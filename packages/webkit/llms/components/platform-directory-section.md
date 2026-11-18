@@ -1,6 +1,6 @@
 # Platform Directory Section
 
-> A directory of Azion's products under a section title: one column per product group (Build, Store, Secure, Observe), each row an icon, a product name and one line about it, linking to that product. It is a page section — the site places it from a `{ _id: 'platform-directory-section', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `section-module`, `section-title`, `registration-frame` and `link-directory` rather than owning any anatomy of its own.
+> A directory of Azion's products under a section title: one column per product group (Build, Store, Secure, Observe), each row an icon, a product name and one line about it, linking to that product. It is a page section — the site places it from a `{ _id: 'platform-directory-section', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `module`, `module-header`, `registration-frame` and `link-directory` rather than owning any anatomy of its own.
 
 - Import: `import PlatformDirectorySection from '@aziontech/webkit/platform-directory-section'`
 - Category: section · Surface: site · Structure: monolithic
@@ -30,7 +30,7 @@
 ## Related
 
 - [link-directory](link-directory.md) — the named navigation landmark whose columns and rows this band fills.
-- [section-title](section-title.md) — the headline over the directory.
+- [module-header](module-header.md) — the headline over the directory.
 
 ## Props
 

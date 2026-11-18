@@ -24,9 +24,9 @@
   import SelectContent from '../../input/select/select-content/select-content.vue'
   import SelectItem from '../../input/select/select-item/select-item.vue'
   import SelectTrigger from '../../input/select/select-trigger/select-trigger.vue'
+  import Module from '../../layout/module/module.vue'
+  import ModuleHeader from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
-  import SectionModule from '../../marketing/section-module/section-module.vue'
-  import SectionTitle from '../../marketing/section-title/section-title.vue'
 
   defineOptions({
     name: 'ListingIndexSection',
@@ -314,7 +314,7 @@
     :aria-label="hasHeader ? title : undefined"
     class="scroll-mt-(--spacing-2xl)"
   >
-    <SectionModule
+    <Module
       v-if="hasRows"
       :divided="false"
       :padded="false"
@@ -324,7 +324,7 @@
         borders="y"
         marks="bottom"
       >
-        <SectionTitle
+        <ModuleHeader
           v-if="hasHeader"
           align="start"
           :framed="false"
@@ -663,6 +663,6 @@
           </template>
         </EmptyState>
       </RegistrationFrame>
-    </SectionModule>
+    </Module>
   </section>
 </template>

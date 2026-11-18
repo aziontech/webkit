@@ -4,10 +4,10 @@ category: section
 structure: monolithic
 template: 2
 status: implemented
-spec_version: 8
+spec_version: 9
 created: 2026-11-04
-last_updated: 2026-11-16
-checksum: 91be354307c22cdebf3fa149b8bebbf6b3769d698cbef934a159769685f95e47
+last_updated: 2026-11-18
+checksum: df233dc139fb80657c592531eadb65fce5c4360da2df30f660ecd8c1b64eb074
 ---
 
 # CustomerUseCasesSection — Component Spec
@@ -76,7 +76,7 @@ The "what teams use it for" band of a product page: a three-column frame whose f
 | `eyebrow`       | `string`                        | `''`        | false    | Eyebrow above the headline in the title cell, closed by the blinking cursor.                                                      |
 | `title`         | `string`                        | `''`        | false    | Headline of the band, rendered as its `h2` in the title cell.                                                                     |
 | `description`   | `string`                        | `''`        | false    | One-line lead under the headline.                                                                                                 |
-| `primaryAction` | `SectionTitleAction`            | `undefined` | false    | Button pinned to the foot of the title cell; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent. |
+| `primaryAction` | `ModuleHeaderAction`            | `undefined` | false    | Button pinned to the foot of the title cell; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent. |
 | `items`         | `CustomerUseCasesSectionItem[]` | `[]`        | false    | The use cases rendered as frame cells, in order; each item is `{ icon, title, description }`.                                     |
 | `anchor`        | `string`                        | `''`        | false    | In-page id set on the band so a hash link can target it.                                                                          |
 

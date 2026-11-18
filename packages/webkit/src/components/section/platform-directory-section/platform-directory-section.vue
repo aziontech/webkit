@@ -1,13 +1,13 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import Module from '../../layout/module/module.vue'
+  import ModuleHeader from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import type { LinkDirectoryColumns } from '../../marketing/link-directory/link-directory.vue'
   import LinkDirectory from '../../marketing/link-directory/link-directory.vue'
   import LinkDirectoryColumn from '../../marketing/link-directory/link-directory-column/link-directory-column.vue'
   import LinkDirectoryItem from '../../marketing/link-directory/link-directory-item/link-directory-item.vue'
-  import SectionModule from '../../marketing/section-module/section-module.vue'
-  import SectionTitle from '../../marketing/section-title/section-title.vue'
 
   defineOptions({
     name: 'PlatformDirectorySection',
@@ -101,7 +101,7 @@
     :aria-label="hasHeader ? title : undefined"
     class="scroll-mt-(--spacing-2xl)"
   >
-    <SectionModule
+    <Module
       v-if="hasColumns"
       :divided="false"
       :padded="false"
@@ -110,7 +110,7 @@
         v-if="hasHeader"
         #header
       >
-        <SectionTitle
+        <ModuleHeader
           :eyebrow="eyebrow"
           :title="title"
           :description="description"
@@ -145,6 +145,6 @@
           </LinkDirectoryColumn>
         </LinkDirectory>
       </RegistrationFrame>
-    </SectionModule>
+    </Module>
   </section>
 </template>

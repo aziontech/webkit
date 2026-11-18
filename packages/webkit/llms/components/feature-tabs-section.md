@@ -1,6 +1,6 @@
 # Feature Tabs Section
 
-> The feature walkthrough band of a product page: a horizontal section title, with its button beside the headline, over up to three tabs on one side and the active tab's media on the other. A tab's media is its own code file (a `code-block` with line numbers whose lines rise in while the tab is open, on a pixelate texture in a taller stage), the band's live scene (handed the open tab's `value`), or the tab's illustration. It is a page section — the site places it from a `{ _id: 'feature-tabs-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `registration-frame`, `media-tabs`, `code-block`, `illustration`, `button`, `link` and the webkit scene assets. The tabs advance on a timer that pauses under the pointer or keyboard focus and never runs under reduced motion; that state is owned by `media-tabs`.
+> The feature walkthrough band of a product page: a horizontal section title, with its button beside the headline, over up to three tabs on one side and the active tab's media on the other. A tab's media is its own code file (a `code-block` with line numbers whose lines rise in while the tab is open, on a pixelate texture in a taller stage), the band's live scene (handed the open tab's `value`), or the tab's illustration. It is a page section — the site places it from a `{ _id: 'feature-tabs-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `registration-frame`, `media-tabs`, `code-block`, `illustration`, `button`, `link` and the webkit scene assets. The tabs advance on a timer that pauses under the pointer or keyboard focus and never runs under reduced motion; that state is owned by `media-tabs`.
 
 - Import: `import FeatureTabsSection from '@aziontech/webkit/feature-tabs-section'`
 - Category: section · Surface: site · Structure: monolithic
@@ -43,7 +43,7 @@
 | `autoplay` | `boolean` | `true` | false | Opens the next tab on a timer, with the composed tabs' visible pause control. |
 | `autoplayInterval` | `number` | `5200` | false | Milliseconds each tab holds before the next one opens. |
 | `copyAriaLabel` | `string` | `''` | false | Accessible name of the copy button on each tab's code file; empty keeps the code block's own. |
-| `primaryAction` | `SectionTitleAction` | `undefined` | false | Button in the section title, beside the headline (under the frame when the band has no title); `{ label, href, trailing?, target? }` where `trailing` adds the chevron. Omitted when absent. |
+| `primaryAction` | `ModuleHeaderAction` | `undefined` | false | Button in the section title, beside the headline (under the frame when the band has no title); `{ label, href, trailing?, target? }` where `trailing` adds the chevron. Omitted when absent. |
 
 ## Assets
 
@@ -63,7 +63,7 @@
 - Visible focus: owned by `media-tabs` (the tabs), `code-block` (the copy button), `button` and `link`.
 - Keyboard map: `Tab` reaches the action, the tabs and the open file's copy button; the tabs' keys are owned by `media-tabs`.
 - ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the headline is the section title's `h2`; each illustration is named by its tab's `illustrationLabel`, or decorative when empty; a code file is real text a screen reader reads, with a named copy button.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `section-title`, `media-tabs`, `code-block`, `button` and `link`.
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `module-header`, `media-tabs`, `code-block`, `button` and `link`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion; the timer never runs under reduced motion (owned by `media-tabs`).
 - Touch target ≥40×40 px: the tab rows and the large header button; the under-frame link is supplementary to them.
 

@@ -6,7 +6,7 @@
   import CarouselNext from '../../content/carousel/carousel-next/carousel-next.vue'
   import CarouselPrevious from '../../content/carousel/carousel-previous/carousel-previous.vue'
   import Eyebrow from '../../content/eyebrow/eyebrow.vue'
-  import SectionTitle from '../../marketing/section-title/section-title.vue'
+  import ModuleHeader from '../../layout/module-header/module-header.vue'
 
   defineOptions({
     name: 'CardCarouselSection',
@@ -76,7 +76,7 @@
         v-if="title"
         #header
       >
-        <SectionTitle
+        <ModuleHeader
           align="start"
           size="small"
           :framed="false"

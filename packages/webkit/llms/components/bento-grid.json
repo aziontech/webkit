@@ -14,7 +14,7 @@
  "setup": null,
  "useWhen": [
   "When a set of claims is genuinely unequal and one or two deserve more room than the rest.",
-  "As the framed body of a product or platform section, under a `section-title`.",
+  "As the framed body of a product or platform section, under a `module-header`.",
   "For a logo wall, a client-story band, or any set where a few members carry a headline and the rest carry only a mark.",
   "Whenever the cells hold composed content — copy, media, a control — rather than one repeated shape."
  ],

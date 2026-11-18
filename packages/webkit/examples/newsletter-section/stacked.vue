@@ -1,8 +1,8 @@
 <script setup>
   import ClosingCallToActionSection from '@aziontech/webkit/closing-call-to-action-section'
+  import Container from '@aziontech/webkit/container'
   import NewsletterSection from '@aziontech/webkit/newsletter-section'
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionGap from '@aziontech/webkit/section-gap'
+  import Spacer from '@aziontech/webkit/spacer'
 
   const form = {
     placeholder: 'Your email',
@@ -15,8 +15,8 @@
 </script>
 
 <template>
-  <SectionContainer max-width="site">
-    <SectionGap hatch />
+  <Container max-width="site">
+    <Spacer hatch />
 
     <NewsletterSection
       anchor="contact"
@@ -26,7 +26,7 @@
       :form="form"
       :hatch="false"
     />
-    <SectionGap hatch />
+    <Spacer hatch />
 
     <ClosingCallToActionSection
       variant="panel"
@@ -34,5 +34,5 @@
       description="Tell us what you are building and a specialist will reach out."
       :primary-action="{ label: 'Talk to sales', href: '/contact', trailing: true }"
     />
-  </SectionContainer>
+  </Container>
 </template>

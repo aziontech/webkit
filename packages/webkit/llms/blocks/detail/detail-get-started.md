@@ -1,11 +1,11 @@
 # DetailGetStarted (`detail/detail-get-started`)
 
-> The onboarding block for a resource made from the CLI: a section heading with a toggle between the CLI and GitHub Actions paths, then three numbered step cards, each with a code block for its commands. It sits under the summary on a resource Overview tab and at the end of a create wizard, on the deploy success screen. Built from `SectionHeader`, `ToggleGroup`, `Card` and `CodeBlock`.
+> The onboarding block for a resource made from the CLI: a section heading with a toggle between the CLI and GitHub Actions paths, then three numbered step cards, each with a code block for its commands. It sits under the summary on a resource Overview tab and at the end of a create wizard, on the deploy success screen. Built from `Subheader`, `ToggleGroup`, `Card` and `CodeBlock`.
 
 - Surface: app
 - Source: `blocks/detail/detail-get-started/detail-get-started.vue` in `@aziontech/webkit`
 - MCP: `get_block("detail/detail-get-started")`
-- Components: [Card](../../components/card.md), [CodeBlock](../../components/code-block.md), [SectionHeader](../../components/section-header.md), [ToggleGroup](../../components/toggle-group.md)
+- Components: [Card](../../components/card.md), [CodeBlock](../../components/code-block.md), [Subheader](../../components/subheader.md), [ToggleGroup](../../components/toggle-group.md)
 - Skills: `webkit-microcopy`
 
 ## Asked as
@@ -30,9 +30,9 @@ The first thing a user reads about a resource they created from the CLI and have
 
 ## Building blocks
 
-### A. Section heading — `SectionHeader` (required)
+### A. Section heading — `Subheader` (required)
 
-`SectionHeader` titled "Get started" with a one-sentence description that ends on a link to the CLI docs. It is a section inside the page, never the page title.
+`Subheader` titled "Get started" with a one-sentence description that ends on a link to the CLI docs. It is a section inside the page, never the page title.
 
 ### B. Path switch — `ToggleGroup` (required)
 
@@ -135,7 +135,7 @@ Each variant is the same screen in another state: `get_block("detail/detail-get-
 <script setup lang="ts">
   import Card from '@aziontech/webkit/card'
   import CodeBlock from '@aziontech/webkit/code-block'
-  import SectionHeader from '@aziontech/webkit/section-header'
+  import Subheader from '@aziontech/webkit/subheader'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { computed } from 'vue'
 
@@ -273,7 +273,7 @@ jobs:
 
 <template>
   <div class="@container flex min-w-0 flex-col gap-(--spacing-md)">
-    <SectionHeader title="Get started">
+    <Subheader title="Get started">
       <template #description>
         Two ways to build and deploy this resource. Select one and follow the steps, or read the
         <a
@@ -292,7 +292,7 @@ jobs:
           aria-label="Deploy with"
         />
       </template>
-    </SectionHeader>
+    </Subheader>
 
     <div class="grid min-w-0 gap-(--spacing-lg) @4xl:grid-cols-3">
       <div

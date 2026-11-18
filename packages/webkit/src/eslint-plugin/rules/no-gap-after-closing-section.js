@@ -7,7 +7,7 @@ const CLOSING = new Set(['closing-call-to-action-section', 'newsletter-section']
 const CLOSING_WHEN_SET = new Set(['template-gallery-section'])
 
 const CLOSE_PARTS = new Map([
-  ['section-gap', 'gap'],
+  ['spacer', 'gap'],
   ['registration-frame', 'frame'],
   ['texture', 'texture']
 ])
@@ -28,7 +28,7 @@ export default {
     type: 'problem',
     docs: {
       description:
-        'Disallow a SectionGap or a closing RegistrationFrame right after a closing section (ClosingCallToActionSection, its newsletter variant, or a TemplateGallerySection set as closing): the section draws the hatched closing frame itself, so a trailing one doubles it. A section bound with :hatch="false" draws no frame and is skipped.'
+        'Disallow a Spacer or a closing RegistrationFrame right after a closing section (ClosingCallToActionSection, its newsletter variant, or a TemplateGallerySection set as closing): the section draws the hatched closing frame itself, so a trailing one doubles it. A section bound with :hatch="false" draws no frame and is skipped.'
     },
     schema: [],
     messages: {

@@ -6,7 +6,7 @@ status: implemented
 spec_version: 6
 created: 2026-11-04
 last_updated: 2026-11-16
-checksum: eaf14c64850f219bb94fcd7ca7c42dc34d4c49e5398dceced8d3994265d9f30a
+checksum: 5360d970cee2148c3edc6ab27bff341f6a9ae792716ee5dba2eb8874c6883ec0
 template: 2
 ---
 
@@ -14,7 +14,7 @@ template: 2
 
 ## Purpose
 
-The analyst-recognition band: a section title over a framed strip of signed quotes — one per report, marked by the firm's logo — that scrolls continuously and pauses on hover, on focus or from its pause control; the loop is the one `marquee` runs on. It is a page section — the site places it from a `{ _id: 'recognition-marquee-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `registration-frame` and `quote`.
+The analyst-recognition band: a section title over a framed strip of signed quotes — one per report, marked by the firm's logo — that scrolls continuously and pauses on hover, on focus or from its pause control; the loop is the one `marquee` runs on. It is a page section — the site places it from a `{ _id: 'recognition-marquee-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `registration-frame` and `quote`.
 
 ## When to use
 

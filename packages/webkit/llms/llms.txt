@@ -309,19 +309,24 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [BentoGrid](components/bento-grid.md): A mosaic of unequal cells on one set of shared rules: each cell claims a number of columns and rows, and the rules between them are drawn once so the whole block reads as a single framed surface.
 - [CardGrid](components/card-grid.md): The responsive cell grid of the page language, in three registers: spaced cards separated by real gutters, a hairline box grid whose internal rules are the gaps themselves, and a framed grid whose cells are real `regi…
 - [ConsoleLayout](components/console-layout.md): The console chrome, composed once in the app: `AppLayout` with the navigation rail (`Sidebar` + `SidebarMenu`, the brand on top and the account at the foot), the global header (breadcrumbs, `SearchTrigger`, the app's…
+- [Container](components/container.md): The framed content column: a centered, width-capped block carrying only its two vertical rules, which every section below a hero stacks inside.
 - [DashboardGrid](components/dashboard-grid.md): A configurable dashboard grid: the reader arranges the cards.
 - [Footer](components/footer.md): Page footer for marketing, docs and console surfaces: the bottom-of-page counterpart to `AppHeader`.
+- [Module](components/module.md): The brick of the page column: a section whose header row is divided from its body by a hairline and which is divided from the module above it by another.
+- [ModuleHeader](components/module-header.md): The framed header row that opens a page section: an optional overline, the section's `h2`, an optional description and an optional row of actions, held inside a registration frame whose bottom rule is what divides the…
 - [PageHeader](components/page-header.md): The heading that opens a console page: an h1 whose `size` picks the heading token by page level, a one-line description, and the actions the page owns on the right.
 - [RegistrationFrame](components/registration-frame.md): The registration frame: a hairline box with a small square set inside each corner and an optional linear hatch texture behind its content.
 - [Resizable](components/resizable.md): A group of adjacent regions whose shared edges the reader can drag.
 - [SaveBar](components/save-bar.md): The bar at the bottom of a settings or create page that holds the status of unsaved work and its Discard (or Cancel) and Save actions.
 - [ScrollArea](components/scroll-area.md): Structural layout primitive for scrolling regions: native overflow with themed thin scrollbars and keyboard scrolling.
-- [SectionHeader](components/section-header.md): The heading of one band inside a page: an h2 with a one-line description, a copy-link button that appears when the heading is hovered or focused (when it has an `anchor`), and the band's own actions on the right.
 - [Separator](components/separator.md): Thin separator line that visually splits content into groups.
+- [SettingsGroup](components/settings-group.md): A band of a settings page: an h2 with a `Hint` glyph that carries the one-sentence guidance, over the band body (usually a flush `Card` of `SettingsRow` rows).
 - [SettingsRow](components/settings-row.md): One setting inside a flush `Card`: an `Item` whose content carries the title and description, with the control placed by what it needs.
-- [SettingsSection](components/settings-section.md): A band of a settings page: an h2 with a `Hint` glyph that carries the one-sentence guidance, over the band body (usually a flush `Card` of `SettingsRow` rows).
 - [Sidebar](components/sidebar.md): Helps users move between views or sections.
 - [SiteLayout](components/site-layout.md): The marketing site's chrome, composed once in the app: `SiteHeaderSection` on top, the page's sections in the layout's `<main>`, `SiteFooterSection` at the foot, and the `Command` search palette wired to the bar's sea…
+- [Spacer](components/spacer.md): The empty registration frame that divides two page sections.
+- [SplitStack](components/split-stack.md): A run of framed bands that follow one another down the page, each one drawn as two registration frames — its left half and its right half — sharing a hairline with the next.
+- [Subheader](components/subheader.md): The heading of one band inside a page: an h2 with a one-line description, a copy-link button that appears when the heading is hovered or focused (when it has an `anchor`), and the band's own actions on the right.
 
 ## Components: Marketing
 
@@ -340,11 +345,6 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [MediaTile](components/media-tile.md): One cell of a media band: a scene above, and under it a run-in caption whose lead names what the scene shows and whose sentence continues on the same line, so a row of tiles reads as one paragraph of claims under one…
 - [Quote](components/quote.md): A single customer testimonial: the quotation, who said it, and optionally the mark of the company they said it for.
 - [QuoteTabs](components/quote-tabs.md): A testimonial band a reader browses by client: the selected client's quotation featured at the top in the client's own colours, and a wall of client cards below it that is the selector itself — clicking a card brings…
-- [SectionContainer](components/section-container.md): The framed content column: a centered, width-capped block carrying only its two vertical rules, which every section below a hero stacks inside.
-- [SectionGap](components/section-gap.md): The empty registration frame that divides two page sections.
-- [SectionModule](components/section-module.md): The brick of the page column: a section whose header row is divided from its body by a hairline and which is divided from the module above it by another.
-- [SectionStack](components/section-stack.md): A run of framed bands that follow one another down the page, each one drawn as two registration frames — its left half and its right half — sharing a hairline with the next.
-- [SectionTitle](components/section-title.md): The framed header row that opens a page section: an optional overline, the section's `h2`, an optional description and an optional row of actions, held inside a registration frame whose bottom rule is what divides the…
 - [SitePage](components/site-page.md): The page renderer of the marketing site: it takes a page as data — the page JSON `{ hero, sections }` whose entries are `{ _id, props, scenes?, gap?, submission?
 - [Stats](components/stats.md): A band of headline figures — throughput, uptime, points of presence — set in the display face at big-number scale, each in its own cell of a hairline `card-grid` with a short caption underneath.
 

@@ -1,5 +1,5 @@
 {
- "purpose": "A directory of Azion's products under a section title: one column per product group (Build, Store, Secure, Observe), each row an icon, a product name and one line about it, linking to that product. It is a page section — the site places it from a `{ _id: 'platform-directory-section', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `section-module`, `section-title`, `registration-frame` and `link-directory` rather than owning any anatomy of its own.",
+ "purpose": "A directory of Azion's products under a section title: one column per product group (Build, Store, Secure, Observe), each row an icon, a product name and one line about it, linking to that product. It is a page section — the site places it from a `{ _id: 'platform-directory-section', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `module`, `module-header`, `registration-frame` and `link-directory` rather than owning any anatomy of its own.",
  "useWhen": [
   "Use PlatformDirectorySection for the Azion products directory band.",
   "On Home, right under the hero, to show every product the platform offers at a glance.",
@@ -12,7 +12,7 @@
  ],
  "related": [
   "`link-directory` — the named navigation landmark whose columns and rows this band fills.",
-  "`section-title` — the headline over the directory."
+  "`module-header` — the headline over the directory."
  ],
  "bestPractices": [
   "Keep to four groups or fewer; the directory fans out to one column per group at the large breakpoint, up to four, so one, two or three groups never leave an empty cell.",

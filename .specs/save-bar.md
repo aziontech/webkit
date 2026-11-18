@@ -3,7 +3,7 @@ name: save-bar
 category: layout
 structure: monolithic
 status: implemented
-checksum: 7bf0ee7dfe9f43f93454dc5181b0f9ab4ace3fb3d39bdb89d9f4a2a3b8501487
+checksum: 2260420e0c92d1622d031812d045633b0be26579eab0db7704b2e1c617ac73ce
 spec_version: 4
 template: 2
 created: 2026-11-10
@@ -32,7 +32,7 @@ The bar at the bottom of a settings or create page that holds the status of unsa
 ## Related
 
 - `button` — the actions: an outlined Discard or Cancel, then a primary Save with `loading` while it runs.
-- `settings-section` — the bands the bar saves.
+- `settings-group` — the bands the bar saves.
 - `confirm-dialog` — the guard shown when someone leaves with unsaved changes.
 
 ## Best practices
@@ -73,8 +73,8 @@ The bar at the bottom of a settings or create page that holds the status of unsa
 
 ## Props
 
-| Prop   | Type                                | Default      | Required | JSDoc                                                |
-| ------ | ----------------------------------- | ------------ | -------- | ---------------------------------------------------- |
+| Prop      | Type                                                        | Default      | Required | JSDoc                                                                             |
+| --------- | ----------------------------------------------------------- | ------------ | -------- | --------------------------------------------------------------------------------- |
 | `variant` | `'floating' \| 'docked' \| 'plain' \| 'fade' \| 'centered'` | `'floating'` | false    | How the bar sits at the bottom of its scroll region. See the variant table below. |
 
 Each `variant` is one placement plus one surface, named for what a reader sees:
@@ -110,16 +110,16 @@ _none_ — the consumer wraps the bar in a `Transition` when it appears with the
 
 ## Tokens
 
-| Region                  | Token (DESIGN.md)                                               |
-| ----------------------- | --------------------------------------------------------------- |
-| floating/docked surface | `var(--bg-canvas)` · border `var(--border-default)`             |
-| plain surface           | `var(--bg-surface)` · border `var(--border-muted)`              |
-| fade surface            | gradient `transparent` to `var(--bg-canvas)`, no border         |
+| Region                  | Token (DESIGN.md)                                                                                      |
+| ----------------------- | ------------------------------------------------------------------------------------------------------ |
+| floating/docked surface | `var(--bg-canvas)` · border `var(--border-default)`                                                    |
+| plain surface           | `var(--bg-surface)` · border `var(--border-muted)`                                                     |
+| fade surface            | gradient `transparent` to `var(--bg-canvas)`, no border                                                |
 | centered card           | `var(--bg-surface-raised)` · border `var(--border-default)` · `var(--shape-card)` · `var(--shadow-lg)` |
-| status text             | `.text-body-sm` · `var(--text-default)`                         |
-| status glyph            | `var(--text-muted)`                                             |
-| gaps                    | `var(--spacing-xs)` · `var(--spacing-sm)` · `var(--spacing-xl)` |
-| padding                 | `var(--spacing-sm)` · `var(--spacing-md)` · `var(--spacing-lg)` · `var(--spacing-xl)` |
+| status text             | `.text-body-sm` · `var(--text-default)`                                                                |
+| status glyph            | `var(--text-muted)`                                                                                    |
+| gaps                    | `var(--spacing-xs)` · `var(--spacing-sm)` · `var(--spacing-xl)`                                        |
+| padding                 | `var(--spacing-sm)` · `var(--spacing-md)` · `var(--spacing-lg)` · `var(--spacing-xl)`                  |
 
 ## Theme gaps
 

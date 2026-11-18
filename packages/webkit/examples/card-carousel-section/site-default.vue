@@ -1,7 +1,7 @@
 <script setup>
   import CardCarouselSection from '@aziontech/webkit/card-carousel-section'
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionGap from '@aziontech/webkit/section-gap'
+  import Container from '@aziontech/webkit/container'
+  import Spacer from '@aziontech/webkit/spacer'
 
   const items = [
     {
@@ -40,14 +40,14 @@
 </script>
 
 <template>
-  <SectionContainer max-width="site">
-    <SectionGap hatch />
+  <Container max-width="site">
+    <Spacer hatch />
 
     <CardCarouselSection
       title="See how to use"
       :items="items"
     />
 
-    <SectionGap hatch />
-  </SectionContainer>
+    <Spacer hatch />
+  </Container>
 </template>

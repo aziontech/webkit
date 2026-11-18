@@ -7,14 +7,14 @@ spec_version: 9
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-16
-checksum: 0640116fca315aa27cc7dcfff77482a5dfb931d6ecf74c9acba1d7432ba50c99
+checksum: 020c143d0925c302656e019f628c6319fe41855582782bddd26e01078aaaf96c
 ---
 
 # ListingIndexSection — Component Spec
 
 ## Purpose
 
-The full, browsable listing of a page such as the Careers jobs list: a headline over a toolbar (a search field, one select per facet and one for the order) and every row under its group, as a table from the small breakpoint up and as a list of items below it, with an empty state when nothing matches. A row may carry its client's mark, drawn before the name on the table and above it on phones; a pointer click anywhere on a table row follows the row link; the other columns are metadata in the small overline, each cut to one line with its full text as a tooltip; group headings stick under the site header while their rows scroll. Below the large breakpoint the toolbar folds to the search field and a filter button that reveals the selects, with each applied facet listed under it as a removable chip. A select with more than seven options gains an option search. Search, facets and order are local state over the rows the page carries; a facet is seeded from `?<id>=` in the URL when the value is one the page offers. It is a page section — the site places it from a `{ _id: 'listing-index-section', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `section-module`, `section-title`, `registration-frame`, `input`, `select`, `table`, `item`, `chip`, `empty-state` and `button` rather than owning any anatomy of its own.
+The full, browsable listing of a page such as the Careers jobs list: a headline over a toolbar (a search field, one select per facet and one for the order) and every row under its group, as a table from the small breakpoint up and as a list of items below it, with an empty state when nothing matches. A row may carry its client's mark, drawn before the name on the table and above it on phones; a pointer click anywhere on a table row follows the row link; the other columns are metadata in the small overline, each cut to one line with its full text as a tooltip; group headings stick under the site header while their rows scroll. Below the large breakpoint the toolbar folds to the search field and a filter button that reveals the selects, with each applied facet listed under it as a removable chip. A select with more than seven options gains an option search. Search, facets and order are local state over the rows the page carries; a facet is seeded from `?<id>=` in the URL when the value is one the page offers. It is a page section — the site places it from a `{ _id: 'listing-index-section', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `module`, `module-header`, `registration-frame`, `input`, `select`, `table`, `item`, `chip`, `empty-state` and `button` rather than owning any anatomy of its own.
 
 ## When to use
 

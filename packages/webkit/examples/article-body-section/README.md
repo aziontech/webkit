@@ -2,9 +2,9 @@
 
 The reading page of an article. A brand banner sits over a three-column grid: the share, community and Copy page rail on the left; the breadcrumb, headline, byline and prose down the middle at a reading measure; and the "On this page" outline on the right.
 
-Both rails stick under the header and fold away below `lg`, leaving the column alone. The section opens the page itself, so it carries its own `SectionContainer` instead of sitting in the page column. Every blog post (/blog/:slug) and every success story (/success-cases/:slug) opens with it.
+Both rails stick under the header and fold away below `lg`, leaving the column alone. The section opens the page itself, so it carries its own `Container` instead of sitting in the page column. Every blog post (/blog/:slug) and every success story (/success-cases/:slug) opens with it.
 
-The band is the `ArticleBodySection` component from `@aziontech/webkit/article-body-section`; it composes `SectionContainer`, `SectionModule`, `RegistrationFrame`, `Breadcrumb`, `HeroTitle`, `Separator`, `DocProse`, `Tooltip`, `IconButton`, `SplitButton` and `DocTableOfContents`. The body is markdown rendered block by block — `##` / `###` headings, `-` lists and paragraphs — and the copy buttons write to the clipboard.
+The band is the `ArticleBodySection` component from `@aziontech/webkit/article-body-section`; it composes `Container`, `Module`, `RegistrationFrame`, `Breadcrumb`, `HeroTitle`, `Separator`, `DocProse`, `Tooltip`, `IconButton`, `SplitButton` and `DocTableOfContents`. The body is markdown rendered block by block — `##` / `###` headings, `-` lists and paragraphs — and the copy buttons write to the clipboard.
 
 ## Examples
 

@@ -3,18 +3,18 @@ name: logo-wall-section
 category: section
 structure: monolithic
 status: implemented
-spec_version: 6
+spec_version: 7
 template: 2
 created: 2026-11-04
-last_updated: 2026-11-16
-checksum: e792e9b06f380f7c2baec282f611217bdbc7441dd998899383b4d484dd06ed79
+last_updated: 2026-11-18
+checksum: 0e6fcd2d3518528df1479c14b3dbc4a5e335c8a66e9cbc02c6c286f64ee88a5c
 ---
 
 # LogoWallSection — Component Spec
 
 ## Purpose
 
-The customers band: a section title over a framed logo wall of linked client marks with one signed quote in its aside, closed by a call to action. It is a page section — the site places it from a `{ _id: 'logo-wall-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `registration-frame`, `logo-wall`, `quote` and `button`.
+The customers band: a section title over a framed logo wall of linked client marks with one signed quote in its aside, closed by a call to action. It is a page section — the site places it from a `{ _id: 'logo-wall-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `registration-frame`, `logo-wall`, `quote` and `button`.
 
 ## When to use
 
@@ -89,8 +89,8 @@ The customers band: a section title over a framed logo wall of linked client mar
 | `ariaLabel`       | `string`                      | `''`        | false    | Accessible name of the logo wall.                                                                                                                                                                                                                                                                   |
 | `logos`           | `LogoWallSectionLogo[]`       | `[]`        | false    | The client marks, in order; each is `{ name, logo, logoLight?, logoTreatment?, artwork?, href? }` where `logoTreatment` is the shared `CompanyLogoTreatment` (`'color'`, `'monochrome'` or `'knockout'`, the `CompanyLogo` looks) and `artwork` is the registry's `'color'`, `'light'` or `'dark'`. |
 | `quote`           | `LogoWallSectionQuote`        | `undefined` | false    | The signed quote in the wall's aside; `{ text, name, jobTitle, logo, logoAlt, logoLight?, artwork? }`. Omitted when absent.                                                                                                                                                                         |
-| `primaryAction`   | `SectionTitleAction`          | `undefined` | false    | Button under the quote; `{ label, href, trailing?, target? }`. Omitted when absent.                                                                                                                                                                                                                 |
-| `secondaryAction` | `SectionTitleAction`          | `undefined` | false    | Outlined button beside the primary one under the quote; `{ label, href, trailing?, target? }`. Omitted when absent.                                                                                                                                                                                 |
+| `primaryAction`   | `ModuleHeaderAction`          | `undefined` | false    | Button under the quote; `{ label, href, trailing?, target? }`. Omitted when absent.                                                                                                                                                                                                                 |
+| `secondaryAction` | `ModuleHeaderAction`          | `undefined` | false    | Outlined button beside the primary one under the quote; `{ label, href, trailing?, target? }`. Omitted when absent.                                                                                                                                                                                 |
 
 ## Events
 
@@ -140,7 +140,7 @@ No built-in strings: the title, the quote, the client names and the action label
 
 ## Right-to-left
 
-- Layout: the composed `section-title`, `logo-wall`, `quote` and `button` use logical utilities; the band adds none of its own.
+- Layout: the composed `module-header`, `logo-wall`, `quote` and `button` use logical utilities; the band adds none of its own.
 - Icons: the trailing chevron of an action is mirrored by `button`; logos are never mirrored.
 - Keyboard: `Tab` order follows the DOM, which follows the reading direction.
 - User data: a client name drawn as a wordmark is wrapped in `dir="auto"` by `CompanyLogo`.

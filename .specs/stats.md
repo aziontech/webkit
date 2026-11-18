@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 5
-checksum: 059b34f762404ca5cd05f192cb30d1ed464d0f37608a179e17de330cd44ee666
+checksum: 99dc5a311ccb84cd44916355df62a340f802cd15e2c63e3ec0e30a20d059d49e
 created: 2026-09-22
 last_updated: 2026-11-15
 ---
@@ -13,7 +13,7 @@ last_updated: 2026-11-15
 
 ## Purpose
 
-A band of headline figures — throughput, uptime, points of presence — set in the display face at big-number scale, each in its own cell of a hairline `card-grid` with a short caption underneath. It is the proof band of a marketing page: the one place a page states its numbers, between a `section-title` and the section body.
+A band of headline figures — throughput, uptime, points of presence — set in the display face at big-number scale, each in its own cell of a hairline `card-grid` with a short caption underneath. It is the proof band of a marketing page: the one place a page states its numbers, between a `module-header` and the section body.
 
 ## When to use
 
@@ -21,7 +21,7 @@ A band of headline figures — throughput, uptime, points of presence — set in
 - Rendering page JSON, or you need a whole band with no custom content → the section (`stats-section`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`stats`).
 - To state a handful of measured facts (2–6) as the proof band of a marketing or landing page.
 - Whenever the figure itself is the message and the caption only names what was measured.
-- Under a `section-title`, as the opening evidence of a section.
+- Under a `module-header`, as the opening evidence of a section.
 
 ## When NOT to use
 
@@ -32,14 +32,14 @@ A band of headline figures — throughput, uptime, points of presence — set in
 
 ## Related
 
-- `section-title` — the framed section header this band usually sits under.
+- `module-header` — the framed section header this band usually sits under.
 - `card-grid` — the hairline grid the cells sit in; its `gap-px` seams are the rules between them.
 - `currency-amount` — a monetary amount at three reading distances, with symbol handling.
 - `pricing-card` — a plan card, where the headline figure is a price.
 
 ## Best practices
 
-- The band draws no frame of its own: the rule and the corner marks belong to the `section-module` or `registration-frame` that the page assembles it into, so a band placed in a framed column never lands a second hairline on the column's own.
+- The band draws no frame of its own: the rule and the corner marks belong to the `module` or `registration-frame` that the page assembles it into, so a band placed in a framed column never lands a second hairline on the column's own.
 
 - Keep the band to 2–6 figures: it reads as a row, and past six the cells stop being scannable.
 - Put the unit in `suffix` and the qualifier in `prefix`, so the figure itself stays the largest, highest-contrast thing in the cell.

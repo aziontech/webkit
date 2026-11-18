@@ -132,12 +132,12 @@ axis is the prop name or its `*<Axis>` suffix (`titleVariant`, `tagSeverity`).
 | `size`        | `tiny · small · medium · large · xlarge`, ordered subset (see Size)    | none                                                                                                                                      |
 
 - **A `variant` union made only of alignment words** (`start`, `center`, `end`, `split`) is
-  the `align` axis, never a look: `section-title` is `align="start|center|split"`.
+  the `align` axis, never a look: `module-header` is `align="start|center|split"`.
 - **An exported `*Severity` type derives from `Severity`** (`packages/webkit/src/utils/severity.ts`)
   — `Severity`, `Exclude<Severity, …>` or `Extract<Severity, …>` — instead of re-listing the
   values. An exported `*Status` / `*Orientation` type stays inside its set too.
 - **A union a file declares for an axis prop is named `<Component><Axis>`**
-  (`DateRangePickerSize`, `SectionTitleAlign`); reusing another component's exported union is
+  (`DateRangePickerSize`, `ModuleHeaderAlign`); reusing another component's exported union is
   fine.
 - Adding an extra is an API decision: one line in the machine source and the table above, in
   the same PR.

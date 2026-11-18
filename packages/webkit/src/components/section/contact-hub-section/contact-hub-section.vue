@@ -5,17 +5,17 @@
   import StatusIndicator from '../../feedback/status-indicator/status-indicator.vue'
   import CardGrid from '../../layout/card-grid/card-grid.vue'
   import CardGridCell from '../../layout/card-grid/card-grid-cell/card-grid-cell.vue'
+  import Module from '../../layout/module/module.vue'
+  import type { ModuleHeaderAction } from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import FeatureItem from '../../marketing/feature-item/feature-item.vue'
-  import SectionModule from '../../marketing/section-module/section-module.vue'
-  import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
 
   defineOptions({
     name: 'ContactHubSection',
     inheritAttrs: false
   })
 
-  export type { SectionTitleAction }
+  export type { ModuleHeaderAction }
 
   /** The system status link beside a lane's action. */
   export type ContactHubSectionStatusLink = {
@@ -36,9 +36,9 @@
     /** One sentence stating what the team handles. */
     description: string
     /** The button that reaches the team; `{ label, href, trailing? }`. Omitted when absent. */
-    action?: SectionTitleAction
+    action?: ModuleHeaderAction
     /** A second, outlined button after the action; `{ label, href, trailing? }`. Omitted when absent. */
-    secondaryAction?: SectionTitleAction
+    secondaryAction?: ModuleHeaderAction
     /** The system status link beside the action; `{ label, href, target? }`. Omitted when absent. */
     statusLink?: ContactHubSectionStatusLink
   }
@@ -90,7 +90,7 @@
     :data-testid="testId"
     class="scroll-mt-(--spacing-2xl)"
   >
-    <SectionModule
+    <Module
       v-if="hasContent"
       :divided="false"
       :padded="false"
@@ -197,6 +197,6 @@
           </CardGridCell>
         </CardGrid>
       </RegistrationFrame>
-    </SectionModule>
+    </Module>
   </section>
 </template>

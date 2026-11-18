@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/account/account-personal-tokens/account-personal-tokens.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-personal-tokens")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldDescription`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PasswordInput](../../components/password-input.md), [PropertyFilter](../../components/property-filter.md), [Select](../../components/select.md), [SettingsSection](../../components/settings-section.md), [Table](../../components/table.md), `TableCellActions`, `TableCellStatus`, `TableCellTime`, [Textarea](../../components/textarea.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldDescription`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PasswordInput](../../components/password-input.md), [PropertyFilter](../../components/property-filter.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [Table](../../components/table.md), `TableCellActions`, `TableCellStatus`, `TableCellTime`, [Textarea](../../components/textarea.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -51,7 +51,7 @@ The table's `#empty` slot holds `No matching tokens` with Clear filters; an acco
 
 When the list does not load, a danger `Alert` with Retry takes the table's place and the heading stays.
 
-### G. Create drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelBody`, `SettingsSection`, `PanelFooter` (required)
+### G. Create drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelBody`, `SettingsGroup`, `PanelFooter` (required)
 
 A large right `Drawer` with one `form`: General (Name, Description) and Expiration. Titled `Create Personal Token`. Footer: Cancel and `Create Personal Token`, so the label does not change on the way in. Create emits `create` with the values; the fields lock while `creating` is set.
 
@@ -213,7 +213,7 @@ Each variant is the same screen in another state: `get_block("account/account-pe
   import PasswordInput from '@aziontech/webkit/password-input'
   import PropertyFilter from '@aziontech/webkit/property-filter'
   import Select from '@aziontech/webkit/select'
-  import SettingsSection from '@aziontech/webkit/settings-section'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
   import TableCellActions from '@aziontech/webkit/table-cell-actions'
   import TableCellStatus from '@aziontech/webkit/table-cell-status'
@@ -712,8 +712,8 @@ Each variant is the same screen in another state: `get_block("account/account-pe
               :disabled="submitting"
             >
               <legend class="sr-only">Create Personal Token</legend>
-              <SettingsSection
-                title="General"
+              <SettingsGroup
+                label="General"
                 hint="How you will recognise the token in this list."
               >
                 <div class="flex w-full min-w-0 flex-col gap-(--spacing-lg)">
@@ -742,9 +742,9 @@ Each variant is the same screen in another state: `get_block("account/account-pe
                     />
                   </Field>
                 </div>
-              </SettingsSection>
-              <SettingsSection
-                title="Expiration"
+              </SettingsGroup>
+              <SettingsGroup
+                label="Expiration"
                 hint="Shorter is safer. A token cannot be extended."
               >
                 <Field>
@@ -771,7 +771,7 @@ Each variant is the same screen in another state: `get_block("account/account-pe
                   </Select>
                   <FieldDescription id="token-expiry-hint">{{ expiryHint }}</FieldDescription>
                 </Field>
-              </SettingsSection>
+              </SettingsGroup>
             </fieldset>
           </PanelBody>
 

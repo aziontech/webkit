@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/create/create-wizard/create-wizard.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-wizard")`
-- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [Field](../../components/field.md), `FieldDescription`, `FieldError`, [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), [RadioGroup](../../components/radio-group.md), [RadioGroup](../../components/radio-group.md), [SectionHeader](../../components/section-header.md), [Select](../../components/select.md), [SettingsRow](../../components/settings-row.md), [SettingsSection](../../components/settings-section.md), [Skeleton](../../components/skeleton.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Wizard](../../components/wizard.md)
+- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [Field](../../components/field.md), `FieldDescription`, `FieldError`, [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), [RadioGroup](../../components/radio-group.md), [RadioGroup](../../components/radio-group.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Skeleton](../../components/skeleton.md), [Subheader](../../components/subheader.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Wizard](../../components/wizard.md)
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -64,16 +64,16 @@ A choice that changes what follows, such as the list type, is a `SettingsRow var
 
 A stacked row with a five-row `Textarea` whose label, placeholder and guidance follow the choice above it. Its required message is a `FieldError` tied by `aria-describedby`.
 
-### I. Review — `SectionHeader`, `Alert`, `Card`, `Item`, `Tag`, `Button` (required)
+### I. Review — `Subheader`, `Alert`, `Card`, `Item`, `Tag`, `Button` (required)
 
-The last step, read-only: three bands under small `SectionHeader`s (Where it runs, What gets created, What can reference it), each with Edit back to its step; see Review step below.
+The last step, read-only: three bands under small `Subheader`s (Where it runs, What gets created, What can reference it), each with Edit back to its step; see Review step below.
 
 ### J. Create and deploy — `Card`, `Field`, `Input`, `Item`, `RadioGroup` (CreateAndDeploy)
 
 Two steps, Project then Domain and deployment, with the last action reading "Create and deploy".
 
 - **Project.** The `create/create-resource-picker` band, copied from that block (the source of truth for the paged picker; change it there first): a flush `Card` titled Project, a lead sentence, a large fluid `ToggleGroup` of Existing project and New project, then either a searchable `Item` list paged five at a time with `Skeleton` rows and a Load more `Button`, or a Name `Field`. In New mode the project is configured in place: a Cache Settings `Card` whose policy `Switch`es open their fields, and an Add an origin `SettingsRow` whose `Switch` opens a `RadioGroup variant="card"` of origin types and the type's fields. Each opened field is required only while its switch is on.
-- **Domain and deployment.** A read-back `Item` of the bound project with a transparent Change `Button` back to step one (the answer is kept); a Domain `Card` with a `ToggleGroup` of Free platform domain and Your own domain and a preview line of the address traffic arrives on; Environment as a `RadioGroup variant="card"` and Certificate as a `Select`; a Deployment `Card` with Create one or Use existing (the paged picker again); and a collapsed `SettingsSection` titled Advanced holding only fields that have defaults.
+- **Domain and deployment.** A read-back `Item` of the bound project with a transparent Change `Button` back to step one (the answer is kept); a Domain `Card` with a `ToggleGroup` of Free platform domain and Your own domain and a preview line of the address traffic arrives on; Environment as a `RadioGroup variant="card"` and Certificate as a `Select`; a Deployment `Card` with Create one or Use existing (the paged picker again); and a collapsed `SettingsGroup` titled Advanced holding only fields that have defaults.
 - **After submit.** Create and deploy shows its loading state; the consumer then hands the column to `detail/detail-deployment-logs` (InCreateFlow) and ends on `create/create-deploy-success`.
 
 ## Data
@@ -200,7 +200,7 @@ Then delete `sample.ts` and its import.
 - `WhereItRuns` — primary (the code below)
 - `ModuleOff` — acme-staging was chosen with IP filtering off, so an IP filtering step follows Where it runs: a warning Alert, the Switch choice card that turns the module on with the list, and a note on what leaving it off means.
 - `ListSettings` — The settings step of a list bound to acme-production, before Review: the Type as wide RadioGroup choice cards and the List Textarea whose label, placeholder and guidance follow the type, with Previous and Next in the Wizard footer. Next with the list empty stays on the step and shows the required message under it.
-- `Review` — The Review step that closes the create, after List settings: three bands under small `SectionHeader`s. Where it runs is one `Alert` (success when the policy is ready, warning when it is unbound or its module stays off) with Edit back to the chooser; What gets created lists each value beside the property it is sent as (Name with its own Edit back to General), the entries as `Tag`s with a count and and N more, with Edit back to List settings; What can reference it lists the consumers and the field that carries the reference. Create Access List shows its loading state and the result arrives as a toast; a value that fails on create sends the user back to its step with the message under the field.
+- `Review` — The Review step that closes the create, after List settings: three bands under small `Subheader`s. Where it runs is one `Alert` (success when the policy is ready, warning when it is unbound or its module stays off) with Edit back to the chooser; What gets created lists each value beside the property it is sent as (Name with its own Edit back to General), the entries as `Tag`s with a count and and N more, with Edit back to List settings; What can reference it lists the consumers and the field that carries the reference. Create Access List shows its loading state and the result arrives as a toast; a value that fails on create sends the user back to its step with the message under the field.
 - `CreateAndDeploy` — A resource that is useless until it is bound and deployed (Create Service): step one binds the project it serves, an existing one from the paged list or a new one configured in place (cache settings, origin); step two reads the project back with Change, then asks for the domain (a free platform-domain prefix or your own hostname, previewed as the address traffic arrives on), environment and certificate, the deployment the first release is cut against and a collapsed Advanced section. Next is gated on the project; the last action reads Create and deploy and shows its loading state, then the build logs (`detail/detail-deployment-logs#InCreateFlow`) and `create/create-deploy-success` follow.
 
 Each variant is the same screen in another state: `get_block("create/create-wizard", { variant })`, or the file under `blocks/create/create-wizard/variants/`.
@@ -223,8 +223,8 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
   import RadioGroup from '@aziontech/webkit/radio-group'
-  import SectionHeader from '@aziontech/webkit/section-header'
   import SettingsRow from '@aziontech/webkit/settings-row'
+  import Subheader from '@aziontech/webkit/subheader'
   import Switch from '@aziontech/webkit/switch'
   import Tag from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
@@ -843,7 +843,7 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
           >
             <section class="flex min-w-0 flex-col gap-(--layout-section-gap)">
               <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-                <SectionHeader
+                <Subheader
                   title="Where it runs"
                   size="small"
                 >
@@ -857,7 +857,7 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
                       @click="editStep('where-it-runs')"
                     />
                   </template>
-                </SectionHeader>
+                </Subheader>
                 <Alert
                   key="alert-1"
                   v-if="!choice"
@@ -882,7 +882,7 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
               </section>
 
               <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-                <SectionHeader
+                <Subheader
                   title="What gets created"
                   description="Each value is sent as the property named under it."
                   size="small"
@@ -897,7 +897,7 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
                       @click="editStep('settings')"
                     />
                   </template>
-                </SectionHeader>
+                </Subheader>
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
@@ -968,7 +968,7 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
               </section>
 
               <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-                <SectionHeader
+                <Subheader
                   title="What can reference it"
                   description="Everything that can point at this list once it exists, and the field that carries the reference."
                   size="small"

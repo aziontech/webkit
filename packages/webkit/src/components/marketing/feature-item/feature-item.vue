@@ -18,7 +18,7 @@
     icon?: string
     /** When set, the whole claim renders as an anchor link to this URL and its headline closes on a trailing arrow. */
     href?: string
-    /** Level of the heading element. Keep 2 when the band has no headline of its own; drop it to 3 when a section-title has already opened the section, so the document outline stays in order. */
+    /** Level of the heading element. Keep 2 when the band has no headline of its own; drop it to 3 when a module-header has already opened the section, so the document outline stays in order. */
     headingLevel?: FeatureItemHeadingLevel
   }
 

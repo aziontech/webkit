@@ -8,8 +8,8 @@
   import PageTabs from '@aziontech/webkit/page-tabs'
   import SaveBar from '@aziontech/webkit/save-bar'
   import Select from '@aziontech/webkit/select'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
-  import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import Tabs from '@aziontech/webkit/tabs'
   import { toast } from '@aziontech/webkit/toast'
@@ -189,8 +189,8 @@
             <section
               class="layout-section-start flex min-w-0 flex-1 flex-col pb-(--layout-boundary-end)"
             >
-              <SettingsSection
-                title="General"
+              <SettingsGroup
+                label="General"
                 hint="How this rule set is identified across the console."
               >
                 <Card :padded="false">
@@ -223,10 +223,10 @@
                     </Item.List>
                   </template>
                 </Card>
-              </SettingsSection>
+              </SettingsGroup>
 
-              <SettingsSection
-                title="Status"
+              <SettingsGroup
+                label="Status"
                 hint="Whether the rule set inspects traffic, and what it does with what it matches."
               >
                 <Card :padded="false">
@@ -270,10 +270,10 @@
                     </Item.List>
                   </template>
                 </Card>
-              </SettingsSection>
+              </SettingsGroup>
 
-              <SettingsSection
-                title="Threats"
+              <SettingsGroup
+                label="Threats"
                 hint="The threat families this rule set inspects for, and how strictly each one is applied. Higher sensitivity catches more attacks and more legitimate requests."
               >
                 <Card :padded="false">
@@ -319,7 +319,7 @@
                     </Item.List>
                   </template>
                 </Card>
-              </SettingsSection>
+              </SettingsGroup>
             </section>
           </div>
 

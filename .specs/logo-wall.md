@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 6
-checksum: 2cdf7bc3767bd64dbfedd245f1e374eb305693d519937171ac70fae30645e366
+checksum: 70fc3176a49456a48f505ac84e5ad43d9d9e7a853c2007eb0d987997344946df
 created: 2026-09-22
 last_updated: 2026-11-15
 ---
@@ -42,7 +42,7 @@ The cells are `card-grid` frame cells, so the wall draws the same hairlines and 
 
 ## Best practices
 
-- Place the wall inside a `registration-frame` (in a `section-module`, as every framed band is). The grid is `card-grid`'s `flush` frame: the surrounding frame draws the outer rules and the cells lay their right and bottom rules onto it.
+- Place the wall inside a `registration-frame` (in a `module`, as every framed band is). The grid is `card-grid`'s `flush` frame: the surrounding frame draws the outer rules and the cells lay their right and bottom rules onto it.
 - Supply marks that read on the page's own surface. The component applies no colour filter, so a mark that only works on one theme will not work on both; brand-colour marks read on either. When the marks come from a registry that already places them per theme, render them through the `mark` slot and keep `items` as the list they are drawn from.
 - Set `shape: 'compact'` on a mark that is close to square (a roundel, a monogram) so it sits taller than the wordmarks beside it and all of them read at one visual weight.
 - Give every mark a real `alt` — the company name. A linked cell is announced as `linkLabel`, then that name ("Read story, Magalu").

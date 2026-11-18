@@ -4,7 +4,7 @@ category: layout
 structure: composition
 status: implemented
 spec_version: 2
-checksum: aed0d03b59c5d93b1f227b5053fb0fd8eb41f13c7b0184610cd50d10ee51e058
+checksum: 292928a34a3f9fce901d593364a2619104cb99623f39ec621f9d2310c85a9c3c
 created: 2026-09-22
 last_updated: 2026-11-18
 ---
@@ -18,7 +18,7 @@ A mosaic of unequal cells on one set of shared rules: each cell claims a number 
 ## When to use
 
 - When a set of claims is genuinely unequal and one or two deserve more room than the rest.
-- As the framed body of a product or platform section, under a `section-title`.
+- As the framed body of a product or platform section, under a `module-header`.
 - For a logo wall, a client-story band, or any set where a few members carry a headline and the rest carry only a mark.
 - Whenever the cells hold composed content — copy, media, a control — rather than one repeated shape.
 

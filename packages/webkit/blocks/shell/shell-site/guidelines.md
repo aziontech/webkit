@@ -25,21 +25,21 @@ Composed once in the app's root around `RouterView`. `navigation` is the `SiteHe
 
 The hero's primary and outlined large buttons, worded like the bar's actions.
 
-### D. Frame — `SectionContainer` (required)
+### D. Frame — `Container` (required)
 
 `max-width="site"`; every section after the hero stacks inside it.
 
-### E. Separator — `SectionGap` (required)
+### E. Separator — `Spacer` (required)
 
 `hatch` between sections. Use it instead of margins.
 
-### F. Section — `SectionModule` (required)
+### F. Section — `Module` (required)
 
 One per section; here unpadded and undivided around a framed figure row.
 
 ### G. Framed area — `RegistrationFrame` (required)
 
-Draws borders and corner marks; the closing frame uses `borders="none"` so it draws no rule of its own and hands the corner to the footer. When the page ends on a closing section (`ClosingCallToActionSection`, `NewsletterSection`, or `TemplateGallerySection` with `closing`), drop both the trailing `SectionGap` and this closing frame: the section draws its own, and a second one doubles the close (`webkit/no-gap-after-closing-section`).
+Draws borders and corner marks; the closing frame uses `borders="none"` so it draws no rule of its own and hands the corner to the footer. When the page ends on a closing section (`ClosingCallToActionSection`, `NewsletterSection`, or `TemplateGallerySection` with `closing`), drop both the trailing `Spacer` and this closing frame: the section draws its own, and a second one doubles the close (`webkit/no-gap-after-closing-section`).
 
 ### H. Figures — `Stats` (optional)
 
@@ -55,7 +55,7 @@ A row of headline figures inside a `RegistrationFrame`.
 - Set `data-theme="dark"` on `<html>` (in `index.html`) for the dark site, so the layout, the teleported mega-menus and the palette all resolve the dark tokens.
 - Keep every band on the site measure; one off-measure section breaks the side rules.
 - Give every navigation item an `href`; add extra palette groups (articles, docs results) in the `search` slot.
-- Separate sections with `SectionGap`, not with spacing utilities.
+- Separate sections with `Spacer`, not with spacing utilities.
 - Keep one primary action per band.
 
 ## Don't
@@ -63,7 +63,7 @@ A row of headline figures inside a `RegistrationFrame`.
 - Never add `SiteHeaderSection`, `SiteFooterSection`, `AppHeader` or `Footer` to a page; the layout already renders them.
 - Never render a second `<main>`; the layout owns the landmark.
 - Don't wrap the layout's slot content in a border, padding or `max-w-*` of its own.
-- Don't nest a second `SectionContainer`.
+- Don't nest a second `Container`.
 - Don't put interactive content inside `Texture`; it is decoration.
 
 ## Copy

@@ -10,7 +10,7 @@
   import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
-  import SettingsSection from '@aziontech/webkit/settings-section'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
@@ -287,8 +287,8 @@ mr+L2DBwFXtW2qJfNedf/9rU
             :disabled="submitting"
           >
             <legend class="sr-only">Create Certificate</legend>
-            <SettingsSection
-              title="General"
+            <SettingsGroup
+              label="General"
               hint="Names the certificate where domains and workloads pick it."
             >
               <Field
@@ -304,10 +304,10 @@ mr+L2DBwFXtW2qJfNedf/9rU
                 />
                 <Field.Error v-if="errors.name">{{ errors.name }}</Field.Error>
               </Field>
-            </SettingsSection>
+            </SettingsGroup>
 
-            <SettingsSection
-              title="Certificate"
+            <SettingsGroup
+              label="Certificate"
               :hint="KIND_HINTS[form.kind]"
             >
               <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
@@ -431,7 +431,7 @@ mr+L2DBwFXtW2qJfNedf/9rU
                   <Field.Error v-if="errors.privateKey">{{ errors.privateKey }}</Field.Error>
                 </Field>
               </div>
-            </SettingsSection>
+            </SettingsGroup>
           </fieldset>
         </PanelBody>
 

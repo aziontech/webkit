@@ -13,8 +13,8 @@
   import RadioGroup from '@aziontech/webkit/radio-group'
   import SaveBar from '@aziontech/webkit/save-bar'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
-  import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import Textarea from '@aziontech/webkit/textarea'
   import { computed, nextTick, reactive, ref } from 'vue'
@@ -346,8 +346,8 @@
       >
         <legend class="sr-only">Data stream settings</legend>
 
-        <SettingsSection
-          title="General"
+        <SettingsGroup
+          label="General"
           hint="How the stream is identified, and whether it is collecting records."
           anchor="general"
         >
@@ -398,10 +398,10 @@
               </Item.List>
             </template>
           </Card>
-        </SettingsSection>
+        </SettingsGroup>
 
-        <SettingsSection
-          title="Source"
+        <SettingsGroup
+          label="Source"
           hint="Which records the stream collects, and from which workloads."
           anchor="source"
         >
@@ -489,11 +489,11 @@
               </Item.List>
             </template>
           </Card>
-        </SettingsSection>
+        </SettingsGroup>
 
-        <SettingsSection
+        <SettingsGroup
           v-if="form.scope === 'all'"
-          title="Sampling"
+          label="Sampling"
           hint="Collect a share of the records instead of all of them. Only available when the stream collects from every workload."
           anchor="sampling"
         >
@@ -557,10 +557,10 @@
               </Item.List>
             </template>
           </Card>
-        </SettingsSection>
+        </SettingsGroup>
 
-        <SettingsSection
-          title="Template"
+        <SettingsGroup
+          label="Template"
           hint="The structure of each record sent to the destination."
           anchor="template"
         >
@@ -671,10 +671,10 @@
               </Item.List>
             </template>
           </Card>
-        </SettingsSection>
+        </SettingsGroup>
 
-        <SettingsSection
-          title="Destination"
+        <SettingsGroup
+          label="Destination"
           hint="The platform the records are sent to. Every value comes from that platform, and credentials cannot be read back."
           anchor="destination"
         >
@@ -1075,7 +1075,7 @@
               </Item.List>
             </template>
           </Card>
-        </SettingsSection>
+        </SettingsGroup>
       </fieldset>
     </div>
 

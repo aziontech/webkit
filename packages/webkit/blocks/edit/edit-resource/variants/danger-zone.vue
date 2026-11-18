@@ -11,8 +11,8 @@
   import PageHeader from '@aziontech/webkit/page-header'
   import PageTabs from '@aziontech/webkit/page-tabs'
   import SaveBar from '@aziontech/webkit/save-bar'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
-  import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import Tabs from '@aziontech/webkit/tabs'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -175,8 +175,8 @@
               >
                 <legend class="sr-only">Main settings</legend>
 
-                <SettingsSection
-                  title="General"
+                <SettingsGroup
+                  label="General"
                   hint="How this project is identified across the platform, and whether it is serving traffic."
                   anchor="general"
                 >
@@ -220,10 +220,10 @@
                       </Item.List>
                     </template>
                   </Card>
-                </SettingsSection>
+                </SettingsGroup>
 
-                <SettingsSection
-                  title="Modules"
+                <SettingsGroup
+                  label="Modules"
                   hint="The capabilities this project runs with, each of which can be toggled here."
                   anchor="modules"
                 >
@@ -246,10 +246,10 @@
                       </Item.List>
                     </template>
                   </Card>
-                </SettingsSection>
+                </SettingsGroup>
 
-                <SettingsSection
-                  title="Subscription modules"
+                <SettingsGroup
+                  label="Subscription modules"
                   hint="Paid add-ons that are activated with sales, not from this page."
                   anchor="subscription-modules"
                 >
@@ -283,10 +283,10 @@
                       </Item.List>
                     </template>
                   </Card>
-                </SettingsSection>
+                </SettingsGroup>
 
-                <SettingsSection
-                  title="Danger zone"
+                <SettingsGroup
+                  label="Danger zone"
                   hint="Actions that cannot be undone."
                   anchor="danger-zone"
                 >
@@ -311,7 +311,7 @@
                       </Item.List>
                     </template>
                   </Card>
-                </SettingsSection>
+                </SettingsGroup>
               </fieldset>
             </div>
 

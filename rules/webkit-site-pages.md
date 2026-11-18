@@ -177,7 +177,7 @@ SD-04.
 After a band hero, the first column section opens on the hero's bottom rule: its `SitePage` entry
 takes `gap: 'none'`.
 
-- **Incorrect:** a `title-band` hero, a hatched `SectionGap`, then the first section.
+- **Incorrect:** a `title-band` hero, a hatched `Spacer`, then the first section.
 - **Correct:** `{ _id: 'capability-grid-section', gap: 'none', props }` as the first entry of
   `sections` under a `title-band` hero.
 

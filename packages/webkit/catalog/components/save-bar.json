@@ -13,7 +13,7 @@
  ],
  "related": [
   "`button` — the actions: an outlined Discard or Cancel, then a primary Save with `loading` while it runs.",
-  "`settings-section` — the bands the bar saves.",
+  "`settings-group` — the bands the bar saves.",
   "`confirm-dialog` — the guard shown when someone leaves with unsaved changes."
  ],
  "bestPractices": [

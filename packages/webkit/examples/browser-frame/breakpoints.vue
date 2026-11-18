@@ -3,12 +3,12 @@
   import Button from '@aziontech/webkit/button'
   import CallToAction from '@aziontech/webkit/call-to-action'
   import CardGrid from '@aziontech/webkit/card-grid'
+  import Container from '@aziontech/webkit/container'
   import FeatureItem from '@aziontech/webkit/feature-item'
+  import Module from '@aziontech/webkit/module'
+  import ModuleHeader from '@aziontech/webkit/module-header'
   import RegistrationFrame from '@aziontech/webkit/registration-frame'
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionGap from '@aziontech/webkit/section-gap'
-  import SectionModule from '@aziontech/webkit/section-module'
-  import SectionTitle from '@aziontech/webkit/section-title'
+  import Spacer from '@aziontech/webkit/spacer'
 </script>
 
 <template>
@@ -21,17 +21,17 @@
           address="https://www.azion.com"
           aria-label="Azion platform page at mobile size, 375 by 812 pixels"
         >
-          <SectionContainer max-width="site">
-            <SectionGap
+          <Container max-width="site">
+            <Spacer
               size="small"
               hatch
             />
-            <SectionModule
+            <Module
               :divided="false"
               :padded="false"
             >
               <template #header>
-                <SectionTitle
+                <ModuleHeader
                   align="split"
                   eyebrow="Platform"
                   title="Build, secure and deliver from one platform"
@@ -43,7 +43,7 @@
                       label="See all products"
                     />
                   </template>
-                </SectionTitle>
+                </ModuleHeader>
               </template>
               <RegistrationFrame
                 flush
@@ -82,12 +82,12 @@
                   </CardGrid.Cell>
                 </CardGrid>
               </RegistrationFrame>
-            </SectionModule>
-            <SectionGap
+            </Module>
+            <Spacer
               size="small"
               hatch
             />
-            <SectionModule
+            <Module
               :divided="false"
               :padded="false"
             >
@@ -112,12 +112,12 @@
                   />
                 </template>
               </CallToAction>
-            </SectionModule>
-            <SectionGap
+            </Module>
+            <Spacer
               size="small"
               hatch
             />
-          </SectionContainer>
+          </Container>
         </BrowserFrame>
       </div>
       <div class="min-w-0 grow-2 basis-(--container-xl)">
@@ -127,17 +127,17 @@
           address="https://www.azion.com"
           aria-label="Azion platform page at tablet size, 768 by 1024 pixels"
         >
-          <SectionContainer max-width="site">
-            <SectionGap
+          <Container max-width="site">
+            <Spacer
               size="small"
               hatch
             />
-            <SectionModule
+            <Module
               :divided="false"
               :padded="false"
             >
               <template #header>
-                <SectionTitle
+                <ModuleHeader
                   align="split"
                   eyebrow="Platform"
                   title="Build, secure and deliver from one platform"
@@ -149,7 +149,7 @@
                       label="See all products"
                     />
                   </template>
-                </SectionTitle>
+                </ModuleHeader>
               </template>
               <RegistrationFrame
                 flush
@@ -188,12 +188,12 @@
                   </CardGrid.Cell>
                 </CardGrid>
               </RegistrationFrame>
-            </SectionModule>
-            <SectionGap
+            </Module>
+            <Spacer
               size="small"
               hatch
             />
-            <SectionModule
+            <Module
               :divided="false"
               :padded="false"
             >
@@ -218,12 +218,12 @@
                   />
                 </template>
               </CallToAction>
-            </SectionModule>
-            <SectionGap
+            </Module>
+            <Spacer
               size="small"
               hatch
             />
-          </SectionContainer>
+          </Container>
         </BrowserFrame>
       </div>
     </div>
@@ -233,17 +233,17 @@
       address="https://www.azion.com"
       aria-label="Azion platform page at desktop size, 1280 by 800 pixels"
     >
-      <SectionContainer max-width="site">
-        <SectionGap
+      <Container max-width="site">
+        <Spacer
           size="small"
           hatch
         />
-        <SectionModule
+        <Module
           :divided="false"
           :padded="false"
         >
           <template #header>
-            <SectionTitle
+            <ModuleHeader
               align="split"
               eyebrow="Platform"
               title="Build, secure and deliver from one platform"
@@ -255,7 +255,7 @@
                   label="See all products"
                 />
               </template>
-            </SectionTitle>
+            </ModuleHeader>
           </template>
           <RegistrationFrame
             flush
@@ -294,12 +294,12 @@
               </CardGrid.Cell>
             </CardGrid>
           </RegistrationFrame>
-        </SectionModule>
-        <SectionGap
+        </Module>
+        <Spacer
           size="small"
           hatch
         />
-        <SectionModule
+        <Module
           :divided="false"
           :padded="false"
         >
@@ -324,12 +324,12 @@
               />
             </template>
           </CallToAction>
-        </SectionModule>
-        <SectionGap
+        </Module>
+        <Spacer
           size="small"
           hatch
         />
-      </SectionContainer>
+      </Container>
     </BrowserFrame>
   </div>
 </template>

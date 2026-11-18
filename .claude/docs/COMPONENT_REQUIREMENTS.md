@@ -48,7 +48,7 @@ Prop vocabulary ([`rules/prop-vocabulary.md`](../rules/prop-vocabulary.md)):
 - `Button` variants are `primary`, `secondary`, `outline`, `ghost` and `danger` (`variant="ghost"`, never `variant="ghost"`); `Item` uses `variant="outline"`;
 - severities are `info`, `success`, `warning` and `danger` (`severity="danger"`, never `error`); `SeverityTag` takes `severity`, not `level`.
 
-Page fragments are components, not copied markup: `PageHeader`, `SectionHeader`, `PageTabs`, `SettingsSection`, `SettingsRow`, `SaveBar` and `ConfirmDialog`. Use them instead of hand-building the h1 row, a section heading, the tab strip under a resource header, a settings band or row, the save / discard bar or a confirm dialog.
+Page fragments are components, not copied markup: `PageHeader`, `Subheader`, `PageTabs`, `SettingsGroup`, `SettingsRow`, `SaveBar` and `ConfirmDialog`. Use them instead of hand-building the h1 row, a section heading, the tab strip under a resource header, a settings band or row, the save / discard bar or a confirm dialog.
 
 ---
 
@@ -234,7 +234,7 @@ Organize the template logically and compose existing components instead of re-dr
 ```vue
 <template>
   <section :data-testid="testId">
-    <SectionHeader
+    <Subheader
       title="Domains"
       description="Where this application answers."
     />

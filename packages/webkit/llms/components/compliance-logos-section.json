@@ -8,7 +8,7 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "The compliance band: a framed media split whose copy states the certifications and whose media is a frame grid of badges, each a picture over a check-marked pill, closed by a \"see more\" cell. It is a page section — the site places it from a `{ _id: 'compliance-logos-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `media-split` and `card-grid`.",
+ "purpose": "The compliance band: a framed media split whose copy states the certifications and whose media is a frame grid of badges, each a picture over a check-marked pill, closed by a \"see more\" cell. It is a page section — the site places it from a `{ _id: 'compliance-logos-section', props }` entry and binds `props` straight onto it — and it composes `module`, `media-split` and `card-grid`.",
  "setup": null,
  "useWhen": [
   "On security, enterprise or pricing pages, to list the certifications and link to the compliance page."
@@ -61,7 +61,7 @@
   },
   {
    "name": "primaryAction",
-   "type": "SectionTitleAction",
+   "type": "ModuleHeaderAction",
    "default": "undefined",
    "required": "false",
    "doc": "The closing \"see more\" cell; `{ label, href }`. Omitted when absent."

@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Two bands stacked inside the column. The column draws the vertical rules; each band draws only its own horizontal ones, so no line is doubled.",
+   "file": "examples/container/default.vue"
+  },
+  {
+   "name": "Widths",
+   "summary": "Three caps in one view — a width only reads against another.",
+   "file": "examples/container/widths.vue"
+  },
+  {
+   "name": "Bordered",
+   "summary": "With `bordered` off the column hands its sides to whatever frame encloses it.",
+   "file": "examples/container/bordered.vue"
+  }
+ ]
+}

@@ -1,8 +1,8 @@
 <script setup>
   import ConsoleApplicationScene from '@aziontech/webkit/assets/console-application-scene'
+  import Container from '@aziontech/webkit/container'
   import HeroSection from '@aziontech/webkit/hero-section'
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionGap from '@aziontech/webkit/section-gap'
+  import Spacer from '@aziontech/webkit/spacer'
 
   const primaryAction = {
     label: 'Start for free',
@@ -11,8 +11,8 @@
 </script>
 
 <template>
-  <SectionContainer max-width="site">
-    <SectionGap hatch />
+  <Container max-width="site">
+    <Spacer hatch />
 
     <HeroSection
       variant="center"
@@ -26,6 +26,6 @@
       </template>
     </HeroSection>
 
-    <SectionGap hatch />
-  </SectionContainer>
+    <Spacer hatch />
+  </Container>
 </template>

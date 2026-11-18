@@ -24,7 +24,7 @@
 
 ## Related
 
-- `Texture`, `RegistrationFrame`, `SectionTitle`.
+- `Texture`, `RegistrationFrame`, `ModuleHeader`.
 
 ## Props
 
@@ -32,10 +32,10 @@
 | --- | --- | --- | --- | --- |
 | `anchor` | `string` | `''` | false | In-page id set on the band so a hash link can target it. |
 | `eyebrow` | `string` | `''` | false | Eyebrow above the title. |
-| `titleAlign` | `SectionTitleAlign` | `'split'` | false | Alignment of the section title over the card row. |
+| `titleAlign` | `ModuleHeaderAlign` | `'split'` | false | Alignment of the section title over the card row. |
 | `title` | `string` | `''` | false | Headline of the band, rendered as its `h2`; the band renders nothing when empty. |
 | `description` | `string` | `''` | false | Paragraph beside the headline. |
-| `descriptionWidth` | `SectionTitleDescriptionWidth` | `'narrow'` | false | Column span of the paragraph: `wide` runs it across the middle column too. |
+| `descriptionWidth` | `ModuleHeaderDescriptionWidth` | `'narrow'` | false | Column span of the paragraph: `wide` runs it across the middle column too. |
 | `steps` | `ProcessScrollSectionStep[]` | `[]` | false | The stages, in order; each is `{ title, description }` and gets its own numbered card. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the scrollable card row; defaults to the title. |
 | `pinned` | `boolean` | `false` | false | From the large breakpoint, pins the band under the site header while the page scrolls and slides the card row sideways until its last card is in view; below it, or under reduced motion, the row scrolls sideways on its own. |

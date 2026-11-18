@@ -8,7 +8,7 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "The opening band of a marketing page: the page `h1` with its overline, accent phrase, sentence and up to two actions, full width above the page column, with an optional client strip on the floor. It is a page section — the site places it from a `{ _id: 'hero-section', props }` entry and binds `props` straight onto it — and it composes `hero`, `hero-title`, `button` and `illustration`, plus `flow-diagram` and `tag` for the topology and `section-container`, `section-module`, `registration-frame`, `card-grid`, `feature-item` and `section-gap` for the argument grid. `variant` picks the layout only: `center` fills a screen over a dot field with the copy centered, `title-band` is a padded band with the copy centered, `copy-beside-art` sets an illustration (or an `image`) beside the copy, sized from that illustration's own drawn bounds so it bleeds past the column edge and trims its empty top and bottom, and `copy-on-top-art` fills a screen with the copy centered over a scene in its `top` or `bottom` slot, unpadded so the scene reaches the band's edges, and draws a `FlowDiagram` topology from `levels` in the bottom window when neither slot is given, so page JSON can carry the scene as data; every layout takes the same copy, actions and client strip, and any layout can set a framed grid of arguments (`items`, three to a row, each a `FeatureItem`) under the band. The client strip's overline falls back to the locale catalog (`Proven on mission-critical workloads`).",
+ "purpose": "The opening band of a marketing page: the page `h1` with its overline, accent phrase, sentence and up to two actions, full width above the page column, with an optional client strip on the floor. It is a page section — the site places it from a `{ _id: 'hero-section', props }` entry and binds `props` straight onto it — and it composes `hero`, `hero-title`, `button` and `illustration`, plus `flow-diagram` and `tag` for the topology and `container`, `module`, `registration-frame`, `card-grid`, `feature-item` and `spacer` for the argument grid. `variant` picks the layout only: `center` fills a screen over a dot field with the copy centered, `title-band` is a padded band with the copy centered, `copy-beside-art` sets an illustration (or an `image`) beside the copy, sized from that illustration's own drawn bounds so it bleeds past the column edge and trims its empty top and bottom, and `copy-on-top-art` fills a screen with the copy centered over a scene in its `top` or `bottom` slot, unpadded so the scene reaches the band's edges, and draws a `FlowDiagram` topology from `levels` in the bottom window when neither slot is given, so page JSON can carry the scene as data; every layout takes the same copy, actions and client strip, and any layout can set a framed grid of arguments (`items`, three to a row, each a `FeatureItem`) under the band. The client strip's overline falls back to the locale catalog (`Proven on mission-critical workloads`).",
  "setup": null,
  "useWhen": [
   "Use HeroSection for every marketing page opening; pick the layout with `variant`.",
@@ -18,14 +18,14 @@
   "Home and the product index page: `center` with the client marquee (`marqueeMarks`). No other page type opens with it.",
   "Every product page: `title-band` with `size=\"large\"`.",
   "Compliance, Recognitions, Support, Careers and Resource Hub: `center-band`.",
-  "Blog: `title-band` with `size=\"medium\"`, followed by a `small` `section-gap`.",
+  "Blog: `title-band` with `size=\"medium\"`, followed by a `small` `spacer`.",
   "Any other page: `title-band`."
  ],
  "avoidWhen": [
   "When the page exists to capture a lead and the form sits above the fold → use `hero-form-section`.",
   "`center` with the client marquee on any page other than Home and the product index page → use `title-band` (or `center-band` on the pages listed under When to use).",
   "In a hand-built SFC that needs slots HeroSection does not offer → use the `hero` primitive.",
-  "For a band inside the page column → use `section-module` or a sibling section."
+  "For a band inside the page column → use `module` or a sibling section."
  ],
  "related": [
   "`hero` — the band primitive every layout is rendered with.",
@@ -85,14 +85,14 @@
   },
   {
    "name": "primaryAction",
-   "type": "SectionTitleAction",
+   "type": "ModuleHeaderAction",
    "default": "undefined",
    "required": "false",
    "doc": "First button under the headline; `{ label, href, trailing?, target? }`. Shown only with a label and a link."
   },
   {
    "name": "secondaryAction",
-   "type": "SectionTitleAction",
+   "type": "ModuleHeaderAction",
    "default": "undefined",
    "required": "false",
    "doc": "Second, outlined button beside the first; `{ label, href, trailing?, target? }`. Shown only with a label and a link."

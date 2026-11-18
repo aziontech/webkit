@@ -5,18 +5,18 @@
   import Button from '../../action/button/button.vue'
   import type { ConsoleMockupName } from '../../content/console-mockup/console-mockup.vue'
   import Illustration from '../../content/illustration/illustration.vue'
+  import Module from '../../layout/module/module.vue'
+  import type { ModuleHeaderAction } from '../../layout/module-header/module-header.vue'
+  import ModuleHeader from '../../layout/module-header/module-header.vue'
+  import SplitStack from '../../layout/split-stack/split-stack.vue'
   import MediaSplit from '../../marketing/media-split/media-split.vue'
-  import SectionModule from '../../marketing/section-module/section-module.vue'
-  import SectionStack from '../../marketing/section-stack/section-stack.vue'
-  import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
-  import SectionTitle from '../../marketing/section-title/section-title.vue'
 
   defineOptions({
     name: 'MediaSplitStackSection',
     inheritAttrs: false
   })
 
-  export type { SectionTitleAction }
+  export type { ModuleHeaderAction }
 
   /** A live scene drawn in a band's media cell, every webkit scene asset except the request-flow diagram. */
   export type MediaSplitStackSectionScene = {
@@ -37,7 +37,7 @@
     /** Destination the whole band links to; falls back to the action's. */
     href?: string
     /** The outlined button, whose `href` the whole band follows when the band has none; `{ label, href }`. Omitted when absent. */
-    action?: SectionTitleAction
+    action?: ModuleHeaderAction
   }
 
   /** A band's picture drawn as a live scene. */
@@ -159,7 +159,7 @@
     class="scroll-mt-(--spacing-2xl)"
   >
     <template v-if="hasBands">
-      <SectionTitle
+      <ModuleHeader
         v-if="hasHeader"
         align="center"
         size="medium"
@@ -168,11 +168,11 @@
         :description="description"
       />
 
-      <SectionModule
+      <Module
         :divided="false"
         :padded="false"
       >
-        <SectionStack
+        <SplitStack
           sticky
           flush
         >
@@ -247,8 +247,8 @@
               />
             </template>
           </MediaSplit>
-        </SectionStack>
-      </SectionModule>
+        </SplitStack>
+      </Module>
     </template>
   </section>
 </template>

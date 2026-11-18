@@ -24,8 +24,8 @@
   import RadioGroup from '@aziontech/webkit/radio-group'
   import SaveBar from '@aziontech/webkit/save-bar'
   import Select from '@aziontech/webkit/select'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
-  import SettingsSection from '@aziontech/webkit/settings-section'
   import Skeleton from '@aziontech/webkit/skeleton'
   import Switch from '@aziontech/webkit/switch'
   import { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
@@ -615,8 +615,8 @@
         />
 
         <div class="flex min-w-0 flex-col">
-          <SettingsSection
-            title="New service defaults"
+          <SettingsGroup
+            label="New service defaults"
             anchor="new-service-defaults"
             hint="What the Deployment Setting created with the next service starts with."
           >
@@ -693,10 +693,10 @@
                 </Item.List>
               </template>
             </Card>
-          </SettingsSection>
+          </SettingsGroup>
 
-          <SettingsSection
-            title="All services"
+          <SettingsGroup
+            label="All services"
             anchor="all-services"
             hint="Every service, every environment, and the Deployment Setting each one publishes with."
           >
@@ -855,10 +855,10 @@
                 </Accordion>
               </template>
             </Card>
-          </SettingsSection>
+          </SettingsGroup>
 
-          <SettingsSection
-            title="Deployment Settings"
+          <SettingsGroup
+            label="Deployment Settings"
             anchor="deployment-settings"
             hint="Every setting this account holds, and the services each one publishes to."
           >
@@ -1027,7 +1027,7 @@
                 </template>
               </Card>
             </div>
-          </SettingsSection>
+          </SettingsGroup>
         </div>
       </section>
 
@@ -1089,8 +1089,8 @@
           <PanelBody>
             <fieldset class="m-0 flex min-w-0 flex-col border-0 p-0">
               <legend class="sr-only">{{ drawerTitle }}</legend>
-              <SettingsSection
-                title="General"
+              <SettingsGroup
+                label="General"
                 hint="How this setting reads in this list and in the field that applies it."
               >
                 <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
@@ -1136,10 +1136,10 @@
                     </Field.Content>
                   </Field>
                 </div>
-              </SettingsSection>
+              </SettingsGroup>
 
-              <SettingsSection
-                title="Routing and policy"
+              <SettingsGroup
+                label="Routing and policy"
                 hint="How versions bind to the resources they ship with, and how traffic reaches them."
               >
                 <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
@@ -1184,7 +1184,7 @@
                     >
                   </fieldset>
                 </div>
-              </SettingsSection>
+              </SettingsGroup>
             </fieldset>
           </PanelBody>
 

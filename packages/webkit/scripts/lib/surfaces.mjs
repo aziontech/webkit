@@ -16,8 +16,13 @@ const BY_COMPONENT = {
   'content/texture': 'site',
   'layout/bento-grid': 'site',
   'layout/card-grid': 'site',
+  'layout/container': 'site',
+  'layout/module': 'site',
+  'layout/module-header': 'site',
   'layout/registration-frame': 'site',
-  'layout/site-layout': 'site'
+  'layout/site-layout': 'site',
+  'layout/spacer': 'site',
+  'layout/split-stack': 'site'
 }
 
 export function surfaceFromTarget(target) {

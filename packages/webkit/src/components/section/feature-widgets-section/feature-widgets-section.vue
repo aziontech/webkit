@@ -10,19 +10,19 @@
   import Illustration from '../../content/illustration/illustration.vue'
   import BentoGrid from '../../layout/bento-grid/bento-grid.vue'
   import BentoGridCell from '../../layout/bento-grid/bento-grid-cell/bento-grid-cell.vue'
+  import Module from '../../layout/module/module.vue'
+  import ModuleHeader, {
+    type ModuleHeaderAction,
+    type ModuleHeaderAlign
+  } from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
-  import SectionModule from '../../marketing/section-module/section-module.vue'
-  import SectionTitle, {
-    type SectionTitleAction,
-    type SectionTitleAlign
-  } from '../../marketing/section-title/section-title.vue'
 
   defineOptions({
     name: 'FeatureWidgetsSection',
     inheritAttrs: false
   })
 
-  export type { SectionTitleAction }
+  export type { ModuleHeaderAction }
 
   /** The copy affordance of a cell: a button that puts a prompt on the clipboard. */
   export type FeatureWidgetsSectionCopy = {
@@ -49,7 +49,7 @@
     /** Name of the illustration drawn above the sentence when no scene is set. */
     illustration?: string
     /** Outlined link button rendered at the foot of the cell; `{ label, href }`. */
-    action?: SectionTitleAction
+    action?: ModuleHeaderAction
     /** Copy button rendered at the foot of the cell; `{ label, text }` where `text` goes to the clipboard. */
     copy?: FeatureWidgetsSectionCopy
   }
@@ -64,11 +64,11 @@
     /** Supporting sentence under the headline. */
     description?: string
     /** First button under the headline; `{ label, href, trailing? }`. Omitted when absent. */
-    primaryAction?: SectionTitleAction
+    primaryAction?: ModuleHeaderAction
     /** Second, outlined button under the headline; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent. */
-    secondaryAction?: SectionTitleAction
+    secondaryAction?: ModuleHeaderAction
     /** Alignment of the section title over the grid: `center`, `start` or `split`. */
-    titleAlign?: SectionTitleAlign
+    titleAlign?: ModuleHeaderAlign
     /** Column count of the grid from the medium breakpoint up: `2`, `3` or `4`. */
     columns?: FeatureWidgetsSectionColumns
     /** Label a cell's copy button shows for two seconds after a copy; empty uses the catalog's `Copied`. */
@@ -132,7 +132,7 @@
     :aria-label="title || undefined"
     class="scroll-mt-(--spacing-2xl)"
   >
-    <SectionModule
+    <Module
       v-if="hasItems"
       :divided="false"
       :padded="false"
@@ -141,7 +141,7 @@
         v-if="hasHeader"
         #header
       >
-        <SectionTitle
+        <ModuleHeader
           :align="titleAlign"
           :eyebrow="eyebrow"
           :title="title"
@@ -164,7 +164,7 @@
               icon-position="trailing"
             />
           </template>
-        </SectionTitle>
+        </ModuleHeader>
       </template>
       <RegistrationFrame
         flush
@@ -232,6 +232,6 @@
           </BentoGridCell>
         </BentoGrid>
       </RegistrationFrame>
-    </SectionModule>
+    </Module>
   </section>
 </template>

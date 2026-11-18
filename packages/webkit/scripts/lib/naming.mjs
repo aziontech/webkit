@@ -24,6 +24,7 @@ export const MARKET_ALIASES = {
   newsletter: 'newsletter-section',
   notice: 'alert',
   notification: 'toast',
+  'section-heading': 'subheader',
   'segmented-control': 'toggle-group',
   sheet: 'drawer',
   snackbar: 'toast',

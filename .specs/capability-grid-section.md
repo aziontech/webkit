@@ -3,11 +3,11 @@ name: capability-grid-section
 category: section
 structure: monolithic
 status: implemented
-spec_version: 11
+spec_version: 12
 template: 2
-checksum: 921e5cdd4dd60f0febc12dc4cb20f69d3a213577fb952a47795f395451cb9457
+checksum: 49efc598946bfe6dbf62c73040f6e7e5dd13d954b7aed2e59a6400e8c3e00906
 created: 2026-11-11
-last_updated: 2026-11-16
+last_updated: 2026-11-18
 ---
 
 # CapabilityGridSection — Component Spec
@@ -33,7 +33,7 @@ Use CapabilityGridSection for any grid of claims or links on a marketing page. I
 
 ## Related
 
-- `FeatureItem`, `CardGrid`, `RegistrationFrame`, `SectionTitle` — the parts.
+- `FeatureItem`, `CardGrid`, `RegistrationFrame`, `ModuleHeader` — the parts.
 - `FeatureTilesSection` — tiles with illustrations.
 
 ## Best practices
@@ -42,7 +42,7 @@ Use CapabilityGridSection for any grid of claims or links on a marketing page. I
 - Keep points to three short lines.
 - A benefits grid gives every item an `icon`; a resource list or text columns give none. A grid where only some items have an icon is a benefits grid with a gap: it logs a development warning, and the site-composition check (`test/standards/site-composition.test.mjs`) fails it in the shipped page JSON.
 - Give either every item an `href` or none, so the grid reads as one kind of cell; do not combine `points` with an `href` (the whole cell is the link).
-- Set `titleAlign: 'start'` for a band whose header sits at the start edge (the Partners page's "Why you should be a partner"); the grid keeps its title, so each capability stays an `h3`. Never wrap a bare grid in `SectionModule` to move the title: the capability headings rise to `h2` and the outline breaks.
+- Set `titleAlign: 'start'` for a band whose header sits at the start edge (the Partners page's "Why you should be a partner"); the grid keeps its title, so each capability stays an `h3`. Never wrap a bare grid in `Module` to move the title: the capability headings rise to `h2` and the outline breaks.
 
 ## Usage
 
@@ -83,7 +83,7 @@ Use CapabilityGridSection for any grid of claims or links on a marketing page. I
 | `primaryAction`   | `CapabilityGridSectionAction`  | `undefined` | false    | First button under the section title, `secondary`; `{ label, href, trailing?, target? }`. Shown only with a label and a link.                                                    |
 | `secondaryAction` | `CapabilityGridSectionAction`  | `undefined` | false    | Second button under the section title, `outline`; same shape. Shown only with a label and a link.                                                                                |
 | `anchor`          | `string`                       | `''`        | false    | In-page id set on the band so a hash link can target it.                                                                                                                         |
-| `titleAlign`      | `SectionTitleAlign`            | `'center'`  | false    | Layout of the section title: `center` stacks and centers it, `start` stacks it at the start edge, `split` sets the headline and its description in two columns.                  |
+| `titleAlign`      | `ModuleHeaderAlign`            | `'center'`  | false    | Layout of the section title: `center` stacks and centers it, `start` stacks it at the start edge, `split` sets the headline and its description in two columns.                  |
 
 ## Events
 

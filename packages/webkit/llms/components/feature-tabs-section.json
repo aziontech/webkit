@@ -8,7 +8,7 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "The feature walkthrough band of a product page: a horizontal section title, with its button beside the headline, over up to three tabs on one side and the active tab's media on the other. A tab's media is its own code file (a `code-block` with line numbers whose lines rise in while the tab is open, on a pixelate texture in a taller stage), the band's live scene (handed the open tab's `value`), or the tab's illustration. It is a page section — the site places it from a `{ _id: 'feature-tabs-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `registration-frame`, `media-tabs`, `code-block`, `illustration`, `button`, `link` and the webkit scene assets. The tabs advance on a timer that pauses under the pointer or keyboard focus and never runs under reduced motion; that state is owned by `media-tabs`.",
+ "purpose": "The feature walkthrough band of a product page: a horizontal section title, with its button beside the headline, over up to three tabs on one side and the active tab's media on the other. A tab's media is its own code file (a `code-block` with line numbers whose lines rise in while the tab is open, on a pixelate texture in a taller stage), the band's live scene (handed the open tab's `value`), or the tab's illustration. It is a page section — the site places it from a `{ _id: 'feature-tabs-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `registration-frame`, `media-tabs`, `code-block`, `illustration`, `button`, `link` and the webkit scene assets. The tabs advance on a timer that pauses under the pointer or keyboard focus and never runs under reduced motion; that state is owned by `media-tabs`.",
  "setup": null,
  "useWhen": [
   "Use FeatureTabsSection for up to three tabs beside a media on a product page.",
@@ -95,7 +95,7 @@
   },
   {
    "name": "primaryAction",
-   "type": "SectionTitleAction",
+   "type": "ModuleHeaderAction",
    "default": "undefined",
    "required": "false",
    "doc": "Button in the section title, beside the headline (under the frame when the band has no title); `{ label, href, trailing?, target? }` where `trailing` adds the chevron. Omitted when absent."

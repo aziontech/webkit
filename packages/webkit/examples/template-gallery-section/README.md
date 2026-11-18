@@ -4,7 +4,7 @@ The templates band of a solution page. Copy on one side invites the reader to st
 
 Each template card is a mark, a title, one line and a `Deploy now` action. Retail, Web Apps, AI Workloads, Security, Performance and Streaming use it.
 
-The band is the `TemplateGallerySection` component from `@aziontech/webkit/template-gallery-section`; it composes `SectionModule`, `MediaSplit`, `ScrollArea`, `CardGrid`, `Button`, `RegistrationFrame` and `Marquee` (and `Texture` on the closing frame with `closing`).
+The band is the `TemplateGallerySection` component from `@aziontech/webkit/template-gallery-section`; it composes `Module`, `MediaSplit`, `ScrollArea`, `CardGrid`, `Button`, `RegistrationFrame` and `Marquee` (and `Texture` on the closing frame with `closing`).
 
 ## Examples
 
@@ -32,7 +32,7 @@ Site JSON: [`site-default.json`](./site-default.json)
 
 ### Closing
 
-The close that starts from a template: the same band, set last on the page with `closing`, so the tall hatched closing frame follows it and nothing else does (no trailing `SectionGap`). Turn `hatch` off when another closing band stacks right under it and draws the page's one closing frame.
+The close that starts from a template: the same band, set last on the page with `closing`, so the tall hatched closing frame follows it and nothing else does (no trailing `Spacer`). Turn `hatch` off when another closing band stacks right under it and draws the page's one closing frame.
 
 Example: [`site-closing.vue`](./site-closing.vue)
 

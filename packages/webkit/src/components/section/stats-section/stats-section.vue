@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import Module from '../../layout/module/module.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
-  import SectionModule from '../../marketing/section-module/section-module.vue'
   import Stats from '../../marketing/stats/stats.vue'
 
   defineOptions({
@@ -48,7 +48,7 @@
     :data-testid="testId"
     class="scroll-mt-(--spacing-2xl)"
   >
-    <SectionModule
+    <Module
       v-if="hasItems"
       :divided="false"
       :padded="false"
@@ -60,6 +60,6 @@
       >
         <Stats :items="items" />
       </RegistrationFrame>
-    </SectionModule>
+    </Module>
   </div>
 </template>

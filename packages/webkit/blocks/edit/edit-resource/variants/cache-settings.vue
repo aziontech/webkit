@@ -9,8 +9,8 @@
   import PageHeader from '@aziontech/webkit/page-header'
   import SaveBar from '@aziontech/webkit/save-bar'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
-  import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import { toast } from '@aziontech/webkit/toast'
   import { computed, nextTick, onBeforeUnmount, reactive, ref } from 'vue'
@@ -181,8 +181,8 @@
         >
           <legend class="sr-only">Cache settings</legend>
 
-          <SettingsSection
-            title="General"
+          <SettingsGroup
+            label="General"
             hint="Names the cache setting in the rules that reference it."
             anchor="general"
           >
@@ -221,9 +221,9 @@
                 </Item.List>
               </template>
             </Card>
-          </SettingsSection>
-          <SettingsSection
-            title="Browser cache"
+          </SettingsGroup>
+          <SettingsGroup
+            label="Browser cache"
             hint="How long the visitor's browser may reuse a response before asking again."
             anchor="browser-cache"
           >
@@ -279,9 +279,9 @@
                 </Item.List>
               </template>
             </Card>
-          </SettingsSection>
-          <SettingsSection
-            title="Edge cache"
+          </SettingsGroup>
+          <SettingsGroup
+            label="Edge cache"
             hint="How long the edge may serve a stored response before it asks the origin again."
             anchor="edge-cache"
           >
@@ -426,9 +426,9 @@
                 </Item.List>
               </template>
             </Card>
-          </SettingsSection>
-          <SettingsSection
-            title="Advanced cache key"
+          </SettingsGroup>
+          <SettingsGroup
+            label="Advanced cache key"
             hint="Which parts of a request make two requests two different cached objects."
             anchor="cache-key"
             collapsible
@@ -572,7 +572,7 @@
                 </Item.List>
               </template>
             </Card>
-          </SettingsSection>
+          </SettingsGroup>
         </fieldset>
       </div>
 

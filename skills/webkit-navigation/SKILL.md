@@ -635,7 +635,7 @@ Each tab renders one of two bodies:
 
 - **A list tab** → the list pattern above (controls row + flush borderless `Table`), with its create
   action **on the tab row**.
-- **A settings tab** → the `ItemGroup` form: `SettingsSection` bands each over a flush `Card` +
+- **A settings tab** → the `ItemGroup` form: `SettingsGroup` bands each over a flush `Card` +
   `Item.List` of `SettingsRow` rows, committed as **one block** by a single `SaveBar` pinned below the
   scroll region (see `webkit-form` and `webkit-ui-states`).
 

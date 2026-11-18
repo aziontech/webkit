@@ -2,7 +2,7 @@
 
 A row of big figures that proves the claims around it are measured. Each figure is a number with an optional qualifier and unit, and a one-line caption. Products places it after the platform guarantees; Partners opens with it under the hero form.
 
-The band is the `StatsSection` component from `@aziontech/webkit/stats-section`; it composes `SectionModule`, `RegistrationFrame` and `Stats`, which picks its column count from the number of figures.
+The band is the `StatsSection` component from `@aziontech/webkit/stats-section`; it composes `Module`, `RegistrationFrame` and `Stats`, which picks its column count from the number of figures.
 
 ## Examples
 

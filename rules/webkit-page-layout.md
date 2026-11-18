@@ -30,7 +30,7 @@ Two scales, documented in `@aziontech/theme` ("Breakpoints and container sizes")
   most `@5xl:` on the site (the column caps at 1388 px) and `@6xl:` in the console (1620 px).
 
 These components are box-aware and need nothing from the page: `Table` (scrolls sideways
-inside its viewport, opt-in `stackable` rows, toolbar), `PageHeader`, `SectionHeader`, `SettingsRow`, `SettingsSection`,
+inside its viewport, opt-in `stackable` rows, toolbar), `PageHeader`, `Subheader`, `SettingsRow`, `SettingsGroup`,
 `SaveBar`, `Card` (its content is `@container/card`), `Alert`, `EmptyState`, `Pagination`,
 `Wizard`, `HelpPanel`, `ChartCard`, `StatTile`, and the dialog and drawer body (`PanelBody`,
 `@container/panel`). `KeyValueList` and `Item` reflow by themselves; `Field orientation="responsive"`
@@ -58,7 +58,7 @@ follows the nearest container.
   `gap-(--layout-group-gap)`. Where the parent cannot carry a `gap`, use `.layout-section-start` /
   `.layout-group-start`.
 - Build the repeated bands from their components, which already carry the right container and
-  rhythm: `PageHeader` for the page heading, `SectionHeader` or `SettingsSection` for a band title,
+  rhythm: `PageHeader` for the page heading, `Subheader` or `SettingsGroup` for a band title,
   `SettingsRow` for a settings row, `PageTabs` for a detail page's tab strip, and `SaveBar` for the
   sticky action bar (`variant="plain"` is the form-column footer).
 - Let a tab panel start one group step (`--layout-group-gap`) below its tab strip. `Tabs.Content`

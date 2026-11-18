@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: 8cba78a311d5ca1bd8394d120fce0aa67ed1e75159cd16ecf3546abf802d6a6b
+checksum: 6dc5f21ed5cbf27e0b63a32d476a56149a239296a27076102246beafcfc85f9a
 created: 2026-09-25
 last_updated: 2026-11-15
 ---
@@ -148,7 +148,7 @@ _none_
 
 - Visible focus: not applicable — the tile carries no control of its own; anything composed into its media keeps its own `focus-visible:ring-2 focus-visible:ring-(--ring-color)` ring.
 - Keyboard map: none — the tile is static content and takes no focus, so `Tab` order runs through whatever a band composes around it.
-- ARIA: the caption is one paragraph whose lead is a `strong`, so the lead is read in flow rather than announced as a heading — the band's `section-title` carries the outline. An image given no `alt` is marked `aria-hidden="true"` and stays decorative.
+- ARIA: the caption is one paragraph whose lead is a `strong`, so the lead is read in flow rather than announced as a heading — the band's `module-header` carries the outline. An image given no `alt` is marked `aria-hidden="true"` and stays decorative.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the lead takes `var(--text-default)` and the body `var(--text-muted)`, both measured against the page canvas the band sits on.
 - `motion-reduce:transition-none motion-reduce:transform-none` — not applicable, the component is static.
 - Touch target ≥40×40 px — not applicable, the tile declares no interactive control.

@@ -1,6 +1,6 @@
 # Feature Tiles Section
 
-> The reasons band of a marketing page: an optional centered section title over a frame grid of media tiles, each a registry illustration above a short heading and a sentence. It is a page section — the site places it from a `{ _id: 'feature-tiles-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `registration-frame`, `card-grid`, `media-tile` and `illustration`. `variant` picks the layout only: `artwork` is four columns with marks on every corner, `illustrated` is three columns with marks on the bottom rule; the tiles keep the same shape in both.
+> The reasons band of a marketing page: an optional centered section title over a frame grid of media tiles, each a registry illustration above a short heading and a sentence. It is a page section — the site places it from a `{ _id: 'feature-tiles-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `registration-frame`, `card-grid`, `media-tile` and `illustration`. `variant` picks the layout only: `artwork` is four columns with marks on every corner, `illustrated` is three columns with marks on the bottom rule; the tiles keep the same shape in both.
 
 - Import: `import FeatureTilesSection from '@aziontech/webkit/feature-tiles-section'`
 - Category: section · Surface: site · Structure: monolithic
@@ -56,7 +56,7 @@
 - Visible focus: nothing in the band is interactive.
 - Keyboard map: none.
 - ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the headline is the section title's `h2` and each tile's heading is `media-tile`'s; illustrations are decorative and named by the tile's heading.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `section-title` and `media-tile`.
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `module-header` and `media-tile`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion.
 - Touch target ≥40×40 px — not applicable, nothing is interactive.
 

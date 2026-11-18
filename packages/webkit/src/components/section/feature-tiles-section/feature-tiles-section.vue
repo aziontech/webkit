@@ -4,10 +4,10 @@
   import Illustration from '../../content/illustration/illustration.vue'
   import CardGrid from '../../layout/card-grid/card-grid.vue'
   import CardGridCell from '../../layout/card-grid/card-grid-cell/card-grid-cell.vue'
+  import Module from '../../layout/module/module.vue'
+  import ModuleHeader from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import MediaTile from '../../marketing/media-tile/media-tile.vue'
-  import SectionModule from '../../marketing/section-module/section-module.vue'
-  import SectionTitle from '../../marketing/section-title/section-title.vue'
 
   defineOptions({
     name: 'FeatureTilesSection',
@@ -71,7 +71,7 @@
     :aria-label="title || undefined"
     class="scroll-mt-(--spacing-2xl)"
   >
-    <SectionModule
+    <Module
       v-if="tiles.length > 0"
       :divided="false"
       :padded="false"
@@ -80,7 +80,7 @@
         v-if="hasTitle"
         #header
       >
-        <SectionTitle
+        <ModuleHeader
           :eyebrow="eyebrow"
           :title="title"
           :description="description"
@@ -138,6 +138,6 @@
           </CardGridCell>
         </CardGrid>
       </RegistrationFrame>
-    </SectionModule>
+    </Module>
   </section>
 </template>

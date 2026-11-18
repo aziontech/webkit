@@ -54,7 +54,7 @@
   },
   {
    "name": "primaryAction",
-   "type": "SectionTitleAction",
+   "type": "ModuleHeaderAction",
    "default": "undefined",
    "required": "false",
    "doc": "Button pinned to the foot of the title cell; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent."

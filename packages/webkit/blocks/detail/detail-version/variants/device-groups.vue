@@ -16,7 +16,7 @@
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import ScrollArea from '@aziontech/webkit/scroll-area'
-  import SettingsSection from '@aziontech/webkit/settings-section'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -313,8 +313,8 @@
                 <PanelBody>
                   <fieldset class="m-0 flex min-w-0 flex-col border-0 p-0">
                     <legend class="sr-only">{{ drawerTitle }}</legend>
-                    <SettingsSection
-                      title="General"
+                    <SettingsGroup
+                      label="General"
                       hint="Names the group in the rules that reference it, so renaming it means revisiting those rules."
                     >
                       <Field :invalid="!!errors.name">
@@ -333,9 +333,9 @@
                         >
                         <Field.Error v-if="errors.name">{{ errors.name }}</Field.Error>
                       </Field>
-                    </SettingsSection>
-                    <SettingsSection
-                      title="Match to User-Agent"
+                    </SettingsGroup>
+                    <SettingsGroup
+                      label="Match to User-Agent"
                       hint="Every request whose User-Agent header matches this expression belongs to the group."
                     >
                       <Field :invalid="!!errors.userAgent">
@@ -353,7 +353,7 @@
                         </Field.Description>
                         <Field.Error v-if="errors.userAgent">{{ errors.userAgent }}</Field.Error>
                       </Field>
-                    </SettingsSection>
+                    </SettingsGroup>
                   </fieldset>
                 </PanelBody>
                 <PanelFooter>

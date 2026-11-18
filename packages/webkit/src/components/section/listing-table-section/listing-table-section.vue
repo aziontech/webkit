@@ -15,17 +15,17 @@
   import TableHeadCell from '../../data/table/table-head-cell/table-head-cell.vue'
   import TableHeader from '../../data/table/table-header/table-header.vue'
   import TableRow from '../../data/table/table-row/table-row.vue'
+  import Module from '../../layout/module/module.vue'
+  import type { ModuleHeaderAction } from '../../layout/module-header/module-header.vue'
+  import ModuleHeader from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
-  import SectionModule from '../../marketing/section-module/section-module.vue'
-  import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
-  import SectionTitle from '../../marketing/section-title/section-title.vue'
 
   defineOptions({
     name: 'ListingTableSection',
     inheritAttrs: false
   })
 
-  export type { SectionTitleAction }
+  export type { ModuleHeaderAction }
 
   /** Flex weight of a column. */
   export type ListingTableSectionColumnGrow = 1 | 2 | 3
@@ -63,7 +63,7 @@
     /** The linked rows, in order; each is `{ href, values }` where `values` maps a column key to its text. */
     data?: ListingTableSectionRow[]
     /** Outlined button into the full listing, in the table footer; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent. */
-    primaryAction?: SectionTitleAction
+    primaryAction?: ModuleHeaderAction
   }
 
   const props = withDefaults(defineProps<ListingTableSectionProps>(), {
@@ -114,7 +114,7 @@
     :aria-label="title || undefined"
     class="scroll-mt-(--spacing-2xl)"
   >
-    <SectionModule
+    <Module
       v-if="hasRows"
       :divided="false"
       :padded="false"
@@ -123,7 +123,7 @@
         v-if="title"
         #header
       >
-        <SectionTitle
+        <ModuleHeader
           align="start"
           :title="title"
         />
@@ -252,6 +252,6 @@
           </template>
         </Table>
       </RegistrationFrame>
-    </SectionModule>
+    </Module>
   </section>
 </template>

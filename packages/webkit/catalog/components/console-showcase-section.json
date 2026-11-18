@@ -12,7 +12,7 @@
  "related": [
   "`ConsoleMockup` — the console scenes it frames.",
   "`ToggleGroup` — the tab control.",
-  "`Texture`, `RegistrationFrame`, `SectionTitle`."
+  "`Texture`, `RegistrationFrame`, `ModuleHeader`."
  ],
  "bestPractices": [
   "Two to four tabs, each a different view, labelled with one word.",

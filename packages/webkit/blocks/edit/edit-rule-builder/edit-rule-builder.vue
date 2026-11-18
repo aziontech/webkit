@@ -17,8 +17,8 @@
   import PanelHeader from '@aziontech/webkit/panel-header'
   import RadioGroup from '@aziontech/webkit/radio-group'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
-  import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import { computed, nextTick, reactive, ref, watch } from 'vue'
 
@@ -648,8 +648,8 @@
             :disabled="submitting"
           >
             <legend class="sr-only">{{ title }}</legend>
-            <SettingsSection
-              title="General"
+            <SettingsGroup
+              label="General"
               hint="Names the rule in the list and in the deployment log."
             >
               <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
@@ -682,10 +682,10 @@
                   >
                 </Field>
               </div>
-            </SettingsSection>
+            </SettingsGroup>
 
-            <SettingsSection
-              title="Phase"
+            <SettingsGroup
+              label="Phase"
               hint="When the rule runs. Request rules act on what arrives at the service; response rules act on what leaves it. The two are separate programs and never interleave."
             >
               <Card :padded="false">
@@ -715,10 +715,10 @@
                   </div>
                 </template>
               </Card>
-            </SettingsSection>
+            </SettingsGroup>
 
-            <SettingsSection
-              title="Criteria"
+            <SettingsGroup
+              label="Criteria"
               hint="The conditions that decide whether the rule runs. Every condition in a group must match, and any one group is enough."
             >
               <AttributeEditor
@@ -796,10 +796,10 @@
                   />
                 </template>
               </AttributeEditor>
-            </SettingsSection>
+            </SettingsGroup>
 
-            <SettingsSection
-              title="Behaviors"
+            <SettingsGroup
+              label="Behaviors"
               hint="What the rule does when its criteria are met, run top to bottom in this order."
             >
               <Card :padded="false">
@@ -960,10 +960,10 @@
                   </div>
                 </template>
               </Card>
-            </SettingsSection>
+            </SettingsGroup>
 
-            <SettingsSection
-              title="Status"
+            <SettingsGroup
+              label="Status"
               hint="An inactive rule stays in the list and in its place in the order, but is skipped at runtime."
             >
               <Card :padded="false">
@@ -983,7 +983,7 @@
                   </Item.List>
                 </template>
               </Card>
-            </SettingsSection>
+            </SettingsGroup>
           </fieldset>
         </PanelBody>
 

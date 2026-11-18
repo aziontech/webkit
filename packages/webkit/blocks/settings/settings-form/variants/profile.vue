@@ -9,8 +9,8 @@
   import PageHeader from '@aziontech/webkit/page-header'
   import SaveBar from '@aziontech/webkit/save-bar'
   import Select from '@aziontech/webkit/select'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
-  import SettingsSection from '@aziontech/webkit/settings-section'
   import Skeleton from '@aziontech/webkit/skeleton'
   import Switch from '@aziontech/webkit/switch'
   import Tag from '@aziontech/webkit/tag'
@@ -266,8 +266,8 @@
               :disabled="saving"
             >
               <legend class="sr-only">Profile</legend>
-              <SettingsSection
-                title="General"
+              <SettingsGroup
+                label="General"
                 hint="How this account is identified on the platform."
                 anchor="general"
               >
@@ -316,9 +316,9 @@
                     </Item.List>
                   </template>
                 </Card>
-              </SettingsSection>
-              <SettingsSection
-                title="Company information"
+              </SettingsGroup>
+              <SettingsGroup
+                label="Company information"
                 hint="The company that owns the account, as it appears on every invoice."
                 anchor="company-information"
               >
@@ -380,9 +380,9 @@
                     </Item.List>
                   </template>
                 </Card>
-              </SettingsSection>
-              <SettingsSection
-                title="Address information"
+              </SettingsGroup>
+              <SettingsGroup
+                label="Address information"
                 hint="Where the account owner is registered, for invoices and tax purposes."
                 anchor="address-information"
               >
@@ -454,9 +454,9 @@
                     </Item.List>
                   </template>
                 </Card>
-              </SettingsSection>
-              <SettingsSection
-                title="Login settings"
+              </SettingsGroup>
+              <SettingsGroup
+                label="Login settings"
                 hint="How the users linked to this account sign in."
                 anchor="login-settings"
               >
@@ -489,9 +489,9 @@
                     </Item.List>
                   </template>
                 </Card>
-              </SettingsSection>
-              <SettingsSection
-                title="Source control"
+              </SettingsGroup>
+              <SettingsGroup
+                label="Source control"
                 hint="The Git providers this account builds applications from, connected at the provider and outside Save."
                 anchor="source-control"
               >
@@ -544,9 +544,9 @@
                     </Item.List>
                   </template>
                 </Card>
-              </SettingsSection>
-              <SettingsSection
-                title="Appearance"
+              </SettingsGroup>
+              <SettingsGroup
+                label="Appearance"
                 hint="Preferences for this browser, applied the moment you change them and not part of Save."
                 anchor="appearance"
               >
@@ -609,9 +609,9 @@
                     </Item.List>
                   </template>
                 </Card>
-              </SettingsSection>
-              <SettingsSection
-                title="Danger zone"
+              </SettingsGroup>
+              <SettingsGroup
+                label="Danger zone"
                 hint="Actions that cannot be undone."
                 anchor="danger-zone"
               >
@@ -635,7 +635,7 @@
                     </Item.List>
                   </template>
                 </Card>
-              </SettingsSection>
+              </SettingsGroup>
             </fieldset>
           </div>
         </div>

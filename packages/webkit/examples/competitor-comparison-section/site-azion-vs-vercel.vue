@@ -2,8 +2,8 @@
   import vercelExtendedMono from '@aziontech/webkit/assets/vercel-extended-mono.svg'
   import vercelExtendedReversed from '@aziontech/webkit/assets/vercel-extended-reversed.svg'
   import CompetitorComparisonSection from '@aziontech/webkit/competitor-comparison-section'
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionGap from '@aziontech/webkit/section-gap'
+  import Container from '@aziontech/webkit/container'
+  import Spacer from '@aziontech/webkit/spacer'
 
   const competitor = {
     name: 'Vercel',
@@ -198,8 +198,8 @@
 </script>
 
 <template>
-  <SectionContainer max-width="site">
-    <SectionGap hatch />
+  <Container max-width="site">
+    <Spacer hatch />
 
     <CompetitorComparisonSection
       eyebrow="Comparison"
@@ -213,6 +213,6 @@
       :groups="groups"
     />
 
-    <SectionGap hatch />
-  </SectionContainer>
+    <Spacer hatch />
+  </Container>
 </template>

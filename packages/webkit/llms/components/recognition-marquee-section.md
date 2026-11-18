@@ -1,6 +1,6 @@
 # Recognition Marquee Section
 
-> The analyst-recognition band: a section title over a framed strip of signed quotes — one per report, marked by the firm's logo — that scrolls continuously and pauses on hover, on focus or from its pause control; the loop is the one `marquee` runs on. It is a page section — the site places it from a `{ _id: 'recognition-marquee-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `registration-frame` and `quote`.
+> The analyst-recognition band: a section title over a framed strip of signed quotes — one per report, marked by the firm's logo — that scrolls continuously and pauses on hover, on focus or from its pause control; the loop is the one `marquee` runs on. It is a page section — the site places it from a `{ _id: 'recognition-marquee-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `registration-frame` and `quote`.
 
 - Import: `import RecognitionMarqueeSection from '@aziontech/webkit/recognition-marquee-section'`
 - Category: section · Surface: site · Structure: monolithic

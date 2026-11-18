@@ -8,7 +8,7 @@
   import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
-  import SettingsSection from '@aziontech/webkit/settings-section'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import Skeleton from '@aziontech/webkit/skeleton'
   import { ref, watch } from 'vue'
 
@@ -57,16 +57,16 @@
             class="flex min-w-0 flex-col"
             aria-busy="true"
           >
-            <SettingsSection
-              title="Resources"
+            <SettingsGroup
+              label="Resources"
               hint="Everything this project serves, at the version this deployment sends live, with the version of every dependency they reference."
             >
               <div aria-hidden="true">
                 <Skeleton height="var(--size-40)" />
               </div>
-            </SettingsSection>
-            <SettingsSection
-              title="Environment"
+            </SettingsGroup>
+            <SettingsGroup
+              label="Environment"
               hint="Where the deployment goes live. Each environment goes live with its own Deployment Settings."
             >
               <div
@@ -79,7 +79,7 @@
                   height="var(--size-16)"
                 />
               </div>
-            </SettingsSection>
+            </SettingsGroup>
             <span
               class="sr-only"
               role="status"
@@ -88,9 +88,9 @@
             </span>
           </div>
 
-          <SettingsSection
+          <SettingsGroup
             v-else
-            title="Deploy targets"
+            label="Deploy targets"
           >
             <div class="flex min-w-0 flex-col items-start gap-(--spacing-sm)">
               <Alert
@@ -105,7 +105,7 @@
                 @click="retrying = true"
               />
             </div>
-          </SettingsSection>
+          </SettingsGroup>
         </PanelBody>
 
         <PanelFooter>

@@ -40,7 +40,7 @@
 - [media-split](media-split.md) — one claim, one medium, no selection and no pin.
 - [code-block](code-block.md) — the medium this band most often holds, one sample per claim.
 - [illustration](illustration.md) — the official scene a claim's `media` slot otherwise holds.
-- [section-title](section-title.md) — the heading above the band; this component carries no title of its own.
+- [module-header](module-header.md) — the heading above the band; this component carries no title of its own.
 
 ## Props
 

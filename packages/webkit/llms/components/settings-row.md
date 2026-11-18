@@ -33,7 +33,7 @@
 
 ## Related
 
-- [settings-section](settings-section.md) — the band the card of rows sits in.
+- [settings-group](settings-group.md) — the band the card of rows sits in.
 - [item](item.md) — the row primitive it renders; place rows in an `Item.List` inside the card.
 - `field-error` — the required or invalid message under the control.
 

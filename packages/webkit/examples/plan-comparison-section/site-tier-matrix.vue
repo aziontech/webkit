@@ -1,7 +1,7 @@
 <script setup>
+  import Container from '@aziontech/webkit/container'
   import PlanComparisonSection from '@aziontech/webkit/plan-comparison-section'
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionGap from '@aziontech/webkit/section-gap'
+  import Spacer from '@aziontech/webkit/spacer'
 
   const tiers = [
     {
@@ -166,8 +166,8 @@
 </script>
 
 <template>
-  <SectionContainer max-width="site">
-    <SectionGap hatch />
+  <Container max-width="site">
+    <Spacer hatch />
 
     <PlanComparisonSection
       anchor="tiers"
@@ -180,6 +180,6 @@
       :sections="sections"
     />
 
-    <SectionGap hatch />
-  </SectionContainer>
+    <Spacer hatch />
+  </Container>
 </template>

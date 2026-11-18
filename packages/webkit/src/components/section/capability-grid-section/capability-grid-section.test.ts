@@ -73,11 +73,11 @@ describe('CapabilityGridSection', () => {
 
   it('centers the title by default and sets it at the start edge with titleAlign start', () => {
     const { getByTestId, unmount } = render(Default)
-    expect(getByTestId('section-title')).toHaveAttribute('data-align', 'center')
+    expect(getByTestId('module-header')).toHaveAttribute('data-align', 'center')
     unmount()
 
     const left = render(TitleStart)
-    expect(left.getByTestId('section-title')).toHaveAttribute('data-align', 'start')
+    expect(left.getByTestId('module-header')).toHaveAttribute('data-align', 'start')
     expect(left.getByRole('heading', { level: 2 }).textContent?.trim()).toBe(
       'Why you should be a partner'
     )

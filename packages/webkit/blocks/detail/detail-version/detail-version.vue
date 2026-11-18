@@ -15,8 +15,8 @@
   import Resizable from '@aziontech/webkit/resizable'
   import ScrollArea from '@aziontech/webkit/scroll-area'
   import Select from '@aziontech/webkit/select'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
-  import SettingsSection from '@aziontech/webkit/settings-section'
   import Skeleton from '@aziontech/webkit/skeleton'
   import Spinner from '@aziontech/webkit/spinner'
   import SplitButton from '@aziontech/webkit/split-button'
@@ -780,8 +780,8 @@
                         >
                           <legend class="sr-only">Main settings</legend>
 
-                          <SettingsSection
-                            title="General"
+                          <SettingsGroup
+                            label="General"
                             hint="How this resource is identified across the console, and whether it is serving traffic."
                             anchor="general"
                           >
@@ -812,10 +812,10 @@
                                 </Item.List>
                               </template>
                             </Card>
-                          </SettingsSection>
+                          </SettingsGroup>
 
-                          <SettingsSection
-                            title="Modules"
+                          <SettingsGroup
+                            label="Modules"
                             hint="The capabilities this resource runs with, each of which can be toggled here."
                             anchor="modules"
                           >
@@ -837,10 +837,10 @@
                                 </Item.List>
                               </template>
                             </Card>
-                          </SettingsSection>
+                          </SettingsGroup>
 
-                          <SettingsSection
-                            title="Subscription modules"
+                          <SettingsGroup
+                            label="Subscription modules"
                             hint="Paid add-ons that are activated with sales, not from this page."
                             anchor="subscription-modules"
                           >
@@ -878,7 +878,7 @@
                                 </Item.List>
                               </template>
                             </Card>
-                          </SettingsSection>
+                          </SettingsGroup>
                         </fieldset>
                       </div>
                     </form>

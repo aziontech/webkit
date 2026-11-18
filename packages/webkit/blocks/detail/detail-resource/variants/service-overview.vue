@@ -20,9 +20,9 @@
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Popover from '@aziontech/webkit/popover'
-  import SectionHeader from '@aziontech/webkit/section-header'
   import Select from '@aziontech/webkit/select'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import Subheader from '@aziontech/webkit/subheader'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
@@ -1058,7 +1058,7 @@
               ref="topologyEl"
               class="flex scroll-mt-(--spacing-lg) flex-col gap-(--layout-group-gap)"
             >
-              <SectionHeader
+              <Subheader
                 title="Deployment topology"
                 description="How a request reaches this service in Production. Bind, change or remove a policy, an error page or the origin here; the change is staged until you deploy."
                 size="small"

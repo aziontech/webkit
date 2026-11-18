@@ -8,7 +8,7 @@
     type TextureVariant
   } from '../../content/texture/texture.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
-  import { SectionStackInjectionKey } from '../section-stack/injection-key'
+  import { SplitStackInjectionKey } from '../../layout/split-stack/injection-key'
 
   defineOptions({
     name: 'MediaSplit',
@@ -51,7 +51,7 @@
     framed?: boolean
     /** Draw the seam between the copy and the media. Turn it off for a band whose two halves should read as one plate. */
     divided?: boolean
-    /** Level of the band's headline element. Drop it to 3 when the band is a sub-band of a section a section-title has already opened with its h2, so the document outline stays in order. */
+    /** Level of the band's headline element. Drop it to 3 when the band is a sub-band of a section a module-header has already opened with its h2, so the document outline stays in order. */
     headingLevel?: MediaSplitHeadingLevel
     /** Texture the media half is grounded with; `none` leaves the cell bare. */
     texture?: TextureVariant
@@ -106,7 +106,7 @@
   }>()
 
   const attrs = useAttrs()
-  const stack = inject(SectionStackInjectionKey, null)
+  const stack = inject(SplitStackInjectionKey, null)
 
   const rootEl = ref<globalThis.HTMLElement | null>(null)
 

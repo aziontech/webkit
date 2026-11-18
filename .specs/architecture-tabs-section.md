@@ -3,17 +3,17 @@ name: architecture-tabs-section
 category: section
 structure: monolithic
 status: implemented
-spec_version: 6
+spec_version: 7
 created: 2026-11-05
-last_updated: 2026-11-16
-checksum: 49a0de1404e0c92eee4eb9c3bc004e01011f930d5af8cd3672613e44fe395ce4
+last_updated: 2026-11-18
+checksum: d02da59cea19a65fda4fb9b0da490e6176ec2023b2348bf8343af0bfe66d23ed
 ---
 
 # ArchitectureTabsSection — Component Spec
 
 ## Purpose
 
-The architecture band of a product page: a horizontal section title with one large button, over a row of up to five tabs whose active tab draws its named diagram the full width of the frame. It is a page section — the site places it from a `{ _id: 'architecture-tabs-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `button`, `registration-frame`, `media-tabs` and `diagram`. The tabs advance on a timer that pauses under the pointer or keyboard focus and never runs under reduced motion; that state is owned by `media-tabs`.
+The architecture band of a product page: a horizontal section title with one large button, over a row of up to five tabs whose active tab draws its named diagram the full width of the frame. It is a page section — the site places it from a `{ _id: 'architecture-tabs-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `button`, `registration-frame`, `media-tabs` and `diagram`. The tabs advance on a timer that pauses under the pointer or keyboard focus and never runs under reduced motion; that state is owned by `media-tabs`.
 
 ## When to use
 
@@ -79,7 +79,7 @@ The architecture band of a product page: a horizontal section title with one lar
 | `tabs`             | `ArchitectureTabsSectionTab[]` | `[]`        | false    | The architectures, in order; each is `{ value, title, description, diagram, diagramAriaLabel? }` where `diagram` is the name of the diagram drawn while the tab is active and `diagramAriaLabel` replaces the description that diagram ships. |
 | `autoplay`         | `boolean`                      | `true`      | false    | Opens the next tab on a timer, with the composed tabs' visible pause control.                                                                                                                                                                 |
 | `autoplayInterval` | `number`                       | `6000`      | false    | Milliseconds each tab holds before the next one opens.                                                                                                                                                                                        |
-| `primaryAction`    | `SectionTitleAction`           | `undefined` | false    | Large button in the section title; `{ label, href, trailing?, target? }`. Omitted when absent.                                                                                                                                                |
+| `primaryAction`    | `ModuleHeaderAction`           | `undefined` | false    | Large button in the section title; `{ label, href, trailing?, target? }`. Omitted when absent.                                                                                                                                                |
 
 ## Events
 
@@ -118,7 +118,7 @@ _none_
 - Visible focus: owned by `media-tabs` (the tabs) and `button`.
 - Keyboard map: `Tab` reaches the button and the tab row; the tab row's keys are owned by `media-tabs`.
 - ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the headline is the section title's `h2`; each diagram carries the description its spec ships, or the tab's `diagramAriaLabel` when one is set.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `section-title`, `media-tabs` and `diagram`.
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `module-header`, `media-tabs` and `diagram`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion; the timer never runs under reduced motion (owned by `media-tabs`).
 - Touch target ≥40×40 px: the large button and the tab rows.
 

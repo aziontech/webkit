@@ -1,6 +1,6 @@
 # Eyebrow
 
-> Overline is the short uppercase label set above a headline to name the section, panel or group it opens (the "eyebrow"). It renders its default slot in `.text-overline-md` in the brand orange (`--text-brand`: the logo orange `#F3652B` in light and dark), optionally behind a preset code-style prefix (`//`, `<>`, `</>`) and followed by a blinking terminal-style cursor. It is purely presentational text with no interaction; the marketing headers (`section-title`, `hero-title`, `call-to-action`, `media-split`, `marquee`) and several page sections render their eyebrow (the `eyebrow` prop, or `label` on `marquee`) through it.
+> Overline is the short uppercase label set above a headline to name the section, panel or group it opens (the "eyebrow"). It renders its default slot in `.text-overline-md` in the brand orange (`--text-brand`: the logo orange `#F3652B` in light and dark), optionally behind a preset code-style prefix (`//`, `<>`, `</>`) and followed by a blinking terminal-style cursor. It is purely presentational text with no interaction; the marketing headers (`module-header`, `hero-title`, `call-to-action`, `media-split`, `marquee`) and several page sections render their eyebrow (the `eyebrow` prop, or `label` on `marquee`) through it.
 
 - Import: `import Eyebrow from '@aziontech/webkit/eyebrow'`
 - Category: content · Surface: app · Structure: monolithic
@@ -9,7 +9,7 @@
 ## When to use
 
 - Name a section, panel or column group with one or two words set above its headline.
-- Build a custom marketing header that must match the eyebrow treatment of `section-title` and `hero-title` (the `//` prefix and the blinking cursor).
+- Build a custom marketing header that must match the eyebrow treatment of `module-header` and `hero-title` (the `//` prefix and the blinking cursor).
 - Label a band inside a page section (a comparison group, a closing panel) with the same uppercase code-style mark.
 
 ## Do
@@ -22,7 +22,7 @@
 
 ## Don’t
 
-- The header has a headline, description and actions → use `section-title` (or `hero-title` for the hero), which already renders its `eyebrow` through Eyebrow.
+- The header has a headline, description and actions → use `module-header` (or `hero-title` for the hero), which already renders its `eyebrow` through Eyebrow.
 - The text is a status, count or category attached to an item → use `tag` or `badge`.
 - The text is the heading itself → use a real heading element; Eyebrow renders a `div` and is not a heading.
 - The text is a keyboard shortcut → use `kbd`.
@@ -31,7 +31,7 @@
 
 ## Related
 
-- [section-title](section-title.md) — the framed section header; renders its `eyebrow` as an Eyebrow with `prefix="//"` and `cursor`.
+- [module-header](module-header.md) — the framed section header; renders its `eyebrow` as an Eyebrow with `prefix="//"` and `cursor`.
 - `hero-title` — the hero copy block; renders its `eyebrow` as an Eyebrow closed by the cursor, with `single-line` turned off.
 - [tag](tag.md) — a compact label attached to an item, not a heading companion.
 - [badge](badge.md) — a compact count or status indicator.

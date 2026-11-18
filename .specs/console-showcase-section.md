@@ -3,11 +3,11 @@ name: console-showcase-section
 category: section
 structure: monolithic
 status: implemented
-spec_version: 12
+spec_version: 13
 template: 2
-checksum: c598c5589ccdc3647f16ee434cf48d3b8a1cab022c5b7b4321da97c8c91f84a4
+checksum: 40a4624cee99dd80428207f350d021c2b35a58d89090ddfac6bc6f9d859668c6
 created: 2026-11-11
-last_updated: 2026-11-16
+last_updated: 2026-11-18
 ---
 
 # ConsoleShowcaseSection — Component Spec
@@ -31,7 +31,7 @@ A full-width framed panel that presents a product scene (a console mock or a dia
 
 - `ConsoleMockup` — the console scenes it frames.
 - `ToggleGroup` — the tab control.
-- `Texture`, `RegistrationFrame`, `SectionTitle`.
+- `Texture`, `RegistrationFrame`, `ModuleHeader`.
 
 ## Best practices
 
@@ -66,9 +66,9 @@ A full-width framed panel that presents a product scene (a console mock or a dia
 | Prop              | Type                           | Default      | Required | JSDoc                                                                                                                          |
 | ----------------- | ------------------------------ | ------------ | -------- | ------------------------------------------------------------------------------------------------------------------------------ |
 | `variant`         | `'console' \| 'diagram'`       | `'console'`  | false    | What the panel frames: `console` crops and fades a console mock at a fixed aspect, `diagram` lets a scene keep its own height. |
-| `titleAlign`      | `SectionTitleAlign`            | `'center'`   | false    | Layout of the headline block.                                                                                                  |
-| `titlePadding`    | `SectionTitlePadding`          | `'medium'`   | false    | Vertical padding of the headline block.                                                                                        |
-| `size`            | `SectionTitleSize`             | `'medium'`   | false    | Step of the headline on the heading scale.                                                                                     |
+| `titleAlign`      | `ModuleHeaderAlign`            | `'center'`   | false    | Layout of the headline block.                                                                                                  |
+| `titlePadding`    | `ModuleHeaderPadding`          | `'medium'`   | false    | Vertical padding of the headline block.                                                                                        |
+| `size`            | `ModuleHeaderSize`             | `'medium'`   | false    | Step of the headline on the heading scale.                                                                                     |
 | `anchor`          | `string`                       | `''`         | false    | In-page id set on the band so a hash link can target it.                                                                       |
 | `eyebrow`         | `string`                       | `''`         | false    | Eyebrow above the title.                                                                                                       |
 | `title`           | `string`                       | `''`         | false    | Headline of the band, rendered as its `h2`.                                                                                    |

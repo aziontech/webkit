@@ -1,7 +1,7 @@
 <script setup>
   import CapabilityGridSection from '@aziontech/webkit/capability-grid-section'
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionGap from '@aziontech/webkit/section-gap'
+  import Container from '@aziontech/webkit/container'
+  import Spacer from '@aziontech/webkit/spacer'
 
   const primaryAction = {
     label: 'Explore the platform',
@@ -29,8 +29,8 @@
 </script>
 
 <template>
-  <SectionContainer max-width="site">
-    <SectionGap hatch />
+  <Container max-width="site">
+    <Spacer hatch />
 
     <CapabilityGridSection
       eyebrow="Platform"
@@ -40,6 +40,6 @@
       :items="items"
     />
 
-    <SectionGap hatch />
-  </SectionContainer>
+    <Spacer hatch />
+  </Container>
 </template>

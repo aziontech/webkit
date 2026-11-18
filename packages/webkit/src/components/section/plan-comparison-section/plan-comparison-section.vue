@@ -12,8 +12,8 @@
   import SelectContent from '../../input/select/select-content/select-content.vue'
   import SelectItem from '../../input/select/select-item/select-item.vue'
   import SelectTrigger from '../../input/select/select-trigger/select-trigger.vue'
-  import SectionModule from '../../marketing/section-module/section-module.vue'
-  import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
+  import Module from '../../layout/module/module.vue'
+  import type { ModuleHeaderAction } from '../../layout/module-header/module-header.vue'
   import Link from '../../navigation/link/link.vue'
   import Popover from '../../overlay/popover/popover.vue'
   import PopoverContent from '../../overlay/popover/popover-content/popover-content.vue'
@@ -27,7 +27,7 @@
     inheritAttrs: false
   })
 
-  export type { SectionTitleAction }
+  export type { ModuleHeaderAction }
 
   /** One plan column. */
   export type PlanComparisonSectionPlan = {
@@ -40,7 +40,7 @@
     /** One line under the name saying who the plan is for. */
     description?: string
     /** The button under the plan name. */
-    action: SectionTitleAction
+    action: ModuleHeaderAction
   }
 
   /** One cell value: `true` or a tick is included, a dash is not included, other text shows as written, empty is blank. */
@@ -71,7 +71,7 @@
     /** The feature rows, in order. */
     rows: PlanComparisonSectionRow[]
     /** Link closing the band, opened in a new tab; `{ label, href }`. */
-    action?: SectionTitleAction
+    action?: ModuleHeaderAction
   }
 
   export interface PlanComparisonSectionProps {
@@ -92,7 +92,7 @@
     /** The product bands, in order; each is `{ eyebrow, title, description, rows, action? }` (`action` closes the band, `{ label, href }`) and a row is `{ label, values, group?, hint?, tag? }` with one value per plan: `true` or a tick is included, a dash is not included, other text shows as written, empty is blank; `hint` defines the label in a popover. */
     sections?: PlanComparisonSectionSection[]
     /** Closing link under the table, opened in a new tab; `{ label, href }`. Omitted when absent. */
-    primaryAction?: SectionTitleAction
+    primaryAction?: ModuleHeaderAction
   }
 
   const props = withDefaults(defineProps<PlanComparisonSectionProps>(), {
@@ -203,7 +203,7 @@
     :data-testid="testId"
     class="scroll-mt-(--spacing-2xl)"
   >
-    <SectionModule
+    <Module
       v-if="columns.length > 0"
       :divided="false"
       :padded="false"
@@ -443,6 +443,6 @@
           </tr>
         </tfoot>
       </table>
-    </SectionModule>
+    </Module>
   </section>
 </template>

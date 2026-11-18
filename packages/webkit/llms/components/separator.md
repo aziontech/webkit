@@ -20,13 +20,13 @@
 
 ## Don’t
 
-- The break between two page sections → use `section-gap`.
+- The break between two page sections → use `spacer`.
 - A bounded region that scrolls → use `scroll-area`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
-- [section-gap](section-gap.md) — the frame that divides page sections, with its own rules and vertical air.
+- [spacer](spacer.md) — the frame that divides page sections, with its own rules and vertical air.
 - [scroll-area](scroll-area.md) — scrolling container; Separator adds no scrolling.
 
 ## Props

@@ -7,14 +7,14 @@ spec_version: 5
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-16
-checksum: bfebefc69f99a1686fcf68aae0c49c8c5c1ce5e5f51c85313a9305de84030a7d
+checksum: a12ed88528669457543f59ae1dddb02c049837e1568236cb048a9fc5d68b92c6
 ---
 
 # ArticleHighlightSection — Component Spec
 
 ## Purpose
 
-The band that opens a blog under its hero. One article is shown large — its cover beside its overline, headline, deck, read time and a button into it — over a wall of the highlight articles that acts as its selector. The wall is a tablist and the large article its panel; selecting a title on the wall swaps the panel with a short slide in the direction of travel, and every article is drawn invisibly under the panel so the band keeps the height of its tallest article and never jumps. With four or more articles the wall runs four across. It is a page section — the site places it from a `{ _id: 'article-highlight-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `registration-frame`, `card-grid` and `button`; the selection is local state. With `autoplay` the band advances on its own every `autoplayInterval`, drawing a primary progress line at the panel's foot, and pauses while the pointer is over it or keyboard focus is inside it; it never autoplays under reduced motion or with one article. With `fill`, from `lg` the band fills the first viewport under the sticky site header.
+The band that opens a blog under its hero. One article is shown large — its cover beside its overline, headline, deck, read time and a button into it — over a wall of the highlight articles that acts as its selector. The wall is a tablist and the large article its panel; selecting a title on the wall swaps the panel with a short slide in the direction of travel, and every article is drawn invisibly under the panel so the band keeps the height of its tallest article and never jumps. With four or more articles the wall runs four across. It is a page section — the site places it from a `{ _id: 'article-highlight-section', props }` entry and binds `props` straight onto it — and it composes `module`, `registration-frame`, `card-grid` and `button`; the selection is local state. With `autoplay` the band advances on its own every `autoplayInterval`, drawing a primary progress line at the panel's foot, and pauses while the pointer is over it or keyboard focus is inside it; it never autoplays under reduced motion or with one article. With `fill`, from `lg` the band fills the first viewport under the sticky site header.
 
 ## When to use
 

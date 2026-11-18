@@ -18,8 +18,8 @@
   import RadioGroup from '@aziontech/webkit/radio-group'
   import SaveBar from '@aziontech/webkit/save-bar'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
-  import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
@@ -247,8 +247,8 @@
         >
           <legend class="sr-only">Protocol settings</legend>
 
-          <SettingsSection
-            title="Protocols"
+          <SettingsGroup
+            label="Protocols"
             hint="The ports and TLS settings clients connect to this workload with."
             anchor="protocols"
           >
@@ -459,9 +459,9 @@
                 </Item.List>
               </template>
             </Card>
-          </SettingsSection>
-          <SettingsSection
-            title="Mutual authentication"
+          </SettingsGroup>
+          <SettingsGroup
+            label="Mutual authentication"
             hint="Ask each client for a certificate the workload can verify, as well as presenting its own."
             anchor="mutual-authentication"
           >
@@ -629,7 +629,7 @@
                 </Item.List>
               </template>
             </Card>
-          </SettingsSection>
+          </SettingsGroup>
         </fieldset>
       </div>
 

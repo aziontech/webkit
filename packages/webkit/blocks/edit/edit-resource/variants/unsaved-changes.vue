@@ -8,8 +8,8 @@
   import PageHeader from '@aziontech/webkit/page-header'
   import PageTabs from '@aziontech/webkit/page-tabs'
   import SaveBar from '@aziontech/webkit/save-bar'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
-  import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import Tabs from '@aziontech/webkit/tabs'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -162,7 +162,7 @@
             <section
               class="layout-section-start flex min-w-0 flex-1 flex-col pb-(--layout-boundary-end)"
             >
-              <SettingsSection title="General">
+              <SettingsGroup label="General">
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
@@ -199,10 +199,10 @@
                     </Item.List>
                   </template>
                 </Card>
-              </SettingsSection>
+              </SettingsGroup>
 
-              <SettingsSection
-                title="Modules"
+              <SettingsGroup
+                label="Modules"
                 hint="A module is what makes a rule act: a rule can only apply a capability that is switched on here."
               >
                 <Card :padded="false">
@@ -236,10 +236,10 @@
                     </Item.List>
                   </template>
                 </Card>
-              </SettingsSection>
+              </SettingsGroup>
 
-              <SettingsSection
-                title="Debug rules"
+              <SettingsGroup
+                label="Debug rules"
                 hint="Query the logged executions from the event log or the logs API."
               >
                 <Card :padded="false">
@@ -258,9 +258,9 @@
                     </Item.List>
                   </template>
                 </Card>
-              </SettingsSection>
+              </SettingsGroup>
 
-              <SettingsSection title="Status">
+              <SettingsGroup label="Status">
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
@@ -277,7 +277,7 @@
                     </Item.List>
                   </template>
                 </Card>
-              </SettingsSection>
+              </SettingsGroup>
             </section>
           </div>
 

@@ -8,7 +8,7 @@
 
 ## When to use
 
-- Use DocHeading only for h2/h3 inside documentation pages; a console page band uses SectionHeader.
+- Use DocHeading only for h2/h3 inside documentation pages; a console page band uses Subheader.
 - Every `h2`–`h4` on a docs page that the page rail lists.
 - Section headings on a designed docs page composed in Vue.
 
@@ -20,7 +20,7 @@
 ## Don’t
 
 - For the page title — use `DocPageHeader`.
-- On marketing pages — use `SectionTitle`.
+- On marketing pages — use `ModuleHeader`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related

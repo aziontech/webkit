@@ -10,8 +10,8 @@
   import nznExtendedReversed from '@aziontech/webkit/assets/nzn-extended-reversed.svg'
   import rennerExtendedReversed from '@aziontech/webkit/assets/renner-extended-reversed.svg'
   import ClientMosaicSection from '@aziontech/webkit/client-mosaic-section'
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionGap from '@aziontech/webkit/section-gap'
+  import Container from '@aziontech/webkit/container'
+  import Spacer from '@aziontech/webkit/spacer'
 
   const stories = [
     {
@@ -81,8 +81,8 @@
 </script>
 
 <template>
-  <SectionContainer max-width="site">
-    <SectionGap hatch />
+  <Container max-width="site">
+    <Spacer hatch />
 
     <ClientMosaicSection
       aria-label="Client stories"
@@ -91,6 +91,6 @@
       :logos="logos"
     />
 
-    <SectionGap hatch />
-  </SectionContainer>
+    <Spacer hatch />
+  </Container>
 </template>

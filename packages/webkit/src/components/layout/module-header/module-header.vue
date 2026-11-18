@@ -1,0 +1,153 @@
+<script setup lang="ts">
+  import { computed, useAttrs } from 'vue'
+
+  import Eyebrow from '../../content/eyebrow/eyebrow.vue'
+  import RegistrationFrame from '../registration-frame/registration-frame.vue'
+
+  defineOptions({
+    name: 'ModuleHeader',
+    inheritAttrs: false
+  })
+
+  /** Layout of the header row. */
+  export type ModuleHeaderAlign = 'start' | 'center' | 'split'
+  /** Step of the headline on the heading scale. */
+  export type ModuleHeaderSize = 'small' | 'medium' | 'large'
+  /** Vertical padding step of the framed header. */
+  export type ModuleHeaderPadding = 'small' | 'medium'
+  /** Column span of the description in the split layout. */
+  export type ModuleHeaderDescriptionWidth = 'narrow' | 'wide'
+  /** One call to action of a section: the shape every section's `primaryAction` and `secondaryAction` take. */
+  export type ModuleHeaderAction = {
+    /** Visible label of the action. */
+    label: string
+    /** Destination the action links to. */
+    href: string
+    /** Closes the label on a trailing chevron that reads as "go", where the section draws one. */
+    trailing?: boolean
+    /** Browsing context the link opens in: `_self` or `_blank`. */
+    target?: '_self' | '_blank'
+  }
+
+  export interface ModuleHeaderProps {
+    /** Headline of the section, rendered as the section's `h2`. */
+    title: string
+    /** Supporting sentence under the headline; overridden by the default slot. */
+    description?: string
+    /** Short uppercase overline rendered above the headline. */
+    eyebrow?: string
+    /** Layout of the header: `center` stacks and centers the copy, `start` stacks it at the start edge, `split` sets the headline and its description in two columns. */
+    align?: ModuleHeaderAlign
+    /** Step of the headline on the heading scale: `small` for a subsection inside a band, `medium` for an ordinary section opener, `large` for a band whose headline is the statement. */
+    size?: ModuleHeaderSize
+    /** Draw the header's own frame and padding. Turn it off when the header is composed inside a band that already owns both. */
+    framed?: boolean
+    /** Vertical padding of the framed header: `medium` for a section opener, `small` for a header that sits tight over its band. */
+    padding?: ModuleHeaderPadding
+    /** Width of the description in the split layout: `narrow` keeps it to the third column, `wide` runs it across the middle column too. */
+    descriptionWidth?: ModuleHeaderDescriptionWidth
+  }
+
+  const props = withDefaults(defineProps<ModuleHeaderProps>(), {
+    description: '',
+    eyebrow: '',
+    align: 'center',
+    size: 'medium',
+    framed: true,
+    padding: 'medium',
+    descriptionWidth: 'narrow'
+  })
+
+  const slots = defineSlots<{
+    /** Replaces the description with richer content; falls back to the description prop. */
+    default?(): unknown
+    /** The section's calls to action, under the headline. */
+    actions?(): unknown
+  }>()
+
+  const attrs = useAttrs()
+
+  const EYEBROW_PREFIX = '//' as const
+
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'module-header')
+
+  const hasDescription = () => Boolean(slots.default) || props.description.length > 0
+
+  const frame = computed(() => (props.framed ? RegistrationFrame : 'div'))
+  const frameProps = computed(() =>
+    props.framed ? { flush: true, borders: 'y', marks: 'all' } : {}
+  )
+</script>
+
+<template>
+  <component
+    :is="frame"
+    v-bind="{ ...$attrs, ...frameProps }"
+    :data-testid="testId"
+    :data-align="align"
+    :data-size="size"
+    :data-framed="props.framed || null"
+    :data-padding="padding"
+    :data-description-width="descriptionWidth"
+    class="group"
+  >
+    <div
+      class="flex flex-col items-start gap-(--spacing-xl) group-data-[framed]:px-(--spacing-xl) group-data-[framed]:py-(--spacing-2xl) group-data-[framed]:group-data-[padding=small]:py-(--spacing-xl) group-data-[align=center]:items-center"
+    >
+      <div
+        v-if="align === 'split'"
+        class="flex w-full flex-col gap-(--spacing-lg)"
+      >
+        <Eyebrow
+          v-if="eyebrow"
+          :prefix="EYEBROW_PREFIX"
+          cursor
+          >{{ eyebrow }}</Eyebrow
+        >
+        <div class="grid gap-(--spacing-xl) md:grid-cols-3">
+          <h2
+            class="m-0 text-balance text-(--text-default) group-data-[size=small]:text-heading-lg group-data-[size=medium]:text-heading-xl group-data-[size=large]:text-heading-2xl md:[grid-column:span_var(--module-header-headline-span,1)/span_var(--module-header-headline-span,1)] md:[max-width:var(--module-header-headline-max,none)]"
+          >
+            {{ title }}
+          </h2>
+          <p
+            v-if="hasDescription()"
+            class="m-0 self-start text-pretty text-body-lg text-(--text-muted) md:col-start-3 md:group-data-[description-width=wide]:col-span-2 md:group-data-[description-width=wide]:col-start-2 md:group-data-[description-width=wide]:max-w-(--container-xl) md:group-data-[description-width=wide]:justify-self-end"
+          >
+            <slot>{{ description }}</slot>
+          </p>
+        </div>
+      </div>
+
+      <div
+        v-else
+        class="flex w-full max-w-(--container-2xl) flex-col gap-(--spacing-lg) group-data-[align=center]:items-center group-data-[align=center]:text-center"
+      >
+        <Eyebrow
+          v-if="eyebrow"
+          :prefix="EYEBROW_PREFIX"
+          cursor
+          >{{ eyebrow }}</Eyebrow
+        >
+        <h2
+          class="m-0 text-balance text-(--text-default) group-data-[size=small]:text-heading-lg group-data-[size=medium]:text-heading-xl group-data-[size=large]:text-heading-2xl"
+        >
+          {{ title }}
+        </h2>
+        <p
+          v-if="hasDescription()"
+          class="m-0 text-pretty text-body-lg text-(--text-muted)"
+        >
+          <slot>{{ description }}</slot>
+        </p>
+      </div>
+
+      <div
+        v-if="slots.actions"
+        class="flex w-full max-w-full min-w-0 flex-col items-stretch gap-(--spacing-md) [&>*]:w-full [&>*]:max-w-full sm:w-auto sm:flex-row sm:items-center sm:[&>*]:w-auto sm:group-data-[align=center]:justify-center"
+      >
+        <slot name="actions" />
+      </div>
+    </div>
+  </component>
+</template>

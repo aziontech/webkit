@@ -13,7 +13,7 @@
   import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
-  import SettingsSection from '@aziontech/webkit/settings-section'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
@@ -297,8 +297,8 @@
             :disabled="submitting"
           >
             <legend class="sr-only">Create Network List</legend>
-            <SettingsSection
-              title="General"
+            <SettingsGroup
+              label="General"
               hint="Names the list where firewall rules pick it."
             >
               <Field
@@ -314,10 +314,10 @@
                 />
                 <Field.Error v-if="nameMissing">Name is required.</Field.Error>
               </Field>
-            </SettingsSection>
+            </SettingsGroup>
 
-            <SettingsSection
-              title="Entries"
+            <SettingsGroup
+              label="Entries"
               :hint="
                 copy?.hint ?? 'The countries the list matches, by where the request comes from.'
               "
@@ -469,7 +469,7 @@
                   <Field.Error v-if="countriesMissing">Select at least one country.</Field.Error>
                 </Field>
               </div>
-            </SettingsSection>
+            </SettingsGroup>
           </fieldset>
         </PanelBody>
 

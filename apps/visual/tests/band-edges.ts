@@ -5,7 +5,7 @@ export type BandEdge = {
 
 export function findBandEdges(): BandEdge[] {
   const BANDS =
-    '[data-testid="hero"], [data-testid="section-title"], [data-testid="section-module"] > [data-padded], [data-testid="section-module"] > [data-frame-edges]'
+    '[data-testid="hero"], [data-testid="module-header"], [data-testid="module"] > [data-padded], [data-testid="module"] > [data-frame-edges]'
 
   const textEdge = (band: Element) => {
     let edge = Infinity

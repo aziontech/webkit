@@ -1,8 +1,8 @@
 <script setup>
   import ArticleIndexSection from '@aziontech/webkit/article-index-section'
   import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionGap from '@aziontech/webkit/section-gap'
+  import Container from '@aziontech/webkit/container'
+  import Spacer from '@aziontech/webkit/spacer'
 
   const items = [
     {
@@ -84,8 +84,8 @@
 </script>
 
 <template>
-  <SectionContainer max-width="site">
-    <SectionGap hatch />
+  <Container max-width="site">
+    <Spacer hatch />
 
     <ArticleIndexSection
       anchor="posts"
@@ -102,6 +102,6 @@
       aria-label="Articles"
     />
 
-    <SectionGap hatch />
-  </SectionContainer>
+    <Spacer hatch />
+  </Container>
 </template>

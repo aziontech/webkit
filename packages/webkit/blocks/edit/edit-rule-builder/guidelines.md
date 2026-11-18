@@ -21,23 +21,23 @@ A drawer where the user writes one rule of a rules engine: when it runs (the pha
 
 A right-side `Drawer` at `size="large"`. The `DrawerTrigger` wraps an outlined medium `Add Rule` `Button` that fills the width on a phone. `DrawerContent` holds one `form` named like the title; `PanelHeader` carries the `DrawerTitle` and the drawer's own close button, and `PanelBody` scrolls the five sections. The form resets each time the drawer opens, so content stays in place while it closes. See `skills/webkit-create-surface`.
 
-### B. General — `SettingsSection`, `Field`, `Input` (required)
+### B. General — `SettingsGroup`, `Field`, `Input` (required)
 
-A `SettingsSection` with a hint, holding two `Field`s with large `Input`s: Name, which shows "Name is required." only after Save is pressed with it empty, and an optional Description. Fields are disabled while saving.
+A `SettingsGroup` with a hint, holding two `Field`s with large `Input`s: Name, which shows "Name is required." only after Save is pressed with it empty, and an optional Description. Fields are disabled while saving.
 
-### C. Phase — `SettingsSection`, `Card`, `RadioGroup`, `FieldDescription` (optional)
+### C. Phase — `SettingsGroup`, `Card`, `RadioGroup`, `FieldDescription` (optional)
 
 Request and Response as choice cards: a flush `Card` holding a `RadioGroup` with `variant="card"`, each option with a title and a one-line description. When editing, the phase is locked and a `FieldDescription` explains why.
 
-### D. Criteria — `SettingsSection`, `AttributeEditor` (grouped), `Combobox`, `Select`, `Input` (required)
+### D. Criteria — `SettingsGroup`, `AttributeEditor` (grouped), `Combobox`, `Select`, `Input` (required)
 
 An `AttributeEditor` in grouped mode (`v-model:groups`), large, named "Criteria": each group is an AND group of condition rows, groups are joined by an "or" `Separator`, and the editor draws the labels, Add condition under each group, Add OR group at the end, Remove condition per row, the limits (10 conditions per group, 5 groups), focus after add and remove, and the polite "Item n added" and "Item n removed" announcements. Its cells are replaced through `cell-<key>` slots: the variable is a `Combobox` of the variables of the chosen phase that also takes a typed one, the operator a `Select`, and the argument an `Input` that turns into a disabled "No argument" field for exists and does not exist. `min-items="1"` keeps one condition. A missing variable shows "Enter the variable to compare." under it, only after Save, through the editor's `errors`. `reorderable` lets conditions and whole OR groups move by their grip, with Move up and Move down, or with Alt+Arrow Up and Alt+Arrow Down inside a row; the editor announces each move. Conditions are evaluated in the order shown, so the cheapest or most selective one goes first.
 
-### E. Behaviors — `SettingsSection`, `Card`, `AttributeEditor`, `Select`, `Input`, `FieldDescription` (required)
+### E. Behaviors — `SettingsGroup`, `Card`, `AttributeEditor`, `Select`, `Input`, `FieldDescription` (required)
 
 A Then list run top to bottom, drawn by a second `AttributeEditor` in list mode (`v-model:items`, large, `reorderable`, `limit` 10, `min-items` 1) named "Behaviors" with Behavior and Argument columns. The `cell-type` slot is a behavior `Select` with its own search `Input`, listing only behaviors valid in the chosen phase; the `cell-argument` slot is the `Input`, `Select` or group of `Input`s that the behavior takes (a disabled "No argument" field when it takes none), with a `FieldDescription` where the argument needs one. The editor owns the grip, Move up and Move down, Alt+Arrow keys, Remove behavior, the limit text, focus and announcements; Add behavior is disabled while the last behavior ends the rule, and the `info` slot says so ("Deliver ends the rule. Nothing after it runs.").
 
-### F. Status — `SettingsSection`, `Card`, `Item`, `SettingsRow`, `Switch` (required)
+### F. Status — `SettingsGroup`, `Card`, `Item`, `SettingsRow`, `Switch` (required)
 
 A flush `Card` with an `Item.List` holding one `SettingsRow` titled Active with a `Switch`. The hint says an inactive rule keeps its place in the order and is skipped at runtime.
 

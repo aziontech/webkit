@@ -4,7 +4,7 @@ A directory of Azion's products, in four columns under a section title. Each col
 
 Home shows it right under the hero. The solution, product and Pricing pages repeat it.
 
-The band is the `PlatformDirectorySection` component from `@aziontech/webkit/platform-directory-section`; it composes `SectionModule`, `SectionTitle`, `RegistrationFrame` and `LinkDirectory`.
+The band is the `PlatformDirectorySection` component from `@aziontech/webkit/platform-directory-section`; it composes `Module`, `ModuleHeader`, `RegistrationFrame` and `LinkDirectory`.
 
 ## Examples
 

@@ -12,7 +12,7 @@
   import Input from '@aziontech/webkit/input'
   import PageHeader from '@aziontech/webkit/page-header'
   import SaveBar from '@aziontech/webkit/save-bar'
-  import SettingsSection from '@aziontech/webkit/settings-section'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import Switch from '@aziontech/webkit/switch'
   import Table from '@aziontech/webkit/table'
   import Textarea from '@aziontech/webkit/textarea'
@@ -210,8 +210,8 @@
             >
               <legend class="sr-only">Create Team</legend>
 
-              <SettingsSection
-                title="General"
+              <SettingsGroup
+                label="General"
                 hint="The name is the only required field."
               >
                 <Card>
@@ -244,10 +244,10 @@
                     </div>
                   </template>
                 </Card>
-              </SettingsSection>
+              </SettingsGroup>
 
-              <SettingsSection
-                title="Permissions"
+              <SettingsGroup
+                label="Permissions"
                 :hint="`What this team can see and change. ${selected.length} of ${allIds.length} selected.`"
               >
                 <Card>
@@ -380,10 +380,10 @@
                     </div>
                   </template>
                 </Card>
-              </SettingsSection>
+              </SettingsGroup>
 
-              <SettingsSection
-                title="Status"
+              <SettingsGroup
+                label="Status"
                 hint="Inactive teams keep their permissions but grant nothing to their members."
               >
                 <Card>
@@ -396,7 +396,7 @@
                     </Field>
                   </template>
                 </Card>
-              </SettingsSection>
+              </SettingsGroup>
             </fieldset>
           </div>
 

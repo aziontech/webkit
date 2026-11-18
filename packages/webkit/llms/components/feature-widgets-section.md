@@ -1,6 +1,6 @@
 # Feature Widgets Section
 
-> The "three ways to start" band of a product page: a centered section title with up to two calls to action, over a bento grid where every cell is a live console scene (or an illustration) above a bold-led sentence and its affordances — a link button, a copy button that puts a prompt on the clipboard and confirms it with "Copied" for two seconds, or both. A cell's scene plays its beat while the pointer is over the cell. It is a page section — the site places it from a `{ _id: 'feature-widgets-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `button`, `registration-frame`, `bento-grid`, `illustration`, `highlight-button` and the webkit scene assets.
+> The "three ways to start" band of a product page: a centered section title with up to two calls to action, over a bento grid where every cell is a live console scene (or an illustration) above a bold-led sentence and its affordances — a link button, a copy button that puts a prompt on the clipboard and confirms it with "Copied" for two seconds, or both. A cell's scene plays its beat while the pointer is over the cell. It is a page section — the site places it from a `{ _id: 'feature-widgets-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `button`, `registration-frame`, `bento-grid`, `illustration`, `highlight-button` and the webkit scene assets.
 
 - Import: `import FeatureWidgetsSection from '@aziontech/webkit/feature-widgets-section'`
 - Category: section · Surface: site · Structure: monolithic
@@ -37,9 +37,9 @@
 | `eyebrow` | `string` | `''` | false | Eyebrow above the section title. |
 | `title` | `string` | `''` | false | Headline of the band, rendered by the section title as its `h2`, and the accessible name of the band. |
 | `description` | `string` | `''` | false | Supporting sentence under the headline. |
-| `primaryAction` | `SectionTitleAction` | `undefined` | false | First button under the headline; `{ label, href, trailing? }`. Omitted when absent. |
-| `secondaryAction` | `SectionTitleAction` | `undefined` | false | Second, outlined button under the headline; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent. |
-| `titleAlign` | `SectionTitleAlign` | `'center'` | false | Alignment of the section title over the grid: `center`, `start` or `split`. |
+| `primaryAction` | `ModuleHeaderAction` | `undefined` | false | First button under the headline; `{ label, href, trailing? }`. Omitted when absent. |
+| `secondaryAction` | `ModuleHeaderAction` | `undefined` | false | Second, outlined button under the headline; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent. |
+| `titleAlign` | `ModuleHeaderAlign` | `'center'` | false | Alignment of the section title over the grid: `center`, `start` or `split`. |
 | `columns` | `FeatureWidgetsSectionColumns` | `2` | false | Column count of the grid from the medium breakpoint up: `2`, `3` or `4`. |
 | `copiedLabel` | `string` | `''` | false | Label a cell's copy button shows for two seconds after a copy; empty uses the catalog's `Copied`. |
 | `items` | `FeatureWidgetsSectionItem[]` | `[]` | false | The cells, in order; each is `{ title, description, scene?, illustration?, action?, copy? }` where `scene` is `{ component, props? }` naming a webkit scene asset drawn in a 20rem window and handed `hover` while the pointer is over the cell, `illustration` is drawn when no scene is set, `action` is `{ label, href }` rendered as an outlined link button and `copy` is `{ label, text }` rendered as a copy button that puts `text` on the clipboard; a cell may carry both. |

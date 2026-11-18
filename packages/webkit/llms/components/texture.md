@@ -23,7 +23,7 @@
 ## Don’t
 
 - To draw the rules between real content cells → use `registration-frame`, whose rules are structural.
-- For the ruled divider between sections → use `section-gap`, which composes this layer's `lines` variant and owns that treatment.
+- For the ruled divider between sections → use `spacer`, which composes this layer's `lines` variant and owns that treatment.
 - For a meaningful image or diagram → use `illustration`.
 - As a wrapper around content. The layer is absolutely positioned and paints only itself; content is a sibling above it, inside the positioned ancestor.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
@@ -32,7 +32,7 @@
 
 - [hero](hero.md) — the band whose `background` slot this is composed into.
 - [registration-frame](registration-frame.md) — structural rules and corner marks, not decoration.
-- [section-gap](section-gap.md) — the hatched rhythm band between sections.
+- [spacer](spacer.md) — the hatched rhythm band between sections.
 - [hero](hero.md) — the marketing band that paints this texture behind its own copy.
 
 ## Props

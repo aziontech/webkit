@@ -7,12 +7,12 @@
     type CompanyLogoTreatment,
     type CompanyLogoVariant
   } from '../../content/company-logo/company-logo.vue'
+  import Module from '../../layout/module/module.vue'
+  import type { ModuleHeaderAction } from '../../layout/module-header/module-header.vue'
+  import ModuleHeader from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import LogoWall from '../../marketing/logo-wall/logo-wall.vue'
   import Quote from '../../marketing/quote/quote.vue'
-  import SectionModule from '../../marketing/section-module/section-module.vue'
-  import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
-  import SectionTitle from '../../marketing/section-title/section-title.vue'
 
   defineOptions({
     name: 'LogoWallSection',
@@ -21,7 +21,7 @@
 
   export type { CompanyLogoTreatment }
 
-  export type { SectionTitleAction }
+  export type { ModuleHeaderAction }
 
   /** One client mark in the wall, optionally linked to that client's story. */
   export type LogoWallSectionLogo = {
@@ -81,9 +81,9 @@
     /** The signed quote in the wall's aside; `{ text, name, jobTitle, logo, logoAlt }`. Omitted when absent. */
     quote?: LogoWallSectionQuote
     /** Button under the quote; `{ label, href, trailing?, target? }`. Omitted when absent. */
-    primaryAction?: SectionTitleAction
+    primaryAction?: ModuleHeaderAction
     /** Outlined button beside the primary one under the quote; `{ label, href, trailing?, target? }`. Omitted when absent. */
-    secondaryAction?: SectionTitleAction
+    secondaryAction?: ModuleHeaderAction
   }
 
   const props = withDefaults(defineProps<LogoWallSectionProps>(), {
@@ -134,7 +134,7 @@
     :data-variant="variant"
     :aria-label="title || undefined"
   >
-    <SectionModule
+    <Module
       v-if="isQuoteBand && quote"
       key="quote"
       :divided="false"
@@ -198,9 +198,9 @@
           </Quote>
         </div>
       </RegistrationFrame>
-    </SectionModule>
+    </Module>
 
-    <SectionModule
+    <Module
       v-else-if="hasLogos"
       key="wall"
       :divided="false"
@@ -210,7 +210,7 @@
         v-if="title"
         #header
       >
-        <SectionTitle
+        <ModuleHeader
           :eyebrow="eyebrow"
           :title="title"
         />
@@ -289,6 +289,6 @@
           </template>
         </LogoWall>
       </RegistrationFrame>
-    </SectionModule>
+    </Module>
   </section>
 </template>

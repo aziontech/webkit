@@ -5,17 +5,17 @@
   import Eyebrow from '../../content/eyebrow/eyebrow.vue'
   import CardGrid from '../../layout/card-grid/card-grid.vue'
   import CardGridCell from '../../layout/card-grid/card-grid-cell/card-grid-cell.vue'
+  import Module from '../../layout/module/module.vue'
+  import type { ModuleHeaderAction } from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import FeatureItem from '../../marketing/feature-item/feature-item.vue'
-  import SectionModule from '../../marketing/section-module/section-module.vue'
-  import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
 
   defineOptions({
     name: 'CustomerUseCasesSection',
     inheritAttrs: false
   })
 
-  export type { SectionTitleAction }
+  export type { ModuleHeaderAction }
 
   /** One use case, rendered as a frame cell. */
   export type CustomerUseCasesSectionItem = {
@@ -35,7 +35,7 @@
     /** One-line lead under the headline. */
     description?: string
     /** Button pinned to the foot of the title cell; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent. */
-    primaryAction?: SectionTitleAction
+    primaryAction?: ModuleHeaderAction
     /** The use cases rendered as frame cells, in order; each item is `{ icon, title, description }`. */
     items?: CustomerUseCasesSectionItem[]
     /** In-page id set on the band so a hash link can target it. */
@@ -71,7 +71,7 @@
     :data-testid="testId"
     :aria-labelledby="hasHeading ? headingId : undefined"
   >
-    <SectionModule
+    <Module
       v-if="hasItems"
       :divided="false"
       :padded="false"
@@ -138,6 +138,6 @@
           </CardGridCell>
         </CardGrid>
       </RegistrationFrame>
-    </SectionModule>
+    </Module>
   </section>
 </template>

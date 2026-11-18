@@ -7,7 +7,7 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=479-886
   node_id: 479:886
-checksum: e0b238c2c15c267239a2a0cd58e5222d8e2f15873229bc52954d087d4db8e2bd
+checksum: 1b2db98af3c6bf0ccfdc2b29fbb5a59273e5aa45eb3d4bbebd7b2d2ad63c12fa
 created: 2026-06-25
 last_updated: 2026-11-15
 ---
@@ -26,12 +26,12 @@ Thin separator line that visually splits content into groups. Renders as a full-
 
 ## When NOT to use
 
-- The break between two page sections → use `section-gap`.
+- The break between two page sections → use `spacer`.
 - A bounded region that scrolls → use `scroll-area`.
 
 ## Related
 
-- `section-gap` — the frame that divides page sections, with its own rules and vertical air.
+- `spacer` — the frame that divides page sections, with its own rules and vertical air.
 - `scroll-area` — scrolling container; Separator adds no scrolling.
 
 ## Best practices
@@ -56,10 +56,10 @@ Thin separator line that visually splits content into groups. Renders as a full-
 
 ## Props
 
-| Prop          | Type                         | Default        | Required | JSDoc                                                        |
-| ------------- | ---------------------------- | -------------- | -------- | ------------------------------------------------------------ |
-| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | false    | Layout axis of the separator line.                           |
-| `label`       | `string`                     | `''`           | false    | Fallback centered text shown when the default slot is empty. |
+| Prop          | Type                         | Default        | Required | JSDoc                                                                              |
+| ------------- | ---------------------------- | -------------- | -------- | ---------------------------------------------------------------------------------- |
+| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | false    | Layout axis of the separator line.                                                 |
+| `label`       | `string`                     | `''`           | false    | Fallback centered text shown when the default slot is empty.                       |
 | `decorative`  | `boolean`                    | `false`        | false    | Purely visual line: renders role none instead of separator when there is no label. |
 
 ## Events

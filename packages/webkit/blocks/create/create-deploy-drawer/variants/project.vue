@@ -16,7 +16,7 @@
   import PanelHeader from '@aziontech/webkit/panel-header'
   import RadioGroup from '@aziontech/webkit/radio-group'
   import Separator from '@aziontech/webkit/separator'
-  import SettingsSection from '@aziontech/webkit/settings-section'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import Tag from '@aziontech/webkit/tag'
   import { computed, reactive, ref, watch } from 'vue'
 
@@ -253,8 +253,8 @@
         <PanelBody>
           <fieldset class="m-0 flex min-w-0 flex-col border-0 p-0">
             <legend class="sr-only">Deploy</legend>
-            <SettingsSection
-              title="Resources"
+            <SettingsGroup
+              label="Resources"
               hint="Everything this project serves, at the version this deployment sends live, with the version of every dependency they reference."
             >
               <Card :padded="false">
@@ -558,10 +558,10 @@
                   </template>
                 </template>
               </Card>
-            </SettingsSection>
+            </SettingsGroup>
 
-            <SettingsSection
-              title="Environment"
+            <SettingsGroup
+              label="Environment"
               hint="Where the deployment goes live. Each environment goes live with its own Deployment Settings."
             >
               <RadioGroup
@@ -596,7 +596,7 @@
                 size="small"
                 :label="`Deploying with ${setting.name} also deploys to ${sharedWith.join(', ')}.`"
               />
-            </SettingsSection>
+            </SettingsGroup>
           </fieldset>
         </PanelBody>
 

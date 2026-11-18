@@ -22,7 +22,7 @@
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Select from '@aziontech/webkit/select'
-  import SettingsSection from '@aziontech/webkit/settings-section'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import Switch from '@aziontech/webkit/switch'
   import TableCellActions from '@aziontech/webkit/table-cell-actions'
   import Tag from '@aziontech/webkit/tag'
@@ -928,8 +928,8 @@
               :disabled="createSubmitting"
             >
               <legend class="sr-only">Create Table</legend>
-              <SettingsSection
-                title="General"
+              <SettingsGroup
+                label="General"
                 hint="Names the table inside this database."
               >
                 <div class="flex w-full min-w-0 flex-col gap-(--spacing-sm)">
@@ -955,10 +955,10 @@
                     <Field.Error v-if="tableNameError">{{ tableNameError }}</Field.Error>
                   </Field>
                 </div>
-              </SettingsSection>
+              </SettingsGroup>
 
-              <SettingsSection
-                title="Import data from CSV"
+              <SettingsGroup
+                label="Import data from CSV"
                 hint="Optional. The first line names the columns; the types are guessed from the values and can be changed below. Every row is inserted after the table is created."
               >
                 <div class="flex w-full min-w-0 flex-col gap-(--spacing-sm)">
@@ -1005,10 +1005,10 @@
                     />
                   </template>
                 </div>
-              </SettingsSection>
+              </SettingsGroup>
 
-              <SettingsSection
-                title="Columns"
+              <SettingsGroup
+                label="Columns"
                 hint="The table's schema, created in this order. A primary key is NOT NULL."
               >
                 <div class="flex w-full min-w-0 flex-col gap-(--spacing-sm)">
@@ -1102,10 +1102,10 @@
                   </AttributeEditor>
                   <FieldError v-if="columnsError">{{ columnsError }}</FieldError>
                 </div>
-              </SettingsSection>
+              </SettingsGroup>
 
-              <SettingsSection
-                title="Foreign keys"
+              <SettingsGroup
+                label="Foreign keys"
                 hint="Optional. Tie a column to a row in another table, so a value that does not exist there is refused."
               >
                 <div class="flex w-full min-w-0 flex-col gap-(--spacing-sm)">
@@ -1199,7 +1199,7 @@
                     </template>
                   </AttributeEditor>
                 </div>
-              </SettingsSection>
+              </SettingsGroup>
             </fieldset>
           </PanelBody>
 
@@ -1252,8 +1252,8 @@
               :disabled="columnSubmitting"
             >
               <legend class="sr-only">Add column</legend>
-              <SettingsSection
-                title="Column"
+              <SettingsGroup
+                label="Column"
                 hint="Its name, type and the value rows get when they leave it empty."
               >
                 <div class="flex w-full min-w-0 flex-col gap-(--spacing-md)">
@@ -1327,9 +1327,9 @@
                     >
                   </Field>
                 </div>
-              </SettingsSection>
-              <SettingsSection
-                title="Constraints"
+              </SettingsGroup>
+              <SettingsGroup
+                label="Constraints"
                 hint="A primary key is always NOT NULL, so turning it on also turns on Not null."
               >
                 <div class="flex w-full min-w-0 flex-col gap-(--spacing-sm)">
@@ -1358,7 +1358,7 @@
                     />
                   </Field>
                 </div>
-              </SettingsSection>
+              </SettingsGroup>
             </fieldset>
           </PanelBody>
           <PanelFooter>

@@ -1,11 +1,11 @@
 # ShellSite (`shell/shell-site`)
 
-> The website shell: `SiteLayout` composed once in the app around RouterView, so the chrome is never rebuilt per page. The navigation is the SiteHeaderSection data (the azion.com mega-menus, Pricing, Contact, Login and Start for free, every item with its `href`) in `navigation`, and the footer is the SiteFooterSection data (`variant: 'site'`, columns, socials, status line, languages) in `footer`; the layout paints the canvas, owns the single `<main>`, and opens a ⌘K / Ctrl K Command palette that lists every navigation destination. Every page is only its sections in the default slot: one `Hero` band opening the page, then every section stacked inside one framed `SectionContainer max-width="site"` separated by hatched `SectionGap`s, ending on a closing frame that draws no rule of its own, so the SiteFooterSection's full-width top rule, with its corner marks, closes the page frame. The hero and the sections resolve to the site measure, which is the only reason the side rules running down the page are continuous; the footer spans the page like the bar. Built from `SiteLayout`, `Hero`, `Button`, `SectionContainer`, `SectionGap`, `SectionModule`, `RegistrationFrame`, `Stats` and `Texture`. The full mega-menus and the navigation sheet are documented on Templates › Marketing › Shell › SiteHeaderSection.
+> The website shell: `SiteLayout` composed once in the app around RouterView, so the chrome is never rebuilt per page. The navigation is the SiteHeaderSection data (the azion.com mega-menus, Pricing, Contact, Login and Start for free, every item with its `href`) in `navigation`, and the footer is the SiteFooterSection data (`variant: 'site'`, columns, socials, status line, languages) in `footer`; the layout paints the canvas, owns the single `<main>`, and opens a ⌘K / Ctrl K Command palette that lists every navigation destination. Every page is only its sections in the default slot: one `Hero` band opening the page, then every section stacked inside one framed `Container max-width="site"` separated by hatched `Spacer`s, ending on a closing frame that draws no rule of its own, so the SiteFooterSection's full-width top rule, with its corner marks, closes the page frame. The hero and the sections resolve to the site measure, which is the only reason the side rules running down the page are continuous; the footer spans the page like the bar. Built from `SiteLayout`, `Hero`, `Button`, `Container`, `Spacer`, `Module`, `RegistrationFrame`, `Stats` and `Texture`. The full mega-menus and the navigation sheet are documented on Templates › Marketing › Shell › SiteHeaderSection.
 
 - Surface: site
 - Source: `blocks/shell/shell-site/shell-site.vue` in `@aziontech/webkit`
 - MCP: `get_block("shell/shell-site")`
-- Components: [Button](../../components/button.md), [Hero](../../components/hero.md), [RegistrationFrame](../../components/registration-frame.md), [SectionContainer](../../components/section-container.md), [SectionGap](../../components/section-gap.md), [SectionModule](../../components/section-module.md), [SiteLayout](../../components/site-layout.md), [Stats](../../components/stats.md), [Texture](../../components/texture.md)
+- Components: [Button](../../components/button.md), [Container](../../components/container.md), [Hero](../../components/hero.md), [Module](../../components/module.md), [RegistrationFrame](../../components/registration-frame.md), [SiteLayout](../../components/site-layout.md), [Spacer](../../components/spacer.md), [Stats](../../components/stats.md), [Texture](../../components/texture.md)
 - Skills: `webkit-layout`
 
 ## Asked as
@@ -37,21 +37,21 @@ Composed once in the app's root around `RouterView`. `navigation` is the `SiteHe
 
 The hero's primary and outlined large buttons, worded like the bar's actions.
 
-### D. Frame — `SectionContainer` (required)
+### D. Frame — `Container` (required)
 
 `max-width="site"`; every section after the hero stacks inside it.
 
-### E. Separator — `SectionGap` (required)
+### E. Separator — `Spacer` (required)
 
 `hatch` between sections. Use it instead of margins.
 
-### F. Section — `SectionModule` (required)
+### F. Section — `Module` (required)
 
 One per section; here unpadded and undivided around a framed figure row.
 
 ### G. Framed area — `RegistrationFrame` (required)
 
-Draws borders and corner marks; the closing frame uses `borders="none"` so it draws no rule of its own and hands the corner to the footer. When the page ends on a closing section (`ClosingCallToActionSection`, `NewsletterSection`, or `TemplateGallerySection` with `closing`), drop both the trailing `SectionGap` and this closing frame: the section draws its own, and a second one doubles the close (`webkit/no-gap-after-closing-section`).
+Draws borders and corner marks; the closing frame uses `borders="none"` so it draws no rule of its own and hands the corner to the footer. When the page ends on a closing section (`ClosingCallToActionSection`, `NewsletterSection`, or `TemplateGallerySection` with `closing`), drop both the trailing `Spacer` and this closing frame: the section draws its own, and a second one doubles the close (`webkit/no-gap-after-closing-section`).
 
 ### H. Figures — `Stats` (optional)
 
@@ -67,7 +67,7 @@ A row of headline figures inside a `RegistrationFrame`.
 - Set `data-theme="dark"` on `<html>` (in `index.html`) for the dark site, so the layout, the teleported mega-menus and the palette all resolve the dark tokens.
 - Keep every band on the site measure; one off-measure section breaks the side rules.
 - Give every navigation item an `href`; add extra palette groups (articles, docs results) in the `search` slot.
-- Separate sections with `SectionGap`, not with spacing utilities.
+- Separate sections with `Spacer`, not with spacing utilities.
 - Keep one primary action per band.
 
 ## Don't
@@ -75,7 +75,7 @@ A row of headline figures inside a `RegistrationFrame`.
 - Never add `SiteHeaderSection`, `SiteFooterSection`, `AppHeader` or `Footer` to a page; the layout already renders them.
 - Never render a second `<main>`; the layout owns the landmark.
 - Don't wrap the layout's slot content in a border, padding or `max-w-*` of its own.
-- Don't nest a second `SectionContainer`.
+- Don't nest a second `Container`.
 - Don't put interactive content inside `Texture`; it is decoration.
 
 ## Copy
@@ -113,15 +113,15 @@ Each variant is the same screen in another state: `get_block("shell/shell-site",
 ```vue
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
+  import Container from '@aziontech/webkit/container'
   import Hero from '@aziontech/webkit/hero'
+  import Module from '@aziontech/webkit/module'
   import RegistrationFrame from '@aziontech/webkit/registration-frame'
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionGap from '@aziontech/webkit/section-gap'
-  import SectionModule from '@aziontech/webkit/section-module'
   import SiteLayout, {
     type SiteLayoutFooter,
     type SiteLayoutNavigation
   } from '@aziontech/webkit/site-layout'
+  import Spacer from '@aziontech/webkit/spacer'
   import Stats from '@aziontech/webkit/stats'
   import Texture from '@aziontech/webkit/texture'
 
@@ -594,10 +594,10 @@ Each variant is the same screen in another state: `get_block("shell/shell-site",
       </Hero.Title>
     </Hero>
 
-    <SectionContainer max-width="site">
-      <SectionGap hatch />
+    <Container max-width="site">
+      <Spacer hatch />
 
-      <SectionModule
+      <Module
         :divided="false"
         :padded="false"
       >
@@ -608,9 +608,9 @@ Each variant is the same screen in another state: `get_block("shell/shell-site",
         >
           <Stats :items="figures" />
         </RegistrationFrame>
-      </SectionModule>
+      </Module>
 
-      <SectionGap hatch />
+      <Spacer hatch />
 
       <RegistrationFrame
         borders="none"
@@ -620,7 +620,7 @@ Each variant is the same screen in another state: `get_block("shell/shell-site",
       >
         <Texture variant="lines" />
       </RegistrationFrame>
-    </SectionContainer>
+    </Container>
   </SiteLayout>
 </template>
 ```

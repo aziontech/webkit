@@ -18,7 +18,7 @@
   import Popover from '@aziontech/webkit/popover'
   import RadioGroup from '@aziontech/webkit/radio-group'
   import Separator from '@aziontech/webkit/separator'
-  import SettingsSection from '@aziontech/webkit/settings-section'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import Skeleton from '@aziontech/webkit/skeleton'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
@@ -589,8 +589,8 @@
           <PanelBody>
             <fieldset class="m-0 flex min-w-0 flex-col border-0 p-0">
               <legend class="sr-only">Deploy</legend>
-              <SettingsSection
-                title="Resources"
+              <SettingsGroup
+                label="Resources"
                 hint="The service version this deployment sends live, and the version of every module and integration it references."
               >
                 <Card :padded="false">
@@ -967,10 +967,10 @@
                     </template>
                   </template>
                 </Card>
-              </SettingsSection>
+              </SettingsGroup>
 
-              <SettingsSection
-                title="Project"
+              <SettingsGroup
+                label="Project"
                 hint="The project whose domains serve the service. Create one to deploy it on a new domain."
               >
                 <Card :padded="false">
@@ -1168,10 +1168,10 @@
                     </div>
                   </template>
                 </Card>
-              </SettingsSection>
+              </SettingsGroup>
 
-              <SettingsSection
-                title="Environment"
+              <SettingsGroup
+                label="Environment"
                 hint="Where the deployment goes live, from the environments this project serves. Each one goes live with the Deployment Settings set on the project."
               >
                 <RadioGroup
@@ -1199,10 +1199,10 @@
                     </template>
                   </RadioGroup.Item>
                 </RadioGroup>
-              </SettingsSection>
+              </SettingsGroup>
 
-              <SettingsSection
-                title="Projects impacted"
+              <SettingsGroup
+                label="Projects impacted"
                 hint="This environment deploys with shared Deployment Settings, so the deployment reaches every project below, in every environment they are linked to, and the domains they serve."
               >
                 <div class="flex min-w-0 flex-col gap-(--spacing-md)">
@@ -1358,7 +1358,7 @@
                     </ul>
                   </div>
                 </div>
-              </SettingsSection>
+              </SettingsGroup>
 
               <span
                 class="sr-only"

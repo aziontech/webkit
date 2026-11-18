@@ -1,12 +1,12 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import CardGrid from '@aziontech/webkit/card-grid'
+  import Container from '@aziontech/webkit/container'
   import CopyPromptButton from '@aziontech/webkit/copy-prompt-button'
   import DocCard from '@aziontech/webkit/doc-card'
   import DocCardGroup from '@aziontech/webkit/doc-card-group'
   import Hero from '@aziontech/webkit/hero'
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionModule from '@aziontech/webkit/section-module'
+  import Module from '@aziontech/webkit/module'
   import { useHead } from '@unhead/vue'
   import { computed } from 'vue'
 
@@ -87,11 +87,11 @@
       </Hero.Title>
     </Hero>
 
-    <SectionContainer
+    <Container
       max-width="7xl"
       class="lg:@max-7xl/main:border-s-0!"
     >
-      <SectionModule
+      <Module
         :divided="false"
         :padded="false"
         :title="t.exploreTitle"
@@ -110,9 +110,9 @@
             :label="section.text"
           />
         </DocCardGroup>
-      </SectionModule>
+      </Module>
 
-      <SectionModule
+      <Module
         :divided="false"
         :padded="false"
         :title="t.whyTitle"
@@ -138,7 +138,7 @@
             <p class="text-pretty text-body-sm text-(--text-muted)">{{ feature.body }}</p>
           </div>
         </CardGrid>
-      </SectionModule>
-    </SectionContainer>
+      </Module>
+    </Container>
   </div>
 </template>

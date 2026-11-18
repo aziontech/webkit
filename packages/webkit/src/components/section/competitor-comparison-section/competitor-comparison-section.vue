@@ -6,9 +6,9 @@
   import IconButton from '../../action/icon-button/icon-button.vue'
   import Brand from '../../content/brand/brand.vue'
   import CompanyLogo, { type CompanyLogoArtwork } from '../../content/company-logo/company-logo.vue'
+  import Module from '../../layout/module/module.vue'
+  import ModuleHeader from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
-  import SectionModule from '../../marketing/section-module/section-module.vue'
-  import SectionTitle from '../../marketing/section-title/section-title.vue'
   import Popover from '../../overlay/popover/popover.vue'
   import PopoverContent from '../../overlay/popover/popover-content/popover-content.vue'
   import PopoverDescription from '../../overlay/popover/popover-description/popover-description.vue'
@@ -150,7 +150,7 @@
     :data-testid="testId"
     :aria-label="title || undefined"
   >
-    <SectionModule
+    <Module
       v-if="hasGroups"
       :divided="false"
       :padded="false"
@@ -159,7 +159,7 @@
         v-if="title"
         #header
       >
-        <SectionTitle
+        <ModuleHeader
           align="start"
           :eyebrow="eyebrow"
           :title="title"
@@ -296,6 +296,6 @@
           </tbody>
         </table>
       </RegistrationFrame>
-    </SectionModule>
+    </Module>
   </section>
 </template>

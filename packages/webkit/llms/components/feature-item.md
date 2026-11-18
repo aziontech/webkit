@@ -16,7 +16,7 @@
 ## Do
 
 - Let the cell own the surface. A topic paints no background and adds no padding, so put it inside `CardGrid.Cell` / `BentoGrid.Cell` (or a padded cell the page owns) rather than giving the topic a fill.
-- Keep `headingLevel` in step with the page outline: `2` when the band has no headline of its own and these are the first sub-headings under the `h1`, `3` when a `section-title` has already opened the section. The level is the outline; the size is fixed at `heading-xs`.
+- Keep `headingLevel` in step with the page outline: `2` when the band has no headline of its own and these are the first sub-headings under the `h1`, `3` when a `module-header` has already opened the section. The level is the outline; the size is fixed at `heading-xs`.
 - Keep the description to one sentence. The glyph carries the recognition, the headline carries the claim, and a second sentence turns a scannable grid into a wall of prose.
 - Drop `icon` for a band whose claims are not glyph-led rather than reaching for a decorative glyph that says nothing.
 - Give the claim an `href` rather than composing a button under it. A grid of six claims that each close on their own "Learn more" reads as six calls to action instead of six claims, and the button is a second target for the destination the claim already points at.
@@ -26,7 +26,7 @@
 
 - For a tile with its own border and surface → keep the topic and put it in a `CardGrid.Cell`, which draws the frame and the fill.
 - For a claim that carries an eyebrow, a media region or a button → use `media-split`.
-- For the headline that opens the whole section → use `section-title`.
+- For the headline that opens the whole section → use `module-header`.
 - For a whole band of claims or links placed from page JSON → use `capability-grid-section`, which lays topics out for you.
 - For a measured figure with a unit → use `stats`.
 - For a console list row with media and actions → use `item`.
@@ -36,7 +36,7 @@
 
 - [card-grid](card-grid.md) — the equal-cell grid a topic is usually repeated in; its `frame` register gives each topic a real `registration-frame` cell.
 - [bento-grid](bento-grid.md) — the unequal-cell mosaic, when one claim deserves more room than the rest.
-- [section-title](section-title.md) — the headline that opens the band a row of topics sits in.
+- [module-header](module-header.md) — the headline that opens the band a row of topics sits in.
 
 ## Props
 
@@ -46,7 +46,7 @@
 | `description` | `string` | `''` | false | One sentence explaining the claim; overridden by the default slot. |
 | `icon` | `string` | `''` | false | Icon class for the glyph that leads the headline. |
 | `href` | `string` | `''` | false | When set, the whole claim renders as an anchor link to this URL and its headline closes on a trailing arrow. |
-| `headingLevel` | `FeatureItemHeadingLevel` | `2` | false | Level of the heading element. Keep `2` when the band has no headline of its own; drop it to `3` when a `section-title` has already opened the section, so the document outline stays in order. |
+| `headingLevel` | `FeatureItemHeadingLevel` | `2` | false | Level of the heading element. Keep `2` when the band has no headline of its own; drop it to `3` when a `module-header` has already opened the section, so the document outline stays in order. |
 
 ## Slots
 

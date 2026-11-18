@@ -3,8 +3,8 @@
   import gpaExtendedReversed from '@aziontech/webkit/assets/gpa-extended-reversed.svg'
   import netshoesExtendedReversed from '@aziontech/webkit/assets/netshoes-extended-reversed.svg'
   import rennerExtendedColor from '@aziontech/webkit/assets/renner-extended-color.svg'
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionGap from '@aziontech/webkit/section-gap'
+  import Container from '@aziontech/webkit/container'
+  import Spacer from '@aziontech/webkit/spacer'
 
   const items = [
     {
@@ -47,8 +47,8 @@
 </script>
 
 <template>
-  <SectionContainer max-width="site">
-    <SectionGap hatch />
+  <Container max-width="site">
+    <Spacer hatch />
 
     <ArticleCardsSection
       align="start"
@@ -57,6 +57,6 @@
       aria-label="Related Success Cases"
     />
 
-    <SectionGap hatch />
-  </SectionContainer>
+    <Spacer hatch />
+  </Container>
 </template>

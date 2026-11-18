@@ -7,14 +7,14 @@ spec_version: 4
 template: 2
 created: 2026-11-04
 last_updated: 2026-11-16
-checksum: 2af8510ea09c9af204016f0d188db1adaf0b2c5474672c76599b50363bcb92f7
+checksum: 3257a41d858a9f65616171e8937f49dc31bcd7c5872d3bc488a7f089692066b0
 ---
 
 # ClientMosaicSection — Component Spec
 
 ## Purpose
 
-The client mosaic: a framed bento grid of customer cells where a story cell carries a photograph, the client's mark, one line of its result and a "read the case study" link, and a mark cell carries only the client's linked logo on a chosen fill. With `stories` and `logos` the layout is derived from the data: the first story spans two columns and two rows, every other story one column and two rows, every mark one cell. With `cells` the page places story and mark cells in one ordered list, each with its own column and row span, so stories and marks interleave as on the home page. It is a page section — the site places it from a `{ _id: 'client-mosaic-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `registration-frame`, `bento-grid`, `logo` and `link`.
+The client mosaic: a framed bento grid of customer cells where a story cell carries a photograph, the client's mark, one line of its result and a "read the case study" link, and a mark cell carries only the client's linked logo on a chosen fill. With `stories` and `logos` the layout is derived from the data: the first story spans two columns and two rows, every other story one column and two rows, every mark one cell. With `cells` the page places story and mark cells in one ordered list, each with its own column and row span, so stories and marks interleave as on the home page. It is a page section — the site places it from a `{ _id: 'client-mosaic-section', props }` entry and binds `props` straight onto it — and it composes `module`, `registration-frame`, `bento-grid`, `logo` and `link`.
 
 ## When to use
 

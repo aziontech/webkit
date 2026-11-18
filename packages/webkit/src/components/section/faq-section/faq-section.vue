@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import Module from '../../layout/module/module.vue'
   import Faq from '../../marketing/faq/faq.vue'
-  import SectionModule from '../../marketing/section-module/section-module.vue'
 
   defineOptions({
     name: 'FaqSection',
@@ -133,7 +133,7 @@
     :data-testid="testId"
     class="scroll-mt-(--spacing-2xl)"
   >
-    <SectionModule
+    <Module
       v-if="items.length > 0"
       :divided="false"
       :padded="false"
@@ -201,6 +201,6 @@
           </span>
         </template>
       </Faq>
-    </SectionModule>
+    </Module>
   </div>
 </template>

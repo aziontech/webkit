@@ -10,7 +10,7 @@ the WebKit shells [`blocks/shell/shell-site`](../../packages/webkit/blocks/shell
 [`blocks/shell/shell-docs`](../../packages/webkit/blocks/shell/shell-docs/shell-docs.vue), and the page sections in
 [`src/components/section/`](../../packages/webkit/src/components/section/); the layout primitives —
 shared by Site, Hub and Docs — are in
-[`src/components/marketing/`](../../packages/webkit/src/components/marketing/) (`SectionContainer`, `SectionModule`, `CardGrid`, `Hero`)
+[`src/components/marketing/`](../../packages/webkit/src/components/marketing/) (`Container`, `Module`, `CardGrid`, `Hero`)
 and [`src/components/layout/`](../../packages/webkit/src/components/layout/) (`RegistrationFrame`, `PageHeader`). The design sample these
 were taken from lives on the `design/sample` branch only.
 
@@ -56,13 +56,13 @@ The page renders inside `SiteLayout` (or `DocLayout`), composed once in `App.vue
   <PageHeader size="hero" eyebrow="…" title="…" description="…" />
 </Hero>
 
-<SectionContainer max-width="7xl">        <!-- 2. framed column, owns border-x -->
-  <SectionModule :divided="false" title="…">…</SectionModule>   <!-- 3. bricks -->
-  <SectionModule title="…">…</SectionModule>
-  <SectionModule title="…" :padded="false">
+<Container max-width="7xl">        <!-- 2. framed column, owns border-x -->
+  <Module :divided="false" title="…">…</Module>   <!-- 3. bricks -->
+  <Module title="…">…</Module>
+  <Module title="…" :padded="false">
     <CardGrid variant="divider" :columns="3">…</CardGrid>
-  </SectionModule>
-</SectionContainer>
+  </Module>
+</Container>
 <!-- SiteLayout renders SiteFooterSection after the page; it owns border-t -->
 ```
 
@@ -151,9 +151,9 @@ The Site hero closes with a **capability strip** — a 2/3/5-column grid separat
 
 ---
 
-## 2. The container rule — `SectionContainer`
+## 2. The container rule — `Container`
 
-[`section-container.vue`](../../packages/webkit/src/components/marketing/section-container/section-container.vue)
+[`container.vue`](../../packages/webkit/src/components/layout/container/container.vue)
 
 The framed column. Centered, capped, and carrying **only** `border-x`.
 
@@ -170,12 +170,12 @@ The framed column. Centered, capped, and carrying **only** `border-x`.
 
 ---
 
-## 3. The module rule — `SectionModule`
+## 3. The module rule — `Module`
 
-[`section-module.vue`](../../packages/webkit/src/components/marketing/section-module/section-module.vue)
+[`module.vue`](../../packages/webkit/src/components/layout/module/module.vue)
 
 The "lego brick". A `<section>` with a header row divided from its body by a hairline, and divided
-from the module above by a hairline. Stacked in a `SectionContainer`, the modules read as bricks in
+from the module above by a hairline. Stacked in a `Container`, the modules read as bricks in
 one continuous frame.
 
 ```html
@@ -213,7 +213,7 @@ The signature industrial module: a grid whose internal rules are **gaps**, not b
 fill their own background** (`bg-[var(--bg-canvas)]`) or the whole cell goes border-coloured.
 
 The divider variant carries **no perimeter border** — that is what lets it sit flush inside a
-`SectionContainer` whose `border-x` already owns the outer edges. Set `dividerColor="muted"` for
+`Container` whose `border-x` already owns the outer edges. Set `dividerColor="muted"` for
 rules one step back.
 
 The `gap` variant is the other mode: self-contained cards with their own border, radius and
@@ -325,9 +325,9 @@ Found while documenting; **not fixed** — each changes rendered output.
    `import RegistrationFrame from './foundations/components/layout/RegistrationFrame.vue'`.
 
 2. **`maxWidth` keys don't mean the same width in the two containers.** `Hero`'s map is
-   shifted two steps down from `SectionContainer`'s — `max-width="7xl"` gives `--container-5xl`
+   shifted two steps down from `Container`'s — `max-width="7xl"` gives `--container-5xl`
    (1192px) in the banner but `--container-7xl` (1620px) in the column; `"6xl"` gives 1024px vs
-   1388px. `SectionContainer`'s docstring says _"match the banner above it"_, which reads as "pass
+   1388px. `Container`'s docstring says _"match the banner above it"_, which reads as "pass
    the same key" — and passing the same key does **not** align their content edges. (The banner also
    adds `px-[var(--spacing-xl)]`, so some inset is intended; the two-step shift is systematic across
    all five keys.)

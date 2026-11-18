@@ -47,10 +47,10 @@ container; the parts inside it draw only the dividers between themselves. Two bo
 sit flush side by side or 1px apart: no 2px seam where two parts meet, no frame drawn again
 just inside a container's frame.
 
-- Let the WebKit container draw the edge: an unpadded `SectionModule` body takes its top
-  from the header's rule and its sides from `SectionContainer`, and a `DocCardGroup` or
+- Let the WebKit container draw the edge: an unpadded `Module` body takes its top
+  from the header's rule and its sides from `Container`, and a `DocCardGroup` or
   `RegistrationFrame` placed in it drops its own top and side rules. The module after a
-  band that closes on a rule (`SectionGap`, a framed grid) passes `:divided="false"`.
+  band that closes on a rule (`Spacer`, a framed grid) passes `:divided="false"`.
 - Inside a `Card`, a pane or an accordion, give a framed part `:bordered="false"`
   (`CodeEditor`, `LogViewer`); inside an `InputGroup`, use `InputGroup.Input` (an `Input`
   placed there loses its border too).

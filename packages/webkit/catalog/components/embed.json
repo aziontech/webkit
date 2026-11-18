@@ -17,7 +17,7 @@
   "`media-split` — when the embed is one half of a copy-and-media band."
  ],
  "bestPractices": [
-  "The band draws no frame of its own: the rule and the corner marks belong to the `section-module` or `registration-frame` that the page assembles it into, so a band placed in a framed column never lands a second hairline on the column's own.",
+  "The band draws no frame of its own: the rule and the corner marks belong to the `module` or `registration-frame` that the page assembles it into, so a band placed in a framed column never lands a second hairline on the column's own.",
   "Always write a `title` that says what the embedded thing is. It is the frame's accessible name, and a screen-reader user meets it before the content.",
   "Pick the `ratio` that matches the source. A `video` ratio around a square form leaves bands of empty frame.",
   "Prefer `loading=\"lazy\"` behaviour for anything below the fold — it is the default here, and an embed is usually the heaviest thing on a marketing page.",

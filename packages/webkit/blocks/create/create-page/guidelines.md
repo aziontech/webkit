@@ -28,9 +28,9 @@ The page a first-level resource is created on when everything it needs fits on o
 
 `PageHeader size="small"` at the top of the centred form column (`layout-column-form`), titled with the create label and described in one sentence of what the resource is. Its `title-id` labels the `form`. One section gap separates it from the first band.
 
-### C. Sections — `SettingsSection`, `Card`, `Item` (required)
+### C. Sections — `SettingsGroup`, `Card`, `Item` (required)
 
-Each band is a `SettingsSection` with a title and a `hint` (the glyph that reveals guidance on hover or focus) over a flush `Card :padded="false"` whose content is an `Item.List` of rows. Required fields go in the first band, General. The last band is Advanced: `collapsible`, `icon="az az-settings"`, closed by default (`v-model:open`), holding only fields the endpoint does not require, that already carry its default and that are not the point of the form.
+Each band is a `SettingsGroup` with a title and a `hint` (the glyph that reveals guidance on hover or focus) over a flush `Card :padded="false"` whose content is an `Item.List` of rows. Required fields go in the first band, General. The last band is Advanced: `collapsible`, `icon="az az-settings"`, closed by default (`v-model:open`), holding only fields the endpoint does not require, that already carry its default and that are not the point of the form.
 
 ### D. Field rows — `SettingsRow`, `Input`, `FieldError` (required)
 

@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 9
-checksum: cdc2022a641541cc63d9b98775bf03459dbb3b59827e984799ef6b90bf8f04db
+checksum: e9bd19dbe47a12f333324761da7d4d4ff4ed5f6a02870250560ab718ab31f530
 created: 2026-09-22
 last_updated: 2026-11-18
 ---
@@ -15,7 +15,7 @@ last_updated: 2026-11-18
 
 A two-column band pairing a block of copy with a piece of media — a screenshot, diagram or short video — each holding half the frame. It is the workhorse section of a product page: one claim, one picture of the claim, repeated down the page with the sides alternating.
 
-It is a **sub-section**, not a section header, and its typography says so: the headline is `heading-md` against `section-title`'s `heading-xl`, because these bands sit _inside_ a section that a `section-title` has already opened. A band that needs the larger weight is opening a section, and wants `section-title`.
+It is a **sub-section**, not a section header, and its typography says so: the headline is `heading-md` against `module-header`'s `heading-xl`, because these bands sit _inside_ a section that a `module-header` has already opened. A band that needs the larger weight is opening a section, and wants `module-header`.
 
 Typographic weight and heading level are separate choices. The band sets its headline at `heading-md`, or `heading-xl` when `size` is `large`; `headingLevel` decides whether that headline is an `h2` or an `h3`, so a band nested under a section that already has its own `h2` does not open a second one at the same level.
 
@@ -30,13 +30,13 @@ Whether the band ever splits is `orientation`'s call. `horizontal` is the band p
 - To pair one capability's explanation with a screenshot or diagram of it.
 - Down a product page, alternating `variant` so consecutive bands mirror each other.
 - With `framed` off inside a page column that already draws the frame, and on when the band stands alone.
-- With `heading-level="3"` whenever a `section-title` has already opened the section the band sits in.
+- With `heading-level="3"` whenever a `module-header` has already opened the section the band sits in.
 - With `orientation="vertical"` in a column too narrow for two halves — a page aside, a grid cell — where the band would otherwise squeeze both.
 - Whenever the media carries as much of the message as the copy does.
 
 ## When NOT to use
 
-- For copy with no media → use `section-title`, which is the header band.
+- For copy with no media → use `module-header`, which is the header band.
 - For one claim beside its picture or scene placed from page JSON → use `media-split-section`.
 - For the closing ask → use `call-to-action`; for a mid-page announcement → use `call-to-action` with `variant="announcement"`.
 - For several short claims side by side → use `feature-item` in a `card-grid`.
@@ -44,17 +44,17 @@ Whether the band ever splits is `orientation`'s call. `horizontal` is the band p
 
 ## Related
 
-- `section-title` — the copy-only section header.
+- `module-header` — the copy-only section header.
 - `feature-item` — the smaller unit when a page needs several claims rather than one.
 - `illustration` — the media itself; a scene dropped in the `media` slot is what the band's ground is drawn for.
 - `texture` — the material the media half is grounded with; compose it yourself when a band needs a different one.
-- `registration-frame` — the frame the band is drawn with. With `framed` on, or inside a `section-stack`, each of the band's two cells is its own `registration-frame`.
-- `section-stack` — the run that stacks these bands; inside it every band frames its two cells, left and right, under the rules the stack draws.
+- `registration-frame` — the frame the band is drawn with. With `framed` on, or inside a `split-stack`, each of the band's two cells is its own `registration-frame`.
+- `split-stack` — the run that stacks these bands; inside it every band frames its two cells, left and right, under the rules the stack draws.
 
 ## Best practices
 
-- By default the band draws no frame of its own: the rule and the corner marks belong to the `section-module` or `registration-frame` that the page assembles it into, so a band placed in a framed column never lands a second hairline on the column's own.
-- A run of bands goes in a `section-stack`, not in a frame per band: the stack draws each band's rules and the band frames its two cells. Leave `framed` off there, or the band draws a second set of rules over the stack's.
+- By default the band draws no frame of its own: the rule and the corner marks belong to the `module` or `registration-frame` that the page assembles it into, so a band placed in a framed column never lands a second hairline on the column's own.
+- A run of bands goes in a `split-stack`, not in a frame per band: the stack draws each band's rules and the band frames its two cells. Leave `framed` off there, or the band draws a second set of rules over the stack's.
 
 - Alternate `variant` down a page so consecutive bands mirror; two identical bands in a row read as one.
 - Reach for `orientation="vertical"` when the column is too narrow to carry two halves, not to vary the rhythm of a wide page — a vertical band across a full-width page reads as a card that lost its grid.
@@ -118,13 +118,13 @@ Whether the band ever splits is `orientation`'s call. `horizontal` is the band p
 | `eyebrow`      | `string`                 | `''`           | false    | Short uppercase overline rendered above the headline.                                                                                                                                                                                                         |
 | `src`          | `string`                 | `''`           | false    | URL of the band's image; ignored when the `media` slot is filled.                                                                                                                                                                                             |
 | `alt`          | `string`                 | `''`           | false    | Alternative text describing what the image shows.                                                                                                                                                                                                             |
-| `variant`      | `MediaSplitVariant`      | `'media-end'`  | false    | Which end the media sits on: the closing cell once the band splits, or the lower one when the band is vertical. `media-end` puts the copy first.                                                                                                                      |
-| `orientation`  | `MediaSplitOrientation`  | `'horizontal'` | false    | Axis the band splits on. `horizontal` sets the cells side by side once the band is 60rem wide; `vertical` holds them stacked at every width.                                                                                                                                 |
+| `variant`      | `MediaSplitVariant`      | `'media-end'`  | false    | Which end the media sits on: the closing cell once the band splits, or the lower one when the band is vertical. `media-end` puts the copy first.                                                                                                              |
+| `orientation`  | `MediaSplitOrientation`  | `'horizontal'` | false    | Axis the band splits on. `horizontal` sets the cells side by side once the band is 60rem wide; `vertical` holds them stacked at every width.                                                                                                                  |
 | `fill`         | `MediaSplitFill`         | `'canvas'`     | false    | The copy cell's fill. `canvas` lets the band sit in the page column; `surface` lifts it onto its own plate. The media cell follows `mediaFill`.                                                                                                               |
 | `mediaFill`    | `MediaSplitFill`         | `'surface'`    | false    | The media cell's fill. `surface` sets the asset on its own plate, one step off the page; `canvas` lets the whole band sit on the page.                                                                                                                        |
 | `framed`       | `boolean`                | `false`        | false    | Draw the band's own registration frame: its top and bottom rules, with the copy and the media framed as two cells, each with its four marks. Turn it off when the page already wraps the band in a frame.                                                     |
 | `divided`      | `boolean`                | `true`         | false    | Draw the seam between the copy and the media. Turn it off for a band whose two halves should read as one plate.                                                                                                                                               |
-| `headingLevel` | `MediaSplitHeadingLevel` | `2`            | false    | Level of the band's headline element. Drop it to `3` when the band is a sub-band of a section a `section-title` has already opened with its `h2`, so the document outline stays in order.                                                                     |
+| `headingLevel` | `MediaSplitHeadingLevel` | `2`            | false    | Level of the band's headline element. Drop it to `3` when the band is a sub-band of a section a `module-header` has already opened with its `h2`, so the document outline stays in order.                                                                     |
 | `texture`      | `TextureVariant`         | `'grid'`       | false    | Texture the media half is grounded with; `none` leaves the cell bare.                                                                                                                                                                                         |
 | `textureSize`  | `TextureSize`            | `'medium'`     | false    | Pitch of the ground's tiling — how far apart its cells sit.                                                                                                                                                                                                   |
 | `textureFade`  | `TextureFade`            | `'vignette'`   | false    | How the ground fades out before the cell's edges.                                                                                                                                                                                                             |
@@ -152,7 +152,7 @@ Whether the band ever splits is `orientation`'s call. `horizontal` is the band p
 - `data-variant` mirrors the `variant` prop and drives which column the media occupies
 - `data-media` is present when the band has media (either `src` or the `media` slot), and is what switches the band between one and two columns
 - `data-orientation` mirrors the `orientation` prop; `vertical` holds the stacked layout at every width, so the band never reaches two columns and `variant` decides which cell is on top instead of which is on the right
-- With `framed` on, or when the band sits inside a `section-stack`, each cell — the copy and the media — is its own `registration-frame` with no rules and all four registration marks, so the band reads as two frames, left and right, and every corner of each half is ticked, including both sides of the seam. `framed` adds the band's top and bottom rules around them; inside a `section-stack` the stack draws those. Below the split the same two frames stack, and their marks flank the horizontal seam
+- With `framed` on, or when the band sits inside a `split-stack`, each cell — the copy and the media — is its own `registration-frame` with no rules and all four registration marks, so the band reads as two frames, left and right, and every corner of each half is ticked, including both sides of the seam. `framed` adds the band's top and bottom rules around them; inside a `split-stack` the stack draws those. Below the split the same two frames stack, and their marks flank the horizontal seam
 - `data-divided` mirrors the `divided` prop and is what draws the seam — the grid's own gap over a rule fill. With it off the grid closes the gap and the two cells meet on their own fills
 - Below the split a horizontal band is one column with the copy first, so reading order matches the argument regardless of `variant`; a vertical band honours `variant` at every width, and does it with grid `order` so the copy — which carries the actions — stays first in DOM and in tab order either way
 - When neither `src` nor the `media` slot is given, the copy column spans the full width rather than leaving an empty half

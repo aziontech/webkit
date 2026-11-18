@@ -3,13 +3,13 @@
 
   import { usePinnedRow } from '../../../composables/use-pinned-row'
   import Texture from '../../content/texture/texture.vue'
-  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
-  import SectionModule from '../../marketing/section-module/section-module.vue'
+  import Module from '../../layout/module/module.vue'
   import type {
-    SectionTitleAlign,
-    SectionTitleDescriptionWidth
-  } from '../../marketing/section-title/section-title.vue'
-  import SectionTitle from '../../marketing/section-title/section-title.vue'
+    ModuleHeaderAlign,
+    ModuleHeaderDescriptionWidth
+  } from '../../layout/module-header/module-header.vue'
+  import ModuleHeader from '../../layout/module-header/module-header.vue'
+  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
 
   defineOptions({ name: 'ProcessScrollSection', inheritAttrs: false })
 
@@ -27,13 +27,13 @@
     /** Eyebrow above the title. */
     eyebrow?: string
     /** Alignment of the section title over the card row. */
-    titleAlign?: SectionTitleAlign
+    titleAlign?: ModuleHeaderAlign
     /** Headline of the band, rendered as its `h2`; the band renders nothing when empty. */
     title?: string
     /** Paragraph beside the headline. */
     description?: string
     /** Column span of the paragraph: `wide` runs it across the middle column too. */
-    descriptionWidth?: SectionTitleDescriptionWidth
+    descriptionWidth?: ModuleHeaderDescriptionWidth
     /** The stages, in order; each is `{ title, description }` and gets its own numbered card. */
     steps?: ProcessScrollSectionStep[]
     /** Accessible name of the scrollable card row. */
@@ -100,12 +100,12 @@
       ref="bandEl"
       class="flex flex-col lg:motion-safe:group-data-[pinned]/process:sticky lg:motion-safe:group-data-[pinned]/process:top-(--process-scroll-section-offset) lg:motion-safe:group-data-[pinned]/process:h-[calc(100dvh-var(--process-scroll-section-offset))]"
     >
-      <SectionModule
+      <Module
         :divided="false"
         :padded="false"
       >
         <template #header>
-          <SectionTitle
+          <ModuleHeader
             :align="titleAlign"
             :eyebrow="eyebrow"
             :title="title"
@@ -113,7 +113,7 @@
             :description-width="descriptionWidth"
           />
         </template>
-      </SectionModule>
+      </Module>
 
       <div class="grid flex-1 grid-cols-1">
         <RegistrationFrame

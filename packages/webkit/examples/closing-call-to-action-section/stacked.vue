@@ -1,13 +1,13 @@
 <script setup>
   import ClosingCallToActionSection from '@aziontech/webkit/closing-call-to-action-section'
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionGap from '@aziontech/webkit/section-gap'
+  import Container from '@aziontech/webkit/container'
+  import Spacer from '@aziontech/webkit/spacer'
 </script>
 
 <template>
   <div class="flex flex-col gap-(--spacing-xl)">
-    <SectionContainer max-width="site">
-      <SectionGap hatch />
+    <Container max-width="site">
+      <Spacer hatch />
 
       <ClosingCallToActionSection
         variant="panel"
@@ -17,7 +17,7 @@
         :primary-action="{ label: 'See open roles', href: '/careers/jobs', trailing: true }"
       />
 
-      <SectionGap hatch />
+      <Spacer hatch />
 
       <ClosingCallToActionSection
         variant="primary"
@@ -26,10 +26,10 @@
         description="Get faster launches, lower latency, and less infrastructure overhead from day one."
         :primary-action="{ label: 'Start for free', href: '/signup' }"
       />
-    </SectionContainer>
+    </Container>
 
-    <SectionContainer max-width="site">
+    <Container max-width="site">
       <ClosingCallToActionSection variant="frame" />
-    </SectionContainer>
+    </Container>
   </div>
 </template>

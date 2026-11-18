@@ -2,7 +2,7 @@
 
 The opening band of a page: an eyebrow, the page headline, a lead and up to two calls to action, laid out by `variant`, with an optional scene above or under the copy.
 
-The band is the `HeroSection` component from `@aziontech/webkit/hero-section`; it composes `Hero`, `Button`, the `FlowDiagram` nodes for a topology, and `SectionContainer`, `SectionModule`, `RegistrationFrame`, `CardGrid` and `FeatureItem` for the argument grid.
+The band is the `HeroSection` component from `@aziontech/webkit/hero-section`; it composes `Hero`, `Button`, the `FlowDiagram` nodes for a topology, and `Container`, `Module`, `RegistrationFrame`, `CardGrid` and `FeatureItem` for the argument grid.
 
 ## Examples
 

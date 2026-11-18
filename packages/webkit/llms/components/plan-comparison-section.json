@@ -8,7 +8,7 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "The feature-by-feature matrix under the plan cards on Pricing: one column per plan with its name and action button pinned in the header while the page scrolls, one band per product with an overline, a title and a lead, and one row per feature saying what each plan includes — an included mark, a not-included mark, or the allowance as text. The recommended plan carries an accent bar, and below the large breakpoint the table folds to one plan picked from a searchable select. It is a page section — the site places it from a `{ _id: 'plan-comparison-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `select`, `input`, `button`, `icon-button`, `popover`, `tooltip`, `eyebrow`, `tag` and `link`.",
+ "purpose": "The feature-by-feature matrix under the plan cards on Pricing: one column per plan with its name and action button pinned in the header while the page scrolls, one band per product with an overline, a title and a lead, and one row per feature saying what each plan includes — an included mark, a not-included mark, or the allowance as text. The recommended plan carries an accent bar, and below the large breakpoint the table folds to one plan picked from a searchable select. It is a page section — the site places it from a `{ _id: 'plan-comparison-section', props }` entry and binds `props` straight onto it — and it composes `module`, `select`, `input`, `button`, `icon-button`, `popover`, `tooltip`, `eyebrow`, `tag` and `link`.",
  "setup": null,
  "useWhen": [
   "Use PlanComparisonSection for a feature matrix across plans or support tiers: on Pricing under the plan cards, product by product, and on Support with one column per support tier."
@@ -87,7 +87,7 @@
   },
   {
    "name": "primaryAction",
-   "type": "SectionTitleAction",
+   "type": "ModuleHeaderAction",
    "default": "undefined",
    "required": "false",
    "doc": "Closing link under the table, opened in a new tab; `{ label, href }`. Omitted when absent."

@@ -10,8 +10,8 @@
   import type { CardGridColumns } from '../../layout/card-grid/card-grid.vue'
   import CardGrid from '../../layout/card-grid/card-grid.vue'
   import CardGridCell from '../../layout/card-grid/card-grid-cell/card-grid-cell.vue'
+  import Module from '../../layout/module/module.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
-  import SectionModule from '../../marketing/section-module/section-module.vue'
 
   defineOptions({
     name: 'ArticleHighlightSection',
@@ -201,7 +201,7 @@
     :data-testid="testId"
     class="scroll-mt-(--spacing-2xl)"
   >
-    <SectionModule
+    <Module
       v-if="current"
       :divided="false"
       :padded="false"
@@ -370,6 +370,6 @@
           </div>
         </div>
       </RegistrationFrame>
-    </SectionModule>
+    </Module>
   </section>
 </template>

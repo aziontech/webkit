@@ -17,20 +17,20 @@
 - Stack or abut frames with `flush` so a shared edge reads as one hairline instead of two. It subtracts the named sides from this frame's own set, so it works vertically (`flush`, i.e. `top`) and horizontally (`flush="left"`) with the same mechanic.
 - Use `borders` rather than overriding the border utilities from the call site: `y` for a full-bleed band that keeps only its top and bottom rules, `none` for a cell of a `gap-px` divider grid whose edges are already drawn by the grid's seams.
 - Keep `marks` on: the corner squares are the frame's identity, and they cost nothing when the rules are handed over to a grid. On a shared edge, pair `flush` with the opposite `marks` keyword (`flush` + `marks="bottom"`, `flush="left"` + `marks="right"`) so the junction carries one rule and one mark per corner.
-- Never double a line. A frame placed directly in a box whose top and side edges its container already draws (a `section-module` body with `padded` off, marked `data-frame-edges`) drops its own top and side rules and its two top corner marks: the header's bottom rule and the column's side rules are its edge there, so each seam stays one hairline at every width. Its bottom rule and bottom marks stay; the module that follows it passes `divided` as `false`.
+- Never double a line. A frame placed directly in a box whose top and side edges its container already draws (a `module` body with `padded` off, marked `data-frame-edges`) drops its own top and side rules and its two top corner marks: the header's bottom rule and the column's side rules are its edge there, so each seam stays one hairline at every width. Its bottom rule and bottom marks stay; the module that follows it passes `divided` as `false`.
 - Reach for `hatch` sparingly — one hatched frame per view reads as texture; several read as noise. For a ruled ground, compose `texture` at its `lines` kind inside the frame instead: it is the system's texture layer, and its ink and pitch are tunable from the call site.
 
 ## Don’t
 
 - For a card-shaped surface with padding, a header and a footer → use `card` instead.
 - For a single separating line between two blocks → use `separator` instead.
-- For the empty framed band that separates two sections → use `section-gap`, which is this frame configured for that one job.
+- For the empty framed band that separates two sections → use `spacer`, which is this frame configured for that one job.
 - Built to be personalized (style seam): any class is accepted on the tag.
 
 ## Related
 
-- [section-gap](section-gap.md) — an empty `registration-frame` that holds the air between two sections.
-- [section-title](section-title.md) — a `registration-frame` around a centered section header.
+- [spacer](spacer.md) — an empty `registration-frame` that holds the air between two sections.
+- [module-header](module-header.md) — a `registration-frame` around a centered section header.
 - [card](card.md) — a padded surface with header/content/footer regions; a card, not a frame.
 - [separator](separator.md) — one hairline with optional centered label; no corners, no content.
 
@@ -40,7 +40,7 @@
 | --- | --- | --- | --- | --- |
 | `borders` | `'all' \| 'none' \| 'x' \| 'y' \| Side \| Side[]` | `'all'` | false | Which of the frame's own rules to draw. Takes a keyword, one side, or a list of sides. |
 | `marks` | `'all' \| 'none' \| Edge \| Corner \| Corner[]` | `'all'` | false | Which corner registration squares to draw. Takes a keyword (`all`, `none`, `top`, `bottom`, `left`, `right`), one corner, or a list of corners. |
-| `hatch` | `boolean` | `false` | false | Show the frame's own linear hatch texture behind the content, faded toward the edges. Prefer `texture`'s `lines` kind for a ruled ground; `section-gap` composes that instead. |
+| `hatch` | `boolean` | `false` | false | Show the frame's own linear hatch texture behind the content, faded toward the edges. Prefer `texture`'s `lines` kind for a ruled ground; `spacer` composes that instead. |
 | `flush` | `boolean \| Side \| Side[]` | `false` | false | Which sides a neighbouring frame already draws, so this one does not draw them again. `true` is shorthand for `top`; use `left` for a horizontal row, or a list for a grid cell. |
 
 ## Slots

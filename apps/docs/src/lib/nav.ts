@@ -31,7 +31,7 @@ export const CATEGORY_LEADS: Record<string, string> = {
   overlay:
     'Layered, floating surfaces: dialogs, drawers, popovers, tooltips and menus above the page.',
   layout:
-    'Structure and shells: the frames, dividers, scroll areas and panes that hold a page together.',
+    'Structure and shells: app frames, the marketing page frame (container, module, spacer), dividers, scroll areas and panes.',
   content: 'Status and identity: tags, badges, avatars, cards and the pieces that describe things.',
   chart: 'Charts and figures: series, totals and trends drawn from the chart palette.',
   code: 'Source and log surfaces: code blocks and log views for monospaced content.',
@@ -39,7 +39,7 @@ export const CATEGORY_LEADS: Record<string, string> = {
   provider: 'Providers that set locale, direction and context for the rest.',
   docs: 'Documentation site pieces: page chrome, callouts, steps, cards and the table of contents.',
   marketing:
-    'Marketing site pieces you compose by hand: heroes, bands, quotes, media and the page frame.',
+    'Marketing site pieces you compose by hand: heroes, quotes, stats, media and the page renderer.',
   section: 'Ready marketing page sections, each named by the id a page writes in its sections.',
   scenes: 'Illustrated scenes for the marketing site.'
 }

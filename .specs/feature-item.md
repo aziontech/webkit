@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: dba0a169590be71c9c62f5944d5c2d302b060c015d10b4a3f70e8742e465e1af
+checksum: 749d5b865d3764ae876c3836afdf929faea73d7283c99b5bbd0ed08ec92a1eab
 created: 2026-09-24
 last_updated: 2026-11-16
 ---
@@ -26,7 +26,7 @@ One claim stated in three parts: a glyph, a short headline it shares a line with
 
 - For a tile with its own border and surface → keep the topic and put it in a `CardGrid.Cell`, which draws the frame and the fill.
 - For a claim that carries an eyebrow, a media region or a button → use `media-split`.
-- For the headline that opens the whole section → use `section-title`.
+- For the headline that opens the whole section → use `module-header`.
 - For a whole band of claims or links placed from page JSON → use `capability-grid-section`, which lays topics out for you.
 - For a measured figure with a unit → use `stats`.
 - For a console list row with media and actions → use `item`.
@@ -35,12 +35,12 @@ One claim stated in three parts: a glyph, a short headline it shares a line with
 
 - `card-grid` — the equal-cell grid a topic is usually repeated in; its `frame` register gives each topic a real `registration-frame` cell.
 - `bento-grid` — the unequal-cell mosaic, when one claim deserves more room than the rest.
-- `section-title` — the headline that opens the band a row of topics sits in.
+- `module-header` — the headline that opens the band a row of topics sits in.
 
 ## Best practices
 
 - Let the cell own the surface. A topic paints no background and adds no padding, so put it inside `CardGrid.Cell` / `BentoGrid.Cell` (or a padded cell the page owns) rather than giving the topic a fill.
-- Keep `headingLevel` in step with the page outline: `2` when the band has no headline of its own and these are the first sub-headings under the `h1`, `3` when a `section-title` has already opened the section. The level is the outline; the size is fixed at `heading-xs`.
+- Keep `headingLevel` in step with the page outline: `2` when the band has no headline of its own and these are the first sub-headings under the `h1`, `3` when a `module-header` has already opened the section. The level is the outline; the size is fixed at `heading-xs`.
 - Keep the description to one sentence. The glyph carries the recognition, the headline carries the claim, and a second sentence turns a scannable grid into a wall of prose.
 - Drop `icon` for a band whose claims are not glyph-led rather than reaching for a decorative glyph that says nothing.
 - Give the claim an `href` rather than composing a button under it. A grid of six claims that each close on their own "Learn more" reads as six calls to action instead of six claims, and the button is a second target for the destination the claim already points at.
@@ -71,7 +71,7 @@ One claim stated in three parts: a glyph, a short headline it shares a line with
 | `description`  | `string`                  | `''`    | false    | One sentence explaining the claim; overridden by the default slot.                                                                                                                             |
 | `icon`         | `string`                  | `''`    | false    | Icon class for the glyph that leads the headline.                                                                                                                                              |
 | `href`         | `string`                  | `''`    | false    | When set, the whole claim renders as an anchor link to this URL and its headline closes on a trailing arrow.                                                                                   |
-| `headingLevel` | `FeatureItemHeadingLevel` | `2`     | false    | Level of the heading element. Keep `2` when the band has no headline of its own; drop it to `3` when a `section-title` has already opened the section, so the document outline stays in order. |
+| `headingLevel` | `FeatureItemHeadingLevel` | `2`     | false    | Level of the heading element. Keep `2` when the band has no headline of its own; drop it to `3` when a `module-header` has already opened the section, so the document outline stays in order. |
 
 ## Events
 

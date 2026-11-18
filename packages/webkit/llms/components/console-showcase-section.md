@@ -27,16 +27,16 @@
 
 - `ConsoleMockup` — the console scenes it frames.
 - `ToggleGroup` — the tab control.
-- `Texture`, `RegistrationFrame`, `SectionTitle`.
+- `Texture`, `RegistrationFrame`, `ModuleHeader`.
 
 ## Props
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `variant` | `'console' \| 'diagram'` | `'console'` | false | What the panel frames: `console` crops and fades a console mock at a fixed aspect, `diagram` lets a scene keep its own height. |
-| `titleAlign` | `SectionTitleAlign` | `'center'` | false | Layout of the headline block. |
-| `titlePadding` | `SectionTitlePadding` | `'medium'` | false | Vertical padding of the headline block. |
-| `size` | `SectionTitleSize` | `'medium'` | false | Step of the headline on the heading scale. |
+| `titleAlign` | `ModuleHeaderAlign` | `'center'` | false | Layout of the headline block. |
+| `titlePadding` | `ModuleHeaderPadding` | `'medium'` | false | Vertical padding of the headline block. |
+| `size` | `ModuleHeaderSize` | `'medium'` | false | Step of the headline on the heading scale. |
 | `anchor` | `string` | `''` | false | In-page id set on the band so a hash link can target it. |
 | `eyebrow` | `string` | `''` | false | Eyebrow above the title. |
 | `title` | `string` | `''` | false | Headline of the band, rendered as its `h2`. |

@@ -33,9 +33,9 @@ A small heading, "Resources", over `Card :padded="false"` holding an `Item` list
 
 `IntegrationCard` tiles in a row from the small breakpoint, each with a glyph (`logo`), a title and one sentence. A step with `href` is a link stretched over the tile; a step that acts in place (Deploy this resource) has no `href`, and its title is a button that emits `select`. Mark at most one with a primary Recommended badge (`badges`). Docs steps open in the same tab, so no new-tab notice is needed.
 
-### E. Get started — `SectionHeader`, `ToggleGroup`, `CodeBlock`, `Card` (optional)
+### E. Get started — `Subheader`, `ToggleGroup`, `CodeBlock`, `Card` (optional)
 
-Only for a resource nothing serves yet (`getStarted` set to its name): a `SectionHeader` with a link to the CLI docs and a large `ToggleGroup` between the CLI and GitHub Actions paths, then three numbered step `Card`s, each with its commands in a `CodeBlock` without line numbers. The Link your project command names the resource.
+Only for a resource nothing serves yet (`getStarted` set to its name): a `Subheader` with a link to the CLI docs and a large `ToggleGroup` between the CLI and GitHub Actions paths, then three numbered step `Card`s, each with its commands in a `CodeBlock` without line numbers. The Link your project command names the resource.
 
 ### F. Manage — `Button` (required)
 

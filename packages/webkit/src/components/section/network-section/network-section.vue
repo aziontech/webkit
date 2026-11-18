@@ -6,11 +6,11 @@
   import type { CardGridColumns } from '../../layout/card-grid/card-grid.vue'
   import CardGrid from '../../layout/card-grid/card-grid.vue'
   import CardGridCell from '../../layout/card-grid/card-grid-cell/card-grid-cell.vue'
+  import Module from '../../layout/module/module.vue'
+  import ModuleHeader from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import FeatureItem from '../../marketing/feature-item/feature-item.vue'
   import Quote from '../../marketing/quote/quote.vue'
-  import SectionModule from '../../marketing/section-module/section-module.vue'
-  import SectionTitle from '../../marketing/section-title/section-title.vue'
   import Stats from '../../marketing/stats/stats.vue'
 
   defineOptions({
@@ -126,7 +126,7 @@
     :aria-label="title || undefined"
     class="scroll-mt-(--spacing-2xl)"
   >
-    <SectionModule
+    <Module
       v-if="title.length > 0"
       :divided="false"
       :padded="false"
@@ -154,7 +154,7 @@
           <div
             class="relative flex min-h-[38rem] flex-col justify-between gap-(--spacing-xl) p-(--spacing-2xl) md:min-h-[clamp(36rem,60vh,40rem)] lg:min-h-[clamp(340px,52vh,620px)]"
           >
-            <SectionTitle
+            <ModuleHeader
               :framed="false"
               align="start"
               size="small"
@@ -266,6 +266,6 @@
           />
         </div>
       </RegistrationFrame>
-    </SectionModule>
+    </Module>
   </section>
 </template>

@@ -1,6 +1,6 @@
 # Client Quotes Section
 
-> The client-stories band: a framed `quote-tabs` carousel of customer quotes, each signed by its author and marked by the client's logo, with one call to action under it. It is a page section — the site places it from a `{ _id: 'client-quotes-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `registration-frame`, `quote-tabs` and `button`.
+> The client-stories band: a framed `quote-tabs` carousel of customer quotes, each signed by its author and marked by the client's logo, with one call to action under it. It is a page section — the site places it from a `{ _id: 'client-quotes-section', props }` entry and binds `props` straight onto it — and it composes `module`, `registration-frame`, `quote-tabs` and `button`.
 
 - Import: `import ClientQuotesSection from '@aziontech/webkit/client-quotes-section'`
 - Category: section · Surface: site · Structure: monolithic
@@ -37,7 +37,7 @@
 | `anchor` | `string` | `''` | false | In-page id set on the band so a hash link can target it. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the quote carousel. |
 | `items` | `ClientQuotesSectionItem[]` | `[]` | false | The quotes, in order; each is `{ text, name?, jobTitle?, mark?, logo?, clientName?, photo? }` where `mark` is a registry mark name and `logo` a mark URL named by `clientName`. |
-| `primaryAction` | `SectionTitleAction` | `undefined` | false | Button under the quotes; `{ label, href, trailing? }`. Omitted when absent. |
+| `primaryAction` | `ModuleHeaderAction` | `undefined` | false | Button under the quotes; `{ label, href, trailing? }`. Omitted when absent. |
 | `autoplay` | `boolean` | `true` | false | Advances to the next quote on a timer, as `quote-tabs` does, with its visible pause control; pauses under the pointer or keyboard focus and never runs under reduced motion. |
 | `autoplayInterval` | `number` | `5000` | false | Milliseconds each quote is held before the band advances. |
 | `modelValue` | `number` | `0` | false | Two-way value (`v-model`). |

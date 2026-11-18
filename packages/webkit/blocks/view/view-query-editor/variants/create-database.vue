@@ -11,8 +11,8 @@
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
   import SaveBar from '@aziontech/webkit/save-bar'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
-  import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import { toast } from '@aziontech/webkit/toast'
   import { computed, nextTick, onBeforeUnmount, reactive, ref } from 'vue'
@@ -166,8 +166,8 @@
             >
               <legend class="sr-only">Create Database</legend>
 
-              <SettingsSection
-                title="General"
+              <SettingsGroup
+                label="General"
                 hint="The only field this endpoint requires."
               >
                 <Card :padded="false">
@@ -201,11 +201,11 @@
                     </Item.List>
                   </template>
                 </Card>
-              </SettingsSection>
+              </SettingsGroup>
 
-              <SettingsSection
+              <SettingsGroup
                 v-model:open="advancedOpen"
-                title="Advanced"
+                label="Advanced"
                 icon="az az-settings"
                 collapsible
               >
@@ -225,7 +225,7 @@
                     </Item.List>
                   </template>
                 </Card>
-              </SettingsSection>
+              </SettingsGroup>
             </fieldset>
           </div>
 

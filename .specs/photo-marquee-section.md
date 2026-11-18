@@ -6,7 +6,7 @@ status: implemented
 spec_version: 5
 created: 2026-11-04
 last_updated: 2026-11-16
-checksum: 44829a5fb658a6735a423263bd062ff68c89b78d7c7152d4d9a3ed422444bd46
+checksum: 47f5875fd7db6a251ed95d8f1f5fe4f206f085f01b303628740f927b6ea60b37
 template: 2
 ---
 
@@ -14,7 +14,7 @@ template: 2
 
 ## Purpose
 
-The office band of the careers page: a horizontal section title over a framed strip of photographs of varied aspect ratios that scrolls continuously and pauses on hover, on focus or from its pause control; the loop is the one `marquee` runs on. It is a page section — the site places it from a `{ _id: 'photo-marquee-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title` and `registration-frame`.
+The office band of the careers page: a horizontal section title over a framed strip of photographs of varied aspect ratios that scrolls continuously and pauses on hover, on focus or from its pause control; the loop is the one `marquee` runs on. It is a page section — the site places it from a `{ _id: 'photo-marquee-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header` and `registration-frame`.
 
 ## When to use
 
@@ -107,7 +107,7 @@ The office band of the careers page: a horizontal section title over a framed st
 - Visible focus: the scrolling region is focusable and carries `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset`.
 - Keyboard map: `Tab` reaches the region, which pauses the loop, then the pause control (`Enter` / `Space` toggles it, WCAG 2.2.2); under reduced motion the control is hidden and arrow keys scroll the region.
 - ARIA: the band is a `<section>` named by its title (`aria-label`); the strip is a `region` named by `ariaLabel`; every photo carries its `alt` once — the duplicate copy is `aria-hidden` with empty `alt`.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `section-title`.
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `module-header`.
 - `motion-reduce:animate-none` on the strip; the duplicate list is hidden so nothing moves and nothing repeats.
 - Touch target ≥40×40 px — not applicable beyond the focusable region.
 

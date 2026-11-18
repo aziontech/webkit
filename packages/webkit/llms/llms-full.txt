@@ -776,8 +776,8 @@ another's.
 ```
 
 - **The heading** is `PageHeader` (`@aziontech/webkit/page-header`): the page's only h1, its
-  description, and the page's own actions. A band inside the page is titled by a `SectionHeader`
-  (`@aziontech/webkit/section-header`), or by a `SettingsSection` (`@aziontech/webkit/settings-section`)
+  description, and the page's own actions. A band inside the page is titled by a `Subheader`
+  (`@aziontech/webkit/subheader`), or by a `SettingsGroup` (`@aziontech/webkit/settings-group`)
   on a settings page — never by a second hand-written header block.
 - **The boundary** (`layout-boundary`) sets the page's inset from the app chrome — sides, top and
   bottom — and its top inset is the space above the heading.
@@ -926,7 +926,7 @@ The section step is the gap _above_ the band, not inside it.
 
 **The group step is the floor.** No two regions of a page — a banner (`Alert`), a card, a framed
 table, a section heading — ever sit closer than `--layout-group-gap`. The usual way to break it is a
-parent section with no `gap` of its own: a page-level `Alert` above the first `SettingsSection` lands
+parent section with no `gap` of its own: a page-level `Alert` above the first `SettingsGroup` lands
 flush against that section's heading, because the band only spaces itself from the bands before it.
 A banner that speaks for the whole page is a child of the parent section like any band, and the
 parent's `gap-(--layout-section-gap)` spaces it. Tighter steps belong _inside_ one unit — a card's
@@ -1416,8 +1416,8 @@ ask the window. Two scales (both in `@aziontech/theme`, "Breakpoints and contain
 
 The components that live in panels already do this, so a page gets it for free: `Table` (the grid
 scrolls sideways inside its own viewport; `stackable` opts a short list into label/value cards),
-`PageHeader` and `SectionHeader` (actions drop under the title, full width), `SettingsRow` (a field moves
-under its copy on a phone, the description wraps in full; `stackable` stacks it in a drawer-width box too), `SettingsSection`, `SaveBar` (actions stack full width, Save on top),
+`PageHeader` and `Subheader` (actions drop under the title, full width), `SettingsRow` (a field moves
+under its copy on a phone, the description wraps in full; `stackable` stacks it in a drawer-width box too), `SettingsGroup`, `SaveBar` (actions stack full width, Save on top),
 `Card` (its content is `@container/card`), `Alert` (the action takes its own line), `EmptyState`,
 `Pagination` (the strip and page-size control wrap under the info text; the page list stays whole), `Wizard` (the rail hides when the
 wizard is narrow), `HelpPanel`, `ChartCard`, `StatTile`, and the body of every dialog and drawer
@@ -2050,7 +2050,7 @@ yout, objects, git) and External (frameworks, AI models, developer tools, langua
 
 483 names. These are the only values the components accept. An unknown class renders nothing. The MCP tool `list_assets({ kind: "icons" })` returns the same list (with a `query` to filter), and `catalog.json#assets.icons` points at it as data.
 
-Used by: Alert, ArtifactPreview, Avatar, Button, DocCard, DocItem, DocPrompt, EmptyState, FeatureItem, FileDropzone, HighlightButton, IconButton, Link, SettingsSection, SplitButton, Tag.
+Used by: Alert, ArtifactPreview, Avatar, Button, DocCard, DocItem, DocPrompt, EmptyState, FeatureItem, FileDropzone, HighlightButton, IconButton, Link, SettingsGroup, SplitButton, Tag.
 
 ## Names
 
@@ -2169,7 +2169,7 @@ What each prop and event does, and the go-live code: [blocks/account/account-act
 - Surface: app
 - Source: `blocks/account/account-billing/account-billing.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-billing")`
-- Components: Alert, Button, Card, CollectionPreferences, ConfirmDialog, CurrencyAmount, DataTable, DropdownMenu, EmptyState, IconButton, KeyValueList, PageHeader, PageTabs, PaymentBrand, PropertyFilter, SectionHeader, Skeleton, StatusIndicator, Table, `TableCellActions`, `TableCellStatus`, Tabs, Tag, Toast, Tooltip, `use-collection`, `use-locale`
+- Components: Alert, Button, Card, CollectionPreferences, ConfirmDialog, CurrencyAmount, DataTable, DropdownMenu, EmptyState, IconButton, KeyValueList, PageHeader, PageTabs, PaymentBrand, PropertyFilter, Skeleton, StatusIndicator, Subheader, Table, `TableCellActions`, `TableCellStatus`, Tabs, Tag, Toast, Tooltip, `use-collection`, `use-locale`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-navigation`, `webkit-microcopy`
 
 ## Asked as
@@ -2197,7 +2197,7 @@ What the account pays, what it paid and which card it is charged to. An admin ch
 - C. Load failure — `Alert` (conditional)
 - D. Subscription plan — `Card`, `Skeleton`, `Tag`, `KeyValueList`, `CurrencyAmount`, `PaymentBrand` (required)
 - E. Upgrade card — `Card` (required)
-- F. Invoices controls — `SectionHeader`, `PropertyFilter`, `CollectionPreferences` (required)
+- F. Invoices controls — `Subheader`, `PropertyFilter`, `CollectionPreferences` (required)
 - G. Invoices table — `DataTable`, `TableCellActions`, `TableCellStatus`, `useCollection` (required)
 - H. No invoices and no match — `EmptyState` (conditional)
 - I. Payment information — `StatusIndicator` (required on the Payment methods tab)
@@ -2392,7 +2392,7 @@ What each prop and event does, and the go-live code: [blocks/account/account-cha
 - Surface: app
 - Source: `blocks/account/account-deployment-settings/account-deployment-settings.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-deployment-settings")`
-- Components: Accordion, Alert, Button, Card, CollectionPreferences, ConfirmDialog, DataTable, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, IconButton, Input, Item, PageHeader, Pagination, `PanelBody`, `PanelFooter`, `PanelHeader`, PropertyFilter, RadioGroup, SaveBar, Select, SettingsRow, SettingsSection, Skeleton, Switch, Table, `TableCellActions`, `TableCellStatus`, `TableCellTime`, Tag, Textarea, Toast, Tooltip, `use-collection`
+- Components: Accordion, Alert, Button, Card, CollectionPreferences, ConfirmDialog, DataTable, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, IconButton, Input, Item, PageHeader, Pagination, `PanelBody`, `PanelFooter`, `PanelHeader`, PropertyFilter, RadioGroup, SaveBar, Select, SettingsGroup, SettingsRow, Skeleton, Switch, Table, `TableCellActions`, `TableCellStatus`, `TableCellTime`, Tag, Textarea, Toast, Tooltip, `use-collection`
 - Skills: `webkit-form`, `webkit-tables`, `webkit-lists`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -2417,7 +2417,7 @@ How every deploy in the account routes. A Deployment Setting holds a binding pol
 
 - A. Page heading — `PageHeader`, `Button` (required)
 - B. What a Deployment Setting is — `Alert` (required)
-- C. New service defaults — `SettingsSection`, `Card`, `Item`, `SettingsRow`, `Select`, `Switch`, `SaveBar` (required)
+- C. New service defaults — `SettingsGroup`, `Card`, `Item`, `SettingsRow`, `Select`, `Switch`, `SaveBar` (required)
 - D. All services — `Accordion`, `Input`, `Tag`, `Select`, `Pagination` (required)
 - E. Deployment Settings controls — `PropertyFilter`, `Tooltip`, `IconButton`, `CollectionPreferences` (required)
 - F. Deployment Settings table — `DataTable`, `TableCellActions`, `TableCellStatus`, `TableCellTime`, `Card`, `Tag`, `DropdownMenu`, `ConfirmDialog`, `EmptyState`, `useCollection` (required)
@@ -2913,7 +2913,7 @@ What each prop and event does, and the go-live code: [blocks/account/account-pay
 - Surface: app
 - Source: `blocks/account/account-personal-tokens/account-personal-tokens.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-personal-tokens")`
-- Components: Alert, Button, Card, CollectionPreferences, ConfirmDialog, CopyButton, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, `FieldDescription`, IconButton, Input, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, PasswordInput, PropertyFilter, Select, SettingsSection, Table, `TableCellActions`, `TableCellStatus`, `TableCellTime`, Textarea, Tooltip, `use-collection`, `use-locale`
+- Components: Alert, Button, Card, CollectionPreferences, ConfirmDialog, CopyButton, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, `FieldDescription`, IconButton, Input, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, PasswordInput, PropertyFilter, Select, SettingsGroup, Table, `TableCellActions`, `TableCellStatus`, `TableCellTime`, Textarea, Tooltip, `use-collection`, `use-locale`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -2941,7 +2941,7 @@ The Personal tokens page of the account settings. A person creates a token for a
 - D. Row actions — `DropdownMenu` (required)
 - E. No match and empty — `EmptyState` (required)
 - F. Load failure — `Alert` (conditional)
-- G. Create drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelBody`, `SettingsSection`, `PanelFooter` (required)
+- G. Create drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelBody`, `SettingsGroup`, `PanelFooter` (required)
 - H. Fields — `Field`, `Input`, `Textarea`, `Select`, `FieldDescription` (required)
 - I. One-time reveal — `Dialog`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PasswordInput`, `CopyButton` (required)
 - J. Confirmations and outcomes — `ConfirmDialog` (required)
@@ -3019,7 +3019,7 @@ What each prop and event does, and the go-live code: [blocks/account/account-per
 - Surface: app
 - Source: `blocks/account/account-team-permissions/account-team-permissions.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-team-permissions")`
-- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, Checkbox, CollectionPreferences, Combobox, ConfirmDialog, DataTable, DropdownMenu, EmptyState, Field, IconButton, Input, PageHeader, PropertyFilter, SaveBar, SettingsSection, Switch, Table, `TableCellActions`, `TableCellLink`, `TableCellStatus`, `TableCellTags`, Textarea, Toast, Tooltip, `use-collection`
+- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, Checkbox, CollectionPreferences, Combobox, ConfirmDialog, DataTable, DropdownMenu, EmptyState, Field, IconButton, Input, PageHeader, PropertyFilter, SaveBar, SettingsGroup, Switch, Table, `TableCellActions`, `TableCellLink`, `TableCellStatus`, `TableCellTags`, Textarea, Toast, Tooltip, `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -3782,7 +3782,7 @@ What each prop and event does, and the go-live code: [blocks/auth/auth-sign-in.m
 - Surface: app
 - Source: `blocks/create/create-deploy-drawer/create-deploy-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-deploy-drawer")`
-- Components: Accordion, Alert, Avatar, Button, Card, `DrawerContent`, Drawer, `DrawerTitle`, `DrawerTrigger`, DropdownMenu, EmptyState, Input, Item, Link, `PanelBody`, `PanelFooter`, `PanelHeader`, Popover, RadioGroup, Separator, SettingsSection, Skeleton, Spinner, Tag, Toast, ToggleGroup, Tooltip
+- Components: Accordion, Alert, Avatar, Button, Card, `DrawerContent`, Drawer, `DrawerTitle`, `DrawerTrigger`, DropdownMenu, EmptyState, Input, Item, Link, `PanelBody`, `PanelFooter`, `PanelHeader`, Popover, RadioGroup, Separator, SettingsGroup, Skeleton, Spinner, Tag, Toast, ToggleGroup, Tooltip
 - Skills: `webkit-create-surface`, `webkit-navigation`, `webkit-form`, `webkit-ui-states`
 
 ## Asked as
@@ -3810,7 +3810,7 @@ The drawer a platform deploys from, opened by Deploy on a service or a project. 
 
 - A. Trigger and frame — `Drawer`, `DrawerTrigger`, `Button`, `DrawerContent` (required)
 - B. Panel header — `PanelHeader`, `DrawerTitle` (required)
-- C. Sections — `PanelBody`, `SettingsSection`, `Skeleton`, `Alert`, `Spinner` (required)
+- C. Sections — `PanelBody`, `SettingsGroup`, `Skeleton`, `Alert`, `Spinner` (required)
 - D. Resources card — `Card`, `Separator`, `Item`, `Tag`, `DropdownMenu`, `Input`, `Avatar`, `Button` (required)
 - E. Dependencies — `Accordion`, `Item`, `Tag`, `DropdownMenu` (required)
 - F. Project — `ToggleGroup`, `Item`, `Tag`, `Link`, `Tooltip`, `Popover`, `DropdownMenu` (required on a service)
@@ -3910,7 +3910,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-deplo
 - `detail/detail-deployment-logs` — the logs of a deploy after it ran.
 - `detail/detail-version` — what a version contains before it is deployed.
 - `create/create-resource-picker` — the Existing or New pattern the Project section follows.
-- `SettingsSection` — the band each section uses; see `skills/webkit-create-surface` for the drawer commit model.
+- `SettingsGroup` — the band each section uses; see `skills/webkit-create-surface` for the drawer commit model.
 
 ## Variants
 
@@ -4031,7 +4031,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-deplo
 - Surface: app
 - Source: `blocks/create/create-deploy-success/create-deploy-success.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-deploy-success")`
-- Components: Button, Card, CodeBlock, IntegrationCard, Item, Link, SectionHeader, Tag, ToggleGroup, Tooltip
+- Components: Button, Card, CodeBlock, IntegrationCard, Item, Link, Subheader, Tag, ToggleGroup, Tooltip
 - Skills: `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -4059,7 +4059,7 @@ The screen a create flow ends on. The user has just watched a deploy finish and 
 - B. Deployment card — `Card`, `Tag`, `Button`, `Link`, `Tooltip` (required)
 - C. Resources list — `Card`, `Item`, `Tag` (required)
 - D. Next steps — `IntegrationCard` (required)
-- E. Get started — `SectionHeader`, `ToggleGroup`, `CodeBlock`, `Card` (optional)
+- E. Get started — `Subheader`, `ToggleGroup`, `CodeBlock`, `Card` (optional)
 - F. Manage — `Button` (required)
 
 What each part takes: [blocks/create/create-deploy-success.md](blocks/create/create-deploy-success.md).
@@ -4265,7 +4265,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-deplo
 - Surface: app
 - Source: `blocks/create/create-drawer/create-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-drawer")`
-- Components: Alert, Button, Card, CodeEditor, `DrawerContent`, Drawer, `DrawerTitle`, `DrawerTrigger`, `DropdownMenuGroup`, `DropdownMenuItem`, `DropdownMenuRoot`, `DropdownMenuTrigger`, Field, `FieldDescription`, `FieldError`, Hint, IconButton, Input, InputGroup, Item, KeyValueList, Link, NumberInput, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, RadioGroup, SchemaForm, Select, SettingsRow, SettingsSection, StatusIndicator, Switch, Textarea, Toast, ToggleGroup, Tooltip, `use-locale`
+- Components: Alert, Button, Card, CodeEditor, `DrawerContent`, Drawer, `DrawerTitle`, `DrawerTrigger`, `DropdownMenuGroup`, `DropdownMenuItem`, `DropdownMenuRoot`, `DropdownMenuTrigger`, Field, `FieldDescription`, `FieldError`, Hint, IconButton, Input, InputGroup, Item, KeyValueList, Link, NumberInput, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, RadioGroup, SchemaForm, Select, SettingsGroup, SettingsRow, StatusIndicator, Switch, Textarea, Toast, ToggleGroup, Tooltip, `use-locale`
 - Skills: `webkit-create-surface`, `webkit-navigation`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -4296,14 +4296,14 @@ The right-side drawer that adds or edits something that only exists inside anoth
 - A. Trigger — `Button` (required)
 - B. Drawer frame — `Drawer`, `DrawerContent` (required)
 - C. Panel header — `PanelHeader`, `DrawerTitle` (required)
-- D. Sections — `PanelBody`, `SettingsSection` (required)
+- D. Sections — `PanelBody`, `SettingsGroup` (required)
 - E. Environment select — `Field`, `Select` (required)
 - F. Domain source — `Field`, `RadioGroup` (required)
 - G. Domain name — `Field`, `InputGroup` (required)
 - H. Certificate — `Field`, `Select`, `FieldDescription` (optional)
 - I. Context alert — `Alert` (optional)
 - J. Footer — `PanelFooter`, `Button` (required)
-- K. Certificate import — `SettingsSection`, `Field`, `Button`, `PanelFooter` (optional)
+- K. Certificate import — `SettingsGroup`, `Field`, `Button`, `PanelFooter` (optional)
 
 What each part takes: [blocks/create/create-drawer.md](blocks/create/create-drawer.md).
 
@@ -4382,7 +4382,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-drawe
 - `create/create-page` — the page a first-level resource creates on instead.
 - `create/create-deploy-drawer` — the drawer that deploys rather than creates.
 - `state/state-form-validation` — the submit-time validation this drawer follows.
-- `SettingsSection` — the band each section is built from; see `skills/webkit-form` for fields and validation.
+- `SettingsGroup` — the band each section is built from; see `skills/webkit-form` for fields and validation.
 
 ## Variants
 
@@ -4514,7 +4514,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-hub.m
 - Surface: app
 - Source: `blocks/create/create-page/create-page.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-page")`
-- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, `FieldDescription`, `FieldError`, IconButton, Input, Item, MultiSelect, NumberInput, PageHeader, RadioGroup, RadioGroup, SaveBar, Select, SettingsRow, SettingsSection, Switch, Tag, Textarea, Toast
+- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, `FieldDescription`, `FieldError`, IconButton, Input, Item, MultiSelect, NumberInput, PageHeader, RadioGroup, RadioGroup, SaveBar, Select, SettingsGroup, SettingsRow, Switch, Tag, Textarea, Toast
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`, `webkit-layout`
 
 ## Asked as
@@ -4543,7 +4543,7 @@ The page a first-level resource is created on when everything it needs fits on o
 
 - A. Creation header — `AppHeader`, `IconButton`, `Brand`, `Breadcrumb`, `Avatar` (required)
 - B. Page heading — `PageHeader` (required)
-- C. Sections — `SettingsSection`, `Card`, `Item` (required)
+- C. Sections — `SettingsGroup`, `Card`, `Item` (required)
 - D. Field rows — `SettingsRow`, `Input`, `FieldError` (required)
 - E. Switch rows — `Switch` (optional)
 - F. Commit bar — `SaveBar`, `Button` (required)
@@ -4866,7 +4866,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-resou
 - Surface: app
 - Source: `blocks/create/create-wizard/create-wizard.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-wizard")`
-- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, Field, `FieldDescription`, `FieldError`, Hint, IconButton, Input, Item, PageHeader, RadioGroup, RadioGroup, SectionHeader, Select, SettingsRow, SettingsSection, Skeleton, Switch, Tag, Textarea, Toast, ToggleGroup, Wizard
+- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, Field, `FieldDescription`, `FieldError`, Hint, IconButton, Input, Item, PageHeader, RadioGroup, RadioGroup, Select, SettingsGroup, SettingsRow, Skeleton, Subheader, Switch, Tag, Textarea, Toast, ToggleGroup, Wizard
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -4901,7 +4901,7 @@ The page a first-level resource is created on one step at a time. It is the `Wiz
 - F. Field steps — `Card`, `Item`, `SettingsRow`, `Input`, `FieldError` (required)
 - G. Choice cards — `RadioGroup` (optional)
 - H. Long entry — `Textarea`, `FieldError` (optional)
-- I. Review — `SectionHeader`, `Alert`, `Card`, `Item`, `Tag`, `Button` (required)
+- I. Review — `Subheader`, `Alert`, `Card`, `Item`, `Tag`, `Button` (required)
 - J. Create and deploy — `Card`, `Field`, `Input`, `Item`, `RadioGroup` (CreateAndDeploy)
 
 What each part takes: [blocks/create/create-wizard.md](blocks/create/create-wizard.md).
@@ -6499,7 +6499,7 @@ What each prop and event does, and the go-live code: [blocks/detail/detail-deplo
 - Surface: app
 - Source: `blocks/detail/detail-dns-zone/detail-dns-zone.vue` in `@aziontech/webkit`
 - MCP: `get_block("detail/detail-dns-zone")`
-- Components: Alert, Button, Card, CollectionPreferences, CopyButton, DataTable, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, EmptyState, Field, `FieldDescription`, `FieldError`, FileDropzone, IconButton, Input, `InputGroupRoot`, `ItemList`, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, PropertyFilter, SaveBar, SettingsRow, SettingsSection, Switch, `TableCellActions`, `TableCellId`, `TableCellLink`, Tabs, Tag, Textarea, Toast, Tooltip, `use-collection`
+- Components: Alert, Button, Card, CollectionPreferences, CopyButton, DataTable, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, EmptyState, Field, `FieldDescription`, `FieldError`, FileDropzone, IconButton, Input, `InputGroupRoot`, `ItemList`, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, PropertyFilter, SaveBar, SettingsGroup, SettingsRow, Switch, `TableCellActions`, `TableCellId`, `TableCellLink`, Tabs, Tag, Textarea, Toast, Tooltip, `use-collection`
 - Skills: `webkit-tables`, `webkit-form`, `webkit-navigation`
 
 ## Asked as
@@ -6524,7 +6524,7 @@ The detail page of a resource that owns a long list of records, here a DNS zone.
 ## Building blocks
 
 - A. Tab bar — `PageTabs`, `Tabs` (required)
-- B. Settings sections — `SettingsSection`, `Card`, `ItemList`, `SettingsRow`, `Input`, `FieldDescription`, `FieldError` (required)
+- B. Settings sections — `SettingsGroup`, `Card`, `ItemList`, `SettingsRow`, `Input`, `FieldDescription`, `FieldError` (required)
 - C. Copyable values — `InputGroupRoot`, `Input`, `CopyButton` (required)
 - D. Toggles — `Switch` (required)
 - E. Save bar — `SaveBar`, `Button` (required)
@@ -6730,7 +6730,7 @@ What each prop and event does, and the go-live code: [blocks/detail/detail-domai
 - Surface: app
 - Source: `blocks/detail/detail-get-started/detail-get-started.vue` in `@aziontech/webkit`
 - MCP: `get_block("detail/detail-get-started")`
-- Components: Card, CodeBlock, SectionHeader, ToggleGroup
+- Components: Card, CodeBlock, Subheader, ToggleGroup
 - Skills: `webkit-microcopy`
 
 ## Asked as
@@ -6755,7 +6755,7 @@ The first thing a user reads about a resource they created from the CLI and have
 
 ## Building blocks
 
-- A. Section heading — `SectionHeader` (required)
+- A. Section heading — `Subheader` (required)
 - B. Path switch — `ToggleGroup` (required)
 - C. Step cards — `Card` (required)
 - D. Commands — `CodeBlock` (required)
@@ -6833,7 +6833,7 @@ What each prop and event does, and the go-live code: [blocks/detail/detail-get-s
 - Surface: app
 - Source: `blocks/detail/detail-invocations/detail-invocations.vue` in `@aziontech/webkit`
 - MCP: `get_block("detail/detail-invocations")`
-- Components: Button, Card, CopyButton, DropdownMenu, FlowDiagram, IconButton, Link, `LogViewerContent`, LogViewer, PageHeader, SectionHeader, StatusIndicator, Tag, Tooltip, Trace, `use-locale`
+- Components: Button, Card, CopyButton, DropdownMenu, FlowDiagram, IconButton, Link, `LogViewerContent`, LogViewer, PageHeader, StatusIndicator, Subheader, Tag, Tooltip, Trace, `use-locale`
 - Skills: `webkit-layout`, `webkit-ui-states`, `webkit-data-viz`
 
 ## Asked as
@@ -6860,9 +6860,9 @@ The page a user opens to understand one run of a function: did it work, how long
 
 - A. Page heading — `PageHeader` (required)
 - B. Invocation summary — `Card`, `Link`, `Tooltip`, `CopyButton`, `StatusIndicator`, `Button`, `DropdownMenu`, `IconButton` (required)
-- C. Request path — `SectionHeader`, `FlowDiagram`, `Tag` (required)
+- C. Request path — `Subheader`, `FlowDiagram`, `Tag` (required)
 - D. Trace — `Trace` (required)
-- E. Logs — `SectionHeader`, `StatusIndicator`, `LogViewer`, `LogViewerContent` (required)
+- E. Logs — `Subheader`, `StatusIndicator`, `LogViewer`, `LogViewerContent` (required)
 
 What each part takes: [blocks/detail/detail-invocations.md](blocks/detail/detail-invocations.md).
 
@@ -7044,7 +7044,7 @@ What each prop and event does, and the go-live code: [blocks/detail/detail-produ
 - Surface: app
 - Source: `blocks/detail/detail-resource/detail-resource.vue` in `@aziontech/webkit`
 - MCP: `get_block("detail/detail-resource")`
-- Components: Accordion, Alert, Avatar, Button, Card, CodeBlock, ConfirmDialog, ConsoleLayout, CopyButton, DataTable, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, IconButton, Input, `InputGroupRoot`, Item, Link, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, Popover, SaveBar, SectionHeader, Select, SettingsRow, SettingsSection, StatusIndicator, Tabs, Tag, Toast, ToggleGroup, Tooltip, TopologyDiagram, `use-locale`, `use-unsaved-changes`
+- Components: Accordion, Alert, Avatar, Button, Card, CodeBlock, ConfirmDialog, ConsoleLayout, CopyButton, DataTable, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, IconButton, Input, `InputGroupRoot`, Item, Link, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, Popover, SaveBar, Select, SettingsGroup, SettingsRow, StatusIndicator, Subheader, Tabs, Tag, Toast, ToggleGroup, Tooltip, TopologyDiagram, `use-locale`, `use-unsaved-changes`
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-ui-states`
 
 ## Asked as
@@ -7075,7 +7075,7 @@ The second-level page of one resource. The user arrives from a list row or a dep
 - B. Summary subject band — `Card`, `Tooltip`, `Button`, `DropdownMenu`, `IconButton` (required)
 - C. Summary facts band — `Link`, `Tag`, `StatusIndicator`, `Avatar`, `Tooltip` (required)
 - D. Summary state band — `Button` (optional)
-- E. Get started — `SectionHeader`, `ToggleGroup`, `Card`, `CodeBlock` (optional)
+- E. Get started — `Subheader`, `ToggleGroup`, `Card`, `CodeBlock` (optional)
 
 What each part takes: [blocks/detail/detail-resource.md](blocks/detail/detail-resource.md).
 
@@ -7167,7 +7167,7 @@ Grouped by the resource type the page shows. A deployment's own page is `detail/
 
 ### Application
 
-- Application: a whole application page body, with working tabs. Overview is the summary card; Versions and Deployments are a small `SectionHeader` over a flush `DataTable`; Topology draws the request path with `TopologyDiagram` (domain, workload, firewall, application, function instance). Binding or removing the firewall or the function only stages the change: the node turns dashed with a Staged status, a polite status line names it, and the tab row shows the count as a warning `Tag` beside Deploy. Deploy opens a `Drawer` that lists each staged change as from and to, then runs on its own: a loading toast, then the state-async-submit toast with **Edit** (back to the Topology tab) and **Redeploy**, never View deployments.
+- Application: a whole application page body, with working tabs. Overview is the summary card; Versions and Deployments are a small `Subheader` over a flush `DataTable`; Topology draws the request path with `TopologyDiagram` (domain, workload, firewall, application, function instance). Binding or removing the firewall or the function only stages the change: the node turns dashed with a Staged status, a polite status line names it, and the tab row shows the count as a warning `Tag` beside Deploy. Deploy opens a `Drawer` that lists each staged change as from and to, then runs on its own: a loading toast, then the state-async-submit toast with **Edit** (back to the Topology tab) and **Redeploy**, never View deployments.
 - ApplicationBuild: an application page body with Overview, Versions, Build and Deployments. Dragging files over the page raises the dashed drop target of `state/state-project-intake`; dropping them or Deploy opens a deploy `Drawer` naming the source, and the run reports through the state-async-submit toast with Edit and Redeploy. Leaving the Build tab with unsaved changes asks first in a `ConfirmDialog`.
 
 ## Related
@@ -7198,7 +7198,7 @@ Grouped by the resource type the page shows. A deployment's own page is `detail/
 - Surface: app
 - Source: `blocks/detail/detail-version/detail-version.vue` in `@aziontech/webkit`
 - MCP: `get_block("detail/detail-version")`
-- Components: Avatar, Breadcrumb, Button, Card, CodeEditor, ConfirmDialog, ConsoleLayout, DataTable, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, `FieldError`, IconButton, Input, Item, MultiSelect, NumberInput, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, Resizable, SchemaForm, ScrollArea, Select, SettingsRow, SettingsSection, Skeleton, Spinner, SplitButton, Switch, `TableCellTime`, Tabs, Tag, Textarea, Toast, Tooltip
+- Components: Avatar, Breadcrumb, Button, Card, CodeEditor, ConfirmDialog, ConsoleLayout, DataTable, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, `FieldError`, IconButton, Input, Item, MultiSelect, NumberInput, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, Resizable, SchemaForm, ScrollArea, Select, SettingsGroup, SettingsRow, Skeleton, Spinner, SplitButton, Switch, `TableCellTime`, Tabs, Tag, Textarea, Toast, Tooltip
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-ui-states`
 
 ## Asked as
@@ -7225,7 +7225,7 @@ One version of a resource, opened from its Versions tab. The user is here to cha
 - A. Version switcher — `ConsoleLayout`, `Select`, `Input`, `Tag`, `IconButton`, `Tooltip` (required)
 - B. Workspace — `Resizable` (required)
 - C. Version tab bar — `PageTabs`, `Tabs`, `Tag`, `DropdownMenu`, `IconButton`, `EmptyState` (required)
-- D. Settings panel — `ScrollArea`, `PageHeader`, `SettingsSection`, `Card`, `Item`, `SettingsRow`, `Input`, `Switch`, `Tooltip`, `Skeleton` (required)
+- D. Settings panel — `ScrollArea`, `PageHeader`, `SettingsGroup`, `Card`, `Item`, `SettingsRow`, `Input`, `Switch`, `Tooltip`, `Skeleton` (required)
 - E. Version bar — `Tag`, `SplitButton`, `Button`, `Spinner` (required)
 - F. Version history — `IconButton`, `Tag`, `Field`, `Textarea`, `Button`, `Avatar` (optional)
 - G. Revert — `ConfirmDialog`, `Button`, `Tag` (optional, on an earlier Ready version)
@@ -7234,7 +7234,7 @@ What each part takes: [blocks/detail/detail-version.md](blocks/detail/detail-ver
 
 ## List tabs
 
-Source, Device Groups, Cache Settings and Functions Instances are lists inside the version: a small `PageHeader` with an outlined add action, the controls row of `view/view-table` (search, Refresh, Download CSV, Columns) and a flush `DataTable` in a `Card`, paginated at 10. Its `#empty` slot tells a search that matches nothing (No matching, with Clear search) apart from a list with nothing yet (the add action). The name cell is a button that opens the edit `Drawer`, the same drawer the add action opens, built as in `create/create-drawer`: `SettingsSection`s of `Field`s (Device Groups, Functions Instances) or of `SettingsRow`s in a `Card` (Cache Settings, reusing the rows of `edit/edit-resource#CacheSettings` plus Adaptive delivery and a Device groups `MultiSelect`). Functions Instances renders the arguments as a `SchemaForm` when the function declares a schema and as a JSON `CodeEditor` when it does not, and its function `Select` ends on Create Function. Source embeds the file browser: Upload Files in the heading, Open in Object Storage in the controls row, the folder path as a `Breadcrumb` and an `EmptyState` with Upload Files and Open Bucket. Saving a drawer changes the draft only; the version bar still deploys it.
+Source, Device Groups, Cache Settings and Functions Instances are lists inside the version: a small `PageHeader` with an outlined add action, the controls row of `view/view-table` (search, Refresh, Download CSV, Columns) and a flush `DataTable` in a `Card`, paginated at 10. Its `#empty` slot tells a search that matches nothing (No matching, with Clear search) apart from a list with nothing yet (the add action). The name cell is a button that opens the edit `Drawer`, the same drawer the add action opens, built as in `create/create-drawer`: `SettingsGroup`s of `Field`s (Device Groups, Functions Instances) or of `SettingsRow`s in a `Card` (Cache Settings, reusing the rows of `edit/edit-resource#CacheSettings` plus Adaptive delivery and a Device groups `MultiSelect`). Functions Instances renders the arguments as a `SchemaForm` when the function declares a schema and as a JSON `CodeEditor` when it does not, and its function `Select` ends on Create Function. Source embeds the file browser: Upload Files in the heading, Open in Object Storage in the controls row, the folder path as a `Breadcrumb` and an `EmptyState` with Upload Files and Open Bucket. Saving a drawer changes the draft only; the version bar still deploys it.
 
 ## Creating and not found
 
@@ -7456,7 +7456,7 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-delete-di
 - Surface: app
 - Source: `blocks/edit/edit-function/edit-function.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/edit-function")`
-- Components: Alert, Button, Card, CodeEditor, CopyButton, EmptyState, `FieldError`, IconButton, Input, Item, KeyValueList, Link, `LogViewerContent`, LogViewer, PageTabs, RadioGroup, `ResizableHandle`, `ResizablePane`, `ResizableRoot`, SaveBar, Select, SettingsRow, SettingsSection, StatusIndicator, Switch, Tabs, Tag, Textarea, Toast, ToggleGroup, Tooltip, Trace
+- Components: Alert, Button, Card, CodeEditor, CopyButton, EmptyState, `FieldError`, IconButton, Input, Item, KeyValueList, Link, `LogViewerContent`, LogViewer, PageTabs, RadioGroup, `ResizableHandle`, `ResizablePane`, `ResizableRoot`, SaveBar, Select, SettingsGroup, SettingsRow, StatusIndicator, Switch, Tabs, Tag, Textarea, Toast, ToggleGroup, Tooltip, Trace
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-form`
 
 ## Asked as
@@ -7490,7 +7490,7 @@ The editing page of a service whose behavior lives in source code. The user writ
 - F. No fields — `EmptyState`, `Button`, `Link` (optional)
 - G. Field list — `Card`, `Item`, `Tag`, `Tooltip`, `IconButton` (required)
 - H. Field settings — `SettingsRow`, `Input`, `Select`, `Switch`, `Textarea`, `FieldError` (required)
-- I. Settings tab — `SettingsSection`, `Card`, `Item`, `SettingsRow`, `Input`, `RadioGroup`, `Switch`, `FieldError` (required)
+- I. Settings tab — `SettingsGroup`, `Card`, `Item`, `SettingsRow`, `Input`, `RadioGroup`, `Switch`, `FieldError` (required)
 - J. Save bar — `SaveBar`, `Button`, `Alert` (required)
 
 What each part takes: [blocks/edit/edit-function.md](blocks/edit/edit-function.md).
@@ -7581,12 +7581,12 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-function.
 
 # EditResource (`edit/edit-resource`)
 
-> The settings page of a resource, a page body for ConsoleLayout (the layout's breadcrumb names the resource): a small Settings page heading over stacked `SettingsSection` bands in the form column, each a heading with a…
+> The settings page of a resource, a page body for ConsoleLayout (the layout's breadcrumb names the resource): a small Settings page heading over stacked `SettingsGroup` bands in the form column, each a heading with an…
 
 - Surface: app
 - Source: `blocks/edit/edit-resource/edit-resource.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/edit-resource")`
-- Components: Alert, Button, Card, CodeBlock, CodeEditor, ConfirmDialog, ConsoleLayout, CopyButton, DataTable, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, DropdownMenu, Field, `FieldDescription`, `FieldError`, IconButton, Input, Item, Link, MultiSelect, NumberInput, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, PasswordInput, RadioGroup, SaveBar, Select, SettingsRow, SettingsSection, Switch, Tabs, Tag, Textarea, Toast, Tooltip, `use-unsaved-changes`
+- Components: Alert, Button, Card, CodeBlock, CodeEditor, ConfirmDialog, ConsoleLayout, CopyButton, DataTable, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, DropdownMenu, Field, `FieldDescription`, `FieldError`, IconButton, Input, Item, Link, MultiSelect, NumberInput, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, PasswordInput, RadioGroup, SaveBar, Select, SettingsGroup, SettingsRow, Switch, Tabs, Tag, Textarea, Toast, Tooltip, `use-unsaved-changes`
 - Skills: `webkit-form`, `webkit-errors`, `webkit-layout`, `webkit-ux-heuristics`
 
 ## Asked as
@@ -7614,15 +7614,15 @@ The settings page of one existing resource. The user comes here to change how th
 
 - A. Resource tabs — `PageTabs`, `Tabs` (optional)
 - B. Page heading — `PageHeader` (required)
-- C. Settings sections — `SettingsSection`, `Card`, `Item`, `SettingsRow`, `Input`, `FieldError`, `Switch` (required)
+- C. Settings sections — `SettingsGroup`, `Card`, `Item`, `SettingsRow`, `Input`, `FieldError`, `Switch` (required)
 - D. Locked settings — `Tooltip`, `Switch`, `Link` (optional)
 - E. Save bar — `SaveBar`, `Button` (required)
 - F. Conditional fields — `SettingsRow`, `Input`, `FieldError` (optional)
 - G. Template editor — `SettingsRow`, `FieldError` (optional)
-- H. Section warnings and server errors — `SettingsSection`, `Button` (optional)
+- H. Section warnings and server errors — `SettingsGroup`, `Button` (optional)
 - I. Leave guard — `Tabs`, `SaveBar` (optional)
 - J. Changed elsewhere — `Button`, `SaveBar` (optional)
-- K. Danger zone — `SettingsSection`, `Card`, `SettingsRow`, `Button`, `Input` (optional)
+- K. Danger zone — `SettingsGroup`, `Card`, `SettingsRow`, `Button`, `Input` (optional)
 
 What each part takes: [blocks/edit/edit-resource.md](blocks/edit/edit-resource.md).
 
@@ -7749,7 +7749,7 @@ Some settings only take effect once the resource is deployed (cache settings of 
 - Surface: app
 - Source: `blocks/edit/edit-rule-builder/edit-rule-builder.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/edit-rule-builder")`
-- Components: Alert, AttributeEditor, Button, Card, Combobox, `DrawerContent`, Drawer, `DrawerTitle`, `DrawerTrigger`, Field, `FieldDescription`, Input, Item, `PanelBody`, `PanelFooter`, `PanelHeader`, RadioGroup, Select, SettingsRow, SettingsSection, Switch
+- Components: Alert, AttributeEditor, Button, Card, Combobox, `DrawerContent`, Drawer, `DrawerTitle`, `DrawerTrigger`, Field, `FieldDescription`, Input, Item, `PanelBody`, `PanelFooter`, `PanelHeader`, RadioGroup, Select, SettingsGroup, SettingsRow, Switch
 - Skills: `webkit-form`, `webkit-errors`, `webkit-create-surface`
 
 ## Asked as
@@ -7774,11 +7774,11 @@ A drawer where the user writes one rule of a rules engine: when it runs (the pha
 ## Building blocks
 
 - A. Drawer and trigger — `Drawer`, `DrawerTrigger`, `Button`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelBody` (required)
-- B. General — `SettingsSection`, `Field`, `Input` (required)
-- C. Phase — `SettingsSection`, `Card`, `RadioGroup`, `FieldDescription` (optional)
-- D. Criteria — `SettingsSection`, `AttributeEditor` (grouped), `Combobox`, `Select`, `Input` (required)
-- E. Behaviors — `SettingsSection`, `Card`, `AttributeEditor`, `Select`, `Input`, `FieldDescription` (required)
-- F. Status — `SettingsSection`, `Card`, `Item`, `SettingsRow`, `Switch` (required)
+- B. General — `SettingsGroup`, `Field`, `Input` (required)
+- C. Phase — `SettingsGroup`, `Card`, `RadioGroup`, `FieldDescription` (optional)
+- D. Criteria — `SettingsGroup`, `AttributeEditor` (grouped), `Combobox`, `Select`, `Input` (required)
+- E. Behaviors — `SettingsGroup`, `Card`, `AttributeEditor`, `Select`, `Input`, `FieldDescription` (required)
+- F. Status — `SettingsGroup`, `Card`, `Item`, `SettingsRow`, `Switch` (required)
 - G. Footer — `PanelFooter`, `Button`, `Alert` (required)
 
 What each part takes: [blocks/edit/edit-rule-builder.md](blocks/edit/edit-rule-builder.md).
@@ -7861,7 +7861,7 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-rule-buil
 - Surface: app
 - Source: `blocks/edit/edit-schema/edit-schema.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/edit-schema")`
-- Components: Alert, AttributeEditor, Button, Card, Checkbox, CodeEditor, ConfirmDialog, DataTable, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, Field, `FieldError`, FileDropzone, FileTokenGroup, IconButton, Input, `PanelBody`, `PanelFooter`, `PanelHeader`, Select, SettingsSection, Switch, `TableCellActions`, Tag, Toast, Tooltip
+- Components: Alert, AttributeEditor, Button, Card, Checkbox, CodeEditor, ConfirmDialog, DataTable, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, Field, `FieldError`, FileDropzone, FileTokenGroup, IconButton, Input, `PanelBody`, `PanelFooter`, `PanelHeader`, Select, SettingsGroup, Switch, `TableCellActions`, Tag, Toast, Tooltip
 - Skills: `webkit-form`, `webkit-create-surface`, `webkit-tables`, `webkit-errors`, `webkit-ui-states`
 
 ## Asked as
@@ -7886,7 +7886,7 @@ The table schema of a SQL database: the definition of one table and the drawers 
 ## Building blocks
 
 - A. Definition surface — `Card`, `DataTable`, `TableCellActions`, `Tag`, `Button`, `DropdownMenu`, `Tooltip`, `IconButton` (required)
-- B. Create Table drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelBody`, `SettingsSection`, `Alert`, `Field`, `Input` (required)
+- B. Create Table drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelBody`, `SettingsGroup`, `Alert`, `Field`, `Input` (required)
 - C. Column rows — `AttributeEditor`, `Select`, `Checkbox`, `FieldError` (required)
 - D. CSV import and foreign keys — `FileDropzone`, `FileTokenGroup` (optional)
 - E. Add column drawer — `Switch` (required)
@@ -7978,7 +7978,7 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-schema.md
 - Surface: app
 - Source: `blocks/edit/edit-variables/edit-variables.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/edit-variables")`
-- Components: Alert, AttributeEditor, Avatar, Button, Card, Checkbox, CollectionPreferences, ConfirmDialog, DataTable, `DrawerContent`, Drawer, `DrawerTitle`, `DrawerTrigger`, DropdownMenu, EmptyState, Field, `FieldDescription`, `FieldError`, IconButton, Input, `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, MultiSelect, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, PropertyFilter, SettingsSection, Switch, `TableCellActions`, `TableCellId`, `TableCellLink`, Textarea, Toast, ToggleGroup, Tooltip, `use-collection`
+- Components: Alert, AttributeEditor, Avatar, Button, Card, Checkbox, CollectionPreferences, ConfirmDialog, DataTable, `DrawerContent`, Drawer, `DrawerTitle`, `DrawerTrigger`, DropdownMenu, EmptyState, Field, `FieldDescription`, `FieldError`, IconButton, Input, `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, MultiSelect, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, PropertyFilter, SettingsGroup, Switch, `TableCellActions`, `TableCellId`, `TableCellLink`, Textarea, Toast, ToggleGroup, Tooltip, `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-create-surface`
 
 ## Asked as
@@ -8008,15 +8008,15 @@ A list of key and value pairs and the drawer that edits them, here environment v
 - C. EditVariables table — `Card`, `DataTable`, `TableCellId`, `TableCellLink`, `Avatar`, `Tooltip` (required)
 - D. Row actions — `TableCellActions`, `DropdownMenu` (required)
 - E. Create and edit drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelBody` (required)
-- F. EditVariables section — `SettingsSection`, `Button`, `ToggleGroup` (required)
+- F. EditVariables section — `SettingsGroup`, `Button`, `ToggleGroup` (required)
 - G. Key and value rows — `AttributeEditor`, `Field`, `InputGroupRoot`, `InputGroupAddon`, `InputGroupInput`, `Input`, `Tooltip`, `IconButton`, `Checkbox`, `FieldError` (required)
 - H. Paste .env panel — `Button`, `Textarea`, `FieldDescription` (optional)
 - I. JSON view — `Textarea`, `FieldDescription` (optional)
-- J. Scope — `SettingsSection`, `InputGroupRoot`, `InputGroupAddon`, `MultiSelect`, `Input`, `Switch`, `FieldError` (required)
+- J. Scope — `SettingsGroup`, `InputGroupRoot`, `InputGroupAddon`, `MultiSelect`, `Input`, `Switch`, `FieldError` (required)
 - K. Drawer footer — `PanelFooter`, `Button` (required)
 - L. List states — `EmptyState`, `Button` (required)
 - M. Delete confirmation — `ConfirmDialog`, `Alert`, `Input`, `Button` (required)
-- N. Network list drawer — `Drawer`, `SettingsSection`, `ToggleGroup`, `Button`, `Textarea`, `FieldDescription`, `AttributeEditor`, `MultiSelect` (optional)
+- N. Network list drawer — `Drawer`, `SettingsGroup`, `ToggleGroup`, `Button`, `Textarea`, `FieldDescription`, `AttributeEditor`, `MultiSelect` (optional)
 
 What each part takes: [blocks/edit/edit-variables.md](blocks/edit/edit-variables.md).
 
@@ -8113,7 +8113,7 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-variables
 - Surface: app
 - Source: `blocks/settings/settings-form/settings-form.vue` in `@aziontech/webkit`
 - MCP: `get_block("settings/settings-form")`
-- Components: Alert, Button, Card, ConfirmDialog, Field, `FieldError`, Input, Item, Link, PageHeader, SaveBar, SectionHeader, Select, SettingsRow, SettingsSection, Skeleton, Switch, Tag, Textarea, Toast, `use-unsaved-changes`
+- Components: Alert, Button, Card, ConfirmDialog, Field, `FieldError`, Input, Item, Link, PageHeader, SaveBar, Select, SettingsGroup, SettingsRow, Skeleton, Subheader, Switch, Tag, Textarea, Toast, `use-unsaved-changes`
 - Skills: `webkit-form`, `webkit-errors`, `webkit-ux-heuristics`
 
 ## Asked as
@@ -8141,7 +8141,7 @@ The place the user goes to change how an account or a project behaves. They scan
 ## Building blocks
 
 - A. Page heading — `PageHeader` (required)
-- B. FeatureItem sections — `SectionHeader`, `Card`, `Item` (required)
+- B. FeatureItem sections — `Subheader`, `Card`, `Item` (required)
 - C. Setting rows — `SettingsRow`, `Input`, `FieldError`, `Select`, `Switch` (required)
 - D. Save — `SaveBar`, `Button` (required)
 - E. Profile sections — `SettingsRow`, `Card`, `Item`, `Input`, `Select`, `Switch`, `Button` (Profile only)
@@ -8450,7 +8450,7 @@ What each part takes: [blocks/shell/shell-docs.md](blocks/shell/shell-docs.md).
 - Surface: site
 - Source: `blocks/shell/shell-site/shell-site.vue` in `@aziontech/webkit`
 - MCP: `get_block("shell/shell-site")`
-- Components: Button, Hero, RegistrationFrame, SectionContainer, SectionGap, SectionModule, SiteLayout, Stats, Texture
+- Components: Button, Container, Hero, Module, RegistrationFrame, SiteLayout, Spacer, Stats, Texture
 - Skills: `webkit-layout`
 
 ## Asked as
@@ -8473,9 +8473,9 @@ The marketing shell: one continuous frame — the site bar, a hero band that sta
 - A. ShellSite chrome — `SiteLayout` (required)
 - B. Opening band — `Hero` (required)
 - C. Actions — `Button` (required)
-- D. Frame — `SectionContainer` (required)
-- E. Separator — `SectionGap` (required)
-- F. Section — `SectionModule` (required)
+- D. Frame — `Container` (required)
+- E. Separator — `Spacer` (required)
+- F. Section — `Module` (required)
 - G. Framed area — `RegistrationFrame` (required)
 - H. Figures — `Stats` (optional)
 - I. Texture — `Texture` (optional)
@@ -8488,7 +8488,7 @@ What each part takes: [blocks/shell/shell-site.md](blocks/shell/shell-site.md).
 - Set `data-theme="dark"` on `<html>` (in `index.html`) for the dark site, so the layout, the teleported mega-menus and the palette all resolve the dark tokens.
 - Keep every band on the site measure; one off-measure section breaks the side rules.
 - Give every navigation item an `href`; add extra palette groups (articles, docs results) in the `search` slot.
-- Separate sections with `SectionGap`, not with spacing utilities.
+- Separate sections with `Spacer`, not with spacing utilities.
 - Keep one primary action per band.
 
 ## Don't
@@ -8496,7 +8496,7 @@ What each part takes: [blocks/shell/shell-site.md](blocks/shell/shell-site.md).
 - Never add `SiteHeaderSection`, `SiteFooterSection`, `AppHeader` or `Footer` to a page; the layout already renders them.
 - Never render a second `<main>`; the layout owns the landmark.
 - Don't wrap the layout's slot content in a border, padding or `max-w-*` of its own.
-- Don't nest a second `SectionContainer`.
+- Don't nest a second `Container`.
 - Don't put interactive content inside `Texture`; it is decoration.
 
 ## Copy
@@ -8881,7 +8881,7 @@ What each prop and event does, and the go-live code: [blocks/state/state-first-u
 - Surface: app
 - Source: `blocks/state/state-form-validation/state-form-validation.vue` in `@aziontech/webkit`
 - MCP: `get_block("state/state-form-validation")`
-- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, DropdownMenu, Field, `FieldError`, IconButton, Input, Item, MultiSelect, NumberInput, PageHeader, RadioGroup, SaveBar, SectionHeader, Select, SettingsRow, Skeleton, Switch, Textarea, Toast, Tooltip
+- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, DropdownMenu, Field, `FieldError`, IconButton, Input, Item, MultiSelect, NumberInput, PageHeader, RadioGroup, SaveBar, Select, SettingsRow, Skeleton, Subheader, Switch, Textarea, Toast, Tooltip
 - Skills: `webkit-form`, `webkit-errors`, `webkit-ui-states`
 
 ## Asked as
@@ -9821,7 +9821,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-file-brow
 - Surface: app
 - Source: `blocks/view/view-marketplace/view-marketplace.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-marketplace")`
-- Components: Alert, Button, Card, DataTable, DocProse, `DrawerContent`, Drawer, `DrawerTitle`, EmptyState, Field, Input, IntegrationCard, Item, KeyValueList, Link, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, PropertyFilter, SaveBar, Select, SettingsRow, SettingsSection, Skeleton, Switch, `TableCellStatus`, Tabs, Tag, Toast, `use-collection`
+- Components: Alert, Button, Card, DataTable, DocProse, `DrawerContent`, Drawer, `DrawerTitle`, EmptyState, Field, Input, IntegrationCard, Item, KeyValueList, Link, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, PropertyFilter, SaveBar, Select, SettingsGroup, SettingsRow, Skeleton, Switch, `TableCellStatus`, Tabs, Tag, Toast, `use-collection`
 - Skills: `webkit-lists`, `webkit-form`, `webkit-errors`, `webkit-ui-states`
 
 ## Asked as
@@ -9955,7 +9955,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-marketpla
 - Surface: app
 - Source: `blocks/view/view-query-editor/view-query-editor.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-query-editor")`
-- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, CodeBlock, CodeEditor, DataTable, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, `FieldError`, FileDropzone, FileTokenGroup, IconButton, Input, Item, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, SaveBar, Select, SettingsRow, SettingsSection, Sidebar, Skeleton, Switch, Tabs, Tag, Toast, ToggleGroup, Tooltip
+- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, CodeBlock, CodeEditor, DataTable, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, `FieldError`, FileDropzone, FileTokenGroup, IconButton, Input, Item, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, SaveBar, Select, SettingsGroup, SettingsRow, Sidebar, Skeleton, Switch, Tabs, Tag, Toast, ToggleGroup, Tooltip
 - Skills: `webkit-layout`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -10090,7 +10090,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-query-edi
 - Surface: app
 - Source: `blocks/view/view-rule-list/view-rule-list.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-rule-list")`
-- Components: Accordion, Alert, AttributeEditor, Button, Card, Combobox, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, `FieldDescription`, IconButton, Input, Item, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, RadioGroup, SaveBar, Select, SettingsRow, SettingsSection, Switch, Tag, Toast, Tooltip
+- Components: Accordion, Alert, AttributeEditor, Button, Card, Combobox, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, `FieldDescription`, IconButton, Input, Item, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, RadioGroup, SaveBar, Select, SettingsGroup, SettingsRow, Switch, Tag, Toast, Tooltip
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -16341,12 +16341,12 @@ The frame is static apart from its resize handles.
   import Button from '@aziontech/webkit/button'
   import CallToAction from '@aziontech/webkit/call-to-action'
   import CardGrid from '@aziontech/webkit/card-grid'
+  import Container from '@aziontech/webkit/container'
   import FeatureItem from '@aziontech/webkit/feature-item'
+  import Module from '@aziontech/webkit/module'
+  import ModuleHeader from '@aziontech/webkit/module-header'
   import RegistrationFrame from '@aziontech/webkit/registration-frame'
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionGap from '@aziontech/webkit/section-gap'
-  import SectionModule from '@aziontech/webkit/section-module'
-  import SectionTitle from '@aziontech/webkit/section-title'
+  import Spacer from '@aziontech/webkit/spacer'
 </script>
 
 <template>
@@ -16354,17 +16354,17 @@ The frame is static apart from its resize handles.
     address="https://www.azion.com"
     aria-label="Azion platform page"
   >
-    <SectionContainer max-width="site">
-      <SectionGap
+    <Container max-width="site">
+      <Spacer
         size="small"
         hatch
       />
-      <SectionModule
+      <Module
         :divided="false"
         :padded="false"
       >
         <template #header>
-          <SectionTitle
+          <ModuleHeader
             align="split"
             eyebrow="Platform"
             title="Build, secure and deliver from one platform"
@@ -16376,7 +16376,7 @@ The frame is static apart from its resize handles.
                 label="See all products"
               />
             </template>
-          </SectionTitle>
+          </ModuleHeader>
         </template>
         <RegistrationFrame
           flush
@@ -16415,12 +16415,12 @@ The frame is static apart from its resize handles.
             </CardGrid.Cell>
           </CardGrid>
         </RegistrationFrame>
-      </SectionModule>
-      <SectionGap
+      </Module>
+      <Spacer
         size="small"
         hatch
       />
-      <SectionModule
+      <Module
         :divided="false"
         :padded="false"
       >
@@ -16445,12 +16445,12 @@ The frame is static apart from its resize handles.
             />
           </template>
         </CallToAction>
-      </SectionModule>
-      <SectionGap
+      </Module>
+      <Spacer
         size="small"
         hatch
       />
-    </SectionContainer>
+    </Container>
   </BrowserFrame>
 </template>
 ```
@@ -16926,7 +16926,7 @@ The frame is static apart from its resize handles.
 
 # Eyebrow
 
-> Overline is the short uppercase label set above a headline to name the section, panel or group it opens (the "eyebrow"). It renders its default slot in `.text-overline-md` in the brand orange (`--text-brand`: the logo orange `#F3652B` in light and dark), optionally behind a preset code-style prefix (`//`, `<>`, `</>`) and followed by a blinking terminal-style cursor. It is purely presentational text with no interaction; the marketing headers (`section-title`, `hero-title`, `call-to-action`, `media-split`, `marquee`) and several page sections render their eyebrow (the `eyebrow` prop, or `label` on `marquee`) through it.
+> Overline is the short uppercase label set above a headline to name the section, panel or group it opens (the "eyebrow"). It renders its default slot in `.text-overline-md` in the brand orange (`--text-brand`: the logo orange `#F3652B` in light and dark), optionally behind a preset code-style prefix (`//`, `<>`, `</>`) and followed by a blinking terminal-style cursor. It is purely presentational text with no interaction; the marketing headers (`module-header`, `hero-title`, `call-to-action`, `media-split`, `marquee`) and several page sections render their eyebrow (the `eyebrow` prop, or `label` on `marquee`) through it.
 
 - Import: `import Eyebrow from '@aziontech/webkit/eyebrow'`
 - Category: content · Surface: app · Structure: monolithic
@@ -16934,7 +16934,7 @@ The frame is static apart from its resize handles.
 ## When to use
 
 - Name a section, panel or column group with one or two words set above its headline.
-- Build a custom marketing header that must match the eyebrow treatment of `section-title` and `hero-title` (the `//` prefix and the blinking cursor).
+- Build a custom marketing header that must match the eyebrow treatment of `module-header` and `hero-title` (the `//` prefix and the blinking cursor).
 - Label a band inside a page section (a comparison group, a closing panel) with the same uppercase code-style mark.
 
 ## Do
@@ -16947,7 +16947,7 @@ The frame is static apart from its resize handles.
 
 ## Don’t
 
-- The header has a headline, description and actions → use `section-title` (or `hero-title` for the hero), which already renders its `eyebrow` through Eyebrow.
+- The header has a headline, description and actions → use `module-header` (or `hero-title` for the hero), which already renders its `eyebrow` through Eyebrow.
 - The text is a status, count or category attached to an item → use `tag` or `badge`.
 - The text is the heading itself → use a real heading element; Eyebrow renders a `div` and is not a heading.
 - The text is a keyboard shortcut → use `kbd`.
@@ -16955,7 +16955,7 @@ The frame is static apart from its resize handles.
 
 ## Related
 
-- `section-title` — the framed section header; renders its `eyebrow` as an Eyebrow with `prefix="//"` and `cursor`.
+- `module-header` — the framed section header; renders its `eyebrow` as an Eyebrow with `prefix="//"` and `cursor`.
 - `hero-title` — the hero copy block; renders its `eyebrow` as an Eyebrow closed by the cursor, with `single-line` turned off.
 - `tag` — a compact label attached to an item, not a heading companion.
 - `badge` — a compact count or status indicator.
@@ -26827,7 +26827,7 @@ Exported types: `DashboardGridLayoutItem = { id: string; span: number; height?: 
 
 ## When to use
 
-- Use PageHeader once per console page for the h1, description and page actions; a band inside the page uses SectionHeader.
+- Use PageHeader once per console page for the h1, description and page actions; a band inside the page uses Subheader.
 - The top of any console page: a first-level list (`medium`), a detail tab or settings sub-page (`small`), a creation hub headline (`large`).
 - A page that owns actions (Documentation, a create action) that belong next to its title.
 - A resource detail page whose header carries the trail back to the list, the resource's icon, its status and the tabs of its sections (`breadcrumbs`, `icon`, `meta`, `tabs`).
@@ -26845,13 +26845,13 @@ Exported types: `DashboardGridLayoutItem = { id: string; span: number; height?: 
 
 ## Don’t
 
-- The heading of one band inside a page → use `section-header`.
-- A settings band with a Hint and a card of rows → use `settings-section`.
+- The heading of one band inside a page → use `subheader`.
+- A settings band with a Hint and a card of rows → use `settings-group`.
 - A documentation page heading → use `doc-page-header`.
 
 ## Related
 
-- `section-header` — the h2 band heading inside a page.
+- `subheader` — the h2 band heading inside a page.
 - `page-tabs` — the second-level navigation strip that sits above a detail page's header; a header-local tab row goes in the `tabs` slot.
 - `breadcrumb` — the usual content of the `breadcrumbs` slot.
 - `tag` — the usual content of the `meta` slot (a status, an environment, a version).
@@ -27106,7 +27106,7 @@ context, so a consumer never wires one part to the other.
 ## Related
 
 - `button` — the actions: an outlined Discard or Cancel, then a primary Save with `loading` while it runs.
-- `settings-section` — the bands the bar saves.
+- `settings-group` — the bands the bar saves.
 - `confirm-dialog` — the guard shown when someone leaves with unsaved changes.
 
 ## Props
@@ -27284,101 +27284,6 @@ context, so a consumer never wires one part to the other.
 
 ---
 
-<!-- components/section-header.md -->
-
-# Section Header
-
-> The heading of one band inside a page: an h2 with a one-line description, a copy-link button that appears when the heading is hovered or focused (when it has an `anchor`), and the band's own actions on the right. Below `md` the actions drop under the copy.
-
-- Import: `import SectionHeader from '@aziontech/webkit/section-header'`
-- Category: layout · Surface: app · Structure: monolithic
-
-## When to use
-
-- Use SectionHeader for the h2 heading of one band inside a console page; for marketing pages use SectionTitle, and for a settings band use SettingsSection.
-- A band of a page that holds a card, a table or a list: Payment information on Billing, Get started on a resource, General in a create form.
-- A band that someone should be able to link to (`anchor`).
-
-## Do
-
-- Keep the description to one sentence; put longer guidance in the band body.
-- Set `anchor` on bands people link to, so the h2 takes the id and the copy-link button appears.
-- Keep band actions to one or two outlined medium buttons.
-
-## Don’t
-
-- The page title → use `page-header`.
-- A settings band whose guidance sits in a Hint and whose body is a card of setting rows → use `settings-section`.
-
-## Related
-
-- `page-header` — the page's h1.
-- `settings-section` — the settings band with a Hint, a gutter copy-link and an optional disclosure; use it, not this, for a band of `SettingsRow`s.
-- `section-title` — the marketing section heading (centred, left or horizontal); use it on site pages, this one in the console.
-- `copy-button` — the copy-link affordance it renders.
-
-## Props
-
-| Prop | Type | Default | Required | Description |
-| --- | --- | --- | --- | --- |
-| `title` | `string` | `—` | true | The band title, rendered as an h2. |
-| `description` | `string` | `''` | false | One sentence under the title. |
-| `size` | `'small' \| 'medium'` | `'medium'` | false | Heading scale of the title (subset: no `large`). |
-| `anchor` | `string` | `''` | false | Id of the h2 that a hash link targets; when set, a copy-link button appears beside the title on hover or focus. |
-
-## Slots
-
-| Slot | Scope | Notes |
-| --- | --- | --- |
-| `description` | — | Rich description content (links, inline code); replaces the `description` prop. |
-| `actions` | — | The band's own actions, on the right of the copy. |
-
-## States
-
-- Visual states: `default`, `hover` / `focus-within` (reveals the copy-link button)
-- `data-size` mirrors the `size` prop on the root and the h2
-- Responsive: the root is the `@container/section-header`; the actions take the full width under the copy below `@md` of the box and sit beside it from `@md`.
-- Hover-free devices: the copy-link stays visible where the primary pointer cannot hover (`@media (hover: none)`), so it is never a hover-only affordance.
-
-## Accessibility
-
-- Visible focus: the copy-link `CopyButton` and the actions carry their own focus ring; focusing the copy-link reveals it.
-- Keyboard map: `Tab` reaches the copy-link button, then the actions; `Enter`/`Space` copies the link.
-- ARIA: the copy-link button is named "Copy link to the {title} section" and announces "Link copied".
-- Contrast ≥4.5:1 for the title and the description.
-- `motion-reduce:transition-none` on the reveal.
-
-## Examples
-
-### Default
-
-```vue
-<script setup>
-  import Button from '@aziontech/webkit/button'
-  import SectionHeader from '@aziontech/webkit/section-header'
-</script>
-
-<template>
-  <SectionHeader
-    title="Payment information"
-    description="Where invoices are sent, and whether the plan renews on its own."
-    anchor="payment-information"
-  >
-    <template #actions>
-      <Button
-        label="Update"
-        variant="outline"
-        size="medium"
-      />
-    </template>
-  </SectionHeader>
-</template>
-```
-
-2 more example(s) in [components/section-header.md](components/section-header.md).
-
----
-
 <!-- components/separator.md -->
 
 # Separator
@@ -27402,12 +27307,12 @@ context, so a consumer never wires one part to the other.
 
 ## Don’t
 
-- The break between two page sections → use `section-gap`.
+- The break between two page sections → use `spacer`.
 - A bounded region that scrolls → use `scroll-area`.
 
 ## Related
 
-- `section-gap` — the frame that divides page sections, with its own rules and vertical air.
+- `spacer` — the frame that divides page sections, with its own rules and vertical air.
 - `scroll-area` — scrolling container; Separator adds no scrolling.
 
 ## Props
@@ -27456,6 +27361,187 @@ context, so a consumer never wires one part to the other.
 
 ---
 
+<!-- components/settings-group.md -->
+
+# Settings Group
+
+> A band of a settings page: an h2 with a `Hint` glyph that carries the one-sentence guidance, over the band body (usually a flush `Card` of `SettingsRow` rows). Bands stack at the section gap with no rule between them. An anchored band shows a copy-link button in the gutter when the heading is hovered or focused; a collapsible band turns the heading into a disclosure that unfolds the body along the grid track.
+
+- Import: `import SettingsGroup from '@aziontech/webkit/settings-group'`
+- Category: layout · Surface: app · Structure: monolithic
+
+## When to use
+
+- Use SettingsGroup for a band of a settings page whose body is SettingsRow rows; any other band heading is a Subheader.
+- Every settings page and create page: a resource's Settings tab, Account Settings, a create form, a create drawer.
+- An Advanced band that starts closed (`collapsible`).
+
+## Do
+
+- One sentence of guidance in `hint`; the title names the band in one or two words.
+- Set `anchor` on bands people link to.
+- Use `collapsible` only for an Advanced band whose defaults are right for most people; it starts closed.
+- Stack the bands inside one form column (`layout-column-form`); the first band takes no top margin.
+
+## Don’t
+
+- A band whose heading carries a description line and actions → use `subheader`.
+- The page title → use `page-header`.
+- A disclosure list of several independent panels → use `accordion`.
+
+## Related
+
+- `settings-row` — the rows inside the band's card.
+- `card` — the flush (`:padded="false"`) surface the rows sit on.
+- `hint` — the guidance glyph beside the title.
+- `subheader` — the band heading with a description and actions. Pick by content: a settings band of `SettingsRow`s (a Hint, a gutter copy-link, an optional disclosure) is `SettingsGroup`; a console band heading with a description and its own actions is `Subheader`; a marketing section heading is `module-header`. The three share the h2 and the copy-link anchor; folding SettingsGroup's heading onto Subheader is a planned refactor, not a behaviour change.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `label` | `string` | `—` | true | The group heading, rendered as an h2. |
+| `hint` | `string` | `''` | false | One-sentence guidance shown in a Hint glyph beside the label. |
+| `anchor` | `string` | `''` | false | Id of the h2 that a hash link targets; when set, a copy-link button appears in the gutter on hover or focus. |
+| `collapsible` | `boolean` | `false` | false | Turns the label into a disclosure that folds the band body. |
+| `icon` | `string` | `''` | false | Glyph shown before the label of a collapsible band (e.g. `az az-settings`). |
+| `open` | `boolean` | `false` | false | Two-way value (`v-model:open`). |
+
+## Slots
+
+| Slot | Scope | Notes |
+| --- | --- | --- |
+| `default` | — | The band body, usually a flush Card of SettingsRow rows. |
+| `label` | — | Rich label content; replaces the `label` prop text in the h2. |
+
+## Assets
+
+- Icons: every valid name is in icons.md (MCP `list_assets({ kind: "icons" })`). An unknown class renders nothing.
+
+## v-model
+
+- **`v-model:open`** — `boolean`, default `false`. Whether a collapsible band is unfolded; it updates when the disclosure toggles. Ignored unless `collapsible`.
+
+## States
+
+- Visual states: `default`, `hover` / `focus-within` (reveals the copy-link button)
+- `data-state` on the root: `open` | `closed` when `collapsible`
+- `data-state` on the body: `open` | `closed`, mirroring whether it is unfolded
+- Only a collapsible band folds along the `0fr`/`1fr` grid track (`data-collapsible` on the body); a band that is not collapsible lays its body out in normal flow, so it has no track that can resolve to zero height.
+- Responsive: the body is the `@container/settings-group`, so rows and fields inside lay out for the section, not the window.
+- Hover-free devices: the copy-link button is shown inline after the title where the pointer cannot hover (`@media (hover: none)`), instead of floating outside the start edge on hover.
+
+## Accessibility
+
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color)` on the copy-link and the disclosure button (plus `ring-offset` on the disclosure).
+- Keyboard map: `Tab` reaches the copy-link, the disclosure and then the body; `Enter`/`Space` toggles the disclosure.
+- ARIA: the disclosure is a `button` inside the h2 with `aria-expanded` and `aria-controls` pointing at the body (`useId`); a folded body is `inert` and `aria-hidden`. The copy-link button is named "Copy link to the {title} section"; after a successful copy its glyph turns into a check and its name into "Link copied" for two seconds, then both return.
+- Contrast ≥4.5:1 for the title.
+- `motion-reduce:transition-none` on every transition.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import Card from '@aziontech/webkit/card'
+  import Item from '@aziontech/webkit/item'
+  import Select from '@aziontech/webkit/select'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
+  import SettingsRow from '@aziontech/webkit/settings-row'
+  import { ref } from 'vue'
+
+  const fonts = [
+    { label: 'Rubik (Default)', value: 'rubik' },
+    { label: 'Inter', value: 'inter' },
+    { label: 'IBM Plex Sans', value: 'ibm-plex-sans' },
+    { label: 'Geist', value: 'geist' }
+  ]
+
+  const appearances = [
+    { label: 'System', value: 'system' },
+    { label: 'Light', value: 'light' },
+    { label: 'Dark', value: 'dark' }
+  ]
+
+  const font = ref('rubik')
+  const theme = ref('system')
+
+  const labelFor = (options) => (value) =>
+    options.find((option) => option.value === value)?.label ?? ''
+</script>
+
+<template>
+  <div class="layout-column-form flex min-w-0 flex-col">
+    <SettingsGroup
+      label="Appearance"
+      hint="Preferences for this browser, applied the moment you change them and not part of Save."
+      anchor="appearance"
+    >
+      <Card :padded="false">
+        <template #default>
+          <Item.List>
+            <SettingsRow
+              title="Font family"
+              description="The primary sans typeface across the interface."
+            >
+              <Select
+                v-model="font"
+                size="large"
+                :display-value="labelFor(fonts)"
+              >
+                <Select.Trigger
+                  class="w-full"
+                  aria-label="Font family"
+                />
+                <Select.Content>
+                  <Select.Item
+                    v-for="option in fonts"
+                    :key="option.value"
+                    :value="option.value"
+                  >
+                    {{ option.label }}
+                  </Select.Item>
+                </Select.Content>
+              </Select>
+            </SettingsRow>
+            <SettingsRow
+              title="System appearance"
+              description="Follow the operating system, or force a light or dark theme."
+            >
+              <Select
+                v-model="theme"
+                size="large"
+                :display-value="labelFor(appearances)"
+              >
+                <Select.Trigger
+                  class="w-full"
+                  aria-label="System appearance"
+                />
+                <Select.Content>
+                  <Select.Item
+                    v-for="option in appearances"
+                    :key="option.value"
+                    :value="option.value"
+                  >
+                    {{ option.label }}
+                  </Select.Item>
+                </Select.Content>
+              </Select>
+            </SettingsRow>
+          </Item.List>
+        </template>
+      </Card>
+    </SettingsGroup>
+  </div>
+</template>
+```
+
+2 more example(s) in [components/settings-group.md](components/settings-group.md).
+
+---
+
 <!-- components/settings-row.md -->
 
 # Settings Row
@@ -27491,7 +27577,7 @@ context, so a consumer never wires one part to the other.
 
 ## Related
 
-- `settings-section` — the band the card of rows sits in.
+- `settings-group` — the band the card of rows sits in.
 - `item` — the row primitive it renders; place rows in an `Item.List` inside the card.
 - `field-error` — the required or invalid message under the control.
 
@@ -27590,187 +27676,6 @@ context, so a consumer never wires one part to the other.
 ```
 
 2 more example(s) in [components/settings-row.md](components/settings-row.md).
-
----
-
-<!-- components/settings-section.md -->
-
-# Settings Section
-
-> A band of a settings page: an h2 with a `Hint` glyph that carries the one-sentence guidance, over the band body (usually a flush `Card` of `SettingsRow` rows). Bands stack at the section gap with no rule between them. An anchored band shows a copy-link button in the gutter when the heading is hovered or focused; a collapsible band turns the heading into a disclosure that unfolds the body along the grid track.
-
-- Import: `import SettingsSection from '@aziontech/webkit/settings-section'`
-- Category: layout · Surface: app · Structure: monolithic
-
-## When to use
-
-- Use SettingsSection for a band of a settings page whose body is SettingsRow rows; any other band heading is a SectionHeader.
-- Every settings page and create page: a resource's Settings tab, Account Settings, a create form, a create drawer.
-- An Advanced band that starts closed (`collapsible`).
-
-## Do
-
-- One sentence of guidance in `hint`; the title names the band in one or two words.
-- Set `anchor` on bands people link to.
-- Use `collapsible` only for an Advanced band whose defaults are right for most people; it starts closed.
-- Stack the bands inside one form column (`layout-column-form`); the first band takes no top margin.
-
-## Don’t
-
-- A band whose heading carries a description line and actions → use `section-header`.
-- The page title → use `page-header`.
-- A disclosure list of several independent panels → use `accordion`.
-
-## Related
-
-- `settings-row` — the rows inside the band's card.
-- `card` — the flush (`:padded="false"`) surface the rows sit on.
-- `hint` — the guidance glyph beside the title.
-- `section-header` — the band heading with a description and actions. Pick by content: a settings band of `SettingsRow`s (a Hint, a gutter copy-link, an optional disclosure) is `SettingsSection`; a console band heading with a description and its own actions is `SectionHeader`; a marketing section heading is `section-title`. The three share the h2 and the copy-link anchor; folding SettingsSection's heading onto SectionHeader is a planned refactor, not a behaviour change.
-
-## Props
-
-| Prop | Type | Default | Required | Description |
-| --- | --- | --- | --- | --- |
-| `title` | `string` | `—` | true | The band title, rendered as an h2. |
-| `hint` | `string` | `''` | false | One-sentence guidance shown in a Hint glyph beside the title. |
-| `anchor` | `string` | `''` | false | Id of the h2 that a hash link targets; when set, a copy-link button appears in the gutter on hover or focus. |
-| `collapsible` | `boolean` | `false` | false | Turns the title into a disclosure that folds the band body. |
-| `icon` | `string` | `''` | false | Glyph shown before the title of a collapsible band (e.g. `az az-settings`). |
-| `open` | `boolean` | `false` | false | Two-way value (`v-model:open`). |
-
-## Slots
-
-| Slot | Scope | Notes |
-| --- | --- | --- |
-| `default` | — | The band body, usually a flush Card of SettingsRow rows. |
-| `title` | — | Rich title content; replaces the `title` prop text in the h2. |
-
-## Assets
-
-- Icons: every valid name is in icons.md (MCP `list_assets({ kind: "icons" })`). An unknown class renders nothing.
-
-## v-model
-
-- **`v-model:open`** — `boolean`, default `false`. Whether a collapsible band is unfolded; it updates when the disclosure toggles. Ignored unless `collapsible`.
-
-## States
-
-- Visual states: `default`, `hover` / `focus-within` (reveals the copy-link button)
-- `data-state` on the root: `open` | `closed` when `collapsible`
-- `data-state` on the body: `open` | `closed`, mirroring whether it is unfolded
-- Only a collapsible band folds along the `0fr`/`1fr` grid track (`data-collapsible` on the body); a band that is not collapsible lays its body out in normal flow, so it has no track that can resolve to zero height.
-- Responsive: the body is the `@container/settings-section`, so rows and fields inside lay out for the section, not the window.
-- Hover-free devices: the copy-link button is shown inline after the title where the pointer cannot hover (`@media (hover: none)`), instead of floating outside the start edge on hover.
-
-## Accessibility
-
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color)` on the copy-link and the disclosure button (plus `ring-offset` on the disclosure).
-- Keyboard map: `Tab` reaches the copy-link, the disclosure and then the body; `Enter`/`Space` toggles the disclosure.
-- ARIA: the disclosure is a `button` inside the h2 with `aria-expanded` and `aria-controls` pointing at the body (`useId`); a folded body is `inert` and `aria-hidden`. The copy-link button is named "Copy link to the {title} section"; after a successful copy its glyph turns into a check and its name into "Link copied" for two seconds, then both return.
-- Contrast ≥4.5:1 for the title.
-- `motion-reduce:transition-none` on every transition.
-
-## Examples
-
-### Default
-
-```vue
-<script setup>
-  import Card from '@aziontech/webkit/card'
-  import Item from '@aziontech/webkit/item'
-  import Select from '@aziontech/webkit/select'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import SettingsSection from '@aziontech/webkit/settings-section'
-  import { ref } from 'vue'
-
-  const fonts = [
-    { label: 'Rubik (Default)', value: 'rubik' },
-    { label: 'Inter', value: 'inter' },
-    { label: 'IBM Plex Sans', value: 'ibm-plex-sans' },
-    { label: 'Geist', value: 'geist' }
-  ]
-
-  const appearances = [
-    { label: 'System', value: 'system' },
-    { label: 'Light', value: 'light' },
-    { label: 'Dark', value: 'dark' }
-  ]
-
-  const font = ref('rubik')
-  const theme = ref('system')
-
-  const labelFor = (options) => (value) =>
-    options.find((option) => option.value === value)?.label ?? ''
-</script>
-
-<template>
-  <div class="layout-column-form flex min-w-0 flex-col">
-    <SettingsSection
-      title="Appearance"
-      hint="Preferences for this browser, applied the moment you change them and not part of Save."
-      anchor="appearance"
-    >
-      <Card :padded="false">
-        <template #default>
-          <Item.List>
-            <SettingsRow
-              title="Font family"
-              description="The primary sans typeface across the interface."
-            >
-              <Select
-                v-model="font"
-                size="large"
-                :display-value="labelFor(fonts)"
-              >
-                <Select.Trigger
-                  class="w-full"
-                  aria-label="Font family"
-                />
-                <Select.Content>
-                  <Select.Item
-                    v-for="option in fonts"
-                    :key="option.value"
-                    :value="option.value"
-                  >
-                    {{ option.label }}
-                  </Select.Item>
-                </Select.Content>
-              </Select>
-            </SettingsRow>
-            <SettingsRow
-              title="System appearance"
-              description="Follow the operating system, or force a light or dark theme."
-            >
-              <Select
-                v-model="theme"
-                size="large"
-                :display-value="labelFor(appearances)"
-              >
-                <Select.Trigger
-                  class="w-full"
-                  aria-label="System appearance"
-                />
-                <Select.Content>
-                  <Select.Item
-                    v-for="option in appearances"
-                    :key="option.value"
-                    :value="option.value"
-                  >
-                    {{ option.label }}
-                  </Select.Item>
-                </Select.Content>
-              </Select>
-            </SettingsRow>
-          </Item.List>
-        </template>
-      </Card>
-    </SettingsSection>
-  </div>
-</template>
-```
-
-2 more example(s) in [components/settings-section.md](components/settings-section.md).
 
 ---
 
@@ -28182,6 +28087,101 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 ```
 
 1 more example(s) in [components/sidebar.md](components/sidebar.md).
+
+---
+
+<!-- components/subheader.md -->
+
+# Subheader
+
+> The heading of one band inside a page: an h2 with a one-line description, a copy-link button that appears when the heading is hovered or focused (when it has an `anchor`), and the band's own actions on the right. Below `md` the actions drop under the copy.
+
+- Import: `import Subheader from '@aziontech/webkit/subheader'`
+- Category: layout · Surface: app · Structure: monolithic
+
+## When to use
+
+- Use Subheader for the h2 heading of one band inside a console page; for marketing pages use ModuleHeader, and for a settings band use SettingsGroup.
+- A band of a page that holds a card, a table or a list: Payment information on Billing, Get started on a resource, General in a create form.
+- A band that someone should be able to link to (`anchor`).
+
+## Do
+
+- Keep the description to one sentence; put longer guidance in the band body.
+- Set `anchor` on bands people link to, so the h2 takes the id and the copy-link button appears.
+- Keep band actions to one or two outlined medium buttons.
+
+## Don’t
+
+- The page title → use `page-header`.
+- A settings band whose guidance sits in a Hint and whose body is a card of setting rows → use `settings-group`.
+
+## Related
+
+- `page-header` — the page's h1.
+- `settings-group` — the settings band with a Hint, a gutter copy-link and an optional disclosure; use it, not this, for a band of `SettingsRow`s.
+- `module-header` — the marketing section heading (centred, left or horizontal); use it on site pages, this one in the console.
+- `copy-button` — the copy-link affordance it renders.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `title` | `string` | `—` | true | The band title, rendered as an h2. |
+| `description` | `string` | `''` | false | One sentence under the title. |
+| `size` | `'small' \| 'medium'` | `'medium'` | false | Heading scale of the title (subset: no `large`). |
+| `anchor` | `string` | `''` | false | Id of the h2 that a hash link targets; when set, a copy-link button appears beside the title on hover or focus. |
+
+## Slots
+
+| Slot | Scope | Notes |
+| --- | --- | --- |
+| `description` | — | Rich description content (links, inline code); replaces the `description` prop. |
+| `actions` | — | The band's own actions, on the right of the copy. |
+
+## States
+
+- Visual states: `default`, `hover` / `focus-within` (reveals the copy-link button)
+- `data-size` mirrors the `size` prop on the root and the h2
+- Responsive: the root is the `@container/subheader`; the actions take the full width under the copy below `@md` of the box and sit beside it from `@md`.
+- Hover-free devices: the copy-link stays visible where the primary pointer cannot hover (`@media (hover: none)`), so it is never a hover-only affordance.
+
+## Accessibility
+
+- Visible focus: the copy-link `CopyButton` and the actions carry their own focus ring; focusing the copy-link reveals it.
+- Keyboard map: `Tab` reaches the copy-link button, then the actions; `Enter`/`Space` copies the link.
+- ARIA: the copy-link button is named "Copy link to the {title} section" and announces "Link copied".
+- Contrast ≥4.5:1 for the title and the description.
+- `motion-reduce:transition-none` on the reveal.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import Button from '@aziontech/webkit/button'
+  import Subheader from '@aziontech/webkit/subheader'
+</script>
+
+<template>
+  <Subheader
+    title="Payment information"
+    description="Where invoices are sent, and whether the plan renews on its own."
+    anchor="payment-information"
+  >
+    <template #actions>
+      <Button
+        label="Update"
+        variant="outline"
+        size="medium"
+      />
+    </template>
+  </Subheader>
+</template>
+```
+
+2 more example(s) in [components/subheader.md](components/subheader.md).
 
 ---
 

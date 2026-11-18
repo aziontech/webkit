@@ -7,14 +7,14 @@ status: implemented
 spec_version: 6
 created: 2026-11-04
 last_updated: 2026-11-16
-checksum: 7fa10f46f2d8a4ea6e0ef48cd74834562f0788f63835263968a5ec3027e90a2e
+checksum: 96abd6cfc00fc8ab96b412b3077647933112074308d0953f14947994bef84802
 ---
 
 # NetworkSection — Component Spec
 
 ## Purpose
 
-The infrastructure band of a marketing page: a tall framed panel with the world network map drawn behind a small start-aligned title, a claims eyebrow and a row of claim chips, closed by a floor of client outcomes (a quote with its highlights and, when given, the client's mark), benefits (a topic each) or stats (headline figures). It is a page section — the site places it from a `{ _id: 'network-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `registration-frame`, `network-map`, `section-title`, `card-grid`, `quote`, `feature-item` and `stats`. `variant` picks the floor only: `outcomes` renders the quotes on one column per entry — two at least, four at most; `benefits` renders the topics on up to three columns, balanced so every row is full; `stats` renders the figures as a `stats` row. The band above is the same.
+The infrastructure band of a marketing page: a tall framed panel with the world network map drawn behind a small start-aligned title, a claims eyebrow and a row of claim chips, closed by a floor of client outcomes (a quote with its highlights and, when given, the client's mark), benefits (a topic each) or stats (headline figures). It is a page section — the site places it from a `{ _id: 'network-section', props }` entry and binds `props` straight onto it — and it composes `module`, `registration-frame`, `network-map`, `module-header`, `card-grid`, `quote`, `feature-item` and `stats`. `variant` picks the floor only: `outcomes` renders the quotes on one column per entry — two at least, four at most; `benefits` renders the topics on up to three columns, balanced so every row is full; `stats` renders the figures as a `stats` row. The band above is the same.
 
 ## When to use
 

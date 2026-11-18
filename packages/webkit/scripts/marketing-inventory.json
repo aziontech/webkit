@@ -1651,7 +1651,7 @@
       "surface": "site"
     },
     {
-      "id": "section-stack",
+      "id": "split-stack",
       "surface": "site"
     },
     {
@@ -2055,19 +2055,19 @@
       "surface": "site"
     },
     {
-      "id": "section-container",
+      "id": "container",
       "surface": "site"
     },
     {
-      "id": "section-gap",
+      "id": "spacer",
       "surface": "site"
     },
     {
-      "id": "section-module",
+      "id": "module",
       "surface": "site"
     },
     {
-      "id": "section-title",
+      "id": "module-header",
       "surface": "site"
     },
     {

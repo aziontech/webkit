@@ -23,8 +23,8 @@
   import PageTabs from '@aziontech/webkit/page-tabs'
   import PropertyFilter from '@aziontech/webkit/property-filter'
   import SaveBar from '@aziontech/webkit/save-bar'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
-  import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import TableCellActions from '@aziontech/webkit/table-cell-actions'
   import TableCellId from '@aziontech/webkit/table-cell-id'
@@ -297,8 +297,8 @@
               :disabled="saving"
             >
               <legend class="sr-only">Zone settings</legend>
-              <SettingsSection
-                title="General"
+              <SettingsGroup
+                label="General"
                 hint="How this zone is identified across the platform."
                 anchor="general"
               >
@@ -353,10 +353,10 @@
                     </ItemList>
                   </template>
                 </Card>
-              </SettingsSection>
+              </SettingsGroup>
 
-              <SettingsSection
-                title="Configure your nameserver"
+              <SettingsGroup
+                label="Configure your nameserver"
                 hint="Make this zone the authoritative DNS for the domain."
                 anchor="configure-your-nameserver"
               >
@@ -398,10 +398,10 @@
                     </ItemList>
                   </template>
                 </Card>
-              </SettingsSection>
+              </SettingsGroup>
 
-              <SettingsSection
-                title="DNSSEC"
+              <SettingsGroup
+                label="DNSSEC"
                 hint="Signs the zone so resolvers can detect spoofed answers."
                 anchor="dnssec"
               >
@@ -451,10 +451,10 @@
                     </ItemList>
                   </template>
                 </Card>
-              </SettingsSection>
+              </SettingsGroup>
 
-              <SettingsSection
-                title="Status"
+              <SettingsGroup
+                label="Status"
                 hint="A zone can be held inactive while its records are being built."
                 anchor="status"
               >
@@ -475,7 +475,7 @@
                     </ItemList>
                   </template>
                 </Card>
-              </SettingsSection>
+              </SettingsGroup>
             </fieldset>
           </section>
         </div>

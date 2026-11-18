@@ -7,14 +7,14 @@ status: implemented
 spec_version: 5
 created: 2026-11-05
 last_updated: 2026-11-16
-checksum: b569cfe9c9ac17fe8574590e4db61e350f24c6a902251ccc4c03dbb89547efc2
+checksum: e0a20effeb24c6b70731c6dd720ce4428f63b7196138bafd50ca7e9e913af224
 ---
 
 # SubjectGridSection — Component Spec
 
 ## Purpose
 
-A library of learning subjects in a divider grid: each subject is one framed card with its name, what it covers and a list of its article links, and an optional closing call to action spans the grid's last two cells so the grid ends without an empty cell. It is a page section — the site places it from a `{ _id: 'subject-grid-section', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `section-module`, `registration-frame`, `card-grid`, `call-to-action` and `button` rather than owning any anatomy of its own.
+A library of learning subjects in a divider grid: each subject is one framed card with its name, what it covers and a list of its article links, and an optional closing call to action spans the grid's last two cells so the grid ends without an empty cell. It is a page section — the site places it from a `{ _id: 'subject-grid-section', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `module`, `registration-frame`, `card-grid`, `call-to-action` and `button` rather than owning any anatomy of its own.
 
 ## When to use
 

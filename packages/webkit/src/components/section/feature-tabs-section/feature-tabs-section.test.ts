@@ -100,13 +100,13 @@ describe('FeatureTabsSection', () => {
 
     const link = getByRole('link', { name: primaryAction.label })
     expect(link.getAttribute('href')).toBe(primaryAction.href)
-    expect(getByTestId('section-title').contains(link)).toBe(true)
+    expect(getByTestId('module-header').contains(link)).toBe(true)
   })
 
   it('links the primary action under the frame when there is no title', () => {
     const { getByRole, queryByTestId } = band({ title: '' })
 
-    expect(queryByTestId('section-title')).toBeNull()
+    expect(queryByTestId('module-header')).toBeNull()
     expect(getByRole('link', { name: primaryAction.label }).getAttribute('href')).toBe(
       primaryAction.href
     )

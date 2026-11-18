@@ -4,7 +4,7 @@ The core of a product page: a run of copy-beside-art bands, each stating one cla
 
 Every band sits on the same small pixelate texture, fading toward the top. A band with a link is a link as a whole. A claim shown by code is a `FeatureScrollSection` step with `code`; a band never shows code or a request-flow diagram.
 
-The band is the `MediaSplitStackSection` component from `@aziontech/webkit/media-split-stack-section`; it composes `SectionModule`, `SectionTitle`, `SectionStack` and `MediaSplit`, with `Illustration` scenes and `Button` actions. Every picture sits at the closing end of its band. It uses `_id: 'media-split-stack-section'`.
+The band is the `MediaSplitStackSection` component from `@aziontech/webkit/media-split-stack-section`; it composes `Module`, `ModuleHeader`, `SplitStack` and `MediaSplit`, with `Illustration` scenes and `Button` actions. Every picture sits at the closing end of its band. It uses `_id: 'media-split-stack-section'`.
 
 ## Examples
 

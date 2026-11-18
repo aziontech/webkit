@@ -5,9 +5,9 @@
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
-  import SectionHeader from '@aziontech/webkit/section-header'
   import Select from '@aziontech/webkit/select'
   import SettingsRow from '@aziontech/webkit/settings-row'
+  import Subheader from '@aziontech/webkit/subheader'
   import Switch from '@aziontech/webkit/switch'
   import { toast } from '@aziontech/webkit/toast'
   import { computed, nextTick, reactive, type Ref, ref } from 'vue'
@@ -58,7 +58,7 @@
     />
 
     <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
-      <SectionHeader
+      <Subheader
         title="General"
         size="small"
       />
@@ -144,7 +144,7 @@
     </section>
 
     <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
-      <SectionHeader
+      <Subheader
         title="Notifications"
         size="small"
       />

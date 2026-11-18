@@ -1,7 +1,7 @@
 <script setup>
   import ClosingCallToActionSection from '@aziontech/webkit/closing-call-to-action-section'
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionGap from '@aziontech/webkit/section-gap'
+  import Container from '@aziontech/webkit/container'
+  import Spacer from '@aziontech/webkit/spacer'
 
   const typedWords = ['Console', 'CLI', 'MCP server']
 
@@ -44,8 +44,8 @@
 </script>
 
 <template>
-  <SectionContainer max-width="site">
-    <SectionGap hatch />
+  <Container max-width="site">
+    <Spacer hatch />
 
     <ClosingCallToActionSection
       variant="primary"
@@ -58,5 +58,5 @@
       line-aria-label="Prompt"
       :audiences="audiences"
     />
-  </SectionContainer>
+  </Container>
 </template>

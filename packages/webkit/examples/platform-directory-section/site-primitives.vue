@@ -1,7 +1,7 @@
 <script setup>
+  import Container from '@aziontech/webkit/container'
   import PlatformDirectorySection from '@aziontech/webkit/platform-directory-section'
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionGap from '@aziontech/webkit/section-gap'
+  import Spacer from '@aziontech/webkit/spacer'
 
   const groups = [
     {
@@ -118,8 +118,8 @@
 </script>
 
 <template>
-  <SectionContainer max-width="site">
-    <SectionGap hatch />
+  <Container max-width="site">
+    <Spacer hatch />
 
     <PlatformDirectorySection
       title="Everything you need to build and run applications"
@@ -127,6 +127,6 @@
       :groups="groups"
     />
 
-    <SectionGap hatch />
-  </SectionContainer>
+    <Spacer hatch />
+  </Container>
 </template>

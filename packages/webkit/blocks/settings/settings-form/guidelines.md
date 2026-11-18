@@ -24,9 +24,9 @@ The place the user goes to change how an account or a project behaves. They scan
 
 A `PageHeader` at `size="small"` opens the form column (`layout-column-form`) with the page name and one sentence of purpose. Its `title-id` names the `form` through `aria-labelledby`. No actions in the heading: saving lives at the bottom.
 
-### B. FeatureItem sections — `SectionHeader`, `Card`, `Item` (required)
+### B. FeatureItem sections — `Subheader`, `Card`, `Item` (required)
 
-Each topic is a section with a `SectionHeader` at `size="small"` (so every topic is an `h2` under the page `h1`) over a flush `Card :padded="false"` whose content is an `Item.List`. Sections stack at the section step; the heading and its card sit at the group gap. In SaveAll the sections share one `fieldset` with a visually hidden `legend`; in SavePerGroup and SavePerCard each card holds its own `fieldset`.
+Each topic is a section with a `Subheader` at `size="small"` (so every topic is an `h2` under the page `h1`) over a flush `Card :padded="false"` whose content is an `Item.List`. Sections stack at the section step; the heading and its card sit at the group gap. In SaveAll the sections share one `fieldset` with a visually hidden `legend`; in SavePerGroup and SavePerCard each card holds its own `fieldset`.
 
 ### C. Setting rows — `SettingsRow`, `Input`, `FieldError`, `Select`, `Switch` (required)
 
@@ -38,9 +38,9 @@ SaveAll ends with one full-bleed sticky `SaveBar variant="plain"` holding an out
 
 ### E. Profile sections — `SettingsRow`, `Card`, `Item`, `Input`, `Select`, `Switch`, `Button` (Profile only)
 
-The Profile variant adds `SettingsSection`, `Textarea`, `Tag`, `ConfirmDialog`, `Skeleton` and `Alert` to these parts.
+The Profile variant adds `SettingsGroup`, `Textarea`, `Tag`, `ConfirmDialog`, `Skeleton` and `Alert` to these parts.
 
-The Profile variant stacks one `SettingsSection` per group (General, Company information, Address information, Login settings, Source control, Appearance, Danger zone), each with a `hint` and an `anchor` over a flush `Card` whose `Item.List` holds the rows. Client ID is a `readonly` `Input`; Billing emails is a three-row `Textarea` that starts empty (an editable contact field never carries sample data) and is required; address rows use `postal-code`, `address-line1` and `address-line2` autocomplete. Requiring MFA is not a switch here: `account/account-mfa-settings` owns it, and the Multi-factor authentication row links there with `Manage MFA`. Source-control providers are `Item`s with `Item.Media`, a success `Tag` (`Active`) when connected, and `Manage` or `Connect` opening the provider in a new tab. The unsaved-changes `SaveBar` rises with a motion-reduced transition once the form differs from the saved copy. The danger Delete account opens a `variant="danger"` `ConfirmDialog` with a warning `Alert` and `Type <account name> to confirm.` over an `Input`; its confirm stays disabled until the typed name matches. ProfileLoading puts three `Card`s of `Skeleton` rows in place of the sections (`aria-busy`); ProfileError puts a danger `Alert` with Retry there; the heading stays in both.
+The Profile variant stacks one `SettingsGroup` per group (General, Company information, Address information, Login settings, Source control, Appearance, Danger zone), each with a `hint` and an `anchor` over a flush `Card` whose `Item.List` holds the rows. Client ID is a `readonly` `Input`; Billing emails is a three-row `Textarea` that starts empty (an editable contact field never carries sample data) and is required; address rows use `postal-code`, `address-line1` and `address-line2` autocomplete. Requiring MFA is not a switch here: `account/account-mfa-settings` owns it, and the Multi-factor authentication row links there with `Manage MFA`. Source-control providers are `Item`s with `Item.Media`, a success `Tag` (`Active`) when connected, and `Manage` or `Connect` opening the provider in a new tab. The unsaved-changes `SaveBar` rises with a motion-reduced transition once the form differs from the saved copy. The danger Delete account opens a `variant="danger"` `ConfirmDialog` with a warning `Alert` and `Type <account name> to confirm.` over an `Input`; its confirm stays disabled until the typed name matches. ProfileLoading puts three `Card`s of `Skeleton` rows in place of the sections (`aria-busy`); ProfileError puts a danger `Alert` with Retry there; the heading stays in both.
 
 ## Data
 

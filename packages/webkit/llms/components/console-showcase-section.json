@@ -22,7 +22,7 @@
  "related": [
   "`ConsoleMockup` — the console scenes it frames.",
   "`ToggleGroup` — the tab control.",
-  "`Texture`, `RegistrationFrame`, `SectionTitle`."
+  "`Texture`, `RegistrationFrame`, `ModuleHeader`."
  ],
  "bestPractices": [
   "Two to four tabs, each a different view, labelled with one word.",
@@ -38,21 +38,21 @@
   },
   {
    "name": "titleAlign",
-   "type": "SectionTitleAlign",
+   "type": "ModuleHeaderAlign",
    "default": "'center'",
    "required": "false",
    "doc": "Layout of the headline block."
   },
   {
    "name": "titlePadding",
-   "type": "SectionTitlePadding",
+   "type": "ModuleHeaderPadding",
    "default": "'medium'",
    "required": "false",
    "doc": "Vertical padding of the headline block."
   },
   {
    "name": "size",
-   "type": "SectionTitleSize",
+   "type": "ModuleHeaderSize",
    "default": "'medium'",
    "required": "false",
    "doc": "Step of the headline on the heading scale."

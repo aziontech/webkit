@@ -20,8 +20,8 @@
   import ResizableRoot from '@aziontech/webkit/resizable-root'
   import SaveBar from '@aziontech/webkit/save-bar'
   import Select from '@aziontech/webkit/select'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
-  import SettingsSection from '@aziontech/webkit/settings-section'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Switch from '@aziontech/webkit/switch'
   import Tabs from '@aziontech/webkit/tabs'
@@ -1183,7 +1183,7 @@
               class="layout-section-start m-0 flex min-w-0 flex-col border-0 p-0"
               :disabled="saving"
             >
-              <SettingsSection title="General">
+              <SettingsGroup label="General">
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
@@ -1213,9 +1213,9 @@
                     </Item.List>
                   </template>
                 </Card>
-              </SettingsSection>
+              </SettingsGroup>
 
-              <SettingsSection title="Runtime">
+              <SettingsGroup label="Runtime">
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
@@ -1243,10 +1243,10 @@
                     </Item.List>
                   </template>
                 </Card>
-              </SettingsSection>
+              </SettingsGroup>
 
-              <SettingsSection
-                title="Execution environment"
+              <SettingsGroup
+                label="Execution environment"
                 hint="Where in the request path the service runs, each stage handing the code a different request."
               >
                 <Card :padded="false">
@@ -1277,9 +1277,9 @@
                     </Item.List>
                   </template>
                 </Card>
-              </SettingsSection>
+              </SettingsGroup>
 
-              <SettingsSection title="Status">
+              <SettingsGroup label="Status">
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
@@ -1296,7 +1296,7 @@
                     </Item.List>
                   </template>
                 </Card>
-              </SettingsSection>
+              </SettingsGroup>
             </fieldset>
           </div>
         </fieldset>

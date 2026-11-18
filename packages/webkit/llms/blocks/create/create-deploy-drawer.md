@@ -1,11 +1,11 @@
 # CreateDeployDrawer (`create/create-deploy-drawer`)
 
-> The drawer a platform deploys from, opened by the outlined Deploy button on a service or a project. Every variant shares one Resources card: a row per resource with its Ready tag, the picked version and a Change version menu, and a Dependencies disclosure with the modules and integrations the service references. On a service the default flow is environment first: the Project card uses an existing project or creates one, the environments come as radio blocks, and Projects impacted lists every project the environment’s shared Deployment Settings deploy to. A deploy started without a pinned version first builds one, so the drawer opens as Build and deployment with a Building row and the other sections faded. A service can also deploy project first, picking the project before the environment. On a project, the drawer carries every resource it serves and warns when its Deployment Settings also deploy elsewhere. The footer counts the version changes and where they go live; while the targets resolve the sections are Skeletons, a load failure is an Alert with Retry, and a project with no environment shows an EmptyState with Add environment, Deploy disabled in all three. Built from `SettingsSection`, `Drawer`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Card`, `Item`, `Accordion`, `Separator`, `Popover`, `DropdownMenu`, `ToggleGroup`, `RadioGroup` (`variant="card"`), `Input`, `Avatar`, `Tag`, `Spinner`, `Skeleton`, `EmptyState`, `Alert`, `Tooltip` and `Button`.
+> The drawer a platform deploys from, opened by the outlined Deploy button on a service or a project. Every variant shares one Resources card: a row per resource with its Ready tag, the picked version and a Change version menu, and a Dependencies disclosure with the modules and integrations the service references. On a service the default flow is environment first: the Project card uses an existing project or creates one, the environments come as radio blocks, and Projects impacted lists every project the environment’s shared Deployment Settings deploy to. A deploy started without a pinned version first builds one, so the drawer opens as Build and deployment with a Building row and the other sections faded. A service can also deploy project first, picking the project before the environment. On a project, the drawer carries every resource it serves and warns when its Deployment Settings also deploy elsewhere. The footer counts the version changes and where they go live; while the targets resolve the sections are Skeletons, a load failure is an Alert with Retry, and a project with no environment shows an EmptyState with Add environment, Deploy disabled in all three. Built from `SettingsGroup`, `Drawer`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Card`, `Item`, `Accordion`, `Separator`, `Popover`, `DropdownMenu`, `ToggleGroup`, `RadioGroup` (`variant="card"`), `Input`, `Avatar`, `Tag`, `Spinner`, `Skeleton`, `EmptyState`, `Alert`, `Tooltip` and `Button`.
 
 - Surface: app
 - Source: `blocks/create/create-deploy-drawer/create-deploy-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-deploy-drawer")`
-- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DrawerTrigger`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Input](../../components/input.md), [Item](../../components/item.md), [Link](../../components/link.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Popover](../../components/popover.md), [RadioGroup](../../components/radio-group.md), [Separator](../../components/separator.md), [SettingsSection](../../components/settings-section.md), [Skeleton](../../components/skeleton.md), [Spinner](../../components/spinner.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md)
+- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DrawerTrigger`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Input](../../components/input.md), [Item](../../components/item.md), [Link](../../components/link.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Popover](../../components/popover.md), [RadioGroup](../../components/radio-group.md), [Separator](../../components/separator.md), [SettingsGroup](../../components/settings-group.md), [Skeleton](../../components/skeleton.md), [Spinner](../../components/spinner.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md)
 - Skills: `webkit-create-surface`, `webkit-navigation`, `webkit-form`, `webkit-ui-states`
 
 ## Asked as
@@ -39,9 +39,9 @@ An outlined medium `Button` reading Deploy inside `DrawerTrigger`, on the servic
 
 `DrawerTitle` reads Deploy, or Build and deployment while a version is being built first. The drawer's own close button sits on the right; no Cancel anywhere.
 
-### C. Sections — `PanelBody`, `SettingsSection`, `Skeleton`, `Alert`, `Spinner` (required)
+### C. Sections — `PanelBody`, `SettingsGroup`, `Skeleton`, `Alert`, `Spinner` (required)
 
-`PanelBody` holds one `fieldset` of `SettingsSection` bands, each with a title and a `hint`: Resources, Project, Environment, Projects impacted on a service; Resources and Environment on a project. The order is the order of the decision: what, where, then what else it reaches. While the deploy targets load, `Skeleton` blocks stand in for Resources and Environment; a failed load is a danger `Alert` with Retry; a build in progress is one row with its version `Tag` and a `Spinner` in place of Resources.
+`PanelBody` holds one `fieldset` of `SettingsGroup` bands, each with a title and a `hint`: Resources, Project, Environment, Projects impacted on a service; Resources and Environment on a project. The order is the order of the decision: what, where, then what else it reaches. While the deploy targets load, `Skeleton` blocks stand in for Resources and Environment; a failed load is a danger `Alert` with Retry; a build in progress is one row with its version `Tag` and a `Spinner` in place of Resources.
 
 ### D. Resources card — `Card`, `Separator`, `Item`, `Tag`, `DropdownMenu`, `Input`, `Avatar`, `Button` (required)
 
@@ -193,7 +193,7 @@ Then delete `sample.ts` and its import. The page reports the run through the toa
 - `detail/detail-deployment-logs` — the logs of a deploy after it ran.
 - `detail/detail-version` — what a version contains before it is deployed.
 - `create/create-resource-picker` — the Existing or New pattern the Project section follows.
-- `SettingsSection` — the band each section uses; see `skills/webkit-create-surface` for the drawer commit model.
+- `SettingsGroup` — the band each section uses; see `skills/webkit-create-surface` for the drawer commit model.
 
 ## Variants
 
@@ -232,7 +232,7 @@ Each variant is the same screen in another state: `get_block("create/create-depl
   import Popover from '@aziontech/webkit/popover'
   import RadioGroup from '@aziontech/webkit/radio-group'
   import Separator from '@aziontech/webkit/separator'
-  import SettingsSection from '@aziontech/webkit/settings-section'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import Skeleton from '@aziontech/webkit/skeleton'
   import Spinner from '@aziontech/webkit/spinner'
   import Tag from '@aziontech/webkit/tag'
@@ -570,17 +570,17 @@ Each variant is the same screen in another state: `get_block("create/create-depl
             class="flex min-w-0 flex-col"
             aria-busy="true"
           >
-            <SettingsSection
-              title="Resources"
+            <SettingsGroup
+              label="Resources"
               hint="The service version this deployment sends live, and the version of every module and integration it references."
             >
               <div aria-hidden="true">
                 <Skeleton height="var(--size-40)" />
               </div>
-            </SettingsSection>
+            </SettingsGroup>
 
-            <SettingsSection
-              title="Environment"
+            <SettingsGroup
+              label="Environment"
               hint="Where the deployment goes live, from the environments this project serves. Each one goes live with the Deployment Settings set on the project."
             >
               <div
@@ -593,7 +593,7 @@ Each variant is the same screen in another state: `get_block("create/create-depl
                   height="var(--size-16)"
                 />
               </div>
-            </SettingsSection>
+            </SettingsGroup>
 
             <span
               class="sr-only"
@@ -603,9 +603,9 @@ Each variant is the same screen in another state: `get_block("create/create-depl
             </span>
           </div>
 
-          <SettingsSection
+          <SettingsGroup
             v-else-if="error"
-            title="Deploy targets"
+            label="Deploy targets"
           >
             <div class="flex min-w-0 flex-col items-start gap-(--spacing-sm)">
               <Alert
@@ -620,15 +620,15 @@ Each variant is the same screen in another state: `get_block("create/create-depl
                 @click="(event: MouseEvent) => emit('retry', event)"
               />
             </div>
-          </SettingsSection>
+          </SettingsGroup>
 
           <fieldset
             v-else
             class="m-0 flex min-w-0 flex-col border-0 p-0"
           >
             <legend class="sr-only">{{ title }}</legend>
-            <SettingsSection
-              title="Resources"
+            <SettingsGroup
+              label="Resources"
               hint="The service version this deployment sends live, and the version of every module and integration it references."
             >
               <Item
@@ -974,12 +974,12 @@ Each variant is the same screen in another state: `get_block("create/create-depl
                   </template>
                 </template>
               </Card>
-            </SettingsSection>
+            </SettingsGroup>
 
-            <SettingsSection
+            <SettingsGroup
               :inert="!!build || undefined"
               :data-pending="build ? 'true' : undefined"
-              title="Project"
+              label="Project"
               hint="The project whose domains serve the service. Create one to deploy it on a new domain."
             >
               <Card :padded="false">
@@ -1177,12 +1177,12 @@ Each variant is the same screen in another state: `get_block("create/create-depl
                   </div>
                 </template>
               </Card>
-            </SettingsSection>
+            </SettingsGroup>
 
-            <SettingsSection
+            <SettingsGroup
               :inert="!!build || undefined"
               :data-pending="build ? 'true' : undefined"
-              title="Environment"
+              label="Environment"
               hint="Where the deployment goes live, from the environments this project serves. Each one goes live with the Deployment Settings set on the project."
             >
               <RadioGroup
@@ -1210,12 +1210,12 @@ Each variant is the same screen in another state: `get_block("create/create-depl
                   </template>
                 </RadioGroup.Item>
               </RadioGroup>
-            </SettingsSection>
+            </SettingsGroup>
 
-            <SettingsSection
+            <SettingsGroup
               :inert="!!build || undefined"
               :data-pending="build ? 'true' : undefined"
-              title="Projects impacted"
+              label="Projects impacted"
               hint="This environment deploys with shared Deployment Settings, so the deployment reaches every project below, in every environment they are linked to, and the domains they serve."
             >
               <div class="flex min-w-0 flex-col gap-(--spacing-md)">
@@ -1371,7 +1371,7 @@ Each variant is the same screen in another state: `get_block("create/create-depl
                   </ul>
                 </div>
               </div>
-            </SettingsSection>
+            </SettingsGroup>
 
             <span
               class="sr-only"

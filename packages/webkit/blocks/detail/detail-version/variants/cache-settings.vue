@@ -21,8 +21,8 @@
   import PanelHeader from '@aziontech/webkit/panel-header'
   import ScrollArea from '@aziontech/webkit/scroll-area'
   import Select from '@aziontech/webkit/select'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
-  import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
@@ -420,8 +420,8 @@
                 <PanelBody>
                   <fieldset class="m-0 flex min-w-0 flex-col border-0 p-0">
                     <legend class="sr-only">{{ drawerTitle }}</legend>
-                    <SettingsSection
-                      title="General"
+                    <SettingsGroup
+                      label="General"
                       hint="Names the cache setting in the rules that reference it."
                     >
                       <Card :padded="false">
@@ -453,9 +453,9 @@
                           </Item.List>
                         </template>
                       </Card>
-                    </SettingsSection>
-                    <SettingsSection
-                      title="Browser cache"
+                    </SettingsGroup>
+                    <SettingsGroup
+                      label="Browser cache"
                       hint="How long the visitor's browser may reuse a response before asking again."
                     >
                       <Card :padded="false">
@@ -503,9 +503,9 @@
                           </Item.List>
                         </template>
                       </Card>
-                    </SettingsSection>
-                    <SettingsSection
-                      title="Edge cache"
+                    </SettingsGroup>
+                    <SettingsGroup
+                      label="Edge cache"
                       hint="How long the edge may serve a stored response before it asks the origin again."
                     >
                       <Card :padded="false">
@@ -626,9 +626,9 @@
                           </Item.List>
                         </template>
                       </Card>
-                    </SettingsSection>
-                    <SettingsSection
-                      title="Advanced cache key"
+                    </SettingsGroup>
+                    <SettingsGroup
+                      label="Advanced cache key"
                       hint="Which parts of a request make two requests two different cached objects."
                       collapsible
                     >
@@ -787,7 +787,7 @@
                           </Item.List>
                         </template>
                       </Card>
-                    </SettingsSection>
+                    </SettingsGroup>
                   </fieldset>
                 </PanelBody>
                 <PanelFooter>

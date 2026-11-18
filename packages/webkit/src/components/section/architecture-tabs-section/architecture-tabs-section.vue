@@ -2,19 +2,19 @@
   import { computed, useAttrs } from 'vue'
 
   import Button from '../../action/button/button.vue'
+  import Module from '../../layout/module/module.vue'
+  import type { ModuleHeaderAction } from '../../layout/module-header/module-header.vue'
+  import ModuleHeader from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import Diagram, { type DiagramName } from '../../marketing/diagram/diagram.vue'
   import MediaTabs from '../../marketing/media-tabs/media-tabs.vue'
-  import SectionModule from '../../marketing/section-module/section-module.vue'
-  import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
-  import SectionTitle from '../../marketing/section-title/section-title.vue'
 
   defineOptions({
     name: 'ArchitectureTabsSection',
     inheritAttrs: false
   })
 
-  export type { SectionTitleAction }
+  export type { ModuleHeaderAction }
 
   /** Side of the diagram the tabs sit on. */
   export type ArchitectureTabsSectionSide = 'top' | 'bottom' | 'start' | 'end'
@@ -51,7 +51,7 @@
     /** Milliseconds each tab holds before the next one opens. */
     autoplayInterval?: number
     /** Large button in the section title; `{ label, href, trailing?, target? }`. Omitted when absent. */
-    primaryAction?: SectionTitleAction
+    primaryAction?: ModuleHeaderAction
   }
 
   const props = withDefaults(defineProps<ArchitectureTabsSectionProps>(), {
@@ -89,7 +89,7 @@
     :aria-label="title || undefined"
     class="scroll-mt-(--spacing-2xl)"
   >
-    <SectionModule
+    <Module
       v-if="hasTabs"
       :divided="false"
       :padded="false"
@@ -98,7 +98,7 @@
         v-if="hasHeader"
         #header
       >
-        <SectionTitle
+        <ModuleHeader
           align="split"
           padding="small"
           :eyebrow="eyebrow"
@@ -120,7 +120,7 @@
               :animated="Boolean(primaryAction.trailing)"
             />
           </template>
-        </SectionTitle>
+        </ModuleHeader>
       </template>
 
       <RegistrationFrame
@@ -146,6 +146,6 @@
           </template>
         </MediaTabs>
       </RegistrationFrame>
-    </SectionModule>
+    </Module>
   </section>
 </template>

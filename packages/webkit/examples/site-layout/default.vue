@@ -1,7 +1,7 @@
 <script setup lang="ts">
+  import Container from '@aziontech/webkit/container'
   import HeroSection from '@aziontech/webkit/hero-section'
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionModule from '@aziontech/webkit/section-module'
+  import Module from '@aziontech/webkit/module'
   import SiteLayout, {
     type SiteLayoutFooter,
     type SiteLayoutNavigation
@@ -91,12 +91,12 @@
       :primary-action="{ label: 'Start for free', href: 'https://console.azion.com/signup' }"
       :secondary-action="{ label: 'Talk to an expert', href: '/en/contact/' }"
     />
-    <SectionContainer max-width="site">
-      <SectionModule
+    <Container max-width="site">
+      <Module
         :divided="false"
         title="Deploy from the CLI or from Git"
         description="Push a change and it goes live on every edge location in seconds."
       />
-    </SectionContainer>
+    </Container>
   </SiteLayout>
 </template>

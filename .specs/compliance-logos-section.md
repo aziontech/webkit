@@ -3,10 +3,10 @@ name: compliance-logos-section
 category: section
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 created: 2026-11-04
-last_updated: 2026-11-16
-checksum: 8919f8d30678b74765551b1be6b203818c4223e5bf422059280f1cd2e470a620
+last_updated: 2026-11-18
+checksum: 1e5366ef69214d4c7c3862ee435dd55bc8c0f3bbbe6ecc02f21809f236cd33f8
 template: 2
 ---
 
@@ -14,7 +14,7 @@ template: 2
 
 ## Purpose
 
-The compliance band: a framed media split whose copy states the certifications and whose media is a frame grid of badges, each a picture over a check-marked pill, closed by a "see more" cell. It is a page section — the site places it from a `{ _id: 'compliance-logos-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `media-split` and `card-grid`.
+The compliance band: a framed media split whose copy states the certifications and whose media is a frame grid of badges, each a picture over a check-marked pill, closed by a "see more" cell. It is a page section — the site places it from a `{ _id: 'compliance-logos-section', props }` entry and binds `props` straight onto it — and it composes `module`, `media-split` and `card-grid`.
 
 ## When to use
 
@@ -63,7 +63,7 @@ The compliance band: a framed media split whose copy states the certifications a
 | `description`    | `string`                                | `''`        | false    | Supporting sentence under the headline.                                                                           |
 | `ariaLabel`      | `string`                                | `''`        | false    | Accessible name of the badge list.                                                                                |
 | `certifications` | `ComplianceLogosSectionCertification[]` | `[]`        | false    | The badges, in order; each is `{ label, badge, alt }` where `badge` is the picture URL and `label` the pill text. |
-| `primaryAction`  | `SectionTitleAction`                    | `undefined` | false    | The closing "see more" cell; `{ label, href }`. Omitted when absent.                                              |
+| `primaryAction`  | `ModuleHeaderAction`                    | `undefined` | false    | The closing "see more" cell; `{ label, href }`. Omitted when absent.                                              |
 | `anchor`         | `string`                                | `''`        | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                    |
 
 ## Events

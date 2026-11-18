@@ -1,7 +1,7 @@
 <script setup>
+  import Container from '@aziontech/webkit/container'
   import ProcessScrollSection from '@aziontech/webkit/process-scroll-section'
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionGap from '@aziontech/webkit/section-gap'
+  import Spacer from '@aziontech/webkit/spacer'
 
   const steps = [
     {
@@ -24,8 +24,8 @@
 </script>
 
 <template>
-  <SectionContainer max-width="site">
-    <SectionGap hatch />
+  <Container max-width="site">
+    <Spacer hatch />
 
     <ProcessScrollSection
       eyebrow="How it works"
@@ -34,6 +34,6 @@
       :steps="steps"
     />
 
-    <SectionGap hatch />
-  </SectionContainer>
+    <Spacer hatch />
+  </Container>
 </template>

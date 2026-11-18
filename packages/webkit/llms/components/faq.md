@@ -16,7 +16,7 @@
 
 ## Do
 
-- `framed` decides who draws the rule. On, the band draws its own registration frame. Off, the rule and the corner marks belong to the `section-module` or `registration-frame` the page assembles it into, so a band placed in an already-framed column never lands a second hairline on the column's own.
+- `framed` decides who draws the rule. On, the band draws its own registration frame. Off, the rule and the corner marks belong to the `module` or `registration-frame` the page assembles it into, so a band placed in an already-framed column never lands a second hairline on the column's own.
 - Keep the band to the questions a reader actually asks before buying; a FAQ is objection handling, not a manual.
 - Write each `question` as the reader would ask it, in their words rather than the product's.
 - Keep answers to a couple of sentences and link out for the rest — use the `answer` slot when an answer needs a link or richer content.
@@ -33,7 +33,7 @@
 ## Related
 
 - [accordion](accordion.md) — the disclosure primitive this band renders its answers through.
-- [section-title](section-title.md) — the header for a section whose body is not a question list.
+- [module-header](module-header.md) — the header for a section whose body is not a question list.
 - [registration-frame](registration-frame.md) — the frame the band is drawn with, applied by whatever assembles the page; the band draws none of its own.
 
 ## Props

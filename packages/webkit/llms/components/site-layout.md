@@ -30,7 +30,7 @@
 
 - `SiteHeaderSection` — the bar and its mega-menus; `navigation` is bound onto it.
 - `SiteFooterSection` — the footer; `footer` is bound onto it. In `variant="site"` it spans the full width like the bar, with no side rules, and opens on a plain full-width rule, the same clean line as the bar's, with no corner marks.
-- `SectionContainer`, `SectionGap` — the frame the page's sections stack in, inside the slot.
+- `Container`, `Spacer` — the frame the page's sections stack in, inside the slot.
 - `Command` — the search palette the bar's search button opens.
 - `shell/shell-site` — the block that shows this layout with the azion.com navigation and footer.
 
@@ -96,7 +96,7 @@
 ## Responsive
 
 - Container queries: none of its own; `SiteHeaderSection` switches to its sheet below `xl` and `SiteFooterSection` reflows its rows.
-- Narrow: the main column is full width; the sections own their measure (`SectionContainer`).
+- Narrow: the main column is full width; the sections own their measure (`Container`).
 - Touch: owned by the composed components.
 - Reflow: no horizontal scroll at 320 px; the page scrolls the document (no inner scroll area), so a full-page capture shows the whole page.
 
@@ -106,9 +106,9 @@
 
 ```vue
 <script setup lang="ts">
+  import Container from '@aziontech/webkit/container'
   import HeroSection from '@aziontech/webkit/hero-section'
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionModule from '@aziontech/webkit/section-module'
+  import Module from '@aziontech/webkit/module'
   import SiteLayout, {
     type SiteLayoutFooter,
     type SiteLayoutNavigation
@@ -198,13 +198,13 @@
       :primary-action="{ label: 'Start for free', href: 'https://console.azion.com/signup' }"
       :secondary-action="{ label: 'Talk to an expert', href: '/en/contact/' }"
     />
-    <SectionContainer max-width="site">
-      <SectionModule
+    <Container max-width="site">
+      <Module
         :divided="false"
         title="Deploy from the CLI or from Git"
         description="Push a change and it goes live on every edge location in seconds."
       />
-    </SectionContainer>
+    </Container>
   </SiteLayout>
 </template>
 ```
@@ -213,9 +213,9 @@
 
 ```vue
 <script setup lang="ts">
+  import Container from '@aziontech/webkit/container'
   import HeroSection from '@aziontech/webkit/hero-section'
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionModule from '@aziontech/webkit/section-module'
+  import Module from '@aziontech/webkit/module'
   import SiteLayout, {
     type SiteLayoutFooter,
     type SiteLayoutNavigation
@@ -306,13 +306,13 @@
       :primary-action="{ label: 'Start for free', href: 'https://console.azion.com/signup' }"
       :secondary-action="{ label: 'Talk to an expert', href: '/en/contact/' }"
     />
-    <SectionContainer max-width="site">
-      <SectionModule
+    <Container max-width="site">
+      <Module
         :divided="false"
         title="Deploy from the CLI or from Git"
         description="Push a change and it goes live on every edge location in seconds."
       />
-    </SectionContainer>
+    </Container>
   </SiteLayout>
 </template>
 ```

@@ -20,7 +20,7 @@
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Select from '@aziontech/webkit/select'
-  import SettingsSection from '@aziontech/webkit/settings-section'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import Sidebar from '@aziontech/webkit/sidebar-root'
   import Skeleton from '@aziontech/webkit/skeleton'
   import Tabs from '@aziontech/webkit/tabs'
@@ -1594,8 +1594,8 @@ LIMIT 3;`
               :disabled="importing"
             >
               <legend class="sr-only">Import data from CSV</legend>
-              <SettingsSection
-                title="File"
+              <SettingsGroup
+                label="File"
                 hint="One .csv file whose first line names its columns."
               >
                 <div class="flex w-full min-w-0 flex-col gap-(--spacing-sm)">
@@ -1634,11 +1634,11 @@ LIMIT 3;`
                     {{ importFileMissing }}
                   </p>
                 </div>
-              </SettingsSection>
+              </SettingsGroup>
 
               <template v-if="importRows.length">
-                <SettingsSection
-                  title="Map columns"
+                <SettingsGroup
+                  label="Map columns"
                   :hint="`Choose the column of ${selectedTable?.name} each CSV column fills, or Skip it. Columns left out take NULL or their default.`"
                 >
                   <div class="flex w-full min-w-0 flex-col gap-(--spacing-sm)">
@@ -1705,10 +1705,10 @@ LIMIT 3;`
                       </li>
                     </ul>
                   </div>
-                </SettingsSection>
+                </SettingsGroup>
 
-                <SettingsSection
-                  title="Check rows"
+                <SettingsGroup
+                  label="Check rows"
                   hint="Each value is checked against its column's type, and required columns against empty values."
                 >
                   <div class="flex w-full min-w-0 flex-col gap-(--spacing-sm)">
@@ -1770,7 +1770,7 @@ LIMIT 3;`
                       />
                     </template>
                   </div>
-                </SettingsSection>
+                </SettingsGroup>
               </template>
             </fieldset>
           </PanelBody>

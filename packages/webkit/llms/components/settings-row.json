@@ -20,7 +20,7 @@
   "A navigable list row → use `item` directly."
  ],
  "related": [
-  "`settings-section` — the band the card of rows sits in.",
+  "`settings-group` — the band the card of rows sits in.",
   "`item` — the row primitive it renders; place rows in an `Item.List` inside the card.",
   "`field-error` — the required or invalid message under the control."
  ],

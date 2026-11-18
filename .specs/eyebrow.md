@@ -7,7 +7,7 @@ spec_version: 7
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=6482-17218
   node_id: 6482:17218
-checksum: 31115382af7c77cb01a400f3ebb311902ba6498344fe065544f058c0d567e551
+checksum: b2757f34cb6dca783ee50ea2179a8f0661e5945b09781f92eaf209df56deeb83
 created: 2026-11-10
 last_updated: 2026-11-16
 ---
@@ -16,17 +16,17 @@ last_updated: 2026-11-16
 
 ## Purpose
 
-Overline is the short uppercase label set above a headline to name the section, panel or group it opens (the "eyebrow"). It renders its default slot in `.text-overline-md` in the brand orange (`--text-brand`: the logo orange `#F3652B` in light and dark), optionally behind a preset code-style prefix (`//`, `<>`, `</>`) and followed by a blinking terminal-style cursor. It is purely presentational text with no interaction; the marketing headers (`section-title`, `hero-title`, `call-to-action`, `media-split`, `marquee`) and several page sections render their eyebrow (the `eyebrow` prop, or `label` on `marquee`) through it.
+Overline is the short uppercase label set above a headline to name the section, panel or group it opens (the "eyebrow"). It renders its default slot in `.text-overline-md` in the brand orange (`--text-brand`: the logo orange `#F3652B` in light and dark), optionally behind a preset code-style prefix (`//`, `<>`, `</>`) and followed by a blinking terminal-style cursor. It is purely presentational text with no interaction; the marketing headers (`module-header`, `hero-title`, `call-to-action`, `media-split`, `marquee`) and several page sections render their eyebrow (the `eyebrow` prop, or `label` on `marquee`) through it.
 
 ## When to use
 
 - Name a section, panel or column group with one or two words set above its headline.
-- Build a custom marketing header that must match the eyebrow treatment of `section-title` and `hero-title` (the `//` prefix and the blinking cursor).
+- Build a custom marketing header that must match the eyebrow treatment of `module-header` and `hero-title` (the `//` prefix and the blinking cursor).
 - Label a band inside a page section (a comparison group, a closing panel) with the same uppercase code-style mark.
 
 ## When NOT to use
 
-- The header has a headline, description and actions → use `section-title` (or `hero-title` for the hero), which already renders its `eyebrow` through Eyebrow.
+- The header has a headline, description and actions → use `module-header` (or `hero-title` for the hero), which already renders its `eyebrow` through Eyebrow.
 - The text is a status, count or category attached to an item → use `tag` or `badge`.
 - The text is the heading itself → use a real heading element; Eyebrow renders a `div` and is not a heading.
 - The text is a keyboard shortcut → use `kbd`.
@@ -34,7 +34,7 @@ Overline is the short uppercase label set above a headline to name the section, 
 
 ## Related
 
-- `section-title` — the framed section header; renders its `eyebrow` as an Eyebrow with `prefix="//"` and `cursor`.
+- `module-header` — the framed section header; renders its `eyebrow` as an Eyebrow with `prefix="//"` and `cursor`.
 - `hero-title` — the hero copy block; renders its `eyebrow` as an Eyebrow closed by the cursor, with `single-line` turned off.
 - `tag` — a compact label attached to an item, not a heading companion.
 - `badge` — a compact count or status indicator.

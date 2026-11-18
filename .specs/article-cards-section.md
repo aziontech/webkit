@@ -7,14 +7,14 @@ spec_version: 7
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-16
-checksum: b27bf37bc87ec1ce1ae4450e0476b2319d0e72e687b5dfe8dbbc5510890c8eaf
+checksum: da32012b67e812bcc7ae91081ba8cbc33f69b6f6f6764bf2af3d206d967ee027
 ---
 
 # ArticleCardsSection — Component Spec
 
 ## Purpose
 
-A titled row of three linked article cards on one hairline frame grid with no gutter, stacking to one column on mobile. Each card is a single link: a 16:9 media cell holding the article's cover — or, when it has none, the client's mark in one flat ink that follows the theme — then the headline, the deck and a `meta` overline pinned to the foot. It is a page section — the site places it from a `{ _id: 'article-cards-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `registration-frame` and `card-grid`. `variant` places the heading only: `start` at the start (an article's closing row), `center` centred over the cards under an overline (a landing-page band); the cards keep the same shape in both.
+A titled row of three linked article cards on one hairline frame grid with no gutter, stacking to one column on mobile. Each card is a single link: a 16:9 media cell holding the article's cover — or, when it has none, the client's mark in one flat ink that follows the theme — then the headline, the deck and a `meta` overline pinned to the foot. It is a page section — the site places it from a `{ _id: 'article-cards-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `registration-frame` and `card-grid`. `variant` places the heading only: `start` at the start (an article's closing row), `center` centred over the cards under an overline (a landing-page band); the cards keep the same shape in both.
 
 ## When to use
 

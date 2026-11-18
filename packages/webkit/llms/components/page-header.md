@@ -8,7 +8,7 @@
 
 ## When to use
 
-- Use PageHeader once per console page for the h1, description and page actions; a band inside the page uses SectionHeader.
+- Use PageHeader once per console page for the h1, description and page actions; a band inside the page uses Subheader.
 - The top of any console page: a first-level list (`medium`), a detail tab or settings sub-page (`small`), a creation hub headline (`large`).
 - A page that owns actions (Documentation, a create action) that belong next to its title.
 - A resource detail page whose header carries the trail back to the list, the resource's icon, its status and the tabs of its sections (`breadcrumbs`, `icon`, `meta`, `tabs`).
@@ -26,14 +26,14 @@
 
 ## Don’t
 
-- The heading of one band inside a page → use `section-header`.
-- A settings band with a Hint and a card of rows → use `settings-section`.
+- The heading of one band inside a page → use `subheader`.
+- A settings band with a Hint and a card of rows → use `settings-group`.
 - A documentation page heading → use `doc-page-header`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
-- [section-header](section-header.md) — the h2 band heading inside a page.
+- [subheader](subheader.md) — the h2 band heading inside a page.
 - [page-tabs](page-tabs.md) — the second-level navigation strip that sits above a detail page's header; a header-local tab row goes in the `tabs` slot.
 - [breadcrumb](breadcrumb.md) — the usual content of the `breadcrumbs` slot.
 - [tag](tag.md) — the usual content of the `meta` slot (a status, an environment, a version).

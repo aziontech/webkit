@@ -7,14 +7,14 @@ status: implemented
 spec_version: 10
 created: 2026-11-05
 last_updated: 2026-11-18
-checksum: dd890d21200d44e1a3c45a3c8fbe9e2576927139af28f11fe1ee4953c147ad4a
+checksum: c5798a9367648e4ffcb98ee8669a6105f29e66c7c15f9c36b2f9ff2c5b0f1bab
 ---
 
 # TemplateGallerySection — Component Spec
 
 ## Purpose
 
-The templates band of a solution page: a framed media split whose copy side invites the reader to start from a template and whose media side is a scrolling two-column wall of deployable template cards, closed by a marquee of the frameworks and clouds it works with. Each card is a mark, a title, one line and a deploy action. It is a page section — the site places it from a `{ _id: 'template-gallery-section', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `section-module`, `media-split`, `scroll-area`, `card-grid`, `button`, `registration-frame` and `marquee` rather than owning any anatomy of its own. With `closing` set it is the page's closing band: the hatched closing frame follows it, with no rules of its own, because the site footer under it opens with one (`hatch` turns that frame off when another closing band stacks directly below and draws the shared one).
+The templates band of a solution page: a framed media split whose copy side invites the reader to start from a template and whose media side is a scrolling two-column wall of deployable template cards, closed by a marquee of the frameworks and clouds it works with. Each card is a mark, a title, one line and a deploy action. It is a page section — the site places it from a `{ _id: 'template-gallery-section', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `module`, `media-split`, `scroll-area`, `card-grid`, `button`, `registration-frame` and `marquee` rather than owning any anatomy of its own. With `closing` set it is the page's closing band: the hatched closing frame follows it, with no rules of its own, because the site footer under it opens with one (`hatch` turns that frame off when another closing band stacks directly below and draws the shared one).
 
 ## When to use
 
@@ -39,7 +39,7 @@ The templates band of a solution page: a framed media split whose copy side invi
 - Keep the wall to an even number of templates so the two columns end level.
 - Turn on `invertInDark` only for a mark whose artwork ships in dark ink, so it stays legible on the dark theme.
 - Set `templatesAriaLabel` so the scrolling wall is announced by name.
-- Set `closing` only on the last band of the page, right above `site-footer-section`: it draws the hatched closing frame itself, so nothing follows it inside the page column (no trailing `SectionGap`, no closing `RegistrationFrame`).
+- Set `closing` only on the last band of the page, right above `site-footer-section`: it draws the hatched closing frame itself, so nothing follows it inside the page column (no trailing `Spacer`, no closing `RegistrationFrame`).
 - Turn `hatch` off only on a closing band that another closing band follows directly; the last one keeps the frame.
 
 ## Usage
@@ -87,8 +87,8 @@ The templates band of a solution page: a framed media split whose copy side invi
 | `eyebrow`            | `string`                           | `''`        | false    | Eyebrow above the headline.                                                                                                                                                                                         |
 | `title`              | `string`                           | `''`        | false    | Headline of the band, rendered by the media split as its `h2` and naming its region.                                                                                                                                |
 | `description`        | `string`                           | `''`        | false    | Paragraph under the headline.                                                                                                                                                                                       |
-| `primaryAction`      | `SectionTitleAction`               | `undefined` | false    | First button under the copy, drawn as the large secondary button; `{ label, href, trailing?, target? }`. Omitted when absent.                                                                                       |
-| `secondaryAction`    | `SectionTitleAction`               | `undefined` | false    | Second button under the copy, drawn as the large outlined button; `{ label, href, trailing?, target? }`. Omitted when absent.                                                                                       |
+| `primaryAction`      | `ModuleHeaderAction`               | `undefined` | false    | First button under the copy, drawn as the large secondary button; `{ label, href, trailing?, target? }`. Omitted when absent.                                                                                       |
+| `secondaryAction`    | `ModuleHeaderAction`               | `undefined` | false    | Second button under the copy, drawn as the large outlined button; `{ label, href, trailing?, target? }`. Omitted when absent.                                                                                       |
 | `templates`          | `TemplateGallerySectionTemplate[]` | `[]`        | false    | The template cards of the scrolling wall, in order; each is `{ title, description?, icon?, invertInDark?, href? }` where `href` makes the whole card a link to the template. Templates without a title are skipped. |
 | `deployLabel`        | `string`                           | `''`        | false    | Label of the deploy button on each card; a card renders its button only when both this and its `href` are set.                                                                                                      |
 | `templatesAriaLabel` | `string`                           | `''`        | false    | Accessible name of the scrolling wall of templates.                                                                                                                                                                 |

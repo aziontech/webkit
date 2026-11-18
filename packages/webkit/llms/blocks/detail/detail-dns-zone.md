@@ -1,11 +1,11 @@
 # DetailDnsZone (`detail/detail-dns-zone`)
 
-> A DNS zone detail page, opened from its index: a full-bleed tab bar with Main settings and Records over a scrolling tab panel. Main settings is a settings form in the form column: four stacked sections (General, Configure your nameserver, DNSSEC, Status), each an anchored heading with a hint glyph over a flush `Card` of `ItemList` rows. Name and Domain Name are required `Input`s that show a required `FieldError` only after a failed save; the three nameservers and, while DNSSEC is on, the key tag, algorithm, digest type and digest are read-only code `Input`s in an `InputGroupRoot` with a transparent `CopyButton`; DNSSEC and Active are `Switch`es; editing anything raises the save bar at the bottom. Records is a small-heading list inside the tab (Documentation and Add Record actions) with the TableView controls row (`PropertyFilter` over Name, Type, Policy and Value, Refresh, Download CSV and `CollectionPreferences`, all driven by `useCollection`) and a records table paginated at 10: the value cell pins a copy button, Weight and Description stay blank when they do not apply, the row menu carries Edit and Delete, and the empty slot separates no records (Add Record, Import zone file) from no match (Clear filters). Built from `PageHeader`, `PageTabs`, `SettingsSection`, `SettingsRow`, `SaveBar`, `Tabs`, `Card`, `ItemList`, `Input`, `InputGroupRoot`, `CopyButton`, `Switch`, `FieldError`, `Button`, `PropertyFilter`, `CollectionPreferences`, `DataTable` and `EmptyState`. A page body for ConsoleLayout.
+> A DNS zone detail page, opened from its index: a full-bleed tab bar with Main settings and Records over a scrolling tab panel. Main settings is a settings form in the form column: four stacked sections (General, Configure your nameserver, DNSSEC, Status), each an anchored heading with a hint glyph over a flush `Card` of `ItemList` rows. Name and Domain Name are required `Input`s that show a required `FieldError` only after a failed save; the three nameservers and, while DNSSEC is on, the key tag, algorithm, digest type and digest are read-only code `Input`s in an `InputGroupRoot` with a transparent `CopyButton`; DNSSEC and Active are `Switch`es; editing anything raises the save bar at the bottom. Records is a small-heading list inside the tab (Documentation and Add Record actions) with the TableView controls row (`PropertyFilter` over Name, Type, Policy and Value, Refresh, Download CSV and `CollectionPreferences`, all driven by `useCollection`) and a records table paginated at 10: the value cell pins a copy button, Weight and Description stay blank when they do not apply, the row menu carries Edit and Delete, and the empty slot separates no records (Add Record, Import zone file) from no match (Clear filters). Built from `PageHeader`, `PageTabs`, `SettingsGroup`, `SettingsRow`, `SaveBar`, `Tabs`, `Card`, `ItemList`, `Input`, `InputGroupRoot`, `CopyButton`, `Switch`, `FieldError`, `Button`, `PropertyFilter`, `CollectionPreferences`, `DataTable` and `EmptyState`. A page body for ConsoleLayout.
 
 - Surface: app
 - Source: `blocks/detail/detail-dns-zone/detail-dns-zone.vue` in `@aziontech/webkit`
 - MCP: `get_block("detail/detail-dns-zone")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldDescription`, `FieldError`, [FileDropzone](../../components/file-dropzone.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `InputGroupRoot`, `ItemList`, [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [SaveBar](../../components/save-bar.md), [SettingsRow](../../components/settings-row.md), [SettingsSection](../../components/settings-section.md), [Switch](../../components/switch.md), `TableCellActions`, `TableCellId`, `TableCellLink`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldDescription`, `FieldError`, [FileDropzone](../../components/file-dropzone.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `InputGroupRoot`, `ItemList`, [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [SaveBar](../../components/save-bar.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Switch](../../components/switch.md), `TableCellActions`, `TableCellId`, `TableCellLink`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`
 - Skills: `webkit-tables`, `webkit-form`, `webkit-navigation`
 
 ## Asked as
@@ -33,9 +33,9 @@ The detail page of a resource that owns a long list of records, here a DNS zone.
 
 A full-bleed `PageTabs` with one `Tabs.Trigger` per tab, Main settings first and Records second, in a `sticky top-0` wrapper on the canvas fill: each tab panel scrolls in the layout's content region under the bar, and only the open tab is mounted. See `skills/webkit-navigation`.
 
-### B. Settings sections — `SettingsSection`, `Card`, `ItemList`, `SettingsRow`, `Input`, `FieldDescription`, `FieldError` (required)
+### B. Settings sections — `SettingsGroup`, `Card`, `ItemList`, `SettingsRow`, `Input`, `FieldDescription`, `FieldError` (required)
 
-Main settings is a form in the form column with four `SettingsSection` bands: General, Configure your nameserver, DNSSEC and Status. Each band wraps a flush `Card :padded="false"` around an `ItemList` of `SettingsRow`s, each with a title and a one-sentence description. Name and Domain Name are large `Input`s; their required `FieldError` appears only after Save is pressed with them empty and clears as soon as the user types. See `skills/webkit-form`.
+Main settings is a form in the form column with four `SettingsGroup` bands: General, Configure your nameserver, DNSSEC and Status. Each band wraps a flush `Card :padded="false"` around an `ItemList` of `SettingsRow`s, each with a title and a one-sentence description. Name and Domain Name are large `Input`s; their required `FieldError` appears only after Save is pressed with them empty and clears as soon as the user types. See `skills/webkit-form`.
 
 ### C. Copyable values — `InputGroupRoot`, `Input`, `CopyButton` (required)
 
@@ -232,8 +232,8 @@ Each variant is the same screen in another state: `get_block("detail/detail-dns-
   import PageTabs from '@aziontech/webkit/page-tabs'
   import PropertyFilter from '@aziontech/webkit/property-filter'
   import SaveBar from '@aziontech/webkit/save-bar'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
-  import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import TableCellActions from '@aziontech/webkit/table-cell-actions'
   import TableCellId from '@aziontech/webkit/table-cell-id'
@@ -506,8 +506,8 @@ Each variant is the same screen in another state: `get_block("detail/detail-dns-
               :disabled="saving"
             >
               <legend class="sr-only">Zone settings</legend>
-              <SettingsSection
-                title="General"
+              <SettingsGroup
+                label="General"
                 hint="How this zone is identified across the platform."
                 anchor="general"
               >
@@ -562,10 +562,10 @@ Each variant is the same screen in another state: `get_block("detail/detail-dns-
                     </ItemList>
                   </template>
                 </Card>
-              </SettingsSection>
+              </SettingsGroup>
 
-              <SettingsSection
-                title="Configure your nameserver"
+              <SettingsGroup
+                label="Configure your nameserver"
                 hint="Make this zone the authoritative DNS for the domain."
                 anchor="configure-your-nameserver"
               >
@@ -607,10 +607,10 @@ Each variant is the same screen in another state: `get_block("detail/detail-dns-
                     </ItemList>
                   </template>
                 </Card>
-              </SettingsSection>
+              </SettingsGroup>
 
-              <SettingsSection
-                title="DNSSEC"
+              <SettingsGroup
+                label="DNSSEC"
                 hint="Signs the zone so resolvers can detect spoofed answers."
                 anchor="dnssec"
               >
@@ -660,10 +660,10 @@ Each variant is the same screen in another state: `get_block("detail/detail-dns-
                     </ItemList>
                   </template>
                 </Card>
-              </SettingsSection>
+              </SettingsGroup>
 
-              <SettingsSection
-                title="Status"
+              <SettingsGroup
+                label="Status"
                 hint="A zone can be held inactive while its records are being built."
                 anchor="status"
               >
@@ -684,7 +684,7 @@ Each variant is the same screen in another state: `get_block("detail/detail-dns-
                     </ItemList>
                   </template>
                 </Card>
-              </SettingsSection>
+              </SettingsGroup>
             </fieldset>
           </section>
         </div>

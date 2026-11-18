@@ -3,9 +3,9 @@
 
   import BentoGrid from '../../layout/bento-grid/bento-grid.vue'
   import BentoGridCell from '../../layout/bento-grid/bento-grid-cell/bento-grid-cell.vue'
+  import Module from '../../layout/module/module.vue'
+  import ModuleHeader from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
-  import SectionModule from '../../marketing/section-module/section-module.vue'
-  import SectionTitle from '../../marketing/section-title/section-title.vue'
 
   defineOptions({
     name: 'InvestorMarksSection',
@@ -64,7 +64,7 @@
     :aria-label="title || undefined"
     class="scroll-mt-(--spacing-2xl)"
   >
-    <SectionModule
+    <Module
       v-if="hasItems"
       :divided="false"
       :padded="false"
@@ -73,7 +73,7 @@
         v-if="hasHeading"
         #header
       >
-        <SectionTitle
+        <ModuleHeader
           align="center"
           :eyebrow="eyebrow"
           :title="title"
@@ -137,6 +137,6 @@
           </BentoGridCell>
         </BentoGrid>
       </RegistrationFrame>
-    </SectionModule>
+    </Module>
   </section>
 </template>

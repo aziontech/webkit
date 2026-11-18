@@ -309,9 +309,9 @@ Adjacent bordered surfaces share **exactly one hairline**. The outer frame belon
 
 How the library keeps it, so a page composed from it inherits the single line:
 
-- **The container owns the outer edge.** `SectionContainer` draws the column's sides, `SectionTitle` the header's bottom rule; an unpadded `SectionModule` body marks itself `data-frame-edges`, and a `RegistrationFrame` placed directly in it (and the `DocCardGroup` built on one) drops its top and side rules and its top corner marks. `Card` frames its regions, `InputGroup` frames its controls and strips a nested `Input`'s border, the `Pagination` strip frames its current page.
+- **The container owns the outer edge.** `Container` draws the column's sides, `ModuleHeader` the header's bottom rule; an unpadded `Module` body marks itself `data-frame-edges`, and a `RegistrationFrame` placed directly in it (and the `DocCardGroup` built on one) drops its top and side rules and its top corner marks. `Card` frames its regions, `InputGroup` frames its controls and strips a nested `Input`'s border, the `Pagination` strip frames its current page.
 - **Parts draw dividers, not frames.** A list of items rules the seams between them (`not-last:border-b`), never under the last one; a header rules its bottom only when a body follows it.
-- **A frame that closes a band hands the next seam over.** A frame's bottom rule (`SectionGap`, a framed grid) is the next band's top edge, so the `SectionModule` after it passes `divided` as `false`.
+- **A frame that closes a band hands the next seam over.** A frame's bottom rule (`Spacer`, a framed grid) is the next band's top edge, so the `Module` after it passes `divided` as `false`.
 - **Drop the part's own frame when it sits in one.** `CodeEditor` and `LogViewer` take `:bordered="false"` inside a pane, card or accordion that already frames them.
 - **When two parts must both keep a rule, lay one exactly on the other** (`CardGrid`'s `flush`, a cell's `ring-1` painted into its frame's pixel). Coinciding on the same pixel reads as one line; touching or 1px apart reads as two.
 
@@ -325,14 +325,14 @@ Two regions of a page never sit closer than the group step, `--layout-group-gap`
 <!-- ❌ the parent section carries no gap: the banner lands flush on the band's heading -->
 <section class="layout-section-start flex flex-col">
   <Alert … />
-  <div><SettingsSection title="Defaults">…</SettingsSection></div>
+  <div><SettingsGroup label="Defaults">…</SettingsGroup></div>
 </section>
 
 <!-- ✅ the parent section spaces every band, the banner included -->
 <section class="layout-section-start flex flex-col gap-(--layout-section-gap)">…</section>
 ```
 
-`SettingsSection` spaces itself from the bands before it with its own top margin, and only from a `SettingsSection` sibling, so a page-level banner above the first band is spaced by the parent section's `gap`, never by the band. Tighter steps are right **inside one unit**: a card's rows, a list's items, a chat message's parts, a label over its own field, a controls row inside a card, anything inside an overlay. The gate reads them as one unit and stays silent.
+`SettingsGroup` spaces itself from the bands before it with its own top margin, and only from a `SettingsGroup` sibling, so a page-level banner above the first band is spaced by the parent section's `gap`, never by the band. Tighter steps are right **inside one unit**: a card's rows, a list's items, a chat message's parts, a label over its own field, a controls row inside a card, anything inside an overlay. The gate reads them as one unit and stays silent.
 
 A static lint cannot see a rendered gap either; the styled visual suite measures it (see Enforcement).
 

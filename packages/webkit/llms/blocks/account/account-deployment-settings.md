@@ -1,11 +1,11 @@
 # AccountDeploymentSettings (`account/account-deployment-settings`)
 
-> The account's Build and deployment settings. A `PageHeader` with Documentation and the primary Create Deployment Setting, a closable info `Alert` that explains what a Deployment Setting is, then three `SettingsSection`s. New service defaults: a flush `Card` of `SettingsRow`s in an `Item.List` with a binding policy `Select`, a deployment policy `Select` and an Apply to existing `Switch`, saved through a `SaveBar` that appears only with unsaved changes (Discard, Save). All services: a collapsible `Accordion` whose trigger counts the services and tags how many share a setting; inside, a search `Input` (a small `EmptyState` with Clear search when nothing matches) and, ten services per page with `Pagination`, one row per environment with environment and policy `Tag`s, a `Select` that rebinds it to a matching Deployment Setting (inactive ones disabled), and Linked automatically and Shared `Tag`s; a rebind ends in a toast that warns when the setting now reaches several services. Deployment Settings: the view-table controls row (`PropertyFilter`, Refresh and Download CSV as `IconButton`s with a `Tooltip`, `CollectionPreferences`) over a `DataTable` on one `useCollection` (Name with a System `Tag` for Default, Services with a Shared `Tag` and the service names on a `Tooltip`, Type hidden by default, Binding policy, Deployment policy, `TableCellStatus`, `TableCellTime` for Last modified, `TableCellActions` with Edit, Clone and Delete behind a `ConfirmDialog`). Create and Edit open a large `Drawer` form (Name, Description, Active `Switch`, binding and deployment policy `RadioGroup`s). Loading draws `Skeleton`s; no services draws an `EmptyState`. Its toasts go through `toast` into the app's one toast region. A page body for ConsoleLayout, rendered in its default slot.
+> The account's Build and deployment settings. A `PageHeader` with Documentation and the primary Create Deployment Setting, a closable info `Alert` that explains what a Deployment Setting is, then three `SettingsGroup`s. New service defaults: a flush `Card` of `SettingsRow`s in an `Item.List` with a binding policy `Select`, a deployment policy `Select` and an Apply to existing `Switch`, saved through a `SaveBar` that appears only with unsaved changes (Discard, Save). All services: a collapsible `Accordion` whose trigger counts the services and tags how many share a setting; inside, a search `Input` (a small `EmptyState` with Clear search when nothing matches) and, ten services per page with `Pagination`, one row per environment with environment and policy `Tag`s, a `Select` that rebinds it to a matching Deployment Setting (inactive ones disabled), and Linked automatically and Shared `Tag`s; a rebind ends in a toast that warns when the setting now reaches several services. Deployment Settings: the view-table controls row (`PropertyFilter`, Refresh and Download CSV as `IconButton`s with a `Tooltip`, `CollectionPreferences`) over a `DataTable` on one `useCollection` (Name with a System `Tag` for Default, Services with a Shared `Tag` and the service names on a `Tooltip`, Type hidden by default, Binding policy, Deployment policy, `TableCellStatus`, `TableCellTime` for Last modified, `TableCellActions` with Edit, Clone and Delete behind a `ConfirmDialog`). Create and Edit open a large `Drawer` form (Name, Description, Active `Switch`, binding and deployment policy `RadioGroup`s). Loading draws `Skeleton`s; no services draws an `EmptyState`. Its toasts go through `toast` into the app's one toast region. A page body for ConsoleLayout, rendered in its default slot.
 
 - Surface: app
 - Source: `blocks/account/account-deployment-settings/account-deployment-settings.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-deployment-settings")`
-- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), [Pagination](../../components/pagination.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [RadioGroup](../../components/radio-group.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsRow](../../components/settings-row.md), [SettingsSection](../../components/settings-section.md), [Skeleton](../../components/skeleton.md), [Switch](../../components/switch.md), [Table](../../components/table.md), `TableCellActions`, `TableCellStatus`, `TableCellTime`, [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`
+- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), [Pagination](../../components/pagination.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [RadioGroup](../../components/radio-group.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Skeleton](../../components/skeleton.md), [Switch](../../components/switch.md), [Table](../../components/table.md), `TableCellActions`, `TableCellStatus`, `TableCellTime`, [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`
 - Skills: `webkit-form`, `webkit-tables`, `webkit-lists`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -34,15 +34,15 @@ Title `Build and deployment` and one sentence that says every environment is lin
 
 ### B. What a Deployment Setting is — `Alert` (required)
 
-A small info `Alert`, closable, that explains the binding policy, the deployment policy, the automatic link and what sharing a setting does. It closes for the session. It sits in the page's parent section, one section gap (`--layout-section-gap`) above the first `SettingsSection`, never flush against its heading.
+A small info `Alert`, closable, that explains the binding policy, the deployment policy, the automatic link and what sharing a setting does. It closes for the session. It sits in the page's parent section, one section gap (`--layout-section-gap`) above the first `SettingsGroup`, never flush against its heading.
 
-### C. New service defaults — `SettingsSection`, `Card`, `Item`, `SettingsRow`, `Select`, `Switch`, `SaveBar` (required)
+### C. New service defaults — `SettingsGroup`, `Card`, `Item`, `SettingsRow`, `Select`, `Switch`, `SaveBar` (required)
 
-A `SettingsSection` with an anchor around a flush `Card` and an `Item.List` of `SettingsRow`s: Binding policy and Deployment policy as large `Select`s whose value reads the policy label, then `Apply to existing Deployment Settings` as a compact `Switch`. Changing any of them raises a `SaveBar` (entering and leaving with a short translate and fade, none under reduced motion) that says `You have unsaved changes.` with Discard and Save. Save emits `save` with the values and spins while `saving` is set; when the save ends without `error` the values are kept, Apply turns off again and a toast says what changed: with Apply on, how many settings now use the binding policy (Default is never changed).
+A `SettingsGroup` with an anchor around a flush `Card` and an `Item.List` of `SettingsRow`s: Binding policy and Deployment policy as large `Select`s whose value reads the policy label, then `Apply to existing Deployment Settings` as a compact `Switch`. Changing any of them raises a `SaveBar` (entering and leaving with a short translate and fade, none under reduced motion) that says `You have unsaved changes.` with Discard and Save. Save emits `save` with the values and spins while `saving` is set; when the save ends without `error` the values are kept, Apply turns off again and a toast says what changed: with Apply on, how many settings now use the binding policy (Default is never changed).
 
 ### D. All services — `Accordion`, `Input`, `Tag`, `Select`, `Pagination` (required)
 
-A `SettingsSection` around a flush `Card` with one collapsible `Accordion` item, closed at first, its trigger a level 3 heading: `All services`, the count and a warning `Tag` with how many services use a shared setting. Inside: a search `Input` over service and setting names (`v-bind="filterProps"` from a `useCollection` over the services), then a list named Services, ten services per page with a `Pagination` under it when more match, so an account with hundreds of services never mounts hundreds of `Select`s, with one entry per service (its name links to the service) and one row per environment: the environment and its deployment policy as small `Tag`s, a `Select` named `Deployment Setting for <service> <environment>` that offers only the settings with the same deployment policy (inactive ones disabled), `Linked automatically` while the link was never changed, and `Shared · N services` when the setting reaches more than one. A rebind applies at once and toasts; when the new setting is shared, the toast is a warning that says how many services a deploy now reaches. A search with no match shows a small `EmptyState` (`No matching services`) with Clear search, inside a polite status region.
+A `SettingsGroup` around a flush `Card` with one collapsible `Accordion` item, closed at first, its trigger a level 3 heading: `All services`, the count and a warning `Tag` with how many services use a shared setting. Inside: a search `Input` over service and setting names (`v-bind="filterProps"` from a `useCollection` over the services), then a list named Services, ten services per page with a `Pagination` under it when more match, so an account with hundreds of services never mounts hundreds of `Select`s, with one entry per service (its name links to the service) and one row per environment: the environment and its deployment policy as small `Tag`s, a `Select` named `Deployment Setting for <service> <environment>` that offers only the settings with the same deployment policy (inactive ones disabled), `Linked automatically` while the link was never changed, and `Shared · N services` when the setting reaches more than one. A rebind applies at once and toasts; when the new setting is shared, the toast is a warning that says how many services a deploy now reaches. A search with no match shows a small `EmptyState` (`No matching services`) with Clear search, inside a polite status region.
 
 ### E. Deployment Settings controls — `PropertyFilter`, `Tooltip`, `IconButton`, `CollectionPreferences` (required)
 
@@ -202,8 +202,8 @@ Each variant is the same screen in another state: `get_block("account/account-de
   import RadioGroup from '@aziontech/webkit/radio-group'
   import SaveBar from '@aziontech/webkit/save-bar'
   import Select from '@aziontech/webkit/select'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
-  import SettingsSection from '@aziontech/webkit/settings-section'
   import Skeleton from '@aziontech/webkit/skeleton'
   import Switch from '@aziontech/webkit/switch'
   import { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
@@ -793,8 +793,8 @@ Each variant is the same screen in another state: `get_block("account/account-de
         />
 
         <div class="flex min-w-0 flex-col">
-          <SettingsSection
-            title="New service defaults"
+          <SettingsGroup
+            label="New service defaults"
             anchor="new-service-defaults"
             hint="What the Deployment Setting created with the next service starts with."
           >
@@ -871,10 +871,10 @@ Each variant is the same screen in another state: `get_block("account/account-de
                 </Item.List>
               </template>
             </Card>
-          </SettingsSection>
+          </SettingsGroup>
 
-          <SettingsSection
-            title="All services"
+          <SettingsGroup
+            label="All services"
             anchor="all-services"
             hint="Every service, every environment, and the Deployment Setting each one publishes with."
           >
@@ -1033,10 +1033,10 @@ Each variant is the same screen in another state: `get_block("account/account-de
                 </Accordion>
               </template>
             </Card>
-          </SettingsSection>
+          </SettingsGroup>
 
-          <SettingsSection
-            title="Deployment Settings"
+          <SettingsGroup
+            label="Deployment Settings"
             anchor="deployment-settings"
             hint="Every setting this account holds, and the services each one publishes to."
           >
@@ -1205,7 +1205,7 @@ Each variant is the same screen in another state: `get_block("account/account-de
                 </template>
               </Card>
             </div>
-          </SettingsSection>
+          </SettingsGroup>
         </div>
       </section>
 
@@ -1267,8 +1267,8 @@ Each variant is the same screen in another state: `get_block("account/account-de
           <PanelBody>
             <fieldset class="m-0 flex min-w-0 flex-col border-0 p-0">
               <legend class="sr-only">{{ drawerTitle }}</legend>
-              <SettingsSection
-                title="General"
+              <SettingsGroup
+                label="General"
                 hint="How this setting reads in this list and in the field that applies it."
               >
                 <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
@@ -1314,10 +1314,10 @@ Each variant is the same screen in another state: `get_block("account/account-de
                     </Field.Content>
                   </Field>
                 </div>
-              </SettingsSection>
+              </SettingsGroup>
 
-              <SettingsSection
-                title="Routing and policy"
+              <SettingsGroup
+                label="Routing and policy"
                 hint="How versions bind to the resources they ship with, and how traffic reaches them."
               >
                 <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
@@ -1362,7 +1362,7 @@ Each variant is the same screen in another state: `get_block("account/account-de
                     >
                   </fieldset>
                 </div>
-              </SettingsSection>
+              </SettingsGroup>
             </fieldset>
           </PanelBody>
 

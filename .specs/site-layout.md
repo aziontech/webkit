@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: 7f67f13505c0a618cf78394ceee8a0558851ed62230b10514f768b20fb34f74a
+checksum: 1be6dc59b5827bfa2d0be7e57a1d698fe8b015888a11a5c4cad931cc9a9d0363
 created: 2026-11-12
 last_updated: 2026-11-17
 ---
@@ -31,7 +31,7 @@ The marketing site's chrome, composed once in the app: `SiteHeaderSection` on to
 
 - `SiteHeaderSection` — the bar and its mega-menus; `navigation` is bound onto it.
 - `SiteFooterSection` — the footer; `footer` is bound onto it. In `variant="site"` it spans the full width like the bar, with no side rules, and opens on a plain full-width rule, the same clean line as the bar's, with no corner marks.
-- `SectionContainer`, `SectionGap` — the frame the page's sections stack in, inside the slot.
+- `Container`, `Spacer` — the frame the page's sections stack in, inside the slot.
 - `Command` — the search palette the bar's search button opens.
 - `shell/shell-site` — the block that shows this layout with the azion.com navigation and footer.
 
@@ -141,7 +141,7 @@ The marketing site's chrome, composed once in the app: `SiteHeaderSection` on to
 ## Responsive
 
 - Container queries: none of its own; `SiteHeaderSection` switches to its sheet below `xl` and `SiteFooterSection` reflows its rows.
-- Narrow: the main column is full width; the sections own their measure (`SectionContainer`).
+- Narrow: the main column is full width; the sections own their measure (`Container`).
 - Touch: owned by the composed components.
 - Reflow: no horizontal scroll at 320 px; the page scrolls the document (no inner scroll area), so a full-page capture shows the whole page.
 

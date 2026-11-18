@@ -10,7 +10,7 @@
 ## When to use
 
 - Use LinkDirectory for a columned directory of destinations inside a marketing band.
-- As the "everything on the platform" band of a product, solutions or pricing page, under a `section-title` and inside the page's frame.
+- As the "everything on the platform" band of a product, solutions or pricing page, under a `module-header` and inside the page's frame.
 - When a set of destinations is grouped and the group's name carries as much as the destinations under it.
 - When each destination needs a glyph and one line of what it is, not just a label.
 - When the same directory appears on several pages and has to read identically on every one.
@@ -39,7 +39,7 @@
 - [bento-grid](bento-grid.md) — unequal cells on the same shared rules.
 - [navigation-menu](navigation-menu.md) — the same anatomy inside an overlay, with a trigger and a panel.
 - [footer](footer.md) — the other place a directory of links is laid out in columns.
-- [section-module](section-module.md) / `registration-frame` — the frame this block is normally dropped into.
+- [module](module.md) / `registration-frame` — the frame this block is normally dropped into.
 
 ## Props
 

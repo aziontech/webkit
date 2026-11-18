@@ -12,7 +12,7 @@
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import RadioGroup from '@aziontech/webkit/radio-group'
-  import SettingsSection from '@aziontech/webkit/settings-section'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import Switch from '@aziontech/webkit/switch'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
@@ -120,8 +120,8 @@
           >
             <legend class="sr-only">Create Deployment Settings</legend>
 
-            <SettingsSection
-              title="General"
+            <SettingsGroup
+              label="General"
               hint="How this strategy is identified in the Deployment Settings list and in the field that applies it."
             >
               <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
@@ -171,10 +171,10 @@
                   </Field>
                 </Field.Label>
               </div>
-            </SettingsSection>
+            </SettingsGroup>
 
-            <SettingsSection
-              title="Routing and policy"
+            <SettingsGroup
+              label="Routing and policy"
               hint="How versions bind to the resources they ship with, and how traffic reaches them."
             >
               <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
@@ -246,7 +246,7 @@
                   </Field>
                 </Field.Label>
               </div>
-            </SettingsSection>
+            </SettingsGroup>
           </fieldset>
         </PanelBody>
 

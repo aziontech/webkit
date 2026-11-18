@@ -8,7 +8,7 @@ On small screens the table shows one plan at a time, picked from a select in the
 
 The Support page's tier comparison is the same table: pass the support tiers as `plans`.
 
-The band is the `PlanComparisonSection` component from `@aziontech/webkit/plan-comparison-section`; it composes `SectionModule`, `Select`, `Button`, `Eyebrow`, `Hint`, `Tag` and `Link`, and keeps the plan picked on small screens as local state.
+The band is the `PlanComparisonSection` component from `@aziontech/webkit/plan-comparison-section`; it composes `Module`, `Select`, `Button`, `Eyebrow`, `Hint`, `Tag` and `Link`, and keeps the plan picked on small screens as local state.
 
 ## Examples
 

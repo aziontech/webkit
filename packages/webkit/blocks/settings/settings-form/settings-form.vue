@@ -6,9 +6,9 @@
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
   import SaveBar from '@aziontech/webkit/save-bar'
-  import SectionHeader from '@aziontech/webkit/section-header'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import SettingsRow from '@aziontech/webkit/settings-row'
+  import Subheader from '@aziontech/webkit/subheader'
   import Switch from '@aziontech/webkit/switch'
   import { toast } from '@aziontech/webkit/toast'
   import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
@@ -170,7 +170,7 @@
         <legend class="sr-only">Profile settings</legend>
 
         <section class="flex flex-col gap-(--layout-group-gap)">
-          <SectionHeader
+          <Subheader
             title="General"
             size="small"
           />
@@ -236,7 +236,7 @@
         </section>
 
         <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
-          <SectionHeader
+          <Subheader
             title="Preferences"
             size="small"
           />
@@ -305,7 +305,7 @@
         </section>
 
         <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
-          <SectionHeader
+          <Subheader
             title="Notifications"
             size="small"
           />

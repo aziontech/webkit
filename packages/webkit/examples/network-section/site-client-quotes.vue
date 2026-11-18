@@ -3,9 +3,9 @@
   import fourbankExtendedReversed from '@aziontech/webkit/assets/fourbank-extended-reversed.svg'
   import madeiramadeiraExtendedReversed from '@aziontech/webkit/assets/madeiramadeira-extended-reversed.svg'
   import rennerExtendedColor from '@aziontech/webkit/assets/renner-extended-color.svg'
+  import Container from '@aziontech/webkit/container'
   import NetworkSection from '@aziontech/webkit/network-section'
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionGap from '@aziontech/webkit/section-gap'
+  import Spacer from '@aziontech/webkit/spacer'
 
   const claims = [
     '100+ data centers',
@@ -47,8 +47,8 @@
 </script>
 
 <template>
-  <SectionContainer max-width="site">
-    <SectionGap hatch />
+  <Container max-width="site">
+    <Spacer hatch />
 
     <NetworkSection
       variant="outcomes"
@@ -59,6 +59,6 @@
       :outcomes="outcomes"
     />
 
-    <SectionGap hatch />
-  </SectionContainer>
+    <Spacer hatch />
+  </Container>
 </template>

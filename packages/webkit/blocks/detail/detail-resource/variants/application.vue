@@ -16,8 +16,8 @@
   import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
-  import SectionHeader from '@aziontech/webkit/section-header'
   import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
+  import Subheader from '@aziontech/webkit/subheader'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
@@ -481,7 +481,7 @@
           v-else-if="activeTab === 'versions'"
           class="layout-section-start flex min-w-0 flex-col gap-(--layout-group-gap) pb-(--layout-section-gap)"
         >
-          <SectionHeader
+          <Subheader
             title="Versions"
             size="small"
           >
@@ -493,7 +493,7 @@
                 icon="az az-plus"
               />
             </template>
-          </SectionHeader>
+          </Subheader>
           <Card :padded="false">
             <template #default>
               <DataTable
@@ -541,7 +541,7 @@
           v-else-if="activeTab === 'deployments'"
           class="layout-section-start flex min-w-0 flex-col gap-(--layout-group-gap) pb-(--layout-section-gap)"
         >
-          <SectionHeader
+          <Subheader
             title="Deployments"
             size="small"
           />
@@ -579,7 +579,7 @@
           v-else
           class="layout-section-start flex min-w-0 flex-col gap-(--layout-group-gap) pb-(--layout-section-gap)"
         >
-          <SectionHeader
+          <Subheader
             title="Deployment topology"
             description="How a request reaches this application in Production. Bind or remove a firewall or a function here; the change is staged until you deploy."
             size="small"

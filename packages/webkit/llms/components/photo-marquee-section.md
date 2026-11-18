@@ -1,6 +1,6 @@
 # Photo Marquee Section
 
-> The office band of the careers page: a horizontal section title over a framed strip of photographs of varied aspect ratios that scrolls continuously and pauses on hover, on focus or from its pause control; the loop is the one `marquee` runs on. It is a page section — the site places it from a `{ _id: 'photo-marquee-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title` and `registration-frame`.
+> The office band of the careers page: a horizontal section title over a framed strip of photographs of varied aspect ratios that scrolls continuously and pauses on hover, on focus or from its pause control; the loop is the one `marquee` runs on. It is a page section — the site places it from a `{ _id: 'photo-marquee-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header` and `registration-frame`.
 
 - Import: `import PhotoMarqueeSection from '@aziontech/webkit/photo-marquee-section'`
 - Category: section · Surface: site · Structure: monolithic
@@ -48,7 +48,7 @@
 - Visible focus: the scrolling region is focusable and carries `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset`.
 - Keyboard map: `Tab` reaches the region, which pauses the loop, then the pause control (`Enter` / `Space` toggles it, WCAG 2.2.2); under reduced motion the control is hidden and arrow keys scroll the region.
 - ARIA: the band is a `<section>` named by its title (`aria-label`); the strip is a `region` named by `ariaLabel`; every photo carries its `alt` once — the duplicate copy is `aria-hidden` with empty `alt`.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `section-title`.
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `module-header`.
 - `motion-reduce:animate-none` on the strip; the duplicate list is hidden so nothing moves and nothing repeats.
 - Touch target ≥40×40 px — not applicable beyond the focusable region.
 

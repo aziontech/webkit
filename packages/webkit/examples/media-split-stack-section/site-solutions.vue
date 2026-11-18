@@ -1,7 +1,7 @@
 <script setup>
+  import Container from '@aziontech/webkit/container'
   import MediaSplitStackSection from '@aziontech/webkit/media-split-stack-section'
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionGap from '@aziontech/webkit/section-gap'
+  import Spacer from '@aziontech/webkit/spacer'
 
   const bands = [
     {
@@ -57,11 +57,11 @@
 </script>
 
 <template>
-  <SectionContainer max-width="site">
-    <SectionGap hatch />
+  <Container max-width="site">
+    <Spacer hatch />
 
     <MediaSplitStackSection :bands="bands" />
 
-    <SectionGap hatch />
-  </SectionContainer>
+    <Spacer hatch />
+  </Container>
 </template>

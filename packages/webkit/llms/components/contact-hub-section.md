@@ -1,6 +1,6 @@
 # Contact Hub Section
 
-> The band under the Contact title band: the team lanes side by side (Sales and Support), each with its scope in one sentence and the action that reaches that team, over a row of self-serve channels. It is a page section — the site places it from a `{ _id: 'contact-hub-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `registration-frame`, `card-grid`, `feature-item`, `button` and `status-indicator`. Lanes and channels share one frame, the channels in the rows under the lanes. A lane can carry a second button and a link to the system status page, so a reader can check for an incident before opening a ticket.
+> The band under the Contact title band: the team lanes side by side (Sales and Support), each with its scope in one sentence and the action that reaches that team, over a row of self-serve channels. It is a page section — the site places it from a `{ _id: 'contact-hub-section', props }` entry and binds `props` straight onto it — and it composes `module`, `registration-frame`, `card-grid`, `feature-item`, `button` and `status-indicator`. Lanes and channels share one frame, the channels in the rows under the lanes. A lane can carry a second button and a link to the system status page, so a reader can check for an incident before opening a ticket.
 
 - Import: `import ContactHubSection from '@aziontech/webkit/contact-hub-section'`
 - Category: section · Surface: site · Structure: monolithic

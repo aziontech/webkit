@@ -2,8 +2,8 @@
   import { type Component, computed, useAttrs } from 'vue'
 
   import { resolveScene } from '../../../assets/scene-registry'
-  import SectionContainer from '../section-container/section-container.vue'
-  import SectionGap from '../section-gap/section-gap.vue'
+  import Container from '../../layout/container/container.vue'
+  import Spacer from '../../layout/spacer/spacer.vue'
   import { resolveSection, resolveSectionEntry, warnOnce } from './site-page-sections'
 
   defineOptions({ name: 'SitePage', inheritAttrs: false })
@@ -162,7 +162,7 @@
         />
       </template>
     </component>
-    <SectionContainer
+    <Container
       v-if="columnEntries.length > 0"
       max-width="site"
     >
@@ -170,7 +170,7 @@
         v-for="item in columnEntries"
         :key="item.key"
       >
-        <SectionGap
+        <Spacer
           v-if="item.gapSize"
           hatch
           :size="item.gapSize"
@@ -191,11 +191,11 @@
           </template>
         </component>
       </template>
-      <SectionGap
+      <Spacer
         v-if="!closesPage"
         hatch
         size="medium"
       />
-    </SectionContainer>
+    </Container>
   </div>
 </template>

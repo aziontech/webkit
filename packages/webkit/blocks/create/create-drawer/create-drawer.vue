@@ -12,7 +12,7 @@
   import PanelHeader from '@aziontech/webkit/panel-header'
   import RadioGroup from '@aziontech/webkit/radio-group'
   import Select from '@aziontech/webkit/select'
-  import SettingsSection from '@aziontech/webkit/settings-section'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import { computed, reactive, ref, watch } from 'vue'
 
   import { sampleCertificates, sampleConnectedEnvironments, sampleEnvironments } from './sample'
@@ -296,8 +296,8 @@
             :disabled="loading"
           >
             <legend class="sr-only">{{ title }}</legend>
-            <SettingsSection
-              title="Environment"
+            <SettingsGroup
+              label="Environment"
               hint="Where the domain answers."
             >
               <Field
@@ -340,10 +340,10 @@
                 <Field.Error v-if="errors.environment">{{ errors.environment }}</Field.Error>
                 <Field.Description v-else>{{ environmentHint }}</Field.Description>
               </Field>
-            </SettingsSection>
+            </SettingsGroup>
 
-            <SettingsSection
-              title="Domain"
+            <SettingsGroup
+              label="Domain"
               hint="The address this resource answers on, where it comes from, and the certificate it is served with."
             >
               <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
@@ -421,7 +421,7 @@
                   label="Your resource is always accessible at an azion.app subdomain based on its name. Custom domains allow visitors to reach it at your own domain."
                 />
               </div>
-            </SettingsSection>
+            </SettingsGroup>
           </fieldset>
         </PanelBody>
 

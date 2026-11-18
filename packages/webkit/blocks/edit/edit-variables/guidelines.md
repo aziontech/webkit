@@ -38,9 +38,9 @@ The same controls row as `view/view-table`, all bound to one client-mode `useCol
 
 A right-side `Drawer` whose content is one `form` labeled Create Variable or Edit Variable. `PanelHeader` holds the `DrawerTitle` and the drawer's own close button; `PanelBody` scrolls the EditVariables and Scope sections. The form resets every time the drawer opens: from Create Variable, one empty pair, the Form view, Global the only scope on; from a row's Edit, that variable's pair and scopes, with no Upload, view toggle or Add variable. A saved secret is never shown: its value starts empty, an empty value keeps the saved secret, and the Secret checkbox is locked. See `skills/webkit-create-surface`.
 
-### F. EditVariables section — `SettingsSection`, `Button`, `ToggleGroup` (required)
+### F. EditVariables section — `SettingsGroup`, `Button`, `ToggleGroup` (required)
 
-A `SettingsSection` titled EditVariables with a hint that says what variables are for. Its toolbar holds an outlined Upload `Button` that reads a `.env` or text file into rows, and a medium `ToggleGroup` that switches between the Form and JSON views of the same data.
+A `SettingsGroup` titled EditVariables with a hint that says what variables are for. Its toolbar holds an outlined Upload `Button` that reads a `.env` or text file into rows, and a medium `ToggleGroup` that switches between the Form and JSON views of the same data.
 
 ### G. Key and value rows — `AttributeEditor`, `Field`, `InputGroupRoot`, `InputGroupAddon`, `InputGroupInput`, `Input`, `Tooltip`, `IconButton`, `Checkbox`, `FieldError` (required)
 
@@ -54,9 +54,9 @@ In the PasteEnv state an outlined Paste .env `Button` (with `aria-expanded`) bes
 
 The JSON view replaces the rows with one `Textarea` labeled EditVariables JSON over the same entries; a `FieldError` reports a parse error in place. Switching back to Form keeps what was typed.
 
-### J. Scope — `SettingsSection`, `InputGroupRoot`, `InputGroupAddon`, `MultiSelect`, `Input`, `Switch`, `FieldError` (required)
+### J. Scope — `SettingsGroup`, `InputGroupRoot`, `InputGroupAddon`, `MultiSelect`, `Input`, `Switch`, `FieldError` (required)
 
-A `SettingsSection` titled Scope with one large `InputGroupRoot` per scope type: a label addon, a `MultiSelect` of resources with a search `Input` (Global shows "The entire account" instead), and an enable `Switch`. Global turns off when any specific scope turns on. An enabled scope with no resource selected shows a required `FieldError`.
+A `SettingsGroup` titled Scope with one large `InputGroupRoot` per scope type: a label addon, a `MultiSelect` of resources with a search `Input` (Global shows "The entire account" instead), and an enable `Switch`. Global turns off when any specific scope turns on. An enabled scope with no resource selected shows a required `FieldError`.
 
 ### K. Drawer footer — `PanelFooter`, `Button` (required)
 
@@ -72,7 +72,7 @@ The dialog of `edit/edit-delete-dialog`, titled Delete variable: a warning `Aler
 
 Every change confirms itself with a success toast: "API_KEY created." or "3 variables created.", "API_KEY updated.", "API_KEY cloned as API_KEY_COPY.", "API_KEY deleted.".
 
-### N. Network list drawer — `Drawer`, `SettingsSection`, `ToggleGroup`, `Button`, `Textarea`, `FieldDescription`, `AttributeEditor`, `MultiSelect` (optional)
+### N. Network list drawer — `Drawer`, `SettingsGroup`, `ToggleGroup`, `Button`, `Textarea`, `FieldDescription`, `AttributeEditor`, `MultiSelect` (optional)
 
 In the NetworkList state the same drawer recipe creates a network list for firewall rules: a General section with a required Name, then an Entries section whose `ToggleGroup` picks the type (IP/CIDR, ASN, Countries). IP/CIDR and ASN entries are an `AttributeEditor` in list mode, large, with an Address (or ASN) column in the code font through `cell-value` and an optional Comment, at most 200 rows; a paste that would pass 200 says how many lines will be skipped and adds only what fits. Paste list opens the panel of H for a whole list, one entry per line with `#` comments: its report counts the entries found, names the lines that are not valid ("Line 4 is not an IPv4 or IPv6 address, or a CIDR range") and the lines already in the list that will be skipped. Add N entries appends every new line as a row, valid or not, and each invalid row shows its own error under the field right away, so the user fixes the list line by line instead of retyping it; typed rows are checked only after Save, and empty rows are ignored once one row is filled. Countries is a required `MultiSelect`. Save validates, moves focus to the first field in error, then closes the drawer and raises a success toast with the entry count.
 

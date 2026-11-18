@@ -29,7 +29,7 @@
     borders?: RegistrationFrameSides
     /** Which corner registration squares to draw. Takes a keyword (`all`, `none`, `top`, `bottom`, `left`, `right`), one corner, or a list of corners. */
     marks?: RegistrationFrameMarks
-    /** Show the frame's own linear hatch texture behind the content, faded toward the edges. Prefer `texture`'s `lines` kind for a ruled ground; `section-gap` composes that instead. */
+    /** Show the frame's own linear hatch texture behind the content, faded toward the edges. Prefer `texture`'s `lines` kind for a ruled ground; `spacer` composes that instead. */
     hatch?: boolean
     /** Which sides a neighbouring frame already draws, so this one does not draw them again. `true` is shorthand for `top` (a vertical stack); use `left` for a horizontal row, or a list for a grid cell. */
     flush?: boolean | RegistrationFrameSides

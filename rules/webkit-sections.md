@@ -17,8 +17,8 @@ Guide, rule `webkit-site-pages` (SD-01 to SD-25); a page task runs through `/web
   `import PricingPlansSection from '@aziontech/webkit/pricing-plans-section'`.
 - Pass the site JSON entry's props as the whole API: `<PricingPlansSection v-bind="section.props" />`. The
   `_id` in the JSON is the section's name.
-- Place sections inside the page column: `SectionContainer` (`max-width="site"`) with a
-  `SectionGap` between sections. The section's own root is the band; it never sets its own width.
+- Place sections inside the page column: `Container` (`max-width="site"`) with a
+  `Spacer` between sections. The section's own root is the band; it never sets its own width.
 - For a section with a form (lead form, newsletter): listen to `submit` (`(event, values)`) and send
   from the site. The section never posts. Feed the outcome back through its `loading`, `submitted`
   and `error` props; the messages come from the JSON.
@@ -34,7 +34,7 @@ Guide, rule `webkit-site-pages` (SD-01 to SD-25); a page task runs through `/web
   `offset="var(--layout-header-height)"`. Never a literal (`56px`, `3.5rem`).
 - End the page column on a closing section (`ClosingCallToActionSection` and its `-newsletter`,
   `-agents`, `-templates` variants) with nothing after it: it draws the hatched closing frame
-  itself. A page that ends on any other band closes with `SectionGap hatch` + the closing
+  itself. A page that ends on any other band closes with `Spacer hatch` + the closing
   `RegistrationFrame` of `shell/shell-site`.
 - Reach for the section's own switches before anything else: `ClientQuotesSection` `autoplay` /
   `autoplayInterval` / `v-model`, `ArticleHighlightSection` `v-model`, `CapabilityGridSection` `titleAlign`,
@@ -44,8 +44,8 @@ Guide, rule `webkit-site-pages` (SD-01 to SD-25); a page task runs through `/web
   `visuallyHiddenLabel` (a field labelled by its placeholder) and `NetworkSection` outcomes without
   `logo`. A `NetworkSection` benefit always carries its `icon`, and a `CapabilityGridSection` gives
   every item an `icon` (benefits) or none (resources, text columns).
-- A header that opens a run of bands inside a page (`MediaSplitStackSection`, a `SectionTitle` over
-  a `SectionStack`) is the medium `SectionTitle`; `size="large"` is for a page's opening title only.
+- A header that opens a run of bands inside a page (`MediaSplitStackSection`, a `ModuleHeader` over
+  a `SplitStack`) is the medium `ModuleHeader`; `size="large"` is for a page's opening title only.
 - A titled row of cards that scrolls sideways, with the previous/next arrows on the title row ("See
   how to use", "Industries"), is `CardCarouselSection` (`card-carousel-section`): each card takes `eyebrow`,
   `title`, `description`, `href` and `linkLabel`. Do not compose it from `Carousel` and `Eyebrow`.
@@ -74,7 +74,7 @@ Guide, rule `webkit-site-pages` (SD-01 to SD-25); a page task runs through `/web
 - Do not pass slots or extra props a section does not declare. If the JSON needs a new field, the
   section changes in webkit first.
 - Do not wrap a section in your own `max-w-*`, padding or border to change its look. Spacing between
-  bands is `SectionGap`.
+  bands is `Spacer`.
 - Do not build the site header or footer from `AppHeader`, `NavigationMenu` or `Footer`, and do
   not place `SiteHeaderSection` / `SiteFooterSection` in a page: `SiteLayout` owns them, once.
 - Do not wrap `SiteFooterSection` or `SiteHeaderSection` in a `div` with `border-t`, `border-b` or padding: the
@@ -86,17 +86,17 @@ Guide, rule `webkit-site-pages` (SD-01 to SD-25); a page task runs through `/web
 - Do not copy a root-relative `/marketing-components/…` or `/media/…` URL from azion.com or the
   WebKit docs site into another app: it does not serve it and the image breaks (lint
   `webkit/no-root-relative-asset`).
-- Do not put a `SectionGap` or a closing `RegistrationFrame` after a closing section: the hatch doubles
+- Do not put a `Spacer` or a closing `RegistrationFrame` after a closing section: the hatch doubles
   (`webkit/no-gap-after-closing-section`).
-- Do not wrap a bare `CapabilityGridSection` in a `SectionModule` to move its title: set `titleAlign`, or
+- Do not wrap a bare `CapabilityGridSection` in a `Module` to move its title: set `titleAlign`, or
   its capability headings rise to `h2`.
 
 ## Correct
 
 ```vue
 <script setup lang="ts">
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionGap from '@aziontech/webkit/section-gap'
+  import Container from '@aziontech/webkit/container'
+  import Spacer from '@aziontech/webkit/spacer'
   import PricingPlansSection, {
     type PricingPlansSectionProps
   } from '@aziontech/webkit/pricing-plans-section'
@@ -119,14 +119,14 @@ Guide, rule `webkit-site-pages` (SD-01 to SD-25); a page task runs through `/web
 </script>
 
 <template>
-  <SectionContainer max-width="site">
-    <SectionGap hatch />
+  <Container max-width="site">
+    <Spacer hatch />
     <PricingPlansSection v-bind="page.pricing.props" />
-    <SectionGap hatch />
+    <Spacer hatch />
     <NewsletterSection
       v-bind="page.newsletter.props"
       @submit="subscribe"
     />
-  </SectionContainer>
+  </Container>
 </template>
 ```

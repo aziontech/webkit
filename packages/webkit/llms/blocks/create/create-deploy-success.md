@@ -1,11 +1,11 @@
 # CreateDeploySuccess (`create/create-deploy-success`)
 
-> The outcome screen a create flow ends on, in the terminal column of the wizard page: a heading with its lead and, for a Git source, the scope as a Tag; the deployment card with a preview tile, the service name with a Live Tag and its creation time, Visit site, the domain with Add custom domain, and the repository with its branch; the Resources list that tags each row Created or Bound; Next steps as `IntegrationCard`s that open the docs or carry on in the console; Get started with the CLI or GitHub Actions for a resource made from the CLI; and the Manage service button. Any create flow can end on it, with its own title and, when there is no Git source, no scope. Built from `SectionHeader`, `Card`, `IntegrationCard`, `Tag`, `Button`, `Link`, `Tooltip`, `Item`, `ToggleGroup` and `CodeBlock`.
+> The outcome screen a create flow ends on, in the terminal column of the wizard page: a heading with its lead and, for a Git source, the scope as a Tag; the deployment card with a preview tile, the service name with a Live Tag and its creation time, Visit site, the domain with Add custom domain, and the repository with its branch; the Resources list that tags each row Created or Bound; Next steps as `IntegrationCard`s that open the docs or carry on in the console; Get started with the CLI or GitHub Actions for a resource made from the CLI; and the Manage service button. Any create flow can end on it, with its own title and, when there is no Git source, no scope. Built from `Subheader`, `Card`, `IntegrationCard`, `Tag`, `Button`, `Link`, `Tooltip`, `Item`, `ToggleGroup` and `CodeBlock`.
 
 - Surface: app
 - Source: `blocks/create/create-deploy-success/create-deploy-success.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-deploy-success")`
-- Components: [Button](../../components/button.md), [Card](../../components/card.md), [CodeBlock](../../components/code-block.md), [IntegrationCard](../../components/integration-card.md), [Item](../../components/item.md), [Link](../../components/link.md), [SectionHeader](../../components/section-header.md), [Tag](../../components/tag.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md)
+- Components: [Button](../../components/button.md), [Card](../../components/card.md), [CodeBlock](../../components/code-block.md), [IntegrationCard](../../components/integration-card.md), [Item](../../components/item.md), [Link](../../components/link.md), [Subheader](../../components/subheader.md), [Tag](../../components/tag.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md)
 - Skills: `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -45,9 +45,9 @@ A small heading, "Resources", over `Card :padded="false"` holding an `Item` list
 
 `IntegrationCard` tiles in a row from the small breakpoint, each with a glyph (`logo`), a title and one sentence. A step with `href` is a link stretched over the tile; a step that acts in place (Deploy this resource) has no `href`, and its title is a button that emits `select`. Mark at most one with a primary Recommended badge (`badges`). Docs steps open in the same tab, so no new-tab notice is needed.
 
-### E. Get started — `SectionHeader`, `ToggleGroup`, `CodeBlock`, `Card` (optional)
+### E. Get started — `Subheader`, `ToggleGroup`, `CodeBlock`, `Card` (optional)
 
-Only for a resource nothing serves yet (`getStarted` set to its name): a `SectionHeader` with a link to the CLI docs and a large `ToggleGroup` between the CLI and GitHub Actions paths, then three numbered step `Card`s, each with its commands in a `CodeBlock` without line numbers. The Link your project command names the resource.
+Only for a resource nothing serves yet (`getStarted` set to its name): a `Subheader` with a link to the CLI docs and a large `ToggleGroup` between the CLI and GitHub Actions paths, then three numbered step `Card`s, each with its commands in a `CodeBlock` without line numbers. The Link your project command names the resource.
 
 ### F. Manage — `Button` (required)
 
@@ -157,7 +157,7 @@ Each variant is the same screen in another state: `get_block("create/create-depl
   import IntegrationCard, { type IntegrationCardBadge } from '@aziontech/webkit/integration-card'
   import Item from '@aziontech/webkit/item'
   import Link from '@aziontech/webkit/link'
-  import SectionHeader from '@aziontech/webkit/section-header'
+  import Subheader from '@aziontech/webkit/subheader'
   import Tag from '@aziontech/webkit/tag'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -588,7 +588,7 @@ jobs:
               v-if="getStarted"
               class="@container flex min-w-0 flex-col gap-(--spacing-md)"
             >
-              <SectionHeader title="Get started">
+              <Subheader title="Get started">
                 <template #description>
                   Two ways to build and deploy this resource. Select one and follow the steps, or
                   read the
@@ -608,7 +608,7 @@ jobs:
                     aria-label="Deploy with"
                   />
                 </template>
-              </SectionHeader>
+              </Subheader>
 
               <div class="grid min-w-0 gap-(--spacing-lg) @4xl:grid-cols-3">
                 <div

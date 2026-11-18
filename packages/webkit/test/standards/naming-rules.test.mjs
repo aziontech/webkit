@@ -439,6 +439,17 @@ test('section-suffix: every page section ends in -section, a bare name or a wrap
   assert.deepEqual(hits(`${C}/marketing/hero/hero.vue`, sfc(''), 'section-suffix'), [])
 })
 
+test('section-suffix: only page sections carry the word section', () => {
+  const fired = (rel) => hits(rel, sfc(''), 'section-suffix').map((x) => x.message)
+  assert.match(fired(`${C}/marketing/section-title/section-title.vue`)[0], /only the page sections/)
+  assert.match(
+    fired(`${C}/layout/settings-section/settings-section.vue`)[0],
+    /only the page sections/
+  )
+  assert.deepEqual(fired(`${C}/layout/module-header/module-header.vue`), [])
+  assert.deepEqual(fired(`${C}/layout/settings-group/settings-group.vue`), [])
+})
+
 test('docs-prefix: a docs component starts with doc-, and only docs components do', () => {
   const fired = (rel) => hits(rel, sfc(''), 'docs-prefix').map((x) => x.message)
   assert.match(fired(`${C}/docs/steps/steps.vue`)[0], /name it "doc-steps"/)
@@ -631,7 +642,7 @@ test('prop-value: a variant union reads only shared values or documented extras'
 })
 
 test('prop-value: a variant made only of alignment words must be align', () => {
-  const msg = checkValueSet('variant', ['start', 'center', 'split'], 'section-title')
+  const msg = checkValueSet('variant', ['start', 'center', 'split'], 'module-header')
   assert.match(msg, /name the prop "align"/)
   assert.match(
     checkValueSet('titleVariant', ['start', 'center'], 'process-scroll-section'),

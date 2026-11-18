@@ -4,7 +4,7 @@ A list of features with the media that shows each one. The band pins under the s
 
 Below `lg` it turns into a FeatureTilesSection grid: each feature becomes a tile, its media over the title and description.
 
-The band is the `FeatureScrollSection` component from `@aziontech/webkit/feature-scroll-section`; it composes `SectionModule`, `SectionTitle`, `RegistrationFrame`, `MediaScroll`, `Texture`, `Button`, `CardGrid`, `MediaTile`, `CodeBlock` and `Illustration`.
+The band is the `FeatureScrollSection` component from `@aziontech/webkit/feature-scroll-section`; it composes `Module`, `ModuleHeader`, `RegistrationFrame`, `MediaScroll`, `Texture`, `Button`, `CardGrid`, `MediaTile`, `CodeBlock` and `Illustration`.
 
 ## Examples
 

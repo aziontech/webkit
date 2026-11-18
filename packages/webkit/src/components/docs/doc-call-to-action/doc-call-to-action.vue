@@ -3,12 +3,12 @@
 
   import Button from '../../action/button/button.vue'
   import Brand from '../../content/brand/brand.vue'
+  import type { ModuleHeaderAction } from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
-  import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
 
   defineOptions({ name: 'DocCallToAction', inheritAttrs: false })
 
-  export type { SectionTitleAction }
+  export type { ModuleHeaderAction }
 
   export interface DocCallToActionProps {
     /** The offer's headline; names the complementary landmark. */
@@ -16,9 +16,9 @@
     /** Fallback copy when the default slot is empty. */
     label?: string
     /** The primary action, label and href; unset or an empty label renders none. */
-    primaryAction?: SectionTitleAction
+    primaryAction?: ModuleHeaderAction
     /** The outlined secondary action, label and href; unset renders none. */
-    secondaryAction?: SectionTitleAction
+    secondaryAction?: ModuleHeaderAction
   }
 
   withDefaults(defineProps<DocCallToActionProps>(), {

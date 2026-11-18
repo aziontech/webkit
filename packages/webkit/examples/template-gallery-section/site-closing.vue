@@ -1,6 +1,6 @@
 <script setup>
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionGap from '@aziontech/webkit/section-gap'
+  import Container from '@aziontech/webkit/container'
+  import Spacer from '@aziontech/webkit/spacer'
   import TemplateGallerySection from '@aziontech/webkit/template-gallery-section'
 
   const primaryAction = {
@@ -70,8 +70,8 @@
 </script>
 
 <template>
-  <SectionContainer max-width="site">
-    <SectionGap hatch />
+  <Container max-width="site">
+    <Spacer hatch />
 
     <TemplateGallerySection
       closing
@@ -84,5 +84,5 @@
       deploy-label="Deploy"
       templates-aria-label="Templates you can deploy"
     />
-  </SectionContainer>
+  </Container>
 </template>

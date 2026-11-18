@@ -117,7 +117,11 @@ component binding, its parts (`Flow.Node` → `FlowDiagram.Node`, `@aziontech/we
 | `@aziontech/webkit/stats-band`                        | `@aziontech/webkit/stats-section`                  | `StatsBand`                          | `StatsSection`                                     |
 | `@aziontech/webkit/media-split-band`                  | `@aziontech/webkit/media-split-section`            | `MediaSplitBand`                     | `MediaSplitSection`                                |
 | `@aziontech/webkit/logo-wall-quote`                   | `@aziontech/webkit/logo-wall-section`              | `LogoWallQuote`                      | `LogoWallSection`                                  |
-| `@aziontech/webkit/band-stack`                        | `@aziontech/webkit/section-stack`                  | `BandStack`                          | `SectionStack`                                     |
+| `@aziontech/webkit/band-stack`                        | `@aziontech/webkit/split-stack`                    | `BandStack`                          | `SplitStack`                                       |
+| `@aziontech/webkit/section-container`                 | `@aziontech/webkit/container`                      | `SectionContainer`                   | `Container`                                        |
+| `@aziontech/webkit/section-gap`                       | `@aziontech/webkit/spacer`                         | `SectionGap`                         | `Spacer`                                           |
+| `@aziontech/webkit/section-module`                    | `@aziontech/webkit/module`                         | `SectionModule`                      | `Module`                                           |
+| `@aziontech/webkit/section-title`                     | `@aziontech/webkit/module-header`                  | `SectionTitle`                       | `ModuleHeader`                                     |
 | `@aziontech/webkit/big-numbers`                       | `@aziontech/webkit/stats`                          | `BigNumbers`                         | `Stats`                                            |
 | `@aziontech/webkit/closing-call-to-action-newsletter` | `@aziontech/webkit/newsletter-section`             | `ClosingCallToActionNewsletter`      | `NewsletterSection`                                |
 | `@aziontech/webkit/ticker`                            | `@aziontech/webkit/marquee`                        | `Ticker`                             | `Marquee`                                          |
@@ -273,6 +277,26 @@ Client logo files spell the brand one word per word, and the codemod rewrites th
 | `tooltip`              | `placement`                   | `side` (+ `align`, `sideOffset`) |
 | `wizard`               | `v-model:activeStep`          | `v-model`                        |
 
+Only the page sections carry the word "section" (`hero-section`, `faq-section`). The pieces a page
+is framed with take their own names: `SectionContainer` is `Container`, `SectionGap` is `Spacer`,
+`SectionModule` is `Module` and `SectionTitle` is `ModuleHeader`, with their types
+(`SectionContainerWidth` → `ContainerWidth`, `SectionGapSize` → `SpacerSize`, `SectionModuleKind`
+→ `ModuleAlign`, `SectionTitleKind` → `ModuleHeaderAlign`, `SectionTitleSize` → `ModuleHeaderSize`,
+`SectionTitlePadding` → `ModuleHeaderPadding`, `SectionTitleDescriptionWidth` →
+`ModuleHeaderDescriptionWidth`). Their props and slots are unchanged.
+
+The page sections that type a prop with one of these keep the prop and take the new type name
+(`ModuleHeaderAction` for `primaryAction` / `secondaryAction`, `ModuleHeaderAlign`,
+`ModuleHeaderPadding`, `ModuleHeaderSize`, `ModuleHeaderDescriptionWidth`): `ArchitectureTabsSection`,
+`CapabilityGridSection`, `ClientQuotesSection`, `ClosingCallToActionSection`,
+`ComplianceLogosSection`, `ConsoleShowcaseSection`, `CustomerUseCasesSection`, `DocCallToAction`,
+`FeatureTabsSection`, `FeatureWidgetsSection`, `HeroFormSection`, `JobPostingSection`,
+`ListingTableSection`, `PlanComparisonSection`, `ProcessScrollSection` and
+`TemplateGallerySection`.
+
+If you built on a 6.0 prerelease: `SectionHeader` is `Subheader`, `SectionStack` is `SplitStack`,
+and `SettingsSection` is `SettingsGroup`, whose heading prop and slot are `label` (were `title`).
+
 ### Overlays: `side` and `align` replace `placement`
 
 Every anchored overlay takes the same three props, shaped like Radix and shadcn: `side`
@@ -319,7 +343,7 @@ and Supabase words, and each component keeps only the ones it draws:
 `sidebar-menu-sub-trigger` and `item-media`; every other `kind` becomes `variant`. Section props
 follow suit: `titleKind` → `titleAlign` (`capability-grid-section`, `console-showcase-section`, `process-scroll-section`,
 `feature-widgets-section`; it only ever aligned the title, so it is not a look), `kind` → `align` on
-`section-title`, `section-module` and `article-cards-section`, `quoteKind` → `quoteVariant` (`logo-wall-section`), `rowKind` → `rowVariant`
+`module-header`, `module` and `article-cards-section`, `quoteKind` → `quoteVariant` (`logo-wall-section`), `rowKind` → `rowVariant`
 (`article-index-section`). The codemod rewrites the attributes, their static values and a bound single literal
 (`:kind="'text'"`; other bound expressions are listed as `MANUAL`), and every `*Kind` type you import (`ButtonKind` →
 `ButtonVariant`, `TableCellKind` → `TableCellType`).
@@ -347,13 +371,13 @@ Props and events whose type is only renamed keep their shape: `Sources` `items` 
 `sources` take `SourcesItem[]` (was `AiSource[]`); `DocTableOfContents` `items`, `groups` and the `select`
 payload take `DocTableOfContentsItem` / `DocTableOfContentsGroup` (was `DocTocItem` / `DocTocGroup`);
 `ContextMenu` and `ContextMenuRoot` `select` pass a `DropdownMenuItemValue` (was
-`DropdownMenuOptionValue`); `CliTerminalSection` `primaryAction` is a `SectionTitleAction` (was
+`DropdownMenuOptionValue`); `CliTerminalSection` `primaryAction` is a `ModuleHeaderAction` (was
 `CliTerminalAction`).
 
 | v5 type                                | v6 type                                        |
 | -------------------------------------- | ---------------------------------------------- |
 | `AppliedFilter`                        | `TableAppliedFilter`                           |
-| `ArchitectureTabsAction`               | `SectionTitleAction`                           |
+| `ArchitectureTabsAction`               | `ModuleHeaderAction`                           |
 | `ArticleBodyCrumb`                     | `BreadcrumbItemData`                           |
 | `ArticleCardsMark`                     | `CompanyLogoMark`                              |
 | `ArticleIndexBlogAuthor`               | `ArticleIndexSectionAuthor`                    |
@@ -376,14 +400,14 @@ payload take `DocTableOfContentsItem` / `DocTableOfContentsGroup` (was `DocTocIt
 | `CardsSelectionMode`                   | `CardListSelectionMode`                        |
 | `ClientMosaicColumnsLogoTreatment`     | `CompanyLogoTreatment`                         |
 | `ClientMosaicLogoTreatment`            | `CompanyLogoTreatment`                         |
-| `ClientQuotesAction`                   | `SectionTitleAction`                           |
-| `CliTerminalAction`                    | `SectionTitleAction`                           |
-| `ClosingCallToActionAction`            | `SectionTitleAction`                           |
+| `ClientQuotesAction`                   | `ModuleHeaderAction`                           |
+| `CliTerminalAction`                    | `ModuleHeaderAction`                           |
+| `ClosingCallToActionAction`            | `ModuleHeaderAction`                           |
 | `ClosingCallToActionAgentsAction`      | `ClosingCallToActionSectionAudienceAction`     |
 | `ClosingCallToActionAgentsActionKind`  | `ClosingCallToActionSectionAudienceActionKind` |
 | `ClosingCallToActionAgentsAudience`    | `ClosingCallToActionSectionAudience`           |
 | `ClosingCallToActionAgentsCopy`        | `ClosingCallToActionSectionAudienceCopy`       |
-| `ClosingCallToActionTemplatesAction`   | `SectionTitleAction`                           |
+| `ClosingCallToActionTemplatesAction`   | `ModuleHeaderAction`                           |
 | `ClosingCallToActionTemplatesTemplate` | `TemplateGallerySectionTemplate`               |
 | `CodeSplitAction`                      | `MediaSplitSectionAction`                      |
 | `CodeSplitActionKind`                  | `MediaSplitSectionActionKind`                  |
@@ -391,14 +415,14 @@ payload take `DocTableOfContentsItem` / `DocTableOfContentsGroup` (was `DocTocIt
 | `CommandMenuContext`                   | `CommandContext`                               |
 | `CommandMenuItemValue`                 | `CommandItemValue`                             |
 | `CommandMenuRegisteredItem`            | `CommandRegisteredItem`                        |
-| `ComparePlansAction`                   | `SectionTitleAction`                           |
-| `CompareSupportTiersAction`            | `SectionTitleAction`                           |
+| `ComparePlansAction`                   | `ModuleHeaderAction`                           |
+| `CompareSupportTiersAction`            | `ModuleHeaderAction`                           |
 | `CompareSupportTiersRow`               | `PlanComparisonSectionRow`                     |
 | `CompareSupportTiersSection`           | `PlanComparisonSectionSection`                 |
 | `CompareSupportTiersTier`              | `PlanComparisonSectionPlan`                    |
 | `CompareSupportTiersValue`             | `PlanComparisonSectionValue`                   |
-| `ComplianceBadgesAction`               | `SectionTitleAction`                           |
-| `ContactHubAction`                     | `SectionTitleAction`                           |
+| `ComplianceBadgesAction`               | `ModuleHeaderAction`                           |
+| `ContactHubAction`                     | `ModuleHeaderAction`                           |
 | `ContentColumnsItem`                   | `CapabilityGridSectionItem`                    |
 | `Country`                              | `PhoneInputCountry`                            |
 | `DocCardGroupCols`                     | `DocCardGroupColumns`                          |
@@ -412,26 +436,26 @@ payload take `DocTableOfContentsItem` / `DocTableOfContentsGroup` (was `DocTocIt
 | `DropdownOptionValue`                  | `DropdownMenuOptionValue`                      |
 | `DropdownPlacement`                    | `DropdownMenuSide`                             |
 | `DropdownPlacementInput`               | `DropdownMenuSide`                             |
-| `FeatureTabsAction`                    | `SectionTitleAction`                           |
-| `FeatureWidgetsAction`                 | `SectionTitleAction`                           |
+| `FeatureTabsAction`                    | `ModuleHeaderAction`                           |
+| `FeatureWidgetsAction`                 | `ModuleHeaderAction`                           |
 | `FilterField`                          | `TableFilterField`                             |
 | `FilterOperator`                       | `TableFilterOperator`                          |
 | `FilterValue`                          | `TableFilterValue`                             |
-| `HeroBandAction`                       | `SectionTitleAction`                           |
-| `HeroCopyOnTopArtAction`               | `SectionTitleAction`                           |
+| `HeroBandAction`                       | `ModuleHeaderAction`                           |
+| `HeroCopyOnTopArtAction`               | `ModuleHeaderAction`                           |
 | `HeroCopyOnTopArtLevel`                | `HeroSectionLevel`                             |
 | `HeroCopyOnTopArtNode`                 | `HeroSectionNode`                              |
-| `HeroWithOpeningAction`                | `SectionTitleAction`                           |
+| `HeroWithOpeningAction`                | `ModuleHeaderAction`                           |
 | `HeroWithOpeningItem`                  | `HeroSectionItem`                              |
 | `HeroWithOpeningTitleLength`           | `HeroSectionTitleLength`                       |
 | `InputNumberSize`                      | `NumberInputSize`                              |
 | `InputPasswordAutocomplete`            | `PasswordInputAutocomplete`                    |
 | `InputTextSize`                        | `InputSize`                                    |
 | `InputTextType`                        | `InputType`                                    |
-| `ListingTableAction`                   | `SectionTitleAction`                           |
-| `LogoWallQuoteAction`                  | `SectionTitleAction`                           |
+| `ListingTableAction`                   | `ModuleHeaderAction`                           |
+| `LogoWallQuoteAction`                  | `ModuleHeaderAction`                           |
 | `LogoWallQuoteLogoTreatment`           | `CompanyLogoTreatment`                         |
-| `MediaSplitStackAction`                | `SectionTitleAction`                           |
+| `MediaSplitStackAction`                | `ModuleHeaderAction`                           |
 | `MessageSeverity`                      | `AlertSeverity`                                |
 | `MessageSize`                          | `AlertSize`                                    |
 | `MoveDirection`                        | `TransferListMoveDirection`                    |
@@ -444,7 +468,7 @@ payload take `DocTableOfContentsItem` / `DocTableOfContentsGroup` (was `DocTocIt
 | `PickListSide`                         | `TransferListSide`                             |
 | `PickListValue`                        | `TransferListValue`                            |
 | `PopoverPlacementInput`                | `PopoverSide`                                  |
-| `PricingPlansAction`                   | `SectionTitleAction`                           |
+| `PricingPlansAction`                   | `ModuleHeaderAction`                           |
 | `ProgressBarShape`                     | `ProgressKind`                                 |
 | `ProgressBarSize`                      | `ProgressSize`                                 |
 | `ResizablePanelContext`                | `ResizableContext`                             |
@@ -459,19 +483,19 @@ payload take `DocTableOfContentsItem` / `DocTableOfContentsGroup` (was `DocTocIt
 | `StickyScrollCodeItem`                 | `FeatureScrollSectionItem`                     |
 | `StickyScrollCodeSample`               | `FeatureScrollSectionCode`                     |
 | `StoryLibraryClient`                   | `CompanyLogoMark`                              |
-| `SubjectLibraryAction`                 | `SectionTitleAction`                           |
+| `SubjectLibraryAction`                 | `ModuleHeaderAction`                           |
 | `TabViewContext`                       | `TabsContext`                                  |
 | `TabViewSlideDirection`                | `TabsSlideDirection`                           |
 | `TabViewTabRegistration`               | `TabsTabRegistration`                          |
 | `TabViewValue`                         | `TabsValue`                                    |
-| `TemplateGalleryAction`                | `SectionTitleAction`                           |
+| `TemplateGalleryAction`                | `ModuleHeaderAction`                           |
 | `TooltipPlacementInput`                | `TooltipSide`                                  |
 | `UseCaseLinksItem`                     | `CapabilityGridSectionItem`                    |
-| `UseCasesAction`                       | `SectionTitleAction`                           |
+| `UseCasesAction`                       | `ModuleHeaderAction`                           |
 
 Every exported type starts with its component's name, and a shape several components shared is one
 type now, exported by the component that owns it: a section's `primaryAction` / `secondaryAction`
-is `SectionTitleAction` (`@aziontech/webkit/section-title`), a breadcrumb entry is
+is `ModuleHeaderAction` (`@aziontech/webkit/module-header`), a breadcrumb entry is
 `BreadcrumbItemData`, a client mark `{ name, logo }` is `CompanyLogoMark` and a mark's ink is
 `CompanyLogoTreatment` (`@aziontech/webkit/company-logo`). Each section still re-exports the shared type, so an
 import the codemod rewrote keeps its path. `CompanyLogoTreatment` uses the `CompanyLogo` words: `as-is` is
@@ -600,8 +624,8 @@ section item arrays (`items[].illustration`):
 | `media-split`                                                                                              | `align="top"`                                                                    | `align="start"`                                                                                                                                                                                                              |
 | `media-tabs`                                                                                               | `position="left" \| "right"`                                                     | `tabs-side="start" \| "end"`                                                                                                                                                                                                 |
 | `network-section`                                                                                          | `lead`                                                                           | `claimsEyebrow`                                                                                                                                                                                                              |
-| `section-module`                                                                                           | `kind="centered" \| "left" \| "horizontal"`                                      | `align="start" \| "center" \| "split"`                                                                                                                                                                                       |
-| `section-title`                                                                                            | `kind="centered" \| "left" \| "horizontal"`                                      | `align="start" \| "center" \| "split"`                                                                                                                                                                                       |
+| `module`                                                                                                   | `kind="centered" \| "left" \| "horizontal"`                                      | `align="start" \| "center" \| "split"`                                                                                                                                                                                       |
+| `module-header`                                                                                            | `kind="centered" \| "left" \| "horizontal"`                                      | `align="start" \| "center" \| "split"`                                                                                                                                                                                       |
 | `article-cards-section`                                                                                    | `kind="left" \| "centered"`                                                      | `align="start" \| "center"`                                                                                                                                                                                                  |
 | `site-footer-section`                                                                                      | `columns[].links[].external`                                                     | `columns[].links[].target="_blank"`                                                                                                                                                                                          |
 | `story-index-section`                                                                                      | `search="{ placeholder, shortPlaceholder, label }"`                              | `searchPlaceholder`, `searchShortPlaceholder`, `searchAriaLabel`                                                                                                                                                             |
@@ -736,7 +760,7 @@ New standalone paths: `tabs-list`, `tabs-trigger`, `tabs-content`, `dialog-heade
 | Component                                                                                                       | v5                                                                                                  | v6                                                                                                                                     |
 | --------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
 | `chat-message`, `prompt-input`, `tool-approval`, `tool-call`                                                    | `data-status` mirrors `state`                                                                       | `data-status` mirrors `status`                                                                                                         |
-| `section-title`, `section-module`, `article-cards-section`                                                      | `data-kind`                                                                                         | `data-align`                                                                                                                           |
+| `module-header`, `module`, `article-cards-section`                                                              | `data-kind`                                                                                         | `data-align`                                                                                                                           |
 | `stepper-step`                                                                                                  | `data-state="upcoming\|current\|complete\|error\|loading"`                                          | `data-status` + `data-active` (+ `data-completed`)                                                                                     |
 | `stepper`                                                                                                       | `data-current`                                                                                      | `data-active`                                                                                                                          |
 | `stepper-step`                                                                                                  | `data-step-dot`, `data-step-disc`, `data-step-description`, `data-step-connector`, `data-step-body` | `data-slot="step-dot"` … `data-slot="step-body"`                                                                                       |
@@ -757,7 +781,7 @@ New standalone paths: `tabs-list`, `tabs-trigger`, `tabs-content`, `dialog-heade
 | `drawer-content`                                                                                                | `data-side="left\|right"`                                                                           | `data-side="start\|end"`                                                                                                               |
 | `sidebar`                                                                                                       | `data-collapsed`                                                                                    | `data-state="open\|closed"`                                                                                                            |
 | `resizable-pane`                                                                                                | `data-collapsed`                                                                                    | `data-state="open\|closed"`                                                                                                            |
-| `settings-section` (body)                                                                                       | `data-open`                                                                                         | `data-state="open\|closed"`                                                                                                            |
+| `settings-group` (body)                                                                                         | `data-open`                                                                                         | `data-state="open\|closed"`                                                                                                            |
 | `doc-prompt` (prompt text)                                                                                      | `data-expanded`                                                                                     | `data-state="open\|closed"`                                                                                                            |
 | `settings-row`                                                                                                  | `data-level`                                                                                        | `data-depth`                                                                                                                           |
 | `page-header`                                                                                                   | `__breadcrumb` test id                                                                              | `__breadcrumbs`                                                                                                                        |
@@ -1117,19 +1141,19 @@ Landing headings carry no `anchor`, so the docs home shows no outline rail.
 Markup that every screen used to copy is now a component. Screens copied from v5 keep working; replace
 the copied markup when you touch them.
 
-| Component         | Import                               | Replaces                                                     |
-| ----------------- | ------------------------------------ | ------------------------------------------------------------ |
-| `PageHeader`      | `@aziontech/webkit/page-header`      | the h1 + description + actions row of every page             |
-| `SectionHeader`   | `@aziontech/webkit/section-header`   | the h2 + description (+ copy-link anchor) of a section       |
-| `PageTabs`        | `@aziontech/webkit/page-tabs`        | the full-bleed tab strip under a resource header (`v-model`) |
-| `SettingsSection` | `@aziontech/webkit/settings-section` | a titled settings band (collapsible)                         |
-| `SettingsRow`     | `@aziontech/webkit/settings-row`     | one settings row: title, description, control                |
-| `SaveBar`         | `@aziontech/webkit/save-bar`         | the floating or docked save / discard bar                    |
-| `ConfirmDialog`   | `@aziontech/webkit/confirm-dialog`   | a confirm / discard / delete dialog                          |
+| Component       | Import                             | Replaces                                                     |
+| --------------- | ---------------------------------- | ------------------------------------------------------------ |
+| `PageHeader`    | `@aziontech/webkit/page-header`    | the h1 + description + actions row of every page             |
+| `Subheader`     | `@aziontech/webkit/subheader`      | the h2 + description (+ copy-link anchor) of a section       |
+| `PageTabs`      | `@aziontech/webkit/page-tabs`      | the full-bleed tab strip under a resource header (`v-model`) |
+| `SettingsGroup` | `@aziontech/webkit/settings-group` | a titled settings band (collapsible)                         |
+| `SettingsRow`   | `@aziontech/webkit/settings-row`   | one settings row: title, description, control                |
+| `SaveBar`       | `@aziontech/webkit/save-bar`       | the floating or docked save / discard bar                    |
+| `ConfirmDialog` | `@aziontech/webkit/confirm-dialog` | a confirm / discard / delete dialog                          |
 
 The screens (blocks) that were only these fragments are gone from the catalog:
-`platform/page/page-header`, `platform/page/section-header`, `platform/page/page-tabs`,
-`platform/page/settings-section`, `platform/forms/settings-row` and `platform/overlays/confirm-dialog`.
+`platform/page/page-header`, `platform/page/subheader`, `platform/page/page-tabs`,
+`platform/page/settings-group`, `platform/forms/settings-row` and `platform/overlays/confirm-dialog`.
 
 ### Blocks take their data through props
 
@@ -1825,7 +1849,7 @@ container queries (Tailwind v4 `@container`, the `--container-*` scale; see the 
 "Breakpoints and container sizes"). On a full-width page nothing moves much; inside a drawer, a
 split view or a card these change:
 
-- **Container-aware components.** `PageHeader` and `SectionHeader` drop their actions under the
+- **Container-aware components.** `PageHeader` and `Subheader` drop their actions under the
   title below `@md` of the header (was: below the `md` viewport). `SaveBar` puts message and actions
   on one row from `@xl` of the bar (was: the `lg` viewport); `plain` stacks its actions below `@md`.
   `Wizard` hides its rail below `@2xl` of the wizard (was: the `md` viewport). `SettingsRow` keeps its two
@@ -1837,7 +1861,7 @@ split view or a card these change:
   follows the nearest container (a Card, a dialog or drawer body, a `Field.Group`), not only a
   `Field.Group`. If you relied on the old viewport switch, check those screens in a drawer.
 - **Containers you can use.** `Card` content (`@container/card`), the dialog and drawer body
-  (`PanelContent`, `@container/panel`), `SettingsSection` body, `HelpPanel`, `ChartCard`,
+  (`PanelContent`, `@container/panel`), `SettingsGroup` body, `HelpPanel`, `ChartCard`,
   `StatTile` and `Table` (`@container/table`) are containers: `@md:` utilities in your own markup
   inside them follow that box. A `Card` used as a shrink-to-fit flex item now needs a width
   (`flex-1`, `w-full` or a grid track).
@@ -1878,8 +1902,8 @@ split view or a card these change:
 - **Touch and hover.** `Button`, `IconButton`, `Checkbox`, `RadioGroup.Item` and `Switch` keep their
   drawn size but get a 24 px hit area, 44 px on a coarse pointer; `Pagination` buttons grow to
   44 px on a coarse pointer. `Button` and `IconButton` render one more child, an empty
-  `[data-slot=touch-target]` span; update DOM snapshots. The copy-link of `SectionHeader` and
-  `SettingsSection`, the `Card` header action and the `Table` sort affordance stay visible on
+  `[data-slot=touch-target]` span; update DOM snapshots. The copy-link of `Subheader` and
+  `SettingsGroup`, the `Card` header action and the `Table` sort affordance stay visible on
   devices without hover.
 - **Reflow.** `ToggleGroup`, `DatePicker`, `RadioGroup` cards, `Eyebrow`, the `Accordion` trigger and
   `Resizable` no longer overflow a 320 px box (they truncate, wrap or clip instead). A

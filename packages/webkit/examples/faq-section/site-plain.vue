@@ -1,7 +1,7 @@
 <script setup>
+  import Container from '@aziontech/webkit/container'
   import FaqSection from '@aziontech/webkit/faq-section'
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionGap from '@aziontech/webkit/section-gap'
+  import Spacer from '@aziontech/webkit/spacer'
 
   const items = [
     {
@@ -23,8 +23,8 @@
 </script>
 
 <template>
-  <SectionContainer max-width="site">
-    <SectionGap hatch />
+  <Container max-width="site">
+    <Spacer hatch />
 
     <FaqSection
       anchor="faq"
@@ -32,6 +32,6 @@
       :items="items"
     />
 
-    <SectionGap hatch />
-  </SectionContainer>
+    <Spacer hatch />
+  </Container>
 </template>

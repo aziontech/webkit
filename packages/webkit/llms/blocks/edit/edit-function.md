@@ -1,11 +1,11 @@
 # EditFunction (`edit/edit-function`)
 
-> The code editor page, a page body for ConsoleLayout (the layout's breadcrumb names the service): the Code and Settings tabs, an editor toolbar whose ToggleGroup switches between the Code document and the Arguments document, and under it either one editor filling the pane or the Arguments split, a Resizable with the collapsible schema editor on the left and the form fields on the right. Both editors are a `CodeEditor` filling its pane with zero-padded line numbers and the Monaco loader from the code-editor spec. On Settings the tab holds the General, Runtime, Execution environment and Status sections, with the unsaved-changes bar: Save shows its loading state while Discard and the fields wait, a saved change raises a success toast, and a failed save keeps the bar with a danger `Alert`. Fields reorder with Move up and Move down buttons. Its page-level parts are `PageTabs`, `SettingsSection`, `SettingsRow` and `SaveBar`.
+> The code editor page, a page body for ConsoleLayout (the layout's breadcrumb names the service): the Code and Settings tabs, an editor toolbar whose ToggleGroup switches between the Code document and the Arguments document, and under it either one editor filling the pane or the Arguments split, a Resizable with the collapsible schema editor on the left and the form fields on the right. Both editors are a `CodeEditor` filling its pane with zero-padded line numbers and the Monaco loader from the code-editor spec. On Settings the tab holds the General, Runtime, Execution environment and Status sections, with the unsaved-changes bar: Save shows its loading state while Discard and the fields wait, a saved change raises a success toast, and a failed save keeps the bar with a danger `Alert`. Fields reorder with Move up and Move down buttons. Its page-level parts are `PageTabs`, `SettingsGroup`, `SettingsRow` and `SaveBar`.
 
 - Surface: app
 - Source: `blocks/edit/edit-function/edit-function.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/edit-function")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeEditor](../../components/code-editor.md), [CopyButton](../../components/copy-button.md), [EmptyState](../../components/empty-state.md), `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [KeyValueList](../../components/key-value-list.md), [Link](../../components/link.md), `LogViewerContent`, [LogViewer](../../components/log-viewer.md), [PageTabs](../../components/page-tabs.md), [RadioGroup](../../components/radio-group.md), `ResizableHandle`, `ResizablePane`, `ResizableRoot`, [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsRow](../../components/settings-row.md), [SettingsSection](../../components/settings-section.md), [StatusIndicator](../../components/status-indicator.md), [Switch](../../components/switch.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), [Trace](../../components/trace.md)
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeEditor](../../components/code-editor.md), [CopyButton](../../components/copy-button.md), [EmptyState](../../components/empty-state.md), `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [KeyValueList](../../components/key-value-list.md), [Link](../../components/link.md), `LogViewerContent`, [LogViewer](../../components/log-viewer.md), [PageTabs](../../components/page-tabs.md), [RadioGroup](../../components/radio-group.md), `ResizableHandle`, `ResizablePane`, `ResizableRoot`, [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [StatusIndicator](../../components/status-indicator.md), [Switch](../../components/switch.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), [Trace](../../components/trace.md)
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-form`
 
 ## Asked as
@@ -71,9 +71,9 @@ A flush `Card` with one small `Item` per field: a Move up and a Move down `IconB
 
 Inside an expanded field, `SettingsRow`s for Name, Type, Label, Description, Required and Default, then the rows that follow the type: minimum and maximum length and a pattern for text, minimum and maximum for numbers, Choices as a `Textarea` with one value per line, List of for lists. A name error shows as `FieldError` once the field was touched. Field rows set `stackable`, so in a narrow pane the control moves under its copy at full width.
 
-### I. Settings tab — `SettingsSection`, `Card`, `Item`, `SettingsRow`, `Input`, `RadioGroup`, `Switch`, `FieldError` (required)
+### I. Settings tab — `SettingsGroup`, `Card`, `Item`, `SettingsRow`, `Input`, `RadioGroup`, `Switch`, `FieldError` (required)
 
-The form column with four `SettingsSection`s: General (Name, required on Save), Runtime (a read-only `Input` with a lock glyph, because it cannot change after creation), Execution environment (On request or At the gateway as `RadioGroup` choice cards (`variant="card"`)) and Status (Active as a `Switch`). See `skills/webkit-form`.
+The form column with four `SettingsGroup`s: General (Name, required on Save), Runtime (a read-only `Input` with a lock glyph, because it cannot change after creation), Execution environment (On request or At the gateway as `RadioGroup` choice cards (`variant="card"`)) and Status (Active as a `Switch`). See `skills/webkit-form`.
 
 ### J. Save bar — `SaveBar`, `Button`, `Alert` (required)
 
@@ -219,8 +219,8 @@ Each variant is the same screen in another state: `get_block("edit/edit-function
   import ResizableRoot from '@aziontech/webkit/resizable-root'
   import SaveBar from '@aziontech/webkit/save-bar'
   import Select from '@aziontech/webkit/select'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
-  import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
@@ -1235,7 +1235,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-function
               class="layout-section-start m-0 flex min-w-0 flex-col border-0 p-0"
               :disabled="saving"
             >
-              <SettingsSection title="General">
+              <SettingsGroup label="General">
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
@@ -1265,9 +1265,9 @@ Each variant is the same screen in another state: `get_block("edit/edit-function
                     </Item.List>
                   </template>
                 </Card>
-              </SettingsSection>
+              </SettingsGroup>
 
-              <SettingsSection title="Runtime">
+              <SettingsGroup label="Runtime">
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
@@ -1295,10 +1295,10 @@ Each variant is the same screen in another state: `get_block("edit/edit-function
                     </Item.List>
                   </template>
                 </Card>
-              </SettingsSection>
+              </SettingsGroup>
 
-              <SettingsSection
-                title="Execution environment"
+              <SettingsGroup
+                label="Execution environment"
                 hint="Where in the request path the service runs, each stage handing the code a different request."
               >
                 <Card :padded="false">
@@ -1329,9 +1329,9 @@ Each variant is the same screen in another state: `get_block("edit/edit-function
                     </Item.List>
                   </template>
                 </Card>
-              </SettingsSection>
+              </SettingsGroup>
 
-              <SettingsSection title="Status">
+              <SettingsGroup label="Status">
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
@@ -1348,7 +1348,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-function
                     </Item.List>
                   </template>
                 </Card>
-              </SettingsSection>
+              </SettingsGroup>
             </fieldset>
           </div>
         </fieldset>

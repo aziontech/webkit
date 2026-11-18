@@ -1,11 +1,11 @@
 <script setup lang="ts">
   import CardGrid from '../../../layout/card-grid/card-grid.vue'
   import CardGridCell from '../../../layout/card-grid/card-grid-cell/card-grid-cell.vue'
+  import Container from '../../../layout/container/container.vue'
+  import Module from '../../../layout/module/module.vue'
   import RegistrationFrame from '../../../layout/registration-frame/registration-frame.vue'
+  import Spacer from '../../../layout/spacer/spacer.vue'
   import FeatureItem from '../../../marketing/feature-item/feature-item.vue'
-  import SectionContainer from '../../../marketing/section-container/section-container.vue'
-  import SectionGap from '../../../marketing/section-gap/section-gap.vue'
-  import SectionModule from '../../../marketing/section-module/section-module.vue'
   import type { HeroSectionItem } from '../hero-section.vue'
 
   defineOptions({ name: 'HeroSectionArguments' })
@@ -16,8 +16,8 @@
 </script>
 
 <template>
-  <SectionContainer max-width="site">
-    <SectionModule
+  <Container max-width="site">
+    <Module
       :divided="false"
       :padded="false"
     >
@@ -45,8 +45,8 @@
           </CardGridCell>
         </CardGrid>
       </RegistrationFrame>
-    </SectionModule>
+    </Module>
 
-    <SectionGap hatch />
-  </SectionContainer>
+    <Spacer hatch />
+  </Container>
 </template>

@@ -7,8 +7,8 @@
   import PageHeader from '@aziontech/webkit/page-header'
   import RadioGroup from '@aziontech/webkit/radio-group'
   import SaveBar from '@aziontech/webkit/save-bar'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
-  import SettingsSection from '@aziontech/webkit/settings-section'
   import Textarea from '@aziontech/webkit/textarea'
   import { computed, reactive, ref } from 'vue'
 
@@ -106,8 +106,8 @@
       >
         <legend class="sr-only">access list settings</legend>
 
-        <SettingsSection
-          title="General"
+        <SettingsGroup
+          label="General"
           hint="Build allowlists, blocklists and greylists from IP addresses, countries or ASNs, and use them in policy rules."
           anchor="general"
         >
@@ -145,10 +145,10 @@
               </Item.List>
             </template>
           </Card>
-        </SettingsSection>
+        </SettingsGroup>
 
-        <SettingsSection
-          title="List settings"
+        <SettingsGroup
+          label="List settings"
           hint="The kind of entry the list holds, and the entries themselves. The type cannot be changed after the list is created, because every entry is validated against it."
           anchor="list-settings"
         >
@@ -258,7 +258,7 @@
               </Item.List>
             </template>
           </Card>
-        </SettingsSection>
+        </SettingsGroup>
       </fieldset>
     </div>
 

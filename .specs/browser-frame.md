@@ -6,7 +6,7 @@ status: implemented
 spec_version: 3
 created: 2026-10-20
 last_updated: 2026-11-15
-checksum: 5b225744f6ec5a44d7b33903a60624425ffa2d81c8d33a7657044470dd37938a
+checksum: d1ec034d86b8210c9414cf2594865694f7f5453e25ce6a58c5bc0ed85f9ae356
 ---
 
 # BrowserFrame — Component Spec
@@ -52,7 +52,7 @@ A browser window that renders live webkit components inside a viewport of its ow
 <script setup>
   import { ref } from 'vue'
   import BrowserFrame from '@aziontech/webkit/browser-frame'
-  import SectionTitle from '@aziontech/webkit/section-title'
+  import ModuleHeader from '@aziontech/webkit/module-header'
   import Button from '@aziontech/webkit/button'
 
   const width = ref(768)
@@ -66,7 +66,7 @@ A browser window that renders live webkit components inside a viewport of its ow
     address="https://www.azion.com/en/pricing"
     aria-label="Pricing page at tablet size"
   >
-    <SectionTitle title="Pricing that scales with you" />
+    <ModuleHeader title="Pricing that scales with you" />
     <Button label="Start for free" />
   </BrowserFrame>
 </template>

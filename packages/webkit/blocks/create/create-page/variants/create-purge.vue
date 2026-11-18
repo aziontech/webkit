@@ -12,8 +12,8 @@
   import PageHeader from '@aziontech/webkit/page-header'
   import RadioGroup from '@aziontech/webkit/radio-group'
   import SaveBar from '@aziontech/webkit/save-bar'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
-  import SettingsSection from '@aziontech/webkit/settings-section'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
   import { computed, reactive, ref, watch } from 'vue'
@@ -213,8 +213,8 @@
             >
               <legend class="sr-only">Create Purge</legend>
 
-              <SettingsSection
-                title="Target"
+              <SettingsGroup
+                label="Target"
                 hint="Where the objects are evicted from, and how this purge identifies them."
               >
                 <Card :padded="false">
@@ -270,10 +270,10 @@
                     </Item.List>
                   </template>
                 </Card>
-              </SettingsSection>
+              </SettingsGroup>
 
-              <SettingsSection
-                title="Arguments"
+              <SettingsGroup
+                label="Arguments"
                 :hint="'The ' + selectedType.noun + 's to purge, one per line.'"
               >
                 <Card :padded="false">
@@ -312,7 +312,7 @@
                   size="small"
                   label="A purge cannot be undone. A broad one briefly raises the traffic that reaches your origin, while the cache fills again."
                 />
-              </SettingsSection>
+              </SettingsGroup>
             </fieldset>
           </div>
           <SaveBar variant="centered">

@@ -3,16 +3,16 @@
 
   import CardGrid from '../../layout/card-grid/card-grid.vue'
   import CardGridCell from '../../layout/card-grid/card-grid-cell/card-grid-cell.vue'
+  import Module from '../../layout/module/module.vue'
+  import type { ModuleHeaderAction } from '../../layout/module-header/module-header.vue'
   import MediaSplit from '../../marketing/media-split/media-split.vue'
-  import SectionModule from '../../marketing/section-module/section-module.vue'
-  import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
 
   defineOptions({
     name: 'ComplianceLogosSection',
     inheritAttrs: false
   })
 
-  export type { SectionTitleAction }
+  export type { ModuleHeaderAction }
 
   /** One certification badge in the grid. */
   export type ComplianceLogosSectionCertification = {
@@ -36,7 +36,7 @@
     /** The badges, in order; each is `{ label, badge, alt }`. */
     certifications?: ComplianceLogosSectionCertification[]
     /** The closing "see more" cell; `{ label, href }`. Omitted when absent. */
-    primaryAction?: SectionTitleAction
+    primaryAction?: ModuleHeaderAction
     /** In-page id set on the band so a `#hash` link can scroll to it. */
     anchor?: string
   }
@@ -65,7 +65,7 @@
     :data-testid="testId"
     class="scroll-mt-(--spacing-2xl)"
   >
-    <SectionModule
+    <Module
       v-if="title.length > 0"
       :divided="false"
       :padded="false"
@@ -139,6 +139,6 @@
           </CardGrid>
         </template>
       </MediaSplit>
-    </SectionModule>
+    </Module>
   </div>
 </template>

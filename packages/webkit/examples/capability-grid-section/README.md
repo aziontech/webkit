@@ -2,7 +2,7 @@
 
 A grid of claims or links under one section title: each cell an optional icon, a title and a sentence, with one or two calls to action under the headline. An item with an `href` links its whole cell, so the same band lists use cases or resources that each have their own page.
 
-The band is the `CapabilityGridSection` component from `@aziontech/webkit/capability-grid-section`; it composes `SectionModule`, `SectionTitle`, `RegistrationFrame`, `CardGrid`, `FeatureItem` and `Button`.
+The band is the `CapabilityGridSection` component from `@aziontech/webkit/capability-grid-section`; it composes `Module`, `ModuleHeader`, `RegistrationFrame`, `CardGrid`, `FeatureItem` and `Button`.
 
 ## Examples
 

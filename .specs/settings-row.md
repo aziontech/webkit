@@ -3,7 +3,7 @@ name: settings-row
 category: layout
 structure: monolithic
 status: implemented
-checksum: 6401413b88e7552161258879ffeb5b2231a79d22663a503905491423b71af9f4
+checksum: bade8cff3f2c50d097409ebbfb4a9567061e1cd9579b36366c224b52c546d637
 spec_version: 8
 created: 2026-11-10
 last_updated: 2026-11-17
@@ -28,7 +28,7 @@ One setting inside a flush `Card`: an `Item` whose content carries the title and
 
 ## Related
 
-- `settings-section` — the band the card of rows sits in.
+- `settings-group` — the band the card of rows sits in.
 - `item` — the row primitive it renders; place rows in an `Item.List` inside the card.
 - `field-error` — the required or invalid message under the control.
 
@@ -92,14 +92,14 @@ One setting inside a flush `Card`: an `Item` whose content carries the title and
 
 ## Props
 
-| Prop          | Type                                | Default   | Required | JSDoc                                                                                 |
-| ------------- | ----------------------------------- | --------- | -------- | ------------------------------------------------------------------------------------- |
-| `title`       | `string`                            | `—`       | true     | The setting name; the control takes the same text as its aria-label.                  |
-| `description` | `string`                            | `''`      | false    | One sentence under the title that says what the setting does.                         |
-| `variant`     | `'field' \| 'compact' \| 'stacked'` | `'field'` | false    | Where the control sits relative to the copy.                                          |
-| `depth`       | `0 \| 1 \| 2`                       | `0`       | false    | Indent depth under a rule, for a setting that only applies when its parent is on.     |
+| Prop          | Type                                | Default   | Required | JSDoc                                                                                                                          |
+| ------------- | ----------------------------------- | --------- | -------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `title`       | `string`                            | `—`       | true     | The setting name; the control takes the same text as its aria-label.                                                           |
+| `description` | `string`                            | `''`      | false    | One sentence under the title that says what the setting does.                                                                  |
+| `variant`     | `'field' \| 'compact' \| 'stacked'` | `'field'` | false    | Where the control sits relative to the copy.                                                                                   |
+| `depth`       | `0 \| 1 \| 2`                       | `0`       | false    | Indent depth under a rule, for a setting that only applies when its parent is on.                                              |
 | `stackable`   | `boolean`                           | `false`   | false    | Stack a field control under the copy below the lg container of the row instead of md, for a value that needs the full measure. |
-| `hint`        | `string`                            | `''`      | false    | Extra guidance in a Hint glyph beside the title; empty renders no glyph.              |
+| `hint`        | `string`                            | `''`      | false    | Extra guidance in a Hint glyph beside the title; empty renders no glyph.                                                       |
 
 ## Events
 

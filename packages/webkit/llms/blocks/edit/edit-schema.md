@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/edit/edit-schema/edit-schema.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/edit-schema")`
-- Components: [Alert](../../components/alert.md), [AttributeEditor](../../components/attribute-editor.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), [CodeEditor](../../components/code-editor.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [Field](../../components/field.md), `FieldError`, [FileDropzone](../../components/file-dropzone.md), [FileTokenGroup](../../components/file-token-group.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Select](../../components/select.md), [SettingsSection](../../components/settings-section.md), [Switch](../../components/switch.md), `TableCellActions`, [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md)
+- Components: [Alert](../../components/alert.md), [AttributeEditor](../../components/attribute-editor.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), [CodeEditor](../../components/code-editor.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [Field](../../components/field.md), `FieldError`, [FileDropzone](../../components/file-dropzone.md), [FileTokenGroup](../../components/file-token-group.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [Switch](../../components/switch.md), `TableCellActions`, [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md)
 - Skills: `webkit-form`, `webkit-create-surface`, `webkit-tables`, `webkit-errors`, `webkit-ui-states`
 
 ## Asked as
@@ -33,9 +33,9 @@ The table schema of a SQL database: the definition of one table and the drawers 
 
 One `Card :padded="false"` around a `DataTable :bordered="false"` named `Columns of <table>`. The toolbar slot holds the table glyph and name, a small secondary `Tag` with the row count, an outlined Add column `Button`, the primary Insert row `Button` and a Table actions `IconButton` (with its `Tooltip`) that opens a `DropdownMenu`: Create Table in the first group, Truncate table alone in the last. The rows are the columns: the name in the code font, the type as a secondary `Tag`, the constraints in muted text (`PRIMARY KEY, NOT NULL, DEFAULT now()`, or `None`), and a per-column `TableCellActions` ("Actions for <column>") with Change type.
 
-### B. Create Table drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelBody`, `SettingsSection`, `Alert`, `Field`, `Input` (required)
+### B. Create Table drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelBody`, `SettingsGroup`, `Alert`, `Field`, `Input` (required)
 
-A large right `Drawer` whose content is a `form` named Create Table. The `PanelHeader` holds the `DrawerTitle`, one muted sentence (the database and how to reorder) and the drawer's own close button. A `fieldset` disabled while the request runs holds two `SettingsSection`s. General has one `Field` with the table Name in the code font and why it cannot be renamed lightly. A rejection from the server goes above it as a danger `Alert` that says what happened and that the columns are kept, and on the field as its `Field.Error`, per `state/state-form-validation` (SectionRejected).
+A large right `Drawer` whose content is a `form` named Create Table. The `PanelHeader` holds the `DrawerTitle`, one muted sentence (the database and how to reorder) and the drawer's own close button. A `fieldset` disabled while the request runs holds two `SettingsGroup`s. General has one `Field` with the table Name in the code font and why it cannot be renamed lightly. A rejection from the server goes above it as a danger `Alert` that says what happened and that the columns are kept, and on the field as its `Field.Error`, per `state/state-form-validation` (SectionRejected).
 
 ### C. Column rows — `AttributeEditor`, `Select`, `Checkbox`, `FieldError` (required)
 
@@ -215,7 +215,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-schema",
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Select from '@aziontech/webkit/select'
-  import SettingsSection from '@aziontech/webkit/settings-section'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import Switch from '@aziontech/webkit/switch'
   import TableCellActions from '@aziontech/webkit/table-cell-actions'
   import Tag from '@aziontech/webkit/tag'
@@ -1121,8 +1121,8 @@ Each variant is the same screen in another state: `get_block("edit/edit-schema",
               :disabled="createSubmitting"
             >
               <legend class="sr-only">Create Table</legend>
-              <SettingsSection
-                title="General"
+              <SettingsGroup
+                label="General"
                 hint="Names the table inside this database."
               >
                 <div class="flex w-full min-w-0 flex-col gap-(--spacing-sm)">
@@ -1148,10 +1148,10 @@ Each variant is the same screen in another state: `get_block("edit/edit-schema",
                     <Field.Error v-if="tableNameError">{{ tableNameError }}</Field.Error>
                   </Field>
                 </div>
-              </SettingsSection>
+              </SettingsGroup>
 
-              <SettingsSection
-                title="Import data from CSV"
+              <SettingsGroup
+                label="Import data from CSV"
                 hint="Optional. The first line names the columns; the types are guessed from the values and can be changed below. Every row is inserted after the table is created."
               >
                 <div class="flex w-full min-w-0 flex-col gap-(--spacing-sm)">
@@ -1198,10 +1198,10 @@ Each variant is the same screen in another state: `get_block("edit/edit-schema",
                     />
                   </template>
                 </div>
-              </SettingsSection>
+              </SettingsGroup>
 
-              <SettingsSection
-                title="Columns"
+              <SettingsGroup
+                label="Columns"
                 hint="The table's schema, created in this order. A primary key is NOT NULL."
               >
                 <div class="flex w-full min-w-0 flex-col gap-(--spacing-sm)">
@@ -1295,10 +1295,10 @@ Each variant is the same screen in another state: `get_block("edit/edit-schema",
                   </AttributeEditor>
                   <FieldError v-if="columnsError">{{ columnsError }}</FieldError>
                 </div>
-              </SettingsSection>
+              </SettingsGroup>
 
-              <SettingsSection
-                title="Foreign keys"
+              <SettingsGroup
+                label="Foreign keys"
                 hint="Optional. Tie a column to a row in another table, so a value that does not exist there is refused."
               >
                 <div class="flex w-full min-w-0 flex-col gap-(--spacing-sm)">
@@ -1392,7 +1392,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-schema",
                     </template>
                   </AttributeEditor>
                 </div>
-              </SettingsSection>
+              </SettingsGroup>
             </fieldset>
           </PanelBody>
 
@@ -1445,8 +1445,8 @@ Each variant is the same screen in another state: `get_block("edit/edit-schema",
               :disabled="columnSubmitting"
             >
               <legend class="sr-only">Add column</legend>
-              <SettingsSection
-                title="Column"
+              <SettingsGroup
+                label="Column"
                 hint="Its name, type and the value rows get when they leave it empty."
               >
                 <div class="flex w-full min-w-0 flex-col gap-(--spacing-md)">
@@ -1520,9 +1520,9 @@ Each variant is the same screen in another state: `get_block("edit/edit-schema",
                     >
                   </Field>
                 </div>
-              </SettingsSection>
-              <SettingsSection
-                title="Constraints"
+              </SettingsGroup>
+              <SettingsGroup
+                label="Constraints"
                 hint="A primary key is always NOT NULL, so turning it on also turns on Not null."
               >
                 <div class="flex w-full min-w-0 flex-col gap-(--spacing-sm)">
@@ -1551,7 +1551,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-schema",
                     />
                   </Field>
                 </div>
-              </SettingsSection>
+              </SettingsGroup>
             </fieldset>
           </PanelBody>
           <PanelFooter>

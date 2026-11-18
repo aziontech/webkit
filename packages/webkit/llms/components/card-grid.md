@@ -11,7 +11,7 @@
 
 - For a row or block of equal cells that should fan out from one column on a phone to several on a wide screen.
 - With `variant` set to `frame` whenever the cells are real content — a `feature-item`, a claim, a figure — and should carry the page's frame language, corner marks included.
-- For the hairline cell grid a `section-module` body holds, with `variant` set to `divider`.
+- For the hairline cell grid a `module` body holds, with `variant` set to `divider`.
 - For a row of self-contained cards with gutters between them, with the default `gap`.
 
 ## Do
@@ -31,7 +31,7 @@
 - For a mosaic whose cells claim different numbers of columns and rows → use `bento-grid`, which is this grid with spans.
 - For a single framed box → use `registration-frame`.
 - For one card with a header, content and footer → use `card`.
-- For the band that wraps the grid → use `section-module`.
+- For the band that wraps the grid → use `module`.
 - For tabular data a reader scans row by row → use `table`.
 - Built to be personalized (style seam): any class is accepted on the tag.
 
@@ -39,8 +39,8 @@
 
 - [bento-grid](bento-grid.md) — the same framed grid with unequal cells; reach for it when one claim deserves more room than the rest.
 - [feature-item](feature-item.md) — the glyph, headline and sentence a `frame` cell usually holds.
-- [section-module](section-module.md) — the band whose body holds this grid.
-- [section-container](section-container.md) — the column whose vertical rules the `divider` and flush `frame` grids deliberately do not repeat.
+- [module](module.md) — the band whose body holds this grid.
+- [container](container.md) — the column whose vertical rules the `divider` and flush `frame` grids deliberately do not repeat.
 - [registration-frame](registration-frame.md) — the frame each `frame` cell is drawn with, and the framed box a `gap` cell may be built from.
 - [card](card.md) — a padded card surface, the usual child of a `gap` grid.
 

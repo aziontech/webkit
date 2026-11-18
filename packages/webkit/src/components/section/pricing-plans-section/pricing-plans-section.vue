@@ -5,15 +5,15 @@
   import ToggleGroup from '../../action/toggle-group/toggle-group.vue'
   import PricingCard from '../../content/pricing-card/pricing-card.vue'
   import CardGrid from '../../layout/card-grid/card-grid.vue'
+  import type { ModuleHeaderAction } from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
-  import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
 
   defineOptions({
     name: 'PricingPlansSection',
     inheritAttrs: false
   })
 
-  export type { SectionTitleAction }
+  export type { ModuleHeaderAction }
 
   /** One option of the billing-period toggle. */
   export type PricingPlansSectionPeriod = {
@@ -62,7 +62,7 @@
     /** What the plan includes, in order. */
     features?: PricingPlansSectionFeature[]
     /** The card button; `{ label, href }`. */
-    action?: SectionTitleAction
+    action?: ModuleHeaderAction
   }
 
   export interface PricingPlansSectionProps {

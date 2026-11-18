@@ -1,14 +1,14 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
+  import Container from '@aziontech/webkit/container'
   import Hero from '@aziontech/webkit/hero'
+  import Module from '@aziontech/webkit/module'
   import RegistrationFrame from '@aziontech/webkit/registration-frame'
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionGap from '@aziontech/webkit/section-gap'
-  import SectionModule from '@aziontech/webkit/section-module'
   import SiteLayout, {
     type SiteLayoutFooter,
     type SiteLayoutNavigation
   } from '@aziontech/webkit/site-layout'
+  import Spacer from '@aziontech/webkit/spacer'
   import Stats from '@aziontech/webkit/stats'
   import Texture from '@aziontech/webkit/texture'
 
@@ -481,10 +481,10 @@
       </Hero.Title>
     </Hero>
 
-    <SectionContainer max-width="site">
-      <SectionGap hatch />
+    <Container max-width="site">
+      <Spacer hatch />
 
-      <SectionModule
+      <Module
         :divided="false"
         :padded="false"
       >
@@ -495,9 +495,9 @@
         >
           <Stats :items="figures" />
         </RegistrationFrame>
-      </SectionModule>
+      </Module>
 
-      <SectionGap hatch />
+      <Spacer hatch />
 
       <RegistrationFrame
         borders="none"
@@ -507,6 +507,6 @@
       >
         <Texture variant="lines" />
       </RegistrationFrame>
-    </SectionContainer>
+    </Container>
   </SiteLayout>
 </template>

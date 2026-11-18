@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 6
-checksum: c00b447ba643c1faa327b34d28c552013719179e4b6a3a003fb7f694ab0028cb
+checksum: 7477523085df2f5d909e028ddd3ba0cc6e25fb3c92a7be2e4d9d62c3bb41faec
 created: 2026-09-22
 last_updated: 2026-11-16
 ---
@@ -13,7 +13,7 @@ last_updated: 2026-11-16
 
 ## Purpose
 
-The closing ask of a marketing page: a headline, a supporting sentence and the actions that follow from them, set apart from the surrounding copy by its own surface. It is a panel, not a section header — `section-title` opens a section, `call-to-action` closes one.
+The closing ask of a marketing page: a headline, a supporting sentence and the actions that follow from them, set apart from the surrounding copy by its own surface. It is a panel, not a section header — `module-header` opens a section, `call-to-action` closes one.
 
 Four registers. `panel` sets the copy and its controls on one surface, as a row from `md` up. `split` divides the band in two at a 7fr/3fr ratio: a raised lead cell carrying the headline and the primary action, and an aside carrying the supporting line and the secondary one — each cell pushing its control to the band's floor, so the two actions share a baseline at any height. `split` is the register a product page closes on, where the ask has a primary and a secondary path and the headline turns on a second, muted line.
 
@@ -37,7 +37,7 @@ Four registers. `panel` sets the copy and its controls on one surface, as a row 
 
 ## When NOT to use
 
-- To open a section with a headline and optional actions → use `section-title`, which draws a header rule rather than a panel.
+- To open a section with a headline and optional actions → use `module-header`, which draws a header rule rather than a panel.
 - For the page's leading statement and primary CTAs → use `hero`, whose `Hero.Title` owns the `h1`.
 - For a dismissible or time-bound notice inside the product → use `alert`.
 - For a close that sits quietly in the column → use `split` or `panel`; `primary` fills a whole brand-coloured band and should appear once per page.
@@ -45,7 +45,7 @@ Four registers. `panel` sets the copy and its controls on one surface, as a row 
 
 ## Related
 
-- `section-title` — opens a section with a header rule; this closes one with a panel.
+- `module-header` — opens a section with a header rule; this closes one with a panel.
 - `hero` — the page's leading band; its `Hero.Title` owns the statement and the `h1`.
 - `registration-frame` — the registration frame the band draws when `framed` is on, and the one the page supplies around it when off.
 - `button` — the controls composed into the `actions` and `aside-actions` slots.
@@ -55,7 +55,7 @@ Four registers. `panel` sets the copy and its controls on one surface, as a row 
 
 ## Best practices
 
-- `framed` decides who draws the rule. On, the band draws its own registration frame — vertical rules handed back to the column, a tick at its floor. Off, the rule and the corner marks belong to the `section-module` or `registration-frame` the page assembles it into, so a band placed in an already-framed column never lands a second hairline on the column's own.
+- `framed` decides who draws the rule. On, the band draws its own registration frame — vertical rules handed back to the column, a tick at its floor. Off, the rule and the corner marks belong to the `module` or `registration-frame` the page assembles it into, so a band placed in an already-framed column never lands a second hairline on the column's own.
 - Keep `title` to one line and one ask. A panel that poses two questions gets neither answered.
 - Put the controls in the `actions` slot; the panel lays them out as a row beside the copy from `md` up and stacks them full-width below it.
 - Lead with the primary action and keep secondary ones `outline` or `text`, so the panel has one obvious target.
@@ -229,7 +229,7 @@ _none_
 
 - Visible focus: not applicable to the panel itself; controls composed into `actions` keep their own `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` ring.
 - Keyboard map: none of its own — `Tab` reaches only the controls placed in the `actions` slot, in DOM order.
-- ARIA: the headline is a real `h2` — rendered by the composed `section-title` in `panel`, and by the band itself in `split` and `lead`, where `title` and `title-muted` are two spans of that one heading so it is announced as a single string. The band is a `<section>` named by its `title`, reachable as a landmark with a name; no `role` is added.
+- ARIA: the headline is a real `h2` — rendered by the composed `module-header` in `panel`, and by the band itself in `split` and `lead`, where `title` and `title-muted` are two spans of that one heading so it is announced as a single string. The band is a `<section>` named by its `title`, reachable as a landmark with a name; no `role` is added.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): in `primary` the copy is ordinary ink on `var(--bg-canvas)`, so the pair is the same as `panel`'s. The headline is `var(--text-default)` on `var(--bg-surface)`; the description uses `var(--text-muted)`, which clears AA on the dark canvas and is a known theme-level shortfall on the light one (see `stats`).
 - `motion-reduce:transition-none motion-reduce:transform-none` — not applicable, the panel is static.
 - Touch target ≥40×40 px — both action slots stretch their children to full width below the breakpoint, so slotted buttons keep their own target size.

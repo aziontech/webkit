@@ -13,8 +13,8 @@
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
   import RadioGroup from '@aziontech/webkit/radio-group'
-  import SectionHeader from '@aziontech/webkit/section-header'
   import SettingsRow from '@aziontech/webkit/settings-row'
+  import Subheader from '@aziontech/webkit/subheader'
   import Switch from '@aziontech/webkit/switch'
   import Tag from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
@@ -633,7 +633,7 @@
           >
             <section class="flex min-w-0 flex-col gap-(--layout-section-gap)">
               <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-                <SectionHeader
+                <Subheader
                   title="Where it runs"
                   size="small"
                 >
@@ -647,7 +647,7 @@
                       @click="editStep('where-it-runs')"
                     />
                   </template>
-                </SectionHeader>
+                </Subheader>
                 <Alert
                   key="alert-1"
                   v-if="!choice"
@@ -672,7 +672,7 @@
               </section>
 
               <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-                <SectionHeader
+                <Subheader
                   title="What gets created"
                   description="Each value is sent as the property named under it."
                   size="small"
@@ -687,7 +687,7 @@
                       @click="editStep('settings')"
                     />
                   </template>
-                </SectionHeader>
+                </Subheader>
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
@@ -758,7 +758,7 @@
               </section>
 
               <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-                <SectionHeader
+                <Subheader
                   title="What can reference it"
                   description="Everything that can point at this list once it exists, and the field that carries the reference."
                   size="small"

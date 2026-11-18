@@ -4,7 +4,7 @@ The band under the Contact title band. Sales and Support sit side by side, each 
 
 Support carries a second link to the system status page, so a reader can check for an incident before opening a ticket. The Contact page renders this band.
 
-The band is the `ContactHubSection` component from `@aziontech/webkit/contact-hub-section`; it composes `SectionModule`, `RegistrationFrame`, `CardGrid`, `CardGridCell`, `FeatureItem` and `Button`.
+The band is the `ContactHubSection` component from `@aziontech/webkit/contact-hub-section`; it composes `Module`, `RegistrationFrame`, `CardGrid`, `CardGridCell`, `FeatureItem` and `Button`.
 
 ## Examples
 

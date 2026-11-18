@@ -146,13 +146,13 @@
     "limit": "1.35 KB"
   },
   {
-    "name": "section-gap",
-    "path": "src/components/marketing/section-gap/section-gap.vue",
+    "name": "spacer",
+    "path": "src/components/layout/spacer/spacer.vue",
     "limit": "3 KB"
   },
   {
-    "name": "section-title",
-    "path": "src/components/marketing/section-title/section-title.vue",
+    "name": "module-header",
+    "path": "src/components/layout/module-header/module-header.vue",
     "limit": "2.65 KB"
   },
   {
@@ -283,8 +283,8 @@
     "limit": "0.8 KB"
   },
   {
-    "name": "section-stack",
-    "path": "src/components/marketing/section-stack/section-stack.vue",
+    "name": "split-stack",
+    "path": "src/components/layout/split-stack/split-stack.vue",
     "limit": "1.95 KB"
   },
   {
@@ -346,8 +346,8 @@
     "limit": "1.5 KB"
   },
   {
-    "name": "section-module",
-    "path": "src/components/marketing/section-module/section-module.vue",
+    "name": "module",
+    "path": "src/components/layout/module/module.vue",
     "limit": "2.9 KB"
   },
   {
@@ -357,8 +357,8 @@
     "entryOnly": true
   },
   {
-    "name": "section-container",
-    "path": "src/components/marketing/section-container/section-container.vue",
+    "name": "container",
+    "path": "src/components/layout/container/container.vue",
     "limit": "0.7 KB"
   },
   {
@@ -604,7 +604,7 @@
   {
     "name": "client-quotes-section",
     "path": "src/components/section/client-quotes-section/client-quotes-section.vue",
-    "limit": "26.6 KB",
+    "limit": "26.7 KB",
     "entryOnly": true
   },
   {
@@ -631,7 +631,7 @@
   {
     "name": "photo-marquee-section",
     "path": "src/components/section/photo-marquee-section/photo-marquee-section.vue",
-    "limit": "7.25 KB"
+    "limit": "7.3 KB"
   },
   {
     "name": "listing-index-section",
@@ -652,13 +652,13 @@
   {
     "name": "template-gallery-section",
     "path": "src/components/section/template-gallery-section/template-gallery-section.vue",
-    "limit": "28.45 KB",
+    "limit": "28.65 KB",
     "entryOnly": true
   },
   {
     "name": "recognition-marquee-section",
     "path": "src/components/section/recognition-marquee-section/recognition-marquee-section.vue",
-    "limit": "21.15 KB"
+    "limit": "21.35 KB"
   },
   {
     "name": "architecture-tabs-section",
@@ -1047,14 +1047,14 @@
     "limit": "1.1 KB"
   },
   {
-    "name": "section-header",
-    "path": "src/components/layout/section-header/section-header.vue",
+    "name": "subheader",
+    "path": "src/components/layout/subheader/subheader.vue",
     "limit": "10.4 KB",
     "entryOnly": true
   },
   {
-    "name": "settings-section",
-    "path": "src/components/layout/settings-section/settings-section.vue",
+    "name": "settings-group",
+    "path": "src/components/layout/settings-group/settings-group.vue",
     "limit": "8.05 KB"
   },
   {

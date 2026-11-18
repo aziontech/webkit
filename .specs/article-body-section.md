@@ -7,14 +7,14 @@ spec_version: 6
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-18
-checksum: 17388313e3c340a3080451b611db7e2400e9b38b4ba865097f4705f9c5daf401
+checksum: f73d1b2ba970a9e422d9a721fea30abd22a3aaa7ff4e64dd8dd7b8e0a196d1a5
 ---
 
 # ArticleBodySection — Component Spec
 
 ## Purpose
 
-The reading page of an article. A brand banner sits over a three-column grid: the share, community and copy-page rail on the left; the breadcrumb, headline, byline and prose down the middle at a reading measure; and the "On this page" outline on the right. Both rails stick under the header and fold away below `lg`, leaving the column alone. The section opens the page itself, so it carries its own `section-container` instead of sitting in the page column. The prose arrives as markdown: `##` / `###` headings (each with an id slugged from its text, feeding the outline), fenced code blocks, `-` and numbered lists and paragraphs, with inline links, `**strong**`, `*emphasis*` and `` `code` `` inside paragraphs and list items. The outline follows the reader: the heading last scrolled past is active, and choosing an entry scrolls to it (smoothly unless reduced motion is set) and writes its hash to the address. The byline can carry the writers' names and their photos as overlapping avatars. It is a page section — the site places it from a `{ _id: 'article-body-section', props }` entry and binds `props` straight onto it — and it composes `section-container`, `section-module`, `registration-frame`, `breadcrumb`, `hero-title`, `divider`, `doc-prose`, `tooltip`, `icon-button`, `split-button`, `avatar` and `doc-table-of-contents`; copying to the clipboard is local behaviour, confirmed by a toast.
+The reading page of an article. A brand banner sits over a three-column grid: the share, community and copy-page rail on the left; the breadcrumb, headline, byline and prose down the middle at a reading measure; and the "On this page" outline on the right. Both rails stick under the header and fold away below `lg`, leaving the column alone. The section opens the page itself, so it carries its own `container` instead of sitting in the page column. The prose arrives as markdown: `##` / `###` headings (each with an id slugged from its text, feeding the outline), fenced code blocks, `-` and numbered lists and paragraphs, with inline links, `**strong**`, `*emphasis*` and `` `code` `` inside paragraphs and list items. The outline follows the reader: the heading last scrolled past is active, and choosing an entry scrolls to it (smoothly unless reduced motion is set) and writes its hash to the address. The byline can carry the writers' names and their photos as overlapping avatars. It is a page section — the site places it from a `{ _id: 'article-body-section', props }` entry and binds `props` straight onto it — and it composes `container`, `module`, `registration-frame`, `breadcrumb`, `hero-title`, `divider`, `doc-prose`, `tooltip`, `icon-button`, `split-button`, `avatar` and `doc-table-of-contents`; copying to the clipboard is local behaviour, confirmed by a toast.
 
 ## When to use
 

@@ -7,14 +7,14 @@ status: implemented
 spec_version: 5
 created: 2026-11-05
 last_updated: 2026-11-16
-checksum: cc039ed5a3e75ab0ce77d521819dbb944b29c1cfc74219f44badc1762b03f326
+checksum: 8d41194c27971942756daf79f92a760f7059f525c4097e8df5aa0c4e40222c75
 ---
 
 # PlatformDirectorySection — Component Spec
 
 ## Purpose
 
-A directory of Azion's products under a section title: one column per product group (Build, Store, Secure, Observe), each row an icon, a product name and one line about it, linking to that product. It is a page section — the site places it from a `{ _id: 'platform-directory-section', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `section-module`, `section-title`, `registration-frame` and `link-directory` rather than owning any anatomy of its own.
+A directory of Azion's products under a section title: one column per product group (Build, Store, Secure, Observe), each row an icon, a product name and one line about it, linking to that product. It is a page section — the site places it from a `{ _id: 'platform-directory-section', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `module`, `module-header`, `registration-frame` and `link-directory` rather than owning any anatomy of its own.
 
 ## When to use
 
@@ -31,7 +31,7 @@ A directory of Azion's products under a section title: one column per product gr
 ## Related
 
 - `link-directory` — the named navigation landmark whose columns and rows this band fills.
-- `section-title` — the headline over the directory.
+- `module-header` — the headline over the directory.
 
 ## Best practices
 

@@ -1,6 +1,6 @@
 # Cli Terminal Section
 
-> The Azion CLI band of a product page: a horizontal section title with one outlined button, over a terminal on the pixelate texture that runs off the frame's bottom rule. The terminal is either a recorded Azion CLI session typed live by a `console-mockup` (`script`), in a fixed-height stage that rises in when it scrolls into view, or a static session whose lines enter one after another (`session`). It is a page section — the site places it from a `{ _id: 'cli-terminal-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `button`, `registration-frame`, `texture`, `console-mockup` and `code-block`.
+> The Azion CLI band of a product page: a horizontal section title with one outlined button, over a terminal on the pixelate texture that runs off the frame's bottom rule. The terminal is either a recorded Azion CLI session typed live by a `console-mockup` (`script`), in a fixed-height stage that rises in when it scrolls into view, or a static session whose lines enter one after another (`session`). It is a page section — the site places it from a `{ _id: 'cli-terminal-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `button`, `registration-frame`, `texture`, `console-mockup` and `code-block`.
 
 - Import: `import CliTerminalSection from '@aziontech/webkit/cli-terminal-section'`
 - Category: section · Surface: site · Structure: monolithic
@@ -40,7 +40,7 @@
 | `script` | `CliTerminalSectionScript` | `undefined` | false | Recorded Azion CLI session the terminal types live: `start` or `deploy`; wins over `session`. |
 | `session` | `string` | `''` | false | The terminal session shown under the header when no `script` is set, commands and their output verbatim, highlighted as bash; the band renders nothing when neither is set. |
 | `copyAriaLabel` | `string` | `''` | false | Accessible name of the session's copy button; empty keeps the code block's own. |
-| `primaryAction` | `SectionTitleAction` | `undefined` | false | Outlined button in the section title; `{ label, href, trailing?, target? }`. Omitted when absent. |
+| `primaryAction` | `ModuleHeaderAction` | `undefined` | false | Outlined button in the section title; `{ label, href, trailing?, target? }`. Omitted when absent. |
 
 ## States
 
@@ -54,7 +54,7 @@
 - Visible focus: owned by `code-block` (copy button) and `button`; the `script` terminal has no focusable parts.
 - Keyboard map: `Tab` reaches the button and the copy button; `Enter` follows the button.
 - ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the headline is the section title's `h2`; the copy button is named by `copyAriaLabel`; the `script` terminal is an `aria-hidden` picture of the console (owned by `console-mockup`), so the headline carries the meaning.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `section-title`, `code-block` and `button`.
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `module-header`, `code-block` and `button`.
 - `motion-reduce:transition-none` — the `script` stage's entrance is skipped under reduced motion and the stage is drawn at rest; the session's line entrance is owned by `code-block` and draws at once under reduced motion.
 - Touch target ≥40×40 px: the large button.
 

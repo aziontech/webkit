@@ -21,9 +21,9 @@ The detail page of a resource that owns a long list of records, here a DNS zone.
 
 A full-bleed `PageTabs` with one `Tabs.Trigger` per tab, Main settings first and Records second, in a `sticky top-0` wrapper on the canvas fill: each tab panel scrolls in the layout's content region under the bar, and only the open tab is mounted. See `skills/webkit-navigation`.
 
-### B. Settings sections — `SettingsSection`, `Card`, `ItemList`, `SettingsRow`, `Input`, `FieldDescription`, `FieldError` (required)
+### B. Settings sections — `SettingsGroup`, `Card`, `ItemList`, `SettingsRow`, `Input`, `FieldDescription`, `FieldError` (required)
 
-Main settings is a form in the form column with four `SettingsSection` bands: General, Configure your nameserver, DNSSEC and Status. Each band wraps a flush `Card :padded="false"` around an `ItemList` of `SettingsRow`s, each with a title and a one-sentence description. Name and Domain Name are large `Input`s; their required `FieldError` appears only after Save is pressed with them empty and clears as soon as the user types. See `skills/webkit-form`.
+Main settings is a form in the form column with four `SettingsGroup` bands: General, Configure your nameserver, DNSSEC and Status. Each band wraps a flush `Card :padded="false"` around an `ItemList` of `SettingsRow`s, each with a title and a one-sentence description. Name and Domain Name are large `Input`s; their required `FieldError` appears only after Save is pressed with them empty and clears as soon as the user types. See `skills/webkit-form`.
 
 ### C. Copyable values — `InputGroupRoot`, `Input`, `CopyButton` (required)
 

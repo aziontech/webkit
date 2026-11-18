@@ -32,7 +32,7 @@ A short list of the things one resource is attached to, shown in place inside it
 
 ### A. Container — `Card` (required)
 
-`Card :padded="false"` holds the table and the footer as one surface, so the table runs edge to edge and the footer rule meets the card border. It sits as the body of a `SettingsSection` band of the Settings tab, under that section's heading.
+`Card :padded="false"` holds the table and the footer as one surface, so the table runs edge to edge and the footer rule meets the card border. It sits as the body of a `SettingsGroup` band of the Settings tab, under that section's heading.
 
 ### B. Attached table — `DataTable` (required)
 

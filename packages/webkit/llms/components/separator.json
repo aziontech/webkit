@@ -16,11 +16,11 @@
   "A vertical rule between inline items in a toolbar or meta line."
  ],
  "avoidWhen": [
-  "The break between two page sections → use `section-gap`.",
+  "The break between two page sections → use `spacer`.",
   "A bounded region that scrolls → use `scroll-area`."
  ],
  "related": [
-  "`section-gap` — the frame that divides page sections, with its own rules and vertical air.",
+  "`spacer` — the frame that divides page sections, with its own rules and vertical air.",
   "`scroll-area` — scrolling container; Separator adds no scrolling."
  ],
  "bestPractices": [

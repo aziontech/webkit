@@ -8,8 +8,8 @@
   import PageHeader from '@aziontech/webkit/page-header'
   import SaveBar from '@aziontech/webkit/save-bar'
   import Select from '@aziontech/webkit/select'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
-  import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import { toast } from '@aziontech/webkit/toast'
   import { computed, nextTick, reactive, ref } from 'vue'
@@ -101,8 +101,8 @@
           label="Some settings need a fix before they can be saved."
         />
 
-        <SettingsSection
-          title="Queue"
+        <SettingsGroup
+          label="Queue"
           hint="When the queue starts and what visitors see while they wait."
         >
           <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
@@ -151,10 +151,10 @@
               <Field.Error v-if="errors.title">{{ errors.title }}</Field.Error>
             </Field>
           </div>
-        </SettingsSection>
+        </SettingsGroup>
 
-        <SettingsSection
-          title="Sessions"
+        <SettingsGroup
+          label="Sessions"
           hint="How long a visitor who got in keeps their place."
         >
           <Field :disabled="saving || !form.enabled">
@@ -177,7 +177,7 @@
               >Shorter sessions free places sooner when visitors leave.</Field.Description
             >
           </Field>
-        </SettingsSection>
+        </SettingsGroup>
       </form>
 
       <SaveBar v-if="dirty">

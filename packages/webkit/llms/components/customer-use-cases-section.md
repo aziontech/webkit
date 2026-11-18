@@ -38,7 +38,7 @@
 | `eyebrow` | `string` | `''` | false | Eyebrow above the headline in the title cell, closed by the blinking cursor. |
 | `title` | `string` | `''` | false | Headline of the band, rendered as its `h2` in the title cell. |
 | `description` | `string` | `''` | false | One-line lead under the headline. |
-| `primaryAction` | `SectionTitleAction` | `undefined` | false | Button pinned to the foot of the title cell; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent. |
+| `primaryAction` | `ModuleHeaderAction` | `undefined` | false | Button pinned to the foot of the title cell; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent. |
 | `items` | `CustomerUseCasesSectionItem[]` | `[]` | false | The use cases rendered as frame cells, in order; each item is `{ icon, title, description }`. |
 | `anchor` | `string` | `''` | false | In-page id set on the band so a hash link can target it. |
 

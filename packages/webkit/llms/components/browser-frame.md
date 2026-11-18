@@ -123,12 +123,12 @@ The frame is static apart from its resize handles.
   import Button from '@aziontech/webkit/button'
   import CallToAction from '@aziontech/webkit/call-to-action'
   import CardGrid from '@aziontech/webkit/card-grid'
+  import Container from '@aziontech/webkit/container'
   import FeatureItem from '@aziontech/webkit/feature-item'
+  import Module from '@aziontech/webkit/module'
+  import ModuleHeader from '@aziontech/webkit/module-header'
   import RegistrationFrame from '@aziontech/webkit/registration-frame'
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionGap from '@aziontech/webkit/section-gap'
-  import SectionModule from '@aziontech/webkit/section-module'
-  import SectionTitle from '@aziontech/webkit/section-title'
+  import Spacer from '@aziontech/webkit/spacer'
 </script>
 
 <template>
@@ -136,17 +136,17 @@ The frame is static apart from its resize handles.
     address="https://www.azion.com"
     aria-label="Azion platform page"
   >
-    <SectionContainer max-width="site">
-      <SectionGap
+    <Container max-width="site">
+      <Spacer
         size="small"
         hatch
       />
-      <SectionModule
+      <Module
         :divided="false"
         :padded="false"
       >
         <template #header>
-          <SectionTitle
+          <ModuleHeader
             align="split"
             eyebrow="Platform"
             title="Build, secure and deliver from one platform"
@@ -158,7 +158,7 @@ The frame is static apart from its resize handles.
                 label="See all products"
               />
             </template>
-          </SectionTitle>
+          </ModuleHeader>
         </template>
         <RegistrationFrame
           flush
@@ -197,12 +197,12 @@ The frame is static apart from its resize handles.
             </CardGrid.Cell>
           </CardGrid>
         </RegistrationFrame>
-      </SectionModule>
-      <SectionGap
+      </Module>
+      <Spacer
         size="small"
         hatch
       />
-      <SectionModule
+      <Module
         :divided="false"
         :padded="false"
       >
@@ -227,12 +227,12 @@ The frame is static apart from its resize handles.
             />
           </template>
         </CallToAction>
-      </SectionModule>
-      <SectionGap
+      </Module>
+      <Spacer
         size="small"
         hatch
       />
-    </SectionContainer>
+    </Container>
   </BrowserFrame>
 </template>
 ```
@@ -245,12 +245,12 @@ The frame is static apart from its resize handles.
   import Button from '@aziontech/webkit/button'
   import CallToAction from '@aziontech/webkit/call-to-action'
   import CardGrid from '@aziontech/webkit/card-grid'
+  import Container from '@aziontech/webkit/container'
   import FeatureItem from '@aziontech/webkit/feature-item'
+  import Module from '@aziontech/webkit/module'
+  import ModuleHeader from '@aziontech/webkit/module-header'
   import RegistrationFrame from '@aziontech/webkit/registration-frame'
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionGap from '@aziontech/webkit/section-gap'
-  import SectionModule from '@aziontech/webkit/section-module'
-  import SectionTitle from '@aziontech/webkit/section-title'
+  import Spacer from '@aziontech/webkit/spacer'
 </script>
 
 <template>
@@ -259,17 +259,17 @@ The frame is static apart from its resize handles.
       address="https://www.azion.com/en/documentation/products/build/applications/cache-settings/tiered-cache-configuration/"
       aria-label="Cache settings documentation in a narrow column"
     >
-      <SectionContainer max-width="site">
-        <SectionGap
+      <Container max-width="site">
+        <Spacer
           size="small"
           hatch
         />
-        <SectionModule
+        <Module
           :divided="false"
           :padded="false"
         >
           <template #header>
-            <SectionTitle
+            <ModuleHeader
               align="split"
               eyebrow="Platform"
               title="Build, secure and deliver from one platform"
@@ -281,7 +281,7 @@ The frame is static apart from its resize handles.
                   label="See all products"
                 />
               </template>
-            </SectionTitle>
+            </ModuleHeader>
           </template>
           <RegistrationFrame
             flush
@@ -320,12 +320,12 @@ The frame is static apart from its resize handles.
               </CardGrid.Cell>
             </CardGrid>
           </RegistrationFrame>
-        </SectionModule>
-        <SectionGap
+        </Module>
+        <Spacer
           size="small"
           hatch
         />
-        <SectionModule
+        <Module
           :divided="false"
           :padded="false"
         >
@@ -350,12 +350,12 @@ The frame is static apart from its resize handles.
               />
             </template>
           </CallToAction>
-        </SectionModule>
-        <SectionGap
+        </Module>
+        <Spacer
           size="small"
           hatch
         />
-      </SectionContainer>
+      </Container>
     </BrowserFrame>
   </div>
 </template>

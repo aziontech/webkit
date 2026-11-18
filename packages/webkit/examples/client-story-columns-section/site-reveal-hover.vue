@@ -3,8 +3,8 @@
   import dafitiExtendedReversed from '@aziontech/webkit/assets/dafiti-extended-reversed.svg'
   import madeiramadeiraExtendedReversed from '@aziontech/webkit/assets/madeiramadeira-extended-reversed.svg'
   import ClientStoryColumnsSection from '@aziontech/webkit/client-story-columns-section'
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionGap from '@aziontech/webkit/section-gap'
+  import Container from '@aziontech/webkit/container'
+  import Spacer from '@aziontech/webkit/spacer'
 
   const cells = [
     {
@@ -29,14 +29,14 @@
 </script>
 
 <template>
-  <SectionContainer max-width="site">
-    <SectionGap hatch />
+  <Container max-width="site">
+    <Spacer hatch />
 
     <ClientStoryColumnsSection
       reveal="hover"
       :cells="cells"
     />
 
-    <SectionGap hatch />
-  </SectionContainer>
+    <Spacer hatch />
+  </Container>
 </template>

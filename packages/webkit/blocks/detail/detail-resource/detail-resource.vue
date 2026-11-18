@@ -8,8 +8,8 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import Link from '@aziontech/webkit/link'
   import PageTabs from '@aziontech/webkit/page-tabs'
-  import SectionHeader from '@aziontech/webkit/section-header'
   import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
+  import Subheader from '@aziontech/webkit/subheader'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
@@ -454,7 +454,7 @@ jobs:
               </Card>
 
               <div class="@container flex min-w-0 flex-col gap-(--spacing-md)">
-                <SectionHeader title="Get started">
+                <Subheader title="Get started">
                   <template #description>
                     Two ways to build and deploy this resource. Select one and follow the steps, or
                     read the
@@ -474,7 +474,7 @@ jobs:
                       aria-label="Deploy with"
                     />
                   </template>
-                </SectionHeader>
+                </Subheader>
 
                 <div class="grid min-w-0 gap-(--spacing-lg) @4xl:grid-cols-3">
                   <div

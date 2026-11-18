@@ -8,7 +8,7 @@
   "For more than five stages or stages with art — use `FeatureScrollSection`."
  ],
  "related": [
-  "`Texture`, `RegistrationFrame`, `SectionTitle`."
+  "`Texture`, `RegistrationFrame`, `ModuleHeader`."
  ],
  "bestPractices": [
   "Name each stage with a verb.",

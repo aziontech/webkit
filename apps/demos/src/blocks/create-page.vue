@@ -11,8 +11,8 @@
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
   import SaveBar from '@aziontech/webkit/save-bar'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
-  import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import { toast } from '@aziontech/webkit/toast'
   import { reactive, ref, watch } from 'vue'
@@ -188,8 +188,8 @@
             >
               <legend class="sr-only">Create Resource</legend>
 
-              <SettingsSection
-                title="General"
+              <SettingsGroup
+                label="General"
                 hint="The two fields this endpoint requires: what the domain is called here, and the hostname it answers for."
               >
                 <Card :padded="false">
@@ -244,10 +244,10 @@
                     </Item.List>
                   </template>
                 </Card>
-              </SettingsSection>
+              </SettingsGroup>
 
-              <SettingsSection
-                title="Advanced"
+              <SettingsGroup
+                label="Advanced"
                 v-model:open="advancedOpen"
                 icon="az az-settings"
                 collapsible
@@ -278,7 +278,7 @@
                     </Item.List>
                   </template>
                 </Card>
-              </SettingsSection>
+              </SettingsGroup>
             </fieldset>
           </div>
           <SaveBar variant="centered">

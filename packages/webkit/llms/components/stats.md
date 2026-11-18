@@ -1,6 +1,6 @@
 # Stats
 
-> A band of headline figures — throughput, uptime, points of presence — set in the display face at big-number scale, each in its own cell of a hairline `card-grid` with a short caption underneath. It is the proof band of a marketing page: the one place a page states its numbers, between a `section-title` and the section body.
+> A band of headline figures — throughput, uptime, points of presence — set in the display face at big-number scale, each in its own cell of a hairline `card-grid` with a short caption underneath. It is the proof band of a marketing page: the one place a page states its numbers, between a `module-header` and the section body.
 
 - Import: `import Stats from '@aziontech/webkit/stats'`
 - Category: marketing · Surface: site · Structure: monolithic
@@ -12,11 +12,11 @@
 - Rendering page JSON, or you need a whole band with no custom content → the section (`stats-section`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`stats`).
 - To state a handful of measured facts (2–6) as the proof band of a marketing or landing page.
 - Whenever the figure itself is the message and the caption only names what was measured.
-- Under a `section-title`, as the opening evidence of a section.
+- Under a `module-header`, as the opening evidence of a section.
 
 ## Do
 
-- The band draws no frame of its own: the rule and the corner marks belong to the `section-module` or `registration-frame` that the page assembles it into, so a band placed in a framed column never lands a second hairline on the column's own.
+- The band draws no frame of its own: the rule and the corner marks belong to the `module` or `registration-frame` that the page assembles it into, so a band placed in a framed column never lands a second hairline on the column's own.
 - Keep the band to 2–6 figures: it reads as a row, and past six the cells stop being scannable.
 - Put the unit in `suffix` and the qualifier in `prefix`, so the figure itself stays the largest, highest-contrast thing in the cell.
 - Keep `label` to a few words — it is set at overline scale and is a caption, not a sentence.
@@ -33,7 +33,7 @@
 
 ## Related
 
-- [section-title](section-title.md) — the framed section header this band usually sits under.
+- [module-header](module-header.md) — the framed section header this band usually sits under.
 - [card-grid](card-grid.md) — the hairline grid the cells sit in; its `gap-px` seams are the rules between them.
 - [currency-amount](currency-amount.md) — a monetary amount at three reading distances, with symbol handling.
 - [pricing-card](pricing-card.md) — a plan card, where the headline figure is a price.

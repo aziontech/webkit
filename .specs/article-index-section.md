@@ -7,14 +7,14 @@ spec_version: 5
 template: 2
 created: 2026-11-15
 last_updated: 2026-11-16
-checksum: c1cd4bbaa32415d6a2223b81ae247887bac7cfafb1220b595cbec84c29793cc4
+checksum: f2655c0cea98dadf81e78efb4807fae6c6ba7ddf7441b018183af2fd3540cb10
 ---
 
 # ArticleIndexSection — Component Spec
 
 ## Purpose
 
-Every article or resource of a blog or a resource hub as one ruled list, with the controls to narrow it on one row. `filters` picks the filter bar: `category-search` draws a category picker and a search field (the blog), `facets` draws one dropdown per facet — content type, category, industry — that wraps when it runs out of room (a resource hub). Each entry is a row — its cover on the left, and on the right its overline, headline, a deck and, when it has them, its writers with the byline; the row is one link named by its headline, and from `lg` up a read cue rises into its end on hover or keyboard focus. The filters combine; a facet dropdown with more than seven options gains an option search; a load-more button reveals the next page, and when nothing matches an empty state offers to clear every filter. It is a page section — the site places it from a `{ _id: 'article-index-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `registration-frame`, `toggle-group`, `select`, `input`, `avatar`, `empty-state` and `button`; the selected category, the search term, the facet selections, each dropdown's option search and the page count are local state. A row without a cover draws its client's mark in one flat ink that follows the theme.
+Every article or resource of a blog or a resource hub as one ruled list, with the controls to narrow it on one row. `filters` picks the filter bar: `category-search` draws a category picker and a search field (the blog), `facets` draws one dropdown per facet — content type, category, industry — that wraps when it runs out of room (a resource hub). Each entry is a row — its cover on the left, and on the right its overline, headline, a deck and, when it has them, its writers with the byline; the row is one link named by its headline, and from `lg` up a read cue rises into its end on hover or keyboard focus. The filters combine; a facet dropdown with more than seven options gains an option search; a load-more button reveals the next page, and when nothing matches an empty state offers to clear every filter. It is a page section — the site places it from a `{ _id: 'article-index-section', props }` entry and binds `props` straight onto it — and it composes `module`, `registration-frame`, `toggle-group`, `select`, `input`, `avatar`, `empty-state` and `button`; the selected category, the search term, the facet selections, each dropdown's option search and the page count are local state. A row without a cover draws its client's mark in one flat ink that follows the theme.
 
 ## When to use
 

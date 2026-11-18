@@ -4,7 +4,7 @@
   "title": "Blocks/Detail/DetailGetStarted",
   "surface": "app",
   "kind": "fragment",
-  "summary": "The onboarding block for a resource made from the CLI: a section heading with a toggle between the CLI and GitHub Actions paths, then three numbered step cards, each with a code block for its commands. It sits under the summary on a resource Overview tab and at the end of a create wizard, on the deploy success screen. Built from `SectionHeader`, `ToggleGroup`, `Card` and `CodeBlock`.",
+  "summary": "The onboarding block for a resource made from the CLI: a section heading with a toggle between the CLI and GitHub Actions paths, then three numbered step cards, each with a code block for its commands. It sits under the summary on a resource Overview tab and at the end of a create wizard, on the deploy success screen. Built from `Subheader`, `ToggleGroup`, `Card` and `CodeBlock`.",
   "preview": {
     "layout": "padded",
     "background": "dark"

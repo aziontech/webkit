@@ -10,10 +10,10 @@
   import { defaultCountries } from '../../input/phone-input/countries'
   import PhoneInput from '../../input/phone-input/phone-input.vue'
   import Textarea from '../../input/textarea/textarea.vue'
+  import type { ModuleHeaderAction } from '../../layout/module-header/module-header.vue'
   import FeatureItem from '../../marketing/feature-item/feature-item.vue'
   import Hero from '../../marketing/hero/hero.vue'
   import HeroTitle from '../../marketing/hero/hero-title/hero-title.vue'
-  import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
   import HeroFormSectionSelect from './parts/hero-form-section-select.vue'
 
   defineOptions({
@@ -21,7 +21,7 @@
     inheritAttrs: false
   })
 
-  export type { SectionTitleAction }
+  export type { ModuleHeaderAction }
 
   /** Control a form field renders as. */
   export type HeroFormSectionFieldType = 'text' | 'email' | 'select' | 'phone' | 'textarea'
@@ -94,9 +94,9 @@
     /** Copy after the inline link, closing the description's sentence. */
     descriptionAfter?: string
     /** First button under the copy; `{ label, href, trailing?, target? }`. Shown only with a label and a link. */
-    primaryAction?: SectionTitleAction
+    primaryAction?: ModuleHeaderAction
     /** Second, outlined button beside the first; `{ label, href, trailing?, target? }`. Shown only with a label and a link. */
-    secondaryAction?: SectionTitleAction
+    secondaryAction?: ModuleHeaderAction
     /** In-page id set on the band so a `#hash` link can scroll to it. */
     anchor?: string
     /** The highlights under the description, in order; each is `{ icon, title, description }`. The list renders only when there are items. */
@@ -155,12 +155,12 @@
   const countries = ref<Record<string, string>>({})
   const errors = ref<Record<string, string>>({})
 
-  const usable = (action?: SectionTitleAction) => Boolean(action?.label && action.href)
+  const usable = (action?: ModuleHeaderAction) => Boolean(action?.label && action.href)
 
   const primary = computed(() => usable(props.primaryAction))
 
   const actions = computed(() =>
-    [props.primaryAction, props.secondaryAction].filter((action): action is SectionTitleAction =>
+    [props.primaryAction, props.secondaryAction].filter((action): action is ModuleHeaderAction =>
       usable(action)
     )
   )

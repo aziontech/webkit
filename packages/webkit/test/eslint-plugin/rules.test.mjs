@@ -432,7 +432,7 @@ test('no-gap-after-closing-section', () => {
   const imports = `<script setup>
 import ClosingCallToActionSection from '@aziontech/webkit/closing-call-to-action-section'
 import NewsletterSection from '@aziontech/webkit/newsletter-section'
-import SectionGap from '@aziontech/webkit/section-gap'
+import Spacer from '@aziontech/webkit/spacer'
 import RegistrationFrame from '@aziontech/webkit/registration-frame'
 import Texture from '@aziontech/webkit/texture'
 import FaqSection from '@aziontech/webkit/faq-section'
@@ -442,12 +442,12 @@ import TemplateGallerySection from '@aziontech/webkit/template-gallery-section'
   vue.run('no-gap-after-closing-section', noGapAfterClosingSection, {
     valid: [
       {
-        code: sfc('<SectionGap hatch /><ClosingCallToActionSection title="Go" />'),
+        code: sfc('<Spacer hatch /><ClosingCallToActionSection title="Go" />'),
         filename: 'a.vue'
       },
       {
         code: sfc(
-          '<FaqSection /><SectionGap hatch /><RegistrationFrame borders="none"><Texture kind="lines" /></RegistrationFrame>'
+          '<FaqSection /><Spacer hatch /><RegistrationFrame borders="none"><Texture kind="lines" /></RegistrationFrame>'
         ),
         filename: 'b.vue'
       },
@@ -458,29 +458,29 @@ import TemplateGallerySection from '@aziontech/webkit/template-gallery-section'
         filename: 'c.vue'
       },
       {
-        code: '<template><ClosingCallToActionSection /><SectionGap hatch /></template>',
+        code: '<template><ClosingCallToActionSection /><Spacer hatch /></template>',
         filename: 'd.vue'
       },
       {
         code: sfc(
-          '<ClosingCallToActionSection kind="panel" :hatch="false" /><SectionGap hatch /><ClosingCallToActionSection kind="primary" />'
+          '<ClosingCallToActionSection kind="panel" :hatch="false" /><Spacer hatch /><ClosingCallToActionSection kind="primary" />'
         ),
         filename: 'h.vue'
       },
-      { code: sfc('<TemplateGallerySection title="Go" /><SectionGap hatch />'), filename: 'k.vue' },
+      { code: sfc('<TemplateGallerySection title="Go" /><Spacer hatch />'), filename: 'k.vue' },
       {
-        code: sfc('<TemplateGallerySection :closing="false" title="Go" /><SectionGap hatch />'),
+        code: sfc('<TemplateGallerySection :closing="false" title="Go" /><Spacer hatch />'),
         filename: 'l.vue'
       }
     ],
     invalid: [
       {
-        code: sfc('<ClosingCallToActionSection title="Go" />\n  <SectionGap hatch />'),
+        code: sfc('<ClosingCallToActionSection title="Go" />\n  <Spacer hatch />'),
         filename: 'e.vue',
         errors: [{ messageId: 'doubled' }]
       },
       {
-        code: sfc('<newsletter-section /><!-- end --><section-gap hatch />'),
+        code: sfc('<newsletter-section /><!-- end --><spacer hatch />'),
         filename: 'f.vue',
         errors: [{ messageId: 'doubled' }]
       },
@@ -492,22 +492,22 @@ import TemplateGallerySection from '@aziontech/webkit/template-gallery-section'
         errors: [{ messageId: 'doubled' }]
       },
       {
-        code: sfc('<ClosingCallToActionSection :hatch="true" title="Go" /><SectionGap hatch />'),
+        code: sfc('<ClosingCallToActionSection :hatch="true" title="Go" /><Spacer hatch />'),
         filename: 'i.vue',
         errors: [{ messageId: 'doubled' }]
       },
       {
-        code: sfc('<ClosingCallToActionSection :hatch="stacked" title="Go" /><SectionGap hatch />'),
+        code: sfc('<ClosingCallToActionSection :hatch="stacked" title="Go" /><Spacer hatch />'),
         filename: 'j.vue',
         errors: [{ messageId: 'doubled' }]
       },
       {
-        code: sfc('<TemplateGallerySection closing title="Go" /><SectionGap hatch />'),
+        code: sfc('<TemplateGallerySection closing title="Go" /><Spacer hatch />'),
         filename: 'm.vue',
         errors: [{ messageId: 'doubled' }]
       },
       {
-        code: sfc('<template-gallery-section :closing="last" /><section-gap hatch />'),
+        code: sfc('<template-gallery-section :closing="last" /><spacer hatch />'),
         filename: 'n.vue',
         errors: [{ messageId: 'doubled' }]
       }

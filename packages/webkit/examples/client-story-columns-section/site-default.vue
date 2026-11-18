@@ -3,8 +3,8 @@
   import madeiramadeiraExtendedReversed from '@aziontech/webkit/assets/madeiramadeira-extended-reversed.svg'
   import magaluExtendedColor from '@aziontech/webkit/assets/magalu-extended-color.svg'
   import ClientStoryColumnsSection from '@aziontech/webkit/client-story-columns-section'
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionGap from '@aziontech/webkit/section-gap'
+  import Container from '@aziontech/webkit/container'
+  import Spacer from '@aziontech/webkit/spacer'
 
   const cells = [
     {
@@ -35,8 +35,8 @@
 </script>
 
 <template>
-  <SectionContainer max-width="site">
-    <SectionGap hatch />
+  <Container max-width="site">
+    <Spacer hatch />
 
     <ClientStoryColumnsSection
       aria-label="Featured success stories"
@@ -44,6 +44,6 @@
       :cells="cells"
     />
 
-    <SectionGap hatch />
-  </SectionContainer>
+    <Spacer hatch />
+  </Container>
 </template>

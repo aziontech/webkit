@@ -1,6 +1,6 @@
 # Hero Section
 
-> The opening band of a marketing page: the page `h1` with its overline, accent phrase, sentence and up to two actions, full width above the page column, with an optional client strip on the floor. It is a page section — the site places it from a `{ _id: 'hero-section', props }` entry and binds `props` straight onto it — and it composes `hero`, `hero-title`, `button` and `illustration`, plus `flow-diagram` and `tag` for the topology and `section-container`, `section-module`, `registration-frame`, `card-grid`, `feature-item` and `section-gap` for the argument grid. `variant` picks the layout only: `center` fills a screen over a dot field with the copy centered, `title-band` is a padded band with the copy centered, `copy-beside-art` sets an illustration (or an `image`) beside the copy, sized from that illustration's own drawn bounds so it bleeds past the column edge and trims its empty top and bottom, and `copy-on-top-art` fills a screen with the copy centered over a scene in its `top` or `bottom` slot, unpadded so the scene reaches the band's edges, and draws a `FlowDiagram` topology from `levels` in the bottom window when neither slot is given, so page JSON can carry the scene as data; every layout takes the same copy, actions and client strip, and any layout can set a framed grid of arguments (`items`, three to a row, each a `FeatureItem`) under the band. The client strip's overline falls back to the locale catalog (`Proven on mission-critical workloads`).
+> The opening band of a marketing page: the page `h1` with its overline, accent phrase, sentence and up to two actions, full width above the page column, with an optional client strip on the floor. It is a page section — the site places it from a `{ _id: 'hero-section', props }` entry and binds `props` straight onto it — and it composes `hero`, `hero-title`, `button` and `illustration`, plus `flow-diagram` and `tag` for the topology and `container`, `module`, `registration-frame`, `card-grid`, `feature-item` and `spacer` for the argument grid. `variant` picks the layout only: `center` fills a screen over a dot field with the copy centered, `title-band` is a padded band with the copy centered, `copy-beside-art` sets an illustration (or an `image`) beside the copy, sized from that illustration's own drawn bounds so it bleeds past the column edge and trims its empty top and bottom, and `copy-on-top-art` fills a screen with the copy centered over a scene in its `top` or `bottom` slot, unpadded so the scene reaches the band's edges, and draws a `FlowDiagram` topology from `levels` in the bottom window when neither slot is given, so page JSON can carry the scene as data; every layout takes the same copy, actions and client strip, and any layout can set a framed grid of arguments (`items`, three to a row, each a `FeatureItem`) under the band. The client strip's overline falls back to the locale catalog (`Proven on mission-critical workloads`).
 
 - Import: `import HeroSection from '@aziontech/webkit/hero-section'`
 - Category: section · Surface: site · Structure: monolithic
@@ -15,7 +15,7 @@
 - Home and the product index page: `center` with the client marquee (`marqueeMarks`). No other page type opens with it.
 - Every product page: `title-band` with `size="large"`.
 - Compliance, Recognitions, Support, Careers and Resource Hub: `center-band`.
-- Blog: `title-band` with `size="medium"`, followed by a `small` `section-gap`.
+- Blog: `title-band` with `size="medium"`, followed by a `small` `spacer`.
 - Any other page: `title-band`.
 
 ## Do
@@ -30,7 +30,7 @@
 - When the page exists to capture a lead and the form sits above the fold → use `hero-form-section`.
 - `center` with the client marquee on any page other than Home and the product index page → use `title-band` (or `center-band` on the pages listed under When to use).
 - In a hand-built SFC that needs slots HeroSection does not offer → use the `hero` primitive.
-- For a band inside the page column → use `section-module` or a sibling section.
+- For a band inside the page column → use `module` or a sibling section.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
@@ -51,8 +51,8 @@
 | `titleHighlight` | `string` | `''` | false | Opening words of the headline, painted in the brand accent; reads as one sentence with `title`. |
 | `title` | `string` | `''` | false | Page headline, rendered as the page `h1`; the band renders nothing when empty. |
 | `description` | `string` | `''` | false | Sentence under the headline. |
-| `primaryAction` | `SectionTitleAction` | `undefined` | false | First button under the headline; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
-| `secondaryAction` | `SectionTitleAction` | `undefined` | false | Second, outlined button beside the first; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
+| `primaryAction` | `ModuleHeaderAction` | `undefined` | false | First button under the headline; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
+| `secondaryAction` | `ModuleHeaderAction` | `undefined` | false | Second, outlined button beside the first; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
 | `marqueeLabel` | `string` | `''` | false | Eyebrow above the client marquee; empty uses the locale catalog (`Proven on mission-critical workloads`). |
 | `marqueeMarks` | `string[]` | `[]` | false | Registry names of the client marks on the band floor, in order; the marquee renders only when it has marks. |
 | `illustration` | `string` | `''` | false | Registry name of the illustration set beside the copy in the `copy-beside-art` layout. |
@@ -88,7 +88,7 @@
 - `copy-beside-art` art bounds: a registered illustration whose drawn area is known (the `azion-to-*` comparisons and the solution illustrations) takes a width, a bleed past the column's end edge and a top and bottom trim computed from where it is drawn on its canvas, set as `--hero-section-art-width`, `--hero-section-art-bleed`, `--hero-section-art-trim-top` and `--hero-section-art-trim-bottom` on the art box from `md` up; any other illustration keeps the default bounds (161.45 % wide, 35.73 % bleed, no trim); an `image` fills the media column. Below `md` the art takes the column width
 - `data-orientation="portrait"` on an `image` taller than it is wide
 - Topology: in `copy-on-top-art` with no `top` or `bottom` slot, `levels` draws a `FlowDiagram` in the bottom window, one column per level and one card per node with a title; a level left with no card is dropped, and with none left the window is not drawn. A lit node carries `data-lit` and a brand glow. Other layouts ignore `levels`, and a slotted scene wins over it
-- Argument grid: `items` renders a framed three-column `CardGrid` of `FeatureItem`s (headings at level 2) inside a site-wide `SectionContainer` under the hero, closed by a hatched `SectionGap`; only with a title and at least one item
+- Argument grid: `items` renders a framed three-column `CardGrid` of `FeatureItem`s (headings at level 2) inside a site-wide `Container` under the hero, closed by a hatched `Spacer`; only with a title and at least one item
 
 ## Accessibility
 

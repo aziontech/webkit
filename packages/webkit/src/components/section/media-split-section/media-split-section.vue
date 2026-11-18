@@ -6,8 +6,8 @@
   import type { ConsoleMockupName } from '../../content/console-mockup/console-mockup.vue'
   import Illustration from '../../content/illustration/illustration.vue'
   import type { TextureVariant } from '../../content/texture/texture.vue'
+  import Module from '../../layout/module/module.vue'
   import MediaSplit from '../../marketing/media-split/media-split.vue'
-  import SectionModule from '../../marketing/section-module/section-module.vue'
 
   defineOptions({
     name: 'MediaSplitSection',
@@ -173,7 +173,7 @@
     :data-testid="testId"
     class="scroll-mt-(--spacing-2xl)"
   >
-    <SectionModule
+    <Module
       v-if="title"
       :divided="false"
       :padded="false"
@@ -269,6 +269,6 @@
           />
         </template>
       </MediaSplit>
-    </SectionModule>
+    </Module>
   </div>
 </template>

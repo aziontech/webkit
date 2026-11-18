@@ -1,6 +1,6 @@
 # Compliance Logos Section
 
-> The compliance band: a framed media split whose copy states the certifications and whose media is a frame grid of badges, each a picture over a check-marked pill, closed by a "see more" cell. It is a page section — the site places it from a `{ _id: 'compliance-logos-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `media-split` and `card-grid`.
+> The compliance band: a framed media split whose copy states the certifications and whose media is a frame grid of badges, each a picture over a check-marked pill, closed by a "see more" cell. It is a page section — the site places it from a `{ _id: 'compliance-logos-section', props }` entry and binds `props` straight onto it — and it composes `module`, `media-split` and `card-grid`.
 
 - Import: `import ComplianceLogosSection from '@aziontech/webkit/compliance-logos-section'`
 - Category: section · Surface: site · Structure: monolithic
@@ -33,7 +33,7 @@
 | `description` | `string` | `''` | false | Supporting sentence under the headline. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the badge list. |
 | `certifications` | `ComplianceLogosSectionCertification[]` | `[]` | false | The badges, in order; each is `{ label, badge, alt }` where `badge` is the picture URL and `label` the pill text. |
-| `primaryAction` | `SectionTitleAction` | `undefined` | false | The closing "see more" cell; `{ label, href }`. Omitted when absent. |
+| `primaryAction` | `ModuleHeaderAction` | `undefined` | false | The closing "see more" cell; `{ label, href }`. Omitted when absent. |
 | `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
 
 ## States

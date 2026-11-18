@@ -1,7 +1,7 @@
 <script setup>
+  import Container from '@aziontech/webkit/container'
   import Hero from '@aziontech/webkit/hero'
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionModule from '@aziontech/webkit/section-module'
+  import Module from '@aziontech/webkit/module'
 </script>
 
 <template>
@@ -20,21 +20,21 @@
       />
     </Hero>
 
-    <SectionContainer max-width="site">
-      <SectionModule
+    <Container max-width="site">
+      <Module
         :divided="false"
         title="What you get"
         description="The first module opens on the band's own rule, so it draws no top edge of its own."
       >
         <p class="m-0 text-body-md text-(--text-muted)">Module body.</p>
-      </SectionModule>
+      </Module>
 
-      <SectionModule
+      <Module
         title="How it works"
         description="Every module after the first draws the rule that divides it from the one above."
       >
         <p class="m-0 text-body-md text-(--text-muted)">Module body.</p>
-      </SectionModule>
-    </SectionContainer>
+      </Module>
+    </Container>
   </div>
 </template>

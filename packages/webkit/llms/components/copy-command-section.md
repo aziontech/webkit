@@ -15,7 +15,7 @@
 ## Do
 
 - One line that works when pasted as is.
-- Place it in a hero or section-title actions slot.
+- Place it in a hero or module-header actions slot.
 
 ## Don’t
 

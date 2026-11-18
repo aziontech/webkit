@@ -1,11 +1,11 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import Module from '../../layout/module/module.vue'
+  import ModuleHeader from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import MarqueeLoop from '../../marketing/marquee/marquee-loop.vue'
   import Quote from '../../marketing/quote/quote.vue'
-  import SectionModule from '../../marketing/section-module/section-module.vue'
-  import SectionTitle from '../../marketing/section-title/section-title.vue'
 
   defineOptions({
     name: 'RecognitionMarqueeSection',
@@ -71,7 +71,7 @@
     :aria-label="title || undefined"
     class="scroll-mt-(--spacing-2xl)"
   >
-    <SectionModule
+    <Module
       v-if="items.length > 0"
       :divided="false"
       :padded="false"
@@ -80,7 +80,7 @@
         v-if="title.length > 0"
         #header
       >
-        <SectionTitle
+        <ModuleHeader
           :eyebrow="eyebrow"
           :title="title"
         />
@@ -147,6 +147,6 @@
           </ul>
         </MarqueeLoop>
       </RegistrationFrame>
-    </SectionModule>
+    </Module>
   </section>
 </template>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import Card from '@aziontech/webkit/card'
   import CodeBlock from '@aziontech/webkit/code-block'
-  import SectionHeader from '@aziontech/webkit/section-header'
+  import Subheader from '@aziontech/webkit/subheader'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { computed } from 'vue'
 
@@ -139,7 +139,7 @@ jobs:
 
 <template>
   <div class="@container flex min-w-0 flex-col gap-(--spacing-md)">
-    <SectionHeader title="Get started">
+    <Subheader title="Get started">
       <template #description>
         Two ways to build and deploy this resource. Select one and follow the steps, or read the
         <a
@@ -158,7 +158,7 @@ jobs:
           aria-label="Deploy with"
         />
       </template>
-    </SectionHeader>
+    </Subheader>
 
     <div class="grid min-w-0 gap-(--spacing-lg) @4xl:grid-cols-3">
       <div

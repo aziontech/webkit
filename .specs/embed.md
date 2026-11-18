@@ -4,7 +4,7 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: 046c9e77c7199c04ea23897251239c400c316c67f0209095823ea605dd487f4f
+checksum: 3836ccb0915202e2ffaf3214ae4bbd5094e2bf56a76ea1bd3194778623c7e76f
 created: 2026-09-22
 last_updated: 2026-11-18
 ---
@@ -36,7 +36,7 @@ A responsive `iframe` for third-party content — a demo, a player, a status pag
 
 ## Best practices
 
-- The band draws no frame of its own: the rule and the corner marks belong to the `section-module` or `registration-frame` that the page assembles it into, so a band placed in a framed column never lands a second hairline on the column's own.
+- The band draws no frame of its own: the rule and the corner marks belong to the `module` or `registration-frame` that the page assembles it into, so a band placed in a framed column never lands a second hairline on the column's own.
 
 - Always write a `title` that says what the embedded thing is. It is the frame's accessible name, and a screen-reader user meets it before the content.
 - Pick the `ratio` that matches the source. A `video` ratio around a square form leaves bands of empty frame.

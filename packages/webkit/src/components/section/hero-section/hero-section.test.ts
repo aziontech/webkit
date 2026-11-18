@@ -506,7 +506,7 @@ describe('HeroSection', () => {
       it('omits the grid and its gap when items is empty, and everything without a title', () => {
         const empty = band()
         expect(empty.queryAllByTestId(CELL_TESTID)).toHaveLength(0)
-        expect(empty.queryByTestId('section-gap')).toBeNull()
+        expect(empty.queryByTestId('spacer')).toBeNull()
         empty.unmount()
 
         const untitled = band({ items, title: '' })

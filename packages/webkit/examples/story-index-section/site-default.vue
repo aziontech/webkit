@@ -5,8 +5,8 @@
   import gpaExtendedReversed from '@aziontech/webkit/assets/gpa-extended-reversed.svg'
   import marisaExtendedReversed from '@aziontech/webkit/assets/marisa-extended-reversed.svg'
   import panvelExtendedReversed from '@aziontech/webkit/assets/panvel-extended-reversed.svg'
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionGap from '@aziontech/webkit/section-gap'
+  import Container from '@aziontech/webkit/container'
+  import Spacer from '@aziontech/webkit/spacer'
   import StoryIndexSection from '@aziontech/webkit/story-index-section'
 
   const items = [
@@ -210,8 +210,8 @@
 </script>
 
 <template>
-  <SectionContainer max-width="site">
-    <SectionGap hatch />
+  <Container max-width="site">
+    <Spacer hatch />
 
     <StoryIndexSection
       anchor="cases"
@@ -227,6 +227,6 @@
       aria-label="Success stories"
     />
 
-    <SectionGap hatch />
-  </SectionContainer>
+    <Spacer hatch />
+  </Container>
 </template>

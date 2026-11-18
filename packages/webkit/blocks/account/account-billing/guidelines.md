@@ -36,9 +36,9 @@ A `Card` whose header holds the `Subscription plan` heading and the outlined `Ch
 
 `Upgrade to Enterprise` beside the plan card: one sentence on what the tier adds, four perks with icons, a link to pricing and a primary `Contact sales`, the one primary action on the page (the tier is sold by the sales team). Show the next tier only; hide the card on the top tier.
 
-### F. Invoices controls — `SectionHeader`, `PropertyFilter`, `CollectionPreferences` (required)
+### F. Invoices controls — `Subheader`, `PropertyFilter`, `CollectionPreferences` (required)
 
-A small `SectionHeader` `Invoices` over the view-table controls row: `PropertyFilter` bound with `v-bind="propertyFilterProps"` (Invoice ID free text, Plan, Cycle and Status with options), then Refresh (`Refresh invoices`) and Download CSV as outlined icon buttons in tooltips, then `CollectionPreferences` (page size 10, 25 or 50; columns), saved under `storageKey`.
+A small `Subheader` `Invoices` over the view-table controls row: `PropertyFilter` bound with `v-bind="propertyFilterProps"` (Invoice ID free text, Plan, Cycle and Status with options), then Refresh (`Refresh invoices`) and Download CSV as outlined icon buttons in tooltips, then `CollectionPreferences` (page size 10, 25 or 50; columns), saved under `storageKey`.
 
 ### G. Invoices table — `DataTable`, `TableCellActions`, `TableCellStatus`, `useCollection` (required)
 
@@ -50,11 +50,11 @@ An account with no invoice yet replaces the table with `No invoices yet` and a l
 
 ### I. Payment information — `StatusIndicator` (required on the Payment methods tab)
 
-A `SectionHeader` with Update over a `Card` of four-column `KeyValueList`: AccountBilling email, Auto-renewal as a `StatusIndicator` (On or Off, never colour alone), AccountBilling address and Tax ID (empty shows the empty-value marker).
+A `Subheader` with Update over a `Card` of four-column `KeyValueList`: AccountBilling email, Auto-renewal as a `StatusIndicator` (On or Off, never colour alone), AccountBilling address and Tax ID (empty shows the empty-value marker).
 
 ### J. Payment methods — `DropdownMenu`, `ConfirmDialog` (required on the Payment methods tab)
 
-A `SectionHeader` with Add payment method over a flush `Card` and a `DataTable` of cards: Card holder with a small success `Default` tag, Card as the brand plate and the last four, Expiration date, and `TableCellActions` named after the card with `Set as default` and `Remove` as `DropdownMenu` options, both disabled on the default card. Set as default applies at once with a toast; Remove asks in a `ConfirmDialog` first.
+A `Subheader` with Add payment method over a flush `Card` and a `DataTable` of cards: Card holder with a small success `Default` tag, Card as the brand plate and the last four, Expiration date, and `TableCellActions` named after the card with `Set as default` and `Remove` as `DropdownMenu` options, both disabled on the default card. Set as default applies at once with a toast; Remove asks in a `ConfirmDialog` first.
 
 ### Outcomes — through `toast`
 

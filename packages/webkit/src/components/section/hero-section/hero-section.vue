@@ -6,18 +6,18 @@
   import Button from '../../action/button/button.vue'
   import Illustration from '../../content/illustration/illustration.vue'
   import type { TagSeverity } from '../../content/tag/tag.vue'
+  import type { ModuleHeaderAction } from '../../layout/module-header/module-header.vue'
   import Hero from '../../marketing/hero/hero.vue'
   import HeroTitle, {
     type HeroTitleEyebrowPrefix
   } from '../../marketing/hero/hero-title/hero-title.vue'
-  import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
 
   defineOptions({
     name: 'HeroSection',
     inheritAttrs: false
   })
 
-  export type { SectionTitleAction }
+  export type { ModuleHeaderAction }
 
   /** Layout of the opening band. */
   export type HeroSectionVariant =
@@ -98,9 +98,9 @@
     /** Sentence under the headline. */
     description?: string
     /** First button under the headline; `{ label, href, trailing?, target? }`. Shown only with a label and a link. */
-    primaryAction?: SectionTitleAction
+    primaryAction?: ModuleHeaderAction
     /** Second, outlined button beside the first; `{ label, href, trailing?, target? }`. Shown only with a label and a link. */
-    secondaryAction?: SectionTitleAction
+    secondaryAction?: ModuleHeaderAction
     /** Eyebrow above the client marquee; empty uses the locale catalog (`Proven on mission-critical workloads`). */
     marqueeLabel?: string
     /** Registry names of the client marks on the band floor, in order; the marquee renders only when it has marks. */

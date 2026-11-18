@@ -22,8 +22,8 @@ another's.
 ```
 
 - **The heading** is `PageHeader` (`@aziontech/webkit/page-header`): the page's only h1, its
-  description, and the page's own actions. A band inside the page is titled by a `SectionHeader`
-  (`@aziontech/webkit/section-header`), or by a `SettingsSection` (`@aziontech/webkit/settings-section`)
+  description, and the page's own actions. A band inside the page is titled by a `Subheader`
+  (`@aziontech/webkit/subheader`), or by a `SettingsGroup` (`@aziontech/webkit/settings-group`)
   on a settings page — never by a second hand-written header block.
 - **The boundary** (`layout-boundary`) sets the page's inset from the app chrome — sides, top and
   bottom — and its top inset is the space above the heading.
@@ -172,7 +172,7 @@ The section step is the gap _above_ the band, not inside it.
 
 **The group step is the floor.** No two regions of a page — a banner (`Alert`), a card, a framed
 table, a section heading — ever sit closer than `--layout-group-gap`. The usual way to break it is a
-parent section with no `gap` of its own: a page-level `Alert` above the first `SettingsSection` lands
+parent section with no `gap` of its own: a page-level `Alert` above the first `SettingsGroup` lands
 flush against that section's heading, because the band only spaces itself from the bands before it.
 A banner that speaks for the whole page is a child of the parent section like any band, and the
 parent's `gap-(--layout-section-gap)` spaces it. Tighter steps belong _inside_ one unit — a card's

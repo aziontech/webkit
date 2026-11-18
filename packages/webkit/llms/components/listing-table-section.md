@@ -1,6 +1,6 @@
 # Listing Table Section
 
-> A titled preview of a longer listing: a few linked rows in columns, and one outlined button into the full list. It is a page section — the site places it from a `{ _id: 'listing-table-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `registration-frame`, `table` and, below `sm`, `item`. Each row is one link named by its first column; a pointer click anywhere on the row follows that link (with the same modifier keys), and the link stays the keyboard and screen-reader path. The other columns are metadata in the small overline, each cut to one line with its full text as a tooltip. Below `sm` the same rows become a list of items, the first column as the title and the second as the description in the small overline, with the button going full width.
+> A titled preview of a longer listing: a few linked rows in columns, and one outlined button into the full list. It is a page section — the site places it from a `{ _id: 'listing-table-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `registration-frame`, `table` and, below `sm`, `item`. Each row is one link named by its first column; a pointer click anywhere on the row follows that link (with the same modifier keys), and the link stays the keyboard and screen-reader path. The other columns are metadata in the small overline, each cut to one line with its full text as a tooltip. Below `sm` the same rows become a list of items, the first column as the title and the second as the description in the small overline, with the button going full width.
 
 - Import: `import ListingTableSection from '@aziontech/webkit/listing-table-section'`
 - Category: section · Surface: site · Structure: monolithic
@@ -35,7 +35,7 @@
 | `title` | `string` | `''` | false | Headline of the band, rendered by the left-aligned section title as its `h2`; the band renders no header when empty. |
 | `columns` | `ListingTableSectionColumn[]` | `[]` | false | The columns left to right; each is `{ key, label, grow?, align? }` where `key` picks the row value, `grow` is the flex weight (1, 2 or 3) and `align` is `start` or `end`. The first column names the row and the second describes it on phones. |
 | `data` | `ListingTableSectionRow[]` | `[]` | false | The linked rows, in order; each is `{ href, values }` where `values` maps a column key to its text. |
-| `primaryAction` | `SectionTitleAction` | `undefined` | false | Outlined button into the full listing, in the table footer; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent. |
+| `primaryAction` | `ModuleHeaderAction` | `undefined` | false | Outlined button into the full listing, in the table footer; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent. |
 
 ## States
 

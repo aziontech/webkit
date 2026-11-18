@@ -8,14 +8,14 @@
   import ToggleGroup from '../../action/toggle-group/toggle-group.vue'
   import type { TextureFade, TextureVariant } from '../../content/texture/texture.vue'
   import Texture from '../../content/texture/texture.vue'
-  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
-  import SectionModule from '../../marketing/section-module/section-module.vue'
+  import Module from '../../layout/module/module.vue'
   import type {
-    SectionTitleAlign,
-    SectionTitlePadding,
-    SectionTitleSize
-  } from '../../marketing/section-title/section-title.vue'
-  import SectionTitle from '../../marketing/section-title/section-title.vue'
+    ModuleHeaderAlign,
+    ModuleHeaderPadding,
+    ModuleHeaderSize
+  } from '../../layout/module-header/module-header.vue'
+  import ModuleHeader from '../../layout/module-header/module-header.vue'
+  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
 
   defineOptions({ name: 'ConsoleShowcaseSection', inheritAttrs: false })
 
@@ -51,11 +51,11 @@
     /** What the panel frames. */
     variant?: ConsoleShowcaseSectionVariant
     /** Layout of the headline block. */
-    titleAlign?: SectionTitleAlign
+    titleAlign?: ModuleHeaderAlign
     /** Vertical padding of the headline block. */
-    titlePadding?: SectionTitlePadding
+    titlePadding?: ModuleHeaderPadding
     /** Step of the headline on the heading scale. */
-    size?: SectionTitleSize
+    size?: ModuleHeaderSize
     /** In-page id set on the band so a hash link can target it. */
     anchor?: string
     /** Eyebrow above the title. */
@@ -148,7 +148,7 @@
     :data-variant="variant"
     :aria-label="title || undefined"
   >
-    <SectionModule
+    <Module
       :divided="false"
       :padded="false"
     >
@@ -156,8 +156,8 @@
         v-if="title"
         #header
       >
-        <SectionTitle
-          class="[--section-title-headline-max:var(--container-xl)] [--section-title-headline-span:2]"
+        <ModuleHeader
+          class="[--module-header-headline-max:var(--container-xl)] [--module-header-headline-span:2]"
           :align="titleAlign"
           :padding="titlePadding"
           :size="size"
@@ -189,7 +189,7 @@
               :aria-label="tabsAriaLabel || t('consoleShowcaseSection.views')"
             />
           </template>
-        </SectionTitle>
+        </ModuleHeader>
       </template>
 
       <RegistrationFrame
@@ -217,6 +217,6 @@
           </div>
         </div>
       </RegistrationFrame>
-    </SectionModule>
+    </Module>
   </section>
 </template>

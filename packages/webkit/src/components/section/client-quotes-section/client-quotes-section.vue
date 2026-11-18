@@ -2,17 +2,17 @@
   import { computed, useAttrs } from 'vue'
 
   import Button from '../../action/button/button.vue'
+  import Module from '../../layout/module/module.vue'
+  import type { ModuleHeaderAction } from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import QuoteTabs from '../../marketing/quote-tabs/quote-tabs.vue'
-  import SectionModule from '../../marketing/section-module/section-module.vue'
-  import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
 
   defineOptions({
     name: 'ClientQuotesSection',
     inheritAttrs: false
   })
 
-  export type { SectionTitleAction }
+  export type { ModuleHeaderAction }
 
   /** One client quotation, featured while its client card is selected. */
   export type ClientQuotesSectionItem = {
@@ -40,7 +40,7 @@
     /** The quotes, in order. */
     items?: ClientQuotesSectionItem[]
     /** Button under the quotes; omitted when absent. */
-    primaryAction?: SectionTitleAction
+    primaryAction?: ModuleHeaderAction
     /** Advances to the next quote on a timer, as QuoteTabs does, with its visible pause control; pauses under the pointer or keyboard focus and never runs under reduced motion. */
     autoplay?: boolean
     /** Milliseconds each quote is held before the band advances. */
@@ -77,7 +77,7 @@
     class="scroll-mt-(--spacing-2xl)"
     :data-testid="testId"
   >
-    <SectionModule
+    <Module
       v-if="hasItems"
       :divided="false"
       :padded="false"
@@ -108,6 +108,6 @@
           </template>
         </QuoteTabs>
       </RegistrationFrame>
-    </SectionModule>
+    </Module>
   </div>
 </template>

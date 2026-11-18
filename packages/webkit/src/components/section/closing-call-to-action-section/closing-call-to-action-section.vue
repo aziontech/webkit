@@ -3,17 +3,17 @@
 
   import Button from '../../action/button/button.vue'
   import Texture from '../../content/texture/texture.vue'
+  import Module from '../../layout/module/module.vue'
+  import type { ModuleHeaderAction } from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import CallToAction from '../../marketing/call-to-action/call-to-action.vue'
-  import SectionModule from '../../marketing/section-module/section-module.vue'
-  import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
 
   defineOptions({
     name: 'ClosingCallToActionSection',
     inheritAttrs: false
   })
 
-  export type { SectionTitleAction }
+  export type { ModuleHeaderAction }
 
   /** Layout of the band. */
   export type ClosingCallToActionSectionVariant = 'panel' | 'primary' | 'frame'
@@ -67,9 +67,9 @@
     /** Supporting sentence under the headline. */
     description?: string
     /** The white button of the band, under the headline; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent. */
-    primaryAction?: SectionTitleAction
+    primaryAction?: ModuleHeaderAction
     /** The outlined button of the band, beside the primary one; `{ label, href, trailing? }`. Omitted when absent. */
-    secondaryAction?: SectionTitleAction
+    secondaryAction?: ModuleHeaderAction
     /** Shell command on a copyable line before the actions, copied as written; drawn in `panel` and `primary`. */
     command?: string
     /** Draws the hatched closing frame under the band; turn it off when another closing band stacks directly below and draws the shared frame. */
@@ -139,7 +139,7 @@
     class="group scroll-mt-(--spacing-2xl)"
   >
     <template v-if="title && !isFrame">
-      <SectionModule
+      <Module
         :divided="false"
         :padded="false"
       >
@@ -202,7 +202,7 @@
             </template>
           </template>
         </CallToAction>
-      </SectionModule>
+      </Module>
     </template>
     <RegistrationFrame
       v-if="isFrame || (title && hatch)"

@@ -15,8 +15,8 @@
   import PageHeader from '@aziontech/webkit/page-header'
   import RadioGroup from '@aziontech/webkit/radio-group-root'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
-  import SettingsSection from '@aziontech/webkit/settings-section'
   import Skeleton from '@aziontech/webkit/skeleton'
   import Switch from '@aziontech/webkit/switch'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
@@ -1514,8 +1514,8 @@
                 </Card>
               </div>
 
-              <SettingsSection
-                title="Advanced"
+              <SettingsGroup
+                label="Advanced"
                 hint="Every field here already carries the endpoint's own default, and all of them can be changed once the service exists."
                 v-model:open="advancedOpen"
                 icon="az az-settings"
@@ -1617,7 +1617,7 @@
                     </Item.List>
                   </template>
                 </Card>
-              </SettingsSection>
+              </SettingsGroup>
             </div>
           </Wizard.Step>
         </Wizard>

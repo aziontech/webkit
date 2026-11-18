@@ -80,8 +80,8 @@ another's.
 ```
 
 - **The heading** is `PageHeader` (`@aziontech/webkit/page-header`): the page's only h1, its
-  description, and the page's own actions. A band inside the page is titled by a `SectionHeader`
-  (`@aziontech/webkit/section-header`), or by a `SettingsSection` (`@aziontech/webkit/settings-section`)
+  description, and the page's own actions. A band inside the page is titled by a `Subheader`
+  (`@aziontech/webkit/subheader`), or by a `SettingsGroup` (`@aziontech/webkit/settings-group`)
   on a settings page — never by a second hand-written header block.
 - **The boundary** (`layout-boundary`) sets the page's inset from the app chrome — sides, top and
   bottom — and its top inset is the space above the heading.
@@ -230,7 +230,7 @@ The section step is the gap _above_ the band, not inside it.
 
 **The group step is the floor.** No two regions of a page — a banner (`Alert`), a card, a framed
 table, a section heading — ever sit closer than `--layout-group-gap`. The usual way to break it is a
-parent section with no `gap` of its own: a page-level `Alert` above the first `SettingsSection` lands
+parent section with no `gap` of its own: a page-level `Alert` above the first `SettingsGroup` lands
 flush against that section's heading, because the band only spaces itself from the bands before it.
 A banner that speaks for the whole page is a child of the parent section like any band, and the
 parent's `gap-(--layout-section-gap)` spaces it. Tighter steps belong _inside_ one unit — a card's
@@ -353,8 +353,8 @@ ask the window. Two scales (both in `@aziontech/theme`, "Breakpoints and contain
 
 The components that live in panels already do this, so a page gets it for free: `Table` (the grid
 scrolls sideways inside its own viewport; `stackable` opts a short list into label/value cards),
-`PageHeader` and `SectionHeader` (actions drop under the title, full width), `SettingsRow` (a field moves
-under its copy on a phone, the description wraps in full; `stackable` stacks it in a drawer-width box too), `SettingsSection`, `SaveBar` (actions stack full width, Save on top),
+`PageHeader` and `Subheader` (actions drop under the title, full width), `SettingsRow` (a field moves
+under its copy on a phone, the description wraps in full; `stackable` stacks it in a drawer-width box too), `SettingsGroup`, `SaveBar` (actions stack full width, Save on top),
 `Card` (its content is `@container/card`), `Alert` (the action takes its own line), `EmptyState`,
 `Pagination` (the strip and page-size control wrap under the info text; the page list stays whole), `Wizard` (the rail hides when the
 wizard is narrow), `HelpPanel`, `ChartCard`, `StatTile`, and the body of every dialog and drawer
@@ -449,7 +449,7 @@ Per gap:
 
 ✗ DeploymentSettings.vue:27
   quoted: <section class="layout-section-start flex min-w-0 flex-col">
-            <Alert … />  <div><SettingsSection …/></div>
+            <Alert … />  <div><SettingsGroup …/></div>
   rule:   the parent section carries the section step; without it the banner sits flush on the
           first band's heading
   fix:    <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">

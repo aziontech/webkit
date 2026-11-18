@@ -39,7 +39,7 @@ The table's `#empty` slot holds `No matching tokens` with Clear filters; an acco
 
 When the list does not load, a danger `Alert` with Retry takes the table's place and the heading stays.
 
-### G. Create drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelBody`, `SettingsSection`, `PanelFooter` (required)
+### G. Create drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelBody`, `SettingsGroup`, `PanelFooter` (required)
 
 A large right `Drawer` with one `form`: General (Name, Description) and Expiration. Titled `Create Personal Token`. Footer: Cancel and `Create Personal Token`, so the label does not change on the way in. Create emits `create` with the values; the fields lock while `creating` is set.
 

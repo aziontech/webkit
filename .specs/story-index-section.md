@@ -7,14 +7,14 @@ spec_version: 7
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-16
-checksum: b1339c617af54dddc22b82c99f08b856b7043aba7cb7364481f363037eed28b2
+checksum: 1363c7a2df3d15a38bb8591e7593bc23d7fc7f301a50a521a21eda8937e92ac8
 ---
 
 # StoryIndexSection — Component Spec
 
 ## Purpose
 
-Every success story of a company as one filterable library. A left-aligned title sits over a toolbar — a search field and one select per facet (industry, solution, product) on one row, each starting with an option that clears it — then a grid of story cards and a load-more button that reveals the next page. Below `lg` the toolbar folds to the search field (with its shorter placeholder) and a filter button that reveals the selects, with each applied facet listed under it as a removable chip. A select with more than seven options gains an option search. Each card is one link named by its company: the client mark in a single ink, the story's category as an overline, its description and a read cue whose arrow nudges on hover. The grid runs one column on phones, two from `sm` and three from `lg`. Search and facets combine; when nothing matches, an empty state offers to clear every filter. It is a page section — the site places it from a `{ _id: 'story-index-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `registration-frame`, `input`, `select`, `chip`, `button` and `empty-state`; the search, the facet selections, each select's own option search and the page count are local state, and facets can be seeded from the URL query.
+Every success story of a company as one filterable library. A left-aligned title sits over a toolbar — a search field and one select per facet (industry, solution, product) on one row, each starting with an option that clears it — then a grid of story cards and a load-more button that reveals the next page. Below `lg` the toolbar folds to the search field (with its shorter placeholder) and a filter button that reveals the selects, with each applied facet listed under it as a removable chip. A select with more than seven options gains an option search. Each card is one link named by its company: the client mark in a single ink, the story's category as an overline, its description and a read cue whose arrow nudges on hover. The grid runs one column on phones, two from `sm` and three from `lg`. Search and facets combine; when nothing matches, an empty state offers to clear every filter. It is a page section — the site places it from a `{ _id: 'story-index-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `registration-frame`, `input`, `select`, `chip`, `button` and `empty-state`; the search, the facet selections, each select's own option search and the page count are local state, and facets can be seeded from the URL query.
 
 ## When to use
 
@@ -128,13 +128,13 @@ Every success story of a company as one filterable library. A left-aligned title
 
 ## Tokens
 
-| Region                          | Token (DESIGN.md)                                                                     |
-| ------------------------------- | ------------------------------------------------------------------------------------- |
-| card fill                       | hover `var(--bg-surface-raised)`                                                      |
-| rules                           | `var(--border-default)`                                                               |
+| Region                          | Token (DESIGN.md)                                                                                                                                   |
+| ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| card fill                       | hover `var(--bg-surface-raised)`                                                                                                                    |
+| rules                           | `var(--border-default)`                                                                                                                             |
 | overline, description, read cue | `text-overline-sm` / `text-body-sm`; overline and read cue `var(--text-muted)` (cue hover `var(--text-default)`), description `var(--text-default)` |
-| no-match text                   | `text-label-sm`, `var(--text-muted)`                                                  |
-| focus ring                      | `var(--ring-color)`                                                                   |
+| no-match text                   | `text-label-sm`, `var(--text-muted)`                                                                                                                |
+| focus ring                      | `var(--ring-color)`                                                                                                                                 |
 
 ## Theme gaps
 

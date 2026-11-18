@@ -6,9 +6,9 @@
   import type { CompanyLogoMark } from '../../content/company-logo/company-logo.vue'
   import CardGrid from '../../layout/card-grid/card-grid.vue'
   import CardGridCell from '../../layout/card-grid/card-grid-cell/card-grid-cell.vue'
+  import Module from '../../layout/module/module.vue'
+  import ModuleHeader from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
-  import SectionModule from '../../marketing/section-module/section-module.vue'
-  import SectionTitle from '../../marketing/section-title/section-title.vue'
 
   defineOptions({
     name: 'ArticleCardsSection',
@@ -84,7 +84,7 @@
     :data-align="align"
     :aria-label="title || undefined"
   >
-    <SectionModule
+    <Module
       v-if="items.length > 0"
       :divided="false"
       :padded="false"
@@ -93,7 +93,7 @@
         v-if="hasTitle"
         #header
       >
-        <SectionTitle
+        <ModuleHeader
           :align="align"
           :eyebrow="eyebrow"
           :title="title"
@@ -164,6 +164,6 @@
           </CardGridCell>
         </CardGrid>
       </RegistrationFrame>
-    </SectionModule>
+    </Module>
   </section>
 </template>

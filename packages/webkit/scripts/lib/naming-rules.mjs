@@ -46,7 +46,11 @@ export const RULES = {
   'block-group-first': { stage: 'staged', decision: 'WN07', surface: 'block folders and ids' },
   'part-word': { stage: 'staged', decision: 'N8', surface: 'sub-component folders' },
   'part-export': { stage: 'staged', decision: 'N8', surface: 'sub-component exports' },
-  'section-suffix': { stage: 'staged', decision: 'N12', surface: 'marketing page sections' },
+  'section-suffix': {
+    stage: 'staged',
+    decision: 'N12/WN-S01',
+    surface: 'marketing page sections, and the word section elsewhere'
+  },
   'docs-prefix': { stage: 'staged', decision: 'WN04', surface: 'documentation components' },
   'example-file': { stage: 'staged', decision: 'N13', surface: 'example files' },
   'prop-name': { stage: 'staged', decision: 'N1/N5/N6/api-76', surface: 'props in .vue and specs' },
@@ -509,6 +513,7 @@ export function checkComponentPath(rel, ctx = {}) {
   const folder = segs[segs.length - 2]
   if (isRootFile && (category === 'sections' || category === 'section'))
     out.push(...sectionSuffixProblems(rel, stem))
+  else if (isRootFile) out.push(...sectionWordProblems(rel, stem))
   if (isRootFile) out.push(...docsPrefixProblems(rel, category, stem))
   for (const problem of nameWordProblems(stem))
     out.push(v('near-duplicate', rel, 1, `component "${stem}" uses ${problem} (${RULE_DOC}).`))
@@ -581,6 +586,18 @@ export function docsPrefixProblems(rel, category, stem) {
       inDocs
         ? `documentation component "${stem}" must start with "doc-" — name it "doc-${stem}" (${RULE_DOC}).`
         : `"${stem}" starts with "doc-", which only components in src/components/docs/ use (${RULE_DOC}).`
+    )
+  ]
+}
+
+export function sectionWordProblems(rel, stem) {
+  if (!stem.split('-').includes('section')) return []
+  return [
+    v(
+      'section-suffix',
+      rel,
+      1,
+      `"${stem}" carries the word "section", which only the page sections in src/components/section/ use — name the piece after what it is (${RULE_DOC}).`
     )
   ]
 }

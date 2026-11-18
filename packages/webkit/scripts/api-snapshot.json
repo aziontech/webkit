@@ -737,12 +737,12 @@
     "schema-form",
     "scroll-area",
     "search-trigger",
-    "section-container",
-    "section-gap",
-    "section-header",
-    "section-module",
-    "section-stack",
-    "section-title",
+    "container",
+    "spacer",
+    "subheader",
+    "module",
+    "split-stack",
+    "module-header",
     "select",
     "select-content",
     "select-group",
@@ -751,7 +751,7 @@
     "select-trigger",
     "separator",
     "settings-row",
-    "settings-section",
+    "settings-group",
     "severity-tag",
     "sidebar",
     "sidebar-footer",
@@ -1733,7 +1733,7 @@
       "loading": null,
       "title": null
     },
-    "section-title": {
+    "module-header": {
       "align": [
         "center",
         "split",
@@ -3100,7 +3100,7 @@
       "hatch": null,
       "marks": null
     },
-    "section-gap": {
+    "spacer": {
       "hatch": null,
       "size": [
         "large",
@@ -3207,7 +3207,7 @@
       "title": null,
       "titleId": null
     },
-    "section-header": {
+    "subheader": {
       "anchor": null,
       "description": null,
       "size": [
@@ -3216,7 +3216,7 @@
       ],
       "title": null
     },
-    "settings-section": {
+    "settings-group": {
       "anchor": null,
       "collapsible": null,
       "hint": null,
@@ -3285,7 +3285,7 @@
       "shortcut": null,
       "width": null
     },
-    "section-stack": {
+    "split-stack": {
       "flush": null,
       "sticky": null
     },
@@ -4310,7 +4310,7 @@
       "icon": null,
       "title": null
     },
-    "section-module": {
+    "module": {
       "align": null,
       "description": null,
       "divided": null,
@@ -4318,7 +4318,7 @@
       "padded": null,
       "title": null
     },
-    "section-container": {
+    "container": {
       "bordered": null,
       "maxWidth": null,
       "padded": null

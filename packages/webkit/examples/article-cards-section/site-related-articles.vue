@@ -1,8 +1,8 @@
 <script setup>
   import ArticleCardsSection from '@aziontech/webkit/article-cards-section'
   import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionGap from '@aziontech/webkit/section-gap'
+  import Container from '@aziontech/webkit/container'
+  import Spacer from '@aziontech/webkit/spacer'
 
   const items = [
     {
@@ -36,8 +36,8 @@
 </script>
 
 <template>
-  <SectionContainer max-width="site">
-    <SectionGap hatch />
+  <Container max-width="site">
+    <Spacer hatch />
 
     <ArticleCardsSection
       align="start"
@@ -46,6 +46,6 @@
       aria-label="Related Articles"
     />
 
-    <SectionGap hatch />
-  </SectionContainer>
+    <Spacer hatch />
+  </Container>
 </template>

@@ -1,6 +1,6 @@
 # Plan Comparison Section
 
-> The feature-by-feature matrix under the plan cards on Pricing: one column per plan with its name and action button pinned in the header while the page scrolls, one band per product with an overline, a title and a lead, and one row per feature saying what each plan includes — an included mark, a not-included mark, or the allowance as text. The recommended plan carries an accent bar, and below the large breakpoint the table folds to one plan picked from a searchable select. It is a page section — the site places it from a `{ _id: 'plan-comparison-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `select`, `input`, `button`, `icon-button`, `popover`, `tooltip`, `eyebrow`, `tag` and `link`.
+> The feature-by-feature matrix under the plan cards on Pricing: one column per plan with its name and action button pinned in the header while the page scrolls, one band per product with an overline, a title and a lead, and one row per feature saying what each plan includes — an included mark, a not-included mark, or the allowance as text. The recommended plan carries an accent bar, and below the large breakpoint the table folds to one plan picked from a searchable select. It is a page section — the site places it from a `{ _id: 'plan-comparison-section', props }` entry and binds `props` straight onto it — and it composes `module`, `select`, `input`, `button`, `icon-button`, `popover`, `tooltip`, `eyebrow`, `tag` and `link`.
 
 - Import: `import PlanComparisonSection from '@aziontech/webkit/plan-comparison-section'`
 - Category: section · Surface: site · Structure: monolithic
@@ -41,7 +41,7 @@
 | `excludedLabel` | `string` | `''` | false | Tooltip and screen-reader text of a not-included cell; empty uses the locale catalog (`Not included`). |
 | `plans` | `PlanComparisonSectionPlan[]` | `[]` | false | The plan columns, in order; each is `{ id, name, description?, highlighted?, action }` with `action` as `{ label, href }`; a plan without a name is dropped. |
 | `sections` | `PlanComparisonSectionSection[]` | `[]` | false | The product bands, in order; each is `{ eyebrow, title, description, rows, action? }` (`action` closes the band, `{ label, href }`) and a row is `{ label, values, group?, hint?, tag? }` with one value per plan: `true` or `✓` is included, `—` is not included, other text shows as written, empty is blank; `hint` defines the label in a popover. |
-| `primaryAction` | `SectionTitleAction` | `undefined` | false | Closing link under the table, opened in a new tab; `{ label, href }`. Omitted when absent. |
+| `primaryAction` | `ModuleHeaderAction` | `undefined` | false | Closing link under the table, opened in a new tab; `{ label, href }`. Omitted when absent. |
 
 ## States
 

@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 4
-checksum: c760d3e4eaedf8af2dab330defbef7d530857908d4d21c16477f78f6118612eb
+checksum: d8561e6e2d2d75f4a33e3f2c7d323148fd29a57b1b37c59dd0b9f4859e528155
 created: 2026-09-25
 last_updated: 2026-11-18
 ---
@@ -36,7 +36,7 @@ A band that pins to the viewport and is read by scrolling through it: a stack of
 - `media-split` — one claim, one medium, no selection and no pin.
 - `code-block` — the medium this band most often holds, one sample per claim.
 - `illustration` — the official scene a claim's `media` slot otherwise holds.
-- `section-title` — the heading above the band; this component carries no title of its own.
+- `module-header` — the heading above the band; this component carries no title of its own.
 
 ## Best practices
 

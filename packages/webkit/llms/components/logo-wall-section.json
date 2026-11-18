@@ -8,7 +8,7 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "The customers band: a section title over a framed logo wall of linked client marks with one signed quote in its aside, closed by a call to action. It is a page section — the site places it from a `{ _id: 'logo-wall-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `registration-frame`, `logo-wall`, `quote` and `button`.",
+ "purpose": "The customers band: a section title over a framed logo wall of linked client marks with one signed quote in its aside, closed by a call to action. It is a page section — the site places it from a `{ _id: 'logo-wall-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `registration-frame`, `logo-wall`, `quote` and `button`.",
  "setup": null,
  "useWhen": [
   "Use LogoWallSection for customer logos plus one featured quote.",
@@ -88,14 +88,14 @@
   },
   {
    "name": "primaryAction",
-   "type": "SectionTitleAction",
+   "type": "ModuleHeaderAction",
    "default": "undefined",
    "required": "false",
    "doc": "Button under the quote; `{ label, href, trailing?, target? }`. Omitted when absent."
   },
   {
    "name": "secondaryAction",
-   "type": "SectionTitleAction",
+   "type": "ModuleHeaderAction",
    "default": "undefined",
    "required": "false",
    "doc": "Outlined button beside the primary one under the quote; `{ label, href, trailing?, target? }`. Omitted when absent."

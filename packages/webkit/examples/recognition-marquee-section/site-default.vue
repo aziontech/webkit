@@ -8,9 +8,9 @@
   import gartnerExtendedReversed from '@aziontech/webkit/assets/gartner-extended-reversed.svg'
   import gigaomExtendedColor from '@aziontech/webkit/assets/gigaom-extended-color.svg'
   import gigaomExtendedReversed from '@aziontech/webkit/assets/gigaom-extended-reversed.svg'
+  import Container from '@aziontech/webkit/container'
   import RecognitionMarqueeSection from '@aziontech/webkit/recognition-marquee-section'
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionGap from '@aziontech/webkit/section-gap'
+  import Spacer from '@aziontech/webkit/spacer'
 
   const items = [
     {
@@ -71,8 +71,8 @@
 </script>
 
 <template>
-  <SectionContainer max-width="site">
-    <SectionGap hatch />
+  <Container max-width="site">
+    <Spacer hatch />
 
     <RecognitionMarqueeSection
       eyebrow="Analysts"
@@ -81,6 +81,6 @@
       :items="items"
     />
 
-    <SectionGap hatch />
-  </SectionContainer>
+    <Spacer hatch />
+  </Container>
 </template>

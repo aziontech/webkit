@@ -36,9 +36,9 @@ A grid of label and value pairs, one column below `sm` so no value runs into the
 
 The last band, on the canvas fill, says what the user can do next in one sentence and ends on an outlined Documentation `Button`, e.g. how to deploy to production for a resource with nothing deployed.
 
-### E. Get started — `SectionHeader`, `ToggleGroup`, `Card`, `CodeBlock` (optional)
+### E. Get started — `Subheader`, `ToggleGroup`, `Card`, `CodeBlock` (optional)
 
-For a resource made from the CLI, the `detail/detail-get-started` section follows the summary: a `SectionHeader` with the CLI or GitHub Actions `ToggleGroup`, then three numbered step `Card`s with a `CodeBlock` each.
+For a resource made from the CLI, the `detail/detail-get-started` section follows the summary: a `Subheader` with the CLI or GitHub Actions `ToggleGroup`, then three numbered step `Card`s with a `CodeBlock` each.
 
 ## Breadcrumb and environment
 
@@ -157,7 +157,7 @@ Grouped by the resource type the page shows. A deployment's own page is `detail/
 
 ### Application
 
-- Application: a whole application page body, with working tabs. Overview is the summary card; Versions and Deployments are a small `SectionHeader` over a flush `DataTable`; Topology draws the request path with `TopologyDiagram` (domain, workload, firewall, application, function instance). Binding or removing the firewall or the function only stages the change: the node turns dashed with a Staged status, a polite status line names it, and the tab row shows the count as a warning `Tag` beside Deploy. Deploy opens a `Drawer` that lists each staged change as from and to, then runs on its own: a loading toast, then the state-async-submit toast with **Edit** (back to the Topology tab) and **Redeploy**, never View deployments.
+- Application: a whole application page body, with working tabs. Overview is the summary card; Versions and Deployments are a small `Subheader` over a flush `DataTable`; Topology draws the request path with `TopologyDiagram` (domain, workload, firewall, application, function instance). Binding or removing the firewall or the function only stages the change: the node turns dashed with a Staged status, a polite status line names it, and the tab row shows the count as a warning `Tag` beside Deploy. Deploy opens a `Drawer` that lists each staged change as from and to, then runs on its own: a loading toast, then the state-async-submit toast with **Edit** (back to the Topology tab) and **Redeploy**, never View deployments.
 - ApplicationBuild: an application page body with Overview, Versions, Build and Deployments. Dragging files over the page raises the dashed drop target of `state/state-project-intake`; dropping them or Deploy opens a deploy `Drawer` naming the source, and the run reports through the state-async-submit toast with Edit and Redeploy. Leaving the Build tab with unsaved changes asks first in a `ConfirmDialog`.
 
 ## Related

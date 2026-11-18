@@ -1,0 +1,93 @@
+{
+ "name": "subheader",
+ "binding": "Subheader",
+ "import": "@aziontech/webkit/subheader",
+ "treeShakeableImport": "@aziontech/webkit/subheader",
+ "category": "layout",
+ "surface": "app",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The heading of one band inside a page: an h2 with a one-line description, a copy-link button that appears when the heading is hovered or focused (when it has an `anchor`), and the band's own actions on the right. Below `md` the actions drop under the copy.",
+ "setup": null,
+ "useWhen": [
+  "Use Subheader for the h2 heading of one band inside a console page; for marketing pages use ModuleHeader, and for a settings band use SettingsGroup.",
+  "A band of a page that holds a card, a table or a list: Payment information on Billing, Get started on a resource, General in a create form.",
+  "A band that someone should be able to link to (`anchor`)."
+ ],
+ "avoidWhen": [
+  "The page title → use `page-header`.",
+  "A settings band whose guidance sits in a Hint and whose body is a card of setting rows → use `settings-group`."
+ ],
+ "related": [
+  "`page-header` — the page's h1.",
+  "`settings-group` — the settings band with a Hint, a gutter copy-link and an optional disclosure; use it, not this, for a band of `SettingsRow`s.",
+  "`module-header` — the marketing section heading (centred, left or horizontal); use it on site pages, this one in the console.",
+  "`copy-button` — the copy-link affordance it renders."
+ ],
+ "bestPractices": [
+  "Keep the description to one sentence; put longer guidance in the band body.",
+  "Set `anchor` on bands people link to, so the h2 takes the id and the copy-link button appears.",
+  "Keep band actions to one or two outlined medium buttons."
+ ],
+ "props": [
+  {
+   "name": "title",
+   "type": "string",
+   "default": "—",
+   "required": "true",
+   "doc": "The band title, rendered as an h2."
+  },
+  {
+   "name": "description",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "One sentence under the title."
+  },
+  {
+   "name": "size",
+   "type": "'small' | 'medium'",
+   "default": "'medium'",
+   "required": "false",
+   "doc": "Heading scale of the title (subset: no `large`)."
+  },
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Id of the h2 that a hash link targets; when set, a copy-link button appears beside the title on hover or focus."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "description",
+   "scope": "—",
+   "notes": "Rich description content (links, inline code); replaces the `description` prop."
+  },
+  {
+   "name": "actions",
+   "scope": "—",
+   "notes": "The band's own actions, on the right of the copy."
+  }
+ ],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/subheader/default.vue"
+  },
+  {
+   "name": "WithActions",
+   "file": "examples/subheader/with-actions.vue"
+  },
+  {
+   "name": "Sizes",
+   "file": "examples/subheader/sizes.vue"
+  }
+ ],
+ "docs": "components/subheader.md"
+}

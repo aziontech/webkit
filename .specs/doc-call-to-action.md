@@ -3,9 +3,9 @@ name: doc-call-to-action
 category: docs
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: e7c76aa790e9f6cde4eee880476f99ee96c05015eeabd08b2fe23c6d1292d4ad
+checksum: 1180a4ab22d41ae122b7a5a145f1208cecc3e4b328400561eadabc175bf030bd
 created: 2026-11-14
 last_updated: 2026-11-18
 ---
@@ -60,10 +60,10 @@ The closing offer of a documentation page, parked at the foot of the "On this pa
 | ----------------- | -------------------- | ----------- | -------- | ---------------------------------------------------------------------------- |
 | `title`           | `string`             | `''`        | false    | The offer's headline; names the complementary landmark.                      |
 | `label`           | `string`             | `''`        | false    | Fallback copy when the default slot is empty.                                |
-| `primaryAction`   | `SectionTitleAction` | `undefined` | false    | The primary action, `{ label, href }`; unset or an empty label renders none. |
-| `secondaryAction` | `SectionTitleAction` | `undefined` | false    | The outlined secondary action, `{ label, href }`; unset renders none.        |
+| `primaryAction`   | `ModuleHeaderAction` | `undefined` | false    | The primary action, `{ label, href }`; unset or an empty label renders none. |
+| `secondaryAction` | `ModuleHeaderAction` | `undefined` | false    | The outlined secondary action, `{ label, href }`; unset renders none.        |
 
-`SectionTitleAction` is exported: `{ label: string; href: string }`.
+`ModuleHeaderAction` is exported: `{ label: string; href: string }`.
 
 ## Events
 

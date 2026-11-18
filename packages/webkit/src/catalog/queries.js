@@ -597,7 +597,7 @@ export function searchComponents(catalog, query, { surface } = {}) {
       ...(wantedSurface ? { surface: wantedSurface } : {}),
       count: matches.length,
       matches,
-      hint: 'A marketing page is the shell/shell-site block (get_block("shell/shell-site")) filled with page sections: import each from its flat subpath, bind it with v-bind="section.props" and place it inside SectionContainer and SectionGap (rule webkit-sections).'
+      hint: 'A marketing page is the shell/shell-site block (get_block("shell/shell-site")) filled with page sections: import each from its flat subpath, bind it with v-bind="section.props" and place it inside Container and Spacer (rule webkit-sections).'
     }
   }
   const aliases = aliasHits(catalog, q)
@@ -1257,7 +1257,7 @@ export function suggestComponent(catalog, need, { surface } = {}) {
           .slice(0, 3)
           .map((r) => ({ ...componentCard(catalog, r.sub), score: r.score })),
         found: true,
-        hint: 'A marketing band is a page section: import it from its flat subpath (@aziontech/webkit/<name>, the site JSON _id), bind it with v-bind="section.props" and place it inside SectionContainer and SectionGap (rule webkit-sections).'
+        hint: 'A marketing band is a page section: import it from its flat subpath (@aziontech/webkit/<name>, the site JSON _id), bind it with v-bind="section.props" and place it inside Container and Spacer (rule webkit-sections).'
       }
     }
   }

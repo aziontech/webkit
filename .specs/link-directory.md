@@ -4,7 +4,7 @@ category: marketing
 structure: composition
 status: implemented
 spec_version: 4
-checksum: d92c1eb090d8bd9e1ba549439878da32dedcd42b9302f6255ea62956751a0101
+checksum: 55c150e2ce6f32d683e7228e035eb216a63b0fa25bd04d6e3c7fa5dab066f87c
 created: 2026-09-24
 last_updated: 2026-11-18
 ---
@@ -18,7 +18,7 @@ A directory of destinations laid out in columns on one set of shared hairlines: 
 ## When to use
 
 - Use LinkDirectory for a columned directory of destinations inside a marketing band.
-- As the "everything on the platform" band of a product, solutions or pricing page, under a `section-title` and inside the page's frame.
+- As the "everything on the platform" band of a product, solutions or pricing page, under a `module-header` and inside the page's frame.
 - When a set of destinations is grouped and the group's name carries as much as the destinations under it.
 - When each destination needs a glyph and one line of what it is, not just a label.
 - When the same directory appears on several pages and has to read identically on every one.
@@ -37,7 +37,7 @@ A directory of destinations laid out in columns on one set of shared hairlines: 
 - `bento-grid` — unequal cells on the same shared rules.
 - `navigation-menu` — the same anatomy inside an overlay, with a trigger and a panel.
 - `footer` — the other place a directory of links is laid out in columns.
-- `section-module` / `registration-frame` — the frame this block is normally dropped into.
+- `module` / `registration-frame` — the frame this block is normally dropped into.
 
 ## Best practices
 

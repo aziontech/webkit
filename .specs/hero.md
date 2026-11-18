@@ -4,7 +4,7 @@ category: marketing
 structure: composition
 status: implemented
 spec_version: 8
-checksum: 1d816a57f142940e5fae4cc67e114b3e9dd765f4c3c5afc2d23e26b6422b1393
+checksum: fe59a9ea712eb41a7d55961bbb947aba025bd9a71b0a7fd38370e327ff8c03ce
 created: 2026-09-22
 last_updated: 2026-11-15
 ---
@@ -27,16 +27,16 @@ The opening band of a page: a full-bleed section spanning the whole viewport wid
 ## When NOT to use
 
 - For a marketing page opening placed from page JSON → use `hero-section` (or `hero-form-section` for a lead form).
-- For the framed column of bands below the opening → use `section-container`.
-- For one band inside that column → use `section-module`.
-- For a section header further down the page → use `section-title`, which renders an `h2`.
+- For the framed column of bands below the opening → use `container`.
+- For one band inside that column → use `module`.
+- For a section header further down the page → use `module-header`, which renders an `h2`.
 - For a mid-page announcement → use `call-to-action` with `variant="announcement"`; for the closing ask → use `call-to-action`.
 - For a copy-and-media pairing that is not the page opening → use `media-split`.
 
 ## Related
 
-- `section-container` — the framed column below it; this band's `border-b` is that column's top edge.
-- `section-module` — the brick stacked inside that column.
+- `container` — the framed column below it; this band's `border-b` is that column's top edge.
+- `module` — the brick stacked inside that column.
 - `texture` — the backdrop the `texture` and `floorTexture` props paint, at the pitch `textureSize` and `floorTextureSize` set; reach for the `background` slot only when the layer needs more than variant, size and fade.
 - `media-split` — the same copy-beside-media shape at section scale, rendering an `h2`.
 - `call-to-action` — the mid-page announcement band (`variant="announcement"`) and the closing ask.
@@ -46,7 +46,7 @@ The opening band of a page: a full-bleed section spanning the whole viewport wid
 - One `Hero` per page. It owns the `h1` through `Hero.Title`, and a second breaks the document outline.
 - Pass `variant="screen"` for an opening band that should measure one screen, and declare the sticky bar's height as `--hero-banner-offset` so the band still measures exactly one screen beneath it.
 - Put the backdrop in the `background` slot rather than on the band's own class: the slot renders beneath the content layer and is already marked decorative.
-- Turn `padded` off when the slotted content owns its block rhythm; the inline inset is not optional, because it is the band inset every band below also applies: the content column is the same box a `SectionContainer` of the same `maxWidth` draws (its frame line is the page boundary the bar above the band also reads), and the copy starts `--spacing-xl` inside it, on the same edge as a `SectionModule` title and body below.
+- Turn `padded` off when the slotted content owns its block rhythm; the inline inset is not optional, because it is the band inset every band below also applies: the content column is the same box a `Container` of the same `maxWidth` draws (its frame line is the page boundary the bar above the band also reads), and the copy starts `--spacing-xl` inside it, on the same edge as a `Module` title and body below.
 - Set the band's air with `size`, never with a padded wrapper around the copy: `large` is the opening a page leads with, and the rhythm is the same above and below so the copy and the media sit on the band's vertical centre.
 - Keep `titleHighlight` to the opening phrase of the headline — it is the same sentence, only painted differently.
 - Put the calls to action in `Hero.Title`'s `actions` slot; it stacks them full-width on narrow screens, which is what makes a hero button a comfortable thumb target.
@@ -181,7 +181,7 @@ _none_
 | headline to description            | `var(--spacing-md)` gap plus `var(--spacing-md)` margin                                          |
 | asset window clip                  | — (geometry, set by the consumer's `--hero-banner-*` properties)                                 |
 | width cap                          | `var(--container-3xl)` … `var(--container-7xl)`                                                  |
-| content column (`maxWidth` site)   | `.layout-column-site`, the box `SectionContainer` draws at the same width                        |
+| content column (`maxWidth` site)   | `.layout-column-site`, the box `Container` draws at the same width                               |
 
 ## Theme gaps
 
@@ -209,7 +209,7 @@ _none_
 - Backdrops — composite story rendering every `texture` value (justified: a texture is a multi-option axis, and the canonical composite story for it)
 - AssetWindows — the `top` and `bottom` slots filled (justified: the clipping windows and their `--hero-banner-*` geometry cannot be read from the prop table)
 - Alignment — composite story rendering every `align` value (justified: a multi-option axis whose effect only exists in a `screen` band)
-- PageLanguage — the band above a `section-container` (justified: the band's `border-b` is another component's top edge, and that handoff is the reason the band exists)
+- PageLanguage — the band above a `container` (justified: the band's `border-b` is another component's top edge, and that handoff is the reason the band exists)
 - Carousel — the band with a `floorTexture` field and the brand strip on its floor (justified: the strip is a floor region the prop table cannot show, and its plinth ground is set by a custom property rather than a prop)
 - Banners — composite story placing a scene from the package's illustration library in each asset slot (`background`, `top`, `media`) (justified: where an asset sits decides where the copy stands, and the slots only read side by side)
 

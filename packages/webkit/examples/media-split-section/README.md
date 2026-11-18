@@ -4,7 +4,7 @@ One claim beside its picture, on its own frame: copy on one side, the media on a
 
 The media cell sits on the small pixelate texture, fading toward the top. With `size="large"` the headline is set at `heading-xl` and centred beside the media. With one action the whole band links to it; with two the band stays unlinked and the reader picks a button.
 
-The band is the `MediaSplitSection` component from `@aziontech/webkit/media-split-section`; it composes `SectionModule` and a `framed` `MediaSplit`, with a scene (a `ConsoleMockup` widget among them) or an `Illustration` from the illustration registry in the media cell. The media is required; code goes in `FeatureScrollSection` and a request-flow diagram in `ConsoleShowcaseSection`.
+The band is the `MediaSplitSection` component from `@aziontech/webkit/media-split-section`; it composes `Module` and a `framed` `MediaSplit`, with a scene (a `ConsoleMockup` widget among them) or an `Illustration` from the illustration registry in the media cell. The media is required; code goes in `FeatureScrollSection` and a request-flow diagram in `ConsoleShowcaseSection`.
 
 ## Examples
 

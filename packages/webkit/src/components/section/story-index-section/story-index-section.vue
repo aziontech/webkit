@@ -12,9 +12,9 @@
   import SelectContent from '../../input/select/select-content/select-content.vue'
   import SelectItem from '../../input/select/select-item/select-item.vue'
   import SelectTrigger from '../../input/select/select-trigger/select-trigger.vue'
+  import Module from '../../layout/module/module.vue'
+  import ModuleHeader from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
-  import SectionModule from '../../marketing/section-module/section-module.vue'
-  import SectionTitle from '../../marketing/section-title/section-title.vue'
 
   defineOptions({
     name: 'StoryIndexSection',
@@ -246,7 +246,7 @@
     :aria-label="title || undefined"
     class="scroll-mt-(--spacing-2xl)"
   >
-    <SectionModule
+    <Module
       :divided="false"
       :padded="false"
     >
@@ -254,7 +254,7 @@
         v-if="hasTitle"
         #header
       >
-        <SectionTitle
+        <ModuleHeader
           align="start"
           :title="title"
         />
@@ -463,6 +463,6 @@
           </template>
         </EmptyState>
       </RegistrationFrame>
-    </SectionModule>
+    </Module>
   </section>
 </template>

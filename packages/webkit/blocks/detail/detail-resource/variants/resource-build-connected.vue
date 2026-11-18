@@ -9,8 +9,8 @@
   import PageHeader from '@aziontech/webkit/page-header'
   import PageTabs from '@aziontech/webkit/page-tabs'
   import SaveBar from '@aziontech/webkit/save-bar'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
-  import SettingsSection from '@aziontech/webkit/settings-section'
   import Tabs from '@aziontech/webkit/tabs'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, reactive, ref } from 'vue'
@@ -90,8 +90,8 @@
               </PageHeader>
 
               <div class="mt-(--layout-section-gap) flex min-w-0 flex-col">
-                <SettingsSection
-                  title="Git repository"
+                <SettingsGroup
+                  label="Git repository"
                   hint="The repository this resource builds from, and the branches a push deploys."
                   anchor="git-repository"
                 >
@@ -180,10 +180,10 @@
                       </fieldset>
                     </template>
                   </Card>
-                </SettingsSection>
+                </SettingsGroup>
 
-                <SettingsSection
-                  title="Build configuration"
+                <SettingsGroup
+                  label="Build configuration"
                   hint="How the CLI builds this resource."
                   anchor="build-configuration"
                 >
@@ -263,10 +263,10 @@
                       </template>
                     </Card>
                   </form>
-                </SettingsSection>
+                </SettingsGroup>
 
-                <SettingsSection
-                  title="Deployment"
+                <SettingsGroup
+                  label="Deployment"
                   hint="The personal token the workflow authenticates with, kept as a repository secret."
                   anchor="deployment"
                 >
@@ -302,7 +302,7 @@
                       </Item.List>
                     </template>
                   </Card>
-                </SettingsSection>
+                </SettingsGroup>
               </div>
             </div>
 

@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: e28a1d38d256951806da5034ca58bc354db7147d6bf4d10213c1e5c5382c5d6b
+checksum: 0f25c66f4e519f92227d321577371b886625137e5e648b5bd5feb8c1c6cbe37a
 created: 2026-11-11
 last_updated: 2026-11-18
 ---
@@ -18,14 +18,14 @@ A documentation section heading that is also the link to itself. The whole text 
 
 ## When to use
 
-- Use DocHeading only for h2/h3 inside documentation pages; a console page band uses SectionHeader.
+- Use DocHeading only for h2/h3 inside documentation pages; a console page band uses Subheader.
 - Every `h2`–`h4` on a docs page that the page rail lists.
 - Section headings on a designed docs page composed in Vue.
 
 ## When NOT to use
 
 - For the page title — use `DocPageHeader`.
-- On marketing pages — use `SectionTitle`.
+- On marketing pages — use `ModuleHeader`.
 
 ## Related
 

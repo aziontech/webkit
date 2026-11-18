@@ -18,7 +18,7 @@
   "For more than five stages or stages with art — use `FeatureScrollSection`."
  ],
  "related": [
-  "`Texture`, `RegistrationFrame`, `SectionTitle`."
+  "`Texture`, `RegistrationFrame`, `ModuleHeader`."
  ],
  "bestPractices": [
   "Name each stage with a verb.",
@@ -42,7 +42,7 @@
   },
   {
    "name": "titleAlign",
-   "type": "SectionTitleAlign",
+   "type": "ModuleHeaderAlign",
    "default": "'split'",
    "required": "false",
    "doc": "Alignment of the section title over the card row."
@@ -63,7 +63,7 @@
   },
   {
    "name": "descriptionWidth",
-   "type": "SectionTitleDescriptionWidth",
+   "type": "ModuleHeaderDescriptionWidth",
    "default": "'narrow'",
    "required": "false",
    "doc": "Column span of the paragraph: `wide` runs it across the middle column too."

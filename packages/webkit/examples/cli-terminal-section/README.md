@@ -4,7 +4,7 @@ The Azion CLI band: a headline beside its description, with one outlined button 
 
 The session sits in a `CodeBlock` that runs off the frame's bottom rule, its lines entering one after another. With reduced motion the finished session draws at once.
 
-The band is the `CliTerminalSection` component from `@aziontech/webkit/cli-terminal-section`; it composes `SectionModule`, `SectionTitle`, `Button`, `RegistrationFrame`, `Texture` and `CodeBlock`.
+The band is the `CliTerminalSection` component from `@aziontech/webkit/cli-terminal-section`; it composes `Module`, `ModuleHeader`, `Button`, `RegistrationFrame`, `Texture` and `CodeBlock`.
 
 ## Examples
 

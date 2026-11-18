@@ -1,7 +1,7 @@
 <script setup>
   import ArchitectureTabsSection from '@aziontech/webkit/architecture-tabs-section'
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionGap from '@aziontech/webkit/section-gap'
+  import Container from '@aziontech/webkit/container'
+  import Spacer from '@aziontech/webkit/spacer'
 
   const tabs = [
     {
@@ -47,8 +47,8 @@
 </script>
 
 <template>
-  <SectionContainer max-width="site">
-    <SectionGap hatch />
+  <Container max-width="site">
+    <Spacer hatch />
 
     <ArchitectureTabsSection
       anchor="platform-architecture"
@@ -60,6 +60,6 @@
       :primary-action="primaryAction"
     />
 
-    <SectionGap hatch />
-  </SectionContainer>
+    <Spacer hatch />
+  </Container>
 </template>

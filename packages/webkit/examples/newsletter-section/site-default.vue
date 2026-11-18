@@ -1,7 +1,7 @@
 <script setup>
+  import Container from '@aziontech/webkit/container'
   import NewsletterSection from '@aziontech/webkit/newsletter-section'
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionGap from '@aziontech/webkit/section-gap'
+  import Spacer from '@aziontech/webkit/spacer'
   import { ref } from 'vue'
 
   const form = {
@@ -37,8 +37,8 @@
 </script>
 
 <template>
-  <SectionContainer max-width="site">
-    <SectionGap hatch />
+  <Container max-width="site">
+    <Spacer hatch />
 
     <NewsletterSection
       anchor="contact"
@@ -51,5 +51,5 @@
       :failed="error"
       @submit="onSubmit"
     />
-  </SectionContainer>
+  </Container>
 </template>

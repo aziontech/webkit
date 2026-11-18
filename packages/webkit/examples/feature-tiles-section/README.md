@@ -4,7 +4,7 @@ A row of reasons, each a picture over a short bold title and a sentence. Home us
 
 The tiles sit on a hairline frame grid with no padding, so the artwork runs to the rules.
 
-The band is the `FeatureTilesSection` component from `@aziontech/webkit/feature-tiles-section`; it composes `SectionModule`, `RegistrationFrame`, `CardGrid` and `MediaTile`, with `SectionTitle` for the heading and `Illustration` for each tile's picture, a scene of the illustration registry. `variant` picks the layout: `artwork` (four columns, marks on every corner) or `illustrated` (three columns, marks on the bottom rule).
+The band is the `FeatureTilesSection` component from `@aziontech/webkit/feature-tiles-section`; it composes `Module`, `RegistrationFrame`, `CardGrid` and `MediaTile`, with `ModuleHeader` for the heading and `Illustration` for each tile's picture, a scene of the illustration registry. `variant` picks the layout: `artwork` (four columns, marks on every corner) or `illustrated` (three columns, marks on the bottom rule).
 
 ## Examples
 

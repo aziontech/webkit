@@ -4,11 +4,11 @@
   import Button from '../../action/button/button.vue'
   import CardGrid from '../../layout/card-grid/card-grid.vue'
   import CardGridCell from '../../layout/card-grid/card-grid-cell/card-grid-cell.vue'
+  import Module from '../../layout/module/module.vue'
+  import type { ModuleHeaderAlign } from '../../layout/module-header/module-header.vue'
+  import ModuleHeader from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import FeatureItem from '../../marketing/feature-item/feature-item.vue'
-  import SectionModule from '../../marketing/section-module/section-module.vue'
-  import type { SectionTitleAlign } from '../../marketing/section-title/section-title.vue'
-  import SectionTitle from '../../marketing/section-title/section-title.vue'
 
   defineOptions({ name: 'CapabilityGridSection', inheritAttrs: false })
 
@@ -64,7 +64,7 @@
     /** In-page id set on the band so a hash link can target it. */
     anchor?: string
     /** Layout of the section title: `center` stacks and centers it, `start` stacks it at the start edge, `split` sets the headline and its description in two columns. */
-    titleAlign?: SectionTitleAlign
+    titleAlign?: ModuleHeaderAlign
   }
 
   const props = withDefaults(defineProps<CapabilityGridSectionProps>(), {
@@ -127,7 +127,7 @@
     :data-testid="testId"
     :aria-label="title || undefined"
   >
-    <SectionModule
+    <Module
       :divided="false"
       :padded="false"
     >
@@ -135,7 +135,7 @@
         v-if="title"
         #header
       >
-        <SectionTitle
+        <ModuleHeader
           :align="titleAlign"
           :eyebrow="eyebrow"
           :title="title"
@@ -158,7 +158,7 @@
               :animated="Boolean(action.trailing)"
             />
           </template>
-        </SectionTitle>
+        </ModuleHeader>
       </template>
 
       <RegistrationFrame
@@ -198,6 +198,6 @@
           </CardGridCell>
         </CardGrid>
       </RegistrationFrame>
-    </SectionModule>
+    </Module>
   </section>
 </template>

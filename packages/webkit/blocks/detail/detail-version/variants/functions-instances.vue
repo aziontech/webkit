@@ -20,7 +20,7 @@
   import SchemaForm, { type SchemaFormSchema } from '@aziontech/webkit/schema-form'
   import ScrollArea from '@aziontech/webkit/scroll-area'
   import Select from '@aziontech/webkit/select'
-  import SettingsSection from '@aziontech/webkit/settings-section'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -460,8 +460,8 @@
                 <PanelBody>
                   <fieldset class="m-0 flex min-w-0 flex-col border-0 p-0">
                     <legend class="sr-only">{{ drawerTitle }}</legend>
-                    <SettingsSection
-                      title="General"
+                    <SettingsGroup
+                      label="General"
                       hint="A function can run more than once with different arguments; the name tells the instances apart in the rules."
                     >
                       <Field :invalid="!!errors.name">
@@ -475,9 +475,9 @@
                         />
                         <Field.Error v-if="errors.name">{{ errors.name }}</Field.Error>
                       </Field>
-                    </SettingsSection>
-                    <SettingsSection
-                      title="Function"
+                    </SettingsGroup>
+                    <SettingsGroup
+                      label="Function"
                       hint="Select an existing function and set the arguments it runs with."
                     >
                       <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
@@ -550,7 +550,7 @@
                           <Field.Error v-if="errors.args">{{ errors.args }}</Field.Error>
                         </Field>
                       </div>
-                    </SettingsSection>
+                    </SettingsGroup>
                   </fieldset>
                 </PanelBody>
                 <PanelFooter>

@@ -88,7 +88,7 @@ labelled with a **small heading**, not an overline:
   a `flex min-h-(--size-8) items-center` row so the title baseline matches sibling section titles in
   other columns (e.g. a two-column page where one title stands alone and the other sits beside a control).
 
-This is the canonical section-title treatment. A section title written as
+This is the canonical module-header treatment. A section title written as
 `text-overline-sm text-(--text-muted)` is **legacy** — bring it to this pattern when you touch it.
 
 ### Shape & elevation — tokens only

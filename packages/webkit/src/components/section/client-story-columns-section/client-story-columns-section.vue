@@ -5,9 +5,9 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import type { CompanyLogoTreatment } from '../../content/company-logo/company-logo.vue'
+  import Module from '../../layout/module/module.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import LogoWall from '../../marketing/logo-wall/logo-wall.vue'
-  import SectionModule from '../../marketing/section-module/section-module.vue'
 
   defineOptions({
     name: 'ClientStoryColumnsSection',
@@ -145,7 +145,7 @@
     class="scroll-mt-(--spacing-2xl)"
     :data-testid="testId"
   >
-    <SectionModule
+    <Module
       key="hover"
       v-if="cells.length > 0 && reveal === 'hover'"
       :divided="false"
@@ -222,8 +222,8 @@
           </li>
         </ul>
       </RegistrationFrame>
-    </SectionModule>
-    <SectionModule
+    </Module>
+    <Module
       key="always"
       v-else-if="cells.length > 0"
       :divided="false"
@@ -280,6 +280,6 @@
           </RegistrationFrame>
         </div>
       </RegistrationFrame>
-    </SectionModule>
+    </Module>
   </section>
 </template>

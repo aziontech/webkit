@@ -6,14 +6,14 @@ status: implemented
 spec_version: 4
 created: 2026-11-05
 last_updated: 2026-11-16
-checksum: 74929be69bda8a0991249ce2936255d9f84ca33f554e41f7f8ba30eb705a218e
+checksum: fc2af4d999f42b65d1ab04cce85a8552cccbb7cd6bcbf90cabd0d1732fc41fd8
 ---
 
 # ContactHubSection — Component Spec
 
 ## Purpose
 
-The band under the Contact title band: the team lanes side by side (Sales and Support), each with its scope in one sentence and the action that reaches that team, over a row of self-serve channels. It is a page section — the site places it from a `{ _id: 'contact-hub-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `registration-frame`, `card-grid`, `feature-item`, `button` and `status-indicator`. Lanes and channels share one frame, the channels in the rows under the lanes. A lane can carry a second button and a link to the system status page, so a reader can check for an incident before opening a ticket.
+The band under the Contact title band: the team lanes side by side (Sales and Support), each with its scope in one sentence and the action that reaches that team, over a row of self-serve channels. It is a page section — the site places it from a `{ _id: 'contact-hub-section', props }` entry and binds `props` straight onto it — and it composes `module`, `registration-frame`, `card-grid`, `feature-item`, `button` and `status-indicator`. Lanes and channels share one frame, the channels in the rows under the lanes. A lane can carry a second button and a link to the system status page, so a reader can check for an incident before opening a ticket.
 
 ## When to use
 

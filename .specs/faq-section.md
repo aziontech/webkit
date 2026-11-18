@@ -6,14 +6,14 @@ status: implemented
 spec_version: 2
 created: 2026-11-05
 last_updated: 2026-11-16
-checksum: 2835b29f5b11c62d9f39c1fdf447e863684e99a398736f4d07555d6b48753687
+checksum: 4a9768e37a1361e546770a3149863dea609a73011f790bee9dd417a2e84f577f
 ---
 
 # FaqSection — Component Spec
 
 ## Purpose
 
-The frequently asked questions band near the end of a landing page: the heading in the left column and the questions on the right, each answer closed until the reader opens it, one at a time. It is a page section — the site places it from a `{ _id: 'faq-section', props }` entry and binds `props` straight onto it — and it composes `section-module` and `faq`. An answer is a markdown string, so it can run to several paragraphs (split by a blank line) and `- ` bullet lists, and a sentence can carry a link, bold or italic text, all without a slot or `v-html`.
+The frequently asked questions band near the end of a landing page: the heading in the left column and the questions on the right, each answer closed until the reader opens it, one at a time. It is a page section — the site places it from a `{ _id: 'faq-section', props }` entry and binds `props` straight onto it — and it composes `module` and `faq`. An answer is a markdown string, so it can run to several paragraphs (split by a blank line) and `- ` bullet lists, and a sentence can carry a link, bold or italic text, all without a slot or `v-html`.
 
 ## When to use
 

@@ -892,11 +892,11 @@ export const es: Messages = {
     mapValue: 'Valor',
     duplicateKey: 'Cada clave debe ser única.'
   },
-  sectionHeader: {
+  subheader: {
     copyLink: 'Copiar enlace a la sección {title}',
     linkCopied: 'Enlace copiado'
   },
-  settingsSection: {
+  settingsGroup: {
     copyLink: 'Copiar enlace a la sección {title}',
     linkCopied: 'Enlace copiado'
   },

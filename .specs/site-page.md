@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 7
 template: 2
-checksum: 0ce8fc668c9b21040174b5c472e4721781f30313512de4fbaac93420a61bb529
+checksum: 28e82f4b61ecc956cef5f8369dd209055a9bb1b301c775a6ec43d7f53f5c80b0
 created: 2026-11-12
 last_updated: 2026-11-16
 ---
@@ -14,7 +14,7 @@ last_updated: 2026-11-16
 
 ## Purpose
 
-The page renderer of the marketing site: it takes a page as data — the page JSON `{ hero, sections }` whose entries are `{ _id, props, scenes?, gap?, submission? }` — and renders each entry with the page section published at `@aziontech/webkit/<_id>`, binding `props` onto it. Openings (`hero`) run full bleed; the column (`sections`) sits in one `SectionContainer max-width="site"` with a hatched `SectionGap` before each band and one more after the last, the hatched break a page closes on before the footer, as the design sample's `SitePage` lays a page out. A page that ends on a closing band (`closing-call-to-action-section`, `newsletter-section`, or a `template-gallery-section` with `closing: true`) closes on that band's own closing frame instead, so no trailing gap is drawn; two closing bands in a row share one frame (the upper one is bound with `hatch: false`); and a `closing-call-to-action-section` of `variant: 'frame'` takes no gap before it. A scene named in `scenes` is resolved by name through the scene registry and drawn in the section's slot of that name (`hero-section` `top` / `bottom`, `console-showcase-section` `scene`). Every section and scene is loaded on demand, so a page pulls in only the sections it lists. An `_id` or scene name the renderer does not know is skipped with a development warning naming it, never silently.
+The page renderer of the marketing site: it takes a page as data — the page JSON `{ hero, sections }` whose entries are `{ _id, props, scenes?, gap?, submission? }` — and renders each entry with the page section published at `@aziontech/webkit/<_id>`, binding `props` onto it. Openings (`hero`) run full bleed; the column (`sections`) sits in one `Container max-width="site"` with a hatched `Spacer` before each band and one more after the last, the hatched break a page closes on before the footer, as the design sample's `SitePage` lays a page out. A page that ends on a closing band (`closing-call-to-action-section`, `newsletter-section`, or a `template-gallery-section` with `closing: true`) closes on that band's own closing frame instead, so no trailing gap is drawn; two closing bands in a row share one frame (the upper one is bound with `hatch: false`); and a `closing-call-to-action-section` of `variant: 'frame'` takes no gap before it. A scene named in `scenes` is resolved by name through the scene registry and drawn in the section's slot of that name (`hero-section` `top` / `bottom`, `console-showcase-section` `scene`). Every section and scene is loaded on demand, so a page pulls in only the sections it lists. An `_id` or scene name the renderer does not know is skipped with a development warning naming it, never silently.
 
 It reverses the earlier rule in `.claude/docs/SECTIONS.md` ("the package ships no registry and no dispatcher"): the owner decided to ship the renderer (ROADMAP M2.10 row 44), and that doc is updated with it.
 
@@ -34,14 +34,14 @@ It reverses the earlier rule in `.claude/docs/SECTIONS.md` ("the package ships n
 
 ## When NOT to use
 
-- A page that composes marketing primitives by hand (`Hero`, `MediaSplit`, `CardGrid`) — write the SFC with `SectionContainer` / `SectionGap` instead.
+- A page that composes marketing primitives by hand (`Hero`, `MediaSplit`, `CardGrid`) — write the SFC with `Container` / `Spacer` instead.
 - A console screen or a docs page — use `shell/shell-console` or `shell/shell-docs`.
 - One section on its own — import that section (`@aziontech/webkit/<name>`) and bind its props.
 
 ## Related
 
-- `section-container` — the column the renderer lays `sections` in.
-- `section-gap` — the hatched break it draws before each band.
+- `container` — the column the renderer lays `sections` in.
+- `spacer` — the hatched break it draws before each band.
 - The page sections (`hero-section`, `customer-use-cases-section`, `faq-section`, …) — what each `_id` names.
 - `shell/shell-site` — the nav and footer frame a page renders inside.
 
@@ -127,11 +127,11 @@ _none_
 
 ## Tokens
 
-| Region           | Token (DESIGN.md)                                                          |
-| ---------------- | -------------------------------------------------------------------------- |
-| column           | From `SectionContainer` (`max-width="site"`, `var(--layout-measure-site)`) |
-| breaks           | From `SectionGap` (`hatch`, `small` / `medium`)                            |
-| sections, scenes | Their own tokens                                                           |
+| Region           | Token (DESIGN.md)                                                   |
+| ---------------- | ------------------------------------------------------------------- |
+| column           | From `Container` (`max-width="site"`, `var(--layout-measure-site)`) |
+| breaks           | From `Spacer` (`hatch`, `small` / `medium`)                         |
+| sections, scenes | Their own tokens                                                    |
 
 ## Theme gaps
 
@@ -143,7 +143,7 @@ _none_
 
 - The renderer adds no landmark, heading or focusable element of its own; each section owns its landmark (`<section>` named by its title) and its keyboard model.
 - Openings render before the column, so the page `h1` (in the opening) comes first in reading order.
-- The breaks are decorative (`SectionGap` is `aria-hidden`).
+- The breaks are decorative (`Spacer` is `aria-hidden`).
 - Keyboard map: none of its own; focus moves through the sections in page order.
 
 ## Internationalization
@@ -160,8 +160,8 @@ _none_
 
 ## Responsive
 
-- Container queries: none of its own; the column follows `SectionContainer` and each section its own breakpoints.
-- Narrow (≤ 640 px): the column runs edge to edge as `SectionContainer` does; sections stack themselves.
+- Container queries: none of its own; the column follows `Container` and each section its own breakpoints.
+- Narrow (≤ 640 px): the column runs edge to edge as `Container` does; sections stack themselves.
 - Touch: no targets of its own.
 - Reflow: no horizontal scroll at 320 px from the renderer; the sections hold the same contract.
 

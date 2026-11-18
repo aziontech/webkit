@@ -1,7 +1,7 @@
 <script setup>
   import ClosingCallToActionSection from '@aziontech/webkit/closing-call-to-action-section'
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionGap from '@aziontech/webkit/section-gap'
+  import Container from '@aziontech/webkit/container'
+  import Spacer from '@aziontech/webkit/spacer'
   import TemplateGallerySection from '@aziontech/webkit/template-gallery-section'
 
   const primaryAction = {
@@ -71,8 +71,8 @@
 </script>
 
 <template>
-  <SectionContainer max-width="site">
-    <SectionGap hatch />
+  <Container max-width="site">
+    <Spacer hatch />
 
     <TemplateGallerySection
       closing
@@ -86,7 +86,7 @@
       templates-aria-label="Templates you can deploy"
       :hatch="false"
     />
-    <SectionGap hatch />
+    <Spacer hatch />
 
     <ClosingCallToActionSection
       variant="panel"
@@ -94,5 +94,5 @@
       description="Tell us what you are building and a specialist will reach out."
       :primary-action="{ label: 'Talk to sales', href: '/contact', trailing: true }"
     />
-  </SectionContainer>
+  </Container>
 </template>

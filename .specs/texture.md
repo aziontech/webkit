@@ -4,7 +4,7 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: 94625c59dcaafe32892f4be04213110994720b2c8637d704c11e5d479d42614d
+checksum: e3ace8b6f991a237936f678fae2c4eb462be1eba6ed92391c1319754217ce41e
 created: 2026-09-23
 last_updated: 2026-11-18
 ---
@@ -24,7 +24,7 @@ The one decorative surface every band in the system is painted on: a full-bleed,
 ## When NOT to use
 
 - To draw the rules between real content cells → use `registration-frame`, whose rules are structural.
-- For the ruled divider between sections → use `section-gap`, which composes this layer's `lines` variant and owns that treatment.
+- For the ruled divider between sections → use `spacer`, which composes this layer's `lines` variant and owns that treatment.
 - For a meaningful image or diagram → use `illustration`.
 - As a wrapper around content. The layer is absolutely positioned and paints only itself; content is a sibling above it, inside the positioned ancestor.
 
@@ -32,7 +32,7 @@ The one decorative surface every band in the system is painted on: a full-bleed,
 
 - `hero` — the band whose `background` slot this is composed into.
 - `registration-frame` — structural rules and corner marks, not decoration.
-- `section-gap` — the hatched rhythm band between sections.
+- `spacer` — the hatched rhythm band between sections.
 - `hero` — the marketing band that paints this texture behind its own copy.
 
 ## Best practices

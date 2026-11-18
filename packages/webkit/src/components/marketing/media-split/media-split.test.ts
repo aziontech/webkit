@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { h, nextTick, ref } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
-import SectionStack from '../section-stack/section-stack.vue'
+import SplitStack from '../../layout/split-stack/split-stack.vue'
 import MediaSplit from './media-split.vue'
 
 const TESTID = 'media-split'
@@ -327,7 +327,7 @@ describe('MediaSplit', () => {
   })
 
   it('frames its two cells inside a band stack without drawing rules of its own', () => {
-    const { getByTestId, queryByTestId } = render(SectionStack, {
+    const { getByTestId, queryByTestId } = render(SplitStack, {
       slots: { default: () => h(MediaSplit, { title: TITLE, src: SRC, alt: ALT }) }
     })
 

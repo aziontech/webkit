@@ -4,17 +4,17 @@
   import Button from '../../action/button/button.vue'
   import CodeBlock from '../../code/code-block/code-block.vue'
   import Texture from '../../content/texture/texture.vue'
+  import Module from '../../layout/module/module.vue'
+  import type { ModuleHeaderAction } from '../../layout/module-header/module-header.vue'
+  import ModuleHeader from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
-  import SectionModule from '../../marketing/section-module/section-module.vue'
-  import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
-  import SectionTitle from '../../marketing/section-title/section-title.vue'
 
   defineOptions({
     name: 'CliTerminalSection',
     inheritAttrs: false
   })
 
-  export type { SectionTitleAction }
+  export type { ModuleHeaderAction }
 
   /** A recorded Azion CLI session the terminal types. */
   export type CliTerminalSectionScript = 'start' | 'deploy'
@@ -35,7 +35,7 @@
     /** Accessible name of the session's copy button; empty keeps the code block's own. */
     copyAriaLabel?: string
     /** Outlined button in the section title; `{ label, href, trailing?, target? }`. Omitted when absent. */
-    primaryAction?: SectionTitleAction
+    primaryAction?: ModuleHeaderAction
   }
 
   const props = withDefaults(defineProps<CliTerminalSectionProps>(), {
@@ -108,7 +108,7 @@
     :aria-label="title || undefined"
     class="scroll-mt-(--spacing-2xl)"
   >
-    <SectionModule
+    <Module
       v-if="hasTerminal"
       :divided="false"
       :padded="false"
@@ -118,9 +118,9 @@
         #header
       >
         <div
-          class="contents [--section-title-headline-span:2] [--section-title-headline-max:var(--container-xl)]"
+          class="contents [--module-header-headline-span:2] [--module-header-headline-max:var(--container-xl)]"
         >
-          <SectionTitle
+          <ModuleHeader
             align="split"
             padding="small"
             :eyebrow="eyebrow"
@@ -142,7 +142,7 @@
                 :animated="Boolean(primaryAction.trailing)"
               />
             </template>
-          </SectionTitle>
+          </ModuleHeader>
         </div>
       </template>
 
@@ -180,6 +180,6 @@
           </div>
         </div>
       </RegistrationFrame>
-    </SectionModule>
+    </Module>
   </section>
 </template>

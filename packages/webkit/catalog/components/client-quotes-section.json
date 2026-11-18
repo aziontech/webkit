@@ -1,5 +1,5 @@
 {
- "purpose": "The client-stories band: a framed `quote-tabs` carousel of customer quotes, each signed by its author and marked by the client's logo, with one call to action under it. It is a page section — the site places it from a `{ _id: 'client-quotes-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `registration-frame`, `quote-tabs` and `button`.",
+ "purpose": "The client-stories band: a framed `quote-tabs` carousel of customer quotes, each signed by its author and marked by the client's logo, with one call to action under it. It is a page section — the site places it from a `{ _id: 'client-quotes-section', props }` entry and binds `props` straight onto it — and it composes `module`, `registration-frame`, `quote-tabs` and `button`.",
  "useWhen": [
   "Rendering page JSON, or you need a whole band with no custom content → the section (`client-quotes-section`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`quote-tabs`).",
   "Use ClientQuotesSection for a band of customer quotes the reader browses by client.",

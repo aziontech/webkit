@@ -13,7 +13,7 @@
   import PanelHeader from '@aziontech/webkit/panel-header'
   import RadioGroup from '@aziontech/webkit/radio-group'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
-  import SettingsSection from '@aziontech/webkit/settings-section'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import Switch from '@aziontech/webkit/switch'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
@@ -354,8 +354,8 @@
             :disabled="submitting"
           >
             <legend class="sr-only">Add Domain</legend>
-            <SettingsSection
-              title="Environment"
+            <SettingsGroup
+              label="Environment"
               hint="Where the domain answers."
             >
               <Field
@@ -398,10 +398,10 @@
                 <Field.Error v-if="errors.environment">{{ errors.environment }}</Field.Error>
                 <Field.Description v-else>{{ environmentHint }}</Field.Description>
               </Field>
-            </SettingsSection>
+            </SettingsGroup>
 
-            <SettingsSection
-              title="Domain"
+            <SettingsGroup
+              label="Domain"
               hint="The address this resource answers on, where it comes from, and the certificate it is served with."
             >
               <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
@@ -479,7 +479,7 @@
                   label="Your resource is always accessible at an azion.app subdomain based on its name. Custom domains allow visitors to reach it at your own domain."
                 />
               </div>
-            </SettingsSection>
+            </SettingsGroup>
           </fieldset>
         </PanelBody>
 
@@ -525,8 +525,8 @@
             :disabled="environmentSubmitting"
           >
             <legend class="sr-only">Create Environment</legend>
-            <SettingsSection
-              title="General"
+            <SettingsGroup
+              label="General"
               hint="How this environment is identified across the console."
             >
               <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
@@ -559,10 +559,10 @@
                   >
                 </Field>
               </div>
-            </SettingsSection>
+            </SettingsGroup>
 
-            <SettingsSection
-              title="Settings"
+            <SettingsGroup
+              label="Settings"
               hint="How this environment's URLs are organized, and how the edge answers robots.txt for it."
             >
               <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
@@ -623,10 +623,10 @@
                   }}</FieldDescription>
                 </Field>
               </div>
-            </SettingsSection>
+            </SettingsGroup>
 
-            <SettingsSection
-              title="Protection"
+            <SettingsGroup
+              label="Protection"
               hint="Restrict who can reach this environment."
             >
               <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
@@ -668,10 +668,10 @@
                   >
                 </Field>
               </div>
-            </SettingsSection>
+            </SettingsGroup>
 
-            <SettingsSection
-              title="Branch tracking"
+            <SettingsGroup
+              label="Branch tracking"
               hint="Build this environment automatically when a matching Git branch is updated."
             >
               <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
@@ -740,7 +740,7 @@
                   </Field>
                 </template>
               </div>
-            </SettingsSection>
+            </SettingsGroup>
           </fieldset>
         </PanelBody>
 

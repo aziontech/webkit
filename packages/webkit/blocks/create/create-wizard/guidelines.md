@@ -52,16 +52,16 @@ A choice that changes what follows, such as the list type, is a `SettingsRow var
 
 A stacked row with a five-row `Textarea` whose label, placeholder and guidance follow the choice above it. Its required message is a `FieldError` tied by `aria-describedby`.
 
-### I. Review — `SectionHeader`, `Alert`, `Card`, `Item`, `Tag`, `Button` (required)
+### I. Review — `Subheader`, `Alert`, `Card`, `Item`, `Tag`, `Button` (required)
 
-The last step, read-only: three bands under small `SectionHeader`s (Where it runs, What gets created, What can reference it), each with Edit back to its step; see Review step below.
+The last step, read-only: three bands under small `Subheader`s (Where it runs, What gets created, What can reference it), each with Edit back to its step; see Review step below.
 
 ### J. Create and deploy — `Card`, `Field`, `Input`, `Item`, `RadioGroup` (CreateAndDeploy)
 
 Two steps, Project then Domain and deployment, with the last action reading "Create and deploy".
 
 - **Project.** The `create/create-resource-picker` band, copied from that block (the source of truth for the paged picker; change it there first): a flush `Card` titled Project, a lead sentence, a large fluid `ToggleGroup` of Existing project and New project, then either a searchable `Item` list paged five at a time with `Skeleton` rows and a Load more `Button`, or a Name `Field`. In New mode the project is configured in place: a Cache Settings `Card` whose policy `Switch`es open their fields, and an Add an origin `SettingsRow` whose `Switch` opens a `RadioGroup variant="card"` of origin types and the type's fields. Each opened field is required only while its switch is on.
-- **Domain and deployment.** A read-back `Item` of the bound project with a transparent Change `Button` back to step one (the answer is kept); a Domain `Card` with a `ToggleGroup` of Free platform domain and Your own domain and a preview line of the address traffic arrives on; Environment as a `RadioGroup variant="card"` and Certificate as a `Select`; a Deployment `Card` with Create one or Use existing (the paged picker again); and a collapsed `SettingsSection` titled Advanced holding only fields that have defaults.
+- **Domain and deployment.** A read-back `Item` of the bound project with a transparent Change `Button` back to step one (the answer is kept); a Domain `Card` with a `ToggleGroup` of Free platform domain and Your own domain and a preview line of the address traffic arrives on; Environment as a `RadioGroup variant="card"` and Certificate as a `Select`; a Deployment `Card` with Create one or Use existing (the paged picker again); and a collapsed `SettingsGroup` titled Advanced holding only fields that have defaults.
 - **After submit.** Create and deploy shows its loading state; the consumer then hands the column to `detail/detail-deployment-logs` (InCreateFlow) and ends on `create/create-deploy-success`.
 
 ## Data

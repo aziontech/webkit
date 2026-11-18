@@ -13,10 +13,10 @@
   import Input from '../../input/input/input.vue'
   import { defaultCountries } from '../../input/phone-input/countries'
   import PhoneInput from '../../input/phone-input/phone-input.vue'
+  import Module from '../../layout/module/module.vue'
+  import type { ModuleHeaderAction } from '../../layout/module-header/module-header.vue'
+  import ModuleHeader from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
-  import SectionModule from '../../marketing/section-module/section-module.vue'
-  import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
-  import SectionTitle from '../../marketing/section-title/section-title.vue'
   import Dialog from '../../overlay/dialog/dialog.vue'
   import DialogContent from '../../overlay/dialog/dialog-content.vue'
   import DialogDescription from '../../overlay/dialog/dialog-description.vue'
@@ -30,7 +30,7 @@
     inheritAttrs: false
   })
 
-  export type { SectionTitleAction }
+  export type { ModuleHeaderAction }
 
   /** One fact about the posting, listed in the rail. */
   export type JobPostingSectionFacet = {
@@ -146,7 +146,7 @@
     /** The description, one row per section in order; each is `{ title, blocks }` where a block is `{ type: 'text', text }` or `{ type: 'list', items }`. */
     sections?: JobPostingSectionSection[]
     /** Link in the confirmation dialog back to the open positions; `{ label, href }`. Omitted when absent. */
-    secondaryAction?: SectionTitleAction
+    secondaryAction?: ModuleHeaderAction
     /** The site is sending the application: the submit button shows its loading state, every control is disabled and a submit is ignored. */
     loading?: boolean
     /** The site sent the application: the confirmation dialog opens. */
@@ -322,7 +322,7 @@
     class="scroll-mt-(--spacing-2xl)"
   >
     <template v-if="title">
-      <SectionModule
+      <Module
         :divided="false"
         :padded="false"
       >
@@ -388,7 +388,7 @@
                 <div
                   class="flex max-w-(--layout-measure-content) flex-col gap-(--spacing-lg) px-(--spacing-xl) py-(--spacing-2xl)"
                 >
-                  <SectionTitle
+                  <ModuleHeader
                     :framed="false"
                     align="start"
                     size="small"
@@ -423,9 +423,9 @@
             </div>
           </div>
         </RegistrationFrame>
-      </SectionModule>
+      </Module>
 
-      <SectionModule
+      <Module
         :id="applyId"
         :divided="false"
         :padded="false"
@@ -439,7 +439,7 @@
             marks="bottom"
           >
             <div class="max-w-(--layout-measure-content) px-(--spacing-xl) py-(--spacing-2xl)">
-              <SectionTitle
+              <ModuleHeader
                 :framed="false"
                 align="start"
                 :title="form.title"
@@ -570,7 +570,7 @@
             </form>
           </div>
         </RegistrationFrame>
-      </SectionModule>
+      </Module>
 
       <Dialog
         v-model:open="confirming"

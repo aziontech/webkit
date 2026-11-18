@@ -15,10 +15,10 @@
   import NumberInput from '@aziontech/webkit/number-input'
   import RadioGroup from '@aziontech/webkit/radio-group'
   import SaveBar from '@aziontech/webkit/save-bar'
-  import SectionHeader from '@aziontech/webkit/section-header'
   import Select from '@aziontech/webkit/select'
   import SettingsRow from '@aziontech/webkit/settings-row'
   import Skeleton from '@aziontech/webkit/skeleton'
+  import Subheader from '@aziontech/webkit/subheader'
   import Switch from '@aziontech/webkit/switch'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
@@ -318,7 +318,7 @@
             <legend class="sr-only">Create service</legend>
 
             <section class="flex flex-col gap-(--layout-group-gap)">
-              <SectionHeader title="General" />
+              <Subheader title="General" />
               <Card :padded="false">
                 <template #default>
                   <Item.List>
@@ -354,7 +354,7 @@
             </section>
 
             <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
-              <SectionHeader title="Delivery settings" />
+              <Subheader title="Delivery settings" />
               <Card :padded="false">
                 <template #default>
                   <Item.List>
@@ -425,7 +425,7 @@
             </section>
 
             <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
-              <SectionHeader title="Features" />
+              <Subheader title="Features" />
               <Card :padded="false">
                 <template #default>
                   <Item.List>
@@ -613,7 +613,7 @@
             </section>
 
             <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
-              <SectionHeader title="Cache expiration policies" />
+              <Subheader title="Cache expiration policies" />
               <Card :padded="false">
                 <template #default>
                   <Item.List>
@@ -653,7 +653,7 @@
             </section>
 
             <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
-              <SectionHeader title="Debug rules" />
+              <Subheader title="Debug rules" />
               <Card :padded="false">
                 <template #default>
                   <Item.List>

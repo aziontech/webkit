@@ -4,7 +4,7 @@ The compliance band of a solution page: a short statement that the platform meet
 
 Three columns on desktop, two on a phone. Retail, Financial Services and Technology use it.
 
-The band is the `ComplianceLogosSection` component from `@aziontech/webkit/compliance-logos-section`; it composes `SectionModule`, `MediaSplit` and `CardGrid`, with the badge files from `@aziontech/webkit/assets`.
+The band is the `ComplianceLogosSection` component from `@aziontech/webkit/compliance-logos-section`; it composes `Module`, `MediaSplit` and `CardGrid`, with the badge files from `@aziontech/webkit/assets`.
 
 ## Examples
 

@@ -551,9 +551,9 @@
       "types": "./types/components/marketing/hero/hero-title/hero-title.vue.d.ts",
       "default": "./src/components/marketing/hero/hero-title/hero-title.vue"
     },
-    "./section-title": {
-      "types": "./types/components/marketing/section-title/section-title.vue.d.ts",
-      "default": "./src/components/marketing/section-title/section-title.vue"
+    "./module-header": {
+      "types": "./types/components/layout/module-header/module-header.vue.d.ts",
+      "default": "./src/components/layout/module-header/module-header.vue"
     },
     "./item": {
       "types": "./types/components/content/item/index.d.ts",
@@ -1295,9 +1295,9 @@
       "types": "./types/components/layout/registration-frame/registration-frame.vue.d.ts",
       "default": "./src/components/layout/registration-frame/registration-frame.vue"
     },
-    "./section-gap": {
-      "types": "./types/components/marketing/section-gap/section-gap.vue.d.ts",
-      "default": "./src/components/marketing/section-gap/section-gap.vue"
+    "./spacer": {
+      "types": "./types/components/layout/spacer/spacer.vue.d.ts",
+      "default": "./src/components/layout/spacer/spacer.vue"
     },
     "./app-layout": {
       "types": "./types/components/layout/app-layout/app-layout.vue.d.ts",
@@ -1359,13 +1359,13 @@
       "types": "./types/components/layout/page-header/page-header.vue.d.ts",
       "default": "./src/components/layout/page-header/page-header.vue"
     },
-    "./section-header": {
-      "types": "./types/components/layout/section-header/section-header.vue.d.ts",
-      "default": "./src/components/layout/section-header/section-header.vue"
+    "./subheader": {
+      "types": "./types/components/layout/subheader/subheader.vue.d.ts",
+      "default": "./src/components/layout/subheader/subheader.vue"
     },
-    "./settings-section": {
-      "types": "./types/components/layout/settings-section/settings-section.vue.d.ts",
-      "default": "./src/components/layout/settings-section/settings-section.vue"
+    "./settings-group": {
+      "types": "./types/components/layout/settings-group/settings-group.vue.d.ts",
+      "default": "./src/components/layout/settings-group/settings-group.vue"
     },
     "./settings-row": {
       "types": "./types/components/layout/settings-row/settings-row.vue.d.ts",
@@ -1399,9 +1399,9 @@
       "types": "./types/components/layout/sidebar/sidebar-footer.vue.d.ts",
       "default": "./src/components/layout/sidebar/sidebar-footer.vue"
     },
-    "./section-stack": {
-      "types": "./types/components/marketing/section-stack/section-stack.vue.d.ts",
-      "default": "./src/components/marketing/section-stack/section-stack.vue"
+    "./split-stack": {
+      "types": "./types/components/layout/split-stack/split-stack.vue.d.ts",
+      "default": "./src/components/layout/split-stack/split-stack.vue"
     },
     "./logo-wall": {
       "types": "./types/components/marketing/logo-wall/logo-wall.vue.d.ts",
@@ -2501,13 +2501,13 @@
       "types": "./types/components/marketing/feature-item/feature-item.vue.d.ts",
       "default": "./src/components/marketing/feature-item/feature-item.vue"
     },
-    "./section-module": {
-      "types": "./types/components/marketing/section-module/section-module.vue.d.ts",
-      "default": "./src/components/marketing/section-module/section-module.vue"
+    "./module": {
+      "types": "./types/components/layout/module/module.vue.d.ts",
+      "default": "./src/components/layout/module/module.vue"
     },
-    "./section-container": {
-      "types": "./types/components/marketing/section-container/section-container.vue.d.ts",
-      "default": "./src/components/marketing/section-container/section-container.vue"
+    "./container": {
+      "types": "./types/components/layout/container/container.vue.d.ts",
+      "default": "./src/components/layout/container/container.vue"
     },
     "./site-page": {
       "types": "./types/components/marketing/site-page/site-page.vue.d.ts",
@@ -2869,8 +2869,8 @@
       "hero-title": [
         "./types/components/marketing/hero/hero-title/hero-title.vue.d.ts"
       ],
-      "section-title": [
-        "./types/components/marketing/section-title/section-title.vue.d.ts"
+      "module-header": [
+        "./types/components/layout/module-header/module-header.vue.d.ts"
       ],
       "item": [
         "./types/components/content/item/index.d.ts"
@@ -3427,8 +3427,8 @@
       "registration-frame": [
         "./types/components/layout/registration-frame/registration-frame.vue.d.ts"
       ],
-      "section-gap": [
-        "./types/components/marketing/section-gap/section-gap.vue.d.ts"
+      "spacer": [
+        "./types/components/layout/spacer/spacer.vue.d.ts"
       ],
       "app-layout": [
         "./types/components/layout/app-layout/app-layout.vue.d.ts"
@@ -3475,11 +3475,11 @@
       "page-header": [
         "./types/components/layout/page-header/page-header.vue.d.ts"
       ],
-      "section-header": [
-        "./types/components/layout/section-header/section-header.vue.d.ts"
+      "subheader": [
+        "./types/components/layout/subheader/subheader.vue.d.ts"
       ],
-      "settings-section": [
-        "./types/components/layout/settings-section/settings-section.vue.d.ts"
+      "settings-group": [
+        "./types/components/layout/settings-group/settings-group.vue.d.ts"
       ],
       "settings-row": [
         "./types/components/layout/settings-row/settings-row.vue.d.ts"
@@ -3505,8 +3505,8 @@
       "sidebar-footer": [
         "./types/components/layout/sidebar/sidebar-footer.vue.d.ts"
       ],
-      "section-stack": [
-        "./types/components/marketing/section-stack/section-stack.vue.d.ts"
+      "split-stack": [
+        "./types/components/layout/split-stack/split-stack.vue.d.ts"
       ],
       "logo-wall": [
         "./types/components/marketing/logo-wall/logo-wall.vue.d.ts"
@@ -4063,11 +4063,11 @@
       "feature-item": [
         "./types/components/marketing/feature-item/feature-item.vue.d.ts"
       ],
-      "section-module": [
-        "./types/components/marketing/section-module/section-module.vue.d.ts"
+      "module": [
+        "./types/components/layout/module/module.vue.d.ts"
       ],
-      "section-container": [
-        "./types/components/marketing/section-container/section-container.vue.d.ts"
+      "container": [
+        "./types/components/layout/container/container.vue.d.ts"
       ],
       "site-page": [
         "./types/components/marketing/site-page/site-page.vue.d.ts"

@@ -3,7 +3,7 @@ name: page-header
 category: layout
 structure: monolithic
 status: implemented
-checksum: aff6c267b4b7b83e413a8c1a427f8e5f67d97df6428c8e5f0393579b58732489
+checksum: 232e787fbfd00fb310b0399750c22d9e632eeed881a9d7b13fe98712577d785b
 spec_version: 7
 template: 2
 created: 2026-11-10
@@ -18,20 +18,20 @@ The heading that opens a console page: an h1 whose `size` picks the heading toke
 
 ## When to use
 
-- Use PageHeader once per console page for the h1, description and page actions; a band inside the page uses SectionHeader.
+- Use PageHeader once per console page for the h1, description and page actions; a band inside the page uses Subheader.
 - The top of any console page: a first-level list (`medium`), a detail tab or settings sub-page (`small`), a creation hub headline (`large`).
 - A page that owns actions (Documentation, a create action) that belong next to its title.
 - A resource detail page whose header carries the trail back to the list, the resource's icon, its status and the tabs of its sections (`breadcrumbs`, `icon`, `meta`, `tabs`).
 
 ## When NOT to use
 
-- The heading of one band inside a page → use `section-header`.
-- A settings band with a Hint and a card of rows → use `settings-section`.
+- The heading of one band inside a page → use `subheader`.
+- A settings band with a Hint and a card of rows → use `settings-group`.
 - A documentation page heading → use `doc-page-header`.
 
 ## Related
 
-- `section-header` — the h2 band heading inside a page.
+- `subheader` — the h2 band heading inside a page.
 - `page-tabs` — the second-level navigation strip that sits above a detail page's header; a header-local tab row goes in the `tabs` slot.
 - `breadcrumb` — the usual content of the `breadcrumbs` slot.
 - `tag` — the usual content of the `meta` slot (a status, an environment, a version).

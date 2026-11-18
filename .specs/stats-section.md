@@ -6,7 +6,7 @@ status: implemented
 spec_version: 4
 created: 2026-11-04
 last_updated: 2026-11-15
-checksum: 3477ff2ceda96b5242950c89c4c8850b6410e9a7f7981eb5277290ca1fd33add
+checksum: e3dcf7a74fc6a7250e397b4393d52a8b2a9189a8dc03b6d9d871b32c9e20582b
 template: 2
 ---
 
@@ -14,7 +14,7 @@ template: 2
 
 ## Purpose
 
-The proof-by-numbers band of a marketing page: a framed row of big figures, each with its caption and optional prefix or unit. It is a page section — the site places it from a `{ _id: 'stats-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `registration-frame` and `stats`, which owns the figures' scale and layout.
+The proof-by-numbers band of a marketing page: a framed row of big figures, each with its caption and optional prefix or unit. It is a page section — the site places it from a `{ _id: 'stats-section', props }` entry and binds `props` straight onto it — and it composes `module`, `registration-frame` and `stats`, which owns the figures' scale and layout.
 
 ## When to use
 

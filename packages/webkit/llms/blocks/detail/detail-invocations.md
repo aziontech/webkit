@@ -1,11 +1,11 @@
 # DetailInvocations (`detail/detail-invocations`)
 
-> The Invocation page of one function run, as a page body for ConsoleLayout: one run end to end. A `PageHeader` titled Invocation opens on the invocation summary `Card` (the function `Link`, the copyable invocation ID with its `StatusIndicator`, Replay, the Recent switcher, an outlined `Button` whose `DropdownMenu` picks another invocation, the Invocation actions menu with Open in Real-Time Events and Function settings, the Started, Completed, Duration and Location facts, and the triggering request with its outcome). Below it the Request path is a `FlowDiagram` with one node per hop (service, resource, function, origin), each with its `Tag`, its facts and the time spent there; a node's `IconButton` selects its span in the `Trace` waterfall and scrolls it into view. The `LogViewer` lists what the function printed, timed on the same clock as the trace. The Error variant opens on a run the origin timed out, with the failing span selected; Running shows a run still in progress, its spans running and the lines printed so far under a Streaming indicator. Built from `PageHeader`, `Card`, `Tooltip`, `CopyButton`, `StatusIndicator`, `Button`, `DropdownMenu`, `IconButton`, `Link`, `SectionHeader`, `FlowDiagram`, `Tag`, `Trace`, `LogViewer` and `LogViewerContent`; Replay emits `replay`, which the page reports through `toast`.
+> The Invocation page of one function run, as a page body for ConsoleLayout: one run end to end. A `PageHeader` titled Invocation opens on the invocation summary `Card` (the function `Link`, the copyable invocation ID with its `StatusIndicator`, Replay, the Recent switcher, an outlined `Button` whose `DropdownMenu` picks another invocation, the Invocation actions menu with Open in Real-Time Events and Function settings, the Started, Completed, Duration and Location facts, and the triggering request with its outcome). Below it the Request path is a `FlowDiagram` with one node per hop (service, resource, function, origin), each with its `Tag`, its facts and the time spent there; a node's `IconButton` selects its span in the `Trace` waterfall and scrolls it into view. The `LogViewer` lists what the function printed, timed on the same clock as the trace. The Error variant opens on a run the origin timed out, with the failing span selected; Running shows a run still in progress, its spans running and the lines printed so far under a Streaming indicator. Built from `PageHeader`, `Card`, `Tooltip`, `CopyButton`, `StatusIndicator`, `Button`, `DropdownMenu`, `IconButton`, `Link`, `Subheader`, `FlowDiagram`, `Tag`, `Trace`, `LogViewer` and `LogViewerContent`; Replay emits `replay`, which the page reports through `toast`.
 
 - Surface: app
 - Source: `blocks/detail/detail-invocations/detail-invocations.vue` in `@aziontech/webkit`
 - MCP: `get_block("detail/detail-invocations")`
-- Components: [Button](../../components/button.md), [Card](../../components/card.md), [CopyButton](../../components/copy-button.md), [DropdownMenu](../../components/dropdown-menu.md), [FlowDiagram](../../components/flow-diagram.md), [IconButton](../../components/icon-button.md), [Link](../../components/link.md), `LogViewerContent`, [LogViewer](../../components/log-viewer.md), [PageHeader](../../components/page-header.md), [SectionHeader](../../components/section-header.md), [StatusIndicator](../../components/status-indicator.md), [Tag](../../components/tag.md), [Tooltip](../../components/tooltip.md), [Trace](../../components/trace.md), `use-locale`
+- Components: [Button](../../components/button.md), [Card](../../components/card.md), [CopyButton](../../components/copy-button.md), [DropdownMenu](../../components/dropdown-menu.md), [FlowDiagram](../../components/flow-diagram.md), [IconButton](../../components/icon-button.md), [Link](../../components/link.md), `LogViewerContent`, [LogViewer](../../components/log-viewer.md), [PageHeader](../../components/page-header.md), [StatusIndicator](../../components/status-indicator.md), [Subheader](../../components/subheader.md), [Tag](../../components/tag.md), [Tooltip](../../components/tooltip.md), [Trace](../../components/trace.md), `use-locale`
 - Skills: `webkit-layout`, `webkit-ui-states`, `webkit-data-viz`
 
 ## Asked as
@@ -38,17 +38,17 @@ A medium `PageHeader` titled Invocation, singular because the page is one run, w
 
 `Card :padded="false"` with three bands. The subject band holds the function `Link` (its `Tooltip` says where it goes), the invocation ID in code type with a `CopyButton`, and the run's `StatusIndicator` (loading while it runs); then Replay as a secondary `Button` (disabled while the run is still going), the Recent switcher, an outlined medium `Button` with the history glyph inside `DropdownMenu.Trigger` (its `Tooltip` inside the trigger, like the actions menu) that opens a `DropdownMenu` of the recent invocations with their status and start that swaps the page to the picked run, and the Invocation actions `IconButton` menu with Open in Real-Time Events and Function settings. The facts band lists Started, Completed, Duration and Location. The state band, on the canvas fill, shows the request that triggered the run with a `CopyButton` and its outcome, in danger color when it failed.
 
-### C. Request path — `SectionHeader`, `FlowDiagram`, `Tag` (required)
+### C. Request path — `Subheader`, `FlowDiagram`, `Tag` (required)
 
-A small `SectionHeader`, then a horizontally scrolling surface holding a `FlowDiagram` with one unstyled `FlowDiagram.Node` per hop: service, resource, function and origin, the last one `terminal`. Each node card has an eyebrow with its glyph and a status `Tag`, its name, and a short list of facts ending on the time spent there. A node measured by a span carries an outlined small `IconButton` named "Show <name> in the trace" that selects that span and scrolls the trace into view, honoring reduced motion.
+A small `Subheader`, then a horizontally scrolling surface holding a `FlowDiagram` with one unstyled `FlowDiagram.Node` per hop: service, resource, function and origin, the last one `terminal`. Each node card has an eyebrow with its glyph and a status `Tag`, its name, and a short list of facts ending on the time spent there. A node measured by a span carries an outlined small `IconButton` named "Show <name> in the trace" that selects that span and scrolls the trace into view, honoring reduced motion.
 
 ### D. Trace — `Trace` (required)
 
-A small `SectionHeader` over the `Trace` waterfall of the run, its spans nested by `parentId` with a service word and glyph, bound with `v-model:selected-key` so a node of the request path and a row of the waterfall are one selection. A failed span carries `status: 'error'` and its `message`; a span still going carries `status: 'running'`.
+A small `Subheader` over the `Trace` waterfall of the run, its spans nested by `parentId` with a service word and glyph, bound with `v-model:selected-key` so a node of the request path and a row of the waterfall are one selection. A failed span carries `status: 'error'` and its `message`; a span still going carries `status: 'running'`.
 
-### E. Logs — `SectionHeader`, `StatusIndicator`, `LogViewer`, `LogViewerContent` (required)
+### E. Logs — `Subheader`, `StatusIndicator`, `LogViewer`, `LogViewerContent` (required)
 
-A small `SectionHeader` over a copyable `LogViewer` whose lines are timed from the run's zero (+16 ms), the same clock as the trace. Warnings and errors use the warning line type and keep the level word in the message; the last line of a completed run is a success line. While the run is going the lines printed so far stay on screen and a loading `StatusIndicator` reading Streaming sits in the section header; the view shows its own loading state only while no line has arrived yet, and `LogViewerContent` holds the empty text.
+A small `Subheader` over a copyable `LogViewer` whose lines are timed from the run's zero (+16 ms), the same clock as the trace. Warnings and errors use the warning line type and keep the level word in the message; the last line of a completed run is a success line. While the run is going the lines printed so far stay on screen and a loading `StatusIndicator` reading Streaming sits in the section header; the view shows its own loading state only while no line has arrived yet, and `LogViewerContent` holds the empty text.
 
 ## Data
 
@@ -166,8 +166,8 @@ Each variant is the same screen in another state: `get_block("detail/detail-invo
   import LogViewerContent from '@aziontech/webkit/log-viewer-content'
   import LogViewer, { type LogViewerLine } from '@aziontech/webkit/log-viewer-root'
   import PageHeader from '@aziontech/webkit/page-header'
-  import SectionHeader from '@aziontech/webkit/section-header'
   import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
+  import Subheader from '@aziontech/webkit/subheader'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
   import Trace, { type TraceSpan } from '@aziontech/webkit/trace'
@@ -609,7 +609,7 @@ Each variant is the same screen in another state: `get_block("detail/detail-invo
           aria-label="Request path"
           class="flex min-w-0 flex-col gap-(--layout-group-gap)"
         >
-          <SectionHeader
+          <Subheader
             title="Request path"
             description="The resources this invocation travelled, and the time it spent in each one."
             size="small"
@@ -699,7 +699,7 @@ Each variant is the same screen in another state: `get_block("detail/detail-invo
           aria-label="Trace"
           class="flex min-w-0 scroll-mt-(--spacing-lg) flex-col gap-(--layout-group-gap)"
         >
-          <SectionHeader
+          <Subheader
             title="Trace"
             description="One row per span, placed against the run's own clock. Select a row to read what it measured."
             size="small"
@@ -717,7 +717,7 @@ Each variant is the same screen in another state: `get_block("detail/detail-invo
           aria-label="Logs"
           class="flex min-w-0 flex-col gap-(--layout-group-gap)"
         >
-          <SectionHeader
+          <Subheader
             title="Logs"
             description="What the function printed while it ran, on the same clock as the trace."
             size="small"
@@ -732,7 +732,7 @@ Each variant is the same screen in another state: `get_block("detail/detail-invo
                 label="Streaming"
               />
             </template>
-          </SectionHeader>
+          </Subheader>
           <LogViewer
             :lines="lines"
             :loading="running && !lines.length"

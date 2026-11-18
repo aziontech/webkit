@@ -9,9 +9,9 @@
   import netshoesExtendedColor from '@aziontech/webkit/assets/netshoes-extended-color.svg'
   import rennerExtendedColor from '@aziontech/webkit/assets/renner-extended-color.svg'
   import zoopExtendedColor from '@aziontech/webkit/assets/zoop-extended-color.svg'
+  import Container from '@aziontech/webkit/container'
   import LogoWallSection from '@aziontech/webkit/logo-wall-section'
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionGap from '@aziontech/webkit/section-gap'
+  import Spacer from '@aziontech/webkit/spacer'
 
   const logos = [
     {
@@ -82,8 +82,8 @@
 </script>
 
 <template>
-  <SectionContainer max-width="site">
-    <SectionGap hatch />
+  <Container max-width="site">
+    <Spacer hatch />
 
     <LogoWallSection
       eyebrow="Customers"
@@ -94,6 +94,6 @@
       :primary-action="primaryAction"
     />
 
-    <SectionGap hatch />
-  </SectionContainer>
+    <Spacer hatch />
+  </Container>
 </template>

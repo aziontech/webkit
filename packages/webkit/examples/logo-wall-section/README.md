@@ -4,7 +4,7 @@ A wall of client logos with one of those clients quoted beside it, in one frame.
 
 Use it instead of hand-rolling the same split, as Cache, Application Accelerator and Our Network do today. Each logo can be tuned per theme: white artwork flips on light, dark artwork flips on dark, and a client with a file per theme shows the right one.
 
-The band is the `LogoWallSection` component from `@aziontech/webkit/logo-wall-section`; it composes `SectionModule`, `SectionTitle`, `RegistrationFrame`, `LogoWall`, `Quote` and `Button`.
+The band is the `LogoWallSection` component from `@aziontech/webkit/logo-wall-section`; it composes `Module`, `ModuleHeader`, `RegistrationFrame`, `LogoWall`, `Quote` and `Button`.
 
 ## Examples
 

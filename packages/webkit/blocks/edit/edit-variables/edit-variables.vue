@@ -28,7 +28,7 @@
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
-  import SettingsSection from '@aziontech/webkit/settings-section'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import Switch from '@aziontech/webkit/switch'
   import TableCellActions from '@aziontech/webkit/table-cell-actions'
   import TableCellId from '@aziontech/webkit/table-cell-id'
@@ -974,8 +974,8 @@
               :disabled="submitting"
             >
               <legend class="sr-only">{{ drawerTitle }}</legend>
-              <SettingsSection
-                title="EditVariables"
+              <SettingsGroup
+                label="EditVariables"
                 hint="Store values your services read at runtime. Add one row per variable, or import a .env file."
               >
                 <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
@@ -1176,10 +1176,10 @@
                     >Add at least one variable.</FieldError
                   >
                 </div>
-              </SettingsSection>
+              </SettingsGroup>
 
-              <SettingsSection
-                title="Scope"
+              <SettingsGroup
+                label="Scope"
                 hint="Global covers the entire account and turns off when you enable a specific scope. Each scope starts with every resource selected. Scope cannot be changed after the variable is created."
               >
                 <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
@@ -1264,7 +1264,7 @@
                     >
                   </div>
                 </div>
-              </SettingsSection>
+              </SettingsGroup>
             </fieldset>
           </PanelBody>
 

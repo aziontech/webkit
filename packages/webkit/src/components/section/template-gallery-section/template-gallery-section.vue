@@ -5,19 +5,19 @@
   import Texture from '../../content/texture/texture.vue'
   import CardGrid from '../../layout/card-grid/card-grid.vue'
   import CardGridCell from '../../layout/card-grid/card-grid-cell/card-grid-cell.vue'
+  import Module from '../../layout/module/module.vue'
+  import type { ModuleHeaderAction } from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import ScrollArea from '../../layout/scroll-area/scroll-area.vue'
   import Marquee from '../../marketing/marquee/marquee.vue'
   import MediaSplit from '../../marketing/media-split/media-split.vue'
-  import SectionModule from '../../marketing/section-module/section-module.vue'
-  import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
 
   defineOptions({
     name: 'TemplateGallerySection',
     inheritAttrs: false
   })
 
-  export type { SectionTitleAction }
+  export type { ModuleHeaderAction }
 
   /** One deployable template, rendered as a card of the scrolling wall. */
   export type TemplateGallerySectionTemplate = {
@@ -43,9 +43,9 @@
     /** Paragraph under the headline. */
     description?: string
     /** First button under the copy, drawn as the large secondary button; `{ label, href, trailing?, target? }`. Omitted when absent. */
-    primaryAction?: SectionTitleAction
+    primaryAction?: ModuleHeaderAction
     /** Second button under the copy, drawn as the large outlined button; `{ label, href, trailing?, target? }`. Omitted when absent. */
-    secondaryAction?: SectionTitleAction
+    secondaryAction?: ModuleHeaderAction
     /** The template cards of the scrolling wall, in order; each is `{ title, description?, icon?, invertInDark?, href? }`. Templates without a title are skipped. */
     templates?: TemplateGallerySectionTemplate[]
     /** Label of the deploy button on each card; a card renders its button only when both this and its `href` are set. */
@@ -98,7 +98,7 @@
     :data-testid="testId"
     class="@container/template-gallery scroll-mt-(--spacing-2xl)"
   >
-    <SectionModule
+    <Module
       v-if="hasCards"
       :divided="false"
       :padded="false"
@@ -230,15 +230,15 @@
         borders="y"
         marks="all"
       >
-        <SectionModule :divided="false">
+        <Module :divided="false">
           <Marquee
             size="small"
             :label="marqueeLabel"
             :marks="marqueeMarks"
           />
-        </SectionModule>
+        </Module>
       </RegistrationFrame>
-    </SectionModule>
+    </Module>
     <RegistrationFrame
       v-if="hasCards && closing && hatch"
       borders="none"

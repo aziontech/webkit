@@ -9,8 +9,8 @@
   import LogViewerContent from '@aziontech/webkit/log-viewer-content'
   import LogViewer, { type LogViewerLine } from '@aziontech/webkit/log-viewer-root'
   import PageHeader from '@aziontech/webkit/page-header'
-  import SectionHeader from '@aziontech/webkit/section-header'
   import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
+  import Subheader from '@aziontech/webkit/subheader'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
   import Trace, { type TraceSpan } from '@aziontech/webkit/trace'
@@ -452,7 +452,7 @@
           aria-label="Request path"
           class="flex min-w-0 flex-col gap-(--layout-group-gap)"
         >
-          <SectionHeader
+          <Subheader
             title="Request path"
             description="The resources this invocation travelled, and the time it spent in each one."
             size="small"
@@ -542,7 +542,7 @@
           aria-label="Trace"
           class="flex min-w-0 scroll-mt-(--spacing-lg) flex-col gap-(--layout-group-gap)"
         >
-          <SectionHeader
+          <Subheader
             title="Trace"
             description="One row per span, placed against the run's own clock. Select a row to read what it measured."
             size="small"
@@ -560,7 +560,7 @@
           aria-label="Logs"
           class="flex min-w-0 flex-col gap-(--layout-group-gap)"
         >
-          <SectionHeader
+          <Subheader
             title="Logs"
             description="What the function printed while it ran, on the same clock as the trace."
             size="small"
@@ -575,7 +575,7 @@
                 label="Streaming"
               />
             </template>
-          </SectionHeader>
+          </Subheader>
           <LogViewer
             :lines="lines"
             :loading="running && !lines.length"

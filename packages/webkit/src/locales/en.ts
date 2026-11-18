@@ -826,12 +826,12 @@ export const schemaForm = {
   duplicateKey: 'Each key must be unique.'
 } as const
 
-export const sectionHeader = {
+export const subheader = {
   copyLink: 'Copy link to the {title} section',
   linkCopied: 'Link copied'
 } as const
 
-export const settingsSection = {
+export const settingsGroup = {
   copyLink: 'Copy link to the {title} section',
   linkCopied: 'Link copied'
 } as const
@@ -1484,8 +1484,8 @@ export const en = {
   reasoning,
   resizable,
   schemaForm,
-  sectionHeader,
-  settingsSection,
+  subheader,
+  settingsGroup,
   severityTag,
   sidebar,
   siteFooterSection,

@@ -1,7 +1,7 @@
 <script setup>
   import Carousel from '@aziontech/webkit/carousel'
   import FeatureItem from '@aziontech/webkit/feature-item'
-  import SectionTitle from '@aziontech/webkit/section-title'
+  import ModuleHeader from '@aziontech/webkit/module-header'
 </script>
 
 <template>
@@ -10,7 +10,7 @@
     aria-label="Ways to use Image Processor"
   >
     <template #header>
-      <SectionTitle
+      <ModuleHeader
         align="start"
         size="small"
         :framed="false"

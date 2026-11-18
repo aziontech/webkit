@@ -31,7 +31,7 @@
 ## Related
 
 - [button](button.md) — the actions: an outlined Discard or Cancel, then a primary Save with `loading` while it runs.
-- [settings-section](settings-section.md) — the bands the bar saves.
+- [settings-group](settings-group.md) — the bands the bar saves.
 - [confirm-dialog](confirm-dialog.md) — the guard shown when someone leaves with unsaved changes.
 
 ## Props

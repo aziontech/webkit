@@ -13,8 +13,8 @@
   import RadioGroup from '@aziontech/webkit/radio-group-root'
   import SaveBar from '@aziontech/webkit/save-bar'
   import Select from '@aziontech/webkit/select'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
-  import SettingsSection from '@aziontech/webkit/settings-section'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import { computed, reactive, ref } from 'vue'
@@ -247,8 +247,8 @@
             >
               <legend class="sr-only">Create Organization</legend>
 
-              <SettingsSection
-                title="General"
+              <SettingsGroup
+                label="General"
                 hint="The mark identifies the organization in the header and the switcher, next to its name."
               >
                 <Card :padded="false">
@@ -339,10 +339,10 @@
                     </Item.List>
                   </template>
                 </Card>
-              </SettingsSection>
+              </SettingsGroup>
 
-              <SettingsSection
-                title="Owner"
+              <SettingsGroup
+                label="Owner"
                 hint="You create it, so you own it. Only an owner can delete an organization."
               >
                 <Card :padded="false">
@@ -378,10 +378,10 @@
                     </Item.List>
                   </template>
                 </Card>
-              </SettingsSection>
+              </SettingsGroup>
 
-              <SettingsSection
-                title="First workspace"
+              <SettingsGroup
+                label="First workspace"
                 hint="A workspace groups the resources of one context, such as a team, an environment or a kind of application."
               >
                 <Card :padded="false">
@@ -416,11 +416,11 @@
                     </Item.List>
                   </template>
                 </Card>
-              </SettingsSection>
+              </SettingsGroup>
 
-              <SettingsSection
+              <SettingsGroup
                 v-model:open="advancedOpen"
-                title="Advanced"
+                label="Advanced"
                 hint="Stored with the organization and used to shape what we recommend inside it."
                 icon="az az-settings"
                 collapsible
@@ -459,7 +459,7 @@
                     </Item.List>
                   </template>
                 </Card>
-              </SettingsSection>
+              </SettingsGroup>
             </fieldset>
           </div>
           <SaveBar variant="centered">

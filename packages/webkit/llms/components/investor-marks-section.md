@@ -1,6 +1,6 @@
 # Investor Marks Section
 
-> The investors band: a centered section title over a two-column bento grid where each cell is an investor's mark, linked to its site, that lifts on hover to reveal a "visit website" line. It is a page section — the site places it from a `{ _id: 'investor-marks-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `registration-frame` and `bento-grid`.
+> The investors band: a centered section title over a two-column bento grid where each cell is an investor's mark, linked to its site, that lifts on hover to reveal a "visit website" line. It is a page section — the site places it from a `{ _id: 'investor-marks-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `registration-frame` and `bento-grid`.
 
 - Import: `import InvestorMarksSection from '@aziontech/webkit/investor-marks-section'`
 - Category: section · Surface: site · Structure: monolithic

@@ -3,17 +3,17 @@
 
   import Button from '../../action/button/button.vue'
   import CardGrid from '../../layout/card-grid/card-grid.vue'
+  import Module from '../../layout/module/module.vue'
+  import type { ModuleHeaderAction } from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import CallToAction from '../../marketing/call-to-action/call-to-action.vue'
-  import SectionModule from '../../marketing/section-module/section-module.vue'
-  import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
 
   defineOptions({
     name: 'SubjectGridSection',
     inheritAttrs: false
   })
 
-  export type { SectionTitleAction }
+  export type { ModuleHeaderAction }
 
   /** One article link under a subject. */
   export type SubjectGridSectionArticle = {
@@ -46,9 +46,9 @@
     /** Supporting sentence under the headline. */
     description?: string
     /** First action, drawn as the large secondary button. */
-    primaryAction?: SectionTitleAction
+    primaryAction?: ModuleHeaderAction
     /** Second action, drawn as the large outlined button. */
-    secondaryAction?: SectionTitleAction
+    secondaryAction?: ModuleHeaderAction
   }
 
   export interface SubjectGridSectionProps {
@@ -99,7 +99,7 @@
     :aria-label="ariaLabel || undefined"
     class="scroll-mt-(--spacing-2xl)"
   >
-    <SectionModule
+    <Module
       v-if="hasSubjects"
       :divided="false"
       :padded="false"
@@ -201,6 +201,6 @@
           </RegistrationFrame>
         </CardGrid>
       </RegistrationFrame>
-    </SectionModule>
+    </Module>
   </section>
 </template>

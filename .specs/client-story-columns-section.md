@@ -6,14 +6,14 @@ status: implemented
 spec_version: 7
 created: 2026-11-04
 last_updated: 2026-11-16
-checksum: 6352316dc3a5d29ea6b4c84be5197198863ecd264f9dd383c5dccde93d4ab658
+checksum: be9eefcc18732719d2feb844d055db0dd6cb0a53d2a610ad0ef23103f2c9c6ff
 ---
 
 # ClientStoryColumnsSection — Component Spec
 
 ## Purpose
 
-Three featured success stories side by side: each column is a client's mark on a face painted in the client's own brand colour, over a one-line story that links to the case. With `reveal="hover"` each column is one card instead: the client's reversed logo on its brand face, which opens while hovered or focused to reveal the story line and a "Read story" cue, the whole card linking to the case; below the large breakpoint those cards stack and stay open. It is a page section — the site places it from a `{ _id: 'client-story-columns-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `registration-frame` and `logo-wall`. The retired `'customer-spotlight'` `_id` resolves here with `reveal: 'hover'`.
+Three featured success stories side by side: each column is a client's mark on a face painted in the client's own brand colour, over a one-line story that links to the case. With `reveal="hover"` each column is one card instead: the client's reversed logo on its brand face, which opens while hovered or focused to reveal the story line and a "Read story" cue, the whole card linking to the case; below the large breakpoint those cards stack and stay open. It is a page section — the site places it from a `{ _id: 'client-story-columns-section', props }` entry and binds `props` straight onto it — and it composes `module`, `registration-frame` and `logo-wall`. The retired `'customer-spotlight'` `_id` resolves here with `reveal: 'hover'`.
 
 ## When to use
 

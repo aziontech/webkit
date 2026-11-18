@@ -21,7 +21,7 @@ toasts request errors) — this skill owns **layout, labels, grouping, validatio
 
 There are **two ways to lay out a form**, and both are first-class:
 
-- **Approach A — Cards + ItemGroups.** Sections are a `SettingsSection` over a flush `Card` wrapping
+- **Approach A — Cards + ItemGroups.** Sections are a `SettingsGroup` over a flush `Card` wrapping
   an `Item.List`; every field is one `SettingsRow` (name/guidance on the left, control on the right). This is the default for
   **grouped, settings-style, or list-like** forms — an account settings page, a resource's config or
   create page, a create drawer.
@@ -141,14 +141,14 @@ if a form seems to need a different rhythm, it's in the wrong container.
 | Label → control → FieldDescription (inside one field) | `--spacing-xs` | 8 — already baked into every `Field` |
 | Field → field (and row → row)                         | `--spacing-lg` | 24                                   |
 | Section → section                                     | `--spacing-lg` | 24                                   |
-| Section title → its card (`SettingsSection`)          | `--spacing-md` | 16 — owned by the component          |
+| Section title → its card (`SettingsGroup`)            | `--spacing-md` | 16 — owned by the component          |
 | Compact modal body (Dialog / Drawer)                  | `--spacing-md` | 16 — the **only** allowed tightening |
 
 ### Hierarchy (top → down, never inverted)
 
 form title (`text-heading-*` — `PageHeader` on a page, a `Card` title / `text-heading-sm`
 in a contained card, `DialogTitle` in a modal) → form description (`text-body-sm text-(--text-muted)`)
-→ section title (`SettingsSection`, `text-heading-2xs`) or sub-heading (`text-heading-xs`) → **field label** (`Field.Label`,
+→ section title (`SettingsGroup`, `text-heading-2xs`) or sub-heading (`text-heading-xs`) → **field label** (`Field.Label`,
 which carries the Required marker) → control → **helper** (`Field.Description` guidance, then `Field.Error` for the invalid
 feedback). A label is never smaller than its helper; a section title is never smaller than a field label.
 
@@ -163,7 +163,7 @@ contexts** in Azion products:
   first-level resource started from its own module creates on a page, not here
   (`/webkit-create-surface`; variables are the one exception). A `large` drawer (`/webkit-navigation`, Drawers). One scoped save (the drawer's primary
   action).
-  Approach A for grouped/config-heavy creates (one flush ItemGroup, or several `SettingsSection` bands),
+  Approach A for grouped/config-heavy creates (one flush ItemGroup, or several `SettingsGroup` bands),
   Approach B for short ones.
 
 - **Missing-resource drawer.** A form whose field needs a resource that does not exist yet — a workload
@@ -192,7 +192,7 @@ contexts** in Azion products:
 
 - **ItemGroup settings.** Account-level configuration surfaces built from `Item` rows (Approach A). The
   rows organize **either as multiple Cards** (grouped by topic — e.g. Billing split into Plan, Payment,
-  Invoices; each card titled by a `SettingsSection`, see Approach A § _Section title_) **or as a
+  Invoices; each card titled by a `SettingsGroup`, see Approach A § _Section title_) **or as a
   single flush block** (all rows in one container, for shorter or flat settings). Used for Billing,
   Integrations, Account Settings — "define and manage personal account preferences and profile config".
   The read-only cards beside them are components too, never a hand-written `dl` or `ul`: plan
@@ -207,7 +207,7 @@ contexts** in Azion products:
 
 **Save model follows partitioning, not the container type.** A form that is one logical unit has **one
 save** — a Drawer, a Dialog, or an ItemGroup (whether a single flush block **or** several
-`SettingsSection` bands, like Account Settings; the sections group the topic, not the save). A form deliberately split
+`SettingsGroup` bands, like Account Settings; the sections group the topic, not the save). A form deliberately split
 into independently-committed cards — the **Card with independent saves** type — has **one save per
 card**, each locking off its own `submitting` flag (the `/webkit-ui-states` contract).
 
@@ -584,7 +584,7 @@ Rules:
 
 ## Approach A — Cards + ItemGroups (grouped / settings forms)
 
-Each section is a `SettingsSection` (`@aziontech/webkit/settings-section`) over a flush `Card`
+Each section is a `SettingsGroup` (`@aziontech/webkit/settings-group`) over a flush `Card`
 (`:padded="false"`) whose body is an `Item.List`. `Item.List` draws the dividers between rows, so every
 field reads as a divided row inside one box. Each row is a `SettingsRow`
 (`@aziontech/webkit/settings-row`): the field's name and guidance on the left, the control on the right.
@@ -617,13 +617,13 @@ Canonical pattern:
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import SettingsRow from '@aziontech/webkit/settings-row'
-  import SettingsSection from '@aziontech/webkit/settings-section'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import Switch from '@aziontech/webkit/switch'
 </script>
 
 <template>
-  <SettingsSection
-    title="General"
+  <SettingsGroup
+    label="General"
     hint="How this application is identified, and whether it is serving traffic."
     anchor="general"
   >
@@ -666,13 +666,13 @@ Canonical pattern:
         </Item.List>
       </template>
     </Card>
-  </SettingsSection>
+  </SettingsGroup>
 </template>
 ```
 
 Rules:
 
-- **`SettingsSection` + `Card :padded="false"` + `Item.List`** — one box per band, dividers from the
+- **`SettingsGroup` + `Card :padded="false"` + `Item.List`** — one box per band, dividers from the
   list, no box-in-box. The card is header-less (only its default slot); the band's title is the section's.
 - **Every row is a `SettingsRow`.** Do not hand-write the `Item` / `Item.Content` / `Item.Actions`
   markup of a settings row; the row owns its density (`Item size="small"`) and the control placement.
@@ -691,10 +691,10 @@ Rules:
 - **Richer controls that don't fit a one-line row** (a radio group, a block of `Field` choice cards,
   a list editor) use `variant="stacked"`, not a squeezed right column.
 
-### Section title — the SettingsSection heading
+### Section title — the SettingsGroup heading
 
 When a settings surface is split into topic bands (the Account Settings pattern), **each band is a
-`SettingsSection`**: an h2 titled in one or two words, its one-sentence guidance in `hint` (rendered as
+`SettingsGroup`**: an h2 titled in one or two words, its one-sentence guidance in `hint` (rendered as
 a `Hint` glyph beside the title), and `anchor` when people link to it (the h2 takes the id and a
 copy-link appears in the gutter on hover or focus). An Advanced band whose defaults suit most people is
 `collapsible` with `icon="az az-settings"`; it starts closed, and its body is `inert` while folded.
@@ -703,9 +703,9 @@ Rules:
 
 - **Do not also set a `Card` `title`** on the card inside a band — the band's title would double it.
 - **A band with a description line and its own actions** (Billing's Payment methods with Add payment
-  method) is a `SectionHeader` (`@aziontech/webkit/section-header`) over its card, not a
-  `SettingsSection`.
-- **`SettingsSection` vs `Card` title — pick by role.** A `SettingsSection` titles a _band of a larger
+  method) is a `Subheader` (`@aziontech/webkit/subheader`) over its card, not a
+  `SettingsGroup`.
+- **`SettingsGroup` vs `Card` title — pick by role.** A `SettingsGroup` titles a _band of a larger
   page_. A **`Card` `title`** (in the card header) names a _self-contained card that is the form_ — the
   "Card with its own save" / Contained form. Never use both on one card.
 
@@ -806,7 +806,7 @@ Rules:
 ## Grouping — a real `<fieldset>` + `<legend>`
 
 Each section is a **group of related controls**. Give it programmatic grouping with a native
-`<fieldset>` and an `sr-only` `<legend>` (the visible section title — the `SettingsSection` title or `Card title`
+`<fieldset>` and an `sr-only` `<legend>` (the visible section title — the `SettingsGroup` title or `Card title`
 — already names it, so it isn't drawn twice). A `<fieldset>` also disables its whole subtree in one
 attribute, which is how you lock the scope on submit.
 
@@ -984,7 +984,7 @@ The design sample's `/forms/error-validation` screen is the standard. When the s
 because of one section (a linked resource another user deleted, a value only that section owns), the
 form does four things, and never toasts:
 
-1. **One danger `Alert` above that section**, under its `SectionHeader`, saying what happened, why,
+1. **One danger `Alert` above that section**, under its `Subheader`, saying what happened, why,
    that nothing else was lost, and what to do, as separate sentences: `Origin "web-origin-prod" no
 longer exists. Another user deleted it while you were filling in this form, so the service wasn't
 created. Nothing else was lost: reload the origin list and select another one.`
@@ -1150,7 +1150,7 @@ End with: `form is accessible` or `N gaps — fix before polish`.
       label lives elsewhere, and then the `aria-label` + `aria-describedby` are wired by hand.
 - [ ] The form type fits the flow (Drawer / nested Drawer / Dialog / ItemGroup settings / Card with
       independent saves), and the **save model follows partitioning**: one save for a logical unit (Drawer,
-      Dialog, or an ItemGroup — single block _or_ multiple `SettingsSection` bands); one save per card only
+      Dialog, or an ItemGroup — single block _or_ multiple `SettingsGroup` bands); one save per card only
       for the Card-with-independent-saves type.
 - [ ] Every field that needs another resource offers `Create <noun>` when it may not exist yet; the
       drawer creates it and selects it back, so the reader never leaves the form to create it.
@@ -1161,7 +1161,7 @@ End with: `form is accessible` or `N gaps — fix before polish`.
 - [ ] Field spacing follows the macro rule: `--spacing-xs` inside a field, `--spacing-lg` between fields
       and sections (`--spacing-md` only in a compact modal body). No one-off gaps.
 - [ ] Hierarchy is not inverted: title → description → section title → field label → control → helper.
-- [ ] Section titling matches role: a multi-Card ItemGroup titles each band with a `SettingsSection`
+- [ ] Section titling matches role: a multi-Card ItemGroup titles each band with a `SettingsGroup`
       over a header-less flush `Card`; a self-contained card that _is_ the form
       uses the `Card` `title` in its header. Never both on one card.
 - [ ] The form uses **one** layout: Cards + ItemGroups (`Item.List` of `SettingsRow` rows) or

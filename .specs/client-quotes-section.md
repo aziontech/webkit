@@ -3,17 +3,17 @@ name: client-quotes-section
 category: section
 structure: monolithic
 status: implemented
-spec_version: 7
+spec_version: 8
 created: 2026-11-04
-last_updated: 2026-11-16
-checksum: a9ce0ec13baac845496a84e97659f8da1cf6e5c7547a943eec94c3eba9c20058
+last_updated: 2026-11-18
+checksum: afc82ab1e9e0c72fce95c439eddf28ffa33cbc376e75c2a4890d93fefb103833
 ---
 
 # ClientQuotesSection — Component Spec
 
 ## Purpose
 
-The client-stories band: a framed `quote-tabs` carousel of customer quotes, each signed by its author and marked by the client's logo, with one call to action under it. It is a page section — the site places it from a `{ _id: 'client-quotes-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `registration-frame`, `quote-tabs` and `button`.
+The client-stories band: a framed `quote-tabs` carousel of customer quotes, each signed by its author and marked by the client's logo, with one call to action under it. It is a page section — the site places it from a `{ _id: 'client-quotes-section', props }` entry and binds `props` straight onto it — and it composes `module`, `registration-frame`, `quote-tabs` and `button`.
 
 ## When to use
 
@@ -78,7 +78,7 @@ The client-stories band: a framed `quote-tabs` carousel of customer quotes, each
 | `anchor`           | `string`                    | `''`        | false    | In-page id set on the band so a hash link can target it.                                                                                                                        |
 | `ariaLabel`        | `string`                    | `''`        | false    | Accessible name of the quote carousel.                                                                                                                                          |
 | `items`            | `ClientQuotesSectionItem[]` | `[]`        | false    | The quotes, in order; each is `{ text, name?, jobTitle?, mark?, logo?, clientName?, photo? }` where `mark` is a registry mark name and `logo` a mark URL named by `clientName`. |
-| `primaryAction`    | `SectionTitleAction`        | `undefined` | false    | Button under the quotes; `{ label, href, trailing? }`. Omitted when absent.                                                                                                     |
+| `primaryAction`    | `ModuleHeaderAction`        | `undefined` | false    | Button under the quotes; `{ label, href, trailing? }`. Omitted when absent.                                                                                                     |
 | `autoplay`         | `boolean`                   | `true`      | false    | Advances to the next quote on a timer, as `quote-tabs` does, with its visible pause control; pauses under the pointer or keyboard focus and never runs under reduced motion.    |
 | `autoplayInterval` | `number`                    | `5000`      | false    | Milliseconds each quote is held before the band advances.                                                                                                                       |
 

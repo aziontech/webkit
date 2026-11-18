@@ -6,7 +6,7 @@ status: implemented
 spec_version: 3
 created: 2026-11-04
 last_updated: 2026-11-16
-checksum: 09e50edbf36077f6f0d190c9a80df44581eb05c1b22b48eed78b962fc0f4c197
+checksum: df9a72ce3462d707f21b06b2849f0b54d767631935279660b039ef149d16fb14
 template: 2
 ---
 
@@ -14,7 +14,7 @@ template: 2
 
 ## Purpose
 
-The investors band: a centered section title over a two-column bento grid where each cell is an investor's mark, linked to its site, that lifts on hover to reveal a "visit website" line. It is a page section — the site places it from a `{ _id: 'investor-marks-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `registration-frame` and `bento-grid`.
+The investors band: a centered section title over a two-column bento grid where each cell is an investor's mark, linked to its site, that lifts on hover to reveal a "visit website" line. It is a page section — the site places it from a `{ _id: 'investor-marks-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `registration-frame` and `bento-grid`.
 
 ## When to use
 

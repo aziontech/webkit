@@ -1373,7 +1373,7 @@
   "listing-table-section": {
     "rows": "data"
   },
-  "section-title": {
+  "module-header": {
     "kind": {
       "to": "align",
       "values": {
@@ -1384,7 +1384,7 @@
     },
     "variant": "align"
   },
-  "section-module": {
+  "module": {
     "kind": {
       "to": "align",
       "values": {
@@ -1822,5 +1822,8 @@
         "white-gloves-when-it-matters": "chat-and-headset-tiles"
       }
     }
+  },
+  "settings-group": {
+    "title": "label"
   }
 }

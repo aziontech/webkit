@@ -3,10 +3,10 @@ name: hero-form-section
 category: section
 structure: monolithic
 status: implemented
-spec_version: 8
+spec_version: 9
 created: 2026-11-05
-last_updated: 2026-11-17
-checksum: abc24b7b849881b89f15d965054747f3aab782ae62594eeeab86f69cdeddcab3
+last_updated: 2026-11-18
+checksum: dd24b508e5967edfc689994cf74da795b818346d433774aa59c2abcb1531c6f3
 template: 2
 ---
 
@@ -106,8 +106,8 @@ The opening band of a lead-capture page, where the form is the reason for the pa
 | `description`      | `string`                  | `''`        | false    | Sentence under the headline.                                                                                                                                                                                            |
 | `descriptionLink`  | `HeroFormSectionLink`     | `undefined` | false    | A link continuing the description inline, such as a phone line; `{ label, href }`. Omitted when absent.                                                                                                                 |
 | `descriptionAfter` | `string`                  | `''`        | false    | Copy after the inline link, closing the description's sentence.                                                                                                                                                         |
-| `primaryAction`    | `SectionTitleAction`      | `undefined` | false    | First button under the copy; `{ label, href, trailing?, target? }`. Shown only with a label and a link.                                                                                                                 |
-| `secondaryAction`  | `SectionTitleAction`      | `undefined` | false    | Second, outlined button beside the first; `{ label, href, trailing?, target? }`. Shown only with a label and a link.                                                                                                    |
+| `primaryAction`    | `ModuleHeaderAction`      | `undefined` | false    | First button under the copy; `{ label, href, trailing?, target? }`. Shown only with a label and a link.                                                                                                                 |
+| `secondaryAction`  | `ModuleHeaderAction`      | `undefined` | false    | Second, outlined button beside the first; `{ label, href, trailing?, target? }`. Shown only with a label and a link.                                                                                                    |
 | `anchor`           | `string`                  | `''`        | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                                                                                                                          |
 | `items`            | `HeroFormSectionItem[]`   | `[]`        | false    | The highlights under the description, in order; each is `{ icon, title, description }`. The list renders only when there are items.                                                                                     |
 | `formAriaLabel`    | `string`                  | `''`        | false    | Accessible name of the field group, read as its legend.                                                                                                                                                                 |

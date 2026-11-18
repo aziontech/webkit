@@ -34,7 +34,7 @@ export const RULE_PURPOSE = {
   'no-output-in-command': 'shell code sample that mixes the command with what it prints',
   'prefer-href-in-menu-node': 'navigation node naming its destination path/to/url instead of href',
   'no-gap-after-closing-section':
-    'SectionGap or closing frame after a section that draws its own close',
+    'Spacer or closing frame after a section that draws its own close',
   'require-accessible-name': 'IconButton or ButtonGroup with no aria-label or aria-labelledby',
   'no-dropped-children': 'content inside a webkit component with no default slot, never rendered'
 }

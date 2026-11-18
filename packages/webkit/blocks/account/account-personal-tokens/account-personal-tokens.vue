@@ -26,7 +26,7 @@
   import PasswordInput from '@aziontech/webkit/password-input'
   import PropertyFilter from '@aziontech/webkit/property-filter'
   import Select from '@aziontech/webkit/select'
-  import SettingsSection from '@aziontech/webkit/settings-section'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
   import TableCellActions from '@aziontech/webkit/table-cell-actions'
   import TableCellStatus from '@aziontech/webkit/table-cell-status'
@@ -525,8 +525,8 @@
               :disabled="submitting"
             >
               <legend class="sr-only">Create Personal Token</legend>
-              <SettingsSection
-                title="General"
+              <SettingsGroup
+                label="General"
                 hint="How you will recognise the token in this list."
               >
                 <div class="flex w-full min-w-0 flex-col gap-(--spacing-lg)">
@@ -555,9 +555,9 @@
                     />
                   </Field>
                 </div>
-              </SettingsSection>
-              <SettingsSection
-                title="Expiration"
+              </SettingsGroup>
+              <SettingsGroup
+                label="Expiration"
                 hint="Shorter is safer. A token cannot be extended."
               >
                 <Field>
@@ -584,7 +584,7 @@
                   </Select>
                   <FieldDescription id="token-expiry-hint">{{ expiryHint }}</FieldDescription>
                 </Field>
-              </SettingsSection>
+              </SettingsGroup>
             </fieldset>
           </PanelBody>
 

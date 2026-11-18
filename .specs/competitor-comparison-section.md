@@ -7,14 +7,14 @@ spec_version: 5
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-18
-checksum: 4913f772f0f1fc30d9274037e070e472e95a5aff6778ee8e6d3bf71c5848a265
+checksum: a9fcd44afc58204bf895ae467b7982ba68a44870931be514c9907b73ba11e96c
 ---
 
 # CompetitorComparisonSection — Component Spec
 
 ## Purpose
 
-The capability-by-capability comparison of Azion with one competitor on a migration landing page: a left section title over a framed table whose header row (the capability column, the Azion brand and the competitor logo) stays pinned while the page scrolls. Each category opens with a heading row; each cell is a support glyph — full, partial or none — named by a tooltip and by screen-reader text, and a capability with a definition carries an info button that opens it in a popover. It is a page section — the site places it from a `{ _id: 'competitor-comparison-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `registration-frame`, `brand`, `popover`, `icon-button` and `tooltip`.
+The capability-by-capability comparison of Azion with one competitor on a migration landing page: a left section title over a framed table whose header row (the capability column, the Azion brand and the competitor logo) stays pinned while the page scrolls. Each category opens with a heading row; each cell is a support glyph — full, partial or none — named by a tooltip and by screen-reader text, and a capability with a definition carries an info button that opens it in a popover. It is a page section — the site places it from a `{ _id: 'competitor-comparison-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `registration-frame`, `brand`, `popover`, `icon-button` and `tooltip`.
 
 ## When to use
 

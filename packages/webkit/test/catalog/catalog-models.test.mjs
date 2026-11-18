@@ -20,7 +20,7 @@ test('modelProps reads every defineModel of a root, named and default', () => {
   )
   assert.match(menu[0].doc, /v-model:path/)
 
-  const section = modelProps(exportTarget(exportsMap['./settings-section']))
+  const section = modelProps(exportTarget(exportsMap['./settings-group']))
   assert.deepEqual(section, [
     {
       name: 'open',
@@ -38,7 +38,7 @@ test('the catalog lists v-model values as props, so webkit view shows them', asy
   for (const [name, model] of [
     ['sidebar-menu', 'path'],
     ['sidebar-menu', 'openKeys'],
-    ['settings-section', 'open'],
+    ['settings-group', 'open'],
     ['sidebar', 'open'],
     ['tree', 'selectedKey'],
     ['tree', 'selectedKeys']

@@ -5,11 +5,11 @@
   import Button from '../../action/button/button.vue'
   import CodeBlock, { type CodeBlockTab } from '../../code/code-block/code-block.vue'
   import Illustration from '../../content/illustration/illustration.vue'
+  import Module from '../../layout/module/module.vue'
+  import type { ModuleHeaderAction } from '../../layout/module-header/module-header.vue'
+  import ModuleHeader from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import MediaTabs from '../../marketing/media-tabs/media-tabs.vue'
-  import SectionModule from '../../marketing/section-module/section-module.vue'
-  import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
-  import SectionTitle from '../../marketing/section-title/section-title.vue'
   import Link from '../../navigation/link/link.vue'
 
   defineOptions({
@@ -17,7 +17,7 @@
     inheritAttrs: false
   })
 
-  export type { SectionTitleAction }
+  export type { ModuleHeaderAction }
 
   /** A code file a tab opens as its media. */
   export type FeatureTabsSectionCode = CodeBlockTab
@@ -61,7 +61,7 @@
     /** Accessible name of the copy button on each tab's code file; empty keeps the code block's own. */
     copyAriaLabel?: string
     /** Button in the section title, beside the headline (under the frame when the band has no title); `{ label, href, trailing?, target? }` where `trailing` adds the chevron. Omitted when absent. */
-    primaryAction?: SectionTitleAction
+    primaryAction?: ModuleHeaderAction
   }
 
   const props = withDefaults(defineProps<FeatureTabsSectionProps>(), {
@@ -106,7 +106,7 @@
     :aria-label="title || undefined"
     class="scroll-mt-(--spacing-2xl)"
   >
-    <SectionModule
+    <Module
       v-if="hasTabs"
       :divided="false"
       :padded="false"
@@ -115,7 +115,7 @@
         v-if="hasHeader"
         #header
       >
-        <SectionTitle
+        <ModuleHeader
           align="split"
           :eyebrow="eyebrow"
           :title="title"
@@ -135,7 +135,7 @@
               :animated="Boolean(primaryAction.trailing)"
             />
           </template>
-        </SectionTitle>
+        </ModuleHeader>
       </template>
 
       <RegistrationFrame
@@ -198,6 +198,6 @@
           />
         </div>
       </RegistrationFrame>
-    </SectionModule>
+    </Module>
   </section>
 </template>

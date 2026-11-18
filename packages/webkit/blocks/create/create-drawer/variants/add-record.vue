@@ -14,7 +14,7 @@
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Select from '@aziontech/webkit/select'
-  import SettingsSection from '@aziontech/webkit/settings-section'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
   import { computed, reactive, ref, watch } from 'vue'
@@ -151,8 +151,8 @@
             :disabled="submitting"
           >
             <legend class="sr-only">Add Record</legend>
-            <SettingsSection
-              title="Settings"
+            <SettingsGroup
+              label="Settings"
               hint="Which addresses are associated with the domain and how the zone should handle requests."
             >
               <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
@@ -259,10 +259,10 @@
                   >
                 </Field>
               </div>
-            </SettingsSection>
+            </SettingsGroup>
 
-            <SettingsSection
-              title="Policy"
+            <SettingsGroup
+              label="Policy"
               hint="How the zone should deal with requests answered by this record."
             >
               <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
@@ -317,7 +317,7 @@
                   >
                 </Field>
               </div>
-            </SettingsSection>
+            </SettingsGroup>
           </fieldset>
         </PanelBody>
 

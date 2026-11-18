@@ -18,7 +18,7 @@
   import PanelHeader from '@aziontech/webkit/panel-header'
   import SchemaForm, { type SchemaFormSchema } from '@aziontech/webkit/schema-form'
   import Select from '@aziontech/webkit/select'
-  import SettingsSection from '@aziontech/webkit/settings-section'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { computed, nextTick, reactive, ref, watch } from 'vue'
@@ -334,8 +334,8 @@
             :disabled="submitting"
           >
             <legend class="sr-only">{{ title }}</legend>
-            <SettingsSection
-              title="General"
+            <SettingsGroup
+              label="General"
               hint="The function this instance runs, and the name it is listed under."
             >
               <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
@@ -394,11 +394,11 @@
                   }}</Field.Description>
                 </Field>
               </div>
-            </SettingsSection>
+            </SettingsGroup>
 
-            <SettingsSection
+            <SettingsGroup
               v-if="selected"
-              title="Arguments"
+              label="Arguments"
               hint="The values this instance passes to the function, as the fields it declares or as JSON."
             >
               <div class="flex min-w-0 flex-col gap-(--spacing-md)">
@@ -449,7 +449,7 @@
                   }}</FieldError>
                 </div>
               </div>
-            </SettingsSection>
+            </SettingsGroup>
           </fieldset>
         </PanelBody>
 

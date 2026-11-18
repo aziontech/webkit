@@ -7,7 +7,7 @@ spec_version: 5
 figma:
   url: https://www.figma.com/design/QEbHSTFDWfh4VHkBp6NWN3/Azion.com?node-id=13138-296208
   node_id: 13138-296208
-checksum: 567e9ed59fe90e1e95dfb61f0b47f12cfd8dd3004a5288ff79adba6a6381e00f
+checksum: 019f6cdc968e068da9155f343ce89c40c6a4463398dd8c4ab084d88e2cc8187b
 created: 2026-09-24
 last_updated: 2026-11-15
 ---
@@ -36,7 +36,7 @@ A band split in two: a stack of claims on one side, one piece of media on the ot
 - `media-split` — one claim, one picture, no selection.
 - `illustration` — the official scene a tab's `media` slot usually holds.
 - `registration-frame` — the registration frame the band is built from: every tab is its own frame and the media column is one more, each with all four corner marks. Every tab flushes its top rule and the media column its top and left rules, so the band draws no top rule of its own: the rule above it (a section title's, or the page frame's) is the only one, and a shared edge is one hairline.
-- `section-title` — the heading above the band; this component carries no title of its own.
+- `module-header` — the heading above the band; this component carries no title of its own.
 
 ## Best practices
 

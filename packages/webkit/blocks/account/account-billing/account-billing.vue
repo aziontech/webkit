@@ -14,9 +14,9 @@
   import PageTabs from '@aziontech/webkit/page-tabs'
   import PaymentBrand from '@aziontech/webkit/payment-brand'
   import PropertyFilter from '@aziontech/webkit/property-filter'
-  import SectionHeader from '@aziontech/webkit/section-header'
   import Skeleton from '@aziontech/webkit/skeleton'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import Subheader from '@aziontech/webkit/subheader'
   import { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
   import TableCellActions from '@aziontech/webkit/table-cell-actions'
   import TableCellStatus from '@aziontech/webkit/table-cell-status'
@@ -518,7 +518,7 @@
           </div>
 
           <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-            <SectionHeader
+            <Subheader
               title="Invoices"
               description="Every invoice on the account, with what it charged and to which card."
               size="small"
@@ -683,7 +683,7 @@
 
         <template v-else>
           <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-            <SectionHeader
+            <Subheader
               title="Payment information"
               description="Where invoices are sent, and whether the plan renews on its own."
               size="small"
@@ -697,7 +697,7 @@
                   :disabled="loading"
                 />
               </template>
-            </SectionHeader>
+            </Subheader>
             <Card>
               <template #default>
                 <KeyValueList
@@ -735,7 +735,7 @@
           </div>
 
           <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-            <SectionHeader
+            <Subheader
               title="Payment methods"
               description="Every card on the account. Invoices are charged to the default one."
               size="small"
@@ -750,7 +750,7 @@
                   :disabled="loading"
                 />
               </template>
-            </SectionHeader>
+            </Subheader>
             <Card :padded="false">
               <template #default>
                 <DataTable

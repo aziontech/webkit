@@ -27,9 +27,9 @@ An outlined medium `Button` reading Deploy inside `DrawerTrigger`, on the servic
 
 `DrawerTitle` reads Deploy, or Build and deployment while a version is being built first. The drawer's own close button sits on the right; no Cancel anywhere.
 
-### C. Sections — `PanelBody`, `SettingsSection`, `Skeleton`, `Alert`, `Spinner` (required)
+### C. Sections — `PanelBody`, `SettingsGroup`, `Skeleton`, `Alert`, `Spinner` (required)
 
-`PanelBody` holds one `fieldset` of `SettingsSection` bands, each with a title and a `hint`: Resources, Project, Environment, Projects impacted on a service; Resources and Environment on a project. The order is the order of the decision: what, where, then what else it reaches. While the deploy targets load, `Skeleton` blocks stand in for Resources and Environment; a failed load is a danger `Alert` with Retry; a build in progress is one row with its version `Tag` and a `Spinner` in place of Resources.
+`PanelBody` holds one `fieldset` of `SettingsGroup` bands, each with a title and a `hint`: Resources, Project, Environment, Projects impacted on a service; Resources and Environment on a project. The order is the order of the decision: what, where, then what else it reaches. While the deploy targets load, `Skeleton` blocks stand in for Resources and Environment; a failed load is a danger `Alert` with Retry; a build in progress is one row with its version `Tag` and a `Spinner` in place of Resources.
 
 ### D. Resources card — `Card`, `Separator`, `Item`, `Tag`, `DropdownMenu`, `Input`, `Avatar`, `Button` (required)
 
@@ -181,4 +181,4 @@ Then delete `sample.ts` and its import. The page reports the run through the toa
 - `detail/detail-deployment-logs` — the logs of a deploy after it ran.
 - `detail/detail-version` — what a version contains before it is deployed.
 - `create/create-resource-picker` — the Existing or New pattern the Project section follows.
-- `SettingsSection` — the band each section uses; see `skills/webkit-create-surface` for the drawer commit model.
+- `SettingsGroup` — the band each section uses; see `skills/webkit-create-surface` for the drawer commit model.

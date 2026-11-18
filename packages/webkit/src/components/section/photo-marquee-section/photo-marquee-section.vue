@@ -1,10 +1,10 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import Module from '../../layout/module/module.vue'
+  import ModuleHeader from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import MarqueeLoop from '../../marketing/marquee/marquee-loop.vue'
-  import SectionModule from '../../marketing/section-module/section-module.vue'
-  import SectionTitle from '../../marketing/section-title/section-title.vue'
 
   defineOptions({
     name: 'PhotoMarqueeSection',
@@ -74,7 +74,7 @@
     :aria-label="title || undefined"
     class="scroll-mt-(--spacing-2xl)"
   >
-    <SectionModule
+    <Module
       v-if="hasPhotos"
       :divided="false"
       :padded="false"
@@ -83,7 +83,7 @@
         v-if="title"
         #header
       >
-        <SectionTitle
+        <ModuleHeader
           align="split"
           :title="title"
           :description="description"
@@ -125,6 +125,6 @@
           </ul>
         </MarqueeLoop>
       </RegistrationFrame>
-    </SectionModule>
+    </Module>
   </section>
 </template>

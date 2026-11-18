@@ -41,7 +41,7 @@ When the teams do not load, a danger `Alert` with Retry takes the table's place 
 
 ### G. Members — `Button`, `Avatar`, `IconButton` (EditTeam)
 
-Variant EditTeam only; it adds `Combobox`, `Field`, `SettingsSection`, `Switch`, `Textarea`, `Checkbox`, `Alert` and `SaveBar`.
+Variant EditTeam only; it adds `Combobox`, `Field`, `SettingsGroup`, `Switch`, `Textarea`, `Checkbox`, `Alert` and `SaveBar`.
 
 On the Edit Team page, a Members section above the matrix: an Add member `Combobox` over the account's users (`allow-custom` off, each option the name with the email as its description) with an Add button, then the members as a list with a square `Avatar`, name, email and a Remove `IconButton` named `Remove <name>`. With no member, a dashed sentence says the team grants nothing until someone joins. Members join from existing users only; inviting a new person belongs to `account/account-users`.
 

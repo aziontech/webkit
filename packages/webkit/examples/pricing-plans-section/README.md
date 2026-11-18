@@ -2,7 +2,7 @@
 
 The plan cards at the top of Pricing. A toggle picks the billing period, and the plans sit side by side with their price, what they include and one button. The recommended plan is raised and carries a tag.
 
-The band is the `PricingPlansSection` component from `@aziontech/webkit/pricing-plans-section`; it composes `SectionModule`, `RegistrationFrame`, `ToggleGroup`, `CardGrid` and `PricingCard`, with a `Button` in each card, and keeps the picked billing period as local state.
+The band is the `PricingPlansSection` component from `@aziontech/webkit/pricing-plans-section`; it composes `Module`, `RegistrationFrame`, `ToggleGroup`, `CardGrid` and `PricingCard`, with a `Button` in each card, and keeps the picked billing period as local state.
 
 ## Examples
 

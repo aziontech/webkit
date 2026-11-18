@@ -1,6 +1,6 @@
 # Media Split Stack Section
 
-> A run of large media-split bands that pile up under the site header as the page scrolls, each a centered claim with an outlined "learn more" button beside its picture, the whole band linking through. An optional centered section title at the medium size opens the run, as the run headers of the live product pages do. It is a page section — the site places it from a `{ _id: 'media-split-stack-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `section-stack`, `media-split`, `illustration`, `console-mockup` and `button`. Every band has a picture, and it is a drawn asset: a registered `scene`, a `ConsoleMockup` console mock (`widget`, itself a registered scene), or a registry `illustration`. The band type is a union that requires one of them; request-flow diagrams and code do not go in a media band. Every band sets its picture at the closing end, so the run reads down one edge.
+> A run of large media-split bands that pile up under the site header as the page scrolls, each a centered claim with an outlined "learn more" button beside its picture, the whole band linking through. An optional centered section title at the medium size opens the run, as the run headers of the live product pages do. It is a page section — the site places it from a `{ _id: 'media-split-stack-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `split-stack`, `media-split`, `illustration`, `console-mockup` and `button`. Every band has a picture, and it is a drawn asset: a registered `scene`, a `ConsoleMockup` console mock (`widget`, itself a registered scene), or a registry `illustration`. The band type is a union that requires one of them; request-flow diagrams and code do not go in a media band. Every band sets its picture at the closing end, so the run reads down one edge.
 
 - Import: `import MediaSplitStackSection from '@aziontech/webkit/media-split-stack-section'`
 - Category: section · Surface: site · Structure: monolithic
@@ -25,7 +25,7 @@
 
 ## Related
 
-- [section-stack](section-stack.md) — the sticky run the bands pile up in.
+- [split-stack](split-stack.md) — the sticky run the bands pile up in.
 - [media-split](media-split.md) — the band each entry renders through.
 
 ## Props
@@ -58,7 +58,7 @@
 - Visible focus: owned by `button` and `media-split`'s media link.
 - Keyboard map: `Tab` reaches each band's media link and button; `Enter` follows them.
 - ARIA: the run is a `<section>` named by its title (`aria-label`) when one is set; each band is `media-split`'s own section named by the band's title, with its headline as an `h3` under the run's `h2` (an `h2` when the run has no title); illustrations are named by `illustrationLabel`, or decorative when empty; a widget is an inert, `aria-hidden` picture of the console, so the band's copy carries its meaning.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `section-title`, `media-split` and `button`.
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `module-header`, `media-split` and `button`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the run adds no motion.
 - Touch target ≥40×40 px: the medium buttons and the band links.
 

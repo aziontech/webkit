@@ -5,8 +5,8 @@
   import pciDssSymbolColor from '@aziontech/webkit/assets/pci-dss-symbol-color.svg'
   import socSymbolColor from '@aziontech/webkit/assets/soc-symbol-color.svg'
   import ComplianceLogosSection from '@aziontech/webkit/compliance-logos-section'
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionGap from '@aziontech/webkit/section-gap'
+  import Container from '@aziontech/webkit/container'
+  import Spacer from '@aziontech/webkit/spacer'
 
   const certifications = [
     {
@@ -43,8 +43,8 @@
 </script>
 
 <template>
-  <SectionContainer max-width="site">
-    <SectionGap hatch />
+  <Container max-width="site">
+    <Spacer hatch />
 
     <ComplianceLogosSection
       eyebrow="Compliance"
@@ -55,6 +55,6 @@
       :primary-action="primaryAction"
     />
 
-    <SectionGap hatch />
-  </SectionContainer>
+    <Spacer hatch />
+  </Container>
 </template>

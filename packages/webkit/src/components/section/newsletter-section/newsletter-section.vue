@@ -10,8 +10,8 @@
   import Field from '../../input/field/field.vue'
   import FieldDescription from '../../input/field/field-description/field-description.vue'
   import Input from '../../input/input/input.vue'
+  import Module from '../../layout/module/module.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
-  import SectionModule from '../../marketing/section-module/section-module.vue'
 
   defineOptions({
     name: 'NewsletterSection',
@@ -121,7 +121,7 @@
     :aria-label="title || undefined"
     class="scroll-mt-(--spacing-2xl)"
   >
-    <SectionModule
+    <Module
       :divided="false"
       :padded="false"
     >
@@ -237,7 +237,7 @@
           />
         </div>
       </RegistrationFrame>
-    </SectionModule>
+    </Module>
     <RegistrationFrame
       v-if="hatch"
       borders="none"

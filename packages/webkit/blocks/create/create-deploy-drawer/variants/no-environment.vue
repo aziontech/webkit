@@ -9,7 +9,7 @@
   import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
-  import SettingsSection from '@aziontech/webkit/settings-section'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import { ref } from 'vue'
 
   const open = ref(false)
@@ -47,8 +47,8 @@
         </PanelHeader>
 
         <PanelBody>
-          <SettingsSection
-            title="Resources"
+          <SettingsGroup
+            label="Resources"
             hint="Everything this project serves, at the version this deployment sends live, with the version of every dependency they reference."
           >
             <Card>
@@ -56,9 +56,9 @@
                 <p class="text-body-sm text-(--text-muted)">Nothing is bound to project-01 yet.</p>
               </template>
             </Card>
-          </SettingsSection>
+          </SettingsGroup>
 
-          <SettingsSection title="Environment">
+          <SettingsGroup label="Environment">
             <EmptyState
               bordered
               size="small"
@@ -75,7 +75,7 @@
                 />
               </template>
             </EmptyState>
-          </SettingsSection>
+          </SettingsGroup>
         </PanelBody>
 
         <PanelFooter>

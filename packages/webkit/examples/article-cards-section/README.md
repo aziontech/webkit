@@ -4,7 +4,7 @@ A titled row of three article cards on one hairline grid with no gutter, stackin
 
 The media cell holds the article's cover. When the article has no cover, it holds the client's mark, drawn in one flat ink that follows the theme. On hover the card lifts to the raised surface and the media scales up slightly. The band closes every blog post with its related articles and every success story with its related stories.
 
-The band is the `ArticleCardsSection` component from `@aziontech/webkit/article-cards-section`; it composes `SectionModule`, `SectionTitle`, `RegistrationFrame` and `CardGrid` (`CardGrid.Cell`). `variant` places the heading: `start` (an article's closing row) or `center` (a landing-page band). Every variant uses the one `_id`, `article-cards-section`.
+The band is the `ArticleCardsSection` component from `@aziontech/webkit/article-cards-section`; it composes `Module`, `ModuleHeader`, `RegistrationFrame` and `CardGrid` (`CardGrid.Cell`). `variant` places the heading: `start` (an article's closing row) or `center` (a landing-page band). Every variant uses the one `_id`, `article-cards-section`.
 
 ## Examples
 

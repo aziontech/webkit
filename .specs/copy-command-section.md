@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: 44dcab37e53c6e68fa618e3f9f3a25103e6ae273d7d9e847e51b276a2e659076
+checksum: 819c78238347eef713334d3e91219e8d2ac0c9de7eae70bfdd7bb9a0bab9deec
 created: 2026-11-11
 last_updated: 2026-11-16
 ---
@@ -35,7 +35,7 @@ A one-line command or agent prompt with a copy button, set in a large `InputGrou
 ## Best practices
 
 - One line that works when pasted as is.
-- Place it in a hero or section-title actions slot.
+- Place it in a hero or module-header actions slot.
 
 ## Usage
 

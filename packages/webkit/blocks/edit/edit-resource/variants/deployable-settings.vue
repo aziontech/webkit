@@ -18,8 +18,8 @@
   import SaveBar from '@aziontech/webkit/save-bar'
   import Select from '@aziontech/webkit/select'
   import type { SelectOptionItem } from '@aziontech/webkit/select-root'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
-  import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
@@ -382,8 +382,8 @@
             >
               <legend class="sr-only">Resource settings</legend>
 
-              <SettingsSection
-                title="General"
+              <SettingsGroup
+                label="General"
                 hint="How this resource is identified across the platform, and whether it answers at all."
                 anchor="general"
               >
@@ -427,10 +427,10 @@
                     </Item.List>
                   </template>
                 </Card>
-              </SettingsSection>
+              </SettingsGroup>
 
-              <SettingsSection
-                title="Domains"
+              <SettingsGroup
+                label="Domains"
                 hint="The addresses this resource answers on, the environment each one answers in, and the certificate it is served with."
                 anchor="domains"
               >
@@ -529,18 +529,18 @@
                     </div>
                   </template>
                 </Card>
-              </SettingsSection>
+              </SettingsGroup>
 
-              <SettingsSection
-                title="Advanced settings"
+              <SettingsGroup
+                label="Advanced settings"
                 hint="Deployment Settings, protocols and mutual authentication, which most resources never change."
                 anchor="advanced-settings"
                 v-model:open="advancedOpen"
                 collapsible
               >
                 <div class="flex min-w-0 flex-col">
-                  <SettingsSection
-                    title="Deployment Settings"
+                  <SettingsGroup
+                    label="Deployment Settings"
                     hint="Which shared configuration each of this resource’s environments publishes with, linked automatically by deployment policy."
                     anchor="deployment-settings"
                   >
@@ -617,10 +617,10 @@
                         </template>
                       </Card>
                     </div>
-                  </SettingsSection>
+                  </SettingsGroup>
 
-                  <SettingsSection
-                    title="Protocol settings"
+                  <SettingsGroup
+                    label="Protocol settings"
                     hint="Which protocols and ports this resource answers on, and the TLS floor it accepts."
                     anchor="protocol-settings"
                   >
@@ -801,10 +801,10 @@
                         </Item.List>
                       </template>
                     </Card>
-                  </SettingsSection>
+                  </SettingsGroup>
 
-                  <SettingsSection
-                    title="Mutual authentication"
+                  <SettingsGroup
+                    label="Mutual authentication"
                     hint="Require the client to present a certificate the resource can verify, as well as presenting its own."
                     anchor="mutual-authentication"
                   >
@@ -910,12 +910,12 @@
                         </Item.List>
                       </template>
                     </Card>
-                  </SettingsSection>
+                  </SettingsGroup>
                 </div>
-              </SettingsSection>
+              </SettingsGroup>
 
-              <SettingsSection
-                title="Danger zone"
+              <SettingsGroup
+                label="Danger zone"
                 hint="Actions that cannot be undone."
                 anchor="danger-zone"
               >
@@ -983,7 +983,7 @@
                     </Item.List>
                   </template>
                 </Card>
-              </SettingsSection>
+              </SettingsGroup>
             </fieldset>
           </form>
         </div>

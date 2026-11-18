@@ -22,10 +22,10 @@
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import SaveBar from '@aziontech/webkit/save-bar'
-  import SectionHeader from '@aziontech/webkit/section-header'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
-  import SettingsSection from '@aziontech/webkit/settings-section'
   import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
+  import Subheader from '@aziontech/webkit/subheader'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
@@ -296,7 +296,7 @@
         v-if="activeTab === 'build'"
         class="layout-column-form layout-boundary-inline flex min-w-0 flex-col pb-(--layout-section-gap) pt-(--layout-section-gap)"
       >
-        <SectionHeader
+        <Subheader
           title="Build"
           description="How code reaches this application, and what the CLI builds it with."
           size="small"
@@ -313,8 +313,8 @@
             :disabled="saving"
           >
             <legend class="sr-only">Build settings</legend>
-            <SettingsSection
-              title="Git repository"
+            <SettingsGroup
+              label="Git repository"
               hint="The repository this application builds from, and the branches a push deploys."
               anchor="git-repository"
             >
@@ -379,10 +379,10 @@
                   </Item.List>
                 </template>
               </Card>
-            </SettingsSection>
+            </SettingsGroup>
 
-            <SettingsSection
-              title="Build configuration"
+            <SettingsGroup
+              label="Build configuration"
               hint="How the CLI builds this application."
               anchor="build-configuration"
             >
@@ -420,10 +420,10 @@
                   </Item.List>
                 </template>
               </Card>
-            </SettingsSection>
+            </SettingsGroup>
 
-            <SettingsSection
-              title="Deployment"
+            <SettingsGroup
+              label="Deployment"
               hint="The personal token the workflow authenticates with, kept as a repository secret."
               anchor="deployment"
             >
@@ -457,7 +457,7 @@
                   </Item.List>
                 </template>
               </Card>
-            </SettingsSection>
+            </SettingsGroup>
           </fieldset>
         </form>
 
@@ -708,7 +708,7 @@
           v-else-if="activeTab === 'versions'"
           class="layout-section-start flex min-w-0 flex-col gap-(--layout-group-gap) pb-(--layout-section-gap)"
         >
-          <SectionHeader
+          <Subheader
             title="Versions"
             size="small"
           >
@@ -720,7 +720,7 @@
                 icon="az az-plus"
               />
             </template>
-          </SectionHeader>
+          </Subheader>
           <Card :padded="false">
             <template #default>
               <DataTable
@@ -768,7 +768,7 @@
           v-else
           class="layout-section-start flex min-w-0 flex-col gap-(--layout-group-gap) pb-(--layout-section-gap)"
         >
-          <SectionHeader
+          <Subheader
             title="Deployments"
             size="small"
           />

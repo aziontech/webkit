@@ -6,14 +6,14 @@ status: implemented
 spec_version: 6
 created: 2026-11-04
 last_updated: 2026-11-17
-checksum: f63ab4742e72b8cabe0e8a60c443354093718b93b0f82765f42d9bf3f49127ab
+checksum: 708f6d1fe6535f0d290da5994c981ac6f979b11b10f5eb42f84d4da9f6480e75
 ---
 
 # FeatureTilesSection — Component Spec
 
 ## Purpose
 
-The reasons band of a marketing page: an optional centered section title over a frame grid of media tiles, each a registry illustration above a short heading and a sentence. It is a page section — the site places it from a `{ _id: 'feature-tiles-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `registration-frame`, `card-grid`, `media-tile` and `illustration`. `variant` picks the layout only: `artwork` is four columns with marks on every corner, `illustrated` is three columns with marks on the bottom rule; the tiles keep the same shape in both.
+The reasons band of a marketing page: an optional centered section title over a frame grid of media tiles, each a registry illustration above a short heading and a sentence. It is a page section — the site places it from a `{ _id: 'feature-tiles-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `registration-frame`, `card-grid`, `media-tile` and `illustration`. `variant` picks the layout only: `artwork` is four columns with marks on every corner, `illustrated` is three columns with marks on the bottom rule; the tiles keep the same shape in both.
 
 ## When to use
 
@@ -114,7 +114,7 @@ _none_
 - Visible focus: nothing in the band is interactive.
 - Keyboard map: none.
 - ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the headline is the section title's `h2` and each tile's heading is `media-tile`'s; illustrations are decorative and named by the tile's heading.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `section-title` and `media-tile`.
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `module-header` and `media-tile`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion.
 - Touch target ≥40×40 px — not applicable, nothing is interactive.
 

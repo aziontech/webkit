@@ -4,7 +4,7 @@ Every success story of a company as one library, with the controls to narrow it.
 
 Each card is one link, named by its company: the client mark in a single ink, the story's industry as an overline, its description, and a "Read story" line whose arrow nudges on hover. The grid runs one column on phones, two from `sm` and three from `lg`. Below `lg` the field and the selects stack. When nothing matches, an empty state offers to clear every filter.
 
-The band is the `StoryIndexSection` component from `@aziontech/webkit/story-index-section`; it composes `SectionModule`, `SectionTitle`, `RegistrationFrame`, `Input`, `Select`, `Button` and, when nothing matches, `EmptyState`. The search, the facet selections and each select's option search are local state.
+The band is the `StoryIndexSection` component from `@aziontech/webkit/story-index-section`; it composes `Module`, `ModuleHeader`, `RegistrationFrame`, `Input`, `Select`, `Button` and, when nothing matches, `EmptyState`. The search, the facet selections and each select's option search are local state.
 
 ## Examples
 

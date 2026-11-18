@@ -1,11 +1,11 @@
 # EditRuleBuilder (`edit/edit-rule-builder`)
 
-> A rule builder drawer, the richest form pattern: a large right-side drawer with General, Phase, Criteria, Behaviors and Status sections over a single Save in the footer. Name shows the Required marker from the start and turns invalid only after Save is pressed with it empty. Criteria are an `AttributeEditor` in grouped mode: AND groups of variable, operator and argument rows joined by OR, the variable a `Combobox` of the phase's variables, with Add condition, Add OR group, limits and announcements from the editor, and conditions and groups that reorder by grip, Move up and Move down, or Alt+Arrow keys (`reorderable`); behaviors are a second `AttributeEditor` (list mode, `reorderable`, up to 10) labelled Then, whose argument cell follows the behavior picked from a searchable list filtered by phase; Add behavior waits while the last behavior ends the rule. Every form resets when the drawer opens, so its content stays in place while it closes. A resource’s Rules tab opens it as Add Rule or Edit Rule. A save that fails keeps the drawer open with a danger `Alert`. Built from `SettingsSection`, `SettingsRow`, `Drawer` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `Field`, `Input`, `FieldDescription`, `Select`, `AttributeEditor`, `Combobox`, `RadioGroup` choice cards (`variant="card"`), `Card`, `Item`, `Switch`, `Alert` and `Button`.
+> A rule builder drawer, the richest form pattern: a large right-side drawer with General, Phase, Criteria, Behaviors and Status sections over a single Save in the footer. Name shows the Required marker from the start and turns invalid only after Save is pressed with it empty. Criteria are an `AttributeEditor` in grouped mode: AND groups of variable, operator and argument rows joined by OR, the variable a `Combobox` of the phase's variables, with Add condition, Add OR group, limits and announcements from the editor, and conditions and groups that reorder by grip, Move up and Move down, or Alt+Arrow keys (`reorderable`); behaviors are a second `AttributeEditor` (list mode, `reorderable`, up to 10) labelled Then, whose argument cell follows the behavior picked from a searchable list filtered by phase; Add behavior waits while the last behavior ends the rule. Every form resets when the drawer opens, so its content stays in place while it closes. A resource’s Rules tab opens it as Add Rule or Edit Rule. A save that fails keeps the drawer open with a danger `Alert`. Built from `SettingsGroup`, `SettingsRow`, `Drawer` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `Field`, `Input`, `FieldDescription`, `Select`, `AttributeEditor`, `Combobox`, `RadioGroup` choice cards (`variant="card"`), `Card`, `Item`, `Switch`, `Alert` and `Button`.
 
 - Surface: app
 - Source: `blocks/edit/edit-rule-builder/edit-rule-builder.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/edit-rule-builder")`
-- Components: [Alert](../../components/alert.md), [AttributeEditor](../../components/attribute-editor.md), [Button](../../components/button.md), [Card](../../components/card.md), [Combobox](../../components/combobox.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DrawerTrigger`, [Field](../../components/field.md), `FieldDescription`, [Input](../../components/input.md), [Item](../../components/item.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [RadioGroup](../../components/radio-group.md), [Select](../../components/select.md), [SettingsRow](../../components/settings-row.md), [SettingsSection](../../components/settings-section.md), [Switch](../../components/switch.md)
+- Components: [Alert](../../components/alert.md), [AttributeEditor](../../components/attribute-editor.md), [Button](../../components/button.md), [Card](../../components/card.md), [Combobox](../../components/combobox.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DrawerTrigger`, [Field](../../components/field.md), `FieldDescription`, [Input](../../components/input.md), [Item](../../components/item.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [RadioGroup](../../components/radio-group.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Switch](../../components/switch.md)
 - Skills: `webkit-form`, `webkit-errors`, `webkit-create-surface`
 
 ## Asked as
@@ -33,23 +33,23 @@ A drawer where the user writes one rule of a rules engine: when it runs (the pha
 
 A right-side `Drawer` at `size="large"`. The `DrawerTrigger` wraps an outlined medium `Add Rule` `Button` that fills the width on a phone. `DrawerContent` holds one `form` named like the title; `PanelHeader` carries the `DrawerTitle` and the drawer's own close button, and `PanelBody` scrolls the five sections. The form resets each time the drawer opens, so content stays in place while it closes. See `skills/webkit-create-surface`.
 
-### B. General — `SettingsSection`, `Field`, `Input` (required)
+### B. General — `SettingsGroup`, `Field`, `Input` (required)
 
-A `SettingsSection` with a hint, holding two `Field`s with large `Input`s: Name, which shows "Name is required." only after Save is pressed with it empty, and an optional Description. Fields are disabled while saving.
+A `SettingsGroup` with a hint, holding two `Field`s with large `Input`s: Name, which shows "Name is required." only after Save is pressed with it empty, and an optional Description. Fields are disabled while saving.
 
-### C. Phase — `SettingsSection`, `Card`, `RadioGroup`, `FieldDescription` (optional)
+### C. Phase — `SettingsGroup`, `Card`, `RadioGroup`, `FieldDescription` (optional)
 
 Request and Response as choice cards: a flush `Card` holding a `RadioGroup` with `variant="card"`, each option with a title and a one-line description. When editing, the phase is locked and a `FieldDescription` explains why.
 
-### D. Criteria — `SettingsSection`, `AttributeEditor` (grouped), `Combobox`, `Select`, `Input` (required)
+### D. Criteria — `SettingsGroup`, `AttributeEditor` (grouped), `Combobox`, `Select`, `Input` (required)
 
 An `AttributeEditor` in grouped mode (`v-model:groups`), large, named "Criteria": each group is an AND group of condition rows, groups are joined by an "or" `Separator`, and the editor draws the labels, Add condition under each group, Add OR group at the end, Remove condition per row, the limits (10 conditions per group, 5 groups), focus after add and remove, and the polite "Item n added" and "Item n removed" announcements. Its cells are replaced through `cell-<key>` slots: the variable is a `Combobox` of the variables of the chosen phase that also takes a typed one, the operator a `Select`, and the argument an `Input` that turns into a disabled "No argument" field for exists and does not exist. `min-items="1"` keeps one condition. A missing variable shows "Enter the variable to compare." under it, only after Save, through the editor's `errors`. `reorderable` lets conditions and whole OR groups move by their grip, with Move up and Move down, or with Alt+Arrow Up and Alt+Arrow Down inside a row; the editor announces each move. Conditions are evaluated in the order shown, so the cheapest or most selective one goes first.
 
-### E. Behaviors — `SettingsSection`, `Card`, `AttributeEditor`, `Select`, `Input`, `FieldDescription` (required)
+### E. Behaviors — `SettingsGroup`, `Card`, `AttributeEditor`, `Select`, `Input`, `FieldDescription` (required)
 
 A Then list run top to bottom, drawn by a second `AttributeEditor` in list mode (`v-model:items`, large, `reorderable`, `limit` 10, `min-items` 1) named "Behaviors" with Behavior and Argument columns. The `cell-type` slot is a behavior `Select` with its own search `Input`, listing only behaviors valid in the chosen phase; the `cell-argument` slot is the `Input`, `Select` or group of `Input`s that the behavior takes (a disabled "No argument" field when it takes none), with a `FieldDescription` where the argument needs one. The editor owns the grip, Move up and Move down, Alt+Arrow keys, Remove behavior, the limit text, focus and announcements; Add behavior is disabled while the last behavior ends the rule, and the `info` slot says so ("Deliver ends the rule. Nothing after it runs.").
 
-### F. Status — `SettingsSection`, `Card`, `Item`, `SettingsRow`, `Switch` (required)
+### F. Status — `SettingsGroup`, `Card`, `Item`, `SettingsRow`, `Switch` (required)
 
 A flush `Card` with an `Item.List` holding one `SettingsRow` titled Active with a `Switch`. The hint says an inactive rule keeps its place in the order and is skipped at runtime.
 
@@ -175,8 +175,8 @@ Each variant is the same screen in another state: `get_block("edit/edit-rule-bui
   import PanelHeader from '@aziontech/webkit/panel-header'
   import RadioGroup from '@aziontech/webkit/radio-group'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
-  import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import { computed, nextTick, reactive, ref, watch } from 'vue'
 
@@ -806,8 +806,8 @@ Each variant is the same screen in another state: `get_block("edit/edit-rule-bui
             :disabled="submitting"
           >
             <legend class="sr-only">{{ title }}</legend>
-            <SettingsSection
-              title="General"
+            <SettingsGroup
+              label="General"
               hint="Names the rule in the list and in the deployment log."
             >
               <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
@@ -840,10 +840,10 @@ Each variant is the same screen in another state: `get_block("edit/edit-rule-bui
                   >
                 </Field>
               </div>
-            </SettingsSection>
+            </SettingsGroup>
 
-            <SettingsSection
-              title="Phase"
+            <SettingsGroup
+              label="Phase"
               hint="When the rule runs. Request rules act on what arrives at the service; response rules act on what leaves it. The two are separate programs and never interleave."
             >
               <Card :padded="false">
@@ -873,10 +873,10 @@ Each variant is the same screen in another state: `get_block("edit/edit-rule-bui
                   </div>
                 </template>
               </Card>
-            </SettingsSection>
+            </SettingsGroup>
 
-            <SettingsSection
-              title="Criteria"
+            <SettingsGroup
+              label="Criteria"
               hint="The conditions that decide whether the rule runs. Every condition in a group must match, and any one group is enough."
             >
               <AttributeEditor
@@ -954,10 +954,10 @@ Each variant is the same screen in another state: `get_block("edit/edit-rule-bui
                   />
                 </template>
               </AttributeEditor>
-            </SettingsSection>
+            </SettingsGroup>
 
-            <SettingsSection
-              title="Behaviors"
+            <SettingsGroup
+              label="Behaviors"
               hint="What the rule does when its criteria are met, run top to bottom in this order."
             >
               <Card :padded="false">
@@ -1118,10 +1118,10 @@ Each variant is the same screen in another state: `get_block("edit/edit-rule-bui
                   </div>
                 </template>
               </Card>
-            </SettingsSection>
+            </SettingsGroup>
 
-            <SettingsSection
-              title="Status"
+            <SettingsGroup
+              label="Status"
               hint="An inactive rule stays in the list and in its place in the order, but is skipped at runtime."
             >
               <Card :padded="false">
@@ -1141,7 +1141,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-rule-bui
                   </Item.List>
                 </template>
               </Card>
-            </SettingsSection>
+            </SettingsGroup>
           </fieldset>
         </PanelBody>
 

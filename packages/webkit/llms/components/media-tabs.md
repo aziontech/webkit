@@ -34,7 +34,7 @@
 - [media-split](media-split.md) — one claim, one picture, no selection.
 - [illustration](illustration.md) — the official scene a tab's `media` slot usually holds.
 - [registration-frame](registration-frame.md) — the registration frame the band is built from: every tab is its own frame and the media column is one more, each with all four corner marks. Every tab flushes its top rule and the media column its top and left rules, so the band draws no top rule of its own: the rule above it (a section title's, or the page frame's) is the only one, and a shared edge is one hairline.
-- [section-title](section-title.md) — the heading above the band; this component carries no title of its own.
+- [module-header](module-header.md) — the heading above the band; this component carries no title of its own.
 
 ## Props
 

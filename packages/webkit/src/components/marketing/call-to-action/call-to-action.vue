@@ -2,8 +2,8 @@
   import { computed, useAttrs } from 'vue'
 
   import Eyebrow from '../../content/eyebrow/eyebrow.vue'
+  import ModuleHeader from '../../layout/module-header/module-header.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
-  import SectionTitle from '../section-title/section-title.vue'
 
   defineOptions({
     name: 'CallToAction',
@@ -176,7 +176,7 @@
           <div
             class="relative z-10 flex justify-center px-(--spacing-xl) py-[calc(var(--spacing-2xl)*1.5)] md:py-[calc(var(--spacing-2xl)*2)] [&_h2]:max-w-(--container-xl) [&_h2+p]:max-w-(--container-md)"
           >
-            <SectionTitle
+            <ModuleHeader
               :framed="false"
               align="center"
               size="large"
@@ -195,7 +195,7 @@
               >
                 <slot name="actions" />
               </template>
-            </SectionTitle>
+            </ModuleHeader>
           </div>
         </div>
 
@@ -214,7 +214,7 @@
         <div
           class="flex flex-col justify-between gap-(--spacing-xl) bg-(--bg-surface) p-(--spacing-2xl) md:basis-2/3 md:grow"
         >
-          <SectionTitle
+          <ModuleHeader
             :framed="false"
             align="start"
             :title="title"
@@ -243,7 +243,7 @@
         v-else
         class="flex flex-col gap-(--spacing-xl) bg-(--bg-surface) p-(--spacing-2xl) md:flex-row md:items-center md:justify-between"
       >
-        <SectionTitle
+        <ModuleHeader
           :framed="false"
           align="start"
           :title="title"
@@ -256,7 +256,7 @@
           >
             <slot />
           </template>
-        </SectionTitle>
+        </ModuleHeader>
 
         <div
           v-if="slots.actions"

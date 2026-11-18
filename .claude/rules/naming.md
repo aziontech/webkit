@@ -42,6 +42,10 @@ The kebab name is the single source. Six surfaces must agree:
   `site-footer-section`), and that name is the `_id` the site writes in a page's `sections[]`;
   the building pieces in `src/components/marketing/` keep the bare name (`hero`, `stats`).
   `-band`, `-stack` and the other wrapper words are not used.
+- **Only a page section says "section".** The word marks one thing: a whole band of a marketing
+  page, at the end of its name. Nothing else carries it, first or last: the frame a page is built
+  from is `container`, `module`, `module-header`, `spacer` and `split-stack`, a console band
+  heading is `subheader`, a settings band is `settings-group` (WN-S01, WN-S02).
 - **No synonym of an existing export.** One overlay is `dialog` (never `modal`), the side panel
   is `drawer` (never `sheet`), the moving strip is `marquee` (never `ticker`).
 
@@ -515,7 +519,7 @@ the level goes into the name only where it has to.
 | Folder       | What it holds                                           | Name shape                                                                          | Example                                                                                |
 | ------------ | ------------------------------------------------------- | ----------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
 | `docs/`      | pieces of the documentation site                        | `doc-<thing>`; the `<thing>` is the MDX tag `DocMarkdown` renders, otherwise a noun | `doc-callout` (`<Callout>`), `doc-card-group` (`<CardGroup>`), `doc-table-of-contents` |
-| `marketing/` | marketing-site pieces composed by hand, with slots      | the plain noun                                                                      | `hero`, `faq`, `quote`, `media-tabs`, `section-title`                                  |
+| `marketing/` | marketing-site pieces composed by hand, with slots      | the plain noun                                                                      | `hero`, `faq`, `quote`, `media-tabs`, `logo-wall`                                      |
 | `section/`   | whole marketing bands placed from page JSON, props only | `<what>-section`, the same string as the page `_id`                                 | `faq-section`, `hero-section`                                                          |
 
 - **The prefix covers the whole docs folder.** Every docs piece starts with `doc-`, even where the
@@ -526,6 +530,11 @@ the level goes into the name only where it has to.
 - **A generic piece leaves the website folders.** A grid, a carousel, an embed or a texture that an
   app or the docs site uses too lives in `layout/` or `content/`, under its plain name; the
   catalog still marks its surface `site` where it is styled for the site.
+- **The page frame is layout.** The pieces a page is framed with live in `layout/` beside
+  `registration-frame`, under the market's plain words: `container` (the framed column),
+  `spacer` (the hatched gap between bands), `module` (a band you compose: a header row over a
+  body), `module-header` (that header row, also used alone) and `split-stack` (bands that pin as
+  the page scrolls). Their catalog surface stays `site`.
 - **A section pairs with the piece it builds on** where one exists: `faq` / `faq-section`,
   `media-tabs` / `feature-tabs-section`, `media-scroll` / `feature-scroll-section`.
 
@@ -558,10 +567,10 @@ does not say it again. One rule, three cases:
 - **The list drops it.** The docs sidebar and the block index show the name without the group
   word, in Title Case, under the group heading (`labelInGroup` in `apps/docs/src/lib/nav.ts`). The
   page heading and the copyable code keep the full name.
-- **Page sections keep the word last.** `section-` already starts the six frame pieces every band
-  is built from (`section-container`, `section-module`, `section-gap`, `section-header`,
-  `section-title`, `section-stack`), so `section-hero` would mix whole bands with their parts, and
-  every `_id` is stored in page data outside this repo. The `-section` suffix stays (N12, WN08).
+- **Page sections keep the word last.** "Hero section", "pricing section" is how Tailwind Plus,
+  Shopify and Mantine UI say it, and every `_id` is stored in page data outside this repo, so the
+  `-section` suffix stays (N12, WN08). No other component carries the word (WN-S01), so the
+  _Page sections_ list holds every name that says "section" and nothing else.
 - **Components are not a family here.** A component name reads modifier first, noun last
   (`icon-button`, `pricing-card`); the category is a folder and a sidebar heading, never a word in
   the name (WN10).
@@ -585,48 +594,48 @@ One engine checks every rule that a machine can decide, and every rule blocks: t
 (`NAMING_STAGED_BLOCKS` is `true`). The write-time hook blocks a violation a write adds, and
 `check:naming` fails CI on any violation in the tree.
 
-| Rule id             | Checks                                                                                 | Decision       |
-| ------------------- | -------------------------------------------------------------------------------------- | -------------- |
-| `export-kebab`      | export subpaths and block ids are kebab-case English                                   | N18            |
-| `block-id`          | a block's `id` equals its folder path                                                  | N9             |
-| `export-synonym`    | no export is a market alias or synonym of another export                               | N12            |
-| `export-retired`    | no retired v6 name (`v6.json`) comes back as an export                                 | N12            |
-| `near-duplicate`    | abbreviations, plurals and synonyms in exports, blocks, folders, examples              | N12, N18       |
-| `export-category`   | no category segment in an export key                                                   | N11            |
-| `category-folder`   | category folders are singular and in the closed list                                   | N11            |
-| `block-path`        | `blocks/<group>/<block>/`, group in the closed list, no surface level                  | N9             |
-| `block-word`        | "block", never "pattern" or "template", in titles, catalog keys and MCP tools          | N9             |
-| `block-state`       | block variant names use the state words                                                | N10            |
-| `part-word`         | part suffix in the closed list or a declared domain part; `Body` placement             | N8             |
-| `part-export`       | every part folder has its `<root>-<part>` export                                       | N8             |
-| `block-group-first` | a block's name starts with its group word, once (`dashboard/dashboard-alerts`)         | WN07           |
-| `section-suffix`    | every component in `src/components/section/` ends in `-section`                        | N12            |
-| `docs-prefix`       | every component in `src/components/docs/` starts with `doc-`, and only those do        | WN04           |
-| `example-file`      | first example is `default.vue`; no banned example file names                           | N13            |
-| `prop-name`         | prop names against the vocabulary (specs and `.vue`)                                   | N1, N5, N6     |
-| `prop-value`        | value sets, `Severity`-derived types, `left`/`right` only in `PHYSICAL_EDGE_TYPES`     | N2, N3, N5, N7 |
-| `model-shape`       | `defineModel` names and types per concept, `default<Model>` seeds, template `v-model:` | N6             |
-| `event-name`        | kebab events, no echo, the shared event words                                          | N5             |
-| `slot-name`         | kebab slots; `leading`/`trailing`, never `prefix`/`suffix`/`left`/`right`              | N7             |
-| `type-name`         | no `*Kind` type, no bare `Props`, exported types prefixed, `<Component><Axis>` unions  | N1             |
-| `data-attribute`    | kebab `data-*`, no banned attributes                                                   | N1, N6, N7     |
-| `testid`            | fallback is the own name; inner parts `__part`; no category prefix                     | N11            |
-| `i18n-key`          | camelCase namespaces and keys                                                          | N16            |
-| `injection-key`     | `<Component>[<Part>]InjectionKey` and its `Symbol` description                         | N16            |
-| `composable-file`   | `use-x.ts` exports `useX`                                                              | N16            |
-| `handler-name`      | `onX` handlers in Vue DOM casing, no `handleX`                                         | N16            |
-| `dom-ref-name`      | element refs end in `El` / `Els`                                                       | N16            |
-| `private-folder`    | a component's private helpers in `lib/`, never `_lib`, `utils`, `helpers`              | N16            |
-| `css-variable`      | component CSS variables carry the component prefix, no abbreviations                   | N16            |
-| `token-name`        | `2xs`/`2xl`, `-foreground`, `code-syntax`, every fill has a foreground pair            | N4, N15        |
-| `icon-name`         | used icon names exist in the icons package; no legacy or `pi` names                    | N14            |
-| `file-name`         | kebab files and folders in packages and apps                                           | N18            |
-| `script-name`       | `<verb>:<target>` scripts named after their script file                                | N17            |
-| `filter-name`       | `pnpm --filter` with the full package name                                             | N17            |
-| `workflow-name`     | kebab workflow files; sentence-case names without milestone codes or Storybook         | N17            |
-| `eslint-rule-name`  | lint rule names start with a verb prefix                                               | N18            |
-| `tooling-name`      | skills, agents and hooks name shapes                                                   | N18            |
-| `cli-name`          | CLI commands one word; MCP tools `<verb>_<noun>`                                       | N9, N18        |
+| Rule id             | Checks                                                                                     | Decision       |
+| ------------------- | ------------------------------------------------------------------------------------------ | -------------- |
+| `export-kebab`      | export subpaths and block ids are kebab-case English                                       | N18            |
+| `block-id`          | a block's `id` equals its folder path                                                      | N9             |
+| `export-synonym`    | no export is a market alias or synonym of another export                                   | N12            |
+| `export-retired`    | no retired v6 name (`v6.json`) comes back as an export                                     | N12            |
+| `near-duplicate`    | abbreviations, plurals and synonyms in exports, blocks, folders, examples                  | N12, N18       |
+| `export-category`   | no category segment in an export key                                                       | N11            |
+| `category-folder`   | category folders are singular and in the closed list                                       | N11            |
+| `block-path`        | `blocks/<group>/<block>/`, group in the closed list, no surface level                      | N9             |
+| `block-word`        | "block", never "pattern" or "template", in titles, catalog keys and MCP tools              | N9             |
+| `block-state`       | block variant names use the state words                                                    | N10            |
+| `part-word`         | part suffix in the closed list or a declared domain part; `Body` placement                 | N8             |
+| `part-export`       | every part folder has its `<root>-<part>` export                                           | N8             |
+| `block-group-first` | a block's name starts with its group word, once (`dashboard/dashboard-alerts`)             | WN07           |
+| `section-suffix`    | every component in `src/components/section/` ends in `-section`, and no other has the word | N12, WN-S01    |
+| `docs-prefix`       | every component in `src/components/docs/` starts with `doc-`, and only those do            | WN04           |
+| `example-file`      | first example is `default.vue`; no banned example file names                               | N13            |
+| `prop-name`         | prop names against the vocabulary (specs and `.vue`)                                       | N1, N5, N6     |
+| `prop-value`        | value sets, `Severity`-derived types, `left`/`right` only in `PHYSICAL_EDGE_TYPES`         | N2, N3, N5, N7 |
+| `model-shape`       | `defineModel` names and types per concept, `default<Model>` seeds, template `v-model:`     | N6             |
+| `event-name`        | kebab events, no echo, the shared event words                                              | N5             |
+| `slot-name`         | kebab slots; `leading`/`trailing`, never `prefix`/`suffix`/`left`/`right`                  | N7             |
+| `type-name`         | no `*Kind` type, no bare `Props`, exported types prefixed, `<Component><Axis>` unions      | N1             |
+| `data-attribute`    | kebab `data-*`, no banned attributes                                                       | N1, N6, N7     |
+| `testid`            | fallback is the own name; inner parts `__part`; no category prefix                         | N11            |
+| `i18n-key`          | camelCase namespaces and keys                                                              | N16            |
+| `injection-key`     | `<Component>[<Part>]InjectionKey` and its `Symbol` description                             | N16            |
+| `composable-file`   | `use-x.ts` exports `useX`                                                                  | N16            |
+| `handler-name`      | `onX` handlers in Vue DOM casing, no `handleX`                                             | N16            |
+| `dom-ref-name`      | element refs end in `El` / `Els`                                                           | N16            |
+| `private-folder`    | a component's private helpers in `lib/`, never `_lib`, `utils`, `helpers`                  | N16            |
+| `css-variable`      | component CSS variables carry the component prefix, no abbreviations                       | N16            |
+| `token-name`        | `2xs`/`2xl`, `-foreground`, `code-syntax`, every fill has a foreground pair                | N4, N15        |
+| `icon-name`         | used icon names exist in the icons package; no legacy or `pi` names                        | N14            |
+| `file-name`         | kebab files and folders in packages and apps                                               | N18            |
+| `script-name`       | `<verb>:<target>` scripts named after their script file                                    | N17            |
+| `filter-name`       | `pnpm --filter` with the full package name                                                 | N17            |
+| `workflow-name`     | kebab workflow files; sentence-case names without milestone codes or Storybook             | N17            |
+| `eslint-rule-name`  | lint rule names start with a verb prefix                                                   | N18            |
+| `tooling-name`      | skills, agents and hooks name shapes                                                       | N18            |
+| `cli-name`          | CLI commands one word; MCP tools `<verb>_<noun>`                                           | N9, N18        |
 
 ## Review-only
 

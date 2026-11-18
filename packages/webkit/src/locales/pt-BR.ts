@@ -892,11 +892,11 @@ export const ptBR: Messages = {
     mapValue: 'Valor',
     duplicateKey: 'Cada chave deve ser única.'
   },
-  sectionHeader: {
+  subheader: {
     copyLink: 'Copiar link da seção {title}',
     linkCopied: 'Link copiado'
   },
-  settingsSection: {
+  settingsGroup: {
     copyLink: 'Copiar link da seção {title}',
     linkCopied: 'Link copiado'
   },

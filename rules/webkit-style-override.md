@@ -56,7 +56,7 @@ is in `webkit-tokens.md` § "Chart palettes".
 - Compose your own markup **inside the component's slots** — your elements, your classes:
   the component's own surface stays untouched.
 - Use a component that is **built to be personalized** (`styleSeam` in the catalog, e.g.
-  `RegistrationFrame`, `SectionContainer`) when a container must accept your classes.
+  `RegistrationFrame`, `Container`) when a container must accept your classes.
 - Size, align or place the component in its parent with the layout utilities above
   (`<Button class="w-full" />`, `<Card class="w-full max-w-(--container-sm)" />`,
   `<Field class="mt-(--spacing-md) col-span-2" />`).

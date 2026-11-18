@@ -12,7 +12,7 @@
   },
   {
    "name": "SavePerGroup",
-   "summary": "A settings page split into topic groups that each save on their own: a page heading, then one section per topic, each a `SectionHeader` over a flush `Card` of `Item` rows whose footer carries a secondary Save for that group only. Saving one group disables just its own fieldset; the other stays editable. Preferences is the example, with General (Full name, Language) and Notifications (Product updates, Security alerts). Built from `PageHeader`, `SectionHeader`, `SettingsRow`, `Card`, `Item`, `Input`, `Select`, `Switch` and `Button`.",
+   "summary": "A settings page split into topic groups that each save on their own: a page heading, then one section per topic, each a `Subheader` over a flush `Card` of `Item` rows whose footer carries a secondary Save for that group only. Saving one group disables just its own fieldset; the other stays editable. Preferences is the example, with General (Full name, Language) and Notifications (Product updates, Security alerts). Built from `PageHeader`, `Subheader`, `SettingsRow`, `Card`, `Item`, `Input`, `Select`, `Switch` and `Button`.",
    "file": "blocks/settings/settings-form/variants/save-per-group.vue"
   },
   {
@@ -32,7 +32,7 @@
   },
   {
    "name": "Profile",
-   "summary": "The profile page of a signed-in account: a small page heading over seven stacked `SettingsSection`s (General, Company information, Address information, Login settings, Source control, Appearance, Danger zone), each a flush `Card` of rows, with the `SaveBar` that rises once a saved field changes. Account name comes filled; Billing emails starts empty and is required; both are checked on Save. Requiring MFA lives in `account/account-mfa-settings`, linked from the Login settings row; source-control actions open the provider; Delete account asks in a `ConfirmDialog` that takes the account name typed. A save that fails with no field to blame raises an error toast with Retry and keeps the changes.",
+   "summary": "The profile page of a signed-in account: a small page heading over seven stacked `SettingsGroup`s (General, Company information, Address information, Login settings, Source control, Appearance, Danger zone), each a flush `Card` of rows, with the `SaveBar` that rises once a saved field changes. Account name comes filled; Billing emails starts empty and is required; both are checked on Save. Requiring MFA lives in `account/account-mfa-settings`, linked from the Login settings row; source-control actions open the provider; Delete account asks in a `ConfirmDialog` that takes the account name typed. A save that fails with no field to blame raises an error toast with Retry and keeps the changes.",
    "file": "blocks/settings/settings-form/variants/profile.vue"
   },
   {

@@ -6,14 +6,14 @@ status: implemented
 spec_version: 7
 created: 2026-11-04
 last_updated: 2026-11-18
-checksum: 058494fd1f5fa406e3471419ed372770529d57f9db96d714ee212808f82f72cc
+checksum: 508fc81368ab96c8c66db3fa104f5fd15f67c574aacece193baa770e9472bf02
 ---
 
 # FeatureScrollSection — Component Spec
 
 ## Purpose
 
-The walkthrough band of a product page: a large section title over one screen per feature. From the large breakpoint up the features scroll through a sticky stack — the copy advances while the feature's live scene or illustration stays pinned in a framed, textured stage with one small action under each step (a step may pin a one-file code sample instead, for a code-led walkthrough); below it the same features are a three-column grid of media tiles. It is a page section — the site places it from a `{ _id: 'feature-scroll-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `registration-frame`, `card-grid`, `media-tile`, `illustration`, `code-block`, `media-scroll`, `texture`, `button` and the webkit scene assets (a `ConsoleMockup` console fragment, most often).
+The walkthrough band of a product page: a large section title over one screen per feature. From the large breakpoint up the features scroll through a sticky stack — the copy advances while the feature's live scene or illustration stays pinned in a framed, textured stage with one small action under each step (a step may pin a one-file code sample instead, for a code-led walkthrough); below it the same features are a three-column grid of media tiles. It is a page section — the site places it from a `{ _id: 'feature-scroll-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `registration-frame`, `card-grid`, `media-tile`, `illustration`, `code-block`, `media-scroll`, `texture`, `button` and the webkit scene assets (a `ConsoleMockup` console fragment, most often).
 
 ## When to use
 

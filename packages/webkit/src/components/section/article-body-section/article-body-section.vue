@@ -12,11 +12,11 @@
   import DocProse from '../../docs/doc-prose/doc-prose.vue'
   import DocTableOfContents from '../../docs/doc-table-of-contents/doc-table-of-contents.vue'
   import { toast } from '../../feedback/toast/composables/use-toast-store'
+  import Container from '../../layout/container/container.vue'
+  import Module from '../../layout/module/module.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import Separator from '../../layout/separator/separator.vue'
   import HeroTitle from '../../marketing/hero/hero-title/hero-title.vue'
-  import SectionContainer from '../../marketing/section-container/section-container.vue'
-  import SectionModule from '../../marketing/section-module/section-module.vue'
   import type { BreadcrumbItemData } from '../../navigation/breadcrumb/breadcrumb.vue'
   import Breadcrumb from '../../navigation/breadcrumb/breadcrumb.vue'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
@@ -364,8 +364,8 @@
     class="scroll-mt-(--spacing-2xl)"
     :data-testid="testId"
   >
-    <SectionContainer max-width="site">
-      <SectionModule
+    <Container max-width="site">
+      <Module
         :divided="false"
         :padded="false"
       >
@@ -641,7 +641,7 @@
             </aside>
           </div>
         </RegistrationFrame>
-      </SectionModule>
-    </SectionContainer>
+      </Module>
+    </Container>
   </div>
 </template>
