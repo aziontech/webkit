@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 8
 template: 2
-checksum: 97e7591e37826644d50a1e3b4a79a3bfffe70190440a5f84d4b20298f71c5ee5
+checksum: 8a19ba61c99df590136b925e7c9546ddd24301d576a19e9a34cc59b311652821
 created: 2026-11-11
 last_updated: 2026-11-17
 ---
@@ -192,8 +192,9 @@ _none_ — the trigger, the panel and its two tabs are fixed parts.
 
 ## Responsive
 
-- Container queries: none; the trigger is inline and truncates its text inside the available width (`max-w-full`).
-- Narrow (≤ 640 px): the panel is at most `min(90vw, 24rem)` wide and scrolls inside itself when taller than the viewport.
+- Container queries: none; the trigger is inline within the available width (`max-w-full`) and wraps a long range onto more lines (it grows taller); no word of the trigger, the quick ranges or the absolute fields is cut with an ellipsis.
+- Absolute range layout: one column as wide as the month grid at every width (the panel is at most `min(90vw, 24rem)`): the start and end fields and the time zone come first, then the month grid.
+- Short viewports: the Relative/Absolute switch and the Apply row stay fixed; only the body between them scrolls when the panel is taller than the space left, so the start and end fields, the zone and Apply are visible without scrolling on a 1280 × 720 laptop and a 390 × 664 phone (covered by a styled test).
 - Touch: options are 44 px high on `pointer: coarse`; nothing depends on hover.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom.
 

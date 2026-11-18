@@ -475,7 +475,7 @@
         :aria-label="t('dateRangePicker.previous')"
         :data-size="size"
         :data-testid="`${testId}__previous`"
-        class="inline-flex shrink-0 items-center justify-center border-e border-(--border-input) px-(--spacing-xs) text-(--text-muted) transition-colors duration-150 ease-out hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset disabled:cursor-not-allowed disabled:text-(--text-disabled) data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 motion-reduce:transition-none"
+        class="inline-flex shrink-0 items-center justify-center border-e border-(--border-input) px-(--spacing-xs) text-(--text-muted) transition-colors duration-150 ease-out hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset disabled:cursor-not-allowed disabled:text-(--text-disabled) data-[size=small]:min-h-7 data-[size=medium]:min-h-8 data-[size=large]:min-h-10 motion-reduce:transition-none"
         @click="step(-1)"
       >
         <i
@@ -500,7 +500,7 @@
         :aria-invalid="field.invalid.value || undefined"
         aria-haspopup="dialog"
         :aria-expanded="isOpen"
-        class="text-label-sm inline-flex min-w-0 flex-1 items-center gap-(--spacing-xs) px-(--spacing-sm) text-(--text-default) transition-colors duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset disabled:cursor-not-allowed disabled:text-(--text-disabled) data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 data-[empty]:text-(--text-muted) motion-reduce:transition-none"
+        class="text-label-sm inline-flex min-w-0 flex-1 items-center gap-(--spacing-xs) px-(--spacing-sm) py-(--spacing-2xs) text-(--text-default) transition-colors duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset disabled:cursor-not-allowed disabled:text-(--text-disabled) data-[size=small]:min-h-7 data-[size=medium]:min-h-8 data-[size=large]:min-h-10 data-[empty]:text-(--text-muted) motion-reduce:transition-none"
         @click="setOpen(!isOpen)"
       >
         <i
@@ -508,7 +508,9 @@
           class="shrink-0 text-[length:inherit] leading-none text-(--text-muted)"
           aria-hidden="true"
         />
-        <span class="min-w-0 flex-1 truncate text-start tabular-nums"
+        <span
+          :data-testid="`${testId}__value`"
+          class="min-w-0 flex-1 text-start tabular-nums break-words"
           ><bdi>{{ triggerText || placeholder || t('dateRangePicker.placeholder') }}</bdi></span
         >
         <i
@@ -524,7 +526,7 @@
         :aria-label="t('dateRangePicker.next')"
         :data-size="size"
         :data-testid="`${testId}__next`"
-        class="inline-flex shrink-0 items-center justify-center border-s border-(--border-input) px-(--spacing-xs) text-(--text-muted) transition-colors duration-150 ease-out hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset disabled:cursor-not-allowed disabled:text-(--text-disabled) data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 motion-reduce:transition-none"
+        class="inline-flex shrink-0 items-center justify-center border-s border-(--border-input) px-(--spacing-xs) text-(--text-muted) transition-colors duration-150 ease-out hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset disabled:cursor-not-allowed disabled:text-(--text-disabled) data-[size=small]:min-h-7 data-[size=medium]:min-h-8 data-[size=large]:min-h-10 motion-reduce:transition-none"
         @click="step(1)"
       >
         <i
@@ -552,12 +554,12 @@
           :data-align="resolvedAlign"
           :data-size="size"
           :style="panelStyle"
-          class="flex max-w-[min(90vw,24rem)] flex-col overflow-x-hidden overflow-y-auto rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-sm) outline-none [transform-origin:var(--popup-origin,top_left)] [--input-ring-offset:var(--bg-surface-raised)]"
+          class="flex max-w-[min(90vw,24rem)] flex-col overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-sm) outline-none [transform-origin:var(--popup-origin,top_left)] [--input-ring-offset:var(--bg-surface-raised)]"
           @keydown="onPanelKeydown"
         >
           <div
             v-if="offersRelative && offersAbsolute"
-            class="border-b border-(--border-default) p-(--spacing-sm)"
+            class="shrink-0 border-b border-(--border-default) p-(--spacing-sm)"
           >
             <ToggleGroup
               :model-value="panelMode"
@@ -572,7 +574,7 @@
 
           <fieldset
             v-if="panelMode === 'relative'"
-            class="m-0 flex min-w-0 flex-col border-0 px-(--spacing-2xs) py-(--spacing-xs)"
+            class="m-0 flex min-h-0 min-w-0 flex-1 flex-col overflow-y-auto border-0 px-(--spacing-2xs) py-(--spacing-xs)"
             :data-testid="`${testId}__relative`"
           >
             <legend
@@ -596,7 +598,7 @@
                 :data-autofocus="(!offersAbsolute && draftKey === option.key) || null"
                 class="sr-only"
               />
-              <span class="min-w-0 truncate">{{ optionLabel(option) }}</span>
+              <span class="min-w-0 break-words">{{ optionLabel(option) }}</span>
               <i
                 v-if="draftKey === option.key"
                 class="az az-check shrink-0 text-[length:inherit] leading-none text-(--text-default)"
@@ -616,7 +618,7 @@
                 :data-autofocus="(!offersAbsolute && draftKey === CUSTOM) || null"
                 class="sr-only"
               />
-              <span class="min-w-0 truncate">{{ t('dateRangePicker.custom') }}</span>
+              <span class="min-w-0 break-words">{{ t('dateRangePicker.custom') }}</span>
               <i
                 v-if="draftKey === CUSTOM"
                 class="az az-check shrink-0 text-[length:inherit] leading-none text-(--text-default)"
@@ -676,21 +678,23 @@
 
           <div
             v-else
-            class="flex flex-col"
+            class="flex min-h-0 flex-1 flex-col overflow-y-auto"
             :data-testid="`${testId}__absolute`"
           >
+            <div
+              class="flex flex-col gap-(--spacing-sm) border-b border-(--border-default) p-(--spacing-sm)"
+            >
+              <DatePickerFields />
+              <DatePickerTimezone v-if="showTimeZone" />
+            </div>
             <div class="p-(--spacing-sm)">
               <DatePickerGrid />
-            </div>
-            <div class="border-t border-(--border-default) p-(--spacing-sm)">
-              <DatePickerFields />
             </div>
           </div>
 
           <div
-            class="flex flex-col gap-(--spacing-sm) border-t border-(--border-default) p-(--spacing-sm)"
+            class="flex shrink-0 flex-col gap-(--spacing-sm) border-t border-(--border-default) p-(--spacing-sm)"
           >
-            <DatePickerTimezone v-if="showTimeZone && panelMode === 'absolute'" />
             <p
               v-if="showError && draftError"
               :id="errorId"
