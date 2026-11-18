@@ -141,6 +141,9 @@ runs axe + screenshots), and taste is a review concern.
   names it: Shell, JavaScript); a command block holds only what the reader runs, and what it prints
   goes in the sample's `output` (a muted "Output" block), never as a `# HTTP/2 200` comment (rule
   `webkit-code-samples`).
+- **Overlays open on the reader's action.** A popover, tooltip, menu, hover card, select list,
+  dialog or drawer starts closed on page load and opens on click, hover or focus; never
+  `:open="true"` or `default-open` on its root (rule `webkit-overlays-closed-on-load`).
 - **Forms that browsers understand.** E-mail fields set `type="email"` and `autocomplete`
   (`username` to sign in, `email` to sign up); passwords `current-password` / `new-password`; paste is
   never blocked. Auth screens never toast: every outcome is one `Alert` inside the card.

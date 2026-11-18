@@ -8,7 +8,7 @@
 </script>
 
 <template>
-  <DropdownMenuRoot :open="true">
+  <DropdownMenuRoot>
     <DropdownMenuTrigger>
       <IconButton
         variant="outline"

@@ -178,8 +178,11 @@ describe('ContextMenu', () => {
     expect(panel()).toBeNull()
   })
 
-  it('the forced-open example shows a sub-menu and checkable items with no a11y violations', async () => {
+  it('the WithSubMenu example opens on right-click with a sub-menu and checkable items and no a11y violations', async () => {
     const { container } = render(WithSubMenu)
+    await nextTick()
+    expect(panel()).toBeNull()
+    await fireEvent.contextMenu(area() as HTMLElement)
     await waitFor(() => expect(panel()).not.toBeNull())
     await waitFor(() =>
       expect(

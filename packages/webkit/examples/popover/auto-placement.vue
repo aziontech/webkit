@@ -13,19 +13,16 @@
     <p
       class="absolute top-(--spacing-md) left-1/2 -translate-x-1/2 text-body-sm text-(--text-muted) text-center max-w-md"
     >
-      All triggers use side="auto". Each panel resolves to the best-fitting corner based on its
-      position in the viewport.
+      All triggers use side="auto". Click one: its panel resolves to the best-fitting corner based
+      on its position in the viewport.
     </p>
 
     <div class="absolute top-(--spacing-md) start-(--spacing-md)">
-      <PopoverRoot
-        :open="true"
-        side="auto"
-      >
+      <PopoverRoot side="auto">
         <PopoverTrigger>
           <Button
             variant="secondary"
-            label="top-left"
+            label="Open top left"
           />
         </PopoverTrigger>
         <PopoverContent>
@@ -39,14 +36,11 @@
     </div>
 
     <div class="absolute top-(--spacing-md) end-(--spacing-md)">
-      <PopoverRoot
-        :open="true"
-        side="auto"
-      >
+      <PopoverRoot side="auto">
         <PopoverTrigger>
           <Button
             variant="secondary"
-            label="top-right"
+            label="Open top right"
           />
         </PopoverTrigger>
         <PopoverContent>
@@ -60,14 +54,11 @@
     </div>
 
     <div class="absolute bottom-(--spacing-md) start-(--spacing-md)">
-      <PopoverRoot
-        :open="true"
-        side="auto"
-      >
+      <PopoverRoot side="auto">
         <PopoverTrigger>
           <Button
             variant="secondary"
-            label="bottom-left"
+            label="Open bottom left"
           />
         </PopoverTrigger>
         <PopoverContent>
@@ -81,14 +72,11 @@
     </div>
 
     <div class="absolute bottom-(--spacing-md) end-(--spacing-md)">
-      <PopoverRoot
-        :open="true"
-        side="auto"
-      >
+      <PopoverRoot side="auto">
         <PopoverTrigger>
           <Button
             variant="secondary"
-            label="bottom-right"
+            label="Open bottom right"
           />
         </PopoverTrigger>
         <PopoverContent>

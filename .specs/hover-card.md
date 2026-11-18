@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 5
 template: 2
-checksum: cd7b77f357a78036d2f7a6a7ee6207b25260547a530a04bd5717ca71202eb3e7
+checksum: 3a1a549ee905b1e9141cbaf42b0ef1231f98bc63f19a905f72b4c2282542f36e
 created: 2026-11-14
 last_updated: 2026-11-17
 ---
@@ -185,7 +185,7 @@ No built-in strings: the card shows only consumer content.
 Canonical layout — composite examples (`types.vue`, `sizes.vue`) render every variant of one axis side-by-side in a single frame; state examples (`loading.vue`, `disabled.vue`) change only the prop they demonstrate.
 
 - Default — a user link in a sentence; the card shows an avatar, name, role and a fact. Opens on hover or focus.
-- ResourcePreview — card forced open (`default-open`) on a resource name in a table cell, showing status, region and last deploy. Required because the forced-open card is the only way to show the card's anatomy without a pointer, and table rows are the main use.
+- ResourcePreview — a card on a resource name, opened by the reader's hover or focus, showing status, region and last deploy. Required because table rows are the main use. A floating card never starts open on page load.
 - Disabled — the same link with `disabled`; no card.
 
 ## Constraints — DO NOT

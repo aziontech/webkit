@@ -87,6 +87,12 @@ const control = () =>
 const getPanel = () =>
   document.body.querySelector('[data-testid="dropdown-menu__panel"]') as HTMLElement | null
 
+const openFromTrigger = async (container: Element) => {
+  expect(getPanel()).toBeNull()
+  await userEvent.click(container.querySelector('[aria-haspopup]') as HTMLElement)
+  await waitFor(() => expect(getPanel()).not.toBeNull())
+}
+
 const getOptions = () =>
   Array.from(document.body.querySelectorAll('[role^="menuitem"]')) as HTMLElement[]
 
@@ -116,7 +122,8 @@ describe('DropdownMenu', () => {
     })
 
     it('renders the root header and footer slots outside the scrolling menu', async () => {
-      render(WithHeaderAndFooter)
+      const { container } = render(WithHeaderAndFooter)
+      await openFromTrigger(container)
       await waitFor(() =>
         expect(document.body.querySelector('[data-testid="dropdown-menu__header"]')).not.toBeNull()
       )
@@ -127,7 +134,8 @@ describe('DropdownMenu', () => {
     })
 
     it('renders the group header and footer slots inline in the section', async () => {
-      render(GroupsWithHeaderAndFooter)
+      const { container } = render(GroupsWithHeaderAndFooter)
+      await openFromTrigger(container)
       await waitFor(() =>
         expect(
           document.body.querySelectorAll('[data-testid="dropdown-menu-group__header"]')
@@ -504,8 +512,9 @@ describe('DropdownMenu', () => {
       expect(screen.getByText('Workspace')).toBeTruthy()
     })
 
-    it('renders the OptionAffordances story open with a command hint option', async () => {
-      render(OptionAffordances)
+    it('opens the OptionAffordances example from its trigger with a command hint option', async () => {
+      const { container } = render(OptionAffordances)
+      await openFromTrigger(container)
       await waitFor(() =>
         expect(document.body.querySelectorAll('[role^="menuitem"]').length).toBeGreaterThan(0)
       )
@@ -958,7 +967,8 @@ describe('DropdownMenu', () => {
     })
 
     it('the SubMenus example renders two levels with no a11y violations', async () => {
-      render(SubMenus)
+      const { container } = render(SubMenus)
+      await openFromTrigger(container)
       await waitFor(() => expect(subPanels()).toHaveLength(1))
       expect(subTrigger('Move to').dataset['state']).toBe('open')
       await userEvent.hover(subTrigger('Other workspaces'))
@@ -970,8 +980,8 @@ describe('DropdownMenu', () => {
 
   describe('checkable options', () => {
     it('maps type to menuitemcheckbox / menuitemradio with aria-checked', async () => {
-      render(CheckableOptions)
-      await waitFor(() => expect(getPanel()).not.toBeNull())
+      const { container } = render(CheckableOptions)
+      await openFromTrigger(container)
       const boxes = Array.from(document.body.querySelectorAll('[role="menuitemcheckbox"]'))
       const radios = Array.from(document.body.querySelectorAll('[role="menuitemradio"]'))
       expect(boxes).toHaveLength(3)
@@ -983,8 +993,8 @@ describe('DropdownMenu', () => {
     })
 
     it('activating a checkable option keeps the panel open and the consumer toggles it', async () => {
-      render(CheckableOptions)
-      await waitFor(() => expect(getPanel()).not.toBeNull())
+      const { container } = render(CheckableOptions)
+      await openFromTrigger(container)
       const updated = within(getPanel() as HTMLElement)
         .getByText('Last updated')
         .closest('[role="menuitemcheckbox"]') as HTMLElement
@@ -1001,8 +1011,8 @@ describe('DropdownMenu', () => {
     })
 
     it('arrow keys move across checkable items like any other item', async () => {
-      render(CheckableOptions)
-      await waitFor(() => expect(getPanel()).not.toBeNull())
+      const { container } = render(CheckableOptions)
+      await openFromTrigger(container)
       const first = document.body.querySelector('[role="menuitemcheckbox"]') as HTMLElement
       first.focus()
       await userEvent.keyboard('{End}')

@@ -201,7 +201,6 @@ No built-in strings: item labels and the panel's `aria-label` come from the cons
 
 <template>
   <ContextMenu
-    :open="true"
     aria-label="File actions"
     @select="onSelect"
   >
@@ -209,7 +208,7 @@ No built-in strings: item labels and the panel's `aria-label` come from the cons
       <div
         class="flex h-40 w-full max-w-(--container-sm) items-center justify-center rounded-(--shape-card) border border-dashed border-(--border-default) text-body-sm text-(--text-muted)"
       >
-        site-assets
+        Right-click site-assets
       </div>
     </ContextMenu.Trigger>
 

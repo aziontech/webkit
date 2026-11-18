@@ -59,7 +59,7 @@
     },
     {
       "name": "ListStates",
-      "summary": "The loading, error and empty states the panel renders in place of the options.",
+      "summary": "Pick a state, then open the list: the loading, error and empty states the panel renders in place of the options.",
       "file": "list-states.vue"
     }
   ]

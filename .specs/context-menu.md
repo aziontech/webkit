@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 5
 template: 2
-checksum: fccca6d967dcbcf3f4a4db0ab13dbcab2869d6629de59534c74a4530037bde59
+checksum: c97500d74aa2daefeed07e934cdc852e003798f1dbbceaf78a6d288aa01b4d57
 created: 2026-11-14
 last_updated: 2026-11-17
 ---
@@ -215,7 +215,7 @@ No built-in strings: item labels and the panel's `aria-label` come from the cons
 Canonical layout — composite examples (`types.vue`, `sizes.vue`) render every variant of one axis side-by-side in a single frame; state examples (`loading.vue`, `disabled.vue`) change only the prop they demonstrate.
 
 - Default — a list of resources inside `ContextMenu.Trigger`; right-click, `Shift+F10` or long-press a row to open the menu.
-- WithSubMenu — panel forced open (`:open="true"`) showing groups, a `command` hint, checkbox items and an open sub-menu. Required because the forced-open panel is the only way to show the menu's anatomy without a pointer, and the shared sub-menu and checkable parts need coverage inside this root.
+- WithSubMenu — a panel the reader opens with a right-click or `Shift+F10`, showing groups, a `command` hint, checkbox items and a sub-menu that opens with it (`default-open`). Required because the shared sub-menu and checkable parts need coverage inside this root. A floating panel never starts open on page load.
 - Disabled — the same area with `disabled`; the browser's native menu appears.
 
 ## Constraints — DO NOT

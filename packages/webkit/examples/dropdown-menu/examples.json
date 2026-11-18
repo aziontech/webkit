@@ -14,7 +14,7 @@
     },
     {
       "name": "States",
-      "summary": "Panel forced open (`open=\"true\"`) showing each spec-declared option state side-by-side: `default`, `selected`, and `disabled`. The `hover` and `focus-visible` states are interactive — focus an option with the keyboard (`Down` / `Up`) or hover with the pointer to see them.",
+      "summary": "Click the trigger to open the panel and see each spec-declared option state side-by-side: `default`, `selected`, and `disabled`. The `hover` and `focus-visible` states are interactive — focus an option with the keyboard (`Down` / `Up`) or hover with the pointer to see them.",
       "file": "states.vue"
     },
     {
@@ -29,22 +29,22 @@
     },
     {
       "name": "OptionAffordances",
-      "summary": "Panel forced open showing every option affordance: plain label, `command` keyboard hint, `leading` icon slot, `trailing` content slot (with a `Tag`), `selected` state (a checked radio item with a check mark), and `disabled` state. The `command` prop and the `trailing` slot are mutually exclusive — pick one per option.",
+      "summary": "Click the trigger to see every option affordance: plain label, `command` keyboard hint, `leading` icon slot, `trailing` content slot (with a `Tag`), `selected` state (a checked radio item with a check mark), and `disabled` state. The `command` prop and the `trailing` slot are mutually exclusive — pick one per option.",
       "file": "option-affordances.vue"
     },
     {
       "name": "WithHeaderAndFooter",
-      "summary": "Root `header` and `footer` named slots in use — typically a search input at the top and a footer action at the bottom. Both regions stick to their edges and stay outside the scrollable group list.",
+      "summary": "Click the trigger to open the panel with the root `header` and `footer` named slots in use — typically a search input at the top and a footer action at the bottom. Both regions stick to their edges and stay outside the scrollable group list.",
       "file": "with-header-and-footer.vue"
     },
     {
       "name": "GroupsWithHeaderAndFooter",
-      "summary": "Two groups each using the `header` and `footer` slots — a per-section caption above the options and a footer action below. Different from the root `header`/`footer` (which are sticky outside the scroll area), group-level slots render inline within the section.",
+      "summary": "Click the trigger to open two groups each using the `header` and `footer` slots — a per-section caption above the options and a footer action below. Different from the root `header`/`footer` (which are sticky outside the scroll area), group-level slots render inline within the section.",
       "file": "groups-with-header-and-footer.vue"
     },
     {
       "name": "SubMenus",
-      "summary": "`DropdownMenu.Sub` nests a menu: `SubTrigger` is the row with the chevron and `SubContent` the panel beside it. It opens on hover, click, `Enter`, `Space` or `ArrowRight`; `ArrowLeft` or `Esc` closes it. Here `Move to` starts open (`default-open`) and holds a second level; `Share` is disabled.",
+      "summary": "`DropdownMenu.Sub` nests a menu: `SubTrigger` is the row with the chevron and `SubContent` the panel beside it. It opens on hover, click, `Enter`, `Space` or `ArrowRight`; `ArrowLeft` or `Esc` closes it. Click the trigger to open the menu: `Move to` opens with it (`default-open`) and holds a second level; `Share` is disabled.",
       "file": "sub-menus.vue"
     },
     {
