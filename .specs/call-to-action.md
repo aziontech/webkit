@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 6
-checksum: c00b447ba643c1faa327b34d28c552013719179e4b6a3a003fb7f694ab0028cb
+checksum: 3bb6c020880ec9898ed132c25985bb1e5d4479ad342a6e84094f5e4ac5cbf6ee
 created: 2026-09-22
 last_updated: 2026-11-16
 ---
@@ -81,7 +81,7 @@ Four registers. `panel` sets the copy and its controls on one surface, as a row 
   <CallToAction
     eyebrow="Get started"
     title="Ship your first application today."
-    description="Deploy to every edge location in seconds. No credit card required."
+    description="Deploy to every data center in seconds. No credit card required."
   >
     <template #actions>
       <Button label="Start for free" />

@@ -26,7 +26,7 @@
       delta-label="vs previous 24 hours"
     />
     <StatTile
-      label="Edge locations"
+      label="Data centers"
       :value="120"
     />
   </div>

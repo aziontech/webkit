@@ -202,7 +202,7 @@ No built-in strings (the content is the model's; `Citation` and `CodeBlock` carr
   ]
 
   const content =
-    'A purge reaches every edge location in a few seconds [1]. The next request for that object goes to the origin, and the response is cached again with the TTL from your cache settings [2].'
+    'A purge reaches every data center in a few seconds [1]. The next request for that object goes to the origin, and the response is cached again with the TTL from your cache settings [2].'
 </script>
 
 <template>

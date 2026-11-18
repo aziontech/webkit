@@ -45,7 +45,7 @@ Everything that is Azion's own: its products, the parts inside them, the platfor
 | `az az-data-stream` | Data Stream | Data Stream | logs, events |
 | `az az-durable-objects` | Durable Objects | Durable Objects | product |
 | `az az-edge-dns` | Edge DNS | Edge DNS | network, distributed, domain, name server, zone, records |
-| `az az-edge-orchestrator` | Edge Orchestrator | Edge Orchestrator | network, distributed, infrastructure, deploy |
+| `az az-orchestrator` | Orchestrator | Orchestrator | infrastructure, deploy, edge orchestrator |
 | `az az-edge-pulse` | Edge Pulse | Edge Pulse | network, distributed |
 | `az az-firewall` | Firewall | Firewall | security, waf, protection, edge firewall |
 | `az az-functions` | Functions | Functions | serverless, compute, code, edge functions |
@@ -67,17 +67,17 @@ Everything that is Azion's own: its products, the parts inside them, the platfor
 | `az az-network-shield` | Network Shield | Network Shield | connectivity, security, protection, safe |
 | `az az-ddos-protection` | DDoS Protection | DDoS Protection | product |
 | `az az-secure-internet-access` | Secure Internet Access | Secure Internet Access | security, protection |
+| `az az-lora-fine-tune` | LoRA Fine-Tune | LoRA Fine-Tune | fine-tuning, ai, model |
+| `az az-origin-shield` | Origin Shield | Origin Shield | backend, server, security, protection, safe |
 
 #### Azion · Product features
 
 | Class | Product | Stands for | Keywords |
 | --- | --- | --- | --- |
 | `az az-domains` | Workloads | Domains (inside Workloads) | dns, url, workload |
-| `az az-edge-libraries` | Edge Orchestrator | Edge Libraries, where Edge Orchestrator keeps the services it can install | network, distributed |
-| `az az-edge-nodes` | Edge Orchestrator | Edge Nodes, the servers Edge Orchestrator manages | network, distributed, infrastructure |
-| `az az-edge-services` | Edge Orchestrator | Edge Services, the services Edge Orchestrator installs on an edge node | network, distributed |
-| `az az-lora` | AI Inference | LoRA adapters for AI Inference | fine-tuning, model |
-| `az az-origin-shield` | Connectors | Origin Shield (Connectors feature) | backend, server, security, protection, safe |
+| `az az-edge-libraries` | Orchestrator | Edge Libraries, where Orchestrator keeps the services it can install | network, distributed |
+| `az az-edge-nodes` | Orchestrator | Edge Nodes, the servers Orchestrator manages | network, distributed, infrastructure |
+| `az az-edge-services` | Orchestrator | Edge Services, the services Orchestrator installs on an edge node | network, distributed |
 | `az az-rules-engine` | Applications | Rules Engine (part of Applications) | logic, conditions, behavior |
 | `az az-tiered-cache` | Cache | Tiered Cache (Cache feature) | feature |
 

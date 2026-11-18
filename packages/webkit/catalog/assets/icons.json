@@ -162,18 +162,17 @@
    ]
   },
   {
-   "name": "az-edge-orchestrator",
-   "class": "az az-edge-orchestrator",
+   "name": "az-orchestrator",
+   "class": "az az-orchestrator",
    "set": "azionicons",
    "group": "azion",
    "category": "product",
-   "label": "Edge Orchestrator",
-   "product": "Edge Orchestrator",
+   "label": "Orchestrator",
+   "product": "Orchestrator",
    "keywords": [
-    "network",
-    "distributed",
     "infrastructure",
-    "deploy"
+    "deploy",
+    "edge orchestrator"
    ]
   },
   {
@@ -433,8 +432,8 @@
    "set": "azionicons",
    "group": "azion",
    "category": "feature",
-   "label": "Edge Libraries, where Edge Orchestrator keeps the services it can install",
-   "product": "Edge Orchestrator",
+   "label": "Edge Libraries, where Orchestrator keeps the services it can install",
+   "product": "Orchestrator",
    "keywords": [
     "network",
     "distributed"
@@ -446,8 +445,8 @@
    "set": "azionicons",
    "group": "azion",
    "category": "feature",
-   "label": "Edge Nodes, the servers Edge Orchestrator manages",
-   "product": "Edge Orchestrator",
+   "label": "Edge Nodes, the servers Orchestrator manages",
+   "product": "Orchestrator",
    "keywords": [
     "network",
     "distributed",
@@ -460,40 +459,11 @@
    "set": "azionicons",
    "group": "azion",
    "category": "feature",
-   "label": "Edge Services, the services Edge Orchestrator installs on an edge node",
-   "product": "Edge Orchestrator",
+   "label": "Edge Services, the services Orchestrator installs on an edge node",
+   "product": "Orchestrator",
    "keywords": [
     "network",
     "distributed"
-   ]
-  },
-  {
-   "name": "az-lora",
-   "class": "az az-lora",
-   "set": "azionicons",
-   "group": "azion",
-   "category": "feature",
-   "label": "LoRA adapters for AI Inference",
-   "product": "AI Inference",
-   "keywords": [
-    "fine-tuning",
-    "model"
-   ]
-  },
-  {
-   "name": "az-origin-shield",
-   "class": "az az-origin-shield",
-   "set": "azionicons",
-   "group": "azion",
-   "category": "feature",
-   "label": "Origin Shield (Connectors feature)",
-   "product": "Connectors",
-   "keywords": [
-    "backend",
-    "server",
-    "security",
-    "protection",
-    "safe"
    ]
   },
   {
@@ -5842,6 +5812,36 @@
    "keywords": [
     "security",
     "protection"
+   ]
+  },
+  {
+   "name": "az-lora-fine-tune",
+   "class": "az az-lora-fine-tune",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "LoRA Fine-Tune",
+   "product": "LoRA Fine-Tune",
+   "keywords": [
+    "fine-tuning",
+    "ai",
+    "model"
+   ]
+  },
+  {
+   "name": "az-origin-shield",
+   "class": "az az-origin-shield",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Origin Shield",
+   "product": "Origin Shield",
+   "keywords": [
+    "backend",
+    "server",
+    "security",
+    "protection",
+    "safe"
    ]
   },
   {

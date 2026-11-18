@@ -17,7 +17,7 @@
     | 'asia'
     | 'oceania'
 
-  /** How many PoPs are lit; `none` draws the landmass alone. */
+  /** How many data centers are lit; `none` draws the landmass alone. */
   export type NetworkMapDensity = 'none' | 'low' | 'medium' | 'high'
 
   /** Where the framed region parks in the space the box leaves over. */
@@ -36,13 +36,13 @@
   export type NetworkMapFade = 'none' | 'top' | 'bottom' | 'left' | 'right' | 'edges' | 'vignette'
 
   export interface NetworkMapProps {
-    /** Which part of the world has its PoPs lit; the map always frames the whole world. */
+    /** Which part of the world has its data centers lit; the map always frames the whole world. */
     region?: NetworkMapRegion
-    /** How many PoPs are lit, from `none` to `high`. */
+    /** How many data centers are lit, from `none` to `high`. */
     density?: NetworkMapDensity
-    /** Pulses the PoPs in three staggered waves that settle within five seconds; static when false. */
+    /** Pulses the data centers in three staggered waves that settle within five seconds; static when false. */
     animated?: boolean
-    /** Opacity of the landmass dots, from 0 to 1; the PoPs stay at full strength. */
+    /** Opacity of the landmass dots, from 0 to 1; the data centers stay at full strength. */
     opacity?: number
     /** Where the map parks in the space the box leaves over. */
     position?: NetworkMapPosition
@@ -54,7 +54,7 @@
     offsetY?: number
     /** Fades the map out along an axis so it meets content without a hard edge. */
     fade?: NetworkMapFade
-    /** Draws traffic between lit PoPs: faint links and, while `animated`, packets that cross them; the links alone under reduced motion. */
+    /** Draws traffic between lit data centers: faint links and, while `animated`, packets that cross them; the links alone under reduced motion. */
     traffic?: boolean
   }
 

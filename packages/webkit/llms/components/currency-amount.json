@@ -16,7 +16,7 @@
  ],
  "avoidWhen": [
   "You need a full pricing tier with plan name, caveat and action → use `pricing-card`.",
-  "The headline figures are not money (throughput, uptime, points of presence) → use `stats`."
+  "The headline figures are not money (throughput, uptime, data centers) → use `stats`."
  ],
  "related": [
   "`pricing-card` — composes CurrencyAmount for its price, `medium` or `large` depending on `slotPosition`.",

@@ -31,7 +31,7 @@ The HTTP code as a `StatusCode` (4xx warning, 5xx danger) followed by the reason
 
 ### B. Request path — `TopologyDiagram`
 
-Three hops, always in this order: You (the browser), Azion (the location code that answered) and Application (the site's host). Each hop is a `TopologyDiagram` node card: an icon and the hop's name in the header with its state as a status tag (Working, Error, Timed out, Unavailable, Blocked, Rate limited, Not reached, Not found), the browser, location or host as the card's name, and a one-line explanation of the hop when the card is opened. One node per level, so every card has the same width, and every card has the same parts, so they share one height. On wide screens (`lg` and up) the cards sit side by side joined by the diagram's connectors; below that they stack at full width with `orientation="vertical"`, joined by a short dashed line, so the path never scrolls sideways. The path answers "whose fault is it" before the visitor reads a word.
+Three hops, always in this order: You (the browser), Azion (the code of the data center that answered) and Application (the site's host). Each hop is a `TopologyDiagram` node card: an icon and the hop's name in the header with its state as a status tag (Working, Error, Timed out, Unavailable, Blocked, Rate limited, Not reached, Not found), the browser, data center or host as the card's name, and a one-line explanation of the hop when the card is opened. One node per level, so every card has the same width, and every card has the same parts, so they share one height. On wide screens (`lg` and up) the cards sit side by side joined by the diagram's connectors; below that they stack at full width with `orientation="vertical"`, joined by a short dashed line, so the path never scrolls sideways. The path answers "whose fault is it" before the visitor reads a word.
 
 ### C. Next steps — `Button`
 
@@ -41,7 +41,7 @@ Under them, two `Button`s at most. The primary is Try again (reloads the address
 
 ### D. Request details — `KeyValueList`, `CopyButton`, `Timestamp`
 
-Four facts in a two-column `KeyValueList` (one column on a phone): the request ID with a `CopyButton`, the time as a `Timestamp` in UTC, the Azion location and the host. These are what the site owner needs to find the request in their logs.
+Four facts in a two-column `KeyValueList` (one column on a phone): the request ID with a `CopyButton`, the time as a `Timestamp` in UTC, the Azion data center and the host. These are what the site owner needs to find the request in their logs.
 
 ### E. Footer — `Brand`
 
@@ -61,7 +61,7 @@ The block fetches nothing: Azion fills the props from the request it failed to s
 | `host`      | `string`            | The host the visitor asked for; the Application hop and the Host fact. |
 | `requestId` | `string`            | The request ID to quote.                                               |
 | `time`      | `string`            | When the request was answered, ISO 8601.                               |
-| `location`  | `string`            | The Azion location code (`IAD`); the Azion hop and its fact.           |
+| `location`  | `string`            | The code of the Azion data center (`IAD`); the Azion hop and its fact. |
 | `path`      | `EdgeErrorPagePath` | `{ visitor, azion, application }`, each `{ status, severity }`.        |
 | `recovery`  | `'retry' \| 'home'` | The primary button: Try again, or Go to home page.                     |
 
@@ -94,7 +94,7 @@ The block fetches nothing: Azion fills the props from the request it failed to s
 - **What can I do?:** what the visitor can do now: `Try again in a few minutes. If it keeps happening, let the site owner know and quote the request ID below.`
 - **Hop states:** one or two words: `Working`, `Error`, `Timed out`, `Unavailable`, `Blocked`, `Rate limited`, `Not reached`, `Not found`.
 - **Actions:** `Try again`, `Go to home page`, `Go back`.
-- **Facts:** `Request ID`, `Time`, `Azion location`, `Host`; the request ID in `text-label-code-sm` inside `<bdi>`.
+- **Facts:** `Request ID`, `Time`, `Data center`, `Host`; the request ID in `text-label-code-sm` inside `<bdi>`.
 
 ## Accessibility
 

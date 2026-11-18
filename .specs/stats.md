@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 5
-checksum: 5a628d6157d232cd2ca95f20865fa03375106e3fea471411e6386ebc030b06d5
+checksum: dd675573ddcd7e29caedeec2889bad1086e61ef32333c1663fdff4fff3400f5c
 created: 2026-09-22
 last_updated: 2026-11-18
 ---
@@ -13,7 +13,7 @@ last_updated: 2026-11-18
 
 ## Purpose
 
-A band of headline figures — throughput, uptime, points of presence — set in the display face at big-number scale, each in its own cell of a hairline `card-grid` with a short caption underneath. It is the proof band of a marketing page: the one place a page states its numbers, between a `section-title` and the section body.
+A band of headline figures — throughput, uptime, data centers — set in the display face at big-number scale, each in its own cell of a hairline `card-grid` with a short caption underneath. It is the proof band of a marketing page: the one place a page states its numbers, between a `section-title` and the section body.
 
 ## When to use
 
@@ -58,7 +58,7 @@ A band of headline figures — throughput, uptime, points of presence — set in
 <template>
   <Stats
     :items="[
-      { value: '120', suffix: '+', label: 'Points of presence' },
+      { value: '120', suffix: '+', label: 'Data centers' },
       { value: '99.99', suffix: '%', label: 'Availability' },
       { prefix: '<', value: '15', suffix: 'ms', label: 'Median latency' },
       { value: '4.5', suffix: 'Tbps', label: 'Network capacity' }

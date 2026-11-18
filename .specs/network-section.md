@@ -7,7 +7,7 @@ status: implemented
 spec_version: 6
 created: 2026-11-04
 last_updated: 2026-11-16
-checksum: a31b70838b59a639dbf7a1a06c9c740ae296ad00ad036a557e926d295e46e79e
+checksum: 0a3855d9f3f1a8f3fec889fa2474269419f8ef5e266fbd73f3a49bc954b097f3
 ---
 
 # NetworkSection — Component Spec
@@ -172,7 +172,7 @@ _none_
 ## Performance
 
 - Bundle budget: 26.25 KB for `./network-section` gzip in `.size-limit.json`, initial chunk only (the map and the floors' composed parts load in their own chunks).
-- No timers or observers of its own; the map's PoP pulse is `network-map`'s and stops under reduced motion.
+- No timers or observers of its own; the map's data center pulse is `network-map`'s and stops under reduced motion.
 
 ## Examples
 

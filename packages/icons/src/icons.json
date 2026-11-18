@@ -10,7 +10,7 @@
         },
         "feature": {
           "title": "Product features",
-          "summary": "A part that lives inside a product, such as Domains in Workloads or Edge Nodes in Edge Orchestrator. The entry names its product."
+          "summary": "A part that lives inside a product, such as Domains in Workloads or Edge Nodes in Orchestrator. The entry names its product."
         },
         "platform": {
           "title": "Platform",
@@ -239,15 +239,16 @@
       "legacy": ["ai ai-edge-dns"]
     },
     {
-      "name": "edge-orchestrator",
+      "name": "orchestrator",
       "set": "mono",
       "group": "azion",
       "category": "product",
-      "product": "Edge Orchestrator",
+      "product": "Orchestrator",
       "shows": "Two boxes joined by a path",
-      "means": "Edge Orchestrator",
+      "means": "Orchestrator",
       "status": "stable",
-      "legacy": ["ai ai-edge-orchestrator"]
+      "legacy": ["ai ai-edge-orchestrator"],
+      "renamedBecause": "Edge Orchestrator was renamed Orchestrator in the Azion product catalog."
     },
     {
       "name": "edge-pulse",
@@ -458,9 +459,9 @@
       "set": "mono",
       "group": "azion",
       "category": "feature",
-      "product": "Edge Orchestrator",
+      "product": "Orchestrator",
       "shows": "Books on a shelf",
-      "means": "Edge Libraries, where Edge Orchestrator keeps the services it can install",
+      "means": "Edge Libraries, where Orchestrator keeps the services it can install",
       "status": "stable",
       "legacy": ["ai ai-edge-libraries"]
     },
@@ -469,9 +470,9 @@
       "set": "mono",
       "group": "azion",
       "category": "feature",
-      "product": "Edge Orchestrator",
+      "product": "Orchestrator",
       "shows": "Two server racks",
-      "means": "Edge Nodes, the servers Edge Orchestrator manages",
+      "means": "Edge Nodes, the servers Orchestrator manages",
       "status": "stable",
       "legacy": ["ai ai-edge-nodes"]
     },
@@ -480,33 +481,11 @@
       "set": "mono",
       "group": "azion",
       "category": "feature",
-      "product": "Edge Orchestrator",
+      "product": "Orchestrator",
       "shows": "Four squares in a grid",
-      "means": "Edge Services, the services Edge Orchestrator installs on an edge node",
+      "means": "Edge Services, the services Orchestrator installs on an edge node",
       "status": "stable",
       "legacy": ["ai ai-edge-services"]
-    },
-    {
-      "name": "lora",
-      "set": "mono",
-      "group": "azion",
-      "category": "feature",
-      "product": "AI Inference",
-      "shows": "Three sliders",
-      "means": "LoRA adapters for AI Inference",
-      "status": "stable",
-      "legacy": ["ai ai-lora"]
-    },
-    {
-      "name": "origin-shield",
-      "set": "mono",
-      "group": "azion",
-      "category": "feature",
-      "product": "Connectors",
-      "shows": "A shield with a map pin",
-      "means": "Origin Shield (Connectors feature)",
-      "status": "stable",
-      "legacy": ["ai ai-origin-shield"]
     },
     {
       "name": "rules-engine",
@@ -4855,6 +4834,29 @@
       "means": "Secure Internet Access",
       "status": "stable",
       "legacy": []
+    },
+    {
+      "name": "lora-fine-tune",
+      "set": "mono",
+      "group": "azion",
+      "category": "product",
+      "product": "LoRA Fine-Tune",
+      "shows": "Two sliders and a third whose knob is a sparkle",
+      "means": "LoRA Fine-Tune",
+      "status": "stable",
+      "renamedBecause": "LoRA Fine-Tune is a Build product in the Azion product catalog, no longer a part of AI Inference.",
+      "legacy": ["ai ai-lora"]
+    },
+    {
+      "name": "origin-shield",
+      "set": "mono",
+      "group": "azion",
+      "category": "product",
+      "product": "Origin Shield",
+      "shows": "A server with a shield in its lower corner",
+      "means": "Origin Shield",
+      "status": "stable",
+      "legacy": ["ai ai-origin-shield"]
     },
     {
       "name": "langgraph",

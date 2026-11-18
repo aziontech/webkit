@@ -46,7 +46,7 @@
   export interface MapChartPoint {
     /** Stable id of the location. */
     id: string
-    /** Display name, such as a city or a point of presence. */
+    /** Display name, such as a city or a data center. */
     name: string
     /** Latitude in degrees. */
     lat: number

@@ -4,7 +4,7 @@
 
 <template>
   <p class="max-w-(--container-md) text-body-md text-(--text-default)">
-    A purge reaches every edge location in a few seconds
+    A purge reaches every data center in a few seconds
     <Citation
       :index="1"
       title="Real-Time Purge"

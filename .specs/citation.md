@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: ff76d6e95c0a71f19ee27a61fb9897cbe0d366d797b817839ee099609a382e90
+checksum: 232b9fa3dcc9f7afebed3960f2851db1225a7d6a733f1a8bcec10432eb32e40d
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -48,7 +48,7 @@ or straight to the URL — with a tooltip naming the source and an accessible na
 
 <template>
   <p>
-    Purges reach every edge location in seconds
+    Purges reach every data center in seconds
     <Citation :index="1" title="Real-Time Purge" href="#answer-1-source-1" />.
   </p>
 </template>
@@ -60,10 +60,10 @@ _None. Exports: `"./citation"`. Composed DS components: `tooltip`._
 
 ## Props
 
-| Prop    | Type     | Default | Required | JSDoc                                                                                                                       |
-| ------- | -------- | ------- | -------- | --------------------------------------------------------------------------------------------------------------------------- |
-| `index` | `number` | —       | true     | 1-based number of the source, in the order the response first cites it.                                                     |
-| `title` | `string` | `''`    | false    | Title of the source, shown in the tooltip and read in the accessible name.                                                  |
+| Prop    | Type     | Default | Required | JSDoc                                                                                                                                                 |
+| ------- | -------- | ------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `index` | `number` | —       | true     | 1-based number of the source, in the order the response first cites it.                                                                               |
+| `title` | `string` | `''`    | false    | Title of the source, shown in the tooltip and read in the accessible name.                                                                            |
 | `href`  | `string` | `''`    | false    | Where the reference points: `#<anchor>-source-<n>` for the `Sources` list under the response, or the source URL. Without it the number is plain text. |
 
 ## Events
@@ -87,10 +87,10 @@ _No slots._
 
 ## Tokens
 
-| Region | Token                                                              |
-| ------ | ------------------------------------------------------------------ |
+| Region | Token                                                                       |
+| ------ | --------------------------------------------------------------------------- |
 | chip   | `var(--bg-surface-raised)`, hover `var(--bg-hover)`, `var(--shape-control)` |
-| number | `.text-label-sm`, `var(--text-link)` (linked) / `var(--text-muted)` |
+| number | `.text-label-sm`, `var(--text-link)` (linked) / `var(--text-muted)`         |
 
 ## Theme gaps
 

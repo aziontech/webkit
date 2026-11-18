@@ -13,7 +13,7 @@ const knowledge: { cache: Answer; errors: Answer } = {
     reasoning:
       'The question is about one URL, so a full purge would be too broad. Real-Time Purge by URL is the narrowest option, and the CLI does the same from a terminal.',
     content: [
-      'Use **Real-Time Purge** with the *URL* type. It removes one object from every edge location in a few seconds [1].',
+      'Use **Real-Time Purge** with the *URL* type. It removes one object from every data center in a few seconds [1].',
       '',
       '1. Open Real-Time Purge from the products menu.',
       '2. Choose **URL** and paste the address.',

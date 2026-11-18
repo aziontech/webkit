@@ -1,6 +1,6 @@
 # EdgeErrorPage (`state/edge-error-page`)
 
-> The page Azion serves to a visitor of a customer's site when a request fails: a standalone page, no Azion product chrome, no account actions. Left-aligned and diagnostic: the `StatusCode` with its reason phrase, a title in plain words, the request path You → Azion → Application drawn with `TopologyDiagram` (one node card per hop, every card the same width and height, each with its status tag; side by side on a wide screen, stacked with `orientation="vertical"` on a phone or tablet), What happened? and What can I do? side by side, Try again or Go to home page with Go back, then the request details in a `KeyValueList` (request ID with `CopyButton`, `Timestamp` in UTC, Azion location, host) and a Served by `Brand` footer. Azion here is Azion's infrastructure; the Application is the site's application, on Azion's infrastructure or on the customer's own servers. The primary is the 502 (application unreachable); variants cover 504, 500, 503, 403 (blocked by the site's firewall), 429 and 404. Azion's own console, site and docs use `state/error-page` instead.
+> The page Azion serves to a visitor of a customer's site when a request fails: a standalone page, no Azion product chrome, no account actions. Left-aligned and diagnostic: the `StatusCode` with its reason phrase, a title in plain words, the request path You → Azion → Application drawn with `TopologyDiagram` (one node card per hop, every card the same width and height, each with its status tag; side by side on a wide screen, stacked with `orientation="vertical"` on a phone or tablet), What happened? and What can I do? side by side, Try again or Go to home page with Go back, then the request details in a `KeyValueList` (request ID with `CopyButton`, `Timestamp` in UTC, data center, host) and a Served by `Brand` footer. Azion here is Azion's infrastructure; the Application is the site's application, on Azion's infrastructure or on the customer's own servers. The primary is the 502 (application unreachable); variants cover 504, 500, 503, 403 (blocked by the site's firewall), 429 and 404. Azion's own console, site and docs use `state/error-page` instead.
 
 - Surface: edge
 - Source: `blocks/state/edge-error-page/edge-error-page.vue` in `@aziontech/webkit`
@@ -43,7 +43,7 @@ The HTTP code as a `StatusCode` (4xx warning, 5xx danger) followed by the reason
 
 ### B. Request path — `TopologyDiagram`
 
-Three hops, always in this order: You (the browser), Azion (the location code that answered) and Application (the site's host). Each hop is a `TopologyDiagram` node card: an icon and the hop's name in the header with its state as a status tag (Working, Error, Timed out, Unavailable, Blocked, Rate limited, Not reached, Not found), the browser, location or host as the card's name, and a one-line explanation of the hop when the card is opened. One node per level, so every card has the same width, and every card has the same parts, so they share one height. On wide screens (`lg` and up) the cards sit side by side joined by the diagram's connectors; below that they stack at full width with `orientation="vertical"`, joined by a short dashed line, so the path never scrolls sideways. The path answers "whose fault is it" before the visitor reads a word.
+Three hops, always in this order: You (the browser), Azion (the code of the data center that answered) and Application (the site's host). Each hop is a `TopologyDiagram` node card: an icon and the hop's name in the header with its state as a status tag (Working, Error, Timed out, Unavailable, Blocked, Rate limited, Not reached, Not found), the browser, data center or host as the card's name, and a one-line explanation of the hop when the card is opened. One node per level, so every card has the same width, and every card has the same parts, so they share one height. On wide screens (`lg` and up) the cards sit side by side joined by the diagram's connectors; below that they stack at full width with `orientation="vertical"`, joined by a short dashed line, so the path never scrolls sideways. The path answers "whose fault is it" before the visitor reads a word.
 
 ### C. Next steps — `Button`
 
@@ -53,7 +53,7 @@ Under them, two `Button`s at most. The primary is Try again (reloads the address
 
 ### D. Request details — `KeyValueList`, `CopyButton`, `Timestamp`
 
-Four facts in a two-column `KeyValueList` (one column on a phone): the request ID with a `CopyButton`, the time as a `Timestamp` in UTC, the Azion location and the host. These are what the site owner needs to find the request in their logs.
+Four facts in a two-column `KeyValueList` (one column on a phone): the request ID with a `CopyButton`, the time as a `Timestamp` in UTC, the Azion data center and the host. These are what the site owner needs to find the request in their logs.
 
 ### E. Footer — `Brand`
 
@@ -73,7 +73,7 @@ The block fetches nothing: Azion fills the props from the request it failed to s
 | `host`      | `string`            | The host the visitor asked for; the Application hop and the Host fact. |
 | `requestId` | `string`            | The request ID to quote.                                               |
 | `time`      | `string`            | When the request was answered, ISO 8601.                               |
-| `location`  | `string`            | The Azion location code (`IAD`); the Azion hop and its fact.           |
+| `location`  | `string`            | The code of the Azion data center (`IAD`); the Azion hop and its fact. |
 | `path`      | `EdgeErrorPagePath` | `{ visitor, azion, application }`, each `{ status, severity }`.        |
 | `recovery`  | `'retry' \| 'home'` | The primary button: Try again, or Go to home page.                     |
 
@@ -106,7 +106,7 @@ The block fetches nothing: Azion fills the props from the request it failed to s
 - **What can I do?:** what the visitor can do now: `Try again in a few minutes. If it keeps happening, let the site owner know and quote the request ID below.`
 - **Hop states:** one or two words: `Working`, `Error`, `Timed out`, `Unavailable`, `Blocked`, `Rate limited`, `Not reached`, `Not found`.
 - **Actions:** `Try again`, `Go to home page`, `Go back`.
-- **Facts:** `Request ID`, `Time`, `Azion location`, `Host`; the request ID in `text-label-code-sm` inside `<bdi>`.
+- **Facts:** `Request ID`, `Time`, `Data center`, `Host`; the request ID in `text-label-code-sm` inside `<bdi>`.
 
 ## Accessibility
 
@@ -175,7 +175,7 @@ Each variant is the same screen in another state: `get_block("state/edge-error-p
   export interface EdgeErrorPagePath {
     /** The visitor's browser. */
     visitor: EdgeErrorPageHopState
-    /** The Azion location that answered. */
+    /** The Azion data center that answered. */
     azion: EdgeErrorPageHopState
     /** The site's application, on Azion's infrastructure or on the site's own servers. */
     application: EdgeErrorPageHopState
@@ -198,7 +198,7 @@ Each variant is the same screen in another state: `get_block("state/edge-error-p
     requestId?: string
     /** When the request was answered, as an ISO string. */
     time?: string
-    /** The code of the Azion location that answered (IAD). */
+    /** The code of the Azion data center that answered (IAD). */
     location?: string
     /** The state of each hop of the request path. */
     path?: EdgeErrorPagePath
@@ -247,7 +247,7 @@ Each variant is the same screen in another state: `get_block("state/edge-error-p
       type: 'Azion',
       icon: 'az az-azion',
       name: props.location,
-      message: 'The Azion location that received your request and answered with this page.',
+      message: 'The Azion data center that received your request and answered with this page.',
       ...props.path.azion
     },
     {
@@ -377,7 +377,7 @@ Each variant is the same screen in another state: `get_block("state/edge-error-p
               format="utc"
             />
           </KeyValueList.Item>
-          <KeyValueList.Item label="Azion location">{{ location }}</KeyValueList.Item>
+          <KeyValueList.Item label="Data center">{{ location }}</KeyValueList.Item>
           <KeyValueList.Item label="Host">
             <bdi>{{ host }}</bdi>
           </KeyValueList.Item>
