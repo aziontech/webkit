@@ -1304,6 +1304,13 @@ rewrite this, because the replacement depends on whether the child was a link or
 </Item>
 ```
 
+### `LineFigure` is removed
+
+`LineFigure` (`@aziontech/webkit/line-figure`) and its line figures are removed, with no
+replacement: delete the import and the `<LineFigure>` element. The `lineFigures` kind is gone from
+`catalog.assets`, the MCP `list_assets` and the llms foundation pages. The codemod lists the import
+as `MANUAL`.
+
 ### Removed in 6.0: feedback, content, code and chart names
 
 These names are removed in 6.0, with no alias. The codemod rewrites
@@ -2047,7 +2054,7 @@ follow.
 
 Paths in `file`, `examplesFile` and `docsFile` are relative to the folder that holds `catalog.json`. The MCP tools
 (`get_block`, `get_component`, `get_usage_example`) return the same answers as before. The asset
-lists are `catalog/assets/<kind>.json` in kebab-case (`line-figures.json`, `brand-marks.json`).
+lists are `catalog/assets/<kind>.json` in kebab-case (`brand-marks.json`, `icons.json`).
 
 ### Example files renamed
 
@@ -2061,9 +2068,17 @@ folder.
 
 ### Performance
 
-- `PhoneInput` loads the flag sprite (about 80 KB) with a dynamic `import()` when the country list
-  first opens; until it arrives the flag boxes are blank. Bundles that include `PhoneInput` drop
-  about 80 KB gzipped from the initial chunk.
+- `PhoneInput` loads the flag sprite (a 74 KB WebP) with a dynamic `import()` after the field
+  mounts in the browser, so it stays out of the initial chunk; until it arrives the flag boxes are
+  blank. The closed field shows the selected country's flag, name and dial code.
+- `PhoneInput` offers every country and territory with a calling code (245, from Google's
+  libphonenumber metadata), with the United States first; set `default-country` to start on another.
+- The flag sprite behind `@aziontech/webkit/styles/country-flags` is now
+  `src/images/country-flags.webp` (it was a PNG) and covers 252 flags. Its `.flag-an`, `.flag-tp`,
+  `.flag-ty` and `.flag-zr` classes are removed (Netherlands Antilles, East Timor and Zaire no longer
+  exist; use `.flag-cw`/`.flag-sx`/`.flag-bq`, `.flag-tl` and `.flag-cd`); `.flag-ac`, `.flag-ax`,
+  `.flag-bl`, `.flag-bq`, `.flag-cw`, `.flag-gg`, `.flag-im`, `.flag-je`, `.flag-mf`, `.flag-ps`,
+  `.flag-sx`, `.flag-ta`, `.flag-xk` and `.flag-yt` are new.
 - `Select`, `MultiSelect`, `LogViewer` and `CodeBlock` mount lists longer than 300 rows in chunks of
   100 as they scroll near view. Tests that count every rendered option, line or log row of a long
   list see only the first chunks; scroll the list, or press an arrow key in a `Select` list, which

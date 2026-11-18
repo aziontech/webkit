@@ -2,7 +2,7 @@
 
 > The Vue 3 design system of Azion (`@aziontech/webkit` 5.13.0): components, screen blocks with guidelines, and the design foundations, written for agents that build Azion product, marketing and docs screens.
 
-Start every screen from a block (a reviewed, copyable screen), then fill gaps with components. Import each component from its own subpath (`@aziontech/webkit/<name>`), style only through tokens, and keep strings in the locale catalogs. These pages are generated from `catalog.json`; agents with MCP get the same data from `@aziontech/webkit-mcp` (`search_blocks`, `get_block`, `suggest_component`, `get_component`, `list_assets`). The names a component takes for its artwork (illustrations, diagrams, line figures, brand marks, icon classes) are listed in the asset foundation pages below; never guess one from a file in `src/`.
+Start every screen from a block (a reviewed, copyable screen), then fill gaps with components. Import each component from its own subpath (`@aziontech/webkit/<name>`), style only through tokens, and keep strings in the locale catalogs. These pages are generated from `catalog.json`; agents with MCP get the same data from `@aziontech/webkit-mcp` (`search_blocks`, `get_block`, `suggest_component`, `get_component`, `list_assets`). The names a component takes for its artwork (illustrations, diagrams, brand marks, icon classes) are listed in the asset foundation pages below; never guess one from a file in `src/`.
 
 Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has a JSON API next to its page (`components/<name>.json`).
 
@@ -1059,6 +1059,17 @@ always has a reduced-motion escape. This is the invariant behind the `/webkit-mo
 - For `data-state="open|closed"` overlay motion, read `duration` + `curve` from the tokens and emit
   the inline `transition` per phase; keep transform/opacity in classes, only timing inline.
 
+## Never
+
+- A hardcoded duration (`duration-[180ms]`, `transition: opacity 200ms`) or an inline
+  `ease-[cubic-bezier(...)]` — the values live in the theme tokens.
+- Animating layout props (`width`, `height`, `top`, `left`, `margin`, `padding`) — they thrash
+  layout (exception: the catalogued `animate-slide-down`).
+- A component-local `@keyframes`, or any external animation library (`gsap`, `framer-motion`,
+  `motion`, `@vueuse/motion`, `@formkit/auto-animate`, lottie, popmotion). Use the utilities above +
+  Vue `<Transition>` / `<TransitionGroup>`.
+- A motion class with no `motion-reduce:*` fallback.
+
 ## The panel recipe (sidebar / drawer / any v-if region)
 
 A conditionally rendered region never animates by itself — wrap the `v-if` in a Vue `Transition`
@@ -1077,17 +1088,6 @@ and hand the enter/leave phases to the catalogued utilities. For lateral panels 
 Content or backdrops appearing in place use `animate-fade-in` / `animate-fade-out` in the same
 shape; vertical disclosure uses `animate-slide-down`. Ask the webkit MCP
 (`list_tokens` with category `animations`) for every utility, its timing, and when to use it.
-
-## Never
-
-- A hardcoded duration (`duration-[180ms]`, `transition: opacity 200ms`) or an inline
-  `ease-[cubic-bezier(...)]` — the values live in the theme tokens.
-- Animating layout props (`width`, `height`, `top`, `left`, `margin`, `padding`) — they thrash
-  layout (exception: the catalogued `animate-slide-down`).
-- A component-local `@keyframes`, or any external animation library (`gsap`, `framer-motion`,
-  `motion`, `@vueuse/motion`, `@formkit/auto-animate`, lottie, popmotion). Use the utilities above +
-  Vue `<Transition>` / `<TransitionGroup>`.
-- A motion class with no `motion-reduce:*` fallback.
 
 ## Enforcement
 
@@ -1810,7 +1810,7 @@ In your own components, `useLocale()` from `@aziontech/webkit/use-locale` return
 - ✅ `webkit()` from `@aziontech/webkit/vite-plugin` in `vite.config`: it keeps `src/webkit.sources.css`, the WebKit files Tailwind compiles, in step with your imports. Without Vite, run `npx @aziontech/webkit css` after adding or removing a WebKit import.
 - ✅ The tree-shakeable `<name>-root` path (or specific sub-components) when you only need the root.
 - ✅ Icons via the `@aziontech/icons` font: side-effect import once (`import '@aziontech/icons'`) + the icon CSS classes.
-- ✅ Artwork and icon names from the published lists: `node_modules/@aziontech/webkit/llms/foundations/` (`illustrations.md`, `diagrams.md`, `line-figures.md`, `brand-marks.md`, `icons.md`) or the MCP `list_assets` (`variant`, plus a `query` such as "ddos" or "delete"). Icon classes are `az az-<name>`, and `az-color az-<name>` for a colour logo; pick one by what it stands for (`list_assets` gives each icon's group, category and meaning, and a product icon names only that product). WebKit 6 uses only the Azion set: write `az az-check`, never the removed `pi pi-check` set (the default `@aziontech/icons` entry no longer loads it; `webkit migrate v6` rewrites old classes).
+- ✅ Artwork and icon names from the published lists: `node_modules/@aziontech/webkit/llms/foundations/` (`illustrations.md`, `diagrams.md`, `brand-marks.md`, `icons.md`) or the MCP `list_assets` (`variant`, plus a `query` such as "ddos" or "delete"). Icon classes are `az az-<name>`, and `az-color az-<name>` for a colour logo; pick one by what it stands for (`list_assets` gives each icon's group, category and meaning, and a product icon names only that product). WebKit 6 uses only the Azion set: write `az az-check`, never the removed `pi pi-check` set (the default `@aziontech/icons` entry no longer loads it; `webkit migrate v6` rewrites old classes).
 - ✅ A webkit component reused instead of a hand-rolled or third-party equivalent.
 
 ## Must Not Have
@@ -2009,26 +2009,6 @@ Used by: ArchitectureTabsSection, Diagram, FeatureScrollSection, FeatureTabsSect
 `ai-gateway` · `ai-gateway-latency-routing` · `ai-gateway-model-routing` · `ai-gateway-provider-failover` · `ai-gateway-response-cache` · `ai-inference` · `application-accelerator` · `applications` · `bot-manager` · `cache` · `data-stream` · `ddos-protection` · `edge-dns` · `firewall` · `functions` · `image-processor` · `kv-store` · `load-balancer` · `network-shield` · `object-storage` · `real-time-events` · `real-time-metrics` · `sql-database` · `web-application-firewall` · `workloads` · `workloads-gradual-rollout` · `workloads-isolate-per-request` · `workloads-security`
 
 Descriptions: foundations/diagrams.md.
-
----
-
-<!-- foundations/line-figures.md -->
-
-# Line figures
-
-> The isometric line-art figures that answer the pointer, one per product.
-
-Pass the name to `LineFigure` (`name`); the label is the figure’s own English description.
-
-25 names. These are the only values the components accept. An unknown or empty name draws nothing. The MCP tool `list_assets({ kind: "lineFigures" })` returns the same list (with a `query` to filter), and `catalog.json#assets.lineFigures` points at it as data.
-
-Used by: LineFigure.
-
-## Names
-
-`ai-versioning` · `applications-rules` · `azion-404` · `bot-lineup` · `build-terminal` · `cache-ttl` · `certificates-chain` · `connectors-link` · `custom-pages-status` · `ddos-flood` · `deployments-release` · `dns-lookup` · `functions-invoke` · `image-variants` · `infra-workloads` · `lb-rotor` · `metrics-gauge` · `network-lists-gate` · `object-storage-bucket` · `observe-stream` · `orchestrator-scale` · `platform-edge` · `secure-shield` · `store-replicas` · `variables-keys`
-
-Descriptions: foundations/line-figures.md.
 
 ---
 
@@ -8673,7 +8653,7 @@ What each prop and event does, and the go-live code: [blocks/state/async-submit.
 - Surface: app
 - Source: `blocks/state/error-page/error-page.vue` in `@aziontech/webkit`
 - MCP: `get_block("state/error-page")`
-- Components: Button, CopyButton, EmptyState, LineFigure, `Error403`
+- Components: Button, CopyButton, EmptyState, `Error403`, `Error404`
 - Skills: `webkit-ui-states`, `webkit-errors`, `webkit-microcopy`
 
 ## Asked as
@@ -8701,7 +8681,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ## Building blocks
 
-- A. Figure — `LineFigure` (`@aziontech/webkit/line-figure`)
+- A. Figure — `Error404` (`@aziontech/webkit/svg/error-404`)
 - B. Message — `EmptyState` (required)
 - C. Actions — `Button` (required)
 
@@ -8752,7 +8732,7 @@ What each prop and event does, and the go-live code: [blocks/state/error-page.md
 
 ## States
 
-- Default: 404, the animated azion-404 line figure, `title` (Page not found), `description`, Go to home (`homeHref`) and Docs (`docsHref`).
+- Default: 404, the 404 numeral art, `title` (Page not found), `description`, Go to home (`homeHref`) and Docs (`docsHref`).
 - Forbidden: 403, the 403 numeral art, You don't have access to this page, Go to home and Switch account.
 - ServerError: 500, the warning icon tile, Something went wrong on our side, Retry, System status and the error reference with its copy button.
 - ResourceNotFound: a bordered EmptyState in the console's content column naming the missing service and its ID, with Back to services.
@@ -15477,6 +15457,7 @@ LogViewer ships its sub-components attached to the root (`LogViewer.Header`, `Lo
 - `loading` state: LogViewerContent renders a centered spinner + `loadingLabel` in place of the log body
 - Log line `data-type` reflects `line.type` and `data-level` reflects `line.level`; `warn` rows take the warning tint, `error` rows the danger tint and danger text
 - Level toggles carry `data-level` and `data-active` (the chosen level); every toggle shows the count of lines at its level in the whole log
+- Log line columns: the time and level cells take their width from the longest value in the whole log (`--log-viewer-time-width`, `--log-viewer-level-width` on the line list, counted in `ch` plus the code letter-spacing), so the columns do not move while lines are filtered, appended or mounted in chunks.
 - Long logs: above 300 visible lines `LogViewerContent` mounts lines in chunks of 100 as they scroll near view (unmounted chunks keep an estimated 24 px per line), so a 10,000-line log mounts within its runtime budget. Search, the level filter, the line count and copy work on every line, mounted or not.
 
 ## Accessibility
@@ -17928,91 +17909,6 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 ```
 
 2 more example(s) in [components/key-value-list.md](components/key-value-list.md).
-
----
-
-<!-- components/line-figure.md -->
-
-# Line Figure
-
-> An isometric line-art figure that answers the pointer: one per product (cache TTL, load balancer, DNS lookup, firewall, a 404 page and 20 more), drawn by a small engine into one SVG with the illustration tokens, so it follows the theme. Each figure loads on demand. The pointer, or focus with arrow keys, moves the figure through its answer; `play` walks it through on its own until a person arrives; under reduced motion it holds a still frame. From the design sample's `shared/ui/line-figure` (engine MIT, kept with its `LICENSE`). The figures are marketing assets, listed in the marketing inventory.
-
-- Import: `import LineFigure from '@aziontech/webkit/line-figure'`
-- Category: content · Surface: app · Structure: monolithic
-
-## When to use
-
-- Use LineFigure for an interactive isometric product figure.
-- The art beside a product's copy on a landing or a docs home.
-- An empty state or a not-found page (`azion-404`).
-
-## Do
-
-- One figure per view; two figures answering the pointer compete.
-- Pass `aria-label` when the page says something more specific than the figure's own description.
-- Use `play` only where nothing else moves.
-- Take the name from `llms/foundations/line-figures.md` or `list_assets({ kind: "lineFigures" })`; an unknown name draws nothing.
-- In a container that sizes to its content (the `EmptyState` `icon` slot, a centred flex column) the figure takes its natural 400×320 size, capped by the space available. Put it in a sized wrapper (`<div class="w-60 max-w-full">`) when the art should be smaller.
-
-## Don’t
-
-- For static, non-interactive art — use `Illustration`.
-- For data — use the charts.
-- Inside dense application screens.
-
-## Related
-
-- `Illustration` — static art from the registry.
-- `ConsoleMockup` — product scenes.
-- `EmptyState` — can carry a figure in its art slot.
-
-## Props
-
-| Prop | Type | Default | Required | Description |
-| --- | --- | --- | --- | --- |
-| `name` | `LineFigureName \| ''` | `''` | false | Registered figure to draw; an unknown or empty name draws nothing. |
-| `intensity` | `number` | `0.5` | false | How strongly the figure answers the pointer, from 0 (subtle) to 1 (strong). |
-| `play` | `boolean` | `false` | false | Walks the figure through its answer on its own until a pointer or focus arrives; a still frame under reduced motion. |
-| `ariaLabel` | `string` | `''` | false | Accessible name; falls back to the figure's own English description. |
-
-## Events
-
-| Event | Payload | Notes |
-| --- | --- | --- |
-| `read` | `caption: string` | The figure's current reading each time it changes (the first reading on mount). |
-
-## Assets
-
-- Line figures: every valid name is in line-figures.md (MCP `list_assets({ kind: "lineFigures" })`). An unknown or empty name draws nothing.
-
-## States
-
-- `data-name` mirrors `name`; `data-play` is present while `play` is on.
-- Empty: no role and an empty SVG for an unknown name.
-
-## Accessibility
-
-- `role="img"` named by `ariaLabel` or the figure description; the SVG is `aria-hidden`.
-- The figure is not a control: it never takes focus on its own, and the page stays operable without it.
-- Readings go out through `read`; a page that shows them should put them in a polite live region (see the Play example).
-
-## Examples
-
-### Default
-
-```vue
-<script setup>
-  import LineFigure from '@aziontech/webkit/line-figure'
-</script>
-
-<template>
-  <div class="max-w-(--container-sm)">
-    <LineFigure name="cache-ttl" />
-  </div>
-</template>
-```
-
-2 more example(s) in [components/line-figure.md](components/line-figure.md).
 
 ---
 
@@ -23411,6 +23307,8 @@ Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `par
 - Keyboard map: `Enter`/`Space` on the trigger opens the panel and the focus trap moves into it; `Tab` cycles inside the panel; the range type is a `ToggleGroup` (arrow keys); the quick ranges are native radios (`ArrowUp`/`ArrowDown` move and select); the grid keeps the `date-picker` keyboard map; `Escape` closes without committing and returns focus to the trigger.
 - ARIA: the trigger has `aria-haspopup="dialog"`, `aria-expanded` and a name that starts with the picker's label and contains the visible range (inside a `Field` with no `ariaLabel`, the Field label names it and the trigger also carries the Field's `aria-describedby` and `aria-invalid`); the panel is a named `dialog`; the quick ranges are a `fieldset` with a `legend`; the custom duration and unit have visible labels; the error is `role="alert"` and described from the duration field; Previous and Next are named buttons.
 - Targets: options are 32 px high (44 px on `pointer: coarse`).
+- Quick ranges layout: the list follows the `select` group rhythm — the list is inset `var(--spacing-2xs)` inline and `var(--spacing-xs)` block, the `legend` and every option are padded `var(--spacing-xs)` inline and `var(--spacing-2xs)` block, so the heading, the option labels and the custom duration fields start on one inline edge in both directions; options stack with no gap, ring inset on focus, and show the check in `var(--text-default)`.
+- Initial focus: with `rangeSelectorMode="relative-only"` (no range-type toggle) the focus trap lands on the checked quick range, the one the trigger shows.
 - Contrast ≥4.5:1 from the semantic text tokens.
 
 ## Examples
@@ -24779,7 +24677,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 
 # Phone Input
 
-> International phone-number control: an `InputGroup` with a searchable dial-code `Select` on the left and a `type="tel"` input on the right that applies the selected country's mask as the user types and accepts exactly the lengths that country allows. Two v-models (`v-model` for the national digits, `v-model:country` for the ISO 3166-1 alpha-2 code) carry the editable state; the one-way `phone-change` event hands the form the full E.164 number and whether it is complete. It carries no label or helper text: wrap it in a `Field` (`Field.Label` + `PhoneInput` + `Field.Description`), and it picks up `id`, `aria-describedby`, `invalid`, `disabled` and `required` from the Field.
+> International phone-number control: an `InputGroup` with a searchable country `Select` on the left (the closed trigger shows the selected country's flag, its name and, at the end, its dial code, like a row of the list) and a `type="tel"` input on the right that applies the selected country's mask as the user types and accepts exactly the lengths that country allows. Two v-models (`v-model` for the national digits, `v-model:country` for the ISO 3166-1 alpha-2 code) carry the editable state; the one-way `phone-change` event hands the form the full E.164 number and whether it is complete. It carries no label or helper text: wrap it in a `Field` (`Field.Label` + `PhoneInput` + `Field.Description`), and it picks up `id`, `aria-describedby`, `invalid`, `disabled` and `required` from the Field.
 
 - Import: `import PhoneInput from '@aziontech/webkit/phone-input'`
 - Category: input · Surface: app · Structure: monolithic
@@ -24794,7 +24692,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 - Put it in a `Field` with a `Field.Label`; the label targets the tel input.
 - `v-model` holds the national digits only; read `number` from the `phone-change` payload when you need the E.164 value.
 - Use `complete` from `phone-change` to decide `invalid` and the `Field.Error` on submit; the control shows no incomplete-number message of its own.
-- `v-model:country` defaults to `'US'`; seed it with the user's country when you know it.
+- The field starts on the United States. Set `default-country` to start on another country (an ISO 3166-1 alpha-2 code from `countries`), or bind `v-model:country` when the form owns the country.
 - `searchPlaceholder` and `searchEmptyLabel` default to English; pass translated copy in localized UIs.
 
 ## Don’t
@@ -24813,6 +24711,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `countries` | `PhoneInputCountry[]` | `(built-in list — see Notes)` | false | Countries offered by the dial-code Select. When omitted, uses the built-in curated list. |
+| `defaultCountry` | `string` | `'US'` | false | ISO 3166-1 alpha-2 code of the country selected at first, while `v-model:country` is empty. A code missing from `countries` falls back to the first country of the list. |
 | `placeholder` | `string` | `''` | false | Placeholder of the tel input. Falls back to the selected country's mask when empty. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size forwarded to the InputGroup and the dial-code Select trigger. Heights: small=28px, medium=32px, large=40px. |
 | `disabled` | `boolean` | `false` | false | Disables both the dial-code Select and the internal input. |
@@ -24823,7 +24722,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 | `searchPlaceholder` | `string` | `''` | false | Placeholder of the search box that filters the dial-code list. Empty uses the locale catalog (`Search country`). |
 | `searchEmptyLabel` | `string` | `''` | false | Shown in the dial-code list when no country matches the search. Empty uses the locale catalog (`No country found.`). |
 | `modelValue` | `string` | `''` | false | Two-way value (`v-model`). |
-| `country` | `string` | `'US'` | false | Two-way value (`v-model:country`). |
+| `country` | `string` | `''` | false | Two-way value (`v-model:country`). |
 
 ## Events
 
@@ -24836,15 +24735,17 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 | Model | Type | Default | Emits | Notes |
 | --- | --- | --- | --- | --- |
 | `v-model` | `string` | `''` | `update:modelValue` | National number as **digits only**, without dial code and without mask characters (e.g. `'4155550100'`). Updates on input when the digits change, and when a country switch truncates digits beyond the new country's capacity. Via `defineModel`, so the field also works unbound. |
-| `v-model:country` | `string` | `'US'` | `update:country` | ISO 3166-1 alpha-2 code of the selected country (e.g. `'US'`, `'GB'`, `'BR'`). Drives the dial code shown in the `Select` and the masks applied to the input. Via `defineModel`, so picking a country works even when the consumer binds only `v-model`. |
+| `v-model:country` | `string` | `''` | `update:country` | ISO 3166-1 alpha-2 code of the selected country (e.g. `'US'`, `'GB'`, `'BR'`). While it is empty (`''`) the field shows `defaultCountry`. Drives the flag, name and dial code shown in the `Select` trigger and the masks applied to the input. Via `defineModel`, so picking a country works even when the consumer binds only `v-model`. |
 
 ## States
 
 - Visual states delegated to `InputGroup`: `default`, `hover`, `focus-within`, `invalid`, `required`, `disabled`.
 - `invalid`, `disabled` and `required` combine the prop with the enclosing `Field`.
 - The dial-code `Select` is disabled whenever the control is `disabled` **or** `readonly`.
+- The closed trigger mirrors a row of the list: the country's flag in the trigger's `#leading` slot, its name as the value (truncated with an ellipsis when the trigger is narrow), and its dial code in muted text in the trigger's `#trailing` slot at the inline end, which never shrinks. The country part sizes to its content and takes at most 60% of the field, so the number keeps at least 40%.
+- Narrow fields: the root is a size container (`@container/phone-input`); below 21rem (336px) the trigger hides the country name (`data-slot="value"`) and shows only the flag and the dial code, so phones from 320 to 430px keep room to type the number. The open list always shows the full names, and the trigger keeps its accessible name.
 - Completeness is reported through `phone-change`, never rendered.
-- The flag sprite (`country-flags.png`, about 80 KB) loads with a dynamic `import()` the first time the dial-code list opens; until it arrives each option keeps its flag box blank. The closed field never fetches it.
+- The flag sprite (`country-flags.png`, about 80 KB) loads with a dynamic `import()` after the field mounts in the browser (never on the server), so the closed trigger can show the selected flag; until it arrives the flag boxes stay blank. It is one shared request for every PhoneInput on the page.
 
 ## Accessibility
 
@@ -24853,7 +24754,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 - ARIA: the tel input has `type="tel"`, `inputmode="tel"`, `autocomplete="tel-national"`, `aria-invalid`, `aria-required`, and the `id` / `aria-describedby` of the enclosing `Field`; the dial-code trigger has `aria-label="PhoneInputCountry dial code"`. The control provides an empty Field context below it so the inner search input never takes the field id.
 - Contrast ≥4.5:1 for input and dial-code text.
 - Touch target follows the `size` (40px at `large`).
-- Direction: the tel input, each option's dial code and the closed trigger's dial code (`SelectTrigger` `value-dir="ltr"`, a `<bdi dir="ltr">`) render left-to-right, so a number and its `+` keep their order on a right-to-left page; the typed number still aligns to the inline start of the page (`rtl:text-end`, which resolves against the input's own `ltr` direction).
+- Direction: the tel input, each option's dial code and the closed trigger's dial code (a `dir="ltr"` span in the trigger's `#trailing` slot) render left-to-right, so a number and its `+` keep their order on a right-to-left page; the typed number still aligns to the inline start of the page (`rtl:text-end`, which resolves against the input's own `ltr` direction).
 
 ## Examples
 
@@ -24886,6 +24787,8 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
   </Field>
 </template>
 ```
+
+1 more example(s) in [components/phone-input.md](components/phone-input.md).
 
 ---
 
@@ -25261,7 +25164,7 @@ packages/webkit/src/components/input/radio-group/
 
 ## Sub-components
 
-- `select-trigger/select-trigger.vue` — Bordered trigger field with an optional `#leading` slot (typed with `defineSlots`), selected-value label, and chevron-down.
+- `select-trigger/select-trigger.vue` — Bordered trigger field (its value text carries `data-slot="value"`, so a composing component can style it) with an optional `#leading` slot before the value and an optional `#trai…
 - `select-content/select-content.vue` — Popover panel teleported to `body` and anchored with `usePlacement`; exposes `default` (the options), `#search` and `#footer` slots, typed with `defineSlots`, and scrolls its opti…
 - `select-group/select-group.vue` — Section wrapper for a labelled group of options; renders a `text-label-sm` heading in `--text-muted` when `label` is set.
 - `select-item/select-item.vue` — Selectable option row with a trailing check when selected, an optional `icon` (an Azion icon class, default `''`), an optional leading `#leading` slot, the option label, and an optional…
@@ -30084,7 +29987,7 @@ even when the row carries nothing but its title.
 - Root: `data-tabs-root` (and the legacy `data-tab-view-root`, kept for selectors written against the v5 name).
 - Panel motion: the incoming panel's inner element carries `data-motion="enter"` and `data-slide="start|end"` for the frame before it slides in; the attributes drop on the next animation frame.
 - Dirty: `data-dirty` on a `Tabs.Trigger` with `dirty`; the dot is not the only cue for assistive tech (a hidden "Unsaved changes" joins the tab's name).
-- Responsive: the tab list (`Tabs.List`) scrolls **horizontally** when the tabs exceed the available width (mobile / narrow viewports) instead of overflowing or wrapping; the scrollbar is visually hidden and the active indicator stays aligned while scrolling. Tabs keep their intrinsic width (`shrink-0`). A gradient edge-fade overlay on the scrollable side(s) (mirrored on `data-fade-start` / `data-fade-end`) hints at off-screen tabs; it fades in / out with the semantic `animate-fade-in` / `animate-fade-out` utilities, and a non-scrollable edge renders no overlay so the first / last tab is never covered at rest.
+- Responsive: the tab list (`Tabs.List`) scrolls **horizontally** when the tabs exceed the available width (mobile / narrow viewports) instead of overflowing or wrapping; the scrollbar is visually hidden and the active indicator stays aligned while scrolling. The indicator always sits exactly on the active tab: it is measured in the list's own layout pixels (the on-screen box divided by the list's scale), so a list inside a CSS-scaled or transformed container (a console mock-up drawn at a scale) keeps it on its label, and it re-measures whenever the list or any tab changes size (late web fonts, a label change, a resize). Tabs keep their intrinsic width (`shrink-0`). A gradient edge-fade overlay on the scrollable side(s) (mirrored on `data-fade-start` / `data-fade-end`) hints at off-screen tabs; it fades in / out with the semantic `animate-fade-in` / `animate-fade-out` utilities, and a non-scrollable edge renders no overlay so the first / last tab is never covered at rest.
 
 ## Accessibility
 

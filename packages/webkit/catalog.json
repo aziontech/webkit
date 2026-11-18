@@ -4177,6 +4177,7 @@
   "hero-copy-on-top-art": "HeroSection from @aziontech/webkit/hero-section with variant=\"copy-on-top-art\" and the same levels",
   "hero-with-opening": "HeroSection from @aziontech/webkit/hero-section with size=\"large\" and the same items (titleLength=\"long\" for a long headline)",
   "label": "use Field.Label inside a Field, or FieldLabel with for (and required) beside its control",
+  "line-figure": "remove it; no replacement: WebKit no longer ships line figures",
   "mini-button": "Link (label, href, icon) for a text link that navigates; Button variant=\"link\" for a text action without href",
   "quote-carousel": "ClientQuotesSection from @aziontech/webkit/client-quotes-section, or Quote cards in a CardCarouselSection",
   "radio-button": "a radio is a RadioGroup.Item inside one RadioGroup that holds the v-model: <RadioGroup v-model><RadioGroup.Item value>Label</RadioGroup.Item></RadioGroup>; a Field.Label choice card becomes variant=\"card\" with description on the item",
@@ -9465,54 +9466,6 @@
    "surface": "app",
    "examplesFile": "catalog/examples/illustration.json",
    "docsFile": "catalog/components/illustration.json"
-  },
-  "line-figure": {
-   "import": "@aziontech/webkit/line-figure",
-   "target": "./src/components/content/line-figure/line-figure.vue",
-   "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/line-figure",
-   "category": "content",
-   "structure": "monolithic",
-   "props": [
-    {
-     "name": "name",
-     "type": "LineFigureName | ''",
-     "default": "''",
-     "required": "false",
-     "doc": "Registered figure to draw; an unknown or empty name draws nothing."
-    },
-    {
-     "name": "intensity",
-     "type": "number",
-     "default": "0.5",
-     "required": "false",
-     "doc": "How strongly the figure answers the pointer, from 0 (subtle) to 1 (strong)."
-    },
-    {
-     "name": "play",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Walks the figure through its answer on its own until a pointer or focus arrives; a still frame under reduced motion."
-    },
-    {
-     "name": "ariaLabel",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Accessible name; falls back to the figure's own English description."
-    }
-   ],
-   "events": [
-    {
-     "name": "read",
-     "payload": "caption: string",
-     "notes": "The figure's current reading each time it changes (the first reading on mount)."
-    }
-   ],
-   "surface": "app",
-   "examplesFile": "catalog/examples/line-figure.json",
-   "docsFile": "catalog/components/line-figure.json"
   },
   "logo": {
    "import": "@aziontech/webkit/logo",
@@ -15105,6 +15058,13 @@
      "doc": "Countries offered by the dial-code Select. When omitted, uses the built-in curated list."
     },
     {
+     "name": "defaultCountry",
+     "type": "string",
+     "default": "'US'",
+     "required": "false",
+     "doc": "ISO 3166-1 alpha-2 code of the country selected at first, while `v-model:country` is empty. A code missing from `countries` falls back to the first country of the list."
+    },
+    {
      "name": "placeholder",
      "type": "string",
      "default": "''",
@@ -15177,7 +15137,7 @@
     {
      "name": "country",
      "type": "string",
-     "default": "'US'",
+     "default": "''",
      "required": "false",
      "doc": "Two-way value (`v-model:country`)."
     }
@@ -30646,17 +30606,6 @@
    "count": 28,
    "file": "catalog/assets/diagrams.json"
   },
-  "lineFigures": {
-   "title": "Line figures",
-   "summary": "The isometric line-art figures that answer the pointer, one per product. Pass the name to `LineFigure` (`name`); the label is the figure’s own English description.",
-   "unknown": "An unknown or empty name draws nothing.",
-   "registry": "src/components/content/line-figure/figures/registry.ts",
-   "usedBy": [
-    "line-figure"
-   ],
-   "count": 25,
-   "file": "catalog/assets/line-figures.json"
-  },
   "brandMarks": {
    "title": "Brand marks",
    "summary": "Client, analyst and framework marks drawn as theme-aware SVG. Pass the name where a component asks for a mark (`Marquee` `marks`, `QuoteTabs` `mark`, `ClientQuotesSection` `mark`); the label is the accessible name. A `wordmark` entry is a brand whose terms do not let WebKit ship its logo (Splunk, Google BigQuery, Amazon S3 and Kinesis, Zoop, G2 badges, Rust, Datadog in a one-ink row): it renders as its label in plain text, in WebKit type and colour, until its owner grants the logo.",
@@ -36438,7 +36387,7 @@
    "title": "Blocks/State/ErrorPage",
    "source": "blocks/state/error-page/error-page.vue",
    "surface": "app",
-   "summary": "The page an app renders when it cannot show the address the user asked for. The primary is the 404: the content region centring an EmptyState whose figure is the animated azion-404 line figure (a still frame under reduced motion), the title Page not found, one sentence that says the address leads nowhere, and two actions, Go to home (primary) and Docs (outlined, new tab). A visually hidden h1 names the error code the figure shows. Variants cover 403 (no access, with Switch account), 500 (a failure on the server, with Retry, System status and an error reference for support) and a resource that does not exist inside the console (bordered EmptyState in the content column with Back to the list). Built from `EmptyState`, `Button`, `LineFigure` (azion-404) and the `svg/error-403` figure. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
+   "summary": "The page an app renders when it cannot show the address the user asked for. The primary is the 404: the content region centring an EmptyState whose figure is the 404 numeral art, the title Page not found, one sentence that says the address leads nowhere, and two actions, Go to home (primary) and Docs (outlined, new tab). A visually hidden h1 names the error code the figure shows. Variants cover 403 (no access, with Switch account), 500 (a failure on the server, with Retry, System status and an error reference for support) and a resource that does not exist inside the console (bordered EmptyState in the content column with Back to the list). Built from `EmptyState`, `Button` and the `svg/error-404` and `svg/error-403` numeral art. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "404 page",
     "not found page",
@@ -36464,15 +36413,15 @@
     "Button",
     "CopyButton",
     "EmptyState",
-    "LineFigure",
-    "Error403"
+    "Error403",
+    "Error404"
    ],
    "imports": [
     "@aziontech/webkit/button",
     "@aziontech/webkit/copy-button",
     "@aziontech/webkit/empty-state",
-    "@aziontech/webkit/line-figure",
-    "@aziontech/webkit/svg/error-403"
+    "@aziontech/webkit/svg/error-403",
+    "@aziontech/webkit/svg/error-404"
    ],
    "primary": "Default",
    "guidelinesSummary": "The page an app renders when it cannot show the address the user asked for: the address leads nowhere (404), the user may not see it (403), or the server failed to build it (500). The user's job is to understand, in one sentence, that the problem is the address or the access and not their work, and to get somewhere useful in one click. The block keeps the error code out of the headline (it is in the figure and in a hidden `h1`) and says what happened in plain words. This block is a page body: render it in the default slot of `ConsoleLayout` (`shell/console`), which owns the rail, the header and the `main`.",

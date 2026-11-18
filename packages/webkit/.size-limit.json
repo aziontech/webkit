@@ -398,12 +398,6 @@
     "entryOnly": true
   },
   {
-    "name": "line-figure",
-    "path": "src/components/content/line-figure/line-figure.vue",
-    "limit": "6.55 KB",
-    "entryOnly": true
-  },
-  {
     "name": "logo",
     "path": "src/components/content/logo/logo.vue",
     "limit": "1.5 KB"
@@ -453,12 +447,12 @@
   {
     "name": "console-application-scene",
     "path": "src/assets/scenes/console-application/console-application-scene.vue",
-    "limit": "115.8 KB"
+    "limit": "115.95 KB"
   },
   {
     "name": "console-trace-scene",
     "path": "src/assets/scenes/console-trace/console-trace-scene.vue",
-    "limit": "73.9 KB"
+    "limit": "74.05 KB"
   },
   {
     "name": "runtime-api-cloud",
@@ -533,7 +527,7 @@
   {
     "name": "hero-form-section",
     "path": "src/components/section/hero-form-section/hero-form-section.vue",
-    "limit": "45.85 KB",
+    "limit": "50.6 KB",
     "entryOnly": true
   },
   {
@@ -626,7 +620,7 @@
   {
     "name": "job-posting-section",
     "path": "src/components/section/job-posting-section/job-posting-section.vue",
-    "limit": "51.5 KB",
+    "limit": "56.25 KB",
     "entryOnly": true
   },
   {
@@ -642,7 +636,7 @@
   {
     "name": "listing-index-section",
     "path": "src/components/section/listing-index-section/listing-index-section.vue",
-    "limit": "39.85 KB",
+    "limit": "39.95 KB",
     "entryOnly": true
   },
   {
@@ -1101,7 +1095,7 @@
   {
     "name": "phone-input",
     "path": "src/components/input/phone-input/phone-input.vue",
-    "limit": "29.1 KB",
+    "limit": "33.25 KB",
     "entryOnly": true
   },
   {
@@ -1123,7 +1117,7 @@
   {
     "name": "log-viewer-content",
     "path": "src/components/code/log-viewer/log-viewer-content.vue",
-    "limit": "28.4 KB",
+    "limit": "28.5 KB",
     "entryOnly": true
   },
   {
@@ -1599,7 +1593,7 @@
   {
     "name": "log-viewer",
     "path": "src/components/code/log-viewer/index.ts",
-    "limit": "42.6 KB"
+    "limit": "42.7 KB"
   },
   {
     "name": "log-viewer-root",
@@ -1614,7 +1608,7 @@
   {
     "name": "log-viewer-steps",
     "path": "src/components/code/log-viewer/log-viewer-steps.vue",
-    "limit": "40.5 KB"
+    "limit": "40.6 KB"
   },
   {
     "name": "log-viewer-header",

@@ -2,7 +2,7 @@
 
 > The Vue 3 design system of Azion (`@aziontech/webkit` 5.13.0): components, screen blocks with guidelines, and the design foundations, written for agents that build Azion product, marketing and docs screens.
 
-Start every screen from a block (a reviewed, copyable screen), then fill gaps with components. Import each component from its own subpath (`@aziontech/webkit/<name>`), style only through tokens, and keep strings in the locale catalogs. These pages are generated from `catalog.json`; agents with MCP get the same data from `@aziontech/webkit-mcp` (`search_blocks`, `get_block`, `suggest_component`, `get_component`, `list_assets`). The names a component takes for its artwork (illustrations, diagrams, line figures, brand marks, icon classes) are listed in the asset foundation pages below; never guess one from a file in `src/`.
+Start every screen from a block (a reviewed, copyable screen), then fill gaps with components. Import each component from its own subpath (`@aziontech/webkit/<name>`), style only through tokens, and keep strings in the locale catalogs. These pages are generated from `catalog.json`; agents with MCP get the same data from `@aziontech/webkit-mcp` (`search_blocks`, `get_block`, `suggest_component`, `get_component`, `list_assets`). The names a component takes for its artwork (illustrations, diagrams, brand marks, icon classes) are listed in the asset foundation pages below; never guess one from a file in `src/`.
 
 Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has a JSON API next to its page (`components/<name>.json`).
 
@@ -21,7 +21,6 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [Using WebKit in an app](foundations/usage.md): Start from a block, find a component, import it tree-shakeably, app-level setup and the quality checklist.
 - [Illustrations](foundations/illustrations.md): The official product illustration scenes, drawn into the page as inline SVG and repainted from the theme.
 - [Diagrams](foundations/diagrams.md): The registered product architecture diagrams.
-- [Line figures](foundations/line-figures.md): The isometric line-art figures that answer the pointer, one per product.
 - [Brand marks](foundations/brand-marks.md): Client, analyst and framework marks drawn as theme-aware SVG.
 - [Icons](foundations/icons.md): Every icon class of `@aziontech/icons`, grouped as Azion (products, product features, platform, solutions, services), Interface (arrows, actions, status, files, media, communication, commerce, people, devices, data, l…
 
@@ -204,7 +203,6 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [Item](components/item.md): Use Item rows for a short list of mixed rows (title, description, actions) that do not share columns; read-only label/value facts about one resource are KeyValueList, records compared across columns are a Table, and w…
 - [Kbd](components/kbd.md): Kbd renders keyboard input — a single key or a shortcut combination — as a compact, non-interactive keycap.
 - [KeyValueList](components/key-value-list.md): Use KeyValueList to show read-only label/value facts about one resource, including its tags; rows with their own actions are Item rows.
-- [LineFigure](components/line-figure.md): An isometric line-art figure that answers the pointer: one per product (cache TTL, load balancer, DNS lookup, firewall, a 404 page and 20 more), drawn by a small engine into one SVG with the illustration tokens, so it…
 - [Logo](components/logo.md): A third-party mark (a client, a competitor, an analyst firm, a standard or certification, a coding agent) drawn right on both themes.
 - [NetworkMap](components/network-map.md): A decorative, full-bleed layer that paints the dotted world map with Azion's PoPs lit in the brand accent.
 - [OverflowCount](components/overflow-count.md): Use OverflowCount for the '+N' that opens the hidden items of a truncated list; a plain number attached to something else is a Badge.
@@ -292,7 +290,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [OtpInput](components/otp-input.md): The field for a one-time code: the six digits an authenticator app shows, or a code sent by email or SMS.
 - [PasswordInput](components/password-input.md): Single-line password input for forms.
 - [PasswordRequirements](components/password-requirements.md): Live checklist of password rules shown under a `PasswordInput`: a caption followed by one chip per rule, each chip turning to the success tone with a check as the typed value satisfies it.
-- [PhoneInput](components/phone-input.md): International phone-number control: an `InputGroup` with a searchable dial-code `Select` on the left and a `type="tel"` input on the right that applies the selected country's mask as the user types and accepts exactly…
+- [PhoneInput](components/phone-input.md): International phone-number control: an `InputGroup` with a searchable country `Select` on the left (the closed trigger shows the selected country's flag, its name and, at the end, its dial code, like a row of the list…
 - [RadioGroup](components/radio-group.md): RadioGroup is the one "pick one of a few" component: it picks exactly one value from a short list of labelled options shown at once.
 - [SchemaForm](components/schema-form.md): A form rendered from a JSON schema: each property of an object schema becomes a `Field` with its label, description, Required marker and control, and a nested object becomes a fieldset with its own legend.
 - [Select](components/select.md): Select control for choosing exactly one option from a list; several values are `multi-select`.

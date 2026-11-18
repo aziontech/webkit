@@ -49,6 +49,7 @@
 - `data-variant` mirrors the `variant` prop, so a test or a consumer can target one flavour
 - `data-neutral` is present only for `tip`, the one variant that carries no severity
 - `data-doc-block` + `data-doc-chrome` are the `DocProse` contract (block rung; prose stops here)
+- Inline code: the chip `DocProse` defines (`.text-label-code-sm`, no vertical padding, `var(--spacing-2xs)` inline padding, outline as an `inset-ring` with a `border` only under `forced-colors`, `wrap-anywhere` + `box-decoration-clone`), so it is never taller than the `.text-body-sm` line and chips on consecutive wrapped lines keep at least a 1px gap (`src/test/inline-code.test.ts`)
 
 ## Accessibility
 

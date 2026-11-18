@@ -98,6 +98,7 @@ LogViewer ships its sub-components attached to the root (`LogViewer.Header`, `Lo
 - `loading` state: LogViewerContent renders a centered spinner + `loadingLabel` in place of the log body
 - Log line `data-type` reflects `line.type` and `data-level` reflects `line.level`; `warn` rows take the warning tint, `error` rows the danger tint and danger text
 - Level toggles carry `data-level` and `data-active` (the chosen level); every toggle shows the count of lines at its level in the whole log
+- Log line columns: the time and level cells take their width from the longest value in the whole log (`--log-viewer-time-width`, `--log-viewer-level-width` on the line list, counted in `ch` plus the code letter-spacing), so the columns do not move while lines are filtered, appended or mounted in chunks.
 - Long logs: above 300 visible lines `LogViewerContent` mounts lines in chunks of 100 as they scroll near view (unmounted chunks keep an estimated 24 px per line), so a 10,000-line log mounts within its runtime budget. Search, the level filter, the line count and copy work on every line, mounted or not.
 
 ## Accessibility

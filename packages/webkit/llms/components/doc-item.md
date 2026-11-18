@@ -56,6 +56,7 @@
 - The anchor appears on data, not on a mode prop: the title wraps in an anchor when `href` is set, and the trailing glyph region renders only then
 - An external destination (absolute URL, `mailto:`, or explicit `target="_blank"`) swaps the chevron for the diagonal arrow and, for `target="_blank"`, adds `rel="noreferrer"`
 - `data-doc-chrome` is the `DocProse` contract (prose rules stop at the row's edge)
+- Inline code: the chip `DocProse` defines (`.text-label-code-sm`, no vertical padding, `var(--spacing-2xs)` inline padding, outline as an `inset-ring` with a `border` only under `forced-colors`, `wrap-anywhere` + `box-decoration-clone`), so it is never taller than the `.text-body-sm` line and chips on consecutive wrapped lines keep at least a 1px gap (`src/test/inline-code.test.ts`)
 
 ## Accessibility
 

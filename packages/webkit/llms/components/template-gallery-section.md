@@ -84,7 +84,9 @@
 
 ## Responsive
 
-- The composed `media-split` sets the ask beside the template grid and stacks them on narrow screens; the grid scrolls inside its `scroll-area`, at least 36rem tall and 44rem from large.
+- The band splits on its own width, not the screen's: the root is a size container, the composed `media-split` stays stacked, and from a band 72rem wide the ask sits beside the template grid. A narrower band (a tablet, a docs preview, a narrow column on a wide screen) stacks the ask over the grid, so the headline keeps room for two lines and the two card columns are never cut off.
+- The headline wraps naturally (`text-wrap: balance` from the type scale); no line breaks are written into the copy.
+- The grid scrolls inside its `scroll-area`, at least 36rem tall and 44rem once the band splits.
 - No horizontal scroll at 320 px.
 
 ## Examples
