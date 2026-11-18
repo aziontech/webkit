@@ -145,7 +145,7 @@
                     :style="{ fontSize: `${size}px` }"
                     aria-hidden="true"
                   />
-                  <span class="w-full truncate text-center text-label-code-sm text-(--text-muted)"
+                  <span class="w-full text-center wrap-break-word [hyphens:none] text-label-code-sm text-(--text-muted)"
                     >{{ shortName(icon)
                     }}<template v-if="icon.set === 'color'"> · {{ t.iconsColor }}</template></span
                   >
