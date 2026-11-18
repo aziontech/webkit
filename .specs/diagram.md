@@ -4,9 +4,9 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 5
-checksum: 57d5e6687d3a4d36e1d97ba1c320bfb50436cf7c1c428fd4e3e99a2ee67b176a
+checksum: 7bf18fd33bc0f8752b02d5be0c15936f0c7d17f8d4b8acb8c2f6ddf49563856a
 created: 2026-10-21
-last_updated: 2026-11-15
+last_updated: 2026-11-18
 ---
 
 # Diagram — Component Spec
@@ -96,6 +96,8 @@ A node-and-connector diagram for marketing pages: the request path of an archite
   />
 </template>
 ```
+
+**Three ways in** (decision RV-K2-1, rule `webkit-content-channels`). The same data renders from a docs page as the `<Diagram>` tag `DocMarkdown` mounts (braced attribute values are JSON). The site draws it as the `Diagram` scene.
 
 ## Props
 
@@ -190,6 +192,7 @@ _None — every node is drawn from `spec`._
 - Nodes — composite story drawing one node of each type (`pill`, `card`, `item`, `tile`, `app`) in one diagram. Justified addition: the node type is the component's one visual axis, carried in the data rather than a `type` prop, so no Types story covers it.
 - Groups — a framed group with a grid of tiles and a dashed, tinted group, connected to the nodes beside them. Justified addition: groups and grids are the layout primitives a Default row does not show.
 - FlowDiagram — a five-node vertical flow in a 640 px docs column (terminal → project folder → CLI → API → account resources) with a labelled `azion deploy` edge. Justified addition: it is the centred stacked geometry — connectors through each node's centre, the chip centred on its line — that the docs use and no other example reaches (Spec stacks as a tree).
+- Markdown — a `<Diagram name="…" />` tag rendered by `DocMarkdown` inside `DocProse`. Justified: the docs channel (RV-K2-1).
 
 <!-- Types/Sizes omitted: Diagram has no `type` or `size` prop. Loading/Disabled omitted: it declares neither prop. -->
 

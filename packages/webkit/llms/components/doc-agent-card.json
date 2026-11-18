@@ -110,6 +110,10 @@
   {
    "name": "Narrow",
    "file": "examples/doc-agent-card/narrow.vue"
+  },
+  {
+   "name": "Markdown",
+   "file": "examples/doc-agent-card/markdown.vue"
   }
  ],
  "docs": "components/doc-agent-card.md"

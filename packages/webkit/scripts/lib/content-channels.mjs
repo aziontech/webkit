@@ -23,6 +23,11 @@ export const NOT_CONTENT = {
 const DOCS_PIECE = 'A docs piece; the site uses the marketing pieces and sections.'
 const MARKETING_PIECE = 'A marketing piece; a docs page uses the doc- pieces.'
 
+export const PIPE_TABLE = 'Markdown pipe table'
+
+const BROWSER_FRAME =
+  'A resizable viewport around a live Vue page (drag handles, copyable address); Markdown writes <Frame> around a screenshot and a site band frames a scene or a ConsoleMockup itself, so neither has a page to put inside it.'
+
 const DATA_TABLE =
   'App-only: it drives app state (sorting, selection, paging, filters) through its engine; a docs page writes a Markdown pipe table and the site uses listing-table-section.'
 const CODE_EDITOR =
@@ -34,27 +39,27 @@ const TRACE =
 
 export const CONTENT_CHANNELS = {
   'data/flow-diagram': { docs: 'FlowDiagram', site: 'scene:FlowDiagram' },
-  'content/illustration': { site: 'scene:Illustration', pending: ['docs'] },
-  'content/console-mockup': { site: 'scene:ConsoleMockup', pending: ['docs'] },
-  'marketing/diagram': { site: 'scene:Diagram', pending: ['docs'] },
-  'data/table': { site: 'listing-table-section', pending: ['docs'] },
-  'content/carousel': { site: 'card-carousel-section', pending: ['docs'] },
-  'content/network-map': { site: 'network-section', pending: ['docs'] },
-  'content/pricing-card': { site: 'pricing-plans-section', pending: ['docs'] },
-  'content/third-party-logo': { site: 'logo-wall-section', pending: ['docs'] },
+  'content/illustration': { docs: 'Illustration', site: 'scene:Illustration' },
+  'content/console-mockup': { docs: 'ConsoleMockup', site: 'scene:ConsoleMockup' },
+  'marketing/diagram': { docs: 'Diagram', site: 'scene:Diagram' },
+  'data/table': { docs: PIPE_TABLE, site: 'listing-table-section' },
+  'content/carousel': { docs: 'Carousel', site: 'card-carousel-section' },
+  'content/network-map': { docs: 'NetworkMap', site: 'network-section' },
+  'content/pricing-card': { docs: 'PricingCard', site: 'pricing-plans-section' },
+  'content/third-party-logo': { docs: 'ThirdPartyLogo', site: 'logo-wall-section' },
   'content/accordion': {
-    pending: ['site'],
+    site: 'scene:Accordion',
     outOfScope: { docs: 'Markdown writes <AccordionGroup>, which renders DocAccordionGroup.' }
   },
-  'content/browser-frame': { pending: ['docs', 'site'] },
+  'content/browser-frame': { outOfScope: { docs: BROWSER_FRAME, site: BROWSER_FRAME } },
   'content/card': {
-    pending: ['site'],
+    site: 'scene:Card',
     outOfScope: { docs: 'Markdown writes <Card>, which renders DocCard.' }
   },
-  'content/embed': { pending: ['docs', 'site'] },
-  'content/integration-card': { pending: ['docs', 'site'] },
-  'content/key-value-list': { pending: ['docs', 'site'] },
-  'content/plan-feature-list': { pending: ['docs', 'site'] },
+  'content/embed': { docs: 'Embed', site: 'scene:Embed' },
+  'content/integration-card': { docs: 'IntegrationCard', site: 'scene:IntegrationCard' },
+  'content/key-value-list': { docs: 'KeyValueList', site: 'scene:KeyValueList' },
+  'content/plan-feature-list': { docs: 'PlanFeatureList', site: 'scene:PlanFeatureList' },
   'data/data-table': {
     outOfScope: { docs: DATA_TABLE, site: DATA_TABLE }
   },
@@ -68,7 +73,7 @@ export const CONTENT_CHANNELS = {
   'chart/stat-tile-group': { docs: 'StatTileGroup', site: 'scene:StatTileGroup' },
   'chart/tracker': { docs: 'Tracker', site: 'scene:Tracker' },
   'code/code-block': {
-    pending: ['site'],
+    site: 'scene:CodeBlock',
     outOfScope: { docs: 'Markdown writes a code fence, which renders DocCodeGroup.' }
   },
   'code/code-editor': { outOfScope: { docs: CODE_EDITOR, site: CODE_EDITOR } },
@@ -76,8 +81,8 @@ export const CONTENT_CHANNELS = {
   'code/trace': { outOfScope: { docs: TRACE, site: TRACE } },
   'docs/doc-accordion': { docs: 'Accordion', outOfScope: { site: DOCS_PIECE } },
   'docs/doc-accordion-group': { docs: 'AccordionGroup', outOfScope: { site: DOCS_PIECE } },
-  'docs/doc-agent-card': { pending: ['docs'], outOfScope: { site: DOCS_PIECE } },
-  'docs/doc-call-to-action': { pending: ['docs'], outOfScope: { site: DOCS_PIECE } },
+  'docs/doc-agent-card': { docs: 'AgentCard', outOfScope: { site: DOCS_PIECE } },
+  'docs/doc-call-to-action': { docs: 'CallToAction', outOfScope: { site: DOCS_PIECE } },
   'docs/doc-callout': { docs: 'Note', outOfScope: { site: DOCS_PIECE } },
   'docs/doc-card': { docs: 'Card', outOfScope: { site: DOCS_PIECE } },
   'docs/doc-card-group': { docs: 'CardGroup', outOfScope: { site: DOCS_PIECE } },
@@ -91,7 +96,7 @@ export const CONTENT_CHANNELS = {
     site: 'closing-call-to-action-section',
     outOfScope: { docs: MARKETING_PIECE }
   },
-  'marketing/faq': { site: 'faq-section', pending: ['docs'] },
+  'marketing/faq': { docs: 'Faq', site: 'faq-section' },
   'marketing/feature-item': {
     site: 'capability-grid-section',
     outOfScope: { docs: MARKETING_PIECE }
@@ -110,9 +115,9 @@ export const CONTENT_CHANNELS = {
   'marketing/media-split': { site: 'media-split-section', outOfScope: { docs: MARKETING_PIECE } },
   'marketing/media-tabs': { site: 'feature-tabs-section', outOfScope: { docs: MARKETING_PIECE } },
   'marketing/media-tile': { site: 'feature-tiles-section', outOfScope: { docs: MARKETING_PIECE } },
-  'marketing/quote': { site: 'recognition-marquee-section', pending: ['docs'] },
+  'marketing/quote': { docs: 'Quote', site: 'recognition-marquee-section' },
   'marketing/quote-tabs': { site: 'client-quotes-section', outOfScope: { docs: MARKETING_PIECE } },
-  'marketing/stats': { site: 'stats-section', pending: ['docs'] }
+  'marketing/stats': { docs: 'Stats', site: 'stats-section' }
 }
 
 export function channelsOf(target) {

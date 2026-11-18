@@ -21,7 +21,12 @@ export const sceneAssets = {
   FlowDiagram: () => import('../components/data/flow-diagram/flow-diagram.vue'),
   Illustration: () => import('../components/content/illustration/illustration.vue'),
   ConsoleMockup: () => import('../components/content/console-mockup/console-mockup.vue'),
+  Accordion: contentScene('Accordion'),
+  AccordionContent: contentScene('AccordionContent'),
+  AccordionItem: contentScene('AccordionItem'),
+  AccordionTrigger: contentScene('AccordionTrigger'),
   BarList: contentScene('BarList'),
+  Card: contentScene('Card'),
   Chart: contentScene('Chart'),
   ChartArea: contentScene('ChartArea'),
   ChartAxis: contentScene('ChartAxis'),
@@ -33,9 +38,16 @@ export const sceneAssets = {
   ChartReference: contentScene('ChartReference'),
   ChartScatter: contentScene('ChartScatter'),
   ChartTooltip: contentScene('ChartTooltip'),
+  CodeBlock: contentScene('CodeBlock'),
   DonutChart: contentScene('DonutChart'),
+  Embed: contentScene('Embed'),
   GaugeChart: contentScene('GaugeChart'),
+  IntegrationCard: contentScene('IntegrationCard'),
+  KeyValueList: contentScene('KeyValueList'),
+  KeyValueListGroup: contentScene('KeyValueListGroup'),
+  KeyValueListItem: contentScene('KeyValueListItem'),
   MapChart: contentScene('MapChart'),
+  PlanFeatureList: contentScene('PlanFeatureList'),
   SparkChart: contentScene('SparkChart'),
   StatTile: contentScene('StatTile'),
   StatTileGroup: contentScene('StatTileGroup'),
@@ -53,8 +65,8 @@ export type SceneRef = {
   component: SceneName
   /** Props bound onto the scene, such as the `name` of a `ConsoleMockup`; the section's own state props win on a clash. */
   props?: Record<string, unknown>
-  /** Scenes drawn in the scene's default slot, in order, such as the marks of a `Chart` or the tiles of a `StatTileGroup`. */
-  children?: SceneRef[]
+  /** Scenes or plain text drawn in the scene's default slot, in order, such as the marks of a `Chart`, the tiles of a `StatTileGroup` or the value of a `KeyValueListItem`. */
+  children?: (SceneRef | string)[]
 }
 
 const resolved = new Map<string, Component>()

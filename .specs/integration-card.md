@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 168041c7f6153c3b504e8400d791184b2e370e9b9db437246b8ceaf9988b4cef
+checksum: cf8e46beb97b9987ba0b4040700a7ba3ed00114894227c1e9786de87dd85243d
 created: 2026-11-16
-last_updated: 2026-11-16
+last_updated: 2026-11-18
 ---
 
 # IntegrationCard — Component Spec
@@ -73,6 +73,8 @@ A catalog tile laid out from props: a logo mark, the item name, its vendor, a sh
   </IntegrationCard>
 </template>
 ```
+
+**Three ways in** (decision RV-K2-1, rule `webkit-content-channels`). From a docs page it is the `<IntegrationCard />` tag `DocMarkdown` mounts (braced attribute values are JSON). From the site's page JSON it is the `IntegrationCard` scene a band draws by name (a `console-showcase-section` with `variant: "diagram"` and `texture: "none"`, so no texture sits behind it); the `logo`, `actions` and default slots and the `select` event stay Vue.
 
 ## Props
 
@@ -176,6 +178,8 @@ A catalog tile laid out from props: a logo mark, the item name, its vendor, a sh
 - Default — a tile with a vendor, a badge and an Install action
 - Installed — `installed` with a Configure action (justified: the installed state is the tile's second state)
 - Featured — a row of three `featured` tiles (justified: `featured` is a boolean layout of the tile)
+- Markdown — the Default content as a `<IntegrationCard>` tag rendered by `DocMarkdown` inside `DocProse`. Justified: the docs channel (RV-K2-1).
+- Page JSON — the Default card as an `IntegrationCard` scene in a `console-showcase-section` entry with `texture: "none"`, rendered by `SitePage`, with the JSON shown. Justified: the site channel (RV-K2-1).
 
 ## Constraints — DO NOT
 

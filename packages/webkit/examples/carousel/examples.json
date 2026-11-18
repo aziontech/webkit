@@ -16,6 +16,11 @@
       "name": "Titled cards",
       "summary": "variant=\"cards\" separates the cards with a gutter and rounds each one, and the header slot puts the band's title on the row the step controls sit in, with the controls at its end. Every card keeps the default medium width; for the whole band of overline, title, text and link cards reach for the card-carousel-section section instead of composing one.",
       "file": "titled-cards.vue"
+    },
+    {
+      "name": "Markdown",
+      "summary": "The same content written in a docs page: `DocMarkdown` turns a `<Carousel>` tag into a real `Carousel`. Braced attribute values are JSON, so a docs author copies them from the props or a page entry and never imports the component. Each slide is a `<CarouselItem>` tag holding other tags (here `<Quote />`), and `DocMarkdown` adds the previous and next controls.",
+      "file": "markdown.vue"
     }
   ]
 }

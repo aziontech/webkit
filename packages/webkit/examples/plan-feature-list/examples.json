@@ -16,6 +16,17 @@
       "name": "WithDescriptions",
       "summary": "The features of a change-plan drawer, each with a one-line description under its label.",
       "file": "with-descriptions.vue"
+    },
+    {
+      "name": "Markdown",
+      "summary": "The same content written in a docs page: `DocMarkdown` turns a `<PlanFeatureList>` tag into a real `PlanFeatureList`. Braced attribute values are JSON, so a docs author copies them from the props or a page entry and never imports the component.",
+      "file": "markdown.vue"
+    },
+    {
+      "name": "Page JSON",
+      "summary": "The same content in the marketing site's page JSON: `PlanFeatureList` is a scene, so a band places it by name in its `scene` slot (here `console-showcase-section` with `variant: \"diagram\"` and `texture: \"none\"`, so nothing is painted behind it) and `SitePage` renders the entry with no code.",
+      "file": "page-entry.vue",
+      "json": "page-entry.json"
     }
   ]
 }

@@ -7,9 +7,9 @@ spec_version: 23
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
   node_id: 2053:7649
-checksum: 2217a198d17ebbcb3f5331ecaaef6a71f03a18f297f2c604e642e8ce87c72b35
+checksum: b36490a5380994cba43bb300d390abe240b5464541dcee374426b714e7f7832e
 created: 2026-06-16
-last_updated: 2026-11-17
+last_updated: 2026-11-18
 ---
 
 # Table — Component Spec
@@ -112,6 +112,8 @@ One import of the root; every structural part is reached via dot-notation (`<Tab
 
 Each sub-component is also a standalone import (`import TableRow from '@aziontech/webkit/table-row'`, …) — the tree-shaking path when only a few parts are used.
 
+**Three ways in** (decision RV-K2-1, rule `webkit-content-channels`). A docs page writes a Markdown pipe table, and `DocMarkdown` renders it as this `Table` (`Table.Header`, `Table.Row`, `Table.HeadCell`, `Table.Body`, `Table.Cell`; bordered, lines wrapping, column alignment from `:---:` / `---:`, inline Markdown in the cells), loaded as an async chunk, so a docs table looks like an app table. The site places a table through `listing-table-section`. Sorting, toolbars, the cell presets and the data-driven `DataTable` stay Vue.
+
 ## Sub-components
 
 <!-- Each sub-component lives in its own folder under the root.
@@ -184,7 +186,7 @@ Each sub-component is also a standalone import (`import TableRow from '@aziontec
 | `maxHeight` | `string`                     | `''`            | false    | Max height (CSS length). The viewport scrolls dynamically: horizontal scroll appears automatically when columns overflow the width; vertical scroll appears only when `maxHeight` is set smaller than the content (under a frozen header). |
 | `bordered`  | `boolean`                    | `false`         | false    | Draw the outer card border around the table. Off by default (the table is typically framed by a surrounding surface); the internal row dividers are unaffected.                                                                            |
 | `density`   | `'comfortable' \| 'compact'` | `'comfortable'` | false    | Density of the body cells: `compact` shrinks their height and padding. Set `density` on `Table.Header` too for a compact header.                                                                                                           |
-| `wrapLines` | `boolean`                    | `false`         | false    | Cell text wraps onto several lines instead of truncating. Identifiers stay on one line and truncate: `code`, `kbd`, `samp`, a `dir="ltr"` span (the `TableCellId` value) and code-typography text (`text-label-code-*`). |
+| `wrapLines` | `boolean`                    | `false`         | false    | Cell text wraps onto several lines instead of truncating. Identifiers stay on one line and truncate: `code`, `kbd`, `samp`, a `dir="ltr"` span (the `TableCellId` value) and code-typography text (`text-label-code-*`).                   |
 
 ## Events
 

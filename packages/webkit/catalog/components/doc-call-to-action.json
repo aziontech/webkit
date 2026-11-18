@@ -18,6 +18,7 @@
   "A one-line headline and a one-line subtitle."
  ],
  "channels": [
-  "app"
+  "app",
+  "docs"
  ]
 }

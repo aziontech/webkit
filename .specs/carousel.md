@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 4
 template: 2
-checksum: ae337c3d4c73d8a4fa883cb52f57693667d2a1072a30085f683b07de3474c8b2
+checksum: 73c8ffe32e21b0efadb3c47b3a57b094a4987548d2144a1af871b4fb994e5b6c
 created: 2026-09-22
 last_updated: 2026-11-18
 ---
@@ -78,6 +78,8 @@ An optional `header` slot shares the row the step controls sit in: the band's ti
   </Carousel>
 </template>
 ```
+
+**Three ways in** (decision RV-K2-1, rule `webkit-content-channels`). The same data renders from a docs page as the `<Carousel>` tag `DocMarkdown` mounts (braced attribute values are JSON); each slide is a `<CarouselItem>` tag holding other tags (a `<Quote />`, a `<Card />`), and `DocMarkdown` adds the previous and next controls. The site places it through `card-carousel-section`; the `header` slot stays Vue.
 
 ## Sub-components
 
@@ -188,6 +190,7 @@ An optional `header` slot shares the row the step controls sit in: the band's ti
 - Default
 - Peek — narrow quote cards that overflow the row so one lands under the trailing fade (justified: a carousel whose content fits shows no scrolling and no enabled control, so the default alone never exercises the component's purpose)
 - Titled cards — `variant="cards"` with the band's title in the `header` slot and the controls at the end of the title row (justified: the header slot and the card layout are the two behaviours the default does not show)
+- Markdown — three `<Quote />` slides in `<CarouselItem>` tags inside a `<Carousel>` tag rendered by `DocMarkdown` inside `DocProse`. Justified: the docs channel (RV-K2-1).
 
 ## Constraints — DO NOT
 

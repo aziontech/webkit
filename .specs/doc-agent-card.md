@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: 2ce7c8c1c2416d95ece51698548360402f861f45e37e6805abab3c144dda3f71
+checksum: 7ea4fc957407c3bc35e1bdfb2ef972499ae203a8ed73cdfce15db3e22017ca1e
 created: 2026-11-12
-last_updated: 2026-11-15
+last_updated: 2026-11-18
 ---
 
 # DocAgentCard — Component Spec
@@ -54,6 +54,8 @@ The "Your AI agent, fluent in Azion" card that opens the first section of a docu
   />
 </template>
 ```
+
+**Three ways in** (decision RV-K2-1, rule `webkit-content-channels`). The same data renders from a docs page as the `<AgentCard>` tag `DocMarkdown` mounts (braced attribute values are JSON). It is a docs piece, so the site has no entry; the `actions` slot and the events stay Vue.
 
 ## Props
 
@@ -143,6 +145,7 @@ The "Your AI agent, fluent in Azion" card that opens the first section of a docu
 
 - Default — the reference card from the catalog strings and a prompt.
 - Narrow — the same card in a phone-width container, stacked.
+- Markdown — an `<AgentCard prompt="…" />` tag rendered by `DocMarkdown` inside `DocProse`. Justified: the docs channel (RV-K2-1).
 
 ## Constraints — DO NOT
 

@@ -31,6 +31,12 @@
       "name": "Multiple",
       "summary": "`type=\"multiple\"` with two items open at once via an array `default-value`.",
       "file": "multiple.vue"
+    },
+    {
+      "name": "Page JSON",
+      "summary": "The same content in the marketing site's page JSON: `Accordion` is a scene, so a band places it by name in its `scene` slot (here `console-showcase-section` with `variant: \"diagram\"` and `texture: \"none\"`, so nothing is painted behind it) and `SitePage` renders the entry with no code. Its items are the scene's `children`: each `AccordionItem` holds an `AccordionTrigger` and an `AccordionContent`, and their text is a text child.",
+      "file": "page-entry.vue",
+      "json": "page-entry.json"
     }
   ]
 }

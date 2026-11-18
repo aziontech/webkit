@@ -24,6 +24,8 @@
   "Do not hand-write the list with your own check icons: the check colour and spacing are part of the component."
  ],
  "channels": [
-  "app"
+  "app",
+  "docs",
+  "site"
  ]
 }

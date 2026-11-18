@@ -68,6 +68,10 @@
   {
    "name": "Ratios",
    "file": "examples/embed/ratios.vue"
+  },
+  {
+   "name": "Markdown",
+   "file": "examples/embed/markdown.vue"
   }
  ],
  "docs": "components/embed.md"

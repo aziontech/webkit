@@ -9,6 +9,11 @@
    "name": "Ratios",
    "summary": "Every `ratio` value, one frame under the other, around the same placeholder document. Each frame keeps its shape at any width — only the height follows. Pick the ratio the source already has: a `video` frame around a square form leaves bands of empty surface above and below it, and no ratio will crop a document that disagrees, it will just scroll inside the frame. Each frame states its own `title`, because every embedded document needs its own name.",
    "file": "examples/embed/ratios.vue"
+  },
+  {
+   "name": "Markdown",
+   "summary": "The same content written in a docs page: `DocMarkdown` turns a `<Embed>` tag into a real `Embed`. Braced attribute values are JSON, so a docs author copies them from the props or a page entry and never imports the component.",
+   "file": "examples/embed/markdown.vue"
   }
  ]
 }

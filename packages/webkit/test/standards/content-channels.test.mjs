@@ -7,7 +7,8 @@ import { fileURLToPath } from 'node:url'
 import {
   CONTENT_CHANNELS,
   CONTENT_FOLDERS,
-  NOT_CONTENT
+  NOT_CONTENT,
+  PIPE_TABLE
 } from '../../scripts/lib/content-channels.mjs'
 
 const PKG = join(dirname(fileURLToPath(import.meta.url)), '../..')
@@ -66,7 +67,17 @@ for (const [folder, entry] of Object.entries(CONTENT_CHANNELS)) {
     }
     const name = folder.split('/')[1]
     const docs = entry.docs ?? (pending.includes('docs') ? null : undefined)
-    if (entry.docs) {
+    if (entry.docs === PIPE_TABLE) {
+      assert.match(
+        renderer,
+        /case 'table':\s*return h\(\s*TableRoot/,
+        `doc-markdown.vue does not render a pipe table with ${folder}`
+      )
+      assert.ok(
+        new RegExp(`import\\('[^']*/${folder}/${name}\\.vue'\\)`).test(renderer),
+        `doc-markdown.vue does not load ${folder} lazily`
+      )
+    } else if (entry.docs) {
       assert.ok(blockTags.has(entry.docs), `DocMarkdown does not parse <${entry.docs}>`)
       assert.ok(
         new RegExp(
