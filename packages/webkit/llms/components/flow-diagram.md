@@ -10,7 +10,7 @@
 ## When to use
 
 - Showing an ordered pipeline or request path as steps joined by connectors — build → deploy → serve, or a request through a load balancer, a function and its bindings.
-- A request path whose steps must read as equal boxes (You → Azion edge → Origin on an error page) — set `uniform`.
+- A request path whose steps must read as equal boxes (You → Azion → Application) — set `uniform`. A path whose hops carry a status and details uses `topology-diagram` instead, as the edge error page does.
 - A step fans out to several parallel targets and (optionally) back in — wrap those steps in `FlowDiagram.Parallel`.
 - A node with custom content (a card with several rows) where connectors must touch specific parts — mark them with `FlowDiagram.Anchor`.
 

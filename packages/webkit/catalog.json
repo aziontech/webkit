@@ -11983,6 +11983,13 @@
      "doc": "Shows placeholder cards while the topology loads."
     },
     {
+     "name": "orientation",
+     "type": "TopologyDiagramOrientation",
+     "default": "'horizontal'",
+     "required": "false",
+     "doc": "Direction the levels run: side by side, or stacked from top to bottom for a narrow screen."
+    },
+    {
      "name": "ariaLabel",
      "type": "string",
      "default": "''",
@@ -36433,13 +36440,14 @@
    "title": "Blocks/State/EdgeErrorPage",
    "source": "blocks/state/edge-error-page/edge-error-page.vue",
    "surface": "edge",
-   "summary": "The page Azion's edge serves to a visitor of a customer's site when a request fails: a standalone page, no Azion product chrome, no account actions. Left-aligned and diagnostic: the `StatusCode` with its reason phrase, a title in plain words, the request path You → Azion edge → Origin drawn with `FlowDiagram` `uniform` (every hop the same width and height, each with a `StatusIndicator`; stacked boxes of the same size on a phone), What happened? and What can I do? side by side, Try again or Go to home page with Go back, then the request details in a `KeyValueList` (request ID with `CopyButton`, `Timestamp` in UTC, edge location, host) and a Served by `Brand` footer. The primary is the 502 (origin unreachable); variants cover 504, 500, 503, 403 (blocked by the site's firewall), 429 and 404. Azion's own console, site and docs use `state/error-page` instead.",
+   "summary": "The page Azion serves to a visitor of a customer's site when a request fails: a standalone page, no Azion product chrome, no account actions. Left-aligned and diagnostic: the `StatusCode` with its reason phrase, a title in plain words, the request path You → Azion → Application drawn with `TopologyDiagram` (one node card per hop, every card the same width and height, each with its status tag; side by side on a wide screen, stacked with `orientation=\"vertical\"` on a phone or tablet), What happened? and What can I do? side by side, Try again or Go to home page with Go back, then the request details in a `KeyValueList` (request ID with `CopyButton`, `Timestamp` in UTC, Azion location, host) and a Served by `Brand` footer. Azion here is Azion's infrastructure; the Application is the site's application, on Azion's infrastructure or on the customer's own servers. The primary is the 502 (application unreachable); variants cover 504, 500, 503, 403 (blocked by the site's firewall), 429 and 404. Azion's own console, site and docs use `state/error-page` instead.",
    "intents": [
     "edge error page",
     "502 bad gateway page",
     "504 gateway timeout page",
+    "application unreachable page",
+    "application error page",
     "origin unreachable page",
-    "origin error page",
     "503 service unavailable page",
     "firewall blocked page",
     "waf blocked request page",
@@ -36448,7 +36456,7 @@
     "error page for site visitors",
     "custom error page",
     "página de erro do edge",
-    "origem indisponível",
+    "aplicação indisponível",
     "requisição bloqueada pelo firewall",
     "página de error del edge"
    ],
@@ -36461,33 +36469,31 @@
     "Brand",
     "Button",
     "CopyButton",
-    "FlowDiagram",
     "KeyValueList",
     "StatusCode",
-    "StatusIndicator",
-    "Timestamp"
+    "Timestamp",
+    "TopologyDiagram"
    ],
    "imports": [
     "@aziontech/webkit/brand",
     "@aziontech/webkit/button",
     "@aziontech/webkit/copy-button",
-    "@aziontech/webkit/flow-diagram",
     "@aziontech/webkit/key-value-list",
     "@aziontech/webkit/status-code",
-    "@aziontech/webkit/status-indicator",
-    "@aziontech/webkit/timestamp"
+    "@aziontech/webkit/timestamp",
+    "@aziontech/webkit/topology-diagram"
    ],
    "primary": "Default",
-   "guidelinesSummary": "The page Azion's edge serves to a visitor of a customer's site when the request fails: the site's server is down or slow, it answered with an error, the site's firewall blocked the request, or the visitor sent too many requests. The reader is not an Azion user: it is anyone on the internet who opened `www.example.com`. Their job is to learn, in one look, whose side the problem is on (their connection, Azion's edge or the site's server), what they can do about it, and what to quote to the site owner. The page stands alone: it has no Azion product chrome, no navigation and nothing that needs an Azion account. Two error page families, one per audience: - **Edge** (this block, `surface: edge`): the visitors of your customers' sites. Diagnostic, left-aligned, with the request path. - **Console, site and docs** (`state/error-page`, `surface: app`): Azion's own users on Azion's own pages. Quiet and centred, inside the product shell.",
+   "guidelinesSummary": "The page Azion serves to a visitor of a customer's site when the request fails: the site's application is down or slow, it answered with an error, the site's firewall blocked the request, or the visitor sent too many requests. The reader is not an Azion user: it is anyone on the internet who opened `www.example.com`. Their job is to learn, in one look, whose side the problem is on (their connection, Azion's infrastructure or the site's application), what they can do about it, and what to quote to the site owner. The page stands alone: it has no Azion product chrome, no navigation and nothing that needs an Azion account. Two error page families, one per audience: - **Edge** (this block, `surface: edge`): the visitors of your customers' sites. Diagnostic, left-aligned, with the request path. Words: the docs say **Azion's infrastructure**; the page itself says just **Azion**. The third hop is the **Application**, never \"origin\": the site's application may run on Azion's distributed infrastructure or on the customer's own servers, and the visitor does not need to know which. - **Console, site and docs** (`state/error-page`, `surface: app`): Azion's own users on Azion's own pages. Quiet and centred, inside the product shell.",
    "variants": [
     {
-     "name": "OriginTimeout"
+     "name": "ApplicationTimeout"
     },
     {
-     "name": "OriginError"
+     "name": "ApplicationError"
     },
     {
-     "name": "OriginUnavailable"
+     "name": "ApplicationUnavailable"
     },
     {
      "name": "Blocked"

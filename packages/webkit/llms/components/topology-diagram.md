@@ -10,6 +10,7 @@
 
 - The topology tab of a project, service or workload: what serves its traffic, in order, and what is still unbound.
 - A review before a deploy where binding or removing a resource is staged on the diagram.
+- A short linear path whose hops carry a status, such as the request path You → Azion → Application on `state/edge-error-page`: one node per level, side by side on a wide screen and `orientation="vertical"` on a phone.
 
 ## Do
 
@@ -40,6 +41,7 @@
 | --- | --- | --- | --- | --- |
 | `levels` | `TopologyDiagramLevel[]` | `[]` | false | Columns of the diagram, from the entry point to the last dependency. |
 | `loading` | `boolean` | `false` | false | Shows placeholder cards while the topology loads. |
+| `orientation` | `TopologyDiagramOrientation` | `'horizontal'` | false | Direction the levels run: side by side, or stacked from top to bottom for a narrow screen. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the diagram. Empty uses the locale catalog (`Deployment topology`). |
 | `openKeys` | `string[]` | `() => []` | false | Two-way value (`v-model:openKeys`). |
 
@@ -64,6 +66,7 @@
 
 ## States
 
+- Orientation: `data-orientation` mirrors `orientation` on the root, the column list and each column. `horizontal` (default) lays the levels out as columns of the same width (`flex-1`, at least `--size-56`) joined by the measured connectors. `vertical` stacks the levels top to bottom at full width, draws a short dashed `--accent` line between consecutive levels instead of the measured connectors, and hides the side ports; the nodes, their statuses and their open bodies are the same in both. A level with one node per level gives every node the same width in either direction, and nodes with the same parts (type, status, name) share one height.
 - Root: `data-loading` and `aria-busy` while `loading`; empty when `levels` is empty, rendered as the package `EmptyState` (small) unless the `empty` slot replaces it.
 - Node card: `data-state` `open` | `closed`; `data-dashed` for a staged, unbound or pending node.
 - Pending (internal, per node): picking an option other than `boundValue` holds it on the node with `data-pending` and the dashed outline; the identity row shows the picked label and the status tag reads `Pending` (warning). The action area swaps Remove for **Apply** (`az az-check`, primary, `Apply {kind}`) and **Cancel** (`az az-x`, `Cancel`). Apply emits `bind` and clears it; the node is controlled, so it then shows the `name` and `boundValue` its `levels` entry carries, and the app writes the applied value back in its `bind` handler (and clears it in `remove`) or the card returns to the previous binding; Cancel or `Esc` in the action area drops it without an event; picking the current value again clears it; Create emits `create` and clears it.
@@ -104,7 +107,7 @@
 
 ## Responsive
 
-- Container queries: none; each column keeps `min-w-(--size-56)` and grows to share the width.
+- Container queries: none; each column keeps `min-w-(--size-56)` and grows to share the width. A page that must not scroll the diagram on a phone renders it with `orientation="vertical"` below its breakpoint (two instances, the hidden one `display: none`), as `state/edge-error-page` does.
 - Narrow (≤ 640 px or a narrow container): the diagram scrolls inline in its own focusable area; the page does not.
 - Touch: header buttons are full-width rows; bind, remove, apply, cancel and copy are small icon buttons with tooltips that also work on focus.
 - Reflow: the diagram is a two-dimensional figure, an accepted exception to 1.4.10 inside its own scroll area.

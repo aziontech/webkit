@@ -12,7 +12,8 @@
  "setup": null,
  "useWhen": [
   "The topology tab of a project, service or workload: what serves its traffic, in order, and what is still unbound.",
-  "A review before a deploy where binding or removing a resource is staged on the diagram."
+  "A review before a deploy where binding or removing a resource is staged on the diagram.",
+  "A short linear path whose hops carry a status, such as the request path You → Azion → Application on `state/edge-error-page`: one node per level, side by side on a wide screen and `orientation=\"vertical\"` on a phone."
  ],
  "avoidWhen": [
   "A sequence of steps or a pipeline without data cards → use `flow-diagram`.",
@@ -47,6 +48,13 @@
    "default": "false",
    "required": "false",
    "doc": "Shows placeholder cards while the topology loads."
+  },
+  {
+   "name": "orientation",
+   "type": "TopologyDiagramOrientation",
+   "default": "'horizontal'",
+   "required": "false",
+   "doc": "Direction the levels run: side by side, or stacked from top to bottom for a narrow screen."
   },
   {
    "name": "ariaLabel",

@@ -21,6 +21,11 @@
       "name": "Empty",
       "summary": "No levels: one line says nothing is connected yet; the `empty` slot replaces it with an action.",
       "file": "empty.vue"
+    },
+    {
+      "name": "Orientations",
+      "summary": "`orientation` sets the direction the levels run: `horizontal` (the default) draws them side by side as columns of the same width joined by connectors; `vertical` stacks them at full width for a phone, joined by a short dashed line. The nodes, statuses and open bodies are the same in both.",
+      "file": "orientations.vue"
     }
   ]
 }

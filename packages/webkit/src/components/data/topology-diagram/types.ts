@@ -3,6 +3,9 @@ import type { Severity } from '../../../utils/severity'
 /** Colour of a node's status tag. */
 export type TopologyDiagramNodeSeverity = Severity
 
+/** Direction the levels of the diagram run. */
+export type TopologyDiagramOrientation = 'horizontal' | 'vertical'
+
 /** One labelled value in the expanded body of a node. */
 export interface TopologyDiagramNodeField {
   /** Field name, e.g. `ID` or `Domain`. */

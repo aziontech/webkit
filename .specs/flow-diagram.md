@@ -7,7 +7,7 @@ spec_version: 8
 figma:
   url: https://www.figma.com/design/y38AUdg5uXuMeXofUkOxv6/Illustrations?node-id=129-2056
   node_id: 129:2056
-checksum: 5ccb462204f47c6cf56a75a0562c1ca5017922105b1988c097439dd15a2ee53e
+checksum: c0bb306945dacf30a13822e3748ac680713e4e41f43fa25725b75d3f88e82272
 created: 2026-06-25
 last_updated: 2026-11-18
 ---
@@ -21,7 +21,7 @@ FlowDiagram renders a directed flow diagram: a horizontal sequence of steps (`fl
 ## When to use
 
 - Showing an ordered pipeline or request path as steps joined by connectors — build → deploy → serve, or a request through a load balancer, a function and its bindings.
-- A request path whose steps must read as equal boxes (You → Azion edge → Origin on an error page) — set `uniform`.
+- A request path whose steps must read as equal boxes (You → Azion → Application) — set `uniform`. A path whose hops carry a status and details uses `topology-diagram` instead, as the edge error page does.
 - A step fans out to several parallel targets and (optionally) back in — wrap those steps in `FlowDiagram.Parallel`.
 - A node with custom content (a card with several rows) where connectors must touch specific parts — mark them with `FlowDiagram.Anchor`.
 
@@ -202,7 +202,7 @@ Composite stories are justified below because FlowDiagram is a composition compo
 - Branches — leading and trailing `flow-diagram-parallel` (fan-in then fan-out), proving connectors route correctly at the edges of the sequence.
 - CustomNodes — `unstyled` nodes whose slot content defines the appearance (a start dot, a tall node, a multi-row card with `flow-diagram-anchor` attachment points).
 - Disabled — a `flow-diagram-node` with the `disabled` prop, showing the reduced-opacity connectors.
-- Uniform — the `uniform` prop: three steps with different amounts of text drawn as identical boxes, the shape the edge error page's request path needs.
+- Uniform — the `uniform` prop: three steps with different amounts of text (You → Azion → Application) drawn as identical boxes.
 
 ## Constraints — DO NOT
 

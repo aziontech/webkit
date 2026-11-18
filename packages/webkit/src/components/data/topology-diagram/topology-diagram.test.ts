@@ -7,6 +7,7 @@ import Binding from '../../../../examples/topology-diagram/binding.vue'
 import Default from '../../../../examples/topology-diagram/default.vue'
 import Empty from '../../../../examples/topology-diagram/empty.vue'
 import Loading from '../../../../examples/topology-diagram/loading.vue'
+import Orientations from '../../../../examples/topology-diagram/orientations.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import TopologyDiagram from './topology-diagram.vue'
 import type { TopologyDiagramLevel, TopologyDiagramNodeData } from './types'
@@ -312,8 +313,32 @@ describe('TopologyDiagram', () => {
     await waitFor(() => expect(root.querySelectorAll('svg path').length).toBe(2))
   })
 
+  it('runs horizontally by default, with measured connectors and no stacked line', async () => {
+    const view = render(TopologyDiagram, { props: { levels } })
+    const root = view.getByTestId('topology-diagram')
+    expect(root.getAttribute('data-orientation')).toBe('horizontal')
+    await waitFor(() => expect(root.querySelectorAll('svg path').length).toBe(2))
+    expect(view.queryAllByTestId('topology-diagram__connector')).toHaveLength(0)
+  })
+
+  it('stacks the levels when vertical, joined by a line between each pair', async () => {
+    const view = render(TopologyDiagram, { props: { levels, orientation: 'vertical' } })
+    const root = view.getByTestId('topology-diagram')
+    expect(root.getAttribute('data-orientation')).toBe('vertical')
+    await settle()
+    expect(root.querySelector('svg')).toBeNull()
+    const lines = view.getAllByTestId('topology-diagram__connector')
+    expect(lines).toHaveLength(levels.length - 1)
+    for (const line of lines) expect(line.getAttribute('aria-hidden')).toBe('true')
+    const columns = view.getAllByTestId('topology-diagram__level')
+    expect(columns[0]!.querySelector('[data-testid="topology-diagram__connector"]')).toBeNull()
+    for (const column of columns) expect(column.getAttribute('data-orientation')).toBe('vertical')
+    await fireEvent.click(view.getAllByTestId('topology-diagram__node-trigger')[0]!)
+    expect(view.emitted<unknown[]>('update:openKeys')?.[0]?.[0]).toEqual(['project'])
+  })
+
   it('has no axe violations', async () => {
-    for (const example of [Default, Binding, Loading, Empty]) {
+    for (const example of [Default, Binding, Loading, Empty, Orientations]) {
       const view = render(example)
       await settle()
       await expectNoA11yViolations(view.container)

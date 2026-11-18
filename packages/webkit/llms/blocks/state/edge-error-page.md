@@ -1,29 +1,32 @@
 # EdgeErrorPage (`state/edge-error-page`)
 
-> The page Azion's edge serves to a visitor of a customer's site when a request fails: a standalone page, no Azion product chrome, no account actions. Left-aligned and diagnostic: the `StatusCode` with its reason phrase, a title in plain words, the request path You → Azion edge → Origin drawn with `FlowDiagram` `uniform` (every hop the same width and height, each with a `StatusIndicator`; stacked boxes of the same size on a phone), What happened? and What can I do? side by side, Try again or Go to home page with Go back, then the request details in a `KeyValueList` (request ID with `CopyButton`, `Timestamp` in UTC, edge location, host) and a Served by `Brand` footer. The primary is the 502 (origin unreachable); variants cover 504, 500, 503, 403 (blocked by the site's firewall), 429 and 404. Azion's own console, site and docs use `state/error-page` instead.
+> The page Azion serves to a visitor of a customer's site when a request fails: a standalone page, no Azion product chrome, no account actions. Left-aligned and diagnostic: the `StatusCode` with its reason phrase, a title in plain words, the request path You → Azion → Application drawn with `TopologyDiagram` (one node card per hop, every card the same width and height, each with its status tag; side by side on a wide screen, stacked with `orientation="vertical"` on a phone or tablet), What happened? and What can I do? side by side, Try again or Go to home page with Go back, then the request details in a `KeyValueList` (request ID with `CopyButton`, `Timestamp` in UTC, Azion location, host) and a Served by `Brand` footer. Azion here is Azion's infrastructure; the Application is the site's application, on Azion's infrastructure or on the customer's own servers. The primary is the 502 (application unreachable); variants cover 504, 500, 503, 403 (blocked by the site's firewall), 429 and 404. Azion's own console, site and docs use `state/error-page` instead.
 
 - Surface: edge
 - Source: `blocks/state/edge-error-page/edge-error-page.vue` in `@aziontech/webkit`
 - MCP: `get_block("state/edge-error-page")`
-- Components: [Brand](../../components/brand.md), [Button](../../components/button.md), [CopyButton](../../components/copy-button.md), [FlowDiagram](../../components/flow-diagram.md), [KeyValueList](../../components/key-value-list.md), [StatusCode](../../components/status-code.md), [StatusIndicator](../../components/status-indicator.md), [Timestamp](../../components/timestamp.md)
+- Components: [Brand](../../components/brand.md), [Button](../../components/button.md), [CopyButton](../../components/copy-button.md), [KeyValueList](../../components/key-value-list.md), [StatusCode](../../components/status-code.md), [Timestamp](../../components/timestamp.md), [TopologyDiagram](../../components/topology-diagram.md)
 - Skills: `webkit-errors`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
 
-edge error page; 502 bad gateway page; 504 gateway timeout page; origin unreachable page; origin error page; 503 service unavailable page; firewall blocked page; waf blocked request page; rate limited page; 429 page for visitors; error page for site visitors; custom error page; página de erro do edge; origem indisponível; requisição bloqueada pelo firewall; página de error del edge
+edge error page; 502 bad gateway page; 504 gateway timeout page; application unreachable page; application error page; origin unreachable page; 503 service unavailable page; firewall blocked page; waf blocked request page; rate limited page; 429 page for visitors; error page for site visitors; custom error page; página de erro do edge; aplicação indisponível; requisição bloqueada pelo firewall; página de error del edge
 
-The page Azion's edge serves to a visitor of a customer's site when the request fails: the site's server is down or slow, it answered with an error, the site's firewall blocked the request, or the visitor sent too many requests. The reader is not an Azion user: it is anyone on the internet who opened `www.example.com`. Their job is to learn, in one look, whose side the problem is on (their connection, Azion's edge or the site's server), what they can do about it, and what to quote to the site owner. The page stands alone: it has no Azion product chrome, no navigation and nothing that needs an Azion account.
+The page Azion serves to a visitor of a customer's site when the request fails: the site's application is down or slow, it answered with an error, the site's firewall blocked the request, or the visitor sent too many requests. The reader is not an Azion user: it is anyone on the internet who opened `www.example.com`. Their job is to learn, in one look, whose side the problem is on (their connection, Azion's infrastructure or the site's application), what they can do about it, and what to quote to the site owner. The page stands alone: it has no Azion product chrome, no navigation and nothing that needs an Azion account.
 
 Two error page families, one per audience:
 
 - **Edge** (this block, `surface: edge`): the visitors of your customers' sites. Diagnostic, left-aligned, with the request path.
+
+Words: the docs say **Azion's infrastructure**; the page itself says just **Azion**. The third hop is the **Application**, never "origin": the site's application may run on Azion's distributed infrastructure or on the customer's own servers, and the visitor does not need to know which.
+
 - **Console, site and docs** (`state/error-page`, `surface: app`): Azion's own users on Azion's own pages. Quiet and centred, inside the product shell.
 
 ## When to use
 
-- The default error pages an edge application serves when the origin cannot answer: 502 (origin unreachable, the primary), 504 (origin timeout), 500 (origin error) and 503 (origin unavailable).
-- A request a firewall or WAF rule on the edge blocked (Blocked, 403) or rate limited (RateLimited, 429).
-- A 404 the edge serves for the site when the origin has no page and the site has no page of its own (NotFound).
+- The default error pages Azion serves when the site's application cannot answer: 502 (application unreachable, the primary), 504 (application timeout), 500 (application error) and 503 (application unavailable).
+- A request a firewall or WAF rule on Azion blocked (Blocked, 403) or rate limited (RateLimited, 429).
+- A 404 Azion serves for the site when the application has no page and the site has no page of its own (NotFound).
 - As the starting point of a customer's own custom error page: the customer replaces the copy and keeps the structure.
 
 ## When not to use
@@ -38,9 +41,9 @@ Two error page families, one per audience:
 
 The HTTP code as a `StatusCode` (4xx warning, 5xx danger) followed by the reason phrase (`Bad gateway`) in muted text. The code is the fact a visitor can search for or quote; the reason phrase says it in words.
 
-### B. Request path — `FlowDiagram`, `StatusIndicator`
+### B. Request path — `TopologyDiagram`
 
-Three hops, always in this order: You (the browser), Azion edge (the location code that answered) and Origin (the site's host). Each hop shows its name, a second line and its state as a `StatusIndicator` (Working, Error, Timed out, Unavailable, Blocked, Rate limited, Not reached, Not found). On wide screens the hops are `FlowDiagram.Node`s in a `FlowDiagram` with `uniform`, so every box has the same width and height whatever its text; on a phone they stack as full-width boxes of the same height joined by a dashed line. The path answers "whose fault is it" before the visitor reads a word.
+Three hops, always in this order: You (the browser), Azion (the location code that answered) and Application (the site's host). Each hop is a `TopologyDiagram` node card: an icon and the hop's name in the header with its state as a status tag (Working, Error, Timed out, Unavailable, Blocked, Rate limited, Not reached, Not found), the browser, location or host as the card's name, and a one-line explanation of the hop when the card is opened. One node per level, so every card has the same width, and every card has the same parts, so they share one height. On wide screens (`lg` and up) the cards sit side by side joined by the diagram's connectors; below that they stack at full width with `orientation="vertical"`, joined by a short dashed line, so the path never scrolls sideways. The path answers "whose fault is it" before the visitor reads a word.
 
 ### C. Next steps — `Button`
 
@@ -50,7 +53,7 @@ Under them, two `Button`s at most. The primary is Try again (reloads the address
 
 ### D. Request details — `KeyValueList`, `CopyButton`, `Timestamp`
 
-Four facts in a two-column `KeyValueList` (one column on a phone): the request ID with a `CopyButton`, the time as a `Timestamp` in UTC, the edge location and the host. These are what the site owner needs to find the request in their logs.
+Four facts in a two-column `KeyValueList` (one column on a phone): the request ID with a `CopyButton`, the time as a `Timestamp` in UTC, the Azion location and the host. These are what the site owner needs to find the request in their logs.
 
 ### E. Footer — `Brand`
 
@@ -58,21 +61,21 @@ Four facts in a two-column `KeyValueList` (one column on a phone): the request I
 
 ## Data
 
-The block fetches nothing: the edge fills the props from the request it failed to serve.
+The block fetches nothing: Azion fills the props from the request it failed to serve.
 
-| Prop        | Type                | What it does                                                      |
-| ----------- | ------------------- | ----------------------------------------------------------------- |
-| `code`      | `number`            | HTTP status (`502`).                                              |
-| `reason`    | `string`            | Reason phrase beside the code (`Bad gateway`).                    |
-| `title`     | `string`            | What happened, in the visitor's words; the page's `h1`.           |
-| `cause`     | `string`            | The answer to What happened?                                      |
-| `advice`    | `string`            | The answer to What can I do?; never an account action.            |
-| `host`      | `string`            | The host the visitor asked for; the Origin hop and the Host fact. |
-| `requestId` | `string`            | The request ID to quote.                                          |
-| `time`      | `string`            | When the request was answered, ISO 8601.                          |
-| `location`  | `string`            | The edge location code (`IAD`); the edge hop and its fact.        |
-| `path`      | `EdgeErrorPagePath` | `{ visitor, edge, origin }`, each `{ status, severity }`.         |
-| `recovery`  | `'retry' \| 'home'` | The primary button: Try again, or Go to home page.                |
+| Prop        | Type                | What it does                                                           |
+| ----------- | ------------------- | ---------------------------------------------------------------------- |
+| `code`      | `number`            | HTTP status (`502`).                                                   |
+| `reason`    | `string`            | Reason phrase beside the code (`Bad gateway`).                         |
+| `title`     | `string`            | What happened, in the visitor's words; the page's `h1`.                |
+| `cause`     | `string`            | The answer to What happened?                                           |
+| `advice`    | `string`            | The answer to What can I do?; never an account action.                 |
+| `host`      | `string`            | The host the visitor asked for; the Application hop and the Host fact. |
+| `requestId` | `string`            | The request ID to quote.                                               |
+| `time`      | `string`            | When the request was answered, ISO 8601.                               |
+| `location`  | `string`            | The Azion location code (`IAD`); the Azion hop and its fact.           |
+| `path`      | `EdgeErrorPagePath` | `{ visitor, azion, application }`, each `{ status, severity }`.        |
+| `recovery`  | `'retry' \| 'home'` | The primary button: Try again, or Go to home page.                     |
 
 | Event   | Payload   | When                                                                         |
 | ------- | --------- | ---------------------------------------------------------------------------- |
@@ -83,60 +86,61 @@ The block fetches nothing: the edge fills the props from the request it failed t
 
 - Answer with the real status code (502, 504, 500, 503, 403, 429, 404), so browsers, crawlers and monitors see it.
 - Keep the three hops in every state, with the hop that failed marked, so every error reads the same way.
-- Give every hop the same box size: `uniform` on `FlowDiagram` does it on wide screens, and the stacked boxes on a phone share one structure.
-- Show the request ID and the time on every state; log the same ID on the edge so the site owner can find the request.
+- Give every hop the same card size: one node per level and the same parts (type, status, name) on every card.
+- Show the request ID and the time on every state; log the same ID on Azion so the site owner can find the request.
 - Say plainly when the problem is not the visitor's fault (`nothing you did caused this`).
 
 ## Don't
 
 - Don't offer Sign in, Switch account, Request access or any other account action: the visitor has no Azion account, and the site owner's account is not theirs.
-- Don't show Azion Console links, the product navigation, an internal hostname, a stack trace or the origin's IP address.
-- Don't blame the visitor, and don't name Azion as the culprit when the origin failed: the path shows which hop it was.
+- Don't show Azion Console links, the product navigation, an internal hostname, a stack trace or the application's IP address.
+- Don't blame the visitor, and don't name Azion as the culprit when the application failed: the path shows which hop it was.
 - Don't auto-redirect or auto-reload in a loop; Try again is the visitor's choice.
 - Don't drop the path on a phone; stack it instead.
+- Don't write "edge" or "origin" on the page: the visitor reads Azion and Application.
 
 ## Copy
 
-- **Title:** what happened, from the visitor's side, no code: `The site's server could not be reached`, `This site's firewall blocked your request`, `Too many requests from your connection`.
-- **What happened?:** one or two sentences naming the hop: `Azion's edge received your request, but the server that hosts this site did not accept the connection.`
+- **Title:** what happened, from the visitor's side, no code: `The site's application could not be reached`, `This site's firewall blocked your request`, `Too many requests from your connection`.
+- **What happened?:** one or two sentences naming the hop: `Azion received your request, but the application that serves this site did not accept the connection.`
 - **What can I do?:** what the visitor can do now: `Try again in a few minutes. If it keeps happening, let the site owner know and quote the request ID below.`
 - **Hop states:** one or two words: `Working`, `Error`, `Timed out`, `Unavailable`, `Blocked`, `Rate limited`, `Not reached`, `Not found`.
 - **Actions:** `Try again`, `Go to home page`, `Go back`.
-- **Facts:** `Request ID`, `Time`, `Edge location`, `Host`; the request ID in `text-label-code-sm` inside `<bdi>`.
+- **Facts:** `Request ID`, `Time`, `Azion location`, `Host`; the request ID in `text-label-code-sm` inside `<bdi>`.
 
 ## Accessibility
 
 - The block is the whole page: it owns the single `main`, one `h1` (the title) and an `h2` for each section (Request path, What happened?, What can I do?).
-- The request path is a list (`FlowDiagram` is `role="list"`, the phone layout an `ol`); each hop reads as its name, its second line and its state. The connectors are decorative.
-- Severity is never colour alone: every `StatusIndicator` has its label.
+- The request path is a `TopologyDiagram`: a `section` named by the Request path heading (`aria-labelledby`) holding an `ol` of levels; each hop's header is a button that reads its name and status tag and opens its explanation (`aria-expanded`). The connectors are decorative.
+- Severity is never colour alone: every status tag has its label.
 - Long hosts truncate on a phone and wrap in the details; hosts and IDs sit in `<bdi>` so they keep their order on right-to-left pages.
 - The phone and wide layouts of the path are the same content; the hidden one is `display: none`, so a screen reader hears it once.
 
 ## States
 
-- Default: 502 Bad gateway, the origin could not be reached; the origin hop reads Error; Try again and Go back.
-- OriginTimeout: 504 Gateway timeout; the origin hop reads Timed out.
-- OriginError: 500 Internal server error; the origin answered with an error.
-- OriginUnavailable: 503 Service unavailable; the origin hop reads Unavailable.
-- Blocked: 403 Forbidden; the site's firewall matched the request, the edge hop reads Blocked and the origin Not reached; Go to home page.
-- RateLimited: 429 Too many requests; the edge hop reads Rate limited and the origin Not reached.
-- NotFound: 404 Not found; every hop worked and the origin reads Not found; Go to home page.
+- Default: 502 Bad gateway, the application could not be reached; the Application hop reads Error; Try again and Go back.
+- ApplicationTimeout: 504 Gateway timeout; the Application hop reads Timed out.
+- ApplicationError: 500 Internal server error; the application answered with an error.
+- ApplicationUnavailable: 503 Service unavailable; the Application hop reads Unavailable.
+- Blocked: 403 Forbidden; the site's firewall matched the request, the Azion hop reads Blocked and the Application Not reached; Go to home page.
+- RateLimited: 429 Too many requests; the Azion hop reads Rate limited and the Application Not reached.
+- NotFound: 404 Not found; every hop worked and the Application reads Not found; Go to home page.
 
 ## Related
 
 - `state/error-page` — the error pages of Azion's own console, site and docs.
-- `FlowDiagram` — the request path, with `uniform` for equal boxes.
+- `TopologyDiagram` — the request path, with `orientation="vertical"` on a phone.
 - `state/async-submit` — a failed build or deploy inside the console.
 
 ## Variants
 
 - `Default` — primary (the code below)
-- `OriginTimeout` — 504: the edge reached the origin, but it did not answer in time. The origin hop reads Timed out; Try again and Go back.
-- `OriginError` — 500: the origin answered with an error while building the page. The origin hop reads Error; Try again and Go back.
-- `OriginUnavailable` — 503: the origin is down for maintenance or too busy. The origin hop reads Unavailable; the copy says the site usually comes back on its own.
-- `Blocked` — 403: a firewall or WAF rule the site owner set on the edge matched the request, so it never reached the origin. The edge hop reads Blocked and the origin Not reached; Go to home page and Go back, and the advice is to contact the site owner with the request ID.
-- `RateLimited` — 429: the visitor's connection sent more requests than the site allows. The edge hop reads Rate limited and the origin Not reached; wait a minute, then Try again.
-- `NotFound` — 404: the origin has no page at the address. Every hop worked and the origin reads Not found; Go to home page and Go back.
+- `ApplicationTimeout` — 504: Azion reached the application, but it did not answer in time. The Application hop reads Timed out; Try again and Go back.
+- `ApplicationError` — 500: the application answered with an error while building the page. The Application hop reads Error; Try again and Go back.
+- `ApplicationUnavailable` — 503: the application is down for maintenance or too busy. The Application hop reads Unavailable; the copy says the site usually comes back on its own.
+- `Blocked` — 403: a firewall or WAF rule the site owner set on Azion matched the request, so it never reached the application. The Azion hop reads Blocked and the Application Not reached; Go to home page and Go back, and the advice is to contact the site owner with the request ID.
+- `RateLimited` — 429: the visitor's connection sent more requests than the site allows. The Azion hop reads Rate limited and the Application Not reached; wait a minute, then Try again.
+- `NotFound` — 404: the application has no page at the address. Every hop worked and the Application reads Not found; Go to home page and Go back.
 
 Each variant is the same screen in another state: `get_block("state/edge-error-page", { variant })`, or the file under `blocks/state/edge-error-page/variants/`.
 
@@ -147,11 +151,13 @@ Each variant is the same screen in another state: `get_block("state/edge-error-p
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
   import CopyButton from '@aziontech/webkit/copy-button'
-  import FlowDiagram from '@aziontech/webkit/flow-diagram'
   import KeyValueList from '@aziontech/webkit/key-value-list'
   import StatusCode from '@aziontech/webkit/status-code'
-  import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
   import Timestamp from '@aziontech/webkit/timestamp'
+  import TopologyDiagram, {
+    type TopologyDiagramLevel,
+    type TopologyDiagramNodeSeverity
+  } from '@aziontech/webkit/topology-diagram'
   import { computed, useId } from 'vue'
 
   /** The way back the primary button offers: reload the address, or open the site's home page. */
@@ -161,18 +167,18 @@ Each variant is the same screen in another state: `get_block("state/edge-error-p
   export interface EdgeErrorPageHopState {
     /** The status label, in a word or two (Working, Error, Blocked). */
     status: string
-    /** The colour of the status dot. */
-    severity: StatusIndicatorSeverity
+    /** The colour of the status tag. */
+    severity: TopologyDiagramNodeSeverity
   }
 
-  /** The state of the three hops a request crosses: the visitor, Azion's edge and the site's origin server. */
+  /** The state of the three hops a request crosses: the visitor, Azion's infrastructure and the site's application. */
   export interface EdgeErrorPagePath {
     /** The visitor's browser. */
     visitor: EdgeErrorPageHopState
-    /** The Azion edge location that answered. */
-    edge: EdgeErrorPageHopState
-    /** The site's own server. */
-    origin: EdgeErrorPageHopState
+    /** The Azion location that answered. */
+    azion: EdgeErrorPageHopState
+    /** The site's application, on Azion's infrastructure or on the site's own servers. */
+    application: EdgeErrorPageHopState
   }
 
   export interface EdgeErrorPageProps {
@@ -192,7 +198,7 @@ Each variant is the same screen in another state: `get_block("state/edge-error-p
     requestId?: string
     /** When the request was answered, as an ISO string. */
     time?: string
-    /** The code of the Azion edge location that answered (IAD). */
+    /** The code of the Azion location that answered (IAD). */
     location?: string
     /** The state of each hop of the request path. */
     path?: EdgeErrorPagePath
@@ -203,9 +209,9 @@ Each variant is the same screen in another state: `get_block("state/edge-error-p
   const props = withDefaults(defineProps<EdgeErrorPageProps>(), {
     code: 502,
     reason: 'Bad gateway',
-    title: "The site's server could not be reached",
+    title: "The site's application could not be reached",
     cause:
-      "Azion's edge received your request, but the server that hosts this site did not accept the connection.",
+      'Azion received your request, but the application that serves this site did not accept the connection.',
     advice:
       'Try again in a few minutes. If it keeps happening, let the site owner know and quote the request ID below.',
     host: 'www.example.com',
@@ -214,8 +220,8 @@ Each variant is the same screen in another state: `get_block("state/edge-error-p
     location: 'IAD',
     path: () => ({
       visitor: { status: 'Working', severity: 'success' },
-      edge: { status: 'Working', severity: 'success' },
-      origin: { status: 'Error', severity: 'danger' }
+      azion: { status: 'Working', severity: 'success' },
+      application: { status: 'Error', severity: 'danger' }
     }),
     recovery: 'retry'
   })
@@ -228,10 +234,39 @@ Each variant is the same screen in another state: `get_block("state/edge-error-p
   const pathId = useId()
 
   const hops = computed(() => [
-    { key: 'visitor', name: 'You', detail: 'Browser', ...props.path.visitor },
-    { key: 'edge', name: 'Azion edge', detail: props.location, ...props.path.edge },
-    { key: 'origin', name: 'Origin', detail: props.host, ...props.path.origin }
+    {
+      key: 'visitor',
+      type: 'You',
+      icon: 'az az-user',
+      name: 'Browser',
+      message: 'Your browser, where the request started.',
+      ...props.path.visitor
+    },
+    {
+      key: 'azion',
+      type: 'Azion',
+      icon: 'az az-azion',
+      name: props.location,
+      message: 'The Azion location that received your request and answered with this page.',
+      ...props.path.azion
+    },
+    {
+      key: 'application',
+      type: 'Application',
+      icon: 'az az-applications',
+      name: props.host,
+      message:
+        "The application that serves this site, on Azion's infrastructure or on the site's own servers.",
+      ...props.path.application
+    }
   ])
+
+  const levels = computed<TopologyDiagramLevel[]>(() =>
+    hops.value.map(({ key, ...hop }, index) => ({
+      id: key,
+      nodes: [{ id: key, terminal: index === hops.value.length - 1, ...hop }]
+    }))
+  )
 
   const homeHref = computed(() => `https://${props.host}/`)
 
@@ -259,63 +294,29 @@ Each variant is the same screen in another state: `get_block("state/edge-error-p
         <h1 class="m-0 text-heading-lg text-(--text-default)">{{ title }}</h1>
       </header>
 
-      <section
-        :aria-labelledby="pathId"
-        class="flex flex-col gap-(--spacing-sm)"
-      >
+      <div class="flex flex-col gap-(--spacing-sm)">
         <h2
           :id="pathId"
           class="m-0 text-label-md text-(--text-muted)"
         >
           Request path
         </h2>
-        <div class="-mx-(--spacing-md) hidden md:block">
-          <FlowDiagram uniform>
-            <FlowDiagram.Node
-              v-for="hop in hops"
-              :key="hop.key"
-            >
-              <span
-                :data-hop="hop.key"
-                class="flex w-full min-w-0 flex-col items-start gap-(--spacing-2xs)"
-              >
-                <span class="text-label-md text-(--text-default)">{{ hop.name }}</span>
-                <bdi class="text-body-xs text-(--text-muted)">{{ hop.detail }}</bdi>
-                <StatusIndicator
-                  :severity="hop.severity"
-                  :label="hop.status"
-                />
-              </span>
-            </FlowDiagram.Node>
-          </FlowDiagram>
+        <div class="-mx-(--spacing-md) hidden lg:block">
+          <TopologyDiagram
+            :levels="levels"
+            :aria-labelledby="pathId"
+            data-testid="edge-error-page__path"
+          />
         </div>
-        <ol class="m-0 flex list-none flex-col p-0 md:hidden">
-          <li
-            v-for="(hop, index) in hops"
-            :key="hop.key"
-            class="flex flex-col"
-          >
-            <span
-              v-if="index > 0"
-              aria-hidden="true"
-              class="ms-(--spacing-lg) h-(--spacing-md) w-px border-s border-dashed border-(--accent)"
-            />
-            <span
-              :data-hop="hop.key"
-              class="flex items-center justify-between gap-(--spacing-sm) rounded-(--shape-button) border border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-md) py-(--spacing-sm) shadow-(--shadow-xs)"
-            >
-              <span class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-                <span class="text-label-md text-(--text-default)">{{ hop.name }}</span>
-                <bdi class="truncate text-body-xs text-(--text-muted)">{{ hop.detail }}</bdi>
-              </span>
-              <StatusIndicator
-                :severity="hop.severity"
-                :label="hop.status"
-              />
-            </span>
-          </li>
-        </ol>
-      </section>
+        <div class="-mx-(--spacing-md) lg:hidden">
+          <TopologyDiagram
+            :levels="levels"
+            orientation="vertical"
+            :aria-labelledby="pathId"
+            data-testid="edge-error-page__path-stacked"
+          />
+        </div>
+      </div>
 
       <div class="grid gap-(--spacing-lg) md:grid-cols-2">
         <section class="flex flex-col gap-(--spacing-xs)">
@@ -376,7 +377,7 @@ Each variant is the same screen in another state: `get_block("state/edge-error-p
               format="utc"
             />
           </KeyValueList.Item>
-          <KeyValueList.Item label="Edge location">{{ location }}</KeyValueList.Item>
+          <KeyValueList.Item label="Azion location">{{ location }}</KeyValueList.Item>
           <KeyValueList.Item label="Host">
             <bdi>{{ host }}</bdi>
           </KeyValueList.Item>

@@ -7,10 +7,10 @@
     <FlowDiagram.Node>You</FlowDiagram.Node>
     <FlowDiagram.Node>
       <span class="flex flex-col">
-        <span>Azion edge</span>
+        <span>Azion</span>
         <span class="text-body-xs text-(--text-muted)">IAD</span>
       </span>
     </FlowDiagram.Node>
-    <FlowDiagram.Node>Origin</FlowDiagram.Node>
+    <FlowDiagram.Node>Application</FlowDiagram.Node>
   </FlowDiagram>
 </template>

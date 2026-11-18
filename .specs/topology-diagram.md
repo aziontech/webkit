@@ -3,11 +3,11 @@ name: topology-diagram
 category: data
 structure: monolithic
 status: implemented
-spec_version: 11
+spec_version: 12
 template: 2
-checksum: 0d202424d530b2f61d55441be363d6611efce9301c755113be9402e3e9316742
+checksum: 19c87e7ac42b52802660cf8720d356fb95429c3ffeb9afc83de90a620dab8b40
 created: 2026-11-11
-last_updated: 2026-11-17
+last_updated: 2026-11-18
 ---
 
 # TopologyDiagram — Component Spec
@@ -20,6 +20,7 @@ The deployment topology of a resource as a left-to-right diagram: each column is
 
 - The topology tab of a project, service or workload: what serves its traffic, in order, and what is still unbound.
 - A review before a deploy where binding or removing a resource is staged on the diagram.
+- A short linear path whose hops carry a status, such as the request path You → Azion → Application on `state/edge-error-page`: one node per level, side by side on a wide screen and `orientation="vertical"` on a phone.
 
 ## When NOT to use
 
@@ -124,13 +125,14 @@ The deployment topology of a resource as a left-to-right diagram: each column is
 
 ## Props
 
-| Prop        | Type                     | Default | Required | JSDoc                                                                                  |
-| ----------- | ------------------------ | ------- | -------- | -------------------------------------------------------------------------------------- |
-| `levels`    | `TopologyDiagramLevel[]` | `[]`    | false    | Columns of the diagram, from the entry point to the last dependency.                   |
-| `loading`   | `boolean`                | `false` | false    | Shows placeholder cards while the topology loads.                                      |
-| `ariaLabel` | `string`                 | `''`    | false    | Accessible name of the diagram. Empty uses the locale catalog (`Deployment topology`). |
+| Prop          | Type                         | Default        | Required | JSDoc                                                                                      |
+| ------------- | ---------------------------- | -------------- | -------- | ------------------------------------------------------------------------------------------ |
+| `levels`      | `TopologyDiagramLevel[]`     | `[]`           | false    | Columns of the diagram, from the entry point to the last dependency.                       |
+| `loading`     | `boolean`                    | `false`        | false    | Shows placeholder cards while the topology loads.                                          |
+| `orientation` | `TopologyDiagramOrientation` | `'horizontal'` | false    | Direction the levels run: side by side, or stacked from top to bottom for a narrow screen. |
+| `ariaLabel`   | `string`                     | `''`           | false    | Accessible name of the diagram. Empty uses the locale catalog (`Deployment topology`).     |
 
-Types: `TopologyDiagramLevel = { id: string; label?: string; nodes: TopologyDiagramNodeData[] }`; `TopologyDiagramNodeData = { id: string; type?: string; icon?: string; name?: string; status?: string; severity?: TopologyDiagramNodeSeverity; dashed?: boolean; message?: string; fields?: TopologyDiagramNodeField[]; href?: string; terminal?: boolean; bindable?: boolean; bindOptions?: TopologyDiagramBindOption[]; boundValue?: string; removable?: boolean }`; `TopologyDiagramNodeField = { label: string; value: string; href?: string; copyable?: boolean }`; `TopologyDiagramBindOption = { value: string; label: string }`; `TopologyDiagramNodeSeverity = 'success' | 'info' | 'warning' | 'danger' | 'neutral'`. `type` is the resource type shown in the node header (`Policy`).
+Types: `TopologyDiagramLevel = { id: string; label?: string; nodes: TopologyDiagramNodeData[] }`; `TopologyDiagramNodeData = { id: string; type?: string; icon?: string; name?: string; status?: string; severity?: TopologyDiagramNodeSeverity; dashed?: boolean; message?: string; fields?: TopologyDiagramNodeField[]; href?: string; terminal?: boolean; bindable?: boolean; bindOptions?: TopologyDiagramBindOption[]; boundValue?: string; removable?: boolean }`; `TopologyDiagramNodeField = { label: string; value: string; href?: string; copyable?: boolean }`; `TopologyDiagramBindOption = { value: string; label: string }`; `TopologyDiagramNodeSeverity = 'success' | 'info' | 'warning' | 'danger' | 'neutral'`; `TopologyDiagramOrientation = 'horizontal' | 'vertical'`. `type` is the resource type shown in the node header (`Policy`).
 
 ## v-model
 
@@ -153,6 +155,7 @@ Types: `TopologyDiagramLevel = { id: string; label?: string; nodes: TopologyDiag
 
 ## States
 
+- Orientation: `data-orientation` mirrors `orientation` on the root, the column list and each column. `horizontal` (default) lays the levels out as columns of the same width (`flex-1`, at least `--size-56`) joined by the measured connectors. `vertical` stacks the levels top to bottom at full width, draws a short dashed `--accent` line between consecutive levels instead of the measured connectors, and hides the side ports; the nodes, their statuses and their open bodies are the same in both. A level with one node per level gives every node the same width in either direction, and nodes with the same parts (type, status, name) share one height.
 - Root: `data-loading` and `aria-busy` while `loading`; empty when `levels` is empty, rendered as the package `EmptyState` (small) unless the `empty` slot replaces it.
 - Node card: `data-state` `open` | `closed`; `data-dashed` for a staged, unbound or pending node.
 - Pending (internal, per node): picking an option other than `boundValue` holds it on the node with `data-pending` and the dashed outline; the identity row shows the picked label and the status tag reads `Pending` (warning). The action area swaps Remove for **Apply** (`az az-check`, primary, `Apply {kind}`) and **Cancel** (`az az-x`, `Cancel`). Apply emits `bind` and clears it; the node is controlled, so it then shows the `name` and `boundValue` its `levels` entry carries, and the app writes the applied value back in its `bind` handler (and clears it in `remove`) or the card returns to the previous binding; Cancel or `Esc` in the action area drops it without an event; picking the current value again clears it; Create emits `create` and clears it.
@@ -220,14 +223,14 @@ Types: `TopologyDiagramLevel = { id: string; label?: string; nodes: TopologyDiag
 
 ## Responsive
 
-- Container queries: none; each column keeps `min-w-(--size-56)` and grows to share the width.
+- Container queries: none; each column keeps `min-w-(--size-56)` and grows to share the width. A page that must not scroll the diagram on a phone renders it with `orientation="vertical"` below its breakpoint (two instances, the hidden one `display: none`), as `state/edge-error-page` does.
 - Narrow (≤ 640 px or a narrow container): the diagram scrolls inline in its own focusable area; the page does not.
 - Touch: header buttons are full-width rows; bind, remove, apply, cancel and copy are small icon buttons with tooltips that also work on focus.
 - Reflow: the diagram is a two-dimensional figure, an accepted exception to 1.4.10 inside its own scroll area.
 
 ## Performance
 
-- Bundle budget: 27.75 KB gzip for `./topology-diagram` (it carries `dropdown-menu`, `tooltip`, `copy-button` and `empty-state`) in `.size-limit.json`.
+- Bundle budget: 28.1 KB gzip for `./topology-diagram` (it carries `dropdown-menu`, `tooltip`, `copy-button` and `empty-state`) in `.size-limit.json`.
 - Runtime budget: connectors re-measure on resize and DOM mutations; a 7-column, 10-node topology measures in one frame.
 - Heavy parts: none; no node-graph library.
 
@@ -237,11 +240,13 @@ Types: `TopologyDiagramLevel = { id: string; label?: string; nodes: TopologyDiag
 - Binding — justified: staging bind, remove and create needs state across interactions.
 - Loading — the `loading` prop.
 - Empty — the empty state and the `empty` slot.
+- Orientations — justified: `orientation` is a declared prop whose two values change the layout; one short linear path drawn `horizontal` and `vertical`.
 
 ## Decisions and open questions
 
 - **Open glyph on linked names (2026-11-12).** A node with `href` renders its name as a link followed by `az az-external-link`, as the design sample's `ResourceLink` and WebKit's `TableCellLink` do for every resource name, internal or not; the link keeps same-tab navigation and the glyph is `aria-hidden`. No `external` flag: the sample never draws a linked name without it.
 - **A bind is confirmed before it applies (2026-11-17, v6).** Picking from the bind menu used to emit `bind` at once, so a stray pick staged a change. Following Cloudscape's inline edit, the pick is pending on the node and Apply (check) or Cancel (x) replace Remove until one is chosen; only Apply emits `bind`, with the same payload. This changes when `bind` fires, so it rides the v6 break. The pending state is internal: no new prop, event or slot.
+- **A vertical orientation (2026-11-18, RV-Z2).** The edge error page draws its request path with TopologyDiagram's richer node cards, and on a phone the path must stack instead of scrolling. `orientation: 'horizontal' | 'vertical'` is the smallest addition: the measured connectors stay horizontal-only, and the vertical layout joins the levels with a short dashed line, like the stacked steps the page drew before. No responsive value, so the closed `orientation` set needs no extra.
 - **The Domains `+` stays in the `actions` slot.** A battery-2 builder left it out though the slot already existed; the fix is discoverability (Best practices, Usage, the Default example), not a new prop.
 
 ## Constraints — DO NOT
