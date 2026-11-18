@@ -1,8 +1,14 @@
 <script setup lang="ts">
-  import { computed, provide, ref } from 'vue'
+  import { computed, onBeforeUnmount, onMounted, provide, ref, watch } from 'vue'
 
   import type { TutorialPanelFlatStep, TutorialPanelTutorial } from '../injection-key'
   import { TutorialPanelInjectionKey } from '../injection-key'
+  import {
+    claimOpenStep,
+    claimOpenStepIfFree,
+    openStepOwner,
+    releaseOpenStep
+  } from '../lib/open-step-owner'
 
   defineOptions({
     name: 'TutorialPanelProvider',
@@ -38,6 +44,7 @@
   const dismissed = ref(false)
   const focusRequest = ref(0)
   const hotspots = ref<Record<string, number>>({})
+  const ownerId = Symbol('TutorialPanelProvider')
 
   const tutorials = computed<TutorialPanelTutorial[]>(() => props.tutorials)
 
@@ -63,6 +70,7 @@
   )
 
   const move = (index: number) => {
+    claimOpenStep(ownerId)
     dismissed.value = false
     step.value = index
     focusRequest.value += 1
@@ -79,6 +87,7 @@
     activeKey.value = null
     step.value = 0
     dismissed.value = false
+    releaseOpenStep(ownerId)
     if (id) emit('exit', event, id)
   }
 
@@ -98,13 +107,27 @@
     if (currentStep.value > 0) move(currentStep.value - 1)
   }
 
+  onMounted(() => {
+    if (activeTutorial.value) claimOpenStepIfFree(ownerId)
+  })
+
+  watch(
+    () => activeTutorial.value?.id,
+    (id) => {
+      if (id) claimOpenStepIfFree(ownerId)
+      else releaseOpenStep(ownerId)
+    }
+  )
+
+  onBeforeUnmount(() => releaseOpenStep(ownerId))
+
   provide(TutorialPanelInjectionKey, {
     tutorials,
     active: activeTutorial,
     steps,
     step: currentStep,
     finished,
-    dismissed: computed(() => dismissed.value),
+    dismissed: computed(() => dismissed.value || openStepOwner.value !== ownerId),
     focusRequest: computed(() => focusRequest.value),
     start,
     exit,

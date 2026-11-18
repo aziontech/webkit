@@ -1,9 +1,9 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
-  import Hotspot from '@aziontech/webkit/hotspot'
   import Input from '@aziontech/webkit/input'
   import PageHeader from '@aziontech/webkit/page-header'
   import TutorialPanel from '@aziontech/webkit/tutorial-panel'
+  import TutorialPanelHotspot from '@aziontech/webkit/tutorial-panel-hotspot'
   import { ref } from 'vue'
 
   const tutorials = [
@@ -79,7 +79,7 @@
         />
         <div class="flex flex-wrap items-center gap-(--spacing-xs)">
           <div class="min-w-0 flex-1">
-            <Hotspot
+            <TutorialPanelHotspot
               hotspot-id="search"
               class="w-full"
             >
@@ -88,15 +88,15 @@
                 aria-label="Search services"
                 placeholder="Search services"
               />
-            </Hotspot>
+            </TutorialPanelHotspot>
           </div>
-          <Hotspot hotspot-id="new-service">
+          <TutorialPanelHotspot hotspot-id="new-service">
             <Button
               label="New service"
               icon="az az-plus"
               size="medium"
             />
-          </Hotspot>
+          </TutorialPanelHotspot>
         </div>
         <section
           aria-labelledby="new-service-title"
@@ -108,15 +108,15 @@
           >
             New service
           </h2>
-          <Hotspot hotspot-id="service-name">
+          <TutorialPanelHotspot hotspot-id="service-name">
             <Input
               v-model="name"
               aria-label="Service name"
               placeholder="storefront-api"
             />
-          </Hotspot>
+          </TutorialPanelHotspot>
           <div class="flex justify-end">
-            <Hotspot
+            <TutorialPanelHotspot
               hotspot-id="deploy"
               side="start"
             >
@@ -125,7 +125,7 @@
                 variant="primary"
                 size="medium"
               />
-            </Hotspot>
+            </TutorialPanelHotspot>
           </div>
         </section>
       </main>

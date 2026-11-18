@@ -1,6 +1,11 @@
 {
   "version": 6,
   "components": {
+    "hotspot": {
+      "to": "tutorial-panel-hotspot",
+      "from": "Hotspot",
+      "binding": "TutorialPanelHotspot"
+    },
     "doc-pagination": {
       "to": "doc-previous-next",
       "from": "DocPagination",
@@ -719,7 +724,7 @@
     "sidebar-group": "SidebarMenu with a SidebarMenu.Group per section (label, the rows as SidebarMenu.Item)",
     "doc-tooltip": "HoverCard + HoverCard.Trigger + HoverCard.Content (DocMarkdown renders the MDX <Tooltip> tag as one)",
     "mini-button": "Link (label, href, icon) for a text link that navigates; Button variant=\"link\" for a text action without href",
-    "help-panel-tutorial": "TutorialPanel (with TutorialPanel.Provider and Hotspot) owns tutorials; HelpPanel has no tutorial mode",
+    "help-panel-tutorial": "TutorialPanel (with TutorialPanel.Provider and TutorialPanelHotspot) owns tutorials; HelpPanel has no tutorial mode",
     "help-panel-task": "TutorialPanel: give each tutorial its tasks and steps as data",
     "table-applied-filters": "FilterMenu.ChipGroup with no fields in the DataTable filters slot (menu type); the property kind shows its own tokens",
     "table-column-selector": "CollectionPreferences with no columns in the DataTable toolbar (:sections=\"['columns']\" for columns only)",

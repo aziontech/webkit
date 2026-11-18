@@ -229,7 +229,7 @@ export const DOMAIN_PARTS = {
   ],
   toast: ['action'],
   'transfer-list': ['controls', 'source', 'target'],
-  'tutorial-panel': ['provider'],
+  'tutorial-panel': ['hotspot', 'provider'],
   wizard: ['step']
 }
 

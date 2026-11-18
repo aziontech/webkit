@@ -71,30 +71,31 @@ the paths it moved onto a name a v3 wrapper also used (`button`, `card`, `dialog
 
 ## 2. Renamed components
 
-| v5 import                               | v6 import                             | v5 component         | v6 component      |
-| --------------------------------------- | ------------------------------------- | -------------------- | ----------------- |
-| `@aziontech/webkit/paginator`           | `@aziontech/webkit/pagination`        | `Paginator`          | `Pagination`      |
-| `@aziontech/webkit/tab-view`            | `@aziontech/webkit/tabs`              | `TabView`            | `Tabs`            |
-| `@aziontech/webkit/card-box`            | `@aziontech/webkit/card`              | `CardBox`            | `Card`            |
-| `@aziontech/webkit/message`             | `@aziontech/webkit/alert`             | `Message`            | `Alert`           |
-| `@aziontech/webkit/divider`             | `@aziontech/webkit/separator`         | `Divider`            | `Separator`       |
-| `@aziontech/webkit/progress-bar`        | `@aziontech/webkit/progress`          | `ProgressBar`        | `Progress`        |
-| `@aziontech/webkit/command-menu`        | `@aziontech/webkit/command`           | `CommandMenu`        | `Command`         |
-| `@aziontech/webkit/dropdown`            | `@aziontech/webkit/dropdown-menu`     | `Dropdown`           | `DropdownMenu`    |
-| `@aziontech/webkit/input-text`          | `@aziontech/webkit/input`             | `InputText`          | `Input`           |
-| `@aziontech/webkit/input-number`        | `@aziontech/webkit/number-input`      | `InputNumber`        | `NumberInput`     |
-| `@aziontech/webkit/input-password`      | `@aziontech/webkit/password-input`    | `InputPassword`      | `PasswordInput`   |
-| `@aziontech/webkit/box-grid-selection`  | `@aziontech/webkit/radio-group`       | `BoxGridSelection`   | `RadioGroup`      |
-| `@aziontech/webkit/calendar`            | `@aziontech/webkit/date-picker`       | `Calendar`           | `DatePicker`      |
-| `@aziontech/webkit/pick-list`           | `@aziontech/webkit/transfer-list`     | `PickList`           | `TransferList`    |
-| `@aziontech/webkit/radio-cards`         | `@aziontech/webkit/radio-group`       | `RadioCards`         | `RadioGroup`      |
-| `@aziontech/webkit/radio-button`        | `@aziontech/webkit/radio-group-item`  | `RadioButton`        | `RadioGroup.Item` |
-| `@aziontech/webkit/resizable-panel`     | `@aziontech/webkit/resizable`         | `ResizablePanel`     | `Resizable`       |
-| `@aziontech/webkit/segmented-button`    | `@aziontech/webkit/toggle-group`      | `SegmentedButton`    | `ToggleGroup`     |
-| `@aziontech/webkit/doc-pagination`      | `@aziontech/webkit/doc-previous-next` | `DocPagination`      | `DocPreviousNext` |
-| `@aziontech/webkit/cards`               | `@aziontech/webkit/card-list`         | `Cards`              | `CardList`        |
-| `@aziontech/webkit/menu`                | `@aziontech/webkit/sidebar-menu`      | `Menu`               | `SidebarMenu`     |
-| `@aziontech/webkit/action-confirmation` | `@aziontech/webkit/tool-approval`     | `ActionConfirmation` | `ToolApproval`    |
+| v5 import                               | v6 import                                  | v5 component         | v6 component           |
+| --------------------------------------- | ------------------------------------------ | -------------------- | ---------------------- |
+| `@aziontech/webkit/paginator`           | `@aziontech/webkit/pagination`             | `Paginator`          | `Pagination`           |
+| `@aziontech/webkit/tab-view`            | `@aziontech/webkit/tabs`                   | `TabView`            | `Tabs`                 |
+| `@aziontech/webkit/card-box`            | `@aziontech/webkit/card`                   | `CardBox`            | `Card`                 |
+| `@aziontech/webkit/message`             | `@aziontech/webkit/alert`                  | `Message`            | `Alert`                |
+| `@aziontech/webkit/divider`             | `@aziontech/webkit/separator`              | `Divider`            | `Separator`            |
+| `@aziontech/webkit/progress-bar`        | `@aziontech/webkit/progress`               | `ProgressBar`        | `Progress`             |
+| `@aziontech/webkit/command-menu`        | `@aziontech/webkit/command`                | `CommandMenu`        | `Command`              |
+| `@aziontech/webkit/dropdown`            | `@aziontech/webkit/dropdown-menu`          | `Dropdown`           | `DropdownMenu`         |
+| `@aziontech/webkit/input-text`          | `@aziontech/webkit/input`                  | `InputText`          | `Input`                |
+| `@aziontech/webkit/input-number`        | `@aziontech/webkit/number-input`           | `InputNumber`        | `NumberInput`          |
+| `@aziontech/webkit/input-password`      | `@aziontech/webkit/password-input`         | `InputPassword`      | `PasswordInput`        |
+| `@aziontech/webkit/box-grid-selection`  | `@aziontech/webkit/radio-group`            | `BoxGridSelection`   | `RadioGroup`           |
+| `@aziontech/webkit/calendar`            | `@aziontech/webkit/date-picker`            | `Calendar`           | `DatePicker`           |
+| `@aziontech/webkit/pick-list`           | `@aziontech/webkit/transfer-list`          | `PickList`           | `TransferList`         |
+| `@aziontech/webkit/radio-cards`         | `@aziontech/webkit/radio-group`            | `RadioCards`         | `RadioGroup`           |
+| `@aziontech/webkit/radio-button`        | `@aziontech/webkit/radio-group-item`       | `RadioButton`        | `RadioGroup.Item`      |
+| `@aziontech/webkit/resizable-panel`     | `@aziontech/webkit/resizable`              | `ResizablePanel`     | `Resizable`            |
+| `@aziontech/webkit/segmented-button`    | `@aziontech/webkit/toggle-group`           | `SegmentedButton`    | `ToggleGroup`          |
+| `@aziontech/webkit/doc-pagination`      | `@aziontech/webkit/doc-previous-next`      | `DocPagination`      | `DocPreviousNext`      |
+| `@aziontech/webkit/cards`               | `@aziontech/webkit/card-list`              | `Cards`              | `CardList`             |
+| `@aziontech/webkit/menu`                | `@aziontech/webkit/sidebar-menu`           | `Menu`               | `SidebarMenu`          |
+| `@aziontech/webkit/action-confirmation` | `@aziontech/webkit/tool-approval`          | `ActionConfirmation` | `ToolApproval`         |
+| `@aziontech/webkit/hotspot`             | `@aziontech/webkit/tutorial-panel-hotspot` | `Hotspot`            | `TutorialPanelHotspot` |
 
 ### Naming standard: renamed components
 
@@ -748,7 +749,7 @@ New standalone paths: `tabs-list`, `tabs-trigger`, `tabs-content`, `dialog-heade
 | `breadcrumb-item`                                                                                               | `data-current`                                                                                      | `data-active`                                                                                                                          |
 | `sidebar-menu-item`                                                                                             | `data-selected`                                                                                     | `data-active`                                                                                                                          |
 | `pagination-button`                                                                                             | `data-selected`                                                                                     | `data-active`                                                                                                                          |
-| `hotspot`                                                                                                       | `data-active` (marker shown) / `data-current` (current step)                                        | `data-marker` / `data-active`                                                                                                          |
+| `tutorial-panel-hotspot`                                                                                        | `data-active` (marker shown) / `data-current` (current step)                                        | `data-marker` / `data-active`                                                                                                          |
 | `navigation-menu` (root, list, icon, content, popup, backdrop)                                                  | `data-open` / `data-closed`                                                                         | `data-state="open\|closed"`                                                                                                            |
 | `navigation-menu-positioner`, `navigation-menu-arrow`                                                           | `data-side="left\|right"`                                                                           | `data-side="start\|end"`                                                                                                               |
 | `drawer-content`                                                                                                | `data-side="left\|right"`                                                                           | `data-side="start\|end"`                                                                                                               |
@@ -1439,7 +1440,7 @@ Inner parts use one word per concept:
 
 | Component                                                                                     | v5                                                   | v6                                                               |
 | --------------------------------------------------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------------------- |
-| `Hotspot`                                                                                     | `__dismiss`                                          | `__close`                                                        |
+| `TutorialPanelHotspot`                                                                        | `__dismiss`                                          | `__close`                                                        |
 | `Chart`, `BarList`, `DonutChart`, `GaugeChart`, `MapChart`, `StatTile`, `Tracker`, `CardList` | `__skeleton`                                         | `__loading`                                                      |
 | `StatusIndicator`                                                                             | `__spinner`                                          | `__loading`                                                      |
 | `TutorialPanel`, `CommandInput`, `FilterMenu`                                                 | `__back`                                             | `__previous`                                                     |
@@ -1890,6 +1891,18 @@ Two behaviour changes need a hand edit:
 - `ToggleGroup`: a disabled option no longer shows the lock by itself; set `locked: true` on the
   options a plan or a permission blocks.
 
+### `Hotspot` is a part of `TutorialPanel`
+
+`Hotspot` (`@aziontech/webkit/hotspot`, from the 6.0 previews) is `TutorialPanelHotspot`
+(`@aziontech/webkit/tutorial-panel-hotspot`): it only works inside `TutorialPanel.Provider`, so it
+lives with it. It is a companion part, imported on its own (no `TutorialPanel.Hotspot`). The codemod
+rewrites the import and the tag. Its type is `TutorialPanelHotspotSide`, its test id
+`tutorial-panel-hotspot`, and its locale keys moved into the `tutorialPanel` group
+(`hotspot.label` → `tutorialPanel.hotspotLabel`, `hotspot.stepOf` → `tutorialPanel.hotspotStepOf`,
+`hotspot.previous` / `next` / `finish` → `tutorialPanel.hotspotPrevious` / `hotspotNext` /
+`hotspotFinish`). Only one tutorial step is open on a page at a time: when a second
+`TutorialPanel.Provider` starts a tutorial, the first one's open step closes and its marker stays.
+
 ### Actions, navigation and overlay: one component per job
 
 The codemod rewrites the renamed paths and bindings and prints `MANUAL` for a removed one.
@@ -1900,7 +1913,7 @@ The codemod rewrites the renamed paths and bindings and prints `MANUAL` for a re
   `SidebarMenu.Item` drops `kind="group"`: put the title on `SidebarMenu.Group label`.
 - `HelpPanel.Tutorial` and `HelpPanel.Task` are removed (`help-panel-tutorial`, `help-panel-task`,
   the `HelpPanelTaskStatus` type): a tutorial is `TutorialPanel` inside `TutorialPanel.Provider`,
-  with its tasks and steps as data and a `Hotspot` on each real control.
+  with its tasks and steps as data and a `TutorialPanelHotspot` on each real control.
 - `action-confirmation` → `tool-approval` (`ActionConfirmation` → `ToolApproval`, types
   `ToolApprovalState`, `ToolApprovalKind`, test id `tool-approval`, locale key `toolApproval.*`):
   it is only an agent's request to run a tool; a person confirming their own action uses `ConfirmDialog`.

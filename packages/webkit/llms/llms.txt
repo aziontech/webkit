@@ -198,7 +198,6 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [Eyebrow](components/eyebrow.md): Overline is the short uppercase label set above a headline to name the section, panel or group it opens (the "eyebrow").
 - [FilePreview](components/file-preview.md): The preview of one stored file in a storage or object browser: a header with the file's glyph, name, type and size, a Download action, and a body that shows the file the way it can be read.
 - [HelpPanel](components/help-panel.md): The content of a help side region: a topic's title, a few sections of short guidance, and the "Learn more" links that leave for the documentation.
-- [Hotspot](components/hotspot.md): Marks a real control as a step of a tutorial.
 - [Illustration](components/illustration.md): Renders an **official product illustration** — one of the scenes drawn in the Assets library in Figma and exported as an SVG that ships with this package.
 - [IntegrationCard](components/integration-card.md): Use IntegrationCard for one tile of a catalog of integrations, extensions or plugins; for a bordered box of related content use Card, and for a collection of resource records shown as cards use CardList.
 - [Item](components/item.md): Use Item rows for a short list of mixed rows (title, description, actions) that do not share columns; read-only label/value facts about one resource are KeyValueList, records compared across columns are a Table, and w…

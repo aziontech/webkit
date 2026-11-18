@@ -658,13 +658,6 @@ export const es: Messages = {
     search: 'Buscar',
     noMatch: 'No se encontraron resultados.'
   },
-  hotspot: {
-    label: 'Paso del tutorial: {title}',
-    stepOf: 'Paso {current} de {total}',
-    previous: 'Anterior',
-    next: 'Siguiente',
-    finish: 'Finalizar'
-  },
   keyValueList: {
     notSet: 'Sin definir'
   },
@@ -1183,7 +1176,12 @@ export const es: Messages = {
     taskComplete: 'Completada',
     taskCurrent: 'Tarea actual',
     taskNotStarted: 'Sin iniciar',
-    progress: '{complete} de {total} completadas'
+    progress: '{complete} de {total} completadas',
+    hotspotLabel: 'Paso del tutorial: {title}',
+    hotspotStepOf: 'Paso {current} de {total}',
+    hotspotPrevious: 'Anterior',
+    hotspotNext: 'Siguiente',
+    hotspotFinish: 'Finalizar'
   },
   wizard: {
     stepOf: 'Paso {step} de {total}',
