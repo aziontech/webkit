@@ -21,7 +21,7 @@
  "bestPractices": [
   "`modelValue` is committed only on Apply; read the final value from `update:modelValue` or the second argument of `apply`, and set `:show-apply=\"false\"` when every edit should commit at once.",
   "Bind a `Date` or `null`.",
-  "Bound the selectable days with `min` and `max` instead of validating after commit.",
+  "Bound the selectable days with `min` and `max` instead of validating after commit. Unlike `date-range-picker` (five years back to the end of today by default), DatePicker is unbounded by default: a single date is often in the future (a token expiry, an alert schedule), so a page sets `min` to today there, and sets `max` only when the date must be in the past.",
   "Send `toISOString()` (or the ISO date `2026-11-15`) to the server, never the printed label."
  ]
 }

@@ -25,7 +25,6 @@
   import ToggleGroup from '../../action/toggle-group/toggle-group.vue'
   import {
     asRange,
-    cityName,
     formatValueLabel,
     localTimezone,
     startOfDay,
@@ -47,9 +46,11 @@
   import Switch from '../switch/switch.vue'
   import {
     DATE_RANGE_UNITS,
+    type DateRangeDuration,
     type DateRangeRefreshUnit,
     type DateRangeUnit,
     type DateRangeValue,
+    DEFAULT_HISTORY_YEARS,
     DEFAULT_RELATIVE_OPTIONS,
     endsNow,
     fromWallClock,
@@ -58,12 +59,15 @@
     type RelativeOption,
     resolveDateRange,
     sameRelative,
+    shiftByUnit,
+    shiftWallClock,
     stepDateRange,
     toWallClock,
     zoneOffsetLabel
   } from './date-range'
 
   export type {
+    DateRangeDuration,
     DateRangeRefreshUnit,
     DateRangeUnit,
     DateRangeValue,
@@ -73,6 +77,7 @@
   export type DateRangePickerSize = 'small' | 'medium' | 'large'
   type RangeSelectorMode = 'default' | 'relative-only' | 'absolute-only'
   type PanelMode = 'relative' | 'absolute'
+  type RelativeView = 'quick' | 'custom'
 
   defineOptions({
     name: 'DateRangePicker',
@@ -84,7 +89,7 @@
     relativeOptions?: RelativeOption[]
     /** Zones offered by the selector. Empty falls back to the zones `Intl` supports. */
     timeZones?: string[]
-    /** Shows the time zone selector in the panel. Off, the panel names the zone in a read-only line. */
+    /** Shows the time zone selector in the panel. Off, the panel says nothing about the zone and the page states it. */
     showTimeZone?: boolean
     /** Shows the start and end time fields of an absolute range. Off, a range covers whole days (a report or billing period). */
     showTime?: boolean
@@ -94,10 +99,12 @@
     showRefresh?: boolean
     /** Which kinds of range the panel offers. */
     rangeSelectorMode?: RangeSelectorMode
-    /** Earliest instant an absolute range may start at. */
+    /** Earliest selectable instant. Unset, the start of the day five years before today. */
     min?: Date
-    /** Latest instant an absolute range may end at. */
+    /** Latest selectable instant. Unset, the end of today; pass a later date to allow future dates. */
     max?: Date
+    /** Longest range a person may pick, for example 90 days. Unset, any length between min and max. */
+    maxDuration?: DateRangeDuration
     /** Reference clock for relative ranges and stepping. Unset uses the nearest ConfigProvider now, then the real clock. */
     now?: Date
     /** Trigger text with no range. Empty uses the locale catalog. */
@@ -123,6 +130,7 @@
     rangeSelectorMode: 'default',
     min: undefined,
     max: undefined,
+    maxDuration: undefined,
     now: undefined,
     placeholder: '',
     ariaLabel: '',
@@ -172,6 +180,7 @@
   const refreshLabelId = `${uid}-refresh-label`
   const untilNowLabelId = `${uid}-until-now`
   const refreshId = `${uid}-refresh`
+  const customRangeId = `${uid}-custom-range`
 
   const mounted = ref(false)
   onMounted(() => {
@@ -212,6 +221,43 @@
     option.label || relativeText(option.amount, option.unit, option.snap)
 
   const resolveOptions = computed(() => ({ timeZone: zone.value, weekStart: 0 }))
+
+  const minBound = (): Date => {
+    if (props.min) return props.min
+    const today = toWallClock(clock(), zone.value)
+    return fromWallClock(
+      new Date(today.getFullYear() - DEFAULT_HISTORY_YEARS, today.getMonth(), today.getDate()),
+      zone.value
+    )
+  }
+
+  const maxBound = (): Date => {
+    if (props.max) return props.max
+    const today = toWallClock(clock(), zone.value)
+    return fromWallClock(
+      new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59, 999),
+      zone.value
+    )
+  }
+
+  const durationText = (duration: DateRangeDuration): string =>
+    new Intl.NumberFormat(locale.value, {
+      style: 'unit',
+      unit: duration.unit,
+      unitDisplay: 'long'
+    }).format(duration.amount)
+
+  const relativeFits = (amount: number, unit: DateRangeUnit, snap = false): boolean => {
+    const now = clock()
+    const range = resolveDateRange(
+      { type: 'relative', amount, unit, snap },
+      now,
+      resolveOptions.value
+    )
+    if (!range || range.start.getTime() < minBound().getTime()) return false
+    const limit = props.maxDuration
+    return !limit || range.start.getTime() >= shiftByUnit(now, -limit.amount, limit.unit).getTime()
+  }
 
   const unitKeys = {
     second: 'dateRangePicker.unitSecond',
@@ -279,6 +325,10 @@
     return { text: formatValueLabel(wall, 'range', '', locale.value), zone: offset }
   })
 
+  const availableOptions = computed<RelativeOption[]>(() =>
+    props.relativeOptions.filter((option) => relativeFits(option.amount, option.unit, option.snap))
+  )
+
   const triggerText = computed<string>(() =>
     [triggerParts.value.text, triggerParts.value.zone].filter(Boolean).join(' ')
   )
@@ -290,6 +340,8 @@
   const panelEl = ref<HTMLElement | null>(null)
 
   const panelMode = ref<PanelMode>('relative')
+  const relativeView = ref<RelativeView>('quick')
+  const quickKey = ref<string>('')
   const draftKey = ref<string>('')
   const customAmount = ref<string>('1')
   const customUnit = ref<DateRangeUnit>('hour')
@@ -313,7 +365,9 @@
 
   const CUSTOM = '__custom'
 
-  const quickRows = computed<number>(() => Math.max(1, Math.ceil(props.relativeOptions.length / 2)))
+  const quickRows = computed<number>(() =>
+    Math.max(1, Math.ceil(availableOptions.value.length / 2))
+  )
 
   const resetRefresh = (): void => {
     draftRefresh.value = refreshInterval.value > 0 ? refreshInterval.value : 0
@@ -325,17 +379,18 @@
     showError.value = false
     draftUntilNow.value = value?.type === 'since'
     resetRefresh()
+    relativeView.value = 'quick'
     if (offersRelative.value && (!value || value.type === 'relative' || !offersAbsolute.value)) {
       panelMode.value = 'relative'
       const option = value
-        ? props.relativeOptions.find((item) => sameRelative(value, item))
-        : props.relativeOptions[0]
+        ? availableOptions.value.find((item) => sameRelative(value, item))
+        : availableOptions.value[0]
       draftKey.value = option ? option.key : CUSTOM
       customAmount.value = String(value?.type === 'relative' ? value.amount : (option?.amount ?? 1))
       customUnit.value = value?.type === 'relative' ? value.unit : (option?.unit ?? 'hour')
     } else {
       panelMode.value = offersAbsolute.value ? 'absolute' : 'relative'
-      const first = props.relativeOptions[0]
+      const first = availableOptions.value[0]
       draftKey.value = first?.key ?? CUSTOM
       customAmount.value = String(first?.amount ?? 1)
       customUnit.value = first?.unit ?? 'hour'
@@ -368,6 +423,32 @@
     draftKey.value = CUSTOM
   }
 
+  const focusIn = (selector: string): void => {
+    nextTick(() => panelEl.value?.querySelector<HTMLElement>(selector)?.focus())
+  }
+
+  const showCustom = (): void => {
+    quickKey.value = draftKey.value
+    draftKey.value = CUSTOM
+    relativeView.value = 'custom'
+    showError.value = false
+    focusIn(`#${CSS.escape(customAmountId)}`)
+  }
+
+  const showQuick = (): void => {
+    const option = availableOptions.value.find((item) => item.key === quickKey.value)
+    if (
+      option &&
+      String(option.amount) === customAmount.value &&
+      option.unit === customUnit.value
+    ) {
+      draftKey.value = option.key
+    }
+    relativeView.value = 'quick'
+    showError.value = false
+    focusIn(`#${CSS.escape(customRangeId)}`)
+  }
+
   const setOpen = (open: boolean): void => {
     if (open && isDisabled.value) return
     if (open === isOpen.value) return
@@ -391,8 +472,39 @@
     nextTick(focusTrigger)
   }
 
-  const minWall = computed(() => (props.min ? toWallClock(props.min, draftZone.value) : undefined))
-  const maxWall = computed(() => (props.max ? toWallClock(props.max, draftZone.value) : undefined))
+  const pickingEnd = computed<boolean>(
+    () => !draftUntilNow.value && Boolean(draftRange.value.start) && !draftRange.value.end
+  )
+
+  const minWall = computed<Date>(() => {
+    const floor = toWallClock(minBound(), draftZone.value)
+    const limit = props.maxDuration
+    if (!isOpen.value || !limit) return floor
+    const anchor = draftUntilNow.value
+      ? toWallClock(clock(), draftZone.value)
+      : pickingEnd.value && draftRange.value.start
+        ? shiftWallClock(startOfDay(draftRange.value.start), 1, 'day')
+        : null
+    if (!anchor) return floor
+    const reach = shiftWallClock(anchor, -limit.amount, limit.unit)
+    return reach > floor ? reach : floor
+  })
+
+  const maxWall = computed<Date>(() => {
+    const ceiling = toWallClock(maxBound(), draftZone.value)
+    const limit = props.maxDuration
+    const start = draftRange.value.start
+    if (!isOpen.value || !limit || !pickingEnd.value || !start) return ceiling
+    const reach = new Date(
+      shiftWallClock(startOfDay(start), limit.amount, limit.unit).getTime() - 1
+    )
+    return reach < ceiling ? reach : ceiling
+  })
+
+  const exceedsDuration = (startWall: Date, endWall: Date): boolean => {
+    const limit = props.maxDuration
+    return Boolean(limit && endWall > shiftWallClock(startWall, limit.amount, limit.unit))
+  }
 
   const parsedAmount = computed<number | null>(() => {
     const amount = Number(customAmount.value)
@@ -406,7 +518,7 @@
           ? { type: 'relative', amount: parsedAmount.value, unit: customUnit.value }
           : null
       }
-      const option = props.relativeOptions.find((item) => item.key === draftKey.value)
+      const option = availableOptions.value.find((item) => item.key === draftKey.value)
       if (!option) return null
       return option.snap
         ? {
@@ -432,43 +544,53 @@
     }
   })
 
+  const tooLongText = computed<string>(() =>
+    props.maxDuration
+      ? t('dateRangePicker.tooLong', { duration: durationText(props.maxDuration) })
+      : ''
+  )
+
   const rangeError = computed<string>(() => {
     if (panelMode.value === 'relative') {
-      return draftKey.value === CUSTOM && !parsedAmount.value
-        ? t('dateRangePicker.invalidAmount')
-        : ''
+      if (draftKey.value !== CUSTOM) return ''
+      if (!parsedAmount.value) return t('dateRangePicker.invalidAmount')
+      const now = clock()
+      const start = shiftByUnit(now, -parsedAmount.value, customUnit.value).getTime()
+      const limit = props.maxDuration
+      if (limit && start < shiftByUnit(now, -limit.amount, limit.unit).getTime()) {
+        return tooLongText.value
+      }
+      return start < minBound().getTime() ? t('dateRangePicker.outOfBounds') : ''
     }
     const value = draftValue.value
     if (value?.type === 'since') {
       const start = new Date(value.start).getTime()
       if (start >= clock().getTime()) return t('dateRangePicker.order')
-      return props.min && start < props.min.getTime() ? t('dateRangePicker.outOfBounds') : ''
+      if (start < minBound().getTime()) return t('dateRangePicker.outOfBounds')
+      const wallStart = draftRange.value.start
+      return wallStart && exceedsDuration(wallStart, toWallClock(clock(), draftZone.value))
+        ? tooLongText.value
+        : ''
     }
     if (!value || value.type !== 'absolute') return t('dateRangePicker.incomplete')
     const start = new Date(value.start).getTime()
     const end = new Date(value.end).getTime()
     if (end <= start) return t('dateRangePicker.order')
-    if ((props.min && start < props.min.getTime()) || (props.max && end > props.max.getTime())) {
+    if (start < minBound().getTime() || end > maxBound().getTime()) {
       return t('dateRangePicker.outOfBounds')
     }
-    return ''
+    const { start: wallStart, end: wallEnd } = draftRange.value
+    return wallStart && wallEnd && exceedsDuration(wallStart, wallEnd) ? tooLongText.value : ''
   })
 
   const draftError = computed<string>(() => rangeError.value)
-
-  const zoneNote = computed<string>(() => {
-    const offset = zoneOffsetLabel(draftZone.value, clock())
-    const city = cityName(draftZone.value)
-    return city === draftZone.value && !draftZone.value.includes('/')
-      ? offset
-      : `${offset} · ${city}`
-  })
 
   const visibleError = computed<string>(() => {
     if (showError.value) return draftError.value
     return panelMode.value === 'absolute' &&
       draftValue.value &&
-      rangeError.value === t('dateRangePicker.order')
+      (rangeError.value === t('dateRangePicker.order') ||
+        (tooLongText.value && rangeError.value === tooLongText.value))
       ? rangeError.value
       : ''
   })
@@ -497,9 +619,8 @@
   const canStepBack = computed<boolean>(() => {
     const range = resolvedNow.value
     if (!range || isDisabled.value) return false
-    if (!props.min) return true
     const span = range.end.getTime() - range.start.getTime()
-    return range.start.getTime() - span >= props.min.getTime()
+    return range.start.getTime() - span >= minBound().getTime()
   })
 
   const canStepForward = computed<boolean>(() => {
@@ -601,6 +722,7 @@
   const setPanelMode = (value: string | undefined): void => {
     if (value === 'relative' || value === 'absolute') {
       panelMode.value = value
+      relativeView.value = 'quick'
       showError.value = false
     }
   }
@@ -805,59 +927,101 @@
           <div
             v-if="panelMode === 'relative'"
             :data-size="size"
+            :data-view="relativeView"
             class="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain data-[size=small]:w-[calc(7*var(--size-8)_+_2*var(--spacing-sm))] data-[size=medium]:w-[calc(7*var(--size-9)_+_2*var(--spacing-sm))] data-[size=large]:w-[calc(7*var(--size-10)_+_2*var(--spacing-sm))] max-sm:w-full!"
             :data-testid="`${testId}__relative`"
           >
-            <fieldset
-              class="@container m-0 flex min-w-0 shrink-0 flex-col border-x-0 border-t-0 border-b border-solid border-(--border-default) px-(--spacing-2xs) py-(--spacing-xs)"
-              :data-testid="`${testId}__quick`"
-            >
-              <legend
-                :data-testid="`${testId}__legend`"
-                class="text-label-sm float-start w-full px-(--spacing-xs) py-(--spacing-2xs) text-(--text-muted)"
+            <template v-if="relativeView === 'quick'">
+              <fieldset
+                v-if="availableOptions.length"
+                class="@container m-0 flex min-w-0 shrink-0 flex-col border-0 px-(--spacing-2xs) pt-(--spacing-xs)"
+                :data-testid="`${testId}__quick`"
               >
-                {{ t('dateRangePicker.quickRanges') }}
-              </legend>
-              <div
-                :style="{ '--date-range-picker-quick-rows': quickRows }"
-                class="grid grid-cols-1 gap-(--spacing-2xs) @[15rem]:grid-flow-col @[15rem]:grid-cols-2 @[15rem]:grid-rows-[repeat(var(--date-range-picker-quick-rows),auto)]"
-              >
-                <label
-                  v-for="option in relativeOptions"
-                  :key="option.key"
-                  :data-selected="draftKey === option.key || null"
-                  :data-testid="`${testId}__option`"
-                  class="text-label-sm flex min-h-8 cursor-pointer items-center justify-between gap-(--spacing-xs) rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-(--ring-color) has-[:focus-visible]:ring-inset data-[selected]:bg-(--bg-selected) motion-reduce:transition-none pointer-coarse:min-h-11"
+                <legend
+                  :data-testid="`${testId}__legend`"
+                  class="text-label-sm float-start w-full px-(--spacing-xs) py-(--spacing-2xs) text-(--text-muted)"
                 >
-                  <input
-                    :checked="draftKey === option.key"
-                    type="radio"
-                    :name="`${uid}-relative`"
-                    :value="option.key"
-                    :data-autofocus="(!offersAbsolute && draftKey === option.key) || null"
-                    class="sr-only"
-                    @change="pickOption(option.key)"
-                  />
-                  <span class="min-w-0 [overflow-wrap:anywhere]">{{ optionLabel(option) }}</span>
+                  {{ t('dateRangePicker.quickRanges') }}
+                </legend>
+                <div
+                  :style="{ '--date-range-picker-quick-rows': quickRows }"
+                  class="grid grid-cols-1 gap-(--spacing-2xs) @[15rem]:grid-flow-col @[15rem]:grid-cols-2 @[15rem]:grid-rows-[repeat(var(--date-range-picker-quick-rows),auto)]"
+                >
+                  <label
+                    v-for="option in availableOptions"
+                    :key="option.key"
+                    :data-selected="draftKey === option.key || null"
+                    :data-testid="`${testId}__option`"
+                    class="text-label-sm flex min-h-8 cursor-pointer items-center justify-between gap-(--spacing-xs) rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-(--ring-color) has-[:focus-visible]:ring-inset data-[selected]:bg-(--bg-selected) motion-reduce:transition-none pointer-coarse:min-h-11"
+                  >
+                    <input
+                      :checked="draftKey === option.key"
+                      type="radio"
+                      :name="`${uid}-relative`"
+                      :value="option.key"
+                      :data-autofocus="(!offersAbsolute && draftKey === option.key) || null"
+                      class="sr-only"
+                      @change="pickOption(option.key)"
+                    />
+                    <span class="min-w-0 [overflow-wrap:anywhere]">{{ optionLabel(option) }}</span>
+                    <i
+                      v-if="draftKey === option.key"
+                      class="az az-check shrink-0 text-[length:inherit] leading-none text-(--text-default)"
+                      aria-hidden="true"
+                    />
+                  </label>
+                </div>
+              </fieldset>
+
+              <div class="shrink-0 px-(--spacing-2xs) pt-(--spacing-2xs) pb-(--spacing-xs)">
+                <button
+                  :id="customRangeId"
+                  type="button"
+                  :data-selected="draftKey === CUSTOM || null"
+                  :data-autofocus="(!offersAbsolute && draftKey === CUSTOM) || null"
+                  :data-testid="`${testId}__custom-range`"
+                  class="text-label-sm flex min-h-8 w-full cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) text-start text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset data-[selected]:bg-(--bg-selected) motion-reduce:transition-none pointer-coarse:min-h-11"
+                  @click="showCustom"
+                >
+                  <span class="min-w-0 flex-1 [overflow-wrap:anywhere]">{{
+                    t('dateRangePicker.custom')
+                  }}</span>
+                  <span
+                    v-if="draftKey === CUSTOM && parsedAmount"
+                    class="min-w-0 text-(--text-muted) [overflow-wrap:anywhere]"
+                    >{{ relativeText(parsedAmount, customUnit) }}</span
+                  >
                   <i
-                    v-if="draftKey === option.key"
-                    class="az az-check shrink-0 text-[length:inherit] leading-none text-(--text-default)"
+                    class="az az-chevron-right shrink-0 text-[length:inherit] leading-none text-(--text-muted)"
                     aria-hidden="true"
                   />
-                </label>
+                </button>
               </div>
-            </fieldset>
+            </template>
 
             <div
+              v-else
               role="group"
               :aria-labelledby="customLabelId"
               :data-selected="draftKey === CUSTOM || null"
               :data-testid="`${testId}__custom`"
               class="flex flex-col gap-(--spacing-xs) p-(--spacing-sm)"
             >
+              <button
+                type="button"
+                :data-testid="`${testId}__quick-ranges`"
+                class="text-label-sm -ms-(--spacing-2xs) inline-flex min-h-8 w-fit cursor-pointer items-center gap-(--spacing-2xs) rounded-(--shape-control) px-(--spacing-2xs) text-(--text-muted) transition-colors duration-150 ease-out hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset motion-reduce:transition-none pointer-coarse:min-h-11"
+                @click="showQuick"
+              >
+                <i
+                  class="az az-chevron-left shrink-0 text-[length:inherit] leading-none"
+                  aria-hidden="true"
+                />
+                {{ t('dateRangePicker.showQuickRanges') }}
+              </button>
               <span
                 :id="customLabelId"
-                class="text-label-sm text-(--text-muted)"
+                class="text-label-sm text-(--text-default)"
                 >{{ t('dateRangePicker.custom') }}</span
               >
               <div
@@ -987,13 +1151,6 @@
             class="flex shrink-0 flex-col gap-(--spacing-sm) border-t border-(--border-default) p-(--spacing-sm)"
           >
             <DatePickerTimezone v-if="showTimeZone" />
-            <p
-              v-else
-              :data-testid="`${testId}__zone`"
-              class="text-label-sm m-0 text-(--text-muted)"
-            >
-              {{ t('dateRangePicker.zoneNote', { zone: zoneNote }) }}
-            </p>
             <p
               v-if="visibleError"
               :id="errorId"

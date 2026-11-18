@@ -3,12 +3,12 @@ name: date-picker
 category: input
 structure: composition
 status: implemented
-spec_version: 13
+spec_version: 14
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5087-17336
   node_id: 5087:17336
-checksum: efb77e298de37cdd88912990d57839264817b1519c6578458809f53d06823c92
+checksum: d789638c199fd87acfa1d55f8433a274be0ec100605471a61be459671e35732f
 created: 2026-06-25
 last_updated: 2026-11-18
 ---
@@ -44,7 +44,7 @@ DatePicker picks **one date**, optionally with a time, in a form field. A trigge
 
 - `modelValue` is committed only on Apply; read the final value from `update:modelValue` or the second argument of `apply`, and set `:show-apply="false"` when every edit should commit at once.
 - Bind a `Date` or `null`.
-- Bound the selectable days with `min` and `max` instead of validating after commit.
+- Bound the selectable days with `min` and `max` instead of validating after commit. Unlike `date-range-picker` (five years back to the end of today by default), DatePicker is unbounded by default: a single date is often in the future (a token expiry, an alert schedule), so a page sets `min` to today there, and sets `max` only when the date must be in the past.
 - Send `toISOString()` (or the ISO date `2026-11-15`) to the server, never the printed label.
 
 ## Usage

@@ -901,6 +901,16 @@
           </div>
         </div>
         <div class="flex shrink-0 items-center gap-(--spacing-xs)">
+          <span
+            class="text-label-sm inline-flex items-center gap-(--spacing-2xs) whitespace-nowrap text-(--text-muted)"
+            data-testid="events-time-zone"
+          >
+            <i
+              class="az az-globe"
+              aria-hidden="true"
+            />
+            Times in UTC
+          </span>
           <Tooltip
             content="Refresh"
             class="shrink-0"

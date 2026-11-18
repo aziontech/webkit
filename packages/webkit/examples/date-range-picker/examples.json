@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "A relative range (`Last 15 minutes`) that stays relative: the value is `{ type: 'relative', amount, unit }`, re-resolved against the clock on every query. The panel has two tabs, Relative and Absolute, and opens on Relative here because the value is relative (an absolute or `since` value opens Absolute). Relative lists the quick ranges, then a custom duration and unit; Absolute shows the month grid first, with Month and Year selects between the arrows to jump far back, then the start and end date and time, typed or picked from a 30-minute list. Refresh every is on at 5 minutes by default, so the page handles `@refresh` by re-running its query. The panel is as thin as the calendar, names the zone in a read-only line, and commits nothing until Apply. On a phone it opens as a full-width sheet from the bottom of the screen.",
+      "summary": "A relative range (`Last 15 minutes`) that stays relative: the value is `{ type: 'relative', amount, unit }`, re-resolved against the clock on every query. The panel has two tabs, Relative and Absolute, and opens on Relative here because the value is relative (an absolute or `since` value opens Absolute). Relative lists the quick ranges and a **Custom range** row that opens a duration and unit form in their place (Back to quick ranges returns); Absolute shows the month grid first, with Month and Year selects between the arrows to jump far back, then the start and end date and time, typed or picked from a 30-minute list. Refresh every is on at 5 minutes by default, so the page handles `@refresh` by re-running its query. The panel is as thin as the calendar and commits nothing until Apply; the page states the time zone next to the picker (see the Events explorer block). Unset, `min` is five years ago and `max` the end of today. On a phone it opens as a full-width sheet from the bottom of the screen.",
       "file": "default.vue"
     },
     {
@@ -14,7 +14,7 @@
     },
     {
       "name": "RelativeOnly",
-      "summary": "`range-selector-mode=\"relative-only\"` with the default quick ranges (Today to Last year) above the custom duration, for a metrics interval that is always measured back from now.",
+      "summary": "`range-selector-mode=\"relative-only\"` with the default quick ranges (Today to Last year) above the Custom range row, for a metrics interval that is always measured back from now.",
       "file": "relative-only.vue"
     },
     {
@@ -34,8 +34,18 @@
     },
     {
       "name": "TimeZone",
-      "summary": "`v-model:time-zone` and `show-time-zone` with a short list of zones: the zone selector appears in the panel, the absolute range is typed and shown in the chosen zone, and the stored value stays the same ISO instants, printed under the picker.",
+      "summary": "`v-model:time-zone` and `show-time-zone` with a short list of zones: the panel shows the zone selector, the absolute range is typed and shown in the chosen zone, and the stored value stays the same ISO instants, printed under the picker. Without `show-time-zone` the panel says nothing about the zone; the page shows it beside the picker.",
       "file": "time-zone.vue"
+    },
+    {
+      "name": "Limits",
+      "summary": "`:max-duration=\"{ amount: 90, unit: 'day' }\"` caps the range at 90 days with the default bounds (five years back to the end of today): Last year leaves the quick ranges, a longer custom duration or calendar range is refused with `Choose a range of 90 days or less.`, and once a start day is picked the days more than 90 days away are disabled.",
+      "file": "limits.vue"
+    },
+    {
+      "name": "FutureDates",
+      "summary": "A maintenance window in the future: `max` a year ahead lifts the default end-of-today limit, `min` stops the past, and `max-duration` of one day keeps the window short. Use the same `max` for token expiry or an alert schedule.",
+      "file": "future-dates.vue"
     },
     {
       "name": "Disabled",

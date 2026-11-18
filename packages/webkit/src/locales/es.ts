@@ -416,6 +416,7 @@ export const es: Messages = {
     absolute: 'Absoluto',
     quickRanges: 'Intervalos rápidos',
     custom: 'Intervalo personalizado',
+    showQuickRanges: 'Volver a los intervalos rápidos',
     amount: 'Duración',
     unit: 'Unidad',
     second: {
@@ -459,7 +460,6 @@ export const es: Messages = {
     thisYear: 'Este año',
     now: 'ahora',
     untilNow: 'Terminar ahora',
-    zoneNote: 'Horas en {zone}',
     refreshEvery: 'Actualizar cada',
     refreshOff: 'Desactivado',
     refreshSecond: {
@@ -481,6 +481,7 @@ export const es: Messages = {
     incomplete: 'Elige un inicio y un fin.',
     order: 'El fin debe ser posterior al inicio.',
     outOfBounds: 'Elige un intervalo dentro de las fechas permitidas.',
+    tooLong: 'Elige un intervalo de {duration} como máximo.',
     invalidAmount: 'Introduce un número entero mayor que 0.'
   },
   dialog: {
