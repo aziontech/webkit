@@ -4,9 +4,9 @@ category: docs
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: cd0a05366988462735a09a519658d18f4a9a35246da9e03c853959caa5488472
+checksum: 68ed0e6162b248fc557ab28af3306ba8630b5e3ebe71bf1c39fce250be9c9624
 created: 2026-08-22
-last_updated: 2026-11-15
+last_updated: 2026-11-18
 ---
 
 # DocItem — Component Spec
@@ -95,6 +95,7 @@ One row of the documentation's related-content list: a leading glyph in a framed
 - The anchor appears on data, not on a mode prop: the title wraps in an anchor when `href` is set, and the trailing glyph region renders only then
 - An external destination (absolute URL, `mailto:`, or explicit `target="_blank"`) swaps the chevron for the diagonal arrow and, for `target="_blank"`, adds `rel="noreferrer"`
 - `data-doc-chrome` is the `DocProse` contract (prose rules stop at the row's edge)
+- Inline code: the chip `DocProse` defines (`.text-label-code-sm`, no vertical padding, `var(--spacing-2xs)` inline padding, outline as an `inset-ring` with a `border` only under `forced-colors`, `wrap-anywhere` + `box-decoration-clone`), so it is never taller than the `.text-body-sm` line and chips on consecutive wrapped lines keep at least a 1px gap (`src/test/inline-code.test.ts`)
 
 ## Motion & Animations
 
@@ -114,8 +115,9 @@ One row of the documentation's related-content list: a leading glyph in a framed
 | tile border                      | `var(--border-muted)`      |
 | tile shape                       | `var(--shape-control)`     |
 | row hover + inline-code surface  | `var(--bg-hover)`          |
-| inline-code border               | `var(--border-default)`    |
-| inline-code shape                | `var(--shape-flat)`        |
+| inline-code inset ring           | `var(--border-default)`    |
+| inline-code shape                | `var(--shape-control)`     |
+| inline-code inline padding       | `var(--spacing-2xs)`       |
 | spacing (title to copy)          | `var(--spacing-2xs)`       |
 | ring                             | `var(--ring-color)`        |
 

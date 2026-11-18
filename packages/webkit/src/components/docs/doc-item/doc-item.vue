@@ -84,7 +84,7 @@
         <template v-else>{{ title }}</template>
       </ItemTitle>
       <ItemDescription
-        class="line-clamp-none text-pretty [&_code]:rounded-(--shape-control) [&_code]:border [&_code]:border-(--border-default) [&_code]:bg-(--bg-hover) [&_code]:px-1 [&_code]:py-0.5 [&_code]:text-label-code-sm [&_code]:text-(--text-default)"
+        class="line-clamp-none text-pretty [&_code]:rounded-(--shape-control) [&_code]:inset-ring [&_code]:inset-ring-(--border-default) [&_code]:forced-colors:border [&_code]:bg-(--bg-hover) [&_code]:px-(--spacing-2xs) [&_code]:text-label-code-sm [&_code]:text-(--text-default) [&_code]:wrap-anywhere [&_code]:box-decoration-clone"
       >
         <slot>{{ label }}</slot>
       </ItemDescription>

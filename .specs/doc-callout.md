@@ -4,9 +4,9 @@ category: docs
 structure: monolithic
 status: implemented
 spec_version: 4
-checksum: 60b5cbc232654d71c992f66df33bdef9ee125be4f80dce2a437b535cfef381a2
+checksum: 9ae93b453647edfd80933c3a21fe1db87f5f45ef30ab2910b1f39e40a3ba9d3c
 created: 2026-08-22
-last_updated: 2026-11-15
+last_updated: 2026-11-18
 ---
 
 # DocCallout — Component Spec
@@ -77,6 +77,7 @@ The admonition a documentation page interrupts itself with — Note, Info, Tip, 
 - `data-variant` mirrors the `variant` prop, so a test or a consumer can target one flavour
 - `data-neutral` is present only for `tip`, the one variant that carries no severity
 - `data-doc-block` + `data-doc-chrome` are the `DocProse` contract (block rung; prose stops here)
+- Inline code: the chip `DocProse` defines (`.text-label-code-sm`, no vertical padding, `var(--spacing-2xs)` inline padding, outline as an `inset-ring` with a `border` only under `forced-colors`, `wrap-anywhere` + `box-decoration-clone`), so it is never taller than the `.text-body-sm` line and chips on consecutive wrapped lines keep at least a 1px gap (`src/test/inline-code.test.ts`)
 
 ## Motion & Animations
 
@@ -94,8 +95,9 @@ _none_
 | glyph (neutral variant)              | `var(--primary)`                                                                                  |
 | surface + border (severity variants) | `Alert`'s own `data-severity` tokens                                                              |
 | surface (inline code, neutral)       | `var(--bg-hover)`                                                                                 |
-| border (inline code, severity)       | `var(--info-border)` / `var(--success-border)` / `var(--warning-border)` / `var(--danger-border)` |
-| shape (inline code)                  | `var(--shape-flat)`                                                                               |
+| inset ring (inline code, severity)   | `var(--info-border)` / `var(--success-border)` / `var(--warning-border)` / `var(--danger-border)` |
+| shape (inline code)                  | `var(--shape-control)`                                                                            |
+| spacing (inline code)                | `var(--spacing-2xs)` inline, no vertical padding                                                  |
 | spacing                              | `var(--spacing-sm)`                                                                               |
 
 ## Theme gaps
