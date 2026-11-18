@@ -22,9 +22,10 @@ body {
   margin: 0;
   padding: var(--spacing-md);
   overflow-x: auto;
-  font-family: 'Roboto Mono', ui-monospace, monospace;
-  font-size: 13px;
-  line-height: 1.6;
+  font-family: var(--text-body-code-sm-font-family);
+  font-size: var(--text-body-code-sm-font-size);
+  line-height: var(--text-body-code-sm-line-height);
+  letter-spacing: var(--text-body-code-sm-letter-spacing);
   background: transparent !important;
   direction: ltr;
   text-align: start;
@@ -40,6 +41,10 @@ body {
 
 .docs-html pre.shiki {
   padding: var(--spacing-md);
+  font-family: var(--text-body-code-sm-font-family);
+  font-size: var(--text-body-code-sm-font-size);
+  line-height: var(--text-body-code-sm-line-height);
+  letter-spacing: var(--text-body-code-sm-letter-spacing);
   overflow-x: auto;
   border: 1px solid var(--border-default);
   border-radius: var(--radius-md);

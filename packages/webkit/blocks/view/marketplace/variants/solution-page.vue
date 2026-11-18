@@ -179,7 +179,7 @@
           </Tabs.List>
           <div class="relative isolate w-full">
             <Tabs.Content value="overview">
-              <div class="pt-(--layout-group-gap)">
+              <div>
                 <DocProse>
                   <p>{{ integration.description }}</p>
                   <p>
@@ -196,7 +196,7 @@
               </div>
             </Tabs.Content>
             <Tabs.Content value="usage">
-              <div class="pt-(--layout-group-gap)">
+              <div>
                 <DocProse>
                   <h2>Set the capacity</h2>
                   <p>
@@ -218,7 +218,7 @@
             </Tabs.Content>
             <Tabs.Content value="changelog">
               <ol
-                class="m-0 flex list-none flex-col gap-(--layout-group-gap) p-0 pt-(--layout-group-gap)"
+                class="m-0 flex list-none flex-col gap-(--layout-group-gap) p-0"
                 aria-label="Version history"
               >
                 <li
@@ -251,7 +251,7 @@
               </ol>
             </Tabs.Content>
             <Tabs.Content value="applications">
-              <div class="pt-(--layout-group-gap)">
+              <div>
                 <Card :padded="false">
                   <template #default>
                     <DataTable

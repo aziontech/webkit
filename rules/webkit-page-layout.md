@@ -61,6 +61,10 @@ follows the nearest container.
   rhythm: `PageHeader` for the page heading, `SectionHeader` or `SettingsSection` for a band title,
   `SettingsRow` for a settings row, `PageTabs` for a detail page's tab strip, and `SaveBar` for the
   sticky action bar (`variant="plain"` is the form-column footer).
+- Let a tab panel start one group step (`--layout-group-gap`) below its tab strip. `Tabs.Content`
+  already carries that top padding (and so does `DocTabs`), so put no `mt-*`, `pt-*` or `gap` of
+  your own between `Tabs.List` and the panels; any other strip that switches what shows below it
+  follows the same step.
 - Size cards, dialogs and side columns with the container scale: `max-w-(--container-sm)` …
   `max-w-(--container-7xl)`.
 - Start a screen from its block (`npx @aziontech/webkit search <words>` → `npx @aziontech/webkit add

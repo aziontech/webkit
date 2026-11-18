@@ -731,7 +731,7 @@
                 </h2>
 
                 <Tabs v-model="detailsTab">
-                  <div class="flex w-full flex-col gap-(--spacing-md)">
+                  <div class="flex w-full flex-col">
                     <Tabs.List aria-label="Details">
                       <Tabs.Trigger
                         value="permissions"

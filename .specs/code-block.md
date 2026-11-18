@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761
   node_id: 4567:33761
-checksum: 570283b3cd32860e92ef831b2b6304e6568a3f82932112e7676b33fbb0cc3f08
+checksum: 541aba51fb1b0a71becc1ef806da6f2cc5eed09b0bb0cc33b19236f09f87c361
 created: 2026-05-28
 last_updated: 2026-11-16
 ---
@@ -268,6 +268,8 @@ Code content scrolls inside `@aziontech/webkit/scroll-area` (`orientation="both"
 | diff added marker        | `var(--success-foreground)`                                                            |
 | highlighted row          | `var(--info)`                                                                          |
 | highlighted leading bar  | `var(--info-border)`                                                                   |
+
+One code size across the code components (CodeBlock, CodeEditor, LogViewer, Trace and the docs source viewer): code text and line numbers are 12 px Roboto Mono (`--text-body-code-sm-font-size`, set by `.text-body-code-sm` or `.text-label-code-sm`), never a raw size and never a second code size. A file name in a header or tab is code too (`.text-label-code-sm`, `var(--text-muted)` or `var(--text-default)`); a tab that names a choice (npm, pnpm) is a label (`.text-label-sm`).
 
 ## Theme gaps
 

@@ -163,6 +163,10 @@ it names the group in the markup.
 **`layout-group-start` is the fallback** for the one case a parent cannot cover: a group whose parts
 are already direct siblings of the page stack, where adding a wrapper is the wrong answer.
 
+A tab strip and its panel are one band too: the panel starts one group step below the strip.
+`Tabs.Content` carries that top padding itself (`DocTabs` inherits it), so never add a margin or a
+`gap` between `Tabs.List` and the panels.
+
 A common miss: a controls row and the table it narrows are **one band**, joined at the group step.
 The section step is the gap _above_ the band, not inside it.
 

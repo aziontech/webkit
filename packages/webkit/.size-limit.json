@@ -28,7 +28,7 @@
   {
     "name": "doc-markdown",
     "path": "src/components/docs/doc-markdown/doc-markdown.vue",
-    "limit": "26.05 KB",
+    "limit": "28.1 KB",
     "entryOnly": true
   },
   {
@@ -178,7 +178,7 @@
   {
     "name": "doc-prose",
     "path": "src/components/docs/doc-prose/doc-prose.vue",
-    "limit": "3.75 KB"
+    "limit": "4.35 KB"
   },
   {
     "name": "doc-call-to-action",
@@ -188,7 +188,7 @@
   {
     "name": "doc-callout",
     "path": "src/components/docs/doc-callout/doc-callout.vue",
-    "limit": "6.3 KB"
+    "limit": "8.45 KB"
   },
   {
     "name": "doc-card",
@@ -472,7 +472,7 @@
   {
     "name": "article-body-section",
     "path": "src/components/section/article-body-section/article-body-section.vue",
-    "limit": "45.1 KB",
+    "limit": "45.75 KB",
     "entryOnly": true
   },
   {

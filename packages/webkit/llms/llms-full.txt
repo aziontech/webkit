@@ -916,6 +916,10 @@ it names the group in the markup.
 **`layout-group-start` is the fallback** for the one case a parent cannot cover: a group whose parts
 are already direct siblings of the page stack, where adding a wrapper is the wrong answer.
 
+A tab strip and its panel are one band too: the panel starts one group step below the strip.
+`Tabs.Content` carries that top padding itself (`DocTabs` inherits it), so never add a margin or a
+`gap` between `Tabs.List` and the panels.
+
 A common miss: a controls row and the table it narrows are **one band**, joined at the group step.
 The section step is the gap _above_ the band, not inside it.
 
@@ -29935,7 +29939,7 @@ even when the row carries nothing but its title.
 - `closable` only emits `close` with `(event, value)` — remove the tab and its panel from your data yourself; when the active tab unmounts, the root moves to the first enabled tab.
 - `dirty` only marks the tab (a dot after the label, "Unsaved changes" for screen readers); guard the switch itself with `useUnsavedChanges().confirmLeave()` in the setter of the root's `v-model` when leaving must ask first.
 - The selection always comes from the root's value. A row of pressed / unpressed pills outside a `Tabs` root is a `ToggleGroup`, not loose `Tabs.Trigger`s (6.0 removed the item's `selected` prop).
-- Put spacing between the list and the panels on an element of your own around the panels (or on each `Tabs.Content`), not inside each panel. It always renders the panel and needs a `value` (6.0 removed its wrapper mode).
+- Add no spacing between the list and the panels: every `Tabs.Content` starts one group step below the strip (`pt-(--layout-group-gap)`, 16 px), the rule every tab strip in WebKit follows (`DocTabs` inherits it). A consumer `class` can still override it (`pt-0` for a panel that butts against a framed strip). It always renders the panel and needs a `value` (6.0 removed its wrapper mode).
 - Centre the tab row with `<Tabs.List align="center">`, never with a `justify-center` class or a centring wrapper; keep the default `start` for tabs that head a resource page or a settings form.
 
 ## Don’t
@@ -30034,7 +30038,7 @@ even when the row carries nothing but its title.
         label="Tab Item"
       />
     </Tabs.List>
-    <div class="mt-(--spacing-4) w-full">
+    <div class="w-full">
       <Tabs.Content value="tab-1">
         <div class="rounded-(--shape-card) border border-(--border-default) p-(--spacing-4)">
           <p class="text-body-sm text-(--text-default)">Content for tab 1</p>

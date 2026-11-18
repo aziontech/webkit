@@ -20,7 +20,7 @@
         label="Integrations"
       />
     </Tabs.List>
-    <div class="mt-(--spacing-lg) w-full">
+    <div class="w-full">
       <Tabs.Content value="templates">
         <p class="text-center text-body-sm text-(--text-muted)">
           Start a project from a template built for the edge.

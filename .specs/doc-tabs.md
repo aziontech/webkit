@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 2
 template: 2
-checksum: 702f50726d72d3e6596e686492d4e953a6d793459cdc11d0c19957eab3ce7b56
+checksum: ec2237be7b085a47b4b3447496bac4b117ff7bed68d383cc55639fb2781cb4aa
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -71,6 +71,7 @@ Alternative paths through the same instruction ("macOS / Linux / Windows", "Cons
 
 - The first tab is selected on render; selection state comes from `Tabs`.
 - `data-doc-block` on the root; the strip carries `data-doc-chrome`.
+- The panel text starts one group step (`--layout-group-gap`, 16 px) below the strip, from `Tabs.Content`; DocTabs adds no spacing of its own.
 
 ## Motion & Animations
 
@@ -78,9 +79,10 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-| ------ | ----------------- |
-| all    | From `Tabs`.      |
+| Region         | Token (DESIGN.md)                              |
+| -------------- | ---------------------------------------------- |
+| all            | From `Tabs`.                                   |
+| panel top step | `var(--layout-group-gap)`, from `Tabs.Content` |
 
 ## Theme gaps
 
