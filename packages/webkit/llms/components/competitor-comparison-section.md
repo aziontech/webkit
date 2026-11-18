@@ -94,7 +94,7 @@
 - Container queries: none; the head row's logos step up from 12 px to 16 px (`sm`) and 24 px (`md`).
 - Narrow: the capability column keeps its text, the two platform columns narrow to their glyphs.
 - Touch: the info button is a small `icon-button`, a secondary affordance next to the capability name.
-- Reflow: no horizontal scroll at 320 px; the head row stays pinned under the site header.
+- Reflow: no horizontal scroll at 320 px; the head row stays pinned under the site header at `top: var(--layout-sticky-top)` (the header height by default; `0` inside a scroller with no header above it, so the head row never covers the first category at rest).
 
 ## Examples
 

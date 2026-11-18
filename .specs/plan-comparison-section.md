@@ -5,8 +5,8 @@ structure: monolithic
 status: implemented
 spec_version: 10
 created: 2026-11-05
-last_updated: 2026-11-16
-checksum: 9d06fe6b5e68236bff33776b0078758cb2f64435df48a18d447388db46ab5863
+last_updated: 2026-11-18
+checksum: 5aa5627dc8749dda521d85827fbbbe54f76b8503597f6077204388faceecc243
 ---
 
 # PlanComparisonSection — Component Spec
@@ -116,6 +116,7 @@ The feature-by-feature matrix under the plan cards on Pricing: one column per pl
 - A group row (`group: true`) reads in the default text colour and draws a top rule unless it opens its band
 - Category row: a group row whose values are all empty is a category heading. It opens its own `tbody` with one `th scope="rowgroup"` spanning every column (label, hint and tag included) and renders no value cells; the rows after it belong to that `tbody` until the next category. A group row that carries values stays a feature row.
 - The feature column head (`columnLabel`) is start-aligned, like the row labels under it.
+- Sticky header: the plan row (`thead` cells, `z-20`) sticks at `top: var(--layout-sticky-top)`, which defaults to `--layout-header-height`, so on the site it stops right under the sticky `site-header-section` and the bands scroll beneath it. Inside a scroller with no header above it (a docs example card, an example frame) set `--layout-sticky-top: 0` on that scroller: a sticky cell is pushed down to its offset even at rest, so an offset that reserves room for an absent header lays the plan row over the first band's eyebrow and title.
 - Empty: when no plan has a name the band renders nothing but its root
 
 ## Motion & Animations
@@ -132,6 +133,7 @@ _none_
 | typography (rows and cells) | `.text-label-md`                                                                      |
 | typography (column head)    | `.text-overline-md`                                                                   |
 | header fill                 | `var(--bg-canvas)`                                                                    |
+| header stick offset         | `var(--layout-sticky-top)`                                                            |
 | accent bar                  | `var(--border-selected)`                                                              |
 | included mark               | `var(--success-foreground)`, `.text-body-md`                                          |
 | not-included mark           | `var(--text-muted)`, `.text-body-md`                                                  |

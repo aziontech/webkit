@@ -42,7 +42,7 @@
     </div>
     <div class="flex flex-col gap-(--spacing-sm)">
       <div
-        class="flex min-h-40 min-w-0 items-center justify-center overflow-auto rounded-(--shape-card) border border-(--border-default) bg-(--bg-canvas) p-(--spacing-lg)"
+        class="flex min-h-40 min-w-0 items-center justify-center overflow-auto rounded-(--shape-card) [--layout-sticky-top:0] border border-(--border-default) bg-(--bg-canvas) p-(--spacing-lg)"
         :data-example="`${dir}/${example.file}`"
       >
         <div class="w-full min-w-0">

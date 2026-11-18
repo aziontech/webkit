@@ -7,7 +7,7 @@ spec_version: 5
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-18
-checksum: 64db2b9bcb08645e7dd66870521ae389bc9011277a35cc90e49275b72619e65a
+checksum: 526f0a3d77ac4683696eae50915ba41f479a4fa2a0e990c18a74052e94708ef2
 ---
 
 # CompetitorComparisonSection — Component Spec
@@ -170,7 +170,7 @@ _none_
 - Container queries: none; the head row's logos step up from 12 px to 16 px (`sm`) and 24 px (`md`).
 - Narrow: the capability column keeps its text, the two platform columns narrow to their glyphs.
 - Touch: the info button is a small `icon-button`, a secondary affordance next to the capability name.
-- Reflow: no horizontal scroll at 320 px; the head row stays pinned under the site header.
+- Reflow: no horizontal scroll at 320 px; the head row stays pinned under the site header at `top: var(--layout-sticky-top)` (the header height by default; `0` inside a scroller with no header above it, so the head row never covers the first category at rest).
 
 ## Performance
 

@@ -453,6 +453,7 @@
    "--layout-measure-site",
    "--layout-measure-site-header",
    "--layout-section-gap",
+   "--layout-sticky-top",
    "--leading-loose",
    "--leading-none",
    "--leading-normal",
@@ -1281,7 +1282,8 @@
     "--layout-measure-form-create",
     "--layout-measure-site",
     "--layout-measure-site-header",
-    "--layout-section-gap"
+    "--layout-section-gap",
+    "--layout-sticky-top"
    ],
    "leading": [
     "--leading-loose",
@@ -2948,6 +2950,12 @@
     "type": "length",
     "value": "calc(var(--spacing) * 14)",
     "purpose": "The height of the top header, which a full-height hero subtracts."
+   },
+   "--layout-sticky-top": {
+    "group": "layout",
+    "type": "length",
+    "value": "var(--layout-header-height)",
+    "purpose": "Where a sticky part inside the page stops: under the sticky header; 0 inside a scroller with no header above it."
    },
    "--z-control": {
     "group": "z-index",

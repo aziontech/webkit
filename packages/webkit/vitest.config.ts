@@ -8,6 +8,7 @@ import { defineConfig } from 'vitest/config'
 
 import { ariaSnapshot } from './src/test/aria-snapshot'
 import { emulateMedia } from './src/test/emulate-media'
+import { emulateTouch } from './src/test/emulate-touch'
 import { renderOnServer } from './src/test/server-render'
 
 const EXPORTS: Record<string, string | { default: string }> = JSON.parse(
@@ -45,7 +46,7 @@ export default defineConfig({
       provider: playwright({ contextOptions: { locale: 'en-US' } }),
       headless: true,
       instances: [{ browser: 'chromium' }],
-      commands: { ariaSnapshot, emulateMedia, renderOnServer }
+      commands: { ariaSnapshot, emulateMedia, emulateTouch, renderOnServer }
     },
     coverage: {
       provider: 'v8',

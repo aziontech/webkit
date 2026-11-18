@@ -16,7 +16,8 @@ export const layout = {
   'layout-measure-site-header': 'var(--container-7xl)',
   'layout-measure-control': 'var(--container-3xs)',
 
-  'layout-header-height': 'calc(var(--spacing) * 14)'
+  'layout-header-height': 'calc(var(--spacing) * 14)',
+  'layout-sticky-top': 'var(--layout-header-height)'
 }
 
 const COLUMN_MEASURE = {
