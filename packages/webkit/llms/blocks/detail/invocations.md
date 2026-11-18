@@ -626,10 +626,9 @@ Each variant is the same screen in another state: `get_block("detail/invocations
                 :key="node.key"
                 unstyled
                 :terminal="node.key === 'origin'"
-                class="w-full @xl/flow-diagram:w-auto @xl/flow-diagram:min-w-(--size-56) @xl/flow-diagram:max-w-(--size-56)"
               >
                 <div
-                  class="flex w-full min-w-0 flex-col rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) transition-colors duration-moderate-01 ease-productive-entrance hover:border-(--border-strong) has-[:focus-visible]:border-(--border-strong) motion-reduce:transition-none"
+                  class="flex w-full min-w-0 flex-col @xl/flow-diagram:w-(--size-56) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) transition-colors duration-moderate-01 ease-productive-entrance hover:border-(--border-strong) has-[:focus-visible]:border-(--border-strong) motion-reduce:transition-none"
                 >
                   <FlowDiagram.Anchor>
                     <div

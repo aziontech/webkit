@@ -70,7 +70,7 @@
 - `flow-diagram-group` — parallel nodes stacked in one step (was `Parallel` and a topology level). Prop `label` (hidden).
 - `flow-diagram-anchor` — where a connector touches. Prop `side`.
 - `flow-diagram-header` — props `icon`, `eyebrow`, `status`, `severity`.
-- `flow-diagram-title` — prop `href`; `actions` slot. A title row that shows controls keeps `--spacing-sm` between them and the divider or border below.
+- `flow-diagram-title` — prop `href`; `actions` slot. Every title row is one control high with `--spacing-sm` below it, so a button keeps that space to the divider or border below and rows with and without controls line their connectors up.
 - `flow-diagram-description`, `flow-diagram-footer`, `flow-diagram-item` (prop `label`).
 - `flow-diagram-bind` — companion (not attached): bind with Apply and Cancel. Props `label`, `options`, `value`, `removable`; events `bind`, `remove`, `create`.
 
@@ -82,7 +82,7 @@
 
 - List: `data-orientation`, `data-align`, `data-uniform`, `data-labelled` (wider gap for edge labels), `data-stacked` (rail drawn, ports hidden).
 - Node: `data-disabled`, `data-dashed`, `data-terminal`, `data-node-key`, `data-entry` / `data-exit` (ports show only where a connector attaches).
-- Title: an `actions` slot that renders controls adds `--spacing-sm` of bottom padding to the row, so a button sits as far from the divider below as the header text sits from the border above.
+- Title: every row is one small control high (`min-h-7`) with `--spacing-sm` of bottom padding, so a button in the `actions` slot sits as far from the divider below as the header text sits from the border above, and cards with and without controls keep the same anchor height (their connectors stay level).
 - Data card: `data-state="open|closed"`; an unbound bindable node is dashed with `Not bound`; a pending bind dashes it too.
 - Loading: `aria-busy`, skeleton cards, one `role="status"` line. Empty: `EmptyState` unless the `empty` slot replaces it.
 - Edge `severity` colours the connector (`--<severity>-mark`); default `--accent`.

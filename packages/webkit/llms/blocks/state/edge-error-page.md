@@ -151,11 +151,12 @@ Each variant is the same screen in another state: `get_block("state/edge-error-p
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
   import CopyButton from '@aziontech/webkit/copy-button'
-  import FlowDiagram, {
-    type FlowDiagramEdgeData,
-    type FlowDiagramNodeData,
-    type FlowDiagramSeverity
-  } from '@aziontech/webkit/flow-diagram'
+  import type {
+    FlowDiagramEdgeData,
+    FlowDiagramNodeData,
+    FlowDiagramSeverity
+  } from '@aziontech/webkit/flow-diagram-root'
+  import FlowDiagram from '@aziontech/webkit/flow-diagram-root'
   import KeyValueList from '@aziontech/webkit/key-value-list'
   import StatusCode from '@aziontech/webkit/status-code'
   import Timestamp from '@aziontech/webkit/timestamp'
