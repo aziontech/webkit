@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: 31555d6a5b91d294966d53acf68d7eed5ceb28248b216638f38ac737e80c17e1
+checksum: f8258e06e90a4f08662af46bdaff613d6d8253487f64f579f1141e2f9e978574
 created: 2026-11-12
 last_updated: 2026-11-17
 ---
@@ -124,7 +124,7 @@ It is a page section — the site places it from a `{ _id: 'card-carousel-sectio
 | card heading                        | `.text-heading-sm`, `var(--text-default)`                                  |
 | card copy                           | `.text-body-sm` below `sm`, `.text-body-md` from `sm`, `var(--text-muted)` |
 | link label                          | `.text-overline-sm`, `var(--text-muted)` → `var(--text-default)` on hover  |
-| link arrow                          | `var(--text-primary)`                                                      |
+| link arrow                          | `var(--text-brand)`                                                        |
 | focus ring                          | `var(--ring-color)`                                                        |
 | card overline                       | owned by `eyebrow`                                                         |
 
@@ -141,7 +141,7 @@ It is a page section — the site places it from a `{ _id: 'card-carousel-sectio
 - Links: on a linked card the `h3` holds the anchor, so the link's name is the card title; a stretched `::after` makes the whole card its hit area. The link label and its arrow are `aria-hidden` decoration.
 - Keyboard map: `Tab` reaches the previous control, the next control, the track (arrow keys scroll it natively) and each card link in order; `Enter` / `Space` on a control steps one card; `Enter` on a card link follows it. A card that scrolls into focus is brought into view by the browser.
 - Visible focus: card links draw `focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-(--ring-color)` around the whole card; the controls and track carry the carousel's ring.
-- Contrast ≥4.5:1: copy is `var(--text-muted)` on `var(--bg-surface)`; the link label is `var(--text-muted)` at rest; the arrow is `var(--text-primary)` (≥3:1 as a graphic).
+- Contrast ≥4.5:1: copy is `var(--text-muted)` on `var(--bg-surface)`; the link label is `var(--text-muted)` at rest; the arrow is `var(--text-brand)`, the logo orange (≥3:1 as a decorative graphic).
 - `motion-reduce:transition-none` on every transition; the track never auto-advances (WCAG 2.2.2 does not apply).
 - Touch target ≥40×40 px: the controls are 40×40; a card link spans its whole card.
 

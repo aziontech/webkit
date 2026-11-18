@@ -89,6 +89,14 @@ export const TOKEN_CHECKS = [
       'rtl:rotate-180 on a directional icon. `@aziontech/webkit/styles` already mirrors every directional `az-*` glyph under RTL with `scale: -1 1`; adding a rotation composes with it and the arrow points the WRONG way. Drop the rotation (or use `rtl:-scale-x-100`, which sets the same scale) (.claude/rules/styling.md).'
   },
   {
+    id: 'off-brand-orange',
+    wide: true,
+    regex:
+      /(?<!\w)(?:--text-primary(?![\w-])|(?:--color-)?(?:alpha-orange|brand-primary|orange)-(?!500(?![\w-]))\d{2,3}(?![\w-]))/g,
+    message:
+      'An orange that is not the logo orange. Content uses one orange, the logo orange #F3652B: var(--text-brand) for text, var(--primary) for fills, glyphs and glows. --text-primary was removed in 6.0 (use --text-brand), and the lighter and darker steps of the orange scale stay inside the theme (rules/webkit-tokens.md).'
+  },
+  {
     id: 'class-in-defineprops',
     regex: /defineProps\s*[<(][^>)]*['"]?class['"]?\s*:/s,
     message:

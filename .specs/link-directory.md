@@ -4,7 +4,7 @@ category: marketing
 structure: composition
 status: implemented
 spec_version: 4
-checksum: b4346fd122083538557844e751edfe16c6014e74257f19a420dc7c4a1c8373b2
+checksum: 8434ba87ccb9ba17be8a009ad442c32b9e100ac06917a27df5c9707e50785b4c
 created: 2026-09-24
 last_updated: 2026-11-15
 ---
@@ -139,7 +139,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 | column surface                      | `var(--bg-canvas)`                             |
 | column heading rule                 | `var(--border-default)`                        |
 | typography (column heading)         | `.text-overline-md`                            |
-| column heading ink                  | `var(--text-primary)`                          |
+| column heading ink                  | `var(--text-brand)`                            |
 | typography (row title)              | `.text-label-md`                               |
 | row title ink                       | `var(--text-default)`                          |
 | typography (row description)        | `.text-body-sm`                                |

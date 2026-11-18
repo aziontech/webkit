@@ -61,7 +61,7 @@
 - Visible focus: none; the tag is not focusable. A focusable control that holds a tag draws its own ring.
 - Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `Escape` closes overlays where applicable.
 - ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state; the `highlight` label is the logo orange `#F3652B`, an owner-accepted brand exception in light (about 3:1, `rules/webkit-tokens.md` § "Contrast: APCA and WCAG 2").
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
 

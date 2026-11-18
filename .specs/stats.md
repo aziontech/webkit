@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 5
-checksum: 5842d22f3ce893a4bb33ea61d0486accf8f20743fafe1cad6c7ab61892797b12
+checksum: 059b34f762404ca5cd05f192cb30d1ed464d0f37608a179e17de330cd44ee666
 created: 2026-09-22
 last_updated: 2026-11-15
 ---
@@ -100,7 +100,7 @@ _none_
 | typography (figure, large)  | `.text-big-number-lg`   |
 | typography (caption)        | `.text-overline-sm`     |
 | figure text                 | `var(--text-default)`   |
-| prefix accent               | `var(--text-primary)`   |
+| prefix accent               | `var(--text-brand)`     |
 | suffix text                 | `var(--text-muted)`     |
 | caption text                | `var(--text-muted)`     |
 | cell rules and marks        | `var(--border-default)` |
@@ -119,7 +119,7 @@ _none_
 - Visible focus: not applicable — the band is static copy and holds no interactive control.
 - Keyboard map: none of its own; the band contains no focusable element and is skipped by `Tab`.
 - ARIA: each cell is a `<figure>` whose `<figcaption>` carries the caption, so the figure and what it measures are one unit for a screen reader; `prefix` and `suffix` are plain spans inside the figure's text, so the announced value is the whole expression.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the figure is `var(--text-default)` (17.65:1 light, 20.12:1 dark) and the accent prefix `var(--text-primary)` (`primary-700` in light, `primary-500` in dark) is large text (5.5:1 or more light, 6.71:1 dark). The caption is `var(--text-muted)` at overline scale — 5.32:1 on the dark canvas, but **3.78:1 on the light canvas, under AA for normal text**. This is a system-wide property of `--text-muted`, not of this component; it is carried as a theme-level follow-up and is not worked around here with an off-token colour.
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the figure is `var(--text-default)` (17.65:1 light, 20.12:1 dark) and the accent prefix `var(--text-brand)` (the logo orange `#F3652B` in both themes) is large text (about 3:1 light, 6.71:1 dark; the light pair is the accepted `--text-brand` exception). The caption is `var(--text-muted)` at overline scale — 5.32:1 on the dark canvas, but **3.78:1 on the light canvas, under AA for normal text**. This is a system-wide property of `--text-muted`, not of this component; it is carried as a theme-level follow-up and is not worked around here with an off-token colour.
 - `motion-reduce:transition-none motion-reduce:transform-none` — not applicable, the component is static.
 - Touch target ≥40×40 px — not applicable, no interactive target.
 - Reflow: the figure row wraps (`flex-wrap`), so the prefix and the suffix move under the value when a cell is narrow, and the value itself breaks (`wrap-anywhere`) rather than overflow at 200% zoom.

@@ -754,7 +754,6 @@
    "--text-overline-xs-letter-spacing",
    "--text-overline-xs-line-height",
    "--text-overline-xs-text-transform",
-   "--text-primary",
    "--text-sm",
    "--text-sm--line-height",
    "--text-tag-md-font-size",
@@ -1611,7 +1610,6 @@
     "--text-overline-xs-letter-spacing",
     "--text-overline-xs-line-height",
     "--text-overline-xs-text-transform",
-    "--text-primary",
     "--text-sm",
     "--text-sm--line-height",
     "--text-tag-md-font-size",
@@ -2057,19 +2055,12 @@
     "dark": "#4D4D4D",
     "purpose": "Text of a disabled control."
    },
-   "--text-primary": {
-    "group": "text",
-    "type": "color",
-    "light": "#B03C02",
-    "dark": "#FFB180",
-    "purpose": "Brand-coloured text, such as the required asterisk on a field label."
-   },
    "--text-brand": {
     "group": "text",
     "type": "color",
     "light": "#F3652B",
     "dark": "#F3652B",
-    "purpose": "The logo orange for brand labels such as the eyebrow; an accepted contrast exception."
+    "purpose": "The logo orange, the one orange for brand text such as eyebrows and quote names; an accepted contrast exception."
    },
    "--text-link": {
     "group": "text",
@@ -2145,7 +2136,7 @@
     "group": "code-syntax",
     "type": "color",
     "light": "#B03C02",
-    "dark": "#FFB180",
+    "dark": "#F3652B",
     "purpose": "Function and method names."
    },
    "--code-syntax-type": {
@@ -8201,7 +8192,7 @@
     {
      "name": "colors",
      "type": "string[]",
-     "default": "['var(--text-primary)', 'var(--primary)', 'var(--warning)']",
+     "default": "['var(--primary)', 'var(--warning)', 'var(--brand-blue)']",
      "required": "false",
      "doc": "CSS colors the generated pattern paints with, in order; theme tokens such as `var(--primary)`."
     }

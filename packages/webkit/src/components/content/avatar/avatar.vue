@@ -42,7 +42,7 @@
     variant: 'circle',
     size: 'medium',
     pattern: undefined,
-    colors: () => ['var(--text-primary)', 'var(--primary)', 'var(--warning)']
+    colors: () => ['var(--primary)', 'var(--warning)', 'var(--brand-blue)']
   })
 
   const attrs = useAttrs()

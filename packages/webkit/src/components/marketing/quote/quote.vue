@@ -161,7 +161,8 @@
         >
           <span
             v-if="name"
-            class="px-(--spacing-2xs) text-(--text-primary)"
+            :data-testid="`${testId}__name`"
+            class="px-(--spacing-2xs) text-(--text-brand)"
             >{{ name }}</span
           >
           <span

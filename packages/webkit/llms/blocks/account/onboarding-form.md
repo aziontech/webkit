@@ -358,7 +358,7 @@ Each variant is the same screen in another state: `get_block("account/onboarding
       value: 'orange',
       label: 'Orange',
       ariaLabel: 'Orange mark',
-      colors: ['var(--text-primary)', 'var(--primary)', 'var(--warning)']
+      colors: ['var(--primary)', 'var(--warning)', 'var(--brand-blue)']
     },
     {
       value: 'yellow',

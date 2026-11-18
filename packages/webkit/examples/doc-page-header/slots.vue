@@ -1,5 +1,6 @@
 <script setup>
   import DocPageHeader from '@aziontech/webkit/doc-page-header'
+  import Eyebrow from '@aziontech/webkit/eyebrow'
   import Tag from '@aziontech/webkit/tag'
 
   const onActionClick = (event, action) => action
@@ -39,7 +40,7 @@
           />
         </span>
         <div class="min-w-0 flex-1">
-          <span class="block text-overline-sm uppercase text-(--text-primary)">Anthropic</span>
+          <Eyebrow>Anthropic</Eyebrow>
           <h1 class="m-0 text-heading-2xl text-(--text-default) sm:text-heading-xl">
             Claude Code + Azion
           </h1>

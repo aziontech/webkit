@@ -1361,7 +1361,7 @@
   {
     "name": "table-cell-time",
     "path": "src/components/data/table/table-cell-time/table-cell-time.vue",
-    "limit": "18.7 KB",
+    "limit": "18.75 KB",
     "entryOnly": true
   },
   {

@@ -44,7 +44,7 @@
 | `variant` | `AvatarVariant` | `'circle'` | false | Visual shape of the avatar container. |
 | `size` | `AvatarSize` | `'medium'` | false | Size preset matching Figma sm / md / lg (24 / 32 / 48 px). |
 | `pattern` | `AvatarPattern` | `undefined` | false | Generated fallback drawn when there is no image: `marble` blends three soft shapes seeded by `label` (or `alt`). |
-| `colors` | `string[]` | `['var(--text-primary)', 'var(--primary)', 'var(--warning)']` | false | CSS colors the generated pattern paints with, in order; theme tokens such as `var(--primary)`. |
+| `colors` | `string[]` | `['var(--primary)', 'var(--warning)', 'var(--brand-blue)']` | false | CSS colors the generated pattern paints with, in order; theme tokens such as `var(--primary)`. |
 
 ## Assets
 

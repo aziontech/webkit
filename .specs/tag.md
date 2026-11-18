@@ -7,7 +7,7 @@ spec_version: 8
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-940&vars=1
   node_id: 476:940
-checksum: c9d6b1fc391def833e0e639dca289a35de7eff1a130d07870ea8c4e08299ca68
+checksum: 2c5cca0907517f78281aa0d7258f753989c5cabc677d71f313cf4862a2aebf15
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -61,14 +61,14 @@ A compact, read-only word on an item, colored by its brand look `variant` or its
 
 ## Props
 
-| Prop       | Type                                                             | Default     | Required | JSDoc                                                                                                                                                                                                                                                                                                            |
-| ---------- | ---------------------------------------------------------------- | ----------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `label`    | `string`                                                         | `''`        | false    | Fallback text when the default slot is empty.                                                                                                                                                                                                                                                                    |
-| `variant`  | `'primary' \| 'accent' \| 'contrast' \| 'highlight'` | `'primary'` | false | Brand look of the tag surface and label, used when `severity` is not set: `primary` (solid brand orange), `accent`, `highlight` (the brand orange as a tint) and `contrast` (`var(--bg-contrast)` / `var(--text-contrast)`). |
-| `severity` | `'neutral' \| 'info' \| 'success' \| 'warning' \| 'danger'` | — | false | Status colour of the tag surface and label, the shared `Severity` scale exported from this component; wins over `variant` when set. |
-| `size`     | `'small' \| 'medium'`                                            | `'medium'`  | false    | Size token; `medium` is 24px tall, `small` is 20px.                                                                                                                                                                                                                                                              |
-| `rounded`  | `boolean`                                                        | `false`     | false    | Pill shape when true.                                                                                                                                                                                                                                                                                            |
-| `icon`     | `string`                                                         | `''`        | false    | Azion icon class for the leading icon.                                                                                                                                                                                                                                                                           |
+| Prop       | Type                                                        | Default     | Required | JSDoc                                                                                                                                                                                                                        |
+| ---------- | ----------------------------------------------------------- | ----------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `label`    | `string`                                                    | `''`        | false    | Fallback text when the default slot is empty.                                                                                                                                                                                |
+| `variant`  | `'primary' \| 'accent' \| 'contrast' \| 'highlight'`        | `'primary'` | false    | Brand look of the tag surface and label, used when `severity` is not set: `primary` (solid brand orange), `accent`, `highlight` (the brand orange as a tint) and `contrast` (`var(--bg-contrast)` / `var(--text-contrast)`). |
+| `severity` | `'neutral' \| 'info' \| 'success' \| 'warning' \| 'danger'` | —           | false    | Status colour of the tag surface and label, the shared `Severity` scale exported from this component; wins over `variant` when set.                                                                                          |
+| `size`     | `'small' \| 'medium'`                                       | `'medium'`  | false    | Size token; `medium` is 24px tall, `small` is 20px.                                                                                                                                                                          |
+| `rounded`  | `boolean`                                                   | `false`     | false    | Pill shape when true.                                                                                                                                                                                                        |
+| `icon`     | `string`                                                    | `''`        | false    | Azion icon class for the leading icon.                                                                                                                                                                                       |
 
 ## Events
 
@@ -91,18 +91,18 @@ _none_
 
 ## Tokens
 
-| Region                 | Token (DESIGN.md)                                                                                                                                              |
-| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| typography (medium)    | `.text-tag-md` + `leading-none` (Figma Typography/Tag/md, 12px)                                                                                                |
-| typography (small)     | `.text-tag-sm` + `leading-none` (Figma Typography/Tag/sm, 11px)                                                                                                |
-| spacing (medium)       | `var(--spacing-xs)` horizontal padding and icon gap                                                                                                            |
-| spacing (small)        | `var(--spacing-2xs)` horizontal padding and icon gap                                                                                                           |
-| shape (all severities) | `var(--shape-control)`                                                                                                                                         |
-| surface (primary)      | `var(--primary)` / `var(--primary-foreground)`, WCAG AA in both themes                                                                                         |
-| surface (contrast)     | `var(--bg-contrast)` / `var(--text-contrast)`                                                                                                                  |
-| surface (highlight)    | `var(--primary-mask)` / `color-mix(in srgb, var(--text-primary) 80%, var(--text-default))`, WCAG AA (5.1:1 or more) on every surface and canvas in both themes |
-| shape (pill)           | `rounded-full`                                                                                                                                                 |
-| ring                   | `var(--ring-color)`                                                                                                                                            |
+| Region                 | Token (DESIGN.md)                                                                                                    |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| typography (medium)    | `.text-tag-md` + `leading-none` (Figma Typography/Tag/md, 12px)                                                      |
+| typography (small)     | `.text-tag-sm` + `leading-none` (Figma Typography/Tag/sm, 11px)                                                      |
+| spacing (medium)       | `var(--spacing-xs)` horizontal padding and icon gap                                                                  |
+| spacing (small)        | `var(--spacing-2xs)` horizontal padding and icon gap                                                                 |
+| shape (all severities) | `var(--shape-control)`                                                                                               |
+| surface (primary)      | `var(--primary)` / `var(--primary-foreground)`, WCAG AA in both themes                                               |
+| surface (contrast)     | `var(--bg-contrast)` / `var(--text-contrast)`                                                                        |
+| surface (highlight)    | `var(--primary-mask)` / `var(--text-brand)`, the logo orange: AA in dark, an owner-accepted brand exception in light |
+| shape (pill)           | `rounded-full`                                                                                                       |
+| ring                   | `var(--ring-color)`                                                                                                  |
 
 ## Theme gaps
 
@@ -113,7 +113,7 @@ _none_
 - Visible focus: none; the tag is not focusable. A focusable control that holds a tag draws its own ring.
 - Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `Escape` closes overlays where applicable.
 - ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state; the `highlight` label is the logo orange `#F3652B`, an owner-accepted brand exception in light (about 3:1, `rules/webkit-tokens.md` § "Contrast: APCA and WCAG 2").
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
 

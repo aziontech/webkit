@@ -38,9 +38,8 @@ export const tokenPurpose = {
   '--text-muted': 'Secondary text: descriptions, captions, metadata.',
   '--text-disabled': 'Text of a disabled control.',
   '--text-danger': 'Error text on the page, such as the FieldError message.',
-  '--text-primary': 'Brand-coloured text, such as the required asterisk on a field label.',
   '--text-brand':
-    'The logo orange for brand labels such as the eyebrow; an accepted contrast exception.',
+    'The logo orange, the one orange for brand text such as eyebrows and quote names; an accepted contrast exception.',
   '--text-link': 'Links in text and the link button.',
   '--text-link-hover': 'A link under the pointer.',
   '--text-contrast': 'Text on the inverted --bg-contrast surface.',
