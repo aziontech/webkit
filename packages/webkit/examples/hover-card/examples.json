@@ -9,7 +9,7 @@
     },
     {
       "name": "ResourcePreview",
-      "summary": "Card forced open (`default-open`) on a resource name, the main use in tables: status, region, last deploy and domain, the same facts the resource page shows.",
+      "summary": "Rest the pointer on the resource name or tab to it, the main use in tables: the card shows status, region, last deploy and domain, the same facts the resource page shows.",
       "file": "resource-preview.vue"
     },
     {

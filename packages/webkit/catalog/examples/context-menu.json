@@ -7,7 +7,7 @@
   },
   {
    "name": "WithSubMenu",
-   "summary": "Panel forced open (`:open=\"true\"`) to show the anatomy it shares with `DropdownMenu`: groups, a `command` hint, an open `Sub` (`default-open`) and `type=\"checkbox\"` items that keep the panel open.",
+   "summary": "Right-click the area, or press `Shift+F10` on it, to see the anatomy it shares with `DropdownMenu`: groups, a `command` hint, a `Sub` that opens with the panel (`default-open`) and `type=\"checkbox\"` items that keep the panel open.",
    "file": "examples/context-menu/with-sub-menu.vue"
   },
   {

@@ -272,7 +272,7 @@ No built-in strings: every label comes from the consumer (`label` props and slot
 </script>
 
 <template>
-  <DropdownMenuRoot :open="true">
+  <DropdownMenuRoot>
     <DropdownMenuTrigger>
       <IconButton
         variant="outline"

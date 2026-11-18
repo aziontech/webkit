@@ -206,9 +206,12 @@ describe('HoverCard', () => {
     expect(card()).toBeNull()
   })
 
-  it('default-open renders the card teleported to body with a resolved side and align', async () => {
+  it('the ResourcePreview example opens on hover, teleported to body with a resolved side and align', async () => {
     const { container } = render(ResourcePreview)
-    await waitFor(() => expect(card()).not.toBeNull())
+    await nextTick()
+    expect(card()).toBeNull()
+    await userEvent.hover(link())
+    await waitFor(() => expect(card()).not.toBeNull(), { timeout: 2000 })
     expect(container.contains(card())).toBe(false)
     expect(card()?.dataset['side']).toMatch(/^(top|bottom)$/)
     expect(card()?.dataset['align']).toBe('start')
