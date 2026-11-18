@@ -12,7 +12,7 @@
   },
   {
    "name": "CustomItem",
-   "summary": "The `item` slot replaces the label region of every row, here adding a status `Tag`; the `actions` slot adds an end-aligned `IconButton` per row. The chevron, indentation and row states stay owned by the tree.",
+   "summary": "The `item` slot replaces the label region of every row, here adding a status `Tag`; the `actions` slot adds an end-aligned `IconButton` per row that opens a `DropdownMenu` of row actions (Download, Copy path, Delete); the last one picked is shown under the tree. The chevron, indentation and row states stay owned by the tree.",
    "file": "examples/tree/custom-item.vue"
   }
  ]

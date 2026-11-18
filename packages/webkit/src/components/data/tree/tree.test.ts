@@ -5,6 +5,7 @@ import { render } from '@testing-library/vue'
 import { describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
+import CustomItemExample from '../../../../examples/tree/custom-item.vue'
 import LazyChildren from '../../../../examples/tree/lazy-children.vue'
 import MultiSelect from '../../../../examples/tree/multi-select.vue'
 import RenameExample from '../../../../examples/tree/rename.vue'
@@ -746,6 +747,20 @@ describe('Tree', () => {
   })
 
   describe('feature examples', () => {
+    it('opens the row menu from the ellipsis in the CustomItem example and reports the picked action', async () => {
+      const view = render(CustomItemExample)
+      await userEvent.click(view.getByRole('button', { name: 'More actions for styles.css' }))
+      const download = await vi.waitFor(() => {
+        const item = Array.from(
+          document.body.querySelectorAll<HTMLElement>('[role="menuitem"]')
+        ).find((el) => el.textContent?.includes('Download'))
+        if (!item) throw new Error('menu not open')
+        return item
+      })
+      await userEvent.click(download)
+      expect(view.container.textContent).toContain('Last action: Downloaded styles.css')
+    })
+
     it('renames through the Rename example: the pencil and F2 open the field, Enter applies the label, Escape cancels', async () => {
       const view = render(RenameExample)
       await userEvent.click(view.getByRole('button', { name: 'Rename package.json' }))
