@@ -912,6 +912,7 @@ The theme that ships with WebKit 6 changes three things your app can see:
   | `--shape-elements`                                                                                                          | `--shape-control`                                               |
   | `--z-input-field`, `--z-input-overlay`                                                                                      | `--z-control`, `--z-control-overlay`                            |
   | `animate-slide-in-left`, `-out-left`, `-in-right`, `-out-right`                                                             | `animate-slide-in-start`, `-out-start`, `-in-end`, `-out-end`   |
+  | `--text-primary` (a peach orange in dark, a brown orange in light)                                                          | `--text-brand`, the logo orange `#F3652B` in both themes        |
   | `@aziontech/theme/texts` (`textsData`)                                                                                      | `@aziontech/theme/typography` (`typography`)                    |
   | `@aziontech/theme/layouts` (`layoutsData`, `layoutsUtilities`)                                                              | `@aziontech/theme/layout` (`layout`, `layoutUtilities`)         |
 
@@ -929,6 +930,15 @@ The theme that ships with WebKit 6 changes three things your app can see:
   slots (`--chart-series-7`, `-8` are new): a `Chart` keeps eight series before folding the rest
   into Other (`cap` defaults to `8`), and `ChartSlot` takes `1` to `8`. `DonutChart` still keeps six
   slices. Pass `:cap="6"` to a `Chart` to keep the old fold.
+
+- **One orange.** Brand text is the logo orange `#F3652B` in both themes: `--text-primary` is gone
+  (the codemod rewrites it to `--text-brand`), and the `Quote` name, `LinkDirectory` column titles,
+  the `HeroTitle` highlight, `Stats` prefixes, the `FieldLabel` asterisk, `Tag variant="highlight"`
+  text and a hovered linked `FeatureItem` now render it. In light it is about 3:1 on white, an
+  accepted brand exception; a screen that needs AA brand text in light puts the label on a
+  `--primary` fill with `--primary-foreground` instead. The default `Avatar` pattern `colors` are
+  now `['var(--primary)', 'var(--warning)', 'var(--brand-blue)']`, and the dark code syntax function
+  colour is the logo orange.
 
 Two additions need nothing from you: `--border-input` is the outline token of every form field (same
 value as `--border-default`), and dark mode has its own, visible elevation shadows (`--shadow-*`).

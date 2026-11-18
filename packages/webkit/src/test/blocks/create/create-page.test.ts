@@ -129,7 +129,7 @@ describe('create-page#CreateOrganization', () => {
     await fireEvent.update(screen.getByRole('textbox', { name: 'Name' }), 'Northwind Studio')
     expect(preview.textContent).toContain('Northwind Studio')
     const fill = () => preview.querySelector<SVGRectElement>('rect')?.style.fill ?? ''
-    await waitFor(() => expect(fill()).toMatch(/--(text-primary|primary|warning)\b/), wait)
+    await waitFor(() => expect(fill()).toMatch(/--(primary|warning|brand-blue)\b/), wait)
     await fireEvent.click(screen.getByRole('radio', { name: 'Green mark' }))
     await waitFor(() => expect(fill()).toMatch(/--success/), wait)
   })

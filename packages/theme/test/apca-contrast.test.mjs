@@ -33,7 +33,6 @@ const PAIRS = [
   ...SURFACES.map((bg) => ['body', '--text-default', bg]),
   ...[
     '--text-muted',
-    '--text-primary',
     '--text-brand',
     '--text-link',
     '--text-link-hover',

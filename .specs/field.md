@@ -4,7 +4,7 @@ category: input
 structure: composition
 status: implemented
 spec_version: 9
-checksum: 71354584917d09af1c7a949d43105c135ff238469ef66a00fd17016c7d765777
+checksum: a0286a7bfef1262479cfadf3100c5f4421f0db98d4d6b976f3b80f8908acb127
 created: 2026-11-10
 last_updated: 2026-11-17
 ---
@@ -196,7 +196,7 @@ The root `Field` provides `FieldInjectionKey` (`injection-key.ts`): a generated 
 | title typography      | `.text-body-sm`          |
 | label text            | `var(--text-default)`    |
 | muted text            | `var(--text-muted)`      |
-| required marker       | `var(--text-primary)`    |
+| required marker       | `var(--text-brand)`      |
 | error text            | `var(--text-danger)`     |
 | card border           | `var(--border-muted)`    |
 | card selected border  | `var(--border-selected)` |

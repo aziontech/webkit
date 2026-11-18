@@ -3,12 +3,12 @@ name: avatar
 category: content
 structure: monolithic
 status: implemented
-spec_version: 7
+spec_version: 8
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=477-882
   node_id: 477:882
-checksum: f2ebd54b4be9d2caf35b65662719650181eb989c5db751957ab84e3931c7f31a
+checksum: 4ae030401b06c3a01ad791ba76ed80c79a45a968fd935176b49f0fb854127424
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -69,16 +69,16 @@ Identifies a person, an account or an organization with a small visual mark: the
 
 ## Props
 
-| Prop      | Type            | Default                                                       | Required | JSDoc                                                                                                            |
-| --------- | --------------- | ------------------------------------------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------- |
-| `src`     | `string`        | `''`                                                          | false    | Image URL. When set, renders a photo and takes precedence over label and icon.                                   |
-| `alt`     | `string`        | `''`                                                          | false    | Accessible name: the image's `alt` with `src`, and the name of the initials or icon fallback without it.         |
-| `label`   | `string`        | `''`                                                          | false    | Initials shown when no image (normalized to two uppercase characters).                                           |
-| `icon`    | `string`        | `'az az-user'`                                                | false    | Icon class for the fallback when no image or label (Azion icon class).                                           |
-| `variant` | `AvatarVariant` | `'circle'`                                                    | false    | Visual shape of the avatar container.                                                                            |
-| `size`    | `AvatarSize`    | `'medium'`                                                    | false    | Size preset matching Figma sm / md / lg (24 / 32 / 48 px).                                                       |
-| `pattern` | `AvatarPattern` | `undefined`                                                   | false    | Generated fallback drawn when there is no image: `marble` blends three soft shapes seeded by `label` (or `alt`). |
-| `colors`  | `string[]`      | `['var(--text-primary)', 'var(--primary)', 'var(--warning)']` | false    | CSS colors the generated pattern paints with, in order; theme tokens such as `var(--primary)`.                   |
+| Prop      | Type            | Default                                                     | Required | JSDoc                                                                                                            |
+| --------- | --------------- | ----------------------------------------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------- |
+| `src`     | `string`        | `''`                                                        | false    | Image URL. When set, renders a photo and takes precedence over label and icon.                                   |
+| `alt`     | `string`        | `''`                                                        | false    | Accessible name: the image's `alt` with `src`, and the name of the initials or icon fallback without it.         |
+| `label`   | `string`        | `''`                                                        | false    | Initials shown when no image (normalized to two uppercase characters).                                           |
+| `icon`    | `string`        | `'az az-user'`                                              | false    | Icon class for the fallback when no image or label (Azion icon class).                                           |
+| `variant` | `AvatarVariant` | `'circle'`                                                  | false    | Visual shape of the avatar container.                                                                            |
+| `size`    | `AvatarSize`    | `'medium'`                                                  | false    | Size preset matching Figma sm / md / lg (24 / 32 / 48 px).                                                       |
+| `pattern` | `AvatarPattern` | `undefined`                                                 | false    | Generated fallback drawn when there is no image: `marble` blends three soft shapes seeded by `label` (or `alt`). |
+| `colors`  | `string[]`      | `['var(--primary)', 'var(--warning)', 'var(--brand-blue)']` | false    | CSS colors the generated pattern paints with, in order; theme tokens such as `var(--primary)`.                   |
 
 ## Events
 
@@ -103,15 +103,15 @@ _none_
 
 ## Tokens
 
-| Region                   | Token (DESIGN.md)                                           |
-| ------------------------ | ----------------------------------------------------------- |
-| typography               | .text-body-sm                                               |
-| surface                  | `var(--bg-surface)`                                         |
-| text                     | `var(--text-default)`                                       |
-| spacing                  | `var(--spacing-3)`                                          |
-| shape                    | `var(--shape-control)`                                      |
-| ring                     | `var(--ring-color)`                                         |
-| pattern colors (default) | `var(--text-primary)` · `var(--primary)` · `var(--warning)` |
+| Region                   | Token (DESIGN.md)                                         |
+| ------------------------ | --------------------------------------------------------- |
+| typography               | .text-body-sm                                             |
+| surface                  | `var(--bg-surface)`                                       |
+| text                     | `var(--text-default)`                                     |
+| spacing                  | `var(--spacing-3)`                                        |
+| shape                    | `var(--shape-control)`                                    |
+| ring                     | `var(--ring-color)`                                       |
+| pattern colors (default) | `var(--primary)` · `var(--warning)` · `var(--brand-blue)` |
 
 ## Theme gaps
 

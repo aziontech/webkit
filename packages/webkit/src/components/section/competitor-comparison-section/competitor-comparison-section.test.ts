@@ -132,7 +132,7 @@ describe('CompetitorComparisonSection', () => {
     expect(getByRole('columnheader', { name: 'Capability' }).classList.contains('text-start')).toBe(
       true
     )
-    expect(getByText('Security').className).toContain('var(--text-brand)')
+    expect(getByText('Security').classList.contains('text-(--text-brand)')).toBe(true)
   })
 
   it('renders an info button only for a capability with a definition', () => {

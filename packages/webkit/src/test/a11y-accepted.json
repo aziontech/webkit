@@ -7,6 +7,55 @@
       "selector": "[data-testid$=\"eyebrow__label\"]",
       "token": "--text-brand",
       "reason": "brand: the eyebrow matches the logo orange; owner decision 2026-11-16"
+    },
+    {
+      "rule": "color-contrast",
+      "themes": ["light"],
+      "selector": "[data-testid$=\"quote__name\"]",
+      "token": "--text-brand",
+      "reason": "brand: brand text is the logo orange #F3652B, the one orange in content; owner decision 2026-11-18"
+    },
+    {
+      "rule": "color-contrast",
+      "themes": ["light"],
+      "selector": "[data-testid$=\"link-directory-column__title\"]",
+      "token": "--text-brand",
+      "reason": "brand: brand text is the logo orange #F3652B, the one orange in content; owner decision 2026-11-18"
+    },
+    {
+      "rule": "color-contrast",
+      "themes": ["light"],
+      "selector": "[data-testid$=\"hero-title__highlight\"]",
+      "token": "--text-brand",
+      "reason": "brand: brand text is the logo orange #F3652B, the one orange in content; owner decision 2026-11-18"
+    },
+    {
+      "rule": "color-contrast",
+      "themes": ["light"],
+      "selector": "[data-testid$=\"competitor-comparison-section__group-title\"]",
+      "token": "--text-brand",
+      "reason": "brand: brand text is the logo orange #F3652B, the one orange in content; owner decision 2026-11-18"
+    },
+    {
+      "rule": "color-contrast",
+      "themes": ["light"],
+      "selector": "[data-testid$=\"field-label__required\"] [aria-hidden=\"true\"]",
+      "token": "--text-brand",
+      "reason": "brand: brand text is the logo orange #F3652B, the one orange in content; owner decision 2026-11-18"
+    },
+    {
+      "rule": "color-contrast",
+      "themes": ["light"],
+      "selector": "[data-testid$=\"tag\"][data-variant=\"highlight\"]",
+      "token": "--text-brand",
+      "reason": "brand: brand text is the logo orange #F3652B, the one orange in content; owner decision 2026-11-18"
+    },
+    {
+      "rule": "color-contrast",
+      "themes": ["light"],
+      "selector": "[data-testid$=\"feature-item\"][data-linked]",
+      "token": "--text-brand",
+      "reason": "brand: brand text is the logo orange #F3652B, the one orange in content; owner decision 2026-11-18"
     }
   ]
 }

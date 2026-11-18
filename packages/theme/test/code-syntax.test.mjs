@@ -41,5 +41,5 @@ for (const variant of ['light', 'dark']) {
 
 test('the shell command colour is the brand orange, not a brown', () => {
   assert.equal(vars.light['--code-syntax-function'].toUpperCase(), brand.primary[700])
-  assert.equal(vars.dark['--code-syntax-function'].toUpperCase(), brand.primary[300])
+  assert.equal(vars.dark['--code-syntax-function'].toUpperCase(), brand.primary[500])
 })

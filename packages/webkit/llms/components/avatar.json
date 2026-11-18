@@ -85,7 +85,7 @@
   {
    "name": "colors",
    "type": "string[]",
-   "default": "['var(--text-primary)', 'var(--primary)', 'var(--warning)']",
+   "default": "['var(--primary)', 'var(--warning)', 'var(--brand-blue)']",
    "required": "false",
    "doc": "CSS colors the generated pattern paints with, in order; theme tokens such as `var(--primary)`."
   }

@@ -267,7 +267,26 @@ Shipped in `Trace` (its name column stayed at 9rem in every panel) until 2026-11
 <i class="az az-arrow-right"></i>
 ```
 
-`rtl:-scale-x-100` is harmless (it sets the same scale), and a non-directional glyph (`az-chevron-down`) may rotate freely. Shipped in `apps/docs` until 2026-11-17. The **`rtl-double-flip`** token check blocks it at write time and in the CI ratchet, over components and also `apps/docs/src`, `apps/demos/src`, `packages/webkit/blocks` and `packages/webkit/examples` (the only token check that runs outside components).
+`rtl:-scale-x-100` is harmless (it sets the same scale), and a non-directional glyph (`az-chevron-down`) may rotate freely. Shipped in `apps/docs` until 2026-11-17. The **`rtl-double-flip`** token check blocks it at write time and in the CI ratchet, over components and also `apps/docs/src`, `apps/demos/src`, `packages/webkit/blocks` and `packages/webkit/examples` (one of the two token checks that run outside components).
+
+## One orange: the logo orange
+
+Content uses one orange, the logo orange `#F3652B` (owner decision 2026-11-18). Text that carries the brand colour (an eyebrow, a quote name, a column heading, a headline highlight, a figure prefix, the required asterisk) is `text-(--text-brand)`; a fill, a glyph, a glow or a gradient is `--primary`, fading to transparent, never to a lighter or darker orange.
+
+```html
+<!-- ❌ a second orange: peach in dark, brown in light -->
+<span class="text-(--text-primary)">Jane Doe</span>
+<span class="text-(--color-orange-300)">Compute</span>
+
+<!-- ✅ the logo orange -->
+<span class="text-(--text-brand)">Jane Doe</span>
+<span
+  class="text-(--text-brand) [text-shadow:0_0_2rem_color-mix(in_srgb,var(--primary)_30%,transparent)]"
+  >Build and run</span
+>
+```
+
+`--text-primary` was removed in 6.0 (`webkit migrate` rewrites it to `--text-brand`). The other steps of the orange scale stay inside the theme, where the chart and severity scales use them as data colours. In light, the logo orange on white is about 3:1, an owner-accepted brand exception: each part that carries it is listed in `packages/webkit/src/test/a11y-accepted.json` with its row in `rules/webkit-tokens.md`. The **`off-brand-orange`** token check blocks `--text-primary` and any orange step but `500` at write time and in the CI ratchet, over components, examples, blocks and the docs and demos apps.
 
 ## Never double a line
 
@@ -276,10 +295,16 @@ Adjacent bordered surfaces share **exactly one hairline**. The outer frame belon
 ```html
 <!-- ❌ the header's bottom rule and the grid's own top rule stack into a 2px seam,
         and the grid's side rules sit inside the column's -->
-<div class="border-x"> <header class="border-b">…</header> <div class="border">…</div> </div>
+<div class="border-x">
+  <header class="border-b">…</header>
+  <div class="border">…</div>
+</div>
 
 <!-- ✅ the column draws the sides, the header the seam, the grid only its inner dividers -->
-<div class="border-x"> <header class="border-b">…</header> <div class="grid gap-px bg-(--border-default)">…</div> </div>
+<div class="border-x">
+  <header class="border-b">…</header>
+  <div class="grid gap-px bg-(--border-default)">…</div>
+</div>
 ```
 
 How the library keeps it, so a page composed from it inherits the single line:
@@ -444,6 +469,7 @@ Use a `data-*` attribute + a Tailwind variant. The decision lives in HTML, not i
 - `validate-tokens.mjs` (PreToolUse hook) already blocks HEX/palette/raw typography regardless of where they appear.
 - **`container-query-on-container`** (same engine, write-time hook and CI ratchet) blocks a class string that declares `@container/<name>` and also uses an `@…/<name>:` variant; pinned both ways in [`token-checks.test.mjs`](../../packages/webkit/test/eslint-plugin/token-checks.test.mjs).
 - **`rtl-double-flip`** (same engine, write-time hook and CI ratchet; marked `wide`, so `tokenChecksFor` also runs it over blocks and examples, and `repoTokenChecksFor` in `.claude/hooks/lib/token-checks.mjs` adds `apps/docs/src` and `apps/demos/src`, since the package itself never names `apps/`) blocks a class string that holds a directional `az-*` glyph together with `rtl:rotate-180` / `rtl:-rotate-180` under any variant chain; pinned both ways, and against `DIRECTIONAL_ICONS`, in [`token-checks.test.mjs`](../../packages/webkit/test/eslint-plugin/token-checks.test.mjs).
+- **`off-brand-orange`** (same engine, write-time hook and CI ratchet; marked `wide` like `rtl-double-flip`, so it runs over components, blocks, examples, `apps/docs/src` and `apps/demos/src`) blocks `--text-primary` and every `orange` / `brand-primary` / `alpha-orange` step other than the logo step `500`, as a variable or a utility; pinned both ways in [`token-checks.test.mjs`](../../packages/webkit/test/eslint-plugin/token-checks.test.mjs).
 - **`dead-token-shorthand`** (same shared token-checks engine, so write-time hook **and** the `check-authoring` CI ratchet) blocks a malformed shorthand — whitespace inside the parens, or the inverted `[--(token)]`. It is the only gate that sees this class of defect: the utility never exists, so nothing else in the pipeline has anything to complain about, and the unit suite runs unstyled. Pinned both directions (fires / stays silent on ordinary subtraction and on a nested `var()` fallback) in [`token-checks.test.mjs`](../../packages/webkit/test/eslint-plugin/token-checks.test.mjs).
 - **Zero-unit** is gated on four surfaces, so no authoring path escapes it: the `zero-with-unit` check in the shared token-checks engine (write-time hook **and** the `check-authoring` CI ratchet, over component sources); `length-zero-no-unit` in [`.stylelintrc.json`](../../.stylelintrc.json) for authored CSS/SCSS/Vue `<style>` — set to plain `true` so the preset's `ignore: ['custom-properties']` does **not** apply, since a design system is authored almost entirely as custom properties; the same rule in the shipped [`stylelint-config.js`](../../packages/webkit/src/stylelint-config.js) so consumers inherit it; and a build-time assertion in the theme's `build:tokens`, which is the only gate that sees token values (they are authored in JS and compiled, so no linter reads them). A `length-zero-no-unit` canary fixture keeps the stylelint side from being relaxed.
 - **The `rem`-in-math-function carve-out** is gated by the two engines we own — the `zero-unit-in-calc` token check and the same assertion in `build:tokens`. Stylelint's `length-zero-no-unit` deliberately skips math functions (a unit is required there), so it accepts `calc(100% - 0px)`; the token check is what makes that `0rem`.

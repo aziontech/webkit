@@ -234,7 +234,8 @@
                 class="sticky top-[calc(3.5rem+var(--competitor-comparison-section-head))] z-10 border-b border-(--border-default) bg-(--bg-surface) px-(--spacing-md) py-(--spacing-sm) sm:px-(--spacing-xl) text-start font-normal"
               >
                 <span
-                  class="text-overline-md text-[color:light-dark(var(--text-primary),var(--text-brand))]"
+                  :data-testid="`${testId}__group-title`"
+                  class="text-overline-md text-(--text-brand)"
                   >{{ group.title }}</span
                 >
               </th>
