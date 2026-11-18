@@ -252,7 +252,7 @@ flashes on first open; not worth it for a control that is always opened to be us
 
 Both tabs are now exactly as wide as the month grid: seven day cells of the size token plus
 `--spacing-sm` on each side (276 px at `medium`, was 384 px). Start and End keep date and time on
-one row (the time field is 88 px), the quick ranges keep two columns (container query lowered from
+one row (the time field is 88 px) and now come **before** the calendar, while the Relative/Absolute switch and the zone and Apply rows stay fixed and only the middle scrolls — so on a short laptop screen (1280 × 720) the panel, capped at the space under the trigger, still shows the fields, the zone and Apply (this is the fix from the main-branch report "I still can't see the absolute range words", carried over here); the quick ranges keep two columns (container query lowered from
 18 rem to 15 rem), the refresh row and the footer wrap when needed. On a phone the panel is still the
 full-width bottom sheet. `src/test/date-picker-readability.test.ts` checks the width on both tabs
 and that no word is cut off at 320, 390 and 1280 px in English and Portuguese.

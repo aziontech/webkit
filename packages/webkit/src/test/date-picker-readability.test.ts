@@ -7,6 +7,7 @@ import { type Component, defineComponent, h, nextTick } from 'vue'
 
 import DatePickerWithTime from '../../examples/date-picker/with-time.vue'
 import AutoRefresh from '../../examples/date-range-picker/auto-refresh.vue'
+import TimeZone from '../../examples/date-range-picker/time-zone.vue'
 import UntilNow from '../../examples/date-range-picker/until-now.vue'
 import WithStep from '../../examples/date-range-picker/with-step.vue'
 import ConfigProvider from '../components/provider/config-provider/config-provider.vue'
@@ -169,4 +170,46 @@ describe('date pickers stay readable at every width', () => {
       }
     })
   })
+})
+
+describe('the absolute range fields stay visible on short screens', () => {
+  const SCREENS = [
+    { name: 'laptop', width: 1280, height: 720 },
+    { name: 'phone', width: 390, height: 664 }
+  ] as const
+
+  it.each(SCREENS)(
+    'shows the start and end fields, the zone and Apply without scrolling on a $name screen',
+    async ({ width, height }) => {
+      await page.viewport(width, height)
+      await vi.waitFor(() => expect(window.innerWidth).toBe(width))
+      const Host = defineComponent({
+        setup: () => () =>
+          h('div', { style: { paddingTop: `${Math.round(height / 2) - 40}px` } }, [
+            h(
+              ConfigProvider,
+              { now: NOW, timeZone: 'UTC', locale: 'en-US', catalogs: LOCALES },
+              { default: () => h(TimeZone) }
+            )
+          ])
+      })
+      const view = render(Host)
+      const panel = await openPanel(view, 'date-range-picker')
+      const box = panel.getBoundingClientRect()
+      expect(box.bottom).toBeLessThanOrEqual(height + 1)
+      const absolute = within(panel).getByTestId('date-range-picker__absolute')
+      const words = [
+        within(absolute).getByText('Start'),
+        within(absolute).getByText('End'),
+        within(absolute).getByLabelText('Start time'),
+        within(absolute).getByLabelText('End time'),
+        within(panel).getByText('Timezone'),
+        within(panel).getByRole('button', { name: 'Apply' })
+      ]
+      for (const word of words) {
+        const rect = word.getBoundingClientRect()
+        expect(rect.top >= box.top - 1 && rect.bottom <= box.bottom + 1, word.outerHTML).toBe(true)
+      }
+    }
+  )
 })

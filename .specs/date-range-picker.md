@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 9
 template: 2
-checksum: 7e9bddd08e41c264bf1b7a019609f1b9bd76cec3bec1a4f4c1cec7d7854ac7a3
+checksum: 46b811ba4e52866c85b1b521102fab75f6548bb304458e3263922d7a03b82e08
 created: 2026-11-11
 last_updated: 2026-11-18
 ---
@@ -225,7 +225,7 @@ Below 640 px the same `animate-popup-scale-in` / `animate-popup-scale-out` run f
 
 - No truncation at any width: the trigger is inline and capped at its container (`max-w-full`); its value wraps (`overflow-wrap: anywhere`) and the trigger grows taller (its height is a minimum), with the UTC offset kept on one line. The panel's labels, quick ranges and field values are never cut off (checked at 320, 390 and 1280 px in `src/test/date-picker-readability.test.ts`).
 - Container query: the quick ranges are one column below 15 rem of list width and two columns from there (`@container` on the fieldset).
-- Desktop (from 640 px): an anchored popover exactly as thin as the month grid on both tabs (seven day cells of the size token plus `--spacing-sm` on each side: 276 px at `medium`), capped at the viewport minus `--spacing-sm` on each side, scrolling inside itself when taller than the viewport. The time list opens under its field as a `Combobox` list, so it never widens the panel (checked in `src/test/date-picker-readability.test.ts`).
+- Desktop (from 640 px): an anchored popover exactly as thin as the month grid on both tabs (seven day cells of the size token plus `--spacing-sm` on each side: 276 px at `medium`), capped at the viewport minus `--spacing-sm` on each side, scrolling inside itself when taller than the viewport. The Relative/Absolute switch and the zone and Apply rows stay fixed and only the tab body between them scrolls; on the Absolute tab the start and end fields come before the month grid, so the fields, the zone and Apply are visible without scrolling on a 1280 × 720 laptop and a 390 × 664 phone (`src/test/date-picker-readability.test.ts`). The time list opens under its field as a `Combobox` list, so it never widens the panel (checked in `src/test/date-picker-readability.test.ts`).
 - Phone (below 640 px, `max-sm:`): a sheet — full width, attached to the bottom of the screen, at most 85 % of the viewport high, scrolling inside, padded for the home indicator (`safe-area-inset-bottom`), over a `--bg-backdrop` layer; Cancel and Apply share the footer width.
 - Touch: options, selects and step buttons are 44 px on `pointer: coarse`; nothing depends on hover.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom.

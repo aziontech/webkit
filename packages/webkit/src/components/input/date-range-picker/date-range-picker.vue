@@ -781,12 +781,12 @@
           :data-align="resolvedAlign"
           :data-size="size"
           :style="panelStyle"
-          class="flex w-min max-w-[calc(100vw-2*var(--spacing-sm))] flex-col overflow-x-hidden overflow-y-auto overscroll-contain rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-sm) outline-none [transform-origin:var(--popup-origin,top_left)] [--input-ring-offset:var(--bg-surface-raised)] max-sm:inset-x-0! max-sm:top-auto! max-sm:bottom-0! max-sm:w-full! max-sm:max-w-none! max-sm:max-h-[85dvh]! max-sm:translate-none! max-sm:rounded-b-none max-sm:border-x-0 max-sm:border-b-0 max-sm:pb-[env(safe-area-inset-bottom)] max-sm:[transform-origin:bottom_center]"
+          class="flex w-min max-w-[calc(100vw-2*var(--spacing-sm))] flex-col overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-sm) outline-none [transform-origin:var(--popup-origin,top_left)] [--input-ring-offset:var(--bg-surface-raised)] max-sm:inset-x-0! max-sm:top-auto! max-sm:bottom-0! max-sm:w-full! max-sm:max-w-none! max-sm:max-h-[85dvh]! max-sm:translate-none! max-sm:rounded-b-none max-sm:border-x-0 max-sm:border-b-0 max-sm:pb-[env(safe-area-inset-bottom)] max-sm:[transform-origin:bottom_center]"
           @keydown="onPanelKeydown"
         >
           <div
             v-if="offersRelative && offersAbsolute"
-            class="border-b border-(--border-default) p-(--spacing-sm)"
+            class="shrink-0 border-b border-(--border-default) p-(--spacing-sm)"
           >
             <ToggleGroup
               :model-value="panelMode"
@@ -802,7 +802,7 @@
           <div
             v-if="panelMode === 'relative'"
             :data-size="size"
-            class="flex flex-col data-[size=small]:w-[calc(7*var(--size-8)_+_2*var(--spacing-sm))] data-[size=medium]:w-[calc(7*var(--size-9)_+_2*var(--spacing-sm))] data-[size=large]:w-[calc(7*var(--size-10)_+_2*var(--spacing-sm))] max-sm:w-full!"
+            class="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain data-[size=small]:w-[calc(7*var(--size-8)_+_2*var(--spacing-sm))] data-[size=medium]:w-[calc(7*var(--size-9)_+_2*var(--spacing-sm))] data-[size=large]:w-[calc(7*var(--size-10)_+_2*var(--spacing-sm))] max-sm:w-full!"
             :data-testid="`${testId}__relative`"
           >
             <div
@@ -907,16 +907,11 @@
           <div
             v-else
             :data-size="size"
-            class="flex flex-col data-[size=small]:w-[calc(7*var(--size-8)_+_2*var(--spacing-sm))] data-[size=medium]:w-[calc(7*var(--size-9)_+_2*var(--spacing-sm))] data-[size=large]:w-[calc(7*var(--size-10)_+_2*var(--spacing-sm))] max-sm:w-full!"
+            class="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain data-[size=small]:w-[calc(7*var(--size-8)_+_2*var(--spacing-sm))] data-[size=medium]:w-[calc(7*var(--size-9)_+_2*var(--spacing-sm))] data-[size=large]:w-[calc(7*var(--size-10)_+_2*var(--spacing-sm))] max-sm:w-full!"
             :data-testid="`${testId}__absolute`"
           >
-            <div class="p-(--spacing-sm)">
-              <div class="mx-auto w-fit">
-                <DatePickerGrid />
-              </div>
-            </div>
             <div
-              class="flex flex-col gap-(--spacing-sm) border-t border-(--border-default) p-(--spacing-sm)"
+              class="flex flex-col gap-(--spacing-sm) border-b border-(--border-default) p-(--spacing-sm)"
             >
               <DatePickerFields />
               <div
@@ -936,11 +931,16 @@
                 >
               </div>
             </div>
+            <div class="p-(--spacing-sm)">
+              <div class="mx-auto w-fit">
+                <DatePickerGrid />
+              </div>
+            </div>
           </div>
 
           <div
             v-if="showRefresh"
-            class="flex flex-wrap items-center gap-(--spacing-xs) border-t border-(--border-default) p-(--spacing-sm)"
+            class="flex shrink-0 flex-wrap items-center gap-(--spacing-xs) border-t border-(--border-default) p-(--spacing-sm)"
             :data-testid="`${testId}__refresh`"
           >
             <div class="flex min-w-36 flex-1 items-center gap-(--spacing-xs)">
@@ -993,7 +993,7 @@
           </div>
 
           <div
-            class="flex flex-col gap-(--spacing-sm) border-t border-(--border-default) p-(--spacing-sm)"
+            class="flex shrink-0 flex-col gap-(--spacing-sm) border-t border-(--border-default) p-(--spacing-sm)"
           >
             <DatePickerTimezone v-if="showTimeZone" />
             <p
