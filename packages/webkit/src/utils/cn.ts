@@ -1,7 +1,7 @@
 import { type ClassValue, clsx } from 'clsx'
 import { extendTailwindMerge } from 'tailwind-merge'
 
-const SEMANTIC_TEXT_SIZE_RE = /^(?:big-number|heading|body|label|overline|button)-/
+const SEMANTIC_TEXT_SIZE_RE = /^(?:big-number|amount|heading|title|body|label|overline|tag|button)-/
 
 const twMerge = extendTailwindMerge({
   extend: {

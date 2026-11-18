@@ -84,7 +84,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — handle, title and controls in reading order.
-- `chart-card-title/chart-card-title.vue` — the title (`.text-label-md`), a `div` (not a heading, as shadcn's CardTitle: the card sits under any heading level) whose id names the card and the chart inside.
+- `chart-card-title/chart-card-title.vue` — the title (`.text-title-sm`), a `div` (not a heading, as shadcn's CardTitle: the card sits under any heading level) whose id names the card and the chart inside.
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — plain-text title.

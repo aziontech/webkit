@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-892
   node_id: 478:892
-checksum: 5017bbb79a08cc7f9fbdf8886887e8dad7fb42b9f20194b7244f0fd52df4e299
+checksum: 726997d9489fef33a79ab75660e83566c10c238553d6c1b2d4fe8111dd3e63d0
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -110,7 +110,7 @@ Inline feedback banner that communicates status, alerts, or progress. Presents a
 ## States
 
 - Visual states: default (per severity)
-- `data-titled` on the root mirrors a non-empty `title`: the title renders above the copy in `.text-heading-2xs` (`__title`), and the copy keeps its size below it. With a title and no copy (no default slot, empty `label`), only the title renders.
+- `data-titled` on the root mirrors a non-empty `title`: the title renders above the copy in `.text-title-sm` (`__title`), and the copy keeps its size below it. With a title and no copy (no default slot, empty `label`), only the title renders.
 - Responsive: the root is the `@container/alert`. Below `@sm` of its box the action (built-in or the `actions` slot, wrapped in `[data-slot=alert-actions]`) moves to its own line under the message while the close button stays on the message line.
 
 ## Motion & Animations
@@ -125,7 +125,7 @@ Inline feedback banner that communicates status, alerts, or progress. Presents a
 | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | message typography (small)                            | `.text-label-sm` — 12px                                                                                                                                                                                                                                                               |
 | message typography (medium)                           | `.text-label-md` — 14px                                                                                                                                                                                                                                                               |
-| title typography                                      | `.text-heading-2xs` — a flat 14px heading at both sizes, so the title stands out from the copy by weight                                                                                                                                                                              |
+| title typography                                      | `.text-title-sm` — a flat 14px medium-weight title at both sizes, so the title stands out from the copy by weight                                                                                                                                                                     |
 | title text                                            | `var(--text-default)`                                                                                                                                                                                                                                                                 |
 | spacing (title to copy)                               | `var(--spacing-2xs)` — 4px                                                                                                                                                                                                                                                            |
 | inline link (anchor inside the message)               | `.text-link` with its color set to `currentColor` (the message copy color), told apart by the underline, so it keeps AA contrast on every severity surface                                                                                                                            |

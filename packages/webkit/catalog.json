@@ -763,6 +763,21 @@
    "--text-tag-sm-font-size",
    "--text-tag-sm-font-weight",
    "--text-tag-sm-line-height",
+   "--text-title-lg-font-size",
+   "--text-title-lg-font-weight",
+   "--text-title-lg-letter-spacing",
+   "--text-title-lg-line-height",
+   "--text-title-lg-text-wrap-style",
+   "--text-title-md-font-size",
+   "--text-title-md-font-weight",
+   "--text-title-md-letter-spacing",
+   "--text-title-md-line-height",
+   "--text-title-md-text-wrap-style",
+   "--text-title-sm-font-size",
+   "--text-title-sm-font-weight",
+   "--text-title-sm-letter-spacing",
+   "--text-title-sm-line-height",
+   "--text-title-sm-text-wrap-style",
    "--text-xl",
    "--text-xl--line-height",
    "--text-xs",
@@ -823,7 +838,10 @@
    "text-overline-sm",
    "text-overline-xs",
    "text-tag-md",
-   "text-tag-sm"
+   "text-tag-sm",
+   "text-title-lg",
+   "text-title-md",
+   "text-title-sm"
   ],
   "groups": {
    "accent": [
@@ -1620,6 +1638,21 @@
     "--text-tag-sm-font-size",
     "--text-tag-sm-font-weight",
     "--text-tag-sm-line-height",
+    "--text-title-lg-font-size",
+    "--text-title-lg-font-weight",
+    "--text-title-lg-letter-spacing",
+    "--text-title-lg-line-height",
+    "--text-title-lg-text-wrap-style",
+    "--text-title-md-font-size",
+    "--text-title-md-font-weight",
+    "--text-title-md-letter-spacing",
+    "--text-title-md-line-height",
+    "--text-title-md-text-wrap-style",
+    "--text-title-sm-font-size",
+    "--text-title-sm-font-weight",
+    "--text-title-sm-letter-spacing",
+    "--text-title-sm-line-height",
+    "--text-title-sm-text-wrap-style",
     "--text-xl",
     "--text-xl--line-height",
     "--text-xs",
@@ -3241,6 +3274,50 @@
      "letter-spacing": "0"
     },
     "purpose": "A small title or a wordmark written in type, a flat 14px."
+   },
+   "text-title-lg": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "text-wrap-style": "balance",
+     "font-size": "0.875rem",
+     "line-height": "1.375",
+     "font-weight": "500",
+     "letter-spacing": "0"
+    },
+    "purpose": "The title of a dialog or drawer, medium weight.",
+    "breakpoints": {
+     "sm": {
+      "font-size": "1rem"
+     },
+     "md": {
+      "font-size": "1.125rem"
+     }
+    }
+   },
+   "text-title-md": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "text-wrap-style": "balance",
+     "font-size": "1rem",
+     "line-height": "1.375",
+     "font-weight": "500",
+     "letter-spacing": "0"
+    },
+    "purpose": "The title of a side panel, medium weight, a flat 16px."
+   },
+   "text-title-sm": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "text-wrap-style": "balance",
+     "font-size": "0.875rem",
+     "line-height": "1.375",
+     "font-weight": "500",
+     "letter-spacing": "0"
+    },
+    "purpose": "The title of a popover, card, alert or toast, medium weight."
    },
    "text-label-lg": {
     "group": "typography",

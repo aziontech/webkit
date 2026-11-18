@@ -434,3 +434,8 @@ Budget-raise: tutorial-panel-root 8.9 KB → 9 KB (measured 8.94 KB): the same f
 Budget-raise: tutorial-panel-provider 1.1 KB → 1.15 KB (measured 1.13 KB): the one-open-step owner (`lib/open-step-owner.ts`), so starting a tutorial in one provider closes the step another provider had open.
 Budget-raise: tutorial-panel-hotspot 13 KB → 13.25 KB (measured 13.21 KB): renamed from `hotspot` (13 KB); it now reads the whole `tutorialPanel` locale group instead of its own five strings.
 Budget-raise: tree 10.1 KB → 10.35 KB (measured 10.28 KB): owner report 2026-11-18 (RV-T1, RV-T2), the new `size` prop (small, medium, large rows with their padding, type and indent steps), the inset 1px focus border and the guard that keeps Shift and Ctrl+click from selecting label text.
+Budget-raise: css-button 10.85 KB → 11.1 KB (measured 11.04 KB; the base branch already measured 10.94 KB, over its limit): owner report 2026-11-18 (RV-B1), the theme's three medium-weight `text-title-*` roles add their custom properties (size, line height, weight, tracking, wrap, and the two breakpoint sizes of `text-title-lg`) to every app's stylesheet.
+Budget-raise: css-console 24 KB → 24.1 KB (measured 24.01 KB): the same `text-title-*` role properties (RV-B1).
+Budget-raise: recognition-marquee-section 21.15 KB → 21.2 KB (measured 21.16 KB): `cn` now knows the `title`, `amount` and `tag` type roles, so it no longer drops them when a text colour follows (RV-B1).
+Budget-raise: code-block 32.4 KB → 32.45 KB (measured 32.4 KB): the same `cn` role list (RV-B1).
+Budget-raise: schema-form 60.8 KB → 60.85 KB (measured 60.8 KB): the same `cn` role list (RV-B1).

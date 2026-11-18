@@ -530,12 +530,12 @@ describe('TutorialPanel', () => {
       expect(document.activeElement).toBe(marker)
     })
 
-    it('sets the step title in the heading class of a popover title', async () => {
+    it('sets the step title in the medium-weight title role of a popover title', async () => {
       render(GuideHost, { props: { active: 'guide', step: 0 } })
       await tick()
       const title = document.querySelector('[data-testid="tutorial-panel-hotspot__title"]')
       expect(title?.textContent).toContain('First')
-      expect(title?.classList.contains('text-heading-2xs')).toBe(true)
+      expect(title?.classList.contains('text-title-sm')).toBe(true)
     })
   })
 

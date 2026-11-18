@@ -164,7 +164,7 @@
             <div class="flex flex-wrap items-center gap-(--spacing-xs)">
               <h3
                 :id="`${uid}-${tutorial.id}`"
-                class="text-heading-2xs text-(--text-default)"
+                class="text-title-sm text-(--text-default)"
               >
                 {{ tutorial.title }}
               </h3>
@@ -210,7 +210,7 @@
             :id="`${uid}-done`"
             ref="doneHeadingEl"
             tabindex="-1"
-            class="flex items-center gap-(--spacing-2xs) text-heading-2xs text-(--text-default) outline-none"
+            class="flex items-center gap-(--spacing-2xs) text-title-sm text-(--text-default) outline-none"
           >
             <span
               aria-hidden="true"
