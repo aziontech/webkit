@@ -18,6 +18,8 @@
   defineSlots<{
     /** Leading adornment before the value (an icon, a flag). */
     leading(): unknown
+    /** Trailing adornment after the value, before the chevron (a dial code, a count). It never shrinks. */
+    trailing(): unknown
   }>()
 
   const ctx = inject(SelectInjectionKey)
@@ -87,6 +89,7 @@
     <span
       class="flex-1 truncate text-start data-[filled=false]:text-(--text-muted) group-data-[disabled]:text-(--text-disabled)"
       :data-filled="ctx.filled.value"
+      data-slot="value"
       :data-testid="`${testId}__value`"
     >
       <bdi
@@ -96,6 +99,7 @@
       >
       <template v-else>{{ ctx.placeholder.value }}</template>
     </span>
+    <slot name="trailing" />
     <i
       class="az az-chevron-down shrink-0 text-(--text-muted) group-data-[disabled]:text-(--text-disabled) transition-transform duration-150 ease-out motion-reduce:transition-none data-[state=open]:rotate-180"
       :data-state="ctx.open.value ? 'open' : 'closed'"

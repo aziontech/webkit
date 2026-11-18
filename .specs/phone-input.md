@@ -3,20 +3,20 @@ name: phone-input
 category: input
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2048-5713
   node_id: 2048:5713
-checksum: a76ce414c7db20824d09160651a071eee04e2972328bf0ebb30563bdfc9d7ab9
+checksum: aa0d2ea2b0e766ffa8ec8f0c3191a8624c01fb3dc5353e379afbb2455f0f20c9
 created: 2026-11-10
-last_updated: 2026-11-15
+last_updated: 2026-11-18
 ---
 
 # PhoneInput — Component Spec
 
 ## Purpose
 
-International phone-number control: an `InputGroup` with a searchable dial-code `Select` on the left and a `type="tel"` input on the right that applies the selected country's mask as the user types and accepts exactly the lengths that country allows. Two v-models (`v-model` for the national digits, `v-model:country` for the ISO 3166-1 alpha-2 code) carry the editable state; the one-way `phone-change` event hands the form the full E.164 number and whether it is complete. It carries no label or helper text: wrap it in a `Field` (`Field.Label` + `PhoneInput` + `Field.Description`), and it picks up `id`, `aria-describedby`, `invalid`, `disabled` and `required` from the Field.
+International phone-number control: an `InputGroup` with a searchable country `Select` on the left (the closed trigger shows the selected country's flag, its name and, at the end, its dial code, like a row of the list) and a `type="tel"` input on the right that applies the selected country's mask as the user types and accepts exactly the lengths that country allows. Two v-models (`v-model` for the national digits, `v-model:country` for the ISO 3166-1 alpha-2 code) carry the editable state; the one-way `phone-change` event hands the form the full E.164 number and whether it is complete. It carries no label or helper text: wrap it in a `Field` (`Field.Label` + `PhoneInput` + `Field.Description`), and it picks up `id`, `aria-describedby`, `invalid`, `disabled` and `required` from the Field.
 
 ## When to use
 
@@ -39,7 +39,7 @@ International phone-number control: an `InputGroup` with a searchable dial-code 
 - Put it in a `Field` with a `Field.Label`; the label targets the tel input.
 - `v-model` holds the national digits only; read `number` from the `phone-change` payload when you need the E.164 value.
 - Use `complete` from `phone-change` to decide `invalid` and the `Field.Error` on submit; the control shows no incomplete-number message of its own.
-- `v-model:country` defaults to `'US'`; seed it with the user's country when you know it.
+- The field starts on the United States. Set `default-country` to start on another country (an ISO 3166-1 alpha-2 code from `countries`), or bind `v-model:country` when the form owns the country.
 - `searchPlaceholder` and `searchEmptyLabel` default to English; pass translated copy in localized UIs.
 
 ## Usage
@@ -73,6 +73,7 @@ International phone-number control: an `InputGroup` with a searchable dial-code 
 | Prop                | Type                             | Default                     | Required | JSDoc                                                                                                                                                                                                                                                       |
 | ------------------- | -------------------------------- | --------------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `countries`         | `PhoneInputCountry[]`            | (built-in list — see Notes) | false    | Countries offered by the dial-code Select. When omitted, uses the built-in curated list.                                                                                                                                                                    |
+| `defaultCountry`    | `string`                         | `'US'`                      | false    | ISO 3166-1 alpha-2 code of the country selected at first, while `v-model:country` is empty. A code missing from `countries` falls back to the first country of the list.                                                                             |
 | `placeholder`       | `string`                         | `''`                        | false    | Placeholder of the tel input. Falls back to the selected country's mask when empty.                                                                                                                                                                         |
 | `size`              | `'small' \| 'medium' \| 'large'` | `'medium'`                  | false    | Size forwarded to the InputGroup and the dial-code Select trigger. Heights: small=28px, medium=32px, large=40px.                                                                                                                                            |
 | `disabled`          | `boolean`                        | `false`                     | false    | Disables both the dial-code Select and the internal input.                                                                                                                                                                                                  |
@@ -83,7 +84,7 @@ International phone-number control: an `InputGroup` with a searchable dial-code 
 | `searchPlaceholder` | `string`                         | `''`                        | false    | Placeholder of the search box that filters the dial-code list. Empty uses the locale catalog (`Search country`).                                                                                                                                            |
 | `searchEmptyLabel`  | `string`                         | `''`                        | false    | Shown in the dial-code list when no country matches the search. Empty uses the locale catalog (`No country found.`).                                                                                                                                        |
 
-Notes on the built-in `countries` list: the default set opens with the priority shortlist (BR, US, GB, PT, ES, AR, MX, CL, CO, DE, FR, IT — order preserved in the Select), continues with the rest of the supported countries in alphabetical order (AU, BE, BO, CA, CN, EC, IN, IE, IL, JP, NL, PY, PE, PL, SG, ZA, KR, CH, TR, AE, UY, VE). Countries outside the list are not offered. Consumers who need a different set pass a custom `countries` array. The list lives in a co-located `countries.ts` inside the component folder; it is data, not a public export.
+Notes on the built-in `countries` list: it offers every country and territory with a calling code — the 245 regions of Google's libphonenumber metadata (libphonenumber-js 1.13.16) — with the dial code each one uses (several share one: `+1` for the United States, Canada and the Caribbean numbering plan, `+44` for the United Kingdom, Guernsey, Jersey and the Isle of Man, `+7` for Russia and Kazakhstan). It opens with the priority shortlist (US, BR, GB, PT, ES, AR, MX, CL, CO, DE, FR, IT — order preserved in the Select) and continues with every other region in English alphabetical order of its name. Names are plain English (`and`, never `&`; `Saint`, never `St.`; `Congo (DRC)` and `Congo`). The masks of the 34 countries the list had before 6.0 are kept as reviewed; every other region takes its national number lengths for mobile and fixed-line numbers from libphonenumber, formatted like its example mobile number where libphonenumber gives one and in groups of three or four digits otherwise. Consumers who need a different set pass a custom `countries` array. The list lives in a co-located `countries.ts` inside the component folder; it is data, not a public export. Every region has a flag in the sprite (`src/images/country-flags.webp`, drawn from the MIT-licensed `country-flag-icons` 3x2 set), which also backs `@aziontech/webkit/styles/country-flags`.
 
 Masks: `#` is a digit slot and every other character is a literal. Digits are always the **national significant number** — no dial code, no trunk prefix (`0`) — so `dialCode + digits` is the E.164 number. With several masks, the field formats with the shortest mask whose slot count covers the digits typed so far, caps input at the longest mask's slot count, and treats the number as complete when its digit count equals one of the masks' slot counts. The placeholder fallback is the longest mask with every slot shown as `9`.
 
@@ -92,7 +93,7 @@ Masks: `#` is a digit slot and every other character is a literal. Digits are al
 | Model             | Type     | Default | Emits               | Notes                                                                                                                                                                                                                                                                               |
 | ----------------- | -------- | ------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `v-model`         | `string` | `''`    | `update:modelValue` | National number as **digits only**, without dial code and without mask characters (e.g. `'4155550100'`). Updates on input when the digits change, and when a country switch truncates digits beyond the new country's capacity. Via `defineModel`, so the field also works unbound. |
-| `v-model:country` | `string` | `'US'`  | `update:country`    | ISO 3166-1 alpha-2 code of the selected country (e.g. `'US'`, `'GB'`, `'BR'`). Drives the dial code shown in the `Select` and the masks applied to the input. Via `defineModel`, so picking a country works even when the consumer binds only `v-model`.                            |
+| `v-model:country` | `string` | `''` | `update:country` | ISO 3166-1 alpha-2 code of the selected country (e.g. `'US'`, `'GB'`, `'BR'`). While it is empty (`''`) the field shows `defaultCountry`. Drives the flag, name and dial code shown in the `Select` trigger and the masks applied to the input. Via `defineModel`, so picking a country works even when the consumer binds only `v-model`. |
 
 ## Events
 
@@ -110,8 +111,10 @@ Masks: `#` is a digit slot and every other character is a literal. Digits are al
 - Visual states delegated to `InputGroup`: `default`, `hover`, `focus-within`, `invalid`, `required`, `disabled`.
 - `invalid`, `disabled` and `required` combine the prop with the enclosing `Field`.
 - The dial-code `Select` is disabled whenever the control is `disabled` **or** `readonly`.
+- The closed trigger mirrors a row of the list: the country's flag in the trigger's `#leading` slot, its name as the value (truncated with an ellipsis when the trigger is narrow), and its dial code in muted text in the trigger's `#trailing` slot at the inline end, which never shrinks. The country part sizes to its content and takes at most 60% of the field, so the number keeps at least 40%.
+- Narrow fields: the root is a size container (`@container/phone-input`); below 21rem (336px) the trigger hides the country name (`data-slot="value"`) and shows only the flag and the dial code, so phones from 320 to 430px keep room to type the number. The open list always shows the full names, and the trigger keeps its accessible name.
 - Completeness is reported through `phone-change`, never rendered.
-- The flag sprite (`country-flags.png`, about 80 KB) loads with a dynamic `import()` the first time the dial-code list opens; until it arrives each option keeps its flag box blank. The closed field never fetches it.
+- The flag sprite (`country-flags.png`, about 80 KB) loads with a dynamic `import()` after the field mounts in the browser (never on the server), so the closed trigger can show the selected flag; until it arrives the flag boxes stay blank. It is one shared request for every PhoneInput on the page.
 
 ## Motion & Animations
 
@@ -139,13 +142,14 @@ _none_ — motion is owned by `InputGroup` (colour transitions) and `Select` (dr
 - ARIA: the tel input has `type="tel"`, `inputmode="tel"`, `autocomplete="tel-national"`, `aria-invalid`, `aria-required`, and the `id` / `aria-describedby` of the enclosing `Field`; the dial-code trigger has `aria-label="PhoneInputCountry dial code"`. The control provides an empty Field context below it so the inner search input never takes the field id.
 - Contrast ≥4.5:1 for input and dial-code text.
 - Touch target follows the `size` (40px at `large`).
-- Direction: the tel input, each option's dial code and the closed trigger's dial code (`SelectTrigger` `value-dir="ltr"`, a `<bdi dir="ltr">`) render left-to-right, so a number and its `+` keep their order on a right-to-left page; the typed number still aligns to the inline start of the page (`rtl:text-end`, which resolves against the input's own `ltr` direction).
+- Direction: the tel input, each option's dial code and the closed trigger's dial code (a `dir="ltr"` span in the trigger's `#trailing` slot) render left-to-right, so a number and its `+` keep their order on a right-to-left page; the typed number still aligns to the inline start of the page (`rtl:text-end`, which resolves against the input's own `ltr` direction).
 
 ## Examples
 
 The examples in `packages/webkit/examples/phone-input/` render on the docs site (`/components/<name>`):
 
 - Default — inside a `Field` with a label and description.
+- DefaultCountry — the field starting on another country with `default-country`; justified because `defaultCountry` changes which country and mask the field opens with.
 
 ## Constraints — DO NOT
 

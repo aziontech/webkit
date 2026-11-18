@@ -1,3 +1,5 @@
+import '../../../test/reflow.css'
+
 import userEvent from '@testing-library/user-event'
 import { fireEvent, render } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
@@ -7,7 +9,7 @@ import Default from '../../../../examples/phone-input/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Field from '../field/field.vue'
 import FieldLabel from '../field/field-label/field-label.vue'
-import { defaultCountries } from './countries'
+import { defaultCountries, flagStyle, hasFlag, loadFlagSprite, masksOf } from './countries'
 import PhoneInput, { type PhoneInputValue } from './phone-input.vue'
 
 /** The dial-code dropdown Teleports to document.body — query it from there. */
@@ -24,6 +26,12 @@ const optionText = (option: HTMLElement) =>
   ]
     .map((el) => el?.textContent?.trim())
     .join(' ')
+
+const triggerText = (value: HTMLElement) => {
+  const trigger = value.closest('[data-testid="select-trigger"]') as HTMLElement
+  const dialCode = trigger.querySelector('[data-testid="phone-input__selected-dial-code"]')
+  return `${value.textContent?.trim()} ${dialCode?.textContent?.trim()}`
+}
 
 const lastPhone = (emitted: Record<string, unknown[]>) => {
   const events = emitted['phone-change'] as PhoneInputValue[][]
@@ -86,7 +94,7 @@ describe('PhoneInput', () => {
       const { getByRole } = render(PhoneInput, {
         props: { country: 'QQ' }
       })
-      expect(getByRole('textbox').getAttribute('placeholder')).toBe('(99) 99999-9999')
+      expect(getByRole('textbox').getAttribute('placeholder')).toBe('(999) 999-9999')
     })
 
     it('honors a consumer-provided countries list', () => {
@@ -190,9 +198,27 @@ describe('PhoneInput', () => {
       expect(getByTestId('phone-input__country').getAttribute('aria-label')).toBeNull()
     })
 
-    it("shows the selected country's dial code in the trigger", () => {
+    it("shows the selected country's name and dial code in the trigger", () => {
       const { getByTestId } = render(PhoneInput, {})
-      expect(getByTestId('select-trigger__value').textContent?.trim()).toBe('+1')
+      expect(triggerText(getByTestId('select-trigger__value'))).toBe('United States +1')
+    })
+
+    it('shows the flag before the name and the dial code after it, like a list row', async () => {
+      const { getByTestId } = render(PhoneInput, { props: { country: 'BR' } })
+      const trigger = getByTestId('select-trigger')
+      const flag = getByTestId('phone-input__selected-flag')
+      const value = getByTestId('select-trigger__value')
+      const dialCode = getByTestId('phone-input__selected-dial-code')
+
+      expect(value.textContent?.trim()).toBe('Brazil')
+      expect(flag.getAttribute('data-country')).toBe('BR')
+      expect(flag.getAttribute('aria-hidden')).toBe('true')
+      expect(dialCode.textContent?.trim()).toBe('+55')
+      expect(dialCode.getAttribute('dir')).toBe('ltr')
+      expect(trigger.contains(flag) && trigger.contains(dialCode)).toBe(true)
+      expect(flag.compareDocumentPosition(value)).toBe(Node.DOCUMENT_POSITION_FOLLOWING)
+      expect(value.compareDocumentPosition(dialCode)).toBe(Node.DOCUMENT_POSITION_FOLLOWING)
+      await expect.poll(() => flag.style.backgroundImage).toContain('url(')
     })
 
     it('keeps the number and the dial codes left-to-right on an RTL page', async () => {
@@ -208,7 +234,7 @@ describe('PhoneInput', () => {
       const { getByTestId } = render(PhoneInput, {
         props: { country: 'US' }
       })
-      expect(getByTestId('select-trigger__value').textContent?.trim()).toBe('+1')
+      expect(triggerText(getByTestId('select-trigger__value'))).toBe('United States +1')
     })
 
     it('opens the Teleported listbox with one option per country', async () => {
@@ -223,7 +249,7 @@ describe('PhoneInput', () => {
 
       const options = getOptions()
       expect(options).toHaveLength(defaultCountries.length)
-      const us = options[1]
+      const us = options[0]
       const flag = us.querySelector('[data-testid="phone-input__flag"]')
       expect(flag?.getAttribute('data-country')).toBe('US')
       expect(flag?.getAttribute('aria-hidden')).toBe('true')
@@ -237,7 +263,7 @@ describe('PhoneInput', () => {
       const { getByTestId } = render(PhoneInput, { props: { country: 'BR' } })
       await fireEvent.click(getByTestId('select-trigger'))
 
-      const br = getOptions()[0]
+      const br = getOptions()[1]
       const dialCode = br.querySelector('[data-testid="phone-input__dial-code"]')
       const check = br.querySelector('[data-testid="select-item__check"]')
       expect(check).not.toBeNull()
@@ -252,8 +278,8 @@ describe('PhoneInput', () => {
       })
 
       await fireEvent.click(getByTestId('select-trigger'))
-      // defaultCountries[1] is US (mask capacity 10 digits).
-      await fireEvent.click(getOptions()[1])
+      // defaultCountries[0] is US (mask capacity 10 digits).
+      await fireEvent.click(getOptions()[0])
 
       expect(emitted()['update:country']).toEqual([['US']])
       const modelEvents = emitted()['update:modelValue'] as string[][]
@@ -339,7 +365,7 @@ describe('PhoneInput', () => {
       })
 
       await fireEvent.click(getByTestId('select-trigger'))
-      await fireEvent.click(getOptions()[1])
+      await fireEvent.click(getOptions()[0])
 
       expect(lastPhone(emitted())).toEqual({
         country: 'US',
@@ -351,14 +377,150 @@ describe('PhoneInput', () => {
     })
   })
 
+  describe('narrow fields', () => {
+    const renderAt = (width: number, country: string) =>
+      render({
+        components: { PhoneInput },
+        setup: () => ({ country, width: `${width}px` }),
+        template: '<div :style="{ width }"><PhoneInput :country="country" /></div>'
+      })
+
+    it.each([
+      [254, 'AE'],
+      [324, 'VC']
+    ])('shows only the flag and dial code at %ipx', (width, code) => {
+      const { getByTestId } = renderAt(width, code)
+      const value = getByTestId('select-trigger__value')
+      expect(getComputedStyle(value).display).toBe('none')
+      expect(
+        getByTestId('phone-input__selected-flag').getBoundingClientRect().width
+      ).toBeGreaterThan(0)
+      expect(
+        getByTestId('phone-input__selected-dial-code').getBoundingClientRect().width
+      ).toBeGreaterThan(0)
+      expect(
+        getByTestId('phone-input__input').getBoundingClientRect().width
+      ).toBeGreaterThanOrEqual(width * 0.5)
+    })
+
+    it.each([
+      [348, 'AE'],
+      [348, 'VC'],
+      [600, 'VC']
+    ])('shows the name and keeps room for the number at %ipx (%s)', (width, code) => {
+      const { getByTestId } = renderAt(width, code)
+      const value = getByTestId('select-trigger__value')
+      expect(getComputedStyle(value).display).not.toBe('none')
+      expect(value.getBoundingClientRect().width).toBeGreaterThan(0)
+      const root = getByTestId('phone-input').getBoundingClientRect()
+      expect(getByTestId('phone-input__country').getBoundingClientRect().width).toBeLessThanOrEqual(
+        root.width * 0.6 + 1
+      )
+      expect(
+        getByTestId('phone-input__input').getBoundingClientRect().width
+      ).toBeGreaterThanOrEqual(root.width * 0.39)
+    })
+  })
+
   describe('countries', () => {
+    it('offers every country and territory with a calling code, once each', () => {
+      const codes = defaultCountries.map((c) => c.code)
+      expect(codes).toHaveLength(245)
+      expect(new Set(codes).size).toBe(codes.length)
+      for (const c of defaultCountries) {
+        expect(c.code).toMatch(/^[A-Z]{2}$/)
+        expect(c.dialCode).toMatch(/^\+[1-9]\d{0,2}$/)
+        expect(c.label).not.toMatch(/&|\bSt\.|SAR/)
+        expect(hasFlag(c.code)).toBe(true)
+        for (const mask of masksOf(c)) expect(mask).toMatch(/^[#()\-.\s]+$/)
+      }
+    })
+
+    it('opens with the United States and keeps the rest in alphabetical order', () => {
+      expect(defaultCountries[0].code).toBe('US')
+      const rest = defaultCountries.slice(12).map((c) => c.label)
+      expect(rest).toEqual([...rest].sort((a, b) => a.localeCompare(b, 'en')))
+    })
+
+    it.each([
+      ['US', '+1'],
+      ['CA', '+1'],
+      ['JM', '+1'],
+      ['GB', '+44'],
+      ['JE', '+44'],
+      ['BR', '+55'],
+      ['RU', '+7'],
+      ['KZ', '+7'],
+      ['IN', '+91'],
+      ['JP', '+81'],
+      ['AE', '+971'],
+      ['XK', '+383'],
+      ['PS', '+970'],
+      ['SS', '+211'],
+      ['TL', '+670'],
+      ['CD', '+243'],
+      ['VA', '+39']
+    ])('uses %s %s', (code, dialCode) => {
+      expect(defaultCountries.find((c) => c.code === code)?.dialCode).toBe(dialCode)
+    })
+
+    it('lines every flag up with its row of the sprite', async () => {
+      const url = await loadFlagSprite()
+      const img = new Image()
+      img.src = url
+      await img.decode()
+      expect(img.naturalWidth).toBe(44)
+      const rows = img.naturalHeight / 30 - 1
+      expect(Number.isInteger(rows)).toBe(true)
+      expect(flagStyle('AC', url)?.backgroundPosition).toBe(`0 ${(1 / rows) * 100}%`)
+      expect(flagStyle('ZW', url)?.backgroundPosition).toBe('0 100%')
+    })
+
+    it('shows the flag of a country added in 6.0 in the trigger', () => {
+      const { getByTestId } = render(PhoneInput, { props: { country: 'XK' } })
+      expect(getByTestId('phone-input__selected-flag').getAttribute('data-country')).toBe('XK')
+      expect(triggerText(getByTestId('select-trigger__value'))).toBe('Kosovo +383')
+    })
+
+    it('starts on the United States by default', () => {
+      const { emitted } = render(PhoneInput, {})
+      expect(lastPhone(emitted()).country).toBe('US')
+    })
+
+    it('starts on defaultCountry while v-model:country holds no value', () => {
+      const { getByTestId, getByRole, emitted } = render(PhoneInput, {
+        props: { defaultCountry: 'GB' }
+      })
+      expect(triggerText(getByTestId('select-trigger__value'))).toBe('United Kingdom +44')
+      expect(getByRole('textbox').getAttribute('placeholder')).toBe('9999 999999')
+      expect(lastPhone(emitted()).country).toBe('GB')
+    })
+
+    it('lets a bound v-model:country win over defaultCountry', () => {
+      const { emitted } = render(PhoneInput, { props: { defaultCountry: 'GB', country: 'BR' } })
+      expect(lastPhone(emitted()).country).toBe('BR')
+    })
+
+    it('falls back to the first country when defaultCountry is not in the list', () => {
+      const { emitted } = render(PhoneInput, { props: { defaultCountry: 'QQ' } })
+      expect(lastPhone(emitted()).country).toBe('US')
+    })
+
+    it('moves off defaultCountry when the user picks another country', async () => {
+      const { getByTestId, emitted } = render(PhoneInput, { props: { defaultCountry: 'GB' } })
+      await fireEvent.click(getByTestId('select-trigger'))
+      await fireEvent.click(getOptions()[1])
+      expect(emitted()['update:country']).toEqual([['BR']])
+      expect(triggerText(getByTestId('select-trigger__value'))).toBe('Brazil +55')
+    })
+
     it('changes country without a v-model:country binding', async () => {
       const { getByTestId, getByRole } = render(PhoneInput, {})
 
       await fireEvent.click(getByTestId('select-trigger'))
-      await fireEvent.click(getOptions()[0])
+      await fireEvent.click(getOptions()[1])
 
-      expect(getByTestId('select-trigger__value').textContent?.trim()).toBe('+55')
+      expect(triggerText(getByTestId('select-trigger__value'))).toBe('Brazil +55')
       expect(getByRole('textbox').getAttribute('placeholder')).toBe('(99) 99999-9999')
     })
   })
@@ -426,7 +588,7 @@ describe('PhoneInput', () => {
 
     it('moves the highlight with the arrows while focus stays in the search', async () => {
       const { getByTestId, emitted } = render(PhoneInput, {
-        props: { country: 'BR' }
+        props: { country: 'US' }
       })
 
       await fireEvent.click(getByTestId('select-trigger'))
@@ -444,12 +606,11 @@ describe('PhoneInput', () => {
       await fireEvent.keyDown(getByTestId('select-trigger'), { key: 'p' })
 
       expect(getSearch()?.value).toBe('p')
-      expect(getOptions().map(optionText)).toEqual([
-        'Portugal +351',
-        'Paraguay +595',
-        'Peru +51',
-        'Poland +48'
-      ])
+      const matches = getOptions().map(optionText)
+      expect(matches[0]).toBe('Portugal +351')
+      expect(matches).toContain('Paraguay +595')
+      expect(matches).toContain('Puerto Rico +1')
+      expect(matches.filter((text) => !/(^|\s)P/.test(text))).toEqual([])
     })
 
     it('clears the search when the list closes', async () => {
