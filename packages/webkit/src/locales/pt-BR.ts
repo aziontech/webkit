@@ -394,6 +394,8 @@ export const ptBR: Messages = {
     apply: 'Aplicar',
     previousMonth: 'Mês anterior',
     nextMonth: 'Próximo mês',
+    month: 'Mês',
+    year: 'Ano',
     start: 'Início',
     end: 'Fim',
     date: 'Data',

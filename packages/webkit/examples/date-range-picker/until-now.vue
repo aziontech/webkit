@@ -3,6 +3,7 @@
   import { ref } from 'vue'
 
   const range = ref({ type: 'since', start: '2026-11-10T09:30:00.000Z' })
+  const runQuery = () => {}
 </script>
 
 <template>
@@ -12,6 +13,7 @@
       time-zone="UTC"
       show-step
       aria-label="Incident time range"
+      @refresh="runQuery"
     />
     <p class="text-body-sm m-0 text-(--text-muted)">
       <code>{{ JSON.stringify(range) }}</code>

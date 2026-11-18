@@ -455,3 +455,7 @@ Budget-raise: css-console 24 KB → 24.1 KB (measured 24.01 KB): the same `text-
 Budget-raise: recognition-marquee-section 21.15 KB → 21.2 KB (measured 21.16 KB): `cn` now knows the `title`, `amount` and `tag` type roles, so it no longer drops them when a text colour follows (RV-B1).
 Budget-raise: code-block 32.4 KB → 32.45 KB (measured 32.4 KB): the same `cn` role list (RV-B1).
 Budget-raise: schema-form 61 KB → 61.05 KB: the same `cn` role list (RV-B1), on top of the date range picker raise.
+Budget-raise: date-picker 24.6 KB → 41.7 KB (measured 41.57 KB): the calendar caption gains Month and Year selects between its arrows (owner 2026-11-18, decision RV-S2), built on the WebKit `Select` because the owner wants no native select; the Select's list brings `ScrollArea` and with it `cn` (tailwind-merge), which the date picker did not carry before.
+Budget-raise: date-picker-root 24.4 KB → 41.5 KB (measured 41.36 KB): the same Month and Year `Select`s in the shared calendar caption (2026-11-18).
+Budget-raise: date-range-picker 44.85 KB → 51.05 KB (measured 50.91 KB): the same Month and Year `Select`s, plus the Unit and Refresh every selects and the time zone selector moved from native selects to the WebKit `Select` and `Combobox` (owner 2026-11-18, decision RV-S4).
+Budget-raise: locales-es 10.8 KB → 10.85 KB (measured 10.80 KB): the Month and Year names of the calendar caption selects (2026-11-18).

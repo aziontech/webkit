@@ -2,7 +2,7 @@
  "examples": [
   {
    "name": "Default",
-   "summary": "A relative range (`Last 15 minutes`) that stays relative: the value is `{ type: 'relative', amount, unit }`, re-resolved against the clock on every query. The panel has two tabs, Absolute and Relative, and opens on Relative here because the value is relative (any other value, or none, opens Absolute). Absolute shows the month grid first (click a start day and an end day), then the start and end date and time, typed or picked from a 30-minute list; Relative has a custom duration and unit on top and the quick ranges below. Refresh every sets the auto-refresh interval. The panel is as thin as the calendar, names the zone in a read-only line, and commits nothing until Apply. On a phone it opens as a full-width sheet from the bottom of the screen.",
+   "summary": "A relative range (`Last 15 minutes`) that stays relative: the value is `{ type: 'relative', amount, unit }`, re-resolved against the clock on every query. The panel has two tabs, Relative and Absolute, and opens on Relative here because the value is relative (an absolute or `since` value opens Absolute). Relative lists the quick ranges, then a custom duration and unit; Absolute shows the month grid first, with Month and Year selects between the arrows to jump far back, then the start and end date and time, typed or picked from a 30-minute list. Refresh every is on at 5 minutes by default, so the page handles `@refresh` by re-running its query. The panel is as thin as the calendar, names the zone in a read-only line, and commits nothing until Apply. On a phone it opens as a full-width sheet from the bottom of the screen.",
    "file": "examples/date-range-picker/default.vue"
   },
   {

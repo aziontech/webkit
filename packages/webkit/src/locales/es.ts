@@ -394,6 +394,8 @@ export const es: Messages = {
     apply: 'Aplicar',
     previousMonth: 'Mes anterior',
     nextMonth: 'Mes siguiente',
+    month: 'Mes',
+    year: 'Año',
     start: 'Inicio',
     end: 'Fin',
     date: 'Fecha',

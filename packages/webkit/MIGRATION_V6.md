@@ -1969,12 +1969,15 @@ bindings and prints `MANUAL` for everything below that it cannot rewrite.
   `false`: the panel names the zone in a read-only line (`Times in UTC−08:00 · Los Angeles`). A page
   that lets people switch zones adds `show-time-zone` (with `v-model:time-zone`). The start and end
   time fields also list the day in 30-minute steps; typing a time still works.
-- **`DateRangePicker` opens on Absolute, calendar first, and offers Refresh every.** The tabs read
-  `Absolute` then `Relative`; the panel opens on Absolute unless the value is relative. The Absolute
-  tab shows the month grid before the start and end fields. `showRefresh` now defaults to `true`:
-  a Refresh every select (Off, 10 seconds … 1 hour) sets `v-model:refresh-interval`, and the picker
-  fires `@refresh` on each tick. Run your query on `@refresh`, or pass `:show-refresh="false"` where
-  the page cannot re-run it. (DateRangePicker is new in 6.0, so no 5.x app needs a change.)
+- **`DateRangePicker` lists Relative first and refreshes every 5 minutes by default.** The tabs
+  read `Relative` then `Absolute`; the panel opens on Relative unless the value is absolute or
+  `since`. The Absolute tab shows the month grid (with Month and Year selects between its arrows)
+  before the start and end fields. `showRefresh` defaults to `true` and `v-model:refresh-interval`
+  to `300`: a Refresh every select (Off, 10 seconds … 1 hour) changes it, and the picker fires
+  `@refresh` on each tick. Run your query on `@refresh`; a page that cannot re-run it passes
+  `:show-refresh="false"` (no tick fires while Refresh every is hidden), and a page that wants it
+  off at first binds `v-model:refresh-interval` to `0`. (DateRangePicker is new in 6.0, so no 5.x
+  app needs a change.)
 - **Radios are one `RadioGroup`.** `RadioButton` and `RadioCards` are removed. Every radio is a
   `RadioGroup.Item` (`@aziontech/webkit/radio-group-item`) inside a `RadioGroup` that holds the
   `v-model`: `<RadioGroup v-model="plan"><RadioGroup.Item value="pro">Pro</RadioGroup.Item></RadioGroup>`.

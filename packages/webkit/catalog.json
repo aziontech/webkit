@@ -14204,7 +14204,7 @@
     {
      "name": "refreshInterval",
      "type": "number",
-     "default": "0",
+     "default": "300",
      "required": "false",
      "doc": "Two-way value (`v-model:refreshInterval`)."
     }
@@ -14213,7 +14213,7 @@
     {
      "name": "refresh",
      "payload": "()",
-     "notes": "On every auto-refresh tick while `refreshInterval` is above 0, the picker is enabled and the page is visible. A timer signal, not a user action: it carries no DOM event."
+     "notes": "On every auto-refresh tick while `refreshInterval` is above 0 (5 minutes by default), Refresh every is offered, the picker is enabled and the page is visible. A timer signal, not a user action: it carries no DOM event."
     }
    ],
    "surface": "app",

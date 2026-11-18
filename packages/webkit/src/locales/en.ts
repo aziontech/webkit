@@ -295,6 +295,8 @@ export const datePicker = {
   apply: 'Apply',
   previousMonth: 'Previous month',
   nextMonth: 'Next month',
+  month: 'Month',
+  year: 'Year',
   start: 'Start',
   end: 'End',
   date: 'Date',

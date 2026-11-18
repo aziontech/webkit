@@ -40,6 +40,10 @@
   import DatePickerGrid from '../date-picker/parts/date-picker-grid.vue'
   import DatePickerTimezone from '../date-picker/parts/date-picker-timezone.vue'
   import Input from '../input/input.vue'
+  import Select from '../select/select.vue'
+  import SelectContent from '../select/select-content/select-content.vue'
+  import SelectItem from '../select/select-item/select-item.vue'
+  import SelectTrigger from '../select/select-trigger/select-trigger.vue'
   import Switch from '../switch/switch.vue'
   import {
     DATE_RANGE_UNITS,
@@ -138,7 +142,7 @@
   /** Controlled open state of the panel (v-model:open); omit for uncontrolled, seeded by defaultOpen. */
   const openModel = defineModel<boolean>('open', { default: undefined as never })
   /** Auto-refresh interval in seconds; 0 turns it off. */
-  const refreshInterval = defineModel<number>('refreshInterval', { default: 0 })
+  const refreshInterval = defineModel<number>('refreshInterval', { default: 300 })
 
   const attrs = useAttrs()
   const field = useFieldControl({
@@ -164,6 +168,8 @@
   const customAmountId = `${uid}-amount`
   const customUnitId = `${uid}-unit`
   const customLabelId = `${uid}-custom`
+  const unitLabelId = `${uid}-unit-label`
+  const refreshLabelId = `${uid}-refresh-label`
   const untilNowLabelId = `${uid}-until-now`
   const refreshId = `${uid}-refresh`
 
@@ -225,7 +231,7 @@
     [...REFRESH_UNITS].reverse().find((item) => seconds % UNIT_SECONDS[item] === 0) ?? 'second'
 
   const refreshText = computed<string>(() => {
-    const seconds = refreshInterval.value
+    const seconds = offersRefresh.value ? refreshInterval.value : 0
     if (!seconds || seconds <= 0) return ''
     const unit = intervalUnit(seconds)
     const keys = {
@@ -301,8 +307,8 @@
     return current > 0 && !list.includes(current) ? [...list, current].sort((a, b) => a - b) : list
   })
 
-  const editRefresh = (event: Event): void => {
-    draftRefresh.value = Number((event.target as HTMLSelectElement).value)
+  const editRefresh = (seconds: number | undefined): void => {
+    if (seconds !== undefined) draftRefresh.value = seconds
   }
 
   const CUSTOM = '__custom'
@@ -319,7 +325,7 @@
     showError.value = false
     draftUntilNow.value = value?.type === 'since'
     resetRefresh()
-    if (offersRelative.value && (value?.type === 'relative' || !offersAbsolute.value)) {
+    if (offersRelative.value && (!value || value.type === 'relative' || !offersAbsolute.value)) {
       panelMode.value = 'relative'
       const option = value
         ? props.relativeOptions.find((item) => sameRelative(value, item))
@@ -356,8 +362,9 @@
     draftKey.value = CUSTOM
   }
 
-  const editCustomUnit = (event: Event): void => {
-    customUnit.value = (event.target as HTMLSelectElement).value as DateRangeUnit
+  const editCustomUnit = (unit: DateRangeUnit | undefined): void => {
+    if (!unit) return
+    customUnit.value = unit
     draftKey.value = CUSTOM
   }
 
@@ -587,8 +594,8 @@
   })
 
   const modeOptions = computed(() => [
-    { label: t('dateRangePicker.absolute'), value: 'absolute' },
-    { label: t('dateRangePicker.relative'), value: 'relative' }
+    { label: t('dateRangePicker.relative'), value: 'relative' },
+    { label: t('dateRangePicker.absolute'), value: 'absolute' }
   ])
 
   const setPanelMode = (value: string | undefined): void => {
@@ -620,7 +627,7 @@
   }
 
   const onPanelKeydown = (event: KeyboardEvent): void => {
-    if (event.key === 'Escape') {
+    if (event.key === 'Escape' && !event.defaultPrevented) {
       event.preventDefault()
       close()
     }
@@ -642,14 +649,14 @@
 
   const startRefresh = (): void => {
     stopRefresh()
-    const seconds = refreshInterval.value
+    const seconds = offersRefresh.value ? refreshInterval.value : 0
     if (!mounted.value || isDisabled.value || !seconds || seconds <= 0) return
     refreshTimer = setInterval(() => {
       if (globalThis.document?.visibilityState !== 'hidden') emit('refresh')
     }, seconds * 1000)
   }
 
-  watch([refreshInterval, isDisabled, mounted], startRefresh)
+  watch([refreshInterval, offersRefresh, isDisabled, mounted], startRefresh)
 
   onMounted(() => {
     globalThis.document?.addEventListener('mousedown', onDocumentMousedown)
@@ -859,8 +866,10 @@
                 class="text-label-sm text-(--text-muted)"
                 >{{ t('dateRangePicker.custom') }}</span
               >
-              <div class="flex flex-wrap items-end gap-(--spacing-xs)">
-                <div class="flex min-w-20 flex-1 flex-col gap-(--spacing-2xs)">
+              <div
+                class="grid grid-cols-[minmax(0,1fr)_minmax(0,2fr)] items-end gap-x-(--spacing-xs)"
+              >
+                <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
                   <label
                     :for="customAmountId"
                     class="text-label-sm text-(--text-default)"
@@ -877,34 +886,33 @@
                     @update:model-value="editCustomAmount"
                   />
                 </div>
-                <div class="flex min-w-32 flex-[2] flex-col gap-(--spacing-2xs)">
-                  <label
-                    :for="customUnitId"
+                <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
+                  <span
+                    :id="unitLabelId"
                     class="text-label-sm text-(--text-default)"
-                    >{{ t('dateRangePicker.unit') }}</label
+                    >{{ t('dateRangePicker.unit') }}</span
                   >
-                  <span class="relative inline-flex w-full items-center">
-                    <select
+                  <Select
+                    :model-value="customUnit"
+                    :size="size"
+                    :aria-labelledby="unitLabelId"
+                    :data-testid="`${testId}__unit-select`"
+                    @update:model-value="editCustomUnit"
+                  >
+                    <SelectTrigger
                       :id="customUnitId"
-                      :value="customUnit"
-                      :data-size="size"
                       :data-testid="`${testId}__unit`"
-                      class="text-label-sm w-full appearance-none rounded-(--shape-control) border border-(--border-input) bg-(--bg-surface) ps-(--spacing-sm) pe-(--spacing-lg) text-(--text-default) transition-colors duration-150 ease-out [&:not(:focus)]:hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 motion-reduce:transition-none pointer-coarse:h-11"
-                      @change="editCustomUnit"
-                    >
-                      <option
+                      class="pointer-coarse:h-11"
+                    />
+                    <SelectContent :data-testid="`${testId}__unit-list`">
+                      <SelectItem
                         v-for="unit in DATE_RANGE_UNITS"
                         :key="unit"
                         :value="unit"
+                        >{{ unitLabel(unit) }}</SelectItem
                       >
-                        {{ unitLabel(unit) }}
-                      </option>
-                    </select>
-                    <i
-                      class="az az-chevron-down pointer-events-none absolute end-(--spacing-sm) text-[length:inherit] leading-none text-(--text-muted)"
-                      aria-hidden="true"
-                    />
-                  </span>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
             </div>
@@ -950,36 +958,35 @@
 
           <div
             v-if="offersRefresh"
-            class="flex shrink-0 flex-wrap items-center gap-x-(--spacing-xs) gap-y-(--spacing-2xs) border-t border-(--border-default) px-(--spacing-sm) py-(--spacing-xs)"
+            class="grid shrink-0 grid-cols-[minmax(0,1fr)_minmax(0,2fr)] items-center gap-x-(--spacing-xs) border-t border-(--border-default) px-(--spacing-sm) py-(--spacing-xs)"
             :data-testid="`${testId}__refresh`"
           >
-            <label
-              :for="refreshId"
-              class="text-label-sm shrink-0 text-(--text-default)"
-              >{{ t('dateRangePicker.refreshEvery') }}</label
+            <span
+              :id="refreshLabelId"
+              class="text-label-sm min-w-0 text-(--text-default) [overflow-wrap:anywhere]"
+              >{{ t('dateRangePicker.refreshEvery') }}</span
             >
-            <span class="relative inline-flex min-w-28 flex-1 items-center">
-              <select
+            <Select
+              :model-value="draftRefresh"
+              :size="size"
+              :aria-labelledby="refreshLabelId"
+              :data-testid="`${testId}__refresh-select`"
+              @update:model-value="editRefresh"
+            >
+              <SelectTrigger
                 :id="refreshId"
-                :value="draftRefresh"
-                :data-size="size"
                 :data-testid="`${testId}__refresh-interval`"
-                class="text-label-sm w-full appearance-none rounded-(--shape-control) border border-(--border-input) bg-(--bg-surface) ps-(--spacing-sm) pe-(--spacing-lg) text-(--text-default) transition-colors duration-150 ease-out [&:not(:focus)]:hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 motion-reduce:transition-none pointer-coarse:h-11"
-                @change="editRefresh"
-              >
-                <option
+                class="pointer-coarse:h-11"
+              />
+              <SelectContent :data-testid="`${testId}__refresh-list`">
+                <SelectItem
                   v-for="seconds in refreshChoices"
                   :key="seconds"
                   :value="seconds"
+                  >{{ intervalLabel(seconds) }}</SelectItem
                 >
-                  {{ intervalLabel(seconds) }}
-                </option>
-              </select>
-              <i
-                class="az az-chevron-down pointer-events-none absolute end-(--spacing-sm) text-[length:inherit] leading-none text-(--text-muted)"
-                aria-hidden="true"
-              />
-            </span>
+              </SelectContent>
+            </Select>
           </div>
 
           <div
