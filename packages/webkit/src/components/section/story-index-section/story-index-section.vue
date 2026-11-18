@@ -5,7 +5,7 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import Button from '../../action/button/button.vue'
-  import type { CompanyLogoMark } from '../../content/company-logo/company-logo.vue'
+  import type { ThirdPartyLogoMark } from '../../content/third-party-logo/third-party-logo.vue'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Input from '../../input/input/input.vue'
   import Select from '../../input/select/select.vue'
@@ -21,7 +21,7 @@
     inheritAttrs: false
   })
 
-  export type { CompanyLogoMark }
+  export type { ThirdPartyLogoMark }
 
   /** One success story, rendered as a linked card. */
   export type StoryIndexSectionItem = {
@@ -30,7 +30,7 @@
     /** Destination of the story. */
     href: string
     /** The client the story is about. */
-    client: CompanyLogoMark
+    client: ThirdPartyLogoMark
     /** Eyebrow of the card, usually the industry. */
     category: string
     /** One or two sentences on the story. */

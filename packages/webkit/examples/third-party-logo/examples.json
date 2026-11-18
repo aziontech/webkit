@@ -1,6 +1,6 @@
 {
-  "component": "company-logo",
-  "title": "Components/Content/CompanyLogo",
+  "component": "third-party-logo",
+  "title": "Components/Content/ThirdPartyLogo",
   "examples": [
     {
       "name": "Default",

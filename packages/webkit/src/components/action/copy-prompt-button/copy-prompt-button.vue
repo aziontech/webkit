@@ -14,7 +14,7 @@
     name: string
     /** Icon-font class of the single-colour mark, such as `az az-claude`; used when `logo` is not set. */
     icon?: string
-    /** URL of the agent's mark file, such as the `@aziontech/webkit/assets/claude-symbol-color.svg` asset, drawn through `CompanyLogo` in the chip's own ink. */
+    /** URL of the agent's mark file, such as the `@aziontech/webkit/assets/claude-symbol-color.svg` asset, drawn through `ThirdPartyLogo` in the chip's own ink. */
     logo?: string
   }
 
@@ -60,8 +60,8 @@
   const CopyButtonFallback = defineAsyncComponent(
     () => import('../copy-button/copy-button-fallback.vue')
   )
-  const CompanyLogo = defineAsyncComponent({
-    loader: () => import('../../content/company-logo/company-logo.vue'),
+  const ThirdPartyLogo = defineAsyncComponent({
+    loader: () => import('../../content/third-party-logo/third-party-logo.vue'),
     loadingComponent: () => h('span', { 'aria-hidden': 'true', class: 'inline-block size-5' }),
     delay: 0
   })
@@ -185,7 +185,7 @@
               v-for="agent in agents"
               :key="agent.name"
             >
-              <CompanyLogo
+              <ThirdPartyLogo
                 v-if="agent.logo"
                 :name="agent.name"
                 :src="agent.logo"

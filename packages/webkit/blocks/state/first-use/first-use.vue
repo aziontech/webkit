@@ -5,7 +5,6 @@
   import geminiMark from '@aziontech/webkit/assets/gemini-symbol-color.svg'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import CompanyLogo from '@aziontech/webkit/company-logo'
   import CopyButton from '@aziontech/webkit/copy-button'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Input from '@aziontech/webkit/input'
@@ -13,6 +12,7 @@
   import Item from '@aziontech/webkit/item'
   import Link from '@aziontech/webkit/link'
   import Skeleton from '@aziontech/webkit/skeleton'
+  import ThirdPartyLogo from '@aziontech/webkit/third-party-logo'
 
   const agentMarks = [
     { name: 'Claude', src: claudeMark, mono: false },
@@ -339,7 +339,7 @@
                 :key="agent.name"
                 class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)"
               >
-                <CompanyLogo
+                <ThirdPartyLogo
                   :name="agent.name"
                   :src="agent.src"
                   :variant="agent.mono ? 'current' : 'color'"

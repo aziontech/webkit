@@ -26,14 +26,14 @@
   "`DocHero` — the docs-home masthead whose `actions` slot holds `Get started` and this button.",
   "`CopyButton` — the icon-only copy control; this button shares its clipboard fallback.",
   "`HighlightButton` — the AI-flow button whose glow, gradient and scrim this chip shares.",
-  "`CompanyLogo` — draws an agent mark from its asset file in the chip's ink."
+  "`ThirdPartyLogo` — draws an agent mark from its asset file in the chip's ink."
  ],
  "bestPractices": [
   "Put it second, after the primary `Button` (`Get started`), and explain what the prompt does in one line below the row (`DocHero`'s `note` slot).",
   "Keep the default agents unless the product supports a different set; pass `:agents=\"[]\"` to draw the label alone.",
   "Pass the exact prompt in `value`; the button copies it as it stands.",
   "Do not recolour the marks: they are single-colour by design and follow the chip's ink.",
-  "To draw a mark from the agent's asset file instead of the icon font, give the agent a `logo` (`@aziontech/webkit/assets/claude-symbol-color.svg`); `CompanyLogo` flattens it to the chip's ink.",
+  "To draw a mark from the agent's asset file instead of the icon font, give the agent a `logo` (`@aziontech/webkit/assets/claude-symbol-color.svg`); `ThirdPartyLogo` flattens it to the chip's ink.",
   "Set `closable` where the chip is guidance the reader can put away (a first-use overview), not where it is part of a page's composition (a hero). Bind `v-model:open` to remember or restore the choice (`close` still fires with the click)."
  ],
  "props": [
@@ -63,7 +63,7 @@
    "type": "CopyPromptButtonAgent[]",
    "default": "Claude, ChatGPT, Gemini, Cursor",
    "required": "false",
-   "doc": "The agents whose marks follow the label, in order; each is `{ name, icon?, logo? }`, drawn from `logo` through `CompanyLogo` when set and from the `icon` glyph otherwise; an empty list draws no marks."
+   "doc": "The agents whose marks follow the label, in order; each is `{ name, icon?, logo? }`, drawn from `logo` through `ThirdPartyLogo` when set and from the `icon` glyph otherwise; an empty list draws no marks."
   },
   {
    "name": "disabled",

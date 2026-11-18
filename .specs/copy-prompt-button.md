@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 8
 template: 2
-checksum: 863804d223e525748cd5d45a676ea10844e071e9a55e2cc501fbf2bf3b5338bc
+checksum: 0bca51fd50bb157941bc507661193059ecfda00f96574754477f7f7f51ac2435
 created: 2026-11-12
 last_updated: 2026-11-15
 ---
@@ -35,7 +35,7 @@ The "Copy prompt" button of a docs or product home: one dark chip that copies a 
 - `DocHero` — the docs-home masthead whose `actions` slot holds `Get started` and this button.
 - `CopyButton` — the icon-only copy control; this button shares its clipboard fallback.
 - `HighlightButton` — the AI-flow button whose glow, gradient and scrim this chip shares.
-- `CompanyLogo` — draws an agent mark from its asset file in the chip's ink.
+- `ThirdPartyLogo` — draws an agent mark from its asset file in the chip's ink.
 
 ## Best practices
 
@@ -43,7 +43,7 @@ The "Copy prompt" button of a docs or product home: one dark chip that copies a 
 - Keep the default agents unless the product supports a different set; pass `:agents="[]"` to draw the label alone.
 - Pass the exact prompt in `value`; the button copies it as it stands.
 - Do not recolour the marks: they are single-colour by design and follow the chip's ink.
-- To draw a mark from the agent's asset file instead of the icon font, give the agent a `logo` (`@aziontech/webkit/assets/claude-symbol-color.svg`); `CompanyLogo` flattens it to the chip's ink.
+- To draw a mark from the agent's asset file instead of the icon font, give the agent a `logo` (`@aziontech/webkit/assets/claude-symbol-color.svg`); `ThirdPartyLogo` flattens it to the chip's ink.
 - Set `closable` where the chip is guidance the reader can put away (a first-use overview), not where it is part of a page's composition (a hero). Bind `v-model:open` to remember or restore the choice (`close` still fires with the click).
 
 ## Usage
@@ -70,14 +70,14 @@ The "Copy prompt" button of a docs or product home: one dark chip that copies a 
 
 ## Props
 
-| Prop          | Type                      | Default                         | Required | JSDoc                                                                                                                                                                                                    |
-| ------------- | ------------------------- | ------------------------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `value`       | `string`                  | —                               | true     | The prompt copied to the clipboard on activation.                                                                                                                                                        |
-| `label`       | `string`                  | `''`                            | false    | Visible text and accessible name while idle; empty uses the catalog's `Copy prompt`.                                                                                                                     |
-| `copiedLabel` | `string`                  | `''`                            | false    | Visible text announced after a copy; empty uses the catalog's `Copied`.                                                                                                                                  |
-| `agents`      | `CopyPromptButtonAgent[]` | Claude, ChatGPT, Gemini, Cursor | false    | The agents whose marks follow the label, in order; each is `{ name, icon?, logo? }`, drawn from `logo` through `CompanyLogo` when set and from the `icon` glyph otherwise; an empty list draws no marks. |
-| `disabled`    | `boolean`                 | `false`                         | false    | Disables the button; `copy` is not emitted.                                                                                                                                                              |
-| `closable`    | `boolean`                 | `false`                         | false    | Shows a dismiss button beside the chip; activating it removes both from the layout and emits `close`.                                                                                                    |
+| Prop          | Type                      | Default                         | Required | JSDoc                                                                                                                                                                                                       |
+| ------------- | ------------------------- | ------------------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `value`       | `string`                  | —                               | true     | The prompt copied to the clipboard on activation.                                                                                                                                                           |
+| `label`       | `string`                  | `''`                            | false    | Visible text and accessible name while idle; empty uses the catalog's `Copy prompt`.                                                                                                                        |
+| `copiedLabel` | `string`                  | `''`                            | false    | Visible text announced after a copy; empty uses the catalog's `Copied`.                                                                                                                                     |
+| `agents`      | `CopyPromptButtonAgent[]` | Claude, ChatGPT, Gemini, Cursor | false    | The agents whose marks follow the label, in order; each is `{ name, icon?, logo? }`, drawn from `logo` through `ThirdPartyLogo` when set and from the `icon` glyph otherwise; an empty list draws no marks. |
+| `disabled`    | `boolean`                 | `false`                         | false    | Disables the button; `copy` is not emitted.                                                                                                                                                                 |
+| `closable`    | `boolean`                 | `false`                         | false    | Shows a dismiss button beside the chip; activating it removes both from the layout and emits `close`.                                                                                                       |
 
 ## v-model
 
@@ -119,7 +119,7 @@ _none_
 | scrim    | `var(--bg-backdrop)`                                                                                                                                                                                          |
 | rim      | `var(--secondary-mask)` border, `var(--border-width-default)`                                                                                                                                                 |
 | label    | `.text-button-lg`, `var(--color-base-white)`                                                                                                                                                                  |
-| marks    | `currentColor` of the label (`CompanyLogo variant="current"` or the icon glyph at `.text-label-lg`)                                                                                                           |
+| marks    | `currentColor` of the label (`ThirdPartyLogo variant="current"` or the icon glyph at `.text-label-lg`)                                                                                                        |
 | shape    | `var(--shape-button)`                                                                                                                                                                                         |
 | spacing  | `var(--spacing-md)` start, `var(--spacing-sm)` end, `var(--spacing-xs)` gap (`var(--spacing-sm)` from `sm`), `var(--spacing-2xs)` between marks (`var(--spacing-xs)` from `sm`) and before the dismiss button |
 | focus    | `var(--ring-color)` ring, offset on `var(--bg-canvas)`                                                                                                                                                        |
@@ -171,14 +171,14 @@ _none_
 
 - Bundle budget: 7.9 KB gzip for `./copy-prompt-button` in `.size-limit.json`, initial chunks only (the entry and the chunks it imports statically); `Tooltip` is the growth.
 - Runtime budget: none; one timer while the copied state shows.
-- Heavy parts: the copy fallback popover is an async component, requested only when the clipboard write is refused. The dismiss `IconButton` loads only when `closable` is set and `CompanyLogo` only when an agent sets `logo`; each keeps its box with an empty placeholder of the same size until its chunk arrives, and server rendering resolves both before it writes the HTML.
+- Heavy parts: the copy fallback popover is an async component, requested only when the clipboard write is refused. The dismiss `IconButton` loads only when `closable` is set and `ThirdPartyLogo` only when an agent sets `logo`; each keeps its box with an empty placeholder of the same size until its chunk arrives, and server rendering resolves both before it writes the HTML.
 
 ## Examples
 
 - Default — the chip with the default agents, beside a primary `Get started`.
 - Agents — a custom agent list, and the label alone with `:agents="[]"`.
 - Disabled — `disabled`.
-- Closable — `closable` with the agent marks drawn from their asset files through `CompanyLogo`; the dismiss button removes the chip.
+- Closable — `closable` with the agent marks drawn from their asset files through `ThirdPartyLogo`; the dismiss button removes the chip.
 
 ## Constraints — DO NOT
 

@@ -353,16 +353,16 @@ payload take `DocOnThisPageItem` / `DocOnThisPageGroup` (was `DocTocItem` / `Doc
 | `AppliedFilter`                        | `TableAppliedFilter`                           |
 | `ArchitectureTabsAction`               | `SectionTitleAction`                           |
 | `ArticleBodyCrumb`                     | `BreadcrumbItemData`                           |
-| `ArticleCardsMark`                     | `CompanyLogoMark`                              |
+| `ArticleCardsMark`                     | `ThirdPartyLogoMark`                           |
 | `ArticleIndexBlogAuthor`               | `ArticleIndexSectionAuthor`                    |
 | `ArticleIndexBlogEmpty`                | `ArticleIndexSectionEmpty`                     |
-| `ArticleIndexBlogMark`                 | `CompanyLogoMark`                              |
+| `ArticleIndexBlogMark`                 | `ThirdPartyLogoMark`                           |
 | `ArticleIndexBlogRowKind`              | `ArticleIndexSectionRowKind`                   |
 | `ArticleIndexBlogSearch`               | `ArticleIndexSectionSearch`                    |
 | `ArticleIndexResourceHubEmpty`         | `ArticleIndexSectionEmpty`                     |
 | `ArticleIndexResourceHubFacet`         | `ArticleIndexSectionFacet`                     |
 | `ArticleIndexResourceHubItem`          | `ArticleIndexSectionItem`                      |
-| `ArticleIndexResourceHubMark`          | `CompanyLogoMark`                              |
+| `ArticleIndexResourceHubMark`          | `ThirdPartyLogoMark`                           |
 | `ArticleIndexResourceHubRowKind`       | `ArticleIndexSectionRowKind`                   |
 | `BoxGridSelectionItem`                 | `RadioGroupOption`                             |
 | `CalendarMonth`                        | `DatePickerMonth`                              |
@@ -372,8 +372,8 @@ payload take `DocOnThisPageItem` / `DocOnThisPageGroup` (was `DocTocItem` / `Doc
 | `CalendarValue`                        | `DatePickerValue`                              |
 | `CardsItemSlotProps`                   | `CardListItemSlotProps`                        |
 | `CardsSelectionMode`                   | `CardListSelectionMode`                        |
-| `ClientMosaicColumnsLogoTreatment`     | `CompanyLogoTreatment`                         |
-| `ClientMosaicLogoTreatment`            | `CompanyLogoTreatment`                         |
+| `ClientMosaicColumnsLogoTreatment`     | `ThirdPartyLogoTreatment`                      |
+| `ClientMosaicLogoTreatment`            | `ThirdPartyLogoTreatment`                      |
 | `ClientQuotesAction`                   | `SectionTitleAction`                           |
 | `CliTerminalAction`                    | `SectionTitleAction`                           |
 | `ClosingCallToActionAction`            | `SectionTitleAction`                           |
@@ -428,12 +428,12 @@ payload take `DocOnThisPageItem` / `DocOnThisPageGroup` (was `DocTocItem` / `Doc
 | `InputTextType`                        | `InputType`                                    |
 | `ListingTableAction`                   | `SectionTitleAction`                           |
 | `LogoWallQuoteAction`                  | `SectionTitleAction`                           |
-| `LogoWallQuoteLogoTreatment`           | `CompanyLogoTreatment`                         |
+| `LogoWallQuoteLogoTreatment`           | `ThirdPartyLogoTreatment`                      |
 | `MediaSplitStackAction`                | `SectionTitleAction`                           |
 | `MessageSeverity`                      | `AlertSeverity`                                |
 | `MessageSize`                          | `AlertSize`                                    |
 | `MoveDirection`                        | `TransferListMoveDirection`                    |
-| `NetworkSectionLogoTreatment`          | `CompanyLogoTreatment`                         |
+| `NetworkSectionLogoTreatment`          | `ThirdPartyLogoTreatment`                      |
 | `PaginatorContext`                     | `PaginationContext`                            |
 | `PasswordRequirement`                  | `PasswordRequirementsRule`                     |
 | `PhoneNumber`                          | `PhoneInputValue`                              |
@@ -456,7 +456,7 @@ payload take `DocOnThisPageItem` / `DocOnThisPageGroup` (was `DocTocItem` / `Doc
 | `StickyScrollCodeActionKind`           | `FeatureScrollSectionActionKind`               |
 | `StickyScrollCodeItem`                 | `FeatureScrollSectionItem`                     |
 | `StickyScrollCodeSample`               | `FeatureScrollSectionCode`                     |
-| `StoryLibraryClient`                   | `CompanyLogoMark`                              |
+| `StoryLibraryClient`                   | `ThirdPartyLogoMark`                           |
 | `SubjectLibraryAction`                 | `SectionTitleAction`                           |
 | `TabViewContext`                       | `TabsContext`                                  |
 | `TabViewSlideDirection`                | `TabsSlideDirection`                           |
@@ -470,9 +470,9 @@ payload take `DocOnThisPageItem` / `DocOnThisPageGroup` (was `DocTocItem` / `Doc
 Every exported type starts with its component's name, and a shape several components shared is one
 type now, exported by the component that owns it: a section's `primaryAction` / `secondaryAction`
 is `SectionTitleAction` (`@aziontech/webkit/section-title`), a breadcrumb entry is
-`BreadcrumbItemData`, a client mark `{ name, logo }` is `CompanyLogoMark` and a mark's ink is
-`CompanyLogoTreatment` (`@aziontech/webkit/company-logo`). Each section still re-exports the shared type, so an
-import the codemod rewrote keeps its path. `CompanyLogoTreatment` uses the `CompanyLogo` words: `as-is` is
+`BreadcrumbItemData`, a client mark `{ name, logo }` is `ThirdPartyLogoMark` and a mark's ink is
+`ThirdPartyLogoTreatment` (`@aziontech/webkit/third-party-logo`). Each section still re-exports the shared type, so an
+import the codemod rewrote keeps its path. `ThirdPartyLogoTreatment` uses the `ThirdPartyLogo` words: `as-is` is
 `color`, and `logoTreatment: 'invert-light'` on a `LogoWallSection` mark is `artwork: 'light'`
 (change those values by hand). The overlay position types are `TooltipSide`, `PopoverSide`,
 `HoverCardSide`, `DropdownMenuSide` and `HintSide`, with `*Align` beside them (see "Overlays:
@@ -1338,7 +1338,7 @@ as `MANUAL`.
 The two lockups with the "Move to the Edge" tagline are retired: remove them, or use
 `<Brand variant="extended" />` (AZION technologies) where a tagline lockup stood. The codemod
 rewrites `svg/azion/default` to `Brand` and lists the other imports as `MANUAL`. Another company's
-mark (a client, a competitor, a coding agent) is `CompanyLogo` (`@aziontech/webkit/company-logo`),
+mark (a client, a competitor, a coding agent) is `ThirdPartyLogo` (`@aziontech/webkit/third-party-logo`),
 never `Brand`.
 
 ### Removed in 6.0: feedback, content, code and chart names

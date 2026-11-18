@@ -8,10 +8,10 @@
   import rennerLogo from '@aziontech/webkit/assets/renner-extended-color.svg'
   import stoneLogo from '@aziontech/webkit/assets/stone-extended-color.svg'
   import zoopLogo from '@aziontech/webkit/assets/zoop-extended-color.svg'
-  import CompanyLogo from '@aziontech/webkit/company-logo'
   import LogoWall from '@aziontech/webkit/logo-wall'
   import Quote from '@aziontech/webkit/quote'
   import RegistrationFrame from '@aziontech/webkit/registration-frame'
+  import ThirdPartyLogo from '@aziontech/webkit/third-party-logo'
 </script>
 
 <template>
@@ -53,7 +53,7 @@
           job-title="CTO at Acme Inc."
         >
           <template #mark>
-            <CompanyLogo
+            <ThirdPartyLogo
               name="Acme Inc."
               size="large"
             />

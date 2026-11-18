@@ -19,7 +19,7 @@
     },
     {
       "name": "Closable",
-      "summary": "`closable` puts a dismiss button beside the chip; activating it removes both from the layout and emits `close`, so the page can remember the choice. The agent marks are drawn from their asset files through `CompanyLogo`, flattened to the chip's white.",
+      "summary": "`closable` puts a dismiss button beside the chip; activating it removes both from the layout and emits `close`, so the page can remember the choice. The agent marks are drawn from their asset files through `ThirdPartyLogo`, flattened to the chip's white.",
       "file": "closable.vue"
     }
   ]
