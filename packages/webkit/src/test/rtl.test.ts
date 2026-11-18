@@ -210,11 +210,13 @@ describe('values keep their own direction inside an rtl trigger', () => {
       container: rtlContainer('rtl'),
       props: { country: 'BR' }
     })
-    const value = getByTestId('select-trigger__value')
-    const isolate = value.querySelector('bdi')
-    expect(isolate?.getAttribute('dir')).toBe('ltr')
-    expect(isolate?.textContent).toBe('+55')
-    expect(value.closest('[dir]')?.getAttribute('dir')).toBe('rtl')
+    const dialCode = getByTestId('phone-input__selected-dial-code')
+    expect(dialCode.getAttribute('dir')).toBe('ltr')
+    expect(dialCode.textContent?.trim()).toBe('+55')
+    expect(getComputedStyle(dialCode).unicodeBidi).toBe('isolate')
+    expect(getComputedStyle(dialCode).direction).toBe('ltr')
+    expect(dialCode.parentElement?.closest('[dir]')?.getAttribute('dir')).toBe('rtl')
+    expect(getByTestId('select-trigger__value').contains(dialCode)).toBe(false)
   })
 
   it('Select: the shown value sits in a <bdi> that follows its own first strong character', () => {

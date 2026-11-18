@@ -531,10 +531,49 @@ describe('DateRangePicker', () => {
     const popover = await open(view.getByTestId)
     await fireEvent.click(within(popover).getByRole('radio', { name: 'Relative' }))
     expect(
-      (within(popover).getByRole('radio', { name: 'Last 5 minutes' }) as HTMLInputElement).checked
+      (within(popover).getByRole('radio', { name: 'Today' }) as HTMLInputElement).checked
     ).toBe(true)
-    expect((within(popover).getByLabelText('Duration') as HTMLInputElement).value).toBe('5')
-    expect((within(popover).getByLabelText('Unit') as HTMLSelectElement).value).toBe('minute')
+    expect((within(popover).getByLabelText('Duration') as HTMLInputElement).value).toBe('1')
+    expect((within(popover).getByLabelText('Unit') as HTMLSelectElement).value).toBe('day')
+  })
+
+  it('lists the twelve default quick ranges above the custom duration', async () => {
+    const view = render(DateRangePicker, { props: { now: NOW } })
+    const popover = await openRelative(view.getByTestId)
+    expect(
+      within(popover)
+        .getAllByTestId(`${TEST_ID}__option`)
+        .map((option) => option.textContent?.trim())
+    ).toEqual([
+      'Today',
+      'This week',
+      'Last minute',
+      'Last 5 minutes',
+      'Last 15 minutes',
+      'Last 30 minutes',
+      'Last hour',
+      'Last 24 hours',
+      'Last 7 days',
+      'Last 30 days',
+      'Last 90 days',
+      'Last year'
+    ])
+    const quick = within(popover).getByTestId(`${TEST_ID}__quick`)
+    const custom = within(popover).getByTestId(`${TEST_ID}__custom`)
+    expect(quick.compareDocumentPosition(custom) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+  })
+
+  it.each([
+    ['Last 90 days', { amount: 90, unit: 'day', key: 'last-90-days' }],
+    ['Last year', { amount: 1, unit: 'year', key: 'last-1-year' }],
+    ['Last minute', { amount: 1, unit: 'minute', key: 'last-1-minute' }]
+  ] as const)('commits %s and prints it on the trigger', async (name, value) => {
+    const view = render(DateRangePicker, { props: { now: NOW } })
+    const popover = await openRelative(view.getByTestId)
+    await fireEvent.click(within(popover).getByRole('radio', { name }))
+    await fireEvent.click(within(popover).getByRole('button', { name: 'Apply' }))
+    expect(lastValue(view.emitted())).toEqual({ type: 'relative', ...value })
+    await waitFor(() => expect(view.getByTestId(`${TEST_ID}__trigger`).textContent).toContain(name))
   })
 
   it('mirrors a picked quick range in the custom duration and unit', async () => {
