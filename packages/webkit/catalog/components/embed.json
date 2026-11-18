@@ -24,6 +24,8 @@
   "Do not embed something essential. A blocked or failed third-party frame leaves a hole the page cannot fill."
  ],
  "channels": [
-  "app"
+  "app",
+  "docs",
+  "site"
  ]
 }

@@ -1,0 +1,26 @@
+{
+  "_id": "console-showcase-section",
+  "props": {
+    "variant": "diagram",
+    "texture": "none",
+    "eyebrow": "Marketplace",
+    "title": "Add a capability in one click",
+    "description": "Integrations install into a workload from the marketplace."
+  },
+  "scenes": {
+    "scene": {
+      "component": "IntegrationCard",
+      "props": {
+        "title": "Request Signer",
+        "vendor": "Acme Inc.",
+        "logo": "az az-key",
+        "description": "Sign every request at the edge with a rotating key, so the origin only answers traffic that passed through.",
+        "badges": [
+          {
+            "label": "Firewall"
+          }
+        ]
+      }
+    }
+  }
+}

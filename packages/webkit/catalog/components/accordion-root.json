@@ -24,6 +24,7 @@
   "Set `size` and `icon-position` on the root, not per item — they are provided to every item through context."
  ],
  "channels": [
-  "app"
+  "app",
+  "site"
  ]
 }

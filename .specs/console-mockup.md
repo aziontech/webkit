@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 8
 template: 2
-checksum: fb9e379d2afde1ba6cb176adf32b3c743a3d2b6bd1760b09650f14ef7e01ec83
+checksum: aa8bf016ba470dfc3c14a453e5344b849238fdb9394f3e872e32d2c20020d0fb
 created: 2026-10-23
-last_updated: 2026-11-17
+last_updated: 2026-11-18
 ---
 
 # ConsoleMockup — Component Spec
@@ -58,6 +58,8 @@ Draws one of the **official console widgets**: a scaled, inert mock of an Azion 
   </div>
 </template>
 ```
+
+**Three ways in** (decision RV-K2-1, rule `webkit-content-channels`). The same data renders from a docs page as the `<ConsoleMockup>` tag `DocMarkdown` mounts (braced attribute values are JSON), set in a framed 16:9 box because the mockup fills its container. The site draws it as the `ConsoleMockup` scene.
 
 ## Props
 
@@ -180,6 +182,7 @@ The root's own tokens are the padding and fade color of the window it draws arou
 - Library — every registered widget in the cell that hosts it on the site. **Justified addition:** `name` is the main public API and its values are a closed registry, so this story is the only place a consumer can see what `name` accepts. It is not snapshotted (`visual: false`): fragments run timers and the registry resolves lazily, so its pixels are not deterministic; Default and Types carry the pixel contract.
 
 - Still fragment — a fragment with `:cursor="false"` beside the same fragment with its collaborator cursor. **Justified addition:** `cursor` is a render path none of the other stories turns off.
+- Markdown — a `<ConsoleMockup name="…" />` tag in its frame rendered by `DocMarkdown` inside `DocProse`. Justified: the docs channel (RV-K2-1).
 
 There is no `Sizes` story (no `size` prop) and no `Loading` / `Disabled` story (neither prop is declared).
 

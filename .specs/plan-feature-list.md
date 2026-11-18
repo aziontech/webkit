@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: 228e40412e535599c8efd1f146735dc811243611d15ed8f596105e61707f6963
+checksum: 1c1837ace86cdfb5fb325bdebd670a7cfaeedb2f9209fcdae97623357a64df4f
 created: 2026-11-12
-last_updated: 2026-11-16
+last_updated: 2026-11-18
 ---
 
 # PlanFeatureList — Component Spec
@@ -67,6 +67,8 @@ The features a plan, product or upgrade includes, each behind a check mark, in o
   />
 </template>
 ```
+
+**Three ways in** (decision RV-K2-1, rule `webkit-content-channels`). From a docs page it is the `<PlanFeatureList items={[…]} />` tag `DocMarkdown` mounts. From the site's page JSON it is the `PlanFeatureList` scene a band draws by name (a `console-showcase-section` with `variant: "diagram"` and `texture: "none"`, so no texture sits behind it).
 
 ## Props
 
@@ -150,6 +152,8 @@ No built-in strings: every visible text comes from `items`, and the accessible n
 - Default — the perks of an upgrade card, four short labels in one column.
 - Columns — the same list at `columns: 2` (eight perks); justified because `columns` changes the layout and is the component's only axis.
 - WithDescriptions — the features of a change-plan drawer, each with a one-line description; justified because the description row is a distinct anatomy.
+- Markdown — the Default content as a `<PlanFeatureList>` tag rendered by `DocMarkdown` inside `DocProse`. Justified: the docs channel (RV-K2-1).
+- Page JSON — the Default features as a `PlanFeatureList` scene in a `console-showcase-section` entry with `texture: "none"`, rendered by `SitePage`, with the JSON shown. Justified: the site channel (RV-K2-1).
 
 ## Spec review
 

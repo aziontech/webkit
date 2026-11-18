@@ -1,6 +1,6 @@
 # Doc Markdown
 
-> Renders a documentation page written in Markdown with Mintlify-style MDX component tags into the documentation components. Prose becomes plain semantic HTML (headings, paragraphs, lists, block quotes, rules, tables, inline code, links, bold, italic) that the surrounding `DocProse` styles, and the component tags (`<Note>`, `<Steps>`, `<CardGroup>`, `<Tabs>`, `<CodeGroup>`, `<Update>`, `<FlowDiagram>`, the chart tags, `<Tooltip>` …) mount `DocCallout`, `DocSteps`, `DocCardGroup`, `Tabs`, `DocCodeGroup`, `DocChangelogEntry`, `HoverCard` and the rest. Headings render as `DocHeading` with unique slug ids, and the named export `parseDocMarkdown` returns the same headings (for a standalone `DocTableOfContents`; inside `DocLayout` the rendered `DocHeading`s fill the outline on their own) and the frontmatter (for `DocPageHeader`). It is a small in-house reader of a fixed MDX subset, not an MDX compiler: no JSX expressions, no imports, no script, and no `v-html`, so a page's source can never run code.
+> Renders a documentation page written in Markdown with Mintlify-style MDX component tags into the documentation components. Prose becomes plain semantic HTML (headings, paragraphs, lists, block quotes, rules, tables, inline code, links, bold, italic) that the surrounding `DocProse` styles, and the component tags (`<Note>`, `<Steps>`, `<CardGroup>`, `<Tabs>`, `<CodeGroup>`, `<Update>`, `<FlowDiagram>`, the chart and content tags, `<Tooltip>` …) mount `DocCallout`, `DocSteps`, `DocCardGroup`, `Tabs`, `DocCodeGroup`, `DocChangelogEntry`, `HoverCard` and the rest. Headings render as `DocHeading` with unique slug ids, and the named export `parseDocMarkdown` returns the same headings (for a standalone `DocTableOfContents`; inside `DocLayout` the rendered `DocHeading`s fill the outline on their own) and the frontmatter (for `DocPageHeader`). It is a small in-house reader of a fixed MDX subset, not an MDX compiler: no JSX expressions, no imports, no script, and no `v-html`, so a page's source can never run code.
 
 - Import: `import DocMarkdown from '@aziontech/webkit/doc-markdown'`
 - Category: docs · Surface: docs · Structure: monolithic
@@ -36,6 +36,8 @@
 - `DocPageHeader` — takes the frontmatter's `title` and `description`.
 - `DocCallout`, `DocSteps`, `DocStep`, `DocCardGroup`, `DocCard`, `DocItem`, `DocAccordionGroup`, `DocAccordion`, `Tabs` (a `<Tabs>` tag renders `Tabs` with one `Tabs.Trigger` and `Tabs.Content` per `<Tab title>` child), `DocCodeGroup`, `DocFrame`, `DocPrompt`, `DocChangelogEntry`, `FlowDiagram` — what the tags mount.
 - `BarList`, `Chart`, `DonutChart`, `GaugeChart`, `MapChart`, `SparkChart`, `StatTile`, `StatTileGroup`, `Tracker` — the chart tags, under their own names (decision RV-C2-1). A `<Chart>` tag takes its marks as tags inside it (`<ChartGrid />`, `<ChartAxis />`, `<ChartArea />`, `<ChartBar />`, `<ChartLine />`, `<ChartScatter />`, `<ChartReference />`, `<ChartCrosshair />`, `<ChartTooltip />`, `<ChartLegend />`), and a `<StatTileGroup>` its `<StatTile />` tags; the tags inside render as the root's parts, without the prose styles or the block spacing.
+- `KeyValueList`, `Quote`, `Stats`, `Faq`, `ThirdPartyLogo`, `PricingCard`, `IntegrationCard`, `PlanFeatureList`, `Embed`, `Illustration`, `Diagram`, `ConsoleMockup`, `NetworkMap`, `Carousel` — content components under their own names (decision RV-K2-1), each loaded as an async chunk. A `<KeyValueList>` takes `<KeyValueListItem label="…">` and `<KeyValueListGroup label="…">` tags inside it, and the text between a part's tags is its value, with inline Markdown (bold, emphasis, code, links as `Link`). A `<Carousel>` takes `<CarouselItem>` tags whose content is other tags (a `<Quote />`, a `<Card />`), and `DocMarkdown` adds the previous and next controls. `ConsoleMockup` and `NetworkMap` fill their container, so `DocMarkdown` sets each in a framed box (16:9 and 2:1).
+- `AgentCard`, `CallToAction` — `DocAgentCard` and `DocCallToAction` (decision RV-K2-1); the text inside `<CallToAction>` is its offer copy.
 - `HoverCard` — an inline `<Tooltip tip title linkLabel href>` tag renders as a HoverCard: the term is a dotted-underlined button, the card shows the title, the definition and an optional link.
 - `RegistrationFrame`, `ItemList` — the frame and list an `<ItemGroup>` renders its `<Item>` rows in.
 - `StreamingResponse` — renders chat Markdown with the AI layer's reader; this component reuses that reader's inline tokenizer and `safeHref` and adds the MDX block tags, document heading levels and anchors a docs page needs, which a chat bubble must not have.
@@ -46,6 +48,11 @@
 | --- | --- | --- | --- | --- |
 | `source` | `string` | `''` | false | The page source: optional frontmatter, then Markdown with MDX component tags. |
 | `components` | `Record<string, Component>` | `{}` | false | Replaces the component a block tag mounts, or adds a block tag, keyed by tag name (`Card`, `Note`). The tag's attributes become props. |
+
+## Assets
+
+- Illustrations: every valid name is in [illustrations.md](../foundations/illustrations.md) (MCP `list_assets({ kind: "illustrations" })`). An unknown name renders a "PLACE DESIGN ASSET" placeholder and warns in the console.
+- Diagrams: every valid name is in [diagrams.md](../foundations/diagrams.md) (MCP `list_assets({ kind: "diagrams" })`). An unknown name draws nothing.
 
 ## States
 
@@ -58,7 +65,7 @@
 
 ## Accessibility
 
-- Semantics: headings are real `h1`–`h4` (`DocHeading`) in source order with unique ids; lists are `ul` / `ol`; a table is a real `table` with `th scope="col"` header cells, wrapped in a horizontally scrollable region; a rule is `hr`; a quote is `blockquote`.
+- Semantics: headings are real `h1`–`h4` (`DocHeading`) in source order with unique ids; lists are `ul` / `ol`; a pipe table renders as the WebKit `Table` (decision RV-K2-1: `role="table"`, `columnheader` and `cell` roles, bordered, lines wrapping, its own focusable horizontal scroll region), so a docs table looks like an app table; a rule is `hr`; a quote is `blockquote`.
 - Keyboard map: no keyboard handling of its own; links, heading anchors, tabs, accordions and code copy buttons are the mounted components' and follow their maps.
 - Links: an external link announces `(opens in a new tab)` through a visually hidden suffix; link text is the author's.
 - Visible focus: owned by `DocProse` (links) and the mounted components.

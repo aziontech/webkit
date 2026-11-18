@@ -34,6 +34,8 @@
   "Drive `loading` from the data request so the labels stay in place and only the values shimmer."
  ],
  "channels": [
-  "app"
+  "app",
+  "docs",
+  "site"
  ]
 }

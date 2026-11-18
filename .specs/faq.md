@@ -4,9 +4,9 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 4
-checksum: cd0fdb50a83bfa0e121f9bb508cbc76edf4683d06e0616d41ba6a5f7642b5bc5
+checksum: 47ab3977fb428eba81ef0a72ef9791b1eb2f24e45b5643ae3bf42bc7c4a1287b
 created: 2026-09-22
-last_updated: 2026-11-15
+last_updated: 2026-11-18
 ---
 
 # Faq — Component Spec
@@ -77,6 +77,8 @@ The band is drawn in the hairline register: the two columns and every row are se
 </template>
 ```
 
+**Three ways in** (decision RV-K2-1, rule `webkit-content-channels`). The same data renders from a docs page as the `<Faq>` tag `DocMarkdown` mounts (braced attribute values are JSON). The site places it through `faq-section`; the scoped `answer` slot stays Vue.
+
 ## Props
 
 | Prop     | Type        | Default | Required | JSDoc                                                                                                                         |
@@ -141,6 +143,7 @@ _none_
 - Default
 - Framed — the band draws its own registration frame
 - Rich answer — the `answer` slot ends every answer on a link
+- Markdown — the questions as a `<Faq items={[…]} />` tag rendered by `DocMarkdown` inside `DocProse`. Justified: the docs channel (RV-K2-1).
 
 ## Constraints — DO NOT
 

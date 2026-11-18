@@ -32,6 +32,7 @@
   "Do: turn `show-label` on in docs (`DocCodeGroup` does by default) so every block is titled with its language; set `title` only when the language name is not the right title."
  ],
  "channels": [
-  "app"
+  "app",
+  "site"
  ]
 }

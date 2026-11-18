@@ -30739,6 +30739,7 @@
    "unknown": "An unknown name renders a \"PLACE DESIGN ASSET\" placeholder and warns in the console.",
    "registry": "src/assets/illustrations/registry.ts",
    "usedBy": [
+    "doc-markdown",
     "feature-scroll-section",
     "feature-tabs-section",
     "feature-tiles-section",
@@ -30760,6 +30761,7 @@
    "usedBy": [
     "architecture-tabs-section",
     "diagram",
+    "doc-markdown",
     "feature-scroll-section",
     "feature-tabs-section",
     "feature-widgets-section",

@@ -17,8 +17,8 @@
     component: string
     /** SitePageProps bound onto the scene; the slot's own props win on a clash. */
     props?: Record<string, unknown>
-    /** Scenes drawn in this scene's default slot, in order, such as a Chart's marks or a StatTileGroup's tiles. */
-    children?: SitePageScene[]
+    /** Scenes or plain text drawn in this scene's default slot, in order, such as a Chart's marks, a StatTileGroup's tiles or the value of a KeyValueListItem. */
+    children?: (SitePageScene | string)[]
   }
 
   /** One entry of the page data. */
@@ -46,7 +46,7 @@
   type ResolvedTree = {
     component: Component
     props: Record<string, unknown>
-    children: ResolvedTree[]
+    children: (ResolvedTree | string)[]
   }
 
   type ResolvedScene = ResolvedTree & { slot: string }
@@ -117,7 +117,11 @@
       warnOnce(`scene:${scene.component}`, `no scene is registered as "${scene.component}".`)
       return null
     }
-    const children = (scene.children ?? []).flatMap((child) => resolveTree(child) ?? [])
+    const children = (scene.children ?? []).flatMap((child): (ResolvedTree | string)[] => {
+      if (typeof child === 'string') return [child]
+      const tree = resolveTree(child)
+      return tree ? [tree] : []
+    })
     return { component, props: scene.props ?? {}, children }
   }
 
@@ -131,7 +135,9 @@
       tree.children.length
         ? {
             default: () =>
-              tree.children.map((child, index) => h(SceneTree, { key: index, tree: child }))
+              tree.children.map((child, index) =>
+                typeof child === 'string' ? child : h(SceneTree, { key: index, tree: child })
+              )
           }
         : undefined
     )

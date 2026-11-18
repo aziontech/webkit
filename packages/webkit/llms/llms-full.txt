@@ -1994,7 +1994,7 @@ Pass the name to `Illustration` (`name`) or to a section that shows one (`illust
 
 60 names. These are the only values the components accept. An unknown name renders a "PLACE DESIGN ASSET" placeholder and warns in the console. The MCP tool `list_assets({ kind: "illustrations" })` returns the same list (with a `query` to filter), and `catalog.json#assets.illustrations` points at it as data.
 
-Used by: FeatureScrollSection, FeatureTabsSection, FeatureTilesSection, FeatureWidgetsSection, HeroSection, Illustration, MediaSplitSection, MediaSplitStackSection, SitePage.
+Used by: DocMarkdown, FeatureScrollSection, FeatureTabsSection, FeatureTilesSection, FeatureWidgetsSection, HeroSection, Illustration, MediaSplitSection, MediaSplitStackSection, SitePage.
 
 ## Names
 
@@ -2014,7 +2014,7 @@ Pass the name to `Diagram` (`name`) or to a section that shows one; the label is
 
 28 names. These are the only values the components accept. An unknown name draws nothing. The MCP tool `list_assets({ kind: "diagrams" })` returns the same list (with a `query` to filter), and `catalog.json#assets.diagrams` points at it as data.
 
-Used by: ArchitectureTabsSection, Diagram, FeatureScrollSection, FeatureTabsSection, FeatureWidgetsSection, MediaSplitSection, MediaSplitStackSection, SitePage.
+Used by: ArchitectureTabsSection, Diagram, DocMarkdown, FeatureScrollSection, FeatureTabsSection, FeatureWidgetsSection, MediaSplitSection, MediaSplitStackSection, SitePage.
 
 ## Names
 
@@ -16393,6 +16393,7 @@ Badge is non-interactive: it has no hover, focus, active, or disabled states and
 - For a mock of the Azion console's own shell on a marketing band → use the console shell mockup the page composes; it draws the console chrome and staggers its parts.
 - For content whose layout depends on an overlay (`dialog`, `drawer`, a dropdown panel) or a JS breakpoint composable — those still read the outer page (see States), so the frame cannot show them at the simulated size.
 - For a framed page section or grid cell → use `registration-frame`.
+- In a docs Markdown page or the site's page JSON. BrowserFrame is app-only (decision RV-K2-1, rule `webkit-content-channels`): it wraps a live Vue page in a resizable viewport, which neither Markdown nor page JSON can carry. A docs page writes `<Frame>` around a screenshot (`DocFrame`); a site band frames a scene or a `ConsoleMockup` itself.
 
 ## Related
 

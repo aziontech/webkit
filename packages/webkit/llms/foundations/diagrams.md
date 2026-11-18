@@ -6,7 +6,7 @@ Pass the name to `Diagram` (`name`) or to a section that shows one; the label is
 
 28 names. These are the only values the components accept. An unknown name draws nothing. The MCP tool `list_assets({ kind: "diagrams" })` returns the same list (with a `query` to filter), and `catalog.json#assets.diagrams` points at it as data.
 
-Used by: [ArchitectureTabsSection](../components/architecture-tabs-section.md), [Diagram](../components/diagram.md), [FeatureScrollSection](../components/feature-scroll-section.md), [FeatureTabsSection](../components/feature-tabs-section.md), [FeatureWidgetsSection](../components/feature-widgets-section.md), [MediaSplitSection](../components/media-split-section.md), [MediaSplitStackSection](../components/media-split-stack-section.md), [SitePage](../components/site-page.md).
+Used by: [ArchitectureTabsSection](../components/architecture-tabs-section.md), [Diagram](../components/diagram.md), [DocMarkdown](../components/doc-markdown.md), [FeatureScrollSection](../components/feature-scroll-section.md), [FeatureTabsSection](../components/feature-tabs-section.md), [FeatureWidgetsSection](../components/feature-widgets-section.md), [MediaSplitSection](../components/media-split-section.md), [MediaSplitStackSection](../components/media-split-stack-section.md), [SitePage](../components/site-page.md).
 
 ## Usage
 

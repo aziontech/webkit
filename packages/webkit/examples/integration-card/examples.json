@@ -16,6 +16,17 @@
       "name": "Featured",
       "summary": "`featured` turns the tile into a highlight for a short row above the catalog: the mark, the name, the vendor and the description centred on a raised surface with a primary glow at the top, and the context badge in the corner.",
       "file": "featured.vue"
+    },
+    {
+      "name": "Markdown",
+      "summary": "The same content written in a docs page: `DocMarkdown` turns a `<IntegrationCard>` tag into a real `IntegrationCard`. Braced attribute values are JSON, so a docs author copies them from the props or a page entry and never imports the component. The `actions` slot and the `select` event stay Vue.",
+      "file": "markdown.vue"
+    },
+    {
+      "name": "Page JSON",
+      "summary": "The same content in the marketing site's page JSON: `IntegrationCard` is a scene, so a band places it by name in its `scene` slot (here `console-showcase-section` with `variant: \"diagram\"` and `texture: \"none\"`, so nothing is painted behind it) and `SitePage` renders the entry with no code.",
+      "file": "page-entry.vue",
+      "json": "page-entry.json"
     }
   ]
 }

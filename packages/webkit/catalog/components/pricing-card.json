@@ -26,6 +26,7 @@
  ],
  "channels": [
   "app",
+  "docs",
   "site"
  ]
 }

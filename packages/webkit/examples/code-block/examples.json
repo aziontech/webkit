@@ -71,6 +71,12 @@
       "name": "CommandAndOutput",
       "summary": "A docs command and what it prints, as two blocks. The command block is titled \"Shell\" by its label header and copies only the command (the `$ ` prompt is drawn, not copied); the printout sits in a second, muted block with `type=\"output\"`, labelled \"Output\" and without a copy control.",
       "file": "command-and-output.vue"
+    },
+    {
+      "name": "Page JSON",
+      "summary": "The same content in the marketing site's page JSON: `CodeBlock` is a scene, so a band places it by name in its `scene` slot (here `console-showcase-section` with `variant: \"diagram\"` and `texture: \"none\"`, so nothing is painted behind it) and `SitePage` renders the entry with no code.",
+      "file": "page-entry.vue",
+      "json": "page-entry.json"
     }
   ]
 }

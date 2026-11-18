@@ -4,9 +4,9 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: cd6db1513af4263eba86e9905ffcd30baa836d22eafedd68fff417f55f194124
+checksum: bca821eaa3851172c163dcb995cf1dba9d126244f881b1a00e187dd3e06cc4e2
 created: 2026-09-26
-last_updated: 2026-11-15
+last_updated: 2026-11-18
 ---
 
 # Network Map — Component Spec
@@ -65,6 +65,8 @@ A decorative, full-bleed layer that paints the dotted world map with Azion's dat
   </div>
 </template>
 ```
+
+**Three ways in** (decision RV-K2-1, rule `webkit-content-channels`). The same data renders from a docs page as the `<NetworkMap>` tag `DocMarkdown` mounts (braced attribute values are JSON), set in a framed 2:1 box because the map is a background layer that fills its container. The site places it through `network-section`.
 
 ## Props
 
@@ -146,6 +148,7 @@ Static by default: without `animated` no data center carries an animation class.
 - Fades — composite story rendering every `fade` value side-by-side.
 - Traffic — `traffic` with `animated` over the Atlantic at high density.
 - Animated — state story; the Default args plus `animated: true`.
+- Markdown — a `<NetworkMap />` tag in its frame rendered by `DocMarkdown` inside `DocProse`. Justified: the docs channel (RV-K2-1).
 
 ## Constraints — DO NOT
 

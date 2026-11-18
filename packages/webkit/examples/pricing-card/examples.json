@@ -31,6 +31,11 @@
       "name": "Animated",
       "summary": "A billing-period toggle switches the card's price; with `animated` the old price fades out and the new one fades in. Under reduced motion the price swaps in place.",
       "file": "animated.vue"
+    },
+    {
+      "name": "Markdown",
+      "summary": "The same content written in a docs page: `DocMarkdown` turns a `<PricingCard>` tag into a real `PricingCard`. Braced attribute values are JSON, so a docs author copies them from the props or a page entry and never imports the component.",
+      "file": "markdown.vue"
     }
   ]
 }

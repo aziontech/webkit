@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: 757cae5f6d334e3d5ab39e20f76eaca1bc3a8bb7e81d34e96b815c7b7b848753
+checksum: acdf725f2699255ed86a29435ef0490cfb0a1921eb758738d085315a88eb2c00
 created: 2026-11-14
 last_updated: 2026-11-18
 ---
@@ -14,7 +14,7 @@ last_updated: 2026-11-18
 
 ## Purpose
 
-Renders a documentation page written in Markdown with Mintlify-style MDX component tags into the documentation components. Prose becomes plain semantic HTML (headings, paragraphs, lists, block quotes, rules, tables, inline code, links, bold, italic) that the surrounding `DocProse` styles, and the component tags (`<Note>`, `<Steps>`, `<CardGroup>`, `<Tabs>`, `<CodeGroup>`, `<Update>`, `<FlowDiagram>`, the chart tags, `<Tooltip>` …) mount `DocCallout`, `DocSteps`, `DocCardGroup`, `Tabs`, `DocCodeGroup`, `DocChangelogEntry`, `HoverCard` and the rest. Headings render as `DocHeading` with unique slug ids, and the named export `parseDocMarkdown` returns the same headings (for a standalone `DocTableOfContents`; inside `DocLayout` the rendered `DocHeading`s fill the outline on their own) and the frontmatter (for `DocPageHeader`). It is a small in-house reader of a fixed MDX subset, not an MDX compiler: no JSX expressions, no imports, no script, and no `v-html`, so a page's source can never run code.
+Renders a documentation page written in Markdown with Mintlify-style MDX component tags into the documentation components. Prose becomes plain semantic HTML (headings, paragraphs, lists, block quotes, rules, tables, inline code, links, bold, italic) that the surrounding `DocProse` styles, and the component tags (`<Note>`, `<Steps>`, `<CardGroup>`, `<Tabs>`, `<CodeGroup>`, `<Update>`, `<FlowDiagram>`, the chart and content tags, `<Tooltip>` …) mount `DocCallout`, `DocSteps`, `DocCardGroup`, `Tabs`, `DocCodeGroup`, `DocChangelogEntry`, `HoverCard` and the rest. Headings render as `DocHeading` with unique slug ids, and the named export `parseDocMarkdown` returns the same headings (for a standalone `DocTableOfContents`; inside `DocLayout` the rendered `DocHeading`s fill the outline on their own) and the frontmatter (for `DocPageHeader`). It is a small in-house reader of a fixed MDX subset, not an MDX compiler: no JSX expressions, no imports, no script, and no `v-html`, so a page's source can never run code.
 
 ## When to use
 
@@ -37,6 +37,8 @@ Renders a documentation page written in Markdown with Mintlify-style MDX compone
 - `DocPageHeader` — takes the frontmatter's `title` and `description`.
 - `DocCallout`, `DocSteps`, `DocStep`, `DocCardGroup`, `DocCard`, `DocItem`, `DocAccordionGroup`, `DocAccordion`, `Tabs` (a `<Tabs>` tag renders `Tabs` with one `Tabs.Trigger` and `Tabs.Content` per `<Tab title>` child), `DocCodeGroup`, `DocFrame`, `DocPrompt`, `DocChangelogEntry`, `FlowDiagram` — what the tags mount.
 - `BarList`, `Chart`, `DonutChart`, `GaugeChart`, `MapChart`, `SparkChart`, `StatTile`, `StatTileGroup`, `Tracker` — the chart tags, under their own names (decision RV-C2-1). A `<Chart>` tag takes its marks as tags inside it (`<ChartGrid />`, `<ChartAxis />`, `<ChartArea />`, `<ChartBar />`, `<ChartLine />`, `<ChartScatter />`, `<ChartReference />`, `<ChartCrosshair />`, `<ChartTooltip />`, `<ChartLegend />`), and a `<StatTileGroup>` its `<StatTile />` tags; the tags inside render as the root's parts, without the prose styles or the block spacing.
+- `KeyValueList`, `Quote`, `Stats`, `Faq`, `ThirdPartyLogo`, `PricingCard`, `IntegrationCard`, `PlanFeatureList`, `Embed`, `Illustration`, `Diagram`, `ConsoleMockup`, `NetworkMap`, `Carousel` — content components under their own names (decision RV-K2-1), each loaded as an async chunk. A `<KeyValueList>` takes `<KeyValueListItem label="…">` and `<KeyValueListGroup label="…">` tags inside it, and the text between a part's tags is its value, with inline Markdown (bold, emphasis, code, links as `Link`). A `<Carousel>` takes `<CarouselItem>` tags whose content is other tags (a `<Quote />`, a `<Card />`), and `DocMarkdown` adds the previous and next controls. `ConsoleMockup` and `NetworkMap` fill their container, so `DocMarkdown` sets each in a framed box (16:9 and 2:1).
+- `AgentCard`, `CallToAction` — `DocAgentCard` and `DocCallToAction` (decision RV-K2-1); the text inside `<CallToAction>` is its offer copy.
 - `HoverCard` — an inline `<Tooltip tip title linkLabel href>` tag renders as a HoverCard: the term is a dotted-underlined button, the card shows the title, the definition and an optional link.
 - `RegistrationFrame`, `ItemList` — the frame and list an `<ItemGroup>` renders its `<Item>` rows in.
 - `StreamingResponse` — renders chat Markdown with the AI layer's reader; this component reuses that reader's inline tokenizer and `safeHref` and adds the MDX block tags, document heading levels and anchors a docs page needs, which a chat bubble must not have.
@@ -127,7 +129,7 @@ You need an Acme account. Run \`acme login\` first.
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Semantics: headings are real `h1`–`h4` (`DocHeading`) in source order with unique ids; lists are `ul` / `ol`; a table is a real `table` with `th scope="col"` header cells, wrapped in a horizontally scrollable region; a rule is `hr`; a quote is `blockquote`.
+- Semantics: headings are real `h1`–`h4` (`DocHeading`) in source order with unique ids; lists are `ul` / `ol`; a pipe table renders as the WebKit `Table` (decision RV-K2-1: `role="table"`, `columnheader` and `cell` roles, bordered, lines wrapping, its own focusable horizontal scroll region), so a docs table looks like an app table; a rule is `hr`; a quote is `blockquote`.
 - Keyboard map: no keyboard handling of its own; links, heading anchors, tabs, accordions and code copy buttons are the mounted components' and follow their maps.
 - Links: an external link announces `(opens in a new tab)` through a visually hidden suffix; link text is the author's.
 - Visible focus: owned by `DocProse` (links) and the mounted components.
@@ -161,14 +163,14 @@ You need an Acme account. Run \`acme login\` first.
 
 - Bundle budget: 15 KB gzip for the initial chunk of `./doc-markdown` in `.size-limit.json` (`entryOnly`; 14.5 KB measured). It statically imports `DocHeading`, `DocCallout`, `DocCard`, `DocCardGroup`, `DocSteps`, `DocStep`, `DocChangelogEntry`, `HoverCard`, `RegistrationFrame` and `ItemList`.
 - Runtime budget: parsing is linear in the source length and recomputed only when `source` or `components` changes; a 1,000-line page parses in well under one frame.
-- Heavy parts: `DocCodeGroup`, the `Tabs` parts, `DocAccordionGroup`, `DocAccordion`, `DocFrame`, `DocItem`, `DocPrompt`, `FlowDiagram` and the chart components and marks are async chunks (`defineAsyncComponent`), loaded only when the page uses their tag; the server render and hydration render them in place. Syntax highlighting is `DocCodeGroup`'s own lazy chunk.
+- Heavy parts: `DocCodeGroup`, the `Tabs` parts, `DocAccordionGroup`, `DocAccordion`, `DocFrame`, `DocItem`, `DocPrompt`, `DocAgentCard`, `DocCallToAction`, `FlowDiagram`, the `Table` parts a pipe table renders, and the chart and content components and their parts are async chunks (`defineAsyncComponent`), loaded only when the page uses their tag; the server render and hydration render them in place. Syntax highlighting is `DocCodeGroup`'s own lazy chunk.
 
 ## Examples
 
 - Default — a page source with frontmatter, headings, a paragraph with inline code and a link, a list, a callout, steps, a code group, a card group and a table, rendered inside `DocProse`.
 - Components — a source whose `<Card>` tag is mounted by a component passed in `components`, with the outline built from `parseDocMarkdown`. Justified here because `components` is the one prop that changes what renders, and the Default example cannot show it.
 
-The chart tags are shown on each chart's page, in its Markdown example (decision RV-C2-1). The `<FlowDiagram>` tag is shown on the FlowDiagram page, in its Markdown example: a tag with JSON `nodes` and `edges` renders the real diagram (decision RV-F2-1, content channels).
+The chart tags are shown on each chart's page, in its Markdown example (decision RV-C2-1), and so are the content tags of decision RV-K2-1 on their components' pages. The `<FlowDiagram>` tag is shown on the FlowDiagram page, in its Markdown example: a tag with JSON `nodes` and `edges` renders the real diagram (decision RV-F2-1, content channels).
 
 ## Constraints — DO NOT
 

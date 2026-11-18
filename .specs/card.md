@@ -8,9 +8,9 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=562-6473
   node_id: 562:6473
-checksum: 41113f6fbee5b8b8c746e7fd57950a85748d11e43c386b20610e22a17e19fa15
+checksum: 6584f991c9c7446a3a425b3c1f3844727c99510babe2012f6d2519474deabf5f
 created: 2026-05-22
-last_updated: 2026-11-17
+last_updated: 2026-11-18
 ---
 
 # Card Box — Component Spec
@@ -81,6 +81,8 @@ A bordered surface that groups related content under a title, with a header, a b
   </Card>
 </template>
 ```
+
+**Three ways in** (decision RV-K2-1, rule `webkit-content-channels`). Markdown writes `<Card>`, which renders `DocCard` (a docs piece). From the site's page JSON it is the `Card` scene a band draws by name (a `console-showcase-section` with `variant: "diagram"` and `texture: "none"`, so no texture sits behind it); the body is a text child, and the `header`, `header-actions` and `footer` slots stay Vue.
 
 ## Props
 
@@ -175,6 +177,7 @@ A bordered surface that groups related content under a title, with a header, a b
 - Header — an action rendered in the `header` slot, aligned to the end (justified: demonstrates the full-control header path)
 - Footer — `footer` region with actions (justified: the footer bar only renders when the slot is filled)
 - Flush — `padded=false` edge-to-edge content (mutually-exclusive boolean state of the `padded` prop)
+- Page JSON — a `Card` scene with a title and a text child in a `console-showcase-section` entry with `texture: "none"`, rendered by `SitePage`, with the JSON shown. Justified: the site channel (RV-K2-1).
 
 ## Constraints — DO NOT
 

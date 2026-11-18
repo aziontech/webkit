@@ -6,7 +6,7 @@ Pass the name to `Illustration` (`name`) or to a section that shows one (`illust
 
 60 names. These are the only values the components accept. An unknown name renders a "PLACE DESIGN ASSET" placeholder and warns in the console. The MCP tool `list_assets({ kind: "illustrations" })` returns the same list (with a `query` to filter), and `catalog.json#assets.illustrations` points at it as data.
 
-Used by: [FeatureScrollSection](../components/feature-scroll-section.md), [FeatureTabsSection](../components/feature-tabs-section.md), [FeatureTilesSection](../components/feature-tiles-section.md), [FeatureWidgetsSection](../components/feature-widgets-section.md), [HeroSection](../components/hero-section.md), [Illustration](../components/illustration.md), [MediaSplitSection](../components/media-split-section.md), [MediaSplitStackSection](../components/media-split-stack-section.md), [SitePage](../components/site-page.md).
+Used by: [DocMarkdown](../components/doc-markdown.md), [FeatureScrollSection](../components/feature-scroll-section.md), [FeatureTabsSection](../components/feature-tabs-section.md), [FeatureTilesSection](../components/feature-tiles-section.md), [FeatureWidgetsSection](../components/feature-widgets-section.md), [HeroSection](../components/hero-section.md), [Illustration](../components/illustration.md), [MediaSplitSection](../components/media-split-section.md), [MediaSplitStackSection](../components/media-split-stack-section.md), [SitePage](../components/site-page.md).
 
 ## Usage
 

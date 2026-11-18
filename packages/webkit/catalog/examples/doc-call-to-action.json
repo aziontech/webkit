@@ -9,6 +9,11 @@
    "name": "Two actions",
    "summary": "A secondary outlined action stacks under the primary when there is a real alternative.",
    "file": "examples/doc-call-to-action/two-actions.vue"
+  },
+  {
+   "name": "Markdown",
+   "summary": "The same content written in a docs page: `DocMarkdown` turns a `<CallToAction>` tag into a real `DocCallToAction`. Braced attribute values are JSON, so a docs author copies them from the props or a page entry and never imports the component. The text between the tags is the offer copy.",
+   "file": "examples/doc-call-to-action/markdown.vue"
   }
  ]
 }

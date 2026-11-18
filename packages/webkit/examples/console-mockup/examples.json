@@ -21,6 +21,11 @@
       "name": "Library",
       "summary": "Every registered widget in the cell that hosts it on the site: full screens in wide panels, fragments in grid cells that play their beat on hover, framed in a console window or bare as each one is plated by default. These are the only values `name` accepts.",
       "file": "library.vue"
+    },
+    {
+      "name": "Markdown",
+      "summary": "The same content written in a docs page: `DocMarkdown` turns a `<ConsoleMockup>` tag into a real `ConsoleMockup`. Braced attribute values are JSON, so a docs author copies them from the props or a page entry and never imports the component. `DocMarkdown` sets it in a framed 16:9 box, so the mockup has a size to fill.",
+      "file": "markdown.vue"
     }
   ]
 }

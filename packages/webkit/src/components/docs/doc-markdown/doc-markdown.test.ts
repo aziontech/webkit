@@ -4,16 +4,32 @@ import { describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, ref } from 'vue'
 
 import BarListMarkdown from '../../../../examples/bar-list/markdown.vue'
+import CarouselMarkdown from '../../../../examples/carousel/markdown.vue'
 import ChartMarkdown from '../../../../examples/chart/markdown.vue'
+import ConsoleMockupMarkdown from '../../../../examples/console-mockup/markdown.vue'
+import DiagramMarkdown from '../../../../examples/diagram/markdown.vue'
+import DocAgentCardMarkdown from '../../../../examples/doc-agent-card/markdown.vue'
+import DocCallToActionMarkdown from '../../../../examples/doc-call-to-action/markdown.vue'
 import Components from '../../../../examples/doc-markdown/components.vue'
 import Default from '../../../../examples/doc-markdown/default.vue'
 import DonutChartMarkdown from '../../../../examples/donut-chart/markdown.vue'
+import EmbedMarkdown from '../../../../examples/embed/markdown.vue'
+import FaqMarkdown from '../../../../examples/faq/markdown.vue'
 import FlowDiagramMarkdown from '../../../../examples/flow-diagram/markdown.vue'
 import GaugeChartMarkdown from '../../../../examples/gauge-chart/markdown.vue'
+import IllustrationMarkdown from '../../../../examples/illustration/markdown.vue'
+import IntegrationCardMarkdown from '../../../../examples/integration-card/markdown.vue'
+import KeyValueListMarkdown from '../../../../examples/key-value-list/markdown.vue'
 import MapChartMarkdown from '../../../../examples/map-chart/markdown.vue'
+import NetworkMapMarkdown from '../../../../examples/network-map/markdown.vue'
+import PlanFeatureListMarkdown from '../../../../examples/plan-feature-list/markdown.vue'
+import PricingCardMarkdown from '../../../../examples/pricing-card/markdown.vue'
+import QuoteMarkdown from '../../../../examples/quote/markdown.vue'
 import SparkChartMarkdown from '../../../../examples/spark-chart/markdown.vue'
 import StatTileMarkdown from '../../../../examples/stat-tile/markdown.vue'
 import StatTileGroupMarkdown from '../../../../examples/stat-tile-group/markdown.vue'
+import StatsMarkdown from '../../../../examples/stats/markdown.vue'
+import ThirdPartyLogoMarkdown from '../../../../examples/third-party-logo/markdown.vue'
 import TrackerMarkdown from '../../../../examples/tracker/markdown.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import DocMarkdown, { parseDocMarkdown } from './doc-markdown.vue'
@@ -40,8 +56,8 @@ describe('DocMarkdown', () => {
     )
   })
 
-  it('renders paragraphs, inline markup, lists, quotes, rules and tables', () => {
-    const { container, getByRole, getAllByRole } = mount(
+  it('renders paragraphs, inline markup, lists, quotes, rules and tables', async () => {
+    const { container, findByRole, findAllByRole, findByTestId } = mount(
       [
         'Run **only** the *first* step with `acme login`.',
         '',
@@ -68,11 +84,12 @@ describe('DocMarkdown', () => {
     expect(container.querySelectorAll('ol li')).toHaveLength(2)
     expect(container.querySelector('blockquote')?.textContent).toContain('Quoted')
     expect(container.querySelector('hr')).toBeTruthy()
-    expect(getByRole('table')).toBeTruthy()
-    const headers = getAllByRole('columnheader')
-    expect(headers.map((cell) => cell.getAttribute('scope'))).toEqual(['col', 'col'])
+    expect(await findByRole('table')).toBeTruthy()
+    expect((await findByTestId('table')).hasAttribute('data-doc-chrome')).toBe(true)
+    const headers = await findAllByRole('columnheader')
+    expect(headers.map((cell) => cell.textContent?.trim())).toEqual(['Name', 'Size'])
     expect(headers[1]!.getAttribute('data-align')).toBe('end')
-    expect(getByRole('cell', { name: 'site-assets' })).toBeTruthy()
+    expect(await findByRole('cell', { name: 'site-assets' })).toBeTruthy()
   })
 
   it('mounts the documentation components for the MDX tags', async () => {
@@ -291,6 +308,22 @@ describe('DocMarkdown', () => {
     ['chart', ChartMarkdown],
     ['donut-chart', DonutChartMarkdown],
     ['gauge-chart', GaugeChartMarkdown],
+    ['key-value-list', KeyValueListMarkdown],
+    ['embed', EmbedMarkdown],
+    ['integration-card', IntegrationCardMarkdown],
+    ['plan-feature-list', PlanFeatureListMarkdown],
+    ['carousel', CarouselMarkdown],
+    ['console-mockup', ConsoleMockupMarkdown],
+    ['diagram', DiagramMarkdown],
+    ['doc-agent-card', DocAgentCardMarkdown],
+    ['doc-call-to-action', DocCallToActionMarkdown],
+    ['faq', FaqMarkdown],
+    ['illustration', IllustrationMarkdown],
+    ['network-map', NetworkMapMarkdown],
+    ['pricing-card', PricingCardMarkdown],
+    ['quote', QuoteMarkdown],
+    ['stats', StatsMarkdown],
+    ['third-party-logo', ThirdPartyLogoMarkdown],
     ['map-chart', MapChartMarkdown],
     ['spark-chart', SparkChartMarkdown],
     ['stat-tile', StatTileMarkdown],
@@ -301,11 +334,43 @@ describe('DocMarkdown', () => {
     async (testId, example) => {
       const { container, findByTestId } = render(example)
       const root = await findByTestId(testId)
-      expect(root.hasAttribute('data-doc-chrome')).toBe(true)
-      expect(root.hasAttribute('data-doc-block')).toBe(true)
+      expect(root.closest('[data-doc-chrome]')).toBeTruthy()
+      expect(root.closest('[data-doc-block]')).toBeTruthy()
       await expectNoA11yViolations(container)
     }
   )
+
+  it('renders the text between part tags as the part value, with inline Markdown', async () => {
+    const { findByTestId, getByRole } = render(KeyValueListMarkdown)
+    const list = await findByTestId('key-value-list')
+    await waitFor(() => expect(within(list).getAllByTestId('key-value-list-item')).toHaveLength(6))
+    const items = within(list).getAllByTestId('key-value-list-item')
+    expect(items[3]!.querySelector('dd')!.textContent).toBe('US East (Virginia)')
+    expect(items[0]!.querySelector('dd code')!.textContent).toBe('1752167890')
+    expect(items[1]!.querySelector('dd strong')!.textContent).toBe('Active')
+    const link = getByRole('link', { name: /shop\.example\.com/ })
+    expect(link.getAttribute('href')).toBe('https://shop.example.com')
+    expect(link.getAttribute('target')).toBe('_blank')
+    expect(items[5]!.querySelector('dd')!.textContent).toContain('—')
+  })
+
+  it('renders the slides of a Carousel tag with its controls, and tags inside a slide', async () => {
+    const { findByTestId, findAllByTestId } = render(CarouselMarkdown)
+    const carousel = await findByTestId('carousel')
+    await waitFor(() => expect(within(carousel).getAllByTestId('quote')).toHaveLength(3))
+    expect(await findAllByTestId('carousel-previous')).toHaveLength(1)
+    expect(await findAllByTestId('carousel-next')).toHaveLength(1)
+  })
+
+  it('frames a background layer and a mockup so they have a size to fill', async () => {
+    const map = render(NetworkMapMarkdown)
+    const layer = await map.findByTestId('network-map')
+    expect(layer.parentElement!.hasAttribute('data-doc-block')).toBe(true)
+    map.unmount()
+    const mockup = render(ConsoleMockupMarkdown)
+    const shell = await mockup.findByTestId('console-mockup')
+    expect(shell.parentElement!.hasAttribute('data-doc-chrome')).toBe(true)
+  })
 
   it('renders the part tags inside a Chart or StatTileGroup tag as its parts', async () => {
     const chart = render(ChartMarkdown)

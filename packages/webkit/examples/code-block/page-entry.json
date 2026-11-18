@@ -1,0 +1,21 @@
+{
+  "_id": "console-showcase-section",
+  "props": {
+    "variant": "diagram",
+    "texture": "none",
+    "eyebrow": "Functions",
+    "title": "Run AI at the edge",
+    "description": "A function that answers a prompt with a model, in a few lines."
+  },
+  "scenes": {
+    "scene": {
+      "component": "CodeBlock",
+      "props": {
+        "title": "main.js",
+        "language": "javascript",
+        "showLineNumbers": true,
+        "code": "export default {\n  async fetch(request) {\n    const { prompt } = await request.json()\n    const answer = await Azion.AI.run('Qwen/Qwen3-30B-A3B-Instruct-2507-FP8', {\n      messages: [{ role: 'user', content: prompt }]\n    })\n    return new Response(JSON.stringify(answer))\n  }\n}"
+      }
+    }
+  }
+}

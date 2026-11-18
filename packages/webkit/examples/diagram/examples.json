@@ -26,6 +26,11 @@
       "name": "Flow",
       "summary": "A vertical flow in a docs column: one `row` that stacks below the wide breakpoint. The nodes sit centred on one axis, each connector runs from the bottom centre of a node to the top centre of the next, and the `azion deploy` chip sits centred on its line.",
       "file": "flow.vue"
+    },
+    {
+      "name": "Markdown",
+      "summary": "The same content written in a docs page: `DocMarkdown` turns a `<Diagram>` tag into a real `Diagram`. Braced attribute values are JSON, so a docs author copies them from the props or a page entry and never imports the component.",
+      "file": "markdown.vue"
     }
   ]
 }

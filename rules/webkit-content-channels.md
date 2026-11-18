@@ -65,6 +65,12 @@ The catalog lists the channels a component is wired for (`channels` on its entry
   }
   ```
 
+- A part's value can be text: in Markdown the text between the part tags, with inline Markdown
+  (`<KeyValueListItem label="Region">US East</KeyValueListItem>`); in page JSON a string in
+  `children` (`{ "component": "KeyValueListItem", "props": { "label": "Region" }, "children": ["US East"] }`).
+- A Markdown pipe table renders as the WebKit `Table`; write a pipe table, not a tag.
+- On the site, place a scene on a band with no texture behind it (`console-showcase-section` takes
+  `texture: "none"`): the texture goes behind text only.
 - Some components are app-only, and the registry says why (an editor, a live log, a run explorer,
   the data-driven table). Show their content another way: a code fence, a `Chart`, a pipe table.
 

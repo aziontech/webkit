@@ -21,6 +21,11 @@
       "name": "Highlights",
       "summary": "The claim lifted out of the sentence: each phrase in `highlights` keeps the default ink and the rest of the quotation recedes to the muted one. Phrases are matched verbatim against `text`, so keep them to the figure and what it measured — a quotation that highlights most of itself highlights nothing.",
       "file": "highlights.vue"
+    },
+    {
+      "name": "Markdown",
+      "summary": "The same content written in a docs page: `DocMarkdown` turns a `<Quote>` tag into a real `Quote`. Braced attribute values are JSON, so a docs author copies them from the props or a page entry and never imports the component.",
+      "file": "markdown.vue"
     }
   ]
 }

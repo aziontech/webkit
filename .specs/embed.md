@@ -4,7 +4,7 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: 3836ccb0915202e2ffaf3214ae4bbd5094e2bf56a76ea1bd3194778623c7e76f
+checksum: 19997ca5fade11875e12eac59d8393a5470685047a9cf24403493bde33fce15a
 created: 2026-09-22
 last_updated: 2026-11-18
 ---
@@ -59,6 +59,8 @@ A responsive `iframe` for third-party content — a demo, a player, a status pag
 </template>
 ```
 
+**Three ways in** (decision RV-K2-1, rule `webkit-content-channels`). From a docs page it is the `<Embed src="…" title="…" />` tag `DocMarkdown` mounts. From the site's page JSON it is the `Embed` scene a band draws by name (a `console-showcase-section` with `variant: "diagram"` and `texture: "none"`, so no texture sits behind it).
+
 ## Props
 
 | Prop    | Type                            | Default   | Required | JSDoc                                                                    |
@@ -111,6 +113,8 @@ _none_
 
 - Default
 - Ratios — composite story rendering every `ratio` value one under the other
+- Markdown — the Default content as a `<Embed>` tag rendered by `DocMarkdown` inside `DocProse`. Justified: the docs channel (RV-K2-1).
+- Page JSON — the Default embed as an `Embed` scene in a `console-showcase-section` entry with `texture: "none"`, rendered by `SitePage`, with the JSON shown. Justified: the site channel (RV-K2-1).
 
 ## Constraints — DO NOT
 
