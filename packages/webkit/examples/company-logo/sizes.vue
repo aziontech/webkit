@@ -1,6 +1,6 @@
 <script setup>
   import { CLIENTS } from '@aziontech/webkit/assets/client-registry'
-  import Logo from '@aziontech/webkit/logo'
+  import CompanyLogo from '@aziontech/webkit/company-logo'
 
   const client = CLIENTS.find((entry) => entry.name === 'Agibank')
   const sizes = ['small', 'medium', 'large']
@@ -14,7 +14,7 @@
       class="flex flex-wrap items-center gap-(--spacing-xl)"
     >
       <span class="w-20 text-label-md text-(--text-muted)">{{ size }}</span>
-      <Logo
+      <CompanyLogo
         :name="client.name"
         :src="client.logo"
         :src-light="client.logoLight"
@@ -22,7 +22,7 @@
         :size="size"
         class="max-w-40"
       />
-      <Logo
+      <CompanyLogo
         name="Acme Inc."
         :size="size"
       />

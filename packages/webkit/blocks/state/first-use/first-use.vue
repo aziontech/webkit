@@ -5,13 +5,13 @@
   import geminiMark from '@aziontech/webkit/assets/gemini-symbol-color.svg'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import CompanyLogo from '@aziontech/webkit/company-logo'
   import CopyButton from '@aziontech/webkit/copy-button'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Input from '@aziontech/webkit/input'
   import InputGroupRoot from '@aziontech/webkit/input-group-root'
   import Item from '@aziontech/webkit/item'
   import Link from '@aziontech/webkit/link'
-  import Logo from '@aziontech/webkit/logo'
   import Skeleton from '@aziontech/webkit/skeleton'
 
   const agentMarks = [
@@ -339,7 +339,7 @@
                 :key="agent.name"
                 class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)"
               >
-                <Logo
+                <CompanyLogo
                   :name="agent.name"
                   :src="agent.src"
                   :variant="agent.mono ? 'current' : 'color'"

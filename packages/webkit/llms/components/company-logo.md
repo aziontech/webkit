@@ -1,14 +1,14 @@
-# Logo
+# Company Logo
 
-> A third-party mark (a client, a competitor, an analyst firm, a standard or certification, a coding agent) drawn right on both themes. The asset registries already hold the files (`@aziontech/webkit/assets/client-registry`, `@aziontech/webkit/assets/competitor-registry` and the `@aziontech/webkit/assets/<file>.svg` exports); every surface that drew one repeated the same theme rule by hand (two `img` tags revealed per `[data-theme]`, a `brightness-0` silhouette, a CSS mask in `currentColor`) and none had every route. `Logo` holds the rule once: a light/dark pair of files, or one file inverted on the theme where it would vanish, or one ink (the theme's black or white, the surrounding `currentColor`, or black pinned for a coloured fill), and the company's name as a typographic wordmark when there is no file yet. It replaces the design sample's `AgentMark` and `ClientMark`. It is a renderer: it takes the file URLs from a registry entry and imports no registry itself, so a page pays only for the marks it shows.
+> A third-party mark (a client, a competitor, an analyst firm, a standard or certification, a coding agent) drawn right on both themes. The asset registries already hold the files (`@aziontech/webkit/assets/client-registry`, `@aziontech/webkit/assets/competitor-registry` and the `@aziontech/webkit/assets/<file>.svg` exports); every surface that drew one repeated the same theme rule by hand (two `img` tags revealed per `[data-theme]`, a `brightness-0` silhouette, a CSS mask in `currentColor`) and none had every route. `CompanyLogo` holds the rule once: a light/dark pair of files, or one file inverted on the theme where it would vanish, or one ink (the theme's black or white, the surrounding `currentColor`, or black pinned for a coloured fill), and the company's name as a typographic wordmark when there is no file yet. It replaces the design sample's `AgentMark` and `ClientMark`. It is a renderer: it takes the file URLs from a registry entry and imports no registry itself, so a page pays only for the marks it shows.
 
-- Import: `import Logo from '@aziontech/webkit/logo'`
+- Import: `import CompanyLogo from '@aziontech/webkit/company-logo'`
 - Category: content · Surface: app · Structure: monolithic
-- API as JSON: [logo.json](logo.json)
+- API as JSON: [company-logo.json](company-logo.json)
 
 ## When to use
 
-- Use Logo for any other company's mark (client, competitor, agent, certification).
+- Use CompanyLogo for any other company's mark (client, competitor, agent, certification).
 - A logo wall, a trust strip, a client story card, a quote attribution, a comparison column head: any place that shows another company's mark.
 - The coding agents a prompt works with (Claude, Codex, Gemini, Cursor), drawn in the ink of the surface they sit on.
 - A list of standards or analyst firms (SOC, PCI DSS, Gartner, Forrester).
@@ -28,14 +28,14 @@
 - A card network beside a payment method → use `PaymentBrand`.
 - A person or an account → use `Avatar`.
 - A product icon or a UI glyph → use an icon from `@aziontech/icons`.
-- A grid of client marks → use `LogoWall`; it renders each mark and can render `Logo` in its `mark` slot.
+- A grid of client marks → use `LogoWall`; it renders each mark and can render `CompanyLogo` in its `mark` slot.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
-- [brand](brand.md) — the Azion lockup; `Logo` is everyone else's.
+- [brand](brand.md) — the Azion lockup; `CompanyLogo` is everyone else's.
 - [payment-brand](payment-brand.md) — card-network plates, drawn in tokens.
-- [logo-wall](logo-wall.md) — the grid that lays marks out; `Logo` draws one mark.
+- [logo-wall](logo-wall.md) — the grid that lays marks out; `CompanyLogo` draws one mark.
 - [avatar](avatar.md) — a person's or an organization's picture with initials.
 
 ## Props
@@ -96,13 +96,13 @@ No built-in strings: the accessible name and the wordmark are the `name` the con
 ```vue
 <script setup>
   import { CLIENTS } from '@aziontech/webkit/assets/client-registry'
-  import Logo from '@aziontech/webkit/logo'
+  import CompanyLogo from '@aziontech/webkit/company-logo'
 
   const client = CLIENTS.find((entry) => entry.name === 'Agibank')
 </script>
 
 <template>
-  <Logo
+  <CompanyLogo
     :name="client.name"
     :src="client.logo"
     :src-light="client.logoLight"
@@ -118,7 +118,7 @@ No built-in strings: the accessible name and the wordmark are the `name` the con
 ```vue
 <script setup>
   import { CLIENTS } from '@aziontech/webkit/assets/client-registry'
-  import Logo from '@aziontech/webkit/logo'
+  import CompanyLogo from '@aziontech/webkit/company-logo'
 
   const client = CLIENTS.find((entry) => entry.name === 'Agibank')
   const sizes = ['small', 'medium', 'large']
@@ -132,7 +132,7 @@ No built-in strings: the accessible name and the wordmark are the `name` the con
       class="flex flex-wrap items-center gap-(--spacing-xl)"
     >
       <span class="w-20 text-label-md text-(--text-muted)">{{ size }}</span>
-      <Logo
+      <CompanyLogo
         :name="client.name"
         :src="client.logo"
         :src-light="client.logoLight"
@@ -140,7 +140,7 @@ No built-in strings: the accessible name and the wordmark are the `name` the con
         :size="size"
         class="max-w-40"
       />
-      <Logo
+      <CompanyLogo
         name="Acme Inc."
         :size="size"
       />
@@ -157,7 +157,7 @@ No built-in strings: the accessible name and the wordmark are the `name` the con
   import itauExtendedReversed from '@aziontech/webkit/assets/itau-extended-reversed.webp'
   import netshoesExtendedColor from '@aziontech/webkit/assets/netshoes-extended-color.svg'
   import netshoesExtendedReversed from '@aziontech/webkit/assets/netshoes-extended-reversed.svg'
-  import Logo from '@aziontech/webkit/logo'
+  import CompanyLogo from '@aziontech/webkit/company-logo'
 
   const variants = [
     { variant: 'color', label: 'Color', fill: 'bg-(--bg-canvas)', ink: 'text-(--text-muted)' },
@@ -195,26 +195,26 @@ No built-in strings: the accessible name and the wordmark are the `name` the con
         :class="row.ink"
         >{{ row.label }}</span
       >
-      <Logo
+      <CompanyLogo
         name="Netshoes"
         :src="netshoesExtendedReversed"
         :src-light="netshoesExtendedColor"
         :variant="row.variant"
         class="max-w-32"
       />
-      <Logo
+      <CompanyLogo
         name="Itaú"
         :src="itauExtendedReversed"
         artwork="light"
         :variant="row.variant"
         class="max-w-32"
       />
-      <Logo
+      <CompanyLogo
         name="Claude"
         :src="claudeSymbol"
         :variant="row.variant"
       />
-      <Logo
+      <CompanyLogo
         name="Acme Inc."
         :variant="row.variant"
       />

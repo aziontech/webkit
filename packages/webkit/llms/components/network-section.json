@@ -79,7 +79,7 @@
    "type": "NetworkSectionOutcome[]",
    "default": "[]",
    "required": "false",
-   "doc": "Client results for the `outcomes` floor, in order, one column each up to four; each is `{ logo?, logoAlt?, logoTreatment?, text, highlights? }` where `logo` is the mark URL (the cell renders no mark without it), `logoAlt` names the client, `logoTreatment` is `'monochrome'` or `'color'` (`LogoTreatment` without `knockout`), and `highlights` are the phrases of `text` set in the accent."
+   "doc": "Client results for the `outcomes` floor, in order, one column each up to four; each is `{ logo?, logoAlt?, logoTreatment?, text, highlights? }` where `logo` is the mark URL (the cell renders no mark without it), `logoAlt` names the client, `logoTreatment` is `'monochrome'` or `'color'` (`CompanyLogoTreatment` without `knockout`), and `highlights` are the phrases of `text` set in the accent."
   },
   {
    "name": "benefits",

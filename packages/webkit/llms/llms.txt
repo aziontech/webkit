@@ -191,6 +191,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [Brand](components/brand.md): The Azion brand logo, rendered as an inline SVG lockup.
 - [BrowserFrame](components/browser-frame.md): A browser window that renders live webkit components inside a viewport of its own, so a page or story can show a real screen at a real device size — desktop, tablet or mobile — and resize it by hand.
 - [Card](components/card.md): Use Card for one bordered box of related content in product UI; for a collection of records shown as cards use CardList, for a catalog tile use IntegrationCard, and for the frame of a dashboard chart use ChartCard.
+- [CompanyLogo](components/company-logo.md): A third-party mark (a client, a competitor, an analyst firm, a standard or certification, a coding agent) drawn right on both themes.
 - [ConsoleMockup](components/console-mockup.md): Draws one of the **official console widgets**: a scaled, inert mock of an Azion Console screen or fragment, built from real webkit components inside an internal `ConsoleMockupShell` frame (not exported), that marketin…
 - [CopyText](components/copy-text.md): CopyText shows one code value (a CSS custom property, a utility class, a CNAME, a key ID, a one-line command) in monospace inside a quiet bordered box, with an always-visible `CopyButton` at its inline end that copies…
 - [CurrencyAmount](components/currency-amount.md): Use CurrencyAmount to typeset one money amount anywhere; a money metric with a delta and a sparkline is a StatTile.
@@ -203,7 +204,6 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [Item](components/item.md): Use Item rows for a short list of mixed rows (title, description, actions) that do not share columns; read-only label/value facts about one resource are KeyValueList, records compared across columns are a Table, and w…
 - [Kbd](components/kbd.md): Kbd renders keyboard input — a single key or a shortcut combination — as a compact, non-interactive keycap.
 - [KeyValueList](components/key-value-list.md): Use KeyValueList to show read-only label/value facts about one resource, including its tags; rows with their own actions are Item rows.
-- [Logo](components/logo.md): A third-party mark (a client, a competitor, an analyst firm, a standard or certification, a coding agent) drawn right on both themes.
 - [NetworkMap](components/network-map.md): A decorative, full-bleed layer that paints the dotted world map with Azion's PoPs lit in the brand accent.
 - [OverflowCount](components/overflow-count.md): Use OverflowCount for the '+N' that opens the hidden items of a truncated list; a plain number attached to something else is a Badge.
 - [PaymentBrand](components/payment-brand.md): The card-brand plate shown beside a payment card: a small bordered plate with the network's mark (Visa, Mastercard, American Express, Diners Club, JCB, Discover, Elo, Hipercard, UnionPay) drawn in one colour in theme…

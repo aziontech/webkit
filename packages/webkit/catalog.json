@@ -4092,6 +4092,7 @@
   "listing-index": "listing-index-section",
   "listing-table": "listing-table-section",
   "log-view": "log-viewer",
+  "logo": "company-logo",
   "logo-wall-quote": "logo-wall-section",
   "media-split-band": "media-split-section",
   "media-split-stack": "media-split-stack-section",
@@ -4127,6 +4128,7 @@
   "story-library": "story-index-section",
   "subject-grid": "subject-grid-section",
   "subject-library": "subject-grid-section",
+  "svg/azion/default": "brand",
   "tab-view": "tabs",
   "table-export": "table-export-button",
   "template-gallery": "template-gallery-section",
@@ -4188,6 +4190,10 @@
   "sidebar-group": "SidebarMenu with a SidebarMenu.Group per section (label, the rows as SidebarMenu.Item)",
   "sticky-carousel": "ProcessScrollSection from @aziontech/webkit/process-scroll-section with pinned and title-variant=\"centered\"; items become steps",
   "sticky-scroll-code": "FeatureScrollSection from @aziontech/webkit/feature-scroll-section; items keep title, description, code and action",
+  "svg/azion/full": "the \"Move to the Edge\" lockups are retired with no replacement; the loose Azion SVGs are gone; draw the mark with Brand from @aziontech/webkit/brand (variant=\"extended\" for AZION technologies)",
+  "svg/azion/min": "the loose Azion SVGs are gone; draw the mark with Brand from @aziontech/webkit/brand and variant=\"reduced\"",
+  "svg/azion/move-to-the-edge": "the \"Move to the Edge\" lockups are retired with no replacement; the loose Azion SVGs are gone; draw the mark with Brand from @aziontech/webkit/brand (variant=\"extended\" for AZION technologies)",
+  "svg/azion/technologies": "the loose Azion SVGs are gone; draw the mark with Brand from @aziontech/webkit/brand and variant=\"extended\"",
   "table-applied-filters": "FilterMenu.ChipGroup with no fields in the DataTable filters slot (menu type); the property kind shows its own tokens",
   "table-column-selector": "CollectionPreferences with no columns in the DataTable toolbar (:sections=\"['columns']\" for columns only)",
   "use-case-links": "CapabilityGridSection from @aziontech/webkit/capability-grid-section with title-variant=\"left\"; items keep icon, title, description and href",
@@ -6073,7 +6079,7 @@
      "type": "CopyPromptButtonAgent[]",
      "default": "Claude, ChatGPT, Gemini, Cursor",
      "required": "false",
-     "doc": "The agents whose marks follow the label, in order; each is `{ name, icon?, logo? }`, drawn from `logo` through `Logo` when set and from the `icon` glyph otherwise; an empty list draws no marks."
+     "doc": "The agents whose marks follow the label, in order; each is `{ name, icon?, logo? }`, drawn from `logo` through `CompanyLogo` when set and from the `icon` glyph otherwise; an empty list draws no marks."
     },
     {
      "name": "disabled",
@@ -8318,7 +8324,7 @@
      "type": "'default' | 'reduced' | 'extended'",
      "default": "'default'",
      "required": "false",
-     "doc": "Brand lockup to render: `default` (AZION wordmark), `reduced` (the \"A\" glyph for tight spaces), `extended` (wordmark with the \"move to the edge technologies®\" tagline)."
+     "doc": "Brand lockup to render: `default` (AZION wordmark), `reduced` (the \"A\" glyph for tight spaces), `extended` (wordmark over \"technologies\")."
     },
     {
      "name": "size",
@@ -9466,11 +9472,11 @@
    "examplesFile": "catalog/examples/illustration.json",
    "docsFile": "catalog/components/illustration.json"
   },
-  "logo": {
-   "import": "@aziontech/webkit/logo",
-   "target": "./src/components/content/logo/logo.vue",
+  "company-logo": {
+   "import": "@aziontech/webkit/company-logo",
+   "target": "./src/components/content/company-logo/company-logo.vue",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/logo",
+   "treeShakeableImport": "@aziontech/webkit/company-logo",
    "category": "content",
    "structure": "monolithic",
    "props": [
@@ -9532,8 +9538,8 @@
     }
    ],
    "surface": "app",
-   "examplesFile": "catalog/examples/logo.json",
-   "docsFile": "catalog/components/logo.json"
+   "examplesFile": "catalog/examples/company-logo.json",
+   "docsFile": "catalog/components/company-logo.json"
   },
   "console-mockup": {
    "import": "@aziontech/webkit/console-mockup",
@@ -23053,37 +23059,6 @@
    "kind": "svg",
    "treeShakeableImport": "@aziontech/webkit/svg/error-404"
   },
-  "svg/azion/full": {
-   "import": "@aziontech/webkit/svg/azion/full",
-   "target": "./src/svg/azion/full/full.vue",
-   "kind": "svg",
-   "treeShakeableImport": "@aziontech/webkit/svg/azion/full"
-  },
-  "svg/azion/move-to-the-edge": {
-   "import": "@aziontech/webkit/svg/azion/move-to-the-edge",
-   "target": "./src/svg/azion/move-to-the-edge/move-to-the-edge.vue",
-   "kind": "svg",
-   "treeShakeableImport": "@aziontech/webkit/svg/azion/move-to-the-edge"
-  },
-  "svg/azion/technologies": {
-   "import": "@aziontech/webkit/svg/azion/technologies",
-   "target": "./src/svg/azion/technologies/technologies.vue",
-   "kind": "svg",
-   "treeShakeableImport": "@aziontech/webkit/svg/azion/technologies"
-  },
-  "svg/azion/default": {
-   "import": "@aziontech/webkit/svg/azion/default",
-   "target": "./src/svg/azion/default/default.vue",
-   "kind": "svg",
-   "treeShakeableImport": "@aziontech/webkit/svg/azion/default",
-   "examplesFile": "catalog/examples/svg/azion/default.json"
-  },
-  "svg/azion/min": {
-   "import": "@aziontech/webkit/svg/azion/min",
-   "target": "./src/svg/azion/min/min.vue",
-   "kind": "svg",
-   "treeShakeableImport": "@aziontech/webkit/svg/azion/min"
-  },
   "assets/agi-extended-color.svg": {
    "import": "@aziontech/webkit/assets/agi-extended-color.svg",
    "target": "./src/assets/logos/clients/agi-extended-color.svg",
@@ -26196,7 +26171,7 @@
      "type": "ClientMosaicSectionLogo[]",
      "default": "[]",
      "required": "false",
-     "doc": "The mark cells, in order; each is `{ logo, logoAlt, href, fill?, logoTreatment? }` where `fill` is `'canvas'`, `'surface'`, `'white'` or `'primary'` and `logoTreatment` is `'color'`, `'monochrome'` or `'knockout'` (the shared `LogoTreatment`)."
+     "doc": "The mark cells, in order; each is `{ logo, logoAlt, href, fill?, logoTreatment? }` where `fill` is `'canvas'`, `'surface'`, `'white'` or `'primary'` and `logoTreatment` is `'color'`, `'monochrome'` or `'knockout'` (the shared `CompanyLogoTreatment`)."
     },
     {
      "name": "cells",
@@ -26244,7 +26219,7 @@
      "type": "ClientStoryColumnsSectionCell[]",
      "default": "[]",
      "required": "false",
-     "doc": "The stories, in order; each is `{ name, logo, href, story, brand?, logoTreatment?, logoWidth? }` where `brand` is `{ base, glow, ink? }` (CSS colours painting the face, `ink` `'dark'` or `'light'`) and defaults to the client registry's colours for `name`, `logoTreatment` is `'color'`, `'monochrome'` or `'knockout'` (the shared `LogoTreatment`), and `logoWidth` (read by `reveal=\"hover\"`) sizes the mark as a share of the card."
+     "doc": "The stories, in order; each is `{ name, logo, href, story, brand?, logoTreatment?, logoWidth? }` where `brand` is `{ base, glow, ink? }` (CSS colours painting the face, `ink` `'dark'` or `'light'`) and defaults to the client registry's colours for `name`, `logoTreatment` is `'color'`, `'monochrome'` or `'knockout'` (the shared `CompanyLogoTreatment`), and `logoWidth` (read by `reveal=\"hover\"`) sizes the mark as a share of the card."
     },
     {
      "name": "reveal",
@@ -28077,7 +28052,7 @@
      "type": "LogoWallSectionLogo[]",
      "default": "[]",
      "required": "false",
-     "doc": "The client marks, in order; each is `{ name, logo, logoLight?, logoTreatment?, artwork?, href? }` where `logoTreatment` is the shared `LogoTreatment` (`'color'`, `'monochrome'` or `'knockout'`, the `Logo` looks) and `artwork` is the registry's `'color'`, `'light'` or `'dark'`."
+     "doc": "The client marks, in order; each is `{ name, logo, logoLight?, logoTreatment?, artwork?, href? }` where `logoTreatment` is the shared `CompanyLogoTreatment` (`'color'`, `'monochrome'` or `'knockout'`, the `CompanyLogo` looks) and `artwork` is the registry's `'color'`, `'light'` or `'dark'`."
     },
     {
      "name": "quote",
@@ -28319,7 +28294,7 @@
      "type": "NetworkSectionOutcome[]",
      "default": "[]",
      "required": "false",
-     "doc": "Client results for the `outcomes` floor, in order, one column each up to four; each is `{ logo?, logoAlt?, logoTreatment?, text, highlights? }` where `logo` is the mark URL (the cell renders no mark without it), `logoAlt` names the client, `logoTreatment` is `'monochrome'` or `'color'` (`LogoTreatment` without `knockout`), and `highlights` are the phrases of `text` set in the accent."
+     "doc": "Client results for the `outcomes` floor, in order, one column each up to four; each is `{ logo?, logoAlt?, logoTreatment?, text, highlights? }` where `logo` is the mark URL (the cell renders no mark without it), `logoAlt` names the client, `logoTreatment` is `'monochrome'` or `'color'` (`CompanyLogoTreatment` without `knockout`), and `highlights` are the phrases of `text` set in the accent."
     },
     {
      "name": "benefits",
@@ -33954,6 +33929,7 @@
     "geminiMark",
     "Button",
     "Card",
+    "CompanyLogo",
     "DataTable",
     "DropdownMenuGroup",
     "DropdownMenuItem",
@@ -33964,7 +33940,6 @@
     "Input",
     "Item",
     "Link",
-    "Logo",
     "Popover",
     "SearchTrigger",
     "Skeleton",
@@ -33987,6 +33962,7 @@
     "@aziontech/webkit/assets/gemini-symbol-color.svg",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
+    "@aziontech/webkit/company-logo",
     "@aziontech/webkit/data-table",
     "@aziontech/webkit/dropdown-menu-group",
     "@aziontech/webkit/dropdown-menu-item",
@@ -33997,7 +33973,6 @@
     "@aziontech/webkit/input",
     "@aziontech/webkit/item",
     "@aziontech/webkit/link",
-    "@aziontech/webkit/logo",
     "@aziontech/webkit/popover",
     "@aziontech/webkit/search-trigger",
     "@aziontech/webkit/skeleton",
@@ -36167,6 +36142,7 @@
     "Brand",
     "Button",
     "CodeBlock",
+    "CompanyLogo",
     "CopyPromptButton",
     "DataTable",
     "Diagram",
@@ -36194,7 +36170,6 @@
     "Footer",
     "IconButton",
     "ItemList",
-    "Logo",
     "RegistrationFrame",
     "Select",
     "StatusIndicator",
@@ -36212,6 +36187,7 @@
     "@aziontech/webkit/brand",
     "@aziontech/webkit/button",
     "@aziontech/webkit/code-block",
+    "@aziontech/webkit/company-logo",
     "@aziontech/webkit/copy-prompt-button",
     "@aziontech/webkit/data-table",
     "@aziontech/webkit/diagram",
@@ -36239,7 +36215,6 @@
     "@aziontech/webkit/footer",
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/item-list",
-    "@aziontech/webkit/logo",
     "@aziontech/webkit/registration-frame",
     "@aziontech/webkit/select",
     "@aziontech/webkit/status-indicator",
@@ -36467,13 +36442,13 @@
     "geminiMark",
     "Button",
     "Card",
+    "CompanyLogo",
     "CopyButton",
     "EmptyState",
     "Input",
     "InputGroupRoot",
     "Item",
     "Link",
-    "Logo",
     "Skeleton"
    ],
    "imports": [
@@ -36483,13 +36458,13 @@
     "@aziontech/webkit/assets/gemini-symbol-color.svg",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
+    "@aziontech/webkit/company-logo",
     "@aziontech/webkit/copy-button",
     "@aziontech/webkit/empty-state",
     "@aziontech/webkit/input",
     "@aziontech/webkit/input-group-root",
     "@aziontech/webkit/item",
     "@aziontech/webkit/link",
-    "@aziontech/webkit/logo",
     "@aziontech/webkit/skeleton"
    ],
    "primary": "Default",

@@ -1,17 +1,17 @@
 {
- "name": "logo",
- "binding": "Logo",
- "import": "@aziontech/webkit/logo",
- "treeShakeableImport": "@aziontech/webkit/logo",
+ "name": "company-logo",
+ "binding": "CompanyLogo",
+ "import": "@aziontech/webkit/company-logo",
+ "treeShakeableImport": "@aziontech/webkit/company-logo",
  "category": "content",
  "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "A third-party mark (a client, a competitor, an analyst firm, a standard or certification, a coding agent) drawn right on both themes. The asset registries already hold the files (`@aziontech/webkit/assets/client-registry`, `@aziontech/webkit/assets/competitor-registry` and the `@aziontech/webkit/assets/<file>.svg` exports); every surface that drew one repeated the same theme rule by hand (two `img` tags revealed per `[data-theme]`, a `brightness-0` silhouette, a CSS mask in `currentColor`) and none had every route. `Logo` holds the rule once: a light/dark pair of files, or one file inverted on the theme where it would vanish, or one ink (the theme's black or white, the surrounding `currentColor`, or black pinned for a coloured fill), and the company's name as a typographic wordmark when there is no file yet. It replaces the design sample's `AgentMark` and `ClientMark`. It is a renderer: it takes the file URLs from a registry entry and imports no registry itself, so a page pays only for the marks it shows.",
+ "purpose": "A third-party mark (a client, a competitor, an analyst firm, a standard or certification, a coding agent) drawn right on both themes. The asset registries already hold the files (`@aziontech/webkit/assets/client-registry`, `@aziontech/webkit/assets/competitor-registry` and the `@aziontech/webkit/assets/<file>.svg` exports); every surface that drew one repeated the same theme rule by hand (two `img` tags revealed per `[data-theme]`, a `brightness-0` silhouette, a CSS mask in `currentColor`) and none had every route. `CompanyLogo` holds the rule once: a light/dark pair of files, or one file inverted on the theme where it would vanish, or one ink (the theme's black or white, the surrounding `currentColor`, or black pinned for a coloured fill), and the company's name as a typographic wordmark when there is no file yet. It replaces the design sample's `AgentMark` and `ClientMark`. It is a renderer: it takes the file URLs from a registry entry and imports no registry itself, so a page pays only for the marks it shows.",
  "setup": null,
  "useWhen": [
-  "Use Logo for any other company's mark (client, competitor, agent, certification).",
+  "Use CompanyLogo for any other company's mark (client, competitor, agent, certification).",
   "A logo wall, a trust strip, a client story card, a quote attribution, a comparison column head: any place that shows another company's mark.",
   "The coding agents a prompt works with (Claude, Codex, Gemini, Cursor), drawn in the ink of the surface they sit on.",
   "A list of standards or analyst firms (SOC, PCI DSS, Gartner, Forrester)."
@@ -21,12 +21,12 @@
   "A card network beside a payment method → use `PaymentBrand`.",
   "A person or an account → use `Avatar`.",
   "A product icon or a UI glyph → use an icon from `@aziontech/icons`.",
-  "A grid of client marks → use `LogoWall`; it renders each mark and can render `Logo` in its `mark` slot."
+  "A grid of client marks → use `LogoWall`; it renders each mark and can render `CompanyLogo` in its `mark` slot."
  ],
  "related": [
-  "`brand` — the Azion lockup; `Logo` is everyone else's.",
+  "`brand` — the Azion lockup; `CompanyLogo` is everyone else's.",
   "`payment-brand` — card-network plates, drawn in tokens.",
-  "`logo-wall` — the grid that lays marks out; `Logo` draws one mark.",
+  "`logo-wall` — the grid that lays marks out; `CompanyLogo` draws one mark.",
   "`avatar` — a person's or an organization's picture with initials."
  ],
  "bestPractices": [
@@ -102,16 +102,16 @@
  "examples": [
   {
    "name": "Default",
-   "file": "examples/logo/default.vue"
+   "file": "examples/company-logo/default.vue"
   },
   {
    "name": "Sizes",
-   "file": "examples/logo/sizes.vue"
+   "file": "examples/company-logo/sizes.vue"
   },
   {
    "name": "Variants",
-   "file": "examples/logo/variants.vue"
+   "file": "examples/company-logo/variants.vue"
   }
  ],
- "docs": "components/logo.md"
+ "docs": "components/company-logo.md"
 }

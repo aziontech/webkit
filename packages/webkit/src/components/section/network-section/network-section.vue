@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import type { LogoTreatment } from '../../content/logo/logo.vue'
+  import type { CompanyLogoTreatment } from '../../content/company-logo/company-logo.vue'
   import NetworkMap from '../../content/network-map/network-map.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import type { CardGridColumns } from '../../marketing/card-grid/card-grid.vue'
@@ -18,7 +18,7 @@
     inheritAttrs: false
   })
 
-  export type { LogoTreatment }
+  export type { CompanyLogoTreatment }
 
   /** Which floor closes the band. */
   export type NetworkSectionVariant = 'outcomes' | 'benefits' | 'stats'
@@ -30,7 +30,7 @@
     /** Client name, read as the mark's alt text. */
     logoAlt?: string
     /** Treatment applied to the mark: `color` or `monochrome`; defaults to `color`. */
-    logoTreatment?: Exclude<LogoTreatment, 'knockout'>
+    logoTreatment?: Exclude<CompanyLogoTreatment, 'knockout'>
     /** The result, quoted. */
     text: string
     /** Phrases of `text` set in the accent. */

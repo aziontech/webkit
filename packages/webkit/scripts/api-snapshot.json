@@ -461,6 +461,7 @@
     "command-page",
     "command-root",
     "command-separator",
+    "company-logo",
     "competitor-comparison-section",
     "compliance-logos-section",
     "config-provider",
@@ -645,7 +646,6 @@
     "log-viewer-header",
     "log-viewer-root",
     "log-viewer-steps",
-    "logo",
     "logo-wall",
     "logo-wall-section",
     "map-chart",
@@ -794,11 +794,6 @@
     "styles/country-flags",
     "subject-grid-section",
     "suggestion-group",
-    "svg/azion/default",
-    "svg/azion/full",
-    "svg/azion/min",
-    "svg/azion/move-to-the-edge",
-    "svg/azion/technologies",
     "svg/error-403",
     "svg/error-404",
     "svg/illustration-layers",
@@ -1813,7 +1808,7 @@
       "ariaLabel": null,
       "name": null
     },
-    "logo": {
+    "company-logo": {
       "ariaLabel": null,
       "artwork": [
         "color",

@@ -1,24 +1,24 @@
 ---
-name: logo
+name: company-logo
 category: content
 structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: b0b6c9dae580e52a0dccba5d76b0d56ac59f1dfe95203973f95125b258cda69e
+checksum: a578d2fc288b7a3ae03e68469d9ff89a5adc24a666c03438263171dd26482e48
 created: 2026-11-14
 last_updated: 2026-11-15
 ---
 
-# Logo — Component Spec
+# Company Logo — Component Spec
 
 ## Purpose
 
-A third-party mark (a client, a competitor, an analyst firm, a standard or certification, a coding agent) drawn right on both themes. The asset registries already hold the files (`@aziontech/webkit/assets/client-registry`, `@aziontech/webkit/assets/competitor-registry` and the `@aziontech/webkit/assets/<file>.svg` exports); every surface that drew one repeated the same theme rule by hand (two `img` tags revealed per `[data-theme]`, a `brightness-0` silhouette, a CSS mask in `currentColor`) and none had every route. `Logo` holds the rule once: a light/dark pair of files, or one file inverted on the theme where it would vanish, or one ink (the theme's black or white, the surrounding `currentColor`, or black pinned for a coloured fill), and the company's name as a typographic wordmark when there is no file yet. It replaces the design sample's `AgentMark` and `ClientMark`. It is a renderer: it takes the file URLs from a registry entry and imports no registry itself, so a page pays only for the marks it shows.
+A third-party mark (a client, a competitor, an analyst firm, a standard or certification, a coding agent) drawn right on both themes. The asset registries already hold the files (`@aziontech/webkit/assets/client-registry`, `@aziontech/webkit/assets/competitor-registry` and the `@aziontech/webkit/assets/<file>.svg` exports); every surface that drew one repeated the same theme rule by hand (two `img` tags revealed per `[data-theme]`, a `brightness-0` silhouette, a CSS mask in `currentColor`) and none had every route. `CompanyLogo` holds the rule once: a light/dark pair of files, or one file inverted on the theme where it would vanish, or one ink (the theme's black or white, the surrounding `currentColor`, or black pinned for a coloured fill), and the company's name as a typographic wordmark when there is no file yet. It replaces the design sample's `AgentMark` and `ClientMark`. It is a renderer: it takes the file URLs from a registry entry and imports no registry itself, so a page pays only for the marks it shows.
 
 ## When to use
 
-- Use Logo for any other company's mark (client, competitor, agent, certification).
+- Use CompanyLogo for any other company's mark (client, competitor, agent, certification).
 - A logo wall, a trust strip, a client story card, a quote attribution, a comparison column head: any place that shows another company's mark.
 - The coding agents a prompt works with (Claude, Codex, Gemini, Cursor), drawn in the ink of the surface they sit on.
 - A list of standards or analyst firms (SOC, PCI DSS, Gartner, Forrester).
@@ -29,13 +29,13 @@ A third-party mark (a client, a competitor, an analyst firm, a standard or certi
 - A card network beside a payment method → use `PaymentBrand`.
 - A person or an account → use `Avatar`.
 - A product icon or a UI glyph → use an icon from `@aziontech/icons`.
-- A grid of client marks → use `LogoWall`; it renders each mark and can render `Logo` in its `mark` slot.
+- A grid of client marks → use `LogoWall`; it renders each mark and can render `CompanyLogo` in its `mark` slot.
 
 ## Related
 
-- `brand` — the Azion lockup; `Logo` is everyone else's.
+- `brand` — the Azion lockup; `CompanyLogo` is everyone else's.
 - `payment-brand` — card-network plates, drawn in tokens.
-- `logo-wall` — the grid that lays marks out; `Logo` draws one mark.
+- `logo-wall` — the grid that lays marks out; `CompanyLogo` draws one mark.
 - `avatar` — a person's or an organization's picture with initials.
 
 ## Best practices
@@ -52,13 +52,13 @@ A third-party mark (a client, a competitor, an analyst firm, a standard or certi
 ```vue
 <script setup>
   import { CLIENTS } from '@aziontech/webkit/assets/client-registry'
-  import Logo from '@aziontech/webkit/logo'
+  import CompanyLogo from '@aziontech/webkit/company-logo'
 
   const client = CLIENTS[0]
 </script>
 
 <template>
-  <Logo
+  <CompanyLogo
     :name="client.name"
     :src="client.logo"
     :src-light="client.logoLight"

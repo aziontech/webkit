@@ -6,6 +6,7 @@
   import geminiMark from '@aziontech/webkit/assets/gemini-symbol-color.svg'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import CompanyLogo from '@aziontech/webkit/company-logo'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -13,7 +14,6 @@
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import Link from '@aziontech/webkit/link'
-  import Logo from '@aziontech/webkit/logo'
   import Popover from '@aziontech/webkit/popover'
   import SearchTrigger from '@aziontech/webkit/search-trigger'
   import Skeleton from '@aziontech/webkit/skeleton'
@@ -323,7 +323,7 @@
                         :key="agent.name"
                         class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised) text-(--text-default)"
                       >
-                        <Logo
+                        <CompanyLogo
                           :name="agent.name"
                           :src="agent.src"
                           :variant="agent.mono ? 'current' : 'color'"

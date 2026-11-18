@@ -1,5 +1,5 @@
 <script setup>
-  import Logo from '@aziontech/webkit/logo'
+  import CompanyLogo from '@aziontech/webkit/company-logo'
   import Quote from '@aziontech/webkit/quote'
 </script>
 
@@ -11,7 +11,7 @@
     job-title="CTO at Acme Inc."
   >
     <template #mark>
-      <Logo
+      <CompanyLogo
         name="Acme Inc."
         size="large"
       />

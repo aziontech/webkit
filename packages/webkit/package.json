@@ -611,9 +611,9 @@
       "types": "./types/components/content/illustration/illustration.vue.d.ts",
       "default": "./src/components/content/illustration/illustration.vue"
     },
-    "./logo": {
-      "types": "./types/components/content/logo/logo.vue.d.ts",
-      "default": "./src/components/content/logo/logo.vue"
+    "./company-logo": {
+      "types": "./types/components/content/company-logo/company-logo.vue.d.ts",
+      "default": "./src/components/content/company-logo/company-logo.vue"
     },
     "./console-mockup": {
       "types": "./types/components/content/console-mockup/console-mockup.vue.d.ts",
@@ -1851,26 +1851,6 @@
       "types": "./types/svg/error-404/error-404.vue.d.ts",
       "default": "./src/svg/error-404/error-404.vue"
     },
-    "./svg/azion/full": {
-      "types": "./types/svg/azion/full/full.vue.d.ts",
-      "default": "./src/svg/azion/full/full.vue"
-    },
-    "./svg/azion/move-to-the-edge": {
-      "types": "./types/svg/azion/move-to-the-edge/move-to-the-edge.vue.d.ts",
-      "default": "./src/svg/azion/move-to-the-edge/move-to-the-edge.vue"
-    },
-    "./svg/azion/technologies": {
-      "types": "./types/svg/azion/technologies/technologies.vue.d.ts",
-      "default": "./src/svg/azion/technologies/technologies.vue"
-    },
-    "./svg/azion/default": {
-      "types": "./types/svg/azion/default/default.vue.d.ts",
-      "default": "./src/svg/azion/default/default.vue"
-    },
-    "./svg/azion/min": {
-      "types": "./types/svg/azion/min/min.vue.d.ts",
-      "default": "./src/svg/azion/min/min.vue"
-    },
     "./assets/agi-extended-color.svg": "./src/assets/logos/clients/agi-extended-color.svg",
     "./assets/agibank-extended-color.svg": "./src/assets/logos/clients/agibank-extended-color.svg",
     "./assets/agibank-extended-mono.svg": "./src/assets/logos/clients/agibank-extended-mono.svg",
@@ -2934,8 +2914,8 @@
       "illustration": [
         "./types/components/content/illustration/illustration.vue.d.ts"
       ],
-      "logo": [
-        "./types/components/content/logo/logo.vue.d.ts"
+      "company-logo": [
+        "./types/components/content/company-logo/company-logo.vue.d.ts"
       ],
       "console-mockup": [
         "./types/components/content/console-mockup/console-mockup.vue.d.ts"
@@ -3863,21 +3843,6 @@
       ],
       "svg/error-404": [
         "./types/svg/error-404/error-404.vue.d.ts"
-      ],
-      "svg/azion/full": [
-        "./types/svg/azion/full/full.vue.d.ts"
-      ],
-      "svg/azion/move-to-the-edge": [
-        "./types/svg/azion/move-to-the-edge/move-to-the-edge.vue.d.ts"
-      ],
-      "svg/azion/technologies": [
-        "./types/svg/azion/technologies/technologies.vue.d.ts"
-      ],
-      "svg/azion/default": [
-        "./types/svg/azion/default/default.vue.d.ts"
-      ],
-      "svg/azion/min": [
-        "./types/svg/azion/min/min.vue.d.ts"
       ],
       "assets/brand-globe-scene": [
         "./types/assets/globe/brand-globe-scene.vue.d.ts"
