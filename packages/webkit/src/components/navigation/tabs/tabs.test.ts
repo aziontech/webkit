@@ -38,6 +38,22 @@ const Tree = defineComponent({
 })
 
 describe('Tabs', () => {
+  describe('panel spacing', () => {
+    it('starts every panel one group step below the strip', () => {
+      const view = render(Tree)
+      const probe = document.createElement('div')
+      probe.style.height = 'var(--layout-group-gap)'
+      document.body.append(probe)
+      const step = probe.getBoundingClientRect().height
+      probe.remove()
+      const list = view.getByRole('tablist').getBoundingClientRect()
+      const text = view.getByText('Content one').getBoundingClientRect()
+      expect(step).toBeGreaterThan(0)
+      expect(text.top - list.bottom).toBeGreaterThanOrEqual(step - 0.5)
+      expect(text.top - list.bottom).toBeLessThan(step + 8)
+    })
+  })
+
   describe('composition', () => {
     // The panel slide offset is a Tailwind `translate-x-*` utility, which in v4 compiles to
     // the standalone `translate` property — NOT to `transform`. If `translate` is dropped

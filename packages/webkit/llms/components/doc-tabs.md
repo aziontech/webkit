@@ -38,6 +38,7 @@
 
 - The first tab is selected on render; selection state comes from `Tabs`.
 - `data-doc-block` on the root; the strip carries `data-doc-chrome`.
+- The panel text starts one group step (`--layout-group-gap`, 16 px) below the strip, from `Tabs.Content`; DocTabs adds no spacing of its own.
 
 ## Accessibility
 

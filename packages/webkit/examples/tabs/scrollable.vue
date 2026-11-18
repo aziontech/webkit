@@ -52,7 +52,7 @@
         :label="tab.label"
       />
     </Tabs.List>
-    <div class="mt-(--spacing-4) w-full">
+    <div class="w-full">
       <Tabs.Content
         v-for="tab in tabs"
         :key="tab.value"

@@ -24,7 +24,7 @@
         label="Tab Item"
       />
     </Tabs.List>
-    <div class="mt-(--spacing-4) w-full">
+    <div class="w-full">
       <Tabs.Content value="tab-1">
         <div class="rounded-(--shape-card) border border-(--border-default) p-(--spacing-4)">
           <p class="text-body-sm text-(--text-default)">Content for tab 1</p>
