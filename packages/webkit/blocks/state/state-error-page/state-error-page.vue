@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import EmptyState from '@aziontech/webkit/empty-state'
-  import LineFigure from '@aziontech/webkit/line-figure'
+  import Error404 from '@aziontech/webkit/svg/error-404'
 
   export interface ErrorPageProps {
     /** What happened, in the user's words. */
@@ -38,12 +38,7 @@
         :description="description"
       >
         <template #icon>
-          <div class="w-(--container-3xs) sm:w-(--container-2xs)">
-            <LineFigure
-              name="azion-404"
-              play
-            />
-          </div>
+          <Error404 class="h-auto w-full max-w-(--container-3xs)" />
         </template>
         <template #actions>
           <div class="flex flex-wrap items-center justify-center gap-(--spacing-xs)">

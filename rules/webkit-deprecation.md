@@ -41,7 +41,6 @@ least one major, then removed, and `webkit/no-deprecated-component` tells you be
 
 ## Correct
 
-<!-- prettier-ignore -->
 ```ts
 import type { ButtonVariant } from '@aziontech/webkit/button'
 
@@ -57,7 +56,6 @@ interface Props {
 
 Deprecating a whole component:
 
-<!-- prettier-ignore -->
 ```vue
 <script setup lang="ts">
   /** @deprecated since 4.2 — use `EmptyState` instead. Removed in 5.0. */
@@ -67,7 +65,6 @@ Deprecating a whole component:
 
 ## Wrong
 
-<!-- prettier-ignore -->
 ```ts
 interface Props {
   /** @deprecated */ // bare tag: no replacement, no removal version — blocked by lint
@@ -75,7 +72,6 @@ interface Props {
 }
 ```
 
-<!-- prettier-ignore -->
 ```ts
 // Renamed `kind` to `variant` outright in a minor release — a silent breaking
 // change. Consumers get no migration window and no machine-readable warning.

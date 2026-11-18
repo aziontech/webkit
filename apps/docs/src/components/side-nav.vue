@@ -22,7 +22,6 @@
       assets: t.assets,
       brand: t.brand,
       illustrations: t.illustrations,
-      lineFigures: t.lineFigures,
       icons: t.icons
     })
   })

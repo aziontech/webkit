@@ -5,7 +5,7 @@
   import * as en from '../../../locales/en'
   import IconButton from '../../action/icon-button/icon-button.vue'
   import Brand from '../../content/brand/brand.vue'
-  import Logo, { type LogoArtwork } from '../../content/logo/logo.vue'
+  import CompanyLogo, { type CompanyLogoArtwork } from '../../content/company-logo/company-logo.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import SectionTitle from '../../marketing/section-title/section-title.vue'
@@ -33,7 +33,7 @@
     /** Logo file for the light theme. */
     logoLight?: string
     /** The ink a single logo file is drawn in, as the registries record it: `light` art is inverted on the light theme, `dark` art on the dark theme. */
-    artwork?: LogoArtwork
+    artwork?: CompanyLogoArtwork
   }
 
   /** One capability, rendered as a table row. */
@@ -129,7 +129,7 @@
   const supportIcon: Record<CompetitorComparisonSectionSupport, string> = {
     full: 'az az-circle-check',
     partial: 'az az-circle-half',
-    none: 'az az-circle-minus'
+    none: 'az az-minus'
   }
 
   const labelOf = (level: CompetitorComparisonSectionSupport | undefined) =>
@@ -191,14 +191,14 @@
             <tr>
               <th
                 scope="col"
-                class="sticky top-14 z-20 border-b border-(--border-default) bg-(--bg-canvas) px-(--spacing-md) py-0 sm:px-(--spacing-xl) align-middle font-normal h-(--competitor-comparison-section-head)"
+                class="sticky top-(--layout-sticky-top) z-20 border-b border-(--border-default) bg-(--bg-canvas) px-(--spacing-md) py-0 sm:px-(--spacing-xl) text-start align-middle font-normal h-(--competitor-comparison-section-head)"
               >
                 <span class="text-overline-md text-(--text-muted)">{{ columnLabel }}</span>
               </th>
               <th
                 scope="col"
                 aria-label="Azion"
-                class="sticky top-14 z-20 border-b border-s border-(--border-default) bg-(--bg-canvas) px-(--spacing-2xs) py-0 text-center align-middle font-normal h-(--competitor-comparison-section-head) sm:px-(--spacing-lg)"
+                class="sticky top-(--layout-sticky-top) z-20 border-b border-s border-(--border-default) bg-(--bg-canvas) px-(--spacing-2xs) py-0 text-center align-middle font-normal h-(--competitor-comparison-section-head) sm:px-(--spacing-lg)"
               >
                 <Brand
                   variant="default"
@@ -210,9 +210,9 @@
               <th
                 scope="col"
                 :aria-label="competitor.name"
-                class="sticky top-14 z-20 border-b border-s border-(--border-default) bg-(--bg-canvas) px-(--spacing-2xs) py-0 text-center align-middle font-normal h-(--competitor-comparison-section-head) sm:px-(--spacing-lg)"
+                class="sticky top-(--layout-sticky-top) z-20 border-b border-s border-(--border-default) bg-(--bg-canvas) px-(--spacing-2xs) py-0 text-center align-middle font-normal h-(--competitor-comparison-section-head) sm:px-(--spacing-lg)"
               >
-                <Logo
+                <CompanyLogo
                   :name="competitorMark.name"
                   :src="competitorMark.logo"
                   :src-light="competitorMark.logoLight"
@@ -233,7 +233,11 @@
                 colspan="3"
                 class="sticky top-[calc(3.5rem+var(--competitor-comparison-section-head))] z-10 border-b border-(--border-default) bg-(--bg-surface) px-(--spacing-md) py-(--spacing-sm) sm:px-(--spacing-xl) text-start font-normal"
               >
-                <span class="text-overline-md text-(--text-primary)">{{ group.title }}</span>
+                <span
+                  :data-testid="`${testId}__group-title`"
+                  class="text-overline-md text-(--text-brand)"
+                  >{{ group.title }}</span
+                >
               </th>
             </tr>
             <tr
@@ -282,7 +286,7 @@
                   <i
                     :data-support="item[platform] ?? 'none'"
                     :class="iconOf(item[platform])"
-                    class="text-body-md data-[support=full]:text-(--success-foreground) data-[support=none]:text-(--text-muted) data-[support=partial]:text-(--warning-foreground)"
+                    class="text-body-md data-[support=full]:text-(--success-mark) data-[support=none]:text-(--text-muted) data-[support=partial]:text-(--text-muted)"
                     aria-hidden="true"
                   />
                 </Tooltip>

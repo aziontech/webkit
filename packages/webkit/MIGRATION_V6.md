@@ -71,30 +71,31 @@ the paths it moved onto a name a v3 wrapper also used (`button`, `card`, `dialog
 
 ## 2. Renamed components
 
-| v5 import                               | v6 import                             | v5 component         | v6 component      |
-| --------------------------------------- | ------------------------------------- | -------------------- | ----------------- |
-| `@aziontech/webkit/paginator`           | `@aziontech/webkit/pagination`        | `Paginator`          | `Pagination`      |
-| `@aziontech/webkit/tab-view`            | `@aziontech/webkit/tabs`              | `TabView`            | `Tabs`            |
-| `@aziontech/webkit/card-box`            | `@aziontech/webkit/card`              | `CardBox`            | `Card`            |
-| `@aziontech/webkit/message`             | `@aziontech/webkit/alert`             | `Message`            | `Alert`           |
-| `@aziontech/webkit/divider`             | `@aziontech/webkit/separator`         | `Divider`            | `Separator`       |
-| `@aziontech/webkit/progress-bar`        | `@aziontech/webkit/progress`          | `ProgressBar`        | `Progress`        |
-| `@aziontech/webkit/command-menu`        | `@aziontech/webkit/command`           | `CommandMenu`        | `Command`         |
-| `@aziontech/webkit/dropdown`            | `@aziontech/webkit/dropdown-menu`     | `Dropdown`           | `DropdownMenu`    |
-| `@aziontech/webkit/input-text`          | `@aziontech/webkit/input`             | `InputText`          | `Input`           |
-| `@aziontech/webkit/input-number`        | `@aziontech/webkit/number-input`      | `InputNumber`        | `NumberInput`     |
-| `@aziontech/webkit/input-password`      | `@aziontech/webkit/password-input`    | `InputPassword`      | `PasswordInput`   |
-| `@aziontech/webkit/box-grid-selection`  | `@aziontech/webkit/radio-group`       | `BoxGridSelection`   | `RadioGroup`      |
-| `@aziontech/webkit/calendar`            | `@aziontech/webkit/date-picker`       | `Calendar`           | `DatePicker`      |
-| `@aziontech/webkit/pick-list`           | `@aziontech/webkit/transfer-list`     | `PickList`           | `TransferList`    |
-| `@aziontech/webkit/radio-cards`         | `@aziontech/webkit/radio-group`       | `RadioCards`         | `RadioGroup`      |
-| `@aziontech/webkit/radio-button`        | `@aziontech/webkit/radio-group-item`  | `RadioButton`        | `RadioGroup.Item` |
-| `@aziontech/webkit/resizable-panel`     | `@aziontech/webkit/resizable`         | `ResizablePanel`     | `Resizable`       |
-| `@aziontech/webkit/segmented-button`    | `@aziontech/webkit/toggle-group`      | `SegmentedButton`    | `ToggleGroup`     |
-| `@aziontech/webkit/doc-pagination`      | `@aziontech/webkit/doc-previous-next` | `DocPagination`      | `DocPreviousNext` |
-| `@aziontech/webkit/cards`               | `@aziontech/webkit/card-list`         | `Cards`              | `CardList`        |
-| `@aziontech/webkit/menu`                | `@aziontech/webkit/sidebar-menu`      | `Menu`               | `SidebarMenu`     |
-| `@aziontech/webkit/action-confirmation` | `@aziontech/webkit/tool-approval`     | `ActionConfirmation` | `ToolApproval`    |
+| v5 import                               | v6 import                                  | v5 component         | v6 component           |
+| --------------------------------------- | ------------------------------------------ | -------------------- | ---------------------- |
+| `@aziontech/webkit/paginator`           | `@aziontech/webkit/pagination`             | `Paginator`          | `Pagination`           |
+| `@aziontech/webkit/tab-view`            | `@aziontech/webkit/tabs`                   | `TabView`            | `Tabs`                 |
+| `@aziontech/webkit/card-box`            | `@aziontech/webkit/card`                   | `CardBox`            | `Card`                 |
+| `@aziontech/webkit/message`             | `@aziontech/webkit/alert`                  | `Message`            | `Alert`                |
+| `@aziontech/webkit/divider`             | `@aziontech/webkit/separator`              | `Divider`            | `Separator`            |
+| `@aziontech/webkit/progress-bar`        | `@aziontech/webkit/progress`               | `ProgressBar`        | `Progress`             |
+| `@aziontech/webkit/command-menu`        | `@aziontech/webkit/command`                | `CommandMenu`        | `Command`              |
+| `@aziontech/webkit/dropdown`            | `@aziontech/webkit/dropdown-menu`          | `Dropdown`           | `DropdownMenu`         |
+| `@aziontech/webkit/input-text`          | `@aziontech/webkit/input`                  | `InputText`          | `Input`                |
+| `@aziontech/webkit/input-number`        | `@aziontech/webkit/number-input`           | `InputNumber`        | `NumberInput`          |
+| `@aziontech/webkit/input-password`      | `@aziontech/webkit/password-input`         | `InputPassword`      | `PasswordInput`        |
+| `@aziontech/webkit/box-grid-selection`  | `@aziontech/webkit/radio-group`            | `BoxGridSelection`   | `RadioGroup`           |
+| `@aziontech/webkit/calendar`            | `@aziontech/webkit/date-picker`            | `Calendar`           | `DatePicker`           |
+| `@aziontech/webkit/pick-list`           | `@aziontech/webkit/transfer-list`          | `PickList`           | `TransferList`         |
+| `@aziontech/webkit/radio-cards`         | `@aziontech/webkit/radio-group`            | `RadioCards`         | `RadioGroup`           |
+| `@aziontech/webkit/radio-button`        | `@aziontech/webkit/radio-group-item`       | `RadioButton`        | `RadioGroup.Item`      |
+| `@aziontech/webkit/resizable-panel`     | `@aziontech/webkit/resizable`              | `ResizablePanel`     | `Resizable`            |
+| `@aziontech/webkit/segmented-button`    | `@aziontech/webkit/toggle-group`           | `SegmentedButton`    | `ToggleGroup`          |
+| `@aziontech/webkit/doc-pagination`      | `@aziontech/webkit/doc-previous-next`      | `DocPagination`      | `DocPreviousNext`      |
+| `@aziontech/webkit/cards`               | `@aziontech/webkit/card-list`              | `Cards`              | `CardList`             |
+| `@aziontech/webkit/menu`                | `@aziontech/webkit/sidebar-menu`           | `Menu`               | `SidebarMenu`          |
+| `@aziontech/webkit/action-confirmation` | `@aziontech/webkit/tool-approval`          | `ActionConfirmation` | `ToolApproval`         |
+| `@aziontech/webkit/hotspot`             | `@aziontech/webkit/tutorial-panel-hotspot` | `Hotspot`            | `TutorialPanelHotspot` |
 
 ### Naming standard: renamed components
 
@@ -354,16 +355,16 @@ payload take `DocTableOfContentsItem` / `DocTableOfContentsGroup` (was `DocTocIt
 | `AppliedFilter`                        | `TableAppliedFilter`                           |
 | `ArchitectureTabsAction`               | `SectionTitleAction`                           |
 | `ArticleBodyCrumb`                     | `BreadcrumbItemData`                           |
-| `ArticleCardsMark`                     | `LogoMark`                                     |
+| `ArticleCardsMark`                     | `CompanyLogoMark`                              |
 | `ArticleIndexBlogAuthor`               | `ArticleIndexSectionAuthor`                    |
 | `ArticleIndexBlogEmpty`                | `ArticleIndexSectionEmpty`                     |
-| `ArticleIndexBlogMark`                 | `LogoMark`                                     |
+| `ArticleIndexBlogMark`                 | `CompanyLogoMark`                              |
 | `ArticleIndexBlogRowKind`              | `ArticleIndexSectionRowKind`                   |
 | `ArticleIndexBlogSearch`               | `ArticleIndexSectionSearch`                    |
 | `ArticleIndexResourceHubEmpty`         | `ArticleIndexSectionEmpty`                     |
 | `ArticleIndexResourceHubFacet`         | `ArticleIndexSectionFacet`                     |
 | `ArticleIndexResourceHubItem`          | `ArticleIndexSectionItem`                      |
-| `ArticleIndexResourceHubMark`          | `LogoMark`                                     |
+| `ArticleIndexResourceHubMark`          | `CompanyLogoMark`                              |
 | `ArticleIndexResourceHubRowKind`       | `ArticleIndexSectionRowKind`                   |
 | `BoxGridSelectionItem`                 | `RadioGroupOption`                             |
 | `CalendarMonth`                        | `DatePickerMonth`                              |
@@ -373,8 +374,8 @@ payload take `DocTableOfContentsItem` / `DocTableOfContentsGroup` (was `DocTocIt
 | `CalendarValue`                        | `DatePickerValue`                              |
 | `CardsItemSlotProps`                   | `CardListItemSlotProps`                        |
 | `CardsSelectionMode`                   | `CardListSelectionMode`                        |
-| `ClientMosaicColumnsLogoTreatment`     | `LogoTreatment`                                |
-| `ClientMosaicLogoTreatment`            | `LogoTreatment`                                |
+| `ClientMosaicColumnsLogoTreatment`     | `CompanyLogoTreatment`                         |
+| `ClientMosaicLogoTreatment`            | `CompanyLogoTreatment`                         |
 | `ClientQuotesAction`                   | `SectionTitleAction`                           |
 | `CliTerminalAction`                    | `SectionTitleAction`                           |
 | `ClosingCallToActionAction`            | `SectionTitleAction`                           |
@@ -429,12 +430,12 @@ payload take `DocTableOfContentsItem` / `DocTableOfContentsGroup` (was `DocTocIt
 | `InputTextType`                        | `InputType`                                    |
 | `ListingTableAction`                   | `SectionTitleAction`                           |
 | `LogoWallQuoteAction`                  | `SectionTitleAction`                           |
-| `LogoWallQuoteLogoTreatment`           | `LogoTreatment`                                |
+| `LogoWallQuoteLogoTreatment`           | `CompanyLogoTreatment`                         |
 | `MediaSplitStackAction`                | `SectionTitleAction`                           |
 | `MessageSeverity`                      | `AlertSeverity`                                |
 | `MessageSize`                          | `AlertSize`                                    |
 | `MoveDirection`                        | `TransferListMoveDirection`                    |
-| `NetworkSectionLogoTreatment`          | `LogoTreatment`                                |
+| `NetworkSectionLogoTreatment`          | `CompanyLogoTreatment`                         |
 | `PaginatorContext`                     | `PaginationContext`                            |
 | `PasswordRequirement`                  | `PasswordRequirementsRule`                     |
 | `PhoneNumber`                          | `PhoneInputValue`                              |
@@ -457,7 +458,7 @@ payload take `DocTableOfContentsItem` / `DocTableOfContentsGroup` (was `DocTocIt
 | `StickyScrollCodeActionKind`           | `FeatureScrollSectionActionKind`               |
 | `StickyScrollCodeItem`                 | `FeatureScrollSectionItem`                     |
 | `StickyScrollCodeSample`               | `FeatureScrollSectionCode`                     |
-| `StoryLibraryClient`                   | `LogoMark`                                     |
+| `StoryLibraryClient`                   | `CompanyLogoMark`                              |
 | `SubjectLibraryAction`                 | `SectionTitleAction`                           |
 | `TabViewContext`                       | `TabsContext`                                  |
 | `TabViewSlideDirection`                | `TabsSlideDirection`                           |
@@ -471,9 +472,9 @@ payload take `DocTableOfContentsItem` / `DocTableOfContentsGroup` (was `DocTocIt
 Every exported type starts with its component's name, and a shape several components shared is one
 type now, exported by the component that owns it: a section's `primaryAction` / `secondaryAction`
 is `SectionTitleAction` (`@aziontech/webkit/section-title`), a breadcrumb entry is
-`BreadcrumbItemData`, a client mark `{ name, logo }` is `LogoMark` and a mark's ink is
-`LogoTreatment` (`@aziontech/webkit/logo`). Each section still re-exports the shared type, so an
-import the codemod rewrote keeps its path. `LogoTreatment` uses the `Logo` words: `as-is` is
+`BreadcrumbItemData`, a client mark `{ name, logo }` is `CompanyLogoMark` and a mark's ink is
+`CompanyLogoTreatment` (`@aziontech/webkit/company-logo`). Each section still re-exports the shared type, so an
+import the codemod rewrote keeps its path. `CompanyLogoTreatment` uses the `CompanyLogo` words: `as-is` is
 `color`, and `logoTreatment: 'invert-light'` on a `LogoWallSection` mark is `artwork: 'light'`
 (change those values by hand). The overlay position types are `TooltipSide`, `PopoverSide`,
 `HoverCardSide`, `DropdownMenuSide` and `HintSide`, with `*Align` beside them (see "Overlays:
@@ -750,7 +751,7 @@ New standalone paths: `tabs-list`, `tabs-trigger`, `tabs-content`, `dialog-heade
 | `breadcrumb-item`                                                                                               | `data-current`                                                                                      | `data-active`                                                                                                                          |
 | `sidebar-menu-item`                                                                                             | `data-selected`                                                                                     | `data-active`                                                                                                                          |
 | `pagination-button`                                                                                             | `data-selected`                                                                                     | `data-active`                                                                                                                          |
-| `hotspot`                                                                                                       | `data-active` (marker shown) / `data-current` (current step)                                        | `data-marker` / `data-active`                                                                                                          |
+| `tutorial-panel-hotspot`                                                                                        | `data-active` (marker shown) / `data-current` (current step)                                        | `data-marker` / `data-active`                                                                                                          |
 | `navigation-menu` (root, list, icon, content, popup, backdrop)                                                  | `data-open` / `data-closed`                                                                         | `data-state="open\|closed"`                                                                                                            |
 | `navigation-menu-positioner`, `navigation-menu-arrow`                                                           | `data-side="left\|right"`                                                                           | `data-side="start\|end"`                                                                                                               |
 | `drawer-content`                                                                                                | `data-side="left\|right"`                                                                           | `data-side="start\|end"`                                                                                                               |
@@ -914,6 +915,7 @@ The theme that ships with WebKit 6 changes three things your app can see:
   | `--shape-elements`                                                                                                          | `--shape-control`                                               |
   | `--z-input-field`, `--z-input-overlay`                                                                                      | `--z-control`, `--z-control-overlay`                            |
   | `animate-slide-in-left`, `-out-left`, `-in-right`, `-out-right`                                                             | `animate-slide-in-start`, `-out-start`, `-in-end`, `-out-end`   |
+  | `--text-primary` (a peach orange in dark, a brown orange in light)                                                          | `--text-brand`, the logo orange `#F3652B` in both themes        |
   | `@aziontech/theme/texts` (`textsData`)                                                                                      | `@aziontech/theme/typography` (`typography`)                    |
   | `@aziontech/theme/layouts` (`layoutsData`, `layoutsUtilities`)                                                              | `@aziontech/theme/layout` (`layout`, `layoutUtilities`)         |
 
@@ -931,6 +933,15 @@ The theme that ships with WebKit 6 changes three things your app can see:
   slots (`--chart-series-7`, `-8` are new): a `Chart` keeps eight series before folding the rest
   into Other (`cap` defaults to `8`), and `ChartSlot` takes `1` to `8`. `DonutChart` still keeps six
   slices. Pass `:cap="6"` to a `Chart` to keep the old fold.
+
+- **One orange.** Brand text is the logo orange `#F3652B` in both themes: `--text-primary` is gone
+  (the codemod rewrites it to `--text-brand`), and the `Quote` name, `LinkDirectory` column titles,
+  the `HeroTitle` highlight, `Stats` prefixes, the `FieldLabel` asterisk, `Tag variant="highlight"`
+  text and a hovered linked `FeatureItem` now render it. In light it is about 3:1 on white, an
+  accepted brand exception; a screen that needs AA brand text in light puts the label on a
+  `--primary` fill with `--primary-foreground` instead. The default `Avatar` pattern `colors` are
+  now `['var(--primary)', 'var(--warning)', 'var(--brand-blue)']`, and the dark code syntax function
+  colour is the logo orange.
 
 Two additions need nothing from you: `--border-input` is the outline token of every form field (same
 value as `--border-default`), and dark mode has its own, visible elevation shadows (`--shadow-*`).
@@ -1312,6 +1323,32 @@ rewrite this, because the replacement depends on whether the child was a link or
 </Item>
 ```
 
+### `LineFigure` is removed
+
+`LineFigure` (`@aziontech/webkit/line-figure`) and its line figures are removed, with no
+replacement: delete the import and the `<LineFigure>` element. The `lineFigures` kind is gone from
+`catalog.assets`, the MCP `list_assets` and the llms foundation pages. The codemod lists the import
+as `MANUAL`.
+
+### The Azion mark is `Brand`; the loose `svg/azion/*` files are removed
+
+`Brand` (`@aziontech/webkit/brand`) is the one way to draw the Azion mark. The loose drawings
+`@aziontech/webkit/svg/azion/*` are no longer exported:
+
+| Removed import                                 | Write instead                  |
+| ---------------------------------------------- | ------------------------------ |
+| `@aziontech/webkit/svg/azion/default`          | `<Brand />`                    |
+| `@aziontech/webkit/svg/azion/min`              | `<Brand variant="reduced" />`  |
+| `@aziontech/webkit/svg/azion/technologies`     | `<Brand variant="extended" />` |
+| `@aziontech/webkit/svg/azion/full`             | no replacement (see below)     |
+| `@aziontech/webkit/svg/azion/move-to-the-edge` | no replacement (see below)     |
+
+The two lockups with the "Move to the Edge" tagline are retired: remove them, or use
+`<Brand variant="extended" />` (AZION technologies) where a tagline lockup stood. The codemod
+rewrites `svg/azion/default` to `Brand` and lists the other imports as `MANUAL`. Another company's
+mark (a client, a competitor, a coding agent) is `CompanyLogo` (`@aziontech/webkit/company-logo`),
+never `Brand`.
+
 ### Removed in 6.0: feedback, content, code and chart names
 
 These names are removed in 6.0, with no alias. The codemod rewrites
@@ -1411,7 +1448,7 @@ Inner parts use one word per concept:
 
 | Component                                                                                     | v5                                                   | v6                                                               |
 | --------------------------------------------------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------------------- |
-| `Hotspot`                                                                                     | `__dismiss`                                          | `__close`                                                        |
+| `TutorialPanelHotspot`                                                                        | `__dismiss`                                          | `__close`                                                        |
 | `Chart`, `BarList`, `DonutChart`, `GaugeChart`, `MapChart`, `StatTile`, `Tracker`, `CardList` | `__skeleton`                                         | `__loading`                                                      |
 | `StatusIndicator`                                                                             | `__spinner`                                          | `__loading`                                                      |
 | `TutorialPanel`, `CommandInput`, `FilterMenu`                                                 | `__back`                                             | `__previous`                                                     |
@@ -1938,6 +1975,18 @@ Two behaviour changes need a hand edit:
 - `ToggleGroup`: a disabled option no longer shows the lock by itself; set `locked: true` on the
   options a plan or a permission blocks.
 
+### `Hotspot` is a part of `TutorialPanel`
+
+`Hotspot` (`@aziontech/webkit/hotspot`, from the 6.0 previews) is `TutorialPanelHotspot`
+(`@aziontech/webkit/tutorial-panel-hotspot`): it only works inside `TutorialPanel.Provider`, so it
+lives with it. It is a companion part, imported on its own (no `TutorialPanel.Hotspot`). The codemod
+rewrites the import and the tag. Its type is `TutorialPanelHotspotSide`, its test id
+`tutorial-panel-hotspot`, and its locale keys moved into the `tutorialPanel` group
+(`hotspot.label` → `tutorialPanel.hotspotLabel`, `hotspot.stepOf` → `tutorialPanel.hotspotStepOf`,
+`hotspot.previous` / `next` / `finish` → `tutorialPanel.hotspotPrevious` / `hotspotNext` /
+`hotspotFinish`). Only one tutorial step is open on a page at a time: when a second
+`TutorialPanel.Provider` starts a tutorial, the first one's open step closes and its marker stays.
+
 ### Actions, navigation and overlay: one component per job
 
 The codemod rewrites the renamed paths and bindings and prints `MANUAL` for a removed one.
@@ -1948,7 +1997,7 @@ The codemod rewrites the renamed paths and bindings and prints `MANUAL` for a re
   `SidebarMenu.Item` drops `kind="group"`: put the title on `SidebarMenu.Group label`.
 - `HelpPanel.Tutorial` and `HelpPanel.Task` are removed (`help-panel-tutorial`, `help-panel-task`,
   the `HelpPanelTaskStatus` type): a tutorial is `TutorialPanel` inside `TutorialPanel.Provider`,
-  with its tasks and steps as data and a `Hotspot` on each real control.
+  with its tasks and steps as data and a `TutorialPanelHotspot` on each real control.
 - `action-confirmation` → `tool-approval` (`ActionConfirmation` → `ToolApproval`, types
   `ToolApprovalState`, `ToolApprovalKind`, test id `tool-approval`, locale key `toolApproval.*`):
   it is only an agent's request to run a tool; a person confirming their own action uses `ConfirmDialog`.
@@ -2131,7 +2180,7 @@ follow.
 
 Paths in `file`, `examplesFile` and `docsFile` are relative to the folder that holds `catalog.json`. The MCP tools
 (`get_block`, `get_component`, `get_usage_example`) return the same answers as before. The asset
-lists are `catalog/assets/<kind>.json` in kebab-case (`line-figures.json`, `brand-marks.json`).
+lists are `catalog/assets/<kind>.json` in kebab-case (`brand-marks.json`, `icons.json`).
 
 ### Example files renamed
 
@@ -2145,9 +2194,17 @@ folder.
 
 ### Performance
 
-- `PhoneInput` loads the flag sprite (about 80 KB) with a dynamic `import()` when the country list
-  first opens; until it arrives the flag boxes are blank. Bundles that include `PhoneInput` drop
-  about 80 KB gzipped from the initial chunk.
+- `PhoneInput` loads the flag sprite (a 74 KB WebP) with a dynamic `import()` after the field
+  mounts in the browser, so it stays out of the initial chunk; until it arrives the flag boxes are
+  blank. The closed field shows the selected country's flag, name and dial code.
+- `PhoneInput` offers every country and territory with a calling code (245, from Google's
+  libphonenumber metadata), with the United States first; set `default-country` to start on another.
+- The flag sprite behind `@aziontech/webkit/styles/country-flags` is now
+  `src/images/country-flags.webp` (it was a PNG) and covers 252 flags. Its `.flag-an`, `.flag-tp`,
+  `.flag-ty` and `.flag-zr` classes are removed (Netherlands Antilles, East Timor and Zaire no longer
+  exist; use `.flag-cw`/`.flag-sx`/`.flag-bq`, `.flag-tl` and `.flag-cd`); `.flag-ac`, `.flag-ax`,
+  `.flag-bl`, `.flag-bq`, `.flag-cw`, `.flag-gg`, `.flag-im`, `.flag-je`, `.flag-mf`, `.flag-ps`,
+  `.flag-sx`, `.flag-ta`, `.flag-xk` and `.flag-yt` are new.
 - `Select`, `MultiSelect`, `LogViewer` and `CodeBlock` mount lists longer than 300 rows in chunks of
   100 as they scroll near view. Tests that count every rendered option, line or log row of a long
   list see only the first chunks; scroll the list, or press an arrow key in a `Select` list, which

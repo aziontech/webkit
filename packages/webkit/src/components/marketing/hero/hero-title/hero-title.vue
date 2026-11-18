@@ -90,7 +90,8 @@
     >
       <span
         v-if="titleHighlight"
-        class="text-(--text-primary) [text-shadow:0_0_2rem_color-mix(in_srgb,var(--primary)_30%,transparent)]"
+        :data-testid="`${testId}__highlight`"
+        class="text-(--text-brand) [text-shadow:0_0_2rem_color-mix(in_srgb,var(--primary)_30%,transparent)]"
         >{{ titleHighlight }}</span
       >
       {{ title }}

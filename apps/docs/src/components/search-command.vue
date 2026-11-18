@@ -33,8 +33,7 @@
           to: '/assets#illustrations',
           title: t.value.illustrations,
           hint: t.value.illustrationsLead
-        },
-        { to: '/assets#line-figures', title: t.value.lineFigures, hint: t.value.lineFiguresLead }
+        }
       ]
     },
     {

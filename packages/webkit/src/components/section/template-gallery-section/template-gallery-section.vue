@@ -96,7 +96,7 @@
     v-bind="$attrs"
     :id="anchor || undefined"
     :data-testid="testId"
-    class="scroll-mt-(--spacing-2xl)"
+    class="@container/template-gallery scroll-mt-(--spacing-2xl)"
   >
     <SectionModule
       v-if="hasCards"
@@ -114,7 +114,9 @@
         :description="description"
       >
         <template #media>
-          <div class="relative min-h-[36rem] w-full self-stretch lg:min-h-[44rem]">
+          <div
+            class="relative min-h-[36rem] w-full self-stretch @min-[60rem]/template-gallery:min-h-[44rem]"
+          >
             <ScrollArea
               :aria-label="templatesAriaLabel || undefined"
               class="absolute inset-0 mask-t-from-[calc(100%_-_2rem)] mask-b-from-[calc(100%_-_6rem)]"

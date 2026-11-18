@@ -160,7 +160,7 @@
       :data-padded="props.padded || null"
       :data-size="size"
       :data-align="align"
-      class="relative mx-auto w-full px-(--layout-boundary-inline) [z-index:var(--hero-banner-z-content,10)] data-[variant=screen]:flex data-[variant=screen]:flex-1 data-[variant=screen]:flex-col data-[variant=screen]:data-[align=start]:justify-start data-[variant=screen]:data-[align=center]:justify-center data-[variant=screen]:data-[align=end]:justify-end data-[width=3xl]:max-w-(--container-3xl) data-[width=4xl]:max-w-(--container-4xl) data-[width=5xl]:max-w-(--container-5xl) data-[width=6xl]:max-w-(--container-6xl) data-[width=7xl]:max-w-(--container-7xl) data-[width=site]:max-w-(--layout-measure-site) data-[width=full]:max-w-none data-[padded]:data-[size=medium]:py-(--spacing-2xl) data-[padded]:data-[size=large]:py-[calc(var(--spacing-2xl)*2)]"
+      class="relative mx-auto w-full px-(--spacing-xl) [z-index:var(--hero-banner-z-content,10)] data-[variant=screen]:flex data-[variant=screen]:flex-1 data-[variant=screen]:flex-col data-[variant=screen]:data-[align=start]:justify-start data-[variant=screen]:data-[align=center]:justify-center data-[variant=screen]:data-[align=end]:justify-end data-[width=3xl]:max-w-(--container-3xl) data-[width=4xl]:max-w-(--container-4xl) data-[width=5xl]:max-w-(--container-5xl) data-[width=6xl]:max-w-(--container-6xl) data-[width=7xl]:max-w-(--container-7xl) data-[width=site]:layout-column-site data-[width=full]:max-w-none data-[padded]:data-[size=medium]:py-(--spacing-2xl) data-[padded]:data-[size=large]:py-[calc(var(--spacing-2xl)*2)]"
     >
       <div
         v-if="hasMedia()"
@@ -172,7 +172,7 @@
 
         <div
           :data-media-align="mediaAlign"
-          class="flex min-w-0 items-center justify-center md:data-[media-align=end]:-me-(--layout-boundary-inline) md:data-[media-align=end]:justify-end"
+          class="flex min-w-0 items-center justify-center md:data-[media-align=end]:-me-(--spacing-xl) md:data-[media-align=end]:justify-end"
         >
           <slot name="media" />
         </div>
@@ -214,7 +214,7 @@
           :marks="marqueeMarks"
           :label="marqueeLabel"
           size="small"
-          class="mx-auto w-full px-(--layout-boundary-inline) py-(--spacing-xl) data-[width=3xl]:max-w-(--container-3xl) data-[width=4xl]:max-w-(--container-4xl) data-[width=5xl]:max-w-(--container-5xl) data-[width=6xl]:max-w-(--container-6xl) data-[width=7xl]:max-w-(--container-7xl) data-[width=site]:max-w-(--layout-measure-site) data-[width=full]:max-w-none"
+          class="mx-auto w-full px-(--spacing-xl) py-(--spacing-xl) data-[width=3xl]:max-w-(--container-3xl) data-[width=4xl]:max-w-(--container-4xl) data-[width=5xl]:max-w-(--container-5xl) data-[width=6xl]:max-w-(--container-6xl) data-[width=7xl]:max-w-(--container-7xl) data-[width=site]:layout-column-site data-[width=full]:max-w-none"
         />
       </div>
     </div>

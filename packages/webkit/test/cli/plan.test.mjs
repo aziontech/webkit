@@ -82,6 +82,7 @@ test("planInit writes a .prettierrc.json in the copied blocks' style when the ap
       readFileSync(fileURLToPath(new URL('../../../../.prettierrc.json', import.meta.url)), 'utf8')
     )
     delete repo.$schema
+    delete repo.overrides
     assert.deepEqual(JSON.parse(write.content), repo)
   } finally {
     rmSync(dir, { recursive: true, force: true })

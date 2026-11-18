@@ -1,9 +1,12 @@
 export type Highlighted = { code: string; html: string }
-export type MarkdownDoc = { html: string; title: string }
+export type PairType = 'usage' | 'guidance' | 'example'
+export type DocPair = { type: PairType; level: number; do: string; dont: string }
+export type DocPart = { html: string } | { pair: DocPair }
+export type MarkdownDoc = { parts: DocPart[]; title: string }
 export type GuidelinesDoc = {
   title: string
   intro: string
-  sections: { heading: string; html: string }[]
+  sections: { heading: string; html: string; parts: DocPart[] }[]
 }
 export type Row = Record<string, string>
 
@@ -18,6 +21,7 @@ export type ComponentDoc = {
   avoidWhen: string[]
   related: string[]
   bestPractices: string[]
+  avoidPractices: string[]
   props: Row[]
   events: Row[]
   slots: Row[]
@@ -87,7 +91,6 @@ export type IconAsset = {
 export type DocsAssets = {
   icons: IconAsset[]
   illustrations: string[]
-  lineFigures: { name: string; label: string }[]
 }
 
 export type DocsTokens = {

@@ -19,7 +19,7 @@ import { CATALOG, LLMS, readCatalog, THEME, WEBKIT } from './paths.ts'
 const INDEX = 'virtual:docs-index'
 const TOKENS = 'virtual:docs-tokens'
 const ASSETS = 'virtual:docs-assets'
-const ASSET_LLMS = ['illustrations', 'line-figures', 'brand-marks']
+const ASSET_LLMS = ['illustrations', 'brand-marks']
 const LOADERS = 'virtual:docs-component-loaders'
 const COMPONENT = 'virtual:docs-component:'
 const HIGHLIGHT = '\0docs-highlight:'
@@ -28,7 +28,15 @@ const GUIDELINES = '\0docs-guidelines:'
 
 const STATIC_DIRS: { prefix: string; dir: string }[] = [{ prefix: '/llms/', dir: LLMS }]
 
+const PROPOSALS: { route: string; file: string }[] = [
+  {
+    route: '/proposal/error-pages.html',
+    file: join(WEBKIT, 'docs/reviews/error-page-alternatives.html')
+  }
+]
+
 const MIME: Record<string, string> = {
+  '.html': 'text/html; charset=utf-8',
   '.md': 'text/markdown; charset=utf-8',
   '.txt': 'text/plain; charset=utf-8',
   '.json': 'application/json',
@@ -123,6 +131,12 @@ export function docsPlugin(): Plugin {
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
         const url = decodeURIComponent((req.url ?? '').split('?')[0])
+        const proposal = PROPOSALS.find((item) => item.route === url)
+        if (proposal && existsSync(proposal.file)) {
+          res.setHeader('Content-Type', MIME['.html'])
+          createReadStream(proposal.file).pipe(res)
+          return
+        }
         for (const { prefix, dir } of STATIC_DIRS) {
           if (!url.startsWith(prefix)) continue
           const file = normalize(join(dir, url.slice(prefix.length)))
@@ -141,6 +155,9 @@ export function docsPlugin(): Plugin {
         cpSync(LLMS, join(out, 'llms'), { recursive: true })
         if (existsSync(join(LLMS, 'llms.txt')))
           cpSync(join(LLMS, 'llms.txt'), join(out, 'llms.txt'))
+      }
+      for (const { route, file } of PROPOSALS) {
+        if (existsSync(file)) cpSync(file, join(out, route))
       }
     }
   }

@@ -579,7 +579,7 @@ test('list_assets indexes every kind with its count and the components that use 
   const res = listAssets(catalog)
   assert.equal(res.ok, true)
   const kinds = Object.fromEntries(res.kinds.map((k) => [k.kind, k]))
-  for (const kind of ['illustrations', 'diagrams', 'lineFigures', 'brandMarks', 'icons']) {
+  for (const kind of ['illustrations', 'diagrams', 'brandMarks', 'icons']) {
     assert.ok(kinds[kind]?.count > 0, kind)
   }
   assert.ok(kinds.illustrations.usedBy.includes('illustration'))
@@ -587,7 +587,6 @@ test('list_assets indexes every kind with its count and the components that use 
   assert.ok(kinds.brandMarks.usedBy.includes('marquee'))
   assert.ok(kinds.brandMarks.usedBy.includes('client-quotes-section'))
   assert.ok(kinds.diagrams.usedBy.includes('diagram'))
-  assert.ok(kinds.lineFigures.usedBy.includes('line-figure'))
   assert.ok(kinds.icons.usedBy.includes('button'))
 })
 
@@ -641,7 +640,6 @@ test('list_assets filters by name, label and keyword', () => {
   assert.ok(colour.includes('az-color az-react'), colour.join(', '))
   const cache = listAssets(catalog, { kind: 'diagrams', query: 'tiered cache' }).items
   assert.ok(cache.some((i) => i.name === 'cache'))
-  assert.equal(listAssets(catalog, { kind: 'figures', query: 'cache' }).kind, 'lineFigures')
 })
 
 test('list_assets names the kinds when the kind is unknown', () => {

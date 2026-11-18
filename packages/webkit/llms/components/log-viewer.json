@@ -25,11 +25,15 @@
  "avoidWhen": [
   "Static, read-only code or configuration snippets → use `code-block`.",
   "An animated terminal session on a marketing page → use `cli-terminal-section`.",
-  "Rows of structured records with columns, sorting or paging → use `table`."
+  "Rows of structured records with columns, sorting or paging → use `table`.",
+  "The steps of a form or setup the person moves through (no log under each step) → use `stepper`.",
+  "The timed spans of one request or invocation → use `trace`."
  ],
  "related": [
   "`code-block` — highlighted source code with a copy action, not a stream of typed log lines.",
   "`cli-terminal-section` — marketing band that plays a scripted terminal session.",
+  "`stepper` — the steps of a wizard the person moves through; `LogViewer.Steps` is the steps of a run that a machine moves through, each with its log.",
+  "`trace` — the spans of one request on a time axis, not log lines.",
   "`create/create-deploy-success` — the post-deploy screen that embeds `log-viewer` for the build log."
  ],
  "bestPractices": [

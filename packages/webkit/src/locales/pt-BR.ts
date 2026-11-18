@@ -658,13 +658,6 @@ export const ptBR: Messages = {
     search: 'Buscar',
     noMatch: 'Nenhum resultado encontrado.'
   },
-  hotspot: {
-    label: 'Etapa do tutorial: {title}',
-    stepOf: 'Etapa {current} de {total}',
-    previous: 'Anterior',
-    next: 'Próxima',
-    finish: 'Concluir'
-  },
   keyValueList: {
     notSet: 'Não definido'
   },
@@ -1184,7 +1177,12 @@ export const ptBR: Messages = {
     taskComplete: 'Concluída',
     taskCurrent: 'Tarefa atual',
     taskNotStarted: 'Não iniciada',
-    progress: '{complete} de {total} concluídas'
+    progress: '{complete} de {total} concluídas',
+    hotspotLabel: 'Etapa do tutorial: {title}',
+    hotspotStepOf: 'Etapa {current} de {total}',
+    hotspotPrevious: 'Anterior',
+    hotspotNext: 'Próxima',
+    hotspotFinish: 'Concluir'
   },
   wizard: {
     stepOf: 'Etapa {step} de {total}',

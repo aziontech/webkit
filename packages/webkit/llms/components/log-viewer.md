@@ -29,12 +29,16 @@
 - Static, read-only code or configuration snippets → use `code-block`.
 - An animated terminal session on a marketing page → use `cli-terminal-section`.
 - Rows of structured records with columns, sorting or paging → use `table`.
+- The steps of a form or setup the person moves through (no log under each step) → use `stepper`.
+- The timed spans of one request or invocation → use `trace`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
 - [code-block](code-block.md) — highlighted source code with a copy action, not a stream of typed log lines.
 - [cli-terminal-section](cli-terminal-section.md) — marketing band that plays a scripted terminal session.
+- [stepper](stepper.md) — the steps of a wizard the person moves through; `LogViewer.Steps` is the steps of a run that a machine moves through, each with its log.
+- [trace](trace.md) — the spans of one request on a time axis, not log lines.
 - `create/create-deploy-success` — the post-deploy screen that embeds `log-viewer` for the build log.
 
 ## Props
@@ -98,6 +102,7 @@ LogViewer ships its sub-components attached to the root (`LogViewer.Header`, `Lo
 - `loading` state: LogViewerContent renders a centered spinner + `loadingLabel` in place of the log body
 - Log line `data-type` reflects `line.type` and `data-level` reflects `line.level`; `warn` rows take the warning tint, `error` rows the danger tint and danger text
 - Level toggles carry `data-level` and `data-active` (the chosen level); every toggle shows the count of lines at its level in the whole log
+- Log line columns: the time and level cells take their width from the longest value in the whole log (`--log-viewer-time-width`, `--log-viewer-level-width` on the line list, counted in `ch` plus the code letter-spacing), so the columns do not move while lines are filtered, appended or mounted in chunks.
 - Long logs: above 300 visible lines `LogViewerContent` mounts lines in chunks of 100 as they scroll near view (unmounted chunks keep an estimated 24 px per line), so a 10,000-line log mounts within its runtime budget. Search, the level filter, the line count and copy work on every line, mounted or not.
 
 ## Accessibility

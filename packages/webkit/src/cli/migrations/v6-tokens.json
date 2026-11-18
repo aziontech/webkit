@@ -18,6 +18,7 @@
     "mockup-fade-start": "console-mockup-fade-start",
     "mockup-fade-end": "console-mockup-fade-end",
     "mockup-fade-edge": "console-mockup-fade-edge",
+    "text-primary": "text-brand",
     "mockup-fade-color": "console-mockup-fade-color",
     "menu-ring-offset": "sidebar-menu-ring-offset",
     "menu-item-ring-offset": "sidebar-menu-item-ring-offset",

@@ -242,6 +242,7 @@ Same values, new names. `npx @aziontech/webkit migrate` rewrites them in `.vue`,
 | `--shape-elements`                                                                 | `--shape-control`                                                                                               |
 | `--z-input-field`, `--z-input-overlay`                                             | `--z-control`, `--z-control-overlay`                                                                            |
 | `animate-slide-in-left` / `-out-left`, `animate-slide-in-right` / `-out-right`     | `animate-slide-in-start` / `-out-start`, `animate-slide-in-end` / `-out-end` (they flip in right-to-left pages) |
+| `--text-primary` (a lighter orange in dark, a darker one in light)                 | `--text-brand`, the logo orange `#F3652B` in both themes: the one orange for brand text                         |
 
 `--bg-contrast` and `--text-contrast` keep their names: they are the inverted surface and its text, not a fill colour's text pair.
 | `surfacePrimitives` (from `@aziontech/theme/colors`) | `primitives.gray` |

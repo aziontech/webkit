@@ -77,7 +77,7 @@
 - Visible focus: not applicable — the quote is static copy and holds no interactive control.
 - Keyboard map: none of its own; the block contains no focusable element and is skipped by `Tab`.
 - ARIA: the quotation is a real `blockquote` inside a `figure`, and the attribution is its `figcaption`, so the statement and its source are announced as one unit; the mark carries `logoAlt`, falling back to `jobTitle`, and is never left with an empty accessible name while it conveys the company.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the quotation is `var(--text-default)` — or, with `highlights`, `var(--text-muted)` around phrases in `var(--text-default)`; the attribution uses `var(--text-muted)`, which clears AA on the dark canvas and is a known theme-level shortfall on the light one (see `stats`).
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the quotation is `var(--text-default)` — or, with `highlights`, `var(--text-muted)` around phrases in `var(--text-default)`; the attribution name is `var(--text-brand)`, the logo orange `#F3652B`, an owner-accepted brand exception in light (about 3:1, `rules/webkit-tokens.md` § "Contrast: APCA and WCAG 2"); the job title uses `var(--text-muted)`, which clears AA on the dark canvas and is a known theme-level shortfall on the light one (see `stats`).
 - `motion-reduce:transition-none motion-reduce:transform-none` — not applicable, the block is static.
 - Touch target ≥40×40 px — not applicable, no interactive target.
 
@@ -87,7 +87,7 @@
 
 ```vue
 <script setup>
-  import Logo from '@aziontech/webkit/logo'
+  import CompanyLogo from '@aziontech/webkit/company-logo'
   import Quote from '@aziontech/webkit/quote'
 </script>
 
@@ -98,7 +98,7 @@
     job-title="CTO at Acme Inc."
   >
     <template #mark>
-      <Logo
+      <CompanyLogo
         name="Acme Inc."
         size="large"
       />
@@ -112,7 +112,7 @@
 ```vue
 <script setup>
   import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
-  import Logo from '@aziontech/webkit/logo'
+  import CompanyLogo from '@aziontech/webkit/company-logo'
   import Quote from '@aziontech/webkit/quote'
 </script>
 
@@ -125,7 +125,7 @@
       job-title="CTO at Acme Inc."
     >
       <template #mark>
-        <Logo
+        <CompanyLogo
           name="Acme Inc."
           size="medium"
         />
@@ -138,7 +138,7 @@
       job-title="CTO at Acme Inc."
     >
       <template #mark>
-        <Logo
+        <CompanyLogo
           name="Acme Inc."
           size="large"
         />
@@ -152,7 +152,7 @@
       :photo="placeholderImage"
     >
       <template #mark>
-        <Logo
+        <CompanyLogo
           name="Acme Inc."
           size="large"
         />

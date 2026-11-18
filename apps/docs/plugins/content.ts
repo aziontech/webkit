@@ -54,6 +54,22 @@ export function sourceHref(href: string, file: string): string {
   return `${SOURCE_URL}${target}${hash ? `#${hash}` : ''}`
 }
 
+const HTML_COMMENT = /^<!--[\s\S]*?-->$/
+
+type CoreState = { tokens: ReturnType<InstanceType<typeof MarkdownIt>['parse']> }
+
+export function dropHtmlComments(state: CoreState): void {
+  const comment = (at: number) =>
+    state.tokens[at]?.type === 'paragraph_open' &&
+    HTML_COMMENT.test(state.tokens[at + 1]?.content.trim() ?? '')
+  const kept: CoreState['tokens'] = []
+  for (let at = 0; at < state.tokens.length; at++) {
+    if (comment(at)) at += 2
+    else kept.push(state.tokens[at])
+  }
+  state.tokens = kept
+}
+
 export async function markdown(file = ''): Promise<InstanceType<typeof MarkdownIt>> {
   const hl = await highlighter()
   const md = new MarkdownIt({
@@ -61,6 +77,7 @@ export async function markdown(file = ''): Promise<InstanceType<typeof MarkdownI
     linkify: true,
     highlight: (code, lang) => highlight(hl, code, lang || 'txt')
   })
+  md.core.ruler.after('block', 'drop-html-comments', dropHtmlComments)
   if (file) {
     const render = md.renderer.rules.link_open
     md.renderer.rules.link_open = (tokens, index, options, env, self) => {
@@ -86,13 +103,160 @@ function stripFrontMatter(source: string): string {
   return source.replace(/^---\n[\s\S]*?\n---\n/, '')
 }
 
-export async function renderMarkdownFile(file: string): Promise<{ html: string; title: string }> {
+export type PairType = 'usage' | 'guidance' | 'example'
+export type DocPair = { type: PairType; level: number; do: string; dont: string }
+export type DocPart = { html: string } | { pair: DocPair }
+
+const PAIR_WORDS: { type: PairType; side: 'do' | 'dont'; pattern: RegExp }[] = [
+  { type: 'usage', side: 'do', pattern: /^when to use$/i },
+  { type: 'usage', side: 'dont', pattern: /^when not to use$/i },
+  { type: 'guidance', side: 'do', pattern: /^(do|recommended)$/i },
+  { type: 'guidance', side: 'dont', pattern: /^(don['’]t|do not|never|avoid)$/i },
+  { type: 'example', side: 'do', pattern: /^(correct|good)$/i },
+  { type: 'example', side: 'dont', pattern: /^(wrong|incorrect|bad)$/i }
+]
+
+export function pairWord(text: string): { type: PairType; side: 'do' | 'dont' } | null {
+  const clean = text.replace(/[:.]$/, '').trim()
+  const hit = PAIR_WORDS.find((word) => word.pattern.test(clean))
+  return hit ? { type: hit.type, side: hit.side } : null
+}
+
+type MdToken = ReturnType<InstanceType<typeof MarkdownIt>['parse']>[number]
+
+function closeOf(tokens: MdToken[], start: number): number {
+  let depth = 0
+  for (let at = start; at < tokens.length; at++) {
+    depth += tokens[at].nesting
+    if (depth === 0) return at
+  }
+  return tokens.length - 1
+}
+
+function headingLevel(token: MdToken): number {
+  return Number(token.tag.slice(1))
+}
+
+function sectionEnd(tokens: MdToken[], start: number, level: number): number {
+  for (let at = start + 3; at < tokens.length; at++)
+    if (tokens[at].type === 'heading_open' && headingLevel(tokens[at]) <= level) return at
+  return tokens.length
+}
+
+function labelStart(inline: MdToken | undefined): number {
+  const children = inline?.children ?? []
+  const at = children.findIndex((child) => !(child.type === 'text' && !child.content.trim()))
+  return Math.max(at, 0)
+}
+
+function itemLabel(tokens: MdToken[], open: number): ReturnType<typeof pairWord> {
+  const inline = tokens.slice(open, closeOf(tokens, open)).find((token) => token.type === 'inline')
+  const [first, label, last] = (inline?.children ?? []).slice(labelStart(inline))
+  if (first?.type !== 'strong_open' || last?.type !== 'strong_close') return null
+  return pairWord(label?.content ?? '')
+}
+
+function stripItemLabel(tokens: MdToken[]): MdToken[] {
+  const inline = tokens.find((token) => token.type === 'inline')
+  if (inline?.children) {
+    inline.children.splice(0, labelStart(inline) + 3)
+    const [next] = inline.children
+    if (next?.type === 'text') next.content = next.content.replace(/^\s+/, '')
+  }
+  return tokens.map((token) => {
+    if (token.type === 'paragraph_open' || token.type === 'paragraph_close') token.hidden = false
+    return token
+  })
+}
+
+export function markdownParts(md: InstanceType<typeof MarkdownIt>, source: string): DocPart[] {
+  const tokens = md.parse(source, {})
+  const render = (slice: MdToken[]) => md.renderer.render(slice, md.options, {})
+  const parts: DocPart[] = []
+  let pending: MdToken[] = []
+  let level = 1
+  const flush = () => {
+    if (pending.length) parts.push({ html: render(pending) })
+    pending = []
+  }
+  const push = (pair: DocPair) => {
+    flush()
+    parts.push({ pair })
+  }
+  let at = 0
+  while (at < tokens.length) {
+    const token = tokens[at]
+    if (token.type === 'heading_open') {
+      const word = pairWord(tokens[at + 1]?.content ?? '')
+      const own = headingLevel(token)
+      const end = sectionEnd(tokens, at, own)
+      const next = tokens[end]
+      const nextWord =
+        next?.type === 'heading_open' && headingLevel(next) === own
+          ? pairWord(tokens[end + 1]?.content ?? '')
+          : null
+      if (word && nextWord && word.type === nextWord.type && word.side !== nextWord.side) {
+        const nextEnd = sectionEnd(tokens, end, own)
+        const first = render(tokens.slice(at + 3, end))
+        const second = render(tokens.slice(end + 3, nextEnd))
+        push({
+          type: word.type,
+          level: own,
+          do: word.side === 'do' ? first : second,
+          dont: word.side === 'do' ? second : first
+        })
+        at = nextEnd
+        continue
+      }
+      level = own
+    }
+    if (token.type === 'bullet_list_open' && token.level === 0) {
+      const close = closeOf(tokens, at)
+      const items: { start: number; end: number; word: ReturnType<typeof pairWord> }[] = []
+      for (let item = at + 1; item < close; item = closeOf(tokens, item) + 1)
+        items.push({ start: item, end: closeOf(tokens, item), word: itemLabel(tokens, item) })
+      const doItem = items.find((item) => item.word?.side === 'do')
+      const dontItem = items.find(
+        (item) => item.word?.side === 'dont' && item.word.type === doItem?.word?.type
+      )
+      if (doItem?.word && dontItem) {
+        const rest = items.filter((item) => item !== doItem && item !== dontItem)
+        if (rest.length)
+          pending.push(
+            token,
+            ...rest.flatMap((item) => tokens.slice(item.start, item.end + 1)),
+            tokens[close]
+          )
+        const body = (item: (typeof items)[number]) =>
+          render(stripItemLabel(tokens.slice(item.start + 1, item.end)))
+        push({
+          type: doItem.word.type,
+          level: Math.min(level + 1, 6),
+          do: body(doItem),
+          dont: body(dontItem)
+        })
+        at = close + 1
+        continue
+      }
+    }
+    pending.push(token)
+    at++
+  }
+  flush()
+  return parts
+}
+
+export async function renderMarkdownFile(
+  file: string
+): Promise<{ parts: DocPart[]; title: string }> {
   const md = await markdown(file)
   const source = stripFrontMatter(readFileSync(file, 'utf8'))
   const title = /^#\s+(.+)$/m.exec(source)?.[1]?.trim() ?? basename(file, '.md')
   const body = source.replace(/^#\s+.+\n/m, '')
-  return { html: md.render(body), title }
+  return { parts: markdownParts(md, body), title }
 }
+
+const DONT_PRACTICE = /^\*\*(don['’]t|do not|never|avoid)\*\*\s*/i
 
 type ExampleMeta = { name: string; summary?: string; file: string }
 type ExamplesFile = { component: string; title?: string; examples: ExampleMeta[] }
@@ -274,6 +438,7 @@ export async function buildComponent(name: string, catalog: Catalog = readCatalo
     .filter(([, sub]) => sub.parent === name)
     .map(([subName, sub]) => ({ name: subName, import: sub.import, props: rows(sub.props) }))
   const sections = specSections(name)
+  const practices = (entry.bestPractices as string[]) ?? []
   const found = readExampleDirs().find(({ data }) => data.component === name)
   const examplesDir = found
     ? { file: join(WEBKIT, 'examples', found.dir, 'examples.json'), data: found.data }
@@ -290,7 +455,8 @@ export async function buildComponent(name: string, catalog: Catalog = readCatalo
     related: ((entry.related as string[]) ?? []).map((item) =>
       inline(item.startsWith('`') ? item : `\`${item}`)
     ),
-    bestPractices: ((entry.bestPractices as string[]) ?? []).map(inline),
+    bestPractices: practices.filter((line) => !DONT_PRACTICE.test(line)).map(inline),
+    avoidPractices: practices.filter((line) => DONT_PRACTICE.test(line)).map(inline),
     props: rows(entry.props),
     events: rows(entry.events),
     slots: rows(entry.slots),
@@ -307,9 +473,11 @@ export async function buildComponent(name: string, catalog: Catalog = readCatalo
   }
 }
 
-export async function renderGuidelinesFile(
-  file: string
-): Promise<{ title: string; intro: string; sections: { heading: string; html: string }[] }> {
+export async function renderGuidelinesFile(file: string): Promise<{
+  title: string
+  intro: string
+  sections: { heading: string; html: string; parts: DocPart[] }[]
+}> {
   const md = await markdown(file)
   const source = stripFrontMatter(readFileSync(file, 'utf8'))
   const title = /^#\s+(.+)$/m.exec(source)?.[1]?.trim() ?? basename(dirname(file))
@@ -317,10 +485,14 @@ export async function renderGuidelinesFile(
   return {
     title,
     intro: md.render(head.trim()),
-    sections: parts.map((part) => ({
-      heading: part.slice(0, part.indexOf('\n')).trim(),
-      html: md.render(part.slice(part.indexOf('\n') + 1).trim())
-    }))
+    sections: parts.map((part) => {
+      const body = part.slice(part.indexOf('\n') + 1).trim()
+      return {
+        heading: part.slice(0, part.indexOf('\n')).trim(),
+        html: md.render(body),
+        parts: markdownParts(md, body)
+      }
+    })
   }
 }
 
@@ -336,16 +508,20 @@ function tokenUsage(): { match: (name: string) => boolean; usage: TokenUsage }[]
   const source = readFileSync(file, 'utf8')
   const start = source.indexOf('## Which color token does which job')
   if (start === -1) return []
-  const rows = source
-    .slice(start)
+  const section = source.slice(start)
+  const end = section.indexOf('\n## ', 1)
+  const rows = (end === -1 ? section : section.slice(0, end))
     .split('\n')
     .filter((line) => line.startsWith('|') && !/^\|\s*-/.test(line))
     .slice(1)
-  return rows.map((line) => {
-    const [job, tokens, usedBy] = line
-      .split('|')
-      .slice(1, -1)
-      .map((cell) => cell.trim())
+    .map((line) =>
+      line
+        .split('|')
+        .slice(1, -1)
+        .map((cell) => cell.trim())
+    )
+    .filter((cells) => cells.length >= 3)
+  return rows.map(([job, tokens, usedBy]) => {
     const names = [...tokens.matchAll(/`([^`]+)`/g)].map((match) => match[1])
     const bases = names.filter((name) => name.startsWith('--'))
     const suffixes = names.filter((name) => !name.startsWith('--'))
@@ -536,7 +712,6 @@ export function buildAssets() {
     })),
     illustrations: assetItems<{ name: string; canvas?: string }>('illustrations').map(
       (item) => item.name
-    ),
-    lineFigures: assetItems<{ name: string; label: string }>('line-figures')
+    )
   }
 }

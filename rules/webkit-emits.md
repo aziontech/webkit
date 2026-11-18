@@ -45,7 +45,6 @@ convention, upheld in code review.
 
 ## Correct
 
-<!-- prettier-ignore -->
 ```vue
 <script setup lang="ts">
   interface MenuItem {
@@ -73,7 +72,6 @@ convention, upheld in code review.
 
 ## Wrong
 
-<!-- prettier-ignore -->
 ```vue
 <script setup lang="ts">
   // runtime array form — untyped payloads (blocked by lint)

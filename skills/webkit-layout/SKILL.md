@@ -2,7 +2,7 @@
 name: webkit-layout
 description: The page container system — how a page built on @aziontech/webkit gets its width, its inset from the app chrome, and its vertical rhythm. Fixes the three-level page shape (boundary → parent section → band), the five measures and what picks one (the payload, never the URL), why the boundary is not part of the measure and what that buys, the two rhythm steps and the margin form for a band whose parent cannot carry a gap, the site frame, the control cap inside an item-group field row, and the device contract (viewport breakpoints for the shell, container queries for anything that can sit in a drawer, split view or card, touch targets, reflow at 320 px). Everything comes from the `layout-*` utilities and tokens in @aziontech/theme — a page never writes its own `mx-auto max-w-*`, and full-bleed is the absence of a column class, not a `w-full`. Use when building any page, adding a sticky action bar, wondering how wide a page should be, or reviewing a page whose column drifts left, whose bar misaligns with the body it submits, or whose sections breathe unevenly.
 status: active
-last_updated: 2026-11-17
+last_updated: 2026-11-18
 scope: general
 enforced_by: [webkit-styling, webkit-tokens, webkit-direction, ui-verify, review]
 ---
@@ -221,6 +221,10 @@ it names the group in the markup.
 **`layout-group-start` is the fallback** for the one case a parent cannot cover: a group whose parts
 are already direct siblings of the page stack, where adding a wrapper is the wrong answer.
 
+A tab strip and its panel are one band too: the panel starts one group step below the strip.
+`Tabs.Content` carries that top padding itself (`DocTabs` inherits it), so never add a margin or a
+`gap` between `Tabs.List` and the panels.
+
 A common miss: a controls row and the table it narrows are **one band**, joined at the group step.
 The section step is the gap _above_ the band, not inside it.
 
@@ -279,6 +283,10 @@ by retuning the bar.
 The bar is **`--layout-header-height`** tall (56px, the `AppHeader` height). A band that fills the
 first screen under it takes that token out of the screen: `HeroSection` does by default (`headerOffset`),
 and a bare `Hero variant="screen"` takes `offset="var(--layout-header-height)"`. Never a literal.
+A sticky part further down (a plan table's head row) sticks at **`--layout-sticky-top`**, which
+defaults to the bar's height, so it stops right under the bar. Inside a scroller with no bar above
+it (a preview card, an embedded frame) set `--layout-sticky-top: 0` on that scroller; otherwise the
+sticky part is pushed down at rest and covers what follows it.
 
 **A grid of cards fills its rows.** A framed or divided card grid (`CardGrid`, and every section
 built on it) takes `columns` as the most a row may hold, not how many it must: by default

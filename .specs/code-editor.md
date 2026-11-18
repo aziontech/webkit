@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 11
 template: 2
-checksum: ef750562805739edb235215dabb7ded1c59d5671ffd42bc8b710e048eab9c489
+checksum: ec82d7741c5ffb21011e30d5066c49c08e87b7577aa6cf613677a8e07e42b699
 created: 2026-11-11
 last_updated: 2026-11-16
 ---
@@ -181,6 +181,8 @@ Types: `CodeEditorMarker = { line: number; column?: number; endLine?: number; en
 | marker colours           | `var(--danger-foreground)`, `var(--warning-foreground)`, `var(--info-foreground)`                                                            |
 | toolbar / problems bands | `var(--bg-surface-raised)`, `var(--border-default)`, `.text-body-xs`, `.text-label-sm`                                                       |
 | shape / ring             | `var(--shape-control)`, `var(--ring-color)`                                                                                                  |
+
+One code size across the code components (CodeBlock, CodeEditor, LogViewer, Trace and the docs source viewer): code text and line numbers are 12 px Roboto Mono (`--text-body-code-sm-font-size`, set by `.text-body-code-sm` or `.text-label-code-sm`), never a raw size and never a second code size. A file name in a header or tab is code too (`.text-label-code-sm`, `var(--text-muted)` or `var(--text-default)`); a tab that names a choice (npm, pnpm) is a label (`.text-label-sm`).
 
 ## Theme gaps
 

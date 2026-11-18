@@ -453,6 +453,7 @@
    "--layout-measure-site",
    "--layout-measure-site-header",
    "--layout-section-gap",
+   "--layout-sticky-top",
    "--leading-loose",
    "--leading-none",
    "--leading-normal",
@@ -754,7 +755,6 @@
    "--text-overline-xs-letter-spacing",
    "--text-overline-xs-line-height",
    "--text-overline-xs-text-transform",
-   "--text-primary",
    "--text-sm",
    "--text-sm--line-height",
    "--text-tag-md-font-size",
@@ -1281,7 +1281,8 @@
     "--layout-measure-form-create",
     "--layout-measure-site",
     "--layout-measure-site-header",
-    "--layout-section-gap"
+    "--layout-section-gap",
+    "--layout-sticky-top"
    ],
    "leading": [
     "--leading-loose",
@@ -1611,7 +1612,6 @@
     "--text-overline-xs-letter-spacing",
     "--text-overline-xs-line-height",
     "--text-overline-xs-text-transform",
-    "--text-primary",
     "--text-sm",
     "--text-sm--line-height",
     "--text-tag-md-font-size",
@@ -2057,19 +2057,12 @@
     "dark": "#4D4D4D",
     "purpose": "Text of a disabled control."
    },
-   "--text-primary": {
-    "group": "text",
-    "type": "color",
-    "light": "#B03C02",
-    "dark": "#FFB180",
-    "purpose": "Brand-coloured text, such as the required asterisk on a field label."
-   },
    "--text-brand": {
     "group": "text",
     "type": "color",
     "light": "#F3652B",
     "dark": "#F3652B",
-    "purpose": "The logo orange for brand labels such as the eyebrow; an accepted contrast exception."
+    "purpose": "The logo orange, the one orange for brand text such as eyebrows and quote names; an accepted contrast exception."
    },
    "--text-link": {
     "group": "text",
@@ -2145,7 +2138,7 @@
     "group": "code-syntax",
     "type": "color",
     "light": "#B03C02",
-    "dark": "#FFB180",
+    "dark": "#F3652B",
     "purpose": "Function and method names."
    },
    "--code-syntax-type": {
@@ -2948,6 +2941,12 @@
     "type": "length",
     "value": "calc(var(--spacing) * 14)",
     "purpose": "The height of the top header, which a full-height hero subtracts."
+   },
+   "--layout-sticky-top": {
+    "group": "layout",
+    "type": "length",
+    "value": "var(--layout-header-height)",
+    "purpose": "Where a sticky part inside the page stops: under the sticky header; 0 inside a scroller with no header above it."
    },
    "--z-control": {
     "group": "z-index",
@@ -4084,6 +4083,7 @@
   "help-panel-section": "help-panel-group",
   "hero-band": "hero-section",
   "hero-form": "hero-form-section",
+  "hotspot": "tutorial-panel-hotspot",
   "input-number": "number-input",
   "input-password": "password-input",
   "input-text": "input",
@@ -4094,6 +4094,7 @@
   "listing-index": "listing-index-section",
   "listing-table": "listing-table-section",
   "log-view": "log-viewer",
+  "logo": "company-logo",
   "logo-wall-quote": "logo-wall-section",
   "media-split-band": "media-split-section",
   "media-split-stack": "media-split-stack-section",
@@ -4130,6 +4131,7 @@
   "story-library": "story-index-section",
   "subject-grid": "subject-grid-section",
   "subject-library": "subject-grid-section",
+  "svg/azion/default": "brand",
   "tab-view": "tabs",
   "table-export": "table-export-button",
   "template-gallery": "template-gallery-section",
@@ -4174,11 +4176,12 @@
   "field-textarea": "Field + FieldLabel + Textarea + FieldDescription",
   "field-time": "Field + FieldLabel + Input + FieldDescription",
   "help-panel-task": "TutorialPanel: give each tutorial its tasks and steps as data",
-  "help-panel-tutorial": "TutorialPanel (with TutorialPanel.Provider and Hotspot) owns tutorials; HelpPanel has no tutorial mode",
+  "help-panel-tutorial": "TutorialPanel (with TutorialPanel.Provider and TutorialPanelHotspot) owns tutorials; HelpPanel has no tutorial mode",
   "helper-text": "use FieldDescription for guidance or FieldError for a validation message (Field.Description / Field.Error); both work outside a Field",
   "hero-copy-on-top-art": "HeroSection from @aziontech/webkit/hero-section with variant=\"copy-on-top-art\" and the same levels",
   "hero-with-opening": "HeroSection from @aziontech/webkit/hero-section with size=\"large\" and the same items (titleLength=\"long\" for a long headline)",
   "label": "use Field.Label inside a Field, or FieldLabel with for (and required) beside its control",
+  "line-figure": "remove it; no replacement: WebKit no longer ships line figures",
   "mini-button": "Link (label, href, icon) for a text link that navigates; Button variant=\"link\" for a text action without href",
   "quote-carousel": "ClientQuotesSection from @aziontech/webkit/client-quotes-section, or Quote cards in a CardCarouselSection",
   "radio-button": "a radio is a RadioGroup.Item inside one RadioGroup that holds the v-model: <RadioGroup v-model><RadioGroup.Item value>Label</RadioGroup.Item></RadioGroup>; a Field.Label choice card becomes variant=\"card\" with description on the item",
@@ -4190,6 +4193,10 @@
   "sidebar-group": "SidebarMenu with a SidebarMenu.Group per section (label, the rows as SidebarMenu.Item)",
   "sticky-carousel": "ProcessScrollSection from @aziontech/webkit/process-scroll-section with pinned and title-variant=\"centered\"; items become steps",
   "sticky-scroll-code": "FeatureScrollSection from @aziontech/webkit/feature-scroll-section; items keep title, description, code and action",
+  "svg/azion/full": "the \"Move to the Edge\" lockups are retired with no replacement; the loose Azion SVGs are gone; draw the mark with Brand from @aziontech/webkit/brand (variant=\"extended\" for AZION technologies)",
+  "svg/azion/min": "the loose Azion SVGs are gone; draw the mark with Brand from @aziontech/webkit/brand and variant=\"reduced\"",
+  "svg/azion/move-to-the-edge": "the \"Move to the Edge\" lockups are retired with no replacement; the loose Azion SVGs are gone; draw the mark with Brand from @aziontech/webkit/brand (variant=\"extended\" for AZION technologies)",
+  "svg/azion/technologies": "the loose Azion SVGs are gone; draw the mark with Brand from @aziontech/webkit/brand and variant=\"extended\"",
   "table-applied-filters": "FilterMenu.ChipGroup with no fields in the DataTable filters slot (menu type); the property kind shows its own tokens",
   "table-column-selector": "CollectionPreferences with no columns in the DataTable toolbar (:sections=\"['columns']\" for columns only)",
   "use-case-links": "CapabilityGridSection from @aziontech/webkit/capability-grid-section with title-variant=\"left\"; items keep icon, title, description and href",
@@ -6075,7 +6082,7 @@
      "type": "CopyPromptButtonAgent[]",
      "default": "Claude, ChatGPT, Gemini, Cursor",
      "required": "false",
-     "doc": "The agents whose marks follow the label, in order; each is `{ name, icon?, logo? }`, drawn from `logo` through `Logo` when set and from the `icon` glyph otherwise; an empty list draws no marks."
+     "doc": "The agents whose marks follow the label, in order; each is `{ name, icon?, logo? }`, drawn from `logo` through `CompanyLogo` when set and from the `icon` glyph otherwise; an empty list draws no marks."
     },
     {
      "name": "disabled",
@@ -8202,7 +8209,7 @@
     {
      "name": "colors",
      "type": "string[]",
-     "default": "['var(--text-primary)', 'var(--primary)', 'var(--warning)']",
+     "default": "['var(--primary)', 'var(--warning)', 'var(--brand-blue)']",
      "required": "false",
      "doc": "CSS colors the generated pattern paints with, in order; theme tokens such as `var(--primary)`."
     }
@@ -8320,7 +8327,7 @@
      "type": "'default' | 'reduced' | 'extended'",
      "default": "'default'",
      "required": "false",
-     "doc": "Brand lockup to render: `default` (AZION wordmark), `reduced` (the \"A\" glyph for tight spaces), `extended` (wordmark with the \"move to the edge technologies®\" tagline)."
+     "doc": "Brand lockup to render: `default` (AZION wordmark), `reduced` (the \"A\" glyph for tight spaces), `extended` (wordmark over \"technologies\")."
     },
     {
      "name": "size",
@@ -8975,40 +8982,6 @@
    "treeShakeableImport": "@aziontech/webkit/help-panel-footer",
    "surface": "app"
   },
-  "hotspot": {
-   "import": "@aziontech/webkit/hotspot",
-   "target": "./src/components/content/hotspot/hotspot.vue",
-   "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/hotspot",
-   "category": "content",
-   "structure": "monolithic",
-   "props": [
-    {
-     "name": "hotspotId",
-     "type": "string",
-     "default": "—",
-     "required": "true",
-     "doc": "Matches the `hotspotId` of a tutorial step; the marker shows while that step's tutorial runs."
-    },
-    {
-     "name": "side",
-     "type": "'start' | 'end'",
-     "default": "'end'",
-     "required": "false",
-     "doc": "Which side of the wrapped control the marker sits on, in reading direction."
-    }
-   ],
-   "slots": [
-    {
-     "name": "default",
-     "scope": "—",
-     "notes": "The real control the step is about."
-    }
-   ],
-   "surface": "app",
-   "examplesFile": "catalog/examples/hotspot.json",
-   "docsFile": "catalog/components/hotspot.json"
-  },
   "tutorial-panel": {
    "import": "@aziontech/webkit/tutorial-panel",
    "target": "./src/components/content/tutorial-panel/index.ts",
@@ -9016,7 +8989,8 @@
    "compoundRoot": true,
    "treeShakeableImport": "@aziontech/webkit/tutorial-panel-root",
    "subcomponents": [
-    "@aziontech/webkit/tutorial-panel-provider"
+    "@aziontech/webkit/tutorial-panel-provider",
+    "@aziontech/webkit/tutorial-panel-hotspot"
    ],
    "category": "content",
    "structure": "composition",
@@ -9119,6 +9093,15 @@
     "activeKey",
     "step"
    ],
+   "surface": "app"
+  },
+  "tutorial-panel-hotspot": {
+   "import": "@aziontech/webkit/tutorial-panel-hotspot",
+   "target": "./src/components/content/tutorial-panel/tutorial-panel-hotspot/tutorial-panel-hotspot.vue",
+   "kind": "subcomponent",
+   "parent": "tutorial-panel",
+   "treeShakeableImport": "@aziontech/webkit/tutorial-panel-hotspot",
+   "attached": false,
    "surface": "app"
   },
   "hero-title": {
@@ -9468,59 +9451,11 @@
    "examplesFile": "catalog/examples/illustration.json",
    "docsFile": "catalog/components/illustration.json"
   },
-  "line-figure": {
-   "import": "@aziontech/webkit/line-figure",
-   "target": "./src/components/content/line-figure/line-figure.vue",
+  "company-logo": {
+   "import": "@aziontech/webkit/company-logo",
+   "target": "./src/components/content/company-logo/company-logo.vue",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/line-figure",
-   "category": "content",
-   "structure": "monolithic",
-   "props": [
-    {
-     "name": "name",
-     "type": "LineFigureName | ''",
-     "default": "''",
-     "required": "false",
-     "doc": "Registered figure to draw; an unknown or empty name draws nothing."
-    },
-    {
-     "name": "intensity",
-     "type": "number",
-     "default": "0.5",
-     "required": "false",
-     "doc": "How strongly the figure answers the pointer, from 0 (subtle) to 1 (strong)."
-    },
-    {
-     "name": "play",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Walks the figure through its answer on its own until a pointer or focus arrives; a still frame under reduced motion."
-    },
-    {
-     "name": "ariaLabel",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Accessible name; falls back to the figure's own English description."
-    }
-   ],
-   "events": [
-    {
-     "name": "read",
-     "payload": "caption: string",
-     "notes": "The figure's current reading each time it changes (the first reading on mount)."
-    }
-   ],
-   "surface": "app",
-   "examplesFile": "catalog/examples/line-figure.json",
-   "docsFile": "catalog/components/line-figure.json"
-  },
-  "logo": {
-   "import": "@aziontech/webkit/logo",
-   "target": "./src/components/content/logo/logo.vue",
-   "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/logo",
+   "treeShakeableImport": "@aziontech/webkit/company-logo",
    "category": "content",
    "structure": "monolithic",
    "props": [
@@ -9582,8 +9517,8 @@
     }
    ],
    "surface": "app",
-   "examplesFile": "catalog/examples/logo.json",
-   "docsFile": "catalog/components/logo.json"
+   "examplesFile": "catalog/examples/company-logo.json",
+   "docsFile": "catalog/components/company-logo.json"
   },
   "console-mockup": {
    "import": "@aziontech/webkit/console-mockup",
@@ -15107,6 +15042,13 @@
      "doc": "Countries offered by the dial-code Select. When omitted, uses the built-in curated list."
     },
     {
+     "name": "defaultCountry",
+     "type": "string",
+     "default": "'US'",
+     "required": "false",
+     "doc": "ISO 3166-1 alpha-2 code of the country selected at first, while `v-model:country` is empty. A code missing from `countries` falls back to the first country of the list."
+    },
+    {
      "name": "placeholder",
      "type": "string",
      "default": "''",
@@ -15179,7 +15121,7 @@
     {
      "name": "country",
      "type": "string",
-     "default": "'US'",
+     "default": "''",
      "required": "false",
      "doc": "Two-way value (`v-model:country`)."
     }
@@ -19294,14 +19236,14 @@
      "type": "MediaSplitVariant",
      "default": "'media-end'",
      "required": "false",
-     "doc": "Which end the media sits on: the closing cell from `lg` up, or the lower one when the band is vertical. `media-end` puts the copy first."
+     "doc": "Which end the media sits on: the closing cell once the band splits, or the lower one when the band is vertical. `media-end` puts the copy first."
     },
     {
      "name": "orientation",
      "type": "MediaSplitOrientation",
      "default": "'horizontal'",
      "required": "false",
-     "doc": "Axis the band splits on. `horizontal` sets the cells side by side from `lg` up; `vertical` holds them stacked at every width."
+     "doc": "Axis the band splits on. `horizontal` sets the cells side by side once the band is 60rem wide; `vertical` holds them stacked at every width."
     },
     {
      "name": "fill",
@@ -23096,37 +23038,6 @@
    "kind": "svg",
    "treeShakeableImport": "@aziontech/webkit/svg/error-404"
   },
-  "svg/azion/full": {
-   "import": "@aziontech/webkit/svg/azion/full",
-   "target": "./src/svg/azion/full/full.vue",
-   "kind": "svg",
-   "treeShakeableImport": "@aziontech/webkit/svg/azion/full"
-  },
-  "svg/azion/move-to-the-edge": {
-   "import": "@aziontech/webkit/svg/azion/move-to-the-edge",
-   "target": "./src/svg/azion/move-to-the-edge/move-to-the-edge.vue",
-   "kind": "svg",
-   "treeShakeableImport": "@aziontech/webkit/svg/azion/move-to-the-edge"
-  },
-  "svg/azion/technologies": {
-   "import": "@aziontech/webkit/svg/azion/technologies",
-   "target": "./src/svg/azion/technologies/technologies.vue",
-   "kind": "svg",
-   "treeShakeableImport": "@aziontech/webkit/svg/azion/technologies"
-  },
-  "svg/azion/default": {
-   "import": "@aziontech/webkit/svg/azion/default",
-   "target": "./src/svg/azion/default/default.vue",
-   "kind": "svg",
-   "treeShakeableImport": "@aziontech/webkit/svg/azion/default",
-   "examplesFile": "catalog/examples/svg/azion/default.json"
-  },
-  "svg/azion/min": {
-   "import": "@aziontech/webkit/svg/azion/min",
-   "target": "./src/svg/azion/min/min.vue",
-   "kind": "svg",
-   "treeShakeableImport": "@aziontech/webkit/svg/azion/min"
-  },
   "assets/agi-extended-color.svg": {
    "import": "@aziontech/webkit/assets/agi-extended-color.svg",
    "target": "./src/assets/logos/clients/agi-extended-color.svg",
@@ -26239,7 +26150,7 @@
      "type": "ClientMosaicSectionLogo[]",
      "default": "[]",
      "required": "false",
-     "doc": "The mark cells, in order; each is `{ logo, logoAlt, href, fill?, logoTreatment? }` where `fill` is `'canvas'`, `'surface'`, `'white'` or `'primary'` and `logoTreatment` is `'color'`, `'monochrome'` or `'knockout'` (the shared `LogoTreatment`)."
+     "doc": "The mark cells, in order; each is `{ logo, logoAlt, href, fill?, logoTreatment? }` where `fill` is `'canvas'`, `'surface'`, `'white'` or `'primary'` and `logoTreatment` is `'color'`, `'monochrome'` or `'knockout'` (the shared `CompanyLogoTreatment`)."
     },
     {
      "name": "cells",
@@ -26287,7 +26198,7 @@
      "type": "ClientStoryColumnsSectionCell[]",
      "default": "[]",
      "required": "false",
-     "doc": "The stories, in order; each is `{ name, logo, href, story, brand?, logoTreatment?, logoWidth? }` where `brand` is `{ base, glow, ink? }` (CSS colours painting the face, `ink` `'dark'` or `'light'`) and defaults to the client registry's colours for `name`, `logoTreatment` is `'color'`, `'monochrome'` or `'knockout'` (the shared `LogoTreatment`), and `logoWidth` (read by `reveal=\"hover\"`) sizes the mark as a share of the card."
+     "doc": "The stories, in order; each is `{ name, logo, href, story, brand?, logoTreatment?, logoWidth? }` where `brand` is `{ base, glow, ink? }` (CSS colours painting the face, `ink` `'dark'` or `'light'`) and defaults to the client registry's colours for `name`, `logoTreatment` is `'color'`, `'monochrome'` or `'knockout'` (the shared `CompanyLogoTreatment`), and `logoWidth` (read by `reveal=\"hover\"`) sizes the mark as a share of the card."
     },
     {
      "name": "reveal",
@@ -28120,7 +28031,7 @@
      "type": "LogoWallSectionLogo[]",
      "default": "[]",
      "required": "false",
-     "doc": "The client marks, in order; each is `{ name, logo, logoLight?, logoTreatment?, artwork?, href? }` where `logoTreatment` is the shared `LogoTreatment` (`'color'`, `'monochrome'` or `'knockout'`, the `Logo` looks) and `artwork` is the registry's `'color'`, `'light'` or `'dark'`."
+     "doc": "The client marks, in order; each is `{ name, logo, logoLight?, logoTreatment?, artwork?, href? }` where `logoTreatment` is the shared `CompanyLogoTreatment` (`'color'`, `'monochrome'` or `'knockout'`, the `CompanyLogo` looks) and `artwork` is the registry's `'color'`, `'light'` or `'dark'`."
     },
     {
      "name": "quote",
@@ -28362,7 +28273,7 @@
      "type": "NetworkSectionOutcome[]",
      "default": "[]",
      "required": "false",
-     "doc": "Client results for the `outcomes` floor, in order, one column each up to four; each is `{ logo?, logoAlt?, logoTreatment?, text, highlights? }` where `logo` is the mark URL (the cell renders no mark without it), `logoAlt` names the client, `logoTreatment` is `'monochrome'` or `'color'` (`LogoTreatment` without `knockout`), and `highlights` are the phrases of `text` set in the accent."
+     "doc": "Client results for the `outcomes` floor, in order, one column each up to four; each is `{ logo?, logoAlt?, logoTreatment?, text, highlights? }` where `logo` is the mark URL (the cell renders no mark without it), `logoAlt` names the client, `logoTreatment` is `'monochrome'` or `'color'` (`CompanyLogoTreatment` without `knockout`), and `highlights` are the phrases of `text` set in the accent."
     },
     {
      "name": "benefits",
@@ -30647,17 +30558,6 @@
    ],
    "count": 28,
    "file": "catalog/assets/diagrams.json"
-  },
-  "lineFigures": {
-   "title": "Line figures",
-   "summary": "The isometric line-art figures that answer the pointer, one per product. Pass the name to `LineFigure` (`name`); the label is the figure’s own English description.",
-   "unknown": "An unknown or empty name draws nothing.",
-   "registry": "src/components/content/line-figure/figures/registry.ts",
-   "usedBy": [
-    "line-figure"
-   ],
-   "count": 25,
-   "file": "catalog/assets/line-figures.json"
   },
   "brandMarks": {
    "title": "Brand marks",
@@ -33934,6 +33834,7 @@
     "geminiMark",
     "Button",
     "Card",
+    "CompanyLogo",
     "DataTable",
     "DropdownMenuGroup",
     "DropdownMenuItem",
@@ -33944,7 +33845,6 @@
     "Input",
     "Item",
     "Link",
-    "Logo",
     "Popover",
     "SearchTrigger",
     "Skeleton",
@@ -33967,6 +33867,7 @@
     "@aziontech/webkit/assets/gemini-symbol-color.svg",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
+    "@aziontech/webkit/company-logo",
     "@aziontech/webkit/data-table",
     "@aziontech/webkit/dropdown-menu-group",
     "@aziontech/webkit/dropdown-menu-item",
@@ -33977,7 +33878,6 @@
     "@aziontech/webkit/input",
     "@aziontech/webkit/item",
     "@aziontech/webkit/link",
-    "@aziontech/webkit/logo",
     "@aziontech/webkit/popover",
     "@aziontech/webkit/search-trigger",
     "@aziontech/webkit/skeleton",
@@ -36221,6 +36121,7 @@
     "Brand",
     "Button",
     "CodeBlock",
+    "CompanyLogo",
     "CopyPromptButton",
     "DataTable",
     "Diagram",
@@ -36248,7 +36149,6 @@
     "Footer",
     "IconButton",
     "ItemList",
-    "Logo",
     "RegistrationFrame",
     "Select",
     "StatusIndicator",
@@ -36266,6 +36166,7 @@
     "@aziontech/webkit/brand",
     "@aziontech/webkit/button",
     "@aziontech/webkit/code-block",
+    "@aziontech/webkit/company-logo",
     "@aziontech/webkit/copy-prompt-button",
     "@aziontech/webkit/data-table",
     "@aziontech/webkit/diagram",
@@ -36293,7 +36194,6 @@
     "@aziontech/webkit/footer",
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/item-list",
-    "@aziontech/webkit/logo",
     "@aziontech/webkit/registration-frame",
     "@aziontech/webkit/select",
     "@aziontech/webkit/status-indicator",
@@ -36440,7 +36340,7 @@
    "title": "Blocks/State/StateErrorPage",
    "source": "blocks/state/state-error-page/state-error-page.vue",
    "surface": "app",
-   "summary": "The page an app renders when it cannot show the address the user asked for. The primary is the 404: the content region centring an EmptyState whose figure is the animated azion-404 line figure (a still frame under reduced motion), the title Page not found, one sentence that says the address leads nowhere, and two actions, Go to home (primary) and Docs (outlined, new tab). A visually hidden h1 names the error code the figure shows. Variants cover 403 (no access, with Switch account), 500 (a failure on the server, with Retry, System status and an error reference for support) and a resource that does not exist inside the console (bordered EmptyState in the content column with Back to the list). Built from `EmptyState`, `Button`, `LineFigure` (azion-404) and the `svg/error-403` figure. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
+   "summary": "The page an app renders when it cannot show the address the user asked for. The primary is the 404: the content region centring an EmptyState whose figure is the 404 numeral art, the title Page not found, one sentence that says the address leads nowhere, and two actions, Go to home (primary) and Docs (outlined, new tab). A visually hidden h1 names the error code the figure shows. Variants cover 403 (no access, with Switch account), 500 (a failure on the server, with Retry, System status and an error reference for support) and a resource that does not exist inside the console (bordered EmptyState in the content column with Back to the list). Built from `EmptyState`, `Button` and the `svg/error-404` and `svg/error-403` numeral art. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "404 page",
     "not found page",
@@ -36466,15 +36366,15 @@
     "Button",
     "CopyButton",
     "EmptyState",
-    "LineFigure",
-    "Error403"
+    "Error403",
+    "Error404"
    ],
    "imports": [
     "@aziontech/webkit/button",
     "@aziontech/webkit/copy-button",
     "@aziontech/webkit/empty-state",
-    "@aziontech/webkit/line-figure",
-    "@aziontech/webkit/svg/error-403"
+    "@aziontech/webkit/svg/error-403",
+    "@aziontech/webkit/svg/error-404"
    ],
    "primary": "Default",
    "guidelinesSummary": "The page an app renders when it cannot show the address the user asked for: the address leads nowhere (404), the user may not see it (403), or the server failed to build it (500). The user's job is to understand, in one sentence, that the problem is the address or the access and not their work, and to get somewhere useful in one click. The block keeps the error code out of the headline (it is in the figure and in a hidden `h1`) and says what happened in plain words. This block is a page body: render it in the default slot of `ConsoleLayout` (`shell/shell-console`), which owns the rail, the header and the `main`.",
@@ -36521,13 +36421,13 @@
     "geminiMark",
     "Button",
     "Card",
+    "CompanyLogo",
     "CopyButton",
     "EmptyState",
     "Input",
     "InputGroupRoot",
     "Item",
     "Link",
-    "Logo",
     "Skeleton"
    ],
    "imports": [
@@ -36537,13 +36437,13 @@
     "@aziontech/webkit/assets/gemini-symbol-color.svg",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
+    "@aziontech/webkit/company-logo",
     "@aziontech/webkit/copy-button",
     "@aziontech/webkit/empty-state",
     "@aziontech/webkit/input",
     "@aziontech/webkit/input-group-root",
     "@aziontech/webkit/item",
     "@aziontech/webkit/link",
-    "@aziontech/webkit/logo",
     "@aziontech/webkit/skeleton"
    ],
    "primary": "Default",

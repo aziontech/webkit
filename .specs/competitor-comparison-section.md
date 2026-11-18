@@ -6,8 +6,8 @@ status: implemented
 spec_version: 5
 template: 2
 created: 2026-11-05
-last_updated: 2026-11-16
-checksum: a1a2e32aa1afe6b8eecb25e92b0a33d5fbb809223ea200610087815d20d2a201
+last_updated: 2026-11-18
+checksum: 4913f772f0f1fc30d9274037e070e472e95a5aff6778ee8e6d3bf71c5848a265
 ---
 
 # CompetitorComparisonSection — Component Spec
@@ -29,7 +29,7 @@ The capability-by-capability comparison of Azion with one competitor on a migrat
 
 - `plan-comparison-section` — the plan-by-plan matrix of Pricing.
 - `tooltip` — names each support glyph on hover and focus.
-- `logo` — draws the competitor's mark right on both themes.
+- `company-logo` — draws the competitor's mark right on both themes.
 
 ## Best practices
 
@@ -100,8 +100,17 @@ The capability-by-capability comparison of Azion with one competitor on a migrat
 ## States
 
 - Visual states: `default`
-- A support cell is one of `full`, `partial` or `none`, mirrored on the glyph's `data-support`
-- The competitor head is a `Logo` (`data-testid="competitor-comparison-section__competitor-logo"`) whose `data-route` is `pair` (light/dark files), `single` (one file) or `wordmark` (the name as text: no logo and no registry entry, or before the registry loads)
+- A support cell is one of `full`, `partial` or `none`, mirrored on the glyph's `data-support`. Only `full` is coloured; `partial` and `none` stay neutral, told apart by their glyph and their label:
+
+  | Level     | Glyph                | Colour                |
+  | --------- | -------------------- | --------------------- |
+  | `full`    | `az az-circle-check` | `var(--success-mark)` |
+  | `partial` | `az az-circle-half`  | `var(--text-muted)`   |
+  | `none`    | `az az-minus`        | `var(--text-muted)`   |
+
+  Partial support is a property of the platform, not a problem that needs action, so it never takes the warning colour; an unsupported capability is a quiet dash, not a red cross.
+
+- The competitor head is a `CompanyLogo` (`data-testid="competitor-comparison-section__competitor-logo"`) whose `data-route` is `pair` (light/dark files), `single` (one file) or `wordmark` (the name as text: no logo and no registry entry, or before the registry loads)
 - Not applicable: `loading`, `error`, `disabled`, `readonly`, `invalid`, `open`/`closed` (the popovers own their open state)
 - Empty: when `groups` is empty the band renders nothing but its root — no header, no table
 
@@ -111,18 +120,18 @@ _none_
 
 ## Tokens
 
-| Region                                    | Token (DESIGN.md)                                                               |
-| ----------------------------------------- | ------------------------------------------------------------------------------- |
-| typography (column heads, category heads) | `.text-overline-md`                                                             |
-| typography (row heads)                    | `.text-label-md`                                                                |
-| category head text                        | `var(--text-primary)`                                                           |
-| column head text                          | `var(--text-muted)`                                                             |
-| row head text                             | `var(--text-default)`                                                           |
-| full / partial / none glyph               | `var(--success-foreground)` / `var(--warning-foreground)` / `var(--text-muted)` |
-| header fill                               | `var(--bg-canvas)`                                                              |
-| category fill                             | `var(--bg-surface)`                                                             |
-| rules                                     | `var(--border-default)`                                                         |
-| cell padding                              | `var(--spacing-xs)` / `var(--spacing-md)` / `var(--spacing-xl)`                 |
+| Region                                    | Token (DESIGN.md)                                                                                             |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| typography (column heads, category heads) | `.text-overline-md`                                                                                           |
+| typography (row heads)                    | `.text-label-md`                                                                                              |
+| category head text                        | `var(--text-brand)` — the logo orange `#F3652B` in both themes (`competitor-comparison-section__group-title`) |
+| column head text (aligned to the start)   | `var(--text-muted)`                                                                                           |
+| row head text                             | `var(--text-default)`                                                                                         |
+| full / partial / none glyph               | `var(--success-mark)` / `var(--text-muted)` / `var(--text-muted)`                                             |
+| header fill                               | `var(--bg-canvas)`                                                                                            |
+| category fill                             | `var(--bg-surface)`                                                                                           |
+| rules                                     | `var(--border-default)`                                                                                       |
+| cell padding                              | `var(--spacing-xs)` / `var(--spacing-md)` / `var(--spacing-xl)`                                               |
 
 ## Theme gaps
 
@@ -135,7 +144,10 @@ _none_
 - Visible focus: owned by the composed `icon-button` and `tooltip` triggers.
 - Keyboard map: `Tab` reaches each definition's info button; `Enter` / `Space` opens its popover and `Esc` closes it (owned by `popover`).
 - ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the table carries a `caption`, `scope="col"` heads, a `scope="colgroup"` head per category and a `scope="row"` head per capability, so each value is announced with its row and column. The glyphs are `aria-hidden` and every cell carries its level as `sr-only` text; the competitor logo is a `Logo` named by the platform, inside a head cell that carries the same name.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text and glyph colours are the tokens above.
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text and glyph colours are the tokens above. The glyphs on `--bg-canvas`: `--success-mark` Lc 67.0 / 4.43:1 (light) and Lc 49.6 / 7.69:1 (dark); `--text-muted` Lc 80.8 / 7.06:1 (light) and Lc 60.7 / 9.90:1 (dark). The category heads on `--bg-surface` are `--text-brand`, the logo orange in both themes: Lc 44.1 / 6.32:1 in dark, and about 3:1 in light, the accepted `--text-brand` pairs of `rules/webkit-tokens.md` (owner decision 2026-11-18, superseding the darker light-theme orange).
+- ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the table carries a `caption`, `scope="col"` heads, a `scope="colgroup"` head per category and a `scope="row"` head per capability, so each value is announced with its row and column. The glyphs are `aria-hidden` and every cell carries its level as `sr-only` text; the competitor logo is a `CompanyLogo` named by the platform, inside a head cell that carries the same name.
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text and glyph colours are the tokens above. The glyphs on `--bg-canvas`: `--success-mark` Lc 67.0 / 4.43:1 (light) and Lc 49.6 / 7.69:1 (dark); `--text-muted` Lc 80.8 / 7.06:1 (light) and Lc 60.7 / 9.90:1 (dark). The category heads on `--bg-surface`: `--text-primary` Lc 79.0 / 6.01:1 in light; `--text-brand` Lc 44.1 / 6.32:1 in dark, the accepted dark `--text-brand` pair of `rules/webkit-tokens.md`.
+- Never colour alone: each level has its own glyph and its label as tooltip and `sr-only` text.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the popover and tooltip carry their own reduced-motion fallback; this band adds no motion.
 - Touch target ≥40×40 px — the info button is a small `icon-button`, a secondary affordance next to the capability name.
 
@@ -153,14 +165,14 @@ _none_
 - Layout: logical utilities only (`border-s`, `ps-`/`pe-`); the Azion and competitor columns follow the reading direction.
 - Icons: the support glyphs and the info glyph are not mirrored; logos are never mirrored.
 - Keyboard: `Tab` order follows the DOM.
-- User data: the competitor name drawn as a wordmark is wrapped in `dir="auto"` by `Logo`.
+- User data: the competitor name drawn as a wordmark is wrapped in `dir="auto"` by `CompanyLogo`.
 
 ## Responsive
 
 - Container queries: none; the head row's logos step up from 12 px to 16 px (`sm`) and 24 px (`md`).
 - Narrow: the capability column keeps its text, the two platform columns narrow to their glyphs.
 - Touch: the info button is a small `icon-button`, a secondary affordance next to the capability name.
-- Reflow: no horizontal scroll at 320 px; the head row stays pinned under the site header.
+- Reflow: no horizontal scroll at 320 px; the head row stays pinned under the site header at `top: var(--layout-sticky-top)` (the header height by default; `0` inside a scroller with no header above it, so the head row never covers the first category at rest).
 
 ## Performance
 

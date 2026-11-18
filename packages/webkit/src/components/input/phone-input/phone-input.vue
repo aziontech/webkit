@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, provide, shallowRef, useAttrs, useId, watch } from 'vue'
+  import { computed, onMounted, provide, shallowRef, useAttrs, useId, watch } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
   import { useSelectSearch } from '../../../composables/use-select-search'
@@ -51,6 +51,8 @@
   export interface PhoneInputProps {
     /** Countries offered by the dial-code Select. When omitted, uses the built-in curated list. */
     countries?: PhoneInputCountry[]
+    /** ISO 3166-1 alpha-2 code of the country selected at first, while v-model:country is empty. A code missing from countries falls back to the first country of the list. */
+    defaultCountry?: string
     /** Placeholder forwarded to the internal input. Falls back to the selected country's mask when empty. */
     placeholder?: string
     /** Size forwarded to the InputGroup and the dial-code Select trigger. Heights: small=28px, medium=32px, large=40px. */
@@ -72,6 +74,7 @@
   }
   const props = withDefaults(defineProps<PhoneInputProps>(), {
     countries: () => defaultCountries,
+    defaultCountry: 'US',
     placeholder: '',
     size: 'medium',
     disabled: false,
@@ -88,7 +91,7 @@
   }>()
 
   const model = defineModel<string>({ default: '' })
-  const country = defineModel<string>('country', { default: 'US' })
+  const country = defineModel<string>('country', { default: '' })
 
   const attrs = useAttrs()
   const { t } = useTranslate({ phoneInput: en.phoneInput })
@@ -124,7 +127,9 @@
   const triggerId = `${generatedId}-trigger`
 
   const selectedCountry = computed<PhoneInputCountry>(
-    () => props.countries.find((c) => c.code === country.value) ?? props.countries[0]
+    () =>
+      props.countries.find((c) => c.code === (country.value || props.defaultCountry)) ??
+      props.countries[0]
   )
 
   const displayValue = computed(() => formatNational(selectedCountry.value, model.value))
@@ -185,7 +190,7 @@
         text: c.label,
         keywords: [c.code, c.dialCode, stripToDigits(c.dialCode)]
       })),
-    selectedKeys: () => [country.value],
+    selectedKeys: () => [selectedCountry.value.code],
     idPrefix: generatedId,
     triggerId,
     locked: () => isDisabled.value || props.readonly,
@@ -194,12 +199,10 @@
   })
 
   const flagSprite = shallowRef('')
-  watch(open, (isOpen) => {
-    if (isOpen && !flagSprite.value) {
-      loadFlagSprite().then((url) => {
-        flagSprite.value = url
-      })
-    }
+  onMounted(() => {
+    loadFlagSprite().then((url) => {
+      flagSprite.value = url
+    })
   })
 
   const filteredCountries = computed(() => {
@@ -216,23 +219,45 @@
     :required="isRequired"
     :disabled="isDisabled"
     :data-testid="testId"
+    class="@container/phone-input"
   >
     <Select
       :open="open"
       @update:open="setOpen"
-      :model-value="country"
+      :model-value="selectedCountry.code"
       :size="size"
       :disabled="isDisabled || readonly"
-      :display-value="() => selectedCountry.dialCode"
+      :display-value="() => selectedCountry.label"
       :data-testid="`${testId}__country`"
+      class="w-auto! min-w-0 max-w-[60%] shrink-0"
       @update:model-value="onCountryChange"
     >
       <SelectTrigger
         :id="triggerId"
         :aria-label="t('phoneInput.dialCode')"
-        value-dir="ltr"
+        class="@max-[21rem]/phone-input:**:data-[slot=value]:hidden"
         @keydown="onTriggerKeydown"
-      />
+      >
+        <template #leading>
+          <i
+            v-if="hasFlag(selectedCountry.code)"
+            :style="flagStyle(selectedCountry.code, flagSprite)"
+            class="block w-4 shrink-0 aspect-[22/15] bg-no-repeat"
+            aria-hidden="true"
+            :data-country="selectedCountry.code"
+            :data-testid="`${testId}__selected-flag`"
+          />
+        </template>
+        <template #trailing>
+          <span
+            dir="ltr"
+            :data-testid="`${testId}__selected-dial-code`"
+            class="shrink-0 text-label-code-sm text-(--text-muted) group-data-[disabled]:text-(--text-disabled)"
+          >
+            {{ selectedCountry.dialCode }}
+          </span>
+        </template>
+      </SelectTrigger>
       <SelectContent
         class="min-w-max"
         @keydown="onContentKeydown"

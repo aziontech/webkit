@@ -3,13 +3,13 @@ name: tabs
 category: navigation
 structure: composition
 status: implemented
-spec_version: 9
+spec_version: 10
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6191
   node_id: 3374:6191
-checksum: 9dc0c5cc25af395c4472ea1e6f19fae9d230ba1964f0f50fc5272d451632145f
+checksum: ee0982a8a3854a17b6f8e918007305794e28719d5b3f1832bab3306402dd1232
 created: 2026-05-22
-last_updated: 2026-11-15
+last_updated: 2026-11-18
 ---
 
 # Tab View — Component Spec
@@ -47,7 +47,7 @@ Switches between peer views of one page or panel, showing one at a time: Overvie
 - `closable` only emits `close` with `(event, value)` — remove the tab and its panel from your data yourself; when the active tab unmounts, the root moves to the first enabled tab.
 - `dirty` only marks the tab (a dot after the label, "Unsaved changes" for screen readers); guard the switch itself with `useUnsavedChanges().confirmLeave()` in the setter of the root's `v-model` when leaving must ask first.
 - The selection always comes from the root's value. A row of pressed / unpressed pills outside a `Tabs` root is a `ToggleGroup`, not loose `Tabs.Trigger`s (6.0 removed the item's `selected` prop).
-- Put spacing between the list and the panels on an element of your own around the panels (or on each `Tabs.Content`), not inside each panel. It always renders the panel and needs a `value` (6.0 removed its wrapper mode).
+- Add no spacing between the list and the panels: every `Tabs.Content` starts one group step below the strip (`pt-(--layout-group-gap)`, 16 px), the rule every tab strip in WebKit follows (`DocTabs` inherits it). A consumer `class` can still override it (`pt-0` for a panel that butts against a framed strip). It always renders the panel and needs a `value` (6.0 removed its wrapper mode).
 - Centre the tab row with `<Tabs.List align="center">`, never with a `justify-center` class or a centring wrapper; keep the default `start` for tabs that head a resource page or a settings form.
 
 ## Usage
@@ -77,11 +77,9 @@ Switches between peer views of one page or panel, showing one at a time: Overvie
         disabled
       />
     </Tabs.List>
-    <div class="mt-(--spacing-md)">
-      <Tabs.Content value="overview">Overview content</Tabs.Content>
-      <Tabs.Content value="settings">Settings content</Tabs.Content>
-      <Tabs.Content value="logs">Logs content</Tabs.Content>
-    </div>
+    <Tabs.Content value="overview">Overview content</Tabs.Content>
+    <Tabs.Content value="settings">Settings content</Tabs.Content>
+    <Tabs.Content value="logs">Logs content</Tabs.Content>
   </Tabs>
 </template>
 ```
@@ -90,7 +88,7 @@ Switches between peer views of one page or panel, showing one at a time: Overvie
 
 - `tabs-trigger.vue` — Public sub-component `tabs-trigger` (`@aziontech/webkit/tabs-trigger`), attached as `Tabs.Trigger`. `label` defaults to `''` (an item with neither `label` nor default slot renders an empty label). It has no selection of its own: the root's value selects it. The disabled state is read reactively: toggling `disabled` after mount updates the arrow-key path. Props include `dirty: boolean` (default `false`): a `size-1.5` `var(--warning-foreground)` dot after the label (`aria-hidden`, `CanvasText` under forced colors) plus a `sr-only` "Unsaved changes" from the `tabs.unsaved` catalog key, and `data-dirty` on the tab.
 - `tabs-list.vue` — Public sub-component `tabs-list` (`@aziontech/webkit/tabs-list`), attached as `Tabs.List`. Prop `align: 'start' | 'center'` (default `'start'`): `center` centres the tabs in the row (`data-align="center"`, `justify-center-safe`, so a row that overflows still scrolls from its first tab), for a page whose content below is centred, such as a catalog of cards.
-- `tabs-content.vue` — Public sub-component `tabs-content` (`@aziontech/webkit/tabs-content`), attached as `Tabs.Content`. Prop `value: TabsValue` (required). It renders the `role="tabpanel"` for that tab, attributes forwarded to it; its testid derives from the root's (`<testId>__panel`).
+- `tabs-content.vue` — Public sub-component `tabs-content` (`@aziontech/webkit/tabs-content`), attached as `Tabs.Content`. Prop `value: TabsValue` (required). It renders the `role="tabpanel"` for that tab, attributes forwarded to it; its testid derives from the root's (`<testId>__panel`); it starts one group step (`--layout-group-gap`) below the strip.
 - The root file is `tabs.vue`; `@aziontech/webkit/tabs-root` resolves to it with no part attached (the tree-shaking path).
 - Every part spreads the consumer's attributes (`id`, `aria-*`, `dir`, `data-*`, listeners) on its own root element (`inheritAttrs: false` + `v-bind="$attrs"`), with `class` merged through `cn`.
 
@@ -126,7 +124,7 @@ Types (exported from `@aziontech/webkit/tabs`): `TabsValue = string | number`, `
 - Root: `data-tabs-root` (and the legacy `data-tab-view-root`, kept for selectors written against the v5 name).
 - Panel motion: the incoming panel's inner element carries `data-motion="enter"` and `data-slide="start|end"` for the frame before it slides in; the attributes drop on the next animation frame.
 - Dirty: `data-dirty` on a `Tabs.Trigger` with `dirty`; the dot is not the only cue for assistive tech (a hidden "Unsaved changes" joins the tab's name).
-- Responsive: the tab list (`Tabs.List`) scrolls **horizontally** when the tabs exceed the available width (mobile / narrow viewports) instead of overflowing or wrapping; the scrollbar is visually hidden and the active indicator stays aligned while scrolling. Tabs keep their intrinsic width (`shrink-0`). A gradient edge-fade overlay on the scrollable side(s) (mirrored on `data-fade-start` / `data-fade-end`) hints at off-screen tabs; it fades in / out with the semantic `animate-fade-in` / `animate-fade-out` utilities, and a non-scrollable edge renders no overlay so the first / last tab is never covered at rest.
+- Responsive: the tab list (`Tabs.List`) scrolls **horizontally** when the tabs exceed the available width (mobile / narrow viewports) instead of overflowing or wrapping; the scrollbar is visually hidden and the active indicator stays aligned while scrolling. The indicator always sits exactly on the active tab: it is measured in the list's own layout pixels (the on-screen box divided by the list's scale), so a list inside a CSS-scaled or transformed container (a console mock-up drawn at a scale) keeps it on its label, and it re-measures whenever the list or any tab changes size (late web fonts, a label change, a resize). Tabs keep their intrinsic width (`shrink-0`). A gradient edge-fade overlay on the scrollable side(s) (mirrored on `data-fade-start` / `data-fade-end`) hints at off-screen tabs; it fades in / out with the semantic `animate-fade-in` / `animate-fade-out` utilities, and a non-scrollable edge renders no overlay so the first / last tab is never covered at rest.
 
 ## Motion & Animations
 
@@ -134,6 +132,7 @@ Types (exported from `@aziontech/webkit/tabs`): `TabsValue = string | number`, `
 | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------------------- |
 | scroll edge fade appears / leaves | `animate-fade-in` / `animate-fade-out`                                                                                                                                                                                                                                                                                                   | semantic                                                                                    | `motion-reduce:animate-none`    |
 | state change                      | `transition-colors duration-150 ease-out`                                                                                                                                                                                                                                                                                                | inline                                                                                      | `motion-reduce:transition-none` |
+| active highlight moves            | `transition-[transform,width,height] duration-moderate-02 ease-productive-entrance` on the `Tabs.List` highlight, as utilities on the element (never an inline `transition`, which would beat `motion-reduce:`)                                                                                                                          | `duration['moderate-02']` + `curve['productive-entrance']` from the theme animation catalog | `motion-reduce:transition-none` |
 | panel change                      | `transition-[translate,opacity] duration-moderate-02 ease-productive-entrance`: the incoming panel slides in from the side being navigated toward (`translate-x-(--spacing-md)` / negative) while fading; the panel active at first render is visible at once (also on the server, without JS), so the motion runs only on later changes | `duration['moderate-02']` + `curve['productive-entrance']` from the theme animation catalog | `motion-reduce:transition-none` |
 
 ## Tokens
@@ -144,6 +143,7 @@ Types (exported from `@aziontech/webkit/tabs`): `TabsValue = string | number`, `
 | surface           | `var(--bg-surface)`                                |
 | text              | `var(--text-default)`                              |
 | spacing           | `var(--spacing-3)`                                 |
+| panel top step    | `var(--layout-group-gap)` on `Tabs.Content`        |
 | height (tab item) | `var(--size-8)` — 32 px, applied as `h-(--size-8)` |
 | shape             | `var(--shape-control)`                             |
 | ring              | `var(--ring-color)`                                |
@@ -168,7 +168,7 @@ Types (exported from `@aziontech/webkit/tabs`): `TabsValue = string | number`, `
 
 - Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
 - Icons: none mirror.
-- Keyboard: `ArrowRight`/`ArrowLeft` move to the next/previous tab, swapped under `dir="rtl"` (`logicalArrowKey`); the indicator is anchored with a physical `left: 0` and moved by `offsetLeft`; scroll fades pair `bg-gradient-to-r` with `rtl:bg-gradient-to-l` and read `Math.abs(scrollLeft)`.
+- Keyboard: `ArrowRight`/`ArrowLeft` move to the next/previous tab, swapped under `dir="rtl"` (`logicalArrowKey`); the indicator is anchored with a physical `left: 0` and moved by the tab's offset from the list's left padding edge plus `scrollLeft` (negative under `rtl`); scroll fades pair `bg-gradient-to-r` with `rtl:bg-gradient-to-l` and read `Math.abs(scrollLeft)`.
 - Motion: panel slides mirror (`rtl:` flips the `translate-x` presets).
 - User data: none.
 

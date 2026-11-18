@@ -7,7 +7,7 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/aerxJReCkLz3x3z29IERE9/Assets?node-id=1901-225133
   node_id: 1901:225133
-checksum: ad9dce41751b2542b9ae693070fcde2d1bc8e97d22a9104cb4b7a4d5a1e48649
+checksum: ce1488253080f7678f0612a66e4706b2aea2ae3dfbdf65e2907ca98343ca5bab
 created: 2026-08-05
 last_updated: 2026-11-15
 ---
@@ -47,7 +47,7 @@ export follows light and dark like the rest of the page.
 - `empty-state` — the surrounding layout (illustration + title + description + actions); reach for it first and put an `Illustration` inside it.
 - `flow-diagram` — a real interactive node/edge diagram driven by data; `Illustration` is decorative and static by comparison.
 - `skeleton` — the loading placeholder; an illustration is never a loading state.
-- `svg/azion/*` — drawn brand marks, for artwork that is not part of the illustration library.
+- `brand` — the Azion mark; an illustration never draws it.
 
 ## Best practices
 

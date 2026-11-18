@@ -1484,7 +1484,7 @@
   "brand": {
     "kind": "variant"
   },
-  "logo": {
+  "company-logo": {
     "kind": "variant"
   },
   "kbd": {

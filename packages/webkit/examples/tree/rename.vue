@@ -40,7 +40,7 @@
 <template>
   <div class="flex max-w-(--container-sm) flex-col gap-(--spacing-md)">
     <Tree
-      ref="tree"
+      ref="treeEl"
       v-model:open-keys="expanded"
       :items="items"
       editable

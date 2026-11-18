@@ -6,12 +6,12 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import Button from '../../action/button/button.vue'
+  import type { CompanyLogoMark } from '../../content/company-logo/company-logo.vue'
   import Item from '../../content/item/item.vue'
   import ItemContent from '../../content/item/item-content.vue'
   import ItemDescription from '../../content/item/item-description.vue'
   import ItemList from '../../content/item/item-list.vue'
   import ItemTitle from '../../content/item/item-title.vue'
-  import type { LogoMark } from '../../content/logo/logo.vue'
   import Table from '../../data/table/table.vue'
   import TableBody from '../../data/table/table-body/table-body.vue'
   import TableCell from '../../data/table/table-cell/table-cell.vue'
@@ -33,7 +33,7 @@
     inheritAttrs: false
   })
 
-  export type { LogoMark }
+  export type { CompanyLogoMark }
 
   /** Horizontal alignment of a column. */
   export type ListingIndexSectionColumnAlign = 'start' | 'end'
@@ -61,7 +61,7 @@
     /** The facet values the row carries, keyed by facet. */
     facets?: Record<string, string[]>
     /** Client mark drawn before the name on the table and above it on phones. */
-    mark?: LogoMark
+    mark?: CompanyLogoMark
   }
 
   /** One option of a facet select. */

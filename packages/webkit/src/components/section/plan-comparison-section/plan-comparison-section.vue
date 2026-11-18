@@ -221,7 +221,7 @@
           <tr>
             <th
               scope="col"
-              class="sticky top-14 z-20 border-b border-(--border-default) bg-(--bg-canvas) p-(--spacing-sm) text-start align-top lg:p-(--spacing-lg) font-normal"
+              class="sticky top-(--layout-sticky-top) z-20 border-b border-(--border-default) bg-(--bg-canvas) p-(--spacing-sm) text-start align-top lg:p-(--spacing-lg) font-normal"
             >
               <span class="text-overline-md text-(--text-muted) max-lg:sr-only">{{
                 columnLabel
@@ -273,7 +273,7 @@
               scope="col"
               :data-folded="plan.id !== visiblePlan || null"
               :data-highlighted="plan.highlighted || null"
-              class="sticky top-14 z-20 border-b border-s border-(--border-default) bg-(--bg-canvas) p-(--spacing-sm) align-top lg:p-(--spacing-lg) font-normal max-lg:data-folded:hidden"
+              class="sticky top-(--layout-sticky-top) z-20 border-b border-s border-(--border-default) bg-(--bg-canvas) p-(--spacing-sm) align-top lg:p-(--spacing-lg) font-normal max-lg:data-folded:hidden"
             >
               <span
                 v-if="plan.highlighted"

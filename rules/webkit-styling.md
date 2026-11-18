@@ -61,6 +61,24 @@ just inside a container's frame.
   `-me-px` flush, a `ring-1` painted into the frame's pixel): the same pixel reads as one
   line, touching pixels read as two.
 
+## An inline chip is never taller than its line
+
+Inline code and any other inline chip (a background plus an outline on text that wraps)
+must fit inside the line box of the text around it, or the chips on two wrapped lines
+overlap. Put WebKit documentation text inside `DocProse` (or `DocCallout`, `DocItem`),
+which already draws the chip this way. When you style your own:
+
+- No vertical padding (`py-*`) on an inline element; inline padding only
+  (`px-(--spacing-2xs)`).
+- Draw the outline inside the box (`inset-ring inset-ring-(--border-default)`), not with
+  `border`, which adds 2px to the height; keep `forced-colors:border` so the chip stays
+  visible in Windows high-contrast mode.
+- Add `wrap-anywhere box-decoration-clone` so a long chip wraps and each line keeps its
+  outline and padding.
+- Scope the chip to inline code: `[&_code:not(pre_*)]`, never a bare `[&_code]`. A code block
+  (`pre > code`) is not a chip; with `box-decoration-clone` a bare selector draws one pill per
+  line of the block.
+
 ## Token value syntax — the canonical `prop-(--token)` form
 
 Write a token value with Tailwind v4's **paren shorthand**, not the bracket form. This is the single canonical spelling the toolkit standardizes on — it matches what upstream v4 canonicalizes to, so your editor stops flagging every styled line.
@@ -76,7 +94,6 @@ Two cases **stay in brackets** — the paren form silently emits no CSS for them
 
 ## Correct
 
-<!-- prettier-ignore -->
 ```vue
 <template>
   <button
@@ -102,7 +119,6 @@ Two cases **stay in brackets** — the paren form silently emits no CSS for them
 
 ## Wrong
 
-<!-- prettier-ignore -->
 ```vue
 <script setup>
   const variantClasses = {

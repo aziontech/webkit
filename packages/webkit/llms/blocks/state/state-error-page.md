@@ -1,11 +1,11 @@
 # StateErrorPage (`state/state-error-page`)
 
-> The page an app renders when it cannot show the address the user asked for. The primary is the 404: the content region centring an EmptyState whose figure is the animated azion-404 line figure (a still frame under reduced motion), the title Page not found, one sentence that says the address leads nowhere, and two actions, Go to home (primary) and Docs (outlined, new tab). A visually hidden h1 names the error code the figure shows. Variants cover 403 (no access, with Switch account), 500 (a failure on the server, with Retry, System status and an error reference for support) and a resource that does not exist inside the console (bordered EmptyState in the content column with Back to the list). Built from `EmptyState`, `Button`, `LineFigure` (azion-404) and the `svg/error-403` figure. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> The page an app renders when it cannot show the address the user asked for. The primary is the 404: the content region centring an EmptyState whose figure is the 404 numeral art, the title Page not found, one sentence that says the address leads nowhere, and two actions, Go to home (primary) and Docs (outlined, new tab). A visually hidden h1 names the error code the figure shows. Variants cover 403 (no access, with Switch account), 500 (a failure on the server, with Retry, System status and an error reference for support) and a resource that does not exist inside the console (bordered EmptyState in the content column with Back to the list). Built from `EmptyState`, `Button` and the `svg/error-404` and `svg/error-403` numeral art. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: app
 - Source: `blocks/state/state-error-page/state-error-page.vue` in `@aziontech/webkit`
 - MCP: `get_block("state/state-error-page")`
-- Components: [Button](../../components/button.md), [CopyButton](../../components/copy-button.md), [EmptyState](../../components/empty-state.md), [LineFigure](../../components/line-figure.md), `Error403`
+- Components: [Button](../../components/button.md), [CopyButton](../../components/copy-button.md), [EmptyState](../../components/empty-state.md), `Error403`, `Error404`
 - Skills: `webkit-ui-states`, `webkit-errors`, `webkit-microcopy`
 
 ## Asked as
@@ -33,9 +33,9 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ## Building blocks
 
-### A. Figure — `LineFigure` (`@aziontech/webkit/line-figure`)
+### A. Figure — `Error404` (`@aziontech/webkit/svg/error-404`)
 
-The 404 is the `azion-404` line figure in the `EmptyState` icon slot, 256 px wide on phones and 320 px from `sm`, with `play` so it walks through its answer on its own until a pointer or focus arrives (a still frame under reduced motion). It is decorative: the `EmptyState` icon wrapper is `aria-hidden`, and the hidden `h1` names the code. Forbidden uses the `Error403` numeral art (`@aziontech/webkit/svg/error-403`). ServerError and ResourceNotFound use the `EmptyState` icon tile (`az az-triangle-alert`, `az az-search`) because no numeral art exists for them.
+The 404 is the `Error404` numeral art in the `EmptyState` icon slot, at most `--container-3xs` wide; Forbidden uses the `Error403` numeral art the same way. The art is decorative: the `EmptyState` icon wrapper is `aria-hidden`, and the hidden `h1` names the code. ServerError and ResourceNotFound use the `EmptyState` icon tile (`az az-triangle-alert`, `az az-search`) because no numeral art exists for them.
 
 ### B. Message — `EmptyState` (required)
 
@@ -117,7 +117,7 @@ To go live, render the primary from the catch-all route and point the links at t
 
 ## States
 
-- Default: 404, the animated azion-404 line figure, `title` (Page not found), `description`, Go to home (`homeHref`) and Docs (`docsHref`).
+- Default: 404, the 404 numeral art, `title` (Page not found), `description`, Go to home (`homeHref`) and Docs (`docsHref`).
 - Forbidden: 403, the 403 numeral art, You don't have access to this page, Go to home and Switch account.
 - ServerError: 500, the warning icon tile, Something went wrong on our side, Retry, System status and the error reference with its copy button.
 - ResourceNotFound: a bordered EmptyState in the console's content column naming the missing service and its ID, with Back to services.
@@ -145,7 +145,7 @@ Each variant is the same screen in another state: `get_block("state/state-error-
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import EmptyState from '@aziontech/webkit/empty-state'
-  import LineFigure from '@aziontech/webkit/line-figure'
+  import Error404 from '@aziontech/webkit/svg/error-404'
 
   export interface ErrorPageProps {
     /** What happened, in the user's words. */
@@ -182,12 +182,7 @@ Each variant is the same screen in another state: `get_block("state/state-error-
         :description="description"
       >
         <template #icon>
-          <div class="w-(--container-3xs) sm:w-(--container-2xs)">
-            <LineFigure
-              name="azion-404"
-              play
-            />
-          </div>
+          <Error404 class="h-auto w-full max-w-(--container-3xs)" />
         </template>
         <template #actions>
           <div class="flex flex-wrap items-center justify-center gap-(--spacing-xs)">

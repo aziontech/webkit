@@ -3,7 +3,7 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
-  import type { LogoMark } from '../../content/logo/logo.vue'
+  import type { CompanyLogoMark } from '../../content/company-logo/company-logo.vue'
   import CardGrid from '../../layout/card-grid/card-grid.vue'
   import CardGridCell from '../../layout/card-grid/card-grid-cell/card-grid-cell.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
@@ -15,7 +15,7 @@
     inheritAttrs: false
   })
 
-  export type { LogoMark }
+  export type { CompanyLogoMark }
 
   /** Placement of the band heading. */
   export type ArticleCardsSectionAlign = 'start' | 'center'
@@ -35,7 +35,7 @@
     /** URL of the cover drawn in the media cell. */
     image?: string
     /** Client mark drawn in the media cell when there is no cover. */
-    mark?: LogoMark
+    mark?: CompanyLogoMark
     /** Where the destination opens; `_blank` opens it in a new tab. */
     target?: '_blank' | '_self'
   }

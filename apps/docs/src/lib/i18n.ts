@@ -43,6 +43,8 @@ const en = {
   whenNotToUse: 'When not to use',
   bestPractices: 'Do',
   constraints: "Don't",
+  correct: 'Correct',
+  wrong: 'Wrong',
   related: 'Related',
   accessibility: 'Accessibility',
   rightToLeftSection: 'Right-to-left',
@@ -151,7 +153,7 @@ const en = {
   iconsEmpty: 'No icons match that search',
   iconsEmptyLead: 'Try another name or keyword.',
   iconsCopy: 'Copy the class',
-  assetsLead: 'The brand lockups, product illustrations and line figures WebKit ships.',
+  assetsLead: 'The brand lockups and product illustrations WebKit ships.',
   brand: 'Brand',
   brandLead:
     'The Azion lockups of Brand. Keep the mark clear and unmodified, and pick the lockup that fits the space.',
@@ -161,9 +163,6 @@ const en = {
   illustrations: 'Illustrations',
   illustrationsLead:
     'Product scenes drawn as inline SVG and repainted from the theme. Pass the name to Illustration.',
-  lineFigures: 'Line figures',
-  lineFiguresLead:
-    'Isometric figures that answer the pointer, one per product. Pass the name to LineFigure.',
   iconsAssetLead: 'Every class of @aziontech/icons, searchable, with click to copy.',
   openIcons: 'Open the icon gallery',
   homeEyebrow: 'WebKit',
@@ -178,7 +177,7 @@ const en = {
   exploreFoundations: 'Tokens, color, type, icons, languages, right-to-left and accessibility.',
   exploreComponents: 'Every component by category, rendered live from its first example.',
   exploreBlocks: 'Whole screens built from the components, in a resizable frame.',
-  exploreAssets: 'The brand lockups, product illustrations and line figures.',
+  exploreAssets: 'The brand lockups and product illustrations.',
   whyTitle: 'One kit powers every Azion interface',
   whyLead:
     '{components} components, {examples} live examples and {blocks} blocks: the same pieces behind the Azion Console, shaped by the teams who use them every day.',
@@ -234,6 +233,8 @@ const ptBR: Messages = {
   whenNotToUse: 'Quando não usar',
   bestPractices: 'Faça',
   constraints: 'Não faça',
+  correct: 'Correto',
+  wrong: 'Errado',
   related: 'Relacionados',
   accessibility: 'Acessibilidade',
   rightToLeftSection: 'Direita para a esquerda',
@@ -338,7 +339,7 @@ const ptBR: Messages = {
   iconsEmpty: 'Nenhum ícone corresponde a essa busca',
   iconsEmptyLead: 'Tente outro nome ou palavra-chave.',
   iconsCopy: 'Copiar a classe',
-  assetsLead: 'As marcas, ilustrações de produto e figuras de linha que o WebKit entrega.',
+  assetsLead: 'As marcas e ilustrações de produto que o WebKit entrega.',
   brand: 'Marca',
   brandLead:
     'As versões da marca Azion do Brand. Mantenha a marca limpa e sem alterações e escolha a versão que cabe no espaço.',
@@ -348,9 +349,6 @@ const ptBR: Messages = {
   illustrations: 'Ilustrações',
   illustrationsLead:
     'Cenas de produto em SVG inline, repintadas pelo tema. Passe o nome para Illustration.',
-  lineFigures: 'Figuras de linha',
-  lineFiguresLead:
-    'Figuras isométricas que respondem ao ponteiro, uma por produto. Passe o nome para LineFigure.',
   iconsAssetLead: 'Todas as classes de @aziontech/icons, com busca e clique para copiar.',
   openIcons: 'Abrir a galeria de ícones',
   homeTitle: 'Um design system. Todos os componentes, prontos para compor.',
@@ -365,7 +363,7 @@ const ptBR: Messages = {
   exploreComponents:
     'Todos os componentes por categoria, renderizados ao vivo pelo primeiro exemplo.',
   exploreBlocks: 'Telas inteiras feitas com os componentes, num quadro redimensionável.',
-  exploreAssets: 'As versões da marca, ilustrações de produto e figuras de linha.',
+  exploreAssets: 'As versões da marca e ilustrações de produto.',
   whyTitle: 'Um kit move todas as interfaces da Azion',
   whyLead:
     '{components} componentes, {examples} exemplos ao vivo e {blocks} blocos: as mesmas peças do Azion Console, moldadas pelas equipes que as usam todo dia.',
@@ -419,6 +417,8 @@ const es: Messages = {
   whenNotToUse: 'Cuándo no usar',
   bestPractices: 'Haz',
   constraints: 'No hagas',
+  correct: 'Correcto',
+  wrong: 'Incorrecto',
   related: 'Relacionados',
   accessibility: 'Accesibilidad',
   rightToLeftSection: 'Derecha a izquierda',
@@ -524,8 +524,7 @@ const es: Messages = {
   iconsEmpty: 'Ningún icono coincide con esa búsqueda',
   iconsEmptyLead: 'Prueba otro nombre o palabra clave.',
   iconsCopy: 'Copiar la clase',
-  assetsLead:
-    'Las versiones de la marca, ilustraciones de producto y figuras de línea que trae WebKit.',
+  assetsLead: 'Las versiones de la marca e ilustraciones de producto que trae WebKit.',
   brand: 'Marca',
   brandLead:
     'Las versiones de la marca Azion de Brand. Mantén la marca limpia y sin cambios, y elige la versión que cabe en el espacio.',
@@ -535,9 +534,6 @@ const es: Messages = {
   illustrations: 'Ilustraciones',
   illustrationsLead:
     'Escenas de producto en SVG en línea, repintadas por el tema. Pasa el nombre a Illustration.',
-  lineFigures: 'Figuras de línea',
-  lineFiguresLead:
-    'Figuras isométricas que responden al puntero, una por producto. Pasa el nombre a LineFigure.',
   iconsAssetLead: 'Todas las clases de @aziontech/icons, con búsqueda y clic para copiar.',
   openIcons: 'Abrir la galería de iconos',
   homeTitle: 'Un design system. Todos los componentes, listos para componer.',
@@ -552,7 +548,7 @@ const es: Messages = {
   exploreComponents:
     'Todos los componentes por categoría, renderizados en vivo desde su primer ejemplo.',
   exploreBlocks: 'Pantallas enteras hechas con los componentes, en un marco redimensionable.',
-  exploreAssets: 'Las versiones de la marca, ilustraciones de producto y figuras de línea.',
+  exploreAssets: 'Las versiones de la marca e ilustraciones de producto.',
   whyTitle: 'Un kit impulsa todas las interfaces de Azion',
   whyLead:
     '{components} componentes, {examples} ejemplos en vivo y {blocks} bloques: las mismas piezas del Azion Console, moldeadas por los equipos que las usan cada día.',

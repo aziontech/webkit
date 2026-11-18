@@ -1,6 +1,11 @@
 {
   "version": 6,
   "components": {
+    "hotspot": {
+      "to": "tutorial-panel-hotspot",
+      "from": "Hotspot",
+      "binding": "TutorialPanelHotspot"
+    },
     "doc-pagination": {
       "to": "doc-previous-next",
       "from": "DocPagination",
@@ -694,6 +699,16 @@
       "to": "media-scroll",
       "from": "StickyStack",
       "binding": "MediaScroll"
+    },
+    "svg/azion/default": {
+      "to": "brand",
+      "from": "SvgAzionDefault",
+      "binding": "Brand"
+    },
+    "logo": {
+      "to": "company-logo",
+      "from": "Logo",
+      "binding": "CompanyLogo"
     }
   },
   "removed": {
@@ -719,7 +734,7 @@
     "sidebar-group": "SidebarMenu with a SidebarMenu.Group per section (label, the rows as SidebarMenu.Item)",
     "doc-tooltip": "HoverCard + HoverCard.Trigger + HoverCard.Content (DocMarkdown renders the MDX <Tooltip> tag as one)",
     "mini-button": "Link (label, href, icon) for a text link that navigates; Button variant=\"link\" for a text action without href",
-    "help-panel-tutorial": "TutorialPanel (with TutorialPanel.Provider and Hotspot) owns tutorials; HelpPanel has no tutorial mode",
+    "help-panel-tutorial": "TutorialPanel (with TutorialPanel.Provider and TutorialPanelHotspot) owns tutorials; HelpPanel has no tutorial mode",
     "help-panel-task": "TutorialPanel: give each tutorial its tasks and steps as data",
     "table-applied-filters": "FilterMenu.ChipGroup with no fields in the DataTable filters slot (menu type); the property kind shows its own tokens",
     "table-column-selector": "CollectionPreferences with no columns in the DataTable toolbar (:sections=\"['columns']\" for columns only)",
@@ -749,7 +764,12 @@
     "vite": "delete the webkitViteConfig import and its mergeConfig call; an app that uses vee-validate sets optimizeDeps: { include: ['vee-validate'] } in its own Vite config",
     "doc-cta": "use DocCallToAction from '@aziontech/webkit/doc-call-to-action': primary-label and primary-href become :primary-action=\"{ label, href }\", secondary-label and secondary-href become :secondary-action=\"{ label, href }\"",
     "helper-text": "use FieldDescription for guidance or FieldError for a validation message (Field.Description / Field.Error); both work outside a Field",
-    "doc-step": "import DocSteps from @aziontech/webkit/doc-steps and write each step as <DocSteps.Step title>: a step only renders inside DocSteps, so it ships attached to the compound"
+    "doc-step": "import DocSteps from @aziontech/webkit/doc-steps and write each step as <DocSteps.Step title>: a step only renders inside DocSteps, so it ships attached to the compound",
+    "line-figure": "remove it; no replacement: WebKit no longer ships line figures",
+    "svg/azion/min": "the loose Azion SVGs are gone; draw the mark with Brand from @aziontech/webkit/brand and variant=\"reduced\"",
+    "svg/azion/technologies": "the loose Azion SVGs are gone; draw the mark with Brand from @aziontech/webkit/brand and variant=\"extended\"",
+    "svg/azion/full": "the \"Move to the Edge\" lockups are retired with no replacement; the loose Azion SVGs are gone; draw the mark with Brand from @aziontech/webkit/brand (variant=\"extended\" for AZION technologies)",
+    "svg/azion/move-to-the-edge": "the \"Move to the Edge\" lockups are retired with no replacement; the loose Azion SVGs are gone; draw the mark with Brand from @aziontech/webkit/brand (variant=\"extended\" for AZION technologies)"
   },
   "types": {
     "BoxGridSelectionItem": "RadioGroupOption",
@@ -818,10 +838,10 @@
     "CompareSupportTiersRow": "PlanComparisonSectionRow",
     "CompareSupportTiersSection": "PlanComparisonSectionSection",
     "ArticleIndexBlogAuthor": "ArticleIndexSectionAuthor",
-    "ArticleIndexBlogMark": "LogoMark",
+    "ArticleIndexBlogMark": "CompanyLogoMark",
     "ArticleIndexBlogItem": "ArticleIndexSectionItem",
     "ArticleIndexBlogRowKind": "ArticleIndexSectionRowVariant",
-    "ArticleIndexResourceHubMark": "LogoMark",
+    "ArticleIndexResourceHubMark": "CompanyLogoMark",
     "ArticleIndexResourceHubItem": "ArticleIndexSectionItem",
     "ArticleIndexResourceHubFacet": "ArticleIndexSectionFacet",
     "ArticleIndexResourceHubRowKind": "ArticleIndexSectionRowVariant",
@@ -853,7 +873,7 @@
     "MultiSelectKind": "MultiSelectVariant",
     "AvatarKind": "AvatarVariant",
     "BrandKind": "BrandVariant",
-    "LogoKind": "LogoVariant",
+    "LogoKind": "CompanyLogoVariant",
     "KbdKind": "KbdVariant",
     "KeyValuePairsKind": "KeyValueListVariant",
     "ShellMockupKind": "ConsoleMockupShellVariant",
@@ -987,14 +1007,14 @@
     "TemplateGalleryAction": "SectionTitleAction",
     "UseCasesAction": "SectionTitleAction",
     "DocCallToActionAction": "SectionTitleAction",
-    "ClientMosaicLogoTreatment": "LogoTreatment",
-    "ClientMosaicColumnsLogoTreatment": "LogoTreatment",
-    "LogoWallQuoteLogoTreatment": "LogoTreatment",
-    "NetworkSectionLogoTreatment": "LogoTreatment",
-    "ArticleIndexMark": "LogoMark",
-    "ArticleCardsMark": "LogoMark",
-    "ListingBrowserMark": "LogoMark",
-    "StoryLibraryClient": "LogoMark",
+    "ClientMosaicLogoTreatment": "CompanyLogoTreatment",
+    "ClientMosaicColumnsLogoTreatment": "CompanyLogoTreatment",
+    "LogoWallQuoteLogoTreatment": "CompanyLogoTreatment",
+    "NetworkSectionLogoTreatment": "CompanyLogoTreatment",
+    "ArticleIndexMark": "CompanyLogoMark",
+    "ArticleCardsMark": "CompanyLogoMark",
+    "ListingBrowserMark": "CompanyLogoMark",
+    "StoryLibraryClient": "CompanyLogoMark",
     "HelpPanelSectionProps": "HelpPanelGroupProps",
     "HelpPanelLinksProps": "HelpPanelFooterProps",
     "KeyValuePairsItemProps": "KeyValueListItemProps",

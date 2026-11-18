@@ -1,5 +1,8 @@
+import '../../../test/reflow.css'
+
 import { render } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it } from 'vitest'
+import { page } from 'vitest/browser'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import TemplateGallerySection from './template-gallery-section.vue'
@@ -242,5 +245,98 @@ describe('TemplateGallerySection', () => {
     })
 
     expect(getByTestId(TESTID).children).toHaveLength(0)
+  })
+
+  describe('layout', () => {
+    const CLOSING_TITLE = 'Start from a template. Ship it today.'
+
+    afterEach(async () => {
+      await page.viewport(414, 896)
+    })
+
+    const mountIn = (width: number) => {
+      const host = document.createElement('div')
+      host.style.width = `${width}px`
+      document.body.appendChild(host)
+      return render(TemplateGallerySection, {
+        props: {
+          eyebrow: 'Your Stack, Your Way',
+          title: CLOSING_TITLE,
+          description:
+            'Launch storefronts faster with pre-built templates and starter kits. Deploy complete projects in seconds with popular frameworks.',
+          primaryAction,
+          secondaryAction,
+          templates,
+          deployLabel: DEPLOY
+        },
+        container: host
+      })
+    }
+
+    const linesOf = (heading: HTMLElement) =>
+      Math.round(
+        heading.getBoundingClientRect().height /
+          Number.parseFloat(getComputedStyle(heading).lineHeight)
+      )
+
+    const cellsOf = (view: ReturnType<typeof mountIn>) => {
+      const copy = view.getByTestId('media-split__copy-cell').getBoundingClientRect()
+      const media = view.getByTestId('media-split__media-cell').getBoundingClientRect()
+      return { copy, media }
+    }
+
+    const deployButtonsOutsideTheirCard = (view: ReturnType<typeof mountIn>) =>
+      view.getAllByRole('link', { name: DEPLOY }).filter((button) => {
+        const card = button.parentElement as HTMLElement
+        const inner =
+          card.getBoundingClientRect().right -
+          Number.parseFloat(getComputedStyle(card).paddingRight)
+        return button.getBoundingClientRect().right > inner + 0.5
+      })
+
+    it.each([
+      [1440, 1376],
+      [1440, 1200],
+      [1440, 1000],
+      [1920, 1120],
+      [1024, 960]
+    ])(
+      "splits a %ipx screen's %ipx band in two equal halves, the headline in two lines and the cards inside theirs",
+      async (screen, width) => {
+        await page.viewport(screen, 900)
+        const view = mountIn(width)
+        const heading = view.getByRole('heading', { level: 2, name: CLOSING_TITLE })
+        const { copy, media } = cellsOf(view)
+
+        expect(media.left).toBeGreaterThanOrEqual(copy.right)
+        expect(Math.abs(copy.width - media.width)).toBeLessThanOrEqual(1)
+        expect(linesOf(heading)).toBe(2)
+        expect(heading.getBoundingClientRect().right).toBeLessThanOrEqual(copy.right)
+        expect(view.getAllByRole('link', { name: DEPLOY })).toHaveLength(templates.length)
+        expect(deployButtonsOutsideTheirCard(view)).toHaveLength(0)
+      }
+    )
+
+    it('stacks the copy over the templates in a band narrower than 60rem, even on a wide screen', async () => {
+      await page.viewport(1920, 900)
+      const view = mountIn(900)
+      const heading = view.getByRole('heading', { level: 2, name: CLOSING_TITLE })
+      const { copy, media } = cellsOf(view)
+
+      expect(media.top).toBeGreaterThanOrEqual(copy.bottom)
+      expect(media.width).toBeCloseTo(900, 0)
+      expect(linesOf(heading)).toBe(2)
+    })
+
+    it('keeps the band inside a 320 px screen', async () => {
+      await page.viewport(320, 800)
+      const view = mountIn(320)
+      const root = view.getByTestId(TESTID)
+      const heading = view.getByRole('heading', { level: 2, name: CLOSING_TITLE })
+
+      expect(root.scrollWidth).toBeLessThanOrEqual(320)
+      expect(heading.getBoundingClientRect().right).toBeLessThanOrEqual(320)
+      expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(320)
+    })
   })
 })

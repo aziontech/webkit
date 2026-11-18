@@ -7,27 +7,27 @@ spec_version: 5
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=587-3946
   node_id: 587:3946
-checksum: c7c2c14c07ac45479f7c68f8f4e8fecbb8709b6e0ea8c8b26fba4fdf9f74919c
+checksum: 12dbc7cf27dcfd85f91f80f955173b26ee31abbf805b226b80ff8f0ba9a0fd95
 created: 2026-07-13
-last_updated: 2026-11-16
+last_updated: 2026-11-18
 ---
 
 # Brand — Component Spec
 
 ## Purpose
 
-The Azion brand logo, rendered as an inline SVG lockup. A single `variant` prop selects the lockup: `default` (the AZION wordmark) for standard surfaces, `reduced` (the "A" glyph) for compact headers and tight spaces, and `extended` (the AZION wordmark with the "move to the edge technologies®" tagline) for marketing-oriented layouts. It consolidates the loose `@aziontech/webkit/svg/azion/*` assets — which remain individually importable — behind one component.
+The Azion brand logo, rendered as an inline SVG lockup. A single `variant` prop selects the lockup: `default` (the AZION wordmark) for standard surfaces, `reduced` (the "A" glyph) for compact headers and tight spaces, and `extended` (the AZION wordmark over "technologies") for marketing-oriented layouts. It is the one public way to draw the Azion mark: the drawings live inside the package and are not exported on their own. The lockups that carry the "Move to the Edge" tagline were retired in 6.0.
 
 ## When to use
 
 - Use Brand only for the Azion logo.
 - The Azion logo in a header, navigation bar, footer, sign-in screen or product mockup.
 - `variant="reduced"` where space is tight (collapsed sidebar, mobile header).
-- `variant="extended"` in marketing layouts that carry the tagline.
+- `variant="extended"` in marketing layouts that show "AZION technologies".
 
 ## When NOT to use
 
-- A customer or partner logo → use `logo-wall`.
+- A customer, partner or competitor logo → use `company-logo` (one mark) or `logo-wall` (a grid of them).
 - A person's or organization's picture → use `avatar`.
 - A decorative product graphic → use `illustration`.
 
@@ -35,7 +35,8 @@ The Azion brand logo, rendered as an inline SVG lockup. A single `variant` prop 
 
 - `site-header-section` and `site-footer-section` — compose Brand for the site chrome.
 - `avatar` — the picture or initials of a user, not the product mark.
-- `logo-wall` — third-party company marks.
+- `company-logo` — another company's mark; `Brand` is only Azion's own.
+- `logo-wall` — a grid of other companies' marks.
 
 ## Best practices
 
@@ -61,11 +62,11 @@ The Azion brand logo, rendered as an inline SVG lockup. A single `variant` prop 
 
 ## Props
 
-| Prop         | Type                                   | Default     | Required | JSDoc                                                                                                                                                                    |
-| ------------ | -------------------------------------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `variant`    | `'default' \| 'reduced' \| 'extended'` | `'default'` | false    | Brand lockup to render: `default` (AZION wordmark), `reduced` (the "A" glyph for tight spaces), `extended` (wordmark with the "move to the edge technologies®" tagline). |
-| `size`       | `'small' \| 'medium' \| 'large'`       | `'medium'`  | false    | Size token; sets the lockup height (16 / 24 / 32 px) while width scales automatically so each `variant` keeps its own aspect ratio.                                      |
-| `decorative` | `boolean`                              | `false`     | false    | Hides the mark from assistive tech when visible text beside it already says Azion.                                                                                       |
+| Prop         | Type                                   | Default     | Required | JSDoc                                                                                                                                      |
+| ------------ | -------------------------------------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `variant`    | `'default' \| 'reduced' \| 'extended'` | `'default'` | false    | Brand lockup to render: `default` (AZION wordmark), `reduced` (the "A" glyph for tight spaces), `extended` (wordmark over "technologies"). |
+| `size`       | `'small' \| 'medium' \| 'large'`       | `'medium'`  | false    | Size token; sets the lockup height (16 / 24 / 32 px) while width scales automatically so each `variant` keeps its own aspect ratio.        |
+| `decorative` | `boolean`                              | `false`     | false    | Hides the mark from assistive tech when visible text beside it already says Azion.                                                         |
 
 ## Events
 
@@ -93,13 +94,13 @@ _none_
 
 ## Theme gaps
 
-| Figma variable           | Temporary primitive                           | Follow-up                                              |
-| ------------------------ | --------------------------------------------- | ------------------------------------------------------ |
-| brand orange (`#F3652B`) | hardcoded HEX inside the `svg/azion/*` assets | `TODO: tokenizar the brand assets to `var(--primary)`` |
+| Figma variable           | Temporary primitive                             | Follow-up                                              |
+| ------------------------ | ----------------------------------------------- | ------------------------------------------------------ |
+| brand orange (`#F3652B`) | hardcoded HEX inside the private Azion drawings | `TODO: tokenizar the brand assets to `var(--primary)`` |
 
 ## Accessibility (WCAG 2.1 AA)
 
-- The root carries `role="img"` and a default `aria-label` (`Azion`) so the logo has an accessible name; consumers may override the label via a passed `aria-label`. With `decorative` the root drops `role` and the name and is `aria-hidden`, for a mark next to visible Azion text (the same option `Logo` has; `Brand` is the Azion house mark, `Logo` any vendor mark).
+- The root carries `role="img"` and a default `aria-label` (`Azion`) so the logo has an accessible name; consumers may override the label via a passed `aria-label`. With `decorative` the root drops `role` and the name and is `aria-hidden`, for a mark next to visible Azion text (the same option `CompanyLogo` has; `Brand` is the Azion house mark, `CompanyLogo` any other company's mark).
 - Non-interactive: the logo is not focusable and emits no events; the inner SVG is presentational.
 - Contrast ≥3:1 for the brand mark against its background (large graphic).
 - `motion-reduce` not applicable — the component is static.

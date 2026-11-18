@@ -11,7 +11,7 @@ const css = readFileSync(resolve(ROOT, 'packages/theme/dist/globals.css'), 'utf8
 const readme = readFileSync(resolve(ROOT, 'packages/theme/README.md'), 'utf8')
 
 const REMOVED =
-  /^--(surface-\d+|color-surface-\d+|height-\d+|width-\w+|z-input-popup|z-input-field|z-input-overlay|[\w-]+-xx[sl](-[\w-]+)?|(primary|secondary|accent|success|warning|danger|info)-contrast|code-sintax-[\w-]+|line-height-\w+|border-\d|container-(px|py|max-width)|shape-elements|animate-slide-(in|out)-(left|right))$/
+  /^--(surface-\d+|color-surface-\d+|height-\d+|width-\w+|z-input-popup|z-input-field|z-input-overlay|[\w-]+-xx[sl](-[\w-]+)?|(primary|secondary|accent|success|warning|danger|info)-contrast|text-primary|code-sintax-[\w-]+|line-height-\w+|border-\d|container-(px|py|max-width)|shape-elements|animate-slide-(in|out)-(left|right))$/
 
 test('the variables removed in 6.0 no longer ship', () => {
   const shipped = [...css.matchAll(/^\s*(--[\w-]+):/gm)].map((match) => match[1])
@@ -49,6 +49,7 @@ test('the README maps every removed variable family to its replacement', () => {
     '--spacing-xxl',
     '--primary-contrast',
     '--code-sintax-*',
+    '--text-primary',
     '--line-height-3',
     '--border-0',
     '--container-px',

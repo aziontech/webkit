@@ -14,7 +14,7 @@
     },
     {
       "name": "Orientations",
-      "summary": "Both axes: the horizontal band across the full canvas, then the vertical one held in a narrow column. `horizontal` is the band proper — one column below `lg`, two cells above it. `vertical` keeps the stacked form at every width, which is what a page aside or a grid cell wants, and `variant` changes meaning with it: `media-start` puts the media above the copy rather than to its left. The copy cell stays first in the DOM either way, so tab order and screen-reader order follow the argument rather than the picture.",
+      "summary": "Both axes: the horizontal band across the full canvas, then the vertical one held in a narrow column. `horizontal` is the band proper — one column while the band is narrower than 60rem, two equal cells from 60rem — it splits on its own width, not the screen's. `vertical` keeps the stacked form at every width, which is what a page aside or a grid cell wants, and `variant` changes meaning with it: `media-start` puts the media above the copy rather than to its left. The copy cell stays first in the DOM either way, so tab order and screen-reader order follow the argument rather than the picture.",
       "file": "orientations.vue"
     },
     {

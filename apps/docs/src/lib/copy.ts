@@ -41,9 +41,10 @@ export function componentMarkdown(item: ComponentIndexItem, doc: ComponentDoc): 
     parts.push('## Props\n' + table(doc.props, ['name', 'type', 'default', 'doc']))
   if (doc.events.length) parts.push('## Events\n' + table(doc.events, ['name', 'payload', 'notes']))
   if (doc.slots.length) parts.push('## Slots\n' + table(doc.slots, ['name', 'scope', 'notes']))
-  if (doc.bestPractices.length)
+  if (doc.bestPractices.length || doc.avoidPractices.length)
     parts.push(
-      '## Best practices\n' + doc.bestPractices.map((line) => `- ${text(line)}`).join('\n')
+      '## Best practices\n' +
+        [...doc.bestPractices, ...doc.avoidPractices].map((line) => `- ${text(line)}`).join('\n')
     )
   if (doc.exampleDir) {
     for (const example of doc.examples) {

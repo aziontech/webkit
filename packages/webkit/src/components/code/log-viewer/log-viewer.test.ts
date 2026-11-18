@@ -1,3 +1,5 @@
+import '../../../test/reflow.css'
+
 import userEvent from '@testing-library/user-event'
 import { fireEvent, render, within } from '@testing-library/vue'
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
@@ -6,9 +8,9 @@ import { defineComponent, h, nextTick, ref } from 'vue'
 import Borderless from '../../../../examples/log-viewer/borderless.vue'
 import Default from '../../../../examples/log-viewer/default.vue'
 import Levels from '../../../../examples/log-viewer/levels.vue'
-import StepsExample from '../../../../examples/log-viewer/steps.vue'
-import StepsError from '../../../../examples/log-viewer/steps-error.vue'
-import StepsRunning from '../../../../examples/log-viewer/steps-running.vue'
+import StepsExample from '../../../../examples/log-viewer/step-logs.vue'
+import StepsError from '../../../../examples/log-viewer/step-logs-error.vue'
+import StepsRunning from '../../../../examples/log-viewer/step-logs-running.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import LogViewerCompound from './index'
 import type { LogViewerLine, LogViewerLineLevel, LogViewerStep } from './injection-key'
@@ -282,6 +284,24 @@ describe('LogViewer', () => {
         expect(mark.tagName).toBe('MARK')
       })
 
+      it('moves the highlight when the query changes on a line that stays', async () => {
+        const { Host } = makeHost({})
+        const { getByTestId, getAllByTestId } = render(Host)
+        const search = getByTestId('log-viewer-header__search')
+
+        await fireEvent.update(search, 'Build')
+        const row = getAllByTestId('log-viewer__line').find((line) =>
+          line.textContent?.includes('Build finished')
+        )!
+        expect(within(row).getByText('Build').tagName).toBe('MARK')
+
+        await fireEvent.update(search, 'Build fin')
+        expect(row.isConnected).toBe(true)
+        expect([...row.querySelectorAll('mark')].map((mark) => mark.textContent)).toEqual([
+          'Build fin'
+        ])
+      })
+
       it('shows the empty region when the query matches nothing', async () => {
         const { Host } = makeHost({})
         const { getByTestId, queryAllByTestId } = render(Host)
@@ -516,7 +536,7 @@ describe('LogViewer', () => {
         expect(level.value).toBe('')
       })
 
-      it('renders the level column and data-level on rows, and drops an empty time', () => {
+      it('renders the level column and data-level on rows, and keeps an empty time cell', () => {
         const { view } = renderLevels()
         const rows = view.getAllByTestId('log-viewer__line')
         expect(rows.map((row) => row.getAttribute('data-level'))).toEqual([
@@ -529,7 +549,7 @@ describe('LogViewer', () => {
         expect(within(rows[2]!).getByTestId('log-viewer__line-level').textContent?.trim()).toBe(
           'warn'
         )
-        expect(within(rows[3]!).queryByTestId('log-viewer__line-time')).toBeNull()
+        expect(within(rows[3]!).getByTestId('log-viewer__line-time').textContent?.trim()).toBe('')
         expect(within(rows[0]!).getByTestId('log-viewer__line-time').textContent?.trim()).toBe(
           '0 ms'
         )
@@ -835,6 +855,68 @@ describe('LogViewer', () => {
           view.unmount()
         }
       })
+    })
+  })
+
+  describe('columns', () => {
+    const left = (el: Element) => el.getBoundingClientRect().left
+    const right = (el: Element) => el.getBoundingClientRect().right
+
+    const renderLines = (lines: LogViewerLine[], dir: 'ltr' | 'rtl' = 'ltr') =>
+      render(
+        defineComponent({
+          setup: () => () =>
+            h('div', { dir, style: { width: '640px', height: '480px' } }, [
+              h(LogViewer, { lines, class: 'h-full' }, () => [h(LogViewerContent)])
+            ])
+        })
+      )
+
+    const RAGGED: LogViewerLine[] = [
+      { id: 'c1', time: '0 ms', level: 'info', type: 'text', message: 'Invocation started' },
+      { id: 'c2', time: '4 ms', level: 'debug', type: 'text', message: 'Arguments parsed' },
+      { id: 'c3', time: '202 ms', level: 'info', type: 'text', message: 'Origin answered' },
+      { id: 'c4', time: '1.24 s', level: 'error', type: 'text', message: 'Webhook failed' },
+      { id: 'c5', time: '', type: 'text', message: 'No time or level' },
+      { id: 'c6', time: '412 ms', level: 'info', type: 'success', message: 'Done' }
+    ]
+
+    it('starts every message at the same x whatever the time and level lengths', () => {
+      const view = renderLines(RAGGED)
+      const messages = view.getAllByTestId('log-viewer__line-message')
+      const starts = messages.map(left)
+      expect(new Set(starts).size).toBe(1)
+      const levels = view.getAllByTestId('log-viewer__line-level').map(left)
+      expect(new Set(levels).size).toBe(1)
+    })
+
+    it('right-aligns the time column and sizes it to the longest time', () => {
+      const view = renderLines(RAGGED)
+      const times = view.getAllByTestId('log-viewer__line-time')
+      expect(new Set(times.map(right)).size).toBe(1)
+      for (const time of times) {
+        const text = document.createRange()
+        text.selectNodeContents(time)
+        expect(text.getBoundingClientRect().width).toBeLessThanOrEqual(
+          time.getBoundingClientRect().width + 0.5
+        )
+      }
+      const longest = times[3]!
+      const range = document.createRange()
+      range.selectNodeContents(longest)
+      expect(range.getBoundingClientRect().right).toBeCloseTo(right(longest), 0)
+    })
+
+    it('keeps the columns aligned right to left', () => {
+      const view = renderLines(RAGGED, 'rtl')
+      const ends = view.getAllByTestId('log-viewer__line-message').map(right)
+      expect(new Set(ends).size).toBe(1)
+    })
+
+    it('drops the time and level columns when no line has them', () => {
+      const view = renderLines([{ id: 'p1', time: '', type: 'text', message: 'Plain line' }])
+      expect(view.queryByTestId('log-viewer__line-time')).toBeNull()
+      expect(view.queryByTestId('log-viewer__line-level')).toBeNull()
     })
   })
 })

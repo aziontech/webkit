@@ -12,7 +12,7 @@
   },
   {
    "name": "Registry",
-   "summary": "The wall built straight from the client registry: each entry's light/dark pair, or its single file with the `artwork` that says which theme inverts it, is drawn right on both themes by `Logo`; the quote's company mark comes from the registry too, and an outlined `secondary-action` sits beside the primary one.",
+   "summary": "The wall built straight from the client registry: each entry's light/dark pair, or its single file with the `artwork` that says which theme inverts it, is drawn right on both themes by `CompanyLogo`; the quote's company mark comes from the registry too, and an outlined `secondary-action` sits beside the primary one.",
    "file": "examples/logo-wall-section/registry.vue"
   }
  ]

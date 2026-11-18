@@ -41,7 +41,6 @@ write instead.
 
 ## Correct
 
-<!-- prettier-ignore -->
 ```vue
 <script setup lang="ts">
   // Primary value — consumer binds v-model="query".
@@ -57,7 +56,6 @@ write instead.
 </template>
 ```
 
-<!-- prettier-ignore -->
 ```html
 <!-- Consumer side: works controlled (bound) or uncontrolled (unbound) -->
 <SearchField v-model="query" v-model:open="menuOpen" />
@@ -65,7 +63,6 @@ write instead.
 
 ## Wrong
 
-<!-- prettier-ignore -->
 ```vue
 <script setup lang="ts">
   // Hand-rolled pair — blocked by the webkit/require-authoring-standards ESLint rule

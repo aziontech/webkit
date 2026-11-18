@@ -1,5 +1,5 @@
 {
- "purpose": "International phone-number control: an `InputGroup` with a searchable dial-code `Select` on the left and a `type=\"tel\"` input on the right that applies the selected country's mask as the user types and accepts exactly the lengths that country allows. Two v-models (`v-model` for the national digits, `v-model:country` for the ISO 3166-1 alpha-2 code) carry the editable state; the one-way `phone-change` event hands the form the full E.164 number and whether it is complete. It carries no label or helper text: wrap it in a `Field` (`Field.Label` + `PhoneInput` + `Field.Description`), and it picks up `id`, `aria-describedby`, `invalid`, `disabled` and `required` from the Field.",
+ "purpose": "International phone-number control: an `InputGroup` with a searchable country `Select` on the left (the closed trigger shows the selected country's flag, its name and, at the end, its dial code, like a row of the list) and a `type=\"tel\"` input on the right that applies the selected country's mask as the user types and accepts exactly the lengths that country allows. Two v-models (`v-model` for the national digits, `v-model:country` for the ISO 3166-1 alpha-2 code) carry the editable state; the one-way `phone-change` event hands the form the full E.164 number and whether it is complete. It carries no label or helper text: wrap it in a `Field` (`Field.Label` + `PhoneInput` + `Field.Description`), and it picks up `id`, `aria-describedby`, `invalid`, `disabled` and `required` from the Field.",
  "useWhen": [
   "International phone entry where the user picks a country and types the national number with that country's mask.",
   "Forms that need the full E.164 number and whether it is complete, without per-country length rules in the form."
@@ -17,7 +17,7 @@
   "Put it in a `Field` with a `Field.Label`; the label targets the tel input.",
   "`v-model` holds the national digits only; read `number` from the `phone-change` payload when you need the E.164 value.",
   "Use `complete` from `phone-change` to decide `invalid` and the `Field.Error` on submit; the control shows no incomplete-number message of its own.",
-  "`v-model:country` defaults to `'US'`; seed it with the user's country when you know it.",
+  "The field starts on the United States. Set `default-country` to start on another country (an ISO 3166-1 alpha-2 code from `countries`), or bind `v-model:country` when the form owns the country.",
   "`searchPlaceholder` and `searchEmptyLabel` default to English; pass translated copy in localized UIs."
  ]
 }

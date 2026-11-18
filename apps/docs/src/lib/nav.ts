@@ -143,7 +143,6 @@ export function foundationGroups(labels: {
   assets: string
   brand: string
   illustrations: string
-  lineFigures: string
   icons: string
 }): NavGroup[] {
   return [
@@ -166,7 +165,6 @@ export function foundationGroups(labels: {
       items: [
         { label: labels.brand, to: '/assets#brand' },
         { label: labels.illustrations, to: '/assets#illustrations' },
-        { label: labels.lineFigures, to: '/assets#line-figures' },
         { label: labels.icons, to: '/foundations/icon' }
       ]
     }

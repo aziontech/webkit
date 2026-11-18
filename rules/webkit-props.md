@@ -40,7 +40,6 @@ checked in review.
 
 ## Correct
 
-<!-- prettier-ignore -->
 ```vue
 <script setup lang="ts">
   /** Visual variant. */
@@ -70,7 +69,6 @@ checked in review.
 
 ## Wrong
 
-<!-- prettier-ignore -->
 ```vue
 <script setup lang="ts">
   // Runtime object form — blocked by webkit/require-authoring-standards.

@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: b0b45e10956de5c6c9c0998c1ed8d908cf8b6d6b5f8547ff4b83a1dd7ae24ab4
+checksum: dba0a169590be71c9c62f5944d5c2d302b060c015d10b4a3f70e8742e465e1af
 created: 2026-09-24
 last_updated: 2026-11-16
 ---
@@ -110,7 +110,7 @@ One claim stated in three parts: a glyph, a short headline it shares a line with
 | typography (trailing arrow)        | `.text-body-xs`                                                                             |
 | glyph                              | `var(--primary)`                                                                            |
 | heading ink                        | `var(--text-default)`                                                                       |
-| heading ink (linked, hover)        | `var(--text-primary)`                                                                       |
+| heading ink (linked, hover)        | `var(--text-brand)`                                                                         |
 | description ink                    | `var(--text-muted)`                                                                         |
 | focus ring                         | `var(--ring-color)` on `var(--bg-canvas)`                                                   |
 | spacing (headline row to sentence) | `var(--spacing-sm)`                                                                         |
@@ -128,7 +128,7 @@ One claim stated in three parts: a glyph, a short headline it shares a line with
 - Visible focus: the linked root draws an inset `focus-visible` ring in `var(--ring-color)` on its `::after`, so the ring outlines the whole cell it covers. Without an `href` the topic holds no interactive control of its own.
 - Keyboard map: `Tab` reaches the linked claim and `Enter` follows it — the anchor's own behaviour, no handler of our own. Unlinked, the topic is static content and `Tab` passes through whatever the description slot contains.
 - ARIA: both glyphs are decorative and carry `aria-hidden="true"` — the leading icon and the trailing arrow — so the link's accessible name is the headline and the sentence, the copy a reader sees. `headingLevel` is what keeps the document outline in order (axe `heading-order`); the heading stays a heading inside the anchor.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): `var(--text-default)` for the heading, `var(--text-muted)` for the description, `var(--primary)` for the glyph and `var(--text-primary)` for the hovered headline — all against the fill the surrounding cell provides.
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): `var(--text-default)` for the heading, `var(--text-muted)` for the description, `var(--primary)` for the glyph and `var(--text-brand)`, the logo orange, for the hovered headline (an owner-accepted brand exception in light) — all against the fill the surrounding cell provides.
 - `motion-reduce:transition-none` on both transitions a linked claim carries.
 - Touch target ≥40×40 px — the whole claim is the target, so it is the cell's own height; a topic is never smaller than its heading plus its sentence.
 

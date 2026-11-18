@@ -38,9 +38,8 @@ export const tokenPurpose = {
   '--text-muted': 'Secondary text: descriptions, captions, metadata.',
   '--text-disabled': 'Text of a disabled control.',
   '--text-danger': 'Error text on the page, such as the FieldError message.',
-  '--text-primary': 'Brand-coloured text, such as the required asterisk on a field label.',
   '--text-brand':
-    'The logo orange for brand labels such as the eyebrow; an accepted contrast exception.',
+    'The logo orange, the one orange for brand text such as eyebrows and quote names; an accepted contrast exception.',
   '--text-link': 'Links in text and the link button.',
   '--text-link-hover': 'A link under the pointer.',
   '--text-contrast': 'Text on the inverted --bg-contrast surface.',
@@ -155,6 +154,8 @@ export const tokenPurpose = {
   '--layout-measure-control':
     'The width of a form control in a form column; a create page widens it.',
   '--layout-header-height': 'The height of the top header, which a full-height hero subtracts.',
+  '--layout-sticky-top':
+    'Where a sticky part inside the page stops: under the sticky header; 0 inside a scroller with no header above it.',
   '--z-control': 'Lifts a control above its neighbours, such as a focused input in a group.',
   '--z-control-overlay': 'The layer of overlays: menus, popovers, dialogs, toasts.',
   '--code-editor-line-height': 'The line step of code in the code editor.',

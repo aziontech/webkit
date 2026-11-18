@@ -572,10 +572,13 @@
 
           <fieldset
             v-if="panelMode === 'relative'"
-            class="m-0 flex min-w-0 flex-col gap-(--spacing-2xs) border-0 p-(--spacing-sm)"
+            class="m-0 flex min-w-0 flex-col border-0 px-(--spacing-2xs) py-(--spacing-xs)"
             :data-testid="`${testId}__relative`"
           >
-            <legend class="text-label-sm mb-(--spacing-2xs) p-0 text-(--text-muted)">
+            <legend
+              :data-testid="`${testId}__legend`"
+              class="text-label-sm float-start w-full px-(--spacing-xs) py-(--spacing-2xs) text-(--text-muted)"
+            >
               {{ t('dateRangePicker.quickRanges') }}
             </legend>
             <label
@@ -583,44 +586,46 @@
               :key="option.key"
               :data-selected="draftKey === option.key || null"
               :data-testid="`${testId}__option`"
-              class="text-label-sm flex min-h-8 cursor-pointer items-center justify-between gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-2xs) text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-(--ring-color) data-[selected]:bg-(--bg-selected) motion-reduce:transition-none pointer-coarse:min-h-11"
+              class="text-label-sm flex min-h-8 cursor-pointer items-center justify-between gap-(--spacing-xs) rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-(--ring-color) has-[:focus-visible]:ring-inset data-[selected]:bg-(--bg-selected) motion-reduce:transition-none pointer-coarse:min-h-11"
             >
               <input
                 v-model="draftKey"
                 type="radio"
                 :name="`${uid}-relative`"
                 :value="option.key"
+                :data-autofocus="(!offersAbsolute && draftKey === option.key) || null"
                 class="sr-only"
               />
               <span class="min-w-0 truncate">{{ optionLabel(option) }}</span>
               <i
                 v-if="draftKey === option.key"
-                class="az az-check shrink-0 text-[length:inherit] leading-none text-(--text-muted)"
+                class="az az-check shrink-0 text-[length:inherit] leading-none text-(--text-default)"
                 aria-hidden="true"
               />
             </label>
             <label
               :data-selected="draftKey === CUSTOM || null"
               :data-testid="`${testId}__option`"
-              class="text-label-sm flex min-h-8 cursor-pointer items-center justify-between gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-2xs) text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-(--ring-color) data-[selected]:bg-(--bg-selected) motion-reduce:transition-none pointer-coarse:min-h-11"
+              class="text-label-sm flex min-h-8 cursor-pointer items-center justify-between gap-(--spacing-xs) rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-(--ring-color) has-[:focus-visible]:ring-inset data-[selected]:bg-(--bg-selected) motion-reduce:transition-none pointer-coarse:min-h-11"
             >
               <input
                 v-model="draftKey"
                 type="radio"
                 :name="`${uid}-relative`"
                 :value="CUSTOM"
+                :data-autofocus="(!offersAbsolute && draftKey === CUSTOM) || null"
                 class="sr-only"
               />
               <span class="min-w-0 truncate">{{ t('dateRangePicker.custom') }}</span>
               <i
                 v-if="draftKey === CUSTOM"
-                class="az az-check shrink-0 text-[length:inherit] leading-none text-(--text-muted)"
+                class="az az-check shrink-0 text-[length:inherit] leading-none text-(--text-default)"
                 aria-hidden="true"
               />
             </label>
             <div
               v-if="draftKey === CUSTOM"
-              class="flex items-end gap-(--spacing-xs) pt-(--spacing-xs)"
+              class="flex items-end gap-(--spacing-xs) px-(--spacing-xs) pt-(--spacing-xs) pb-(--spacing-2xs)"
             >
               <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-2xs)">
                 <label

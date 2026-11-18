@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "A client from the asset registry: its dark-theme file and its light-theme file both render, and the theme reveals one.",
+   "file": "examples/company-logo/default.vue"
+  },
+  {
+   "name": "Sizes",
+   "summary": "`small` (16 px), `medium` (24 px, the default) and `large` (32 px) on the same client pair and on a wordmark with no file; the width follows each file's aspect ratio.",
+   "file": "examples/company-logo/sizes.vue"
+  },
+  {
+   "name": "Variants",
+   "summary": "The four inks on the same marks: `color` keeps each file's colours (a light/dark pair, a light file inverted on the light theme, an agent symbol), `monochrome` paints one silhouette per theme, `current` takes the surface's text colour, `knockout` pins black for a coloured fill. A name with no file draws its wordmark.",
+   "file": "examples/company-logo/variants.vue"
+  }
+ ]
+}

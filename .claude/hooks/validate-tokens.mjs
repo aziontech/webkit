@@ -83,7 +83,7 @@ async function main() {
   // *.test.* / *.spec.* — tests legitimately contain values the checks forbid (the
   // browser serializes a collapsed height as the string '0px', type tests use
   // @ts-expect-error), so the token discipline must not block writing them.
-  // Outside components only the WIDE_TOKEN_CHECKS (rtl-double-flip) run, over the
+  // Outside components only the WIDE_TOKEN_CHECKS (rtl-double-flip, off-brand-orange) run, over the
   // apps/docs, apps/demos, blocks and examples sources the ratchet also scans.
   const relPath = relative(ROOT, resolve(filePath)).split('\\').join('/')
   const checks = repoTokenChecksFor(relPath)

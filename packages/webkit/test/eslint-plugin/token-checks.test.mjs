@@ -258,17 +258,45 @@ test('rtl-double-flip covers exactly DIRECTIONAL_ICONS', async () => {
   }
 })
 
+test('off-brand-orange fires on --text-primary and on any orange step but the logo orange', () => {
+  for (const content of [
+    'class="text-(--text-primary)"',
+    "colors: ['var(--text-primary)']",
+    'color: var(--color-orange-300);',
+    'class="bg-(--color-brand-primary-700)"',
+    'class="text-brand-primary-300"',
+    'fill: var(--color-alpha-orange-200)'
+  ]) {
+    assert.ok(ids(content).includes('off-brand-orange'), `expected off-brand-orange for: ${content}`)
+  }
+})
+
+test('off-brand-orange stays silent on the logo orange and on the primary roles', () => {
+  for (const content of [
+    'class="text-(--text-brand)"',
+    'class="bg-(--primary) text-(--primary-foreground)"',
+    'class="text-primary"',
+    'class="text-(--text-primary-foreground)"',
+    'color: var(--color-orange-500);',
+    'class="bg-(--primary-mask)"',
+    'class="text-(--chart-series-4)"'
+  ]) {
+    assert.ok(!ids(content).includes('off-brand-orange'), `expected silence for: ${content}`)
+  }
+})
+
 test('tokenChecksFor runs only the wide checks over blocks, examples and given extra dirs', () => {
+  const WIDE = ['rtl-double-flip', 'off-brand-orange']
   const idsFor = (rel, dirs) => tokenChecksFor(rel, dirs).map((c) => c.id)
   assert.ok(idsFor('packages/webkit/src/components/action/button/button.vue').includes('hex-color'))
   for (const rel of [
     'packages/webkit/blocks/login/login.vue',
     'packages/webkit/examples/button/default.vue'
   ]) {
-    assert.deepEqual(idsFor(rel), ['rtl-double-flip'], rel)
+    assert.deepEqual(idsFor(rel), WIDE, rel)
   }
   assert.deepEqual(idsFor('site/src/nav.vue'), [])
-  assert.deepEqual(idsFor('site/src/nav.vue', ['site/src/']), ['rtl-double-flip'])
+  assert.deepEqual(idsFor('site/src/nav.vue', ['site/src/']), WIDE)
   for (const rel of [
     'packages/webkit/examples/button/button.test.ts',
     'packages/webkit/examples/button/examples.json',

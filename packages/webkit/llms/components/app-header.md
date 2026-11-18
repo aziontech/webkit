@@ -92,7 +92,7 @@ right-to-left: the start region is on the right there. 6.0 removed the physical 
 ```vue
 <script setup>
   import AppHeader from '@aziontech/webkit/app-header'
-  import Default from '@aziontech/webkit/svg/azion/default'
+  import Brand from '@aziontech/webkit/brand'
 </script>
 
 <template>
@@ -102,7 +102,7 @@ right-to-left: the start region is on the right there. 6.0 removed the physical 
         href="/"
         aria-label="Azion home"
       >
-        <Default />
+        <Brand size="small" />
       </AppHeader.Brand>
     </AppHeader.Start>
     <AppHeader.Center />

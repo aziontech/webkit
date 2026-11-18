@@ -913,7 +913,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
                 </h2>
 
                 <Tabs v-model="detailsTab">
-                  <div class="flex w-full flex-col gap-(--spacing-md)">
+                  <div class="flex w-full flex-col">
                     <Tabs.List aria-label="Details">
                       <Tabs.Trigger
                         value="permissions"

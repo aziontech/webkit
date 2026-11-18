@@ -1025,6 +1025,20 @@ describe('Select', () => {
       })
       expect(legacy.queryByTestId('l')).toBeNull()
     })
+
+    it('renders the trailing slot after the value and before the chevron', () => {
+      const view = render({
+        components: { Select, SelectTrigger },
+        template: `<Select model-value="a" :display-value="() => 'Alpha'"><SelectTrigger aria-label="Pick"><template #trailing><span data-testid="t">+1</span></template></SelectTrigger></Select>`
+      })
+      const trailing = view.getByTestId('t')
+      expect(view.getByTestId('select-trigger__value').compareDocumentPosition(trailing)).toBe(
+        Node.DOCUMENT_POSITION_FOLLOWING
+      )
+      expect(trailing.compareDocumentPosition(view.getByTestId('select-trigger__chevron'))).toBe(
+        Node.DOCUMENT_POSITION_FOLLOWING
+      )
+    })
   })
 
   describe('native form submit', () => {

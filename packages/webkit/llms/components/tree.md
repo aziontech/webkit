@@ -356,6 +356,10 @@
 
 ```vue
 <script setup>
+  import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
+  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
+  import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
+  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import IconButton from '@aziontech/webkit/icon-button'
   import Tag from '@aziontech/webkit/tag'
   import Tree from '@aziontech/webkit/tree'
@@ -442,6 +446,18 @@
 
   const expanded = ref(['assets', 'assets/images'])
 
+  const lastAction = ref('')
+
+  const actionLabels = {
+    download: 'Downloaded',
+    'copy-path': 'Copied the path of',
+    delete: 'Deleted'
+  }
+
+  function onAction(item, value) {
+    lastAction.value = `${actionLabels[value]} ${item.label}`
+  }
+
   const statuses = {
     'assets/styles.css': {
       label: 'Modified',
@@ -459,7 +475,7 @@
 </script>
 
 <template>
-  <div class="max-w-(--container-sm)">
+  <div class="flex max-w-(--container-sm) flex-col gap-(--spacing-md)">
     <Tree
       v-model:open-keys="expanded"
       :items="items"
@@ -481,14 +497,41 @@
         </span>
       </template>
       <template #actions="{ item }">
-        <IconButton
-          icon="az az-ellipsis"
-          variant="ghost"
-          size="small"
-          :aria-label="'More actions for ' + item.label"
-        />
+        <DropdownMenuRoot
+          align="end"
+          @select="(event, value) => onAction(item, value)"
+        >
+          <DropdownMenuTrigger>
+            <IconButton
+              icon="az az-ellipsis"
+              variant="ghost"
+              size="small"
+              :aria-label="'More actions for ' + item.label"
+            />
+          </DropdownMenuTrigger>
+          <DropdownMenuGroup>
+            <DropdownMenuItem
+              value="download"
+              label="Download"
+            />
+            <DropdownMenuItem
+              value="copy-path"
+              label="Copy path"
+            />
+            <DropdownMenuItem
+              value="delete"
+              label="Delete"
+            />
+          </DropdownMenuGroup>
+        </DropdownMenuRoot>
       </template>
     </Tree>
+    <p
+      class="text-body-sm text-(--text-muted)"
+      aria-live="polite"
+    >
+      Last action: {{ lastAction || 'none' }}
+    </p>
   </div>
 </template>
 ```

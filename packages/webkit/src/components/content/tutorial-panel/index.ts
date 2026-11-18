@@ -18,4 +18,8 @@ export type {
   TutorialPanelTutorial
 } from './injection-key'
 export type { TutorialPanelProps } from './tutorial-panel.vue'
+export type {
+  TutorialPanelHotspotProps,
+  TutorialPanelHotspotSide
+} from './tutorial-panel-hotspot/tutorial-panel-hotspot.vue'
 export type { TutorialPanelProviderProps } from './tutorial-panel-provider/tutorial-panel-provider.vue'

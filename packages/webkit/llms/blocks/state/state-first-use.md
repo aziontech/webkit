@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/state/state-first-use/state-first-use.vue` in `@aziontech/webkit`
 - MCP: `get_block("state/state-first-use")`
-- Components: `claudeMark`, `codexMark`, `cursorMark`, `geminiMark`, [Button](../../components/button.md), [Card](../../components/card.md), [CopyButton](../../components/copy-button.md), [EmptyState](../../components/empty-state.md), [Input](../../components/input.md), `InputGroupRoot`, [Item](../../components/item.md), [Link](../../components/link.md), [Logo](../../components/logo.md), [Skeleton](../../components/skeleton.md)
+- Components: `claudeMark`, `codexMark`, `cursorMark`, `geminiMark`, [Button](../../components/button.md), [Card](../../components/card.md), [CompanyLogo](../../components/company-logo.md), [CopyButton](../../components/copy-button.md), [EmptyState](../../components/empty-state.md), [Input](../../components/input.md), `InputGroupRoot`, [Item](../../components/item.md), [Link](../../components/link.md), [Skeleton](../../components/skeleton.md)
 - Skills: `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -36,9 +36,9 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 A flush `Card` (`:padded="false"`) holds the explanation and the method list as one object. Each promo below sits in its own flush `Card`, two columns from `md`.
 
-### B. Agent marks — `Logo` (optional)
+### B. Agent marks — `CompanyLogo` (optional)
 
-The coding-agent promo stacks the agent marks, each a decorative `Logo` at `size="small"` in a bordered tile. A mono mark takes `variant="current"` and the tile's text colour, a coloured one `variant="color"`.
+The coding-agent promo stacks the agent marks, each a decorative `CompanyLogo` at `size="small"` in a bordered tile. A mono mark takes `variant="current"` and the tile's text colour, a coloured one `variant="color"`.
 
 ### C. Explanation — `EmptyState` (required)
 
@@ -122,7 +122,7 @@ To go live, render the block while the list request is pending or returns nothin
 
 ## Don't
 
-- Don't draw an agent mark by hand (an `img` or a CSS mask): `Logo` already inks it for the theme.
+- Don't draw an agent mark by hand (an `img` or a CSS mask): `CompanyLogo` already inks it for the theme.
 - Don't show list controls (search, filters, pagination, column settings) over a list that has never had an item.
 - Don't render this block for a filtered list with no matches; that state says how to clear the filter.
 - Don't show it while the list is still loading; the user would see "create your first" for an account that has items.
@@ -177,13 +177,13 @@ Each variant is the same screen in another state: `get_block("state/state-first-
   import geminiMark from '@aziontech/webkit/assets/gemini-symbol-color.svg'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import CompanyLogo from '@aziontech/webkit/company-logo'
   import CopyButton from '@aziontech/webkit/copy-button'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Input from '@aziontech/webkit/input'
   import InputGroupRoot from '@aziontech/webkit/input-group-root'
   import Item from '@aziontech/webkit/item'
   import Link from '@aziontech/webkit/link'
-  import Logo from '@aziontech/webkit/logo'
   import Skeleton from '@aziontech/webkit/skeleton'
 
   const agentMarks = [
@@ -511,7 +511,7 @@ Each variant is the same screen in another state: `get_block("state/state-first-
                 :key="agent.name"
                 class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)"
               >
-                <Logo
+                <CompanyLogo
                   :name="agent.name"
                   :src="agent.src"
                   :variant="agent.mono ? 'current' : 'color'"

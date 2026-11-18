@@ -56,6 +56,7 @@
 - A group row (`group: true`) reads in the default text colour and draws a top rule unless it opens its band
 - Category row: a group row whose values are all empty is a category heading. It opens its own `tbody` with one `th scope="rowgroup"` spanning every column (label, hint and tag included) and renders no value cells; the rows after it belong to that `tbody` until the next category. A group row that carries values stays a feature row.
 - The feature column head (`columnLabel`) is start-aligned, like the row labels under it.
+- Sticky header: the plan row (`thead` cells, `z-20`) sticks at `top: var(--layout-sticky-top)`, which defaults to `--layout-header-height`, so on the site it stops right under the sticky `site-header-section` and the bands scroll beneath it. Inside a scroller with no header above it (a docs example card, an example frame) set `--layout-sticky-top: 0` on that scroller: a sticky cell is pushed down to its offset even at rest, so an offset that reserves room for an absent header lays the plan row over the first band's eyebrow and title.
 - Empty: when no plan has a name the band renders nothing but its root
 
 ## Accessibility

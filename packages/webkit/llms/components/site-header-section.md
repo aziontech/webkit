@@ -1,6 +1,6 @@
 # Site Header Section
 
-> The marketing site's own navigation: a sticky bar with the Azion mark, the mega-menu triggers and plain links, and the contact, login and sign-up actions, plus the sheet that carries the same tree below `xl`. It is a page section — the site places it from a `{ _id: 'site-header-section', props }` entry and binds `props` straight onto it — and it composes `app-header`, `brand`, `navigation-menu`, `icon-button`, `search-trigger`, `button`, `drawer`, `panel-header`, `panel-footer`, `scroll-area` and `sidebar-menu`. Each mega-menu lists its panel as columns of groups, and the sheet's drill-down tree is projected from the same menus, so an entry added to a panel is in both. The open state of the sheet, its drill path and the bar's inline inset are local state. Search is the folded `search-trigger` last in the bar: the section owns no palette, it emits `search` (on a click and on ⌘K / Ctrl K) and the page opens its own `command`, as every header does under `rules/webkit-header-search.md`.
+> The marketing site's own navigation: a sticky bar with the Azion mark, the mega-menu triggers and plain links, and the contact, login and sign-up actions, plus the sheet that carries the same tree below `xl`. It is a page section — the site places it from a `{ _id: 'site-header-section', props }` entry and binds `props` straight onto it — and it composes `app-header`, `brand`, `navigation-menu`, `icon-button`, `search-trigger`, `button`, `drawer`, `panel-header`, `panel-footer`, `scroll-area` and `sidebar-menu`. Each mega-menu lists its panel as columns of groups, and the sheet's drill-down tree is projected from the same menus, so an entry added to a panel is in both. The open state of the sheet, its drill path and the bar's inline inset are local state. Search is the collapsible `search-trigger`, first in the bar's end group (before contact, login and sign-up, so the call to action closes the bar): the section owns no palette, it emits `search` (on a click and on ⌘K / Ctrl K) and the page opens its own `command`, as every header does under `rules/webkit-header-search.md`.
 
 - Import: `import SiteHeaderSection from '@aziontech/webkit/site-header-section'`
 - Category: section · Surface: site · Structure: monolithic
@@ -17,7 +17,9 @@
 - Stack a short group under another in the same column (Platform under Observe) instead of adding a fifth column.
 - Give every entry an `href`; an entry without one links to `#`.
 - Listen to `search` and open the page's `Command` from it (`@search="searchOpen = true"` beside `<Command v-model:open="searchOpen">`); the trigger already carries ⌘K / Ctrl K.
-- Leave `secondaryActionOnPhones` off: on a phone the bar keeps the menu button, the mark, the call to action and search, as azion.com does, and Login stays in the sheet footer.
+- Leave `secondaryActionOnPhones` off: on a phone the bar keeps the menu button, the mark, search and the call to action, as azion.com does, and Login stays in the sheet footer.
+- Keep search in the bar at every width, never only inside the sheet: one tap reaches it on a phone, as on Vercel, Supabase, Stripe, Tailwind and Cloudflare docs.
+- Sticky parts further down the page (a plan table's head row) stop under the bar through `--layout-sticky-top`, which defaults to the bar's height.
 - The bar is `--layout-header-height` tall: `HeroSection` already takes it out of a screen-filling band; a bare `Hero variant="screen"` takes `offset="var(--layout-header-height)"`, never a literal length.
 - Don't wrap the bar, add a second search button beside it, or bind ⌘K yourself.
 
@@ -92,6 +94,7 @@
 
 - Container queries: none; the bar switches at viewport breakpoints.
 - Narrow (below `xl`, 80rem): the menus, links and contact leave the bar for the sheet behind the menu button; below `sm` the secondary action steps out unless `secondaryActionOnPhones`. When the bar's content box is under 20rem (a 320 px phone) the AZION wordmark gives way to the reduced "A" mark, so the sign-up button never covers it. Reaching `xl` while the sheet is open closes it.
+- Search: the `search-trigger` is first in the end group at every width. While the bar's content box is 47rem (752 px) or wider it is the field — magnifier, `Search` and the `⌘K` keycap (`Ctrl K` off Apple platforms, drawn by `kbd`); narrower (tablet and phone) it folds to a 32 × 32 px magnifier button named "Search", with the label as a tooltip and a 44 px touch area, beside the call to action. It never moves into the sheet. On a touch screen (`pointer: coarse`) the keycap is hidden at every width, since there is no keyboard to press it; the field keeps its label. Every form opens the same palette: the click and ⌘K / Ctrl K both emit `search`.
 - Touch: medium buttons and icon buttons meet 40 px; the mega-menu opens on click as well as hover.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom; the sheet scrolls inside `scroll-area`.
 

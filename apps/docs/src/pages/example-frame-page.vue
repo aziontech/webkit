@@ -58,7 +58,7 @@
   <div
     :data-example="mounted && dir ? `${dir}/${file}` : undefined"
     :data-ready="live ? '' : undefined"
-    class="min-h-screen w-full bg-(--bg-canvas) p-(--spacing-lg)"
+    class="min-h-screen w-full bg-(--bg-canvas) p-(--spacing-lg) [--layout-sticky-top:0]"
   >
     <component
       :is="live"

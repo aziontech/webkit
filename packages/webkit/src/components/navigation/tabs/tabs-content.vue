@@ -78,7 +78,10 @@
     role="tabpanel"
     :id="panelId"
     :class="
-      cn('relative w-full shrink-0 data-[state=inactive]:hidden', attrs.class as string | undefined)
+      cn(
+        'relative w-full shrink-0 pt-(--layout-group-gap) data-[state=inactive]:hidden',
+        attrs.class as string | undefined
+      )
     "
     :data-testid="testId"
     :data-state="isActive ? 'active' : 'inactive'"

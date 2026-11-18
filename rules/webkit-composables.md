@@ -55,7 +55,6 @@ composable). The rest of the contract is convention, enforced in review.
 
 ## Correct
 
-<!-- prettier-ignore -->
 ```ts
 // use-controllable.ts — pure, per-instance, readonly outward
 export interface UseControllableReturn<T> {
@@ -80,7 +79,6 @@ export function useControllable<T>(
 
 ## Wrong
 
-<!-- prettier-ignore -->
 ```ts
 // Returns reactive() (destructure loses reactivity), exposes mutable
 // state directly, and registers a listener that is never removed.

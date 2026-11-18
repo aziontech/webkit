@@ -53,8 +53,10 @@ groups go in their `search` slot; a page opens the console palette with
   (`Search … ⌘K`) on a wide bar and folds to the magnifier, with its label as a tooltip, while
   the bar is narrower than 47rem (752 px, `--container-2xl`). That is the one threshold for every
   header: do not add your own `@min-[…]` around it. The folded square is drawn at 32 px like the
-  header's other icon buttons; its 44 px touch area is built in. The site header keeps the folded
-  form (no `@container` around it), as azion.com does.
+  header's other icon buttons; its 44 px touch area is built in. On a touch screen the keycap
+  hides by itself (there is no keyboard to press it), and it reads `Ctrl K` off Apple platforms.
+  Keep the trigger in the bar at every width, never only inside a mobile menu sheet: on a phone it
+  is the magnifier beside the menu button and the call to action.
 - Name the scope in `label` when it is narrow (`label="Search docs"`).
 - On the marketing site, `SiteHeaderSection` already carries the folded trigger: listen to its `search` event
   (`<SiteHeaderSection @search="searchOpen = true" />`) and mount the `Command` beside it.

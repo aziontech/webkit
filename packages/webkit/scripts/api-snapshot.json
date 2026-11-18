@@ -9,11 +9,11 @@
     "app-header",
     "app-header-root",
     "app-layout",
-    "architecture-tabs",
-    "article-body",
-    "article-cards",
-    "article-highlight",
-    "article-index",
+    "architecture-tabs-section",
+    "article-body-section",
+    "article-cards-section",
+    "article-highlight-section",
+    "article-index-section",
     "artifact-canvas",
     "artifact-preview",
     "assets/agi-extended-color.svg",
@@ -384,6 +384,7 @@
     "assets/zoop-extended-color.svg",
     "attribute-editor",
     "avatar",
+    "avatar-group",
     "backdrop",
     "badge",
     "bar-list",
@@ -398,9 +399,9 @@
     "button",
     "button-group",
     "call-to-action",
-    "capability-grid",
+    "capability-grid-section",
     "card",
-    "card-carousel",
+    "card-carousel-section",
     "card-grid",
     "card-grid-cell",
     "card-grid-root",
@@ -442,11 +443,11 @@
     "checkbox",
     "chip",
     "citation",
-    "cli-terminal",
-    "client-mosaic",
-    "client-quotes",
-    "client-story-columns",
-    "closing-call-to-action",
+    "cli-terminal-section",
+    "client-mosaic-section",
+    "client-quotes-section",
+    "client-story-columns-section",
+    "closing-call-to-action-section",
     "code-block",
     "code-editor",
     "collection-preferences",
@@ -460,25 +461,28 @@
     "command-page",
     "command-root",
     "command-separator",
-    "competitor-comparison",
-    "compliance-logos",
+    "company-logo",
+    "competitor-comparison-section",
+    "compliance-logos-section",
+    "config-provider",
     "confirm-dialog",
     "console-layout",
     "console-layout-breadcrumb",
     "console-layout-root",
     "console-mockup",
-    "console-showcase",
-    "contact-hub",
+    "console-showcase-section",
+    "contact-hub-section",
     "context-menu",
     "context-menu-root",
     "context-menu-trigger",
     "conversation",
     "conversation-history",
     "copy-button",
-    "copy-command",
+    "copy-command-section",
     "copy-prompt-button",
+    "copy-text",
     "currency-amount",
-    "customer-use-cases",
+    "customer-use-cases-section",
     "dashboard-grid",
     "dashboard-grid-item",
     "dashboard-grid-root",
@@ -514,14 +518,14 @@
     "doc-item",
     "doc-layout",
     "doc-markdown",
-    "doc-on-this-page",
     "doc-page-header",
     "doc-previous-next",
     "doc-prompt",
     "doc-prose",
-    "doc-step",
     "doc-steps",
+    "doc-steps-root",
     "doc-tab",
+    "doc-table-of-contents",
     "doc-tabs",
     "docs/STYLEGUIDE.md",
     "donut-chart",
@@ -551,10 +555,10 @@
     "faq",
     "faq-section",
     "feature-item",
-    "feature-scroll",
-    "feature-tabs",
-    "feature-tiles",
-    "feature-widgets",
+    "feature-scroll-section",
+    "feature-tabs-section",
+    "feature-tiles-section",
+    "feature-widgets-section",
     "feedback-reason-dialog",
     "field",
     "field-content",
@@ -595,7 +599,6 @@
     "hero-title",
     "highlight-button",
     "hint",
-    "hotspot",
     "hover-card",
     "hover-card-content",
     "hover-card-root",
@@ -607,7 +610,8 @@
     "input-group-addon",
     "input-group-input",
     "input-group-root",
-    "investor-marks",
+    "integration-card",
+    "investor-marks-section",
     "item",
     "item-actions",
     "item-content",
@@ -620,20 +624,19 @@
     "item-root",
     "item-separator",
     "item-title",
-    "job-posting",
+    "job-posting-section",
     "kbd",
     "key-value-list",
     "key-value-list-group",
     "key-value-list-item",
     "key-value-list-root",
-    "line-figure",
     "link",
     "link-directory",
     "link-directory-column",
     "link-directory-item",
     "link-directory-root",
-    "listing-index",
-    "listing-table",
+    "listing-index-section",
+    "listing-table-section",
     "locales/es",
     "locales/pt-BR",
     "log-viewer",
@@ -642,11 +645,11 @@
     "log-viewer-header",
     "log-viewer-root",
     "log-viewer-steps",
-    "logo",
     "logo-wall",
     "logo-wall-section",
     "map-chart",
     "marquee",
+    "media-scroll",
     "media-split",
     "media-split-section",
     "media-split-stack-section",
@@ -690,10 +693,10 @@
     "password-requirements",
     "payment-brand",
     "phone-input",
-    "photo-marquee",
-    "plan-comparison",
+    "photo-marquee-section",
+    "plan-comparison-section",
     "plan-feature-list",
-    "platform-directory",
+    "platform-directory-section",
     "popover",
     "popover-close",
     "popover-content",
@@ -704,10 +707,16 @@
     "popover-title",
     "popover-trigger",
     "pricing-card",
-    "pricing-plans",
-    "process-scroll",
+    "pricing-plans-section",
+    "process-scroll-section",
     "progress",
     "prompt-input",
+    "prompt-input-attach-button",
+    "prompt-input-context-picker",
+    "prompt-input-dictate-button",
+    "prompt-input-model-picker",
+    "prompt-input-root",
+    "prompt-input-tools",
     "property-filter",
     "qr-code",
     "quote",
@@ -716,7 +725,7 @@
     "radio-group-item",
     "radio-group-root",
     "reasoning",
-    "recognition-marquee",
+    "recognition-marquee-section",
     "registration-frame",
     "resizable",
     "resizable-handle",
@@ -756,11 +765,12 @@
     "sidebar-menu-sub-content",
     "sidebar-menu-sub-trigger",
     "sidebar-root",
-    "site-footer",
-    "site-header",
+    "site-footer-section",
+    "site-header-section",
     "site-layout",
     "site-page",
     "skeleton",
+    "skip-link",
     "slider",
     "sources",
     "spark-chart",
@@ -775,20 +785,14 @@
     "stepper",
     "stepper-root",
     "stepper-step",
-    "sticky-stack",
-    "story-index",
+    "story-index-section",
     "streaming-response",
     "stylelint-config",
     "styles",
     "styles/all",
     "styles/country-flags",
-    "subject-grid",
+    "subject-grid-section",
     "suggestion-group",
-    "svg/azion/default",
-    "svg/azion/full",
-    "svg/azion/min",
-    "svg/azion/move-to-the-edge",
-    "svg/azion/technologies",
     "svg/error-403",
     "svg/error-404",
     "svg/illustration-layers",
@@ -822,7 +826,7 @@
     "tabs-trigger",
     "tag",
     "tag-editor",
-    "template-gallery",
+    "template-gallery-section",
     "textarea",
     "texture",
     "theme-switcher",
@@ -848,6 +852,7 @@
     "transfer-list-target",
     "tree",
     "tutorial-panel",
+    "tutorial-panel-hotspot",
     "tutorial-panel-provider",
     "tutorial-panel-root",
     "upload-progress",
@@ -863,20 +868,20 @@
     "use-placement",
     "use-time-range",
     "use-unsaved-changes",
+    "utils/clipboard",
     "utils/cn",
     "utils/csv",
     "vite-plugin",
-    "config-provider",
     "wizard",
     "wizard-root",
     "wizard-step"
   ],
   "blocks": [
-    "account/account-hierarchy",
     "account/account-activity-history",
     "account/account-billing",
     "account/account-change-plan-drawer",
     "account/account-deployment-settings",
+    "account/account-hierarchy",
     "account/account-mfa-settings",
     "account/account-onboarding-form",
     "account/account-payment-method-card",
@@ -887,39 +892,38 @@
     "ai/ai-chat",
     "ai/ai-chat-drawer",
     "auth/auth-sign-in",
-    "create/create-drawer",
-    "create/create-hub",
-    "create/create-page",
-    "create/create-wizard",
     "create/create-deploy-drawer",
     "create/create-deploy-progress-dialog",
     "create/create-deploy-success",
     "create/create-deploy-template",
+    "create/create-drawer",
+    "create/create-hub",
+    "create/create-page",
     "create/create-release-impact",
     "create/create-resource-picker",
+    "create/create-wizard",
     "dashboard/dashboard-alerts",
     "dashboard/dashboard-analytics",
     "dashboard/dashboard-breakdown",
     "dashboard/dashboard-configurable",
-    "dashboard/dashboard-switcher",
     "dashboard/dashboard-executive-summary",
     "dashboard/dashboard-health-score",
     "dashboard/dashboard-home",
     "dashboard/dashboard-scan-results",
     "dashboard/dashboard-security",
     "dashboard/dashboard-service-monitoring",
-    "detail/attached-resources",
+    "dashboard/dashboard-switcher",
     "detail/detail-deployment-logs",
     "detail/detail-dns-zone",
+    "detail/detail-domains-card",
     "detail/detail-get-started",
     "detail/detail-invocations",
     "detail/detail-production-checklist",
     "detail/detail-resource",
-    "detail/sectioned-resource",
     "detail/detail-version",
     "edit/edit-delete-dialog",
-    "edit/edit-resource",
     "edit/edit-function",
+    "edit/edit-resource",
     "edit/edit-rule-builder",
     "edit/edit-schema",
     "edit/edit-variables",
@@ -928,19 +932,19 @@
     "shell/shell-docs",
     "shell/shell-site",
     "state/state-async-submit",
+    "state/state-error-page",
     "state/state-first-use",
     "state/state-form-validation",
-    "state/not-found",
     "state/state-page-skeleton",
     "state/state-project-intake",
     "top-bar/top-bar-auth",
     "top-bar/top-bar-creation",
     "view/view-card",
+    "view/view-events-explorer",
     "view/view-file-browser",
     "view/view-marketplace",
     "view/view-query-editor",
     "view/view-rule-list",
-    "view/split-view",
     "view/view-table",
     "view/view-template-browser",
     "view/view-waf-tuning"
@@ -1069,8 +1073,12 @@
       "removable": null
     },
     "prompt-input": {
+      "accept": null,
       "ariaLabel": null,
       "disabled": null,
+      "files": null,
+      "maxFiles": null,
+      "maxFileSize": null,
       "maxLength": null,
       "maxRows": null,
       "menus": null,
@@ -1082,7 +1090,29 @@
         "pending",
         "ready",
         "streaming"
-      ]
+      ],
+      "voice": null
+    },
+    "prompt-input-root": {
+      "accept": null,
+      "ariaLabel": null,
+      "disabled": null,
+      "files": null,
+      "maxFiles": null,
+      "maxFileSize": null,
+      "maxLength": null,
+      "maxRows": null,
+      "menus": null,
+      "minRows": null,
+      "modelValue": null,
+      "placeholder": null,
+      "references": null,
+      "status": [
+        "pending",
+        "ready",
+        "streaming"
+      ],
+      "voice": null
     },
     "reasoning": {
       "defaultOpen": null,
@@ -1199,6 +1229,14 @@
         "primary",
         "secondary"
       ]
+    },
+    "copy-text": {
+      "ariaLabel": null,
+      "size": [
+        "medium",
+        "small"
+      ],
+      "value": null
     },
     "search-trigger": {
       "collapsible": null,
@@ -1545,6 +1583,20 @@
       "src": null,
       "variant": null
     },
+    "avatar-group": {
+      "ariaLabel": null,
+      "items": null,
+      "max": null,
+      "orientation": [
+        "horizontal",
+        "vertical"
+      ],
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ]
+    },
     "badge": {
       "label": null,
       "severity": [
@@ -1625,18 +1677,17 @@
       ]
     },
     "card": {
+      "padded": null,
+      "title": null
+    },
+    "integration-card": {
       "badges": null,
       "description": null,
       "featured": null,
       "href": null,
       "installed": null,
       "logo": null,
-      "padded": null,
       "title": null,
-      "variant": [
-        "default",
-        "integration"
-      ],
       "vendor": null
     },
     "pricing-card": {
@@ -1669,13 +1720,6 @@
     "help-panel-root": {
       "ariaLabel": null,
       "loading": null
-    },
-    "hotspot": {
-      "hotspotId": null,
-      "side": [
-        "end",
-        "start"
-      ]
     },
     "tutorial-panel": {
       "ariaLabel": null,
@@ -1757,13 +1801,7 @@
       "ariaLabel": null,
       "name": null
     },
-    "line-figure": {
-      "ariaLabel": null,
-      "intensity": null,
-      "name": null,
-      "play": null
-    },
-    "logo": {
+    "company-logo": {
       "ariaLabel": null,
       "artwork": [
         "color",
@@ -2025,11 +2063,13 @@
     "trace": {
       "ariaLabel": null,
       "bordered": null,
+      "highlightCriticalPath": null,
       "highlightSlowest": null,
       "loading": null,
       "range": null,
       "selectedKey": null,
       "spans": null,
+      "view": null,
       "zoomable": null
     },
     "log-viewer": {
@@ -2335,7 +2375,7 @@
       "components": null,
       "source": null
     },
-    "doc-on-this-page": {
+    "doc-table-of-contents": {
       "activeId": null,
       "groups": null,
       "items": null,
@@ -2374,9 +2414,6 @@
       "asideTitle": null,
       "description": null,
       "prompt": null,
-      "title": null
-    },
-    "doc-step": {
       "title": null
     },
     "doc-changelog-entry": {
@@ -2691,6 +2728,7 @@
     "phone-input": {
       "countries": null,
       "country": null,
+      "defaultCountry": null,
       "disabled": null,
       "invalid": null,
       "modelValue": null,
@@ -2887,7 +2925,8 @@
     "theme-switcher": {
       "ariaLabel": null,
       "disabled": null,
-      "modelValue": null
+      "modelValue": null,
+      "size": null
     },
     "textarea": {
       "autoResize": null,
@@ -3041,22 +3080,16 @@
     },
     "footer": {
       "ariaLabel": null,
-      "signature": [
-        "always",
-        "compact"
-      ],
       "variant": [
+        "console",
         "content",
         "site"
       ]
     },
     "footer-root": {
       "ariaLabel": null,
-      "signature": [
-        "always",
-        "compact"
-      ],
       "variant": [
+        "console",
         "content",
         "site"
       ]
@@ -3410,7 +3443,7 @@
       "textureSize": null,
       "variant": null
     },
-    "sticky-stack": {
+    "media-scroll": {
       "dwell": null,
       "items": null,
       "showProgress": null,
@@ -3510,6 +3543,10 @@
         "_self"
       ]
     },
+    "skip-link": {
+      "href": null,
+      "label": null
+    },
     "sidebar-menu": {
       "activeId": null,
       "ariaLabel": null,
@@ -3543,6 +3580,10 @@
       "modelValue": null
     },
     "page-tabs": {
+      "align": [
+        "center",
+        "start"
+      ],
       "column": [
         "data",
         "focused",
@@ -3734,7 +3775,7 @@
       "now": null,
       "timeZone": null
     },
-    "architecture-tabs": {
+    "architecture-tabs-section": {
       "anchor": null,
       "autoplay": null,
       "autoplayInterval": null,
@@ -3745,7 +3786,7 @@
       "tabsSide": null,
       "title": null
     },
-    "article-body": {
+    "article-body-section": {
       "anchor": null,
       "article": null,
       "assistants": null,
@@ -3757,7 +3798,7 @@
       "share": null,
       "trail": null
     },
-    "article-cards": {
+    "article-cards-section": {
       "align": null,
       "anchor": null,
       "ariaLabel": null,
@@ -3765,7 +3806,7 @@
       "items": null,
       "title": null
     },
-    "article-highlight": {
+    "article-highlight-section": {
       "actionLabel": null,
       "anchor": null,
       "ariaLabel": null,
@@ -3775,7 +3816,7 @@
       "items": null,
       "modelValue": null
     },
-    "article-index": {
+    "article-index-section": {
       "allLabel": null,
       "anchor": null,
       "ariaLabel": null,
@@ -3797,7 +3838,7 @@
       "searchPlaceholder": null,
       "title": null
     },
-    "cli-terminal": {
+    "cli-terminal-section": {
       "anchor": null,
       "copyAriaLabel": null,
       "description": null,
@@ -3807,7 +3848,7 @@
       "session": null,
       "title": null
     },
-    "client-mosaic": {
+    "client-mosaic-section": {
       "anchor": null,
       "ariaLabel": null,
       "cells": null,
@@ -3815,14 +3856,14 @@
       "logos": null,
       "stories": null
     },
-    "client-story-columns": {
+    "client-story-columns-section": {
       "anchor": null,
       "ariaLabel": null,
       "cells": null,
       "linkLabel": null,
       "reveal": null
     },
-    "client-quotes": {
+    "client-quotes-section": {
       "anchor": null,
       "ariaLabel": null,
       "autoplay": null,
@@ -3831,7 +3872,7 @@
       "modelValue": null,
       "primaryAction": null
     },
-    "closing-call-to-action": {
+    "closing-call-to-action-section": {
       "anchor": null,
       "audiences": null,
       "audiencesAriaLabel": null,
@@ -3843,7 +3884,6 @@
       "primaryAction": null,
       "secondaryAction": null,
       "title": null,
-      "titleMuted": null,
       "typedLead": null,
       "typedWords": null,
       "variant": null
@@ -3859,7 +3899,7 @@
       "submitted": null,
       "title": null
     },
-    "plan-comparison": {
+    "plan-comparison-section": {
       "anchor": null,
       "caption": null,
       "columnLabel": null,
@@ -3870,7 +3910,7 @@
       "primaryAction": null,
       "sections": null
     },
-    "competitor-comparison": {
+    "competitor-comparison-section": {
       "anchor": null,
       "caption": null,
       "columnLabel": null,
@@ -3882,7 +3922,7 @@
       "partialLabel": null,
       "title": null
     },
-    "compliance-logos": {
+    "compliance-logos-section": {
       "anchor": null,
       "ariaLabel": null,
       "certifications": null,
@@ -3891,7 +3931,7 @@
       "primaryAction": null,
       "title": null
     },
-    "contact-hub": {
+    "contact-hub-section": {
       "anchor": null,
       "channels": null,
       "lanes": null
@@ -3901,14 +3941,14 @@
       "items": null,
       "title": null
     },
-    "feature-scroll": {
+    "feature-scroll-section": {
       "anchor": null,
       "description": null,
       "eyebrow": null,
       "items": null,
       "title": null
     },
-    "feature-tabs": {
+    "feature-tabs-section": {
       "anchor": null,
       "autoplay": null,
       "autoplayInterval": null,
@@ -3920,7 +3960,7 @@
       "tabs": null,
       "title": null
     },
-    "feature-tiles": {
+    "feature-tiles-section": {
       "anchor": null,
       "description": null,
       "eyebrow": null,
@@ -3928,7 +3968,7 @@
       "title": null,
       "variant": null
     },
-    "feature-widgets": {
+    "feature-widgets-section": {
       "anchor": null,
       "columns": null,
       "copiedLabel": null,
@@ -3962,7 +4002,7 @@
       "titleLength": null,
       "variant": null
     },
-    "capability-grid": {
+    "capability-grid-section": {
       "anchor": null,
       "columns": null,
       "description": null,
@@ -3973,7 +4013,7 @@
       "title": null,
       "titleAlign": null
     },
-    "console-showcase": {
+    "console-showcase-section": {
       "anchor": null,
       "crop": null,
       "description": null,
@@ -3993,7 +4033,7 @@
         "diagram"
       ]
     },
-    "process-scroll": {
+    "process-scroll-section": {
       "anchor": null,
       "ariaLabel": null,
       "description": null,
@@ -4005,7 +4045,7 @@
       "title": null,
       "titleAlign": null
     },
-    "copy-command": {
+    "copy-command-section": {
       "shell": null,
       "value": null
     },
@@ -4030,14 +4070,14 @@
       "title": null,
       "titleHighlight": null
     },
-    "investor-marks": {
+    "investor-marks-section": {
       "anchor": null,
       "eyebrow": null,
       "items": null,
       "linkLabel": null,
       "title": null
     },
-    "job-posting": {
+    "job-posting-section": {
       "anchor": null,
       "applyLabel": null,
       "area": null,
@@ -4051,7 +4091,7 @@
       "submitted": null,
       "title": null
     },
-    "listing-index": {
+    "listing-index-section": {
       "anchor": null,
       "columns": null,
       "data": null,
@@ -4068,7 +4108,7 @@
       "sorts": null,
       "title": null
     },
-    "listing-table": {
+    "listing-table-section": {
       "anchor": null,
       "columns": null,
       "data": null,
@@ -4089,15 +4129,10 @@
     },
     "media-split-section": {
       "anchor": null,
-      "codeTabs": null,
-      "copyAriaLabel": null,
-      "defaultFile": null,
       "description": null,
-      "diagram": null,
       "eyebrow": null,
       "illustration": null,
       "illustrationAriaLabel": null,
-      "image": null,
       "linked": null,
       "orientation": null,
       "primaryAction": null,
@@ -4113,8 +4148,7 @@
       "bands": null,
       "description": null,
       "eyebrow": null,
-      "title": null,
-      "variant": null
+      "title": null
     },
     "network-section": {
       "anchor": null,
@@ -4127,7 +4161,7 @@
       "title": null,
       "variant": null
     },
-    "photo-marquee": {
+    "photo-marquee-section": {
       "anchor": null,
       "ariaLabel": null,
       "description": null,
@@ -4136,7 +4170,7 @@
       "photos": null,
       "title": null
     },
-    "platform-directory": {
+    "platform-directory-section": {
       "anchor": null,
       "ariaLabel": null,
       "description": null,
@@ -4144,13 +4178,13 @@
       "groups": null,
       "title": null
     },
-    "pricing-plans": {
+    "pricing-plans-section": {
       "anchor": null,
       "periods": null,
       "periodsAriaLabel": null,
       "plans": null
     },
-    "recognition-marquee": {
+    "recognition-marquee-section": {
       "anchor": null,
       "ariaLabel": null,
       "duration": null,
@@ -4158,7 +4192,7 @@
       "items": null,
       "title": null
     },
-    "site-footer": {
+    "site-footer-section": {
       "ariaLabel": null,
       "columns": null,
       "home": null,
@@ -4170,7 +4204,7 @@
       "statusLabel": null,
       "variant": null
     },
-    "site-header": {
+    "site-header-section": {
       "contact": null,
       "home": null,
       "links": null,
@@ -4183,7 +4217,7 @@
       "anchor": null,
       "items": null
     },
-    "story-index": {
+    "story-index-section": {
       "anchor": null,
       "ariaLabel": null,
       "emptyActionLabel": null,
@@ -4200,13 +4234,13 @@
       "seedFromQuery": null,
       "title": null
     },
-    "subject-grid": {
+    "subject-grid-section": {
       "anchor": null,
       "ariaLabel": null,
       "closing": null,
       "subjects": null
     },
-    "template-gallery": {
+    "template-gallery-section": {
       "anchor": null,
       "closing": null,
       "deployLabel": null,
@@ -4221,7 +4255,7 @@
       "templatesAriaLabel": null,
       "title": null
     },
-    "customer-use-cases": {
+    "customer-use-cases-section": {
       "anchor": null,
       "description": null,
       "eyebrow": null,
@@ -4430,7 +4464,7 @@
       "columns": null,
       "items": null
     },
-    "card-carousel": {
+    "card-carousel-section": {
       "anchor": null,
       "ariaLabel": null,
       "description": null,

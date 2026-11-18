@@ -139,7 +139,6 @@ WebKit does not depend on `vee-validate`. An app that uses `vee-validate` puts
 on a light device, dark on a dark one. To pin it, set the attribute in `index.html`, so the first
 paint is already right; an app that is always dark sets:
 
-<!-- prettier-ignore -->
 ```html
 <html lang="en" data-theme="dark">
 ```
@@ -152,7 +151,6 @@ ancestor works too. Every token changes with it, so nothing else needs a dark va
 
 Every component is a flat, tree-shakeable import — `@aziontech/webkit/<name>`:
 
-<!-- prettier-ignore -->
 ```vue
 <script setup>
 import Button from '@aziontech/webkit/button'

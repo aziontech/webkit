@@ -3,14 +3,14 @@ name: log-viewer
 category: code
 structure: composition
 status: implemented
-spec_version: 13
+spec_version: 14
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3950-34695
   node_id: 3950:34695
-checksum: 5155a185a9561b7827ac609435839e9af0bae0d301ab49021c425d7e21fadf8d
+checksum: 8cb40066d64a63bd43dffc5c35bba786a6f6ad3082d42156a86052e1df3d39f9
 created: 2026-05-26
-last_updated: 2026-11-17
+last_updated: 2026-11-18
 ---
 
 # Log View — Component Spec
@@ -34,11 +34,15 @@ Use LogViewer for build, deploy or runtime log lines, and LogViewer.Steps when t
 - Static, read-only code or configuration snippets → use `code-block`.
 - An animated terminal session on a marketing page → use `cli-terminal-section`.
 - Rows of structured records with columns, sorting or paging → use `table`.
+- The steps of a form or setup the person moves through (no log under each step) → use `stepper`.
+- The timed spans of one request or invocation → use `trace`.
 
 ## Related
 
 - `code-block` — highlighted source code with a copy action, not a stream of typed log lines.
 - `cli-terminal-section` — marketing band that plays a scripted terminal session.
+- `stepper` — the steps of a wizard the person moves through; `LogViewer.Steps` is the steps of a run that a machine moves through, each with its log.
+- `trace` — the spans of one request on a time axis, not log lines.
 - `create/create-deploy-success` — the post-deploy screen that embeds `log-viewer` for the build log.
 
 ## Best practices
@@ -171,7 +175,7 @@ LogViewer ships its sub-components attached to the root (`LogViewer.Header`, `Lo
 | `suffix`     | `string`                                                 | Optional highlight for `framework-version`.                                                                                   |
 | `level`      | `'debug' \| 'info' \| 'warn' \| 'error'`                 | Optional log level (`LogViewerLineLevel`): adds the level column, tints `warn` and `error` rows, and drives the level filter. |
 
-`time` is a label, so it holds a clock time (`13:47:33`) or a run offset (`120 ms`); an empty `time` drops the time column for that line.
+`time` is a label, so it holds a clock time (`13:47:33`) or a run offset (`120 ms`). The time and level are columns of the whole log: the time column is as wide as the longest `time` in `lines` (tabular numbers, aligned to the end) and the level column as wide as the longest `level`, so every message starts at the same x on every row, whatever the filter shows. A line with an empty `time` or no `level` keeps an empty cell; a log where no line has a `time` (or a `level`) drops that column.
 
 `LogViewerStep` (exported from `injection-key.ts`, read by `LogViewer.Steps`):
 
@@ -194,6 +198,7 @@ LogViewer ships its sub-components attached to the root (`LogViewer.Header`, `Lo
 - `loading` state: LogViewerContent renders a centered spinner + `loadingLabel` in place of the log body
 - Log line `data-type` reflects `line.type` and `data-level` reflects `line.level`; `warn` rows take the warning tint, `error` rows the danger tint and danger text
 - Level toggles carry `data-level` and `data-active` (the chosen level); every toggle shows the count of lines at its level in the whole log
+- Log line columns: the time and level cells take their width from the longest value in the whole log (`--log-viewer-time-width`, `--log-viewer-level-width` on the line list, counted in `ch` plus the code letter-spacing), so the columns do not move while lines are filtered, appended or mounted in chunks.
 - Long logs: above 300 visible lines `LogViewerContent` mounts lines in chunks of 100 as they scroll near view (unmounted chunks keep an estimated 24 px per line), so a 10,000-line log mounts within its runtime budget. Search, the level filter, the line count and copy work on every line, mounted or not.
 
 ## Motion & Animations
@@ -226,6 +231,8 @@ LogViewer ships its sub-components attached to the root (`LogViewer.Header`, `Lo
 | shape (outer card, `bordered` prop)                  | `var(--shape-control)`                                                                                                         |
 | spacing (loading block, vertical)                    | `var(--spacing-xl)`                                                                                                            |
 | ring                                                 | `var(--ring-color)`                                                                                                            |
+
+One code size across the code components (CodeBlock, CodeEditor, LogViewer, Trace and the docs source viewer): code text and line numbers are 12 px Roboto Mono (`--text-body-code-sm-font-size`, set by `.text-body-code-sm` or `.text-label-code-sm`), never a raw size and never a second code size. A file name in a header or tab is code too (`.text-label-code-sm`, `var(--text-muted)` or `var(--text-default)`); a tab that names a choice (npm, pnpm) is a label (`.text-label-sm`).
 
 **The root sizes to its content, not to its parent.** It takes `h-fit` alongside `min-h-0`, so a
 short log occupies the height of the lines it has instead of stretching to fill a flex or grid
@@ -315,9 +322,9 @@ the height of a single row the moment the root stopped stretching.
 - Empty — no lines: the package empty state; justified because `empty` is a state the component owns.
 - Disabled — `disabled` locks the search, level toggles and copy.
 - WithFooter — `LogViewer.Footer` with a summary and an action; justified because the footer is public anatomy no other example shows.
-- Steps — `LogViewer.Steps` over a finished deploy: each step's log in Phased, every line in Complete; justified because the steps part is public anatomy.
-- StepsRunning — `LogViewer.Steps` mid-run: done steps, a running step with its spinner, pending steps waiting, and the flush progress bar.
-- StepsError — `LogViewer.Steps` after a failure: the failed step open with its reason, the remaining steps skipped, and a `step-meta` Tag.
+- StepLogs — `LogViewer.Steps` over a finished deploy: each step's log in Phased, every line in Complete; justified because the steps part is public anatomy. Named for what it shows (a log split by step), so it does not read as a separate steps component.
+- StepLogsRunning — the same step logs mid-run: done steps, a running step with its spinner, pending steps waiting, and the flush progress bar.
+- StepLogsError — the same step logs after a failure: the failed step open with its reason, the remaining steps skipped, and a `step-meta` Tag.
 
 ## Constraints — DO NOT
 

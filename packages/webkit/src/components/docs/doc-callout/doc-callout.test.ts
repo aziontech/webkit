@@ -1,11 +1,12 @@
-import { render } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
+import { fireEvent, render, waitFor } from '@testing-library/vue'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { createSSRApp, h } from 'vue'
 import { renderToString } from 'vue/server-renderer'
 
 import Default from '../../../../examples/doc-callout/default.vue'
 import Kinds from '../../../../examples/doc-callout/variants.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
+import DocProse from '../doc-prose/doc-prose.vue'
 import DocCallout from './doc-callout.vue'
 
 // Browser mode loads no Tailwind, so per-kind colours are unverifiable here;
@@ -110,6 +111,56 @@ describe('DocCallout', () => {
       const root = getByTestId('doc-callout')
       expect(root.hasAttribute('data-doc-block')).toBe(true)
       expect(root.hasAttribute('data-doc-chrome')).toBe(true)
+    })
+  })
+
+  describe('the inline command copies', () => {
+    afterEach(() => {
+      vi.unstubAllGlobals()
+    })
+
+    const stubClipboard = () => {
+      const writeText = vi.fn().mockResolvedValue(undefined)
+      vi.stubGlobal('navigator', { ...navigator, clipboard: { writeText } })
+      return writeText
+    }
+    const copyTip = () => document.body.querySelector('[data-testid="doc-callout__copy-tip"]')
+
+    it('copies the whole command on click with a brief Copied', async () => {
+      const writeText = stubClipboard()
+      const { getByText } = render(Kinds)
+      await fireEvent.click(getByText('azion deploy --local'))
+      expect(writeText).toHaveBeenCalledWith('azion deploy --local')
+      await waitFor(() => expect(copyTip()?.textContent).toBe('Copied'))
+      const statuses = () =>
+        [...document.body.querySelectorAll('[data-testid="doc-callout__copy-status"]')].map(
+          (status) => status.textContent
+        )
+      expect(statuses().filter((text) => text === 'Copied')).toHaveLength(1)
+      await waitFor(() => expect(statuses().every((text) => text === '')).toBe(true), {
+        timeout: 3000
+      })
+    })
+
+    it('reaches the command with Tab and copies it with Enter', async () => {
+      const writeText = stubClipboard()
+      const { getByRole } = render(Kinds)
+      const chip = getByRole('button', { name: 'Copy azion deploy --local' })
+      chip.focus()
+      await fireEvent.keyDown(chip, { key: 'Enter' })
+      expect(writeText).toHaveBeenCalledWith('azion deploy --local')
+    })
+
+    it('handles a callout chip once when the callout sits in DocProse', async () => {
+      const writeText = stubClipboard()
+      const { getByText } = render({
+        components: { DocProse, DocCallout },
+        template:
+          '<DocProse><p>Intro.</p><DocCallout variant="tip">Run <code>azion link</code>.</DocCallout></DocProse>'
+      })
+      await fireEvent.click(getByText('azion link'))
+      expect(writeText).toHaveBeenCalledTimes(1)
+      await waitFor(() => expect(document.body.querySelectorAll('[role="tooltip"]').length).toBe(1))
     })
   })
 

@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: 69cfdf8ef4f60a34dd5eee79a4364bf1d02a3a69c09da3db7c631abcd6af055d
+checksum: b212b431816bbb4004e62e8b36e281b305f45d723fec4daef977381e9f893382
 created: 2026-11-12
-last_updated: 2026-11-16
+last_updated: 2026-11-18
 ---
 
 # SearchTrigger — Component Spec
@@ -144,7 +144,7 @@ _none_
 
 - Container queries: with `collapsible`, while the nearest `@container` is narrower than 47rem (`@2xl`, 752 px, the `--container-2xl` token) the label and keycap hide and the button becomes a 32 × 32 px square with a tooltip; from 47rem it is the field (`w-56`). The threshold is the design sample's measured one (the console bar with breadcrumb, Create, Agent and avatar runs out of room at 740 px of content box). It is written as `@min-[47rem]` and not `@2xl` because the theme ships its container scale in `:root`, not in `@theme`, so Tailwind's `@2xl` still compiles to its own 42rem.
 - Narrow: without `collapsible` the label truncates with an ellipsis and the keycap stays.
-- Touch: drawn at 32 px everywhere; the hit area grows invisibly to 44 px on `pointer: coarse`; no hover-only affordance (hover only strengthens the border; the folded tooltip also opens on focus).
+- Touch: drawn at 32 px everywhere; the hit area grows invisibly to 44 px on `pointer: coarse`, and the keycap hides there (`pointer-coarse:hidden`), since a touch screen has no keyboard to press it (the label and `aria-keyshortcuts` stay); no hover-only affordance (hover only strengthens the border; the folded tooltip also opens on focus).
 - Reflow: no horizontal scroll at 320 px and 200 % zoom; the field shrinks to its content.
 
 ## Performance
