@@ -3,6 +3,7 @@ import '../../../test/reflow.css'
 import userEvent from '@testing-library/user-event'
 import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
+import { page } from 'vitest/browser'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/date-range-picker/default.vue'
@@ -461,6 +462,71 @@ describe('DateRangePicker', () => {
   it('renders the time zone example', async () => {
     const view = render(TimeZone)
     expect(view.getByTestId(`${TEST_ID}__trigger`).textContent).toContain('UTC+00:00')
+  })
+
+  describe('every word stays readable (styled)', () => {
+    const SCREENS = [
+      { name: 'laptop', width: 1280, height: 720 },
+      { name: 'phone', width: 390, height: 664 }
+    ] as const
+
+    afterEach(async () => {
+      await page.viewport(414, 896)
+    })
+
+    const shownWithin = (el: Element, box: DOMRect): boolean => {
+      const rect = el.getBoundingClientRect()
+      return (
+        rect.width > 0 &&
+        rect.top >= box.top - 1 &&
+        rect.bottom <= box.bottom + 1 &&
+        rect.left >= box.left - 1 &&
+        rect.right <= box.right + 1
+      )
+    }
+
+    it.each(SCREENS)(
+      'shows the absolute range fields, the zone and Apply without scrolling on a $name screen',
+      async ({ width, height }) => {
+        await page.viewport(width, height)
+        const Host = defineComponent(
+          () => () =>
+            h('div', { style: { paddingTop: `${Math.round(height / 2) - 40}px` } }, [h(TimeZone)])
+        )
+        const { getByTestId } = render(Host)
+        const popover = await open(getByTestId)
+        const box = popover.getBoundingClientRect()
+        expect(box.bottom).toBeLessThanOrEqual(height)
+        const absolute = within(popover).getByTestId(`${TEST_ID}__absolute`)
+        const words = [
+          within(absolute).getByText('Start'),
+          within(absolute).getByText('End'),
+          ...within(absolute).getAllByDisplayValue('Nov 10, 2026'),
+          within(absolute).getByLabelText('Start time'),
+          within(absolute).getByLabelText('End time'),
+          within(absolute).getByText('Timezone'),
+          getByTestId(`${TEST_ID}__apply`)
+        ]
+        for (const word of words) expect(shownWithin(word, box), word.outerHTML).toBe(true)
+      }
+    )
+
+    it('wraps a long range in a narrow trigger instead of cutting it', async () => {
+      await page.viewport(390, 664)
+      const Host = defineComponent(
+        () => () => h('div', { style: { width: '12rem' } }, [h(TimeZone)])
+      )
+      const { getByTestId } = render(Host)
+      const value = getByTestId(`${TEST_ID}__value`)
+      const trigger = getByTestId(`${TEST_ID}__trigger`)
+      expect(value.textContent).toContain('UTC+00:00')
+      expect(getComputedStyle(value).textOverflow).not.toBe('ellipsis')
+      expect(value.scrollWidth).toBeLessThanOrEqual(value.clientWidth + 1)
+      expect(trigger.scrollHeight).toBeLessThanOrEqual(trigger.clientHeight + 1)
+      expect(value.getBoundingClientRect().height).toBeGreaterThan(
+        Number.parseFloat(getComputedStyle(value).lineHeight) * 1.5
+      )
+    })
   })
 
   it('follows the provider: right-to-left and pt-BR labels', async () => {
