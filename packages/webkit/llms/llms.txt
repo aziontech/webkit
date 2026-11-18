@@ -191,7 +191,6 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [Brand](components/brand.md): The Azion brand logo, rendered as an inline SVG lockup.
 - [BrowserFrame](components/browser-frame.md): A browser window that renders live webkit components inside a viewport of its own, so a page or story can show a real screen at a real device size — desktop, tablet or mobile — and resize it by hand.
 - [Card](components/card.md): Use Card for one bordered box of related content in product UI; for a collection of records shown as cards use CardList, for a catalog tile use IntegrationCard, and for the frame of a dashboard chart use ChartCard.
-- [CompanyLogo](components/company-logo.md): A third-party mark (a client, a competitor, an analyst firm, a standard or certification, a coding agent) drawn right on both themes.
 - [ConsoleMockup](components/console-mockup.md): Draws one of the **official console widgets**: a scaled, inert mock of an Azion Console screen or fragment, built from real webkit components inside an internal `ConsoleMockupShell` frame (not exported), that marketin…
 - [CopyText](components/copy-text.md): CopyText shows one code value (a CSS custom property, a utility class, a CNAME, a key ID, a one-line command) in monospace inside a quiet bordered box, with an always-visible `CopyButton` at its inline end that copies…
 - [CurrencyAmount](components/currency-amount.md): Use CurrencyAmount to typeset one money amount anywhere; a money metric with a delta and a sparkline is a StatTile.
@@ -212,6 +211,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [SeverityTag](components/severity-tag.md): Use SeverityTag only for a level on the critical → info scale of findings and alerts; the state of a resource is a StatusIndicator, and any other category word is a Tag.
 - [StatusCode](components/status-code.md): Use StatusCode only for an HTTP status code or method (200, 404, GET); for resource state use StatusIndicator, and for any other word use Tag.
 - [Tag](components/tag.md): Use Tag for a read-only category or outcome word on an item (Production, Beta, Allowed) that is not a lifecycle state.
+- [ThirdPartyLogo](components/third-party-logo.md): A third-party mark (a client, a competitor, an analyst firm, a standard or certification, a coding agent) drawn right on both themes.
 - [Timestamp](components/timestamp.md): Timestamp shows one moment — when a request ran, a deployment finished, a key was created — in the form the reader needs: the local date and time, the same in UTC, or a relative phrase (`5 minutes ago`) that updates e…
 - [TutorialPanel](components/tutorial-panel.md): The guide that runs tutorials beside the real product.
 

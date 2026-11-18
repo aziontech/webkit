@@ -25,7 +25,7 @@
 
 ## Don’t
 
-- A customer, partner or competitor logo → use `company-logo` (one mark) or `logo-wall` (a grid of them).
+- A customer, partner or competitor logo → use `third-party-logo` (one mark) or `logo-wall` (a grid of them).
 - A person's or organization's picture → use `avatar`.
 - A decorative product graphic → use `illustration`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
@@ -34,7 +34,7 @@
 
 - [site-header-section](site-header-section.md) and `site-footer-section` — compose Brand for the site chrome.
 - [avatar](avatar.md) — the picture or initials of a user, not the product mark.
-- [company-logo](company-logo.md) — another company's mark; `Brand` is only Azion's own.
+- [third-party-logo](third-party-logo.md) — another company's mark; `Brand` is only Azion's own.
 - [logo-wall](logo-wall.md) — a grid of other companies' marks.
 
 ## Props
@@ -53,7 +53,7 @@
 
 ## Accessibility
 
-- The root carries `role="img"` and a default `aria-label` (`Azion`) so the logo has an accessible name; consumers may override the label via a passed `aria-label`. With `decorative` the root drops `role` and the name and is `aria-hidden`, for a mark next to visible Azion text (the same option `CompanyLogo` has; `Brand` is the Azion house mark, `CompanyLogo` any other company's mark).
+- The root carries `role="img"` and a default `aria-label` (`Azion`) so the logo has an accessible name; consumers may override the label via a passed `aria-label`. With `decorative` the root drops `role` and the name and is `aria-hidden`, for a mark next to visible Azion text (the same option `ThirdPartyLogo` has; `Brand` is the Azion house mark, `ThirdPartyLogo` any other company's mark).
 - Non-interactive: the logo is not focusable and emits no events; the inner SVG is presentational.
 - Contrast ≥3:1 for the brand mark against its background (large graphic).
 - `motion-reduce` not applicable — the component is static.

@@ -17,14 +17,14 @@
   "`variant=\"extended\"` in marketing layouts that show \"AZION technologies\"."
  ],
  "avoidWhen": [
-  "A customer, partner or competitor logo → use `company-logo` (one mark) or `logo-wall` (a grid of them).",
+  "A customer, partner or competitor logo → use `third-party-logo` (one mark) or `logo-wall` (a grid of them).",
   "A person's or organization's picture → use `avatar`.",
   "A decorative product graphic → use `illustration`."
  ],
  "related": [
   "`site-header-section` and `site-footer-section` — compose Brand for the site chrome.",
   "`avatar` — the picture or initials of a user, not the product mark.",
-  "`company-logo` — another company's mark; `Brand` is only Azion's own.",
+  "`third-party-logo` — another company's mark; `Brand` is only Azion's own.",
   "`logo-wall` — a grid of other companies' marks."
  ],
  "bestPractices": [

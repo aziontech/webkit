@@ -24,9 +24,9 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 A flush `Card` (`:padded="false"`) holds the explanation and the method list as one object. Each promo below sits in its own flush `Card`, two columns from `md`.
 
-### B. Agent marks — `CompanyLogo` (optional)
+### B. Agent marks — `ThirdPartyLogo` (optional)
 
-The coding-agent promo stacks the agent marks, each a decorative `CompanyLogo` at `size="small"` in a bordered tile. A mono mark takes `variant="current"` and the tile's text colour, a coloured one `variant="color"`.
+The coding-agent promo stacks the agent marks, each a decorative `ThirdPartyLogo` at `size="small"` in a bordered tile. A mono mark takes `variant="current"` and the tile's text colour, a coloured one `variant="color"`.
 
 ### C. Explanation — `EmptyState` (required)
 
@@ -110,7 +110,7 @@ To go live, render the block while the list request is pending or returns nothin
 
 ## Don't
 
-- Don't draw an agent mark by hand (an `img` or a CSS mask): `CompanyLogo` already inks it for the theme.
+- Don't draw an agent mark by hand (an `img` or a CSS mask): `ThirdPartyLogo` already inks it for the theme.
 - Don't show list controls (search, filters, pagination, column settings) over a list that has never had an item.
 - Don't render this block for a filtered list with no matches; that state says how to clear the filter.
 - Don't show it while the list is still loading; the user would see "create your first" for an account that has items.

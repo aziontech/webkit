@@ -1,7 +1,7 @@
 <script setup>
   import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
-  import CompanyLogo from '@aziontech/webkit/company-logo'
   import Quote from '@aziontech/webkit/quote'
+  import ThirdPartyLogo from '@aziontech/webkit/third-party-logo'
 </script>
 
 <template>
@@ -13,7 +13,7 @@
       job-title="CTO at Acme Inc."
     >
       <template #mark>
-        <CompanyLogo
+        <ThirdPartyLogo
           name="Acme Inc."
           size="medium"
         />
@@ -26,7 +26,7 @@
       job-title="CTO at Acme Inc."
     >
       <template #mark>
-        <CompanyLogo
+        <ThirdPartyLogo
           name="Acme Inc."
           size="large"
         />
@@ -40,7 +40,7 @@
       :photo="placeholderImage"
     >
       <template #mark>
-        <CompanyLogo
+        <ThirdPartyLogo
           name="Acme Inc."
           size="large"
         />

@@ -43,10 +43,10 @@ in the aside slot that explains the metric (`Share of traffic served from cache 
 the dismissible `Set up your coding agent` card. Home shows at most these four figures; the rest
 belongs on a dashboard.
 
-### D. Agent onboarding — `Card`, `Item`, `CompanyLogo` (optional)
+### D. Agent onboarding — `Card`, `Item`, `ThirdPartyLogo` (optional)
 
 A whole-card link (`Item` with `href` to the agent setup page): the agent marks, `Set up your coding agent` and one sentence. Each mark is a
-decorative `CompanyLogo` at `size="small"` in a bordered tile; a mono mark takes `variant="current"` and the
+decorative `ThirdPartyLogo` at `size="small"` in a bordered tile; a mono mark takes `variant="current"` and the
 tile's text colour, a coloured one `variant="color"`. Its dismiss `IconButton` sits outside the button
 so the two controls never nest.
 

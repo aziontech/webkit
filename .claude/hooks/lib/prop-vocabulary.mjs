@@ -345,7 +345,7 @@ export const VARIANT_EXTRAS = {
   item: ['default', 'muted', 'inline', 'option'],
   kbd: ['combined', 'separate'],
   'key-value-list': ['stacked', 'split'],
-  'company-logo': ['color', 'monochrome', 'current', 'knockout'],
+  'third-party-logo': ['color', 'monochrome', 'current', 'knockout'],
   'logo-wall': ['square', 'rectangle'],
   'logo-wall-section': ['wall', 'quote'],
   'logo-wall-section.quoteVariant': ['highlight', 'signed'],

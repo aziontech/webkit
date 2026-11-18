@@ -4093,7 +4093,7 @@
   "listing-index": "listing-index-section",
   "listing-table": "listing-table-section",
   "log-view": "log-viewer",
-  "logo": "company-logo",
+  "logo": "third-party-logo",
   "logo-wall-quote": "logo-wall-section",
   "media-split-band": "media-split-section",
   "media-split-stack": "media-split-stack-section",
@@ -6080,7 +6080,7 @@
      "type": "CopyPromptButtonAgent[]",
      "default": "Claude, ChatGPT, Gemini, Cursor",
      "required": "false",
-     "doc": "The agents whose marks follow the label, in order; each is `{ name, icon?, logo? }`, drawn from `logo` through `CompanyLogo` when set and from the `icon` glyph otherwise; an empty list draws no marks."
+     "doc": "The agents whose marks follow the label, in order; each is `{ name, icon?, logo? }`, drawn from `logo` through `ThirdPartyLogo` when set and from the `icon` glyph otherwise; an empty list draws no marks."
     },
     {
      "name": "disabled",
@@ -9449,11 +9449,11 @@
    "examplesFile": "catalog/examples/illustration.json",
    "docsFile": "catalog/components/illustration.json"
   },
-  "company-logo": {
-   "import": "@aziontech/webkit/company-logo",
-   "target": "./src/components/content/company-logo/company-logo.vue",
+  "third-party-logo": {
+   "import": "@aziontech/webkit/third-party-logo",
+   "target": "./src/components/content/third-party-logo/third-party-logo.vue",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/company-logo",
+   "treeShakeableImport": "@aziontech/webkit/third-party-logo",
    "category": "content",
    "structure": "monolithic",
    "props": [
@@ -9515,8 +9515,8 @@
     }
    ],
    "surface": "app",
-   "examplesFile": "catalog/examples/company-logo.json",
-   "docsFile": "catalog/components/company-logo.json"
+   "examplesFile": "catalog/examples/third-party-logo.json",
+   "docsFile": "catalog/components/third-party-logo.json"
   },
   "console-mockup": {
    "import": "@aziontech/webkit/console-mockup",
@@ -26155,7 +26155,7 @@
      "type": "ClientMosaicSectionLogo[]",
      "default": "[]",
      "required": "false",
-     "doc": "The mark cells, in order; each is `{ logo, logoAlt, href, fill?, logoTreatment? }` where `fill` is `'canvas'`, `'surface'`, `'white'` or `'primary'` and `logoTreatment` is `'color'`, `'monochrome'` or `'knockout'` (the shared `CompanyLogoTreatment`)."
+     "doc": "The mark cells, in order; each is `{ logo, logoAlt, href, fill?, logoTreatment? }` where `fill` is `'canvas'`, `'surface'`, `'white'` or `'primary'` and `logoTreatment` is `'color'`, `'monochrome'` or `'knockout'` (the shared `ThirdPartyLogoTreatment`)."
     },
     {
      "name": "cells",
@@ -26203,7 +26203,7 @@
      "type": "ClientStoryColumnsSectionCell[]",
      "default": "[]",
      "required": "false",
-     "doc": "The stories, in order; each is `{ name, logo, href, story, brand?, logoTreatment?, logoWidth? }` where `brand` is `{ base, glow, ink? }` (CSS colours painting the face, `ink` `'dark'` or `'light'`) and defaults to the client registry's colours for `name`, `logoTreatment` is `'color'`, `'monochrome'` or `'knockout'` (the shared `CompanyLogoTreatment`), and `logoWidth` (read by `reveal=\"hover\"`) sizes the mark as a share of the card."
+     "doc": "The stories, in order; each is `{ name, logo, href, story, brand?, logoTreatment?, logoWidth? }` where `brand` is `{ base, glow, ink? }` (CSS colours painting the face, `ink` `'dark'` or `'light'`) and defaults to the client registry's colours for `name`, `logoTreatment` is `'color'`, `'monochrome'` or `'knockout'` (the shared `ThirdPartyLogoTreatment`), and `logoWidth` (read by `reveal=\"hover\"`) sizes the mark as a share of the card."
     },
     {
      "name": "reveal",
@@ -28036,7 +28036,7 @@
      "type": "LogoWallSectionLogo[]",
      "default": "[]",
      "required": "false",
-     "doc": "The client marks, in order; each is `{ name, logo, logoLight?, logoTreatment?, artwork?, href? }` where `logoTreatment` is the shared `CompanyLogoTreatment` (`'color'`, `'monochrome'` or `'knockout'`, the `CompanyLogo` looks) and `artwork` is the registry's `'color'`, `'light'` or `'dark'`."
+     "doc": "The client marks, in order; each is `{ name, logo, logoLight?, logoTreatment?, artwork?, href? }` where `logoTreatment` is the shared `ThirdPartyLogoTreatment` (`'color'`, `'monochrome'` or `'knockout'`, the `ThirdPartyLogo` looks) and `artwork` is the registry's `'color'`, `'light'` or `'dark'`."
     },
     {
      "name": "quote",
@@ -28278,7 +28278,7 @@
      "type": "NetworkSectionOutcome[]",
      "default": "[]",
      "required": "false",
-     "doc": "Client results for the `outcomes` floor, in order, one column each up to four; each is `{ logo?, logoAlt?, logoTreatment?, text, highlights? }` where `logo` is the mark URL (the cell renders no mark without it), `logoAlt` names the client, `logoTreatment` is `'monochrome'` or `'color'` (`CompanyLogoTreatment` without `knockout`), and `highlights` are the phrases of `text` set in the accent."
+     "doc": "Client results for the `outcomes` floor, in order, one column each up to four; each is `{ logo?, logoAlt?, logoTreatment?, text, highlights? }` where `logo` is the mark URL (the cell renders no mark without it), `logoAlt` names the client, `logoTreatment` is `'monochrome'` or `'color'` (`ThirdPartyLogoTreatment` without `knockout`), and `highlights` are the phrases of `text` set in the accent."
     },
     {
      "name": "benefits",
@@ -33913,7 +33913,6 @@
     "geminiMark",
     "Button",
     "Card",
-    "CompanyLogo",
     "DataTable",
     "DropdownMenuGroup",
     "DropdownMenuItem",
@@ -33934,6 +33933,7 @@
     "TableCellLink",
     "TableCellTime",
     "Tag",
+    "ThirdPartyLogo",
     "toast",
     "Tooltip",
     "use-console-layout"
@@ -33946,7 +33946,6 @@
     "@aziontech/webkit/assets/gemini-symbol-color.svg",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
-    "@aziontech/webkit/company-logo",
     "@aziontech/webkit/data-table",
     "@aziontech/webkit/dropdown-menu-group",
     "@aziontech/webkit/dropdown-menu-item",
@@ -33967,6 +33966,7 @@
     "@aziontech/webkit/table-cell-link",
     "@aziontech/webkit/table-cell-time",
     "@aziontech/webkit/tag",
+    "@aziontech/webkit/third-party-logo",
     "@aziontech/webkit/toast",
     "@aziontech/webkit/tooltip",
     "@aziontech/webkit/use-console-layout"
@@ -36126,7 +36126,6 @@
     "Brand",
     "Button",
     "CodeBlock",
-    "CompanyLogo",
     "CopyPromptButton",
     "DataTable",
     "Diagram",
@@ -36159,6 +36158,7 @@
     "StatusIndicator",
     "Tag",
     "ThemeSwitcher",
+    "ThirdPartyLogo",
     "use-color-mode"
    ],
    "imports": [
@@ -36171,7 +36171,6 @@
     "@aziontech/webkit/brand",
     "@aziontech/webkit/button",
     "@aziontech/webkit/code-block",
-    "@aziontech/webkit/company-logo",
     "@aziontech/webkit/copy-prompt-button",
     "@aziontech/webkit/data-table",
     "@aziontech/webkit/diagram",
@@ -36204,6 +36203,7 @@
     "@aziontech/webkit/status-indicator",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/theme-switcher",
+    "@aziontech/webkit/third-party-logo",
     "@aziontech/webkit/use-color-mode"
    ],
    "primary": "Default",
@@ -36426,14 +36426,14 @@
     "geminiMark",
     "Button",
     "Card",
-    "CompanyLogo",
     "CopyButton",
     "EmptyState",
     "Input",
     "InputGroupRoot",
     "Item",
     "Link",
-    "Skeleton"
+    "Skeleton",
+    "ThirdPartyLogo"
    ],
    "imports": [
     "@aziontech/webkit/assets/claude-symbol-color.svg",
@@ -36442,14 +36442,14 @@
     "@aziontech/webkit/assets/gemini-symbol-color.svg",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
-    "@aziontech/webkit/company-logo",
     "@aziontech/webkit/copy-button",
     "@aziontech/webkit/empty-state",
     "@aziontech/webkit/input",
     "@aziontech/webkit/input-group-root",
     "@aziontech/webkit/item",
     "@aziontech/webkit/link",
-    "@aziontech/webkit/skeleton"
+    "@aziontech/webkit/skeleton",
+    "@aziontech/webkit/third-party-logo"
    ],
    "primary": "Default",
    "guidelinesSummary": "What a first-level list shows before the account owns any resource of that kind. The user's job is to create the first one, so the block replaces the empty table with a short explanation and every way to get started on the same screen: the methods to create one (import, CLI, from scratch), then the promotions that shortcut it (a Catalog template, a coding agent). Every list that is still empty renders this block with its own nouns, methods and promos. This block is a page body: render it in the default slot of `ConsoleLayout` (`shell/console`), which owns the rail, the header and the `main`.",

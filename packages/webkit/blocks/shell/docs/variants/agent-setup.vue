@@ -5,7 +5,6 @@
   import cursorMark from '@aziontech/webkit/assets/cursor-symbol-mono.svg'
   import geminiMark from '@aziontech/webkit/assets/gemini-symbol-color.svg'
   import opencodeMark from '@aziontech/webkit/assets/opencode-symbol-mono.svg'
-  import CompanyLogo from '@aziontech/webkit/company-logo'
   import DataTable from '@aziontech/webkit/data-table'
   import DocCallout from '@aziontech/webkit/doc-callout'
   import DocCard from '@aziontech/webkit/doc-card'
@@ -17,6 +16,7 @@
   import DocTab from '@aziontech/webkit/doc-tab'
   import DocTabs from '@aziontech/webkit/doc-tabs'
   import Tag from '@aziontech/webkit/tag'
+  import ThirdPartyLogo from '@aziontech/webkit/third-party-logo'
 
   type Workflow = 'Terminal' | 'IDE' | 'Extension'
 
@@ -324,7 +324,7 @@
                 #icon
               >
                 <span class="flex text-(--text-default)">
-                  <CompanyLogo
+                  <ThirdPartyLogo
                     :name="agent.name"
                     :src="agent.logo"
                     :variant="agent.mono ? 'current' : 'color'"
@@ -362,7 +362,7 @@
               :href="row.href"
               class="flex min-w-0 items-center gap-(--spacing-sm) rounded-(--shape-flat) text-label-md text-(--text-default) no-underline hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color)"
             >
-              <CompanyLogo
+              <ThirdPartyLogo
                 v-if="row.logo"
                 :name="row.agent"
                 :src="row.logo"

@@ -6,7 +6,6 @@
   import geminiMark from '@aziontech/webkit/assets/gemini-symbol-color.svg'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import CompanyLogo from '@aziontech/webkit/company-logo'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -20,6 +19,7 @@
   import Spinner from '@aziontech/webkit/spinner'
   import StatTile from '@aziontech/webkit/stat-tile'
   import StatTileGroup from '@aziontech/webkit/stat-tile-group'
+  import ThirdPartyLogo from '@aziontech/webkit/third-party-logo'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { useConsoleLayout } from '@aziontech/webkit/use-console-layout'
   import { computed, onScopeDispose, reactive, ref, watch } from 'vue'
@@ -323,7 +323,7 @@
                         :key="agent.name"
                         class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised) text-(--text-default)"
                       >
-                        <CompanyLogo
+                        <ThirdPartyLogo
                           :name="agent.name"
                           :src="agent.src"
                           :variant="agent.mono ? 'current' : 'color'"

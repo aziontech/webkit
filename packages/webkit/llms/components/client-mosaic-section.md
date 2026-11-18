@@ -28,7 +28,7 @@
 
 - [bento-grid](bento-grid.md) — the grid the cells are laid in.
 - [client-story-columns-section](client-story-columns-section.md) — the three-column sibling with brand-coloured faces.
-- [company-logo](company-logo.md) — draws every client mark in the ink its fill needs.
+- [third-party-logo](third-party-logo.md) — draws every client mark in the ink its fill needs.
 
 ## Props
 
@@ -38,13 +38,13 @@
 | `linkLabel` | `string` | `''` | false | Label of the link under every story. |
 | `anchor` | `string` | `''` | false | In-page id set on the band so a hash link can target it. |
 | `stories` | `ClientMosaicSectionStory[]` | `[]` | false | The story cells, in order; each is `{ logo, logoAlt, photo?, text, href, fill?, logoTreatment? }`. The first spans two columns and two rows, the rest one column and two rows. |
-| `logos` | `ClientMosaicSectionLogo[]` | `[]` | false | The mark cells, in order; each is `{ logo, logoAlt, href, fill?, logoTreatment? }` where `fill` is `'canvas'`, `'surface'`, `'white'` or `'primary'` and `logoTreatment` is `'color'`, `'monochrome'` or `'knockout'` (the shared `CompanyLogoTreatment`). |
+| `logos` | `ClientMosaicSectionLogo[]` | `[]` | false | The mark cells, in order; each is `{ logo, logoAlt, href, fill?, logoTreatment? }` where `fill` is `'canvas'`, `'surface'`, `'white'` or `'primary'` and `logoTreatment` is `'color'`, `'monochrome'` or `'knockout'` (the shared `ThirdPartyLogoTreatment`). |
 | `cells` | `ClientMosaicSectionCell[]` | `[]` | false | The cells in placement order, story and mark cells interleaved; each is `{ logo, logoAlt, href, text?, photo?, span?, rows?, fill?, logoTreatment?, stacked? }` where a cell with `text` is a story cell, `span` and `rows` are `'1'` (default) or `'2'`, and `fill` defaults to `canvas`. When set it replaces `stories` and `logos`. |
 
 ## States
 
 - Visual states: `default`, `hover` and `focus-visible` on each cell
-- `data-cell` (`story` or `logo`), `data-span` and `data-rows` on every grid cell; `data-fill` on every cell face drives its fill; every mark is a `CompanyLogo` with `data-treatment` and `data-variant` for its ink and `data-stacked` for a stacked lockup; `data-lead` sets the larger text of the first story (from `stories`) or of a story spanning two columns (from `cells`)
+- `data-cell` (`story` or `logo`), `data-span` and `data-rows` on every grid cell; `data-fill` on every cell face drives its fill; every mark is a `ThirdPartyLogo` with `data-treatment` and `data-variant` for its ink and `data-stacked` for a stacked lockup; `data-lead` sets the larger text of the first story (from `stories`) or of a story spanning two columns (from `cells`)
 - Empty: when `cells`, `stories` and `logos` are all empty the band renders nothing
 - Not applicable: `loading`, `error`, `disabled`, `readonly`, `invalid`, `open`/`closed`
 
@@ -52,7 +52,7 @@
 
 - Visible focus: every mark cell is a link with `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset`; the story link is a `link` with its own ring.
 - Keyboard map: `Tab` moves between mark links and story links; `Enter` follows.
-- ARIA: the band is a `<section>` named by `ariaLabel`; the photo of a story is decorative (`alt=""`, `aria-hidden`); every mark is a `CompanyLogo` (`role="img"`) named by `logoAlt`; the story text is a paragraph and its link is named by `linkLabel`.
+- ARIA: the band is a `<section>` named by `ariaLabel`; the photo of a story is decorative (`alt=""`, `aria-hidden`); every mark is a `ThirdPartyLogo` (`role="img"`) named by `logoAlt`; the story text is a paragraph and its link is named by `linkLabel`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): story text `var(--text-default)` over the canvas gradient; marks are inked to their fill through `logoTreatment`.
 - `motion-reduce:transition-none` on the fill transition.
 - Touch target ≥40×40 px — each mark cell is a full grid cell.

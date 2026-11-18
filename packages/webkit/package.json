@@ -611,9 +611,9 @@
       "types": "./types/components/content/illustration/illustration.vue.d.ts",
       "default": "./src/components/content/illustration/illustration.vue"
     },
-    "./company-logo": {
-      "types": "./types/components/content/company-logo/company-logo.vue.d.ts",
-      "default": "./src/components/content/company-logo/company-logo.vue"
+    "./third-party-logo": {
+      "types": "./types/components/content/third-party-logo/third-party-logo.vue.d.ts",
+      "default": "./src/components/content/third-party-logo/third-party-logo.vue"
     },
     "./console-mockup": {
       "types": "./types/components/content/console-mockup/console-mockup.vue.d.ts",
@@ -2914,8 +2914,8 @@
       "illustration": [
         "./types/components/content/illustration/illustration.vue.d.ts"
       ],
-      "company-logo": [
-        "./types/components/content/company-logo/company-logo.vue.d.ts"
+      "third-party-logo": [
+        "./types/components/content/third-party-logo/third-party-logo.vue.d.ts"
       ],
       "console-mockup": [
         "./types/components/content/console-mockup/console-mockup.vue.d.ts"

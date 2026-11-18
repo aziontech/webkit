@@ -461,7 +461,7 @@
     "command-page",
     "command-root",
     "command-separator",
-    "company-logo",
+    "third-party-logo",
     "competitor-comparison-section",
     "compliance-logos-section",
     "config-provider",
@@ -1808,7 +1808,7 @@
       "ariaLabel": null,
       "name": null
     },
-    "company-logo": {
+    "third-party-logo": {
       "ariaLabel": null,
       "artwork": [
         "color",
