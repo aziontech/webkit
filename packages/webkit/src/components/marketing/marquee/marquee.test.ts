@@ -9,7 +9,7 @@ const TESTID = 'marquee'
 const MARKS = ['itau', 'magalu', 'netshoes', 'caixa']
 
 const ITEMS = [
-  { label: 'Deploy to 330+ cities instantly', icon: 'az az-content-delivery' },
+  { label: 'Deploy to 330+ cities instantly', icon: 'az az-globe' },
   { label: 'Predictable pricing without surprises' }
 ]
 
@@ -236,10 +236,7 @@ describe('Marquee', () => {
       const [first] = [...container.querySelectorAll('ul')]
       const [withIcon, withoutIcon] = [...first.querySelectorAll('li')]
 
-      expect(withIcon.querySelector('span.az-content-delivery')).toHaveAttribute(
-        'aria-hidden',
-        'true'
-      )
+      expect(withIcon.querySelector('span.az-globe')).toHaveAttribute('aria-hidden', 'true')
       expect(withoutIcon.querySelector('span')).toBeNull()
     })
 

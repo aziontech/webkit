@@ -635,49 +635,116 @@
    ]
   },
   {
-   "name": "az-abuse-prevention",
-   "class": "az az-abuse-prevention",
+   "name": "az-application-development",
+   "class": "az az-application-development",
    "set": "azionicons",
    "group": "azion",
    "category": "solution",
-   "label": "Abuse prevention (security solution)",
+   "label": "Build and run applications (Application Development)",
    "keywords": [
-    "fraud"
+    "web apps",
+    "websites",
+    "apis",
+    "serverless"
    ]
   },
   {
-   "name": "az-adaptive-security",
-   "class": "az az-adaptive-security",
+   "name": "az-performance-and-reliability",
+   "class": "az az-performance-and-reliability",
    "set": "azionicons",
    "group": "azion",
    "category": "solution",
-   "label": "Adaptive security (security solution)",
+   "label": "Improve application performance and reliability (Performance and Reliability)",
+   "keywords": [
+    "content delivery",
+    "speed",
+    "availability",
+    "uptime",
+    "cdn"
+   ]
+  },
+  {
+   "name": "az-artificial-intelligence",
+   "class": "az az-artificial-intelligence",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "solution",
+   "label": "Build and run AI workloads (Artificial Intelligence)",
+   "keywords": [
+    "inference",
+    "agents",
+    "machine learning"
+   ]
+  },
+  {
+   "name": "az-application-security",
+   "class": "az az-application-security",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "solution",
+   "label": "Secure applications and networks (Application Security)",
    "keywords": [
     "protection",
-    "shield"
-   ]
-  },
-  {
-   "name": "az-content-delivery",
-   "class": "az az-content-delivery",
-   "set": "azionicons",
-   "group": "azion",
-   "category": "solution",
-   "label": "Content delivery (solution)",
-   "keywords": [
-    "solution"
-   ]
-  },
-  {
-   "name": "az-sase",
-   "class": "az az-sase",
-   "set": "azionicons",
-   "group": "azion",
-   "category": "solution",
-   "label": "SASE (secure access solution)",
-   "keywords": [
+    "shield",
+    "abuse prevention",
+    "adaptive security",
+    "sase",
     "network security",
+    "fraud",
     "zero trust"
+   ]
+  },
+  {
+   "name": "az-media-and-streaming",
+   "class": "az az-media-and-streaming",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "solution",
+   "label": "Deliver media and streaming content (Media and Streaming)",
+   "keywords": [
+    "video",
+    "live streaming",
+    "broadcast"
+   ]
+  },
+  {
+   "name": "az-retail",
+   "class": "az az-retail",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "solution",
+   "label": "Retail (industry solution)",
+   "keywords": [
+    "ecommerce",
+    "commerce",
+    "store"
+   ]
+  },
+  {
+   "name": "az-technology",
+   "class": "az az-technology",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "solution",
+   "label": "Technology (industry solution)",
+   "keywords": [
+    "tech companies",
+    "saas",
+    "software"
+   ]
+  },
+  {
+   "name": "az-financial-services",
+   "class": "az az-financial-services",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "solution",
+   "label": "Financial Services (industry solution)",
+   "keywords": [
+    "banking",
+    "fintech",
+    "payments",
+    "finance"
    ]
   },
   {

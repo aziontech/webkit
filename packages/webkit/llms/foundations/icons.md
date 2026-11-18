@@ -4,7 +4,7 @@
 
 yout, objects, git) and External (frameworks, AI models, developer tools, languages, online services). A monochrome icon is `az az-<name>`, coloured by the text colour; a colour logo is `az-color az-<name>`. Pick an icon by what it stands for: a product icon names only that product. Import `@aziontech/icons` once at the app entry; an `icon` prop takes the class string.
 
-483 names. These are the only values the components accept. An unknown class renders nothing. The MCP tool `list_assets({ kind: "icons" })` returns the same list (with a `query` to filter), and `catalog.json#assets.icons` points at it as data.
+487 names. These are the only values the components accept. An unknown class renders nothing. The MCP tool `list_assets({ kind: "icons" })` returns the same list (with a `query` to filter), and `catalog.json#assets.icons` points at it as data.
 
 Used by: [Alert](../components/alert.md), [ArtifactPreview](../components/artifact-preview.md), [Avatar](../components/avatar.md), [Button](../components/button.md), [Combobox](../components/combobox.md), [DocCard](../components/doc-card.md), [DocItem](../components/doc-item.md), [DocPrompt](../components/doc-prompt.md), [EmptyState](../components/empty-state.md), [FeatureItem](../components/feature-item.md), [FileDropzone](../components/file-dropzone.md), [HighlightButton](../components/highlight-button.md), [IconButton](../components/icon-button.md), [Link](../components/link.md), [SettingsSection](../components/settings-section.md), [SplitButton](../components/split-button.md), [Tag](../components/tag.md).
 
@@ -99,10 +99,14 @@ Everything that is Azion's own: its products, the parts inside them, the platfor
 
 | Class | Stands for | Keywords |
 | --- | --- | --- |
-| `az az-abuse-prevention` | Abuse prevention (security solution) | fraud |
-| `az az-adaptive-security` | Adaptive security (security solution) | protection, shield |
-| `az az-content-delivery` | Content delivery (solution) | solution |
-| `az az-sase` | SASE (secure access solution) | network security, zero trust |
+| `az az-application-development` | Build and run applications (Application Development) | web apps, websites, apis, serverless |
+| `az az-performance-and-reliability` | Improve application performance and reliability (Performance and Reliability) | content delivery, speed, availability, uptime, cdn |
+| `az az-artificial-intelligence` | Build and run AI workloads (Artificial Intelligence) | inference, agents, machine learning |
+| `az az-application-security` | Secure applications and networks (Application Security) | protection, shield, abuse prevention, adaptive security, sase, network security, fraud, zero trust |
+| `az az-media-and-streaming` | Deliver media and streaming content (Media and Streaming) | video, live streaming, broadcast |
+| `az az-retail` | Retail (industry solution) | ecommerce, commerce, store |
+| `az az-technology` | Technology (industry solution) | tech companies, saas, software |
+| `az az-financial-services` | Financial Services (industry solution) | banking, fintech, payments, finance |
 
 #### Azion · Services
 

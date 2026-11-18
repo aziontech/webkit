@@ -2,15 +2,15 @@
 
 > Generated from `src/icons.json` by `scripts/build-docs.mjs`. Edit the JSON, then run `npm run build`; do not edit this page by hand.
 
-483 icons in three groups. A monochrome icon is `az az-<name>` and takes the text colour; a colour logo is `az-color az-<name>` and keeps its own colours. Browse the drawings in the icons gallery (`apps/icons-gallery`).
+487 icons in three groups. A monochrome icon is `az az-<name>` and takes the text colour; a colour logo is `az-color az-<name>` and keeps its own colours. Browse the drawings in the icons gallery (`apps/icons-gallery`).
 
 ## How the icons are organised
 
-- **Azion** (62) — Everything that is Azion's own: its products, the parts inside them, the platform, its solutions and its services.
+- **Azion** (66) — Everything that is Azion's own: its products, the parts inside them, the platform, its solutions and its services.
   - Products (33) — One icon per Azion product, named after the product as WebKit and the console name it.
   - Product features (8) — A part that lives inside a product, such as Domains in Workloads or Edge Nodes in Edge Orchestrator. The entry names its product.
   - Platform (9) — The Azion brand, its tools (CLI, API, Ask Azion) and the platform pillars.
-  - Solutions (4) — Solutions Azion sells that combine several products.
+  - Solutions (8) — The Azion Solutions, one icon each: the five By Need Solutions and the three By Industry Solutions, named after the Solution's short name.
   - Services (8) — Support plans and professional services.
 - **Interface** (307) — Generic glyphs for the interface. They name an action, an object or a state, never a product.
   - Arrows (48) — Arrows, chevrons, carets, sorting and moving.
@@ -112,14 +112,18 @@ The Azion brand, its tools (CLI, API, Ask Azion) and the platform pillars.
 
 ### Azion · Solutions
 
-Solutions Azion sells that combine several products.
+The Azion Solutions, one icon each: the five By Need Solutions and the three By Industry Solutions, named after the Solution's short name.
 
 | Class | Stands for | Shows | Notes |
 | --- | --- | --- | --- |
-| `az az-abuse-prevention` | Abuse prevention (security solution) | A skull with a no-entry sign |  |
-| `az az-adaptive-security` | Adaptive security (security solution) | A shield with a magnifying glass |  |
-| `az az-content-delivery` | Content delivery (solution) | A globe with a person |  |
-| `az az-sase` | SASE (secure access solution) | A shield with a triangle |  |
+| `az az-application-development` | Build and run applications (Application Development) | A browser window with code brackets |  |
+| `az az-performance-and-reliability` | Improve application performance and reliability (Performance and Reliability) | A dial with a check mark |  |
+| `az az-artificial-intelligence` | Build and run AI workloads (Artificial Intelligence) | Four connected nodes around a sparkle |  |
+| `az az-application-security` | Secure applications and networks (Application Security) | A shield with a padlock |  |
+| `az az-media-and-streaming` | Deliver media and streaming content (Media and Streaming) | A play button sending waves |  |
+| `az az-retail` | Retail (industry solution) | A shopping basket |  |
+| `az az-technology` | Technology (industry solution) | A circuit board |  |
+| `az az-financial-services` | Financial Services (industry solution) | Two coins, the front one with a dollar sign |  |
 
 ### Azion · Services
 
@@ -708,6 +712,10 @@ Until 6.0 the classes were `ai ai-<name>`, `ai-cor ai-<name>` and PrimeIcons `pi
 | `ai ai-edge-sql` | `az az-sql-database` | Old name Edge SQL. |
 | `ai ai-waf-rules` | `az az-waf` | The product is WAF; WAF Rules is its list in the console. |
 | `ai ai-store` | `az az-store-pillar` | "store" alone reads as a shop. Matches the other pillars. |
+| `ai ai-content-delivery` | `az az-performance-and-reliability` | Content delivery is not an Azion Solution; it is part of Improve application performance and reliability. |
+| `ai ai-abuse-prevention` | `az az-application-security` | Abuse prevention, adaptive security and SASE are not Azion Solutions; they are part of Secure applications and networks. |
+| `ai ai-adaptive-security` | `az az-application-security` | Abuse prevention, adaptive security and SASE are not Azion Solutions; they are part of Secure applications and networks. |
+| `ai ai-sase` | `az az-application-security` | Abuse prevention, adaptive security and SASE are not Azion Solutions; they are part of Secure applications and networks. |
 | `ai ai-pratices-review` | `az az-practices-review` | Spelling: practices. |
 | `ai ai-sort-down` | `az az-arrow-down` |  |
 | `ai ai-sort-numeric-down` | `az az-arrow-down-0-1` |  |
