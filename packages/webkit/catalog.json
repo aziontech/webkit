@@ -19257,14 +19257,14 @@
      "type": "MediaSplitVariant",
      "default": "'media-end'",
      "required": "false",
-     "doc": "Which end the media sits on: the closing cell from `lg` up, or the lower one when the band is vertical. `media-end` puts the copy first."
+     "doc": "Which end the media sits on: the closing cell once the band splits, or the lower one when the band is vertical. `media-end` puts the copy first."
     },
     {
      "name": "orientation",
      "type": "MediaSplitOrientation",
      "default": "'horizontal'",
      "required": "false",
-     "doc": "Axis the band splits on. `horizontal` sets the cells side by side from `lg` up; `vertical` holds them stacked at every width."
+     "doc": "Axis the band splits on. `horizontal` sets the cells side by side once the band is 60rem wide; `vertical` holds them stacked at every width."
     },
     {
      "name": "fill",

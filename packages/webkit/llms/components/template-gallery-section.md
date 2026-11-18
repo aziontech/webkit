@@ -84,9 +84,10 @@
 
 ## Responsive
 
-- The band splits on its own width, not the screen's: the root is a size container, the composed `media-split` stays stacked, and from a band 72rem wide the ask sits beside the template grid. A narrower band (a tablet, a docs preview, a narrow column on a wide screen) stacks the ask over the grid, so the headline keeps room for two lines and the two card columns are never cut off.
-- The headline wraps naturally (`text-wrap: balance` from the type scale); no line breaks are written into the copy.
-- The grid scrolls inside its `scroll-area`, at least 36rem tall and 44rem once the band splits.
+- The composed `media-split` splits on its own width: from a band 60rem wide the ask and the template grid sit side by side as two equal halves, in a docs preview as on a full-width page; a narrower band (a phone, a tablet, a narrow column) stacks the ask over the grid.
+- The headline keeps two lines from the split up: in a band 60 to 72rem wide the large copy cell pads `var(--spacing-xl)` instead of `var(--spacing-2xl)` (owned by `media-split`), which leaves the `heading-xl` headline room for its longest line. It wraps naturally (`text-wrap: balance` from the type scale); no line breaks are written into the copy.
+- The template grid keeps two columns inside its half; titles and descriptions wrap, and each deploy button stays inside its card.
+- The grid scrolls inside its `scroll-area`, at least 36rem tall and 44rem once the band splits (the root is a size container for this).
 - No horizontal scroll at 320 px.
 
 ## Examples
