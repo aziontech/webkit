@@ -22,7 +22,7 @@
   "`deploy-success` — the post-deploy screen that embeds `log-viewer` for the build log."
  ],
  "bestPractices": [
-  "Give every line a stable `id` and a `type` (`text`, `folder`, `framework-version`, `success`); the type drives the line's rendering. A warning is a `text` line with `level: 'warn'`; `level` drives the warnings filter and the level toggles.",
+  "Give every line a stable `id` and a `type` (`text`, `folder`, `framework-version`, `success`); the type drives the line's rendering. A warning is a `text` line with `level: 'warn'`; `level` drives the level toggles; the `warn` toggle is the warnings shortcut.",
   "For a run log, give each line a `level` and put the run offset (`120 ms`, `1.24 s`) in `time`; pass the levels the run can print as `levels` so every level is offered even when it has no line yet. Bind `v-model:level` when the app needs the chosen level.",
   "Bind `v-model:search` and `v-model:level` when the app needs the filter state; otherwise leave them unbound and the header manages them.",
   "Set `:bordered=\"false\"` when the log sits inside a surface that already frames it (an accordion panel, a drawer).",

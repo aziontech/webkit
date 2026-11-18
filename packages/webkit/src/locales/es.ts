@@ -717,8 +717,6 @@ export const es: Messages = {
     search: 'Buscar registros',
     loading: 'Cargando…',
     lines: { one: '{count} línea', other: '{count} líneas' },
-    warnings: 'Advertencias',
-    warningCount: { one: '{count} advertencia', other: '{count} advertencias' },
     gzip: 'gzip:',
     empty: 'Ninguna línea de registro coincide con los filtros actuales.',
     noLines: 'Todavía no hay líneas de log.',

@@ -633,8 +633,6 @@ export const logViewer = {
   search: 'Search logs',
   loading: 'Loading…',
   lines: { one: '{count} line', other: '{count} lines' },
-  warnings: 'Warnings',
-  warningCount: { one: '{count} warning', other: '{count} warnings' },
   gzip: 'gzip:',
   empty: 'No log lines match the current filters.',
   noLines: 'No log lines yet.',

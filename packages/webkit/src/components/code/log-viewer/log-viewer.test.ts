@@ -223,23 +223,26 @@ describe('LogViewer', () => {
         expect(log.textContent?.trim()).toBe('')
       })
 
-      it('reflects the injected line count and warning-tag label in the header', () => {
+      it('without levels, offers the warn level alone as the same toggle, with its count', () => {
         const { Host } = makeHost({})
-        const { getByTestId } = render(Host)
-        // lineCountLabel = `${filteredLines.length} lines`; one warning line -> "1 warning".
-        // Header controls carry `${ctx.testId}__header__<part>` testids.
+        const { getByTestId, getAllByTestId, queryByTestId } = render(Host)
         expect(getByTestId('log-viewer-header__line-count').textContent?.trim()).toBe('4 lines')
-        const filter = getByTestId('log-viewer-header__warnings-filter')
-        expect(filter.textContent).toContain('1 warning')
-        expect(filter.getAttribute('aria-pressed')).toBe('false')
+        const toggles = getAllByTestId('log-viewer-header__level')
+        expect(toggles).toHaveLength(1)
+        expect(toggles[0]!.getAttribute('data-level')).toBe('warn')
+        expect(toggles[0]!.getAttribute('aria-label')).toBe('warn, 1 line')
+        expect(toggles[0]!.getAttribute('aria-pressed')).toBe('false')
+        expect(
+          within(toggles[0]!).getByTestId('log-viewer-header__level-count').textContent?.trim()
+        ).toBe('1')
+        expect(queryByTestId('log-viewer-header__warnings-filter')).toBeNull()
       })
 
-      it('omits the warnings filter entirely when there are no warning lines', () => {
+      it('omits the level filter entirely when there are no levels and no warning lines', () => {
         const noWarnings = LINES.filter((l) => l.level !== 'warn')
         const { Host } = makeHost({ lines: noWarnings })
         const { queryByTestId, getByTestId } = render(Host)
-        // Template: v-if="ctx.warningCount.value > 0".
-        expect(queryByTestId('log-viewer-header__warnings-filter')).toBeNull()
+        expect(queryByTestId('log-viewer-header__levels')).toBeNull()
         expect(getByTestId('log-viewer-header__line-count').textContent?.trim()).toBe('3 lines')
       })
 
@@ -316,12 +319,12 @@ describe('LogViewer', () => {
       })
     })
 
-    describe('warnings filter: the context-aware button toggles the warn level', () => {
+    describe('warn toggle: the context-aware button toggles the warn level', () => {
       it('sets v-model:level to warn on click and filters content to warnings', async () => {
         const { Host, level } = makeHost({})
         const { getByTestId, getAllByTestId } = render(Host)
 
-        const filter = getByTestId('log-viewer-header__warnings-filter')
+        const filter = getByTestId('log-viewer-header__level')
         expect(filter.getAttribute('aria-pressed')).toBe('false')
 
         await fireEvent.click(filter)
@@ -346,7 +349,7 @@ describe('LogViewer', () => {
         const { Host, level } = makeHost({})
         const { getByTestId } = render(Host)
 
-        const filter = getByTestId('log-viewer-header__warnings-filter')
+        const filter = getByTestId('log-viewer-header__level')
         filter.focus()
         await userEvent.keyboard('{Enter}')
 
@@ -390,22 +393,19 @@ describe('LogViewer', () => {
     })
 
     describe('disabled: toolbar controls are inert', () => {
-      it('flags data-disabled on the root and disables the warnings filter', () => {
+      it('flags data-disabled on the root and disables the warn toggle', () => {
         const { Host } = makeHost({ disabled: true })
         const { getByTestId } = render(Host)
 
         expect(getByTestId('log-viewer').getAttribute('data-disabled')).toBe('true')
-        // <button ... :disabled="ctx.disabled.value"> on the warnings filter.
-        expect(
-          (getByTestId('log-viewer-header__warnings-filter') as HTMLButtonElement).disabled
-        ).toBe(true)
+        expect((getByTestId('log-viewer-header__level') as HTMLButtonElement).disabled).toBe(true)
       })
 
       it('does not toggle the warn level while disabled (click is a no-op)', async () => {
         const { Host, level } = makeHost({ disabled: true })
         const { getByTestId } = render(Host)
 
-        await fireEvent.click(getByTestId('log-viewer-header__warnings-filter'))
+        await fireEvent.click(getByTestId('log-viewer-header__level'))
         expect(level.value).toBe('')
       })
     })
@@ -504,10 +504,15 @@ describe('LogViewer', () => {
         )
       })
 
-      it('hides the level filter when levels is empty', () => {
+      it('with levels empty, keeps only the warn toggle', () => {
         const { Host } = makeHost({ lines: RUN })
         const view = render(Host)
-        expect(view.queryByRole('group', { name: 'Log levels' })).toBeNull()
+        const group = view.getByRole('group', { name: 'Log levels' })
+        expect(
+          within(group)
+            .getAllByRole('button')
+            .map((toggle) => toggle.getAttribute('aria-label'))
+        ).toEqual(['warn, 1 line'])
       })
 
       it('filters to a level on click, round-trips v-model:level and clears on a second click', async () => {
@@ -565,6 +570,53 @@ describe('LogViewer', () => {
         )
       })
 
+      it('draws every toolbar control in one style: one height, one font, no second warning control', () => {
+        const { getAllByTestId, getByTestId, queryByTestId } = render(Levels)
+        expect(queryByTestId('log-viewer-header__warnings-filter')).toBeNull()
+        const toggles = getAllByTestId('log-viewer-header__level')
+        const heights = toggles.map((toggle) => toggle.getBoundingClientRect().height)
+        expect(new Set(heights)).toEqual(new Set([32]))
+        const lineCount = getByTestId('log-viewer-header__line-count')
+        const fontOf = (el: Element) => {
+          const style = getComputedStyle(el)
+          return `${style.fontFamily}|${style.fontSize}`
+        }
+        const fonts = new Set([lineCount, ...toggles].map(fontOf))
+        expect(fonts.size).toBe(1)
+        for (const toggle of toggles) {
+          expect(toggle.classList.contains('text-label-sm')).toBe(true)
+          expect(
+            getComputedStyle(within(toggle).getByTestId('log-viewer-header__level-count'))
+              .fontVariantNumeric
+          ).toContain('tabular-nums')
+        }
+        expect(
+          toggles.map((t) => within(t).getByTestId('log-viewer-header__level-count').textContent)
+        ).toEqual(['2', '3', '1', '1'])
+      })
+
+      it('keeps the line count and every toggle on one row at phone width, scrolling sideways', () => {
+        const host = document.createElement('div')
+        host.style.width = '320px'
+        document.body.appendChild(host)
+        const { getAllByTestId, getByTestId, unmount } = render(Levels, { container: host })
+        const toggles = getAllByTestId('log-viewer-header__level')
+        const tops = new Set(
+          [getByTestId('log-viewer-header__line-count'), ...toggles].map((el) =>
+            Math.round(el.getBoundingClientRect().top + el.getBoundingClientRect().height / 2)
+          )
+        )
+        expect(tops.size).toBe(1)
+        const strip = getByTestId('log-viewer-header__start')
+        expect(getComputedStyle(strip).overflowX).toBe('auto')
+        expect(strip.scrollWidth).toBeGreaterThan(strip.clientWidth)
+        expect(strip.getBoundingClientRect().right).toBeLessThanOrEqual(
+          host.getBoundingClientRect().right + 8
+        )
+        unmount()
+        host.remove()
+      })
+
       it('the Levels example has no a11y violations', async () => {
         const { container, getAllByTestId } = render(Levels)
         expect(getAllByTestId('log-viewer-header__level')).toHaveLength(4)
@@ -572,12 +624,9 @@ describe('LogViewer', () => {
       })
 
       it('keeps the level toggles 32 px on touch screens and widens only their hit area', () => {
-        const { getAllByTestId, getByTestId } = render(Levels)
-        const controls = [
-          ...getAllByTestId('log-viewer-header__level'),
-          getByTestId('log-viewer-header__warnings-filter')
-        ]
-        for (const control of controls) {
+        const { getAllByTestId } = render(Levels)
+        expect(getAllByTestId('log-viewer-header__level')).toHaveLength(4)
+        for (const control of getAllByTestId('log-viewer-header__level')) {
           expect(control.classList.contains('h-8')).toBe(true)
           expect(control.classList.contains('pointer-coarse:h-11')).toBe(false)
           expect(control.classList.contains('pointer-coarse:before:-inset-y-1.5')).toBe(true)
