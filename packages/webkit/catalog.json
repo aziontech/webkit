@@ -14118,7 +14118,7 @@
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Shows the time zone selector in the panel. Off, the panel names the zone in a read-only line."
+     "doc": "Shows the time zone selector in the panel. Off, the panel says nothing about the zone and the page states it."
     },
     {
      "name": "showTime",
@@ -14151,16 +14151,23 @@
     {
      "name": "min",
      "type": "Date",
-     "default": "undefined",
+     "default": "undefined (the start of the day five years before today)",
      "required": "false",
-     "doc": "Earliest instant an absolute range may start at."
+     "doc": "Earliest selectable instant. Unset, the start of the day five years before today."
     },
     {
      "name": "max",
      "type": "Date",
+     "default": "undefined (the end of today)",
+     "required": "false",
+     "doc": "Latest selectable instant. Unset, the end of today; pass a later date to allow future dates."
+    },
+    {
+     "name": "maxDuration",
+     "type": "DateRangeDuration",
      "default": "undefined",
      "required": "false",
-     "doc": "Latest instant an absolute range may end at."
+     "doc": "Longest range a person may pick, for example 90 days. Unset, any length between min and max."
     },
     {
      "name": "now",
@@ -37060,7 +37067,7 @@
    "title": "Blocks/View/EventsExplorer",
    "source": "blocks/view/events-explorer/events-explorer.vue",
    "surface": "app",
-   "summary": "The events explorer (the app marks its Events navigation entry active): the controls row (`FilterMenu`, event search, Refresh and Download CSV) over the applied `FilterMenu.ChipGroup`, and the explorer. The explorer pairs a resizable, collapsible fields `Sidebar` (each field a column checkbox and a popover of its top values, grouped in an `Accordion` by category) with the log: the Events, Errors and Avg request time summary, the stacked volume chart whose buckets filter the period on click or drag, and the event `DataTable`. Each row's detail `IconButton` (or a row click) opens the event document (its fields, the request's `Trace` with the critical path when the event carries spans, and the JSON) beside the log in the end pane of a `Resizable` when the explorer is wide enough, and in a `Drawer` when it is not. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main. Its root carries data-layout-fill, so the main stops scrolling and the fields panel, the log and the document scroll on their own.",
+   "summary": "The events explorer (the app marks its Events navigation entry active): the controls row (`FilterMenu`, event search, the time zone, Refresh and Download CSV) over the applied `FilterMenu.ChipGroup`, and the explorer. The explorer pairs a resizable, collapsible fields `Sidebar` (each field a column checkbox and a popover of its top values, grouped in an `Accordion` by category) with the log: the Events, Errors and Avg request time summary, the stacked volume chart whose buckets filter the period on click or drag, and the event `DataTable`. Each row's detail `IconButton` (or a row click) opens the event document (its fields, the request's `Trace` with the critical path when the event carries spans, and the JSON) beside the log in the end pane of a `Resizable` when the explorer is wide enough, and in a `Drawer` when it is not. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main. Its root carries data-layout-fill, so the main stops scrolling and the fields panel, the log and the document scroll on their own.",
    "intents": [
     "real-time events",
     "events visualizer",
@@ -37123,6 +37130,7 @@
     "Popover",
     "PropertyFilter",
     "Resizable",
+    "Select",
     "Sidebar",
     "Skeleton",
     "Tabs",
@@ -37157,6 +37165,7 @@
     "@aziontech/webkit/popover",
     "@aziontech/webkit/property-filter",
     "@aziontech/webkit/resizable",
+    "@aziontech/webkit/select",
     "@aziontech/webkit/sidebar-root",
     "@aziontech/webkit/skeleton",
     "@aziontech/webkit/tabs",

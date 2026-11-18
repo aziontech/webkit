@@ -2,7 +2,7 @@
 name: webkit-query-explorer
 description: Recipe for a query explorer over Azion's GraphQL Metrics and Events APIs built only from @aziontech/webkit pieces — dataset Select, measures and group-by, PropertyFilter tokens turned into GraphQL filters, a DateRangePicker resolved with useTimeRange, a Run button, the result as a Chart and a DataTable, and the generated query in a CodeBlock. Use when building an analytics, metrics or events explorer, a "query builder", or any screen that turns controls into a GraphQL query.
 status: active
-last_updated: 2026-11-16
+last_updated: 2026-11-18
 scope: general
 enforced_by: [webkit-component-states, webkit-prefer-over-custom, review]
 ---
@@ -15,18 +15,21 @@ An explorer lets a person ask the Metrics or Events API a question without writi
 
 ## The pieces
 
-| Part                 | Component                                                                            | Notes                                                                             |
-| -------------------- | ------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------- |
-| Page heading and Run | `PageHeader` with `Button` (`variant="primary"`, `label="Run query"`) in its actions | Run is explicit; do not refetch on every keystroke.                               |
-| Time range           | `DateRangePicker` with `:relative-options="TIME_RANGE_PRESETS"`                      | `useTimeRange` (`@aziontech/webkit/use-time-range`) resolves it to `from` / `to`. |
-| Dataset              | `Select`                                                                             | Options from schema introspection, never a hard-coded list.                       |
-| Measures             | `Select` (function) beside `Select` (field)                                          | `count`, `sum`, `avg`, `max`, `min` and the fields each one accepts.              |
-| Group by             | `MultiSelect`                                                                        | Dimensions of the dataset; `ts` for a time series.                                |
-| Filters              | `PropertyFilter`                                                                     | One property per filterable field; `loadValues` for server values.                |
-| Limit                | `NumberInput`                                                                        | Clamp to the API maximum.                                                         |
-| Result over time     | `Chart` (inside `ChartCard`)                                                         | Pass `Date` labels; `loading`, `refetching` and `error` are props.                |
-| Result rows          | `DataTable` (`data` + `columns`)                                                     | Its empty slot holds `EmptyState`.                                                |
-| The query            | `CodeBlock` (`language="graphql"`, copyable)                                         | So the person can reuse it in their own client.                                   |
+| Part                 | Component                                                                             | Notes                                                                             |
+| -------------------- | ------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| Page heading and Run | `PageHeader` with `Button` (`variant="primary"`, `label="Run query"`) in its actions  | Run is explicit; do not refetch on every keystroke.                               |
+| Time range           | `DateRangePicker` with `:relative-options="TIME_RANGE_PRESETS"`                       | `useTimeRange` (`@aziontech/webkit/use-time-range`) resolves it to `from` / `to`. |
+| Time zone            | Muted `Times in UTC` text, or a `Select` named Time zone bound to `v-model:time-zone` | Beside the picker and always visible; the picker panel does not show the zone.    |
+| Dataset              | `Select`                                                                              | Options from schema introspection, never a hard-coded list.                       |
+| Measures             | `Select` (function) beside `Select` (field)                                           | `count`, `sum`, `avg`, `max`, `min` and the fields each one accepts.              |
+| Group by             | `MultiSelect`                                                                         | Dimensions of the dataset; `ts` for a time series.                                |
+| Filters              | `PropertyFilter`                                                                      | One property per filterable field; `loadValues` for server values.                |
+| Limit                | `NumberInput`                                                                         | Clamp to the API maximum.                                                         |
+| Result over time     | `Chart` (inside `ChartCard`)                                                          | Pass `Date` labels; `loading`, `refetching` and `error` are props.                |
+| Result rows          | `DataTable` (`data` + `columns`)                                                      | Its empty slot holds `EmptyState`.                                                |
+| The query            | `CodeBlock` (`language="graphql"`, copyable)                                          | So the person can reuse it in their own client.                                   |
+
+Bound the time range to what the API retains: `min` is the retention limit (the picker's default is five years back), `max` stays the end of today, and `maxDuration` is the longest window one query may cover (`:max-duration="{ amount: 90, unit: 'day' }"`). The picker then hides the quick ranges that do not fit and refuses longer ranges before Run.
 
 ## 1. Read the datasets from the schema
 

@@ -15,6 +15,10 @@ export type RelativeOption = {
 
 export type DateRangeRefreshUnit = 'second' | 'minute' | 'hour'
 
+export type DateRangeDuration = { amount: number; unit: DateRangeUnit }
+
+export const DEFAULT_HISTORY_YEARS = 5
+
 export type ResolveDateRangeOptions = { timeZone?: string; weekStart?: number }
 
 export type ResolvedRange = { start: Date; end: Date }
@@ -113,6 +117,16 @@ export const shiftByUnit = (date: Date, amount: number, unit: DateRangeUnit): Da
     return next
   }
   return new Date(date.getTime() + amount * UNIT_MS[unit])
+}
+
+export const shiftWallClock = (wall: Date, amount: number, unit: DateRangeUnit): Date => {
+  const next = new Date(wall.getTime())
+  if (unit === 'year') next.setFullYear(next.getFullYear() + amount)
+  else if (unit === 'month') next.setMonth(next.getMonth() + amount)
+  else if (unit === 'week') next.setDate(next.getDate() + amount * 7)
+  else if (unit === 'day') next.setDate(next.getDate() + amount)
+  else return new Date(wall.getTime() + amount * UNIT_MS[unit])
+  return next
 }
 
 export const startOfUnit = (
