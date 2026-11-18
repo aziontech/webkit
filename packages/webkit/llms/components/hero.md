@@ -21,7 +21,7 @@
 - One `Hero` per page. It owns the `h1` through `Hero.Title`, and a second breaks the document outline.
 - Pass `variant="screen"` for an opening band that should measure one screen, and declare the sticky bar's height as `--hero-banner-offset` so the band still measures exactly one screen beneath it.
 - Put the backdrop in the `background` slot rather than on the band's own class: the slot renders beneath the content layer and is already marked decorative.
-- Turn `padded` off when the slotted content owns its block rhythm; the inline inset is not optional, because it is the page boundary the bar above the band also reads.
+- Turn `padded` off when the slotted content owns its block rhythm; the inline inset is not optional, because it is the band inset every band below also applies: the content column is the same box a `SectionContainer` of the same `maxWidth` draws (its frame line is the page boundary the bar above the band also reads), and the copy starts `--spacing-xl` inside it, on the same edge as a `SectionModule` title and body below.
 - Set the band's air with `size`, never with a padded wrapper around the copy: `large` is the opening a page leads with, and the rhythm is the same above and below so the copy and the media sit on the band's vertical centre.
 - Keep `titleHighlight` to the opening phrase of the headline — it is the same sentence, only painted differently.
 - Put the calls to action in `Hero.Title`'s `actions` slot; it stacks them full-width on narrow screens, which is what makes a hero button a comfortable thumb target.

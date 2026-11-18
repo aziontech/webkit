@@ -4,7 +4,7 @@ category: docs
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: ebfafac9557a0276b32ffd2a52078c64a1d34c51bca117b8ef4edc3f4e00b58b
+checksum: 1d27fecec1d3f8c24f039e8324a7f5a9d8cdfd8e4973738b4a315fdde55b5897
 created: 2026-08-22
 last_updated: 2026-11-15
 ---
@@ -107,6 +107,7 @@ One cell of the grid a documentation page scans across: a leading glyph, an opti
 | surface              | `var(--bg-surface)`                                              |
 | surface.hover        | `var(--bg-hover)`                                                |
 | spacing              | `var(--spacing-md)` / `var(--spacing-sm)` / `var(--spacing-2xs)` |
+| inline padding       | `var(--spacing-xl)`, the band inset, so a card's copy starts on the same edge as the section title above it |
 | ring                 | `var(--ring-color)`                                              |
 
 ## Theme gaps

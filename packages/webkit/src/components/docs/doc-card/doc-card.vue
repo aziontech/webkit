@@ -62,7 +62,7 @@
     :href="isLink ? href : undefined"
     :target="isLink ? target : undefined"
     :rel="isLink && target === '_blank' ? 'noreferrer' : undefined"
-    class="group relative flex h-full flex-col bg-(--bg-surface) px-6 py-5 no-underline transition-colors duration-150 ease-out hover:bg-(--bg-hover) focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+    class="group relative flex h-full flex-col bg-(--bg-surface) px-(--spacing-xl) py-5 no-underline transition-colors duration-150 ease-out hover:bg-(--bg-hover) focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) motion-reduce:transition-none"
   >
     <span
       v-if="$slots['icon']"
