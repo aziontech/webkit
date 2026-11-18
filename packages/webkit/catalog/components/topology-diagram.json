@@ -2,7 +2,8 @@
  "purpose": "The deployment topology of a resource as a left-to-right diagram: each column is a depth (domains, project, policy, service, cache rules, integration, storage), each node a collapsible card with the resource kind, its status tag, its name and, when opened, a message and labelled fields; dashed connectors join every node of a column to the next. A node without a name is an unbound slot (dashed, Not bound) and a `bindable` node carries the bind control (bind an existing resource, change it, create one, remove it); a picked resource stays pending on the node until it is applied. Taken from the design sample's workload topology (`TopologyDiagramNodeData`, `TopologyNodeCard`, `TopologyBindNode`, `TopologyBindControl`, the empty node). It reuses `FlowDiagram`'s connector engine and anchors and draws its own list semantics, with no node-graph dependency.",
  "useWhen": [
   "The topology tab of a project, service or workload: what serves its traffic, in order, and what is still unbound.",
-  "A review before a deploy where binding or removing a resource is staged on the diagram."
+  "A review before a deploy where binding or removing a resource is staged on the diagram.",
+  "A short linear path whose hops carry a status, such as the request path You → Azion → Application on `state/edge-error-page`: one node per level, side by side on a wide screen and `orientation=\"vertical\"` on a phone."
  ],
  "avoidWhen": [
   "A sequence of steps or a pipeline without data cards → use `flow-diagram`.",

@@ -1,24 +1,24 @@
 import '../../reflow.css'
 
-import { cleanup, fireEvent, render } from '@testing-library/vue'
+import { cleanup, fireEvent, render, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { page } from 'vitest/browser'
 import type { Component } from 'vue'
 
 import EdgeErrorPage from '../../../../blocks/state/edge-error-page/edge-error-page.vue'
+import ApplicationError from '../../../../blocks/state/edge-error-page/variants/application-error.vue'
+import ApplicationTimeout from '../../../../blocks/state/edge-error-page/variants/application-timeout.vue'
+import ApplicationUnavailable from '../../../../blocks/state/edge-error-page/variants/application-unavailable.vue'
 import Blocked from '../../../../blocks/state/edge-error-page/variants/blocked.vue'
 import NotFound from '../../../../blocks/state/edge-error-page/variants/not-found.vue'
-import OriginError from '../../../../blocks/state/edge-error-page/variants/origin-error.vue'
-import OriginTimeout from '../../../../blocks/state/edge-error-page/variants/origin-timeout.vue'
-import OriginUnavailable from '../../../../blocks/state/edge-error-page/variants/origin-unavailable.vue'
 import RateLimited from '../../../../blocks/state/edge-error-page/variants/rate-limited.vue'
 import { expectNoA11yViolations } from '../../axe'
 
 const STATES: Array<[string, Component, string]> = [
   ['Default', EdgeErrorPage, '502'],
-  ['OriginTimeout', OriginTimeout, '504'],
-  ['OriginError', OriginError, '500'],
-  ['OriginUnavailable', OriginUnavailable, '503'],
+  ['ApplicationTimeout', ApplicationTimeout, '504'],
+  ['ApplicationError', ApplicationError, '500'],
+  ['ApplicationUnavailable', ApplicationUnavailable, '503'],
   ['Blocked', Blocked, '403'],
   ['RateLimited', RateLimited, '429'],
   ['NotFound', NotFound, '404']
@@ -34,10 +34,26 @@ const atWidth = async (width: number): Promise<void> => {
   await frame()
 }
 
-const visibleBoxes = (container: Element): DOMRect[] =>
-  [...container.querySelectorAll<HTMLElement>('[data-hop]')]
-    .map((hop) => hop.getBoundingClientRect())
-    .filter((rect) => rect.width > 0)
+const HOPS = ['You', 'Azion', 'Application']
+
+const nodeBoxes = (diagram: Element): DOMRect[] =>
+  [...diagram.querySelectorAll<HTMLElement>('[data-slot="flow-diagram-node"]')].map((node) =>
+    node.getBoundingClientRect()
+  )
+
+const hopNames = (diagram: Element): string[] =>
+  [...diagram.querySelectorAll('[data-testid$="__node-trigger"]')].map(
+    (trigger) => trigger.querySelector('.truncate')?.textContent?.trim() ?? ''
+  )
+
+const expectSameSize = (boxes: DOMRect[]): void => {
+  expect(boxes).toHaveLength(3)
+  for (const box of boxes) {
+    expect(box.width).toBeGreaterThan(0)
+    expect(Math.abs(box.width - boxes[0]!.width)).toBeLessThan(0.5)
+    expect(Math.abs(box.height - boxes[0]!.height)).toBeLessThan(0.5)
+  }
+}
 
 afterEach(async () => {
   cleanup()
@@ -54,12 +70,12 @@ describe('state/edge-error-page', () => {
       expect(view.getAllByRole('heading', { level: 1 })).toHaveLength(1)
       expect(view.getByRole('heading', { name: 'What happened?' })).toBeTruthy()
       expect(view.getByRole('heading', { name: 'What can I do?' })).toBeTruthy()
-      const hops = view.getByTestId('flow-diagram').querySelectorAll('[data-hop]')
-      expect([...hops].map((hop) => hop.getAttribute('data-hop'))).toEqual([
-        'visitor',
-        'edge',
-        'origin'
-      ])
+      const diagram = view.getByTestId('edge-error-page__path')
+      expect(hopNames(diagram)).toEqual(HOPS)
+      expect(diagram.getAttribute('aria-labelledby')).toBe(
+        view.getByRole('heading', { name: 'Request path' }).id
+      )
+      expect(view.container.textContent).not.toMatch(/\bedge\b|\borigin\b/i)
       const actions = [...view.container.querySelectorAll('button, a')]
         .map((el) => el.textContent?.trim() ?? '')
         .filter(Boolean)
@@ -71,33 +87,49 @@ describe('state/edge-error-page', () => {
     }
   )
 
-  it.each(STATES)('%s draws every hop as the same box on a wide screen', async (_, state) => {
-    await atWidth(1280)
-    const view = render(state)
-    const boxes = [
-      ...view.getByTestId('flow-diagram').querySelectorAll('[data-slot="flow-diagram-node"]')
-    ].map((node) => node.getBoundingClientRect())
-    expect(boxes).toHaveLength(3)
-    for (const box of boxes) {
-      expect(Math.abs(box.width - boxes[0]!.width)).toBeLessThan(0.5)
-      expect(Math.abs(box.height - boxes[0]!.height)).toBeLessThan(0.5)
-      expect(Math.abs(box.top - boxes[0]!.top)).toBeLessThan(0.5)
+  it.each(STATES)(
+    '%s draws every hop as the same card in one row on a wide screen',
+    async (_, state) => {
+      await atWidth(1280)
+      const view = render(state)
+      expect(view.getByTestId('edge-error-page__path-stacked').getBoundingClientRect().width).toBe(
+        0
+      )
+      const diagram = view.getByTestId('edge-error-page__path')
+      const boxes = nodeBoxes(diagram)
+      expectSameSize(boxes)
+      for (const box of boxes) expect(Math.abs(box.top - boxes[0]!.top)).toBeLessThan(0.5)
+      expect(boxes[1]!.left).toBeGreaterThan(boxes[0]!.right)
+      expect(boxes[2]!.left).toBeGreaterThan(boxes[1]!.right)
+      await vi.waitFor(() => expect(diagram.querySelectorAll('svg path')).toHaveLength(2))
+      const scroller = diagram.querySelector<HTMLElement>('.overflow-x-auto')!
+      expect(scroller.scrollWidth).toBeLessThanOrEqual(scroller.clientWidth)
     }
-  })
+  )
 
-  it.each(STATES)('%s stacks the hops as boxes of one size on a phone', async (_, state) => {
+  it.each(STATES)('%s stacks the hops as cards of one size on a phone', async (_, state) => {
     await atWidth(375)
     const view = render(state)
-    expect(view.getByTestId('flow-diagram').getBoundingClientRect().width).toBe(0)
-    const list = view.container.querySelector('ol')!
-    const boxes = visibleBoxes(list)
-    expect(boxes).toHaveLength(3)
-    for (const box of boxes) {
-      expect(Math.abs(box.width - boxes[0]!.width)).toBeLessThan(0.5)
-      expect(Math.abs(box.height - boxes[0]!.height)).toBeLessThan(0.5)
-      expect(box.right).toBeLessThanOrEqual(375)
-    }
+    expect(view.getByTestId('edge-error-page__path').getBoundingClientRect().width).toBe(0)
+    const diagram = view.getByTestId('edge-error-page__path-stacked')
+    expect(diagram.getAttribute('data-orientation')).toBe('vertical')
+    expect(hopNames(diagram)).toEqual(HOPS)
+    const boxes = nodeBoxes(diagram)
+    expectSameSize(boxes)
+    expect(boxes[1]!.top).toBeGreaterThan(boxes[0]!.bottom)
+    expect(boxes[2]!.top).toBeGreaterThan(boxes[1]!.bottom)
+    for (const box of boxes) expect(box.right).toBeLessThanOrEqual(375)
     expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(375)
+  })
+
+  it('opens a hop to explain it', async () => {
+    await atWidth(1280)
+    const view = render(EdgeErrorPage)
+    const diagram = view.getByTestId('edge-error-page__path')
+    const trigger = within(diagram).getAllByRole('button', { expanded: false })[2]!
+    await fireEvent.click(trigger)
+    expect(trigger.getAttribute('aria-expanded')).toBe('true')
+    expect(within(diagram).getByText(/The application that serves this site/)).toBeTruthy()
   })
 
   it('fills the facts and the path from its props', () => {
@@ -108,8 +140,8 @@ describe('state/edge-error-page', () => {
         requestId: 'abc123',
         path: {
           visitor: { status: 'Working', severity: 'success' },
-          edge: { status: 'Working', severity: 'success' },
-          origin: { status: 'Timed out', severity: 'danger' }
+          azion: { status: 'Working', severity: 'success' },
+          application: { status: 'Timed out', severity: 'danger' }
         }
       }
     })

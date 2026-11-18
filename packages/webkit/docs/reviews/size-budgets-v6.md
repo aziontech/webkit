@@ -462,3 +462,4 @@ Budget-raise: locales-es 10.8 KB → 10.85 KB (measured 10.80 KB): the Month and
 Budget-raise: flow-diagram-root 13.5 KB → 13.75 KB (measured 13.52 KB): the `uniform` prop (equal-size steps) the edge error page's request path needs (owner decision RV-D1, 2026-11-18).
 Budget-raise: stats-section 4.5 KB → 4.65 KB (measured 4.63 KB): owner report 2026-11-18 (RV-U1), a Stats figure never wraps; the band counts the glyphs of its longest figure so the big-number role shrinks every figure to fit its cell.
 Budget-raise: network-section 26.65 KB → 26.8 KB (measured 26.79 KB): the same Stats figure fit, which the network band renders (RV-U1).
+Budget-raise: topology-diagram 27.95 KB → 28.1 KB (measured 28.03 KB): the `orientation` prop (`vertical` stacks the levels with a dashed line between them), so the edge error page draws its request path with TopologyDiagram and stacks it on a phone (owner decision RV-Z2, 2026-11-18).

@@ -3,7 +3,7 @@
   "name": "EdgeErrorPage",
   "title": "Blocks/State/EdgeErrorPage",
   "surface": "edge",
-  "summary": "The page Azion's edge serves to a visitor of a customer's site when a request fails: a standalone page, no Azion product chrome, no account actions. Left-aligned and diagnostic: the `StatusCode` with its reason phrase, a title in plain words, the request path You → Azion edge → Origin drawn with `FlowDiagram` `uniform` (every hop the same width and height, each with a `StatusIndicator`; stacked boxes of the same size on a phone), What happened? and What can I do? side by side, Try again or Go to home page with Go back, then the request details in a `KeyValueList` (request ID with `CopyButton`, `Timestamp` in UTC, edge location, host) and a Served by `Brand` footer. The primary is the 502 (origin unreachable); variants cover 504, 500, 503, 403 (blocked by the site's firewall), 429 and 404. Azion's own console, site and docs use `state/error-page` instead.",
+  "summary": "The page Azion serves to a visitor of a customer's site when a request fails: a standalone page, no Azion product chrome, no account actions. Left-aligned and diagnostic: the `StatusCode` with its reason phrase, a title in plain words, the request path You → Azion → Application drawn with `TopologyDiagram` (one node card per hop, every card the same width and height, each with its status tag; side by side on a wide screen, stacked with `orientation=\"vertical\"` on a phone or tablet), What happened? and What can I do? side by side, Try again or Go to home page with Go back, then the request details in a `KeyValueList` (request ID with `CopyButton`, `Timestamp` in UTC, Azion location, host) and a Served by `Brand` footer. Azion here is Azion's infrastructure; the Application is the site's application, on Azion's infrastructure or on the customer's own servers. The primary is the 502 (application unreachable); variants cover 504, 500, 503, 403 (blocked by the site's firewall), 429 and 404. Azion's own console, site and docs use `state/error-page` instead.",
   "preview": {
     "layout": "fullscreen",
     "background": "dark"
@@ -12,8 +12,9 @@
     "edge error page",
     "502 bad gateway page",
     "504 gateway timeout page",
+    "application unreachable page",
+    "application error page",
     "origin unreachable page",
-    "origin error page",
     "503 service unavailable page",
     "firewall blocked page",
     "waf blocked request page",
@@ -22,7 +23,7 @@
     "error page for site visitors",
     "custom error page",
     "página de erro do edge",
-    "origem indisponível",
+    "aplicação indisponível",
     "requisição bloqueada pelo firewall",
     "página de error del edge"
   ],
@@ -33,33 +34,33 @@
   },
   "variants": [
     {
-      "name": "OriginTimeout",
-      "summary": "504: the edge reached the origin, but it did not answer in time. The origin hop reads Timed out; Try again and Go back.",
-      "file": "variants/origin-timeout.vue"
+      "name": "ApplicationTimeout",
+      "summary": "504: Azion reached the application, but it did not answer in time. The Application hop reads Timed out; Try again and Go back.",
+      "file": "variants/application-timeout.vue"
     },
     {
-      "name": "OriginError",
-      "summary": "500: the origin answered with an error while building the page. The origin hop reads Error; Try again and Go back.",
-      "file": "variants/origin-error.vue"
+      "name": "ApplicationError",
+      "summary": "500: the application answered with an error while building the page. The Application hop reads Error; Try again and Go back.",
+      "file": "variants/application-error.vue"
     },
     {
-      "name": "OriginUnavailable",
-      "summary": "503: the origin is down for maintenance or too busy. The origin hop reads Unavailable; the copy says the site usually comes back on its own.",
-      "file": "variants/origin-unavailable.vue"
+      "name": "ApplicationUnavailable",
+      "summary": "503: the application is down for maintenance or too busy. The Application hop reads Unavailable; the copy says the site usually comes back on its own.",
+      "file": "variants/application-unavailable.vue"
     },
     {
       "name": "Blocked",
-      "summary": "403: a firewall or WAF rule the site owner set on the edge matched the request, so it never reached the origin. The edge hop reads Blocked and the origin Not reached; Go to home page and Go back, and the advice is to contact the site owner with the request ID.",
+      "summary": "403: a firewall or WAF rule the site owner set on Azion matched the request, so it never reached the application. The Azion hop reads Blocked and the Application Not reached; Go to home page and Go back, and the advice is to contact the site owner with the request ID.",
       "file": "variants/blocked.vue"
     },
     {
       "name": "RateLimited",
-      "summary": "429: the visitor's connection sent more requests than the site allows. The edge hop reads Rate limited and the origin Not reached; wait a minute, then Try again.",
+      "summary": "429: the visitor's connection sent more requests than the site allows. The Azion hop reads Rate limited and the Application Not reached; wait a minute, then Try again.",
       "file": "variants/rate-limited.vue"
     },
     {
       "name": "NotFound",
-      "summary": "404: the origin has no page at the address. Every hop worked and the origin reads Not found; Go to home page and Go back.",
+      "summary": "404: the application has no page at the address. Every hop worked and the Application reads Not found; Go to home page and Go back.",
       "file": "variants/not-found.vue"
     }
   ]

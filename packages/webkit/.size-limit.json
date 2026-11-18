@@ -1124,7 +1124,7 @@
   {
     "name": "topology-diagram",
     "path": "src/components/data/topology-diagram/topology-diagram.vue",
-    "limit": "27.95 KB"
+    "limit": "28.1 KB"
   },
   {
     "name": "tool-approval",

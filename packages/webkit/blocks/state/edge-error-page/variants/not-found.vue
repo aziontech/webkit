@@ -3,8 +3,8 @@
 
   const path: EdgeErrorPagePath = {
     visitor: { status: 'Working', severity: 'success' },
-    edge: { status: 'Working', severity: 'success' },
-    origin: { status: 'Not found', severity: 'warning' }
+    azion: { status: 'Working', severity: 'success' },
+    application: { status: 'Not found', severity: 'warning' }
   }
 </script>
 
@@ -13,7 +13,7 @@
     :code="404"
     reason="Not found"
     title="This page does not exist"
-    cause="The site has no page at this address. The link may be old, or the address may have a typo."
+    cause="The site's application has no page at this address. The link may be old, or the address may have a typo."
     advice="Check the address, or go to the site's home page and look for the page from there."
     :path="path"
     recovery="home"

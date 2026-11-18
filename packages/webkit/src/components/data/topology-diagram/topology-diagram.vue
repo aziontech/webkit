@@ -8,14 +8,19 @@
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
   import { useFlowDiagramConnectors } from '../flow-diagram/composables/use-flow-diagram-connectors'
   import TopologyDiagramNode from './parts/topology-node.vue'
-  import type { TopologyDiagramLevel, TopologyDiagramNodeData } from './types'
+  import type {
+    TopologyDiagramLevel,
+    TopologyDiagramNodeData,
+    TopologyDiagramOrientation
+  } from './types'
 
   export type {
     TopologyDiagramBindOption,
     TopologyDiagramLevel,
     TopologyDiagramNodeData,
     TopologyDiagramNodeField,
-    TopologyDiagramNodeSeverity
+    TopologyDiagramNodeSeverity,
+    TopologyDiagramOrientation
   } from './types'
 
   defineOptions({
@@ -28,6 +33,8 @@
     levels?: TopologyDiagramLevel[]
     /** Shows placeholder cards while the topology loads. */
     loading?: boolean
+    /** Direction the levels run: side by side, or stacked from top to bottom for a narrow screen. */
+    orientation?: TopologyDiagramOrientation
     /** Accessible name of the diagram. Empty uses the locale catalog (`Deployment topology`). */
     ariaLabel?: string
   }
@@ -35,6 +42,7 @@
   const props = withDefaults(defineProps<TopologyDiagramProps>(), {
     levels: () => [],
     loading: false,
+    orientation: 'horizontal',
     ariaLabel: ''
   })
 
@@ -111,6 +119,7 @@
     :aria-busy="loading || undefined"
     :data-testid="testId"
     :data-loading="loading || null"
+    :data-orientation="orientation"
     class="w-full min-w-0 text-(--text-default)"
   >
     <div
@@ -142,7 +151,7 @@
       >
       <div class="relative w-full min-w-fit">
         <svg
-          v-if="paths.length"
+          v-if="paths.length && orientation === 'horizontal'"
           :viewBox="viewBox"
           preserveAspectRatio="none"
           fill="none"
@@ -162,15 +171,23 @@
         <ol
           ref="containerEl"
           :aria-hidden="loading || undefined"
-          class="relative m-0 flex w-full list-none flex-row items-start gap-(--spacing-xl) p-0 [&>[data-flow-leading]_[data-slot=flow-port][data-side=end]]:hidden [&>[data-flow-trailing]_[data-slot=flow-port][data-side=start]]:hidden [&_[data-flow-terminal]_[data-slot=flow-port][data-side=start]]:hidden"
+          :data-orientation="orientation"
+          class="relative m-0 flex w-full list-none flex-row items-start gap-(--spacing-xl) p-0 data-[orientation=vertical]:flex-col data-[orientation=vertical]:items-stretch data-[orientation=vertical]:gap-0 data-[orientation=vertical]:[&_[data-slot=flow-port]]:hidden [&>[data-flow-leading]_[data-slot=flow-port][data-side=end]]:hidden [&>[data-flow-trailing]_[data-slot=flow-port][data-side=start]]:hidden [&_[data-flow-terminal]_[data-slot=flow-port][data-side=start]]:hidden"
         >
           <li
-            v-for="level in shown"
+            v-for="(level, index) in shown"
             :key="level.id"
             data-slot="flow-diagram-parallel"
             :data-testid="`${testId}__level`"
-            class="flex min-w-(--size-56) flex-1 flex-col items-start gap-(--spacing-md)"
+            :data-orientation="orientation"
+            class="flex min-w-(--size-56) flex-1 flex-col items-start gap-(--spacing-md) data-[orientation=vertical]:min-w-0"
           >
+            <span
+              v-if="orientation === 'vertical' && index > 0"
+              aria-hidden="true"
+              :data-testid="`${testId}__connector`"
+              class="ms-(--spacing-lg) -mb-(--spacing-md) h-(--spacing-md) w-px border-s border-dashed border-(--accent)"
+            />
             <span
               v-if="level.label"
               class="sr-only"

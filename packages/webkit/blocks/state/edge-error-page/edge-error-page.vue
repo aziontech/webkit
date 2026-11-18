@@ -2,11 +2,13 @@
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
   import CopyButton from '@aziontech/webkit/copy-button'
-  import FlowDiagram from '@aziontech/webkit/flow-diagram'
   import KeyValueList from '@aziontech/webkit/key-value-list'
   import StatusCode from '@aziontech/webkit/status-code'
-  import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
   import Timestamp from '@aziontech/webkit/timestamp'
+  import TopologyDiagram, {
+    type TopologyDiagramLevel,
+    type TopologyDiagramNodeSeverity
+  } from '@aziontech/webkit/topology-diagram'
   import { computed, useId } from 'vue'
 
   /** The way back the primary button offers: reload the address, or open the site's home page. */
@@ -16,18 +18,18 @@
   export interface EdgeErrorPageHopState {
     /** The status label, in a word or two (Working, Error, Blocked). */
     status: string
-    /** The colour of the status dot. */
-    severity: StatusIndicatorSeverity
+    /** The colour of the status tag. */
+    severity: TopologyDiagramNodeSeverity
   }
 
-  /** The state of the three hops a request crosses: the visitor, Azion's edge and the site's origin server. */
+  /** The state of the three hops a request crosses: the visitor, Azion's infrastructure and the site's application. */
   export interface EdgeErrorPagePath {
     /** The visitor's browser. */
     visitor: EdgeErrorPageHopState
-    /** The Azion edge location that answered. */
-    edge: EdgeErrorPageHopState
-    /** The site's own server. */
-    origin: EdgeErrorPageHopState
+    /** The Azion location that answered. */
+    azion: EdgeErrorPageHopState
+    /** The site's application, on Azion's infrastructure or on the site's own servers. */
+    application: EdgeErrorPageHopState
   }
 
   export interface EdgeErrorPageProps {
@@ -47,7 +49,7 @@
     requestId?: string
     /** When the request was answered, as an ISO string. */
     time?: string
-    /** The code of the Azion edge location that answered (IAD). */
+    /** The code of the Azion location that answered (IAD). */
     location?: string
     /** The state of each hop of the request path. */
     path?: EdgeErrorPagePath
@@ -58,9 +60,9 @@
   const props = withDefaults(defineProps<EdgeErrorPageProps>(), {
     code: 502,
     reason: 'Bad gateway',
-    title: "The site's server could not be reached",
+    title: "The site's application could not be reached",
     cause:
-      "Azion's edge received your request, but the server that hosts this site did not accept the connection.",
+      'Azion received your request, but the application that serves this site did not accept the connection.',
     advice:
       'Try again in a few minutes. If it keeps happening, let the site owner know and quote the request ID below.',
     host: 'www.example.com',
@@ -69,8 +71,8 @@
     location: 'IAD',
     path: () => ({
       visitor: { status: 'Working', severity: 'success' },
-      edge: { status: 'Working', severity: 'success' },
-      origin: { status: 'Error', severity: 'danger' }
+      azion: { status: 'Working', severity: 'success' },
+      application: { status: 'Error', severity: 'danger' }
     }),
     recovery: 'retry'
   })
@@ -83,10 +85,39 @@
   const pathId = useId()
 
   const hops = computed(() => [
-    { key: 'visitor', name: 'You', detail: 'Browser', ...props.path.visitor },
-    { key: 'edge', name: 'Azion edge', detail: props.location, ...props.path.edge },
-    { key: 'origin', name: 'Origin', detail: props.host, ...props.path.origin }
+    {
+      key: 'visitor',
+      type: 'You',
+      icon: 'az az-user',
+      name: 'Browser',
+      message: 'Your browser, where the request started.',
+      ...props.path.visitor
+    },
+    {
+      key: 'azion',
+      type: 'Azion',
+      icon: 'az az-azion',
+      name: props.location,
+      message: 'The Azion location that received your request and answered with this page.',
+      ...props.path.azion
+    },
+    {
+      key: 'application',
+      type: 'Application',
+      icon: 'az az-applications',
+      name: props.host,
+      message:
+        "The application that serves this site, on Azion's infrastructure or on the site's own servers.",
+      ...props.path.application
+    }
   ])
+
+  const levels = computed<TopologyDiagramLevel[]>(() =>
+    hops.value.map(({ key, ...hop }, index) => ({
+      id: key,
+      nodes: [{ id: key, terminal: index === hops.value.length - 1, ...hop }]
+    }))
+  )
 
   const homeHref = computed(() => `https://${props.host}/`)
 
@@ -114,63 +145,29 @@
         <h1 class="m-0 text-heading-lg text-(--text-default)">{{ title }}</h1>
       </header>
 
-      <section
-        :aria-labelledby="pathId"
-        class="flex flex-col gap-(--spacing-sm)"
-      >
+      <div class="flex flex-col gap-(--spacing-sm)">
         <h2
           :id="pathId"
           class="m-0 text-label-md text-(--text-muted)"
         >
           Request path
         </h2>
-        <div class="-mx-(--spacing-md) hidden md:block">
-          <FlowDiagram uniform>
-            <FlowDiagram.Node
-              v-for="hop in hops"
-              :key="hop.key"
-            >
-              <span
-                :data-hop="hop.key"
-                class="flex w-full min-w-0 flex-col items-start gap-(--spacing-2xs)"
-              >
-                <span class="text-label-md text-(--text-default)">{{ hop.name }}</span>
-                <bdi class="text-body-xs text-(--text-muted)">{{ hop.detail }}</bdi>
-                <StatusIndicator
-                  :severity="hop.severity"
-                  :label="hop.status"
-                />
-              </span>
-            </FlowDiagram.Node>
-          </FlowDiagram>
+        <div class="-mx-(--spacing-md) hidden lg:block">
+          <TopologyDiagram
+            :levels="levels"
+            :aria-labelledby="pathId"
+            data-testid="edge-error-page__path"
+          />
         </div>
-        <ol class="m-0 flex list-none flex-col p-0 md:hidden">
-          <li
-            v-for="(hop, index) in hops"
-            :key="hop.key"
-            class="flex flex-col"
-          >
-            <span
-              v-if="index > 0"
-              aria-hidden="true"
-              class="ms-(--spacing-lg) h-(--spacing-md) w-px border-s border-dashed border-(--accent)"
-            />
-            <span
-              :data-hop="hop.key"
-              class="flex items-center justify-between gap-(--spacing-sm) rounded-(--shape-button) border border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-md) py-(--spacing-sm) shadow-(--shadow-xs)"
-            >
-              <span class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-                <span class="text-label-md text-(--text-default)">{{ hop.name }}</span>
-                <bdi class="truncate text-body-xs text-(--text-muted)">{{ hop.detail }}</bdi>
-              </span>
-              <StatusIndicator
-                :severity="hop.severity"
-                :label="hop.status"
-              />
-            </span>
-          </li>
-        </ol>
-      </section>
+        <div class="-mx-(--spacing-md) lg:hidden">
+          <TopologyDiagram
+            :levels="levels"
+            orientation="vertical"
+            :aria-labelledby="pathId"
+            data-testid="edge-error-page__path-stacked"
+          />
+        </div>
+      </div>
 
       <div class="grid gap-(--spacing-lg) md:grid-cols-2">
         <section class="flex flex-col gap-(--spacing-xs)">
@@ -231,7 +228,7 @@
               format="utc"
             />
           </KeyValueList.Item>
-          <KeyValueList.Item label="Edge location">{{ location }}</KeyValueList.Item>
+          <KeyValueList.Item label="Azion location">{{ location }}</KeyValueList.Item>
           <KeyValueList.Item label="Host">
             <bdi>{{ host }}</bdi>
           </KeyValueList.Item>
