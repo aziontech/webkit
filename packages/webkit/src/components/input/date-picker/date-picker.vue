@@ -313,14 +313,18 @@
             :aria-invalid="field.invalid.value || undefined"
             aria-haspopup="dialog"
             :aria-expanded="isOpen"
-            class="text-label-sm inline-flex min-w-0 flex-1 items-center gap-(--spacing-xs) px-(--spacing-sm) text-(--text-default) transition-colors duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:text-(--text-disabled) data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 data-[empty]:text-(--text-muted) motion-reduce:transition-none"
+            class="text-label-sm inline-flex min-w-0 flex-1 items-center gap-(--spacing-xs) px-(--spacing-sm) py-(--spacing-2xs) text-(--text-default) transition-colors duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:text-(--text-disabled) data-[size=small]:min-h-7 data-[size=medium]:min-h-8 data-[size=large]:min-h-10 data-[empty]:text-(--text-muted) motion-reduce:transition-none"
             @click="toggleOpen"
           >
             <i
               class="az az-calendar shrink-0 text-[length:inherit] leading-none text-(--text-muted)"
               aria-hidden="true"
             />
-            <span class="min-w-0 flex-1 truncate text-start">{{ triggerText }}</span>
+            <span
+              :data-testid="`${testId}__value`"
+              class="min-w-0 flex-1 text-start tabular-nums [overflow-wrap:anywhere]"
+              >{{ triggerText }}</span
+            >
             <i
               v-if="!split && !(clearable && hasCommitted)"
               :data-state="isOpen ? 'open' : 'closed'"
@@ -365,6 +369,12 @@
     </span>
 
     <Teleport to="body">
+      <div
+        v-if="isOpen"
+        aria-hidden="true"
+        :data-testid="`${testId}__backdrop`"
+        class="fixed inset-0 z-1099 bg-(--bg-backdrop) sm:hidden"
+      />
       <Transition
         enter-active-class="animate-popup-scale-in motion-reduce:animate-none"
         leave-active-class="animate-popup-scale-out motion-reduce:animate-none"
@@ -381,7 +391,7 @@
           :data-side="resolvedSide"
           :data-align="resolvedAlign"
           :style="panelStyle"
-          class="flex max-w-[min(90vw,44rem)] flex-col overflow-x-hidden overflow-y-auto rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-sm) outline-none [transform-origin:var(--popup-origin,top_left)]"
+          class="flex max-w-[min(calc(100vw-2*var(--spacing-sm)),44rem)] flex-col overflow-x-hidden overflow-y-auto overscroll-contain rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-sm) outline-none [transform-origin:var(--popup-origin,top_left)] max-sm:inset-x-0! max-sm:top-auto! max-sm:bottom-0! max-sm:w-full! max-sm:max-w-none! max-sm:max-h-[85dvh]! max-sm:translate-none! max-sm:items-center max-sm:rounded-b-none max-sm:border-x-0 max-sm:border-b-0 max-sm:pb-[env(safe-area-inset-bottom)] max-sm:[transform-origin:bottom_center]"
           @keydown="onPanelKeydown"
         >
           <div

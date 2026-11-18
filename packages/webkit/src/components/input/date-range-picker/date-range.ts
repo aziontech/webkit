@@ -1,10 +1,21 @@
 export type DateRangeUnit = 'second' | 'minute' | 'hour' | 'day' | 'week' | 'month' | 'year'
 
 export type DateRangeValue =
-  | { type: 'relative'; amount: number; unit: DateRangeUnit; key?: string }
+  | { type: 'relative'; amount: number; unit: DateRangeUnit; key?: string; snap?: boolean }
   | { type: 'absolute'; start: string; end: string }
+  | { type: 'since'; start: string }
 
-export type RelativeOption = { key: string; amount: number; unit: DateRangeUnit; label?: string }
+export type RelativeOption = {
+  key: string
+  amount: number
+  unit: DateRangeUnit
+  label?: string
+  snap?: boolean
+}
+
+export type DateRangeRefreshUnit = 'second' | 'minute' | 'hour'
+
+export type ResolveDateRangeOptions = { timeZone?: string; weekStart?: number }
 
 export type ResolvedRange = { start: Date; end: Date }
 
@@ -17,6 +28,8 @@ export const DATE_RANGE_UNITS: DateRangeUnit[] = [
   'month',
   'year'
 ]
+
+export const REFRESH_UNITS: DateRangeRefreshUnit[] = ['second', 'minute', 'hour']
 
 export const DEFAULT_RELATIVE_OPTIONS: RelativeOption[] = [
   { key: 'last-5-minutes', amount: 5, unit: 'minute' },
@@ -95,13 +108,52 @@ export const shiftByUnit = (date: Date, amount: number, unit: DateRangeUnit): Da
   return new Date(date.getTime() + amount * UNIT_MS[unit])
 }
 
+export const startOfUnit = (
+  instant: Date,
+  unit: DateRangeUnit,
+  zone = 'UTC',
+  weekStart = 0
+): Date => {
+  const wall = toWallClock(instant, zone)
+  const parts = [
+    wall.getFullYear(),
+    wall.getMonth(),
+    wall.getDate(),
+    wall.getHours(),
+    wall.getMinutes(),
+    wall.getSeconds()
+  ]
+  const depth = { year: 1, month: 2, week: 3, day: 3, hour: 4, minute: 5, second: 6 }[unit]
+  const kept = parts.map((part, index) => (index < depth ? part : index === 2 ? 1 : 0))
+  const start = new Date(kept[0], kept[1], kept[2], kept[3], kept[4], kept[5])
+  if (unit === 'week') start.setDate(start.getDate() - ((start.getDay() - weekStart + 7) % 7))
+  return fromWallClock(start, zone)
+}
+
 export const resolveDateRange = (
   value: DateRangeValue | null | undefined,
-  now: Date = new Date()
+  now: Date = new Date(),
+  options: ResolveDateRangeOptions = {}
 ): ResolvedRange | null => {
   if (!value) return null
   if (value.type === 'relative') {
+    if (value.snap) {
+      const current = startOfUnit(
+        now,
+        value.unit,
+        options.timeZone || 'UTC',
+        options.weekStart ?? 0
+      )
+      return {
+        start: shiftByUnit(current, 1 - value.amount, value.unit),
+        end: new Date(now.getTime())
+      }
+    }
     return { start: shiftByUnit(now, -value.amount, value.unit), end: new Date(now.getTime()) }
+  }
+  if (value.type === 'since') {
+    const since = new Date(value.start)
+    return Number.isNaN(since.getTime()) ? null : { start: since, end: new Date(now.getTime()) }
   }
   const start = new Date(value.start)
   const end = new Date(value.end)
@@ -112,9 +164,10 @@ export const resolveDateRange = (
 export const stepDateRange = (
   value: DateRangeValue | null | undefined,
   direction: -1 | 1,
-  now: Date = new Date()
+  now: Date = new Date(),
+  options: ResolveDateRangeOptions = {}
 ): DateRangeValue | null => {
-  const range = resolveDateRange(value, now)
+  const range = resolveDateRange(value, now, options)
   if (!range) return null
   const span = range.end.getTime() - range.start.getTime()
   return {
@@ -140,4 +193,9 @@ export const sameRelative = (
   value?.type === 'relative' &&
   (value.key
     ? value.key === option.key
-    : value.amount === option.amount && value.unit === option.unit)
+    : value.amount === option.amount &&
+      value.unit === option.unit &&
+      Boolean(value.snap) === Boolean(option.snap))
+
+export const endsNow = (value: DateRangeValue | null | undefined): boolean =>
+  value?.type === 'relative' || value?.type === 'since'

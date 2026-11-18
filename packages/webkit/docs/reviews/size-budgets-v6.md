@@ -407,6 +407,15 @@ Budget-raise: console-trace-scene 70.1 KB → 73.9 KB (measured 73.82 KB): the s
 Budget-raise: config-provider 11.25 KB → 11.35 KB (measured 11.31 KB): the English catalog it carries gained the trace's view, critical path and self time messages (2026-11-17).
 Budget-raise: locales-pt-BR 10.45 KB → 10.5 KB (measured 10.49 KB): the same trace messages (2026-11-17).
 Budget-raise: locales-es 10.6 KB → 10.65 KB (measured 10.62 KB): the same trace messages (2026-11-17).
+Budget-raise: date-picker-root 17.75 KB → 17.9 KB (measured 17.84 KB): the trigger wraps a long value instead of cutting it off, and on a phone the panel opens as a full-width bottom sheet over a backdrop (owner request, 2026-11-18).
+Budget-raise: date-range-picker 34.6 KB → 37.55 KB (measured 37.48 KB): the time range picker gains the Console parity features the owner asked for: Today and This week (ranges rounded to the start of the day or week in the zone), End at now (`since` ranges), auto refresh (`Switch`, interval, `refresh` event), the always-visible custom duration, the two-column quick ranges and the phone sheet (2026-11-18).
+Budget-raise: config-provider 11.35 KB → 11.5 KB (measured 11.44 KB): the English catalog it carries gained the time range picker’s Today, This week, End at now and auto-refresh messages (2026-11-18).
+Budget-raise: locales-pt-BR 10.5 KB → 10.7 KB (measured 10.62 KB): the same time range picker messages (2026-11-18).
+Budget-raise: locales-es 10.65 KB → 10.8 KB (measured 10.74 KB): the same time range picker messages (2026-11-18).
+Budget-raise: use-time-range 0.9 KB → 1.4 KB (measured 1.37 KB): `useTimeRange` rounds Today and This week in the time zone (option `timeZone`, else the ConfigProvider zone), which brings the wall-clock zone conversion it skipped before (2026-11-18).
+Budget-raise: filter-menu 36.05 KB → 36.2 KB (measured 36.11 KB): its custom range is a `DateRangePicker`, which grew (2026-11-18).
+Budget-raise: filter-menu-root 32.3 KB → 32.45 KB (measured 32.38 KB): the same `DateRangePicker` growth (2026-11-18).
+Budget-raise: date-picker 17.95 KB → 18.1 KB (measured 18.05 KB): the same wrapping trigger and phone sheet (2026-11-18).
 
 - llms-full.txt cap 2,080,000 → 2,100,000 bytes (2026-11-16): the Web Design Guide moved in from azion-ai-toolkit and the round-2 page guidance; measured 2,080,508.
 

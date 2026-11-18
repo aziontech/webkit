@@ -14084,7 +14084,8 @@
    "models": [
     "modelValue",
     "timeZone",
-    "open"
+    "open",
+    "refreshInterval"
    ],
    "category": "input",
    "structure": "monolithic",
@@ -14123,6 +14124,13 @@
      "default": "false",
      "required": "false",
      "doc": "Shows Previous and Next buttons that move the range back or forward by its own length."
+    },
+    {
+     "name": "showRefresh",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows the auto-refresh switch and interval in the panel; bind v-model:refresh-interval and listen to refresh."
     },
     {
      "name": "rangeSelectorMode",
@@ -14214,6 +14222,20 @@
      "default": "undefined as never",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
+    },
+    {
+     "name": "refreshInterval",
+     "type": "number",
+     "default": "0",
+     "required": "false",
+     "doc": "Two-way value (`v-model:refreshInterval`)."
+    }
+   ],
+   "events": [
+    {
+     "name": "refresh",
+     "payload": "()",
+     "notes": "On every auto-refresh tick while `refreshInterval` is above 0, the picker is enabled and the page is visible. A timer signal, not a user action: it carries no DOM event."
     }
    ],
    "surface": "app",

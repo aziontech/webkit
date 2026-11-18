@@ -310,8 +310,8 @@ export const dateRangePicker = {
   placeholder: 'Select a time range',
   dialog: 'Choose a time range',
   rangeType: 'Range type',
-  relative: 'Relative range',
-  absolute: 'Absolute range',
+  relative: 'Relative',
+  absolute: 'Absolute',
   quickRanges: 'Quick ranges',
   custom: 'Custom range',
   amount: 'Duration',
@@ -351,6 +351,27 @@ export const dateRangePicker = {
   unitWeek: 'Weeks',
   unitMonth: 'Months',
   unitYear: 'Years',
+  today: 'Today',
+  thisWeek: 'This week',
+  thisMonth: 'This month',
+  thisYear: 'This year',
+  now: 'now',
+  untilNow: 'End at now',
+  refreshEvery: 'Refresh every',
+  refreshAmount: 'Refresh interval',
+  refreshUnit: 'Refresh interval unit',
+  refreshSecond: {
+    one: 'refreshes every second',
+    other: 'refreshes every {count} seconds'
+  },
+  refreshMinute: {
+    one: 'refreshes every minute',
+    other: 'refreshes every {count} minutes'
+  },
+  refreshHour: {
+    one: 'refreshes every hour',
+    other: 'refreshes every {count} hours'
+  },
   apply: 'Apply',
   cancel: 'Cancel',
   previous: 'Previous range',

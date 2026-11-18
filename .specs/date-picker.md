@@ -3,14 +3,14 @@ name: date-picker
 category: input
 structure: composition
 status: implemented
-spec_version: 11
+spec_version: 12
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5087-17336
   node_id: 5087:17336
-checksum: 60fe2e8e8f59e6259c6689873d44811bbe145b2f5f6a23b686109088be062214
+checksum: 59ff13c316a08bd8c8441d49684568bcab5eb83578d2802d3f797d53b690fe78
 created: 2026-06-25
-last_updated: 2026-11-17
+last_updated: 2026-11-18
 ---
 
 # DatePicker — Component Spec
@@ -227,7 +227,8 @@ Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `par
 
 ## Responsive
 
-- The root is capped at its container (`max-w-full`), so the trigger never overflows a 320 px box; the popover is capped at `min(90vw, 44rem)` and scrolls inside.
+- The root is capped at its container (`max-w-full`), so the trigger never overflows a 320 px box. The trigger never cuts its value off: a value longer than the trigger wraps to a second line and the trigger grows (its height is a minimum, not a fixed size).
+- Narrow (below 640 px, `max-sm:`): the panel opens as a sheet — full width, attached to the bottom of the screen, at most 85 % of the viewport high, scrolling inside, over a `--bg-backdrop` layer that closes it on tap; the content is centred. From 640 px it is the anchored popover, capped at `min(100vw − 2 × --spacing-sm, 44rem)`.
 - `orientation="horizontal"` needs room for the grid and the fields side by side; on narrow screens keep the default vertical layout.
 - Touch: day cells are 32 / 36 / 40 px by `size`; use `size="large"` on touch-first surfaces.
 

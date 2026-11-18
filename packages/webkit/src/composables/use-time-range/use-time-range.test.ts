@@ -112,4 +112,15 @@ describe('useTimeRange', () => {
     })
     expect(view.getByTestId('probe').textContent).toBe(NOW.toISOString())
   })
+
+  it('starts calendar ranges in the given time zone', () => {
+    const scope = effectScope()
+    const today = { type: 'relative', amount: 1, unit: 'day', snap: true } as const
+    const utc = scope.run(() => useTimeRange(today, { now: NOW, timeZone: 'UTC' }))
+    const tokyo = scope.run(() => useTimeRange(today, { now: NOW, timeZone: 'Asia/Tokyo' }))
+    expect(utc?.to.value?.toISOString()).toBe(NOW.toISOString())
+    expect(utc?.from.value?.getUTCHours()).toBe(0)
+    expect(tokyo?.from.value?.getUTCHours()).toBe(15)
+    scope.stop()
+  })
 })

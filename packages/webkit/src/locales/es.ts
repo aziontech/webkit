@@ -408,8 +408,8 @@ export const es: Messages = {
     placeholder: 'Selecciona un intervalo de tiempo',
     dialog: 'Elige un intervalo de tiempo',
     rangeType: 'Tipo de intervalo',
-    relative: 'Intervalo relativo',
-    absolute: 'Intervalo absoluto',
+    relative: 'Relativo',
+    absolute: 'Absoluto',
     quickRanges: 'Intervalos rápidos',
     custom: 'Intervalo personalizado',
     amount: 'Duración',
@@ -449,6 +449,27 @@ export const es: Messages = {
     unitWeek: 'Semanas',
     unitMonth: 'Meses',
     unitYear: 'Años',
+    today: 'Hoy',
+    thisWeek: 'Esta semana',
+    thisMonth: 'Este mes',
+    thisYear: 'Este año',
+    now: 'ahora',
+    untilNow: 'Terminar ahora',
+    refreshEvery: 'Actualizar cada',
+    refreshAmount: 'Intervalo de actualización',
+    refreshUnit: 'Unidad del intervalo de actualización',
+    refreshSecond: {
+      one: 'se actualiza cada segundo',
+      other: 'se actualiza cada {count} segundos'
+    },
+    refreshMinute: {
+      one: 'se actualiza cada minuto',
+      other: 'se actualiza cada {count} minutos'
+    },
+    refreshHour: {
+      one: 'se actualiza cada hora',
+      other: 'se actualiza cada {count} horas'
+    },
     apply: 'Aplicar',
     cancel: 'Cancelar',
     previous: 'Intervalo anterior',

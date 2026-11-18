@@ -2,7 +2,7 @@
  "examples": [
   {
    "name": "Default",
-   "summary": "A relative range (`Last 15 minutes`) that stays relative: the value is `{ type: 'relative', amount, unit }`, re-resolved against the clock on every query. The panel switches between Relative range (quick ranges plus a custom duration) and Absolute range (month grid with start and end date and time, and the time zone), and commits only on Apply.",
+   "summary": "A relative range (`Last 15 minutes`) that stays relative: the value is `{ type: 'relative', amount, unit }`, re-resolved against the clock on every query. The Relative tab has a custom duration and unit on top and the quick ranges below (two columns when there is room); the Absolute tab has the month grid with start and end date and time; the time zone sits under both. Nothing commits until Apply. On a phone the panel opens as a full-width sheet from the bottom of the screen.",
    "file": "examples/date-range-picker/default.vue"
   },
   {

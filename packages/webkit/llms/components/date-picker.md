@@ -134,7 +134,8 @@ Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `par
 
 ## Responsive
 
-- The root is capped at its container (`max-w-full`), so the trigger never overflows a 320 px box; the popover is capped at `min(90vw, 44rem)` and scrolls inside.
+- The root is capped at its container (`max-w-full`), so the trigger never overflows a 320 px box. The trigger never cuts its value off: a value longer than the trigger wraps to a second line and the trigger grows (its height is a minimum, not a fixed size).
+- Narrow (below 640 px, `max-sm:`): the panel opens as a sheet — full width, attached to the bottom of the screen, at most 85 % of the viewport high, scrolling inside, over a `--bg-backdrop` layer that closes it on tap; the content is centred. From 640 px it is the anchored popover, capped at `min(100vw − 2 × --spacing-sm, 44rem)`.
 - `orientation="horizontal"` needs room for the grid and the fields side by side; on narrow screens keep the default vertical layout.
 - Touch: day cells are 32 / 36 / 40 px by `size`; use `size="large"` on touch-first surfaces.
 
