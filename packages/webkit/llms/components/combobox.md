@@ -46,6 +46,7 @@
 | --- | --- | --- | --- | --- |
 | `options` | `ComboboxOption[]` | `[]` | false | Suggestions: `{ value, label?, description?, group?, disabled? }`. |
 | `placeholder` | `string` | `''` | false | Placeholder of the field. |
+| `icon` | `string` | `'az az-search'` | false | Leading icon of the field. Empty shows none (a time field passes `az az-clock`). |
 | `ariaLabel` | `string` | `''` | false | Accessible name when no `Field` label names the field. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token, as `Input`: 28 / 32 / 40 px. |
 | `allowCustom` | `boolean` | `true` | false | Accepts a typed value that matches no option, offered as `Use "…"`. |
@@ -74,6 +75,10 @@
 | --- | --- | --- |
 | `option` | { option: ComboboxOption, active: boolean, selected: boolean } | Replaces the content of one option row. |
 
+## Assets
+
+- Icons: every valid name is in [icons.md](../foundations/icons.md) (MCP `list_assets({ kind: "icons" })`). An unknown class renders nothing.
+
 ## Sub-components
 
 _none_ — one `.vue` file. The list is rendered by the component itself (teleported to `body`, positioned with `usePlacement`); options are data, rendered through the optional `option` slot.
@@ -97,7 +102,7 @@ _none_ — one `.vue` file. The list is rendered by the component itself (telepo
 ## Accessibility
 
 - ARIA 1.2 combobox: the `<input>` has `role="combobox"`, `aria-autocomplete="list"`, `aria-expanded`, `aria-controls` (the listbox id) and `aria-activedescendant` (the highlighted option); the list is `role="listbox"`, rows are `role="option"` with `aria-selected` and `aria-disabled`; grouped rows sit in `role="group"` named by their title (`aria-labelledby`).
-- Keyboard map: focus or `ArrowDown` opens the list; `ArrowDown`/`ArrowUp` move the highlight (wrapping, skipping disabled rows); `Home`/`End` move it to the first/last option while the list is open (otherwise the caret moves); `Enter` commits the highlighted option, or the typed text when nothing is highlighted (`allowCustom`); `Escape` closes the list, and a second `Escape` restores the last committed text; `Tab` commits the highlighted option or the typed text and moves on; `Alt+ArrowUp` closes.
+- Keyboard map: focus or `ArrowDown` opens the list, scrolled so the committed option (when the value is one of the options) sits in the middle of the list; `ArrowDown`/`ArrowUp` move the highlight (wrapping, skipping disabled rows); `Home`/`End` move it to the first/last option while the list is open (otherwise the caret moves); `Enter` commits the highlighted option, or the typed text when nothing is highlighted (`allowCustom`); `Escape` closes the list, and a second `Escape` restores the last committed text; `Tab` commits the highlighted option or the typed text and moves on; `Alt+ArrowUp` closes.
 - Nested overlays: the open list joins the shared overlay layer stack (`useOverlayLayer`) as a transient layer (focus stays in the input), so inside a `Popover`, `Dialog` or `Drawer` picking a suggestion or pressing `Escape` closes only the list; the host overlay stays open.
 - Focus stays in the input the whole time; pointer clicks on rows do not move focus (`mousedown.prevent`).
 - A polite status region announces the number of options after each change of the typed text ("3 options"), "No matches" and "Loading options"; it is visually hidden.

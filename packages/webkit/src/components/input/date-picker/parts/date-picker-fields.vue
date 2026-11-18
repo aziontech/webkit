@@ -1,8 +1,9 @@
 <script setup lang="ts">
-  import { computed, inject, ref, useId, watch } from 'vue'
+  import { computed, inject, nextTick, ref, useId, watch } from 'vue'
 
   import { useLocaleContext, useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
+  import Combobox from '../../combobox/combobox.vue'
   import Input from '../../input/input.vue'
   import { asRange, asSingle, formatDate, formatTime } from '../format'
   import { DatePickerInjectionKey } from '../injection-key'
@@ -55,18 +56,35 @@
 
   const { context: localeContext } = useLocaleContext()
   const placeholderYear = new Date(localeContext?.now?.value ?? Date.now()).getFullYear()
-  const startDatePlaceholder = computed(() =>
-    formatDate(new Date(placeholderYear, 5, 1), '', locale.value)
+  const datePlaceholder = computed(() =>
+    t('datePicker.example', {
+      value: formatDate(new Date(placeholderYear, 0, 31), '', locale.value)
+    })
   )
-  const endDatePlaceholder = computed(() =>
-    formatDate(new Date(placeholderYear, 5, 30), '', locale.value)
+
+  const halfHours = computed(() =>
+    Array.from({ length: 48 }, (_, index) => ({
+      minutes: index * 30,
+      value: formatTime(
+        new Date(placeholderYear, 0, 1, Math.floor(index / 2), (index % 2) * 30),
+        '',
+        locale.value
+      )
+    }))
   )
-  const startTimePlaceholder = computed(() =>
-    formatTime(new Date(placeholderYear, 0, 1, 0, 0), '', locale.value)
-  )
-  const endTimePlaceholder = computed(() =>
-    formatTime(new Date(placeholderYear, 0, 1, 23, 59), '', locale.value)
-  )
+
+  const timeOptionsFor = (current: string) => {
+    const time = parseTime(current)
+    const entries = [...halfHours.value]
+    if (time && !entries.some((entry) => entry.value === current)) {
+      entries.push({ minutes: time.hours * 60 + time.minutes, value: current })
+      entries.sort((a, b) => a.minutes - b.minutes)
+    }
+    return entries.map(({ value }) => ({ value }))
+  }
+
+  const startTimeOptions = computed(() => timeOptionsFor(startTimeText.value))
+  const endTimeOptions = computed(() => timeOptionsFor(endTimeText.value))
 
   const commitDate = (which: 'start' | 'end', text: string) => {
     const parsed = parseFixedDate(text, new Date(), { locale: locale.value })
@@ -84,10 +102,12 @@
   }
 
   const commitTime = (which: 'start' | 'end', text: string) => {
+    if (which === 'start') startTimeText.value = text
+    else endTimeText.value = text
     const time = parseTime(text)
     const base = which === 'start' ? startDate.value : endDate.value
     if (!time || !base) {
-      syncFromDraft()
+      nextTick(syncFromDraft)
       return
     }
     ctx?.setEndpoint(
@@ -116,23 +136,25 @@
             :model-value="startDateText"
             :size="size"
             :disabled="disabled"
-            :placeholder="startDatePlaceholder"
+            :placeholder="datePlaceholder"
             @update:model-value="startDateText = $event"
             @change="commitDate('start', startDateText)"
           />
         </div>
         <div
           v-if="showTime"
-          class="w-24 shrink-0"
+          class="w-22 shrink-0"
         >
-          <Input
+          <Combobox
             :model-value="startTimeText"
+            :options="startTimeOptions"
+            icon="az az-clock"
             :size="size"
             :disabled="disabled"
             :aria-label="startTimeLabel"
-            :placeholder="startTimePlaceholder"
-            @update:model-value="startTimeText = $event"
-            @change="commitTime('start', startTimeText)"
+            :placeholder="t('datePicker.timePlaceholder')"
+            data-testid="date-picker__start-time"
+            @update:model-value="commitTime('start', $event)"
           />
         </div>
       </div>
@@ -155,23 +177,25 @@
             :model-value="endDateText"
             :size="size"
             :disabled="disabled"
-            :placeholder="endDatePlaceholder"
+            :placeholder="datePlaceholder"
             @update:model-value="endDateText = $event"
             @change="commitDate('end', endDateText)"
           />
         </div>
         <div
           v-if="showTime"
-          class="w-24 shrink-0"
+          class="w-22 shrink-0"
         >
-          <Input
+          <Combobox
             :model-value="endTimeText"
+            :options="endTimeOptions"
+            icon="az az-clock"
             :size="size"
             :disabled="disabled"
             :aria-label="t('datePicker.endTime')"
-            :placeholder="endTimePlaceholder"
-            @update:model-value="endTimeText = $event"
-            @change="commitTime('end', endTimeText)"
+            :placeholder="t('datePicker.timePlaceholder')"
+            data-testid="date-picker__end-time"
+            @update:model-value="commitTime('end', $event)"
           />
         </div>
       </div>

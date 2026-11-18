@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "A relative range (`Last 15 minutes`) that stays relative: the value is `{ type: 'relative', amount, unit }`, re-resolved against the clock on every query. The panel switches between Relative range (quick ranges plus a custom duration) and Absolute range (month grid with start and end date and time, and the time zone), and commits only on Apply.",
+      "summary": "A relative range (`Last 15 minutes`) that stays relative: the value is `{ type: 'relative', amount, unit }`, re-resolved against the clock on every query. The panel has two tabs, Absolute and Relative, and opens on Relative here because the value is relative (any other value, or none, opens Absolute). Absolute shows the month grid first (click a start day and an end day), then the start and end date and time, typed or picked from a 30-minute list; Relative has a custom duration and unit on top and the quick ranges below. Refresh every sets the auto-refresh interval. The panel is as thin as the calendar, names the zone in a read-only line, and commits nothing until Apply. On a phone it opens as a full-width sheet from the bottom of the screen.",
       "file": "default.vue"
     },
     {
@@ -19,12 +19,22 @@
     },
     {
       "name": "WithStep",
-      "summary": "`show-step` adds Previous and Next around the trigger; each moves the range by its own length (an hour back, an hour forward) and Next stops at the present.",
+      "summary": "`show-step` adds Previous and Next around the trigger; each moves the range by its own length (an hour back, an hour forward) and Next stops at the present. A range inside one day prints its date once (`Nov 10, 13:00 – 14:00`), and the trigger text wraps instead of being cut off when the space is narrow.",
       "file": "with-step.vue"
     },
     {
+      "name": "UntilNow",
+      "summary": "An absolute start that ends now: turn on **End at now** on the Absolute tab and the value becomes `{ type: 'since', start }`. The trigger reads `Nov 10, 2026, 9:30 – now`, the end moves with the clock on every query, and Next stays disabled.",
+      "file": "until-now.vue"
+    },
+    {
+      "name": "AutoRefresh",
+      "summary": "Refresh every is in the panel by default (Off, 10 seconds … 1 hour). Bind `v-model:refresh-interval` (seconds, 0 is off) and run the query on `@refresh`, which fires on each tick while the page is visible; the trigger shows a refresh icon and says the interval to screen readers. A page that cannot re-run its query passes `:show-refresh=\"false\"`. The quick ranges start with **Today** and **This week**: options with `snap: true` begin at the start of the day or week in the time zone.",
+      "file": "auto-refresh.vue"
+    },
+    {
       "name": "TimeZone",
-      "summary": "`v-model:time-zone` with a short list of zones: the absolute range is typed and shown in the chosen zone, and the stored value stays the same ISO instants, printed under the picker.",
+      "summary": "`v-model:time-zone` and `show-time-zone` with a short list of zones: the zone selector appears in the panel, the absolute range is typed and shown in the chosen zone, and the stored value stays the same ISO instants, printed under the picker.",
       "file": "time-zone.vue"
     },
     {

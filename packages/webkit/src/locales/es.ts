@@ -401,15 +401,17 @@ export const es: Messages = {
     startTime: 'Hora de inicio',
     endTime: 'Hora de fin',
     timezone: 'Zona horaria',
-    localTimezone: 'Local'
+    localTimezone: 'Local',
+    example: 'p. ej.: {value}',
+    timePlaceholder: 'hh:mm'
   },
   dateRangePicker: {
     label: 'Intervalo de tiempo',
     placeholder: 'Selecciona un intervalo de tiempo',
     dialog: 'Elige un intervalo de tiempo',
     rangeType: 'Tipo de intervalo',
-    relative: 'Intervalo relativo',
-    absolute: 'Intervalo absoluto',
+    relative: 'Relativo',
+    absolute: 'Absoluto',
     quickRanges: 'Intervalos rápidos',
     custom: 'Intervalo personalizado',
     amount: 'Duración',
@@ -449,6 +451,27 @@ export const es: Messages = {
     unitWeek: 'Semanas',
     unitMonth: 'Meses',
     unitYear: 'Años',
+    today: 'Hoy',
+    thisWeek: 'Esta semana',
+    thisMonth: 'Este mes',
+    thisYear: 'Este año',
+    now: 'ahora',
+    untilNow: 'Terminar ahora',
+    zoneNote: 'Horas en {zone}',
+    refreshEvery: 'Actualizar cada',
+    refreshOff: 'Desactivado',
+    refreshSecond: {
+      one: 'se actualiza cada segundo',
+      other: 'se actualiza cada {count} segundos'
+    },
+    refreshMinute: {
+      one: 'se actualiza cada minuto',
+      other: 'se actualiza cada {count} minutos'
+    },
+    refreshHour: {
+      one: 'se actualiza cada hora',
+      other: 'se actualiza cada {count} horas'
+    },
     apply: 'Aplicar',
     cancel: 'Cancelar',
     previous: 'Intervalo anterior',

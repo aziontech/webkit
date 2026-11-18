@@ -20,6 +20,7 @@ Options of `useTimeRange`.
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
 | `now` | `MaybeRefOrGetter<Date \| number \| undefined>` | no | Reference clock. A ref or getter that changes re-resolves the range; unset reads the nearest ConfigProvider now, then the real clock. |
+| `timeZone` | `MaybeRefOrGetter<string \| undefined>` | no | IANA zone that calendar ranges (Today, This week) start in; unset reads the nearest ConfigProvider timeZone, then UTC. |
 
 ## `UseTimeRangeReturn`
 
