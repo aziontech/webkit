@@ -85,7 +85,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — `Popover.Title`, optional `Popover.Description`, and `Popover.Close`.
-- `popover-title/popover-title.vue` — title text (`.text-heading-2xs`, `var(--text-default)`). Registers its element id with the injected context so `Popover.Content` can reference it via `aria-labelledby`.
+- `popover-title/popover-title.vue` — title text (`.text-title-sm`, `var(--text-default)`). Registers its element id with the injected context so `Popover.Content` can reference it via `aria-labelledby`.
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — plain-text title.
@@ -326,19 +326,16 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
     <p
       class="absolute top-(--spacing-md) left-1/2 -translate-x-1/2 text-body-sm text-(--text-muted) text-center max-w-md"
     >
-      All triggers use side="auto". Each panel resolves to the best-fitting corner based on its
-      position in the viewport.
+      All triggers use side="auto". Click one: its panel resolves to the best-fitting corner based
+      on its position in the viewport.
     </p>
 
     <div class="absolute top-(--spacing-md) start-(--spacing-md)">
-      <PopoverRoot
-        :open="true"
-        side="auto"
-      >
+      <PopoverRoot side="auto">
         <PopoverTrigger>
           <Button
             variant="secondary"
-            label="top-left"
+            label="Open top left"
           />
         </PopoverTrigger>
         <PopoverContent>
@@ -352,14 +349,11 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
     </div>
 
     <div class="absolute top-(--spacing-md) end-(--spacing-md)">
-      <PopoverRoot
-        :open="true"
-        side="auto"
-      >
+      <PopoverRoot side="auto">
         <PopoverTrigger>
           <Button
             variant="secondary"
-            label="top-right"
+            label="Open top right"
           />
         </PopoverTrigger>
         <PopoverContent>
@@ -373,14 +367,11 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
     </div>
 
     <div class="absolute bottom-(--spacing-md) start-(--spacing-md)">
-      <PopoverRoot
-        :open="true"
-        side="auto"
-      >
+      <PopoverRoot side="auto">
         <PopoverTrigger>
           <Button
             variant="secondary"
-            label="bottom-left"
+            label="Open bottom left"
           />
         </PopoverTrigger>
         <PopoverContent>
@@ -394,14 +385,11 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
     </div>
 
     <div class="absolute bottom-(--spacing-md) end-(--spacing-md)">
-      <PopoverRoot
-        :open="true"
-        side="auto"
-      >
+      <PopoverRoot side="auto">
         <PopoverTrigger>
           <Button
             variant="secondary"
-            label="bottom-right"
+            label="Open bottom right"
           />
         </PopoverTrigger>
         <PopoverContent>

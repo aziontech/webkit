@@ -295,6 +295,8 @@ export const datePicker = {
   apply: 'Apply',
   previousMonth: 'Previous month',
   nextMonth: 'Next month',
+  month: 'Month',
+  year: 'Year',
   start: 'Start',
   end: 'End',
   date: 'Date',
@@ -316,6 +318,7 @@ export const dateRangePicker = {
   absolute: 'Absolute',
   quickRanges: 'Quick ranges',
   custom: 'Custom range',
+  showQuickRanges: 'Back to quick ranges',
   amount: 'Duration',
   unit: 'Unit',
   second: {
@@ -359,7 +362,6 @@ export const dateRangePicker = {
   thisYear: 'This year',
   now: 'now',
   untilNow: 'End at now',
-  zoneNote: 'Times in {zone}',
   refreshEvery: 'Refresh every',
   refreshOff: 'Off',
   refreshSecond: {
@@ -381,6 +383,7 @@ export const dateRangePicker = {
   incomplete: 'Choose a start and an end.',
   order: 'The end must be after the start.',
   outOfBounds: 'Choose a range inside the allowed dates.',
+  tooLong: 'Choose a range of {duration} or less.',
   invalidAmount: 'Enter a whole number greater than 0.'
 } as const
 
@@ -631,8 +634,6 @@ export const logViewer = {
   search: 'Search logs',
   loading: 'Loading…',
   lines: { one: '{count} line', other: '{count} lines' },
-  warnings: 'Warnings',
-  warningCount: { one: '{count} warning', other: '{count} warnings' },
   gzip: 'gzip:',
   empty: 'No log lines match the current filters.',
   noLines: 'No log lines yet.',
@@ -1106,8 +1107,8 @@ export const tracker = {
   roleDescription: 'status history'
 } as const
 
-export const topologyDiagram = {
-  label: 'Deployment topology',
+export const flowDiagram = {
+  label: 'Diagram',
   notBound: 'Not bound',
   bind: 'Bind {kind}',
   change: 'Change {kind}',
@@ -1119,8 +1120,11 @@ export const topologyDiagram = {
   existing: 'Existing',
   noOptions: 'No options yet.',
   copy: 'Copy {field}',
+  details: 'Details',
+  connections: 'Connections',
+  connection: '{from} to {to}',
   emptyTitle: 'Nothing is connected yet.',
-  loading: 'Loading the topology'
+  loading: 'Loading the diagram'
 } as const
 
 export const tree = {
@@ -1543,7 +1547,7 @@ export const en = {
   toggleGroup,
   trace,
   toolCall,
-  topologyDiagram,
+  flowDiagram,
   tracker,
   tree,
   unsavedChanges,

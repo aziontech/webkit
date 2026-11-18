@@ -17,7 +17,7 @@
 
 - `modelValue` is committed only on Apply; read the final value from `update:modelValue` or the second argument of `apply`, and set `:show-apply="false"` when every edit should commit at once.
 - Bind a `Date` or `null`.
-- Bound the selectable days with `min` and `max` instead of validating after commit.
+- Bound the selectable days with `min` and `max` instead of validating after commit. Unlike `date-range-picker` (five years back to the end of today by default), DatePicker is unbounded by default: a single date is often in the future (a token expiry, an alert schedule), so a page sets `min` to today there, and sets `max` only when the date must be in the past.
 - Send `toISOString()` (or the ISO date `2026-11-15`) to the server, never the printed label.
 
 ## Don’t
@@ -32,6 +32,7 @@
 - [date-range-picker](date-range-picker.md) — every range: relative windows (`last 15 minutes`) kept relative, absolute ranges down to the minute, and whole days with `:show-time="false"`. It is built on this component's grid, fields and time zone selector.
 - [timestamp](timestamp.md) — shows a moment in time in the app's time zone.
 - [field](field.md) — inside a `Field`, the trigger takes the field's label (`for` points at it), description, `invalid` and `disabled`.
+- [select](select.md) — the Month and Year selects in the calendar caption (`variant="ghost"`, `size="small"`).
 - [combobox](combobox.md) — the time field: a typed time or a pick from the 30-minute list, which opens under the field so the panel stays as thin as the grid.
 - [input](input.md) — the trigger and the date field share its heights, hover, and disabled treatment, so they align side by side.
 
@@ -79,7 +80,7 @@
 
 - `date-picker-clear/date-picker-clear.vue` — context-aware button that clears the draft selection through injected context; disabled when there is no selection. Placed in the `footer` slot.
 
-Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `parts/date-picker-grid.vue` (the month grid), `parts/date-picker-fields.vue` (the date and time fields, a Start/End pair for a range; each time field is a `Combobox` with `allow-custom` that lists the day in 30-minute steps under the field — plus the current time when it is between two steps, so the list opens on it — shows a clock icon and takes any typed time), `parts/date-picker-timezone.vue` (the time zone selector `date-range-picker` shows). A private part lives in `parts/`, so it is not mistaken for a public `date-picker-<part>`.
+Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `parts/date-picker-grid.vue` (the month grid; its caption reads `‹ Month ⌄ Year ⌄ ›`: the previous and next month arrows, and between them two ghost `Select`s, Month (the twelve month names, a month fully outside `min`/`max` disabled) and Year (from `min`'s year to `max`'s year, or ten years either side of today when unbounded, always including the shown year); picking a month or a year moves the grid there and emits `month-change`, a year that would land outside `min`/`max` keeps the month inside them), `parts/date-picker-fields.vue` (the date and time fields, a Start/End pair for a range; each time field is a `Combobox` with `allow-custom` that lists the day in 30-minute steps under the field — plus the current time when it is between two steps, so the list opens on it — shows a clock icon and takes any typed time), `parts/date-picker-timezone.vue` (the time zone selector `date-range-picker` shows, a `Combobox` with `allow-custom` off that filters the zones by city, zone id or offset as the person types). No part renders a native `select`. A private part lives in `parts/`, so it is not mistaken for a public `date-picker-<part>`.
 
 ## v-model
 
@@ -110,8 +111,8 @@ Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `par
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on the trigger and `focus-visible:ring-offset-(--bg-surface-raised)` inside the popover. The date and time fields reuse `input`, whose ring offset resolves `var(--input-ring-offset, var(--bg-canvas))`; the fields container declares `--input-ring-offset: var(--bg-surface-raised)` once and it inherits to every field.
 - Field labels: the visible Date label is a `<label for>` bound to its date field through `useId()`; the time field beside it carries its own `aria-label` (`Time`), so every field has a programmatic accessible name.
-- Keyboard map: the trigger toggles the popover with `Enter`/`Space` and exposes `aria-haspopup`/`aria-expanded`; `Escape` and click-outside close it and return focus to the trigger; focus is trapped in the open popover. In the grid, `Tab` enters at the focused day, `Arrow` keys move focus (paging the visible month when crossing its first/last day), `Enter`/`Space` selects, `Home`/`End` move to the first/last day of the week (the grid starts on Sunday; logical, so the same under `dir="rtl"`), `PageUp`/`PageDown` change month, `Shift+PageUp`/`Shift+PageDown` change year. Tests: `date-picker.test.ts` › Home and End, Shift+PageDown and Shift+PageUp. Apply, Clear and the fields are all reachable by `Tab`.
-- ARIA: the month grid uses `role="grid"` with `role="row"` and `role="gridcell"` descendants; the selected cell sets `aria-selected="true"`; the current date sets `aria-current="date"`; navigation buttons carry `aria-label`; the popover is a `dialog` named by the catalog (`Choose date`); decorative icons are `aria-hidden="true"`.
+- Keyboard map: the trigger toggles the popover with `Enter`/`Space` and exposes `aria-haspopup`/`aria-expanded`; `Escape` and click-outside close it and return focus to the trigger; focus is trapped in the open popover. In the grid, `Tab` enters at the focused day, `Arrow` keys move focus (paging the visible month when crossing its first/last day), `Enter`/`Space` selects, `Home`/`End` move to the first/last day of the week (the grid starts on Sunday; logical, so the same under `dir="rtl"`), `PageUp`/`PageDown` change month, `Shift+PageUp`/`Shift+PageDown` change year. The caption's Month and Year selects keep the `select` keyboard map (`Enter`/`Space`/`ArrowDown` open the list, the arrows move, typing jumps to an option, `Escape` closes only the list and leaves the popover open). Tests: `date-picker.test.ts` › Home and End, Shift+PageDown and Shift+PageUp; jumps to the month and year picked in the caption selects; bounds the year list by min and max. Apply, Clear and the fields are all reachable by `Tab`.
+- ARIA: the month grid uses `role="grid"` with `role="row"` and `role="gridcell"` descendants; the selected cell sets `aria-selected="true"`; the current date sets `aria-current="date"`; navigation buttons carry `aria-label`; the caption's Month and Year selects are `combobox` buttons named `Month` and `Year` from the catalog, showing the visible month and year; the popover is a `dialog` named by the catalog (`Choose date`); decorative icons are `aria-hidden="true"`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state.
 - `motion-reduce:animate-none` on the popover and `motion-reduce:transition-none` on animated states.
 - Touch target ≥40×40 px (or justified deviation): day cells use a 32×32 px (`small`), 36×36 px (`medium`), or 40×40 px (`large`) hit area; `small`/`medium` are a justified deviation for dense month-grid layouts, `large` meets the 40 px target.
@@ -127,10 +128,10 @@ Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `par
 
 ## Internationalization
 
-- Every built-in string comes from the `datePicker` group of the locale catalog (`useLocale`): trigger placeholder (`Select a date`), Date / Time labels, Apply, Clear, the month navigation labels.
+- Every built-in string comes from the `datePicker` group of the locale catalog (`useLocale`): trigger placeholder (`Select a date`), Date / Time labels, Apply, Clear, the month navigation labels and the caption selects (`datePicker.month` `Month`, `datePicker.year` `Year`).
 - The active locale is the nearest `ConfigProvider`'s `locale`, else the device locale (`navigator.language`); the server render and the hydrating client use `en-US`, and the device locale applies right after mount.
 - What the person sends stays unambiguous: `v-model` is a `Date` whatever the display format, so an app sends `toISOString()` (or the ISO date `2026-11-15`) to its server, never the printed label.
-- Printed text uses `Intl` in the active locale: the trigger label, the field value and its placeholder, a hint and never a bare date (`e.g. Jan 31, 2026` in `en`, `ex.: 31 de jan. de 2026` in `pt-BR`; the time field reads `hh:mm`), the time field and its 30-minute list, weekday and month names.
+- Printed text uses `Intl` in the active locale: the trigger label, the field value and its placeholder, a hint and never a bare date (`e.g. Jan 31, 2026` in `en`, `ex.: 31 de jan. de 2026` in `pt-BR`; the time field reads `hh:mm`), the time field and its 30-minute list, weekday and month names, the Month select's options (`Intl` `month: 'long'`) and the Year select's options (`Intl` `year: 'numeric'`).
 - Typing is parsed in the active locale with English always accepted as well: month names (long and short, accents optional), numeric dates in the locale's day/month order (`1/2/2026` is 2 January in `en`, 1 February in `pt-BR`) and ISO `2026-01-05`. Times accept `14:30`, `14h30` and `2:30 pm`.
 
 ## Responsive

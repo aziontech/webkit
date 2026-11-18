@@ -48,7 +48,7 @@ For a resource made from the CLI, the `detail/detail-get-started` section follow
 
 ## Topology tab
 
-- Use `TopologyDiagram` for the path a request takes to the resource (Application and ServiceOverview both do). A pick from a node's bind menu is pending on the node until its Apply control confirms it (Cancel or Escape drops it); only the confirmed `bind`, a change or a removal is staged on the node, counted beside Deploy and listed in the deploy `Drawer`; the run ends in the state-async-submit toast with Edit and Redeploy. A detail-production-checklist step that binds a slot (Bind Policy, Bind Error Page) scrolls to the topology and expands that node instead of opening a separate form.
+- Use `FlowDiagram` (`nodes` + `edges`, with `FlowDiagramBind` in its `actions` slot) for the path a request takes to the resource (Application and ServiceOverview both do). A pick from a node's bind menu is pending on the node until its Apply control confirms it (Cancel or Escape drops it); only the confirmed `bind`, a change or a removal is staged on the node, counted beside Deploy and listed in the deploy `Drawer`; the run ends in the state-async-submit toast with Edit and Redeploy. A detail-production-checklist step that binds a slot (Bind Policy, Bind Error Page) scrolls to the topology and expands that node instead of opening a separate form.
 - Bind, create and remove act on staged state only. Nothing reaches Production until Deploy, and the deploy drawer lists every staged change before it runs.
 - Show the staged count on the tab row next to Deploy, so it stays visible from every tab.
 - Report the deploy through the state-async-submit toast (Edit and Redeploy) and clear the staged marks once it succeeds.
@@ -149,7 +149,7 @@ Grouped by the resource type the page shows. A deployment's own page is `detail/
 ### Service
 
 - Service: the service summary with its domains, environment menu, ID and the Deployment Settings band.
-- ServiceOverview: a service (its environment crumb is the page's `ConsoleLayout.Breadcrumb`), Deploy on the tab row, the production checklist and the deployment topology on `TopologyDiagram` (policy, error page and origin slots staged until Deploy).
+- ServiceOverview: a service (its environment crumb is the page's `ConsoleLayout.Breadcrumb`), Deploy on the tab row, the production checklist and the deployment topology on `FlowDiagram` (policy, error page and origin slots staged until Deploy).
 
 ### Policy
 
@@ -157,7 +157,7 @@ Grouped by the resource type the page shows. A deployment's own page is `detail/
 
 ### Application
 
-- Application: a whole application page body, with working tabs. Overview is the summary card; Versions and Deployments are a small `Subheader` over a flush `DataTable`; Topology draws the request path with `TopologyDiagram` (domain, workload, firewall, application, function instance). Binding or removing the firewall or the function only stages the change: the node turns dashed with a Staged status, a polite status line names it, and the tab row shows the count as a warning `Tag` beside Deploy. Deploy opens a `Drawer` that lists each staged change as from and to, then runs on its own: a loading toast, then the state-async-submit toast with **Edit** (back to the Topology tab) and **Redeploy**, never View deployments.
+- Application: a whole application page body, with working tabs. Overview is the summary card; Versions and Deployments are a small `Subheader` over a flush `DataTable`; Topology draws the request path with `FlowDiagram` (domain, workload, firewall, application, function instance). Binding or removing the firewall or the function only stages the change: the node turns dashed with a Staged status, a polite status line names it, and the tab row shows the count as a warning `Tag` beside Deploy. Deploy opens a `Drawer` that lists each staged change as from and to, then runs on its own: a loading toast, then the state-async-submit toast with **Edit** (back to the Topology tab) and **Redeploy**, never View deployments.
 - ApplicationBuild: an application page body with Overview, Versions, Build and Deployments. Dragging files over the page raises the dashed drop target of `state/state-project-intake`; dropping them or Deploy opens a deploy `Drawer` naming the source, and the run reports through the state-async-submit toast with Edit and Redeploy. Leaving the Build tab with unsaved changes asks first in a `ConfirmDialog`.
 
 ## Related

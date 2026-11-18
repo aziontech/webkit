@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import FlowDiagramRoot from '../../../data/flow-diagram/flow-diagram.vue'
   import FlowDiagramAnchor from '../../../data/flow-diagram/flow-diagram-anchor/flow-diagram-anchor.vue'
+  import FlowDiagramGroup from '../../../data/flow-diagram/flow-diagram-group/flow-diagram-group.vue'
   import FlowDiagramNode from '../../../data/flow-diagram/flow-diagram-node/flow-diagram-node.vue'
-  import FlowDiagramParallel from '../../../data/flow-diagram/flow-diagram-parallel/flow-diagram-parallel.vue'
   import Tag, { type TagSeverity } from '../../tag/tag.vue'
   import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
 
@@ -94,13 +94,13 @@
       :animated="false"
     >
       <FlowDiagramRoot
+        orientation="horizontal"
         align="center"
         class="w-full [&>div]:w-full"
       >
-        <FlowDiagramParallel
+        <FlowDiagramGroup
           v-for="level in LEVELS"
           :key="level.key"
-          align="start"
           class="min-w-[15rem] flex-1"
         >
           <FlowDiagramNode
@@ -137,7 +137,7 @@
               >
             </div>
           </FlowDiagramNode>
-        </FlowDiagramParallel>
+        </FlowDiagramGroup>
       </FlowDiagramRoot>
     </ConsoleMockupShell>
   </div>

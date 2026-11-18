@@ -12,7 +12,7 @@
   },
   {
    "name": "States",
-   "summary": "Panel forced open (`open=\"true\"`) showing each spec-declared option state side-by-side: `default`, `selected`, and `disabled`. The `hover` and `focus-visible` states are interactive — focus an option with the keyboard (`Down` / `Up`) or hover with the pointer to see them.",
+   "summary": "Click the trigger to open the panel and see each spec-declared option state side-by-side: `default`, `selected`, and `disabled`. The `hover` and `focus-visible` states are interactive — focus an option with the keyboard (`Down` / `Up`) or hover with the pointer to see them.",
    "file": "examples/dropdown-menu/states.vue"
   }
  ]

@@ -347,6 +347,108 @@ describe('DatePicker', () => {
       expect(events[2][0]).toEqual({ year: 2026, month: 8 }) // September
     })
 
+    it('jumps to the month and year picked in the caption selects, keeping the arrows', async () => {
+      const { getByTestId, emitted } = render(DatePicker, {
+        props: { modelValue: OCT_8 }
+      })
+      const thisYear = new Date().getFullYear()
+      const popover = await openDatePicker(getByTestId)
+      expect(popover.querySelector('select')).toBeNull()
+      const month = within(popover).getByRole('combobox', { name: 'Month' })
+      const year = within(popover).getByRole('combobox', { name: 'Year' })
+      expect(month.textContent?.trim()).toBe('October')
+      expect(year.textContent?.trim()).toBe('2026')
+
+      await userEvent.click(month)
+      const months = await waitFor(() => {
+        const list = document.body.querySelector<HTMLElement>(
+          '[data-testid="date-picker__month-list"]'
+        )
+        expect(list).toBeTruthy()
+        return list as HTMLElement
+      })
+      expect(within(months).getAllByRole('option')).toHaveLength(12)
+      await userEvent.click(within(months).getByRole('option', { name: 'February' }))
+      await waitFor(() =>
+        expect(within(popover).getByRole('grid').getAttribute('aria-label')).toBe('February 2026')
+      )
+      expect(getPopover()).toBeTruthy()
+
+      await userEvent.click(year)
+      const years = await waitFor(() => {
+        const list = document.body.querySelector<HTMLElement>(
+          '[data-testid="date-picker__year-list"]'
+        )
+        expect(list).toBeTruthy()
+        return list as HTMLElement
+      })
+      const yearLabels = within(years)
+        .getAllByRole('option')
+        .map((option) => option.textContent?.trim())
+      expect(yearLabels[0]).toBe(String(Math.min(thisYear - 10, 2026)))
+      expect(yearLabels.at(-1)).toBe(String(Math.max(thisYear + 10, 2026)))
+      await userEvent.keyboard('{Escape}')
+      await waitFor(() =>
+        expect(document.body.querySelector('[data-testid="date-picker__year-list"]')).toBeNull()
+      )
+      expect(getPopover()).toBeTruthy()
+      await userEvent.click(year)
+      const reopened = await waitFor(() => {
+        const list = document.body.querySelector<HTMLElement>(
+          '[data-testid="date-picker__year-list"]'
+        )
+        expect(list).toBeTruthy()
+        return list as HTMLElement
+      })
+      await userEvent.click(within(reopened).getByRole('option', { name: '2030' }))
+      await waitFor(() =>
+        expect(within(popover).getByRole('grid').getAttribute('aria-label')).toBe('February 2030')
+      )
+
+      await fireEvent.click(within(popover).getByRole('button', { name: 'Next month' }))
+      await waitFor(() => expect(month.textContent?.trim()).toBe('March'))
+      const events = emitted()['month-change'] as Array<[{ year: number; month: number }]>
+      expect(events.at(-1)?.[0]).toEqual({ year: 2030, month: 2 })
+    })
+
+    it('bounds the year list by min and max and keeps the month inside them', async () => {
+      const { getByTestId } = render(DatePicker, {
+        props: { modelValue: OCT_8, min: new Date(2025, 5, 10), max: new Date(2027, 2, 5) }
+      })
+      const popover = await openDatePicker(getByTestId)
+      await userEvent.click(within(popover).getByRole('combobox', { name: 'Year' }))
+      const years = await waitFor(() => {
+        const list = document.body.querySelector<HTMLElement>(
+          '[data-testid="date-picker__year-list"]'
+        )
+        expect(list).toBeTruthy()
+        return list as HTMLElement
+      })
+      expect(
+        within(years)
+          .getAllByRole('option')
+          .map((option) => option.textContent?.trim())
+      ).toEqual(['2025', '2026', '2027'])
+      await userEvent.click(within(years).getByRole('option', { name: '2027' }))
+      await waitFor(() =>
+        expect(within(popover).getByRole('grid').getAttribute('aria-label')).toBe('March 2027')
+      )
+      await userEvent.click(within(popover).getByRole('combobox', { name: 'Month' }))
+      const months = await waitFor(() => {
+        const list = document.body.querySelector<HTMLElement>(
+          '[data-testid="date-picker__month-list"]'
+        )
+        expect(list).toBeTruthy()
+        return list as HTMLElement
+      })
+      expect(
+        within(months).getByRole('option', { name: 'April' }).getAttribute('aria-disabled')
+      ).toBe('true')
+      expect(
+        within(months).getByRole('option', { name: 'March' }).getAttribute('aria-disabled')
+      ).not.toBe('true')
+    })
+
     it('re-seeds the visible month from the committed value on reopen', async () => {
       const { getByTestId, rerender } = render(DatePicker, {
         props: { modelValue: OCT_8 }

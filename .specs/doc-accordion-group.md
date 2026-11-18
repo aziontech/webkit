@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: a81683b8bea8b698238eaae5457791e5567b3ff13cf51e2c3d0a786d3074570a
+checksum: c05820206d964cc69e913ef569ef065947ffce60e5210a6e21fecadaf0da8974
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -130,6 +130,7 @@ The panel height transition comes from `Accordion` and is off under reduced moti
 
 - Default — three questions, the first open.
 - Multiple — `type="multiple"` with two entries open.
+- Markdown — the same group authored as `<AccordionGroup>` / `<Accordion title>` in a Markdown page and rendered by `DocMarkdown`.
 
 ## Constraints — DO NOT
 

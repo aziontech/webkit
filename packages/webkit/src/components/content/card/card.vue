@@ -70,7 +70,7 @@
       <template v-else-if="showDefaultHeader()">
         <h2
           v-if="title"
-          class="text-label-md text-(--text-default)"
+          class="text-title-sm text-(--text-default)"
           :data-testid="`${testId}__title`"
         >
           {{ title }}

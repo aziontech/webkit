@@ -12,6 +12,14 @@
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
+  import FlowDiagramBind from '@aziontech/webkit/flow-diagram-bind'
+  import type {
+    FlowDiagramBindOption,
+    FlowDiagramEdgeData,
+    FlowDiagramNodeData,
+    FlowDiagramNodeField
+  } from '@aziontech/webkit/flow-diagram-root'
+  import FlowDiagram from '@aziontech/webkit/flow-diagram-root'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
@@ -27,12 +35,6 @@
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import TopologyDiagram, {
-    type TopologyDiagramBindOption,
-    type TopologyDiagramLevel,
-    type TopologyDiagramNodeData,
-    type TopologyDiagramNodeField
-  } from '@aziontech/webkit/topology-diagram'
   import { computed, onBeforeUnmount, reactive, ref } from 'vue'
 
   type ProductionStep = {
@@ -47,11 +49,11 @@
   type Target = {
     kind: string
     icon: string
-    options: TopologyDiagramBindOption[]
+    options: FlowDiagramBindOption[]
     unbound?: string
     bound?: string
     removable?: boolean
-    fields?: TopologyDiagramNodeField[]
+    fields?: FlowDiagramNodeField[]
   }
 
   const environments = [
@@ -173,14 +175,14 @@
   const stagedCount = computed(() => Object.keys(staged).length)
   const stagedNote = ref('')
 
-  const slotNode = (key: string): TopologyDiagramNodeData => {
+  const slotNode = (key: string): FlowDiagramNodeData => {
     const target = targets[key]
     const pick = staged[key]
     const removing = pick === ''
     const value = pick === undefined ? deployed[key] : pick
     const base = {
       id: key,
-      type: target.kind,
+      eyebrow: target.kind,
       icon: target.icon,
       bindable: true,
       bindOptions: target.options,
@@ -197,7 +199,7 @@
     }
     return {
       ...base,
-      name: value,
+      title: value,
       boundValue: value,
       status: pick === undefined ? 'Active' : 'Staged',
       severity: pick === undefined ? 'success' : 'warning',
@@ -210,95 +212,83 @@
     }
   }
 
-  const topologyLevels = computed<TopologyDiagramLevel[]>(() => [
+  const topologyNodes = computed<FlowDiagramNodeData[]>(() => [
     {
       id: 'domains',
-      nodes: [
+      eyebrow: 'Domains',
+      icon: 'az az-globe',
+      title: 'service-01.example.com',
+      status: '1 domain',
+      severity: 'neutral',
+      fields: [
         {
-          id: 'domains',
-          type: 'Domains',
-          icon: 'az az-globe',
-          name: 'service-01.example.com',
-          status: '1 domain',
-          severity: 'neutral',
-          fields: [
-            {
-              label: 'Generated domain',
-              value: 'service-01.example.com',
-              copyable: true,
-              href: 'https://service-01.example.com'
-            }
-          ]
+          label: 'Generated domain',
+          value: 'service-01.example.com',
+          copyable: true,
+          href: 'https://service-01.example.com'
         }
       ]
     },
     {
       id: 'service',
-      nodes: [
+      eyebrow: 'Service',
+      icon: 'az az-server',
+      title: SERVICE.name,
+      status: 'Live',
+      severity: 'success',
+      href: '/services/1020655',
+      fields: [
+        { label: 'ID', value: '1020655' },
         {
-          id: 'service',
-          type: 'Service',
-          icon: 'az az-server',
-          name: SERVICE.name,
-          status: 'Live',
-          severity: 'success',
-          href: '/services/1020655',
-          fields: [
-            { label: 'ID', value: '1020655' },
-            {
-              label: 'Domain',
-              value: 'service-01.example.com',
-              copyable: true,
-              href: 'https://service-01.example.com'
-            },
-            { label: 'Environment', value: 'Production' }
-          ]
-        }
+          label: 'Domain',
+          value: 'service-01.example.com',
+          copyable: true,
+          href: 'https://service-01.example.com'
+        },
+        { label: 'Environment', value: 'Production' }
       ]
     },
-    { id: 'policy', nodes: [slotNode('policy')] },
+    slotNode('policy'),
     {
       id: 'resource',
-      nodes: [
-        {
-          id: 'resource',
-          type: 'Resource',
-          icon: 'az az-box',
-          name: 'web-app',
-          status: 'Active',
-          severity: 'success',
-          href: '/resources/1170472732',
-          fields: [
-            { label: 'ID', value: '1170472732' },
-            { label: 'Repository', value: 'acme/web-app' },
-            { label: 'Branch', value: 'main' }
-          ]
-        },
-        { ...slotNode('errorPage'), terminal: true }
+      eyebrow: 'Resource',
+      icon: 'az az-box',
+      title: 'web-app',
+      status: 'Active',
+      severity: 'success',
+      href: '/resources/1170472732',
+      fields: [
+        { label: 'ID', value: '1170472732' },
+        { label: 'Repository', value: 'acme/web-app' },
+        { label: 'Branch', value: 'main' }
       ]
     },
-    { id: 'origin', nodes: [slotNode('origin')] },
+    slotNode('errorPage'),
+    slotNode('origin'),
     {
       id: 'storage',
-      nodes: [
-        {
-          id: 'storage',
-          type: 'Storage',
-          icon: 'az az-inbox',
-          name: 'web-app-assets',
-          status: 'Public',
-          severity: 'info',
-          href: '/storage/web-app-assets',
-          terminal: true,
-          fields: [
-            { label: 'Access', value: 'Public' },
-            { label: 'Files', value: '24' },
-            { label: 'Size', value: '1.2 MB' }
-          ]
-        }
+      eyebrow: 'Storage',
+      icon: 'az az-inbox',
+      title: 'web-app-assets',
+      status: 'Public',
+      severity: 'info',
+      href: '/storage/web-app-assets',
+      fields: [
+        { label: 'Access', value: 'Public' },
+        { label: 'Files', value: '24' },
+        { label: 'Size', value: '1.2 MB' }
       ]
     }
   ])
+
+  const topologyEdges: FlowDiagramEdgeData[] = [
+    { from: 'domains', to: 'service' },
+    { from: 'service', to: 'policy' },
+    { from: 'policy', to: 'resource' },
+    { from: 'policy', to: 'errorPage' },
+    { from: 'resource', to: 'origin' },
+    { from: 'origin', to: 'storage' }
+  ]
 
   const stagedChanges = computed(() =>
     Object.entries(staged).map(([key, value]) => ({
@@ -1066,12 +1056,11 @@
               <div
                 class="rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised)"
               >
-                <TopologyDiagram
+                <FlowDiagram
                   v-model:open-keys="expanded"
-                  :levels="topologyLevels"
-                  @bind="(_event, { id, value }) => bind(id, value)"
-                  @remove="(_event, key) => unbind(key)"
-                  @create="(_event, key) => createTarget(key)"
+                  :nodes="topologyNodes"
+                  :edges="topologyEdges"
+                  aria-label="Deployment topology"
                 >
                   <template #actions="{ node }">
                     <Tooltip
@@ -1086,8 +1075,18 @@
                         href="/domains/create"
                       />
                     </Tooltip>
+                    <FlowDiagramBind
+                      v-if="node.bindable"
+                      :label="node.eyebrow"
+                      :options="node.bindOptions"
+                      :value="node.boundValue"
+                      :removable="node.removable"
+                      @bind="(_event, value) => bind(node.id, value)"
+                      @remove="() => unbind(node.id)"
+                      @create="() => createTarget(node.id)"
+                    />
                   </template>
-                </TopologyDiagram>
+                </FlowDiagram>
               </div>
               <p
                 role="status"

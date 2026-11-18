@@ -4,7 +4,7 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 5
-checksum: 2962984f2a2213bc4e271c3639e028272dafefe2b9e5df8eece4aefd2855abf1
+checksum: 7b01c0ba32ac2a4c4cb914e4b8f896ed5060ecabf55034b12987b14c0b6d3988
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -27,7 +27,7 @@ The size ladder is the house one (`small` / `medium` / `large`) and each step is
 ## When NOT to use
 
 - You need a full pricing tier with plan name, caveat and action → use `pricing-card`.
-- The headline figures are not money (throughput, uptime, points of presence) → use `stats`.
+- The headline figures are not money (throughput, uptime, data centers) → use `stats`.
 
 ## Related
 

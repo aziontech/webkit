@@ -1,17 +1,17 @@
 import './reflow.css'
 
 import { render } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import type { Component } from 'vue'
 import { nextTick } from 'vue'
 
 import EyebrowCursor from '../../examples/eyebrow/cursor.vue'
 import FlowDiagramDefault from '../../examples/flow-diagram/default.vue'
+import FlowDiagramTopology from '../../examples/flow-diagram/topology.vue'
 import HighlightButtonDefault from '../../examples/highlight-button/default.vue'
 import NetworkMapAnimated from '../../examples/network-map/animated.vue'
 import NetworkMapTraffic from '../../examples/network-map/traffic.vue'
 import TextureVariants from '../../examples/texture/variants.vue'
-import TopologyDiagramDefault from '../../examples/topology-diagram/default.vue'
 
 const LIMIT = 5000
 
@@ -22,7 +22,7 @@ const EXAMPLES: [string, Component][] = [
   ['network-map/animated', NetworkMapAnimated],
   ['network-map/traffic', NetworkMapTraffic],
   ['texture/variants', TextureVariants],
-  ['topology-diagram/default', TopologyDiagramDefault]
+  ['flow-diagram/topology', FlowDiagramTopology]
 ]
 
 const frame = () => new Promise((resolve) => requestAnimationFrame(resolve))
@@ -45,8 +45,8 @@ function animationsIn(root: Element) {
 describe('decorative motion stops by itself within five seconds (WCAG 2.2.2)', () => {
   it.each(EXAMPLES)('%s', async (_, component) => {
     const { container } = await mounted(component)
+    await vi.waitFor(() => expect(animationsIn(container).length).toBeGreaterThan(0))
     const animations = animationsIn(container)
-    expect(animations.length).toBeGreaterThan(0)
     for (const animation of animations) {
       expect((animation.effect as KeyframeEffect).getKeyframes().length).toBeGreaterThan(0)
       const end = Number(animation.effect!.getComputedTiming().endTime)

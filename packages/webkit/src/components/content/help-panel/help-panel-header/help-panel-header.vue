@@ -38,7 +38,7 @@
   >
     <h2
       v-if="title"
-      class="text-heading-xs text-(--text-default)"
+      class="text-title-md text-(--text-default)"
     >
       {{ title }}
     </h2>

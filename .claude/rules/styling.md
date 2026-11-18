@@ -317,6 +317,27 @@ How the library keeps it, so a page composed from it inherits the single line:
 
 A static lint cannot see rendered borders, so this rule is gated where the CSS is real: the styled visual suite measures every page it visits and fails on a doubled line (see Enforcement).
 
+## Two filled rows never touch
+
+In a list of rows (a select or combobox option, a menu item, a command item, a sidebar or tree row), the hover, highlighted, active and selected fills of two neighbouring rows are separated by a **2px gap**. The row keeps its full height, so the hit area and the touch target do not shrink; only the painted fill is inset, 1px from the top and 1px from the bottom edge. This is the market pattern (Radix and shadcn menus, Linear, Vercel Geist, Raycast): each highlighted row is its own rounded surface, and a selected row next to a highlighted one reads as two surfaces, never as one merged block.
+
+```html
+<!-- ❌ the selected row and the highlighted row below it fuse into one block -->
+<div role="option" class="h-8 rounded-(--shape-control) hover:bg-(--bg-hover) data-[selected]:bg-(--bg-selected)">…</div>
+
+<!-- ✅ the fill stops 1px inside each edge; the row is still 32px tall -->
+<div
+  role="option"
+  class="h-8 rounded-(--shape-control) border-y border-transparent bg-clip-padding forced-colors:border-y-0 hover:bg-(--bg-hover) data-[selected]:bg-(--bg-selected)"
+>…</div>
+```
+
+- **The pattern is the four utilities `border-y border-transparent bg-clip-padding forced-colors:border-y-0`** on the row, next to its `rounded-*`. A fill painted on a `before:` / `after:` layer with `inset-0` is inset too, because an absolute layer fills the padding box. An inset focus ring (`ring-inset`) sits inside the same box.
+- **`forced-colors:border-y-0` is required**: under Windows high contrast the system paints a transparent border as a solid line, which would rule every row. There are no fills in that mode, so the gap is not needed there.
+- **The list does not add a gap between rows**: the gap comes from the inset, so a list is exactly as tall as before, and a virtualized list keeps its fixed row height.
+- **A panel list whose focus ring sits outside the row keeps its list gap instead.** `TransferList`, `ConversationHistory`, `FilterMenu` and the `DateRangePicker` presets space their rows with `gap-(--spacing-2xs)`, which already separates the fills and leaves room for the offset ring; they do not add the inset as well.
+- **Rows that are not a list keep their own shape**: a calendar cell, a tab, a segmented control, a mega-menu entry and a table row follow their own components' rules.
+
 ## Never stack regions flush
 
 Two regions of a page never sit closer than the group step, `--layout-group-gap` (`--spacing-md`, 16px). A region is a banner (`Alert`), a card, a framed table or any bordered or filled surface, and a section heading; the step between two of them is `--layout-section-gap` between the sections of a parent and `--layout-group-gap` between the parts of one section (the two steps of [`webkit-layout`](../../skills/webkit-layout/SKILL.md)), so the group step is the floor.
@@ -375,6 +396,7 @@ padding: 0 var(--spacing-md);
 ## Hard prohibitions
 
 - Never double a line — no two visible borders flush side by side or 1px apart. The container draws the outer frame; the parts inside draw only the dividers between themselves.
+- Never let the fills of two neighbouring list rows touch: inset the fill with `border-y border-transparent bg-clip-padding forced-colors:border-y-0`, keeping the row height.
 - Never stack two page regions (a banner, a card, a framed table, a section heading) closer than `--layout-group-gap`; the stack that holds them carries the gap.
 - No zero with a length unit — `0`, never `0px` / `0rem` / `0em` (in tokens, arbitrary Tailwind values, inline `style`, or authored CSS). The single exception is inside `calc()`/`min()`/`max()`/`clamp()`, where CSS requires a unit and that unit is **`rem`**.
 - No malformed token shorthand — no whitespace inside the parens (`bg-(--token )`, `bg-( --token)`) and never the inverted `[--(token)]`. The style silently never applies; blocked by `dead-token-shorthand`.
@@ -474,6 +496,7 @@ Use a `data-*` attribute + a Tailwind variant. The decision lives in HTML, not i
 - **Zero-unit** is gated on four surfaces, so no authoring path escapes it: the `zero-with-unit` check in the shared token-checks engine (write-time hook **and** the `check-authoring` CI ratchet, over component sources); `length-zero-no-unit` in [`.stylelintrc.json`](../../.stylelintrc.json) for authored CSS/SCSS/Vue `<style>` — set to plain `true` so the preset's `ignore: ['custom-properties']` does **not** apply, since a design system is authored almost entirely as custom properties; the same rule in the shipped [`stylelint-config.js`](../../packages/webkit/src/stylelint-config.js) so consumers inherit it; and a build-time assertion in the theme's `build:tokens`, which is the only gate that sees token values (they are authored in JS and compiled, so no linter reads them). A `length-zero-no-unit` canary fixture keeps the stylelint side from being relaxed.
 - **The `rem`-in-math-function carve-out** is gated by the two engines we own — the `zero-unit-in-calc` token check and the same assertion in `build:tokens`. Stylelint's `length-zero-no-unit` deliberately skips math functions (a unit is required there), so it accepts `calc(100% - 0px)`; the token check is what makes that `0rem`.
 - **Never double a line** is gated by the `visual` CI job: [`apps/visual/tests/doubled-lines.spec.ts`](../../apps/visual/tests/doubled-lines.spec.ts) runs [`findDoubledLines`](../../apps/visual/tests/doubled-lines.ts) once per page in the browser — the first example of every component, the primary state of every block, and the docs home and foundation pages, at 390 and 1280 — and fails listing every pair of visible borders (non-zero width, opaque color, not inside a form control, not hidden or zero-size) that lie flush or 1px apart and overlap along at least 4px. [`apps/visual/scripts/doubled-lines.mjs`](../../apps/visual/scripts/doubled-lines.mjs) runs the same detector over every docs route, example and block state against a built docs site, for a full sweep before a PR.
+- **Two filled rows never touch** is gated by the styled suite [`list-row-gap.test.ts`](../../packages/webkit/src/test/list-row-gap.test.ts): it opens Select, MultiSelect, Combobox and DropdownMenu, puts a selected row next to a highlighted one, and measures a visible gap of at least 2px between the two fills, with the row height unchanged.
 - **Never stack regions flush** is gated by the same `visual` job: [`apps/visual/tests/region-gaps.spec.ts`](../../apps/visual/tests/region-gaps.spec.ts) runs [`findTightRegions`](../../apps/visual/tests/region-gaps.ts) over the same pages at the same widths. For every vertical stack (a block flow, a column flex or a grid) that is not inside a unit — a bordered or filled surface, a fixed or sticky layer, an `article`, a list item, a log or a dialog — it takes each pair of consecutive visible children and fails when the first ends on a surface (bordered on four sides or filled with a radius, at least 120 × 32px, not a control or a field wrapper) and the second starts on a surface or a heading, closer than the resolved `--layout-group-gap`. A heading is measured from its content box, so a heading's own top padding counts as space; two surfaces of the same kind (a list of like cards) are a list, not two regions. [`apps/visual/scripts/region-gaps.mjs`](../../apps/visual/scripts/region-gaps.mjs) sweeps every docs route, example and block state.
 - A future PostToolUse hook may grep `.vue` files for `const \w+Classes\s*=\s*[\{[]` and emit `BLOCKED: forbidden class preset` — until then, `echo-reporter` flags the pattern.
 - `.claude/docs/COMPONENT_REQUIREMENTS.md` § 13.w "Styling discipline" supersedes any older example in the same file that still shows the JS-presets pattern. **The data-attribute approach is the canonical pattern for new components.**

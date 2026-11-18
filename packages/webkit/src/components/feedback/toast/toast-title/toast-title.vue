@@ -18,7 +18,7 @@
   <p
     v-bind="$attrs"
     :data-testid="testId"
-    class="text-label-md text-(--text-default)"
+    class="text-title-sm text-(--text-default)"
   >
     <slot />
   </p>

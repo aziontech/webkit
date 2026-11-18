@@ -4,7 +4,7 @@
 </script>
 
 <template>
-  <DropdownMenu :open="true">
+  <DropdownMenu>
     <DropdownMenu.Trigger>
       <Button
         variant="secondary"

@@ -14,13 +14,14 @@
   "`date-range-picker` — every range: relative windows (`last 15 minutes`) kept relative, absolute ranges down to the minute, and whole days with `:show-time=\"false\"`. It is built on this component's grid, fields and time zone selector.",
   "`timestamp` — shows a moment in time in the app's time zone.",
   "`field` — inside a `Field`, the trigger takes the field's label (`for` points at it), description, `invalid` and `disabled`.",
+  "`select` — the Month and Year selects in the calendar caption (`variant=\"ghost\"`, `size=\"small\"`).",
   "`combobox` — the time field: a typed time or a pick from the 30-minute list, which opens under the field so the panel stays as thin as the grid.",
   "`input` — the trigger and the date field share its heights, hover, and disabled treatment, so they align side by side."
  ],
  "bestPractices": [
   "`modelValue` is committed only on Apply; read the final value from `update:modelValue` or the second argument of `apply`, and set `:show-apply=\"false\"` when every edit should commit at once.",
   "Bind a `Date` or `null`.",
-  "Bound the selectable days with `min` and `max` instead of validating after commit.",
+  "Bound the selectable days with `min` and `max` instead of validating after commit. Unlike `date-range-picker` (five years back to the end of today by default), DatePicker is unbounded by default: a single date is often in the future (a token expiry, an alert schedule), so a page sets `min` to today there, and sets `max` only when the date must be in the past.",
   "Send `toISOString()` (or the ISO date `2026-11-15`) to the server, never the printed label."
  ]
 }

@@ -202,7 +202,7 @@
       <Module
         :divided="false"
         title="Deploy from the CLI or from Git"
-        description="Push a change and it goes live on every edge location in seconds."
+        description="Push a change and it goes live in every data center in seconds."
       />
     </Container>
   </SiteLayout>
@@ -310,7 +310,7 @@
       <Module
         :divided="false"
         title="Deploy from the CLI or from Git"
-        description="Push a change and it goes live on every edge location in seconds."
+        description="Push a change and it goes live in every data center in seconds."
       />
     </Container>
   </SiteLayout>

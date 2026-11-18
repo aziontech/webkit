@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3775-16746&m=dev
   node_id: 3775:16746
-checksum: 9fd9c3a23b49234dc8f4a521ab30efa23b180ad82f2687636d1f0dee925884fd
+checksum: 680daa003c74385bda004925f895120d2ad0987d7b17fae1f4b4c61d0f2db029
 created: 2026-06-26
 last_updated: 2026-11-17
 ---
@@ -262,6 +262,7 @@ Sub-menus and checkable options:
 | option gap                      | `var(--spacing-xs)`                                                                                                             |
 | option hover surface            | `var(--bg-hover)`                                                                                                               |
 | option selected surface         | `var(--bg-selected)`                                                                                                            |
+| row fill inset (2px gap)        | `border-y border-transparent bg-clip-padding`                                                                                   |
 | option disabled text            | `var(--text-disabled)`                                                                                                          |
 | option command text             | `text-(--text-muted)`                                                                                                           |
 | checkable indicator             | `az az-check` / a `size-1.5` `rounded-full` `bg-current` dot in `text-(--text-default)`, in a `size-4` column                   |
@@ -272,7 +273,7 @@ Sub-menus and checkable options:
 | group divider spacing.below     | `var(--spacing-xs)`                                                                                                             |
 | group content inset.x           | `var(--spacing-2xs)`                                                                                                            |
 | panel spacing.y                 | `var(--spacing-xs)` — the vertical seam is one step up from the row inset so the first/last row does not crowd the panel border |
-| focus ring                      | `var(--ring-color)`                                                                                                             |
+| focus ring                      | `var(--ring-color)`, 2px, inset in the row                                                                                      |
 | popup origin                    | `var(--popup-origin)`                                                                                                           |
 
 ## Theme gaps
@@ -333,10 +334,10 @@ Canonical layout — composite examples (`types.vue`, `sizes.vue`) render every 
 - Placements — composite story rendering the four corners (`bottom` / `top` × `start` / `end`) side-by-side. Required because `side` × `align` is a multi-value prop axis with no other coverage; consumers need to see how each anchors against its trigger.
 - AutoPlacement — composite story demonstrating `side="auto"`: four triggers anchored near each viewport corner so the resolver opens the panel toward the side with the most available space. Required because `'auto'` is the only `side` value not covered by `Placements` and is the recommended default for consumer-positioned triggers.
 - OptionAffordances — composite story rendering options that demonstrate the `command` prop and the `leading` + `trailing` slots in a single panel. Required because these affordances are public Option API surface the existing stories do not exercise, and the spec calls out their mutual exclusivity.
-- WithHeaderAndFooter — single panel forced open showing the root `header` and `footer` named slots in use (e.g. a search input on top, a footer action on bottom). Required because both slots are public root API documented in the Slots table and have no other coverage.
-- GroupsWithHeaderAndFooter — panel forced open with two `<DropdownMenu.Group>` each using its own `header` (per-section caption) and `footer` (per-section action) slots. Required because the group-level `header`/`footer` are public API on `DropdownMenu.Group` and behave differently from the root slots (inline, per-section — not sticky).
-- SubMenus — panel forced open with a `DropdownMenu.Sub` open by `defaultOpen`, one nested level holding a second sub-menu. Required because the sub-menu parts are public API with no other coverage.
-- CheckableOptions — panel forced open with a group of `type="checkbox"` options and a group of `type="radio"` options, wired to local state. Required because `type` is a public Option axis with no other coverage.
+- WithHeaderAndFooter — a single panel, opened by the reader, showing the root `header` and `footer` named slots in use (e.g. a search input on top, a footer action on bottom). Required because both slots are public root API documented in the Slots table and have no other coverage.
+- GroupsWithHeaderAndFooter — a panel, opened by the reader, with two `<DropdownMenu.Group>` each using its own `header` (per-section caption) and `footer` (per-section action) slots. Required because the group-level `header`/`footer` are public API on `DropdownMenu.Group` and behave differently from the root slots (inline, per-section — not sticky).
+- SubMenus — a panel, opened by the reader, with a `DropdownMenu.Sub` that opens with it by `defaultOpen`, one nested level holding a second sub-menu. Required because the sub-menu parts are public API with no other coverage.
+- CheckableOptions — a panel, opened by the reader, with a group of `type="checkbox"` options and a group of `type="radio"` options, wired to local state. Required because `type` is a public Option axis with no other coverage.
 - CustomTriggers — composite story showing the abstract `<DropdownMenu.Trigger>` wrapping different elements (Button, IconButton, plain text). Required because the spec mandates the trigger is abstract and the consumer chooses the inner element; the existing stories only show a `Button`.
 
 ## Constraints — DO NOT

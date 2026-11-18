@@ -125,39 +125,39 @@
           class="flex flex-col gap-(--spacing-xs)"
         >
           <h3 class="text-label-md text-(--text-muted)">{{ category.title }}</h3>
-          <ul
-            class="grid grid-cols-3 gap-px overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--border-default) sm:grid-cols-4 md:grid-cols-6 xl:grid-cols-8"
-          >
-            <li
-              v-for="icon in category.icons"
-              :key="icon.class"
-              class="flex"
-            >
-              <Item
-                clickable
-                size="small"
-                :title="`${icon.label} · ${format('{label}: {value}', { label: t.iconsCopy, value: icon.class })}`"
-                class="min-h-24 flex-col justify-center gap-(--spacing-xs) rounded-none bg-(--bg-canvas) focus-visible:z-1 focus-visible:ring-inset focus-visible:ring-offset-0"
-                @click="copyValue(icon.class)"
+          <div class="overflow-hidden rounded-(--shape-card) border border-(--border-default)">
+            <ul class="-me-px -mb-px grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 xl:grid-cols-8">
+              <li
+                v-for="icon in category.icons"
+                :key="icon.class"
+                class="flex border-e border-b border-(--border-default)"
               >
-                <i
-                  :class="icon.class"
-                  class="text-(--text-default)"
-                  :style="{ fontSize: `${size}px` }"
-                  aria-hidden="true"
-                />
-                <span class="w-full truncate text-center text-label-code-sm text-(--text-muted)"
-                  >{{ shortName(icon)
-                  }}<template v-if="icon.set === 'color'"> · {{ t.iconsColor }}</template></span
+                <Item
+                  clickable
+                  size="small"
+                  :title="`${icon.label} · ${format('{label}: {value}', { label: t.iconsCopy, value: icon.class })}`"
+                  class="min-h-24 flex-col justify-center gap-(--spacing-xs) rounded-none bg-(--bg-canvas) focus-visible:z-1 focus-visible:ring-inset focus-visible:ring-offset-0"
+                  @click="copyValue(icon.class)"
                 >
-                <span class="sr-only">{{ icon.class }}, {{ icon.label }}</span>
-                <i
-                  class="az az-copy absolute end-(--spacing-xs) top-(--spacing-xs) text-(--text-muted) opacity-0 transition-opacity duration-fast-02 group-hover/item:opacity-100 group-focus-visible/item:opacity-100 motion-reduce:transition-none"
-                  aria-hidden="true"
-                />
-              </Item>
-            </li>
-          </ul>
+                  <i
+                    :class="icon.class"
+                    class="text-(--text-default)"
+                    :style="{ fontSize: `${size}px` }"
+                    aria-hidden="true"
+                  />
+                  <span class="w-full text-center wrap-break-word [hyphens:none] text-label-code-sm text-(--text-muted)"
+                    >{{ shortName(icon)
+                    }}<template v-if="icon.set === 'color'"> · {{ t.iconsColor }}</template></span
+                  >
+                  <span class="sr-only">{{ icon.class }}, {{ icon.label }}</span>
+                  <i
+                    class="az az-copy absolute end-(--spacing-xs) top-(--spacing-xs) text-(--text-muted) opacity-0 transition-opacity duration-fast-02 group-hover/item:opacity-100 group-focus-visible/item:opacity-100 motion-reduce:transition-none"
+                    aria-hidden="true"
+                  />
+                </Item>
+              </li>
+            </ul>
+          </div>
         </div>
       </section>
     </template>

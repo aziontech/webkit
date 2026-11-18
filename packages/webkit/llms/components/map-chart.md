@@ -9,7 +9,7 @@
 ## When to use
 
 - Requests, threats or bandwidth by country (Real-Time Metrics map card).
-- Traffic by point of presence or by city, as bubbles.
+- Traffic by data center or by city, as bubbles.
 - A regional view of either, framed with `view` (for example `south-america`).
 
 ## Do
@@ -162,7 +162,7 @@
 <template>
   <MapChart
     :points="points"
-    aria-label="Requests by point of presence"
+    aria-label="Requests by data center"
   />
 </template>
 ```

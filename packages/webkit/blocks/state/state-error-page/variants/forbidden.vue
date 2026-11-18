@@ -1,39 +1,29 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Error403 from '@aziontech/webkit/svg/error-403'
+
+  import StateErrorPage from '../state-error-page.vue'
 </script>
 
 <template>
-  <div
-    class="flex w-full flex-1 flex-col items-center justify-center px-(--spacing-md) py-(--spacing-xl)"
+  <StateErrorPage
+    :code="403"
+    error-code="FORBIDDEN"
+    title="You don't have access to this page"
+    description="Your role in this account does not include this page. Ask an account admin for access, or switch to an account that has it."
   >
-    <h1 class="sr-only">Error 403</h1>
-    <div class="w-full max-w-(--container-md)">
-      <EmptyState
-        title="You don't have access to this page"
-        description="Your role in this account does not include this page. Ask an account admin for access, or switch to an account that has it."
-      >
-        <template #icon>
-          <Error403 class="h-auto w-full max-w-(--container-3xs)" />
-        </template>
-        <template #actions>
-          <div class="flex flex-wrap items-center justify-center gap-(--spacing-xs)">
-            <Button
-              label="Go to home"
-              variant="primary"
-              size="medium"
-              href="/"
-            />
-            <Button
-              label="Switch account"
-              variant="outline"
-              icon="az az-sync"
-              size="medium"
-            />
-          </div>
-        </template>
-      </EmptyState>
-    </div>
-  </div>
+    <template #actions>
+      <Button
+        label="Request access"
+        variant="primary"
+        size="medium"
+        icon="az az-mail"
+      />
+      <Button
+        label="Switch account"
+        variant="outline"
+        size="medium"
+        icon="az az-users"
+      />
+    </template>
+  </StateErrorPage>
 </template>

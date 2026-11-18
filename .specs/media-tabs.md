@@ -7,7 +7,7 @@ spec_version: 5
 figma:
   url: https://www.figma.com/design/QEbHSTFDWfh4VHkBp6NWN3/Azion.com?node-id=13138-296208
   node_id: 13138-296208
-checksum: 019f6cdc968e068da9155f343ce89c40c6a4463398dd8c4ab084d88e2cc8187b
+checksum: e653f5cf4c61432b86147f8a453e00dd4896fe2da782e2a0a5e2f385743df98e
 created: 2026-09-24
 last_updated: 2026-11-15
 ---
@@ -65,7 +65,7 @@ A band split in two: a stack of claims on one side, one piece of media on the ot
         description:
           'Execute models on the Azion Web Platform across hundreds of locations to deliver real-time responses with median latency under 30 ms.',
         src: '',
-        alt: 'Inference running at the edge locations closest to each user'
+        alt: 'Inference running at the data centers closest to each user'
       },
       {
         title: 'Keep every inference accounted for',

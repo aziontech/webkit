@@ -186,7 +186,7 @@
         <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-2xs)">
           <div
             v-if="title"
-            class="text-heading-2xs text-(--text-default)"
+            class="text-title-sm text-(--text-default)"
             :data-testid="`${testId}__title`"
           >
             {{ title }}

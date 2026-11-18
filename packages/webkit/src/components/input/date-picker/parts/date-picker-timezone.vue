@@ -1,8 +1,9 @@
 <script setup lang="ts">
-  import { computed, inject, onMounted, ref } from 'vue'
+  import { computed, inject, onMounted, ref, useId } from 'vue'
 
   import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
+  import Combobox from '../../combobox/combobox.vue'
   import { cityName, defaultTimezones, formatTimezoneLabel, localTimezone } from '../format'
   import { DatePickerInjectionKey } from '../injection-key'
 
@@ -33,44 +34,44 @@
     return provided.length > 0 ? provided : defaultTimezones()
   })
 
+  const labelId = useId()
+
   const optionLabel = (zone: string): string => {
     const local = t('datePicker.localTimezone')
     if (mounted.value) return formatTimezoneLabel(zone, local)
     return zone ? cityName(zone) : local
   }
 
-  const onChange = (event: globalThis.Event) => {
-    const target = event.target as globalThis.HTMLSelectElement
-    ctx?.setTimezone(target.value)
+  const zoneOptions = computed(() =>
+    options.value.map((zone) => ({ value: zone, label: optionLabel(zone) }))
+  )
+
+  const onPick = (zone: string) => {
+    if (zone && zone !== value.value && options.value.includes(zone)) ctx?.setTimezone(zone)
   }
 </script>
 
 <template>
-  <label
+  <div
     class="flex flex-col gap-(--spacing-2xs)"
     data-testid="date-picker__timezone"
   >
-    <span class="text-label-sm text-(--text-muted)"> {{ t('datePicker.timezone') }} </span>
-    <span class="relative inline-flex w-full items-center">
-      <select
-        :value="value"
-        :disabled="disabled"
-        :data-size="size"
-        class="text-label-sm w-full appearance-none rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) ps-(--spacing-sm) pe-(--spacing-lg) text-(--text-default) transition-colors duration-150 ease-out [&:not(:focus):not(:disabled)]:hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) disabled:cursor-not-allowed disabled:bg-(--bg-disabled) disabled:text-(--text-disabled) data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 motion-reduce:transition-none"
-        @change="onChange"
-      >
-        <option
-          v-for="zone in options"
-          :key="zone"
-          :value="zone"
-        >
-          {{ optionLabel(zone) }}
-        </option>
-      </select>
-      <i
-        class="az az-chevron-down pointer-events-none absolute end-(--spacing-sm) text-[length:inherit] leading-none text-(--text-muted)"
-        aria-hidden="true"
-      />
+    <span
+      :id="labelId"
+      class="text-label-sm text-(--text-muted)"
+    >
+      {{ t('datePicker.timezone') }}
     </span>
-  </label>
+    <Combobox
+      :model-value="value"
+      :options="zoneOptions"
+      icon="az az-globe"
+      :size="size"
+      :disabled="disabled"
+      :allow-custom="false"
+      :aria-labelledby="labelId"
+      data-testid="date-picker__timezone-field"
+      @update:model-value="onPick"
+    />
+  </div>
 </template>

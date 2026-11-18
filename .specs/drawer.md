@@ -4,7 +4,7 @@ category: overlay
 structure: composition
 status: implemented
 spec_version: 10
-checksum: c6ce066e34d4d532854797286f0280eba6982425a4c2aecfbcefd3e8795259f0
+checksum: 12bba17609406b7e9ad76cc1870088346e3823add71eb9461a4f90bcddfe2698
 created: 2026-05-22
 last_updated: 2026-11-17
 ---
@@ -157,7 +157,7 @@ No element sets an inline `transition`, so `motion-reduce:transition-none` wins 
 
 | Region         | Token (DESIGN.md)                                                |
 | -------------- | ---------------------------------------------------------------- |
-| title          | `.text-heading-sm`, `var(--text-default)`                        |
+| title          | `.text-title-lg` (medium weight), `var(--text-default)`          |
 | description    | `.text-body-sm`, `var(--text-muted)`                             |
 | body           | `PanelBody`: `.text-body-sm`, `var(--spacing-lg)`, `min-h-24`    |
 | header, footer | `PanelHeader` / `PanelFooter`: `var(--spacing-md)` block padding |

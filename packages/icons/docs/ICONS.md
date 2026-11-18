@@ -2,15 +2,15 @@
 
 > Generated from `src/icons.json` by `scripts/build-docs.mjs`. Edit the JSON, then run `npm run build`; do not edit this page by hand.
 
-483 icons in three groups. A monochrome icon is `az az-<name>` and takes the text colour; a colour logo is `az-color az-<name>` and keeps its own colours. Browse the drawings in the icons gallery (`apps/icons-gallery`).
+487 icons in three groups. A monochrome icon is `az az-<name>` and takes the text colour; a colour logo is `az-color az-<name>` and keeps its own colours. Browse the drawings in the icons gallery (`apps/icons-gallery`).
 
 ## How the icons are organised
 
-- **Azion** (62) — Everything that is Azion's own: its products, the parts inside them, the platform, its solutions and its services.
-  - Products (33) — One icon per Azion product, named after the product as WebKit and the console name it.
-  - Product features (8) — A part that lives inside a product, such as Domains in Workloads or Edge Nodes in Edge Orchestrator. The entry names its product.
+- **Azion** (66) — Everything that is Azion's own: its products, the parts inside them, the platform, its solutions and its services.
+  - Products (35) — One icon per Azion product, named after the product as WebKit and the console name it.
+  - Product features (6) — A part that lives inside a product, such as Domains in Workloads or Edge Nodes in Orchestrator. The entry names its product.
   - Platform (9) — The Azion brand, its tools (CLI, API, Ask Azion) and the platform pillars.
-  - Solutions (4) — Solutions Azion sells that combine several products.
+  - Solutions (8) — The Azion Solutions, one icon each: the five By Need Solutions and the three By Industry Solutions, named after the Solution's short name.
   - Services (8) — Support plans and professional services.
 - **Interface** (307) — Generic glyphs for the interface. They name an action, an object or a state, never a product.
   - Arrows (48) — Arrows, chevrons, carets, sorting and moving.
@@ -56,7 +56,7 @@ One icon per Azion product, named after the product as WebKit and the console na
 | `az az-data-stream` | Data Stream | Data Stream | A wave line |  |
 | `az az-durable-objects` | Durable Objects | Durable Objects | A cube inside a focus frame |  |
 | `az az-edge-dns` | Edge DNS | Edge DNS | Three connected boxes in a tree |  |
-| `az az-edge-orchestrator` | Edge Orchestrator | Edge Orchestrator | Two boxes joined by a path |  |
+| `az az-orchestrator` | Orchestrator | Orchestrator | Two boxes joined by a path |  |
 | `az az-edge-pulse` | Edge Pulse | Edge Pulse | A heartbeat line |  |
 | `az az-firewall` | Firewall | Firewall | A brick wall with a flame |  |
 | `az az-functions` | Functions | Functions | The letter f in parentheses |  |
@@ -78,19 +78,19 @@ One icon per Azion product, named after the product as WebKit and the console na
 | `az az-network-shield` | Network Shield | Network Shield | A shield with a list inside |  |
 | `az az-ddos-protection` | DDoS Protection | DDoS Protection | Flood lines held off by a shield |  |
 | `az az-secure-internet-access` | Secure Internet Access | Secure Internet Access | A globe with a padlock |  |
+| `az az-lora-fine-tune` | LoRA Fine-Tune | LoRA Fine-Tune | Two sliders and a third whose knob is a sparkle |  |
+| `az az-origin-shield` | Origin Shield | Origin Shield | A server with a shield in its lower corner |  |
 
 ### Azion · Product features
 
-A part that lives inside a product, such as Domains in Workloads or Edge Nodes in Edge Orchestrator. The entry names its product.
+A part that lives inside a product, such as Domains in Workloads or Edge Nodes in Orchestrator. The entry names its product.
 
 | Class | Product | Stands for | Shows | Notes |
 | --- | --- | --- | --- | --- |
 | `az az-domains` | Workloads | Domains (inside Workloads) | A globe |  |
-| `az az-edge-libraries` | Edge Orchestrator | Edge Libraries, where Edge Orchestrator keeps the services it can install | Books on a shelf |  |
-| `az az-edge-nodes` | Edge Orchestrator | Edge Nodes, the servers Edge Orchestrator manages | Two server racks |  |
-| `az az-edge-services` | Edge Orchestrator | Edge Services, the services Edge Orchestrator installs on an edge node | Four squares in a grid |  |
-| `az az-lora` | AI Inference | LoRA adapters for AI Inference | Three sliders |  |
-| `az az-origin-shield` | Connectors | Origin Shield (Connectors feature) | A shield with a map pin |  |
+| `az az-edge-libraries` | Orchestrator | Edge Libraries, where Orchestrator keeps the services it can install | Books on a shelf |  |
+| `az az-edge-nodes` | Orchestrator | Edge Nodes, the servers Orchestrator manages | Two server racks |  |
+| `az az-edge-services` | Orchestrator | Edge Services, the services Orchestrator installs on an edge node | Four squares in a grid |  |
 | `az az-rules-engine` | Applications | Rules Engine (part of Applications) | A box with a path and a lightning bolt |  |
 | `az az-tiered-cache` | Cache | Tiered Cache (Cache feature) | Three stacked tiers, narrowest on top |  |
 
@@ -112,14 +112,18 @@ The Azion brand, its tools (CLI, API, Ask Azion) and the platform pillars.
 
 ### Azion · Solutions
 
-Solutions Azion sells that combine several products.
+The Azion Solutions, one icon each: the five By Need Solutions and the three By Industry Solutions, named after the Solution's short name.
 
 | Class | Stands for | Shows | Notes |
 | --- | --- | --- | --- |
-| `az az-abuse-prevention` | Abuse prevention (security solution) | A skull with a no-entry sign |  |
-| `az az-adaptive-security` | Adaptive security (security solution) | A shield with a magnifying glass |  |
-| `az az-content-delivery` | Content delivery (solution) | A globe with a person |  |
-| `az az-sase` | SASE (secure access solution) | A shield with a triangle |  |
+| `az az-application-development` | Build and run applications (Application Development) | A browser window with code brackets |  |
+| `az az-performance-and-reliability` | Improve application performance and reliability (Performance and Reliability) | A dial with a check mark |  |
+| `az az-artificial-intelligence` | Build and run AI workloads (Artificial Intelligence) | Four connected nodes around a sparkle |  |
+| `az az-application-security` | Secure applications and networks (Application Security) | A shield with a padlock |  |
+| `az az-media-and-streaming` | Deliver media and streaming content (Media and Streaming) | A play button sending waves |  |
+| `az az-retail` | Retail (industry solution) | A shopping basket |  |
+| `az az-technology` | Technology (industry solution) | A circuit board |  |
+| `az az-financial-services` | Financial Services (industry solution) | Two coins, the front one with a dollar sign |  |
 
 ### Azion · Services
 
@@ -701,6 +705,7 @@ Until 6.0 the classes were `ai ai-<name>`, `ai-cor ai-<name>` and PrimeIcons `pi
 | `ai ai-app-accelerator` | `az az-application-accelerator` | Product name is Application Accelerator, not "App". |
 | `ai ai-edge-application` | `az az-applications` | Old name Edge Application. |
 | `ai ai-edge-connectors` | `az az-connectors` | Old name Edge Connectors. |
+| `ai ai-edge-orchestrator` | `az az-orchestrator` | Edge Orchestrator was renamed Orchestrator in the Azion product catalog. |
 | `ai ai-edge-firewall` | `az az-firewall` | Old name Edge Firewall. |
 | `ai ai-edge-functions` | `az az-functions` | Old name Edge Functions. |
 | `ai ai-edge-kv` | `az az-kv-store` | Old name Edge KV. |
@@ -708,6 +713,10 @@ Until 6.0 the classes were `ai ai-<name>`, `ai-cor ai-<name>` and PrimeIcons `pi
 | `ai ai-edge-sql` | `az az-sql-database` | Old name Edge SQL. |
 | `ai ai-waf-rules` | `az az-waf` | The product is WAF; WAF Rules is its list in the console. |
 | `ai ai-store` | `az az-store-pillar` | "store" alone reads as a shop. Matches the other pillars. |
+| `ai ai-content-delivery` | `az az-performance-and-reliability` | Content delivery is not an Azion Solution; it is part of Improve application performance and reliability. |
+| `ai ai-abuse-prevention` | `az az-application-security` | Abuse prevention, adaptive security and SASE are not Azion Solutions; they are part of Secure applications and networks. |
+| `ai ai-adaptive-security` | `az az-application-security` | Abuse prevention, adaptive security and SASE are not Azion Solutions; they are part of Secure applications and networks. |
+| `ai ai-sase` | `az az-application-security` | Abuse prevention, adaptive security and SASE are not Azion Solutions; they are part of Secure applications and networks. |
 | `ai ai-pratices-review` | `az az-practices-review` | Spelling: practices. |
 | `ai ai-sort-down` | `az az-arrow-down` |  |
 | `ai ai-sort-numeric-down` | `az az-arrow-down-0-1` |  |
@@ -812,5 +821,6 @@ Until 6.0 the classes were `ai ai-<name>`, `ai-cor ai-<name>` and PrimeIcons `pi
 | `ai-cor ai-js` | `az-color az-javascript` | Spelled out, like typescript. |
 | `ai-cor ai-ts` | `az-color az-typescript` | Spelled out, so search finds it. |
 | `ai-cor ai-x` | `az-color az-x-brand` |  |
+| `ai ai-lora` | `az az-lora-fine-tune` | LoRA Fine-Tune is a Build product in the Azion product catalog, no longer a part of AI Inference. |
 
 PrimeIcons: 87 `pi pi-<name>` classes map to an `az` icon; each entry lists its old class under `legacy` in `src/icons.json`.

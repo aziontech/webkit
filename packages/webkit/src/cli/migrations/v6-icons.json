@@ -110,6 +110,8 @@
     "ai-edge-kv": "az-kv-store",
     "ai-edge-sql": "az-sql-database",
     "ai-edge-storage": "az-object-storage",
+    "ai-edge-orchestrator": "az-orchestrator",
+    "ai-lora": "az-lora-fine-tune",
     "ai-eject": "az-arrow-up-from-line",
     "ai-fast-backward": "az-skip-back",
     "ai-fast-forward": "az-skip-forward",
@@ -119,7 +121,11 @@
     "ai-waf-rules": "az-waf",
     "ai-origin-accelerator": "az-application-accelerator",
     "ai-ai-pillar": "az-sparkles",
-    "ai-window-maximize": "az-app-window"
+    "ai-window-maximize": "az-app-window",
+    "ai-abuse-prevention": "az-application-security",
+    "ai-adaptive-security": "az-application-security",
+    "ai-sase": "az-application-security",
+    "ai-content-delivery": "az-performance-and-reliability"
   },
   "color": {
     "ai-open": "az-openai",

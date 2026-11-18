@@ -21,7 +21,7 @@
 ## Don’t
 
 - You need a full pricing tier with plan name, caveat and action → use `pricing-card`.
-- The headline figures are not money (throughput, uptime, points of presence) → use `stats`.
+- The headline figures are not money (throughput, uptime, data centers) → use `stats`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related

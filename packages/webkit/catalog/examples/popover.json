@@ -12,7 +12,7 @@
   },
   {
    "name": "AutoPlacement",
-   "summary": "`side=\"auto\"` lets the popover choose the side with the most room at open time. The four triggers below all use the same value — each, anchored near a different viewport corner and forced open, resolves toward the side with the most available space.",
+   "summary": "`side=\"auto\"` lets the popover choose the side with the most room at open time. The four triggers below all use the same value. Click one to open its panel: each, anchored near a different viewport corner, resolves toward the side with the most available space.",
    "file": "examples/popover/auto-placement.vue"
   }
  ]

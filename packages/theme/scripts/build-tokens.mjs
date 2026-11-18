@@ -50,7 +50,7 @@ const flattenBundle = (data) => {
   const byBp = {};
   for (const [key, bundle] of Object.entries(data)) {
     for (const [prop, val] of Object.entries(bundle)) {
-      if (prop === 'states') continue;
+      if (prop === 'states' || prop === 'fontSizeFit') continue;
       const varName = `--${key}-${kebab(prop)}`;
       for (const [bp, v] of Object.entries(splitResponsive(val))) {
         (byBp[bp] ||= {})[varName] = v;
@@ -108,10 +108,16 @@ const emitComponentClasses = (indent = '  ') => {
 const emitTextUtilities = () => {
   const blocks = [];
   for (const [key, bundle] of Object.entries(typography)) {
-    const baseProps = Object.keys(bundle).filter((prop) => prop !== 'states');
-    const declLines = baseProps.map(
-      (prop) => `  ${kebab(prop)}: var(--${key}-${kebab(prop)});`,
+    const baseProps = Object.keys(bundle).filter(
+      (prop) => prop !== 'states' && prop !== 'fontSizeFit',
     );
+    const declLines = baseProps.map((prop) => {
+      const value = `var(--${key}-${kebab(prop)})`;
+      if (prop === 'fontSize' && bundle.fontSizeFit) {
+        return `  font-size: min(${value}, ${bundle.fontSizeFit});`;
+      }
+      return `  ${kebab(prop)}: ${value};`;
+    });
     const nested = [];
     if (bundle.states) {
       for (const [pseudo, rules] of Object.entries(bundle.states)) {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, onMounted, provide, ref, useAttrs, useId } from 'vue'
+  import { computed, nextTick, onMounted, provide, ref, useAttrs, useId } from 'vue'
 
   import { useDropdownContext } from '../composables/use-dropdown-context'
   import { DropdownMenuSubInjectionKey } from '../injection-key'
@@ -38,8 +38,10 @@
     else if (parent.activeSub.value === uid) parent.setActiveSub(null)
   }
 
-  onMounted(() => {
-    if (props.defaultOpen) setOpen(true)
+  onMounted(async () => {
+    if (!props.defaultOpen) return
+    await nextTick()
+    setOpen(true)
   })
 
   provide(DropdownMenuSubInjectionKey, {

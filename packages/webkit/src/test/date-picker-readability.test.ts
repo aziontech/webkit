@@ -148,6 +148,49 @@ describe('date pickers stay readable at every width', () => {
       expect(panel.getBoundingClientRect().width).toBeLessThanOrEqual(thin)
     })
 
+    it.each(['en-US', 'pt-BR'])(
+      'DateRangePicker relative only: two columns of quick ranges, read down each, the custom duration below and Apply in view (%s)',
+      async (locale) => {
+        await atWidth(width)
+        const view = mount(RelativeOnly, locale)
+        const panel = await openPanel(view, 'date-range-picker')
+        expect(cutOff(panel)).toEqual([])
+        expect(outside(panel, width)).toEqual([])
+        const options = within(panel).getAllByTestId('date-range-picker__option')
+        expect(options).toHaveLength(12)
+        const boxes = options.map((option) => option.getBoundingClientRect())
+        const first = boxes.slice(0, 6)
+        const second = boxes.slice(6)
+        for (const column of [first, second]) {
+          for (const box of column)
+            expect(Math.abs(box.left - (column[0] as DOMRect).left)).toBeLessThanOrEqual(1)
+          for (let i = 1; i < column.length; i += 1) {
+            expect((column[i] as DOMRect).top).toBeGreaterThan((column[i - 1] as DOMRect).top)
+          }
+        }
+        expect((second[0] as DOMRect).left).toBeGreaterThan((first[0] as DOMRect).right - 1)
+        for (const option of options) {
+          const label = option.querySelector('span') as HTMLElement
+          const range = document.createRange()
+          range.selectNodeContents(label)
+          expect(range.getBoundingClientRect().right).toBeLessThanOrEqual(
+            option.getBoundingClientRect().right + 1
+          )
+        }
+        const quick = within(panel).getByTestId('date-range-picker__quick').getBoundingClientRect()
+        const custom = within(panel)
+          .getByTestId('date-range-picker__custom-range')
+          .getBoundingClientRect()
+        expect(custom.top).toBeGreaterThanOrEqual(quick.bottom - 1)
+        const apply = within(panel)
+          .getByRole('button', { name: /Apply|Aplicar/ })
+          .getBoundingClientRect()
+        const box = panel.getBoundingClientRect()
+        expect(apply.bottom).toBeLessThanOrEqual(Math.min(box.bottom, window.innerHeight) + 1)
+        expect(apply.top).toBeGreaterThanOrEqual(box.top - 1)
+      }
+    )
+
     it('DateRangePicker until now: the open end reads in full', async () => {
       await atWidth(width)
       const view = mount(UntilNow)
@@ -208,7 +251,8 @@ describe('the absolute range opens on the calendar and keeps Apply in view on sh
       const visible = [
         within(panel).getByRole('radio', { name: 'Absolute' }),
         within(panel).getByRole('radio', { name: 'Relative' }),
-        within(absolute).getByText('November 2026'),
+        within(absolute).getByLabelText('Month'),
+        within(absolute).getByLabelText('Year'),
         within(panel).getByText('Timezone'),
         within(panel).getByRole('button', { name: 'Apply' }),
         within(panel).getByRole('button', { name: 'Cancel' })
@@ -252,5 +296,44 @@ describe('the quick ranges start on one inline edge', () => {
     expect(Math.abs(textStart(legend, dir) - textStart(label as Element, dir))).toBeLessThanOrEqual(
       1
     )
+  })
+})
+
+describe('the Unit and Refresh every selects line up', () => {
+  it.each([
+    [320, 'ltr'],
+    [390, 'ltr'],
+    [1280, 'ltr'],
+    [390, 'rtl']
+  ] as const)('same edges and width at %ipx (%s)', async (width, dir) => {
+    await atWidth(width)
+    const view = render(
+      defineComponent({
+        setup: () => () =>
+          h(
+            ConfigProvider,
+            { now: NOW, timeZone: 'UTC', locale: 'en-US', catalogs: LOCALES, dir },
+            { default: () => h(AutoRefresh) }
+          )
+      })
+    )
+    const panel = await openPanel(view, 'date-range-picker')
+    const relativeTab = within(panel).queryByRole('radio', { name: 'Relative' })
+    if (relativeTab && relativeTab.getAttribute('aria-checked') !== 'true') {
+      await fireEvent.click(relativeTab)
+      await nextTick()
+      await frame()
+    }
+    await fireEvent.click(within(panel).getByTestId('date-range-picker__custom-range'))
+    await nextTick()
+    await frame()
+    const unit = within(panel).getByTestId('date-range-picker__unit').getBoundingClientRect()
+    const refresh = within(panel)
+      .getByTestId('date-range-picker__refresh-interval')
+      .getBoundingClientRect()
+    expect(unit.width).toBeGreaterThan(0)
+    expect(Math.abs(unit.left - refresh.left)).toBeLessThanOrEqual(0.5)
+    expect(Math.abs(unit.right - refresh.right)).toBeLessThanOrEqual(0.5)
+    expect(Math.abs(unit.width - refresh.width)).toBeLessThanOrEqual(0.5)
   })
 })

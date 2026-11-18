@@ -957,7 +957,19 @@
     "active": "activeKey"
   },
   "topology-diagram": {
-    "expanded": "openKeys"
+    "expanded": "openKeys",
+    "levels": {
+      "removed": "TopologyDiagram is now FlowDiagram: pass the nodes flat in nodes and the connections in edges ({ from, to }); the edges set the columns (MIGRATION_V6.md, FlowDiagram)."
+    },
+    "@bind": {
+      "removed": "the bind control moved to the FlowDiagramBind companion: put it in the actions slot and listen to its bind, remove and create events (MIGRATION_V6.md, FlowDiagram)."
+    },
+    "@remove": {
+      "removed": "the bind control moved to the FlowDiagramBind companion: put it in the actions slot and listen to its bind, remove and create events (MIGRATION_V6.md, FlowDiagram)."
+    },
+    "@create": {
+      "removed": "the bind control moved to the FlowDiagramBind companion: put it in the actions slot and listen to its bind, remove and create events (MIGRATION_V6.md, FlowDiagram)."
+    }
   },
   "console-mockup": {
     "hover": "hovered",
@@ -1825,5 +1837,10 @@
   },
   "settings-group": {
     "title": "label"
+  },
+  "flow-diagram-parallel": {
+    "align": {
+      "removed": "FlowDiagram.Group stacks its nodes full width; drop align (MIGRATION_V6.md, FlowDiagram)."
+    }
   }
 }

@@ -206,7 +206,7 @@ export const DOMAIN_PARTS = {
   'date-picker': ['clear'],
   'dropdown-menu': ['sub'],
   field: ['error', 'legend', 'set'],
-  'flow-diagram': ['anchor', 'node', 'parallel'],
+  'flow-diagram': ['anchor', 'bind', 'node'],
   footer: ['column', 'link'],
   'input-group': ['addon', 'input'],
   item: ['actions', 'media'],

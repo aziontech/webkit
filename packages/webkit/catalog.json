@@ -608,14 +608,17 @@
    "--text-big-number-lg-font-size",
    "--text-big-number-lg-font-weight",
    "--text-big-number-lg-line-height",
+   "--text-big-number-lg-white-space",
    "--text-big-number-md-font-family",
    "--text-big-number-md-font-size",
    "--text-big-number-md-font-weight",
    "--text-big-number-md-line-height",
+   "--text-big-number-md-white-space",
    "--text-big-number-sm-font-family",
    "--text-big-number-sm-font-size",
    "--text-big-number-sm-font-weight",
    "--text-big-number-sm-line-height",
+   "--text-big-number-sm-white-space",
    "--text-body-2xs-font-size",
    "--text-body-2xs-font-weight",
    "--text-body-2xs-line-height",
@@ -763,6 +766,21 @@
    "--text-tag-sm-font-size",
    "--text-tag-sm-font-weight",
    "--text-tag-sm-line-height",
+   "--text-title-lg-font-size",
+   "--text-title-lg-font-weight",
+   "--text-title-lg-letter-spacing",
+   "--text-title-lg-line-height",
+   "--text-title-lg-text-wrap-style",
+   "--text-title-md-font-size",
+   "--text-title-md-font-weight",
+   "--text-title-md-letter-spacing",
+   "--text-title-md-line-height",
+   "--text-title-md-text-wrap-style",
+   "--text-title-sm-font-size",
+   "--text-title-sm-font-weight",
+   "--text-title-sm-letter-spacing",
+   "--text-title-sm-line-height",
+   "--text-title-sm-text-wrap-style",
    "--text-xl",
    "--text-xl--line-height",
    "--text-xs",
@@ -823,7 +841,10 @@
    "text-overline-sm",
    "text-overline-xs",
    "text-tag-md",
-   "text-tag-sm"
+   "text-tag-sm",
+   "text-title-lg",
+   "text-title-md",
+   "text-title-sm"
   ],
   "groups": {
    "accent": [
@@ -1465,14 +1486,17 @@
     "--text-big-number-lg-font-size",
     "--text-big-number-lg-font-weight",
     "--text-big-number-lg-line-height",
+    "--text-big-number-lg-white-space",
     "--text-big-number-md-font-family",
     "--text-big-number-md-font-size",
     "--text-big-number-md-font-weight",
     "--text-big-number-md-line-height",
+    "--text-big-number-md-white-space",
     "--text-big-number-sm-font-family",
     "--text-big-number-sm-font-size",
     "--text-big-number-sm-font-weight",
     "--text-big-number-sm-line-height",
+    "--text-big-number-sm-white-space",
     "--text-body-2xs-font-size",
     "--text-body-2xs-font-weight",
     "--text-body-2xs-line-height",
@@ -1620,6 +1644,21 @@
     "--text-tag-sm-font-size",
     "--text-tag-sm-font-weight",
     "--text-tag-sm-line-height",
+    "--text-title-lg-font-size",
+    "--text-title-lg-font-weight",
+    "--text-title-lg-letter-spacing",
+    "--text-title-lg-line-height",
+    "--text-title-lg-text-wrap-style",
+    "--text-title-md-font-size",
+    "--text-title-md-font-weight",
+    "--text-title-md-letter-spacing",
+    "--text-title-md-line-height",
+    "--text-title-md-text-wrap-style",
+    "--text-title-sm-font-size",
+    "--text-title-sm-font-weight",
+    "--text-title-sm-letter-spacing",
+    "--text-title-sm-line-height",
+    "--text-title-sm-text-wrap-style",
     "--text-xl",
     "--text-xl--line-height",
     "--text-xs",
@@ -3000,12 +3039,13 @@
     "group": "typography",
     "type": "typography",
     "value": {
+     "white-space": "nowrap",
      "font-size": "1.25rem",
      "line-height": "1.25",
      "font-weight": "400",
      "font-family": "'Proto Mono', 'Roboto Mono', ui-monospace, monospace"
     },
-    "purpose": "A numeric display in a stat card.",
+    "purpose": "A numeric figure in a stat card, on one line, shrunk to fit.",
     "breakpoints": {
      "sm": {
       "font-size": "1.5rem"
@@ -3019,12 +3059,13 @@
     "group": "typography",
     "type": "typography",
     "value": {
+     "white-space": "nowrap",
      "font-size": "1rem",
      "line-height": "1.25",
      "font-weight": "400",
      "font-family": "'Proto Mono', 'Roboto Mono', ui-monospace, monospace"
     },
-    "purpose": "A compact numeric display.",
+    "purpose": "A compact numeric figure, on one line, shrunk to fit.",
     "breakpoints": {
      "sm": {
       "font-size": "1.25rem"
@@ -3035,12 +3076,13 @@
     "group": "typography",
     "type": "typography",
     "value": {
+     "white-space": "nowrap",
      "font-size": "1.5rem",
      "line-height": "1.25",
      "font-weight": "400",
      "font-family": "'Proto Mono', 'Roboto Mono', ui-monospace, monospace"
     },
-    "purpose": "The largest numeric display, such as a hero metric.",
+    "purpose": "The largest numeric figure on one line, shrunk to fit its container.",
     "breakpoints": {
      "sm": {
       "font-size": "2.25rem"
@@ -3241,6 +3283,50 @@
      "letter-spacing": "0"
     },
     "purpose": "A small title or a wordmark written in type, a flat 14px."
+   },
+   "text-title-lg": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "text-wrap-style": "balance",
+     "font-size": "0.875rem",
+     "line-height": "1.375",
+     "font-weight": "500",
+     "letter-spacing": "0"
+    },
+    "purpose": "The title of a dialog or drawer, medium weight.",
+    "breakpoints": {
+     "sm": {
+      "font-size": "1rem"
+     },
+     "md": {
+      "font-size": "1.125rem"
+     }
+    }
+   },
+   "text-title-md": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "text-wrap-style": "balance",
+     "font-size": "1rem",
+     "line-height": "1.375",
+     "font-weight": "500",
+     "letter-spacing": "0"
+    },
+    "purpose": "The title of a side panel, medium weight, a flat 16px."
+   },
+   "text-title-sm": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "text-wrap-style": "balance",
+     "font-size": "0.875rem",
+     "line-height": "1.375",
+     "font-weight": "500",
+     "letter-spacing": "0"
+    },
+    "purpose": "The title of a popover, card, alert or toast, medium weight."
    },
    "text-label-lg": {
     "group": "typography",
@@ -3950,7 +4036,8 @@
  "surfaces": {
   "app": "Product UI (the console and other apps). The default for components.",
   "site": "The marketing site (azion.com): page sections, bands, brand and client assets.",
-  "docs": "The documentation site: doc page chrome, callouts, steps, the table of contents."
+  "docs": "The documentation site: doc page chrome, callouts, steps, the table of contents.",
+  "edge": "Pages Azion's edge serves to the visitors of a customer's site (error pages), with no Azion product chrome and no account actions."
  },
  "aliases": {
   "alert-dialog": "confirm-dialog",
@@ -3975,6 +4062,7 @@
   "logo-cloud": "logo-wall",
   "modal": "dialog",
   "newsletter": "newsletter-section",
+  "node-diagram": "flow-diagram",
   "notice": "alert",
   "notification": "toast",
   "section-heading": "subheader",
@@ -4080,6 +4168,7 @@
   "feature-widgets": "feature-widgets-section",
   "filter-menu-chips": "filter-menu-chip-group",
   "flow": "flow-diagram",
+  "flow-diagram-parallel": "flow-diagram-group",
   "frame-box": "registration-frame",
   "global-header": "app-header",
   "help-panel-links": "help-panel-footer",
@@ -4148,6 +4237,7 @@
   "texture-material": "texture",
   "ticker": "marquee",
   "topic": "feature-item",
+  "topology-diagram": "flow-diagram",
   "use-cases": "customer-use-cases-section",
   "use-heading-nav": "use-heading-navigation",
   "webkit-provider": "config-provider"
@@ -9944,28 +10034,28 @@
      "type": "'world' | 'atlantic' | 'americas' | 'north-america' | 'south-america' | 'europe' | 'africa' | 'asia' | 'oceania'",
      "default": "'world'",
      "required": "false",
-     "doc": "Which part of the world has its PoPs lit; the map always frames the whole world."
+     "doc": "Which part of the world has its data centers lit; the map always frames the whole world."
     },
     {
      "name": "density",
      "type": "'none' | 'low' | 'medium' | 'high'",
      "default": "'medium'",
      "required": "false",
-     "doc": "How many PoPs are lit, from `none` to `high`."
+     "doc": "How many data centers are lit, from `none` to `high`."
     },
     {
      "name": "animated",
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Pulses the PoPs in three staggered waves that settle within five seconds; static when false."
+     "doc": "Pulses the data centers in three staggered waves that settle within five seconds; static when false."
     },
     {
      "name": "opacity",
      "type": "number",
      "default": "0.4",
      "required": "false",
-     "doc": "Opacity of the landmass dots, from 0 to 1; the PoPs stay at full strength."
+     "doc": "Opacity of the landmass dots, from 0 to 1; the data centers stay at full strength."
     },
     {
      "name": "position",
@@ -10007,7 +10097,7 @@
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Draws traffic between lit PoPs: faint links and, while `animated`, packets that cross them; the links alone under reduced motion."
+     "doc": "Draws traffic between lit data centers: faint links and, while `animated`, packets that cross them; the links alone under reduced motion."
     }
    ],
    "surface": "app",
@@ -11848,62 +11938,69 @@
    "treeShakeableImport": "@aziontech/webkit/flow-diagram-root",
    "subcomponents": [
     "@aziontech/webkit/flow-diagram-node",
-    "@aziontech/webkit/flow-diagram-parallel",
-    "@aziontech/webkit/flow-diagram-anchor"
+    "@aziontech/webkit/flow-diagram-group",
+    "@aziontech/webkit/flow-diagram-anchor",
+    "@aziontech/webkit/flow-diagram-header",
+    "@aziontech/webkit/flow-diagram-title",
+    "@aziontech/webkit/flow-diagram-description",
+    "@aziontech/webkit/flow-diagram-footer",
+    "@aziontech/webkit/flow-diagram-item",
+    "@aziontech/webkit/flow-diagram-bind"
+   ],
+   "models": [
+    "openKeys"
    ],
    "category": "data",
    "structure": "composition",
    "props": [
     {
+     "name": "nodes",
+     "type": "FlowDiagramNodeData[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Nodes of a data-driven diagram; each renders as a full card. Leave empty to compose the parts by hand."
+    },
+    {
+     "name": "edges",
+     "type": "FlowDiagramEdgeData[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Connectors between nodes by id; they also decide the columns. Empty joins each step to the next."
+    },
+    {
+     "name": "orientation",
+     "type": "'horizontal' | 'vertical' | 'responsive'",
+     "default": "'responsive'",
+     "required": "false",
+     "doc": "Lays the steps out in a row, in a column, or in a row that stacks when its container is narrow."
+    },
+    {
      "name": "align",
      "type": "'start' | 'center'",
      "default": "'start'",
      "required": "false",
-     "doc": "Vertical alignment of nodes within the diagram."
-    }
-   ],
-   "slots": [
+     "doc": "Vertical alignment of the steps in a row."
+    },
     {
-     "name": "default",
-     "scope": "—",
-     "notes": "Diagram content: `flow-diagram-node` and `flow-diagram-parallel`, in flow order."
-    }
-   ],
-   "surface": "app",
-   "examplesFile": "catalog/examples/flow-diagram.json",
-   "docsFile": "catalog/components/flow-diagram.json"
-  },
-  "topology-diagram": {
-   "import": "@aziontech/webkit/topology-diagram",
-   "target": "./src/components/data/topology-diagram/topology-diagram.vue",
-   "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/topology-diagram",
-   "models": [
-    "openKeys"
-   ],
-   "category": "data",
-   "structure": "monolithic",
-   "props": [
-    {
-     "name": "levels",
-     "type": "TopologyDiagramLevel[]",
-     "default": "[]",
+     "name": "uniform",
+     "type": "boolean",
+     "default": "false",
      "required": "false",
-     "doc": "Columns of the diagram, from the entry point to the last dependency."
+     "doc": "Gives every step the width and height of the largest one."
     },
     {
      "name": "loading",
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Shows placeholder cards while the topology loads."
+     "doc": "Shows placeholder steps while the diagram loads."
     },
     {
      "name": "ariaLabel",
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Accessible name of the diagram. Empty uses the locale catalog (`Deployment topology`)."
+     "doc": "Accessible name of the diagram. Empty uses the locale catalog (`Diagram`)."
     },
     {
      "name": "openKeys",
@@ -11913,38 +12010,26 @@
      "doc": "Two-way value (`v-model:openKeys`)."
     }
    ],
-   "events": [
-    {
-     "name": "bind",
-     "payload": "(event: MouseEvent | KeyboardEvent, binding: { id: string; value: string })",
-     "notes": "A pending pick was confirmed with Apply; `id` is the node's id, `value` the picked option. Picking an option no longer emits on its own (v6)."
-    },
-    {
-     "name": "remove",
-     "payload": "(event: MouseEvent, id: string)",
-     "notes": "Remove was activated on a bound, removable node."
-    },
-    {
-     "name": "create",
-     "payload": "(event: MouseEvent | KeyboardEvent, id: string)",
-     "notes": "Create was picked in the bind control."
-    }
-   ],
    "slots": [
     {
+     "name": "default",
+     "scope": "—",
+     "notes": "Composed mode: nodes and groups, in flow order."
+    },
+    {
      "name": "actions",
-     "scope": "{ node: TopologyDiagramNodeData }",
-     "notes": "Extra controls in a node's identity row, before the bind control."
+     "scope": "{ node: FlowDiagramNodeData }",
+     "notes": "Data mode: controls at the end of a node's title row."
     },
     {
      "name": "empty",
      "scope": "—",
-     "notes": "Replaces the default empty state (the package `EmptyState`, small, `topologyDiagram.emptyTitle`) shown when there are no levels."
+     "notes": "Replaces the `EmptyState` shown when there are no nodes."
     }
    ],
    "surface": "app",
-   "examplesFile": "catalog/examples/topology-diagram.json",
-   "docsFile": "catalog/components/topology-diagram.json"
+   "examplesFile": "catalog/examples/flow-diagram.json",
+   "docsFile": "catalog/components/flow-diagram.json"
   },
   "flow-diagram-root": {
    "import": "@aziontech/webkit/flow-diagram-root",
@@ -11952,22 +12037,84 @@
    "kind": "root",
    "rootOf": "flow-diagram",
    "treeShakeableImport": "@aziontech/webkit/flow-diagram-root",
+   "models": [
+    "openKeys"
+   ],
    "category": "data",
    "structure": "composition",
    "props": [
+    {
+     "name": "nodes",
+     "type": "FlowDiagramNodeData[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Nodes of a data-driven diagram; each renders as a full card. Leave empty to compose the parts by hand."
+    },
+    {
+     "name": "edges",
+     "type": "FlowDiagramEdgeData[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Connectors between nodes by id; they also decide the columns. Empty joins each step to the next."
+    },
+    {
+     "name": "orientation",
+     "type": "'horizontal' | 'vertical' | 'responsive'",
+     "default": "'responsive'",
+     "required": "false",
+     "doc": "Lays the steps out in a row, in a column, or in a row that stacks when its container is narrow."
+    },
     {
      "name": "align",
      "type": "'start' | 'center'",
      "default": "'start'",
      "required": "false",
-     "doc": "Vertical alignment of nodes within the diagram."
+     "doc": "Vertical alignment of the steps in a row."
+    },
+    {
+     "name": "uniform",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Gives every step the width and height of the largest one."
+    },
+    {
+     "name": "loading",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows placeholder steps while the diagram loads."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the diagram. Empty uses the locale catalog (`Diagram`)."
+    },
+    {
+     "name": "openKeys",
+     "type": "string[]",
+     "default": "() => []",
+     "required": "false",
+     "doc": "Two-way value (`v-model:openKeys`)."
     }
    ],
    "slots": [
     {
      "name": "default",
      "scope": "—",
-     "notes": "Diagram content: `flow-diagram-node` and `flow-diagram-parallel`, in flow order."
+     "notes": "Composed mode: nodes and groups, in flow order."
+    },
+    {
+     "name": "actions",
+     "scope": "{ node: FlowDiagramNodeData }",
+     "notes": "Data mode: controls at the end of a node's title row."
+    },
+    {
+     "name": "empty",
+     "scope": "—",
+     "notes": "Replaces the `EmptyState` shown when there are no nodes."
     }
    ],
    "surface": "app",
@@ -11981,12 +12128,12 @@
    "treeShakeableImport": "@aziontech/webkit/flow-diagram-node",
    "surface": "app"
   },
-  "flow-diagram-parallel": {
-   "import": "@aziontech/webkit/flow-diagram-parallel",
-   "target": "./src/components/data/flow-diagram/flow-diagram-parallel/flow-diagram-parallel.vue",
+  "flow-diagram-group": {
+   "import": "@aziontech/webkit/flow-diagram-group",
+   "target": "./src/components/data/flow-diagram/flow-diagram-group/flow-diagram-group.vue",
    "kind": "subcomponent",
    "parent": "flow-diagram",
-   "treeShakeableImport": "@aziontech/webkit/flow-diagram-parallel",
+   "treeShakeableImport": "@aziontech/webkit/flow-diagram-group",
    "surface": "app"
   },
   "flow-diagram-anchor": {
@@ -11995,6 +12142,55 @@
    "kind": "subcomponent",
    "parent": "flow-diagram",
    "treeShakeableImport": "@aziontech/webkit/flow-diagram-anchor",
+   "surface": "app"
+  },
+  "flow-diagram-header": {
+   "import": "@aziontech/webkit/flow-diagram-header",
+   "target": "./src/components/data/flow-diagram/flow-diagram-header/flow-diagram-header.vue",
+   "kind": "subcomponent",
+   "parent": "flow-diagram",
+   "treeShakeableImport": "@aziontech/webkit/flow-diagram-header",
+   "surface": "app"
+  },
+  "flow-diagram-title": {
+   "import": "@aziontech/webkit/flow-diagram-title",
+   "target": "./src/components/data/flow-diagram/flow-diagram-title/flow-diagram-title.vue",
+   "kind": "subcomponent",
+   "parent": "flow-diagram",
+   "treeShakeableImport": "@aziontech/webkit/flow-diagram-title",
+   "surface": "app"
+  },
+  "flow-diagram-description": {
+   "import": "@aziontech/webkit/flow-diagram-description",
+   "target": "./src/components/data/flow-diagram/flow-diagram-description/flow-diagram-description.vue",
+   "kind": "subcomponent",
+   "parent": "flow-diagram",
+   "treeShakeableImport": "@aziontech/webkit/flow-diagram-description",
+   "surface": "app"
+  },
+  "flow-diagram-footer": {
+   "import": "@aziontech/webkit/flow-diagram-footer",
+   "target": "./src/components/data/flow-diagram/flow-diagram-footer/flow-diagram-footer.vue",
+   "kind": "subcomponent",
+   "parent": "flow-diagram",
+   "treeShakeableImport": "@aziontech/webkit/flow-diagram-footer",
+   "surface": "app"
+  },
+  "flow-diagram-item": {
+   "import": "@aziontech/webkit/flow-diagram-item",
+   "target": "./src/components/data/flow-diagram/flow-diagram-item/flow-diagram-item.vue",
+   "kind": "subcomponent",
+   "parent": "flow-diagram",
+   "treeShakeableImport": "@aziontech/webkit/flow-diagram-item",
+   "surface": "app"
+  },
+  "flow-diagram-bind": {
+   "import": "@aziontech/webkit/flow-diagram-bind",
+   "target": "./src/components/data/flow-diagram/flow-diagram-bind/flow-diagram-bind.vue",
+   "kind": "subcomponent",
+   "parent": "flow-diagram",
+   "treeShakeableImport": "@aziontech/webkit/flow-diagram-bind",
+   "attached": false,
    "surface": "app"
   },
   "transfer-list": {
@@ -14004,7 +14200,7 @@
     {
      "name": "relativeOptions",
      "type": "RelativeOption[]",
-     "default": "5m, 15m, 1h, 6h, 24h, 7d, 30d",
+     "default": "Today, This week, 1m, 5m, 15m, 30m, 1h, 24h, 7d, 30d, 90d, 1y",
      "required": "false",
      "doc": "Quick ranges listed on the Relative tab."
     },
@@ -14020,7 +14216,7 @@
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Shows the time zone selector in the panel. Off, the panel names the zone in a read-only line."
+     "doc": "Shows the time zone selector in the panel. Off, the panel says nothing about the zone and the page states it."
     },
     {
      "name": "showTime",
@@ -14053,16 +14249,23 @@
     {
      "name": "min",
      "type": "Date",
-     "default": "undefined",
+     "default": "undefined (the start of the day five years before today)",
      "required": "false",
-     "doc": "Earliest instant an absolute range may start at."
+     "doc": "Earliest selectable instant. Unset, the start of the day five years before today."
     },
     {
      "name": "max",
      "type": "Date",
+     "default": "undefined (the end of today)",
+     "required": "false",
+     "doc": "Latest selectable instant. Unset, the end of today; pass a later date to allow future dates."
+    },
+    {
+     "name": "maxDuration",
+     "type": "DateRangeDuration",
      "default": "undefined",
      "required": "false",
-     "doc": "Latest instant an absolute range may end at."
+     "doc": "Longest range a person may pick, for example 90 days. Unset, any length between min and max."
     },
     {
      "name": "now",
@@ -14137,7 +14340,7 @@
     {
      "name": "refreshInterval",
      "type": "number",
-     "default": "0",
+     "default": "300",
      "required": "false",
      "doc": "Two-way value (`v-model:refreshInterval`)."
     }
@@ -14146,7 +14349,7 @@
     {
      "name": "refresh",
      "payload": "()",
-     "notes": "On every auto-refresh tick while `refreshInterval` is above 0, the picker is enabled and the page is visible. A timer signal, not a user action: it carries no DOM event."
+     "notes": "On every auto-refresh tick while `refreshInterval` is above 0 (5 minutes by default), Refresh every is offered, the picker is enabled and the page is visible. A timer signal, not a user action: it carries no DOM event."
     }
    ],
    "surface": "app",
@@ -19803,7 +20006,7 @@
      "type": "boolean",
      "default": "true",
      "required": "false",
-     "doc": "Spins the globe or pulses the PoPs; a still frame when false or under reduced motion."
+     "doc": "Spins the globe or pulses the data centers; a still frame when false or under reduced motion."
     }
    ],
    "surface": "site",
@@ -30603,7 +30806,7 @@
     "split-button",
     "tag"
    ],
-   "count": 483,
+   "count": 487,
    "file": "catalog/assets/icons.json"
   }
  },
@@ -34714,7 +34917,7 @@
    "title": "Blocks/Detail/DetailResource",
    "source": "blocks/detail/detail-resource/detail-resource.vue",
    "surface": "app",
-   "summary": "The Overview tab of a resource detail page: the full-bleed tab bar, sticky while the layout scrolls, then the column that opens on the resource summary card. The resource overview follows it with Get started for a resource made from the CLI, and the same page plots its Versions tab (the versions table) and its Build tab (repository, build configuration and token bands); the service overview follows the summary with the production checklist and the deployment topology. The summary card on its own, in its resource, service and policy shapes, is the Resource, Service and Policy variants: a subject band with the primary link and the actions, a band of labelled facts, and a state band on the canvas fill. A deployment's own page (success, failure, queued) is the DeploymentLogs template and one function run is the Invocations template. The FirstDeploy variant draws the summary cards before and during the first deploy, ResourceBuildConnected the Build tab with a connected repository, and ApplicationBuild the application page with a Build tab and the project drop target. The Application variant is a whole application page with Overview, Versions, Deployments and a Topology tab built on `TopologyDiagram`, whose staged binds deploy through a `Drawer` and the Edit and Redeploy toast. The version page of a resource is the VersionDetail template and the deploy drawers opened from these pages are the DeployDrawer template (Templates/Platform/Create/DeployDrawer). The Deployments tab of a resource and of a service is the TableView controls row over a deployments table, scoped to the resource (the resource tab adds a small Deployments heading with Documentation and an outlined Deploy action); the service Settings tab is a variant of Templates/Platform/Edit/EditResource. Built from `PageHeader`, `PageTabs`, `Subheader`, `SettingsGroup`, `SettingsRow`, `SaveBar`, `Tabs`, `DataTable`, `EmptyState`, `InputGroupRoot`, `Card`, `DropdownMenu`, `Popover`, `Accordion`, `TopologyDiagram`, `Item`, `Drawer`, `Alert`, `CodeBlock` and `ToggleGroup`; the summary card variants add `Button`, `IconButton`, `Tag`, `StatusIndicator`, `Avatar`, `CopyButton` and `Tooltip`. A page body for ConsoleLayout: the layout owns the rail, the header with the breadcrumb (a service's environment crumb is its `breadcrumbs` slot) and the main.",
+   "summary": "The Overview tab of a resource detail page: the full-bleed tab bar, sticky while the layout scrolls, then the column that opens on the resource summary card. The resource overview follows it with Get started for a resource made from the CLI, and the same page plots its Versions tab (the versions table) and its Build tab (repository, build configuration and token bands); the service overview follows the summary with the production checklist and the deployment topology. The summary card on its own, in its resource, service and policy shapes, is the Resource, Service and Policy variants: a subject band with the primary link and the actions, a band of labelled facts, and a state band on the canvas fill. A deployment's own page (success, failure, queued) is the DeploymentLogs template and one function run is the Invocations template. The FirstDeploy variant draws the summary cards before and during the first deploy, ResourceBuildConnected the Build tab with a connected repository, and ApplicationBuild the application page with a Build tab and the project drop target. The Application variant is a whole application page with Overview, Versions, Deployments and a Topology tab built on `FlowDiagram`, whose staged binds deploy through a `Drawer` and the Edit and Redeploy toast. The version page of a resource is the VersionDetail template and the deploy drawers opened from these pages are the DeployDrawer template (Templates/Platform/Create/DeployDrawer). The Deployments tab of a resource and of a service is the TableView controls row over a deployments table, scoped to the resource (the resource tab adds a small Deployments heading with Documentation and an outlined Deploy action); the service Settings tab is a variant of Templates/Platform/Edit/EditResource. Built from `PageHeader`, `PageTabs`, `Subheader`, `SettingsGroup`, `SettingsRow`, `SaveBar`, `Tabs`, `DataTable`, `EmptyState`, `InputGroupRoot`, `Card`, `DropdownMenu`, `Popover`, `Accordion`, `FlowDiagram`, `Item`, `Drawer`, `Alert`, `CodeBlock` and `ToggleGroup`; the summary card variants add `Button`, `IconButton`, `Tag`, `StatusIndicator`, `Avatar`, `CopyButton` and `Tooltip`. A page body for ConsoleLayout: the layout owns the rail, the header with the breadcrumb (a service's environment crumb is its `breadcrumbs` slot) and the main.",
    "intents": [
     "overview page",
     "resource overview",
@@ -34775,6 +34978,8 @@
     "DrawerTitle",
     "DropdownMenu",
     "EmptyState",
+    "FlowDiagramBind",
+    "FlowDiagram",
     "IconButton",
     "Input",
     "InputGroupRoot",
@@ -34797,7 +35002,6 @@
     "toast",
     "ToggleGroup",
     "Tooltip",
-    "TopologyDiagram",
     "use-locale",
     "use-unsaved-changes"
    ],
@@ -34818,6 +35022,8 @@
     "@aziontech/webkit/drawer-title",
     "@aziontech/webkit/dropdown-menu",
     "@aziontech/webkit/empty-state",
+    "@aziontech/webkit/flow-diagram-bind",
+    "@aziontech/webkit/flow-diagram-root",
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
     "@aziontech/webkit/input-group-root",
@@ -34840,7 +35046,6 @@
     "@aziontech/webkit/toast",
     "@aziontech/webkit/toggle-group",
     "@aziontech/webkit/tooltip",
-    "@aziontech/webkit/topology-diagram",
     "@aziontech/webkit/use-locale",
     "@aziontech/webkit/use-unsaved-changes"
    ],
@@ -36337,25 +36542,103 @@
    ],
    "file": "catalog/blocks/state/state-async-submit.json"
   },
+  "state/state-edge-error-page": {
+   "name": "StateEdgeErrorPage",
+   "title": "Blocks/State/StateEdgeErrorPage",
+   "source": "blocks/state/state-edge-error-page/state-edge-error-page.vue",
+   "surface": "edge",
+   "summary": "The page Azion serves to a visitor of a customer's site when a request fails: a standalone page, no Azion product chrome, no account actions. Left-aligned and diagnostic: the `StatusCode` with its reason phrase, a title in plain words, the request path You → Azion → Application drawn with `FlowDiagram` (one data card per hop, `uniform` so every card has the same width and height, each with its status dot and text; side by side on a wide screen, stacked with `orientation=\"vertical\"` on a phone or tablet), What happened? and What can I do? side by side, Try again or Go to home page with Go back, then the request details in a `KeyValueList` (request ID with `CopyButton`, `Timestamp` in UTC, data center, host) and a Served by `Brand` footer. Azion here is Azion's infrastructure; the Application is the site's application, on Azion's infrastructure or on the customer's own servers. The primary is the 502 (application unreachable); variants cover 504, 500, 503, 403 (blocked by the site's firewall), 429 and 404. Azion's own console, site and docs use `state/state-error-page` instead.",
+   "intents": [
+    "edge error page",
+    "502 bad gateway page",
+    "504 gateway timeout page",
+    "application unreachable page",
+    "application error page",
+    "origin unreachable page",
+    "503 service unavailable page",
+    "firewall blocked page",
+    "waf blocked request page",
+    "rate limited page",
+    "429 page for visitors",
+    "error page for site visitors",
+    "custom error page",
+    "página de erro do edge",
+    "aplicação indisponível",
+    "requisição bloqueada pelo firewall",
+    "página de error del edge"
+   ],
+   "skills": [
+    "webkit-errors",
+    "webkit-ui-states",
+    "webkit-microcopy"
+   ],
+   "components": [
+    "Brand",
+    "Button",
+    "CopyButton",
+    "FlowDiagram",
+    "KeyValueList",
+    "StatusCode",
+    "Timestamp"
+   ],
+   "imports": [
+    "@aziontech/webkit/brand",
+    "@aziontech/webkit/button",
+    "@aziontech/webkit/copy-button",
+    "@aziontech/webkit/flow-diagram-root",
+    "@aziontech/webkit/key-value-list",
+    "@aziontech/webkit/status-code",
+    "@aziontech/webkit/timestamp"
+   ],
+   "primary": "Default",
+   "guidelinesSummary": "The page Azion serves to a visitor of a customer's site when the request fails: the site's application is down or slow, it answered with an error, the site's firewall blocked the request, or the visitor sent too many requests. The reader is not an Azion user: it is anyone on the internet who opened `www.example.com`. Their job is to learn, in one look, whose side the problem is on (their connection, Azion's infrastructure or the site's application), what they can do about it, and what to quote to the site owner. The page stands alone: it has no Azion product chrome, no navigation and nothing that needs an Azion account. Two error page families, one per audience: - **Edge** (this block, `surface: edge`): the visitors of your customers' sites. Diagnostic, left-aligned, with the request path. Words: the docs say **Azion's infrastructure**; the page itself says just **Azion**. The third hop is the **Application**, never \"origin\": the site's application may run on Azion's distributed infrastructure or on the customer's own servers, and the visitor does not need to know which. - **Console, site and docs** (`state/state-error-page`, `surface: app`): Azion's own users on Azion's own pages. Quiet and centred, inside the product shell.",
+   "variants": [
+    {
+     "name": "ApplicationTimeout"
+    },
+    {
+     "name": "ApplicationError"
+    },
+    {
+     "name": "ApplicationUnavailable"
+    },
+    {
+     "name": "Blocked"
+    },
+    {
+     "name": "RateLimited"
+    },
+    {
+     "name": "NotFound"
+    }
+   ],
+   "file": "catalog/blocks/state/state-edge-error-page.json"
+  },
   "state/state-error-page": {
    "name": "StateErrorPage",
    "title": "Blocks/State/StateErrorPage",
    "source": "blocks/state/state-error-page/state-error-page.vue",
    "surface": "app",
-   "summary": "The page an app renders when it cannot show the address the user asked for. The primary is the 404: the content region centring an EmptyState whose figure is the 404 numeral art, the title Page not found, one sentence that says the address leads nowhere, and two actions, Go to home (primary) and Docs (outlined, new tab). A visually hidden h1 names the error code the figure shows. Variants cover 403 (no access, with Switch account), 500 (a failure on the server, with Retry, System status and an error reference for support) and a resource that does not exist inside the console (bordered EmptyState in the content column with Back to the list). Built from `EmptyState`, `Button` and the `svg/error-404` and `svg/error-403` numeral art. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
+   "summary": "The error page of Azion's own surfaces (Console, the site, the docs) when a page cannot show what the user asked for. Quiet and traceable: one centred `EmptyState` column with the HTTP code as a `StatusCode` in its figure, a title in plain words, one sentence, at most two `Button`s, and a reference line with the error code, the request ID (with `CopyButton`) and the time (`Timestamp`, UTC) for support. A visually hidden h1 names the code. The primary is the 404 (Go to home and Docs); variants cover 401 (session expired, Sign in), 403 (Request access, Switch account), 429 (Try again, About rate limits), 500 (Retry, System status), 503 (scheduled maintenance) and a missing record inside the console (Back to services). A page body: render it in the default slot of ConsoleLayout (or the site and docs shells); the 401 renders signed out, without the rail. The pages Azion's edge serves to visitors of customer sites use `state/state-edge-error-page` instead.",
    "intents": [
     "404 page",
     "not found page",
     "page not found",
+    "401 session expired page",
+    "sign in required page",
     "403 forbidden page",
     "access denied page",
+    "429 too many requests page",
     "500 error page",
     "server error page",
+    "503 maintenance page",
     "error page",
+    "console error page",
     "resource not found",
     "página não encontrada",
     "página de erro",
     "acesso negado",
+    "sessão expirada",
     "erro 404",
     "erro 500"
    ],
@@ -36368,24 +36651,33 @@
     "Button",
     "CopyButton",
     "EmptyState",
-    "Error403",
-    "Error404"
+    "StatusCode",
+    "Timestamp"
    ],
    "imports": [
     "@aziontech/webkit/button",
     "@aziontech/webkit/copy-button",
     "@aziontech/webkit/empty-state",
-    "@aziontech/webkit/svg/error-403",
-    "@aziontech/webkit/svg/error-404"
+    "@aziontech/webkit/status-code",
+    "@aziontech/webkit/timestamp"
    ],
    "primary": "Default",
-   "guidelinesSummary": "The page an app renders when it cannot show the address the user asked for: the address leads nowhere (404), the user may not see it (403), or the server failed to build it (500). The user's job is to understand, in one sentence, that the problem is the address or the access and not their work, and to get somewhere useful in one click. The block keeps the error code out of the headline (it is in the figure and in a hidden `h1`) and says what happened in plain words. This block is a page body: render it in the default slot of `ConsoleLayout` (`shell/shell-console`), which owns the rail, the header and the `main`.",
+   "guidelinesSummary": "The page Azion's own surfaces (Console, the site, the docs) render when they cannot show what the user asked for: the address leads nowhere (404), the session ended (401), the user's role does not include the page (403), the account sent too many requests (429), the server failed (500) or the console is in maintenance (503). The reader is an Azion user. Their job is to understand, in one sentence, that the problem is the address, the access or Azion and not their work, to get somewhere useful in one click, and to have the reference support will ask for. Every state has the same quiet, centred shape; only the code, the words and the two buttons change. Two error page families, one per audience: - **Console, site and docs** (this block, `surface: app`): Azion's users on Azion's pages. Quiet and centred, inside the product shell, with the account actions an Azion user needs. - **Edge** (`state/state-edge-error-page`, `surface: edge`): the visitors of Azion customers' sites. Diagnostic, standalone, with the request path and no account actions. The block is a page body: render it in the default slot of `ConsoleLayout` (`shell/shell-console`), or of the site and docs shells, which own the navigation, the header and the `main`. SessionExpired renders signed out, without the rail.",
    "variants": [
+    {
+     "name": "SessionExpired"
+    },
     {
      "name": "Forbidden"
     },
     {
+     "name": "RateLimited"
+    },
+    {
      "name": "ServerError"
+    },
+    {
+     "name": "Maintenance"
     },
     {
      "name": "ResourceNotFound"
@@ -36875,7 +37167,7 @@
    "title": "Blocks/View/ViewEventsExplorer",
    "source": "blocks/view/view-events-explorer/view-events-explorer.vue",
    "surface": "app",
-   "summary": "The events explorer (the app marks its Events navigation entry active): the controls row (`FilterMenu`, event search, Refresh and Download CSV) over the applied `FilterMenu.ChipGroup`, and the explorer. The explorer pairs a resizable, collapsible fields `Sidebar` (each field a column checkbox and a popover of its top values, grouped in an `Accordion` by category) with the log: the Events, Errors and Avg request time summary, the stacked volume chart whose buckets filter the period on click or drag, and the event `DataTable`. Each row's detail `IconButton` (or a row click) opens the event document (its fields, the request's `Trace` with the critical path when the event carries spans, and the JSON) beside the log in the end pane of a `Resizable` when the explorer is wide enough, and in a `Drawer` when it is not. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main. Its root carries data-layout-fill, so the main stops scrolling and the fields panel, the log and the document scroll on their own.",
+   "summary": "The events explorer (the app marks its Events navigation entry active): the controls row (`FilterMenu`, event search, the time zone, Refresh and Download CSV) over the applied `FilterMenu.ChipGroup`, and the explorer. The explorer pairs a resizable, collapsible fields `Sidebar` (each field a column checkbox and a popover of its top values, grouped in an `Accordion` by category) with the log: the Events, Errors and Avg request time summary, the stacked volume chart whose buckets filter the period on click or drag, and the event `DataTable`. Each row's detail `IconButton` (or a row click) opens the event document (its fields, the request's `Trace` with the critical path when the event carries spans, and the JSON) beside the log in the end pane of a `Resizable` when the explorer is wide enough, and in a `Drawer` when it is not. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main. Its root carries data-layout-fill, so the main stops scrolling and the fields panel, the log and the document scroll on their own.",
    "intents": [
     "real-time events",
     "events visualizer",
@@ -36938,6 +37230,7 @@
     "Popover",
     "PropertyFilter",
     "Resizable",
+    "Select",
     "Sidebar",
     "Skeleton",
     "Tabs",
@@ -36972,6 +37265,7 @@
     "@aziontech/webkit/popover",
     "@aziontech/webkit/property-filter",
     "@aziontech/webkit/resizable",
+    "@aziontech/webkit/select",
     "@aziontech/webkit/sidebar-root",
     "@aziontech/webkit/skeleton",
     "@aziontech/webkit/tabs",

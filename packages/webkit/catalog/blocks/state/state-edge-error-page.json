@@ -1,0 +1,36 @@
+{
+ "variants": [
+  {
+   "name": "ApplicationTimeout",
+   "summary": "504: Azion reached the application, but it did not answer in time. The Application hop reads Timed out; Try again and Go back.",
+   "file": "blocks/state/state-edge-error-page/variants/application-timeout.vue"
+  },
+  {
+   "name": "ApplicationError",
+   "summary": "500: the application answered with an error while building the page. The Application hop reads Error; Try again and Go back.",
+   "file": "blocks/state/state-edge-error-page/variants/application-error.vue"
+  },
+  {
+   "name": "ApplicationUnavailable",
+   "summary": "503: the application is down for maintenance or too busy. The Application hop reads Unavailable; the copy says the site usually comes back on its own.",
+   "file": "blocks/state/state-edge-error-page/variants/application-unavailable.vue"
+  },
+  {
+   "name": "Blocked",
+   "summary": "403: a firewall or WAF rule the site owner set on Azion matched the request, so it never reached the application. The Azion hop reads Blocked and the Application Not reached; Go to home page and Go back, and the advice is to contact the site owner with the request ID.",
+   "file": "blocks/state/state-edge-error-page/variants/blocked.vue"
+  },
+  {
+   "name": "RateLimited",
+   "summary": "429: the visitor's connection sent more requests than the site allows. The Azion hop reads Rate limited and the Application Not reached; wait a minute, then Try again.",
+   "file": "blocks/state/state-edge-error-page/variants/rate-limited.vue"
+  },
+  {
+   "name": "NotFound",
+   "summary": "404: the application has no page at the address. Every hop worked and the Application reads Not found; Go to home page and Go back.",
+   "file": "blocks/state/state-edge-error-page/variants/not-found.vue"
+  }
+ ],
+ "sfcFile": "blocks/state/state-edge-error-page/state-edge-error-page.vue",
+ "guidelinesFile": "blocks/state/state-edge-error-page/guidelines.md"
+}

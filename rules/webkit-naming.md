@@ -63,7 +63,9 @@ The full dictionary is [`webkit-prop-vocabulary.md`](./webkit-prop-vocabulary.md
 Use `az az-<name>` with the names the icons package ships (colour logos: `az-color az-<name>`).
 Interface glyphs take Lucide-style names, Azion product icons take the product's name
 (`az az-functions`, `az az-sql-database`), and brands are spelled out. Every icon is documented in
-`@aziontech/icons/manifest` (group, category, what it stands for).
+`@aziontech/icons/manifest` (group, category, what it stands for). Every official Azion product and
+Solution has its product or Solution icon, named after the product (`az az-orchestrator`,
+`az az-origin-shield`, `az az-lora-fine-tune`, `az az-waf`).
 
 | ✅                   | ❌                                      |
 | -------------------- | --------------------------------------- |

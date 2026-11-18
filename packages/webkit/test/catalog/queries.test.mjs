@@ -713,7 +713,7 @@ test('getBlock takes a variant by its file name or its PascalCase name', () => {
 test('every block carries one surface of catalog.surfaces', () => {
   const raw = JSON.parse(readFileSync(new URL('../../catalog.json', import.meta.url), 'utf8'))
   const surfaces = Object.keys(raw.surfaces)
-  assert.deepEqual(surfaces, ['app', 'site', 'docs'])
+  assert.deepEqual(surfaces, ['app', 'site', 'docs', 'edge'])
   for (const [id, p] of Object.entries(catalog.blocks)) assert.ok(surfaces.includes(p.surface), id)
   assert.equal(catalog.block('shell/shell-site').surface, 'site')
   assert.equal(catalog.block('shell/shell-docs').surface, 'docs')

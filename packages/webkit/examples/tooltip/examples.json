@@ -14,7 +14,7 @@
     },
     {
       "name": "AutoPlacement",
-      "summary": "`side=\"auto\"` lets the tooltip pick the side with the most available space at open time. The four edge-positioned triggers all share the same prop value — each resolves to the side that fits best, reflected in `data-side`.",
+      "summary": "`side=\"auto\"` lets the tooltip pick the side with the most available space at open time. The four edge-positioned triggers all share the same prop value. Hover or focus each one: its tooltip resolves to the side that fits best, reflected in `data-side`.",
       "file": "auto-placement.vue"
     },
     {

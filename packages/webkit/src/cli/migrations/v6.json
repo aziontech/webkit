@@ -744,6 +744,16 @@
       "to": "settings-group",
       "from": "SettingsSection",
       "binding": "SettingsGroup"
+    },
+    "topology-diagram": {
+      "to": "flow-diagram",
+      "from": "TopologyDiagram",
+      "binding": "FlowDiagram"
+    },
+    "flow-diagram-parallel": {
+      "to": "flow-diagram-group",
+      "from": "FlowDiagramParallel",
+      "binding": "FlowDiagramGroup"
     }
   },
   "removed": {
@@ -996,11 +1006,10 @@
     "AppliedFilter": "TableAppliedFilter",
     "SortDirection": "TableSortDirection",
     "MoveDirection": "TransferListMoveDirection",
-    "TopologyNode": "TopologyDiagramNodeData",
-    "TopologyLevel": "TopologyDiagramLevel",
-    "TopologyNodeField": "TopologyDiagramNodeField",
-    "TopologyBindOption": "TopologyDiagramBindOption",
-    "TopologyNodeSeverity": "TopologyDiagramNodeSeverity",
+    "TopologyNode": "FlowDiagramNodeData",
+    "TopologyNodeField": "FlowDiagramNodeField",
+    "TopologyBindOption": "FlowDiagramBindOption",
+    "TopologyNodeSeverity": "FlowDiagramSeverity",
     "DocTocItem": "DocTableOfContentsItem",
     "DocTocLink": "DocTableOfContentsLink",
     "DocTocGroup": "DocTableOfContentsGroup",
@@ -1136,8 +1145,7 @@
     "FlowAnchorSide": "FlowDiagramAnchorSide",
     "FlowAnchorProps": "FlowDiagramAnchorProps",
     "FlowNodeProps": "FlowDiagramNodeProps",
-    "FlowParallelAlign": "FlowDiagramParallelAlign",
-    "FlowParallelProps": "FlowDiagramParallelProps",
+    "FlowParallelProps": "FlowDiagramGroupProps",
     "FlowProps": "FlowDiagramProps",
     "FlowAlign": "FlowDiagramAlign",
     "FlowContext": "FlowDiagramContext",
@@ -1264,7 +1272,14 @@
     "SectionHeaderSize": "SubheaderSize",
     "SectionStackProps": "SplitStackProps",
     "SectionStackContext": "SplitStackContext",
-    "SettingsSectionProps": "SettingsGroupProps"
+    "SettingsSectionProps": "SettingsGroupProps",
+    "WebkitProviderProps": "ConfigProviderProps",
+    "TopologyDiagramProps": "FlowDiagramProps",
+    "TopologyDiagramNodeData": "FlowDiagramNodeData",
+    "TopologyDiagramNodeField": "FlowDiagramNodeField",
+    "TopologyDiagramBindOption": "FlowDiagramBindOption",
+    "TopologyDiagramNodeSeverity": "FlowDiagramSeverity",
+    "FlowDiagramParallelProps": "FlowDiagramGroupProps"
   },
   "legacy": {
     "major": 3,
@@ -1474,7 +1489,8 @@
     "PaginationInfo": "PaginationDescription",
     "ConsoleLayoutBreadcrumbs": "ConsoleLayoutBreadcrumb",
     "useHeadingNav": "useHeadingNavigation",
-    "provideHeadingNav": "provideHeadingNavigation"
+    "provideHeadingNav": "provideHeadingNavigation",
+    "FlowDiagramParallel": "FlowDiagramGroup"
   },
   "members": {
     "tabs": {
@@ -1564,6 +1580,9 @@
       "LiveButton": {
         "standalone": "table-live-button"
       }
+    },
+    "flow-diagram": {
+      "Parallel": "Group"
     }
   },
   "attached": {

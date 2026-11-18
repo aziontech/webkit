@@ -1,6 +1,6 @@
 # Flow Diagram
 
-> FlowDiagram renders a directed flow diagram: a horizontal sequence of steps (`flow-diagram-node`) joined by decorative connectors, with optional parallel branches (`flow-diagram-parallel`) and custom connector-attachment points (`flow-diagram-anchor`). Use it to visualize pipelines, workflows, and step-by-step processes inside a data view; unlike `table` it expresses ordered/branching relationships rather than tabular records. Steps are written as direct children of `flow-diagram`; a `flow-diagram-parallel` between two steps fans out from the previous step and fans back into the next, and a `flow-diagram-parallel` at the start/end fans only inward/outward (no dangling stubs). A node can be styled (the default box) or `unstyled` so its slot content defines the entire node — a dot, a tall card, a multi-row card — while connectors still attach correctly, optionally at `flow-diagram-anchor` points inside the node. Connectors run port-to-port: a styled node renders a small square **connector port** just outside each of its edges, and a `flow-diagram-anchor` renders one outside the edge it attaches to, so a line always terminates on a visible attachment point instead of a bare edge (the port is the endpoint treatment — connectors carry no arrowheads). The port sits fully clear of the box rather than overlapping it, so neither the node's surface nor its focus ring crops it. A port is only rendered where a connector actually attaches: the leading child has no incoming connector and the trailing child no outgoing one, so those two edges show no port and the chain opens and closes on a node rather than on a stub. An `unstyled` node renders no ports, because its slot content owns its appearance; put a `flow-diagram-anchor` inside it to place ports on the parts a connector should touch. Design source (rewritten to our conventions, never inherited as-is): the kumo "Flow" component group at https://kumo-ui.com/components/flow-diagram/. Scope boundary: large diagrams pan via a native `overflow: auto` scroll container on the root — free 2D drag-pan is intentionally out of scope (it would require an external positioning library forbidden by `.claude/rules/dependencies.md`). The connector port is specified by the Figma frame in the frontmatter; the remaining tokens are inferred from intent and recorded in the Theme gaps table.
+> The one in-product diagram (owner decision RV-Y1, 2026-11-18): it kept the old FlowDiagram parts and replaced TopologyDiagram in the 6.0 clean break. A naked root lays steps out and draws the connectors. **Data mode** (`nodes` + `edges`): edges set the columns and each node renders the richest card its data allows. **Composed mode**: hand-written parts in the default slot. `orientation="responsive"` stacks into a rail below a 36rem container.
 
 - Import: `import FlowDiagramRoot from '@aziontech/webkit/flow-diagram-root'`
 - Compound import (dot notation, not tree-shakeable): `import FlowDiagram from '@aziontech/webkit/flow-diagram'`
@@ -9,81 +9,112 @@
 
 ## When to use
 
-- Showing an ordered pipeline or request path as steps joined by connectors — build → deploy → serve, or a request through a load balancer, a function and its bindings.
-- A step fans out to several parallel targets and (optionally) back in — wrap those steps in `FlowDiagram.Parallel`.
-- A node with custom content (a card with several rows) where connectors must touch specific parts — mark them with `FlowDiagram.Anchor`.
+- A request path or pipeline: steps in order joined by connectors.
+- A deployment or service topology with status, metrics, details and bind controls.
 
 ## Do
 
-- Write steps as direct children of `FlowDiagram` in flow order; connectors are drawn between siblings, so wrapping nodes in extra elements breaks the chain.
-- Use `unstyled` when the slot content is the whole node, and put a `FlowDiagram.Anchor` (`side="end"` incoming, `side="start"` outgoing) on each part a connector should touch — an unstyled node renders no ports of its own.
-- Mark a leaf that hangs off the chain with `terminal`; it receives a connector but sends none on.
-- Do not clip a node with `overflow-hidden` in a wrapping card — the connector ports sit outside the node's box and would disappear.
-- Let a wide flow scroll in its own container; the root is an `overflow: auto` region, and there is no drag-to-pan.
+- Prefer data mode; compose by hand only for markup the card cannot express.
+- Join adjacent columns; an edge that skips a column can cross it.
+- Put timing or failure on the edge (`label`, `severity`) when the hop failed, on the node when the resource did.
+- Use `orientation="horizontal"` for fixed-size scenes and mock-ups.
+- A one-resource slot puts `flow-diagram-bind` in the `actions` slot.
 
 ## Don’t
 
-- One of the official architecture drawings, or a node-and-connector picture for a marketing page → use `diagram`.
-- Tabular records with no ordering between them → use `table`.
-- A numbered set of instructions in documentation → use `doc-steps`.
+- A marketing architecture drawing from the official library → use `diagram`.
+- A numbered set of instructions → use `doc-steps`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
-- [diagram](diagram.md) — marketing architecture drawings from a closed library or a one-off spec; `flow-diagram` is the in-product, hand-composed pipeline.
-- [doc-steps](doc-steps.md) — an ordered walkthrough of text steps joined by a rail, not connected nodes.
-- [table](table.md) — records without ordered or branching relationships.
+- [diagram](diagram.md) — the marketing figure (closed drawing library).
+- [status-indicator](status-indicator.md) — the status dot and text in a node header.
 
 ## Props
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `align` | `'start' \| 'center'` | `'start'` | false | Vertical alignment of nodes within the diagram. |
+| `nodes` | `FlowDiagramNodeData[]` | `[]` | false | Nodes of a data-driven diagram; each renders as a full card. Leave empty to compose the parts by hand. |
+| `edges` | `FlowDiagramEdgeData[]` | `[]` | false | Connectors between nodes by id; they also decide the columns. Empty joins each step to the next. |
+| `orientation` | `'horizontal' \| 'vertical' \| 'responsive'` | `'responsive'` | false | Lays the steps out in a row, in a column, or in a row that stacks when its container is narrow. |
+| `align` | `'start' \| 'center'` | `'start'` | false | Vertical alignment of the steps in a row. |
+| `uniform` | `boolean` | `false` | false | Gives every step the width and height of the largest one. |
+| `loading` | `boolean` | `false` | false | Shows placeholder steps while the diagram loads. |
+| `ariaLabel` | `string` | `''` | false | Accessible name of the diagram. Empty uses the locale catalog (`Diagram`). |
+| `openKeys` | `string[]` | `() => []` | false | Two-way value (`v-model:openKeys`). |
 
 ## Slots
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
-| `default` | — | Diagram content: `flow-diagram-node` and `flow-diagram-parallel`, in flow order. |
+| `default` | — | Composed mode: nodes and groups, in flow order. |
+| `actions` | { node: FlowDiagramNodeData } | Data mode: controls at the end of a node's title row. |
+| `empty` | — | Replaces the `EmptyState` shown when there are no nodes. |
 
 ## Sub-component imports
 
 - `@aziontech/webkit/flow-diagram-node`
-- `@aziontech/webkit/flow-diagram-parallel`
+- `@aziontech/webkit/flow-diagram-group`
 - `@aziontech/webkit/flow-diagram-anchor`
+- `@aziontech/webkit/flow-diagram-header`
+- `@aziontech/webkit/flow-diagram-title`
+- `@aziontech/webkit/flow-diagram-description`
+- `@aziontech/webkit/flow-diagram-footer`
+- `@aziontech/webkit/flow-diagram-item`
+- `@aziontech/webkit/flow-diagram-bind`
 
 ## Sub-components
 
-- `flow-diagram-node/flow-diagram-node.vue` — A single step in the flow. Renders the default node box; `unstyled` drops the box so the `default` slot defines the node's appearance (a dot, a card, a tall node). `disabled` marks the step disabled, rendering adjacent connectors at reduced opacity (mirrored by `data-disabled`). `terminal` ends the node's branch: it still receives an incoming connector but originates none, so the chain continues through its siblings while the branch stops there — the shape a **leaf** needs (an attached resource that hangs off the chain rather than passing it on). A terminal node therefore renders no outgoing port. Content via the `default` slot.
-- `flow-diagram-anchor/flow-diagram-anchor.vue` — Marks a connector-attachment point inside a node and wraps the content that the connector should touch. Prop `side?: 'start' | 'end'` (default `undefined`): `side="end"` is the incoming endpoint, `side="start"` the outgoing origin; omitted marks both. Content via the `default` slot. Its class merges with the consumer's through Vue's own class merge (no `cn`).
-- `flow-diagram-parallel/flow-diagram-parallel.vue` — Container whose direct `flow-diagram-node` children are laid out as parallel branches stacked vertically; the `flow-diagram` root draws the fan-out/fan-in junction connectors. `align?: 'start' | 'end'` (default `'start'`) controls the horizontal alignment of the branches. Its class merges with the consumer's through Vue's own class merge (no `cn`).
+- `flow-diagram-node` — one step: a label box, a card when it holds a `Title`, or `unstyled`. Props `value` (identity for edges), `disabled`, `unstyled`, `terminal`, `dashed`.
+- `flow-diagram-group` — parallel nodes stacked in one step (was `Parallel` and a topology level). Prop `label` (hidden).
+- `flow-diagram-anchor` — where a connector touches. Prop `side`.
+- `flow-diagram-header` — props `icon`, `eyebrow`, `status`, `severity`.
+- `flow-diagram-title` — prop `href`; `actions` slot. Every title row is one control high with `--spacing-sm` below it, so a button keeps that space to the divider or border below and rows with and without controls line their connectors up.
+- `flow-diagram-description`, `flow-diagram-footer`, `flow-diagram-item` (prop `label`).
+- `flow-diagram-bind` — companion (not attached): bind with Apply and Cancel. Props `label`, `options`, `value`, `removable`; events `bind`, `remove`, `create`.
+
+## v-model
+
+- **`v-model:openKeys`** — `string[]`, default `[]`. Ids of the data-mode nodes whose details are open.
 
 ## States
 
-- Visual states: `default`, `focus-visible`, `disabled`
-- `data-disabled` mirrors the `disabled` prop on `flow-diagram-node`
-- `data-styled` is present on `flow-diagram-node` unless `unstyled` (gates the default box utilities)
-- `data-align` mirrors the `align` prop on `flow-diagram` and `flow-diagram-parallel`
-- Part markers are `data-slot`: `flow-diagram-node`, `flow-diagram-parallel`, `flow-branches` (the nested list of a parallel step), `flow-diagram-anchor` and `flow-port`
-- `data-side` mirrors the `side` prop on `flow-diagram-anchor` (`start` / `end`; absent when the anchor attaches on both edges)
-- The root provides `testId` and `align` as computed refs, so a changed `data-testid` or `align` reaches every sub-component
-- `data-slot="flow-port"` marks a connector port and its `data-side` selects the edge it sits on (`start` = outgoing / right, `end` = incoming / left). Emitted on both edges of a styled `flow-diagram-node`, and on the attaching edge(s) of a `flow-diagram-anchor`. The port sits entirely **outside** the box, flush against that edge — never inside it, so the node's surface and its `focus-visible` ring cannot crop the port
-- Port appearance follows the enclosing node: solid border by default, `border-dashed` under `data-disabled`
-- `data-flow-terminal` mirrors the `terminal` prop on `flow-diagram-node`. The composable drops that branch's exit, so no connector is drawn leaving it; the root additionally hides any outgoing port inside it (including one rendered by a nested `flow-diagram-anchor`)
-- `data-flow-leading` / `data-flow-trailing` are stamped by the connector composable on the first / last direct child of the diagram (both, when there is only one). The root hides the ports on those outer edges, because no connector reaches them. They are attributes rather than `:first-child` / `:last-child` rules because the connector `<svg>` is a sibling of the nodes in the same container
-- A consuming component that wraps a node in its own card must not clip it (`overflow-hidden`): the ports are positioned outside the anchor's box, so a clipping ancestor renders them invisible
-- `data-faded` marks a connector path whose endpoint node is disabled (drives the reduced opacity)
+- List: `data-orientation`, `data-align`, `data-uniform`, `data-labelled` (wider gap for edge labels), `data-stacked` (rail drawn, ports hidden).
+- Node: `data-disabled`, `data-dashed`, `data-terminal`, `data-node-key`, `data-entry` / `data-exit` (ports show only where a connector attaches).
+- Title: every row is one small control high (`min-h-7`) with `--spacing-sm` of bottom padding, so a button in the `actions` slot sits as far from the divider below as the header text sits from the border above, and cards with and without controls keep the same anchor height (their connectors stay level).
+- Data card: `data-state="open|closed"`; an unbound bindable node is dashed with `Not bound`; a pending bind dashes it too.
+- Loading: `aria-busy`, skeleton cards, one `role="status"` line. Empty: `EmptyState` unless the `empty` slot replaces it.
+- Edge `severity` colours the connector (`--<severity>-mark`); default `--accent`.
 
 ## Accessibility
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
-- Keyboard map: `Tab` moves focus through focusable nodes in document order; no arrow-key roving (the diagram is a static list). When the diagram is wider than its box, the scroll root itself takes `tabindex="0"` (measured with a resize observer, removed again when it fits) so keyboard users can scroll it with the arrow keys; it shows the focus ring inset.
-- ARIA: root `flow-diagram` is `role="list"`; each `flow-diagram-node` is `role="listitem"` with accessible text content; `flow-diagram-parallel` is a `role="listitem"` (one step of the outer list) holding a nested `role="list"` (`data-flow-branches`, testid `<parallel testid>-branches`; it is the flex column that stacks and aligns the branches) of its branch nodes, because a `group` is not an allowed child of a `list` and its nodes would lose their `list` parent; the connector SVG is decorative and carries `aria-hidden="true"`, as does every connector port (`data-flow-port`) — the ports are a visual attachment affordance and carry no meaning for AT. A `flow-diagram-anchor` wraps meaningful node content and is therefore not hidden.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state.
-- `motion-reduce:animate-none` on the connector dashes; no other part moves.
-- Pause, Stop, Hide (WCAG 2.2.2): the connector dashes march six times on mount and stop by themselves after 4.2 seconds, so the diagram needs no pause control.
-- Touch target ≥40×40 px where a node is interactive.
-- Right-to-left: under `dir="rtl"` the flow runs from the inline start (right) to the inline end (left). Connectors leave a node's inline-end edge and enter the next node's inline-start edge, the elbow bus sits between them, and the ports (`data-flow-port`) sit outside the node on the edge they mark.
+- Root `role="group"` named by `ariaLabel`; steps are a `list`, a group a nested list with a hidden label.
+- Connectors, ports and edge labels are `aria-hidden`; data mode adds a hidden `Connections` list (`{from} to {to}, {label}`).
+- `Tab` reaches links, the Details toggle (`aria-expanded`, closed details `inert`), copy and bind controls; the scroll area is focusable only when it overflows.
+- Status is a dot plus text; the dashes stop after six runs; `motion-reduce:animate-none`; focus ring `--ring-color`.
+
+## Right-to-left
+
+- Logical utilities only; the engine reads `direction`, mirrors elbows and ports, and puts the rail and its labels on the inline start.
+
+## Internationalization
+
+| Key                                                                      | English source                                      | Override prop |
+| ------------------------------------------------------------------------ | --------------------------------------------------- | ------------- |
+| `flowDiagram.label`                                                      | Diagram                                             | `ariaLabel`   |
+| `flowDiagram.notBound`                                                   | Not bound                                           | node `status` |
+| `flowDiagram.bind` / `change` / `remove` / `create` / `apply` / `cancel` | Bind {kind} / Change {kind} / … / Cancel            | —             |
+| `flowDiagram.pending` / `existing` / `noOptions` / `copy`                | Pending / Existing / No options yet. / Copy {field} | —             |
+| `flowDiagram.details`                                                    | Details                                             | —             |
+| `flowDiagram.connections` / `connection`                                 | Connections / {from} to {to}                        | —             |
+| `flowDiagram.emptyTitle` / `loading`                                     | Nothing is connected yet. / Loading the diagram     | `empty` slot  |
+
+- Formatting: none; metrics and labels arrive formatted.
+
+## Responsive
+
+- `responsive` stacks below a 36rem container into a rail in reading order, labels beside it; `horizontal` scrolls in its own area; `vertical` always stacks.
 
 ## Examples
 
@@ -91,19 +122,95 @@
 
 ```vue
 <script setup>
-  import FlowDiagram from '@aziontech/webkit/flow-diagram'
+  import FlowDiagram from '@aziontech/webkit/flow-diagram-root'
+  import { ref } from 'vue'
+
+  const nodes = [
+    {
+      id: 'client',
+      eyebrow: 'Client',
+      icon: 'az az-user',
+      title: 'Browsers',
+      description: 'United States',
+      metrics: [{ label: 'Requests', value: '1.2k/s' }]
+    },
+    {
+      id: 'edge',
+      eyebrow: 'Application',
+      icon: 'az az-globe',
+      title: 'shop.example.com',
+      href: '#application',
+      description: 'San Francisco, US',
+      status: 'Healthy',
+      severity: 'success',
+      metrics: [
+        { label: 'p95', value: '38 ms' },
+        { label: 'Hit ratio', value: '91%' }
+      ],
+      fields: [
+        { label: 'ID', value: '1482736015', copyable: true },
+        { label: 'Domain', value: 'shop.example.com', href: 'https://shop.example.com' }
+      ]
+    },
+    {
+      id: 'function',
+      eyebrow: 'Function',
+      icon: 'az az-functions',
+      title: 'checkout-router',
+      status: 'Running',
+      severity: 'success',
+      metrics: [
+        { label: 'p95', value: '12 ms' },
+        { label: 'Errors', value: '0.1%' }
+      ]
+    },
+    {
+      id: 'cache',
+      eyebrow: 'Cache',
+      icon: 'az az-cache',
+      title: 'static-assets',
+      status: 'Warming',
+      severity: 'warning',
+      metrics: [{ label: 'Hit ratio', value: '64%' }],
+      message: 'The cache refills after the deploy of 10:42 UTC.'
+    },
+    {
+      id: 'origin',
+      eyebrow: 'Origin',
+      icon: 'az az-server',
+      title: 'api.example.com',
+      description: 'Ashburn, US',
+      status: 'Degraded',
+      severity: 'danger',
+      metrics: [
+        { label: 'p95', value: '840 ms' },
+        { label: '5xx', value: '4.2%' }
+      ]
+    }
+  ]
+
+  const edges = [
+    { from: 'client', to: 'edge', label: '6 ms' },
+    { from: 'edge', to: 'function', label: '2 ms' },
+    { from: 'edge', to: 'cache', label: '1 ms' },
+    { from: 'function', to: 'origin', label: '840 ms', severity: 'danger' },
+    { from: 'cache', to: 'origin', label: '96 ms' }
+  ]
+
+  const openKeys = ref([])
 </script>
 
 <template>
-  <FlowDiagram align="center">
-    <FlowDiagram.Node>Source</FlowDiagram.Node>
-    <FlowDiagram.Node>Transform</FlowDiagram.Node>
-    <FlowDiagram.Node>Deliver</FlowDiagram.Node>
-  </FlowDiagram>
+  <FlowDiagram
+    v-model:open-keys="openKeys"
+    :nodes="nodes"
+    :edges="edges"
+    aria-label="Request path of shop.example.com"
+  />
 </template>
 ```
 
-### Parallel
+### Composed
 
 ```vue
 <script setup>
@@ -111,38 +218,75 @@
 </script>
 
 <template>
-  <FlowDiagram align="center">
-    <FlowDiagram.Node>Start</FlowDiagram.Node>
-    <FlowDiagram.Parallel>
-      <FlowDiagram.Node>Branch A</FlowDiagram.Node>
-      <FlowDiagram.Node>Branch B</FlowDiagram.Node>
-      <FlowDiagram.Node>Branch C</FlowDiagram.Node>
-    </FlowDiagram.Parallel>
-    <FlowDiagram.Node>End</FlowDiagram.Node>
+  <FlowDiagram
+    align="center"
+    aria-label="Build pipeline"
+  >
+    <FlowDiagram.Node>Commit</FlowDiagram.Node>
+    <FlowDiagram.Node>Build</FlowDiagram.Node>
+    <FlowDiagram.Group label="Checks">
+      <FlowDiagram.Node>Unit tests</FlowDiagram.Node>
+      <FlowDiagram.Node>Lint</FlowDiagram.Node>
+    </FlowDiagram.Group>
+    <FlowDiagram.Node class="min-w-(--size-56)">
+      <FlowDiagram.Header
+        icon="az az-upload"
+        eyebrow="Deploy"
+        status="Running"
+        severity="info"
+      />
+      <FlowDiagram.Title href="#deploy">production</FlowDiagram.Title>
+      <FlowDiagram.Description>Started 2 minutes ago</FlowDiagram.Description>
+      <FlowDiagram.Footer>
+        <FlowDiagram.Item label="Regions">38 of 120</FlowDiagram.Item>
+      </FlowDiagram.Footer>
+    </FlowDiagram.Node>
   </FlowDiagram>
 </template>
 ```
 
-### Branches
+### Request path
 
 ```vue
 <script setup>
-  import FlowDiagram from '@aziontech/webkit/flow-diagram'
+  import FlowDiagram from '@aziontech/webkit/flow-diagram-root'
+
+  const nodes = [
+    {
+      id: 'you',
+      title: 'You',
+      description: 'Browser',
+      status: 'Working',
+      severity: 'success'
+    },
+    {
+      id: 'azion',
+      title: 'Azion',
+      description: 'San Francisco, US',
+      status: 'Working',
+      severity: 'success'
+    },
+    {
+      id: 'application',
+      title: 'Application',
+      description: 'api.example.com',
+      status: 'Error',
+      severity: 'danger'
+    }
+  ]
+
+  const edges = [
+    { from: 'you', to: 'azion', label: '18 ms' },
+    { from: 'azion', to: 'application', label: '502', severity: 'danger' }
+  ]
 </script>
 
 <template>
-  <FlowDiagram align="center">
-    <FlowDiagram.Parallel>
-      <FlowDiagram.Node>HTTP Trigger</FlowDiagram.Node>
-      <FlowDiagram.Node>Cron Trigger</FlowDiagram.Node>
-    </FlowDiagram.Parallel>
-    <FlowDiagram.Node>Process Request</FlowDiagram.Node>
-    <FlowDiagram.Parallel>
-      <FlowDiagram.Node>Log Analytics</FlowDiagram.Node>
-      <FlowDiagram.Node>Update Cache</FlowDiagram.Node>
-      <FlowDiagram.Node>Send Notification</FlowDiagram.Node>
-    </FlowDiagram.Parallel>
-    <FlowDiagram.Node>Complete</FlowDiagram.Node>
-  </FlowDiagram>
+  <FlowDiagram
+    :nodes="nodes"
+    :edges="edges"
+    uniform
+    aria-label="Request path"
+  />
 </template>
 ```

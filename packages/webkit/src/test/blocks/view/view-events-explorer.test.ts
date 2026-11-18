@@ -1,9 +1,11 @@
-import { fireEvent, render, waitFor } from '@testing-library/vue'
+import userEvent from '@testing-library/user-event'
+import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
 import EventsExplorerEmpty from '../../../../blocks/view/view-events-explorer/variants/empty.vue'
 import EventsExplorerFailed from '../../../../blocks/view/view-events-explorer/variants/error.vue'
 import EventsExplorerFiltered from '../../../../blocks/view/view-events-explorer/variants/filtered.vue'
+import EventsExplorerQuery from '../../../../blocks/view/view-events-explorer/variants/query.vue'
 import ViewEventsExplorer, {
   type EventsExplorerEvent,
   type EventsExplorerField
@@ -23,6 +25,21 @@ const record = (id: string, message: string, extra: Record<string, unknown> = {}
   }) as EventsExplorerEvent
 
 describe('view/view-events-explorer block', () => {
+  it('states the time zone in the toolbar, outside the time range picker', async () => {
+    const view = render(ViewEventsExplorer)
+    expect(view.getByTestId('events-time-zone').textContent?.trim()).toBe('Times in UTC')
+  })
+
+  it('shows the zone beside the picker in the Query variant and changes it there', async () => {
+    const view = render(EventsExplorerQuery)
+    const zone = await waitFor(() => view.getByRole('combobox', { name: 'Time zone' }))
+    expect(zone.textContent).toContain('UTC+00:00')
+    await userEvent.click(zone)
+    const list = await waitFor(() => document.body.querySelector<HTMLElement>('[role="listbox"]'))
+    await userEvent.click(within(list as HTMLElement).getByRole('option', { name: /Sao Paulo/ }))
+    await waitFor(() => expect(zone.textContent).toContain('UTC−03:00 · Sao Paulo'))
+  })
+
   it('opens an event from its detail button, a keyboard path to the document', async () => {
     const view = render(ViewEventsExplorer)
     const [open] = await waitFor(() => view.getAllByRole('button', { name: /^Open event / }))

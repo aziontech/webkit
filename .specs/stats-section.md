@@ -5,8 +5,8 @@ structure: monolithic
 status: implemented
 spec_version: 4
 created: 2026-11-04
-last_updated: 2026-11-15
-checksum: e3dcf7a74fc6a7250e397b4393d52a8b2a9189a8dc03b6d9d871b32c9e20582b
+last_updated: 2026-11-18
+checksum: 414e24b6906679516aeabf1bc31f65b4aa647b869d63a571824a2c62f66f7aae
 template: 2
 ---
 
@@ -116,7 +116,7 @@ No built-in strings: every visible and announced text is a prop from the page JS
 
 ## Responsive
 
-- Container queries: none of its own; `stats` owns how the figures wrap.
+- Container queries: none of its own; `stats` makes each cell a size container and shrinks its figures to fit, so a figure never wraps.
 - Narrow (below `md`): the figures stack as `stats` stacks them; the frame rules stay full width.
 - Touch: nothing is interactive.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom.

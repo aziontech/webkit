@@ -5,10 +5,9 @@
 </script>
 
 <template>
-  <div class="flex w-full max-w-(--container-sm) flex-col gap-(--spacing-xs) pb-48">
+  <div class="flex w-full max-w-(--container-sm) flex-col gap-(--spacing-xs)">
     <span class="text-label-sm text-(--text-muted)">Application</span>
     <HoverCard
-      default-open
       side="bottom"
       align="start"
     >

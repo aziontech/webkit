@@ -181,14 +181,13 @@
       class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-body-sm text-(--text-muted) text-center max-w-md"
     >
       All four triggers use <code>side="auto"</code>.<br />
-      Each tooltip resolves to the side with the most available space.
+      Hover or focus a trigger: its tooltip resolves to the side with the most room.
     </p>
 
     <div class="absolute top-(--spacing-md) left-1/2 -translate-x-1/2">
       <Tooltip
         content="auto side"
         side="auto"
-        :default-open="true"
       >
         <IconButton
           icon="az az-arrow-up"
@@ -203,7 +202,6 @@
       <Tooltip
         content="auto side"
         side="auto"
-        :default-open="true"
       >
         <IconButton
           icon="az az-arrow-down"
@@ -218,7 +216,6 @@
       <Tooltip
         content="auto side"
         side="auto"
-        :default-open="true"
       >
         <IconButton
           icon="az az-arrow-left"
@@ -233,7 +230,6 @@
       <Tooltip
         content="auto side"
         side="auto"
-        :default-open="true"
       >
         <IconButton
           icon="az az-arrow-right"

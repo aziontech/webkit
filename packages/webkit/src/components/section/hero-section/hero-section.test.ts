@@ -427,7 +427,7 @@ describe('HeroSection', () => {
         const nodes = await findAllByTestId(NODE_TESTID)
 
         expect(
-          container.querySelectorAll('[role="listitem"][data-slot="flow-diagram-parallel"]')
+          container.querySelectorAll('[role="listitem"][data-slot="flow-diagram-group"]')
         ).toHaveLength(levels.length)
         expect(nodes.map((node) => node.textContent?.includes('shop-prod'))).toEqual([
           false,
@@ -460,7 +460,7 @@ describe('HeroSection', () => {
         })
 
         expect(await findAllByTestId(NODE_TESTID)).toHaveLength(4)
-        expect(container.querySelectorAll('[data-slot="flow-diagram-parallel"]')).toHaveLength(
+        expect(container.querySelectorAll('[data-slot="flow-diagram-group"]')).toHaveLength(
           levels.length
         )
       })

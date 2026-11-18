@@ -108,7 +108,8 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 ## Blocks: State
 
 - [StateAsyncSubmit (state/state-async-submit)](blocks/state/state-async-submit.md): The async-action pattern, and the standard for every build and deploy screen.
-- [StateErrorPage (state/state-error-page)](blocks/state/state-error-page.md): The page an app renders when it cannot show the address the user asked for: the address leads nowhere (404), the user may not see it (403), or the server failed to build it (500).
+- [StateEdgeErrorPage (state/state-edge-error-page)](blocks/state/state-edge-error-page.md): The page Azion serves to a visitor of a customer's site when the request fails: the site's application is down or slow, it answered with an error, the site's firewall blocked the request, or the visitor sent too many…
+- [StateErrorPage (state/state-error-page)](blocks/state/state-error-page.md): The page Azion's own surfaces (Console, the site, the docs) render when they cannot show what the user asked for: the address leads nowhere (404), the session ended (401), the user's role does not include the page (40…
 - [StateFirstUse (state/state-first-use)](blocks/state/state-first-use.md): What a first-level list shows before the account owns any resource of that kind.
 - [StateFormValidation (state/state-form-validation)](blocks/state/state-form-validation.md): Every state a submit can land in, on one create form.
 - [StatePageSkeleton (state/state-page-skeleton)](blocks/state/state-page-skeleton.md): The skeleton wires an app paints while a page is still arriving.
@@ -204,7 +205,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [Item](components/item.md): Use Item rows for a short list of mixed rows (title, description, actions) that do not share columns; read-only label/value facts about one resource are KeyValueList, records compared across columns are a Table, and w…
 - [Kbd](components/kbd.md): Kbd renders keyboard input — a single key or a shortcut combination — as a compact, non-interactive keycap.
 - [KeyValueList](components/key-value-list.md): Use KeyValueList to show read-only label/value facts about one resource, including its tags; rows with their own actions are Item rows.
-- [NetworkMap](components/network-map.md): A decorative, full-bleed layer that paints the dotted world map with Azion's PoPs lit in the brand accent.
+- [NetworkMap](components/network-map.md): A decorative, full-bleed layer that paints the dotted world map with Azion's data centers lit in the brand accent.
 - [OverflowCount](components/overflow-count.md): Use OverflowCount for the '+N' that opens the hidden items of a truncated list; a plain number attached to something else is a Badge.
 - [PaymentBrand](components/payment-brand.md): The card-brand plate shown beside a payment card: a small bordered plate with the network's mark (Visa, Mastercard, American Express, Diners Club, JCB, Discover, Elo, Hipercard, UnionPay) drawn in one colour in theme…
 - [PlanFeatureList](components/plan-feature-list.md): Use PlanFeatureList only for what a plan includes; any other list of rows is Item rows, and facts about one resource are KeyValueList.
@@ -225,12 +226,11 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [DataGrid](components/data-grid.md): An editable, spreadsheet-like grid: rows of records and typed columns where people move a cell cursor with the keyboard, edit cells in place, select ranges, copy them and paste a block of cells from a spreadsheet, the…
 - [DataTable](components/data-table.md): The data-driven table: pass `data` + `columns` and it renders the header, rows, selection, sorting, paging, empty / loading / error states and the footer `Pagination` itself, through the same `Table` parts (`Table.Hea…
 - [FilterMenu](components/filter-menu.md): The list filter of a console list: a Filter button that carries the number of applied filters and opens a drill-in menu.
-- [FlowDiagram](components/flow-diagram.md): FlowDiagram renders a directed flow diagram: a horizontal sequence of steps (`flow-diagram-node`) joined by decorative connectors, with optional parallel branches (`flow-diagram-parallel`) and custom connector-attachm…
+- [FlowDiagram](components/flow-diagram.md): The one in-product diagram (owner decision RV-Y1, 2026-11-18): it kept the old FlowDiagram parts and replaced TopologyDiagram in the 6.0 clean break.
 - [Pagination](components/pagination.md): Pagination controls for tables and lists, pixel-perfect to Figma, in two modes.
 - [PaginationButton](components/pagination-button.md): PaginationButton is one segment of the pagination's numbers strip: a 28px-tall native `button` that renders a page number or a Previous / Next chevron, or — for `type="more"` — an inert, decorative overflow ellipsis (…
 - [PropertyFilter](components/property-filter.md): One field that filters a collection by properties and free text, after Cloudscape's property filter.
 - [Table](components/table.md): The table's parts and its markup-only root.
-- [TopologyDiagram](components/topology-diagram.md): The deployment topology of a resource as a left-to-right diagram: each column is a depth (domains, project, policy, service, cache rules, integration, storage), each node a collapsible card with the resource kind, its…
 - [TransferList](components/transfer-list.md): Dual-list transfer control: a labelled **source** listbox and a labelled **target** listbox with a control column to move items between them.
 - [Tree](components/tree.md): A hierarchical list of nodes, each row a name with an optional glyph and one line of detail, where a parent row folds its children open and closed under a chevron.
 
@@ -344,7 +344,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [Quote](components/quote.md): A single customer testimonial: the quotation, who said it, and optionally the mark of the company they said it for.
 - [QuoteTabs](components/quote-tabs.md): A testimonial band a reader browses by client: the selected client's quotation featured at the top in the client's own colours, and a wall of client cards below it that is the selector itself — clicking a card brings…
 - [SitePage](components/site-page.md): The page renderer of the marketing site: it takes a page as data — the page JSON `{ hero, sections }` whose entries are `{ _id, props, scenes?, gap?, submission?
-- [Stats](components/stats.md): A band of headline figures — throughput, uptime, points of presence — set in the display face at big-number scale, each in its own cell of a hairline `card-grid` with a short caption underneath.
+- [Stats](components/stats.md): A band of headline figures — throughput, uptime, data centers — set in the display face at big-number scale, each in its own cell of a hairline `card-grid` with a short caption underneath.
 
 ## Components: Navigation
 

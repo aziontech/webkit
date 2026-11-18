@@ -53,9 +53,7 @@ export interface LogViewerContext {
   loadingLabel: ComputedRef<string>
   error: ComputedRef<string>
   searchPlaceholder: ComputedRef<string>
-  warningCount: ComputedRef<number>
   lineCountLabel: ComputedRef<string>
-  warningTagLabel: ComputedRef<string>
   canCopy: ComputedRef<boolean>
   copyText: ComputedRef<string>
   setSearch: (value: string) => void

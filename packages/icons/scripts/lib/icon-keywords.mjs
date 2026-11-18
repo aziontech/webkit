@@ -1,5 +1,4 @@
 const WORD_KEYWORDS = {
-  abuse: ['fraud', 'security'],
   accelerator: ['performance', 'speed', 'product'],
   'address-book': ['contacts', 'people'],
   ai: ['artificial intelligence', 'llm', 'model'],
@@ -173,7 +172,6 @@ const WORD_KEYWORDS = {
   repository: ['git', 'source', 'code'],
   rss: ['feed', 'subscribe', 'news'],
   rules: ['logic', 'conditions', 'behavior'],
-  sase: ['secure access', 'network security', 'zero trust'],
   save: ['disk', 'store'],
   scissors: ['cut'],
   search: ['find', 'magnifier', 'lookup'],

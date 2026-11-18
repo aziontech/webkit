@@ -1003,6 +1003,7 @@ For any component that exposes an open/close state (Dialog, Drawer, Sheet, Popov
 - The `default.vue` example renders the component in its **closed** state — the trigger is visible; the overlay is not.
 - The viewer activates the overlay by interacting with the trigger (click, hover, keyboard) on the docs page — exactly as a real consumer would.
 - Per-variant examples (one per `variant`, one per `size`) also default to closed unless the variant cannot exist closed.
+- Every other example starts closed too: a floating overlay (popover, tooltip, menu, hover card, list popup, dialog, drawer) never opens on page load, even to show its open state; it opens on the reader's action ([`rules/webkit-overlays-closed-on-load.md`](../../rules/webkit-overlays-closed-on-load.md), owner 2026-11-18). Inline disclosures (accordion, sidebar groups) may start open.
 
 ```vue
 <!-- examples/dialog/default.vue: the trigger renders, the dialog opens on click -->

@@ -5,21 +5,30 @@ import { fontWeight } from '../primitives/typography/font-weight.js'
 import { leading } from '../primitives/typography/leading.js'
 import { tracking } from '../primitives/typography/tracking.js'
 
+const bigNumberFit =
+  '(100cqi - var(--text-big-number-inset, calc(0rem))) / (var(--text-big-number-characters, 1) * 0.65)'
+
 export const typography = {
   'text-big-number-md': {
+    whiteSpace: 'nowrap',
     fontSize: { _: fontSize.xl, sm: fontSize['2xl'], md: fontSize['4xl'] },
+    fontSizeFit: bigNumberFit,
     lineHeight: leading.tight,
     fontWeight: fontWeight.normal,
     fontFamily: fontFamily.display
   },
   'text-big-number-sm': {
+    whiteSpace: 'nowrap',
     fontSize: { _: fontSize.base, sm: fontSize.xl },
+    fontSizeFit: bigNumberFit,
     lineHeight: leading.tight,
     fontWeight: fontWeight.normal,
     fontFamily: fontFamily.display
   },
   'text-big-number-lg': {
+    whiteSpace: 'nowrap',
     fontSize: { _: fontSize['2xl'], sm: fontSize['4xl'], md: fontSize['6xl'] },
+    fontSizeFit: bigNumberFit,
     lineHeight: leading.tight,
     fontWeight: fontWeight.normal,
     fontFamily: fontFamily.display
@@ -98,6 +107,27 @@ export const typography = {
     fontSize: fontSize.sm,
     lineHeight: leading.snug,
     fontWeight: fontWeight.normal,
+    letterSpacing: tracking.normal
+  },
+  'text-title-lg': {
+    textWrapStyle: 'balance',
+    fontSize: { _: fontSize.sm, sm: fontSize.base, md: fontSize.lg },
+    lineHeight: leading.snug,
+    fontWeight: fontWeight.medium,
+    letterSpacing: tracking.normal
+  },
+  'text-title-md': {
+    textWrapStyle: 'balance',
+    fontSize: fontSize.base,
+    lineHeight: leading.snug,
+    fontWeight: fontWeight.medium,
+    letterSpacing: tracking.normal
+  },
+  'text-title-sm': {
+    textWrapStyle: 'balance',
+    fontSize: fontSize.sm,
+    lineHeight: leading.snug,
+    fontWeight: fontWeight.medium,
     letterSpacing: tracking.normal
   },
   'text-label-lg': {

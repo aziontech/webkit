@@ -819,10 +819,6 @@
       "types": "./types/components/data/flow-diagram/index.d.ts",
       "default": "./src/components/data/flow-diagram/index.ts"
     },
-    "./topology-diagram": {
-      "types": "./types/components/data/topology-diagram/topology-diagram.vue.d.ts",
-      "default": "./src/components/data/topology-diagram/topology-diagram.vue"
-    },
     "./flow-diagram-root": {
       "types": "./types/components/data/flow-diagram/flow-diagram.vue.d.ts",
       "default": "./src/components/data/flow-diagram/flow-diagram.vue"
@@ -831,13 +827,37 @@
       "types": "./types/components/data/flow-diagram/flow-diagram-node/flow-diagram-node.vue.d.ts",
       "default": "./src/components/data/flow-diagram/flow-diagram-node/flow-diagram-node.vue"
     },
-    "./flow-diagram-parallel": {
-      "types": "./types/components/data/flow-diagram/flow-diagram-parallel/flow-diagram-parallel.vue.d.ts",
-      "default": "./src/components/data/flow-diagram/flow-diagram-parallel/flow-diagram-parallel.vue"
+    "./flow-diagram-group": {
+      "types": "./types/components/data/flow-diagram/flow-diagram-group/flow-diagram-group.vue.d.ts",
+      "default": "./src/components/data/flow-diagram/flow-diagram-group/flow-diagram-group.vue"
     },
     "./flow-diagram-anchor": {
       "types": "./types/components/data/flow-diagram/flow-diagram-anchor/flow-diagram-anchor.vue.d.ts",
       "default": "./src/components/data/flow-diagram/flow-diagram-anchor/flow-diagram-anchor.vue"
+    },
+    "./flow-diagram-header": {
+      "types": "./types/components/data/flow-diagram/flow-diagram-header/flow-diagram-header.vue.d.ts",
+      "default": "./src/components/data/flow-diagram/flow-diagram-header/flow-diagram-header.vue"
+    },
+    "./flow-diagram-title": {
+      "types": "./types/components/data/flow-diagram/flow-diagram-title/flow-diagram-title.vue.d.ts",
+      "default": "./src/components/data/flow-diagram/flow-diagram-title/flow-diagram-title.vue"
+    },
+    "./flow-diagram-description": {
+      "types": "./types/components/data/flow-diagram/flow-diagram-description/flow-diagram-description.vue.d.ts",
+      "default": "./src/components/data/flow-diagram/flow-diagram-description/flow-diagram-description.vue"
+    },
+    "./flow-diagram-footer": {
+      "types": "./types/components/data/flow-diagram/flow-diagram-footer/flow-diagram-footer.vue.d.ts",
+      "default": "./src/components/data/flow-diagram/flow-diagram-footer/flow-diagram-footer.vue"
+    },
+    "./flow-diagram-item": {
+      "types": "./types/components/data/flow-diagram/flow-diagram-item/flow-diagram-item.vue.d.ts",
+      "default": "./src/components/data/flow-diagram/flow-diagram-item/flow-diagram-item.vue"
+    },
+    "./flow-diagram-bind": {
+      "types": "./types/components/data/flow-diagram/flow-diagram-bind/flow-diagram-bind.vue.d.ts",
+      "default": "./src/components/data/flow-diagram/flow-diagram-bind/flow-diagram-bind.vue"
     },
     "./transfer-list": {
       "types": "./types/components/data/transfer-list/index.d.ts",
@@ -3062,20 +3082,35 @@
       "flow-diagram": [
         "./types/components/data/flow-diagram/index.d.ts"
       ],
-      "topology-diagram": [
-        "./types/components/data/topology-diagram/topology-diagram.vue.d.ts"
-      ],
       "flow-diagram-root": [
         "./types/components/data/flow-diagram/flow-diagram.vue.d.ts"
       ],
       "flow-diagram-node": [
         "./types/components/data/flow-diagram/flow-diagram-node/flow-diagram-node.vue.d.ts"
       ],
-      "flow-diagram-parallel": [
-        "./types/components/data/flow-diagram/flow-diagram-parallel/flow-diagram-parallel.vue.d.ts"
+      "flow-diagram-group": [
+        "./types/components/data/flow-diagram/flow-diagram-group/flow-diagram-group.vue.d.ts"
       ],
       "flow-diagram-anchor": [
         "./types/components/data/flow-diagram/flow-diagram-anchor/flow-diagram-anchor.vue.d.ts"
+      ],
+      "flow-diagram-header": [
+        "./types/components/data/flow-diagram/flow-diagram-header/flow-diagram-header.vue.d.ts"
+      ],
+      "flow-diagram-title": [
+        "./types/components/data/flow-diagram/flow-diagram-title/flow-diagram-title.vue.d.ts"
+      ],
+      "flow-diagram-description": [
+        "./types/components/data/flow-diagram/flow-diagram-description/flow-diagram-description.vue.d.ts"
+      ],
+      "flow-diagram-footer": [
+        "./types/components/data/flow-diagram/flow-diagram-footer/flow-diagram-footer.vue.d.ts"
+      ],
+      "flow-diagram-item": [
+        "./types/components/data/flow-diagram/flow-diagram-item/flow-diagram-item.vue.d.ts"
+      ],
+      "flow-diagram-bind": [
+        "./types/components/data/flow-diagram/flow-diagram-bind/flow-diagram-bind.vue.d.ts"
       ],
       "transfer-list": [
         "./types/components/data/transfer-list/index.d.ts"

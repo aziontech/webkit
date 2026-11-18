@@ -4,7 +4,7 @@
 
 yout, objects, git) and External (frameworks, AI models, developer tools, languages, online services). A monochrome icon is `az az-<name>`, coloured by the text colour; a colour logo is `az-color az-<name>`. Pick an icon by what it stands for: a product icon names only that product. Import `@aziontech/icons` once at the app entry; an `icon` prop takes the class string.
 
-483 names. These are the only values the components accept. An unknown class renders nothing. The MCP tool `list_assets({ kind: "icons" })` returns the same list (with a `query` to filter), and `catalog.json#assets.icons` points at it as data.
+487 names. These are the only values the components accept. An unknown class renders nothing. The MCP tool `list_assets({ kind: "icons" })` returns the same list (with a `query` to filter), and `catalog.json#assets.icons` points at it as data.
 
 Used by: [Alert](../components/alert.md), [ArtifactPreview](../components/artifact-preview.md), [Avatar](../components/avatar.md), [Button](../components/button.md), [Combobox](../components/combobox.md), [DocCard](../components/doc-card.md), [DocItem](../components/doc-item.md), [DocPrompt](../components/doc-prompt.md), [EmptyState](../components/empty-state.md), [FeatureItem](../components/feature-item.md), [FileDropzone](../components/file-dropzone.md), [HighlightButton](../components/highlight-button.md), [IconButton](../components/icon-button.md), [Link](../components/link.md), [SettingsGroup](../components/settings-group.md), [SplitButton](../components/split-button.md), [Tag](../components/tag.md).
 
@@ -45,7 +45,7 @@ Everything that is Azion's own: its products, the parts inside them, the platfor
 | `az az-data-stream` | Data Stream | Data Stream | logs, events |
 | `az az-durable-objects` | Durable Objects | Durable Objects | product |
 | `az az-edge-dns` | Edge DNS | Edge DNS | network, distributed, domain, name server, zone, records |
-| `az az-edge-orchestrator` | Edge Orchestrator | Edge Orchestrator | network, distributed, infrastructure, deploy |
+| `az az-orchestrator` | Orchestrator | Orchestrator | infrastructure, deploy, edge orchestrator |
 | `az az-edge-pulse` | Edge Pulse | Edge Pulse | network, distributed |
 | `az az-firewall` | Firewall | Firewall | security, waf, protection, edge firewall |
 | `az az-functions` | Functions | Functions | serverless, compute, code, edge functions |
@@ -67,17 +67,17 @@ Everything that is Azion's own: its products, the parts inside them, the platfor
 | `az az-network-shield` | Network Shield | Network Shield | connectivity, security, protection, safe |
 | `az az-ddos-protection` | DDoS Protection | DDoS Protection | product |
 | `az az-secure-internet-access` | Secure Internet Access | Secure Internet Access | security, protection |
+| `az az-lora-fine-tune` | LoRA Fine-Tune | LoRA Fine-Tune | fine-tuning, ai, model |
+| `az az-origin-shield` | Origin Shield | Origin Shield | backend, server, security, protection, safe |
 
 #### Azion · Product features
 
 | Class | Product | Stands for | Keywords |
 | --- | --- | --- | --- |
 | `az az-domains` | Workloads | Domains (inside Workloads) | dns, url, workload |
-| `az az-edge-libraries` | Edge Orchestrator | Edge Libraries, where Edge Orchestrator keeps the services it can install | network, distributed |
-| `az az-edge-nodes` | Edge Orchestrator | Edge Nodes, the servers Edge Orchestrator manages | network, distributed, infrastructure |
-| `az az-edge-services` | Edge Orchestrator | Edge Services, the services Edge Orchestrator installs on an edge node | network, distributed |
-| `az az-lora` | AI Inference | LoRA adapters for AI Inference | fine-tuning, model |
-| `az az-origin-shield` | Connectors | Origin Shield (Connectors feature) | backend, server, security, protection, safe |
+| `az az-edge-libraries` | Orchestrator | Edge Libraries, where Orchestrator keeps the services it can install | network, distributed |
+| `az az-edge-nodes` | Orchestrator | Edge Nodes, the servers Orchestrator manages | network, distributed, infrastructure |
+| `az az-edge-services` | Orchestrator | Edge Services, the services Orchestrator installs on an edge node | network, distributed |
 | `az az-rules-engine` | Applications | Rules Engine (part of Applications) | logic, conditions, behavior |
 | `az az-tiered-cache` | Cache | Tiered Cache (Cache feature) | feature |
 
@@ -99,10 +99,14 @@ Everything that is Azion's own: its products, the parts inside them, the platfor
 
 | Class | Stands for | Keywords |
 | --- | --- | --- |
-| `az az-abuse-prevention` | Abuse prevention (security solution) | fraud |
-| `az az-adaptive-security` | Adaptive security (security solution) | protection, shield |
-| `az az-content-delivery` | Content delivery (solution) | solution |
-| `az az-sase` | SASE (secure access solution) | network security, zero trust |
+| `az az-application-development` | Build and run applications (Application Development) | web apps, websites, apis, serverless |
+| `az az-performance-and-reliability` | Improve application performance and reliability (Performance and Reliability) | content delivery, speed, availability, uptime, cdn |
+| `az az-artificial-intelligence` | Build and run AI workloads (Artificial Intelligence) | inference, agents, machine learning |
+| `az az-application-security` | Secure applications and networks (Application Security) | protection, shield, abuse prevention, adaptive security, sase, network security, fraud, zero trust |
+| `az az-media-and-streaming` | Deliver media and streaming content (Media and Streaming) | video, live streaming, broadcast |
+| `az az-retail` | Retail (industry solution) | ecommerce, commerce, store |
+| `az az-technology` | Technology (industry solution) | tech companies, saas, software |
+| `az az-financial-services` | Financial Services (industry solution) | banking, fintech, payments, finance |
 
 #### Azion · Services
 

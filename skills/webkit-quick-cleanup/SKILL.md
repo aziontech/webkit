@@ -2,7 +2,7 @@
 name: webkit-quick-cleanup
 description: Fast deslop pass for UI built on @aziontech/webkit — enforce components-only, tokens-only (typography/color/shape/spacing/shadow), correct typography hierarchy, and consistent spacing rhythm. Use for a quick cleanup or polish review.
 status: active
-last_updated: 2026-11-15
+last_updated: 2026-11-18
 scope: general
 enforced_by: [webkit-tokens, webkit-prefer-over-custom, webkit-styling]
 ---
@@ -68,6 +68,8 @@ hand-rolled, nothing hardcoded.
   `text-[length:inherit]`), or `tracking-*` overrides — line-height and tracking are baked into the token.
 - **NEVER** make a heading visually smaller than a label. Respect the order
   `text-heading-* > text-body-* > text-label-* > text-overline-*`, and don't skip levels arbitrarily.
+- **MUST** title a contained surface (a dialog, drawer, popover, card, alert or toast) with its component's
+  own title part, which carries the medium-weight `text-title-*` role; a page or section heading stays `text-heading-*`.
 - **MUST** use `text-balance` on headings and `text-pretty` on body/paragraph copy.
 - **MUST** use `tabular-nums` for numeric / data columns.
 

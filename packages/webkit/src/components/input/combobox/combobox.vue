@@ -567,11 +567,11 @@
             <ul
               :role="section.title ? 'group' : 'presentation'"
               :aria-labelledby="section.title ? section.id : undefined"
-              class="m-0 flex list-none flex-col gap-(--spacing-2xs) p-0"
+              class="m-0 flex list-none flex-col p-0"
             >
               <LazyNodes
                 :ref="setLazy"
-                :row-height="34"
+                :row-height="32"
               >
                 <li
                   v-for="row in section.rows"
@@ -585,7 +585,7 @@
                   :data-disabled="isDisabledRow(row) || null"
                   :data-type="row.kind"
                   :data-testid="`${testId}__option`"
-                  class="flex min-h-8 cursor-pointer select-none items-center gap-(--spacing-sm) rounded-(--shape-control) px-(--spacing-sm) py-(--spacing-2xs) text-start text-label-sm text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) data-[active]:bg-(--bg-hover) data-[selected]:bg-(--bg-selected) data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled) data-[disabled]:hover:bg-transparent motion-reduce:transition-none pointer-coarse:min-h-11"
+                  class="flex min-h-8 cursor-pointer select-none items-center gap-(--spacing-sm) rounded-(--shape-control) border-y border-transparent bg-clip-padding forced-colors:border-y-0 px-(--spacing-sm) py-(--spacing-2xs) text-start text-label-sm text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) data-[active]:bg-(--bg-hover) data-[selected]:bg-(--bg-selected) data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled) data-[disabled]:hover:bg-transparent motion-reduce:transition-none pointer-coarse:min-h-11"
                   @click="commitRow($event, row)"
                   @keydown.enter.prevent="commitRow($event, row)"
                   @mousemove="active = isDisabledRow(row) ? active : rows.indexOf(row)"

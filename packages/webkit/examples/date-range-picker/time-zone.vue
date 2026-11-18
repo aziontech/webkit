@@ -9,6 +9,7 @@
     start: '2026-11-10T11:00:00.000Z',
     end: '2026-11-10T23:00:00.000Z'
   })
+  const runQuery = () => {}
 </script>
 
 <template>
@@ -19,6 +20,7 @@
       :time-zones="zones"
       show-time-zone
       aria-label="Log window"
+      @refresh="runQuery"
     />
     <p class="text-body-sm text-(--text-muted) tabular-nums">{{ range.start }} – {{ range.end }}</p>
   </div>

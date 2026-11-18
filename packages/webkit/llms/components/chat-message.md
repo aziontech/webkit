@@ -165,7 +165,7 @@ packages/webkit/src/components/ai/chat-message/
     </ChatMessageRoot>
     <ChatMessageRoot timestamp="10:41">
       <StreamingResponse
-        content="Open **Real-Time Purge**, choose *URL* as the purge type and paste the address. The purge reaches every edge location in a few seconds."
+        content="Open **Real-Time Purge**, choose *URL* as the purge type and paste the address. The purge reaches every data center in a few seconds."
       />
     </ChatMessageRoot>
   </div>

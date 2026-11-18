@@ -31,6 +31,7 @@
     type PropertyFilterToken
   } from '@aziontech/webkit/property-filter'
   import Resizable from '@aziontech/webkit/resizable'
+  import Select from '@aziontech/webkit/select'
   import Sidebar from '@aziontech/webkit/sidebar-root'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -120,6 +121,23 @@
   const timeZone = ref('UTC')
 
   const timeZones = ['UTC', 'America/Sao_Paulo', 'America/New_York', 'Europe/Lisbon', 'Asia/Tokyo']
+
+  const zoneLabel = (zone: string) => {
+    const offset =
+      new Intl.DateTimeFormat('en-US', { timeZone: zone, timeZoneName: 'longOffset' })
+        .formatToParts(new Date(referenceNow))
+        .find((part) => part.type === 'timeZoneName')
+        ?.value.replace('GMT', 'UTC')
+        .replace('-', '−') ?? zone
+    const utcOffset = offset === 'UTC' ? 'UTC+00:00' : offset
+    if (!zone.includes('/')) return utcOffset
+    const city = zone.split('/').at(-1)?.replace(/_/g, ' ') ?? zone
+    return `${utcOffset} · ${city}`
+  }
+
+  const setTimeZone = (zone: string | undefined) => {
+    if (zone) timeZone.value = zone
+  }
 
   const { formatDate, formatNumber } = useLocale()
 
@@ -560,7 +578,7 @@
   })
 
   const loading = ref(false)
-  const refreshInterval = ref(0)
+  const refreshInterval = ref(300)
   let refreshTimer: ReturnType<typeof setTimeout> | undefined
   const refresh = () => {
     if (loading.value) return
@@ -917,7 +935,6 @@
               v-model:time-zone="timeZone"
               v-model:refresh-interval="refreshInterval"
               :relative-options="relativeOptions"
-              :time-zones="timeZones"
               :now="rangeNow"
               :min="rangeMin"
               :max="rangeNow"
@@ -926,6 +943,34 @@
               data-testid="events-range"
               @refresh="refresh"
             />
+          </div>
+          <div class="flex shrink-0 items-center">
+            <Select
+              :model-value="timeZone"
+              :display-value="zoneLabel"
+              size="medium"
+              aria-label="Time zone"
+              data-testid="events-time-zone"
+              @update:model-value="setTimeZone"
+            >
+              <Select.Trigger>
+                <template #leading>
+                  <i
+                    class="az az-globe text-(--text-muted)"
+                    aria-hidden="true"
+                  />
+                </template>
+              </Select.Trigger>
+              <Select.Content>
+                <Select.Item
+                  v-for="zone in timeZones"
+                  :key="zone"
+                  :value="zone"
+                >
+                  {{ zoneLabel(zone) }}
+                </Select.Item>
+              </Select.Content>
+            </Select>
           </div>
           <div class="flex min-w-36 grow basis-(--container-xs)">
             <PropertyFilter

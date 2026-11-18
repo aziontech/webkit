@@ -577,9 +577,15 @@
     "filter-menu-root",
     "flow-diagram",
     "flow-diagram-anchor",
+    "flow-diagram-bind",
+    "flow-diagram-description",
+    "flow-diagram-footer",
+    "flow-diagram-group",
+    "flow-diagram-header",
+    "flow-diagram-item",
     "flow-diagram-node",
-    "flow-diagram-parallel",
     "flow-diagram-root",
+    "flow-diagram-title",
     "footer",
     "footer-column",
     "footer-link",
@@ -840,7 +846,6 @@
     "tool-approval",
     "tool-call",
     "tooltip",
-    "topology-diagram",
     "trace",
     "tracker",
     "transfer-list",
@@ -930,6 +935,7 @@
     "shell/shell-docs",
     "shell/shell-site",
     "state/state-async-submit",
+    "state/state-edge-error-page",
     "state/state-error-page",
     "state/state-first-use",
     "state/state-form-validation",
@@ -2269,19 +2275,35 @@
       "align": [
         "center",
         "start"
-      ]
-    },
-    "topology-diagram": {
+      ],
       "ariaLabel": null,
-      "levels": null,
+      "edges": null,
       "loading": null,
-      "openKeys": null
+      "nodes": null,
+      "openKeys": null,
+      "orientation": [
+        "horizontal",
+        "responsive",
+        "vertical"
+      ],
+      "uniform": null
     },
     "flow-diagram-root": {
       "align": [
         "center",
         "start"
-      ]
+      ],
+      "ariaLabel": null,
+      "edges": null,
+      "loading": null,
+      "nodes": null,
+      "openKeys": null,
+      "orientation": [
+        "horizontal",
+        "responsive",
+        "vertical"
+      ],
+      "uniform": null
     },
     "transfer-list": {
       "disabled": null,
@@ -2567,6 +2589,7 @@
       "disabled": null,
       "invalid": null,
       "max": null,
+      "maxDuration": null,
       "min": null,
       "modelValue": null,
       "now": null,

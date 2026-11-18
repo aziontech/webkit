@@ -394,6 +394,8 @@ export const es: Messages = {
     apply: 'Aplicar',
     previousMonth: 'Mes anterior',
     nextMonth: 'Mes siguiente',
+    month: 'Mes',
+    year: 'Año',
     start: 'Inicio',
     end: 'Fin',
     date: 'Fecha',
@@ -414,6 +416,7 @@ export const es: Messages = {
     absolute: 'Absoluto',
     quickRanges: 'Intervalos rápidos',
     custom: 'Intervalo personalizado',
+    showQuickRanges: 'Volver a los intervalos rápidos',
     amount: 'Duración',
     unit: 'Unidad',
     second: {
@@ -457,7 +460,6 @@ export const es: Messages = {
     thisYear: 'Este año',
     now: 'ahora',
     untilNow: 'Terminar ahora',
-    zoneNote: 'Horas en {zone}',
     refreshEvery: 'Actualizar cada',
     refreshOff: 'Desactivado',
     refreshSecond: {
@@ -479,6 +481,7 @@ export const es: Messages = {
     incomplete: 'Elige un inicio y un fin.',
     order: 'El fin debe ser posterior al inicio.',
     outOfBounds: 'Elige un intervalo dentro de las fechas permitidas.',
+    tooLong: 'Elige un intervalo de {duration} como máximo.',
     invalidAmount: 'Introduce un número entero mayor que 0.'
   },
   dialog: {
@@ -715,8 +718,6 @@ export const es: Messages = {
     search: 'Buscar registros',
     loading: 'Cargando…',
     lines: { one: '{count} línea', other: '{count} líneas' },
-    warnings: 'Advertencias',
-    warningCount: { one: '{count} advertencia', other: '{count} advertencias' },
     gzip: 'gzip:',
     empty: 'Ninguna línea de registro coincide con los filtros actuales.',
     noLines: 'Todavía no hay líneas de log.',
@@ -1142,8 +1143,8 @@ export const es: Messages = {
       other: '{count} eventos'
     }
   },
-  topologyDiagram: {
-    label: 'Topología de despliegue',
+  flowDiagram: {
+    label: 'Diagrama',
     notBound: 'Sin vincular',
     bind: 'Vincular {kind}',
     change: 'Cambiar {kind}',
@@ -1155,8 +1156,11 @@ export const es: Messages = {
     existing: 'Existentes',
     noOptions: 'Aún no hay opciones.',
     copy: 'Copiar {field}',
+    details: 'Detalles',
+    connections: 'Conexiones',
+    connection: '{from} a {to}',
     emptyTitle: 'Aún no hay nada conectado.',
-    loading: 'Cargando la topología'
+    loading: 'Cargando el diagrama'
   },
   tracker: {
     noData: 'Sin datos',

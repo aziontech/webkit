@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 9
 template: 2
-checksum: 10718db8c9829825a98d3ba4f75b82b6bf2798e5da23a4af2b98a071b03ee049
+checksum: 4054ec44743821c8466bc0b647953e3a6b582b1b4f742ef4761b2f05cf2e06dc
 created: 2026-11-11
 last_updated: 2026-11-18
 ---
@@ -158,7 +158,7 @@ not hold it reports its step as dismissed, so its popover is closed and its mark
   - Events: `update:activeKey` (`string \| null`) and `update:step` (`number`) from the models; `start` (`(event: Event, id: string)` — the tutorial id, on Start and Restart), `exit` (`(event: Event, id: string)` — on Exit or Back to tutorials), `complete` (`(event: Event, id: string)` — on Finish of the last step). Each fires from a button the reader activated (in the panel or a hotspot popover, through the context), so the DOM event comes first and the tutorial id second.
   - Slot: `default` — the page, with the panel and every hotspot inside.
 
-- `tutorial-panel-hotspot/tutorial-panel-hotspot.vue` — **companion part** (composes `Popover` and `Button`; exported on its own, not attached): marks a real control as a step. It wraps the control and, while a tutorial that names its `hotspotId` runs, draws a small marker beside it. The current step's marker pulses and opens the step in a popover: the step's title (`Popover.Title`, `.text-heading-2xs`), `Step n of N` with the task's name, the instructions, and Previous / Next (Finish on the last step). Outside a running tutorial, or outside a provider, it renders only the wrapped control, so hotspots can stay on a page for good.
+- `tutorial-panel-hotspot/tutorial-panel-hotspot.vue` — **companion part** (composes `Popover` and `Button`; exported on its own, not attached): marks a real control as a step. It wraps the control and, while a tutorial that names its `hotspotId` runs, draws a small marker beside it. The current step's marker pulses and opens the step in a popover: the step's title (`Popover.Title`, `.text-title-sm`), `Step n of N` with the task's name, the instructions, and Previous / Next (Finish on the last step). Outside a running tutorial, or outside a provider, it renders only the wrapped control, so hotspots can stay on a page for good.
   - Props: `hotspotId: string` (required) — matches the `hotspotId` of a tutorial step; `side?: 'start' | 'end'` (default `'end'`, type `TutorialPanelHotspotSide`) — which side of the wrapped control the marker sits on, in reading direction.
   - Events: none — moves go through the provider.
   - Slot: `default` — the real control the step is about.
@@ -246,7 +246,7 @@ _No events on the panel — every action goes through the provider, which emits 
 
 | Region                              | Token (DESIGN.md)                                              |
 | ----------------------------------- | -------------------------------------------------------------- |
-| typography (tutorial title in list) | `.text-heading-2xs`                                            |
+| typography (tutorial title in list) | `.text-title-sm`                                               |
 | typography (description, steps)     | `.text-body-sm`                                                |
 | typography (counts, current step)   | `.text-label-sm`, `.text-label-md`                             |
 | title ink                           | `var(--text-default)`                                          |
@@ -261,7 +261,7 @@ _No events on the panel — every action goes through the provider, which emits 
 | hotspot marker dot (not current)    | `var(--bg-surface)`                                            |
 | hotspot marker shape                | `var(--radius-full)`                                           |
 | hotspot marker focus ring           | `var(--ring-color)`                                            |
-| hotspot step title                  | `.text-heading-2xs` (from `Popover.Title`)                     |
+| hotspot step title                  | `.text-title-sm` (from `Popover.Title`)                        |
 | hotspot step content                | `.text-body-sm`, `var(--text-default)`                         |
 | hotspot step content padding        | `var(--spacing-md)` inline and top, `var(--spacing-lg)` bottom |
 

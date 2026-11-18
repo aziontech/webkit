@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 5
-checksum: 97351cafeccd628918c03454281d51a5f38ac2946289a2255a047b4332746fd6
+checksum: 57d5e6687d3a4d36e1d97ba1c320bfb50436cf7c1c428fd4e3e99a2ee67b176a
 created: 2026-10-21
 last_updated: 2026-11-15
 ---
@@ -25,7 +25,7 @@ A node-and-connector diagram for marketing pages: the request path of an archite
 ## When NOT to use
 
 - For decorative product art → use `illustration`.
-- For a world map of points of presence → use `network-map`.
+- For a world map of data centers → use `network-map`.
 - For a sequence of steps the reader follows in order → use `stepper` or an ordered list.
 - For live data or anything the reader operates — a diagram is a figure, not a control.
 

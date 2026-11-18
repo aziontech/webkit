@@ -37,8 +37,9 @@ Every icon belongs to one of three groups, so it is always clear whether an icon
 Rules that keep the names honest (checked by `scripts/check-manifest.mjs` on every build):
 
 - **A product icon is named after the product**, as WebKit and the console name it: `functions` for Functions, `sql-database` for SQL Database, `waf` for WAF.
-- **`edge-` stays only where the product still carries it**: Edge DNS, Edge Pulse and Edge Orchestrator (with its Edge Nodes, Edge Services and Edge Libraries).
-- **A feature names its product**: Domains belongs to Workloads, Rules Engine to Applications, Tiered Cache to Cache, Origin Shield to Connectors.
+- **`edge-` stays only where the name still carries it**: the products Edge DNS and Edge Pulse, and the Orchestrator features Edge Nodes, Edge Services and Edge Libraries. Edge Orchestrator is now Orchestrator (`az-orchestrator`).
+- **A feature names its product**: Domains belongs to Workloads, Rules Engine to Applications, Tiered Cache to Cache.
+- **Every official Azion product and Solution has an icon; CI blocks otherwise.** The lists come from azioncorp's `product-naming.md` (Product Catalog) and `solutions.md`, stored as [`azion-products.json`](../webkit/test/catalog/azion-products.json) and [`azion-solutions.json`](../webkit/test/catalog/azion-solutions.json). The `toolkit` CI job (it runs on every PR, also one that touches only this package) fails when one of them has no SVG in `src/svg-raw/az/`, no entry in `src/icons.json` with that product or Solution name, or no `az az-<name>` glyph in a fresh font build. When the taxonomy changes, update the JSON first, then add the icon. Official abbreviations are allowed where the catalog gives one (`waf` for Web Application Firewall (WAF)), and an icon may not name a deprecated product (Edge Orchestrator is Orchestrator).
 - **Interface glyphs take [Lucide](https://lucide.dev/icons) names** (`az-x`, `az-menu`, `az-settings`, `az-chevron-down`); brands are spelled out (`az-javascript`, `az-x-brand`).
 - **Names say what the icon is**, never how the file was made: no `-alt`, `-logo`, `-icon`, and no class prefix inside the name.
 - **Pick an icon by what it stands for.** For a generic idea (a database, a route, a table) use an Interface icon, not a product's. Never use an External logo to stand for an Azion product.

@@ -17,7 +17,7 @@
         href="/functions"
       />
       <LinkDirectoryItem
-        icon="az az-edge-orchestrator"
+        icon="az az-rules-engine"
         title="Rules Engine"
         description="Automate request handling with programmable rules"
         href="/rules-engine"

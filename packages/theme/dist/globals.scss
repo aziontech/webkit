@@ -522,14 +522,17 @@
   --layout-header-height: calc(var(--spacing) * 14);
   --layout-sticky-top: var(--layout-header-height);
   --code-editor-line-height: 1rem;
+  --text-big-number-md-white-space: nowrap;
   --text-big-number-md-font-size: 1.25rem;
   --text-big-number-md-line-height: 1.25;
   --text-big-number-md-font-weight: 400;
   --text-big-number-md-font-family: 'Proto Mono', 'Roboto Mono', ui-monospace, monospace;
+  --text-big-number-sm-white-space: nowrap;
   --text-big-number-sm-font-size: 1rem;
   --text-big-number-sm-line-height: 1.25;
   --text-big-number-sm-font-weight: 400;
   --text-big-number-sm-font-family: 'Proto Mono', 'Roboto Mono', ui-monospace, monospace;
+  --text-big-number-lg-white-space: nowrap;
   --text-big-number-lg-font-size: 1.5rem;
   --text-big-number-lg-line-height: 1.25;
   --text-big-number-lg-font-weight: 400;
@@ -588,6 +591,21 @@
   --text-heading-2xs-line-height: 1.375;
   --text-heading-2xs-font-weight: 400;
   --text-heading-2xs-letter-spacing: 0;
+  --text-title-lg-text-wrap-style: balance;
+  --text-title-lg-font-size: 0.875rem;
+  --text-title-lg-line-height: 1.375;
+  --text-title-lg-font-weight: 500;
+  --text-title-lg-letter-spacing: 0;
+  --text-title-md-text-wrap-style: balance;
+  --text-title-md-font-size: 1rem;
+  --text-title-md-line-height: 1.375;
+  --text-title-md-font-weight: 500;
+  --text-title-md-letter-spacing: 0;
+  --text-title-sm-text-wrap-style: balance;
+  --text-title-sm-font-size: 0.875rem;
+  --text-title-sm-line-height: 1.375;
+  --text-title-sm-font-weight: 500;
+  --text-title-sm-letter-spacing: 0;
   --text-label-lg-font-size: 1rem;
   --text-label-lg-line-height: 1.5;
   --text-label-lg-font-weight: 400;
@@ -698,6 +716,7 @@
     --text-heading-xl-font-size: 1.875rem;
     --text-heading-md-font-size: 1.25rem;
     --text-heading-sm-font-size: 1rem;
+    --text-title-lg-font-size: 1rem;
     --text-overline-md-font-size: 0.875rem;
   }
 
@@ -712,6 +731,7 @@
     --text-heading-lg-font-size: 1.875rem;
     --text-heading-md-font-size: 1.5rem;
     --text-heading-sm-font-size: 1.125rem;
+    --text-title-lg-font-size: 1.125rem;
     --text-body-lg-font-size: 1.125rem;
   }
 
@@ -1251,21 +1271,24 @@
 }
 
 @utility text-big-number-md {
-  font-size: var(--text-big-number-md-font-size);
+  white-space: var(--text-big-number-md-white-space);
+  font-size: min(var(--text-big-number-md-font-size), (100cqi - var(--text-big-number-inset, calc(0rem))) / (var(--text-big-number-characters, 1) * 0.65));
   line-height: var(--text-big-number-md-line-height);
   font-weight: var(--text-big-number-md-font-weight);
   font-family: var(--text-big-number-md-font-family);
 }
 
 @utility text-big-number-sm {
-  font-size: var(--text-big-number-sm-font-size);
+  white-space: var(--text-big-number-sm-white-space);
+  font-size: min(var(--text-big-number-sm-font-size), (100cqi - var(--text-big-number-inset, calc(0rem))) / (var(--text-big-number-characters, 1) * 0.65));
   line-height: var(--text-big-number-sm-line-height);
   font-weight: var(--text-big-number-sm-font-weight);
   font-family: var(--text-big-number-sm-font-family);
 }
 
 @utility text-big-number-lg {
-  font-size: var(--text-big-number-lg-font-size);
+  white-space: var(--text-big-number-lg-white-space);
+  font-size: min(var(--text-big-number-lg-font-size), (100cqi - var(--text-big-number-inset, calc(0rem))) / (var(--text-big-number-characters, 1) * 0.65));
   line-height: var(--text-big-number-lg-line-height);
   font-weight: var(--text-big-number-lg-font-weight);
   font-family: var(--text-big-number-lg-font-family);
@@ -1356,6 +1379,30 @@
   line-height: var(--text-heading-2xs-line-height);
   font-weight: var(--text-heading-2xs-font-weight);
   letter-spacing: var(--text-heading-2xs-letter-spacing);
+}
+
+@utility text-title-lg {
+  text-wrap-style: var(--text-title-lg-text-wrap-style);
+  font-size: var(--text-title-lg-font-size);
+  line-height: var(--text-title-lg-line-height);
+  font-weight: var(--text-title-lg-font-weight);
+  letter-spacing: var(--text-title-lg-letter-spacing);
+}
+
+@utility text-title-md {
+  text-wrap-style: var(--text-title-md-text-wrap-style);
+  font-size: var(--text-title-md-font-size);
+  line-height: var(--text-title-md-line-height);
+  font-weight: var(--text-title-md-font-weight);
+  letter-spacing: var(--text-title-md-letter-spacing);
+}
+
+@utility text-title-sm {
+  text-wrap-style: var(--text-title-sm-text-wrap-style);
+  font-size: var(--text-title-sm-font-size);
+  line-height: var(--text-title-sm-line-height);
+  font-weight: var(--text-title-sm-font-weight);
+  letter-spacing: var(--text-title-sm-letter-spacing);
 }
 
 @utility text-label-lg {

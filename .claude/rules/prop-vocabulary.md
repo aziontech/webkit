@@ -128,7 +128,7 @@ axis is the prop name or its `*<Axis>` suffix (`titleVariant`, `tagSeverity`).
 | `variant`     | `primary · secondary · outline · ghost · danger · link`                | the component's own looks, e.g. `avatar` circle·square, `chip` filled·dashed, `tag` accent·contrast·highlight, `texture` dots·grid·lines… |
 | `severity`    | `neutral · info · success · warning · danger`                          | `severity-tag` critical·high·medium·low (a security level); `chart` the `severity-*` palette                                              |
 | `status`      | `pending · running · success · error · canceled · skipped · streaming` | `prompt-input` ready; `tool-approval` approved·denied·expired; `tool-call` denied                                                         |
-| `orientation` | `horizontal · vertical`                                                | `field` responsive; `scroll-area` both                                                                                                    |
+| `orientation` | `horizontal · vertical`                                                | `field`, `flow-diagram` responsive; `scroll-area` both                                                                                    |
 | `size`        | `tiny · small · medium · large · xlarge`, ordered subset (see Size)    | none                                                                                                                                      |
 
 - **A `variant` union made only of alignment words** (`start`, `center`, `end`, `split`) is

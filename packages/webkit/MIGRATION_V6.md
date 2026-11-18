@@ -839,10 +839,20 @@ listed in `@aziontech/icons/manifest` and `ICONS.md` in the icons package:
   `az-sql-database`, `ai-edge-kv` → `az-kv-store`, `ai-edge-connectors` → `az-connectors`,
   `ai-edge-ai` → `az-ai-inference`, `ai-waf-rules` → `az-waf`, `ai-app-accelerator` →
   `az-application-accelerator`, `ai-store` → `az-store-pillar`, `ai-origin-accelerator` →
-  `az-application-accelerator`; Edge DNS, Edge Pulse and Edge Orchestrator (with `az-edge-nodes`,
-  `az-edge-services`, `az-edge-libraries`) keep `edge-`; `ai-tiered-cache` → `az-tiered-cache`, now a
-  feature of the new `az-cache`; new product icons `az-cache`, `az-network-shield`,
+  `az-application-accelerator`, `ai-edge-orchestrator` → `az-orchestrator` (the product is now
+  Orchestrator), `ai-lora` → `az-lora-fine-tune` (LoRA Fine-Tune is now a product, with a new
+  drawing); Edge DNS and Edge Pulse keep `edge-`, and so do the Orchestrator features
+  `az-edge-nodes`, `az-edge-services` and `az-edge-libraries`; `ai-tiered-cache` →
+  `az-tiered-cache`, now a feature of the new `az-cache`; `az-origin-shield` is now the Origin
+  Shield product icon, with a new drawing; new product icons `az-cache`, `az-network-shield`,
   `az-ddos-protection` and `az-secure-internet-access`;
+- solutions: the Solutions category holds the eight Azion Solutions, named after their short
+  names (`az-application-development`, `az-performance-and-reliability`,
+  `az-artificial-intelligence`, `az-application-security`, `az-media-and-streaming`, `az-retail`,
+  `az-technology`, `az-financial-services`); the old solution icons were not Azion Solutions and
+  are gone: `ai-abuse-prevention`, `ai-adaptive-security` and `ai-sase` →
+  `az-application-security`, `ai-content-delivery` → `az-performance-and-reliability` (each with
+  a new drawing);
 - one drawing, one name: `ai-digital-certificates` → `az-verified`, `ai-instructor` →
   `az-graduation-cap`, `ai-ai-pillar` → `az-sparkles`,
   `ai-window-maximize` → `az-app-window`; and names that say the drawing: `ai-datasheet` → `az-sheet`, `ai-column` →
@@ -1271,9 +1281,9 @@ not rewrite handlers: a handler that ignores its arguments (`@retry="reload"`,
 | `ChatMessage`           | `retry`             | `()`                             | `(event)`                                           |
 | `Reasoning`             | `skip`              | `()`                             | `(event)`                                           |
 | `FeedbackReasonDialog`  | `submit`            | `(payload)`                      | `(event, payload)`                                  |
-| `TopologyDiagram`       | `remove`            | `(key)`                          | `(event, key)`                                      |
-| `TopologyDiagram`       | `create`            | `(key)`                          | `(event, key)`                                      |
-| `TopologyDiagram`       | `bind`              | `(key, value)`                   | `(event, { key, value })`                           |
+| `TopologyDiagram`       | `remove`            | `(key)`                          | `FlowDiagramBind` `(event)`                         |
+| `TopologyDiagram`       | `create`            | `(key)`                          | `FlowDiagramBind` `(event)`                         |
+| `TopologyDiagram`       | `bind`              | `(key, value)`                   | `FlowDiagramBind` `(event, value)`                  |
 | `DataTable`             | `filter-apply`      | `(filters)`                      | `(event, filters)`                                  |
 | `DataTable`             | `filter-remove`     | `(filter)`                       | `(event, filter)`                                   |
 | `Table.Filter`          | `apply`             | `(filters)`                      | `(event, filters)`                                  |
@@ -1388,20 +1398,21 @@ the prop renames of section 3 (`skeleton` `kind="shape"`, `progress` `shape`, `b
 `severity="default"`, `overline` `showCursor`, `pricing-card` `planTitle`, `flow-diagram-anchor` `type`, `toast-item` `type`) and the type names; the rest need a
 hand edit.
 
-| Component             | Removed                                                 | Use instead                                                   |
-| --------------------- | ------------------------------------------------------- | ------------------------------------------------------------- |
-| `toast-item`          | `type` (and the value `error`)                          | `severity` (`danger`)                                         |
-| `toast`               | `ToastType`, store entry `type`, `data-type`            | `ToastSeverity`, entry `severity`, `data-severity`            |
-| `progress`            | `shape`, `ProgressShape`, `data-shape`                  | `variant`, `ProgressVariant`, `data-variant`                  |
-| `skeleton`            | `kind="shape"`                                          | `variant="rectangle"`                                         |
-| `badge`               | `severity="default"`                                    | `severity="neutral"`                                          |
-| `overline`            | `showCursor`                                            | `cursor`                                                      |
-| `pricing-card`        | `planTitle` (and its built-in `Pro`)                    | `title`, set on every card                                    |
-| `flow-diagram-anchor` | `type`, `FlowDiagramAnchorType`                         | `side`, `FlowDiagramAnchorSide`                               |
-| `log-viewer`          | `v-model:warnings-only`, `data-warnings-only`           | `v-model:level` set to `'warn'`                               |
-| `log-viewer`          | line `type: 'warning'`                                  | line `type: 'text', level: 'warn'`                            |
-| `gauge-chart`         | threshold `color`, `GaugeChartThreshold`, `data-status` | threshold `severity`, `ChartThreshold`, `data-severity`       |
-| `chart-reference`     | `ChartReferenceSeverity`                                | `ChartThresholdSeverity` (now also takes the findings levels) |
+| Component             | Removed                                                                                 | Use instead                                                                                    |
+| --------------------- | --------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `toast-item`          | `type` (and the value `error`)                                                          | `severity` (`danger`)                                                                          |
+| `toast`               | `ToastType`, store entry `type`, `data-type`                                            | `ToastSeverity`, entry `severity`, `data-severity`                                             |
+| `progress`            | `shape`, `ProgressShape`, `data-shape`                                                  | `variant`, `ProgressVariant`, `data-variant`                                                   |
+| `skeleton`            | `kind="shape"`                                                                          | `variant="rectangle"`                                                                          |
+| `badge`               | `severity="default"`                                                                    | `severity="neutral"`                                                                           |
+| `overline`            | `showCursor`                                                                            | `cursor`                                                                                       |
+| `pricing-card`        | `planTitle` (and its built-in `Pro`)                                                    | `title`, set on every card                                                                     |
+| `flow-diagram-anchor` | `type`, `FlowDiagramAnchorType`                                                         | `side`, `FlowDiagramAnchorSide`                                                                |
+| `log-viewer`          | `v-model:warnings-only`, `data-warnings-only`                                           | `v-model:level` set to `'warn'`                                                                |
+| `log-viewer`          | line `type: 'warning'`                                                                  | line `type: 'text', level: 'warn'`                                                             |
+| `log-viewer-header`   | test id `__warnings-filter`, locale keys `logViewer.warnings`, `logViewer.warningCount` | the `warn` level toggle (`__level`, `data-level="warn"`), offered alone when `levels` is empty |
+| `gauge-chart`         | threshold `color`, `GaugeChartThreshold`, `data-status`                                 | threshold `severity`, `ChartThreshold`, `data-severity`                                        |
+| `chart-reference`     | `ChartReferenceSeverity`                                                                | `ChartThresholdSeverity` (now also takes the findings levels)                                  |
 
 `Badge` is for counts only (`12`, `99+`): a status word goes to `StatusIndicator` (the state of a
 resource) or `Tag` (a category or outcome word). `CodeEditor`'s plain diff mode now marks added and
@@ -2077,12 +2088,15 @@ bindings and prints `MANUAL` for everything below that it cannot rewrite.
   `false`: the panel names the zone in a read-only line (`Times in UTC−08:00 · Los Angeles`). A page
   that lets people switch zones adds `show-time-zone` (with `v-model:time-zone`). The start and end
   time fields also list the day in 30-minute steps; typing a time still works.
-- **`DateRangePicker` opens on Absolute, calendar first, and offers Refresh every.** The tabs read
-  `Absolute` then `Relative`; the panel opens on Absolute unless the value is relative. The Absolute
-  tab shows the month grid before the start and end fields. `showRefresh` now defaults to `true`:
-  a Refresh every select (Off, 10 seconds … 1 hour) sets `v-model:refresh-interval`, and the picker
-  fires `@refresh` on each tick. Run your query on `@refresh`, or pass `:show-refresh="false"` where
-  the page cannot re-run it. (DateRangePicker is new in 6.0, so no 5.x app needs a change.)
+- **`DateRangePicker` lists Relative first and refreshes every 5 minutes by default.** The tabs
+  read `Relative` then `Absolute`; the panel opens on Relative unless the value is absolute or
+  `since`. The Absolute tab shows the month grid (with Month and Year selects between its arrows)
+  before the start and end fields. `showRefresh` defaults to `true` and `v-model:refresh-interval`
+  to `300`: a Refresh every select (Off, 10 seconds … 1 hour) changes it, and the picker fires
+  `@refresh` on each tick. Run your query on `@refresh`; a page that cannot re-run it passes
+  `:show-refresh="false"` (no tick fires while Refresh every is hidden), and a page that wants it
+  off at first binds `v-model:refresh-interval` to `0`. (DateRangePicker is new in 6.0, so no 5.x
+  app needs a change.)
 - **Radios are one `RadioGroup`.** `RadioButton` and `RadioCards` are removed. Every radio is a
   `RadioGroup.Item` (`@aziontech/webkit/radio-group-item`) inside a `RadioGroup` that holds the
   `v-model`: `<RadioGroup v-model="plan"><RadioGroup.Item value="pro">Pro</RadioGroup.Item></RadioGroup>`.
@@ -2095,6 +2109,54 @@ bindings and prints `MANUAL` for everything below that it cannot rewrite.
   `transfer-list` (`TransferList.Source`, `.Target`, `.Controls`), the test id
   `transfer-list`, the catalog group `transferList`; `dataKey` is gone (the
   codemod writes `itemKey`).
+
+### `FlowDiagram` replaces `TopologyDiagram` and gains data cards
+
+6.0 has one in-product diagram, `FlowDiagram` (owner decision RV-Y1). It keeps the old
+`FlowDiagram` parts (`Node`, `Anchor`) and adds a data mode (`nodes` + `edges`) whose default card
+draws everything `TopologyDiagram` drew. `TopologyDiagram` is removed.
+
+| v5 / early 6.0                                          | 6.0                                                                                                               | Codemod |
+| ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ------- |
+| `@aziontech/webkit/topology-diagram`, `TopologyDiagram` | `@aziontech/webkit/flow-diagram`, `FlowDiagram`                                                                   | yes     |
+| `FlowDiagram.Parallel`, `flow-diagram-parallel`         | `FlowDiagram.Group`, `flow-diagram-group`                                                                         | yes     |
+| `FlowDiagram.Parallel` `align`                          | removed: a group stacks its nodes at full width                                                                   | MANUAL  |
+| `TopologyDiagram` `levels`                              | `nodes` (flat) + `edges` (`{ from, to, label?, severity? }`); the edges set columns                               | MANUAL  |
+| node `type` / `name`                                    | `eyebrow` / `title`                                                                                               | MANUAL  |
+| `@bind`, `@remove`, `@create` on the root               | the same events on `FlowDiagramBind`, placed in the `actions` slot                                                | MANUAL  |
+| status `Tag` in the node header                         | a status dot and text (`status` + `severity`)                                                                     | —       |
+| `TopologyDiagram*` types                                | `FlowDiagramNodeData`, `FlowDiagramNodeField`, `FlowDiagramBindOption`, `FlowDiagramSeverity`, `FlowDiagramProps` | yes     |
+
+Recipe for a topology: flatten every level's nodes into one `nodes` array, rename `type` to
+`eyebrow` and `name` to `title`, and write one edge per connection the levels drew (each node of
+a level to each node of the next). Drop `terminal` (the edges decide where a branch ends). Move
+the bind handlers onto a `FlowDiagramBind` in the `actions` slot:
+
+```vue
+<FlowDiagram
+  v-model:open-keys="openKeys"
+  :nodes="nodes"
+  :edges="edges"
+  aria-label="Deployment topology"
+>
+  <template #actions="{ node }">
+    <FlowDiagramBind
+      v-if="node.bindable"
+      :label="node.eyebrow"
+      :options="node.bindOptions"
+      :value="node.boundValue"
+      :removable="node.removable"
+      @bind="(event, value) => bind(node.id, value)"
+      @remove="() => unbind(node.id)"
+      @create="() => create(node.id)"
+    />
+  </template>
+</FlowDiagram>
+```
+
+`FlowDiagram` lays steps out with `orientation="responsive"` by default: it stacks into a vertical
+rail when its container is narrower than 36rem. A fixed-size scene keeps a row with
+`orientation="horizontal"`.
 
 ### AI skills renamed
 

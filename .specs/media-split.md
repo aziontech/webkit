@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 9
-checksum: e9bd19dbe47a12f333324761da7d4d4ff4ed5f6a02870250560ab718ab31f530
+checksum: 5c4dffd6655c9935619a19e466babac14013e8c5941e15a959b271d4ada95ffd
 created: 2026-09-22
 last_updated: 2026-11-18
 ---
@@ -79,7 +79,7 @@ Whether the band ever splits is `orientation`'s call. `horizontal` is the band p
   <MediaSplit
     eyebrow="Observability"
     title="See every request as it happens."
-    description="Logs stream from every edge location in real time, with no agent to install and no sampling."
+    description="Logs stream from every data center in real time, with no agent to install and no sampling."
   >
     <template #media>
       <Illustration name="live-debugging" />
@@ -90,7 +90,7 @@ Whether the band ever splits is `orientation`'s call. `horizontal` is the band p
   <MediaSplit
     title="See every request as it happens."
     src="/media/real-time-logs.png"
-    alt="A live log stream showing requests from twelve edge locations"
+    alt="A live log stream showing requests from twelve data centers"
   />
 
   <!-- Stacked at every width, media leading, and the two cells reading as one plate. -->
@@ -100,7 +100,7 @@ Whether the band ever splits is `orientation`'s call. `horizontal` is the band p
     :divided="false"
     fill="surface"
     title="See every request as it happens."
-    description="Logs stream from every edge location in real time."
+    description="Logs stream from every data center in real time."
   >
     <template #media>
       <Illustration name="live-debugging" />

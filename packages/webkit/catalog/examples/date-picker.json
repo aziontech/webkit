@@ -2,7 +2,7 @@
  "examples": [
   {
    "name": "Default",
-   "summary": "One date in a field: the trigger shows the picked day, the panel holds the month grid, a typed date field and Apply.",
+   "summary": "One date in a field: the trigger shows the picked day, the panel holds the month grid (Month and Year selects between its arrows jump straight to any month), a typed date field and Apply.",
    "file": "examples/date-picker/default.vue"
   },
   {

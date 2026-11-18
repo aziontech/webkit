@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "`LogViewer.Header` + `LogViewer.Content` over a realistic deploy log. Search filters lines and highlights matches in the body.",
+      "summary": "`LogViewer.Header` + `LogViewer.Content` over a realistic deploy log. Search filters lines and highlights matches in the body; with no `levels` set, the header offers the `warn` toggle alone, with its count, while the log has a warning.",
       "file": "default.vue"
     },
     {
@@ -19,7 +19,7 @@
     },
     {
       "name": "Levels",
-      "summary": "A function's test-run log: each line has a `level` and its run offset in `time`, and `levels` on the root puts one toggle per level in the header with the count of lines at that level. Pressing a toggle filters the log to that level (`v-model:level`), pressing it again shows every level; `warn` and `error` rows are tinted and keep the level in text.",
+      "summary": "A function's test-run log: each line has a `level` and its run offset in `time`, and `levels` on the root puts one toggle per level in the header with the count of lines at that level. Pressing a toggle filters the log to that level (`v-model:level`), pressing it again shows every level. The line count and the toggles share one size and font, and on a phone the strip scrolls sideways instead of wrapping; `warn` and `error` rows are tinted and keep the level in text.",
       "file": "levels.vue"
     },
     {

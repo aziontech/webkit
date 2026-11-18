@@ -4,33 +4,23 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "A sequential flow of nodes joined by connectors.",
+      "summary": "The data-driven default draws every field it is given: an icon and type over the name, a location, a status dot and text, metrics in the footer, details that open, and labelled edges with their timing. The edges also set the columns, so the two services that serve in parallel share one.",
       "file": "default.vue"
     },
     {
-      "name": "Parallel",
-      "summary": "A parallel group fans out from the previous node and back into the next.",
-      "file": "parallel.vue"
+      "name": "Composed",
+      "summary": "The naked root with parts written by hand: plain labelled steps, a group of parallel steps, and one node built from Header, Title, Description and Footer items. The connectors are drawn the same way as in the data mode.",
+      "file": "composed.vue"
     },
     {
-      "name": "Branches",
-      "summary": "A leading parallel fans in and a trailing parallel fans out — connectors route correctly at the edges of the sequence.",
-      "file": "branches.vue"
+      "name": "Request path",
+      "summary": "Three equal boxes (`uniform`) for an error page: You, Azion and the Application, with the failing hop as a danger edge labelled 502. Below its container's breakpoint the row stacks into a vertical rail, so a phone needs no second list.",
+      "file": "request-path.vue"
     },
     {
-      "name": "CustomNodes",
-      "summary": "Unstyled nodes whose slot content defines the appearance: a start dot, the default box, and a taller custom node.",
-      "file": "custom-nodes.vue"
-    },
-    {
-      "name": "AnchoredNode",
-      "summary": "A multi-row card: the incoming connector attaches at the `end` anchor (my-worker) and the outgoing connectors leave from the `start` anchor (Bindings).",
-      "file": "anchored-node.vue"
-    },
-    {
-      "name": "Disabled",
-      "summary": "A disabled node with reduced-opacity connectors.",
-      "file": "disabled.vue"
+      "name": "Topology",
+      "summary": "A deployment topology from domains to storage, with the FlowDiagramBind companion in the `actions` slot: the policy can be changed or removed, the unbound error page offers Bind, and every pick waits for Apply.",
+      "file": "topology.vue"
     }
   ]
 }

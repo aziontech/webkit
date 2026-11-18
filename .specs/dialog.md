@@ -7,7 +7,7 @@ spec_version: 10
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-935
   node_id: 482:935
-checksum: 0bc14ed6285d2cf2c862e12e78237de599f0e6db643544513ac5892d1b8f510d
+checksum: 834dfaab902519f0fca71c25b18791eb56708f029af8f88dcf791e8eb3d14843
 created: 2026-05-22
 last_updated: 2026-11-17
 ---
@@ -156,7 +156,7 @@ No element sets an inline `transition` (an inline style beats `motion-reduce:tra
 
 | Region         | Token (DESIGN.md)                                                |
 | -------------- | ---------------------------------------------------------------- |
-| title          | `.text-heading-sm`, `var(--text-default)`                        |
+| title          | `.text-title-lg` (medium weight), `var(--text-default)`          |
 | description    | `.text-body-sm`, `var(--text-muted)`                             |
 | body           | `PanelBody`: `.text-body-sm`, `var(--spacing-lg)`, `min-h-24`    |
 | header, footer | `PanelHeader` / `PanelFooter`: `var(--spacing-md)` block padding |

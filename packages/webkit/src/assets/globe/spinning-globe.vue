@@ -13,13 +13,13 @@
   defineOptions({ name: 'SpinningGlobe', inheritAttrs: false })
 
   interface Props {
-    /** Which part of the world has its PoPs lit; the globe always shows the whole world. */
+    /** Which part of the world has its data centers lit; the globe always shows the whole world. */
     region?: NetworkMapRegion
-    /** How many PoPs are lit, from `none` to `high`. */
+    /** How many data centers are lit, from `none` to `high`. */
     density?: NetworkMapDensity
     /** Spins the globe; static when false. */
     animated?: boolean
-    /** Opacity of the landmass dots, from 0 to 1; the PoPs stay at full strength. */
+    /** Opacity of the landmass dots, from 0 to 1; the data centers stay at full strength. */
     opacity?: number
     /** Where the globe parks in the space the box leaves over. */
     position?: NetworkMapPosition

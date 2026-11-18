@@ -8,6 +8,10 @@
     getTabViewPanelTransitionStyle,
     type TabsSlideDirection
   } from '../../../navigation/tabs/presets/transitions'
+  import Select from '../../select/select.vue'
+  import SelectContent from '../../select/select-content/select-content.vue'
+  import SelectItem from '../../select/select-item/select-item.vue'
+  import SelectTrigger from '../../select/select-trigger/select-trigger.vue'
   import { asRange, asSingle, sameDay, startOfDay } from '../format'
   import { DatePickerInjectionKey } from '../injection-key'
 
@@ -22,6 +26,17 @@
   const monthLabel = computed(
     () => new Intl.DateTimeFormat(intlLocale(locale.value), { month: 'long', year: 'numeric' })
   )
+  const monthNames = computed(() =>
+    Array.from({ length: 12 }, (_, month) =>
+      new Intl.DateTimeFormat(intlLocale(locale.value), { month: 'long' }).format(
+        new Date(2023, month, 1)
+      )
+    )
+  )
+  const yearName = (year: number): string =>
+    new Intl.DateTimeFormat(intlLocale(locale.value), { year: 'numeric' }).format(
+      new Date(year, 0, 1)
+    )
   const weekdayLabels = computed(() =>
     Array.from({ length: 7 }, (_, day) =>
       new Intl.DateTimeFormat(intlLocale(locale.value), { weekday: 'narrow' }).format(
@@ -252,6 +267,40 @@
     ctx?.changeMonth({ year: viewDate.value.getFullYear(), month: viewDate.value.getMonth() })
   }
 
+  const YEAR_SPAN = 10
+
+  const yearOptions = computed<number[]>(() => {
+    const current = now().getFullYear()
+    const min = ctx?.min.value
+    const max = ctx?.max.value
+    const first = Math.min(min ? min.getFullYear() : current - YEAR_SPAN, viewYear.value)
+    const last = Math.max(max ? max.getFullYear() : current + YEAR_SPAN, viewYear.value, first)
+    return Array.from({ length: last - first + 1 }, (_, index) => first + index)
+  })
+
+  const monthOutOfBounds = (year: number, month: number): boolean => {
+    const min = ctx?.min.value
+    const max = ctx?.max.value
+    const first = new Date(year, month, 1)
+    const last = new Date(year, month + 1, 0)
+    return Boolean((min && last < startOfDay(min)) || (max && first > startOfDay(max)))
+  }
+
+  const pickMonth = (month: number | undefined) => {
+    if (month === undefined || disabledAll.value) return
+    goToMonth(viewYear.value, month)
+  }
+
+  const pickYear = (year: number | undefined) => {
+    if (year === undefined || disabledAll.value) return
+    const min = ctx?.min.value
+    const max = ctx?.max.value
+    let month = viewMonth.value
+    if (min && year === min.getFullYear()) month = Math.max(month, min.getMonth())
+    if (max && year === max.getFullYear()) month = Math.min(month, max.getMonth())
+    goToMonth(year, month)
+  }
+
   const goToPreviousMonth = () => {
     if (disabledAll.value) {
       return
@@ -348,38 +397,79 @@
     data-testid="date-picker__grid"
     class="flex flex-col items-start gap-(--spacing-md)"
   >
-    <div class="flex w-full items-center justify-between gap-(--spacing-xs)">
-      <span class="text-body-sm text-(--text-default)">
-        {{ monthGrid.label }}
-      </span>
+    <div
+      class="flex w-full items-center justify-between gap-(--spacing-2xs)"
+      data-testid="date-picker__caption"
+    >
+      <button
+        type="button"
+        data-testid="date-picker__previous-month"
+        :disabled="disabledAll"
+        :aria-label="t('datePicker.previousMonth')"
+        class="inline-flex size-7 shrink-0 items-center justify-center rounded-(--shape-control) text-(--text-muted) transition-colors duration-150 ease-out hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) disabled:cursor-not-allowed disabled:text-(--text-disabled) motion-reduce:transition-none"
+        @click="goToPreviousMonth"
+      >
+        <i
+          class="az az-chevron-left text-[length:inherit] leading-none rtl:-scale-x-100"
+          aria-hidden="true"
+        />
+      </button>
 
-      <div class="flex shrink-0 items-center gap-(--spacing-2xs)">
-        <button
-          type="button"
+      <div class="flex min-w-0 flex-1 flex-wrap items-center justify-center">
+        <Select
+          :model-value="viewMonth"
+          variant="ghost"
+          size="small"
           :disabled="disabledAll"
-          :aria-label="t('datePicker.previousMonth')"
-          class="inline-flex size-7 shrink-0 items-center justify-center rounded-(--shape-control) text-(--text-muted) transition-colors duration-150 ease-out hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) disabled:cursor-not-allowed disabled:text-(--text-disabled) motion-reduce:transition-none"
-          @click="goToPreviousMonth"
+          :aria-label="t('datePicker.month')"
+          data-testid="date-picker__month"
+          @update:model-value="pickMonth"
         >
-          <i
-            class="az az-chevron-left text-[length:inherit] leading-none rtl:-scale-x-100"
-            aria-hidden="true"
-          />
-        </button>
-
-        <button
-          type="button"
+          <SelectTrigger data-testid="date-picker__month-trigger" />
+          <SelectContent data-testid="date-picker__month-list">
+            <SelectItem
+              v-for="(name, month) in monthNames"
+              :key="month"
+              :value="month"
+              :disabled="monthOutOfBounds(viewYear, month)"
+              >{{ name }}</SelectItem
+            >
+          </SelectContent>
+        </Select>
+        <Select
+          :model-value="viewYear"
+          variant="ghost"
+          size="small"
           :disabled="disabledAll"
-          :aria-label="t('datePicker.nextMonth')"
-          class="inline-flex size-7 shrink-0 items-center justify-center rounded-(--shape-control) text-(--text-muted) transition-colors duration-150 ease-out hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) disabled:cursor-not-allowed disabled:text-(--text-disabled) motion-reduce:transition-none"
-          @click="goToNextMonth"
+          :aria-label="t('datePicker.year')"
+          data-testid="date-picker__year"
+          @update:model-value="pickYear"
         >
-          <i
-            class="az az-chevron-right text-[length:inherit] leading-none rtl:-scale-x-100"
-            aria-hidden="true"
-          />
-        </button>
+          <SelectTrigger data-testid="date-picker__year-trigger" />
+          <SelectContent data-testid="date-picker__year-list">
+            <SelectItem
+              v-for="year in yearOptions"
+              :key="year"
+              :value="year"
+              >{{ yearName(year) }}</SelectItem
+            >
+          </SelectContent>
+        </Select>
       </div>
+
+      <button
+        type="button"
+        data-testid="date-picker__next-month"
+        :disabled="disabledAll"
+        :aria-label="t('datePicker.nextMonth')"
+        class="inline-flex size-7 shrink-0 items-center justify-center rounded-(--shape-control) text-(--text-muted) transition-colors duration-150 ease-out hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) disabled:cursor-not-allowed disabled:text-(--text-disabled) motion-reduce:transition-none"
+        @click="goToNextMonth"
+      >
+        <i
+          class="az az-chevron-right text-[length:inherit] leading-none rtl:-scale-x-100"
+          aria-hidden="true"
+        />
+      </button>
     </div>
 
     <div
@@ -444,7 +534,7 @@
                     :data-disabled="day.disabled || null"
                     data-testid="date-picker__day"
                     :tabindex="!day.outside && day.time === activeTime ? 0 : -1"
-                    class="flex items-center justify-center text-(--text-default) transition-colors duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) data-[size=small]:size-8 data-[size=small]:text-body-xs data-[size=medium]:size-9 data-[size=medium]:text-body-sm data-[size=large]:size-10 data-[size=large]:text-body-md data-[band=none]:rounded-(--shape-control) data-[band=none]:hover:bg-(--bg-hover) data-[band=single]:rounded-(--shape-control) data-[band=single]:bg-(--secondary-selected) data-[band=single]:text-(--secondary-foreground) data-[band=start]:rounded-s-(--shape-control) data-[band=start]:bg-(--secondary-selected) data-[band=start]:text-(--secondary-foreground) data-[band=end]:rounded-e-(--shape-control) data-[band=end]:bg-(--secondary-selected) data-[band=end]:text-(--secondary-foreground) data-[band=middle]:bg-(--bg-selected) data-[outside]:text-(--text-muted) data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled) motion-reduce:transition-none"
+                    class="flex items-center justify-center text-(--text-default) transition-colors duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) data-[size=small]:size-8 data-[size=small]:text-body-xs data-[size=medium]:size-9 data-[size=medium]:text-body-sm data-[size=large]:size-10 data-[size=large]:text-body-md data-[band=none]:rounded-(--shape-control) data-[band=none]:hover:bg-(--bg-hover) data-[band=single]:rounded-(--shape-control) data-[band=single]:bg-(--secondary-selected) data-[band=single]:text-(--secondary-foreground) data-[band=start]:rounded-s-(--shape-control) data-[band=start]:bg-(--secondary-selected) data-[band=start]:text-(--secondary-foreground) data-[band=end]:rounded-e-(--shape-control) data-[band=end]:bg-(--secondary-selected) data-[band=end]:text-(--secondary-foreground) data-[band=middle]:bg-(--bg-selected) data-[outside]:not-data-[disabled]:text-(--text-muted) data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled) motion-reduce:transition-none"
                     @click="selectDay(day)"
                     @keydown="onDayKeydown($event, day)"
                   >

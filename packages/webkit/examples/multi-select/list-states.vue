@@ -31,7 +31,6 @@
       empty-title="No domains yet"
       placeholder="Select domains"
       aria-label="Domains"
-      default-open
     >
       <MultiSelect.Trigger />
       <MultiSelect.Content />

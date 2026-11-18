@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3899-29362
   node_id: 3899:29362
-checksum: b4e98c6df144fa3a61bf7ece56508c15c77f325ac01008ef19fb1636e09e9513
+checksum: b8930cb902512497c86dec4cb42e9cfee89e356a6ed1acb89c66142cd491b875
 created: 2026-06-25
 last_updated: 2026-11-17
 ---
@@ -240,6 +240,7 @@ Chips, typed filter and a create row:
 | typed text / placeholder             | `.text-label-sm`, `var(--text-default)` / `var(--text-muted)`                                                                   |
 | list state rows (loading, empty)     | `.text-body-sm` + `var(--text-muted)`                                                                                           |
 | list state row (error)               | `.text-body-sm` + `var(--danger)` icon                                                                                          |
+| row fill inset (2px gap)             | `border-y border-transparent bg-clip-padding`                                                                                   |
 
 ## Theme gaps
 

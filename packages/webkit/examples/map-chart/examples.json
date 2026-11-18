@@ -9,7 +9,7 @@
     },
     {
       "name": "Points",
-      "summary": "Locations as bubbles whose area follows the value, for points of presence or cities.",
+      "summary": "Locations as bubbles whose area follows the value, for data centers or cities.",
       "file": "points.vue"
     },
     {

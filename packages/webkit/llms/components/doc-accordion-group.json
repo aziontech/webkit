@@ -57,6 +57,10 @@
   {
    "name": "Multiple",
    "file": "examples/doc-accordion-group/multiple.vue"
+  },
+  {
+   "name": "Markdown",
+   "file": "examples/doc-accordion-group/markdown.vue"
   }
  ],
  "docs": "components/doc-accordion-group.md"

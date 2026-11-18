@@ -210,6 +210,16 @@ body[data-scale="actual"] .views { flex-wrap:wrap; }
   </div>
 </header>
 
+<section class="rec" id="decision">
+  <h2>Decision (owner, 2026-11-18)</h2>
+  <p class="lead">Error pages are <strong>blocks</strong> (copyable screens built from existing components), not a component: Cloudscape, Atlassian, Polaris and Primer document error pages as page patterns, and Cloudflare, Fastly and Vercel serve theirs as hosted templates. They split into two families by who reads them.</p>
+  <ol>
+    <li><strong>Edge, for the visitors of your customers' sites</strong> — <code>state/state-edge-error-page</code> (surface <code>edge</code>). Option 3's diagnostic format on a standalone page: the code and reason, a plain title, the request path <em>You → Azion → Application</em> drawn with <code>TopologyDiagram</code> node cards of one width and height, each with its status tag (side by side on a wide screen, stacked with <code>orientation="vertical"</code> on a phone), What happened? / What can I do?, Try again or Go to home page with Go back, and the request ID, time, Azion location and host. The docs call the middle hop Azion's infrastructure and the page says just Azion; the third hop is the Application, because the site's application may run on Azion's distributed infrastructure or on the customer's own servers (RV-Z1 to RV-Z3). Never an account action. States: 502 (primary), 504, 500, 503, 403 (the site's firewall), 429, 404.</li>
+    <li><strong>Azion's console, site and docs</strong> — <code>state/state-error-page</code> (surface <code>app</code>). Option 1's quiet, centred style with the existing <code>StatusCode</code> as the figure, a title, one sentence, at most two buttons and the line with the error code, the copyable request ID and the time. States: 404 (primary), 401, 403, 429, 500, 503 and a missing record.</li>
+  </ol>
+  <p class="lead">See them on the docs site under Blocks › State › StateEdgeErrorPage and Blocks › State › ErrorPage. The options below are kept as the record of what was compared (decisions RV-D1, RV-R1 to RV-R3, RV-Z1 to RV-Z3).</p>
+</section>
+
 <h2 style="margin-top:var(--spacing-lg)">Which errors, and what the benchmarks do for each</h2>
 <div class="bench-wrap"><table class="bench">
   <thead><tr><th>Page</th><th>Why people see it</th><th>What strong products show</th><th>What our page does</th></tr></thead>
@@ -263,10 +273,10 @@ body[data-scale="actual"] .views { flex-wrap:wrap; }
   <ol>
     <li><strong>Why 2:</strong> it is the only option where every error page gives a real next step: search on a 404, the signed-in account on 401 and 403, a wait meter on 429, the maintenance window on 503. It keeps the look the console already has (EmptyState, the Azion 404 and 403 art) and needs no new component.</li>
     <li><strong>Why not 1:</strong> consistent and cheap, but the 404 stays a dead end, which is what the owner disliked in today's page.</li>
-    <li><strong>Why not 3 for the console:</strong> too technical for people who manage billing or teams. Keep it for later as the style of the error pages Azion serves to visitors of customer sites (502, 504, origin timeouts), where "whose fault is it" matters most.</li>
+    <li><strong>Why not 3 for the console:</strong> too technical for people who manage billing or teams. Keep it for later as the style of the error pages Azion serves to visitors of customer sites (502, 504, application timeouts), where "whose fault is it" matters most.</li>
     <li><strong>What it costs:</strong> three new block variants (401, 429, 503) and props for the data each panel needs; the existing 404, 403, 500 and missing-resource variants are reworked in the same style.</li>
   </ol>
-  <p class="lead">Owner to pick: Option 1, 2 or 3 (or 2 with 3 kept for the edge pages).</p>
+  <p class="lead">Decided: Option 3 for the edge pages, Option 1 for the console, site and docs (see Decision at the top).</p>
 </section>
 </main>
 
@@ -325,13 +335,13 @@ body[data-scale="actual"] .views { flex-wrap:wrap; }
     '401': ['Your session ended after 12 hours, so the request carried no valid sign-in.', 'Sign in again; you return to this page afterwards.', [['Session', 'expired 14:01 UTC']]],
     '403': ['You are signed in as alex.morgan@example.com (Developer). This page needs the Billing permission.', 'Ask an account admin (Jane Doe) to add the permission, or switch to an account that has it.', [['Requires', 'billing:read']]],
     '429': ['This account sent 100 requests in one minute, the limit for this API.', 'Wait until the limit resets, then retry. Scripts should read the Retry-After header.', [['Limit', '100 / min'], ['Retry-After', '24 s']]],
-    '500': ['The edge reached the console, but the console API failed while building this page.', 'Retry in a moment. If it keeps failing, check the status page and send the request ID to support.', [['Hop', 'console API']]],
+    '500': ['Azion reached the console, but the console API failed while building this page.', 'Retry in a moment. If it keeps failing, check the status page and send the request ID to support.', [['Hop', 'console API']]],
     '503': ['The console is in scheduled maintenance from 14:00 to 15:00 UTC.', 'Your applications keep serving traffic. Come back after 15:00 UTC, or follow the status page.', [['Retry-After', '3600 s']]]
   };
   function option3(p) {
     var d = detail3[p.code];
     var facts = [['Request ID', 'req_7f3c91ab' + copy('request ID')]].concat(d[2]).concat([['Time', '14:02:11 UTC']]);
-    var flow = (p.code === '500' || p.code === '503') ? '<div class="flow" data-cmp="FlowDiagram"><span class="node" data-cmp="FlowDiagramNode">You<span class="status" data-cmp="StatusIndicator success"><i data-severity="success"></i>Working</span></span><span class="wire"></span><span class="node" data-cmp="FlowDiagramNode">Azion edge <small>IAD</small><span class="status" data-cmp="StatusIndicator success"><i data-severity="success"></i>Working</span></span><span class="wire" data-faded></span><span class="node" data-cmp="FlowDiagramNode">Console API' + (p.code === '500' ? '<span class="status" data-cmp="StatusIndicator danger"><i data-severity="danger"></i>Error</span>' : '<span class="status" data-cmp="StatusIndicator info"><i data-severity="info"></i>Maintenance</span>') + '</span></div>' : '';
+    var flow = (p.code === '500' || p.code === '503') ? '<div class="flow" data-cmp="FlowDiagram"><span class="node" data-cmp="FlowDiagramNode">You<span class="status" data-cmp="StatusIndicator success"><i data-severity="success"></i>Working</span></span><span class="wire"></span><span class="node" data-cmp="FlowDiagramNode">Azion <small>IAD</small><span class="status" data-cmp="StatusIndicator success"><i data-severity="success"></i>Working</span></span><span class="wire" data-faded></span><span class="node" data-cmp="FlowDiagramNode">Console API' + (p.code === '500' ? '<span class="status" data-cmp="StatusIndicator danger"><i data-severity="danger"></i>Error</span>' : '<span class="status" data-cmp="StatusIndicator info"><i data-severity="info"></i>Maintenance</span>') + '</span></div>' : '';
     var inner = '<div class="d3">' +
       '<div class="head3">' + '<span class="tag" data-cmp="StatusCode with method" data-severity="' + p.sev + '"><span class="m">' + p.method + '</span>' + p.code + '</span><span class="code">' + p.err + '</span></div>' +
       '<p class="title lg" style="margin:0">' + p.title + '</p>' + flow +

@@ -9,12 +9,12 @@
     },
     {
       "name": "Regions",
-      "summary": "Every region, each lighting only its own PoPs over the same whole-world map. `asia` and `oceania` hold no PoPs, so they read as landmass alone.",
+      "summary": "Every region, each lighting only its own data centers over the same whole-world map. `asia` and `oceania` hold no data centers, so they read as landmass alone.",
       "file": "regions.vue"
     },
     {
       "name": "Densities",
-      "summary": "Levels are cumulative: `low` lights 65 PoPs, `medium` 186 and `high` 275. `none` draws the landmass alone.",
+      "summary": "Levels are cumulative: `low` lights 65 data centers, `medium` 186 and `high` 275. `none` draws the landmass alone.",
       "file": "densities.vue"
     },
     {
@@ -24,12 +24,12 @@
     },
     {
       "name": "Animated",
-      "summary": "The PoPs pulse in three staggered waves. The pulse stops under reduced motion, leaving the PoPs static.",
+      "summary": "The data centers pulse in three staggered waves. The pulse stops under reduced motion, leaving the data centers static.",
       "file": "animated.vue"
     },
     {
       "name": "Traffic",
-      "summary": "`traffic` draws a mesh between lit PoPs: faint grey links and orange packets that grow out of one PoP and are absorbed into another, each ray on its own clock. Under reduced motion only the links remain.",
+      "summary": "`traffic` draws a mesh between lit data centers: faint grey links and orange packets that grow out of one data center and are absorbed into another, each ray on its own clock. Under reduced motion only the links remain.",
       "file": "traffic.vue"
     }
   ]

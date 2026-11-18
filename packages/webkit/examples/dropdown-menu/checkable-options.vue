@@ -13,10 +13,7 @@
 </script>
 
 <template>
-  <DropdownMenu
-    :open="true"
-    @select="onSelect"
-  >
+  <DropdownMenu @select="onSelect">
     <DropdownMenu.Trigger>
       <Button
         variant="secondary"
