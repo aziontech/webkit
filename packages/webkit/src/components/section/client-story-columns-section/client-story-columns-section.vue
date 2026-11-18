@@ -4,7 +4,7 @@
   import { clientBrand } from '../../../assets/logos/clients/brands'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
-  import type { LogoTreatment } from '../../content/logo/logo.vue'
+  import type { CompanyLogoTreatment } from '../../content/company-logo/company-logo.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import LogoWall from '../../marketing/logo-wall/logo-wall.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
@@ -14,7 +14,7 @@
     inheritAttrs: false
   })
 
-  export type { LogoTreatment }
+  export type { CompanyLogoTreatment }
 
   /** When a column shows its story: `always` under the face, `hover` only while the card is hovered or focused. */
   export type ClientStoryColumnsSectionReveal = 'always' | 'hover'
@@ -45,7 +45,7 @@
     /** Brand colours painting the face; defaults to the client registry's colours for `name`. */
     brand?: ClientStoryColumnsSectionBrand
     /** How the mark is inked on the face; defaults to `color`. */
-    logoTreatment?: LogoTreatment
+    logoTreatment?: CompanyLogoTreatment
     /** Width of the mark as a share of the card, such as `35%`; read by `reveal="hover"`. */
     logoWidth?: string
   }

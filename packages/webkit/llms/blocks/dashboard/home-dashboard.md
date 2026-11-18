@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/dashboard/home-dashboard/home-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_block("dashboard/home-dashboard")`
-- Components: [Alert](../../components/alert.md), `claudeMark`, `codexMark`, `cursorMark`, `geminiMark`, [Button](../../components/button.md), [Card](../../components/card.md), [DataTable](../../components/data-table.md), `DropdownMenuGroup`, `DropdownMenuItem`, [EmptyState](../../components/empty-state.md), [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Illustration](../../components/illustration.md), [Input](../../components/input.md), [Item](../../components/item.md), [Link](../../components/link.md), [Logo](../../components/logo.md), [Popover](../../components/popover.md), [SearchTrigger](../../components/search-trigger.md), [Skeleton](../../components/skeleton.md), [Spinner](../../components/spinner.md), [StatTile](../../components/stat-tile.md), [StatTileGroup](../../components/stat-tile-group.md), `TableCellActions`, `TableCellLink`, `TableCellTime`, [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-console-layout`
+- Components: [Alert](../../components/alert.md), `claudeMark`, `codexMark`, `cursorMark`, `geminiMark`, [Button](../../components/button.md), [Card](../../components/card.md), [CompanyLogo](../../components/company-logo.md), [DataTable](../../components/data-table.md), `DropdownMenuGroup`, `DropdownMenuItem`, [EmptyState](../../components/empty-state.md), [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Illustration](../../components/illustration.md), [Input](../../components/input.md), [Item](../../components/item.md), [Link](../../components/link.md), [Popover](../../components/popover.md), [SearchTrigger](../../components/search-trigger.md), [Skeleton](../../components/skeleton.md), [Spinner](../../components/spinner.md), [StatTile](../../components/stat-tile.md), [StatTileGroup](../../components/stat-tile-group.md), `TableCellActions`, `TableCellLink`, `TableCellTime`, [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-console-layout`
 - Skills: `webkit-layout`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -55,10 +55,10 @@ in the aside slot that explains the metric (`Share of traffic served from cache 
 the dismissible `Set up your coding agent` card. Home shows at most these four figures; the rest
 belongs on a dashboard.
 
-### D. Agent onboarding — `Card`, `Item`, `Logo` (optional)
+### D. Agent onboarding — `Card`, `Item`, `CompanyLogo` (optional)
 
 A whole-card link (`Item` with `href` to the agent setup page): the agent marks, `Set up your coding agent` and one sentence. Each mark is a
-decorative `Logo` at `size="small"` in a bordered tile; a mono mark takes `variant="current"` and the
+decorative `CompanyLogo` at `size="small"` in a bordered tile; a mono mark takes `variant="current"` and the
 tile's text colour, a coloured one `variant="color"`. Its dismiss `IconButton` sits outside the button
 so the two controls never nest.
 
@@ -245,6 +245,7 @@ Each variant is the same screen in another state: `get_block("dashboard/home-das
   import geminiMark from '@aziontech/webkit/assets/gemini-symbol-color.svg'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import CompanyLogo from '@aziontech/webkit/company-logo'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -252,7 +253,6 @@ Each variant is the same screen in another state: `get_block("dashboard/home-das
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import Link from '@aziontech/webkit/link'
-  import Logo from '@aziontech/webkit/logo'
   import Popover from '@aziontech/webkit/popover'
   import SearchTrigger from '@aziontech/webkit/search-trigger'
   import Skeleton from '@aziontech/webkit/skeleton'
@@ -562,7 +562,7 @@ Each variant is the same screen in another state: `get_block("dashboard/home-das
                         :key="agent.name"
                         class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised) text-(--text-default)"
                       >
-                        <Logo
+                        <CompanyLogo
                           :name="agent.name"
                           :src="agent.src"
                           :variant="agent.mono ? 'current' : 'color'"

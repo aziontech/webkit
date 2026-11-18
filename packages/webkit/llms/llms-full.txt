@@ -5881,7 +5881,7 @@ What each prop and event does, and the go-live code: [blocks/dashboard/health-sc
 - Surface: app
 - Source: `blocks/dashboard/home-dashboard/home-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_block("dashboard/home-dashboard")`
-- Components: Alert, `claudeMark`, `codexMark`, `cursorMark`, `geminiMark`, Button, Card, DataTable, `DropdownMenuGroup`, `DropdownMenuItem`, EmptyState, Hint, IconButton, Illustration, Input, Item, Link, Logo, Popover, SearchTrigger, Skeleton, Spinner, StatTile, StatTileGroup, `TableCellActions`, `TableCellLink`, `TableCellTime`, Tag, Toast, Tooltip, `use-console-layout`
+- Components: Alert, `claudeMark`, `codexMark`, `cursorMark`, `geminiMark`, Button, Card, CompanyLogo, DataTable, `DropdownMenuGroup`, `DropdownMenuItem`, EmptyState, Hint, IconButton, Illustration, Input, Item, Link, Popover, SearchTrigger, Skeleton, Spinner, StatTile, StatTileGroup, `TableCellActions`, `TableCellLink`, `TableCellTime`, Tag, Toast, Tooltip, `use-console-layout`
 - Skills: `webkit-layout`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -5917,7 +5917,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 - A. Control labels — `Tooltip` (required)
 - B. Icon-only controls — `IconButton` (required)
 - C. Usage band — `StatTileGroup`, `StatTile`, `Hint` (required)
-- D. Agent onboarding — `Card`, `Item`, `Logo` (optional)
+- D. Agent onboarding — `Card`, `Item`, `CompanyLogo` (optional)
 - E. Resource rows — `Item`, `Link`, `EmptyState` (required)
 - F. Failure — `Alert` (required)
 - G. Classic summary — `StatTile`, `Card`, `IconButton`, `Tooltip` (optional)
@@ -8340,7 +8340,7 @@ What each prop and event does, and the go-live code: [blocks/shell/console.md](b
 - Surface: docs
 - Source: `blocks/shell/docs/docs.vue` in `@aziontech/webkit`
 - MCP: `get_block("shell/docs")`
-- Components: `claudeMark`, `codexMark`, `copilotMark`, `cursorMark`, `geminiMark`, `opencodeMark`, Brand, Button, CodeBlock, CopyPromptButton, DataTable, Diagram, DocAccordion, DocAccordionGroup, DocAgentCard, DocCallToAction, DocCallout, DocCard, DocCardGroup, DocCodeGroup, DocFrame, DocHeading, DocHero, DocItem, DocLayout, DocMarkdown, DocPageHeader, DocPreviousNext, DocPrompt, DocProse, DocSteps, DocTab, DocTabs, Footer, IconButton, `ItemList`, Logo, RegistrationFrame, Select, StatusIndicator, Tag, ThemeSwitcher, `use-color-mode`
+- Components: `claudeMark`, `codexMark`, `copilotMark`, `cursorMark`, `geminiMark`, `opencodeMark`, Brand, Button, CodeBlock, CompanyLogo, CopyPromptButton, DataTable, Diagram, DocAccordion, DocAccordionGroup, DocAgentCard, DocCallToAction, DocCallout, DocCard, DocCardGroup, DocCodeGroup, DocFrame, DocHeading, DocHero, DocItem, DocLayout, DocMarkdown, DocPageHeader, DocPreviousNext, DocPrompt, DocProse, DocSteps, DocTab, DocTabs, Footer, IconButton, `ItemList`, RegistrationFrame, Select, StatusIndicator, Tag, ThemeSwitcher, `use-color-mode`
 - Skills: `webkit-layout`, `webkit-navigation`
 
 ## Asked as
@@ -8760,7 +8760,7 @@ What each prop and event does, and the go-live code: [blocks/state/error-page.md
 - Surface: app
 - Source: `blocks/state/first-use/first-use.vue` in `@aziontech/webkit`
 - MCP: `get_block("state/first-use")`
-- Components: `claudeMark`, `codexMark`, `cursorMark`, `geminiMark`, Button, Card, CopyButton, EmptyState, Input, `InputGroupRoot`, Item, Link, Logo, Skeleton
+- Components: `claudeMark`, `codexMark`, `cursorMark`, `geminiMark`, Button, Card, CompanyLogo, CopyButton, EmptyState, Input, `InputGroupRoot`, Item, Link, Skeleton
 - Skills: `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -8788,7 +8788,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 ## Building blocks
 
 - A. Frame — `Card` (required)
-- B. Agent marks — `Logo` (optional)
+- B. Agent marks — `CompanyLogo` (optional)
 - C. Explanation — `EmptyState` (required)
 - D. Documentation — `Link` (required)
 - E. Methods — `Item` (required)
@@ -8820,7 +8820,7 @@ What each prop and event does, and the go-live code: [blocks/state/first-use.md]
 
 ## Don't
 
-- Don't draw an agent mark by hand (an `img` or a CSS mask): `Logo` already inks it for the theme.
+- Don't draw an agent mark by hand (an `img` or a CSS mask): `CompanyLogo` already inks it for the theme.
 - Don't show list controls (search, filters, pagination, column settings) over a list that has never had an item.
 - Don't render this block for a filtered list with no matches; that state says how to clear the filter.
 - Don't show it while the list is still loading; the user would see "create your first" for an account that has items.
@@ -10932,7 +10932,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 - Keep the default agents unless the product supports a different set; pass `:agents="[]"` to draw the label alone.
 - Pass the exact prompt in `value`; the button copies it as it stands.
 - Do not recolour the marks: they are single-colour by design and follow the chip's ink.
-- To draw a mark from the agent's asset file instead of the icon font, give the agent a `logo` (`@aziontech/webkit/assets/claude-symbol-color.svg`); `Logo` flattens it to the chip's ink.
+- To draw a mark from the agent's asset file instead of the icon font, give the agent a `logo` (`@aziontech/webkit/assets/claude-symbol-color.svg`); `CompanyLogo` flattens it to the chip's ink.
 - Set `closable` where the chip is guidance the reader can put away (a first-use overview), not where it is part of a page's composition (a hero). Bind `v-model:open` to remember or restore the choice (`close` still fires with the click).
 
 ## Don’t
@@ -10948,7 +10948,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 - `DocHero` — the docs-home masthead whose `actions` slot holds `Get started` and this button.
 - `CopyButton` — the icon-only copy control; this button shares its clipboard fallback.
 - `HighlightButton` — the AI-flow button whose glow, gradient and scrim this chip shares.
-- `Logo` — draws an agent mark from its asset file in the chip's ink.
+- `CompanyLogo` — draws an agent mark from its asset file in the chip's ink.
 
 ## Props
 
@@ -10957,7 +10957,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 | `value` | `string` | `—` | true | The prompt copied to the clipboard on activation. |
 | `label` | `string` | `''` | false | Visible text and accessible name while idle; empty uses the catalog's `Copy prompt`. |
 | `copiedLabel` | `string` | `''` | false | Visible text announced after a copy; empty uses the catalog's `Copied`. |
-| `agents` | `CopyPromptButtonAgent[]` | `Claude, ChatGPT, Gemini, Cursor` | false | The agents whose marks follow the label, in order; each is `{ name, icon?, logo? }`, drawn from `logo` through `Logo` when set and from the `icon` glyph otherwise; an empty list draws no marks. |
+| `agents` | `CopyPromptButtonAgent[]` | `Claude, ChatGPT, Gemini, Cursor` | false | The agents whose marks follow the label, in order; each is `{ name, icon?, logo? }`, drawn from `logo` through `CompanyLogo` when set and from the `icon` glyph otherwise; an empty list draws no marks. |
 | `disabled` | `boolean` | `false` | false | Disables the button; `copy` is not emitted. |
 | `closable` | `boolean` | `false` | false | Shows a dismiss button beside the chip; activating it removes both from the layout and emits `close`. |
 | `open` | `boolean` | `true` | false | Two-way value (`v-model:open`). |
@@ -16142,7 +16142,7 @@ Badge is non-interactive: it has no hover, focus, active, or disabled states and
 
 # Brand
 
-> The Azion brand logo, rendered as an inline SVG lockup. A single `variant` prop selects the lockup: `default` (the AZION wordmark) for standard surfaces, `reduced` (the "A" glyph) for compact headers and tight spaces, and `extended` (the AZION wordmark with the "move to the edge technologies®" tagline) for marketing-oriented layouts. It consolidates the loose `@aziontech/webkit/svg/azion/*` assets — which remain individually importable — behind one component.
+> The Azion brand logo, rendered as an inline SVG lockup. A single `variant` prop selects the lockup: `default` (the AZION wordmark) for standard surfaces, `reduced` (the "A" glyph) for compact headers and tight spaces, and `extended` (the AZION wordmark over "technologies") for marketing-oriented layouts. It is the one public way to draw the Azion mark: the drawings live inside the package and are not exported on their own. The lockups that carry the "Move to the Edge" tagline were retired in 6.0.
 
 - Import: `import Brand from '@aziontech/webkit/brand'`
 - Category: content · Surface: app · Structure: monolithic
@@ -16152,7 +16152,7 @@ Badge is non-interactive: it has no hover, focus, active, or disabled states and
 - Use Brand only for the Azion logo.
 - The Azion logo in a header, navigation bar, footer, sign-in screen or product mockup.
 - `variant="reduced"` where space is tight (collapsed sidebar, mobile header).
-- `variant="extended"` in marketing layouts that carry the tagline.
+- `variant="extended"` in marketing layouts that show "AZION technologies".
 
 ## Do
 
@@ -16166,7 +16166,7 @@ Badge is non-interactive: it has no hover, focus, active, or disabled states and
 
 ## Don’t
 
-- A customer or partner logo → use `logo-wall`.
+- A customer, partner or competitor logo → use `company-logo` (one mark) or `logo-wall` (a grid of them).
 - A person's or organization's picture → use `avatar`.
 - A decorative product graphic → use `illustration`.
 
@@ -16174,13 +16174,14 @@ Badge is non-interactive: it has no hover, focus, active, or disabled states and
 
 - `site-header-section` and `site-footer-section` — compose Brand for the site chrome.
 - `avatar` — the picture or initials of a user, not the product mark.
-- `logo-wall` — third-party company marks.
+- `company-logo` — another company's mark; `Brand` is only Azion's own.
+- `logo-wall` — a grid of other companies' marks.
 
 ## Props
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `variant` | `'default' \| 'reduced' \| 'extended'` | `'default'` | false | Brand lockup to render: `default` (AZION wordmark), `reduced` (the "A" glyph for tight spaces), `extended` (wordmark with the "move to the edge technologies®" tagline). |
+| `variant` | `'default' \| 'reduced' \| 'extended'` | `'default'` | false | Brand lockup to render: `default` (AZION wordmark), `reduced` (the "A" glyph for tight spaces), `extended` (wordmark over "technologies"). |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token; sets the lockup height (16 / 24 / 32 px) while width scales automatically so each `variant` keeps its own aspect ratio. |
 | `decorative` | `boolean` | `false` | false | Hides the mark from assistive tech when visible text beside it already says Azion. |
 
@@ -16192,7 +16193,7 @@ Badge is non-interactive: it has no hover, focus, active, or disabled states and
 
 ## Accessibility
 
-- The root carries `role="img"` and a default `aria-label` (`Azion`) so the logo has an accessible name; consumers may override the label via a passed `aria-label`. With `decorative` the root drops `role` and the name and is `aria-hidden`, for a mark next to visible Azion text (the same option `Logo` has; `Brand` is the Azion house mark, `Logo` any vendor mark).
+- The root carries `role="img"` and a default `aria-label` (`Azion`) so the logo has an accessible name; consumers may override the label via a passed `aria-label`. With `decorative` the root drops `role` and the name and is `aria-hidden`, for a mark next to visible Azion text (the same option `CompanyLogo` has; `Brand` is the Azion house mark, `CompanyLogo` any other company's mark).
 - Non-interactive: the logo is not focusable and emits no events; the inner SVG is presentational.
 - Contrast ≥3:1 for the brand mark against its background (large graphic).
 - `motion-reduce` not applicable — the component is static.
@@ -16547,6 +16548,105 @@ The frame is static apart from its resize handles.
 ```
 
 2 more example(s) in [components/card.md](components/card.md).
+
+---
+
+<!-- components/company-logo.md -->
+
+# Company Logo
+
+> A third-party mark (a client, a competitor, an analyst firm, a standard or certification, a coding agent) drawn right on both themes. The asset registries already hold the files (`@aziontech/webkit/assets/client-registry`, `@aziontech/webkit/assets/competitor-registry` and the `@aziontech/webkit/assets/<file>.svg` exports); every surface that drew one repeated the same theme rule by hand (two `img` tags revealed per `[data-theme]`, a `brightness-0` silhouette, a CSS mask in `currentColor`) and none had every route. `CompanyLogo` holds the rule once: a light/dark pair of files, or one file inverted on the theme where it would vanish, or one ink (the theme's black or white, the surrounding `currentColor`, or black pinned for a coloured fill), and the company's name as a typographic wordmark when there is no file yet. It replaces the design sample's `AgentMark` and `ClientMark`. It is a renderer: it takes the file URLs from a registry entry and imports no registry itself, so a page pays only for the marks it shows.
+
+- Import: `import CompanyLogo from '@aziontech/webkit/company-logo'`
+- Category: content · Surface: app · Structure: monolithic
+
+## When to use
+
+- Use CompanyLogo for any other company's mark (client, competitor, agent, certification).
+- A logo wall, a trust strip, a client story card, a quote attribution, a comparison column head: any place that shows another company's mark.
+- The coding agents a prompt works with (Claude, Codex, Gemini, Cursor), drawn in the ink of the surface they sit on.
+- A list of standards or analyst firms (SOC, PCI DSS, Gartner, Forrester).
+
+## Do
+
+- Pass a registry entry as it stands: `name`, `src` from `logo`, `src-light` from `logoLight`, `artwork` from `artwork`. The registry knows which theme each file is drawn for.
+- Set the height with `size`: `small` (16 px) beside a label or in a table cell, `medium` (24 px, the default) in a card or a list, `large` (32 px) in a logo wall or a quote attribution. The width follows each file's own aspect ratio. Cap wide wordmarks with `max-w-*`.
+- In a list of many clients, use `variant="monochrome"`: per-brand colour reads as noise next to twenty others.
+- On a coloured fill (white, `--primary`), use `variant="knockout"`: a fill does not follow the theme, so the ink must not either.
+- On a surface that is dark in both themes, or among drawn diagram parts, use `variant="current"` so the mark takes the surface's own ink.
+- When the text beside the mark already names the company, set `decorative`.
+
+## Don’t
+
+- The Azion logo → use `Brand`.
+- A card network beside a payment method → use `PaymentBrand`.
+- A person or an account → use `Avatar`.
+- A product icon or a UI glyph → use an icon from `@aziontech/icons`.
+- A grid of client marks → use `LogoWall`; it renders each mark and can render `CompanyLogo` in its `mark` slot.
+
+## Related
+
+- `brand` — the Azion lockup; `CompanyLogo` is everyone else's.
+- `payment-brand` — card-network plates, drawn in tokens.
+- `logo-wall` — the grid that lays marks out; `CompanyLogo` draws one mark.
+- `avatar` — a person's or an organization's picture with initials.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `name` | `string` | `—` | true | The company or product the mark belongs to; the accessible name, and the typographic wordmark drawn when no file is set. |
+| `src` | `string` | `''` | false | URL of the mark; on its own it serves both themes, and with `srcLight` it is the dark-theme file. Empty draws the wordmark. |
+| `srcLight` | `string` | `''` | false | URL of the light-theme file; with `src` both files render and the theme reveals one. |
+| `artwork` | `'color' \| 'light' \| 'dark'` | `'color'` | false | The ink a single file is drawn in: `light` art (for dark surfaces) is inverted on the light theme, `dark` art is inverted on the dark theme, `color` is kept as is. Ignored when `srcLight` is set or `variant` is not `color`. |
+| `variant` | `'color' \| 'monochrome' \| 'current' \| 'knockout'` | `'color'` | false | Ink: `color` keeps the vendor's colours, `monochrome` paints one silhouette black on light and white on dark, `current` paints it in the surrounding text colour, `knockout` pins it black for a mark on a coloured fill. |
+| `ariaLabel` | `string` | `''` | false | Accessible name when it should differ from `name`. |
+| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Height of the mark: `small` 16 px, `medium` 24 px, `large` 32 px; the width follows the file's aspect ratio. |
+| `decorative` | `boolean` | `false` | false | Hides the mark from assistive technology when the text beside it already names the company. |
+
+## States
+
+- `data-variant` on the root: `color` | `monochrome` | `current` | `knockout`.
+- `data-route` on the root: `pair` (both files in the DOM, the theme reveals one), `single` (one file, filtered by `artwork` or the ink of `variant`), `wordmark` (no file: the name in type).
+- `data-artwork` on the root mirrors `artwork`.
+- `data-size` on the root mirrors `size`: `small` is `h-4`, `medium` is `h-6`, `large` is `h-8`.
+- `data-sized` on the root when the caller's class sets a height (`h-*` or `size-*`, with or without a breakpoint); it then wins over `size`.
+- Not applicable: `loading`, `empty`, `error`, `disabled`, `readonly`, `invalid`, `open`/`closed` (a static mark).
+
+## Accessibility
+
+- Pattern: an image (`role="img"` on the root) named by `ariaLabel`, else `name`. The files inside have empty `alt` and are `aria-hidden`, so a light/dark pair is announced once.
+- With `decorative` the root is `aria-hidden="true"` and has no role.
+- Not focusable; no keyboard map (a static mark).
+- Contrast: marks are logos (WCAG 1.4.3 exempts logotypes); the `monochrome` route makes a mark pure black or white against the page, and `knockout` pure black on a light fill.
+- Forced colors: the `current` route paints `currentColor`, so it follows `CanvasText`.
+- No motion.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import { CLIENTS } from '@aziontech/webkit/assets/client-registry'
+  import CompanyLogo from '@aziontech/webkit/company-logo'
+
+  const client = CLIENTS.find((entry) => entry.name === 'Agibank')
+</script>
+
+<template>
+  <CompanyLogo
+    :name="client.name"
+    :src="client.logo"
+    :src-light="client.logoLight"
+    :artwork="client.artwork"
+    size="large"
+    class="max-w-40"
+  />
+</template>
+```
+
+2 more example(s) in [components/company-logo.md](components/company-logo.md).
 
 ---
 
@@ -17370,7 +17470,7 @@ name.
 - `empty-state` — the surrounding layout (illustration + title + description + actions); reach for it first and put an `Illustration` inside it.
 - `flow-diagram` — a real interactive node/edge diagram driven by data; `Illustration` is decorative and static by comparison.
 - `skeleton` — the loading placeholder; an illustration is never a loading state.
-- `svg/azion/*` — drawn brand marks, for artwork that is not part of the illustration library.
+- `brand` — the Azion mark; an illustration never draws it.
 
 ## Props
 
@@ -17913,105 +18013,6 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 ```
 
 2 more example(s) in [components/key-value-list.md](components/key-value-list.md).
-
----
-
-<!-- components/logo.md -->
-
-# Logo
-
-> A third-party mark (a client, a competitor, an analyst firm, a standard or certification, a coding agent) drawn right on both themes. The asset registries already hold the files (`@aziontech/webkit/assets/client-registry`, `@aziontech/webkit/assets/competitor-registry` and the `@aziontech/webkit/assets/<file>.svg` exports); every surface that drew one repeated the same theme rule by hand (two `img` tags revealed per `[data-theme]`, a `brightness-0` silhouette, a CSS mask in `currentColor`) and none had every route. `Logo` holds the rule once: a light/dark pair of files, or one file inverted on the theme where it would vanish, or one ink (the theme's black or white, the surrounding `currentColor`, or black pinned for a coloured fill), and the company's name as a typographic wordmark when there is no file yet. It replaces the design sample's `AgentMark` and `ClientMark`. It is a renderer: it takes the file URLs from a registry entry and imports no registry itself, so a page pays only for the marks it shows.
-
-- Import: `import Logo from '@aziontech/webkit/logo'`
-- Category: content · Surface: app · Structure: monolithic
-
-## When to use
-
-- Use Logo for any other company's mark (client, competitor, agent, certification).
-- A logo wall, a trust strip, a client story card, a quote attribution, a comparison column head: any place that shows another company's mark.
-- The coding agents a prompt works with (Claude, Codex, Gemini, Cursor), drawn in the ink of the surface they sit on.
-- A list of standards or analyst firms (SOC, PCI DSS, Gartner, Forrester).
-
-## Do
-
-- Pass a registry entry as it stands: `name`, `src` from `logo`, `src-light` from `logoLight`, `artwork` from `artwork`. The registry knows which theme each file is drawn for.
-- Set the height with `size`: `small` (16 px) beside a label or in a table cell, `medium` (24 px, the default) in a card or a list, `large` (32 px) in a logo wall or a quote attribution. The width follows each file's own aspect ratio. Cap wide wordmarks with `max-w-*`.
-- In a list of many clients, use `variant="monochrome"`: per-brand colour reads as noise next to twenty others.
-- On a coloured fill (white, `--primary`), use `variant="knockout"`: a fill does not follow the theme, so the ink must not either.
-- On a surface that is dark in both themes, or among drawn diagram parts, use `variant="current"` so the mark takes the surface's own ink.
-- When the text beside the mark already names the company, set `decorative`.
-
-## Don’t
-
-- The Azion logo → use `Brand`.
-- A card network beside a payment method → use `PaymentBrand`.
-- A person or an account → use `Avatar`.
-- A product icon or a UI glyph → use an icon from `@aziontech/icons`.
-- A grid of client marks → use `LogoWall`; it renders each mark and can render `Logo` in its `mark` slot.
-
-## Related
-
-- `brand` — the Azion lockup; `Logo` is everyone else's.
-- `payment-brand` — card-network plates, drawn in tokens.
-- `logo-wall` — the grid that lays marks out; `Logo` draws one mark.
-- `avatar` — a person's or an organization's picture with initials.
-
-## Props
-
-| Prop | Type | Default | Required | Description |
-| --- | --- | --- | --- | --- |
-| `name` | `string` | `—` | true | The company or product the mark belongs to; the accessible name, and the typographic wordmark drawn when no file is set. |
-| `src` | `string` | `''` | false | URL of the mark; on its own it serves both themes, and with `srcLight` it is the dark-theme file. Empty draws the wordmark. |
-| `srcLight` | `string` | `''` | false | URL of the light-theme file; with `src` both files render and the theme reveals one. |
-| `artwork` | `'color' \| 'light' \| 'dark'` | `'color'` | false | The ink a single file is drawn in: `light` art (for dark surfaces) is inverted on the light theme, `dark` art is inverted on the dark theme, `color` is kept as is. Ignored when `srcLight` is set or `variant` is not `color`. |
-| `variant` | `'color' \| 'monochrome' \| 'current' \| 'knockout'` | `'color'` | false | Ink: `color` keeps the vendor's colours, `monochrome` paints one silhouette black on light and white on dark, `current` paints it in the surrounding text colour, `knockout` pins it black for a mark on a coloured fill. |
-| `ariaLabel` | `string` | `''` | false | Accessible name when it should differ from `name`. |
-| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Height of the mark: `small` 16 px, `medium` 24 px, `large` 32 px; the width follows the file's aspect ratio. |
-| `decorative` | `boolean` | `false` | false | Hides the mark from assistive technology when the text beside it already names the company. |
-
-## States
-
-- `data-variant` on the root: `color` | `monochrome` | `current` | `knockout`.
-- `data-route` on the root: `pair` (both files in the DOM, the theme reveals one), `single` (one file, filtered by `artwork` or the ink of `variant`), `wordmark` (no file: the name in type).
-- `data-artwork` on the root mirrors `artwork`.
-- `data-size` on the root mirrors `size`: `small` is `h-4`, `medium` is `h-6`, `large` is `h-8`.
-- `data-sized` on the root when the caller's class sets a height (`h-*` or `size-*`, with or without a breakpoint); it then wins over `size`.
-- Not applicable: `loading`, `empty`, `error`, `disabled`, `readonly`, `invalid`, `open`/`closed` (a static mark).
-
-## Accessibility
-
-- Pattern: an image (`role="img"` on the root) named by `ariaLabel`, else `name`. The files inside have empty `alt` and are `aria-hidden`, so a light/dark pair is announced once.
-- With `decorative` the root is `aria-hidden="true"` and has no role.
-- Not focusable; no keyboard map (a static mark).
-- Contrast: marks are logos (WCAG 1.4.3 exempts logotypes); the `monochrome` route makes a mark pure black or white against the page, and `knockout` pure black on a light fill.
-- Forced colors: the `current` route paints `currentColor`, so it follows `CanvasText`.
-- No motion.
-
-## Examples
-
-### Default
-
-```vue
-<script setup>
-  import { CLIENTS } from '@aziontech/webkit/assets/client-registry'
-  import Logo from '@aziontech/webkit/logo'
-
-  const client = CLIENTS.find((entry) => entry.name === 'Agibank')
-</script>
-
-<template>
-  <Logo
-    :name="client.name"
-    :src="client.logo"
-    :src-light="client.logoLight"
-    :artwork="client.artwork"
-    size="large"
-    class="max-w-40"
-  />
-</template>
-```
-
-2 more example(s) in [components/logo.md](components/logo.md).
 
 ---
 
@@ -25855,7 +25856,7 @@ right-to-left: the start region is on the right there. 6.0 removed the physical 
 ```vue
 <script setup>
   import AppHeader from '@aziontech/webkit/app-header'
-  import Default from '@aziontech/webkit/svg/azion/default'
+  import Brand from '@aziontech/webkit/brand'
 </script>
 
 <template>
@@ -25865,7 +25866,7 @@ right-to-left: the start region is on the right there. 6.0 removed the physical 
         href="/"
         aria-label="Azion home"
       >
-        <Default />
+        <Brand size="small" />
       </AppHeader.Brand>
     </AppHeader.Start>
     <AppHeader.Center />

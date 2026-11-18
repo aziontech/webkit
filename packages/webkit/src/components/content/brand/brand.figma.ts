@@ -8,8 +8,7 @@ const instance = figma.selectedInstance
 const variant = instance.getEnum('kind', {
   default: 'default',
   reduced: 'reduced',
-  extended: 'extended',
-  'move-to-the-edge': 'extended'
+  extended: 'extended'
 })
 
 export default {

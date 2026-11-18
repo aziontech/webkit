@@ -36,7 +36,7 @@
 - [empty-state](empty-state.md) — the surrounding layout (illustration + title + description + actions); reach for it first and put an `Illustration` inside it.
 - [flow-diagram](flow-diagram.md) — a real interactive node/edge diagram driven by data; `Illustration` is decorative and static by comparison.
 - [skeleton](skeleton.md) — the loading placeholder; an illustration is never a loading state.
-- `svg/azion/*` — drawn brand marks, for artwork that is not part of the illustration library.
+- [brand](brand.md) — the Azion mark; an illustration never draws it.
 
 ## Props
 

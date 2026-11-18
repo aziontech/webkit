@@ -15,7 +15,7 @@
   })
 
   export interface BrandProps {
-    /** Brand lockup to render: `default` (AZION wordmark), `reduced` (the "A" glyph for tight spaces), `extended` (wordmark with the "move to the edge technologies" tagline). */
+    /** Brand lockup to render: `default` (AZION wordmark), `reduced` (the "A" glyph for tight spaces), `extended` (wordmark over "technologies"). */
     variant?: BrandVariant
     /** Size token; sets the lockup height (16 / 24 / 32 px) while width scales automatically so each `variant` keeps its own aspect ratio. */
     size?: BrandSize

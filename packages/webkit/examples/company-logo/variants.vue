@@ -3,7 +3,7 @@
   import itauExtendedReversed from '@aziontech/webkit/assets/itau-extended-reversed.webp'
   import netshoesExtendedColor from '@aziontech/webkit/assets/netshoes-extended-color.svg'
   import netshoesExtendedReversed from '@aziontech/webkit/assets/netshoes-extended-reversed.svg'
-  import Logo from '@aziontech/webkit/logo'
+  import CompanyLogo from '@aziontech/webkit/company-logo'
 
   const variants = [
     { variant: 'color', label: 'Color', fill: 'bg-(--bg-canvas)', ink: 'text-(--text-muted)' },
@@ -41,26 +41,26 @@
         :class="row.ink"
         >{{ row.label }}</span
       >
-      <Logo
+      <CompanyLogo
         name="Netshoes"
         :src="netshoesExtendedReversed"
         :src-light="netshoesExtendedColor"
         :variant="row.variant"
         class="max-w-32"
       />
-      <Logo
+      <CompanyLogo
         name="Itaú"
         :src="itauExtendedReversed"
         artwork="light"
         :variant="row.variant"
         class="max-w-32"
       />
-      <Logo
+      <CompanyLogo
         name="Claude"
         :src="claudeSymbol"
         :variant="row.variant"
       />
-      <Logo
+      <CompanyLogo
         name="Acme Inc."
         :variant="row.variant"
       />

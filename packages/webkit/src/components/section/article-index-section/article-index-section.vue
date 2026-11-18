@@ -6,7 +6,7 @@
   import Button from '../../action/button/button.vue'
   import ToggleGroup from '../../action/toggle-group/toggle-group.vue'
   import Avatar from '../../content/avatar/avatar.vue'
-  import type { LogoMark } from '../../content/logo/logo.vue'
+  import type { CompanyLogoMark } from '../../content/company-logo/company-logo.vue'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Input from '../../input/input/input.vue'
   import Select from '../../input/select/select.vue'
@@ -21,7 +21,7 @@
     inheritAttrs: false
   })
 
-  export type { LogoMark }
+  export type { CompanyLogoMark }
 
   /** Filter bar: category-search draws a category picker and a search field, facets draws one dropdown per facet. */
   export type ArticleIndexSectionFilters = 'category-search' | 'facets'
@@ -43,7 +43,7 @@
     /** URL of the cover drawn at the start of the row. */
     image?: string
     /** Client mark drawn in the cover cell when there is no cover. */
-    mark?: LogoMark
+    mark?: CompanyLogoMark
     /** Eyebrow, usually the category or the content type and the date. */
     meta: string
     /** Headline of the entry, naming the row link. */

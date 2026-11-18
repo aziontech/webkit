@@ -398,8 +398,8 @@
     "entryOnly": true
   },
   {
-    "name": "logo",
-    "path": "src/components/content/logo/logo.vue",
+    "name": "company-logo",
+    "path": "src/components/content/company-logo/company-logo.vue",
     "limit": "1.5 KB"
   },
   {

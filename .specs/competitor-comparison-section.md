@@ -7,7 +7,7 @@ spec_version: 5
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-18
-checksum: 64db2b9bcb08645e7dd66870521ae389bc9011277a35cc90e49275b72619e65a
+checksum: 9fa5514d159a722c40c9f7e7cdfff0a0133bd09dcac1ca5ec27a207caa285eec
 ---
 
 # CompetitorComparisonSection — Component Spec
@@ -29,7 +29,7 @@ The capability-by-capability comparison of Azion with one competitor on a migrat
 
 - `plan-comparison-section` — the plan-by-plan matrix of Pricing.
 - `tooltip` — names each support glyph on hover and focus.
-- `logo` — draws the competitor's mark right on both themes.
+- `company-logo` — draws the competitor's mark right on both themes.
 
 ## Best practices
 
@@ -110,7 +110,7 @@ The capability-by-capability comparison of Azion with one competitor on a migrat
 
   Partial support is a property of the platform, not a problem that needs action, so it never takes the warning colour; an unsupported capability is a quiet dash, not a red cross.
 
-- The competitor head is a `Logo` (`data-testid="competitor-comparison-section__competitor-logo"`) whose `data-route` is `pair` (light/dark files), `single` (one file) or `wordmark` (the name as text: no logo and no registry entry, or before the registry loads)
+- The competitor head is a `CompanyLogo` (`data-testid="competitor-comparison-section__competitor-logo"`) whose `data-route` is `pair` (light/dark files), `single` (one file) or `wordmark` (the name as text: no logo and no registry entry, or before the registry loads)
 - Not applicable: `loading`, `error`, `disabled`, `readonly`, `invalid`, `open`/`closed` (the popovers own their open state)
 - Empty: when `groups` is empty the band renders nothing but its root — no header, no table
 
@@ -143,7 +143,7 @@ _none_
 
 - Visible focus: owned by the composed `icon-button` and `tooltip` triggers.
 - Keyboard map: `Tab` reaches each definition's info button; `Enter` / `Space` opens its popover and `Esc` closes it (owned by `popover`).
-- ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the table carries a `caption`, `scope="col"` heads, a `scope="colgroup"` head per category and a `scope="row"` head per capability, so each value is announced with its row and column. The glyphs are `aria-hidden` and every cell carries its level as `sr-only` text; the competitor logo is a `Logo` named by the platform, inside a head cell that carries the same name.
+- ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the table carries a `caption`, `scope="col"` heads, a `scope="colgroup"` head per category and a `scope="row"` head per capability, so each value is announced with its row and column. The glyphs are `aria-hidden` and every cell carries its level as `sr-only` text; the competitor logo is a `CompanyLogo` named by the platform, inside a head cell that carries the same name.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text and glyph colours are the tokens above. The glyphs on `--bg-canvas`: `--success-mark` Lc 67.0 / 4.43:1 (light) and Lc 49.6 / 7.69:1 (dark); `--text-muted` Lc 80.8 / 7.06:1 (light) and Lc 60.7 / 9.90:1 (dark). The category heads on `--bg-surface`: `--text-primary` Lc 79.0 / 6.01:1 in light; `--text-brand` Lc 44.1 / 6.32:1 in dark, the accepted dark `--text-brand` pair of `rules/webkit-tokens.md`.
 - Never colour alone: each level has its own glyph and its label as tooltip and `sr-only` text.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the popover and tooltip carry their own reduced-motion fallback; this band adds no motion.
@@ -163,7 +163,7 @@ _none_
 - Layout: logical utilities only (`border-s`, `ps-`/`pe-`); the Azion and competitor columns follow the reading direction.
 - Icons: the support glyphs and the info glyph are not mirrored; logos are never mirrored.
 - Keyboard: `Tab` order follows the DOM.
-- User data: the competitor name drawn as a wordmark is wrapped in `dir="auto"` by `Logo`.
+- User data: the competitor name drawn as a wordmark is wrapped in `dir="auto"` by `CompanyLogo`.
 
 ## Responsive
 

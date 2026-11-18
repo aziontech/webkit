@@ -20,7 +20,7 @@
  "related": [
   "`bento-grid` — the grid the cells are laid in.",
   "`client-story-columns-section` — the three-column sibling with brand-coloured faces.",
-  "`logo` — draws every client mark in the ink its fill needs."
+  "`company-logo` — draws every client mark in the ink its fill needs."
  ],
  "bestPractices": [
   "Two stories and six marks fill the four-column grid exactly.",
@@ -63,7 +63,7 @@
    "type": "ClientMosaicSectionLogo[]",
    "default": "[]",
    "required": "false",
-   "doc": "The mark cells, in order; each is `{ logo, logoAlt, href, fill?, logoTreatment? }` where `fill` is `'canvas'`, `'surface'`, `'white'` or `'primary'` and `logoTreatment` is `'color'`, `'monochrome'` or `'knockout'` (the shared `LogoTreatment`)."
+   "doc": "The mark cells, in order; each is `{ logo, logoAlt, href, fill?, logoTreatment? }` where `fill` is `'canvas'`, `'surface'`, `'white'` or `'primary'` and `logoTreatment` is `'color'`, `'monochrome'` or `'knockout'` (the shared `CompanyLogoTreatment`)."
   },
   {
    "name": "cells",

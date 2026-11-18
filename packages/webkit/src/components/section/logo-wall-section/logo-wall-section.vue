@@ -2,11 +2,11 @@
   import { computed, useAttrs } from 'vue'
 
   import Button from '../../action/button/button.vue'
-  import Logo, {
-    type LogoArtwork,
-    type LogoTreatment,
-    type LogoVariant
-  } from '../../content/logo/logo.vue'
+  import CompanyLogo, {
+    type CompanyLogoArtwork,
+    type CompanyLogoTreatment,
+    type CompanyLogoVariant
+  } from '../../content/company-logo/company-logo.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import LogoWall from '../../marketing/logo-wall/logo-wall.vue'
   import Quote from '../../marketing/quote/quote.vue'
@@ -19,7 +19,7 @@
     inheritAttrs: false
   })
 
-  export type { LogoTreatment }
+  export type { CompanyLogoTreatment }
 
   export type { SectionTitleAction }
 
@@ -32,9 +32,9 @@
     /** URL of the mark shown on the light theme when it needs a different drawing. */
     logoLight?: string
     /** How the mark is inked: `color`, `monochrome` or `knockout`; defaults to `color`. A reversed file sets `artwork: 'light'` instead. */
-    logoTreatment?: LogoTreatment
+    logoTreatment?: CompanyLogoTreatment
     /** The ink a single file is drawn in, as the client registry records it: `light` art is inverted on the light theme, `dark` art on the dark theme. */
-    artwork?: LogoArtwork
+    artwork?: CompanyLogoArtwork
     /** Destination the mark links to, such as that client's success case. */
     href?: string
   }
@@ -60,7 +60,7 @@
     /** URL of the company mark on the light theme, when it needs a different drawing. */
     logoLight?: string
     /** The ink a single mark file is drawn in, as the client registry records it. */
-    artwork?: LogoArtwork
+    artwork?: CompanyLogoArtwork
   }
 
   export interface LogoWallSectionProps {
@@ -111,9 +111,9 @@
 
   const hasActions = computed(() => Boolean(props.primaryAction || props.secondaryAction))
 
-  const markKind = (logo: LogoWallSectionLogo): LogoVariant => logo.logoTreatment ?? 'color'
+  const markKind = (logo: LogoWallSectionLogo): CompanyLogoVariant => logo.logoTreatment ?? 'color'
 
-  const markArtwork = (logo: LogoWallSectionLogo): LogoArtwork => logo.artwork ?? 'color'
+  const markArtwork = (logo: LogoWallSectionLogo): CompanyLogoArtwork => logo.artwork ?? 'color'
 
   const wallItems = computed(() =>
     props.logos.map((logo) => ({
@@ -159,7 +159,7 @@
               v-if="quote.logo"
               #mark
             >
-              <Logo
+              <CompanyLogo
                 :name="quote.logoAlt"
                 :src="quote.logo"
                 :src-light="quote.logoLight"
@@ -227,7 +227,7 @@
           :items="wallItems"
         >
           <template #mark="{ index }">
-            <Logo
+            <CompanyLogo
               v-if="logos[index]"
               :name="logos[index].name"
               :src="logos[index].logo"
@@ -249,7 +249,7 @@
               :job-title="quote.jobTitle"
             >
               <template #mark>
-                <Logo
+                <CompanyLogo
                   :name="quote.logoAlt"
                   :src="quote.logo"
                   :src-light="quote.logoLight"

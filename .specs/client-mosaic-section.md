@@ -7,7 +7,7 @@ spec_version: 4
 template: 2
 created: 2026-11-04
 last_updated: 2026-11-16
-checksum: 7ea32cd18cc003291cc58473d1d904f076b39f884d8f577827f1808f446cac5a
+checksum: 2af8510ea09c9af204016f0d188db1adaf0b2c5474672c76599b50363bcb92f7
 ---
 
 # ClientMosaicSection — Component Spec
@@ -29,7 +29,7 @@ The client mosaic: a framed bento grid of customer cells where a story cell carr
 
 - `bento-grid` — the grid the cells are laid in.
 - `client-story-columns-section` — the three-column sibling with brand-coloured faces.
-- `logo` — draws every client mark in the ink its fill needs.
+- `company-logo` — draws every client mark in the ink its fill needs.
 
 ## Best practices
 
@@ -81,7 +81,7 @@ The client mosaic: a framed bento grid of customer cells where a story cell carr
 | `linkLabel` | `string`                     | `''`    | false    | Label of the link under every story.                                                                                                                                                                                                                                                                                                   |
 | `anchor`    | `string`                     | `''`    | false    | In-page id set on the band so a hash link can target it.                                                                                                                                                                                                                                                                               |
 | `stories`   | `ClientMosaicSectionStory[]` | `[]`    | false    | The story cells, in order; each is `{ logo, logoAlt, photo?, text, href, fill?, logoTreatment? }`. The first spans two columns and two rows, the rest one column and two rows.                                                                                                                                                         |
-| `logos`     | `ClientMosaicSectionLogo[]`  | `[]`    | false    | The mark cells, in order; each is `{ logo, logoAlt, href, fill?, logoTreatment? }` where `fill` is `'canvas'`, `'surface'`, `'white'` or `'primary'` and `logoTreatment` is `'color'`, `'monochrome'` or `'knockout'` (the shared `LogoTreatment`).                                                                                    |
+| `logos`     | `ClientMosaicSectionLogo[]`  | `[]`    | false    | The mark cells, in order; each is `{ logo, logoAlt, href, fill?, logoTreatment? }` where `fill` is `'canvas'`, `'surface'`, `'white'` or `'primary'` and `logoTreatment` is `'color'`, `'monochrome'` or `'knockout'` (the shared `CompanyLogoTreatment`).                                                                             |
 | `cells`     | `ClientMosaicSectionCell[]`  | `[]`    | false    | The cells in placement order, story and mark cells interleaved; each is `{ logo, logoAlt, href, text?, photo?, span?, rows?, fill?, logoTreatment?, stacked? }` where a cell with `text` is a story cell, `span` and `rows` are `'1'` (default) or `'2'`, and `fill` defaults to `canvas`. When set it replaces `stories` and `logos`. |
 
 ## Events
@@ -95,7 +95,7 @@ The client mosaic: a framed bento grid of customer cells where a story cell carr
 ## States
 
 - Visual states: `default`, `hover` and `focus-visible` on each cell
-- `data-cell` (`story` or `logo`), `data-span` and `data-rows` on every grid cell; `data-fill` on every cell face drives its fill; every mark is a `Logo` with `data-treatment` and `data-variant` for its ink and `data-stacked` for a stacked lockup; `data-lead` sets the larger text of the first story (from `stories`) or of a story spanning two columns (from `cells`)
+- `data-cell` (`story` or `logo`), `data-span` and `data-rows` on every grid cell; `data-fill` on every cell face drives its fill; every mark is a `CompanyLogo` with `data-treatment` and `data-variant` for its ink and `data-stacked` for a stacked lockup; `data-lead` sets the larger text of the first story (from `stories`) or of a story spanning two columns (from `cells`)
 - Empty: when `cells`, `stories` and `logos` are all empty the band renders nothing
 - Not applicable: `loading`, `error`, `disabled`, `readonly`, `invalid`, `open`/`closed`
 
@@ -131,7 +131,7 @@ The client mosaic: a framed bento grid of customer cells where a story cell carr
 
 - Visible focus: every mark cell is a link with `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset`; the story link is a `link` with its own ring.
 - Keyboard map: `Tab` moves between mark links and story links; `Enter` follows.
-- ARIA: the band is a `<section>` named by `ariaLabel`; the photo of a story is decorative (`alt=""`, `aria-hidden`); every mark is a `Logo` (`role="img"`) named by `logoAlt`; the story text is a paragraph and its link is named by `linkLabel`.
+- ARIA: the band is a `<section>` named by `ariaLabel`; the photo of a story is decorative (`alt=""`, `aria-hidden`); every mark is a `CompanyLogo` (`role="img"`) named by `logoAlt`; the story text is a paragraph and its link is named by `linkLabel`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): story text `var(--text-default)` over the canvas gradient; marks are inked to their fill through `logoTreatment`.
 - `motion-reduce:transition-none` on the fill transition.
 - Touch target ≥40×40 px — each mark cell is a full grid cell.
@@ -158,7 +158,7 @@ No built-in strings: the story lines, the client names and `linkLabel` are conte
 
 ## Performance
 
-- Bundle budget: 7.1 KB gzip for `./client-mosaic-section` in `.size-limit.json` (the ordered `cells` model and `Logo` add about 0.9 KB).
+- Bundle budget: 7.1 KB gzip for `./client-mosaic-section` in `.size-limit.json` (the ordered `cells` model and `CompanyLogo` add about 0.9 KB).
 - Runtime budget: up to a dozen cells; photos load lazily and decode asynchronously.
 - Heavy parts: the story photographs (`loading="lazy"`).
 

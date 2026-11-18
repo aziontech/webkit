@@ -4,6 +4,7 @@
   import cursorMark from '@aziontech/webkit/assets/cursor-symbol-mono.svg'
   import geminiMark from '@aziontech/webkit/assets/gemini-symbol-color.svg'
   import opencodeMark from '@aziontech/webkit/assets/opencode-symbol-mono.svg'
+  import CompanyLogo from '@aziontech/webkit/company-logo'
   import DataTable from '@aziontech/webkit/data-table'
   import DocAccordion from '@aziontech/webkit/doc-accordion'
   import DocAccordionGroup from '@aziontech/webkit/doc-accordion-group'
@@ -20,7 +21,6 @@
   import DocProse from '@aziontech/webkit/doc-prose'
   import DocSteps from '@aziontech/webkit/doc-steps'
   import ItemList from '@aziontech/webkit/item-list'
-  import Logo from '@aziontech/webkit/logo'
   import RegistrationFrame from '@aziontech/webkit/registration-frame'
   import Tag from '@aziontech/webkit/tag'
 
@@ -538,7 +538,7 @@
             #icon
           >
             <span class="flex text-(--text-default)">
-              <Logo
+              <CompanyLogo
                 :name="other.name"
                 :src="other.logo"
                 :variant="other.mono ? 'current' : 'color'"
