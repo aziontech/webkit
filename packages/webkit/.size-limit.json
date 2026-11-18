@@ -648,7 +648,7 @@
   {
     "name": "recognition-marquee-section",
     "path": "src/components/section/recognition-marquee-section/recognition-marquee-section.vue",
-    "limit": "21.15 KB"
+    "limit": "21.2 KB"
   },
   {
     "name": "architecture-tabs-section",
@@ -1101,7 +1101,7 @@
   {
     "name": "code-block",
     "path": "src/components/code/code-block/code-block.vue",
-    "limit": "32.4 KB",
+    "limit": "32.45 KB",
     "entryOnly": true
   },
   {
@@ -1289,7 +1289,7 @@
   {
     "name": "schema-form",
     "path": "src/components/input/schema-form/schema-form.vue",
-    "limit": "61 KB"
+    "limit": "61.05 KB"
   },
   {
     "name": "use-unsaved-changes",

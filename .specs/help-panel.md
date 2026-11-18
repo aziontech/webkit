@@ -3,7 +3,7 @@ name: help-panel
 category: content
 structure: composition
 status: implemented
-checksum: f9a4d527f9a5b5122e8b51c6e46a53f600872fa1428116b832f77d75b3346dcf
+checksum: 421ba5fd4cf26a6b0aa59e63c6af696f73f9319da83149fed3d711e2b9c4427d
 spec_version: 5
 created: 2026-11-10
 last_updated: 2026-11-16
@@ -193,7 +193,7 @@ name.
 
 | Region                               | Token (DESIGN.md)     |
 | ------------------------------------ | --------------------- |
-| typography (header title)            | `.text-heading-xs`    |
+| typography (header title)            | `.text-title-md`      |
 | typography (header description)      | `.text-body-sm`       |
 | typography (inline anchors in prose) | `.text-link`          |
 | title ink                            | `var(--text-default)` |

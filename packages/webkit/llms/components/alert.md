@@ -70,7 +70,7 @@
 ## States
 
 - Visual states: default (per severity)
-- `data-titled` on the root mirrors a non-empty `title`: the title renders above the copy in `.text-heading-2xs` (`__title`), and the copy keeps its size below it. With a title and no copy (no default slot, empty `label`), only the title renders.
+- `data-titled` on the root mirrors a non-empty `title`: the title renders above the copy in `.text-title-sm` (`__title`), and the copy keeps its size below it. With a title and no copy (no default slot, empty `label`), only the title renders.
 - Responsive: the root is the `@container/alert`. Below `@sm` of its box the action (built-in or the `actions` slot, wrapped in `[data-slot=alert-actions]`) moves to its own line under the message while the close button stays on the message line.
 
 ## Accessibility

@@ -43,6 +43,9 @@ Text uses the generated classes from `@aziontech/theme`. Each one bundles font f
 | `text-overline-xs` | `0.75rem` |  | The smallest uppercase overline. |
 | `text-tag-md` | `0.75rem` |  | The label of a tag or badge. |
 | `text-tag-sm` | `0.75rem` |  | The label of a small tag or badge. |
+| `text-title-lg` | `0.875rem` | sm: 1rem, md: 1.125rem | The title of a dialog or drawer, medium weight. |
+| `text-title-md` | `1rem` |  | The title of a side panel, medium weight, a flat 16px. |
+| `text-title-sm` | `0.875rem` |  | The title of a popover, card, alert or toast, medium weight. |
 
 ## Related tokens
 

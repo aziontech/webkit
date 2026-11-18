@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=562-6473
   node_id: 562:6473
-checksum: 6ccbb2b41ffc10e89f58b75c6273dcd444e9b71d64df104351d284669c8ef04d
+checksum: 41113f6fbee5b8b8c746e7fd57950a85748d11e43c386b20610e22a17e19fa15
 created: 2026-05-22
 last_updated: 2026-11-17
 ---
@@ -122,6 +122,7 @@ A bordered surface that groups related content under a title, with a header, a b
 | Region     | Token (DESIGN.md)      |
 | ---------- | ---------------------- |
 | typography | .text-body-sm          |
+| title      | .text-title-sm         |
 | surface    | `var(--bg-surface)`    |
 | text       | `var(--text-default)`  |
 | spacing    | `var(--spacing-3)`     |

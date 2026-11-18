@@ -7,7 +7,7 @@ spec_version: 12
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-954
   node_id: 482:954
-checksum: 6d0e7adbb9171d15df6b7f6d1c6fc7c3ba5debe93b408d52e9b048b6c76b51f6
+checksum: 7b91ef8f069ad94e44fba37687e59756a679825952ac422000e67903c6b4222a
 created: 2026-06-30
 last_updated: 2026-11-18
 ---
@@ -109,7 +109,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — `Popover.Title`, optional `Popover.Description`, and `Popover.Close`.
-- `popover-title/popover-title.vue` — title text (`.text-heading-2xs`, `var(--text-default)`). Registers its element id with the injected context so `Popover.Content` can reference it via `aria-labelledby`.
+- `popover-title/popover-title.vue` — title text (`.text-title-sm`, `var(--text-default)`). Registers its element id with the injected context so `Popover.Content` can reference it via `aria-labelledby`.
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — plain-text title.
@@ -227,7 +227,7 @@ _No events of its own: `update:open` comes from `v-model:open` (see v-model abov
 | header / footer divider   | `border-(--border-default)` |
 | header / footer spacing.y | `var(--spacing-sm)`         |
 | header / footer spacing.x | `var(--spacing-md)`         |
-| title typography          | `.text-heading-2xs`         |
+| title typography          | `.text-title-sm`            |
 | title text                | `var(--text-default)`       |
 | description typography    | `.text-body-xs`             |
 | description text          | `var(--text-muted)`         |
@@ -238,7 +238,7 @@ _No events of its own: `update:open` comes from `v-model:open` (see v-model abov
 
 ## Theme gaps
 
-_None._ Resolved 2026-11-18: the title uses `.text-heading-2xs`, the flat 14px heading DESIGN.md now documents, in place of `.text-body-sm`, so a popover title reads as a heading like the `Dialog` and `Drawer` titles.
+_None._ Resolved 2026-11-18: the title uses `.text-title-sm`, the flat 14px medium-weight title role, in place of `.text-body-sm` and then `.text-heading-2xs` (regular weight, which still read as body text), so a popover title stands out by weight like the `Dialog` and `Drawer` titles (`.text-title-lg`).
 
 ## Accessibility (WCAG 2.1 AA)
 

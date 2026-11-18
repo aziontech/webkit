@@ -2,7 +2,7 @@
 name: webkit-form
 description: Accessible forms on @aziontech/webkit — one Form Layout spacing reference (xs inside a field, lg between fields/rows) shared by five form types (Drawer, nested Drawer, Dialog, ItemGroup settings, Card with independent saves) that differ only in container + save model, with two internal layouts (Cards + ItemGroups / Fields separated) composing inside each. Every field carries a real label (never a placeholder-as-label), errors are tied to the control via aria-describedby, and related fields group in a real <fieldset>/<legend>; validated only on submit with the field's own invalid state as the feedback (required is static and draws no colour) — no custom error-summary block, no Alert callout for field validation. The a11y companion to /webkit-ux-heuristics (states) and /webkit-ui-states (locking + toast).
 status: active
-last_updated: 2026-11-17
+last_updated: 2026-11-18
 scope: general
 enforced_by: [webkit-accessibility, webkit-component-states, ui-verify]
 ---
@@ -146,8 +146,8 @@ if a form seems to need a different rhythm, it's in the wrong container.
 
 ### Hierarchy (top → down, never inverted)
 
-form title (`text-heading-*` — `PageHeader` on a page, a `Card` title / `text-heading-sm`
-in a contained card, `DialogTitle` in a modal) → form description (`text-body-sm text-(--text-muted)`)
+form title (`text-heading-*` — `PageHeader` on a page, a `Card` title / `text-title-sm`
+in a contained card, `DialogTitle` / `text-title-lg` in a modal) → form description (`text-body-sm text-(--text-muted)`)
 → section title (`SettingsSection`, `text-heading-2xs`) or sub-heading (`text-heading-xs`) → **field label** (`Field.Label`,
 which carries the Required marker) → control → **helper** (`Field.Description` guidance, then `Field.Error` for the invalid
 feedback). A label is never smaller than its helper; a section title is never smaller than a field label.

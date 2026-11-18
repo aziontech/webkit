@@ -100,6 +100,27 @@ export const typography = {
     fontWeight: fontWeight.normal,
     letterSpacing: tracking.normal
   },
+  'text-title-lg': {
+    textWrapStyle: 'balance',
+    fontSize: { _: fontSize.sm, sm: fontSize.base, md: fontSize.lg },
+    lineHeight: leading.snug,
+    fontWeight: fontWeight.medium,
+    letterSpacing: tracking.normal
+  },
+  'text-title-md': {
+    textWrapStyle: 'balance',
+    fontSize: fontSize.base,
+    lineHeight: leading.snug,
+    fontWeight: fontWeight.medium,
+    letterSpacing: tracking.normal
+  },
+  'text-title-sm': {
+    textWrapStyle: 'balance',
+    fontSize: fontSize.sm,
+    lineHeight: leading.snug,
+    fontWeight: fontWeight.medium,
+    letterSpacing: tracking.normal
+  },
   'text-label-lg': {
     fontSize: fontSize.base,
     lineHeight: leading.normal,

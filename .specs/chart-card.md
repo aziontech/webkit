@@ -3,7 +3,7 @@ name: chart-card
 category: chart
 structure: composition
 status: implemented
-checksum: 6ec032da7f50394e5242f05a69048da70ddf9f886c7b3e83ccce030335742d86
+checksum: 77081930d9689e34baa4d9f29c2af5612f065952d26fea1b90fa24eab98f4cbd
 spec_version: 6
 created: 2026-10-20
 last_updated: 2026-11-15
@@ -97,7 +97,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — handle, title and controls in reading order.
-- `chart-card-title/chart-card-title.vue` — the title (`.text-label-md`), a `div` (not a heading, as shadcn's CardTitle: the card sits under any heading level) whose id names the card and the chart inside.
+- `chart-card-title/chart-card-title.vue` — the title (`.text-title-sm`), a `div` (not a heading, as shadcn's CardTitle: the card sits under any heading level) whose id names the card and the chart inside.
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — plain-text title.
@@ -200,7 +200,7 @@ A pointer resize follows the pointer 1:1 with no transition; it is direct manipu
 | Region              | Token (DESIGN.md)                                                 |
 | ------------------- | ----------------------------------------------------------------- |
 | surface             | `var(--bg-surface)`, `var(--border-default)`, `var(--shape-card)` |
-| title               | `.text-label-md`, `var(--text-default)`                           |
+| title               | `.text-title-sm`, `var(--text-default)`                           |
 | description, footer | `.text-body-sm`, `var(--text-muted)`                              |
 | handles             | `var(--text-muted)`, `var(--bg-hover)`, `var(--shape-button)`     |
 | spacing             | `var(--spacing-xs)`, `var(--spacing-sm)`, `var(--spacing-md)`     |
