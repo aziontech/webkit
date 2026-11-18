@@ -78,7 +78,7 @@ plus the domain parts a root declares in `DOMAIN_PARTS` (in the engine), where t
 really is a table, a chart or a field: `table` declares Row, Cell, Body, Caption, Toolbar,
 Search, Filter, Export…; `chart` declares Axis, Legend, Tooltip, Grid, Line, Area, Bar…;
 `input-group` declares Addon and Input; `resizable` Handle and Pane; `stepper` and `wizard`
-Step. A new domain part is a one-line entry in `DOMAIN_PARTS`, reviewed like any API change.
+Step; `flow-diagram` Node, Anchor and Bind. A new domain part is a one-line entry in `DOMAIN_PARTS`, reviewed like any API change.
 The check reads the part's last word (`table-head-cell` → `cell`, `table-sort-button` →
 `button`).
 

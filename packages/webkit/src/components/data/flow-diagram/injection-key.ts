@@ -1,11 +1,11 @@
 import type { ComputedRef, InjectionKey } from 'vue'
 
-export type FlowDiagramAlign = 'start' | 'center'
+import type { FlowDiagramAlign } from './types'
 
 export interface FlowDiagramContext {
-  /** Base data-testid for BEM-derived sub-component ids. */
+  /** Base data-testid of the diagram. */
   testId: ComputedRef<string>
-  /** Vertical alignment of nodes within the diagram. */
+  /** Vertical alignment of the steps. */
   align: ComputedRef<FlowDiagramAlign>
 }
 

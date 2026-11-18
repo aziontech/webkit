@@ -442,7 +442,7 @@
   {
     "name": "console-trace-scene",
     "path": "src/assets/scenes/console-trace/console-trace-scene.vue",
-    "limit": "74.05 KB"
+    "limit": "82 KB"
   },
   {
     "name": "runtime-api-cloud",
@@ -490,7 +490,7 @@
   {
     "name": "hero-section",
     "path": "src/components/section/hero-section/hero-section.vue",
-    "limit": "12 KB",
+    "limit": "12.45 KB",
     "entryOnly": true
   },
   {
@@ -1122,11 +1122,6 @@
     "limit": "2.35 KB"
   },
   {
-    "name": "topology-diagram",
-    "path": "src/components/data/topology-diagram/topology-diagram.vue",
-    "limit": "28.1 KB"
-  },
-  {
     "name": "tool-approval",
     "path": "src/components/ai/tool-approval/tool-approval.vue",
     "limit": "11.65 KB"
@@ -1709,12 +1704,14 @@
   {
     "name": "flow-diagram",
     "path": "src/components/data/flow-diagram/index.ts",
-    "limit": "14.5 KB"
+    "limit": "21.35 KB",
+    "entryOnly": true
   },
   {
     "name": "flow-diagram-root",
     "path": "src/components/data/flow-diagram/flow-diagram.vue",
-    "limit": "13.75 KB"
+    "limit": "19.3 KB",
+    "entryOnly": true
   },
   {
     "name": "flow-diagram-node",
@@ -1722,14 +1719,44 @@
     "limit": "11.25 KB"
   },
   {
-    "name": "flow-diagram-parallel",
-    "path": "src/components/data/flow-diagram/flow-diagram-parallel/flow-diagram-parallel.vue",
-    "limit": "0.75 KB"
+    "name": "flow-diagram-group",
+    "path": "src/components/data/flow-diagram/flow-diagram-group/flow-diagram-group.vue",
+    "limit": "0.6 KB"
   },
   {
     "name": "flow-diagram-anchor",
     "path": "src/components/data/flow-diagram/flow-diagram-anchor/flow-diagram-anchor.vue",
-    "limit": "1 KB"
+    "limit": "0.75 KB"
+  },
+  {
+    "name": "flow-diagram-header",
+    "path": "src/components/data/flow-diagram/flow-diagram-header/flow-diagram-header.vue",
+    "limit": "2.5 KB"
+  },
+  {
+    "name": "flow-diagram-title",
+    "path": "src/components/data/flow-diagram/flow-diagram-title/flow-diagram-title.vue",
+    "limit": "0.85 KB"
+  },
+  {
+    "name": "flow-diagram-description",
+    "path": "src/components/data/flow-diagram/flow-diagram-description/flow-diagram-description.vue",
+    "limit": "0.45 KB"
+  },
+  {
+    "name": "flow-diagram-footer",
+    "path": "src/components/data/flow-diagram/flow-diagram-footer/flow-diagram-footer.vue",
+    "limit": "0.45 KB"
+  },
+  {
+    "name": "flow-diagram-item",
+    "path": "src/components/data/flow-diagram/flow-diagram-item/flow-diagram-item.vue",
+    "limit": "0.55 KB"
+  },
+  {
+    "name": "flow-diagram-bind",
+    "path": "src/components/data/flow-diagram/flow-diagram-bind/flow-diagram-bind.vue",
+    "limit": "14.9 KB"
   },
   {
     "name": "transfer-list",

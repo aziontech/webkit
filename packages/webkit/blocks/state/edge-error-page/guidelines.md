@@ -29,9 +29,9 @@ Words: the docs say **Azion's infrastructure**; the page itself says just **Azio
 
 The HTTP code as a `StatusCode` (4xx warning, 5xx danger) followed by the reason phrase (`Bad gateway`) in muted text. The code is the fact a visitor can search for or quote; the reason phrase says it in words.
 
-### B. Request path — `TopologyDiagram`
+### B. Request path — `FlowDiagram`
 
-Three hops, always in this order: You (the browser), Azion (the location code that answered) and Application (the site's host). Each hop is a `TopologyDiagram` node card: an icon and the hop's name in the header with its state as a status tag (Working, Error, Timed out, Unavailable, Blocked, Rate limited, Not reached, Not found), the browser, location or host as the card's name, and a one-line explanation of the hop when the card is opened. One node per level, so every card has the same width, and every card has the same parts, so they share one height. On wide screens (`lg` and up) the cards sit side by side joined by the diagram's connectors; below that they stack at full width with `orientation="vertical"`, joined by a short dashed line, so the path never scrolls sideways. The path answers "whose fault is it" before the visitor reads a word.
+Three hops, always in this order: You (the browser), Azion (the location code that answered) and Application (the site's host). Each hop is a `FlowDiagram` data card: an icon and the hop's name in the header with its state as a status dot and text (Working, Error, Timed out, Unavailable, Blocked, Rate limited, Not reached, Not found), the browser, location or host as the card's name, and a one-line explanation of the hop when the card is opened. The edges give one node per column and `uniform` gives every card the same width and height. On wide screens (`lg` and up) the cards sit side by side joined by the diagram's connectors; below that they stack at full width with `orientation="vertical"`, joined by a dashed rail, so the path never scrolls sideways. The path answers "whose fault is it" before the visitor reads a word.
 
 ### C. Next steps — `Button`
 
@@ -99,8 +99,8 @@ The block fetches nothing: Azion fills the props from the request it failed to s
 ## Accessibility
 
 - The block is the whole page: it owns the single `main`, one `h1` (the title) and an `h2` for each section (Request path, What happened?, What can I do?).
-- The request path is a `TopologyDiagram`: a `section` named by the Request path heading (`aria-labelledby`) holding an `ol` of levels; each hop's header is a button that reads its name and status tag and opens its explanation (`aria-expanded`). The connectors are decorative.
-- Severity is never colour alone: every status tag has its label.
+- The request path is a `FlowDiagram` (`role="group"`) named by the Request path heading (`aria-labelledby`), holding a list of hops; each card's Details button opens its explanation (`aria-expanded`). The connectors are decorative, and a hidden list reads the connections.
+- Severity is never colour alone: every status dot has its label.
 - Long hosts truncate on a phone and wrap in the details; hosts and IDs sit in `<bdi>` so they keep their order on right-to-left pages.
 - The phone and wide layouts of the path are the same content; the hidden one is `display: none`, so a screen reader hears it once.
 
@@ -117,5 +117,5 @@ The block fetches nothing: Azion fills the props from the request it failed to s
 ## Related
 
 - `state/error-page` — the error pages of Azion's own console, site and docs.
-- `TopologyDiagram` — the request path, with `orientation="vertical"` on a phone.
+- `FlowDiagram` — the request path (`nodes` + `edges`, `uniform`), with `orientation="vertical"` on a phone.
 - `state/async-submit` — a failed build or deploy inside the console.

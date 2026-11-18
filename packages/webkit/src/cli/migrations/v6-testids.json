@@ -120,7 +120,7 @@
   "data-flow": "flow-diagram",
   "data-flow__anchor": "flow-diagram-anchor",
   "data-flow__node": "flow-diagram-node",
-  "data-flow__parallel": "flow-diagram-parallel",
+  "data-flow__parallel": "flow-diagram-group",
   "data-pagination": "pagination",
   "data-pagination__button": "pagination-button",
   "data-pagination__info": "pagination-description",
@@ -147,7 +147,7 @@
   "data-table__search": "table-search",
   "data-table__sort-button": "table-sort-button",
   "data-table__toolbar-actions": "table-toolbar",
-  "data-topology-diagram": "topology-diagram",
+  "data-topology-diagram": "flow-diagram",
   "data-transfer-list": "transfer-list",
   "data-tree": "tree",
   "documentation-doc-accordion-group": "doc-accordion-group",
@@ -412,5 +412,7 @@
   "sections-template-gallery": "template-gallery-section",
   "sections-use-cases": "customer-use-cases-section",
   "utils-spinner": "spinner",
-  "utils-webkit-provider": "config-provider"
+  "utils-webkit-provider": "config-provider",
+  "flow-diagram-parallel": "flow-diagram-group",
+  "topology-diagram": "flow-diagram"
 }

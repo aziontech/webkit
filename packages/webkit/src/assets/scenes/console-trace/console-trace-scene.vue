@@ -143,6 +143,7 @@
 
         <FlowDiagram
           v-else
+          orientation="horizontal"
           align="start"
           class="[&>div]:w-full"
         >

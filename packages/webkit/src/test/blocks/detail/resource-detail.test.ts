@@ -108,7 +108,7 @@ describe('resource-detail#Application', () => {
     render(inConsoleLayout(Application))
     await fireEvent.click(screen.getByRole('tab', { name: 'Topology' }))
     expect(await screen.findByRole('heading', { name: 'Deployment topology' })).toBeTruthy()
-    expect(screen.getByText('shop.example.com')).toBeTruthy()
+    expect(await screen.findByText('shop.example.com')).toBeTruthy()
     expect(screen.getByText('edge-guard')).toBeTruthy()
     await expectNoA11yViolations(document.body)
   })

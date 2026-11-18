@@ -1246,9 +1246,9 @@ not rewrite handlers: a handler that ignores its arguments (`@retry="reload"`,
 | `ChatMessage`           | `retry`             | `()`                             | `(event)`                                           |
 | `Reasoning`             | `skip`              | `()`                             | `(event)`                                           |
 | `FeedbackReasonDialog`  | `submit`            | `(payload)`                      | `(event, payload)`                                  |
-| `TopologyDiagram`       | `remove`            | `(key)`                          | `(event, key)`                                      |
-| `TopologyDiagram`       | `create`            | `(key)`                          | `(event, key)`                                      |
-| `TopologyDiagram`       | `bind`              | `(key, value)`                   | `(event, { key, value })`                           |
+| `TopologyDiagram`       | `remove`            | `(key)`                          | `FlowDiagramBind` `(event)`                         |
+| `TopologyDiagram`       | `create`            | `(key)`                          | `FlowDiagramBind` `(event)`                         |
+| `TopologyDiagram`       | `bind`              | `(key, value)`                   | `FlowDiagramBind` `(event, value)`                  |
 | `DataTable`             | `filter-apply`      | `(filters)`                      | `(event, filters)`                                  |
 | `DataTable`             | `filter-remove`     | `(filter)`                       | `(event, filter)`                                   |
 | `Table.Filter`          | `apply`             | `(filters)`                      | `(event, filters)`                                  |
@@ -1998,6 +1998,54 @@ bindings and prints `MANUAL` for everything below that it cannot rewrite.
   `transfer-list` (`TransferList.Source`, `.Target`, `.Controls`), the test id
   `transfer-list`, the catalog group `transferList`; `dataKey` is gone (the
   codemod writes `itemKey`).
+
+### `FlowDiagram` replaces `TopologyDiagram` and gains data cards
+
+6.0 has one in-product diagram, `FlowDiagram` (owner decision RV-Y1). It keeps the old
+`FlowDiagram` parts (`Node`, `Anchor`) and adds a data mode (`nodes` + `edges`) whose default card
+draws everything `TopologyDiagram` drew. `TopologyDiagram` is removed.
+
+| v5 / early 6.0                                          | 6.0                                                                                                               | Codemod |
+| ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ------- |
+| `@aziontech/webkit/topology-diagram`, `TopologyDiagram` | `@aziontech/webkit/flow-diagram`, `FlowDiagram`                                                                   | yes     |
+| `FlowDiagram.Parallel`, `flow-diagram-parallel`         | `FlowDiagram.Group`, `flow-diagram-group`                                                                         | yes     |
+| `FlowDiagram.Parallel` `align`                          | removed: a group stacks its nodes at full width                                                                   | MANUAL  |
+| `TopologyDiagram` `levels`                              | `nodes` (flat) + `edges` (`{ from, to, label?, severity? }`); the edges set columns                               | MANUAL  |
+| node `type` / `name`                                    | `eyebrow` / `title`                                                                                               | MANUAL  |
+| `@bind`, `@remove`, `@create` on the root               | the same events on `FlowDiagramBind`, placed in the `actions` slot                                                | MANUAL  |
+| status `Tag` in the node header                         | a status dot and text (`status` + `severity`)                                                                     | —       |
+| `TopologyDiagram*` types                                | `FlowDiagramNodeData`, `FlowDiagramNodeField`, `FlowDiagramBindOption`, `FlowDiagramSeverity`, `FlowDiagramProps` | yes     |
+
+Recipe for a topology: flatten every level's nodes into one `nodes` array, rename `type` to
+`eyebrow` and `name` to `title`, and write one edge per connection the levels drew (each node of
+a level to each node of the next). Drop `terminal` (the edges decide where a branch ends). Move
+the bind handlers onto a `FlowDiagramBind` in the `actions` slot:
+
+```vue
+<FlowDiagram
+  v-model:open-keys="openKeys"
+  :nodes="nodes"
+  :edges="edges"
+  aria-label="Deployment topology"
+>
+  <template #actions="{ node }">
+    <FlowDiagramBind
+      v-if="node.bindable"
+      :label="node.eyebrow"
+      :options="node.bindOptions"
+      :value="node.boundValue"
+      :removable="node.removable"
+      @bind="(event, value) => bind(node.id, value)"
+      @remove="() => unbind(node.id)"
+      @create="() => create(node.id)"
+    />
+  </template>
+</FlowDiagram>
+```
+
+`FlowDiagram` lays steps out with `orientation="responsive"` by default: it stacks into a vertical
+rail when its container is narrower than 36rem. A fixed-size scene keeps a row with
+`orientation="horizontal"`.
 
 ### AI skills renamed
 

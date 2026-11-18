@@ -1143,8 +1143,8 @@ export const ptBR: Messages = {
       other: '{count} eventos'
     }
   },
-  topologyDiagram: {
-    label: 'Topologia de implantação',
+  flowDiagram: {
+    label: 'Diagrama',
     notBound: 'Não vinculado',
     bind: 'Vincular {kind}',
     change: 'Trocar {kind}',
@@ -1156,8 +1156,11 @@ export const ptBR: Messages = {
     existing: 'Existentes',
     noOptions: 'Nenhuma opção ainda.',
     copy: 'Copiar {field}',
+    details: 'Detalhes',
+    connections: 'Conexões',
+    connection: '{from} para {to}',
     emptyTitle: 'Nada conectado ainda.',
-    loading: 'Carregando a topologia'
+    loading: 'Carregando o diagrama'
   },
   tracker: {
     noData: 'Sem dados',

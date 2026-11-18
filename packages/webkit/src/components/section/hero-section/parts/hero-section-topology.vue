@@ -2,8 +2,8 @@
   import Tag from '../../../content/tag/tag.vue'
   import FlowDiagram from '../../../data/flow-diagram/flow-diagram.vue'
   import FlowDiagramAnchor from '../../../data/flow-diagram/flow-diagram-anchor/flow-diagram-anchor.vue'
+  import FlowDiagramGroup from '../../../data/flow-diagram/flow-diagram-group/flow-diagram-group.vue'
   import FlowDiagramNode from '../../../data/flow-diagram/flow-diagram-node/flow-diagram-node.vue'
-  import FlowDiagramParallel from '../../../data/flow-diagram/flow-diagram-parallel/flow-diagram-parallel.vue'
   import type { HeroSectionNode } from '../hero-section.vue'
 
   defineOptions({ name: 'HeroSectionTopology' })
@@ -15,13 +15,13 @@
 
 <template>
   <FlowDiagram
+    orientation="horizontal"
     align="center"
     class="w-[40rem] shrink-0 @4xl:w-(--container-3xl) [&>div]:w-full"
   >
-    <FlowDiagramParallel
+    <FlowDiagramGroup
       v-for="(column, index) in nodes"
       :key="index"
-      align="start"
       class="min-w-0 flex-1 @4xl:min-w-[15rem]"
     >
       <FlowDiagramNode
@@ -55,6 +55,6 @@
           <span class="min-w-0 truncate text-label-sm text-(--text-default)">{{ node.title }}</span>
         </div>
       </FlowDiagramNode>
-    </FlowDiagramParallel>
+    </FlowDiagramGroup>
   </FlowDiagram>
 </template>

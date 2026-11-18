@@ -1,26 +1,22 @@
 {
- "purpose": "FlowDiagram renders a directed flow diagram: a horizontal sequence of steps (`flow-diagram-node`) joined by decorative connectors, with optional parallel branches (`flow-diagram-parallel`) and custom connector-attachment points (`flow-diagram-anchor`). Use it to visualize pipelines, workflows, and step-by-step processes inside a data view; unlike `table` it expresses ordered/branching relationships rather than tabular records. Steps are written as direct children of `flow-diagram`; a `flow-diagram-parallel` between two steps fans out from the previous step and fans back into the next, and a `flow-diagram-parallel` at the start/end fans only inward/outward (no dangling stubs). A node can be styled (the default box) or `unstyled` so its slot content defines the entire node — a dot, a tall card, a multi-row card — while connectors still attach correctly, optionally at `flow-diagram-anchor` points inside the node. Connectors run port-to-port: a styled node renders a small square **connector port** just outside each of its edges, and a `flow-diagram-anchor` renders one outside the edge it attaches to, so a line always terminates on a visible attachment point instead of a bare edge (the port is the endpoint treatment — connectors carry no arrowheads). The port sits fully clear of the box rather than overlapping it, so neither the node's surface nor its focus ring crops it. A port is only rendered where a connector actually attaches: the leading child has no incoming connector and the trailing child no outgoing one, so those two edges show no port and the chain opens and closes on a node rather than on a stub. An `unstyled` node renders no ports, because its slot content owns its appearance; put a `flow-diagram-anchor` inside it to place ports on the parts a connector should touch. Design source (rewritten to our conventions, never inherited as-is): the kumo \"Flow\" component group at https://kumo-ui.com/components/flow-diagram/. Scope boundary: large diagrams pan via a native `overflow: auto` scroll container on the root — free 2D drag-pan is intentionally out of scope (it would require an external positioning library forbidden by `.claude/rules/dependencies.md`). The connector port is specified by the Figma frame in the frontmatter; the remaining tokens are inferred from intent and recorded in the Theme gaps table.",
+ "purpose": "The one in-product diagram (owner decision RV-Y1, 2026-11-18): it kept the old FlowDiagram parts and replaced TopologyDiagram in the 6.0 clean break. A naked root lays steps out and draws the connectors. **Data mode** (`nodes` + `edges`): edges set the columns and each node renders the richest card its data allows. **Composed mode**: hand-written parts in the default slot. `orientation=\"responsive\"` stacks into a rail below a 36rem container.",
  "useWhen": [
-  "Showing an ordered pipeline or request path as steps joined by connectors — build → deploy → serve, or a request through a load balancer, a function and its bindings.",
-  "A request path whose steps must read as equal boxes (You → Azion → Application) — set `uniform`. A path whose hops carry a status and details uses `topology-diagram` instead, as the edge error page does.",
-  "A step fans out to several parallel targets and (optionally) back in — wrap those steps in `FlowDiagram.Parallel`.",
-  "A node with custom content (a card with several rows) where connectors must touch specific parts — mark them with `FlowDiagram.Anchor`."
+  "A request path or pipeline: steps in order joined by connectors.",
+  "A deployment or service topology with status, metrics, details and bind controls."
  ],
  "avoidWhen": [
-  "One of the official architecture drawings, or a node-and-connector picture for a marketing page → use `diagram`.",
-  "Tabular records with no ordering between them → use `table`.",
-  "A numbered set of instructions in documentation → use `doc-steps`."
+  "A marketing architecture drawing from the official library → use `diagram`.",
+  "A numbered set of instructions → use `doc-steps`."
  ],
  "related": [
-  "`diagram` — marketing architecture drawings from a closed library or a one-off spec; `flow-diagram` is the in-product, hand-composed pipeline.",
-  "`doc-steps` — an ordered walkthrough of text steps joined by a rail, not connected nodes.",
-  "`table` — records without ordered or branching relationships."
+  "`diagram` — the marketing figure (closed drawing library).",
+  "`status-indicator` — the status dot and text in a node header."
  ],
  "bestPractices": [
-  "Write steps as direct children of `FlowDiagram` in flow order; connectors are drawn between siblings, so wrapping nodes in extra elements breaks the chain.",
-  "Use `unstyled` when the slot content is the whole node, and put a `FlowDiagram.Anchor` (`side=\"end\"` incoming, `side=\"start\"` outgoing) on each part a connector should touch — an unstyled node renders no ports of its own.",
-  "Mark a leaf that hangs off the chain with `terminal`; it receives a connector but sends none on.",
-  "Do not clip a node with `overflow-hidden` in a wrapping card — the connector ports sit outside the node's box and would disappear.",
-  "Let a wide flow scroll in its own container; the root is an `overflow: auto` region, and there is no drag-to-pan."
+  "Prefer data mode; compose by hand only for markup the card cannot express.",
+  "Join adjacent columns; an edge that skips a column can cross it.",
+  "Put timing or failure on the edge (`label`, `severity`) when the hop failed, on the node when the resource did.",
+  "Use `orientation=\"horizontal\"` for fixed-size scenes and mock-ups.",
+  "A one-resource slot puts `flow-diagram-bind` in the `actions` slot."
  ]
 }

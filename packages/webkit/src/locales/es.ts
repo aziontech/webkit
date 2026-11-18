@@ -1143,8 +1143,8 @@ export const es: Messages = {
       other: '{count} eventos'
     }
   },
-  topologyDiagram: {
-    label: 'Topología de despliegue',
+  flowDiagram: {
+    label: 'Diagrama',
     notBound: 'Sin vincular',
     bind: 'Vincular {kind}',
     change: 'Cambiar {kind}',
@@ -1156,8 +1156,11 @@ export const es: Messages = {
     existing: 'Existentes',
     noOptions: 'Aún no hay opciones.',
     copy: 'Copiar {field}',
+    details: 'Detalles',
+    connections: 'Conexiones',
+    connection: '{from} a {to}',
     emptyTitle: 'Aún no hay nada conectado.',
-    loading: 'Cargando la topología'
+    loading: 'Cargando el diagrama'
   },
   tracker: {
     noData: 'Sin datos',

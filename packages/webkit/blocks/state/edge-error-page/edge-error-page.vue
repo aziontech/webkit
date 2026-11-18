@@ -2,13 +2,15 @@
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
   import CopyButton from '@aziontech/webkit/copy-button'
+  import type {
+    FlowDiagramEdgeData,
+    FlowDiagramNodeData,
+    FlowDiagramSeverity
+  } from '@aziontech/webkit/flow-diagram-root'
+  import FlowDiagram from '@aziontech/webkit/flow-diagram-root'
   import KeyValueList from '@aziontech/webkit/key-value-list'
   import StatusCode from '@aziontech/webkit/status-code'
   import Timestamp from '@aziontech/webkit/timestamp'
-  import TopologyDiagram, {
-    type TopologyDiagramLevel,
-    type TopologyDiagramNodeSeverity
-  } from '@aziontech/webkit/topology-diagram'
   import { computed, useId } from 'vue'
 
   /** The way back the primary button offers: reload the address, or open the site's home page. */
@@ -18,8 +20,8 @@
   export interface EdgeErrorPageHopState {
     /** The status label, in a word or two (Working, Error, Blocked). */
     status: string
-    /** The colour of the status tag. */
-    severity: TopologyDiagramNodeSeverity
+    /** The colour of the status dot. */
+    severity: FlowDiagramSeverity
   }
 
   /** The state of the three hops a request crosses: the visitor, Azion's infrastructure and the site's application. */
@@ -112,12 +114,19 @@
     }
   ])
 
-  const levels = computed<TopologyDiagramLevel[]>(() =>
-    hops.value.map(({ key, ...hop }, index) => ({
+  const nodes = computed<FlowDiagramNodeData[]>(() =>
+    hops.value.map(({ key, type, name, ...hop }) => ({
       id: key,
-      nodes: [{ id: key, terminal: index === hops.value.length - 1, ...hop }]
+      eyebrow: type,
+      title: name,
+      ...hop
     }))
   )
+
+  const edges: FlowDiagramEdgeData[] = [
+    { from: 'visitor', to: 'azion' },
+    { from: 'azion', to: 'application' }
+  ]
 
   const homeHref = computed(() => `https://${props.host}/`)
 
@@ -153,16 +162,21 @@
           Request path
         </h2>
         <div class="-mx-(--spacing-md) hidden lg:block">
-          <TopologyDiagram
-            :levels="levels"
+          <FlowDiagram
+            :nodes="nodes"
+            :edges="edges"
+            orientation="horizontal"
+            uniform
             :aria-labelledby="pathId"
             data-testid="edge-error-page__path"
           />
         </div>
         <div class="-mx-(--spacing-md) lg:hidden">
-          <TopologyDiagram
-            :levels="levels"
+          <FlowDiagram
+            :nodes="nodes"
+            :edges="edges"
             orientation="vertical"
+            uniform
             :aria-labelledby="pathId"
             data-testid="edge-error-page__path-stacked"
           />

@@ -109,7 +109,7 @@ use it, so you can check a choice against a real one.
 | Main action | `--primary`, `--primary-foreground` | `Button variant="primary"`, `Checkbox` checked, `Progress` fill, `Tag variant="primary"`, `StatusIndicator severity="alt"` |
 | Second action | `--secondary`, `--secondary-foreground` | `Button variant="secondary"`, `IconButton`, `Badge variant="secondary"` |
 | Brand tint | `--primary-mask`, `--primary-selected` | `Tag variant="highlight"` surface, `RadioGroup` selected card |
-| Accent: a live state or connection, never an action | `--accent`, `--accent-foreground` | `Switch` on, `Slider` fill, `Tag variant="accent"`, resize handles in `Sidebar` and `Resizable`, a dragged `Table` row, `FlowDiagram` and `TopologyDiagram` edges and ports |
+| Accent: a live state or connection, never an action | `--accent`, `--accent-foreground` | `Switch` on, `Slider` fill, `Tag variant="accent"`, resize handles in `Sidebar` and `Resizable`, a dragged `Table` row, `FlowDiagram` edges and ports |
 | Brand text and marks: the logo colours | `--text-brand`, `--brand-blue`, `--brand-blue-foreground` | every brand-coloured text in the logo orange (`--text-brand`, `#F3652B` in light and dark, an owner-accepted contrast exception below): `Eyebrow`, the `Quote` name, `LinkDirectory` column headings, the `HeroTitle` highlight, `Stats` prefixes, the required asterisk in `FieldLabel`, `Tag variant="highlight"` text; the `Eyebrow` cursor in the brand blue (`--brand-blue`, `#0072F5`, the azion.com blue) |
 | Selected item | `--bg-selected`, `--border-selected` | selected rows and options in `Table`, `MenuItem`, `DropdownMenu`, `ToggleGroup`, `Select`, `Combobox`, `Trace`; `RadioGroup` card and `Chip` borders |
 | Selected tab | `--secondary-mask` | the sliding indicator in `Tabs` |
@@ -7048,7 +7048,7 @@ What each prop and event does, and the go-live code: [blocks/detail/production-c
 - Surface: app
 - Source: `blocks/detail/resource-detail/resource-detail.vue` in `@aziontech/webkit`
 - MCP: `get_block("detail/resource-detail")`
-- Components: Accordion, Alert, Avatar, Button, Card, CodeBlock, ConfirmDialog, ConsoleLayout, CopyButton, DataTable, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, IconButton, Input, `InputGroupRoot`, Item, Link, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, Popover, SaveBar, SectionHeader, Select, SettingsRow, SettingsSection, StatusIndicator, Tabs, Tag, Toast, ToggleGroup, Tooltip, TopologyDiagram, `use-locale`, `use-unsaved-changes`
+- Components: Accordion, Alert, Avatar, Button, Card, CodeBlock, ConfirmDialog, ConsoleLayout, CopyButton, DataTable, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, `FlowDiagramBind`, FlowDiagram, IconButton, Input, `InputGroupRoot`, Item, Link, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, Popover, SaveBar, SectionHeader, Select, SettingsRow, SettingsSection, StatusIndicator, Tabs, Tag, Toast, ToggleGroup, Tooltip, `use-locale`, `use-unsaved-changes`
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-ui-states`
 
 ## Asked as
@@ -7091,7 +7091,7 @@ What each part takes: [blocks/detail/resource-detail.md](blocks/detail/resource-
 
 ## Topology tab
 
-- Use `TopologyDiagram` for the path a request takes to the resource (Application and ServiceOverview both do). A pick from a node's bind menu is pending on the node until its Apply control confirms it (Cancel or Escape drops it); only the confirmed `bind`, a change or a removal is staged on the node, counted beside Deploy and listed in the deploy `Drawer`; the run ends in the async-submit toast with Edit and Redeploy. A production-checklist step that binds a slot (Bind Policy, Bind Error Page) scrolls to the topology and expands that node instead of opening a separate form.
+- Use `FlowDiagram` (`nodes` + `edges`, with `FlowDiagramBind` in its `actions` slot) for the path a request takes to the resource (Application and ServiceOverview both do). A pick from a node's bind menu is pending on the node until its Apply control confirms it (Cancel or Escape drops it); only the confirmed `bind`, a change or a removal is staged on the node, counted beside Deploy and listed in the deploy `Drawer`; the run ends in the async-submit toast with Edit and Redeploy. A production-checklist step that binds a slot (Bind Policy, Bind Error Page) scrolls to the topology and expands that node instead of opening a separate form.
 - Bind, create and remove act on staged state only. Nothing reaches Production until Deploy, and the deploy drawer lists every staged change before it runs.
 - Show the staged count on the tab row next to Deploy, so it stays visible from every tab.
 - Report the deploy through the async-submit toast (Edit and Redeploy) and clear the staged marks once it succeeds.
@@ -7163,7 +7163,7 @@ Grouped by the resource type the page shows. A deployment's own page is `detail/
 ### Service
 
 - Service: the service summary with its domains, environment menu, ID and the Deployment Settings band.
-- ServiceOverview: a service (its environment crumb is the page's `ConsoleLayout.Breadcrumb`), Deploy on the tab row, the production checklist and the deployment topology on `TopologyDiagram` (policy, error page and origin slots staged until Deploy).
+- ServiceOverview: a service (its environment crumb is the page's `ConsoleLayout.Breadcrumb`), Deploy on the tab row, the production checklist and the deployment topology on `FlowDiagram` (policy, error page and origin slots staged until Deploy).
 
 ### Policy
 
@@ -7171,7 +7171,7 @@ Grouped by the resource type the page shows. A deployment's own page is `detail/
 
 ### Application
 
-- Application: a whole application page body, with working tabs. Overview is the summary card; Versions and Deployments are a small `SectionHeader` over a flush `DataTable`; Topology draws the request path with `TopologyDiagram` (domain, workload, firewall, application, function instance). Binding or removing the firewall or the function only stages the change: the node turns dashed with a Staged status, a polite status line names it, and the tab row shows the count as a warning `Tag` beside Deploy. Deploy opens a `Drawer` that lists each staged change as from and to, then runs on its own: a loading toast, then the async-submit toast with **Edit** (back to the Topology tab) and **Redeploy**, never View deployments.
+- Application: a whole application page body, with working tabs. Overview is the summary card; Versions and Deployments are a small `SectionHeader` over a flush `DataTable`; Topology draws the request path with `FlowDiagram` (domain, workload, firewall, application, function instance). Binding or removing the firewall or the function only stages the change: the node turns dashed with a Staged status, a polite status line names it, and the tab row shows the count as a warning `Tag` beside Deploy. Deploy opens a `Drawer` that lists each staged change as from and to, then runs on its own: a loading toast, then the async-submit toast with **Edit** (back to the Topology tab) and **Redeploy**, never View deployments.
 - ApplicationBuild: an application page body with Overview, Versions, Build and Deployments. Dragging files over the page raises the dashed drop target of `state/project-intake`; dropping them or Deploy opens a deploy `Drawer` naming the source, and the run reports through the async-submit toast with Edit and Redeploy. Leaving the Build tab with unsaved changes asks first in a `ConfirmDialog`.
 
 ## Related
@@ -8665,7 +8665,7 @@ What each prop and event does, and the go-live code: [blocks/state/async-submit.
 - Surface: edge
 - Source: `blocks/state/edge-error-page/edge-error-page.vue` in `@aziontech/webkit`
 - MCP: `get_block("state/edge-error-page")`
-- Components: Brand, Button, CopyButton, KeyValueList, StatusCode, Timestamp, TopologyDiagram
+- Components: Brand, Button, CopyButton, FlowDiagram, KeyValueList, StatusCode, Timestamp
 - Skills: `webkit-errors`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -8698,7 +8698,7 @@ Words: the docs say **Azion's infrastructure**; the page itself says just **Azio
 ## Building blocks
 
 - A. Status line — `StatusCode`
-- B. Request path — `TopologyDiagram`
+- B. Request path — `FlowDiagram`
 - C. Next steps — `Button`
 - D. Request details — `KeyValueList`, `CopyButton`, `Timestamp`
 - E. Footer — `Brand`
@@ -8744,8 +8744,8 @@ What each prop and event does, and the go-live code: [blocks/state/edge-error-pa
 ## Accessibility
 
 - The block is the whole page: it owns the single `main`, one `h1` (the title) and an `h2` for each section (Request path, What happened?, What can I do?).
-- The request path is a `TopologyDiagram`: a `section` named by the Request path heading (`aria-labelledby`) holding an `ol` of levels; each hop's header is a button that reads its name and status tag and opens its explanation (`aria-expanded`). The connectors are decorative.
-- Severity is never colour alone: every status tag has its label.
+- The request path is a `FlowDiagram` (`role="group"`) named by the Request path heading (`aria-labelledby`), holding a list of hops; each card's Details button opens its explanation (`aria-expanded`). The connectors are decorative, and a hidden list reads the connections.
+- Severity is never colour alone: every status dot has its label.
 - Long hosts truncate on a phone and wrap in the details; hosts and IDs sit in `<bdi>` so they keep their order on right-to-left pages.
 - The phone and wide layouts of the path are the same content; the hidden one is `display: none`, so a screen reader hears it once.
 
@@ -8762,7 +8762,7 @@ What each prop and event does, and the go-live code: [blocks/state/edge-error-pa
 ## Related
 
 - `state/error-page` — the error pages of Azion's own console, site and docs.
-- `TopologyDiagram` — the request path, with `orientation="vertical"` on a phone.
+- `FlowDiagram` — the request path (`nodes` + `edges`, `uniform`), with `orientation="vertical"` on a phone.
 - `state/async-submit` — a failed build or deploy inside the console.
 
 ## Variants
@@ -20174,7 +20174,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 
 # Flow Diagram
 
-> FlowDiagram renders a directed flow diagram: a horizontal sequence of steps (`flow-diagram-node`) joined by decorative connectors, with optional parallel branches (`flow-diagram-parallel`) and custom connector-attachment points (`flow-diagram-anchor`). Use it to visualize pipelines, workflows, and step-by-step processes inside a data view; unlike `table` it expresses ordered/branching relationships rather than tabular records. Steps are written as direct children of `flow-diagram`; a `flow-diagram-parallel` between two steps fans out from the previous step and fans back into the next, and a `flow-diagram-parallel` at the start/end fans only inward/outward (no dangling stubs). A node can be styled (the default box) or `unstyled` so its slot content defines the entire node — a dot, a tall card, a multi-row card — while connectors still attach correctly, optionally at `flow-diagram-anchor` points inside the node. Connectors run port-to-port: a styled node renders a small square **connector port** just outside each of its edges, and a `flow-diagram-anchor` renders one outside the edge it attaches to, so a line always terminates on a visible attachment point instead of a bare edge (the port is the endpoint treatment — connectors carry no arrowheads). The port sits fully clear of the box rather than overlapping it, so neither the node's surface nor its focus ring crops it. A port is only rendered where a connector actually attaches: the leading child has no incoming connector and the trailing child no outgoing one, so those two edges show no port and the chain opens and closes on a node rather than on a stub. An `unstyled` node renders no ports, because its slot content owns its appearance; put a `flow-diagram-anchor` inside it to place ports on the parts a connector should touch. Design source (rewritten to our conventions, never inherited as-is): the kumo "Flow" component group at https://kumo-ui.com/components/flow-diagram/. Scope boundary: large diagrams pan via a native `overflow: auto` scroll container on the root — free 2D drag-pan is intentionally out of scope (it would require an external positioning library forbidden by `.claude/rules/dependencies.md`). The connector port is specified by the Figma frame in the frontmatter; the remaining tokens are inferred from intent and recorded in the Theme gaps table.
+> The one in-product diagram (owner decision RV-Y1, 2026-11-18): it kept the old FlowDiagram parts and replaced TopologyDiagram in the 6.0 clean break. A naked root lays steps out and draws the connectors. **Data mode** (`nodes` + `edges`): edges set the columns and each node renders the richest card its data allows. **Composed mode**: hand-written parts in the default slot. `orientation="responsive"` stacks into a rail below a 36rem container.
 
 - Import: `import FlowDiagramRoot from '@aziontech/webkit/flow-diagram-root'`
 - Compound import (dot notation, not tree-shakeable): `import FlowDiagram from '@aziontech/webkit/flow-diagram'`
@@ -20182,83 +20182,89 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 
 ## When to use
 
-- Showing an ordered pipeline or request path as steps joined by connectors — build → deploy → serve, or a request through a load balancer, a function and its bindings.
-- A request path whose steps must read as equal boxes (You → Azion → Application) — set `uniform`. A path whose hops carry a status and details uses `topology-diagram` instead, as the edge error page does.
-- A step fans out to several parallel targets and (optionally) back in — wrap those steps in `FlowDiagram.Parallel`.
-- A node with custom content (a card with several rows) where connectors must touch specific parts — mark them with `FlowDiagram.Anchor`.
+- A request path or pipeline: steps in order joined by connectors.
+- A deployment or service topology with status, metrics, details and bind controls.
 
 ## Do
 
-- Write steps as direct children of `FlowDiagram` in flow order; connectors are drawn between siblings, so wrapping nodes in extra elements breaks the chain.
-- Use `unstyled` when the slot content is the whole node, and put a `FlowDiagram.Anchor` (`side="end"` incoming, `side="start"` outgoing) on each part a connector should touch — an unstyled node renders no ports of its own.
-- Mark a leaf that hangs off the chain with `terminal`; it receives a connector but sends none on.
-- Do not clip a node with `overflow-hidden` in a wrapping card — the connector ports sit outside the node's box and would disappear.
-- Let a wide flow scroll in its own container; the root is an `overflow: auto` region, and there is no drag-to-pan.
+- Prefer data mode; compose by hand only for markup the card cannot express.
+- Join adjacent columns; an edge that skips a column can cross it.
+- Put timing or failure on the edge (`label`, `severity`) when the hop failed, on the node when the resource did.
+- Use `orientation="horizontal"` for fixed-size scenes and mock-ups.
+- A one-resource slot puts `flow-diagram-bind` in the `actions` slot.
 
 ## Don’t
 
-- One of the official architecture drawings, or a node-and-connector picture for a marketing page → use `diagram`.
-- Tabular records with no ordering between them → use `table`.
-- A numbered set of instructions in documentation → use `doc-steps`.
+- A marketing architecture drawing from the official library → use `diagram`.
+- A numbered set of instructions → use `doc-steps`.
 
 ## Related
 
-- `diagram` — marketing architecture drawings from a closed library or a one-off spec; `flow-diagram` is the in-product, hand-composed pipeline.
-- `doc-steps` — an ordered walkthrough of text steps joined by a rail, not connected nodes.
-- `table` — records without ordered or branching relationships.
+- `diagram` — the marketing figure (closed drawing library).
+- `status-indicator` — the status dot and text in a node header.
 
 ## Props
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `align` | `'start' \| 'center'` | `'start'` | false | Vertical alignment of nodes within the diagram. |
-| `uniform` | `boolean` | `false` | false | Gives every step the width and height of the largest one, so the steps line up as equal boxes. |
+| `nodes` | `FlowDiagramNodeData[]` | `[]` | false | Nodes of a data-driven diagram; each renders as a full card. Leave empty to compose the parts by hand. |
+| `edges` | `FlowDiagramEdgeData[]` | `[]` | false | Connectors between nodes by id; they also decide the columns. Empty joins each step to the next. |
+| `orientation` | `'horizontal' \| 'vertical' \| 'responsive'` | `'responsive'` | false | Lays the steps out in a row, in a column, or in a row that stacks when its container is narrow. |
+| `align` | `'start' \| 'center'` | `'start'` | false | Vertical alignment of the steps in a row. |
+| `uniform` | `boolean` | `false` | false | Gives every step the width and height of the largest one. |
+| `loading` | `boolean` | `false` | false | Shows placeholder steps while the diagram loads. |
+| `ariaLabel` | `string` | `''` | false | Accessible name of the diagram. Empty uses the locale catalog (`Diagram`). |
+| `openKeys` | `string[]` | `() => []` | false | Two-way value (`v-model:openKeys`). |
 
 ## Slots
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
-| `default` | — | Diagram content: `flow-diagram-node` and `flow-diagram-parallel`, in flow order. |
+| `default` | — | Composed mode: nodes and groups, in flow order. |
+| `actions` | { node: FlowDiagramNodeData } | Data mode: controls at the end of a node's title row. |
+| `empty` | — | Replaces the `EmptyState` shown when there are no nodes. |
 
 ## Sub-component imports
 
 - `@aziontech/webkit/flow-diagram-node`
-- `@aziontech/webkit/flow-diagram-parallel`
+- `@aziontech/webkit/flow-diagram-group`
 - `@aziontech/webkit/flow-diagram-anchor`
+- `@aziontech/webkit/flow-diagram-header`
+- `@aziontech/webkit/flow-diagram-title`
+- `@aziontech/webkit/flow-diagram-description`
+- `@aziontech/webkit/flow-diagram-footer`
+- `@aziontech/webkit/flow-diagram-item`
+- `@aziontech/webkit/flow-diagram-bind`
 
 ## Sub-components
 
-- `flow-diagram-node/flow-diagram-node.vue` — A single step in the flow.
-- `flow-diagram-anchor/flow-diagram-anchor.vue` — Marks a connector-attachment point inside a node and wraps the content that the connector should touch.
-- `flow-diagram-parallel/flow-diagram-parallel.vue` — Container whose direct `flow-diagram-node` children are laid out as parallel branches stacked vertically; the `flow-diagram` root draws the fan-out/fan-in junction c…
+- `flow-diagram-node` — one step: a label box, a card when it holds a `Title`, or `unstyled`.
+- `flow-diagram-group` — parallel nodes stacked in one step (was `Parallel` and a topology level).
+- `flow-diagram-anchor` — where a connector touches.
+- `flow-diagram-header` — props `icon`, `eyebrow`, `status`, `severity`.
+- `flow-diagram-title` — prop `href`; `actions` slot.
+- `flow-diagram-description`, `flow-diagram-footer`, `flow-diagram-item` (prop `label`).
+- `flow-diagram-bind` — companion (not attached): bind with Apply and Cancel.
+
+## v-model
+
+- **`v-model:openKeys`** — `string[]`, default `[]`. Ids of the data-mode nodes whose details are open.
 
 ## States
 
-- Visual states: `default`, `focus-visible`, `disabled`
-- `data-disabled` mirrors the `disabled` prop on `flow-diagram-node`
-- `data-styled` is present on `flow-diagram-node` unless `unstyled` (gates the default box utilities)
-- `data-align` mirrors the `align` prop on `flow-diagram` and `flow-diagram-parallel`
-- `data-uniform` mirrors the `uniform` prop on the inner container of `flow-diagram`: the steps become equal columns of a grid (each as wide as the widest step) and every step stretches to the tallest one, so a request path whose steps carry different amounts of text still reads as a row of identical boxes. `align` has no effect while `uniform` is set, because every step fills the row's height
-- Part markers are `data-slot`: `flow-diagram-node`, `flow-diagram-parallel`, `flow-branches` (the nested list of a parallel step), `flow-diagram-anchor` and `flow-port`
-- `data-side` mirrors the `side` prop on `flow-diagram-anchor` (`start` / `end`; absent when the anchor attaches on both edges)
-- The root provides `testId` and `align` as computed refs, so a changed `data-testid` or `align` reaches every sub-component
-- `data-slot="flow-port"` marks a connector port and its `data-side` selects the edge it sits on (`start` = outgoing / right, `end` = incoming / left). Emitted on both edges of a styled `flow-diagram-node`, and on the attaching edge(s) of a `flow-diagram-anchor`. The port sits entirely **outside** the box, flush against that edge — never inside it, so the node's surface and its `focus-visible` ring cannot crop the port
-- Port appearance follows the enclosing node: solid border by default, `border-dashed` under `data-disabled`
-- `data-flow-terminal` mirrors the `terminal` prop on `flow-diagram-node`. The composable drops that branch's exit, so no connector is drawn leaving it; the root additionally hides any outgoing port inside it (including one rendered by a nested `flow-diagram-anchor`)
-- `data-flow-leading` / `data-flow-trailing` are stamped by the connector composable on the first / last direct child of the diagram (both, when there is only one). The root hides the ports on those outer edges, because no connector reaches them. They are attributes rather than `:first-child` / `:last-child` rules because the connector `<svg>` is a sibling of the nodes in the same container
-- A consuming component that wraps a node in its own card must not clip it (`overflow-hidden`): the ports are positioned outside the anchor's box, so a clipping ancestor renders them invisible
-- `data-faded` marks a connector path whose endpoint node is disabled (drives the reduced opacity)
+- List: `data-orientation`, `data-align`, `data-uniform`, `data-labelled` (wider gap for edge labels), `data-stacked` (rail drawn, ports hidden).
+- Node: `data-disabled`, `data-dashed`, `data-terminal`, `data-node-key`, `data-entry` / `data-exit` (ports show only where a connector attaches).
+- Title: every row is one small control high (`min-h-7`) with `--spacing-sm` of bottom padding, so a button in the `actions` slot sits as far from the divider below as the header text sits from the border above, and cards with and without controls keep the same anchor height (their connectors stay level).
+- Data card: `data-state="open|closed"`; an unbound bindable node is dashed with `Not bound`; a pending bind dashes it too.
+- Loading: `aria-busy`, skeleton cards, one `role="status"` line. Empty: `EmptyState` unless the `empty` slot replaces it.
+- Edge `severity` colours the connector (`--<severity>-mark`); default `--accent`.
 
 ## Accessibility
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
-- Keyboard map: `Tab` moves focus through focusable nodes in document order; no arrow-key roving (the diagram is a static list). When the diagram is wider than its box, the scroll root itself takes `tabindex="0"` (measured with a resize observer, removed again when it fits) so keyboard users can scroll it with the arrow keys; it shows the focus ring inset.
-- ARIA: root `flow-diagram` is `role="list"`; each `flow-diagram-node` is `role="listitem"` with accessible text content; `flow-diagram-parallel` is a `role="listitem"` (one step of the outer list) holding a nested `role="list"` (`data-flow-branches`, testid `<parallel testid>-branches`; it is the flex column that stacks and aligns the branches) of its branch nodes, because a `group` is not an allowed child of a `list` and its nodes would lose their `list` parent; the connector SVG is decorative and carries `aria-hidden="true"`, as does every connector port (`data-flow-port`) — the ports are a visual attachment affordance and carry no meaning for AT. A `flow-diagram-anchor` wraps meaningful node content and is therefore not hidden.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state.
-- `motion-reduce:animate-none` on the connector dashes; no other part moves.
-- Pause, Stop, Hide (WCAG 2.2.2): the connector dashes march six times on mount and stop by themselves after 4.2 seconds, so the diagram needs no pause control.
-- Touch target ≥40×40 px where a node is interactive.
-- Right-to-left: under `dir="rtl"` the flow runs from the inline start (right) to the inline end (left). Connectors leave a node's inline-end edge and enter the next node's inline-start edge, the elbow bus sits between them, and the ports (`data-flow-port`) sit outside the node on the edge they mark.
+- Root `role="group"` named by `ariaLabel`; steps are a `list`, a group a nested list with a hidden label.
+- Connectors, ports and edge labels are `aria-hidden`; data mode adds a hidden `Connections` list (`{from} to {to}, {label}`).
+- `Tab` reaches links, the Details toggle (`aria-expanded`, closed details `inert`), copy and bind controls; the scroll area is focusable only when it overflows.
+- Status is a dot plus text; the dashes stop after six runs; `motion-reduce:animate-none`; focus ring `--ring-color`.
 
 ## Examples
 
@@ -20266,15 +20272,91 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 
 ```vue
 <script setup>
-  import FlowDiagram from '@aziontech/webkit/flow-diagram'
+  import FlowDiagram from '@aziontech/webkit/flow-diagram-root'
+  import { ref } from 'vue'
+
+  const nodes = [
+    {
+      id: 'client',
+      eyebrow: 'Client',
+      icon: 'az az-user',
+      title: 'Browsers',
+      description: 'United States',
+      metrics: [{ label: 'Requests', value: '1.2k/s' }]
+    },
+    {
+      id: 'edge',
+      eyebrow: 'Application',
+      icon: 'az az-globe',
+      title: 'shop.example.com',
+      href: '#application',
+      description: 'San Francisco, US',
+      status: 'Healthy',
+      severity: 'success',
+      metrics: [
+        { label: 'p95', value: '38 ms' },
+        { label: 'Hit ratio', value: '91%' }
+      ],
+      fields: [
+        { label: 'ID', value: '1482736015', copyable: true },
+        { label: 'Domain', value: 'shop.example.com', href: 'https://shop.example.com' }
+      ]
+    },
+    {
+      id: 'function',
+      eyebrow: 'Function',
+      icon: 'az az-functions',
+      title: 'checkout-router',
+      status: 'Running',
+      severity: 'success',
+      metrics: [
+        { label: 'p95', value: '12 ms' },
+        { label: 'Errors', value: '0.1%' }
+      ]
+    },
+    {
+      id: 'cache',
+      eyebrow: 'Cache',
+      icon: 'az az-cache',
+      title: 'static-assets',
+      status: 'Warming',
+      severity: 'warning',
+      metrics: [{ label: 'Hit ratio', value: '64%' }],
+      message: 'The cache refills after the deploy of 10:42 UTC.'
+    },
+    {
+      id: 'origin',
+      eyebrow: 'Origin',
+      icon: 'az az-server',
+      title: 'api.example.com',
+      description: 'Ashburn, US',
+      status: 'Degraded',
+      severity: 'danger',
+      metrics: [
+        { label: 'p95', value: '840 ms' },
+        { label: '5xx', value: '4.2%' }
+      ]
+    }
+  ]
+
+  const edges = [
+    { from: 'client', to: 'edge', label: '6 ms' },
+    { from: 'edge', to: 'function', label: '2 ms' },
+    { from: 'edge', to: 'cache', label: '1 ms' },
+    { from: 'function', to: 'origin', label: '840 ms', severity: 'danger' },
+    { from: 'cache', to: 'origin', label: '96 ms' }
+  ]
+
+  const openKeys = ref([])
 </script>
 
 <template>
-  <FlowDiagram align="center">
-    <FlowDiagram.Node>Source</FlowDiagram.Node>
-    <FlowDiagram.Node>Transform</FlowDiagram.Node>
-    <FlowDiagram.Node>Deliver</FlowDiagram.Node>
-  </FlowDiagram>
+  <FlowDiagram
+    v-model:open-keys="openKeys"
+    :nodes="nodes"
+    :edges="edges"
+    aria-label="Request path of shop.example.com"
+  />
 </template>
 ```
 
@@ -20863,316 +20945,6 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 ```
 
 1 more example(s) in [components/table.md](components/table.md).
-
----
-
-<!-- components/topology-diagram.md -->
-
-# Topology Diagram
-
-> The deployment topology of a resource as a left-to-right diagram: each column is a depth (domains, project, policy, service, cache rules, integration, storage), each node a collapsible card with the resource kind, its status tag, its name and, when opened, a message and labelled fields; dashed connectors join every node of a column to the next. A node without a name is an unbound slot (dashed, Not bound) and a `bindable` node carries the bind control (bind an existing resource, change it, create one, remove it); a picked resource stays pending on the node until it is applied. Taken from the design sample's workload topology (`TopologyDiagramNodeData`, `TopologyNodeCard`, `TopologyBindNode`, `TopologyBindControl`, the empty node). It reuses `FlowDiagram`'s connector engine and anchors and draws its own list semantics, with no node-graph dependency.
-
-- Import: `import TopologyDiagram from '@aziontech/webkit/topology-diagram'`
-- Category: data · Surface: app · Structure: monolithic
-
-## When to use
-
-- The topology tab of a project, service or workload: what serves its traffic, in order, and what is still unbound.
-- A review before a deploy where binding or removing a resource is staged on the diagram.
-- A short linear path whose hops carry a status, such as the request path You → Azion → Application on `state/edge-error-page`: one node per level, side by side on a wide screen and `orientation="vertical"` on a phone.
-
-## Do
-
-- Keep a column per depth and put the nodes that serve in parallel in the same column.
-- Mark a staged change `dashed` with a warning status and a message that says the deploy applies it.
-- Mark the last node of each branch `terminal` so no connector leaves it.
-- Give every unbound slot a message that says what happens without it.
-- Give a node `href` when its resource has a page: the name becomes a link that ends in the open glyph (`az az-external-link`), as every resource name in the console does.
-- A node that collects many resources and adds to itself, such as Domains (add a domain), puts its `+` in the `actions` slot: an `IconButton` (`az az-plus`, `variant="outline"`, `size="small"`) named `Add domain` inside a `Tooltip`, picked by `node.id`. `bindable` is for a slot that holds one resource (Firewall, Custom Page): it brings its own `+` with the bind menu. Do not hand-draw a node card to get the `+`.
-
-## Don’t
-
-- A sequence of steps or a pipeline without data cards → use `flow-diagram`.
-- A nested list of items with no flow between them → use `tree`.
-- A marketing architecture picture → use `diagram`.
-
-## Related
-
-- `flow-diagram` — the connector engine and anchors this component reuses.
-- `tree` — hierarchical data without connectors.
-- `dropdown-menu` — the bind control's menu.
-- `detail/resource-detail` — the page whose topology tab holds it.
-
-## Props
-
-| Prop | Type | Default | Required | Description |
-| --- | --- | --- | --- | --- |
-| `levels` | `TopologyDiagramLevel[]` | `[]` | false | Columns of the diagram, from the entry point to the last dependency. |
-| `loading` | `boolean` | `false` | false | Shows placeholder cards while the topology loads. |
-| `orientation` | `TopologyDiagramOrientation` | `'horizontal'` | false | Direction the levels run: side by side, or stacked from top to bottom for a narrow screen. |
-| `ariaLabel` | `string` | `''` | false | Accessible name of the diagram. Empty uses the locale catalog (`Deployment topology`). |
-| `openKeys` | `string[]` | `() => []` | false | Two-way value (`v-model:openKeys`). |
-
-## Events
-
-| Event | Payload | Notes |
-| --- | --- | --- |
-| `bind` | `(event: MouseEvent \| KeyboardEvent, binding: { id: string; value: string })` | A pending pick was confirmed with Apply; `id` is the node's id, `value` the picked option. Picking an option no longer emits on its own (v6). |
-| `remove` | `(event: MouseEvent, id: string)` | Remove was activated on a bound, removable node. |
-| `create` | `(event: MouseEvent \| KeyboardEvent, id: string)` | Create was picked in the bind control. |
-
-## Slots
-
-| Slot | Scope | Notes |
-| --- | --- | --- |
-| `actions` | { node: TopologyDiagramNodeData } | Extra controls in a node's identity row, before the bind control. |
-| `empty` | — | Replaces the default empty state (the package `EmptyState`, small, `topologyDiagram.emptyTitle`) shown when there are no levels. |
-
-## v-model
-
-- **`v-model:openKeys`** — `string[]`, default `[]`. Ids of the open node cards; a header click toggles its id.
-
-## States
-
-- Orientation: `data-orientation` mirrors `orientation` on the root, the column list and each column. `horizontal` (default) lays the levels out as columns of the same width (`flex-1`, at least `--size-56`) joined by the measured connectors. `vertical` stacks the levels top to bottom at full width, draws a short dashed `--accent` line between consecutive levels instead of the measured connectors, and hides the side ports; the nodes, their statuses and their open bodies are the same in both. A level with one node per level gives every node the same width in either direction, and nodes with the same parts (type, status, name) share one height.
-- Root: `data-loading` and `aria-busy` while `loading`; empty when `levels` is empty, rendered as the package `EmptyState` (small) unless the `empty` slot replaces it.
-- Node card: `data-state` `open` | `closed`; `data-dashed` for a staged, unbound or pending node.
-- Pending (internal, per node): picking an option other than `boundValue` holds it on the node with `data-pending` and the dashed outline; the identity row shows the picked label and the status tag reads `Pending` (warning). The action area swaps Remove for **Apply** (`az az-check`, primary, `Apply {kind}`) and **Cancel** (`az az-x`, `Cancel`). Apply emits `bind` and clears it; the node is controlled, so it then shows the `name` and `boundValue` its `levels` entry carries, and the app writes the applied value back in its `bind` handler (and clears it in `remove`) or the card returns to the previous binding; Cancel or `Esc` in the action area drops it without an event; picking the current value again clears it; Create emits `create` and clears it.
-- Connectors: dashed, flowing; faded never (no disabled nodes).
-
-## Accessibility
-
-- Visible focus: header buttons `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset`; the scroll area when it scrolls.
-- Keyboard map: `Tab` moves through header buttons, links, copy, bind and remove controls in reading order; `Enter`/`Space` on a header toggles its card; the bind menu follows `dropdown-menu` (arrows, `Enter`, `Esc`). Picking an option that differs from the bound one moves focus to Apply, so `Enter` confirms it; `Esc` anywhere in the node's action area cancels the pending pick; after Apply or Cancel focus returns to the bind (pencil) control. The scroll area is focusable (`tabindex="0"`) only when it overflows, so arrow keys scroll it.
-- ARIA: the root is a `section` named by `ariaLabel`; columns are an `ol` of `li`, each with an optional visually hidden label; each header is a `button` with `aria-expanded` and `aria-controls`; the collapsed body is `inert`; connectors are `aria-hidden`; icon-only controls are named (`Bind Policy`, `Remove Policy`, `Apply Policy`, `Cancel`, `Copy Domains Custom domain`) and carry a `Tooltip`; Apply is described by the pending label (`aria-describedby`), so focusing it reads what it applies, and no extra live region is added (the component's only one is the loading line); loading announces once through a `role="status"` line.
-- The unbound dash is `aria-hidden`; the status tag says Not bound in words.
-- Pause, Stop, Hide (WCAG 2.2.2): the connector dashes march six times on mount and stop by themselves after 4.2 seconds; `motion-reduce:animate-none` keeps them still.
-- Contrast ≥4.5:1 from the semantic text tokens.
-
-## Examples
-
-### Default
-
-```vue
-<script setup>
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Tooltip from '@aziontech/webkit/tooltip'
-  import TopologyDiagram from '@aziontech/webkit/topology-diagram'
-  import { computed, reactive, ref } from 'vue'
-
-  const policies = [
-    { value: 'edge-guard', label: 'edge-guard' },
-    { value: 'strict-waf', label: 'strict-waf' }
-  ]
-  const errorPages = [{ value: 'maintenance', label: 'maintenance' }]
-
-  const bound = reactive({ policy: 'edge-guard', 'error-page': '' })
-
-  const bindingFields = (value, unbound) =>
-    value
-      ? { name: value, boundValue: value, status: 'Active', severity: 'success', message: '' }
-      : { name: '', boundValue: '', status: '', severity: 'neutral', message: unbound }
-
-  const levels = computed(() => [
-    {
-      id: 'domains',
-      label: 'Domains',
-      nodes: [
-        {
-          id: 'domains',
-          type: 'Domains',
-          icon: 'az az-globe',
-          name: 'shop.example.com',
-          status: '2 domains',
-          severity: 'info',
-          fields: [
-            {
-              label: 'Platform domain',
-              value: 'web-app-k3x9q2.example.net',
-              href: 'https://web-app-k3x9q2.example.net',
-              copyable: true
-            },
-            {
-              label: 'Custom domain',
-              value: 'shop.example.com',
-              href: 'https://shop.example.com',
-              copyable: true
-            }
-          ]
-        }
-      ]
-    },
-    {
-      id: 'project',
-      label: 'Project',
-      nodes: [
-        {
-          id: 'project',
-          type: 'Project',
-          icon: 'az az-folder',
-          name: 'web-app',
-          status: 'Live',
-          severity: 'success',
-          href: '#project',
-          fields: [
-            { label: 'ID', value: '1482736015', copyable: true },
-            { label: 'Environment', value: 'Production' }
-          ]
-        }
-      ]
-    },
-    {
-      id: 'policy',
-      label: 'Policy',
-      nodes: [
-        {
-          id: 'policy',
-          type: 'Policy',
-          icon: 'az az-shield',
-          href: '#policy',
-          bindable: true,
-          bindOptions: policies,
-          removable: true,
-          ...bindingFields(bound.policy, 'Requests reach the service without inspection.'),
-          fields: [{ label: 'Rules', value: '12 rules, 3 rate limits' }]
-        }
-      ]
-    },
-    {
-      id: 'service',
-      label: 'Service',
-      nodes: [
-        {
-          id: 'service',
-          type: 'Service',
-          icon: 'az az-server',
-          name: 'web-app',
-          status: 'Active',
-          severity: 'success',
-          href: '#service',
-          fields: [{ label: 'Version', value: 'AEO25I38' }]
-        },
-        {
-          id: 'error-page',
-          type: 'Error page',
-          icon: 'az az-file',
-          terminal: true,
-          bindable: true,
-          bindOptions: errorPages,
-          removable: true,
-          ...bindingFields(bound['error-page'], 'Errors answer with the default page.')
-        }
-      ]
-    },
-    {
-      id: 'cache',
-      label: 'Cache rules',
-      nodes: [
-        {
-          id: 'cache-static',
-          type: 'Cache rule',
-          icon: 'az az-bolt',
-          name: 'static-assets',
-          status: 'Active',
-          severity: 'success',
-          fields: [{ label: 'Lifetime', value: '30 days' }]
-        },
-        {
-          id: 'cache-api',
-          type: 'Cache rule',
-          icon: 'az az-bolt',
-          name: 'api-bypass',
-          status: 'Active',
-          severity: 'success',
-          fields: [{ label: 'Lifetime', value: 'Bypass' }]
-        }
-      ]
-    },
-    {
-      id: 'integration',
-      label: 'Integration',
-      nodes: [
-        {
-          id: 'integration',
-          type: 'Integration',
-          icon: 'az az-link',
-          name: 'web-app-origin',
-          status: 'Active',
-          severity: 'success',
-          message:
-            'Routes traffic from the service to its origin. It can be re-pointed but not removed.',
-          fields: [{ label: 'Origin', value: 'origin.example.com', copyable: true }]
-        }
-      ]
-    },
-    {
-      id: 'storage',
-      label: 'Storage',
-      nodes: [
-        {
-          id: 'storage',
-          type: 'Storage',
-          icon: 'az az-inbox',
-          name: 'web-app-assets',
-          status: 'Private',
-          severity: 'neutral',
-          terminal: true,
-          fields: [{ label: 'Objects', value: '24 files, 1.2 MB' }]
-        }
-      ]
-    }
-  ])
-
-  const openKeys = ref(['project'])
-  const note = ref('')
-
-  const bind = (event, { id, value }) => {
-    bound[id] = value
-    note.value = `${value} bound to ${id}.`
-  }
-  const remove = (event, id) => {
-    bound[id] = ''
-    note.value = `Removed the ${id} binding.`
-  }
-</script>
-
-<template>
-  <div class="flex flex-col gap-(--spacing-sm)">
-    <div class="rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised)">
-      <TopologyDiagram
-        v-model:open-keys="openKeys"
-        :levels="levels"
-        @bind="bind"
-        @remove="remove"
-        @create="(event, id) => (note = `Create a new ${id}.`)"
-      >
-        <template #actions="{ node }">
-          <Tooltip
-            v-if="node.id === 'domains'"
-            content="Add domain"
-          >
-            <IconButton
-              icon="az az-plus"
-              variant="outline"
-              size="small"
-              aria-label="Add domain"
-              @click="note = 'Add a domain.'"
-            />
-          </Tooltip>
-        </template>
-      </TopologyDiagram>
-    </div>
-    <p
-      role="status"
-      class="text-body-sm text-(--text-muted)"
-    >
-      {{ note }}
-    </p>
-  </div>
-</template>
-```
-
-2 more example(s) in [components/topology-diagram.md](components/topology-diagram.md).
 
 ---
 
