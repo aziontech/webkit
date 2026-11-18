@@ -560,7 +560,7 @@
   })
 
   const loading = ref(false)
-  const refreshInterval = ref(0)
+  const refreshInterval = ref(300)
   let refreshTimer: ReturnType<typeof setTimeout> | undefined
   const refresh = () => {
     if (loading.value) return

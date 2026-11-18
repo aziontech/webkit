@@ -83,12 +83,12 @@
   {
     "name": "date-picker-root",
     "path": "src/components/input/date-picker/date-picker.vue",
-    "limit": "24.4 KB"
+    "limit": "41.5 KB"
   },
   {
     "name": "date-range-picker",
     "path": "src/components/input/date-range-picker/date-range-picker.vue",
-    "limit": "44.85 KB"
+    "limit": "51.05 KB"
   },
   {
     "name": "table-root",
@@ -1080,7 +1080,7 @@
   {
     "name": "locales-es",
     "path": "src/locales/es.ts",
-    "limit": "10.8 KB"
+    "limit": "10.85 KB"
   },
   {
     "name": "phone-input",
@@ -1819,7 +1819,7 @@
   {
     "name": "date-picker",
     "path": "src/components/input/date-picker/index.ts",
-    "limit": "24.6 KB"
+    "limit": "41.7 KB"
   },
   {
     "name": "date-picker-clear",

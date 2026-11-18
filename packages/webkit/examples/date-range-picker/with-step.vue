@@ -7,6 +7,7 @@
     start: '2026-11-10T13:00:00.000Z',
     end: '2026-11-10T14:00:00.000Z'
   })
+  const runQuery = () => {}
 </script>
 
 <template>
@@ -15,5 +16,6 @@
     time-zone="UTC"
     show-step
     aria-label="Trace window"
+    @refresh="runQuery"
   />
 </template>

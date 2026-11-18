@@ -251,7 +251,8 @@ describe('the absolute range opens on the calendar and keeps Apply in view on sh
       const visible = [
         within(panel).getByRole('radio', { name: 'Absolute' }),
         within(panel).getByRole('radio', { name: 'Relative' }),
-        within(absolute).getByText('November 2026'),
+        within(absolute).getByLabelText('Month'),
+        within(absolute).getByLabelText('Year'),
         within(panel).getByText('Timezone'),
         within(panel).getByRole('button', { name: 'Apply' }),
         within(panel).getByRole('button', { name: 'Cancel' })
@@ -295,5 +296,41 @@ describe('the quick ranges start on one inline edge', () => {
     expect(Math.abs(textStart(legend, dir) - textStart(label as Element, dir))).toBeLessThanOrEqual(
       1
     )
+  })
+})
+
+describe('the Unit and Refresh every selects line up', () => {
+  it.each([
+    [320, 'ltr'],
+    [390, 'ltr'],
+    [1280, 'ltr'],
+    [390, 'rtl']
+  ] as const)('same edges and width at %ipx (%s)', async (width, dir) => {
+    await atWidth(width)
+    const view = render(
+      defineComponent({
+        setup: () => () =>
+          h(
+            ConfigProvider,
+            { now: NOW, timeZone: 'UTC', locale: 'en-US', catalogs: LOCALES, dir },
+            { default: () => h(AutoRefresh) }
+          )
+      })
+    )
+    const panel = await openPanel(view, 'date-range-picker')
+    const relativeTab = within(panel).queryByRole('radio', { name: 'Relative' })
+    if (relativeTab && relativeTab.getAttribute('aria-checked') !== 'true') {
+      await fireEvent.click(relativeTab)
+      await nextTick()
+      await frame()
+    }
+    const unit = within(panel).getByTestId('date-range-picker__unit').getBoundingClientRect()
+    const refresh = within(panel)
+      .getByTestId('date-range-picker__refresh-interval')
+      .getBoundingClientRect()
+    expect(unit.width).toBeGreaterThan(0)
+    expect(Math.abs(unit.left - refresh.left)).toBeLessThanOrEqual(0.5)
+    expect(Math.abs(unit.right - refresh.right)).toBeLessThanOrEqual(0.5)
+    expect(Math.abs(unit.width - refresh.width)).toBeLessThanOrEqual(0.5)
   })
 })
