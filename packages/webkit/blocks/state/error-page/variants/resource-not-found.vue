@@ -1,29 +1,26 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
-  import EmptyState from '@aziontech/webkit/empty-state'
+
+  import ErrorPage from '../error-page.vue'
 
   const resourceId = '4821'
 </script>
 
 <template>
-  <div class="layout-boundary">
-    <div class="layout-column flex min-w-0 flex-col">
-      <h1 class="sr-only">Error 404</h1>
-      <EmptyState
-        :title="`Service ${resourceId} not found`"
-        description="No service with this ID exists in the account. It may have been deleted, or the link may be out of date."
-        icon="az az-search"
-        bordered
-      >
-        <template #actions>
-          <Button
-            label="Back to services"
-            variant="primary"
-            size="medium"
-            href="/services"
-          />
-        </template>
-      </EmptyState>
-    </div>
-  </div>
+  <ErrorPage
+    :code="404"
+    error-code="RESOURCE_NOT_FOUND"
+    :title="`Service ${resourceId} not found`"
+    description="No service with this ID exists in the account. It may have been deleted, or the link may be out of date."
+  >
+    <template #actions>
+      <Button
+        label="Back to services"
+        variant="primary"
+        size="medium"
+        icon="az az-arrow-left"
+        href="/services"
+      />
+    </template>
+  </ErrorPage>
 </template>

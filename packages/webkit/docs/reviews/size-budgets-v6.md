@@ -455,3 +455,4 @@ Budget-raise: css-console 24 KB → 24.1 KB (measured 24.01 KB): the same `text-
 Budget-raise: recognition-marquee-section 21.15 KB → 21.2 KB (measured 21.16 KB): `cn` now knows the `title`, `amount` and `tag` type roles, so it no longer drops them when a text colour follows (RV-B1).
 Budget-raise: code-block 32.4 KB → 32.45 KB (measured 32.4 KB): the same `cn` role list (RV-B1).
 Budget-raise: schema-form 61 KB → 61.05 KB: the same `cn` role list (RV-B1), on top of the date range picker raise.
+Budget-raise: flow-diagram-root 13.5 KB → 13.75 KB (measured 13.52 KB): the `uniform` prop (equal-size steps) the edge error page's request path needs (owner decision RV-D1, 2026-11-18).

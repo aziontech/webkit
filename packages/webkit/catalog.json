@@ -4027,7 +4027,8 @@
  "surfaces": {
   "app": "Product UI (the console and other apps). The default for components.",
   "site": "The marketing site (azion.com): page sections, bands, brand and client assets.",
-  "docs": "The documentation site: doc page chrome, callouts, steps, on-this-page."
+  "docs": "The documentation site: doc page chrome, callouts, steps, on-this-page.",
+  "edge": "Pages Azion's edge serves to the visitors of a customer's site (error pages), with no Azion product chrome and no account actions."
  },
  "aliases": {
   "alert-dialog": "confirm-dialog",
@@ -11927,6 +11928,13 @@
      "default": "'start'",
      "required": "false",
      "doc": "Vertical alignment of nodes within the diagram."
+    },
+    {
+     "name": "uniform",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Gives every step the width and height of the largest one, so the steps line up as equal boxes."
     }
    ],
    "slots": [
@@ -12028,6 +12036,13 @@
      "default": "'start'",
      "required": "false",
      "doc": "Vertical alignment of nodes within the diagram."
+    },
+    {
+     "name": "uniform",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Gives every step the width and height of the largest one, so the steps line up as equal boxes."
     }
    ],
    "slots": [
@@ -36404,25 +36419,104 @@
    ],
    "file": "catalog/blocks/state/async-submit.json"
   },
+  "state/edge-error-page": {
+   "name": "EdgeErrorPage",
+   "title": "Blocks/State/EdgeErrorPage",
+   "source": "blocks/state/edge-error-page/edge-error-page.vue",
+   "surface": "edge",
+   "summary": "The page Azion's edge serves to a visitor of a customer's site when a request fails: a standalone page, no Azion product chrome, no account actions. Left-aligned and diagnostic: the `StatusCode` with its reason phrase, a title in plain words, the request path You → Azion edge → Origin drawn with `FlowDiagram` `uniform` (every hop the same width and height, each with a `StatusIndicator`; stacked boxes of the same size on a phone), What happened? and What can I do? side by side, Try again or Go to home page with Go back, then the request details in a `KeyValueList` (request ID with `CopyButton`, `Timestamp` in UTC, edge location, host) and a Served by `Brand` footer. The primary is the 502 (origin unreachable); variants cover 504, 500, 503, 403 (blocked by the site's firewall), 429 and 404. Azion's own console, site and docs use `state/error-page` instead.",
+   "intents": [
+    "edge error page",
+    "502 bad gateway page",
+    "504 gateway timeout page",
+    "origin unreachable page",
+    "origin error page",
+    "503 service unavailable page",
+    "firewall blocked page",
+    "waf blocked request page",
+    "rate limited page",
+    "429 page for visitors",
+    "error page for site visitors",
+    "custom error page",
+    "página de erro do edge",
+    "origem indisponível",
+    "requisição bloqueada pelo firewall",
+    "página de error del edge"
+   ],
+   "skills": [
+    "webkit-errors",
+    "webkit-ui-states",
+    "webkit-microcopy"
+   ],
+   "components": [
+    "Brand",
+    "Button",
+    "CopyButton",
+    "FlowDiagram",
+    "KeyValueList",
+    "StatusCode",
+    "StatusIndicator",
+    "Timestamp"
+   ],
+   "imports": [
+    "@aziontech/webkit/brand",
+    "@aziontech/webkit/button",
+    "@aziontech/webkit/copy-button",
+    "@aziontech/webkit/flow-diagram",
+    "@aziontech/webkit/key-value-list",
+    "@aziontech/webkit/status-code",
+    "@aziontech/webkit/status-indicator",
+    "@aziontech/webkit/timestamp"
+   ],
+   "primary": "Default",
+   "guidelinesSummary": "The page Azion's edge serves to a visitor of a customer's site when the request fails: the site's server is down or slow, it answered with an error, the site's firewall blocked the request, or the visitor sent too many requests. The reader is not an Azion user: it is anyone on the internet who opened `www.example.com`. Their job is to learn, in one look, whose side the problem is on (their connection, Azion's edge or the site's server), what they can do about it, and what to quote to the site owner. The page stands alone: it has no Azion product chrome, no navigation and nothing that needs an Azion account. Two error page families, one per audience: - **Edge** (this block, `surface: edge`): the visitors of your customers' sites. Diagnostic, left-aligned, with the request path. - **Console, site and docs** (`state/error-page`, `surface: app`): Azion's own users on Azion's own pages. Quiet and centred, inside the product shell.",
+   "variants": [
+    {
+     "name": "OriginTimeout"
+    },
+    {
+     "name": "OriginError"
+    },
+    {
+     "name": "OriginUnavailable"
+    },
+    {
+     "name": "Blocked"
+    },
+    {
+     "name": "RateLimited"
+    },
+    {
+     "name": "NotFound"
+    }
+   ],
+   "file": "catalog/blocks/state/edge-error-page.json"
+  },
   "state/error-page": {
    "name": "ErrorPage",
    "title": "Blocks/State/ErrorPage",
    "source": "blocks/state/error-page/error-page.vue",
    "surface": "app",
-   "summary": "The page an app renders when it cannot show the address the user asked for. The primary is the 404: the content region centring an EmptyState whose figure is the 404 numeral art, the title Page not found, one sentence that says the address leads nowhere, and two actions, Go to home (primary) and Docs (outlined, new tab). A visually hidden h1 names the error code the figure shows. Variants cover 403 (no access, with Switch account), 500 (a failure on the server, with Retry, System status and an error reference for support) and a resource that does not exist inside the console (bordered EmptyState in the content column with Back to the list). Built from `EmptyState`, `Button` and the `svg/error-404` and `svg/error-403` numeral art. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
+   "summary": "The error page of Azion's own surfaces (Console, the site, the docs) when a page cannot show what the user asked for. Quiet and traceable: one centred `EmptyState` column with the HTTP code as a `StatusCode` in its figure, a title in plain words, one sentence, at most two `Button`s, and a reference line with the error code, the request ID (with `CopyButton`) and the time (`Timestamp`, UTC) for support. A visually hidden h1 names the code. The primary is the 404 (Go to home and Docs); variants cover 401 (session expired, Sign in), 403 (Request access, Switch account), 429 (Try again, About rate limits), 500 (Retry, System status), 503 (scheduled maintenance) and a missing record inside the console (Back to services). A page body: render it in the default slot of ConsoleLayout (or the site and docs shells); the 401 renders signed out, without the rail. The pages Azion's edge serves to visitors of customer sites use `state/edge-error-page` instead.",
    "intents": [
     "404 page",
     "not found page",
     "page not found",
+    "401 session expired page",
+    "sign in required page",
     "403 forbidden page",
     "access denied page",
+    "429 too many requests page",
     "500 error page",
     "server error page",
+    "503 maintenance page",
     "error page",
+    "console error page",
     "resource not found",
     "página não encontrada",
     "página de erro",
     "acesso negado",
+    "sessão expirada",
     "erro 404",
     "erro 500"
    ],
@@ -36435,24 +36529,33 @@
     "Button",
     "CopyButton",
     "EmptyState",
-    "Error403",
-    "Error404"
+    "StatusCode",
+    "Timestamp"
    ],
    "imports": [
     "@aziontech/webkit/button",
     "@aziontech/webkit/copy-button",
     "@aziontech/webkit/empty-state",
-    "@aziontech/webkit/svg/error-403",
-    "@aziontech/webkit/svg/error-404"
+    "@aziontech/webkit/status-code",
+    "@aziontech/webkit/timestamp"
    ],
    "primary": "Default",
-   "guidelinesSummary": "The page an app renders when it cannot show the address the user asked for: the address leads nowhere (404), the user may not see it (403), or the server failed to build it (500). The user's job is to understand, in one sentence, that the problem is the address or the access and not their work, and to get somewhere useful in one click. The block keeps the error code out of the headline (it is in the figure and in a hidden `h1`) and says what happened in plain words. This block is a page body: render it in the default slot of `ConsoleLayout` (`shell/console`), which owns the rail, the header and the `main`.",
+   "guidelinesSummary": "The page Azion's own surfaces (Console, the site, the docs) render when they cannot show what the user asked for: the address leads nowhere (404), the session ended (401), the user's role does not include the page (403), the account sent too many requests (429), the server failed (500) or the console is in maintenance (503). The reader is an Azion user. Their job is to understand, in one sentence, that the problem is the address, the access or Azion and not their work, to get somewhere useful in one click, and to have the reference support will ask for. Every state has the same quiet, centred shape; only the code, the words and the two buttons change. Two error page families, one per audience: - **Console, site and docs** (this block, `surface: app`): Azion's users on Azion's pages. Quiet and centred, inside the product shell, with the account actions an Azion user needs. - **Edge** (`state/edge-error-page`, `surface: edge`): the visitors of Azion customers' sites. Diagnostic, standalone, with the request path and no account actions. The block is a page body: render it in the default slot of `ConsoleLayout` (`shell/console`), or of the site and docs shells, which own the navigation, the header and the `main`. SessionExpired renders signed out, without the rail.",
    "variants": [
+    {
+     "name": "SessionExpired"
+    },
     {
      "name": "Forbidden"
     },
     {
+     "name": "RateLimited"
+    },
+    {
      "name": "ServerError"
+    },
+    {
+     "name": "Maintenance"
     },
     {
      "name": "ResourceNotFound"

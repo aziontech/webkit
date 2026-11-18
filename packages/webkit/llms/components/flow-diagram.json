@@ -16,6 +16,7 @@
  "setup": null,
  "useWhen": [
   "Showing an ordered pipeline or request path as steps joined by connectors — build → deploy → serve, or a request through a load balancer, a function and its bindings.",
+  "A request path whose steps must read as equal boxes (You → Azion edge → Origin on an error page) — set `uniform`.",
   "A step fans out to several parallel targets and (optionally) back in — wrap those steps in `FlowDiagram.Parallel`.",
   "A node with custom content (a card with several rows) where connectors must touch specific parts — mark them with `FlowDiagram.Anchor`."
  ],
@@ -43,6 +44,13 @@
    "default": "'start'",
    "required": "false",
    "doc": "Vertical alignment of nodes within the diagram."
+  },
+  {
+   "name": "uniform",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Gives every step the width and height of the largest one, so the steps line up as equal boxes."
   }
  ],
  "events": [],

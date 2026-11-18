@@ -14,10 +14,13 @@
   export interface FlowDiagramProps {
     /** Vertical alignment of nodes within the diagram. */
     align?: FlowDiagramAlign
+    /** Gives every step the width and height of the largest one, so the steps line up as equal boxes. */
+    uniform?: boolean
   }
 
   const props = withDefaults(defineProps<FlowDiagramProps>(), {
-    align: 'start'
+    align: 'start',
+    uniform: false
   })
 
   defineSlots<{
@@ -67,7 +70,8 @@
     <div
       ref="containerEl"
       :data-align="align"
-      class="relative flex w-fit flex-row gap-(--spacing-xl) text-(--text-default) data-[align=center]:items-center data-[align=start]:items-start [&>[data-flow-leading]_[data-slot=flow-port][data-side=end]]:hidden [&>[data-flow-trailing]_[data-slot=flow-port][data-side=start]]:hidden [&_[data-flow-terminal]_[data-slot=flow-port][data-side=start]]:hidden"
+      :data-uniform="uniform || null"
+      class="relative flex w-fit flex-row gap-(--spacing-xl) text-(--text-default) data-[align=center]:items-center data-[align=start]:items-start data-[uniform]:grid data-[uniform]:auto-cols-fr data-[uniform]:grid-flow-col data-[uniform]:*:self-stretch [&>[data-flow-leading]_[data-slot=flow-port][data-side=end]]:hidden [&>[data-flow-trailing]_[data-slot=flow-port][data-side=start]]:hidden [&_[data-flow-terminal]_[data-slot=flow-port][data-side=start]]:hidden"
     >
       <svg
         v-if="paths.length"

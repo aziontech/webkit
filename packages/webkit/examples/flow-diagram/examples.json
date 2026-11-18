@@ -14,7 +14,7 @@
     },
     {
       "name": "Branches",
-      "summary": "A leading parallel fans in and a trailing parallel fans out — connectors route correctly at the edges of the sequence.",
+      "summary": "A leading parallel fans in and a trailing parallel fans out \u2014 connectors route correctly at the edges of the sequence.",
       "file": "branches.vue"
     },
     {
@@ -31,6 +31,11 @@
       "name": "Disabled",
       "summary": "A disabled node with reduced-opacity connectors.",
       "file": "disabled.vue"
+    },
+    {
+      "name": "Uniform",
+      "summary": "Steps with different amounts of text drawn as identical boxes: every step takes the width and height of the largest one.",
+      "file": "uniform.vue"
     }
   ]
 }
