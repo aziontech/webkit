@@ -12,7 +12,7 @@
   },
   {
    "name": "RelativeOnly",
-   "summary": "`range-selector-mode=\"relative-only\"` with the product's own quick ranges, for a metrics interval that is always measured back from now.",
+   "summary": "`range-selector-mode=\"relative-only\"` with the default quick ranges (Today to Last year) above the custom duration, for a metrics interval that is always measured back from now.",
    "file": "examples/date-range-picker/relative-only.vue"
   }
  ]

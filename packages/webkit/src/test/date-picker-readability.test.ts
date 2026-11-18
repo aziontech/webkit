@@ -148,6 +148,49 @@ describe('date pickers stay readable at every width', () => {
       expect(panel.getBoundingClientRect().width).toBeLessThanOrEqual(thin)
     })
 
+    it.each(['en-US', 'pt-BR'])(
+      'DateRangePicker relative only: two columns of quick ranges, read down each, the custom duration below and Apply in view (%s)',
+      async (locale) => {
+        await atWidth(width)
+        const view = mount(RelativeOnly, locale)
+        const panel = await openPanel(view, 'date-range-picker')
+        expect(cutOff(panel)).toEqual([])
+        expect(outside(panel, width)).toEqual([])
+        const options = within(panel).getAllByTestId('date-range-picker__option')
+        expect(options).toHaveLength(12)
+        const boxes = options.map((option) => option.getBoundingClientRect())
+        const first = boxes.slice(0, 6)
+        const second = boxes.slice(6)
+        for (const column of [first, second]) {
+          for (const box of column)
+            expect(Math.abs(box.left - (column[0] as DOMRect).left)).toBeLessThanOrEqual(1)
+          for (let i = 1; i < column.length; i += 1) {
+            expect((column[i] as DOMRect).top).toBeGreaterThan((column[i - 1] as DOMRect).top)
+          }
+        }
+        expect((second[0] as DOMRect).left).toBeGreaterThan((first[0] as DOMRect).right - 1)
+        for (const option of options) {
+          const label = option.querySelector('span') as HTMLElement
+          const range = document.createRange()
+          range.selectNodeContents(label)
+          expect(range.getBoundingClientRect().right).toBeLessThanOrEqual(
+            option.getBoundingClientRect().right + 1
+          )
+        }
+        const quick = within(panel).getByTestId('date-range-picker__quick').getBoundingClientRect()
+        const custom = within(panel)
+          .getByTestId('date-range-picker__custom')
+          .getBoundingClientRect()
+        expect(custom.top).toBeGreaterThanOrEqual(quick.bottom - 1)
+        const apply = within(panel)
+          .getByRole('button', { name: /Apply|Aplicar/ })
+          .getBoundingClientRect()
+        const box = panel.getBoundingClientRect()
+        expect(apply.bottom).toBeLessThanOrEqual(Math.min(box.bottom, window.innerHeight) + 1)
+        expect(apply.top).toBeGreaterThanOrEqual(box.top - 1)
+      }
+    )
+
     it('DateRangePicker until now: the open end reads in full', async () => {
       await atWidth(width)
       const view = mount(UntilNow)

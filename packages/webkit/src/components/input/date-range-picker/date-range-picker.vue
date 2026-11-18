@@ -307,6 +307,8 @@
 
   const CUSTOM = '__custom'
 
+  const quickRows = computed<number>(() => Math.max(1, Math.ceil(props.relativeOptions.length / 2)))
+
   const resetRefresh = (): void => {
     draftRefresh.value = refreshInterval.value > 0 ? refreshInterval.value : 0
   }
@@ -805,12 +807,52 @@
             class="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain data-[size=small]:w-[calc(7*var(--size-8)_+_2*var(--spacing-sm))] data-[size=medium]:w-[calc(7*var(--size-9)_+_2*var(--spacing-sm))] data-[size=large]:w-[calc(7*var(--size-10)_+_2*var(--spacing-sm))] max-sm:w-full!"
             :data-testid="`${testId}__relative`"
           >
+            <fieldset
+              class="@container m-0 flex min-w-0 shrink-0 flex-col border-x-0 border-t-0 border-b border-solid border-(--border-default) px-(--spacing-2xs) py-(--spacing-xs)"
+              :data-testid="`${testId}__quick`"
+            >
+              <legend
+                :data-testid="`${testId}__legend`"
+                class="text-label-sm float-start w-full px-(--spacing-xs) py-(--spacing-2xs) text-(--text-muted)"
+              >
+                {{ t('dateRangePicker.quickRanges') }}
+              </legend>
+              <div
+                :style="{ '--date-range-picker-quick-rows': quickRows }"
+                class="grid grid-cols-1 gap-(--spacing-2xs) @[15rem]:grid-flow-col @[15rem]:grid-cols-2 @[15rem]:grid-rows-[repeat(var(--date-range-picker-quick-rows),auto)]"
+              >
+                <label
+                  v-for="option in relativeOptions"
+                  :key="option.key"
+                  :data-selected="draftKey === option.key || null"
+                  :data-testid="`${testId}__option`"
+                  class="text-label-sm flex min-h-8 cursor-pointer items-center justify-between gap-(--spacing-xs) rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-(--ring-color) has-[:focus-visible]:ring-inset data-[selected]:bg-(--bg-selected) motion-reduce:transition-none pointer-coarse:min-h-11"
+                >
+                  <input
+                    :checked="draftKey === option.key"
+                    type="radio"
+                    :name="`${uid}-relative`"
+                    :value="option.key"
+                    :data-autofocus="(!offersAbsolute && draftKey === option.key) || null"
+                    class="sr-only"
+                    @change="pickOption(option.key)"
+                  />
+                  <span class="min-w-0 [overflow-wrap:anywhere]">{{ optionLabel(option) }}</span>
+                  <i
+                    v-if="draftKey === option.key"
+                    class="az az-check shrink-0 text-[length:inherit] leading-none text-(--text-default)"
+                    aria-hidden="true"
+                  />
+                </label>
+              </div>
+            </fieldset>
+
             <div
               role="group"
               :aria-labelledby="customLabelId"
               :data-selected="draftKey === CUSTOM || null"
               :data-testid="`${testId}__custom`"
-              class="flex flex-col gap-(--spacing-xs) border-b border-(--border-default) p-(--spacing-sm)"
+              class="flex flex-col gap-(--spacing-xs) p-(--spacing-sm)"
             >
               <span
                 :id="customLabelId"
@@ -866,43 +908,6 @@
                 </div>
               </div>
             </div>
-
-            <fieldset
-              class="@container m-0 flex min-w-0 flex-col border-0 px-(--spacing-2xs) py-(--spacing-xs)"
-              :data-testid="`${testId}__quick`"
-            >
-              <legend
-                :data-testid="`${testId}__legend`"
-                class="text-label-sm float-start w-full px-(--spacing-xs) py-(--spacing-2xs) text-(--text-muted)"
-              >
-                {{ t('dateRangePicker.quickRanges') }}
-              </legend>
-              <div class="grid grid-cols-1 gap-(--spacing-2xs) @[15rem]:grid-cols-2">
-                <label
-                  v-for="option in relativeOptions"
-                  :key="option.key"
-                  :data-selected="draftKey === option.key || null"
-                  :data-testid="`${testId}__option`"
-                  class="text-label-sm flex min-h-8 cursor-pointer items-center justify-between gap-(--spacing-xs) rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-(--ring-color) has-[:focus-visible]:ring-inset data-[selected]:bg-(--bg-selected) motion-reduce:transition-none pointer-coarse:min-h-11"
-                >
-                  <input
-                    :checked="draftKey === option.key"
-                    type="radio"
-                    :name="`${uid}-relative`"
-                    :value="option.key"
-                    :data-autofocus="(!offersAbsolute && draftKey === option.key) || null"
-                    class="sr-only"
-                    @change="pickOption(option.key)"
-                  />
-                  <span class="min-w-0 [overflow-wrap:anywhere]">{{ optionLabel(option) }}</span>
-                  <i
-                    v-if="draftKey === option.key"
-                    class="az az-check shrink-0 text-[length:inherit] leading-none text-(--text-default)"
-                    aria-hidden="true"
-                  />
-                </label>
-              </div>
-            </fieldset>
           </div>
 
           <div

@@ -34,13 +34,18 @@ export const REFRESH_UNITS: DateRangeRefreshUnit[] = ['second', 'minute', 'hour'
 export const REFRESH_INTERVALS: number[] = [10, 30, 60, 300, 900, 1800, 3600]
 
 export const DEFAULT_RELATIVE_OPTIONS: RelativeOption[] = [
+  { key: 'today', amount: 1, unit: 'day', snap: true },
+  { key: 'this-week', amount: 1, unit: 'week', snap: true },
+  { key: 'last-1-minute', amount: 1, unit: 'minute' },
   { key: 'last-5-minutes', amount: 5, unit: 'minute' },
   { key: 'last-15-minutes', amount: 15, unit: 'minute' },
+  { key: 'last-30-minutes', amount: 30, unit: 'minute' },
   { key: 'last-1-hour', amount: 1, unit: 'hour' },
-  { key: 'last-6-hours', amount: 6, unit: 'hour' },
   { key: 'last-24-hours', amount: 24, unit: 'hour' },
   { key: 'last-7-days', amount: 7, unit: 'day' },
-  { key: 'last-30-days', amount: 30, unit: 'day' }
+  { key: 'last-30-days', amount: 30, unit: 'day' },
+  { key: 'last-90-days', amount: 90, unit: 'day' },
+  { key: 'last-1-year', amount: 1, unit: 'year' }
 ]
 
 const UNIT_MS: Record<'second' | 'minute' | 'hour' | 'day' | 'week', number> = {
