@@ -4062,6 +4062,7 @@
   "logo-cloud": "logo-wall",
   "modal": "dialog",
   "newsletter": "newsletter-section",
+  "node-diagram": "flow-diagram",
   "notice": "alert",
   "notification": "toast",
   "segmented-control": "toggle-group",
@@ -4165,6 +4166,7 @@
   "feature-widgets": "feature-widgets-section",
   "filter-menu-chips": "filter-menu-chip-group",
   "flow": "flow-diagram",
+  "flow-diagram-parallel": "flow-diagram-group",
   "frame-box": "registration-frame",
   "global-header": "app-header",
   "help-panel-links": "help-panel-footer",
@@ -4225,6 +4227,7 @@
   "texture-material": "texture",
   "ticker": "marquee",
   "topic": "feature-item",
+  "topology-diagram": "flow-diagram",
   "use-cases": "customer-use-cases-section",
   "use-heading-nav": "use-heading-navigation",
   "webkit-provider": "config-provider"
@@ -11925,76 +11928,69 @@
    "treeShakeableImport": "@aziontech/webkit/flow-diagram-root",
    "subcomponents": [
     "@aziontech/webkit/flow-diagram-node",
-    "@aziontech/webkit/flow-diagram-parallel",
-    "@aziontech/webkit/flow-diagram-anchor"
+    "@aziontech/webkit/flow-diagram-group",
+    "@aziontech/webkit/flow-diagram-anchor",
+    "@aziontech/webkit/flow-diagram-header",
+    "@aziontech/webkit/flow-diagram-title",
+    "@aziontech/webkit/flow-diagram-description",
+    "@aziontech/webkit/flow-diagram-footer",
+    "@aziontech/webkit/flow-diagram-item",
+    "@aziontech/webkit/flow-diagram-bind"
+   ],
+   "models": [
+    "openKeys"
    ],
    "category": "data",
    "structure": "composition",
    "props": [
     {
+     "name": "nodes",
+     "type": "FlowDiagramNodeData[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Nodes of a data-driven diagram; each renders as a full card. Leave empty to compose the parts by hand."
+    },
+    {
+     "name": "edges",
+     "type": "FlowDiagramEdgeData[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Connectors between nodes by id; they also decide the columns. Empty joins each step to the next."
+    },
+    {
+     "name": "orientation",
+     "type": "'horizontal' | 'vertical' | 'responsive'",
+     "default": "'responsive'",
+     "required": "false",
+     "doc": "Lays the steps out in a row, in a column, or in a row that stacks when its container is narrow."
+    },
+    {
      "name": "align",
      "type": "'start' | 'center'",
      "default": "'start'",
      "required": "false",
-     "doc": "Vertical alignment of nodes within the diagram."
+     "doc": "Vertical alignment of the steps in a row."
     },
     {
      "name": "uniform",
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Gives every step the width and height of the largest one, so the steps line up as equal boxes."
-    }
-   ],
-   "slots": [
-    {
-     "name": "default",
-     "scope": "—",
-     "notes": "Diagram content: `flow-diagram-node` and `flow-diagram-parallel`, in flow order."
-    }
-   ],
-   "surface": "app",
-   "examplesFile": "catalog/examples/flow-diagram.json",
-   "docsFile": "catalog/components/flow-diagram.json"
-  },
-  "topology-diagram": {
-   "import": "@aziontech/webkit/topology-diagram",
-   "target": "./src/components/data/topology-diagram/topology-diagram.vue",
-   "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/topology-diagram",
-   "models": [
-    "openKeys"
-   ],
-   "category": "data",
-   "structure": "monolithic",
-   "props": [
-    {
-     "name": "levels",
-     "type": "TopologyDiagramLevel[]",
-     "default": "[]",
-     "required": "false",
-     "doc": "Columns of the diagram, from the entry point to the last dependency."
+     "doc": "Gives every step the width and height of the largest one."
     },
     {
      "name": "loading",
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Shows placeholder cards while the topology loads."
-    },
-    {
-     "name": "orientation",
-     "type": "TopologyDiagramOrientation",
-     "default": "'horizontal'",
-     "required": "false",
-     "doc": "Direction the levels run: side by side, or stacked from top to bottom for a narrow screen."
+     "doc": "Shows placeholder steps while the diagram loads."
     },
     {
      "name": "ariaLabel",
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Accessible name of the diagram. Empty uses the locale catalog (`Deployment topology`)."
+     "doc": "Accessible name of the diagram. Empty uses the locale catalog (`Diagram`)."
     },
     {
      "name": "openKeys",
@@ -12004,38 +12000,26 @@
      "doc": "Two-way value (`v-model:openKeys`)."
     }
    ],
-   "events": [
-    {
-     "name": "bind",
-     "payload": "(event: MouseEvent | KeyboardEvent, binding: { id: string; value: string })",
-     "notes": "A pending pick was confirmed with Apply; `id` is the node's id, `value` the picked option. Picking an option no longer emits on its own (v6)."
-    },
-    {
-     "name": "remove",
-     "payload": "(event: MouseEvent, id: string)",
-     "notes": "Remove was activated on a bound, removable node."
-    },
-    {
-     "name": "create",
-     "payload": "(event: MouseEvent | KeyboardEvent, id: string)",
-     "notes": "Create was picked in the bind control."
-    }
-   ],
    "slots": [
     {
+     "name": "default",
+     "scope": "—",
+     "notes": "Composed mode: nodes and groups, in flow order."
+    },
+    {
      "name": "actions",
-     "scope": "{ node: TopologyDiagramNodeData }",
-     "notes": "Extra controls in a node's identity row, before the bind control."
+     "scope": "{ node: FlowDiagramNodeData }",
+     "notes": "Data mode: controls at the end of a node's title row."
     },
     {
      "name": "empty",
      "scope": "—",
-     "notes": "Replaces the default empty state (the package `EmptyState`, small, `topologyDiagram.emptyTitle`) shown when there are no levels."
+     "notes": "Replaces the `EmptyState` shown when there are no nodes."
     }
    ],
    "surface": "app",
-   "examplesFile": "catalog/examples/topology-diagram.json",
-   "docsFile": "catalog/components/topology-diagram.json"
+   "examplesFile": "catalog/examples/flow-diagram.json",
+   "docsFile": "catalog/components/flow-diagram.json"
   },
   "flow-diagram-root": {
    "import": "@aziontech/webkit/flow-diagram-root",
@@ -12043,29 +12027,84 @@
    "kind": "root",
    "rootOf": "flow-diagram",
    "treeShakeableImport": "@aziontech/webkit/flow-diagram-root",
+   "models": [
+    "openKeys"
+   ],
    "category": "data",
    "structure": "composition",
    "props": [
+    {
+     "name": "nodes",
+     "type": "FlowDiagramNodeData[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Nodes of a data-driven diagram; each renders as a full card. Leave empty to compose the parts by hand."
+    },
+    {
+     "name": "edges",
+     "type": "FlowDiagramEdgeData[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Connectors between nodes by id; they also decide the columns. Empty joins each step to the next."
+    },
+    {
+     "name": "orientation",
+     "type": "'horizontal' | 'vertical' | 'responsive'",
+     "default": "'responsive'",
+     "required": "false",
+     "doc": "Lays the steps out in a row, in a column, or in a row that stacks when its container is narrow."
+    },
     {
      "name": "align",
      "type": "'start' | 'center'",
      "default": "'start'",
      "required": "false",
-     "doc": "Vertical alignment of nodes within the diagram."
+     "doc": "Vertical alignment of the steps in a row."
     },
     {
      "name": "uniform",
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Gives every step the width and height of the largest one, so the steps line up as equal boxes."
+     "doc": "Gives every step the width and height of the largest one."
+    },
+    {
+     "name": "loading",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows placeholder steps while the diagram loads."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the diagram. Empty uses the locale catalog (`Diagram`)."
+    },
+    {
+     "name": "openKeys",
+     "type": "string[]",
+     "default": "() => []",
+     "required": "false",
+     "doc": "Two-way value (`v-model:openKeys`)."
     }
    ],
    "slots": [
     {
      "name": "default",
      "scope": "—",
-     "notes": "Diagram content: `flow-diagram-node` and `flow-diagram-parallel`, in flow order."
+     "notes": "Composed mode: nodes and groups, in flow order."
+    },
+    {
+     "name": "actions",
+     "scope": "{ node: FlowDiagramNodeData }",
+     "notes": "Data mode: controls at the end of a node's title row."
+    },
+    {
+     "name": "empty",
+     "scope": "—",
+     "notes": "Replaces the `EmptyState` shown when there are no nodes."
     }
    ],
    "surface": "app",
@@ -12079,12 +12118,12 @@
    "treeShakeableImport": "@aziontech/webkit/flow-diagram-node",
    "surface": "app"
   },
-  "flow-diagram-parallel": {
-   "import": "@aziontech/webkit/flow-diagram-parallel",
-   "target": "./src/components/data/flow-diagram/flow-diagram-parallel/flow-diagram-parallel.vue",
+  "flow-diagram-group": {
+   "import": "@aziontech/webkit/flow-diagram-group",
+   "target": "./src/components/data/flow-diagram/flow-diagram-group/flow-diagram-group.vue",
    "kind": "subcomponent",
    "parent": "flow-diagram",
-   "treeShakeableImport": "@aziontech/webkit/flow-diagram-parallel",
+   "treeShakeableImport": "@aziontech/webkit/flow-diagram-group",
    "surface": "app"
   },
   "flow-diagram-anchor": {
@@ -12095,266 +12134,52 @@
    "treeShakeableImport": "@aziontech/webkit/flow-diagram-anchor",
    "surface": "app"
   },
-  "node-diagram": {
-   "import": "@aziontech/webkit/node-diagram",
-   "target": "./src/components/data/node-diagram/index.ts",
-   "kind": "component",
-   "compoundRoot": true,
-   "treeShakeableImport": "@aziontech/webkit/node-diagram-root",
-   "subcomponents": [
-    "@aziontech/webkit/node-diagram-node",
-    "@aziontech/webkit/node-diagram-group",
-    "@aziontech/webkit/node-diagram-anchor",
-    "@aziontech/webkit/node-diagram-header",
-    "@aziontech/webkit/node-diagram-title",
-    "@aziontech/webkit/node-diagram-description",
-    "@aziontech/webkit/node-diagram-footer",
-    "@aziontech/webkit/node-diagram-item",
-    "@aziontech/webkit/node-diagram-bind"
-   ],
-   "models": [
-    "openKeys"
-   ],
-   "category": "data",
-   "structure": "composition",
-   "props": [
-    {
-     "name": "nodes",
-     "type": "NodeDiagramNodeData[]",
-     "default": "[]",
-     "required": "false",
-     "doc": "Nodes of a data-driven diagram; each renders as a full card. Leave empty to compose the parts by hand."
-    },
-    {
-     "name": "edges",
-     "type": "NodeDiagramEdgeData[]",
-     "default": "[]",
-     "required": "false",
-     "doc": "Connectors between nodes by id; they also decide the columns. Empty joins each step to the next."
-    },
-    {
-     "name": "orientation",
-     "type": "'horizontal' | 'vertical' | 'responsive'",
-     "default": "'responsive'",
-     "required": "false",
-     "doc": "Lays the steps out in a row, in a column, or in a row that stacks when its container is narrow."
-    },
-    {
-     "name": "align",
-     "type": "'start' | 'center'",
-     "default": "'start'",
-     "required": "false",
-     "doc": "Vertical alignment of the steps in a row."
-    },
-    {
-     "name": "uniform",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Gives every step the width and height of the largest one."
-    },
-    {
-     "name": "loading",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Shows placeholder steps while the diagram loads."
-    },
-    {
-     "name": "ariaLabel",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Accessible name of the diagram. Empty uses the locale catalog (`Diagram`)."
-    },
-    {
-     "name": "openKeys",
-     "type": "string[]",
-     "default": "() => []",
-     "required": "false",
-     "doc": "Two-way value (`v-model:openKeys`)."
-    }
-   ],
-   "slots": [
-    {
-     "name": "default",
-     "scope": "—",
-     "notes": "Composed mode: nodes and groups, in flow order."
-    },
-    {
-     "name": "actions",
-     "scope": "{ node: NodeDiagramNodeData }",
-     "notes": "Data mode: controls at the end of a node's title row."
-    },
-    {
-     "name": "empty",
-     "scope": "—",
-     "notes": "Replaces the `EmptyState` shown when there are no nodes."
-    }
-   ],
-   "surface": "app",
-   "examplesFile": "catalog/examples/node-diagram.json",
-   "docsFile": "catalog/components/node-diagram.json"
-  },
-  "node-diagram-root": {
-   "import": "@aziontech/webkit/node-diagram-root",
-   "target": "./src/components/data/node-diagram/node-diagram.vue",
-   "kind": "root",
-   "rootOf": "node-diagram",
-   "treeShakeableImport": "@aziontech/webkit/node-diagram-root",
-   "models": [
-    "openKeys"
-   ],
-   "category": "data",
-   "structure": "composition",
-   "props": [
-    {
-     "name": "nodes",
-     "type": "NodeDiagramNodeData[]",
-     "default": "[]",
-     "required": "false",
-     "doc": "Nodes of a data-driven diagram; each renders as a full card. Leave empty to compose the parts by hand."
-    },
-    {
-     "name": "edges",
-     "type": "NodeDiagramEdgeData[]",
-     "default": "[]",
-     "required": "false",
-     "doc": "Connectors between nodes by id; they also decide the columns. Empty joins each step to the next."
-    },
-    {
-     "name": "orientation",
-     "type": "'horizontal' | 'vertical' | 'responsive'",
-     "default": "'responsive'",
-     "required": "false",
-     "doc": "Lays the steps out in a row, in a column, or in a row that stacks when its container is narrow."
-    },
-    {
-     "name": "align",
-     "type": "'start' | 'center'",
-     "default": "'start'",
-     "required": "false",
-     "doc": "Vertical alignment of the steps in a row."
-    },
-    {
-     "name": "uniform",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Gives every step the width and height of the largest one."
-    },
-    {
-     "name": "loading",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Shows placeholder steps while the diagram loads."
-    },
-    {
-     "name": "ariaLabel",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Accessible name of the diagram. Empty uses the locale catalog (`Diagram`)."
-    },
-    {
-     "name": "openKeys",
-     "type": "string[]",
-     "default": "() => []",
-     "required": "false",
-     "doc": "Two-way value (`v-model:openKeys`)."
-    }
-   ],
-   "slots": [
-    {
-     "name": "default",
-     "scope": "—",
-     "notes": "Composed mode: nodes and groups, in flow order."
-    },
-    {
-     "name": "actions",
-     "scope": "{ node: NodeDiagramNodeData }",
-     "notes": "Data mode: controls at the end of a node's title row."
-    },
-    {
-     "name": "empty",
-     "scope": "—",
-     "notes": "Replaces the `EmptyState` shown when there are no nodes."
-    }
-   ],
-   "surface": "app",
-   "docsFile": "catalog/components/node-diagram-root.json"
-  },
-  "node-diagram-node": {
-   "import": "@aziontech/webkit/node-diagram-node",
-   "target": "./src/components/data/node-diagram/node-diagram-node/node-diagram-node.vue",
+  "flow-diagram-header": {
+   "import": "@aziontech/webkit/flow-diagram-header",
+   "target": "./src/components/data/flow-diagram/flow-diagram-header/flow-diagram-header.vue",
    "kind": "subcomponent",
-   "parent": "node-diagram",
-   "treeShakeableImport": "@aziontech/webkit/node-diagram-node",
+   "parent": "flow-diagram",
+   "treeShakeableImport": "@aziontech/webkit/flow-diagram-header",
    "surface": "app"
   },
-  "node-diagram-group": {
-   "import": "@aziontech/webkit/node-diagram-group",
-   "target": "./src/components/data/node-diagram/node-diagram-group/node-diagram-group.vue",
+  "flow-diagram-title": {
+   "import": "@aziontech/webkit/flow-diagram-title",
+   "target": "./src/components/data/flow-diagram/flow-diagram-title/flow-diagram-title.vue",
    "kind": "subcomponent",
-   "parent": "node-diagram",
-   "treeShakeableImport": "@aziontech/webkit/node-diagram-group",
+   "parent": "flow-diagram",
+   "treeShakeableImport": "@aziontech/webkit/flow-diagram-title",
    "surface": "app"
   },
-  "node-diagram-anchor": {
-   "import": "@aziontech/webkit/node-diagram-anchor",
-   "target": "./src/components/data/node-diagram/node-diagram-anchor/node-diagram-anchor.vue",
+  "flow-diagram-description": {
+   "import": "@aziontech/webkit/flow-diagram-description",
+   "target": "./src/components/data/flow-diagram/flow-diagram-description/flow-diagram-description.vue",
    "kind": "subcomponent",
-   "parent": "node-diagram",
-   "treeShakeableImport": "@aziontech/webkit/node-diagram-anchor",
+   "parent": "flow-diagram",
+   "treeShakeableImport": "@aziontech/webkit/flow-diagram-description",
    "surface": "app"
   },
-  "node-diagram-header": {
-   "import": "@aziontech/webkit/node-diagram-header",
-   "target": "./src/components/data/node-diagram/node-diagram-header/node-diagram-header.vue",
+  "flow-diagram-footer": {
+   "import": "@aziontech/webkit/flow-diagram-footer",
+   "target": "./src/components/data/flow-diagram/flow-diagram-footer/flow-diagram-footer.vue",
    "kind": "subcomponent",
-   "parent": "node-diagram",
-   "treeShakeableImport": "@aziontech/webkit/node-diagram-header",
+   "parent": "flow-diagram",
+   "treeShakeableImport": "@aziontech/webkit/flow-diagram-footer",
    "surface": "app"
   },
-  "node-diagram-title": {
-   "import": "@aziontech/webkit/node-diagram-title",
-   "target": "./src/components/data/node-diagram/node-diagram-title/node-diagram-title.vue",
+  "flow-diagram-item": {
+   "import": "@aziontech/webkit/flow-diagram-item",
+   "target": "./src/components/data/flow-diagram/flow-diagram-item/flow-diagram-item.vue",
    "kind": "subcomponent",
-   "parent": "node-diagram",
-   "treeShakeableImport": "@aziontech/webkit/node-diagram-title",
+   "parent": "flow-diagram",
+   "treeShakeableImport": "@aziontech/webkit/flow-diagram-item",
    "surface": "app"
   },
-  "node-diagram-description": {
-   "import": "@aziontech/webkit/node-diagram-description",
-   "target": "./src/components/data/node-diagram/node-diagram-description/node-diagram-description.vue",
+  "flow-diagram-bind": {
+   "import": "@aziontech/webkit/flow-diagram-bind",
+   "target": "./src/components/data/flow-diagram/flow-diagram-bind/flow-diagram-bind.vue",
    "kind": "subcomponent",
-   "parent": "node-diagram",
-   "treeShakeableImport": "@aziontech/webkit/node-diagram-description",
-   "surface": "app"
-  },
-  "node-diagram-footer": {
-   "import": "@aziontech/webkit/node-diagram-footer",
-   "target": "./src/components/data/node-diagram/node-diagram-footer/node-diagram-footer.vue",
-   "kind": "subcomponent",
-   "parent": "node-diagram",
-   "treeShakeableImport": "@aziontech/webkit/node-diagram-footer",
-   "surface": "app"
-  },
-  "node-diagram-item": {
-   "import": "@aziontech/webkit/node-diagram-item",
-   "target": "./src/components/data/node-diagram/node-diagram-item/node-diagram-item.vue",
-   "kind": "subcomponent",
-   "parent": "node-diagram",
-   "treeShakeableImport": "@aziontech/webkit/node-diagram-item",
-   "surface": "app"
-  },
-  "node-diagram-bind": {
-   "import": "@aziontech/webkit/node-diagram-bind",
-   "target": "./src/components/data/node-diagram/node-diagram-bind/node-diagram-bind.vue",
-   "kind": "subcomponent",
-   "parent": "node-diagram",
-   "treeShakeableImport": "@aziontech/webkit/node-diagram-bind",
+   "parent": "flow-diagram",
+   "treeShakeableImport": "@aziontech/webkit/flow-diagram-bind",
    "attached": false,
    "surface": "app"
   },
@@ -35075,7 +34900,7 @@
    "title": "Blocks/Detail/ResourceDetail",
    "source": "blocks/detail/resource-detail/resource-detail.vue",
    "surface": "app",
-   "summary": "The Overview tab of a resource detail page: the full-bleed tab bar, sticky while the layout scrolls, then the column that opens on the resource summary card. The resource overview follows it with Get started for a resource made from the CLI, and the same page plots its Versions tab (the versions table) and its Build tab (repository, build configuration and token bands); the service overview follows the summary with the production checklist and the deployment topology. The summary card on its own, in its resource, service and policy shapes, is the Resource, Service and Policy variants: a subject band with the primary link and the actions, a band of labelled facts, and a state band on the canvas fill. A deployment's own page (success, failure, queued) is the DeploymentLogs template and one function run is the Invocations template. The FirstDeploy variant draws the summary cards before and during the first deploy, ResourceBuildConnected the Build tab with a connected repository, and ApplicationBuild the application page with a Build tab and the project drop target. The Application variant is a whole application page with Overview, Versions, Deployments and a Topology tab built on `TopologyDiagram`, whose staged binds deploy through a `Drawer` and the Edit and Redeploy toast. The version page of a resource is the VersionDetail template and the deploy drawers opened from these pages are the DeployDrawer template (Templates/Platform/Create/DeployDrawer). The Deployments tab of a resource and of a service is the TableView controls row over a deployments table, scoped to the resource (the resource tab adds a small Deployments heading with Documentation and an outlined Deploy action); the service Settings tab is a variant of Templates/Platform/Edit/EditResource. Built from `PageHeader`, `PageTabs`, `SectionHeader`, `SettingsSection`, `SettingsRow`, `SaveBar`, `Tabs`, `DataTable`, `EmptyState`, `InputGroupRoot`, `Card`, `DropdownMenu`, `Popover`, `Accordion`, `TopologyDiagram`, `Item`, `Drawer`, `Alert`, `CodeBlock` and `ToggleGroup`; the summary card variants add `Button`, `IconButton`, `Tag`, `StatusIndicator`, `Avatar`, `CopyButton` and `Tooltip`. A page body for ConsoleLayout: the layout owns the rail, the header with the breadcrumb (a service's environment crumb is its `breadcrumbs` slot) and the main.",
+   "summary": "The Overview tab of a resource detail page: the full-bleed tab bar, sticky while the layout scrolls, then the column that opens on the resource summary card. The resource overview follows it with Get started for a resource made from the CLI, and the same page plots its Versions tab (the versions table) and its Build tab (repository, build configuration and token bands); the service overview follows the summary with the production checklist and the deployment topology. The summary card on its own, in its resource, service and policy shapes, is the Resource, Service and Policy variants: a subject band with the primary link and the actions, a band of labelled facts, and a state band on the canvas fill. A deployment's own page (success, failure, queued) is the DeploymentLogs template and one function run is the Invocations template. The FirstDeploy variant draws the summary cards before and during the first deploy, ResourceBuildConnected the Build tab with a connected repository, and ApplicationBuild the application page with a Build tab and the project drop target. The Application variant is a whole application page with Overview, Versions, Deployments and a Topology tab built on `FlowDiagram`, whose staged binds deploy through a `Drawer` and the Edit and Redeploy toast. The version page of a resource is the VersionDetail template and the deploy drawers opened from these pages are the DeployDrawer template (Templates/Platform/Create/DeployDrawer). The Deployments tab of a resource and of a service is the TableView controls row over a deployments table, scoped to the resource (the resource tab adds a small Deployments heading with Documentation and an outlined Deploy action); the service Settings tab is a variant of Templates/Platform/Edit/EditResource. Built from `PageHeader`, `PageTabs`, `SectionHeader`, `SettingsSection`, `SettingsRow`, `SaveBar`, `Tabs`, `DataTable`, `EmptyState`, `InputGroupRoot`, `Card`, `DropdownMenu`, `Popover`, `Accordion`, `FlowDiagram`, `Item`, `Drawer`, `Alert`, `CodeBlock` and `ToggleGroup`; the summary card variants add `Button`, `IconButton`, `Tag`, `StatusIndicator`, `Avatar`, `CopyButton` and `Tooltip`. A page body for ConsoleLayout: the layout owns the rail, the header with the breadcrumb (a service's environment crumb is its `breadcrumbs` slot) and the main.",
    "intents": [
     "overview page",
     "resource overview",
@@ -35136,6 +34961,8 @@
     "DrawerTitle",
     "DropdownMenu",
     "EmptyState",
+    "FlowDiagram",
+    "FlowDiagramBind",
     "IconButton",
     "Input",
     "InputGroupRoot",
@@ -35158,7 +34985,6 @@
     "toast",
     "ToggleGroup",
     "Tooltip",
-    "TopologyDiagram",
     "use-locale",
     "use-unsaved-changes"
    ],
@@ -35179,6 +35005,8 @@
     "@aziontech/webkit/drawer-title",
     "@aziontech/webkit/dropdown-menu",
     "@aziontech/webkit/empty-state",
+    "@aziontech/webkit/flow-diagram",
+    "@aziontech/webkit/flow-diagram-bind",
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
     "@aziontech/webkit/input-group-root",
@@ -35201,7 +35029,6 @@
     "@aziontech/webkit/toast",
     "@aziontech/webkit/toggle-group",
     "@aziontech/webkit/tooltip",
-    "@aziontech/webkit/topology-diagram",
     "@aziontech/webkit/use-locale",
     "@aziontech/webkit/use-unsaved-changes"
    ],
@@ -36703,7 +36530,7 @@
    "title": "Blocks/State/EdgeErrorPage",
    "source": "blocks/state/edge-error-page/edge-error-page.vue",
    "surface": "edge",
-   "summary": "The page Azion serves to a visitor of a customer's site when a request fails: a standalone page, no Azion product chrome, no account actions. Left-aligned and diagnostic: the `StatusCode` with its reason phrase, a title in plain words, the request path You → Azion → Application drawn with `TopologyDiagram` (one node card per hop, every card the same width and height, each with its status tag; side by side on a wide screen, stacked with `orientation=\"vertical\"` on a phone or tablet), What happened? and What can I do? side by side, Try again or Go to home page with Go back, then the request details in a `KeyValueList` (request ID with `CopyButton`, `Timestamp` in UTC, Azion location, host) and a Served by `Brand` footer. Azion here is Azion's infrastructure; the Application is the site's application, on Azion's infrastructure or on the customer's own servers. The primary is the 502 (application unreachable); variants cover 504, 500, 503, 403 (blocked by the site's firewall), 429 and 404. Azion's own console, site and docs use `state/error-page` instead.",
+   "summary": "The page Azion serves to a visitor of a customer's site when a request fails: a standalone page, no Azion product chrome, no account actions. Left-aligned and diagnostic: the `StatusCode` with its reason phrase, a title in plain words, the request path You → Azion → Application drawn with `FlowDiagram` (one data card per hop, `uniform` so every card has the same width and height, each with its status dot and text; side by side on a wide screen, stacked with `orientation=\"vertical\"` on a phone or tablet), What happened? and What can I do? side by side, Try again or Go to home page with Go back, then the request details in a `KeyValueList` (request ID with `CopyButton`, `Timestamp` in UTC, Azion location, host) and a Served by `Brand` footer. Azion here is Azion's infrastructure; the Application is the site's application, on Azion's infrastructure or on the customer's own servers. The primary is the 502 (application unreachable); variants cover 504, 500, 503, 403 (blocked by the site's firewall), 429 and 404. Azion's own console, site and docs use `state/error-page` instead.",
    "intents": [
     "edge error page",
     "502 bad gateway page",
@@ -36732,19 +36559,19 @@
     "Brand",
     "Button",
     "CopyButton",
+    "FlowDiagram",
     "KeyValueList",
     "StatusCode",
-    "Timestamp",
-    "TopologyDiagram"
+    "Timestamp"
    ],
    "imports": [
     "@aziontech/webkit/brand",
     "@aziontech/webkit/button",
     "@aziontech/webkit/copy-button",
+    "@aziontech/webkit/flow-diagram",
     "@aziontech/webkit/key-value-list",
     "@aziontech/webkit/status-code",
-    "@aziontech/webkit/timestamp",
-    "@aziontech/webkit/topology-diagram"
+    "@aziontech/webkit/timestamp"
    ],
    "primary": "Default",
    "guidelinesSummary": "The page Azion serves to a visitor of a customer's site when the request fails: the site's application is down or slow, it answered with an error, the site's firewall blocked the request, or the visitor sent too many requests. The reader is not an Azion user: it is anyone on the internet who opened `www.example.com`. Their job is to learn, in one look, whose side the problem is on (their connection, Azion's infrastructure or the site's application), what they can do about it, and what to quote to the site owner. The page stands alone: it has no Azion product chrome, no navigation and nothing that needs an Azion account. Two error page families, one per audience: - **Edge** (this block, `surface: edge`): the visitors of your customers' sites. Diagnostic, left-aligned, with the request path. Words: the docs say **Azion's infrastructure**; the page itself says just **Azion**. The third hop is the **Application**, never \"origin\": the site's application may run on Azion's distributed infrastructure or on the customer's own servers, and the visitor does not need to know which. - **Console, site and docs** (`state/error-page`, `surface: app`): Azion's own users on Azion's own pages. Quiet and centred, inside the product shell.",

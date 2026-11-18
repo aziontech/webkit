@@ -56,6 +56,7 @@ export type {
   FlowDiagramAnchorProps,
   FlowDiagramAnchorSide
 } from './flow-diagram-anchor/flow-diagram-anchor.vue'
+export type { FlowDiagramBindProps } from './flow-diagram-bind/flow-diagram-bind.vue'
 export type { FlowDiagramGroupProps } from './flow-diagram-group/flow-diagram-group.vue'
 export type { FlowDiagramHeaderProps } from './flow-diagram-header/flow-diagram-header.vue'
 export type { FlowDiagramItemProps } from './flow-diagram-item/flow-diagram-item.vue'

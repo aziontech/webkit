@@ -34,7 +34,7 @@
     v-bind="$attrs"
     data-slot="flow-diagram-title"
     :data-testid="testId"
-    class="flex min-h-9 min-w-0 items-center gap-(--spacing-xs) px-(--spacing-md) pt-(--spacing-2xs) last:pb-(--spacing-sm) has-[[data-slot=flow-diagram-title-actions]:not(:empty)]:pb-(--spacing-sm)"
+    class="flex min-h-11 min-w-0 items-center gap-(--spacing-xs) px-(--spacing-md) pt-(--spacing-2xs) pb-(--spacing-sm)"
   >
     <a
       v-if="href"

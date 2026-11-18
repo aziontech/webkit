@@ -24,6 +24,7 @@ export const MARKET_ALIASES = {
   'logo-cloud': 'logo-wall',
   modal: 'dialog',
   newsletter: 'newsletter-section',
+  'node-diagram': 'flow-diagram',
   notice: 'alert',
   notification: 'toast',
   'segmented-control': 'toggle-group',

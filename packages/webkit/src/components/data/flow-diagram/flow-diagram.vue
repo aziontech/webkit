@@ -5,8 +5,6 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import { cn } from '../../../utils/cn'
-  import EmptyState from '../../feedback/empty-state/empty-state.vue'
-  import Skeleton from '../../feedback/skeleton/skeleton.vue'
   import { useFlowDiagramConnectors } from './composables/use-flow-diagram-connectors'
   import FlowDiagramGroup from './flow-diagram-group/flow-diagram-group.vue'
   import FlowDiagramNode from './flow-diagram-node/flow-diagram-node.vue'
@@ -73,6 +71,10 @@
   const attrs = useAttrs()
   const slots = useSlots()
   const FlowDiagramCard = defineAsyncComponent(() => import('./parts/flow-diagram-card.vue'))
+  const EmptyState = defineAsyncComponent(
+    () => import('../../feedback/empty-state/empty-state.vue')
+  )
+  const Skeleton = defineAsyncComponent(() => import('../../feedback/skeleton/skeleton.vue'))
   const { t } = useTranslate({ flowDiagram: en.flowDiagram })
 
   const testId = computed<string>(

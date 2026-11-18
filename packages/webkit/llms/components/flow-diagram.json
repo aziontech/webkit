@@ -1,24 +1,24 @@
 {
- "name": "node-diagram",
- "binding": "NodeDiagram",
- "import": "@aziontech/webkit/node-diagram",
- "treeShakeableImport": "@aziontech/webkit/node-diagram-root",
+ "name": "flow-diagram",
+ "binding": "FlowDiagram",
+ "import": "@aziontech/webkit/flow-diagram",
+ "treeShakeableImport": "@aziontech/webkit/flow-diagram-root",
  "category": "data",
  "surface": "app",
  "structure": "composition",
  "compoundRoot": true,
  "subcomponents": [
-  "@aziontech/webkit/node-diagram-node",
-  "@aziontech/webkit/node-diagram-group",
-  "@aziontech/webkit/node-diagram-anchor",
-  "@aziontech/webkit/node-diagram-header",
-  "@aziontech/webkit/node-diagram-title",
-  "@aziontech/webkit/node-diagram-description",
-  "@aziontech/webkit/node-diagram-footer",
-  "@aziontech/webkit/node-diagram-item",
-  "@aziontech/webkit/node-diagram-bind"
+  "@aziontech/webkit/flow-diagram-node",
+  "@aziontech/webkit/flow-diagram-group",
+  "@aziontech/webkit/flow-diagram-anchor",
+  "@aziontech/webkit/flow-diagram-header",
+  "@aziontech/webkit/flow-diagram-title",
+  "@aziontech/webkit/flow-diagram-description",
+  "@aziontech/webkit/flow-diagram-footer",
+  "@aziontech/webkit/flow-diagram-item",
+  "@aziontech/webkit/flow-diagram-bind"
  ],
- "purpose": "PROPOSAL (RV-Y1, owner to approve): one in-product diagram replacing `flow-diagram` and `topology-diagram`. A naked root lays steps out and draws the connectors. **Data mode** (`nodes` + `edges`): edges set the columns and each node renders the richest card its data allows. **Composed mode**: hand-written parts in the default slot. `orientation=\"responsive\"` stacks into a rail below a 36rem container.",
+ "purpose": "The one in-product diagram (owner decision RV-Y1, 2026-11-18): it kept the old FlowDiagram parts and replaced TopologyDiagram in the 6.0 clean break. A naked root lays steps out and draws the connectors. **Data mode** (`nodes` + `edges`): edges set the columns and each node renders the richest card its data allows. **Composed mode**: hand-written parts in the default slot. `orientation=\"responsive\"` stacks into a rail below a 36rem container.",
  "setup": null,
  "useWhen": [
   "A request path or pipeline: steps in order joined by connectors.",
@@ -37,19 +37,19 @@
   "Join adjacent columns; an edge that skips a column can cross it.",
   "Put timing or failure on the edge (`label`, `severity`) when the hop failed, on the node when the resource did.",
   "Use `orientation=\"horizontal\"` for fixed-size scenes and mock-ups.",
-  "A one-resource slot puts `node-diagram-bind` in the `actions` slot."
+  "A one-resource slot puts `flow-diagram-bind` in the `actions` slot."
  ],
  "props": [
   {
    "name": "nodes",
-   "type": "NodeDiagramNodeData[]",
+   "type": "FlowDiagramNodeData[]",
    "default": "[]",
    "required": "false",
    "doc": "Nodes of a data-driven diagram; each renders as a full card. Leave empty to compose the parts by hand."
   },
   {
    "name": "edges",
-   "type": "NodeDiagramEdgeData[]",
+   "type": "FlowDiagramEdgeData[]",
    "default": "[]",
    "required": "false",
    "doc": "Connectors between nodes by id; they also decide the columns. Empty joins each step to the next."
@@ -106,7 +106,7 @@
   },
   {
    "name": "actions",
-   "scope": "{ node: NodeDiagramNodeData }",
+   "scope": "{ node: FlowDiagramNodeData }",
    "notes": "Data mode: controls at the end of a node's title row."
   },
   {
@@ -120,16 +120,16 @@
  "examples": [
   {
    "name": "Default",
-   "file": "examples/node-diagram/default.vue"
+   "file": "examples/flow-diagram/default.vue"
   },
   {
    "name": "Composed",
-   "file": "examples/node-diagram/composed.vue"
+   "file": "examples/flow-diagram/composed.vue"
   },
   {
    "name": "Request path",
-   "file": "examples/node-diagram/request-path.vue"
+   "file": "examples/flow-diagram/request-path.vue"
   }
  ],
- "docs": "components/node-diagram.md"
+ "docs": "components/flow-diagram.md"
 }

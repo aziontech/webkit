@@ -127,6 +127,42 @@ describe('FlowDiagram', () => {
     )
   })
 
+  it('keeps the spacing token between a row of controls and the divider or border below', async () => {
+    const { container } = render(() => h('div', { style: 'width: 1600px' }, [h(Topology)]))
+    await waitFor(() => expect(cards(container).length).toBe(7))
+    const rem = parseFloat(getComputedStyle(document.documentElement).fontSize)
+    const token =
+      parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--spacing-sm')) * rem
+    expect(token).toBeGreaterThan(0)
+    for (const key of ['domains', 'policy', 'error-page']) {
+      const card = cards(container).find((entry) => entry.dataset['nodeKey'] === key) as HTMLElement
+      const button = card.querySelector<HTMLElement>(
+        '[data-slot="flow-diagram-title-actions"] button'
+      ) as HTMLElement
+      const toggle = card.querySelector<HTMLElement>('[data-testid="flow-diagram__node-toggle"]')
+      const below = toggle
+        ? toggle.getBoundingClientRect().top
+        : card.getBoundingClientRect().bottom - parseFloat(getComputedStyle(card).borderBottomWidth)
+      expect(below - button.getBoundingClientRect().bottom).toBeGreaterThanOrEqual(token - 0.5)
+    }
+    const project = cards(container).find(
+      (entry) => entry.dataset['nodeKey'] === 'project'
+    ) as HTMLElement
+    expect(
+      project.querySelector('[data-slot="flow-diagram-title-actions"]')?.childElementCount ?? 0
+    ).toBe(0)
+    const domains = cards(container).find(
+      (entry) => entry.dataset['nodeKey'] === 'domains'
+    ) as HTMLElement
+    const rowHeight = (card: HTMLElement) =>
+      (
+        card.querySelector('[data-slot="flow-diagram-anchor"]') as HTMLElement
+      ).getBoundingClientRect().height
+    for (const card of cards(container))
+      expect(Math.abs(rowHeight(card) - rowHeight(domains))).toBeLessThan(0.5)
+    expect(rowHeight(project)).toBe(rowHeight(domains))
+  })
+
   it('shows the empty state, loading placeholders and honours data-testid', async () => {
     const empty = render(FlowDiagramRoot, { props: { nodes: [] } })
     expect(empty.container.querySelector('[data-testid="flow-diagram__empty"]')).toBeTruthy()

@@ -47,11 +47,21 @@ ul { margin:0; padding-inline-start:20px; }
 <header class="top">
   <div>
     <h1>One diagram instead of two</h1>
-    <p>Proposal RV-Y1 · 2026-11-18 · open, owner to approve. <strong>TopologyDiagram</strong> and <strong>FlowDiagram</strong> become one component, here called <strong>NodeDiagram</strong>. It can be used “naked” and built by hand from parts, like FlowDiagram today, or given <code>nodes</code> and <code>edges</code>, in which case the default shows as much information as the data has.</p>
-    <p>Working prototype on branch <code>proposal/unified-diagram</code>: <a href="/components/node-diagram">/components/node-diagram</a> (live examples). Today’s pages: <a href="/components/flow-diagram">/components/flow-diagram</a>, <a href="/components/topology-diagram">/components/topology-diagram</a>.</p>
+    <p>Proposal RV-Y1 · 2026-11-18 · <a href="#decision">decided</a>. <strong>TopologyDiagram</strong> and <strong>FlowDiagram</strong> become one component, here called <strong>NodeDiagram</strong>. It can be used “naked” and built by hand from parts, like FlowDiagram today, or given <code>nodes</code> and <code>edges</code>, in which case the default shows as much information as the data has.</p>
+    <p>Working prototype on branch <code>proposal/unified-diagram</code>: <a href="/components/flow-diagram">/components/flow-diagram</a> (live examples, now under the FlowDiagram name).</p>
   </div>
   <button class="toggle" type="button" id="theme" aria-pressed="false">Light theme</button>
 </header>
+
+<section class="reco" id="decision">
+  <h2>Decision (2026-11-18, owner)</h2>
+  <ul>
+    <li><strong>Approved, named FlowDiagram.</strong> The proposed component took over the name <code>FlowDiagram</code> (<a href="/components/flow-diagram">/components/flow-diagram</a>); the old FlowDiagram and TopologyDiagram are removed in 6.0, and <code>Parallel</code> is now <code>Group</code>.</li>
+    <li><strong>Accepted as recommended:</strong> the bind menu is the add-on <code>FlowDiagramBind</code>, status is a dot and text, and the diagram stacks vertically on phones by default.</li>
+    <li><strong>One fix:</strong> a row with a button (+, edit, ×) keeps the same space under the button as the text rows have, so the button no longer touches the line below it.</li>
+  </ul>
+  <p>The rest of this page is the proposal as it was presented; NodeDiagram below means today’s FlowDiagram.</p>
+</section>
 
 <section class="reco">
   <h2>Recommendation in plain words</h2>

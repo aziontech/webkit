@@ -24,7 +24,7 @@
     data-slot="flow-diagram-description"
     :data-testid="testId"
     dir="auto"
-    class="m-0 -mt-(--spacing-2xs) min-w-0 truncate px-(--spacing-md) pb-(--spacing-sm) text-body-xs text-(--text-muted)"
+    class="m-0 -mt-(--spacing-xs) min-w-0 truncate px-(--spacing-md) pb-(--spacing-sm) text-body-xs text-(--text-muted)"
   >
     <slot />
   </p>

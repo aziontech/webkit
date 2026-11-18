@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 9
 template: 2
-checksum: 0000000000000000000000000000000000000000000000000000000000000000
+checksum: fdf9413a8316e3fbeac596411a77acd52eb9cf4373ed1e1b49ac8044bb6aa769
 created: 2026-06-25
 last_updated: 2026-11-18
 ---
@@ -14,7 +14,7 @@ last_updated: 2026-11-18
 
 ## Purpose
 
-The one in-product diagram (owner decision RV-Y1, 2026-11-18): it took over the old `flow-diagram` parts and replaced `topology-diagram` in the 6.0 clean break. A naked root lays steps out and draws the connectors. **Data mode** (`nodes` + `edges`): edges set the columns and each node renders the richest card its data allows. **Composed mode**: hand-written parts in the default slot. `orientation="responsive"` stacks into a rail below a 36rem container.
+The one in-product diagram (owner decision RV-Y1, 2026-11-18): it kept the old FlowDiagram parts and replaced TopologyDiagram in the 6.0 clean break. A naked root lays steps out and draws the connectors. **Data mode** (`nodes` + `edges`): edges set the columns and each node renders the richest card its data allows. **Composed mode**: hand-written parts in the default slot. `orientation="responsive"` stacks into a rail below a 36rem container.
 
 ## When to use
 
@@ -47,12 +47,12 @@ The one in-product diagram (owner decision RV-Y1, 2026-11-18): it took over the 
 
   const nodes = [
     { id: 'you', title: 'You', description: 'Browser', status: 'Working', severity: 'success' },
-    { id: 'edge', title: 'Azion edge', description: 'San Francisco, US', status: 'Working', severity: 'success' },
-    { id: 'origin', title: 'Origin', description: 'api.example.com', status: 'Error', severity: 'danger' }
+    { id: 'azion', title: 'Azion', description: 'San Francisco, US', status: 'Working', severity: 'success' },
+    { id: 'application', title: 'Application', description: 'api.example.com', status: 'Error', severity: 'danger' }
   ]
   const edges = [
-    { from: 'you', to: 'edge', label: '18 ms' },
-    { from: 'edge', to: 'origin', label: '502', severity: 'danger' }
+    { from: 'you', to: 'azion', label: '18 ms' },
+    { from: 'azion', to: 'application', label: '502', severity: 'danger' }
   ]
 </script>
 
@@ -81,10 +81,10 @@ The root is also published standalone as `@aziontech/webkit/flow-diagram-root`, 
 ## Sub-components
 
 - `flow-diagram-node` — one step: a label box, a card when it holds a `Title`, or `unstyled`. Props `value` (identity for edges), `disabled`, `unstyled`, `terminal`, `dashed`.
-- `flow-diagram-group` — nodes side by side in one step (was Parallel / a topology level). Prop `label` (hidden).
+- `flow-diagram-group` — parallel nodes stacked in one step (was `Parallel` and a topology level). Prop `label` (hidden).
 - `flow-diagram-anchor` — where a connector touches. Prop `side`.
 - `flow-diagram-header` — props `icon`, `eyebrow`, `status`, `severity`.
-- `flow-diagram-title` — prop `href`; `actions` slot. A title row that shows controls keeps `--spacing-sm` between them and the divider or border below.
+- `flow-diagram-title` — prop `href`; `actions` slot. Every title row is one control high with `--spacing-sm` below it, so a button keeps that space to the divider or border below and rows with and without controls line their connectors up.
 - `flow-diagram-description`, `flow-diagram-footer`, `flow-diagram-item` (prop `label`).
 - `flow-diagram-bind` — companion (not attached): bind with Apply and Cancel. Props `label`, `options`, `value`, `removable`; events `bind`, `remove`, `create`.
 
@@ -124,7 +124,7 @@ The root emits nothing; the bind events live on the `flow-diagram-bind` companio
 
 - List: `data-orientation`, `data-align`, `data-uniform`, `data-labelled` (wider gap for edge labels), `data-stacked` (rail drawn, ports hidden).
 - Node: `data-disabled`, `data-dashed`, `data-terminal`, `data-node-key`, `data-entry` / `data-exit` (ports show only where a connector attaches).
-- Title: an `actions` slot that renders controls adds `--spacing-sm` of bottom padding to the row, so a button sits as far from the divider below as the header text sits from the border above.
+- Title: every row is one small control high (`min-h-7`) with `--spacing-sm` of bottom padding, so a button in the `actions` slot sits as far from the divider below as the header text sits from the border above, and cards with and without controls keep the same anchor height (their connectors stay level).
 - Data card: `data-state="open|closed"`; an unbound bindable node is dashed with `Not bound`; a pending bind dashes it too.
 - Loading: `aria-busy`, skeleton cards, one `role="status"` line. Empty: `EmptyState` unless the `empty` slot replaces it.
 - Edge `severity` colours the connector (`--<severity>-mark`); default `--accent`.

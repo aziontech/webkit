@@ -14,7 +14,7 @@
     },
     {
       "name": "Request path",
-      "summary": "Three equal boxes (`uniform`) for an error page: You, the Azion edge and the origin, with the failing hop as a danger edge labelled 502. Below its container's breakpoint the row stacks into a vertical rail, so a phone needs no second list.",
+      "summary": "Three equal boxes (`uniform`) for an error page: You, Azion and the Application, with the failing hop as a danger edge labelled 502. Below its container's breakpoint the row stacks into a vertical rail, so a phone needs no second list.",
       "file": "request-path.vue"
     },
     {

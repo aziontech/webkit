@@ -42,9 +42,15 @@ const nodeBoxes = (diagram: Element): DOMRect[] =>
   )
 
 const hopNames = (diagram: Element): string[] =>
-  [...diagram.querySelectorAll('[data-testid$="__node-trigger"]')].map(
-    (trigger) => trigger.querySelector('.truncate')?.textContent?.trim() ?? ''
+  [...diagram.querySelectorAll('[data-slot="flow-diagram-header"]')].map(
+    (header) => header.querySelector('.truncate')?.textContent?.trim() ?? ''
   )
+
+const cardsLoaded = async (container: Element): Promise<void> => {
+  await vi.waitFor(() =>
+    expect(container.querySelectorAll('[data-slot="flow-diagram-header"]')).toHaveLength(6)
+  )
+}
 
 const expectSameSize = (boxes: DOMRect[]): void => {
   expect(boxes).toHaveLength(3)
@@ -66,6 +72,7 @@ describe('state/edge-error-page', () => {
     async (_, state, code) => {
       await atWidth(1280)
       const view = render(state)
+      await cardsLoaded(view.container)
       expect(view.getByTestId('status-code__code').textContent).toBe(code)
       expect(view.getAllByRole('heading', { level: 1 })).toHaveLength(1)
       expect(view.getByRole('heading', { name: 'What happened?' })).toBeTruthy()
@@ -92,6 +99,7 @@ describe('state/edge-error-page', () => {
     async (_, state) => {
       await atWidth(1280)
       const view = render(state)
+      await cardsLoaded(view.container)
       expect(view.getByTestId('edge-error-page__path-stacked').getBoundingClientRect().width).toBe(
         0
       )
@@ -110,9 +118,12 @@ describe('state/edge-error-page', () => {
   it.each(STATES)('%s stacks the hops as cards of one size on a phone', async (_, state) => {
     await atWidth(375)
     const view = render(state)
+    await cardsLoaded(view.container)
     expect(view.getByTestId('edge-error-page__path').getBoundingClientRect().width).toBe(0)
     const diagram = view.getByTestId('edge-error-page__path-stacked')
-    expect(diagram.getAttribute('data-orientation')).toBe('vertical')
+    expect(diagram.querySelector('[role="list"]')?.getAttribute('data-orientation')).toBe(
+      'vertical'
+    )
     expect(hopNames(diagram)).toEqual(HOPS)
     const boxes = nodeBoxes(diagram)
     expectSameSize(boxes)
@@ -125,6 +136,7 @@ describe('state/edge-error-page', () => {
   it('opens a hop to explain it', async () => {
     await atWidth(1280)
     const view = render(EdgeErrorPage)
+    await cardsLoaded(view.container)
     const diagram = view.getByTestId('edge-error-page__path')
     const trigger = within(diagram).getAllByRole('button', { expanded: false })[2]!
     await fireEvent.click(trigger)
@@ -132,7 +144,7 @@ describe('state/edge-error-page', () => {
     expect(within(diagram).getByText(/The application that serves this site/)).toBeTruthy()
   })
 
-  it('fills the facts and the path from its props', () => {
+  it('fills the facts and the path from its props', async () => {
     const view = render(EdgeErrorPage, {
       props: {
         host: 'shop.example.com',
@@ -145,6 +157,7 @@ describe('state/edge-error-page', () => {
         }
       }
     })
+    await cardsLoaded(view.container)
     expect(view.getAllByText('shop.example.com').length).toBeGreaterThan(0)
     expect(view.getAllByText('GRU').length).toBeGreaterThan(0)
     expect(view.getAllByText('Timed out').length).toBeGreaterThan(0)

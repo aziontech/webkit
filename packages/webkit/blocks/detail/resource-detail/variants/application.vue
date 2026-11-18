@@ -10,6 +10,13 @@
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
+  import FlowDiagramBind from '@aziontech/webkit/flow-diagram-bind'
+  import type {
+    FlowDiagramBindOption,
+    FlowDiagramEdgeData,
+    FlowDiagramNodeData
+  } from '@aziontech/webkit/flow-diagram-root'
+  import FlowDiagram from '@aziontech/webkit/flow-diagram-root'
   import IconButton from '@aziontech/webkit/icon-button'
   import Link from '@aziontech/webkit/link'
   import PageTabs from '@aziontech/webkit/page-tabs'
@@ -22,11 +29,6 @@
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import TopologyDiagram, {
-    type TopologyDiagramBindOption,
-    type TopologyDiagramLevel,
-    type TopologyDiagramNodeData
-  } from '@aziontech/webkit/topology-diagram'
   import { computed, onBeforeUnmount, reactive, ref } from 'vue'
 
   const APP = {
@@ -124,7 +126,7 @@
 
   const targets: Record<
     string,
-    { kind: string; icon: string; options: TopologyDiagramBindOption[]; unbound: string }
+    { kind: string; icon: string; options: FlowDiagramBindOption[]; unbound: string }
   > = {
     firewall: {
       kind: 'Firewall',
@@ -152,14 +154,14 @@
   const stagedCount = computed(() => Object.keys(staged).length)
   const stagedNote = ref('')
 
-  const slotNode = (key: string): TopologyDiagramNodeData => {
+  const slotNode = (key: string): FlowDiagramNodeData => {
     const target = targets[key]
     const pick = staged[key]
     const removing = pick === ''
     const value = pick === undefined ? deployed[key] : pick
     const base = {
       id: key,
-      type: target.kind,
+      eyebrow: target.kind,
       icon: target.icon,
       bindable: true,
       bindOptions: target.options,
@@ -176,7 +178,7 @@
     }
     return {
       ...base,
-      name: value,
+      title: value,
       boundValue: value,
       status: pick === undefined ? 'Active' : 'Staged',
       severity: pick === undefined ? 'success' : 'warning',
@@ -185,49 +187,41 @@
     }
   }
 
-  const levels = computed<TopologyDiagramLevel[]>(() => [
+  const nodes = computed<FlowDiagramNodeData[]>(() => [
     {
       id: 'domain',
-      nodes: [
-        {
-          id: 'domain',
-          type: 'Domain',
-          icon: 'az az-globe',
-          name: 'shop.example.com',
-          status: 'Live',
-          severity: 'success'
-        }
-      ]
+      eyebrow: 'Domain',
+      icon: 'az az-globe',
+      title: 'shop.example.com',
+      status: 'Live',
+      severity: 'success'
     },
     {
       id: 'workload',
-      nodes: [
-        {
-          id: 'workload',
-          type: 'Workload',
-          icon: 'az az-sitemap',
-          name: 'storefront',
-          status: 'Active',
-          severity: 'success'
-        }
-      ]
+      eyebrow: 'Workload',
+      icon: 'az az-sitemap',
+      title: 'storefront',
+      status: 'Active',
+      severity: 'success'
     },
-    { id: 'firewall', nodes: [slotNode('firewall')] },
+    slotNode('firewall'),
     {
       id: 'application',
-      nodes: [
-        {
-          id: 'application',
-          type: 'Application',
-          icon: 'az az-box',
-          name: APP.name,
-          status: 'Active',
-          severity: 'success'
-        }
-      ]
+      eyebrow: 'Application',
+      icon: 'az az-box',
+      title: APP.name,
+      status: 'Active',
+      severity: 'success'
     },
-    { id: 'function', nodes: [{ ...slotNode('function'), terminal: true }] }
+    slotNode('function')
   ])
+
+  const edges: FlowDiagramEdgeData[] = [
+    { from: 'domain', to: 'workload' },
+    { from: 'workload', to: 'firewall' },
+    { from: 'firewall', to: 'application' },
+    { from: 'application', to: 'function' }
+  ]
 
   const stagedChanges = computed(() =>
     Object.entries(staged).map(([key, value]) => ({
@@ -587,13 +581,25 @@
           <div
             class="rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised)"
           >
-            <TopologyDiagram
+            <FlowDiagram
               v-model:open-keys="expanded"
-              :levels="levels"
-              @bind="(_event, { id, value }) => bind(id, value)"
-              @remove="(_event, key) => unbind(key)"
-              @create="(_event, key) => createTarget(key)"
-            />
+              :nodes="nodes"
+              :edges="edges"
+              aria-label="Deployment topology"
+            >
+              <template #actions="{ node }">
+                <FlowDiagramBind
+                  v-if="node.bindable"
+                  :label="node.eyebrow"
+                  :options="node.bindOptions"
+                  :value="node.boundValue"
+                  :removable="node.removable"
+                  @bind="(_event, value) => bind(node.id, value)"
+                  @remove="() => unbind(node.id)"
+                  @create="() => createTarget(node.id)"
+                />
+              </template>
+            </FlowDiagram>
           </div>
           <p
             role="status"

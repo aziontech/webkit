@@ -124,6 +124,7 @@
     <DropdownMenu
       side="bottom"
       align="end"
+      class="flex!"
       :data-testid="`${testId}__menu`"
       @select="onSelect"
     >

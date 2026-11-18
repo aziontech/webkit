@@ -1,11 +1,11 @@
-# Node Diagram
+# Flow Diagram
 
-> PROPOSAL (RV-Y1, owner to approve): one in-product diagram replacing `flow-diagram` and `topology-diagram`. A naked root lays steps out and draws the connectors. **Data mode** (`nodes` + `edges`): edges set the columns and each node renders the richest card its data allows. **Composed mode**: hand-written parts in the default slot. `orientation="responsive"` stacks into a rail below a 36rem container.
+> The one in-product diagram (owner decision RV-Y1, 2026-11-18): it kept the old FlowDiagram parts and replaced TopologyDiagram in the 6.0 clean break. A naked root lays steps out and draws the connectors. **Data mode** (`nodes` + `edges`): edges set the columns and each node renders the richest card its data allows. **Composed mode**: hand-written parts in the default slot. `orientation="responsive"` stacks into a rail below a 36rem container.
 
-- Import: `import NodeDiagramRoot from '@aziontech/webkit/node-diagram-root'`
-- Compound import (dot notation, not tree-shakeable): `import NodeDiagram from '@aziontech/webkit/node-diagram'`
+- Import: `import FlowDiagramRoot from '@aziontech/webkit/flow-diagram-root'`
+- Compound import (dot notation, not tree-shakeable): `import FlowDiagram from '@aziontech/webkit/flow-diagram'`
 - Category: data · Surface: app · Structure: composition
-- API as JSON: [node-diagram.json](node-diagram.json)
+- API as JSON: [flow-diagram.json](flow-diagram.json)
 
 ## When to use
 
@@ -18,7 +18,7 @@
 - Join adjacent columns; an edge that skips a column can cross it.
 - Put timing or failure on the edge (`label`, `severity`) when the hop failed, on the node when the resource did.
 - Use `orientation="horizontal"` for fixed-size scenes and mock-ups.
-- A one-resource slot puts `node-diagram-bind` in the `actions` slot.
+- A one-resource slot puts `flow-diagram-bind` in the `actions` slot.
 
 ## Don’t
 
@@ -35,8 +35,8 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `nodes` | `NodeDiagramNodeData[]` | `[]` | false | Nodes of a data-driven diagram; each renders as a full card. Leave empty to compose the parts by hand. |
-| `edges` | `NodeDiagramEdgeData[]` | `[]` | false | Connectors between nodes by id; they also decide the columns. Empty joins each step to the next. |
+| `nodes` | `FlowDiagramNodeData[]` | `[]` | false | Nodes of a data-driven diagram; each renders as a full card. Leave empty to compose the parts by hand. |
+| `edges` | `FlowDiagramEdgeData[]` | `[]` | false | Connectors between nodes by id; they also decide the columns. Empty joins each step to the next. |
 | `orientation` | `'horizontal' \| 'vertical' \| 'responsive'` | `'responsive'` | false | Lays the steps out in a row, in a column, or in a row that stacks when its container is narrow. |
 | `align` | `'start' \| 'center'` | `'start'` | false | Vertical alignment of the steps in a row. |
 | `uniform` | `boolean` | `false` | false | Gives every step the width and height of the largest one. |
@@ -49,30 +49,30 @@
 | Slot | Scope | Notes |
 | --- | --- | --- |
 | `default` | — | Composed mode: nodes and groups, in flow order. |
-| `actions` | { node: NodeDiagramNodeData } | Data mode: controls at the end of a node's title row. |
+| `actions` | { node: FlowDiagramNodeData } | Data mode: controls at the end of a node's title row. |
 | `empty` | — | Replaces the `EmptyState` shown when there are no nodes. |
 
 ## Sub-component imports
 
-- `@aziontech/webkit/node-diagram-node`
-- `@aziontech/webkit/node-diagram-group`
-- `@aziontech/webkit/node-diagram-anchor`
-- `@aziontech/webkit/node-diagram-header`
-- `@aziontech/webkit/node-diagram-title`
-- `@aziontech/webkit/node-diagram-description`
-- `@aziontech/webkit/node-diagram-footer`
-- `@aziontech/webkit/node-diagram-item`
-- `@aziontech/webkit/node-diagram-bind`
+- `@aziontech/webkit/flow-diagram-node`
+- `@aziontech/webkit/flow-diagram-group`
+- `@aziontech/webkit/flow-diagram-anchor`
+- `@aziontech/webkit/flow-diagram-header`
+- `@aziontech/webkit/flow-diagram-title`
+- `@aziontech/webkit/flow-diagram-description`
+- `@aziontech/webkit/flow-diagram-footer`
+- `@aziontech/webkit/flow-diagram-item`
+- `@aziontech/webkit/flow-diagram-bind`
 
 ## Sub-components
 
-- `node-diagram-node` — one step: a label box, a card when it holds a `Title`, or `unstyled`. Props `value` (identity for edges), `disabled`, `unstyled`, `terminal`, `dashed`.
-- `node-diagram-group` — nodes side by side in one step (was Parallel / a topology level). Prop `label` (hidden).
-- `node-diagram-anchor` — where a connector touches. Prop `side`.
-- `node-diagram-header` — props `icon`, `eyebrow`, `status`, `severity`.
-- `node-diagram-title` — prop `href`; `actions` slot.
-- `node-diagram-description`, `node-diagram-footer`, `node-diagram-item` (prop `label`).
-- `node-diagram-bind` — companion (not attached): bind with Apply and Cancel. Props `label`, `options`, `value`, `removable`; events `bind`, `remove`, `create`.
+- `flow-diagram-node` — one step: a label box, a card when it holds a `Title`, or `unstyled`. Props `value` (identity for edges), `disabled`, `unstyled`, `terminal`, `dashed`.
+- `flow-diagram-group` — parallel nodes stacked in one step (was `Parallel` and a topology level). Prop `label` (hidden).
+- `flow-diagram-anchor` — where a connector touches. Prop `side`.
+- `flow-diagram-header` — props `icon`, `eyebrow`, `status`, `severity`.
+- `flow-diagram-title` — prop `href`; `actions` slot. A title row that shows controls keeps `--spacing-sm` between them and the divider or border below.
+- `flow-diagram-description`, `flow-diagram-footer`, `flow-diagram-item` (prop `label`).
+- `flow-diagram-bind` — companion (not attached): bind with Apply and Cancel. Props `label`, `options`, `value`, `removable`; events `bind`, `remove`, `create`.
 
 ## v-model
 
@@ -82,6 +82,7 @@
 
 - List: `data-orientation`, `data-align`, `data-uniform`, `data-labelled` (wider gap for edge labels), `data-stacked` (rail drawn, ports hidden).
 - Node: `data-disabled`, `data-dashed`, `data-terminal`, `data-node-key`, `data-entry` / `data-exit` (ports show only where a connector attaches).
+- Title: an `actions` slot that renders controls adds `--spacing-sm` of bottom padding to the row, so a button sits as far from the divider below as the header text sits from the border above.
 - Data card: `data-state="open|closed"`; an unbound bindable node is dashed with `Not bound`; a pending bind dashes it too.
 - Loading: `aria-busy`, skeleton cards, one `role="status"` line. Empty: `EmptyState` unless the `empty` slot replaces it.
 - Edge `severity` colours the connector (`--<severity>-mark`); default `--accent`.
@@ -101,13 +102,13 @@
 
 | Key                                                                      | English source                                      | Override prop |
 | ------------------------------------------------------------------------ | --------------------------------------------------- | ------------- |
-| `nodeDiagram.label`                                                      | Diagram                                             | `ariaLabel`   |
-| `nodeDiagram.notBound`                                                   | Not bound                                           | node `status` |
-| `nodeDiagram.bind` / `change` / `remove` / `create` / `apply` / `cancel` | Bind {kind} / Change {kind} / … / Cancel            | —             |
-| `nodeDiagram.pending` / `existing` / `noOptions` / `copy`                | Pending / Existing / No options yet. / Copy {field} | —             |
-| `nodeDiagram.details`                                                    | Details                                             | —             |
-| `nodeDiagram.connections` / `connection`                                 | Connections / {from} to {to}                        | —             |
-| `nodeDiagram.emptyTitle` / `loading`                                     | Nothing is connected yet. / Loading the diagram     | `empty` slot  |
+| `flowDiagram.label`                                                      | Diagram                                             | `ariaLabel`   |
+| `flowDiagram.notBound`                                                   | Not bound                                           | node `status` |
+| `flowDiagram.bind` / `change` / `remove` / `create` / `apply` / `cancel` | Bind {kind} / Change {kind} / … / Cancel            | —             |
+| `flowDiagram.pending` / `existing` / `noOptions` / `copy`                | Pending / Existing / No options yet. / Copy {field} | —             |
+| `flowDiagram.details`                                                    | Details                                             | —             |
+| `flowDiagram.connections` / `connection`                                 | Connections / {from} to {to}                        | —             |
+| `flowDiagram.emptyTitle` / `loading`                                     | Nothing is connected yet. / Loading the diagram     | `empty` slot  |
 
 - Formatting: none; metrics and labels arrive formatted.
 
@@ -121,7 +122,7 @@
 
 ```vue
 <script setup>
-  import NodeDiagram from '@aziontech/webkit/node-diagram-root'
+  import FlowDiagram from '@aziontech/webkit/flow-diagram-root'
   import { ref } from 'vue'
 
   const nodes = [
@@ -200,7 +201,7 @@
 </script>
 
 <template>
-  <NodeDiagram
+  <FlowDiagram
     v-model:open-keys="openKeys"
     :nodes="nodes"
     :edges="edges"
@@ -213,34 +214,34 @@
 
 ```vue
 <script setup>
-  import NodeDiagram from '@aziontech/webkit/node-diagram'
+  import FlowDiagram from '@aziontech/webkit/flow-diagram'
 </script>
 
 <template>
-  <NodeDiagram
+  <FlowDiagram
     align="center"
     aria-label="Build pipeline"
   >
-    <NodeDiagram.Node>Commit</NodeDiagram.Node>
-    <NodeDiagram.Node>Build</NodeDiagram.Node>
-    <NodeDiagram.Group label="Checks">
-      <NodeDiagram.Node>Unit tests</NodeDiagram.Node>
-      <NodeDiagram.Node>Lint</NodeDiagram.Node>
-    </NodeDiagram.Group>
-    <NodeDiagram.Node class="min-w-(--size-56)">
-      <NodeDiagram.Header
+    <FlowDiagram.Node>Commit</FlowDiagram.Node>
+    <FlowDiagram.Node>Build</FlowDiagram.Node>
+    <FlowDiagram.Group label="Checks">
+      <FlowDiagram.Node>Unit tests</FlowDiagram.Node>
+      <FlowDiagram.Node>Lint</FlowDiagram.Node>
+    </FlowDiagram.Group>
+    <FlowDiagram.Node class="min-w-(--size-56)">
+      <FlowDiagram.Header
         icon="az az-upload"
         eyebrow="Deploy"
         status="Running"
         severity="info"
       />
-      <NodeDiagram.Title href="#deploy">production</NodeDiagram.Title>
-      <NodeDiagram.Description>Started 2 minutes ago</NodeDiagram.Description>
-      <NodeDiagram.Footer>
-        <NodeDiagram.Item label="Regions">38 of 120</NodeDiagram.Item>
-      </NodeDiagram.Footer>
-    </NodeDiagram.Node>
-  </NodeDiagram>
+      <FlowDiagram.Title href="#deploy">production</FlowDiagram.Title>
+      <FlowDiagram.Description>Started 2 minutes ago</FlowDiagram.Description>
+      <FlowDiagram.Footer>
+        <FlowDiagram.Item label="Regions">38 of 120</FlowDiagram.Item>
+      </FlowDiagram.Footer>
+    </FlowDiagram.Node>
+  </FlowDiagram>
 </template>
 ```
 
@@ -248,7 +249,7 @@
 
 ```vue
 <script setup>
-  import NodeDiagram from '@aziontech/webkit/node-diagram-root'
+  import FlowDiagram from '@aziontech/webkit/flow-diagram-root'
 
   const nodes = [
     {
@@ -259,15 +260,15 @@
       severity: 'success'
     },
     {
-      id: 'edge',
-      title: 'Azion edge',
+      id: 'azion',
+      title: 'Azion',
       description: 'San Francisco, US',
       status: 'Working',
       severity: 'success'
     },
     {
-      id: 'origin',
-      title: 'Origin',
+      id: 'application',
+      title: 'Application',
       description: 'api.example.com',
       status: 'Error',
       severity: 'danger'
@@ -275,13 +276,13 @@
   ]
 
   const edges = [
-    { from: 'you', to: 'edge', label: '18 ms' },
-    { from: 'edge', to: 'origin', label: '502', severity: 'danger' }
+    { from: 'you', to: 'azion', label: '18 ms' },
+    { from: 'azion', to: 'application', label: '502', severity: 'danger' }
   ]
 </script>
 
 <template>
-  <NodeDiagram
+  <FlowDiagram
     :nodes="nodes"
     :edges="edges"
     uniform
