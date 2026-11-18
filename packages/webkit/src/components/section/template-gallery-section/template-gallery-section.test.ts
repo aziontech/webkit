@@ -1,5 +1,8 @@
+import '../../../test/reflow.css'
+
 import { render } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it } from 'vitest'
+import { page } from 'vitest/browser'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import TemplateGallerySection from './template-gallery-section.vue'
@@ -242,5 +245,67 @@ describe('TemplateGallerySection', () => {
     })
 
     expect(getByTestId(TESTID).children).toHaveLength(0)
+  })
+
+  describe('layout', () => {
+    const CLOSING_TITLE = 'Start from a template. Ship it today.'
+
+    afterEach(async () => {
+      await page.viewport(414, 896)
+    })
+
+    const mountIn = (width: number) => {
+      const host = document.createElement('div')
+      host.style.width = `${width}px`
+      document.body.appendChild(host)
+      return render(TemplateGallerySection, {
+        props: { title: CLOSING_TITLE, description: 'Deploy a starter.', templates },
+        container: host
+      })
+    }
+
+    const linesOf = (heading: HTMLElement) =>
+      Math.round(
+        heading.getBoundingClientRect().height /
+          Number.parseFloat(getComputedStyle(heading).lineHeight)
+      )
+
+    const cellsOf = (view: ReturnType<typeof mountIn>) => {
+      const copy = view.getByTestId('media-split__copy-cell').getBoundingClientRect()
+      const media = view.getByTestId('media-split__media-cell').getBoundingClientRect()
+      return { copy, media }
+    }
+
+    it('sets the copy beside the templates and the headline in two lines in a full-width desktop band', async () => {
+      await page.viewport(1440, 900)
+      const view = mountIn(1376)
+      const heading = view.getByRole('heading', { level: 2, name: CLOSING_TITLE })
+      const { copy, media } = cellsOf(view)
+
+      expect(media.left).toBeGreaterThanOrEqual(copy.right)
+      expect(linesOf(heading)).toBe(2)
+    })
+
+    it('stacks the copy over the templates in a band narrower than 72rem, the headline still in two lines', async () => {
+      await page.viewport(1920, 900)
+      const view = mountIn(1120)
+      const heading = view.getByRole('heading', { level: 2, name: CLOSING_TITLE })
+      const { copy, media } = cellsOf(view)
+
+      expect(media.top).toBeGreaterThanOrEqual(copy.bottom)
+      expect(media.width).toBeCloseTo(1120, 0)
+      expect(linesOf(heading)).toBe(2)
+    })
+
+    it('keeps the band inside a 320 px screen', async () => {
+      await page.viewport(320, 800)
+      const view = mountIn(320)
+      const root = view.getByTestId(TESTID)
+      const heading = view.getByRole('heading', { level: 2, name: CLOSING_TITLE })
+
+      expect(root.scrollWidth).toBeLessThanOrEqual(320)
+      expect(heading.getBoundingClientRect().right).toBeLessThanOrEqual(320)
+      expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(320)
+    })
   })
 })
