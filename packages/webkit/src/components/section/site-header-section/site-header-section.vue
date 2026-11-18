@@ -309,6 +309,12 @@
       </AppHeaderCenter>
 
       <AppHeaderEnd class="ms-auto">
+        <SearchTrigger
+          collapsible
+          :label="t('siteHeaderSection.search')"
+          class="shrink-0"
+          @open="emit('search', $event)"
+        />
         <div
           v-if="contact"
           class="hidden xl:flex"
@@ -341,12 +347,6 @@
           size="medium"
           class="shrink-0"
           :href="primaryAction.href"
-        />
-        <SearchTrigger
-          collapsible
-          :label="t('siteHeaderSection.search')"
-          class="shrink-0"
-          @open="emit('search', $event)"
         />
       </AppHeaderEnd>
     </AppHeader>

@@ -121,7 +121,7 @@
         size="small"
         aria-hidden="true"
         :data-testid="`${testId}__shortcut`"
-        class="shrink-0 group-data-[collapsible=true]/search-trigger:hidden group-data-[collapsible=true]/search-trigger:@2xl:inline-flex"
+        class="shrink-0 group-data-[collapsible=true]/search-trigger:hidden group-data-[collapsible=true]/search-trigger:@2xl:inline-flex pointer-coarse:hidden!"
         >{{ shortcut.trim().toUpperCase() }}</Kbd
       >
       <span

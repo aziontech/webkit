@@ -191,14 +191,14 @@
             <tr>
               <th
                 scope="col"
-                class="sticky top-14 z-20 border-b border-(--border-default) bg-(--bg-canvas) px-(--spacing-md) py-0 sm:px-(--spacing-xl) text-start align-middle font-normal h-(--competitor-comparison-section-head)"
+                class="sticky top-(--layout-sticky-top) z-20 border-b border-(--border-default) bg-(--bg-canvas) px-(--spacing-md) py-0 sm:px-(--spacing-xl) text-start align-middle font-normal h-(--competitor-comparison-section-head)"
               >
                 <span class="text-overline-md text-(--text-muted)">{{ columnLabel }}</span>
               </th>
               <th
                 scope="col"
                 aria-label="Azion"
-                class="sticky top-14 z-20 border-b border-s border-(--border-default) bg-(--bg-canvas) px-(--spacing-2xs) py-0 text-center align-middle font-normal h-(--competitor-comparison-section-head) sm:px-(--spacing-lg)"
+                class="sticky top-(--layout-sticky-top) z-20 border-b border-s border-(--border-default) bg-(--bg-canvas) px-(--spacing-2xs) py-0 text-center align-middle font-normal h-(--competitor-comparison-section-head) sm:px-(--spacing-lg)"
               >
                 <Brand
                   variant="default"
@@ -210,7 +210,7 @@
               <th
                 scope="col"
                 :aria-label="competitor.name"
-                class="sticky top-14 z-20 border-b border-s border-(--border-default) bg-(--bg-canvas) px-(--spacing-2xs) py-0 text-center align-middle font-normal h-(--competitor-comparison-section-head) sm:px-(--spacing-lg)"
+                class="sticky top-(--layout-sticky-top) z-20 border-b border-s border-(--border-default) bg-(--bg-canvas) px-(--spacing-2xs) py-0 text-center align-middle font-normal h-(--competitor-comparison-section-head) sm:px-(--spacing-lg)"
               >
                 <Logo
                   :name="competitorMark.name"

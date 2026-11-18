@@ -221,6 +221,10 @@ by retuning the bar.
 The bar is **`--layout-header-height`** tall (56px, the `AppHeader` height). A band that fills the
 first screen under it takes that token out of the screen: `HeroSection` does by default (`headerOffset`),
 and a bare `Hero variant="screen"` takes `offset="var(--layout-header-height)"`. Never a literal.
+A sticky part further down (a plan table's head row) sticks at **`--layout-sticky-top`**, which
+defaults to the bar's height, so it stops right under the bar. Inside a scroller with no bar above
+it (a preview card, an embedded frame) set `--layout-sticky-top: 0` on that scroller; otherwise the
+sticky part is pushed down at rest and covers what follows it.
 
 **A grid of cards fills its rows.** A framed or divided card grid (`CardGrid`, and every section
 built on it) takes `columns` as the most a row may hold, not how many it must: by default
@@ -272,7 +276,7 @@ everything inside it. One token, retuned per band, instead of a width re-typed o
 | Group | Count | Tokens |
 | --- | --- | --- |
 | spacing | 36 | `--spacing-1` · `--spacing-10` · `--spacing-11` · `--spacing-12` · `--spacing-14` · `--spacing-16` · `--spacing-2` · `--spacing-20` · `--spacing-24` · `--spacing-28` · `--spacing-2xl` · `--spacing-2xs` · `--spacing-3` · `--spacing-32` · `--spacing-36` · `--spacing-4` · `--spacing-40` · `--spacing-44` · `--spacing-48` · `--spacing-5` · `--spacing-52` · `--spacing-56` · `--spacing-6` · `--spacing-60` · `--spacing-64` · `--spacing-7` · `--spacing-72` · `--spacing-8` · `--spacing-80` · `--spacing-9` · `--spacing-96` · `--spacing-lg` · `--spacing-md` · `--spacing-sm` · `--spacing-xl` · `--spacing-xs` |
-| layout | 15 | `--layout-boundary-end` · `--layout-boundary-inline` · `--layout-boundary-start` · `--layout-column-measure` · `--layout-group-gap` · `--layout-header-height` · `--layout-measure` · `--layout-measure-content` · `--layout-measure-control` · `--layout-measure-focused` · `--layout-measure-form` · `--layout-measure-form-create` · `--layout-measure-site` · `--layout-measure-site-header` · `--layout-section-gap` |
+| layout | 16 | `--layout-boundary-end` · `--layout-boundary-inline` · `--layout-boundary-start` · `--layout-column-measure` · `--layout-group-gap` · `--layout-header-height` · `--layout-measure` · `--layout-measure-content` · `--layout-measure-control` · `--layout-measure-focused` · `--layout-measure-form` · `--layout-measure-form-create` · `--layout-measure-site` · `--layout-measure-site-header` · `--layout-section-gap` · `--layout-sticky-top` |
 | container | 13 | `--container-2xl` · `--container-2xs` · `--container-3xl` · `--container-3xs` · `--container-4xl` · `--container-5xl` · `--container-6xl` · `--container-7xl` · `--container-lg` · `--container-md` · `--container-sm` · `--container-xl` · `--container-xs` |
 | size | 28 | `--size-10` · `--size-11` · `--size-12` · `--size-14` · `--size-16` · `--size-2` · `--size-20` · `--size-24` · `--size-28` · `--size-3` · `--size-32` · `--size-36` · `--size-4` · `--size-40` · `--size-44` · `--size-48` · `--size-5` · `--size-52` · `--size-56` · `--size-6` · `--size-60` · `--size-64` · `--size-7` · `--size-72` · `--size-8` · `--size-80` · `--size-9` · `--size-96` |
 | inset | 3 | `--inset-shadow-2xs` · `--inset-shadow-sm` · `--inset-shadow-xs` |

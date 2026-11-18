@@ -46,6 +46,11 @@ describe('SearchTrigger', () => {
       expect(keycap).toHaveTextContent('K')
     })
 
+    it('drops the keycap on a coarse pointer, where no keyboard is at hand', () => {
+      const { getByTestId } = render(SearchTrigger)
+      expect(getByTestId('search-trigger__shortcut').classList).toContain('pointer-coarse:hidden!')
+    })
+
     it('maps another shortcut key and drops the keycap when shortcut is empty', () => {
       const slash = render(SearchTrigger, { props: { shortcut: 'p' } })
       expect(slash.getByTestId('search-trigger')).toHaveAttribute(

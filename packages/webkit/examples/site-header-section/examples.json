@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "The site's navigation with its four mega-menus, the Pricing link and the account actions. Widen past `xl` to see the menus in the bar; below it, open the sheet with the menu button.",
+      "summary": "The site's navigation with its four mega-menus, the Pricing link and the account actions. Widen past `xl` to see the menus in the bar; below it, open the sheet with the menu button. Search stays in the bar at every width: the field with its ⌘K keycap (Ctrl K off a Mac) on a wide bar, a magnifier button beside the call to action on a tablet or phone, and no keycap on a touch screen. Click it or press the shortcut to open the same palette.",
       "file": "default.vue"
     }
   ],

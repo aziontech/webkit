@@ -154,6 +154,8 @@ export const tokenPurpose = {
   '--layout-measure-control':
     'The width of a form control in a form column; a create page widens it.',
   '--layout-header-height': 'The height of the top header, which a full-height hero subtracts.',
+  '--layout-sticky-top':
+    'Where a sticky part inside the page stops: under the sticky header; 0 inside a scroller with no header above it.',
   '--z-control': 'Lifts a control above its neighbours, such as a focused input in a group.',
   '--z-control-overlay': 'The layer of overlays: menus, popovers, dialogs, toasts.',
   '--code-editor-line-height': 'The line step of code in the code editor.',
