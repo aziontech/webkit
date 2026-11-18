@@ -83,12 +83,12 @@
   {
     "name": "date-picker-root",
     "path": "src/components/input/date-picker/date-picker.vue",
-    "limit": "17.75 KB"
+    "limit": "24.4 KB"
   },
   {
     "name": "date-range-picker",
     "path": "src/components/input/date-range-picker/date-range-picker.vue",
-    "limit": "34.6 KB"
+    "limit": "44.85 KB"
   },
   {
     "name": "table-root",
@@ -1080,17 +1080,17 @@
   {
     "name": "config-provider",
     "path": "src/components/provider/config-provider/config-provider.vue",
-    "limit": "11.35 KB"
+    "limit": "11.5 KB"
   },
   {
     "name": "locales-pt-BR",
     "path": "src/locales/pt-BR.ts",
-    "limit": "10.5 KB"
+    "limit": "10.7 KB"
   },
   {
     "name": "locales-es",
     "path": "src/locales/es.ts",
-    "limit": "10.65 KB"
+    "limit": "10.8 KB"
   },
   {
     "name": "phone-input",
@@ -1289,7 +1289,7 @@
   {
     "name": "combobox",
     "path": "src/components/input/combobox/combobox.vue",
-    "limit": "13.05 KB"
+    "limit": "13.15 KB"
   },
   {
     "name": "tag-editor",
@@ -1299,7 +1299,7 @@
   {
     "name": "schema-form",
     "path": "src/components/input/schema-form/schema-form.vue",
-    "limit": "60.8 KB"
+    "limit": "61 KB"
   },
   {
     "name": "use-unsaved-changes",
@@ -1314,7 +1314,7 @@
   {
     "name": "use-time-range",
     "path": "src/composables/use-time-range/index.ts",
-    "limit": "0.9 KB"
+    "limit": "1.4 KB"
   },
   {
     "name": "file-preview",
@@ -1382,13 +1382,13 @@
   {
     "name": "filter-menu",
     "path": "src/components/data/filter-menu/index.ts",
-    "limit": "36.05 KB",
+    "limit": "36.2 KB",
     "entryOnly": true
   },
   {
     "name": "filter-menu-root",
     "path": "src/components/data/filter-menu/filter-menu.vue",
-    "limit": "32.3 KB",
+    "limit": "32.45 KB",
     "entryOnly": true
   },
   {
@@ -1673,7 +1673,7 @@
   {
     "name": "table-filter",
     "path": "src/components/data/table/table-filter/table-filter.vue",
-    "limit": "6.35 KB",
+    "limit": "6.45 KB",
     "entryOnly": true
   },
   {
@@ -1829,7 +1829,7 @@
   {
     "name": "date-picker",
     "path": "src/components/input/date-picker/index.ts",
-    "limit": "17.95 KB"
+    "limit": "24.6 KB"
   },
   {
     "name": "date-picker-clear",

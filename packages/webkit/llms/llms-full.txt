@@ -2,7 +2,7 @@
 
 > The Vue 3 design system of Azion (`@aziontech/webkit` 5.13.0): components, screen blocks with guidelines, and the design foundations, written for agents that build Azion product, marketing and docs screens.
 
-Start every screen from a block (a reviewed, copyable screen), then fill gaps with components. Import each component from its own subpath (`@aziontech/webkit/<name>`), style only through tokens, and keep strings in the locale catalogs. These pages are generated from `catalog.json`; agents with MCP get the same data from `@aziontech/webkit-mcp` (`search_blocks`, `get_block`, `suggest_component`, `get_component`, `list_assets`). The names a component takes for its artwork (illustrations, diagrams, brand marks, icon classes) are listed in the asset foundation pages below; never guess one from a file in `src/`.
+Start every screen from a block (a reviewed, copyable screen), then fill gaps with components. Import each component from its own subpath (`@aziontech/webkit/<name>`), style only through tokens, and keep strings in the locale catalogs. These pages are generated from `catalog.json`; agents with MCP get the same data from `@aziontech/webkit-mcp` (`search_blocks`, `get_block`, `suggest_component`, `get_component`, `list_assets`). The names a component takes for its artwork (illustrations, diagrams, line figures, brand marks, icon classes) are listed in the asset foundation pages below; never guess one from a file in `src/`.
 
 Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has a JSON API next to its page (`components/<name>.json`).
 
@@ -50,7 +50,6 @@ The design system ships tokens. Use them. Never hardcode a raw color or an off-s
 ## Do
 
 - Use CSS variables from `@aziontech/theme` for color: `var(--primary)`, `var(--bg-surface)`, `var(--text-default)`, `var(--border-default)`, and the other semantic tokens.
-- Use one orange, the logo orange `#F3652B`: `var(--text-brand)` for brand-coloured text (eyebrows, names, headings, highlights) and `var(--primary)` for fills, glyphs, glows and gradients. A highlight or glow starts from `--primary` and fades to transparent, never to a lighter or darker orange.
 - Put text on a fill with that fill's pair: every fill colour has a `-foreground` text colour (`--primary` / `--primary-foreground`, `--danger` / `--danger-foreground`); the inverted surface `--bg-contrast` takes `--text-contrast`.
 - Use the theme's semantic spacing and radius tokens: `var(--spacing-xs)`, `var(--spacing-md)` (scale `2xs…2xl`), `var(--shape-button)`.
 - Use the generated typography classes / tokens for text (`text-button-lg`, and the other named type scales), not raw font sizes.
@@ -62,7 +61,6 @@ The design system ships tokens. Use them. Never hardcode a raw color or an off-s
 
 - No hex: never `#fff`, `#0a0a0a`, `text-[#1e40af]`.
 - No `rgb(...)` / `rgba(...)` / `hsl(...)` literals for design colors.
-- No second orange: never `--text-primary` (removed in 6.0, use `--text-brand`), `--color-orange-<step>`, `--color-brand-primary-<step>` or `--color-alpha-orange-<step>` other than the logo step `500`. The lighter and darker oranges stay inside the theme (the chart and severity scales use them as data colours). The `off-brand-orange` token check blocks them in components, examples, blocks and the docs and demos apps.
 - No raw Tailwind palette: never `bg-blue-600`, `text-red-500`, `border-gray-200`. Those are not the design system's colors.
 - No off-scale magic numbers for spacing (`p-[13px]`) when a spacing token exists.
 - No zero with a length unit: write `0`, never `0px` / `0rem` / `0em`. A zero is identical in every unit, so the unit is noise — and it makes the same value read three different ways. This covers tokens, arbitrary values (`p-[0px]`), inline `style`, and authored CSS. Units that carry meaning at zero are fine: `0%`, `0s`, `0deg`, `0fr`. One exception: inside `calc()`/`min()`/`max()`/`clamp()` CSS requires a unit on the zero — there, write `0rem` (never `0px` / `0em`).
@@ -107,9 +105,9 @@ use it, so you can check a choice against a real one.
 | --- | --- | --- |
 | Main action | `--primary`, `--primary-foreground` | `Button variant="primary"`, `Checkbox` checked, `Progress` fill, `Tag variant="primary"`, `StatusIndicator severity="alt"` |
 | Second action | `--secondary`, `--secondary-foreground` | `Button variant="secondary"`, `IconButton`, `Badge variant="secondary"` |
-| Brand tint | `--primary-mask`, `--primary-selected` | `Tag variant="highlight"` surface, `RadioGroup` selected card |
+| Brand text and tint | `--text-primary`, `--primary-mask`, `--primary-selected` | the required asterisk in `FieldLabel`, `Tag variant="highlight"`, `RadioGroup` selected card |
 | Accent: a live state or connection, never an action | `--accent`, `--accent-foreground` | `Switch` on, `Slider` fill, `Tag variant="accent"`, resize handles in `Sidebar` and `Resizable`, a dragged `Table` row, `FlowDiagram` and `TopologyDiagram` edges and ports |
-| Brand text and marks: the logo colours | `--text-brand`, `--brand-blue`, `--brand-blue-foreground` | every brand-coloured text in the logo orange (`--text-brand`, `#F3652B` in light and dark, an owner-accepted contrast exception below): `Eyebrow`, the `Quote` name, `LinkDirectory` column headings, the `HeroTitle` highlight, `Stats` prefixes, the required asterisk in `FieldLabel`, `Tag variant="highlight"` text; the `Eyebrow` cursor in the brand blue (`--brand-blue`, `#0072F5`, the azion.com blue) |
+| Brand marks: the logo colours | `--text-brand`, `--brand-blue`, `--brand-blue-foreground` | `Eyebrow` text in the logo orange (`--text-brand`: the logo orange `#F3652B` in light and dark, an owner-accepted contrast exception below) and its blinking cursor in the brand blue (`--brand-blue`, `#0072F5`, the azion.com blue) |
 | Selected item | `--bg-selected`, `--border-selected` | selected rows and options in `Table`, `MenuItem`, `DropdownMenu`, `ToggleGroup`, `Select`, `Combobox`, `Trace`; `RadioGroup` card and `Chip` borders |
 | Selected tab | `--secondary-mask` | the sliding indicator in `Tabs` |
 | Hover and press | `--bg-hover`, `--bg-active`, `--bg-mask` | every interactive component (`--bg-mask` is the hover layer on `Button variant="outline"` and `variant="ghost"`) |
@@ -150,8 +148,8 @@ Exceptions (the one list; `accepted` means the owner chose the look, `open` wait
 | `--primary-foreground` on `--primary` | light, dark | 46.6 | accepted | The black label on the logo orange `#F3652B` matches the logo (2026-11-14). WCAG 6.71:1 passes. |
 | `--border-default` on the surfaces | dark | 0 | accepted | Dark dividers keep the original `#2B2B2B` look (2026-11-16). Form outlines stay `--border-input` `#535353`. |
 | `--border-muted` on the surfaces | dark | 0 | accepted | Dark muted dividers keep the original `#242424` look (2026-11-16). |
-| `--text-brand` on the surfaces | dark | 43.5–44.3 | accepted | Brand text stays the logo orange `#F3652B` in dark. WCAG 5.5:1 passes. |
-| `--text-brand` on the surfaces | light | 51.5–57.5 | accepted | brand: brand text is the logo orange; owner decisions 2026-11-16 (Eyebrow) and 2026-11-18 (every brand text). Fails both APCA (Lc 60) and WCAG 2 AA (2.9–3.1:1, needs 4.5:1). axe skips `color-contrast` only on the brand-text parts listed in `packages/webkit/src/test/a11y-accepted.json` (Eyebrow label, Quote name, LinkDirectory column title, HeroTitle highlight, CompetitorComparisonSection group title, FieldLabel asterisk, highlight Tag, linked FeatureItem on hover). |
+| `--text-brand` on the surfaces | dark | 43.5–44.3 | accepted | The `Eyebrow` label stays the logo orange `#F3652B` in dark. WCAG 5.5:1 passes. |
+| `--text-brand` on the surfaces | light | 51.5–57.5 | accepted | brand: the eyebrow matches the logo orange; owner decision 2026-11-16. Fails both APCA (Lc 60) and WCAG 2 AA (2.9–3.1:1, needs 4.5:1). axe skips `color-contrast` on the Eyebrow label only, listed in `packages/webkit/src/test/a11y-accepted.json`. |
 | `--border-muted` on `--bg-canvas` | light | 13.3 | accepted | Light muted divider on the page canvas, target Lc 15: kept as is (owner decision 2026-11-16). |
 | `--text-muted` on `--bg-surface-raised` | dark | 59.9 | accepted | Dark muted text in menus and popovers, target Lc 60: kept as is (owner decision 2026-11-16). |
 | `--border-input` on `--bg-surface-raised` | dark | 14.6 | accepted | Dark field outline inside a raised panel, target Lc 15: kept as is (owner decision 2026-11-16). |
@@ -250,7 +248,7 @@ The full token catalog is generated by `@aziontech/theme`. If you need a color t
 | illustration | 21 | `--illustration-accent` · `--illustration-block` · `--illustration-code-keyword` · `--illustration-code-punctuation` · `--illustration-danger` · `--illustration-ground` · `--illustration-highlight` · `--illustration-info` · `--illustration-info-surface` · `--illustration-ink` · `--illustration-ink-muted` · `--illustration-line` · `--illustration-line-muted` · `--illustration-line-strong` · `--illustration-primary` · `--illustration-success` · `--illustration-success-surface` · `--illustration-surface` · `--illustration-surface-raised` · `--illustration-warning` · `--illustration-warning-surface` |
 | info | 4 | `--info` · `--info-border` · `--info-foreground` · `--info-mark` |
 | inset | 3 | `--inset-shadow-2xs` · `--inset-shadow-sm` · `--inset-shadow-xs` |
-| layout | 16 | `--layout-boundary-end` · `--layout-boundary-inline` · `--layout-boundary-start` · `--layout-column-measure` · `--layout-group-gap` · `--layout-header-height` · `--layout-measure` · `--layout-measure-content` · `--layout-measure-control` · `--layout-measure-focused` · `--layout-measure-form` · `--layout-measure-form-create` · `--layout-measure-site` · `--layout-measure-site-header` · `--layout-section-gap` · `--layout-sticky-top` |
+| layout | 15 | `--layout-boundary-end` · `--layout-boundary-inline` · `--layout-boundary-start` · `--layout-column-measure` · `--layout-group-gap` · `--layout-header-height` · `--layout-measure` · `--layout-measure-content` · `--layout-measure-control` · `--layout-measure-focused` · `--layout-measure-form` · `--layout-measure-form-create` · `--layout-measure-site` · `--layout-measure-site-header` · `--layout-section-gap` |
 | leading | 6 | `--leading-loose` · `--leading-none` · `--leading-normal` · `--leading-relaxed` · `--leading-snug` · `--leading-tight` |
 | opacity | 4 | `--opacity-100` · `--opacity-25` · `--opacity-50` · `--opacity-75` |
 | perspective | 5 | `--perspective-distant` · `--perspective-dramatic` · `--perspective-midrange` · `--perspective-near` · `--perspective-normal` |
@@ -264,7 +262,7 @@ The full token catalog is generated by `@aziontech/theme`. If you need a color t
 | size | 28 | `--size-10` · `--size-11` · `--size-12` · `--size-14` · `--size-16` · `--size-2` · `--size-20` · `--size-24` · `--size-28` · `--size-3` · `--size-32` · `--size-36` · `--size-4` · `--size-40` · `--size-44` · `--size-48` · `--size-5` · `--size-52` · `--size-56` · `--size-6` · `--size-60` · `--size-64` · `--size-7` · `--size-72` · `--size-8` · `--size-80` · `--size-9` · `--size-96` |
 | spacing | 36 | `--spacing-1` · `--spacing-10` · `--spacing-11` · `--spacing-12` · `--spacing-14` · `--spacing-16` · `--spacing-2` · `--spacing-20` · `--spacing-24` · `--spacing-28` · `--spacing-2xl` · `--spacing-2xs` · `--spacing-3` · `--spacing-32` · `--spacing-36` · `--spacing-4` · `--spacing-40` · `--spacing-44` · `--spacing-48` · `--spacing-5` · `--spacing-52` · `--spacing-56` · `--spacing-6` · `--spacing-60` · `--spacing-64` · `--spacing-7` · `--spacing-72` · `--spacing-8` · `--spacing-80` · `--spacing-9` · `--spacing-96` · `--spacing-lg` · `--spacing-md` · `--spacing-sm` · `--spacing-xl` · `--spacing-xs` |
 | success | 4 | `--success` · `--success-border` · `--success-foreground` · `--success-mark` |
-| text | 195 | `--text-2xl` · `--text-2xl--line-height` · `--text-3xl` · `--text-3xl--line-height` · `--text-4xl` · `--text-4xl--line-height` · `--text-5xl` · `--text-5xl--line-height` · `--text-6xl` · `--text-6xl--line-height` · `--text-7xl` · `--text-7xl--line-height` · `--text-8xl` · `--text-8xl--line-height` · `--text-9xl` · `--text-9xl--line-height` · `--text-amount-lg-font-size` · `--text-amount-lg-font-weight` · `--text-amount-lg-letter-spacing` · `--text-amount-lg-line-height` · `--text-amount-lg-text-wrap-style` · `--text-amount-md-font-size` · `--text-amount-md-font-weight` · `--text-amount-md-letter-spacing` · `--text-amount-md-line-height` · `--text-amount-md-text-wrap-style` · `--text-amount-sm-font-size` · `--text-amount-sm-font-weight` · `--text-amount-sm-letter-spacing` · `--text-amount-sm-line-height` · `--text-base` · `--text-base--line-height` · `--text-big-number-lg-font-family` · `--text-big-number-lg-font-size` · `--text-big-number-lg-font-weight` · `--text-big-number-lg-line-height` · `--text-big-number-md-font-family` · `--text-big-number-md-font-size` · `--text-big-number-md-font-weight` · `--text-big-number-md-line-height` · `--text-big-number-sm-font-family` · `--text-big-number-sm-font-size` · `--text-big-number-sm-font-weight` · `--text-big-number-sm-line-height` · `--text-body-2xs-font-size` · `--text-body-2xs-font-weight` · `--text-body-2xs-line-height` · `--text-body-2xs-text-wrap-style` · `--text-body-code-sm-font-family` · `--text-body-code-sm-font-size` · `--text-body-code-sm-font-weight` · `--text-body-code-sm-letter-spacing` · `--text-body-code-sm-line-height` · `--text-body-code-sm-text-wrap-style` · `--text-body-lg-font-size` · `--text-body-lg-font-weight` · `--text-body-lg-line-height` · `--text-body-lg-text-wrap-style` · `--text-body-md-font-size` · `--text-body-md-font-weight` · `--text-body-md-line-height` · `--text-body-md-text-wrap-style` · `--text-body-prose-md-font-size` · `--text-body-prose-md-font-weight` · `--text-body-prose-md-line-height` · `--text-body-sm-font-size` · `--text-body-sm-font-weight` · `--text-body-sm-line-height` · `--text-body-sm-text-wrap-style` · `--text-body-xs-font-size` · `--text-body-xs-font-weight` · `--text-body-xs-line-height` · `--text-body-xs-text-wrap-style` · `--text-brand` · `--text-button-lg-font-family` · `--text-button-lg-font-size` · `--text-button-lg-font-weight` · `--text-button-lg-letter-spacing` · `--text-button-lg-line-height` · `--text-button-md-font-family` · `--text-button-md-font-size` · `--text-button-md-font-weight` · `--text-button-md-letter-spacing` · `--text-button-md-line-height` · `--text-contrast` · `--text-danger` · `--text-default` · `--text-disabled` · `--text-heading-2xl-font-size` · `--text-heading-2xl-font-weight` · `--text-heading-2xl-letter-spacing` · `--text-heading-2xl-line-height` · `--text-heading-2xl-text-wrap-style` · `--text-heading-2xs-font-size` · `--text-heading-2xs-font-weight` · `--text-heading-2xs-letter-spacing` · `--text-heading-2xs-line-height` · `--text-heading-2xs-text-wrap-style` · `--text-heading-3xl-font-size` · `--text-heading-3xl-font-weight` · `--text-heading-3xl-letter-spacing` · `--text-heading-3xl-line-height` · `--text-heading-3xl-text-wrap-style` · `--text-heading-lg-font-size` · `--text-heading-lg-font-weight` · `--text-heading-lg-letter-spacing` · `--text-heading-lg-line-height` · `--text-heading-lg-text-wrap-style` · `--text-heading-md-font-size` · `--text-heading-md-font-weight` · `--text-heading-md-letter-spacing` · `--text-heading-md-line-height` · `--text-heading-md-text-wrap-style` · `--text-heading-sm-font-size` · `--text-heading-sm-font-weight` · `--text-heading-sm-letter-spacing` · `--text-heading-sm-line-height` · `--text-heading-sm-text-wrap-style` · `--text-heading-xl-font-size` · `--text-heading-xl-font-weight` · `--text-heading-xl-letter-spacing` · `--text-heading-xl-line-height` · `--text-heading-xl-text-wrap-style` · `--text-heading-xs-font-size` · `--text-heading-xs-font-weight` · `--text-heading-xs-letter-spacing` · `--text-heading-xs-line-height` · `--text-heading-xs-text-wrap-style` · `--text-label-code-lg-font-family` · `--text-label-code-lg-font-size` · `--text-label-code-lg-font-weight` · `--text-label-code-lg-letter-spacing` · `--text-label-code-lg-line-height` · `--text-label-code-md-font-family` · `--text-label-code-md-font-size` · `--text-label-code-md-font-weight` · `--text-label-code-md-letter-spacing` · `--text-label-code-md-line-height` · `--text-label-code-sm-font-family` · `--text-label-code-sm-font-size` · `--text-label-code-sm-font-weight` · `--text-label-code-sm-letter-spacing` · `--text-label-code-sm-line-height` · `--text-label-lg-font-size` · `--text-label-lg-font-weight` · `--text-label-lg-letter-spacing` · `--text-label-lg-line-height` · `--text-label-md-font-size` · `--text-label-md-font-weight` · `--text-label-md-letter-spacing` · `--text-label-md-line-height` · `--text-label-sm-font-size` · `--text-label-sm-font-weight` · `--text-label-sm-letter-spacing` · `--text-label-sm-line-height` · `--text-lg` · `--text-lg--line-height` · `--text-link` · `--text-link-border-radius` · `--text-link-color` · `--text-link-font-size` · `--text-link-hover` · `--text-link-line-height` · `--text-link-text-decoration-color` · `--text-link-text-decoration-line` · `--text-link-text-underline-offset` · `--text-link-transition` · `--text-muted` · `--text-overline-md-font-family` · `--text-overline-md-font-size` · `--text-overline-md-letter-spacing` · `--text-overline-md-line-height` · `--text-overline-md-text-transform` · `--text-overline-sm-font-family` · `--text-overline-sm-font-size` · `--text-overline-sm-letter-spacing` · `--text-overline-sm-line-height` · `--text-overline-sm-text-transform` · `--text-overline-xs-font-family` · `--text-overline-xs-font-size` · `--text-overline-xs-letter-spacing` · `--text-overline-xs-line-height` · `--text-overline-xs-text-transform` · `--text-sm` · `--text-sm--line-height` · `--text-tag-md-font-size` · `--text-tag-md-font-weight` · `--text-tag-md-line-height` · `--text-tag-sm-font-size` · `--text-tag-sm-font-weight` · `--text-tag-sm-line-height` · `--text-xl` · `--text-xl--line-height` · `--text-xs` · `--text-xs--line-height` |
+| text | 196 | `--text-2xl` · `--text-2xl--line-height` · `--text-3xl` · `--text-3xl--line-height` · `--text-4xl` · `--text-4xl--line-height` · `--text-5xl` · `--text-5xl--line-height` · `--text-6xl` · `--text-6xl--line-height` · `--text-7xl` · `--text-7xl--line-height` · `--text-8xl` · `--text-8xl--line-height` · `--text-9xl` · `--text-9xl--line-height` · `--text-amount-lg-font-size` · `--text-amount-lg-font-weight` · `--text-amount-lg-letter-spacing` · `--text-amount-lg-line-height` · `--text-amount-lg-text-wrap-style` · `--text-amount-md-font-size` · `--text-amount-md-font-weight` · `--text-amount-md-letter-spacing` · `--text-amount-md-line-height` · `--text-amount-md-text-wrap-style` · `--text-amount-sm-font-size` · `--text-amount-sm-font-weight` · `--text-amount-sm-letter-spacing` · `--text-amount-sm-line-height` · `--text-base` · `--text-base--line-height` · `--text-big-number-lg-font-family` · `--text-big-number-lg-font-size` · `--text-big-number-lg-font-weight` · `--text-big-number-lg-line-height` · `--text-big-number-md-font-family` · `--text-big-number-md-font-size` · `--text-big-number-md-font-weight` · `--text-big-number-md-line-height` · `--text-big-number-sm-font-family` · `--text-big-number-sm-font-size` · `--text-big-number-sm-font-weight` · `--text-big-number-sm-line-height` · `--text-body-2xs-font-size` · `--text-body-2xs-font-weight` · `--text-body-2xs-line-height` · `--text-body-2xs-text-wrap-style` · `--text-body-code-sm-font-family` · `--text-body-code-sm-font-size` · `--text-body-code-sm-font-weight` · `--text-body-code-sm-letter-spacing` · `--text-body-code-sm-line-height` · `--text-body-code-sm-text-wrap-style` · `--text-body-lg-font-size` · `--text-body-lg-font-weight` · `--text-body-lg-line-height` · `--text-body-lg-text-wrap-style` · `--text-body-md-font-size` · `--text-body-md-font-weight` · `--text-body-md-line-height` · `--text-body-md-text-wrap-style` · `--text-body-prose-md-font-size` · `--text-body-prose-md-font-weight` · `--text-body-prose-md-line-height` · `--text-body-sm-font-size` · `--text-body-sm-font-weight` · `--text-body-sm-line-height` · `--text-body-sm-text-wrap-style` · `--text-body-xs-font-size` · `--text-body-xs-font-weight` · `--text-body-xs-line-height` · `--text-body-xs-text-wrap-style` · `--text-brand` · `--text-button-lg-font-family` · `--text-button-lg-font-size` · `--text-button-lg-font-weight` · `--text-button-lg-letter-spacing` · `--text-button-lg-line-height` · `--text-button-md-font-family` · `--text-button-md-font-size` · `--text-button-md-font-weight` · `--text-button-md-letter-spacing` · `--text-button-md-line-height` · `--text-contrast` · `--text-danger` · `--text-default` · `--text-disabled` · `--text-heading-2xl-font-size` · `--text-heading-2xl-font-weight` · `--text-heading-2xl-letter-spacing` · `--text-heading-2xl-line-height` · `--text-heading-2xl-text-wrap-style` · `--text-heading-2xs-font-size` · `--text-heading-2xs-font-weight` · `--text-heading-2xs-letter-spacing` · `--text-heading-2xs-line-height` · `--text-heading-2xs-text-wrap-style` · `--text-heading-3xl-font-size` · `--text-heading-3xl-font-weight` · `--text-heading-3xl-letter-spacing` · `--text-heading-3xl-line-height` · `--text-heading-3xl-text-wrap-style` · `--text-heading-lg-font-size` · `--text-heading-lg-font-weight` · `--text-heading-lg-letter-spacing` · `--text-heading-lg-line-height` · `--text-heading-lg-text-wrap-style` · `--text-heading-md-font-size` · `--text-heading-md-font-weight` · `--text-heading-md-letter-spacing` · `--text-heading-md-line-height` · `--text-heading-md-text-wrap-style` · `--text-heading-sm-font-size` · `--text-heading-sm-font-weight` · `--text-heading-sm-letter-spacing` · `--text-heading-sm-line-height` · `--text-heading-sm-text-wrap-style` · `--text-heading-xl-font-size` · `--text-heading-xl-font-weight` · `--text-heading-xl-letter-spacing` · `--text-heading-xl-line-height` · `--text-heading-xl-text-wrap-style` · `--text-heading-xs-font-size` · `--text-heading-xs-font-weight` · `--text-heading-xs-letter-spacing` · `--text-heading-xs-line-height` · `--text-heading-xs-text-wrap-style` · `--text-label-code-lg-font-family` · `--text-label-code-lg-font-size` · `--text-label-code-lg-font-weight` · `--text-label-code-lg-letter-spacing` · `--text-label-code-lg-line-height` · `--text-label-code-md-font-family` · `--text-label-code-md-font-size` · `--text-label-code-md-font-weight` · `--text-label-code-md-letter-spacing` · `--text-label-code-md-line-height` · `--text-label-code-sm-font-family` · `--text-label-code-sm-font-size` · `--text-label-code-sm-font-weight` · `--text-label-code-sm-letter-spacing` · `--text-label-code-sm-line-height` · `--text-label-lg-font-size` · `--text-label-lg-font-weight` · `--text-label-lg-letter-spacing` · `--text-label-lg-line-height` · `--text-label-md-font-size` · `--text-label-md-font-weight` · `--text-label-md-letter-spacing` · `--text-label-md-line-height` · `--text-label-sm-font-size` · `--text-label-sm-font-weight` · `--text-label-sm-letter-spacing` · `--text-label-sm-line-height` · `--text-lg` · `--text-lg--line-height` · `--text-link` · `--text-link-border-radius` · `--text-link-color` · `--text-link-font-size` · `--text-link-hover` · `--text-link-line-height` · `--text-link-text-decoration-color` · `--text-link-text-decoration-line` · `--text-link-text-underline-offset` · `--text-link-transition` · `--text-muted` · `--text-overline-md-font-family` · `--text-overline-md-font-size` · `--text-overline-md-letter-spacing` · `--text-overline-md-line-height` · `--text-overline-md-text-transform` · `--text-overline-sm-font-family` · `--text-overline-sm-font-size` · `--text-overline-sm-letter-spacing` · `--text-overline-sm-line-height` · `--text-overline-sm-text-transform` · `--text-overline-xs-font-family` · `--text-overline-xs-font-size` · `--text-overline-xs-letter-spacing` · `--text-overline-xs-line-height` · `--text-overline-xs-text-transform` · `--text-primary` · `--text-sm` · `--text-sm--line-height` · `--text-tag-md-font-size` · `--text-tag-md-font-weight` · `--text-tag-md-line-height` · `--text-tag-sm-font-size` · `--text-tag-sm-font-weight` · `--text-tag-sm-line-height` · `--text-xl` · `--text-xl--line-height` · `--text-xs` · `--text-xs--line-height` |
 | tracking | 6 | `--tracking-normal` · `--tracking-tight` · `--tracking-tighter` · `--tracking-wide` · `--tracking-wider` · `--tracking-widest` |
 | transition | 8 | `--transition-duration-fast-01` · `--transition-duration-fast-02` · `--transition-duration-moderate-01` · `--transition-duration-moderate-02` · `--transition-duration-slow-01` · `--transition-duration-slow-02` · `--transition-duration-slow-03` · `--transition-duration-slow-04` |
 | warning | 4 | `--warning` · `--warning-border` · `--warning-foreground` · `--warning-mark` |
@@ -313,7 +311,8 @@ The full token catalog is generated by `@aziontech/theme`. If you need a color t
 | `--text-default` | `#141414` | `#FAFAFA` | Body text and headings on any surface. |
 | `--text-muted` | `#535353` | `#B2B2B2` | Secondary text: descriptions, captions, metadata. |
 | `--text-disabled` | `#999999` | `#4D4D4D` | Text of a disabled control. |
-| `--text-brand` | `#F3652B` | `#F3652B` | The logo orange, the one orange for brand text such as eyebrows and quote names; an accepted contrast exception. |
+| `--text-primary` | `#B03C02` | `#FFB180` | Brand-coloured text, such as the required asterisk on a field label. |
+| `--text-brand` | `#F3652B` | `#F3652B` | The logo orange for brand labels such as the eyebrow; an accepted contrast exception. |
 | `--text-link` | `#005FCC` | `#99C9FF` | Links in text and the link button. |
 | `--text-link-hover` | `#004799` | `#99C9FF` | A link under the pointer. |
 | `--text-danger` | `#B71515` | `#F3A5A5` | Error text on the page, such as the FieldError message. |
@@ -324,7 +323,7 @@ The full token catalog is generated by `@aziontech/theme`. If you need a color t
 | `--code-syntax-keyword` | `#004799` | `#99C9FF` | Language keywords. |
 | `--code-syntax-punctuation` | `#535353` | `#B2B2B2` | Brackets, operators and punctuation. |
 | `--code-syntax-comment` | `#535353` | `#999999` | Code comments. |
-| `--code-syntax-function` | `#B03C02` | `#F3652B` | Function and method names. |
+| `--code-syntax-function` | `#B03C02` | `#FFB180` | Function and method names. |
 | `--code-syntax-type` | `#634B03` | `#FAD76B` | Type names and annotations. |
 | `--code-syntax-string` | `#004799` | `#99C9FF` | String literals. |
 | `--success` | `#78EDA2` | `#0A2916` | The box of a success message, tag or badge. |
@@ -430,7 +429,6 @@ The full token catalog is generated by `@aziontech/theme`. If you need a color t
 | `--layout-measure-site-header` | `var(--container-7xl)` |  | The column of the marketing site top bar. |
 | `--layout-measure-control` | `var(--container-3xs)` |  | The width of a form control in a form column; a create page widens it. |
 | `--layout-header-height` | `calc(var(--spacing) * 14)` |  | The height of the top header, which a full-height hero subtracts. |
-| `--layout-sticky-top` | `var(--layout-header-height)` |  | Where a sticky part inside the page stops: under the sticky header; 0 inside a scroller with no header above it. |
 | `--z-control` | `1` |  | Lifts a control above its neighbours, such as a focused input in a group. |
 | `--z-control-overlay` | `1100` |  | The layer of overlays: menus, popovers, dialogs, toasts. |
 | `--code-editor-line-height` | `1rem` |  | The line step of code in the code editor. |
@@ -677,7 +675,7 @@ End with: `theme-safe (both themes)` or `N gaps — fix before verifying`.
 | secondary | 4 | `--secondary` · `--secondary-foreground` · `--secondary-mask` · `--secondary-selected` |
 | accent | 4 | `--accent` · `--accent-foreground` · `--accent-mask` · `--accent-selected` |
 | bg | 13 | `--bg-active` · `--bg-backdrop` · `--bg-canvas` · `--bg-contrast` · `--bg-disabled` · `--bg-hover` · `--bg-mask` · `--bg-placeholder` · `--bg-placeholder-highlight` · `--bg-selected` · `--bg-surface` · `--bg-surface-overlay` · `--bg-surface-raised` |
-| text | 195 | `--text-2xl` · `--text-2xl--line-height` · `--text-3xl` · `--text-3xl--line-height` · `--text-4xl` · `--text-4xl--line-height` · `--text-5xl` · `--text-5xl--line-height` · `--text-6xl` · `--text-6xl--line-height` · `--text-7xl` · `--text-7xl--line-height` · `--text-8xl` · `--text-8xl--line-height` · `--text-9xl` · `--text-9xl--line-height` · `--text-amount-lg-font-size` · `--text-amount-lg-font-weight` · `--text-amount-lg-letter-spacing` · `--text-amount-lg-line-height` · `--text-amount-lg-text-wrap-style` · `--text-amount-md-font-size` · `--text-amount-md-font-weight` · `--text-amount-md-letter-spacing` · `--text-amount-md-line-height` · `--text-amount-md-text-wrap-style` · `--text-amount-sm-font-size` · `--text-amount-sm-font-weight` · `--text-amount-sm-letter-spacing` · `--text-amount-sm-line-height` · `--text-base` · `--text-base--line-height` · `--text-big-number-lg-font-family` · `--text-big-number-lg-font-size` · `--text-big-number-lg-font-weight` · `--text-big-number-lg-line-height` · `--text-big-number-md-font-family` · `--text-big-number-md-font-size` · `--text-big-number-md-font-weight` · `--text-big-number-md-line-height` · `--text-big-number-sm-font-family` · `--text-big-number-sm-font-size` · `--text-big-number-sm-font-weight` · `--text-big-number-sm-line-height` · `--text-body-2xs-font-size` · `--text-body-2xs-font-weight` · `--text-body-2xs-line-height` · `--text-body-2xs-text-wrap-style` · `--text-body-code-sm-font-family` · `--text-body-code-sm-font-size` · `--text-body-code-sm-font-weight` · `--text-body-code-sm-letter-spacing` · `--text-body-code-sm-line-height` · `--text-body-code-sm-text-wrap-style` · `--text-body-lg-font-size` · `--text-body-lg-font-weight` · `--text-body-lg-line-height` · `--text-body-lg-text-wrap-style` · `--text-body-md-font-size` · `--text-body-md-font-weight` · `--text-body-md-line-height` · `--text-body-md-text-wrap-style` · `--text-body-prose-md-font-size` · `--text-body-prose-md-font-weight` · `--text-body-prose-md-line-height` · `--text-body-sm-font-size` · `--text-body-sm-font-weight` · `--text-body-sm-line-height` · `--text-body-sm-text-wrap-style` · `--text-body-xs-font-size` · `--text-body-xs-font-weight` · `--text-body-xs-line-height` · `--text-body-xs-text-wrap-style` · `--text-brand` · `--text-button-lg-font-family` · `--text-button-lg-font-size` · `--text-button-lg-font-weight` · `--text-button-lg-letter-spacing` · `--text-button-lg-line-height` · `--text-button-md-font-family` · `--text-button-md-font-size` · `--text-button-md-font-weight` · `--text-button-md-letter-spacing` · `--text-button-md-line-height` · `--text-contrast` · `--text-danger` · `--text-default` · `--text-disabled` · `--text-heading-2xl-font-size` · `--text-heading-2xl-font-weight` · `--text-heading-2xl-letter-spacing` · `--text-heading-2xl-line-height` · `--text-heading-2xl-text-wrap-style` · `--text-heading-2xs-font-size` · `--text-heading-2xs-font-weight` · `--text-heading-2xs-letter-spacing` · `--text-heading-2xs-line-height` · `--text-heading-2xs-text-wrap-style` · `--text-heading-3xl-font-size` · `--text-heading-3xl-font-weight` · `--text-heading-3xl-letter-spacing` · `--text-heading-3xl-line-height` · `--text-heading-3xl-text-wrap-style` · `--text-heading-lg-font-size` · `--text-heading-lg-font-weight` · `--text-heading-lg-letter-spacing` · `--text-heading-lg-line-height` · `--text-heading-lg-text-wrap-style` · `--text-heading-md-font-size` · `--text-heading-md-font-weight` · `--text-heading-md-letter-spacing` · `--text-heading-md-line-height` · `--text-heading-md-text-wrap-style` · `--text-heading-sm-font-size` · `--text-heading-sm-font-weight` · `--text-heading-sm-letter-spacing` · `--text-heading-sm-line-height` · `--text-heading-sm-text-wrap-style` · `--text-heading-xl-font-size` · `--text-heading-xl-font-weight` · `--text-heading-xl-letter-spacing` · `--text-heading-xl-line-height` · `--text-heading-xl-text-wrap-style` · `--text-heading-xs-font-size` · `--text-heading-xs-font-weight` · `--text-heading-xs-letter-spacing` · `--text-heading-xs-line-height` · `--text-heading-xs-text-wrap-style` · `--text-label-code-lg-font-family` · `--text-label-code-lg-font-size` · `--text-label-code-lg-font-weight` · `--text-label-code-lg-letter-spacing` · `--text-label-code-lg-line-height` · `--text-label-code-md-font-family` · `--text-label-code-md-font-size` · `--text-label-code-md-font-weight` · `--text-label-code-md-letter-spacing` · `--text-label-code-md-line-height` · `--text-label-code-sm-font-family` · `--text-label-code-sm-font-size` · `--text-label-code-sm-font-weight` · `--text-label-code-sm-letter-spacing` · `--text-label-code-sm-line-height` · `--text-label-lg-font-size` · `--text-label-lg-font-weight` · `--text-label-lg-letter-spacing` · `--text-label-lg-line-height` · `--text-label-md-font-size` · `--text-label-md-font-weight` · `--text-label-md-letter-spacing` · `--text-label-md-line-height` · `--text-label-sm-font-size` · `--text-label-sm-font-weight` · `--text-label-sm-letter-spacing` · `--text-label-sm-line-height` · `--text-lg` · `--text-lg--line-height` · `--text-link` · `--text-link-border-radius` · `--text-link-color` · `--text-link-font-size` · `--text-link-hover` · `--text-link-line-height` · `--text-link-text-decoration-color` · `--text-link-text-decoration-line` · `--text-link-text-underline-offset` · `--text-link-transition` · `--text-muted` · `--text-overline-md-font-family` · `--text-overline-md-font-size` · `--text-overline-md-letter-spacing` · `--text-overline-md-line-height` · `--text-overline-md-text-transform` · `--text-overline-sm-font-family` · `--text-overline-sm-font-size` · `--text-overline-sm-letter-spacing` · `--text-overline-sm-line-height` · `--text-overline-sm-text-transform` · `--text-overline-xs-font-family` · `--text-overline-xs-font-size` · `--text-overline-xs-letter-spacing` · `--text-overline-xs-line-height` · `--text-overline-xs-text-transform` · `--text-sm` · `--text-sm--line-height` · `--text-tag-md-font-size` · `--text-tag-md-font-weight` · `--text-tag-md-line-height` · `--text-tag-sm-font-size` · `--text-tag-sm-font-weight` · `--text-tag-sm-line-height` · `--text-xl` · `--text-xl--line-height` · `--text-xs` · `--text-xs--line-height` |
+| text | 196 | `--text-2xl` · `--text-2xl--line-height` · `--text-3xl` · `--text-3xl--line-height` · `--text-4xl` · `--text-4xl--line-height` · `--text-5xl` · `--text-5xl--line-height` · `--text-6xl` · `--text-6xl--line-height` · `--text-7xl` · `--text-7xl--line-height` · `--text-8xl` · `--text-8xl--line-height` · `--text-9xl` · `--text-9xl--line-height` · `--text-amount-lg-font-size` · `--text-amount-lg-font-weight` · `--text-amount-lg-letter-spacing` · `--text-amount-lg-line-height` · `--text-amount-lg-text-wrap-style` · `--text-amount-md-font-size` · `--text-amount-md-font-weight` · `--text-amount-md-letter-spacing` · `--text-amount-md-line-height` · `--text-amount-md-text-wrap-style` · `--text-amount-sm-font-size` · `--text-amount-sm-font-weight` · `--text-amount-sm-letter-spacing` · `--text-amount-sm-line-height` · `--text-base` · `--text-base--line-height` · `--text-big-number-lg-font-family` · `--text-big-number-lg-font-size` · `--text-big-number-lg-font-weight` · `--text-big-number-lg-line-height` · `--text-big-number-md-font-family` · `--text-big-number-md-font-size` · `--text-big-number-md-font-weight` · `--text-big-number-md-line-height` · `--text-big-number-sm-font-family` · `--text-big-number-sm-font-size` · `--text-big-number-sm-font-weight` · `--text-big-number-sm-line-height` · `--text-body-2xs-font-size` · `--text-body-2xs-font-weight` · `--text-body-2xs-line-height` · `--text-body-2xs-text-wrap-style` · `--text-body-code-sm-font-family` · `--text-body-code-sm-font-size` · `--text-body-code-sm-font-weight` · `--text-body-code-sm-letter-spacing` · `--text-body-code-sm-line-height` · `--text-body-code-sm-text-wrap-style` · `--text-body-lg-font-size` · `--text-body-lg-font-weight` · `--text-body-lg-line-height` · `--text-body-lg-text-wrap-style` · `--text-body-md-font-size` · `--text-body-md-font-weight` · `--text-body-md-line-height` · `--text-body-md-text-wrap-style` · `--text-body-prose-md-font-size` · `--text-body-prose-md-font-weight` · `--text-body-prose-md-line-height` · `--text-body-sm-font-size` · `--text-body-sm-font-weight` · `--text-body-sm-line-height` · `--text-body-sm-text-wrap-style` · `--text-body-xs-font-size` · `--text-body-xs-font-weight` · `--text-body-xs-line-height` · `--text-body-xs-text-wrap-style` · `--text-brand` · `--text-button-lg-font-family` · `--text-button-lg-font-size` · `--text-button-lg-font-weight` · `--text-button-lg-letter-spacing` · `--text-button-lg-line-height` · `--text-button-md-font-family` · `--text-button-md-font-size` · `--text-button-md-font-weight` · `--text-button-md-letter-spacing` · `--text-button-md-line-height` · `--text-contrast` · `--text-danger` · `--text-default` · `--text-disabled` · `--text-heading-2xl-font-size` · `--text-heading-2xl-font-weight` · `--text-heading-2xl-letter-spacing` · `--text-heading-2xl-line-height` · `--text-heading-2xl-text-wrap-style` · `--text-heading-2xs-font-size` · `--text-heading-2xs-font-weight` · `--text-heading-2xs-letter-spacing` · `--text-heading-2xs-line-height` · `--text-heading-2xs-text-wrap-style` · `--text-heading-3xl-font-size` · `--text-heading-3xl-font-weight` · `--text-heading-3xl-letter-spacing` · `--text-heading-3xl-line-height` · `--text-heading-3xl-text-wrap-style` · `--text-heading-lg-font-size` · `--text-heading-lg-font-weight` · `--text-heading-lg-letter-spacing` · `--text-heading-lg-line-height` · `--text-heading-lg-text-wrap-style` · `--text-heading-md-font-size` · `--text-heading-md-font-weight` · `--text-heading-md-letter-spacing` · `--text-heading-md-line-height` · `--text-heading-md-text-wrap-style` · `--text-heading-sm-font-size` · `--text-heading-sm-font-weight` · `--text-heading-sm-letter-spacing` · `--text-heading-sm-line-height` · `--text-heading-sm-text-wrap-style` · `--text-heading-xl-font-size` · `--text-heading-xl-font-weight` · `--text-heading-xl-letter-spacing` · `--text-heading-xl-line-height` · `--text-heading-xl-text-wrap-style` · `--text-heading-xs-font-size` · `--text-heading-xs-font-weight` · `--text-heading-xs-letter-spacing` · `--text-heading-xs-line-height` · `--text-heading-xs-text-wrap-style` · `--text-label-code-lg-font-family` · `--text-label-code-lg-font-size` · `--text-label-code-lg-font-weight` · `--text-label-code-lg-letter-spacing` · `--text-label-code-lg-line-height` · `--text-label-code-md-font-family` · `--text-label-code-md-font-size` · `--text-label-code-md-font-weight` · `--text-label-code-md-letter-spacing` · `--text-label-code-md-line-height` · `--text-label-code-sm-font-family` · `--text-label-code-sm-font-size` · `--text-label-code-sm-font-weight` · `--text-label-code-sm-letter-spacing` · `--text-label-code-sm-line-height` · `--text-label-lg-font-size` · `--text-label-lg-font-weight` · `--text-label-lg-letter-spacing` · `--text-label-lg-line-height` · `--text-label-md-font-size` · `--text-label-md-font-weight` · `--text-label-md-letter-spacing` · `--text-label-md-line-height` · `--text-label-sm-font-size` · `--text-label-sm-font-weight` · `--text-label-sm-letter-spacing` · `--text-label-sm-line-height` · `--text-lg` · `--text-lg--line-height` · `--text-link` · `--text-link-border-radius` · `--text-link-color` · `--text-link-font-size` · `--text-link-hover` · `--text-link-line-height` · `--text-link-text-decoration-color` · `--text-link-text-decoration-line` · `--text-link-text-underline-offset` · `--text-link-transition` · `--text-muted` · `--text-overline-md-font-family` · `--text-overline-md-font-size` · `--text-overline-md-letter-spacing` · `--text-overline-md-line-height` · `--text-overline-md-text-transform` · `--text-overline-sm-font-family` · `--text-overline-sm-font-size` · `--text-overline-sm-letter-spacing` · `--text-overline-sm-line-height` · `--text-overline-sm-text-transform` · `--text-overline-xs-font-family` · `--text-overline-xs-font-size` · `--text-overline-xs-letter-spacing` · `--text-overline-xs-line-height` · `--text-overline-xs-text-transform` · `--text-primary` · `--text-sm` · `--text-sm--line-height` · `--text-tag-md-font-size` · `--text-tag-md-font-weight` · `--text-tag-md-line-height` · `--text-tag-sm-font-size` · `--text-tag-sm-font-weight` · `--text-tag-sm-line-height` · `--text-xl` · `--text-xl--line-height` · `--text-xs` · `--text-xs--line-height` |
 | border | 11 | `--border-default` · `--border-input` · `--border-muted` · `--border-selected` · `--border-strong` · `--border-width-0` · `--border-width-1` · `--border-width-2` · `--border-width-3` · `--border-width-4` · `--border-width-default` |
 | ring | 2 | `--ring-color` · `--ring-offset` |
 | success | 4 | `--success` · `--success-border` · `--success-foreground` · `--success-mark` |
@@ -917,10 +915,6 @@ it names the group in the markup.
 **`layout-group-start` is the fallback** for the one case a parent cannot cover: a group whose parts
 are already direct siblings of the page stack, where adding a wrapper is the wrong answer.
 
-A tab strip and its panel are one band too: the panel starts one group step below the strip.
-`Tabs.Content` carries that top padding itself (`DocTabs` inherits it), so never add a margin or a
-`gap` between `Tabs.List` and the panels.
-
 A common miss: a controls row and the table it narrows are **one band**, joined at the group step.
 The section step is the gap _above_ the band, not inside it.
 
@@ -979,10 +973,6 @@ by retuning the bar.
 The bar is **`--layout-header-height`** tall (56px, the `AppHeader` height). A band that fills the
 first screen under it takes that token out of the screen: `HeroSection` does by default (`headerOffset`),
 and a bare `Hero variant="screen"` takes `offset="var(--layout-header-height)"`. Never a literal.
-A sticky part further down (a plan table's head row) sticks at **`--layout-sticky-top`**, which
-defaults to the bar's height, so it stops right under the bar. Inside a scroller with no bar above
-it (a preview card, an embedded frame) set `--layout-sticky-top: 0` on that scroller; otherwise the
-sticky part is pushed down at rest and covers what follows it.
 
 **A grid of cards fills its rows.** A framed or divided card grid (`CardGrid`, and every section
 built on it) takes `columns` as the most a row may hold, not how many it must: by default
@@ -1034,7 +1024,7 @@ everything inside it. One token, retuned per band, instead of a width re-typed o
 | Group | Count | Tokens |
 | --- | --- | --- |
 | spacing | 36 | `--spacing-1` · `--spacing-10` · `--spacing-11` · `--spacing-12` · `--spacing-14` · `--spacing-16` · `--spacing-2` · `--spacing-20` · `--spacing-24` · `--spacing-28` · `--spacing-2xl` · `--spacing-2xs` · `--spacing-3` · `--spacing-32` · `--spacing-36` · `--spacing-4` · `--spacing-40` · `--spacing-44` · `--spacing-48` · `--spacing-5` · `--spacing-52` · `--spacing-56` · `--spacing-6` · `--spacing-60` · `--spacing-64` · `--spacing-7` · `--spacing-72` · `--spacing-8` · `--spacing-80` · `--spacing-9` · `--spacing-96` · `--spacing-lg` · `--spacing-md` · `--spacing-sm` · `--spacing-xl` · `--spacing-xs` |
-| layout | 16 | `--layout-boundary-end` · `--layout-boundary-inline` · `--layout-boundary-start` · `--layout-column-measure` · `--layout-group-gap` · `--layout-header-height` · `--layout-measure` · `--layout-measure-content` · `--layout-measure-control` · `--layout-measure-focused` · `--layout-measure-form` · `--layout-measure-form-create` · `--layout-measure-site` · `--layout-measure-site-header` · `--layout-section-gap` · `--layout-sticky-top` |
+| layout | 15 | `--layout-boundary-end` · `--layout-boundary-inline` · `--layout-boundary-start` · `--layout-column-measure` · `--layout-group-gap` · `--layout-header-height` · `--layout-measure` · `--layout-measure-content` · `--layout-measure-control` · `--layout-measure-focused` · `--layout-measure-form` · `--layout-measure-form-create` · `--layout-measure-site` · `--layout-measure-site-header` · `--layout-section-gap` |
 | container | 13 | `--container-2xl` · `--container-2xs` · `--container-3xl` · `--container-3xs` · `--container-4xl` · `--container-5xl` · `--container-6xl` · `--container-7xl` · `--container-lg` · `--container-md` · `--container-sm` · `--container-xl` · `--container-xs` |
 | size | 28 | `--size-10` · `--size-11` · `--size-12` · `--size-14` · `--size-16` · `--size-2` · `--size-20` · `--size-24` · `--size-28` · `--size-3` · `--size-32` · `--size-36` · `--size-4` · `--size-40` · `--size-44` · `--size-48` · `--size-5` · `--size-52` · `--size-56` · `--size-6` · `--size-60` · `--size-64` · `--size-7` · `--size-72` · `--size-8` · `--size-80` · `--size-9` · `--size-96` |
 | inset | 3 | `--inset-shadow-2xs` · `--inset-shadow-sm` · `--inset-shadow-xs` |
@@ -1069,17 +1059,6 @@ always has a reduced-motion escape. This is the invariant behind the `/webkit-mo
 - For `data-state="open|closed"` overlay motion, read `duration` + `curve` from the tokens and emit
   the inline `transition` per phase; keep transform/opacity in classes, only timing inline.
 
-## Never
-
-- A hardcoded duration (`duration-[180ms]`, `transition: opacity 200ms`) or an inline
-  `ease-[cubic-bezier(...)]` — the values live in the theme tokens.
-- Animating layout props (`width`, `height`, `top`, `left`, `margin`, `padding`) — they thrash
-  layout (exception: the catalogued `animate-slide-down`).
-- A component-local `@keyframes`, or any external animation library (`gsap`, `framer-motion`,
-  `motion`, `@vueuse/motion`, `@formkit/auto-animate`, lottie, popmotion). Use the utilities above +
-  Vue `<Transition>` / `<TransitionGroup>`.
-- A motion class with no `motion-reduce:*` fallback.
-
 ## The panel recipe (sidebar / drawer / any v-if region)
 
 A conditionally rendered region never animates by itself — wrap the `v-if` in a Vue `Transition`
@@ -1098,6 +1077,17 @@ and hand the enter/leave phases to the catalogued utilities. For lateral panels 
 Content or backdrops appearing in place use `animate-fade-in` / `animate-fade-out` in the same
 shape; vertical disclosure uses `animate-slide-down`. Ask the webkit MCP
 (`list_tokens` with category `animations`) for every utility, its timing, and when to use it.
+
+## Never
+
+- A hardcoded duration (`duration-[180ms]`, `transition: opacity 200ms`) or an inline
+  `ease-[cubic-bezier(...)]` — the values live in the theme tokens.
+- Animating layout props (`width`, `height`, `top`, `left`, `margin`, `padding`) — they thrash
+  layout (exception: the catalogued `animate-slide-down`).
+- A component-local `@keyframes`, or any external animation library (`gsap`, `framer-motion`,
+  `motion`, `@vueuse/motion`, `@formkit/auto-animate`, lottie, popmotion). Use the utilities above +
+  Vue `<Transition>` / `<TransitionGroup>`.
+- A motion class with no `motion-reduce:*` fallback.
 
 ## Enforcement
 
@@ -1529,6 +1519,7 @@ an icon-only control, which `webkit/require-accessible-name` requires on every `
 
 ## Correct
 
+<!-- prettier-ignore -->
 ```vue
 <script setup>
 import { useId } from 'vue'
@@ -1555,6 +1546,7 @@ const hintId = useId() // stable id for the ARIA association
 
 ## Wrong
 
+<!-- prettier-ignore -->
 ```html
 <!-- clickable div: fake semantics, unreachable by keyboard -->
 <div role="button" @click="open">Open settings</div>
@@ -1818,7 +1810,7 @@ In your own components, `useLocale()` from `@aziontech/webkit/use-locale` return
 - ✅ `webkit()` from `@aziontech/webkit/vite-plugin` in `vite.config`: it keeps `src/webkit.sources.css`, the WebKit files Tailwind compiles, in step with your imports. Without Vite, run `npx @aziontech/webkit css` after adding or removing a WebKit import.
 - ✅ The tree-shakeable `<name>-root` path (or specific sub-components) when you only need the root.
 - ✅ Icons via the `@aziontech/icons` font: side-effect import once (`import '@aziontech/icons'`) + the icon CSS classes.
-- ✅ Artwork and icon names from the published lists: `node_modules/@aziontech/webkit/llms/foundations/` (`illustrations.md`, `diagrams.md`, `brand-marks.md`, `icons.md`) or the MCP `list_assets` (`variant`, plus a `query` such as "ddos" or "delete"). Icon classes are `az az-<name>`, and `az-color az-<name>` for a colour logo; pick one by what it stands for (`list_assets` gives each icon's group, category and meaning, and a product icon names only that product). WebKit 6 uses only the Azion set: write `az az-check`, never the removed `pi pi-check` set (the default `@aziontech/icons` entry no longer loads it; `webkit migrate v6` rewrites old classes).
+- ✅ Artwork and icon names from the published lists: `node_modules/@aziontech/webkit/llms/foundations/` (`illustrations.md`, `diagrams.md`, `line-figures.md`, `brand-marks.md`, `icons.md`) or the MCP `list_assets` (`variant`, plus a `query` such as "ddos" or "delete"). Icon classes are `az az-<name>`, and `az-color az-<name>` for a colour logo; pick one by what it stands for (`list_assets` gives each icon's group, category and meaning, and a product icon names only that product). WebKit 6 uses only the Azion set: write `az az-check`, never the removed `pi pi-check` set (the default `@aziontech/icons` entry no longer loads it; `webkit migrate v6` rewrites old classes).
 - ✅ A webkit component reused instead of a hand-rolled or third-party equivalent.
 
 ## Must Not Have
@@ -2020,6 +2012,26 @@ Descriptions: foundations/diagrams.md.
 
 ---
 
+<!-- foundations/line-figures.md -->
+
+# Line figures
+
+> The isometric line-art figures that answer the pointer, one per product.
+
+Pass the name to `LineFigure` (`name`); the label is the figure’s own English description.
+
+25 names. These are the only values the components accept. An unknown or empty name draws nothing. The MCP tool `list_assets({ kind: "lineFigures" })` returns the same list (with a `query` to filter), and `catalog.json#assets.lineFigures` points at it as data.
+
+Used by: LineFigure.
+
+## Names
+
+`ai-versioning` · `applications-rules` · `azion-404` · `bot-lineup` · `build-terminal` · `cache-ttl` · `certificates-chain` · `connectors-link` · `custom-pages-status` · `ddos-flood` · `deployments-release` · `dns-lookup` · `functions-invoke` · `image-variants` · `infra-workloads` · `lb-rotor` · `metrics-gauge` · `network-lists-gate` · `object-storage-bucket` · `observe-stream` · `orchestrator-scale` · `platform-edge` · `secure-shield` · `store-replicas` · `variables-keys`
+
+Descriptions: foundations/line-figures.md.
+
+---
+
 <!-- foundations/brand-marks.md -->
 
 # Brand marks
@@ -2050,7 +2062,7 @@ yout, objects, git) and External (frameworks, AI models, developer tools, langua
 
 483 names. These are the only values the components accept. An unknown class renders nothing. The MCP tool `list_assets({ kind: "icons" })` returns the same list (with a `query` to filter), and `catalog.json#assets.icons` points at it as data.
 
-Used by: Alert, ArtifactPreview, Avatar, Button, DocCard, DocItem, DocPrompt, EmptyState, FeatureItem, FileDropzone, HighlightButton, IconButton, Link, SettingsSection, SplitButton, Tag.
+Used by: Alert, ArtifactPreview, Avatar, Button, Combobox, DocCard, DocItem, DocPrompt, EmptyState, FeatureItem, FileDropzone, HighlightButton, IconButton, Link, SettingsSection, SplitButton, Tag.
 
 ## Names
 
@@ -5889,7 +5901,7 @@ What each prop and event does, and the go-live code: [blocks/dashboard/health-sc
 - Surface: app
 - Source: `blocks/dashboard/home-dashboard/home-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_block("dashboard/home-dashboard")`
-- Components: Alert, `claudeMark`, `codexMark`, `cursorMark`, `geminiMark`, Button, Card, CompanyLogo, DataTable, `DropdownMenuGroup`, `DropdownMenuItem`, EmptyState, Hint, IconButton, Illustration, Input, Item, Link, Popover, SearchTrigger, Skeleton, Spinner, StatTile, StatTileGroup, `TableCellActions`, `TableCellLink`, `TableCellTime`, Tag, Toast, Tooltip, `use-console-layout`
+- Components: Alert, `claudeMark`, `codexMark`, `cursorMark`, `geminiMark`, Button, Card, DataTable, `DropdownMenuGroup`, `DropdownMenuItem`, EmptyState, Hint, IconButton, Illustration, Input, Item, Link, Logo, Popover, SearchTrigger, Skeleton, Spinner, StatTile, StatTileGroup, `TableCellActions`, `TableCellLink`, `TableCellTime`, Tag, Toast, Tooltip, `use-console-layout`
 - Skills: `webkit-layout`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -5925,7 +5937,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 - A. Control labels — `Tooltip` (required)
 - B. Icon-only controls — `IconButton` (required)
 - C. Usage band — `StatTileGroup`, `StatTile`, `Hint` (required)
-- D. Agent onboarding — `Card`, `Item`, `CompanyLogo` (optional)
+- D. Agent onboarding — `Card`, `Item`, `Logo` (optional)
 - E. Resource rows — `Item`, `Link`, `EmptyState` (required)
 - F. Failure — `Alert` (required)
 - G. Classic summary — `StatTile`, `Card`, `IconButton`, `Tooltip` (optional)
@@ -8348,7 +8360,7 @@ What each prop and event does, and the go-live code: [blocks/shell/console.md](b
 - Surface: docs
 - Source: `blocks/shell/docs/docs.vue` in `@aziontech/webkit`
 - MCP: `get_block("shell/docs")`
-- Components: `claudeMark`, `codexMark`, `copilotMark`, `cursorMark`, `geminiMark`, `opencodeMark`, Brand, Button, CodeBlock, CompanyLogo, CopyPromptButton, DataTable, Diagram, DocAccordion, DocAccordionGroup, DocAgentCard, DocCallToAction, DocCallout, DocCard, DocCardGroup, DocCodeGroup, DocFrame, DocHeading, DocHero, DocItem, DocLayout, DocMarkdown, DocPageHeader, DocPreviousNext, DocPrompt, DocProse, DocSteps, DocTab, DocTabs, Footer, IconButton, `ItemList`, RegistrationFrame, Select, StatusIndicator, Tag, ThemeSwitcher, `use-color-mode`
+- Components: `claudeMark`, `codexMark`, `copilotMark`, `cursorMark`, `geminiMark`, `opencodeMark`, Brand, Button, CodeBlock, CopyPromptButton, DataTable, Diagram, DocAccordion, DocAccordionGroup, DocAgentCard, DocCallToAction, DocCallout, DocCard, DocCardGroup, DocCodeGroup, DocFrame, DocHeading, DocHero, DocItem, DocLayout, DocMarkdown, DocPageHeader, DocPreviousNext, DocPrompt, DocProse, DocSteps, DocTab, DocTabs, Footer, IconButton, `ItemList`, Logo, RegistrationFrame, Select, StatusIndicator, Tag, ThemeSwitcher, `use-color-mode`
 - Skills: `webkit-layout`, `webkit-navigation`
 
 ## Asked as
@@ -8661,7 +8673,7 @@ What each prop and event does, and the go-live code: [blocks/state/async-submit.
 - Surface: app
 - Source: `blocks/state/error-page/error-page.vue` in `@aziontech/webkit`
 - MCP: `get_block("state/error-page")`
-- Components: Button, CopyButton, EmptyState, `Error403`, `Error404`
+- Components: Button, CopyButton, EmptyState, LineFigure, `Error403`
 - Skills: `webkit-ui-states`, `webkit-errors`, `webkit-microcopy`
 
 ## Asked as
@@ -8689,7 +8701,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ## Building blocks
 
-- A. Figure — `Error404` (`@aziontech/webkit/svg/error-404`)
+- A. Figure — `LineFigure` (`@aziontech/webkit/line-figure`)
 - B. Message — `EmptyState` (required)
 - C. Actions — `Button` (required)
 
@@ -8740,7 +8752,7 @@ What each prop and event does, and the go-live code: [blocks/state/error-page.md
 
 ## States
 
-- Default: 404, the 404 numeral art, `title` (Page not found), `description`, Go to home (`homeHref`) and Docs (`docsHref`).
+- Default: 404, the animated azion-404 line figure, `title` (Page not found), `description`, Go to home (`homeHref`) and Docs (`docsHref`).
 - Forbidden: 403, the 403 numeral art, You don't have access to this page, Go to home and Switch account.
 - ServerError: 500, the warning icon tile, Something went wrong on our side, Retry, System status and the error reference with its copy button.
 - ResourceNotFound: a bordered EmptyState in the console's content column naming the missing service and its ID, with Back to services.
@@ -8768,7 +8780,7 @@ What each prop and event does, and the go-live code: [blocks/state/error-page.md
 - Surface: app
 - Source: `blocks/state/first-use/first-use.vue` in `@aziontech/webkit`
 - MCP: `get_block("state/first-use")`
-- Components: `claudeMark`, `codexMark`, `cursorMark`, `geminiMark`, Button, Card, CompanyLogo, CopyButton, EmptyState, Input, `InputGroupRoot`, Item, Link, Skeleton
+- Components: `claudeMark`, `codexMark`, `cursorMark`, `geminiMark`, Button, Card, CopyButton, EmptyState, Input, `InputGroupRoot`, Item, Link, Logo, Skeleton
 - Skills: `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -8796,7 +8808,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 ## Building blocks
 
 - A. Frame — `Card` (required)
-- B. Agent marks — `CompanyLogo` (optional)
+- B. Agent marks — `Logo` (optional)
 - C. Explanation — `EmptyState` (required)
 - D. Documentation — `Link` (required)
 - E. Methods — `Item` (required)
@@ -8828,7 +8840,7 @@ What each prop and event does, and the go-live code: [blocks/state/first-use.md]
 
 ## Don't
 
-- Don't draw an agent mark by hand (an `img` or a CSS mask): `CompanyLogo` already inks it for the theme.
+- Don't draw an agent mark by hand (an `img` or a CSS mask): `Logo` already inks it for the theme.
 - Don't show list controls (search, filters, pagination, column settings) over a list that has never had an item.
 - Don't render this block for a filtered list with no matches; that state says how to clear the filter.
 - Don't show it while the list is still loading; the user would see "create your first" for an account that has items.
@@ -10940,7 +10952,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 - Keep the default agents unless the product supports a different set; pass `:agents="[]"` to draw the label alone.
 - Pass the exact prompt in `value`; the button copies it as it stands.
 - Do not recolour the marks: they are single-colour by design and follow the chip's ink.
-- To draw a mark from the agent's asset file instead of the icon font, give the agent a `logo` (`@aziontech/webkit/assets/claude-symbol-color.svg`); `CompanyLogo` flattens it to the chip's ink.
+- To draw a mark from the agent's asset file instead of the icon font, give the agent a `logo` (`@aziontech/webkit/assets/claude-symbol-color.svg`); `Logo` flattens it to the chip's ink.
 - Set `closable` where the chip is guidance the reader can put away (a first-use overview), not where it is part of a page's composition (a hero). Bind `v-model:open` to remember or restore the choice (`close` still fires with the click).
 
 ## Don’t
@@ -10956,7 +10968,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 - `DocHero` — the docs-home masthead whose `actions` slot holds `Get started` and this button.
 - `CopyButton` — the icon-only copy control; this button shares its clipboard fallback.
 - `HighlightButton` — the AI-flow button whose glow, gradient and scrim this chip shares.
-- `CompanyLogo` — draws an agent mark from its asset file in the chip's ink.
+- `Logo` — draws an agent mark from its asset file in the chip's ink.
 
 ## Props
 
@@ -10965,7 +10977,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 | `value` | `string` | `—` | true | The prompt copied to the clipboard on activation. |
 | `label` | `string` | `''` | false | Visible text and accessible name while idle; empty uses the catalog's `Copy prompt`. |
 | `copiedLabel` | `string` | `''` | false | Visible text announced after a copy; empty uses the catalog's `Copied`. |
-| `agents` | `CopyPromptButtonAgent[]` | `Claude, ChatGPT, Gemini, Cursor` | false | The agents whose marks follow the label, in order; each is `{ name, icon?, logo? }`, drawn from `logo` through `CompanyLogo` when set and from the `icon` glyph otherwise; an empty list draws no marks. |
+| `agents` | `CopyPromptButtonAgent[]` | `Claude, ChatGPT, Gemini, Cursor` | false | The agents whose marks follow the label, in order; each is `{ name, icon?, logo? }`, drawn from `logo` through `Logo` when set and from the `icon` glyph otherwise; an empty list draws no marks. |
 | `disabled` | `boolean` | `false` | false | Disables the button; `copy` is not emitted. |
 | `closable` | `boolean` | `false` | false | Shows a dismiss button beside the chip; activating it removes both from the layout and emits `close`. |
 | `open` | `boolean` | `true` | false | Two-way value (`v-model:open`). |
@@ -15397,15 +15409,11 @@ _none_ — monolithic. The gutter, the fallback textarea, the Monaco host, the t
 - Static, read-only code or configuration snippets → use `code-block`.
 - An animated terminal session on a marketing page → use `cli-terminal-section`.
 - Rows of structured records with columns, sorting or paging → use `table`.
-- The steps of a form or setup the person moves through (no log under each step) → use `stepper`.
-- The timed spans of one request or invocation → use `trace`.
 
 ## Related
 
 - `code-block` — highlighted source code with a copy action, not a stream of typed log lines.
 - `cli-terminal-section` — marketing band that plays a scripted terminal session.
-- `stepper` — the steps of a wizard the person moves through; `LogViewer.Steps` is the steps of a run that a machine moves through, each with its log.
-- `trace` — the spans of one request on a time axis, not log lines.
 - `deploy-success` — the post-deploy screen that embeds `log-viewer` for the build log.
 
 ## Props
@@ -15469,7 +15477,6 @@ LogViewer ships its sub-components attached to the root (`LogViewer.Header`, `Lo
 - `loading` state: LogViewerContent renders a centered spinner + `loadingLabel` in place of the log body
 - Log line `data-type` reflects `line.type` and `data-level` reflects `line.level`; `warn` rows take the warning tint, `error` rows the danger tint and danger text
 - Level toggles carry `data-level` and `data-active` (the chosen level); every toggle shows the count of lines at its level in the whole log
-- Log line columns: the time and level cells take their width from the longest value in the whole log (`--log-viewer-time-width`, `--log-viewer-level-width` on the line list, counted in `ch` plus the code letter-spacing), so the columns do not move while lines are filtered, appended or mounted in chunks.
 - Long logs: above 300 visible lines `LogViewerContent` mounts lines in chunks of 100 as they scroll near view (unmounted chunks keep an estimated 24 px per line), so a 10,000-line log mounts within its runtime budget. Search, the level filter, the line count and copy work on every line, mounted or not.
 
 ## Accessibility
@@ -15924,7 +15931,7 @@ Exports to add to `packages/webkit/package.json#exports` (flat public names; cat
 | `variant` | `AvatarVariant` | `'circle'` | false | Visual shape of the avatar container. |
 | `size` | `AvatarSize` | `'medium'` | false | Size preset matching Figma sm / md / lg (24 / 32 / 48 px). |
 | `pattern` | `AvatarPattern` | `undefined` | false | Generated fallback drawn when there is no image: `marble` blends three soft shapes seeded by `label` (or `alt`). |
-| `colors` | `string[]` | `['var(--primary)', 'var(--warning)', 'var(--brand-blue)']` | false | CSS colors the generated pattern paints with, in order; theme tokens such as `var(--primary)`. |
+| `colors` | `string[]` | `['var(--text-primary)', 'var(--primary)', 'var(--warning)']` | false | CSS colors the generated pattern paints with, in order; theme tokens such as `var(--primary)`. |
 
 ## Assets
 
@@ -16150,7 +16157,7 @@ Badge is non-interactive: it has no hover, focus, active, or disabled states and
 
 # Brand
 
-> The Azion brand logo, rendered as an inline SVG lockup. A single `variant` prop selects the lockup: `default` (the AZION wordmark) for standard surfaces, `reduced` (the "A" glyph) for compact headers and tight spaces, and `extended` (the AZION wordmark over "technologies") for marketing-oriented layouts. It is the one public way to draw the Azion mark: the drawings live inside the package and are not exported on their own. The lockups that carry the "Move to the Edge" tagline were retired in 6.0.
+> The Azion brand logo, rendered as an inline SVG lockup. A single `variant` prop selects the lockup: `default` (the AZION wordmark) for standard surfaces, `reduced` (the "A" glyph) for compact headers and tight spaces, and `extended` (the AZION wordmark with the "move to the edge technologies®" tagline) for marketing-oriented layouts. It consolidates the loose `@aziontech/webkit/svg/azion/*` assets — which remain individually importable — behind one component.
 
 - Import: `import Brand from '@aziontech/webkit/brand'`
 - Category: content · Surface: app · Structure: monolithic
@@ -16160,7 +16167,7 @@ Badge is non-interactive: it has no hover, focus, active, or disabled states and
 - Use Brand only for the Azion logo.
 - The Azion logo in a header, navigation bar, footer, sign-in screen or product mockup.
 - `variant="reduced"` where space is tight (collapsed sidebar, mobile header).
-- `variant="extended"` in marketing layouts that show "AZION technologies".
+- `variant="extended"` in marketing layouts that carry the tagline.
 
 ## Do
 
@@ -16174,7 +16181,7 @@ Badge is non-interactive: it has no hover, focus, active, or disabled states and
 
 ## Don’t
 
-- A customer, partner or competitor logo → use `company-logo` (one mark) or `logo-wall` (a grid of them).
+- A customer or partner logo → use `logo-wall`.
 - A person's or organization's picture → use `avatar`.
 - A decorative product graphic → use `illustration`.
 
@@ -16182,14 +16189,13 @@ Badge is non-interactive: it has no hover, focus, active, or disabled states and
 
 - `site-header-section` and `site-footer-section` — compose Brand for the site chrome.
 - `avatar` — the picture or initials of a user, not the product mark.
-- `company-logo` — another company's mark; `Brand` is only Azion's own.
-- `logo-wall` — a grid of other companies' marks.
+- `logo-wall` — third-party company marks.
 
 ## Props
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `variant` | `'default' \| 'reduced' \| 'extended'` | `'default'` | false | Brand lockup to render: `default` (AZION wordmark), `reduced` (the "A" glyph for tight spaces), `extended` (wordmark over "technologies"). |
+| `variant` | `'default' \| 'reduced' \| 'extended'` | `'default'` | false | Brand lockup to render: `default` (AZION wordmark), `reduced` (the "A" glyph for tight spaces), `extended` (wordmark with the "move to the edge technologies®" tagline). |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token; sets the lockup height (16 / 24 / 32 px) while width scales automatically so each `variant` keeps its own aspect ratio. |
 | `decorative` | `boolean` | `false` | false | Hides the mark from assistive tech when visible text beside it already says Azion. |
 
@@ -16201,7 +16207,7 @@ Badge is non-interactive: it has no hover, focus, active, or disabled states and
 
 ## Accessibility
 
-- The root carries `role="img"` and a default `aria-label` (`Azion`) so the logo has an accessible name; consumers may override the label via a passed `aria-label`. With `decorative` the root drops `role` and the name and is `aria-hidden`, for a mark next to visible Azion text (the same option `CompanyLogo` has; `Brand` is the Azion house mark, `CompanyLogo` any other company's mark).
+- The root carries `role="img"` and a default `aria-label` (`Azion`) so the logo has an accessible name; consumers may override the label via a passed `aria-label`. With `decorative` the root drops `role` and the name and is `aria-hidden`, for a mark next to visible Azion text (the same option `Logo` has; `Brand` is the Azion house mark, `Logo` any vendor mark).
 - Non-interactive: the logo is not focusable and emits no events; the inner SVG is presentational.
 - Contrast ≥3:1 for the brand mark against its background (large graphic).
 - `motion-reduce` not applicable — the component is static.
@@ -16556,105 +16562,6 @@ The frame is static apart from its resize handles.
 ```
 
 2 more example(s) in [components/card.md](components/card.md).
-
----
-
-<!-- components/company-logo.md -->
-
-# Company Logo
-
-> A third-party mark (a client, a competitor, an analyst firm, a standard or certification, a coding agent) drawn right on both themes. The asset registries already hold the files (`@aziontech/webkit/assets/client-registry`, `@aziontech/webkit/assets/competitor-registry` and the `@aziontech/webkit/assets/<file>.svg` exports); every surface that drew one repeated the same theme rule by hand (two `img` tags revealed per `[data-theme]`, a `brightness-0` silhouette, a CSS mask in `currentColor`) and none had every route. `CompanyLogo` holds the rule once: a light/dark pair of files, or one file inverted on the theme where it would vanish, or one ink (the theme's black or white, the surrounding `currentColor`, or black pinned for a coloured fill), and the company's name as a typographic wordmark when there is no file yet. It replaces the design sample's `AgentMark` and `ClientMark`. It is a renderer: it takes the file URLs from a registry entry and imports no registry itself, so a page pays only for the marks it shows.
-
-- Import: `import CompanyLogo from '@aziontech/webkit/company-logo'`
-- Category: content · Surface: app · Structure: monolithic
-
-## When to use
-
-- Use CompanyLogo for any other company's mark (client, competitor, agent, certification).
-- A logo wall, a trust strip, a client story card, a quote attribution, a comparison column head: any place that shows another company's mark.
-- The coding agents a prompt works with (Claude, Codex, Gemini, Cursor), drawn in the ink of the surface they sit on.
-- A list of standards or analyst firms (SOC, PCI DSS, Gartner, Forrester).
-
-## Do
-
-- Pass a registry entry as it stands: `name`, `src` from `logo`, `src-light` from `logoLight`, `artwork` from `artwork`. The registry knows which theme each file is drawn for.
-- Set the height with `size`: `small` (16 px) beside a label or in a table cell, `medium` (24 px, the default) in a card or a list, `large` (32 px) in a logo wall or a quote attribution. The width follows each file's own aspect ratio. Cap wide wordmarks with `max-w-*`.
-- In a list of many clients, use `variant="monochrome"`: per-brand colour reads as noise next to twenty others.
-- On a coloured fill (white, `--primary`), use `variant="knockout"`: a fill does not follow the theme, so the ink must not either.
-- On a surface that is dark in both themes, or among drawn diagram parts, use `variant="current"` so the mark takes the surface's own ink.
-- When the text beside the mark already names the company, set `decorative`.
-
-## Don’t
-
-- The Azion logo → use `Brand`.
-- A card network beside a payment method → use `PaymentBrand`.
-- A person or an account → use `Avatar`.
-- A product icon or a UI glyph → use an icon from `@aziontech/icons`.
-- A grid of client marks → use `LogoWall`; it renders each mark and can render `CompanyLogo` in its `mark` slot.
-
-## Related
-
-- `brand` — the Azion lockup; `CompanyLogo` is everyone else's.
-- `payment-brand` — card-network plates, drawn in tokens.
-- `logo-wall` — the grid that lays marks out; `CompanyLogo` draws one mark.
-- `avatar` — a person's or an organization's picture with initials.
-
-## Props
-
-| Prop | Type | Default | Required | Description |
-| --- | --- | --- | --- | --- |
-| `name` | `string` | `—` | true | The company or product the mark belongs to; the accessible name, and the typographic wordmark drawn when no file is set. |
-| `src` | `string` | `''` | false | URL of the mark; on its own it serves both themes, and with `srcLight` it is the dark-theme file. Empty draws the wordmark. |
-| `srcLight` | `string` | `''` | false | URL of the light-theme file; with `src` both files render and the theme reveals one. |
-| `artwork` | `'color' \| 'light' \| 'dark'` | `'color'` | false | The ink a single file is drawn in: `light` art (for dark surfaces) is inverted on the light theme, `dark` art is inverted on the dark theme, `color` is kept as is. Ignored when `srcLight` is set or `variant` is not `color`. |
-| `variant` | `'color' \| 'monochrome' \| 'current' \| 'knockout'` | `'color'` | false | Ink: `color` keeps the vendor's colours, `monochrome` paints one silhouette black on light and white on dark, `current` paints it in the surrounding text colour, `knockout` pins it black for a mark on a coloured fill. |
-| `ariaLabel` | `string` | `''` | false | Accessible name when it should differ from `name`. |
-| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Height of the mark: `small` 16 px, `medium` 24 px, `large` 32 px; the width follows the file's aspect ratio. |
-| `decorative` | `boolean` | `false` | false | Hides the mark from assistive technology when the text beside it already names the company. |
-
-## States
-
-- `data-variant` on the root: `color` | `monochrome` | `current` | `knockout`.
-- `data-route` on the root: `pair` (both files in the DOM, the theme reveals one), `single` (one file, filtered by `artwork` or the ink of `variant`), `wordmark` (no file: the name in type).
-- `data-artwork` on the root mirrors `artwork`.
-- `data-size` on the root mirrors `size`: `small` is `h-4`, `medium` is `h-6`, `large` is `h-8`.
-- `data-sized` on the root when the caller's class sets a height (`h-*` or `size-*`, with or without a breakpoint); it then wins over `size`.
-- Not applicable: `loading`, `empty`, `error`, `disabled`, `readonly`, `invalid`, `open`/`closed` (a static mark).
-
-## Accessibility
-
-- Pattern: an image (`role="img"` on the root) named by `ariaLabel`, else `name`. The files inside have empty `alt` and are `aria-hidden`, so a light/dark pair is announced once.
-- With `decorative` the root is `aria-hidden="true"` and has no role.
-- Not focusable; no keyboard map (a static mark).
-- Contrast: marks are logos (WCAG 1.4.3 exempts logotypes); the `monochrome` route makes a mark pure black or white against the page, and `knockout` pure black on a light fill.
-- Forced colors: the `current` route paints `currentColor`, so it follows `CanvasText`.
-- No motion.
-
-## Examples
-
-### Default
-
-```vue
-<script setup>
-  import { CLIENTS } from '@aziontech/webkit/assets/client-registry'
-  import CompanyLogo from '@aziontech/webkit/company-logo'
-
-  const client = CLIENTS.find((entry) => entry.name === 'Agibank')
-</script>
-
-<template>
-  <CompanyLogo
-    :name="client.name"
-    :src="client.logo"
-    :src-light="client.logoLight"
-    :artwork="client.artwork"
-    size="large"
-    class="max-w-40"
-  />
-</template>
-```
-
-2 more example(s) in [components/company-logo.md](components/company-logo.md).
 
 ---
 
@@ -17309,6 +17216,137 @@ name.
 
 ---
 
+<!-- components/hotspot.md -->
+
+# Hotspot
+
+> Marks a real control as a step of a tutorial. It wraps the control and, while a tutorial that names its `hotspotId` runs, draws a small marker beside it. The current step's marker pulses and opens the step in a popover: the step's title, `Step n of N` with the task's name, the instructions, and Previous / Next (Finish on the last step). Outside a running tutorial, or outside a `TutorialPanel.Provider`, it renders only the wrapped control, so hotspots can stay on a page for good.
+
+- Import: `import Hotspot from '@aziontech/webkit/hotspot'`
+- Category: content · Surface: app · Structure: monolithic
+
+## When to use
+
+- A tutorial step is about one control on the page, and the reader should see where it is.
+- The page runs inside a `TutorialPanel.Provider` and offers guided tutorials from its help region.
+
+## Do
+
+- Wrap exactly the control the step is about; keep the marker beside it, not inside a long row.
+- Use `side="start"` when the control sits at the end of a row and the marker would overflow.
+- One `hotspotId` per control and per page. The same id on two elements opens two popovers.
+- Keep step content short: the popover is a small surface over the real UI.
+
+## Don’t
+
+- A permanent tip on a control → use `hint` or `popover`.
+- A new feature announcement with no tutorial behind it → use `popover` or an `alert`.
+- Help text for a form field → use the field's `field-description`.
+
+## Related
+
+- `tutorial-panel` — the provider holds the steps a hotspot shows; the panel lists and runs the tutorials.
+- `popover` — the overlay the current step opens in.
+- `help-panel` — static help without a guided run.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `hotspotId` | `string` | `—` | true | Matches the `hotspotId` of a tutorial step; the marker shows while that step's tutorial runs. |
+| `side` | `'start' \| 'end'` | `'end'` | false | Which side of the wrapped control the marker sits on, in reading direction. |
+
+## Slots
+
+| Slot | Scope | Notes |
+| --- | --- | --- |
+| `default` | — | The real control the step is about. |
+
+## States
+
+- Visual states: `idle` (no marker), `marked` (static marker: the step belongs to the running tutorial), `active` (the current step: marker filled and pulsing, popover open), `dismissed` (active step closed by the reader: marker filled, no pulse, popover closed)
+- `data-marker` on the root when the marker shows; `data-active` on the root and on the marker for the current step (the step you are on)
+- `data-side` mirrors `side`
+- The popover's `data-state` is `open` | `closed` (owned by `Popover`)
+
+## Accessibility
+
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on the marker.
+- Keyboard map: the marker is a `button` in the tab order after the wrapped control (before it with `side="start"`); `Enter` / `Space` opens its step (and makes it current). Inside the popover `Tab` cycles Close, Previous and Next (the `Popover` loop); `Esc` closes the step and returns focus to the marker. Next, Previous and the marker move focus into the new step's popover; Finish moves focus to the panel's completion heading.
+- ARIA: the marker is named `Tutorial step: <title>` and carries `aria-haspopup="dialog"`, `aria-expanded` and `aria-controls` (from `Popover.Trigger`). The popover is a non-modal `dialog` labelled by the step title and described by `Step n of N`. The pulse ring and dot are `aria-hidden`.
+- Contrast: the marker's `--primary` against the canvas ≥3:1 (non-text) in both themes.
+- Pause, Stop, Hide (WCAG 2.2.2): the pulse ring pings three times when a step opens and stops by itself after 3 seconds; opening the next step replays it.
+- Touch target: the visible marker is 24 px; a `before:` pseudo-element extends the hit area by 8 px on each side (40 px). While the marker shows, the root reserves those 8 px on the marker's outer side (`--spacing-xs` padding), so a hotspot flush with the end of a narrow row does not scroll the page sideways.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import Button from '@aziontech/webkit/button'
+  import Hotspot from '@aziontech/webkit/hotspot'
+  import TutorialPanel from '@aziontech/webkit/tutorial-panel'
+  import { ref } from 'vue'
+
+  const tutorials = [
+    {
+      id: 'publish',
+      title: 'Publish a change',
+      tasks: [
+        {
+          title: 'Review and deploy',
+          steps: [
+            {
+              title: 'Preview the change',
+              content: 'Open the preview to check the change before anyone else sees it.',
+              hotspotId: 'preview'
+            },
+            {
+              title: 'Deploy',
+              content: 'Select Deploy to send the change to production.',
+              hotspotId: 'deploy'
+            }
+          ]
+        }
+      ]
+    }
+  ]
+
+  const active = ref('publish')
+  const step = ref(0)
+</script>
+
+<template>
+  <TutorialPanel.Provider
+    v-model:active-key="active"
+    v-model:step="step"
+    :tutorials="tutorials"
+  >
+    <div class="flex min-h-(--container-3xs) flex-wrap items-start gap-(--spacing-sm)">
+      <Hotspot hotspot-id="preview">
+        <Button
+          label="Preview"
+          variant="outline"
+          size="medium"
+        />
+      </Hotspot>
+      <Hotspot hotspot-id="deploy">
+        <Button
+          label="Deploy"
+          variant="primary"
+          size="medium"
+        />
+      </Hotspot>
+    </div>
+  </TutorialPanel.Provider>
+</template>
+```
+
+2 more example(s) in [components/hotspot.md](components/hotspot.md).
+
+---
+
 <!-- components/illustration.md -->
 
 # Illustration
@@ -17347,7 +17385,7 @@ name.
 - `empty-state` — the surrounding layout (illustration + title + description + actions); reach for it first and put an `Illustration` inside it.
 - `flow-diagram` — a real interactive node/edge diagram driven by data; `Illustration` is decorative and static by comparison.
 - `skeleton` — the loading placeholder; an illustration is never a loading state.
-- `brand` — the Azion mark; an illustration never draws it.
+- `svg/azion/*` — drawn brand marks, for artwork that is not part of the illustration library.
 
 ## Props
 
@@ -17890,6 +17928,190 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 ```
 
 2 more example(s) in [components/key-value-list.md](components/key-value-list.md).
+
+---
+
+<!-- components/line-figure.md -->
+
+# Line Figure
+
+> An isometric line-art figure that answers the pointer: one per product (cache TTL, load balancer, DNS lookup, firewall, a 404 page and 20 more), drawn by a small engine into one SVG with the illustration tokens, so it follows the theme. Each figure loads on demand. The pointer, or focus with arrow keys, moves the figure through its answer; `play` walks it through on its own until a person arrives; under reduced motion it holds a still frame. From the design sample's `shared/ui/line-figure` (engine MIT, kept with its `LICENSE`). The figures are marketing assets, listed in the marketing inventory.
+
+- Import: `import LineFigure from '@aziontech/webkit/line-figure'`
+- Category: content · Surface: app · Structure: monolithic
+
+## When to use
+
+- Use LineFigure for an interactive isometric product figure.
+- The art beside a product's copy on a landing or a docs home.
+- An empty state or a not-found page (`azion-404`).
+
+## Do
+
+- One figure per view; two figures answering the pointer compete.
+- Pass `aria-label` when the page says something more specific than the figure's own description.
+- Use `play` only where nothing else moves.
+- Take the name from `llms/foundations/line-figures.md` or `list_assets({ kind: "lineFigures" })`; an unknown name draws nothing.
+- In a container that sizes to its content (the `EmptyState` `icon` slot, a centred flex column) the figure takes its natural 400×320 size, capped by the space available. Put it in a sized wrapper (`<div class="w-60 max-w-full">`) when the art should be smaller.
+
+## Don’t
+
+- For static, non-interactive art — use `Illustration`.
+- For data — use the charts.
+- Inside dense application screens.
+
+## Related
+
+- `Illustration` — static art from the registry.
+- `ConsoleMockup` — product scenes.
+- `EmptyState` — can carry a figure in its art slot.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `name` | `LineFigureName \| ''` | `''` | false | Registered figure to draw; an unknown or empty name draws nothing. |
+| `intensity` | `number` | `0.5` | false | How strongly the figure answers the pointer, from 0 (subtle) to 1 (strong). |
+| `play` | `boolean` | `false` | false | Walks the figure through its answer on its own until a pointer or focus arrives; a still frame under reduced motion. |
+| `ariaLabel` | `string` | `''` | false | Accessible name; falls back to the figure's own English description. |
+
+## Events
+
+| Event | Payload | Notes |
+| --- | --- | --- |
+| `read` | `caption: string` | The figure's current reading each time it changes (the first reading on mount). |
+
+## Assets
+
+- Line figures: every valid name is in line-figures.md (MCP `list_assets({ kind: "lineFigures" })`). An unknown or empty name draws nothing.
+
+## States
+
+- `data-name` mirrors `name`; `data-play` is present while `play` is on.
+- Empty: no role and an empty SVG for an unknown name.
+
+## Accessibility
+
+- `role="img"` named by `ariaLabel` or the figure description; the SVG is `aria-hidden`.
+- The figure is not a control: it never takes focus on its own, and the page stays operable without it.
+- Readings go out through `read`; a page that shows them should put them in a polite live region (see the Play example).
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import LineFigure from '@aziontech/webkit/line-figure'
+</script>
+
+<template>
+  <div class="max-w-(--container-sm)">
+    <LineFigure name="cache-ttl" />
+  </div>
+</template>
+```
+
+2 more example(s) in [components/line-figure.md](components/line-figure.md).
+
+---
+
+<!-- components/logo.md -->
+
+# Logo
+
+> A third-party mark (a client, a competitor, an analyst firm, a standard or certification, a coding agent) drawn right on both themes. The asset registries already hold the files (`@aziontech/webkit/assets/client-registry`, `@aziontech/webkit/assets/competitor-registry` and the `@aziontech/webkit/assets/<file>.svg` exports); every surface that drew one repeated the same theme rule by hand (two `img` tags revealed per `[data-theme]`, a `brightness-0` silhouette, a CSS mask in `currentColor`) and none had every route. `Logo` holds the rule once: a light/dark pair of files, or one file inverted on the theme where it would vanish, or one ink (the theme's black or white, the surrounding `currentColor`, or black pinned for a coloured fill), and the company's name as a typographic wordmark when there is no file yet. It replaces the design sample's `AgentMark` and `ClientMark`. It is a renderer: it takes the file URLs from a registry entry and imports no registry itself, so a page pays only for the marks it shows.
+
+- Import: `import Logo from '@aziontech/webkit/logo'`
+- Category: content · Surface: app · Structure: monolithic
+
+## When to use
+
+- Use Logo for any other company's mark (client, competitor, agent, certification).
+- A logo wall, a trust strip, a client story card, a quote attribution, a comparison column head: any place that shows another company's mark.
+- The coding agents a prompt works with (Claude, Codex, Gemini, Cursor), drawn in the ink of the surface they sit on.
+- A list of standards or analyst firms (SOC, PCI DSS, Gartner, Forrester).
+
+## Do
+
+- Pass a registry entry as it stands: `name`, `src` from `logo`, `src-light` from `logoLight`, `artwork` from `artwork`. The registry knows which theme each file is drawn for.
+- Set the height with `size`: `small` (16 px) beside a label or in a table cell, `medium` (24 px, the default) in a card or a list, `large` (32 px) in a logo wall or a quote attribution. The width follows each file's own aspect ratio. Cap wide wordmarks with `max-w-*`.
+- In a list of many clients, use `variant="monochrome"`: per-brand colour reads as noise next to twenty others.
+- On a coloured fill (white, `--primary`), use `variant="knockout"`: a fill does not follow the theme, so the ink must not either.
+- On a surface that is dark in both themes, or among drawn diagram parts, use `variant="current"` so the mark takes the surface's own ink.
+- When the text beside the mark already names the company, set `decorative`.
+
+## Don’t
+
+- The Azion logo → use `Brand`.
+- A card network beside a payment method → use `PaymentBrand`.
+- A person or an account → use `Avatar`.
+- A product icon or a UI glyph → use an icon from `@aziontech/icons`.
+- A grid of client marks → use `LogoWall`; it renders each mark and can render `Logo` in its `mark` slot.
+
+## Related
+
+- `brand` — the Azion lockup; `Logo` is everyone else's.
+- `payment-brand` — card-network plates, drawn in tokens.
+- `logo-wall` — the grid that lays marks out; `Logo` draws one mark.
+- `avatar` — a person's or an organization's picture with initials.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `name` | `string` | `—` | true | The company or product the mark belongs to; the accessible name, and the typographic wordmark drawn when no file is set. |
+| `src` | `string` | `''` | false | URL of the mark; on its own it serves both themes, and with `srcLight` it is the dark-theme file. Empty draws the wordmark. |
+| `srcLight` | `string` | `''` | false | URL of the light-theme file; with `src` both files render and the theme reveals one. |
+| `artwork` | `'color' \| 'light' \| 'dark'` | `'color'` | false | The ink a single file is drawn in: `light` art (for dark surfaces) is inverted on the light theme, `dark` art is inverted on the dark theme, `color` is kept as is. Ignored when `srcLight` is set or `variant` is not `color`. |
+| `variant` | `'color' \| 'monochrome' \| 'current' \| 'knockout'` | `'color'` | false | Ink: `color` keeps the vendor's colours, `monochrome` paints one silhouette black on light and white on dark, `current` paints it in the surrounding text colour, `knockout` pins it black for a mark on a coloured fill. |
+| `ariaLabel` | `string` | `''` | false | Accessible name when it should differ from `name`. |
+| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Height of the mark: `small` 16 px, `medium` 24 px, `large` 32 px; the width follows the file's aspect ratio. |
+| `decorative` | `boolean` | `false` | false | Hides the mark from assistive technology when the text beside it already names the company. |
+
+## States
+
+- `data-variant` on the root: `color` | `monochrome` | `current` | `knockout`.
+- `data-route` on the root: `pair` (both files in the DOM, the theme reveals one), `single` (one file, filtered by `artwork` or the ink of `variant`), `wordmark` (no file: the name in type).
+- `data-artwork` on the root mirrors `artwork`.
+- `data-size` on the root mirrors `size`: `small` is `h-4`, `medium` is `h-6`, `large` is `h-8`.
+- `data-sized` on the root when the caller's class sets a height (`h-*` or `size-*`, with or without a breakpoint); it then wins over `size`.
+- Not applicable: `loading`, `empty`, `error`, `disabled`, `readonly`, `invalid`, `open`/`closed` (a static mark).
+
+## Accessibility
+
+- Pattern: an image (`role="img"` on the root) named by `ariaLabel`, else `name`. The files inside have empty `alt` and are `aria-hidden`, so a light/dark pair is announced once.
+- With `decorative` the root is `aria-hidden="true"` and has no role.
+- Not focusable; no keyboard map (a static mark).
+- Contrast: marks are logos (WCAG 1.4.3 exempts logotypes); the `monochrome` route makes a mark pure black or white against the page, and `knockout` pure black on a light fill.
+- Forced colors: the `current` route paints `currentColor`, so it follows `CanvasText`.
+- No motion.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import { CLIENTS } from '@aziontech/webkit/assets/client-registry'
+  import Logo from '@aziontech/webkit/logo'
+
+  const client = CLIENTS.find((entry) => entry.name === 'Agibank')
+</script>
+
+<template>
+  <Logo
+    :name="client.name"
+    :src="client.logo"
+    :src-light="client.logoLight"
+    :artwork="client.artwork"
+    size="large"
+    class="max-w-40"
+  />
+</template>
+```
+
+2 more example(s) in [components/logo.md](components/logo.md).
 
 ---
 
@@ -18697,7 +18919,7 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 - Visible focus: none; the tag is not focusable. A focusable control that holds a tag draws its own ring.
 - Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `Escape` closes overlays where applicable.
 - ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state; the `highlight` label is the logo orange `#F3652B`, an owner-accepted brand exception in light (about 3:1, `rules/webkit-tokens.md` § "Contrast: APCA and WCAG 2").
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
 
@@ -18838,7 +19060,7 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 
 # Tutorial Panel
 
-> The guide that runs tutorials beside the real product. It lives in the page's tools or help region, lists the tutorials a reader can take, and while one runs it shows the tutorial's tasks and the reader's place in them. The steps themselves happen on the page: each step points at a `TutorialPanelHotspot` placed beside the real control, and the current step opens there in a popover. `TutorialPanel.Provider` wraps the whole page (the content and the tools region), holds the running tutorial and the current step, and is what the panel and every hotspot read. A tutorial starts on a reader's action (the panel's Start); only one step is open on a page at a time. It is the stateful layer over `help-panel`: the panel is a `HelpPanel` with its `Header`, and draws each tutorial with its own internal task list (6.0 moved the former `HelpPanel.TutorialPanelTutorial` and `HelpPanel.Task` here; `HelpPanel` no longer has a tutorial mode). Design call (M2.9, WP app-layout): neither the design sample nor the Console Kit has a guided tutorial, so the model is Cloudscape's tutorial panel, hotspot and annotation context, rebuilt on WebKit parts. Design call (2026-11-18): the hotspot is a part of this component, not a component of its own. It renders nothing without the provider's running tutorial and reads only this component's context, so it belongs to this family the way Atlassian's `SpotlightTarget` belongs to its onboarding `SpotlightManager`; Shepherd.js and Driver.js have no separate target component at all (a step names its element), and the standalone hotspots of Appcues and Pendo work without a tour, which ours never does. Cloudscape ships `Hotspot` as its own export, but it too only works inside its annotation context. It is a companion part (it composes `Popover`), so it is imported on its own and not attached to the compound.
+> The guide that runs tutorials beside the real product. It lives in the page's tools or help region, lists the tutorials a reader can take, and while one runs it shows the tutorial's tasks and the reader's place in them. The steps themselves happen on the page: each step points at a `Hotspot` placed beside the real control, and the current step opens there in a popover. `TutorialPanel.Provider` wraps the whole page (the content and the tools region), holds the running tutorial and the current step, and is what the panel and every `Hotspot` read. It is the stateful layer over `help-panel`: the panel is a `HelpPanel` with its `Header`, and draws each tutorial with its own internal task list (6.0 moved the former `HelpPanel.TutorialPanelTutorial` and `HelpPanel.Task` here; `HelpPanel` no longer has a tutorial mode). Design call (M2.9, WP app-layout): neither the design sample nor the Console Kit has a guided tutorial, so the model is Cloudscape's tutorial panel, hotspot and annotation context, rebuilt on WebKit parts.
 
 - Import: `import TutorialPanelRoot from '@aziontech/webkit/tutorial-panel-root'`
 - Compound import (dot notation, not tree-shakeable): `import TutorialPanel from '@aziontech/webkit/tutorial-panel'`
@@ -18846,7 +19068,7 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 
 ## When to use
 
-- Use TutorialPanel for guided tutorials whose steps point at real controls through TutorialPanelHotspot.
+- Use TutorialPanel for guided tutorials whose steps point at real controls through Hotspot.
 - A reader learns a product task by doing it on the real screen, step by step, with the instructions pointing at the control they need next.
 - A product offers several tutorials in its help region and records which ones the reader finished.
 - A first-run or onboarding flow guides the reader through a real create and deploy, not a mock.
@@ -18854,11 +19076,9 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 ## Do
 
 - Wrap the whole page in `TutorialPanel.Provider`, so the panel and every hotspot share one state.
-- Start a tutorial on a reader's action (the panel's Start, or a call to action that sets `activeKey`), never by presetting `activeKey` on the page's first render: a step popover over the page before the reader asked for it hides what they came to read.
-- One step is open on a page at a time. When a provider starts or moves a tutorial it takes the open step, and the step another provider had open closes (its marker stays and reopens it).
 - Keep tutorials as data (`TutorialPanelTutorial[]`): the panel lists them and the hotspots on the page read the same steps. This is the one place a config array is right — the step content is shown away from where it is declared.
 - One step, one control. Write the step title as the action (`Name the service`) and the content as one or two sentences.
-- Place every `TutorialPanelHotspot` a tutorial names on the page that runs it. A step whose hotspot is missing still shows in the panel, and focus moves to it there.
+- Place every `Hotspot` a tutorial names on the page that runs it. A step whose hotspot is missing still shows in the panel, and focus moves to it there.
 - Set `completed` on a tutorial from what the product recorded (the `complete` event), not from a click.
 - Bind `v-model:activeKey` and `v-model:step` and persist them when a tutorial must survive a navigation.
 
@@ -18873,8 +19093,9 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 
 ## Related
 
+- `hotspot` — the marker beside a real control; the current step opens from it. Every step names one by `hotspotId`.
 - `help-panel` — the parts the panel draws with; use it alone for help without a guided run.
-- `popover` — what a `TutorialPanelHotspot` opens; the step's title, content and Previous / Next live in it.
+- `popover` — what a hotspot opens; the step's title, content and Previous / Next live in it.
 - `drawer` — the host of the tools region on narrow screens; the panel goes inside it.
 
 ## Props
@@ -18895,7 +19116,6 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 ## Sub-component imports
 
 - `@aziontech/webkit/tutorial-panel-provider`
-- `@aziontech/webkit/tutorial-panel-hotspot`
 
 ## Sub-components
 
@@ -18903,32 +19123,19 @@ The root ships a **compound API**: `index.ts` attaches the provider to the panel
 `<TutorialPanel.Provider>` resolves from the same import. The panel has no open state (the tools region
 that hosts it owns that), so there is no `Trigger` / `Content`. State flows through `provide`/`inject`
 (`injection-key.ts`, provided by the provider): the panel reads it through
-`composables/use-tutorial-panel-context.ts`, which throws outside a provider, and `TutorialPanelHotspot` reads it
-through the optional variant, which returns null so a hotspot outside a provider renders only its content.
-Which provider holds the page's one open step is a module-level owner in `lib/open-step-owner.ts`: a
-provider takes it when it starts or moves a tutorial (or, on mount or when `activeKey` is set from
-outside, only if no provider holds it), and gives it back on exit and unmount. A provider that does
-not hold it reports its step as dismissed, so its popover is closed and its marker stays.
+`composables/use-tutorial-panel-context.ts`, which throws outside a provider, and `Hotspot` reads it through
+the optional variant, which returns null so a hotspot outside a provider renders only its content.
 
 - `tutorial-panel-provider/tutorial-panel-provider.vue` — Holds the tutorials, the running tutorial (`v-model:activeKey`), the current step (`v-model:step`, flat across tasks), whether the reader dismissed the current s…
   - Props: `tutorials?: TutorialPanelTutorial[]` (default `[]`).
   - Models (`defineModel`): `v-model:activeKey` (`string \| null`, default `null` — the parent owns it when bound, the provider keeps it locally when not), `v-model:step` (`number`, default `0`, same rule; equals the step count once the tutorial is finished).
-  - Events: `update:activeKey` (`string \| null`) and `update:step` (`number`) from the models; `start` (`(event: Event, id: string)` — the tutorial id, on Start and Restart), `exit` (`(event: Event, id: string)` — on Exit or Back to tutorials), `complete` (`(event: Event, id: string)` — on Finish of the last step). Each fires from a button the reader activated (in the panel or a hotspot popover, through the context), so the DOM event comes first and the tutorial id second.
+  - Events: `update:activeKey` (`string \| null`) and `update:step` (`number`) from the models; `start` (`(event: Event, id: string)` — the tutorial id, on Start and Restart), `exit` (`(event: Event, id: string)` — on Exit or Back to tutorials), `complete` (`(event: Event, id: string)` — on Finish of the last step). Each fires from a button the reader activated (in the panel or a `Hotspot` popover, through the context), so the DOM event comes first and the tutorial id second.
   - Slot: `default` — the page, with the panel and every hotspot inside.
-
-- `tutorial-panel-hotspot/tutorial-panel-hotspot.vue` — **companion part** (composes `Popover` and `Button`; exported on its own, not attached): marks a real control as a step.
-  - Props: `hotspotId: string` (required) — matches the `hotspotId` of a tutorial step; `side?: 'start' | 'end'` (default `'end'`, type `TutorialPanelHotspotSide`) — which side of the wrapped control the marker sits on, in reading direction.
-  - Events: none — moves go through the provider.
-  - Slot: `default` — the real control the step is about.
-  - States: `idle` (no marker), `marked` (static marker), `active` (the current step: filled, pulsing, popover open), `dismissed` (the current step closed by the reader, or by another provider taking the open step: filled, no pulse, popover closed). `data-marker` on the root when the marker shows; `data-active` on the root and the marker for the current step; `data-side` mirrors `side`; the popover's `data-state` is owned by `Popover`.
-  - `data-testid` fallback `tutorial-panel-hotspot`; inner parts `__marker`, `__popover`, `__trigger`, `__step`, `__title`, `__close`, `__previous`, `__next`.
-  - Keyboard and ARIA: the marker is a `button` in the tab order after the wrapped control (before it with `side="start"`), named `Tutorial step: <title>`, with `aria-haspopup="dialog"`, `aria-expanded` and `aria-controls` from `Popover.Trigger`; `Enter` / `Space` opens its step and makes it current. The popover is a non-modal `dialog` labelled by the step title and described by `Step n of N`; `Tab` cycles Close, Previous and Next; `Esc` closes the step and returns focus to the marker. Next, Previous and the marker move focus into the new step's popover. The pulse ring and dot are `aria-hidden`; the ring pings three times and stops (WCAG 2.2.2).
-  - Touch: a 24 px marker with a `before:` pseudo-element that extends the hit area to 40 px; the root reserves `--spacing-xs` on the marker's outer side so a hotspot flush with a narrow row does not scroll the page sideways.
 
 - `parts/tutorial-panel-tasks.vue` — internal, not exported: a tutorial's title, description, a progress line derived from the registered tasks (`2 of 3 complete`, `aria-live="polite"`), the ordered task `<ol>` and an a…
 - `parts/tutorial-panel-task.vue` — internal, not exported: one task, a numbered marker, a title and its steps.
 
-Exported types: `TutorialPanelTutorial` (`id`, `title`, `description?`, `completed?`, `tasks`), `TutorialPanelTaskData` (`title`, `steps`), `TutorialPanelStep` (`title`, `content`, `hotspotId`), `TutorialPanelHotspotSide`.
+Exported types: `TutorialPanelTutorial` (`id`, `title`, `description?`, `completed?`, `tasks`), `TutorialPanelTaskData` (`title`, `steps`), `TutorialPanelStep` (`title`, `content`, `hotspotId`).
 
 ```
 packages/webkit/src/components/content/tutorial-panel/
@@ -18939,12 +19146,8 @@ packages/webkit/src/components/content/tutorial-panel/
 ├── composables/
 │   ├── use-tutorial-panel-context.ts           (strict and optional injectors)
 │   └── use-tutorial-panel-tasks-context.ts     (task registry; throws outside the task list)
-├── lib/
-│   └── open-step-owner.ts                (the page's one open step)
 ├── tutorial-panel-provider/
 │   └── tutorial-panel-provider.vue
-├── tutorial-panel-hotspot/
-│   └── tutorial-panel-hotspot.vue        (companion part)
 ├── tutorial-panel-tasks/
 │   └── tutorial-panel-tasks.vue          (internal)
 └── tutorial-panel-task/
@@ -18956,11 +19159,10 @@ Exports:
 ```jsonc
 "./tutorial-panel": "./src/components/content/tutorial-panel/index.ts",
 "./tutorial-panel-root": "./src/components/content/tutorial-panel/tutorial-panel.vue",
-"./tutorial-panel-provider": "./src/components/content/tutorial-panel/tutorial-panel-provider/tutorial-panel-provider.vue",
-"./tutorial-panel-hotspot": "./src/components/content/tutorial-panel/tutorial-panel-hotspot/tutorial-panel-hotspot.vue"
+"./tutorial-panel-provider": "./src/components/content/tutorial-panel/tutorial-panel-provider/tutorial-panel-provider.vue"
 ```
 
-Composed DS components (relative imports): `help-panel` (root, `Header`), `button`, `empty-state`, `tag`, `popover` (the hotspot's step).
+Composed DS components (relative imports): `help-panel` (root, `Header`), `button`, `empty-state`, `tag`.
 
 ## States
 
@@ -18985,10 +19187,10 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
 ```vue
 <script setup>
   import Button from '@aziontech/webkit/button'
+  import Hotspot from '@aziontech/webkit/hotspot'
   import Input from '@aziontech/webkit/input'
   import PageHeader from '@aziontech/webkit/page-header'
   import TutorialPanel from '@aziontech/webkit/tutorial-panel'
-  import TutorialPanelHotspot from '@aziontech/webkit/tutorial-panel-hotspot'
   import { ref } from 'vue'
 
   const tutorials = [
@@ -19064,7 +19266,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
         />
         <div class="flex flex-wrap items-center gap-(--spacing-xs)">
           <div class="min-w-0 flex-1">
-            <TutorialPanelHotspot
+            <Hotspot
               hotspot-id="search"
               class="w-full"
             >
@@ -19073,15 +19275,15 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
                 aria-label="Search services"
                 placeholder="Search services"
               />
-            </TutorialPanelHotspot>
+            </Hotspot>
           </div>
-          <TutorialPanelHotspot hotspot-id="new-service">
+          <Hotspot hotspot-id="new-service">
             <Button
               label="New service"
               icon="az az-plus"
               size="medium"
             />
-          </TutorialPanelHotspot>
+          </Hotspot>
         </div>
         <section
           aria-labelledby="new-service-title"
@@ -19093,15 +19295,15 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
           >
             New service
           </h2>
-          <TutorialPanelHotspot hotspot-id="service-name">
+          <Hotspot hotspot-id="service-name">
             <Input
               v-model="name"
               aria-label="Service name"
               placeholder="storefront-api"
             />
-          </TutorialPanelHotspot>
+          </Hotspot>
           <div class="flex justify-end">
-            <TutorialPanelHotspot
+            <Hotspot
               hotspot-id="deploy"
               side="start"
             >
@@ -19110,7 +19312,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
                 variant="primary"
                 size="medium"
               />
-            </TutorialPanelHotspot>
+            </Hotspot>
           </div>
         </section>
       </main>
@@ -22886,6 +23088,7 @@ The imperative API is backed by a small reactive store composable, declared here
 | --- | --- | --- | --- | --- |
 | `options` | `ComboboxOption[]` | `[]` | false | Suggestions: `{ value, label?, description?, group?, disabled? }`. |
 | `placeholder` | `string` | `''` | false | Placeholder of the field. |
+| `icon` | `string` | `'az az-search'` | false | Leading icon of the field. Empty shows none (a time field passes `az az-clock`). |
 | `ariaLabel` | `string` | `''` | false | Accessible name when no `Field` label names the field. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token, as `Input`: 28 / 32 / 40 px. |
 | `allowCustom` | `boolean` | `true` | false | Accepts a typed value that matches no option, offered as `Use "…"`. |
@@ -22914,6 +23117,10 @@ The imperative API is backed by a small reactive store composable, declared here
 | --- | --- | --- |
 | `option` | { option: ComboboxOption, active: boolean, selected: boolean } | Replaces the content of one option row. |
 
+## Assets
+
+- Icons: every valid name is in icons.md (MCP `list_assets({ kind: "icons" })`). An unknown class renders nothing.
+
 ## Sub-components
 
 _none_ — one `.vue` file. The list is rendered by the component itself (teleported to `body`, positioned with `usePlacement`); options are data, rendered through the optional `option` slot.
@@ -22937,7 +23144,7 @@ _none_ — one `.vue` file. The list is rendered by the component itself (telepo
 ## Accessibility
 
 - ARIA 1.2 combobox: the `<input>` has `role="combobox"`, `aria-autocomplete="list"`, `aria-expanded`, `aria-controls` (the listbox id) and `aria-activedescendant` (the highlighted option); the list is `role="listbox"`, rows are `role="option"` with `aria-selected` and `aria-disabled`; grouped rows sit in `role="group"` named by their title (`aria-labelledby`).
-- Keyboard map: focus or `ArrowDown` opens the list; `ArrowDown`/`ArrowUp` move the highlight (wrapping, skipping disabled rows); `Home`/`End` move it to the first/last option while the list is open (otherwise the caret moves); `Enter` commits the highlighted option, or the typed text when nothing is highlighted (`allowCustom`); `Escape` closes the list, and a second `Escape` restores the last committed text; `Tab` commits the highlighted option or the typed text and moves on; `Alt+ArrowUp` closes.
+- Keyboard map: focus or `ArrowDown` opens the list, scrolled so the committed option (when the value is one of the options) sits in the middle of the list; `ArrowDown`/`ArrowUp` move the highlight (wrapping, skipping disabled rows); `Home`/`End` move it to the first/last option while the list is open (otherwise the caret moves); `Enter` commits the highlighted option, or the typed text when nothing is highlighted (`allowCustom`); `Escape` closes the list, and a second `Escape` restores the last committed text; `Tab` commits the highlighted option or the typed text and moves on; `Alt+ArrowUp` closes.
 - Nested overlays: the open list joins the shared overlay layer stack (`useOverlayLayer`) as a transient layer (focus stays in the input), so inside a `Popover`, `Dialog` or `Drawer` picking a suggestion or pressing `Escape` closes only the list; the host overlay stays open.
 - Focus stays in the input the whole time; pointer clicks on rows do not move focus (`mousedown.prevent`).
 - A polite status region announces the number of options after each change of the typed text ("3 options"), "No matches" and "Loading options"; it is visually hidden.
@@ -23019,6 +23226,7 @@ _none_ — one `.vue` file. The list is rendered by the component itself (telepo
 - `date-range-picker` — every range: relative windows (`last 15 minutes`) kept relative, absolute ranges down to the minute, and whole days with `:show-time="false"`. It is built on this component's grid, fields and time zone selector.
 - `timestamp` — shows a moment in time in the app's time zone.
 - `field` — inside a `Field`, the trigger takes the field's label (`for` points at it), description, `invalid` and `disabled`.
+- `combobox` — the time field: a typed time or a pick from the 30-minute list, which opens under the field so the panel stays as thin as the grid.
 - `input` — the trigger and the date field share its heights, hover, and disabled treatment, so they align side by side.
 
 ## Props
@@ -23065,7 +23273,7 @@ _none_ — one `.vue` file. The list is rendered by the component itself (telepo
 
 - `date-picker-clear/date-picker-clear.vue` — context-aware button that clears the draft selection through injected context; disabled when there is no selection.
 
-Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `parts/date-picker-grid.vue` (the month grid), `parts/date-picker-fields.vue` (the date and time fields, a Start/End pair for a range), `parts/date-picker-timezone.vue` (the time zone selector `date-range-picker` shows). A private part lives in `parts/`, so it is not mistaken for a public `date-picker-<part>`.
+Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `parts/date-picker-grid.vue` (the month grid), `parts/date-picker-fields.vue` (the date and time fields, a Start/End pair for a range; each time field is a `Combobox` with `allow-custom` that lists the day in 30-minute steps under the field — plus the current time when it is between two steps, so the list opens on it — shows a clock icon and takes any typed time), `parts/date-picker-timezone.vue` (the time zone selector `date-range-picker` shows). A private part lives in `parts/`, so it is not mistaken for a public `date-picker-<part>`.
 
 ## v-model
 
@@ -23130,7 +23338,7 @@ Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `par
 
 # Date Range Picker
 
-> A time range for queries over time: logs, events, traces and metrics. After the Console Kit date-time range (quick ranges, absolute range with times, previous and next) and Cloudscape's date range picker. The value is either **relative** (`{ type: 'relative', amount: 15, unit: 'minute' }`, read as "the last 15 minutes" and re-resolved against the clock on every query, so a live view keeps moving) or **absolute** (`{ type: 'absolute', start, end }`, two ISO 8601 instants). The trigger prints `Last 15 minutes` or the absolute range in the selected time zone with its UTC offset. The panel switches between Relative range (the quick ranges and a custom duration) and Absolute range (the `DatePicker` month grid, start and end date and time fields — the times hidden with `showTime` off — and the time zone selector) and commits only on Apply; Cancel and Escape drop the draft. Absolute boundaries are typed as wall-clock time in the selected zone and stored as instants, so the same value reads correctly in every zone. With `showStep`, Previous and Next move the range by its own length. Date math uses `Intl` and the native `Date` only.
+> A time range for queries over time: logs, events, traces and metrics. After the Console Kit date-time range (quick ranges, a custom duration, absolute range with times, a range that ends now, previous and next, auto refresh, the time zone) and Cloudscape's date range picker. The value is one of three shapes: - **relative** — `{ type: 'relative', amount: 15, unit: 'minute' }`, read as "the last 15 minutes" and re-resolved against the clock on every query, so a live view keeps moving. With `snap: true` the start is rounded down to the start of the unit in the time zone: `{ amount: 1, unit: 'day', snap: true }` is **Today** (midnight to now), `unit: 'week'` is **This week** (from Sunday, like the month grid). - **absolute** — `{ type: 'absolute', start, end }`, two ISO 8601 instants. - **since** — `{ type: 'since', start }`, an ISO 8601 start and an end that is always now ("from the incident until now"). The trigger prints `Last 15 minutes`, `Today`, the absolute range in the selected time zone with its UTC offset (`Nov 10, 16:00 – 17:00 (UTC+00:00)`; the date is printed once when both ends are on the same day), or `Nov 10, 2026, 9:30 – now`. It never cuts the text off: a long value wraps onto a second line. The panel switches between Relative (a custom duration and unit, then the quick ranges, two columns when there is room) and Absolute (the `DatePicker` month grid, start and end date and time fields — each time field a `Combobox` that takes a typed time or lists the day in 30-minute steps (plus the current time when it falls between two), opened under the field and scrolled to the current time; the times hidden with `showTime` off — and, when the picker also offers relative ranges, an **End at now** switch that makes a `since` range). Under both tabs the panel names the zone in a read-only line (`Times in UTC−08:00 · Los Angeles`), or, with `showTimeZone`, shows the time zone selector there instead; with `showRefresh`, an auto-refresh switch and interval sit above it. The panel commits only on Apply; Cancel and Escape drop the draft. Absolute boundaries are typed as wall-clock time in the selected zone and stored as instants, so the same value reads correctly in every zone. With `showStep`, Previous and Next move the range by its own length. On a phone (below 640 px) the panel is a full-width sheet at the bottom of the screen. Date math uses `Intl` and the native `Date` only.
 
 - Import: `import DateRangePicker from '@aziontech/webkit/date-range-picker'`
 - Category: input · Surface: app · Structure: monolithic
@@ -23142,10 +23350,11 @@ Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `par
 - Any range that needs times of day and a time zone, not only dates.
 - Investigations that page through time window by window (`show-step`).
 - Whole-day ranges for a report or a billing period: `range-selector-mode="absolute-only"` with `:show-time="false"`.
+- Dashboards and live logs that re-run their query on a timer (`show-refresh`, `v-model:refresh-interval`, `@refresh`).
 
 ## Do
 
-- Keep relative values relative: resolve them to instants when the query runs (`now - amount × unit` to `now`), never when the user picks them. `useTimeRange(value)` from `@aziontech/webkit/use-time-range` returns `from` and `to` and holds the window until `refresh()`; its `TIME_RANGE_PRESETS` (last hour, 24 hours, 7 days, 30 days) go in `relative-options`.
+- Keep relative and `since` values relative: resolve them to instants when the query runs (`now - amount × unit` to `now`, or `start` to `now`), never when the user picks them. `useTimeRange(value, { timeZone })` from `@aziontech/webkit/use-time-range` returns `from` and `to`, rounds `snap` ranges in the zone, and holds the window until `refresh()`; call that `refresh()` from `@refresh`. Its `TIME_RANGE_PRESETS` (last hour, 24 hours, 7 days, 30 days) go in `relative-options`.
 - Fix the reference clock in tests, demos and server-rendered pages so labels and step limits are deterministic: `now` on the app's `ConfigProvider` covers every picker below it; the `now` prop overrides it for one picker.
 - Bind `v-model:time-zone` to the user's saved preference, and show times elsewhere on the page in the same zone.
 - Set `max` (usually now) and `min` (the retention limit) instead of validating after Apply.
@@ -23171,9 +23380,10 @@ Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `par
 | --- | --- | --- | --- | --- |
 | `relativeOptions` | `RelativeOption[]` | `5m, 15m, 1h, 6h, 24h, 7d, 30d` | false | Quick ranges listed on the Relative tab. |
 | `timeZones` | `string[]` | `[]` | false | Zones offered by the selector. Empty falls back to the zones `Intl` supports. |
-| `showTimeZone` | `boolean` | `true` | false | Shows the time zone selector in the panel. |
+| `showTimeZone` | `boolean` | `false` | false | Shows the time zone selector in the panel. Off, the panel names the zone in a read-only line. |
 | `showTime` | `boolean` | `true` | false | Shows the start and end time fields of an absolute range. Off, a range covers whole days (a report or billing period). |
 | `showStep` | `boolean` | `false` | false | Shows Previous and Next buttons that move the range back or forward by its own length. |
+| `showRefresh` | `boolean` | `false` | false | Shows the auto-refresh switch and interval in the panel; bind v-model:refresh-interval and listen to refresh. |
 | `rangeSelectorMode` | `'default' \| 'relative-only' \| 'absolute-only'` | `'default'` | false | Which kinds of range the panel offers. |
 | `min` | `Date` | `undefined` | false | Earliest instant an absolute range may start at. |
 | `max` | `Date` | `undefined` | false | Latest instant an absolute range may end at. |
@@ -23187,6 +23397,13 @@ Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `par
 | `modelValue` | `DateRangeValue \| null` | `null` | false | Two-way value (`v-model`). |
 | `timeZone` | `string` | `''` | false | Two-way value (`v-model:timeZone`). |
 | `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `refreshInterval` | `number` | `0` | false | Two-way value (`v-model:refreshInterval`). |
+
+## Events
+
+| Event | Payload | Notes |
+| --- | --- | --- |
+| `refresh` | `()` | On every auto-refresh tick while `refreshInterval` is above 0, the picker is enabled and the page is visible. A timer signal, not a user action: it carries no DOM event. |
 
 ## v-model
 
@@ -23194,23 +23411,24 @@ Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `par
 | --- | --- | --- | --- | --- |
 | `v-model` | `DateRangeValue \| null` | `null` | `update:modelValue` | The committed range: relative (last N units, re-resolved against now) or absolute (ISO instants). Set on Apply with a valid draft, or by Previous / Next (always an absolute range). |
 | `v-model:timeZone` | `string` | `''` | `update:timeZone` | IANA time zone the absolute range is typed and shown in; empty uses the local zone. Set on Apply after the zone changed in the panel. |
+| `v-model:refreshInterval` | `number` | `0` | `update:refreshInterval` | Auto-refresh interval in seconds; `0` is off. Set on Apply from the panel's Refresh every switch and interval (with `showRefresh`). While above 0 the picker fires `refresh` on every tick. |
 | `v-model:open` | `boolean` | `undefined` | `update:open` | Open state of the panel via `defineModel('open')`: the trigger, Apply, Cancel, `Esc` and an outside click update it. Unbound, the picker keeps it itself and starts at `defaultOpen`. |
 
 ## States
 
-- Visual states: `default`, `hover`, `focus-visible`, `open`, `disabled`; the panel shows an inline error after an Apply that the draft cannot satisfy.
+- Visual states: `default`, `hover`, `focus-visible`, `open`, `disabled`; the panel shows an inline error after an Apply that the draft cannot satisfy, and at once (without waiting for Apply) when both ends of an absolute range are set and the end is not after the start.
 - `data-state="open|closed"` on the root and the panel; `data-size`; `data-disabled`; `data-invalid` on the root and the trigger shell (own `invalid` or the enclosing `Field`'s, with `aria-invalid` on the trigger and the danger border); `data-empty` on the trigger with no value; `data-selected` on the chosen quick range.
-- The Next button is disabled while the range is relative (it already ends now) or when the step would pass `max` (or now); Previous is disabled when the step would pass `min`.
+- The Next button is disabled while the range ends now (relative or `since`) or when the step would pass `max` (or now); Previous is disabled when the step would pass `min`.
+- `data-selected` on the custom duration group when the draft is a custom duration (no quick range picked).
+- With an auto-refresh interval above 0 the trigger shows a refresh glyph and its accessible name ends with the interval (`…, refreshes every 30 seconds`).
 - `data-side` (`bottom` | `top`) and `data-align` (`start`) on the calendar panel mirror where it landed after flipping; `start` follows the text direction, so under `rtl` the panel lines up with the field's right edge
 
 ## Accessibility
 
 - Visible focus: a 2 px `--ring-color` ring inset on each trigger segment; the quick ranges ring their row when the radio inside has focus.
-- Keyboard map: `Enter`/`Space` on the trigger opens the panel and the focus trap moves into it; `Tab` cycles inside the panel; the range type is a `ToggleGroup` (arrow keys); the quick ranges are native radios (`ArrowUp`/`ArrowDown` move and select); the grid keeps the `date-picker` keyboard map; `Escape` closes without committing and returns focus to the trigger.
-- ARIA: the trigger has `aria-haspopup="dialog"`, `aria-expanded` and a name that starts with the picker's label and contains the visible range (inside a `Field` with no `ariaLabel`, the Field label names it and the trigger also carries the Field's `aria-describedby` and `aria-invalid`); the panel is a named `dialog`; the quick ranges are a `fieldset` with a `legend`; the custom duration and unit have visible labels; the error is `role="alert"` and described from the duration field; Previous and Next are named buttons.
-- Targets: options are 32 px high (44 px on `pointer: coarse`).
-- Quick ranges layout: the list follows the `select` group rhythm — the list is inset `var(--spacing-2xs)` inline and `var(--spacing-xs)` block, the `legend` and every option are padded `var(--spacing-xs)` inline and `var(--spacing-2xs)` block, so the heading, the option labels and the custom duration fields start on one inline edge in both directions; options stack with no gap, ring inset on focus, and show the check in `var(--text-default)`.
-- Initial focus: with `rangeSelectorMode="relative-only"` (no range-type toggle) the focus trap lands on the checked quick range, the one the trigger shows.
+- Keyboard map: `Enter`/`Space` on the trigger opens the panel and the focus trap moves into it; `Tab` cycles inside the panel; the range type is a `ToggleGroup` (arrow keys); the quick ranges are native radios (`ArrowUp`/`ArrowDown` move and select, in reading order across the two columns); the End at now and Refresh every switches toggle with `Space`/`Enter`; the grid keeps the `date-picker` keyboard map; a time field keeps the `combobox` keyboard map (focus or `ArrowDown` opens the 30-minute list, `Enter` takes the highlighted time or the typed one, `Escape` closes only the list); `Escape` closes without committing and returns focus to the trigger. On a phone a tap on the backdrop closes the sheet like Cancel.
+- ARIA: the trigger has `aria-haspopup="dialog"`, `aria-expanded` and a name that starts with the picker's label and contains the visible range and, with auto refresh on, the interval (inside a `Field` with no `ariaLabel`, the Field label names it and the trigger also carries the Field's `aria-describedby` and `aria-invalid`); the panel is a named `dialog`; the custom duration is a `group` named "Custom range" whose duration and unit have visible labels; the quick ranges are a `fieldset` with a `legend`; End at now and Refresh every are `switch`es named by their visible text; the refresh amount and unit have accessible names; the error is `role="alert"` and described from the duration field; Previous and Next are named buttons; the sheet backdrop is `aria-hidden`.
+- Targets: options are 32 px high (44 px on `pointer: coarse`); the selects are 44 px high and the step buttons 44 px wide on `pointer: coarse`.
 - Contrast ≥4.5:1 from the semantic text tokens.
 
 ## Examples
@@ -24579,7 +24797,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 
 # Phone Input
 
-> International phone-number control: an `InputGroup` with a searchable country `Select` on the left (the closed trigger shows the selected country's flag, its name and, at the end, its dial code, like a row of the list) and a `type="tel"` input on the right that applies the selected country's mask as the user types and accepts exactly the lengths that country allows. Two v-models (`v-model` for the national digits, `v-model:country` for the ISO 3166-1 alpha-2 code) carry the editable state; the one-way `phone-change` event hands the form the full E.164 number and whether it is complete. It carries no label or helper text: wrap it in a `Field` (`Field.Label` + `PhoneInput` + `Field.Description`), and it picks up `id`, `aria-describedby`, `invalid`, `disabled` and `required` from the Field.
+> International phone-number control: an `InputGroup` with a searchable dial-code `Select` on the left and a `type="tel"` input on the right that applies the selected country's mask as the user types and accepts exactly the lengths that country allows. Two v-models (`v-model` for the national digits, `v-model:country` for the ISO 3166-1 alpha-2 code) carry the editable state; the one-way `phone-change` event hands the form the full E.164 number and whether it is complete. It carries no label or helper text: wrap it in a `Field` (`Field.Label` + `PhoneInput` + `Field.Description`), and it picks up `id`, `aria-describedby`, `invalid`, `disabled` and `required` from the Field.
 
 - Import: `import PhoneInput from '@aziontech/webkit/phone-input'`
 - Category: input · Surface: app · Structure: monolithic
@@ -24594,7 +24812,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 - Put it in a `Field` with a `Field.Label`; the label targets the tel input.
 - `v-model` holds the national digits only; read `number` from the `phone-change` payload when you need the E.164 value.
 - Use `complete` from `phone-change` to decide `invalid` and the `Field.Error` on submit; the control shows no incomplete-number message of its own.
-- The field starts on the United States. Set `default-country` to start on another country (an ISO 3166-1 alpha-2 code from `countries`), or bind `v-model:country` when the form owns the country.
+- `v-model:country` defaults to `'US'`; seed it with the user's country when you know it.
 - `searchPlaceholder` and `searchEmptyLabel` default to English; pass translated copy in localized UIs.
 
 ## Don’t
@@ -24613,7 +24831,6 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `countries` | `PhoneInputCountry[]` | `(built-in list — see Notes)` | false | Countries offered by the dial-code Select. When omitted, uses the built-in curated list. |
-| `defaultCountry` | `string` | `'US'` | false | ISO 3166-1 alpha-2 code of the country selected at first, while `v-model:country` is empty. A code missing from `countries` falls back to the first country of the list. |
 | `placeholder` | `string` | `''` | false | Placeholder of the tel input. Falls back to the selected country's mask when empty. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size forwarded to the InputGroup and the dial-code Select trigger. Heights: small=28px, medium=32px, large=40px. |
 | `disabled` | `boolean` | `false` | false | Disables both the dial-code Select and the internal input. |
@@ -24624,7 +24841,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 | `searchPlaceholder` | `string` | `''` | false | Placeholder of the search box that filters the dial-code list. Empty uses the locale catalog (`Search country`). |
 | `searchEmptyLabel` | `string` | `''` | false | Shown in the dial-code list when no country matches the search. Empty uses the locale catalog (`No country found.`). |
 | `modelValue` | `string` | `''` | false | Two-way value (`v-model`). |
-| `country` | `string` | `''` | false | Two-way value (`v-model:country`). |
+| `country` | `string` | `'US'` | false | Two-way value (`v-model:country`). |
 
 ## Events
 
@@ -24637,17 +24854,15 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 | Model | Type | Default | Emits | Notes |
 | --- | --- | --- | --- | --- |
 | `v-model` | `string` | `''` | `update:modelValue` | National number as **digits only**, without dial code and without mask characters (e.g. `'4155550100'`). Updates on input when the digits change, and when a country switch truncates digits beyond the new country's capacity. Via `defineModel`, so the field also works unbound. |
-| `v-model:country` | `string` | `''` | `update:country` | ISO 3166-1 alpha-2 code of the selected country (e.g. `'US'`, `'GB'`, `'BR'`). While it is empty (`''`) the field shows `defaultCountry`. Drives the flag, name and dial code shown in the `Select` trigger and the masks applied to the input. Via `defineModel`, so picking a country works even when the consumer binds only `v-model`. |
+| `v-model:country` | `string` | `'US'` | `update:country` | ISO 3166-1 alpha-2 code of the selected country (e.g. `'US'`, `'GB'`, `'BR'`). Drives the dial code shown in the `Select` and the masks applied to the input. Via `defineModel`, so picking a country works even when the consumer binds only `v-model`. |
 
 ## States
 
 - Visual states delegated to `InputGroup`: `default`, `hover`, `focus-within`, `invalid`, `required`, `disabled`.
 - `invalid`, `disabled` and `required` combine the prop with the enclosing `Field`.
 - The dial-code `Select` is disabled whenever the control is `disabled` **or** `readonly`.
-- The closed trigger mirrors a row of the list: the country's flag in the trigger's `#leading` slot, its name as the value (truncated with an ellipsis when the trigger is narrow), and its dial code in muted text in the trigger's `#trailing` slot at the inline end, which never shrinks. The country part sizes to its content and takes at most 60% of the field, so the number keeps at least 40%.
-- Narrow fields: the root is a size container (`@container/phone-input`); below 21rem (336px) the trigger hides the country name (`data-slot="value"`) and shows only the flag and the dial code, so phones from 320 to 430px keep room to type the number. The open list always shows the full names, and the trigger keeps its accessible name.
 - Completeness is reported through `phone-change`, never rendered.
-- The flag sprite (`country-flags.png`, about 80 KB) loads with a dynamic `import()` after the field mounts in the browser (never on the server), so the closed trigger can show the selected flag; until it arrives the flag boxes stay blank. It is one shared request for every PhoneInput on the page.
+- The flag sprite (`country-flags.png`, about 80 KB) loads with a dynamic `import()` the first time the dial-code list opens; until it arrives each option keeps its flag box blank. The closed field never fetches it.
 
 ## Accessibility
 
@@ -24656,7 +24871,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 - ARIA: the tel input has `type="tel"`, `inputmode="tel"`, `autocomplete="tel-national"`, `aria-invalid`, `aria-required`, and the `id` / `aria-describedby` of the enclosing `Field`; the dial-code trigger has `aria-label="PhoneInputCountry dial code"`. The control provides an empty Field context below it so the inner search input never takes the field id.
 - Contrast ≥4.5:1 for input and dial-code text.
 - Touch target follows the `size` (40px at `large`).
-- Direction: the tel input, each option's dial code and the closed trigger's dial code (a `dir="ltr"` span in the trigger's `#trailing` slot) render left-to-right, so a number and its `+` keep their order on a right-to-left page; the typed number still aligns to the inline start of the page (`rtl:text-end`, which resolves against the input's own `ltr` direction).
+- Direction: the tel input, each option's dial code and the closed trigger's dial code (`SelectTrigger` `value-dir="ltr"`, a `<bdi dir="ltr">`) render left-to-right, so a number and its `+` keep their order on a right-to-left page; the typed number still aligns to the inline start of the page (`rtl:text-end`, which resolves against the input's own `ltr` direction).
 
 ## Examples
 
@@ -24689,8 +24904,6 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
   </Field>
 </template>
 ```
-
-1 more example(s) in [components/phone-input.md](components/phone-input.md).
 
 ---
 
@@ -25066,7 +25279,7 @@ packages/webkit/src/components/input/radio-group/
 
 ## Sub-components
 
-- `select-trigger/select-trigger.vue` — Bordered trigger field (its value text carries `data-slot="value"`, so a composing component can style it) with an optional `#leading` slot before the value and an optional `#trai…
+- `select-trigger/select-trigger.vue` — Bordered trigger field with an optional `#leading` slot (typed with `defineSlots`), selected-value label, and chevron-down.
 - `select-content/select-content.vue` — Popover panel teleported to `body` and anchored with `usePlacement`; exposes `default` (the options), `#search` and `#footer` slots, typed with `defineSlots`, and scrolls its opti…
 - `select-group/select-group.vue` — Section wrapper for a labelled group of options; renders a `text-label-sm` heading in `--text-muted` when `label` is set.
 - `select-item/select-item.vue` — Selectable option row with a trailing check when selected, an optional `icon` (an Azion icon class, default `''`), an optional leading `#leading` slot, the option label, and an optional…
@@ -25753,7 +25966,7 @@ right-to-left: the start region is on the right there. 6.0 removed the physical 
 ```vue
 <script setup>
   import AppHeader from '@aziontech/webkit/app-header'
-  import Brand from '@aziontech/webkit/brand'
+  import Default from '@aziontech/webkit/svg/azion/default'
 </script>
 
 <template>
@@ -25763,7 +25976,7 @@ right-to-left: the start region is on the right there. 6.0 removed the physical 
         href="/"
         aria-label="Azion home"
       >
-        <Brand size="small" />
+        <Default />
       </AppHeader.Brand>
     </AppHeader.Start>
     <AppHeader.Center />
@@ -29833,7 +30046,7 @@ even when the row carries nothing but its title.
 - `closable` only emits `close` with `(event, value)` — remove the tab and its panel from your data yourself; when the active tab unmounts, the root moves to the first enabled tab.
 - `dirty` only marks the tab (a dot after the label, "Unsaved changes" for screen readers); guard the switch itself with `useUnsavedChanges().confirmLeave()` in the setter of the root's `v-model` when leaving must ask first.
 - The selection always comes from the root's value. A row of pressed / unpressed pills outside a `Tabs` root is a `ToggleGroup`, not loose `Tabs.Trigger`s (6.0 removed the item's `selected` prop).
-- Add no spacing between the list and the panels: every `Tabs.Content` starts one group step below the strip (`pt-(--layout-group-gap)`, 16 px), the rule every tab strip in WebKit follows (`DocTabs` inherits it). A consumer `class` can still override it (`pt-0` for a panel that butts against a framed strip). It always renders the panel and needs a `value` (6.0 removed its wrapper mode).
+- Put spacing between the list and the panels on an element of your own around the panels (or on each `Tabs.Content`), not inside each panel. It always renders the panel and needs a `value` (6.0 removed its wrapper mode).
 - Centre the tab row with `<Tabs.List align="center">`, never with a `justify-center` class or a centring wrapper; keep the default `start` for tabs that head a resource page or a settings form.
 
 ## Don’t
@@ -29889,7 +30102,7 @@ even when the row carries nothing but its title.
 - Root: `data-tabs-root` (and the legacy `data-tab-view-root`, kept for selectors written against the v5 name).
 - Panel motion: the incoming panel's inner element carries `data-motion="enter"` and `data-slide="start|end"` for the frame before it slides in; the attributes drop on the next animation frame.
 - Dirty: `data-dirty` on a `Tabs.Trigger` with `dirty`; the dot is not the only cue for assistive tech (a hidden "Unsaved changes" joins the tab's name).
-- Responsive: the tab list (`Tabs.List`) scrolls **horizontally** when the tabs exceed the available width (mobile / narrow viewports) instead of overflowing or wrapping; the scrollbar is visually hidden and the active indicator stays aligned while scrolling. The indicator always sits exactly on the active tab: it is measured in the list's own layout pixels (the on-screen box divided by the list's scale), so a list inside a CSS-scaled or transformed container (a console mock-up drawn at a scale) keeps it on its label, and it re-measures whenever the list or any tab changes size (late web fonts, a label change, a resize). Tabs keep their intrinsic width (`shrink-0`). A gradient edge-fade overlay on the scrollable side(s) (mirrored on `data-fade-start` / `data-fade-end`) hints at off-screen tabs; it fades in / out with the semantic `animate-fade-in` / `animate-fade-out` utilities, and a non-scrollable edge renders no overlay so the first / last tab is never covered at rest.
+- Responsive: the tab list (`Tabs.List`) scrolls **horizontally** when the tabs exceed the available width (mobile / narrow viewports) instead of overflowing or wrapping; the scrollbar is visually hidden and the active indicator stays aligned while scrolling. Tabs keep their intrinsic width (`shrink-0`). A gradient edge-fade overlay on the scrollable side(s) (mirrored on `data-fade-start` / `data-fade-end`) hints at off-screen tabs; it fades in / out with the semantic `animate-fade-in` / `animate-fade-out` utilities, and a non-scrollable edge renders no overlay so the first / last tab is never covered at rest.
 
 ## Accessibility
 
@@ -29932,7 +30145,7 @@ even when the row carries nothing but its title.
         label="Tab Item"
       />
     </Tabs.List>
-    <div class="w-full">
+    <div class="mt-(--spacing-4) w-full">
       <Tabs.Content value="tab-1">
         <div class="rounded-(--shape-card) border border-(--border-default) p-(--spacing-4)">
           <p class="text-body-sm text-(--text-default)">Content for tab 1</p>
@@ -31340,7 +31553,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — `Popover.Title`, optional `Popover.Description`, and `Popover.Close`.
-- `popover-title/popover-title.vue` — title text (`.text-heading-2xs`, `var(--text-default)`).
+- `popover-title/popover-title.vue` — title text (`.text-body-sm`, `var(--text-default)`).
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — plain-text title.
@@ -32063,6 +32276,7 @@ Options of `useTimeRange`.
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
 | `now` | `MaybeRefOrGetter<Date \| number \| undefined>` | no | Reference clock. A ref or getter that changes re-resolves the range; unset reads the nearest ConfigProvider now, then the real clock. |
+| `timeZone` | `MaybeRefOrGetter<string \| undefined>` | no | IANA zone that calendar ranges (Today, This week) start in; unset reads the nearest ConfigProvider timeZone, then UTC. |
 
 ## `UseTimeRangeReturn`
 

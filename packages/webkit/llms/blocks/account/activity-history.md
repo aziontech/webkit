@@ -266,6 +266,9 @@ Each variant is the same screen in another state: `get_block("account/activity-h
     if (value?.type === 'absolute') {
       return { start: new Date(value.start).getTime(), end: new Date(value.end).getTime() }
     }
+    if (value?.type === 'since') {
+      return { start: new Date(value.start).getTime(), end: Number.POSITIVE_INFINITY }
+    }
     const span = (value?.amount ?? 30) * (UNIT_MS[value?.unit] ?? DAY)
     return { start: referenceTime.value - span, end: Number.POSITIVE_INFINITY }
   })

@@ -44,6 +44,42 @@ describe('Combobox', () => {
     view.unmount()
   })
 
+  it('shows the search icon by default, another icon or none', async () => {
+    const icon = (view: ReturnType<typeof render>) =>
+      view.getByTestId('combobox__input').parentElement?.querySelector('i')?.className ?? ''
+    const plain = render(Combobox, { props: { options } })
+    expect(icon(plain)).toContain('az-search')
+    plain.unmount()
+    const clock = render(Combobox, { props: { options, icon: 'az az-clock' } })
+    expect(icon(clock)).toContain('az-clock')
+    expect(icon(clock)).not.toContain('az-search')
+    clock.unmount()
+    const none = render(Combobox, { props: { options, icon: '' } })
+    expect(icon(none)).toBe('')
+  })
+
+  it('opens a long list scrolled to the committed option', async () => {
+    const hours = Array.from({ length: 48 }, (_, index) => ({
+      value: `${String(Math.floor(index / 2)).padStart(2, '0')}:${index % 2 ? '30' : '00'}`
+    }))
+    const style = document.head.appendChild(document.createElement('style'))
+    style.textContent = '[data-testid="combobox__listbox"] { max-height: 10rem; overflow-y: auto }'
+    const view = render(Combobox, { props: { options: hours, modelValue: '18:00' } })
+    await fireEvent.focus(view.getByTestId('combobox__input'))
+    const list = await waitFor(() => {
+      const found = document.body.querySelector<HTMLElement>('[data-testid="combobox__listbox"]')
+      expect(found?.style.display).not.toBe('none')
+      return found as HTMLElement
+    })
+    await waitFor(() => expect(list.scrollTop).toBeGreaterThan(0))
+    const selected = list.querySelector<HTMLElement>('[aria-selected="true"]') as HTMLElement
+    const listBox = list.getBoundingClientRect()
+    const rowBox = selected.getBoundingClientRect()
+    expect(rowBox.top).toBeGreaterThanOrEqual(listBox.top)
+    expect(rowBox.bottom).toBeLessThanOrEqual(listBox.bottom)
+    style.remove()
+  })
+
   it('shows emptyTitle when nothing matches', async () => {
     const view = render(Combobox, {
       props: { options, ariaLabel: 'Variable', allowCustom: false, emptyTitle: 'Nothing here' }

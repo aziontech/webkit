@@ -14019,7 +14019,8 @@
    "models": [
     "modelValue",
     "timeZone",
-    "open"
+    "open",
+    "refreshInterval"
    ],
    "category": "input",
    "structure": "monolithic",
@@ -14041,9 +14042,9 @@
     {
      "name": "showTimeZone",
      "type": "boolean",
-     "default": "true",
+     "default": "false",
      "required": "false",
-     "doc": "Shows the time zone selector in the panel."
+     "doc": "Shows the time zone selector in the panel. Off, the panel names the zone in a read-only line."
     },
     {
      "name": "showTime",
@@ -14058,6 +14059,13 @@
      "default": "false",
      "required": "false",
      "doc": "Shows Previous and Next buttons that move the range back or forward by its own length."
+    },
+    {
+     "name": "showRefresh",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows the auto-refresh switch and interval in the panel; bind v-model:refresh-interval and listen to refresh."
     },
     {
      "name": "rangeSelectorMode",
@@ -14149,6 +14157,20 @@
      "default": "undefined as never",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
+    },
+    {
+     "name": "refreshInterval",
+     "type": "number",
+     "default": "0",
+     "required": "false",
+     "doc": "Two-way value (`v-model:refreshInterval`)."
+    }
+   ],
+   "events": [
+    {
+     "name": "refresh",
+     "payload": "()",
+     "notes": "On every auto-refresh tick while `refreshInterval` is above 0, the picker is enabled and the page is visible. A timer signal, not a user action: it carries no DOM event."
     }
    ],
    "surface": "app",
@@ -29998,6 +30020,13 @@
      "doc": "Placeholder of the field."
     },
     {
+     "name": "icon",
+     "type": "string",
+     "default": "'az az-search'",
+     "required": "false",
+     "doc": "Leading icon of the field. Empty shows none (a time field passes `az az-clock`)."
+    },
+    {
      "name": "ariaLabel",
      "type": "string",
      "default": "''",
@@ -30584,6 +30613,7 @@
     "artifact-preview",
     "avatar",
     "button",
+    "combobox",
     "doc-card",
     "doc-item",
     "doc-prompt",

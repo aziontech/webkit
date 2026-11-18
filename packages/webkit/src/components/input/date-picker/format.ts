@@ -134,6 +134,9 @@ export const formatValueLabel = (
   const sameMonth = sameYear && s.getMonth() === e.getMonth()
   const hasTime = startTime !== '' || endTime !== ''
 
+  if (sameDay(s, e) && hasTime) {
+    return `${monthDay(s, timezone, locale)}, ${labelClock(s, timezone, locale)} – ${labelClock(e, timezone, locale)}`
+  }
   if (sameMonth && !hasTime) {
     return `${monthDay(s, timezone, locale)} – ${e.getDate()}`
   }

@@ -24,7 +24,7 @@
     },
     {
       "name": "WithTime",
-      "summary": "`show-time` adds a time field, so the value carries a time of day; the trigger shows it after the date.",
+      "summary": "`show-time` adds a time field (type a time or pick one from the 30-minute list), so the value carries a time of day; the trigger shows it after the date.",
       "file": "with-time.vue"
     },
     {

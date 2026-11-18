@@ -527,6 +527,7 @@
     if (value.type === 'relative') {
       return { start: new Date(referenceNow - value.amount * unitMs[value.unit]), end: rangeNow }
     }
+    if (value.type === 'since') return { start: new Date(value.start), end: rangeNow }
     return { start: new Date(value.start), end: new Date(value.end) }
   })
 

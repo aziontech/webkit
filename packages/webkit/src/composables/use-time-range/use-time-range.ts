@@ -38,6 +38,8 @@ export function timeRangePreset(key: TimeRangePresetKey): DateRangeValue {
 export interface UseTimeRangeOptions {
   /** Reference clock. A ref or getter that changes re-resolves the range; unset reads the nearest ConfigProvider now, then the real clock. */
   now?: MaybeRefOrGetter<Date | number | undefined>
+  /** IANA zone that calendar ranges (Today, This week) start in; unset reads the nearest ConfigProvider timeZone, then UTC. */
+  timeZone?: MaybeRefOrGetter<string | undefined>
 }
 
 /** What `useTimeRange` returns. */
@@ -54,7 +56,9 @@ export function useTimeRange(
   value: MaybeRefOrGetter<DateRangeValue | null | undefined>,
   options: UseTimeRangeOptions = {}
 ): UseTimeRangeReturn {
-  const provided = hasInjectionContext() ? inject(LocaleInjectionKey, null)?.now : undefined
+  const context = hasInjectionContext() ? inject(LocaleInjectionKey, null) : null
+  const provided = context?.now
+  const zone = (): string => toValue(options.timeZone) || context?.timeZone?.value || 'UTC'
   const generation = ref(0)
 
   const clock = (): Date => {
@@ -64,7 +68,7 @@ export function useTimeRange(
 
   const range = computed(() => {
     void generation.value
-    return resolveDateRange(toValue(value), clock())
+    return resolveDateRange(toValue(value), clock(), { timeZone: zone() })
   })
 
   return {

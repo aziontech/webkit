@@ -3,18 +3,24 @@ name: date-range-picker
 category: input
 structure: monolithic
 status: implemented
-spec_version: 8
+spec_version: 9
 template: 2
-checksum: 8a19ba61c99df590136b925e7c9546ddd24301d576a19e9a34cc59b311652821
+checksum: 46b811ba4e52866c85b1b521102fab75f6548bb304458e3263922d7a03b82e08
 created: 2026-11-11
-last_updated: 2026-11-17
+last_updated: 2026-11-18
 ---
 
 # DateRangePicker — Component Spec
 
 ## Purpose
 
-A time range for queries over time: logs, events, traces and metrics. After the Console Kit date-time range (quick ranges, absolute range with times, previous and next) and Cloudscape's date range picker. The value is either **relative** (`{ type: 'relative', amount: 15, unit: 'minute' }`, read as "the last 15 minutes" and re-resolved against the clock on every query, so a live view keeps moving) or **absolute** (`{ type: 'absolute', start, end }`, two ISO 8601 instants). The trigger prints `Last 15 minutes` or the absolute range in the selected time zone with its UTC offset. The panel switches between Relative range (the quick ranges and a custom duration) and Absolute range (the `DatePicker` month grid, start and end date and time fields — the times hidden with `showTime` off — and the time zone selector) and commits only on Apply; Cancel and Escape drop the draft. Absolute boundaries are typed as wall-clock time in the selected zone and stored as instants, so the same value reads correctly in every zone. With `showStep`, Previous and Next move the range by its own length. Date math uses `Intl` and the native `Date` only.
+A time range for queries over time: logs, events, traces and metrics. After the Console Kit date-time range (quick ranges, a custom duration, absolute range with times, a range that ends now, previous and next, auto refresh, the time zone) and Cloudscape's date range picker. The value is one of three shapes:
+
+- **relative** — `{ type: 'relative', amount: 15, unit: 'minute' }`, read as "the last 15 minutes" and re-resolved against the clock on every query, so a live view keeps moving. With `snap: true` the start is rounded down to the start of the unit in the time zone: `{ amount: 1, unit: 'day', snap: true }` is **Today** (midnight to now), `unit: 'week'` is **This week** (from Sunday, like the month grid).
+- **absolute** — `{ type: 'absolute', start, end }`, two ISO 8601 instants.
+- **since** — `{ type: 'since', start }`, an ISO 8601 start and an end that is always now ("from the incident until now").
+
+The trigger prints `Last 15 minutes`, `Today`, the absolute range in the selected time zone with its UTC offset (`Nov 10, 16:00 – 17:00 (UTC+00:00)`; the date is printed once when both ends are on the same day), or `Nov 10, 2026, 9:30 – now`. It never cuts the text off: a long value wraps onto a second line. The panel switches between Relative (a custom duration and unit, then the quick ranges, two columns when there is room) and Absolute (the `DatePicker` month grid, start and end date and time fields — each time field a `Combobox` that takes a typed time or lists the day in 30-minute steps (plus the current time when it falls between two), opened under the field and scrolled to the current time; the times hidden with `showTime` off — and, when the picker also offers relative ranges, an **End at now** switch that makes a `since` range). Under both tabs the panel names the zone in a read-only line (`Times in UTC−08:00 · Los Angeles`), or, with `showTimeZone`, shows the time zone selector there instead; with `showRefresh`, an auto-refresh switch and interval sit above it. The panel commits only on Apply; Cancel and Escape drop the draft. Absolute boundaries are typed as wall-clock time in the selected zone and stored as instants, so the same value reads correctly in every zone. With `showStep`, Previous and Next move the range by its own length. On a phone (below 640 px) the panel is a full-width sheet at the bottom of the screen. Date math uses `Intl` and the native `Date` only.
 
 ## When to use
 
@@ -23,6 +29,7 @@ A time range for queries over time: logs, events, traces and metrics. After the 
 - Any range that needs times of day and a time zone, not only dates.
 - Investigations that page through time window by window (`show-step`).
 - Whole-day ranges for a report or a billing period: `range-selector-mode="absolute-only"` with `:show-time="false"`.
+- Dashboards and live logs that re-run their query on a timer (`show-refresh`, `v-model:refresh-interval`, `@refresh`).
 
 ## When NOT to use
 
@@ -40,7 +47,7 @@ A time range for queries over time: logs, events, traces and metrics. After the 
 
 ## Best practices
 
-- Keep relative values relative: resolve them to instants when the query runs (`now - amount × unit` to `now`), never when the user picks them. `useTimeRange(value)` from `@aziontech/webkit/use-time-range` returns `from` and `to` and holds the window until `refresh()`; its `TIME_RANGE_PRESETS` (last hour, 24 hours, 7 days, 30 days) go in `relative-options`.
+- Keep relative and `since` values relative: resolve them to instants when the query runs (`now - amount × unit` to `now`, or `start` to `now`), never when the user picks them. `useTimeRange(value, { timeZone })` from `@aziontech/webkit/use-time-range` returns `from` and `to`, rounds `snap` ranges in the zone, and holds the window until `refresh()`; call that `refresh()` from `@refresh`. Its `TIME_RANGE_PRESETS` (last hour, 24 hours, 7 days, 30 days) go in `relative-options`.
 - Fix the reference clock in tests, demos and server-rendered pages so labels and step limits are deterministic: `now` on the app's `ConfigProvider` covers every picker below it; the `now` prop overrides it for one picker.
 - Bind `v-model:time-zone` to the user's saved preference, and show times elsewhere on the page in the same zone.
 - Set `max` (usually now) and `min` (the retention limit) instead of validating after Apply.
@@ -55,14 +62,19 @@ A time range for queries over time: logs, events, traces and metrics. After the 
 
   const range = ref({ type: 'relative', amount: 15, unit: 'minute', key: 'last-15-minutes' })
   const timeZone = ref('UTC')
+  const refreshInterval = ref(0)
+  const runQuery = () => {}
 </script>
 
 <template>
   <DateRangePicker
     v-model="range"
     v-model:time-zone="timeZone"
+    v-model:refresh-interval="refreshInterval"
     show-step
+    show-refresh
     aria-label="Events time range"
+    @refresh="runQuery"
   />
 </template>
 ```
@@ -73,9 +85,10 @@ A time range for queries over time: logs, events, traces and metrics. After the 
 | ------------------- | ------------------------------------------------- | ----------------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------- |
 | `relativeOptions`   | `RelativeOption[]`                                | 5m, 15m, 1h, 6h, 24h, 7d, 30d | false    | Quick ranges listed on the Relative tab.                                                                                |
 | `timeZones`         | `string[]`                                        | `[]`                          | false    | Zones offered by the selector. Empty falls back to the zones `Intl` supports.                                           |
-| `showTimeZone`      | `boolean`                                         | `true`                        | false    | Shows the time zone selector in the panel.                                                                              |
+| `showTimeZone`      | `boolean`                                         | `false`                       | false    | Shows the time zone selector in the panel. Off, the panel names the zone in a read-only line.                           |
 | `showTime`          | `boolean`                                         | `true`                        | false    | Shows the start and end time fields of an absolute range. Off, a range covers whole days (a report or billing period).  |
 | `showStep`          | `boolean`                                         | `false`                       | false    | Shows Previous and Next buttons that move the range back or forward by its own length.                                  |
+| `showRefresh`       | `boolean`                                         | `false`                       | false    | Shows the auto-refresh switch and interval in the panel; bind v-model:refresh-interval and listen to refresh.           |
 | `rangeSelectorMode` | `'default' \| 'relative-only' \| 'absolute-only'` | `'default'`                   | false    | Which kinds of range the panel offers.                                                                                  |
 | `min`               | `Date`                                            | undefined                     | false    | Earliest instant an absolute range may start at.                                                                        |
 | `max`               | `Date`                                            | undefined                     | false    | Latest instant an absolute range may end at.                                                                            |
@@ -87,21 +100,24 @@ A time range for queries over time: logs, events, traces and metrics. After the 
 | `defaultOpen`       | `boolean`                                         | `false`                       | false    | Initial open state when uncontrolled (`v-model:open` unbound).                                                          |
 | `size`              | `'small' \| 'medium' \| 'large'`                  | `'medium'`                    | false    | Size token of the trigger and the panel controls.                                                                       |
 
-**Booleans that default to true.** `showTimeZone` and `showTime` default to `true`: an events toolbar always states the zone of its range and the times of its boundaries. Inverting it would break every consumer, so it is recorded here as an exception to props.md's default-false rule.
+**Booleans that default to true.** `showTime` defaults to `true`: an events toolbar always states the times of its boundaries. Inverting it would break every consumer, so it is recorded here as an exception to props.md's default-false rule. `showTimeZone` defaults to `false` (owner review 2026-11-18): like Grafana, Elastic, Cloudscape and CloudWatch, the zone is stated (in the trigger's UTC offset and the panel's read-only line) but changed elsewhere unless the page opts in; the component is new in 6.0, so no released consumer depends on the old default.
 
-Types (exported from the component): `DateRangeUnit = 'second' | 'minute' | 'hour' | 'day' | 'week' | 'month' | 'year'`; `DateRangeValue = { type: 'relative'; amount: number; unit: DateRangeUnit; key?: string } | { type: 'absolute'; start: string; end: string }`; `RelativeOption = { key: string; amount: number; unit: DateRangeUnit; label?: string }` (an empty `label` prints `Last {count} {unit}` from the catalog).
+Types (exported from the component): `DateRangeUnit = 'second' | 'minute' | 'hour' | 'day' | 'week' | 'month' | 'year'`; `DateRangeValue = { type: 'relative'; amount: number; unit: DateRangeUnit; key?: string; snap?: boolean } | { type: 'absolute'; start: string; end: string } | { type: 'since'; start: string }`; `RelativeOption = { key: string; amount: number; unit: DateRangeUnit; label?: string; snap?: boolean }` (an empty `label` prints `Last {count} {unit}` from the catalog, or `Today` / `This week` / `This month` / `This year` for a snapped option of 1 day, week, month or year); `DateRangeRefreshUnit = 'second' | 'minute' | 'hour'`.
 
 ## v-model
 
-| Model              | Type                     | Default     | Emits               | Notes                                                                                                                                                                                 |
-| ------------------ | ------------------------ | ----------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model`          | `DateRangeValue \| null` | `null`      | `update:modelValue` | The committed range: relative (last N units, re-resolved against now) or absolute (ISO instants). Set on Apply with a valid draft, or by Previous / Next (always an absolute range).  |
-| `v-model:timeZone` | `string`                 | `''`        | `update:timeZone`   | IANA time zone the absolute range is typed and shown in; empty uses the local zone. Set on Apply after the zone changed in the panel.                                                 |
-| `v-model:open`     | `boolean`                | `undefined` | `update:open`       | Open state of the panel via `defineModel('open')`: the trigger, Apply, Cancel, `Esc` and an outside click update it. Unbound, the picker keeps it itself and starts at `defaultOpen`. |
+| Model                     | Type                     | Default     | Emits                    | Notes                                                                                                                                                                                       |
+| ------------------------- | ------------------------ | ----------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model`                 | `DateRangeValue \| null` | `null`      | `update:modelValue`      | The committed range: relative (last N units, re-resolved against now) or absolute (ISO instants). Set on Apply with a valid draft, or by Previous / Next (always an absolute range).        |
+| `v-model:timeZone`        | `string`                 | `''`        | `update:timeZone`        | IANA time zone the absolute range is typed and shown in; empty uses the local zone. Set on Apply after the zone changed in the panel.                                                       |
+| `v-model:refreshInterval` | `number`                 | `0`         | `update:refreshInterval` | Auto-refresh interval in seconds; `0` is off. Set on Apply from the panel's Refresh every switch and interval (with `showRefresh`). While above 0 the picker fires `refresh` on every tick. |
+| `v-model:open`            | `boolean`                | `undefined` | `update:open`            | Open state of the panel via `defineModel('open')`: the trigger, Apply, Cancel, `Esc` and an outside click update it. Unbound, the picker keeps it itself and starts at `defaultOpen`.       |
 
 ## Events
 
-None beyond the v-model updates above.
+| Event     | Payload | Notes                                                                                                                                                                     |
+| --------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `refresh` | `()`    | On every auto-refresh tick while `refreshInterval` is above 0, the picker is enabled and the page is visible. A timer signal, not a user action: it carries no DOM event. |
 
 ## Slots
 
@@ -109,17 +125,23 @@ _none_ — the trigger, the panel and its two tabs are fixed parts.
 
 ## States
 
-- Visual states: `default`, `hover`, `focus-visible`, `open`, `disabled`; the panel shows an inline error after an Apply that the draft cannot satisfy.
+- Visual states: `default`, `hover`, `focus-visible`, `open`, `disabled`; the panel shows an inline error after an Apply that the draft cannot satisfy, and at once (without waiting for Apply) when both ends of an absolute range are set and the end is not after the start.
 - `data-state="open|closed"` on the root and the panel; `data-size`; `data-disabled`; `data-invalid` on the root and the trigger shell (own `invalid` or the enclosing `Field`'s, with `aria-invalid` on the trigger and the danger border); `data-empty` on the trigger with no value; `data-selected` on the chosen quick range.
-- The Next button is disabled while the range is relative (it already ends now) or when the step would pass `max` (or now); Previous is disabled when the step would pass `min`.
+- The Next button is disabled while the range ends now (relative or `since`) or when the step would pass `max` (or now); Previous is disabled when the step would pass `min`.
+- `data-selected` on the custom duration group when the draft is a custom duration (no quick range picked).
+- With an auto-refresh interval above 0 the trigger shows a refresh glyph and its accessible name ends with the interval (`…, refreshes every 30 seconds`).
 - `data-side` (`bottom` | `top`) and `data-align` (`start`) on the calendar panel mirror where it landed after flipping; `start` follows the text direction, so under `rtl` the panel lines up with the field's right edge
 
 ## Behaviour
 
-- Opening seeds the draft from the committed value: a relative value opens the Relative tab with its option (or Custom range) selected; an absolute value opens the Absolute tab with its boundaries as wall-clock time in the zone.
+- Opening seeds the draft from the committed value: a relative value opens the Relative tab with its quick range selected and its amount and unit in the custom fields; an absolute value opens the Absolute tab with its boundaries as wall-clock time in the zone; a `since` value opens the Absolute tab with End at now on.
+- Picking a quick range copies its amount and unit into the custom fields; editing the amount or the unit makes the draft a custom duration and clears the quick range.
+- End at now is offered only when the panel offers relative ranges too (`rangeSelectorMode` `default`): an `absolute-only` picker promises absolute values, so it never emits `since`.
+- End at now on: the grid and the fields pick the start only (one day, one time) and the value is `{ type: 'since', start }`; off again, the end comes back as now.
+- Auto refresh: the switch, the amount and the unit are a draft like the range; Apply writes `refreshInterval` in seconds (0 when the switch is off). The timer starts after mount, restarts when the interval changes, stops while disabled and on unmount, and skips ticks while the page is hidden.
 - Changing the zone in the panel keeps the same instants and re-expresses the draft in the new zone; the trigger of a committed absolute range re-labels when `timeZone` changes.
-- Apply validates: a custom duration must be a whole number above 0; an absolute range needs a start and an end, the end after the start, and both inside `min` and `max`. The message is announced (`role="alert"`) and the panel stays open.
-- Previous and Next resolve the current value (relative values against `now`) and emit the absolute range shifted by its length.
+- Apply validates: a custom duration and a refresh amount must be whole numbers above 0; an absolute range needs a start and an end, the end after the start, and both inside `min` and `max`; a `since` start must be before now and after `min`. The message is announced (`role="alert"`) and the panel stays open. An end that is not after the start is flagged as soon as it is typed or picked. The empty date fields show a hint (`e.g. Jan 31, 2026`) and the empty time fields `hh:mm`, so an empty end never reads as a value.
+- Previous and Next resolve the current value (relative and `since` values against `now`, snapped ranges in the zone) and emit the absolute range shifted by its length.
 
 ## Motion & Animations
 
@@ -130,6 +152,8 @@ _none_ — the trigger, the panel and its two tabs are fixed parts.
 | chevron         | `transition-transform duration-150 ease-out` | inline (matches `date-picker`)                    | `motion-reduce:transition-none` |
 | hover / options | `transition-colors duration-150 ease-out`    | inline (matches `date-picker`)                    | `motion-reduce:transition-none` |
 
+Below 640 px the same `animate-popup-scale-in` / `animate-popup-scale-out` run from the bottom centre of the sheet (`transform-origin: bottom center`); the backdrop appears and disappears with the panel, without motion.
+
 ## Tokens
 
 | Region          | Token (DESIGN.md)                                                          |
@@ -138,6 +162,7 @@ _none_ — the trigger, the panel and its two tabs are fixed parts.
 | panel surface   | `var(--bg-surface-raised)`, `var(--shadow-sm)`, `var(--shape-card)`        |
 | selected option | `var(--bg-selected)`; hover `var(--bg-hover)`                              |
 | muted text      | `var(--text-muted)`                                                        |
+| sheet backdrop  | `var(--bg-backdrop)` (below 640 px)                                        |
 | error message   | `var(--danger-foreground)`                                                 |
 | gaps            | `var(--spacing-2xs)`, `var(--spacing-xs)`, `var(--spacing-sm)`             |
 
@@ -150,36 +175,42 @@ _none_ — the trigger, the panel and its two tabs are fixed parts.
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: a 2 px `--ring-color` ring inset on each trigger segment; the quick ranges ring their row when the radio inside has focus.
-- Keyboard map: `Enter`/`Space` on the trigger opens the panel and the focus trap moves into it; `Tab` cycles inside the panel; the range type is a `ToggleGroup` (arrow keys); the quick ranges are native radios (`ArrowUp`/`ArrowDown` move and select); the grid keeps the `date-picker` keyboard map; `Escape` closes without committing and returns focus to the trigger.
-- ARIA: the trigger has `aria-haspopup="dialog"`, `aria-expanded` and a name that starts with the picker's label and contains the visible range (inside a `Field` with no `ariaLabel`, the Field label names it and the trigger also carries the Field's `aria-describedby` and `aria-invalid`); the panel is a named `dialog`; the quick ranges are a `fieldset` with a `legend`; the custom duration and unit have visible labels; the error is `role="alert"` and described from the duration field; Previous and Next are named buttons.
-- Targets: options are 32 px high (44 px on `pointer: coarse`).
-- Quick ranges layout: the list follows the `select` group rhythm — the list is inset `var(--spacing-2xs)` inline and `var(--spacing-xs)` block, the `legend` and every option are padded `var(--spacing-xs)` inline and `var(--spacing-2xs)` block, so the heading, the option labels and the custom duration fields start on one inline edge in both directions; options stack with no gap, ring inset on focus, and show the check in `var(--text-default)`.
-- Initial focus: with `rangeSelectorMode="relative-only"` (no range-type toggle) the focus trap lands on the checked quick range, the one the trigger shows.
+- Keyboard map: `Enter`/`Space` on the trigger opens the panel and the focus trap moves into it; `Tab` cycles inside the panel; the range type is a `ToggleGroup` (arrow keys); the quick ranges are native radios (`ArrowUp`/`ArrowDown` move and select, in reading order across the two columns); the End at now and Refresh every switches toggle with `Space`/`Enter`; the grid keeps the `date-picker` keyboard map; a time field keeps the `combobox` keyboard map (focus or `ArrowDown` opens the 30-minute list, `Enter` takes the highlighted time or the typed one, `Escape` closes only the list); `Escape` closes without committing and returns focus to the trigger. On a phone a tap on the backdrop closes the sheet like Cancel.
+- ARIA: the trigger has `aria-haspopup="dialog"`, `aria-expanded` and a name that starts with the picker's label and contains the visible range and, with auto refresh on, the interval (inside a `Field` with no `ariaLabel`, the Field label names it and the trigger also carries the Field's `aria-describedby` and `aria-invalid`); the panel is a named `dialog`; the custom duration is a `group` named "Custom range" whose duration and unit have visible labels; the quick ranges are a `fieldset` with a `legend`; End at now and Refresh every are `switch`es named by their visible text; the refresh amount and unit have accessible names; the error is `role="alert"` and described from the duration field; Previous and Next are named buttons; the sheet backdrop is `aria-hidden`.
+- Targets: options are 32 px high (44 px on `pointer: coarse`); the selects are 44 px high and the step buttons 44 px wide on `pointer: coarse`.
 - Contrast ≥4.5:1 from the semantic text tokens.
 
 ## Internationalization
 
-| Key                                       | English source                                | Override prop          |
-| ----------------------------------------- | --------------------------------------------- | ---------------------- |
-| `dateRangePicker.label`                   | Time range                                    | `ariaLabel`            |
-| `dateRangePicker.placeholder`             | Select a time range                           | `placeholder`          |
-| `dateRangePicker.dialog`                  | Choose a time range                           | —                      |
-| `dateRangePicker.rangeType`               | Range type                                    | —                      |
-| `dateRangePicker.relative` / `absolute`   | Relative range / Absolute range               | —                      |
-| `dateRangePicker.quickRanges`             | Quick ranges                                  | —                      |
-| `dateRangePicker.custom`                  | Custom range                                  | —                      |
-| `dateRangePicker.amount` / `unit`         | Duration / Unit                               | —                      |
-| `dateRangePicker.second` … `year`         | Last second / Last {count} seconds … (plural) | `RelativeOption.label` |
-| `dateRangePicker.unitSecond` … `unitYear` | Seconds … Years                               | —                      |
-| `dateRangePicker.apply` / `cancel`        | Apply / Cancel                                | —                      |
-| `dateRangePicker.previous` / `next`       | Previous range / Next range                   | —                      |
-| `dateRangePicker.incomplete`              | Choose a start and an end.                    | —                      |
-| `dateRangePicker.order`                   | The end must be after the start.              | —                      |
-| `dateRangePicker.outOfBounds`             | Choose a range inside the allowed dates.      | —                      |
-| `dateRangePicker.invalidAmount`           | Enter a whole number greater than 0.          | —                      |
+| Key                                                             | English source                                            | Override prop          |
+| --------------------------------------------------------------- | --------------------------------------------------------- | ---------------------- |
+| `dateRangePicker.label`                                         | Time range                                                | `ariaLabel`            |
+| `dateRangePicker.placeholder`                                   | Select a time range                                       | `placeholder`          |
+| `dateRangePicker.dialog`                                        | Choose a time range                                       | —                      |
+| `dateRangePicker.rangeType`                                     | Range type                                                | —                      |
+| `dateRangePicker.relative` / `absolute`                         | Relative / Absolute                                       | —                      |
+| `dateRangePicker.quickRanges`                                   | Quick ranges                                              | —                      |
+| `dateRangePicker.custom`                                        | Custom range                                              | —                      |
+| `dateRangePicker.amount` / `unit`                               | Duration / Unit                                           | —                      |
+| `dateRangePicker.second` … `year`                               | Last second / Last {count} seconds … (plural)             | `RelativeOption.label` |
+| `dateRangePicker.unitSecond` … `unitYear`                       | Seconds … Years                                           | —                      |
+| `dateRangePicker.today` / `thisWeek` / `thisMonth` / `thisYear` | Today / This week / This month / This year                | `RelativeOption.label` |
+| `dateRangePicker.now`                                           | now                                                       | —                      |
+| `dateRangePicker.untilNow`                                      | End at now                                                | —                      |
+| `dateRangePicker.zoneNote`                                      | Times in {zone}                                           | —                      |
+| `dateRangePicker.refreshEvery`                                  | Refresh every                                             | —                      |
+| `dateRangePicker.refreshAmount` / `refreshUnit`                 | Refresh interval / Refresh interval unit                  | —                      |
+| `dateRangePicker.refreshSecond` … `refreshHour`                 | refreshes every second / every {count} seconds … (plural) | —                      |
+| `dateRangePicker.apply` / `cancel`                              | Apply / Cancel                                            | —                      |
+| `dateRangePicker.previous` / `next`                             | Previous range / Next range                               | —                      |
+| `dateRangePicker.incomplete`                                    | Choose a start and an end.                                | —                      |
+| `dateRangePicker.order`                                         | The end must be after the start.                          | —                      |
+| `dateRangePicker.outOfBounds`                                   | Choose a range inside the allowed dates.                  | —                      |
+| `dateRangePicker.invalidAmount`                                 | Enter a whole number greater than 0.                      | —                      |
 
 - Active locale: the nearest `ConfigProvider`'s `locale`, else the device locale (`navigator.language`); the server render and the hydrating client use `en-US`, and the device locale applies right after mount.
-- What the person sends stays unambiguous: an absolute `v-model` carries `start` and `end` as ISO 8601 instants (`2026-11-15T00:00:00.000Z`) and a relative one carries `amount` and `unit`, whatever the display format.
+- What the person sends stays unambiguous: an absolute `v-model` carries `start` and `end` as ISO 8601 instants (`2026-11-15T00:00:00.000Z`), a `since` one its `start` the same way, and a relative one carries `amount`, `unit` and `snap`, whatever the display format; `refreshInterval` is a number of seconds.
+- The two-word tab labels (`Relative` / `Absolute` and their translations) fit the toggle at 320 px; the tab labels, the quick ranges and the trigger wrap instead of being cut off, so a longer translation still reads in full.
 - Formatting: the absolute range goes through `Intl.DateTimeFormat` in the active locale; the relative labels through the plural rules of the active locale; the grid, the date and time fields and the time zone selector use the `datePicker` keys.
 
 ## Right-to-left
@@ -192,22 +223,23 @@ _none_ — the trigger, the panel and its two tabs are fixed parts.
 
 ## Responsive
 
-- Container queries: none; the trigger is inline within the available width (`max-w-full`) and wraps a long range onto more lines (it grows taller); no word of the trigger, the quick ranges or the absolute fields is cut with an ellipsis.
-- Absolute range layout: one column as wide as the month grid at every width (the panel is at most `min(90vw, 24rem)`): the start and end fields and the time zone come first, then the month grid.
-- Short viewports: the Relative/Absolute switch and the Apply row stay fixed; only the body between them scrolls when the panel is taller than the space left, so the start and end fields, the zone and Apply are visible without scrolling on a 1280 × 720 laptop and a 390 × 664 phone (covered by a styled test).
-- Touch: options are 44 px high on `pointer: coarse`; nothing depends on hover.
+- No truncation at any width: the trigger is inline and capped at its container (`max-w-full`); its value wraps (`overflow-wrap: anywhere`) and the trigger grows taller (its height is a minimum), with the UTC offset kept on one line. The panel's labels, quick ranges and field values are never cut off (checked at 320, 390 and 1280 px in `src/test/date-picker-readability.test.ts`).
+- Container query: the quick ranges are one column below 15 rem of list width and two columns from there (`@container` on the fieldset).
+- Desktop (from 640 px): an anchored popover exactly as thin as the month grid on both tabs (seven day cells of the size token plus `--spacing-sm` on each side: 276 px at `medium`), capped at the viewport minus `--spacing-sm` on each side, scrolling inside itself when taller than the viewport. The Relative/Absolute switch and the zone and Apply rows stay fixed and only the tab body between them scrolls; on the Absolute tab the start and end fields come before the month grid, so the fields, the zone and Apply are visible without scrolling on a 1280 × 720 laptop and a 390 × 664 phone (`src/test/date-picker-readability.test.ts`). The time list opens under its field as a `Combobox` list, so it never widens the panel (checked in `src/test/date-picker-readability.test.ts`).
+- Phone (below 640 px, `max-sm:`): a sheet — full width, attached to the bottom of the screen, at most 85 % of the viewport high, scrolling inside, padded for the home indicator (`safe-area-inset-bottom`), over a `--bg-backdrop` layer; Cancel and Apply share the footer width.
+- Touch: options, selects and step buttons are 44 px on `pointer: coarse`; nothing depends on hover.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom.
 
 ## Performance
 
-- Bundle budget: 26 KB gzip for `./date-range-picker` (it carries the `date-picker` grid, fields and time zone selector, `toggle-group`, `button`, `input` and the placement and focus-trap composables) in `.size-limit.json`.
-- Runtime budget: zone conversion is two `Intl.DateTimeFormat#formatToParts` calls per boundary; nothing runs per frame.
+- Bundle budget: `./date-range-picker` in `.size-limit.json` (it carries the `date-picker` grid, fields and time zone selector, `toggle-group`, `button`, `input`, `switch` and the placement and focus-trap composables).
+- Runtime budget: zone conversion is two `Intl.DateTimeFormat#formatToParts` calls per boundary; nothing runs per frame. Auto refresh is one `setInterval` per picker, only while the interval is above 0, cleared on unmount.
 - Heavy parts: none; the panel renders only while open.
 
 ## Examples
 
 - Default — a relative range.
-- Absolute, RelativeOnly, WithStep, TimeZone — justified: each documents one of the range modes or the time zone contract, which have no `variant`/`size` axis.
+- Absolute, RelativeOnly, WithStep, TimeZone, UntilNow, AutoRefresh — justified: each documents one of the range modes (absolute, relative, a range that ends now), stepping, the time zone contract or the auto-refresh contract, which have no `variant`/`size` axis.
 - Disabled — a disabled picker with a committed range (state example for the `disabled` prop).
 
 ## Constraints — DO NOT
