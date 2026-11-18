@@ -1,0 +1,135 @@
+{
+ "name": "node-diagram",
+ "binding": "NodeDiagram",
+ "import": "@aziontech/webkit/node-diagram",
+ "treeShakeableImport": "@aziontech/webkit/node-diagram-root",
+ "category": "data",
+ "surface": "app",
+ "structure": "composition",
+ "compoundRoot": true,
+ "subcomponents": [
+  "@aziontech/webkit/node-diagram-node",
+  "@aziontech/webkit/node-diagram-group",
+  "@aziontech/webkit/node-diagram-anchor",
+  "@aziontech/webkit/node-diagram-header",
+  "@aziontech/webkit/node-diagram-title",
+  "@aziontech/webkit/node-diagram-description",
+  "@aziontech/webkit/node-diagram-footer",
+  "@aziontech/webkit/node-diagram-item",
+  "@aziontech/webkit/node-diagram-bind"
+ ],
+ "purpose": "PROPOSAL (RV-Y1, owner to approve): one in-product diagram replacing `flow-diagram` and `topology-diagram`. A naked root lays steps out and draws the connectors. **Data mode** (`nodes` + `edges`): edges set the columns and each node renders the richest card its data allows. **Composed mode**: hand-written parts in the default slot. `orientation=\"responsive\"` stacks into a rail below a 36rem container.",
+ "setup": null,
+ "useWhen": [
+  "A request path or pipeline: steps in order joined by connectors.",
+  "A deployment or service topology with status, metrics, details and bind controls."
+ ],
+ "avoidWhen": [
+  "A marketing architecture drawing from the official library → use `diagram`.",
+  "A numbered set of instructions → use `doc-steps`."
+ ],
+ "related": [
+  "`diagram` — the marketing figure (closed drawing library).",
+  "`status-indicator` — the status dot and text in a node header."
+ ],
+ "bestPractices": [
+  "Prefer data mode; compose by hand only for markup the card cannot express.",
+  "Join adjacent columns; an edge that skips a column can cross it.",
+  "Put timing or failure on the edge (`label`, `severity`) when the hop failed, on the node when the resource did.",
+  "Use `orientation=\"horizontal\"` for fixed-size scenes and mock-ups.",
+  "A one-resource slot puts `node-diagram-bind` in the `actions` slot."
+ ],
+ "props": [
+  {
+   "name": "nodes",
+   "type": "NodeDiagramNodeData[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Nodes of a data-driven diagram; each renders as a full card. Leave empty to compose the parts by hand."
+  },
+  {
+   "name": "edges",
+   "type": "NodeDiagramEdgeData[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Connectors between nodes by id; they also decide the columns. Empty joins each step to the next."
+  },
+  {
+   "name": "orientation",
+   "type": "'horizontal' | 'vertical' | 'responsive'",
+   "default": "'responsive'",
+   "required": "false",
+   "doc": "Lays the steps out in a row, in a column, or in a row that stacks when its container is narrow."
+  },
+  {
+   "name": "align",
+   "type": "'start' | 'center'",
+   "default": "'start'",
+   "required": "false",
+   "doc": "Vertical alignment of the steps in a row."
+  },
+  {
+   "name": "uniform",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Gives every step the width and height of the largest one."
+  },
+  {
+   "name": "loading",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows placeholder steps while the diagram loads."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the diagram. Empty uses the locale catalog (`Diagram`)."
+  },
+  {
+   "name": "openKeys",
+   "type": "string[]",
+   "default": "() => []",
+   "required": "false",
+   "doc": "Two-way value (`v-model:openKeys`)."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "Composed mode: nodes and groups, in flow order."
+  },
+  {
+   "name": "actions",
+   "scope": "{ node: NodeDiagramNodeData }",
+   "notes": "Data mode: controls at the end of a node's title row."
+  },
+  {
+   "name": "empty",
+   "scope": "—",
+   "notes": "Replaces the `EmptyState` shown when there are no nodes."
+  }
+ ],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/node-diagram/default.vue"
+  },
+  {
+   "name": "Composed",
+   "file": "examples/node-diagram/composed.vue"
+  },
+  {
+   "name": "Request path",
+   "file": "examples/node-diagram/request-path.vue"
+  }
+ ],
+ "docs": "components/node-diagram.md"
+}

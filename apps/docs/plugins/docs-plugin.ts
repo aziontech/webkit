@@ -36,6 +36,10 @@ const PROPOSALS: { route: string; file: string }[] = [
   {
     route: '/proposal/date-picker.html',
     file: join(WEBKIT, 'docs/reviews/date-picker-proposal.html')
+  },
+  {
+    route: '/proposal/diagram.html',
+    file: join(WEBKIT, 'docs/reviews/diagram-proposal.html')
   }
 ]
 

@@ -1144,6 +1144,25 @@ export const ptBR: Messages = {
       other: '{count} eventos'
     }
   },
+  nodeDiagram: {
+    label: 'Diagrama',
+    notBound: 'Não vinculado',
+    bind: 'Vincular {kind}',
+    change: 'Trocar {kind}',
+    remove: 'Remover {kind}',
+    create: 'Criar {kind}',
+    apply: 'Aplicar {kind}',
+    cancel: 'Cancelar',
+    pending: 'Pendente',
+    existing: 'Existentes',
+    noOptions: 'Nenhuma opção ainda.',
+    copy: 'Copiar {field}',
+    details: 'Detalhes',
+    connections: 'Conexões',
+    connection: '{from} para {to}',
+    emptyTitle: 'Nada conectado ainda.',
+    loading: 'Carregando o diagrama'
+  },
   topologyDiagram: {
     label: 'Topologia de implantação',
     notBound: 'Não vinculado',

@@ -12088,6 +12088,269 @@
    "treeShakeableImport": "@aziontech/webkit/flow-diagram-anchor",
    "surface": "app"
   },
+  "node-diagram": {
+   "import": "@aziontech/webkit/node-diagram",
+   "target": "./src/components/data/node-diagram/index.ts",
+   "kind": "component",
+   "compoundRoot": true,
+   "treeShakeableImport": "@aziontech/webkit/node-diagram-root",
+   "subcomponents": [
+    "@aziontech/webkit/node-diagram-node",
+    "@aziontech/webkit/node-diagram-group",
+    "@aziontech/webkit/node-diagram-anchor",
+    "@aziontech/webkit/node-diagram-header",
+    "@aziontech/webkit/node-diagram-title",
+    "@aziontech/webkit/node-diagram-description",
+    "@aziontech/webkit/node-diagram-footer",
+    "@aziontech/webkit/node-diagram-item",
+    "@aziontech/webkit/node-diagram-bind"
+   ],
+   "models": [
+    "openKeys"
+   ],
+   "category": "data",
+   "structure": "composition",
+   "props": [
+    {
+     "name": "nodes",
+     "type": "NodeDiagramNodeData[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Nodes of a data-driven diagram; each renders as a full card. Leave empty to compose the parts by hand."
+    },
+    {
+     "name": "edges",
+     "type": "NodeDiagramEdgeData[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Connectors between nodes by id; they also decide the columns. Empty joins each step to the next."
+    },
+    {
+     "name": "orientation",
+     "type": "'horizontal' | 'vertical' | 'responsive'",
+     "default": "'responsive'",
+     "required": "false",
+     "doc": "Lays the steps out in a row, in a column, or in a row that stacks when its container is narrow."
+    },
+    {
+     "name": "align",
+     "type": "'start' | 'center'",
+     "default": "'start'",
+     "required": "false",
+     "doc": "Vertical alignment of the steps in a row."
+    },
+    {
+     "name": "uniform",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Gives every step the width and height of the largest one."
+    },
+    {
+     "name": "loading",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows placeholder steps while the diagram loads."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the diagram. Empty uses the locale catalog (`Diagram`)."
+    },
+    {
+     "name": "openKeys",
+     "type": "string[]",
+     "default": "() => []",
+     "required": "false",
+     "doc": "Two-way value (`v-model:openKeys`)."
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "Composed mode: nodes and groups, in flow order."
+    },
+    {
+     "name": "actions",
+     "scope": "{ node: NodeDiagramNodeData }",
+     "notes": "Data mode: controls at the end of a node's title row."
+    },
+    {
+     "name": "empty",
+     "scope": "—",
+     "notes": "Replaces the `EmptyState` shown when there are no nodes."
+    }
+   ],
+   "surface": "app",
+   "examplesFile": "catalog/examples/node-diagram.json",
+   "docsFile": "catalog/components/node-diagram.json"
+  },
+  "node-diagram-root": {
+   "import": "@aziontech/webkit/node-diagram-root",
+   "target": "./src/components/data/node-diagram/node-diagram.vue",
+   "kind": "root",
+   "rootOf": "node-diagram",
+   "treeShakeableImport": "@aziontech/webkit/node-diagram-root",
+   "models": [
+    "openKeys"
+   ],
+   "category": "data",
+   "structure": "composition",
+   "props": [
+    {
+     "name": "nodes",
+     "type": "NodeDiagramNodeData[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Nodes of a data-driven diagram; each renders as a full card. Leave empty to compose the parts by hand."
+    },
+    {
+     "name": "edges",
+     "type": "NodeDiagramEdgeData[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Connectors between nodes by id; they also decide the columns. Empty joins each step to the next."
+    },
+    {
+     "name": "orientation",
+     "type": "'horizontal' | 'vertical' | 'responsive'",
+     "default": "'responsive'",
+     "required": "false",
+     "doc": "Lays the steps out in a row, in a column, or in a row that stacks when its container is narrow."
+    },
+    {
+     "name": "align",
+     "type": "'start' | 'center'",
+     "default": "'start'",
+     "required": "false",
+     "doc": "Vertical alignment of the steps in a row."
+    },
+    {
+     "name": "uniform",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Gives every step the width and height of the largest one."
+    },
+    {
+     "name": "loading",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows placeholder steps while the diagram loads."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the diagram. Empty uses the locale catalog (`Diagram`)."
+    },
+    {
+     "name": "openKeys",
+     "type": "string[]",
+     "default": "() => []",
+     "required": "false",
+     "doc": "Two-way value (`v-model:openKeys`)."
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "Composed mode: nodes and groups, in flow order."
+    },
+    {
+     "name": "actions",
+     "scope": "{ node: NodeDiagramNodeData }",
+     "notes": "Data mode: controls at the end of a node's title row."
+    },
+    {
+     "name": "empty",
+     "scope": "—",
+     "notes": "Replaces the `EmptyState` shown when there are no nodes."
+    }
+   ],
+   "surface": "app",
+   "docsFile": "catalog/components/node-diagram-root.json"
+  },
+  "node-diagram-node": {
+   "import": "@aziontech/webkit/node-diagram-node",
+   "target": "./src/components/data/node-diagram/node-diagram-node/node-diagram-node.vue",
+   "kind": "subcomponent",
+   "parent": "node-diagram",
+   "treeShakeableImport": "@aziontech/webkit/node-diagram-node",
+   "surface": "app"
+  },
+  "node-diagram-group": {
+   "import": "@aziontech/webkit/node-diagram-group",
+   "target": "./src/components/data/node-diagram/node-diagram-group/node-diagram-group.vue",
+   "kind": "subcomponent",
+   "parent": "node-diagram",
+   "treeShakeableImport": "@aziontech/webkit/node-diagram-group",
+   "surface": "app"
+  },
+  "node-diagram-anchor": {
+   "import": "@aziontech/webkit/node-diagram-anchor",
+   "target": "./src/components/data/node-diagram/node-diagram-anchor/node-diagram-anchor.vue",
+   "kind": "subcomponent",
+   "parent": "node-diagram",
+   "treeShakeableImport": "@aziontech/webkit/node-diagram-anchor",
+   "surface": "app"
+  },
+  "node-diagram-header": {
+   "import": "@aziontech/webkit/node-diagram-header",
+   "target": "./src/components/data/node-diagram/node-diagram-header/node-diagram-header.vue",
+   "kind": "subcomponent",
+   "parent": "node-diagram",
+   "treeShakeableImport": "@aziontech/webkit/node-diagram-header",
+   "surface": "app"
+  },
+  "node-diagram-title": {
+   "import": "@aziontech/webkit/node-diagram-title",
+   "target": "./src/components/data/node-diagram/node-diagram-title/node-diagram-title.vue",
+   "kind": "subcomponent",
+   "parent": "node-diagram",
+   "treeShakeableImport": "@aziontech/webkit/node-diagram-title",
+   "surface": "app"
+  },
+  "node-diagram-description": {
+   "import": "@aziontech/webkit/node-diagram-description",
+   "target": "./src/components/data/node-diagram/node-diagram-description/node-diagram-description.vue",
+   "kind": "subcomponent",
+   "parent": "node-diagram",
+   "treeShakeableImport": "@aziontech/webkit/node-diagram-description",
+   "surface": "app"
+  },
+  "node-diagram-footer": {
+   "import": "@aziontech/webkit/node-diagram-footer",
+   "target": "./src/components/data/node-diagram/node-diagram-footer/node-diagram-footer.vue",
+   "kind": "subcomponent",
+   "parent": "node-diagram",
+   "treeShakeableImport": "@aziontech/webkit/node-diagram-footer",
+   "surface": "app"
+  },
+  "node-diagram-item": {
+   "import": "@aziontech/webkit/node-diagram-item",
+   "target": "./src/components/data/node-diagram/node-diagram-item/node-diagram-item.vue",
+   "kind": "subcomponent",
+   "parent": "node-diagram",
+   "treeShakeableImport": "@aziontech/webkit/node-diagram-item",
+   "surface": "app"
+  },
+  "node-diagram-bind": {
+   "import": "@aziontech/webkit/node-diagram-bind",
+   "target": "./src/components/data/node-diagram/node-diagram-bind/node-diagram-bind.vue",
+   "kind": "subcomponent",
+   "parent": "node-diagram",
+   "treeShakeableImport": "@aziontech/webkit/node-diagram-bind",
+   "attached": false,
+   "surface": "app"
+  },
   "transfer-list": {
    "import": "@aziontech/webkit/transfer-list",
    "target": "./src/components/data/transfer-list/index.ts",

@@ -1,0 +1,22 @@
+{
+ "purpose": "PROPOSAL (RV-Y1, owner to approve): one in-product diagram replacing `flow-diagram` and `topology-diagram`. A naked root lays steps out and draws the connectors. **Data mode** (`nodes` + `edges`): edges set the columns and each node renders the richest card its data allows. **Composed mode**: hand-written parts in the default slot. `orientation=\"responsive\"` stacks into a rail below a 36rem container.",
+ "useWhen": [
+  "A request path or pipeline: steps in order joined by connectors.",
+  "A deployment or service topology with status, metrics, details and bind controls."
+ ],
+ "avoidWhen": [
+  "A marketing architecture drawing from the official library → use `diagram`.",
+  "A numbered set of instructions → use `doc-steps`."
+ ],
+ "related": [
+  "`diagram` — the marketing figure (closed drawing library).",
+  "`status-indicator` — the status dot and text in a node header."
+ ],
+ "bestPractices": [
+  "Prefer data mode; compose by hand only for markup the card cannot express.",
+  "Join adjacent columns; an edge that skips a column can cross it.",
+  "Put timing or failure on the edge (`label`, `severity`) when the hop failed, on the node when the resource did.",
+  "Use `orientation=\"horizontal\"` for fixed-size scenes and mock-ups.",
+  "A one-resource slot puts `node-diagram-bind` in the `actions` slot."
+ ]
+}

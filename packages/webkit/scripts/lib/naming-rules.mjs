@@ -201,6 +201,7 @@ export const DOMAIN_PARTS = {
   'dropdown-menu': ['sub'],
   field: ['error', 'legend', 'set'],
   'flow-diagram': ['anchor', 'node', 'parallel'],
+  'node-diagram': ['anchor', 'bind', 'node'],
   footer: ['column', 'link'],
   'input-group': ['addon', 'input'],
   item: ['actions', 'media'],
