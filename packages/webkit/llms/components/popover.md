@@ -85,7 +85,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — `Popover.Title`, optional `Popover.Description`, and `Popover.Close`.
-- `popover-title/popover-title.vue` — title text (`.text-body-sm`, `var(--text-default)`). Registers its element id with the injected context so `Popover.Content` can reference it via `aria-labelledby`.
+- `popover-title/popover-title.vue` — title text (`.text-heading-2xs`, `var(--text-default)`). Registers its element id with the injected context so `Popover.Content` can reference it via `aria-labelledby`.
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — plain-text title.

@@ -1,35 +1,35 @@
 <script setup lang="ts">
   import { computed, nextTick, onBeforeUnmount, onMounted, ref, useAttrs, watch } from 'vue'
 
-  import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../locales/en'
-  import Button from '../../action/button/button.vue'
-  import Popover from '../../overlay/popover/popover.vue'
-  import PopoverClose from '../../overlay/popover/popover-close/popover-close.vue'
-  import PopoverContent from '../../overlay/popover/popover-content/popover-content.vue'
-  import PopoverDescription from '../../overlay/popover/popover-description/popover-description.vue'
-  import PopoverFooter from '../../overlay/popover/popover-footer/popover-footer.vue'
-  import PopoverHeader from '../../overlay/popover/popover-header/popover-header.vue'
-  import PopoverTitle from '../../overlay/popover/popover-title/popover-title.vue'
-  import PopoverTrigger from '../../overlay/popover/popover-trigger/popover-trigger.vue'
-  import { useOptionalTutorialPanelContext } from '../tutorial-panel/composables/use-tutorial-panel-context'
+  import { useTranslate } from '../../../../composables/use-translate'
+  import * as en from '../../../../locales/en'
+  import Button from '../../../action/button/button.vue'
+  import Popover from '../../../overlay/popover/popover.vue'
+  import PopoverClose from '../../../overlay/popover/popover-close/popover-close.vue'
+  import PopoverContent from '../../../overlay/popover/popover-content/popover-content.vue'
+  import PopoverDescription from '../../../overlay/popover/popover-description/popover-description.vue'
+  import PopoverFooter from '../../../overlay/popover/popover-footer/popover-footer.vue'
+  import PopoverHeader from '../../../overlay/popover/popover-header/popover-header.vue'
+  import PopoverTitle from '../../../overlay/popover/popover-title/popover-title.vue'
+  import PopoverTrigger from '../../../overlay/popover/popover-trigger/popover-trigger.vue'
+  import { useOptionalTutorialPanelContext } from '../composables/use-tutorial-panel-context'
 
   defineOptions({
-    name: 'Hotspot',
+    name: 'TutorialPanelHotspot',
     inheritAttrs: false
   })
 
   /** Side of the wrapped control the marker sits on. */
-  export type HotspotSide = 'start' | 'end'
+  export type TutorialPanelHotspotSide = 'start' | 'end'
 
-  export interface HotspotProps {
+  export interface TutorialPanelHotspotProps {
     /** Matches the `hotspotId` of a tutorial step; the marker shows while that step's tutorial runs. */
     hotspotId: string
     /** Which side of the wrapped control the marker sits on, in reading direction. */
-    side?: HotspotSide
+    side?: TutorialPanelHotspotSide
   }
 
-  const props = withDefaults(defineProps<HotspotProps>(), {
+  const props = withDefaults(defineProps<TutorialPanelHotspotProps>(), {
     side: 'end'
   })
 
@@ -39,10 +39,12 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useTranslate({ hotspot: en.hotspot })
+  const { t } = useTranslate({ tutorialPanel: en.tutorialPanel })
   const context = useOptionalTutorialPanelContext()
 
-  const testId = computed<string>(() => (attrs['data-testid'] as string | undefined) ?? 'hotspot')
+  const testId = computed<string>(
+    () => (attrs['data-testid'] as string | undefined) ?? 'tutorial-panel-hotspot'
+  )
 
   const entry = computed(() => {
     if (!context || !context.active.value || context.finished.value) return null
@@ -113,7 +115,7 @@
         <button
           ref="markerEl"
           type="button"
-          :aria-label="t('hotspot.label', { title: entry.title })"
+          :aria-label="t('tutorialPanel.hotspotLabel', { title: entry.title })"
           :data-testid="`${testId}__marker`"
           :data-active="isCurrent || null"
           class="relative inline-flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-(--radius-full) outline-none before:absolute before:-inset-2 before:content-[''] focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
@@ -136,9 +138,9 @@
           class="flex flex-col"
         >
           <PopoverHeader>
-            <PopoverTitle>{{ entry.title }}</PopoverTitle>
+            <PopoverTitle :data-testid="`${testId}__title`">{{ entry.title }}</PopoverTitle>
             <PopoverDescription>
-              {{ t('hotspot.stepOf', { current: entry.index + 1, total }) }}
+              {{ t('tutorialPanel.hotspotStepOf', { current: entry.index + 1, total }) }}
               <template v-if="taskTitle">· {{ taskTitle }}</template>
             </PopoverDescription>
             <PopoverClose :data-testid="`${testId}__close`" />
@@ -151,14 +153,14 @@
           <PopoverFooter>
             <Button
               v-if="entry.index > 0"
-              :label="t('hotspot.previous')"
+              :label="t('tutorialPanel.hotspotPrevious')"
               variant="outline"
               size="small"
               :data-testid="`${testId}__previous`"
               @click="context?.previous()"
             />
             <Button
-              :label="isLast ? t('hotspot.finish') : t('hotspot.next')"
+              :label="isLast ? t('tutorialPanel.hotspotFinish') : t('tutorialPanel.hotspotNext')"
               variant="primary"
               size="small"
               :data-testid="`${testId}__next`"

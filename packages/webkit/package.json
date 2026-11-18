@@ -531,10 +531,6 @@
       "types": "./types/components/content/help-panel/help-panel-footer/help-panel-footer.vue.d.ts",
       "default": "./src/components/content/help-panel/help-panel-footer/help-panel-footer.vue"
     },
-    "./hotspot": {
-      "types": "./types/components/content/hotspot/hotspot.vue.d.ts",
-      "default": "./src/components/content/hotspot/hotspot.vue"
-    },
     "./tutorial-panel": {
       "types": "./types/components/content/tutorial-panel/index.d.ts",
       "default": "./src/components/content/tutorial-panel/index.ts"
@@ -546,6 +542,10 @@
     "./tutorial-panel-provider": {
       "types": "./types/components/content/tutorial-panel/tutorial-panel-provider/tutorial-panel-provider.vue.d.ts",
       "default": "./src/components/content/tutorial-panel/tutorial-panel-provider/tutorial-panel-provider.vue"
+    },
+    "./tutorial-panel-hotspot": {
+      "types": "./types/components/content/tutorial-panel/tutorial-panel-hotspot/tutorial-panel-hotspot.vue.d.ts",
+      "default": "./src/components/content/tutorial-panel/tutorial-panel-hotspot/tutorial-panel-hotspot.vue"
     },
     "./hero-title": {
       "types": "./types/components/marketing/hero/hero-title/hero-title.vue.d.ts",
@@ -2874,9 +2874,6 @@
       "help-panel-footer": [
         "./types/components/content/help-panel/help-panel-footer/help-panel-footer.vue.d.ts"
       ],
-      "hotspot": [
-        "./types/components/content/hotspot/hotspot.vue.d.ts"
-      ],
       "tutorial-panel": [
         "./types/components/content/tutorial-panel/index.d.ts"
       ],
@@ -2885,6 +2882,9 @@
       ],
       "tutorial-panel-provider": [
         "./types/components/content/tutorial-panel/tutorial-panel-provider/tutorial-panel-provider.vue.d.ts"
+      ],
+      "tutorial-panel-hotspot": [
+        "./types/components/content/tutorial-panel/tutorial-panel-hotspot/tutorial-panel-hotspot.vue.d.ts"
       ],
       "hero-title": [
         "./types/components/marketing/hero/hero-title/hero-title.vue.d.ts"

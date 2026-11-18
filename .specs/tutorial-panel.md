@@ -3,11 +3,11 @@ name: tutorial-panel
 category: content
 structure: composition
 status: implemented
-spec_version: 8
+spec_version: 9
 template: 2
-checksum: 5510f462e7835ae41eaa971b002c87e3305d1546e634e8ec358eb9b4cbc372d4
+checksum: 10718db8c9829825a98d3ba4f75b82b6bf2798e5da23a4af2b98a071b03ee049
 created: 2026-11-11
-last_updated: 2026-11-16
+last_updated: 2026-11-18
 ---
 
 # TutorialPanel — Component Spec
@@ -16,10 +16,11 @@ last_updated: 2026-11-16
 
 The guide that runs tutorials beside the real product. It lives in the page's tools or help region,
 lists the tutorials a reader can take, and while one runs it shows the tutorial's tasks and the
-reader's place in them. The steps themselves happen on the page: each step points at a `Hotspot`
-placed beside the real control, and the current step opens there in a popover. `TutorialPanel.Provider`
-wraps the whole page (the content and the tools region), holds the running tutorial and the current
-step, and is what the panel and every `Hotspot` read.
+reader's place in them. The steps themselves happen on the page: each step points at a
+`TutorialPanelHotspot` placed beside the real control, and the current step opens there in a popover.
+`TutorialPanel.Provider` wraps the whole page (the content and the tools region), holds the running
+tutorial and the current step, and is what the panel and every hotspot read. A tutorial starts on a
+reader's action (the panel's Start); only one step is open on a page at a time.
 
 It is the stateful layer over `help-panel`: the panel is a `HelpPanel` with its `Header`, and draws
 each tutorial with its own internal task list (6.0 moved the former `HelpPanel.TutorialPanelTutorial` and
@@ -27,9 +28,18 @@ each tutorial with its own internal task list (6.0 moved the former `HelpPanel.T
 app-layout): neither the design sample nor the Console Kit has a guided tutorial, so the model is
 Cloudscape's tutorial panel, hotspot and annotation context, rebuilt on WebKit parts.
 
+Design call (2026-11-18): the hotspot is a part of this component, not a component of its own. It
+renders nothing without the provider's running tutorial and reads only this component's context, so
+it belongs to this family the way Atlassian's `SpotlightTarget` belongs to its onboarding
+`SpotlightManager`; Shepherd.js and Driver.js have no separate target component at all (a step names
+its element), and the standalone hotspots of Appcues and Pendo work without a tour, which ours never
+does. Cloudscape ships `Hotspot` as its own export, but it too only works inside its annotation
+context. It is a companion part (it composes `Popover`), so it is imported on its own and not attached
+to the compound.
+
 ## When to use
 
-- Use TutorialPanel for guided tutorials whose steps point at real controls through Hotspot.
+- Use TutorialPanel for guided tutorials whose steps point at real controls through TutorialPanelHotspot.
 - A reader learns a product task by doing it on the real screen, step by step, with the instructions pointing at the control they need next.
 - A product offers several tutorials in its help region and records which ones the reader finished.
 - A first-run or onboarding flow guides the reader through a real create and deploy, not a mock.
@@ -45,17 +55,18 @@ Cloudscape's tutorial panel, hotspot and annotation context, rebuilt on WebKit p
 
 ## Related
 
-- `hotspot` — the marker beside a real control; the current step opens from it. Every step names one by `hotspotId`.
 - `help-panel` — the parts the panel draws with; use it alone for help without a guided run.
-- `popover` — what a hotspot opens; the step's title, content and Previous / Next live in it.
+- `popover` — what a `TutorialPanelHotspot` opens; the step's title, content and Previous / Next live in it.
 - `drawer` — the host of the tools region on narrow screens; the panel goes inside it.
 
 ## Best practices
 
 - Wrap the whole page in `TutorialPanel.Provider`, so the panel and every hotspot share one state.
+- Start a tutorial on a reader's action (the panel's Start, or a call to action that sets `activeKey`), never by presetting `activeKey` on the page's first render: a step popover over the page before the reader asked for it hides what they came to read.
+- One step is open on a page at a time. When a provider starts or moves a tutorial it takes the open step, and the step another provider had open closes (its marker stays and reopens it).
 - Keep tutorials as data (`TutorialPanelTutorial[]`): the panel lists them and the hotspots on the page read the same steps. This is the one place a config array is right — the step content is shown away from where it is declared.
 - One step, one control. Write the step title as the action (`Name the service`) and the content as one or two sentences.
-- Place every `Hotspot` a tutorial names on the page that runs it. A step whose hotspot is missing still shows in the panel, and focus moves to it there.
+- Place every `TutorialPanelHotspot` a tutorial names on the page that runs it. A step whose hotspot is missing still shows in the panel, and focus moves to it there.
 - Set `completed` on a tutorial from what the product recorded (the `complete` event), not from a click.
 - Bind `v-model:activeKey` and `v-model:step` and persist them when a tutorial must survive a navigation.
 
@@ -65,8 +76,8 @@ Cloudscape's tutorial panel, hotspot and annotation context, rebuilt on WebKit p
 <script setup>
   import { ref } from 'vue'
   import Button from '@aziontech/webkit/button'
-  import Hotspot from '@aziontech/webkit/hotspot'
   import TutorialPanel from '@aziontech/webkit/tutorial-panel'
+  import TutorialPanelHotspot from '@aziontech/webkit/tutorial-panel-hotspot'
 
   const tutorials = [
     {
@@ -102,15 +113,15 @@ Cloudscape's tutorial panel, hotspot and annotation context, rebuilt on WebKit p
     :tutorials="tutorials"
   >
     <main>
-      <Hotspot hotspot-id="new-service">
+      <TutorialPanelHotspot hotspot-id="new-service">
         <Button label="New service" />
-      </Hotspot>
-      <Hotspot hotspot-id="deploy">
+      </TutorialPanelHotspot>
+      <TutorialPanelHotspot hotspot-id="deploy">
         <Button
           label="Deploy"
           variant="primary"
         />
-      </Hotspot>
+      </TutorialPanelHotspot>
     </main>
     <aside>
       <TutorialPanel />
@@ -134,19 +145,32 @@ The root ships a **compound API**: `index.ts` attaches the provider to the panel
 `<TutorialPanel.Provider>` resolves from the same import. The panel has no open state (the tools region
 that hosts it owns that), so there is no `Trigger` / `Content`. State flows through `provide`/`inject`
 (`injection-key.ts`, provided by the provider): the panel reads it through
-`composables/use-tutorial-panel-context.ts`, which throws outside a provider, and `Hotspot` reads it through
-the optional variant, which returns null so a hotspot outside a provider renders only its content.
+`composables/use-tutorial-panel-context.ts`, which throws outside a provider, and `TutorialPanelHotspot` reads it
+through the optional variant, which returns null so a hotspot outside a provider renders only its content.
+Which provider holds the page's one open step is a module-level owner in `lib/open-step-owner.ts`: a
+provider takes it when it starts or moves a tutorial (or, on mount or when `activeKey` is set from
+outside, only if no provider holds it), and gives it back on exit and unmount. A provider that does
+not hold it reports its step as dismissed, so its popover is closed and its marker stays.
 
 - `tutorial-panel-provider/tutorial-panel-provider.vue` — Holds the tutorials, the running tutorial (`v-model:activeKey`), the current step (`v-model:step`, flat across tasks), whether the reader dismissed the current step, and the hotspots on the page. Renders only its slot (no element).
   - Props: `tutorials?: TutorialPanelTutorial[]` (default `[]`).
   - Models (`defineModel`): `v-model:activeKey` (`string \| null`, default `null` — the parent owns it when bound, the provider keeps it locally when not), `v-model:step` (`number`, default `0`, same rule; equals the step count once the tutorial is finished).
-  - Events: `update:activeKey` (`string \| null`) and `update:step` (`number`) from the models; `start` (`(event: Event, id: string)` — the tutorial id, on Start and Restart), `exit` (`(event: Event, id: string)` — on Exit or Back to tutorials), `complete` (`(event: Event, id: string)` — on Finish of the last step). Each fires from a button the reader activated (in the panel or a `Hotspot` popover, through the context), so the DOM event comes first and the tutorial id second.
+  - Events: `update:activeKey` (`string \| null`) and `update:step` (`number`) from the models; `start` (`(event: Event, id: string)` — the tutorial id, on Start and Restart), `exit` (`(event: Event, id: string)` — on Exit or Back to tutorials), `complete` (`(event: Event, id: string)` — on Finish of the last step). Each fires from a button the reader activated (in the panel or a hotspot popover, through the context), so the DOM event comes first and the tutorial id second.
   - Slot: `default` — the page, with the panel and every hotspot inside.
+
+- `tutorial-panel-hotspot/tutorial-panel-hotspot.vue` — **companion part** (composes `Popover` and `Button`; exported on its own, not attached): marks a real control as a step. It wraps the control and, while a tutorial that names its `hotspotId` runs, draws a small marker beside it. The current step's marker pulses and opens the step in a popover: the step's title (`Popover.Title`, `.text-heading-2xs`), `Step n of N` with the task's name, the instructions, and Previous / Next (Finish on the last step). Outside a running tutorial, or outside a provider, it renders only the wrapped control, so hotspots can stay on a page for good.
+  - Props: `hotspotId: string` (required) — matches the `hotspotId` of a tutorial step; `side?: 'start' | 'end'` (default `'end'`, type `TutorialPanelHotspotSide`) — which side of the wrapped control the marker sits on, in reading direction.
+  - Events: none — moves go through the provider.
+  - Slot: `default` — the real control the step is about.
+  - States: `idle` (no marker), `marked` (static marker), `active` (the current step: filled, pulsing, popover open), `dismissed` (the current step closed by the reader, or by another provider taking the open step: filled, no pulse, popover closed). `data-marker` on the root when the marker shows; `data-active` on the root and the marker for the current step; `data-side` mirrors `side`; the popover's `data-state` is owned by `Popover`.
+  - `data-testid` fallback `tutorial-panel-hotspot`; inner parts `__marker`, `__popover`, `__trigger`, `__step`, `__title`, `__close`, `__previous`, `__next`.
+  - Keyboard and ARIA: the marker is a `button` in the tab order after the wrapped control (before it with `side="start"`), named `Tutorial step: <title>`, with `aria-haspopup="dialog"`, `aria-expanded` and `aria-controls` from `Popover.Trigger`; `Enter` / `Space` opens its step and makes it current. The popover is a non-modal `dialog` labelled by the step title and described by `Step n of N`; `Tab` cycles Close, Previous and Next; `Esc` closes the step and returns focus to the marker. Next, Previous and the marker move focus into the new step's popover. The pulse ring and dot are `aria-hidden`; the ring pings three times and stops (WCAG 2.2.2).
+  - Touch: a 24 px marker with a `before:` pseudo-element that extends the hit area to 40 px; the root reserves `--spacing-xs` on the marker's outer side so a hotspot flush with a narrow row does not scroll the page sideways.
 
 - `parts/tutorial-panel-tasks.vue` — internal, not exported: a tutorial's title, description, a progress line derived from the registered tasks (`2 of 3 complete`, `aria-live="polite"`), the ordered task `<ol>` and an actions row. Provides the task registry (`TutorialTasksInjectionKey`) to its tasks. `data-testid` fallback `tutorial-panel-tasks`; the panel passes `<testId>__tutorial`. `data-completed` mirrors its `completed` prop.
 - `parts/tutorial-panel-task.vue` — internal, not exported: one task, a numbered marker, a title and its steps. An `<li>` that registers with the task list on mount (ordinal + `status`), `data-status` mirrors `status` (`pending` / `success`), the `active` task (boolean prop) carries `data-active` and `aria-current="step"`, and an `sr-only` status word (`Not started`, `Current task`, `Complete`). Throws outside the task list. `data-testid` fallback `tutorial-panel-task`.
 
-Exported types: `TutorialPanelTutorial` (`id`, `title`, `description?`, `completed?`, `tasks`), `TutorialPanelTaskData` (`title`, `steps`), `TutorialPanelStep` (`title`, `content`, `hotspotId`).
+Exported types: `TutorialPanelTutorial` (`id`, `title`, `description?`, `completed?`, `tasks`), `TutorialPanelTaskData` (`title`, `steps`), `TutorialPanelStep` (`title`, `content`, `hotspotId`), `TutorialPanelHotspotSide`.
 
 ```
 packages/webkit/src/components/content/tutorial-panel/
@@ -157,8 +181,12 @@ packages/webkit/src/components/content/tutorial-panel/
 ├── composables/
 │   ├── use-tutorial-panel-context.ts           (strict and optional injectors)
 │   └── use-tutorial-panel-tasks-context.ts     (task registry; throws outside the task list)
+├── lib/
+│   └── open-step-owner.ts                (the page's one open step)
 ├── tutorial-panel-provider/
 │   └── tutorial-panel-provider.vue
+├── tutorial-panel-hotspot/
+│   └── tutorial-panel-hotspot.vue        (companion part)
 ├── tutorial-panel-tasks/
 │   └── tutorial-panel-tasks.vue          (internal)
 └── tutorial-panel-task/
@@ -170,10 +198,11 @@ Exports:
 ```jsonc
 "./tutorial-panel": "./src/components/content/tutorial-panel/index.ts",
 "./tutorial-panel-root": "./src/components/content/tutorial-panel/tutorial-panel.vue",
-"./tutorial-panel-provider": "./src/components/content/tutorial-panel/tutorial-panel-provider/tutorial-panel-provider.vue"
+"./tutorial-panel-provider": "./src/components/content/tutorial-panel/tutorial-panel-provider/tutorial-panel-provider.vue",
+"./tutorial-panel-hotspot": "./src/components/content/tutorial-panel/tutorial-panel-hotspot/tutorial-panel-hotspot.vue"
 ```
 
-Composed DS components (relative imports): `help-panel` (root, `Header`), `button`, `empty-state`, `tag`.
+Composed DS components (relative imports): `help-panel` (root, `Header`), `button`, `empty-state`, `tag`, `popover` (the hotspot's step).
 
 ## Props
 
@@ -204,10 +233,14 @@ _No events on the panel — every action goes through the provider, which emits 
 
 ## Motion & Animations
 
-| Trigger            | Animation / Transition                                           | Token                                                    | Reduced-motion fallback         |
-| ------------------ | ---------------------------------------------------------------- | -------------------------------------------------------- | ------------------------------- |
-| task status change | `transition-colors` on the task marker and title (internal task) | inline · `duration-fast-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
-| loading            | owned by `HelpPanel` (`Skeleton`)                                | component                                                | handled by `Skeleton`           |
+| Trigger                             | Animation / Transition                                                     | Token                                                    | Reduced-motion fallback                           |
+| ----------------------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------- | ------------------------------------------------- |
+| task status change                  | `transition-colors` on the task marker and title (internal task)           | inline · `duration-fast-02` · `ease-productive-entrance` | `motion-reduce:transition-none`                   |
+| loading                             | owned by `HelpPanel` (`Skeleton`)                                          | component                                                | handled by `Skeleton`                             |
+| hotspot: current step, popover open | `animate-ping-settle` on a ring behind the marker: three rings, then still | catalog `ping-settle` (3s)                               | `motion-reduce:animate-none` (static ring)        |
+| hotspot: marker becomes current     | `transition-colors` on the dot                                             | inline · `duration-fast-02` · `ease-productive-entrance` | `motion-reduce:transition-none`                   |
+| hotspot: popover open / close       | owned by `Popover` (its scale in and out)                                  | component                                                | handled by `Popover`                              |
+| hotspot: scroll to the marker       | `scrollIntoView` smooth                                                    | browser                                                  | `behavior: 'auto'` under `prefers-reduced-motion` |
 
 ## Tokens
 
@@ -224,6 +257,13 @@ _No events on the panel — every action goes through the provider, which emits 
 | shape                               | `var(--shape-card)`                                            |
 | padding (item)                      | `var(--spacing-sm)`                                            |
 | gap                                 | `var(--spacing-xs)`, `var(--spacing-sm)`, `var(--spacing-2xs)` |
+| hotspot marker ring and fill        | `var(--primary)`                                               |
+| hotspot marker dot (not current)    | `var(--bg-surface)`                                            |
+| hotspot marker shape                | `var(--radius-full)`                                           |
+| hotspot marker focus ring           | `var(--ring-color)`                                            |
+| hotspot step title                  | `.text-heading-2xs` (from `Popover.Title`)                     |
+| hotspot step content                | `.text-body-sm`, `var(--text-default)`                         |
+| hotspot step content padding        | `var(--spacing-md)` inline and top, `var(--spacing-lg)` bottom |
 
 ## Theme gaps
 
@@ -254,6 +294,11 @@ _None._
 | `tutorialPanel.completedDescription` | `You finished {title}.`                                       | —             |
 | `tutorialPanel.taskCount`            | `{count} task` / `{count} tasks`                              | —             |
 | `tutorialPanel.stepCount`            | `{count} step` / `{count} steps`                              | —             |
+| `tutorialPanel.hotspotLabel`         | `Tutorial step: {title}`                                      | —             |
+| `tutorialPanel.hotspotStepOf`        | `Step {current} of {total}`                                   | —             |
+| `tutorialPanel.hotspotPrevious`      | `Previous`                                                    | —             |
+| `tutorialPanel.hotspotNext`          | `Next`                                                        | —             |
+| `tutorialPanel.hotspotFinish`        | `Finish`                                                      | —             |
 
 - Formatting: plurals through `Intl.PluralRules` (the catalog's plural messages); tutorial content is the consumer's own text.
 
@@ -273,17 +318,19 @@ _None._
 
 ## Performance
 
-- Bundle budget: `tutorial-panel` 9 KB, `tutorial-panel-root` 8.25 KB, `tutorial-panel-provider` 1.25 KB (gzip, `.size-limit.json`).
+- Bundle budget: `tutorial-panel`, `tutorial-panel-root`, `tutorial-panel-provider` and `tutorial-panel-hotspot` (it carries `Popover` and `Button`) each have an entry in `.size-limit.json` (gzip).
 - Runtime budget: none: a tutorial holds tens of steps; derived state is computed per change.
 - Heavy parts: none.
 
 ## Examples
 
-- Default — the example page: the panel beside a page with hotspots; start a tutorial to see the run.
+- Default — the example page: the panel beside a page with hotspots (one with `side="start"`); nothing opens until the reader selects Start.
 - Completed — the completion screen with the `completion` slot. Justified because the completion view is a different state of the provider, not an args delta of the panel.
 - Loading — `loading` only.
 
 ## Open questions
+
+- Resolved 2026-11-18: `Hotspot` became the companion part `TutorialPanelHotspot` (see the design call in Purpose); examples no longer start a tutorial on render, and one step is open per page.
 
 - A step whose hotspot sits on another route: the panel shows it and focuses it, but the reader has no Next in the panel. Cloudscape behaves the same; revisit if a product needs cross-route tutorials.
 

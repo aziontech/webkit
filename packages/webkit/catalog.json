@@ -4083,6 +4083,7 @@
   "help-panel-section": "help-panel-group",
   "hero-band": "hero-section",
   "hero-form": "hero-form-section",
+  "hotspot": "tutorial-panel-hotspot",
   "input-number": "number-input",
   "input-password": "password-input",
   "input-text": "input",
@@ -4172,7 +4173,7 @@
   "field-textarea": "Field + FieldLabel + Textarea + FieldDescription",
   "field-time": "Field + FieldLabel + Input + FieldDescription",
   "help-panel-task": "TutorialPanel: give each tutorial its tasks and steps as data",
-  "help-panel-tutorial": "TutorialPanel (with TutorialPanel.Provider and Hotspot) owns tutorials; HelpPanel has no tutorial mode",
+  "help-panel-tutorial": "TutorialPanel (with TutorialPanel.Provider and TutorialPanelHotspot) owns tutorials; HelpPanel has no tutorial mode",
   "helper-text": "use FieldDescription for guidance or FieldError for a validation message (Field.Description / Field.Error); both work outside a Field",
   "hero-copy-on-top-art": "HeroSection from @aziontech/webkit/hero-section with variant=\"copy-on-top-art\" and the same levels",
   "hero-with-opening": "HeroSection from @aziontech/webkit/hero-section with size=\"large\" and the same items (titleLength=\"long\" for a long headline)",
@@ -8974,40 +8975,6 @@
    "treeShakeableImport": "@aziontech/webkit/help-panel-footer",
    "surface": "app"
   },
-  "hotspot": {
-   "import": "@aziontech/webkit/hotspot",
-   "target": "./src/components/content/hotspot/hotspot.vue",
-   "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/hotspot",
-   "category": "content",
-   "structure": "monolithic",
-   "props": [
-    {
-     "name": "hotspotId",
-     "type": "string",
-     "default": "—",
-     "required": "true",
-     "doc": "Matches the `hotspotId` of a tutorial step; the marker shows while that step's tutorial runs."
-    },
-    {
-     "name": "side",
-     "type": "'start' | 'end'",
-     "default": "'end'",
-     "required": "false",
-     "doc": "Which side of the wrapped control the marker sits on, in reading direction."
-    }
-   ],
-   "slots": [
-    {
-     "name": "default",
-     "scope": "—",
-     "notes": "The real control the step is about."
-    }
-   ],
-   "surface": "app",
-   "examplesFile": "catalog/examples/hotspot.json",
-   "docsFile": "catalog/components/hotspot.json"
-  },
   "tutorial-panel": {
    "import": "@aziontech/webkit/tutorial-panel",
    "target": "./src/components/content/tutorial-panel/index.ts",
@@ -9015,7 +8982,8 @@
    "compoundRoot": true,
    "treeShakeableImport": "@aziontech/webkit/tutorial-panel-root",
    "subcomponents": [
-    "@aziontech/webkit/tutorial-panel-provider"
+    "@aziontech/webkit/tutorial-panel-provider",
+    "@aziontech/webkit/tutorial-panel-hotspot"
    ],
    "category": "content",
    "structure": "composition",
@@ -9118,6 +9086,15 @@
     "activeKey",
     "step"
    ],
+   "surface": "app"
+  },
+  "tutorial-panel-hotspot": {
+   "import": "@aziontech/webkit/tutorial-panel-hotspot",
+   "target": "./src/components/content/tutorial-panel/tutorial-panel-hotspot/tutorial-panel-hotspot.vue",
+   "kind": "subcomponent",
+   "parent": "tutorial-panel",
+   "treeShakeableImport": "@aziontech/webkit/tutorial-panel-hotspot",
+   "attached": false,
    "surface": "app"
   },
   "hero-title": {

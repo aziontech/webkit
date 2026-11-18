@@ -570,14 +570,6 @@ export const heroFormSection = {
   noMatch: 'No results found.'
 } as const
 
-export const hotspot = {
-  label: 'Tutorial step: {title}',
-  stepOf: 'Step {current} of {total}',
-  previous: 'Previous',
-  next: 'Next',
-  finish: 'Finish'
-} as const
-
 export const keyValueList = {
   notSet: 'Not set'
 } as const
@@ -1142,7 +1134,12 @@ export const tutorialPanel = {
   taskComplete: 'Complete',
   taskCurrent: 'Current task',
   taskNotStarted: 'Not started',
-  progress: '{complete} of {total} complete'
+  progress: '{complete} of {total} complete',
+  hotspotLabel: 'Tutorial step: {title}',
+  hotspotStepOf: 'Step {current} of {total}',
+  hotspotPrevious: 'Previous',
+  hotspotNext: 'Next',
+  hotspotFinish: 'Finish'
 } as const
 
 export const wizard = {
@@ -1462,7 +1459,6 @@ export const en = {
   helpPanel,
   heroSection,
   heroFormSection,
-  hotspot,
   keyValueList,
   kbd,
   link,

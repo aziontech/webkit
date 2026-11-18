@@ -1,14 +1,18 @@
+import userEvent from '@testing-library/user-event'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { defineComponent, nextTick, ref } from 'vue'
 
+import CompletedExample from '../../../../examples/tutorial-panel/completed.vue'
+import DefaultExample from '../../../../examples/tutorial-panel/default.vue'
+import LoadingExample from '../../../../examples/tutorial-panel/loading.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import HelpPanel from '../help-panel/help-panel.vue'
-import Hotspot from '../hotspot/hotspot.vue'
 import { useTutorialPanelTasksContext } from './composables/use-tutorial-panel-tasks-context'
 import TutorialPanel, { TutorialPanelProvider, type TutorialPanelTutorial } from './index'
 import TutorialPanelTask from './parts/tutorial-panel-task.vue'
 import TutorialPanelTasks from './parts/tutorial-panel-tasks.vue'
+import TutorialPanelHotspot from './tutorial-panel-hotspot/tutorial-panel-hotspot.vue'
 
 const tutorials: TutorialPanelTutorial[] = [
   {
@@ -43,7 +47,7 @@ const tutorials: TutorialPanelTutorial[] = [
 ]
 
 const Page = defineComponent({
-  components: { TutorialPanel, TutorialPanelProvider, Hotspot },
+  components: { TutorialPanel, TutorialPanelProvider, TutorialPanelHotspot },
   props: {
     withDeploy: { type: Boolean, default: true },
     list: { type: Array, default: () => tutorials }
@@ -67,9 +71,9 @@ const Page = defineComponent({
     >
       <main>
         <h1>Applications</h1>
-        <Hotspot hotspot-id="create"><button type="button">Create</button></Hotspot>
-        <Hotspot hotspot-id="name" side="start"><label>Name <input /></label></Hotspot>
-        <Hotspot v-if="withDeploy" hotspot-id="deploy"><button type="button">Deploy</button></Hotspot>
+        <TutorialPanelHotspot hotspot-id="create"><button type="button">Create</button></TutorialPanelHotspot>
+        <TutorialPanelHotspot hotspot-id="name" side="start"><label>Name <input /></label></TutorialPanelHotspot>
+        <TutorialPanelHotspot v-if="withDeploy" hotspot-id="deploy"><button type="button">Deploy</button></TutorialPanelHotspot>
       </main>
       <TutorialPanel>
         <template #completion><a href="#feedback">Give feedback</a></template>
@@ -88,9 +92,11 @@ const tick = async () => {
 const panelOf = (container: Element) =>
   container.querySelector('[data-testid="tutorial-panel"]') as HTMLElement
 const markers = () =>
-  Array.from(document.querySelectorAll<HTMLElement>('[data-testid="hotspot__marker"]'))
+  Array.from(
+    document.querySelectorAll<HTMLElement>('[data-testid="tutorial-panel-hotspot__marker"]')
+  )
 const openStep = () =>
-  document.querySelector<HTMLElement>('[data-testid="hotspot__popover__panel"]')
+  document.querySelector<HTMLElement>('[data-testid="tutorial-panel-hotspot__popover__panel"]')
 
 describe('TutorialPanel', () => {
   it('lists the tutorials with their counts and completion', async () => {
@@ -130,18 +136,28 @@ describe('TutorialPanel', () => {
     const { container, getByRole, getByTestId } = render(Page)
     getByRole('button', { name: 'Start tutorial' }).click()
     await tick()
-    ;(openStep()?.querySelector('[data-testid="hotspot__next"]') as HTMLElement).click()
+    ;(
+      openStep()?.querySelector('[data-testid="tutorial-panel-hotspot__next"]') as HTMLElement
+    ).click()
     await tick()
     expect(openStep()?.textContent).toContain('Name it')
     expect(openStep()?.textContent).toContain('Step 2 of 3')
-    ;(openStep()?.querySelector('[data-testid="hotspot__previous"]') as HTMLElement).click()
+    ;(
+      openStep()?.querySelector('[data-testid="tutorial-panel-hotspot__previous"]') as HTMLElement
+    ).click()
     await tick()
     expect(openStep()?.textContent).toContain('Step 1 of 3')
-    ;(openStep()?.querySelector('[data-testid="hotspot__next"]') as HTMLElement).click()
+    ;(
+      openStep()?.querySelector('[data-testid="tutorial-panel-hotspot__next"]') as HTMLElement
+    ).click()
     await tick()
-    ;(openStep()?.querySelector('[data-testid="hotspot__next"]') as HTMLElement).click()
+    ;(
+      openStep()?.querySelector('[data-testid="tutorial-panel-hotspot__next"]') as HTMLElement
+    ).click()
     await tick()
-    const finish = openStep()?.querySelector('[data-testid="hotspot__next"]') as HTMLElement
+    const finish = openStep()?.querySelector(
+      '[data-testid="tutorial-panel-hotspot__next"]'
+    ) as HTMLElement
     expect(finish.textContent).toContain('Finish')
     finish.click()
     await tick()
@@ -178,9 +194,13 @@ describe('TutorialPanel', () => {
     const { container, getByRole } = render(Page, { props: { withDeploy: false } })
     getByRole('button', { name: 'Start tutorial' }).click()
     await tick()
-    ;(openStep()?.querySelector('[data-testid="hotspot__next"]') as HTMLElement).click()
+    ;(
+      openStep()?.querySelector('[data-testid="tutorial-panel-hotspot__next"]') as HTMLElement
+    ).click()
     await tick()
-    ;(openStep()?.querySelector('[data-testid="hotspot__next"]') as HTMLElement).click()
+    ;(
+      openStep()?.querySelector('[data-testid="tutorial-panel-hotspot__next"]') as HTMLElement
+    ).click()
     await tick()
     const current = panelOf(container).querySelector(
       '[aria-current="step"][data-slot="tutorial-step"]'
@@ -207,12 +227,12 @@ describe('TutorialPanel', () => {
 
   it('keeps the running tutorial and step locally when v-model is unbound', async () => {
     const Loose = defineComponent({
-      components: { TutorialPanel, TutorialPanelProvider, Hotspot },
+      components: { TutorialPanel, TutorialPanelProvider, TutorialPanelHotspot },
       setup: () => ({ tutorials }),
       template: `
         <TutorialPanelProvider :tutorials="tutorials">
-          <Hotspot hotspot-id="create"><button type="button">Create</button></Hotspot>
-          <Hotspot hotspot-id="name"><label>Name <input /></label></Hotspot>
+          <TutorialPanelHotspot hotspot-id="create"><button type="button">Create</button></TutorialPanelHotspot>
+          <TutorialPanelHotspot hotspot-id="name"><label>Name <input /></label></TutorialPanelHotspot>
           <TutorialPanel />
         </TutorialPanelProvider>
       `
@@ -224,11 +244,11 @@ describe('TutorialPanel', () => {
   })
 
   it('renders a hotspot outside a provider as its content only', () => {
-    const { container } = render(Hotspot, {
+    const { container } = render(TutorialPanelHotspot, {
       props: { hotspotId: 'x' },
       slots: { default: '<button type="button">Plain</button>' }
     })
-    expect(container.querySelector('[data-testid="hotspot__marker"]')).toBeNull()
+    expect(container.querySelector('[data-testid="tutorial-panel-hotspot__marker"]')).toBeNull()
     expect(container.textContent).toContain('Plain')
   })
 
@@ -253,7 +273,9 @@ describe('TutorialPanel', () => {
     getByRole('button', { name: 'Start tutorial' }).click()
     await tick()
     const name = container.querySelector('[data-side="start"]') as HTMLElement
-    const marker = name.querySelector('[data-testid="hotspot__marker"]') as HTMLElement
+    const marker = name.querySelector(
+      '[data-testid="tutorial-panel-hotspot__marker"]'
+    ) as HTMLElement
     const input = name.querySelector('input') as HTMLElement
     expect(marker.getBoundingClientRect().left).toBeGreaterThan(input.getBoundingClientRect().left)
     await expectNoA11yViolations(container)
@@ -379,6 +401,210 @@ describe('TutorialPanel', () => {
       expect(() => render(TutorialPanelTask, { props: { title: 'Loose' } })).toThrow(
         /must be used within a TutorialPanel/
       )
+    })
+  })
+
+  const guideTutorials: TutorialPanelTutorial[] = [
+    {
+      id: 'guide',
+      title: 'Guide',
+      tasks: [
+        {
+          title: 'Task one',
+          steps: [
+            { title: 'First', content: 'Do the first thing.', hotspotId: 'a' },
+            { title: 'Second', content: 'Do the second thing.', hotspotId: 'b' }
+          ]
+        }
+      ]
+    }
+  ]
+
+  const GuideHost = defineComponent({
+    components: { TutorialPanelProvider, TutorialPanelHotspot },
+    props: {
+      active: { type: String, default: null },
+      step: { type: Number, default: 0 }
+    },
+    setup(props) {
+      const current = ref(props.active)
+      const at = ref(props.step)
+      return { guideTutorials, current, at }
+    },
+    template: `
+    <TutorialPanelProvider v-model:active-key="current" v-model:step="at" :tutorials="guideTutorials">
+      <TutorialPanelHotspot hotspot-id="a"><button type="button">Alpha</button></TutorialPanelHotspot>
+      <TutorialPanelHotspot hotspot-id="b"><button type="button">Beta</button></TutorialPanelHotspot>
+      <TutorialPanelHotspot hotspot-id="z"><button type="button">Other</button></TutorialPanelHotspot>
+    </TutorialPanelProvider>
+  `
+  })
+
+  describe('hotspot', () => {
+    it('renders no marker while no tutorial runs', () => {
+      render(GuideHost)
+      expect(markers()).toHaveLength(0)
+    })
+
+    it('shows a marker only beside the running tutorial’s steps, the current one open and pulsing', async () => {
+      const { container } = render(GuideHost, { props: { active: 'guide', step: 1 } })
+      await tick()
+      expect(markers()).toHaveLength(2)
+      const current = container.querySelector('[data-active]') as HTMLElement
+      expect(container.querySelectorAll('[data-marker]')).toHaveLength(2)
+      expect(current.textContent).toContain('Beta')
+      expect(current.querySelector('.animate-ping-settle')).not.toBeNull()
+      expect(markers()[1]?.getAttribute('aria-label')).toBe('Tutorial step: Second')
+      expect(markers()[1]?.getAttribute('aria-expanded')).toBe('true')
+      const panel = document.querySelector('[data-testid="tutorial-panel-hotspot__popover__panel"]')
+      expect(panel?.textContent).toContain('Step 2 of 2')
+      expect(panel?.textContent).toContain('Task one')
+      expect(panel?.textContent).toContain('Finish')
+      expect(panel?.textContent).toContain('Previous')
+    })
+
+    it('opens from the keyboard on Enter on a marker', async () => {
+      render(GuideHost, { props: { active: 'guide', step: 1 } })
+      await tick()
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))
+      await tick()
+      const marker = markers()[0] as HTMLElement
+      marker.focus()
+      await userEvent.keyboard('{Enter}')
+      await tick()
+      const panel = document.querySelector('[data-testid="tutorial-panel-hotspot__popover__panel"]')
+      expect(panel?.textContent).toContain('First')
+      expect(panel?.textContent).not.toContain('Previous')
+    })
+
+    it('places the marker before the content with side="start"', async () => {
+      const { getByRole, container } = render({
+        components: { TutorialPanelProvider, TutorialPanelHotspot },
+        setup: () => ({ guideTutorials }),
+        template: `
+        <TutorialPanelProvider :tutorials="guideTutorials" active-key="guide" :step="0">
+          <TutorialPanelHotspot hotspot-id="a" side="start"><button type="button">Alpha</button></TutorialPanelHotspot>
+        </TutorialPanelProvider>
+      `
+      })
+      await tick()
+      const marker = container.querySelector<HTMLElement>(
+        '[data-testid="tutorial-panel-hotspot__marker"]'
+      ) as HTMLElement
+      const button = getByRole('button', { name: 'Alpha' })
+      expect(marker.compareDocumentPosition(button) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    })
+
+    it('has no axe violations', async () => {
+      const { container } = render(GuideHost, { props: { active: 'guide', step: 0 } })
+      await tick()
+      await expectNoA11yViolations(container)
+    })
+
+    it('renders the testid fallback and lets a consumer testid win', async () => {
+      const { container } = render({
+        components: { TutorialPanelProvider, TutorialPanelHotspot },
+        setup: () => ({ guideTutorials }),
+        template: `
+        <TutorialPanelProvider :tutorials="guideTutorials" active-key="guide" :step="0">
+          <TutorialPanelHotspot hotspot-id="a"><button type="button">Alpha</button></TutorialPanelHotspot>
+          <TutorialPanelHotspot hotspot-id="b" data-testid="beta-spot"><button type="button">Beta</button></TutorialPanelHotspot>
+        </TutorialPanelProvider>
+      `
+      })
+      await tick()
+      expect(container.querySelectorAll('[data-testid="tutorial-panel-hotspot"]')).toHaveLength(1)
+      expect(container.querySelector('[data-testid="beta-spot"]')?.textContent).toContain('Beta')
+      expect(container.querySelector('[data-testid="beta-spot__marker"]')).not.toBeNull()
+    })
+
+    it('closes the open step on Escape and returns focus to its marker', async () => {
+      render(GuideHost, { props: { active: 'guide', step: 0 } })
+      await tick()
+      const marker = markers()[0] as HTMLElement
+      expect(marker.getAttribute('aria-expanded')).toBe('true')
+      await userEvent.keyboard('{Escape}')
+      await tick()
+      await new Promise((resolve) => setTimeout(resolve, 50))
+      expect(marker.getAttribute('aria-expanded')).toBe('false')
+      expect(document.activeElement).toBe(marker)
+    })
+
+    it('sets the step title in the heading class of a popover title', async () => {
+      render(GuideHost, { props: { active: 'guide', step: 0 } })
+      await tick()
+      const title = document.querySelector('[data-testid="tutorial-panel-hotspot__title"]')
+      expect(title?.textContent).toContain('First')
+      expect(title?.classList.contains('text-heading-2xs')).toBe(true)
+    })
+  })
+
+  describe('open steps', () => {
+    const openDialogs = () =>
+      Array.from(document.querySelectorAll<HTMLElement>('[role="dialog"][data-state="open"]'))
+
+    it.each([
+      ['default', DefaultExample],
+      ['completed', CompletedExample],
+      ['loading', LoadingExample]
+    ])('opens no step when the %s example mounts', async (_name, example) => {
+      render(example)
+      await tick()
+      expect(openDialogs()).toHaveLength(0)
+    })
+
+    const Twin = defineComponent({
+      components: { TutorialPanel, TutorialPanelProvider, TutorialPanelHotspot },
+      props: { name: { type: String, required: true }, preset: { type: Boolean, default: false } },
+      setup(props) {
+        const active = ref<string | null>(props.preset ? 'guide' : null)
+        const step = ref(0)
+        return { active, step, guideTutorials }
+      },
+      template: `
+      <TutorialPanelProvider v-model:active-key="active" v-model:step="step" :tutorials="guideTutorials">
+        <TutorialPanelHotspot hotspot-id="a" :data-testid="name"><button type="button">Alpha</button></TutorialPanelHotspot>
+        <TutorialPanel :title="name" :data-testid="name + '-panel'" />
+      </TutorialPanelProvider>
+    `
+    })
+
+    const Pair = defineComponent({
+      components: { Twin },
+      props: { preset: { type: Boolean, default: false } },
+      template: `<div><Twin name="one" :preset="preset" /><Twin name="two" :preset="preset" /></div>`
+    })
+
+    const startIn = async (panel: string) => {
+      const root = document.querySelector(`[data-testid="${panel}-panel"]`) as HTMLElement
+      await userEvent.click(
+        Array.from(root.querySelectorAll('button')).find((b) => /start/i.test(b.textContent ?? ''))!
+      )
+      await tick()
+    }
+
+    it('keeps one step open when a second provider starts a tutorial', async () => {
+      render(Pair)
+      await startIn('one')
+      expect(openDialogs()).toHaveLength(1)
+      expect(openDialogs()[0]?.textContent).toContain('First')
+      await startIn('two')
+      expect(openDialogs()).toHaveLength(1)
+      const one = document.querySelector('[data-testid="one__marker"]') as HTMLElement
+      const two = document.querySelector('[data-testid="two__marker"]') as HTMLElement
+      expect(one.getAttribute('aria-expanded')).toBe('false')
+      expect(two.getAttribute('aria-expanded')).toBe('true')
+      await userEvent.click(one)
+      await tick()
+      expect(openDialogs()).toHaveLength(1)
+      expect(one.getAttribute('aria-expanded')).toBe('true')
+      expect(two.getAttribute('aria-expanded')).toBe('false')
+    })
+
+    it('opens at most one step when two providers mount with a running tutorial', async () => {
+      render(Pair, { props: { preset: true } })
+      await tick()
+      expect(openDialogs()).toHaveLength(1)
     })
   })
 })

@@ -3,13 +3,13 @@ name: popover
 category: overlay
 structure: composition
 status: implemented
-spec_version: 11
+spec_version: 12
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-954
   node_id: 482:954
-checksum: ab6abb7f0f6bead0255d887b3e1a484c12c16a01ac81fe142ae270a97a6cc6ed
+checksum: 6d0e7adbb9171d15df6b7f6d1c6fc7c3ba5debe93b408d52e9b048b6c76b51f6
 created: 2026-06-30
-last_updated: 2026-11-17
+last_updated: 2026-11-18
 ---
 
 # Popover — Component Spec
@@ -109,7 +109,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — `Popover.Title`, optional `Popover.Description`, and `Popover.Close`.
-- `popover-title/popover-title.vue` — title text (`.text-body-sm`, `var(--text-default)`). Registers its element id with the injected context so `Popover.Content` can reference it via `aria-labelledby`.
+- `popover-title/popover-title.vue` — title text (`.text-heading-2xs`, `var(--text-default)`). Registers its element id with the injected context so `Popover.Content` can reference it via `aria-labelledby`.
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — plain-text title.
@@ -227,7 +227,7 @@ _No events of its own: `update:open` comes from `v-model:open` (see v-model abov
 | header / footer divider   | `border-(--border-default)` |
 | header / footer spacing.y | `var(--spacing-sm)`         |
 | header / footer spacing.x | `var(--spacing-md)`         |
-| title typography          | `.text-body-sm`             |
+| title typography          | `.text-heading-2xs`         |
 | title text                | `var(--text-default)`       |
 | description typography    | `.text-body-xs`             |
 | description text          | `var(--text-muted)`         |
@@ -238,9 +238,7 @@ _No events of its own: `update:open` comes from `v-model:open` (see v-model abov
 
 ## Theme gaps
 
-| Figma variable                                | Temporary primitive | Follow-up                                                                                                                                                                     |
-| --------------------------------------------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `Typography/Heading/xss` (14px Rubik Regular) | `.text-body-sm`     | `TODO: tokenizar` — DESIGN.md documents headings only down to `text-heading-sm` (responsive ≤18px); add a flat-14px heading role if popover titles need a true heading class. |
+_None._ Resolved 2026-11-18: the title uses `.text-heading-2xs`, the flat 14px heading DESIGN.md now documents, in place of `.text-body-sm`, so a popover title reads as a heading like the `Dialog` and `Drawer` titles.
 
 ## Accessibility (WCAG 2.1 AA)
 
