@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3950-34695
   node_id: 3950:34695
-checksum: 42e1fdbf1f86acea48a6059a94222439874e783dc6c0fd3fb37a1986239aece1
+checksum: 816f50e76373af1b1e5661bb2a1f3cd741c7acc381fa3765f96340afce206a84
 created: 2026-05-26
 last_updated: 2026-11-18
 ---
@@ -231,6 +231,8 @@ LogViewer ships its sub-components attached to the root (`LogViewer.Header`, `Lo
 | shape (outer card, `bordered` prop)                  | `var(--shape-control)`                                                                                                         |
 | spacing (loading block, vertical)                    | `var(--spacing-xl)`                                                                                                            |
 | ring                                                 | `var(--ring-color)`                                                                                                            |
+
+One code size across the code components (CodeBlock, CodeEditor, LogViewer, Trace and the docs source viewer): code text and line numbers are 12 px Roboto Mono (`--text-body-code-sm-font-size`, set by `.text-body-code-sm` or `.text-label-code-sm`), never a raw size and never a second code size. A file name in a header or tab is code too (`.text-label-code-sm`, `var(--text-muted)` or `var(--text-default)`); a tab that names a choice (npm, pnpm) is a label (`.text-label-sm`).
 
 **The root sizes to its content, not to its parent.** It takes `h-fit` alongside `min-h-0`, so a
 short log occupies the height of the lines it has instead of stretching to fill a flex or grid

@@ -24,7 +24,9 @@
       aria-label="Function code"
     >
       <template #toolbar>
-        <span class="min-w-0 flex-1 truncate text-label-sm text-(--text-default)">handler.js</span>
+        <span class="min-w-0 flex-1 truncate text-label-code-sm text-(--text-default)"
+          >handler.js</span
+        >
         <span class="shrink-0 text-body-xs text-(--text-muted)">JavaScript</span>
       </template>
     </CodeEditor>
