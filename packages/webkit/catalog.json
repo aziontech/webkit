@@ -10024,28 +10024,28 @@
      "type": "'world' | 'atlantic' | 'americas' | 'north-america' | 'south-america' | 'europe' | 'africa' | 'asia' | 'oceania'",
      "default": "'world'",
      "required": "false",
-     "doc": "Which part of the world has its PoPs lit; the map always frames the whole world."
+     "doc": "Which part of the world has its data centers lit; the map always frames the whole world."
     },
     {
      "name": "density",
      "type": "'none' | 'low' | 'medium' | 'high'",
      "default": "'medium'",
      "required": "false",
-     "doc": "How many PoPs are lit, from `none` to `high`."
+     "doc": "How many data centers are lit, from `none` to `high`."
     },
     {
      "name": "animated",
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Pulses the PoPs in three staggered waves that settle within five seconds; static when false."
+     "doc": "Pulses the data centers in three staggered waves that settle within five seconds; static when false."
     },
     {
      "name": "opacity",
      "type": "number",
      "default": "0.4",
      "required": "false",
-     "doc": "Opacity of the landmass dots, from 0 to 1; the PoPs stay at full strength."
+     "doc": "Opacity of the landmass dots, from 0 to 1; the data centers stay at full strength."
     },
     {
      "name": "position",
@@ -10087,7 +10087,7 @@
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Draws traffic between lit PoPs: faint links and, while `animated`, packets that cross them; the links alone under reduced motion."
+     "doc": "Draws traffic between lit data centers: faint links and, while `animated`, packets that cross them; the links alone under reduced motion."
     }
    ],
    "surface": "app",
@@ -19996,7 +19996,7 @@
      "type": "boolean",
      "default": "true",
      "required": "false",
-     "doc": "Spins the globe or pulses the PoPs; a still frame when false or under reduced motion."
+     "doc": "Spins the globe or pulses the data centers; a still frame when false or under reduced motion."
     }
    ],
    "surface": "site",
@@ -36537,7 +36537,7 @@
    "title": "Blocks/State/EdgeErrorPage",
    "source": "blocks/state/edge-error-page/edge-error-page.vue",
    "surface": "edge",
-   "summary": "The page Azion serves to a visitor of a customer's site when a request fails: a standalone page, no Azion product chrome, no account actions. Left-aligned and diagnostic: the `StatusCode` with its reason phrase, a title in plain words, the request path You → Azion → Application drawn with `FlowDiagram` (one data card per hop, `uniform` so every card has the same width and height, each with its status dot and text; side by side on a wide screen, stacked with `orientation=\"vertical\"` on a phone or tablet), What happened? and What can I do? side by side, Try again or Go to home page with Go back, then the request details in a `KeyValueList` (request ID with `CopyButton`, `Timestamp` in UTC, Azion location, host) and a Served by `Brand` footer. Azion here is Azion's infrastructure; the Application is the site's application, on Azion's infrastructure or on the customer's own servers. The primary is the 502 (application unreachable); variants cover 504, 500, 503, 403 (blocked by the site's firewall), 429 and 404. Azion's own console, site and docs use `state/error-page` instead.",
+   "summary": "The page Azion serves to a visitor of a customer's site when a request fails: a standalone page, no Azion product chrome, no account actions. Left-aligned and diagnostic: the `StatusCode` with its reason phrase, a title in plain words, the request path You → Azion → Application drawn with `FlowDiagram` (one data card per hop, `uniform` so every card has the same width and height, each with its status dot and text; side by side on a wide screen, stacked with `orientation=\"vertical\"` on a phone or tablet), What happened? and What can I do? side by side, Try again or Go to home page with Go back, then the request details in a `KeyValueList` (request ID with `CopyButton`, `Timestamp` in UTC, data center, host) and a Served by `Brand` footer. Azion here is Azion's infrastructure; the Application is the site's application, on Azion's infrastructure or on the customer's own servers. The primary is the 502 (application unreachable); variants cover 504, 500, 503, 403 (blocked by the site's firewall), 429 and 404. Azion's own console, site and docs use `state/error-page` instead.",
    "intents": [
     "edge error page",
     "502 bad gateway page",
