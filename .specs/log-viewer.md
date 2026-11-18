@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3950-34695
   node_id: 3950:34695
-checksum: fe4a59533e3c9b73cd74a826786fbd10b3e65d020cbc5212dc29682b0d72c42f
+checksum: 42e1fdbf1f86acea48a6059a94222439874e783dc6c0fd3fb37a1986239aece1
 created: 2026-05-26
 last_updated: 2026-11-18
 ---
@@ -34,11 +34,15 @@ Use LogViewer for build, deploy or runtime log lines, and LogViewer.Steps when t
 - Static, read-only code or configuration snippets → use `code-block`.
 - An animated terminal session on a marketing page → use `cli-terminal-section`.
 - Rows of structured records with columns, sorting or paging → use `table`.
+- The steps of a form or setup the person moves through (no log under each step) → use `stepper`.
+- The timed spans of one request or invocation → use `trace`.
 
 ## Related
 
 - `code-block` — highlighted source code with a copy action, not a stream of typed log lines.
 - `cli-terminal-section` — marketing band that plays a scripted terminal session.
+- `stepper` — the steps of a wizard the person moves through; `LogViewer.Steps` is the steps of a run that a machine moves through, each with its log.
+- `trace` — the spans of one request on a time axis, not log lines.
 - `deploy-success` — the post-deploy screen that embeds `log-viewer` for the build log.
 
 ## Best practices
@@ -316,9 +320,9 @@ the height of a single row the moment the root stopped stretching.
 - Empty — no lines: the package empty state; justified because `empty` is a state the component owns.
 - Disabled — `disabled` locks the search, level toggles and copy.
 - WithFooter — `LogViewer.Footer` with a summary and an action; justified because the footer is public anatomy no other example shows.
-- Steps — `LogViewer.Steps` over a finished deploy: each step's log in Phased, every line in Complete; justified because the steps part is public anatomy.
-- StepsRunning — `LogViewer.Steps` mid-run: done steps, a running step with its spinner, pending steps waiting, and the flush progress bar.
-- StepsError — `LogViewer.Steps` after a failure: the failed step open with its reason, the remaining steps skipped, and a `step-meta` Tag.
+- StepLogs — `LogViewer.Steps` over a finished deploy: each step's log in Phased, every line in Complete; justified because the steps part is public anatomy. Named for what it shows (a log split by step), so it does not read as a separate steps component.
+- StepLogsRunning — the same step logs mid-run: done steps, a running step with its spinner, pending steps waiting, and the flush progress bar.
+- StepLogsError — the same step logs after a failure: the failed step open with its reason, the remaining steps skipped, and a `step-meta` Tag.
 
 ## Constraints — DO NOT
 

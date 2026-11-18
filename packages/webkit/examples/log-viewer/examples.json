@@ -38,19 +38,19 @@
       "file": "with-footer.vue"
     },
     {
-      "name": "Steps",
-      "summary": "`LogViewer.Steps` over a finished deploy: each step's own log in the Phased view, every line in one log in Complete. The `header` slot holds the title, the outcome and the time; `open-step` opens Build.",
-      "file": "steps.vue"
+      "name": "StepLogs",
+      "summary": "Still `LogViewer`, not a separate component: a deploy log split into its steps with `LogViewer.Steps`, the way GitHub Actions, Vercel and Netlify show a run. Each step is a collapsible row with its status and its own log (Phased), or every line in one log (Complete). The `header` slot holds the title, the outcome and the time; `open-step` opens Build. For a wizard's progress use `Stepper`, for request spans use `Trace`.",
+      "file": "step-logs.vue"
     },
     {
-      "name": "StepsRunning",
-      "summary": "`LogViewer.Steps` mid-run: done steps, the running step with its spinner and shimmering description, pending steps waiting to start, and `progress` drawing the flush bar valued by the share of steps done. `:view-switch=\"false\"` keeps the switch out until the run settles.",
-      "file": "steps-running.vue"
+      "name": "StepLogsRunning",
+      "summary": "The same step logs mid-run: done steps, the running step with its spinner and shimmering description, pending steps waiting to start, and `progress` drawing the flush bar valued by the share of steps done. `:view-switch=\"false\"` keeps the Phased/Complete switch out until the run settles.",
+      "file": "step-logs-running.vue"
     },
     {
-      "name": "StepsError",
-      "summary": "`LogViewer.Steps` after a failure: the failed step opens on its own with the reason in danger text, the step after it is skipped, `#step-meta` adds a Skipped `Tag` and `#step-empty` says why it never ran.",
-      "file": "steps-error.vue"
+      "name": "StepLogsError",
+      "summary": "The same step logs after a failure: the failed step opens on its own with the reason in danger text, the step after it is skipped, `#step-meta` adds a Skipped `Tag` and `#step-empty` says why it never ran.",
+      "file": "step-logs-error.vue"
     }
   ]
 }

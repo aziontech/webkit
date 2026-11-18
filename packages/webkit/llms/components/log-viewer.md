@@ -29,12 +29,16 @@
 - Static, read-only code or configuration snippets → use `code-block`.
 - An animated terminal session on a marketing page → use `cli-terminal-section`.
 - Rows of structured records with columns, sorting or paging → use `table`.
+- The steps of a form or setup the person moves through (no log under each step) → use `stepper`.
+- The timed spans of one request or invocation → use `trace`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
 - [code-block](code-block.md) — highlighted source code with a copy action, not a stream of typed log lines.
 - [cli-terminal-section](cli-terminal-section.md) — marketing band that plays a scripted terminal session.
+- [stepper](stepper.md) — the steps of a wizard the person moves through; `LogViewer.Steps` is the steps of a run that a machine moves through, each with its log.
+- [trace](trace.md) — the spans of one request on a time axis, not log lines.
 - `deploy-success` — the post-deploy screen that embeds `log-viewer` for the build log.
 
 ## Props
