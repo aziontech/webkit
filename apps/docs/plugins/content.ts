@@ -54,6 +54,22 @@ export function sourceHref(href: string, file: string): string {
   return `${SOURCE_URL}${target}${hash ? `#${hash}` : ''}`
 }
 
+const HTML_COMMENT = /^<!--[\s\S]*?-->$/
+
+type CoreState = { tokens: ReturnType<InstanceType<typeof MarkdownIt>['parse']> }
+
+export function dropHtmlComments(state: CoreState): void {
+  const comment = (at: number) =>
+    state.tokens[at]?.type === 'paragraph_open' &&
+    HTML_COMMENT.test(state.tokens[at + 1]?.content.trim() ?? '')
+  const kept: CoreState['tokens'] = []
+  for (let at = 0; at < state.tokens.length; at++) {
+    if (comment(at)) at += 2
+    else kept.push(state.tokens[at])
+  }
+  state.tokens = kept
+}
+
 export async function markdown(file = ''): Promise<InstanceType<typeof MarkdownIt>> {
   const hl = await highlighter()
   const md = new MarkdownIt({
@@ -61,6 +77,7 @@ export async function markdown(file = ''): Promise<InstanceType<typeof MarkdownI
     linkify: true,
     highlight: (code, lang) => highlight(hl, code, lang || 'txt')
   })
+  md.core.ruler.after('block', 'drop-html-comments', dropHtmlComments)
   if (file) {
     const render = md.renderer.rules.link_open
     md.renderer.rules.link_open = (tokens, index, options, env, self) => {

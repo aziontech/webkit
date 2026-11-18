@@ -99,3 +99,35 @@ describe('inline code chips on wrapped lines', () => {
     )
   })
 })
+
+const BLOCK =
+  '<pre><code><span class="line">&lt;script setup&gt;</span>\n<span class="line">const hintId = useId()</span>\n<span class="line">&lt;/script&gt;</span></code></pre>'
+
+function expectPlainBlock(root: HTMLElement) {
+  const block = root.querySelector('pre > code') as HTMLElement
+  const style = getComputedStyle(block)
+  expect(style.boxShadow).toBe('none')
+  expect(style.backgroundColor).toBe('rgba(0, 0, 0, 0)')
+  expect(style.boxDecorationBreak).toBe('slice')
+  expect(style.cursor).not.toBe('pointer')
+}
+
+describe('code blocks are not inline code chips', () => {
+  it('a pre code block in DocProse keeps no chip outline, fill or per-line box', () => {
+    const { container } = render(() => h(DocProse, null, () => h('div', { innerHTML: BLOCK })))
+    expectPlainBlock(container)
+    const chip = container.ownerDocument.createElement('p')
+    chip.innerHTML = 'Run <code>pnpm build</code>.'
+    container.querySelector('[data-testid="doc-prose"]')?.append(chip)
+    expect(getComputedStyle(chip.querySelector('code') as HTMLElement).boxShadow).not.toBe('none')
+  })
+
+  it('a pre code block in DocCallout and DocItem keeps no chip outline or fill', () => {
+    const { container } = render(() => [
+      h(DocCallout, { variant: 'note' }, () => h('div', { innerHTML: BLOCK })),
+      h(DocItem, { title: 'Run query' }, () => h('span', { innerHTML: BLOCK }))
+    ])
+    expectPlainBlock(container.querySelector('[data-testid="doc-callout"]') as HTMLElement)
+    expectPlainBlock(container.querySelector('[data-testid="doc-item"]') as HTMLElement)
+  })
+})

@@ -49,7 +49,6 @@ Not every component has every state — a button has `disabled` + `loading`; a d
 
 ## Correct
 
-<!-- prettier-ignore -->
 ```html
 <!-- the component renders its states; the page only supplies the trigger -->
 <div
@@ -67,7 +66,6 @@ Not every component has every state — a button has `disabled` + `loading`; a d
 
 ## Wrong
 
-<!-- prettier-ignore -->
 ```html
 <!-- :class ternary, hand-rolled placeholder and empty string, fetching inside -->
 <div :class="loading ? 'opacity-50' : ''">

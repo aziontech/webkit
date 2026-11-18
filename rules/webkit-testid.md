@@ -36,7 +36,6 @@ enforced by review — no lint rule checks it, so apply it deliberately.
 
 ## Correct
 
-<!-- prettier-ignore -->
 ```vue
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
@@ -56,7 +55,6 @@ enforced by review — no lint rule checks it, so apply it deliberately.
 </template>
 ```
 
-<!-- prettier-ignore -->
 ```html
 <!-- override per instance when the page has several of the same component -->
 <Chip data-testid="plan-chip-pro" />
@@ -65,7 +63,6 @@ enforced by review — no lint rule checks it, so apply it deliberately.
 
 ## Wrong
 
-<!-- prettier-ignore -->
 ```vue
 <script setup lang="ts">
   defineOptions({ name: 'Chip', inheritAttrs: false })
@@ -78,7 +75,6 @@ enforced by review — no lint rule checks it, so apply it deliberately.
 </template>
 ```
 
-<!-- prettier-ignore -->
 ```js
 // selecting by structure instead of the testid — breaks on any markup change
 const removeButton = wrapper.find('div > span:nth-child(2) > button')

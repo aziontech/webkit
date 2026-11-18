@@ -29,7 +29,6 @@ conventions below are enforced by review.
 
 ## Correct
 
-<!-- prettier-ignore -->
 ```vue
 <script setup lang="ts">
   interface Item {
@@ -62,7 +61,6 @@ conventions below are enforced by review.
 
 ## Wrong
 
-<!-- prettier-ignore -->
 ```vue
 <script setup lang="ts">
   // No defineSlots: the slots below are invisible to the editor — blocked by lint.

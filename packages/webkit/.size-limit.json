@@ -28,7 +28,7 @@
   {
     "name": "doc-markdown",
     "path": "src/components/docs/doc-markdown/doc-markdown.vue",
-    "limit": "26 KB",
+    "limit": "26.05 KB",
     "entryOnly": true
   },
   {

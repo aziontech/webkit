@@ -4,7 +4,7 @@ category: docs
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: 68ed0e6162b248fc557ab28af3306ba8630b5e3ebe71bf1c39fce250be9c9624
+checksum: 9c4e8d6f0182799281e684ad906863258f8ad1c0a86e8bd91962050f8de82268
 created: 2026-08-22
 last_updated: 2026-11-18
 ---
@@ -95,7 +95,7 @@ One row of the documentation's related-content list: a leading glyph in a framed
 - The anchor appears on data, not on a mode prop: the title wraps in an anchor when `href` is set, and the trailing glyph region renders only then
 - An external destination (absolute URL, `mailto:`, or explicit `target="_blank"`) swaps the chevron for the diagonal arrow and, for `target="_blank"`, adds `rel="noreferrer"`
 - `data-doc-chrome` is the `DocProse` contract (prose rules stop at the row's edge)
-- Inline code: the chip `DocProse` defines (`.text-label-code-sm`, no vertical padding, `var(--spacing-2xs)` inline padding, outline as an `inset-ring` with a `border` only under `forced-colors`, `wrap-anywhere` + `box-decoration-clone`), so it is never taller than the `.text-body-sm` line and chips on consecutive wrapped lines keep at least a 1px gap (`src/test/inline-code.test.ts`)
+- Inline code: the chip `DocProse` defines (`.text-label-code-sm`, no vertical padding, `var(--spacing-2xs)` inline padding, outline as an `inset-ring` with a `border` only under `forced-colors`, `wrap-anywhere` + `box-decoration-clone`), so it is never taller than the `.text-body-sm` line and chips on consecutive wrapped lines keep at least a 1px gap; code inside `pre` never takes the chip (`src/test/inline-code.test.ts`)
 
 ## Motion & Animations
 

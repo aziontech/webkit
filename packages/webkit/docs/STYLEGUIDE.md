@@ -88,7 +88,6 @@ different component (`chip-group`), never a plural spelling of the same one.
 **One component, one folder; two components differ only in what they do, never in how
 their files are arranged.**
 
-<!-- prettier-ignore -->
 ```text
 <category>/<name>/
 ├── <name>.vue              # the root component (kebab file = canonical name)
@@ -106,7 +105,6 @@ their files are arranged.**
   only when a second component needs it.
 - The `<script setup>` **section order is fixed**:
 
-<!-- prettier-ignore -->
 ```text
 imports → defineOptions({ name, inheritAttrs: false }) → types → props → emits
 → models (defineModel) → slots → inject/composables → local state → computed
@@ -123,7 +121,6 @@ convention + review.
 **Props are declared with a named `interface Props` consumed by `defineProps<Props>()`,
 wrapped in `withDefaults`. Every public prop carries JSDoc. No `any`.**
 
-<!-- prettier-ignore -->
 ```ts
 // ✅
 /** Visual variant. */
@@ -193,7 +190,6 @@ defaults) · type-coverage ≥ 95%.
 **Every two-way value goes through `defineModel()` — controlled and uncontrolled in one
 macro. Never a hand-rolled `modelValue` prop + `update:modelValue` emit.**
 
-<!-- prettier-ignore -->
 ```ts
 // ✅ primary value — consumer writes v-model="x"
 const model = defineModel<string>({ default: '' })
@@ -226,7 +222,6 @@ commit + CI) · `validate-authoring` (write-time) · the DS CI ratchet.
 **Events are declared with the type-only `defineEmits` form, named in kebab-case, and
 split into two variants with two payload shapes.**
 
-<!-- prettier-ignore -->
 ```ts
 interface MenuItem { id: string; label: string }
 
@@ -257,7 +252,6 @@ const emit = defineEmits<{
 **Every slot is declared in a typed `defineSlots<{…}>()`. Named slots are kebab-case.
 Scoped payloads are named-key objects. Fallback content lives inside the `<slot>`.**
 
-<!-- prettier-ignore -->
 ```vue
 <script setup lang="ts">
 interface TableRow { id: string; label: string }
@@ -319,7 +313,6 @@ Behaviour (B):
 - State inside the function = per-instance; module scope = deliberate singleton
   (explicit in the name/doc).
 
-<!-- prettier-ignore -->
 ```ts
 // ✅
 import { readonly, ref, toValue, type MaybeRefOrGetter } from 'vue'
@@ -331,7 +324,7 @@ export function useCounter(start: MaybeRefOrGetter<number>) {
 ```
 
 <!-- snippet: partial -->
-<!-- prettier-ignore -->
+
 ```ts
 // ❌ blocked
 export function useCounter() { return reactive({ n: 0 }) }   // reactive return
@@ -354,7 +347,6 @@ return type → error) · `webkit/require-composable-scope-cleanup` (listener/ti
 attributes consumed by Tailwind `data-[…]:` variants. No JS class presets, no `<style>`
 blocks, no component-local CSS.**
 
-<!-- prettier-ignore -->
 ```vue
 <!-- ✅ one class attribute; data-* switches variants -->
 <button
@@ -371,7 +363,7 @@ blocks, no component-local CSS.**
 ```
 
 <!-- snippet: partial -->
-<!-- prettier-ignore -->
+
 ```ts
 // ❌ the whole class-map pattern is banned
 const variantClasses = { primary: 'bg-(--primary)' }
@@ -406,7 +398,6 @@ attributes explicitly, and exposes a minimal imperative API.**
 - **`defineExpose` is minimal and intentional:** expose functions (`focus()`, `open()`),
   never internal reactive state; default to exposing nothing.
 
-<!-- prettier-ignore -->
 ```vue
 <script setup lang="ts">
 import { computed, useAttrs } from 'vue'
@@ -483,7 +474,6 @@ reduced-motion ship with it.**
 **The root carries `data-testid`, defaulting to the component's own name, and the consumer's
 value wins.**
 
-<!-- prettier-ignore -->
 ```ts
 const attrs = useAttrs()
 const testId = computed(() => (attrs['data-testid'] as string) ?? 'chip')
@@ -528,7 +518,6 @@ replacement) · release-please maps removal (`!` / `BREAKING CHANGE:`) to a majo
 **Every component is a flat, single-segment public import; the category lives only in the
 folder.**
 
-<!-- prettier-ignore -->
 ```ts
 // ✅
 import Button from '@aziontech/webkit/button'
@@ -536,7 +525,7 @@ import TableRoot from '@aziontech/webkit/table-root'   // root-only, tree-shakea
 ```
 
 <!-- snippet: partial -->
-<!-- prettier-ignore -->
+
 ```ts
 // ❌ all blocked
 import { Button } from '@aziontech/webkit'             // barrel — retains the catalog
@@ -574,7 +563,7 @@ against `.size-limit.json`; unbudgeted paths stay gated by review.
 `provide`/`inject`.**
 
 <!-- snippet: partial -->
-<!-- prettier-ignore -->
+
 ```ts
 // index.ts — runtime + the type vue-tsc derives
 import Table from './table.vue'

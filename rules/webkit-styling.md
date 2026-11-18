@@ -75,6 +75,9 @@ which already draws the chip this way. When you style your own:
   visible in Windows high-contrast mode.
 - Add `wrap-anywhere box-decoration-clone` so a long chip wraps and each line keeps its
   outline and padding.
+- Scope the chip to inline code: `[&_code:not(pre_*)]`, never a bare `[&_code]`. A code block
+  (`pre > code`) is not a chip; with `box-decoration-clone` a bare selector draws one pill per
+  line of the block.
 
 ## Token value syntax — the canonical `prop-(--token)` form
 
@@ -91,7 +94,6 @@ Two cases **stay in brackets** — the paren form silently emits no CSS for them
 
 ## Correct
 
-<!-- prettier-ignore -->
 ```vue
 <template>
   <button
@@ -117,7 +119,6 @@ Two cases **stay in brackets** — the paren form silently emits no CSS for them
 
 ## Wrong
 
-<!-- prettier-ignore -->
 ```vue
 <script setup>
   const variantClasses = {

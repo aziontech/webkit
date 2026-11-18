@@ -12,7 +12,6 @@ layout and the section order themselves are convention + review.
 
 - Keep **one component per `.vue` file**, named in kebab-case; the folder carries the same name:
 
-<!-- prettier-ignore -->
 ```
 src/components/<name>/
   <name>.vue              # the root component
@@ -50,7 +49,6 @@ src/components/<name>/
 
 ## Correct
 
-<!-- prettier-ignore -->
 ```vue
 <script setup lang="ts">
   // 1. imports
@@ -85,7 +83,6 @@ src/components/<name>/
 
 ## Wrong
 
-<!-- prettier-ignore -->
 ```vue
 <script setup>
   // runtime macros, manual v-model wiring, no defineOptions, imports out of order
