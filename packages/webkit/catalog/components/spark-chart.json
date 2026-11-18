@@ -22,6 +22,8 @@
   "Give it an `ariaLabel` only when it stands without a nearby number; otherwise keep it decorative."
  ],
  "channels": [
-  "app"
+  "app",
+  "docs",
+  "site"
  ]
 }

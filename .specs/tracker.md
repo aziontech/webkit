@@ -5,8 +5,8 @@ structure: monolithic
 status: implemented
 spec_version: 7
 created: 2026-11-10
-last_updated: 2026-11-16
-checksum: 4fb4c0e279fec3390e8fed15d17433386aeba524429a692da354dc9b94557c62
+last_updated: 2026-11-18
+checksum: 0a93d314e2119f6563ebe2e3b9c9467e2bd853b42469f524a83aa6171992791c
 ---
 
 # Tracker — Component Spec
@@ -64,6 +64,18 @@ A status strip: one block per period — a day, an hour, a deployment — colore
   />
 </template>
 ```
+
+**Three ways in** (decision RV-C2-1, rule `webkit-content-channels`). The same data renders from a docs page as a tag (`DocMarkdown`, braced attribute values are JSON) and from the site's page JSON as the `Tracker` scene a band draws by name (a `console-showcase-section` with `variant: "diagram"` in its `scene` slot):
+
+```mdx
+<Tracker aria-label="Uptime" items={[{ "severity": "success", "label": "Nov 1 · Operational" }]} />
+```
+
+```json
+{ "component": "Tracker", "props": { "items": [{ "severity": "success", "label": "Nov 1 · Operational" }] } }
+```
+
+The function props (`formatValue`) and the events stay Vue. `DocMarkdown` and the scene registry load the component as an async chunk, so neither grows unless a page uses it.
 
 ## Props
 
@@ -144,6 +156,8 @@ _No slots._
 - Loading — `loading`.
 - Empty — `items` empty.
 - Error — `error` set; justified because `error` is a state the data strip owns.
+- Markdown — the same data as a `<Tracker>` tag rendered by `DocMarkdown`. Justified: the docs channel (RV-C2-1).
+- Page JSON — the same data as a `Tracker` scene in a `console-showcase-section` entry rendered by `SitePage`, with the JSON shown. Justified: the site channel (RV-C2-1).
 
 ## Constraints — DO NOT
 

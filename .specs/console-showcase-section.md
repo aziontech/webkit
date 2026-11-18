@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 13
 template: 2
-checksum: 40a4624cee99dd80428207f350d021c2b35a58d89090ddfac6bc6f9d859668c6
+checksum: 27bf53e01520f61ba9e712b440eb7ad9d86895e7c971e1f14a2cb29ef9a012bd
 created: 2026-11-11
 last_updated: 2026-11-18
 ---
@@ -109,6 +109,7 @@ None of its own; `Texture` stops under reduced motion.
 | texture        | From `Texture`                           |
 | spacing        | `var(--spacing-xl)`, `var(--spacing-md)` |
 | diagram height | `var(--size-96)`                         |
+| diagram scene width | at least `min(100%, var(--container-3xl))` (RV-C2-1: a chart or a stat strip that sizes to its container gets a readable width; a scene that fills the cell is unchanged) |
 
 ## Theme gaps
 

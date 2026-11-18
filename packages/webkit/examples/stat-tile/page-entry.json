@@ -1,0 +1,22 @@
+{
+  "_id": "console-showcase-section",
+  "props": {
+    "variant": "diagram",
+    "eyebrow": "Firewall",
+    "title": "Every blocked threat, counted",
+    "description": "Threat requests blocked in the last 24 hours."
+  },
+  "scenes": {
+    "scene": {
+      "component": "StatTile",
+      "props": {
+        "label": "Blocked threats",
+        "value": 48210,
+        "delta": 12.4,
+        "deltaLabel": "vs previous 24 hours",
+        "inverse": true,
+        "trend": [310, 290, 340, 380, 360, 420, 410, 470, 450, 520, 500, 560]
+      }
+    }
+  }
+}

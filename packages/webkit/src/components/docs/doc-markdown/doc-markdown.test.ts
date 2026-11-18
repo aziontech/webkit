@@ -1,11 +1,20 @@
 import userEvent from '@testing-library/user-event'
-import { render, within } from '@testing-library/vue'
+import { render, waitFor, within } from '@testing-library/vue'
 import { describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, ref } from 'vue'
 
+import BarListMarkdown from '../../../../examples/bar-list/markdown.vue'
+import ChartMarkdown from '../../../../examples/chart/markdown.vue'
 import Components from '../../../../examples/doc-markdown/components.vue'
 import Default from '../../../../examples/doc-markdown/default.vue'
+import DonutChartMarkdown from '../../../../examples/donut-chart/markdown.vue'
 import FlowDiagramMarkdown from '../../../../examples/flow-diagram/markdown.vue'
+import GaugeChartMarkdown from '../../../../examples/gauge-chart/markdown.vue'
+import MapChartMarkdown from '../../../../examples/map-chart/markdown.vue'
+import SparkChartMarkdown from '../../../../examples/spark-chart/markdown.vue'
+import StatTileMarkdown from '../../../../examples/stat-tile/markdown.vue'
+import StatTileGroupMarkdown from '../../../../examples/stat-tile-group/markdown.vue'
+import TrackerMarkdown from '../../../../examples/tracker/markdown.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import DocMarkdown, { parseDocMarkdown } from './doc-markdown.vue'
 import { parseAttributes } from './parse-doc-markdown'
@@ -275,6 +284,43 @@ describe('DocMarkdown', () => {
     expect(within(diagram).getAllByRole('listitem').length).toBeGreaterThanOrEqual(3)
     expect(within(diagram).getByText('Azion')).toBeTruthy()
     await expectNoA11yViolations(container)
+  })
+
+  it.each([
+    ['bar-list', BarListMarkdown],
+    ['chart', ChartMarkdown],
+    ['donut-chart', DonutChartMarkdown],
+    ['gauge-chart', GaugeChartMarkdown],
+    ['map-chart', MapChartMarkdown],
+    ['spark-chart', SparkChartMarkdown],
+    ['stat-tile', StatTileMarkdown],
+    ['stat-tile-group', StatTileGroupMarkdown],
+    ['tracker', TrackerMarkdown]
+  ])(
+    'renders the %s tag of its Markdown example as the real component',
+    async (testId, example) => {
+      const { container, findByTestId } = render(example)
+      const root = await findByTestId(testId)
+      expect(root.hasAttribute('data-doc-chrome')).toBe(true)
+      expect(root.hasAttribute('data-doc-block')).toBe(true)
+      await expectNoA11yViolations(container)
+    }
+  )
+
+  it('renders the part tags inside a Chart or StatTileGroup tag as its parts', async () => {
+    const chart = render(ChartMarkdown)
+    expect((await chart.findAllByText('WAF requests allowed')).length).toBeGreaterThan(0)
+    expect(await chart.findByTestId('chart__plot')).toBeTruthy()
+    await waitFor(() =>
+      expect(
+        chart.container.querySelectorAll('[data-testid="chart"] svg path').length
+      ).toBeGreaterThan(0)
+    )
+    chart.unmount()
+    const group = render(StatTileGroupMarkdown)
+    const strip = await group.findByTestId('stat-tile-group')
+    await waitFor(() => expect(within(strip).getAllByTestId('stat-tile')).toHaveLength(4))
+    expect(within(strip).getAllByTestId('stat-tile')[0]!.hasAttribute('data-doc-block')).toBe(false)
   })
 
   it('parseDocMarkdown returns the frontmatter and the outline headings', () => {

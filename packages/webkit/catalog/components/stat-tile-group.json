@@ -22,6 +22,8 @@
   "Next to a taller card in a row (a dashboard's usage band beside a chart), let the row stretch the group: it fills the height and the cells grow with it. Do not pin a height. Inside a wrapper element, give the group `h-full` (or make the wrapper a flex column) so the stretch reaches it."
  ],
  "channels": [
-  "app"
+  "app",
+  "docs",
+  "site"
  ]
 }

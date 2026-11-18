@@ -24,6 +24,8 @@
   "Put the unit in `formatValue` (`74%`, `92 ms`) and what is measured in `label`."
  ],
  "channels": [
-  "app"
+  "app",
+  "docs",
+  "site"
  ]
 }

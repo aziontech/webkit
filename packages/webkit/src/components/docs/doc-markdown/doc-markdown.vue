@@ -9,6 +9,7 @@
     type VNodeChild
   } from 'vue'
 
+  import type { ContentSceneName } from '../../../assets/content-scenes'
   import { useAppNavigation } from '../../../composables/use-app-navigation'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
@@ -64,6 +65,40 @@
   const DocItem = defineAsyncComponent(() => import('../doc-item/doc-item.vue'))
   const DocPrompt = defineAsyncComponent(() => import('../doc-prompt/doc-prompt.vue'))
   const FlowDiagram = defineAsyncComponent(() => import('../../data/flow-diagram/flow-diagram.vue'))
+  const contentTag = (name: ContentSceneName): Component =>
+    defineAsyncComponent(() =>
+      import('../../../assets/content-scenes').then((module) => module.contentScenes[name]())
+    )
+
+  const CONTENT_ROOTS: ContentSceneName[] = [
+    'BarList',
+    'Chart',
+    'DonutChart',
+    'GaugeChart',
+    'MapChart',
+    'SparkChart',
+    'StatTile',
+    'StatTileGroup',
+    'Tracker'
+  ]
+
+  const CONTENT_PARTS: ContentSceneName[] = [
+    'ChartArea',
+    'ChartAxis',
+    'ChartBar',
+    'ChartCrosshair',
+    'ChartGrid',
+    'ChartLegend',
+    'ChartLine',
+    'ChartReference',
+    'ChartScatter',
+    'ChartTooltip'
+  ]
+
+  const CONTENT_TAGS = Object.fromEntries(
+    [...CONTENT_ROOTS, ...CONTENT_PARTS].map((name) => [name, contentTag(name)])
+  ) as Record<ContentSceneName, Component>
+
   const TabsRoot = defineAsyncComponent(() => import('../../navigation/tabs/tabs.vue'))
   const TabsList = defineAsyncComponent(() => import('../../navigation/tabs/tabs-list.vue'))
   const TabsTrigger = defineAsyncComponent(() => import('../../navigation/tabs/tabs-trigger.vue'))
@@ -96,10 +131,14 @@
     Frame: DocFrame,
     Prompt: DocPrompt,
     Update: DocChangelogEntry,
-    FlowDiagram
+    FlowDiagram,
+    ...CONTENT_TAGS
   }
 
-  const CHROME_BLOCKS = new Set<Component>([FlowDiagram])
+  const CHROME_BLOCKS = new Set<Component>([
+    FlowDiagram,
+    ...CONTENT_ROOTS.map((name) => CONTENT_TAGS[name])
+  ])
 
   const INLINE_BODY = new Set<Component>([DocCallout, DocItem, DocPrompt])
 
@@ -231,6 +270,17 @@
     )
   }
 
+  const renderParts = (nodes: DocMarkdownNode[]): VNodeChild[] =>
+    nodes.flatMap((child, index) => {
+      if (child.type !== 'component') return []
+      const part = BLOCK_COMPONENTS[child.name]
+      if (!part) return []
+      const inner = renderParts(child.children)
+      return [
+        h(part, { key: index, ...child.props }, inner.length ? { default: () => inner } : undefined)
+      ]
+    })
+
   const renderComponent = (
     node: Extract<DocMarkdownNode, { type: 'component' }>,
     key: number
@@ -267,7 +317,12 @@
       slots['caption'] = () => inline(caption)
     }
     if (!override && CHROME_BLOCKS.has(component)) {
-      return h(component, { key, 'data-doc-block': '', 'data-doc-chrome': '', ...values })
+      const parts = renderParts(node.children)
+      return h(
+        component,
+        { key, 'data-doc-block': '', 'data-doc-chrome': '', ...values },
+        parts.length ? { default: () => parts } : undefined
+      )
     }
     const children = renderNodes(node.children, !override && INLINE_BODY.has(component))
     if (children.length) slots['default'] = () => children

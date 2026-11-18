@@ -58,6 +58,10 @@
   {
    "name": "BesideCard",
    "file": "examples/stat-tile-group/beside-card.vue"
+  },
+  {
+   "name": "Markdown",
+   "file": "examples/stat-tile-group/markdown.vue"
   }
  ],
  "docs": "components/stat-tile-group.md"

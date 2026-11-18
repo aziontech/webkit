@@ -5,8 +5,8 @@ structure: monolithic
 status: implemented
 spec_version: 3
 created: 2026-11-10
-last_updated: 2026-11-16
-checksum: 8156e87658adafa6b1fea309397dcc67f5479345eb486a1b8c78852bdc743c04
+last_updated: 2026-11-18
+checksum: 08e72fc8cd72209d0ab08ee2bd521eee975e33612023bc622f3f419e84d956a1
 ---
 
 # SparkChart — Component Spec
@@ -51,6 +51,18 @@ A word-sized chart: one series drawn as an area, a line or bars, with no axes, g
   <SparkChart :values="[310, 290, 340, 380, 360, 420, 410, 470, 450, 520, 500, 560]" />
 </template>
 ```
+
+**Three ways in** (decision RV-C2-1, rule `webkit-content-channels`). The same data renders from a docs page as a tag (`DocMarkdown`, braced attribute values are JSON) and from the site's page JSON as the `SparkChart` scene a band draws by name (a `console-showcase-section` with `variant: "diagram"` in its `scene` slot):
+
+```mdx
+<SparkChart aria-label="Requests per minute" values={[310, 290, 340]} />
+```
+
+```json
+{ "component": "SparkChart", "props": { "values": [310, 290, 340] } }
+```
+
+The function props (`formatValue`) and the events stay Vue. `DocMarkdown` and the scene registry load the component as an async chunk, so neither grows unless a page uses it.
 
 ## Props
 
@@ -110,6 +122,8 @@ _No slots._
 - Types — composite: `area`, `line`, `bar` side by side.
 - Sizes — composite: `small`, `medium`, `large`.
 - Cards — a list of marquee rows (name, SparkChart, value, delta); justified because a spark is only legible beside its number, and this is the reference composition.
+- Markdown — the same data as a `<SparkChart>` tag rendered by `DocMarkdown`. Justified: the docs channel (RV-C2-1).
+- Page JSON — the same data as a `SparkChart` scene in a `console-showcase-section` entry rendered by `SitePage`, with the JSON shown. Justified: the site channel (RV-C2-1).
 
 ## Constraints — DO NOT
 

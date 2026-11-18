@@ -3,10 +3,10 @@ name: donut-chart
 category: chart
 structure: monolithic
 status: implemented
-checksum: e04eafd27b6ef14e678ad87257714a2e0a9c5f5b6b3a8bd77e55e16673201f32
+checksum: 2550cb39eedf93c6c060aa108e7e7ffcd995c3025838e0fde79c7607aba1a2ce
 spec_version: 4
 created: 2026-10-20
-last_updated: 2026-11-16
+last_updated: 2026-11-18
 ---
 
 # DonutChart — Component Spec
@@ -60,6 +60,18 @@ A part-to-whole chart drawn as a ring (donut) or a disc (pie): one slice per ser
   />
 </template>
 ```
+
+**Three ways in** (decision RV-C2-1, rule `webkit-content-channels`). The same data renders from a docs page as a tag (`DocMarkdown`, braced attribute values are JSON) and from the site's page JSON as the `DonutChart` scene a band draws by name (a `console-showcase-section` with `variant: "diagram"` in its `scene` slot):
+
+```mdx
+<DonutChart aria-label="Threats by country" series={[{ "id": "us", "name": "United States", "values": [48210] }]} />
+```
+
+```json
+{ "component": "DonutChart", "props": { "series": [{ "id": "us", "name": "United States", "values": [48210] }] } }
+```
+
+The function props (`formatValue`) and the events stay Vue. `DocMarkdown` and the scene registry load the component as an async chunk, so neither grows unless a page uses it.
 
 ## Props
 
@@ -157,6 +169,8 @@ A part-to-whole chart drawn as a ring (donut) or a disc (pie): one slice per ser
 - Sizes — composite: `small`, `medium`, `large`.
 - Loading — `loading`.
 - Empty — composite: every slice zero, once with the default copy and once filtered to nothing with a Clear filters action.
+- Markdown — the same data as a `<DonutChart>` tag rendered by `DocMarkdown`. Justified: the docs channel (RV-C2-1).
+- Page JSON — the same data as a `DonutChart` scene in a `console-showcase-section` entry rendered by `SitePage`, with the JSON shown. Justified: the site channel (RV-C2-1).
 
 ## Constraints — DO NOT
 

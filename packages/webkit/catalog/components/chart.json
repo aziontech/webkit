@@ -40,6 +40,8 @@
   "Draw event volume over contiguous time buckets (a log's histogram, requests per minute) with `Chart.Bar type=\"histogram\"`: solid columns that touch, segments without gaps, the tallest column at the top. Keep the default bars for separate categories that are compared one against another."
  ],
  "channels": [
-  "app"
+  "app",
+  "docs",
+  "site"
  ]
 }

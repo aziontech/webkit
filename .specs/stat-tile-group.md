@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: 6be6b41c2cbf872ce4a080435686ee8faeb2324d36a07cfc724f30eb0973fe06
+checksum: 414c381e97f399a3c4becf65cf653cea71225fd5a77817da5b70f587d2ea9823
 created: 2026-11-12
-last_updated: 2026-11-15
+last_updated: 2026-11-18
 ---
 
 # StatTileGroup — Component Spec
@@ -81,6 +81,20 @@ One card split into cells, one `StatTile` per cell: the KPI strip at the top of 
   </StatTileGroup>
 </template>
 ```
+
+**Three ways in** (decision RV-C2-1, rule `webkit-content-channels`). The same data renders from a docs page as a `<StatTileGroup>` tag with `<StatTile />` tags inside (`DocMarkdown`, braced attribute values are JSON), and from the site's page JSON as the `StatTileGroup` scene whose `children` are `StatTile` scenes:
+
+```mdx
+<StatTileGroup aria-label="Usage">
+  <StatTile label="Data transferred" value={842} unit="GB" delta={12.4} />
+</StatTileGroup>
+```
+
+```json
+{ "component": "StatTileGroup", "props": { "ariaLabel": "Usage" }, "children": [{ "component": "StatTile", "props": { "label": "Data transferred", "value": 842, "unit": "GB" } }] }
+```
+
+The JSON is a scene a band draws by name (a `console-showcase-section` with `variant: "diagram"` in its `scene` slot). The function props (`formatValue`) and the events stay Vue. `DocMarkdown` and the scene registry load the component as an async chunk, so neither grows unless a page uses it.
 
 ## Props
 
@@ -163,6 +177,8 @@ _No events — the group is layout; each tile is content._
 
 - Default — four tiles with deltas in one card: the overview's usage strip.
 - BesideCard — justification: the stretch to a taller neighbour is layout behaviour no prop shows; the strip sits beside a taller card in a dashboard row and fills its height.
+- Markdown — the same data as a `<StatTileGroup>` tag rendered by `DocMarkdown`. Justified: the docs channel (RV-C2-1).
+- Page JSON — the same data as a `StatTileGroup` scene in a `console-showcase-section` entry rendered by `SitePage`, with the JSON shown. Justified: the site channel (RV-C2-1).
 
 ## Constraints — DO NOT
 

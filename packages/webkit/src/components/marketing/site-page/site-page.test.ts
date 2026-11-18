@@ -2,7 +2,16 @@ import userEvent from '@testing-library/user-event'
 import { render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
+import BarListPageEntry from '../../../../examples/bar-list/page-entry.vue'
+import ChartPageEntry from '../../../../examples/chart/page-entry.vue'
+import DonutChartPageEntry from '../../../../examples/donut-chart/page-entry.vue'
 import PageEntry from '../../../../examples/flow-diagram/page-entry.vue'
+import GaugeChartPageEntry from '../../../../examples/gauge-chart/page-entry.vue'
+import MapChartPageEntry from '../../../../examples/map-chart/page-entry.vue'
+import SparkChartPageEntry from '../../../../examples/spark-chart/page-entry.vue'
+import StatTilePageEntry from '../../../../examples/stat-tile/page-entry.vue'
+import StatTileGroupPageEntry from '../../../../examples/stat-tile-group/page-entry.vue'
+import TrackerPageEntry from '../../../../examples/tracker/page-entry.vue'
 import legacyPropMaps from '../../../cli/migrations/v6-props.json'
 import { expectNoA11yViolations } from '../../../test/axe'
 import SitePage, { type SitePageSection, type SitePageSubmit } from './site-page.vue'
@@ -225,6 +234,41 @@ describe('SitePage', () => {
     expect(await findByRole('group', { name: 'Request path' })).toBeInTheDocument()
     expect(await findByText('api.example.com')).toBeInTheDocument()
     await expectNoA11yViolations(container)
+  })
+
+  it.each([
+    ['bar-list', BarListPageEntry],
+    ['chart', ChartPageEntry],
+    ['donut-chart', DonutChartPageEntry],
+    ['gauge-chart', GaugeChartPageEntry],
+    ['map-chart', MapChartPageEntry],
+    ['spark-chart', SparkChartPageEntry],
+    ['stat-tile', StatTilePageEntry],
+    ['stat-tile-group', StatTileGroupPageEntry],
+    ['tracker', TrackerPageEntry]
+  ])('places %s from page JSON as a scene', async (testId, example) => {
+    const { container, findByTestId } = render(example)
+    expect(await findByTestId(testId)).toBeInTheDocument()
+    await expectNoA11yViolations(container)
+  })
+
+  it('draws the children of a scene in its default slot, in order', async () => {
+    const chart = render(ChartPageEntry)
+    expect((await chart.findAllByText('WAF requests allowed')).length).toBeGreaterThan(0)
+    await waitFor(() =>
+      expect(
+        chart.container.querySelectorAll('[data-testid="chart"] svg path').length
+      ).toBeGreaterThan(0)
+    )
+    chart.unmount()
+    const group = render(StatTileGroupPageEntry)
+    await waitFor(() => expect(group.getAllByTestId('stat-tile')).toHaveLength(4))
+    expect(group.getAllByTestId('stat-tile').map((tile) => tile.textContent)).toEqual([
+      expect.stringContaining('Data transferred'),
+      expect.stringContaining('Requests / second'),
+      expect.stringContaining('Bandwidth saving'),
+      expect.stringContaining('Data offload')
+    ])
   })
 
   it('skips a scene the registry does not hold, with a development warning', async () => {

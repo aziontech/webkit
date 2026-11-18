@@ -5,8 +5,8 @@ structure: monolithic
 status: implemented
 spec_version: 5
 created: 2026-11-10
-last_updated: 2026-11-16
-checksum: a294c4025d0cce406c39a970147a449d6dc73e99cd7bfc3c17d345f0c055e5f5
+last_updated: 2026-11-18
+checksum: d6d20425fb5f8d406b4c0eb5dd48c1fad86a869c37ed54a098e64ed324f9dfab
 ---
 
 # BarList — Component Spec
@@ -62,6 +62,18 @@ A ranked list of named values: each row is a tinted bar whose length is the valu
   />
 </template>
 ```
+
+**Three ways in** (decision RV-C2-1, rule `webkit-content-channels`). The same data renders from a docs page as a tag (`DocMarkdown`, braced attribute values are JSON) and from the site's page JSON as the `BarList` scene a band draws by name (a `console-showcase-section` with `variant: "diagram"` in its `scene` slot):
+
+```mdx
+<BarList aria-label="Top paths" items={[{ "name": "/home", "value": 843 }]} />
+```
+
+```json
+{ "component": "BarList", "props": { "items": [{ "name": "/home", "value": 843 }] } }
+```
+
+The function props (`formatValue`) and the events stay Vue. `DocMarkdown` and the scene registry load the component as an async chunk, so neither grows unless a page uses it.
 
 ## Props
 
@@ -146,6 +158,8 @@ The rows are data (`items`). The state surface matches `chart`, `donut-chart`, `
 - Loading — `loading`.
 - Empty — `items` empty.
 - Error — `error` set after a failed load; justified because `error` is a state the component owns.
+- Markdown — the same data as a `<BarList>` tag rendered by `DocMarkdown`. Justified: the docs channel (RV-C2-1).
+- Page JSON — the same data as a `BarList` scene in a `console-showcase-section` entry rendered by `SitePage`, with the JSON shown. Justified: the site channel (RV-C2-1).
 
 ## Constraints — DO NOT
 

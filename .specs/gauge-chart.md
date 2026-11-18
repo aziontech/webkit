@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: 98125e576c675baa77fd9835040e18a1e3e28ae81e65c23b48fd574e5b6d3c42
+checksum: 1c6eced2e4ae543dbe05b714a9aacfe6e74e5683ab2b870f97a759a5700e0969
 created: 2026-11-11
-last_updated: 2026-11-17
+last_updated: 2026-11-18
 ---
 
 # GaugeChart — Component Spec
@@ -84,6 +84,18 @@ With bands, when the reading means a state (the arc takes the color of the band 
   />
 </template>
 ```
+
+**Three ways in** (decision RV-C2-1, rule `webkit-content-channels`). The same data renders from a docs page as a tag (`DocMarkdown`, braced attribute values are JSON) and from the site's page JSON as the `GaugeChart` scene a band draws by name (a `console-showcase-section` with `variant: "diagram"` in its `scene` slot):
+
+```mdx
+<GaugeChart aria-label="Cache hit ratio" value={74} label="Cache hit ratio, %" />
+```
+
+```json
+{ "component": "GaugeChart", "props": { "value": 74, "label": "Cache hit ratio, %" } }
+```
+
+The function props (`formatValue`) and the events stay Vue. `DocMarkdown` and the scene registry load the component as an async chunk, so neither grows unless a page uses it.
 
 ## Props
 
@@ -195,6 +207,8 @@ _No events — the gauge is a read-out; wrap it in a link or button to make it i
 - Bands — CPU usage with three named status bands; the one example with semantic colors.
 - Sizes — composite: small, medium and large dials.
 - States — composite: loading, empty and error (the gauge has no `disabled`; its three data states share one frame, as in the examples).
+- Markdown — the same data as a `<GaugeChart>` tag rendered by `DocMarkdown`. Justified: the docs channel (RV-C2-1).
+- Page JSON — the same data as a `GaugeChart` scene in a `console-showcase-section` entry rendered by `SitePage`, with the JSON shown. Justified: the site channel (RV-C2-1).
 
 ## Constraints — DO NOT
 

@@ -34,6 +34,7 @@
 - A feature-by-feature comparison of Azion with a competitor → use `competitor-comparison-section`.
 - Rows of mixed content (media, title, description, actions) that do not share columns → use `item`.
 - The same records as a grid of cards → use `card-list` (same collection, card layout).
+- In a docs Markdown page or the site's page JSON. DataTable is app-only (decision RV-C2-1, rule `webkit-content-channels`): it drives app state (sorting, selection, paging, filters) through its engine, so it has no `DocMarkdown` tag and no page JSON entry. A docs page writes a Markdown pipe table; the site uses `listing-table-section`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related

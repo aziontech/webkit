@@ -8,9 +8,9 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
   node_id: 2053:7649
-checksum: d13a46fda745e6acc38617fe8e4c0b938ee6b531303eacac7330152ff302622e
+checksum: 25827fa440ca7971d838c1066a523f4c4f917f4c7283a0770cfa6e3f6c4d4065
 created: 2026-11-15
-last_updated: 2026-11-17
+last_updated: 2026-11-18
 ---
 
 # DataTable — Component Spec
@@ -46,6 +46,7 @@ The data-driven table: pass `data` + `columns` and it renders the header, rows, 
 - A feature-by-feature comparison of Azion with a competitor → use `competitor-comparison-section`.
 - Rows of mixed content (media, title, description, actions) that do not share columns → use `item`.
 - The same records as a grid of cards → use `card-list` (same collection, card layout).
+- In a docs Markdown page or the site's page JSON. DataTable is app-only (decision RV-C2-1, rule `webkit-content-channels`): it drives app state (sorting, selection, paging, filters) through its engine, so it has no `DocMarkdown` tag and no page JSON entry. A docs page writes a Markdown pipe table; the site uses `listing-table-section`.
 
 ## Related
 
