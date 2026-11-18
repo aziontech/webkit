@@ -17,7 +17,7 @@
  ],
  "avoidWhen": [
   "For steps the reader must follow in order — use `DocSteps`.",
-  "For alternative paths through the same instruction — use `DocTabs`.",
+  "For alternative paths through the same instruction — use `Tabs`.",
   "Inside an application screen — use `Accordion` directly."
  ],
  "related": [

@@ -137,6 +137,8 @@
   "removed": {
     "block:headers/docs-header": "DocLayout already renders the documentation bar; the shell/docs block shows it (dup plan BL-8)",
     "block:headers/site-header": "SiteLayout and SiteHeaderSection already render the marketing bar; the shell/site block shows it (dup plan BL-8)",
+    "doc-tab": "Tabs (Tabs.Trigger + Tabs.Content); DocMarkdown renders the MDX <Tab title> tag as one (RV-M1)",
+    "doc-tabs": "Tabs; DocMarkdown renders the MDX <Tabs> tag as one (RV-M1)",
     "doc-tooltip": "HoverCard; DocMarkdown renders the MDX <Tooltip> tag as one (dup plan DO-1)",
     "sample:shared/ui/banners/map-framing": "the deck slide crop; decks are product tooling and are not ported (m2.9-inventory section 6)",
     "sample:shared/ui/line-figure/LineFigure": "removed from WebKit in 6.0 (owner decision): no line figures and no replacement",

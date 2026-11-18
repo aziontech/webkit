@@ -7,7 +7,7 @@ spec_version: 10
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6191
   node_id: 3374:6191
-checksum: ee0982a8a3854a17b6f8e918007305794e28719d5b3f1832bab3306402dd1232
+checksum: 4f7456f0a5f3d5e46a6b1121892d14837b0eab26cfc4bf5a7c3ff89e86791d26
 created: 2026-05-22
 last_updated: 2026-11-18
 ---
@@ -23,6 +23,7 @@ Switches between peer views of one page or panel, showing one at a time: Overvie
 - Use Tabs to switch between peer views of one page or panel; for the second-level navigation strip of a resource detail page use PageTabs.
 - A page or panel holds several peer views and only one is shown at a time (Overview / Settings / Logs on a resource page).
 - The tab row may outgrow its container — `Tabs.List` scrolls horizontally with edge fades instead of wrapping.
+- Alternative paths through one instruction in documentation (macOS / Linux / Windows, Console / CLI). There is no separate docs tabs component: inside `DocProse` put `data-doc-block` on `Tabs` so it takes the block step, and in Markdown write `<Tabs><Tab title>`, which `DocMarkdown` renders as `Tabs` (6.0 removed `DocTabs` / `DocTab`).
 - Tabs that the user can close: set `closable` on the item and remove it from your data on `@close`.
 - A tab whose form holds unsaved changes: set `dirty` on the item (bind it to `useUnsavedChanges().isDirty`) so the reader sees which section still needs a save.
 
@@ -47,7 +48,7 @@ Switches between peer views of one page or panel, showing one at a time: Overvie
 - `closable` only emits `close` with `(event, value)` — remove the tab and its panel from your data yourself; when the active tab unmounts, the root moves to the first enabled tab.
 - `dirty` only marks the tab (a dot after the label, "Unsaved changes" for screen readers); guard the switch itself with `useUnsavedChanges().confirmLeave()` in the setter of the root's `v-model` when leaving must ask first.
 - The selection always comes from the root's value. A row of pressed / unpressed pills outside a `Tabs` root is a `ToggleGroup`, not loose `Tabs.Trigger`s (6.0 removed the item's `selected` prop).
-- Add no spacing between the list and the panels: every `Tabs.Content` starts one group step below the strip (`pt-(--layout-group-gap)`, 16 px), the rule every tab strip in WebKit follows (`DocTabs` inherits it). A consumer `class` can still override it (`pt-0` for a panel that butts against a framed strip). It always renders the panel and needs a `value` (6.0 removed its wrapper mode).
+- Add no spacing between the list and the panels: every `Tabs.Content` starts one group step below the strip (`pt-(--layout-group-gap)`, 16 px), the rule every tab strip in WebKit follows (a Markdown `<Tabs>` rendered by `DocMarkdown` is a `Tabs` too). A consumer `class` can still override it (`pt-0` for a panel that butts against a framed strip). It always renders the panel and needs a `value` (6.0 removed its wrapper mode).
 - Centre the tab row with `<Tabs.List align="center">`, never with a `justify-center` class or a centring wrapper; keep the default `start` for tabs that head a resource page or a settings form.
 
 ## Usage

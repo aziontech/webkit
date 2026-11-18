@@ -3962,6 +3962,8 @@
   "command-palette": "command",
   "cta": "call-to-action",
   "datatable": "data-table",
+  "doc-tab": "tabs",
+  "doc-tabs": "tabs",
   "feature-grid": "capability-grid-section",
   "file-viewer": "file-preview",
   "image-viewer": "file-preview",
@@ -4155,6 +4157,8 @@
   "dialog-portal": "delete the <DialogPortal> wrapper (keep its children): DialogContent renders the portal and the overlay itself",
   "doc-cta": "use DocCallToAction from '@aziontech/webkit/doc-call-to-action': primary-label and primary-href become :primary-action=\"{ label, href }\", secondary-label and secondary-href become :secondary-action=\"{ label, href }\"",
   "doc-step": "import DocSteps from @aziontech/webkit/doc-steps and write each step as <DocSteps.Step title>: a step only renders inside DocSteps, so it ships attached to the compound",
+  "doc-tab": "a Tabs.Trigger (value, label = the old title) plus a Tabs.Content with the same value, inside one Tabs",
+  "doc-tabs": "Tabs from @aziontech/webkit/tabs: <Tabs default-value=\"<first value>\"><Tabs.List><Tabs.Trigger value label /></Tabs.List><Tabs.Content value>…</Tabs.Content></Tabs> (DocMarkdown renders the MDX <Tabs><Tab title> tags as one)",
   "doc-tooltip": "HoverCard + HoverCard.Trigger + HoverCard.Content (DocMarkdown renders the MDX <Tooltip> tag as one)",
   "drawer-overlay": "delete the <DrawerOverlay /> element: DrawerContent renders the portal and the overlay itself",
   "drawer-portal": "delete the <DrawerPortal> wrapper (keep its children): DrawerContent renders the portal and the overlay itself",
@@ -13341,51 +13345,6 @@
    "surface": "docs",
    "examplesFile": "catalog/examples/doc-heading.json",
    "docsFile": "catalog/components/doc-heading.json"
-  },
-  "doc-tab": {
-   "import": "@aziontech/webkit/doc-tab",
-   "target": "./src/components/docs/doc-tab/doc-tab.vue",
-   "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/doc-tab",
-   "category": "docs",
-   "structure": "monolithic",
-   "props": [
-    {
-     "name": "title",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "The tab label; `DocTabs` reads it to build the strip."
-    }
-   ],
-   "slots": [
-    {
-     "name": "default",
-     "scope": "—",
-     "notes": "The panel body."
-    }
-   ],
-   "surface": "docs",
-   "examplesFile": "catalog/examples/doc-tab.json",
-   "docsFile": "catalog/components/doc-tab.json"
-  },
-  "doc-tabs": {
-   "import": "@aziontech/webkit/doc-tabs",
-   "target": "./src/components/docs/doc-tabs/doc-tabs.vue",
-   "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/doc-tabs",
-   "category": "docs",
-   "structure": "monolithic",
-   "slots": [
-    {
-     "name": "default",
-     "scope": "—",
-     "notes": "The `DocTab` children, in strip order. A child without a `title` is labelled by its position."
-    }
-   ],
-   "surface": "docs",
-   "examplesFile": "catalog/examples/doc-tabs.json",
-   "docsFile": "catalog/components/doc-tabs.json"
   },
   "alert": {
    "import": "@aziontech/webkit/alert",
@@ -36093,7 +36052,7 @@
    "title": "Blocks/Shell/Docs",
    "source": "blocks/shell/docs/docs.vue",
    "surface": "docs",
-   "summary": "The documentation shell is `DocLayout`, composed once around the app's router view: this block's primary is the app's `App.vue` and every variant is a page body (an `<article>` only, with no header, rail, outline or footer of its own) that renders inside it. The layout owns the chrome and the DOCUMENT scrolls: a sticky docs header (the Azion Docs mark, the section links from `sections`, the search field that opens the ⌘K palette of every navigation page, and the `actions` slot with the GitHub `IconButton` and the Console `Button`), a sticky navigation rail from `lg` built from the `navigation` data (groups of rows with in-app `href`s followed with the router, inline subsections as `children`, the current row following the route) with the `ThemeSwitcher` in its `navigation-footer` slot and a drawer opened from the header below `lg`, the page in the layout's single main landmark, the sticky On this page rail from `xl` filled by the page itself (every `DocHeading` with an `anchor` at level 2 or 3 registers with the layout, in document order, and is tracked as the reader scrolls), the GitHub and Community `outline-groups` and a `DocCallToAction` in its `aside` slot (both shown only on pages with an outline), and the `Footer` (`variant=\"content\"`) in the `footer` slot under the article, between the two rails; the primary's footer carries the columns, then one bottom bar with the brand and the social links at the start and the status and language at the end, stacked below `md`, in CSS. No page wraps its article in a scroll area, a full-height frame or a layout of its own. The primary's stand-in page, in its default slot, is a short guide (`DocPageHeader`, then `DocProse` with anchored `DocHeading` sections); replace it with `<RouterView />`. Five variants are page bodies built from the documentation parts only: Article is a tutorial (First deploy) with breadcrumb, last updated and meta actions, a `DocCardGroup` chooser of paths, `DocCallout` tips, `DocSteps` with `CodeBlock` commands, a `DocPrompt`, Next steps, Related resources as `DocItem` rows in a `RegistrationFrame`, and `DocPreviousNext`; Reference is a product reference page (an info callout, two actions, the request path as a `Diagram` in a `DocFrame`, a JSON `CodeBlock`, a term list); Landing is the documentation home, whose headings carry no anchor so no outline rail shows: a `DocHero` with `Get started` and the `CopyPromptButton`, a `DocAgentCard` above the Console, CLI and API `DocCard`s, objectives, ready-made templates in their brand colours, Stop attacks, compliance, Follow along and the pager forward; AgentSetup is the index of agent setup pages: a `DocTabs` picker filtering `DocCard`s of coding agents by workflow, a comparison `DataTable` with check marks and `Tag`s, a legend `DocCallout` and a glossary of `DocCard` grids; AgentGuide is one agent's setup page: a masthead with the agent mark, fact `Tag`s and links, `DocSteps` with `DocCodeGroup` commands and `DocMarkdown` bodies, the MCP tools `DataTable`, CLI and context-file code, `DocItem` rows, `DocPrompt`s, tip callouts, FAQ and troubleshooting `DocAccordionGroup`s and the other agents grid.",
+   "summary": "The documentation shell is `DocLayout`, composed once around the app's router view: this block's primary is the app's `App.vue` and every variant is a page body (an `<article>` only, with no header, rail, outline or footer of its own) that renders inside it. The layout owns the chrome and the DOCUMENT scrolls: a sticky docs header (the Azion Docs mark, the section links from `sections`, the search field that opens the ⌘K palette of every navigation page, and the `actions` slot with the GitHub `IconButton` and the Console `Button`), a sticky navigation rail from `lg` built from the `navigation` data (groups of rows with in-app `href`s followed with the router, inline subsections as `children`, the current row following the route) with the `ThemeSwitcher` in its `navigation-footer` slot and a drawer opened from the header below `lg`, the page in the layout's single main landmark, the sticky On this page rail from `xl` filled by the page itself (every `DocHeading` with an `anchor` at level 2 or 3 registers with the layout, in document order, and is tracked as the reader scrolls), the GitHub and Community `outline-groups` and a `DocCallToAction` in its `aside` slot (both shown only on pages with an outline), and the `Footer` (`variant=\"content\"`) in the `footer` slot under the article, between the two rails; the primary's footer carries the columns, then one bottom bar with the brand and the social links at the start and the status and language at the end, stacked below `md`, in CSS. No page wraps its article in a scroll area, a full-height frame or a layout of its own. The primary's stand-in page, in its default slot, is a short guide (`DocPageHeader`, then `DocProse` with anchored `DocHeading` sections); replace it with `<RouterView />`. Five variants are page bodies built from the documentation parts only: Article is a tutorial (First deploy) with breadcrumb, last updated and meta actions, a `DocCardGroup` chooser of paths, `DocCallout` tips, `DocSteps` with `CodeBlock` commands, a `DocPrompt`, Next steps, Related resources as `DocItem` rows in a `RegistrationFrame`, and `DocPreviousNext`; Reference is a product reference page (an info callout, two actions, the request path as a `Diagram` in a `DocFrame`, a JSON `CodeBlock`, a term list); Landing is the documentation home, whose headings carry no anchor so no outline rail shows: a `DocHero` with `Get started` and the `CopyPromptButton`, a `DocAgentCard` above the Console, CLI and API `DocCard`s, objectives, ready-made templates in their brand colours, Stop attacks, compliance, Follow along and the pager forward; AgentSetup is the index of agent setup pages: a `Tabs` picker filtering `DocCard`s of coding agents by workflow, a comparison `DataTable` with check marks and `Tag`s, a legend `DocCallout` and a glossary of `DocCard` grids; AgentGuide is one agent's setup page: a masthead with the agent mark, fact `Tag`s and links, `DocSteps` with `DocCodeGroup` commands and `DocMarkdown` bodies, the MCP tools `DataTable`, CLI and context-file code, `DocItem` rows, `DocPrompt`s, tip callouts, FAQ and troubleshooting `DocAccordionGroup`s and the other agents grid.",
    "intents": [
     "docs shell",
     "documentation layout",
@@ -36178,14 +36137,13 @@
     "DocPrompt",
     "DocProse",
     "DocSteps",
-    "DocTab",
-    "DocTabs",
     "Footer",
     "IconButton",
     "ItemList",
     "RegistrationFrame",
     "Select",
     "StatusIndicator",
+    "Tabs",
     "Tag",
     "ThemeSwitcher",
     "ThirdPartyLogo",
@@ -36223,14 +36181,13 @@
     "@aziontech/webkit/doc-prompt",
     "@aziontech/webkit/doc-prose",
     "@aziontech/webkit/doc-steps",
-    "@aziontech/webkit/doc-tab",
-    "@aziontech/webkit/doc-tabs",
     "@aziontech/webkit/footer",
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/item-list",
     "@aziontech/webkit/registration-frame",
     "@aziontech/webkit/select",
     "@aziontech/webkit/status-indicator",
+    "@aziontech/webkit/tabs",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/theme-switcher",
     "@aziontech/webkit/third-party-logo",

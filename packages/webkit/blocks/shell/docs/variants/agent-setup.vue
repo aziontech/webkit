@@ -13,8 +13,7 @@
   import DocPageHeader from '@aziontech/webkit/doc-page-header'
   import DocPreviousNext from '@aziontech/webkit/doc-previous-next'
   import DocProse from '@aziontech/webkit/doc-prose'
-  import DocTab from '@aziontech/webkit/doc-tab'
-  import DocTabs from '@aziontech/webkit/doc-tabs'
+  import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
   import ThirdPartyLogo from '@aziontech/webkit/third-party-logo'
 
@@ -304,11 +303,22 @@
         >Pick your agent</DocHeading
       >
       <p>Select an agent to get step-by-step setup instructions.</p>
-      <DocTabs>
-        <DocTab
+      <Tabs
+        data-doc-block
+        default-value="All"
+      >
+        <Tabs.List>
+          <Tabs.Trigger
+            v-for="grid in grids"
+            :key="grid.filter"
+            :value="grid.filter"
+            :label="grid.filter"
+          />
+        </Tabs.List>
+        <Tabs.Content
           v-for="grid in grids"
           :key="grid.filter"
-          :title="grid.filter"
+          :value="grid.filter"
         >
           <DocCardGroup :columns="3">
             <DocCard
@@ -335,8 +345,8 @@
               {{ agent.description }}
             </DocCard>
           </DocCardGroup>
-        </DocTab>
-      </DocTabs>
+        </Tabs.Content>
+      </Tabs>
       <p>
         Using another client that speaks MCP? The server is one HTTP endpoint: point your client at
         <code>mcp.azion.com</code> with a Personal Token and the nine tools show up.

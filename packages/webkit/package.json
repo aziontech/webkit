@@ -951,14 +951,6 @@
       "types": "./types/components/docs/doc-heading/doc-heading.vue.d.ts",
       "default": "./src/components/docs/doc-heading/doc-heading.vue"
     },
-    "./doc-tab": {
-      "types": "./types/components/docs/doc-tab/doc-tab.vue.d.ts",
-      "default": "./src/components/docs/doc-tab/doc-tab.vue"
-    },
-    "./doc-tabs": {
-      "types": "./types/components/docs/doc-tabs/doc-tabs.vue.d.ts",
-      "default": "./src/components/docs/doc-tabs/doc-tabs.vue"
-    },
     "./alert": {
       "types": "./types/components/feedback/alert/alert.vue.d.ts",
       "default": "./src/components/feedback/alert/alert.vue"
@@ -3168,12 +3160,6 @@
       ],
       "doc-heading": [
         "./types/components/docs/doc-heading/doc-heading.vue.d.ts"
-      ],
-      "doc-tab": [
-        "./types/components/docs/doc-tab/doc-tab.vue.d.ts"
-      ],
-      "doc-tabs": [
-        "./types/components/docs/doc-tabs/doc-tabs.vue.d.ts"
       ],
       "alert": [
         "./types/components/feedback/alert/alert.vue.d.ts"

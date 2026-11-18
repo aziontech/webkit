@@ -722,6 +722,8 @@
     "field-radio-block": "RadioGroup variant=\"card\" v-model with a RadioGroup.Item per option (description on the item)",
     "field-switch-block": "FieldLabel wrapping Field orientation=horizontal + Switch + FieldContent (FieldTitle + FieldDescription)",
     "sidebar-group": "SidebarMenu with a SidebarMenu.Group per section (label, the rows as SidebarMenu.Item)",
+    "doc-tabs": "Tabs from @aziontech/webkit/tabs: <Tabs default-value=\"<first value>\"><Tabs.List><Tabs.Trigger value label /></Tabs.List><Tabs.Content value>…</Tabs.Content></Tabs> (DocMarkdown renders the MDX <Tabs><Tab title> tags as one)",
+    "doc-tab": "a Tabs.Trigger (value, label = the old title) plus a Tabs.Content with the same value, inside one Tabs",
     "doc-tooltip": "HoverCard + HoverCard.Trigger + HoverCard.Content (DocMarkdown renders the MDX <Tooltip> tag as one)",
     "mini-button": "Link (label, href, icon) for a text link that navigates; Button variant=\"link\" for a text action without href",
     "help-panel-tutorial": "TutorialPanel (with TutorialPanel.Provider and TutorialPanelHotspot) owns tutorials; HelpPanel has no tutorial mode",

@@ -63,8 +63,10 @@
   const DocFrame = defineAsyncComponent(() => import('../doc-frame/doc-frame.vue'))
   const DocItem = defineAsyncComponent(() => import('../doc-item/doc-item.vue'))
   const DocPrompt = defineAsyncComponent(() => import('../doc-prompt/doc-prompt.vue'))
-  const DocTab = defineAsyncComponent(() => import('../doc-tab/doc-tab.vue'))
-  const DocTabs = defineAsyncComponent(() => import('../doc-tabs/doc-tabs.vue'))
+  const TabsRoot = defineAsyncComponent(() => import('../../navigation/tabs/tabs.vue'))
+  const TabsList = defineAsyncComponent(() => import('../../navigation/tabs/tabs-list.vue'))
+  const TabsTrigger = defineAsyncComponent(() => import('../../navigation/tabs/tabs-trigger.vue'))
+  const TabsContent = defineAsyncComponent(() => import('../../navigation/tabs/tabs-content.vue'))
 
   const CALLOUT_VARIANTS: Record<string, string> = {
     Note: 'note',
@@ -90,8 +92,6 @@
     Item: DocItem,
     AccordionGroup: DocAccordionGroup,
     Accordion: DocAccordion,
-    Tabs: DocTabs,
-    Tab: DocTab,
     Frame: DocFrame,
     Prompt: DocPrompt,
     Update: DocChangelogEntry
@@ -193,6 +193,40 @@
     code: node.code
   })
 
+  const renderTabs = (
+    node: Extract<DocMarkdownNode, { type: 'component' }>,
+    key: number
+  ): VNodeChild => {
+    const panels = node.children
+      .filter(
+        (child): child is Extract<DocMarkdownNode, { type: 'component' }> =>
+          child.type === 'component' && child.name === 'Tab'
+      )
+      .map((child, position) => ({
+        value: `tab-${position}`,
+        title: text(child.props['title']) || `${position + 1}`,
+        children: child.children
+      }))
+    return h(
+      TabsRoot,
+      { key, 'data-doc-block': '', defaultValue: panels[0]?.value ?? '' },
+      {
+        default: () => [
+          h(TabsList, null, () =>
+            panels.map((panel) =>
+              h(TabsTrigger, { key: panel.value, value: panel.value, label: panel.title })
+            )
+          ),
+          ...panels.map((panel) =>
+            h(TabsContent, { key: panel.value, value: panel.value }, () =>
+              renderNodes(panel.children, false)
+            )
+          )
+        ]
+      }
+    )
+  }
+
   const renderComponent = (
     node: Extract<DocMarkdownNode, { type: 'component' }>,
     key: number
@@ -206,6 +240,7 @@
         .map(toSample)
       return h(DocCodeGroup, { key, samples })
     }
+    if (!override && node.name === 'Tabs') return renderTabs(node, key)
     if (!override && node.name === 'ItemGroup') {
       return h(
         RegistrationFrame,
