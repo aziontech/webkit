@@ -39,9 +39,9 @@
     src?: string
     /** Alternative text describing what the image shows. */
     alt?: string
-    /** Which end the media sits on: the closing cell from `lg` up, or the lower one when the band is vertical. `media-end` puts the copy first. */
+    /** Which end the media sits on: the closing cell once the band splits, or the lower one when the band is vertical. `media-end` puts the copy first. */
     variant?: MediaSplitVariant
-    /** Axis the band splits on. `horizontal` sets the cells side by side from `lg` up; `vertical` holds them stacked at every width. */
+    /** Axis the band splits on. `horizontal` sets the cells side by side once the band is 60rem wide; `vertical` holds them stacked at every width. */
     orientation?: MediaSplitOrientation
     /** The copy cell's fill. `canvas` lets the band sit in the page column; `surface` lifts it onto its own plate. The media cell follows `mediaFill`. */
     fill?: MediaSplitFill
@@ -151,7 +151,7 @@
   <section
     ref="rootEl"
     v-bind="$attrs"
-    class="group/split data-[media-href]:cursor-pointer"
+    class="group/split @container/media-split data-[media-href]:cursor-pointer"
     :data-testid="testId"
     :data-variant="variant"
     :data-orientation="orientation"
@@ -173,17 +173,17 @@
       <div
         :data-testid="`${testId}__cells`"
         :data-orientation="orientation"
-        class="grid h-full group-data-[divided]/split:gap-px group-data-[divided]/split:bg-(--border-default) group-data-[media]/split:data-[orientation=horizontal]:lg:grid-cols-2"
+        class="grid h-full group-data-[divided]/split:gap-px group-data-[divided]/split:bg-(--border-default) group-data-[media]/split:data-[orientation=horizontal]:@min-[60rem]/media-split:grid-cols-2"
       >
         <component
           :is="cellFrame"
           v-bind="cellFrameProps"
           :data-testid="`${testId}__copy-cell`"
           :data-orientation="orientation"
-          class="min-w-0 group-data-[variant=media-start]/split:lg:order-last group-data-[variant=media-start]/split:data-[orientation=vertical]:order-last"
+          class="min-w-0 group-data-[variant=media-start]/split:@min-[60rem]/media-split:order-last group-data-[variant=media-start]/split:data-[orientation=vertical]:order-last"
         >
           <div
-            class="flex h-full flex-col justify-between gap-(--spacing-2xl) p-(--spacing-xl) group-data-[size=large]/split:p-(--spacing-2xl) group-data-[fill=canvas]/split:bg-(--bg-canvas) group-data-[fill=surface]/split:bg-(--bg-surface) group-data-[align=center]/split:justify-center"
+            class="flex h-full flex-col justify-between gap-(--spacing-2xl) p-(--spacing-xl) group-data-[size=large]/split:p-(--spacing-2xl) group-data-[media]/split:group-data-[orientation=horizontal]/split:group-data-[size=large]/split:@min-[60rem]/media-split:@max-[72rem]/media-split:p-(--spacing-xl) group-data-[fill=canvas]/split:bg-(--bg-canvas) group-data-[fill=surface]/split:bg-(--bg-surface) group-data-[align=center]/split:justify-center"
           >
             <div
               class="flex max-w-(--container-md) flex-col gap-(--spacing-lg) group-data-[size=large]/split:max-w-(--container-lg)"

@@ -105,8 +105,6 @@
     >
       <MediaSplit
         framed
-        orientation="vertical"
-        class="@min-[72rem]/template-gallery:[&_[data-testid=media-split\_\_cells]]:grid-cols-2"
         :heading-level="2"
         align="center"
         :eyebrow="eyebrow"
@@ -117,7 +115,7 @@
       >
         <template #media>
           <div
-            class="relative min-h-[36rem] w-full self-stretch @min-[72rem]/template-gallery:min-h-[44rem]"
+            class="relative min-h-[36rem] w-full self-stretch @min-[60rem]/template-gallery:min-h-[44rem]"
           >
             <ScrollArea
               :aria-label="templatesAriaLabel || undefined"

@@ -259,7 +259,16 @@ describe('TemplateGallerySection', () => {
       host.style.width = `${width}px`
       document.body.appendChild(host)
       return render(TemplateGallerySection, {
-        props: { title: CLOSING_TITLE, description: 'Deploy a starter.', templates },
+        props: {
+          eyebrow: 'Your Stack, Your Way',
+          title: CLOSING_TITLE,
+          description:
+            'Launch storefronts faster with pre-built templates and starter kits. Deploy complete projects in seconds with popular frameworks.',
+          primaryAction,
+          secondaryAction,
+          templates,
+          deployLabel: DEPLOY
+        },
         container: host
       })
     }
@@ -276,24 +285,46 @@ describe('TemplateGallerySection', () => {
       return { copy, media }
     }
 
-    it('sets the copy beside the templates and the headline in two lines in a full-width desktop band', async () => {
-      await page.viewport(1440, 900)
-      const view = mountIn(1376)
-      const heading = view.getByRole('heading', { level: 2, name: CLOSING_TITLE })
-      const { copy, media } = cellsOf(view)
+    const deployButtonsOutsideTheirCard = (view: ReturnType<typeof mountIn>) =>
+      view.getAllByRole('link', { name: DEPLOY }).filter((button) => {
+        const card = button.parentElement as HTMLElement
+        const inner =
+          card.getBoundingClientRect().right -
+          Number.parseFloat(getComputedStyle(card).paddingRight)
+        return button.getBoundingClientRect().right > inner + 0.5
+      })
 
-      expect(media.left).toBeGreaterThanOrEqual(copy.right)
-      expect(linesOf(heading)).toBe(2)
-    })
+    it.each([
+      [1440, 1376],
+      [1440, 1200],
+      [1440, 1000],
+      [1920, 1120],
+      [1024, 960]
+    ])(
+      "splits a %ipx screen's %ipx band in two equal halves, the headline in two lines and the cards inside theirs",
+      async (screen, width) => {
+        await page.viewport(screen, 900)
+        const view = mountIn(width)
+        const heading = view.getByRole('heading', { level: 2, name: CLOSING_TITLE })
+        const { copy, media } = cellsOf(view)
 
-    it('stacks the copy over the templates in a band narrower than 72rem, the headline still in two lines', async () => {
+        expect(media.left).toBeGreaterThanOrEqual(copy.right)
+        expect(Math.abs(copy.width - media.width)).toBeLessThanOrEqual(1)
+        expect(linesOf(heading)).toBe(2)
+        expect(heading.getBoundingClientRect().right).toBeLessThanOrEqual(copy.right)
+        expect(view.getAllByRole('link', { name: DEPLOY })).toHaveLength(templates.length)
+        expect(deployButtonsOutsideTheirCard(view)).toHaveLength(0)
+      }
+    )
+
+    it('stacks the copy over the templates in a band narrower than 60rem, even on a wide screen', async () => {
       await page.viewport(1920, 900)
-      const view = mountIn(1120)
+      const view = mountIn(900)
       const heading = view.getByRole('heading', { level: 2, name: CLOSING_TITLE })
       const { copy, media } = cellsOf(view)
 
       expect(media.top).toBeGreaterThanOrEqual(copy.bottom)
-      expect(media.width).toBeCloseTo(1120, 0)
+      expect(media.width).toBeCloseTo(900, 0)
       expect(linesOf(heading)).toBe(2)
     })
 
