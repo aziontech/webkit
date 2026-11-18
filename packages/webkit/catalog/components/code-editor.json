@@ -33,5 +33,8 @@
   "Give the editor a fixed `height`, or `fill` inside a flex column that has its own height; never let it grow with the content.",
   "Use `readonly` for code the user may read and select but not change; use `disabled` only when the whole form is locked.",
   "In diff mode, `original` is the left side and `v-model` the right side, which stays editable. A diff nobody edits is a `code-block` with `original`, which marks every added and removed line without loading an editor."
+ ],
+ "channels": [
+  "app"
  ]
 }

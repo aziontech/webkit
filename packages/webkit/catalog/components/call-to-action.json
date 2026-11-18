@@ -41,5 +41,9 @@
   "In `primary`, compose one `texture` into `background` — `pixelate` at `small` with `fade=\"bottom\"` — and a `marquee` into `bottom`. The band moves the pixelate's resting pools out of frame and runs its two waves at triple gain and double pace, so the travelling bands carry the light instead of a still glow; keep the headline clear of the densest cells by leaving the band's own padding alone.",
   "In `primary`, give the marquee enough claims that the loop never repeats inside one screen, and let the pass derive itself: an item pass runs three times slower per claim than a mark pass, because a claim is read.",
   "Leave `framed` on when the band stands in a section column of its own, and off when the page already wraps it in a `registration-frame` — two frames draw two hairlines on the same edge."
+ ],
+ "channels": [
+  "app",
+  "site"
  ]
 }

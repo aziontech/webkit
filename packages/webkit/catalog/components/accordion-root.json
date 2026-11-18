@@ -22,5 +22,8 @@
   "Set the trigger's `headingLevel` to fit the page outline (default `3`) — each trigger is wrapped in a real heading.",
   "`Accordion.Content` applies no padding; pad the content you put inside it.",
   "Set `size` and `icon-position` on the root, not per item — they are provided to every item through context."
+ ],
+ "channels": [
+  "app"
  ]
 }

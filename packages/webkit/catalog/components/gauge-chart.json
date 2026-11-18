@@ -22,5 +22,8 @@
   "Name every band (`label`) so the value is read with its meaning, not only with a color.",
   "Use status severities for bands (`success`, `warning`, `danger`) and the findings levels (`severity-critical` … `severity-info`) only when the reading is a severity.",
   "Put the unit in `formatValue` (`74%`, `92 ms`) and what is measured in `label`."
+ ],
+ "channels": [
+  "app"
  ]
 }

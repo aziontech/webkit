@@ -67,6 +67,15 @@ Next to `props`, an entry may carry:
 - `gap` — `none`, `small` or `medium` (default) for the break before a column section.
 - `submission` — transport details of a form, handed back on `SitePage`'s `submit` (see below).
 
+## Content channels
+
+A content component (a diagram, a table, a callout, a card, stats, a quote, logos, code, a chart) is used in three places, and each has its own way in: `app` (the Vue import), `docs` (a tag `DocMarkdown` renders) and `site` (an entry `SitePage` renders). It is usable through all three unless the registry says why not (decision RV-F2-1; consumer rule [`webkit-content-channels`](../../rules/webkit-content-channels.md)).
+
+- **Site:** a component that is not a band is a **scene**: one entry in `src/assets/scene-registry.ts`, placed by name in a band's slot (`{ _id: 'console-showcase-section', props: { variant: 'diagram' }, scenes: { scene: { component: 'FlowDiagram', props: { nodes, edges } } } }`). Do not add a `<name>-section` that only wraps one component: only page sections take an `_id`, and the band already gives the frame, title and spacing.
+- **Docs:** a tag in `DocMarkdown`'s block tags and component map, loaded with `defineAsyncComponent` so the docs bundle grows only when a page uses it. Braced attribute values are JSON (`nodes={[{ "id": "you" }]}`), so the Markdown carries the same data as the props and the page JSON. A tag takes data attributes; hand-composed parts stay Vue.
+- **Registry and guard:** `packages/webkit/scripts/lib/content-channels.mjs` lists every content component with each channel wired, `pending` or out of scope with a reason; `build-catalog` stamps the wired ones as `channels`. `test/standards/content-channels.test.mjs` fails when a component in `chart/`, `code/`, `docs/` or `marketing/` is missing from it, when a declared tag or entry is not wired, or when a pending one got wired without moving it. The open gaps are in `packages/webkit/docs/reviews/content-channels.md`.
+- **Examples:** a component with all three shows them on its docs page: the Vue examples, a `markdown.vue` (`DocMarkdown` with the source) and a `page-entry.vue` that renders a `page-entry.json` through `SitePage` (`examples.json` names it in `json`, and the docs page prints the JSON under the example).
+
 ## Pages and their sections
 
 Which sections a page type opens with and which bands it uses for a given job. A section not named for a page type is free to use there; the "never" column is what the page type does not take. Each section spec repeats its own line under When to use / When NOT to use.

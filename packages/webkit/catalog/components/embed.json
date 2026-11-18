@@ -22,5 +22,8 @@
   "Pick the `ratio` that matches the source. A `video` ratio around a square form leaves bands of empty frame.",
   "Prefer `loading=\"lazy\"` behaviour for anything below the fold — it is the default here, and an embed is usually the heaviest thing on a marketing page.",
   "Do not embed something essential. A blocked or failed third-party frame leaves a hole the page cannot fill."
+ ],
+ "channels": [
+  "app"
  ]
 }

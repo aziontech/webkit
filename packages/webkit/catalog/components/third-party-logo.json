@@ -26,5 +26,9 @@
   "On a coloured fill (white, `--primary`), use `variant=\"knockout\"`: a fill does not follow the theme, so the ink must not either.",
   "On a surface that is dark in both themes, or among drawn diagram parts, use `variant=\"current\"` so the mark takes the surface's own ink.",
   "When the text beside the mark already names the company, set `decorative`."
+ ],
+ "channels": [
+  "app",
+  "site"
  ]
 }

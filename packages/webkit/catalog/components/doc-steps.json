@@ -18,5 +18,9 @@
   "Start each step title with the verb; keep the how in the step's body.",
   "Let the numbering be the document order — never encode a number into a title.",
   "Give a step a body only when the heading alone does not carry it; the rail stretches to cover whatever the body holds."
+ ],
+ "channels": [
+  "app",
+  "docs"
  ]
 }

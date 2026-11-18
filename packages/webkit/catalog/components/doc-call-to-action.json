@@ -16,5 +16,8 @@
  "bestPractices": [
   "One primary action; a secondary only when it is a real alternative (talk to sales).",
   "A one-line headline and a one-line subtitle."
+ ],
+ "channels": [
+  "app"
  ]
 }

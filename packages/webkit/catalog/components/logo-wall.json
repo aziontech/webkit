@@ -30,5 +30,9 @@
   "Put one statement in `aside`, not a second grid. The band's argument is _many customers, one of them talking_; two things of equal weight leave a reader with neither.",
   "Give the wall exactly six marks when `aside` is filled — two full rows of three squares beside the statement, and three rows of two between `lg` and `xl` — and a multiple of six when it is not, so the last row is never ragged.",
   "Reach for `variant: 'rectangle'` when the band names nine customers beside `aside`: three rows of three 3:2 cells at the height of the six-square wall. Nine is the count the rectangle wall is drawn for; without `aside` it runs six to a row like the square wall."
+ ],
+ "channels": [
+  "app",
+  "site"
  ]
 }

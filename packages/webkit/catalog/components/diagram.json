@@ -27,5 +27,9 @@
   "Do: for a vertical flow in a docs column (a command → the CLI → the API → the resources), use one `row`. In the column it stacks centred, every connector runs through the horizontal centre of both nodes and an edge label sits centred on its line.",
   "Don't: nudge nodes or labels with wrappers, margins or spacer nodes to centre a flow; the layout does it.",
   "Reach for `card` for platform pieces, `item` for models and providers, `pill` for a client, `tile` for an icon-only grid cell, and `app` for the consumer's own application."
+ ],
+ "channels": [
+  "app",
+  "site"
  ]
 }

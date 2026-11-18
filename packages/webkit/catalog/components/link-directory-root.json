@@ -28,5 +28,9 @@
   "Give every row in a column a `description`, or give none of them one; a single row without its line reads as a mistake rather than as brevity.",
   "Leave `href` empty for a destination that does not exist yet. The row still renders and still reads, and it does not answer the pointer or take focus.",
   "Inside a framed page column, set the surrounding `registration-frame` to `flush` so the column's rules stay one hairline each."
+ ],
+ "channels": [
+  "app",
+  "site"
  ]
 }

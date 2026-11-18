@@ -28,5 +28,8 @@
   "For a KPI strip that reads as one band (an overview's usage row), put the tiles in a `StatTileGroup`; do not hand-build the card, the grid or the dividers. Separate tiles are for figures that stand alone.",
   "Use `variant=\"mono\"` (default) for usage figures with a delta, `variant=\"sans\"` for a summary row of plain figures (requests, data transferred, error rate) above its charts. Keep one variant per row.",
   "Pass the delta as the raw percentage (`12.4`); the tile prints at most two decimals and drops trailing zeros (`+12.4%`, `+3%`)."
+ ],
+ "channels": [
+  "app"
  ]
 }

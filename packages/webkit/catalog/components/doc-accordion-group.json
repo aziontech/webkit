@@ -19,5 +19,9 @@
   "Write each title as the full question the reader would ask.",
   "Keep answers short; link out for anything longer than a few paragraphs.",
   "Open at most one entry by default."
+ ],
+ "channels": [
+  "app",
+  "docs"
  ]
 }

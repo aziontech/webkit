@@ -30,5 +30,9 @@
   "Set `--media-scroll-top` to the height of any sticky header above the band, or the first claim opens underneath it. Set it on a wrapper around the band rather than on the band's own tag: custom properties inherit, and the band is not a style seam.",
   "Leave `showProgress` on. It is the only thing telling a reader how much of the pin is left.",
   "Raise `dwell` for claims that carry code a reader must actually read; lower it for scenes that are grasped at a glance."
+ ],
+ "channels": [
+  "app",
+  "site"
  ]
 }

@@ -19,5 +19,9 @@
   "Give each release its own entry with a `title` when one date ships several things — one title per entry, the date repeated, rather than several product headings inside one entry.",
   "Keep headings inside an entry one level below the heading: the label (or the `title`, when set) is the entry's `h2`.",
   "Set `anchor` only when two entries share a label; otherwise let the id derive from the label so shared links match what readers see."
+ ],
+ "channels": [
+  "app",
+  "docs"
  ]
 }

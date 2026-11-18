@@ -21,6 +21,17 @@
       "name": "Topology",
       "summary": "A deployment topology from domains to storage, with the FlowDiagramBind companion in the `actions` slot: the policy can be changed or removed, the unbound error page offers Bind, and every pick waits for Apply.",
       "file": "topology.vue"
+    },
+    {
+      "name": "Markdown",
+      "summary": "The same data written in a docs page: `DocMarkdown` turns a `<FlowDiagram nodes={[…]} edges={[…]} />` tag into a real `FlowDiagram`. The attribute values are JSON, so a docs author copies the arrays from the API or a page entry and never imports the component.",
+      "file": "markdown.vue"
+    },
+    {
+      "name": "Page JSON",
+      "summary": "The same data in the marketing site's page JSON: `FlowDiagram` is a scene, so a band places it by name in its `scene` slot (here `console-showcase-section` with `variant: \"diagram\"`) and `SitePage` renders the entry with no code.",
+      "file": "page-entry.vue",
+      "json": "page-entry.json"
     }
   ]
 }

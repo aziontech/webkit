@@ -9,6 +9,7 @@ export const sceneAssets = {
   ConsoleTraceScene: () => import('./scenes/console-trace/console-trace-scene.vue'),
   FunctionsHeroCanvas: () => import('./scenes/runtime-api/runtime-api-scene.vue'),
   Diagram: () => import('../components/marketing/diagram/diagram.vue'),
+  FlowDiagram: () => import('../components/data/flow-diagram/flow-diagram.vue'),
   Illustration: () => import('../components/content/illustration/illustration.vue'),
   ConsoleMockup: () => import('../components/content/console-mockup/console-mockup.vue'),
   RuntimeApiCloud: () => import('./scenes/runtime-api/runtime-api-cloud.vue'),

@@ -30,5 +30,8 @@
   "Use the timeline view for a run with many spans or a narrow panel, the tree view to read names and durations as text, the waterfall when both the nesting and the timing matter.",
   "Bind `v-model:selected-key` when another view (a request path, a log line) selects the same span.",
   "Name the waterfall after the run (`aria-label=\"Trace of inv_7f21\"`)."
+ ],
+ "channels": [
+  "app"
  ]
 }

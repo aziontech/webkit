@@ -20,5 +20,8 @@
   "Use the same buckets as the chart behind it, about twelve to thirty points.",
   "Leave `fromZero` off for prices and latencies, where the shape matters more than the magnitude; turn it on for counts that are meaningful from zero.",
   "Give it an `ariaLabel` only when it stands without a nearby number; otherwise keep it decorative."
+ ],
+ "channels": [
+  "app"
  ]
 }

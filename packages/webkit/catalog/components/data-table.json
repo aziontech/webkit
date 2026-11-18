@@ -36,5 +36,8 @@
   "On a phone a console list keeps its grid and scrolls sideways (the default). Set `stackable` only for a short list read one record at a time on a narrow, phone-first surface (a marketing listing, a summary in a side panel), where a card per row reads better than a scroll; never on a resource index, a log or a list compared across columns.",
   "Type the rows, not the slot: pass a typed `data` (`ref<Domain[]>([])`, or a literal array) and destructure `#cell-name=\"{ row, value }\"` — `row` is a `Domain` and `value` is `Domain['name']`. Keep a column's `id` equal to its `accessorKey` (or leave `id` out) so the typed `value` is the field the cell shows. Do not annotate the slot scope by hand or cast `row as Domain`; a wrong field (`row.nmae`) should be a type error.",
   "Place `TableSearch`, `TableFilter`, `CollectionPreferences`, `TableExportButton` and `TableRefreshButton` in the `toolbar` slot with no `v-model` wiring — they read the table from context. Import each from its own entry (`@aziontech/webkit/table-search`); they are not attached to the `table` compound."
+ ],
+ "channels": [
+  "app"
  ]
 }

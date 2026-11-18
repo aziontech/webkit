@@ -27,5 +27,9 @@
   "Give `logo` a mark that carries its own contrast. It is drawn as-is — no filter, one URL, no per-theme swap — so a mark drawn in a single ink reads on one theme and disappears on the other. Use the `mark` slot instead when the mark is a component that owns its own theming.",
   "Use `highlights` to lift the measured claim out of a quotation — the figure and what it measured (`86% faster load times`), not a whole clause. Every phrase must appear in `text` verbatim; the rest of the sentence recedes to the muted ink, so a quotation that highlights most of itself highlights nothing.",
   "Put a trailing control in `actions` rather than beside the quote. The band floors it, which is what keeps a row of quotes aligned on their controls whatever each quotation's length."
+ ],
+ "channels": [
+  "app",
+  "site"
  ]
 }

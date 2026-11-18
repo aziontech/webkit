@@ -359,6 +359,7 @@ export function getComponent(catalog, name) {
     kind: e.kind,
     category: e.category ?? null,
     surface: e.surface ?? null,
+    channels: e.channels ?? null,
     structure: e.structure ?? null,
     import: e.import,
     treeShakeableImport: e.treeShakeableImport ?? e.import,

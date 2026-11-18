@@ -9,13 +9,18 @@
 
   const props = defineProps<{
     dir: string
-    example: { name: string; summary: string; file: string }
+    example: { name: string; summary: string; file: string; json?: string }
     anchor: string
   }>()
 
   const live = computed(() => cached<Component>(keys.example(props.dir, props.example.file)))
   const source = computed(() =>
     cached<Highlighted>(keys.exampleSource(props.dir, props.example.file))
+  )
+  const data = computed(() =>
+    props.example.json
+      ? cached<Highlighted>(keys.exampleSource(props.dir, props.example.json))
+      : undefined
   )
   const title = computed(() => props.example.name.replace(/([a-z0-9])([A-Z])/g, '$1 $2'))
 </script>
@@ -56,6 +61,11 @@
         v-if="source"
         :source="source"
         :label="`examples/${dir}/${example.file}`"
+      />
+      <CodeView key="code-view-2"
+        v-if="data && example.json"
+        :source="data"
+        :label="`examples/${dir}/${example.json}`"
       />
     </div>
   </section>

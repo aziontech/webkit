@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 9
 template: 2
-checksum: fdf9413a8316e3fbeac596411a77acd52eb9cf4373ed1e1b49ac8044bb6aa769
+checksum: 87e4148d47008e512ccbbaffc6fc069de295c65c7929fc57a2cebf2ac805c66e
 created: 2026-06-25
 last_updated: 2026-11-18
 ---
@@ -75,6 +75,26 @@ The one in-product diagram (owner decision RV-Y1, 2026-11-18): it kept the old F
   </FlowDiagram>
 </template>
 ```
+
+**Three ways in** (decision RV-F2-1, rule `webkit-content-channels`). The same data renders from a docs page and from the site's page JSON:
+
+```mdx
+<FlowDiagram
+  aria-label="Request path"
+  nodes={[{ "id": "you", "title": "You" }, { "id": "azion", "title": "Azion" }]}
+  edges={[{ "from": "you", "to": "azion", "label": "18 ms" }]}
+/>
+```
+
+```json
+{
+  "_id": "console-showcase-section",
+  "props": { "variant": "diagram", "title": "Every request takes the shortest path" },
+  "scenes": { "scene": { "component": "FlowDiagram", "props": { "nodes": [], "edges": [] } } }
+}
+```
+
+Markdown takes the data mode only (the composed parts stay Vue); `DocMarkdown` loads the diagram as an async chunk. On the site the diagram is the `FlowDiagram` scene inside a band, never an `_id` of its own.
 
 The root is also published standalone as `@aziontech/webkit/flow-diagram-root`, and every part as `@aziontech/webkit/flow-diagram-<part>`. The data-mode card is loaded as a lazy chunk, so a composed diagram never downloads it.
 
@@ -195,10 +215,13 @@ The root emits nothing; the bind events live on the `flow-diagram-bind` companio
 - Composed — the naked root composed by hand. Justified: the composition is the second half of the API.
 - Request path — `uniform` and the responsive rail. Justified: the edge error page's request path, the old Uniform example.
 - Topology — the bind companion. Justified: replaces the removed TopologyDiagram's Default and Binding examples.
+- Markdown — the same data as a `<FlowDiagram>` tag rendered by `DocMarkdown`. Justified: the docs channel (RV-F2-1).
+- Page JSON — the same data as a `FlowDiagram` scene in a `console-showcase-section` entry rendered by `SitePage`, with the JSON shown. Justified: the site channel (RV-F2-1).
 
 ## Decisions and open questions
 
 - **RV-Y1 (decided 2026-11-18, owner)** — one diagram named `flow-diagram` replaces the old `flow-diagram` and `topology-diagram` (removed in 6.0; `Parallel` is now `Group`, `levels` became `nodes` + `edges`, see MIGRATION_V6.md). The bind control is the `flow-diagram-bind` companion, status is a dot and text, and `responsive` stacks on phones by default.
+- **RV-F2-1 (decided 2026-11-18, owner)** — usable from Vue, Markdown and page JSON: `<FlowDiagram nodes edges />` in `DocMarkdown`, and the `FlowDiagram` scene in `SitePage` (no `flow-diagram-section`: only page sections take an `_id`).
 - Rows with controls get `--spacing-sm` below the buttons (owner, 2026-11-18: the + button nearly touched the divider).
 
 ## Constraints — DO NOT

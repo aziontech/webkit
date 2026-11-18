@@ -32,5 +32,8 @@
   "Put a `CopyButton` after an ID or key, never in place of the visible value.",
   "Use the `info` slot for a short `Hint` that explains the key; long explanations belong in the page, not in a tooltip.",
   "Drive `loading` from the data request so the labels stay in place and only the values shimmer."
+ ],
+ "channels": [
+  "app"
  ]
 }

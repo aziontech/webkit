@@ -20,5 +20,8 @@
   "Leave periods with no data without a severity; they render neutral rather than pretending to be healthy.",
   "Keep the period count fixed for a given view (90 days, 24 hours) so strips stacked in a list line up.",
   "Put the summary figure (99.98% uptime) beside the strip; the strip shows where, the figure shows how much."
+ ],
+ "channels": [
+  "app"
  ]
 }

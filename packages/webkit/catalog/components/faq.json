@@ -24,5 +24,9 @@
   "Keep answers to a couple of sentences and link out for the rest — use the `answer` slot when an answer needs a link or richer content.",
   "Give every item a stable `value`. It is the accordion's open-state key, so a reordered or re-keyed list loses whatever the reader had open.",
   "Leave the first item closed. An open answer on load pushes the rest of the list down and hides the range of questions."
+ ],
+ "channels": [
+  "app",
+  "site"
  ]
 }

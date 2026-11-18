@@ -18,5 +18,9 @@
   "Leave `mobileColumns` at 1 unless every cell is a mark plus one word — a card with copy needs the whole phone width.",
   "Let an incomplete last row be empty; do not stretch the last card to fill it.",
   "Inside a `module` with `padded` off, place the group directly in the body: the header's bottom rule and the column's side rules become the group's top and sides, the group drops its own top and side rules and top corner marks, and the cells' rings land on those rules. The group's bottom rule closes the module, so the module after it passes `divided` as `false` — every seam stays one hairline."
+ ],
+ "channels": [
+  "app",
+  "docs"
  ]
 }

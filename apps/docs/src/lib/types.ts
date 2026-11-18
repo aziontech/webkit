@@ -26,7 +26,7 @@ export type ComponentDoc = {
   events: Row[]
   slots: Row[]
   subcomponents: { name: string; import: string; props: Row[] }[]
-  examples: { name: string; summary: string; file: string }[]
+  examples: { name: string; summary: string; file: string; json?: string }[]
   exampleDir: string | null
   spec: Record<string, string>
 }

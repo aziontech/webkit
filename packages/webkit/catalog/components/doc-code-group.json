@@ -21,5 +21,9 @@
   "Do: show a standalone printout (a deploy log) with `type=\"output\"`.",
   "Don't: write output into `code` — never `curl -I https://example.com\\n# HTTP/2 200`, never `$ azion version\\nAzion CLI 4.23.0`. The lint `webkit/no-output-in-command` warns on it.",
   "Don't: turn the label header off on a docs page."
+ ],
+ "channels": [
+  "app",
+  "docs"
  ]
 }
