@@ -25,7 +25,7 @@
 
 ## Related
 
-- `DocOnThisPage` — the rail that points at the ids.
+- `DocTableOfContents` — the rail that points at the ids.
 - `useHeadingNavigation` — the page-provided scroll handler.
 - `DocProse` — skips `[data-doc-anchor]` in its link rules.
 

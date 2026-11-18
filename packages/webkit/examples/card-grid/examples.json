@@ -1,6 +1,6 @@
 {
   "component": "card-grid",
-  "title": "Components/Marketing/Primitives/CardGrid",
+  "title": "Components/Layout/CardGrid",
   "examples": [
     {
       "name": "Default",

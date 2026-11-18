@@ -1,6 +1,6 @@
 {
   "component": "bento-grid",
-  "title": "Components/Marketing/Primitives/BentoGrid",
+  "title": "Components/Layout/BentoGrid",
   "examples": [
     {
       "name": "Default",

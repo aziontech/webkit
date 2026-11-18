@@ -1,6 +1,6 @@
 {
   "component": "hero-title",
-  "title": "Components/Marketing/Primitives/HeroTitle",
+  "title": "Components/Marketing/Elements/HeroTitle",
   "examples": [
     {
       "name": "Default",

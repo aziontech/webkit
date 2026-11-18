@@ -1,6 +1,6 @@
 {
   "component": "quote-tabs",
-  "title": "Components/Marketing/Primitives/QuoteTabs",
+  "title": "Components/Marketing/Elements/QuoteTabs",
   "examples": [
     {
       "name": "Default",

@@ -1,6 +1,6 @@
 {
-  "component": "sticky-stack",
-  "title": "Components/Marketing/Primitives/StickyStack",
+  "component": "media-scroll",
+  "title": "Components/Marketing/Elements/MediaScroll",
   "examples": [
     {
       "name": "Default",

@@ -1,13 +1,13 @@
 ---
 name: carousel
-category: marketing
+category: content
 structure: composition
 status: implemented
 spec_version: 4
 template: 2
 checksum: ae337c3d4c73d8a4fa883cb52f57693667d2a1072a30085f683b07de3474c8b2
 created: 2026-09-22
-last_updated: 2026-11-16
+last_updated: 2026-11-18
 ---
 
 # Carousel — Component Spec

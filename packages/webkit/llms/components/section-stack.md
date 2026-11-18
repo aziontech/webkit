@@ -24,7 +24,7 @@
 
 ## Don’t
 
-- For a run where the scroll position should decide which claim is open beside one media pane → use `sticky-stack`.
+- For a run where the scroll position should decide which claim is open beside one media pane → use `media-scroll`.
 - For peer claims a reader jumps between at will → use `media-tabs`.
 - For a single band → frame it with `registration-frame` directly, or set `framed` on the `media-split`.
 - For a grid of cards → use `card-grid`.
@@ -33,7 +33,7 @@
 ## Related
 
 - [media-split](media-split.md) — the band this stack holds, typically at `size="large"`. Inside the stack it frames its own two cells, so leave its `framed` off.
-- [sticky-stack](sticky-stack.md) — the scroll-driven sibling: one pinned frame whose open claim follows the scroll, instead of bands that pile up.
+- [media-scroll](media-scroll.md) — the scroll-driven sibling: one pinned frame whose open claim follows the scroll, instead of bands that pile up.
 - [registration-frame](registration-frame.md) — the frame each band is drawn in.
 - [section-gap](section-gap.md) — the spacer usually above the stack; pass `flush` so the first band does not draw a second rule under it.
 

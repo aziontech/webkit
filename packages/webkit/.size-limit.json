@@ -273,8 +273,8 @@
     "limit": "30.7 KB"
   },
   {
-    "name": "doc-on-this-page",
-    "path": "src/components/docs/doc-on-this-page/doc-on-this-page.vue",
+    "name": "doc-table-of-contents",
+    "path": "src/components/docs/doc-table-of-contents/doc-table-of-contents.vue",
     "limit": "4.25 KB"
   },
   {
@@ -305,12 +305,12 @@
   },
   {
     "name": "card-grid-root",
-    "path": "src/components/marketing/card-grid/card-grid.vue",
+    "path": "src/components/layout/card-grid/card-grid.vue",
     "limit": "1.5 KB"
   },
   {
     "name": "carousel-root",
-    "path": "src/components/marketing/carousel/carousel.vue",
+    "path": "src/components/content/carousel/carousel.vue",
     "limit": "4 KB"
   },
   {
@@ -331,13 +331,13 @@
     "entryOnly": true
   },
   {
-    "name": "sticky-stack",
-    "path": "src/components/marketing/sticky-stack/sticky-stack.vue",
+    "name": "media-scroll",
+    "path": "src/components/marketing/media-scroll/media-scroll.vue",
     "limit": "5.75 KB"
   },
   {
     "name": "texture",
-    "path": "src/components/marketing/texture/texture.vue",
+    "path": "src/components/content/texture/texture.vue",
     "limit": "2 KB"
   },
   {
@@ -373,7 +373,7 @@
   },
   {
     "name": "embed",
-    "path": "src/components/marketing/embed/embed.vue",
+    "path": "src/components/content/embed/embed.vue",
     "limit": "0.65 KB"
   },
   {
@@ -426,7 +426,7 @@
   },
   {
     "name": "bento-grid-root",
-    "path": "src/components/marketing/bento-grid/bento-grid.vue",
+    "path": "src/components/layout/bento-grid/bento-grid.vue",
     "limit": "1 KB"
   },
   {
@@ -2104,32 +2104,32 @@
   },
   {
     "name": "bento-grid",
-    "path": "src/components/marketing/bento-grid/index.ts",
+    "path": "src/components/layout/bento-grid/index.ts",
     "limit": "2.25 KB"
   },
   {
     "name": "bento-grid-cell",
-    "path": "src/components/marketing/bento-grid/bento-grid-cell/bento-grid-cell.vue",
+    "path": "src/components/layout/bento-grid/bento-grid-cell/bento-grid-cell.vue",
     "limit": "1.75 KB"
   },
   {
     "name": "carousel",
-    "path": "src/components/marketing/carousel/index.ts",
+    "path": "src/components/content/carousel/index.ts",
     "limit": "4.95 KB"
   },
   {
     "name": "carousel-item",
-    "path": "src/components/marketing/carousel/carousel-item/carousel-item.vue",
+    "path": "src/components/content/carousel/carousel-item/carousel-item.vue",
     "limit": "0.75 KB"
   },
   {
     "name": "carousel-previous",
-    "path": "src/components/marketing/carousel/carousel-previous/carousel-previous.vue",
+    "path": "src/components/content/carousel/carousel-previous/carousel-previous.vue",
     "limit": "1.8 KB"
   },
   {
     "name": "carousel-next",
-    "path": "src/components/marketing/carousel/carousel-next/carousel-next.vue",
+    "path": "src/components/content/carousel/carousel-next/carousel-next.vue",
     "limit": "1.8 KB"
   },
   {
@@ -2524,12 +2524,12 @@
   },
   {
     "name": "card-grid",
-    "path": "src/components/marketing/card-grid/index.ts",
+    "path": "src/components/layout/card-grid/index.ts",
     "limit": "2.8 KB"
   },
   {
     "name": "card-grid-cell",
-    "path": "src/components/marketing/card-grid/card-grid-cell/card-grid-cell.vue",
+    "path": "src/components/layout/card-grid/card-grid-cell/card-grid-cell.vue",
     "limit": "1.65 KB"
   }
 ]

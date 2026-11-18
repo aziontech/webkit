@@ -198,7 +198,7 @@ one continuous frame.
 
 ## 4. The hairline box grid — `CardGrid variant="divider"`
 
-[`card-grid.vue`](../../packages/webkit/src/components/marketing/card-grid/card-grid.vue)
+[`card-grid.vue`](../../packages/webkit/src/components/layout/card-grid/card-grid.vue)
 
 The signature industrial module: a grid whose internal rules are **gaps**, not borders.
 
@@ -222,7 +222,7 @@ background, separated by real gutters.
 **Cells are square.** `ComponentGridCell` uses `rounded-[var(--shape-flat)]` — the interactive
 component showcase grid is deliberately unrounded, with a dashed `--primary` ring and a corner label
 pinned at `top-0 left-0` on hover/focus-within.
-([`card-grid-cell.vue`](../../packages/webkit/src/components/marketing/card-grid/card-grid-cell/card-grid-cell.vue); the hub's
+([`card-grid-cell.vue`](../../packages/webkit/src/components/layout/card-grid/card-grid-cell/card-grid-cell.vue); the hub's
 component showcase grid moves to the docs site, M2.5.)
 
 ---

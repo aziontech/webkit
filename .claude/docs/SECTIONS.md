@@ -1,6 +1,6 @@
 # Page sections — `@aziontech/webkit/<name>`
 
-A **page section** is a complete marketing block (a hero, a FAQ band, a pricing grid, the site footer) that the marketing site places on a page from JSON. Every section is a webkit component under `packages/webkit/src/components/section/<name>/`, published on its own at `@aziontech/webkit/<name>`. This document is the convention; the rules it leans on are [`imports.md`](../rules/imports.md) § Marketing — primitives and page sections and [`component-structure.md`](../rules/component-structure.md).
+A **page section** is a complete marketing block (a hero, a FAQ band, a pricing grid, the site footer) that the marketing site places on a page from JSON. Every section is a webkit component under `packages/webkit/src/components/section/<name>/`, published on its own at `@aziontech/webkit/<name>`. This document is the convention; the rules it leans on are [`imports.md`](../rules/imports.md) § Marketing — elements and page sections and [`component-structure.md`](../rules/component-structure.md).
 
 ## The contract with the site
 
@@ -30,11 +30,11 @@ A whole page renders through `SitePage` (`@aziontech/webkit/site-page`), the pac
 
 **Retired `_id`s keep rendering.** The site's page JSON lives outside this repo, so when a section is merged into another or renamed, its old `_id` gets an entry in `sitePageSectionAliases` (same file): the `target` section and a `props` transform from the old shape to the new one (`{ _id: 'hero-copy-on-top-art', props }` renders `hero-section` with `variant: 'copy-on-top-art'`). Add the alias and a `site-page` test row in the same change as the merge. It is the one alias the package keeps; the old export, its types and its props are removed, not re-exported.
 
-## Section or primitive
+## Section or element
 
-Most bands exist twice on purpose: a **section** (`faq-section`, `stats-section`, `client-quotes-section`, `hero-section`, `closing-call-to-action-section`, `media-split-section`, `site-footer-section`) and the **primitive** it composes (`faq`, `stats`, `quote-tabs`, `hero`, `call-to-action`, `media-split`, `footer`). The rule that picks one:
+Most bands exist twice on purpose: a **section** (`faq-section`, `stats-section`, `client-quotes-section`, `hero-section`, `closing-call-to-action-section`, `media-split-section`, `site-footer-section`) and the **element** it composes (`faq`, `stats`, `quote-tabs`, `hero`, `call-to-action`, `media-split`, `footer`). The rule that picks one:
 
-> Rendering page JSON, or you need a whole band with no custom content → the section. Building an SFC by hand, needing slots, or nesting inside another band → the primitive.
+> Rendering page JSON, or you need a whole band with no custom content → the section. Building an SFC by hand, needing slots, or nesting inside another band → the element.
 
 Customer proof, for example: `Quote` for one testimonial; `ClientQuotesSection` for a band of quotes the reader browses by client; `LogoWallSection` for customer logos plus one featured quote; `RecognitionMarqueeSection` only for a looping row of analyst or press quotes; `QuoteTabs` in a hand-built SFC that needs the `#actions` slot.
 

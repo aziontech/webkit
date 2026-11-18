@@ -4,7 +4,7 @@
 
 - Import: `import CardGridRoot from '@aziontech/webkit/card-grid-root'`
 - Compound import (dot notation, not tree-shakeable): `import CardGrid from '@aziontech/webkit/card-grid'`
-- Category: marketing · Surface: site · Structure: composition
+- Category: layout · Surface: site · Structure: composition
 - API as JSON: [card-grid.json](card-grid.json)
 
 ## When to use

@@ -30,7 +30,7 @@
 - For a set of claims rather than destinations → use `card-grid` with `feature-item`, or `bento-grid` when the claims are unequal.
 - For the site-wide link directory at the foot of the page → use `footer`, which already lays its columns out.
 - For a trail back up the current hierarchy → use `breadcrumb`.
-- For the headings of the page currently being read → use `doc-on-this-page`.
+- For the headings of the page currently being read → use `doc-table-of-contents`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related

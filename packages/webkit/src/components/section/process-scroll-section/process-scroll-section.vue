@@ -2,6 +2,7 @@
   import { computed, ref, useAttrs } from 'vue'
 
   import { usePinnedRow } from '../../../composables/use-pinned-row'
+  import Texture from '../../content/texture/texture.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import type {
@@ -9,7 +10,6 @@
     SectionTitleDescriptionWidth
   } from '../../marketing/section-title/section-title.vue'
   import SectionTitle from '../../marketing/section-title/section-title.vue'
-  import Texture from '../../marketing/texture/texture.vue'
 
   defineOptions({ name: 'ProcessScrollSection', inheritAttrs: false })
 

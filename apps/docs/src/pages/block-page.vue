@@ -12,7 +12,7 @@
 
   import BlockFrame from '../components/block-frame.vue'
   import CodeView from '../components/code-view.vue'
-  import OnThisPage from '../components/on-this-page.vue'
+  import TableOfContents from '../components/table-of-contents.vue'
   import RawHtml from '../components/raw-html.vue'
   import { blockMarkdown, copyText } from '../lib/copy'
   import { cached, findBlock, index, keys } from '../lib/data'
@@ -403,6 +403,6 @@
         </DocProse>
       </section>
     </article>
-    <OnThisPage :items="toc" />
+    <TableOfContents :items="toc" />
   </div>
 </template>

@@ -37,9 +37,11 @@ export const CATEGORY_LEADS: Record<string, string> = {
   code: 'Source and log surfaces: code blocks and log views for monospaced content.',
   ai: 'Conversation pieces: messages, prompts, reasoning, sources and tool calls.',
   provider: 'Providers that set locale, direction and context for the rest.',
-  docs: 'Doc page chrome: headers, callouts, steps, cards and on-this-page navigation.',
-  marketing: 'Marketing building blocks: heroes, grids, columns and the page frame.',
-  section: 'Whole marketing page sections, each named by the id a page writes in its sections.',
+  docs: 'Documentation site pieces: page chrome, callouts, steps, cards and the table of contents.',
+  marketing:
+    'Marketing site pieces you compose by hand: heroes, bands, quotes, media and the page frame.',
+  section:
+    'Ready marketing page sections, each named by the id a page writes in its sections.',
   scenes: 'Illustrated scenes for the marketing site.'
 }
 
@@ -50,7 +52,7 @@ const CATEGORY_LABELS: Record<string, string> = {
   docs: 'Docs',
   input: 'Inputs',
   provider: 'Providers',
-  section: 'Sections'
+  section: 'Page sections'
 }
 
 export function categoryLabel(category: string): string {

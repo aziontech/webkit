@@ -3,7 +3,7 @@
  "binding": "Embed",
  "import": "@aziontech/webkit/embed",
  "treeShakeableImport": "@aziontech/webkit/embed",
- "category": "marketing",
+ "category": "content",
  "surface": "site",
  "structure": "monolithic",
  "compoundRoot": false,

@@ -4,8 +4,8 @@
   import Button from '../../action/button/button.vue'
   import ToggleGroup from '../../action/toggle-group/toggle-group.vue'
   import PricingCard from '../../content/pricing-card/pricing-card.vue'
+  import CardGrid from '../../layout/card-grid/card-grid.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
-  import CardGrid from '../../marketing/card-grid/card-grid.vue'
   import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
 
   defineOptions({

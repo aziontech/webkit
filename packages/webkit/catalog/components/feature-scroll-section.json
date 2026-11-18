@@ -1,5 +1,5 @@
 {
- "purpose": "The walkthrough band of a product page: a large section title over one screen per feature. From the large breakpoint up the features scroll through a sticky stack — the copy advances while the feature's live scene or illustration stays pinned in a framed, textured stage with one small action under each step (a step may pin a one-file code sample instead, for a code-led walkthrough); below it the same features are a three-column grid of media tiles. It is a page section — the site places it from a `{ _id: 'feature-scroll-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `registration-frame`, `card-grid`, `media-tile`, `illustration`, `code-block`, `sticky-stack`, `texture`, `button` and the webkit scene assets (a `ConsoleMockup` console fragment, most often).",
+ "purpose": "The walkthrough band of a product page: a large section title over one screen per feature. From the large breakpoint up the features scroll through a sticky stack — the copy advances while the feature's live scene or illustration stays pinned in a framed, textured stage with one small action under each step (a step may pin a one-file code sample instead, for a code-led walkthrough); below it the same features are a three-column grid of media tiles. It is a page section — the site places it from a `{ _id: 'feature-scroll-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `registration-frame`, `card-grid`, `media-tile`, `illustration`, `code-block`, `media-scroll`, `texture`, `button` and the webkit scene assets (a `ConsoleMockup` console fragment, most often).",
  "useWhen": [
   "Use FeatureScrollSection for the product-page walkthrough, one pinned screen (scene or code) per feature.",
   "To walk through four to six capabilities of one product, each with a picture of its own.",
@@ -7,10 +7,10 @@
  ],
  "avoidWhen": [
   "For three reasons with no scroll story → use `feature-tiles-section`.",
-  "In a hand-built SFC that needs its own media slot → use `sticky-stack` directly."
+  "In a hand-built SFC that needs its own media slot → use `media-scroll` directly."
  ],
  "related": [
-  "`sticky-stack` — the scroll engine the large layout runs on.",
+  "`media-scroll` — the scroll engine the large layout runs on.",
   "`media-tile` — the cell the small layout renders each feature with."
  ],
  "bestPractices": [

@@ -2,15 +2,15 @@
   import { computed, useAttrs } from 'vue'
 
   import Button from '../../action/button/button.vue'
+  import Texture from '../../content/texture/texture.vue'
+  import CardGrid from '../../layout/card-grid/card-grid.vue'
+  import CardGridCell from '../../layout/card-grid/card-grid-cell/card-grid-cell.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import ScrollArea from '../../layout/scroll-area/scroll-area.vue'
-  import CardGrid from '../../marketing/card-grid/card-grid.vue'
-  import CardGridCell from '../../marketing/card-grid/card-grid-cell/card-grid-cell.vue'
   import Marquee from '../../marketing/marquee/marquee.vue'
   import MediaSplit from '../../marketing/media-split/media-split.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
-  import Texture from '../../marketing/texture/texture.vue'
 
   defineOptions({
     name: 'TemplateGallerySection',

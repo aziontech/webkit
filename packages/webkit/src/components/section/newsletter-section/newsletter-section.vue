@@ -5,13 +5,13 @@
   import * as en from '../../../locales/en'
   import Button from '../../action/button/button.vue'
   import Eyebrow from '../../content/eyebrow/eyebrow.vue'
+  import Texture from '../../content/texture/texture.vue'
   import Alert from '../../feedback/alert/alert.vue'
   import Field from '../../input/field/field.vue'
   import FieldDescription from '../../input/field/field-description/field-description.vue'
   import Input from '../../input/input/input.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
-  import Texture from '../../marketing/texture/texture.vue'
 
   defineOptions({
     name: 'NewsletterSection',

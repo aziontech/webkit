@@ -5,9 +5,9 @@
   import Button from '../../action/button/button.vue'
   import type { ConsoleMockupName } from '../../content/console-mockup/console-mockup.vue'
   import Illustration from '../../content/illustration/illustration.vue'
+  import type { TextureVariant } from '../../content/texture/texture.vue'
   import MediaSplit from '../../marketing/media-split/media-split.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
-  import type { TextureVariant } from '../../marketing/texture/texture.vue'
 
   defineOptions({
     name: 'MediaSplitSection',

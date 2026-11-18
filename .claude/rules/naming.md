@@ -496,6 +496,42 @@ Frontmatter is governed by [`authoring-docs.md`](./authoring-docs.md).
 | `Naming`                           | `Naming (2.7) — kebab-case English ids` |
 | `Blocks — every block has intents` | `Patterns (G1) — every template story`  |
 
+## 24. Website components — docs, marketing and page sections
+
+The website-facing components sit in three folders, and the name shape says which one a component
+is in. The namespace is flat (`@aziontech/webkit/<name>`), and the plain names (`tabs`,
+`accordion`, `card`, `hero`, `pagination`) already belong to other components, so the surface or
+the level goes into the name only where it has to.
+
+| Folder | What it holds | Name shape | Example |
+| --- | --- | --- | --- |
+| `docs/` | pieces of the documentation site | `doc-<thing>`; the `<thing>` is the MDX tag `DocMarkdown` renders, otherwise a noun | `doc-callout` (`<Callout>`), `doc-card-group` (`<CardGroup>`), `doc-table-of-contents` |
+| `marketing/` | marketing-site pieces composed by hand, with slots | the plain noun | `hero`, `faq`, `quote`, `media-tabs`, `section-title` |
+| `section/` | whole marketing bands placed from page JSON, props only | `<what>-section`, the same string as the page `_id` | `faq-section`, `hero-section` |
+
+- **The prefix covers the whole docs folder.** Every docs piece starts with `doc-`, even where the
+  plain name is free (`doc-prose`, `doc-code-group`); a docs piece never drops it, and nothing
+  outside `docs/` takes it.
+- **A name carries a noun**, never the label a reader sees or a behaviour: `doc-table-of-contents`,
+  not `doc-on-this-page`; `media-scroll`, not `sticky-stack`.
+- **A generic piece leaves the website folders.** A grid, a carousel, an embed or a texture that an
+  app or the docs site uses too lives in `layout/` or `content/`, under its plain name; the
+  catalog still marks its surface `site` where it is styled for the site.
+- **A section pairs with the piece it builds on** where one exists: `faq` / `faq-section`,
+  `media-tabs` / `feature-tabs-section`, `media-scroll` / `feature-scroll-section`.
+
+| ✅ | ❌ |
+| --- | --- |
+| `doc-steps` | `steps` in `docs/` (no prefix) |
+| `doc-table-of-contents` | `doc-on-this-page` (the heading's text) |
+| `media-scroll` | `sticky-stack` (a behaviour) |
+| `layout/card-grid` | `marketing/card-grid` (a generic grid) |
+
+> Docusaurus prefixes its doc-page parts with `Doc` because one theme serves the docs and the
+> blog; Fumadocs (`DocsPage`) and VitePress (`VPDoc`) do the same. Tailwind Plus splits Marketing
+> into Elements and Page Sections, the same split as `marketing/` and `section/`. The review is
+> `packages/webkit/docs/reviews/website-components-naming.md`.
+
 ## How it is checked
 
 One engine checks every rule that a machine can decide, and every rule blocks: the four
@@ -518,6 +554,7 @@ One engine checks every rule that a machine can decide, and every rule blocks: t
 | `part-word`        | part suffix in the closed list or a declared domain part; `Body` placement             | N8             |
 | `part-export`      | every part folder has its `<root>-<part>` export                                       | N8             |
 | `section-suffix`   | every component in `src/components/section/` ends in `-section`                        | N12            |
+| `docs-prefix`      | every component in `src/components/docs/` starts with `doc-`, and only those do        | WN04           |
 | `example-file`     | first example is `default.vue`; no banned example file names                           | N13            |
 | `prop-name`        | prop names against the vocabulary (specs and `.vue`)                                   | N1, N5, N6     |
 | `prop-value`       | value sets, `Severity`-derived types, `left`/`right` only in `PHYSICAL_EDGE_TYPES`     | N2, N3, N5, N7 |

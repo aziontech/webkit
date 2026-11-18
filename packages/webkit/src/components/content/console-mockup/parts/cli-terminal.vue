@@ -2,7 +2,7 @@
   import { computed, onMounted, onScopeDispose, ref, shallowRef } from 'vue'
 
   import CodeBlock, { type CodeBlockTab } from '../../../code/code-block/code-block.vue'
-  import Texture from '../../../marketing/texture/texture.vue'
+  import Texture from '../../../content/texture/texture.vue'
   import { typeInto, useSceneScript } from '../composables/use-scene-script'
   import {
     TERMINAL_SCRIPTS,

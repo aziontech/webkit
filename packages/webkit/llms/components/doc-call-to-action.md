@@ -24,7 +24,7 @@
 
 ## Related
 
-- `DocOnThisPage` — the rail it closes.
+- `DocTableOfContents` — the rail it closes.
 - `RegistrationFrame` — the frame.
 - `CallToAction` — the marketing closing band.
 

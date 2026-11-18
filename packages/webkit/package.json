@@ -899,9 +899,9 @@
       "types": "./types/components/docs/doc-markdown/doc-markdown.vue.d.ts",
       "default": "./src/components/docs/doc-markdown/doc-markdown.vue"
     },
-    "./doc-on-this-page": {
-      "types": "./types/components/docs/doc-on-this-page/doc-on-this-page.vue.d.ts",
-      "default": "./src/components/docs/doc-on-this-page/doc-on-this-page.vue"
+    "./doc-table-of-contents": {
+      "types": "./types/components/docs/doc-table-of-contents/doc-table-of-contents.vue.d.ts",
+      "default": "./src/components/docs/doc-table-of-contents/doc-table-of-contents.vue"
     },
     "./doc-page-header": {
       "types": "./types/components/docs/doc-page-header/doc-page-header.vue.d.ts",
@@ -1420,16 +1420,16 @@
       "default": "./src/components/marketing/marquee/marquee.vue"
     },
     "./bento-grid": {
-      "types": "./types/components/marketing/bento-grid/index.d.ts",
-      "default": "./src/components/marketing/bento-grid/index.ts"
+      "types": "./types/components/layout/bento-grid/index.d.ts",
+      "default": "./src/components/layout/bento-grid/index.ts"
     },
     "./bento-grid-root": {
-      "types": "./types/components/marketing/bento-grid/bento-grid.vue.d.ts",
-      "default": "./src/components/marketing/bento-grid/bento-grid.vue"
+      "types": "./types/components/layout/bento-grid/bento-grid.vue.d.ts",
+      "default": "./src/components/layout/bento-grid/bento-grid.vue"
     },
     "./bento-grid-cell": {
-      "types": "./types/components/marketing/bento-grid/bento-grid-cell/bento-grid-cell.vue.d.ts",
-      "default": "./src/components/marketing/bento-grid/bento-grid-cell/bento-grid-cell.vue"
+      "types": "./types/components/layout/bento-grid/bento-grid-cell/bento-grid-cell.vue.d.ts",
+      "default": "./src/components/layout/bento-grid/bento-grid-cell/bento-grid-cell.vue"
     },
     "./call-to-action": {
       "types": "./types/components/marketing/call-to-action/call-to-action.vue.d.ts",
@@ -1444,24 +1444,24 @@
       "default": "./src/components/marketing/stats/stats.vue"
     },
     "./carousel": {
-      "types": "./types/components/marketing/carousel/index.d.ts",
-      "default": "./src/components/marketing/carousel/index.ts"
+      "types": "./types/components/content/carousel/index.d.ts",
+      "default": "./src/components/content/carousel/index.ts"
     },
     "./carousel-root": {
-      "types": "./types/components/marketing/carousel/carousel.vue.d.ts",
-      "default": "./src/components/marketing/carousel/carousel.vue"
+      "types": "./types/components/content/carousel/carousel.vue.d.ts",
+      "default": "./src/components/content/carousel/carousel.vue"
     },
     "./carousel-item": {
-      "types": "./types/components/marketing/carousel/carousel-item/carousel-item.vue.d.ts",
-      "default": "./src/components/marketing/carousel/carousel-item/carousel-item.vue"
+      "types": "./types/components/content/carousel/carousel-item/carousel-item.vue.d.ts",
+      "default": "./src/components/content/carousel/carousel-item/carousel-item.vue"
     },
     "./carousel-previous": {
-      "types": "./types/components/marketing/carousel/carousel-previous/carousel-previous.vue.d.ts",
-      "default": "./src/components/marketing/carousel/carousel-previous/carousel-previous.vue"
+      "types": "./types/components/content/carousel/carousel-previous/carousel-previous.vue.d.ts",
+      "default": "./src/components/content/carousel/carousel-previous/carousel-previous.vue"
     },
     "./carousel-next": {
-      "types": "./types/components/marketing/carousel/carousel-next/carousel-next.vue.d.ts",
-      "default": "./src/components/marketing/carousel/carousel-next/carousel-next.vue"
+      "types": "./types/components/content/carousel/carousel-next/carousel-next.vue.d.ts",
+      "default": "./src/components/content/carousel/carousel-next/carousel-next.vue"
     },
     "./backdrop": {
       "types": "./types/components/marketing/backdrop/backdrop.vue.d.ts",
@@ -1475,9 +1475,9 @@
       "types": "./types/components/marketing/hero/hero.vue.d.ts",
       "default": "./src/components/marketing/hero/hero.vue"
     },
-    "./sticky-stack": {
-      "types": "./types/components/marketing/sticky-stack/sticky-stack.vue.d.ts",
-      "default": "./src/components/marketing/sticky-stack/sticky-stack.vue"
+    "./media-scroll": {
+      "types": "./types/components/marketing/media-scroll/media-scroll.vue.d.ts",
+      "default": "./src/components/marketing/media-scroll/media-scroll.vue"
     },
     "./quote": {
       "types": "./types/components/marketing/quote/quote.vue.d.ts",
@@ -1488,8 +1488,8 @@
       "default": "./src/components/marketing/media-tabs/media-tabs.vue"
     },
     "./embed": {
-      "types": "./types/components/marketing/embed/embed.vue.d.ts",
-      "default": "./src/components/marketing/embed/embed.vue"
+      "types": "./types/components/content/embed/embed.vue.d.ts",
+      "default": "./src/components/content/embed/embed.vue"
     },
     "./faq": {
       "types": "./types/components/marketing/faq/faq.vue.d.ts",
@@ -2506,20 +2506,20 @@
       "default": "./src/composables/use-color-mode/index.ts"
     },
     "./card-grid": {
-      "types": "./types/components/marketing/card-grid/index.d.ts",
-      "default": "./src/components/marketing/card-grid/index.ts"
+      "types": "./types/components/layout/card-grid/index.d.ts",
+      "default": "./src/components/layout/card-grid/index.ts"
     },
     "./card-grid-root": {
-      "types": "./types/components/marketing/card-grid/card-grid.vue.d.ts",
-      "default": "./src/components/marketing/card-grid/card-grid.vue"
+      "types": "./types/components/layout/card-grid/card-grid.vue.d.ts",
+      "default": "./src/components/layout/card-grid/card-grid.vue"
     },
     "./card-grid-cell": {
-      "types": "./types/components/marketing/card-grid/card-grid-cell/card-grid-cell.vue.d.ts",
-      "default": "./src/components/marketing/card-grid/card-grid-cell/card-grid-cell.vue"
+      "types": "./types/components/layout/card-grid/card-grid-cell/card-grid-cell.vue.d.ts",
+      "default": "./src/components/layout/card-grid/card-grid-cell/card-grid-cell.vue"
     },
     "./texture": {
-      "types": "./types/components/marketing/texture/texture.vue.d.ts",
-      "default": "./src/components/marketing/texture/texture.vue"
+      "types": "./types/components/content/texture/texture.vue.d.ts",
+      "default": "./src/components/content/texture/texture.vue"
     },
     "./feature-item": {
       "types": "./types/components/marketing/feature-item/feature-item.vue.d.ts",
@@ -3154,8 +3154,8 @@
       "doc-markdown": [
         "./types/components/docs/doc-markdown/doc-markdown.vue.d.ts"
       ],
-      "doc-on-this-page": [
-        "./types/components/docs/doc-on-this-page/doc-on-this-page.vue.d.ts"
+      "doc-table-of-contents": [
+        "./types/components/docs/doc-table-of-contents/doc-table-of-contents.vue.d.ts"
       ],
       "doc-page-header": [
         "./types/components/docs/doc-page-header/doc-page-header.vue.d.ts"
@@ -3545,13 +3545,13 @@
         "./types/components/marketing/marquee/marquee.vue.d.ts"
       ],
       "bento-grid": [
-        "./types/components/marketing/bento-grid/index.d.ts"
+        "./types/components/layout/bento-grid/index.d.ts"
       ],
       "bento-grid-root": [
-        "./types/components/marketing/bento-grid/bento-grid.vue.d.ts"
+        "./types/components/layout/bento-grid/bento-grid.vue.d.ts"
       ],
       "bento-grid-cell": [
-        "./types/components/marketing/bento-grid/bento-grid-cell/bento-grid-cell.vue.d.ts"
+        "./types/components/layout/bento-grid/bento-grid-cell/bento-grid-cell.vue.d.ts"
       ],
       "call-to-action": [
         "./types/components/marketing/call-to-action/call-to-action.vue.d.ts"
@@ -3563,19 +3563,19 @@
         "./types/components/marketing/stats/stats.vue.d.ts"
       ],
       "carousel": [
-        "./types/components/marketing/carousel/index.d.ts"
+        "./types/components/content/carousel/index.d.ts"
       ],
       "carousel-root": [
-        "./types/components/marketing/carousel/carousel.vue.d.ts"
+        "./types/components/content/carousel/carousel.vue.d.ts"
       ],
       "carousel-item": [
-        "./types/components/marketing/carousel/carousel-item/carousel-item.vue.d.ts"
+        "./types/components/content/carousel/carousel-item/carousel-item.vue.d.ts"
       ],
       "carousel-previous": [
-        "./types/components/marketing/carousel/carousel-previous/carousel-previous.vue.d.ts"
+        "./types/components/content/carousel/carousel-previous/carousel-previous.vue.d.ts"
       ],
       "carousel-next": [
-        "./types/components/marketing/carousel/carousel-next/carousel-next.vue.d.ts"
+        "./types/components/content/carousel/carousel-next/carousel-next.vue.d.ts"
       ],
       "backdrop": [
         "./types/components/marketing/backdrop/backdrop.vue.d.ts"
@@ -3586,8 +3586,8 @@
       "hero-root": [
         "./types/components/marketing/hero/hero.vue.d.ts"
       ],
-      "sticky-stack": [
-        "./types/components/marketing/sticky-stack/sticky-stack.vue.d.ts"
+      "media-scroll": [
+        "./types/components/marketing/media-scroll/media-scroll.vue.d.ts"
       ],
       "quote": [
         "./types/components/marketing/quote/quote.vue.d.ts"
@@ -3596,7 +3596,7 @@
         "./types/components/marketing/media-tabs/media-tabs.vue.d.ts"
       ],
       "embed": [
-        "./types/components/marketing/embed/embed.vue.d.ts"
+        "./types/components/content/embed/embed.vue.d.ts"
       ],
       "faq": [
         "./types/components/marketing/faq/faq.vue.d.ts"
@@ -4091,16 +4091,16 @@
         "./types/composables/use-color-mode/index.d.ts"
       ],
       "card-grid": [
-        "./types/components/marketing/card-grid/index.d.ts"
+        "./types/components/layout/card-grid/index.d.ts"
       ],
       "card-grid-root": [
-        "./types/components/marketing/card-grid/card-grid.vue.d.ts"
+        "./types/components/layout/card-grid/card-grid.vue.d.ts"
       ],
       "card-grid-cell": [
-        "./types/components/marketing/card-grid/card-grid-cell/card-grid-cell.vue.d.ts"
+        "./types/components/layout/card-grid/card-grid-cell/card-grid-cell.vue.d.ts"
       ],
       "texture": [
-        "./types/components/marketing/texture/texture.vue.d.ts"
+        "./types/components/content/texture/texture.vue.d.ts"
       ],
       "feature-item": [
         "./types/components/marketing/feature-item/feature-item.vue.d.ts"

@@ -11,7 +11,7 @@
  ],
  "related": [
   "`DocProse` — the body below it. The masthead's `h1` is chrome, so authored content starts at `h2`.",
-  "`DocOnThisPage` — the rail beside the body, which lists those `h2`s.",
+  "`DocTableOfContents` — the rail beside the body, which lists those `h2`s.",
   "`Button` / `Tooltip` / `Separator` — the meta line's entries: a quiet `text` button (an anchor when the entry has an `href`), the sentence its label has no room for, and the rule between two of them."
  ],
  "bestPractices": [

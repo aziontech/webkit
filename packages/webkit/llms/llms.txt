@@ -192,9 +192,11 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [Brand](components/brand.md): The Azion brand logo, rendered as an inline SVG lockup.
 - [BrowserFrame](components/browser-frame.md): A browser window that renders live webkit components inside a viewport of its own, so a page or story can show a real screen at a real device size — desktop, tablet or mobile — and resize it by hand.
 - [Card](components/card.md): Use Card for one bordered box of related content in product UI; for a collection of records shown as cards use CardList, for a catalog tile use IntegrationCard, and for the frame of a dashboard chart use ChartCard.
+- [Carousel](components/carousel.md): A horizontally scrollable track of cards with snap points and a pair of step controls.
 - [ConsoleMockup](components/console-mockup.md): Draws one of the **official console widgets**: a scaled, inert mock of an Azion Console screen or fragment, built from real webkit components inside an internal `ConsoleMockupShell` frame (not exported), that marketin…
 - [CopyText](components/copy-text.md): CopyText shows one code value (a CSS custom property, a utility class, a CNAME, a key ID, a one-line command) in monospace inside a quiet bordered box, with an always-visible `CopyButton` at its inline end that copies…
 - [CurrencyAmount](components/currency-amount.md): Use CurrencyAmount to typeset one money amount anywhere; a money metric with a delta and a sparkline is a StatTile.
+- [Embed](components/embed.md): A responsive `iframe` for third-party content — a demo, a player, a status page, a form — that keeps its aspect ratio at every width and always carries the accessible name an `iframe` needs.
 - [Eyebrow](components/eyebrow.md): Overline is the short uppercase label set above a headline to name the section, panel or group it opens (the "eyebrow").
 - [FilePreview](components/file-preview.md): The preview of one stored file in a storage or object browser: a header with the file's glyph, name, type and size, a Download action, and a body that shows the file the way it can be read.
 - [HelpPanel](components/help-panel.md): The content of a help side region: a topic's title, a few sections of short guidance, and the "Learn more" links that leave for the documentation.
@@ -215,6 +217,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [SeverityTag](components/severity-tag.md): Use SeverityTag only for a level on the critical → info scale of findings and alerts; the state of a resource is a StatusIndicator, and any other category word is a Tag.
 - [StatusCode](components/status-code.md): Use StatusCode only for an HTTP status code or method (200, 404, GET); for resource state use StatusIndicator, and for any other word use Tag.
 - [Tag](components/tag.md): Use Tag for a read-only category or outcome word on an item (Production, Beta, Allowed) that is not a lifecycle state.
+- [Texture](components/texture.md): The one decorative surface every band in the system is painted on: a full-bleed, non-interactive layer that tiles a texture behind whatever sits above it.
 - [Timestamp](components/timestamp.md): Timestamp shows one moment — when a request ran, a deployment finished, a key was created — in the form the reader needs: the local date and time, the same in UTC, or a relative phrase (`5 minutes ago`) that updates e…
 - [TutorialPanel](components/tutorial-panel.md): The guide that runs tutorials beside the real product.
 
@@ -251,13 +254,13 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [DocItem](components/doc-item.md): One row of the documentation's related-content list: a leading glyph in a framed 32px tile, the row's name, and the sentence that says what the thing is.
 - [DocLayout](components/doc-layout.md): The documentation chrome, composed once in the app: a sticky header (at the inline start the compact menu button, the Azion Docs mark and the section links; an empty `AppHeader.Center` spacer; at the inline end `Searc…
 - [DocMarkdown](components/doc-markdown.md): Renders a documentation page written in Markdown with Mintlify-style MDX component tags into the documentation components.
-- [DocOnThisPage](components/doc-on-this-page.md): The "On this page" rail: the page's own headings, the active one lit, nested headings indented under their parent — followed by the rail's complementary groups (the repository, the community).
 - [DocPageHeader](components/doc-page-header.md): The masthead of a documentation page: where the reader is (the breadcrumb), what the page is (the title), what they can do with it (a Copy Page control that hands the page to an AI tool — or, through the `actions` slo…
 - [DocPreviousNext](components/doc-previous-next.md): The previous / next pair that closes a documentation page.
 - [DocPrompt](components/doc-prompt.md): DocPrompt renders text the reader is meant to **run, not read** — the block a documentation page uses when the next step is "say this to your agent".
 - [DocProse](components/doc-prose.md): The typography contract every documentation page inherits.
 - [DocSteps](components/doc-steps.md): The ordered walkthrough from the docs frame: a column of `DocSteps.Step` children joined by a rail.
 - [DocTab](components/doc-tab.md): One panel inside `DocTabs`.
+- [DocTableOfContents](components/doc-table-of-contents.md): The "On this page" rail: the page's own headings, the active one lit, nested headings indented under their parent — followed by the rail's complementary groups (the repository, the community).
 - [DocTabs](components/doc-tabs.md): Alternative paths through the same instruction ("macOS / Linux / Windows", "Console / CLI").
 
 ## Components: Feedback
@@ -306,6 +309,8 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 - [AppHeader](components/app-header.md): Application chrome for the top menubar: a fixed-height horizontal bar with three composable regions (start, center, end) and a dedicated brand slot for Azion logo variants.
 - [AppLayout](components/app-layout.md): The frame every signed-in product page renders inside.
+- [BentoGrid](components/bento-grid.md): A mosaic of unequal cells on one set of shared rules: each cell claims a number of columns and rows, and the rules between them are drawn once so the whole block reads as a single framed surface.
+- [CardGrid](components/card-grid.md): The responsive cell grid of the page language, in three registers: spaced cards separated by real gutters, a hairline box grid whose internal rules are the gaps themselves, and a framed grid whose cells are real `regi…
 - [ConsoleLayout](components/console-layout.md): The console chrome, composed once in the app: `AppLayout` with the navigation rail (`Sidebar` + `SidebarMenu`, the brand on top and the account at the foot), the global header (breadcrumbs, `SearchTrigger`, the app's…
 - [DashboardGrid](components/dashboard-grid.md): A configurable dashboard grid: the reader arranges the cards.
 - [Footer](components/footer.md): Page footer for marketing, docs and console surfaces: the bottom-of-page counterpart to `AppHeader`.
@@ -324,18 +329,15 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 ## Components: Marketing
 
 - [Backdrop](components/backdrop.md): The decorative backdrop a site, hub or docs band stands on, for a `Hero` `background` slot or any band with `relative overflow-hidden`: `globe` hangs half a globe past the page's inline-end rule over the dot lattice,…
-- [BentoGrid](components/bento-grid.md): A mosaic of unequal cells on one set of shared rules: each cell claims a number of columns and rows, and the rules between them are drawn once so the whole block reads as a single framed surface.
 - [CallToAction](components/call-to-action.md): The closing ask of a marketing page: a headline, a supporting sentence and the actions that follow from them, set apart from the surrounding copy by its own surface.
-- [CardGrid](components/card-grid.md): The responsive cell grid of the page language, in three registers: spaced cards separated by real gutters, a hairline box grid whose internal rules are the gaps themselves, and a framed grid whose cells are real `regi…
-- [Carousel](components/carousel.md): A horizontally scrollable track of cards with snap points and a pair of step controls.
 - [Diagram](components/diagram.md): A node-and-connector diagram for marketing pages: the request path of an architecture, a routing policy, a product's place in the platform.
-- [Embed](components/embed.md): A responsive `iframe` for third-party content — a demo, a player, a status page, a form — that keeps its aspect ratio at every width and always carries the accessible name an `iframe` needs.
 - [Faq](components/faq.md): The frequently-asked-questions band of a marketing page: a two-column panel with the section's heading on the left and the answers as a disclosure list on the right.
 - [FeatureItem](components/feature-item.md): One claim stated in three parts: a glyph, a short headline it shares a line with, and a sentence under them that explains it.
 - [Hero](components/hero.md): The opening band of a page: a full-bleed section spanning the whole viewport width whose copy is centered in a capped column, optionally filling one screen and optionally carrying a decorative backdrop behind it.
 - [LinkDirectory](components/link-directory.md): A directory of destinations laid out in columns on one set of shared hairlines: each column carries an overline heading over a rule, then its rows — a glyph, the destination's name, and one line of what it is.
 - [LogoWall](components/logo-wall.md): The customer-proof band of a marketing page: a framed grid of square cells, one company mark to a cell, each one optionally linked to that customer's story, under one accessible group name.
 - [Marquee](components/marquee.md): An endlessly looping row of brand marks — the trust strip that names the companies running on the platform, and the stack strip that names the frameworks and clouds a workload already uses.
+- [MediaScroll](components/media-scroll.md): A band that pins to the viewport and is read by scrolling through it: a stack of claims on one side, one piece of media on the other, and the scroll position — not a pointer — deciding which claim is open.
 - [MediaSplit](components/media-split.md): A two-column band pairing a block of copy with a piece of media — a screenshot, diagram or short video — each holding half the frame.
 - [MediaTabs](components/media-tabs.md): A band split in two: a stack of claims on one side, one piece of media on the other, and only the selected claim's media on screen.
 - [MediaTile](components/media-tile.md): One cell of a media band: a scene above, and under it a run-in caption whose lead names what the scene shows and whose sentence continues on the same line, so a row of tiles reads as one paragraph of claims under one…
@@ -348,8 +350,6 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [SectionTitle](components/section-title.md): The framed header row that opens a page section: an optional overline, the section's `h2`, an optional description and an optional row of actions, held inside a registration frame whose bottom rule is what divides the…
 - [SitePage](components/site-page.md): The page renderer of the marketing site: it takes a page as data — the page JSON `{ hero, sections }` whose entries are `{ _id, props, scenes?, gap?, submission?
 - [Stats](components/stats.md): A band of headline figures — throughput, uptime, points of presence — set in the display face at big-number scale, each in its own cell of a hairline `card-grid` with a short caption underneath.
-- [StickyStack](components/sticky-stack.md): A band that pins to the viewport and is read by scrolling through it: a stack of claims on one side, one piece of media on the other, and the scroll position — not a pointer — deciding which claim is open.
-- [Texture](components/texture.md): The one decorative surface every band in the system is painted on: a full-bleed, non-interactive layer that tiles a texture behind whatever sits above it.
 
 ## Components: Navigation
 
@@ -381,7 +381,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 - [ConfigProvider](components/config-provider.md): Sets the language and text direction of every WebKit component below it.
 
-## Components: Marketing sections
+## Components: Page sections
 
 - [ArchitectureTabsSection](components/architecture-tabs-section.md): The architecture band of a product page: a horizontal section title with one large button, over a row of up to five tabs whose active tab draws its named diagram the full width of the frame.
 - [ArticleBodySection](components/article-body-section.md): The reading page of an article.

@@ -1,6 +1,6 @@
 {
-  "component": "doc-on-this-page",
-  "title": "Components/Docs/DocOnThisPage",
+  "component": "doc-table-of-contents",
+  "title": "Components/Docs/DocTableOfContents",
   "examples": [
     {
       "name": "Default",

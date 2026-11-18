@@ -3,7 +3,7 @@
  "binding": "CardGrid",
  "import": "@aziontech/webkit/card-grid",
  "treeShakeableImport": "@aziontech/webkit/card-grid-root",
- "category": "marketing",
+ "category": "layout",
  "surface": "site",
  "structure": "composition",
  "compoundRoot": true,

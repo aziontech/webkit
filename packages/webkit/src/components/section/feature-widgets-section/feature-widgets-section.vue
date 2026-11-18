@@ -8,9 +8,9 @@
   import Button from '../../action/button/button.vue'
   import HighlightButton from '../../action/highlight-button/highlight-button.vue'
   import Illustration from '../../content/illustration/illustration.vue'
+  import BentoGrid from '../../layout/bento-grid/bento-grid.vue'
+  import BentoGridCell from '../../layout/bento-grid/bento-grid-cell/bento-grid-cell.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
-  import BentoGrid from '../../marketing/bento-grid/bento-grid.vue'
-  import BentoGridCell from '../../marketing/bento-grid/bento-grid-cell/bento-grid-cell.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import SectionTitle, {
     type SectionTitleAction,

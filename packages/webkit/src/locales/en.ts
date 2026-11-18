@@ -376,7 +376,7 @@ export const docFrame = {
   close: 'Close'
 } as const
 
-export const docOnThisPage = {
+export const docTableOfContents = {
   title: 'On this page'
 } as const
 
@@ -1442,7 +1442,7 @@ export const en = {
   dialog,
   docFrame,
   docLayout,
-  docOnThisPage,
+  docTableOfContents,
   docPageHeader,
   docPreviousNext,
   docPrompt,

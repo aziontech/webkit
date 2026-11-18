@@ -1,15 +1,15 @@
 ---
-name: doc-on-this-page
+name: doc-table-of-contents
 category: docs
 structure: monolithic
 status: implemented
 spec_version: 4
-checksum: 50880748a9bd8faa94c56969e10ddd6e278c16c4b5d6987c4941abdf690f5e69
+checksum: f9df0fd44645b8d79db517f4b41196a507615966c4f0269e26743666281f5c29
 created: 2026-08-22
-last_updated: 2026-11-15
+last_updated: 2026-11-18
 ---
 
-# DocOnThisPage — Component Spec
+# DocTableOfContents — Component Spec
 
 ## Purpose
 
@@ -42,11 +42,11 @@ The "On this page" rail: the page's own headings, the active one lit, nested hea
 
 ```vue
 <script setup>
-  import DocOnThisPage from '@aziontech/webkit/doc-on-this-page'
+  import DocTableOfContents from '@aziontech/webkit/doc-table-of-contents'
 </script>
 
 <template>
-  <DocOnThisPage
+  <DocTableOfContents
     :items="[
       { id: 'deploy', text: 'Deploy an application', depth: 2 },
       { id: 'what-you-get', text: 'What you get', depth: 3 }
@@ -69,16 +69,16 @@ The "On this page" rail: the page's own headings, the active one lit, nested hea
 
 | Prop       | Type                   | Default | Required | JSDoc                                                                   |
 | ---------- | ---------------------- | ------- | -------- | ----------------------------------------------------------------------- |
-| `items`    | `DocOnThisPageItem[]`  | `[]`    | false    | The headings, in document order.                                        |
+| `items`    | `DocTableOfContentsItem[]`  | `[]`    | false    | The headings, in document order.                                        |
 | `activeId` | `string`               | `''`    | false    | The id of the heading currently in view.                                |
 | `title`    | `string`               | `''`    | false    | The rail's own heading. Empty uses the locale catalog (`On this page`). |
-| `groups`   | `DocOnThisPageGroup[]` | `[]`    | false    | Complementary groups rendered below the outline, in order.              |
+| `groups`   | `DocTableOfContentsGroup[]` | `[]`    | false    | Complementary groups rendered below the outline, in order.              |
 
 ## Events
 
 | Event    | Payload                                        | Notes                                                                                                              |
 | -------- | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| `select` | `(event: MouseEvent, item: DocOnThisPageItem)` | Fired when a rail entry is activated; the page decides what scrolling means. Event first, per `event-payloads.md`. |
+| `select` | `(event: MouseEvent, item: DocTableOfContentsItem)` | Fired when a rail entry is activated; the page decides what scrolling means. Event first, per `event-payloads.md`. |
 
 ## Slots
 

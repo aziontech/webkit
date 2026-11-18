@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: 771cdfb1b0e589ec73a4a472f1c5b7b593a94b6c456062a7bb1120f2be53f2f9
+checksum: e28a1d38d256951806da5034ca58bc354db7147d6bf4d10213c1e5c5382c5d6b
 created: 2026-11-11
-last_updated: 2026-11-16
+last_updated: 2026-11-18
 ---
 
 # DocHeading — Component Spec
@@ -29,7 +29,7 @@ A documentation section heading that is also the link to itself. The whole text 
 
 ## Related
 
-- `DocOnThisPage` — the rail that points at the ids.
+- `DocTableOfContents` — the rail that points at the ids.
 - `useHeadingNavigation` — the page-provided scroll handler.
 - `DocProse` — skips `[data-doc-anchor]` in its link rules.
 

@@ -1,10 +1,10 @@
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import Default from '../../../../examples/doc-on-this-page/default.vue'
-import Nesting from '../../../../examples/doc-on-this-page/nesting.vue'
+import Default from '../../../../examples/doc-table-of-contents/default.vue'
+import Nesting from '../../../../examples/doc-table-of-contents/nesting.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
-import DocOnThisPage from './doc-on-this-page.vue'
+import DocTableOfContents from './doc-table-of-contents.vue'
 
 // Browser mode loads no Tailwind. Rail geometry (path lengths, dash offsets) is also
 // deliberately unasserted: pinning live-SVG probe numbers would trap any curve refit
@@ -25,41 +25,41 @@ const GROUPS = [
   { label: 'Community', links: [{ label: 'Discord', href: 'https://discord.gg' }] }
 ]
 
-describe('DocOnThisPage', () => {
+describe('DocTableOfContents', () => {
   describe('rendering & testid', () => {
     it('renders every heading with the derived testid', () => {
-      const { getByTestId, getByText } = render(DocOnThisPage, { props: { items: ITEMS } })
-      expect(getByTestId('doc-on-this-page')).toBeInTheDocument()
+      const { getByTestId, getByText } = render(DocTableOfContents, { props: { items: ITEMS } })
+      expect(getByTestId('doc-table-of-contents')).toBeInTheDocument()
       for (const item of ITEMS) expect(getByText(item.text)).toBeInTheDocument()
     })
 
     it('lets a consumer-supplied data-testid win, and sub-testids derive from it', () => {
-      const { getByTestId, queryByTestId } = render(DocOnThisPage, {
+      const { getByTestId, queryByTestId } = render(DocTableOfContents, {
         attrs: { 'data-testid': 'guide-rail' },
         props: { items: ITEMS, activeId: 'deploy', groups: GROUPS }
       })
       expect(getByTestId('guide-rail')).toBeInTheDocument()
       expect(getByTestId('guide-rail__marker')).toBeInTheDocument()
-      expect(queryByTestId('doc-on-this-page')).not.toBeInTheDocument()
+      expect(queryByTestId('doc-table-of-contents')).not.toBeInTheDocument()
     })
 
     it('renders its own title, and takes an override', () => {
-      const dflt = render(DocOnThisPage, { props: { items: ITEMS } })
+      const dflt = render(DocTableOfContents, { props: { items: ITEMS } })
       expect(dflt.getByText('On this page')).toBeInTheDocument()
 
-      const custom = render(DocOnThisPage, { props: { items: ITEMS, title: 'Contents' } })
+      const custom = render(DocTableOfContents, { props: { items: ITEMS, title: 'Contents' } })
       expect(custom.getByText('Contents')).toBeInTheDocument()
     })
 
     it('renders nothing to navigate when there are no headings', () => {
-      const { container } = render(DocOnThisPage)
+      const { container } = render(DocTableOfContents)
       expect(container.querySelectorAll('li')).toHaveLength(0)
     })
   })
 
   describe('the active heading', () => {
     it('marks only the active entry with aria-current=location', () => {
-      const { getByText } = render(DocOnThisPage, {
+      const { getByText } = render(DocTableOfContents, {
         props: { items: ITEMS, activeId: 'what-you-get' }
       })
       const active = getByText('What you get').closest('a')
@@ -70,7 +70,7 @@ describe('DocOnThisPage', () => {
     })
 
     it('moves aria-current when the active heading changes', async () => {
-      const view = render(DocOnThisPage, { props: { items: ITEMS, activeId: 'deploy' } })
+      const view = render(DocTableOfContents, { props: { items: ITEMS, activeId: 'deploy' } })
       expect(
         view.getByText('Deploy an application').closest('a')?.getAttribute('aria-current')
       ).toBe('location')
@@ -88,17 +88,17 @@ describe('DocOnThisPage', () => {
 
   describe('structure and landmarks', () => {
     it('puts the entries in a real list, as the axe list rule requires', () => {
-      const { getByTestId } = render(DocOnThisPage, { props: { items: ITEMS } })
-      const list = getByTestId('doc-on-this-page').querySelector('ul')
+      const { getByTestId } = render(DocTableOfContents, { props: { items: ITEMS } })
+      const list = getByTestId('doc-table-of-contents').querySelector('ul')
       expect(list).not.toBeNull()
       expect(list?.querySelectorAll(':scope > li')).toHaveLength(ITEMS.length)
     })
 
     it('gives the outline and each complementary group its own named landmark', () => {
-      const { getByTestId } = render(DocOnThisPage, {
+      const { getByTestId } = render(DocTableOfContents, {
         props: { items: ITEMS, groups: GROUPS, title: 'On this page' }
       })
-      const navs = [...getByTestId('doc-on-this-page').querySelectorAll('nav')]
+      const navs = [...getByTestId('doc-table-of-contents').querySelectorAll('nav')]
       // Three landmarks, not one long list: a reader must never read "Discord" as a
       // section of the page they are on.
       expect(navs).toHaveLength(3)
@@ -110,7 +110,7 @@ describe('DocOnThisPage', () => {
     })
 
     it('renders each group link as a real anchor', () => {
-      const { getByText } = render(DocOnThisPage, { props: { items: ITEMS, groups: GROUPS } })
+      const { getByText } = render(DocTableOfContents, { props: { items: ITEMS, groups: GROUPS } })
       const link = getByText('View source').closest('a')
       expect(link?.getAttribute('href')).toBe('https://github.com/aziontech')
     })
@@ -118,7 +118,7 @@ describe('DocOnThisPage', () => {
 
   describe('the select event', () => {
     it('emits (event, item) for the entry that was activated', async () => {
-      const { getByText, emitted } = render(DocOnThisPage, {
+      const { getByText, emitted } = render(DocTableOfContents, {
         props: { items: ITEMS, activeId: 'deploy' }
       })
 
@@ -132,7 +132,7 @@ describe('DocOnThisPage', () => {
     })
 
     it('does not emit for a complementary group link', async () => {
-      const { getByText, emitted } = render(DocOnThisPage, {
+      const { getByText, emitted } = render(DocTableOfContents, {
         props: { items: ITEMS, groups: GROUPS }
       })
       await fireEvent.click(getByText('View source'))
@@ -155,8 +155,10 @@ describe('DocOnThisPage', () => {
 
   describe('right-to-left', () => {
     it('mirrors the rail so its depth bends follow the inline direction', () => {
-      const { getByTestId } = render(DocOnThisPage, { props: { items: ITEMS, activeId: 'deploy' } })
-      const rail = getByTestId('doc-on-this-page__marker').closest('svg')
+      const { getByTestId } = render(DocTableOfContents, {
+        props: { items: ITEMS, activeId: 'deploy' }
+      })
+      const rail = getByTestId('doc-table-of-contents__marker').closest('svg')
       expect(rail?.getAttribute('class')).toContain('rtl:-scale-x-100')
     })
   })

@@ -2,9 +2,9 @@
   import { computed, useAttrs } from 'vue'
 
   import Button from '../../action/button/button.vue'
+  import CardGrid from '../../layout/card-grid/card-grid.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import CallToAction from '../../marketing/call-to-action/call-to-action.vue'
-  import CardGrid from '../../marketing/card-grid/card-grid.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
 

@@ -1,15 +1,15 @@
 ---
-name: sticky-stack
+name: media-scroll
 category: marketing
 structure: monolithic
 status: implemented
 spec_version: 4
-checksum: ee7c1d6025a16bc6c1a2704ce623984c390b75bcc3f4be00466297b38103bb26
+checksum: c760d3e4eaedf8af2dab330defbef7d530857908d4d21c16477f78f6118612eb
 created: 2026-09-25
-last_updated: 2026-11-16
+last_updated: 2026-11-18
 ---
 
-# Sticky Stack — Component Spec
+# MediaScroll — Component Spec
 
 ## Purpose
 
@@ -17,7 +17,7 @@ A band that pins to the viewport and is read by scrolling through it: a stack of
 
 ## When to use
 
-- Use StickyStack (primitive) for claims that open one by one as the reader scrolls past pinned media.
+- Use MediaScroll (primitive) for claims that open one by one as the reader scrolls past pinned media.
 - For a sequence of claims a reader should take in one at a time, each with a medium worth looking at — five ways a platform is used, each with the file you would actually write.
 - When the media is the payload and the copy is the caption: a code sample, a console shot, an official scene.
 - As the one band on a page that rewards scrolling slowly, placed where a reader has already committed to the page.
@@ -46,7 +46,7 @@ A band that pins to the viewport and is read by scrolling through it: a stack of
 - Keep a description to two or three lines. Only the open claim shows one, and a long one pushes the stack past the pinned frame.
 - Give every claim a medium. The frame holds one at a time and mounts it fresh, so a claim with nothing to show reads as a band that broke rather than one that is quiet.
 - Use media of the same shape. The frame does not resize between claims, and a scene that changes the frame's height un-pins the band mid-read.
-- Set `--sticky-stack-top` to the height of any sticky header above the band, or the first claim opens underneath it. Set it on a wrapper around the band rather than on the band's own tag: custom properties inherit, and the band is not a style seam.
+- Set `--media-scroll-top` to the height of any sticky header above the band, or the first claim opens underneath it. Set it on a wrapper around the band rather than on the band's own tag: custom properties inherit, and the band is not a style seam.
 - Leave `showProgress` on. It is the only thing telling a reader how much of the pin is left.
 - Raise `dwell` for claims that carry code a reader must actually read; lower it for scenes that are grasped at a glance.
 
@@ -55,7 +55,7 @@ A band that pins to the viewport and is read by scrolling through it: a stack of
 ```vue
 <script setup>
   import CodeBlock from '@aziontech/webkit/code-block'
-  import StickyStack from '@aziontech/webkit/sticky-stack'
+  import MediaScroll from '@aziontech/webkit/media-scroll'
 
   const samples = [
     {
@@ -69,8 +69,8 @@ A band that pins to the viewport and is read by scrolling through it: a stack of
 </script>
 
 <template>
-  <div class="[--sticky-stack-top:3.5rem]">
-    <StickyStack
+  <div class="[--media-scroll-top:3.5rem]">
+    <MediaScroll
       :items="[
         {
           title: 'Automated deployment via Git or CLI',
@@ -90,7 +90,7 @@ A band that pins to the viewport and is read by scrolling through it: a stack of
           show-line-numbers
         />
       </template>
-    </StickyStack>
+    </MediaScroll>
   </div>
 </template>
 ```
@@ -99,7 +99,7 @@ A band that pins to the viewport and is read by scrolling through it: a stack of
 
 | Prop           | Type                             | Default    | Required | JSDoc                                                                                                                                  |
 | -------------- | -------------------------------- | ---------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| `items`        | `StickyStackItem[]`              | `[]`       | false    | The claims, in reading order; each item is a title, the sentence that opens with it, and the image shown while it is open.             |
+| `items`        | `MediaScrollItem[]`              | `[]`       | false    | The claims, in reading order; each item is a title, the sentence that opens with it, and the image shown while it is open.             |
 | `size`         | `'small' \| 'medium' \| 'large'` | `'medium'` | false    | Height the open claim is held to, and so the height of the whole stack beside the media.                                               |
 | `dwell`        | `number`                         | `0.7`      | false    | Screen-heights of scrolling each claim holds while the band is pinned; the band's total scroll is one screen plus this much per claim. |
 | `showProgress` | `boolean`                        | `true`     | false    | Fills a hairline along the open claim's bottom edge as its share of the scroll is spent.                                               |
@@ -114,8 +114,8 @@ A band that pins to the viewport and is read by scrolling through it: a stack of
 
 | Slot       | Scope                                                       | Notes                                                                                                                                                                                                                                                                      |
 | ---------- | ----------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `media`    | `{ item: StickyStackItem, index: number, active: boolean }` | The claim's medium; replaces the image built from the item's own source. Mounted fresh on every change, so an entrance animation inside it replays.                                                                                                                        |
-| `actions`  | `{ item: StickyStackItem, index: number, active: boolean }` | The claim's own controls, pinned to the bottom edge of the open claim. From `lg` up they show only while the claim is open and are out of the tab order while it is collapsed; below `lg` every claim is open and carries its own. Nothing renders when the slot is empty. |
+| `media`    | `{ item: MediaScrollItem, index: number, active: boolean }` | The claim's medium; replaces the image built from the item's own source. Mounted fresh on every change, so an entrance animation inside it replays.                                                                                                                        |
+| `actions`  | `{ item: MediaScrollItem, index: number, active: boolean }` | The claim's own controls, pinned to the bottom edge of the open claim. From `lg` up they show only while the claim is open and are out of the tab order while it is collapsed; below `lg` every claim is open and carries its own. Nothing renders when the slot is empty. |
 | `backdrop` | —                                                           | Fills the media frame behind every claim's medium, from `lg` up. Mounted once and never swapped, so a texture or an animated surface placed here holds still while the media change over it. Nothing renders when the slot is empty.                                       |
 
 ## States
@@ -177,7 +177,7 @@ _none_
 - Default
 - Sizes — composite story rendering every `size` value.
 
-The band is read by scrolling, and an example preview is short, so the docs page shows the band's resting state (first claim open) rather than its full run; the example file is what a consumer pastes. No extra example demonstrates the scroll; the frame route (`/frame/example/sticky-stack/<file>`) shows it full height.
+The band is read by scrolling, and an example preview is short, so the docs page shows the band's resting state (first claim open) rather than its full run; the example file is what a consumer pastes. No extra example demonstrates the scroll; the frame route (`/frame/example/media-scroll/<file>`) shows it full height.
 
 ## Constraints — DO NOT
 

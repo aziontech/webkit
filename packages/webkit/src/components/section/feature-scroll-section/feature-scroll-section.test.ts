@@ -127,7 +127,7 @@ describe('FeatureScrollSection', () => {
     expect(queryByRole('heading', { level: 2 })).toBeNull()
     expect(queryAllByRole('heading', { level: 3 })).toHaveLength(0)
     expect(queryByTestId('registration-frame')).toBeNull()
-    expect(queryByTestId('sticky-stack')).toBeNull()
+    expect(queryByTestId('media-scroll')).toBeNull()
   })
 
   it('renders only the section when items is omitted', () => {

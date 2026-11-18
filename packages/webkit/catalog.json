@@ -3951,7 +3951,7 @@
  "surfaces": {
   "app": "Product UI (the console and other apps). The default for components.",
   "site": "The marketing site (azion.com): page sections, bands, brand and client assets.",
-  "docs": "The documentation site: doc page chrome, callouts, steps, on-this-page."
+  "docs": "The documentation site: doc page chrome, callouts, steps, the table of contents."
  },
  "aliases": {
   "alert-dialog": "confirm-dialog",
@@ -4064,6 +4064,7 @@
   "customer-use-cases": "customer-use-cases-section",
   "divider": "separator",
   "doc-accordion-item": "doc-accordion",
+  "doc-on-this-page": "doc-table-of-contents",
   "doc-pagination": "doc-previous-next",
   "doc-prev-next": "doc-previous-next",
   "doc-update": "doc-changelog-entry",
@@ -4124,6 +4125,7 @@
   "site-header": "site-header-section",
   "site-nav": "site-header-section",
   "stats-band": "stats-section",
+  "sticky-stack": "media-scroll",
   "story-index": "story-index-section",
   "story-library": "story-index-section",
   "subject-grid": "subject-grid-section",
@@ -12679,7 +12681,7 @@
     },
     {
      "name": "outlineGroups",
-     "type": "DocOnThisPageGroup[]",
+     "type": "DocTableOfContentsGroup[]",
      "default": "[]",
      "required": "false",
      "doc": "Complementary link groups under the outline (GitHub, Community)."
@@ -12795,17 +12797,17 @@
    "examplesFile": "catalog/examples/doc-markdown.json",
    "docsFile": "catalog/components/doc-markdown.json"
   },
-  "doc-on-this-page": {
-   "import": "@aziontech/webkit/doc-on-this-page",
-   "target": "./src/components/docs/doc-on-this-page/doc-on-this-page.vue",
+  "doc-table-of-contents": {
+   "import": "@aziontech/webkit/doc-table-of-contents",
+   "target": "./src/components/docs/doc-table-of-contents/doc-table-of-contents.vue",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/doc-on-this-page",
+   "treeShakeableImport": "@aziontech/webkit/doc-table-of-contents",
    "category": "docs",
    "structure": "monolithic",
    "props": [
     {
      "name": "items",
-     "type": "DocOnThisPageItem[]",
+     "type": "DocTableOfContentsItem[]",
      "default": "[]",
      "required": "false",
      "doc": "The headings, in document order."
@@ -12826,7 +12828,7 @@
     },
     {
      "name": "groups",
-     "type": "DocOnThisPageGroup[]",
+     "type": "DocTableOfContentsGroup[]",
      "default": "[]",
      "required": "false",
      "doc": "Complementary groups rendered below the outline, in order."
@@ -12835,13 +12837,13 @@
    "events": [
     {
      "name": "select",
-     "payload": "(event: MouseEvent, item: DocOnThisPageItem)",
+     "payload": "(event: MouseEvent, item: DocTableOfContentsItem)",
      "notes": "Fired when a rail entry is activated; the page decides what scrolling means. Event first, per `event-payloads.md`."
     }
    ],
    "surface": "docs",
-   "examplesFile": "catalog/examples/doc-on-this-page.json",
-   "docsFile": "catalog/components/doc-on-this-page.json"
+   "examplesFile": "catalog/examples/doc-table-of-contents.json",
+   "docsFile": "catalog/components/doc-table-of-contents.json"
   },
   "doc-page-header": {
    "import": "@aziontech/webkit/doc-page-header",
@@ -19476,14 +19478,14 @@
   },
   "bento-grid": {
    "import": "@aziontech/webkit/bento-grid",
-   "target": "./src/components/marketing/bento-grid/index.ts",
+   "target": "./src/components/layout/bento-grid/index.ts",
    "kind": "component",
    "compoundRoot": true,
    "treeShakeableImport": "@aziontech/webkit/bento-grid-root",
    "subcomponents": [
     "@aziontech/webkit/bento-grid-cell"
    ],
-   "category": "marketing",
+   "category": "layout",
    "structure": "composition",
    "props": [
     {
@@ -19528,11 +19530,11 @@
   },
   "bento-grid-root": {
    "import": "@aziontech/webkit/bento-grid-root",
-   "target": "./src/components/marketing/bento-grid/bento-grid.vue",
+   "target": "./src/components/layout/bento-grid/bento-grid.vue",
    "kind": "root",
    "rootOf": "bento-grid",
    "treeShakeableImport": "@aziontech/webkit/bento-grid-root",
-   "category": "marketing",
+   "category": "layout",
    "structure": "composition",
    "props": [
     {
@@ -19576,7 +19578,7 @@
   },
   "bento-grid-cell": {
    "import": "@aziontech/webkit/bento-grid-cell",
-   "target": "./src/components/marketing/bento-grid/bento-grid-cell/bento-grid-cell.vue",
+   "target": "./src/components/layout/bento-grid/bento-grid-cell/bento-grid-cell.vue",
    "kind": "subcomponent",
    "parent": "bento-grid",
    "treeShakeableImport": "@aziontech/webkit/bento-grid-cell",
@@ -19727,7 +19729,7 @@
   },
   "carousel": {
    "import": "@aziontech/webkit/carousel",
-   "target": "./src/components/marketing/carousel/index.ts",
+   "target": "./src/components/content/carousel/index.ts",
    "kind": "component",
    "compoundRoot": true,
    "treeShakeableImport": "@aziontech/webkit/carousel-root",
@@ -19736,7 +19738,7 @@
     "@aziontech/webkit/carousel-previous",
     "@aziontech/webkit/carousel-next"
    ],
-   "category": "marketing",
+   "category": "content",
    "structure": "composition",
    "props": [
     {
@@ -19777,11 +19779,11 @@
   },
   "carousel-root": {
    "import": "@aziontech/webkit/carousel-root",
-   "target": "./src/components/marketing/carousel/carousel.vue",
+   "target": "./src/components/content/carousel/carousel.vue",
    "kind": "root",
    "rootOf": "carousel",
    "treeShakeableImport": "@aziontech/webkit/carousel-root",
-   "category": "marketing",
+   "category": "content",
    "structure": "composition",
    "props": [
     {
@@ -19821,7 +19823,7 @@
   },
   "carousel-item": {
    "import": "@aziontech/webkit/carousel-item",
-   "target": "./src/components/marketing/carousel/carousel-item/carousel-item.vue",
+   "target": "./src/components/content/carousel/carousel-item/carousel-item.vue",
    "kind": "subcomponent",
    "parent": "carousel",
    "treeShakeableImport": "@aziontech/webkit/carousel-item",
@@ -19829,7 +19831,7 @@
   },
   "carousel-previous": {
    "import": "@aziontech/webkit/carousel-previous",
-   "target": "./src/components/marketing/carousel/carousel-previous/carousel-previous.vue",
+   "target": "./src/components/content/carousel/carousel-previous/carousel-previous.vue",
    "kind": "subcomponent",
    "parent": "carousel",
    "treeShakeableImport": "@aziontech/webkit/carousel-previous",
@@ -19837,7 +19839,7 @@
   },
   "carousel-next": {
    "import": "@aziontech/webkit/carousel-next",
-   "target": "./src/components/marketing/carousel/carousel-next/carousel-next.vue",
+   "target": "./src/components/content/carousel/carousel-next/carousel-next.vue",
    "kind": "subcomponent",
    "parent": "carousel",
    "treeShakeableImport": "@aziontech/webkit/carousel-next",
@@ -20192,17 +20194,17 @@
    "surface": "site",
    "docsFile": "catalog/components/hero-root.json"
   },
-  "sticky-stack": {
-   "import": "@aziontech/webkit/sticky-stack",
-   "target": "./src/components/marketing/sticky-stack/sticky-stack.vue",
+  "media-scroll": {
+   "import": "@aziontech/webkit/media-scroll",
+   "target": "./src/components/marketing/media-scroll/media-scroll.vue",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/sticky-stack",
+   "treeShakeableImport": "@aziontech/webkit/media-scroll",
    "category": "marketing",
    "structure": "monolithic",
    "props": [
     {
      "name": "items",
-     "type": "StickyStackItem[]",
+     "type": "MediaScrollItem[]",
      "default": "[]",
      "required": "false",
      "doc": "The claims, in reading order; each item is a title, the sentence that opens with it, and the image shown while it is open."
@@ -20239,12 +20241,12 @@
    "slots": [
     {
      "name": "media",
-     "scope": "{ item: StickyStackItem, index: number, active: boolean }",
+     "scope": "{ item: MediaScrollItem, index: number, active: boolean }",
      "notes": "The claim's medium; replaces the image built from the item's own source. Mounted fresh on every change, so an entrance animation inside it replays."
     },
     {
      "name": "actions",
-     "scope": "{ item: StickyStackItem, index: number, active: boolean }",
+     "scope": "{ item: MediaScrollItem, index: number, active: boolean }",
      "notes": "The claim's own controls, pinned to the bottom edge of the open claim. From `lg` up they show only while the claim is open and are out of the tab order while it is collapsed; below `lg` every claim is open and carries its own. Nothing renders when the slot is empty."
     },
     {
@@ -20254,8 +20256,8 @@
     }
    ],
    "surface": "site",
-   "examplesFile": "catalog/examples/sticky-stack.json",
-   "docsFile": "catalog/components/sticky-stack.json"
+   "examplesFile": "catalog/examples/media-scroll.json",
+   "docsFile": "catalog/components/media-scroll.json"
   },
   "quote": {
    "import": "@aziontech/webkit/quote",
@@ -20445,10 +20447,10 @@
   },
   "embed": {
    "import": "@aziontech/webkit/embed",
-   "target": "./src/components/marketing/embed/embed.vue",
+   "target": "./src/components/content/embed/embed.vue",
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/embed",
-   "category": "marketing",
+   "category": "content",
    "structure": "monolithic",
    "props": [
     {
@@ -29185,14 +29187,14 @@
   },
   "card-grid": {
    "import": "@aziontech/webkit/card-grid",
-   "target": "./src/components/marketing/card-grid/index.ts",
+   "target": "./src/components/layout/card-grid/index.ts",
    "kind": "component",
    "compoundRoot": true,
    "treeShakeableImport": "@aziontech/webkit/card-grid-root",
    "subcomponents": [
     "@aziontech/webkit/card-grid-cell"
    ],
-   "category": "marketing",
+   "category": "layout",
    "structure": "composition",
    "props": [
     {
@@ -29252,11 +29254,11 @@
   },
   "card-grid-root": {
    "import": "@aziontech/webkit/card-grid-root",
-   "target": "./src/components/marketing/card-grid/card-grid.vue",
+   "target": "./src/components/layout/card-grid/card-grid.vue",
    "kind": "root",
    "rootOf": "card-grid",
    "treeShakeableImport": "@aziontech/webkit/card-grid-root",
-   "category": "marketing",
+   "category": "layout",
    "structure": "composition",
    "props": [
     {
@@ -29315,7 +29317,7 @@
   },
   "card-grid-cell": {
    "import": "@aziontech/webkit/card-grid-cell",
-   "target": "./src/components/marketing/card-grid/card-grid-cell/card-grid-cell.vue",
+   "target": "./src/components/layout/card-grid/card-grid-cell/card-grid-cell.vue",
    "kind": "subcomponent",
    "parent": "card-grid",
    "treeShakeableImport": "@aziontech/webkit/card-grid-cell",
@@ -29323,10 +29325,10 @@
   },
   "texture": {
    "import": "@aziontech/webkit/texture",
-   "target": "./src/components/marketing/texture/texture.vue",
+   "target": "./src/components/content/texture/texture.vue",
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/texture",
-   "category": "marketing",
+   "category": "content",
    "structure": "monolithic",
    "props": [
     {

@@ -1,8 +1,8 @@
 {
- "name": "doc-on-this-page",
- "binding": "DocOnThisPage",
- "import": "@aziontech/webkit/doc-on-this-page",
- "treeShakeableImport": "@aziontech/webkit/doc-on-this-page",
+ "name": "doc-table-of-contents",
+ "binding": "DocTableOfContents",
+ "import": "@aziontech/webkit/doc-table-of-contents",
+ "treeShakeableImport": "@aziontech/webkit/doc-table-of-contents",
  "category": "docs",
  "surface": "docs",
  "structure": "monolithic",
@@ -32,7 +32,7 @@
  "props": [
   {
    "name": "items",
-   "type": "DocOnThisPageItem[]",
+   "type": "DocTableOfContentsItem[]",
    "default": "[]",
    "required": "false",
    "doc": "The headings, in document order."
@@ -53,7 +53,7 @@
   },
   {
    "name": "groups",
-   "type": "DocOnThisPageGroup[]",
+   "type": "DocTableOfContentsGroup[]",
    "default": "[]",
    "required": "false",
    "doc": "Complementary groups rendered below the outline, in order."
@@ -62,7 +62,7 @@
  "events": [
   {
    "name": "select",
-   "payload": "(event: MouseEvent, item: DocOnThisPageItem)",
+   "payload": "(event: MouseEvent, item: DocTableOfContentsItem)",
    "notes": "Fired when a rail entry is activated; the page decides what scrolling means. Event first, per `event-payloads.md`."
   }
  ],
@@ -72,12 +72,12 @@
  "examples": [
   {
    "name": "Default",
-   "file": "examples/doc-on-this-page/default.vue"
+   "file": "examples/doc-table-of-contents/default.vue"
   },
   {
    "name": "Nesting",
-   "file": "examples/doc-on-this-page/nesting.vue"
+   "file": "examples/doc-table-of-contents/nesting.vue"
   }
  ],
- "docs": "components/doc-on-this-page.md"
+ "docs": "components/doc-table-of-contents.md"
 }

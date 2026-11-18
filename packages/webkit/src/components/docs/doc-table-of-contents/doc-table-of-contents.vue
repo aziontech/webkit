@@ -10,10 +10,10 @@
    * cut from that same path, so it travels along the bends and cannot drift out
    * of register. Complementary groups are separate nav landmarks, not entries.
    */
-  defineOptions({ name: 'DocOnThisPage', inheritAttrs: false })
+  defineOptions({ name: 'DocTableOfContents', inheritAttrs: false })
 
   /** One entry in the rail. */
-  export type DocOnThisPageItem = {
+  export type DocTableOfContentsItem = {
     /** The heading's anchor id. */
     id: string
     /** The visible heading text. */
@@ -23,7 +23,7 @@
   }
 
   /** One link in a complementary group below the outline. */
-  export type DocOnThisPageLink = {
+  export type DocTableOfContentsLink = {
     /** The visible link text. */
     label: string
     /** Where the link goes. */
@@ -33,25 +33,25 @@
   }
 
   /** A complementary group: its overline and its links. */
-  export type DocOnThisPageGroup = {
+  export type DocTableOfContentsGroup = {
     /** The group's overline label. */
     label: string
     /** The group's links, in the order they should read. */
-    links: DocOnThisPageLink[]
+    links: DocTableOfContentsLink[]
   }
 
-  export interface DocOnThisPageProps {
+  export interface DocTableOfContentsProps {
     /** The headings, in document order. */
-    items?: DocOnThisPageItem[]
+    items?: DocTableOfContentsItem[]
     /** The id of the heading currently in view. */
     activeId?: string
     /** The rail's own heading. Empty uses the locale catalog (`On this page`). */
     title?: string
     /** Complementary groups rendered below the outline, in order. */
-    groups?: DocOnThisPageGroup[]
+    groups?: DocTableOfContentsGroup[]
   }
 
-  const props = withDefaults(defineProps<DocOnThisPageProps>(), {
+  const props = withDefaults(defineProps<DocTableOfContentsProps>(), {
     items: () => [],
     activeId: '',
     title: '',
@@ -60,14 +60,14 @@
 
   const emit = defineEmits<{
     /** Fired when a rail entry is activated. */
-    select: [event: MouseEvent, item: DocOnThisPageItem]
+    select: [event: MouseEvent, item: DocTableOfContentsItem]
   }>()
 
   const attrs = useAttrs()
-  const { t } = useTranslate({ docOnThisPage: en.docOnThisPage })
-  const railTitle = computed(() => props.title || t('docOnThisPage.title'))
+  const { t } = useTranslate({ docTableOfContents: en.docTableOfContents })
+  const railTitle = computed(() => props.title || t('docTableOfContents.title'))
 
-  const testId = computed(() => (attrs['data-testid'] as string) ?? 'doc-on-this-page')
+  const testId = computed(() => (attrs['data-testid'] as string) ?? 'doc-table-of-contents')
 
   const isExternal = (href: string) => /^[a-z]+:/i.test(href) || href.startsWith('//')
 

@@ -256,8 +256,8 @@
   "packages/webkit/src/components/input/select/select.vue::manual-v-model",
   "packages/webkit/src/components/marketing/hero/hero-title/hero-title.vue::token:zero-with-unit",
   "packages/webkit/src/components/marketing/hero/hero.vue::token:zero-with-unit",
-  "packages/webkit/src/components/marketing/sticky-stack/sticky-stack.vue::token:zero-with-unit",
-  "packages/webkit/src/components/marketing/sticky-stack/sticky-stack.vue::token:zero-with-unit",
+  "packages/webkit/src/components/marketing/media-scroll/media-scroll.vue::token:zero-with-unit",
+  "packages/webkit/src/components/marketing/media-scroll/media-scroll.vue::token:zero-with-unit",
   "packages/webkit/src/components/navigation/tabs/presets/transitions.ts::token:js-class-preset",
   "packages/webkit/src/components/overlay/panel/panel-body.vue::token:js-class-preset",
   "packages/webkit/src/components/overlay/panel/panel-body.vue::token:js-class-preset"

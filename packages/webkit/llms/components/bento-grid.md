@@ -4,7 +4,7 @@
 
 - Import: `import BentoGridRoot from '@aziontech/webkit/bento-grid-root'`
 - Compound import (dot notation, not tree-shakeable): `import BentoGrid from '@aziontech/webkit/bento-grid'`
-- Category: marketing · Surface: site · Structure: composition
+- Category: layout · Surface: site · Structure: composition
 - API as JSON: [bento-grid.json](bento-grid.json)
 
 ## When to use

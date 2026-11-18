@@ -1,12 +1,12 @@
 ---
 name: bento-grid
-category: marketing
+category: layout
 structure: composition
 status: implemented
 spec_version: 2
 checksum: aed0d03b59c5d93b1f227b5053fb0fd8eb41f13c7b0184610cd50d10ee51e058
 created: 2026-09-22
-last_updated: 2026-11-15
+last_updated: 2026-11-18
 ---
 
 # Bento Grid — Component Spec

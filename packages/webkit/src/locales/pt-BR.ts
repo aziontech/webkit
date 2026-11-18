@@ -485,7 +485,7 @@ export const ptBR: Messages = {
     expandNavigation: 'Expandir navegação',
     resizeNavigation: 'Redimensionar navegação'
   },
-  docOnThisPage: {
+  docTableOfContents: {
     title: 'Nesta página'
   },
   docPageHeader: {

@@ -165,7 +165,7 @@
   "documentation-doc-item": "doc-item",
   "documentation-doc-layout": "doc-layout",
   "documentation-doc-markdown": "doc-markdown",
-  "documentation-doc-on-this-page": "doc-on-this-page",
+  "documentation-doc-on-this-page": "doc-table-of-contents",
   "documentation-doc-page-header": "doc-page-header",
   "documentation-doc-prev-next": "doc-previous-next",
   "documentation-doc-prompt": "doc-prompt",
@@ -294,7 +294,7 @@
   "marketing-section-module": "section-module",
   "marketing-section-title": "section-title",
   "marketing-site-page": "site-page",
-  "marketing-sticky-stack": "sticky-stack",
+  "marketing-sticky-stack": "media-scroll",
   "marketing-texture-material": "texture",
   "marketing-ticker": "marquee",
   "marketing-topic": "feature-item",
@@ -411,5 +411,7 @@
   "sections-template-gallery": "template-gallery-section",
   "sections-use-cases": "customer-use-cases-section",
   "utils-spinner": "spinner",
-  "utils-webkit-provider": "config-provider"
+  "utils-webkit-provider": "config-provider",
+  "doc-on-this-page": "doc-table-of-contents",
+  "sticky-stack": "media-scroll"
 }

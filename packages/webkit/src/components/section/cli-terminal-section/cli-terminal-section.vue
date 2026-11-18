@@ -3,11 +3,11 @@
 
   import Button from '../../action/button/button.vue'
   import CodeBlock from '../../code/code-block/code-block.vue'
+  import Texture from '../../content/texture/texture.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
   import SectionTitle from '../../marketing/section-title/section-title.vue'
-  import Texture from '../../marketing/texture/texture.vue'
 
   defineOptions({
     name: 'CliTerminalSection',

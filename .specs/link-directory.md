@@ -4,9 +4,9 @@ category: marketing
 structure: composition
 status: implemented
 spec_version: 4
-checksum: b4346fd122083538557844e751edfe16c6014e74257f19a420dc7c4a1c8373b2
+checksum: 9358b44ad90b3c05259fe46870d2887684b0394602b2bd3005ca794ec035a2e7
 created: 2026-09-24
-last_updated: 2026-11-15
+last_updated: 2026-11-18
 ---
 
 # Column Navigation — Component Spec
@@ -29,7 +29,7 @@ A directory of destinations laid out in columns on one set of shared hairlines: 
 - For a set of claims rather than destinations → use `card-grid` with `feature-item`, or `bento-grid` when the claims are unequal.
 - For the site-wide link directory at the foot of the page → use `footer`, which already lays its columns out.
 - For a trail back up the current hierarchy → use `breadcrumb`.
-- For the headings of the page currently being read → use `doc-on-this-page`.
+- For the headings of the page currently being read → use `doc-table-of-contents`.
 
 ## Related
 

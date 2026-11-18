@@ -134,6 +134,11 @@ const FIXTURES = {
     sfc(''),
     sfc('')
   ],
+  'docs-prefix': [
+    [`${C}/docs/callout/callout.vue`, `${C}/docs/doc-callout/doc-callout.vue`],
+    sfc(''),
+    sfc('')
+  ],
   'example-file': [
     'packages/webkit/examples/button/examples.json',
     pkg({ examples: [{ file: 'basic.vue' }, { file: 'types.vue' }, { file: 'read-only.vue' }] }),
@@ -424,6 +429,15 @@ test('section-suffix: every page section ends in -section, a bare name or a wrap
   assert.match(fired('stats-band')[0], /name it "stats-section"/)
   assert.deepEqual(fired('client-quotes-section'), [])
   assert.deepEqual(hits(`${C}/marketing/hero/hero.vue`, sfc(''), 'section-suffix'), [])
+})
+
+test('docs-prefix: a docs component starts with doc-, and only docs components do', () => {
+  const fired = (rel) => hits(rel, sfc(''), 'docs-prefix').map((x) => x.message)
+  assert.match(fired(`${C}/docs/steps/steps.vue`)[0], /name it "doc-steps"/)
+  assert.match(fired(`${C}/content/doc-card/doc-card.vue`)[0], /only components in src\/components\/docs\//)
+  assert.deepEqual(fired(`${C}/docs/doc-steps/doc-steps.vue`), [])
+  assert.deepEqual(fired(`${C}/docs/doc-steps/doc-steps-step.vue`), [])
+  assert.deepEqual(fired(`${C}/navigation/tabs/tabs.vue`), [])
 })
 
 test('every rule in the registry has a fixture, and no fixture names an unknown rule', () => {

@@ -1,6 +1,6 @@
 # Doc Layout
 
-> The documentation chrome, composed once in the app: a sticky header (at the inline start the compact menu button, the Azion Docs mark and the section links; an empty `AppHeader.Center` spacer; at the inline end `SearchTrigger` and then the app's actions, the way most docs sites end their header with the search), the navigation rail (`Sidebar` + `SidebarMenu`) on the inline start, resizable by dragging its edge and collapsible to a thin edge that brings it back, the article in the layout's `<main>`, the "On this page" rail (`DocOnThisPage`) on the inline end with its own slot below it — filled from the page itself: every `DocHeading` of level 2 or 3 that carries an `anchor`, and every `DocChangelogEntry`, rendered anywhere in the default slot registers with the layout, and the rail lists them in document order, so a page composed once in the app needs no wiring to feed its outline — and the footer under the article. The **document** scrolls: the header and both rails are sticky, so a full-page capture shows the whole article, the browser's find and scroll restoration work, and the dark canvas is painted to the end. The outline follows the reading position, a jump clears the sticky header, and below `lg` the rail moves into a drawer opened from the header. The `Command` palette lists every navigation page. Doc pages are only their article (page bodies with no header, rail or footer of their own), rendered through the default slot.
+> The documentation chrome, composed once in the app: a sticky header (at the inline start the compact menu button, the Azion Docs mark and the section links; an empty `AppHeader.Center` spacer; at the inline end `SearchTrigger` and then the app's actions, the way most docs sites end their header with the search), the navigation rail (`Sidebar` + `SidebarMenu`) on the inline start, resizable by dragging its edge and collapsible to a thin edge that brings it back, the article in the layout's `<main>`, the "On this page" rail (`DocTableOfContents`) on the inline end with its own slot below it — filled from the page itself: every `DocHeading` of level 2 or 3 that carries an `anchor`, and every `DocChangelogEntry`, rendered anywhere in the default slot registers with the layout, and the rail lists them in document order, so a page composed once in the app needs no wiring to feed its outline — and the footer under the article. The **document** scrolls: the header and both rails are sticky, so a full-page capture shows the whole article, the browser's find and scroll restoration work, and the dark canvas is painted to the end. The outline follows the reading position, a jump clears the sticky header, and below `lg` the rail moves into a drawer opened from the header. The `Command` palette lists every navigation page. Doc pages are only their article (page bodies with no header, rail or footer of their own), rendered through the default slot.
 
 - Import: `import DocLayout from '@aziontech/webkit/doc-layout'`
 - Category: docs · Surface: docs · Structure: monolithic
@@ -9,7 +9,7 @@
 ## When to use
 
 - Every documentation page (guide, reference, legal, changelog): put one `DocLayout` in the app's root (around `RouterView`) and render each page's article as its default slot.
-- A docs site that needs the navigation rail, the outline and the search palette without hand-composing `AppHeader`, `Sidebar`, `SidebarMenu`, `DocOnThisPage`, `Drawer` and `Command`.
+- A docs site that needs the navigation rail, the outline and the search palette without hand-composing `AppHeader`, `Sidebar`, `SidebarMenu`, `DocTableOfContents`, `Drawer` and `Command`.
 
 ## Do
 
@@ -29,7 +29,7 @@
 
 ## Related
 
-- `DocOnThisPage` — the outline rail; the registered headings and `outlineGroups` are bound onto it.
+- `DocTableOfContents` — the outline rail; the registered headings and `outlineGroups` are bound onto it.
 - `DocHeading` — headings whose anchor links the layout scrolls to, clearing the sticky header; an anchored level 2 or 3 heading registers itself as an outline entry.
 - `DocChangelogEntry` — each entry registers itself as a level 2 outline entry.
 - `useHeadingOutline` (`@aziontech/webkit/use-heading-navigation`) — the registration a custom heading calls to join the outline.
@@ -46,7 +46,7 @@
 | `activeId` | `string` | `''` | false | Id of the current row. Empty matches the current route against each row's `href`. |
 | `sections` | `DocLayoutSection[]` | `[]` | false | The header's section links (`Reference`, `Guides`), each `{ label, href? }`; shown from `lg`. |
 | `home` | `string` | `'/'` | false | Where the Azion Docs mark links. |
-| `outlineGroups` | `DocOnThisPageGroup[]` | `[]` | false | Complementary link groups under the outline (GitHub, Community). |
+| `outlineGroups` | `DocTableOfContentsGroup[]` | `[]` | false | Complementary link groups under the outline (GitHub, Community). |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the navigation landmark. Empty uses the locale catalog (`Documentation`). |
 | `rootLabel` | `string` | `''` | false | Names the top of the docs tree in the rail's Back button on the first drill level (`Back to Docs`); deeper levels name their parent row. Empty uses the locale catalog (`Docs`). |
 | `searchOpen` | `boolean` | `false` | false | Two-way value (`v-model:searchOpen`). |
@@ -87,7 +87,7 @@
 
 ## Accessibility
 
-- Landmarks: the header is `AppHeader` (`<header>` named by the catalog `Documentation sections` on its section links); the rail is the `Sidebar` `<nav>` named by `ariaLabel`; the article is inside the single `<main>`; the end rail is an `<aside>` holding the `DocOnThisPage` navigation landmarks. A page must not render a second `<main>`.
+- Landmarks: the header is `AppHeader` (`<header>` named by the catalog `Documentation sections` on its section links); the rail is the `Sidebar` `<nav>` named by `ariaLabel`; the article is inside the single `<main>`; the end rail is an `<aside>` holding the `DocTableOfContents` navigation landmarks. A page must not render a second `<main>`.
 - Keyboard map: `Tab` runs header → rail → article → end rail → footer; the rail's resize handle is a focusable `separator` (`Resize navigation`) moved with `ArrowLeft` / `ArrowRight`, its collapse button (`Collapse navigation`) folds the rail and the edge affordance's button (`Expand navigation`) brings it back, all owned by `Sidebar`; `⌘K` / `Ctrl K` opens the palette (`Command`); the compact menu button opens the drawer, `Escape` closes it and returns focus. Choosing an outline entry moves focus to its heading (made focusable with `tabindex="-1"`).
 - Names: the mark link (`Azion Docs home`), the compact menu button (`Open documentation navigation`) and the search (`Search docs`) come from the locale catalog.
 - Visible focus: composed controls own their rings; the mark link uses `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
@@ -96,9 +96,9 @@
 
 - Layout: logical utilities only; the header's mark and section links sit at the inline start and the search and actions at the inline end (right in LTR, left under `dir="rtl"`); the navigation rail sits at the inline start, the outline at the inline end, and the drawer opens from the inline start.
 - Resize: dragging and the arrow keys follow the inline direction (`Sidebar` mirrors them under `dir="rtl"`); the collapse and expand glyphs mirror.
-- Icons: the mark is not mirrored; `SidebarMenu` and `DocOnThisPage` mirror their own glyphs.
+- Icons: the mark is not mirrored; `SidebarMenu` and `DocTableOfContents` mirror their own glyphs.
 - Keyboard: arrow handling is `SidebarMenu`'s and `Command`'s, both direction-aware.
-- User data: labels render with `dir="auto"` inside `SidebarMenu`, `DocOnThisPage` and `Command`.
+- User data: labels render with `dir="auto"` inside `SidebarMenu`, `DocTableOfContents` and `Command`.
 
 ## Internationalization
 

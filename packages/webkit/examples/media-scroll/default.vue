@@ -1,6 +1,6 @@
 <script setup>
   import Illustration from '@aziontech/webkit/illustration'
-  import StickyStack from '@aziontech/webkit/sticky-stack'
+  import MediaScroll from '@aziontech/webkit/media-scroll'
 
   const scenes = ['ai-applications', 'live-debugging', 'deploy-secure-mcp-server']
 
@@ -24,9 +24,9 @@
 </script>
 
 <template>
-  <StickyStack :items="items">
+  <MediaScroll :items="items">
     <template #media="{ index }">
       <Illustration :name="scenes[index]" />
     </template>
-  </StickyStack>
+  </MediaScroll>
 </template>

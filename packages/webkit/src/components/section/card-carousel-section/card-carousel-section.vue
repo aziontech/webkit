@@ -1,11 +1,11 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import Carousel from '../../content/carousel/carousel.vue'
+  import CarouselItem from '../../content/carousel/carousel-item/carousel-item.vue'
+  import CarouselNext from '../../content/carousel/carousel-next/carousel-next.vue'
+  import CarouselPrevious from '../../content/carousel/carousel-previous/carousel-previous.vue'
   import Eyebrow from '../../content/eyebrow/eyebrow.vue'
-  import Carousel from '../../marketing/carousel/carousel.vue'
-  import CarouselItem from '../../marketing/carousel/carousel-item/carousel-item.vue'
-  import CarouselNext from '../../marketing/carousel/carousel-next/carousel-next.vue'
-  import CarouselPrevious from '../../marketing/carousel/carousel-previous/carousel-previous.vue'
   import SectionTitle from '../../marketing/section-title/section-title.vue'
 
   defineOptions({

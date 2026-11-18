@@ -2,11 +2,11 @@
   import { computed, defineAsyncComponent, useAttrs } from 'vue'
 
   import Button from '../../action/button/button.vue'
+  import Texture from '../../content/texture/texture.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import CallToAction from '../../marketing/call-to-action/call-to-action.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
-  import Texture from '../../marketing/texture/texture.vue'
 
   defineOptions({
     name: 'ClosingCallToActionSection',

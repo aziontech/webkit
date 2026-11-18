@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: 25e2e5011bcf80892d08f7dc35b2732791a0dcebfcbd715bdc3a821e56d9370b
+checksum: e7c76aa790e9f6cde4eee880476f99ee96c05015eeabd08b2fe23c6d1292d4ad
 created: 2026-11-14
-last_updated: 2026-11-15
+last_updated: 2026-11-18
 ---
 
 # DocCallToAction — Component Spec
@@ -28,7 +28,7 @@ The closing offer of a documentation page, parked at the foot of the "On this pa
 
 ## Related
 
-- `DocOnThisPage` — the rail it closes.
+- `DocTableOfContents` — the rail it closes.
 - `RegistrationFrame` — the frame.
 - `CallToAction` — the marketing closing band.
 

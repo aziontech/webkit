@@ -48,7 +48,7 @@ const CATEGORY_TITLES = {
   navigation: 'Navigation',
   overlay: 'Overlay',
   provider: 'Providers',
-  section: 'Marketing sections'
+  section: 'Page sections'
 }
 
 function stripComments(text) {

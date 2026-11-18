@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { type Component, computed, markRaw, provide, shallowRef, useAttrs, watch } from 'vue'
 
-  import type { TextureVariant } from '../../marketing/texture/texture.vue'
+  import type { TextureVariant } from '../../content/texture/texture.vue'
   import { ConsoleMockupInjectionKey } from './injection-key'
   import type {
     ConsoleMockupShellFade,

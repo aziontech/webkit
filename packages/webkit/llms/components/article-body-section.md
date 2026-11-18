@@ -1,6 +1,6 @@
 # Article Body Section
 
-> The reading page of an article. A brand banner sits over a three-column grid: the share, community and copy-page rail on the left; the breadcrumb, headline, byline and prose down the middle at a reading measure; and the "On this page" outline on the right. Both rails stick under the header and fold away below `lg`, leaving the column alone. The section opens the page itself, so it carries its own `section-container` instead of sitting in the page column. The prose arrives as markdown: `##` / `###` headings (each with an id slugged from its text, feeding the outline), fenced code blocks, `-` and numbered lists and paragraphs, with inline links, `**strong**`, `*emphasis*` and `` `code` `` inside paragraphs and list items. The outline follows the reader: the heading last scrolled past is active, and choosing an entry scrolls to it (smoothly unless reduced motion is set) and writes its hash to the address. The byline can carry the writers' names and their photos as overlapping avatars. It is a page section — the site places it from a `{ _id: 'article-body-section', props }` entry and binds `props` straight onto it — and it composes `section-container`, `section-module`, `registration-frame`, `breadcrumb`, `hero-title`, `divider`, `doc-prose`, `tooltip`, `icon-button`, `split-button`, `avatar` and `doc-on-this-page`; copying to the clipboard is local behaviour, confirmed by a toast.
+> The reading page of an article. A brand banner sits over a three-column grid: the share, community and copy-page rail on the left; the breadcrumb, headline, byline and prose down the middle at a reading measure; and the "On this page" outline on the right. Both rails stick under the header and fold away below `lg`, leaving the column alone. The section opens the page itself, so it carries its own `section-container` instead of sitting in the page column. The prose arrives as markdown: `##` / `###` headings (each with an id slugged from its text, feeding the outline), fenced code blocks, `-` and numbered lists and paragraphs, with inline links, `**strong**`, `*emphasis*` and `` `code` `` inside paragraphs and list items. The outline follows the reader: the heading last scrolled past is active, and choosing an entry scrolls to it (smoothly unless reduced motion is set) and writes its hash to the address. The byline can carry the writers' names and their photos as overlapping avatars. It is a page section — the site places it from a `{ _id: 'article-body-section', props }` entry and binds `props` straight onto it — and it composes `section-container`, `section-module`, `registration-frame`, `breadcrumb`, `hero-title`, `divider`, `doc-prose`, `tooltip`, `icon-button`, `split-button`, `avatar` and `doc-table-of-contents`; copying to the clipboard is local behaviour, confirmed by a toast.
 
 - Import: `import ArticleBodySection from '@aziontech/webkit/article-body-section'`
 - Category: section · Surface: site · Structure: monolithic
@@ -24,7 +24,7 @@
 ## Related
 
 - [doc-prose](doc-prose.md) — the reading-measure typography the body renders in.
-- [doc-on-this-page](doc-on-this-page.md) — the outline rail fed by the body's headings.
+- [doc-table-of-contents](doc-table-of-contents.md) — the outline rail fed by the body's headings.
 
 ## Props
 
@@ -56,7 +56,7 @@
 ## Accessibility
 
 - Visible focus: every link and button shows a `focus-visible` ring.
-- Feedback: copy results are announced by the `Toaster`'s live region; the outline's active entry carries `aria-current` (owned by `doc-on-this-page`).
+- Feedback: copy results are announced by the `Toaster`'s live region; the outline's active entry carries `aria-current` (owned by `doc-table-of-contents`).
 - Keyboard map: `Tab` moves through the breadcrumb, the rails and the prose links; the split button owns its menu keyboard map.
 - ARIA: the root is a plain `div` so the page keeps its own landmarks; the headline is the page `h1` (from `hero-title`); the prose is an `article`; the two rails are `aside` landmarks, the left one named by the share title, the right one by the outline's own navigation; the share and community groups are named `section`s; icon-only share buttons are named by their labels and carry a tooltip; the banner is decorative (`aria-hidden`, `alt=""`); heading ids are slugged from their text.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text uses `--text-default` / `--text-muted`.

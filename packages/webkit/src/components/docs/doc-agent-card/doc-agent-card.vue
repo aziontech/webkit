@@ -6,8 +6,8 @@
   import Button from '../../action/button/button.vue'
   import type { CopyPromptButtonAgent } from '../../action/copy-prompt-button/copy-prompt-button.vue'
   import CopyPromptButton from '../../action/copy-prompt-button/copy-prompt-button.vue'
+  import Texture from '../../content/texture/texture.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
-  import Texture from '../../marketing/texture/texture.vue'
 
   defineOptions({ name: 'DocAgentCard', inheritAttrs: false })
 

@@ -1,6 +1,6 @@
 {
   "component": "feature-item",
-  "title": "Components/Marketing/Primitives/FeatureItem",
+  "title": "Components/Marketing/Elements/FeatureItem",
   "examples": [
     {
       "name": "Default",

@@ -3,7 +3,7 @@
 > A responsive `iframe` for third-party content — a demo, a player, a status page, a form — that keeps its aspect ratio at every width and always carries the accessible name an `iframe` needs. It is the one place external content enters a page, so the attributes that are easy to forget are not optional.
 
 - Import: `import Embed from '@aziontech/webkit/embed'`
-- Category: marketing · Surface: site · Structure: monolithic
+- Category: content · Surface: site · Structure: monolithic
 - API as JSON: [embed.json](embed.json)
 
 ## When to use

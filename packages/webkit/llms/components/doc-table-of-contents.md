@@ -1,10 +1,10 @@
-# Doc On This Page
+# Doc Table Of Contents
 
 > The "On this page" rail: the page's own headings, the active one lit, nested headings indented under their parent — followed by the rail's complementary groups (the repository, the community). The rail is a single path that bends inward as the outline nests, and the active marker is a dash cut from that same path, so moving between headings slides the marker **along** the line, through the bends, rather than jumping a separate bar between two positions.
 
-- Import: `import DocOnThisPage from '@aziontech/webkit/doc-on-this-page'`
+- Import: `import DocTableOfContents from '@aziontech/webkit/doc-table-of-contents'`
 - Category: docs · Surface: docs · Structure: monolithic
-- API as JSON: [doc-on-this-page.json](doc-on-this-page.json)
+- API as JSON: [doc-table-of-contents.json](doc-table-of-contents.json)
 
 ## When to use
 
@@ -34,16 +34,16 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `items` | `DocOnThisPageItem[]` | `[]` | false | The headings, in document order. |
+| `items` | `DocTableOfContentsItem[]` | `[]` | false | The headings, in document order. |
 | `activeId` | `string` | `''` | false | The id of the heading currently in view. |
 | `title` | `string` | `''` | false | The rail's own heading. Empty uses the locale catalog (`On this page`). |
-| `groups` | `DocOnThisPageGroup[]` | `[]` | false | Complementary groups rendered below the outline, in order. |
+| `groups` | `DocTableOfContentsGroup[]` | `[]` | false | Complementary groups rendered below the outline, in order. |
 
 ## Events
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `select` | `(event: MouseEvent, item: DocOnThisPageItem)` | Fired when a rail entry is activated; the page decides what scrolling means. Event first, per `event-payloads.md`. |
+| `select` | `(event: MouseEvent, item: DocTableOfContentsItem)` | Fired when a rail entry is activated; the page decides what scrolling means. Event first, per `event-payloads.md`. |
 
 ## States
 
@@ -66,11 +66,11 @@
 
 ```vue
 <script setup>
-  import DocOnThisPage from '@aziontech/webkit/doc-on-this-page'
+  import DocTableOfContents from '@aziontech/webkit/doc-table-of-contents'
 </script>
 
 <template>
-  <DocOnThisPage
+  <DocTableOfContents
     :items="[
       { id: 'deploy', text: 'Deploy an application', depth: 2 },
       { id: 'what-you-get', text: 'What you get', depth: 3 },
@@ -95,12 +95,12 @@
 
 ```vue
 <script setup>
-  import DocOnThisPage from '@aziontech/webkit/doc-on-this-page'
+  import DocTableOfContents from '@aziontech/webkit/doc-table-of-contents'
 </script>
 
 <template>
   <div class="max-w-64">
-    <DocOnThisPage
+    <DocTableOfContents
       :items="[
         { id: 'overview', text: 'Overview', depth: 2 },
         { id: 'templates', text: 'Templates', depth: 3 },

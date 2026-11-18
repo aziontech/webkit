@@ -684,6 +684,16 @@
       "to": "config-provider",
       "from": "WebkitProvider",
       "binding": "ConfigProvider"
+    },
+    "doc-on-this-page": {
+      "to": "doc-table-of-contents",
+      "from": "DocOnThisPage",
+      "binding": "DocTableOfContents"
+    },
+    "sticky-stack": {
+      "to": "media-scroll",
+      "from": "StickyStack",
+      "binding": "MediaScroll"
     }
   },
   "removed": {
@@ -934,9 +944,9 @@
     "TopologyNodeField": "TopologyDiagramNodeField",
     "TopologyBindOption": "TopologyDiagramBindOption",
     "TopologyNodeSeverity": "TopologyDiagramNodeSeverity",
-    "DocTocItem": "DocOnThisPageItem",
-    "DocTocLink": "DocOnThisPageLink",
-    "DocTocGroup": "DocOnThisPageGroup",
+    "DocTocItem": "DocTableOfContentsItem",
+    "DocTocLink": "DocTableOfContentsLink",
+    "DocTocGroup": "DocTableOfContentsGroup",
     "DocPageAction": "DocPageHeaderAction",
     "DocPageLink": "DocPreviousNextLink",
     "DocCodeSample": "DocCodeGroupSample",
@@ -1180,7 +1190,14 @@
     "HoverCardPlacement": "HoverCardSide",
     "HoverCardPlacementSide": "HoverCardSide",
     "HintPlacement": "HintSide",
-    "WebkitProviderProps": "ConfigProviderProps"
+    "WebkitProviderProps": "ConfigProviderProps",
+    "DocOnThisPageItem": "DocTableOfContentsItem",
+    "DocOnThisPageLink": "DocTableOfContentsLink",
+    "DocOnThisPageGroup": "DocTableOfContentsGroup",
+    "DocOnThisPageProps": "DocTableOfContentsProps",
+    "StickyStackItem": "MediaScrollItem",
+    "StickyStackSize": "MediaScrollSize",
+    "StickyStackProps": "MediaScrollProps"
   },
   "legacy": {
     "major": 3,

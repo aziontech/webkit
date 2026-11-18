@@ -1,6 +1,6 @@
 {
   "component": "logo-wall",
-  "title": "Components/Marketing/Primitives/LogoWall",
+  "title": "Components/Marketing/Elements/LogoWall",
   "examples": [
     {
       "name": "Default",

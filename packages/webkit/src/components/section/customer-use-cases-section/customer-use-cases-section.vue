@@ -3,9 +3,9 @@
 
   import Button from '../../action/button/button.vue'
   import Eyebrow from '../../content/eyebrow/eyebrow.vue'
+  import CardGrid from '../../layout/card-grid/card-grid.vue'
+  import CardGridCell from '../../layout/card-grid/card-grid-cell/card-grid-cell.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
-  import CardGrid from '../../marketing/card-grid/card-grid.vue'
-  import CardGridCell from '../../marketing/card-grid/card-grid-cell/card-grid-cell.vue'
   import FeatureItem from '../../marketing/feature-item/feature-item.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'

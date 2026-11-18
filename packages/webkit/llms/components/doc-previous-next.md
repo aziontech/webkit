@@ -27,7 +27,7 @@
 ## Related
 
 - `Pagination` — the data counterpart; numbered pages over a collection, not two named documents.
-- `DocOnThisPage` — navigation _within_ the page, where this is navigation _between_ pages.
+- `DocTableOfContents` — navigation _within_ the page, where this is navigation _between_ pages.
 
 ## Props
 

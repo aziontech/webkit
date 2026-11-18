@@ -3,7 +3,7 @@
  "binding": "Texture",
  "import": "@aziontech/webkit/texture",
  "treeShakeableImport": "@aziontech/webkit/texture",
- "category": "marketing",
+ "category": "content",
  "surface": "site",
  "structure": "monolithic",
  "compoundRoot": false,

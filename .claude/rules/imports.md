@@ -39,13 +39,13 @@ If the flat name is already taken by another component, that is a **naming** pro
 
 A few export keys have two segments on purpose. The first segment is a **namespace for a kind of file**, never a category: `assets/*` (logos, scenes and media), `locales/*` (message catalogs), `styles/*` (stylesheets), `svg/*` (raw drawings) and `utils/*` (`utils/cn`, `utils/csv`: plain helpers, not components). A component never takes a namespace; it is always `@aziontech/webkit/<name>`.
 
-## Marketing — primitives and page sections
+## Marketing — elements and page sections
 
 The two marketing categories follow the flat rule like every other category; only their docs navigation is grouped under one `Marketing` node.
 
 | Category                      | Source folder                      | Export / import                           | Examples `title`                           |
 | ----------------------------- | ---------------------------------- | ----------------------------------------- | ------------------------------------------ |
-| `marketing` (building blocks) | `src/components/marketing/<name>/` | `"./<name>"` · `@aziontech/webkit/<name>` | `Components/Marketing/Primitives/<Pascal>` |
+| `marketing` (elements)        | `src/components/marketing/<name>/` | `"./<name>"` · `@aziontech/webkit/<name>` | `Components/Marketing/Elements/<Pascal>`   |
 | `section` (page sections)     | `src/components/section/<name>/`   | `"./<name>"` · `@aziontech/webkit/<name>` | `Components/Marketing/Sections/<Pascal>`   |
 
 - A page section's `<name>` is the `_id` the marketing site writes in a page's `sections[]` JSON, so the `_id` and the import subpath are the same string (see [`SECTIONS.md`](../docs/SECTIONS.md)).

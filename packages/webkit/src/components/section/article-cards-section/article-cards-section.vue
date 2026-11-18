@@ -4,9 +4,9 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import type { LogoMark } from '../../content/logo/logo.vue'
+  import CardGrid from '../../layout/card-grid/card-grid.vue'
+  import CardGridCell from '../../layout/card-grid/card-grid-cell/card-grid-cell.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
-  import CardGrid from '../../marketing/card-grid/card-grid.vue'
-  import CardGridCell from '../../marketing/card-grid/card-grid-cell/card-grid-cell.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import SectionTitle from '../../marketing/section-title/section-title.vue'
 

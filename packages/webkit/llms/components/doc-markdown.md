@@ -1,6 +1,6 @@
 # Doc Markdown
 
-> Renders a documentation page written in Markdown with Mintlify-style MDX component tags into the documentation components. Prose becomes plain semantic HTML (headings, paragraphs, lists, block quotes, rules, tables, inline code, links, bold, italic) that the surrounding `DocProse` styles, and the component tags (`<Note>`, `<Steps>`, `<CardGroup>`, `<Tabs>`, `<CodeGroup>`, `<Update>`, `<Tooltip>` …) mount `DocCallout`, `DocSteps`, `DocCardGroup`, `DocTabs`, `DocCodeGroup`, `DocChangelogEntry`, `HoverCard` and the rest. Headings render as `DocHeading` with unique slug ids, and the named export `parseDocMarkdown` returns the same headings (for a standalone `DocOnThisPage`; inside `DocLayout` the rendered `DocHeading`s fill the outline on their own) and the frontmatter (for `DocPageHeader`). It is a small in-house reader of a fixed MDX subset, not an MDX compiler: no JSX expressions, no imports, no script, and no `v-html`, so a page's source can never run code.
+> Renders a documentation page written in Markdown with Mintlify-style MDX component tags into the documentation components. Prose becomes plain semantic HTML (headings, paragraphs, lists, block quotes, rules, tables, inline code, links, bold, italic) that the surrounding `DocProse` styles, and the component tags (`<Note>`, `<Steps>`, `<CardGroup>`, `<Tabs>`, `<CodeGroup>`, `<Update>`, `<Tooltip>` …) mount `DocCallout`, `DocSteps`, `DocCardGroup`, `DocTabs`, `DocCodeGroup`, `DocChangelogEntry`, `HoverCard` and the rest. Headings render as `DocHeading` with unique slug ids, and the named export `parseDocMarkdown` returns the same headings (for a standalone `DocTableOfContents`; inside `DocLayout` the rendered `DocHeading`s fill the outline on their own) and the frontmatter (for `DocPageHeader`). It is a small in-house reader of a fixed MDX subset, not an MDX compiler: no JSX expressions, no imports, no script, and no `v-html`, so a page's source can never run code.
 
 - Import: `import DocMarkdown from '@aziontech/webkit/doc-markdown'`
 - Category: docs · Surface: docs · Structure: monolithic
@@ -14,7 +14,7 @@
 
 ## Do
 
-- Wrap it in `DocProse`; inside `DocLayout` the headings it renders register with the layout's outline, so the page passes nothing. Read the frontmatter (and, for a standalone `DocOnThisPage`, the headings) from the same source: `const { headings, frontmatter } = parseDocMarkdown(source)`.
+- Wrap it in `DocProse`; inside `DocLayout` the headings it renders register with the layout's outline, so the page passes nothing. Read the frontmatter (and, for a standalone `DocTableOfContents`, the headings) from the same source: `const { headings, frontmatter } = parseDocMarkdown(source)`.
 - Write one component tag per line block; a one-line callout (`<Note>Copy.</Note>`) is fine. Attribute values are strings, numbers, booleans or a string list (`tags={["API", "CLI"]}`); anything else stays literal text.
 - Repeated headings are fine: the second `Test it` gets the id `test-it-2`, so anchors and the outline stay unique.
 - Use `components` to swap the component a tag mounts (your own `Card`) or to add a block tag your docs use; never fork the parser.
@@ -32,7 +32,7 @@
 
 - `DocProse` — wrap this component in it; it owns the type scale, the block rhythm and the copyable inline code chips.
 - `DocHeading` — every Markdown heading renders as one, with the slug id the outline points at.
-- `DocLayout` — its outline lists the rendered `DocHeading`s with no wiring. `DocOnThisPage` — takes `parseDocMarkdown(source).headings` as `items` when used without the layout.
+- `DocLayout` — its outline lists the rendered `DocHeading`s with no wiring. `DocTableOfContents` — takes `parseDocMarkdown(source).headings` as `items` when used without the layout.
 - `DocPageHeader` — takes the frontmatter's `title` and `description`.
 - `DocCallout`, `DocSteps`, `DocStep`, `DocCardGroup`, `DocCard`, `DocItem`, `DocAccordionGroup`, `DocAccordion`, `DocTabs`, `DocTab`, `DocCodeGroup`, `DocFrame`, `DocPrompt`, `DocChangelogEntry` — what the tags mount.
 - `HoverCard` — an inline `<Tooltip tip title linkLabel href>` tag renders as a HoverCard: the term is a dotted-underlined button, the card shows the title, the definition and an optional link.
@@ -156,7 +156,7 @@
 <script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import DocMarkdown, { parseDocMarkdown } from '@aziontech/webkit/doc-markdown'
-  import DocOnThisPage from '@aziontech/webkit/doc-on-this-page'
+  import DocTableOfContents from '@aziontech/webkit/doc-table-of-contents'
   import DocProse from '@aziontech/webkit/doc-prose'
 
   const components = { Alert }
@@ -185,7 +185,7 @@
       />
     </DocProse>
     <div class="md:w-(--container-3xs)">
-      <DocOnThisPage :items="headings" />
+      <DocTableOfContents :items="headings" />
     </div>
   </div>
 </template>

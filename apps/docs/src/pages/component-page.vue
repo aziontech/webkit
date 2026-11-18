@@ -11,7 +11,7 @@
 
   import ApiTable from '../components/api-table.vue'
   import ExampleCard from '../components/example-card.vue'
-  import OnThisPage from '../components/on-this-page.vue'
+  import TableOfContents from '../components/table-of-contents.vue'
   import RawHtml from '../components/raw-html.vue'
   import { componentMarkdown, copyText } from '../lib/copy'
   import { cached, index, keys } from '../lib/data'
@@ -343,6 +343,6 @@
         </DocProse>
       </section>
     </article>
-    <OnThisPage :items="toc" />
+    <TableOfContents :items="toc" />
   </div>
 </template>

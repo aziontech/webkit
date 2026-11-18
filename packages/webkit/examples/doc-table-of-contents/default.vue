@@ -1,9 +1,9 @@
 <script setup>
-  import DocOnThisPage from '@aziontech/webkit/doc-on-this-page'
+  import DocTableOfContents from '@aziontech/webkit/doc-table-of-contents'
 </script>
 
 <template>
-  <DocOnThisPage
+  <DocTableOfContents
     :items="[
       { id: 'deploy', text: 'Deploy an application', depth: 2 },
       { id: 'what-you-get', text: 'What you get', depth: 3 },

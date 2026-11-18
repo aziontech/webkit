@@ -1,12 +1,12 @@
 ---
 name: embed
-category: marketing
+category: content
 structure: monolithic
 status: implemented
 spec_version: 3
 checksum: 046c9e77c7199c04ea23897251239c400c316c67f0209095823ea605dd487f4f
 created: 2026-09-22
-last_updated: 2026-11-15
+last_updated: 2026-11-18
 ---
 
 # Embed — Component Spec

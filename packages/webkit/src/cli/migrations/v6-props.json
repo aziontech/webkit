@@ -1417,7 +1417,7 @@
     "kind": "variant",
     "titleVariant": "titleAlign"
   },
-  "sticky-stack": {
+  "media-scroll": {
     "@index-change": "active-index-change"
   },
   "story-index-section": {

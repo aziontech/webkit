@@ -1,10 +1,10 @@
 <script setup lang="ts">
   import Button from '../../../action/button/button.vue'
   import IconButton from '../../../action/icon-button/icon-button.vue'
+  import type { TextureVariant } from '../../../content/texture/texture.vue'
   import FieldDescription from '../../../input/field/field-description/field-description.vue'
   import FieldLabel from '../../../input/field/field-label/field-label.vue'
   import Input from '../../../input/input/input.vue'
-  import type { TextureVariant } from '../../../marketing/texture/texture.vue'
   import Tag from '../../tag/tag.vue'
   import ConsoleMockupShell, {
     type ConsoleMockupShellFade

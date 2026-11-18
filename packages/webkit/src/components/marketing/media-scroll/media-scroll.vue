@@ -16,12 +16,12 @@
   import Texture from '../texture/texture.vue'
 
   defineOptions({
-    name: 'StickyStack',
+    name: 'MediaScroll',
     inheritAttrs: false
   })
 
   /** One claim in the run: the sentence a reader arrives at and the medium it stands for. */
-  export type StickyStackItem = {
+  export type MediaScrollItem = {
     /** The claim's heading, naming it in the stack. */
     title: string
     /** The sentence that opens with the claim. */
@@ -33,20 +33,20 @@
   }
 
   /** Height the open claim is held to, and so the height of the whole stack. */
-  export type StickyStackSize = 'small' | 'medium' | 'large'
+  export type MediaScrollSize = 'small' | 'medium' | 'large'
 
-  export interface StickyStackProps {
+  export interface MediaScrollProps {
     /** The claims, in reading order; each item is a title, the sentence that opens with it, and the image shown while it is open. */
-    items?: StickyStackItem[]
+    items?: MediaScrollItem[]
     /** Height the open claim is held to, and so the height of the whole stack beside the media. */
-    size?: StickyStackSize
+    size?: MediaScrollSize
     /** Screen-heights of scrolling each claim holds while the band is pinned; the band's total scroll is one screen plus this much per claim. */
     dwell?: number
     /** Fills a hairline along the open claim's bottom edge as its share of the scroll is spent. */
     showProgress?: boolean
   }
 
-  const props = withDefaults(defineProps<StickyStackProps>(), {
+  const props = withDefaults(defineProps<MediaScrollProps>(), {
     items: () => [],
     size: 'medium',
     dwell: 0.7,
@@ -60,9 +60,9 @@
 
   const slots = defineSlots<{
     /** The claim's medium; replaces the image built from the item's own source. */
-    media?(props: { item: StickyStackItem; index: number; active: boolean }): unknown
+    media?(props: { item: MediaScrollItem; index: number; active: boolean }): unknown
     /** The claim's own controls, under its description; shown while the claim is open. */
-    actions?(props: { item: StickyStackItem; index: number; active: boolean }): unknown
+    actions?(props: { item: MediaScrollItem; index: number; active: boolean }): unknown
     /** Fills the media frame behind every claim's medium; mounted once, so it holds still as the claims change. */
     backdrop?(): unknown
   }>()
@@ -75,7 +75,7 @@
   const sliceProgress = ref(0)
   let pending: number | null = null
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'sticky-stack')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'media-scroll')
 
   const DENSE_FROM = 6
 
@@ -83,7 +83,7 @@
   const hasItems = computed(() => count.value > 0)
   const dense = computed(() => count.value >= DENSE_FROM)
   const span = computed(() => 1 + count.value * props.dwell)
-  const activeItem = computed<StickyStackItem | null>(() => props.items[activeIndex.value] ?? null)
+  const activeItem = computed<MediaScrollItem | null>(() => props.items[activeIndex.value] ?? null)
 
   useEventListener(
     typeof globalThis.window !== 'undefined' ? globalThis.window : null,
@@ -112,7 +112,7 @@
     pending = null
   })
 
-  function hasActions(item: StickyStackItem, index: number): boolean {
+  function hasActions(item: MediaScrollItem, index: number): boolean {
     return rendersContent(slots.actions?.({ item, index, active: isActive(index) }))
   }
 
@@ -180,12 +180,12 @@
     :data-testid="testId"
     :data-size="size"
     :data-progress="showProgress || null"
-    :style="{ '--sticky-stack-span': span, '--sticky-stack-dwell': dwell }"
-    class="relative [--sticky-stack-open:calc(var(--spacing-xl)*4)] data-[size=large]:[--sticky-stack-open:calc(var(--spacing-xl)*5)] data-[size=small]:[--sticky-stack-open:calc(var(--spacing-xl)*3)] lg:h-[calc(100dvh*var(--sticky-stack-span))]"
+    :style="{ '--media-scroll-span': span, '--media-scroll-dwell': dwell }"
+    class="relative [--media-scroll-open:calc(var(--spacing-xl)*4)] data-[size=large]:[--media-scroll-open:calc(var(--spacing-xl)*5)] data-[size=small]:[--media-scroll-open:calc(var(--spacing-xl)*3)] lg:h-[calc(100dvh*var(--media-scroll-span))]"
   >
     <div
       ref="frameEl"
-      class="lg:sticky lg:top-[var(--sticky-stack-top,0)] lg:h-[calc(100dvh-var(--sticky-stack-top,0rem))] lg:flex lg:flex-col lg:overflow-hidden"
+      class="lg:sticky lg:top-[var(--media-scroll-top,0)] lg:h-[calc(100dvh-var(--media-scroll-top,0rem))] lg:flex lg:flex-col lg:overflow-hidden"
     >
       <div
         aria-hidden="true"
@@ -194,10 +194,10 @@
         <Texture variant="lines" />
       </div>
       <div
-        class="grid w-full grid-cols-1 lg:shrink-0 lg:h-[var(--sticky-stack-height,100%)] lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:border-y-[length:var(--sticky-stack-frame-border,0)] lg:border-solid lg:border-(--border-default)"
+        class="grid w-full grid-cols-1 lg:shrink-0 lg:h-[var(--media-scroll-height,100%)] lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:border-y-[length:var(--media-scroll-frame-border,0)] lg:border-solid lg:border-(--border-default)"
       >
         <ol
-          class="m-0 flex list-none flex-col p-0 lg:min-w-0 lg:[align-self:var(--sticky-stack-align,start)]"
+          class="m-0 flex list-none flex-col p-0 lg:min-w-0 lg:[align-self:var(--media-scroll-align,start)]"
         >
           <li
             v-for="(item, index) in items"
@@ -206,7 +206,7 @@
             :data-completed="index < activeIndex || null"
             :data-actions="hasActions(item, index) || null"
             :data-dense="dense || null"
-            class="group relative border-b border-(--border-default) px-(--spacing-xl) py-(--spacing-lg) last:border-b-0 lg:flex lg:grow-0 lg:flex-col lg:justify-start lg:transition-[flex-grow] lg:duration-moderate-01 lg:ease-productive-entrance lg:data-[dense]:py-(--spacing-md) lg:data-[active]:min-h-(--sticky-stack-open) lg:data-[active]:grow lg:data-[active]:justify-center lg:data-[active]:py-(--spacing-xl) lg:data-[active]:data-[actions]:justify-start lg:data-[active]:data-[actions]:pb-(--spacing-lg) lg:data-[active]:data-[dense]:py-(--spacing-lg) lg:data-[active]:data-[dense]:data-[actions]:pb-(--spacing-md) motion-reduce:transition-none"
+            class="group relative border-b border-(--border-default) px-(--spacing-xl) py-(--spacing-lg) last:border-b-0 lg:flex lg:grow-0 lg:flex-col lg:justify-start lg:transition-[flex-grow] lg:duration-moderate-01 lg:ease-productive-entrance lg:data-[dense]:py-(--spacing-md) lg:data-[active]:min-h-(--media-scroll-open) lg:data-[active]:grow lg:data-[active]:justify-center lg:data-[active]:py-(--spacing-xl) lg:data-[active]:data-[actions]:justify-start lg:data-[active]:data-[actions]:pb-(--spacing-lg) lg:data-[active]:data-[dense]:py-(--spacing-lg) lg:data-[active]:data-[dense]:data-[actions]:pb-(--spacing-md) motion-reduce:transition-none"
           >
             <h3
               class="m-0 text-heading-md text-(--text-default) transition-[color,opacity] duration-moderate-01 ease-out motion-reduce:transition-none lg:text-(--text-muted) lg:group-data-[active]:text-(--text-default) lg:group-data-[completed]:opacity-55"

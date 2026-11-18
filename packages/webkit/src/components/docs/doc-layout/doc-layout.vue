@@ -48,10 +48,10 @@
   import DrawerTitle from '../../overlay/drawer/drawer-title.vue'
   import PanelFooter from '../../overlay/panel/panel-footer.vue'
   import PanelHeader from '../../overlay/panel/panel-header.vue'
-  import DocOnThisPage, {
-    type DocOnThisPageGroup,
-    type DocOnThisPageItem
-  } from '../doc-on-this-page/doc-on-this-page.vue'
+  import DocTableOfContents, {
+    type DocTableOfContentsGroup,
+    type DocTableOfContentsItem
+  } from '../doc-table-of-contents/doc-table-of-contents.vue'
 
   defineOptions({
     name: 'DocLayout',
@@ -82,7 +82,7 @@
     /** Where the Azion Docs mark links. */
     home?: string
     /** Complementary link groups under the outline. */
-    outlineGroups?: DocOnThisPageGroup[]
+    outlineGroups?: DocTableOfContentsGroup[]
     /** Accessible name of the navigation landmark. Empty uses the locale catalog (`Documentation`). */
     ariaLabel?: string
     /** Names the top of the docs tree in the rail's Back button when a drill level is open. Empty uses the locale catalog (Docs). */
@@ -189,7 +189,7 @@
 
   provideHeadingOutline(registerHeading)
 
-  const outline = computed<DocOnThisPageItem[]>(() =>
+  const outline = computed<DocTableOfContentsItem[]>(() =>
     headings.value
       .map((heading) => ({ el: heading.el(), item: heading.item() }))
       .filter((heading): heading is { el: Element; item: HeadingOutlineItem } =>
@@ -436,7 +436,7 @@
         <div
           class="sticky top-(--layout-header-height) flex max-h-[calc(100dvh-var(--layout-header-height))] flex-col gap-(--spacing-lg) overflow-y-auto px-(--spacing-md) pt-(--spacing-md) pb-(--spacing-lg)"
         >
-          <DocOnThisPage
+          <DocTableOfContents
             :items="outline"
             :groups="outlineGroups"
             :active-id="activeHeading"

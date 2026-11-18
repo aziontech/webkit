@@ -5,15 +5,15 @@ structure: monolithic
 status: implemented
 spec_version: 7
 created: 2026-11-04
-last_updated: 2026-11-16
-checksum: e9bae592196077f56e4d5c27b47a9c98478176a57f7b676b71ca5c5c1742d7f0
+last_updated: 2026-11-18
+checksum: 058494fd1f5fa406e3471419ed372770529d57f9db96d714ee212808f82f72cc
 ---
 
 # FeatureScrollSection — Component Spec
 
 ## Purpose
 
-The walkthrough band of a product page: a large section title over one screen per feature. From the large breakpoint up the features scroll through a sticky stack — the copy advances while the feature's live scene or illustration stays pinned in a framed, textured stage with one small action under each step (a step may pin a one-file code sample instead, for a code-led walkthrough); below it the same features are a three-column grid of media tiles. It is a page section — the site places it from a `{ _id: 'feature-scroll-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `registration-frame`, `card-grid`, `media-tile`, `illustration`, `code-block`, `sticky-stack`, `texture`, `button` and the webkit scene assets (a `ConsoleMockup` console fragment, most often).
+The walkthrough band of a product page: a large section title over one screen per feature. From the large breakpoint up the features scroll through a sticky stack — the copy advances while the feature's live scene or illustration stays pinned in a framed, textured stage with one small action under each step (a step may pin a one-file code sample instead, for a code-led walkthrough); below it the same features are a three-column grid of media tiles. It is a page section — the site places it from a `{ _id: 'feature-scroll-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `registration-frame`, `card-grid`, `media-tile`, `illustration`, `code-block`, `media-scroll`, `texture`, `button` and the webkit scene assets (a `ConsoleMockup` console fragment, most often).
 
 ## When to use
 
@@ -24,11 +24,11 @@ The walkthrough band of a product page: a large section title over one screen pe
 ## When NOT to use
 
 - For three reasons with no scroll story → use `feature-tiles-section`.
-- In a hand-built SFC that needs its own media slot → use `sticky-stack` directly.
+- In a hand-built SFC that needs its own media slot → use `media-scroll` directly.
 
 ## Related
 
-- `sticky-stack` — the scroll engine the large layout runs on.
+- `media-scroll` — the scroll engine the large layout runs on.
 - `media-tile` — the cell the small layout renders each feature with.
 
 ## Best practices
@@ -88,7 +88,7 @@ The walkthrough band of a product page: a large section title over one screen pe
 ## States
 
 - Visual states: `default`
-- Below the large breakpoint the features render as a three-column grid of media tiles; from it up they render as a sticky stack whose active step is `sticky-stack`'s own
+- Below the large breakpoint the features render as a three-column grid of media tiles; from it up they render as a `MediaScroll` whose active step is `media-scroll`'s own
 - Empty: when `items` is empty the band renders nothing — not the header, not the frames
 - Media: an item's `scene` wins over its `code`, which wins over its `illustration`; a `code` sample is a one-file `code-block` with line numbers, typed in once in the stack and loaded on demand; in the stack the scene receives `active` for the open step only, so a console fragment plays its beat while its step is open and rests on its settled frame otherwise; in the grid every scene is drawn still (`active: false`) in a 20rem window. A scene name that is not registered draws nothing.
 
@@ -117,9 +117,9 @@ _none_
 
 - Visible focus: owned by the composed `button`.
 - Keyboard map: `Tab` reaches each step's action and a code sample's copy button; `Enter` follows it; the stack's own progression is scroll-driven and never traps focus.
-- ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the step headings are `sticky-stack`'s and `media-tile`'s; the texture layer and the pinned illustration are decorative; a scene carries its own semantics (a `ConsoleMockup` is a decorative console picture).
+- ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the step headings are `media-scroll`'s and `media-tile`'s; the texture layer and the pinned illustration are decorative; a scene carries its own semantics (a `ConsoleMockup` is a decorative console picture).
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by the composed components.
-- `motion-reduce:transition-none motion-reduce:transform-none` — the step transition belongs to `sticky-stack`, which carries its own fallback; this band adds no motion.
+- `motion-reduce:transition-none motion-reduce:transform-none` — the step transition belongs to `media-scroll`, which carries its own fallback; this band adds no motion.
 - Touch target ≥40×40 px — the per-step action is a small `button` on the large layout only, where pointer precision is available.
 
 ## Examples

@@ -333,7 +333,7 @@ MCP at `node_modules/@aziontech/webkit/llms/llms.txt`. The docs site (M2.3) serv
 
 Done: `apps/docs` (`@aziontech/webkit-docs`, private), a Vite + Vue Router site prerendered with
 `vite-ssg` (one static HTML per route, hydrated) and built with WebKit itself (`AppHeader`,
-`Sidebar`, `Menu`, `Command` search on ⌘K, `DocPageHeader`, `DocProse`, `DocOnThisPage`,
+`Sidebar`, `Menu`, `Command` search on ⌘K, `DocPageHeader`, `DocProse`, `DocTableOfContents`,
 `CodeBlock`, `Table`, `ThemeSwitcher`), Rubik, light/dark, an RTL toggle and en / pt-BR / es through
 `ConfigProvider`. Pages come from the files: one per component from `catalog.json` (summary,
 import, when to use / not, props / events / slots, every example from `examples/*/examples.json`

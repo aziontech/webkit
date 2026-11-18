@@ -4,9 +4,9 @@ category: docs
 structure: monolithic
 status: implemented
 spec_version: 6
-checksum: 3761c2e2f3cfe19e40df21b888ae1c673579d788f8faf21997b9e9e968880476
+checksum: ff177bab7561c59e5ed64aec92b0a8997609ddd7e0a75b6688538c81c91e9f21
 created: 2026-08-22
-last_updated: 2026-11-15
+last_updated: 2026-11-18
 ---
 
 # DocPageHeader — Component Spec
@@ -29,7 +29,7 @@ The masthead of a documentation page: where the reader is (the breadcrumb), what
 ## Related
 
 - `DocProse` — the body below it. The masthead's `h1` is chrome, so authored content starts at `h2`.
-- `DocOnThisPage` — the rail beside the body, which lists those `h2`s.
+- `DocTableOfContents` — the rail beside the body, which lists those `h2`s.
 - `Button` / `Tooltip` / `Separator` — the meta line's entries: a quiet `text` button (an anchor when the entry has an `href`), the sentence its label has no room for, and the rule between two of them.
 
 ## Best practices

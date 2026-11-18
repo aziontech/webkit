@@ -4,14 +4,14 @@
   import { resolveScene, type SceneRef } from '../../../assets/scene-registry'
   import Button from '../../action/button/button.vue'
   import Illustration from '../../content/illustration/illustration.vue'
+  import Texture from '../../content/texture/texture.vue'
+  import CardGrid from '../../layout/card-grid/card-grid.vue'
+  import CardGridCell from '../../layout/card-grid/card-grid-cell/card-grid-cell.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
-  import CardGrid from '../../marketing/card-grid/card-grid.vue'
-  import CardGridCell from '../../marketing/card-grid/card-grid-cell/card-grid-cell.vue'
+  import MediaScroll from '../../marketing/media-scroll/media-scroll.vue'
   import MediaTile from '../../marketing/media-tile/media-tile.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import SectionTitle from '../../marketing/section-title/section-title.vue'
-  import StickyStack from '../../marketing/sticky-stack/sticky-stack.vue'
-  import Texture from '../../marketing/texture/texture.vue'
 
   defineOptions({
     name: 'FeatureScrollSection',
@@ -195,9 +195,9 @@
         flush
         borders="y"
         marks="bottom"
-        class="hidden lg:block [--sticky-stack-top:3.5rem] [--sticky-stack-align:stretch]"
+        class="hidden lg:block [--media-scroll-top:3.5rem] [--media-scroll-align:stretch]"
       >
-        <StickyStack :items="items">
+        <MediaScroll :items="items">
           <template #media="{ index, active }">
             <div class="contents">
               <div
@@ -254,7 +254,7 @@
               :animated="Boolean(items[index].action.trailing)"
             />
           </template>
-        </StickyStack>
+        </MediaScroll>
       </RegistrationFrame>
     </SectionModule>
   </section>

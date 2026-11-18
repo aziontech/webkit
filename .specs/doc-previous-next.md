@@ -4,9 +4,9 @@ category: docs
 structure: monolithic
 status: implemented
 spec_version: 4
-checksum: 632812e62e55bb098a64b7cb3507c52bdebcf804a56474d4809d29f441a4dd2a
+checksum: 374b9c59ac4c53625cd721b1d90d9d9e31a8a3ac7f83170520ff8db739ee0b2f
 created: 2026-08-22
-last_updated: 2026-11-15
+last_updated: 2026-11-18
 ---
 
 # DocPreviousNext — Component Spec
@@ -29,7 +29,7 @@ The previous / next pair that closes a documentation page. Each side is a link c
 ## Related
 
 - `Pagination` — the data counterpart; numbered pages over a collection, not two named documents.
-- `DocOnThisPage` — navigation _within_ the page, where this is navigation _between_ pages.
+- `DocTableOfContents` — navigation _within_ the page, where this is navigation _between_ pages.
 
 ## Best practices
 

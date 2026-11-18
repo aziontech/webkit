@@ -148,6 +148,8 @@ component binding, its parts (`Flow.Node` → `FlowDiagram.Node`, `@aziontech/we
 | `@aziontech/webkit/hero-form`                         | `@aziontech/webkit/hero-form-section`              | `HeroForm`                           | `HeroFormSection`                                  |
 | `@aziontech/webkit/media-split-stack`                 | `@aziontech/webkit/media-split-stack-section`      | `MediaSplitStack`                    | `MediaSplitStackSection`                           |
 | `@aziontech/webkit/doc-prev-next`                     | `@aziontech/webkit/doc-previous-next`              | `DocPrevNext`                        | `DocPreviousNext`                                  |
+| `@aziontech/webkit/doc-on-this-page`                  | `@aziontech/webkit/doc-table-of-contents`          | `DocOnThisPage`                      | `DocTableOfContents`                               |
+| `@aziontech/webkit/sticky-stack`                      | `@aziontech/webkit/media-scroll`                   | `StickyStack`                        | `MediaScroll`                                      |
 | `@aziontech/webkit/use-heading-nav`                   | `@aziontech/webkit/use-heading-navigation`         | `useHeadingNav`, `provideHeadingNav` | `useHeadingNavigation`, `provideHeadingNavigation` |
 | `@aziontech/webkit/architecture-tabs`                 | `@aziontech/webkit/architecture-tabs-section`      | `ArchitectureTabs`                   | `ArchitectureTabsSection`                          |
 | `@aziontech/webkit/article-body`                      | `@aziontech/webkit/article-body-section`           | `ArticleBody`                        | `ArticleBodySection`                               |
@@ -341,8 +343,8 @@ The codemod rewrites these where you import them, together with the component th
 types this guide names elsewhere are left out):
 
 Props and events whose type is only renamed keep their shape: `Sources` `items` and `StreamingResponse`
-`sources` take `SourcesItem[]` (was `AiSource[]`); `DocOnThisPage` `items`, `groups` and the `select`
-payload take `DocOnThisPageItem` / `DocOnThisPageGroup` (was `DocTocItem` / `DocTocGroup`);
+`sources` take `SourcesItem[]` (was `AiSource[]`); `DocTableOfContents` `items`, `groups` and the `select`
+payload take `DocTableOfContentsItem` / `DocTableOfContentsGroup` (was `DocTocItem` / `DocTocGroup`);
 `ContextMenu` and `ContextMenuRoot` `select` pass a `DropdownMenuItemValue` (was
 `DropdownMenuOptionValue`); `CliTerminalSection` `primaryAction` is a `SectionTitleAction` (was
 `CliTerminalAction`).
@@ -402,9 +404,9 @@ payload take `DocOnThisPageItem` / `DocOnThisPageGroup` (was `DocTocItem` / `Doc
 | `DocCrumb`                             | `BreadcrumbItemData`                           |
 | `DocPageAction`                        | `DocPageHeaderAction`                          |
 | `DocPageLink`                          | `DocPreviousNextLink`                          |
-| `DocTocGroup`                          | `DocOnThisPageGroup`                           |
-| `DocTocItem`                           | `DocOnThisPageItem`                            |
-| `DocTocLink`                           | `DocOnThisPageLink`                            |
+| `DocTocGroup`                          | `DocTableOfContentsGroup`                      |
+| `DocTocItem`                           | `DocTableOfContentsItem`                       |
+| `DocTocLink`                           | `DocTableOfContentsLink`                       |
 | `DropdownContext`                      | `DropdownMenuContext`                          |
 | `DropdownOptionValue`                  | `DropdownMenuOptionValue`                      |
 | `DropdownPlacement`                    | `DropdownMenuSide`                             |
@@ -664,17 +666,17 @@ New standalone paths: `tabs-list`, `tabs-trigger`, `tabs-content`, `dialog-heade
 
 #### Events
 
-| Component                 | v5                     | v6                    |
-| ------------------------- | ---------------------- | --------------------- |
-| `tutorial-panel-provider` | `finish`               | `complete`            |
-| `navigation-menu`         | `open-change-complete` | `open-transition-end` |
-| `doc-page-header`         | `meta-action`          | `action-click`        |
-| `code-editor`             | `validate`             | `markers-change`      |
-| `phone-input`             | `update:phone`         | `phone-change`        |
-| `tree`                    | `item-dblclick`        | `item-double-click`   |
-| `data-grid`               | `row-delete`           | `row-remove`          |
-| `table-sort-button`       | `toggle`               | `sort`                |
-| `sticky-stack`            | `index-change`         | `active-index-change` |
+| Component                           | v5                     | v6                    |
+| ----------------------------------- | ---------------------- | --------------------- |
+| `tutorial-panel-provider`           | `finish`               | `complete`            |
+| `navigation-menu`                   | `open-change-complete` | `open-transition-end` |
+| `doc-page-header`                   | `meta-action`          | `action-click`        |
+| `code-editor`                       | `validate`             | `markers-change`      |
+| `phone-input`                       | `update:phone`         | `phone-change`        |
+| `tree`                              | `item-dblclick`        | `item-double-click`   |
+| `data-grid`                         | `row-delete`           | `row-remove`          |
+| `table-sort-button`                 | `toggle`               | `sort`                |
+| `media-scroll` (was `sticky-stack`) | `index-change`         | `active-index-change` |
 
 #### Event payloads (handlers that read the arguments need a hand edit)
 
@@ -789,7 +791,7 @@ New standalone paths: `tabs-list`, `tabs-trigger`, `tabs-content`, `dialog-heade
 | `listing-index-section`, `story-index-section` (filter panel)                                                   | `data-expanded`                                                                                     | `data-state="open\|closed"`                                                                                                            |
 | `media-tabs`                                                                                                    | `data-position`                                                                                     | `data-tabs-side`                                                                                                                       |
 | `quote` (highlighted phrase)                                                                                    | `data-highlight`                                                                                    | `data-slot="highlight"`                                                                                                                |
-| `sticky-stack`                                                                                                  | `data-complete`                                                                                     | `data-completed`                                                                                                                       |
+| `media-scroll` (was `sticky-stack`)                                                                             | `data-complete`                                                                                     | `data-completed`                                                                                                                       |
 
 ## 4. Manual changes
 
@@ -1074,6 +1076,11 @@ inside a `DocSteps` to `<DocSteps.Step>` and swaps the import for `doc-steps`; i
 
 `DocCardGroup` takes `columns` (was `cols`); in Markdown, `DocMarkdown` still reads
 `<CardGroup cols>` as `columns`, so existing docs sources render unchanged.
+
+`doc-on-this-page` is now `doc-table-of-contents` (`DocTableOfContents`), the name every docs framework
+uses for the rail; the codemod rewrites the import, the tag and the `DocOnThisPage*` types. The rail's
+heading still reads "On this page". Its locale catalog key and test id moved with it: override
+`docTableOfContents.*` instead of `docOnThisPage.*`, and select `doc-table-of-contents`.
 
 `doc-pagination` is now `doc-previous-next` (`DocPreviousNext`); the codemod rewrites it. Its locale catalog
 key and test id moved with it: override `docPreviousNext.*` instead of `docPagination.*`, and select

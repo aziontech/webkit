@@ -46,6 +46,7 @@ export const RULES = {
   'part-word': { stage: 'staged', decision: 'N8', surface: 'sub-component folders' },
   'part-export': { stage: 'staged', decision: 'N8', surface: 'sub-component exports' },
   'section-suffix': { stage: 'staged', decision: 'N12', surface: 'marketing page sections' },
+  'docs-prefix': { stage: 'staged', decision: 'WN04', surface: 'documentation components' },
   'example-file': { stage: 'staged', decision: 'N13', surface: 'example files' },
   'prop-name': { stage: 'staged', decision: 'N1/N5/N6/api-76', surface: 'props in .vue and specs' },
   'prop-value': { stage: 'staged', decision: 'N2/N3/N5/N7', surface: 'prop value unions' },
@@ -507,6 +508,7 @@ export function checkComponentPath(rel, ctx = {}) {
   const folder = segs[segs.length - 2]
   if (isRootFile && (category === 'sections' || category === 'section'))
     out.push(...sectionSuffixProblems(rel, stem))
+  if (isRootFile) out.push(...docsPrefixProblems(rel, category, stem))
   for (const problem of nameWordProblems(stem))
     out.push(v('near-duplicate', rel, 1, `component "${stem}" uses ${problem} (${RULE_DOC}).`))
   if (stem === root || folder !== stem || segs.length < 4) return out
@@ -566,6 +568,21 @@ export function checkComponentPath(rel, ctx = {}) {
 }
 
 export const SECTION_WRAPPER_WORDS = ['band', 'stack', 'block', 'module', 'strip']
+
+export function docsPrefixProblems(rel, category, stem) {
+  const inDocs = category === 'docs' || category === 'documentation'
+  if (inDocs === stem.startsWith('doc-')) return []
+  return [
+    v(
+      'docs-prefix',
+      rel,
+      1,
+      inDocs
+        ? `documentation component "${stem}" must start with "doc-" — name it "doc-${stem}" (${RULE_DOC}).`
+        : `"${stem}" starts with "doc-", which only components in src/components/docs/ use (${RULE_DOC}).`
+    )
+  ]
+}
 
 export function sectionSuffixProblems(rel, stem) {
   if (stem.endsWith('-section')) return []

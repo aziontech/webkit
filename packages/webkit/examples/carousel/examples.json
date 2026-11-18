@@ -1,6 +1,6 @@
 {
   "component": "carousel",
-  "title": "Components/Marketing/Primitives/Carousel",
+  "title": "Components/Content/Carousel",
   "examples": [
     {
       "name": "Default",

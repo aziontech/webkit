@@ -3,7 +3,7 @@
  "binding": "BentoGrid",
  "import": "@aziontech/webkit/bento-grid",
  "treeShakeableImport": "@aziontech/webkit/bento-grid-root",
- "category": "marketing",
+ "category": "layout",
  "surface": "site",
  "structure": "composition",
  "compoundRoot": true,

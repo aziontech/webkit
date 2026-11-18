@@ -6,6 +6,8 @@
   import * as en from '../../../locales/en'
   import Button from '../../action/button/button.vue'
   import ToggleGroup from '../../action/toggle-group/toggle-group.vue'
+  import type { TextureFade, TextureVariant } from '../../content/texture/texture.vue'
+  import Texture from '../../content/texture/texture.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import type {
@@ -14,8 +16,6 @@
     SectionTitleSize
   } from '../../marketing/section-title/section-title.vue'
   import SectionTitle from '../../marketing/section-title/section-title.vue'
-  import type { TextureFade, TextureVariant } from '../../marketing/texture/texture.vue'
-  import Texture from '../../marketing/texture/texture.vue'
 
   defineOptions({ name: 'ConsoleShowcaseSection', inheritAttrs: false })
 

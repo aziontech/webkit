@@ -1,10 +1,10 @@
 <script setup>
-  import DocOnThisPage from '@aziontech/webkit/doc-on-this-page'
+  import DocTableOfContents from '@aziontech/webkit/doc-table-of-contents'
 </script>
 
 <template>
   <div class="max-w-64">
-    <DocOnThisPage
+    <DocTableOfContents
       :items="[
         { id: 'overview', text: 'Overview', depth: 2 },
         { id: 'templates', text: 'Templates', depth: 3 },

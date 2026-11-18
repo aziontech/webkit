@@ -3,7 +3,7 @@
  "binding": "Carousel",
  "import": "@aziontech/webkit/carousel",
  "treeShakeableImport": "@aziontech/webkit/carousel-root",
- "category": "marketing",
+ "category": "content",
  "surface": "site",
  "structure": "composition",
  "compoundRoot": true,

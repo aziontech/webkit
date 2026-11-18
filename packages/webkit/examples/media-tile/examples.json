@@ -1,6 +1,6 @@
 {
   "component": "media-tile",
-  "title": "Components/Marketing/Primitives/MediaTile",
+  "title": "Components/Marketing/Elements/MediaTile",
   "examples": [
     {
       "name": "Default",

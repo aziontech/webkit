@@ -25,7 +25,7 @@
   "For a set of claims rather than destinations → use `card-grid` with `feature-item`, or `bento-grid` when the claims are unequal.",
   "For the site-wide link directory at the foot of the page → use `footer`, which already lays its columns out.",
   "For a trail back up the current hierarchy → use `breadcrumb`.",
-  "For the headings of the page currently being read → use `doc-on-this-page`."
+  "For the headings of the page currently being read → use `doc-table-of-contents`."
  ],
  "related": [
   "`card-grid` — the equal-cell grid whose `divider` register draws its rules the same way; reach for it when the cells are cards rather than columns of links.",

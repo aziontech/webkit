@@ -9,8 +9,8 @@
   import type { SplitButtonItem } from '../../action/split-button/split-button.vue'
   import SplitButton from '../../action/split-button/split-button.vue'
   import Avatar from '../../content/avatar/avatar.vue'
-  import DocOnThisPage from '../../docs/doc-on-this-page/doc-on-this-page.vue'
   import DocProse from '../../docs/doc-prose/doc-prose.vue'
+  import DocTableOfContents from '../../docs/doc-table-of-contents/doc-table-of-contents.vue'
   import { toast } from '../../feedback/toast/composables/use-toast-store'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import Separator from '../../layout/separator/separator.vue'
@@ -632,7 +632,7 @@
               <div
                 class="sticky top-[calc(3.5rem+var(--spacing-xl))] max-h-[calc(100dvh-3.5rem-var(--spacing-xl))] overflow-y-auto pb-(--spacing-lg)"
               >
-                <DocOnThisPage
+                <DocTableOfContents
                   :items="headings"
                   :active-id="activeId"
                   @select="goToHeading"

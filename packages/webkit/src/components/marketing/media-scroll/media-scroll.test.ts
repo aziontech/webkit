@@ -3,13 +3,13 @@ import { afterEach, describe, expect, it } from 'vitest'
 import { h, nextTick } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
-import StickyStack, { type StickyStackItem } from './sticky-stack.vue'
+import MediaScroll, { type MediaScrollItem } from './media-scroll.vue'
 
-const TESTID = 'sticky-stack'
+const TESTID = 'media-scroll'
 
 const PIXEL = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='
 
-const ITEMS: StickyStackItem[] = [
+const ITEMS: MediaScrollItem[] = [
   {
     title: 'Automated deployment via Git or CLI',
     description: 'Push to a branch or run one command and the build lands in every location.',
@@ -78,12 +78,12 @@ afterEach(async () => {
   await scrollTo(0)
 })
 
-describe('StickyStack', () => {
+describe('MediaScroll', () => {
   it('renders the derived testid and lets a consumer override it', () => {
-    const { container } = render(StickyStack, { props: { items: ITEMS } })
+    const { container } = render(MediaScroll, { props: { items: ITEMS } })
     expect(container.querySelector(`[data-testid="${TESTID}"]`)).not.toBeNull()
 
-    const custom = render(StickyStack, {
+    const custom = render(MediaScroll, {
       props: { items: ITEMS },
       attrs: { 'data-testid': 'dev-platform-stack' }
     })
@@ -92,12 +92,12 @@ describe('StickyStack', () => {
   })
 
   it('renders nothing when there are no items', () => {
-    const { container } = render(StickyStack, { props: { items: [] } })
+    const { container } = render(MediaScroll, { props: { items: [] } })
     expect(container.querySelector(`[data-testid="${TESTID}"]`)).toBeNull()
   })
 
   it('renders every claim as an ordered list entry with its own control', () => {
-    const { container } = render(StickyStack, { props: { items: ITEMS } })
+    const { container } = render(MediaScroll, { props: { items: ITEMS } })
     const rows = rowsOf(container as HTMLElement)
     expect(rows).toHaveLength(ITEMS.length)
     expect(rows.map((row) => row.querySelector('button')?.textContent?.trim())).toEqual(
@@ -107,14 +107,14 @@ describe('StickyStack', () => {
   })
 
   it.each(['small', 'medium', 'large'] as const)('carries data-size for %s', (size) => {
-    const { container } = render(StickyStack, { props: { items: ITEMS, size } })
+    const { container } = render(MediaScroll, { props: { items: ITEMS, size } })
     expect(container.querySelector(`[data-testid="${TESTID}"]`)?.getAttribute('data-size')).toBe(
       size
     )
   })
 
   it('opens the first claim at rest and marks it aria-current', () => {
-    const { container } = render(StickyStack, { props: { items: ITEMS } })
+    const { container } = render(MediaScroll, { props: { items: ITEMS } })
     expect(activeTitle(container as HTMLElement)).toBe(ITEMS[0].title)
     expect(completedTitles(container as HTMLElement)).toEqual([])
 
@@ -124,12 +124,12 @@ describe('StickyStack', () => {
   })
 
   it('marks data-progress only while showProgress is on', () => {
-    const on = render(StickyStack, { props: { items: ITEMS } })
+    const on = render(MediaScroll, { props: { items: ITEMS } })
     expect(
       on.container.querySelector(`[data-testid="${TESTID}"]`)?.getAttribute('data-progress')
     ).toBe('true')
 
-    const off = render(StickyStack, { props: { items: ITEMS, showProgress: false } })
+    const off = render(MediaScroll, { props: { items: ITEMS, showProgress: false } })
     expect(
       off.container.querySelector(`[data-testid="${TESTID}"]`)?.getAttribute('data-progress')
     ).toBeNull()
@@ -137,10 +137,10 @@ describe('StickyStack', () => {
 
   it('renders the media slot for the open claim, with the item and index in scope', () => {
     const seen: number[] = []
-    const { container } = render(StickyStack, {
+    const { container } = render(MediaScroll, {
       props: { items: ITEMS },
       slots: {
-        media: ({ item, index }: { item: StickyStackItem; index: number }) => {
+        media: ({ item, index }: { item: MediaScrollItem; index: number }) => {
           seen.push(index)
           return h('p', { 'data-scene': index }, item.title)
         }
@@ -152,10 +152,10 @@ describe('StickyStack', () => {
   })
 
   it('renders each claim its own actions, with the item and index in scope', () => {
-    const { container } = render(StickyStack, {
+    const { container } = render(MediaScroll, {
       props: { items: ITEMS },
       slots: {
-        actions: ({ item, index }: { item: StickyStackItem; index: number }) =>
+        actions: ({ item, index }: { item: MediaScrollItem; index: number }) =>
           h('a', { 'data-action': index, href: '#more' }, `More on ${item.title}`)
       }
     })
@@ -167,7 +167,7 @@ describe('StickyStack', () => {
   })
 
   it('renders the backdrop once, outside every claim medium', () => {
-    const { container } = render(StickyStack, {
+    const { container } = render(MediaScroll, {
       props: { items: ITEMS },
       slots: {
         media: ({ index }: { index: number }) => h('p', { 'data-scene': index }),
@@ -181,13 +181,13 @@ describe('StickyStack', () => {
   })
 
   it('adds no controls to a claim when the actions slot is empty', () => {
-    const { container } = render(StickyStack, { props: { items: ITEMS } })
+    const { container } = render(MediaScroll, { props: { items: ITEMS } })
     expect(container.querySelectorAll('ol > li button')).toHaveLength(ITEMS.length)
     expect(container.querySelector('ol a')).toBeNull()
   })
 
   it('falls back to the item image when the media slot is empty', () => {
-    const { container } = render(StickyStack, { props: { items: ITEMS } })
+    const { container } = render(MediaScroll, { props: { items: ITEMS } })
     const images = [...container.querySelectorAll('img')]
     expect(images.length).toBeGreaterThan(0)
     expect(images.every((image) => image.getAttribute('alt') !== null)).toBe(true)
@@ -196,7 +196,7 @@ describe('StickyStack', () => {
   it('advances the open claim as the band is scrolled through, and emits each change', async () => {
     const release = pinGeometry()
     try {
-      const { container, emitted } = render(StickyStack, { props: { items: ITEMS } })
+      const { container, emitted } = render(MediaScroll, { props: { items: ITEMS } })
       await scrollTo(0)
       expect(activeTitle(container as HTMLElement)).toBe(ITEMS[0].title)
 
@@ -217,7 +217,7 @@ describe('StickyStack', () => {
   it('does not re-emit while the scroll stays inside one claim', async () => {
     const release = pinGeometry()
     try {
-      const { emitted } = render(StickyStack, { props: { items: ITEMS } })
+      const { emitted } = render(MediaScroll, { props: { items: ITEMS } })
 
       await scrollTo(slice() * 1.2)
       await scrollTo(slice() * 1.4)
@@ -232,7 +232,7 @@ describe('StickyStack', () => {
   it('holds the last claim open past the end of the band', async () => {
     const release = pinGeometry()
     try {
-      const { container } = render(StickyStack, { props: { items: ITEMS } })
+      const { container } = render(MediaScroll, { props: { items: ITEMS } })
       await scrollTo(slice() * SPAN * 2)
       expect(activeTitle(container as HTMLElement)).toBe(ITEMS[ITEMS.length - 1].title)
     } finally {
@@ -241,7 +241,7 @@ describe('StickyStack', () => {
   })
 
   it('marks only the claims whose actions slot renders something', () => {
-    const { container } = render(StickyStack, {
+    const { container } = render(MediaScroll, {
       props: { items: ITEMS },
       slots: {
         actions: ({ index }: { index: number }) =>
@@ -260,8 +260,8 @@ describe('StickyStack', () => {
       ...item,
       title: `${item.title} ${index}`
     }))
-    const few = render(StickyStack, { props: { items: ITEMS } })
-    const dense = render(StickyStack, { props: { items: many } })
+    const few = render(MediaScroll, { props: { items: ITEMS } })
+    const dense = render(MediaScroll, { props: { items: many } })
 
     expect(rowsOf(few.container).some((row) => row.hasAttribute('data-dense'))).toBe(false)
     expect(rowsOf(dense.container).every((row) => row.hasAttribute('data-dense'))).toBe(true)
@@ -271,7 +271,7 @@ describe('StickyStack', () => {
     const release = pinGeometry()
     document.documentElement.style.scrollPaddingTop = '78px'
     try {
-      const { container } = render(StickyStack, { props: { items: ITEMS } })
+      const { container } = render(MediaScroll, { props: { items: ITEMS } })
       await scrollTo(slice() * 0.2)
 
       for (const index of [2, 0, 1, 2, 1]) {
@@ -286,7 +286,7 @@ describe('StickyStack', () => {
   })
 
   it('keeps every claim in the accessibility tree while the band rests', async () => {
-    const { container } = render(StickyStack, { props: { items: ITEMS } })
+    const { container } = render(MediaScroll, { props: { items: ITEMS } })
     for (const item of ITEMS) {
       expect(container.textContent).toContain(item.title)
       expect(container.textContent).toContain(item.description)

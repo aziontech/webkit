@@ -485,7 +485,7 @@ export const es: Messages = {
     expandNavigation: 'Expandir navegación',
     resizeNavigation: 'Cambiar el tamaño de la navegación'
   },
-  docOnThisPage: {
+  docTableOfContents: {
     title: 'En esta página'
   },
   docPageHeader: {

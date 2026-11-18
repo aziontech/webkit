@@ -5,8 +5,8 @@ structure: monolithic
 status: implemented
 spec_version: 3
 created: 2026-09-26
-last_updated: 2026-11-15
-checksum: ff49788b72c8005d6b7464611150fbd40392b102fdbbea49b352380fccd72973
+last_updated: 2026-11-18
+checksum: 7b4b73e6eea7e78ecddc72c117ea9f2c11a2794056251564f05d1b49e62518bc
 ---
 
 # Band Stack — Component Spec
@@ -26,7 +26,7 @@ The component owns the band rules, the shared hairlines and the pin offsets, and
 
 ## When NOT to use
 
-- For a run where the scroll position should decide which claim is open beside one media pane → use `sticky-stack`.
+- For a run where the scroll position should decide which claim is open beside one media pane → use `media-scroll`.
 - For peer claims a reader jumps between at will → use `media-tabs`.
 - For a single band → frame it with `registration-frame` directly, or set `framed` on the `media-split`.
 - For a grid of cards → use `card-grid`.
@@ -34,7 +34,7 @@ The component owns the band rules, the shared hairlines and the pin offsets, and
 ## Related
 
 - `media-split` — the band this stack holds, typically at `size="large"`. Inside the stack it frames its own two cells, so leave its `framed` off.
-- `sticky-stack` — the scroll-driven sibling: one pinned frame whose open claim follows the scroll, instead of bands that pile up.
+- `media-scroll` — the scroll-driven sibling: one pinned frame whose open claim follows the scroll, instead of bands that pile up.
 - `registration-frame` — the frame each band is drawn in.
 - `section-gap` — the spacer usually above the stack; pass `flush` so the first band does not draw a second rule under it.
 

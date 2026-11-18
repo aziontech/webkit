@@ -1849,7 +1849,7 @@
       "surface": "docs"
     },
     {
-      "id": "doc-on-this-page",
+      "id": "doc-table-of-contents",
       "surface": "docs"
     },
     {
@@ -2089,7 +2089,7 @@
       "surface": "site"
     },
     {
-      "id": "sticky-stack",
+      "id": "media-scroll",
       "surface": "site"
     },
     {

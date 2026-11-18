@@ -7,7 +7,7 @@ export type DocMarkdownValue = string | number | boolean | string[]
 /** The attributes of one MDX tag, keyed by name. */
 export type DocMarkdownAttributes = Record<string, DocMarkdownValue>
 
-/** One heading of the page, in the shape `DocOnThisPage` takes. */
+/** One heading of the page, in the shape `DocTableOfContents` takes. */
 export type DocMarkdownHeading = {
   /** The heading's anchor id. */
   id: string

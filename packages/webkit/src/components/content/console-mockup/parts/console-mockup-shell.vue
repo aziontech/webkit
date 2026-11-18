@@ -8,7 +8,7 @@
   import Texture, {
     type TextureFade,
     type TextureVariant
-  } from '../../../marketing/texture/texture.vue'
+  } from '../../../content/texture/texture.vue'
   import Avatar from '../../avatar/avatar.vue'
   import Brand from '../../brand/brand.vue'
   import Kbd from '../../kbd/kbd.vue'

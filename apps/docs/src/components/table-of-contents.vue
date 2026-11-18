@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import DocOnThisPage from '@aziontech/webkit/doc-on-this-page'
+  import DocTableOfContents from '@aziontech/webkit/doc-table-of-contents'
   import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
   const props = defineProps<{ items: { id: string; text: string; depth: number }[] }>()
@@ -39,7 +39,7 @@
     v-if="items.length"
     class="sticky top-20 hidden max-h-[calc(100vh-6rem)] w-(--container-3xs) shrink-0 self-start overflow-y-auto xl:block"
   >
-    <DocOnThisPage
+    <DocTableOfContents
       :items="items"
       :active-id="active"
       @select="onSelect"

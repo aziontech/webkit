@@ -4,7 +4,7 @@
 
 - Import: `import CarouselRoot from '@aziontech/webkit/carousel-root'`
 - Compound import (dot notation, not tree-shakeable): `import Carousel from '@aziontech/webkit/carousel'`
-- Category: marketing · Surface: site · Structure: composition
+- Category: content · Surface: site · Structure: composition
 - API as JSON: [carousel.json](carousel.json)
 
 ## When to use
