@@ -144,6 +144,7 @@
     :aria-label="label"
     :aria-busy="loading || undefined"
     :data-testid="testId"
+    data-graphic
     :data-loading="loading || null"
     :class="rootClass"
   >

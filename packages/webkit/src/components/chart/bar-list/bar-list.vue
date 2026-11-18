@@ -150,6 +150,7 @@
   <ol
     v-bind="$attrs"
     :data-testid="testId"
+    data-graphic
     :data-loading="loading || null"
     :data-refetching="refetching || null"
     :data-error="hasError || null"

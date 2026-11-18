@@ -64,9 +64,9 @@
     title?: string
     /** One or two sentences under the headline. */
     description?: string
-    /** Texture the panel is grounded with. */
+    /** Texture the `console` panel is grounded with; a `diagram` scene sits on the plain canvas. */
     texture?: TextureVariant
-    /** Axis the texture fades out along. */
+    /** Axis the texture of the `console` panel fades out along. */
     textureFade?: TextureFade
     /** Tabs over the frame, each `{ value, title }`; each plays its own beat of the scene. */
     tabs?: ConsoleShowcaseSectionTab[]
@@ -201,6 +201,7 @@
           class="relative w-full overflow-hidden px-(--spacing-xl) pt-(--spacing-md) pb-(--spacing-xl) md:pb-0"
         >
           <Texture
+            v-if="variant === 'console'"
             :variant="texture"
             size="small"
             :fade="textureFade"

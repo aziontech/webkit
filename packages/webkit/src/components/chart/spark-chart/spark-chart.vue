@@ -148,6 +148,7 @@
     v-bind="$attrs"
     ref="rootEl"
     :data-testid="testId"
+    data-graphic
     :data-type="type"
     :data-size="size"
     class="relative block w-full min-w-0 data-[size=large]:h-16 data-[size=medium]:h-12 data-[size=small]:h-8"

@@ -186,6 +186,7 @@
   <figure
     v-bind="$attrs"
     :data-testid="testId"
+    data-graphic
     :data-size="size"
     :data-loading="loading || null"
     :data-error="(!loading && hasError) || null"

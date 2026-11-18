@@ -563,6 +563,41 @@ group('hook: validate-authoring.mjs comments', () => {
   })
 })
 
+group('hook: validate-authoring.mjs texture backdrop', () => {
+  const write = (rel, content) =>
+    runHook('.claude/hooks/validate-authoring.mjs', {
+      tool_name: 'Write',
+      tool_input: { file_path: resolve(ROOT, rel), content }
+    })
+  const example = (scene) =>
+    [
+      '<script setup>',
+      "  import ConsoleShowcaseSection from '@aziontech/webkit/console-showcase-section'",
+      '</script>',
+      '<template>',
+      `  <ConsoleShowcaseSection${scene}>`,
+      '    <template #scene><Chart aria-label="Requests" /></template>',
+      '  </ConsoleShowcaseSection>',
+      '</template>'
+    ].join('\n')
+  test('a chart on a textured band in an example blocks (exit 2)', () => {
+    const r = write('packages/webkit/examples/chart/zz.vue', example(' title="Firewall"'))
+    assertEqual(r.code, 2)
+    assertTrue(r.stderr.includes('texture-backdrop:graphic-on-texture'), 'names the check')
+  })
+  test('page JSON with a chart scene on a textured band blocks (exit 2)', () => {
+    const entry = JSON.stringify({
+      _id: 'console-showcase-section',
+      props: { title: 'Firewall' },
+      scenes: { scene: { component: 'Chart' } }
+    })
+    assertEqual(write('packages/webkit/examples/chart/zz.json', entry).code, 2)
+  })
+  test('the diagram layout, which paints no texture, passes (exit 0)', () => {
+    assertEqual(write('packages/webkit/examples/chart/zz.vue', example(' variant="diagram"')).code, 0)
+  })
+})
+
 group('hook: validate-authoring.mjs slot presence', () => {
   const write = (content) =>
     runHook('.claude/hooks/validate-authoring.mjs', {

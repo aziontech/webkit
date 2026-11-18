@@ -147,6 +147,7 @@
   <div
     v-bind="$attrs"
     :data-testid="testId"
+    data-graphic
     :data-loading="loading || null"
     :aria-busy="loading || undefined"
     role="group"

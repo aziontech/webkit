@@ -13,6 +13,8 @@
 //   - a composable returning reactive()/a raw ref()/no return type, or leaking a listener,
 //     timer, frame or observer with no onScopeDispose                 (composables.md)
 //   - defineProps declaring `as` / `asChild`                          (root-element.md)
+//   - a chart, diagram, map or stat drawn on a Texture, in a .vue or page JSON of
+//     components, blocks or examples                                  (styling.md)
 //
 // Same discipline as validate-tokens.mjs: reconstruct the RESULTING file content, and only
 // block when a check's occurrence count GROWS past the baseline's.
@@ -28,6 +30,11 @@ import {
   STRING_MESSAGES
 } from './lib/built-in-strings.mjs'
 import { scanSignatures, SIGNATURE_MESSAGES } from './lib/signature-checks.mjs'
+import {
+  scanTextureBackdrop,
+  TEXTURE_BACKDROP_MESSAGES,
+  textureBackdropApplies
+} from './lib/texture-backdrop.mjs'
 
 const ROOT = process.cwd()
 const TARGET_PREFIX = 'packages/webkit/src/'
@@ -118,6 +125,23 @@ async function main() {
       const added =
         after.filter((found) => found === id).length - before.filter((found) => found === id).length
       if (added > 0) violations.push({ id: `i18n:${id}`, message: STRING_MESSAGES[id], added })
+    }
+  }
+
+  const textureRel = relPath.split('\\').join('/')
+  if (textureBackdropApplies(textureRel)) {
+    const before = scanTextureBackdrop(baseline, textureRel)
+    const after = scanTextureBackdrop(result, textureRel)
+    for (const id of Object.keys(TEXTURE_BACKDROP_MESSAGES)) {
+      const added =
+        after.filter((found) => found === id).length - before.filter((found) => found === id).length
+      if (added > 0) {
+        violations.push({
+          id: `texture-backdrop:${id}`,
+          message: TEXTURE_BACKDROP_MESSAGES[id],
+          added
+        })
+      }
     }
   }
 
