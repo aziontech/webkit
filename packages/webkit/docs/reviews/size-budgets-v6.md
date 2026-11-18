@@ -462,7 +462,3 @@ Budget-raise: locales-es 10.8 KB → 10.85 KB (measured 10.80 KB): the Month and
 Budget-raise: flow-diagram-root 13.5 KB → 13.75 KB (measured 13.52 KB): the `uniform` prop (equal-size steps) the edge error page's request path needs (owner decision RV-D1, 2026-11-18).
 Budget-raise: stats-section 4.5 KB → 4.65 KB (measured 4.63 KB): owner report 2026-11-18 (RV-U1), a Stats figure never wraps; the band counts the glyphs of its longest figure so the big-number role shrinks every figure to fit its cell.
 Budget-raise: network-section 26.65 KB → 26.8 KB (measured 26.79 KB): the same Stats figure fit, which the network band renders (RV-U1).
-
-Budget-raise: locales-pt-BR 10.7 KB → 10.8 KB (measured 10.73 KB): the `nodeDiagram` strings of the unified diagram proposal (RV-Y1, 2026-11-18); if the owner approves, the `topologyDiagram` namespace is removed and this entry shrinks again.
-Budget-raise: locales-es 10.85 KB → 10.95 KB (measured 10.86 KB): the `nodeDiagram` strings of the unified diagram proposal (RV-Y1, 2026-11-18); if the owner approves, the `topologyDiagram` namespace is removed and this entry shrinks again.
-Budget-raise: config-provider 11.5 KB → 11.6 KB (measured 11.52 KB): the provider carries the English catalog, which gains the `nodeDiagram` strings of the unified diagram proposal (RV-Y1, 2026-11-18); it shrinks again when the `topologyDiagram` namespace is removed on approval.

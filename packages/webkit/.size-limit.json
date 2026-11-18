@@ -1070,17 +1070,17 @@
   {
     "name": "config-provider",
     "path": "src/components/provider/config-provider/config-provider.vue",
-    "limit": "11.6 KB"
+    "limit": "11.5 KB"
   },
   {
     "name": "locales-pt-BR",
     "path": "src/locales/pt-BR.ts",
-    "limit": "10.8 KB"
+    "limit": "10.7 KB"
   },
   {
     "name": "locales-es",
     "path": "src/locales/es.ts",
-    "limit": "10.95 KB"
+    "limit": "10.85 KB"
   },
   {
     "name": "phone-input",
@@ -1120,11 +1120,6 @@
     "name": "outcome-icon",
     "path": "src/components/feedback/outcome-icon/outcome-icon.vue",
     "limit": "2.35 KB"
-  },
-  {
-    "name": "topology-diagram",
-    "path": "src/components/data/topology-diagram/topology-diagram.vue",
-    "limit": "27.95 KB"
   },
   {
     "name": "tool-approval",
@@ -1709,12 +1704,14 @@
   {
     "name": "flow-diagram",
     "path": "src/components/data/flow-diagram/index.ts",
-    "limit": "14.5 KB"
+    "limit": "22.25 KB",
+    "entryOnly": true
   },
   {
     "name": "flow-diagram-root",
     "path": "src/components/data/flow-diagram/flow-diagram.vue",
-    "limit": "13.75 KB"
+    "limit": "20.25 KB",
+    "entryOnly": true
   },
   {
     "name": "flow-diagram-node",
@@ -1722,70 +1719,43 @@
     "limit": "11.25 KB"
   },
   {
-    "name": "flow-diagram-parallel",
-    "path": "src/components/data/flow-diagram/flow-diagram-parallel/flow-diagram-parallel.vue",
-    "limit": "0.75 KB"
+    "name": "flow-diagram-group",
+    "path": "src/components/data/flow-diagram/flow-diagram-group/flow-diagram-group.vue",
+    "limit": "0.6 KB"
   },
   {
     "name": "flow-diagram-anchor",
     "path": "src/components/data/flow-diagram/flow-diagram-anchor/flow-diagram-anchor.vue",
-    "limit": "1 KB"
-  },
-  {
-    "name": "node-diagram",
-    "path": "src/components/data/node-diagram/index.ts",
-    "limit": "22.25 KB",
-    "entryOnly": true
-  },
-  {
-    "name": "node-diagram-root",
-    "path": "src/components/data/node-diagram/node-diagram.vue",
-    "limit": "20.25 KB",
-    "entryOnly": true
-  },
-  {
-    "name": "node-diagram-node",
-    "path": "src/components/data/node-diagram/node-diagram-node/node-diagram-node.vue",
-    "limit": "11.25 KB"
-  },
-  {
-    "name": "node-diagram-group",
-    "path": "src/components/data/node-diagram/node-diagram-group/node-diagram-group.vue",
-    "limit": "0.6 KB"
-  },
-  {
-    "name": "node-diagram-anchor",
-    "path": "src/components/data/node-diagram/node-diagram-anchor/node-diagram-anchor.vue",
     "limit": "0.75 KB"
   },
   {
-    "name": "node-diagram-header",
-    "path": "src/components/data/node-diagram/node-diagram-header/node-diagram-header.vue",
+    "name": "flow-diagram-header",
+    "path": "src/components/data/flow-diagram/flow-diagram-header/flow-diagram-header.vue",
     "limit": "2.5 KB"
   },
   {
-    "name": "node-diagram-title",
-    "path": "src/components/data/node-diagram/node-diagram-title/node-diagram-title.vue",
+    "name": "flow-diagram-title",
+    "path": "src/components/data/flow-diagram/flow-diagram-title/flow-diagram-title.vue",
     "limit": "0.85 KB"
   },
   {
-    "name": "node-diagram-description",
-    "path": "src/components/data/node-diagram/node-diagram-description/node-diagram-description.vue",
+    "name": "flow-diagram-description",
+    "path": "src/components/data/flow-diagram/flow-diagram-description/flow-diagram-description.vue",
     "limit": "0.45 KB"
   },
   {
-    "name": "node-diagram-footer",
-    "path": "src/components/data/node-diagram/node-diagram-footer/node-diagram-footer.vue",
+    "name": "flow-diagram-footer",
+    "path": "src/components/data/flow-diagram/flow-diagram-footer/flow-diagram-footer.vue",
     "limit": "0.45 KB"
   },
   {
-    "name": "node-diagram-item",
-    "path": "src/components/data/node-diagram/node-diagram-item/node-diagram-item.vue",
+    "name": "flow-diagram-item",
+    "path": "src/components/data/flow-diagram/flow-diagram-item/flow-diagram-item.vue",
     "limit": "0.55 KB"
   },
   {
-    "name": "node-diagram-bind",
-    "path": "src/components/data/node-diagram/node-diagram-bind/node-diagram-bind.vue",
+    "name": "flow-diagram-bind",
+    "path": "src/components/data/flow-diagram/flow-diagram-bind/flow-diagram-bind.vue",
     "limit": "14.9 KB"
   },
   {

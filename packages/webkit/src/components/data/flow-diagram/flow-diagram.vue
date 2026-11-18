@@ -1,97 +1,307 @@
 <script setup lang="ts">
   import { useResizeObserver } from '@vueuse/core'
-  import { computed, provide, ref, useAttrs } from 'vue'
+  import { computed, defineAsyncComponent, provide, ref, useAttrs, useSlots } from 'vue'
 
+  import { useTranslate } from '../../../composables/use-translate'
+  import * as en from '../../../locales/en'
   import { cn } from '../../../utils/cn'
+  import EmptyState from '../../feedback/empty-state/empty-state.vue'
+  import Skeleton from '../../feedback/skeleton/skeleton.vue'
   import { useFlowDiagramConnectors } from './composables/use-flow-diagram-connectors'
-  import { type FlowDiagramAlign, FlowDiagramInjectionKey } from './injection-key'
+  import FlowDiagramGroup from './flow-diagram-group/flow-diagram-group.vue'
+  import FlowDiagramNode from './flow-diagram-node/flow-diagram-node.vue'
+  import { FlowDiagramInjectionKey } from './injection-key'
+  import { rankColumns } from './lib/rank'
+  import type { FlowDiagramAlign, FlowDiagramEdgeData, FlowDiagramNodeData } from './types'
+
+  export type {
+    FlowDiagramAlign,
+    FlowDiagramBindOption,
+    FlowDiagramEdgeData,
+    FlowDiagramNodeData,
+    FlowDiagramNodeField,
+    FlowDiagramNodeMetric,
+    FlowDiagramSeverity
+  } from './types'
 
   defineOptions({
     name: 'FlowDiagram',
     inheritAttrs: false
   })
 
+  /** How the diagram lays its steps out. */
+  export type FlowDiagramOrientation = 'horizontal' | 'vertical' | 'responsive'
+
   export interface FlowDiagramProps {
-    /** Vertical alignment of nodes within the diagram. */
+    /** Nodes of a data-driven diagram; each renders as a full card. Leave empty to compose the parts by hand. */
+    nodes?: FlowDiagramNodeData[]
+    /** Connectors between nodes by id; they also decide the columns. Empty joins each step to the next. */
+    edges?: FlowDiagramEdgeData[]
+    /** Lays the steps out in a row, in a column, or in a row that stacks when its container is narrow. */
+    orientation?: FlowDiagramOrientation
+    /** Vertical alignment of the steps in a row. */
     align?: FlowDiagramAlign
-    /** Gives every step the width and height of the largest one, so the steps line up as equal boxes. */
+    /** Gives every step the width and height of the largest one. */
     uniform?: boolean
+    /** Shows placeholder steps while the diagram loads. */
+    loading?: boolean
+    /** Accessible name of the diagram. Empty uses the locale catalog (`Diagram`). */
+    ariaLabel?: string
   }
 
   const props = withDefaults(defineProps<FlowDiagramProps>(), {
+    nodes: () => [],
+    edges: () => [],
+    orientation: 'responsive',
     align: 'start',
-    uniform: false
+    uniform: false,
+    loading: false,
+    ariaLabel: ''
   })
 
+  const openKeys = defineModel<string[]>('openKeys', { default: () => [] })
+
   defineSlots<{
+    /** Hand-composed steps: nodes and groups, in flow order. */
     default(): unknown
+    /** Controls at the end of a data node's title row. */
+    actions(props: { node: FlowDiagramNodeData }): unknown
+    /** Replaces the empty state shown when there are no nodes. */
+    empty(): unknown
   }>()
 
   const attrs = useAttrs()
+  const slots = useSlots()
+  const FlowDiagramCard = defineAsyncComponent(() => import('./parts/flow-diagram-card.vue'))
+  const { t } = useTranslate({ flowDiagram: en.flowDiagram })
 
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'flow-diagram'
   )
+  const rootAttrs = computed(() =>
+    Object.fromEntries(
+      Object.entries(attrs).filter(([key]) => key !== 'data-testid' && key !== 'class')
+    )
+  )
+  const label = computed<string>(() => props.ariaLabel || t('flowDiagram.label'))
 
-  const rootEl = ref<HTMLElement | null>(null)
-  const containerEl = ref<HTMLElement | null>(null)
-  const { paths, viewBox } = useFlowDiagramConnectors(containerEl)
+  const composed = (): boolean => !props.nodes.length && Boolean(slots['default'])
+  const empty = (): boolean => !props.loading && !composed() && !props.nodes.length
 
-  const overflowing = ref(false)
-  const measureOverflow = () => {
-    const el = rootEl.value
-    overflowing.value = !!el && el.scrollWidth > el.clientWidth + 1
+  const PLACEHOLDER: FlowDiagramNodeData[][] = [
+    [{ id: 'a' }],
+    [{ id: 'b' }],
+    [{ id: 'c' }, { id: 'd', terminal: true }]
+  ]
+  const columns = computed<FlowDiagramNodeData[][]>(() =>
+    props.loading ? PLACEHOLDER : rankColumns(props.nodes, props.edges)
+  )
+  const grouped = computed<boolean>(() => props.loading || props.edges.length > 0)
+  const labelled = computed<boolean>(() => props.edges.some((edge) => Boolean(edge.label)))
+  const titleOf = (id: string): string => {
+    const node = props.nodes.find((entry) => entry.id === id)
+    return node?.title || node?.eyebrow || id
   }
-  useResizeObserver(rootEl, measureOverflow)
-  useResizeObserver(containerEl, measureOverflow)
+
+  const scrollEl = ref<HTMLElement | null>(null)
+  const containerEl = ref<HTMLElement | null>(null)
+  const scrollable = ref<boolean>(false)
+  const { paths, labels, viewBox, vertical } = useFlowDiagramConnectors(containerEl, () =>
+    props.loading ? [] : props.edges
+  )
+
+  useResizeObserver(
+    () => scrollEl.value,
+    () => {
+      const el = scrollEl.value
+      scrollable.value = Boolean(el && el.scrollWidth > el.clientWidth + 1)
+    }
+  )
 
   provide(FlowDiagramInjectionKey, {
     testId,
     align: computed(() => props.align)
   })
 
-  const outerClass = computed(() =>
-    cn(
-      'w-full overflow-x-auto p-(--spacing-md) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset',
-      attrs.class as string | undefined
-    )
+  const isOpen = (key: string): boolean => openKeys.value.includes(key)
+  const toggle = (key: string): void => {
+    openKeys.value = isOpen(key)
+      ? openKeys.value.filter((entry) => entry !== key)
+      : [...openKeys.value, key]
+  }
+
+  const rootClass = computed(() =>
+    cn('@container/flow-diagram w-full min-w-0 text-(--text-default)', attrs.class as string)
   )
 </script>
 
 <template>
   <div
-    ref="rootEl"
-    v-bind="$attrs"
-    role="list"
+    v-bind="rootAttrs"
+    role="group"
+    :aria-label="label"
+    :aria-busy="loading || undefined"
     :data-testid="testId"
-    :tabindex="overflowing ? 0 : undefined"
-    :class="outerClass"
+    :data-loading="loading || null"
+    :class="rootClass"
   >
     <div
-      ref="containerEl"
-      :data-align="align"
-      :data-uniform="uniform || null"
-      class="relative flex w-fit flex-row gap-(--spacing-xl) text-(--text-default) data-[align=center]:items-center data-[align=start]:items-start data-[uniform]:grid data-[uniform]:auto-cols-fr data-[uniform]:grid-flow-col data-[uniform]:*:self-stretch [&>[data-flow-leading]_[data-slot=flow-port][data-side=end]]:hidden [&>[data-flow-trailing]_[data-slot=flow-port][data-side=start]]:hidden [&_[data-flow-terminal]_[data-slot=flow-port][data-side=start]]:hidden"
+      v-if="empty()"
+      :data-testid="`${testId}__empty`"
+      class="p-(--spacing-md)"
     >
-      <svg
-        v-if="paths.length"
-        :viewBox="viewBox"
-        preserveAspectRatio="none"
-        fill="none"
-        aria-hidden="true"
-        class="pointer-events-none absolute inset-0 h-full w-full overflow-visible"
-      >
-        <path
-          v-for="(path, index) in paths"
-          :key="index"
-          :d="path.d"
-          stroke-width="1"
-          stroke-dasharray="4 4"
-          :data-faded="path.faded || null"
-          class="animate-flow-dash-settle stroke-(--accent) motion-reduce:animate-none data-[faded]:animate-none data-[faded]:opacity-50"
+      <slot name="empty">
+        <EmptyState
+          size="small"
+          icon="az az-sitemap"
+          :title="t('flowDiagram.emptyTitle')"
         />
-      </svg>
-      <slot />
+      </slot>
+    </div>
+    <div
+      v-else
+      ref="scrollEl"
+      :tabindex="scrollable ? 0 : undefined"
+      class="w-full overflow-x-auto overscroll-x-contain p-(--spacing-md) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset"
+    >
+      <span
+        v-if="loading"
+        role="status"
+        class="sr-only"
+        >{{ t('flowDiagram.loading') }}</span
+      >
+      <div class="relative w-fit min-w-full">
+        <svg
+          v-if="paths.length"
+          :viewBox="viewBox"
+          preserveAspectRatio="none"
+          fill="none"
+          aria-hidden="true"
+          class="pointer-events-none absolute inset-0 h-full w-full overflow-visible"
+        >
+          <path
+            v-for="(path, index) in paths"
+            :key="index"
+            :d="path.d"
+            stroke-width="1"
+            stroke-dasharray="4 4"
+            :data-faded="path.faded || null"
+            :data-severity="path.severity"
+            class="animate-flow-dash-settle stroke-(--accent) data-[severity=danger]:stroke-(--danger-mark) data-[severity=warning]:stroke-(--warning-mark) data-[severity=success]:stroke-(--success-mark) data-[severity=info]:stroke-(--info-mark) data-[severity=neutral]:stroke-(--border-strong) motion-reduce:animate-none data-[faded]:animate-none data-[faded]:opacity-50"
+          />
+        </svg>
+        <div
+          ref="containerEl"
+          role="list"
+          :aria-hidden="loading || undefined"
+          :data-orientation="orientation"
+          :data-align="align"
+          :data-uniform="uniform || null"
+          :data-labelled="labelled || null"
+          :data-stacked="vertical || null"
+          :data-testid="`${testId}__list`"
+          class="relative flex w-full gap-(--spacing-xl) data-[orientation=vertical]:flex-col data-[orientation=responsive]:flex-col @xl/flow-diagram:data-[orientation=responsive]:flex-row data-[orientation=horizontal]:w-fit data-[orientation=horizontal]:min-w-full @xl/flow-diagram:data-[orientation=responsive]:w-fit @xl/flow-diagram:data-[orientation=responsive]:min-w-full data-[orientation=horizontal]:data-[align=start]:items-start data-[orientation=horizontal]:data-[align=center]:items-center @xl/flow-diagram:data-[orientation=responsive]:data-[align=start]:items-start @xl/flow-diagram:data-[orientation=responsive]:data-[align=center]:items-center data-[labelled]:gap-x-(--spacing-2xl) data-[orientation=horizontal]:data-[uniform]:grid data-[orientation=horizontal]:data-[uniform]:auto-cols-fr data-[orientation=horizontal]:data-[uniform]:grid-flow-col data-[orientation=horizontal]:data-[uniform]:*:self-stretch @xl/flow-diagram:data-[orientation=responsive]:data-[uniform]:grid @xl/flow-diagram:data-[orientation=responsive]:data-[uniform]:auto-cols-fr @xl/flow-diagram:data-[orientation=responsive]:data-[uniform]:grid-flow-col @xl/flow-diagram:data-[orientation=responsive]:data-[uniform]:*:self-stretch data-[stacked]:[&_[data-slot=flow-diagram-port]]:hidden [&_[data-slot=flow-diagram-node]:not([data-entry])_[data-slot=flow-diagram-port][data-side=end]]:hidden [&_[data-slot=flow-diagram-node]:not([data-exit])_[data-slot=flow-diagram-port][data-side=start]]:hidden"
+        >
+          <slot v-if="composed()" />
+          <template v-else>
+            <template
+              v-for="(column, index) in columns"
+              :key="index"
+            >
+              <FlowDiagramGroup
+                v-if="grouped"
+                :data-testid="`${testId}__column`"
+                class="min-w-(--size-56) flex-1"
+              >
+                <template
+                  v-for="node in column"
+                  :key="node.id"
+                >
+                  <FlowDiagramNode
+                    v-if="loading"
+                    :terminal="node.terminal"
+                    class="w-full"
+                  >
+                    <span class="flex w-full flex-col gap-(--spacing-sm) py-(--spacing-2xs)">
+                      <Skeleton
+                        height="var(--size-3)"
+                        width="50%"
+                      />
+                      <Skeleton
+                        height="var(--size-4)"
+                        width="80%"
+                      />
+                    </span>
+                  </FlowDiagramNode>
+                  <FlowDiagramCard
+                    v-else
+                    :node="node"
+                    :open="isOpen(node.id)"
+                    :test-id="testId"
+                    card
+                    @toggle="() => toggle(node.id)"
+                  >
+                    <template
+                      v-if="$slots['actions']"
+                      #actions
+                    >
+                      <slot
+                        name="actions"
+                        :node="node"
+                      />
+                    </template>
+                  </FlowDiagramCard>
+                </template>
+              </FlowDiagramGroup>
+              <FlowDiagramCard
+                v-for="node in column"
+                v-else
+                :key="node.id"
+                :node="node"
+                :open="isOpen(node.id)"
+                :test-id="testId"
+                :card="uniform"
+                @toggle="() => toggle(node.id)"
+              >
+                <template
+                  v-if="$slots['actions']"
+                  #actions
+                >
+                  <slot
+                    name="actions"
+                    :node="node"
+                  />
+                </template>
+              </FlowDiagramCard>
+            </template>
+          </template>
+        </div>
+        <span
+          v-for="(mark, index) in labels"
+          :key="`label-${index}`"
+          aria-hidden="true"
+          :data-severity="mark.severity"
+          :data-beside="mark.beside || null"
+          :data-testid="`${testId}__edge-label`"
+          :style="{ left: `${mark.x}px`, top: `${mark.y}px` }"
+          class="pointer-events-none absolute z-2 -translate-x-1/2 -translate-y-1/2 rounded-(--shape-control) border border-solid border-(--border-default) bg-(--bg-canvas) px-(--spacing-2xs) text-body-xs whitespace-nowrap text-(--text-muted) tabular-nums data-[beside]:translate-x-0 rtl:data-[beside]:-translate-x-full data-[severity=danger]:border-(--danger-border) data-[severity=danger]:text-(--danger-foreground) data-[severity=warning]:border-(--warning-border) data-[severity=warning]:text-(--warning-foreground) data-[severity=success]:border-(--success-border) data-[severity=success]:text-(--success-foreground)"
+          >{{ mark.text }}</span
+        >
+      </div>
+      <ul
+        v-if="!composed() && !loading && edges.length"
+        :aria-label="t('flowDiagram.connections')"
+        :data-testid="`${testId}__connections`"
+        class="sr-only"
+      >
+        <li
+          v-for="edge in edges"
+          :key="`${edge.from}-${edge.to}`"
+        >
+          {{ t('flowDiagram.connection', { from: titleOf(edge.from), to: titleOf(edge.to) })
+          }}{{ edge.label ? `, ${edge.label}` : '' }}
+        </li>
+      </ul>
     </div>
   </div>
 </template>

@@ -381,7 +381,7 @@ export const STATUS_EXTRAS = {
 }
 export const ORIENTATION_EXTRAS = {
   field: ['responsive'],
-  'node-diagram': ['responsive'],
+  'flow-diagram': ['responsive'],
   'scroll-area': ['both']
 }
 

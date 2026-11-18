@@ -1106,7 +1106,7 @@ export const tracker = {
   roleDescription: 'status history'
 } as const
 
-export const nodeDiagram = {
+export const flowDiagram = {
   label: 'Diagram',
   notBound: 'Not bound',
   bind: 'Bind {kind}',
@@ -1124,23 +1124,6 @@ export const nodeDiagram = {
   connection: '{from} to {to}',
   emptyTitle: 'Nothing is connected yet.',
   loading: 'Loading the diagram'
-} as const
-
-export const topologyDiagram = {
-  label: 'Deployment topology',
-  notBound: 'Not bound',
-  bind: 'Bind {kind}',
-  change: 'Change {kind}',
-  remove: 'Remove {kind}',
-  create: 'Create {kind}',
-  apply: 'Apply {kind}',
-  cancel: 'Cancel',
-  pending: 'Pending',
-  existing: 'Existing',
-  noOptions: 'No options yet.',
-  copy: 'Copy {field}',
-  emptyTitle: 'Nothing is connected yet.',
-  loading: 'Loading the topology'
 } as const
 
 export const tree = {
@@ -1563,8 +1546,7 @@ export const en = {
   toggleGroup,
   trace,
   toolCall,
-  nodeDiagram,
-  topologyDiagram,
+  flowDiagram,
   tracker,
   tree,
   unsavedChanges,

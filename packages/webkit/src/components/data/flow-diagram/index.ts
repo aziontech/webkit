@@ -1,26 +1,63 @@
 import FlowDiagram from './flow-diagram.vue'
 import FlowDiagramAnchor from './flow-diagram-anchor/flow-diagram-anchor.vue'
+import FlowDiagramDescription from './flow-diagram-description/flow-diagram-description.vue'
+import FlowDiagramFooter from './flow-diagram-footer/flow-diagram-footer.vue'
+import FlowDiagramGroup from './flow-diagram-group/flow-diagram-group.vue'
+import FlowDiagramHeader from './flow-diagram-header/flow-diagram-header.vue'
+import FlowDiagramItem from './flow-diagram-item/flow-diagram-item.vue'
 import FlowDiagramNode from './flow-diagram-node/flow-diagram-node.vue'
-import FlowDiagramParallel from './flow-diagram-parallel/flow-diagram-parallel.vue'
+import FlowDiagramTitle from './flow-diagram-title/flow-diagram-title.vue'
 
-type CompoundFlow = typeof FlowDiagram & {
+type CompoundFlowDiagram = typeof FlowDiagram & {
   Node: typeof FlowDiagramNode
-  Parallel: typeof FlowDiagramParallel
+  Group: typeof FlowDiagramGroup
   Anchor: typeof FlowDiagramAnchor
+  Header: typeof FlowDiagramHeader
+  Title: typeof FlowDiagramTitle
+  Description: typeof FlowDiagramDescription
+  Footer: typeof FlowDiagramFooter
+  Item: typeof FlowDiagramItem
 }
 
 const FlowDiagramRoot = Object.assign(FlowDiagram, {
   Node: FlowDiagramNode,
-  Parallel: FlowDiagramParallel,
-  Anchor: FlowDiagramAnchor
-}) as CompoundFlow
+  Group: FlowDiagramGroup,
+  Anchor: FlowDiagramAnchor,
+  Header: FlowDiagramHeader,
+  Title: FlowDiagramTitle,
+  Description: FlowDiagramDescription,
+  Footer: FlowDiagramFooter,
+  Item: FlowDiagramItem
+}) as CompoundFlowDiagram
 
 export default FlowDiagramRoot
-export { FlowDiagramAnchor, FlowDiagramNode, FlowDiagramParallel }
-export type { FlowDiagramProps } from './flow-diagram.vue'
-export type { FlowDiagramAnchorSide } from './flow-diagram-anchor/flow-diagram-anchor.vue'
-export type { FlowDiagramAnchorProps } from './flow-diagram-anchor/flow-diagram-anchor.vue'
+export {
+  FlowDiagramAnchor,
+  FlowDiagramDescription,
+  FlowDiagramFooter,
+  FlowDiagramGroup,
+  FlowDiagramHeader,
+  FlowDiagramItem,
+  FlowDiagramNode,
+  FlowDiagramTitle
+}
+export type {
+  FlowDiagramAlign,
+  FlowDiagramBindOption,
+  FlowDiagramEdgeData,
+  FlowDiagramNodeData,
+  FlowDiagramNodeField,
+  FlowDiagramNodeMetric,
+  FlowDiagramOrientation,
+  FlowDiagramProps,
+  FlowDiagramSeverity
+} from './flow-diagram.vue'
+export type {
+  FlowDiagramAnchorProps,
+  FlowDiagramAnchorSide
+} from './flow-diagram-anchor/flow-diagram-anchor.vue'
+export type { FlowDiagramGroupProps } from './flow-diagram-group/flow-diagram-group.vue'
+export type { FlowDiagramHeaderProps } from './flow-diagram-header/flow-diagram-header.vue'
+export type { FlowDiagramItemProps } from './flow-diagram-item/flow-diagram-item.vue'
 export type { FlowDiagramNodeProps } from './flow-diagram-node/flow-diagram-node.vue'
-export type { FlowDiagramParallelAlign } from './flow-diagram-parallel/flow-diagram-parallel.vue'
-export type { FlowDiagramParallelProps } from './flow-diagram-parallel/flow-diagram-parallel.vue'
-export type { FlowDiagramAlign } from './injection-key'
+export type { FlowDiagramTitleProps } from './flow-diagram-title/flow-diagram-title.vue'
