@@ -508,16 +508,20 @@ function tokenUsage(): { match: (name: string) => boolean; usage: TokenUsage }[]
   const source = readFileSync(file, 'utf8')
   const start = source.indexOf('## Which color token does which job')
   if (start === -1) return []
-  const rows = source
-    .slice(start)
+  const section = source.slice(start)
+  const end = section.indexOf('\n## ', 1)
+  const rows = (end === -1 ? section : section.slice(0, end))
     .split('\n')
     .filter((line) => line.startsWith('|') && !/^\|\s*-/.test(line))
     .slice(1)
-  return rows.map((line) => {
-    const [job, tokens, usedBy] = line
-      .split('|')
-      .slice(1, -1)
-      .map((cell) => cell.trim())
+    .map((line) =>
+      line
+        .split('|')
+        .slice(1, -1)
+        .map((cell) => cell.trim())
+    )
+    .filter((cells) => cells.length >= 3)
+  return rows.map(([job, tokens, usedBy]) => {
     const names = [...tokens.matchAll(/`([^`]+)`/g)].map((match) => match[1])
     const bases = names.filter((name) => name.startsWith('--'))
     const suffixes = names.filter((name) => !name.startsWith('--'))
