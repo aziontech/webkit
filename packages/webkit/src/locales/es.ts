@@ -459,8 +459,7 @@ export const es: Messages = {
     untilNow: 'Terminar ahora',
     zoneNote: 'Horas en {zone}',
     refreshEvery: 'Actualizar cada',
-    refreshAmount: 'Intervalo de actualización',
-    refreshUnit: 'Unidad del intervalo de actualización',
+    refreshOff: 'Desactivado',
     refreshSecond: {
       one: 'se actualiza cada segundo',
       other: 'se actualiza cada {count} segundos'

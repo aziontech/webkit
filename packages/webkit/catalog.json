@@ -14063,9 +14063,9 @@
     {
      "name": "showRefresh",
      "type": "boolean",
-     "default": "false",
+     "default": "true",
      "required": "false",
-     "doc": "Shows the auto-refresh switch and interval in the panel; bind v-model:refresh-interval and listen to refresh."
+     "doc": "Shows the Refresh every selector in the panel while it offers relative ranges; bind v-model:refresh-interval and run the query on refresh."
     },
     {
      "name": "rangeSelectorMode",

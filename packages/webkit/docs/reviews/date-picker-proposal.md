@@ -284,3 +284,85 @@ per-page setting, not something done every time a range is picked. Decision:
 1. Is a 30-minute step right, or 15 minutes (Google Calendar's default)? It is one constant.
 2. Should the Console's "Account" zone become the default zone when an app knows it? (Pass it
    through `ConfigProvider` `timeZone` today.)
+
+## 8. Round 3 — owner direction 2026-11-18
+
+The owner reviewed the picker on the main branch (`/components/date-range-picker`, example With
+Step) and gave direction that supersedes both lane A's fix and the proposal where they differ:
+
+1. The Absolute tab must show the **calendar first** — it is the easiest way to use it. Not sure the
+   Start/End field block is needed.
+2. Tab labels just `Absolute` and `Relative`, never cut off (the screenshot read `Absolute ran…`).
+3. Open on Absolute, except when the current value is relative.
+4. Always offer **Refresh every**, if the benchmarks have it.
+5. No fake date in empty fields (the screenshot's End `Jun 30, 2026` was a placeholder); the time zone
+   selector hidden by default, as the proposal did; the panel as thin as the calendar.
+
+The screenshot also showed the `Start` label clipped under the tab bar: with the fields first, the
+scrolling middle started half-way through the Start label on a short screen.
+
+### 8.1 Benchmarks
+
+| System                                 | Absolute range                                                                                                                                          | Tabs / order                                                                                              | Auto refresh                                                                                           |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| AWS Cloudscape `DateRangePicker`       | Month grid(s) first (two months on desktop, one on narrow screens); picked days are reflected in the start and end date and time inputs under the grid. | Segmented control `Absolute range` / `Relative range`, absolute listed first; a select on narrow screens. | None in the component.                                                                                 |
+| AWS CloudWatch dashboards              | Custom menu → Absolute tab: set the dates "with a calendar or text fields"; a UTC / Local switch.                                                       | Relative and Absolute tabs.                                                                               | A separate Refresh options menu: 10 s, 1, 2, 5, 15 minutes.                                            |
+| Vercel (Observability, runtime logs)   | Presets (past hour … last 3 days, by plan) or a custom span from a date picker; times shown in UTC.                                                     | One menu: presets, then custom.                                                                           | **Live** mode follows logs in real time (about every 5 s) instead of an interval.                      |
+| Supabase (Logs Explorer / Studio Logs) | Time range in the toolbar (presets or a custom range), or drag on the timeline chart.                                                                   | One menu: presets, then custom.                                                                           | **Live** mode; starting it clears the fixed range, picking a range stops it.                           |
+| Grafana                                | Typed From / To fields (date math or a date); clicking a field opens a calendar for days.                                                               | Absolute fields left, quick ranges right.                                                                 | A separate auto-refresh picker next to the time picker (5 s … 1 d), most useful for ranges ending now. |
+| Datadog                                | Type a time frame in words (`Jan 1 - Jan 2`, `6:00 am - 1:00 pm`) or use the calendar picker.                                                           | One menu.                                                                                                 | Live / paused; a fixed range pauses live.                                                              |
+| Elastic EUI / Kibana                   | Start and end edited separately, each with a calendar and a time list.                                                                                  | Quick menu plus per-end popovers.                                                                         | Refresh interval inside the quick menu (shown when the app handles refresh).                           |
+
+Sources: [Cloudscape date range picker](https://cloudscape.design/components/date-range-picker/index.html.md),
+[CloudWatch time range](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/change_dashboard_time_format.html),
+[CloudWatch refresh interval](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/change_dashboard_refresh_interval.html),
+[Vercel runtime logs](https://vercel.com/docs/logs/runtime), [Vercel live mode](https://vercel.com/changelog/improved-live-mode-in-runtime-logs),
+[Supabase logs](https://supabase.com/docs/guides/telemetry/logs),
+[Grafana dashboards](https://grafana.com/docs/grafana/latest/dashboards/use-dashboards/),
+[Datadog custom time frames](https://docs.datadoghq.com/dashboards/guide/custom_time_frames/),
+[EUI auto refresh](https://eui.elastic.co/docs/components/forms/date-and-time/auto-refresh/). Vercel's
+and Supabase's custom-range layouts are not documented; the rows above say only what their docs say.
+
+What they agree on: (1) the calendar is the main way to pick an absolute range, and typed inputs stay
+for keyboard use and for times (Cloudscape, CloudWatch, Datadog, Grafana); (2) where a system has
+"Absolute" and "Relative" side by side, Cloudscape lists Absolute first; (3) every observability tool
+offers a way to keep the data fresh — an interval (CloudWatch, Grafana, Kibana) or a live mode (Vercel,
+Supabase, Datadog); none is a data-fetching widget, the page re-runs its own query.
+
+### 8.2 Design chosen
+
+- **Absolute tab, top to bottom: month grid → Start and End → End at now.** The grid is what a pointer
+  user sees first: click a start day, click an end day (a day before the start swaps them). Start
+  and End stay under the grid as one compact block (date + time on one row each): the grid fills them
+  in, and they are the keyboard and screen-reader way in and the only place to set a time. Removing
+  them (owner's question) would leave no way to type a range and no way to choose 09:30 instead of
+  00:00, so they stay, second. A summary-only line was considered and dropped: it would repeat what the
+  fields already show and still need an edit control for times.
+- **Short screens: fixed tab bar and footer, scrolling middle** (lane A's structure, kept). With the
+  grid first, the tabs, the whole month and Apply are visible without scrolling on a 1280 × 720 laptop
+  and a 390 × 664 phone; Start and End scroll into view under the grid while Apply stays put. The
+  clipped `Start` label is gone because the middle now starts with the calendar's month heading.
+- **Tabs `Absolute` | `Relative`**, Absolute first (Cloudscape, and the owner's default). Short labels
+  fit the 276 px panel in every language; the readability suite checks no word is cut at 320, 390 and
+  1280 px in English and Portuguese.
+- **Default tab:** Absolute, unless the committed value is relative.
+- **Refresh every, always offered:** one select under the tab body — Off, 10 seconds, 30 seconds,
+  1 minute, 5 minutes, 15 minutes, 30 minutes, 1 hour (CloudWatch's and Grafana's steps) — replacing
+  the proposal's switch + number + unit row, which took two lines in a 276 px panel. It reuses the
+  proposal's API: `v-model:refresh-interval` (seconds, 0 is off) set on Apply, and a `refresh` event on
+  each tick while the page is visible; the app runs the query. `showRefresh` defaults to `true`;
+  it is hidden on `absolute-only` pickers (a fixed range never changes) and a page that cannot re-run
+  its query passes `:show-refresh="false"`. A "Live" toggle (Vercel, Supabase) was not added: an
+  interval covers it (10 seconds) and keeps one control.
+- **Kept from the proposal:** hint placeholders (`e.g. Jan 31, 2026`, `hh:mm`), an end before the start
+  flagged as typed, the zone named in one read-only line with the selector behind `show-time-zone`, the
+  panel as thin as the calendar, the 30-minute time list, the phone sheet, Today / This week, End at now.
+
+Decisions RV-P1 … RV-P5 in `.claude/docs/DECISIONS.md`.
+
+### 8.3 Still open for the owner
+
+1. Should Refresh every also appear as a small button next to the trigger (Grafana style) so the
+   interval is visible without opening the panel? Today the trigger shows a refresh icon when it is on.
+2. Two months side by side on desktop (Cloudscape) would make a cross-month range one click easier, but
+   the panel would be twice as wide; kept to one month, as thin as the calendar.

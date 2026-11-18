@@ -25,7 +25,6 @@
       :relative-options="quickRanges"
       time-zone="UTC"
       show-step
-      show-refresh
       aria-label="Events time range"
       @refresh="refreshes += 1"
     />

@@ -43,6 +43,7 @@ describe('TIME_RANGE_PRESETS', () => {
     })
     await userEvent.click(view.getByTestId('date-range-picker__trigger'))
     const popover = await waitFor(() => view.getByTestId('date-range-picker__popover'))
+    await userEvent.click(within(popover).getByRole('radio', { name: 'Relative' }))
     for (const name of ['Last hour', 'Last 24 hours', 'Last 7 days', 'Last 30 days']) {
       expect(within(popover).getByRole('radio', { name })).toBeTruthy()
     }

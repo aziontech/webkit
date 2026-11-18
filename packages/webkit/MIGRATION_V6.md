@@ -1961,6 +1961,12 @@ bindings and prints `MANUAL` for everything below that it cannot rewrite.
   `false`: the panel names the zone in a read-only line (`Times in UTC−08:00 · Los Angeles`). A page
   that lets people switch zones adds `show-time-zone` (with `v-model:time-zone`). The start and end
   time fields also list the day in 30-minute steps; typing a time still works.
+- **`DateRangePicker` opens on Absolute, calendar first, and offers Refresh every.** The tabs read
+  `Absolute` then `Relative`; the panel opens on Absolute unless the value is relative. The Absolute
+  tab shows the month grid before the start and end fields. `showRefresh` now defaults to `true`:
+  a Refresh every select (Off, 10 seconds … 1 hour) sets `v-model:refresh-interval`, and the picker
+  fires `@refresh` on each tick. Run your query on `@refresh`, or pass `:show-refresh="false"` where
+  the page cannot re-run it. (DateRangePicker is new in 6.0, so no 5.x app needs a change.)
 - **Radios are one `RadioGroup`.** `RadioButton` and `RadioCards` are removed. Every radio is a
   `RadioGroup.Item` (`@aziontech/webkit/radio-group-item`) inside a `RadioGroup` that holds the
   `v-model`: `<RadioGroup v-model="plan"><RadioGroup.Item value="pro">Pro</RadioGroup.Item></RadioGroup>`.

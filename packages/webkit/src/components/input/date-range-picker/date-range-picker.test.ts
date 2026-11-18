@@ -5,6 +5,7 @@ import { defineComponent, h, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/date-range-picker/default.vue'
 import Disabled from '../../../../examples/date-range-picker/disabled.vue'
+import RelativeOnly from '../../../../examples/date-range-picker/relative-only.vue'
 import TimeZone from '../../../../examples/date-range-picker/time-zone.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
@@ -31,6 +32,13 @@ const open = async (getByTestId: (id: string) => HTMLElement): Promise<HTMLEleme
   })
   await nextTick()
   return el
+}
+
+const openRelative = async (getByTestId: (id: string) => HTMLElement): Promise<HTMLElement> => {
+  const popover = await open(getByTestId)
+  await fireEvent.click(within(popover).getByRole('radio', { name: 'Relative' }))
+  await waitFor(() => expect(within(popover).getByTestId(`${TEST_ID}__relative`)).toBeTruthy())
+  return popover
 }
 
 const reopen = async (getByTestId: (id: string) => HTMLElement): Promise<HTMLElement> => {
@@ -104,19 +112,45 @@ describe('DateRangePicker', () => {
     expect(view.getByTestId(`${TEST_ID}__trigger`).hasAttribute('aria-invalid')).toBe(false)
   })
 
-  it('shows the placeholder and opens on the Relative tab with no value', async () => {
+  it('shows the placeholder and opens on the Absolute tab with no value, calendar first', async () => {
     const view = render(DateRangePicker, { props: { now: NOW } })
     const trigger = view.getByTestId(`${TEST_ID}__trigger`)
     expect(trigger.textContent).toContain('Select a time range')
     expect(trigger.getAttribute('aria-expanded')).toBe('false')
     const popover = await open(view.getByTestId)
     expect(trigger.getAttribute('aria-expanded')).toBe('true')
-    expect(within(popover).getByTestId(`${TEST_ID}__relative`)).toBeTruthy()
+    const absolute = within(popover).getByTestId(`${TEST_ID}__absolute`)
+    const grid = within(absolute).getByRole('grid')
+    const start = within(absolute).getByLabelText('Start')
+    expect(grid.compareDocumentPosition(start) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    expect(absolute.firstElementChild?.contains(grid)).toBe(true)
+  })
+
+  it('labels the tabs Absolute then Relative, without the word range', async () => {
+    const view = render(DateRangePicker, { props: { now: NOW } })
+    const popover = await open(view.getByTestId)
+    const tabs = within(within(popover).getByTestId(`${TEST_ID}__mode`)).getAllByRole('radio')
+    expect(tabs.map((tab) => tab.textContent?.trim())).toEqual(['Absolute', 'Relative'])
+    expect((tabs[0] as HTMLInputElement).getAttribute('aria-checked')).toBe('true')
+  })
+
+  it.each([
+    [
+      'an absolute value',
+      { type: 'absolute', start: '2026-11-10T13:00:00.000Z', end: '2026-11-10T14:00:00.000Z' },
+      'absolute'
+    ],
+    ['a range that ends now', { type: 'since', start: '2026-11-10T13:00:00.000Z' }, 'absolute'],
+    ['a relative value', { type: 'relative', amount: 15, unit: 'minute' }, 'relative']
+  ] as const)('opens on the matching tab for %s', async (_name, modelValue, tab) => {
+    const view = render(DateRangePicker, { props: { now: NOW, modelValue } })
+    const popover = await open(view.getByTestId)
+    expect(within(popover).getByTestId(`${TEST_ID}__${tab}`)).toBeTruthy()
   })
 
   it('picks a quick range and commits it only on Apply', async () => {
     const view = render(DateRangePicker, { props: { now: NOW } })
-    const popover = await open(view.getByTestId)
+    const popover = await openRelative(view.getByTestId)
     await fireEvent.click(within(popover).getByRole('radio', { name: 'Last hour' }))
     expect(view.emitted()['update:modelValue']).toBeUndefined()
     await fireEvent.click(within(popover).getByRole('button', { name: 'Apply' }))
@@ -160,7 +194,7 @@ describe('DateRangePicker', () => {
 
   it('validates and applies a custom duration', async () => {
     const view = render(DateRangePicker, { props: { now: NOW } })
-    const popover = await open(view.getByTestId)
+    const popover = await openRelative(view.getByTestId)
     expect(within(popover).getByRole('group', { name: 'Custom range' })).toBeTruthy()
     const amount = within(popover).getByLabelText('Duration')
     await fireEvent.update(amount, '0')
@@ -473,7 +507,7 @@ describe('DateRangePicker', () => {
 
   it('moves between quick ranges with the arrow keys', async () => {
     const view = render(DateRangePicker, { props: { now: NOW } })
-    const popover = await open(view.getByTestId)
+    const popover = await openRelative(view.getByTestId)
     const first = within(popover).getByRole('radio', { name: 'Last 5 minutes' })
     first.focus()
     await userEvent.keyboard('{ArrowDown}')
@@ -505,7 +539,7 @@ describe('DateRangePicker', () => {
 
   it('mirrors a picked quick range in the custom duration and unit', async () => {
     const view = render(DateRangePicker, { props: { now: NOW } })
-    const popover = await open(view.getByTestId)
+    const popover = await openRelative(view.getByTestId)
     await fireEvent.click(within(popover).getByRole('radio', { name: 'Last 7 days' }))
     expect((within(popover).getByLabelText('Duration') as HTMLInputElement).value).toBe('7')
     expect((within(popover).getByLabelText('Unit') as HTMLSelectElement).value).toBe('day')
@@ -533,7 +567,7 @@ describe('DateRangePicker', () => {
         ]
       }
     })
-    const popover = await open(view.getByTestId)
+    const popover = await openRelative(view.getByTestId)
     expect(within(popover).getByRole('radio', { name: 'This week' })).toBeTruthy()
     await fireEvent.click(within(popover).getByRole('radio', { name: 'Today' }))
     await fireEvent.click(within(popover).getByRole('button', { name: 'Apply' }))
@@ -588,24 +622,28 @@ describe('DateRangePicker', () => {
     expect(within(popover).queryByRole('switch', { name: 'End at now' })).toBeNull()
   })
 
-  it('sets the auto-refresh interval on Apply and fires refresh on each tick', async () => {
+  it('offers Refresh every by default and sets the interval on Apply, firing refresh on each tick', async () => {
     vi.useFakeTimers({ toFake: ['setInterval', 'clearInterval'] })
     try {
       const view = render(DateRangePicker, {
-        props: {
-          now: NOW,
-          showRefresh: true,
-          modelValue: { type: 'relative', amount: 5, unit: 'minute' }
-        }
+        props: { now: NOW, modelValue: { type: 'relative', amount: 5, unit: 'minute' } }
       })
       const popover = await open(view.getByTestId)
-      const toggle = within(popover).getByRole('switch', { name: 'Refresh every' })
-      expect(within(popover).getByLabelText('Refresh interval').hasAttribute('disabled')).toBe(true)
-      await fireEvent.click(toggle)
-      await fireEvent.update(within(popover).getByLabelText('Refresh interval'), '30')
-      const unit = within(popover).getByLabelText('Refresh interval unit') as HTMLSelectElement
-      unit.value = 'second'
-      await fireEvent.change(unit)
+      const select = within(popover).getByLabelText('Refresh every') as HTMLSelectElement
+      expect(select.value).toBe('0')
+      expect([...select.options].map((option) => option.textContent?.trim())).toEqual([
+        'Off',
+        '10 seconds',
+        '30 seconds',
+        '1 minute',
+        '5 minutes',
+        '15 minutes',
+        '30 minutes',
+        '1 hour'
+      ])
+      select.value = '30'
+      await fireEvent.change(select)
+      expect(view.emitted()['update:refreshInterval']).toBeUndefined()
       await fireEvent.click(within(popover).getByRole('button', { name: 'Apply' }))
       expect(view.emitted()['update:refreshInterval']?.at(-1)).toEqual([30])
       await view.rerender({ refreshInterval: 30 })
@@ -622,9 +660,48 @@ describe('DateRangePicker', () => {
     }
   })
 
+  it('keeps a bound interval that is not in the list and turns it off with Off', async () => {
+    const view = render(DateRangePicker, {
+      props: {
+        now: NOW,
+        refreshInterval: 120,
+        modelValue: { type: 'relative', amount: 5, unit: 'minute' }
+      }
+    })
+    const popover = await open(view.getByTestId)
+    const select = within(popover).getByLabelText('Refresh every') as HTMLSelectElement
+    expect(select.value).toBe('120')
+    expect(select.selectedOptions[0]?.textContent?.trim()).toBe('2 minutes')
+    select.value = '0'
+    await fireEvent.change(select)
+    await fireEvent.click(within(popover).getByRole('button', { name: 'Apply' }))
+    expect(view.emitted()['update:refreshInterval']?.at(-1)).toEqual([0])
+  })
+
+  it('hides Refresh every with show-refresh off or an absolute-only picker', async () => {
+    const off = render(DateRangePicker, { props: { now: NOW, showRefresh: false } })
+    expect(within(await open(off.getByTestId)).queryByLabelText('Refresh every')).toBeNull()
+    off.unmount()
+    const absolute = render(DateRangePicker, {
+      props: { now: NOW, rangeSelectorMode: 'absolute-only' }
+    })
+    expect(within(await open(absolute.getByTestId)).queryByLabelText('Refresh every')).toBeNull()
+  })
+
+  it('relative-only: opens with the check and the focus on the range the trigger shows', async () => {
+    const view = render(RelativeOnly)
+    const trigger = view.getByTestId(`${TEST_ID}__trigger`)
+    expect(trigger.textContent).toContain('Last 24 hours')
+    const popover = await open(view.getByTestId)
+    expect(within(popover).queryByTestId(`${TEST_ID}__mode`)).toBeNull()
+    const radio = within(popover).getByRole('radio', { name: 'Last 24 hours' })
+    expect((radio as HTMLInputElement).checked).toBe(true)
+    await waitFor(() => expect(document.activeElement).toBe(radio))
+  })
+
   it('switches between the relative and absolute tabs', async () => {
     const view = render(DateRangePicker, { props: { now: NOW } })
-    const popover = await open(view.getByTestId)
+    const popover = await openRelative(view.getByTestId)
     await fireEvent.click(within(popover).getByRole('radio', { name: 'Absolute' }))
     await waitFor(() => expect(within(popover).getByTestId(`${TEST_ID}__absolute`)).toBeTruthy())
     expect(within(popover).getByRole('grid')).toBeTruthy()

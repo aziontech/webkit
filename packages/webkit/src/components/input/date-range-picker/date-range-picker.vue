@@ -49,6 +49,7 @@
     DEFAULT_RELATIVE_OPTIONS,
     endsNow,
     fromWallClock,
+    REFRESH_INTERVALS,
     REFRESH_UNITS,
     type RelativeOption,
     resolveDateRange,
@@ -85,7 +86,7 @@
     showTime?: boolean
     /** Shows Previous and Next buttons that move the range back or forward by its own length. */
     showStep?: boolean
-    /** Shows the auto-refresh switch and interval in the panel; bind v-model:refresh-interval and listen to refresh. */
+    /** Shows the Refresh every selector in the panel while it offers relative ranges; bind v-model:refresh-interval and run the query on refresh. */
     showRefresh?: boolean
     /** Which kinds of range the panel offers. */
     rangeSelectorMode?: RangeSelectorMode
@@ -114,7 +115,7 @@
     showTimeZone: false,
     showTime: true,
     showStep: false,
-    showRefresh: false,
+    showRefresh: true,
     rangeSelectorMode: 'default',
     min: undefined,
     max: undefined,
@@ -164,7 +165,7 @@
   const customUnitId = `${uid}-unit`
   const customLabelId = `${uid}-custom`
   const untilNowLabelId = `${uid}-until-now`
-  const refreshLabelId = `${uid}-refresh`
+  const refreshId = `${uid}-refresh`
 
   const mounted = ref(false)
   onMounted(() => {
@@ -220,18 +221,30 @@
 
   const UNIT_SECONDS: Record<DateRangeRefreshUnit, number> = { second: 1, minute: 60, hour: 3600 }
 
+  const intervalUnit = (seconds: number): DateRangeRefreshUnit =>
+    [...REFRESH_UNITS].reverse().find((item) => seconds % UNIT_SECONDS[item] === 0) ?? 'second'
+
   const refreshText = computed<string>(() => {
     const seconds = refreshInterval.value
     if (!seconds || seconds <= 0) return ''
-    const unit = [...REFRESH_UNITS].reverse().find((item) => seconds % UNIT_SECONDS[item] === 0)
-    const chosen = unit ?? 'second'
+    const unit = intervalUnit(seconds)
     const keys = {
       second: 'dateRangePicker.refreshSecond',
       minute: 'dateRangePicker.refreshMinute',
       hour: 'dateRangePicker.refreshHour'
     } as const
-    return t(keys[chosen], { count: seconds / UNIT_SECONDS[chosen] })
+    return t(keys[unit], { count: seconds / UNIT_SECONDS[unit] })
   })
+
+  const intervalLabel = (seconds: number): string => {
+    if (seconds <= 0) return t('dateRangePicker.refreshOff')
+    const unit = intervalUnit(seconds)
+    return new Intl.NumberFormat(locale.value, {
+      style: 'unit',
+      unit,
+      unitDisplay: 'long'
+    }).format(seconds / UNIT_SECONDS[unit])
+  }
 
   const triggerParts = computed<{ text: string; zone: string }>(() => {
     const value = model.value
@@ -266,7 +279,6 @@
 
   const offersRelative = computed(() => props.rangeSelectorMode !== 'absolute-only')
   const offersAbsolute = computed(() => props.rangeSelectorMode !== 'relative-only')
-
   const isOpen = computed<boolean>(() => openModel.value ?? props.defaultOpen)
   const triggerEl = ref<HTMLElement | null>(null)
   const panelEl = ref<HTMLElement | null>(null)
@@ -278,22 +290,25 @@
   const draftRange = ref<DatePickerRange>({ start: null, end: null })
   const draftZone = ref<string>('')
   const draftUntilNow = ref(false)
-  const draftRefreshOn = ref(false)
-  const draftRefreshAmount = ref<string>('1')
-  const draftRefreshUnit = ref<DateRangeRefreshUnit>('minute')
+  const draftRefresh = ref<number>(0)
   const showError = ref(false)
+
+  const offersRefresh = computed(() => props.showRefresh && offersRelative.value)
+
+  const refreshChoices = computed<number[]>(() => {
+    const current = draftRefresh.value
+    const list = [0, ...REFRESH_INTERVALS]
+    return current > 0 && !list.includes(current) ? [...list, current].sort((a, b) => a - b) : list
+  })
+
+  const editRefresh = (event: Event): void => {
+    draftRefresh.value = Number((event.target as HTMLSelectElement).value)
+  }
 
   const CUSTOM = '__custom'
 
   const resetRefresh = (): void => {
-    const seconds = refreshInterval.value
-    draftRefreshOn.value = seconds > 0
-    if (seconds > 0) {
-      const unit =
-        [...REFRESH_UNITS].reverse().find((item) => seconds % UNIT_SECONDS[item] === 0) ?? 'second'
-      draftRefreshUnit.value = unit
-      draftRefreshAmount.value = String(seconds / UNIT_SECONDS[unit])
-    }
+    draftRefresh.value = refreshInterval.value > 0 ? refreshInterval.value : 0
   }
 
   const resetDraft = (): void => {
@@ -302,7 +317,7 @@
     showError.value = false
     draftUntilNow.value = value?.type === 'since'
     resetRefresh()
-    if ((value?.type === 'relative' || !value) && offersRelative.value) {
+    if (offersRelative.value && (value?.type === 'relative' || !offersAbsolute.value)) {
       panelMode.value = 'relative'
       const option = value
         ? props.relativeOptions.find((item) => sameRelative(value, item))
@@ -408,15 +423,6 @@
     }
   })
 
-  const parsedRefresh = computed<number | null>(() => {
-    const amount = Number(draftRefreshAmount.value)
-    return Number.isInteger(amount) && amount > 0 ? amount : null
-  })
-
-  const refreshError = computed<boolean>(
-    () => props.showRefresh && draftRefreshOn.value && !parsedRefresh.value
-  )
-
   const rangeError = computed<string>(() => {
     if (panelMode.value === 'relative') {
       return draftKey.value === CUSTOM && !parsedAmount.value
@@ -439,9 +445,7 @@
     return ''
   })
 
-  const draftError = computed<string>(
-    () => rangeError.value || (refreshError.value ? t('dateRangePicker.invalidAmount') : '')
-  )
+  const draftError = computed<string>(() => rangeError.value)
 
   const zoneNote = computed<string>(() => {
     const offset = zoneOffsetLabel(draftZone.value, clock())
@@ -466,12 +470,8 @@
       return
     }
     if (draftZone.value !== zone.value) timeZone.value = draftZone.value
-    if (props.showRefresh) {
-      const seconds =
-        draftRefreshOn.value && parsedRefresh.value
-          ? parsedRefresh.value * UNIT_SECONDS[draftRefreshUnit.value]
-          : 0
-      if (seconds !== refreshInterval.value) refreshInterval.value = seconds
+    if (offersRefresh.value && draftRefresh.value !== refreshInterval.value) {
+      refreshInterval.value = draftRefresh.value
     }
     model.value = draftValue.value
     close()
@@ -585,8 +585,8 @@
   })
 
   const modeOptions = computed(() => [
-    { label: t('dateRangePicker.relative'), value: 'relative' },
-    { label: t('dateRangePicker.absolute'), value: 'absolute' }
+    { label: t('dateRangePicker.absolute'), value: 'absolute' },
+    { label: t('dateRangePicker.relative'), value: 'relative' }
   ])
 
   const setPanelMode = (value: string | undefined): void => {
@@ -890,6 +890,7 @@
                     type="radio"
                     :name="`${uid}-relative`"
                     :value="option.key"
+                    :data-autofocus="(!offersAbsolute && draftKey === option.key) || null"
                     class="sr-only"
                     @change="pickOption(option.key)"
                   />
@@ -911,7 +912,16 @@
             :data-testid="`${testId}__absolute`"
           >
             <div
-              class="flex flex-col gap-(--spacing-sm) border-b border-(--border-default) p-(--spacing-sm)"
+              class="p-(--spacing-sm)"
+              :data-testid="`${testId}__calendar`"
+            >
+              <div class="mx-auto w-fit">
+                <DatePickerGrid />
+              </div>
+            </div>
+            <div
+              class="flex flex-col gap-(--spacing-sm) border-t border-(--border-default) p-(--spacing-sm)"
+              :data-testid="`${testId}__bounds`"
             >
               <DatePickerFields />
               <div
@@ -931,65 +941,40 @@
                 >
               </div>
             </div>
-            <div class="p-(--spacing-sm)">
-              <div class="mx-auto w-fit">
-                <DatePickerGrid />
-              </div>
-            </div>
           </div>
 
           <div
-            v-if="showRefresh"
-            class="flex shrink-0 flex-wrap items-center gap-(--spacing-xs) border-t border-(--border-default) p-(--spacing-sm)"
+            v-if="offersRefresh"
+            class="flex shrink-0 flex-wrap items-center gap-x-(--spacing-xs) gap-y-(--spacing-2xs) border-t border-(--border-default) px-(--spacing-sm) py-(--spacing-xs)"
             :data-testid="`${testId}__refresh`"
           >
-            <div class="flex min-w-36 flex-1 items-center gap-(--spacing-xs)">
-              <Switch
-                v-model="draftRefreshOn"
-                :aria-labelledby="refreshLabelId"
-                :data-testid="`${testId}__refresh-switch`"
-              />
-              <span
-                :id="refreshLabelId"
-                class="text-label-sm text-(--text-default)"
-                >{{ t('dateRangePicker.refreshEvery') }}</span
+            <label
+              :for="refreshId"
+              class="text-label-sm shrink-0 text-(--text-default)"
+              >{{ t('dateRangePicker.refreshEvery') }}</label
+            >
+            <span class="relative inline-flex min-w-28 flex-1 items-center">
+              <select
+                :id="refreshId"
+                :value="draftRefresh"
+                :data-size="size"
+                :data-testid="`${testId}__refresh-interval`"
+                class="text-label-sm w-full appearance-none rounded-(--shape-control) border border-(--border-input) bg-(--bg-surface) ps-(--spacing-sm) pe-(--spacing-lg) text-(--text-default) transition-colors duration-150 ease-out [&:not(:focus)]:hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 motion-reduce:transition-none pointer-coarse:h-11"
+                @change="editRefresh"
               >
-            </div>
-            <div class="flex min-w-44 flex-[2] items-center gap-(--spacing-xs)">
-              <div class="min-w-16 flex-1">
-                <Input
-                  v-model="draftRefreshAmount"
-                  type="number"
-                  :size="size"
-                  :disabled="!draftRefreshOn"
-                  :invalid="showError && refreshError"
-                  :aria-label="t('dateRangePicker.refreshAmount')"
-                  :data-testid="`${testId}__refresh-amount`"
-                />
-              </div>
-              <span class="relative inline-flex min-w-24 flex-[2] items-center">
-                <select
-                  v-model="draftRefreshUnit"
-                  :disabled="!draftRefreshOn"
-                  :aria-label="t('dateRangePicker.refreshUnit')"
-                  :data-size="size"
-                  :data-testid="`${testId}__refresh-unit`"
-                  class="text-label-sm w-full appearance-none rounded-(--shape-control) border border-(--border-input) bg-(--bg-surface) ps-(--spacing-sm) pe-(--spacing-lg) text-(--text-default) transition-colors duration-150 ease-out [&:not(:focus):not(:disabled)]:hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) disabled:cursor-not-allowed disabled:bg-(--bg-disabled) disabled:text-(--text-disabled) data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 motion-reduce:transition-none pointer-coarse:h-11"
+                <option
+                  v-for="seconds in refreshChoices"
+                  :key="seconds"
+                  :value="seconds"
                 >
-                  <option
-                    v-for="unit in REFRESH_UNITS"
-                    :key="unit"
-                    :value="unit"
-                  >
-                    {{ unitLabel(unit) }}
-                  </option>
-                </select>
-                <i
-                  class="az az-chevron-down pointer-events-none absolute end-(--spacing-sm) text-[length:inherit] leading-none text-(--text-muted)"
-                  aria-hidden="true"
-                />
-              </span>
-            </div>
+                  {{ intervalLabel(seconds) }}
+                </option>
+              </select>
+              <i
+                class="az az-chevron-down pointer-events-none absolute end-(--spacing-sm) text-[length:inherit] leading-none text-(--text-muted)"
+                aria-hidden="true"
+              />
+            </span>
           </div>
 
           <div

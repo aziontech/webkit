@@ -459,8 +459,7 @@ export const ptBR: Messages = {
     untilNow: 'Terminar agora',
     zoneNote: 'Horários em {zone}',
     refreshEvery: 'Atualizar a cada',
-    refreshAmount: 'Intervalo de atualização',
-    refreshUnit: 'Unidade do intervalo de atualização',
+    refreshOff: 'Desligado',
     refreshSecond: {
       one: 'atualiza a cada segundo',
       other: 'atualiza a cada {count} segundos'

@@ -31,6 +31,8 @@ export const DATE_RANGE_UNITS: DateRangeUnit[] = [
 
 export const REFRESH_UNITS: DateRangeRefreshUnit[] = ['second', 'minute', 'hour']
 
+export const REFRESH_INTERVALS: number[] = [10, 30, 60, 300, 900, 1800, 3600]
+
 export const DEFAULT_RELATIVE_OPTIONS: RelativeOption[] = [
   { key: 'last-5-minutes', amount: 5, unit: 'minute' },
   { key: 'last-15-minutes', amount: 15, unit: 'minute' },

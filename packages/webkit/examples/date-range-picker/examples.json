@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "A relative range (`Last 15 minutes`) that stays relative: the value is `{ type: 'relative', amount, unit }`, re-resolved against the clock on every query. The Relative tab has a custom duration and unit on top and the quick ranges below (two columns when there is room); the Absolute tab has the month grid with start and end date and time (type a time or pick one from the 30-minute list under the field); the panel is as thin as the calendar and names the zone in a read-only line. Nothing commits until Apply. On a phone the panel opens as a full-width sheet from the bottom of the screen.",
+      "summary": "A relative range (`Last 15 minutes`) that stays relative: the value is `{ type: 'relative', amount, unit }`, re-resolved against the clock on every query. The panel has two tabs, Absolute and Relative, and opens on Relative here because the value is relative (any other value, or none, opens Absolute). Absolute shows the month grid first (click a start day and an end day), then the start and end date and time, typed or picked from a 30-minute list; Relative has a custom duration and unit on top and the quick ranges below. Refresh every sets the auto-refresh interval. The panel is as thin as the calendar, names the zone in a read-only line, and commits nothing until Apply. On a phone it opens as a full-width sheet from the bottom of the screen.",
       "file": "default.vue"
     },
     {
@@ -29,7 +29,7 @@
     },
     {
       "name": "AutoRefresh",
-      "summary": "`show-refresh` adds a Refresh every switch with an interval to the panel. Bind `v-model:refresh-interval` (seconds, 0 is off) and run the query on `@refresh`, which fires on each tick while the page is visible; the trigger shows a refresh icon and says the interval to screen readers. The quick ranges start with **Today** and **This week**: options with `snap: true` begin at the start of the day or week in the time zone.",
+      "summary": "Refresh every is in the panel by default (Off, 10 seconds … 1 hour). Bind `v-model:refresh-interval` (seconds, 0 is off) and run the query on `@refresh`, which fires on each tick while the page is visible; the trigger shows a refresh icon and says the interval to screen readers. A page that cannot re-run its query passes `:show-refresh=\"false\"`. The quick ranges start with **Today** and **This week**: options with `snap: true` begin at the start of the day or week in the time zone.",
       "file": "auto-refresh.vue"
     },
     {

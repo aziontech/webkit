@@ -7,6 +7,7 @@ import { type Component, defineComponent, h, nextTick } from 'vue'
 
 import DatePickerWithTime from '../../examples/date-picker/with-time.vue'
 import AutoRefresh from '../../examples/date-range-picker/auto-refresh.vue'
+import RelativeOnly from '../../examples/date-range-picker/relative-only.vue'
 import TimeZone from '../../examples/date-range-picker/time-zone.vue'
 import UntilNow from '../../examples/date-range-picker/until-now.vue'
 import WithStep from '../../examples/date-range-picker/with-step.vue'
@@ -95,8 +96,7 @@ describe('date pickers stay readable at every width', () => {
         expect(cutOff(panel)).toEqual([])
         expect(outside(panel, width)).toEqual([])
 
-        const tabs = within(panel).getAllByRole('radio').slice(0, 2)
-        await fireEvent.click(tabs[0] as HTMLElement)
+        await fireEvent.click(within(panel).getByRole('radio', { name: /^Relativ/ }))
         await nextTick()
         await frame()
         expect(within(panel).getByTestId('date-range-picker__relative')).toBeTruthy()
@@ -141,7 +141,7 @@ describe('date pickers stay readable at every width', () => {
       const gutter = Number.parseFloat(getComputedStyle(document.documentElement).fontSize) * 2
       const thin = grid + gutter + 4
       expect(panel.getBoundingClientRect().width).toBeLessThanOrEqual(thin)
-      await fireEvent.click(within(panel).getAllByRole('radio')[0] as HTMLElement)
+      await fireEvent.click(within(panel).getByRole('radio', { name: 'Relative' }))
       await nextTick()
       await frame()
       expect(within(panel).getByTestId('date-range-picker__relative')).toBeTruthy()
@@ -172,14 +172,19 @@ describe('date pickers stay readable at every width', () => {
   })
 })
 
-describe('the absolute range fields stay visible on short screens', () => {
+describe('the absolute range opens on the calendar and keeps Apply in view on short screens', () => {
   const SCREENS = [
     { name: 'laptop', width: 1280, height: 720 },
     { name: 'phone', width: 390, height: 664 }
   ] as const
 
+  const shownIn = (el: Element, box: DOMRect): boolean => {
+    const rect = el.getBoundingClientRect()
+    return rect.height > 0 && rect.top >= box.top - 1 && rect.bottom <= box.bottom + 1
+  }
+
   it.each(SCREENS)(
-    'shows the start and end fields, the zone and Apply without scrolling on a $name screen',
+    'shows the tabs, the calendar and Apply without scrolling on a $name screen',
     async ({ width, height }) => {
       await page.viewport(width, height)
       await vi.waitFor(() => expect(window.innerWidth).toBe(width))
@@ -196,20 +201,56 @@ describe('the absolute range fields stay visible on short screens', () => {
       const view = render(Host)
       const panel = await openPanel(view, 'date-range-picker')
       const box = panel.getBoundingClientRect()
+      expect(box.top).toBeGreaterThanOrEqual(-1)
       expect(box.bottom).toBeLessThanOrEqual(height + 1)
       const absolute = within(panel).getByTestId('date-range-picker__absolute')
-      const words = [
-        within(absolute).getByText('Start'),
-        within(absolute).getByText('End'),
-        within(absolute).getByLabelText('Start time'),
-        within(absolute).getByLabelText('End time'),
+      const grid = within(absolute).getByRole('grid')
+      const visible = [
+        within(panel).getByRole('radio', { name: 'Absolute' }),
+        within(panel).getByRole('radio', { name: 'Relative' }),
+        within(absolute).getByText('November 2026'),
         within(panel).getByText('Timezone'),
-        within(panel).getByRole('button', { name: 'Apply' })
+        within(panel).getByRole('button', { name: 'Apply' }),
+        within(panel).getByRole('button', { name: 'Cancel' })
       ]
-      for (const word of words) {
-        const rect = word.getBoundingClientRect()
-        expect(rect.top >= box.top - 1 && rect.bottom <= box.bottom + 1, word.outerHTML).toBe(true)
-      }
+      for (const el of visible) expect(shownIn(el, box), el.outerHTML.slice(0, 120)).toBe(true)
+      expect(shownIn(grid.querySelector('[role="row"]') as Element, box)).toBe(true)
+
+      const start = within(absolute).getByLabelText('Start time')
+      start.scrollIntoView({ block: 'nearest' })
+      await frame()
+      expect(shownIn(start, box)).toBe(true)
+      expect(shownIn(within(panel).getByRole('button', { name: 'Apply' }), box)).toBe(true)
     }
   )
+})
+
+describe('the quick ranges start on one inline edge', () => {
+  const textStart = (el: Element, dir: 'ltr' | 'rtl'): number => {
+    const range = document.createRange()
+    range.selectNodeContents(el)
+    const box = range.getBoundingClientRect()
+    return dir === 'rtl' ? box.right : box.left
+  }
+
+  it.each(['ltr', 'rtl'] as const)('heading and options line up (%s)', async (dir) => {
+    const view = render(
+      defineComponent({
+        setup: () => () =>
+          h(
+            ConfigProvider,
+            { now: NOW, timeZone: 'UTC', locale: 'en-US', catalogs: LOCALES, dir },
+            { default: () => h(RelativeOnly) }
+          )
+      })
+    )
+    const panel = await openPanel(view, 'date-range-picker')
+    const legend = within(panel).getByTestId('date-range-picker__legend')
+    const label = within(panel)
+      .getAllByTestId('date-range-picker__option')[0]
+      ?.querySelector('span')
+    expect(Math.abs(textStart(legend, dir) - textStart(label as Element, dir))).toBeLessThanOrEqual(
+      1
+    )
+  })
 })

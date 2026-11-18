@@ -370,6 +370,7 @@ Each variant is the same screen in another state: `get_block("account/activity-h
               :relative-options="relativeOptions"
               aria-label="Activity period"
               :show-time-zone="false"
+              :show-refresh="false"
             />
             <Tooltip
               content="Refresh"

@@ -361,8 +361,7 @@ export const dateRangePicker = {
   untilNow: 'End at now',
   zoneNote: 'Times in {zone}',
   refreshEvery: 'Refresh every',
-  refreshAmount: 'Refresh interval',
-  refreshUnit: 'Refresh interval unit',
+  refreshOff: 'Off',
   refreshSecond: {
     one: 'refreshes every second',
     other: 'refreshes every {count} seconds'
