@@ -817,6 +817,13 @@ listed in `@aziontech/icons/manifest` and `ICONS.md` in the icons package:
   `az-edge-services`, `az-edge-libraries`) keep `edge-`; `ai-tiered-cache` → `az-tiered-cache`, now a
   feature of the new `az-cache`; new product icons `az-cache`, `az-network-shield`,
   `az-ddos-protection` and `az-secure-internet-access`;
+- solutions: the Solutions category holds the eight Azion Solutions, named after their short
+  names (`az-application-development`, `az-performance-and-reliability`,
+  `az-artificial-intelligence`, `az-application-security`, `az-media-and-streaming`, `az-retail`,
+  `az-technology`, `az-financial-services`); the old solution icons were not Azion Solutions and
+  are gone: `ai-abuse-prevention`, `ai-adaptive-security` and `ai-sase` →
+  `az-application-security`, `ai-content-delivery` → `az-performance-and-reliability` (each with
+  a new drawing);
 - one drawing, one name: `ai-digital-certificates` → `az-verified`, `ai-instructor` →
   `az-graduation-cap`, `ai-ai-pillar` → `az-sparkles`,
   `ai-window-maximize` → `az-app-window`; and names that say the drawing: `ai-datasheet` → `az-sheet`, `ai-column` →

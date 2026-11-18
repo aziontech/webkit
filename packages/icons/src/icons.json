@@ -18,7 +18,7 @@
         },
         "solution": {
           "title": "Solutions",
-          "summary": "Solutions Azion sells that combine several products."
+          "summary": "The Azion Solutions, one icon each: the five By Need Solutions and the three By Industry Solutions, named after the Solution's short name."
         },
         "service": {
           "title": "Services",
@@ -611,44 +611,102 @@
       "legacy": ["ai ai-store"]
     },
     {
-      "name": "abuse-prevention",
+      "name": "application-development",
       "set": "mono",
       "group": "azion",
       "category": "solution",
-      "shows": "A skull with a no-entry sign",
-      "means": "Abuse prevention (security solution)",
+      "shows": "A browser window with code brackets",
+      "means": "Build and run applications (Application Development)",
+      "keywords": ["web apps", "websites", "apis", "serverless"],
       "status": "stable",
-      "legacy": ["ai ai-abuse-prevention"]
+      "legacy": []
     },
     {
-      "name": "adaptive-security",
+      "name": "performance-and-reliability",
       "set": "mono",
       "group": "azion",
       "category": "solution",
-      "shows": "A shield with a magnifying glass",
-      "means": "Adaptive security (security solution)",
+      "shows": "A dial with a check mark",
+      "means": "Improve application performance and reliability (Performance and Reliability)",
+      "keywords": ["speed", "availability", "uptime", "content delivery", "cdn"],
       "status": "stable",
-      "legacy": ["ai ai-adaptive-security"]
-    },
-    {
-      "name": "content-delivery",
-      "set": "mono",
-      "group": "azion",
-      "category": "solution",
-      "shows": "A globe with a person",
-      "means": "Content delivery (solution)",
-      "status": "stable",
+      "renamedBecause": "Content delivery is not an Azion Solution; it is part of Improve application performance and reliability.",
       "legacy": ["ai ai-content-delivery"]
     },
     {
-      "name": "sase",
+      "name": "artificial-intelligence",
       "set": "mono",
       "group": "azion",
       "category": "solution",
-      "shows": "A shield with a triangle",
-      "means": "SASE (secure access solution)",
+      "shows": "Four connected nodes around a sparkle",
+      "means": "Build and run AI workloads (Artificial Intelligence)",
+      "keywords": ["ai", "inference", "agents", "machine learning"],
       "status": "stable",
-      "legacy": ["ai ai-sase"]
+      "legacy": []
+    },
+    {
+      "name": "application-security",
+      "set": "mono",
+      "group": "azion",
+      "category": "solution",
+      "shows": "A shield with a padlock",
+      "means": "Secure applications and networks (Application Security)",
+      "keywords": [
+        "protection",
+        "network security",
+        "abuse prevention",
+        "fraud",
+        "adaptive security",
+        "sase",
+        "zero trust"
+      ],
+      "status": "stable",
+      "renamedBecause": "Abuse prevention, adaptive security and SASE are not Azion Solutions; they are part of Secure applications and networks.",
+      "legacy": ["ai ai-abuse-prevention", "ai ai-adaptive-security", "ai ai-sase"]
+    },
+    {
+      "name": "media-and-streaming",
+      "set": "mono",
+      "group": "azion",
+      "category": "solution",
+      "shows": "A play button sending waves",
+      "means": "Deliver media and streaming content (Media and Streaming)",
+      "keywords": ["video", "live streaming", "broadcast"],
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "retail",
+      "set": "mono",
+      "group": "azion",
+      "category": "solution",
+      "shows": "A shopping basket",
+      "means": "Retail (industry solution)",
+      "keywords": ["ecommerce", "commerce", "store"],
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "technology",
+      "set": "mono",
+      "group": "azion",
+      "category": "solution",
+      "shows": "A circuit board",
+      "means": "Technology (industry solution)",
+      "keywords": ["tech companies", "saas", "software"],
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "financial-services",
+      "set": "mono",
+      "group": "azion",
+      "category": "solution",
+      "shows": "Two coins, the front one with a dollar sign",
+      "means": "Financial Services (industry solution)",
+      "keywords": ["banking", "fintech", "payments", "finance"],
+      "status": "stable",
+      "legacy": []
     },
     {
       "name": "business-support",
