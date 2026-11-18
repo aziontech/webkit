@@ -460,6 +460,8 @@ export const ptBR: Messages = {
     thisYear: 'Este ano',
     now: 'agora',
     untilNow: 'Terminar agora',
+    enterDates: 'Digitar datas',
+    showCalendar: 'Mostrar calendário',
     refreshEvery: 'Atualizar a cada',
     refreshOff: 'Desligado',
     refreshSecond: {

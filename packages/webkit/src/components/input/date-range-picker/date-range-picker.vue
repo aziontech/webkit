@@ -23,6 +23,7 @@
   import * as en from '../../../locales/en'
   import Button from '../../action/button/button.vue'
   import ToggleGroup from '../../action/toggle-group/toggle-group.vue'
+  import Checkbox from '../checkbox/checkbox.vue'
   import {
     asRange,
     formatValueLabel,
@@ -43,7 +44,6 @@
   import SelectContent from '../select/select-content/select-content.vue'
   import SelectItem from '../select/select-item/select-item.vue'
   import SelectTrigger from '../select/select-trigger/select-trigger.vue'
-  import Switch from '../switch/switch.vue'
   import {
     DATE_RANGE_UNITS,
     type DateRangeDuration,
@@ -78,6 +78,7 @@
   type RangeSelectorMode = 'default' | 'relative-only' | 'absolute-only'
   type PanelMode = 'relative' | 'absolute'
   type RelativeView = 'quick' | 'custom'
+  type AbsoluteView = 'calendar' | 'fields'
 
   defineOptions({
     name: 'DateRangePicker',
@@ -177,10 +178,11 @@
   const customUnitId = `${uid}-unit`
   const customLabelId = `${uid}-custom`
   const unitLabelId = `${uid}-unit-label`
-  const refreshLabelId = `${uid}-refresh-label`
-  const untilNowLabelId = `${uid}-until-now`
   const refreshId = `${uid}-refresh`
   const customRangeId = `${uid}-custom-range`
+  const calendarId = `${uid}-calendar`
+  const fieldsId = `${uid}-fields`
+  const untilNowCheckId = `${uid}-until-now-check`
 
   const mounted = ref(false)
   onMounted(() => {
@@ -294,7 +296,7 @@
     return new Intl.NumberFormat(locale.value, {
       style: 'unit',
       unit,
-      unitDisplay: 'long'
+      unitDisplay: 'short'
     }).format(seconds / UNIT_SECONDS[unit])
   }
 
@@ -352,6 +354,7 @@
   const showError = ref(false)
 
   const offersRefresh = computed(() => props.showRefresh && offersRelative.value)
+  const absoluteView = ref<AbsoluteView>('calendar')
 
   const refreshChoices = computed<number[]>(() => {
     const current = draftRefresh.value
@@ -380,6 +383,7 @@
     draftUntilNow.value = value?.type === 'since'
     resetRefresh()
     relativeView.value = 'quick'
+    absoluteView.value = 'calendar'
     if (offersRelative.value && (!value || value.type === 'relative' || !offersAbsolute.value)) {
       panelMode.value = 'relative'
       const option = value
@@ -433,6 +437,19 @@
     relativeView.value = 'custom'
     showError.value = false
     focusIn(`#${CSS.escape(customAmountId)}`)
+  }
+
+  const showAbsoluteView = (view: AbsoluteView): void => {
+    absoluteView.value = view
+    nextTick(() => {
+      const target =
+        view === 'fields'
+          ? panelEl.value?.querySelector<HTMLElement>(`#${CSS.escape(fieldsId)} input`)
+          : panelEl.value?.querySelector<HTMLElement>(
+              `#${CSS.escape(calendarId)} [role="grid"] button[tabindex="0"]`
+            )
+      target?.focus()
+    })
   }
 
   const showQuick = (): void => {
@@ -698,6 +715,7 @@
     max: maxWall,
     showTime: computed(() => props.showTime),
     horizontal: computed(() => false),
+    trimWeeks: computed(() => true),
     draft: computed<DatePickerDraft>(() =>
       draftUntilNow.value ? draftRange.value.start : draftRange.value
     ),
@@ -723,6 +741,7 @@
     if (value === 'relative' || value === 'absolute') {
       panelMode.value = value
       relativeView.value = 'quick'
+      absoluteView.value = 'calendar'
       showError.value = false
     }
   }
@@ -944,7 +963,9 @@
                   {{ t('dateRangePicker.quickRanges') }}
                 </legend>
                 <div
-                  :style="{ '--date-range-picker-quick-rows': quickRows }"
+                  :style="{
+                    '--date-range-picker-quick-rows': quickRows
+                  }"
                   class="grid grid-cols-1 gap-(--spacing-2xs) @[15rem]:grid-flow-col @[15rem]:grid-cols-2 @[15rem]:grid-rows-[repeat(var(--date-range-picker-quick-rows),auto)]"
                 >
                   <label
@@ -973,29 +994,27 @@
                 </div>
               </fieldset>
 
-              <div class="shrink-0 px-(--spacing-2xs) pt-(--spacing-2xs) pb-(--spacing-xs)">
-                <button
+              <div
+                class="flex shrink-0 flex-wrap items-center gap-x-(--spacing-xs) gap-y-(--spacing-2xs) px-(--spacing-sm) pt-(--spacing-2xs) pb-(--spacing-sm)"
+              >
+                <Button
                   :id="customRangeId"
-                  type="button"
+                  variant="link"
+                  :label="t('dateRangePicker.custom')"
+                  icon="az az-sliders-horizontal"
+                  :size="size"
                   :data-selected="draftKey === CUSTOM || null"
                   :data-autofocus="(!offersAbsolute && draftKey === CUSTOM) || null"
                   :data-testid="`${testId}__custom-range`"
-                  class="text-label-sm flex min-h-8 w-full cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) text-start text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset data-[selected]:bg-(--bg-selected) motion-reduce:transition-none pointer-coarse:min-h-11"
+                  class="pointer-coarse:min-h-11"
                   @click="showCustom"
+                />
+                <span
+                  v-if="draftKey === CUSTOM && parsedAmount"
+                  :data-testid="`${testId}__custom-value`"
+                  class="text-label-sm min-w-0 text-(--text-muted) [overflow-wrap:anywhere]"
+                  >{{ relativeText(parsedAmount, customUnit) }}</span
                 >
-                  <span class="min-w-0 flex-1 [overflow-wrap:anywhere]">{{
-                    t('dateRangePicker.custom')
-                  }}</span>
-                  <span
-                    v-if="draftKey === CUSTOM && parsedAmount"
-                    class="min-w-0 text-(--text-muted) [overflow-wrap:anywhere]"
-                    >{{ relativeText(parsedAmount, customUnit) }}</span
-                  >
-                  <i
-                    class="az az-chevron-right shrink-0 text-[length:inherit] leading-none text-(--text-muted)"
-                    aria-hidden="true"
-                  />
-                </button>
               </div>
             </template>
 
@@ -1079,11 +1098,14 @@
           <div
             v-else
             :data-size="size"
+            :data-view="absoluteView"
             class="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain data-[size=small]:w-[calc(7*var(--size-8)_+_2*var(--spacing-sm))] data-[size=medium]:w-[calc(7*var(--size-9)_+_2*var(--spacing-sm))] data-[size=large]:w-[calc(7*var(--size-10)_+_2*var(--spacing-sm))] max-sm:w-full!"
             :data-testid="`${testId}__absolute`"
           >
             <div
-              class="p-(--spacing-sm)"
+              v-if="absoluteView === 'calendar'"
+              :id="calendarId"
+              class="px-(--spacing-sm) pt-(--spacing-sm)"
               :data-testid="`${testId}__calendar`"
             >
               <div class="mx-auto w-fit">
@@ -1091,60 +1113,46 @@
               </div>
             </div>
             <div
-              class="flex flex-col gap-(--spacing-sm) border-t border-(--border-default) p-(--spacing-sm)"
+              v-else
+              :id="fieldsId"
+              class="px-(--spacing-sm) pt-(--spacing-sm)"
               :data-testid="`${testId}__bounds`"
             >
-              <DatePickerFields />
+              <DatePickerFields inline-labels />
+            </div>
+            <div
+              class="flex min-h-8 flex-wrap items-center justify-between gap-x-(--spacing-sm) gap-y-(--spacing-2xs) px-(--spacing-sm) pt-(--spacing-xs) pb-(--spacing-sm)"
+            >
               <div
                 v-if="offersRelative"
                 class="flex items-center gap-(--spacing-xs)"
               >
-                <Switch
+                <Checkbox
+                  :id="untilNowCheckId"
                   :model-value="draftUntilNow"
-                  :aria-labelledby="untilNowLabelId"
                   :data-testid="`${testId}__until-now`"
-                  @update:model-value="setUntilNow"
+                  @update:model-value="setUntilNow(Boolean($event))"
                 />
-                <span
-                  :id="untilNowLabelId"
-                  class="text-label-sm text-(--text-default)"
-                  >{{ t('dateRangePicker.untilNow') }}</span
+                <label
+                  :for="untilNowCheckId"
+                  class="text-label-sm cursor-pointer text-(--text-default)"
+                  >{{ t('dateRangePicker.untilNow') }}</label
                 >
               </div>
-            </div>
-          </div>
-
-          <div
-            v-if="offersRefresh"
-            class="grid shrink-0 grid-cols-[minmax(0,1fr)_minmax(0,2fr)] items-center gap-x-(--spacing-xs) border-t border-(--border-default) px-(--spacing-sm) py-(--spacing-xs)"
-            :data-testid="`${testId}__refresh`"
-          >
-            <span
-              :id="refreshLabelId"
-              class="text-label-sm min-w-0 text-(--text-default) [overflow-wrap:anywhere]"
-              >{{ t('dateRangePicker.refreshEvery') }}</span
-            >
-            <Select
-              :model-value="draftRefresh"
-              :size="size"
-              :aria-labelledby="refreshLabelId"
-              :data-testid="`${testId}__refresh-select`"
-              @update:model-value="editRefresh"
-            >
-              <SelectTrigger
-                :id="refreshId"
-                :data-testid="`${testId}__refresh-interval`"
-                class="pointer-coarse:h-11"
+              <Button
+                variant="link"
+                :label="
+                  absoluteView === 'calendar'
+                    ? t('dateRangePicker.enterDates')
+                    : t('dateRangePicker.showCalendar')
+                "
+                :icon="absoluteView === 'calendar' ? 'az az-pencil' : 'az az-calendar'"
+                :size="size"
+                :data-testid="`${testId}__switch-view`"
+                class="ms-auto pointer-coarse:min-h-11"
+                @click="showAbsoluteView(absoluteView === 'calendar' ? 'fields' : 'calendar')"
               />
-              <SelectContent :data-testid="`${testId}__refresh-list`">
-                <SelectItem
-                  v-for="seconds in refreshChoices"
-                  :key="seconds"
-                  :value="seconds"
-                  >{{ intervalLabel(seconds) }}</SelectItem
-                >
-              </SelectContent>
-            </Select>
+            </div>
           </div>
 
           <div
@@ -1160,9 +1168,38 @@
             >
               {{ visibleError }}
             </p>
-            <div
-              class="flex items-center justify-end gap-(--spacing-xs) max-sm:*:flex-1 max-sm:*:justify-center"
-            >
+            <div class="flex items-center justify-end gap-(--spacing-xs)">
+              <Select
+                v-if="offersRefresh"
+                :model-value="draftRefresh"
+                variant="ghost"
+                :size="size"
+                :aria-label="t('dateRangePicker.refreshEvery')"
+                :data-testid="`${testId}__refresh-select`"
+                class="me-auto min-w-0"
+                @update:model-value="editRefresh"
+              >
+                <SelectTrigger
+                  :id="refreshId"
+                  :data-testid="`${testId}__refresh-interval`"
+                  class="pointer-coarse:h-11"
+                >
+                  <template #leading>
+                    <i
+                      class="az az-refresh shrink-0 text-[length:inherit] leading-none text-(--text-muted)"
+                      aria-hidden="true"
+                    />
+                  </template>
+                </SelectTrigger>
+                <SelectContent :data-testid="`${testId}__refresh-list`">
+                  <SelectItem
+                    v-for="seconds in refreshChoices"
+                    :key="seconds"
+                    :value="seconds"
+                    >{{ intervalLabel(seconds) }}</SelectItem
+                  >
+                </SelectContent>
+              </Select>
               <Button
                 :label="t('dateRangePicker.cancel')"
                 variant="ghost"

@@ -48,6 +48,8 @@ export interface DatePickerContext {
   showTime: ComputedRef<boolean>
   /** Whether the popover uses the horizontal (side-by-side) layout. */
   horizontal: ComputedRef<boolean>
+  /** Drops the trailing weeks that hold no day of the month, so the grid has only the rows it needs. */
+  trimWeeks?: ComputedRef<boolean>
   /** Staged (pre-Apply) selection the popover edits. */
   draft: ComputedRef<DatePickerDraft>
   /** Whether the draft has any selection (drives the clear control). */

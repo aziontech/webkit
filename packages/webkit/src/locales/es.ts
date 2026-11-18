@@ -460,6 +460,8 @@ export const es: Messages = {
     thisYear: 'Este año',
     now: 'ahora',
     untilNow: 'Terminar ahora',
+    enterDates: 'Escribir fechas',
+    showCalendar: 'Mostrar calendario',
     refreshEvery: 'Actualizar cada',
     refreshOff: 'Desactivado',
     refreshSecond: {

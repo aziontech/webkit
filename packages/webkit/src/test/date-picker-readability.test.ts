@@ -121,9 +121,9 @@ describe('date pickers stay readable at every width', () => {
         expect(Math.round(rect.bottom)).toBe(window.innerHeight)
         expect(rect.height).toBeLessThanOrEqual(window.innerHeight * 0.85 + 1)
         expect(getComputedStyle(backdrop as Element).display).not.toBe('none')
-        for (const button of within(panel).getAllByRole('button', { name: /Apply|Cancel/ })) {
-          expect(button.getBoundingClientRect().width).toBeGreaterThan(width / 3)
-        }
+        const apply = within(panel).getByRole('button', { name: 'Apply' }).getBoundingClientRect()
+        expect(apply.right).toBeLessThanOrEqual(width)
+        expect(apply.right).toBeGreaterThan(width - 40)
       } else {
         expect(rect.width).toBeLessThan(width / 2)
         expect(getComputedStyle(backdrop as Element).display).toBe('none')
@@ -259,12 +259,32 @@ describe('the absolute range opens on the calendar and keeps Apply in view on sh
       ]
       for (const el of visible) expect(shownIn(el, box), el.outerHTML.slice(0, 120)).toBe(true)
       expect(shownIn(grid.querySelector('[role="row"]') as Element, box)).toBe(true)
+      const reachable = async (el: Element): Promise<void> => {
+        el.scrollIntoView({ block: 'nearest' })
+        await frame()
+        const now = panel.getBoundingClientRect()
+        expect(shownIn(el, now), el.outerHTML.slice(0, 120)).toBe(true)
+        expect(shownIn(within(panel).getByRole('button', { name: 'Apply' }), now)).toBe(true)
+      }
+      const rows = grid.querySelectorAll('[role="row"]')
+      await reachable(rows[rows.length - 1] as Element)
+      await reachable(within(panel).getByRole('button', { name: 'Enter dates' }))
 
-      const start = within(absolute).getByLabelText('Start time')
-      start.scrollIntoView({ block: 'nearest' })
+      await fireEvent.click(within(panel).getByRole('button', { name: 'Enter dates' }))
+      await nextTick()
       await frame()
-      expect(shownIn(start, box)).toBe(true)
-      expect(shownIn(within(panel).getByRole('button', { name: 'Apply' }), box)).toBe(true)
+      for (const el of [
+        within(panel).getByLabelText('Start time'),
+        within(panel).getByLabelText('End time'),
+        within(panel).getByRole('button', { name: 'Show calendar' })
+      ]) {
+        await reachable(el)
+      }
+
+      await fireEvent.click(within(panel).getByRole('radio', { name: 'Relative' }))
+      await nextTick()
+      await frame()
+      await reachable(within(panel).getByRole('button', { name: 'Custom range' }))
     }
   )
 })
@@ -299,13 +319,13 @@ describe('the quick ranges start on one inline edge', () => {
   })
 })
 
-describe('the Unit and Refresh every selects line up', () => {
+describe('Refresh every starts the footer and Apply ends it', () => {
   it.each([
     [320, 'ltr'],
     [390, 'ltr'],
     [1280, 'ltr'],
     [390, 'rtl']
-  ] as const)('same edges and width at %ipx (%s)', async (width, dir) => {
+  ] as const)('on one row at %ipx (%s)', async (width, dir) => {
     await atWidth(width)
     const view = render(
       defineComponent({
@@ -318,22 +338,23 @@ describe('the Unit and Refresh every selects line up', () => {
       })
     )
     const panel = await openPanel(view, 'date-range-picker')
-    const relativeTab = within(panel).queryByRole('radio', { name: 'Relative' })
-    if (relativeTab && relativeTab.getAttribute('aria-checked') !== 'true') {
-      await fireEvent.click(relativeTab)
-      await nextTick()
-      await frame()
-    }
-    await fireEvent.click(within(panel).getByTestId('date-range-picker__custom-range'))
-    await nextTick()
-    await frame()
-    const unit = within(panel).getByTestId('date-range-picker__unit').getBoundingClientRect()
     const refresh = within(panel)
       .getByTestId('date-range-picker__refresh-interval')
       .getBoundingClientRect()
-    expect(unit.width).toBeGreaterThan(0)
-    expect(Math.abs(unit.left - refresh.left)).toBeLessThanOrEqual(0.5)
-    expect(Math.abs(unit.right - refresh.right)).toBeLessThanOrEqual(0.5)
-    expect(Math.abs(unit.width - refresh.width)).toBeLessThanOrEqual(0.5)
+    const cancel = within(panel).getByRole('button', { name: 'Cancel' }).getBoundingClientRect()
+    const apply = within(panel).getByRole('button', { name: 'Apply' }).getBoundingClientRect()
+    const box = panel.getBoundingClientRect()
+    expect(refresh.width).toBeGreaterThan(0)
+    expect(
+      Math.abs(refresh.top + refresh.height / 2 - (apply.top + apply.height / 2))
+    ).toBeLessThanOrEqual(2)
+    if (dir === 'ltr') {
+      expect(refresh.right).toBeLessThanOrEqual(cancel.left)
+      expect(cancel.right).toBeLessThanOrEqual(apply.left)
+      expect(refresh.left - box.left).toBeLessThan(box.right - apply.right + 24)
+    } else {
+      expect(refresh.left).toBeGreaterThanOrEqual(cancel.right)
+      expect(cancel.left).toBeGreaterThanOrEqual(apply.right)
+    }
   })
 })
