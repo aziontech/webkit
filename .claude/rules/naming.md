@@ -36,7 +36,7 @@ The kebab name is the single source. Six surfaces must agree:
   not `btn`. A container of many is a different component (`chip-group`), never a plural.
 - **Modifier first, noun last.** `pricing-card`, `highlight-button`, `icon-button` — every card
   ends in `card`, every button in `button`. This holds for components; a block names its group
-  first (§ 3), and a list shows a name without its group word (§ 25).
+  first (§ 3), and every list shows the full name (§ 25).
 - **Every marketing page section ends in `-section`.** Each component in
   `src/components/section/` is named `<what>-section` (`hero-section`, `client-quotes-section`,
   `site-footer-section`), and that name is the `_id` the site writes in a page's `sections[]`;
@@ -122,7 +122,7 @@ see [`compound-api.md`](./compound-api.md).
   the group word and its forms (`edit/edit-function`, not `edit/edit-function-editor`;
   `detail/detail-dns-zone`, not `detail/detail-dns-zone-detail`). The name travels alone: the file
   `webkit add` copies into an app (`dashboard-alerts.vue`), its route and its component name
-  (`DashboardAlerts`), so it keeps the group word; the docs list under the group drops it (§ 25).
+  (`DashboardAlerts`), so it keeps the group word, and the docs list shows it whole (§ 25).
 
 | ✅                                  | ❌                                                    |
 | ----------------------------------- | ----------------------------------------------------- |
@@ -550,23 +550,26 @@ the level goes into the name only where it has to.
 > into Elements and Page Sections, the same split as `marketing/` and `section/`. The review is
 > `packages/webkit/docs/reviews/website-components-naming.md`.
 
-## 25. Group words — in the name once, out of the list
+## 25. Group words — in the name once, the full name in every list
 
-A name that belongs to a group says its group once, and a list that already shows the group
-does not say it again. One rule, three cases:
+A name that belongs to a group says its group once, and every list shows that full name: the
+menu label, the page heading, the import and the id are one string. One rule, three cases:
 
-| Family        | Code name (import, id, `_id`, file) | Where the group word sits | Shown under its group as                    |
-| ------------- | ----------------------------------- | ------------------------- | ------------------------------------------- |
-| Blocks        | `dashboard/dashboard-alerts`        | first (§ 3)               | **Alerts** under _Dashboard_                |
-| Docs pieces   | `doc-callout`                       | first (§ 24)              | **Callout** under _Docs_                    |
-| Page sections | `architecture-tabs-section`         | last (N12, § 1)           | **Architecture Tabs** under _Page sections_ |
+| Family        | Code name (import, id, `_id`, file) | Where the group word sits | Shown under its group as                          |
+| ------------- | ----------------------------------- | ------------------------- | ------------------------------------------------- |
+| Blocks        | `dashboard/dashboard-alerts`        | first (§ 3)               | **Dashboard Alerts** under _Dashboard_            |
+| Docs pieces   | `doc-callout`                       | first (§ 24)              | **DocCallout** under _Docs_                       |
+| Page sections | `architecture-tabs-section`         | last (N12, § 1)           | **ArchitectureTabsSection** under _Page sections_ |
 
 - **The code name keeps the group word.** It travels without its list: into an app (`webkit add`
   copies `dashboard-alerts.vue`), into page JSON (`_id: 'hero-section'`), into an import
   (`DocCallout`). The bare word is often taken too (`hero`, `faq`, `callout`, `tabs`).
-- **The list drops it.** The docs sidebar and the block index show the name without the group
-  word, in Title Case, under the group heading (`labelInGroup` in `apps/docs/src/lib/nav.ts`). The
-  page heading and the copyable code keep the full name.
+- **The list shows the full name** (WN09, reversed 2026-11-18). The docs sidebar, the component
+  and block indexes, search and breadcrumbs show exactly what the page heading shows: the
+  PascalCase component name (`HeroSection`, `DocCallout`, `ThirdPartyLogo`) or the block's
+  `block.json` title (`Dashboard Alerts`). The group is a heading above the list, never cut out
+  of a label. A person or an agent then searches, reads and imports one word, and `Hero` (the
+  building piece) never reads the same as `HeroSection`.
 - **Page sections keep the word last.** "Hero section", "pricing section" is how Tailwind Plus,
   Shopify and Mantine UI say it, and every `_id` is stored in page data outside this repo, so the
   `-section` suffix stays (N12, WN08). No other component carries the word (WN-S01), so the
@@ -575,17 +578,16 @@ does not say it again. One rule, three cases:
   (`icon-button`, `pricing-card`); the category is a folder and a sidebar heading, never a word in
   the name (WN10).
 
-| ✅                                    | ❌                                                         |
-| ------------------------------------- | ---------------------------------------------------------- |
-| sidebar _Dashboard_ → `Alerts`        | `Alerts Dashboard` (the group word again, last)            |
-| sidebar _Page sections_ → `Hero Form` | `HeroFormSection`                                          |
-| `dashboard/dashboard-alerts`          | `dashboard/alerts` (the copied file would be `alerts.vue`) |
+| ✅                                          | ❌                                                         |
+| ------------------------------------------- | ---------------------------------------------------------- |
+| sidebar _Dashboard_ → `Dashboard Alerts`    | `Alerts` (a label that is not the title or the id)         |
+| sidebar _Page sections_ → `HeroFormSection` | `Hero Form` (reads like the `Hero` building piece)         |
+| `dashboard/dashboard-alerts`                | `dashboard/alerts` (the copied file would be `alerts.vue`) |
 
-> shadcn names its blocks group first (`dashboard-01`, `sidebar-07`, `login-03`) and files them
-> under a group tab; Tailwind Plus lists "Simple centered" under _Hero Sections_, without the
-> word. Cloudscape repeats it ("Configurable dashboard" under _Service Dashboard_), the drift the
-> owner flagged in our sidebar. The analysis is in
-> `packages/webkit/docs/reviews/website-components-naming.md` § Group-first naming.
+> shadcn, Primer, MUI, Carbon, Supabase, Mantine and Chakra all list the exact component name in
+> their navigation, so the label a reader clicks is the name they import. shadcn names its blocks
+> group first (`dashboard-01`, `sidebar-07`, `login-03`) and files them under a group tab. The
+> analysis is in `packages/webkit/docs/reviews/website-components-naming.md` § Group-first naming.
 
 ## How it is checked
 

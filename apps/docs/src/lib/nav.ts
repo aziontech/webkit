@@ -66,11 +66,6 @@ export function titleCase(value: string): string {
     .join(' ')
 }
 
-const GROUP_WORDS: Record<string, { word: string; at: 'start' | 'end' }> = {
-  docs: { word: 'Doc', at: 'start' },
-  section: { word: 'Section', at: 'end' }
-}
-
 const ACRONYMS: Record<string, string> = {
   ai: 'AI',
   cli: 'CLI',
@@ -88,25 +83,11 @@ function words(value: string): string[] {
     .map((word) => ACRONYMS[word.toLowerCase()] ?? word)
 }
 
-export function labelInGroup(title: string, group: string): string {
-  const parts = words(title)
-  const rule = GROUP_WORDS[group]
-  const drop = rule ? [rule.word] : words(titleCase(group))
-  const at = rule?.at ?? 'start'
-  const head = at === 'start' ? parts.slice(0, drop.length) : parts.slice(-drop.length)
-  const same =
-    head.length === drop.length && head.every((w, i) => w.toLowerCase() === drop[i].toLowerCase())
-  if (!same || parts.length === drop.length) return parts.join(' ')
-  const rest = at === 'start' ? parts.slice(drop.length) : parts.slice(0, -drop.length)
-  return rest.join(' ')
-}
-
 export function componentGroups(): NavGroup[] {
   const groups = new Map<string, NavGroup['items']>()
   for (const item of index.components) {
     const list = groups.get(item.category) ?? []
-    const label = GROUP_WORDS[item.category] ? labelInGroup(item.title, item.category) : item.title
-    list.push({ label, to: `/components/${item.name}` })
+    list.push({ label: item.title, to: `/components/${item.name}` })
     groups.set(item.category, list)
   }
   const rank = (category: string) => {
@@ -126,7 +107,7 @@ export function blockGroups(): NavGroup[] {
   const groups = new Map<string, NavGroup['items']>()
   for (const block of index.blocks) {
     const list = groups.get(block.group) ?? []
-    list.push({ label: labelInGroup(block.title, block.group), to: `/blocks/${block.id}` })
+    list.push({ label: block.title, to: `/blocks/${block.id}` })
     groups.set(block.group, list)
   }
   return [...groups.entries()].map(([group, items]) => ({

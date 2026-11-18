@@ -23,7 +23,7 @@ A screen built only from `@aziontech/webkit` components, which agents copy throu
 The group is the job, never the surface: `block.json#surface` says where the screen lives (`app`,
 `docs` or `site`). The `<name>` starts with the group word, once: `<group>-<what>`
 (`dashboard/dashboard-alerts`, `view/view-table`; `check:naming` rule `block-group-first`). The
-docs sidebar lists it without the group word ("Alerts" under Dashboard); see
+docs sidebar lists its full title ("Dashboard Alerts" under Dashboard); see
 `.claude/rules/naming.md` § 3 and § 25.
 
 ```

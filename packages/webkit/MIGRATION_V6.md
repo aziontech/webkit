@@ -1580,7 +1580,7 @@ renamed:
 
 A block's name says its group once, first: `<group>/<group>-<what>`. The name is what `add`
 copies into your app (`dashboard-alerts.vue`, `DashboardAlerts`, route `/dashboard-alerts`), so it
-keeps the group word; the docs list shows it without the word ("Alerts" under Dashboard). Blocks
+keeps the group word, and the docs list shows the same full name ("Dashboard Alerts"). Blocks
 that already started with their group (`create/create-hub`, `ai/ai-chat`,
 `settings/settings-form`, `account/account-hierarchy`, `dashboard/dashboard-switcher`,
 `edit/edit-resource`) keep their id. `webkit migrate v6` rewrites the ids in `webkit.blocks.json`
