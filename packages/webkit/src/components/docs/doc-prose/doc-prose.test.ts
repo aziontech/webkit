@@ -188,6 +188,56 @@ describe('DocProse', () => {
     })
   })
 
+  describe('a command chip', () => {
+    const command =
+      '<p>Run <code data-command>azion deploy --local</code> or read <code>azion.config.js</code>.</p>'
+
+    it('is a button that names the copy, and plain chips stay text', async () => {
+      const { getByText } = render(DocProse, { slots: { default: command } })
+      const chip = getByText('azion deploy --local')
+      await waitFor(() => expect(chip.getAttribute('role')).toBe('button'))
+      expect(chip.getAttribute('tabindex')).toBe('0')
+      expect(chip.getAttribute('aria-label')).toBe('Copy azion deploy --local')
+      const plain = getByText('azion.config.js')
+      expect(plain.hasAttribute('role')).toBe(false)
+      expect(plain.hasAttribute('tabindex')).toBe(false)
+    })
+
+    it('copies the whole command from the keyboard, selects it and announces it politely', async () => {
+      const writeText = stubClipboard()
+      const { getByText } = render(DocProse, { slots: { default: command } })
+      const chip = getByText('azion deploy --local')
+      await waitFor(() => expect(chip.getAttribute('tabindex')).toBe('0'))
+      chip.focus()
+      await waitFor(() => expect(copyTip()?.textContent).toBe('Copy'))
+      await fireEvent.keyDown(chip, { key: 'Enter' })
+      expect(writeText).toHaveBeenCalledWith('azion deploy --local')
+      await waitFor(() => expect(copyTip()?.textContent).toBe('Copied'))
+      expect(globalThis.getSelection()?.toString()).toBe('azion deploy --local')
+      const status = document.body.querySelector('[data-testid="doc-prose__copy-status"]')
+      expect(status?.getAttribute('aria-live')).toBe('polite')
+      expect(status?.textContent).toBe('Copied')
+
+      await fireEvent.keyDown(chip, { key: ' ' })
+      expect(writeText).toHaveBeenCalledTimes(2)
+    })
+
+    it('ignores Enter on a plain chip, which is not a stop', async () => {
+      const writeText = stubClipboard()
+      const { getByText } = render(DocProse, { slots: { default: command } })
+      await fireEvent.keyDown(getByText('azion.config.js'), { key: 'Enter' })
+      expect(writeText).not.toHaveBeenCalled()
+    })
+
+    it('has no violations with a command chip', async () => {
+      const { container, getByText } = render(DocProse, { slots: { default: command } })
+      await waitFor(() =>
+        expect(getByText('azion deploy --local').getAttribute('role')).toBe('button')
+      )
+      await expectNoA11yViolations(container)
+    })
+  })
+
   describe('accessibility', () => {
     it('has no violations over the full ladder', async () => {
       const { container } = render(Default)

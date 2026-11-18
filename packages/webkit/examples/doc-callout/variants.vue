@@ -7,7 +7,7 @@
     <DocCallout variant="note">A neutral aside the reader should not skip.</DocCallout>
     <DocCallout variant="info">Background that explains why the step exists.</DocCallout>
     <DocCallout variant="tip"
-      >Run <code>azion deploy --local</code> to skip the remote install.</DocCallout
+      >Run <code data-command>azion deploy --local</code> to skip the remote install.</DocCallout
     >
     <DocCallout variant="check">The certificate is issued and renews on its own.</DocCallout>
     <DocCallout variant="warning"

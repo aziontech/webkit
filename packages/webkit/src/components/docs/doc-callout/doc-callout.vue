@@ -1,6 +1,8 @@
 <script setup lang="ts">
-  import { computed, useAttrs } from 'vue'
+  import { computed, ref, useAttrs } from 'vue'
 
+  import { useInlineCodeCopy } from '../../../composables/use-inline-code-copy'
+  import { usePortalLocale } from '../../../composables/use-translate'
   import Alert from '../../feedback/alert/alert.vue'
 
   defineOptions({ name: 'DocCallout', inheritAttrs: false })
@@ -35,6 +37,9 @@
   } as const
 
   const attrs = useAttrs()
+  const copyEl = ref<HTMLElement | null>(null)
+  const { tipFor, tipLabel, tipLeft, tipTop, announcement } = useInlineCodeCopy(copyEl)
+  const portalLocale = usePortalLocale()
 
   const preset = computed(() => VARIANTS[props.variant] ?? VARIANTS.note)
 
@@ -54,12 +59,39 @@
     class="data-[neutral]:border-(--border-default)! data-[neutral]:bg-(--bg-surface)! data-[neutral]:[&_i]:text-(--primary)!"
   >
     <div
+      ref="copyEl"
+      data-code-copy
       :data-variant="variant"
       :data-severity="preset.severity"
       :data-neutral="preset.neutral || null"
-      class="text-(--text-default) [&_:is(p,ul,ol)+:is(p,ul,ol)]:pt-(--spacing-sm) [&_ul]:list-disc [&_ul]:ps-(--spacing-lg) [&_ol]:list-decimal [&_ol]:ps-(--spacing-lg) [&_li+li]:pt-(--spacing-xs) [&_strong]:font-normal [&_a]:font-normal [&_a]:text-inherit! [&_a]:underline [&_a]:underline-offset-2 [&_code]:rounded-(--shape-control) [&_code]:inset-ring [&_code]:forced-colors:border [&_code]:px-(--spacing-2xs) [&_code]:text-label-code-sm [&_code]:text-(--text-default) [&_code]:wrap-anywhere [&_code]:box-decoration-clone data-[severity=info]:[&_code]:inset-ring-(--info-border) data-[severity=info]:[&_code]:bg-(--info-foreground)/10 data-[severity=success]:[&_code]:inset-ring-(--success-border) data-[severity=success]:[&_code]:bg-(--success-foreground)/10 data-[severity=warning]:[&_code]:inset-ring-(--warning-border) data-[severity=warning]:[&_code]:bg-(--warning-foreground)/10 data-[severity=danger]:[&_code]:inset-ring-(--danger-border) data-[severity=danger]:[&_code]:bg-(--danger-foreground)/10 data-[neutral]:[&_code]:inset-ring-(--border-default)! data-[neutral]:[&_code]:bg-(--bg-hover)!"
+      class="text-(--text-default) [&_:is(p,ul,ol)+:is(p,ul,ol)]:pt-(--spacing-sm) [&_ul]:list-disc [&_ul]:ps-(--spacing-lg) [&_ol]:list-decimal [&_ol]:ps-(--spacing-lg) [&_li+li]:pt-(--spacing-xs) [&_strong]:font-normal [&_a]:font-normal [&_a]:text-inherit! [&_a]:underline [&_a]:underline-offset-2 [&_code]:rounded-(--shape-control) [&_code]:inset-ring [&_code]:forced-colors:border [&_code]:px-(--spacing-2xs) [&_code]:text-label-code-sm [&_code]:text-(--text-default) [&_code]:wrap-anywhere [&_code]:box-decoration-clone data-[severity=info]:[&_code]:inset-ring-(--info-border) data-[severity=info]:[&_code]:bg-(--info-foreground)/10 data-[severity=success]:[&_code]:inset-ring-(--success-border) data-[severity=success]:[&_code]:bg-(--success-foreground)/10 data-[severity=warning]:[&_code]:inset-ring-(--warning-border) data-[severity=warning]:[&_code]:bg-(--warning-foreground)/10 data-[severity=danger]:[&_code]:inset-ring-(--danger-border) data-[severity=danger]:[&_code]:bg-(--danger-foreground)/10 data-[neutral]:[&_code]:inset-ring-(--border-default)! data-[neutral]:[&_code]:bg-(--bg-hover)! [&_:not(a)>code:not([data-testid])]:cursor-pointer [&_:not(a)>code:not([data-testid])]:hover:ring-1 [&_:not(a)>code:not([data-testid])]:hover:ring-(--border-default) [&_code[data-command]]:outline-none [&_code[data-command]:focus-visible]:ring-2 [&_code[data-command]:focus-visible]:ring-(--ring-color)"
     >
       <slot>{{ label }}</slot>
     </div>
+    <Teleport to="body">
+      <Transition
+        enter-active-class="animate-popup-scale-in motion-reduce:animate-none"
+        leave-active-class="animate-popup-scale-out motion-reduce:animate-none"
+      >
+        <span
+          v-if="tipFor"
+          :dir="portalLocale.dir"
+          :lang="portalLocale.lang"
+          role="tooltip"
+          :data-testid="`${testId}__copy-tip`"
+          :style="{ left: `${tipLeft}px`, top: `${tipTop}px` }"
+          class="pointer-events-none fixed z-(--z-control-overlay) -translate-x-1/2 -translate-y-[calc(100%+var(--spacing-2xs))] rounded-(--shape-control) bg-(--bg-contrast) px-(--spacing-xs) py-(--spacing-2xs) text-body-xs whitespace-nowrap text-(--text-contrast)"
+          >{{ tipLabel }}</span
+        >
+      </Transition>
+      <span
+        :dir="portalLocale.dir"
+        :lang="portalLocale.lang"
+        aria-live="polite"
+        class="sr-only"
+        :data-testid="`${testId}__copy-status`"
+        >{{ announcement }}</span
+      >
+    </Teleport>
   </Alert>
 </template>
