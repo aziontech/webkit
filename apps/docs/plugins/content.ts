@@ -258,7 +258,7 @@ export async function renderMarkdownFile(
 
 const DONT_PRACTICE = /^\*\*(don['’]t|do not|never|avoid)\*\*\s*/i
 
-type ExampleMeta = { name: string; summary?: string; file: string }
+type ExampleMeta = { name: string; summary?: string; file: string; json?: string }
 type ExamplesFile = { component: string; title?: string; examples: ExampleMeta[] }
 
 function readExampleDirs(): { dir: string; data: ExamplesFile }[] {
@@ -464,7 +464,8 @@ export async function buildComponent(name: string, catalog: Catalog = readCatalo
     examples: (examplesDir?.data.examples ?? []).map((example) => ({
       name: example.name,
       summary: inline(example.summary ?? ''),
-      file: example.file
+      file: example.file,
+      ...(example.json ? { json: example.json } : {})
     })),
     exampleDir: examplesDir ? relative(join(WEBKIT, 'examples'), dirname(examplesDir.file)) : null,
     spec: Object.fromEntries(

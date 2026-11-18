@@ -18,5 +18,9 @@
   "Let the glyph and the tint carry the severity; do not restate it in the copy (\"Warning: …\").",
   "Keep the body short — a sentence or two, links and inline code. A list is fine when the aside enumerates actions; the callout lays it out itself, because `DocProse` stops at its edge.",
   "Reach for `tip` when the aside claims nothing about stakes. Borrowing `check` for a friendly shortcut paints a shortcut the same green as a confirmed success."
+ ],
+ "channels": [
+  "app",
+  "docs"
  ]
 }

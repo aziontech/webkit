@@ -63,6 +63,7 @@
   const DocFrame = defineAsyncComponent(() => import('../doc-frame/doc-frame.vue'))
   const DocItem = defineAsyncComponent(() => import('../doc-item/doc-item.vue'))
   const DocPrompt = defineAsyncComponent(() => import('../doc-prompt/doc-prompt.vue'))
+  const FlowDiagram = defineAsyncComponent(() => import('../../data/flow-diagram/flow-diagram.vue'))
   const TabsRoot = defineAsyncComponent(() => import('../../navigation/tabs/tabs.vue'))
   const TabsList = defineAsyncComponent(() => import('../../navigation/tabs/tabs-list.vue'))
   const TabsTrigger = defineAsyncComponent(() => import('../../navigation/tabs/tabs-trigger.vue'))
@@ -94,8 +95,11 @@
     Accordion: DocAccordion,
     Frame: DocFrame,
     Prompt: DocPrompt,
-    Update: DocChangelogEntry
+    Update: DocChangelogEntry,
+    FlowDiagram
   }
+
+  const CHROME_BLOCKS = new Set<Component>([FlowDiagram])
 
   const INLINE_BODY = new Set<Component>([DocCallout, DocItem, DocPrompt])
 
@@ -261,6 +265,9 @@
       const caption = values['caption']
       delete values['caption']
       slots['caption'] = () => inline(caption)
+    }
+    if (!override && CHROME_BLOCKS.has(component)) {
+      return h(component, { key, 'data-doc-block': '', 'data-doc-chrome': '', ...values })
     }
     const children = renderNodes(node.children, !override && INLINE_BODY.has(component))
     if (children.length) slots['default'] = () => children

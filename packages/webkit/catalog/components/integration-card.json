@@ -23,5 +23,8 @@
   "Show at most two badges (category, context, plan). The installed state is a prop, not a badge, so it reads the same everywhere.",
   "Tiles sit under a section heading, so their title is an `h3`.",
   "`featured` centres the mark, the name, the vendor and the description on a raised surface with a primary glow at the top, and moves the badges to the top end corner, where a badge without `severity` is `primary`. Use it for a row of at most three or four picks above the full catalog, never for every tile; the full catalog keeps the plain tile."
+ ],
+ "channels": [
+  "app"
  ]
 }

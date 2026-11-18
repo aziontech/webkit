@@ -28,5 +28,9 @@
   "The track is dragged with the pointer as well as scrolled. A mouse gets a grab cursor and drags the row directly; touch and pen keep native scrolling and its momentum, which is already better than anything a handler would impose.",
   "Always name the carousel with `ariaLabel`. \"Customer stories\" tells a screen-reader user what they are about to scroll through; an unnamed scroll region does not.",
   "The track never advances on its own, and it must not be made to. Auto-advancing content needs a pause control under WCAG 2.2.2 and steals reading time from everyone."
+ ],
+ "channels": [
+  "app",
+  "site"
  ]
 }

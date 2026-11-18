@@ -11,5 +11,9 @@
  ],
  "bestPractices": [
   "Keep the title a question; keep the body prose."
+ ],
+ "channels": [
+  "app",
+  "docs"
  ]
 }

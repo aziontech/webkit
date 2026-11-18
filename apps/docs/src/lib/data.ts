@@ -19,6 +19,10 @@ const exampleSources = import.meta.glob<Highlighted>(
   '../../../../packages/webkit/examples/**/*.vue',
   { query: '?highlight', import: 'default' }
 )
+const exampleData = import.meta.glob<Highlighted>('../../../../packages/webkit/examples/**/*.json', {
+  query: '?highlight',
+  import: 'default'
+})
 const blockComponents = import.meta.glob<Component>('../../../../packages/webkit/blocks/**/*.vue', {
   import: 'default'
 })
@@ -90,7 +94,15 @@ export async function preloadComponent(name: string) {
       remember(
         keys.exampleSource(dir, example.file),
         exampleSources[`${EXAMPLES}${dir}/${example.file}`]
-      )
+      ),
+      ...(example.json
+        ? [
+            remember(
+              keys.exampleSource(dir, example.json),
+              exampleData[`${EXAMPLES}${dir}/${example.json}`]
+            )
+          ]
+        : [])
     ])
   )
 }

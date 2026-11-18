@@ -19,5 +19,8 @@
   "Point `action-href` at the agent setup guide.",
   "Follow it with a three-column `DocCardGroup` (Console, CLI, API) in the same section.",
   "Do not add an overline or an eyebrow above the title; the card has none."
+ ],
+ "channels": [
+  "app"
  ]
 }

@@ -23,5 +23,9 @@
   "The card emits no events, and the built-in button has no handler. To act on the click, fill the `actions` slot with your own `Button`.",
   "Hide the symbol or the period with `:show-prefix=\"false\"` / `:show-suffix=\"false\"` (for example on a custom-quote tier) instead of clearing `prefix` / `suffix`.",
   "Mark at most one card in a row with `show-tag` and `tag-label`."
+ ],
+ "channels": [
+  "app",
+  "site"
  ]
 }

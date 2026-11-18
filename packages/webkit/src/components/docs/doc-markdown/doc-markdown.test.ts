@@ -5,8 +5,10 @@ import { defineComponent, h, ref } from 'vue'
 
 import Components from '../../../../examples/doc-markdown/components.vue'
 import Default from '../../../../examples/doc-markdown/default.vue'
+import FlowDiagramMarkdown from '../../../../examples/flow-diagram/markdown.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import DocMarkdown, { parseDocMarkdown } from './doc-markdown.vue'
+import { parseAttributes } from './parse-doc-markdown'
 
 const mount = (source: string, extra: Record<string, unknown> = {}, options = {}) =>
   render(DocMarkdown, { props: { source, ...extra }, ...options })
@@ -247,6 +249,32 @@ describe('DocMarkdown', () => {
     expect(marks).toHaveLength(2)
     expect(marks[1]!.getAttribute('data-label')).toBe('New')
     expect(marks[1]!.textContent).toBe('Fresh')
+  })
+
+  it('reads braced JSON arrays and objects as data, and keeps the loose list form', () => {
+    expect(
+      parseAttributes(
+        'nodes={[{ "id": "a", "title": "Say {hi}" }, { id: \'b\', metrics: [{ label: "p95", value: "9 ms" }], }]} options={{ "open": true }} tags={[CLI, API]} uniform'
+      )
+    ).toEqual({
+      nodes: [
+        { id: 'a', title: 'Say {hi}' },
+        { id: 'b', metrics: [{ label: 'p95', value: '9 ms' }] }
+      ],
+      options: { open: true },
+      tags: ['CLI', 'API'],
+      uniform: true
+    })
+  })
+
+  it('renders a FlowDiagram tag with JSON nodes and edges as a real FlowDiagram', async () => {
+    const { container, findByRole, findByText } = render(FlowDiagramMarkdown)
+    const diagram = await findByRole('group', { name: 'Request path' })
+    expect(diagram.hasAttribute('data-doc-chrome')).toBe(true)
+    expect(await findByText('api.example.com')).toBeTruthy()
+    expect(within(diagram).getAllByRole('listitem').length).toBeGreaterThanOrEqual(3)
+    expect(within(diagram).getByText('Azion')).toBeTruthy()
+    await expectNoA11yViolations(container)
   })
 
   it('parseDocMarkdown returns the frontmatter and the outline headings', () => {

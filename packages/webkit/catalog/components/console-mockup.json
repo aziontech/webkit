@@ -24,5 +24,9 @@
   "Leave a fragment's plating to the registry. Each fragment has its own default: a form or a list that reads as a console screen is framed in a console window titled with its module, and a fragment that draws its own card, terminal or code panel is bare, because a window around it would be a window in a window. Set `variant` only when the host needs the other plating, and `chrome` to drop the window's console bar. `width` and `fade` re-plate only the workload screens listed under Props; a fragment keeps its own design width and fade, and the root warns in development when a prop is set on a widget that does not read it.",
   "Turn `cursor` off when the widget stands for a screen the reader uses alone. Fragments act their beat with a named collaborator cursor; that is right in a feature grid that plays on hover, and a fake second person in a product band that reads as a screenshot.",
   "Keep the copy beside the widget saying what it shows. Every widget but `function-code` and the coding-agent switch of `functions-start` is hidden from assistive technology."
+ ],
+ "channels": [
+  "app",
+  "site"
  ]
 }

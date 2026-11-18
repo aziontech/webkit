@@ -24,5 +24,9 @@
   "Use scenes of the same shape. The frame does not resize between tabs.",
   "Pick `size` from the copy, not from the section: `medium` holds a title and two lines, `large` a title and four. In a row of tabs, `small` drops each title one step so five claims fit.",
   "Leave `autoplay` on for a band a reader is expected to watch. It pauses under the pointer or keyboard focus, restarts its count on a click (and keeps running under the pointer that clicked), and never starts under reduced motion."
+ ],
+ "channels": [
+  "app",
+  "site"
  ]
 }

@@ -26,5 +26,9 @@
   "Use `size=\"small\"` only where the strip is the quietest thing on the page, such as the floor of a sign-in column; `medium` is the marketing band and carries its own responsive ladder.",
   "Keep each `items` label to a short clause with no punctuation to end it, and give every item the same kind of icon; the row repeats, so a claim is read as one of a run, never on its own.",
   "Never put a call to action, a price or anything else a reader needs inside a strip. It scrolls away, and under `prefers-reduced-motion` it becomes a wrapped grid instead."
+ ],
+ "channels": [
+  "app",
+  "site"
  ]
 }

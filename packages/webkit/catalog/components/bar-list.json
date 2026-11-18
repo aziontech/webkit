@@ -20,5 +20,8 @@
   "Leave `sort` on `descending` for rankings; use `none` only when the order itself carries meaning (pipeline steps, weekdays).",
   "Pass the same `formatValue` as the chart beside it so a number reads the same in both.",
   "Give interactive rows a destination the user expects — a filtered view of that item — not a detail drawer of the whole list."
+ ],
+ "channels": [
+  "app"
  ]
 }

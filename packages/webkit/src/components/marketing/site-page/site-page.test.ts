@@ -2,6 +2,7 @@ import userEvent from '@testing-library/user-event'
 import { render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
+import PageEntry from '../../../../examples/flow-diagram/page-entry.vue'
 import legacyPropMaps from '../../../cli/migrations/v6-props.json'
 import { expectNoA11yViolations } from '../../../test/axe'
 import SitePage, { type SitePageSection, type SitePageSubmit } from './site-page.vue'
@@ -217,6 +218,13 @@ describe('SitePage', () => {
     })
 
     expect(await findByTestId(testId)).toBeInTheDocument()
+  })
+
+  it('places a FlowDiagram from page JSON as a scene, with its nodes and edges', async () => {
+    const { container, findByRole, findByText } = render(PageEntry)
+    expect(await findByRole('group', { name: 'Request path' })).toBeInTheDocument()
+    expect(await findByText('api.example.com')).toBeInTheDocument()
+    await expectNoA11yViolations(container)
   })
 
   it('skips a scene the registry does not hold, with a development warning', async () => {

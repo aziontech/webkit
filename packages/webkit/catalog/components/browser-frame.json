@@ -26,5 +26,8 @@
   "Give the frame an `ariaLabel` that names what is shown (`Pricing page at tablet size`); it becomes the viewport's accessible name.",
   "Viewport-height units (`h-screen`, `min-h-dvh`) in slot content resolve against the simulated height, so a full-height shell renders as it would on the device.",
   "Do not add controls to the chrome — the address's copy button and the resize handles are the frame's only controls. Interactive content belongs in the default slot."
+ ],
+ "channels": [
+  "app"
  ]
 }

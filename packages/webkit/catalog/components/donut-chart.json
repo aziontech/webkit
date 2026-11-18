@@ -19,5 +19,8 @@
   "Order series by size so the largest slice starts at the top.",
   "Use the center for the total and let hover or focus swap it to the active slice.",
   "Pair it with the bar form of the same data when exact ranks matter (the console's country pie plus ordered bar)."
+ ],
+ "channels": [
+  "app"
  ]
 }

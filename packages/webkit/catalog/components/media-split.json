@@ -37,5 +37,9 @@
   "Reach for an official `illustration` scene before a screenshot: it is vector, it follows the canvas the library is drawn on, and its transparent ground is what the band's lattice is there for. `src` is the plain-picture path — a raster covers the ground rather than sitting on it.",
   "Use the `media` slot when the media is not a plain image — a video, a chart or a composed figure belongs there rather than in `src`.",
   "Let the band's own ground carry a scene with a transparent canvas: an `illustration` needs nothing behind it. Quiet or kill the lattice from the call site with `--texture-ink`, which the layer inherits from the band's root; a media element that paints its own opaque backdrop covers it anyway."
+ ],
+ "channels": [
+  "app",
+  "site"
  ]
 }

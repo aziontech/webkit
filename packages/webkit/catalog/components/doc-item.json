@@ -18,5 +18,9 @@
   "Keep the title to a noun phrase and let the sentence carry the verb; inline code in the sentence renders as the chip.",
   "Give every row of one list the same shape — all with glyphs or none, all linked or none — so the column reads as one object.",
   "Compose rows inside a `RegistrationFrame` (with a solid surface) holding an `ItemList`: the frame draws the single box and the list draws full-width dividers, and the `role=\"list\"` parent is what makes each row's `role=\"listitem\"` valid."
+ ],
+ "channels": [
+  "app",
+  "docs"
  ]
 }

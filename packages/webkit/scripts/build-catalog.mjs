@@ -23,6 +23,7 @@ import {
   staleReferences
 } from './lib/catalog-references.mjs'
 import { buildAliases, buildRenamed, removedNames, retiredNames } from './lib/naming.mjs'
+import { CHANNELS, channelsOf } from './lib/content-channels.mjs'
 import { SURFACES, surfaceFromTarget } from './lib/surfaces.mjs'
 import { sameVariant } from '../src/catalog/queries.js'
 import { entryKeywords } from '../../icons/scripts/lib/icon-keywords.mjs'
@@ -41,7 +42,14 @@ const SPECS_DIR = resolve(REPO_ROOT, '.specs')
 const OUT_PATH = resolve(REPO_ROOT, 'packages/webkit/catalog.json')
 const PARTS_DIR = resolve(REPO_ROOT, 'packages/webkit/catalog')
 const BLOCK_HEAVY_KEYS = ['sfc', 'variants', 'guidelines', 'files']
-const COMPONENT_PROSE_KEYS = ['purpose', 'useWhen', 'avoidWhen', 'related', 'bestPractices']
+const COMPONENT_PROSE_KEYS = [
+  'purpose',
+  'useWhen',
+  'avoidWhen',
+  'related',
+  'bestPractices',
+  'channels'
+]
 const V6_MIGRATION = resolve(PKG_ROOT, 'src/cli/migrations/v6.json')
 const V6_BLOCKS = resolve(PKG_ROOT, 'src/cli/migrations/v6-blocks.json')
 
@@ -478,6 +486,8 @@ export async function build() {
 
     const surface = surfaceFromTarget(target)
     if (surface) entry.surface = surface
+    const channels = channelsOf(target)
+    if (channels) entry.channels = channels
     imports[subpath] = entry
   }
 
@@ -496,6 +506,7 @@ export async function build() {
     tokens: buildTokens(),
     vocabulary: vocabularySnapshot(),
     surfaces: SURFACES,
+    channels: CHANNELS,
     aliases: buildAliases(subpaths),
     renamed: buildRenamed(subpaths, retiredNames(v6Migration)),
     removed: removedNames(subpaths, v6Migration),

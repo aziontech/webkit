@@ -1,8 +1,13 @@
 import { type MarkdownInline, parseInline, plainText } from '../../ai/lib/parse-markdown'
 import { slugify } from '../doc-changelog-entry/slugify'
 
+/** A JSON value inside a braced MDX attribute. */
+export type DocMarkdownData =
+  string | number | boolean | null | DocMarkdownData[] | { [key: string]: DocMarkdownData }
+
 /** An attribute value an MDX tag may carry. */
-export type DocMarkdownValue = string | number | boolean | string[]
+export type DocMarkdownValue =
+  string | number | boolean | DocMarkdownData[] | { [key: string]: DocMarkdownData }
 
 /** The attributes of one MDX tag, keyed by name. */
 export type DocMarkdownAttributes = Record<string, DocMarkdownValue>
@@ -68,7 +73,8 @@ export const DOC_MARKDOWN_BLOCK_TAGS: readonly string[] = [
   'CodeGroup',
   'Frame',
   'Prompt',
-  'Update'
+  'Update',
+  'FlowDiagram'
 ]
 
 export const DOC_MARKDOWN_INLINE_TAGS: readonly string[] = ['Tooltip']
@@ -81,7 +87,7 @@ const DIVIDER = /^\s*(?:-{3,}|\*{3,}|_{3,})\s*$/
 const TABLE_DELIM = /^\s*\|?\s*:?-{2,}:?\s*(\|\s*:?-{2,}:?\s*)*\|?\s*$/
 const OPEN_TAG = /^\s*<([A-Z][A-Za-z0-9]*)\b/
 const INLINE_TAG = /<([A-Z][A-Za-z0-9]*)\b((?:"[^"]*"|'[^']*'|[^>"'])*?)(?:\/>|>([\s\S]*?)<\/\1>)/g
-const ATTRIBUTE = /([A-Za-z][A-Za-z0-9-]*)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|\{([^}]*)\}))?/g
+const ATTRIBUTE_NAME = /[A-Za-z][A-Za-z0-9-]*/y
 
 const parseList = (raw: string): string[] =>
   raw
@@ -90,23 +96,85 @@ const parseList = (raw: string): string[] =>
     .map((entry) => entry.trim().replace(/^['"]|['"]$/g, ''))
     .filter((entry) => entry !== '')
 
+const relaxedJson = (raw: string): string =>
+  raw
+    .replace(/'((?:[^'\\]|\\.)*)'/g, (_, inner: string) =>
+      JSON.stringify(inner.replace(/\\'/g, "'"))
+    )
+    .replace(/([{,]\s*)([A-Za-z_$][\w$]*)\s*:/g, '$1"$2":')
+    .replace(/,\s*([}\]])/g, '$1')
+
+const parseData = (raw: string): DocMarkdownData | undefined => {
+  for (const candidate of [raw, relaxedJson(raw)]) {
+    try {
+      return JSON.parse(candidate) as DocMarkdownData
+    } catch {
+      continue
+    }
+  }
+  return undefined
+}
+
 const braceValue = (raw: string): DocMarkdownValue => {
   const value = raw.trim()
   if (value === 'true' || value === 'false') return value === 'true'
   if (value !== '' && !Number.isNaN(Number(value))) return Number(value)
-  if (value.startsWith('[') && value.endsWith(']')) return parseList(value)
+  if (value.startsWith('{') || value.startsWith('[')) {
+    const data = parseData(value)
+    if (Array.isArray(data) || (data !== null && typeof data === 'object')) return data
+    if (value.startsWith('[') && value.endsWith(']')) return parseList(value)
+  }
   return value.replace(/^['"]|['"]$/g, '')
+}
+
+const closingBrace = (raw: string, open: number): number => {
+  let depth = 0
+  let quote = ''
+  for (let index = open; index < raw.length; index += 1) {
+    const char = raw[index] as string
+    if (quote) {
+      if (char === '\\') index += 1
+      else if (char === quote) quote = ''
+      continue
+    }
+    if (char === '"' || char === "'" || char === '`') quote = char
+    else if (char === '{') depth += 1
+    else if (char === '}') {
+      depth -= 1
+      if (depth === 0) return index
+    }
+  }
+  return raw.length
 }
 
 export const parseAttributes = (raw: string): DocMarkdownAttributes => {
   const props: DocMarkdownAttributes = {}
-  for (const match of raw.matchAll(ATTRIBUTE)) {
-    const [, name, double, single, brace] = match
-    if (!name) continue
-    if (double !== undefined) props[name] = double
-    else if (single !== undefined) props[name] = single
-    else if (brace !== undefined) props[name] = braceValue(brace)
-    else props[name] = true
+  let index = 0
+  while (index < raw.length) {
+    ATTRIBUTE_NAME.lastIndex = index
+    const name = ATTRIBUTE_NAME.exec(raw)?.[0]
+    if (!name) {
+      index += 1
+      continue
+    }
+    index += name.length
+    const rest = raw.slice(index).match(/^\s*=\s*/)
+    if (!rest) {
+      props[name] = true
+      continue
+    }
+    index += rest[0].length
+    const quote = raw[index]
+    if (quote === '"' || quote === "'") {
+      const end = raw.indexOf(quote, index + 1)
+      const stop = end === -1 ? raw.length : end
+      props[name] = raw.slice(index + 1, stop)
+      index = stop + 1
+    } else if (quote === '{') {
+      const end = closingBrace(raw, index)
+      props[name] = braceValue(raw.slice(index + 1, end))
+      index = end + 1
+    } else props[name] = true
   }
   return props
 }

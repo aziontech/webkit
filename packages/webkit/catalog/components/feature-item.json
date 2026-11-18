@@ -26,5 +26,9 @@
   "Drop `icon` for a band whose claims are not glyph-led rather than reaching for a decorative glyph that says nothing.",
   "Give the claim an `href` rather than composing a button under it. A grid of six claims that each close on their own \"Learn more\" reads as six calls to action instead of six claims, and the button is a second target for the destination the claim already points at.",
   "A linked claim stretches its link over the nearest positioned ancestor, so the whole cell is the hover and click target, not just the copy. `CardGrid.Cell` and `BentoGrid.Cell` are positioned; a cell the page builds by hand needs `relative`, or every claim in the grid covers the band."
+ ],
+ "channels": [
+  "app",
+  "site"
  ]
 }

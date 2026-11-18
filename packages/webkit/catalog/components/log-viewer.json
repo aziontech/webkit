@@ -28,5 +28,8 @@
   "Set `:bordered=\"false\"` when the log sits inside a surface that already frames it (an accordion panel, a drawer).",
   "The copy control hides while `disabled` or `loading`, or when there is nothing to copy; listen to `@copy` for the copied text instead of reading the clipboard.",
   "Use the header's `start` / `end` / `search` slots and the footer's default slot to add actions, rather than rebuilding the toolbar."
+ ],
+ "channels": [
+  "app"
  ]
 }

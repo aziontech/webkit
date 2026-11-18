@@ -18,5 +18,10 @@
   "Put timing or failure on the edge (`label`, `severity`) when the hop failed, on the node when the resource did.",
   "Use `orientation=\"horizontal\"` for fixed-size scenes and mock-ups.",
   "A one-resource slot puts `flow-diagram-bind` in the `actions` slot."
+ ],
+ "channels": [
+  "app",
+  "docs",
+  "site"
  ]
 }

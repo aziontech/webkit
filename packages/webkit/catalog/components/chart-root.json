@@ -38,5 +38,8 @@
   "Name every `Chart.Reference` with a `label` (`SLO 300 ms`, `Quota`): the label is drawn at the inline end of the line and read in the chart summary, so the limit never rests on a dashed line alone. Color it with a `severity` only when crossing it means that state (`danger` for a hard limit, `warning` for an alert threshold); a plain target stays `neutral`.",
   "Place a band (`from` + `to`) before the marks so it sits under them, and a line after the marks so it stays readable over them.",
   "Draw event volume over contiguous time buckets (a log's histogram, requests per minute) with `Chart.Bar type=\"histogram\"`: solid columns that touch, segments without gaps, the tallest column at the top. Keep the default bars for separate categories that are compared one against another."
+ ],
+ "channels": [
+  "app"
  ]
 }

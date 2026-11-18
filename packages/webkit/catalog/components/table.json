@@ -30,5 +30,9 @@
   "Name the table: a `Table.Caption` labels it (`aria-labelledby`), or pass `aria-label` on the root.",
   "Give `TableCellTime` dates from your data. Where the text must not depend on when it renders (an example, a test, a server render the browser hydrates), set `now` on the app's `ConfigProvider` and count sample dates back from that constant; never build them from `Date.now()` / `new Date()` in setup.",
   "Import the root alone from `table-root`, or each part from its own entry (`table-row`), when only a few parts are used."
+ ],
+ "channels": [
+  "app",
+  "site"
  ]
 }

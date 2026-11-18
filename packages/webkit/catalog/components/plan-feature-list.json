@@ -22,5 +22,8 @@
   "Use `columns: 2` for six or more short labels in a wide card; it falls back to one column in a narrow box on its own.",
   "Name the list with `ariaLabel` (for example \"Pro plan features\") when no visible heading right above it says what the features belong to.",
   "Do not hand-write the list with your own check icons: the check colour and spacing are part of the component."
+ ],
+ "channels": [
+  "app"
  ]
 }

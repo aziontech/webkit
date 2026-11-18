@@ -4039,6 +4039,11 @@
   "docs": "The documentation site: doc page chrome, callouts, steps, the table of contents.",
   "edge": "Pages Azion's edge serves to the visitors of a customer's site (error pages), with no Azion product chrome and no account actions."
  },
+ "channels": {
+  "app": "Vue: the component imported from @aziontech/webkit/<name> in an app, a block or a page.",
+  "docs": "Markdown: a tag DocMarkdown renders, such as <FlowDiagram nodes={[…]} />.",
+  "site": "Page JSON: an entry SitePage renders, either a page section by _id or a scene a band draws by name."
+ },
  "aliases": {
   "alert-dialog": "confirm-dialog",
   "banner": "alert",
