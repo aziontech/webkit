@@ -23,6 +23,15 @@ export const NOT_CONTENT = {
 const DOCS_PIECE = 'A docs piece; the site uses the marketing pieces and sections.'
 const MARKETING_PIECE = 'A marketing piece; a docs page uses the doc- pieces.'
 
+const DATA_TABLE =
+  'App-only: it drives app state (sorting, selection, paging, filters) through its engine; a docs page writes a Markdown pipe table and the site uses listing-table-section.'
+const CODE_EDITOR =
+  'App-only: the person edits code in it; docs and site show code a reader copies, which is a code fence (docs) or CodeBlock.'
+const LOG_VIEWER =
+  'App-only: it views a live run log (search, level filter, follow); docs and site show sample output as a code fence or CodeBlock.'
+const TRACE =
+  'App-only: it explores one run (expand, search, select a span for its details); docs and site explain where the time went with a FlowDiagram or a Chart.'
+
 export const CONTENT_CHANNELS = {
   'data/flow-diagram': { docs: 'FlowDiagram', site: 'scene:FlowDiagram' },
   'content/illustration': { site: 'scene:Illustration', pending: ['docs'] },
@@ -46,23 +55,25 @@ export const CONTENT_CHANNELS = {
   'content/integration-card': { pending: ['docs', 'site'] },
   'content/key-value-list': { pending: ['docs', 'site'] },
   'content/plan-feature-list': { pending: ['docs', 'site'] },
-  'data/data-table': { pending: ['docs', 'site'] },
-  'chart/bar-list': { pending: ['docs', 'site'] },
-  'chart/chart': { pending: ['docs', 'site'] },
-  'chart/donut-chart': { pending: ['docs', 'site'] },
-  'chart/gauge-chart': { pending: ['docs', 'site'] },
-  'chart/map-chart': { pending: ['docs', 'site'] },
-  'chart/spark-chart': { pending: ['docs', 'site'] },
-  'chart/stat-tile': { pending: ['docs', 'site'] },
-  'chart/stat-tile-group': { pending: ['docs', 'site'] },
-  'chart/tracker': { pending: ['docs', 'site'] },
+  'data/data-table': {
+    outOfScope: { docs: DATA_TABLE, site: DATA_TABLE }
+  },
+  'chart/bar-list': { docs: 'BarList', site: 'scene:BarList' },
+  'chart/chart': { docs: 'Chart', site: 'scene:Chart' },
+  'chart/donut-chart': { docs: 'DonutChart', site: 'scene:DonutChart' },
+  'chart/gauge-chart': { docs: 'GaugeChart', site: 'scene:GaugeChart' },
+  'chart/map-chart': { docs: 'MapChart', site: 'scene:MapChart' },
+  'chart/spark-chart': { docs: 'SparkChart', site: 'scene:SparkChart' },
+  'chart/stat-tile': { docs: 'StatTile', site: 'scene:StatTile' },
+  'chart/stat-tile-group': { docs: 'StatTileGroup', site: 'scene:StatTileGroup' },
+  'chart/tracker': { docs: 'Tracker', site: 'scene:Tracker' },
   'code/code-block': {
     pending: ['site'],
     outOfScope: { docs: 'Markdown writes a code fence, which renders DocCodeGroup.' }
   },
-  'code/code-editor': { pending: ['docs', 'site'] },
-  'code/log-viewer': { pending: ['docs', 'site'] },
-  'code/trace': { pending: ['docs', 'site'] },
+  'code/code-editor': { outOfScope: { docs: CODE_EDITOR, site: CODE_EDITOR } },
+  'code/log-viewer': { outOfScope: { docs: LOG_VIEWER, site: LOG_VIEWER } },
+  'code/trace': { outOfScope: { docs: TRACE, site: TRACE } },
   'docs/doc-accordion': { docs: 'Accordion', outOfScope: { site: DOCS_PIECE } },
   'docs/doc-accordion-group': { docs: 'AccordionGroup', outOfScope: { site: DOCS_PIECE } },
   'docs/doc-agent-card': { pending: ['docs'], outOfScope: { site: DOCS_PIECE } },
@@ -81,12 +92,21 @@ export const CONTENT_CHANNELS = {
     outOfScope: { docs: MARKETING_PIECE }
   },
   'marketing/faq': { site: 'faq-section', pending: ['docs'] },
-  'marketing/feature-item': { site: 'capability-grid-section', outOfScope: { docs: MARKETING_PIECE } },
+  'marketing/feature-item': {
+    site: 'capability-grid-section',
+    outOfScope: { docs: MARKETING_PIECE }
+  },
   'marketing/hero': { site: 'hero-section', outOfScope: { docs: MARKETING_PIECE } },
-  'marketing/link-directory': { site: 'platform-directory-section', outOfScope: { docs: MARKETING_PIECE } },
+  'marketing/link-directory': {
+    site: 'platform-directory-section',
+    outOfScope: { docs: MARKETING_PIECE }
+  },
   'marketing/logo-wall': { site: 'logo-wall-section', outOfScope: { docs: MARKETING_PIECE } },
   'marketing/marquee': { site: 'template-gallery-section', outOfScope: { docs: MARKETING_PIECE } },
-  'marketing/media-scroll': { site: 'feature-scroll-section', outOfScope: { docs: MARKETING_PIECE } },
+  'marketing/media-scroll': {
+    site: 'feature-scroll-section',
+    outOfScope: { docs: MARKETING_PIECE }
+  },
   'marketing/media-split': { site: 'media-split-section', outOfScope: { docs: MARKETING_PIECE } },
   'marketing/media-tabs': { site: 'feature-tabs-section', outOfScope: { docs: MARKETING_PIECE } },
   'marketing/media-tile': { site: 'feature-tiles-section', outOfScope: { docs: MARKETING_PIECE } },

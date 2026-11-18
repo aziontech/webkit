@@ -7,7 +7,10 @@ unless the registry says why not. The registry is `scripts/lib/content-channels.
 its `pending` entries. Every component works from Vue today.
 
 `FlowDiagram` is wired in all three (`<FlowDiagram nodes={[…]} edges={[…]} />`, the `FlowDiagram`
-scene). Wired already: the `doc-` pieces as their tags (`<Note>`, `<Steps>`, `<CardGroup>`,
+scene). The charts are wired in all three since RV-C2-1 (lane C2): `BarList`, `Chart` (its marks
+nest as tags and as scene `children`), `DonutChart`, `GaugeChart`, `MapChart`, `SparkChart`,
+`StatTile`, `StatTileGroup` (its tiles nest) and `Tracker`. `LogViewer`, `Trace`, `CodeEditor` and
+`DataTable` are app-only, with the reason in the registry. Wired already: the `doc-` pieces as their tags (`<Note>`, `<Steps>`, `<CardGroup>`,
 `<Card>`, `<Item>`, `<AccordionGroup>`, `<Accordion>`, `<CodeGroup>`, `<Frame>`, `<Prompt>`,
 `<Update>`), the scenes `Diagram`, `Illustration` and `ConsoleMockup`, and the marketing pieces
 through their page sections.
@@ -35,20 +38,7 @@ form is a `doc-` piece).
 | `integration-card`   | content   | **missing**         | **missing**                 |
 | `key-value-list`     | content   | **missing**         | **missing**                 |
 | `plan-feature-list`  | content   | **missing**         | **missing**                 |
-| `data-table`         | data      | **missing**         | **missing**                 |
-| `bar-list`           | chart     | **missing**         | **missing**                 |
-| `chart`              | chart     | **missing**         | **missing**                 |
-| `donut-chart`        | chart     | **missing**         | **missing**                 |
-| `gauge-chart`        | chart     | **missing**         | **missing**                 |
-| `map-chart`          | chart     | **missing**         | **missing**                 |
-| `spark-chart`        | chart     | **missing**         | **missing**                 |
-| `stat-tile`          | chart     | **missing**         | **missing**                 |
-| `stat-tile-group`    | chart     | **missing**         | **missing**                 |
-| `tracker`            | chart     | **missing**         | **missing**                 |
 | `code-block`         | code      | out of scope        | **missing**                 |
-| `code-editor`        | code      | **missing**         | **missing**                 |
-| `log-viewer`         | code      | **missing**         | **missing**                 |
-| `trace`              | code      | **missing**         | **missing**                 |
 | `doc-agent-card`     | docs      | **missing**         | out of scope                |
 | `doc-call-to-action` | docs      | **missing**         | out of scope                |
 | `faq`                | marketing | **missing**         | faq-section                 |
@@ -64,12 +54,16 @@ form is a `doc-` piece).
 - **Site:** add the component to `src/assets/scene-registry.ts` (a piece a band frames) or write a
   page section (a whole band), add a `page-entry.vue` + `page-entry.json` example, and move `site`
   from `pending` in the registry.
+- **Parts that are data:** a root whose parts carry only data (`Chart` and its marks,
+  `StatTileGroup` and its tiles) also registers the parts as tags and scenes; Markdown nests the
+  part tags inside the root tag, page JSON lists them as the scene's `children`.
 
 ## Suggested order
 
-1. Charts (`chart`, `bar-list`, `donut-chart`, `stat-tile`, `stat-tile-group`) — data-only props, so
-   a tag and a scene each are one line plus an example; product pages and docs both show figures.
-2. `table` and `key-value-list` in Markdown — docs reference pages (limits, pricing, API fields).
-3. `code-block` as a scene, `quote`, `stats` and `faq` as tags — shared between blog posts and docs.
-4. The app-only viewers (`log-viewer`, `trace`, `code-editor`, `data-table`, `tracker`) — decide per
-   component whether docs or site need them; if not, mark them out of scope with the reason.
+1. `table` and `key-value-list` in Markdown — docs reference pages (limits, pricing, API fields).
+   Both are composed parts whose value is a slot (`KeyValueList.Item` holds text or components),
+   so a tag needs inline text children inside part tags (`<KeyValueListItem label="Region">US
+East</KeyValueListItem>`), which the part renderer does not read yet; a pipe table already covers
+   most docs tables. Next lane.
+2. `code-block` as a scene, `quote`, `stats` and `faq` as tags — shared between blog posts and docs.
+3. The rest of the list above, one by one.

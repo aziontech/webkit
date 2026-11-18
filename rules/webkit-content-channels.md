@@ -43,7 +43,30 @@ The catalog lists the channels a component is wired for (`channels` on its entry
   (`console-showcase-section` `scene`, `hero-section` `top` / `bottom`). Only page sections take an
   `_id`; the band gives the piece its frame, title and spacing.
 - In docs, write the tag. A tag takes data attributes only: the composed form with hand-written
-  parts is for Vue.
+  parts is for Vue. The one exception is a root whose parts are data too: a `<Chart>` takes its
+  marks as tags inside it, and a `<StatTileGroup>` its `<StatTile />` tags. In page JSON the same
+  parts are the scene's `children`:
+
+  ```mdx
+  <Chart aria-label="Requests" labels={["14:00", "14:05"]} series={[{ "id": "requests", "name": "Requests", "values": [1460, 1610] }]}>
+    <ChartAxis type="x" />
+    <ChartLine ids={["requests"]} />
+  </Chart>
+  ```
+
+  ```json
+  {
+    "component": "Chart",
+    "props": { "labels": ["14:00", "14:05"], "series": [{ "id": "requests", "name": "Requests", "values": [1460, 1610] }] },
+    "children": [
+      { "component": "ChartAxis", "props": { "type": "x" } },
+      { "component": "ChartLine", "props": { "ids": ["requests"] } }
+    ]
+  }
+  ```
+
+- Some components are app-only, and the registry says why (an editor, a live log, a run explorer,
+  the data-driven table). Show their content another way: a code fence, a `Chart`, a pipe table.
 
 ## Don't
 

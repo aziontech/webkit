@@ -3,10 +3,10 @@ name: stat-tile
 category: chart
 structure: monolithic
 status: implemented
-checksum: 0a91ca92715dd617581e1a428b5597689c8578d41a3fb0bce702a3f8664f00e5
+checksum: 541677c78f0550ebc9ede5aff1d2d8127d66b2e7edaef0a8ab03a997570278bb
 spec_version: 7
 created: 2026-10-20
-last_updated: 2026-11-16
+last_updated: 2026-11-18
 ---
 
 # StatTile — Component Spec
@@ -68,6 +68,18 @@ A KPI tile: a label, one big figure that counts up into place with an optional m
   />
 </template>
 ```
+
+**Three ways in** (decision RV-C2-1, rule `webkit-content-channels`). The same data renders from a docs page as a tag (`DocMarkdown`, braced attribute values are JSON) and from the site's page JSON as the `StatTile` scene a band draws by name (a `console-showcase-section` with `variant: "diagram"` in its `scene` slot):
+
+```mdx
+<StatTile label="Blocked threats" value={48210} delta={12.4} />
+```
+
+```json
+{ "component": "StatTile", "props": { "label": "Blocked threats", "value": 48210, "delta": 12.4 } }
+```
+
+The function props (`formatValue`) and the events stay Vue. `DocMarkdown` and the scene registry load the component as an async chunk, so neither grows unless a page uses it.
 
 ## Props
 
@@ -148,6 +160,8 @@ _No events — a tile is content; wrap it in a link or button to make it interac
 - Loading — `loading`.
 - Empty — `value` null with no delta and no trend: a dash, announced as No value, over the no-data band.
 - Variants — composite: the same figures with `variant="mono"` and `variant="sans"`; justified because the figure face is the prop and only a side-by-side row shows both.
+- Markdown — the same data as a `<StatTile>` tag rendered by `DocMarkdown`. Justified: the docs channel (RV-C2-1).
+- Page JSON — the same data as a `StatTile` scene in a `console-showcase-section` entry rendered by `SitePage`, with the JSON shown. Justified: the site channel (RV-C2-1).
 
 ## Constraints — DO NOT
 

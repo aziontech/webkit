@@ -28,7 +28,7 @@
   {
     "name": "doc-markdown",
     "path": "src/components/docs/doc-markdown/doc-markdown.vue",
-    "limit": "28.8 KB",
+    "limit": "31.2 KB",
     "entryOnly": true
   },
   {
@@ -343,7 +343,7 @@
   {
     "name": "site-page",
     "path": "src/components/marketing/site-page/site-page.vue",
-    "limit": "9.95 KB",
+    "limit": "10.25 KB",
     "entryOnly": true
   },
   {
@@ -501,7 +501,7 @@
   {
     "name": "console-showcase-section",
     "path": "src/components/section/console-showcase-section/console-showcase-section.vue",
-    "limit": "21.6 KB"
+    "limit": "21.65 KB"
   },
   {
     "name": "process-scroll-section",
@@ -550,7 +550,7 @@
   {
     "name": "feature-scroll-section",
     "path": "src/components/section/feature-scroll-section/feature-scroll-section.vue",
-    "limit": "17.35 KB",
+    "limit": "17.9 KB",
     "entryOnly": true
   },
   {
@@ -562,7 +562,7 @@
   {
     "name": "feature-widgets-section",
     "path": "src/components/section/feature-widgets-section/feature-widgets-section.vue",
-    "limit": "17.95 KB",
+    "limit": "18.1 KB",
     "entryOnly": true
   },
   {
@@ -665,13 +665,13 @@
   {
     "name": "feature-tabs-section",
     "path": "src/components/section/feature-tabs-section/feature-tabs-section.vue",
-    "limit": "54 KB",
+    "limit": "54.6 KB",
     "entryOnly": true
   },
   {
     "name": "media-split-stack-section",
     "path": "src/components/section/media-split-stack-section/media-split-stack-section.vue",
-    "limit": "15.5 KB",
+    "limit": "15.8 KB",
     "entryOnly": true
   },
   {

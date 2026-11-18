@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: e8a4e36ac68989dd046455e8d70f3aa9b70a39f4e184d7df57b9798400baca92
+checksum: 966f9c6a38e5a0290ee8a49c6cd174b01bb8717b9263ea7ffe442a632f20de72
 created: 2026-11-11
-last_updated: 2026-11-17
+last_updated: 2026-11-18
 ---
 
 # MapChart — Component Spec
@@ -63,6 +63,18 @@ Values by place on the dotted world map of `NetworkMap`: countries shaded on a f
   />
 </template>
 ```
+
+**Three ways in** (decision RV-C2-1, rule `webkit-content-channels`). The same data renders from a docs page as a tag (`DocMarkdown`, braced attribute values are JSON) and from the site's page JSON as the `MapChart` scene a band draws by name (a `console-showcase-section` with `variant: "diagram"` in its `scene` slot):
+
+```mdx
+<MapChart aria-label="Requests by country" regions={[{ "id": "US", "value": 48200 }]} />
+```
+
+```json
+{ "component": "MapChart", "props": { "regions": [{ "id": "US", "value": 48200 }] } }
+```
+
+The function props (`formatValue`) and the events stay Vue. `DocMarkdown` and the scene registry load the component as an async chunk, so neither grows unless a page uses it.
 
 ## Props
 
@@ -185,6 +197,8 @@ Values by place on the dotted world map of `NetworkMap`: countries shaded on a f
 - Points — requests by data center as bubbles.
 - View — South America with countries and bubbles.
 - States — composite: loading, empty, error and table view in one frame (the four data states, as in the chart).
+- Markdown — the same data as a `<MapChart>` tag rendered by `DocMarkdown`. Justified: the docs channel (RV-C2-1).
+- Page JSON — the same data as a `MapChart` scene in a `console-showcase-section` entry rendered by `SitePage`, with the JSON shown. Justified: the site channel (RV-C2-1).
 
 ## Constraints — DO NOT
 

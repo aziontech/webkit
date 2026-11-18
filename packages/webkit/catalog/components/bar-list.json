@@ -22,6 +22,8 @@
   "Give interactive rows a destination the user expects — a filtered view of that item — not a detail drawer of the whole list."
  ],
  "channels": [
-  "app"
+  "app",
+  "docs",
+  "site"
  ]
 }

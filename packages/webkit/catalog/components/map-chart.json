@@ -22,6 +22,8 @@
   "Give points a status color only when the color means a state; otherwise leave the series slot."
  ],
  "channels": [
-  "app"
+  "app",
+  "docs",
+  "site"
  ]
 }

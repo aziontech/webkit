@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 8
 template: 2
-checksum: c4f3adb60eb05e957e621088601bbb5d8347906fc20bb1b034d487db41c66cff
+checksum: 442d8884a4c230cbd9b5ca0e78a4eae6a63159856892654d9dba3d678ac5371c
 created: 2026-11-11
-last_updated: 2026-11-17
+last_updated: 2026-11-18
 ---
 
 # Trace — Component Spec
@@ -29,6 +29,7 @@ A span waterfall: one row per span of a run (a function invocation, a request th
 - Durations to compare across many items with no parent/child relation → use `bar-list` or `chart`.
 - Status history of a service over days → use `tracker`.
 - A hierarchy without time → use `tree`.
+- In a docs Markdown page or the site's page JSON. Trace is app-only (decision RV-C2-1, rule `webkit-content-channels`): it explores one run (expand, search, select a span for its details), so it has no `DocMarkdown` tag and no page JSON entry. A docs page or the site explains where the time went with a `FlowDiagram` or a `Chart`.
 
 ## Related
 

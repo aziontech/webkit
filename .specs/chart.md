@@ -3,11 +3,11 @@ name: chart
 category: chart
 structure: composition
 status: implemented
-checksum: e10c88b05e9fcebef1ca1ece4748a53beacb8411123dbb31c171e3c1d4c490c3
+checksum: 5f95f34b9c1c1d3b439a43d302bc6770eac7cd97c4a0e4efd2b110c2058d0946
 spec_version: 14
 template: 2
 created: 2026-10-20
-last_updated: 2026-11-17
+last_updated: 2026-11-18
 ---
 
 # Chart — Component Spec
@@ -108,6 +108,25 @@ Tree-shaking alternative — the standalone root plus only the parts a chart use
   import ChartAxis from '@aziontech/webkit/chart-axis'
 </script>
 ```
+
+**Three ways in** (decision RV-C2-1, rule `webkit-content-channels`). The same data renders from a docs page and from the site's page JSON. The marks are tags inside the `<Chart>` tag (`<ChartGrid />`, `<ChartAxis />`, `<ChartArea />`, `<ChartBar />`, `<ChartLine />`, `<ChartScatter />`, `<ChartReference />`, `<ChartCrosshair />`, `<ChartTooltip />`, `<ChartLegend />`), and the scene's `children` in page JSON; `Chart.Brush` stays Vue, because the range it selects is app state.
+
+```mdx
+<Chart aria-label="Requests" labels={["14:00", "14:05"]} series={[{ "id": "requests", "name": "Requests", "values": [1460, 1610] }]}>
+  <ChartAxis type="x" />
+  <ChartLine ids={["requests"]} />
+</Chart>
+```
+
+```json
+{
+  "component": "Chart",
+  "props": { "labels": ["14:00", "14:05"], "series": [{ "id": "requests", "name": "Requests", "values": [1460, 1610] }] },
+  "children": [{ "component": "ChartAxis", "props": { "type": "x" } }, { "component": "ChartLine", "props": { "ids": ["requests"] } }]
+}
+```
+
+The JSON is a scene a band draws by name (a `console-showcase-section` with `variant: "diagram"` in its `scene` slot). The function props (`formatValue`) and the events stay Vue. `DocMarkdown` and the scene registry load the component as an async chunk, so neither grows unless a page uses it.
 
 ## Sub-components
 
@@ -359,6 +378,8 @@ The stories share one WAF fixture so every canvas tells the same story.
 - TableView — `tableView`, the accessible twin made visible.
 
 Justification: a chart has no `type` / `size` axis; its axes are the mark form and the four mutually exclusive data states, and each state is its own story per the component-states rule.
+- Markdown — the same data as a `<Chart>` tag rendered by `DocMarkdown`. Justified: the docs channel (RV-C2-1).
+- Page JSON — the same data as a `Chart` scene in a `console-showcase-section` entry rendered by `SitePage`, with the JSON shown. Justified: the site channel (RV-C2-1).
 
 ## Constraints — DO NOT
 

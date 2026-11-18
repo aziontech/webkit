@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 11
 template: 2
-checksum: ec82d7741c5ffb21011e30d5066c49c08e87b7577aa6cf613677a8e07e42b699
+checksum: 4f13ca4def49b2d734c458fee8cbc204e7614d83afabdd323e38231db7d9d414
 created: 2026-11-11
-last_updated: 2026-11-16
+last_updated: 2026-11-18
 ---
 
 # CodeEditor — Component Spec
@@ -34,6 +34,7 @@ An editable code surface with line numbers, diagnostics and a read-only and a di
 - Free prose or a description → use `textarea`.
 - A stream of log lines → use `log-viewer`.
 - A form generated from a JSON schema → use `schema-form` (the arguments tab of a function pairs both).
+- In a docs Markdown page or the site's page JSON. CodeEditor is app-only (decision RV-C2-1, rule `webkit-content-channels`): the person edits code in it, so it has no `DocMarkdown` tag and no page JSON entry. A docs page shows code as a code fence (`DocCodeGroup`); the site uses `CodeBlock`.
 
 ## Related
 

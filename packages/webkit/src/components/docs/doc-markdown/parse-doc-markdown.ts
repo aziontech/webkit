@@ -74,7 +74,26 @@ export const DOC_MARKDOWN_BLOCK_TAGS: readonly string[] = [
   'Frame',
   'Prompt',
   'Update',
-  'FlowDiagram'
+  'FlowDiagram',
+  'BarList',
+  'Chart',
+  'ChartArea',
+  'ChartAxis',
+  'ChartBar',
+  'ChartCrosshair',
+  'ChartGrid',
+  'ChartLegend',
+  'ChartLine',
+  'ChartReference',
+  'ChartScatter',
+  'ChartTooltip',
+  'DonutChart',
+  'GaugeChart',
+  'MapChart',
+  'SparkChart',
+  'StatTileGroup',
+  'StatTile',
+  'Tracker'
 ]
 
 export const DOC_MARKDOWN_INLINE_TAGS: readonly string[] = ['Tooltip']

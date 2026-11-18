@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { type Component, computed, useAttrs } from 'vue'
+  import { type Component, computed, type FunctionalComponent, h, useAttrs } from 'vue'
 
   import { resolveScene } from '../../../assets/scene-registry'
   import Container from '../../layout/container/container.vue'
@@ -17,6 +17,8 @@
     component: string
     /** SitePageProps bound onto the scene; the slot's own props win on a clash. */
     props?: Record<string, unknown>
+    /** Scenes drawn in this scene's default slot, in order, such as a Chart's marks or a StatTileGroup's tiles. */
+    children?: SitePageScene[]
   }
 
   /** One entry of the page data. */
@@ -41,7 +43,13 @@
     values: Record<string, string>
   }
 
-  type ResolvedScene = { slot: string; component: Component; props: Record<string, unknown> }
+  type ResolvedTree = {
+    component: Component
+    props: Record<string, unknown>
+    children: ResolvedTree[]
+  }
+
+  type ResolvedScene = ResolvedTree & { slot: string }
 
   type ResolvedSection = {
     key: string
@@ -97,15 +105,36 @@
   ): ResolvedScene[] {
     const scenes: ResolvedScene[] = []
     for (const [slot, scene] of Object.entries({ ...translated, ...entry.scenes })) {
-      const component = resolveScene(scene.component)
-      if (!component) {
-        warnOnce(`scene:${scene.component}`, `no scene is registered as "${scene.component}".`)
-        continue
-      }
-      scenes.push({ slot, component, props: scene.props ?? {} })
+      const tree = resolveTree(scene)
+      if (tree) scenes.push({ slot, ...tree })
     }
     return scenes
   }
+
+  function resolveTree(scene: SitePageScene): ResolvedTree | null {
+    const component = resolveScene(scene.component)
+    if (!component) {
+      warnOnce(`scene:${scene.component}`, `no scene is registered as "${scene.component}".`)
+      return null
+    }
+    const children = (scene.children ?? []).flatMap((child) => resolveTree(child) ?? [])
+    return { component, props: scene.props ?? {}, children }
+  }
+
+  const SceneTree: FunctionalComponent<{ tree: ResolvedTree; bound?: Record<string, unknown> }> = ({
+    tree,
+    bound
+  }) =>
+    h(
+      tree.component,
+      { ...tree.props, ...bound },
+      tree.children.length
+        ? {
+            default: () =>
+              tree.children.map((child, index) => h(SceneTree, { key: index, tree: child }))
+          }
+        : undefined
+    )
 
   function resolveEntries(entries: SitePageSection[], column = false): ResolvedSection[] {
     const resolved: ResolvedSection[] = []
@@ -156,9 +185,9 @@
         v-for="scene in item.scenes"
         #[scene.slot]="slotProps"
       >
-        <component
-          :is="scene.component"
-          v-bind="{ ...scene.props, ...slotProps }"
+        <SceneTree
+          :tree="scene"
+          :bound="slotProps"
         />
       </template>
     </component>
@@ -184,9 +213,9 @@
             v-for="scene in item.scenes"
             #[scene.slot]="slotProps"
           >
-            <component
-              :is="scene.component"
-              v-bind="{ ...scene.props, ...slotProps }"
+            <SceneTree
+              :tree="scene"
+              :bound="slotProps"
             />
           </template>
         </component>

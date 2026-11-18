@@ -21,6 +21,8 @@
   "Pair it with the bar form of the same data when exact ranks matter (the console's country pie plus ordered bar)."
  ],
  "channels": [
-  "app"
+  "app",
+  "docs",
+  "site"
  ]
 }

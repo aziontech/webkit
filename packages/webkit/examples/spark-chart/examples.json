@@ -21,6 +21,17 @@
       "name": "Cards",
       "summary": "A list of marquee rows: the name, a small area spark, the current value and the signed change. The spark stays decorative because the value beside it carries the number; its color says whether the change is good for that metric, so falling threats and latency read as success.",
       "file": "cards.vue"
+    },
+    {
+      "name": "Markdown",
+      "summary": "The same data written in a docs page: `DocMarkdown` turns a `<SparkChart values={[…]} />` tag into a real `SparkChart`. The attribute values are JSON, so a docs author copies them from the props or a page entry and never imports the component.",
+      "file": "markdown.vue"
+    },
+    {
+      "name": "Page JSON",
+      "summary": "The same data in the marketing site's page JSON: `SparkChart` is a scene, so a band places it by name in its `scene` slot (here `console-showcase-section` with `variant: \"diagram\"`) and `SitePage` renders the entry with no code.",
+      "file": "page-entry.vue",
+      "json": "page-entry.json"
     }
   ]
 }

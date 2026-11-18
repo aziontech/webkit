@@ -1,6 +1,15 @@
 import { type Component, defineAsyncComponent, markRaw } from 'vue'
 
+import type { ContentSceneName } from './content-scenes'
+
 export type SceneLoader = () => Promise<{ default: Component }>
+
+const loadContentScenes = () => import('./content-scenes')
+
+export const contentScene =
+  (name: ContentSceneName): SceneLoader =>
+  () =>
+    loadContentScenes().then((module) => module.contentScenes[name]())
 
 export const sceneAssets = {
   BrandGlobeScene: () => import('./globe/brand-globe-scene.vue'),
@@ -12,6 +21,25 @@ export const sceneAssets = {
   FlowDiagram: () => import('../components/data/flow-diagram/flow-diagram.vue'),
   Illustration: () => import('../components/content/illustration/illustration.vue'),
   ConsoleMockup: () => import('../components/content/console-mockup/console-mockup.vue'),
+  BarList: contentScene('BarList'),
+  Chart: contentScene('Chart'),
+  ChartArea: contentScene('ChartArea'),
+  ChartAxis: contentScene('ChartAxis'),
+  ChartBar: contentScene('ChartBar'),
+  ChartCrosshair: contentScene('ChartCrosshair'),
+  ChartGrid: contentScene('ChartGrid'),
+  ChartLegend: contentScene('ChartLegend'),
+  ChartLine: contentScene('ChartLine'),
+  ChartReference: contentScene('ChartReference'),
+  ChartScatter: contentScene('ChartScatter'),
+  ChartTooltip: contentScene('ChartTooltip'),
+  DonutChart: contentScene('DonutChart'),
+  GaugeChart: contentScene('GaugeChart'),
+  MapChart: contentScene('MapChart'),
+  SparkChart: contentScene('SparkChart'),
+  StatTile: contentScene('StatTile'),
+  StatTileGroup: contentScene('StatTileGroup'),
+  Tracker: contentScene('Tracker'),
   RuntimeApiCloud: () => import('./scenes/runtime-api/runtime-api-cloud.vue'),
   SpinningGlobe: () => import('./globe/spinning-globe.vue')
 } satisfies Record<string, SceneLoader>
@@ -25,6 +53,8 @@ export type SceneRef = {
   component: SceneName
   /** Props bound onto the scene, such as the `name` of a `ConsoleMockup`; the section's own state props win on a clash. */
   props?: Record<string, unknown>
+  /** Scenes drawn in the scene's default slot, in order, such as the marks of a `Chart` or the tiles of a `StatTileGroup`. */
+  children?: SceneRef[]
 }
 
 const resolved = new Map<string, Component>()

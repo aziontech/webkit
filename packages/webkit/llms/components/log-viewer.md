@@ -31,6 +31,7 @@
 - Rows of structured records with columns, sorting or paging → use `table`.
 - The steps of a form or setup the person moves through (no log under each step) → use `stepper`.
 - The timed spans of one request or invocation → use `trace`.
+- In a docs Markdown page or the site's page JSON. LogViewer is app-only (decision RV-C2-1, rule `webkit-content-channels`): it views a live run log (search, level filter, follow), so it has no `DocMarkdown` tag and no page JSON entry. A docs page or the site shows sample output as a code fence or `CodeBlock`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related

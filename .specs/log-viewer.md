@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3950-34695
   node_id: 3950:34695
-checksum: b45e9624cf23e8731e1773e219f7ea6253287c55e995c6568f779b1aaf2019c7
+checksum: 9a23099f42ef6b0d25c6f6a2665e75a56e4e50e862d1da2a2b6ede7f24165813
 created: 2026-05-26
 last_updated: 2026-11-18
 ---
@@ -36,6 +36,7 @@ Use LogViewer for build, deploy or runtime log lines, and LogViewer.Steps when t
 - Rows of structured records with columns, sorting or paging → use `table`.
 - The steps of a form or setup the person moves through (no log under each step) → use `stepper`.
 - The timed spans of one request or invocation → use `trace`.
+- In a docs Markdown page or the site's page JSON. LogViewer is app-only (decision RV-C2-1, rule `webkit-content-channels`): it views a live run log (search, level filter, follow), so it has no `DocMarkdown` tag and no page JSON entry. A docs page or the site shows sample output as a code fence or `CodeBlock`.
 
 ## Related
 

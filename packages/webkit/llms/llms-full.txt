@@ -15067,7 +15067,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 </template>
 ```
 
-1 more example(s) in [components/stat-tile-group.md](components/stat-tile-group.md).
+2 more example(s) in [components/stat-tile-group.md](components/stat-tile-group.md).
 
 ---
 
@@ -15384,6 +15384,7 @@ Code content scrolls inside `@aziontech/webkit/scroll-area` (`orientation="both"
 - Free prose or a description → use `textarea`.
 - A stream of log lines → use `log-viewer`.
 - A form generated from a JSON schema → use `schema-form` (the arguments tab of a function pairs both).
+- In a docs Markdown page or the site's page JSON. CodeEditor is app-only (decision RV-C2-1, rule `webkit-content-channels`): the person edits code in it, so it has no `DocMarkdown` tag and no page JSON entry. A docs page shows code as a code fence (`DocCodeGroup`); the site uses `CodeBlock`.
 
 ## Related
 
@@ -15533,6 +15534,7 @@ _none_ — monolithic. The gutter, the fallback textarea, the Monaco host, the t
 - Rows of structured records with columns, sorting or paging → use `table`.
 - The steps of a form or setup the person moves through (no log under each step) → use `stepper`.
 - The timed spans of one request or invocation → use `trace`.
+- In a docs Markdown page or the site's page JSON. LogViewer is app-only (decision RV-C2-1, rule `webkit-content-channels`): it views a live run log (search, level filter, follow), so it has no `DocMarkdown` tag and no page JSON entry. A docs page or the site shows sample output as a code fence or `CodeBlock`.
 
 ## Related
 
@@ -15705,6 +15707,7 @@ LogViewer ships its sub-components attached to the root (`LogViewer.Header`, `Lo
 - Durations to compare across many items with no parent/child relation → use `bar-list` or `chart`.
 - Status history of a service over days → use `tracker`.
 - A hierarchy without time → use `tree`.
+- In a docs Markdown page or the site's page JSON. Trace is app-only (decision RV-C2-1, rule `webkit-content-channels`): it explores one run (expand, search, select a span for its details), so it has no `DocMarkdown` tag and no page JSON entry. A docs page or the site explains where the time went with a `FlowDiagram` or a `Chart`.
 
 ## Related
 
@@ -19697,6 +19700,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
 - A feature-by-feature comparison of Azion with a competitor → use `competitor-comparison-section`.
 - Rows of mixed content (media, title, description, actions) that do not share columns → use `item`.
 - The same records as a grid of cards → use `card-list` (same collection, card layout).
+- In a docs Markdown page or the site's page JSON. DataTable is app-only (decision RV-C2-1, rule `webkit-content-channels`): it drives app state (sorting, selection, paging, filters) through its engine, so it has no `DocMarkdown` tag and no page JSON entry. A docs page writes a Markdown pipe table; the site uses `listing-table-section`.
 
 ## Related
 

@@ -1,0 +1,76 @@
+{
+  "_id": "console-showcase-section",
+  "props": {
+    "variant": "diagram",
+    "eyebrow": "Firewall",
+    "title": "Watch every threat as it happens",
+    "description": "Allowed, blocked and threat requests, every five minutes."
+  },
+  "scenes": {
+    "scene": {
+      "component": "Chart",
+      "props": {
+        "ariaLabel": "Threats vs requests",
+        "labels": ["13:30", "13:35", "13:40", "13:45", "13:50", "13:55", "14:00"],
+        "series": [
+          {
+            "id": "allowed",
+            "name": "WAF requests allowed",
+            "values": [1460, 1610, 1580, 1720, 1690, 1810, 1760]
+          },
+          {
+            "id": "blocked",
+            "name": "WAF requests blocked",
+            "values": [430, 610, 580, 540, 690, 650, 720]
+          },
+          {
+            "id": "threat",
+            "name": "WAF requests threat",
+            "values": [90, 140, 130, 115, 160, 150, 170]
+          }
+        ]
+      },
+      "children": [
+        {
+          "component": "ChartGrid"
+        },
+        {
+          "component": "ChartAxis",
+          "props": {
+            "type": "y"
+          }
+        },
+        {
+          "component": "ChartAxis",
+          "props": {
+            "type": "x"
+          }
+        },
+        {
+          "component": "ChartArea",
+          "props": {
+            "ids": ["allowed"]
+          }
+        },
+        {
+          "component": "ChartLine",
+          "props": {
+            "ids": ["blocked", "threat"]
+          }
+        },
+        {
+          "component": "ChartCrosshair"
+        },
+        {
+          "component": "ChartTooltip"
+        },
+        {
+          "component": "ChartLegend",
+          "props": {
+            "total": true
+          }
+        }
+      ]
+    }
+  }
+}
