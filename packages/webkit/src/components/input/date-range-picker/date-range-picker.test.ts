@@ -1,3 +1,5 @@
+import '../../../test/reflow.css'
+
 import userEvent from '@testing-library/user-event'
 import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
@@ -5,6 +7,7 @@ import { defineComponent, h, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/date-range-picker/default.vue'
 import Disabled from '../../../../examples/date-range-picker/disabled.vue'
+import RelativeOnly from '../../../../examples/date-range-picker/relative-only.vue'
 import TimeZone from '../../../../examples/date-range-picker/time-zone.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
@@ -369,6 +372,80 @@ describe('DateRangePicker', () => {
     const view = render(DateRangePicker, { props: { disabled: true } })
     await fireEvent.click(view.getByTestId(`${TEST_ID}__trigger`))
     expect(panel()).toBeNull()
+  })
+
+  describe('quick ranges layout', () => {
+    const textBox = (el: Element): DOMRect => {
+      const range = document.createRange()
+      range.selectNodeContents(el)
+      return range.getBoundingClientRect()
+    }
+
+    const edges = (popover: HTMLElement, dir: 'ltr' | 'rtl') => {
+      const legend = within(popover).getByTestId(`${TEST_ID}__legend`)
+      const label = within(popover).getAllByTestId(`${TEST_ID}__option`)[0].querySelector('span')
+      const heading = textBox(legend)
+      const option = textBox(label as HTMLElement)
+      const panelBox = popover.getBoundingClientRect()
+      return {
+        heading: dir === 'rtl' ? heading.right : heading.left,
+        option: dir === 'rtl' ? option.right : option.left,
+        headingInset: heading.top - panelBox.top
+      }
+    }
+
+    it.each([
+      ['relative-only', RelativeOnly],
+      ['default', Default]
+    ])('starts the heading and the options on one inline edge (%s)', async (_name, example) => {
+      const view = render(example)
+      const popover = await open(view.getByTestId)
+      const { heading, option, headingInset } = edges(popover, 'ltr')
+      expect(Math.abs(heading - option)).toBeLessThanOrEqual(1)
+      expect(headingInset).toBeGreaterThanOrEqual(4)
+      expect(
+        within(popover)
+          .getByRole('group', { name: 'Quick ranges' })
+          .contains(popover.querySelector('input[type="radio"][name$="-relative"]'))
+      ).toBe(true)
+    })
+
+    it('keeps the heading and the options on one inline edge right-to-left', async () => {
+      const Host = defineComponent({
+        setup: () => () =>
+          h(
+            ConfigProvider,
+            { dir: 'rtl' },
+            {
+              default: () =>
+                h(DateRangePicker, {
+                  modelValue: { type: 'relative', amount: 1, unit: 'hour', key: 'last-1-hour' },
+                  rangeSelectorMode: 'relative-only',
+                  now: NOW
+                })
+            }
+          )
+      })
+      const view = render(Host)
+      const popover = await open(view.getByTestId)
+      const { heading, option } = edges(popover, 'rtl')
+      expect(Math.abs(heading - option)).toBeLessThanOrEqual(1)
+    })
+
+    it('opens with the check and the focus on the range the trigger shows', async () => {
+      const view = render(RelativeOnly)
+      const trigger = view.getByTestId(`${TEST_ID}__trigger`)
+      expect(trigger.textContent).toContain('Last 24 hours')
+      const popover = await open(view.getByTestId)
+      const checked = within(popover)
+        .getAllByTestId(`${TEST_ID}__option`)
+        .filter((option) => option.hasAttribute('data-selected'))
+      expect(checked).toHaveLength(1)
+      expect(checked[0].textContent?.trim()).toBe('Last 24 hours')
+      const radio = within(popover).getByRole('radio', { name: 'Last 24 hours' })
+      expect((radio as HTMLInputElement).checked).toBe(true)
+      await waitFor(() => expect(document.activeElement).toBe(radio))
+    })
   })
 
   it('has no axe violations closed and open', async () => {

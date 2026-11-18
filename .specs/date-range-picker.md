@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 8
 template: 2
-checksum: 008df40d2c8aa0356b69ded71ad1a862bd787040a188249726cdaa24f25dafa0
+checksum: 97e7591e37826644d50a1e3b4a79a3bfffe70190440a5f84d4b20298f71c5ee5
 created: 2026-11-11
 last_updated: 2026-11-17
 ---
@@ -153,6 +153,8 @@ _none_ — the trigger, the panel and its two tabs are fixed parts.
 - Keyboard map: `Enter`/`Space` on the trigger opens the panel and the focus trap moves into it; `Tab` cycles inside the panel; the range type is a `ToggleGroup` (arrow keys); the quick ranges are native radios (`ArrowUp`/`ArrowDown` move and select); the grid keeps the `date-picker` keyboard map; `Escape` closes without committing and returns focus to the trigger.
 - ARIA: the trigger has `aria-haspopup="dialog"`, `aria-expanded` and a name that starts with the picker's label and contains the visible range (inside a `Field` with no `ariaLabel`, the Field label names it and the trigger also carries the Field's `aria-describedby` and `aria-invalid`); the panel is a named `dialog`; the quick ranges are a `fieldset` with a `legend`; the custom duration and unit have visible labels; the error is `role="alert"` and described from the duration field; Previous and Next are named buttons.
 - Targets: options are 32 px high (44 px on `pointer: coarse`).
+- Quick ranges layout: the list follows the `select` group rhythm — the list is inset `var(--spacing-2xs)` inline and `var(--spacing-xs)` block, the `legend` and every option are padded `var(--spacing-xs)` inline and `var(--spacing-2xs)` block, so the heading, the option labels and the custom duration fields start on one inline edge in both directions; options stack with no gap, ring inset on focus, and show the check in `var(--text-default)`.
+- Initial focus: with `rangeSelectorMode="relative-only"` (no range-type toggle) the focus trap lands on the checked quick range, the one the trigger shows.
 - Contrast ≥4.5:1 from the semantic text tokens.
 
 ## Internationalization
