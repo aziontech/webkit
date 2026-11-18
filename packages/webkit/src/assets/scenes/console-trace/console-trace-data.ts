@@ -122,7 +122,7 @@ export const CONSOLE_TRACE_PATH: ConsoleTracePathNode[] = [
     severity: 'success',
     fields: [
       { label: 'Address', value: 'storefront-prod.azion.app' },
-      { label: 'Edge location', value: 'SFO · San Francisco' }
+      { label: 'Data center', value: 'SFO · San Francisco' }
     ]
   },
   {

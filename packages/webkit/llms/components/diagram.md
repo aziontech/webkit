@@ -27,7 +27,7 @@
 ## Don’t
 
 - For decorative product art → use `illustration`.
-- For a world map of points of presence → use `network-map`.
+- For a world map of data centers → use `network-map`.
 - For a sequence of steps the reader follows in order → use `stepper` or an ordered list.
 - For live data or anything the reader operates — a diagram is a figure, not a control.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.

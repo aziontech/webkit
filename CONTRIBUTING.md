@@ -189,7 +189,9 @@ pnpm --filter @aziontech/webkit run gates -- --only naming,catalog --bail
 It runs `check:catalog`, `check:naming`, `check:marketing-inventory`, `check:blocks`, `check:cited-names`,
 `check:spec-status` (no draft spec), `check:spec-template` (template-2 sections), `check:authoring`,
 `check:authoring-docs`, `check:tests`, `check:size` (the bundle budget, about 15 s), the hook tests and
-`test:toolkit`. The `toolkit` job of `.github/workflows/governance.yml` runs the same commands on
+`test:toolkit` (which also builds the icon font and fails when an official Azion product or Solution,
+listed in `test/catalog/azion-products.json` and `azion-solutions.json`, has no `az az-<name>` icon).
+The `toolkit` job of `.github/workflows/governance.yml` runs the same commands on
 **every** PR, except `check:size`, which runs in the `build` job; the lint, type, size, Vitest browser
 (including `src/test/copyable-sfcs.test.ts`, which mounts every block and example) jobs run
 when `packages/webkit` changes; the docs/demos build and the styled visual job run when

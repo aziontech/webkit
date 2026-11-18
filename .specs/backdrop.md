@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: 2fc84d04815dca39c05fe8b828dd71b17326fd00cc8edeafe1a4c4f6e1b24f75
+checksum: 25382bb3988939d4859248491582c675eec15f1313d146218aa13b900aff2b06
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -14,7 +14,7 @@ last_updated: 2026-11-15
 
 ## Purpose
 
-The decorative backdrop a site, hub or docs band stands on, for a `Hero` `background` slot or any band with `relative overflow-hidden`: `globe` hangs half a globe past the page's inline-end rule over the dot lattice, `map` insets the world map beside the copy, `network` lays the map full bleed with its PoPs lit, the sample's `MapMesh` traffic crossing between them (`NetworkMap` `traffic`: links and packets, the links alone as the still frame under reduced motion) and a scrim over the copy column. From the design sample's `shared/ui/banners` (GlobeBanner, MapBanner, NetworkBanner), drawn with WebKit's own `SpinningGlobe` and `NetworkMap` so there is one map and one globe in the system. The inventory's "`Banner` `art` variants" became this sibling component, `backdrop`: `Banner` is an announcement band with its own surfaces, and a backdrop layer is a different thing.
+The decorative backdrop a site, hub or docs band stands on, for a `Hero` `background` slot or any band with `relative overflow-hidden`: `globe` hangs half a globe past the page's inline-end rule over the dot lattice, `map` insets the world map beside the copy, `network` lays the map full bleed with its data centers lit, the sample's `MapMesh` traffic crossing between them (`NetworkMap` `traffic`: links and packets, the links alone as the still frame under reduced motion) and a scrim over the copy column. From the design sample's `shared/ui/banners` (GlobeBanner, MapBanner, NetworkBanner), drawn with WebKit's own `SpinningGlobe` and `NetworkMap` so there is one map and one globe in the system. The inventory's "`Banner` `art` variants" became this sibling component, `backdrop`: `Banner` is an announcement band with its own surfaces, and a backdrop layer is a different thing.
 
 ## When to use
 
@@ -62,10 +62,10 @@ The decorative backdrop a site, hub or docs band stands on, for a `Hero` `backgr
 
 ## Props
 
-| Prop       | Type              | Default | Required | JSDoc                                                                                 |
-| ---------- | ----------------- | ------- | -------- | ------------------------------------------------------------------------------------- |
-| `variant`  | `BackdropVariant` | `'map'` | false    | Which backdrop to draw: `globe`, `map` or `network`.                                  |
-| `animated` | `boolean`         | `true`  | false    | Spins the globe or pulses the PoPs; a still frame when false or under reduced motion. |
+| Prop       | Type              | Default | Required | JSDoc                                                                                         |
+| ---------- | ----------------- | ------- | -------- | --------------------------------------------------------------------------------------------- |
+| `variant`  | `BackdropVariant` | `'map'` | false    | Which backdrop to draw: `globe`, `map` or `network`.                                          |
+| `animated` | `boolean`         | `true`  | false    | Spins the globe or pulses the data centers; a still frame when false or under reduced motion. |
 
 ## Events
 
@@ -81,7 +81,7 @@ The decorative backdrop a site, hub or docs band stands on, for a `Hero` `backgr
 
 ## Motion & Animations
 
-From `SpinningGlobe` (rotation, stopped under reduced motion) and `NetworkMap` (its own PoP pulse, stopped under reduced motion).
+From `SpinningGlobe` (rotation, stopped under reduced motion) and `NetworkMap` (its own data center pulse, stopped under reduced motion).
 
 ## Tokens
 

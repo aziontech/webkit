@@ -7,7 +7,7 @@
   <CallToAction
     variant="announcement"
     eyebrow="Edge Runtime"
-    title="WebAssembly now runs in every edge location."
+    title="WebAssembly now runs in every data center."
   >
     Rolling out to every account through October —
     <a

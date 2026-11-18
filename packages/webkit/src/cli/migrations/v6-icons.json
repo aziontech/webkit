@@ -110,6 +110,8 @@
     "ai-edge-kv": "az-kv-store",
     "ai-edge-sql": "az-sql-database",
     "ai-edge-storage": "az-object-storage",
+    "ai-edge-orchestrator": "az-orchestrator",
+    "ai-lora": "az-lora-fine-tune",
     "ai-eject": "az-arrow-up-from-line",
     "ai-fast-backward": "az-skip-back",
     "ai-fast-forward": "az-skip-forward",

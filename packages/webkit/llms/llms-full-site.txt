@@ -2371,7 +2371,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
       <SectionModule
         :divided="false"
         title="Deploy from the CLI or from Git"
-        description="Push a change and it goes live on every edge location in seconds."
+        description="Push a change and it goes live in every data center in seconds."
       />
     </SectionContainer>
   </SiteLayout>
@@ -2386,7 +2386,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 # Backdrop
 
-> The decorative backdrop a site, hub or docs band stands on, for a `Hero` `background` slot or any band with `relative overflow-hidden`: `globe` hangs half a globe past the page's inline-end rule over the dot lattice, `map` insets the world map beside the copy, `network` lays the map full bleed with its PoPs lit, the sample's `MapMesh` traffic crossing between them (`NetworkMap` `traffic`: links and packets, the links alone as the still frame under reduced motion) and a scrim over the copy column. From the design sample's `shared/ui/banners` (GlobeBanner, MapBanner, NetworkBanner), drawn with WebKit's own `SpinningGlobe` and `NetworkMap` so there is one map and one globe in the system. The inventory's "`Banner` `art` variants" became this sibling component, `backdrop`: `Banner` is an announcement band with its own surfaces, and a backdrop layer is a different thing.
+> The decorative backdrop a site, hub or docs band stands on, for a `Hero` `background` slot or any band with `relative overflow-hidden`: `globe` hangs half a globe past the page's inline-end rule over the dot lattice, `map` insets the world map beside the copy, `network` lays the map full bleed with its data centers lit, the sample's `MapMesh` traffic crossing between them (`NetworkMap` `traffic`: links and packets, the links alone as the still frame under reduced motion) and a scrim over the copy column. From the design sample's `shared/ui/banners` (GlobeBanner, MapBanner, NetworkBanner), drawn with WebKit's own `SpinningGlobe` and `NetworkMap` so there is one map and one globe in the system. The inventory's "`Banner` `art` variants" became this sibling component, `backdrop`: `Banner` is an announcement band with its own surfaces, and a backdrop layer is a different thing.
 
 - Import: `import Backdrop from '@aziontech/webkit/backdrop'`
 - Category: marketing · Surface: site · Structure: monolithic
@@ -2418,7 +2418,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `variant` | `BackdropVariant` | `'map'` | false | Which backdrop to draw: `globe`, `map` or `network`. |
-| `animated` | `boolean` | `true` | false | Spins the globe or pulses the PoPs; a still frame when false or under reduced motion. |
+| `animated` | `boolean` | `true` | false | Spins the globe or pulses the data centers; a still frame when false or under reduced motion. |
 
 ## States
 
@@ -3025,7 +3025,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 ## Don’t
 
 - For decorative product art → use `illustration`.
-- For a world map of points of presence → use `network-map`.
+- For a world map of data centers → use `network-map`.
 - For a sequence of steps the reader follows in order → use `stepper` or an ordered list.
 - For live data or anything the reader operates — a diagram is a figure, not a control.
 
@@ -3658,7 +3658,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
         href="/functions"
       />
       <LinkDirectoryItem
-        icon="az az-edge-orchestrator"
+        icon="az az-rules-engine"
         title="Rules Engine"
         description="Automate request handling with programmable rules"
         href="/rules-engine"
@@ -5383,7 +5383,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 # Stats
 
-> A band of headline figures — throughput, uptime, points of presence — set in the display face at big-number scale, each in its own cell of a hairline `card-grid` with a short caption underneath. It is the proof band of a marketing page: the one place a page states its numbers, between a `section-title` and the section body.
+> A band of headline figures — throughput, uptime, data centers — set in the display face at big-number scale, each in its own cell of a hairline `card-grid` with a short caption underneath. It is the proof band of a marketing page: the one place a page states its numbers, between a `section-title` and the section body.
 
 - Import: `import Stats from '@aziontech/webkit/stats'`
 - Category: marketing · Surface: site · Structure: monolithic
@@ -5455,7 +5455,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 <template>
   <Stats
     :items="[
-      { value: '120', suffix: '+', label: 'Points of presence' },
+      { value: '120', suffix: '+', label: 'Data centers' },
       { value: '99.99', suffix: '%', label: 'Availability' },
       { prefix: '<', value: '15', suffix: 'ms', label: 'Median latency' },
       { value: '4.5', suffix: 'Tbps', label: 'Network capacity' }

@@ -203,7 +203,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [Item](components/item.md): Use Item rows for a short list of mixed rows (title, description, actions) that do not share columns; read-only label/value facts about one resource are KeyValueList, records compared across columns are a Table, and w…
 - [Kbd](components/kbd.md): Kbd renders keyboard input — a single key or a shortcut combination — as a compact, non-interactive keycap.
 - [KeyValueList](components/key-value-list.md): Use KeyValueList to show read-only label/value facts about one resource, including its tags; rows with their own actions are Item rows.
-- [NetworkMap](components/network-map.md): A decorative, full-bleed layer that paints the dotted world map with Azion's PoPs lit in the brand accent.
+- [NetworkMap](components/network-map.md): A decorative, full-bleed layer that paints the dotted world map with Azion's data centers lit in the brand accent.
 - [OverflowCount](components/overflow-count.md): Use OverflowCount for the '+N' that opens the hidden items of a truncated list; a plain number attached to something else is a Badge.
 - [PaymentBrand](components/payment-brand.md): The card-brand plate shown beside a payment card: a small bordered plate with the network's mark (Visa, Mastercard, American Express, Diners Club, JCB, Discover, Elo, Hipercard, UnionPay) drawn in one colour in theme…
 - [PlanFeatureList](components/plan-feature-list.md): Use PlanFeatureList only for what a plan includes; any other list of rows is Item rows, and facts about one resource are KeyValueList.
@@ -342,7 +342,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [SectionStack](components/section-stack.md): A run of framed bands that follow one another down the page, each one drawn as two registration frames — its left half and its right half — sharing a hairline with the next.
 - [SectionTitle](components/section-title.md): The framed header row that opens a page section: an optional overline, the section's `h2`, an optional description and an optional row of actions, held inside a registration frame whose bottom rule is what divides the…
 - [SitePage](components/site-page.md): The page renderer of the marketing site: it takes a page as data — the page JSON `{ hero, sections }` whose entries are `{ _id, props, scenes?, gap?, submission?
-- [Stats](components/stats.md): A band of headline figures — throughput, uptime, points of presence — set in the display face at big-number scale, each in its own cell of a hairline `card-grid` with a short caption underneath.
+- [Stats](components/stats.md): A band of headline figures — throughput, uptime, data centers — set in the display face at big-number scale, each in its own cell of a hairline `card-grid` with a short caption underneath.
 - [StickyStack](components/sticky-stack.md): A band that pins to the viewport and is read by scrolling through it: a stack of claims on one side, one piece of media on the other, and the scroll position — not a pointer — deciding which claim is open.
 - [Texture](components/texture.md): The one decorative surface every band in the system is painted on: a full-bleed, non-interactive layer that tiles a texture behind whatever sits above it.
 

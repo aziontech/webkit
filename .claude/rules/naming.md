@@ -392,7 +392,11 @@ The class is `az az-<name>`; the colour set is `az-color az-<name>` (owner, 2026
 (`packages/icons/src/svg-raw/az`, colour set `az-color`, documented one by one in
 `packages/icons/src/icons.json`): interface glyphs are Lucide-style words, an Azion product icon
 is the product's name as WebKit spells it (`functions`, `sql-database`; `edge-` only for Edge DNS,
-Edge Pulse and Edge Orchestrator), and brands are spelled out.
+Edge Pulse and the Orchestrator features Edge Nodes, Edge Services and Edge Libraries), and brands
+are spelled out. Every official Azion product and Solution has an icon: the lists are
+`packages/webkit/test/catalog/azion-products.json` and `azion-solutions.json`, copied from
+azioncorp's `product-naming.md` and `solutions.md`, and the `toolkit` CI job fails when one has no
+SVG, no `icons.json` entry or no glyph in the built font.
 
 | ✅                   | ❌                                      |
 | -------------------- | --------------------------------------- |

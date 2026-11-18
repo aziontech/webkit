@@ -6,7 +6,7 @@
   <div class="flex w-full max-w-(--container-3xl) flex-col gap-(--spacing-sm)">
     <ToolApproval
       title="Allow `purge_urls`?"
-      description="Purges https://www.example.com/styles.css from every edge location."
+      description="Purges https://www.example.com/styles.css from every data center."
       status="approved"
     />
     <ToolApproval

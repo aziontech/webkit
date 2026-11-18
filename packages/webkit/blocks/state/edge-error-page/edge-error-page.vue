@@ -28,7 +28,7 @@
   export interface EdgeErrorPagePath {
     /** The visitor's browser. */
     visitor: EdgeErrorPageHopState
-    /** The Azion location that answered. */
+    /** The Azion data center that answered. */
     azion: EdgeErrorPageHopState
     /** The site's application, on Azion's infrastructure or on the site's own servers. */
     application: EdgeErrorPageHopState
@@ -51,7 +51,7 @@
     requestId?: string
     /** When the request was answered, as an ISO string. */
     time?: string
-    /** The code of the Azion location that answered (IAD). */
+    /** The code of the Azion data center that answered (IAD). */
     location?: string
     /** The state of each hop of the request path. */
     path?: EdgeErrorPagePath
@@ -100,7 +100,7 @@
       type: 'Azion',
       icon: 'az az-azion',
       name: props.location,
-      message: 'The Azion location that received your request and answered with this page.',
+      message: 'The Azion data center that received your request and answered with this page.',
       ...props.path.azion
     },
     {
@@ -242,7 +242,7 @@
               format="utc"
             />
           </KeyValueList.Item>
-          <KeyValueList.Item label="Azion location">{{ location }}</KeyValueList.Item>
+          <KeyValueList.Item label="Data center">{{ location }}</KeyValueList.Item>
           <KeyValueList.Item label="Host">
             <bdi>{{ host }}</bdi>
           </KeyValueList.Item>

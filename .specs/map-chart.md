@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: 68b02348ee5be7ad8c2f880ad56a0144884219a51f515986193ccd1d5ff6ecd9
+checksum: e8a4e36ac68989dd046455e8d70f3aa9b70a39f4e184d7df57b9798400baca92
 created: 2026-11-11
 last_updated: 2026-11-17
 ---
@@ -19,7 +19,7 @@ Values by place on the dotted world map of `NetworkMap`: countries shaded on a f
 ## When to use
 
 - Requests, threats or bandwidth by country (Real-Time Metrics map card).
-- Traffic by point of presence or by city, as bubbles.
+- Traffic by data center or by city, as bubbles.
 - A regional view of either, framed with `view` (for example `south-america`).
 
 ## When NOT to use
@@ -182,7 +182,7 @@ Values by place on the dotted world map of `NetworkMap`: countries shaded on a f
 ## Examples
 
 - Default — requests by country.
-- Points — requests by point of presence as bubbles.
+- Points — requests by data center as bubbles.
 - View — South America with countries and bubbles.
 - States — composite: loading, empty, error and table view in one frame (the four data states, as in the chart).
 

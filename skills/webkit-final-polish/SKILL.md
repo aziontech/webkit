@@ -63,7 +63,7 @@ Keep it inside the register:
 - **Token-driven motion only** — a `transform`/`opacity` transition on the right curve (values per
   `/webkit-motion-polish`). No new dependency, no confetti, no component-local `@keyframes`.
 - **Copy is the cheapest delight** — product-specific and technical. Say what the product actually did
-  ("Deployed to 24 edge locations"), never generic filler ("All done! 🎉") or AI-slop loading lines.
+  ("Deployed to 24 data centers"), never generic filler ("All done! 🎉") or AI-slop loading lines.
 - **Never block** — each moment is `< 1s`, skippable, and carries a `motion-reduce:*` escape; it
   amplifies the result, never gates or obscures it.
 - **Nothing playful on a critical error path** — be calm and clear, not cute.

@@ -7,8 +7,8 @@
 ## How the icons are organised
 
 - **Azion** (66) — Everything that is Azion's own: its products, the parts inside them, the platform, its solutions and its services.
-  - Products (33) — One icon per Azion product, named after the product as WebKit and the console name it.
-  - Product features (8) — A part that lives inside a product, such as Domains in Workloads or Edge Nodes in Edge Orchestrator. The entry names its product.
+  - Products (35) — One icon per Azion product, named after the product as WebKit and the console name it.
+  - Product features (6) — A part that lives inside a product, such as Domains in Workloads or Edge Nodes in Orchestrator. The entry names its product.
   - Platform (9) — The Azion brand, its tools (CLI, API, Ask Azion) and the platform pillars.
   - Solutions (8) — The Azion Solutions, one icon each: the five By Need Solutions and the three By Industry Solutions, named after the Solution's short name.
   - Services (8) — Support plans and professional services.
@@ -56,7 +56,7 @@ One icon per Azion product, named after the product as WebKit and the console na
 | `az az-data-stream` | Data Stream | Data Stream | A wave line |  |
 | `az az-durable-objects` | Durable Objects | Durable Objects | A cube inside a focus frame |  |
 | `az az-edge-dns` | Edge DNS | Edge DNS | Three connected boxes in a tree |  |
-| `az az-edge-orchestrator` | Edge Orchestrator | Edge Orchestrator | Two boxes joined by a path |  |
+| `az az-orchestrator` | Orchestrator | Orchestrator | Two boxes joined by a path |  |
 | `az az-edge-pulse` | Edge Pulse | Edge Pulse | A heartbeat line |  |
 | `az az-firewall` | Firewall | Firewall | A brick wall with a flame |  |
 | `az az-functions` | Functions | Functions | The letter f in parentheses |  |
@@ -78,19 +78,19 @@ One icon per Azion product, named after the product as WebKit and the console na
 | `az az-network-shield` | Network Shield | Network Shield | A shield with a list inside |  |
 | `az az-ddos-protection` | DDoS Protection | DDoS Protection | Flood lines held off by a shield |  |
 | `az az-secure-internet-access` | Secure Internet Access | Secure Internet Access | A globe with a padlock |  |
+| `az az-lora-fine-tune` | LoRA Fine-Tune | LoRA Fine-Tune | Two sliders and a third whose knob is a sparkle |  |
+| `az az-origin-shield` | Origin Shield | Origin Shield | A server with a shield in its lower corner |  |
 
 ### Azion · Product features
 
-A part that lives inside a product, such as Domains in Workloads or Edge Nodes in Edge Orchestrator. The entry names its product.
+A part that lives inside a product, such as Domains in Workloads or Edge Nodes in Orchestrator. The entry names its product.
 
 | Class | Product | Stands for | Shows | Notes |
 | --- | --- | --- | --- | --- |
 | `az az-domains` | Workloads | Domains (inside Workloads) | A globe |  |
-| `az az-edge-libraries` | Edge Orchestrator | Edge Libraries, where Edge Orchestrator keeps the services it can install | Books on a shelf |  |
-| `az az-edge-nodes` | Edge Orchestrator | Edge Nodes, the servers Edge Orchestrator manages | Two server racks |  |
-| `az az-edge-services` | Edge Orchestrator | Edge Services, the services Edge Orchestrator installs on an edge node | Four squares in a grid |  |
-| `az az-lora` | AI Inference | LoRA adapters for AI Inference | Three sliders |  |
-| `az az-origin-shield` | Connectors | Origin Shield (Connectors feature) | A shield with a map pin |  |
+| `az az-edge-libraries` | Orchestrator | Edge Libraries, where Orchestrator keeps the services it can install | Books on a shelf |  |
+| `az az-edge-nodes` | Orchestrator | Edge Nodes, the servers Orchestrator manages | Two server racks |  |
+| `az az-edge-services` | Orchestrator | Edge Services, the services Orchestrator installs on an edge node | Four squares in a grid |  |
 | `az az-rules-engine` | Applications | Rules Engine (part of Applications) | A box with a path and a lightning bolt |  |
 | `az az-tiered-cache` | Cache | Tiered Cache (Cache feature) | Three stacked tiers, narrowest on top |  |
 
@@ -705,6 +705,7 @@ Until 6.0 the classes were `ai ai-<name>`, `ai-cor ai-<name>` and PrimeIcons `pi
 | `ai ai-app-accelerator` | `az az-application-accelerator` | Product name is Application Accelerator, not "App". |
 | `ai ai-edge-application` | `az az-applications` | Old name Edge Application. |
 | `ai ai-edge-connectors` | `az az-connectors` | Old name Edge Connectors. |
+| `ai ai-edge-orchestrator` | `az az-orchestrator` | Edge Orchestrator was renamed Orchestrator in the Azion product catalog. |
 | `ai ai-edge-firewall` | `az az-firewall` | Old name Edge Firewall. |
 | `ai ai-edge-functions` | `az az-functions` | Old name Edge Functions. |
 | `ai ai-edge-kv` | `az az-kv-store` | Old name Edge KV. |
@@ -820,5 +821,6 @@ Until 6.0 the classes were `ai ai-<name>`, `ai-cor ai-<name>` and PrimeIcons `pi
 | `ai-cor ai-js` | `az-color az-javascript` | Spelled out, like typescript. |
 | `ai-cor ai-ts` | `az-color az-typescript` | Spelled out, so search finds it. |
 | `ai-cor ai-x` | `az-color az-x-brand` |  |
+| `ai ai-lora` | `az az-lora-fine-tune` | LoRA Fine-Tune is a Build product in the Azion product catalog, no longer a part of AI Inference. |
 
 PrimeIcons: 87 `pi pi-<name>` classes map to an `az` icon; each entry lists its old class under `legacy` in `src/icons.json`.

@@ -14,6 +14,6 @@
 <template>
   <MapChart
     :points="points"
-    aria-label="Requests by point of presence"
+    aria-label="Requests by data center"
   />
 </template>

@@ -4,7 +4,7 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: a8ddb9634d369dc3db46708d17fde283365b4671c2fd5b6573a9dca4d0dda93a
+checksum: cd6db1513af4263eba86e9905ffcd30baa836d22eafedd68fff417f55f194124
 created: 2026-09-26
 last_updated: 2026-11-15
 ---
@@ -13,14 +13,14 @@ last_updated: 2026-11-15
 
 ## Purpose
 
-A decorative, full-bleed layer that paints the dotted world map with Azion's PoPs lit in the brand accent. It is a material — it takes no content and claims no space — but unlike a static illustration it is tuned by the consumer (region, PoP density, landmass opacity, static or animated) to sit behind a band's copy.
+A decorative, full-bleed layer that paints the dotted world map with Azion's data centers lit in the brand accent. It is a material — it takes no content and claims no space — but unlike a static illustration it is tuned by the consumer (region, data center density, landmass opacity, static or animated) to sit behind a band's copy.
 
 ## When to use
 
 - Use NetworkMap as a decorative world-map backdrop; for data by location use MapChart.
 - As the backdrop of a band whose subject is the network (reach, data centers, latency, resilience), composed as a sibling under the band's copy inside a positioned, clipping ancestor.
-- When a band is about one part of the network, so only that region's PoPs should light (`region`) while the whole world stays drawn.
-- When the same artwork has to read with more or fewer PoPs lit, or with none at all (`density="none"`), from one component instead of separate exports.
+- When a band is about one part of the network, so only that region's data centers should light (`region`) while the whole world stays drawn.
+- When the same artwork has to read with more or fewer data centers lit, or with none at all (`density="none"`), from one component instead of separate exports.
 
 ## When NOT to use
 
@@ -36,13 +36,13 @@ A decorative, full-bleed layer that paints the dotted world map with Azion's PoP
 - Give the layer a positioned ancestor (`relative overflow-hidden`); it fills that box and nothing else.
 - Never offset or resize the layer with utilities (`left-*`, `w-*`, `inset-*`). It always fills its positioned ancestor, and `position` + `fade` place the map inside that box — so a fade measures from the band's own edges. An offset box moves the fade's edges off the band's and makes the two placements fight.
 - To make the map smaller or larger inside its box, set `scale` instead of resizing the layer. The map shrinks toward its `position` corner, so there is no hard edge and the fade keeps measuring from the band's edges.
-- Keep `opacity` low (the default `0.4`) when copy sits over the landmass; the PoPs keep full strength so the network still reads.
+- Keep `opacity` low (the default `0.4`) when copy sits over the landmass; the data centers keep full strength so the network still reads.
 - For copy on one side of a band, park the map on the other side with `position` and fade it toward the copy (`position="right"` + `fade="left"`); the default stops need no consumer class.
 - Tune where a fade holds and ends with `--network-map-fade-start` / `--network-map-fade-end` only when the default stops do not fit, instead of adding masks.
 - Leave `animated` off by default; turn it on for the one band per page whose subject is the network.
 - To nudge the map or let it run off the band, set `offsetX` / `offsetY` (for example `:offset-x="0.15"` to bleed right, `:offset-y="-0.1"` to bleed up) instead of offsetting the layer.
-- The landmass is the design's pixel map cell for cell (4,987 cells on a 10-unit grid), and the default `medium` density lights the design's PoP field exactly: 172 cells, each metro a capital with up to two satellites, pulsing in the design's three phases. `low` lights the capitals alone (71); `high` adds 31 outlying PoPs.
-- `asia` and `oceania` hold no PoPs — the artwork carries no accent field there — so either region lights none and the map reads as landmass alone.
+- The landmass is the design's pixel map cell for cell (4,987 cells on a 10-unit grid), and the default `medium` density lights the design's data center field exactly: 172 cells, each metro a capital with up to two satellites, pulsing in the design's three phases. `low` lights the capitals alone (71); `high` adds 31 outlying data centers.
+- `asia` and `oceania` hold no data centers — the artwork carries no accent field there — so either region lights none and the map reads as landmass alone.
 
 ## Usage
 
@@ -68,18 +68,18 @@ A decorative, full-bleed layer that paints the dotted world map with Azion's PoP
 
 ## Props
 
-| Prop       | Type                                                                                                                       | Default    | Required | JSDoc                                                                                                                             |
-| ---------- | -------------------------------------------------------------------------------------------------------------------------- | ---------- | -------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| `region`   | `'world' \| 'atlantic' \| 'americas' \| 'north-america' \| 'south-america' \| 'europe' \| 'africa' \| 'asia' \| 'oceania'` | `'world'`  | false    | Which part of the world has its PoPs lit; the map always frames the whole world.                                                  |
-| `density`  | `'none' \| 'low' \| 'medium' \| 'high'`                                                                                    | `'medium'` | false    | How many PoPs are lit, from `none` to `high`.                                                                                     |
-| `animated` | `boolean`                                                                                                                  | `false`    | false    | Pulses the PoPs in three staggered waves that settle within five seconds; static when false.                                      |
-| `opacity`  | `number`                                                                                                                   | `0.4`      | false    | Opacity of the landmass dots, from 0 to 1; the PoPs stay at full strength.                                                        |
-| `position` | `'center' \| 'top' \| 'bottom' \| 'left' \| 'right' \| 'top-left' \| 'top-right' \| 'bottom-left' \| 'bottom-right'`       | `'center'` | false    | Where the map parks in the space the box leaves over.                                                                             |
-| `scale`    | `number`                                                                                                                   | `0.85`     | false    | Size of the map relative to the box; 1 fits it, below 1 shrinks it toward its position, above 1 enlarges it.                      |
-| `offsetX`  | `number`                                                                                                                   | `0`        | false    | Horizontal shift as a fraction of the map width; negative moves it left, positive right, past the box edge if large enough.       |
-| `offsetY`  | `number`                                                                                                                   | `0`        | false    | Vertical shift as a fraction of the map height; negative moves it up, positive down, past the box edge if large enough.           |
-| `fade`     | `'none' \| 'top' \| 'bottom' \| 'left' \| 'right' \| 'edges' \| 'vignette'`                                                | `'none'`   | false    | Fades the map out along an axis so it meets content without a hard edge.                                                          |
-| `traffic`  | `boolean`                                                                                                                  | `false`    | false    | Draws traffic between lit PoPs: faint links and, while `animated`, packets that cross them; the links alone under reduced motion. |
+| Prop       | Type                                                                                                                       | Default    | Required | JSDoc                                                                                                                                     |
+| ---------- | -------------------------------------------------------------------------------------------------------------------------- | ---------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `region`   | `'world' \| 'atlantic' \| 'americas' \| 'north-america' \| 'south-america' \| 'europe' \| 'africa' \| 'asia' \| 'oceania'` | `'world'`  | false    | Which part of the world has its data centers lit; the map always frames the whole world.                                                  |
+| `density`  | `'none' \| 'low' \| 'medium' \| 'high'`                                                                                    | `'medium'` | false    | How many data centers are lit, from `none` to `high`.                                                                                     |
+| `animated` | `boolean`                                                                                                                  | `false`    | false    | Pulses the data centers in three staggered waves that settle within five seconds; static when false.                                      |
+| `opacity`  | `number`                                                                                                                   | `0.4`      | false    | Opacity of the landmass dots, from 0 to 1; the data centers stay at full strength.                                                        |
+| `position` | `'center' \| 'top' \| 'bottom' \| 'left' \| 'right' \| 'top-left' \| 'top-right' \| 'bottom-left' \| 'bottom-right'`       | `'center'` | false    | Where the map parks in the space the box leaves over.                                                                                     |
+| `scale`    | `number`                                                                                                                   | `0.85`     | false    | Size of the map relative to the box; 1 fits it, below 1 shrinks it toward its position, above 1 enlarges it.                              |
+| `offsetX`  | `number`                                                                                                                   | `0`        | false    | Horizontal shift as a fraction of the map width; negative moves it left, positive right, past the box edge if large enough.               |
+| `offsetY`  | `number`                                                                                                                   | `0`        | false    | Vertical shift as a fraction of the map height; negative moves it up, positive down, past the box edge if large enough.                   |
+| `fade`     | `'none' \| 'top' \| 'bottom' \| 'left' \| 'right' \| 'edges' \| 'vignette'`                                                | `'none'`   | false    | Fades the map out along an axis so it meets content without a hard edge.                                                                  |
+| `traffic`  | `boolean`                                                                                                                  | `false`    | false    | Draws traffic between lit data centers: faint links and, while `animated`, packets that cross them; the links alone under reduced motion. |
 
 ## Events
 
@@ -93,10 +93,10 @@ A decorative, full-bleed layer that paints the dotted world map with Azion's PoP
 
 - Visual states: `default`
 - `data-region`, `data-density` and `data-fade` on the root mirror their props; `data-fade` drives the mask that fades the layer out
-- `density="none"` draws the landmass alone, with no hole where a PoP would be — every PoP cell is also a landmass cell
-- `density` levels are cumulative: `low` (65 PoPs) ⊂ `medium` (186) ⊂ `high` (275); `core` carries a PoP on every main Brazilian capital, so they light at every density
-- Each PoP path carries `data-animated` (present only when `animated` is set) and `data-phase` (`0` / `1` / `2`), which select the pulse and its wave delay
-- The map always frames the whole world; `region` only chooses which PoPs light — a PoP renders when its cell falls inside the region's bounds, and a phase with no PoP left renders no path
+- `density="none"` draws the landmass alone, with no hole where a data center would be — every data center cell is also a landmass cell
+- `density` levels are cumulative: `low` (65 data centers) ⊂ `medium` (186) ⊂ `high` (275); `core` carries a data center on every main Brazilian capital, so they light at every density
+- Each data center path carries `data-animated` (present only when `animated` is set) and `data-phase` (`0` / `1` / `2`), which select the pulse and its wave delay
+- The map always frames the whole world; `region` only chooses which data centers light — a data center renders when its cell falls inside the region's bounds, and a phase with no data center left renders no path
 - `scale` sizes the map around the `position` anchor, so it renders at that fraction of its fitted size while the anchored edge stays put; a value of 0 or below falls back to `1`
 - `offsetX` / `offsetY` translate the map after `position` and `scale` place it, by that fraction of the map's own width / height; the sign is the direction (negative left / up, positive right / down), so each axis moves independently of the anchor
 - The default `scale` of `0.85` leaves room on both axes, so every `position` moves the map in any box shape. At `1` the fitted map fills one axis edge to edge, so `position` acts only on the other axis: `top` / `center` / `bottom` render alike in a wide box, and `left` / `center` / `right` in a tall one
@@ -105,20 +105,20 @@ A decorative, full-bleed layer that paints the dotted world map with Azion's PoP
 
 ## Motion & Animations
 
-| Trigger                                                                                 | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations)           | Reduced-motion fallback                    |
-| --------------------------------------------------------------------------------------- | ---------------------- | ----------------------------------------------------------- | ------------------------------------------ |
-| `animated` set — PoP pulse, three waves at 0 / 350 / 700ms, two pulses each, then still | `animate-pulse-settle` | catalog `pulse-settle` (2s, 2 runs; last wave ends at 4.7s) | `motion-reduce:animate-none` (static PoPs) |
+| Trigger                                                                                         | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations)           | Reduced-motion fallback                            |
+| ----------------------------------------------------------------------------------------------- | ---------------------- | ----------------------------------------------------------- | -------------------------------------------------- |
+| `animated` set — data center pulse, three waves at 0 / 350 / 700ms, two pulses each, then still | `animate-pulse-settle` | catalog `pulse-settle` (2s, 2 runs; last wave ends at 4.7s) | `motion-reduce:animate-none` (static data centers) |
 
-| `traffic` with `animated` — a packet grows out of one PoP, crosses its ray and is absorbed into the other (dash length 0 → 30 → 0 and offset 0 → −100 over the first 45% of the ray's cycle, then parked); each ray stops by itself within 4.8 s of mount, on a parked frame | Web Animations API on each packet path; every ray on its own 3.4–6.2 s clock so the field never pulses in step, with a finite iteration count that ends either at the 4.8 s mark (when that falls in the parked part of the cycle) or at the last whole cycle before it | — (one-off geometry, no token) | none: the packets stay parked at zero length and the links draw at 0.24 instead of 0.12, the still frame of the mesh |
+| `traffic` with `animated` — a packet grows out of one data center, crosses its ray and is absorbed into the other (dash length 0 → 30 → 0 and offset 0 → −100 over the first 45% of the ray's cycle, then parked); each ray stops by itself within 4.8 s of mount, on a parked frame | Web Animations API on each packet path; every ray on its own 3.4–6.2 s clock so the field never pulses in step, with a finite iteration count that ends either at the 4.8 s mark (when that falls in the parked part of the cycle) or at the last whole cycle before it | — (one-off geometry, no token) | none: the packets stay parked at zero length and the links draw at 0.24 instead of 0.12, the still frame of the mesh |
 
-Static by default: without `animated` no PoP carries an animation class. `traffic` builds the mesh from the lit PoPs, deterministically (a fixed-seed generator, so server and client and every export draw the same network): 14 participants by farthest-point sampling, each linked to at least two and at most three others no closer than 60 map units, each ray a quadratic bowed 5–9% of its length to a random side. Links are `--border-strong`, packets `--primary`, both `non-scaling-stroke` so they stay hairlines at any size. The server renders the links and the parked packets; the packets start on mount.
+Static by default: without `animated` no data center carries an animation class. `traffic` builds the mesh from the lit data centers, deterministically (a fixed-seed generator, so server and client and every export draw the same network): 14 participants by farthest-point sampling, each linked to at least two and at most three others no closer than 60 map units, each ray a quadratic bowed 5–9% of its length to a random side. Links are `--border-strong`, packets `--primary`, both `non-scaling-stroke` so they stay hairlines at any size. The server renders the links and the parked packets; the packets start on mount.
 
 ## Tokens
 
 | Region        | Token (DESIGN.md)   |
 | ------------- | ------------------- |
 | landmass dots | `var(--text-muted)` |
-| PoPs          | `var(--primary)`    |
+| data centers  | `var(--primary)`    |
 
 ## Theme gaps
 
@@ -133,7 +133,7 @@ Static by default: without `animated` no PoP carries an animation class. `traffi
 - Visible focus: not applicable (nothing receives focus)
 - Contrast: not applicable to the artwork (decorative); the copy above it keeps its own ≥4.5:1 against the band, which the low default `opacity` protects
 - `motion-reduce:animate-none` stops the pulse under reduced motion
-- Pause, Stop, Hide (WCAG 2.2.2): with `animated`, the PoP pulse and the traffic packets stop by themselves within 5 seconds of mount (pulses by 4.7 s, packets by 4.8 s) and rest on the static map, so the layer needs no pause control
+- Pause, Stop, Hide (WCAG 2.2.2): with `animated`, the data center pulse and the traffic packets stop by themselves within 5 seconds of mount (pulses by 4.7 s, packets by 4.8 s) and rest on the static map, so the layer needs no pause control
 - Touch target: not applicable (no interactive parts)
 
 ## Examples

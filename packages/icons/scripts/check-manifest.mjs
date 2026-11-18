@@ -59,10 +59,13 @@ for (const entry of manifest.icons) {
     kebab(entry.product ?? '') !== entry.name
   )
     fail(id, `a product icon is named after its product: expected "${kebab(entry.product ?? '')}"`)
-  if (entry.name.startsWith('edge-') && !(entry.product ?? '').startsWith('Edge '))
+  const edgeNamed =
+    (entry.product ?? '').startsWith('Edge ') ||
+    (entry.category === 'feature' && entry.means.startsWith('Edge '))
+  if (entry.name.startsWith('edge-') && !edgeNamed)
     fail(
       id,
-      '"edge-" is kept only for products whose name starts with "Edge" (Edge DNS, Edge Pulse, Edge Orchestrator)'
+      '"edge-" is kept only for names that start with "Edge": the products Edge DNS and Edge Pulse, and the Orchestrator features Edge Nodes, Edge Services and Edge Libraries'
     )
 
   if (entry.status !== 'stable')

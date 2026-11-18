@@ -813,9 +813,12 @@ listed in `@aziontech/icons/manifest` and `ICONS.md` in the icons package:
   `az-sql-database`, `ai-edge-kv` → `az-kv-store`, `ai-edge-connectors` → `az-connectors`,
   `ai-edge-ai` → `az-ai-inference`, `ai-waf-rules` → `az-waf`, `ai-app-accelerator` →
   `az-application-accelerator`, `ai-store` → `az-store-pillar`, `ai-origin-accelerator` →
-  `az-application-accelerator`; Edge DNS, Edge Pulse and Edge Orchestrator (with `az-edge-nodes`,
-  `az-edge-services`, `az-edge-libraries`) keep `edge-`; `ai-tiered-cache` → `az-tiered-cache`, now a
-  feature of the new `az-cache`; new product icons `az-cache`, `az-network-shield`,
+  `az-application-accelerator`, `ai-edge-orchestrator` → `az-orchestrator` (the product is now
+  Orchestrator), `ai-lora` → `az-lora-fine-tune` (LoRA Fine-Tune is now a product, with a new
+  drawing); Edge DNS and Edge Pulse keep `edge-`, and so do the Orchestrator features
+  `az-edge-nodes`, `az-edge-services` and `az-edge-libraries`; `ai-tiered-cache` →
+  `az-tiered-cache`, now a feature of the new `az-cache`; `az-origin-shield` is now the Origin
+  Shield product icon, with a new drawing; new product icons `az-cache`, `az-network-shield`,
   `az-ddos-protection` and `az-secure-internet-access`;
 - solutions: the Solutions category holds the eight Azion Solutions, named after their short
   names (`az-application-development`, `az-performance-and-reliability`,

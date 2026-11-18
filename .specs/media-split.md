@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 9
-checksum: cdc2022a641541cc63d9b98775bf03459dbb3b59827e984799ef6b90bf8f04db
+checksum: 45cc958f5064ab0ac9ab25c04d69a0c8cabf00a1273db9f60d6b7eb1c5c39751
 created: 2026-09-22
 last_updated: 2026-11-18
 ---
@@ -79,7 +79,7 @@ Whether the band ever splits is `orientation`'s call. `horizontal` is the band p
   <MediaSplit
     eyebrow="Observability"
     title="See every request as it happens."
-    description="Logs stream from every edge location in real time, with no agent to install and no sampling."
+    description="Logs stream from every data center in real time, with no agent to install and no sampling."
   >
     <template #media>
       <Illustration name="live-debugging" />
@@ -90,7 +90,7 @@ Whether the band ever splits is `orientation`'s call. `horizontal` is the band p
   <MediaSplit
     title="See every request as it happens."
     src="/media/real-time-logs.png"
-    alt="A live log stream showing requests from twelve edge locations"
+    alt="A live log stream showing requests from twelve data centers"
   />
 
   <!-- Stacked at every width, media leading, and the two cells reading as one plate. -->
@@ -100,7 +100,7 @@ Whether the band ever splits is `orientation`'s call. `horizontal` is the band p
     :divided="false"
     fill="surface"
     title="See every request as it happens."
-    description="Logs stream from every edge location in real time."
+    description="Logs stream from every data center in real time."
   >
     <template #media>
       <Illustration name="live-debugging" />
@@ -118,8 +118,8 @@ Whether the band ever splits is `orientation`'s call. `horizontal` is the band p
 | `eyebrow`      | `string`                 | `''`           | false    | Short uppercase overline rendered above the headline.                                                                                                                                                                                                         |
 | `src`          | `string`                 | `''`           | false    | URL of the band's image; ignored when the `media` slot is filled.                                                                                                                                                                                             |
 | `alt`          | `string`                 | `''`           | false    | Alternative text describing what the image shows.                                                                                                                                                                                                             |
-| `variant`      | `MediaSplitVariant`      | `'media-end'`  | false    | Which end the media sits on: the closing cell once the band splits, or the lower one when the band is vertical. `media-end` puts the copy first.                                                                                                                      |
-| `orientation`  | `MediaSplitOrientation`  | `'horizontal'` | false    | Axis the band splits on. `horizontal` sets the cells side by side once the band is 60rem wide; `vertical` holds them stacked at every width.                                                                                                                                 |
+| `variant`      | `MediaSplitVariant`      | `'media-end'`  | false    | Which end the media sits on: the closing cell once the band splits, or the lower one when the band is vertical. `media-end` puts the copy first.                                                                                                              |
+| `orientation`  | `MediaSplitOrientation`  | `'horizontal'` | false    | Axis the band splits on. `horizontal` sets the cells side by side once the band is 60rem wide; `vertical` holds them stacked at every width.                                                                                                                  |
 | `fill`         | `MediaSplitFill`         | `'canvas'`     | false    | The copy cell's fill. `canvas` lets the band sit in the page column; `surface` lifts it onto its own plate. The media cell follows `mediaFill`.                                                                                                               |
 | `mediaFill`    | `MediaSplitFill`         | `'surface'`    | false    | The media cell's fill. `surface` sets the asset on its own plate, one step off the page; `canvas` lets the whole band sit on the page.                                                                                                                        |
 | `framed`       | `boolean`                | `false`        | false    | Draw the band's own registration frame: its top and bottom rules, with the copy and the media framed as two cells, each with its four marks. Turn it off when the page already wraps the band in a frame.                                                     |

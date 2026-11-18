@@ -45,7 +45,7 @@ const spec: DiagramSpec = {
       type: 'item',
       eyebrow: 'LoRA',
       title: 'Your fine-tuned adapter',
-      icon: 'az az-lora'
+      icon: 'az az-lora-fine-tune'
     }
   ],
   layout: {

@@ -3,7 +3,7 @@ import type { SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
 import type { AiChatDrawerMessage } from './ai-chat-drawer.vue'
 
 const cacheAnswer = [
-  'Use **Real-Time Purge** with the *URL* type. It removes one object from every edge location in a few seconds [1].',
+  'Use **Real-Time Purge** with the *URL* type. It removes one object from every data center in a few seconds [1].',
   '',
   '1. Open Real-Time Purge from the products menu.',
   '2. Choose **URL** and paste the address.',

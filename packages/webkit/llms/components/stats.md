@@ -1,6 +1,6 @@
 # Stats
 
-> A band of headline figures — throughput, uptime, points of presence — set in the display face at big-number scale, each in its own cell of a hairline `card-grid` with a short caption underneath. It is the proof band of a marketing page: the one place a page states its numbers, between a `section-title` and the section body.
+> A band of headline figures — throughput, uptime, data centers — set in the display face at big-number scale, each in its own cell of a hairline `card-grid` with a short caption underneath. It is the proof band of a marketing page: the one place a page states its numbers, between a `section-title` and the section body.
 
 - Import: `import Stats from '@aziontech/webkit/stats'`
 - Category: marketing · Surface: site · Structure: monolithic
@@ -74,7 +74,7 @@
 <template>
   <Stats
     :items="[
-      { value: '120', suffix: '+', label: 'Points of presence' },
+      { value: '120', suffix: '+', label: 'Data centers' },
       { value: '99.99', suffix: '%', label: 'Availability' },
       { prefix: '<', value: '15', suffix: 'ms', label: 'Median latency' },
       { value: '4.5', suffix: 'Tbps', label: 'Network capacity' }
@@ -95,7 +95,7 @@
     <Stats
       size="small"
       :items="[
-        { value: '120', suffix: '+', label: 'Points of presence' },
+        { value: '120', suffix: '+', label: 'Data centers' },
         { value: '99.99', suffix: '%', label: 'Availability' },
         { prefix: '<', value: '15', suffix: 'ms', label: 'Median latency' },
         { value: '4.5', suffix: 'Tbps', label: 'Network capacity' }
@@ -104,7 +104,7 @@
     <Stats
       size="medium"
       :items="[
-        { value: '120', suffix: '+', label: 'Points of presence' },
+        { value: '120', suffix: '+', label: 'Data centers' },
         { value: '99.99', suffix: '%', label: 'Availability' },
         { prefix: '<', value: '15', suffix: 'ms', label: 'Median latency' },
         { value: '4.5', suffix: 'Tbps', label: 'Network capacity' }
@@ -113,7 +113,7 @@
     <Stats
       size="large"
       :items="[
-        { value: '120', suffix: '+', label: 'Points of presence' },
+        { value: '120', suffix: '+', label: 'Data centers' },
         { value: '99.99', suffix: '%', label: 'Availability' },
         { prefix: '<', value: '15', suffix: 'ms', label: 'Median latency' },
         { value: '4.5', suffix: 'Tbps', label: 'Network capacity' }

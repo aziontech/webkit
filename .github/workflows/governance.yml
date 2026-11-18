@@ -332,6 +332,9 @@ jobs:
       - name: Icons package tests (published files, no runtime dependencies)
         run: pnpm --filter @aziontech/icons test
 
+      - name: Icons manifest — every SVG documented, names follow the rules, ICONS.md current
+        run: pnpm --filter @aziontech/icons check:manifest
+
       - name: Server rendering — every block and example renders with vue/server-renderer in Node
         run: pnpm --filter @aziontech/webkit test:ssr
 
@@ -560,7 +563,8 @@ jobs:
   gates:
     name: Governance Gate
     runs-on: ubuntu-latest
-    needs: [changes, security, lint-canaries, lint, types, build, site, toolkit, smoke, tests, visual]
+    needs:
+      [changes, security, lint-canaries, lint, types, build, site, toolkit, smoke, tests, visual]
     if: always()
     steps:
       - name: Check all jobs passed or skipped
