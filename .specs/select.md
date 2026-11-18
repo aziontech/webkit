@@ -7,7 +7,7 @@ spec_version: 15
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10801
   node_id: 3714:10801
-checksum: e420e609d43b003267d3b8b091c2c66384f0f647fb626b1525454df2310a49bf
+checksum: bef73e3ded3de91c530d6caa4aa818840b2c0cd006dfcde2b448e62b76ac6d7f
 created: 2026-06-15
 last_updated: 2026-11-18
 ---
@@ -162,6 +162,7 @@ _none_
 | surface (panel)                      | `var(--bg-surface-raised)`                                                                                                      |
 | surface (option hover)               | `var(--bg-hover)`                                                                                                               |
 | surface (option selected)            | `var(--bg-selected)`                                                                                                            |
+| row fill inset (2px gap)             | `border-y border-transparent bg-clip-padding`                                                                                   |
 | text                                 | `var(--text-default)`                                                                                                           |
 | text (placeholder, group heading)    | `var(--text-muted)`                                                                                                             |
 | text (disabled)                      | `var(--text-disabled)`                                                                                                          |
