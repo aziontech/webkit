@@ -77,7 +77,7 @@ async function main() {
           .optional()
           .describe('Restrict to one category (e.g. "action", "data", "input", "feedback").'),
         surface: z
-          .enum(['app', 'site', 'docs'])
+          .enum(['app', 'site', 'docs', 'edge'])
           .optional()
           .describe('Restrict to one surface. Console screens use "app" only.'),
         cursor: z
@@ -214,7 +214,7 @@ async function main() {
           .string()
           .describe('Free-text query in en, pt-BR or es, e.g. "dropdown", "date picker", "botão".'),
         surface: z
-          .enum(['app', 'site', 'docs'])
+          .enum(['app', 'site', 'docs', 'edge'])
           .optional()
           .describe('Restrict to one surface. Console screens use "app" only.')
       }
@@ -236,7 +236,7 @@ async function main() {
           .string()
           .describe('What you are trying to build, e.g. "a searchable paginated table".'),
         surface: z
-          .enum(['app', 'site', 'docs'])
+          .enum(['app', 'site', 'docs', 'edge'])
           .optional()
           .describe('Restrict to one surface. Console screens use "app" only.')
       }
@@ -261,7 +261,7 @@ async function main() {
             'The screen you need, in plain words (en, pt-BR or es), e.g. "login page", "cadastro".'
           ),
         surface: z
-          .enum(['app', 'site', 'docs'])
+          .enum(['app', 'site', 'docs', 'edge'])
           .optional()
           .describe('Restrict to one surface. Console screens use "app" only.'),
         fragments: z

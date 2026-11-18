@@ -459,3 +459,4 @@ Budget-raise: date-picker 24.6 KB → 41.7 KB (measured 41.57 KB): the calendar 
 Budget-raise: date-picker-root 24.4 KB → 41.5 KB (measured 41.36 KB): the same Month and Year `Select`s in the shared calendar caption (2026-11-18).
 Budget-raise: date-range-picker 44.85 KB → 51.05 KB (measured 50.91 KB): the same Month and Year `Select`s, plus the Unit and Refresh every selects and the time zone selector moved from native selects to the WebKit `Select` and `Combobox` (owner 2026-11-18, decision RV-S4).
 Budget-raise: locales-es 10.8 KB → 10.85 KB (measured 10.80 KB): the Month and Year names of the calendar caption selects (2026-11-18).
+Budget-raise: flow-diagram-root 13.5 KB → 13.75 KB (measured 13.52 KB): the `uniform` prop (equal-size steps) the edge error page's request path needs (owner decision RV-D1, 2026-11-18).

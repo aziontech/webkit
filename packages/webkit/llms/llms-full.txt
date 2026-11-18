@@ -8656,54 +8656,177 @@ What each prop and event does, and the go-live code: [blocks/state/async-submit.
 
 ---
 
+<!-- blocks/state/edge-error-page.md -->
+
+# EdgeErrorPage (`state/edge-error-page`)
+
+> The page Azion's edge serves to a visitor of a customer's site when a request fails: a standalone page, no Azion product chrome, no account actions.
+
+- Surface: edge
+- Source: `blocks/state/edge-error-page/edge-error-page.vue` in `@aziontech/webkit`
+- MCP: `get_block("state/edge-error-page")`
+- Components: Brand, Button, CopyButton, FlowDiagram, KeyValueList, StatusCode, StatusIndicator, Timestamp
+- Skills: `webkit-errors`, `webkit-ui-states`, `webkit-microcopy`
+
+## Asked as
+
+edge error page; 502 bad gateway page; 504 gateway timeout page; origin unreachable page; origin error page; 503 service unavailable page; firewall blocked page; waf blocked request page; rate limited page; 429 page for visitors; error page for site visitors; custom error page; página de erro do edge; origem indisponível; requisição bloqueada pelo firewall; página de error del edge
+
+The page Azion's edge serves to a visitor of a customer's site when the request fails: the site's server is down or slow, it answered with an error, the site's firewall blocked the request, or the visitor sent too many requests. The reader is not an Azion user: it is anyone on the internet who opened `www.example.com`. Their job is to learn, in one look, whose side the problem is on (their connection, Azion's edge or the site's server), what they can do about it, and what to quote to the site owner. The page stands alone: it has no Azion product chrome, no navigation and nothing that needs an Azion account.
+
+Two error page families, one per audience:
+
+- **Edge** (this block, `surface: edge`): the visitors of your customers' sites. Diagnostic, left-aligned, with the request path.
+- **Console, site and docs** (`state/error-page`, `surface: app`): Azion's own users on Azion's own pages. Quiet and centred, inside the product shell.
+
+## When to use
+
+- The default error pages an edge application serves when the origin cannot answer: 502 (origin unreachable, the primary), 504 (origin timeout), 500 (origin error) and 503 (origin unavailable).
+- A request a firewall or WAF rule on the edge blocked (Blocked, 403) or rate limited (RateLimited, 429).
+- A 404 the edge serves for the site when the origin has no page and the site has no page of its own (NotFound).
+- As the starting point of a customer's own custom error page: the customer replaces the copy and keeps the structure.
+
+## When not to use
+
+- Any page of Azion Console, the Azion site or the docs: use `state/error-page`, which carries the account actions an Azion user needs (Sign in, Request access, Switch account) and sits in the product shell.
+- An error inside a page that otherwise works: use `ErrorBoundary` or an `Alert` in the region that failed.
+- A failed deploy or build: use `state/async-submit`.
+
+## Building blocks
+
+- A. Status line — `StatusCode`
+- B. Request path — `FlowDiagram`, `StatusIndicator`
+- C. Next steps — `Button`
+- D. Request details — `KeyValueList`, `CopyButton`, `Timestamp`
+- E. Footer — `Brand`
+
+What each part takes: [blocks/state/edge-error-page.md](blocks/state/edge-error-page.md).
+
+## Data
+
+The block fetches nothing: the edge fills the props from the request it failed to serve.
+
+Prop: `code`, `reason`, `title`, `cause`, `advice`, `host`, `requestId`, `time`, `location`, `path`, `recovery`.
+
+Event: `retry`, `back`.
+
+What each prop and event does, and the go-live code: [blocks/state/edge-error-page.md](blocks/state/edge-error-page.md).
+
+## Do
+
+- Answer with the real status code (502, 504, 500, 503, 403, 429, 404), so browsers, crawlers and monitors see it.
+- Keep the three hops in every state, with the hop that failed marked, so every error reads the same way.
+- Give every hop the same box size: `uniform` on `FlowDiagram` does it on wide screens, and the stacked boxes on a phone share one structure.
+- Show the request ID and the time on every state; log the same ID on the edge so the site owner can find the request.
+- Say plainly when the problem is not the visitor's fault (`nothing you did caused this`).
+
+## Don't
+
+- Don't offer Sign in, Switch account, Request access or any other account action: the visitor has no Azion account, and the site owner's account is not theirs.
+- Don't show Azion Console links, the product navigation, an internal hostname, a stack trace or the origin's IP address.
+- Don't blame the visitor, and don't name Azion as the culprit when the origin failed: the path shows which hop it was.
+- Don't auto-redirect or auto-reload in a loop; Try again is the visitor's choice.
+- Don't drop the path on a phone; stack it instead.
+
+## Copy
+
+- **Title:** what happened, from the visitor's side, no code: `The site's server could not be reached`, `This site's firewall blocked your request`, `Too many requests from your connection`.
+- **What happened?:** one or two sentences naming the hop: `Azion's edge received your request, but the server that hosts this site did not accept the connection.`
+- **What can I do?:** what the visitor can do now: `Try again in a few minutes. If it keeps happening, let the site owner know and quote the request ID below.`
+- **Hop states:** one or two words: `Working`, `Error`, `Timed out`, `Unavailable`, `Blocked`, `Rate limited`, `Not reached`, `Not found`.
+- **Actions:** `Try again`, `Go to home page`, `Go back`.
+- **Facts:** `Request ID`, `Time`, `Edge location`, `Host`; the request ID in `text-label-code-sm` inside `<bdi>`.
+
+## Accessibility
+
+- The block is the whole page: it owns the single `main`, one `h1` (the title) and an `h2` for each section (Request path, What happened?, What can I do?).
+- The request path is a list (`FlowDiagram` is `role="list"`, the phone layout an `ol`); each hop reads as its name, its second line and its state. The connectors are decorative.
+- Severity is never colour alone: every `StatusIndicator` has its label.
+- Long hosts truncate on a phone and wrap in the details; hosts and IDs sit in `<bdi>` so they keep their order on right-to-left pages.
+- The phone and wide layouts of the path are the same content; the hidden one is `display: none`, so a screen reader hears it once.
+
+## States
+
+- Default: 502 Bad gateway, the origin could not be reached; the origin hop reads Error; Try again and Go back.
+- OriginTimeout: 504 Gateway timeout; the origin hop reads Timed out.
+- OriginError: 500 Internal server error; the origin answered with an error.
+- OriginUnavailable: 503 Service unavailable; the origin hop reads Unavailable.
+- Blocked: 403 Forbidden; the site's firewall matched the request, the edge hop reads Blocked and the origin Not reached; Go to home page.
+- RateLimited: 429 Too many requests; the edge hop reads Rate limited and the origin Not reached.
+- NotFound: 404 Not found; every hop worked and the origin reads Not found; Go to home page.
+
+## Related
+
+- `state/error-page` — the error pages of Azion's own console, site and docs.
+- `FlowDiagram` — the request path, with `uniform` for equal boxes.
+- `state/async-submit` — a failed build or deploy inside the console.
+
+## Variants
+
+`Default` (primary) · `OriginTimeout` · `OriginError` · `OriginUnavailable` · `Blocked` · `RateLimited` · `NotFound`. Code: [blocks/state/edge-error-page.md](blocks/state/edge-error-page.md), `get_block("state/edge-error-page", { variant })`.
+
+---
+
 <!-- blocks/state/error-page.md -->
 
 # ErrorPage (`state/error-page`)
 
-> The page an app renders when it cannot show the address the user asked for.
+> The error page of Azion's own surfaces (Console, the site, the docs) when a page cannot show what the user asked for.
 
 - Surface: app
 - Source: `blocks/state/error-page/error-page.vue` in `@aziontech/webkit`
 - MCP: `get_block("state/error-page")`
-- Components: Button, CopyButton, EmptyState, `Error403`, `Error404`
+- Components: Button, CopyButton, EmptyState, StatusCode, Timestamp
 - Skills: `webkit-ui-states`, `webkit-errors`, `webkit-microcopy`
 
 ## Asked as
 
-404 page; not found page; page not found; 403 forbidden page; access denied page; 500 error page; server error page; error page; resource not found; página não encontrada; página de erro; acesso negado; erro 404; erro 500
+404 page; not found page; page not found; 401 session expired page; sign in required page; 403 forbidden page; access denied page; 429 too many requests page; 500 error page; server error page; 503 maintenance page; error page; console error page; resource not found; página não encontrada; página de erro; acesso negado; sessão expirada; erro 404; erro 500
 
-The page an app renders when it cannot show the address the user asked for: the address leads nowhere (404), the user may not see it (403), or the server failed to build it (500). The user's job is to understand, in one sentence, that the problem is the address or the access and not their work, and to get somewhere useful in one click. The block keeps the error code out of the headline (it is in the figure and in a hidden `h1`) and says what happened in plain words.
+The page Azion's own surfaces (Console, the site, the docs) render when they cannot show what the user asked for: the address leads nowhere (404), the session ended (401), the user's role does not include the page (403), the account sent too many requests (429), the server failed (500) or the console is in maintenance (503). The reader is an Azion user. Their job is to understand, in one sentence, that the problem is the address, the access or Azion and not their work, to get somewhere useful in one click, and to have the reference support will ask for. Every state has the same quiet, centred shape; only the code, the words and the two buttons change.
 
-This block is a page body: render it in the default slot of `ConsoleLayout` (`shell/console`), which owns the rail, the header and the `main`.
+Two error page families, one per audience:
+
+- **Console, site and docs** (this block, `surface: app`): Azion's users on Azion's pages. Quiet and centred, inside the product shell, with the account actions an Azion user needs.
+- **Edge** (`state/edge-error-page`, `surface: edge`): the visitors of Azion customers' sites. Diagnostic, standalone, with the request path and no account actions.
+
+The block is a page body: render it in the default slot of `ConsoleLayout` (`shell/console`), or of the site and docs shells, which own the navigation, the header and the `main`. SessionExpired renders signed out, without the rail.
 
 ## When to use
 
-- A route that matches nothing: the catch-all route of the app renders the primary.
-- A route the user's role does not include: render Forbidden instead of hiding the page silently or sending them to the home page.
-- A page whose server request failed as a whole (the data the page needs did not arrive and nothing on it can render): render ServerError.
-- A valid route whose record does not exist (a deleted service, a stale link with an old ID): render ResourceNotFound inside the console shell.
+- A route that matches nothing: the catch-all route renders the primary (404).
+- A session that ended while the user was away: SessionExpired (401).
+- A route the user's role does not include: Forbidden (403), instead of hiding the page or sending them home.
+- A request the API refused for the rate limit: RateLimited (429).
+- A page whose server request failed as a whole: ServerError (500).
+- Scheduled maintenance or an overloaded console: Maintenance (503).
+- A valid route whose record does not exist (a deleted service, a stale link): ResourceNotFound.
 
 ## When not to use
 
-- One region of a page failed to render while the rest works: wrap the region in `ErrorBoundary`; it shows a danger `Alert` with Try again in the region's place.
+- The page a visitor of a customer's site sees when Azion's edge cannot serve it: use `state/edge-error-page`.
+- One region of a page failed to render while the rest works: wrap the region in `ErrorBoundary`; it shows a danger `Alert` with Try again in its place.
 - A list with no items yet: use `state/first-use`. A list whose filter matched nothing: use the no-match state of `view/table-view`.
 - A form the server rejected: use `state/form-validation` (SectionRejected).
-- A build or deploy that failed: use `state/async-submit`; its toast and page `Alert` carry Edit and Redeploy.
-- The account itself could not load after sign-in: that is an auth screen; see `auth/sign-in`.
+- A build or deploy that failed: use `state/async-submit`.
+- The sign-in screens themselves: see `auth/sign-in`.
 
 ## Building blocks
 
-- A. Figure — `Error404` (`@aziontech/webkit/svg/error-404`)
-- B. Message — `EmptyState` (required)
-- C. Actions — `Button` (required)
+- A. Code — `StatusCode`
+- B. Message — `EmptyState`
+- C. Actions — `Button`
+- D. Reference line — `CopyButton`, `Timestamp`
 
 What each part takes: [blocks/state/error-page.md](blocks/state/error-page.md).
 
 ## Data
 
-The block shows no records and fetches nothing: the primary takes the copy and the links a real app sets as props and emits Go to home. `ErrorPageProps` is exported from `error-page.vue`; every prop defaults to the 404 copy above.
+The block shows no records and fetches nothing: the app passes the copy, the codes and the reference.
 
-Prop: `title`, `description`, `homeHref`, `docsHref`.
+Prop: `code`, `errorCode`, `title`, `description`, `requestId`, `time`, `homeHref`, `docsHref`.
+
+Slot: `actions`.
 
 Event: `home`.
 
@@ -8711,55 +8834,58 @@ What each prop and event does, and the go-live code: [blocks/state/error-page.md
 
 ## Do
 
-- Render the block on the address the user asked for; do not redirect to `/404`, so reloading tries the real address again and the browser history stays honest.
-- Answer with the matching HTTP status when the server renders the page (404, 403, 500), so crawlers and monitoring see it.
-- Keep the shell (navigation, header) around ResourceNotFound and around a 403 inside the console, so the user can move on without the back button.
-- Give a 500 an error reference the user can quote to support, and log the same reference on the server.
-- On 403, say who can grant access (an account admin) and offer the switch when the user belongs to more than one account.
+- Render the block on the address the user asked for; do not redirect to `/404`, so reloading tries the real address again.
+- Answer with the matching HTTP status when the server renders the page.
+- Keep the shell around every state but SessionExpired, so the user can move on without the back button.
+- Log the same request ID and error code on the server that the page shows.
+- On 403, say who can grant access (an account admin) and offer Switch account when the user belongs to more than one account.
 
 ## Don't
 
-- Don't blame the user (`You typed a wrong URL`) or show a stack trace, a raw status line or an exception message.
-- Don't hide a 403 behind a 404 inside the product: a user who followed a link from a teammate needs to know to ask for access. Use 404 for a 403 only where revealing that the page exists would leak information.
-- Don't add a search box, a sitemap or a list of popular pages; two actions are enough.
+- Don't blame the user or show a stack trace, a raw status line or an exception message.
+- Don't hide a 403 behind a 404 inside the product; use 404 only where revealing that the page exists would leak information.
+- Don't add a third button, a search box or a list of popular pages.
 - Don't auto-redirect after a countdown; the user decides where to go.
-- Don't put the error code in the visible title; the figure already shows it.
+- Don't put the code in the visible title; the `StatusCode` already shows it.
+- Don't use this block for the pages the edge serves to customers' visitors; those have no Azion account to act on.
 
 ## Copy
 
-- **Title:** what happened, sentence case, no code: `Page not found`, `You don't have access to this page`, `Something went wrong on our side`, `Service 4821 not found`.
-- **Description:** why, and what to do: `There is nothing deployed at this address. Check the URL or head back to the start.` On a 500, reassure: `Nothing you saved was lost.`
-- **Primary action:** where it goes: `Go to home`, `Back to services`; or what it does: `Retry`.
-- **Secondary action:** `Docs`, `Switch account`, `System status`.
-- **Reference:** `Error reference: req_7f3c91ab`, in `text-label-code-sm`, wrapped in `<bdi>` so it keeps its order in right-to-left pages, with a `CopyButton` (`Copy the error reference`) so the user can paste it to support.
+- **Title:** what happened, sentence case, no code: `Page not found`, `Your session expired`, `You don't have access to this page`, `Too many requests`, `Something went wrong on our side`, `Back soon: scheduled maintenance`.
+- **Description:** why, and what to do, in one sentence; on a 5xx, reassure: `Nothing you saved was lost.`
+- **Actions:** where it goes (`Go to home`, `Back to services`) or what it does (`Sign in`, `Request access`, `Retry`).
+- **Reference line:** `Code NOT_FOUND · ID req_7f3c91ab` with the time in UTC on the line below, codes in `text-label-code-sm` inside `<bdi>`, with a `CopyButton` (`Copy the request ID`).
 
 ## Accessibility
 
-- Each variant has exactly one `h1` (visually hidden) naming the error code, so the page has a heading and the code is announced even though the figure is decorative.
-- Every variant is a body inside the layout's `main`, with no `main` of its own.
-- The figure is `aria-hidden` (inside the `EmptyState` icon wrapper); never put the only statement of the error in the art.
+- Each state has exactly one `h1` (visually hidden) naming the error code, so the page has a heading and the code is announced even though the figure is decorative.
+- Every state is a body inside the layout's `main`, with no `main` of its own.
 - The `EmptyState` is `role="status"`, so a client-side route change to this page is announced.
 - Retry shows the `Button` loading state while the page reloads; the button keeps its label.
 - Buttons that open a new tab carry an icon; do not rely on colour.
 
 ## States
 
-- Default: 404, the 404 numeral art, `title` (Page not found), `description`, Go to home (`homeHref`) and Docs (`docsHref`).
-- Forbidden: 403, the 403 numeral art, You don't have access to this page, Go to home and Switch account.
-- ServerError: 500, the warning icon tile, Something went wrong on our side, Retry, System status and the error reference with its copy button.
-- ResourceNotFound: a bordered EmptyState in the console's content column naming the missing service and its ID, with Back to services.
+- Default: 404 Page not found, Go to home (`homeHref`) and Docs (`docsHref`).
+- SessionExpired: 401 Your session expired, Sign in; rendered signed out.
+- Forbidden: 403 You don't have access to this page, Request access and Switch account.
+- RateLimited: 429 Too many requests, Try again and About rate limits.
+- ServerError: 500 Something went wrong on our side, Retry and System status.
+- Maintenance: 503 Back soon: scheduled maintenance, Retry and Status page.
+- ResourceNotFound: 404 for a missing record, naming the service and its ID, with Back to services.
 
 ## Related
 
-- `shell/console` — the shell that frames ResourceNotFound and a 403 inside the product.
+- `state/edge-error-page` — the error pages Azion's edge serves to visitors of customer sites.
+- `shell/console` — the shell around every state but SessionExpired.
 - `state/first-use` — an empty list, which is not an error.
 - `state/form-validation` (SectionRejected) — a server rejection scoped to a form section.
-- `state/async-submit` — the outcome of a build or deploy, with Edit and Redeploy.
-- `auth/sign-in` — the sign-in screens, including the account that could not load.
+- `state/async-submit` — the outcome of a build or deploy.
+- `auth/sign-in` — the sign-in screens.
 
 ## Variants
 
-`Default` (primary) · `Forbidden` · `ServerError` · `ResourceNotFound`. Code: [blocks/state/error-page.md](blocks/state/error-page.md), `get_block("state/error-page", { variant })`.
+`Default` (primary) · `SessionExpired` · `Forbidden` · `RateLimited` · `ServerError` · `Maintenance` · `ResourceNotFound`. Code: [blocks/state/error-page.md](blocks/state/error-page.md), `get_block("state/error-page", { variant })`.
 
 ---
 
@@ -20053,6 +20179,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 ## When to use
 
 - Showing an ordered pipeline or request path as steps joined by connectors — build → deploy → serve, or a request through a load balancer, a function and its bindings.
+- A request path whose steps must read as equal boxes (You → Azion edge → Origin on an error page) — set `uniform`.
 - A step fans out to several parallel targets and (optionally) back in — wrap those steps in `FlowDiagram.Parallel`.
 - A node with custom content (a card with several rows) where connectors must touch specific parts — mark them with `FlowDiagram.Anchor`.
 
@@ -20081,6 +20208,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `align` | `'start' \| 'center'` | `'start'` | false | Vertical alignment of nodes within the diagram. |
+| `uniform` | `boolean` | `false` | false | Gives every step the width and height of the largest one, so the steps line up as equal boxes. |
 
 ## Slots
 
@@ -20106,6 +20234,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 - `data-disabled` mirrors the `disabled` prop on `flow-diagram-node`
 - `data-styled` is present on `flow-diagram-node` unless `unstyled` (gates the default box utilities)
 - `data-align` mirrors the `align` prop on `flow-diagram` and `flow-diagram-parallel`
+- `data-uniform` mirrors the `uniform` prop on the inner container of `flow-diagram`: the steps become equal columns of a grid (each as wide as the widest step) and every step stretches to the tallest one, so a request path whose steps carry different amounts of text still reads as a row of identical boxes. `align` has no effect while `uniform` is set, because every step fills the row's height
 - Part markers are `data-slot`: `flow-diagram-node`, `flow-diagram-parallel`, `flow-branches` (the nested list of a parallel step), `flow-diagram-anchor` and `flow-port`
 - `data-side` mirrors the `side` prop on `flow-diagram-anchor` (`start` / `end`; absent when the anchor attaches on both edges)
 - The root provides `testId` and `align` as computed refs, so a changed `data-testid` or `align` reaches every sub-component

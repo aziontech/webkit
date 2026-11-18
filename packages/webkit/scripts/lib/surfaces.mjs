@@ -1,7 +1,8 @@
 export const SURFACES = {
   app: 'Product UI (the console and other apps). The default for components.',
   site: 'The marketing site (azion.com): page sections, bands, brand and client assets.',
-  docs: 'The documentation site: doc page chrome, callouts, steps, on-this-page.'
+  docs: 'The documentation site: doc page chrome, callouts, steps, on-this-page.',
+  edge: "Pages Azion's edge serves to the visitors of a customer's site (error pages), with no Azion product chrome and no account actions."
 }
 
 const BY_COMPONENT_FOLDER = {

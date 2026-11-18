@@ -3,13 +3,13 @@ name: flow-diagram
 category: data
 structure: composition
 status: implemented
-spec_version: 7
+spec_version: 8
 figma:
   url: https://www.figma.com/design/y38AUdg5uXuMeXofUkOxv6/Illustrations?node-id=129-2056
   node_id: 129:2056
-checksum: e665bebb3a712606d235503ed126507b838f53d3cc8cef65b4b35fffa365a4df
+checksum: 5ccb462204f47c6cf56a75a0562c1ca5017922105b1988c097439dd15a2ee53e
 created: 2026-06-25
-last_updated: 2026-11-15
+last_updated: 2026-11-18
 ---
 
 # FlowDiagram — Component Spec
@@ -21,6 +21,7 @@ FlowDiagram renders a directed flow diagram: a horizontal sequence of steps (`fl
 ## When to use
 
 - Showing an ordered pipeline or request path as steps joined by connectors — build → deploy → serve, or a request through a load balancer, a function and its bindings.
+- A request path whose steps must read as equal boxes (You → Azion edge → Origin on an error page) — set `uniform`.
 - A step fans out to several parallel targets and (optionally) back in — wrap those steps in `FlowDiagram.Parallel`.
 - A node with custom content (a card with several rows) where connectors must touch specific parts — mark them with `FlowDiagram.Anchor`.
 
@@ -114,9 +115,10 @@ Each part is also a standalone import (`import FlowDiagramNode from '@aziontech/
 
 ## Props
 
-| Prop    | Type                  | Default   | Required | JSDoc                                           |
-| ------- | --------------------- | --------- | -------- | ----------------------------------------------- |
-| `align` | `'start' \| 'center'` | `'start'` | false    | Vertical alignment of nodes within the diagram. |
+| Prop      | Type                  | Default   | Required | JSDoc                                                                                          |
+| --------- | --------------------- | --------- | -------- | ---------------------------------------------------------------------------------------------- |
+| `align`   | `'start' \| 'center'` | `'start'` | false    | Vertical alignment of nodes within the diagram.                                                |
+| `uniform` | `boolean`             | `false`   | false    | Gives every step the width and height of the largest one, so the steps line up as equal boxes. |
 
 ## Events
 
@@ -134,6 +136,7 @@ Each part is also a standalone import (`import FlowDiagramNode from '@aziontech/
 - `data-disabled` mirrors the `disabled` prop on `flow-diagram-node`
 - `data-styled` is present on `flow-diagram-node` unless `unstyled` (gates the default box utilities)
 - `data-align` mirrors the `align` prop on `flow-diagram` and `flow-diagram-parallel`
+- `data-uniform` mirrors the `uniform` prop on the inner container of `flow-diagram`: the steps become equal columns of a grid (each as wide as the widest step) and every step stretches to the tallest one, so a request path whose steps carry different amounts of text still reads as a row of identical boxes. `align` has no effect while `uniform` is set, because every step fills the row's height
 - Part markers are `data-slot`: `flow-diagram-node`, `flow-diagram-parallel`, `flow-branches` (the nested list of a parallel step), `flow-diagram-anchor` and `flow-port`
 - `data-side` mirrors the `side` prop on `flow-diagram-anchor` (`start` / `end`; absent when the anchor attaches on both edges)
 - The root provides `testId` and `align` as computed refs, so a changed `data-testid` or `align` reaches every sub-component
@@ -199,6 +202,7 @@ Composite stories are justified below because FlowDiagram is a composition compo
 - Branches — leading and trailing `flow-diagram-parallel` (fan-in then fan-out), proving connectors route correctly at the edges of the sequence.
 - CustomNodes — `unstyled` nodes whose slot content defines the appearance (a start dot, a tall node, a multi-row card with `flow-diagram-anchor` attachment points).
 - Disabled — a `flow-diagram-node` with the `disabled` prop, showing the reduced-opacity connectors.
+- Uniform — the `uniform` prop: three steps with different amounts of text drawn as identical boxes, the shape the edge error page's request path needs.
 
 ## Constraints — DO NOT
 

@@ -9,6 +9,7 @@ import Branches from '../../../../examples/flow-diagram/branches.vue'
 import Default from '../../../../examples/flow-diagram/default.vue'
 import Disabled from '../../../../examples/flow-diagram/disabled.vue'
 import Parallel from '../../../../examples/flow-diagram/parallel.vue'
+import Uniform from '../../../../examples/flow-diagram/uniform.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import FlowDiagram, { FlowDiagramAnchor, FlowDiagramNode, FlowDiagramParallel } from './index'
 
@@ -539,6 +540,36 @@ describe('FlowDiagram', () => {
         )!
         expect(port.getBoundingClientRect().right).toBeLessThanOrEqual(source.left + 1)
       })
+    })
+  })
+
+  describe('uniform', () => {
+    it('is off by default: steps keep their own size', async () => {
+      const { getByTestId } = render(Default)
+      const root = getByTestId('flow-diagram')
+      expect(root.querySelector('[data-uniform]')).toBeNull()
+    })
+
+    it('gives every step the width and height of the largest one, and the connectors stay straight', async () => {
+      const { getByTestId } = render(Uniform)
+      const root = getByTestId('flow-diagram')
+      expect(root.querySelector('[data-uniform]')).not.toBeNull()
+      const nodes = [...root.querySelectorAll<HTMLElement>('[data-slot="flow-diagram-node"]')].map(
+        (node) => node.getBoundingClientRect()
+      )
+      expect(nodes).toHaveLength(3)
+      for (const node of nodes) {
+        expect(Math.abs(node.width - nodes[1]!.width)).toBeLessThan(0.5)
+        expect(Math.abs(node.height - nodes[1]!.height)).toBeLessThan(0.5)
+        expect(Math.abs(node.top - nodes[1]!.top)).toBeLessThan(0.5)
+      }
+      await waitFor(() => {
+        expect(root.querySelectorAll('svg path').length).toBe(2)
+      })
+      for (const path of root.querySelectorAll('svg path')) {
+        expect(path.getAttribute('d')).toMatch(/^M[\d.-]+,[\d.-]+ L[\d.-]+,[\d.-]+$/)
+      }
+      await expectNoA11yViolations(root)
     })
   })
 })

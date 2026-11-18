@@ -10,6 +10,7 @@
 ## When to use
 
 - Showing an ordered pipeline or request path as steps joined by connectors — build → deploy → serve, or a request through a load balancer, a function and its bindings.
+- A request path whose steps must read as equal boxes (You → Azion edge → Origin on an error page) — set `uniform`.
 - A step fans out to several parallel targets and (optionally) back in — wrap those steps in `FlowDiagram.Parallel`.
 - A node with custom content (a card with several rows) where connectors must touch specific parts — mark them with `FlowDiagram.Anchor`.
 
@@ -39,6 +40,7 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `align` | `'start' \| 'center'` | `'start'` | false | Vertical alignment of nodes within the diagram. |
+| `uniform` | `boolean` | `false` | false | Gives every step the width and height of the largest one, so the steps line up as equal boxes. |
 
 ## Slots
 
@@ -64,6 +66,7 @@
 - `data-disabled` mirrors the `disabled` prop on `flow-diagram-node`
 - `data-styled` is present on `flow-diagram-node` unless `unstyled` (gates the default box utilities)
 - `data-align` mirrors the `align` prop on `flow-diagram` and `flow-diagram-parallel`
+- `data-uniform` mirrors the `uniform` prop on the inner container of `flow-diagram`: the steps become equal columns of a grid (each as wide as the widest step) and every step stretches to the tallest one, so a request path whose steps carry different amounts of text still reads as a row of identical boxes. `align` has no effect while `uniform` is set, because every step fills the row's height
 - Part markers are `data-slot`: `flow-diagram-node`, `flow-diagram-parallel`, `flow-branches` (the nested list of a parallel step), `flow-diagram-anchor` and `flow-port`
 - `data-side` mirrors the `side` prop on `flow-diagram-anchor` (`start` / `end`; absent when the anchor attaches on both edges)
 - The root provides `testId` and `align` as computed refs, so a changed `data-testid` or `align` reaches every sub-component
