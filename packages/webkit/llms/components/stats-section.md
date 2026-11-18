@@ -64,7 +64,7 @@ No built-in strings: every visible and announced text is a prop from the page JS
 
 ## Responsive
 
-- Container queries: none of its own; `stats` owns how the figures wrap.
+- Container queries: none of its own; `stats` makes each cell a size container and shrinks its figures to fit, so a figure never wraps.
 - Narrow (below `md`): the figures stack as `stats` stacks them; the frame rules stay full width.
 - Touch: nothing is interactive.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom.

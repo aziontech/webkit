@@ -608,14 +608,17 @@
    "--text-big-number-lg-font-size",
    "--text-big-number-lg-font-weight",
    "--text-big-number-lg-line-height",
+   "--text-big-number-lg-white-space",
    "--text-big-number-md-font-family",
    "--text-big-number-md-font-size",
    "--text-big-number-md-font-weight",
    "--text-big-number-md-line-height",
+   "--text-big-number-md-white-space",
    "--text-big-number-sm-font-family",
    "--text-big-number-sm-font-size",
    "--text-big-number-sm-font-weight",
    "--text-big-number-sm-line-height",
+   "--text-big-number-sm-white-space",
    "--text-body-2xs-font-size",
    "--text-body-2xs-font-weight",
    "--text-body-2xs-line-height",
@@ -1483,14 +1486,17 @@
     "--text-big-number-lg-font-size",
     "--text-big-number-lg-font-weight",
     "--text-big-number-lg-line-height",
+    "--text-big-number-lg-white-space",
     "--text-big-number-md-font-family",
     "--text-big-number-md-font-size",
     "--text-big-number-md-font-weight",
     "--text-big-number-md-line-height",
+    "--text-big-number-md-white-space",
     "--text-big-number-sm-font-family",
     "--text-big-number-sm-font-size",
     "--text-big-number-sm-font-weight",
     "--text-big-number-sm-line-height",
+    "--text-big-number-sm-white-space",
     "--text-body-2xs-font-size",
     "--text-body-2xs-font-weight",
     "--text-body-2xs-line-height",
@@ -3033,12 +3039,13 @@
     "group": "typography",
     "type": "typography",
     "value": {
+     "white-space": "nowrap",
      "font-size": "1.25rem",
      "line-height": "1.25",
      "font-weight": "400",
      "font-family": "'Proto Mono', 'Roboto Mono', ui-monospace, monospace"
     },
-    "purpose": "A numeric display in a stat card.",
+    "purpose": "A numeric figure in a stat card, on one line, shrunk to fit.",
     "breakpoints": {
      "sm": {
       "font-size": "1.5rem"
@@ -3052,12 +3059,13 @@
     "group": "typography",
     "type": "typography",
     "value": {
+     "white-space": "nowrap",
      "font-size": "1rem",
      "line-height": "1.25",
      "font-weight": "400",
      "font-family": "'Proto Mono', 'Roboto Mono', ui-monospace, monospace"
     },
-    "purpose": "A compact numeric display.",
+    "purpose": "A compact numeric figure, on one line, shrunk to fit.",
     "breakpoints": {
      "sm": {
       "font-size": "1.25rem"
@@ -3068,12 +3076,13 @@
     "group": "typography",
     "type": "typography",
     "value": {
+     "white-space": "nowrap",
      "font-size": "1.5rem",
      "line-height": "1.25",
      "font-weight": "400",
      "font-family": "'Proto Mono', 'Roboto Mono', ui-monospace, monospace"
     },
-    "purpose": "The largest numeric display, such as a hero metric.",
+    "purpose": "The largest numeric figure on one line, shrunk to fit its container.",
     "breakpoints": {
      "sm": {
       "font-size": "2.25rem"

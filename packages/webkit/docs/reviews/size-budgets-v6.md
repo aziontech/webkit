@@ -455,3 +455,5 @@ Budget-raise: css-console 24 KB → 24.1 KB (measured 24.01 KB): the same `text-
 Budget-raise: recognition-marquee-section 21.15 KB → 21.2 KB (measured 21.16 KB): `cn` now knows the `title`, `amount` and `tag` type roles, so it no longer drops them when a text colour follows (RV-B1).
 Budget-raise: code-block 32.4 KB → 32.45 KB (measured 32.4 KB): the same `cn` role list (RV-B1).
 Budget-raise: schema-form 61 KB → 61.05 KB: the same `cn` role list (RV-B1), on top of the date range picker raise.
+Budget-raise: stats-section 4.5 KB → 4.65 KB (measured 4.63 KB): owner report 2026-11-18 (RV-U1), a Stats figure never wraps; the band counts the glyphs of its longest figure so the big-number role shrinks every figure to fit its cell.
+Budget-raise: network-section 26.65 KB → 26.8 KB (measured 26.79 KB): the same Stats figure fit, which the network band renders (RV-U1).
