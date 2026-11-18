@@ -918,7 +918,7 @@ it names the group in the markup.
 are already direct siblings of the page stack, where adding a wrapper is the wrong answer.
 
 A tab strip and its panel are one band too: the panel starts one group step below the strip.
-`Tabs.Content` carries that top padding itself (`DocTabs` inherits it), so never add a margin or a
+`Tabs.Content` carries that top padding itself (a Markdown `<Tabs>` in `DocMarkdown` renders on it too), so never add a margin or a
 `gap` between `Tabs.List` and the panels.
 
 A common miss: a controls row and the table it narrows are **one band**, joined at the group step.
@@ -8348,7 +8348,7 @@ What each prop and event does, and the go-live code: [blocks/shell/console.md](b
 - Surface: docs
 - Source: `blocks/shell/docs/docs.vue` in `@aziontech/webkit`
 - MCP: `get_block("shell/docs")`
-- Components: `claudeMark`, `codexMark`, `copilotMark`, `cursorMark`, `geminiMark`, `opencodeMark`, Brand, Button, CodeBlock, CopyPromptButton, DataTable, Diagram, DocAccordion, DocAccordionGroup, DocAgentCard, DocCallToAction, DocCallout, DocCard, DocCardGroup, DocCodeGroup, DocFrame, DocHeading, DocHero, DocItem, DocLayout, DocMarkdown, DocPageHeader, DocPreviousNext, DocPrompt, DocProse, DocSteps, DocTab, DocTabs, Footer, IconButton, `ItemList`, RegistrationFrame, Select, StatusIndicator, Tag, ThemeSwitcher, ThirdPartyLogo, `use-color-mode`
+- Components: `claudeMark`, `codexMark`, `copilotMark`, `cursorMark`, `geminiMark`, `opencodeMark`, Brand, Button, CodeBlock, CopyPromptButton, DataTable, Diagram, DocAccordion, DocAccordionGroup, DocAgentCard, DocCallToAction, DocCallout, DocCard, DocCardGroup, DocCodeGroup, DocFrame, DocHeading, DocHero, DocItem, DocLayout, DocMarkdown, DocPageHeader, DocPreviousNext, DocPrompt, DocProse, DocSteps, Footer, IconButton, `ItemList`, RegistrationFrame, Select, StatusIndicator, Tabs, Tag, ThemeSwitcher, ThirdPartyLogo, `use-color-mode`
 - Skills: `webkit-layout`, `webkit-navigation`
 
 ## Asked as
@@ -8390,7 +8390,7 @@ What each part takes: [blocks/shell/docs.md](blocks/shell/docs.md).
 - Put everything under `DocPageHeader` in one `DocProse`.
 - Give every navigation row an `id` and an `href` (an in-app path is followed with the router); keep the rail scoped to the current product; the header section links switch products.
 - Build a docs home from the Landing variant: `DocHero` with `CopyPromptButton`, then `DocAgentCard` above the Console / CLI / API cards; its headings carry no `anchor`, so the page shows no outline rail.
-- Build an index of peers (agents, SDKs, integrations) from AgentSetup: pick (a `DocTabs` filter over a `DocCardGroup`), compare (a `Table`), understand (glossary `DocCard`s). Give each peer its own page from AgentGuide.
+- Build an index of peers (agents, SDKs, integrations) from AgentSetup: pick (a `Tabs` filter over a `DocCardGroup`, with `data-doc-block` on `Tabs` inside `DocProse`), compare (a `Table`), understand (glossary `DocCard`s). Give each peer its own page from AgentGuide.
 - Render copy authored as Markdown with MDX tags (a content file, a CMS field, a sentence in data) with `DocMarkdown` inside `DocProse`; the headings it renders are `DocHeading`s with slug ids and join the outline on their own. AgentGuide uses it for its step bodies and accordion answers.
 - Show a comparison of peers or a list of tools as a `DataTable` (`bordered`, imported from `data-table`) inside an element with `data-doc-block data-doc-chrome`, so the prose rules stay off it; a yes/no cell is a check or minus glyph with a visually hidden `Yes` / `No`, a category cell a `Tag` with `severity="neutral"`.
 - Write the deck as the outcome (`By the end of this tutorial, …`), one action per `DocSteps.Step`, with its command as a `CodeBlock` inside the same step.
@@ -29841,6 +29841,7 @@ even when the row carries nothing but its title.
 - Use Tabs to switch between peer views of one page or panel; for the second-level navigation strip of a resource detail page use PageTabs.
 - A page or panel holds several peer views and only one is shown at a time (Overview / Settings / Logs on a resource page).
 - The tab row may outgrow its container — `Tabs.List` scrolls horizontally with edge fades instead of wrapping.
+- Alternative paths through one instruction in documentation (macOS / Linux / Windows, Console / CLI). There is no separate docs tabs component: inside `DocProse` put `data-doc-block` on `Tabs` so it takes the block step, and in Markdown write `<Tabs><Tab title>`, which `DocMarkdown` renders as `Tabs` (6.0 removed `DocTabs` / `DocTab`).
 - Tabs that the user can close: set `closable` on the item and remove it from your data on `@close`.
 - A tab whose form holds unsaved changes: set `dirty` on the item (bind it to `useUnsavedChanges().isDirty`) so the reader sees which section still needs a save.
 
@@ -29853,7 +29854,7 @@ even when the row carries nothing but its title.
 - `closable` only emits `close` with `(event, value)` — remove the tab and its panel from your data yourself; when the active tab unmounts, the root moves to the first enabled tab.
 - `dirty` only marks the tab (a dot after the label, "Unsaved changes" for screen readers); guard the switch itself with `useUnsavedChanges().confirmLeave()` in the setter of the root's `v-model` when leaving must ask first.
 - The selection always comes from the root's value. A row of pressed / unpressed pills outside a `Tabs` root is a `ToggleGroup`, not loose `Tabs.Trigger`s (6.0 removed the item's `selected` prop).
-- Add no spacing between the list and the panels: every `Tabs.Content` starts one group step below the strip (`pt-(--layout-group-gap)`, 16 px), the rule every tab strip in WebKit follows (`DocTabs` inherits it). A consumer `class` can still override it (`pt-0` for a panel that butts against a framed strip). It always renders the panel and needs a `value` (6.0 removed its wrapper mode).
+- Add no spacing between the list and the panels: every `Tabs.Content` starts one group step below the strip (`pt-(--layout-group-gap)`, 16 px), the rule every tab strip in WebKit follows (a Markdown `<Tabs>` rendered by `DocMarkdown` is a `Tabs` too). A consumer `class` can still override it (`pt-0` for a panel that butts against a framed strip). It always renders the panel and needs a `value` (6.0 removed its wrapper mode).
 - Centre the tab row with `<Tabs.List align="center">`, never with a `justify-center` class or a centring wrapper; keep the default `start` for tabs that head a resource page or a settings form.
 
 ## Don’t
