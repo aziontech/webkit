@@ -254,8 +254,6 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [DocPrompt](components/doc-prompt.md): DocPrompt renders text the reader is meant to **run, not read** — the block a documentation page uses when the next step is "say this to your agent".
 - [DocProse](components/doc-prose.md): The typography contract every documentation page inherits.
 - [DocSteps](components/doc-steps.md): The ordered walkthrough from the docs frame: a column of `DocSteps.Step` children joined by a rail.
-- [DocTab](components/doc-tab.md): One panel inside `DocTabs`.
-- [DocTabs](components/doc-tabs.md): Alternative paths through the same instruction ("macOS / Linux / Windows", "Console / CLI").
 
 ## Components: Feedback
 

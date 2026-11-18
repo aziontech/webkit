@@ -1076,6 +1076,14 @@ renders the `<Tooltip tip title linkLabel href>` tag as one, so Markdown sources
 an SFC, compose `<HoverCard><HoverCard.Trigger>…</HoverCard.Trigger><HoverCard.Content>…</HoverCard.Content></HoverCard>`.
 The codemod lists the import as `MANUAL`.
 
+`doc-tabs` and `doc-tab` are removed: they drew the same strip as `Tabs` and added no behaviour.
+In MDX, `DocMarkdown` renders the `<Tabs><Tab title>` tags as `Tabs`, so Markdown sources need no
+change. In an SFC, give each old `DocTab` a value and write
+`<Tabs default-value="console"><Tabs.List><Tabs.Trigger value="console" label="Console" /></Tabs.List><Tabs.Content value="console">…</Tabs.Content></Tabs>`;
+inside `DocProse`, put `data-doc-block` on `Tabs`. The test ids
+are `tabs`, `tabs-list`, `tabs-trigger` and `tabs-content` (were `doc-tabs` and `doc-tab`). The
+codemod lists the imports as `MANUAL`.
+
 `DocStep` is now `DocSteps.Step`: `@aziontech/webkit/doc-steps` is a compound and `doc-step` has
 no standalone export, since a step only renders inside `DocSteps`. Drop the `doc-step` import and
 write `<DocSteps.Step title>`; Markdown sources (`<Steps><Step>`) need no change. The step's test id

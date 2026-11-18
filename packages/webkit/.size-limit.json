@@ -28,7 +28,7 @@
   {
     "name": "doc-markdown",
     "path": "src/components/docs/doc-markdown/doc-markdown.vue",
-    "limit": "28.1 KB",
+    "limit": "28.25 KB",
     "entryOnly": true
   },
   {
@@ -245,16 +245,6 @@
     "name": "doc-heading",
     "path": "src/components/docs/doc-heading/doc-heading.vue",
     "limit": "1.2 KB"
-  },
-  {
-    "name": "doc-tab",
-    "path": "src/components/docs/doc-tab/doc-tab.vue",
-    "limit": "0.5 KB"
-  },
-  {
-    "name": "doc-tabs",
-    "path": "src/components/docs/doc-tabs/doc-tabs.vue",
-    "limit": "17 KB"
   },
   {
     "name": "doc-prompt",

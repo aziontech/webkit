@@ -1,9 +1,0 @@
-{
- "examples": [
-  {
-   "name": "Default",
-   "summary": "One instruction, three platforms. The strip, the indicator and the arrow-key model come from Tabs.",
-   "file": "examples/doc-tabs/default.vue"
-  }
- ]
-}

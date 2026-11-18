@@ -99,6 +99,28 @@ describe('DocMarkdown', () => {
     expect(getByText('CLI')).toBeTruthy()
   })
 
+  it('renders a Tabs tag as Tabs with one tab and panel per Tab title', async () => {
+    const user = userEvent.setup()
+    const { container, findByRole, getByRole } = mount(
+      [
+        '<Tabs>',
+        '  <Tab title="Console">Open Settings, then Domains.</Tab>',
+        '  <Tab title="CLI">Run the link command.</Tab>',
+        '</Tabs>'
+      ].join('\n')
+    )
+    const consoleTab = await findByRole('tab', { name: 'Console' })
+    expect(consoleTab.getAttribute('aria-selected')).toBe('true')
+    expect(container.querySelector('[data-testid="tabs"]')?.hasAttribute('data-doc-block')).toBe(
+      true
+    )
+    expect(getByRole('tabpanel').textContent).toContain('Open Settings, then Domains.')
+    await user.click(getByRole('tab', { name: 'CLI' }))
+    expect(getByRole('tab', { name: 'CLI' }).getAttribute('aria-selected')).toBe('true')
+    expect(getByRole('tabpanel').textContent).toContain('Run the link command.')
+    await expectNoA11yViolations(container)
+  })
+
   it('collapses a CodeGroup into one tabbed block labelled from each fence', async () => {
     const { findAllByRole } = mount(
       [

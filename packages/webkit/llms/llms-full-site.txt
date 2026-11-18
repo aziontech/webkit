@@ -110,7 +110,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 ## Don’t
 
 - For steps the reader must follow in order — use `DocSteps`.
-- For alternative paths through the same instruction — use `DocTabs`.
+- For alternative paths through the same instruction — use `Tabs`.
 - Inside an application screen — use `Accordion` directly.
 
 ## Related
@@ -749,12 +749,12 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 ## Don’t
 
 - For unrelated snippets — use one `CodeBlock` each.
-- For prose that differs per platform — use `DocTabs`.
+- For prose that differs per platform — use `Tabs`.
 
 ## Related
 
 - `CodeBlock` — the surface it renders on.
-- `DocTabs` — alternatives that are prose, not code.
+- `Tabs` — alternatives that are prose, not code.
 
 ## Props
 
@@ -1392,7 +1392,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 # Doc Markdown
 
-> Renders a documentation page written in Markdown with Mintlify-style MDX component tags into the documentation components. Prose becomes plain semantic HTML (headings, paragraphs, lists, block quotes, rules, tables, inline code, links, bold, italic) that the surrounding `DocProse` styles, and the component tags (`<Note>`, `<Steps>`, `<CardGroup>`, `<Tabs>`, `<CodeGroup>`, `<Update>`, `<Tooltip>` …) mount `DocCallout`, `DocSteps`, `DocCardGroup`, `DocTabs`, `DocCodeGroup`, `DocChangelogEntry`, `HoverCard` and the rest. Headings render as `DocHeading` with unique slug ids, and the named export `parseDocMarkdown` returns the same headings (for a standalone `DocOnThisPage`; inside `DocLayout` the rendered `DocHeading`s fill the outline on their own) and the frontmatter (for `DocPageHeader`). It is a small in-house reader of a fixed MDX subset, not an MDX compiler: no JSX expressions, no imports, no script, and no `v-html`, so a page's source can never run code.
+> Renders a documentation page written in Markdown with Mintlify-style MDX component tags into the documentation components. Prose becomes plain semantic HTML (headings, paragraphs, lists, block quotes, rules, tables, inline code, links, bold, italic) that the surrounding `DocProse` styles, and the component tags (`<Note>`, `<Steps>`, `<CardGroup>`, `<Tabs>`, `<CodeGroup>`, `<Update>`, `<Tooltip>` …) mount `DocCallout`, `DocSteps`, `DocCardGroup`, `Tabs`, `DocCodeGroup`, `DocChangelogEntry`, `HoverCard` and the rest. Headings render as `DocHeading` with unique slug ids, and the named export `parseDocMarkdown` returns the same headings (for a standalone `DocOnThisPage`; inside `DocLayout` the rendered `DocHeading`s fill the outline on their own) and the frontmatter (for `DocPageHeader`). It is a small in-house reader of a fixed MDX subset, not an MDX compiler: no JSX expressions, no imports, no script, and no `v-html`, so a page's source can never run code.
 
 - Import: `import DocMarkdown from '@aziontech/webkit/doc-markdown'`
 - Category: docs · Surface: docs · Structure: monolithic
@@ -1424,7 +1424,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - `DocHeading` — every Markdown heading renders as one, with the slug id the outline points at.
 - `DocLayout` — its outline lists the rendered `DocHeading`s with no wiring. `DocOnThisPage` — takes `parseDocMarkdown(source).headings` as `items` when used without the layout.
 - `DocPageHeader` — takes the frontmatter's `title` and `description`.
-- `DocCallout`, `DocSteps`, `DocStep`, `DocCardGroup`, `DocCard`, `DocItem`, `DocAccordionGroup`, `DocAccordion`, `DocTabs`, `DocTab`, `DocCodeGroup`, `DocFrame`, `DocPrompt`, `DocChangelogEntry` — what the tags mount.
+- `DocCallout`, `DocSteps`, `DocStep`, `DocCardGroup`, `DocCard`, `DocItem`, `DocAccordionGroup`, `DocAccordion`, `Tabs` (a `<Tabs>` tag renders `Tabs` with one `Tabs.Trigger` and `Tabs.Content` per `<Tab title>` child), `DocCodeGroup`, `DocFrame`, `DocPrompt`, `DocChangelogEntry` — what the tags mount.
 - `HoverCard` — an inline `<Tooltip tip title linkLabel href>` tag renders as a HoverCard: the term is a dotted-underlined button, the card shows the title, the definition and an optional link.
 - `RegistrationFrame`, `ItemList` — the frame and list an `<ItemGroup>` renders its `<Item>` rows in.
 - `StreamingResponse` — renders chat Markdown with the AI layer's reader; this component reuses that reader's inline tokenizer and `safeHref` and adds the MDX block tags, document heading levels and anchors a docs page needs, which a chat bubble must not have.
@@ -2098,149 +2098,6 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 ```
 
 1 more example(s) in [components/doc-steps.md](components/doc-steps.md).
-
----
-
-<!-- components/doc-tab.md -->
-
-# Doc Tab
-
-> One panel inside `DocTabs`. It carries its title and its body only; `DocTabs` reads the title to build the strip. Rendered on its own it is a `display: contents` wrapper around its body.
-
-- Import: `import DocTab from '@aziontech/webkit/doc-tab'`
-- Category: docs · Surface: docs · Structure: monolithic
-
-## When to use
-
-- As a direct child of `DocTabs`.
-
-## Do
-
-- A short title: the platform or tool name.
-
-## Don’t
-
-- Outside `DocTabs` — it renders no tab of its own.
-
-## Related
-
-- `DocTabs`.
-
-## Props
-
-| Prop | Type | Default | Required | Description |
-| --- | --- | --- | --- | --- |
-| `title` | `string` | `''` | false | The tab label; `DocTabs` reads it to build the strip. |
-
-## Slots
-
-| Slot | Scope | Notes |
-| --- | --- | --- |
-| `default` | — | The panel body. |
-
-## States
-
-- Visual states: `default` (`DocTabs` owns selection).
-
-## Accessibility
-
-- No role of its own; `DocTabs` renders the tab and the tabpanel.
-
-## Examples
-
-### Default
-
-```vue
-<script setup>
-  import DocTab from '@aziontech/webkit/doc-tab'
-  import DocTabs from '@aziontech/webkit/doc-tabs'
-</script>
-
-<template>
-  <DocTabs>
-    <DocTab title="Console">
-      <p>Open the application, then Settings, then Domains.</p>
-    </DocTab>
-    <DocTab title="CLI">
-      <p>Run the link command from the project folder.</p>
-    </DocTab>
-  </DocTabs>
-</template>
-```
-
----
-
-<!-- components/doc-tabs.md -->
-
-# Doc Tabs
-
-> Alternative paths through the same instruction ("macOS / Linux / Windows", "Console / CLI"). It reads the `title` of each `DocTab` child to build the strip and renders each child body in its panel, on `Tabs`, so the strip, the indicator and the keyboard model are the design system's.
-
-- Import: `import DocTabs from '@aziontech/webkit/doc-tabs'`
-- Category: docs · Surface: docs · Structure: monolithic
-
-## When to use
-
-- Use DocTabs only in documentation prose for alternative paths through one instruction (macOS / Linux); product UI uses Tabs.
-- The same procedure that differs per platform or per tool.
-
-## Do
-
-- Two to five tabs; put the most common path first.
-- Keep the panels parallel so switching compares like with like.
-
-## Don’t
-
-- For code-only alternatives — use `DocCodeGroup`.
-- For page navigation — use links or `DocCardGroup`.
-
-## Related
-
-- `DocTab` — the panel it reads.
-- `Tabs` — the surface it renders on.
-- `DocCodeGroup`.
-
-## Slots
-
-| Slot | Scope | Notes |
-| --- | --- | --- |
-| `default` | — | The `DocTab` children, in strip order. A child without a `title` is labelled by its position. |
-
-## States
-
-- The first tab is selected on render; selection state comes from `Tabs`.
-- `data-doc-block` on the root; the strip carries `data-doc-chrome`.
-- The panel text starts one group step (`--layout-group-gap`, 16 px) below the strip, from `Tabs.Content`; DocTabs adds no spacing of its own.
-
-## Accessibility
-
-- `tablist`, `tab` and `tabpanel` roles and the arrow-key model come from `Tabs`.
-- Panels have no padding of their own; the first block in a panel carries the prose rhythm.
-
-## Examples
-
-### Default
-
-```vue
-<script setup>
-  import DocTab from '@aziontech/webkit/doc-tab'
-  import DocTabs from '@aziontech/webkit/doc-tabs'
-</script>
-
-<template>
-  <DocTabs>
-    <DocTab title="macOS">
-      <p>Install the CLI with Homebrew, then run it once to sign in.</p>
-    </DocTab>
-    <DocTab title="Linux">
-      <p>Download the binary for your architecture and put it on your path.</p>
-    </DocTab>
-    <DocTab title="Windows">
-      <p>Run the installer, then open a new terminal so the path is picked up.</p>
-    </DocTab>
-  </DocTabs>
-</template>
-```
 
 ---
 

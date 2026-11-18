@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: 3bae5a2c669c0afdd740786a055570edc46cdc9731d81a931dd35354e5acad14
+checksum: a81683b8bea8b698238eaae5457791e5567b3ff13cf51e2c3d0a786d3074570a
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -25,7 +25,7 @@ The FAQ and "expand for detail" block of a documentation page. It reads the `tit
 ## When NOT to use
 
 - For steps the reader must follow in order — use `DocSteps`.
-- For alternative paths through the same instruction — use `DocTabs`.
+- For alternative paths through the same instruction — use `Tabs`.
 - Inside an application screen — use `Accordion` directly.
 
 ## Related

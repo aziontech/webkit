@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: d0e6812eb32a70809489b53209b8f4216283722e2b6ad5cb60273bf8056fc536
+checksum: d4ea93cb8b0b736352781ba41f84812c8ebab9e01922785963e828ddb521209c
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -24,12 +24,12 @@ One or more code samples of the same thing in different languages or package man
 ## When NOT to use
 
 - For unrelated snippets — use one `CodeBlock` each.
-- For prose that differs per platform — use `DocTabs`.
+- For prose that differs per platform — use `Tabs`.
 
 ## Related
 
 - `CodeBlock` — the surface it renders on.
-- `DocTabs` — alternatives that are prose, not code.
+- `Tabs` — alternatives that are prose, not code.
 
 ## Best practices
 

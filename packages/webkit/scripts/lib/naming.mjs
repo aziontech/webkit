@@ -11,6 +11,8 @@ export const MARKET_ALIASES = {
   'command-palette': 'command',
   cta: 'call-to-action',
   datatable: 'data-table',
+  'doc-tab': 'tabs',
+  'doc-tabs': 'tabs',
   'feature-grid': 'capability-grid-section',
   'file-viewer': 'file-preview',
   'image-viewer': 'file-preview',
