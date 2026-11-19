@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
@@ -17,7 +18,8 @@
   import Switch from '@aziontech/webkit/switch'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
-  import { computed, reactive, ref, watch } from 'vue'
+  import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
+  import { computed, nextTick, reactive, ref, watch } from 'vue'
 
   const open = ref(false)
   const submitting = ref(false)
@@ -95,6 +97,7 @@
     submitting.value = false
     Object.assign(form, blankForm())
     certificateTouched.value = false
+    nextTick(() => guard.commit())
   })
 
   const fullDomain = computed(() => {
@@ -218,6 +221,7 @@
     Object.assign(environment, blankEnvironment())
     Object.assign(environmentErrors, { name: '', cidrs: '', branchMatch: '' })
     environmentSubmitting.value = false
+    nextTick(() => environmentGuard.commit())
   })
 
   const labelIn =
@@ -304,6 +308,36 @@
       toast.success(`${fullDomain.value} added.`)
     }, 600)
   }
+
+  const guard = useUnsavedChanges(() => form, {
+    onDiscard: (baseline) => Object.assign(form, baseline),
+    enabled: () => open.value && !submitting.value
+  })
+  const guardDialog = guard.dialogProps
+  const guardLabels = guard.labels
+
+  const onOpenChange = async (next: boolean) => {
+    if (next) {
+      open.value = true
+      return
+    }
+    if (await guard.confirmLeave()) open.value = false
+  }
+
+  const environmentGuard = useUnsavedChanges(() => environment, {
+    onDiscard: (baseline) => Object.assign(environment, baseline),
+    enabled: () => environmentOpen.value && !environmentSubmitting.value
+  })
+  const environmentGuardDialog = environmentGuard.dialogProps
+  const environmentGuardLabels = environmentGuard.labels
+
+  const onEnvironmentOpenChange = async (next: boolean) => {
+    if (next) {
+      environmentOpen.value = true
+      return
+    }
+    if (await environmentGuard.confirmLeave()) environmentOpen.value = false
+  }
 </script>
 
 <template>
@@ -327,7 +361,8 @@
   </div>
 
   <Drawer
-    v-model:open="open"
+    :open="open"
+    @update:open="onOpenChange"
     size="large"
     side="end"
   >
@@ -498,7 +533,8 @@
     </DrawerContent>
   </Drawer>
   <Drawer
-    v-model:open="environmentOpen"
+    :open="environmentOpen"
+    @update:open="onEnvironmentOpenChange"
     :size="open ? 'medium' : 'large'"
     side="end"
   >
@@ -758,4 +794,46 @@
       </form>
     </DrawerContent>
   </Drawer>
+
+  <ConfirmDialog
+    v-bind="guardDialog"
+    data-testid="unsaved-changes-dialog"
+  >
+    <template #actions>
+      <Button
+        :label="guardLabels.keepEditing"
+        variant="ghost"
+        size="medium"
+        data-autofocus
+        @click="guard.keepEditing"
+      />
+      <Button
+        :label="guardLabels.discard"
+        variant="danger"
+        size="medium"
+        @click="guard.discardAndLeave"
+      />
+    </template>
+  </ConfirmDialog>
+
+  <ConfirmDialog
+    v-bind="environmentGuardDialog"
+    data-testid="environment-unsaved-changes-dialog"
+  >
+    <template #actions>
+      <Button
+        :label="environmentGuardLabels.keepEditing"
+        variant="ghost"
+        size="medium"
+        data-autofocus
+        @click="environmentGuard.keepEditing"
+      />
+      <Button
+        :label="environmentGuardLabels.discard"
+        variant="danger"
+        size="medium"
+        @click="environmentGuard.discardAndLeave"
+      />
+    </template>
+  </ConfirmDialog>
 </template>

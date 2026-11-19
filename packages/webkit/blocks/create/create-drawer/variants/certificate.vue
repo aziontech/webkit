@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
@@ -16,6 +17,7 @@
   import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup, { type ToggleGroupOption } from '@aziontech/webkit/toggle-group'
   import { useLocale } from '@aziontech/webkit/use-locale'
+  import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import { computed, nextTick, reactive, ref, watch } from 'vue'
 
   interface DerNode {
@@ -168,6 +170,7 @@ mr+L2DBwFXtW2qJfNedf/9rU
     Object.assign(form, blankForm(), { name: 'shop.example.com', certificate: SAMPLE_PEM })
     submitted.value = false
     uploadStatus.value = ''
+    nextTick(() => guard.commit())
   })
 
   const parsed = computed(() => parseCertificates(form.certificate))
@@ -245,11 +248,27 @@ mr+L2DBwFXtW2qJfNedf/9rU
       description: `Valid until ${formatDate(certificate.notAfter)}. Bind it to a workload to serve it.`
     })
   }
+
+  const guard = useUnsavedChanges(() => form, {
+    onDiscard: (baseline) => Object.assign(form, baseline),
+    enabled: () => open.value && !submitting.value
+  })
+  const guardDialog = guard.dialogProps
+  const guardLabels = guard.labels
+
+  const onOpenChange = async (next: boolean) => {
+    if (next) {
+      open.value = true
+      return
+    }
+    if (await guard.confirmLeave()) open.value = false
+  }
 </script>
 
 <template>
   <Drawer
-    v-model:open="open"
+    :open="open"
+    @update:open="onOpenChange"
     size="large"
     side="end"
   >
@@ -448,4 +467,25 @@ mr+L2DBwFXtW2qJfNedf/9rU
       </form>
     </DrawerContent>
   </Drawer>
+
+  <ConfirmDialog
+    v-bind="guardDialog"
+    data-testid="unsaved-changes-dialog"
+  >
+    <template #actions>
+      <Button
+        :label="guardLabels.keepEditing"
+        variant="ghost"
+        size="medium"
+        data-autofocus
+        @click="guard.keepEditing"
+      />
+      <Button
+        :label="guardLabels.discard"
+        variant="danger"
+        size="medium"
+        @click="guard.discardAndLeave"
+      />
+    </template>
+  </ConfirmDialog>
 </template>

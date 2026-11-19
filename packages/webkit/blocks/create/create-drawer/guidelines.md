@@ -27,11 +27,11 @@ An outlined medium `Button` where the list lives: under the section on the resou
 
 ### B. Drawer frame — `Drawer`, `DrawerContent` (required)
 
-`Drawer` at `size="large"`, the standard drawer, for every shape; only the nested child steps down to `medium`. It portals over the page with an overlay and holds one `form` with an `aria-label` equal to the title. State resets each time the drawer opens, never on close, so the content stays in place while it slides out.
+`Drawer` at `size="large"`, the standard drawer, for every shape; only the nested child steps down to `medium`. It portals over the page with an overlay and holds one `form` with an `aria-label` equal to the title. State resets each time the drawer opens, never on close, so the content stays in place while it slides out. Typed work is never lost by accident: `useUnsavedChanges(() => form)` takes the form as its baseline on every open (`commit()` after the reset), the `Drawer` is bound with `:open` and `@update:open`, and a dismissal while the form differs from that baseline asks first in a `ConfirmDialog` (`v-bind="guard.dialogProps"`, Unsaved changes) with Keep editing (`guard.keepEditing`, focused) and a danger Discard changes (`guard.discardAndLeave`). A clean form closes at once; a successful save closes without asking. A nested drawer guards its own form the same way.
 
 ### C. Panel header — `PanelHeader`, `DrawerTitle` (required)
 
-`DrawerTitle` with the action and object, a muted one-line description under it, and the drawer's own close button on the right. The close button, the overlay and Escape are the dismissal; there is no Cancel.
+`DrawerTitle` with the action and object, a muted one-line description under it, and the drawer's own close button on the right. The close button, the overlay and Escape are the dismissal; there is no Cancel. Each goes through the unsaved-changes guard: it closes at once while the form is untouched, and asks Unsaved changes when the user has typed.
 
 ### D. Sections — `PanelBody`, `SettingsGroup` (required)
 
@@ -86,7 +86,7 @@ The block takes its option lists, its starting values and the save state through
 | Event         | Payload           | When                                                                                     |
 | ------------- | ----------------- | ---------------------------------------------------------------------------------------- |
 | `submit`      | `(event, values)` | A valid Add Domain, or Retry in the error alert; `values` adds `host`, the full address. |
-| `update:open` | `(open)`          | The trigger, the close button, the overlay or Escape.                                    |
+| `update:open` | `(open)`          | The trigger, or the close button, the overlay or Escape once the guard allows it.        |
 
 The `trigger` slot replaces the Add button (an environment menu, a row menu) and receives `open` to call.
 
@@ -169,7 +169,7 @@ Then delete `sample.ts` and its import.
 - Required fields carry the Required marker from the start; an error is a `Field.Error` with `role="alert"` and the control is `aria-invalid`.
 - The choice cards are a radio group named by the Domain source label; each card's title and description are the radio's name and description.
 - The loading button keeps its label and announces the busy state; the disabled `fieldset` keeps keyboard users out of the form while saving.
-- Escape, the close button and the overlay all dismiss; none of them submit.
+- Escape, the close button and the overlay all dismiss; none of them submit. With typed input they open the Unsaved changes `alertdialog` first, focused on Keep editing; Escape there closes only the alert and the drawer keeps the form.
 
 ## States
 

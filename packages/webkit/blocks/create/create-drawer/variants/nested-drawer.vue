@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
@@ -14,7 +15,8 @@
   import Select from '@aziontech/webkit/select'
   import SettingsRow from '@aziontech/webkit/settings-row'
   import { toast } from '@aziontech/webkit/toast'
-  import { reactive, ref, watch } from 'vue'
+  import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
+  import { nextTick, reactive, ref, watch } from 'vue'
 
   let nextId = 0
   const uid = () => (nextId += 1)
@@ -61,6 +63,7 @@
     form.originId = ''
     errors.name = ''
     errors.originId = ''
+    nextTick(() => guard.commit())
   })
 
   const submitParent = () => {
@@ -81,6 +84,7 @@
     childForm.address = ''
     childErrors.name = ''
     childErrors.address = ''
+    nextTick(() => childGuard.commit())
   })
 
   const submitChild = () => {
@@ -92,6 +96,36 @@
     form.originId = value
     errors.originId = ''
     childOpen.value = false
+  }
+
+  const guard = useUnsavedChanges(() => form, {
+    onDiscard: (baseline) => Object.assign(form, baseline),
+    enabled: () => parentOpen.value && !submitting.value
+  })
+  const guardDialog = guard.dialogProps
+  const guardLabels = guard.labels
+
+  const onParentOpenChange = async (next: boolean) => {
+    if (next) {
+      parentOpen.value = true
+      return
+    }
+    if (await guard.confirmLeave()) parentOpen.value = false
+  }
+
+  const childGuard = useUnsavedChanges(() => childForm, {
+    onDiscard: (baseline) => Object.assign(childForm, baseline),
+    enabled: () => childOpen.value && !childSubmitting.value
+  })
+  const childGuardDialog = childGuard.dialogProps
+  const childGuardLabels = childGuard.labels
+
+  const onChildOpenChange = async (next: boolean) => {
+    if (next) {
+      childOpen.value = true
+      return
+    }
+    if (await childGuard.confirmLeave()) childOpen.value = false
   }
 </script>
 
@@ -125,7 +159,8 @@
     </ul>
 
     <Drawer
-      v-model:open="parentOpen"
+      :open="parentOpen"
+      @update:open="onParentOpenChange"
       size="large"
       side="end"
     >
@@ -274,7 +309,8 @@
     </Drawer>
 
     <Drawer
-      v-model:open="childOpen"
+      :open="childOpen"
+      @update:open="onChildOpenChange"
       size="medium"
       side="end"
     >
@@ -388,5 +424,47 @@
         </form>
       </DrawerContent>
     </Drawer>
+
+    <ConfirmDialog
+      v-bind="guardDialog"
+      data-testid="unsaved-changes-dialog"
+    >
+      <template #actions>
+        <Button
+          :label="guardLabels.keepEditing"
+          variant="ghost"
+          size="medium"
+          data-autofocus
+          @click="guard.keepEditing"
+        />
+        <Button
+          :label="guardLabels.discard"
+          variant="danger"
+          size="medium"
+          @click="guard.discardAndLeave"
+        />
+      </template>
+    </ConfirmDialog>
+
+    <ConfirmDialog
+      v-bind="childGuardDialog"
+      data-testid="child-unsaved-changes-dialog"
+    >
+      <template #actions>
+        <Button
+          :label="childGuardLabels.keepEditing"
+          variant="ghost"
+          size="medium"
+          data-autofocus
+          @click="childGuard.keepEditing"
+        />
+        <Button
+          :label="childGuardLabels.discard"
+          variant="danger"
+          size="medium"
+          @click="childGuard.discardAndLeave"
+        />
+      </template>
+    </ConfirmDialog>
   </div>
 </template>

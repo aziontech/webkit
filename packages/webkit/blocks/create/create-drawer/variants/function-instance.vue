@@ -5,6 +5,7 @@
     type CodeEditorMarker,
     type CodeEditorMonacoModule
   } from '@aziontech/webkit/code-editor'
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
@@ -21,6 +22,7 @@
   import SettingsGroup from '@aziontech/webkit/settings-group'
   import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import { computed, nextTick, reactive, ref, watch } from 'vue'
 
   interface FunctionOption {
@@ -192,7 +194,10 @@
     view.value = 'fields'
     submitting.value = false
     open.value = true
-    nextTick(() => schemaFormEl.value?.clearValidation())
+    nextTick(() => {
+      schemaFormEl.value?.clearValidation()
+      guard.commit()
+    })
   }
 
   const onFunction = (value: string) => {
@@ -265,6 +270,20 @@
       toast.success(`${record.name} ${editingId.value ? 'saved' : 'added'}.`)
     }, 600)
   }
+
+  const guard = useUnsavedChanges(() => ({ ...form, json: json.value }), {
+    enabled: () => open.value && !submitting.value
+  })
+  const guardDialog = guard.dialogProps
+  const guardLabels = guard.labels
+
+  const onOpenChange = async (next: boolean) => {
+    if (next) {
+      open.value = true
+      return
+    }
+    if (await guard.confirmLeave()) open.value = false
+  }
 </script>
 
 <template>
@@ -308,7 +327,8 @@
   </div>
 
   <Drawer
-    v-model:open="open"
+    :open="open"
+    @update:open="onOpenChange"
     size="large"
     side="end"
   >
@@ -467,4 +487,25 @@
       </form>
     </DrawerContent>
   </Drawer>
+
+  <ConfirmDialog
+    v-bind="guardDialog"
+    data-testid="unsaved-changes-dialog"
+  >
+    <template #actions>
+      <Button
+        :label="guardLabels.keepEditing"
+        variant="ghost"
+        size="medium"
+        data-autofocus
+        @click="guard.keepEditing"
+      />
+      <Button
+        :label="guardLabels.discard"
+        variant="danger"
+        size="medium"
+        @click="guard.discardAndLeave"
+      />
+    </template>
+  </ConfirmDialog>
 </template>

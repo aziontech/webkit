@@ -58,6 +58,32 @@ describe('create-drawer#Certificate', () => {
     )
     await waitFor(() => expect(document.activeElement?.tagName).toBe('TEXTAREA'))
   })
+
+  it('asks before Escape discards an edited certificate; Escape on the alert keeps the drawer', async () => {
+    render(Certificate)
+    const panel = await openDrawer(/Create Certificate/)
+    const name = within(panel).getByRole('textbox', { name: /^Name\b/ }) as HTMLInputElement
+    await fireEvent.update(name, 'store.example.com')
+    await userEvent.keyboard('{Escape}')
+    const confirm = await screen.findByRole('alertdialog')
+    expect(within(confirm).getByRole('button', { name: 'Keep editing' })).toBeTruthy()
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(document.querySelector('[role="alertdialog"]')).toBeNull(), wait)
+    expect(panel.isConnected).toBe(true)
+    expect(name.value).toBe('store.example.com')
+    await userEvent.keyboard('{Escape}')
+    const again = await screen.findByRole('alertdialog')
+    await fireEvent.click(within(again).getByRole('button', { name: 'Discard changes' }))
+    await waitFor(() => expect(document.querySelector('[role="dialog"]')).toBeNull(), wait)
+  })
+
+  it('closes at once on Escape when the prefilled certificate is untouched', async () => {
+    render(Certificate)
+    await openDrawer(/Create Certificate/)
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(document.querySelector('[role="dialog"]')).toBeNull(), wait)
+    expect(document.querySelector('[role="alertdialog"]')).toBeNull()
+  })
 })
 
 describe('create-drawer', () => {
@@ -266,5 +292,14 @@ describe('create-drawer#FunctionInstance', () => {
     expect(panel.getByRole('heading', { name: 'Edit Function Instance' })).toBeTruthy()
     expect((panel.getByLabelText(/Width/) as HTMLInputElement).value).toBe('800')
     expect(panel.getByRole('radiogroup', { name: 'Arguments view' })).toBeTruthy()
+  })
+
+  it('closes an untouched edit at once on Escape', async () => {
+    render(FunctionInstance)
+    await fireEvent.click(screen.getByRole('button', { name: 'Edit resize-product-images' }))
+    await waitFor(() => expect(dialogs()).toHaveLength(1))
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(dialogs()).toHaveLength(0), wait)
+    expect(document.querySelector('[role="alertdialog"]')).toBeNull()
   })
 })
