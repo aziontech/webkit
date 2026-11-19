@@ -41,4 +41,48 @@ describe('useFocusTrap', () => {
       vi.restoreAllMocks()
     }
   })
+
+  it('wraps from the last tabbable member when the trap ends in a roving-tabindex group', async () => {
+    const active = ref(false)
+    const Host = defineComponent({
+      setup() {
+        const container = ref<HTMLElement | null>(null)
+        useFocusTrap(container, active)
+        return () =>
+          h('div', { ref: container }, [
+            h('button', { type: 'button' }, 'First'),
+            h('button', { type: 'button', disabled: true }, 'Disabled'),
+            h('div', { inert: '' }, [h('button', { type: 'button' }, 'Inert')]),
+            h('button', { type: 'button', hidden: true }, 'Hidden'),
+            h('div', { role: 'radiogroup', 'aria-label': 'Theme' }, [
+              h(
+                'button',
+                { type: 'button', role: 'radio', 'aria-checked': 'true', tabindex: 0 },
+                'Dark'
+              ),
+              h(
+                'button',
+                { type: 'button', role: 'radio', 'aria-checked': 'false', tabindex: -1 },
+                'Light'
+              )
+            ])
+          ])
+      }
+    })
+    const { getByRole, getByText } = render(Host)
+    active.value = true
+    await nextTick()
+    await nextTick()
+    expect(document.activeElement).toBe(getByRole('button', { name: 'First' }))
+    const dark = getByRole('radio', { name: 'Dark' })
+    dark.focus()
+    dark.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }))
+    expect(document.activeElement).toBe(getByRole('button', { name: 'First' }))
+    const first = getByRole('button', { name: 'First' })
+    first.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, bubbles: true }))
+    expect(document.activeElement).toBe(dark)
+    expect(getByText('Inert')).toBeTruthy()
+    active.value = false
+    await nextTick()
+  })
 })

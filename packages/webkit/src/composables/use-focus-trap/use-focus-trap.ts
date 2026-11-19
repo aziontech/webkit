@@ -2,8 +2,7 @@ import { defaultDocument, useEventListener } from '@vueuse/core'
 import type { MaybeRefOrGetter } from 'vue'
 import { nextTick, toValue, watch } from 'vue'
 
-const FOCUSABLE_SELECTOR =
-  'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
+import { tabbableIn } from '../../utils/tabbable'
 
 const AUTOFOCUS_SELECTOR = '[data-autofocus]:not([disabled])'
 
@@ -23,9 +22,7 @@ export function useFocusTrap(
       const root = toValue(containerEl)
       if (!root) return
 
-      const focusable = Array.from(root.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)).filter(
-        (el) => !el.hasAttribute('disabled') && el.offsetParent !== null
-      )
+      const focusable = tabbableIn(root)
 
       const first = focusable[0]
       const last = focusable[focusable.length - 1]
@@ -44,7 +41,7 @@ export function useFocusTrap(
         return
       }
 
-      if (activeEl === last) {
+      if (activeEl === last || !root.contains(activeEl)) {
         event.preventDefault()
         first.focus()
       }
@@ -58,9 +55,7 @@ export function useFocusTrap(
       void nextTick(() => {
         const root = toValue(containerEl)
         if (!root) return
-        const first =
-          root.querySelector<HTMLElement>(AUTOFOCUS_SELECTOR) ??
-          root.querySelector<HTMLElement>(FOCUSABLE_SELECTOR)
+        const first = root.querySelector<HTMLElement>(AUTOFOCUS_SELECTOR) ?? tabbableIn(root)[0]
         if (first) {
           first.focus()
         } else {
