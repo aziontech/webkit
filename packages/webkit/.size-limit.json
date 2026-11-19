@@ -1252,6 +1252,11 @@
     "limit": "2 KB"
   },
   {
+    "name": "subagent-card",
+    "path": "src/components/ai/subagent-card/subagent-card.vue",
+    "limit": "5 KB"
+  },
+  {
     "name": "tool-call",
     "path": "src/components/ai/tool-call/tool-call.vue",
     "limit": "3.5 KB"
