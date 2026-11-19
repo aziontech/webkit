@@ -86,6 +86,22 @@ describe('computePlacement (pure geometry)', () => {
     expect([r.side, r.align]).toEqual(['top', 'start'])
   })
 
+  it('a sub-menu on a phone opens below its row when neither side has room, inside the screen', () => {
+    const r = computePlacement(
+      base({
+        boundary: rect(0, 0, 390, 844),
+        triggerRect: rect(9, 137, 254, 40),
+        panelSize: { width: 254, height: 160 },
+        side: 'auto',
+        autoSides: ['end', 'start', 'bottom', 'top']
+      })
+    )
+    expect(r.side).toBe('bottom')
+    expect(r.left).toBeGreaterThanOrEqual(8)
+    expect(r.left + r.width).toBeLessThanOrEqual(382)
+    expect(r.width).toBe(254)
+  })
+
   it('shifts the panel back inside a boundary narrower than the viewport', () => {
     const boundary = rect(0, 0, 300, 600)
     const r = computePlacement(base({ boundary, triggerRect: rect(200, 100, 80, 40) }))

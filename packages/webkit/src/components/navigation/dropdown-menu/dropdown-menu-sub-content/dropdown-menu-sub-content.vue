@@ -36,7 +36,8 @@
     triggerRef: sub.triggerEl,
     panelRef: panelEl,
     isOpen,
-    side: 'end',
+    side: 'auto',
+    autoSides: ['end', 'start', 'bottom', 'top'],
     align: 'start',
     sideOffset: 4,
     onDismiss: () => sub.setOpen(false)
@@ -128,7 +129,7 @@
         :data-side="resolvedSide"
         :data-align="resolvedAlign"
         :style="panelStyle"
-        class="flex min-w-(--container-3xs) max-w-(--container-2xs) flex-col overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) py-(--spacing-xs) shadow-(--shadow-sm) outline-none [transform-origin:var(--popup-origin,top_left)]"
+        class="flex min-w-[min(var(--container-3xs),calc(100vw-2*var(--spacing-xs)))] max-w-[min(var(--container-2xs),calc(100vw-2*var(--spacing-xs)))] flex-col overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) py-(--spacing-xs) shadow-(--shadow-sm) outline-none [transform-origin:var(--popup-origin,top_left)]"
         @keydown="onKeydown"
         @pointerenter="onPointerenter"
       >

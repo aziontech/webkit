@@ -1,4 +1,5 @@
 <script setup>
+  import AppLayout from '@aziontech/webkit/app-layout'
   import Avatar from '@aziontech/webkit/avatar'
   import CommandEmpty from '@aziontech/webkit/command-empty'
   import CommandGroup from '@aziontech/webkit/command-group'
@@ -33,13 +34,14 @@
 </script>
 
 <template>
-  <div class="relative flex h-screen min-h-0">
-    <div class="flex min-h-0 shrink-0 max-md:hidden">
+  <AppLayout class="h-screen">
+    <template #navigation="{ drawer }">
       <Sidebar
-        v-model:open="open"
+        :open="drawer || open"
+        @update:open="open = $event"
         v-model:width="width"
-        resizable
-        collapsible
+        :resizable="!drawer"
+        :collapsible="!drawer"
         aria-label="Console"
       >
         <template #header>
@@ -232,13 +234,28 @@
           </SidebarFooter>
         </template>
       </Sidebar>
-    </div>
+    </template>
 
-    <main class="min-w-0 flex-1 p-(--spacing-lg)">
+    <template #header="{ compact, openNavigation }">
+      <div
+        v-if="compact"
+        class="flex h-14 shrink-0 items-center border-b border-(--border-default) px-(--spacing-md)"
+      >
+        <IconButton
+          icon="az az-menu"
+          aria-label="Open navigation"
+          variant="outline"
+          size="medium"
+          @click="openNavigation"
+        />
+      </div>
+    </template>
+
+    <main class="min-w-0 p-(--spacing-lg)">
       <p class="text-body-sm text-(--text-muted)">
         The page morphs as the rail animates — it is a flex sibling, so it fills the freed space on
         the same frames.
       </p>
     </main>
-  </div>
+  </AppLayout>
 </template>
