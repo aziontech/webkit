@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/edit/edit-function/edit-function.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/edit-function")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeEditor](../../components/code-editor.md), [CopyButton](../../components/copy-button.md), [EmptyState](../../components/empty-state.md), `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [KeyValueList](../../components/key-value-list.md), [Link](../../components/link.md), `LogViewerContent`, [LogViewer](../../components/log-viewer.md), [PageTabs](../../components/page-tabs.md), [RadioGroup](../../components/radio-group.md), `ResizableHandle`, `ResizablePane`, `ResizableRoot`, [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [StatusIndicator](../../components/status-indicator.md), [Switch](../../components/switch.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), [Trace](../../components/trace.md)
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeEditor](../../components/code-editor.md), [ConfirmDialog](../../components/confirm-dialog.md), [CopyButton](../../components/copy-button.md), [EmptyState](../../components/empty-state.md), `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [KeyValueList](../../components/key-value-list.md), [Link](../../components/link.md), `LogViewerContent`, [LogViewer](../../components/log-viewer.md), [PageTabs](../../components/page-tabs.md), [RadioGroup](../../components/radio-group.md), `ResizableHandle`, `ResizablePane`, `ResizableRoot`, [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [StatusIndicator](../../components/status-indicator.md), [Switch](../../components/switch.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), [Trace](../../components/trace.md)
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-form`
 
 ## Asked as
@@ -57,7 +57,7 @@ In TestRun the Code document becomes a vertical `ResizableRoot`: the editor is t
 
 ### E. Arguments split — `ResizableRoot`, `ResizablePane`, `ResizableHandle`, `CodeEditor`, `Button` (required)
 
-A count of fields and the outlined Add field and Remove form `Button`s sit above a `ResizableRoot`. The left `ResizablePane` holds the schema as JSON in a `CodeEditor` (`language="json"`, `fill`, `pad-line-numbers` and the same `loadMonaco`); it is `collapsible` with a minimum and maximum width. The `ResizableHandle` resizes it and collapses it past its minimum. The right pane holds the fields form; both panes describe the same argument form. A `ResizeObserver` on the split keeps the fields usable: while the split is narrower than 640 px (a phone) the `ResizableRoot` turns `vertical`, with the schema on top at 240 px and the fields below at full width; wider, the schema is capped at 45% of the split so the fields never drop under their minimum.
+A count of fields and the outlined Add field and Remove form `Button`s sit above a `ResizableRoot`. Remove form asks first in a small `ConfirmDialog` (the field count, and that Discard brings them back until Save) before it empties the schema. The left `ResizablePane` holds the schema as JSON in a `CodeEditor` (`language="json"`, `fill`, `pad-line-numbers` and the same `loadMonaco`); it is `collapsible` with a minimum and maximum width. The `ResizableHandle` resizes it and collapses it past its minimum. The right pane holds the fields form; both panes describe the same argument form. A `ResizeObserver` on the split keeps the fields usable: while the split is narrower than 640 px (a phone) the `ResizableRoot` turns `vertical`, with the schema on top at 240 px and the fields below at full width; wider, the schema is capped at 45% of the split so the fields never drop under their minimum.
 
 ### F. No fields — `EmptyState`, `Button`, `Link` (optional)
 
@@ -206,6 +206,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-function
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import CodeEditor, { type CodeEditorMonacoModule } from '@aziontech/webkit/code-editor'
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import EmptyState from '@aziontech/webkit/empty-state'
   import FieldError from '@aziontech/webkit/field-error'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -503,9 +504,11 @@ Each variant is the same screen in another state: `get_block("edit/edit-function
       target?.focus()
     })
   }
+  const removeFormOpen = ref(false)
   const removeForm = () => {
     form.schema = cleanSchema
     draftFields.value = []
+    removeFormOpen.value = false
   }
 
   const onTypeChange = (field: SchemaField) => {
@@ -673,14 +676,24 @@ Each variant is the same screen in another state: `get_block("edit/edit-function
                           :disabled="saving"
                           @click="addField"
                         />
-                        <Button
-                          label="Remove form"
-                          variant="outline"
-                          size="medium"
-                          icon="az az-x"
-                          :disabled="saving"
-                          @click="removeForm"
-                        />
+                        <ConfirmDialog
+                          v-model:open="removeFormOpen"
+                          title="Remove form"
+                          :description="`The ${draftFields.length} ${draftFields.length === 1 ? 'field' : 'fields'} of the argument form are removed. Discard brings them back until you save.`"
+                          confirm-label="Remove form"
+                          size="small"
+                          @confirm="removeForm"
+                        >
+                          <template #trigger>
+                            <Button
+                              label="Remove form"
+                              variant="outline"
+                              size="medium"
+                              icon="az az-x"
+                              :disabled="saving"
+                            />
+                          </template>
+                        </ConfirmDialog>
                       </div>
                     </div>
                     <div

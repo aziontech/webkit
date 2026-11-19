@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/view/view-card/view-card.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-card")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CardList](../../components/card-list.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [EmptyState](../../components/empty-state.md), [Input](../../components/input.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [Pagination](../../components/pagination.md), [PropertyFilter](../../components/property-filter.md), [Tag](../../components/tag.md), `use-collection`, `use-locale`
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CardList](../../components/card-list.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [EmptyState](../../components/empty-state.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [Pagination](../../components/pagination.md), [PropertyFilter](../../components/property-filter.md), [Tag](../../components/tag.md), `use-collection`, `use-locale`
 - Skills: `webkit-lists`, `webkit-ui-states`
 
 ## Asked as
@@ -48,7 +48,7 @@ An outlined medium Delete `Button` with the trash icon beside the filter acts on
 
 ### D. Delete confirmation — `ConfirmDialog`, `Alert`, `Input` (required)
 
-The `edit/edit-delete-dialog` pattern adapted to a selection: a medium `ConfirmDialog` whose trigger is the Delete (n) button, titled with the count (`Delete 3 applications`, `Delete application` for one). The body stacks the warning `Alert` (`Once confirmed, this action can't be reversed.`), one sentence of consequence that lists the selected names, and an `Input` labelled by `Type delete to confirm.` (a list of names cannot be retyped, so the confirmation is the verb). The actions are Cancel and a danger `Delete applications` that enables only once the word matches; confirming removes the selected items and clears the selection. The typed word resets each time the dialog opens.
+The `edit/edit-delete-dialog` pattern adapted to a selection: a medium `ConfirmDialog` whose trigger is the Delete (n) button, titled with the count (`Delete 3 applications`, `Delete application` for one). The body stacks the warning `Alert` (`Once confirmed, this action can't be reversed.`), one sentence of consequence that lists the selected names, and the typed confirmation from `ConfirmDialog` `confirmation-phrase`: one application asks for its name, several ask for `delete` (a list of names cannot be retyped, so the confirmation is the verb), matched exactly and case-sensitive. The actions are Cancel and a danger `Delete applications` that enables only once the text matches; confirming removes the selected items and clears the selection. The typed word resets each time the dialog opens.
 
 ### E. Card preferences — `CollectionPreferences` (required)
 
@@ -137,7 +137,7 @@ Then delete `sample.ts` and its import.
 - **Filter:** placeholder and `aria-label` name what is filtered, e.g. "Filter applications".
 - **Bulk action:** the verb, then the count in parentheses, e.g. "Delete", "Delete (3)".
 - **Field labels:** one or two words, sentence case, no colon, e.g. "Status", "Domain", "Region", "Requests in 24h", "Owner". Preferences title: "Card preferences".
-- **Delete dialog:** title `Delete <n> applications`, consequence `The selected applications will be deleted, along with their domains and settings:` followed by the names, prompt `Type delete to confirm.`, actions `Cancel` and `Delete applications` (singular for one).
+- **Delete dialog:** title `Delete <n> applications`, consequence `The selected applications will be deleted, along with their domains and settings:` followed by the names, prompt `Type <name> to confirm.` for one, `Type delete to confirm.` for several, actions `Cancel` and `Delete applications` (singular for one).
 - **No match:** "No matching applications", then "No application matches these filters.", and the action "Clear filters".
 - **Empty:** title states the fact, e.g. "No applications yet"; description is one sentence with what to do, e.g. "Create an application to start serving traffic."
 - Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
@@ -189,7 +189,6 @@ Each variant is the same screen in another state: `get_block("view/view-card", {
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import EmptyState from '@aziontech/webkit/empty-state'
-  import Input from '@aziontech/webkit/input'
   import Link from '@aziontech/webkit/link'
   import PageHeader from '@aziontech/webkit/page-header'
   import Pagination from '@aziontech/webkit/pagination-root'
@@ -197,7 +196,7 @@ Each variant is the same screen in another state: `get_block("view/view-card", {
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
   import { useLocale } from '@aziontech/webkit/use-locale'
-  import { computed, ref, useId, watch } from 'vue'
+  import { computed, ref, watch } from 'vue'
 
   import { sampleApplications } from './sample'
 
@@ -328,10 +327,7 @@ Each variant is the same screen in another state: `get_block("view/view-card", {
   const severityOf = (value: CardViewApplicationStatus): TagSeverity =>
     value === 'Active' ? 'success' : value === 'Degraded' ? 'warning' : 'neutral'
 
-  const CONFIRM_WORD = 'delete'
   const deleteOpen = ref(false)
-  const confirmation = ref('')
-  const confirmLabelId = useId()
   const deleteNoun = computed(() =>
     selectedCount.value === 1 ? 'application' : `${selectedCount.value} applications`
   )
@@ -340,14 +336,11 @@ Each variant is the same screen in another state: `get_block("view/view-card", {
       ? 'The selected application will be deleted, along with its domains and settings:'
       : 'The selected applications will be deleted, along with their domains and settings:'
   )
-  const canDelete = computed(() => confirmation.value.trim().toLowerCase() === CONFIRM_WORD)
-
-  watch(deleteOpen, (isOpen) => {
-    if (isOpen) confirmation.value = ''
-  })
+  const deletePhrase = computed(() =>
+    selectedCount.value === 1 ? (selectedItems.value[0]?.name ?? '') : 'delete'
+  )
 
   const confirmDelete = (event: Event) => {
-    if (!canDelete.value) return
     const deleted = [...selectedItems.value]
     const doomed = new Set(deleted.map((item) => item.id))
     items.value = items.value.filter((item) => !doomed.has(item.id))
@@ -398,6 +391,9 @@ Each variant is the same screen in another state: `get_block("view/view-card", {
                 v-model:open="deleteOpen"
                 :title="`Delete ${deleteNoun}`"
                 size="medium"
+                :confirm-label="selectedCount === 1 ? 'Delete application' : 'Delete applications'"
+                :confirmation-phrase="deletePhrase"
+                @confirm="confirmDelete"
               >
                 <template #trigger>
                   <Button
@@ -420,35 +416,7 @@ Each variant is the same screen in another state: `get_block("view/view-card", {
                     }}</bdi
                     >.
                   </p>
-                  <p
-                    :id="confirmLabelId"
-                    class="m-0 text-body-sm text-(--text-default)"
-                  >
-                    Type <code class="text-label-code-sm">{{ CONFIRM_WORD }}</code> to confirm.
-                  </p>
-                  <Input
-                    v-model="confirmation"
-                    :aria-labelledby="confirmLabelId"
-                    autocomplete="off"
-                    class="w-full"
-                    @keydown.enter="confirmDelete"
-                  />
                 </div>
-                <template #actions="{ close }">
-                  <Button
-                    label="Cancel"
-                    variant="outline"
-                    size="medium"
-                    @click="close"
-                  />
-                  <Button
-                    :label="selectedCount === 1 ? 'Delete application' : 'Delete applications'"
-                    variant="danger"
-                    size="medium"
-                    :disabled="!canDelete"
-                    @click="confirmDelete"
-                  />
-                </template>
               </ConfirmDialog>
               <CollectionPreferences
                 v-bind="preferencesProps"

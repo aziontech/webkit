@@ -1,11 +1,11 @@
 # EditDeleteDialog (`edit/edit-delete-dialog`)
 
-> The destructive confirmation a resource list uses for Delete: a warning `Alert`, a sentence naming what goes with the resource and a Help Center link, then a prompt that shows the resource name in code type with a `CopyButton` beside it and an input the user must match before Delete enables. Every resource list, a folder of files and a table of records open it from the row Delete action; the title reads Delete plus the resource kind, and a container that holds other items passes its own consequence sentence. Delete shows its loading state while the request runs (Cancel and the input are locked, the dialog cannot be dismissed), then closes with a success toast; a refused delete keeps the dialog and the typed name and swaps the warning for a danger `Alert` saying why (Error). The typed confirmation resets each time the dialog opens, so the content stays put while it closes. Built from `ConfirmDialog` (the body in its default slot, its own Cancel and Delete buttons with `loading` and `disabled`), `Alert`, `CopyButton`, `Input` and `Button`; closed by default behind a visible danger trigger. The SettingsRow variant is the settings-page delete: an outlined `Item` row opens the same `ConfirmDialog` with a labelled `Field` + `Input` in its body.
+> The destructive confirmation a resource list uses for Delete: a warning `Alert`, a sentence naming what goes with the resource and a Help Center link, then the typed confirmation `ConfirmDialog` draws from `confirmation-phrase`: the resource name in code type and an input the user must match exactly (case-sensitive) before Delete enables. Every resource list, a folder of files and a table of records open it from the row Delete action; the title reads Delete plus the resource kind, and a container that holds other items passes its own consequence sentence. Delete shows its loading state while the request runs (Cancel and the input are locked, the dialog cannot be dismissed), then closes with a success toast; a refused delete keeps the dialog and the typed name and swaps the warning for a danger `Alert` saying why (Error). The typed confirmation resets each time the dialog opens, so the content stays put while it closes. Built from `ConfirmDialog` (the body in its default slot, `confirmation-phrase` for the typed name, its own Cancel and Delete buttons with `loading`), `Alert` and `Button`; closed by default behind a visible danger trigger. The SettingsRow variant is the settings-page delete: an outlined `Item` row opens the same `ConfirmDialog` with the same typed name.
 
 - Surface: app
 - Source: `blocks/edit/edit-delete-dialog/edit-delete-dialog.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/edit-delete-dialog")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [ConfirmDialog](../../components/confirm-dialog.md), [CopyButton](../../components/copy-button.md), [Field](../../components/field.md), [Input](../../components/input.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), [Toast](../../components/toast.md)
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [ConfirmDialog](../../components/confirm-dialog.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), [Toast](../../components/toast.md)
 - Skills: `webkit-ux-heuristics`, `webkit-microcopy`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -32,21 +32,17 @@ The last stop before a resource is gone for good. The user chose Delete from a r
 
 ### A. Dialog and trigger — `ConfirmDialog`, `Button` (required)
 
-`ConfirmDialog` at `size="medium"`, bound with `v-model:open`, closed by default. Its `#trigger` slot holds the visible `Button variant="danger"` that opens it; in a list the trigger is the row menu's Delete option instead. The title reads Delete plus the resource kind, the same string as the trigger. The body goes in the default slot; the dialog's own Cancel and Delete buttons take `confirm-label`, `cancel-label`, `:disabled` and `:loading`.
+`ConfirmDialog` at `size="medium"`, bound with `v-model:open`, closed by default. Its `#trigger` slot holds the visible `Button variant="danger"` that opens it; in a list the trigger is the row menu's Delete option instead. The title reads Delete plus the resource kind, the same string as the trigger. The body goes in the default slot; the dialog's own Cancel and Delete buttons take `confirm-label`, `cancel-label`, `:confirmation-phrase` and `:loading`.
 
 ### B. Consequence — `Alert` (required)
 
 A `severity="warning"` `Alert` first in the body states that the action cannot be reversed. Below it, one muted sentence names what goes with the resource and links the Help Center with the `text-link` utility. When the server refuses the delete, the same slot shows a `severity="danger"` `Alert` that says what blocks it and how to fix it. A container that holds other items (a folder, a database) passes its own consequence sentence instead of the generic one.
 
-### C. Name and copy — `CopyButton` (required)
+### C. Typed confirmation — `ConfirmDialog` `confirmation-phrase` (required)
 
-The prompt "Type … to confirm." shows the resource name in `text-label-code-sm` with a `CopyButton` beside it (`aria-label` "Copy resource-01", `copied-label` "Copied"), so the user can paste the exact name.
+Pass the resource name as `confirmation-phrase`; never hand-write the field. `ConfirmDialog` renders the prompt "Type `resource-01` to confirm." with the name in code type and a full-width `Input` labelled by it, moves focus into the field on open, and keeps Delete disabled until the typed text matches the name exactly (case-sensitive, the ends trimmed). Enter in the field confirms only when it matches. The field empties each time the dialog opens, never as it closes, so the content stays put during the exit motion. Every typed confirmation in WebKit follows this one rule.
 
-### D. Typed confirmation — `Input` (required)
-
-A full-width `Input` with `autocomplete="off"`, labelled by the prompt paragraph through `aria-labelledby`. The value is compared trimmed and must match the name exactly. Enter confirms only when it matches. The input and the error reset each time the dialog opens, never as it closes, so the content stays put during the exit motion.
-
-### E. Trigger — `Button` (required)
+### D. Trigger — `Button` (required)
 
 The visible `variant="danger"` trigger in `#trigger`. The dialog's own footer carries Cancel and `variant="danger"` Delete resource (the title repeated), `:disabled` until the typed name matches and `:loading` while the request runs; while it loads Cancel and the input are disabled and the dialog cannot be dismissed. On success the dialog closes and a toast says `resource-01 was deleted.`
 
@@ -54,14 +50,13 @@ The visible `variant="danger"` trigger in `#trigger`. The dialog's own footer ca
 
 The block takes the resource name and the request state through props and emits the delete; it fetches nothing. `DeleteDialogProps` is exported from `edit-delete-dialog.vue`, and `sample.ts` holds the sample name the block shows when `name` is left out.
 
-| Prop                  | Type      | What it does                                                                                                                            |
-| --------------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| `name`                | `string`  | The resource to delete; the user types it to confirm.                                                                                   |
-| `loading`             | `boolean` | The delete is in flight: Delete spins, Cancel and the input lock. When it ends with no error, the dialog closes with the success toast. |
-| `error`               | `string`  | Why the server refused the delete, shown in the danger `Alert` in place of the warning; the dialog stays open.                          |
-| `defaultConfirmation` | `string`  | The text the input opens with.                                                                                                          |
-| `defaultOpen`         | `boolean` | Whether the dialog starts open when `v-model:open` is not bound.                                                                        |
-| `v-model:open`        | `boolean` | Whether the dialog is open.                                                                                                             |
+| Prop           | Type      | What it does                                                                                                                            |
+| -------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `name`         | `string`  | The resource to delete; the user types it to confirm.                                                                                   |
+| `loading`      | `boolean` | The delete is in flight: Delete spins, Cancel and the input lock. When it ends with no error, the dialog closes with the success toast. |
+| `error`        | `string`  | Why the server refused the delete, shown in the danger `Alert` in place of the warning; the dialog stays open.                          |
+| `defaultOpen`  | `boolean` | Whether the dialog starts open when `v-model:open` is not bound.                                                                        |
+| `v-model:open` | `boolean` | Whether the dialog is open.                                                                                                             |
 
 | Event    | Payload         | When                                                           |
 | -------- | --------------- | -------------------------------------------------------------- |
@@ -93,9 +88,9 @@ Then delete `sample.ts` and its import.
 - Name the resource kind in the title and the resource itself in the chip, so the user knows exactly what goes.
 - Keep the confirm button disabled until the trimmed value equals the name; that is the prevention, not a toast after the fact.
 - Reset the typed value each time the dialog opens.
-- Let the user copy the name from the chip; never block paste in the input.
+- Never block paste in the input.
 - Put the consequence in the `Alert` and the sentence below it, before the input that asks for the decision.
-- Use the SettingsRow variant on a settings page, so the confirmation is a real labelled `Field`.
+- Use the SettingsRow variant on a settings page.
 
 ## Don't
 
@@ -112,7 +107,7 @@ Then delete `sample.ts` and its import.
 - **Trigger:** verb and object, e.g. "Delete resource" on a visible button; "Delete" in a row menu.
 - **Alert:** one fact, e.g. "Once confirmed, this action can't be reversed."
 - **Consequence:** one sentence naming what goes with it, e.g. "The selected bucket will be deleted, along with all its files."
-- **Prompt:** "Type" before the name chip and "to confirm." after it; never a position such as "in the box below".
+- **Prompt:** "Type `name` to confirm.", written by `ConfirmDialog` from the locale catalog; never a position such as "in the box below".
 - **Confirm:** the title's verb and object, e.g. "Delete resource"; never "OK", "Confirm" or "Yes".
 - **Cancel:** exactly "Cancel".
 - Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
@@ -120,17 +115,15 @@ Then delete `sample.ts` and its import.
 ## Accessibility
 
 - `ConfirmDialog` traps focus, closes on Escape and returns focus to the trigger.
-- The input is named by the prompt paragraph through `aria-labelledby`, so a screen reader hears the name to type.
-- The `CopyButton` is named "Copy resource-01" and announces "Copied" once it copies.
+- The input is named by the prompt through `aria-labelledby`, so a screen reader hears the name to type, and it takes focus when the dialog opens.
 - Enter in the input confirms only when the name matches; otherwise focus moves on to Cancel and Delete in reading order.
-- In the SettingsRow variant the `Field` label carries the prompt, so the name to type is part of the input's accessible name.
 - While the delete runs, the confirm button announces its busy state and the dialog stays open.
 
 ## States
 
 - Default: the danger trigger is visible (`v-model:open` false); opening it shows the warning, the name chip and the empty input with Delete resource disabled.
-- SettingsRow: the settings-page danger zone; an outlined `Item` row opens the medium `ConfirmDialog` asking for the name through a labelled `Field`, with Delete resource disabled until it matches and loading while it runs.
-- Error: `error` set with `defaultOpen` and `defaultConfirmation`: the server refuses the delete (the resource is still used by two workloads); the dialog stays open with the typed name, a danger `Alert` says why, and Delete can run again.
+- SettingsRow: the settings-page danger zone; an outlined `Item` row opens the medium `ConfirmDialog` asking for the name through `confirmation-phrase`, with Delete resource disabled until it matches and loading while it runs.
+- Error: `error` set with `defaultOpen`: the server refuses the delete (the resource is still used by two workloads); the dialog stays open, a danger `Alert` says why, and Delete can run again (in a live flow the typed name stays in the field).
 
 ## Related
 
@@ -144,8 +137,8 @@ Then delete `sample.ts` and its import.
 ## Variants
 
 - `Default` — primary (the code below)
-- `SettingsRow` — The danger-zone delete of a settings page: an outlined `Item` row under the page's `PageHeader` names what the delete removes and holds the danger trigger, and the medium `ConfirmDialog` it opens stacks a warning `Alert` (with the Help Center link) over a labelled `Field` + `Input` asking for the exact resource name, with Delete disabled until the typed name matches and loading while it runs. The field clears every time the dialog opens. Built from `PageHeader`, `Item`, `ConfirmDialog`, `Alert`, `Field`, `Input` and `Button`. The page is a page body for ConsoleLayout.
-- `Error` — A delete the server refuses (the resource is still in use): the dialog stays open with the typed name kept, the warning gives way to a danger `Alert` saying what blocks the delete and how to fix it, and Delete can run again.
+- `SettingsRow` — The danger-zone delete of a settings page: an outlined `Item` row under the page's `PageHeader` names what the delete removes and holds the danger trigger, and the medium `ConfirmDialog` it opens stacks a warning `Alert` (with the Help Center link) over the `confirmation-phrase` field asking for the exact resource name, with Delete disabled until the typed name matches and loading while it runs. The field clears every time the dialog opens. Built from `PageHeader`, `Item`, `ConfirmDialog`, `Alert` and `Button`. The page is a page body for ConsoleLayout.
+- `Error` — A delete the server refuses (the resource is still in use): the dialog stays open (in a live flow the typed name stays in the field), the warning gives way to a danger `Alert` saying what blocks the delete and how to fix it, and Delete can run again.
 
 Each variant is the same screen in another state: `get_block("edit/edit-delete-dialog", { variant })`, or the file under `blocks/edit/edit-delete-dialog/variants/`.
 
@@ -156,10 +149,8 @@ Each variant is the same screen in another state: `get_block("edit/edit-delete-d
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import CopyButton from '@aziontech/webkit/copy-button'
-  import Input from '@aziontech/webkit/input'
   import { toast } from '@aziontech/webkit/toast'
-  import { computed, ref, useId, watch } from 'vue'
+  import { computed, watch } from 'vue'
 
   import { sampleResourceName } from './sample'
 
@@ -170,8 +161,6 @@ Each variant is the same screen in another state: `get_block("edit/edit-delete-d
     loading?: boolean
     /** Why the delete was refused, shown in a danger alert in place of the warning; the dialog stays open. */
     error?: string
-    /** The text the confirmation input opens with. */
-    defaultConfirmation?: string
     /** Whether the dialog starts open when open is not bound. */
     defaultOpen?: boolean
   }
@@ -180,7 +169,6 @@ Each variant is the same screen in another state: `get_block("edit/edit-delete-d
     name: '',
     loading: false,
     error: '',
-    defaultConfirmation: '',
     defaultOpen: false
   })
 
@@ -192,18 +180,8 @@ Each variant is the same screen in another state: `get_block("edit/edit-delete-d
   if (props.defaultOpen) open.value = true
 
   const name = computed(() => props.name || sampleResourceName)
-  const confirmation = ref(props.defaultConfirmation)
   const deleting = computed(() => props.loading)
   const deleteError = computed(() => props.error)
-  const confirmLabelId = useId()
-
-  const canDelete = computed(
-    () => confirmation.value.trim().length > 0 && confirmation.value.trim() === name.value
-  )
-
-  watch(open, (isOpen) => {
-    if (isOpen) confirmation.value = ''
-  })
 
   watch(
     () => props.loading,
@@ -215,7 +193,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-delete-d
   )
 
   const confirm = (event: Event) => {
-    if (!canDelete.value || deleting.value) return
+    if (deleting.value) return
     emit('delete', event, name.value)
   }
 </script>
@@ -228,7 +206,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-delete-d
     confirm-label="Delete resource"
     cancel-label="Cancel"
     :loading="deleting"
-    :disabled="!canDelete"
+    :confirmation-phrase="name"
     @confirm="confirm"
   >
     <template #trigger>
@@ -261,28 +239,6 @@ Each variant is the same screen in another state: `get_block("edit/edit-delete-d
         >
         for more details.
       </p>
-      <p
-        :id="confirmLabelId"
-        class="m-0 flex flex-wrap items-center gap-(--spacing-2xs) text-body-sm text-(--text-default)"
-      >
-        <span>Type</span>
-        <span class="text-label-code-sm text-(--text-default)">{{ name }}</span>
-        <CopyButton
-          :value="name"
-          :aria-label="`Copy ${name}`"
-          copied-label="Copied"
-          size="small"
-        />
-        <span>to confirm.</span>
-      </p>
-      <Input
-        v-model="confirmation"
-        :aria-labelledby="confirmLabelId"
-        autocomplete="off"
-        class="w-full"
-        :disabled="deleting"
-        @keydown.enter="confirm"
-      />
     </div>
   </ConfirmDialog>
 </template>

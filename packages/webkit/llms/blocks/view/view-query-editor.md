@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/view/view-query-editor/view-query-editor.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-query-editor")`
-- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeBlock](../../components/code-block.md), [CodeEditor](../../components/code-editor.md), [DataTable](../../components/data-table.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), `FieldError`, [FileDropzone](../../components/file-dropzone.md), [FileTokenGroup](../../components/file-token-group.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Sidebar](../../components/sidebar.md), [Skeleton](../../components/skeleton.md), [Switch](../../components/switch.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md)
+- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeBlock](../../components/code-block.md), [CodeEditor](../../components/code-editor.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), `FieldError`, [FileDropzone](../../components/file-dropzone.md), [FileTokenGroup](../../components/file-token-group.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Sidebar](../../components/sidebar.md), [Skeleton](../../components/skeleton.md), [Switch](../../components/switch.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md)
 - Skills: `webkit-layout`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -46,7 +46,7 @@ A database with no tables replaces the pane with a `Card` holding an `EmptyState
 
 ### D. Table data — `ToggleGroup`, `Input`, `Button`, `Tooltip`, `IconButton`, `DataTable` (required)
 
-The pane opens with the table name and a `ToggleGroup` switching Data and Definition. Data has a Filter rows `Input`, an outlined Sort `Button`, a Refresh `IconButton` and the primary Insert `Button`, over the rows. The rows are a compact `DataTable` (`row-key="__k"`, `selectable`, `sortable`, `paginated` at 25 rows with 25, 50 and 100 per page) named `Rows of <table>`: one column per table column with a `header-<name>` slot that shows the name, its type muted and a key on the primary key, a `cell-<name>` slot that renders values in the code font and `NULL` in muted italics, and a trailing action column with a Delete row `IconButton`. Sorting by a header sorts the loaded rows; selection resets when another table is picked. An empty table fills the `#empty` slot with a small `EmptyState` holding Insert row and Import data from CSV; a filter that matches nothing shows a small `EmptyState` named with the filter text and a Clear filter button. Each Delete row button names its row (`Delete row 3`).
+The pane opens with the table name and a `ToggleGroup` switching Data and Definition. Data has a Filter rows `Input`, an outlined Sort `Button`, a Refresh `IconButton` and the primary Insert `Button`, over the rows. The rows are a compact `DataTable` (`row-key="__k"`, `selectable`, `sortable`, `paginated` at 25 rows with 25, 50 and 100 per page) named `Rows of <table>`: one column per table column with a `header-<name>` slot that shows the name, its type muted and a key on the primary key, a `cell-<name>` slot that renders values in the code font and `NULL` in muted italics, and a trailing action column with a Delete row `IconButton` that asks in a small `ConfirmDialog` (`Delete row`, the table named in the sentence) before the row goes. Sorting by a header sorts the loaded rows; selection resets when another table is picked. An empty table fills the `#empty` slot with a small `EmptyState` holding Insert row and Import data from CSV; a filter that matches nothing shows a small `EmptyState` named with the filter text and a Clear filter button. Each Delete row button names its row (`Delete row 3`).
 
 ### E. Table definition — `Button`, `Card`, `DataTable`, `Tag` (optional)
 
@@ -70,7 +70,7 @@ Templates opens a large right `Drawer` titled SQL quick templates with a one-lin
 
 ### J. Bulk row delete — `Button` (optional)
 
-With rows selected, a danger `Delete 2 rows` `Button` takes the place of Sort in the Data toolbar; TableData opens with two rows selected (`defaultSelectedKeys`). It removes the rows from the table and emits `delete-rows`; the page sends the request and raises the success toast `2 rows deleted from events.` whose action fits the rows, Undo, which puts them back. Deleting rows is not a deploy: never View deployments, Edit or Redeploy.
+With rows selected, a selection bar opens under the Data toolbar: `2 selected`, Clear selection, and an outlined `Delete 2 rows` `Button` at its end. Sort never moves, so a second tap meant for Sort cannot land on Delete. TableData opens with two rows selected (`defaultSelectedKeys`). Delete N rows asks first in a small `ConfirmDialog` naming the count and the table; confirming removes the rows from the table and emits `delete-rows`; the page sends the request and raises the success toast `2 rows deleted from events.` whose action fits the rows, Undo, which puts them back. Deleting rows is not a deploy: never View deployments, Edit or Redeploy.
 
 ### K. Create database page — `Input`, `Button` (optional)
 
@@ -105,20 +105,20 @@ The block takes its records through props and emits every action; it fetches not
 | `v-model:table`        | `string \| null`            | The id of the open table; the first table when `null`.                                                              |
 | `v-model:sql`          | `string`                    | The statement in the editor.                                                                                        |
 
-| Event              | Payload                    | When                                                                            |
-| ------------------ | -------------------------- | ------------------------------------------------------------------------------- |
-| `run`              | `(event, sql)`             | Run query, Refresh results, or Run query in a history row's menu.               |
-| `refresh-tables`   | `(event)`                  | Refresh tables in the side panel.                                               |
-| `create-table`     | `(event)`                  | Create Table, in the side panel or the empty database.                          |
-| `delete-table`     | `(event, table)`           | Delete table in a table's menu; confirm it with `edit/edit-delete-dialog`.      |
-| `refresh`          | `(event)`                  | Refresh in the Data toolbar.                                                    |
-| `retry`            | `(event)`                  | Retry in the rows error alert.                                                  |
-| `insert-row`       | `(event, table)`           | Insert, or Insert row on an empty table.                                        |
-| `import-csv`       | `(event, table)`           | Import data from CSV on an empty table.                                         |
-| `add-column`       | `(event, table)`           | Add column in the Definition view.                                              |
-| `delete-rows`      | `(event, { table, rows })` | A row's Delete row, or Delete N rows; the rows are already gone from the table. |
-| `delete-query`     | `(event, entry)`           | Delete query in a history row's menu; the entry is already gone.                |
-| `download-results` | `(event, result)`          | Download results.                                                               |
+| Event              | Payload                    | When                                                                                 |
+| ------------------ | -------------------------- | ------------------------------------------------------------------------------------ |
+| `run`              | `(event, sql)`             | Run query, Refresh results, or Run query in a history row's menu.                    |
+| `refresh-tables`   | `(event)`                  | Refresh tables in the side panel.                                                    |
+| `create-table`     | `(event)`                  | Create Table, in the side panel or the empty database.                               |
+| `delete-table`     | `(event, table)`           | Delete table in a table's menu, once the table name is typed in its `ConfirmDialog`. |
+| `refresh`          | `(event)`                  | Refresh in the Data toolbar.                                                         |
+| `retry`            | `(event)`                  | Retry in the rows error alert.                                                       |
+| `insert-row`       | `(event, table)`           | Insert, or Insert row on an empty table.                                             |
+| `import-csv`       | `(event, table)`           | Import data from CSV on an empty table.                                              |
+| `add-column`       | `(event, table)`           | Add column in the Definition view.                                                   |
+| `delete-rows`      | `(event, { table, rows })` | A confirmed Delete row or Delete N rows; the rows are already gone from the table.   |
+| `delete-query`     | `(event, entry)`           | Delete query in a history row's menu; the entry is already gone.                     |
+| `download-results` | `(event, result)`          | Download results.                                                                    |
 
 To go live, render the block from a page that owns the database and the query runner:
 
@@ -155,7 +155,7 @@ Then delete `sample.ts` and its import.
 - Make the editor read-only and disable its toolbar while a query runs, and show Run query loading.
 - Show the outcome of a run in the Results band: the rows, a success `Alert` with what ran, or a danger `Alert` with why it failed.
 - Offer JSON beside Table for results, so the raw shape is one click away.
-- Confirm Delete table with `edit/edit-delete-dialog`.
+- Delete table asks for the table name (`ConfirmDialog` `confirmation-phrase`, the `edit/edit-delete-dialog` rule) before it emits `delete-table`; row deletes ask in a `ConfirmDialog` first.
 - Mark the page root with `data-layout-fill` (every variant but CreateDatabase), so the panes scroll on their own instead of the page.
 - Raise toasts with `toast` only; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so this page body never renders a `Toaster`.
 
@@ -199,7 +199,7 @@ Then delete `sample.ts` and its import.
 - Query: `tab="editor"` with `sql`, `history` and `result`, the Editor tab after a query ran, with the history in the side panel, the statement in the editor and its rows in Results.
 - Templates: `tab="editor"` and `defaultTemplatesOpen`, the Editor tab before anything ran, with Results ready to execute and the SQL quick templates drawer open over it.
 - Loading: `loading`, the tables list and the selected table's rows are loading; `Skeleton` lines hold the side panel and the rows table shows its loading state.
-- TableData: `table="tbl-events"` and `defaultSelectedKeys`, the events table, 137 rows paged 25 at a time, with two rows selected and Delete 2 rows in the toolbar.
+- TableData: `table="tbl-events"` and `defaultSelectedKeys`, the events table, 137 rows paged 25 at a time, with two rows selected and Delete 2 rows in the selection bar.
 - ImportCsv: the empty subscribers table with the import drawer open on a seven-row file: `plan_name` still on Skip (Insert asks to map `plan`), `referrer` skipped, three lines with errors (a non-boolean, an empty required email, a date that does not parse).
 - CreateDatabase: the create database page with its Name and Active fields; try `acme-store` for the name conflict and a name starting with `offline` for the failed request.
 - Error: `error`, the selected table's rows did not load; the Data view shows a danger `Alert` that names the table and offers Retry.
@@ -223,7 +223,7 @@ Then delete `sample.ts` and its import.
 - `Templates` — The Editor tab before anything ran, with the SQL quick templates drawer open over it: a search and one outlined clickable Item per snippet; choosing one loads its SQL into the editor and closes the drawer.
 - `Loading` — The tables and the selected table's rows are loading: Skeleton lines hold the side panel and the rows DataTable shows its loading state.
 - `Error` — The rows of the selected table failed to load: the Tables tab keeps the side panel and the table toolbar, and the Data view shows a danger Alert that names the table and offers Retry.
-- `TableData` — The events table in the Data view: 137 rows in a compact `DataTable` paged 25 at a time, each column header naming its type with a key on the primary key, `NULL` in muted italics, sortable headers and row selection. Two rows are selected, so Delete 2 rows takes the place of Sort in the toolbar; it removes them and emits `delete-rows`.
+- `TableData` — The events table in the Data view: 137 rows in a compact `DataTable` paged 25 at a time, each column header naming its type with a key on the primary key, `NULL` in muted italics, sortable headers and row selection. Two rows are selected, so a selection bar under the toolbar shows 2 selected, Clear selection and Delete 2 rows while Sort stays in place; Delete asks in a `ConfirmDialog`, then removes the rows and emits `delete-rows`.
 - `ImportCsv` — An empty table's Import data from CSV (also a CSV dropped on its empty state): a drawer that reads the file (`FileDropzone`, `FileTokenGroup`), maps each CSV column to a table column or Skip in a `Select` (matched by name first), checks every value against its column's type and NOT NULL with the errors listed per line, previews the first rows as they will be inserted, and inserts the valid rows with a spinner, then a toast with Undo that says how many rows were skipped.
 - `CreateDatabase` — The Create Database page from the design sample: Name (6 to 50 letters, numbers and hyphens) and an Advanced section with Active, under a centred save bar card with Cancel and Create Database. A taken name comes back on the field, a failed request is a toast with Retry, and success is a toast with Open database and Create Table.
 
@@ -238,6 +238,7 @@ Each variant is the same screen in another state: `get_block("view/view-query-ed
   import Card from '@aziontech/webkit/card'
   import CodeBlock from '@aziontech/webkit/code-block'
   import CodeEditor, { type CodeEditorMarker } from '@aziontech/webkit/code-editor'
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import Drawer from '@aziontech/webkit/drawer-root'
@@ -411,8 +412,18 @@ Each variant is the same screen in another state: `get_block("view/view-query-ed
     selectedTableId.value = id
     if (narrowViewport()) leftOpen.value = false
   }
-  const onTableAction = (event: Event, value: unknown, table: QueryEditorTable) => {
-    if (value === 'delete') emit('delete-table', event, table)
+  const tablePendingDelete = ref<QueryEditorTable | null>(null)
+  const tableDeleteOpen = ref(false)
+  const onTableAction = (_event: Event, value: unknown, table: QueryEditorTable) => {
+    if (value !== 'delete') return
+    tablePendingDelete.value = table
+    tableDeleteOpen.value = true
+  }
+  const confirmTableDelete = (event: MouseEvent) => {
+    const table = tablePendingDelete.value
+    if (!table) return
+    tableDeleteOpen.value = false
+    emit('delete-table', event, table)
   }
 
   const schemaColumns: TableColumn[] = [
@@ -491,15 +502,24 @@ Each variant is the same screen in another state: `get_block("view/view-query-ed
     table.rows = table.rows.filter((row) => !keys.has(row.__k))
     emit('delete-rows', event, { table, rows })
   }
-  const deleteRow = (event: MouseEvent, row: QueryEditorRow) => {
-    const table = tableList.value.find((item) => item.id === selectedTable.value?.id)
-    if (table) removeRows(event, table, new Set([row.__k]))
+  const rowsPendingDelete = ref<string[]>([])
+  const rowsDeleteOpen = ref(false)
+  const rowsDeleteCount = computed(() => rowsPendingDelete.value.length)
+  const rowsDeleteNoun = computed(() => (rowsDeleteCount.value === 1 ? 'row' : 'rows'))
+  const askDeleteRows = (keys: string[]) => {
+    if (!keys.length) return
+    rowsPendingDelete.value = keys
+    rowsDeleteOpen.value = true
   }
-  const deleteSelected = (event: MouseEvent) => {
+  const deleteRow = (_event: MouseEvent, row: QueryEditorRow) => askDeleteRows([row.__k])
+  const deleteSelected = () => askDeleteRows([...selectedKeys.value])
+  const confirmRowsDelete = (event: MouseEvent) => {
     const table = tableList.value.find((item) => item.id === selectedTable.value?.id)
-    if (!table || !selectedKeys.value.length) return
-    removeRows(event, table, new Set(selectedKeys.value))
-    selectedKeys.value = []
+    const keys = new Set(rowsPendingDelete.value)
+    rowsDeleteOpen.value = false
+    if (!table || !keys.size) return
+    removeRows(event, table, keys)
+    selectedKeys.value = selectedKeys.value.filter((key) => !keys.has(key))
   }
 
   const historySource = computed<QueryEditorHistoryEntry[]>(
@@ -948,17 +968,6 @@ LIMIT 3;`
               </div>
               <div class="ms-auto flex items-center gap-(--spacing-xs)">
                 <Button
-                  v-if="selectedKeys.length"
-                  key="delete-rows"
-                  :label="`Delete ${selectedKeys.length} ${selectedKeys.length === 1 ? 'row' : 'rows'}`"
-                  variant="danger"
-                  size="medium"
-                  icon="az az-trash"
-                  @click="deleteSelected"
-                />
-                <Button
-                  v-else
-                  key="sort"
                   label="Sort"
                   variant="outline"
                   size="medium"
@@ -983,6 +992,29 @@ LIMIT 3;`
               </div>
             </div>
 
+            <div
+              v-if="selectedKeys.length && !error"
+              class="flex flex-wrap items-center gap-(--spacing-xs) border-b border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-sm) py-(--spacing-xs)"
+            >
+              <span class="text-label-sm text-(--text-default)"
+                >{{ selectedKeys.length }} selected</span
+              >
+              <Button
+                label="Clear selection"
+                variant="ghost"
+                size="small"
+                @click="selectedKeys = []"
+              />
+              <div class="ms-auto flex items-center gap-(--spacing-xs)">
+                <Button
+                  :label="`Delete ${selectedKeys.length} ${selectedKeys.length === 1 ? 'row' : 'rows'}`"
+                  variant="outline"
+                  size="small"
+                  icon="az az-trash"
+                  @click="deleteSelected"
+                />
+              </div>
+            </div>
             <div
               v-if="error"
               class="p-(--spacing-md)"
@@ -1502,6 +1534,25 @@ LIMIT 3;`
         </PanelBody>
       </DrawerContent>
     </Drawer>
+
+    <ConfirmDialog
+      v-model:open="rowsDeleteOpen"
+      :title="rowsDeleteCount === 1 ? 'Delete row' : `Delete ${rowsDeleteCount} rows`"
+      :description="`${rowsDeleteCount === 1 ? 'The row is' : `${rowsDeleteCount} rows are`} deleted from ${selectedTable?.name ?? 'the table'}. This can't be undone.`"
+      :confirm-label="`Delete ${rowsDeleteNoun}`"
+      size="small"
+      @confirm="confirmRowsDelete"
+    />
+
+    <ConfirmDialog
+      v-model:open="tableDeleteOpen"
+      title="Delete table"
+      :description="`${tablePendingDelete?.name ?? 'The table'} and its ${tablePendingDelete?.rows.length ?? 0} rows are deleted. This can't be undone.`"
+      confirm-label="Delete table"
+      :confirmation-phrase="tablePendingDelete?.name ?? ''"
+      size="medium"
+      @confirm="confirmTableDelete"
+    />
   </div>
 </template>
 ```

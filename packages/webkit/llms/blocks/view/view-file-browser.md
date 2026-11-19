@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/view/view-file-browser/view-file-browser.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-file-browser")`
-- Components: [Alert](../../components/alert.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [Combobox](../../components/combobox.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [FileDropzone](../../components/file-dropzone.md), [FileTokenGroup](../../components/file-token-group.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [SplitButton](../../components/split-button.md), `TableCellActions`, `TableCellTime`, `TableSearch`, [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), [UploadProgress](../../components/upload-progress.md)
+- Components: [Alert](../../components/alert.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [Combobox](../../components/combobox.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [FileDropzone](../../components/file-dropzone.md), [FileTokenGroup](../../components/file-token-group.md), [IconButton](../../components/icon-button.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [SplitButton](../../components/split-button.md), `TableCellActions`, `TableCellTime`, `TableSearch`, [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), [UploadProgress](../../components/upload-progress.md)
 - Skills: `webkit-tables`, `webkit-lists`, `webkit-ui-states`
 
 ## Asked as
@@ -62,7 +62,7 @@ Folders sort first with a link-coloured folder glyph; the folder name is a `Butt
 
 ### H. Delete confirmation — `ConfirmDialog`, `Alert`, `Input` (required)
 
-The root's `select` event hands the option and the row to the page: Open enters the folder, Delete opens the `edit/edit-delete-dialog` dialog without a trigger of its own. A medium `ConfirmDialog` titled `Delete file` or `Delete folder`, a warning `Alert` (`Once confirmed, this action can't be reversed.`), one sentence of consequence (a folder goes with all its files), and an `Input` labelled by `Type <name> to confirm.`; the danger confirm repeats the title and enables only when the typed text matches the name. The typed text resets each time it opens.
+The root's `select` event hands the option and the row to the page: Open enters the folder, Delete opens the `edit/edit-delete-dialog` dialog without a trigger of its own. A medium `ConfirmDialog` titled `Delete file` or `Delete folder`, a warning `Alert` (`Once confirmed, this action can't be reversed.`), one sentence of consequence (a folder goes with all its files), and the typed confirmation `ConfirmDialog` draws from `confirmation-phrase` (`Type <name> to confirm.`, exact and case-sensitive); the danger confirm repeats the title and enables only when the typed text matches the name. The typed text resets each time it opens.
 
 ### I. Empty folder — `EmptyState`, `SplitButton` (required)
 
@@ -282,7 +282,6 @@ Each variant is the same screen in another state: `get_block("view/view-file-bro
   import FileDropzone from '@aziontech/webkit/file-dropzone'
   import FileTokenGroup, { type FileTokenGroupItem } from '@aziontech/webkit/file-token-group'
   import IconButton from '@aziontech/webkit/icon-button'
-  import Input from '@aziontech/webkit/input'
   import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
@@ -293,7 +292,7 @@ Each variant is the same screen in another state: `get_block("view/view-file-bro
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import UploadProgress, { type UploadProgressItem } from '@aziontech/webkit/upload-progress'
-  import { computed, nextTick, ref, useId, watch } from 'vue'
+  import { computed, nextTick, ref, watch } from 'vue'
 
   import { sampleFolders, sampleStorageName } from './sample'
 
@@ -548,11 +547,6 @@ Each variant is the same screen in another state: `get_block("view/view-file-bro
 
   const pending = ref<FileRow | null>(null)
   const deleteOpen = ref(false)
-  const confirmation = ref('')
-  const confirmLabelId = useId()
-  const canDelete = computed(
-    () => pending.value !== null && confirmation.value.trim() === pending.value.name
-  )
 
   const onRowAction = (event: Event, value: DropdownMenuItemValue, item: FileRow) => {
     if (value === 'open') openEntry(event, item)
@@ -560,13 +554,12 @@ Each variant is the same screen in another state: `get_block("view/view-file-bro
     if (value === 'move') openMove([item])
     if (value !== 'delete') return
     pending.value = item
-    confirmation.value = ''
     deleteOpen.value = true
   }
 
   const confirmDelete = (event: Event) => {
     const entry = pending.value?.entry
-    if (!canDelete.value || !entry) return
+    if (!entry) return
     items.value = items.value.filter((item) => item !== entry)
     deleteOpen.value = false
     emit('delete', event, entry)
@@ -1068,6 +1061,9 @@ Each variant is the same screen in another state: `get_block("view/view-file-bro
       v-model:open="deleteOpen"
       :title="pending?.kind === 'folder' ? 'Delete folder' : 'Delete file'"
       size="medium"
+      :confirm-label="pending?.kind === 'folder' ? 'Delete folder' : 'Delete file'"
+      :confirmation-phrase="pending?.name ?? ''"
+      @confirm="confirmDelete"
     >
       <div class="flex flex-col gap-(--spacing-md)">
         <Alert
@@ -1081,35 +1077,7 @@ Each variant is the same screen in another state: `get_block("view/view-file-bro
               : 'The selected file will be deleted.'
           }}
         </p>
-        <p
-          :id="confirmLabelId"
-          class="m-0 text-body-sm text-(--text-default)"
-        >
-          Type <code class="text-label-code-sm">{{ pending?.name }}</code> to confirm.
-        </p>
-        <Input
-          v-model="confirmation"
-          :aria-labelledby="confirmLabelId"
-          autocomplete="off"
-          class="w-full"
-          @keydown.enter="confirmDelete"
-        />
       </div>
-      <template #actions="{ close }">
-        <Button
-          label="Cancel"
-          variant="outline"
-          size="medium"
-          @click="close"
-        />
-        <Button
-          :label="pending?.kind === 'folder' ? 'Delete folder' : 'Delete file'"
-          variant="danger"
-          size="medium"
-          :disabled="!canDelete"
-          @click="confirmDelete"
-        />
-      </template>
     </ConfirmDialog>
     <Dialog
       v-model:open="uploadOpen"
