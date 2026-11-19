@@ -72,7 +72,7 @@
   const isInert = computed(() => props.disabled || props.loading)
 
   const linkHref = computed(() =>
-    safeHref(props.href, attrs.download != null && attrs.download !== false)
+    safeHref(props.href, attrs['download'] != null && attrs['download'] !== false)
   )
 
   const isAnchor = computed(() => linkHref.value !== null)
