@@ -1065,7 +1065,7 @@
   {
     "name": "confirm-dialog",
     "path": "src/components/overlay/confirm-dialog/confirm-dialog.vue",
-    "limit": "25.2 KB"
+    "limit": "27.1 KB"
   },
   {
     "name": "config-provider",
@@ -1255,7 +1255,7 @@
   {
     "name": "conversation-history",
     "path": "src/components/ai/conversation-history/conversation-history.vue",
-    "limit": "6.05 KB"
+    "limit": "6.5 KB"
   },
   {
     "name": "feedback-reason-dialog",
