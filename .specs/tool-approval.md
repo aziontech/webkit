@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 9
 template: 2
-checksum: 9bae9555351f5970b2273ae487f540400ace904df0df583945fd789b095140d4
+checksum: 7fee923172fb2f53b7937822f2d13302e658bc194bbfc98c08f4da2dbfe63100
 created: 2026-11-11
 last_updated: 2026-11-19
 ---
@@ -228,7 +228,7 @@ _None._
 ## Responsive
 
 - Container queries: none.
-- Narrow: buttons wrap; the body's code scrolls inside its block.
+- Narrow: buttons wrap; the title wraps anywhere, inline code included, so the whole command in it stays readable. What will run must be readable without scrolling sideways before Approve: prefer a `KeyValueList` (or a `CodeBlock` whose lines are short, such as pretty-printed JSON) in the body, since a `CodeBlock` scrolls a long line inside itself.
 - Touch: medium buttons (44 px on coarse pointers).
 - Reflow: no horizontal scroll at 320 px; the arguments field wraps its lines, grows to 12 lines, then scrolls inside itself.
 

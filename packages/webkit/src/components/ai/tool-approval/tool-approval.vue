@@ -149,7 +149,7 @@
           ref="headingEl"
           tabindex="-1"
           :data-testid="`${testId}__title`"
-          class="m-0 text-heading-2xs text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+          class="m-0 text-heading-2xs [overflow-wrap:anywhere] text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
         >
           <MarkdownInline :nodes="titleNodes" />
         </h3>

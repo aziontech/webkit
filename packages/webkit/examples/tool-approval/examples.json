@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "The agent asks to run a deployment command: the question names it in code, the body shows exactly what will run, and Deny or Deploy decide; the card then shows the outcome in text.",
+      "summary": "The agent asks to run a deployment command: the question names it in code, the body lists exactly what will run as a `KeyValueList` whose values wrap, so a phone shows the whole command before Deploy, and Deny or Deploy decide; the card then shows the outcome in text.",
       "file": "default.vue"
     },
     {
