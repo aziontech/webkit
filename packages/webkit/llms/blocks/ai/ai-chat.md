@@ -567,8 +567,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
   const offline = computed(
     () =>
       !reconnecting.value &&
-      (props.connection === 'error' ||
-        (wasConnected.value && props.connection === 'disconnected'))
+      (props.connection === 'error' || (wasConnected.value && props.connection === 'disconnected'))
   )
   const retryable = computed(() => props.interruptErrors.some((error) => error.retryable !== false))
 

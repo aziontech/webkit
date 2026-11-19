@@ -265,8 +265,7 @@
   const offline = computed(
     () =>
       !reconnecting.value &&
-      (props.connection === 'error' ||
-        (wasConnected.value && props.connection === 'disconnected'))
+      (props.connection === 'error' || (wasConnected.value && props.connection === 'disconnected'))
   )
   const retryable = computed(() => props.interruptErrors.some((error) => error.retryable !== false))
 
