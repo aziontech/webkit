@@ -47,7 +47,7 @@ A large `ConfirmDialog` titled `Change the type of <column>`: a warning `Alert` 
 
 ### H. Truncate table dialog — `ConfirmDialog`, `CodeEditor`, `Input` (required)
 
-A medium `ConfirmDialog` titled `Truncate <table>`, following `edit/edit-delete-dialog`: a warning `Alert`, one sentence with what goes (every row, with the count) and what stays (columns, types, constraints), the `TRUNCATE TABLE <table>;` statement in a read-only `CodeEditor` without line numbers, and a `Field` whose label asks to type the table name. The danger Truncate table button enables only when it matches.
+A medium `ConfirmDialog` titled `Truncate <table>`, following `edit/edit-delete-dialog`: a warning `Alert`, one sentence with what goes (every row, with the count) and what stays (columns, types, constraints), the `TRUNCATE TABLE <table>;` statement in a read-only `CodeEditor` without line numbers, and the typed confirmation `ConfirmDialog` draws from `confirmation-phrase` with the table name. The danger Truncate table button enables only when it matches exactly.
 
 ### Outcome toasts — through `toast`
 

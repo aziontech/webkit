@@ -3,7 +3,6 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import CopyButton from '@aziontech/webkit/copy-button'
   import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
@@ -16,7 +15,7 @@
   import Switch from '@aziontech/webkit/switch'
   import Tabs from '@aziontech/webkit/tabs'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed, nextTick, reactive, ref, useId, watch } from 'vue'
+  import { computed, nextTick, reactive, ref, watch } from 'vue'
 
   const tabs = [
     { value: 'overview', label: 'Overview' },
@@ -120,16 +119,9 @@
 
   const deleteOpen = ref(false)
   const deleting = ref(false)
-  const deleteConfirmation = ref('')
-  const deleteLabelId = useId()
-  const canDelete = computed(() => deleteConfirmation.value.trim() === record.name)
-
-  watch(deleteOpen, (isOpen) => {
-    if (isOpen) deleteConfirmation.value = ''
-  })
 
   const confirmDelete = () => {
-    if (!canDelete.value || deleting.value) return
+    if (deleting.value) return
     deleting.value = true
     setTimeout(() => {
       deleting.value = false
@@ -351,7 +343,10 @@
             v-model:open="deleteOpen"
             title="Delete project"
             size="medium"
+            confirm-label="Delete project"
+            :confirmation-phrase="record.name"
             :loading="deleting"
+            @confirm="confirmDelete"
           >
             <div class="flex flex-col gap-(--spacing-md)">
               <Alert
@@ -368,52 +363,7 @@
                 >
                 for more details.
               </p>
-              <div class="flex flex-col gap-(--spacing-xs)">
-                <p
-                  :id="deleteLabelId"
-                  class="m-0 flex flex-wrap items-center gap-(--spacing-2xs) text-body-sm text-(--text-default)"
-                >
-                  To confirm, type
-                  <code
-                    class="rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-overlay) px-(--spacing-2xs) text-label-code-sm text-(--text-default)"
-                    >{{ record.name }}</code
-                  >
-                  <CopyButton
-                    :value="record.name"
-                    aria-label="Copy the project name"
-                    size="small"
-                  />
-                </p>
-                <Input
-                  v-model="deleteConfirmation"
-                  :aria-labelledby="deleteLabelId"
-                  autocomplete="off"
-                  :spellcheck="false"
-                  size="large"
-                  class="w-full"
-                  :disabled="deleting"
-                  @keydown.enter.prevent="confirmDelete"
-                />
-              </div>
             </div>
-            <template #actions="{ close }">
-              <Button
-                label="Cancel"
-                variant="outline"
-                size="medium"
-                :disabled="deleting"
-                @click="close"
-              />
-              <Button
-                label="Delete project"
-                variant="danger"
-                size="medium"
-                :disabled="!canDelete"
-                :loading="deleting"
-                data-testid="danger-zone-confirm"
-                @click="confirmDelete"
-              />
-            </template>
           </ConfirmDialog>
         </div>
       </section>

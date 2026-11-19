@@ -36,7 +36,7 @@ An outlined medium Delete `Button` with the trash icon beside the filter acts on
 
 ### D. Delete confirmation — `ConfirmDialog`, `Alert`, `Input` (required)
 
-The `edit/edit-delete-dialog` pattern adapted to a selection: a medium `ConfirmDialog` whose trigger is the Delete (n) button, titled with the count (`Delete 3 applications`, `Delete application` for one). The body stacks the warning `Alert` (`Once confirmed, this action can't be reversed.`), one sentence of consequence that lists the selected names, and an `Input` labelled by `Type delete to confirm.` (a list of names cannot be retyped, so the confirmation is the verb). The actions are Cancel and a danger `Delete applications` that enables only once the word matches; confirming removes the selected items and clears the selection. The typed word resets each time the dialog opens.
+The `edit/edit-delete-dialog` pattern adapted to a selection: a medium `ConfirmDialog` whose trigger is the Delete (n) button, titled with the count (`Delete 3 applications`, `Delete application` for one). The body stacks the warning `Alert` (`Once confirmed, this action can't be reversed.`), one sentence of consequence that lists the selected names, and the typed confirmation from `ConfirmDialog` `confirmation-phrase`: one application asks for its name, several ask for `delete` (a list of names cannot be retyped, so the confirmation is the verb), matched exactly and case-sensitive. The actions are Cancel and a danger `Delete applications` that enables only once the text matches; confirming removes the selected items and clears the selection. The typed word resets each time the dialog opens.
 
 ### E. Card preferences — `CollectionPreferences` (required)
 
@@ -125,7 +125,7 @@ Then delete `sample.ts` and its import.
 - **Filter:** placeholder and `aria-label` name what is filtered, e.g. "Filter applications".
 - **Bulk action:** the verb, then the count in parentheses, e.g. "Delete", "Delete (3)".
 - **Field labels:** one or two words, sentence case, no colon, e.g. "Status", "Domain", "Region", "Requests in 24h", "Owner". Preferences title: "Card preferences".
-- **Delete dialog:** title `Delete <n> applications`, consequence `The selected applications will be deleted, along with their domains and settings:` followed by the names, prompt `Type delete to confirm.`, actions `Cancel` and `Delete applications` (singular for one).
+- **Delete dialog:** title `Delete <n> applications`, consequence `The selected applications will be deleted, along with their domains and settings:` followed by the names, prompt `Type <name> to confirm.` for one, `Type delete to confirm.` for several, actions `Cancel` and `Delete applications` (singular for one).
 - **No match:** "No matching applications", then "No application matches these filters.", and the action "Clear filters".
 - **Empty:** title states the fact, e.g. "No applications yet"; description is one sentence with what to do, e.g. "Create an application to start serving traffic."
 - Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.

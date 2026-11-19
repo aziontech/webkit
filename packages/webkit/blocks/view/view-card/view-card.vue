@@ -6,7 +6,6 @@
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import EmptyState from '@aziontech/webkit/empty-state'
-  import Input from '@aziontech/webkit/input'
   import Link from '@aziontech/webkit/link'
   import PageHeader from '@aziontech/webkit/page-header'
   import Pagination from '@aziontech/webkit/pagination-root'
@@ -14,7 +13,7 @@
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
   import { useLocale } from '@aziontech/webkit/use-locale'
-  import { computed, ref, useId, watch } from 'vue'
+  import { computed, ref, watch } from 'vue'
 
   import { sampleApplications } from './sample'
 
@@ -145,10 +144,7 @@
   const severityOf = (value: CardViewApplicationStatus): TagSeverity =>
     value === 'Active' ? 'success' : value === 'Degraded' ? 'warning' : 'neutral'
 
-  const CONFIRM_WORD = 'delete'
   const deleteOpen = ref(false)
-  const confirmation = ref('')
-  const confirmLabelId = useId()
   const deleteNoun = computed(() =>
     selectedCount.value === 1 ? 'application' : `${selectedCount.value} applications`
   )
@@ -157,14 +153,11 @@
       ? 'The selected application will be deleted, along with its domains and settings:'
       : 'The selected applications will be deleted, along with their domains and settings:'
   )
-  const canDelete = computed(() => confirmation.value.trim().toLowerCase() === CONFIRM_WORD)
-
-  watch(deleteOpen, (isOpen) => {
-    if (isOpen) confirmation.value = ''
-  })
+  const deletePhrase = computed(() =>
+    selectedCount.value === 1 ? (selectedItems.value[0]?.name ?? '') : 'delete'
+  )
 
   const confirmDelete = (event: Event) => {
-    if (!canDelete.value) return
     const deleted = [...selectedItems.value]
     const doomed = new Set(deleted.map((item) => item.id))
     items.value = items.value.filter((item) => !doomed.has(item.id))
@@ -215,6 +208,9 @@
                 v-model:open="deleteOpen"
                 :title="`Delete ${deleteNoun}`"
                 size="medium"
+                :confirm-label="selectedCount === 1 ? 'Delete application' : 'Delete applications'"
+                :confirmation-phrase="deletePhrase"
+                @confirm="confirmDelete"
               >
                 <template #trigger>
                   <Button
@@ -237,35 +233,7 @@
                     }}</bdi
                     >.
                   </p>
-                  <p
-                    :id="confirmLabelId"
-                    class="m-0 text-body-sm text-(--text-default)"
-                  >
-                    Type <code class="text-label-code-sm">{{ CONFIRM_WORD }}</code> to confirm.
-                  </p>
-                  <Input
-                    v-model="confirmation"
-                    :aria-labelledby="confirmLabelId"
-                    autocomplete="off"
-                    class="w-full"
-                    @keydown.enter="confirmDelete"
-                  />
                 </div>
-                <template #actions="{ close }">
-                  <Button
-                    label="Cancel"
-                    variant="outline"
-                    size="medium"
-                    @click="close"
-                  />
-                  <Button
-                    :label="selectedCount === 1 ? 'Delete application' : 'Delete applications'"
-                    variant="danger"
-                    size="medium"
-                    :disabled="!canDelete"
-                    @click="confirmDelete"
-                  />
-                </template>
               </ConfirmDialog>
               <CollectionPreferences
                 v-bind="preferencesProps"

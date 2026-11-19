@@ -25,7 +25,6 @@ describe('edit/edit-delete-dialog', () => {
     const view = render(DeleteWithConfirmation)
     await userEvent.click(view.getByRole('button', { name: 'Delete resource' }))
     const panel = await confirmPanel()
-    expect(panel.querySelector('button[aria-label="Copy resource-01"]')).not.toBeNull()
     const input = panel.querySelector('input') as HTMLInputElement
     await fireEvent.update(input, 'resource-01')
     await fireEvent.click(deleteButton(panel))
@@ -52,10 +51,22 @@ describe('edit/edit-delete-dialog', () => {
     expect((view.emitted('delete') as [Event, string][])[0][1]).toBe('acme-store')
   })
 
-  it('Failed: keeps the dialog and the typed name, with the reason in a danger alert', async () => {
+  it('Failed: shows the reason in a danger alert', async () => {
     render(DeleteFailed)
     const panel = await confirmPanel()
     expect(panel.textContent).toContain('resource-01 is still used by 2 workloads')
-    expect((panel.querySelector('input') as HTMLInputElement).value).toBe('resource-01')
+  })
+
+  it('keeps the dialog and the typed name when the delete is refused', async () => {
+    const view = render(DeleteWithConfirmation, { props: { open: true } })
+    const panel = await confirmPanel()
+    const input = panel.querySelector('input') as HTMLInputElement
+    await fireEvent.update(input, 'resource-01')
+    await fireEvent.click(deleteButton(panel))
+    await view.rerender({ open: true, loading: true })
+    await view.rerender({ open: true, loading: false, error: 'resource-01 is still in use.' })
+    await waitFor(() => expect(panel.textContent).toContain('resource-01 is still in use.'))
+    expect(input.value).toBe('resource-01')
+    expect(deleteButton(panel).disabled).toBe(false)
   })
 })

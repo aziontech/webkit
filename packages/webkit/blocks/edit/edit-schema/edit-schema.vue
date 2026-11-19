@@ -688,14 +688,12 @@
     emit('change-type', event, { table: target, column: { ...column }, type })
   }
 
-  const truncateConfirm = ref('')
   const truncateSubmitting = submitting
-  const canTruncate = computed(() => truncateConfirm.value.trim() === table.value?.name)
   const openTruncate = () => {
     truncateOpen.value = true
   }
   const confirmTruncate = (event: Event) => {
-    if (!canTruncate.value || truncateSubmitting.value || !table.value) return
+    if (truncateSubmitting.value || !table.value) return
     const target = table.value
     const removed = target.rowCount
     pending.value = {
@@ -728,7 +726,6 @@
       for (const column of table.value?.columns ?? []) rowForm[column.name] = ''
       rowSubmitted.value = false
     }
-    if (next === 'truncate') truncateConfirm.value = ''
   })
 
   const FAILURES: Partial<Record<SchemaEditorDialog, string>> = {
@@ -1540,6 +1537,10 @@
       v-model:open="truncateOpen"
       :title="`Truncate ${table?.name ?? ''}`"
       size="medium"
+      confirm-label="Truncate table"
+      :confirmation-phrase="table?.name ?? ''"
+      :loading="truncateSubmitting"
+      @confirm="confirmTruncate"
     >
       <div class="flex flex-col gap-(--spacing-md)">
         <Alert
@@ -1558,36 +1559,7 @@
           :show-line-numbers="false"
           aria-label="Statement that will run"
         />
-        <Field>
-          <Field.Label
-            >Type <code class="text-label-code-sm">{{ table?.name }}</code> to confirm.</Field.Label
-          >
-          <Input
-            v-model="truncateConfirm"
-            size="large"
-            class="w-full"
-            autocomplete="off"
-            @keydown.enter="confirmTruncate"
-          />
-        </Field>
       </div>
-      <template #actions="{ close }">
-        <Button
-          label="Cancel"
-          variant="outline"
-          size="medium"
-          :disabled="truncateSubmitting"
-          @click="close"
-        />
-        <Button
-          label="Truncate table"
-          variant="danger"
-          size="medium"
-          :loading="truncateSubmitting"
-          :disabled="!canTruncate"
-          @click="confirmTruncate"
-        />
-      </template>
     </ConfirmDialog>
   </div>
 </template>

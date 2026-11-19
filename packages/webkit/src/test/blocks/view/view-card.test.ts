@@ -69,10 +69,13 @@ describe('view/view-card block', () => {
       expect(el).not.toBeNull()
       return el!
     })
-    await fireEvent.update(input, 'delete')
     const confirm = Array.from(
       document.body.querySelectorAll<HTMLButtonElement>('[role=alertdialog] button')
     ).find((button) => button.textContent?.includes('Delete application'))
+    await fireEvent.update(input, 'Storefront')
+    expect(confirm).toBeDisabled()
+    await fireEvent.update(input, 'storefront')
+    expect(confirm).toBeEnabled()
     await fireEvent.click(confirm!)
     const emitted = view.emitted('delete') as [Event, { id: string }[]][]
     expect(emitted).toHaveLength(1)
