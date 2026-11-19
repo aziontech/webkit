@@ -5,7 +5,13 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 
 import { applyPlan } from '../../src/cli/apply.js'
-import { FRAGMENT_END, FRAGMENT_START, LEGACY_MARKER, stamp, stripMarker } from '../../src/cli/bundle.js'
+import {
+  FRAGMENT_END,
+  FRAGMENT_START,
+  LEGACY_MARKER,
+  stamp,
+  stripMarker
+} from '../../src/cli/bundle.js'
 import { planDoctor } from '../../src/cli/doctor.js'
 import { planInit } from '../../src/cli/plan.js'
 import { planSync } from '../../src/cli/sync.js'

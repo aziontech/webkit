@@ -28,7 +28,7 @@ const WIDTHS = [320, 390, 768, 1024, 1280, 1600] as const
 const COUNTS = [2, 3, 4] as const
 const SIZES = ['small', 'medium', 'large'] as const
 
-async function renderAt(width: number, count: number, size: string) {
+async function renderAt(width: number, count: number, size: 'small' | 'medium' | 'large') {
   await page.viewport(width, 900)
   await vi.waitFor(() => expect(window.matchMedia(`(width: ${width}px)`).matches).toBe(true))
   await document.fonts.load('400 32px "Proto Mono"', '0')

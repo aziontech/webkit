@@ -103,7 +103,7 @@ describe('inline code chips on wrapped lines', () => {
 const BLOCK =
   '<pre><code><span class="line">&lt;script setup&gt;</span>\n<span class="line">const hintId = useId()</span>\n<span class="line">&lt;/script&gt;</span></code></pre>'
 
-function expectPlainBlock(root: HTMLElement) {
+function expectPlainBlock(root: Element) {
   const block = root.querySelector('pre > code') as HTMLElement
   const style = getComputedStyle(block)
   expect(style.boxShadow).toBe('none')

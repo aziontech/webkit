@@ -754,6 +754,11 @@
       "to": "flow-diagram-group",
       "from": "FlowDiagramParallel",
       "binding": "FlowDiagramGroup"
+    },
+    "flow-parallel": {
+      "to": "flow-diagram-group",
+      "from": "FlowParallel",
+      "binding": "FlowDiagramGroup"
     }
   },
   "removed": {
