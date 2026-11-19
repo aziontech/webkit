@@ -8,9 +8,9 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3775-16746&m=dev
   node_id: 3775:16746
-checksum: 680daa003c74385bda004925f895120d2ad0987d7b17fae1f4b4c61d0f2db029
+checksum: 6d523a2d6194e960928346a5bc5ecba8bcd837ccae8d2c68ef55ff6e8bd301c7
 created: 2026-06-26
-last_updated: 2026-11-17
+last_updated: 2026-11-19
 ---
 
 # DropdownMenu — Component Spec
@@ -296,7 +296,7 @@ Sub-menus and checkable options:
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons), including the disabled state (validated via `--text-disabled` token).
 - `motion-reduce:animate-none` on `animate-popup-scale-*`; `motion-reduce:transition-none` on `transition-colors` for hover/selected states.
 - Teleported panel: the `role="menu"` panel binds `dir` and `lang` from the nearest `ConfigProvider` (`usePortalLocale`), so it lays out and is announced in the provider's direction and language although it renders under `body`.
-- Touch target ≥40×40 px on the trigger; option rows are 32 px tall and are activated by full-row click + keyboard, satisfying the 24×24 px target floor for in-menu items per WCAG 2.5.8.
+- Touch target ≥40×40 px on the trigger; option and sub-menu rows are 32 px tall on a fine pointer and 44 px (`pointer-coarse:min-h-11`) on a coarse pointer, full-row click targets whose fills stay inset 1 px so two filled rows never touch.
 
 ## Internationalization
 
@@ -315,7 +315,7 @@ No built-in strings: every label comes from the consumer (`label` props and slot
 
 - Container queries: none; panels are sized between `--container-3xs` and `--container-2xs`.
 - Narrow (≤ 640 px or a narrow container): `usePlacement` keeps every panel inside the viewport; a sub-panel with no room on either side overlaps the parent panel instead of leaving the screen; labels truncate.
-- Touch: rows are 32 px; a sub-menu opens on tap (click) as well as hover, so nothing is hover-only.
+- Touch: rows are 44 px on a coarse pointer (32 px on a fine one); a sub-menu opens on tap (click) as well as hover, so nothing is hover-only.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom.
 
 ## Performance

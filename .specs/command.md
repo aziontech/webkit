@@ -5,9 +5,9 @@ structure: composition
 status: implemented
 spec_version: 13
 template: 2
-checksum: c48421ee8232ae2a535c4b6a9cb6c02523176e35e59a7c0af6b14e2ed90f5cbc
+checksum: 106cb41ea65b13fbd4ddedfd9aee15e0b428158ae721980140024a3754c16f57
 created: 2026-07-23
-last_updated: 2026-11-17
+last_updated: 2026-11-19
 ---
 
 # Command Menu — Component Spec
@@ -265,7 +265,7 @@ _none_
 - `motion-reduce:animate-none` on the inherited `animate-popup-scale-*`; `motion-reduce:transition-none` on item `transition-colors`.
 - Ranked order is visual (CSS `order`) while the DOM keeps the consumer's order; the roving active item, `aria-selected` and `Enter` follow the visual order, so keyboard users get the ranked sequence. Highlighted characters are a `<mark>` inside the option, so the option's accessible name stays its full label.
 - Focus management: opening moves focus to the input; changing pages keeps focus in the input; closing returns focus to the element focused before the palette opened. Focus trap and scroll-lock are inherited from `Dialog`.
-- Touch target: item rows are full-width click targets ≥32 px tall, satisfying the in-overlay 24×24 px floor (WCAG 2.5.8).
+- Touch target: item rows are full-width click targets, at least 32 px tall on a fine pointer and 44 px (`pointer-coarse:min-h-11`) on a coarse pointer.
 
 ## Internationalization
 
@@ -289,7 +289,7 @@ _none_
 
 - The panel width and max height come from `Dialog`; the list scrolls inside `max-h-[24rem]`. From `md` up the panel sits 15% of the viewport height from the top (`15dvh`, a viewport-relative offset no spacing token expresses), so typing never moves its top edge; below `md` it is the Dialog's sheet.
 - The back control truncates a long page heading (`truncate`, `max-w-[40%]`) so the field keeps room to type.
-- Touch: rows are full-width ≥32px; the back control is 32px tall. No hover-only affordance: the highlight follows the active row and taps activate.
+- Touch: rows are full-width, 44 px tall on a coarse pointer; the back control is 32px tall. No hover-only affordance: the highlight follows the active row and taps activate.
 
 ## Performance
 

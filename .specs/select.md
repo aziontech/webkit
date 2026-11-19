@@ -7,9 +7,9 @@ spec_version: 15
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10801
   node_id: 3714:10801
-checksum: bef73e3ded3de91c530d6caa4aa818840b2c0cd006dfcde2b448e62b76ac6d7f
+checksum: 8c381cbdba4c75957563542cbadb7c47ac513f1222afe6db31ace192d5ffac01
 created: 2026-06-15
-last_updated: 2026-11-18
+last_updated: 2026-11-19
 ---
 
 # Select — Component Spec
@@ -202,7 +202,7 @@ _none_
 - `aria-invalid` and `aria-required` on the trigger mirror the matching props.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons + borders), including disabled state.
 - `motion-reduce:transition-none motion-reduce:animate-none` on every transition/animation-bearing class.
-- Touch target ≥40×40 px on `size="large"`; smaller sizes are documented as dense-layout-only (consistent with `Input`).
+- Touch target: the trigger is drawn 28 / 32 / 40 px tall by `size`; on a coarse pointer an invisible `aria-hidden` child (`data-slot="touch-target"`) shown only under `pointer-coarse:` extends its hit area to at least 44 px tall. Option rows are 32 px on a fine pointer and 44 px (`pointer-coarse:min-h-11`) on a coarse pointer, their fills still inset 1 px so two filled rows never touch.
 - Teleported content: the teleported `role="listbox"` content binds `dir` and `lang` from the nearest `ConfigProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
 
 ## Examples

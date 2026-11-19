@@ -8,9 +8,9 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5087-17336
   node_id: 5087:17336
-checksum: d789638c199fd87acfa1d55f8433a274be0ec100605471a61be459671e35732f
+checksum: 731a5a4a79fd5a9afd42c760a86c468ad38ffd8aa9f8a72ac33f1dc5bca25c2d
 created: 2026-06-25
-last_updated: 2026-11-18
+last_updated: 2026-11-19
 ---
 
 # DatePicker — Component Spec
@@ -232,7 +232,7 @@ Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `par
 - The root is capped at its container (`max-w-full`), so the trigger never overflows a 320 px box. The trigger never cuts its value off: a value longer than the trigger wraps to a second line and the trigger grows (its height is a minimum, not a fixed size).
 - Narrow (below 640 px, `max-sm:`): the panel opens as a sheet — full width, attached to the bottom of the screen, at most 85 % of the viewport high, scrolling inside, over a `--bg-backdrop` layer that closes it on tap; the content is centred. From 640 px it is the anchored popover, capped at `min(100vw − 2 × --spacing-sm, 44rem)`.
 - `orientation="horizontal"` needs room for the grid and the fields side by side; on narrow screens keep the default vertical layout.
-- Touch: day cells are 32 / 36 / 40 px by `size`; use `size="large"` on touch-first surfaces.
+- Touch: day cells are 32 / 36 / 40 px by `size`; use `size="large"` on touch-first surfaces. The trigger, clear and split buttons each carry an invisible `aria-hidden` child (`data-slot="touch-target"`) shown only under `pointer-coarse:` that extends the hit area to at least 44 px tall.
 
 ## Performance
 

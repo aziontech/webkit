@@ -221,8 +221,13 @@
           <a
             :href="home"
             :aria-label="t('siteHeaderSection.home')"
-            class="inline-flex shrink-0 items-center self-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
+            class="relative inline-flex shrink-0 items-center self-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
           >
+            <span
+              aria-hidden="true"
+              data-slot="touch-target"
+              class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
+            />
             <Brand
               variant="default"
               size="small"

@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 15
 template: 2
-checksum: 43ea055ad98a807efdbe2ef44fe67e81f1c65627281a6d0b59133620e0053fa4
+checksum: e9d95f34dd69061084e38a647362f3b20ec0ca85b9e6751a1ca32717d77daa3c
 created: 2026-11-11
-last_updated: 2026-11-18
+last_updated: 2026-11-19
 ---
 
 # DateRangePicker — Component Spec
@@ -243,7 +243,7 @@ Below 640 px the same `animate-popup-scale-in` / `animate-popup-scale-out` run f
 - Container query: the quick ranges are one column below 15 rem of list width and two columns from there (`@container` on the fieldset); the two columns fill top to bottom, half the ranges each (rounded up in the first).
 - Desktop (from 640 px): an anchored popover exactly as thin as the month grid on both tabs (seven day cells of the size token plus `--spacing-sm` on each side: 276 px at `medium`), capped at the viewport minus `--spacing-sm` on each side, scrolling inside itself when taller than the viewport. The Absolute/Relative switch and the footer (Refresh every, Cancel, Apply, and the zone selector with `showTimeZone`) stay fixed and only the tab body between them scrolls; the Absolute tab shows either the calendar or the fields, never both, so every view of both tabs, Apply included, fits without scrolling on a 1280 × 720 laptop and a 390 × 664 phone (`src/test/date-picker-readability.test.ts`). The time list opens under its field as a `Combobox` list, so it never widens the panel (checked in `src/test/date-picker-readability.test.ts`).
 - Phone (below 640 px, `max-sm:`): a sheet — full width, attached to the bottom of the screen, at most 85 % of the viewport high, scrolling inside, padded for the home indicator (`safe-area-inset-bottom`), over a `--bg-backdrop` layer; the footer keeps Refresh every at the start edge and Cancel and Apply at the end edge.
-- Touch: options, selects and step buttons are 44 px on `pointer: coarse`; nothing depends on hover.
+- Touch: options, selects and step buttons are 44 px on `pointer: coarse`; the trigger and the step buttons each carry an invisible `aria-hidden` child (`data-slot="touch-target"`) shown only under `pointer-coarse:` that extends the hit area to 44 px tall; nothing depends on hover.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom.
 
 ## Performance

@@ -5,8 +5,8 @@ structure: monolithic
 status: implemented
 spec_version: 6
 created: 2026-11-05
-last_updated: 2026-11-18
-checksum: 69d97d31e6d2e8d9bb7fef202cde1dc1926c694c1f9cb6457f38fc86bcbe5a73
+last_updated: 2026-11-19
+checksum: 1c408518260d160bfaf1d465e6d0e7b33fa0bf31ecac04f5563822f12a71ab7d
 template: 2
 ---
 
@@ -172,7 +172,7 @@ The marketing site's own navigation: a sticky bar with the Azion mark, the mega-
 - Container queries: none; the bar switches at viewport breakpoints.
 - Narrow (below `xl`, 80rem): the menus, links and contact leave the bar for the sheet behind the menu button; below `sm` the secondary action steps out unless `secondaryActionOnPhones`. When the bar's content box is under 20rem (a 320 px phone) the AZION wordmark gives way to the reduced "A" mark, so the sign-up button never covers it. Reaching `xl` while the sheet is open closes it.
 - Search: the `search-trigger` is first in the end group at every width. While the bar's content box is 47rem (752 px) or wider it is the field — magnifier, `Search` and the `⌘K` keycap (`Ctrl K` off Apple platforms, drawn by `kbd`); narrower (tablet and phone) it folds to a 32 × 32 px magnifier button named "Search", with the label as a tooltip and a 44 px touch area, beside the call to action. It never moves into the sheet. On a touch screen (`pointer: coarse`) the keycap is hidden at every width, since there is no keyboard to press it; the field keeps its label. Every form opens the same palette: the click and ⌘K / Ctrl K both emit `search`.
-- Touch: medium buttons and icon buttons meet 40 px; the mega-menu opens on click as well as hover.
+- Touch: medium buttons and icon buttons meet 40 px; the home mark carries an invisible `aria-hidden` touch target that extends its hit area to 44×44 px on a coarse pointer; the phone navigation rows are `SidebarMenu` rows (44 px on a coarse pointer); the mega-menu opens on click as well as hover.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom; the sheet scrolls inside `scroll-area`.
 
 ## Performance

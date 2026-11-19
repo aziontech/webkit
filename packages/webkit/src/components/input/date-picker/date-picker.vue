@@ -301,7 +301,7 @@
           :data-state="isOpen ? 'open' : 'closed'"
           :data-disabled="isDisabled || null"
           :data-invalid="field.invalid.value || null"
-          class="inline-flex w-(--container-3xs) max-w-full items-stretch overflow-hidden rounded-(--shape-control) border border-(--border-input) bg-(--bg-surface) transition-colors duration-150 ease-out [&:not(:focus-within):not([data-disabled])]:hover:border-(--border-strong) data-[invalid]:border-(--danger-border) data-[disabled]:cursor-not-allowed data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) motion-reduce:transition-none"
+          class="inline-flex w-(--container-3xs) max-w-full items-stretch rounded-(--shape-control) border border-(--border-input) bg-(--bg-surface) transition-colors duration-150 ease-out [&:not(:focus-within):not([data-disabled])]:hover:border-(--border-strong) data-[invalid]:border-(--danger-border) data-[disabled]:cursor-not-allowed data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) motion-reduce:transition-none"
         >
           <button
             type="button"
@@ -315,9 +315,14 @@
             :aria-invalid="field.invalid.value || undefined"
             aria-haspopup="dialog"
             :aria-expanded="isOpen"
-            class="text-label-sm inline-flex min-w-0 flex-1 items-center gap-(--spacing-xs) px-(--spacing-sm) py-(--spacing-2xs) text-(--text-default) transition-colors duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:text-(--text-disabled) data-[size=small]:min-h-7 data-[size=medium]:min-h-8 data-[size=large]:min-h-10 data-[empty]:text-(--text-muted) motion-reduce:transition-none"
+            class="relative text-label-sm inline-flex min-w-0 flex-1 items-center gap-(--spacing-xs) px-(--spacing-sm) py-(--spacing-2xs) text-(--text-default) transition-colors duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:text-(--text-disabled) data-[size=small]:min-h-7 data-[size=medium]:min-h-8 data-[size=large]:min-h-10 data-[empty]:text-(--text-muted) motion-reduce:transition-none"
             @click="toggleOpen"
           >
+            <span
+              aria-hidden="true"
+              data-slot="touch-target"
+              class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
+            />
             <i
               class="az az-calendar shrink-0 text-[length:inherit] leading-none text-(--text-muted)"
               aria-hidden="true"
@@ -341,9 +346,14 @@
             :disabled="isDisabled"
             :aria-label="t('datePicker.clear')"
             :data-testid="`${testId}__clear-trigger`"
-            class="inline-flex shrink-0 items-center justify-center px-(--spacing-xs) text-(--text-muted) transition-colors duration-150 ease-out hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+            class="relative inline-flex shrink-0 items-center justify-center px-(--spacing-xs) text-(--text-muted) transition-colors duration-150 ease-out hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
             @click="clearCommitted"
           >
+            <span
+              aria-hidden="true"
+              data-slot="touch-target"
+              class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
+            />
             <i
               class="az az-x text-[length:inherit] leading-none"
               aria-hidden="true"
@@ -357,9 +367,14 @@
             :aria-label="t('datePicker.open')"
             :aria-expanded="isOpen"
             :data-testid="`${testId}__split`"
-            class="inline-flex shrink-0 items-center justify-center border-s border-(--border-input) px-(--spacing-xs) text-(--text-muted) transition-colors duration-150 ease-out hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+            class="relative inline-flex shrink-0 items-center justify-center border-s border-(--border-input) px-(--spacing-xs) text-(--text-muted) transition-colors duration-150 ease-out hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
             @click="toggleOpen"
           >
+            <span
+              aria-hidden="true"
+              data-slot="touch-target"
+              class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
+            />
             <i
               :data-state="isOpen ? 'open' : 'closed'"
               class="az az-chevron-down text-[length:inherit] leading-none transition-transform duration-150 ease-out data-[state=open]:rotate-180 motion-reduce:transition-none"

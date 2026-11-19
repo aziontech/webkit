@@ -139,6 +139,11 @@
     @mousedown="onChromeMousedown"
   >
     <span
+      aria-hidden="true"
+      data-slot="touch-target"
+      class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
+    />
+    <span
       v-if="hasLeading()"
       class="inline-flex shrink-0 items-center justify-center text-(--text-muted)"
       aria-hidden="true"

@@ -7,9 +7,9 @@ spec_version: 7
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5467-1638
   node_id: 5467:1638
-checksum: a79772ae429a0b86c7a32adf98d3e129be811e10fa8933b1b6e603e380335131
+checksum: 7e323972a0f9b64a0483d6496c7e562d4a17b540f7d0df5633643b898478b495
 created: 2026-08-10
-last_updated: 2026-11-17
+last_updated: 2026-11-19
 ---
 
 # Footer — Component Spec
@@ -233,7 +233,7 @@ Tree-shaking alternative — the standalone root and each sub-component from its
 - Visible focus on links: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`.
 - Contrast ≥4.5:1 for column titles and links on `--bg-canvas`.
 - `motion-reduce:transition-none` on the link color transition.
-- Touch target: text links follow the platform convention for footer link lists (<40px height); justified deviation — targets are full-width-of-text with `--spacing-xs` separation.
+- Touch target: text links are drawn at their text height with `--spacing-xs` between them on a fine pointer; on a coarse pointer each link is 44 px tall (`pointer-coarse:min-h-11`) and the column drops its gap, so the links tile the column without overlapping.
 
 ## Examples
 

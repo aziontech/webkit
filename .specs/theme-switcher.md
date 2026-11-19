@@ -7,9 +7,9 @@ spec_version: 5
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5721-5138
   node_id: 5721:5138
-checksum: 895b75334cb953283eb11b2273426e28a545f094723e3467242674dd59451bcb
+checksum: 505bcbbaa529237d4d71295c624810081490050a4fd20ad8d218e1af89a666b1
 created: 2026-07-13
-last_updated: 2026-11-17
+last_updated: 2026-11-19
 ---
 
 # Theme Switcher — Component Spec
@@ -124,7 +124,7 @@ A compact segmented control drawn like `toggle-group` (same radius, border, surf
 - Each segment is wrapped in `@aziontech/webkit/tooltip` (`side="bottom"`) surfacing its mode label (`System` / `Dark` / `Light`) on hover and keyboard focus; the tooltip owns its own `aria-describedby` wiring.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons), including the disabled state.
 - `motion-reduce:transition-none` on animated states.
-- Touch target: `large` segments are 36×30 px; `small` and `medium` segments are below the 40×40 px target, a justified deviation for a dense global control that matches `toggle-group` at the same sizes.
+- Touch target: segments are drawn 24 / 28 / 36 px wide by `size` on every pointer; on a coarse pointer each carries an invisible `aria-hidden` child (`data-slot="touch-target"`) shown only under `pointer-coarse:` that extends its hit area to 44×44 px, as `toggle-group` does.
 
 ## Right-to-left
 

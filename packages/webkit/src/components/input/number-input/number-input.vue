@@ -151,7 +151,7 @@
     :data-invalid="isInvalid || null"
     :data-required="isRequired || null"
     :class="[
-      'relative inline-flex w-full items-center overflow-hidden',
+      'relative inline-flex w-full items-center overflow-hidden pointer-coarse:overflow-visible',
       'rounded-(--shape-control)',
       'border border-(--border-input) bg-(--bg-surface) text-(--text-default)',
       'transition-colors duration-150 ease-out motion-reduce:transition-none',
@@ -216,9 +216,14 @@
         tabindex="-1"
         :aria-label="t('numberInput.increment')"
         :disabled="isDisabled || readonly"
-        class="flex flex-1 items-center justify-center border-b border-(--border-input) pointer-coarse:border-b-0 pointer-coarse:border-s text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
+        class="relative flex flex-1 items-center justify-center border-b border-(--border-input) pointer-coarse:border-b-0 pointer-coarse:border-s text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
         @click="onIncrement"
       >
+        <span
+          aria-hidden="true"
+          data-slot="touch-target"
+          class="absolute hidden inset-x-0 inset-y-[min(0rem,calc(50%-22px))] pointer-coarse:block"
+        />
         <i
           class="az az-chevron-up text-[0.625rem] leading-none"
           aria-hidden="true"
@@ -229,9 +234,14 @@
         tabindex="-1"
         :aria-label="t('numberInput.decrement')"
         :disabled="isDisabled || readonly"
-        class="flex flex-1 items-center justify-center text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
+        class="relative flex flex-1 items-center justify-center text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
         @click="onDecrement"
       >
+        <span
+          aria-hidden="true"
+          data-slot="touch-target"
+          class="absolute hidden inset-x-0 inset-y-[min(0rem,calc(50%-22px))] pointer-coarse:block"
+        />
         <i
           class="az az-chevron-down text-[0.625rem] leading-none"
           aria-hidden="true"

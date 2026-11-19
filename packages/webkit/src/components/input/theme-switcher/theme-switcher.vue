@@ -189,6 +189,11 @@
         @click="select(mode.value)"
         @keydown="onKeydown($event, index)"
       >
+        <span
+          aria-hidden="true"
+          data-slot="touch-target"
+          class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
+        />
         <i
           :class="mode.icon"
           class="shrink-0 text-[length:inherit] leading-none"

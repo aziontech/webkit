@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3899-29362
   node_id: 3899:29362
-checksum: bd924e8ea9a504ca4cecc04187d53bd2d1d741c357b3b1ca606d202b88fae253
+checksum: 74075f3385a68501225e077683bf9ea4d485f538a8b64b6e0cf192e5950c611e
 created: 2026-06-25
 last_updated: 2026-11-19
 ---
@@ -263,7 +263,7 @@ Chips, typed filter and a create row:
 - List states sit in `role="presentation"` rows; a visually hidden `role="status"` region announces `Loading options`, the error message, the empty text, or `{count} options` after typing.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons + borders), including disabled state.
 - `motion-reduce:transition-none motion-reduce:animate-none` on every transition/animation-bearing class.
-- Touch target ≥40×40 px on `size="large"`; smaller sizes are documented as dense-layout-only (consistent with `Input`).
+- Touch target: the trigger is drawn 28 / 32 / 40 px tall by `size`; on a coarse pointer an invisible `aria-hidden` child (`data-slot="touch-target"`) shown only under `pointer-coarse:` extends its hit area to at least 44 px tall. Option rows are 32 px on a fine pointer and 44 px on a coarse pointer, fills inset 1 px.
 - Teleported content: the teleported `role="listbox"` content binds `dir` and `lang` from the nearest `ConfigProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
 
 ## Internationalization
@@ -291,7 +291,7 @@ Chips, typed filter and a create row:
 ## Responsive
 
 - The trigger fills its container; with `variant="chips"` and `chipLimit` `0` the chips wrap onto several lines and the field grows (`min-h` of the size, never a fixed height).
-- Touch: chip remove buttons follow `Chip`'s target; options are 32 px rows.
+- Touch: chip remove buttons follow `Chip`'s target; options are 32 px rows, 44 px on a coarse pointer; the trigger's hit area is 44 px tall on a coarse pointer.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom; a long chip label truncates inside the chip.
 - Touch: on coarse pointers (`pointer-coarse:`) the search field's text steps up to 16 px (`text-body-md`), so iOS Safari does not zoom the page when the searchable trigger takes focus.
 
