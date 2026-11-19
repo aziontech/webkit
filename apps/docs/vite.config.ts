@@ -69,7 +69,12 @@ export default defineConfig({
   },
   build: {
     assetsDir: '_app',
-    chunkSizeWarningLimit: 2000
+    chunkSizeWarningLimit: 2000,
+    rollupOptions: {
+      experimental: {
+        chunkOptimization: { mergeCommonChunks: false }
+      }
+    }
   },
   ssgOptions
 } as UserConfig)
