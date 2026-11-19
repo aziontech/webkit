@@ -3592,7 +3592,7 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-chat-drawer.m
 - Surface: app
 - Source: `blocks/auth/auth-sign-in/auth-sign-in.vue` in `@aziontech/webkit`
 - MCP: `get_block("auth/auth-sign-in")`
-- Components: Alert, AppHeader, Avatar, Brand, Button, Card, Checkbox, CopyButton, Field, `FieldError`, IconButton, Input, Item, KeyValueList, OtpInput, PageHeader, PasswordInput, PasswordRequirements, QrCode, Separator, Skeleton, Tag, Tooltip
+- Components: Alert, AppHeader, Avatar, Brand, Button, Card, Checkbox, CopyButton, Field, `FieldError`, IconButton, Input, Item, KeyValueList, OtpInput, PageHeader, PasswordInput, PasswordRequirements, QrCode, Separator, Skeleton, Tag, Tooltip, `use-locale`
 - Skills: `webkit-form`, `webkit-errors`, `webkit-microcopy`
 
 ## Asked as
@@ -3716,6 +3716,7 @@ What each prop and event does, and the go-live code: [blocks/auth/auth-sign-in.m
 - **Device actions:** `Cancel` and `Confirm`. Outcomes: `Device connected. Go back to your terminal; you can close this tab.` / `Request cancelled. The device was not connected.`
 - **Personal token:** heading `Sign in with a personal token`; lead `Paste a personal token from your Azion account. It is sent only to the Azion API.`; rejected `Azion did not accept this token. Check that you copied all of it and that it has not expired or been revoked.`; no access `This token is valid but cannot read what this app needs. Create a token with access to the account and paste it here.`; rate limited `Azion is limiting requests from this token. Wait a moment and retry.`; unreachable `We could not reach Azion to check the token. Your entry is kept.`; option `Remember for this tab` / `Closing the tab signs you out.`
 - **Device code errors:** `Enter the code your terminal shows.`, `Enter all 8 characters of the code.`, `That code is not valid or has expired. Check your terminal, or start the sign-in again there.`
+- **Languages:** the sign-in card (`auth-sign-in.vue`) carries its copy in a `COPY` table keyed by locale (`en`, `pt-BR`, `es`) and reads the active locale with `useLocale`, so a `ConfigProvider` around the page translates the block's copy together with WebKit's own strings (the password show and hide labels, the requirements). An unknown locale falls back to its language, then to English. Add a language by adding one entry to `COPY`; keep the English row as the source and keep the terms sentence split into its link parts.
 
 ## Accessibility
 
@@ -23942,6 +23943,122 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 ```
 
 2 more example(s) in [components/input-group.md](components/input-group.md).
+
+---
+
+<!-- components/language-select.md -->
+
+# Language Select
+
+> A searchable picker for the interface language: a `Select` whose trigger and rows show each language's flag and its name in that language (`English`, `Português (Brasil)`, `Español`), with a search box at the top of the list that filters by language name, BCP 47 tag or country. `v-model` holds the BCP 47 tag of the picked language, ready to hand to `ConfigProvider`'s `locale`. It offers the languages WebKit ships catalogs for (`en`, `pt-BR`, `es`) and takes the consumer's own list through `options`. It is the language counterpart of the country picker inside `phone-input`, and reuses its flag sprite and search behaviour.
+
+- Import: `import LanguageSelect from '@aziontech/webkit/language-select'`
+- Category: input · Surface: app · Structure: monolithic
+
+## When to use
+
+- A language switch for the whole app or a page: a header, a footer, a settings page or a sign-in screen.
+- A form field that asks which language a user, a page or a notification is written in.
+
+## Do
+
+- Bind `v-model` to the same value as `ConfigProvider`'s `locale`, so the picker and the strings move together.
+- Name languages in their own language (`Português (Brasil)`, not `Portuguese (Brazil)`): a reader who cannot read the current language still finds theirs.
+- Give each option a `country` only when it tells regional variants apart or the tag has no region (`en` → `US`); a flag stands for a country, never for a language on its own, so the name always sits next to it.
+- Put it in a `Field` with a `Field.Label` in a form; on a toolbar or a footer, give it an `aria-label` only if the built-in `Language` name does not fit.
+
+## Don’t
+
+- Two or three languages that must stay visible side by side on a toolbar → use `toggle-group`.
+- Picking a country (for a phone number, an address) → use `phone-input` or `select`.
+- Setting the language of WebKit's own strings → that is `config-provider`'s `locale`; bind this picker's `v-model` to it.
+
+## Related
+
+- `config-provider` — takes the picked tag as `locale` and translates everything below it.
+- `select` — the picker this component is built on; use it directly for any other list of choices.
+- `phone-input` — the same flag sprite and searchable list, for the dial code of a phone number.
+- `field` — wraps the picker with a label and a description when it sits in a form.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `options` | `LanguageSelectOption[]` | `(the languages WebKit ships — see Notes)` | false | Languages offered, in order: `{ value, label, country? }` where `value` is a BCP 47 tag, `label` the language named in itself, and `country` the ISO 3166-1 alpha-2 code of the flag (taken from the tag's region when omitted). |
+| `placeholder` | `string` | `''` | false | Trigger text while no language is picked. Empty uses the locale catalog (`Language`). |
+| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token forwarded to the Select trigger. Heights: small=28px, medium=32px, large=40px. |
+| `disabled` | `boolean` | `false` | false | Disables the trigger and keeps the list closed. |
+| `ariaLabel` | `string` | `''` | false | Accessible name of the trigger when no Field labels it. Empty uses the locale catalog (`Language`). |
+| `searchPlaceholder` | `string` | `''` | false | Placeholder and accessible name of the search box. Empty uses the locale catalog (`Search language`). |
+| `emptyTitle` | `string` | `''` | false | Shown in the list when no language matches the search. Empty uses the locale catalog (`No language found.`). |
+| `modelValue` | `string` | `''` | false | Two-way value (`v-model`). |
+
+## v-model
+
+| Model | Type | Default | Emits | Notes |
+| --- | --- | --- | --- | --- |
+| `v-model` | `string` | `''` | `update:modelValue` | BCP 47 tag of the picked language (`'pt-BR'`). Empty shows the placeholder. Via `defineModel`, so the picker also works unbound. |
+
+## States
+
+- Visual states delegated to `Select`: `default`, `hover`, `focus-visible`, `open`, `disabled`, and the `invalid` / `required` / `disabled` of an enclosing `Field`.
+- `data-state="open|closed"` lives on the `Select` trigger; `data-disabled` mirrors `disabled`.
+- The trigger shows the picked language's flag in its `#leading` slot and its name as the value, and no tag; with nothing picked it shows the placeholder and no flag.
+- `invalid` and `required` have no prop of their own: they come only from an enclosing `Field`, which `Select` reads, and show as the trigger's `data-invalid` / `aria-invalid` and `aria-required`.
+- States that cannot occur: `loading` and `error` (the options are static data, never fetched), and `readonly` (no prop; a fixed language is shown as text, or with `select` and its `readonly`).
+- An empty `options` array: the trigger still opens, and the list shows only the empty line (`No language found.`).
+- Each row shows the flag, the language name, and the BCP 47 tag in muted monospace text at the inline end; the picked row carries the Select's check mark.
+- Search: typing in the open list filters by the language name, its tag, its country code, and its name in English and in the active locale (`Intl.DisplayNames`), accent-insensitive. No match shows the empty line as a `role="status"`.
+- The flag sprite (`src/images/country-flags.webp`, shared with `phone-input`) loads with a dynamic `import()` after mount in the browser; until it arrives the flag boxes stay blank.
+
+## Accessibility
+
+- Visible focus: the `Select` trigger ring (`focus-visible:ring-(--ring-color)`); inside the list, the active row is highlighted (`data-active`) and announced through `aria-activedescendant` on the search box.
+- Keyboard map: `Tab` focuses the trigger; `Enter`, `Space` or `ArrowDown` opens the list with focus in the search box; typing a printable key on the closed trigger opens it and starts the search; `ArrowUp` / `ArrowDown` move the active row; `Home` / `End` jump to the first / last; `Enter` picks and returns focus to the trigger; `Esc` closes and returns focus to the trigger; `Tab` closes the list without picking and focus moves on in page order; `Space` and every other printable key type into the search box and never pick.
+- ARIA: the WAI-ARIA APG select-only combobox with a listbox popup: the trigger is the `Select` combobox button with `aria-expanded`, `aria-haspopup="listbox"`, and its name from the enclosing `Field.Label`, else `ariaLabel`, else the catalog (`Language`); rows are `role="option"` with `aria-selected`; the search box inside the listbox popup has an accessible name and drives `aria-activedescendant`; flags are `aria-hidden="true"` (the name carries the meaning).
+- Each option row renders the label inside the row with `lang` set to its own tag, so a screen reader reads `Español` with Spanish pronunciation.
+- Contrast ≥4.5:1 for names and tags, including the disabled trigger.
+- Touch target follows `size` (40px at `large`).
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import ConfigProvider from '@aziontech/webkit/config-provider'
+  import Field from '@aziontech/webkit/field'
+  import LanguageSelect from '@aziontech/webkit/language-select'
+  import { es } from '@aziontech/webkit/locales/es'
+  import { ptBR } from '@aziontech/webkit/locales/pt-BR'
+  import Pagination from '@aziontech/webkit/pagination'
+  import { ref } from 'vue'
+
+  const locale = ref('en')
+  const page = ref(1)
+  const catalogs = { 'pt-BR': ptBR, es }
+</script>
+
+<template>
+  <ConfigProvider
+    :locale="locale"
+    :catalogs="catalogs"
+    class="flex flex-col gap-(--spacing-md)"
+  >
+    <Field class="max-w-(--container-xs)">
+      <Field.Label>Language</Field.Label>
+      <LanguageSelect v-model="locale" />
+    </Field>
+    <Pagination
+      v-model:page="page"
+      :total="120"
+      :page-size="10"
+    />
+  </ConfigProvider>
+</template>
+```
+
+2 more example(s) in [components/language-select.md](components/language-select.md).
 
 ---
 

@@ -15341,6 +15341,78 @@
    "examplesFile": "catalog/examples/phone-input.json",
    "docsFile": "catalog/components/phone-input.json"
   },
+  "language-select": {
+   "import": "@aziontech/webkit/language-select",
+   "target": "./src/components/input/language-select/language-select.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/language-select",
+   "models": [
+    "modelValue"
+   ],
+   "category": "input",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "options",
+     "type": "LanguageSelectOption[]",
+     "default": "(the languages WebKit ships — see Notes)",
+     "required": "false",
+     "doc": "Languages offered, in order: `{ value, label, country? }` where `value` is a BCP 47 tag, `label` the language named in itself, and `country` the ISO 3166-1 alpha-2 code of the flag (taken from the tag's region when omitted)."
+    },
+    {
+     "name": "placeholder",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Trigger text while no language is picked. Empty uses the locale catalog (`Language`)."
+    },
+    {
+     "name": "size",
+     "type": "'small' | 'medium' | 'large'",
+     "default": "'medium'",
+     "required": "false",
+     "doc": "Size token forwarded to the Select trigger. Heights: small=28px, medium=32px, large=40px."
+    },
+    {
+     "name": "disabled",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Disables the trigger and keeps the list closed."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the trigger when no Field labels it. Empty uses the locale catalog (`Language`)."
+    },
+    {
+     "name": "searchPlaceholder",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Placeholder and accessible name of the search box. Empty uses the locale catalog (`Search language`)."
+    },
+    {
+     "name": "emptyTitle",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Shown in the list when no language matches the search. Empty uses the locale catalog (`No language found.`)."
+    },
+    {
+     "name": "modelValue",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
+    }
+   ],
+   "surface": "app",
+   "examplesFile": "catalog/examples/language-select.json",
+   "docsFile": "catalog/components/language-select.json"
+  },
   "hint": {
    "import": "@aziontech/webkit/hint",
    "target": "./src/components/input/hint/hint.vue",
@@ -32215,7 +32287,7 @@
    "title": "Blocks/Auth/AuthSignIn",
    "source": "blocks/auth/auth-sign-in/auth-sign-in.vue",
    "surface": "app",
-   "summary": "The signed-out screens of a platform app, frame included: a full-height page with the signed-out `AppHeader` (the product mark and a Documentation button) over a centred column that holds one `Card` and the prompt and terms under it. It serves /login, /signup and /signup/verify, and the signed-in hand-offs that share the frame: the OAuth authorize screen (scopes, Allow / Deny) and device or CLI authorization (compare the code, Confirm). An app that signs in with an Azion personal token instead of an account uses the PersonalToken variant (`token-sign-in.vue`): one masked `PasswordInput` for the token, a link to where tokens are created, a Remember for this tab option, and a `sign-in` event that hands the token to the app, which answers with `loading` and `error`. The Google and GitHub buttons lead the card, over an “or” `Separator`. The card opens on a `PageHeader` and signs in in two steps: email, then password. Each field is a `Field` whose `Field.Label` sits over an `Input`, or over a `PasswordInput` with `PasswordRequirements`; a `FieldError` (email) or `Field.Error` (password) appears only after the primary action. While a request is in flight the primary `Button` shows its loading state and the step's fieldset is disabled. The rest is `Button`, `IconButton` in a `Tooltip`, a `Tag` and an `Alert`. Errors follow one rule: auth never toasts. Each error story is the primary flow with one endpoint response: the same two-step card on its password step, and the outcome in the same small `Alert` under the heading. What changes is the severity and what it carries: nothing after a 401, because the fields under it are the recovery; Retry when nobody can fix it (503, 500, timeout); the Sign in and reset-your-password links when the address is already registered (409). In-page actions (Forgot your password?, Resend email, Set a new password) are `Button` with `variant=\"link\"`, never an anchor to `#`. Built from `PageHeader`, `AppHeader`, `Tag`, `Card`, `Alert`, `Input`, `Field`, `PasswordInput`, `PasswordRequirements`, `FieldError` and `Button`. The card column slides in from the inline start with a fade on mount (`starting:` styles, `duration-slow-01`, `ease-expressive-entrance`, none under reduced motion), and the card height eases between steps. A full page routed outside ConsoleLayout.",
+   "summary": "The signed-out screens of a platform app, frame included: a full-height page with the signed-out `AppHeader` (the product mark and a Documentation button) over a centred column that holds one `Card` and the prompt and terms under it. It serves /login, /signup and /signup/verify, and the signed-in hand-offs that share the frame: the OAuth authorize screen (scopes, Allow / Deny) and device or CLI authorization (compare the code, Confirm). An app that signs in with an Azion personal token instead of an account uses the PersonalToken variant (`token-sign-in.vue`): one masked `PasswordInput` for the token, a link to where tokens are created, a Remember for this tab option, and a `sign-in` event that hands the token to the app, which answers with `loading` and `error`. The Google and GitHub buttons lead the card, over an “or” `Separator`. The card opens on a `PageHeader` and signs in in two steps: email, then password. Each field is a `Field` whose `Field.Label` sits over an `Input`, or over a `PasswordInput` with `PasswordRequirements`; a `FieldError` (email) or `Field.Error` (password) appears only after the primary action. While a request is in flight the primary `Button` shows its loading state and the step's fieldset is disabled. The rest is `Button`, `IconButton` in a `Tooltip`, a `Tag` and an `Alert`. Errors follow one rule: auth never toasts. Each error story is the primary flow with one endpoint response: the same two-step card on its password step, and the outcome in the same small `Alert` under the heading. What changes is the severity and what it carries: nothing after a 401, because the fields under it are the recovery; Retry when nobody can fix it (503, 500, timeout); the Sign in and reset-your-password links when the address is already registered (409). In-page actions (Forgot your password?, Resend email, Set a new password) are `Button` with `variant=\"link\"`, never an anchor to `#`. Built from `PageHeader`, `AppHeader`, `Tag`, `Card`, `Alert`, `Input`, `Field`, `PasswordInput`, `PasswordRequirements`, `FieldError` and `Button`. The card column slides in from the inline start with a fade on mount (`starting:` styles, `duration-slow-01`, `ease-expressive-entrance`, none under reduced motion), and the card height eases between steps. A full page routed outside ConsoleLayout. The sign-in card's copy ships in English, Portuguese (Brazil) and Spanish and follows the locale of the nearest `ConfigProvider` (`useLocale`), so the screen translates with WebKit's own strings.",
    "intents": [
     "login",
     "log in",
@@ -32339,7 +32411,8 @@
     "Separator",
     "Skeleton",
     "Tag",
-    "Tooltip"
+    "Tooltip",
+    "use-locale"
    ],
    "imports": [
     "@aziontech/webkit/alert",
@@ -32364,7 +32437,8 @@
     "@aziontech/webkit/separator",
     "@aziontech/webkit/skeleton",
     "@aziontech/webkit/tag",
-    "@aziontech/webkit/tooltip"
+    "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/use-locale"
    ],
    "primary": "Login",
    "guidelinesSummary": "The signed-out screens of a platform app: sign in, sign up, reset password and check your inbox, frame included. The user has one job here, to get into their account, and one object on the page to do it with: a single card under the signed-out bar. Every step of the flow (`email`, `password`, `reset`, `sent`, `new-password`) swaps the contents of that card in place, and every answer the server gives, success included, lands in one `Alert` inside it. Auth never toasts. It is a full page with its own focused header: the app routes it outside `ConsoleLayout`, never into the layout's default slot.",
