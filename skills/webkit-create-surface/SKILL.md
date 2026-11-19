@@ -2,7 +2,7 @@
 name: webkit-create-surface
 description: Where a create or settings form LIVES, and what it is built from. Use whenever you add or review a flow that creates a resource, edits one, or asks a question that commits — a "New X" button, a create route, an "add" affordance inside a detail page, a settings tab. Fixes the surface (a first-level resource creates on a PAGE; anything created inside a resource opens a DRAWER; nothing creates in a dialog), the anatomy every one of them shares (Section band with a Hint glyph over a flush card of rows, control right or stacked when wide), what belongs behind the collapsed Advanced band (the endpoint's not-required, already-defaulted fields), and the commit model (create pages carry a persistent bar; settings pages mount one only once something is edited), and how a flow picks an existing resource (an Existing / New band whose picker carries search past 7 options and Load more).
 status: active
-last_updated: 2026-11-17
+last_updated: 2026-11-19
 scope: general
 enforced_by: [ui-verify, webkit-component-states, webkit-accessibility, webkit-prefer-over-custom]
 ---
@@ -172,6 +172,13 @@ it — a hidden bar still reserves its space.
   of one record the reader meant.
 - **Drawers commit with one Save, alone on the right.** No Cancel: the panel's X, the overlay and
   Escape are already the dismissal, and a fourth exit only competes with the commit for the eye.
+- **Leaving never throws typed work away silently.** Every exit of a create or edit surface (a page's
+  Cancel and header Back, a drawer's X, overlay and Escape, a route change) goes through one guard:
+  `useUnsavedChanges(() => form)` from `@aziontech/webkit/use-unsaved-changes` and one
+  `ConfirmDialog v-bind="guard.dialogProps"` with Keep editing (`guard.keepEditing`) and Discard
+  changes (`guard.discardAndLeave`). A page calls `await guard.confirmLeave()` before it emits
+  `cancel` and pairs it with `onBeforeRouteLeave(() => guard.confirmLeave())`; a drawer binds
+  `:open` and asks in its `@update:open` handler. A clean form leaves at once, with no dialog.
 
 ### Creating is not deploying
 
@@ -257,6 +264,7 @@ would ship without search never exists.
 - [ ] Nothing required is inside the disclosure; the collapsed region is `inert`.
 - [ ] Create page: persistent Cancel + Save. Settings page: bar mounts on first edit, with Discard.
 - [ ] Drawer: one Save, no Cancel.
+- [ ] A dirty form asks before Cancel, Back, X, overlay or Escape discards it; a clean one leaves at once.
 - [ ] Save creates and stops — no deploy, no publish, no charge as a side effect.
 - [ ] The success toast names the resource and offers a way to open it.
 - [ ] One `submitting` flag locks the fieldset AND every control; released in `finally`.

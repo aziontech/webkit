@@ -53,6 +53,30 @@ describe('create-page', () => {
     await waitFor(() => expect(screen.getByText('The service did not answer.')).toBeTruthy(), wait)
   })
 
+  it('leaves at once on Cancel while the form is clean', async () => {
+    const view = render(SinglePageCreate)
+    await fireEvent.click(screen.getByRole('button', { name: 'Cancel' }))
+    await waitFor(() => expect(view.emitted('cancel')).toHaveLength(1), wait)
+    expect(screen.queryByRole('alertdialog')).toBeNull()
+  })
+
+  it('asks before Cancel or Back discards typed input, and keeps it on Keep editing', async () => {
+    const view = render(SinglePageCreate)
+    const name = screen.getByRole('textbox', { name: 'Name' }) as HTMLInputElement
+    await fireEvent.update(name, 'acme-domain')
+    await fireEvent.click(screen.getByRole('button', { name: 'Cancel' }))
+    const confirm = await screen.findByRole('alertdialog')
+    expect(confirm.textContent).toContain('Unsaved changes')
+    await fireEvent.click(within(confirm).getByRole('button', { name: 'Keep editing' }))
+    await waitFor(() => expect(screen.queryByRole('alertdialog')).toBeNull(), wait)
+    expect(view.emitted('cancel')).toBeUndefined()
+    expect(name.value).toBe('acme-domain')
+    await fireEvent.click(screen.getByRole('button', { name: 'Back to Domains' }))
+    const again = await screen.findByRole('alertdialog')
+    await fireEvent.click(within(again).getByRole('button', { name: 'Discard changes' }))
+    await waitFor(() => expect(view.emitted('cancel')).toHaveLength(1), wait)
+  })
+
   it('gives Create Service a page heading and one h2 per group', () => {
     render(CreateService)
     expect(screen.getByRole('heading', { level: 1, name: 'Create Service' })).toBeTruthy()

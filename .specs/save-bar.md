@@ -3,7 +3,7 @@ name: save-bar
 category: layout
 structure: monolithic
 status: implemented
-checksum: 2260420e0c92d1622d031812d045633b0be26579eab0db7704b2e1c617ac73ce
+checksum: 7502c0647b7bd0189e2ba008153485ec732efbc3e8225975ad4486ed8819a881
 spec_version: 4
 template: 2
 created: 2026-11-10
@@ -101,7 +101,7 @@ Each `variant` is one placement plus one surface, named for what a reader sees:
 
 - Visual states: `default`
 - `data-variant` mirrors the `variant` prop on the root
-- Floating inset: while a `floating` bar is mounted it publishes its measured height on the document root as `--save-bar-inset` (for a scroll region of its own, such as a code editor, to pad its bottom) and `--toast-offset-bottom` (so the `toaster` stacks above the bar), and updates both when the bar resizes. When the bar would cover the end of the content, the root grows to the bar's height so the last field can scroll clear of it; when there is nothing left to cover, the root stays at zero height. Both properties are removed when the bar unmounts or changes to another `variant`. The other variants publish nothing.
+- Floating inset: while a `floating` bar is mounted it publishes its measured height on the document root as `--save-bar-inset` (for a scroll region of its own, such as a code editor, to pad its bottom) and `--toast-offset-bottom` (so the `toaster` stacks above the bar), and updates both when the bar resizes. When the bar would cover the end of the content, the root grows to the bar's height so the last field can scroll clear of it, whether the content scrolls in a scroll region of its own or the page itself scrolls; when there is nothing left to cover, the root stays at zero height. Both properties are removed when the bar unmounts or changes to another `variant`. The other variants publish nothing.
 - Responsive: the root is the `@container/save-bar`. `floating` and `docked` put the message and the actions on one row from `@xl` of the bar; below it the actions stack full width under the message, Save on top. `plain` stacks the same way below `@md`. `fade` keeps `leading` (Back) and the actions on one row at every width, the actions at the inline end. `centered` keeps the card centred and one row at every width: the optional `leading` or `default` content first, then the actions; the card never grows wider than the bar and lets clicks through around it. The bar keeps `env(safe-area-inset-bottom)` clear on phones.
 
 ## Motion & Animations
@@ -155,7 +155,7 @@ No built-in strings: the status sentence and the action labels come from the con
 ## Performance
 
 - Bundle budget: 2.1 KB gzip for `./save-bar` in `.size-limit.json`.
-- Runtime budget: one `ResizeObserver` on the floating bar while it is mounted; a resize writes two custom properties on the document root and measures the nearest scroll container once.
+- Runtime budget: one `ResizeObserver` on the floating bar while it is mounted; a resize writes two custom properties on the document root and measures the nearest scroll container (the page when nothing around the bar scrolls) once.
 - Heavy parts: none.
 
 ## Examples

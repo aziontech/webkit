@@ -49,7 +49,7 @@ Name is required and unique; the error sits under the field (`This field is requ
 
 ### I. One-time reveal — `Dialog`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PasswordInput`, `CopyButton` (required)
 
-When the page sets `v-model:secret` to what the create request returned, the drawer closes and a `Dialog` opens: the token's name, a warning `Alert` that this is the only time the secret is shown, the secret in a read-only `PasswordInput` (masked, with show) and a `CopyButton` beside it. The `CopyButton` announces `Token copied` (its `copied-label`), the only announcement; a muted line repeats `Copied to the clipboard.` for sighted users, hidden from assistive technology, and the footer button changes from `I copied the token` to `Done`. Closing sets `secret` back to `null`, which clears it from memory.
+When the page sets `v-model:secret` to what the create request returned, the drawer closes and a `Dialog` opens: the token's name, a warning `Alert` that this is the only time the secret is shown, the secret in a read-only `PasswordInput` (masked, with show) and a `CopyButton` beside it. The `CopyButton` announces `Token copied` (its `copied-label`), the only announcement; a muted line repeats `Copied to the clipboard.` for sighted users, hidden from assistive technology, and the footer button changes from `I copied the token` to `Done`. The dialog is `:dismissible="false"` and `:closable="false"`: Escape, an overlay tap and a header close button would lose the secret for good, so only the footer button closes it, and focus opens on the token field, not on a close control. Closing sets `secret` back to `null`, which clears it from memory.
 
 ### J. Confirmations and outcomes — `ConfirmDialog` (required)
 

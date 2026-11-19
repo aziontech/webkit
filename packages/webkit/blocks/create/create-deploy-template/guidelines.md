@@ -79,6 +79,7 @@ Then delete `sample.ts` and its import.
 
 ## Do
 
+- Leaving with typed work: on the Form state the header Back asks first once the scope, the repository name, its visibility or any setting or variable differs from what the form opened with: `useUnsavedChanges` tracks them, Back `await`s `guard.confirmLeave()` before it leaves, and one `ConfirmDialog v-bind="guard.dialogProps"` asks "Unsaved changes" with Keep editing and Discard changes. An untouched form leaves at once. In a router app pair it with `onBeforeRouteLeave(() => guard.confirmLeave())`.
 - Keep the template preview card at the top of the column through every phase, so the user always sees what is being deployed.
 - Ask for Git first; show the form only once a provider is connected.
 - Let Deploy check the form: show each missing required value under its field and open the collapsed group that holds it. Disable Deploy only while the settings load, or on an upload until a Root (/) is picked.

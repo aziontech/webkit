@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/create/create-wizard/create-wizard.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-wizard")`
-- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [Field](../../components/field.md), `FieldDescription`, `FieldError`, [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), [RadioGroup](../../components/radio-group.md), [RadioGroup](../../components/radio-group.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Skeleton](../../components/skeleton.md), [Subheader](../../components/subheader.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Wizard](../../components/wizard.md)
+- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [ConfirmDialog](../../components/confirm-dialog.md), [Field](../../components/field.md), `FieldDescription`, `FieldError`, [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), [RadioGroup](../../components/radio-group.md), [RadioGroup](../../components/radio-group.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Skeleton](../../components/skeleton.md), [Subheader](../../components/subheader.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), `use-unsaved-changes`, [Wizard](../../components/wizard.md)
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -76,6 +76,10 @@ Two steps, Project then Domain and deployment, with the last action reading "Cre
 - **Domain and deployment.** A read-back `Item` of the bound project with a transparent Change `Button` back to step one (the answer is kept); a Domain `Card` with a `ToggleGroup` of Free platform domain and Your own domain and a preview line of the address traffic arrives on; Environment as a `RadioGroup variant="card"` and Certificate as a `Select`; a Deployment `Card` with Create one or Use existing (the paged picker again); and a collapsed `SettingsGroup` titled Advanced holding only fields that have defaults.
 - **After submit.** Create and deploy shows its loading state; the consumer then hands the column to `detail/detail-deployment-logs` (InCreateFlow) and ends on `create/create-deploy-success`.
 
+### K. Leaving with typed work — `useUnsavedChanges`, `ConfirmDialog` (required)
+
+The Wizard's Cancel and the header Back both leave the flow, so both ask first once the form or the chosen policy differs from what the flow opened with: `useUnsavedChanges(() => form)` tracks it, Cancel and Back `await guard.confirmLeave()` before the page emits `cancel`, and one `ConfirmDialog v-bind="guard.dialogProps"` asks "Unsaved changes" with Keep editing and Discard changes. A clean form leaves at once, with no dialog, and the browser's own prompt covers a reload or a tab close while dirty. In a router app pair it with `onBeforeRouteLeave(() => guard.confirmLeave())` so a link or the browser Back asks too.
+
 ## Data
 
 The block keeps the form as a local draft, validates each step and emits `submit` with the values; it sends no request. `CreateWizardPolicy`, `CreateWizardValues`, `CreateWizardSubmission` and `CreateWizardProps` are exported from `create-wizard.vue`, and `sample.ts` holds the sample policies the chooser lists when `policies` is left out. The page owns the request: it sets `loading` while it runs, and on failure sets `error`, which the block shows in an error toast with Retry; on success the page shows the toast and opens the list.
@@ -92,7 +96,7 @@ The block keeps the form as a local draft, validates each step and emits `submit
 | Event    | Payload           | When                                                                                                             |
 | -------- | ----------------- | ---------------------------------------------------------------------------------------------------------------- |
 | `submit` | `(event, values)` | Create Access List on a valid form, and Retry in the error toast; `values` adds the `policy` and `enableModule`. |
-| `cancel` | `(event)`         | Cancel in the footer.                                                                                            |
+| `cancel` | `(event)`         | Cancel in the footer or the header Back, once the user confirms leaving a dirty form.                            |
 
 To go live, render the block from a page that owns the policies and the request:
 
@@ -216,6 +220,7 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
   import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import Field from '@aziontech/webkit/field'
   import FieldError from '@aziontech/webkit/field-error'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -229,6 +234,7 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
   import Tag from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
+  import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import Wizard from '@aziontech/webkit/wizard'
   import { computed, reactive, ref, watch } from 'vue'
 
@@ -540,6 +546,19 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
     })
   }
 
+  const guard = useUnsavedChanges(
+    () => ({ form, choice: choice.value, enableModule: enableModule.value }),
+    {
+      enabled: () => !props.loading
+    }
+  )
+  const discardDialog = guard.dialogProps
+  const discardLabels = guard.labels
+
+  const onCancel = async (event: MouseEvent) => {
+    if (await guard.confirmLeave()) emit('cancel', event)
+  }
+
   watch(
     () => props.error,
     (message) => {
@@ -562,6 +581,7 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
           aria-label="Back to Access Lists"
           variant="outline"
           size="small"
+          @click="onCancel"
         />
         <AppHeader.Brand
           href="/home"
@@ -607,7 +627,7 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
           :loading="loading"
           @next="onNext"
           @submit="commit"
-          @cancel="(event: MouseEvent) => emit('cancel', event)"
+          @cancel="onCancel"
         >
           <Wizard.Step
             title="Where it runs"
@@ -1001,6 +1021,26 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
         </Wizard>
       </div>
     </main>
+    <ConfirmDialog
+      v-bind="discardDialog"
+      data-testid="unsaved-changes-dialog"
+    >
+      <template #actions>
+        <Button
+          :label="discardLabels.keepEditing"
+          variant="ghost"
+          size="medium"
+          data-autofocus
+          @click="guard.keepEditing"
+        />
+        <Button
+          :label="discardLabels.discard"
+          variant="danger"
+          size="medium"
+          @click="guard.discardAndLeave"
+        />
+      </template>
+    </ConfirmDialog>
   </div>
 </template>
 ```

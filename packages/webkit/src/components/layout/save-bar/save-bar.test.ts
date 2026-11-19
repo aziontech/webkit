@@ -273,5 +273,18 @@ describe('SaveBar', () => {
       view.unmount()
       host.remove()
     })
+
+    it('reserves scroll room when the page itself scrolls, with no scroll region around it', async () => {
+      const view = render({
+        components: { SaveBar },
+        template:
+          '<div><div style="height: 3000px">Form</div><SaveBar>You have unsaved changes.</SaveBar></div>'
+      })
+      const root = view.getByTestId('save-bar')
+
+      await vi.waitFor(() => expect(root.style.height).toMatch(/^[1-9]\d*px$/))
+      expect(root.style.height).toBe(inset())
+      view.unmount()
+    })
   })
 })

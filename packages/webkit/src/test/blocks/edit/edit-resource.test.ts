@@ -5,6 +5,7 @@ import EditResource from '../../../../blocks/edit/edit-resource/edit-resource.vu
 import CacheSettings from '../../../../blocks/edit/edit-resource/variants/cache-settings.vue'
 import DangerZone from '../../../../blocks/edit/edit-resource/variants/danger-zone.vue'
 import Protocols from '../../../../blocks/edit/edit-resource/variants/protocols.vue'
+import Saving from '../../../../blocks/edit/edit-resource/variants/saving.vue'
 import StaleRecord from '../../../../blocks/edit/edit-resource/variants/stale-record.vue'
 import WafSettings from '../../../../blocks/edit/edit-resource/variants/waf-settings.vue'
 import { expectNoA11yViolations } from '../../axe'
@@ -44,6 +45,18 @@ describe('edit-resource locked modules', () => {
       expect(link.target).toBe('_blank')
       expect(link.rel).toContain('noopener')
     }
+  })
+})
+
+describe('edit-resource#Saving', () => {
+  it('locks every field while the save is in flight', async () => {
+    render(Saving)
+    const name = (await screen.findByRole('textbox', { name: 'Name' })) as HTMLInputElement
+    expect(name.disabled).toBe(true)
+    for (const toggle of screen.getAllByRole('switch')) {
+      expect(toggle.matches(':disabled')).toBe(true)
+    }
+    expect(screen.getByRole('button', { name: 'Discard' })).toBeDisabled()
   })
 })
 

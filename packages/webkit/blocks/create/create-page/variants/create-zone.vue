@@ -5,6 +5,7 @@
   import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import FieldError from '@aziontech/webkit/field-error'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
@@ -16,6 +17,7 @@
   import Switch from '@aziontech/webkit/switch'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
+  import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import { computed, reactive, ref } from 'vue'
 
   interface FormErrors {
@@ -192,6 +194,14 @@
   }
 
   const submitting = ref(false)
+
+  const guard = useUnsavedChanges(() => ({ form, records: records.value }), {
+    enabled: () => !submitting.value
+  })
+  const discardDialog = guard.dialogProps
+  const discardLabels = guard.labels
+
+  const onLeave = () => guard.confirmLeave()
   const SAVE_FAILURES = 0
   let failuresLeft = SAVE_FAILURES
 
@@ -234,6 +244,7 @@
           aria-label="Back to Edge DNS"
           variant="outline"
           size="small"
+          @click="onLeave"
         />
         <AppHeader.Brand
           href="/home"
@@ -479,6 +490,7 @@
                 label="Cancel"
                 variant="outline"
                 size="medium"
+                @click="onLeave"
               />
               <Button
                 label="Save"
@@ -492,5 +504,25 @@
         </div>
       </form>
     </main>
+    <ConfirmDialog
+      v-bind="discardDialog"
+      data-testid="unsaved-changes-dialog"
+    >
+      <template #actions>
+        <Button
+          :label="discardLabels.keepEditing"
+          variant="ghost"
+          size="medium"
+          data-autofocus
+          @click="guard.keepEditing"
+        />
+        <Button
+          :label="discardLabels.discard"
+          variant="danger"
+          size="medium"
+          @click="guard.discardAndLeave"
+        />
+      </template>
+    </ConfirmDialog>
   </div>
 </template>

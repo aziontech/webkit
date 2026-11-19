@@ -614,6 +614,8 @@
     <Dialog
       :open="revealOpen"
       size="medium"
+      :dismissible="false"
+      :closable="false"
       @update:open="(open) => !open && closeReveal()"
     >
       <DialogContent>
