@@ -7,7 +7,7 @@ spec_version: 7
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-16
-checksum: 1363c7a2df3d15a38bb8591e7593bc23d7fc7f301a50a521a21eda8937e92ac8
+checksum: 543b987af2b10159354fbb08cef9afeadd4a2624b6afdc791d0569c535161bb2
 ---
 
 # StoryIndexSection — Component Spec
@@ -150,6 +150,7 @@ Every success story of a company as one filterable library. A left-aligned title
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text uses `--text-default` / `--text-muted`.
 - `motion-reduce:transition-none` on every transition.
 - Touch target ≥40×40 px — every card is a full-cell link.
+- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Internationalization
 

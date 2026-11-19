@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: cf8e46beb97b9987ba0b4040700a7ba3ed00114894227c1e9786de87dd85243d
+checksum: 5ae348461e5fad992d1680fab6fe182728143582c2e599475e8d5b2e9d31b9fb
 created: 2026-11-16
 last_updated: 2026-11-18
 ---
@@ -143,6 +143,7 @@ A catalog tile laid out from props: a logo mark, the item name, its vendor, a sh
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
 - `motion-reduce:transition-none` on the hover and glow transitions.
 - Touch target: the whole tile is the title's target; the action is a regular `Button`.
+- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the title activates as a button, as with an empty `href`. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Internationalization
 

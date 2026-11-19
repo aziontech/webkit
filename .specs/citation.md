@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 232b9fa3dcc9f7afebed3960f2851db1225a7d6a733f1a8bcec10432eb32e40d
+checksum: 4d6d0a29c65abb9dad52a96ca987a6eb848c5105ab226c8e9bc8fa8477ed7f7f
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -64,7 +64,7 @@ _None. Exports: `"./citation"`. Composed DS components: `tooltip`._
 | ------- | -------- | ------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `index` | `number` | —       | true     | 1-based number of the source, in the order the response first cites it.                                                                               |
 | `title` | `string` | `''`    | false    | Title of the source, shown in the tooltip and read in the accessible name.                                                                            |
-| `href`  | `string` | `''`    | false    | Where the reference points: `#<anchor>-source-<n>` for the `Sources` list under the response, or the source URL. Without it the number is plain text. |
+| `href`  | `string` | `''`    | false    | Where the reference points: `#<anchor>-source-<n>` for the `Sources` list under the response, or the source URL. Without it, or when it is unsafe (`javascript:`, `data:`), the number is plain text. |
 
 ## Events
 
@@ -102,6 +102,7 @@ _None._
 - Keyboard map: `Tab` reaches a linked citation; `Enter` follows it; focus shows the tooltip.
 - ARIA: `aria-label="Source 1: Real-Time Purge"` (the visible digit alone is not a name).
 - Touch target: inline text reference; exempt from the 24 px minimum as inline text (WCAG 2.5.8 exception).
+- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the number renders as the unlinked `role="note"` chip, like a citation without `href`. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Internationalization
 

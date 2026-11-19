@@ -7,7 +7,7 @@ status: implemented
 spec_version: 5
 created: 2026-11-05
 last_updated: 2026-11-16
-checksum: e0a20effeb24c6b70731c6dd720ce4428f63b7196138bafd50ca7e9e913af224
+checksum: ca33bb994f89a5f48373b0b5e6788d9b0f1b4080d47cb94327e8bc4fcaf5335c
 ---
 
 # SubjectGridSection — Component Spec
@@ -126,6 +126,7 @@ A library of learning subjects in a divider grid: each subject is one framed car
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): titles `var(--text-default)`, descriptions and links `var(--text-muted)`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the article link colour transition carries `motion-reduce:transition-none`.
 - Touch target ≥40×40 px — the closing actions are large `button`s; article links are inline text links inside a list.
+- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Internationalization
 

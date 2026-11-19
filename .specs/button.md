@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 10
 template: 2
-checksum: 90898ebd4ddd837cee283569ecc81b599dc44b93389b171e0f2b5395eac6bb04
+checksum: 08bade71359aea87c77276ae9492f77cebf2db7b0254f8becffb97cdbb21662b
 created: 2026-05-22
 last_updated: 2026-11-16
 ---
@@ -89,7 +89,7 @@ The labelled control that triggers an action. `variant` ranks the action in its 
 | `icon`         | `string`                                                                 | `''`        | false    | Azion icon class for the icon drawn beside the label.                                                                                     |
 | `iconPosition` | `'leading' \| 'trailing'`                                                | `'leading'` | false    | Which side of the label the icon sits on. `leading` is a glyph that names the action; `trailing` is a glyph that points at where it goes. |
 | `animated`     | `boolean`                                                                | `false`     | false    | Nudges a trailing icon along its axis on hover. Off by default; marketing CTAs opt in.                                                    |
-| `href`         | `string`                                                                 | `''`        | false    | When set, renders as a link (`<a>`).                                                                                                      |
+| `href`         | `string`                                                                 | `''`        | false    | When set to a safe URL, renders as a link (`<a>`); an unsafe URL is ignored, and a `download` attribute keeps `blob:` / `data:` (see Accessibility).                                                                                                      |
 | `target`       | `'_blank' \| '_self'`                                                    | `'_self'`   | false    | Link target when `href` is set.                                                                                                           |
 | `type`         | `'button' \| 'submit' \| 'reset'`                                        | `'button'`  | false    | Native button type. `submit` lets the control submit its form; `disabled` and `loading` still block it. Ignored when `href` is set.       |
 
@@ -150,6 +150,7 @@ The labelled control that triggers an action. `variant` ranks the action in its 
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
 - Forced colors: the filled variants (primary, secondary, danger) have no border of their own, so under `forced-colors: active` every button draws a 1px `ButtonBorder` edge (`GrayText` when disabled); outside forced colors nothing changes.
+- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the control stays a native button and still emits `click`; with a `download` attribute, `blob:` and `data:` URLs are kept for the file. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Right-to-left
 

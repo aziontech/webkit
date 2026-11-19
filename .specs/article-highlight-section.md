@@ -7,7 +7,7 @@ spec_version: 5
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-16
-checksum: a12ed88528669457543f59ae1dddb02c049837e1568236cb048a9fc5d68b92c6
+checksum: c3e3540d684a74fac9c718a042adbda1939dd62dcd6110cab759786132c67109
 ---
 
 # ArticleHighlightSection — Component Spec
@@ -138,6 +138,7 @@ The band that opens a blog under its hero. One article is shown large — its co
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text uses `--text-default` / `--text-muted` on the canvas.
 - `motion-reduce:transition-none` on every transition.
 - Touch target ≥40×40 px — every wall title is a full-cell button.
+- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Right-to-left
 

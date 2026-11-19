@@ -7,7 +7,7 @@ status: implemented
 spec_version: 10
 created: 2026-11-05
 last_updated: 2026-11-18
-checksum: c5798a9367648e4ffcb98ee8669a6105f29e66c7c15f9c36b2f9ff2c5b0f1bab
+checksum: 499415b241e0d4c42b49ac0ab8519d424d0116a7c3c7f3d45e9ea58bc029a5b0
 ---
 
 # TemplateGallerySection — Component Spec
@@ -149,6 +149,7 @@ _none_
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): card titles `var(--text-default)`, card lines `var(--text-muted)`; marks flagged `invertInDark` invert under the dark theme.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the button hover and the marquee scroll belong to `button` and `marquee`, which carry their own reduced-motion fallback; this band adds no motion.
 - Touch target ≥40×40 px — the deploy buttons are medium `button`s, the copy's actions are large.
+- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Internationalization
 

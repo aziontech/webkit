@@ -4,7 +4,7 @@ category: navigation
 structure: monolithic
 status: implemented
 spec_version: 6
-checksum: 414aa78fb9272be6325bd7b0257f39985b42ce01c328c853eb2c7bf845b99f11
+checksum: c5f8ad9369c94300a4f9b52b598ac298d07dd550a18a6b824cac7d567e910773
 created: 2026-05-22
 last_updated: 2026-11-15
 figma:
@@ -74,7 +74,7 @@ Helps users move between views or sections. Migrated from the existing implement
 | `size`     | `'small' \| 'medium' \| 'large'` | `'large'` | false    | Size token; affects height and typography (large 40px, medium 32px, small 28px), matching Button.                       |
 | `disabled` | `boolean`                        | `false`   | false    | Disables interaction and applies disabled tokens.                                                                       |
 | `icon`     | `string`                         | `''`      | false    | Azion icon class for the trailing icon; set shows it. Empty shows `az az-external-link` only when `target` is `_blank`. |
-| `href`     | `string`                         | `''`      | false    | Destination URL for the anchor. Empty renders `#`.                                                                      |
+| `href`     | `string`                         | `''`      | false    | Destination URL for the anchor. Empty, or an unsafe URL (`javascript:`, `data:`), renders `#`.                                                                      |
 | `target`   | `'_blank' \| '_self'`            | `'_self'` | false    | Link target when navigating.                                                                                            |
 
 ## Events
@@ -126,6 +126,7 @@ Helps users move between views or sections. Migrated from the existing implement
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
+- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the anchor points at `#`, as with an empty `href`. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Right-to-left
 

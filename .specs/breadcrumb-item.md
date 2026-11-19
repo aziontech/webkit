@@ -7,7 +7,7 @@ spec_version: 7
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6288
   node_id: 3374:6288
-checksum: 0169e30a8187e1d43bba92a032d182cbab95080a80e36fae9699da2d9b470d0a
+checksum: 6d881e13da505d4f4cbb984bd81cc5e0ae289fd284f9414125d9954280a89747
 created: 2026-05-25
 last_updated: 2026-11-15
 ---
@@ -121,6 +121,7 @@ Single segment in a breadcrumb trail. Ancestor segments use muted label text and
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none` on color transitions.
 - Touch target ≥40×40 px on interactive segments (padding + min height).
+- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the crumb points at `#`, as with an empty `href`. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Right-to-left
 

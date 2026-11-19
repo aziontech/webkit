@@ -7,7 +7,7 @@ spec_version: 11
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4310-19617
   node_id: 4310:19617
-checksum: 119eb4cb815d9aa755afe75d2d08e587ee80620823776c26d6005796bba36d5e
+checksum: d9621ea78f2bbe5592af733794876e1c978f9ca11f65210274af46d3ad75e46b
 created: 2026-05-23
 last_updated: 2026-11-17
 ---
@@ -185,6 +185,7 @@ right-to-left: the start region is on the right there. 6.0 removed the physical 
 - Contrast ≥4.5:1 for text and icons in slotted content.
 - `motion-reduce:*` on any animated slotted controls (owned by children).
 - Touch target ≥40×40 px on slotted buttons (owned by children).
+- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the brand renders without a link, as with an empty `href`. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Examples
 

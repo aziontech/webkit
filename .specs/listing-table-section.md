@@ -7,7 +7,7 @@ spec_version: 7
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-18
-checksum: 40f125520efb6f1efab21d03cbbbd74f492c0600c00f4b4ad72916361fc1f85e
+checksum: 4850b9549f60b11e8321a547de72b08e3fb90005b45a88e67988de13ae73e007
 ---
 
 # ListingTableSection — Component Spec
@@ -122,6 +122,7 @@ _none_
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): row titles `var(--text-default)`, values `var(--text-muted)`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion; the button carries its own fallback.
 - Touch target ≥40×40 px — each phone row is a whole-item link; the button is large.
+- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Internationalization
 

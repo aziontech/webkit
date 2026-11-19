@@ -7,7 +7,7 @@ spec_version: 5
 template: 2
 created: 2026-11-15
 last_updated: 2026-11-16
-checksum: f2655c0cea98dadf81e78efb4807fae6c6ba7ddf7441b018183af2fd3540cb10
+checksum: cc960d809cfb8d5db795400541b67f739b5b9c7981b99aec8fd0a289a994e31f
 ---
 
 # ArticleIndexSection — Component Spec
@@ -185,6 +185,7 @@ Every article or resource of a blog or a resource hub as one ruled list, with th
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text uses `--text-default` / `--text-muted`.
 - `motion-reduce:transition-none` on every transition.
 - Touch target ≥40×40 px — every row is a full-row link.
+- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Internationalization
 

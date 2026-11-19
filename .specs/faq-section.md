@@ -6,7 +6,7 @@ status: implemented
 spec_version: 2
 created: 2026-11-05
 last_updated: 2026-11-16
-checksum: 4a9768e37a1361e546770a3149863dea609a73011f790bee9dd417a2e84f577f
+checksum: 76dbb3c5916ebf6102b9008e3383d73e0f5599f5404b6aa83022bca5a8c65429
 ---
 
 # FaqSection — Component Spec
@@ -109,6 +109,7 @@ _none_
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `faq`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion; the accordion carries its own fallback.
 - Touch target ≥40×40 px — owned by the accordion triggers.
+- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link label in the answer renders as plain text. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Examples
 

@@ -4,7 +4,7 @@ category: docs
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: 9c4e8d6f0182799281e684ad906863258f8ad1c0a86e8bd91962050f8de82268
+checksum: 098f667ac030e460cbd5671ef29e79366e927e34a0cdbf964754c7bbd3124ded
 created: 2026-08-22
 last_updated: 2026-11-18
 ---
@@ -135,6 +135,7 @@ One row of the documentation's related-content list: a leading glyph in a framed
 - A row that leaves the documentation carries `rel="noreferrer"` on `target="_blank"` and swaps the chevron for a diagonal arrow, so the destination change is visible and not colour-only.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
 - Touch target: the full row is the hit area, comfortably over 40×40 px.
+- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the item renders without a link, as with an empty `href`. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Right-to-left
 
