@@ -4,6 +4,7 @@ import { basename, dirname, join, relative, resolve } from 'node:path'
 import MarkdownIt from 'markdown-it'
 import { createHighlighter, type Highlighter } from 'shiki'
 
+import { previewPair } from '../../../packages/theme/src/tokens/contrast-pairs.js'
 import {
   type Catalog,
   type CatalogEntry,
@@ -498,9 +499,16 @@ export async function renderGuidelinesFile(file: string): Promise<{
 }
 
 type TokenUsage = { job: string; usedBy: string }
+type TokenPreview = ReturnType<typeof previewPair>
 type TokenGroup = {
   id: string
-  vars: { name: string; value: string; dark?: string; usage?: TokenUsage }[]
+  vars: {
+    name: string
+    value: string
+    dark?: string
+    usage?: TokenUsage
+    preview: TokenPreview
+  }[]
 }
 
 function tokenUsage(): { match: (name: string) => boolean; usage: TokenUsage }[] {
@@ -635,7 +643,8 @@ export function buildTokens(catalog: Catalog = readCatalog()) {
         .filter((token) => !(token.dark === undefined && /^(var|color-mix)\(/.test(token.value)))
         .map((token) => {
           const found = usage.find((entry) => entry.match(token.name))
-          return found ? { ...token, usage: found.usage } : token
+          const preview = previewPair(token.name)
+          return found ? { ...token, usage: found.usage, preview } : { ...token, preview }
         })
     }))
     .filter((group) => group.vars.length)

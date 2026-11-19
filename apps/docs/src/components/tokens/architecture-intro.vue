@@ -10,20 +10,17 @@
     {
       step: '1',
       title: t.value.layerPrimitivesTitle,
-      text: t.value.layerPrimitivesText,
-      code: 'primitives.orange[600]'
+      text: t.value.layerPrimitivesText
     },
     {
       step: '2',
       title: t.value.layerThemeTitle,
-      text: t.value.layerThemeText,
-      code: 'var(--primary)'
+      text: t.value.layerThemeText
     },
     {
       step: '3',
       title: t.value.layerSemanticTitle,
-      text: t.value.layerSemanticText,
-      code: 'text-heading-md · var(--spacing-md)'
+      text: t.value.layerSemanticText
     }
   ])
 </script>
@@ -54,7 +51,6 @@
               >{{ layer.step }} · {{ layer.title }}</span
             >
             <p class="text-body-sm text-(--text-default)">{{ layer.text }}</p>
-            <code class="mt-auto text-label-code-sm text-(--text-muted)">{{ layer.code }}</code>
           </div>
         </Card>
         <span
