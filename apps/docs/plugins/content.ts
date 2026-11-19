@@ -391,6 +391,22 @@ export function firstSentence(text: string): string {
   return (match ? match[1] : plain).trim()
 }
 
+const REFERENCE_NAME =
+  /\b(?:Cloudscape|AI Elements|shadcn|Supabase|Vercel|Geist|Radix|Primer|Polaris|Mantine|Chakra|ChatGPT|Claude\.ai|Gemini|TanStack|AG-UI|benchmarks?)\b/
+const REFERENCE_NOTE = new RegExp(`\\s*\\((?=[^()]*${REFERENCE_NAME.source})[^()]*\\)`, 'g')
+const REFERENCE_CLAUSE = new RegExp(
+  `,\\s*(?:after\\s+)?(?:the\\s+)?(?=${REFERENCE_NAME.source})[^,:;.]*`,
+  'g'
+)
+
+export function stripReviewerNotes(text: string): string {
+  return text
+    .replace(REFERENCE_NOTE, '')
+    .replace(REFERENCE_CLAUSE, '')
+    .replace(/\s+([,:;.])/g, '$1')
+    .trim()
+}
+
 function plainInline(text: string): string {
   return text
     .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
@@ -429,7 +445,9 @@ export function buildIndex(catalog: Catalog = readCatalog(), foundationSlugs: st
         'other',
       surface: entry.surface ?? 'app',
       purpose: plainInline(
-        firstSentence(entry.purpose ?? (parent?.purpose as string | undefined) ?? '')
+        firstSentence(
+          stripReviewerNotes(entry.purpose ?? (parent?.purpose as string | undefined) ?? '')
+        )
       ),
       import: entry.import ?? `@aziontech/webkit/${name}`,
       exampleDir: examples?.dir ?? null,
@@ -445,7 +463,7 @@ export function buildIndex(catalog: Catalog = readCatalog(), foundationSlugs: st
     title: block.name.replace(/([a-z0-9])([A-Z])/g, '$1 $2'),
     group: block.dir.split('/').slice(0, -1).join('/') || block.dir,
     surface: block.surface ?? 'app',
-    summary: plainInline(firstSentence(block.summary ?? '')),
+    summary: plainInline(firstSentence(stripReviewerNotes(block.summary ?? ''))),
     states: block.states,
     dir: block.dir,
     uses: (
