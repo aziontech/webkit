@@ -3,24 +3,24 @@ name: confirm-dialog
 category: overlay
 structure: monolithic
 status: implemented
-checksum: ec21c039194e3024a0c623e26aec3b1372cc1df37cac5e7c13078fd239e1530d
+checksum: 95547c59d598e70c4d83f4982255b0280057cde4b3898795504c554c1c79df4d
 spec_version: 8
 created: 2026-11-10
-last_updated: 2026-11-17
+last_updated: 2026-11-19
 ---
 
 # ConfirmDialog — Component Spec
 
 ## Purpose
 
-A small confirmation dialog: a title, one sentence of description, and a Cancel plus a confirm button whose `variant` says how destructive the outcome is (`danger` for a removal or a discard, `primary` for a commit). The unsaved-changes guard uses the same shell; the `actions` slot replaces the two buttons when the guard can also save. Built from `Dialog`, `Panel` parts and `Button`.
+A small confirmation dialog: a title, one sentence of description, and a Cancel plus a confirm button whose `variant` says how destructive the outcome is (`danger` for a removal or a discard, `primary` for a commit). The unsaved-changes guard uses the same shell; the `actions` slot replaces the two buttons when the guard can also save. Built from `Dialog`, `Panel` parts, `Button` and, for a typed confirmation, `Input`.
 
 ## When to use
 
 - Use ConfirmDialog whenever the person must confirm an action they started (delete, discard, publish), including typed-name confirmation; an agent asking to run a tool uses ToolApproval, and a modal with your own body uses Dialog.
 - Before a removal (Remove domain, Delete resource) or a re-run (Clear again).
 - When someone leaves a form with unsaved changes.
-- A deletion that needs typed confirmation: put the field in the default slot and set `disabled` until it matches.
+- A deletion that needs typed confirmation: set `confirmation-phrase` to the resource name; the dialog renders the field and keeps the confirm button disabled until the text matches.
 
 ## When NOT to use
 
@@ -39,6 +39,7 @@ A small confirmation dialog: a title, one sentence of description, and a Cancel 
 - The confirm label repeats the verb of the title (Remove Domain, Discard changes), never OK or Yes.
 - `variant="danger"` only when the outcome removes or discards something; a commit is `primary`.
 - Close the dialog from `@confirm` once the action has run; keep it open with `loading` while it runs.
+- Typed confirmation has one rule everywhere: the reader types the resource name (`confirmation-phrase`), the match is case-sensitive after trimming the ends, the confirm button stays disabled until it matches, `Enter` in the field confirms once it matches, and the field empties every time the dialog opens. Do not hand-write the field.
 - Below `md` the buttons stack full width with the confirm button on top, the same order as `save-bar`.
 
 ## Usage
@@ -83,6 +84,7 @@ A small confirmation dialog: a title, one sentence of description, and a Cancel 
 | `size`         | `'small' \| 'medium'`   | `'medium'` | false    | Width of the dialog.                                                                                                                |
 | `loading`      | `boolean`               | `false`    | false    | Shows a spinner on the confirm button while the action runs; Cancel, `Esc` and the overlay stop closing the dialog until it clears. |
 | `disabled`     | `boolean`               | `false`    | false    | Disables the confirm button, for a confirmation that needs input first.                                                             |
+| `confirmationPhrase` | `string`          | `''`       | false    | A phrase the reader must type, exactly and with the same case, before confirm enables; usually the resource name. Empty asks for no typing. |
 | `defaultOpen`  | `boolean`               | `false`    | false    | Initial open state when uncontrolled (`v-model:open` unbound).                                                                      |
 
 ## v-model
@@ -93,7 +95,7 @@ A small confirmation dialog: a title, one sentence of description, and a Cancel 
 
 | Event     | Payload               | Notes                                                                            |
 | --------- | --------------------- | -------------------------------------------------------------------------------- |
-| `confirm` | `(event: MouseEvent)` | The confirm button was activated; not emitted while `disabled` or `loading`.     |
+| `confirm` | `(event: MouseEvent)` | The confirm button was activated; not emitted while `disabled`, `loading` or before the phrase matches. |
 | `cancel`  | `(event: MouseEvent)` | The cancel button was activated; the dialog closes. Not emitted while `loading`. |
 
 ## Slots
@@ -128,7 +130,8 @@ _none_
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: owned by the buttons and `dialog`.
-- Keyboard map: on open, focus lands on Cancel, the least destructive action (WAI-ARIA alert dialog pattern; Cancel carries `data-autofocus`, which the shared focus trap honours); with the `actions` slot it lands on the first focusable control, or on the slot control marked `data-autofocus`. `Esc` closes; `Tab` is trapped in the dialog and focus returns to the trigger on close (from `dialog`). There is no close button: an alert dialog is answered with Cancel, the confirm button or `Esc`. Tests: `confirm-dialog.test.ts` › opens with focus on Cancel.
+- Keyboard map: with `confirmationPhrase`, focus lands on the phrase field (the confirm button is disabled until it matches), and `Enter` in the field confirms once the text matches. Otherwise, on open, focus lands on Cancel, the least destructive action (WAI-ARIA alert dialog pattern; Cancel carries `data-autofocus`, which the shared focus trap honours); with the `actions` slot it lands on the first focusable control, or on the slot control marked `data-autofocus`. `Esc` closes; `Tab` is trapped in the dialog and focus returns to the trigger on close (from `dialog`). There is no close button: an alert dialog is answered with Cancel, the confirm button or `Esc`. Tests: `confirm-dialog.test.ts` › opens with focus on Cancel.
+- The phrase field is labelled by its sentence (`aria-labelledby`, "Type `name` to confirm." from the locale catalog, `confirmDialog.typeToConfirm`). Tests: `confirm-dialog.test.ts` › typed confirmation.
 - ARIA: the panel is `role="alertdialog"` (it interrupts with a decision), named by its title and described by its description (`DialogTitle`, `DialogDescription`; `aria-describedby` only when a description renders).
 - Nested: opened from a `Drawer` or a `Dialog`, it is the top overlay layer, so `Esc` closes the confirm only, and while `loading` it closes nothing.
 - Contrast ≥4.5:1, owned by the composed parts.
@@ -138,6 +141,7 @@ _none_
 - Confirm — a removal.
 - DiscardChanges — the unsaved-changes guard.
 - RunAgain — `variant="primary"`.
+- TypedConfirmation — `confirmation-phrase`: the confirm button enables once the resource name is typed.
 - SaveOrDiscard — the `actions` slot with three buttons; justified because the slot replaces the default footer.
 
 ## Constraints — DO NOT

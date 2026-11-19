@@ -401,7 +401,8 @@ export const ptBR: Messages = {
   },
   confirmDialog: {
     confirm: 'Confirmar',
-    cancel: 'Cancelar'
+    cancel: 'Cancelar',
+    typeToConfirm: 'Digite {phrase} para confirmar.'
   },
   consoleLayout: {
     navigation: 'Navegação principal',

@@ -236,7 +236,8 @@ export const competitorComparisonSection = {
 
 export const confirmDialog = {
   confirm: 'Confirm',
-  cancel: 'Cancel'
+  cancel: 'Cancel',
+  typeToConfirm: 'Type {phrase} to confirm.'
 } as const
 
 export const copyButton = {

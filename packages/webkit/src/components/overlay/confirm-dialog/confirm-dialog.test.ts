@@ -5,6 +5,7 @@ import { defineComponent, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/confirm-dialog/default.vue'
 import SaveOrDiscard from '../../../../examples/confirm-dialog/save-or-discard.vue'
+import TypedConfirmation from '../../../../examples/confirm-dialog/typed-confirmation.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import ConfirmDialog from './confirm-dialog.vue'
 
@@ -188,5 +189,72 @@ describe('ConfirmDialog', () => {
     await settle()
     const panel = byTestId('confirm-dialog__panel')
     expect(panel?.getAttribute('role')).toBe('alertdialog')
+  })
+
+  describe('typed confirmation', () => {
+    const phraseProps = {
+      open: true,
+      title: 'Delete application',
+      confirmLabel: 'Delete application',
+      confirmationPhrase: 'acme-store'
+    }
+
+    it('labels the field with the phrase and focuses it on open', async () => {
+      const { getByTestId } = within(render(TypedConfirmation).container as HTMLElement)
+      await userEvent.click(getByTestId('confirm-dialog__trigger'))
+      await settle()
+      await vi.waitFor(() =>
+        expect(document.activeElement).toBe(byTestId('confirm-dialog__phrase'))
+      )
+      const field = byTestId('confirm-dialog__phrase') as HTMLInputElement
+      const label = document.getElementById(field.getAttribute('aria-labelledby') ?? '')
+      expect(label?.textContent?.replace(/\s+/g, ' ').trim()).toBe('Type acme-store to confirm.')
+      await expectNoA11yViolations(document.body)
+    })
+
+    it('keeps confirm disabled until the exact, case-sensitive phrase is typed', async () => {
+      const onConfirm = vi.fn()
+      render(ConfirmDialog, { props: { ...phraseProps, onConfirm } })
+      await settle()
+      const field = byTestId('confirm-dialog__phrase') as HTMLInputElement
+      const confirm = byTestId('confirm-dialog__confirm') as HTMLButtonElement
+
+      expect(confirm).toBeDisabled()
+      await userEvent.type(field, 'Acme-Store')
+      expect(confirm).toBeDisabled()
+      await userEvent.click(confirm)
+      expect(onConfirm).not.toHaveBeenCalled()
+
+      await userEvent.clear(field)
+      await userEvent.type(field, ' acme-store ')
+      expect(confirm).toBeEnabled()
+      await userEvent.click(confirm)
+      expect(onConfirm).toHaveBeenCalledTimes(1)
+      expect(onConfirm.mock.calls[0]?.[0]).toBeInstanceOf(MouseEvent)
+    })
+
+    it('confirms on Enter in the field only once the phrase matches', async () => {
+      const onConfirm = vi.fn()
+      render(ConfirmDialog, { props: { ...phraseProps, onConfirm } })
+      await settle()
+      const field = byTestId('confirm-dialog__phrase') as HTMLInputElement
+
+      await userEvent.type(field, 'acme{Enter}')
+      expect(onConfirm).not.toHaveBeenCalled()
+      await userEvent.type(field, '-store{Enter}')
+      expect(onConfirm).toHaveBeenCalledTimes(1)
+    })
+
+    it('empties the field every time the dialog opens', async () => {
+      const { rerender } = render(ConfirmDialog, { props: phraseProps })
+      await settle()
+      await userEvent.type(byTestId('confirm-dialog__phrase') as HTMLInputElement, 'acme-store')
+      await rerender({ ...phraseProps, open: false })
+      await settle()
+      await rerender({ ...phraseProps, open: true })
+      await settle()
+      expect((byTestId('confirm-dialog__phrase') as HTMLInputElement).value).toBe('')
+      expect(byTestId('confirm-dialog__confirm')).toBeDisabled()
+    })
   })
 })
