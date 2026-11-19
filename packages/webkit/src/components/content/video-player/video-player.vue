@@ -30,21 +30,21 @@
   }
 
   export interface VideoPlayerProps {
-    /** URL of the video file: an https, blob or data URL. Empty with a success status shows the error state. */
+    /** URL of the video: https, blob or data. */
     src?: string
-    /** Media type of the file (video/mp4, video/webm), so the browser can skip a file it cannot play. */
+    /** Media type, such as video/mp4. */
     mimeType?: string
-    /** URL of the still image shown before the video plays. */
+    /** Still image shown before play. */
     poster?: string
-    /** Caption tracks: a WebVTT URL, its language, a label, and whether it is the default track. */
+    /** WebVTT caption tracks. */
     captions?: VideoPlayerCaption[]
-    /** Where the video is: waiting to generate, generating, ready to play, or failed. */
+    /** Generation status; success plays. */
     status?: VideoPlayerStatus
-    /** Percent done (0 to 100) while generating. Unset shows an indeterminate bar. */
+    /** Percent done while generating; unset is indeterminate. */
     progress?: number
-    /** Why the video could not be produced or loaded, shown in the error state. */
+    /** Message of the error state. */
     error?: string
-    /** Accessible name of the player. Empty names it Video. */
+    /** Accessible name; empty reads Video. */
     ariaLabel?: string
   }
 

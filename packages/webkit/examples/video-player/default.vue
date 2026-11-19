@@ -3,19 +3,10 @@
   import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
   import VideoPlayer from '@aziontech/webkit/video-player'
 
-  const captionsVtt = [
-    'WEBVTT',
-    '',
-    '00:00.000 --> 00:03.000',
-    'Open Acme Store and choose Create application.',
-    '',
-    '00:03.000 --> 00:06.000',
-    'Import the repository and deploy.'
-  ].join('\n')
-
+  const vtt = 'WEBVTT\n\n00:00.000 --> 00:05.000\nCreate an application for Acme Store.'
   const captions = [
     {
-      src: `data:text/vtt;charset=utf-8,${encodeURIComponent(captionsVtt)}`,
+      src: `data:text/vtt,${encodeURIComponent(vtt)}`,
       srclang: 'en',
       label: 'English',
       default: true

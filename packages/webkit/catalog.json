@@ -29923,6 +29923,75 @@
    "examplesFile": "catalog/examples/file-preview.json",
    "docsFile": "catalog/components/file-preview.json"
   },
+  "video-player": {
+   "import": "@aziontech/webkit/video-player",
+   "target": "./src/components/content/video-player/video-player.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/video-player",
+   "category": "content",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "src",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "URL of the video: https, blob or data."
+    },
+    {
+     "name": "mimeType",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Media type, such as video/mp4."
+    },
+    {
+     "name": "poster",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Still image shown before play."
+    },
+    {
+     "name": "captions",
+     "type": "VideoPlayerCaption[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "WebVTT caption tracks."
+    },
+    {
+     "name": "status",
+     "type": "'pending' | 'running' | 'success' | 'error'",
+     "default": "'success'",
+     "required": "false",
+     "doc": "Generation status; success plays."
+    },
+    {
+     "name": "progress",
+     "type": "number",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Percent done while generating; unset is indeterminate."
+    },
+    {
+     "name": "error",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Message of the error state."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name; empty reads Video."
+    }
+   ],
+   "surface": "app",
+   "examplesFile": "catalog/examples/video-player.json",
+   "docsFile": "catalog/components/video-player.json"
+  },
   "attribute-editor": {
    "import": "@aziontech/webkit/attribute-editor",
    "target": "./src/components/input/attribute-editor/attribute-editor.vue",

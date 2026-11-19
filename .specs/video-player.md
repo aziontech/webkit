@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 0c17be15c4a12b594b6bfd45bec2676d7ce2b39b70a489e12712543fef5728e4
+checksum: 686a5823637e3f8f27066c54041b6b002fe526aea9dd48b06bc4a1c03844c43b
 created: 2026-11-19
 last_updated: 2026-11-19
 ---
@@ -14,36 +14,29 @@ last_updated: 2026-11-19
 
 ## Purpose
 
-Plays one video file in the page with its own controls: play and pause, a seek bar with the elapsed and total time, mute and volume, captions, and full screen. It also renders the two states a generated video goes through before it can play: a generating state (waiting, then running with an optional percentage) and an error state. It is built on the native video element with no player library; it plays what the app hands it (a URL, a `blob:` or a `data:` URL) and fetches or generates nothing.
+A native video player with play and pause, seek with time, mute and volume, captions and full screen. It also shows the states of a generated video before it plays: generating (with an optional percentage) and error. It plays the URL the app hands it (https, `blob:` or `data:`) and fetches nothing.
 
 ## When to use
 
-- A video an AI model produced or a user attached, shown inside a chat message or an artifact.
-- Showing a video while it is still being generated, then the finished video in the same place.
-- A recorded clip in an app screen (a session recording, a tutorial) that needs labelled, keyboard-operable controls.
+- A generated or attached video in a chat message or artifact, from generating to playing.
+- A recorded clip in an app screen.
 
 ## When NOT to use
 
-- A third-party player page (YouTube, Vimeo, a status page) → use `embed`, which frames another origin's document.
-- A short muted clip that illustrates documentation → use `doc-frame`, which frames stills and clips in docs.
-- A file of any type in a storage browser → use `file-preview`, which picks the right preview for the type.
-- Decorative motion behind marketing copy → do not use a video at all; use the marketing media components.
+- A third-party player page (YouTube, Vimeo) → use `embed`.
+- A docs clip → use `doc-frame`.
+- A stored file of any type → use `file-preview`.
 
 ## Related
 
-- `embed` — an `iframe` for third-party players and documents; no controls of its own.
-- `doc-frame` — documentation frame for stills and clips.
-- `file-preview` — type-aware preview of a stored file, with Download.
-- `progress` — the bar the generating state shows.
-- `empty-state` — the error state inside this component.
+- `embed` — third-party players.
+- `file-preview` — stored files of any type.
 
 ## Best practices
 
-- Always give a `poster`: it is what a reader sees before playing, and it keeps the frame from flashing empty.
-- Name the video with `aria-label` when the page holds more than one, so each player's region reads differently.
-- Pass every caption track you have in `captions`; mark the one in the page's language as `default`.
-- Pass `progress` only when the generator reports one; without it the generating bar is indeterminate, which is honest about an unknown wait.
-- Hand an expiring URL (a signed or generated link) as `src` and refresh it before it expires; the player shows the error state when the file cannot load.
+- Give a `poster` and an `aria-label`.
+- Mark the caption track in the page's language as `default`.
+- Pass `progress` only when the generator reports one.
 
 ## Usage
 
@@ -69,14 +62,14 @@ Plays one video file in the page with its own controls: play and pause, a seek b
 
 | Prop        | Type                                              | Default     | Required | JSDoc                                                                                                   |
 | ----------- | ------------------------------------------------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------- |
-| `src`       | `string`                                          | `''`        | false    | URL of the video file: an https, blob or data URL. Empty with a success status shows the error state.  |
-| `mimeType`  | `string`                                          | `''`        | false    | Media type of the file (`video/mp4`, `video/webm`), so the browser can skip a file it cannot play.      |
-| `poster`    | `string`                                          | `''`        | false    | URL of the still image shown before the video plays.                                                    |
-| `captions`  | `VideoPlayerCaption[]`                            | `[]`        | false    | Caption tracks: a WebVTT URL, its language, a label, and whether it is the default track.               |
-| `status`    | `'pending' \| 'running' \| 'success' \| 'error'`  | `'success'` | false    | Where the video is: waiting to generate, generating, ready to play, or failed.                          |
-| `progress`  | `number`                                          | undefined   | false    | Percent done (0 to 100) while generating. Unset shows an indeterminate bar.                             |
-| `error`     | `string`                                          | `''`        | false    | Why the video could not be produced or loaded, shown in the error state.                                |
-| `ariaLabel` | `string`                                          | `''`        | false    | Accessible name of the player. Empty names it Video.                                                    |
+| `src`       | `string`                                          | `''`        | false    | URL of the video: https, blob or data.  |
+| `mimeType`  | `string`                                          | `''`        | false    | Media type, such as video/mp4.      |
+| `poster`    | `string`                                          | `''`        | false    | Still image shown before play.                                                    |
+| `captions`  | `VideoPlayerCaption[]`                            | `[]`        | false    | WebVTT caption tracks.               |
+| `status`    | `'pending' \| 'running' \| 'success' \| 'error'`  | `'success'` | false    | Generation status; success plays.                          |
+| `progress`  | `number`                                          | undefined   | false    | Percent done while generating; unset is indeterminate.                             |
+| `error`     | `string`                                          | `''`        | false    | Message of the error state.                                |
+| `ariaLabel` | `string`                                          | `''`        | false    | Accessible name; empty reads Video.                                                    |
 
 `VideoPlayerCaption` is `{ src: string; srclang: string; label: string; default?: boolean }`. `VideoPlayerStatus` is declared as `'pending' | 'running' | 'success' | 'error'`, a subset of the shared status set. Both are exported.
 
@@ -90,16 +83,10 @@ Plays one video file in the page with its own controls: play and pause, a seek b
 
 ## States
 
-- `data-status`: `pending` | `running` | `success` | `error`, mirroring `status`; a file that fails to load also shows `error`.
-- `pending` and `running`: the frame is a `Skeleton` with a `role="status"` region that says Waiting to generate or Generating video, a `Progress` bar (indeterminate without `progress`) and the percentage; the root has `aria-busy`. No controls.
-- `error` (or the file fails to load, or no `src`): the frame is an `EmptyState` with the `error` text or the default message. No controls.
-- `success`: the video with the controls bar under it.
-- `data-paused` while the video is paused; `data-muted` while it is muted.
-- Captions toggle: `aria-pressed` while the default track shows. Mute: `aria-pressed` while muted.
-- Full screen: the frame (video and controls) goes full screen; the button's label switches between Enter and Exit full screen. The button is hidden where the browser offers no full screen.
-- A live stream or a file with no known duration hides the total time and disables the seek bar (`Slider` disabled tokens).
-- Buffering during playback (the media `waiting` event) renders nothing extra: the browser keeps the last frame, and `aria-busy` is not set, so a short stall is not announced.
-- States it does not have: `disabled`, `readonly` and `invalid` (it is not a form control); `loading` is `pending` / `running`; an empty `src` is the error state.
+- `data-status` mirrors `status`; a file that fails to load, or no `src`, shows `error`.
+- `pending` / `running`: `Skeleton`, a `role="status"` message, `Progress` and the percentage; no controls.
+- `error`: `EmptyState` with `error` or the default message; no controls.
+- `success`: the video and its controls; `data-paused`, `data-muted`.
 
 ## Motion & Animations
 
@@ -131,18 +118,9 @@ The video never plays on its own: there is no autoplay, so nothing moves until t
 
 ## Accessibility (WCAG 2.1 AA)
 
-- The root is a `div` with `role="group"` named by `ariaLabel` (or Video): a chat with several videos does not fill the landmark list.
-- Every control is a native button or range input with a visible focus ring: Play/Pause (label switches), the seek bar (a `Slider`; its native input takes the forwarded `aria-valuetext` attribute, which overrides `Slider`'s own value text, so it reads like 1:05 of 3:20), Mute (`aria-pressed`; the volume bar keeps its value while muted), Volume (range 0 to 100, its `aria-valuetext` the locale percent, like the generating percentage), Captions (`aria-pressed`, shown only with tracks), Full screen.
-- Keyboard: `Tab` moves through the controls; `Enter` / `Space` press a button; arrow keys move the seek bar by one second and the volume by five; `Home` / `End` jump to the start or end; under right-to-left the arrows follow the bar's direction (`Slider` handles it). `Esc` leaves full screen (the browser's own key); focus stays on the full screen button, whose label switches back to Enter full screen.
-- Status changes: focus is never moved. The `role="status"` region announces Waiting to generate and Generating video; when the status turns to `success` the region is gone and the controls appear in place, when it turns to `error` the `EmptyState` title is announced through `EmptyState`'s own `role="status"` region (no second live region around it).
-- Several caption tracks: the Captions toggle shows the track marked `default`, else the first track; it turns that one track on or off (`mode` showing / disabled). Language choice is out of scope; one player shows one language at a time.
-- The video element has no native controls and is hidden from the tab order; the custom controls are the only path, so there is one set of names.
-- Captions: `track kind="captions"` elements from `captions`; the toggle shows or hides the default track.
-- Generating: `role="status"` with `aria-live="polite"` announces the state; the `Progress` bar is named by the same message (`videoPlayer.pending` or `videoPlayer.running`).
-- No autoplay (WCAG 2.2.2): the video plays only on a press of Play.
-- Touch targets: the buttons are 40 px (`IconButton` and `Button` size `large`) and grow their hit area to 44 px under `pointer: coarse`. The seek and volume bars are `Slider`s, 40 px tall with no coarse hit area of their own: that is above the 24 px minimum of WCAG 2.5.8 and meets the 40 px floor; growing `Slider` to 44 px on coarse pointers is a `Slider` follow-up, not part of this spec.
-- The disabled seek bar (unknown duration) uses `Slider`'s disabled tokens; it carries no information a reader needs, so it is exempt from text contrast (WCAG 1.4.3 inactive component).
-- Contrast ≥4.5:1 for the time and labels on `--bg-surface`.
+- `role="group"` named by `ariaLabel` (or Video). Native buttons and range inputs, each labelled; the seek bar reads like 1:05 of 3:20.
+- Keyboard: `Tab`, `Enter` / `Space`, arrows (seek 1 s, volume 5), `Home` / `End`; `Esc` leaves full screen.
+- No autoplay; status changes are announced, never move focus. Buttons 40 px (44 px coarse), bars 40 px.
 
 ## Internationalization
 
