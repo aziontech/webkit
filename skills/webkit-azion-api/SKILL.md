@@ -2,7 +2,7 @@
 name: webkit-azion-api
 description: Calling the Azion API from a browser app built on @aziontech/webkit — why a direct fetch to api.azion.com fails (CORS), the Vite dev proxy for local work, a same-origin edge function proxy for production, where the person's personal token lives (memory or sessionStorage, never a bundle, a URL or localStorage), and how each API answer maps to a webkit state. Use when an app signs in with a personal token (auth/auth-sign-in PersonalToken) or calls the Azion REST or GraphQL APIs.
 status: active
-last_updated: 2026-11-16
+last_updated: 2026-11-19
 scope: general
 enforced_by: [webkit-example-data, webkit-component-states, review]
 ---
@@ -133,9 +133,9 @@ Sign-out clears it (`token.value = ''` and `sessionStorage.removeItem`). Tell th
 - A 401 or 403 signs the person out with a reason; it is not a toast and not a retry.
 - Sample hosts in code and docs are `example.com` (`webkit-example-data`); never paste a real token, even an expired one.
 
-## Definition of Done
+## How to check it works
 
-- [ ] No request in the Network panel goes from the page to `api.azion.com` directly.
-- [ ] `vite dev` works through `server.proxy`; production through a same-origin proxy with a path allowlist.
-- [ ] The token is not in `localStorage`, a URL, the bundle or a log.
-- [ ] 401/403, 429, 400 and 5xx each render the state in the table above.
+- No request in the Network panel goes from the page to `api.azion.com` directly.
+- `vite dev` works through `server.proxy`; production through a same-origin proxy with a path allowlist.
+- The token is not in `localStorage`, a URL, the bundle or a log.
+- 401/403, 429, 400 and 5xx each render the state in the table above.

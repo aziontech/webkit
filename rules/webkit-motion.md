@@ -21,7 +21,7 @@ always has a reduced-motion escape. This is the invariant behind the `/webkit-mo
 - For `data-state="open|closed"` overlay motion, read `duration` + `curve` from the tokens and emit
   the inline `transition` per phase; keep transform/opacity in classes, only timing inline.
 
-## Never
+## Don't
 
 - A hardcoded duration (`duration-[180ms]`, `transition: opacity 200ms`) or an inline
   `ease-[cubic-bezier(...)]` — the values live in the theme tokens.

@@ -46,7 +46,7 @@ an icon-only control, which `webkit/require-accessible-name` requires on every `
 - Wrap brand names, product names and code tokens in `translate="no"` so browser translation does
   not rewrite them.
 
-## Do not
+## Don't
 
 - Never add `role`/ARIA to fake an interactive element when a native one fits.
 - Never put `@click` on a non-interactive element without a matching key handler.
@@ -70,7 +70,9 @@ an icon-only control, which `webkit/require-accessible-name` requires on every `
   `text-link` keeps a quiet underline at rest and strengthens it on hover. A standalone `Link` (not in a
   sentence) underlines on hover only.
 
-## Correct
+## Example
+
+### Do
 
 ```vue
 <script setup>
@@ -96,7 +98,7 @@ const hintId = useId() // stable id for the ARIA association
 </template>
 ```
 
-## Wrong
+### Don't
 
 ```html
 <!-- clickable div: fake semantics, unreachable by keyboard -->

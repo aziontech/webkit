@@ -6,12 +6,12 @@ The `.claude` bundle that steers the AI — the **skills** and **agents**, both 
 
 `scope` is not a free choice; it is a fact of **where the file lives**:
 
-| Population | Glob | `scope` truth |
-|---|---|---|
-| Internal skills | `.claude/skills/<name>/SKILL.md` | `webkit` |
-| Internal agents | `.claude/agents/<name>.md` (except `_README.md`) | `webkit` |
-| Consumer skills | `skills/<name>/SKILL.md` (repo root) | `general` |
-| Consumer agents | `adapters/claude/agents/<name>.md` (repo root) | `general` |
+| Population      | Glob                                             | `scope` truth |
+| --------------- | ------------------------------------------------ | ------------- |
+| Internal skills | `.claude/skills/<name>/SKILL.md`                 | `webkit`      |
+| Internal agents | `.claude/agents/<name>.md` (except `_README.md`) | `webkit`      |
+| Consumer skills | `skills/<name>/SKILL.md` (repo root)             | `general`     |
+| Consumer agents | `adapters/claude/agents/<name>.md` (repo root)   | `general`     |
 
 A file inside a skill folder that is not `SKILL.md` (a `references/*.md`) is not governed; nor is `_README.md`; nor are the `.claude/rules/*.md` docs (those are governed by [`standards.mjs`](../hooks/lib/standards.mjs) and the invariant test).
 
@@ -36,7 +36,7 @@ Internal skills do **not** require `status` / `last_updated`, and agents (either
 
 ## Every skill declares what enforces it (`enforced_by`)
 
-A skill is *guidance*, not a mechanical invariant — so on its own it is advisory, exactly the drift the standards forbid in rules. To close that, **every skill** (`SKILL.md`, internal **and** consumer) declares a non-empty **`enforced_by:`** flow array in its frontmatter, naming the enforcement arm(s) that actually back its prescriptions. This is a **traceability matrix**: each piece of guidance is paired to the mechanism that makes it non-optional, exactly as every rule pairs to a gate in [`standards.mjs`](../hooks/lib/standards.mjs).
+A skill is _guidance_, not a mechanical invariant — so on its own it is advisory, exactly the drift the standards forbid in rules. To close that, **every skill** (`SKILL.md`, internal **and** consumer) declares a non-empty **`enforced_by:`** flow array in its frontmatter, naming the enforcement arm(s) that actually back its prescriptions. This is a **traceability matrix**: each piece of guidance is paired to the mechanism that makes it non-optional, exactly as every rule pairs to a gate in [`standards.mjs`](../hooks/lib/standards.mjs).
 
 - `enforced-by-missing` — a skill has a non-empty `enforced_by: [ … ]`.
 
@@ -66,12 +66,24 @@ A skill must **find components through the webkit MCP / catalog**, never by poin
 
 The current tree carries 7 pre-existing file-as-example references (component-scaffold, structure-decide, reuse-audit) grandfathered in the baseline; every consumer skill is already clean, so a new consumer file-as-example is blocked with zero slack.
 
+## Rendered docs — one pair vocabulary, no task lists, no printed comments
+
+The docs site renders `rules/*.md`, some `skills/*/SKILL.md` (the foundations pages listed in `apps/docs/src/lib/foundations.ts`), every block `guidelines.md` and the spec sections. In every one of those sources, and in every rule and skill the site may render later:
+
+- **One example-pair vocabulary: Do / Don't** (Carbon, Atlassian, Polaris, Material). A guidance list is `## Do` then `## Don't`; a code example is `## Example` then `### Do` and `### Don't`; a labelled list pair is `- **Do:**` and `- **Don't:**`. Never `Correct` / `Wrong`, `Good` / `Bad`, `Incorrect`, `Do not`, `Never`, `Avoid`, `Recommended`, `Dos and Don'ts`, `Best practices` / `Constraints` as a pair label. The usage pair `## When to use` / `## When not to use` is the only other pair. The docs UI uses the same two words (`do` / `dont` in `apps/docs/src/lib/i18n.ts`).
+- **The card colours are documented passing pairs.** The Do / Don't check and cross and the coloured top edge are `--success-mark` and `--danger-mark` on the surface (WCAG 2.1 at least 4.4:1 on every surface, APCA Lc 45 for an icon, light and dark); label, text and code stay `--text-default` and the shiki high-contrast themes. A `-foreground` token is the text on its own fill and never colours an icon on a surface (`rules/webkit-tokens.md` § Contrast).
+- **No task lists in a rendered page.** The docs are read, not ticked: a checklist is a plain list or numbered steps under a heading such as `## How to check it works`, never `- [ ]`. The renderer also drops a stray `[ ]` marker and never draws a checkbox. Agent-only skills the site does not render may keep their checklists.
+- **HTML comments never print.** The pipeline drops every `<!-- … -->` outside code (own paragraph, inside a sentence, over several lines); a comment inside a code span or fence stays, because it is the sample. Do not add tool comments (`prettier-ignore`) above fences.
+
+The authoring guide with the shapes and examples is `apps/docs/README.md` § "Do and Don't".
+
 ## Hard prohibitions
 
 - Do not ship a skill/agent without conforming frontmatter (name == folder/filename, non-empty description, correct `scope`).
 - Do not set `scope` to anything but `general` (`skills/`, `adapters/`) / `webkit` (`.claude`).
 - Do not ship a consumer skill without a `webkit-` name prefix, a `status:`, and a `last_updated:`.
 - Do not ship a skill without a non-empty `enforced_by:`, and do not name an enforcer that does not resolve (a non-existent rule, the wrong population's rule, or anything other than `ui-verify` / `review`).
+- Do not label an example pair with anything but Do / Don't, colour its icon with a `-foreground` token on a surface, or put a task list in a page the docs site renders.
 - Do not name a component source file (`.vue`/`.ts`) as an example in a skill, or use `#exports` / a `../src/components/` climb as a component lookup — find components via the MCP/catalog.
 
 ## Enforcement
@@ -80,6 +92,7 @@ The current tree carries 7 pre-existing file-as-example references (component-sc
 - **[`check-authoring-docs.mjs`](../../packages/webkit/scripts/check-authoring-docs.mjs)** is the CI ratchet (the `toolkit` job of [`governance.yml`](../../.github/workflows/governance.yml)) over all four populations; it fails on any introduced key even from an editor that never ran the hook.
 - Both share the single engine **[`lib/authoring-docs-checks.mjs`](../hooks/lib/authoring-docs-checks.mjs)** — one definition, two surfaces, so a push cannot bypass the hook.
 - The standard is registered in [`standards.mjs`](../hooks/lib/standards.mjs) (`authoring-docs`), paired to these gates, and the pairing is checked by [`invariant.test.mjs`](../../packages/webkit/test/standards/invariant.test.mjs).
+- **Rendered docs** — [`check-docs-markdown.mjs`](../../packages/webkit/scripts/check-docs-markdown.mjs) (engine `scripts/lib/docs-markdown.mjs`, the `docs-markdown` gate and the `toolkit` job of [`governance.yml`](../../.github/workflows/governance.yml), plus [`docs-markdown.test.mjs`](../../packages/webkit/test/standards/docs-markdown.test.mjs) in the toolkit tests) fails a pair heading or list label other than Do / Don't in `rules/`, `skills/`, `.specs/` and block guidelines, and a task list in a rendered page; [`apps/docs/test/content.test.ts`](../../apps/docs/test/content.test.ts) (`pnpm test:docs`, same gate and job) proves the pipeline drops HTML comments, renders task lists plain and pairs only Do / Don't; the styled `visual` job ([`apps/visual/tests/do-dont.spec.ts`](../../apps/visual/tests/do-dont.spec.ts)) measures every Do / Don't card on every docs page in light and dark: WCAG 2.1 contrast for label, icon, text and code, and the icon in `--success-mark` / `--danger-mark`; [`apca-contrast.test.mjs`](../../packages/theme/test/apca-contrast.test.mjs) holds those marks to the icon target.
 - **`enforced_by` resolution** is enforced by that same [`invariant.test.mjs`](../../packages/webkit/test/standards/invariant.test.mjs): it reads both rule populations (`.claude/rules/` and `rules/`), and fails the build if any skill's `enforced_by` entry is not a rule id of its own population, `ui-verify`, or `review`. Presence (`enforced-by-missing`) is caught earlier, write-time and in the ratchet, by the shared engine.
 
 ## Why this rule exists

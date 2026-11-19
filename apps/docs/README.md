@@ -54,34 +54,64 @@ site serves no media of its own and has no public folder. `packages/webkit/llms/
 
 Every pair of guidance on the site renders through one structure,
 `src/components/do-dont.vue` (owner decision B28): two `Card`s side by side from `md`, the Do
-column first (and on top when they stack on a phone), labelled with the green check and the red
-cross, the same height. Never lay out a pair by hand in a page or in Markdown; write it in one of
-these shapes and the content pipeline (`plugins/content.ts`, `markdownParts`) builds the pair:
+column first (and on top when they stack on a phone), labelled with the check and the cross, the
+same height. Never lay out a pair by hand in a page or in Markdown; write it in one of these shapes
+and the content pipeline (`plugins/content.ts`, `markdownParts`) builds the pair.
 
-| Where                                                                            | Write                                                                                                                                                                                                 |
-| -------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| A rule, skill or README rendered as a foundation page; a block's `guidelines.md` | Two **adjacent** headings of the same level: `## Do` then `## Don't` (or `Do not`, `Never`, `Avoid`), `## When to use` then `## When not to use`, `## Correct` then `## Wrong`. Nothing between them. |
-| One example inside a rule                                                        | A list whose items start with a bold label: `- **Correct:** …` and `- **Incorrect:** …` (or `**Do:**` / `**Don't:**`). Other items of that list stay as a list above the pair.                        |
-| A component spec (`.specs/<name>.md`)                                            | `## Best practices` bullets fill the Do column; a bullet that starts with `**Don't**` (or `**Never**`, `**Avoid**`) moves to the Don't column, above `## Constraints — DO NOT`.                       |
+**One vocabulary.** A pair is labelled **Do** and **Don't**, the words Carbon, Atlassian, Polaris
+and Material use. A guidance list and a code example take the same two words; there is no
+Correct / Wrong, Good / Bad, Do not, Never, Avoid or Recommended pair. The one other pair is the
+usage section, **When to use** / **When not to use**, which carries no check or cross.
+
+| Where                                                                            | Write                                                                                                                                                                           |
+| -------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| A rule, skill or README rendered as a foundation page; a block's `guidelines.md` | Two **adjacent** headings of the same level: `## Do` then `## Don't`, or `## When to use` then `## When not to use`. Nothing between them.                                      |
+| A code example inside a rule                                                     | `## Example`, then `### Do` and `### Don't`, each holding one fenced block. A single sample with no counter-example is `## Example` alone.                                      |
+| One example inside a list                                                        | A list whose items start with a bold label: `- **Do:** …` and `- **Don't:** …`. Other items of that list stay as a list above the pair.                                         |
+| A component spec (`.specs/<name>.md`)                                            | `## Best practices` bullets fill the Do column; a bullet that starts with `**Don't**` (or `**Never**`, `**Avoid**`) moves to the Don't column, above `## Constraints — DO NOT`. |
 
 Each card follows the common Do/Don't pattern (Polaris, Atlassian, Primer, Carbon): a coloured top
-edge (`--success-mark` for Do, `--danger-mark` for Don't; none for When to use), the label with
-its check or cross icon in the header, then the example. A column that is only a fenced code block
-shows it flush, as the card's example area, with no second frame inside the card; a column with
-text keeps the padded body and a normal code block. Code inside a pair is an ordinary fenced
-block: write it as you would anywhere else, with no wrapper and no comment above it.
+edge, the label with its check or cross icon in the header, then the example. The colours are the
+documented status marks on a surface (`rules/webkit-tokens.md` § Contrast): the edge and the icon
+are `--success-mark` for Do and `--danger-mark` for Don't, which pass WCAG 2.1 (at least 4.4:1 on
+the surfaces) and APCA Lc 45 for an icon in light and dark. Never colour the icon with
+`--success-foreground` / `--danger-foreground`: those are the text on the pale status fill, near
+black in light, and read as no colour on a card. The label and the text stay `--text-default`. A
+column that is only a fenced code block shows it flush, as the card's example area, with no second
+frame inside the card; a column with text keeps the padded body and a normal code block. Code
+inside a pair is an ordinary fenced block: write it as you would anywhere else, with no wrapper and
+no comment above it.
 
-Markdown on the site is rendered with raw HTML off, and a paragraph that is only an HTML comment
-(`<!-- … -->`) is dropped (`dropHtmlComments` in `plugins/content.ts`), so a comment never prints
-as text. Do not add tool comments above code fences: Prettier leaves code inside Markdown fences
+**HTML comments never print.** Markdown on the site is rendered with raw HTML off, and the pipeline
+drops every HTML comment (`<!-- … -->`) outside code: a paragraph that is only comments, a comment
+inside a sentence and one that runs over several lines (`dropHtmlComments` in
+`plugins/content.ts`). A comment inside a code span or a fenced block stays, because it is the
+sample. Do not add tool comments above code fences: Prettier leaves code inside Markdown fences
 alone (`embeddedLanguageFormatting: "off"` for `*.md` in `.prettierrc.json`), so no
 `prettier-ignore` is needed.
 
+**No task lists.** The docs are read, not ticked: a page the site renders has no `- [ ]` list. A
+checklist is a plain list or numbered steps under a heading such as `## How to check it works`. If
+one slips in, the renderer drops the `[ ]` marker and shows a plain bullet, never a checkbox. Agent
+skills the site does not render may keep their checklists.
+
 A block's `## Do` / `## Don't` and `## When to use` / `## When not to use` are read by name
-(`block-page.vue`) and must keep those headings. The visual suite checks the result on every page
-(`apps/visual/tests/do-dont.spec.ts`): at 1280 px each pair sits in two columns of equal height, at
-390 px the Do column comes first, and a Do, Don't, Correct or Wrong label outside the structure
-fails the test.
+(`block-page.vue`) and must keep those headings.
+
+How it is checked:
+
+- `pnpm --filter @aziontech/webkit check:docs-markdown` (the `docs-markdown` gate and the `toolkit`
+  CI job; engine `packages/webkit/scripts/lib/docs-markdown.mjs`) fails a pair heading or list
+  label other than Do / Don't in `rules/`, `skills/`, `.specs/` and every block `guidelines.md`,
+  and a task list in a page the site renders.
+- `pnpm test:docs` (`test/content.test.ts`, same gate and job) proves the pipeline drops comments,
+  renders task lists as plain lists and pairs only Do / Don't.
+- The visual suite checks the result on every page (`apps/visual/tests/do-dont.spec.ts`): at
+  1280 px each pair sits in two columns of equal height, at 390 px the Do column comes first, a
+  pair label outside the structure fails, and in light and dark the label, the icon, the text and
+  the code in each card meet WCAG 2.1 contrast against the card.
+- The theme test `packages/theme/test/apca-contrast.test.mjs` holds `--success-mark` and
+  `--danger-mark` to the icon target on every surface.
 
 ## Build and deploy
 

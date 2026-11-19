@@ -112,7 +112,7 @@ npx @aziontech/webkit add create/create-hub#repositories-loading
 - **Tokens:** `--primary` with `--primary-foreground`, scale steps `2xs` / `2xl`.
 - **Scripts:** `<verb>:<target>` (`build:docs`, `check:types`).
 
-## Do not
+## Don't
 
 - Never use a pre-6.0 name; run `npx @aziontech/webkit migrate` instead of fixing call sites
   by hand.

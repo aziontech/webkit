@@ -2,13 +2,13 @@
 
 Before you write UI, check whether the design system already has it. It almost always does — and its version is themed, accessible, and consistent with the rest of the product.
 
-## Do this first
+## Do
 
 1. Check the catalog: the webkit MCP (`suggest_component` with a plain description of what you need), `node_modules/@aziontech/webkit/llms/llms.txt` (a page per block and component, for agents without the MCP) or `node_modules/@aziontech/webkit/catalog.json` (the `imports` object lists every component).
 2. If a component exists, use it. Compose it, pass its props, fill its slots.
 3. If it almost fits, prefer configuring/composing the webkit component over forking it.
 
-## Do not
+## Don't
 
 - Do not hand-roll a button, input, modal, table, tooltip, badge, or any common UI when webkit already ships one.
 - Do not pull in another component library (a third-party UI kit, a headless UI kit, a random npm widget) for something webkit covers.

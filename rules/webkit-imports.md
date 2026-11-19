@@ -9,7 +9,7 @@ Every component — marketing page sections included — has one flat, single-se
 - Import each component you use on its own line, from its own subpath.
 - Import a marketing page section the same way: `import PricingPlansSection from '@aziontech/webkit/pricing-plans-section'` — the subpath equals the section's `_id` in the site JSON; see `webkit-sections`.
 
-## Do not
+## Don't
 
 - Do not prefix with a category. Never `@aziontech/webkit/feedback/skeleton` — the category lives in the folder, not the import.
 - Do not import from `/src/`. Never `@aziontech/webkit/src/components/...`.
@@ -17,7 +17,7 @@ Every component — marketing page sections included — has one flat, single-se
 - Do not use a bare-package barrel: never `import { Button } from '@aziontech/webkit'`. There is no barrel entry — it breaks tree-shaking and will not resolve.
 - Do not let the binding disagree with the subpath: `import Chip from '@aziontech/webkit/chips'` is wrong (singular binding, plural path). Pick the real path; match the binding to it.
 
-## Correct
+## Example
 
 ```vue
 <script setup>

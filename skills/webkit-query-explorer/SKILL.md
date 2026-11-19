@@ -2,7 +2,7 @@
 name: webkit-query-explorer
 description: Recipe for a query explorer over Azion's GraphQL Metrics and Events APIs built only from @aziontech/webkit pieces — dataset Select, measures and group-by, PropertyFilter tokens turned into GraphQL filters, a DateRangePicker resolved with useTimeRange, a Run button, the result as a Chart and a DataTable, and the generated query in a CodeBlock. Use when building an analytics, metrics or events explorer, a "query builder", or any screen that turns controls into a GraphQL query.
 status: active
-last_updated: 2026-11-18
+last_updated: 2026-11-19
 scope: general
 enforced_by: [webkit-component-states, webkit-prefer-over-custom, review]
 ---
@@ -136,9 +136,9 @@ Map rows to `labels` (one `Date` per bucket, from `ts`) and one series per measu
 - The generated query is visible and copyable in a `CodeBlock`.
 - Loading, empty, invalid and signed-out each have their own state.
 
-## Definition of Done
+## How to check it works
 
-- [ ] Dataset, measures, group-by and filters fill from the schema.
-- [ ] Last 1 hour, 24 hours, 7 days and 30 days resolve through `useTimeRange` and the picker shows the same presets.
-- [ ] The query shown in the `CodeBlock` is the query that ran.
-- [ ] Empty, `400` and `401` render distinct states; nothing renders a blank pane.
+- Dataset, measures, group-by and filters fill from the schema.
+- Last 1 hour, 24 hours, 7 days and 30 days resolve through `useTimeRange` and the picker shows the same presets.
+- The query shown in the `CodeBlock` is the query that ran.
+- Empty, `400` and `401` render distinct states; nothing renders a blank pane.
