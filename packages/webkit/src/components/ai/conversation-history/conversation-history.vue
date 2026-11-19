@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, useAttrs, useId } from 'vue'
+  import { computed, onScopeDispose, ref, useAttrs, useId, watch } from 'vue'
 
   import { useLazyChunks } from '../../../composables/use-lazy-chunks'
   import { useLocaleContext, useTranslate } from '../../../composables/use-translate'
@@ -99,15 +99,69 @@
       )
     }))
   })
+
+  const navEl = ref<HTMLElement | null>(null)
+  const removing = ref<{ id: string; index: number } | null>(null)
+  let focusFrame = 0
+  let focusDeadline = 0
+
+  const orderedIds = () =>
+    groups.value.flatMap((group) =>
+      group.chunks.flatMap((chunk) => chunk.items.map((item) => item.id))
+    )
+
+  const onRemove = (event: MouseEvent, id: string) => {
+    removing.value = { id, index: orderedIds().indexOf(id) }
+    emit('remove', event, id)
+  }
+
+  const focusAfterRemoval = () => {
+    focusFrame = 0
+    const pending = removing.value
+    if (!pending || !navEl.value) return
+    const active = document.activeElement
+    const lost = !active || active === document.body || !active.isConnected
+    if (!lost) {
+      if (performance.now() < focusDeadline) focusFrame = requestAnimationFrame(focusAfterRemoval)
+      else removing.value = null
+      return
+    }
+    removing.value = null
+    const rows = Array.from(
+      navEl.value.querySelectorAll<HTMLElement>('[data-slot="conversation-history-item"]')
+    )
+    const target = rows[Math.min(pending.index, rows.length - 1)] ?? navEl.value
+    target.focus()
+  }
+
+  watch(
+    () => props.items.map((item) => item.id),
+    (ids) => {
+      const pending = removing.value
+      if (!pending) return
+      if (ids.includes(pending.id)) {
+        removing.value = null
+        return
+      }
+      cancelAnimationFrame(focusFrame)
+      focusDeadline = performance.now() + 1000
+      focusFrame = requestAnimationFrame(focusAfterRemoval)
+    },
+    { flush: 'post' }
+  )
+
+  onScopeDispose(() => cancelAnimationFrame(focusFrame))
 </script>
 
 <template>
   <nav
+    ref="navEl"
     v-bind="$attrs"
+    tabindex="-1"
     :aria-label="ariaLabel || t('conversationHistory.label')"
     :aria-busy="loading || undefined"
     :data-testid="testId"
-    class="flex min-w-0 flex-col gap-(--spacing-md)"
+    class="flex min-w-0 flex-col gap-(--spacing-md) outline-none"
   >
     <ul
       v-if="loading"
@@ -172,6 +226,7 @@
               >
                 <button
                   type="button"
+                  data-slot="conversation-history-item"
                   :aria-current="item.id === model ? 'page' : undefined"
                   :title="item.title"
                   class="flex h-8 min-w-0 flex-1 items-center rounded-(--shape-control) px-(--spacing-xs) text-start text-label-sm text-(--text-default) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset"
@@ -190,7 +245,7 @@
                   variant="ghost"
                   size="small"
                   :data-testid="`${testId}__remove`"
-                  @click="(event: MouseEvent) => emit('remove', event, item.id)"
+                  @click="(event: MouseEvent) => onRemove(event, item.id)"
                 />
               </li>
             </template>

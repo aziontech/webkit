@@ -1,5 +1,5 @@
 import userEvent from '@testing-library/user-event'
-import { cleanup, fireEvent, render, within } from '@testing-library/vue'
+import { cleanup, fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 import { h } from 'vue'
 
@@ -91,13 +91,41 @@ describe('ConversationHistory', () => {
     host.remove()
   })
 
-  it('removes a row in the example and has no axe violations', async () => {
+  it('asks before it removes a row in the example and has no axe violations', async () => {
     const view = render(Default)
     await expectNoA11yViolations(view.container)
-    await fireEvent.click(view.getByRole('button', { name: 'Delete Edge storage pricing' }))
-    expect(view.queryByText('Edge storage pricing')).toBeNull()
+    await userEvent.click(view.getByRole('button', { name: 'Delete Edge storage pricing' }))
+    const dialog = await waitFor(() => {
+      const found = document.querySelector<HTMLElement>('[role="alertdialog"]')
+      expect(found).toBeTruthy()
+      return found!
+    })
+    expect(view.queryByText('Edge storage pricing')).not.toBeNull()
+    await userEvent.click(within(dialog).getByRole('button', { name: 'Delete conversation' }))
+    await waitFor(() => expect(view.queryByText('Edge storage pricing')).toBeNull())
+    await waitFor(() =>
+      expect(document.activeElement?.textContent?.trim()).toBe(
+        'Migrate DNS records from another provider'
+      )
+    )
     const states = render(States)
     await expectNoA11yViolations(states.container)
+  })
+
+  it('moves focus to the next row after a delete', async () => {
+    const view = render(ConversationHistory, {
+      props: {
+        items,
+        now,
+        removable: true,
+        onRemove: (_event: MouseEvent, id: string) =>
+          view.rerender({ items: items.filter((item) => item.id !== id), now, removable: true })
+      }
+    })
+    const remove = view.getByRole('button', { name: 'Delete Later today' })
+    remove.focus()
+    await userEvent.keyboard('{Enter}')
+    await waitFor(() => expect(document.activeElement?.textContent?.trim()).toBe('Earlier today'))
   })
 
   describe('reference time from ConfigProvider', () => {
