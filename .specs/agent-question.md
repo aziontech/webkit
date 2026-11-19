@@ -2,7 +2,7 @@
 name: agent-question
 category: ai
 structure: monolithic
-status: approved
+status: implemented
 spec_version: 1
 template: 2
 checksum: 373e0558058d556d603239e71947043bcda4f523ea0464b04aa96a543036d8bd

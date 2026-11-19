@@ -17,6 +17,7 @@
         { value: 'production', label: 'Production', description: 'Serves live traffic.' }
       ]"
       :status="status"
+      submit-label="Use this environment"
       skippable
       @submit="status = 'success'"
       @skip="status = 'skipped'"

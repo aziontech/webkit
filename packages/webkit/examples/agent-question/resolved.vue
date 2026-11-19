@@ -22,7 +22,7 @@
     />
     <AgentQuestion
       type="confirm"
-      title="Keep the old cache rules after the migration?"
+      title="Turn on Brotli compression for the new workload?"
       status="canceled"
     />
     <AgentQuestion
@@ -31,6 +31,7 @@
       model-value="shop"
       status="error"
       error="Enter a full domain, such as shop.example.com."
+      submit-label="Use this domain"
     />
   </div>
 </template>

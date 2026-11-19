@@ -9,7 +9,7 @@
     },
     {
       "name": "Types",
-      "summary": "The three answer controls: a choice between options, a one-line text answer, and a yes-or-no confirm whose buttons say what each answer does.",
+      "summary": "The three answer controls: a choice between options, a one-line text answer, and a yes-or-no confirm whose buttons say what each answer does; every submit button names its outcome.",
       "file": "types.vue"
     },
     {

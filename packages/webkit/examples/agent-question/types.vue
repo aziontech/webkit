@@ -11,19 +11,21 @@
         { value: 'business', label: 'Business' },
         { value: 'enterprise', label: 'Enterprise' }
       ]"
+      submit-label="Change plan"
     />
     <AgentQuestion
       type="text"
       title="Which domain should the new workload answer on?"
       description="I could not find a domain in the repository settings."
       placeholder="shop.example.com"
+      submit-label="Use this domain"
     />
     <AgentQuestion
       type="confirm"
-      title="Keep the old cache rules after the migration?"
-      description="They stop matching any request once the new rules are live."
-      submit-label="Keep them"
-      decline-label="Remove them"
+      title="Turn on Brotli compression for the new workload?"
+      description="Text responses get smaller; older clients still receive gzip."
+      submit-label="Turn it on"
+      decline-label="Leave it off"
     />
   </div>
 </template>
