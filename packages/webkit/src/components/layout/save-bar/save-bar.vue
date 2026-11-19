@@ -61,13 +61,16 @@
     if (!element) return 0
     let total = 0
     let node = element.parentElement
+    let container: Element | null = null
     while (node && node !== globalThis.document?.body) {
       if (scrolls(node)) {
-        total += node.scrollHeight - node.clientHeight
+        container = node
         break
       }
       node = node.parentElement
     }
+    container ??= globalThis.document?.scrollingElement ?? null
+    if (container) total += container.scrollHeight - container.clientHeight
     for (const sibling of Array.from(element.parentElement?.children ?? [])) {
       if (sibling !== element && scrolls(sibling))
         total += sibling.scrollHeight - sibling.clientHeight
