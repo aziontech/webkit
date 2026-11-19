@@ -20,7 +20,12 @@ jobs:
   publish:
     name: Build and publish to npm
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch' || startsWith(github.event.release.tag_name, '@aziontech/theme@')
+    if: >-
+      (github.event_name == 'release' && startsWith(github.event.release.tag_name, '@aziontech/theme@'))
+      || (github.event_name == 'workflow_dispatch' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/@aziontech/theme@')))
+    environment:
+      name: npm
+      url: https://www.npmjs.com/package/@aziontech/theme
 
     permissions:
       contents: read
@@ -34,6 +39,14 @@ jobs:
           DISPATCH_TAG: ${{ inputs.tag }}
         run: |
           TAG="${RELEASE_TAG:-$DISPATCH_TAG}"
+          case "$GITHUB_REF" in
+            refs/tags/*)
+              if [ "$GITHUB_REF" != "refs/tags/$TAG" ]; then
+                echo "Dispatched from $GITHUB_REF but asked to publish $TAG." >&2
+                exit 1
+              fi
+              ;;
+          esac
           case "$TAG" in
             "@aziontech/theme@"*) ;;
             *) echo "Not a @aziontech/theme release tag: $TAG" >&2; exit 1 ;;
@@ -44,8 +57,23 @@ jobs:
       - name: Checkout release tag
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: ${{ steps.tag.outputs.tag }}
+          ref: refs/tags/${{ steps.tag.outputs.tag }}
+          fetch-depth: 0
           persist-credentials: false
+
+      - name: Verify the tag points at a commit on main
+        env:
+          TAG: ${{ steps.tag.outputs.tag }}
+        run: |
+          TAG_COMMIT="$(git rev-parse "refs/tags/$TAG^{commit}")"
+          if [ "$TAG_COMMIT" != "$(git rev-parse HEAD)" ]; then
+            echo "Checked-out commit does not match tag $TAG." >&2
+            exit 1
+          fi
+          if ! git merge-base --is-ancestor "$TAG_COMMIT" refs/remotes/origin/main; then
+            echo "Tag $TAG ($TAG_COMMIT) is not on main; refusing to publish." >&2
+            exit 1
+          fi
 
       - name: Setup Node.js
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
