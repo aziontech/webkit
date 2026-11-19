@@ -11,8 +11,8 @@
   import ApiTable from '../components/api-table.vue'
   import DoDont from '../components/do-dont.vue'
   import ExampleCard from '../components/example-card.vue'
-  import TableOfContents from '../components/table-of-contents.vue'
   import RawHtml from '../components/raw-html.vue'
+  import TableOfContents from '../components/table-of-contents.vue'
   import { componentMarkdown, copyText } from '../lib/copy'
   import { cached, index, keys } from '../lib/data'
   import { messages } from '../lib/i18n'
@@ -63,7 +63,7 @@
     if (doc.value.bestPractices.length || doc.value.avoidPractices.length || dont.value)
       items.push({
         id: 'do-dont',
-        text: `${t.value.bestPractices} / ${t.value.constraints}`,
+        text: `${t.value.do} / ${t.value.dont}`,
         depth: 2
       })
     if (accessibility.value)

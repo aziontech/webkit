@@ -17,5 +17,5 @@
       "virtual:docs-component-loaders": ["./src/lib/virtual/docs-component-loaders.d.ts"]
     }
   },
-  "include": ["src/**/*", "plugins/**/*", "vite.config.ts"]
+  "include": ["src/**/*", "plugins/**/*", "test/**/*", "vite.config.ts"]
 }
