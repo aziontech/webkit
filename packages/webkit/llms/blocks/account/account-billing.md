@@ -1,6 +1,6 @@
 # AccountBilling (`account/account-billing`)
 
-> The AccountBilling page of the account settings: a `PageHeader` with the last update, Refresh and Documentation over `PageTabs` (Bills, Payment methods). Bills puts a Subscription plan `Card` (plan with a Current plan `Tag`, Change plan, and `KeyValueList` for plan start, next charge date and value as `CurrencyAmount`, and the default card with its `PaymentBrand`) beside an Upgrade to Enterprise `Card`, then Invoices on one `useCollection`: a controls row (`PropertyFilter`, Refresh, Download CSV, `CollectionPreferences`) over a `DataTable` with No., Invoice ID, Plan, Cycle, Seats, AccountBilling date, Amount, Payment method, Status as `TableCellStatus` and a download `IconButton` per invoice. Payment methods shows Payment information as `KeyValueList` (billing email, auto-renewal as `StatusIndicator`, address, tax ID) with Update, and a `DataTable` of cards (holder with a Default `Tag`, brand and last four, expiry, `TableCellActions` with Set as default and Remove behind a `ConfirmDialog`). Outcomes go through `toast`. A page body for ConsoleLayout, rendered in its default slot.
+> The Billing page of the account settings: a `PageHeader` with the last update, Refresh and Documentation over `PageTabs` (Bills, Payment methods). Bills puts a Subscription plan `Card` (plan with a Current plan `Tag`, Change plan, and `KeyValueList` for plan start, next charge date and value as `CurrencyAmount`, and the default card with its `PaymentBrand`) beside an Upgrade to Enterprise `Card`, then Invoices on one `useCollection`: a controls row (`PropertyFilter`, Refresh, Download CSV, `CollectionPreferences`) over a `DataTable` with No., Invoice ID, Plan, Cycle, Seats, Billing date, Amount, Payment method, Status as `TableCellStatus` and a download `IconButton` per invoice. Payment methods shows Payment information as `KeyValueList` (billing email, auto-renewal as `StatusIndicator`, address, tax ID) with Update, and a `DataTable` of cards (holder with a Default `Tag`, brand and last four, expiry, `TableCellActions` with Set as default and Remove behind a `ConfirmDialog`). Outcomes go through `toast`. A page body for ConsoleLayout, rendered in its default slot.
 
 - Surface: app
 - Source: `blocks/account/account-billing/account-billing.vue` in `@aziontech/webkit`
@@ -30,7 +30,7 @@ What the account pays, what it paid and which card it is charged to. An admin ch
 
 ### A. Page heading — `PageHeader`, `Tooltip`, `IconButton`, `Button` (required)
 
-Title `AccountBilling` and one sentence on what the page holds. Actions: the time of the last update as muted text (a fixed, formatted date in UTC, never the clock at render), Refresh as an outlined icon button in a tooltip, named `Refresh billing data`, which shows its loading state, and Documentation.
+Title `Billing` and one sentence on what the page holds. Actions: the time of the last update as muted text (a fixed, formatted date in UTC, never the clock at render), Refresh as an outlined icon button in a tooltip, named `Refresh billing data`, which shows its loading state, and Documentation.
 
 ### B. Tabs — `PageTabs`, `Tabs` (required)
 
@@ -54,7 +54,7 @@ A small `Subheader` `Invoices` over the view-table controls row: `PropertyFilter
 
 ### G. Invoices table — `DataTable`, `TableCellActions`, `TableCellStatus`, `useCollection` (required)
 
-One `useCollection` over the invoices, newest first, `DataTable` bound with `v-bind="tableProps"` in a flush `Card`. Columns: No., Invoice ID (left to right), Plan, Cycle, Seats, AccountBilling date as a formatted date, Amount as `CurrencyAmount`, Payment method with its plate, Status as `TableCellStatus` (Paid success, Refunded secondary, Overdue danger), and a download icon button per row named `Download invoice <id>` that links to the PDF.
+One `useCollection` over the invoices, newest first, `DataTable` bound with `v-bind="tableProps"` in a flush `Card`. Columns: No., Invoice ID (left to right), Plan, Cycle, Seats, Billing date as a formatted date, Amount as `CurrencyAmount`, Payment method with its plate, Status as `TableCellStatus` (Paid success, Refunded secondary, Overdue danger), and a download icon button per row named `Download invoice <id>` that links to the PDF.
 
 ### H. No invoices and no match — `EmptyState` (conditional)
 
@@ -62,7 +62,7 @@ An account with no invoice yet replaces the table with `No invoices yet` and a l
 
 ### I. Payment information — `StatusIndicator` (required on the Payment methods tab)
 
-A `Subheader` with Update over a `Card` of four-column `KeyValueList`: AccountBilling email, Auto-renewal as a `StatusIndicator` (On or Off, never colour alone), AccountBilling address and Tax ID (empty shows the empty-value marker).
+A `Subheader` with Update over a `Card` of four-column `KeyValueList`: Billing email, Auto-renewal as a `StatusIndicator` (On or Off, never colour alone), Billing address and Tax ID (empty shows the empty-value marker).
 
 ### J. Payment methods — `DropdownMenu`, `ConfirmDialog` (required on the Payment methods tab)
 
@@ -81,7 +81,7 @@ The block takes its records through props and emits every action; it fetches not
 | `invoices`           | `BillingInvoice[]`           | The invoices; the filter, the sort and the pages run on them in the browser. `[]` shows No invoices. |
 | `paymentMethods`     | `BillingPaymentMethod[]`     | The cards on file; the one with `default` is charged and named in the plan card.                     |
 | `subscription`       | `BillingSubscription`        | The plan name, its start date and the next charge's date and amount.                                 |
-| `paymentInformation` | `BillingPaymentInformation`  | AccountBilling email, auto-renewal, billing address and Tax ID.                                      |
+| `paymentInformation` | `BillingPaymentInformation`  | Billing email, auto-renewal, billing address and Tax ID.                                             |
 | `updatedAt`          | `Date`                       | When the data was fetched, shown beside Refresh.                                                     |
 | `defaultQuery`       | `PropertyFilterQuery`        | The filter the invoices open with.                                                                   |
 | `tab`                | `BillingTab` (`v-model:tab`) | The active tab, `bills` or `payment-methods`.                                                        |
@@ -140,7 +140,7 @@ Then delete `sample.ts` and its import.
 
 ## Copy
 
-- **Title:** `AccountBilling`. **Tabs:** `Bills`, `Payment methods`.
+- **Title:** `Billing`. **Tabs:** `Bills`, `Payment methods`.
 - **Plan card:** `Subscription plan`, `Current plan`, `Change plan`; facts `Plan start date`, `Next charge date`, `Next charge value`, `Payment method`.
 - **Invoices:** `Filter invoices`; statuses `Paid`, `Refunded`, `Overdue`; empty `No invoices yet`, `Your first invoice appears here when the first billing cycle closes.`; no match `No matching invoices`, `Clear filters`.
 - **Payment methods:** `Set as default`, `Remove`; confirm `Remove payment method`; toasts `Mastercard •••• 1702 is now the default.`, `Visa •••• 4431 removed.`
@@ -243,7 +243,7 @@ Each variant is the same screen in another state: `get_block("account/account-bi
     number: number
     /** Plan billed. */
     plan: string
-    /** AccountBilling cycle. */
+    /** Billing cycle. */
     cycle: BillingCycle
     /** Seats billed. */
     seats: number
@@ -293,7 +293,7 @@ Each variant is the same screen in another state: `get_block("account/account-bi
     email: string
     /** Whether the plan renews on its own. */
     autoRenewal: boolean
-    /** AccountBilling address, on one line. */
+    /** Billing address, on one line. */
     address: string
     /** Tax ID; empty shows the empty-value marker. */
     taxId: string
@@ -437,7 +437,7 @@ Each variant is the same screen in another state: `get_block("account/account-bi
     { accessorKey: 'plan', header: 'Plan', sortable: true, minWidth: 96 },
     { accessorKey: 'cycle', header: 'Cycle', minWidth: 100 },
     { accessorKey: 'seats', header: 'Seats', sortable: true, minWidth: 80 },
-    { accessorKey: 'billedAt', header: 'AccountBilling date', sortable: true, minWidth: 130 },
+    { accessorKey: 'billedAt', header: 'Billing date', sortable: true, minWidth: 130 },
     { accessorKey: 'amount', header: 'Amount', sortable: true, minWidth: 110 },
     { accessorKey: 'paymentMethod', header: 'Payment method', grow: 2, minWidth: 200 },
     { accessorKey: 'status', header: 'Status', sortable: true, minWidth: 110 },
@@ -511,7 +511,7 @@ Each variant is the same screen in another state: `get_block("account/account-bi
   <div class="layout-boundary">
     <div class="layout-column flex min-w-0 flex-col gap-(--layout-group-gap)">
       <PageHeader
-        title="AccountBilling"
+        title="Billing"
         description="Your plan, your invoices and the cards they are charged to."
       >
         <template #actions>
@@ -891,7 +891,7 @@ Each variant is the same screen in another state: `get_block("account/account-bi
                   :loading="loading"
                   aria-label="Payment information"
                 >
-                  <KeyValueList.Item label="AccountBilling email">
+                  <KeyValueList.Item label="Billing email">
                     <span
                       v-if="paymentInformation?.email"
                       dir="ltr"
@@ -905,7 +905,7 @@ Each variant is the same screen in another state: `get_block("account/account-bi
                       :label="paymentInformation.autoRenewal ? 'On' : 'Off'"
                     />
                   </KeyValueList.Item>
-                  <KeyValueList.Item label="AccountBilling address">
+                  <KeyValueList.Item label="Billing address">
                     <template v-if="paymentInformation?.address">{{
                       paymentInformation.address
                     }}</template>

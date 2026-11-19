@@ -25,7 +25,7 @@ The marketing shell: one continuous frame — the site bar, a hero band that sta
 
 ## Building blocks
 
-### A. ShellSite chrome — `SiteLayout` (required)
+### A. Site chrome — `SiteLayout` (required)
 
 Composed once in the app's root around `RouterView`. `navigation` is the `SiteHeaderSection` data (menus, Pricing link, Contact, Login, Start for free) with an `href` on every item, so each one is also a palette destination; `footer` is the `SiteFooterSection` data with `variant: 'site'` (columns, socials, status line, languages). It owns the bar, the single `<main>`, the footer, the ⌘K / Ctrl K search palette and the canvas paint.
 

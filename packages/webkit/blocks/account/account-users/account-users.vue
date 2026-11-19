@@ -340,7 +340,7 @@
   <div class="layout-boundary">
     <div class="layout-column flex flex-col">
       <PageHeader
-        title="AccountUsers"
+        title="Users"
         description="The people who can sign in to this account. What each one can do comes from their teams."
       >
         <template #actions>
@@ -434,7 +434,7 @@
               :loading="loading"
               sortable
               :bordered="false"
-              aria-label="AccountUsers"
+              aria-label="Users"
             >
               <template #cell-name="{ row }">
                 <div class="flex min-w-0 items-center gap-(--spacing-xs)">

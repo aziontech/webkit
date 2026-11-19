@@ -184,7 +184,7 @@
 <template>
   <article class="layout-column layout-boundary-inline flex flex-col pb-(--spacing-2xl)">
     <DocHero
-      title="Welcome to Azion ShellDocs"
+      title="Welcome to Azion Docs"
       description="We make every application fast and reliable. Deploy on a global network with enterprise-grade security and no cold starts."
     >
       <template #actions>

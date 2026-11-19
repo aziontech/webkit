@@ -1,6 +1,6 @@
 # DetailInvocations
 
-The page a user opens to understand one run of a function: did it work, how long did it take, where did the time go, and what did the code print. It reads top to bottom from the answer to the evidence: the invocation summary, the path the request travelled, the trace that measured each step, and the logs on the same clock. It is a page body for `ConsoleLayout`: the layout owns the rail, the header with the breadcrumb (Functions › the function › DetailInvocations) and the `main`.
+The page a user opens to understand one run of a function: did it work, how long did it take, where did the time go, and what did the code print. It reads top to bottom from the answer to the evidence: the invocation summary, the path the request travelled, the trace that measured each step, and the logs on the same clock. It is a page body for `ConsoleLayout`: the layout owns the rail, the header with the breadcrumb (Functions › the function › Invocations) and the `main`.
 
 ## When to use
 

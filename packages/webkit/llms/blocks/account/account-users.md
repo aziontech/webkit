@@ -30,13 +30,13 @@ Who can sign in to the account, with which role and through which teams. An admi
 
 ### A. Page heading — `PageHeader`, `Button` (required)
 
-Title `AccountUsers` and one sentence that says access comes from teams. Actions: Documentation and the primary `Invite User` at `size="medium"`, which opens the invite drawer.
+Title `Users` and one sentence that says access comes from teams. Actions: Documentation and the primary `Invite User` at `size="medium"`, which opens the invite drawer.
 
 ### B. Controls row — `PropertyFilter`, `IconButton`, `Tooltip`, `CollectionPreferences` (required)
 
 The view-table controls row (`view/view-table`): a `PropertyFilter` bound with `v-bind="propertyFilterProps"` over name, email, role and status, then Refresh and Download CSV as outlined `IconButton`s with a `Tooltip` each (Download CSV writes every match through the table's `exportCsv`, and is disabled with no match), and `CollectionPreferences` bound with `v-bind="preferencesProps"` for page size and visible columns. Hidden while the list failed to load.
 
-### C. AccountUsers table — `Card`, `DataTable`, `TableCellActions`, `TableCellStatus`, `TableCellTime`, `Avatar`, `Tag`, `useCollection` (required)
+### C. Users table — `Card`, `DataTable`, `TableCellActions`, `TableCellStatus`, `TableCellTime`, `Avatar`, `Tag`, `useCollection` (required)
 
 `DataTable` with `v-bind="tableProps"` in a flush `Card`, sortable by name, role and status. Name: a square `Avatar` with the initials and the name (or the email while the invitation is pending). Email in its own column, left to right in every language. Role is a small `Tag`: Owner (highlight), Admin (info), Developer and Viewer (secondary). Status is `TableCellStatus`: Active (success), Invited (warning), Inactive (secondary). Last active is `TableCellTime`, or `Not signed in yet` for an invitation.
 
@@ -132,7 +132,7 @@ Then delete `sample.ts` and its import.
 
 ## Copy
 
-- **Title:** `AccountUsers`. **Action:** `Invite User`; the drawer title `Invite User`, the submit `Send invitation`.
+- **Title:** `Users`. **Action:** `Invite User`; the drawer title `Invite User`, the submit `Send invitation`.
 - **Roles:** `Owner`, `Admin`, `Developer`, `Viewer`; the dialog `Edit role` with `Save role`.
 - **Statuses:** `Active`, `Invited`, `Inactive`; **Last active** for an invitation: `Not signed in yet`.
 - **Errors:** `Enter the email address to invite.`, `Enter an email address like name@example.com.`, `This person is already in the account.`, `Choose at least one team, or they get no access.`
@@ -520,7 +520,7 @@ Each variant is the same screen in another state: `get_block("account/account-us
   <div class="layout-boundary">
     <div class="layout-column flex flex-col">
       <PageHeader
-        title="AccountUsers"
+        title="Users"
         description="The people who can sign in to this account. What each one can do comes from their teams."
       >
         <template #actions>
@@ -614,7 +614,7 @@ Each variant is the same screen in another state: `get_block("account/account-us
               :loading="loading"
               sortable
               :bordered="false"
-              aria-label="AccountUsers"
+              aria-label="Users"
             >
               <template #cell-name="{ row }">
                 <div class="flex min-w-0 items-center gap-(--spacing-xs)">

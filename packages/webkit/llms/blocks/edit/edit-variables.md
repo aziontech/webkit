@@ -32,13 +32,13 @@ A list of key and value pairs and the drawer that edits them, here environment v
 
 ### A. Page heading — `PageHeader`, `Button` (required)
 
-`PageHeader` titled EditVariables with a one-sentence description and two actions: an outlined medium Documentation and the primary medium `Create Variable`, the same height as Documentation, which opens the drawer.
+`PageHeader` titled Variables with a one-sentence description and two actions: an outlined medium Documentation and the primary medium `Create Variable`, the same height as Documentation, which opens the drawer.
 
 ### B. Controls row — `PropertyFilter`, `Tooltip`, `IconButton`, `CollectionPreferences` (required)
 
 The same controls row as `view/view-table`, all bound to one client-mode `useCollection` call: a `PropertyFilter` labeled "Filter variables" (free text over key, ID, author and type, plus Key, Author and Type properties), outlined `IconButton`s for Refresh and Download CSV, each named by a `Tooltip`, and `CollectionPreferences` last. The filter, sort and page live in the URL; page size and columns are saved. See `skills/webkit-lists`.
 
-### C. EditVariables table — `Card`, `DataTable`, `TableCellId`, `TableCellLink`, `Avatar`, `Tooltip` (required)
+### C. Variables table — `Card`, `DataTable`, `TableCellId`, `TableCellLink`, `Avatar`, `Tooltip` (required)
 
 `Card :padded="false"` around a borderless data-driven `DataTable` bound with `v-bind="tableProps"`, with Key as the `principal`, unhideable column, then ID (hidden by default), Value, Scope and Last modified. ID is `TableCellId` ("Copy variable ID") and Value is `TableCellLink` with `copyable`; a secret value shows its mask and loses its copy control (`:copyable="!row.secret"`). Last modified pairs the author `Avatar`, named in a `Tooltip`, with the relative time. See `skills/webkit-tables`.
 
@@ -48,11 +48,11 @@ The same controls row as `view/view-table`, all bound to one client-mode `useCol
 
 ### E. Create and edit drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelBody` (required)
 
-A right-side `Drawer` whose content is one `form` labeled Create Variable or Edit Variable. `PanelHeader` holds the `DrawerTitle` and the drawer's own close button; `PanelBody` scrolls the EditVariables and Scope sections. The form resets every time the drawer opens: from Create Variable, one empty pair, the Form view, Global the only scope on; from a row's Edit, that variable's pair and scopes, with no Upload, view toggle or Add variable. A saved secret is never shown: its value starts empty, an empty value keeps the saved secret, and the Secret checkbox is locked. See `skills/webkit-create-surface`.
+A right-side `Drawer` whose content is one `form` labeled Create Variable or Edit Variable. `PanelHeader` holds the `DrawerTitle` and the drawer's own close button; `PanelBody` scrolls the Variables and Scope sections. The form resets every time the drawer opens: from Create Variable, one empty pair, the Form view, Global the only scope on; from a row's Edit, that variable's pair and scopes, with no Upload, view toggle or Add variable. A saved secret is never shown: its value starts empty, an empty value keeps the saved secret, and the Secret checkbox is locked. See `skills/webkit-create-surface`.
 
-### F. EditVariables section — `SettingsGroup`, `Button`, `ToggleGroup` (required)
+### F. Variables section — `SettingsGroup`, `Button`, `ToggleGroup` (required)
 
-A `SettingsGroup` titled EditVariables with a hint that says what variables are for. Its toolbar holds an outlined Upload `Button` that reads a `.env` or text file into rows, and a medium `ToggleGroup` that switches between the Form and JSON views of the same data.
+A `SettingsGroup` titled Variables with a hint that says what variables are for. Its toolbar holds an outlined Upload `Button` that reads a `.env` or text file into rows, and a medium `ToggleGroup` that switches between the Form and JSON views of the same data.
 
 ### G. Key and value rows — `AttributeEditor`, `Field`, `InputGroupRoot`, `InputGroupAddon`, `InputGroupInput`, `Input`, `Tooltip`, `IconButton`, `Checkbox`, `FieldError` (required)
 
@@ -64,7 +64,7 @@ In the PasteEnv state an outlined Paste .env `Button` (with `aria-expanded`) bes
 
 ### I. JSON view — `Textarea`, `FieldDescription` (optional)
 
-The JSON view replaces the rows with one `Textarea` labeled EditVariables JSON over the same entries; a `FieldError` reports a parse error in place. Switching back to Form keeps what was typed.
+The JSON view replaces the rows with one `Textarea` labeled Variables JSON over the same entries; a `FieldError` reports a parse error in place. Switching back to Form keeps what was typed.
 
 ### J. Scope — `SettingsGroup`, `InputGroupRoot`, `InputGroupAddon`, `MultiSelect`, `Input`, `Switch`, `FieldError` (required)
 
@@ -72,7 +72,7 @@ A `SettingsGroup` titled Scope with one large `InputGroupRoot` per scope type: a
 
 ### K. Drawer footer — `PanelFooter`, `Button` (required)
 
-`PanelFooter` holds one primary medium Save `Button` at the end, which submits the form and shows its loading state while saving. Save emits `save` with the pairs. When the save fails (`saveError` set), the drawer stays open with every row kept and a danger `Alert` at the top of `PanelBody` says why ("EditVariables not saved. You are offline; check your connection and save again."); pressing Save again retries.
+`PanelFooter` holds one primary medium Save `Button` at the end, which submits the form and shows its loading state while saving. Save emits `save` with the pairs. When the save fails (`saveError` set), the drawer stays open with every row kept and a danger `Alert` at the top of `PanelBody` says why ("Variables not saved. You are offline; check your connection and save again."); pressing Save again retries.
 
 ### L. List states — `EmptyState`, `Button` (required)
 
@@ -123,7 +123,7 @@ To go live, render the block from a page that owns the requests and pass what th
     :variables="data ?? []"
     :loading="pending"
     :saving="saving"
-    :save-error="error ? 'EditVariables not saved. Check your connection and save again.' : ''"
+    :save-error="error ? 'Variables not saved. Check your connection and save again.' : ''"
     @refresh="refresh"
     @save="save"
   />
@@ -155,11 +155,11 @@ Then delete `sample.ts` and its import. With no `saving` set during the `save` h
 
 ## Copy
 
-- **Title and create action:** "EditVariables" and "Create Variable"; the drawer title repeats "Create Variable", or reads "Edit Variable" from a row.
+- **Title and create action:** "Variables" and "Create Variable"; the drawer title repeats "Create Variable", or reads "Edit Variable" from a row.
 - **Empty states:** "No variables yet" / "Create a variable to store a value your services read at runtime."; "No matching variables" / "No variable matches these filters."
 - **Delete dialog:** title and danger button "Delete variable"; the prompt reads "Type API_BASE_URL to confirm."
 - **Field placeholders:** show the format, e.g. "MY_VARIABLE" for the key, "my-variable-value" for the value.
-- **Toasts:** "API_KEY created.", "3 variables created.", "API_KEY updated.", "API_KEY cloned as API_KEY_COPY.", "API_KEY deleted."; save failure "EditVariables not saved. You are offline; check your connection and save again."
+- **Toasts:** "API_KEY created.", "3 variables created.", "API_KEY updated.", "API_KEY cloned as API_KEY_COPY.", "API_KEY deleted."; save failure "Variables not saved. You are offline; check your connection and save again."
 - **Errors:** short and specific, e.g. "Key is required.", "Use only uppercase letters, numbers, and underscores.", "Select at least one resource for this scope."
 - **Secret control:** "Mark as secret" and "Unmark as secret"; the hint states the rule, e.g. "Secret values are hidden and write-only after saving."
 - **Network list:** title "Create Network List"; types "IP/CIDR", "ASN", "Countries"; panel label "Paste one address per line"; report "7 entries found. Text after # is kept as the comment.", "Lines 4 and 8 are not an IPv4 or IPv6 address, or a CIDR range; they are added with an error to fix.", "Line 7 is already in the list and will be skipped."; row error "198.51.100.300 is not an IPv4 or IPv6 address, or a CIDR range."; toast "Office and partners created."
@@ -172,7 +172,7 @@ Then delete `sample.ts` and its import. With no `saving` set during the `save` h
 - Every key and value field has a visible `label` in its addon; an invalid field sets `aria-invalid` and points to its `FieldError` through `aria-describedby`.
 - Icon-only controls (Remove variable, Show value, Hide value, row actions, toolbar) carry an `aria-label` that matches their `Tooltip`.
 - The Secret `Checkbox` and each scope `Switch` have an `aria-label` naming what they toggle, e.g. "Enable Project scope".
-- The `ToggleGroup` is labeled "EditVariables view"; the hidden file input is removed from the tab order and the Upload button triggers it.
+- The `ToggleGroup` is labeled "Variables view"; the hidden file input is removed from the tab order and the Upload button triggers it.
 - Adding a pair moves focus to its new Key field; removing one moves focus to the pair now in its place (or Add variable); both are announced in a polite live region by `AttributeEditor`.
 - The paste panel's `Textarea` is described by its report, so skipped lines and replaced keys are read with the field; Paste .env exposes `aria-expanded`, and applying announces how many variables were added.
 - The drawer traps focus while open and returns it to Create Variable on close.
@@ -717,9 +717,9 @@ Each variant is the same screen in another state: `get_block("edit/edit-variable
     try {
       jsonError.value = parseJsonObject(text)
         ? ''
-        : 'EditVariables must be a JSON object with key/value pairs.'
+        : 'Variables must be a JSON object with key/value pairs.'
     } catch {
-      jsonError.value = 'EditVariables must be valid JSON.'
+      jsonError.value = 'Variables must be valid JSON.'
     }
   })
 
@@ -901,7 +901,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-variable
 <template>
   <div class="layout-column layout-boundary flex flex-col">
     <PageHeader
-      title="EditVariables"
+      title="Variables"
       description="Configure variable names, values, and settings for use across your projects."
     >
       <template #actions>
@@ -1187,7 +1187,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-variable
             >
               <legend class="sr-only">{{ drawerTitle }}</legend>
               <SettingsGroup
-                label="EditVariables"
+                label="Variables"
                 hint="Store values your services read at runtime. Add one row per variable, or import a .env file."
               >
                 <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
@@ -1214,7 +1214,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-variable
                     <ToggleGroup
                       v-model="view"
                       :options="VIEW_OPTIONS"
-                      aria-label="EditVariables view"
+                      aria-label="Variables view"
                       size="medium"
                     />
                   </div>
@@ -1228,7 +1228,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-variable
                       :add-disabled="!canAdd"
                       add-button-label="Add variable"
                       remove-button-label="Remove variable"
-                      aria-label="EditVariables"
+                      aria-label="Variables"
                     >
                       <template #row="{ index, remove, removable, removeLabel }">
                         <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
@@ -1368,7 +1368,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-variable
                   <template v-else>
                     <Textarea
                       v-model="jsonText"
-                      aria-label="EditVariables JSON"
+                      aria-label="Variables JSON"
                       :invalid="!!jsonError"
                       :aria-describedby="jsonError ? formId + '-json-message' : undefined"
                     />

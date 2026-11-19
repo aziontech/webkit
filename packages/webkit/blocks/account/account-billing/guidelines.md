@@ -18,7 +18,7 @@ What the account pays, what it paid and which card it is charged to. An admin ch
 
 ### A. Page heading — `PageHeader`, `Tooltip`, `IconButton`, `Button` (required)
 
-Title `AccountBilling` and one sentence on what the page holds. Actions: the time of the last update as muted text (a fixed, formatted date in UTC, never the clock at render), Refresh as an outlined icon button in a tooltip, named `Refresh billing data`, which shows its loading state, and Documentation.
+Title `Billing` and one sentence on what the page holds. Actions: the time of the last update as muted text (a fixed, formatted date in UTC, never the clock at render), Refresh as an outlined icon button in a tooltip, named `Refresh billing data`, which shows its loading state, and Documentation.
 
 ### B. Tabs — `PageTabs`, `Tabs` (required)
 
@@ -42,7 +42,7 @@ A small `Subheader` `Invoices` over the view-table controls row: `PropertyFilter
 
 ### G. Invoices table — `DataTable`, `TableCellActions`, `TableCellStatus`, `useCollection` (required)
 
-One `useCollection` over the invoices, newest first, `DataTable` bound with `v-bind="tableProps"` in a flush `Card`. Columns: No., Invoice ID (left to right), Plan, Cycle, Seats, AccountBilling date as a formatted date, Amount as `CurrencyAmount`, Payment method with its plate, Status as `TableCellStatus` (Paid success, Refunded secondary, Overdue danger), and a download icon button per row named `Download invoice <id>` that links to the PDF.
+One `useCollection` over the invoices, newest first, `DataTable` bound with `v-bind="tableProps"` in a flush `Card`. Columns: No., Invoice ID (left to right), Plan, Cycle, Seats, Billing date as a formatted date, Amount as `CurrencyAmount`, Payment method with its plate, Status as `TableCellStatus` (Paid success, Refunded secondary, Overdue danger), and a download icon button per row named `Download invoice <id>` that links to the PDF.
 
 ### H. No invoices and no match — `EmptyState` (conditional)
 
@@ -50,7 +50,7 @@ An account with no invoice yet replaces the table with `No invoices yet` and a l
 
 ### I. Payment information — `StatusIndicator` (required on the Payment methods tab)
 
-A `Subheader` with Update over a `Card` of four-column `KeyValueList`: AccountBilling email, Auto-renewal as a `StatusIndicator` (On or Off, never colour alone), AccountBilling address and Tax ID (empty shows the empty-value marker).
+A `Subheader` with Update over a `Card` of four-column `KeyValueList`: Billing email, Auto-renewal as a `StatusIndicator` (On or Off, never colour alone), Billing address and Tax ID (empty shows the empty-value marker).
 
 ### J. Payment methods — `DropdownMenu`, `ConfirmDialog` (required on the Payment methods tab)
 
@@ -69,7 +69,7 @@ The block takes its records through props and emits every action; it fetches not
 | `invoices`           | `BillingInvoice[]`           | The invoices; the filter, the sort and the pages run on them in the browser. `[]` shows No invoices. |
 | `paymentMethods`     | `BillingPaymentMethod[]`     | The cards on file; the one with `default` is charged and named in the plan card.                     |
 | `subscription`       | `BillingSubscription`        | The plan name, its start date and the next charge's date and amount.                                 |
-| `paymentInformation` | `BillingPaymentInformation`  | AccountBilling email, auto-renewal, billing address and Tax ID.                                      |
+| `paymentInformation` | `BillingPaymentInformation`  | Billing email, auto-renewal, billing address and Tax ID.                                             |
 | `updatedAt`          | `Date`                       | When the data was fetched, shown beside Refresh.                                                     |
 | `defaultQuery`       | `PropertyFilterQuery`        | The filter the invoices open with.                                                                   |
 | `tab`                | `BillingTab` (`v-model:tab`) | The active tab, `bills` or `payment-methods`.                                                        |
@@ -128,7 +128,7 @@ Then delete `sample.ts` and its import.
 
 ## Copy
 
-- **Title:** `AccountBilling`. **Tabs:** `Bills`, `Payment methods`.
+- **Title:** `Billing`. **Tabs:** `Bills`, `Payment methods`.
 - **Plan card:** `Subscription plan`, `Current plan`, `Change plan`; facts `Plan start date`, `Next charge date`, `Next charge value`, `Payment method`.
 - **Invoices:** `Filter invoices`; statuses `Paid`, `Refunded`, `Overdue`; empty `No invoices yet`, `Your first invoice appears here when the first billing cycle closes.`; no match `No matching invoices`, `Clear filters`.
 - **Payment methods:** `Set as default`, `Remove`; confirm `Remove payment method`; toasts `Mastercard •••• 1702 is now the default.`, `Visa •••• 4431 removed.`
