@@ -1,0 +1,94 @@
+{
+ "name": "mcp-app-frame",
+ "binding": "McpAppFrame",
+ "import": "@aziontech/webkit/mcp-app-frame",
+ "treeShakeableImport": "@aziontech/webkit/mcp-app-frame",
+ "category": "ai",
+ "surface": "app",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The safe frame for an interactive widget a tool returns inside a chat answer: an MCP app (MCP Apps, or the older MCP-UI) such as a plan picker, a booking form or a map that a tool call rendered as HTML. It runs the widget in a sandboxed `iframe` with an opaque origin and a strict content policy, gives it an accessible name, shows a loading state while it starts and a blocked state when the resource cannot be shown safely, grows to the height the widget reports, and forwards every well-formed message the widget sends (call a tool, open a link, send a prompt, the start handshake) to the app as a `message` event. It never acts on a message itself: the app decides, and answers through `post()`. Unlike `embed` (a third-party page an author places on purpose and trusts), the content here is written by a tool at run time and is untrusted by default, so the frame owns the sandbox, the content policy, the message checks and the navigation guard instead of leaving them to the consumer. Threat model. The widget is hostile: it comes from an MCP server the reader may not control, through a model hostile content may have steered. - Page access: the `iframe` has exactly `sandbox=\"allow-scripts\"` (no `allow-same-origin`, `allow-top-navigation`, `allow-popups`, `allow-forms`, `allow-modals` or `allow-downloads`), `referrerpolicy=\"no-referrer\"` and `allow=\"\"`. Its document has an opaque origin: no parent DOM, cookies, storage or session (`window.parent.document` throws), no device permissions, no tab navigation, windows, forms, downloads or dialogs. - Network: inline HTML is prefixed with `<!doctype html>` and a Content Security Policy `meta` (`default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; media-src data:; font-src data:; connect-src 'none'; frame-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'`), so it cannot fetch or load remote content. A resolved URL follows its server's policy. An inline widget also inherits the page's own policy: with a nonce, a hash or `'strict-dynamic'` there, its scripts never run (it stays `ready` and silent), so such an app resolves widgets to an https origin of its own. - URLs: the frame never loads a URL taken from the resource; only an absolute `https:` URL that `resolveUrl` returns. - Messages: accepted only from the current `iframe`'s window with the origin `null`, in one of two shapes, and rebuilt from their known keys; the raw `MessageEvent` (its `source` window and `ports`) never reaches the app. `post()` targets `*`, the only target an opaque origin has, and only that window. - Navigation: the widget can navigate its own frame; the second `load` blocks the frame, but the new page runs until then. The app's own `frame-src`, limited to the origins `resolveUrl` returns, stops it before it leaves. - Residual: WebRTC, DNS prefetch and self-navigation can carry out what the widget holds, so everything sent with `post()` counts as disclosed; a widget can draw look-alike controls inside its bordered box (show its `tool-call` row before it, never ask for credentials in it) and can hold keyboard focus. Height is clamped to 48 px–`maxHeight`. - Out of scope: the MCP Apps sandbox-proxy flow (it needs `allow-same-origin` on a second origin) and what the app does with a message (check tool names and arguments; `tool-approval` for a sensitive tool).",
+ "setup": null,
+ "useWhen": [
+  "A tool call returns a UI resource (an MCP app: `text/html;profile=mcp-app`, `text/html`, or a `ui://` resource the app can resolve) and the answer should show it working inside the message.",
+  "Any HTML or remote app produced at run time that the reader should use without it getting access to the page."
+ ],
+ "avoidWhen": [
+  "A third-party page an author places on purpose (a demo, a player, a form) → `embed`.",
+  "A remote multi-page site: the frame blocks a widget that navigates.",
+  "Live WebKit components shown in the documentation → `browser-frame`.",
+  "A generated file the reader may copy, download or open → `artifact-preview`.",
+  "The record of what the tool did (name, input, output, status) → `tool-call`; the app frame sits after it in the same message."
+ ],
+ "related": [
+  "`tool-call` — the row that records the call the widget belongs to; render the frame right after it.",
+  "`tool-approval` — ask the reader before acting on a widget's tool request when the tool changes something.",
+  "`chat-message` — the message the frame sits in.",
+  "`embed` — the author-placed, trusted counterpart."
+ ],
+ "bestPractices": [
+  "Write a `title` that says what the widget is (`Plan picker from the billing tool`); it is the frame's accessible name.",
+  "Handle `message` with an allow-list: answer only the methods and types you support, check the tool name and its arguments, and route a sensitive tool through `tool-approval`. Never deep-merge a payload into your own objects: nested values are structured clones and may carry an own `__proto__` key.",
+  "Answer with `post()`; never reach into the frame. An MCP Apps widget waits for the reply to its `ui/initialize` request before it starts; an MCP-UI widget that sends `ui-lifecycle-iframe-ready` or `ui-request-data` waits for its data.",
+  "Treat everything you `post()` as disclosed to the widget's author, and limit how often the handler acts on a widget's messages.",
+  "Show where a widget comes from right before it (its `tool-call` row) and never ask the reader for credentials inside one.",
+  "Resolve `ui://` and `https` resources only from servers you trust, and only to `https:` URLs; return `''` to block one.",
+  "Set the app's own Content Security Policy: `frame-src` limited to the origins `resolveUrl` returns, so a widget cannot navigate its frame elsewhere. An inline widget inherits the app's policy as well as its own: with a nonce, a hash or `'strict-dynamic'` in the page's `script-src` its scripts never run, so such an app resolves widgets to an https origin of its own through `resolveUrl` rather than loosening its policy."
+ ],
+ "props": [
+  {
+   "name": "resource",
+   "type": "McpAppFrameResource",
+   "default": "—",
+   "required": "true",
+   "doc": "The UI resource the tool returned: its `uri`, `mimeType`, and the HTML as `text` or base64 `blob`."
+  },
+  {
+   "name": "title",
+   "type": "string",
+   "default": "—",
+   "required": "true",
+   "doc": "Accessible name of the widget, announced before its content."
+  },
+  {
+   "name": "resolveUrl",
+   "type": "(resource: McpAppFrameResource) => string | Promise<string>",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Turns a resource that is not inline HTML into an https URL the frame may load; return an empty string to block it. Without it such resources are blocked."
+  },
+  {
+   "name": "maxHeight",
+   "type": "number",
+   "default": "640",
+   "required": "false",
+   "doc": "Largest height in pixels the widget may grow the frame to; 48 is the floor."
+  }
+ ],
+ "events": [
+  {
+   "name": "message",
+   "payload": "(message: McpAppFrameMessage)",
+   "notes": "A message the widget sent (a tool call, a prompt, a link, a notification, the start handshake), validated and rebuilt from its known keys. Not a user activation, so it carries no DOM event. Size messages are handled by the frame and not emitted."
+  }
+ ],
+ "slots": [],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/mcp-app-frame/default.vue"
+  },
+  {
+   "name": "Resolved URL",
+   "file": "examples/mcp-app-frame/resolved-url.vue"
+  },
+  {
+   "name": "Loading",
+   "file": "examples/mcp-app-frame/loading.vue"
+  }
+ ],
+ "docs": "components/mcp-app-frame.md"
+}

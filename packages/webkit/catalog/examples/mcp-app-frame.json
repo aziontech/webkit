@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "An inline MCP Apps widget, a plan picker, that starts with ui/initialize and asks for a tool call. The page answers the handshake, checks the tool against an allow-list and replies with post().",
+   "file": "examples/mcp-app-frame/default.vue"
+  },
+  {
+   "name": "Resolved URL",
+   "summary": "Two ui:// resources with no inline HTML: resolveUrl turns one into an https URL and blocks the other, which shows the blocked state.",
+   "file": "examples/mcp-app-frame/resolved-url.vue"
+  },
+  {
+   "name": "Loading",
+   "summary": "A resource whose resolveUrl has not settled yet, so the frame keeps its loading state.",
+   "file": "examples/mcp-app-frame/loading.vue"
+  }
+ ]
+}

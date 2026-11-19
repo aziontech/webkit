@@ -4709,6 +4709,54 @@
    "examplesFile": "catalog/examples/artifact-preview.json",
    "docsFile": "catalog/components/artifact-preview.json"
   },
+  "mcp-app-frame": {
+   "import": "@aziontech/webkit/mcp-app-frame",
+   "target": "./src/components/ai/mcp-app-frame/mcp-app-frame.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/mcp-app-frame",
+   "category": "ai",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "resource",
+     "type": "McpAppFrameResource",
+     "default": "—",
+     "required": "true",
+     "doc": "The UI resource the tool returned: its `uri`, `mimeType`, and the HTML as `text` or base64 `blob`."
+    },
+    {
+     "name": "title",
+     "type": "string",
+     "default": "—",
+     "required": "true",
+     "doc": "Accessible name of the widget, announced before its content."
+    },
+    {
+     "name": "resolveUrl",
+     "type": "(resource: McpAppFrameResource) => string | Promise<string>",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Turns a resource that is not inline HTML into an https URL the frame may load; return an empty string to block it. Without it such resources are blocked."
+    },
+    {
+     "name": "maxHeight",
+     "type": "number",
+     "default": "640",
+     "required": "false",
+     "doc": "Largest height in pixels the widget may grow the frame to; 48 is the floor."
+    }
+   ],
+   "events": [
+    {
+     "name": "message",
+     "payload": "(message: McpAppFrameMessage)",
+     "notes": "A message the widget sent (a tool call, a prompt, a link, a notification, the start handshake), validated and rebuilt from its known keys. Not a user activation, so it carries no DOM event. Size messages are handled by the frame and not emitted."
+    }
+   ],
+   "surface": "app",
+   "examplesFile": "catalog/examples/mcp-app-frame.json",
+   "docsFile": "catalog/components/mcp-app-frame.json"
+  },
   "chat-message": {
    "import": "@aziontech/webkit/chat-message",
    "target": "./src/components/ai/chat-message/index.ts",

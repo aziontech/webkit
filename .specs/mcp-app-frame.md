@@ -2,10 +2,10 @@
 name: mcp-app-frame
 category: ai
 structure: monolithic
-status: approved
+status: implemented
 spec_version: 1
 template: 2
-checksum: 44adf718d3dc8fc35c3497920cf1ccb998e7b2bfe91e1f6eb28f42e2b0933f2d
+checksum: 44d1b2b9013453ea2bfec08b5da8871bcac235f0e2332c9e54e6178c90a1a089
 created: 2026-11-19
 last_updated: 2026-11-19
 ---
@@ -18,20 +18,15 @@ The safe frame for an interactive widget a tool returns inside a chat answer: an
 
 Unlike `embed` (a third-party page an author places on purpose and trusts), the content here is written by a tool at run time and is untrusted by default, so the frame owns the sandbox, the content policy, the message checks and the navigation guard instead of leaving them to the consumer.
 
-Threat model. The widget's HTML comes from an MCP server the reader may not control, through a model that hostile content may have steered, so it is treated as hostile.
+Threat model. The widget is hostile: it comes from an MCP server the reader may not control, through a model hostile content may have steered.
 
-- Reaching the page: the `iframe` carries exactly `sandbox="allow-scripts"` (never `allow-same-origin`), `referrerpolicy="no-referrer"`, `allow=""` and no `allowfullscreen`. Inline HTML renders through `srcdoc`, a resolved URL through `src`; either way the document has an opaque origin, so it cannot read or change the parent DOM, cookies, `localStorage` or the app's session (`window.parent.document` throws), and it gets no camera, microphone, geolocation, clipboard or full screen. A resolved URL never learns the conversation's address from the `Referer`, and it has no cookies or storage of its own (reading them throws).
-- Leaving the page: no `allow-top-navigation`, `allow-popups`, `allow-forms`, `allow-modals` or `allow-downloads`, so the widget cannot navigate the tab, open windows, submit forms, start downloads or block the page with `alert()`. Opening a link is a message the app approves.
-- Sending data out: inline HTML is prefixed with `<!doctype html>` and a Content Security Policy `meta` (a leading byte order mark is dropped first), so the policy is the first thing the parser meets whatever the widget's markup holds: `default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; media-src data:; font-src data:; connect-src 'none'; frame-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'` (the MCP Apps default without `'self'`, which means nothing for an opaque origin). The widget cannot `fetch`, open a WebSocket, or load remote scripts, images, fonts or frames; a policy the widget adds can only narrow it. A resolved URL is governed by the policy its server sends.
-- Inherited page policy: an `about:srcdoc` document also inherits the app page's own Content Security Policy, and both apply. If the page's `script-src` uses a nonce, a hash or `'strict-dynamic'`, the browser ignores `'unsafe-inline'` and every inline widget's scripts are blocked; the frame cannot see that, so it reaches `ready` with a widget that never answers (a known limit, not an `error`). An app with such a policy resolves its widgets to an https origin of its own through `resolveUrl` instead of adding `'unsafe-inline'`, which would weaken its own protection against cross-site scripting. The frame ignores a resource's declared `_meta.ui.csp` domains, so an inline widget that needs the network does not get it.
-- Residual channels: a content policy does not govern WebRTC (`RTCPeerConnection` to a STUN or TURN host), some engines leak DNS prefetches, and a document may navigate its own frame (next point). So anything the app sends through `post()` (tool results, render data) is disclosed to the widget's author; the app's data the widget never received stays out of reach.
-- Look-alike controls: a widget can draw what looks like the app's own controls (an approval prompt, a sign-in form) and send what the reader types through a `tools/call` message or a residual channel. The frame keeps it inside a bordered box it can never draw outside, so the edge of the third-party content is always visible; the app names its source next to it (the `tool-call` row placed right before the frame) and never asks for credentials inside a widget.
-- Focus: a widget can keep keyboard focus by cancelling `Tab` inside its own document, and the parent cannot step in; the browser's own controls (address bar, `F6`) still leave it. This is a residual risk the widget's server owns.
-- Navigating itself: a sandboxed document may still navigate its own frame (a link with `target="_self"`, `location.href`, a `refresh` meta). The parent sees nothing until the new document's `load`: until then the new page is displayed, is not bound by the injected policy, keeps the same window and the `null` origin, so its messages pass the checks and `post()` reaches it; a page that never finishes loading stays that way. When the second `load` of the same `iframe` arrives, the frame moves to the blocked state, removes the `iframe`, and stops forwarding and posting. This is a deliberate trade-off: a resolved widget that is a multi-page site (its links reload the page) is blocked on its first navigation; a resolved widget must be a single document. The app closes the gap with its own Content Security Policy: `frame-src` limited to the https origins its `resolveUrl` returns (an inline `srcdoc` needs no entry), which blocks the navigation before it leaves.
-- Loading arbitrary URLs: the frame never loads `resource.uri` or a URL from the resource on its own. A resource that is not inline HTML is shown only when the app's `resolveUrl` returns an absolute `https:` URL for it; anything else is blocked.
-- Spoofed messages: a message is accepted only when its `source` is the current `iframe`'s window and its `origin` is the string `null` (the opaque origin every frame has under this sandbox), and its data is a plain object in one of the two documented shapes. It is rebuilt from the known keys before it is emitted, and the raw `MessageEvent` (its `data`, `source` window and transferred `ports`) never reaches the app. `post()` uses the target origin `*`, the only one that reaches an opaque origin, and only the current `iframe`'s window.
-- Resource exhaustion: a reported height is clamped between 48 px and `maxHeight`, so a widget cannot grow the conversation without bound; a reported width is ignored. A widget can still send many messages; the app limits how often its handler acts.
-- Out of scope: the network of a widget loaded from a resolved URL (its server's policy governs it); the MCP Apps sandbox-proxy flow, which needs `allow-same-origin` on a second origin and so cannot run inside this frame; and what the app does with a message (it must check the tool name and arguments, and ask the reader before a sensitive tool runs, with `tool-approval`).
+- Page access: the `iframe` has exactly `sandbox="allow-scripts"` (no `allow-same-origin`, `allow-top-navigation`, `allow-popups`, `allow-forms`, `allow-modals` or `allow-downloads`), `referrerpolicy="no-referrer"` and `allow=""`. Its document has an opaque origin: no parent DOM, cookies, storage or session (`window.parent.document` throws), no device permissions, no tab navigation, windows, forms, downloads or dialogs.
+- Network: inline HTML is prefixed with `<!doctype html>` and a Content Security Policy `meta` (`default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; media-src data:; font-src data:; connect-src 'none'; frame-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'`), so it cannot fetch or load remote content. A resolved URL follows its server's policy. An inline widget also inherits the page's own policy: with a nonce, a hash or `'strict-dynamic'` there, its scripts never run (it stays `ready` and silent), so such an app resolves widgets to an https origin of its own.
+- URLs: the frame never loads a URL taken from the resource; only an absolute `https:` URL that `resolveUrl` returns.
+- Messages: accepted only from the current `iframe`'s window with the origin `null`, in one of two shapes, and rebuilt from their known keys; the raw `MessageEvent` (its `source` window and `ports`) never reaches the app. `post()` targets `*`, the only target an opaque origin has, and only that window.
+- Navigation: the widget can navigate its own frame; the second `load` blocks the frame, but the new page runs until then. The app's own `frame-src`, limited to the origins `resolveUrl` returns, stops it before it leaves.
+- Residual: WebRTC, DNS prefetch and self-navigation can carry out what the widget holds, so everything sent with `post()` counts as disclosed; a widget can draw look-alike controls inside its bordered box (show its `tool-call` row before it, never ask for credentials in it) and can hold keyboard focus. Height is clamped to 48 px–`maxHeight`.
+- Out of scope: the MCP Apps sandbox-proxy flow (it needs `allow-same-origin` on a second origin) and what the app does with a message (check tool names and arguments; `tool-approval` for a sensitive tool).
 
 ## When to use
 
@@ -202,7 +197,7 @@ _None._
 
 ## Performance
 
-- Bundle budget: at most 9.5 KB gzip for the `mcp-app-frame` entry, excluding Vue (it composes `Alert` and `Skeleton`); recorded in `.size-limit.json`.
+- Bundle budget: at most 9.2 KB gzip for the `mcp-app-frame` entry, excluding Vue (it composes `Alert` and `Skeleton`); recorded in `.size-limit.json`.
 - Runtime budget: one `message` listener on `window` while mounted, removed when the component's scope is disposed; a size message costs one style write.
 - Heavy parts: the widget document. A resolved URL loads lazily (`loading="lazy"` applies to `src`); an inline `srcdoc` widget loads when it mounts.
 
