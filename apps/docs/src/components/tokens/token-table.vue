@@ -135,7 +135,7 @@
       <template #cell-sample="{ row }">
         <span
           :data-fill="wide || null"
-          class="flex min-w-0 data-[fill]:w-0 data-[fill]:min-w-full"
+          class="flex min-w-0 data-[fill]:w-0 data-[fill]:grow"
         >
           <TokenSample
             :name="row.name"
@@ -160,7 +160,7 @@
         </span>
       </template>
       <template #cell-value="{ row }">
-        <span class="flex w-0 min-w-full">
+        <span class="flex w-0 min-w-0 grow">
           <span
             v-if="row.dark"
             class="grid min-w-0 grid-cols-[auto_minmax(0,1fr)] items-center gap-x-(--spacing-xs) gap-y-(--spacing-2xs)"
@@ -219,12 +219,12 @@
       <template #cell-usage="{ row }">
         <span
           v-if="row.continued"
-          class="sr-only"
-          >{{ row.usage?.job }}</span
+          class="text-body-xs text-(--text-muted)"
+          >{{ t.sameUsage }}</span
         >
         <span
           v-else-if="row.usage"
-          class="flex w-0 min-w-full flex-col gap-(--spacing-2xs)"
+          class="flex w-0 min-w-0 grow flex-col gap-(--spacing-2xs)"
         >
           <span class="text-body-sm text-(--text-default)">{{ row.usage.job }}</span>
           <span
