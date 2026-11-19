@@ -3,6 +3,7 @@
   import CodeBlock from '@aziontech/webkit/code-block'
   import DocPageHeader from '@aziontech/webkit/doc-page-header'
   import DocProse from '@aziontech/webkit/doc-prose'
+  import Select from '@aziontech/webkit/select'
   import Tag from '@aziontech/webkit/tag'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { useHead } from '@unhead/vue'
@@ -226,7 +227,33 @@
       >
         <h2 class="text-heading-md">{{ t.preview }}</h2>
         <div
-          v-if="block.states.length > 1"
+          v-if="block.states.length > 5"
+          class="flex max-w-full items-center gap-(--spacing-xs)"
+        >
+          <span
+            aria-hidden="true"
+            class="shrink-0 text-label-sm text-(--text-muted)"
+            >{{ t.states }}</span
+          >
+          <Select
+            v-model="stateSlug"
+            :aria-label="t.states"
+            size="medium"
+            class="w-full max-w-(--container-3xs)"
+          >
+            <Select.Trigger />
+            <Select.Content>
+              <Select.Item
+                v-for="entry in block.states"
+                :key="entry.slug"
+                :value="entry.slug"
+                >{{ entry.name }}</Select.Item
+              >
+            </Select.Content>
+          </Select>
+        </div>
+        <div
+          v-else-if="block.states.length > 1"
           class="max-w-full overflow-x-auto"
         >
           <ToggleGroup

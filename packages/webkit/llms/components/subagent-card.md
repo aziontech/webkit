@@ -116,7 +116,7 @@ _None. Exports: `"./subagent-card"`; type `SubagentCardStatus`. Composed DS comp
 ## Responsive
 
 - Container queries: none.
-- Narrow: the elapsed time, status and `Stop` keep their size and wrap to a second line, aligned to the end, when the row cannot give the name 12rem; title and name truncate; the description wraps.
+- Narrow: the elapsed time, status and `Stop` keep their size and wrap to a second line, aligned to the end, when the row cannot give the name 12rem; the title wraps to two lines before it clamps, and the agent name drops to its own line under it when there is no room for both, truncating only past the row's width; the description wraps.
 - Touch: 40 px row; the toggle reaches 44 px on coarse pointers (`pointer-coarse:min-h-11`) and `Stop` uses `Button`'s own 44 px coarse-pointer hit area. Hover-only affordances: none.
 - Reflow: slot content reflows inside the panel; code in it scrolls inside its block.
 

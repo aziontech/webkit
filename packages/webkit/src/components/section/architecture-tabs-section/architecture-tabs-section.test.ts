@@ -1,5 +1,6 @@
 import { fireEvent, render } from '@testing-library/vue'
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { page } from 'vitest/browser'
 import { nextTick } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -164,6 +165,11 @@ describe('ArchitectureTabsSection', () => {
   })
 
   describe('autoplay timing', () => {
+    beforeEach(async () => {
+      await page.viewport(1280, 800)
+      await vi.waitFor(() => expect(window.matchMedia('(min-width: 64rem)').matches).toBe(true))
+    })
+
     afterEach(() => {
       vi.useRealTimers()
     })

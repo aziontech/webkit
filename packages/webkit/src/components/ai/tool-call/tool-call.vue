@@ -86,19 +86,23 @@
           aria-hidden="true"
         />
         <span
-          v-if="title"
-          class="truncate text-label-sm text-(--text-default)"
+          class="flex min-w-0 flex-1 flex-wrap items-center gap-x-(--spacing-xs) gap-y-(--spacing-2xs)"
         >
-          {{ title }}
+          <span
+            v-if="title"
+            class="line-clamp-2 min-w-0 text-label-sm break-words text-(--text-default)"
+          >
+            {{ title }}
+          </span>
+          <code
+            dir="ltr"
+            class="max-w-full truncate rounded-(--shape-control) bg-(--bg-surface-raised) px-1 text-label-code-sm text-(--text-muted)"
+            >{{ name }}</code
+          >
         </span>
-        <code
-          dir="ltr"
-          class="truncate rounded-(--shape-control) bg-(--bg-surface-raised) px-1 text-label-code-sm text-(--text-muted)"
-          >{{ name }}</code
-        >
         <i
           :data-state="isOpen ? 'open' : 'closed'"
-          class="az az-chevron-down ms-auto shrink-0 text-body-xs text-(--text-muted) transition-transform duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-[state=open]:rotate-180"
+          class="az az-chevron-down shrink-0 text-body-xs text-(--text-muted) transition-transform duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-[state=open]:rotate-180"
           aria-hidden="true"
         />
       </button>
@@ -111,16 +115,20 @@
           aria-hidden="true"
         />
         <span
-          v-if="title"
-          class="truncate text-label-sm text-(--text-default)"
+          class="flex min-w-0 flex-1 flex-wrap items-center gap-x-(--spacing-xs) gap-y-(--spacing-2xs)"
         >
-          {{ title }}
+          <span
+            v-if="title"
+            class="line-clamp-2 min-w-0 text-label-sm break-words text-(--text-default)"
+          >
+            {{ title }}
+          </span>
+          <code
+            dir="ltr"
+            class="max-w-full truncate rounded-(--shape-control) bg-(--bg-surface-raised) px-1 text-label-code-sm text-(--text-muted)"
+            >{{ name }}</code
+          >
         </span>
-        <code
-          dir="ltr"
-          class="truncate rounded-(--shape-control) bg-(--bg-surface-raised) px-1 text-label-code-sm text-(--text-muted)"
-          >{{ name }}</code
-        >
       </div>
       <span
         role="status"

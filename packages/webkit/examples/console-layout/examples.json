@@ -24,7 +24,7 @@
     },
     {
       "name": "FillPage",
-      "summary": "A workspace page body whose root carries `data-layout-fill`: the layout's main becomes a fixed-height region under the header that does not scroll, the body fills it, and its own panes scroll.",
+      "summary": "A workspace page body whose root carries `data-layout-fill`: the layout's main becomes a fixed-height region under the header that does not scroll, the body fills it, and its own panes scroll. Below 768px the panes stack (`orientation=\"vertical\"`), because two side-by-side panes on a phone leave neither readable.",
       "file": "fill-page.vue"
     },
     {

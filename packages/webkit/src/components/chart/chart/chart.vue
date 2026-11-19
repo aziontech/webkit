@@ -1,5 +1,10 @@
 <script setup lang="ts">
-  import { useElementSize, useMounted, usePreferredReducedMotion } from '@vueuse/core'
+  import {
+    useElementSize,
+    useEventListener,
+    useMounted,
+    usePreferredReducedMotion
+  } from '@vueuse/core'
   import {
     computed,
     inject,
@@ -491,7 +496,7 @@
     }
   }
 
-  function indexAtPointer(event: globalThis.PointerEvent): number | null {
+  function indexAtPointer(event: globalThis.MouseEvent): number | null {
     const stage = stageEl.value
     if (!stage || !count.value) return null
     const rect = stage.getBoundingClientRect()
@@ -499,7 +504,19 @@
     return category.value.indexAt(offset)
   }
 
+  const touchActive = ref(false)
+  const isTouch = (event: globalThis.MouseEvent) =>
+    event instanceof globalThis.PointerEvent &&
+    (event.pointerType === 'touch' || event.pointerType === 'pen')
+
   function onPointerdown(event: globalThis.PointerEvent) {
+    if (isTouch(event)) {
+      const index = indexAtPointer(event)
+      if (index !== null) {
+        touchActive.value = true
+        setActiveIndex(index)
+      }
+    }
     if (!hasBrush.value || event.button !== 0) return
     const index = indexAtPointer(event)
     if (index === null) return
@@ -527,13 +544,21 @@
     draft.value = null
   }
 
-  function onPointerleave() {
+  function onPointerleave(event: globalThis.PointerEvent) {
+    if (isTouch(event)) return
     if (!draft.value) setActiveIndex(null)
   }
 
+  useEventListener(globalThis.document, 'pointerdown', (event: globalThis.PointerEvent) => {
+    if (!touchActive.value || stageEl.value?.contains(event.target as globalThis.Node)) return
+    touchActive.value = false
+    if (!draft.value) setActiveIndex(null)
+  })
+
   function onClick(event: MouseEvent) {
-    if (activeIndex.value === null) return
-    emit('point-click', event, pointAt(activeIndex.value))
+    const index = activeIndex.value ?? (isTouch(event) ? indexAtPointer(event) : null)
+    if (index === null) return
+    emit('point-click', event, pointAt(index))
   }
 
   function stepSeries(delta: number) {

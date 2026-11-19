@@ -283,6 +283,42 @@ describe('Chart', () => {
     expect(indexes.at(-1)).toBeNull()
   })
 
+  it('a tap on touch shows the point and keeps it after the finger lifts', async () => {
+    const indexes: Array<number | null> = []
+    const view = mount({ 'onUpdate:activeIndex': (index: number | null) => indexes.push(index) })
+    await nextTick()
+    const plot = plotOf(view)
+    const rect = plot.getBoundingClientRect()
+    const at = { clientX: rect.right - 2, clientY: rect.top + 1, pointerType: 'touch' }
+    plot.dispatchEvent(new PointerEvent('pointerdown', { ...at, bubbles: true }))
+    plot.dispatchEvent(new PointerEvent('pointerup', { ...at, bubbles: true }))
+    plot.dispatchEvent(new PointerEvent('pointerleave', { ...at, bubbles: false }))
+    await nextTick()
+    expect(indexes.at(-1)).toBe(3)
+    expect(view.getByTestId('chart').hasAttribute('data-active')).toBe(true)
+    document.body.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }))
+    await nextTick()
+    expect(indexes.at(-1)).toBeNull()
+  })
+
+  it('emits point-click for the tapped point on touch', async () => {
+    const clicks: unknown[][] = []
+    const view = mount({ onPointClick: (...args: unknown[]) => clicks.push(args) })
+    await nextTick()
+    const plot = plotOf(view)
+    const rect = plot.getBoundingClientRect()
+    plot.dispatchEvent(
+      new PointerEvent('click', {
+        clientX: rect.right - 2,
+        clientY: rect.top + 1,
+        pointerType: 'touch',
+        bubbles: true
+      })
+    )
+    expect(clicks).toHaveLength(1)
+    expect((clicks[0]?.[1] as { index: number }).index).toBe(3)
+  })
+
   it('shows the tooltip inside the figure with every visible series, name before value', async () => {
     const view = mount({ activeIndex: 1 })
     await nextTick()

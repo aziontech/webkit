@@ -434,7 +434,9 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 
 ```vue
 <script setup>
+  import AppLayout from '@aziontech/webkit/app-layout'
   import Avatar from '@aziontech/webkit/avatar'
+  import IconButton from '@aziontech/webkit/icon-button'
   import SidebarFooter from '@aziontech/webkit/sidebar-footer'
   import SidebarMenuBack from '@aziontech/webkit/sidebar-menu-back'
   import SidebarMenuGroup from '@aziontech/webkit/sidebar-menu-group'
@@ -450,102 +452,120 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 </script>
 
 <template>
-  <div class="relative flex h-screen min-h-0">
-    <div class="flex min-h-0 shrink-0 max-md:hidden">
-      <Sidebar
-        v-model:open="open"
-        collapsible="icon"
-        shortcut
-        aria-label="Console"
-      >
-        <SidebarMenu role="presentation">
-          <SidebarMenuBack />
-          <SidebarMenuGroup>
-            <SidebarMenuItem
-              label="Home"
-              icon="az az-home"
-              href="/"
-              active
-            />
-            <SidebarMenuItem
-              label="Marketplace"
-              icon="az az-marketplace"
-              href="/marketplace"
-            />
-          </SidebarMenuGroup>
-          <SidebarMenuGroup label="Build">
-            <SidebarMenuItem
-              label="Applications"
-              icon="az az-applications"
-              href="/applications"
-            />
-            <SidebarMenuItem
-              label="Variables"
-              icon="az az-variables"
-              href="/variables"
-            />
-          </SidebarMenuGroup>
-          <SidebarMenuGroup label="Store">
-            <SidebarMenuItem
-              label="Object Storage"
-              icon="az az-object-storage"
-              href="/object-storage"
-            />
-            <SidebarMenuItem
-              label="SQL Database"
-              icon="az az-sql-database"
-              href="/sql-database"
-              tag-value="Preview"
-              tag-variant="primary"
-            />
-          </SidebarMenuGroup>
-          <SidebarMenuGroup label="Account">
-            <SidebarMenuSub>
-              <SidebarMenuSubTrigger
-                label="Settings"
-                icon="az az-settings"
-                type="drill"
+  <div class="h-screen">
+    <AppLayout>
+      <template #navigation="{ drawer }">
+        <Sidebar
+          :open="drawer || open"
+          @update:open="open = $event"
+          :collapsible="drawer ? false : 'icon'"
+          :shortcut="!drawer"
+          aria-label="Console"
+        >
+          <SidebarMenu role="presentation">
+            <SidebarMenuBack />
+            <SidebarMenuGroup>
+              <SidebarMenuItem
+                label="Home"
+                icon="az az-home"
+                href="/"
+                active
               />
-              <SidebarMenuSubContent>
-                <SidebarMenuGroup label="Organization">
-                  <SidebarMenuItem
-                    label="General"
-                    href="/settings/general"
-                  />
-                  <SidebarMenuItem
-                    label="Members"
-                    href="/settings/members"
-                  />
-                </SidebarMenuGroup>
-              </SidebarMenuSubContent>
-            </SidebarMenuSub>
-          </SidebarMenuGroup>
-        </SidebarMenu>
-        <template #footer="{ rail }">
-          <SidebarFooter>
-            <div class="flex items-center gap-(--spacing-xs)">
-              <Avatar
-                variant="square"
-                size="small"
-                label="JD"
-                alt="Jane Doe"
+              <SidebarMenuItem
+                label="Marketplace"
+                icon="az az-marketplace"
+                href="/marketplace"
               />
-              <span
-                v-if="!rail"
-                class="min-w-0 flex-1 truncate text-label-sm text-(--text-default)"
-                >Jane Doe</span
-              >
-            </div>
-          </SidebarFooter>
-        </template>
-      </Sidebar>
-    </div>
+            </SidebarMenuGroup>
+            <SidebarMenuGroup label="Build">
+              <SidebarMenuItem
+                label="Applications"
+                icon="az az-applications"
+                href="/applications"
+              />
+              <SidebarMenuItem
+                label="Variables"
+                icon="az az-variables"
+                href="/variables"
+              />
+            </SidebarMenuGroup>
+            <SidebarMenuGroup label="Store">
+              <SidebarMenuItem
+                label="Object Storage"
+                icon="az az-object-storage"
+                href="/object-storage"
+              />
+              <SidebarMenuItem
+                label="SQL Database"
+                icon="az az-sql-database"
+                href="/sql-database"
+                tag-value="Preview"
+                tag-variant="primary"
+              />
+            </SidebarMenuGroup>
+            <SidebarMenuGroup label="Account">
+              <SidebarMenuSub>
+                <SidebarMenuSubTrigger
+                  label="Settings"
+                  icon="az az-settings"
+                  type="drill"
+                />
+                <SidebarMenuSubContent>
+                  <SidebarMenuGroup label="Organization">
+                    <SidebarMenuItem
+                      label="General"
+                      href="/settings/general"
+                    />
+                    <SidebarMenuItem
+                      label="Members"
+                      href="/settings/members"
+                    />
+                  </SidebarMenuGroup>
+                </SidebarMenuSubContent>
+              </SidebarMenuSub>
+            </SidebarMenuGroup>
+          </SidebarMenu>
+          <template #footer="{ rail }">
+            <SidebarFooter>
+              <div class="flex items-center gap-(--spacing-xs)">
+                <Avatar
+                  variant="square"
+                  size="small"
+                  label="JD"
+                  alt="Jane Doe"
+                />
+                <span
+                  v-if="!rail"
+                  class="min-w-0 flex-1 truncate text-label-sm text-(--text-default)"
+                  >Jane Doe</span
+                >
+              </div>
+            </SidebarFooter>
+          </template>
+        </Sidebar>
+      </template>
 
-    <main class="min-w-0 flex-1 p-(--spacing-lg)">
-      <p class="text-body-sm text-(--text-muted)">
-        Press Ctrl+B (Cmd+B on macOS) to switch between the icon rail and the full sidebar.
-      </p>
-    </main>
+      <template #header="{ compact, openNavigation }">
+        <div
+          v-if="compact"
+          class="flex h-14 shrink-0 items-center border-b border-(--border-default) px-(--spacing-md)"
+        >
+          <IconButton
+            icon="az az-menu"
+            aria-label="Open navigation"
+            variant="outline"
+            size="medium"
+            @click="openNavigation"
+          />
+        </div>
+      </template>
+
+      <main class="min-w-0 p-(--spacing-lg)">
+        <p class="text-body-sm text-(--text-muted)">
+          Press Ctrl+B (Cmd+B on macOS) to switch between the icon rail and the full sidebar.
+        </p>
+      </main>
+    </AppLayout>
   </div>
 </template>
 ```

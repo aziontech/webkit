@@ -204,6 +204,16 @@ describe('ListingIndexSection', () => {
     expect(tableRoles(getByTestId)).toEqual(['GRC Analyst'])
   })
 
+  it('shows the all label on a facet trigger while nothing is picked', async () => {
+    const { getByRole } = band()
+
+    await waitFor(() =>
+      expect(getByRole('combobox', { name: 'Department' }).textContent?.trim()).toBe(
+        'All departments'
+      )
+    )
+  })
+
   it('narrows the rows by a facet select', async () => {
     const { getByRole, getByTestId } = band()
 

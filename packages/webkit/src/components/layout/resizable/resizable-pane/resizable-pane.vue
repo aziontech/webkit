@@ -63,8 +63,11 @@
   const paneStyle = computed<Record<string, string>>(() => {
     const axis = orientation.value === 'horizontal' ? 'width' : 'height'
     if (isCollapsed.value) return { flex: '0 0 0', [axis]: '0' }
-    if (flexible.value) return { flex: '1 1 0%' }
-    return { flex: `0 0 ${basis.value}px`, [axis]: `${basis.value}px` }
+    if (flexible.value) {
+      const minAxis = axis === 'width' ? 'minWidth' : 'minHeight'
+      return { flex: '1 1 0%', [minAxis]: `min(${props.min}px, 50%)` }
+    }
+    return { flex: `0 1 ${basis.value}px`, [axis]: `${basis.value}px` }
   })
 
   const measure = () => {

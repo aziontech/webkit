@@ -237,6 +237,20 @@ describe('PromptInput', () => {
       await expectNoA11yViolations(document.body.firstElementChild as HTMLElement)
     })
 
+    it('opens the menu below the box when there is no room above it, above otherwise', async () => {
+      render(ShortcutMenus)
+      await typeInto(textbox(), '/')
+      expect(listbox()?.dataset['side']).toBe('bottom')
+      await keys.keyboard('{Escape}')
+      await settle()
+      const spacer = document.createElement('div')
+      spacer.style.height = `${window.innerHeight - 160}px`
+      document.body.prepend(spacer)
+      await typeInto(textbox(), ' /')
+      expect(listbox()?.dataset['side']).toBe('top')
+      spacer.remove()
+    })
+
     it('inserts the choice, adds a reference chip and submits it with the text', async () => {
       const view = render(ShortcutMenus)
       const input = textbox()

@@ -37,7 +37,7 @@ Names the task: `Change plan`, `Upgrade to Pro`. It labels the drawer for assist
 
 ### F. Body — `PanelBody` (required)
 
-The scrolling body of each drawer, between header and footer.
+The scrolling body of each drawer, between header and footer. Its layout follows the drawer's own width (`@container` on the body, `@md` / `@3xl` / `@4xl` variants), never the viewport: a large drawer is about 550px wide on a 1280px screen, so the plan cards stack in one column, the upgrade body keeps What's included above the charge, and the two-field form rows start at `@md`. A wider surface gets the plan row at `@4xl` and the side column at `@3xl`.
 
 ### G. Description — `DrawerDescription` (plan drawer)
 

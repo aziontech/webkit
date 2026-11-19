@@ -103,8 +103,19 @@
 
   const hasItems = computed(() => tabs.value.length > 0)
 
+  const WIDE = '(min-width: 64rem)'
+  const sideBySide = ref(Boolean(globalThis.matchMedia?.(WIDE).matches))
+  let wideQuery: globalThis.MediaQueryList | null = null
+  const onWideChange = () => {
+    sideBySide.value = Boolean(wideQuery?.matches)
+  }
+
   const autoplayEnabled = computed(
-    () => props.autoplay && tabs.value.length > 1 && reducedMotion.value !== 'reduce'
+    () =>
+      props.autoplay &&
+      sideBySide.value &&
+      tabs.value.length > 1 &&
+      reducedMotion.value !== 'reduce'
   )
 
   const autoplayRunning = computed(
@@ -131,10 +142,16 @@
   )
 
   onMounted(() => {
+    wideQuery = globalThis.matchMedia?.(WIDE) ?? null
+    wideQuery?.addEventListener('change', onWideChange)
+    onWideChange()
     if (autoplayRunning.value) start()
   })
 
-  onScopeDispose(stop)
+  onScopeDispose(() => {
+    stop()
+    wideQuery?.removeEventListener('change', onWideChange)
+  })
 
   function isActive(index: number): boolean {
     return activeIndex.value === index

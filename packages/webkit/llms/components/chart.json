@@ -221,7 +221,7 @@
   {
    "name": "point-click",
    "payload": "(event: MouseEvent | KeyboardEvent, point: ChartPoint)",
-   "notes": "Click on the plot, or Enter / Space on the focused chart, at the active index. `point` carries the index, the label and every visible series value."
+   "notes": "Click or tap on the plot, or Enter / Space on the focused chart, at the active index (a tap with no active index uses the point under the finger). `point` carries the index, the label and every visible series value."
   },
   {
    "name": "legend-toggle",

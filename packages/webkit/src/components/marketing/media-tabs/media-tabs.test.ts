@@ -1,5 +1,6 @@
 import { fireEvent, render } from '@testing-library/vue'
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { page } from 'vitest/browser'
 import { nextTick } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -48,6 +49,20 @@ afterEach(() => {
 })
 
 describe('MediaTabs', () => {
+  beforeEach(async () => {
+    await page.viewport(1280, 800)
+    await vi.waitFor(() => expect(window.matchMedia('(min-width: 64rem)').matches).toBe(true))
+  })
+
+  it('does not autoplay while the media stacks under the rows (below lg)', async () => {
+    await page.viewport(390, 844)
+    await vi.waitFor(() => expect(window.matchMedia('(min-width: 64rem)').matches).toBe(false))
+    const { getByTestId, queryByRole } = render(MediaTabs, { props: { items: ITEMS } })
+    await nextTick()
+    expect(getByTestId(TESTID).getAttribute('data-autoplay')).toBeNull()
+    expect(queryByRole('button', { name: 'Pause rotation' })).toBeNull()
+  })
+
   it('renders the band under the default testid', () => {
     const { getByTestId } = render(MediaTabs, { props: { items: ITEMS } })
 

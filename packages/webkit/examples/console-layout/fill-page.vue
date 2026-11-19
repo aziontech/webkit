@@ -3,6 +3,7 @@
     type ConsoleLayoutNavGroup
   } from '@aziontech/webkit/console-layout-root'
   import Resizable from '@aziontech/webkit/resizable'
+  import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 
   const navigation: ConsoleLayoutNavGroup[] = [
     {
@@ -14,6 +15,20 @@
   ]
 
   const lines = Array.from({ length: 80 }, (_, index) => `${index + 1}`)
+
+  const narrow = ref(false)
+  let narrowQuery: MediaQueryList | null = null
+  const onNarrowChange = () => {
+    narrow.value = Boolean(narrowQuery?.matches)
+  }
+  onMounted(() => {
+    narrowQuery = globalThis.matchMedia?.('(max-width: 767px)') ?? null
+    onNarrowChange()
+    narrowQuery?.addEventListener('change', onNarrowChange)
+  })
+  onBeforeUnmount(() => narrowQuery?.removeEventListener('change', onNarrowChange))
+  const orientation = computed(() => (narrow.value ? 'vertical' : 'horizontal'))
+  const previewBasis = computed(() => (narrow.value ? 240 : 320))
 </script>
 
 <template>
@@ -32,7 +47,10 @@
         Code
       </div>
       <div class="grid min-h-0 flex-1">
-        <Resizable aria-label="Editor workspace">
+        <Resizable
+          :orientation="orientation"
+          aria-label="Editor workspace"
+        >
           <Resizable.Pane aria-label="Source">
             <div
               tabindex="0"
@@ -51,7 +69,7 @@
           </Resizable.Pane>
           <Resizable.Handle aria-label="Resize the preview" />
           <Resizable.Pane
-            :basis="320"
+            :basis="previewBasis"
             aria-label="Preview"
           >
             <div

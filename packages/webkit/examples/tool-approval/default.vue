@@ -1,5 +1,5 @@
 <script setup>
-  import CodeBlock from '@aziontech/webkit/code-block'
+  import KeyValueList from '@aziontech/webkit/key-value-list'
   import ToolApproval from '@aziontech/webkit/tool-approval'
   import { ref } from 'vue'
 
@@ -16,17 +16,15 @@
       @approve="status = 'approved'"
       @deny="status = 'denied'"
     >
-      <CodeBlock
-        :tabs="[
-          {
-            label: 'Shell',
-            value: 'cmd',
-            code: 'azion deploy --env production --workload storefront',
-            language: 'bash'
-          }
-        ]"
-        :show-line-numbers="false"
-      />
+      <KeyValueList aria-label="Command to run">
+        <KeyValueList.Item label="Command">
+          <code class="text-label-code-sm [overflow-wrap:anywhere] text-(--text-default)"
+            >azion deploy --env production --workload storefront</code
+          >
+        </KeyValueList.Item>
+        <KeyValueList.Item label="Environment">production</KeyValueList.Item>
+        <KeyValueList.Item label="Workload">storefront</KeyValueList.Item>
+      </KeyValueList>
     </ToolApproval>
   </div>
 </template>

@@ -50,7 +50,7 @@
 </script>
 
 <template>
-  <div class="flex w-full max-w-(--container-3xl) flex-col gap-(--spacing-md) pt-(--spacing-4xl)">
+  <div class="flex w-full max-w-(--container-3xl) flex-col gap-(--spacing-md)">
     <PromptInput
       v-model="prompt"
       v-model:references="references"
