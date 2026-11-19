@@ -221,7 +221,7 @@
           spellcheck="false"
           :disabled="loading"
           :data-testid="`${testId}__phrase`"
-          class="h-8 w-full rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-body-sm text-(--text-default) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) disabled:bg-(--bg-disabled)"
+          class="h-8 w-full rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-body-sm pointer-coarse:text-body-md text-(--text-default) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) disabled:bg-(--bg-disabled)"
         />
       </div>
       <div class="flex flex-wrap justify-end gap-(--spacing-xs)">

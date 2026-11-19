@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 9
 template: 2
-checksum: 9bae9555351f5970b2273ae487f540400ace904df0df583945fd789b095140d4
+checksum: 1fe6292edbf013b93e1cd4545f36fba53f6ccabf619273dbca5e5f8c0f12e08e
 created: 2026-11-11
 last_updated: 2026-11-19
 ---
@@ -231,6 +231,7 @@ _None._
 - Narrow: buttons wrap; the body's code scrolls inside its block.
 - Touch: medium buttons (44 px on coarse pointers).
 - Reflow: no horizontal scroll at 320 px; the arguments field wraps its lines, grows to 12 lines, then scrolls inside itself.
+- Touch: on coarse pointers (`pointer-coarse:`) the confirmation-phrase field and the arguments field (a `Textarea`) type at 16 px (`text-body-md`), so iOS Safari does not zoom the page on focus.
 
 ## Performance
 

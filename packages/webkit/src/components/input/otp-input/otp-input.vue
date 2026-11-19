@@ -214,7 +214,7 @@
       :aria-invalid="isInvalid || undefined"
       :aria-required="isRequired || undefined"
       :data-testid="`${testId}__input`"
-      class="absolute inset-0 z-(--z-control) h-full w-full cursor-text appearance-none border-0 bg-transparent p-0 text-transparent caret-transparent outline-none selection:bg-transparent disabled:cursor-not-allowed"
+      class="absolute inset-0 z-(--z-control) h-full w-full cursor-text appearance-none border-0 bg-transparent p-0 text-transparent caret-transparent pointer-coarse:text-body-md outline-none selection:bg-transparent disabled:cursor-not-allowed"
       v-bind="passthroughAttrs"
       @input="onInput"
       @paste="onPaste"

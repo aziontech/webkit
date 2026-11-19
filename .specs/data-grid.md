@@ -8,9 +8,9 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
   node_id: 2053:7649
-checksum: 079e6025aeac0e78ed51545ba6b29c4190213b807de2e2d619e5420a9ae055f2
+checksum: 0e5a833caa6a54154f21929a7e79ad9d8c747ef658eaf9d9d764fc5c7d29ac71
 created: 2026-11-15
-last_updated: 2026-11-17
+last_updated: 2026-11-19
 ---
 
 # DataGrid — Component Spec
@@ -252,6 +252,7 @@ Fixed sizes (no token exists for them): cell and header height `min-h-10` (40 px
 - Narrow (≤ 640 px or a narrow container): the viewport scrolls sideways inside the grid, with the frozen first column still in view; the toolbar wraps.
 - Touch: cells and headers are 44 px high under `pointer: coarse` (40 px otherwise); the resize handle's hit area is 44 px under `pointer: coarse` (24 px otherwise); editing opens on a second tap; nothing is hover-only.
 - Reflow: a data grid is the WCAG 1.4.10 exception for two-dimensional content: the grid scrolls horizontally inside its frame, never the page.
+- Touch: on coarse pointers (`pointer-coarse:`) the cell editor's text steps up to 16 px (`text-body-md`), so iOS Safari does not zoom the page while editing a cell.
 
 ## Performance
 

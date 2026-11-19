@@ -339,7 +339,7 @@
       :aria-required="isRequired || undefined"
       :aria-describedby="describedBy"
       :data-testid="`${testId}__input`"
-      class="w-full h-full bg-transparent border-0 outline-none focus:ring-0 px-(--spacing-md) rtl:text-end text-label-sm text-(--text-default) placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
+      class="w-full h-full bg-transparent border-0 outline-none focus:ring-0 px-(--spacing-md) rtl:text-end text-label-sm pointer-coarse:text-body-md text-(--text-default) placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
       @input="onInput"
     />
   </InputGroup>

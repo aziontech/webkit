@@ -7,9 +7,9 @@ spec_version: 8
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10788&m=dev
   node_id: 3714:10788
-checksum: 35a4737a62a36fda790951dcd2f90c9fd7d88bc32fb77359b3d9503909e4fc51
+checksum: cf6b3234265367d6e50171dcd36179144c330f20d74df7803ba9ab70b86c9435
 created: 2026-06-16
-last_updated: 2026-11-17
+last_updated: 2026-11-19
 ---
 
 # Input Password — Component Spec
@@ -167,6 +167,10 @@ _none_
 - Icons: the visibility toggle does not mirror.
 - Keyboard: no horizontal arrow-key logic.
 - User data: the `<input>` renders `dir="auto"`; a `dir` attribute overrides it.
+
+## Responsive
+
+- Touch: on coarse pointers (`pointer-coarse:`) the typed text steps up to 16 px (`text-body-md`; `text-label-code-lg` in the code face), so iOS Safari does not zoom the page when the field takes focus; fine pointers keep the dense size.
 
 ## Examples
 

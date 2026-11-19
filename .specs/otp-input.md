@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: ad8f1a085649cc9f9e624c359b75e7a568aa1d1ad15c2ccc2581334d25ba350f
+checksum: ff925a9d6e6ef613cc505ee250ddc2ff9da820cdba31922986923fbe321abb01
 created: 2026-11-11
-last_updated: 2026-11-15
+last_updated: 2026-11-19
 ---
 
 # OtpInput — Component Spec
@@ -151,6 +151,7 @@ _none_
 - Narrow: boxes are 40 px with an 8 px gap and shrink to 24 px when the row is narrower than that, so eight boxes plus a separator fit in 320 px (checked in `apps/visual`, `geometry otp input grouped`).
 - Touch: the whole row is the input's hit area.
 - Reflow: no horizontal scroll at 320 px for `length` up to 8 with a separator.
+- Touch: on coarse pointers (`pointer-coarse:`) the hidden native input carries 16 px text (`text-body-md`), so iOS Safari does not zoom the page when the row takes focus; the boxes look the same.
 
 ## Performance
 

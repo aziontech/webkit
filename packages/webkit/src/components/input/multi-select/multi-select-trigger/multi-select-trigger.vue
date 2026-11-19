@@ -258,7 +258,7 @@
       autocomplete="off"
       :spellcheck="false"
       dir="auto"
-      class="h-6 min-w-16 flex-1 bg-transparent ps-(--spacing-2xs) text-label-sm text-(--text-default) outline-none placeholder:text-(--text-muted) data-[filled]:placeholder:text-(--text-default) disabled:cursor-not-allowed disabled:placeholder:text-(--text-disabled)"
+      class="h-6 min-w-16 flex-1 bg-transparent ps-(--spacing-2xs) text-label-sm pointer-coarse:text-body-md text-(--text-default) outline-none placeholder:text-(--text-muted) data-[filled]:placeholder:text-(--text-default) disabled:cursor-not-allowed disabled:placeholder:text-(--text-disabled)"
       @input="onInput"
     />
     <button

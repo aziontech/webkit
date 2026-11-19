@@ -78,7 +78,7 @@
     :aria-required="isRequired || undefined"
     :data-testid="testId"
     v-bind="{ ...autofillHints, ...$attrs }"
-    class="h-full w-full min-w-0 flex-1 border-0 bg-transparent px-(--spacing-sm) text-label-sm text-(--text-default) outline-none placeholder:text-(--text-muted) focus:ring-0 disabled:cursor-not-allowed disabled:text-(--text-disabled)"
+    class="h-full w-full min-w-0 flex-1 border-0 bg-transparent px-(--spacing-sm) text-label-sm pointer-coarse:text-body-md text-(--text-default) outline-none placeholder:text-(--text-muted) focus:ring-0 disabled:cursor-not-allowed disabled:text-(--text-disabled)"
     @input="onInput"
   />
 </template>

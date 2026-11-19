@@ -196,7 +196,7 @@
               :data-testid="`${ctx.testId.value}__rename`"
               :value="item.label"
               :aria-label="ctx.renameLabel(item.label)"
-              class="h-6 min-w-0 flex-1 rounded-(--shape-control) border border-(--border-default) bg-(--bg-canvas) px-(--spacing-2xs) text-label-md text-(--text-default) outline-none focus-visible:border-(--ring-color) group-data-[size=small]/tree:h-5 group-data-[size=large]/tree:h-8 group-data-[size=large]/tree:text-label-lg"
+              class="h-6 min-w-0 flex-1 rounded-(--shape-control) border border-(--border-default) bg-(--bg-canvas) px-(--spacing-2xs) text-label-md text-(--text-default) outline-none focus-visible:border-(--ring-color) group-data-[size=small]/tree:h-5 group-data-[size=large]/tree:h-8 group-data-[size=large]/tree:text-label-lg pointer-coarse:text-body-md"
               @keydown="onRenameKeydown"
               @blur="commitRename"
             />

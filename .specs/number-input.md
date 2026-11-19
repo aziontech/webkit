@@ -7,9 +7,9 @@ spec_version: 5
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10789&m=dev
   node_id: 3714:10789
-checksum: 64394f62b6f606e234606cabcf0ebfec059c5145a6f89c07bcdbdf30edefd3db
+checksum: a6f68e01099011a33ef52e087065b4542d9f41009141a6afce2d62c5d3784398
 created: 2026-06-22
-last_updated: 2026-11-17
+last_updated: 2026-11-19
 ---
 
 # Input Number — Component Spec
@@ -167,6 +167,10 @@ An optional field binds a `number | null` model and sets `nullable`:
 - Icons: the stepper buttons point up and down and do not mirror.
 - Keyboard: no horizontal arrow-key logic.
 - User data: the `<input>` renders `dir="auto"`; a `dir` attribute overrides it.
+
+## Responsive
+
+- Touch: on coarse pointers (`pointer-coarse:`) the typed text steps up to 16 px (`text-body-md`; `text-label-code-lg` in the code face), so iOS Safari does not zoom the page when the field takes focus; fine pointers keep the dense size.
 
 ## Examples
 

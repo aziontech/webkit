@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 11
 template: 2
-checksum: 4f13ca4def49b2d734c458fee8cbc204e7614d83afabdd323e38231db7d9d414
+checksum: 9a2d273840fa193959918b10c2d10ca2dcddf5550df46652757cf6f2c96c3b78
 created: 2026-11-11
-last_updated: 2026-11-18
+last_updated: 2026-11-19
 ---
 
 # CodeEditor — Component Spec
@@ -230,6 +230,7 @@ One code size across the code components (CodeBlock, CodeEditor, LogViewer, Trac
 - Narrow: the editing area keeps its height and scrolls in both axes; long lines never wrap in code.
 - Touch: problem buttons are 32 px high (44 px on `pointer: coarse`).
 - Reflow: the page never scrolls horizontally; the editor scrolls inside its frame.
+- Touch: on coarse pointers (`pointer-coarse:`) the editing area and its line numbers step up to 16 px (`text-label-code-lg`), so iOS Safari does not zoom the page when the editor takes focus; fine pointers keep the dense size.
 
 ## Performance
 

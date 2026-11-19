@@ -689,7 +689,7 @@
                   diff && changesBySide
                 ]"
                 aria-hidden="true"
-                class="sticky start-0 z-1 m-0 shrink-0 list-none border-e border-(--border-default) bg-(--bg-canvas) py-(--spacing-xs) ps-(--spacing-sm) pe-(--spacing-xs) text-end text-body-code-sm text-(--code-syntax-line-number) select-none"
+                class="sticky start-0 z-1 m-0 shrink-0 list-none border-e border-(--border-default) bg-(--bg-canvas) py-(--spacing-xs) ps-(--spacing-sm) pe-(--spacing-xs) text-end text-body-code-sm pointer-coarse:text-label-code-lg text-(--code-syntax-line-number) select-none"
                 :data-testid="`${testId}__gutter`"
               >
                 <li
@@ -722,7 +722,7 @@
                 :aria-invalid="(pane.main && isInvalid) || undefined"
                 :aria-readonly="!pane.editable || undefined"
                 :aria-describedby="pane.main ? describedBy : undefined"
-                class="m-0 block min-w-0 flex-1 resize-none overflow-hidden border-0 bg-transparent px-(--spacing-sm) py-(--spacing-xs) text-body-code-sm whitespace-pre text-(--code-syntax-identifier) caret-(--text-default) outline-none placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
+                class="m-0 block min-w-0 flex-1 resize-none overflow-hidden border-0 bg-transparent px-(--spacing-sm) py-(--spacing-xs) text-body-code-sm pointer-coarse:text-label-code-lg whitespace-pre text-(--code-syntax-identifier) caret-(--text-default) outline-none placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
                 :data-testid="`${testId}__${pane.main ? 'input' : 'original'}`"
                 @input="onInput"
                 @keydown="onKeydown($event, pane.editable)"
