@@ -137,122 +137,129 @@
             <section
               class="layout-section-start flex min-w-0 flex-1 flex-col pb-(--layout-boundary-end)"
             >
-              <SettingsGroup label="General">
-                <Card :padded="false">
-                  <template #default>
-                    <Item.List>
-                      <SettingsRow
-                        title="Name"
-                        description="Give a unique and descriptive name to identify this policy."
-                      >
-                        <div class="flex w-full flex-col gap-(--spacing-xs)">
-                          <Input
-                            id="resource-name"
-                            v-model="form.name"
-                            size="large"
-                            class="w-full"
-                            aria-label="Name"
-                            autocomplete="off"
-                            required
-                            :invalid="nameError"
-                            :aria-describedby="nameError ? 'resource-name-message' : undefined"
-                          />
-                          <FieldError
-                            v-if="nameError"
-                            id="resource-name-message"
-                            >This field is required.</FieldError
-                          >
-                        </div>
-                      </SettingsRow>
-                      <SettingsRow
-                        title="Project"
-                        description="The project this policy runs in front of."
-                        variant="compact"
-                      >
-                        <span class="text-body-md text-(--text-default)">web-app</span>
-                      </SettingsRow>
-                    </Item.List>
-                  </template>
-                </Card>
-              </SettingsGroup>
-
-              <SettingsGroup
-                label="Modules"
-                hint="A module is what makes a rule act: a rule can only apply a capability that is switched on here."
+              <fieldset
+                class="m-0 flex min-w-0 flex-col border-0 p-0"
+                :disabled="saving"
               >
-                <Card :padded="false">
-                  <template #default>
-                    <Item.List>
-                      <SettingsRow
-                        v-for="field in moduleFields"
-                        :key="field.key"
-                        :title="field.title"
-                        :description="field.description"
-                        variant="compact"
-                      >
-                        <Tooltip
-                          v-if="field.locked"
-                          content="DDoS Protection is always on, on every policy."
+                <legend class="sr-only">Settings</legend>
+                <SettingsGroup label="General">
+                  <Card :padded="false">
+                    <template #default>
+                      <Item.List>
+                        <SettingsRow
+                          title="Name"
+                          description="Give a unique and descriptive name to identify this policy."
                         >
-                          <span class="flex">
-                            <Switch
-                              :model-value="true"
-                              :aria-label="field.title"
-                              disabled
+                          <div class="flex w-full flex-col gap-(--spacing-xs)">
+                            <Input
+                              id="resource-name"
+                              v-model="form.name"
+                              size="large"
+                              :disabled="saving"
+                              class="w-full"
+                              aria-label="Name"
+                              autocomplete="off"
+                              required
+                              :invalid="nameError"
+                              :aria-describedby="nameError ? 'resource-name-message' : undefined"
                             />
-                          </span>
-                        </Tooltip>
-                        <Switch
-                          v-else
-                          v-model="form.modules[field.key]"
-                          :aria-label="field.title"
-                        />
-                      </SettingsRow>
-                    </Item.List>
-                  </template>
-                </Card>
-              </SettingsGroup>
+                            <FieldError
+                              v-if="nameError"
+                              id="resource-name-message"
+                              >This field is required.</FieldError
+                            >
+                          </div>
+                        </SettingsRow>
+                        <SettingsRow
+                          title="Project"
+                          description="The project this policy runs in front of."
+                          variant="compact"
+                        >
+                          <span class="text-body-md text-(--text-default)">web-app</span>
+                        </SettingsRow>
+                      </Item.List>
+                    </template>
+                  </Card>
+                </SettingsGroup>
 
-              <SettingsGroup
-                label="Debug rules"
-                hint="Query the logged executions from the event log or the logs API."
-              >
-                <Card :padded="false">
-                  <template #default>
-                    <Item.List>
-                      <SettingsRow
-                        title="Active"
-                        description="Logs which rules ran for a request, under the trace field of each logged event."
-                        variant="compact"
-                      >
-                        <Switch
-                          v-model="form.debugRules"
-                          aria-label="Debug rules"
-                        />
-                      </SettingsRow>
-                    </Item.List>
-                  </template>
-                </Card>
-              </SettingsGroup>
+                <SettingsGroup
+                  label="Modules"
+                  hint="A module is what makes a rule act: a rule can only apply a capability that is switched on here."
+                >
+                  <Card :padded="false">
+                    <template #default>
+                      <Item.List>
+                        <SettingsRow
+                          v-for="field in moduleFields"
+                          :key="field.key"
+                          :title="field.title"
+                          :description="field.description"
+                          variant="compact"
+                        >
+                          <Tooltip
+                            v-if="field.locked"
+                            content="DDoS Protection is always on, on every policy."
+                          >
+                            <span class="flex">
+                              <Switch
+                                :model-value="true"
+                                :aria-label="field.title"
+                                disabled
+                              />
+                            </span>
+                          </Tooltip>
+                          <Switch
+                            v-else
+                            v-model="form.modules[field.key]"
+                            :aria-label="field.title"
+                          />
+                        </SettingsRow>
+                      </Item.List>
+                    </template>
+                  </Card>
+                </SettingsGroup>
 
-              <SettingsGroup label="Status">
-                <Card :padded="false">
-                  <template #default>
-                    <Item.List>
-                      <SettingsRow
-                        title="Active"
-                        description="An inactive policy stops evaluating rules."
-                        variant="compact"
-                      >
-                        <Switch
-                          v-model="form.active"
-                          aria-label="Active"
-                        />
-                      </SettingsRow>
-                    </Item.List>
-                  </template>
-                </Card>
-              </SettingsGroup>
+                <SettingsGroup
+                  label="Debug rules"
+                  hint="Query the logged executions from the event log or the logs API."
+                >
+                  <Card :padded="false">
+                    <template #default>
+                      <Item.List>
+                        <SettingsRow
+                          title="Active"
+                          description="Logs which rules ran for a request, under the trace field of each logged event."
+                          variant="compact"
+                        >
+                          <Switch
+                            v-model="form.debugRules"
+                            aria-label="Debug rules"
+                          />
+                        </SettingsRow>
+                      </Item.List>
+                    </template>
+                  </Card>
+                </SettingsGroup>
+
+                <SettingsGroup label="Status">
+                  <Card :padded="false">
+                    <template #default>
+                      <Item.List>
+                        <SettingsRow
+                          title="Active"
+                          description="An inactive policy stops evaluating rules."
+                          variant="compact"
+                        >
+                          <Switch
+                            v-model="form.active"
+                            aria-label="Active"
+                          />
+                        </SettingsRow>
+                      </Item.List>
+                    </template>
+                  </Card>
+                </SettingsGroup>
+              </fieldset>
             </section>
           </div>
 
