@@ -98,6 +98,42 @@ describe('create-drawer', () => {
     await waitFor(() => expect(document.querySelector('[role="dialog"]')).toBeNull(), wait)
   })
 
+  it('closes at once on Escape while the form is clean', async () => {
+    render(CreateInDrawer)
+    await fireEvent.click(screen.getByRole('button', { name: 'Add Domain' }))
+    await screen.findByRole('dialog')
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(document.querySelector('[role="dialog"]')).toBeNull(), wait)
+    expect(document.querySelector('[role="alertdialog"]')).toBeNull()
+  })
+
+  it('asks before Escape discards typed input, and keeps it on Keep editing', async () => {
+    render(CreateInDrawer)
+    await fireEvent.click(screen.getByRole('button', { name: 'Add Domain' }))
+    const dialog = await screen.findByRole('dialog')
+    const domain = within(dialog).getByRole('textbox', { name: /Domain/ }) as HTMLInputElement
+    await fireEvent.update(domain, 'acme-store')
+    await userEvent.keyboard('{Escape}')
+    const confirm = await screen.findByRole('alertdialog')
+    expect(confirm.textContent).toContain('Unsaved changes')
+    await fireEvent.click(within(confirm).getByRole('button', { name: 'Keep editing' }))
+    await waitFor(() => expect(document.querySelector('[role="alertdialog"]')).toBeNull(), wait)
+    expect(dialog.isConnected).toBe(true)
+    expect(domain.value).toBe('acme-store')
+  })
+
+  it('closes the drawer when the user discards the typed input', async () => {
+    const view = render(CreateInDrawer)
+    await fireEvent.click(screen.getByRole('button', { name: 'Add Domain' }))
+    const dialog = await screen.findByRole('dialog')
+    await fireEvent.update(within(dialog).getByRole('textbox', { name: /Domain/ }), 'acme-store')
+    await fireEvent.click(within(dialog).getByRole('button', { name: /Close/ }))
+    const confirm = await screen.findByRole('alertdialog')
+    await fireEvent.click(within(confirm).getByRole('button', { name: 'Discard changes' }))
+    await waitFor(() => expect(document.querySelector('[role="dialog"]')).toBeNull(), wait)
+    expect(view.emitted('update:open')?.at(-1)).toEqual([false])
+  })
+
   it('lists the environments it is given instead of the sample', async () => {
     render(CreateInDrawer, {
       props: {

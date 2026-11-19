@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
@@ -13,7 +14,8 @@
   import RadioGroup from '@aziontech/webkit/radio-group'
   import Select from '@aziontech/webkit/select'
   import SettingsGroup from '@aziontech/webkit/settings-group'
-  import { computed, reactive, ref, watch } from 'vue'
+  import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
+  import { computed, nextTick, reactive, ref, watch } from 'vue'
 
   import { sampleCertificates, sampleConnectedEnvironments, sampleEnvironments } from './sample'
 
@@ -182,6 +184,7 @@
     Object.assign(errors, { domain: '', environment: '' })
     Object.assign(form, initialForm())
     certificateTouched.value = Boolean(form.certificate)
+    nextTick(() => guard.commit())
   })
 
   const fullDomain = computed(() => {
@@ -243,6 +246,21 @@
     errors.environment = ''
   }
 
+  const guard = useUnsavedChanges(() => form, {
+    onDiscard: (baseline) => Object.assign(form, baseline),
+    enabled: () => open.value && !props.loading
+  })
+  const discardDialog = guard.dialogProps
+  const discardLabels = guard.labels
+
+  const onOpenChange = async (next: boolean) => {
+    if (next) {
+      open.value = true
+      return
+    }
+    if (await guard.confirmLeave()) open.value = false
+  }
+
   const validate = () => {
     errors.domain = form.domain.trim() ? '' : 'This field is required.'
     errors.environment = form.environment ? '' : 'This field is required.'
@@ -272,9 +290,10 @@
   </slot>
 
   <Drawer
-    v-model:open="open"
+    :open="open"
     size="large"
     side="end"
+    @update:open="onOpenChange"
   >
     <DrawerContent>
       <form
@@ -451,4 +470,25 @@
       </form>
     </DrawerContent>
   </Drawer>
+
+  <ConfirmDialog
+    v-bind="discardDialog"
+    data-testid="unsaved-changes-dialog"
+  >
+    <template #actions>
+      <Button
+        :label="discardLabels.keepEditing"
+        variant="ghost"
+        size="medium"
+        data-autofocus
+        @click="guard.keepEditing"
+      />
+      <Button
+        :label="discardLabels.discard"
+        variant="danger"
+        size="medium"
+        @click="guard.discardAndLeave"
+      />
+    </template>
+  </ConfirmDialog>
 </template>
