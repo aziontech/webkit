@@ -3,15 +3,15 @@ name: toast
 category: feedback
 structure: composition
 status: implemented
-spec_version: 14
+spec_version: 15
 template: 2
 setup: "One-time app-level wiring before the first toast() call — service (recommended): import { ToastPlugin } from '@aziontech/webkit/toast' and chain .use(ToastPlugin) onto createApp() in the app entry; the plugin mounts the toast region automatically. Alternative: mount a Toaster component once near the app root. `webkit doctor` flags toast usage with no wired region."
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-938
   node_id: 478:938
-checksum: 2029427852b2307b3b2d1db8826249a37c8caa7bb2433a12bede672b22cf9926
+checksum: 98557c15518beb1801a5695483e2e4ca4cac9df0298eb8b28ca0d65fbd49fd61
 created: 2026-06-23
-last_updated: 2026-11-17
+last_updated: 2026-11-19
 ---
 
 # Toast — Component Spec
@@ -47,6 +47,7 @@ The card surface, typography, and severity icons follow the Figma design (see `f
 ## Best practices
 
 - Mount `Toaster` once at the app root (in `App.vue`, before the layout or `RouterView`), or install `ToastPlugin`. Never render a `Toaster` in a page, a view or a page-body block: only the first `Toaster` to mount is active and it gives the role up when it unmounts, so a page's copy is either inert or, when it mounted first, silences every toast in the app once the user leaves that page. A page only imports `toast`. A full page routed outside the console layout is still a route of the same app, not a root. `check:blocks` fails a block outside `blocks/shells/` that renders one.
+- Leave the stack at the default `bottom-end` corner (bottom right in a left-to-right page, bottom left in right-to-left). It is the corner a reader reaches last, so a toast never covers the page title, the navigation, the primary action or the text being read, and every Azion app, the docs site included, puts toasts in the same place so the user learns where to look. Don't set `position` on the `Toaster` or the plugin to move the whole stack; a single toast may take another corner only when it must sit next to what it reports.
 - Use the typed shortcuts (`toast.success`, `toast.error`, …). The type sets the icon and how it is announced: `toast.error` (severity `danger`) interrupts the screen reader through the Toaster's assertive live region, every other type waits its turn in the polite one. Both regions are fixed, so no region ever switches between polite and assertive (switching made screen readers drop or repeat the stack).
 - Keep the message text to one line and move detail to `description`. Offer at most two actions: one `action`, or `actions` with two entries when a failure has two ways forward (**Edit** and **Redeploy**).
 - A toast with an `action` (or `actions`) stays at least 10 s unless it sets its own `duration`, so a keyboard or screen-reader user has time to reach the action.
@@ -68,10 +69,7 @@ Two interchangeable usage styles drive the **same** singleton stack — use whic
 
 <template>
   <!-- Mount the region ONCE, near the app root -->
-  <Toaster
-    position="bottom-end"
-    :duration="4000"
-  />
+  <Toaster :duration="4000" />
 
   <!-- Raise a toast from anywhere -->
   <Button
@@ -86,7 +84,7 @@ Two interchangeable usage styles drive the **same** singleton stack — use whic
 ```ts
 // main.js
 import { ToastPlugin } from '@aziontech/webkit/toast'
-app.use(ToastPlugin, { position: 'bottom-end' })
+app.use(ToastPlugin, { duration: 6000 })
 ```
 
 ```vue
