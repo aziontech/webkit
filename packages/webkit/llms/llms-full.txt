@@ -12963,6 +12963,103 @@ packages/webkit/src/components/ai/prompt-input/
 
 ---
 
+<!-- components/prompt-queue.md -->
+
+# Prompt Queue
+
+> Messages sent while a response is generating, waiting above the prompt input (TanStack AI `useChat` `queue`): each shows its text in send order with a button that removes it before it is sent; changes are announced politely.
+
+- Import: `import PromptQueue from '@aziontech/webkit/prompt-queue'`
+- Category: ai · Surface: app · Structure: monolithic
+
+## When to use
+
+- A chat that lets the reader keep typing while a response streams and holds the extra messages.
+- Directly above the `prompt-input`, in the composer area of the conversation.
+
+## Do
+
+- Keep it mounted for the whole chat, so every change is announced.
+- Keep each queued message's id, so a removal cancels the right one.
+- When the queue empties, move focus back to the prompt input.
+
+## Don’t
+
+- Prompts the reader may choose to send → `suggestion-group`.
+- Messages already sent → `chat-message`.
+
+## Related
+
+- `prompt-input` — the composer it sits above.
+- `suggestion-group` — prompts to send, not prompts waiting.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `items` | `PromptQueueItem[]` | `[]` | false | The waiting messages, in the order they will be sent. |
+| `ariaLabel` | `string` | `''` | false | Accessible name of the list. Empty uses the locale catalog (`Queued messages`). |
+
+## Events
+
+| Event | Payload | Notes |
+| --- | --- | --- |
+| `remove` | `(event: MouseEvent, item: PromptQueueItem)` |  |
+
+## Sub-components
+
+_None. Data-driven. `PromptQueueItem`: `{ id: string; text: string; attachmentCount?: number }` (text parts joined; non-text parts counted, shown above zero)._
+
+## States
+
+- Empty: no box, only the hidden status region; `data-empty` on the root.
+- Populated: the box with the count line and one row per item.
+- No `disabled`, `loading`, `invalid`, `error` or `open` state: a message leaves only through the owner.
+
+## Accessibility
+
+- Visible focus: the `IconButton` ring.
+- Keyboard map: `Tab` moves between remove buttons in queue order; `Enter` / `Space` removes.
+- Focus: when a focused row leaves (removed or sent), focus moves to the button now at that position, else the last; an empty queue hands focus to the owner.
+- ARIA: a native `ol` named `Queued messages` (`ariaLabel`); each button is named `Remove from queue` and described by its text; glyphs `aria-hidden`.
+- Announcements: a hidden polite `role="status"` says `2 messages queued` on each count change after mount and `No messages queued` when empty.
+- Touch target: 44 px on coarse pointers.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import PromptInput from '@aziontech/webkit/prompt-input-root'
+  import PromptQueue from '@aziontech/webkit/prompt-queue'
+  import { ref } from 'vue'
+
+  const prompt = ref('')
+  const queue = ref([
+    { id: 'q1', text: 'Also purge the cache for app.example.com' },
+    { id: 'q2', text: 'Then show me the error rate for the last hour', attachmentCount: 1 }
+  ])
+</script>
+
+<template>
+  <div class="flex w-full max-w-(--container-3xl) flex-col gap-(--layout-group-gap)">
+    <PromptQueue
+      :items="queue"
+      @remove="(event, item) => (queue = queue.filter((entry) => entry.id !== item.id))"
+    />
+    <PromptInput
+      v-model="prompt"
+      status="streaming"
+    />
+  </div>
+</template>
+```
+
+1 more example(s) in [components/prompt-queue.md](components/prompt-queue.md).
+
+---
+
 <!-- components/reasoning.md -->
 
 # Reasoning

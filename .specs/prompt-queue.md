@@ -2,10 +2,10 @@
 name: prompt-queue
 category: ai
 structure: monolithic
-status: approved
+status: implemented
 spec_version: 1
 template: 2
-checksum: 135ae01dc145b2df7448677bbfa83c0c89dcebbf58df3439cb387eb338705207
+checksum: 3ecf46a6714eb4dff502fa7707c23cde764ff659d2ddfaf0248e4b718e7c4c2d
 created: 2026-11-19
 last_updated: 2026-11-19
 ---
@@ -14,40 +14,28 @@ last_updated: 2026-11-19
 
 ## Purpose
 
-The messages the reader sent while a response was still being generated, waiting their turn above
-the prompt input (AI Elements Queue; TanStack AI `useChat` `queue` of `QueuedMessage`). Each
-waiting message shows its text, in the order it will be sent, with a remove button that takes it
-out of the queue before it is sent; changes to the queue are announced politely. Unlike
-`suggestion-group`, which offers prompts to send, it shows prompts already sent and not yet
-delivered.
+Messages sent while a response is generating, waiting above the prompt input (TanStack AI `useChat` `queue`): each shows its text in send order with a button that removes it before it is sent; changes are announced politely.
 
 ## When to use
 
-- A chat that lets the reader keep typing while a response streams, and holds the extra messages
-  until the response settles.
-- Directly above the `prompt-input`, inside the composer area of the conversation.
+- A chat that lets the reader keep typing while a response streams and holds the extra messages.
+- Directly above the `prompt-input`, in the composer area of the conversation.
 
 ## When NOT to use
 
 - Prompts the reader may choose to send → `suggestion-group`.
-- Messages already sent to the assistant → `chat-message` in the `conversation`.
-- A list of tasks the assistant is working through → `tool-call` / `log-viewer`.
+- Messages already sent → `chat-message`.
 
 ## Related
 
-- `prompt-input` — the composer it sits above; a message reaches the queue when the owner sends it while a response is still generating.
+- `prompt-input` — the composer it sits above.
 - `suggestion-group` — prompts to send, not prompts waiting.
-- `chat-message` — where a queued message appears once it is sent.
 
 ## Best practices
 
-- Keep it mounted for the whole chat and pass the queue as `items`: with no items it draws no
-  box and keeps only its visually hidden status region, so the first message joining the queue and
-  the last one leaving it are both announced.
-- Map each queued message one to one, keeping its id, so a removal cancels the right message.
-- Keep the queue short: the composer stays the main control, and five or more waiting messages
-  usually mean the reader wants to stop the response instead.
-- When the queue empties (removed or sent), move focus back to the prompt input.
+- Keep it mounted for the whole chat, so every change is announced.
+- Keep each queued message's id, so a removal cancels the right one.
+- When the queue empties, move focus back to the prompt input.
 
 ## Usage
 
@@ -69,20 +57,14 @@ delivered.
 
 ## Sub-components
 
-_None. Data-driven (`items`), like `suggestion-group`. Exports: `"./prompt-queue"`; types
-`PromptQueueItem`, `PromptQueueProps`._
-
-`PromptQueueItem`: `{ id: string; text: string; attachmentCount?: number }` — `id` is the queued
-message id returned in `remove`; `text` is the message text (the text parts joined when the
-message is multimodal); `attachmentCount` is the number of non-text parts (images, audio, video,
-documents), shown as a count when above zero; a missing value means 0.
+_None. Data-driven. `PromptQueueItem`: `{ id: string; text: string; attachmentCount?: number }` (text parts joined; non-text parts counted, shown above zero)._
 
 ## Props
 
-| Prop        | Type                | Default | Required | JSDoc                                                                                  |
-| ----------- | ------------------- | ------- | -------- | -------------------------------------------------------------------------------------- |
-| `items`     | `PromptQueueItem[]` | `[]`    | false    | The waiting messages, in the order they will be sent.                                  |
-| `ariaLabel` | `string`            | `''`    | false    | Accessible name of the list. Empty uses the locale catalog (`Queued messages`).        |
+| Prop        | Type                | Default | Required | JSDoc                                                                           |
+| ----------- | ------------------- | ------- | -------- | ------------------------------------------------------------------------------- |
+| `items`     | `PromptQueueItem[]` | `[]`    | false    | The waiting messages, in the order they will be sent.                           |
+| `ariaLabel` | `string`            | `''`    | false    | Accessible name of the list. Empty uses the locale catalog (`Queued messages`). |
 
 ## Events
 
@@ -96,30 +78,26 @@ _No slots._
 
 ## States
 
-- Empty: `items` is empty → only the polite status region renders (no visible box), so the
-  announcement of the last removal still reaches assistive technology.
-- Populated: the visible box with the count heading and one row per item.
-- `data-empty` on the root while `items` is empty.
-- Not applicable: `disabled`, `loading`, `readonly`, `invalid`, `error` and `open`/`closed`. A
-  message leaves the queue only through the owner (sent or cancelled), each removal is final, and
-  there is no disclosure: the list is always shown while it has items.
+- Empty: no box, only the hidden status region; `data-empty` on the root.
+- Populated: the box with the count line and one row per item.
+- No `disabled`, `loading`, `invalid`, `error` or `open` state: a message leaves only through the owner.
 
 ## Motion & Animations
 
-| Trigger                    | Animation / Transition                                        | Token     | Reduced-motion fallback         |
-| -------------------------- | ------------------------------------------------------------- | --------- | ------------------------------- |
-| remove button hover/focus  | `IconButton`'s own transition                                 | `fast-02` | `motion-reduce:transition-none` |
+| Trigger                   | Animation / Transition        | Token     | Reduced-motion fallback         |
+| ------------------------- | ----------------------------- | --------- | ------------------------------- |
+| remove button hover/focus | `IconButton`'s own transition | `fast-02` | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region       | Token                                                                                   |
-| ------------ | --------------------------------------------------------------------------------------- |
-| box          | `var(--bg-surface)`, `border border-(--border-default)`, `var(--shape-card)`            |
-| box padding  | `var(--spacing-xs)` block / `var(--spacing-sm)` inline; rows gap `var(--spacing-2xs)`   |
-| heading      | `.text-label-sm`, `var(--text-muted)`; glyph `az az-clock` `var(--text-muted)`          |
-| item text    | `.text-body-md`, `var(--text-default)`, two lines at most (`line-clamp-2`)               |
-| attachments  | `.text-label-sm`, `var(--text-muted)`; glyph `az az-paperclip`                          |
-| remove       | `IconButton` `variant="ghost"` `size="small"` `icon="az az-x"`                           |
+| Region      | Token                                                                                 |
+| ----------- | ------------------------------------------------------------------------------------- |
+| box         | `var(--bg-surface)`, `border border-(--border-default)`, `var(--shape-card)`          |
+| box padding | `var(--spacing-xs)` block / `var(--spacing-sm)` inline; rows gap `var(--spacing-2xs)` |
+| heading     | `.text-label-sm`, `var(--text-muted)`; glyph `az az-clock` `var(--text-muted)`        |
+| item text   | `.text-body-md`, `var(--text-default)`, two lines at most (`line-clamp-2`)            |
+| attachments | `.text-label-sm`, `var(--text-muted)`; glyph `az az-paperclip`                        |
+| remove      | `IconButton` `variant="ghost"` `size="small"` `icon="az az-x"`                        |
 
 ## Theme gaps
 
@@ -127,63 +105,48 @@ _None._
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: the `IconButton` ring (`focus-visible:ring-2 focus-visible:ring-(--ring-color)`).
-- Keyboard map: `Tab` moves between the remove buttons in queue order; `Enter` / `Space` removes.
-  No APG widget pattern applies: a native `ol` of rows, each with a native button.
-- Focus: when a row leaves `items` while its remove button has focus (the reader removed it, or
-  the owner sent it), focus moves to the remove button now at that position, or else the last one.
-  Only when the list empties does focus go back to the owner, which moves it to the prompt input.
-- ARIA: the rows are an ordered list (`ol`) named by `ariaLabel` (`Queued messages`); each remove
-  button is named `Remove from queue` and described by its message text (`aria-describedby`, ids
-  from `useId()`); glyphs are `aria-hidden`; a visually hidden `role="status"` (polite) region
-  announces `2 messages queued` on every count change after mount, the first message joining an
-  empty queue (0 to 1) included, and `No messages queued` when it empties. Mounting with items
-  already present announces nothing: the list is on screen and in the reading order.
-- The visible count line (`2 messages queued`) is plain text (a `p`), not a heading: the queue is
-  a small part of the composer, not a section of the page.
-- Contrast: `--text-default` and `--text-muted` on `--bg-surface` pass the theme pairs.
-- Touch target: the small `IconButton` grows to 44 px on coarse pointers.
+- Visible focus: the `IconButton` ring.
+- Keyboard map: `Tab` moves between remove buttons in queue order; `Enter` / `Space` removes.
+- Focus: when a focused row leaves (removed or sent), focus moves to the button now at that position, else the last; an empty queue hands focus to the owner.
+- ARIA: a native `ol` named `Queued messages` (`ariaLabel`); each button is named `Remove from queue` and described by its text; glyphs `aria-hidden`.
+- Announcements: a hidden polite `role="status"` says `2 messages queued` on each count change after mount and `No messages queued` when empty.
+- Touch target: 44 px on coarse pointers.
 
 ## Internationalization
 
-| Key                       | English source                                      | Override prop |
-| ------------------------- | --------------------------------------------------- | ------------- |
-| `promptQueue.label`       | `Queued messages`                                   | `ariaLabel`   |
+| Key                       | English source                                                | Override prop |
+| ------------------------- | ------------------------------------------------------------- | ------------- |
+| `promptQueue.label`       | `Queued messages`                                             | `ariaLabel`   |
 | `promptQueue.title`       | `{count} message queued` / `{count} messages queued` (plural) | —             |
-| `promptQueue.empty`       | `No messages queued`                                | —             |
-| `promptQueue.remove`      | `Remove from queue`                                 | —             |
-| `promptQueue.attachments` | `{count} attachment` / `{count} attachments` (plural) | —           |
+| `promptQueue.empty`       | `No messages queued`                                          | —             |
+| `promptQueue.remove`      | `Remove from queue`                                           | —             |
+| `promptQueue.attachments` | `{count} attachment` / `{count} attachments` (plural)         | —             |
 
 - Formatting: the counts go through the catalog plural rules of the active locale.
 
 ## Right-to-left
 
-- Layout: logical utilities (`ps-*`, `pe-*`, `text-start`, `ms-auto`); the remove button sits at
-  the inline end.
-- Icons: `az-clock`, `az-paperclip` and `az-x` are not directional and are not mirrored.
-- Keyboard: Tab order follows the queue order.
-- User data: message text follows the document direction (`dir="auto"` on the text).
+- Layout: logical utilities; the remove button sits at the inline end.
+- Icons: `az-clock`, `az-paperclip`, `az-x` are not directional.
+- Keyboard: Tab follows queue order.
+- User data: message text has `dir="auto"`.
 
 ## Responsive
 
 - Container queries: none.
-- Narrow: the box takes the composer width; the text wraps and clamps at two lines.
+- Narrow: the box takes the composer width; text wraps and clamps at two lines.
 - Touch: remove buttons 44 px on coarse pointers.
-- Reflow: no horizontal scroll at 320 px and at 200 % zoom; the message text breaks long unbroken
-  strings (a URL, a hostname) with `wrap-anywhere` inside its two-line clamp.
+- Reflow: no horizontal scroll at 320 px or 200 % zoom; `wrap-anywhere` breaks long URLs inside the clamp.
 
 ## Performance
 
-- Bundle budget: see `.size-limit.json` (`prompt-queue`), 6 KB gzip, IconButton included.
+- Bundle budget: see `.size-limit.json` (`prompt-queue`), 4.7 KB gzip, IconButton included.
 - Runtime budget: static; one watcher on the item ids.
 - Heavy parts: none.
 
 ## Examples
 
-_Examples in `packages/webkit/examples/prompt-queue/`: Default (two waiting messages, one with an
-attachment, above a running PromptInput with the group gap between the two boxes, removal
-cancels by id), LongMessage (a long message clamped to
-two lines next to short ones)._
+_Examples in `packages/webkit/examples/prompt-queue/`: Default (two waiting messages, one with an attachment, above a streaming PromptInput; removal cancels by id), LongMessage (a long message clamped to two lines, a long URL wrapped)._
 
 ## Constraints — DO NOT
 

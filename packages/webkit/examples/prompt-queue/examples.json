@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "Two messages the reader sent while a response is generating, one with an attachment, waiting above the prompt input; removing one cancels it by id, and stopping the response clears the queue.",
+      "summary": "Two messages the reader sent while a response is generating, one with an attachment, waiting above the prompt input; removing one cancels it by id.",
       "file": "default.vue"
     },
     {

@@ -118,7 +118,7 @@
           v-for="(item, index) in items"
           :key="item.id"
           :data-testid="`${testId}__item`"
-          class="flex items-start gap-(--spacing-xs)"
+          class="flex items-center gap-(--spacing-xs)"
         >
           <div class="flex min-w-0 flex-1 flex-col">
             <span
