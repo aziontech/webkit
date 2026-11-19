@@ -18,10 +18,10 @@ const providers = [
 const dialog = () =>
   document.querySelector('[role="dialog"], [role="alertdialog"]') as HTMLElement | null
 
-const keyField = (root: HTMLElement) =>
+const keyField = (root: Element) =>
   root.querySelector('input[aria-label="API key"]') as HTMLInputElement
 
-const statusRegion = (root: HTMLElement) => root.querySelector('[role="status"]') as HTMLElement
+const statusRegion = (root: Element) => root.querySelector('[role="status"]') as HTMLElement
 
 describe('ai/ai-api-key', () => {
   it('renders the sample: OpenAI saved, only the masked tail, an empty key field', async () => {

@@ -11,6 +11,7 @@ import AiChat, {
 import Agent from '../../../../blocks/ai/ai-chat/variants/agent.vue'
 import Artifact from '../../../../blocks/ai/ai-chat/variants/artifact.vue'
 import Media from '../../../../blocks/ai/ai-chat/variants/media.vue'
+import type { McpAppFrameMessage } from '../../../components/ai/mcp-app-frame/mcp-app-frame.vue'
 
 describe('ai/ai-chat Artifact', () => {
   describe('wide', () => {
@@ -613,7 +614,11 @@ describe('ai/ai-chat', () => {
       props: {
         messages: [thread[0], widget],
         tools: { pick_plan: { title: 'Plan picker' } },
-        'onApp-message': (message: unknown, _part: unknown, reply: (answer: unknown) => void) => {
+        'onApp-message': (
+          message: McpAppFrameMessage,
+          _part: unknown,
+          reply: (answer: McpAppFrameMessage) => void
+        ) => {
           if (typeof message === 'object' && message && 'jsonrpc' in message) {
             reply({ jsonrpc: '2.0', id: 7, result: { ok: 'answered' } })
           } else replies.push(JSON.stringify(message))
