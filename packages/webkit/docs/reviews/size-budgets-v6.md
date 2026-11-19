@@ -513,8 +513,8 @@ Budget-raise: hero-section 12.45 KB → 12.6 KB (measured 12.53 KB): RV-H2-1, th
 Budget-raise: hero-form-section 50.7 KB → 50.8 KB (measured 50.73 KB): RV-H2-1, the same `Hero` backdrop guard classes.
 Budget-raise: tool-approval 11.65 KB → 14.2 KB (measured 13.77 KB): AI-A, editable arguments before approval (TanStack AI approvals with edited arguments): the opt-in arguments field composes `Field`, `Textarea` and `FieldError`.
 
-Budget-raise: config-provider 11.5 KB → 12.3 KB (measured 12.21 KB): AI-A to AI-K, the English catalog it bundles gains the strings of the new AI components (AgentActivity, AgentQuestion, AudioPlayer, ImageGallery, McpAppFrame, PromptQueue, SubagentCard, VideoPlayer) and the new states of ToolCall, ToolApproval, Conversation and FilePreview.
-Budget-raise: locales-pt-BR 10.7 KB → 11.55 KB (measured 11.47 KB): the same strings in Portuguese.
+Budget-raise: config-provider 11.6 KB → 12.3 KB (measured 12.21 KB): AI-A to AI-K, the English catalog it bundles gains the strings of the new AI components (AgentActivity, AgentQuestion, AudioPlayer, ImageGallery, McpAppFrame, PromptQueue, SubagentCard, VideoPlayer) and the new states of ToolCall, ToolApproval, Conversation and FilePreview.
+Budget-raise: locales-pt-BR 10.8 KB → 11.55 KB (measured 11.47 KB): the same strings in Portuguese.
 Budget-raise: locales-es 10.85 KB → 11.65 KB (measured 11.58 KB): the same strings in Spanish.
 Budget-raise: conversation 4.75 KB → 6.4 KB (measured 6.25 KB): AI-B, Load earlier messages composes `Button` (sharing `Spinner` with `IconButton`) and keeps the reader's place when older messages are prepended.
 Budget-raise: file-preview 6.9 KB → 7.6 KB (measured 7.52 KB): AI-K, the PDF viewer, base64 sources with their object-URL lifecycle, and the PDF, audio and video glyphs.
