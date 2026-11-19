@@ -2,10 +2,10 @@
 name: subagent-card
 category: ai
 structure: monolithic
-status: approved
+status: implemented
 spec_version: 1
 template: 2
-checksum: 72cf2484e055f8c0a9524f71bf5f95272fc45afb7d208894708af54357df6f76
+checksum: 83a4cef2a18f8a5a2bff82ac034755363f2b038affacce03aa5f0cba7c6115df
 created: 2026-11-19
 last_updated: 2026-11-19
 ---
@@ -80,15 +80,15 @@ _None. Exports: `"./subagent-card"`; type `SubagentCardStatus`. Composed DS comp
 
 ## Props
 
-| Prop          | Type                                                           | Default     | Required | JSDoc                                                                                                                                         |
-| ------------- | -------------------------------------------------------------- | ----------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| `name`        | `string`                                                       | —           | true     | The helper agent's identifier, shown in code font (`researcher`).                                                                             |
-| `title`       | `string`                                                       | `''`        | false    | What the helper is doing in the reader's words (`Comparing cache plans`). Empty shows only the name.                                          |
-| `description` | `string`                                                       | `''`        | false    | One summary line under the row: the latest step, the result, or the error message. Empty hides the line.                                      |
-| `status`      | `'pending' \| 'running' \| 'success' \| 'error' \| 'canceled'` | `'running'` | false    | `pending` waits on the reader, `running` is in flight, then `success`, `error` or `canceled` (stopped).                                       |
+| Prop          | Type                                                           | Default     | Required | JSDoc                                                                                                                                                   |
+| ------------- | -------------------------------------------------------------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `name`        | `string`                                                       | —           | true     | The helper agent's identifier, shown in code font (`researcher`).                                                                                       |
+| `title`       | `string`                                                       | `''`        | false    | What the helper is doing in the reader's words (`Comparing cache plans`). Empty shows only the name.                                                    |
+| `description` | `string`                                                       | `''`        | false    | One summary line under the row: the latest step, the result, or the error message. Empty hides the line.                                                |
+| `status`      | `'pending' \| 'running' \| 'success' \| 'error' \| 'canceled'` | `'running'` | false    | `pending` waits on the reader, `running` is in flight, then `success`, `error` or `canceled` (stopped).                                                 |
 | `duration`    | `number`                                                       | `undefined` | false    | Seconds the helper has worked, when the host knows it. Without it the card counts its own running time, held while `pending`, frozen once the run ends. |
-| `stoppable`   | `boolean`                                                      | `false`     | false    | Offers `Stop` while the status is `running` or `pending`.                                                                                     |
-| `defaultOpen` | `boolean`                                                      | `false`     | false    | Initial open state when uncontrolled; the helper's messages start collapsed.                                                                  |
+| `stoppable`   | `boolean`                                                      | `false`     | false    | Offers `Stop` while the status is `running` or `pending`.                                                                                               |
+| `defaultOpen` | `boolean`                                                      | `false`     | false    | Initial open state when uncontrolled; the helper's messages start collapsed.                                                                            |
 
 ## v-model
 
@@ -98,16 +98,16 @@ _None. Exports: `"./subagent-card"`; type `SubagentCardStatus`. Composed DS comp
 
 ## Events
 
-| Event  | Payload               | Notes                                                                                     |
-| ------ | --------------------- | ----------------------------------------------------------------------------------------- |
+| Event  | Payload               | Notes                                                                                  |
+| ------ | --------------------- | -------------------------------------------------------------------------------------- |
 | `stop` | `(event: MouseEvent)` | The reader pressed `Stop`; the owner stops the helper and sets `status` to `canceled`. |
 
 ## Slots
 
-| Slot      | Scope | Notes                                                                                               |
-| --------- | ----- | --------------------------------------------------------------------------------------------------- |
-| `default` | —     | The helper's own messages (`StreamingResponse`, `ToolCall`, a nested `SubagentCard`).               |
-| `input`   | —     | The task the main agent gave the helper (`CodeBlock`, `KeyValueList`, or a sentence).               |
+| Slot      | Scope | Notes                                                                                 |
+| --------- | ----- | ------------------------------------------------------------------------------------- |
+| `default` | —     | The helper's own messages (`StreamingResponse`, `ToolCall`, a nested `SubagentCard`). |
+| `input`   | —     | The task the main agent gave the helper (`CodeBlock`, `KeyValueList`, or a sentence). |
 
 ## States
 
@@ -122,22 +122,22 @@ _None. Exports: `"./subagent-card"`; type `SubagentCardStatus`. Composed DS comp
 
 ## Motion & Animations
 
-| Trigger            | Animation / Transition                                           | Token     | Reduced-motion fallback         |
-| ------------------ | ---------------------------------------------------------------- | --------- | ------------------------------- |
+| Trigger            | Animation / Transition                                          | Token     | Reduced-motion fallback         |
+| ------------------ | --------------------------------------------------------------- | --------- | ------------------------------- |
 | chevron open/close | `transition-[rotate] duration-fast-02 ease-productive-entrance` | `fast-02` | `motion-reduce:transition-none` |
-| running spinner    | `Spinner` inside `StatusIndicator`                               | component | handled by `Spinner`            |
+| running spinner    | `Spinner` inside `StatusIndicator`                              | component | handled by `Spinner`            |
 
 ## Tokens
 
-| Region        | Token                                                               |
-| ------------- | ------------------------------------------------------------------- |
-| frame         | `var(--bg-surface)`, `var(--border-default)`, `var(--shape-card)`   |
-| title         | `.text-label-sm`, `var(--text-default)`                             |
+| Region        | Token                                                                  |
+| ------------- | ---------------------------------------------------------------------- |
+| frame         | `var(--bg-surface)`, `var(--border-default)`, `var(--shape-card)`      |
+| title         | `.text-label-sm`, `var(--text-default)`                                |
 | name          | `.text-label-code-sm`, `var(--bg-surface-raised)`, `var(--text-muted)` |
-| description   | `.text-body-sm`, `var(--text-muted)`                                |
-| elapsed       | `.text-label-sm`, `tabular-nums`, `var(--text-muted)`               |
-| section label | `.text-label-sm`, `var(--text-muted)`                               |
-| padding       | `var(--spacing-sm)`, `var(--spacing-xs)`                            |
+| description   | `.text-body-sm`, `var(--text-muted)`                                   |
+| elapsed       | `.text-label-sm`, `tabular-nums`, `var(--text-muted)`                  |
+| section label | `.text-label-sm`, `var(--text-muted)`                                  |
+| padding       | `var(--spacing-sm)`, `var(--spacing-xs)`                               |
 
 ## Theme gaps
 
@@ -155,17 +155,17 @@ _None._
 
 ## Internationalization
 
-| Key                         | English source     | Override prop |
-| --------------------------- | ------------------ | ------------- |
-| `subagentCard.pending`      | `Waiting`          | —             |
-| `subagentCard.running`      | `Running`          | —             |
-| `subagentCard.success`      | `Completed`        | —             |
-| `subagentCard.error`        | `Failed`           | —             |
-| `subagentCard.canceled`     | `Stopped`          | —             |
-| `subagentCard.stop`         | `Stop`             | —             |
-| `subagentCard.stopAgent`    | `Stop {name}`      | —             |
-| `subagentCard.input`        | `Task`             | —             |
-| `subagentCard.activity`     | `Activity`         | —             |
+| Key                      | English source | Override prop |
+| ------------------------ | -------------- | ------------- |
+| `subagentCard.pending`   | `Waiting`      | —             |
+| `subagentCard.running`   | `Running`      | —             |
+| `subagentCard.success`   | `Completed`    | —             |
+| `subagentCard.error`     | `Failed`       | —             |
+| `subagentCard.canceled`  | `Stopped`      | —             |
+| `subagentCard.stop`      | `Stop`         | —             |
+| `subagentCard.stopAgent` | `Stop {name}`  | —             |
+| `subagentCard.input`     | `Task`         | —             |
+| `subagentCard.activity`  | `Activity`     | —             |
 
 - Formatting: elapsed time through `Intl.NumberFormat` with `style: 'unit'` (`second`, `minute`, `hour`, `unitDisplay: 'narrow'`) in the active locale: `12s`, `2m 5s`, `1h 2m`.
 
@@ -179,7 +179,7 @@ _None._
 ## Responsive
 
 - Container queries: none.
-- Narrow: title and name truncate; status, elapsed time and `Stop` stay visible; the description wraps.
+- Narrow: the elapsed time, status and `Stop` keep their size and wrap to a second line, aligned to the end, when the row cannot give the name 12rem; title and name truncate; the description wraps.
 - Touch: 40 px row; the toggle reaches 44 px on coarse pointers (`pointer-coarse:min-h-11`) and `Stop` uses `Button`'s own 44 px coarse-pointer hit area. Hover-only affordances: none.
 - Reflow: slot content reflows inside the panel; code in it scrolls inside its block.
 

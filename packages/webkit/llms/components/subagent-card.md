@@ -99,24 +99,24 @@ _None. Exports: `"./subagent-card"`; type `SubagentCardStatus`. Composed DS comp
 
 ## Internationalization
 
-| Key                         | English source     | Override prop |
-| --------------------------- | ------------------ | ------------- |
-| `subagentCard.pending`      | `Waiting`          | —             |
-| `subagentCard.running`      | `Running`          | —             |
-| `subagentCard.success`      | `Completed`        | —             |
-| `subagentCard.error`        | `Failed`           | —             |
-| `subagentCard.canceled`     | `Stopped`          | —             |
-| `subagentCard.stop`         | `Stop`             | —             |
-| `subagentCard.stopAgent`    | `Stop {name}`      | —             |
-| `subagentCard.input`        | `Task`             | —             |
-| `subagentCard.activity`     | `Activity`         | —             |
+| Key                      | English source | Override prop |
+| ------------------------ | -------------- | ------------- |
+| `subagentCard.pending`   | `Waiting`      | —             |
+| `subagentCard.running`   | `Running`      | —             |
+| `subagentCard.success`   | `Completed`    | —             |
+| `subagentCard.error`     | `Failed`       | —             |
+| `subagentCard.canceled`  | `Stopped`      | —             |
+| `subagentCard.stop`      | `Stop`         | —             |
+| `subagentCard.stopAgent` | `Stop {name}`  | —             |
+| `subagentCard.input`     | `Task`         | —             |
+| `subagentCard.activity`  | `Activity`     | —             |
 
 - Formatting: elapsed time through `Intl.NumberFormat` with `style: 'unit'` (`second`, `minute`, `hour`, `unitDisplay: 'narrow'`) in the active locale: `12s`, `2m 5s`, `1h 2m`.
 
 ## Responsive
 
 - Container queries: none.
-- Narrow: title and name truncate; status, elapsed time and `Stop` stay visible; the description wraps.
+- Narrow: the elapsed time, status and `Stop` keep their size and wrap to a second line, aligned to the end, when the row cannot give the name 12rem; title and name truncate; the description wraps.
 - Touch: 40 px row; the toggle reaches 44 px on coarse pointers (`pointer-coarse:min-h-11`) and `Stop` uses `Button`'s own 44 px coarse-pointer hit area. Hover-only affordances: none.
 - Reflow: slot content reflows inside the panel; code in it scrolls inside its block.
 

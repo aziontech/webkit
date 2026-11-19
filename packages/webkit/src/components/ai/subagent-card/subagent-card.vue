@@ -175,10 +175,10 @@
     :data-status="status"
     :data-state="expandable() ? (isOpen ? 'open' : 'closed') : undefined"
     :tabindex="expandable() ? undefined : -1"
-    class="flex w-full flex-col rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) focus-visible:outline-none"
+    class="flex w-full flex-col rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
   >
     <div class="flex flex-col gap-(--spacing-2xs) px-(--spacing-sm) py-(--spacing-xs)">
-      <div class="flex min-h-10 items-center gap-(--spacing-sm)">
+      <div class="flex min-h-10 flex-wrap items-center gap-x-(--spacing-sm) gap-y-(--spacing-2xs)">
         <button
           v-if="expandable()"
           ref="toggleEl"
@@ -186,7 +186,7 @@
           :aria-expanded="isOpen ? 'true' : 'false'"
           :aria-controls="panelId"
           :data-testid="`${testId}__trigger`"
-          class="flex min-w-0 flex-1 items-center gap-(--spacing-xs) self-stretch rounded-(--shape-control) text-start pointer-coarse:min-h-11 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+          class="flex min-h-10 min-w-0 flex-1 basis-48 items-center gap-(--spacing-xs) rounded-(--shape-control) text-start pointer-coarse:min-h-11 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
           @click="toggle"
         >
           <i
@@ -212,7 +212,7 @@
         </button>
         <div
           v-else
-          class="flex min-w-0 flex-1 items-center gap-(--spacing-xs)"
+          class="flex min-h-10 min-w-0 flex-1 basis-48 items-center gap-(--spacing-xs)"
         >
           <i
             class="az az-git-fork shrink-0 text-(--text-muted)"
@@ -230,39 +230,41 @@
             >{{ name }}</code
           >
         </div>
-        <span
-          v-if="elapsed"
-          :data-testid="`${testId}__elapsed`"
-          class="shrink-0 text-label-sm tabular-nums text-(--text-muted)"
-        >
-          {{ elapsed }}
-        </span>
-        <span
-          role="status"
-          class="flex shrink-0"
-        >
-          <StatusIndicator
-            :severity="severity"
-            :loading="status === 'running'"
-            :label="t(`subagentCard.${status}`)"
-            :data-testid="`${testId}__status`"
-          />
-        </span>
-        <span
-          v-if="showStop"
-          ref="stopEl"
-          class="flex shrink-0"
-        >
-          <Button
-            :label="t('subagentCard.stop')"
-            :aria-label="t('subagentCard.stopAgent', { name })"
-            icon="az az-stop"
-            variant="ghost"
-            size="small"
-            :data-testid="`${testId}__stop`"
-            @click="(event: MouseEvent) => emit('stop', event)"
-          />
-        </span>
+        <div class="ms-auto flex shrink-0 items-center gap-(--spacing-sm)">
+          <span
+            v-if="elapsed"
+            :data-testid="`${testId}__elapsed`"
+            class="shrink-0 text-label-sm tabular-nums text-(--text-muted)"
+          >
+            {{ elapsed }}
+          </span>
+          <span
+            role="status"
+            class="flex shrink-0"
+          >
+            <StatusIndicator
+              :severity="severity"
+              :loading="status === 'running'"
+              :label="t(`subagentCard.${status}`)"
+              :data-testid="`${testId}__status`"
+            />
+          </span>
+          <span
+            v-if="showStop"
+            ref="stopEl"
+            class="flex shrink-0"
+          >
+            <Button
+              :label="t('subagentCard.stop')"
+              :aria-label="t('subagentCard.stopAgent', { name })"
+              icon="az az-stop"
+              variant="ghost"
+              size="small"
+              :data-testid="`${testId}__stop`"
+              @click="(event: MouseEvent) => emit('stop', event)"
+            />
+          </span>
+        </div>
       </div>
       <p
         v-if="description"
