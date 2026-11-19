@@ -107,6 +107,17 @@ test.describe('demo flows', () => {
     await page.goto(`${DEMOS}/assistant`)
     await page.getByRole('textbox').first().fill('How do I purge one URL?')
     await page.keyboard.press('Enter')
-    await expect(page.getByText('from the products menu')).toBeVisible({ timeout: 15_000 })
+    await expect(page.getByText('from the products menu').first()).toBeVisible({ timeout: 15_000 })
+  })
+
+  test('assistant asks before it deploys and reports the result', async ({ page }) => {
+    await page.goto(`${DEMOS}/assistant`)
+    await page.getByRole('textbox').first().fill('Deploy storefront to production')
+    await page.keyboard.press('Enter')
+    const deploy = page.getByRole('button', { name: 'Deploy', exact: true })
+    await expect(deploy).toBeEnabled({ timeout: 15_000 })
+    await deploy.click()
+    await expect(page.getByText('Approved', { exact: true })).toBeVisible()
+    await expect(page.getByText('is live on production').first()).toBeVisible({ timeout: 15_000 })
   })
 })

@@ -1,12 +1,11 @@
 <script setup lang="ts">
   import AiActionApproval from '../ai-action-approval.vue'
-  import { sampleOutcomes } from '../sample'
+  import { sampleApprovedMessages, sampleTools } from '../sample'
 </script>
 
 <template>
   <AiActionApproval
-    decision="approved"
-    run="success"
-    :outcome="sampleOutcomes.approved"
+    :messages="sampleApprovedMessages"
+    :tools="sampleTools"
   />
 </template>

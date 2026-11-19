@@ -31961,7 +31961,7 @@
    "title": "Blocks/Ai/AiActionApproval",
    "source": "blocks/ai/ai-action-approval/ai-action-approval.vue",
    "surface": "app",
-   "summary": "A user-authorized action inside a generative AI conversation: the reader asks the assistant to deploy, the assistant records the read-only call it made (`ToolCall`), explains in `StreamingResponse` and proposes the deployment as an `ToolApproval` card whose title names the command in code, whose body shows the exact command in a `CodeBlock`, and whose Deny and Deploy buttons decide. Approving turns the card into Approved and adds a running `ToolCall` that completes, followed by a `ChatMessage` that reports what changed with Copy (`CopyButton`); denying or letting the request expire records the outcome on the card and the assistant says nothing ran. The `PromptInput` shows Stop while the approved action runs. Built from `Conversation`, `ChatMessage`, `ToolCall`, `StreamingResponse`, `ToolApproval`, `CodeBlock`, `CopyButton` and `PromptInput`. A page body for ConsoleLayout that fills its content region.",
+   "summary": "A user-authorized action inside a generative AI conversation, from the messages of TanStack AI's `useChat`: the read-only call shows as a completed `ToolCall`, the explanation in `StreamingResponse`, and the call that needs approval as a `ToolApproval` card with its input in a `CodeBlock`. Deploy or Deny resolves the `useChat` interrupt; approved, the call runs under the card and the assistant reports what changed, with Copy and Retry after a failure. Built from `Conversation`, `ChatMessage`, `ToolCall`, `StreamingResponse`, `ToolApproval`, `CodeBlock`, `CopyButton`, `Button` and `PromptInput`. A page body for ConsoleLayout that fills its content region.",
    "intents": [
     "ai action approval",
     "approve ai action",
@@ -31992,7 +31992,8 @@
     "PromptInput",
     "StreamingResponse",
     "ToolApproval",
-    "ToolCall"
+    "ToolCall",
+    "use-locale"
    ],
    "imports": [
     "@aziontech/webkit/button",
@@ -32003,7 +32004,8 @@
     "@aziontech/webkit/prompt-input-root",
     "@aziontech/webkit/streaming-response",
     "@aziontech/webkit/tool-approval",
-    "@aziontech/webkit/tool-call"
+    "@aziontech/webkit/tool-call",
+    "@aziontech/webkit/use-locale"
    ],
    "primary": "Pending",
    "guidelinesSummary": "The moment an assistant needs permission. The reader asked for something that changes their account — a deployment, a purge, a deletion — and the assistant stops before doing it: it says what it found, shows exactly what will run, and waits for Approve or Deny. The decision stays in the thread as text, and the assistant reports what happened next, so the conversation is also the record of what ran and who allowed it. It is a page body for `ConsoleLayout`: it fills the layout's content region (`grow basis-0 min-h-0`, never `h-dvh`), so only the log scrolls, and the layout owns the rail, the header and the `main`.",
@@ -32018,7 +32020,7 @@
      "name": "Denied"
     },
     {
-     "name": "Expired"
+     "name": "Running"
     },
     {
      "name": "Error"
@@ -32031,7 +32033,7 @@
    "title": "Blocks/Ai/AiChat",
    "source": "blocks/ai/ai-chat/ai-chat.vue",
    "surface": "app",
-   "summary": "The full-page generative AI assistant: a header with the assistant's name, a Preview `Tag` and New chat; before the first message an `EmptyState` that says what the assistant knows, over vertical support prompts from `SuggestionGroup`; then a `Conversation` where the reader's prompts sit at the inline end and each response is a `ChatMessage` that goes pending (loading text), thinking (`Reasoning`), streaming (`StreamingResponse` with numbered citations) and complete (collapsed `Sources`, Copy, Regenerate and the feedback thumbs), followed by follow-up questions; a `PromptInput` pinned under the log with a 4,000-character limit, Stop while a response is generated, and the disclaimer under it. The primary state is the empty assistant; sending a support prompt runs the whole response cycle. Built from `ChatMessage`, `Conversation`, `PromptInput`, `StreamingResponse`, `Reasoning`, `Sources`, `SuggestionGroup`, `EmptyState`, `Tag`, `Button`, `IconButton` and `CopyButton`. A page body for ConsoleLayout that fills its content region.",
+   "summary": "The full-page generative AI assistant: a header with the assistant's name, a Preview `Tag` and New chat; before the first message an `EmptyState` that says what the assistant knows, over vertical support prompts from `SuggestionGroup`; then a `Conversation` where the reader's prompts sit at the inline end and each response is a `ChatMessage` that goes pending (loading text), thinking (`Reasoning`), streaming (`StreamingResponse` with numbered citations) and complete (collapsed `Sources`, Copy, Regenerate and the feedback thumbs), followed by follow-up questions; a `PromptInput` pinned under the log with a 4,000-character limit, Stop while a response is generated, and the disclaimer under it. The primary state is the empty assistant; sending a support prompt runs the whole response cycle. Built from `ChatMessage`, `Conversation`, `PromptInput`, `StreamingResponse`, `Reasoning`, `Sources`, `SuggestionGroup`, `EmptyState`, `Tag`, `Button`, `IconButton` and `CopyButton`. Takes the messages of TanStack AI's `useChat` as they are. A page body for ConsoleLayout that fills its content region.",
    "intents": [
     "ai chat",
     "ai assistant",
@@ -32057,7 +32059,9 @@
     "code canvas",
     "canvas de artefato",
     "artefato gerado",
-    "full page chat"
+    "full page chat",
+    "tanstack ai",
+    "usechat"
    ],
    "skills": [
     "webkit-ai-surfaces",
@@ -32083,7 +32087,10 @@
     "Sources",
     "StreamingResponse",
     "SuggestionGroup",
-    "Tag"
+    "Tag",
+    "ToolApproval",
+    "ToolCall",
+    "use-locale"
    ],
    "imports": [
     "@aziontech/webkit/artifact-canvas",
@@ -32104,7 +32111,10 @@
     "@aziontech/webkit/sources",
     "@aziontech/webkit/streaming-response",
     "@aziontech/webkit/suggestion-group",
-    "@aziontech/webkit/tag"
+    "@aziontech/webkit/tag",
+    "@aziontech/webkit/tool-approval",
+    "@aziontech/webkit/tool-call",
+    "@aziontech/webkit/use-locale"
    ],
    "primary": "Empty",
    "guidelinesSummary": "A full page where a person talks with the generative AI assistant about their account: they ask in their own words, watch the response arrive, check where it came from, and keep going with a follow-up or a new question. The page is the conversation; everything else (header, composer) stays still while only the log scrolls. Use it as the assistant's home; on a resource page, open the same conversation in a drawer with `ai/ai-chat-drawer`. It is a page body for `ConsoleLayout`: it fills the layout's content region (`grow basis-0 min-h-0`, never `h-dvh`), so only the log scrolls, and the layout owns the rail, the header and the `main`.",
@@ -32129,7 +32139,7 @@
    "title": "Blocks/Ai/AiChatDrawer",
    "source": "blocks/ai/ai-chat-drawer/ai-chat-drawer.vue",
    "surface": "app",
-   "summary": "The generative AI assistant in a right-side drawer over a resource page, so the reader asks about what they are looking at without leaving it: a workload page (`PageHeader` with an Agent `Button`, the name the console header gives the assistant, a `Card` of `KeyValueList` with a `StatusIndicator`) beside a medium `Drawer` with `:modal=\"false\"` (no overlay), so the page stays undimmed and readable whose `PanelHeader` holds `DrawerTitle`, a Preview `Tag`, New chat and the drawer's own close button. Inside, an `EmptyState` with support prompts about this workload (`SuggestionGroup`), then a `Conversation` with every message at the inline start, responses that think (`Reasoning`), stream (`StreamingResponse`), cite (`Sources`) and carry Copy, Regenerate and feedback, and a `PromptInput` pinned at the foot with the disclaimer. Built from `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `ChatMessage`, `Conversation`, `PromptInput`, `IconButton` and `CopyButton`. A page body for ConsoleLayout, rendered in its default slot; inside ConsoleLayout on a wide screen the same conversation can go in the layout's tools region (`v-model:tools-open`) instead.",
+   "summary": "The generative AI assistant in a right-side drawer over a resource page, so the reader asks about what they are looking at without leaving it: a workload page (`PageHeader` with an Agent `Button`, the name the console header gives the assistant, a `Card` of `KeyValueList` with a `StatusIndicator`) beside a medium `Drawer` with `:modal=\"false\"` (no overlay), so the page stays undimmed and readable whose `PanelHeader` holds `DrawerTitle`, a Preview `Tag`, New chat and the drawer's own close button. Inside, an `EmptyState` with support prompts about this workload (`SuggestionGroup`), then a `Conversation` with every message at the inline start, responses that think (`Reasoning`), stream (`StreamingResponse`), cite (`Sources`) and carry Copy, Regenerate and feedback, and a `PromptInput` pinned at the foot with the disclaimer. Built from `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `ChatMessage`, `Conversation`, `PromptInput`, `IconButton` and `CopyButton`. Takes the messages of TanStack AI's `useChat` as they are. A page body for ConsoleLayout, rendered in its default slot; inside ConsoleLayout on a wide screen the same conversation can go in the layout's tools region (`v-model:tools-open`) instead.",
    "intents": [
     "ai assistant drawer",
     "ask ai about this page",
@@ -32144,7 +32154,9 @@
     "painel lateral de ia",
     "asistente de ia en panel lateral",
     "ask about this page",
-    "assistant side panel"
+    "assistant side panel",
+    "tanstack ai",
+    "usechat"
    ],
    "skills": [
     "webkit-ai-surfaces",
@@ -32155,6 +32167,7 @@
     "Button",
     "Card",
     "ChatMessage",
+    "CodeBlock",
     "Conversation",
     "CopyButton",
     "DrawerContent",
@@ -32171,12 +32184,16 @@
     "StatusIndicator",
     "StreamingResponse",
     "SuggestionGroup",
-    "Tag"
+    "Tag",
+    "ToolApproval",
+    "ToolCall",
+    "use-locale"
    ],
    "imports": [
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
     "@aziontech/webkit/chat-message",
+    "@aziontech/webkit/code-block",
     "@aziontech/webkit/conversation",
     "@aziontech/webkit/copy-button",
     "@aziontech/webkit/drawer-content",
@@ -32193,7 +32210,10 @@
     "@aziontech/webkit/status-indicator",
     "@aziontech/webkit/streaming-response",
     "@aziontech/webkit/suggestion-group",
-    "@aziontech/webkit/tag"
+    "@aziontech/webkit/tag",
+    "@aziontech/webkit/tool-approval",
+    "@aziontech/webkit/tool-call",
+    "@aziontech/webkit/use-locale"
    ],
    "primary": "Empty",
    "guidelinesSummary": "The generative AI assistant beside the work: the reader is on a resource page — here a workload whose error rate is up — and opens the assistant in a drawer to ask about what they see, without losing the page. The drawer carries the same conversation as the full assistant page, laid out for a narrow column: every message at the inline start, a shorter composer, and support prompts written about this resource. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.",

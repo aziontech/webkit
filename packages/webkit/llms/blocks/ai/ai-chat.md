@@ -1,16 +1,16 @@
 # AiChat (`ai/ai-chat`)
 
-> The full-page generative AI assistant: a header with the assistant's name, a Preview `Tag` and New chat; before the first message an `EmptyState` that says what the assistant knows, over vertical support prompts from `SuggestionGroup`; then a `Conversation` where the reader's prompts sit at the inline end and each response is a `ChatMessage` that goes pending (loading text), thinking (`Reasoning`), streaming (`StreamingResponse` with numbered citations) and complete (collapsed `Sources`, Copy, Regenerate and the feedback thumbs), followed by follow-up questions; a `PromptInput` pinned under the log with a 4,000-character limit, Stop while a response is generated, and the disclaimer under it. The primary state is the empty assistant; sending a support prompt runs the whole response cycle. Built from `ChatMessage`, `Conversation`, `PromptInput`, `StreamingResponse`, `Reasoning`, `Sources`, `SuggestionGroup`, `EmptyState`, `Tag`, `Button`, `IconButton` and `CopyButton`. A page body for ConsoleLayout that fills its content region.
+> The full-page generative AI assistant: a header with the assistant's name, a Preview `Tag` and New chat; before the first message an `EmptyState` that says what the assistant knows, over vertical support prompts from `SuggestionGroup`; then a `Conversation` where the reader's prompts sit at the inline end and each response is a `ChatMessage` that goes pending (loading text), thinking (`Reasoning`), streaming (`StreamingResponse` with numbered citations) and complete (collapsed `Sources`, Copy, Regenerate and the feedback thumbs), followed by follow-up questions; a `PromptInput` pinned under the log with a 4,000-character limit, Stop while a response is generated, and the disclaimer under it. The primary state is the empty assistant; sending a support prompt runs the whole response cycle. Built from `ChatMessage`, `Conversation`, `PromptInput`, `StreamingResponse`, `Reasoning`, `Sources`, `SuggestionGroup`, `EmptyState`, `Tag`, `Button`, `IconButton` and `CopyButton`. Takes the messages of TanStack AI's `useChat` as they are. A page body for ConsoleLayout that fills its content region.
 
 - Surface: app
 - Source: `blocks/ai/ai-chat/ai-chat.vue` in `@aziontech/webkit`
 - MCP: `get_block("ai/ai-chat")`
-- Components: [ArtifactCanvas](../../components/artifact-canvas.md), [ArtifactPreview](../../components/artifact-preview.md), [Button](../../components/button.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [Conversation](../../components/conversation.md), [CopyButton](../../components/copy-button.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [PromptInput](../../components/prompt-input.md), [Reasoning](../../components/reasoning.md), [Resizable](../../components/resizable.md), [Sources](../../components/sources.md), [StreamingResponse](../../components/streaming-response.md), [SuggestionGroup](../../components/suggestion-group.md), [Tag](../../components/tag.md)
+- Components: [ArtifactCanvas](../../components/artifact-canvas.md), [ArtifactPreview](../../components/artifact-preview.md), [Button](../../components/button.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [Conversation](../../components/conversation.md), [CopyButton](../../components/copy-button.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [PromptInput](../../components/prompt-input.md), [Reasoning](../../components/reasoning.md), [Resizable](../../components/resizable.md), [Sources](../../components/sources.md), [StreamingResponse](../../components/streaming-response.md), [SuggestionGroup](../../components/suggestion-group.md), [Tag](../../components/tag.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), `use-locale`
 - Skills: `webkit-ai-surfaces`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
 
-ai chat; ai assistant; chatbot; copilot; chat with ai; generative ai chat; assistant page; ask ai; llm chat; conversational ui; prompt and response; streaming response; chat de ia; assistente de ia; assistente virtual; conversa com ia; chat con ia; asistente de ia; artifact; artifact canvas; generated file; code canvas; canvas de artefato; artefato gerado; full page chat
+ai chat; ai assistant; chatbot; copilot; chat with ai; generative ai chat; assistant page; ask ai; llm chat; conversational ui; prompt and response; streaming response; chat de ia; assistente de ia; assistente virtual; conversa com ia; chat con ia; asistente de ia; artifact; artifact canvas; generated file; code canvas; canvas de artefato; artefato gerado; full page chat; tanstack ai; usechat
 
 A full page where a person talks with the generative AI assistant about their account: they ask in their own words, watch the response arrive, check where it came from, and keep going with a follow-up or a new question. The page is the conversation; everything else (header, composer) stays still while only the log scrolls. Use it as the assistant's home; on a resource page, open the same conversation in a drawer with `ai/ai-chat-drawer`. It is a page body for `ConsoleLayout`: it fills the layout's content region (`grow basis-0 min-h-0`, never `h-dvh`), so only the log scrolls, and the layout owns the rail, the header and the `main`.
 
@@ -72,50 +72,75 @@ Variant Artifact only; it adds `ArtifactPreview`, `ArtifactCanvas`, `Resizable`,
 
 When an answer produces something longer than a message (a query, a configuration, a table), the message carries an `ArtifactPreview` with Open and the whole artifact opens in an `ArtifactCanvas` beside the conversation: a `Resizable.Pane` (`min` 320, `max` 880) after a `Resizable.Handle` named `Resize the artifact`, so the reader widens or narrows it with the pointer or the arrow keys. Under the md breakpoint the pane and handle are hidden and Open shows the same canvas in a full-height `Drawer`. Every follow-up that changes the artifact adds a version: the canvas moves to it, `streaming` locks the pager and marks the body busy while it is written, and each message's preview names its version (`Version 3`) and opens that one. Open moves focus to the canvas title; Close (or Escape inside the canvas) hides it and returns focus to the Open that showed it; `Show artifact` in the header brings a closed canvas back.
 
+### K. Tool calls — `ToolCall`, `ToolApproval`, `CodeBlock`
+
+A `tool-call` part draws in its place in the response as a `ToolCall` with the tool name in code, the `title` the `tools` prop gives it, and its input and output in a `CodeBlock` when opened; it reads pending, running, completed, failed or denied from the call's `state` and its `tool-result`. A call that needs approval draws a `ToolApproval` card first, with the question, verb and danger variant from `tools` and the call's input in a `CodeBlock`; Deny and the approve button resolve the matching `useChat` interrupt, and an approved call runs as a `ToolCall` under the card. The card stays busy until the run that asked for it ends. See `ai/ai-action-approval` for the whole approval flow.
+
 ## Data
 
-The block takes the conversation through props and emits every action; it calls no model. `AiChatMessage`, `AiChatProps` and `AiChatFeedback` are exported from `ai-chat.vue`, and `sample.ts` holds the starter prompts the empty state renders when `suggestions` is left out, plus the sample threads the variants pass. The draft in the composer stays local.
+The block draws a conversation in the message shape of TanStack AI: each message has an `id`, a `role` and its `parts` in order (`text`, `thinking`, `tool-call`, `tool-result`), so the values `useChat` from `@tanstack/ai-vue` returns go straight into its props, with no conversion. The block calls no model and depends on no AI library; `messages.ts` declares the same shape itself (`AiChatMessage`, `AiChatPart`, `AiChatTool`, `AiChatInterrupt`, re-exported from `ai-chat.vue`), so any source that produces it works. Parts it does not draw (images, audio) are skipped. `sample.ts` holds the sample threads the variants pass. The draft in the composer stays local.
 
-| Prop          | Type                    | What it does                                                                                                                                |
-| ------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| `messages`    | `AiChatMessage[]`       | The conversation, oldest first: the reader's text, the assistant's Markdown with its reasoning and sources. Empty, the empty state renders. |
-| `suggestions` | `SuggestionGroupItem[]` | The starter prompts under the empty state.                                                                                                  |
-| `followUps`   | `SuggestionGroupItem[]` | Follow-up questions under the last finished answer.                                                                                         |
-| `loading`     | `boolean`               | The assistant is answering: the last assistant message thinks while its `content` is empty, then streams; the composer shows Stop.          |
-| `error`       | `string`                | Why the last answer failed, shown on it with Try again; its partial text stays.                                                             |
+What TanStack AI does not carry, the app adds in `metadata`: `sources` (the documents the response cites, numbered in order), `reasoningSeconds` (left out, the block measures the thinking time) and `stopped` (the block also marks the response that Stop ended). A message's time is its `createdAt`, formatted in the reader's locale.
 
-| Event      | Payload                | When                                                                                      |
-| ---------- | ---------------------- | ----------------------------------------------------------------------------------------- |
-| `send`     | `(event, text)`        | The composer, a starter prompt or a follow-up; append the reader's message and the reply. |
-| `stop`     | `(event)`              | Stop while the answer streams; keep the text and set `stopped` on it.                     |
-| `retry`    | `(event, message)`     | Try again on a failed answer or Regenerate response.                                      |
-| `new-chat` | `(event)`              | New chat; clear `messages`.                                                               |
-| `feedback` | `({ message, value })` | The reader rated an answer.                                                               |
+| Prop          | Type                         | What it does                                                                                                                                             |
+| ------------- | ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `messages`    | `AiChatMessage[]`            | The conversation, oldest first, as `useChat` returns it. Empty, the empty state renders.                                                                 |
+| `suggestions` | `SuggestionGroupItem[]`      | The starter prompts under the empty state.                                                                                                               |
+| `followUps`   | `SuggestionGroupItem[]`      | Follow-up questions under the last finished response.                                                                                                    |
+| `loading`     | `boolean`                    | `isLoading` from `useChat`: the last response thinks, then streams, and the composer shows Stop.                                                         |
+| `error`       | `string \| Error`            | `error` from `useChat` shows the standard sentence on the last response with Try again; a string shows that sentence instead.                            |
+| `tools`       | `Record<string, AiChatTool>` | How each tool reads, by name: `title` for the call, `question`, `description`, `approveLabel`, `variant` and `confirmationPhrase` for its approval card. |
+| `interrupts`  | `interrupts` of `useChat`    | The pending approvals; the approve button and Deny resolve the one whose `toolCallId` matches the call.                                                  |
 
-To go live, render the block from a page that owns the conversation and the model call:
+| Event      | Payload                | When                                                                                       |
+| ---------- | ---------------------- | ------------------------------------------------------------------------------------------ |
+| `send`     | `(event, text)`        | The composer, a starter prompt or a follow-up: call `sendMessage(text)`.                   |
+| `stop`     | `(event)`              | Stop while the response streams: call `stop()`. The block marks the stopped response.      |
+| `retry`    | `(event, message)`     | Try again or Regenerate response: call `reload()`.                                         |
+| `new-chat` | `(event)`              | New chat: call `clear()`.                                                                  |
+| `feedback` | `({ message, value })` | The reader rated a response.                                                               |
+| `approve`  | `(event, call)`        | The approve button on an approval card; the block already resolved the matching interrupt. |
+| `deny`     | `(event, call)`        | Deny on an approval card; the block already resolved the matching interrupt.               |
+
+To go live, install `@tanstack/ai`, `@tanstack/ai-vue` and the adapter of your model (`@tanstack/ai-anthropic`, `@tanstack/ai-openai`…), add a server route that streams the model, and bind `useChat` to the block:
+
+```ts
+// server: POST /api/chat
+import { chat, chatParamsFromRequest, toServerSentEventsResponse } from '@tanstack/ai'
+
+export async function POST(request: Request) {
+  const params = await chatParamsFromRequest(request)
+  return toServerSentEventsResponse(chat({ adapter: yourModelAdapter, ...params, tools: [] }))
+}
+```
 
 ```vue
 <script setup lang="ts">
+  import { fetchServerSentEvents, useChat } from '@tanstack/ai-vue'
+
   import AiChat from './ai-chat.vue'
 
-  const { messages, streaming, error, send, stop, retry, reset } = useAssistant()
-  const failed = 'The connection was interrupted before the response finished.'
+  const { messages, isLoading, error, interrupts, sendMessage, stop, reload, clear } = useChat({
+    connection: fetchServerSentEvents('/api/chat'),
+    threadId: 'assistant'
+  })
 </script>
 
 <template>
   <AiChat
     :messages="messages"
-    :loading="streaming"
-    :error="error ? failed : ''"
-    @send="(_event, text) => send(text)"
-    @stop="stop"
-    @retry="(_event, message) => retry(message)"
-    @new-chat="reset"
+    :loading="isLoading"
+    :error="error"
+    :interrupts="interrupts"
+    @send="(_event, text) => sendMessage(text)"
+    @stop="stop()"
+    @retry="reload()"
+    @new-chat="clear()"
   />
 </template>
 ```
 
-Then delete `sample.ts` and its import.
+A tool that needs approval is declared once with `toolDefinition({ name, inputSchema, needsApproval: true })`, run on the server with `.server(...)` and passed to `useChat({ tools: [definition] })` too, so the client can match the approval request to the call. Then delete `sample.ts` and its import. `apps/demos` runs this block on `useChat` with TanStack AI's `fakeText` model (`src/lib/assistant-model.ts`), no server and no key.
 
 ## Do
 
@@ -162,7 +187,8 @@ Then delete `sample.ts` and its import.
 
 - Empty: `messages` left out or `[]`, with the empty state and four support prompts; selecting one emits `send`.
 - Streaming: `loading` with the last assistant message part-way written: its caret, the busy region and Stop in the composer.
-- Error: `error` set: the last answer keeps its partial text, with the error line and Try again.
+- Error: `error` set: the last response keeps its partial text, with the error line and Try again; with no response yet, a pending response shows the error.
+- Tools: a `tool-call` part draws as a `ToolCall` titled from `tools`, its input and output in code; one with `approval` draws the `ToolApproval` card first (see `ai/ai-action-approval`).
 - Artifact: two turns that wrote top-orders.sql in two versions, the canvas open beside them on version 2; a follow-up fills the composer.
 - LongThread: six earlier turns as `messages` that overflow the log, opened on the newest response, with `followUps`.
 
@@ -193,6 +219,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
     type ChatMessageFeedbackValue,
     type ChatMessageStatus
   } from '@aziontech/webkit/chat-message'
+  import CodeBlock from '@aziontech/webkit/code-block'
   import Conversation from '@aziontech/webkit/conversation'
   import CopyButton from '@aziontech/webkit/copy-button'
   import EmptyState from '@aziontech/webkit/empty-state'
@@ -200,64 +227,79 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
   import type { PromptInputStatus } from '@aziontech/webkit/prompt-input'
   import PromptInput from '@aziontech/webkit/prompt-input-root'
   import Reasoning from '@aziontech/webkit/reasoning'
-  import Sources, { type SourcesItem } from '@aziontech/webkit/sources'
+  import Sources from '@aziontech/webkit/sources'
   import StreamingResponse from '@aziontech/webkit/streaming-response'
   import SuggestionGroup, { type SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
   import Tag from '@aziontech/webkit/tag'
+  import ToolApproval from '@aziontech/webkit/tool-approval'
+  import ToolCall from '@aziontech/webkit/tool-call'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, ref, watch } from 'vue'
 
+  import {
+    type AiChatInterrupt,
+    type AiChatMessage,
+    type AiChatTool,
+    type AiChatToolCallPart,
+    approvalOf,
+    hasText,
+    json,
+    needsApproval,
+    resolveInterrupt,
+    segmentsOf,
+    textOf,
+    toolStatusOf
+  } from './messages'
   import { sampleSuggestions } from './sample'
 
-  /** Who wrote a message. */
-  export type AiChatAuthor = 'user' | 'assistant'
+  export type {
+    AiChatInterrupt,
+    AiChatMessage,
+    AiChatMessageMetadata,
+    AiChatOtherPart,
+    AiChatPart,
+    AiChatRole,
+    AiChatTextPart,
+    AiChatThinkingPart,
+    AiChatTool,
+    AiChatToolCallPart,
+    AiChatToolCallState,
+    AiChatToolResultPart
+  } from './messages'
 
-  /** One message of the conversation. */
-  export interface AiChatMessage {
-    /** Stable key. */
-    id: string
-    /** The reader or the assistant. */
-    from: AiChatAuthor
-    /** Plain text for the reader; Markdown for the assistant, as much as has arrived. */
-    content: string
-    /** When it was written, already formatted. */
-    time: string
-    /** How the assistant reached the answer, in the collapsible Reasoning. */
-    reasoning?: string
-    /** How long the assistant thought, in seconds, shown once it answers. */
-    reasoningSeconds?: number
-    /** The documents the answer cites, numbered in order. */
-    sources?: SourcesItem[]
-    /** The reader stopped this response; what was written stays. */
-    stopped?: boolean
-  }
-
-  /** A rating the reader gave an answer. */
+  /** A rating the reader gave a response. */
   export interface AiChatFeedback {
-    /** The rated answer. */
+    /** The rated response. */
     message: AiChatMessage
     /** Helpful, not helpful, or cleared. */
     value: ChatMessageFeedbackValue | null
   }
 
   export interface AiChatProps {
-    /** The conversation, oldest first. Left out or empty, the empty state with the suggestions renders. */
-    messages?: AiChatMessage[]
+    /** The conversation, oldest first, as TanStack AI's `useChat` returns `messages`. Empty, the empty state renders. */
+    messages?: ReadonlyArray<AiChatMessage>
     /** Starter prompts under the empty state. Left out, the sample prompts render. */
     suggestions?: SuggestionGroupItem[]
-    /** Follow-up questions shown under the last finished answer. */
+    /** Follow-up questions shown under the last finished response. */
     followUps?: SuggestionGroupItem[]
-    /** The assistant is answering: the last assistant message thinks while empty, then streams. */
+    /** The assistant is responding, as `useChat` returns `isLoading`. */
     loading?: boolean
-    /** Why the last answer failed, shown on it with Try again. */
-    error?: string
+    /** Why the last response failed: a sentence, or the `error` of `useChat`, which shows the standard sentence. */
+    error?: string | { message: string } | null
+    /** How each tool reads, by tool name; a tool left out shows its name. */
+    tools?: Record<string, AiChatTool>
+    /** Pending requests, as `useChat` returns `interrupts`; Approve and Deny resolve the matching one. */
+    interrupts?: ReadonlyArray<AiChatInterrupt>
   }
 
   const props = withDefaults(defineProps<AiChatProps>(), {
-    messages: undefined,
+    messages: () => [],
     suggestions: undefined,
     followUps: undefined,
     loading: false,
-    error: ''
+    error: '',
+    tools: () => ({}),
+    interrupts: () => []
   })
 
   const emit = defineEmits<{
@@ -266,32 +308,61 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
     retry: [event: MouseEvent, message: AiChatMessage]
     'new-chat': [event: MouseEvent]
     feedback: [feedback: AiChatFeedback]
+    approve: [event: MouseEvent, call: AiChatToolCallPart]
+    deny: [event: MouseEvent, call: AiChatToolCallPart]
   }>()
+
+  const { formatDate } = useLocale()
 
   const prompt = ref('')
   const composerEl = ref<InstanceType<typeof PromptInput> | null>(null)
   const ratings = ref<Record<string, ChatMessageFeedbackValue | null>>({})
+  const stoppedIds = ref<Set<string>>(new Set())
 
-  const turns = computed(() => props.messages ?? [])
+  const turns = computed(() =>
+    props.messages.filter((message) => message.role === 'user' || message.role === 'assistant')
+  )
   const starters = computed(() => props.suggestions ?? sampleSuggestions)
   const last = computed(() => turns.value[turns.value.length - 1])
+  const failure = computed(() => {
+    if (!props.error) return ''
+    if (typeof props.error === 'string') return props.error
+    return 'The connection was interrupted before the response finished.'
+  })
+  const waiting = computed(
+    () => (props.loading || Boolean(failure.value)) && last.value?.role === 'user'
+  )
 
   function statusOf(turn: AiChatMessage): ChatMessageStatus {
-    if (turn.from === 'user' || turn !== last.value) return 'success'
-    if (props.error) return 'error'
-    if (props.loading) return turn.content ? 'streaming' : 'pending'
+    if (turn.role === 'user' || turn !== last.value) return 'success'
+    if (failure.value) return 'error'
+    if (props.loading) return hasText(turn) ? 'streaming' : 'pending'
     return 'success'
   }
 
   const state = computed<PromptInputStatus>(() => {
     if (!props.loading) return 'ready'
-    return last.value?.from === 'assistant' && !last.value.content ? 'pending' : 'streaming'
+    return last.value?.role === 'assistant' && hasText(last.value) ? 'streaming' : 'pending'
   })
+
+  function stopped(turn: AiChatMessage): boolean {
+    return Boolean(turn.metadata?.stopped) || stoppedIds.value.has(turn.id)
+  }
 
   const lastAnswer = computed(() => {
     const turn = last.value
-    return turn?.from === 'assistant' && statusOf(turn) === 'success' && !turn.stopped ? turn : null
+    return turn?.role === 'assistant' && statusOf(turn) === 'success' && !stopped(turn)
+      ? turn
+      : null
   })
+
+  function timeOf(turn: AiChatMessage): string {
+    return turn.createdAt ? formatDate(turn.createdAt, { hour: '2-digit', minute: '2-digit' }) : ''
+  }
+
+  function toolOf(call: AiChatToolCallPart): AiChatTool {
+    return props.tools[call.name] ?? { title: '' }
+  }
 
   watch(
     () => props.loading,
@@ -306,14 +377,26 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
     emit('send', event, text)
   }
 
+  function stop(event: MouseEvent) {
+    if (props.loading && last.value?.role === 'assistant') stoppedIds.value.add(last.value.id)
+    emit('stop', event)
+  }
+
   function newChat(event: MouseEvent) {
     prompt.value = ''
+    stoppedIds.value.clear()
     emit('new-chat', event)
   }
 
   function rate(message: AiChatMessage, value: ChatMessageFeedbackValue | null) {
     ratings.value[message.id] = value
     emit('feedback', { message, value })
+  }
+
+  function decide(event: MouseEvent, call: AiChatToolCallPart, approved: boolean) {
+    if (approved) emit('approve', event, call)
+    else emit('deny', event, call)
+    resolveInterrupt(props.interrupts, call, approved)
   }
 </script>
 
@@ -370,47 +453,113 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
         <ChatMessage
           v-for="turn in turns"
           :key="turn.id"
-          :from="turn.from"
+          :from="turn.role === 'user' ? 'user' : 'assistant'"
           :status="statusOf(turn)"
-          :timestamp="turn.time"
-          :error-message="statusOf(turn) === 'error' ? error : undefined"
+          :timestamp="timeOf(turn)"
+          :error-message="statusOf(turn) === 'error' ? failure : undefined"
           @retry="emit('retry', $event, turn)"
         >
-          <template v-if="turn.from === 'user'">{{ turn.content }}</template>
+          <template v-if="turn.role === 'user'">{{ textOf(turn, '\n') }}</template>
           <template v-else>
-            <Reasoning
-              v-if="turn.reasoning"
-              :streaming="statusOf(turn) === 'pending'"
-              :duration="statusOf(turn) === 'pending' ? undefined : turn.reasoningSeconds"
+            <template
+              v-for="segment in segmentsOf(turn)"
+              :key="segment.key"
             >
-              <p>{{ turn.reasoning }}</p>
-            </Reasoning>
-            <StreamingResponse
-              :content="turn.content"
-              :streaming="statusOf(turn) === 'streaming'"
-              :sources="turn.sources ?? []"
-              :anchor="`answer-${turn.id}`"
-            />
+              <Reasoning
+                v-if="segment.type === 'reasoning'"
+                :streaming="statusOf(turn) === 'pending'"
+                :duration="
+                  statusOf(turn) === 'pending' ? undefined : turn.metadata?.reasoningSeconds
+                "
+              >
+                <p class="whitespace-pre-line">{{ segment.content }}</p>
+              </Reasoning>
+              <StreamingResponse
+                v-else-if="segment.type === 'text'"
+                :content="segment.content"
+                :streaming="statusOf(turn) === 'streaming'"
+                :sources="turn.metadata?.sources ?? []"
+                :anchor="`answer-${turn.id}`"
+              />
+              <template v-else-if="segment.type === 'tool'">
+                <ToolApproval
+                  v-if="needsApproval(segment.call)"
+                  :title="
+                    toolOf(segment.call).question ||
+                    toolOf(segment.call).title ||
+                    `Run ${segment.call.name}?`
+                  "
+                  :description="toolOf(segment.call).description"
+                  :approve-label="toolOf(segment.call).approveLabel"
+                  :variant="toolOf(segment.call).variant"
+                  :confirmation-phrase="toolOf(segment.call).confirmationPhrase"
+                  :status="approvalOf(segment.call)"
+                  :loading="loading && turn === last"
+                  @approve="decide($event, segment.call, true)"
+                  @deny="decide($event, segment.call, false)"
+                >
+                  <CodeBlock
+                    v-if="json(segment.call.input ?? segment.call.arguments)"
+                    :code="json(segment.call.input ?? segment.call.arguments)"
+                    language="json"
+                    :show-line-numbers="false"
+                  />
+                </ToolApproval>
+                <ToolCall
+                  v-if="!needsApproval(segment.call) || approvalOf(segment.call) === 'approved'"
+                  :name="segment.call.name"
+                  :title="toolOf(segment.call).title"
+                  :status="toolStatusOf(segment.call, segment.result)"
+                >
+                  <template
+                    v-if="json(segment.call.input ?? segment.call.arguments)"
+                    #input
+                  >
+                    <CodeBlock
+                      :code="json(segment.call.input ?? segment.call.arguments)"
+                      language="json"
+                      :show-line-numbers="false"
+                    />
+                  </template>
+                  <template
+                    v-if="
+                      json(segment.result?.error || segment.call.output || segment.result?.content)
+                    "
+                    #output
+                  >
+                    <CodeBlock
+                      :code="
+                        json(
+                          segment.result?.error || segment.call.output || segment.result?.content
+                        )
+                      "
+                      language="json"
+                      :show-line-numbers="false"
+                    />
+                  </template>
+                </ToolCall>
+              </template>
+            </template>
             <p
-              v-if="turn.stopped"
+              v-if="stopped(turn)"
               class="text-body-sm text-(--text-muted)"
             >
               You stopped this response.
             </p>
             <Sources
-              v-if="statusOf(turn) === 'success' && !turn.stopped"
-              :items="turn.sources ?? []"
+              v-if="statusOf(turn) === 'success' && !stopped(turn)"
+              :items="turn.metadata?.sources ?? []"
               :anchor="`answer-${turn.id}`"
             />
           </template>
           <template
-            v-if="turn.from === 'assistant'"
+            v-if="turn.role === 'assistant'"
             #actions
           >
             <ChatMessage.Actions>
               <CopyButton
                 size="small"
-                :value="turn.content"
+                :value="textOf(turn)"
               />
               <IconButton
                 icon="az az-refresh"
@@ -427,6 +576,12 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
             </ChatMessage.Actions>
           </template>
         </ChatMessage>
+        <ChatMessage
+          v-if="waiting && last"
+          :status="failure ? 'error' : 'pending'"
+          :error-message="failure || undefined"
+          @retry="emit('retry', $event, last)"
+        />
         <div
           v-if="lastAnswer && followUps?.length"
           class="ps-[calc(2rem+var(--spacing-sm))]"
@@ -446,7 +601,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
         :status="state"
         :max-length="4000"
         @submit="(event, { value }) => send(event, value)"
-        @stop="emit('stop', $event)"
+        @stop="stop"
       >
         <template #hint>
           The AI assistant can make mistakes. Check important information before you act on it.
@@ -457,12 +612,260 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
 </template>
 ```
 
+## `messages.ts`
+
+```ts
+import type { SourcesItem } from '@aziontech/webkit/sources'
+import type { ToolApprovalVariant } from '@aziontech/webkit/tool-approval'
+import type { ToolCallStatus } from '@aziontech/webkit/tool-call'
+
+/** Who wrote a message; the conversation draws the reader's and the assistant's. */
+export type AiChatRole = 'system' | 'user' | 'assistant' | 'activity'
+
+/** Text of a message: plain for the reader, Markdown for the assistant. */
+export interface AiChatTextPart {
+  type: 'text'
+  content: string
+}
+
+/** How the assistant reached the answer, shown in the collapsible Reasoning. */
+export interface AiChatThinkingPart {
+  type: 'thinking'
+  content: string
+}
+
+/** Where a tool call stands. */
+export type AiChatToolCallState =
+  | 'awaiting-input'
+  | 'input-streaming'
+  | 'input-complete'
+  | 'approval-requested'
+  | 'approval-responded'
+  | 'complete'
+  | 'error'
+
+/** A tool the assistant calls; one that needs approval carries `approval`. */
+export interface AiChatToolCallPart {
+  type: 'tool-call'
+  id: string
+  name: string
+  arguments: string
+  input?: unknown
+  state: AiChatToolCallState
+  output?: unknown
+  approval?: {
+    id: string
+    needsApproval: boolean
+    approved?: boolean
+  }
+}
+
+/** What a tool returned, matched to its call by `toolCallId`. */
+export interface AiChatToolResultPart {
+  type: 'tool-result'
+  toolCallId: string
+  content: unknown
+  state: 'streaming' | 'complete' | 'error'
+  outcome?: 'cancelled' | 'denied'
+  error?: string
+}
+
+/** A part the conversation does not draw, such as an image or audio. */
+export interface AiChatOtherPart {
+  type: string
+}
+
+/** One piece of a message, in the order it arrived. */
+export type AiChatPart =
+  AiChatTextPart | AiChatThinkingPart | AiChatToolCallPart | AiChatToolResultPart | AiChatOtherPart
+
+/** What the app adds to a message beside its parts. */
+export interface AiChatMessageMetadata {
+  /** The documents the response cites, numbered in order. */
+  sources?: SourcesItem[]
+  /** How long the assistant thought, in seconds; left out, the block measures it while it streams. */
+  reasoningSeconds?: number
+  /** The reader stopped this response; the block also marks the response Stop ends. */
+  stopped?: boolean
+}
+
+/** One message, in the shape TanStack AI's `useChat` returns. */
+export interface AiChatMessage {
+  /** Stable key. */
+  id: string
+  /** Who wrote it; `system` and `activity` messages are not drawn. */
+  role: AiChatRole
+  /** The text, reasoning and tool calls, in order. */
+  parts: ReadonlyArray<AiChatPart>
+  /** When it was written. */
+  createdAt?: Date
+  /** Sources, the thinking time and the stopped flag. */
+  metadata?: AiChatMessageMetadata & Record<string, unknown>
+}
+
+/** How a tool reads in the conversation and on its approval card. */
+export interface AiChatTool {
+  /** What the call does, in plain words. */
+  title: string
+  /** The question on the approval card, naming the action; left out, the title. */
+  question?: string
+  /** What changes and what stays, on the approval card. */
+  description?: string
+  /** The approve button label, the verb of the title. */
+  approveLabel?: string
+  /** Danger for an irreversible action. */
+  variant?: ToolApprovalVariant
+  /** The phrase the reader types before an irreversible action enables. */
+  confirmationPhrase?: string
+}
+
+/** A pending request from the chat, as TanStack AI's `useChat` returns it in `interrupts`. */
+export interface AiChatInterrupt {
+  kind: string
+  toolCallId?: string
+  resolveInterrupt?: unknown
+}
+
+/** A rendered piece of an assistant message. */
+export type AiChatSegment =
+  | { type: 'reasoning'; key: string; content: string }
+  | { type: 'text'; key: string; content: string }
+  | { type: 'tool'; key: string; call: AiChatToolCallPart; result?: AiChatToolResultPart }
+
+export const isTextPart = (part: AiChatPart): part is AiChatTextPart => part.type === 'text'
+
+export const isThinkingPart = (part: AiChatPart): part is AiChatThinkingPart =>
+  part.type === 'thinking'
+
+export const isToolCallPart = (part: AiChatPart): part is AiChatToolCallPart =>
+  part.type === 'tool-call'
+
+export const isToolResultPart = (part: AiChatPart): part is AiChatToolResultPart =>
+  part.type === 'tool-result'
+
+export function textOf(message: AiChatMessage, separator = '\n\n'): string {
+  return message.parts
+    .filter(isTextPart)
+    .map((part) => part.content)
+    .filter(Boolean)
+    .join(separator)
+}
+
+export function hasText(message: AiChatMessage): boolean {
+  return message.parts.some((part) => isTextPart(part) && part.content.length > 0)
+}
+
+export function hasThinking(message: AiChatMessage): boolean {
+  return message.parts.some(isThinkingPart)
+}
+
+export function segmentsOf(message: AiChatMessage): AiChatSegment[] {
+  const results = new Map<string, AiChatToolResultPart>()
+  for (const part of message.parts) {
+    if (isToolResultPart(part)) results.set(part.toolCallId, part)
+  }
+  const thinking = message.parts
+    .filter(isThinkingPart)
+    .map((part) => part.content)
+    .join('\n\n')
+  const segments: AiChatSegment[] = thinking
+    ? [{ type: 'reasoning', key: 'reasoning', content: thinking }]
+    : []
+  message.parts.forEach((part, index) => {
+    const previous = segments[segments.length - 1]
+    if (isTextPart(part)) {
+      if (!part.content) return
+      if (previous?.type === 'text') previous.content = `${previous.content}\n\n${part.content}`
+      else segments.push({ type: 'text', key: `text-${index}`, content: part.content })
+    } else if (isToolCallPart(part)) {
+      segments.push({ type: 'tool', key: part.id, call: part, result: results.get(part.id) })
+    }
+  })
+  return segments
+}
+
+export function toolStatusOf(
+  call: AiChatToolCallPart,
+  result?: AiChatToolResultPart
+): ToolCallStatus {
+  if (result?.outcome === 'denied' || call.approval?.approved === false) return 'denied'
+  if (call.state === 'error' || result?.state === 'error') return 'error'
+  if (call.state === 'complete' || result?.state === 'complete') return 'success'
+  if (call.state === 'awaiting-input') return 'pending'
+  return 'running'
+}
+
+export function needsApproval(call: AiChatToolCallPart): boolean {
+  return call.state === 'approval-requested' || Boolean(call.approval?.needsApproval)
+}
+
+export function approvalOf(call: AiChatToolCallPart): 'pending' | 'approved' | 'denied' {
+  if (call.approval?.approved === true) return 'approved'
+  if (call.approval?.approved === false) return 'denied'
+  return 'pending'
+}
+
+export function json(value: unknown): string {
+  if (value === undefined || value === null || value === '') return ''
+  if (typeof value === 'string') {
+    try {
+      return JSON.stringify(JSON.parse(value), null, 2)
+    } catch {
+      return value
+    }
+  }
+  try {
+    return JSON.stringify(value, null, 2)
+  } catch {
+    return String(value)
+  }
+}
+
+export function resolveInterrupt(
+  interrupts: ReadonlyArray<AiChatInterrupt> | undefined,
+  call: AiChatToolCallPart,
+  approved: boolean
+): void {
+  const interrupt = interrupts?.find(
+    (item) => item.kind === 'tool-approval' && item.toolCallId === call.id
+  )
+  const resolve = interrupt?.resolveInterrupt
+  if (typeof resolve === 'function') resolve.call(interrupt, approved)
+}
+```
+
 ## `sample.ts`
 
 ````ts
+import type { SourcesItem } from '@aziontech/webkit/sources'
 import type { SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
 
-import type { AiChatMessage } from './ai-chat.vue'
+import type { AiChatMessage } from './messages'
+
+const at = (time: string): Date => new Date(`2026-11-19T${time}:00`)
+
+const user = (id: string, text: string, time: string): AiChatMessage => ({
+  id,
+  role: 'user',
+  parts: [{ type: 'text', content: text }],
+  createdAt: at(time)
+})
+
+const assistant = (
+  id: string,
+  text: string,
+  time: string,
+  extra: { reasoning?: string; reasoningSeconds?: number; sources?: SourcesItem[] } = {}
+): AiChatMessage => ({
+  id,
+  role: 'assistant',
+  parts: [
+    ...(extra.reasoning ? [{ type: 'thinking' as const, content: extra.reasoning }] : []),
+    { type: 'text', content: text }
+  ],
+  createdAt: at(time),
+  metadata: { reasoningSeconds: extra.reasoningSeconds, sources: extra.sources }
+})
 
 const cacheAnswer = [
   'Use **Real-Time Purge** with the *URL* type. It removes one object from every data center in a few seconds [1].',
@@ -490,17 +893,8 @@ const errorsAnswer = [
 ].join('\n')
 
 export const sampleStreamingMessages: AiChatMessage[] = [
-  {
-    id: 'm1',
-    from: 'user',
-    content: 'Why is storefront answering with 502 errors?',
-    time: '14:12'
-  },
-  {
-    id: 'm2',
-    from: 'assistant',
-    content: errorsAnswer.slice(0, 120),
-    time: '14:12',
+  user('m1', 'Why is storefront answering with 502 errors?', '14:12'),
+  assistant('m2', errorsAnswer.slice(0, 120), '14:12', {
     reasoning:
       'The reader asks about errors on storefront. The error rate rose at 14:05; the certificate of the origin expired at the same minute.',
     reasoningSeconds: 2,
@@ -511,21 +905,12 @@ export const sampleStreamingMessages: AiChatMessage[] = [
         description: 'Azion documentation · Observe'
       }
     ]
-  }
+  })
 ]
 
 export const sampleInterruptedMessages: AiChatMessage[] = [
-  {
-    id: 'm1',
-    from: 'user',
-    content: 'How do I purge the cache of one URL?',
-    time: '10:41'
-  },
-  {
-    id: 'm2',
-    from: 'assistant',
-    content: cacheAnswer.slice(0, 104),
-    time: '10:41',
+  user('m1', 'How do I purge the cache of one URL?', '10:41'),
+  assistant('m2', cacheAnswer.slice(0, 104), '10:41', {
     reasoning:
       'The question is about one URL, so a full purge would be too broad. Real-Time Purge by URL is the narrowest option, and the CLI does the same from a terminal.',
     reasoningSeconds: 2,
@@ -541,9 +926,8 @@ export const sampleInterruptedMessages: AiChatMessage[] = [
         description: 'Azion documentation · CLI'
       }
     ]
-  }
+  })
 ]
-
 export const sampleInterruptedError = 'The connection was interrupted before the response finished.'
 
 const history: [string, string][] = [
@@ -572,16 +956,12 @@ const history: [string, string][] = [
 
 export const sampleLongThread: AiChatMessage[] = history.flatMap(
   ([question, answer], index): AiChatMessage[] => [
-    { id: `q${index}`, from: 'user', content: question, time: `09:${10 + index * 4}` },
-    {
-      id: `a${index}`,
-      from: 'assistant',
-      content: answer,
-      time: `09:${11 + index * 4}`,
+    user(`q${index}`, question, `09:${10 + index * 4}`),
+    assistant(`a${index}`, answer, `09:${11 + index * 4}`, {
       reasoning: 'Reading the workload settings of storefront.',
       reasoningSeconds: 2,
       sources: []
-    }
+    })
   ]
 )
 
@@ -607,20 +987,14 @@ export const sampleArtifactVersions: string[] = [
 ]
 
 export const sampleArtifactThread: (AiChatMessage & { version?: number })[] = [
-  { id: 'q1', from: 'user', content: 'Write a query for the ten biggest orders', time: '10:00' },
+  user('q1', 'Write a query for the ten biggest orders', '10:00'),
   {
-    id: 'a1',
-    from: 'assistant',
-    content: 'Here is a query for the ten biggest orders, newest total first.',
-    time: '10:01',
+    ...assistant('a1', 'Here is a query for the ten biggest orders, newest total first.', '10:01'),
     version: 0
   },
-  { id: 'q2', from: 'user', content: 'Only this week', time: '10:02' },
+  user('q2', 'Only this week', '10:02'),
   {
-    id: 'a2',
-    from: 'assistant',
-    content: 'Done. Version 2 keeps the orders of the last seven days.',
-    time: '10:03',
+    ...assistant('a2', 'Done. Version 2 keeps the orders of the last seven days.', '10:03'),
     version: 1
   }
 ]

@@ -1,110 +1,147 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
-  import ChatMessage from '@aziontech/webkit/chat-message'
+  import ChatMessage, { type ChatMessageStatus } from '@aziontech/webkit/chat-message'
   import CodeBlock from '@aziontech/webkit/code-block'
   import Conversation from '@aziontech/webkit/conversation'
   import CopyButton from '@aziontech/webkit/copy-button'
+  import type { PromptInputStatus } from '@aziontech/webkit/prompt-input'
   import PromptInput from '@aziontech/webkit/prompt-input-root'
   import StreamingResponse from '@aziontech/webkit/streaming-response'
-  import ToolApproval, {
-    type ToolApprovalStatus,
-    type ToolApprovalVariant
-  } from '@aziontech/webkit/tool-approval'
-  import ToolCall, { type ToolCallStatus } from '@aziontech/webkit/tool-call'
+  import ToolApproval from '@aziontech/webkit/tool-approval'
+  import ToolCall from '@aziontech/webkit/tool-call'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, ref } from 'vue'
 
-  import { sampleAction } from './sample'
+  import {
+    type AiActionApprovalInterrupt,
+    type AiActionApprovalMessage,
+    type AiActionApprovalTool,
+    type AiActionApprovalToolCallPart,
+    approvalOf,
+    hasText,
+    isToolCallPart,
+    isToolResultPart,
+    json,
+    needsApproval,
+    resolveInterrupt,
+    segmentsOf,
+    textOf,
+    toolStatusOf
+  } from './messages'
+  import { sampleMessages, sampleTools } from './sample'
 
-  /** A tool call the assistant makes, as the conversation records it. */
-  export interface AiActionApprovalCall {
-    /** The tool name, shown in code. */
-    name: string
-    /** What the call does, in plain words. */
-    title: string
-  }
-
-  /** The action the assistant proposes and the conversation that led to it. */
-  export interface AiActionApprovalAction {
-    /** The reader's request, in their words. */
-    request: string
-    /** When the reader asked and the assistant answered, already formatted. */
-    time: string
-    /** The read-only call the assistant made before asking. */
-    check: AiActionApprovalCall
-    /** What the assistant found and why it needs approval, in Markdown. */
-    explanation: string
-    /** The question on the card, naming the action with the command in code. */
-    title: string
-    /** What changes and what stays. */
-    description: string
-    /** The approve button label, the verb of the title. */
-    approveLabel: string
-    /** The exact command that runs once approved. */
-    command: string
-    /** Danger for an irreversible action. */
-    variant?: ToolApprovalVariant
-    /** The phrase the reader types before an irreversible action enables. */
-    confirmationPhrase?: string
-    /** The call that runs once approved. */
-    run: AiActionApprovalCall
-  }
-
-  /** The assistant's report once the action was decided or ran. */
-  export interface AiActionApprovalOutcome {
-    /** What changed, or that nothing ran, in Markdown. */
-    content: string
-    /** When the assistant reported, already formatted. */
-    time: string
-  }
+  export type {
+    AiActionApprovalInterrupt,
+    AiActionApprovalMessage,
+    AiActionApprovalMessageMetadata,
+    AiActionApprovalOtherPart,
+    AiActionApprovalPart,
+    AiActionApprovalRole,
+    AiActionApprovalTextPart,
+    AiActionApprovalThinkingPart,
+    AiActionApprovalTool,
+    AiActionApprovalToolCallPart,
+    AiActionApprovalToolCallState,
+    AiActionApprovalToolResultPart
+  } from './messages'
 
   export interface AiActionApprovalProps {
-    /** The proposed action. Left out, the sample deployment renders. */
-    action?: AiActionApprovalAction
-    /** Where the approved call stands (running, success, error); empty before it starts. */
-    run?: ToolCallStatus | ''
-    /** The assistant's report after the decision; a failed run shows Retry beside Copy. */
-    outcome?: AiActionApprovalOutcome
+    /** The conversation, oldest first, as TanStack AI's `useChat` returns `messages`. Left out, the sample deployment renders. */
+    messages?: ReadonlyArray<AiActionApprovalMessage>
+    /** The assistant is responding or an approved call runs, as `useChat` returns `isLoading`. */
+    loading?: boolean
+    /** Why the last response failed: a sentence, or the `error` of `useChat`, which shows the standard sentence. */
+    error?: string | { message: string } | null
+    /** How each tool reads, by tool name: the call's title, the approval question, its verb and whether it is irreversible. */
+    tools?: Record<string, AiActionApprovalTool>
+    /** Pending requests, as `useChat` returns `interrupts`; the approve button and Deny resolve the matching one. */
+    interrupts?: ReadonlyArray<AiActionApprovalInterrupt>
   }
 
   const props = withDefaults(defineProps<AiActionApprovalProps>(), {
-    action: undefined,
-    run: '',
-    outcome: undefined
+    messages: undefined,
+    loading: false,
+    error: '',
+    tools: undefined,
+    interrupts: () => []
   })
 
   const emit = defineEmits<{
-    approve: [event: MouseEvent, action: AiActionApprovalAction]
-    deny: [event: MouseEvent, action: AiActionApprovalAction]
-    stop: [event: MouseEvent, action: AiActionApprovalAction]
-    retry: [event: MouseEvent, action: AiActionApprovalAction]
+    approve: [event: MouseEvent, call: AiActionApprovalToolCallPart]
+    deny: [event: MouseEvent, call: AiActionApprovalToolCallPart]
+    stop: [event: MouseEvent]
+    retry: [event: MouseEvent, message: AiActionApprovalMessage]
     send: [event: MouseEvent | KeyboardEvent, text: string]
   }>()
 
-  /** The decision on the card; Deny or the approve button sets it and emits. */
-  const decision = defineModel<ToolApprovalStatus>('decision', { default: 'pending' })
+  const { formatDate } = useLocale()
 
   const prompt = ref('')
 
-  const current = computed(() => props.action ?? sampleAction)
-  const runStatus = computed<ToolCallStatus | ''>(
-    () => props.run || (decision.value === 'denied' ? 'denied' : '')
+  const turns = computed(() =>
+    (props.messages ?? sampleMessages).filter(
+      (message) => message.role === 'user' || message.role === 'assistant'
+    )
   )
-  const followUp = computed(() => props.outcome?.content ?? '')
-  const composerState = computed(() =>
-    decision.value === 'approved' && runStatus.value === 'running' ? 'streaming' : 'ready'
-  )
+  const toolLabels = computed(() => props.tools ?? (props.messages ? {} : sampleTools))
+  const last = computed(() => turns.value[turns.value.length - 1])
+  const failure = computed(() => {
+    if (!props.error) return ''
+    if (typeof props.error === 'string') return props.error
+    return 'The connection was interrupted before the response finished.'
+  })
 
-  function approve(event: MouseEvent) {
-    decision.value = 'approved'
-    emit('approve', event, current.value)
+  function statusOf(turn: AiActionApprovalMessage): ChatMessageStatus {
+    if (turn.role === 'user' || turn !== last.value) return 'success'
+    if (failure.value) return 'error'
+    if (props.loading && !runs(turn)) return hasText(turn) ? 'streaming' : 'pending'
+    return 'success'
   }
 
-  function deny(event: MouseEvent) {
-    decision.value = 'denied'
-    emit('deny', event, current.value)
+  function runs(turn: AiActionApprovalMessage): boolean {
+    return turn.parts.some(
+      (part) =>
+        isToolCallPart(part) &&
+        toolStatusOf(part) === 'running' &&
+        (!needsApproval(part) || approvalOf(part) === 'approved')
+    )
+  }
+
+  function failed(turn: AiActionApprovalMessage): boolean {
+    const results = turn.parts.filter(isToolResultPart)
+    return turn.parts.some(
+      (part) =>
+        isToolCallPart(part) &&
+        toolStatusOf(
+          part,
+          results.find((result) => result.toolCallId === part.id)
+        ) === 'error'
+    )
+  }
+
+  const state = computed<PromptInputStatus>(() => {
+    if (!props.loading) return 'ready'
+    return last.value?.role === 'assistant' && (hasText(last.value) || runs(last.value))
+      ? 'streaming'
+      : 'pending'
+  })
+
+  function timeOf(turn: AiActionApprovalMessage): string {
+    return turn.createdAt ? formatDate(turn.createdAt, { hour: '2-digit', minute: '2-digit' }) : ''
+  }
+
+  function toolOf(call: AiActionApprovalToolCallPart): AiActionApprovalTool {
+    return toolLabels.value[call.name] ?? { title: '' }
+  }
+
+  function decide(event: MouseEvent, call: AiActionApprovalToolCallPart, approved: boolean) {
+    if (approved) emit('approve', event, call)
+    else emit('deny', event, call)
+    resolveInterrupt(props.interrupts, call, approved)
   }
 
   function send(event: MouseEvent | KeyboardEvent, value: string) {
+    if (!value.trim() || state.value !== 'ready') return
     prompt.value = ''
     emit('send', event, value)
   }
@@ -125,58 +162,99 @@
     </header>
     <Conversation aria-label="Conversation with the AI assistant">
       <ChatMessage
-        from="user"
-        :timestamp="current.time"
+        v-for="turn in turns"
+        :key="turn.id"
+        :from="turn.role === 'user' ? 'user' : 'assistant'"
+        :status="statusOf(turn)"
+        :timestamp="timeOf(turn)"
+        :error-message="statusOf(turn) === 'error' ? failure : undefined"
+        @retry="emit('retry', $event, turn)"
       >
-        {{ current.request }}
-      </ChatMessage>
-      <ChatMessage :timestamp="current.time">
-        <ToolCall
-          :name="current.check.name"
-          :title="current.check.title"
-          status="success"
-        />
-        <StreamingResponse :content="current.explanation" />
-        <ToolApproval
-          :title="current.title"
-          :description="current.description"
-          :approve-label="current.approveLabel"
-          :variant="current.variant"
-          :confirmation-phrase="current.confirmationPhrase"
-          :status="decision"
-          @approve="approve"
-          @deny="deny"
+        <template v-if="turn.role === 'user'">{{ textOf(turn, '\n') }}</template>
+        <template v-else>
+          <template
+            v-for="segment in segmentsOf(turn)"
+            :key="segment.key"
+          >
+            <StreamingResponse
+              v-if="segment.type === 'text'"
+              :content="segment.content"
+              :streaming="statusOf(turn) === 'streaming'"
+            />
+            <template v-else-if="segment.type === 'tool'">
+              <ToolApproval
+                v-if="needsApproval(segment.call)"
+                :title="
+                  toolOf(segment.call).question ||
+                  toolOf(segment.call).title ||
+                  `Run ${segment.call.name}?`
+                "
+                :description="toolOf(segment.call).description"
+                :approve-label="toolOf(segment.call).approveLabel"
+                :variant="toolOf(segment.call).variant"
+                :confirmation-phrase="toolOf(segment.call).confirmationPhrase"
+                :status="approvalOf(segment.call)"
+                :loading="loading && turn === last"
+                @approve="decide($event, segment.call, true)"
+                @deny="decide($event, segment.call, false)"
+              >
+                <CodeBlock
+                  v-if="json(segment.call.input ?? segment.call.arguments)"
+                  :code="json(segment.call.input ?? segment.call.arguments)"
+                  language="json"
+                  :show-line-numbers="false"
+                />
+              </ToolApproval>
+              <ToolCall
+                v-if="!needsApproval(segment.call) || approvalOf(segment.call) !== 'pending'"
+                :name="segment.call.name"
+                :title="toolOf(segment.call).title"
+                :status="toolStatusOf(segment.call, segment.result)"
+              >
+                <template
+                  v-if="json(segment.call.input ?? segment.call.arguments)"
+                  #input
+                >
+                  <CodeBlock
+                    :code="json(segment.call.input ?? segment.call.arguments)"
+                    language="json"
+                    :show-line-numbers="false"
+                  />
+                </template>
+                <template
+                  v-if="
+                    json(segment.result?.error || segment.call.output || segment.result?.content)
+                  "
+                  #output
+                >
+                  <CodeBlock
+                    :code="
+                      json(segment.result?.error || segment.call.output || segment.result?.content)
+                    "
+                    language="json"
+                    :show-line-numbers="false"
+                  />
+                </template>
+              </ToolCall>
+            </template>
+          </template>
+        </template>
+        <template
+          v-if="turn.role === 'assistant' && hasText(turn) && statusOf(turn) === 'success'"
+          #actions
         >
-          <CodeBlock
-            :tabs="[{ label: 'Shell', value: 'command', code: current.command, language: 'bash' }]"
-            :show-line-numbers="false"
-          />
-        </ToolApproval>
-        <ToolCall
-          v-if="runStatus"
-          :name="current.run.name"
-          :title="current.run.title"
-          :status="runStatus"
-        />
-      </ChatMessage>
-      <ChatMessage
-        v-if="followUp"
-        :timestamp="outcome?.time"
-      >
-        <StreamingResponse :content="followUp" />
-        <template #actions>
           <ChatMessage.Actions>
             <CopyButton
               size="small"
-              :value="followUp"
+              :value="textOf(turn)"
             />
             <Button
-              v-if="runStatus === 'error'"
+              v-if="turn === last && failed(turn)"
               label="Retry"
               variant="outline"
               size="small"
               icon="az az-refresh"
-              @click="emit('retry', $event, current)"
+              @click="emit('retry', $event, turn)"
             />
           </ChatMessage.Actions>
         </template>
@@ -185,9 +263,9 @@
     <footer class="layout-column-content layout-boundary-inline pb-(--spacing-md)">
       <PromptInput
         v-model="prompt"
-        :status="composerState"
+        :status="state"
         @submit="(event, { value }) => send(event, value)"
-        @stop="emit('stop', $event, current)"
+        @stop="emit('stop', $event)"
       >
         <template #hint>
           The assistant runs nothing in your account without your approval.

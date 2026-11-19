@@ -1,6 +1,32 @@
+import type { SourcesItem } from '@aziontech/webkit/sources'
 import type { SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
 
-import type { AiChatMessage } from './ai-chat.vue'
+import type { AiChatMessage } from './ai-chat.messages'
+
+const at = (time: string): Date => new Date(`2026-11-19T${time}:00`)
+
+const user = (id: string, text: string, time: string): AiChatMessage => ({
+  id,
+  role: 'user',
+  parts: [{ type: 'text', content: text }],
+  createdAt: at(time)
+})
+
+const assistant = (
+  id: string,
+  text: string,
+  time: string,
+  extra: { reasoning?: string; reasoningSeconds?: number; sources?: SourcesItem[] } = {}
+): AiChatMessage => ({
+  id,
+  role: 'assistant',
+  parts: [
+    ...(extra.reasoning ? [{ type: 'thinking' as const, content: extra.reasoning }] : []),
+    { type: 'text', content: text }
+  ],
+  createdAt: at(time),
+  metadata: { reasoningSeconds: extra.reasoningSeconds, sources: extra.sources }
+})
 
 const cacheAnswer = [
   'Use **Real-Time Purge** with the *URL* type. It removes one object from every data center in a few seconds [1].',
@@ -28,17 +54,8 @@ const errorsAnswer = [
 ].join('\n')
 
 export const sampleStreamingMessages: AiChatMessage[] = [
-  {
-    id: 'm1',
-    from: 'user',
-    content: 'Why is storefront answering with 502 errors?',
-    time: '14:12'
-  },
-  {
-    id: 'm2',
-    from: 'assistant',
-    content: errorsAnswer.slice(0, 120),
-    time: '14:12',
+  user('m1', 'Why is storefront answering with 502 errors?', '14:12'),
+  assistant('m2', errorsAnswer.slice(0, 120), '14:12', {
     reasoning:
       'The reader asks about errors on storefront. The error rate rose at 14:05; the certificate of the origin expired at the same minute.',
     reasoningSeconds: 2,
@@ -49,21 +66,12 @@ export const sampleStreamingMessages: AiChatMessage[] = [
         description: 'Azion documentation · Observe'
       }
     ]
-  }
+  })
 ]
 
 export const sampleInterruptedMessages: AiChatMessage[] = [
-  {
-    id: 'm1',
-    from: 'user',
-    content: 'How do I purge the cache of one URL?',
-    time: '10:41'
-  },
-  {
-    id: 'm2',
-    from: 'assistant',
-    content: cacheAnswer.slice(0, 104),
-    time: '10:41',
+  user('m1', 'How do I purge the cache of one URL?', '10:41'),
+  assistant('m2', cacheAnswer.slice(0, 104), '10:41', {
     reasoning:
       'The question is about one URL, so a full purge would be too broad. Real-Time Purge by URL is the narrowest option, and the CLI does the same from a terminal.',
     reasoningSeconds: 2,
@@ -79,9 +87,8 @@ export const sampleInterruptedMessages: AiChatMessage[] = [
         description: 'Azion documentation · CLI'
       }
     ]
-  }
+  })
 ]
-
 export const sampleInterruptedError = 'The connection was interrupted before the response finished.'
 
 const history: [string, string][] = [
@@ -110,16 +117,12 @@ const history: [string, string][] = [
 
 export const sampleLongThread: AiChatMessage[] = history.flatMap(
   ([question, answer], index): AiChatMessage[] => [
-    { id: `q${index}`, from: 'user', content: question, time: `09:${10 + index * 4}` },
-    {
-      id: `a${index}`,
-      from: 'assistant',
-      content: answer,
-      time: `09:${11 + index * 4}`,
+    user(`q${index}`, question, `09:${10 + index * 4}`),
+    assistant(`a${index}`, answer, `09:${11 + index * 4}`, {
       reasoning: 'Reading the workload settings of storefront.',
       reasoningSeconds: 2,
       sources: []
-    }
+    })
   ]
 )
 
@@ -145,20 +148,14 @@ export const sampleArtifactVersions: string[] = [
 ]
 
 export const sampleArtifactThread: (AiChatMessage & { version?: number })[] = [
-  { id: 'q1', from: 'user', content: 'Write a query for the ten biggest orders', time: '10:00' },
+  user('q1', 'Write a query for the ten biggest orders', '10:00'),
   {
-    id: 'a1',
-    from: 'assistant',
-    content: 'Here is a query for the ten biggest orders, newest total first.',
-    time: '10:01',
+    ...assistant('a1', 'Here is a query for the ten biggest orders, newest total first.', '10:01'),
     version: 0
   },
-  { id: 'q2', from: 'user', content: 'Only this week', time: '10:02' },
+  user('q2', 'Only this week', '10:02'),
   {
-    id: 'a2',
-    from: 'assistant',
-    content: 'Done. Version 2 keeps the orders of the last seven days.',
-    time: '10:03',
+    ...assistant('a2', 'Done. Version 2 keeps the orders of the last seven days.', '10:03'),
     version: 1
   }
 ]

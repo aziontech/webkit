@@ -16,9 +16,9 @@
    "file": "blocks/ai/ai-action-approval/variants/denied.vue"
   },
   {
-   "name": "Expired",
-   "summary": "Nobody decided in time: the card reads Request expired and the assistant says nothing was deployed.",
-   "file": "blocks/ai/ai-action-approval/variants/expired.vue"
+   "name": "Running",
+   "summary": "After Deploy: the card reads Approved, the deployment call runs under it and the composer shows Stop until it finishes.",
+   "file": "blocks/ai/ai-action-approval/variants/running.vue"
   },
   {
    "name": "Error",
@@ -29,6 +29,7 @@
  "sfcFile": "blocks/ai/ai-action-approval/ai-action-approval.vue",
  "guidelinesFile": "blocks/ai/ai-action-approval/guidelines.md",
  "fileSources": {
+  "messages.ts": "blocks/ai/ai-action-approval/messages.ts",
   "sample.ts": "blocks/ai/ai-action-approval/sample.ts"
  }
 }

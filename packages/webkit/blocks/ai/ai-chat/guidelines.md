@@ -60,50 +60,75 @@ Variant Artifact only; it adds `ArtifactPreview`, `ArtifactCanvas`, `Resizable`,
 
 When an answer produces something longer than a message (a query, a configuration, a table), the message carries an `ArtifactPreview` with Open and the whole artifact opens in an `ArtifactCanvas` beside the conversation: a `Resizable.Pane` (`min` 320, `max` 880) after a `Resizable.Handle` named `Resize the artifact`, so the reader widens or narrows it with the pointer or the arrow keys. Under the md breakpoint the pane and handle are hidden and Open shows the same canvas in a full-height `Drawer`. Every follow-up that changes the artifact adds a version: the canvas moves to it, `streaming` locks the pager and marks the body busy while it is written, and each message's preview names its version (`Version 3`) and opens that one. Open moves focus to the canvas title; Close (or Escape inside the canvas) hides it and returns focus to the Open that showed it; `Show artifact` in the header brings a closed canvas back.
 
+### K. Tool calls — `ToolCall`, `ToolApproval`, `CodeBlock`
+
+A `tool-call` part draws in its place in the response as a `ToolCall` with the tool name in code, the `title` the `tools` prop gives it, and its input and output in a `CodeBlock` when opened; it reads pending, running, completed, failed or denied from the call's `state` and its `tool-result`. A call that needs approval draws a `ToolApproval` card first, with the question, verb and danger variant from `tools` and the call's input in a `CodeBlock`; Deny and the approve button resolve the matching `useChat` interrupt, and an approved call runs as a `ToolCall` under the card. The card stays busy until the run that asked for it ends. See `ai/ai-action-approval` for the whole approval flow.
+
 ## Data
 
-The block takes the conversation through props and emits every action; it calls no model. `AiChatMessage`, `AiChatProps` and `AiChatFeedback` are exported from `ai-chat.vue`, and `sample.ts` holds the starter prompts the empty state renders when `suggestions` is left out, plus the sample threads the variants pass. The draft in the composer stays local.
+The block draws a conversation in the message shape of TanStack AI: each message has an `id`, a `role` and its `parts` in order (`text`, `thinking`, `tool-call`, `tool-result`), so the values `useChat` from `@tanstack/ai-vue` returns go straight into its props, with no conversion. The block calls no model and depends on no AI library; `messages.ts` declares the same shape itself (`AiChatMessage`, `AiChatPart`, `AiChatTool`, `AiChatInterrupt`, re-exported from `ai-chat.vue`), so any source that produces it works. Parts it does not draw (images, audio) are skipped. `sample.ts` holds the sample threads the variants pass. The draft in the composer stays local.
 
-| Prop          | Type                    | What it does                                                                                                                                |
-| ------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| `messages`    | `AiChatMessage[]`       | The conversation, oldest first: the reader's text, the assistant's Markdown with its reasoning and sources. Empty, the empty state renders. |
-| `suggestions` | `SuggestionGroupItem[]` | The starter prompts under the empty state.                                                                                                  |
-| `followUps`   | `SuggestionGroupItem[]` | Follow-up questions under the last finished answer.                                                                                         |
-| `loading`     | `boolean`               | The assistant is answering: the last assistant message thinks while its `content` is empty, then streams; the composer shows Stop.          |
-| `error`       | `string`                | Why the last answer failed, shown on it with Try again; its partial text stays.                                                             |
+What TanStack AI does not carry, the app adds in `metadata`: `sources` (the documents the response cites, numbered in order), `reasoningSeconds` (left out, the block measures the thinking time) and `stopped` (the block also marks the response that Stop ended). A message's time is its `createdAt`, formatted in the reader's locale.
 
-| Event      | Payload                | When                                                                                      |
-| ---------- | ---------------------- | ----------------------------------------------------------------------------------------- |
-| `send`     | `(event, text)`        | The composer, a starter prompt or a follow-up; append the reader's message and the reply. |
-| `stop`     | `(event)`              | Stop while the answer streams; keep the text and set `stopped` on it.                     |
-| `retry`    | `(event, message)`     | Try again on a failed answer or Regenerate response.                                      |
-| `new-chat` | `(event)`              | New chat; clear `messages`.                                                               |
-| `feedback` | `({ message, value })` | The reader rated an answer.                                                               |
+| Prop          | Type                         | What it does                                                                                                                                             |
+| ------------- | ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `messages`    | `AiChatMessage[]`            | The conversation, oldest first, as `useChat` returns it. Empty, the empty state renders.                                                                 |
+| `suggestions` | `SuggestionGroupItem[]`      | The starter prompts under the empty state.                                                                                                               |
+| `followUps`   | `SuggestionGroupItem[]`      | Follow-up questions under the last finished response.                                                                                                    |
+| `loading`     | `boolean`                    | `isLoading` from `useChat`: the last response thinks, then streams, and the composer shows Stop.                                                         |
+| `error`       | `string \| Error`            | `error` from `useChat` shows the standard sentence on the last response with Try again; a string shows that sentence instead.                            |
+| `tools`       | `Record<string, AiChatTool>` | How each tool reads, by name: `title` for the call, `question`, `description`, `approveLabel`, `variant` and `confirmationPhrase` for its approval card. |
+| `interrupts`  | `interrupts` of `useChat`    | The pending approvals; the approve button and Deny resolve the one whose `toolCallId` matches the call.                                                  |
 
-To go live, render the block from a page that owns the conversation and the model call:
+| Event      | Payload                | When                                                                                       |
+| ---------- | ---------------------- | ------------------------------------------------------------------------------------------ |
+| `send`     | `(event, text)`        | The composer, a starter prompt or a follow-up: call `sendMessage(text)`.                   |
+| `stop`     | `(event)`              | Stop while the response streams: call `stop()`. The block marks the stopped response.      |
+| `retry`    | `(event, message)`     | Try again or Regenerate response: call `reload()`.                                         |
+| `new-chat` | `(event)`              | New chat: call `clear()`.                                                                  |
+| `feedback` | `({ message, value })` | The reader rated a response.                                                               |
+| `approve`  | `(event, call)`        | The approve button on an approval card; the block already resolved the matching interrupt. |
+| `deny`     | `(event, call)`        | Deny on an approval card; the block already resolved the matching interrupt.               |
+
+To go live, install `@tanstack/ai`, `@tanstack/ai-vue` and the adapter of your model (`@tanstack/ai-anthropic`, `@tanstack/ai-openai`…), add a server route that streams the model, and bind `useChat` to the block:
+
+```ts
+// server: POST /api/chat
+import { chat, chatParamsFromRequest, toServerSentEventsResponse } from '@tanstack/ai'
+
+export async function POST(request: Request) {
+  const params = await chatParamsFromRequest(request)
+  return toServerSentEventsResponse(chat({ adapter: yourModelAdapter, ...params, tools: [] }))
+}
+```
 
 ```vue
 <script setup lang="ts">
+  import { fetchServerSentEvents, useChat } from '@tanstack/ai-vue'
+
   import AiChat from './ai-chat.vue'
 
-  const { messages, streaming, error, send, stop, retry, reset } = useAssistant()
-  const failed = 'The connection was interrupted before the response finished.'
+  const { messages, isLoading, error, interrupts, sendMessage, stop, reload, clear } = useChat({
+    connection: fetchServerSentEvents('/api/chat'),
+    threadId: 'assistant'
+  })
 </script>
 
 <template>
   <AiChat
     :messages="messages"
-    :loading="streaming"
-    :error="error ? failed : ''"
-    @send="(_event, text) => send(text)"
-    @stop="stop"
-    @retry="(_event, message) => retry(message)"
-    @new-chat="reset"
+    :loading="isLoading"
+    :error="error"
+    :interrupts="interrupts"
+    @send="(_event, text) => sendMessage(text)"
+    @stop="stop()"
+    @retry="reload()"
+    @new-chat="clear()"
   />
 </template>
 ```
 
-Then delete `sample.ts` and its import.
+A tool that needs approval is declared once with `toolDefinition({ name, inputSchema, needsApproval: true })`, run on the server with `.server(...)` and passed to `useChat({ tools: [definition] })` too, so the client can match the approval request to the call. Then delete `sample.ts` and its import. `apps/demos` runs this block on `useChat` with TanStack AI's `fakeText` model (`src/lib/assistant-model.ts`), no server and no key.
 
 ## Do
 
@@ -150,7 +175,8 @@ Then delete `sample.ts` and its import.
 
 - Empty: `messages` left out or `[]`, with the empty state and four support prompts; selecting one emits `send`.
 - Streaming: `loading` with the last assistant message part-way written: its caret, the busy region and Stop in the composer.
-- Error: `error` set: the last answer keeps its partial text, with the error line and Try again.
+- Error: `error` set: the last response keeps its partial text, with the error line and Try again; with no response yet, a pending response shows the error.
+- Tools: a `tool-call` part draws as a `ToolCall` titled from `tools`, its input and output in code; one with `approval` draws the `ToolApproval` card first (see `ai/ai-action-approval`).
 - Artifact: two turns that wrote top-orders.sql in two versions, the canvas open beside them on version 2; a follow-up fills the composer.
 - LongThread: six earlier turns as `messages` that overflow the log, opened on the newest response, with `followUps`.
 

@@ -20,7 +20,7 @@ The moment an assistant needs permission. The reader asked for something that ch
 
 ### A. Conversation frame — `Conversation`, `PromptInput`
 
-The thread and its composer, as in `ai/ai-chat`. While an approved action runs, the composer shows Stop, which cancels it and marks the call failed.
+The thread and its composer, as in `ai/ai-chat`. While an approved action runs, the composer shows Stop, which emits `stop`; the page cancels the run with `stop()` of `useChat`.
 
 ### B. Request — `ChatMessage`
 
@@ -32,7 +32,7 @@ Each read-only call it made, as a completed `ToolCall` with the tool name in cod
 
 ### D. Authorization card — `ToolApproval`, `CodeBlock`
 
-The question names the action and its target, with the command or tool in code. The description says what changes and what stays. The body is the exact command in a `CodeBlock`. Deny (outlined) and the approve button, labelled with the verb of the title (Deploy, Delete), sit at the inline end. For irreversible actions use `variant="danger"` and `confirmation-phrase` with the resource name. After a decision the buttons give way to Approved, Denied or Request expired.
+The question names the action and its target, with the command or tool in code. The description says what changes and what stays. The body is the call's input in a `CodeBlock`. Deny (outlined) and the approve button, labelled with the verb of the title (Deploy, Delete), sit at the inline end. For irreversible actions use `variant="danger"` and `confirmation-phrase` with the resource name. After a decision the buttons give way to Approved or Denied. The body shows the call's input as JSON.
 
 ### E. The action running — `ToolCall`
 
@@ -44,46 +44,64 @@ A new response that says what changed (or that nothing ran), with Copy in its ac
 
 ## Data
 
-The block takes the proposed action and its outcome through props and emits every decision; it runs nothing. `AiActionApprovalAction`, `AiActionApprovalOutcome` and `AiActionApprovalProps` are exported from `ai-action-approval.vue`, and `sample.ts` holds the sample deployment the block renders when `action` is left out.
+The block draws a conversation in the message shape of TanStack AI: each message has an `id`, a `role` and its `parts` in order (`text`, `thinking`, `tool-call`, `tool-result`), so the values `useChat` from `@tanstack/ai-vue` returns go straight into its props, with no conversion. The block calls no model and depends on no AI library; `messages.ts` declares the same shape itself (`AiActionApprovalMessage`, `AiActionApprovalPart`, `AiActionApprovalTool`, `AiActionApprovalInterrupt`, re-exported from `ai-action-approval.vue`), so any source that produces it works. Parts it does not draw (images, audio) are skipped. `sample.ts` holds the sample threads the variants pass. The draft in the composer stays local.
 
-| Prop               | Type                      | What it does                                                                                                                                                                                     |
-| ------------------ | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `action`           | `AiActionApprovalAction`  | The request, the read-only call, the explanation, the card (title, description, verb, command) and the call to run. Set `variant: 'danger'` and `confirmationPhrase` for an irreversible action. |
-| `v-model:decision` | `ToolApprovalStatus`      | `pending`, `approved`, `denied` or `expired`. Deny and the approve button set it; pass `expired` when the request times out.                                                                     |
-| `run`              | `ToolCallStatus \| ''`    | Where the approved call stands: `running` (the composer shows Stop), `success`, `error` (Retry shows). Empty before it starts; a denial records the call as denied.                              |
-| `outcome`          | `AiActionApprovalOutcome` | The assistant's report after the decision, with its time.                                                                                                                                        |
+What TanStack AI does not carry, the app adds in `metadata`: `sources` (the documents the response cites, numbered in order), `reasoningSeconds` (left out, the block measures the thinking time) and `stopped` (the block also marks the response that Stop ended). A message's time is its `createdAt`, formatted in the reader's locale.
 
-| Event     | Payload           | When                                                         |
-| --------- | ----------------- | ------------------------------------------------------------ |
-| `approve` | `(event, action)` | The approve button; the card reads Approved. Start the call. |
-| `deny`    | `(event, action)` | Deny; the card reads Denied.                                 |
-| `stop`    | `(event, action)` | Stop in the composer while the call runs.                    |
-| `retry`   | `(event, action)` | Retry beside Copy after a failed or stopped run.             |
-| `send`    | `(event, text)`   | The reader sent a message from the composer.                 |
+| Prop         | Type                                   | What it does                                                                                                                                             |
+| ------------ | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `messages`   | `AiActionApprovalMessage[]`            | The conversation, oldest first, as `useChat` returns it. Left out, the sample deployment renders.                                                        |
+| `loading`    | `boolean`                              | `isLoading` from `useChat`: the last response thinks, then streams, and the composer shows Stop.                                                         |
+| `error`      | `string \| Error`                      | `error` from `useChat` shows the standard sentence on the last response with Try again; a string shows that sentence instead.                            |
+| `tools`      | `Record<string, AiActionApprovalTool>` | How each tool reads, by name: `title` for the call, `question`, `description`, `approveLabel`, `variant` and `confirmationPhrase` for its approval card. |
+| `interrupts` | `interrupts` of `useChat`              | The pending approvals; the approve button and Deny resolve the one whose `toolCallId` matches the call.                                                  |
 
-To go live, let the page own the decision and the call:
+| Event     | Payload            | When                                                                                       |
+| --------- | ------------------ | ------------------------------------------------------------------------------------------ |
+| `send`    | `(event, text)`    | The composer: call `sendMessage(text)`.                                                    |
+| `stop`    | `(event)`          | Stop while the response streams: call `stop()`. The block marks the stopped response.      |
+| `retry`   | `(event, message)` | Try again or Regenerate response: call `reload()`.                                         |
+| `approve` | `(event, call)`    | The approve button on an approval card; the block already resolved the matching interrupt. |
+| `deny`    | `(event, call)`    | Deny on an approval card; the block already resolved the matching interrupt.               |
+
+To go live, install `@tanstack/ai`, `@tanstack/ai-vue` and the adapter of your model (`@tanstack/ai-anthropic`, `@tanstack/ai-openai`…), add a server route that streams the model, and bind `useChat` to the block:
+
+```ts
+// server: POST /api/chat
+import { chat, chatParamsFromRequest, toServerSentEventsResponse } from '@tanstack/ai'
+
+export async function POST(request: Request) {
+  const params = await chatParamsFromRequest(request)
+  return toServerSentEventsResponse(chat({ adapter: yourModelAdapter, ...params, tools: [] }))
+}
+```
 
 ```vue
 <script setup lang="ts">
+  import { fetchServerSentEvents, useChat } from '@tanstack/ai-vue'
+
   import AiActionApproval from './ai-action-approval.vue'
 
-  const { action, decision, run, outcome, start, cancel } = useAgentAction()
+  const { messages, isLoading, error, interrupts, sendMessage, stop, reload, clear } = useChat({
+    connection: fetchServerSentEvents('/api/chat'),
+    threadId: 'assistant'
+  })
 </script>
 
 <template>
   <AiActionApproval
-    v-model:decision="decision"
-    :action="action"
-    :run="run"
-    :outcome="outcome"
-    @approve="start"
-    @retry="start"
-    @stop="cancel"
+    :messages="messages"
+    :loading="isLoading"
+    :error="error"
+    :interrupts="interrupts"
+    @send="(_event, text) => sendMessage(text)"
+    @stop="stop()"
+    @retry="reload()"
   />
 </template>
 ```
 
-Then delete `sample.ts` and its import.
+A tool that needs approval is declared once with `toolDefinition({ name, inputSchema, needsApproval: true })`, run on the server with `.server(...)` and passed to `useChat({ tools: [definition] })` too, so the client can match the approval request to the call. Then delete `sample.ts` and its import. `apps/demos` runs this block on `useChat` with TanStack AI's `fakeText` model (`src/lib/assistant-model.ts`), no server and no key.
 
 ## Do
 
@@ -108,8 +126,8 @@ Then delete `sample.ts` and its import.
 - **Description:** what changes and what stays, e.g. "Deploys build `b-4821` of storefront to production. The current version stays available for rollback."
 - **Buttons:** Deny and the verb of the title (Deploy, Delete); "Approve" only for a generic tool call.
 - **Typed confirmation:** "Type old.example.com to confirm" (built in).
-- **Outcomes:** Approved, Denied, Request expired (built in).
-- **Assistant after a denial:** "Got it, nothing was deployed."; **after expiry:** "This request expired. Nothing was deployed."
+- **Outcomes:** Approved, Denied (built in).
+- **Assistant after a denial:** "Got it, nothing was deployed."
 - Follow `skills/webkit-microcopy`: sentence case, no "please", present tense.
 
 ## Accessibility
@@ -122,12 +140,12 @@ Then delete `sample.ts` and its import.
 
 ## States
 
-- Pending: the deployment waiting for Deny or Deploy (`decision` left at `pending`); Deploy emits `approve` and the page runs the call.
-- Irreversible: a domain deletion (an `action` with `variant: 'danger'` and `confirmationPhrase`) that needs the domain name typed before Delete enables.
-- Approved: `decision="approved"`, `run="success"` and the assistant's report as `outcome`.
-- Denied: `decision="denied"`, `run="denied"` and the assistant's acknowledgement as `outcome`.
-- Expired: `decision="expired"` and an `outcome` that says nothing ran.
-- Error: `decision="approved"`, `run="error"` and an `outcome` that says what failed and that `b-4790` still serves, with Retry.
+- Pending: the deployment call in `approval-requested`, waiting for Deny or Deploy; Deploy emits `approve` and resolves the matching interrupt, and the run goes on.
+- Irreversible: a domain deletion whose tool has `variant: 'danger'` and `confirmationPhrase` in `tools`, so Delete enables only after the domain name is typed.
+- Running: the call approved (`approval.approved: true`) and still running under the card, with `loading`, so the composer shows Stop.
+- Approved: the call `complete` with its output, and the assistant's report after it.
+- Denied: `approval.approved: false` and a `tool-result` with `outcome: 'denied'`; the card reads Denied, the call is recorded as denied and the assistant says nothing ran.
+- Error: the approved call in `error` with its `tool-result` error, and a report that says what failed and that `b-4790` still serves, with Retry.
 
 ## Related
 

@@ -22,22 +22,32 @@
       ]
     },
     "ai/ai-chat": {
-      "version": "5.12.3",
+      "version": "5.13.0",
       "files": [
+        {
+          "path": "src/blocks/ai-chat.messages.ts",
+          "source": "blocks/ai/ai-chat/messages.ts",
+          "variant": "Data",
+          "checksum": "sha256:7e7c05629c1484e27a604686c2ca487b2fecb94b5abbaf91e595d2aa172da733"
+        },
         {
           "path": "src/blocks/ai-chat.sample.ts",
           "source": "blocks/ai/ai-chat/sample.ts",
           "variant": "Data",
-          "checksum": "sha256:a00c62cd5b110be4ad0716b4c69cb02c5d0797fbcbf9924ff1fa8309f1f52ef7"
+          "imports": {
+            "./messages": "./ai-chat.messages"
+          },
+          "checksum": "sha256:7759551fc446f76839eca74b1b5010182955807f54a10b422ab18310b0690a30"
         },
         {
           "path": "src/blocks/ai-chat.vue",
           "source": "blocks/ai/ai-chat/ai-chat.vue",
           "variant": "Empty",
           "imports": {
+            "./messages": "./ai-chat.messages",
             "./sample": "./ai-chat.sample"
           },
-          "checksum": "sha256:1c19b19da8ff3e50dc8d4daee7c72091364fb6914b139ee3149c84c30b5be874"
+          "checksum": "sha256:ce319a69dccf2a0655d001cb4b899a39afea9118c6a23a4bbbb918b5cc926cb8"
         }
       ]
     },
