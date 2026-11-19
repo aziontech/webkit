@@ -58,6 +58,7 @@
 - A link that opens a new tab carries a visually hidden `(opens in a new tab)`.
 - The trigger stops its click from bubbling, so opening the list inside a clickable table row does not fire the row's `row-click`; the wrapper itself is not interactive and lets other clicks through.
 - Contrast: the secondary `Tag` and the muted summary meet 4.5:1 in both themes.
+- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Right-to-left
 

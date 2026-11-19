@@ -38,13 +38,13 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `src` | `string` | `—` | true | URL of the document to embed. |
+| `src` | `string` | `—` | true | URL of the document to embed. Only an absolute `http(s)` URL is framed; anything else renders the title as text. |
 | `title` | `string` | `—` | true | Accessible name for the embedded document, announced before its content. |
 | `ratio` | `'video' \| 'square' \| 'wide'` | `'video'` | false | Aspect ratio the frame holds while it scales. |
 
 ## States
 
-- Visual states: `default`
+- Visual states: `default`, `unavailable` (the `src` is not an absolute `http(s)` URL: no `iframe`, the `title` shows as muted text in the reserved box)
 - `data-ratio` mirrors the `ratio` prop and drives the frame's aspect ratio
 - The frame reserves its aspect ratio before the document loads, so the page does not shift when it arrives
 
@@ -56,6 +56,7 @@
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the embedded document carries its own contrast; the frame contributes only its border.
 - `motion-reduce:transition-none motion-reduce:transform-none` — not applicable, the frame is static.
 - Touch target ≥40×40 px — not applicable; any control belongs to the embedded document.
+- Frame safety: only an absolute `http` or `https` `src` is framed (checked by the shared `safeWebUrl` in `src/utils/safe-href.ts`). A `javascript:`, `data:`, `about:`, relative or protocol-relative `src`, in any case or hidden behind spaces, tabs or HTML entities, renders the `title` as muted plain text in the frame box (`embed__unavailable`) instead of an `iframe`. The `iframe` always carries a fixed `sandbox` (`allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-presentation`, never top-level navigation) and `referrerpolicy="strict-origin-when-cross-origin"`. Do not frame a same-origin page that renders untrusted content.
 
 ## Examples
 
@@ -68,7 +69,7 @@
 
 <template>
   <Embed
-    src="data:text/html,<body style='margin:0;height:100vh;display:grid;place-items:center;font:1rem system-ui;color:gray'>Placeholder embed</body>"
+    src="https://example.com"
     title="A placeholder document standing in for an embedded demo"
     ratio="video"
   />
@@ -85,17 +86,17 @@
 <template>
   <div class="flex flex-col gap-(--spacing-2xl)">
     <Embed
-      src="data:text/html,<body style='margin:0;height:100vh;display:grid;place-items:center;font:1rem system-ui;color:gray'>Placeholder embed</body>"
+      src="https://example.com"
       title="A placeholder document in a 16:9 frame"
       ratio="video"
     />
     <Embed
-      src="data:text/html,<body style='margin:0;height:100vh;display:grid;place-items:center;font:1rem system-ui;color:gray'>Placeholder embed</body>"
+      src="https://example.com"
       title="A placeholder document in a square frame"
       ratio="square"
     />
     <Embed
-      src="data:text/html,<body style='margin:0;height:100vh;display:grid;place-items:center;font:1rem system-ui;color:gray'>Placeholder embed</body>"
+      src="https://example.com"
       title="A placeholder document in a 21:9 frame"
       ratio="wide"
     />
@@ -113,7 +114,7 @@
   const source = [
     '## Watch the demo',
     '',
-    '<Embed src="data:text/html,<body style=\'margin:0;height:100vh;display:grid;place-items:center;font:1rem system-ui;color:gray\'>Placeholder embed</body>" title="A placeholder document standing in for an embedded demo" ratio="video" />'
+    '<Embed src="https://example.com" title="A placeholder document standing in for an embedded demo" ratio="video" />'
   ].join('\n')
 </script>
 

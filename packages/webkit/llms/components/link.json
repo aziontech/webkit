@@ -66,7 +66,7 @@
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "Destination URL for the anchor. Empty renders `#`."
+   "doc": "Destination URL for the anchor. Empty, or an unsafe URL (`javascript:`, `data:`), renders `#`."
   },
   {
    "name": "target",

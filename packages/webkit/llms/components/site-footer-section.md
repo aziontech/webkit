@@ -72,6 +72,7 @@
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by the composed components.
 - `motion-reduce:transition-none` on the mark link's opacity transition.
 - Touch target ≥24×24 px — the social buttons are small `icon-button`s (28 px, above the 24 px WCAG 2.5.8 minimum; the design keeps the social row quiet), the select follows `select`; the column links and the Azion mark link rely on the WCAG 2.5.8 spacing exception (see Responsive).
+- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Right-to-left
 

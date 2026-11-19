@@ -72,7 +72,7 @@
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "When set, renders as an anchor link."
+   "doc": "When set to a safe URL, renders as an anchor link; an unsafe URL is ignored (see Accessibility)."
   },
   {
    "name": "target",

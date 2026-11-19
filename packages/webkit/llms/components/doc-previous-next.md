@@ -56,6 +56,7 @@
 - ARIA: the root is a `nav` labelled "Page navigation", so a screen reader announces it as a landmark distinct from the page's own nav. That name is **overridable** by passing `aria-label` — two nav landmarks may not share an accessible name (axe `landmark-unique`), so a page carrying two paginations must distinguish them. Each link's accessible name is its eyebrow plus the destination title; the chevrons are decorative (`aria-hidden`).
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
 - Touch target: each side is a padded block, comfortably over 40×40 px.
+- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Right-to-left
 

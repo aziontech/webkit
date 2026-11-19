@@ -45,7 +45,7 @@
 | `size` | `'small' \| 'medium' \| 'large'` | `'large'` | false | Size token; affects height, padding, and typography. |
 | `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
 | `loading` | `boolean` | `false` | false | Shows loading state and disables activation. |
-| `href` | `string` | `''` | false | When set, renders as a link (`<a>`). |
+| `href` | `string` | `''` | false | When set to a safe URL, renders as a link (`<a>`); an unsafe URL is ignored, and a `download` attribute keeps `blob:` / `data:` (see Accessibility). |
 | `target` | `'_blank' \| '_self'` | `'_self'` | false | Link target when `href` is set. |
 | `iconTransition` | `boolean` | `false` | false | Animates icon swaps with enter/leave transitions. |
 | `iconClass` | `string` | `''` | false | Extra classes applied to the icon glyph. |
@@ -78,6 +78,7 @@
 - `motion-reduce:transition-none` on animated states; the icon swap also starts from `scale-100` under reduced motion.
 - Accessible name: `aria-label` (static or bound) or `aria-labelledby` is mandatory; `webkit/require-accessible-name` flags an IconButton with neither, and an empty name renders no `aria-label` attribute.
 - Touch target ≥40×40 px where the control is interactive.
+- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the control stays a native button and still emits `click`; with a `download` attribute, `blob:` and `data:` URLs are kept for the file. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Right-to-left
 

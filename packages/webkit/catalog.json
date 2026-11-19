@@ -5168,7 +5168,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Where the reference points: `#<anchor>-source-<n>` for the `Sources` list under the response, or the source URL. Without it the number is plain text."
+     "doc": "Where the reference points: `#<anchor>-source-<n>` for the `Sources` list under the response, or the source URL. Without it, or when it is unsafe (`javascript:`, `data:`), the number is plain text."
     }
    ],
    "surface": "app",
@@ -5989,7 +5989,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "The model's Markdown so far. Parsed into elements, never injected as HTML: raw tags render as text and only http(s), mailto, relative and hash links survive."
+     "doc": "The model's Markdown so far. Parsed into elements, never injected as HTML: raw tags render as text and only http(s), mailto, tel, relative and hash links survive."
     },
     {
      "name": "streaming",
@@ -6288,7 +6288,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "When set, renders as a link (`<a>`)."
+     "doc": "When set to a safe URL, renders as a link (`<a>`); an unsafe URL is ignored, and a `download` attribute keeps `blob:` / `data:` (see Accessibility)."
     },
     {
      "name": "target",
@@ -6376,7 +6376,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "When set, renders as an anchor link."
+     "doc": "When set to a safe URL, renders as an anchor link; an unsafe URL is ignored (see Accessibility)."
     },
     {
      "name": "target",
@@ -6752,7 +6752,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "When set, renders as a link (`<a>`)."
+     "doc": "When set to a safe URL, renders as a link (`<a>`); an unsafe URL is ignored, and a `download` attribute keeps `blob:` / `data:` (see Accessibility)."
     },
     {
      "name": "target",
@@ -21072,7 +21072,7 @@
      "type": "string",
      "default": "—",
      "required": "true",
-     "doc": "URL of the document to embed."
+     "doc": "URL of the document to embed. Only an absolute `http(s)` URL is framed; anything else renders the title as text."
     },
     {
      "name": "title",
@@ -21427,7 +21427,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Destination URL for the anchor. Empty renders `#`."
+     "doc": "Destination URL for the anchor. Empty, or an unsafe URL (`javascript:`, `data:`), renders `#`."
     },
     {
      "name": "target",

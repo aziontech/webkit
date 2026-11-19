@@ -46,7 +46,7 @@
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "Where the reference points: `#<anchor>-source-<n>` for the `Sources` list under the response, or the source URL. Without it the number is plain text."
+   "doc": "Where the reference points: `#<anchor>-source-<n>` for the `Sources` list under the response, or the source URL. Without it, or when it is unsafe (`javascript:`, `data:`), the number is plain text."
   }
  ],
  "events": [],

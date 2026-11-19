@@ -206,13 +206,13 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `src` | `string` | `—` | true | URL of the document to embed. |
+| `src` | `string` | `—` | true | URL of the document to embed. Only an absolute `http(s)` URL is framed; anything else renders the title as text. |
 | `title` | `string` | `—` | true | Accessible name for the embedded document, announced before its content. |
 | `ratio` | `'video' \| 'square' \| 'wide'` | `'video'` | false | Aspect ratio the frame holds while it scales. |
 
 ## States
 
-- Visual states: `default`
+- Visual states: `default`, `unavailable` (the `src` is not an absolute `http(s)` URL: no `iframe`, the `title` shows as muted text in the reserved box)
 - `data-ratio` mirrors the `ratio` prop and drives the frame's aspect ratio
 - The frame reserves its aspect ratio before the document loads, so the page does not shift when it arrives
 
@@ -224,6 +224,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the embedded document carries its own contrast; the frame contributes only its border.
 - `motion-reduce:transition-none motion-reduce:transform-none` — not applicable, the frame is static.
 - Touch target ≥40×40 px — not applicable; any control belongs to the embedded document.
+- Frame safety: only an absolute `http` or `https` `src` is framed (checked by the shared `safeWebUrl` in `src/utils/safe-href.ts`). A `javascript:`, `data:`, `about:`, relative or protocol-relative `src`, in any case or hidden behind spaces, tabs or HTML entities, renders the `title` as muted plain text in the frame box (`embed__unavailable`) instead of an `iframe`. The `iframe` always carries a fixed `sandbox` (`allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-presentation`, never top-level navigation) and `referrerpolicy="strict-origin-when-cross-origin"`. Do not frame a same-origin page that renders untrusted content.
 
 ## Examples
 
@@ -236,7 +237,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 <template>
   <Embed
-    src="data:text/html,<body style='margin:0;height:100vh;display:grid;place-items:center;font:1rem system-ui;color:gray'>Placeholder embed</body>"
+    src="https://example.com"
     title="A placeholder document standing in for an embedded demo"
     ratio="video"
   />
@@ -826,6 +827,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - A card that leaves the documentation (absolute URL, `mailto:`, or explicit `target="_blank"`) carries `rel="noreferrer"` and swaps the chevron for a diagonal arrow, so the destination change is visible and not colour-only.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
 - Touch target: the whole tile is the hit area, comfortably over 40×40 px.
+- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the card renders without a link, as with an empty `href`. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Examples
 
@@ -1460,6 +1462,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - A row that leaves the documentation carries `rel="noreferrer"` on `target="_blank"` and swaps the chevron for a diagonal arrow, so the destination change is visible and not colour-only.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
 - Touch target: the full row is the hit area, comfortably over 40×40 px.
+- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the item renders without a link, as with an empty `href`. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Examples
 
@@ -2030,6 +2033,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - ARIA: the root is a `nav` labelled "Page navigation", so a screen reader announces it as a landmark distinct from the page's own nav. That name is **overridable** by passing `aria-label` — two nav landmarks may not share an accessible name (axe `landmark-unique`), so a page carrying two paginations must distinguish them. Each link's accessible name is its eyebrow plus the destination title; the chevrons are decorative (`aria-hidden`).
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
 - Touch target: each side is a padded block, comfortably over 40×40 px.
+- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Examples
 
@@ -2395,6 +2399,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - The marker is never the only signal: the active entry also changes ink and carries `aria-current`, so the state does not depend on seeing the dash.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
 - Touch target: entries are padded rows; the rail itself is not interactive.
+- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Examples
 
@@ -3977,6 +3982,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): `var(--text-default)` for the heading, `var(--text-muted)` for the description, `var(--primary)` for the glyph and `var(--text-brand)`, the logo orange, for the hovered headline (an owner-accepted brand exception in light) — all against the fill the surrounding cell provides.
 - `motion-reduce:transition-none` on both transitions a linked claim carries.
 - Touch target ≥40×40 px — the whole claim is the target, so it is the cell's own height; a topic is never smaller than its heading plus its sentence.
+- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the item renders without a link, as with an empty `href`. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Examples
 
@@ -4245,6 +4251,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the row's title is `var(--text-default)` and its description `var(--text-muted)` on `var(--bg-canvas)`, and the hover plate keeps both on `var(--bg-hover)`.
 - `motion-reduce:transition-none` on the row's hover transition, on the same class string.
 - Touch target ≥40×40 px: a row is at least 44 px tall and spans the column's full width, and its hover plate is pulled past the text on both sides so the target is the row, not the words.
+- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the item renders without a link, as with an empty `href`. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Examples
 
@@ -4434,6 +4441,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the label is `--text-default` on `--bg-hover` over `--bg-surface`. The marks are consumer-supplied images; WCAG 1.4.11 exempts logotypes from the contrast minimum, and the component adds no colour filter, so a mark must carry its own legibility against `var(--bg-surface)`. Anything in `aside` is ordinary content and is bound by the minimum in full.
 - `motion-reduce:transition-none` / `motion-reduce:before:transition-none` on every hover transition. The band never auto-scrolls, so WCAG 2.2.2 (pause, stop, hide) does not apply.
 - Touch target ≥40×40 px — a linked cell's anchor is its whole square.
+- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Examples
 
@@ -4858,6 +4866,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the headline is `var(--text-default)` on `var(--bg-surface)`; the description uses `var(--text-muted)`, which clears AA on the dark canvas and is a known theme-level shortfall on the light one (see `stats`).
 - `motion-reduce:transition-none motion-reduce:transform-none` — not applicable, the band is static.
 - Touch target — the band composes no control of its own; the small buttons its `actions` pattern calls for stand 28 px tall, which clears WCAG 2.2 AA 2.5.8 (24×24 px) but is under this package's own 40×40 px house floor.
+- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the media renders without a link, as with an empty `mediaHref`. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Examples
 
@@ -5895,6 +5904,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text uses `--text-default` / `--text-muted`.
 - `motion-reduce:transition-none` on every transition.
 - Touch target ≥40×40 px — owned by `icon-button` and `split-button`.
+- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link label in the body renders as plain text; other links lose their `href`. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Examples
 
@@ -6017,6 +6027,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text uses `--text-default` / `--text-muted` on the canvas.
 - `motion-reduce:transition-none` on every transition.
 - Touch target ≥40×40 px — the whole card is the target.
+- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Examples
 
@@ -6139,6 +6150,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text uses `--text-default` / `--text-muted` on the canvas.
 - `motion-reduce:transition-none` on every transition.
 - Touch target ≥40×40 px — every wall title is a full-cell button.
+- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Examples
 
@@ -6289,6 +6301,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text uses `--text-default` / `--text-muted`.
 - `motion-reduce:transition-none` on every transition.
 - Touch target ≥40×40 px — every row is a full-row link.
+- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Examples
 
@@ -6529,6 +6542,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Contrast ≥4.5:1: copy is `var(--text-muted)` on `var(--bg-surface)`; the link label is `var(--text-muted)` at rest; the arrow is `var(--text-brand)`, the logo orange (≥3:1 as a decorative graphic).
 - `motion-reduce:transition-none` on every transition; the track never auto-advances (WCAG 2.2.2 does not apply).
 - Touch target ≥40×40 px: the controls are 40×40; a card link spans its whole card.
+- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Examples
 
@@ -6754,6 +6768,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): story text `var(--text-default)` over the canvas gradient; marks are inked to their fill through `logoTreatment`.
 - `motion-reduce:transition-none` on the fill transition.
 - Touch target ≥40×40 px — each mark cell is a full grid cell.
+- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Examples
 
@@ -7043,6 +7058,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - `motion-reduce:before:transition-none` on the hover fill.
 - Touch target ≥40×40 px — each mark face spans its column.
 - `reveal="hover"`: the list carries the one accessible name (`ariaLabel`, else the built-in "Customer stories"); each card is one link named "<link label>, <client>: <story>", so its logo is decorative (`alt=""`); focus opens the card the same way hover does and the ring is drawn inside the card; `az-arrow-up-right` mirrors under right-to-left.
+- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Examples
 
@@ -7544,6 +7560,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): pill `var(--text-default)` on `var(--bg-surface-raised)`; see-more `var(--text-muted)` rising to `var(--text-default)` on hover.
 - `motion-reduce:transition-none motion-reduce:transform-none` on both transitions above.
 - Touch target ≥40×40 px — the see-more cell is a full grid cell.
+- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Examples
 
@@ -7764,6 +7781,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - `motion-reduce:transition-none` on the status link's colour transition.
 - Touch target ≥40×40 px — the status link is at least `h-10` (`min-h-10`), buttons are large, channels are whole-cell links.
 - Reflow: the status link has `min-h-10` and `max-w-full`, and the lane floor wraps its buttons and the status link onto new lines, so nothing overflows a narrow column or a 200% zoom.
+- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Examples
 
@@ -8052,6 +8070,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `faq`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion; the accordion carries its own fallback.
 - Touch target ≥40×40 px — owned by the accordion triggers.
+- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link label in the answer renders as plain text. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Examples
 
@@ -8661,6 +8680,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by the composed components.
 - `motion-reduce:transition-none` on the inline description link's colour transition; the composed components carry their own fallback.
 - Touch target ≥40×40 px — the text fields and the button are large.
+- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Examples
 
@@ -9016,6 +9036,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): link line `var(--text-default)` on `var(--bg-hover)`.
 - `motion-reduce:transition-none motion-reduce:transform-none` on every transition above.
 - Touch target ≥40×40 px — each link is a full 12rem-tall cell.
+- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Examples
 
@@ -9377,6 +9398,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): row links and group headings `var(--text-default)`, headers and meta `var(--text-muted)`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the field, select and button transitions belong to the composed components, which carry their own reduced-motion fallback; this band adds no motion.
 - Touch target ≥40×40 px — the search field, selects and empty-state button are large; each phone row link stretches over its whole item and each table row is a whole-row target.
+- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Examples
 
@@ -9511,6 +9533,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): row titles `var(--text-default)`, values `var(--text-muted)`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion; the button carries its own fallback.
 - Touch target ≥40×40 px — each phone row is a whole-item link; the button is large.
+- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Examples
 
@@ -11141,6 +11164,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by the composed components.
 - `motion-reduce:transition-none` on the mark link's opacity transition.
 - Touch target ≥24×24 px — the social buttons are small `icon-button`s (28 px, above the 24 px WCAG 2.5.8 minimum; the design keeps the social row quiet), the select follows `select`; the column links and the Azion mark link rely on the WCAG 2.5.8 spacing exception (see Responsive).
+- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Examples
 
@@ -11407,6 +11431,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by the composed components.
 - `motion-reduce:transition-none` on the mark link; the sheet and the panels own their reduced-motion fallbacks.
 - Touch target ≥40×40 px — the medium buttons and icon buttons meet it.
+- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Usage
 
@@ -11599,6 +11624,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text uses `--text-default` / `--text-muted`.
 - `motion-reduce:transition-none` on every transition.
 - Touch target ≥40×40 px — every card is a full-cell link.
+- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Examples
 
@@ -11736,6 +11762,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): titles `var(--text-default)`, descriptions and links `var(--text-muted)`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the article link colour transition carries `motion-reduce:transition-none`.
 - Touch target ≥40×40 px — the closing actions are large `button`s; article links are inline text links inside a list.
+- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Examples
 
@@ -11867,6 +11894,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): card titles `var(--text-default)`, card lines `var(--text-muted)`; marks flagged `invertInDark` invert under the dark theme.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the button hover and the marquee scroll belong to `button` and `marquee`, which carry their own reduced-motion fallback; this band adds no motion.
 - Touch target ≥40×40 px — the deploy buttons are medium `button`s, the copy's actions are large.
+- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Examples
 
