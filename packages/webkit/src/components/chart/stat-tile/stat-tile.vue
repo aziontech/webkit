@@ -38,6 +38,8 @@
     trend?: (number | null)[]
     /** Renders Skeleton lines in place of the figure, delta and sparkline. */
     loading?: boolean
+    /** Why the value failed to load. When set, the tile shows a dash and a danger band that says it could not load, never No data. */
+    error?: string
   }
 
   const props = withDefaults(defineProps<StatTileProps>(), {
@@ -50,7 +52,8 @@
     deltaLabel: '',
     inverse: false,
     trend: () => [],
-    loading: false
+    loading: false,
+    error: ''
   })
 
   defineSlots<{
@@ -79,16 +82,20 @@
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'stat-tile')
   const labelId = `${uid}-label`
 
-  const hasValue = computed(() => isFiniteNumber(props.value))
-  const figure = computed(() => (display.value === null ? '–' : valueText(display.value)))
-  const finalFigure = computed(() =>
-    isFiniteNumber(props.value)
+  const failed = computed(() => !props.loading && props.error.length > 0)
+  const hasValue = computed(() => !failed.value && isFiniteNumber(props.value))
+  const figure = computed(() =>
+    failed.value || display.value === null ? '–' : valueText(display.value)
+  )
+  const finalFigure = computed(() => {
+    if (failed.value) return `${t('statTile.loadError')}. ${props.error}`
+    return isFiniteNumber(props.value)
       ? [valueText(props.value), props.unit].filter(Boolean).join(' ')
       : t('statTile.noValue')
-  )
+  })
 
   const trendKind = computed<StatTileTrend | null>(() => {
-    if (!isFiniteNumber(props.delta)) return null
+    if (failed.value || !isFiniteNumber(props.delta)) return null
     if (Number(Math.abs(props.delta).toFixed(2)) === 0) return 'flat'
     return props.delta > 0 !== props.inverse ? 'good' : 'bad'
   })
@@ -115,6 +122,7 @@
     :data-testid="testId"
     data-plain-ground
     :data-loading="loading || null"
+    :data-error="failed || null"
     :data-variant="variant"
     :data-grouped="group ? '' : null"
     :aria-labelledby="labelId"
@@ -204,10 +212,11 @@
     >
       <Separator class="absolute inset-x-0 top-0" />
       <Tag
-        severity="neutral"
+        :severity="failed ? 'danger' : 'neutral'"
         size="small"
         rounded
-        :label="t('statTile.noData')"
+        :label="failed ? t('statTile.loadError') : t('statTile.noData')"
+        :data-testid="`${testId}__empty-label`"
         class="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2"
       />
     </div>

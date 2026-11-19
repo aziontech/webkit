@@ -121,6 +121,29 @@ describe('StatTile', () => {
     expect(spark.querySelectorAll('path').length).toBeGreaterThan(0)
   })
 
+  it('says it could not load, never No data, when the value failed to load', () => {
+    const view = mount({
+      value: 48210,
+      delta: 4,
+      trend: [1, 2, 3],
+      error: 'The request timed out.'
+    })
+    const root = view.getByTestId('stat-tile')
+    expect(root.hasAttribute('data-error')).toBe(true)
+    expect(view.getByTestId('stat-tile__value').textContent?.trim()).toBe('–')
+    expect(view.getByTestId('stat-tile__empty-label').textContent).toContain("Couldn't load")
+    expect(view.getByTestId('stat-tile__empty').textContent).not.toContain('No data')
+    expect(view.queryByTestId('stat-tile__delta')).toBeNull()
+    expect(view.queryByTestId('stat-tile__sparkline')).toBeNull()
+    expect(root.textContent).toContain('The request timed out.')
+  })
+
+  it('keeps the Skeleton while loading even with an error set', () => {
+    const view = mount({ loading: true, error: 'The request timed out.' })
+    expect(view.getByTestId('stat-tile__loading')).toBeTruthy()
+    expect(view.getByTestId('stat-tile').hasAttribute('data-error')).toBe(false)
+  })
+
   it('renders Skeleton lines while loading', () => {
     const view = mount({ loading: true })
     expect(view.getByTestId('stat-tile__loading')).toBeTruthy()
@@ -133,6 +156,7 @@ describe('StatTile', () => {
       {},
       { delta: -3.2, unit: 'ms', trend: [3, 2, 1] },
       { value: null },
+      { error: 'The request timed out.' },
       { loading: true }
     ]) {
       const view = mount(props)

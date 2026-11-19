@@ -1071,6 +1071,7 @@ export const ptBR: Messages = {
   statTile: {
     noValue: 'Sem valor',
     noData: 'Sem dados',
+    loadError: 'Não foi possível carregar',
     better: 'melhor',
     worse: 'pior',
     unchanged: 'sem alteração'

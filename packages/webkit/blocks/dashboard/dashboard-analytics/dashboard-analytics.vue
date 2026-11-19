@@ -503,6 +503,7 @@
           :inverse="figure.inverse"
           :trend="figure.trend"
           :loading="loading"
+          :error="error"
         >
           <template #aside>
             <Hint :content="figure.description" />

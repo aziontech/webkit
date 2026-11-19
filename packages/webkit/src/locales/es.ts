@@ -1071,6 +1071,7 @@ export const es: Messages = {
   statTile: {
     noValue: 'Sin valor',
     noData: 'Sin datos',
+    loadError: 'No se pudo cargar',
     better: 'mejor',
     worse: 'peor',
     unchanged: 'sin cambios'

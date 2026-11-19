@@ -156,6 +156,7 @@
               inverse
               :trend="service.trend"
               :loading="loading"
+              :error="error"
             >
               <template #aside>
                 <StatusIndicator

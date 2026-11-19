@@ -449,6 +449,7 @@
             inverse
             :trend="summary.blocked.trend"
             :loading="loading"
+            :error="error"
           >
             <template #aside>
               <Hint
@@ -466,6 +467,7 @@
             :delta-label="periodComparison"
             :trend="summary.inspected.trend"
             :loading="loading"
+            :error="error"
           >
             <template #aside>
               <Hint content="Requests checked against security rules across every service." />
@@ -482,6 +484,7 @@
             inverse
             :trend="summary.blockRate.trend"
             :loading="loading"
+            :error="error"
           >
             <template #aside>
               <Hint content="Share of inspected requests blocked as attacks." />

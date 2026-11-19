@@ -219,6 +219,7 @@
                   :value="overall.score"
                   :format-value="formatScore"
                   :loading="loading"
+                  :error="error"
                 />
                 <p
                   v-if="overall.cause && !loading"

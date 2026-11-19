@@ -3,10 +3,10 @@ name: stat-tile
 category: chart
 structure: monolithic
 status: implemented
-checksum: 33098335d5476e2ee28b24ab6370efd2a16391281b67c4a043861fa624161af6
+checksum: d10487116bb259c6f8a991a96c635866baa4f538e25d106b6bcff486e252fe0e
 spec_version: 7
 created: 2026-10-20
-last_updated: 2026-11-18
+last_updated: 2026-11-19
 ---
 
 # StatTile — Component Spec
@@ -95,6 +95,7 @@ The function props (`formatValue`) and the events stay Vue. `DocMarkdown` and th
 | `inverse`     | `boolean`                   | `false`         | false    | A rise is bad for this metric; flips the delta between success and danger.                                                         |
 | `trend`       | `(number \| null)[]`        | `[]`            | false    | Sparkline values, oldest first; `null` leaves a gap, as in `spark-chart`. Empty hides the sparkline.                               |
 | `loading`     | `boolean`                   | `false`         | false    | Renders Skeleton lines in place of the figure, delta and sparkline.                                                                |
+| `error`       | `string`                    | `''`            | false    | Why the value failed to load. When set, the tile shows a dash and a danger band that says it could not load, never No data.         |
 
 ## Events
 
@@ -109,7 +110,7 @@ _No events — a tile is content; wrap it in a link or button to make it interac
 
 ## States
 
-- Visual states: `default`, `loading` (Skeleton), `empty value` (a dash when `value` is null, over a no-data band: a `Separator` carrying a "No data" `Tag`, the height of the sparkline so the tile keeps its row's shape; no placeholder curve is drawn, since a curve reads as data)
+- Visual states: `default`, `loading` (Skeleton), `error` (a dash over the same band with a `danger` "Couldn't load" `Tag` in place of "No data"; the delta and the sparkline hide, `data-error` is set and the figure's accessible text reads "Couldn't load." followed by the `error` message; `loading` wins over `error`), `empty value` (a dash when `value` is null, over a no-data band: a `Separator` carrying a "No data" `Tag`, the height of the sparkline so the tile keeps its row's shape; no placeholder curve is drawn, since a curve reads as data)
 - The delta `Tag` severity follows the trend: `success` when good, `danger` when bad, `neutral` when flat
 - `data-loading` mirrors `loading`; `data-variant` mirrors `variant` (`mono` | `sans`)
 - `data-grouped` is set when the tile sits in a `StatTileGroup` (injected, no prop): the tile drops its own border, radius and surface, draws its end and bottom edges as the cell dividers, and aligns the delta to the end of the figure row
