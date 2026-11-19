@@ -313,6 +313,11 @@ describe('ai/ai-chat', () => {
     expect(view.container.querySelector('[data-testid="image-gallery"]')).toBeTruthy()
     expect(view.container.textContent).toContain('traffic-report.csv')
     expect(view.container.querySelector('[data-testid="audio-player"]')).toBeTruthy()
+    expect(
+      view.container.querySelector('[data-from="user"] [data-testid="image-gallery"]')
+    ).toBeTruthy()
+    expect(view.container.textContent).toContain('"cacheHitRatio": 0.92')
+    expect(view.getByRole('button', { name: 'Attach files' })).toBeTruthy()
   })
 
   it('draws activity parts and the activity messages before the turn as one step list', async () => {

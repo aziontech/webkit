@@ -772,12 +772,14 @@
     >
       <StatusIndicator
         v-if="reconnecting"
+        key="reconnecting"
         severity="warning"
         label="Reconnecting"
         loading
       />
       <Alert
         v-else-if="offline"
+        key="offline"
         severity="danger"
         size="small"
         title="Connection lost"
@@ -786,11 +788,13 @@
       </Alert>
       <StatusIndicator
         v-else-if="sessionGenerating && !loading"
+        key="elsewhere"
         severity="info"
         label="Responding in another tab"
         loading
       />
       <Alert
+        key="alert-2"
         v-if="interruptErrors.length"
         severity="danger"
         size="small"

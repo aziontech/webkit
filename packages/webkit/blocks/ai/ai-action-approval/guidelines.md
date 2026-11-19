@@ -34,35 +34,46 @@ Each read-only call it made, as a completed `ToolCall` with the tool name in cod
 
 The question names the action and its target, with the command or tool in code. The description says what changes and what stays. The body is the call's input in a `CodeBlock`. Deny (outlined) and the approve button, labelled with the verb of the title (Deploy, Delete), sit at the inline end. For irreversible actions use `variant="danger"` and `confirmation-phrase` with the resource name. After a decision the buttons give way to Approved or Denied. The body shows the call's input as JSON; a tool with `editable` lets the reader edit it, Approve stays off while it does not parse, and the edit resolves the interrupt as `{ editedArgs }`.
 
-### E. The action running — `ToolCall`
+### E. The action running — `ToolCall`, `ImageGallery`
 
-After approval, the call appears as a running `ToolCall` under the card and completes or fails in place; a denial records it as denied.
+After approval, the call appears as a running `ToolCall` under the card and completes or fails in place; a denial records it as denied. A `tool-result` whose `content` is a list of text and image parts draws as text and an `ImageGallery` in the output, not as JSON.
 
 ### F. Outcome — `ChatMessage`, `CopyButton`, `Button`
 
 A new response that says what changed (or that nothing ran), with Copy in its actions. When the approved action fails or is stopped, the response says what failed and that the previous version still serves, and an outlined Retry `Button` beside Copy runs the action again; an action never ends in silence.
 
+### G. Questions and failed decisions — `AgentQuestion`, `Alert`
+
+A pending generic interrupt is an `AgentQuestion` after the conversation: its `message` is the question, `metadata.options` (or `payload.options`) the choices, else a text field; Submit calls `resolveInterrupt(answer)` and Skip calls `cancel()`. An `unbound` interrupt (an approval a workflow engine owns, which the chat cannot resolve) is asked the same way without Skip, and Submit emits `answer-interrupt` so the app sends the answer to its owner. When `interruptErrors` holds a decision that was not sent, a danger `Alert` above the composer says Your decision was not sent with its reason, and Retry (shown when one is retryable) emits `retry-interrupts`.
+
+### H. Structured answers — `CodeBlock`, `Alert`
+
+A `structured-output` part draws as a JSON `CodeBlock`: the progressive `partial` (else `raw`) while it streams, `data` once complete; on `error` a danger `Alert` says The structured answer failed with its `errorMessage`.
+
 ## Data
 
-The block draws a conversation in the message shape of TanStack AI: each message has an `id`, a `role` and its `parts` in order (`text`, `thinking`, `tool-call`, `tool-result`), so the values `useChat` from `@tanstack/ai-vue` returns go straight into its props, with no conversion. The block calls no model and depends on no AI library; `messages.ts` declares the same shape itself (`AiActionApprovalMessage`, `AiActionApprovalPart`, `AiActionApprovalTool`, `AiActionApprovalInterrupt`, re-exported from `ai-action-approval.vue`), so any source that produces it works. Parts it does not draw (images, audio) are skipped. `sample.ts` holds the sample threads the variants pass. The draft in the composer stays local.
+The block draws a conversation in the message shape of TanStack AI: each message has an `id`, a `role` and its `parts` in order (`text`, `thinking`, `tool-call`, `tool-result`, `structured-output`), so the values `useChat` from `@tanstack/ai-vue` returns go straight into its props, with no conversion. The block calls no model and depends on no AI library; `messages.ts` declares the same shape itself (`AiActionApprovalMessage`, `AiActionApprovalPart`, `AiActionApprovalTool`, `AiActionApprovalInterrupt`, re-exported from `ai-action-approval.vue`), so any source that produces it works. Parts it does not draw (images, audio) are skipped. `sample.ts` holds the sample threads the variants pass. The draft in the composer stays local.
 
 What TanStack AI does not carry, the app adds in `metadata`: `sources` (the documents the response cites, numbered in order), `reasoningSeconds` (left out, the block measures the thinking time) and `stopped` (the block also marks the response that Stop ended). A message's time is its `createdAt`, formatted in the reader's locale.
 
-| Prop         | Type                                   | What it does                                                                                                                                                         |
-| ------------ | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `messages`   | `AiActionApprovalMessage[]`            | The conversation, oldest first, as `useChat` returns it. Left out, the sample deployment renders.                                                                    |
-| `loading`    | `boolean`                              | `isLoading` from `useChat`: the last response thinks, then streams, and the composer shows Stop.                                                                     |
-| `error`      | `string \| Error`                      | `error` from `useChat` shows the standard sentence on the last response with Try again; a string shows that sentence instead.                                        |
-| `tools`      | `Record<string, AiActionApprovalTool>` | How each tool reads, by name: `title` for the call, `question`, `description`, `approveLabel`, `variant`, `confirmationPhrase` and `editable` for its approval card. |
-| `interrupts` | `interrupts` of `useChat`              | The pending approvals; the approve button and Deny resolve the one whose `toolCallId` matches the call.                                                              |
+| Prop              | Type                                   | What it does                                                                                                                                                                                            |
+| ----------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `messages`        | `AiActionApprovalMessage[]`            | The conversation, oldest first, as `useChat` returns it. Left out, the sample deployment renders.                                                                                                       |
+| `loading`         | `boolean`                              | `isLoading` from `useChat`: the last response thinks, then streams, and the composer shows Stop.                                                                                                        |
+| `error`           | `string \| Error`                      | `error` from `useChat` shows the standard sentence on the last response with Try again; a string shows that sentence instead.                                                                           |
+| `tools`           | `Record<string, AiActionApprovalTool>` | How each tool reads, by name: `title` for the call, `question`, `description`, `approveLabel`, `variant`, `confirmationPhrase` and `editable` for its approval card.                                    |
+| `interrupts`      | `interrupts` of `useChat`              | The pending approvals and questions; the approve button and Deny resolve the one whose `toolCallId` matches the call, a generic one asks its question, and an unbound one asks it for the app to route. |
+| `interruptErrors` | `interruptErrors` of `useChat`         | Decisions that were not sent: an alert with the reason, and Retry when one is retryable.                                                                                                                |
 
-| Event     | Payload                 | When                                                                                                                                              |
-| --------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `send`    | `(event, text)`         | The composer: call `sendMessage(text)`.                                                                                                           |
-| `stop`    | `(event)`               | Stop while the response streams: call `stop()`. The block marks the stopped response.                                                             |
-| `retry`   | `(event, message)`      | Try again or Regenerate response: call `reload()`.                                                                                                |
-| `approve` | `(event, call, input?)` | The approve button on an approval card; `input` is the edited arguments of an `editable` tool. The block already resolved the matching interrupt. |
-| `deny`    | `(event, call)`         | Deny on an approval card; the block already resolved the matching interrupt.                                                                      |
+| Event              | Payload                     | When                                                                                                                                              |
+| ------------------ | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `send`             | `(event, text)`             | The composer: call `sendMessage(text)`.                                                                                                           |
+| `stop`             | `(event)`                   | Stop while the response streams: call `stop()`. The block marks the stopped response.                                                             |
+| `retry`            | `(event, message)`          | Try again or Regenerate response: call `reload()`.                                                                                                |
+| `approve`          | `(event, call, input?)`     | The approve button on an approval card; `input` is the edited arguments of an `editable` tool. The block already resolved the matching interrupt. |
+| `deny`             | `(event, call)`             | Deny on an approval card; the block already resolved the matching interrupt.                                                                      |
+| `answer-interrupt` | `(event, interrupt, value)` | The reader answered an unbound interrupt: send `value` to whatever owns it.                                                                       |
+| `retry-interrupts` | `(event)`                   | Retry on the alert of `interruptErrors`: call `retryInterrupts()`.                                                                                |
 
 To go live, install `@tanstack/ai`, `@tanstack/ai-vue` and the adapter of your model (`@tanstack/ai-anthropic`, `@tanstack/ai-openai`…), add a server route that streams the model, and bind `useChat` to the block:
 
@@ -82,7 +93,17 @@ export async function POST(request: Request) {
 
   import AiActionApproval from './ai-action-approval.vue'
 
-  const { messages, isLoading, error, interrupts, sendMessage, stop, reload, clear } = useChat({
+  const {
+    messages,
+    isLoading,
+    error,
+    interrupts,
+    interruptErrors,
+    sendMessage,
+    retryInterrupts,
+    stop,
+    reload
+  } = useChat({
     connection: fetchServerSentEvents('/api/chat'),
     threadId: 'assistant'
   })
@@ -94,7 +115,9 @@ export async function POST(request: Request) {
     :loading="isLoading"
     :error="error"
     :interrupts="interrupts"
+    :interrupt-errors="interruptErrors"
     @send="(_event, text) => sendMessage(text)"
+    @retry-interrupts="retryInterrupts()"
     @stop="stop()"
     @retry="reload()"
   />
@@ -127,6 +150,7 @@ A tool that needs approval is declared once with `toolDefinition({ name, inputSc
 - **Buttons:** Deny and the verb of the title (Deploy, Delete); "Approve" only for a generic tool call.
 - **Typed confirmation:** "Type old.example.com to confirm" (built in).
 - **Outcomes:** Approved, Denied (built in).
+- **Decision not sent:** `Your decision was not sent` with the reason and Retry.
 - **Assistant after a denial:** "Got it, nothing was deployed."
 - Follow `skills/webkit-microcopy`: sentence case, no "please", present tense.
 
@@ -145,6 +169,7 @@ A tool that needs approval is declared once with `toolDefinition({ name, inputSc
 - Running: the call approved (`approval.approved: true`) and still running under the card, with `loading`, so the composer shows Stop.
 - Approved: the call `complete` with its output, and the assistant's report after it.
 - Denied: `approval.approved: false` and a `tool-result` with `outcome: 'denied'`; the card reads Denied, the call is recorded as denied and the assistant says nothing ran.
+- Questions and failed decisions: a generic or unbound interrupt asks its `AgentQuestion` after the conversation; `interruptErrors` shows the alert with Retry.
 - Error: the approved call in `error` with its `tool-result` error, and a report that says what failed and that `b-4790` still serves, with Retry.
 
 ## Related

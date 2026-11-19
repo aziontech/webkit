@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/ai/ai-action-approval/ai-action-approval.vue` in `@aziontech/webkit`
 - MCP: `get_block("ai/ai-action-approval")`
-- Components: [Button](../../components/button.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [Conversation](../../components/conversation.md), [CopyButton](../../components/copy-button.md), [PromptInput](../../components/prompt-input.md), [StreamingResponse](../../components/streaming-response.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), `use-locale`
+- Components: [AgentQuestion](../../components/agent-question.md), [Alert](../../components/alert.md), [Button](../../components/button.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [Conversation](../../components/conversation.md), [CopyButton](../../components/copy-button.md), [ImageGallery](../../components/image-gallery.md), [PromptInput](../../components/prompt-input.md), [StreamingResponse](../../components/streaming-response.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), `use-locale`
 - Skills: `webkit-ai-surfaces`, `webkit-ui-states`, `webkit-errors`
 
 ## Asked as
@@ -46,35 +46,46 @@ Each read-only call it made, as a completed `ToolCall` with the tool name in cod
 
 The question names the action and its target, with the command or tool in code. The description says what changes and what stays. The body is the call's input in a `CodeBlock`. Deny (outlined) and the approve button, labelled with the verb of the title (Deploy, Delete), sit at the inline end. For irreversible actions use `variant="danger"` and `confirmation-phrase` with the resource name. After a decision the buttons give way to Approved or Denied. The body shows the call's input as JSON; a tool with `editable` lets the reader edit it, Approve stays off while it does not parse, and the edit resolves the interrupt as `{ editedArgs }`.
 
-### E. The action running — `ToolCall`
+### E. The action running — `ToolCall`, `ImageGallery`
 
-After approval, the call appears as a running `ToolCall` under the card and completes or fails in place; a denial records it as denied.
+After approval, the call appears as a running `ToolCall` under the card and completes or fails in place; a denial records it as denied. A `tool-result` whose `content` is a list of text and image parts draws as text and an `ImageGallery` in the output, not as JSON.
 
 ### F. Outcome — `ChatMessage`, `CopyButton`, `Button`
 
 A new response that says what changed (or that nothing ran), with Copy in its actions. When the approved action fails or is stopped, the response says what failed and that the previous version still serves, and an outlined Retry `Button` beside Copy runs the action again; an action never ends in silence.
 
+### G. Questions and failed decisions — `AgentQuestion`, `Alert`
+
+A pending generic interrupt is an `AgentQuestion` after the conversation: its `message` is the question, `metadata.options` (or `payload.options`) the choices, else a text field; Submit calls `resolveInterrupt(answer)` and Skip calls `cancel()`. An `unbound` interrupt (an approval a workflow engine owns, which the chat cannot resolve) is asked the same way without Skip, and Submit emits `answer-interrupt` so the app sends the answer to its owner. When `interruptErrors` holds a decision that was not sent, a danger `Alert` above the composer says Your decision was not sent with its reason, and Retry (shown when one is retryable) emits `retry-interrupts`.
+
+### H. Structured answers — `CodeBlock`, `Alert`
+
+A `structured-output` part draws as a JSON `CodeBlock`: the progressive `partial` (else `raw`) while it streams, `data` once complete; on `error` a danger `Alert` says The structured answer failed with its `errorMessage`.
+
 ## Data
 
-The block draws a conversation in the message shape of TanStack AI: each message has an `id`, a `role` and its `parts` in order (`text`, `thinking`, `tool-call`, `tool-result`), so the values `useChat` from `@tanstack/ai-vue` returns go straight into its props, with no conversion. The block calls no model and depends on no AI library; `messages.ts` declares the same shape itself (`AiActionApprovalMessage`, `AiActionApprovalPart`, `AiActionApprovalTool`, `AiActionApprovalInterrupt`, re-exported from `ai-action-approval.vue`), so any source that produces it works. Parts it does not draw (images, audio) are skipped. `sample.ts` holds the sample threads the variants pass. The draft in the composer stays local.
+The block draws a conversation in the message shape of TanStack AI: each message has an `id`, a `role` and its `parts` in order (`text`, `thinking`, `tool-call`, `tool-result`, `structured-output`), so the values `useChat` from `@tanstack/ai-vue` returns go straight into its props, with no conversion. The block calls no model and depends on no AI library; `messages.ts` declares the same shape itself (`AiActionApprovalMessage`, `AiActionApprovalPart`, `AiActionApprovalTool`, `AiActionApprovalInterrupt`, re-exported from `ai-action-approval.vue`), so any source that produces it works. Parts it does not draw (images, audio) are skipped. `sample.ts` holds the sample threads the variants pass. The draft in the composer stays local.
 
 What TanStack AI does not carry, the app adds in `metadata`: `sources` (the documents the response cites, numbered in order), `reasoningSeconds` (left out, the block measures the thinking time) and `stopped` (the block also marks the response that Stop ended). A message's time is its `createdAt`, formatted in the reader's locale.
 
-| Prop         | Type                                   | What it does                                                                                                                                                         |
-| ------------ | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `messages`   | `AiActionApprovalMessage[]`            | The conversation, oldest first, as `useChat` returns it. Left out, the sample deployment renders.                                                                    |
-| `loading`    | `boolean`                              | `isLoading` from `useChat`: the last response thinks, then streams, and the composer shows Stop.                                                                     |
-| `error`      | `string \| Error`                      | `error` from `useChat` shows the standard sentence on the last response with Try again; a string shows that sentence instead.                                        |
-| `tools`      | `Record<string, AiActionApprovalTool>` | How each tool reads, by name: `title` for the call, `question`, `description`, `approveLabel`, `variant`, `confirmationPhrase` and `editable` for its approval card. |
-| `interrupts` | `interrupts` of `useChat`              | The pending approvals; the approve button and Deny resolve the one whose `toolCallId` matches the call.                                                              |
+| Prop              | Type                                   | What it does                                                                                                                                                                                            |
+| ----------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `messages`        | `AiActionApprovalMessage[]`            | The conversation, oldest first, as `useChat` returns it. Left out, the sample deployment renders.                                                                                                       |
+| `loading`         | `boolean`                              | `isLoading` from `useChat`: the last response thinks, then streams, and the composer shows Stop.                                                                                                        |
+| `error`           | `string \| Error`                      | `error` from `useChat` shows the standard sentence on the last response with Try again; a string shows that sentence instead.                                                                           |
+| `tools`           | `Record<string, AiActionApprovalTool>` | How each tool reads, by name: `title` for the call, `question`, `description`, `approveLabel`, `variant`, `confirmationPhrase` and `editable` for its approval card.                                    |
+| `interrupts`      | `interrupts` of `useChat`              | The pending approvals and questions; the approve button and Deny resolve the one whose `toolCallId` matches the call, a generic one asks its question, and an unbound one asks it for the app to route. |
+| `interruptErrors` | `interruptErrors` of `useChat`         | Decisions that were not sent: an alert with the reason, and Retry when one is retryable.                                                                                                                |
 
-| Event     | Payload                 | When                                                                                                                                              |
-| --------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `send`    | `(event, text)`         | The composer: call `sendMessage(text)`.                                                                                                           |
-| `stop`    | `(event)`               | Stop while the response streams: call `stop()`. The block marks the stopped response.                                                             |
-| `retry`   | `(event, message)`      | Try again or Regenerate response: call `reload()`.                                                                                                |
-| `approve` | `(event, call, input?)` | The approve button on an approval card; `input` is the edited arguments of an `editable` tool. The block already resolved the matching interrupt. |
-| `deny`    | `(event, call)`         | Deny on an approval card; the block already resolved the matching interrupt.                                                                      |
+| Event              | Payload                     | When                                                                                                                                              |
+| ------------------ | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `send`             | `(event, text)`             | The composer: call `sendMessage(text)`.                                                                                                           |
+| `stop`             | `(event)`                   | Stop while the response streams: call `stop()`. The block marks the stopped response.                                                             |
+| `retry`            | `(event, message)`          | Try again or Regenerate response: call `reload()`.                                                                                                |
+| `approve`          | `(event, call, input?)`     | The approve button on an approval card; `input` is the edited arguments of an `editable` tool. The block already resolved the matching interrupt. |
+| `deny`             | `(event, call)`             | Deny on an approval card; the block already resolved the matching interrupt.                                                                      |
+| `answer-interrupt` | `(event, interrupt, value)` | The reader answered an unbound interrupt: send `value` to whatever owns it.                                                                       |
+| `retry-interrupts` | `(event)`                   | Retry on the alert of `interruptErrors`: call `retryInterrupts()`.                                                                                |
 
 To go live, install `@tanstack/ai`, `@tanstack/ai-vue` and the adapter of your model (`@tanstack/ai-anthropic`, `@tanstack/ai-openai`…), add a server route that streams the model, and bind `useChat` to the block:
 
@@ -94,7 +105,17 @@ export async function POST(request: Request) {
 
   import AiActionApproval from './ai-action-approval.vue'
 
-  const { messages, isLoading, error, interrupts, sendMessage, stop, reload, clear } = useChat({
+  const {
+    messages,
+    isLoading,
+    error,
+    interrupts,
+    interruptErrors,
+    sendMessage,
+    retryInterrupts,
+    stop,
+    reload
+  } = useChat({
     connection: fetchServerSentEvents('/api/chat'),
     threadId: 'assistant'
   })
@@ -106,7 +127,9 @@ export async function POST(request: Request) {
     :loading="isLoading"
     :error="error"
     :interrupts="interrupts"
+    :interrupt-errors="interruptErrors"
     @send="(_event, text) => sendMessage(text)"
+    @retry-interrupts="retryInterrupts()"
     @stop="stop()"
     @retry="reload()"
   />
@@ -139,6 +162,7 @@ A tool that needs approval is declared once with `toolDefinition({ name, inputSc
 - **Buttons:** Deny and the verb of the title (Deploy, Delete); "Approve" only for a generic tool call.
 - **Typed confirmation:** "Type old.example.com to confirm" (built in).
 - **Outcomes:** Approved, Denied (built in).
+- **Decision not sent:** `Your decision was not sent` with the reason and Retry.
 - **Assistant after a denial:** "Got it, nothing was deployed."
 - Follow `skills/webkit-microcopy`: sentence case, no "please", present tense.
 
@@ -157,6 +181,7 @@ A tool that needs approval is declared once with `toolDefinition({ name, inputSc
 - Running: the call approved (`approval.approved: true`) and still running under the card, with `loading`, so the composer shows Stop.
 - Approved: the call `complete` with its output, and the assistant's report after it.
 - Denied: `approval.approved: false` and a `tool-result` with `outcome: 'denied'`; the card reads Denied, the call is recorded as denied and the assistant says nothing ran.
+- Questions and failed decisions: a generic or unbound interrupt asks its `AgentQuestion` after the conversation; `interruptErrors` shows the alert with Retry.
 - Error: the approved call in `error` with its `tool-result` error, and a report that says what failed and that `b-4790` still serves, with Retry.
 
 ## Related
@@ -181,11 +206,14 @@ Each variant is the same screen in another state: `get_block("ai/ai-action-appro
 
 ```vue
 <script setup lang="ts">
+  import AgentQuestion from '@aziontech/webkit/agent-question'
+  import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import ChatMessage, { type ChatMessageStatus } from '@aziontech/webkit/chat-message'
   import CodeBlock from '@aziontech/webkit/code-block'
   import Conversation from '@aziontech/webkit/conversation'
   import CopyButton from '@aziontech/webkit/copy-button'
+  import ImageGallery from '@aziontech/webkit/image-gallery'
   import type { PromptInputStatus } from '@aziontech/webkit/prompt-input'
   import PromptInput from '@aziontech/webkit/prompt-input-root'
   import StreamingResponse from '@aziontech/webkit/streaming-response'
@@ -196,30 +224,42 @@ Each variant is the same screen in another state: `get_block("ai/ai-action-appro
 
   import {
     type AiActionApprovalInterrupt,
+    type AiActionApprovalInterruptError,
     type AiActionApprovalMessage,
+    type AiActionApprovalQuestion,
     type AiActionApprovalTool,
     type AiActionApprovalToolCallPart,
+    answerInterrupt,
     approvalOf,
+    hasAnswer,
     hasText,
+    interruptErrorText,
+    isQuestion,
     isToolCallPart,
     isToolResultPart,
     json,
     needsApproval,
     parsesAsJson,
+    questionOf,
     resolveInterrupt,
     segmentsOf,
+    skipInterrupt,
+    structuredOf,
     textOf,
+    toolContentOf,
     toolStatusOf
   } from './messages'
   import { sampleMessages, sampleTools } from './sample'
 
   export type {
     AiActionApprovalInterrupt,
+    AiActionApprovalInterruptError,
     AiActionApprovalMessage,
     AiActionApprovalMessageMetadata,
     AiActionApprovalOtherPart,
     AiActionApprovalPart,
     AiActionApprovalRole,
+    AiActionApprovalStructuredOutputPart,
     AiActionApprovalTextPart,
     AiActionApprovalThinkingPart,
     AiActionApprovalTool,
@@ -237,8 +277,10 @@ Each variant is the same screen in another state: `get_block("ai/ai-action-appro
     error?: string | { message: string } | null
     /** How each tool reads, by tool name: the call's title, the approval question, its verb and whether it is irreversible. */
     tools?: Record<string, AiActionApprovalTool>
-    /** Pending requests, as `useChat` returns `interrupts`; the approve button and Deny resolve the matching one. */
+    /** Pending requests, as `useChat` returns `interrupts`; the approve button and Deny resolve the matching one, a generic one asks its question, and an unbound one asks it for the app to route. */
     interrupts?: ReadonlyArray<AiActionApprovalInterrupt>
+    /** Why the decisions were not sent, as `useChat` returns `interruptErrors`; a retryable one offers Retry. */
+    interruptErrors?: ReadonlyArray<AiActionApprovalInterruptError>
   }
 
   const props = withDefaults(defineProps<AiActionApprovalProps>(), {
@@ -246,7 +288,8 @@ Each variant is the same screen in another state: `get_block("ai/ai-action-appro
     loading: false,
     error: '',
     tools: undefined,
-    interrupts: () => []
+    interrupts: () => [],
+    interruptErrors: () => []
   })
 
   const emit = defineEmits<{
@@ -255,12 +298,17 @@ Each variant is the same screen in another state: `get_block("ai/ai-action-appro
     stop: [event: MouseEvent]
     retry: [event: MouseEvent, message: AiActionApprovalMessage]
     send: [event: MouseEvent | KeyboardEvent, text: string]
+    'answer-interrupt': [event: Event, interrupt: AiActionApprovalInterrupt, value: string]
+    'retry-interrupts': [event: MouseEvent]
   }>()
 
   const { formatDate } = useLocale()
 
   const prompt = ref('')
   const edits = ref<Record<string, string>>({})
+  const answers = ref<Record<string, string>>({})
+  const settled = ref<Record<string, AiActionApprovalQuestion>>({})
+  const routed = ref<Record<string, boolean>>({})
 
   const turns = computed(() =>
     (props.messages ?? sampleMessages).filter(
@@ -278,7 +326,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-action-appro
   function statusOf(turn: AiActionApprovalMessage): ChatMessageStatus {
     if (turn.role === 'user' || turn !== last.value) return 'success'
     if (failure.value) return 'error'
-    if (props.loading && !runs(turn)) return hasText(turn) ? 'streaming' : 'pending'
+    if (props.loading && !runs(turn)) return hasAnswer(turn) ? 'streaming' : 'pending'
     return 'success'
   }
 
@@ -305,7 +353,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-action-appro
 
   const state = computed<PromptInputStatus>(() => {
     if (!props.loading) return 'ready'
-    return last.value?.role === 'assistant' && (hasText(last.value) || runs(last.value))
+    return last.value?.role === 'assistant' && (hasAnswer(last.value) || runs(last.value))
       ? 'streaming'
       : 'pending'
   })
@@ -334,6 +382,38 @@ Each variant is the same screen in another state: `get_block("ai/ai-action-appro
   function deny(event: MouseEvent, call: AiActionApprovalToolCallPart) {
     emit('deny', event, call)
     resolveInterrupt(props.interrupts, call, false)
+  }
+
+  const pendingQuestions = computed(() => props.interrupts.filter(isQuestion))
+  const retryable = computed(() => props.interruptErrors.some((error) => error.retryable !== false))
+
+  const questions = computed(() => {
+    const live = pendingQuestions.value
+      .map(questionOf)
+      .map((question) =>
+        !question.bound && routed.value[question.id]
+          ? { ...question, status: 'running' as const }
+          : question
+      )
+    const ids = new Set(live.map((question) => question.id))
+    return [...live, ...Object.values(settled.value).filter((question) => !ids.has(question.id))]
+  })
+
+  function answer(event: Event, question: AiActionApprovalQuestion, value: string) {
+    const interrupt = pendingQuestions.value.find((item) => item.id === question.id)
+    settled.value[question.id] = { ...question, status: 'success', error: '' }
+    if (question.bound) {
+      answerInterrupt(interrupt, value)
+    } else {
+      routed.value[question.id] = true
+      if (interrupt) emit('answer-interrupt', event, interrupt, value)
+    }
+  }
+
+  function skip(question: AiActionApprovalQuestion) {
+    const interrupt = pendingQuestions.value.find((item) => item.id === question.id)
+    settled.value[question.id] = { ...question, status: 'skipped', error: '' }
+    skipInterrupt(interrupt)
   }
 
   function send(event: MouseEvent | KeyboardEvent, value: string) {
@@ -426,6 +506,25 @@ Each variant is the same screen in another state: `get_block("ai/ai-action-appro
                 </template>
                 <template
                   v-if="
+                    !segment.result?.error &&
+                    segment.call.output === undefined &&
+                    toolContentOf(segment.result?.content)
+                  "
+                  #output
+                >
+                  <p
+                    v-if="toolContentOf(segment.result?.content)?.text"
+                    class="whitespace-pre-line text-body-sm text-(--text-default)"
+                  >
+                    {{ toolContentOf(segment.result?.content)?.text }}
+                  </p>
+                  <ImageGallery
+                    v-if="toolContentOf(segment.result?.content)?.images.length"
+                    :items="toolContentOf(segment.result?.content)?.images ?? []"
+                  />
+                </template>
+                <template
+                  v-else-if="
                     json(segment.result?.error || segment.call.output || segment.result?.content)
                   "
                   #output
@@ -439,6 +538,23 @@ Each variant is the same screen in another state: `get_block("ai/ai-action-appro
                   />
                 </template>
               </ToolCall>
+            </template>
+            <template v-else-if="segment.type === 'structured'">
+              <Alert
+                v-if="segment.part.status === 'error'"
+                severity="danger"
+                size="small"
+                title="The structured answer failed"
+              >
+                {{ segment.part.errorMessage || 'The answer did not match the expected format.' }}
+              </Alert>
+              <CodeBlock
+                v-else-if="structuredOf(segment.part)"
+                :code="structuredOf(segment.part)"
+                language="json"
+                :show-line-numbers="false"
+                :aria-busy="segment.part.status === 'streaming' || undefined"
+              />
             </template>
           </template>
         </template>
@@ -467,8 +583,38 @@ Each variant is the same screen in another state: `get_block("ai/ai-action-appro
           </ChatMessage.Actions>
         </template>
       </ChatMessage>
+      <ChatMessage
+        v-if="questions.length"
+        from="assistant"
+      >
+        <AgentQuestion
+          v-for="question in questions"
+          :key="question.id"
+          v-model="answers[question.id]"
+          :title="question.title"
+          :type="question.options.length ? 'choice' : 'text'"
+          :options="question.options"
+          :status="question.status"
+          :error="question.error"
+          :skippable="question.bound"
+          @submit="(event, value) => answer(event, question, value)"
+          @skip="skip(question)"
+        />
+      </ChatMessage>
     </Conversation>
-    <footer class="layout-column-content layout-boundary-inline pb-(--spacing-md)">
+    <footer
+      class="layout-column-content layout-boundary-inline flex flex-col gap-(--spacing-xs) pb-(--spacing-md)"
+    >
+      <Alert
+        v-if="interruptErrors.length"
+        severity="danger"
+        size="small"
+        title="Your decision was not sent"
+        :action-label="retryable ? 'Retry' : ''"
+        @action="emit('retry-interrupts', $event)"
+      >
+        {{ interruptErrorText(interruptErrors) }}
+      </Alert>
       <PromptInput
         v-model="prompt"
         :status="state"
@@ -619,7 +765,18 @@ export interface AiActionApprovalUiResourcePart {
   serverId?: string
 }
 
-/** A part the conversation does not draw, such as structured output. */
+/** A typed answer the assistant returned against a schema; `data` is set once it is complete. */
+export interface AiActionApprovalStructuredOutputPart {
+  type: 'structured-output'
+  status: 'streaming' | 'complete' | 'error'
+  raw: string
+  data?: unknown
+  partial?: unknown
+  reasoning?: string
+  errorMessage?: string
+}
+
+/** A part the conversation does not draw. */
 export interface AiActionApprovalOtherPart {
   type: string
 }
@@ -637,6 +794,7 @@ export type AiActionApprovalPart =
   | AiActionApprovalActivityPart
   | AiActionApprovalSubagentPart
   | AiActionApprovalUiResourcePart
+  | AiActionApprovalStructuredOutputPart
   | AiActionApprovalOtherPart
 
 /** What the app adds to a message beside its parts. */
@@ -679,6 +837,10 @@ export interface AiActionApprovalTool {
   confirmationPhrase?: string
   /** The reader may edit the call's arguments, as JSON, before approving. */
   editable?: boolean
+  /** The reader answers this tool in the chat: the block asks `question` (else the title) and hands the answer back for `addToolResult`. */
+  answerable?: boolean
+  /** The answers the reader picks from when `answerable`; left out, the reader types one. */
+  options?: AgentQuestionOption[]
 }
 
 /** A pending request from the chat, as TanStack AI's `useChat` returns it in `interrupts`. */
@@ -694,6 +856,42 @@ export interface AiActionApprovalInterrupt {
   resolveInterrupt?: unknown
   cancel?: unknown
 }
+
+/** A failed attempt to send the answers to pending requests, as `useChat` returns it in `interruptErrors`. */
+export interface AiActionApprovalInterruptError {
+  message: string
+  retryable?: boolean
+  code?: string
+}
+
+/** The answer to a tool the reader answers, in the shape `addToolResult` takes. */
+export interface AiActionApprovalToolAnswer {
+  toolCallId: string
+  tool: string
+  output: unknown
+}
+
+/** Inline base64 bytes of a file the reader attached. */
+export interface AiActionApprovalDataSource {
+  type: 'data'
+  value: string
+  mimeType: string
+}
+
+/** A file the reader attached to a message, as a TanStack AI content part. */
+export interface AiActionApprovalAttachment {
+  type: 'image' | 'audio' | 'video' | 'document'
+  source: AiActionApprovalDataSource
+  metadata: { name: string }
+}
+
+/** A message with attachments, as `sendMessage` takes it. */
+export interface AiActionApprovalContent {
+  content: Array<AiActionApprovalTextPart | AiActionApprovalAttachment>
+}
+
+/** What the reader sent: the text alone, or the text with its attachments. */
+export type AiActionApprovalSendContent = string | AiActionApprovalContent
 
 /** A message waiting to be sent, as `useChat` returns it in `queue`. */
 export interface AiActionApprovalQueuedMessage {
@@ -711,6 +909,7 @@ export interface AiActionApprovalQuestion {
   options: AgentQuestionOption[]
   status: AgentQuestionStatus
   error: string
+  bound: boolean
 }
 
 /** A rendered piece of an assistant message. */
@@ -730,10 +929,15 @@ export type AiActionApprovalSegment =
   | { type: 'document'; key: string; part: AiActionApprovalDocumentPart }
   | { type: 'subagent'; key: string; part: AiActionApprovalSubagentPart }
   | { type: 'app'; key: string; part: AiActionApprovalUiResourcePart }
+  | { type: 'structured'; key: string; part: AiActionApprovalStructuredOutputPart }
 
 export const isUiResourcePart = (
   part: AiActionApprovalPart
 ): part is AiActionApprovalUiResourcePart => part.type === 'ui-resource'
+
+export const isStructuredOutputPart = (
+  part: AiActionApprovalPart
+): part is AiActionApprovalStructuredOutputPart => part.type === 'structured-output'
 
 export const isTextPart = (part: AiActionApprovalPart): part is AiActionApprovalTextPart =>
   part.type === 'text'
@@ -859,6 +1063,13 @@ export function hasText(message: AiActionApprovalMessage): boolean {
   return message.parts.some((part) => isTextPart(part) && part.content.length > 0)
 }
 
+export function hasAnswer(message: AiActionApprovalMessage): boolean {
+  return (
+    hasText(message) ||
+    message.parts.some((part) => isStructuredOutputPart(part) && part.raw.length > 0)
+  )
+}
+
 export function hasThinking(message: AiActionApprovalMessage): boolean {
   return message.parts.some(isThinkingPart)
 }
@@ -878,8 +1089,13 @@ export function segmentsOf(
     ? [{ type: 'activity', key: 'activity', steps }]
     : []
   const thinking = message.parts
-    .filter(isThinkingPart)
-    .map((part) => part.content)
+    .flatMap((part) =>
+      isThinkingPart(part)
+        ? [part.content]
+        : isStructuredOutputPart(part) && part.reasoning
+          ? [part.reasoning]
+          : []
+    )
     .join('\n\n')
   if (thinking) segments.push({ type: 'reasoning', key: 'reasoning', content: thinking })
   message.parts.forEach((part, index) => {
@@ -914,6 +1130,8 @@ export function segmentsOf(
       segments.push({ type: 'subagent', key: `subagent-${index}`, part })
     } else if (isUiResourcePart(part)) {
       segments.push({ type: 'app', key: `app-${part.toolCallId}-${index}`, part })
+    } else if (isStructuredOutputPart(part)) {
+      segments.push({ type: 'structured', key: `structured-${index}`, part })
     }
   })
   return segments
@@ -929,6 +1147,53 @@ export function toolStatusOf(
   if (call.state === 'complete' || result?.state === 'complete') return 'success'
   if (call.state === 'awaiting-input' || call.state === 'input-streaming') return 'streaming'
   return 'running'
+}
+
+export function structuredOf(part: AiActionApprovalStructuredOutputPart): string {
+  if (part.status === 'complete') return json(part.data)
+  return json(part.partial) || part.raw
+}
+
+export interface AiActionApprovalToolContent {
+  text: string
+  images: ImageGalleryItem[]
+}
+
+export function toolContentOf(content: unknown): AiActionApprovalToolContent | null {
+  if (!Array.isArray(content) || !content.length) return null
+  const texts: string[] = []
+  const images: ImageGalleryItem[] = []
+  for (const [index, part] of (content as AiActionApprovalPart[]).entries()) {
+    if (!part || typeof part !== 'object') return null
+    if (isTextPart(part)) texts.push(part.content)
+    else if (isImagePart(part)) {
+      const image = imageOf(part, index)
+      if (image) images.push(image)
+    } else return null
+  }
+  return { text: texts.filter(Boolean).join('\n\n'), images }
+}
+
+export function answerable(
+  tool: AiActionApprovalTool | undefined,
+  call: AiActionApprovalToolCallPart,
+  result?: AiActionApprovalToolResultPart
+): boolean {
+  return Boolean(tool?.answerable) && call.output === undefined && !result && call.state !== 'error'
+}
+
+export function toolQuestionOf(
+  call: AiActionApprovalToolCallPart,
+  tool: AiActionApprovalTool
+): AiActionApprovalQuestion {
+  return {
+    id: call.id,
+    title: tool.question || tool.title || `Answer ${call.name}`,
+    options: tool.options ?? [],
+    status: 'pending',
+    error: '',
+    bound: true
+  }
 }
 
 export function needsApproval(call: AiActionApprovalToolCallPart): boolean {
@@ -982,7 +1247,7 @@ export function resolveInterrupt(
 }
 
 export function isQuestion(interrupt: AiActionApprovalInterrupt): boolean {
-  return interrupt.kind === 'generic' && Boolean(interrupt.id)
+  return (interrupt.kind === 'generic' || interrupt.kind === 'unbound') && Boolean(interrupt.id)
 }
 
 function optionsIn(value: unknown): AgentQuestionOption[] {
@@ -1014,7 +1279,8 @@ export function questionOf(interrupt: AiActionApprovalInterrupt): AiActionApprov
     title: interrupt.message || 'The agent needs an answer to continue.',
     options: options.length ? options : optionsIn(interrupt.payload),
     status: QUESTION_STATUS[interrupt.status ?? ''] ?? 'pending',
-    error: interrupt.errors?.[0]?.message ?? ''
+    error: interrupt.errors?.[0]?.message ?? '',
+    bound: interrupt.kind !== 'unbound'
   }
 }
 
@@ -1029,6 +1295,48 @@ export function answerInterrupt(
 export function skipInterrupt(interrupt: AiActionApprovalInterrupt | undefined): void {
   const cancel = interrupt?.cancel
   if (typeof cancel === 'function') cancel.call(interrupt)
+}
+
+export function interruptErrorText(errors: ReadonlyArray<AiActionApprovalInterruptError>): string {
+  return [...new Set(errors.map((error) => error.message).filter(Boolean))].join(' ')
+}
+
+const ATTACHMENT_KINDS = ['image', 'audio', 'video'] as const
+
+export function attachmentKindOf(mimeType: string): AiActionApprovalAttachment['type'] {
+  return ATTACHMENT_KINDS.find((kind) => mimeType.startsWith(`${kind}/`)) ?? 'document'
+}
+
+function base64Of(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => {
+      const url = typeof reader.result === 'string' ? reader.result : ''
+      resolve(url.slice(url.indexOf(',') + 1))
+    }
+    reader.onerror = () => reject(reader.error)
+    reader.readAsDataURL(file)
+  })
+}
+
+export async function attachmentOf(file: File): Promise<AiActionApprovalAttachment> {
+  const mimeType = file.type || 'application/octet-stream'
+  return {
+    type: attachmentKindOf(mimeType),
+    source: { type: 'data', value: await base64Of(file), mimeType },
+    metadata: { name: file.name }
+  }
+}
+
+export async function contentOf(
+  text: string,
+  files: ReadonlyArray<File>
+): Promise<AiActionApprovalSendContent> {
+  if (!files.length) return text
+  const attachments = await Promise.all(files.map(attachmentOf))
+  return {
+    content: [...(text.trim() ? [{ type: 'text' as const, content: text }] : []), ...attachments]
+  }
 }
 
 export function queueItemOf(message: AiActionApprovalQueuedMessage): PromptQueueItem {

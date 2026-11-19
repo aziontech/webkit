@@ -69,7 +69,7 @@
     },
     {
       "name": "Media",
-      "summary": "An answer with two charts in an `ImageGallery`, a CSV report in a `FilePreview` and an audio summary in an `AudioPlayer`.",
+      "summary": "A prompt with an attached image, then an answer with a chart tool result, two charts in an `ImageGallery`, a structured answer, a CSV in a `FilePreview` and an audio summary; the composer attaches files.",
       "file": "variants/media.vue"
     },
     {

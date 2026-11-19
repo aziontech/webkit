@@ -3256,7 +3256,7 @@ What each prop and event does, and the go-live code: [blocks/account/account-use
 - Surface: app
 - Source: `blocks/ai/ai-action-approval/ai-action-approval.vue` in `@aziontech/webkit`
 - MCP: `get_block("ai/ai-action-approval")`
-- Components: Button, ChatMessage, CodeBlock, Conversation, CopyButton, PromptInput, StreamingResponse, ToolApproval, ToolCall, `use-locale`
+- Components: AgentQuestion, Alert, Button, ChatMessage, CodeBlock, Conversation, CopyButton, ImageGallery, PromptInput, StreamingResponse, ToolApproval, ToolCall, `use-locale`
 - Skills: `webkit-ai-surfaces`, `webkit-ui-states`, `webkit-errors`
 
 ## Asked as
@@ -3285,20 +3285,22 @@ The moment an assistant needs permission. The reader asked for something that ch
 - B. Request — `ChatMessage`
 - C. What the assistant checked — `ToolCall`, `StreamingResponse`
 - D. Authorization card — `ToolApproval`, `CodeBlock`
-- E. The action running — `ToolCall`
+- E. The action running — `ToolCall`, `ImageGallery`
 - F. Outcome — `ChatMessage`, `CopyButton`, `Button`
+- G. Questions and failed decisions — `AgentQuestion`, `Alert`
+- H. Structured answers — `CodeBlock`, `Alert`
 
 What each part takes: [blocks/ai/ai-action-approval.md](blocks/ai/ai-action-approval.md).
 
 ## Data
 
-The block draws a conversation in the message shape of TanStack AI: each message has an `id`, a `role` and its `parts` in order (`text`, `thinking`, `tool-call`, `tool-result`), so the values `useChat` from `@tanstack/ai-vue` returns go straight into its props, with no conversion. The block calls no model and depends on no AI library; `messages.ts` declares the same shape itself (`AiActionApprovalMessage`, `AiActionApprovalPart`, `AiActionApprovalTool`, `AiActionApprovalInterrupt`, re-exported from `ai-action-approval.vue`), so any source that produces it works. Parts it does not draw (images, audio) are skipped. `sample.ts` holds the sample threads the variants pass. The draft in the composer stays local.
+The block draws a conversation in the message shape of TanStack AI: each message has an `id`, a `role` and its `parts` in order (`text`, `thinking`, `tool-call`, `tool-result`, `structured-output`), so the values `useChat` from `@tanstack/ai-vue` returns go straight into its props, with no conversion. The block calls no model and depends on no AI library; `messages.ts` declares the same shape itself (`AiActionApprovalMessage`, `AiActionApprovalPart`, `AiActionApprovalTool`, `AiActionApprovalInterrupt`, re-exported from `ai-action-approval.vue`), so any source that produces it works. Parts it does not draw (images, audio) are skipped. `sample.ts` holds the sample threads the variants pass. The draft in the composer stays local.
 
 What TanStack AI does not carry, the app adds in `metadata`: `sources` (the documents the response cites, numbered in order), `reasoningSeconds` (left out, the block measures the thinking time) and `stopped` (the block also marks the response that Stop ended). A message's time is its `createdAt`, formatted in the reader's locale.
 
-Prop: `messages`, `loading`, `error`, `tools`, `interrupts`.
+Prop: `messages`, `loading`, `error`, `tools`, `interrupts`, `interruptErrors`.
 
-Event: `send`, `stop`, `retry`, `approve`, `deny`.
+Event: `send`, `stop`, `retry`, `approve`, `deny`, `answer-interrupt`, `retry-interrupts`.
 
 A tool that needs approval is declared once with `toolDefinition({ name, inputSchema, needsApproval: true })`, run on the server with `.server(...)` and passed to `useChat({ tools: [definition] })` too, so the client can match the approval request to the call. Then delete `sample.ts` and its import. `apps/demos` runs this block on `useChat` with TanStack AI's `fakeText` model (`src/lib/assistant-model.ts`), no server and no key.
 
@@ -3328,6 +3330,7 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-action-approv
 - **Buttons:** Deny and the verb of the title (Deploy, Delete); "Approve" only for a generic tool call.
 - **Typed confirmation:** "Type old.example.com to confirm" (built in).
 - **Outcomes:** Approved, Denied (built in).
+- **Decision not sent:** `Your decision was not sent` with the reason and Retry.
 - **Assistant after a denial:** "Got it, nothing was deployed."
 - Follow `skills/webkit-microcopy`: sentence case, no "please", present tense.
 
@@ -3346,6 +3349,7 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-action-approv
 - Running: the call approved (`approval.approved: true`) and still running under the card, with `loading`, so the composer shows Stop.
 - Approved: the call `complete` with its output, and the assistant's report after it.
 - Denied: `approval.approved: false` and a `tool-result` with `outcome: 'denied'`; the card reads Denied, the call is recorded as denied and the assistant says nothing ran.
+- Questions and failed decisions: a generic or unbound interrupt asks its `AgentQuestion` after the conversation; `interruptErrors` shows the alert with Retry.
 - Error: the approved call in `error` with its `tool-result` error, and a report that says what failed and that `b-4790` still serves, with Retry.
 
 ## Related
@@ -3485,7 +3489,7 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-api-key.md](b
 - Surface: app
 - Source: `blocks/ai/ai-chat/ai-chat.vue` in `@aziontech/webkit`
 - MCP: `get_block("ai/ai-chat")`
-- Components: AgentActivity, AgentQuestion, Alert, ArtifactCanvas, ArtifactPreview, `branches`, `placeholderClip`, `usageChart`, AudioPlayer, Button, ChatMessage, CodeBlock, Conversation, CopyButton, `DrawerContent`, Drawer, `DrawerTitle`, EmptyState, FilePreview, IconButton, ImageGallery, McpAppFrame, PromptInput, PromptQueue, Reasoning, Resizable, Sources, StatusIndicator, StreamingResponse, SubagentCard, SuggestionGroup, Tag, ToolApproval, ToolCall, `use-locale`, VideoPlayer
+- Components: AgentActivity, AgentQuestion, Alert, ArtifactCanvas, ArtifactPreview, `branches`, `placeholderClip`, `usageChart`, AudioPlayer, Button, ChatMessage, CodeBlock, Conversation, CopyButton, `DrawerContent`, Drawer, `DrawerTitle`, EmptyState, FilePreview, IconButton, ImageGallery, McpAppFrame, `PromptInputAttachButton`, PromptInput, PromptQueue, Reasoning, Resizable, Skeleton, Sources, StatusIndicator, StreamingResponse, SubagentCard, SuggestionGroup, Tag, ToolApproval, ToolCall, `use-locale`, VideoPlayer
 - Skills: `webkit-ai-surfaces`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -3513,32 +3517,34 @@ A full page where a person talks with the generative AI assistant about their ac
 - A. Header — `Tag`, `Button`
 - B. Empty state — `EmptyState`, `SuggestionGroup`
 - C. Message log — `Conversation`
-- D. Prompt — `ChatMessage`
+- D. Prompt — `ChatMessage`, `ImageGallery`, `FilePreview`
 - E. Response — `ChatMessage`, `Reasoning`, `StreamingResponse`
 - F. Sources — `Sources`
 - G. Response actions — `ChatMessage`, `CopyButton`, `IconButton`
 - H. Follow-up questions — `SuggestionGroup`
-- I. Composer — `PromptInput`
+- I. Composer — `PromptInput`, `PromptInputAttachButton`
 - J. Artifact canvas — `ChatMessage`, `PromptInput` (Artifact)
 - K. Tool calls — `ToolCall`, `ToolApproval`, `CodeBlock`
 - L. Media — `ImageGallery`, `AudioPlayer`, `VideoPlayer`, `FilePreview`
 - M. Agent work — `AgentActivity`, `SubagentCard`, `AgentQuestion`
 - N. Queue and connection — `PromptQueue`, `StatusIndicator`, `Alert`
 - O. Tool widgets — `McpAppFrame`
+- P. Structured answers — `CodeBlock`, `Alert`
+- Q. Restoring — `Skeleton`
 
 What each part takes: [blocks/ai/ai-chat.md](blocks/ai/ai-chat.md).
 
 ## Data
 
-The block draws a conversation in the message shape of TanStack AI: each message has an `id`, a `role` and its `parts` in order (`text`, `thinking`, `tool-call`, `tool-result`, `image`, `audio`, `video`, `document`, `activity`, `subagent`), so the values `useChat` from `@tanstack/ai-vue` returns go straight into its props, with no conversion. The block calls no model and depends on no AI library; `messages.ts` declares the same shape itself (`AiChatMessage`, `AiChatPart`, `AiChatTool`, `AiChatInterrupt`, re-exported from `ai-chat.vue`), so any source that produces it works. Parts it does not draw (structured output, `ui-resource`) are skipped. `sample.ts` holds the sample threads the variants pass. The draft in the composer stays local.
+The block draws a conversation in the message shape of TanStack AI: each message has an `id`, a `role` and its `parts` in order (`text`, `thinking`, `tool-call`, `tool-result`, `image`, `audio`, `video`, `document`, `activity`, `subagent`, `structured-output`, `ui-resource`), so the values `useChat` from `@tanstack/ai-vue` returns go straight into its props, with no conversion. The block calls no model and depends on no AI library; `messages.ts` declares the same shape itself (`AiChatMessage`, `AiChatPart`, `AiChatTool`, `AiChatInterrupt`, `AiChatSendContent`, re-exported from `ai-chat.vue`), so any source that produces it works. A part of another type is skipped. `sample.ts` holds the sample threads the variants pass. The draft in the composer stays local.
 
 An activity step reads, by convention, `content.title` (else its `activityType`), `content.status` (`pending`, `running`, `success` or `complete`, `error`, `canceled` or `cancelled`, `skipped`; left out, running) and `content.detail` as the line under it.
 
 What TanStack AI does not carry, the app adds in `metadata`: `sources` (the documents the response cites, numbered in order), `reasoningSeconds` (left out, the block measures the thinking time) and `stopped` (the block also marks the response that Stop ended). A message's time is its `createdAt`, formatted in the reader's locale.
 
-Prop: `messages`, `suggestions`, `followUps`, `loading`, `error`, `tools`, `interrupts`, `queue`, `moreMessages`, `loadingMore`, `connection`, `resuming`, `resolveAppUrl`.
+Prop: `messages`, `suggestions`, `followUps`, `loading`, `error`, `tools`, `interrupts`, `interruptErrors`, `queue`, `moreMessages`, `loadingMore`, `connection`, `resuming`, `hydrating`, `sessionGenerating`, `attachable`, `accept`, `maxFiles`, `maxFileSize`, `resolveAppUrl`.
 
-Event: `send`, `stop`, `retry`, `new-chat`, `feedback`, `approve`, `remove-queued`, `app-message`, `load-more`, `deny`.
+Event: `send`, `stop`, `retry`, `new-chat`, `feedback`, `approve`, `remove-queued`, `app-message`, `load-more`, `deny`, `answer-tool`, `answer-interrupt`, `retry-interrupts`.
 
 A tool that needs approval is declared once with `toolDefinition({ name, inputSchema, needsApproval: true })`, run on the server with `.server(...)` and passed to `useChat({ tools: [definition] })` too, so the client can match the approval request to the call. Then delete `sample.ts` and its import. `apps/demos` runs this block on `useChat` with TanStack AI's `fakeText` model (`src/lib/assistant-model.ts`), no server and no key.
 
@@ -3575,6 +3581,7 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-chat.md](bloc
 - **Feedback:** Helpful, Not helpful, Feedback submitted (built in).
 - Follow `skills/webkit-microcopy`: sentence case, "select" not "click", "response" not "answer", no "please".
 - **Connection:** `Reconnecting`; `Connection lost` with "Your messages send when the connection returns."
+- **Elsewhere and failed answers:** `Responding in another tab`; `Your answer was not sent` with the reason and Retry; `The structured answer failed`.
 
 ## Accessibility
 
@@ -3585,7 +3592,7 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-chat.md](bloc
 - Feedback thumbs are toggle buttons with `aria-pressed`, and the submitted state is a status message.
 - Keyboard order: header, log (focusable to scroll), each message's links and actions, follow-ups, composer.
 - Alignment never carries meaning alone: every message has its author line.
-- Reconnecting is a polite status and Connection lost an alert; the queued messages are a list named Queued messages, each with Remove from queue; a question card is a group named by its question.
+- Reconnecting is a polite status and Connection lost an alert; the queued messages are a list named Queued messages, each with Remove from queue; a question card is a group named by its question; the placeholders while restoring are a status named Loading the conversation.
 
 ## States
 
@@ -3597,6 +3604,8 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-chat.md](bloc
 - LongThread: six earlier turns as `messages` that overflow the log, opened on the newest response, with `followUps`.
 - Media: an answer with two charts in an `ImageGallery`, a CSV report in a `FilePreview` and an audio summary.
 - Agent: activity steps, a finished `SubagentCard` and a pending `AgentQuestion`; answering it resolves the interrupt and the card keeps the answer.
+- Restoring: `hydrating` with no messages yet shows the `Skeleton` rows and a disabled composer.
+- Attachments, structured answers and rich tool results: a prompt with an image and a PDF, a `structured-output` part as JSON and a tool result with text and an image (variant Media).
 - Queue, older messages and connection: `queue` shows a `PromptQueue` over the composer, `moreMessages` a Load earlier messages button, and `connection` a Reconnecting status or a Connection lost alert.
 
 ## Related
@@ -3622,7 +3631,7 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-chat.md](bloc
 - Surface: app
 - Source: `blocks/ai/ai-chat-drawer/ai-chat-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_block("ai/ai-chat-drawer")`
-- Components: AgentActivity, AgentQuestion, Alert, AudioPlayer, Button, Card, ChatMessage, CodeBlock, Conversation, CopyButton, `DrawerContent`, Drawer, `DrawerTitle`, EmptyState, FilePreview, IconButton, ImageGallery, KeyValueList, McpAppFrame, PageHeader, `PanelHeader`, PromptInput, PromptQueue, Reasoning, Sources, StatusIndicator, StreamingResponse, SubagentCard, SuggestionGroup, Tag, ToolApproval, ToolCall, `use-locale`, VideoPlayer
+- Components: AgentActivity, AgentQuestion, Alert, AudioPlayer, Button, Card, ChatMessage, CodeBlock, Conversation, CopyButton, `DrawerContent`, Drawer, `DrawerTitle`, EmptyState, FilePreview, IconButton, ImageGallery, KeyValueList, McpAppFrame, PageHeader, `PanelHeader`, `PromptInputAttachButton`, PromptInput, PromptQueue, Reasoning, Skeleton, Sources, StatusIndicator, StreamingResponse, SubagentCard, SuggestionGroup, Tag, ToolApproval, ToolCall, `use-locale`, VideoPlayer
 - Skills: `webkit-ai-surfaces`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -3655,26 +3664,28 @@ The generative AI assistant beside the work: the reader is on a resource page �
 - F. Message log — `Conversation`
 - G. Messages — `ChatMessage`, `Reasoning`, `StreamingResponse`, `Sources`, `CopyButton`
 - H. Follow-up questions — `SuggestionGroup`
-- I. Composer — `PromptInput`
+- I. Composer — `PromptInput`, `PromptInputAttachButton`
 - J. Tool calls — `ToolCall`, `ToolApproval`, `CodeBlock`
 - K. Media — `ImageGallery`, `AudioPlayer`, `VideoPlayer`, `FilePreview`
 - L. Agent work — `AgentActivity`, `SubagentCard`, `AgentQuestion`
 - M. Queue and connection — `PromptQueue`, `StatusIndicator`, `Alert`
 - N. Tool widgets — `McpAppFrame`
+- O. Structured answers — `CodeBlock`, `Alert`
+- P. Restoring — `Skeleton`
 
 What each part takes: [blocks/ai/ai-chat-drawer.md](blocks/ai/ai-chat-drawer.md).
 
 ## Data
 
-The block draws a conversation in the message shape of TanStack AI: each message has an `id`, a `role` and its `parts` in order (`text`, `thinking`, `tool-call`, `tool-result`, `image`, `audio`, `video`, `document`, `activity`, `subagent`), so the values `useChat` from `@tanstack/ai-vue` returns go straight into its props, with no conversion. The block calls no model and depends on no AI library; `messages.ts` declares the same shape itself (`AiChatDrawerMessage`, `AiChatDrawerPart`, `AiChatDrawerTool`, `AiChatDrawerInterrupt`, re-exported from `ai-chat-drawer.vue`), so any source that produces it works. Parts it does not draw (structured output, `ui-resource`) are skipped. `sample.ts` holds the sample threads the variants pass. The draft in the composer stays local.
+The block draws a conversation in the message shape of TanStack AI: each message has an `id`, a `role` and its `parts` in order (`text`, `thinking`, `tool-call`, `tool-result`, `image`, `audio`, `video`, `document`, `activity`, `subagent`, `structured-output`, `ui-resource`), so the values `useChat` from `@tanstack/ai-vue` returns go straight into its props, with no conversion. The block calls no model and depends on no AI library; `messages.ts` declares the same shape itself (`AiChatDrawerMessage`, `AiChatDrawerPart`, `AiChatDrawerTool`, `AiChatDrawerInterrupt`, `AiChatDrawerSendContent`, re-exported from `ai-chat-drawer.vue`), so any source that produces it works. A part of another type is skipped. `sample.ts` holds the sample threads the variants pass. The draft in the composer stays local.
 
 An activity step reads, by convention, `content.title` (else its `activityType`), `content.status` (`pending`, `running`, `success` or `complete`, `error`, `canceled` or `cancelled`, `skipped`; left out, running) and `content.detail` as the line under it.
 
 What TanStack AI does not carry, the app adds in `metadata`: `sources` (the documents the response cites, numbered in order), `reasoningSeconds` (left out, the block measures the thinking time) and `stopped` (the block also marks the response that Stop ended). A message's time is its `createdAt`, formatted in the reader's locale.
 
-Prop: `messages`, `suggestions`, `followUps`, `loading`, `error`, `tools`, `interrupts`, `queue`, `moreMessages`, `loadingMore`, `connection`, `resuming`, `resolveAppUrl`, `v-model:open`.
+Prop: `messages`, `suggestions`, `followUps`, `loading`, `error`, `tools`, `interrupts`, `interruptErrors`, `queue`, `moreMessages`, `loadingMore`, `connection`, `resuming`, `hydrating`, `sessionGenerating`, `attachable`, `accept`, `maxFiles`, `maxFileSize`, `resolveAppUrl`, `v-model:open`.
 
-Event: `send`, `stop`, `retry`, `new-chat`, `feedback`, `approve`, `remove-queued`, `app-message`, `load-more`, `deny`.
+Event: `send`, `stop`, `retry`, `new-chat`, `feedback`, `approve`, `remove-queued`, `app-message`, `load-more`, `deny`, `answer-tool`, `answer-interrupt`, `retry-interrupts`.
 
 A tool that needs approval is declared once with `toolDefinition({ name, inputSchema, needsApproval: true })`, run on the server with `.server(...)` and passed to `useChat({ tools: [definition] })` too, so the client can match the approval request to the call. Then delete `sample.ts` and its import. `apps/demos` runs this block on `useChat` with TanStack AI's `fakeText` model (`src/lib/assistant-model.ts`), no server and no key.
 
@@ -3703,6 +3714,7 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-chat-drawer.m
 - **Disclaimer:** "The AI assistant can make mistakes. Check important information."
 - Errors, loading and feedback strings follow `ai/ai-chat` and `skills/webkit-microcopy`.
 - **Connection:** `Reconnecting`; `Connection lost` with "Your messages send when the connection returns."
+- **Elsewhere and failed answers:** `Responding in another tab`; `Your answer was not sent` with the reason and Retry; `The structured answer failed`.
 
 ## Accessibility
 
@@ -3711,7 +3723,7 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-chat-drawer.m
 - The log is a named `role="log"` with live behavior off; finished responses are announced once through the conversation's polite region.
 - New chat is an icon button with an accessible name; it is disabled while the thread is empty.
 - Keyboard order inside the drawer: header controls, log, message actions, follow-ups, composer.
-- Reconnecting is a polite status and Connection lost an alert; the queued messages are a list named Queued messages, each with Remove from queue; a question card is a group named by its question.
+- Reconnecting is a polite status and Connection lost an alert; the queued messages are a list named Queued messages, each with Remove from queue; a question card is a group named by its question; the placeholders while restoring are a status named Loading the conversation.
 
 ## States
 
@@ -3720,7 +3732,7 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-chat-drawer.m
 - Error: `error` set: a failed response with its partial text and Try again.
 - Tools: a `tool-call` part draws as a `ToolCall` titled from `tools`; one with `approval` draws the `ToolApproval` card first (see `ai/ai-action-approval`).
 - LongThread: six earlier turns as `messages` that overflow the drawer's log.
-- Media and agent parts, the queue, older messages and the connection draw as in `ai/ai-chat` (its Media and Agent variants).
+- Media and agent parts, attachments, structured answers, rich tool results, the queue, older messages, restoring and the connection draw as in `ai/ai-chat` (its Media and Agent variants).
 
 ## Related
 
