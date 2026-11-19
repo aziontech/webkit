@@ -2,10 +2,10 @@
 name: mcp-app-frame
 category: ai
 structure: monolithic
-status: draft
+status: approved
 spec_version: 1
 template: 2
-checksum: 0000000000000000000000000000000000000000000000000000000000000000
+checksum: 44adf718d3dc8fc35c3497920cf1ccb998e7b2bfe91e1f6eb28f42e2b0933f2d
 created: 2026-11-19
 last_updated: 2026-11-19
 ---
@@ -21,7 +21,7 @@ Unlike `embed` (a third-party page an author places on purpose and trusts), the 
 Threat model. The widget's HTML comes from an MCP server the reader may not control, through a model that hostile content may have steered, so it is treated as hostile.
 
 - Reaching the page: the `iframe` carries exactly `sandbox="allow-scripts"` (never `allow-same-origin`), `referrerpolicy="no-referrer"`, `allow=""` and no `allowfullscreen`. Inline HTML renders through `srcdoc`, a resolved URL through `src`; either way the document has an opaque origin, so it cannot read or change the parent DOM, cookies, `localStorage` or the app's session (`window.parent.document` throws), and it gets no camera, microphone, geolocation, clipboard or full screen. A resolved URL never learns the conversation's address from the `Referer`, and it has no cookies or storage of its own (reading them throws).
-- Leaving the page: no `allow-top-navigation`, `allow-popups`, `allow-forms` or `allow-modals`, so the widget cannot navigate the tab, open windows, submit forms or block the page with `alert()`. Opening a link is a message the app approves.
+- Leaving the page: no `allow-top-navigation`, `allow-popups`, `allow-forms`, `allow-modals` or `allow-downloads`, so the widget cannot navigate the tab, open windows, submit forms, start downloads or block the page with `alert()`. Opening a link is a message the app approves.
 - Sending data out: inline HTML is prefixed with `<!doctype html>` and a Content Security Policy `meta` (a leading byte order mark is dropped first), so the policy is the first thing the parser meets whatever the widget's markup holds: `default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; media-src data:; font-src data:; connect-src 'none'; frame-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'` (the MCP Apps default without `'self'`, which means nothing for an opaque origin). The widget cannot `fetch`, open a WebSocket, or load remote scripts, images, fonts or frames; a policy the widget adds can only narrow it. A resolved URL is governed by the policy its server sends.
 - Inherited page policy: an `about:srcdoc` document also inherits the app page's own Content Security Policy, and both apply. If the page's `script-src` uses a nonce, a hash or `'strict-dynamic'`, the browser ignores `'unsafe-inline'` and every inline widget's scripts are blocked; the frame cannot see that, so it reaches `ready` with a widget that never answers (a known limit, not an `error`). An app with such a policy resolves its widgets to an https origin of its own through `resolveUrl` instead of adding `'unsafe-inline'`, which would weaken its own protection against cross-site scripting. The frame ignores a resource's declared `_meta.ui.csp` domains, so an inline widget that needs the network does not get it.
 - Residual channels: a content policy does not govern WebRTC (`RTCPeerConnection` to a STUN or TURN host), some engines leak DNS prefetches, and a document may navigate its own frame (next point). So anything the app sends through `post()` (tool results, render data) is disclosed to the widget's author; the app's data the widget never received stays out of reach.
@@ -147,7 +147,7 @@ _No slots._
 - `ready` follows the first `load` of the current `iframe`: the `Skeleton` goes.
 - `error` (`data-error` on the root) replaces the `iframe` with an `Alert` (`severity="warning"`) saying the app cannot be shown. It happens when the resource is not inline HTML and there is no `resolveUrl`; when `resolveUrl` returns an empty string or a URL that is not absolute `https:`, throws, or rejects; when a `blob` is not valid base64 UTF-8; and on a second `load` of the same `iframe` (the widget navigated). A resolved URL that fails on the network cannot be detected (an `iframe` fires no `error` event), so its failure shows inside the frame and does not become `error`.
 - Inline: a resource is shown inline when its `mimeType` is `text/html` (with any parameters, such as `;profile=mcp-app`) and it carries `text` or a base64 `blob`; every other resource goes through `resolveUrl`.
-- Height: the frame starts at `min(240, maxHeight)` px and follows the widget's size message (MCP-UI `ui-size-change` with `payload.height`, MCP Apps `ui/notifications/size-changed` with `params.height`), a finite number clamped between 48 px and `max(48, maxHeight)` (48 px is the floor even when `maxHeight` is smaller), written to `--mcp-app-frame-view-height`; the widget scrolls inside beyond that. Size messages are not emitted.
+- Height: the frame starts at `max(48, min(240, maxHeight))` px and follows the widget's size message (MCP-UI `ui-size-change` with `payload.height`, MCP Apps `ui/notifications/size-changed` with `params.height`), a finite number clamped between 48 px and `max(48, maxHeight)` (48 px is the floor even when `maxHeight` is smaller), written to `--mcp-app-frame-view-height`; the widget scrolls inside beyond that. A size message whose height is not a finite number is dropped. Size messages are not emitted.
 - Accepted messages: `source` is the current `iframe`'s window, `origin` is `null`, and the data is a plain object that is either an MCP-UI message (a string `type` of 1 to 128 characters, an optional plain-object `payload`, an optional string `messageId`) or a JSON-RPC 2.0 message (`jsonrpc: '2.0'` with a string `method` or a string or number `id`; optional plain-object or array `params`, any `result`, plain-object `error`). Everything else is dropped silently.
 
 ## Motion & Animations
