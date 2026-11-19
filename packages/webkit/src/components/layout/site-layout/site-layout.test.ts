@@ -64,6 +64,16 @@ const mount = (
   )
 
 describe('SiteLayout', () => {
+  it('opens with a skip link that moves focus to the main landmark', async () => {
+    const { getByTestId, getByRole, container } = mount()
+    const skip = getByTestId('site-layout__skip-link')
+    expect(container.querySelector('a[href], button')).toBe(skip)
+    const main = getByRole('main')
+    expect(skip.getAttribute('href')).toBe(`#${main.id}`)
+    skip.click()
+    expect(document.activeElement).toBe(main)
+  })
+
   it('renders the bar, one main landmark with the sections, and the footer', () => {
     const { getByTestId, getAllByRole, getByRole } = mount()
     expect(getByTestId('site-layout')).toBeTruthy()

@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 8
 template: 2
-checksum: 14a6816274637108ab4b3f9f751e683f9e762ef4ffdffd4127ed0d8416e2edc0
+checksum: a1708c494b13af1536f34fd9f00933fb7275361e77df2c8495881a6c9bca8478
 created: 2026-11-11
-last_updated: 2026-11-15
+last_updated: 2026-11-19
 ---
 
 # AppLayout — Component Spec
@@ -199,6 +199,7 @@ The only events are the `update:*` of the models above.
 
 ## Accessibility (WCAG 2.1 AA)
 
+- Skip link: the first focusable element is a `SkipLink` (`Skip to content`, from its locale catalog), visually hidden until focused; activating it moves focus to the content region (`app-layout__content`, which takes `tabindex="-1"` for the jump), past the navigation and the header. Every layout built on `AppLayout` (`ConsoleLayout`) gets it by construction.
 - Visible focus: the separator shows `var(--accent)` on `focus-visible`; the region buttons are `IconButton` with their own ring.
 - Keyboard map: `Tab` reaches the region controls in DOM order (navigation, header, content, split panel, tools). On the split separator: `ArrowUp` / `ArrowDown` grow and shrink a bottom panel; `ArrowLeft` / `ArrowRight` grow and shrink a side panel (mirrored under RTL); `Shift` makes the step 64 px instead of 16 px; `Home` / `End` go to the minimum / maximum. `Escape` closes a compact drawer (from `Drawer`) and returns focus to the control that opened it. The split panel and tools bodies are focusable scroll regions (`tabindex="0"`, `role="group"` named by their heading), so a keyboard reader can scroll them when they hold no control.
 - ARIA: the tools region and the split panel are `<section aria-labelledby>` their header title (`<h2>`); the separator is `role="separator"` with `aria-orientation`, `aria-valuenow` / `aria-valuemin` / `aria-valuemax` in pixels, `aria-controls` the split panel and an accessible name from the catalog. The compact drawers are named by `navigationAriaLabel` and `toolsLabel`. The layout adds no landmark of its own around the content; the consumer's `<main>` and `Sidebar` `<nav>` are the landmarks.

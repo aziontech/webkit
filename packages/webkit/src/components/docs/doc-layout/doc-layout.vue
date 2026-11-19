@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, onMounted, onScopeDispose, ref, shallowRef, useAttrs, watch } from 'vue'
+  import { computed, onMounted, onScopeDispose, ref, shallowRef, useAttrs, useId, watch } from 'vue'
 
   import {
     type AppNavGroup,
@@ -37,6 +37,7 @@
   import type { SidebarMenuNode } from '../../navigation/sidebar-menu/injection-key'
   import SidebarMenu from '../../navigation/sidebar-menu/sidebar-menu.vue'
   import SidebarMenuBack from '../../navigation/sidebar-menu/sidebar-menu-back/sidebar-menu-back.vue'
+  import SkipLink from '../../navigation/skip-link/skip-link.vue'
   import Command from '../../overlay/command/command.vue'
   import CommandEmpty from '../../overlay/command/command-empty/command-empty.vue'
   import CommandGroup from '../../overlay/command/command-group/command-group.vue'
@@ -148,6 +149,7 @@
   const NAV_VALUE = 'doc-layout:nav:'
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'doc-layout')
+  const mainId = `${useId()}-main`
 
   const leaves = computed(
     () =>
@@ -319,6 +321,10 @@
     :data-testid="testId"
     class="flex min-h-dvh w-full min-w-0 flex-col bg-(--bg-canvas) text-(--text-default)"
   >
+    <SkipLink
+      :href="`#${mainId}`"
+      :data-testid="`${testId}__skip-link`"
+    />
     <div
       ref="headerEl"
       class="@container sticky top-0 z-30 w-full"
@@ -420,6 +426,7 @@
 
       <div class="flex min-w-0 flex-1 flex-col">
         <main
+          :id="mainId"
           :data-testid="`${testId}__main`"
           class="flex min-w-0 flex-1 flex-col"
         >

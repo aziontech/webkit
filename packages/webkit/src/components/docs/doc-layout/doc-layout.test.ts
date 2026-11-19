@@ -64,6 +64,16 @@ const mount = (
   )
 
 describe('DocLayout', () => {
+  it('opens with a skip link that moves focus to the main landmark', async () => {
+    const { getByTestId, getByRole, container } = mount()
+    const skip = getByTestId('doc-layout__skip-link')
+    expect(container.querySelector('a[href], button')).toBe(skip)
+    const main = getByRole('main')
+    expect(skip.getAttribute('href')).toBe(`#${main.id}`)
+    await fireEvent.click(skip)
+    expect(document.activeElement).toBe(main)
+  })
+
   it('renders the header, the rail, one main landmark with the article and the outline', async () => {
     const { findByTestId, getByTestId, getAllByRole, getByRole } = mount()
     expect(getByTestId('doc-layout')).toBeTruthy()
