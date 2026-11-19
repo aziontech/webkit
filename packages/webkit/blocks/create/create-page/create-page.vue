@@ -5,6 +5,7 @@
   import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import FieldError from '@aziontech/webkit/field-error'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
@@ -15,6 +16,7 @@
   import SettingsRow from '@aziontech/webkit/settings-row'
   import Switch from '@aziontech/webkit/switch'
   import { toast } from '@aziontech/webkit/toast'
+  import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import { reactive, ref, watch } from 'vue'
 
   /** The values of the Create Domain form. */
@@ -108,6 +110,16 @@
     domain: form.domain.trim()
   })
 
+  const guard = useUnsavedChanges(() => form, {
+    enabled: () => !props.loading
+  })
+  const discardDialog = guard.dialogProps
+  const discardLabels = guard.labels
+
+  const onCancel = async (event: MouseEvent) => {
+    if (await guard.confirmLeave()) emit('cancel', event)
+  }
+
   const submit = (event: Event) => {
     if (props.loading || !validate()) return
     emit('submit', event, values())
@@ -135,6 +147,7 @@
           aria-label="Back to Domains"
           variant="outline"
           size="small"
+          @click="onCancel"
         />
         <AppHeader.Brand
           href="/home"
@@ -289,7 +302,7 @@
                 label="Cancel"
                 variant="outline"
                 size="medium"
-                @click="(event: MouseEvent) => emit('cancel', event)"
+                @click="onCancel"
               />
               <Button
                 label="Save"
@@ -303,5 +316,25 @@
         </div>
       </form>
     </main>
+    <ConfirmDialog
+      v-bind="discardDialog"
+      data-testid="unsaved-changes-dialog"
+    >
+      <template #actions>
+        <Button
+          :label="discardLabels.keepEditing"
+          variant="ghost"
+          size="medium"
+          data-autofocus
+          @click="guard.keepEditing"
+        />
+        <Button
+          :label="discardLabels.discard"
+          variant="danger"
+          size="medium"
+          @click="guard.discardAndLeave"
+        />
+      </template>
+    </ConfirmDialog>
   </div>
 </template>

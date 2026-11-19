@@ -2,6 +2,7 @@ import { fireEvent, render, screen, waitFor, within } from '@testing-library/vue
 import { describe, expect, it } from 'vitest'
 
 import CreateDeployTemplate from '../../../../blocks/create/create-deploy-template/create-deploy-template.vue'
+import DeployTemplateForm from '../../../../blocks/create/create-deploy-template/variants/form.vue'
 import InstallIntegration from '../../../../blocks/create/create-deploy-template/variants/install-integration.vue'
 import DeployTemplateUpload from '../../../../blocks/create/create-deploy-template/variants/upload.vue'
 import WhereItRuns from '../../../../blocks/create/create-deploy-template/variants/where-it-runs.vue'
@@ -110,5 +111,23 @@ describe('create-deploy-template#InstallIntegration', () => {
     const added = screen.getByText('Records').parentElement as HTMLElement
     expect(within(added).getByText(/origin\.example\.com/)).toBeTruthy()
     expect(screen.queryByText('This field is required.')).toBeNull()
+  })
+})
+
+describe('create-deploy-template#Form', () => {
+  it('asks before Back discards an edited form, and not while it is untouched', async () => {
+    render(DeployTemplateForm)
+    const back = screen.getByRole('button', { name: 'Back to Creation Center' })
+    await fireEvent.click(back)
+    await new Promise((resolve) => setTimeout(resolve, 50))
+    expect(screen.queryByRole('alertdialog')).toBeNull()
+    await fireEvent.update(screen.getByRole('textbox', { name: /repository name/i }), 'acme-store')
+    await fireEvent.click(back)
+    const confirm = await screen.findByRole('alertdialog')
+    await fireEvent.click(within(confirm).getByRole('button', { name: 'Keep editing' }))
+    await waitFor(() => expect(screen.queryByRole('alertdialog')).toBeNull())
+    expect(
+      (screen.getByRole('textbox', { name: /repository name/i }) as HTMLInputElement).value
+    ).toBe('acme-store')
   })
 })

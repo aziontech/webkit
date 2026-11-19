@@ -38,6 +38,10 @@ Above the step, a preview `Card` names the template, its one-sentence descriptio
 
 An outlined medium `Button` under the step that returns to the template list. It is the way back to choose another template; the header's back control leaves the flow.
 
+### D. Leaving with typed work — `useUnsavedChanges`, `ConfirmDialog` (Form)
+
+On the Form state the header Back asks first once the scope, the repository name, its visibility or any setting or variable differs from what the form opened with: `useUnsavedChanges` tracks them, Back `await`s `guard.confirmLeave()` before it leaves, and one `ConfirmDialog v-bind="guard.dialogProps"` asks "Unsaved changes" with Keep editing and Discard changes. An untouched form leaves at once. In a router app pair it with `onBeforeRouteLeave(() => guard.confirmLeave())`.
+
 ## Data
 
 The block takes the template and the account through props and emits every action; it fetches nothing. `DeployTemplateProps` and `DeployTemplateTemplate` are exported from `create-deploy-template.vue`, and `sample.ts` holds the sample template and account the block renders when a prop is left out. The variants are their own screens (the later steps of the flow) and keep their own records.

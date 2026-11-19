@@ -44,6 +44,10 @@ On/off settings use `SettingsRow variant="compact"` with a `Switch` hard right a
 
 `SaveBar variant="centered"`, a raised card centred at the bottom of the form that stays on screen while the form scrolls under it, at every width. It is the last child of the scrolling region, so the last field always scrolls clear of it. Its `#leading` slot holds what sits at the start, when there is something: an outlined Import `Button` and one muted line on the domain form, nothing on the others. On a phone the muted line hides, so Import keeps its label beside Cancel and Save; the Domain name description already says a paste imports. Its `#actions` slot holds outlined Cancel and the primary submit, both medium `Button`s. The submit is the form's only `type="submit"`. A long create uses the same bar.
 
+### G. Leaving with typed work — `useUnsavedChanges`, `ConfirmDialog` (required)
+
+Cancel and the header Back both leave the page, so both ask first once the form differs from what it opened with: `useUnsavedChanges(() => form)` tracks it, Cancel and Back `await guard.confirmLeave()` before the page emits `cancel`, and one `ConfirmDialog v-bind="guard.dialogProps"` asks "Unsaved changes" with Keep editing and Discard changes. A clean form leaves at once, with no dialog, and the browser's own prompt covers a reload or a tab close while dirty. In a router app pair it with `onBeforeRouteLeave(() => guard.confirmLeave())` so a link or the browser Back asks too.
+
 ## Data
 
 The block keeps the form as a local draft, validates it and emits `submit` with the values; it sends no request. `CreatePageValues` and `CreatePageProps` are exported from `create-page.vue`. The page owns the request: it sets `loading` while it runs, and on failure sets `error`, which the block shows in an error toast with Retry; on success the page shows the toast and opens the new domain.
@@ -54,10 +58,10 @@ The block keeps the form as a local draft, validates it and emits `submit` with 
 | `loading`       | `boolean`                   | The create request is in flight; the `fieldset` locks and Save spins.               |
 | `error`         | `string`                    | Why the request failed, the description of the error toast with Retry.              |
 
-| Event    | Payload           | When                                                                      |
-| -------- | ----------------- | ------------------------------------------------------------------------- |
-| `submit` | `(event, values)` | Save on a valid form, and Retry in the error toast; `values` are trimmed. |
-| `cancel` | `(event)`         | Cancel in the bar.                                                        |
+| Event    | Payload           | When                                                                               |
+| -------- | ----------------- | ---------------------------------------------------------------------------------- |
+| `submit` | `(event, values)` | Save on a valid form, and Retry in the error toast; `values` are trimmed.          |
+| `cancel` | `(event)`         | Cancel in the bar or the header Back, once the user confirms leaving a dirty form. |
 
 To go live, render the block from a page that owns the request:
 

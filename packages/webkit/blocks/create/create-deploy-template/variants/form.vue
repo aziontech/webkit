@@ -7,6 +7,7 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import Checkbox from '@aziontech/webkit/checkbox'
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import Field from '@aziontech/webkit/field'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
@@ -16,6 +17,7 @@
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import Switch from '@aziontech/webkit/switch'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import { computed, reactive, ref } from 'vue'
 
   interface TemplateSetting {
@@ -106,6 +108,17 @@
   const buildOpen = ref<string | null>(null)
   const variablesOpen = ref<string | null>('variables')
 
+  const guard = useUnsavedChanges(() => ({
+    scope: scope.value,
+    repoName: repoName.value,
+    isPublic: isPublic.value,
+    values
+  }))
+  const discardDialog = guard.dialogProps
+  const discardLabels = guard.labels
+
+  const onLeave = () => guard.confirmLeave()
+
   const isMissing = (field: { name: string; required: boolean }) =>
     field.required && !(values[field.name] || '').trim()
 
@@ -136,6 +149,7 @@
           aria-label="Back to Creation Center"
           variant="outline"
           size="small"
+          @click="onLeave"
         />
         <AppHeader.Brand
           href="/home"
@@ -500,5 +514,25 @@
         </div>
       </div>
     </main>
+    <ConfirmDialog
+      v-bind="discardDialog"
+      data-testid="unsaved-changes-dialog"
+    >
+      <template #actions>
+        <Button
+          :label="discardLabels.keepEditing"
+          variant="ghost"
+          size="medium"
+          data-autofocus
+          @click="guard.keepEditing"
+        />
+        <Button
+          :label="discardLabels.discard"
+          variant="danger"
+          size="medium"
+          @click="guard.discardAndLeave"
+        />
+      </template>
+    </ConfirmDialog>
   </div>
 </template>

@@ -5,6 +5,7 @@
   import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import FieldError from '@aziontech/webkit/field-error'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
@@ -17,6 +18,7 @@
   import SettingsRow from '@aziontech/webkit/settings-row'
   import Switch from '@aziontech/webkit/switch'
   import { toast } from '@aziontech/webkit/toast'
+  import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import { computed, reactive, ref } from 'vue'
 
   interface PortOption {
@@ -101,6 +103,14 @@
   const errors = reactive({ name: '', httpPorts: '', address: '', hostHeader: '' })
   const submitting = ref(false)
 
+  const guard = useUnsavedChanges(() => form, {
+    enabled: () => !submitting.value
+  })
+  const discardDialog = guard.dialogProps
+  const discardLabels = guard.labels
+
+  const onLeave = () => guard.confirmLeave()
+
   const validate = () => {
     errors.name = form.name.trim() ? '' : 'This field is required.'
     errors.httpPorts = form.httpPorts.length ? '' : 'Select at least one HTTP port.'
@@ -150,6 +160,7 @@
           aria-label="Back to Services"
           variant="outline"
           size="small"
+          @click="onLeave"
         />
         <AppHeader.Brand
           href="/home"
@@ -550,6 +561,7 @@
               variant="outline"
               size="medium"
               :disabled="submitting"
+              @click="onLeave"
             />
             <Button
               label="Save"
@@ -562,5 +574,25 @@
         </SaveBar>
       </form>
     </main>
+    <ConfirmDialog
+      v-bind="discardDialog"
+      data-testid="unsaved-changes-dialog"
+    >
+      <template #actions>
+        <Button
+          :label="discardLabels.keepEditing"
+          variant="ghost"
+          size="medium"
+          data-autofocus
+          @click="guard.keepEditing"
+        />
+        <Button
+          :label="discardLabels.discard"
+          variant="danger"
+          size="medium"
+          @click="guard.discardAndLeave"
+        />
+      </template>
+    </ConfirmDialog>
   </div>
 </template>

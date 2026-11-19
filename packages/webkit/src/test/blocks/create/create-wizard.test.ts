@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/vue'
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 
 import MultipageCreate from '../../../../blocks/create/create-wizard/create-wizard.vue'
@@ -66,6 +66,27 @@ describe('create-wizard', () => {
     })
     await fireEvent.click(screen.getByRole('button', { name: 'Edit name' }))
     expect(await screen.findByRole('heading', { level: 2, name: 'General' }, wait)).toBeTruthy()
+  })
+
+  it('leaves at once on Cancel while nothing is answered', async () => {
+    const view = render(MultipageCreate)
+    await fireEvent.click(screen.getByRole('button', { name: 'Cancel' }))
+    await waitFor(() => expect(view.emitted('cancel')).toHaveLength(1), wait)
+    expect(screen.queryByRole('alertdialog')).toBeNull()
+  })
+
+  it('asks before Cancel discards the answers, and stays on Keep editing', async () => {
+    const view = render(MultipageCreate)
+    await fireEvent.click(screen.getByRole('button', { name: /acme-staging/ }))
+    await fireEvent.click(screen.getByRole('button', { name: 'Cancel' }))
+    const confirm = await screen.findByRole('alertdialog')
+    await fireEvent.click(within(confirm).getByRole('button', { name: 'Keep editing' }))
+    await waitFor(() => expect(screen.queryByRole('alertdialog')).toBeNull(), wait)
+    expect(view.emitted('cancel')).toBeUndefined()
+    await fireEvent.click(screen.getByRole('button', { name: 'Back to Access Lists' }))
+    const again = await screen.findByRole('alertdialog')
+    await fireEvent.click(within(again).getByRole('button', { name: 'Discard changes' }))
+    await waitFor(() => expect(view.emitted('cancel')).toHaveLength(1), wait)
   })
 
   it('lists the policies it is given and spins the submit while loading', async () => {
