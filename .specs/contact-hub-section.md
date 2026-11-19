@@ -5,8 +5,8 @@ structure: monolithic
 status: implemented
 spec_version: 4
 created: 2026-11-05
-last_updated: 2026-11-16
-checksum: fc2af4d999f42b65d1ab04cce85a8552cccbb7cd6bcbf90cabd0d1732fc41fd8
+last_updated: 2026-11-19
+checksum: a60667147e93866b5c74f6a7565c147103a224438cef9312a2928b403206de79
 ---
 
 # ContactHubSection — Component Spec
@@ -72,11 +72,11 @@ The band under the Contact title band: the team lanes side by side (Sales and Su
 
 ## Props
 
-| Prop       | Type                         | Default | Required | JSDoc                                                                                                                                                                                                                                                                  |
-| ---------- | ---------------------------- | ------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `anchor`   | `string`                     | `''`    | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                                                                                                                                                                         |
-| `lanes`    | `ContactHubSectionLane[]`    | `[]`    | false    | The team lanes side by side, in order; each is `{ icon, title, description, action?, secondaryAction?, statusLink? }` where `action` is the lane's leading button, `secondaryAction` an outlined button after it, and `statusLink` the system status link beside them. |
-| `channels` | `ContactHubSectionChannel[]` | `[]`    | false    | The self-serve channels in the rows under the lanes, in order; each is `{ icon, title, description, href, target? }`, rendered as a linked topic.                                                                                                                      |
+| Prop       | Type                         | Default | Required | JSDoc                                                                                                                                                                                                                                                                                                                  |
+| ---------- | ---------------------------- | ------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `anchor`   | `string`                     | `''`    | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                                                                                                                                                                                                                         |
+| `lanes`    | `ContactHubSectionLane[]`    | `[]`    | false    | The team lanes side by side, in order; each is `{ icon, title, description, action?, secondaryAction?, statusLink? }` where `action` is the lane's leading button, `secondaryAction` an outlined button after it, and `statusLink` the system status link beside them (its optional `severity` draws the live status). |
+| `channels` | `ContactHubSectionChannel[]` | `[]`    | false    | The self-serve channels in the rows under the lanes, in order; each is `{ icon, title, description, href, target? }`, rendered as a linked topic.                                                                                                                                                                      |
 
 ## Events
 
@@ -92,7 +92,7 @@ The band under the Contact title band: the team lanes side by side (Sales and Su
 - Empty: with neither `lanes` nor `channels` the band renders nothing but its root
 - Empty frame: with neither lanes nor channels the frame is left out; lanes alone or channels alone still draw one frame
 - A lane's action, secondary action and status link render only when given, in that order
-- Status link: the pill carries a `status-indicator` (success dot and the link's label)
+- Status link: `statusLink` is `{ label, href, target?, severity? }`. With a `severity` (the live status the site reads from its status page) the pill carries a `status-indicator` in that severity with the link's label; without one it shows a neutral `az-wave-pulse` glyph and the label, and claims no status, so the band never says "all systems up" during an incident. A `target: '_blank'` link adds the shared `common.newTab` text to its accessible name
 - One frame: lanes fill rows of up to two and the channels the rows under them, up to three per row, each group balanced so every row is full
 - Anchor: the root carries `id` = `anchor` when set, with a scroll margin so a `#hash` jump clears a sticky header
 
@@ -123,7 +123,7 @@ The band under the Contact title band: the team lanes side by side (Sales and Su
 
 - Visible focus: the status link carries `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`; buttons and topics own theirs.
 - Keyboard map: `Tab` reaches each lane action, its secondary action, the status link and each channel; `Enter` follows it.
-- ARIA: the band is an unnamed `<section>`; each lane heading and each channel is an `h2`, so the outline reads one entry per route. Glyphs are `aria-hidden`; the status pill's dot belongs to `status-indicator`, which hides it and keeps the label as the link's name. A link with `target: '_blank'` carries `rel="noopener noreferrer"`.
+- ARIA: the band is an unnamed `<section>`; each lane heading and each channel is an `h2`, so the outline reads one entry per route. Glyphs are `aria-hidden`; the status pill's dot belongs to `status-indicator`, which hides it and keeps the label as the link's name; a new-tab status link is named by `aria-label`: its label followed by the shared `common.newTab` text. A link with `target: '_blank'` carries `rel="noopener noreferrer"`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): lane heading `var(--text-muted)`, description `var(--text-default)`.
 - `motion-reduce:transition-none` on the status link's colour transition.
 - Touch target ≥40×40 px — the status link is at least `h-10` (`min-h-10`), buttons are large, channels are whole-cell links.

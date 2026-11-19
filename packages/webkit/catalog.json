@@ -8216,6 +8216,13 @@
      "default": "false",
      "required": "false",
      "doc": "Renders Skeleton lines in place of the figure, delta and sparkline."
+    },
+    {
+     "name": "error",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Why the value failed to load. When set, the tile shows a dash and a danger band that says it could not load, never No data."
     }
    ],
    "slots": [
@@ -27391,7 +27398,7 @@
      "type": "ContactHubSectionLane[]",
      "default": "[]",
      "required": "false",
-     "doc": "The team lanes side by side, in order; each is `{ icon, title, description, action?, secondaryAction?, statusLink? }` where `action` is the lane's leading button, `secondaryAction` an outlined button after it, and `statusLink` the system status link beside them."
+     "doc": "The team lanes side by side, in order; each is `{ icon, title, description, action?, secondaryAction?, statusLink? }` where `action` is the lane's leading button, `secondaryAction` an outlined button after it, and `statusLink` the system status link beside them (its optional `severity` draws the live status)."
     },
     {
      "name": "channels",

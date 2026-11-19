@@ -387,6 +387,7 @@
               :delta-label="comparison"
               :inverse="tile.inverse"
               :loading="loading"
+              :error="error"
             >
               <template #aside>
                 <Hint :content="tile.description" />

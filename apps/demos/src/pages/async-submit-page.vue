@@ -6,21 +6,23 @@
 
   import { sampleError, sampleFailedSteps, sampleRunningSteps } from '../blocks/async-submit.sample'
   import AsyncSubmit, { type AsyncSubmitStep } from '../blocks/async-submit.vue'
+  import ResourceNotFound from '../components/resource-not-found.vue'
   import { run, RUN_TOAST, startDeploy } from '../lib/deploy'
   import { findResource } from '../lib/store'
 
   const route = useRoute()
   const router = useRouter()
   const resource = computed(() => findResource(route.params.id))
-  const name = computed(() => resource.value?.name ?? 'web-app')
+  const name = computed(() => resource.value?.name ?? '')
 
   const breadcrumb = computed(() => [
     { label: 'Resources', href: '/resources' },
-    {
-      label: name.value,
-      href: resource.value ? `/resources/${resource.value.id}` : undefined
-    },
-    { label: 'Deploy' }
+    ...(resource.value
+      ? [
+          { label: resource.value.name, href: `/resources/${resource.value.id}` },
+          { label: 'Deploy' }
+        ]
+      : [{ label: 'Not found' }])
   ])
 
   const status = computed(() => (run.resourceId === resource.value?.id ? run.status : 'idle'))
@@ -54,6 +56,7 @@
 <template>
   <ConsoleLayout.Breadcrumb :items="breadcrumb" />
   <AsyncSubmit
+    v-if="resource"
     :name="name"
     :loading="status === 'running'"
     :error="status === 'error' ? sampleError : ''"
@@ -63,5 +66,9 @@
     @redeploy="deploy"
     @edit="edit"
     @open-service="router.push(`/resources/${resource?.id}`)"
+  />
+  <ResourceNotFound
+    v-else
+    :id="String(route.params.id)"
   />
 </template>

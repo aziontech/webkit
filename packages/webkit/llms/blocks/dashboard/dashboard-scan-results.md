@@ -593,6 +593,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
               :value="error ? null : (summary?.[figure.key] ?? null)"
               :format-value="formatters.compact"
               :loading="loading"
+              :error="error"
             >
               <template #aside>
                 <Hint :content="figure.description" />

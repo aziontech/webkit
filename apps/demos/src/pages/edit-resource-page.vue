@@ -6,6 +6,7 @@
 
   import { sampleProject } from '../blocks/edit-resource.sample'
   import EditResource, { type EditResourceProject } from '../blocks/edit-resource.vue'
+  import ResourceNotFound from '../components/resource-not-found.vue'
   import { findResource, updateResource } from '../lib/store'
 
   const route = useRoute()
@@ -15,8 +16,8 @@
 
   const project = ref<EditResourceProject>({
     ...sampleProject,
-    name: record?.name ?? sampleProject.name,
-    active: record ? record.status === 'Live' : sampleProject.active
+    name: record?.name ?? '',
+    active: record?.status === 'Live'
   })
 
   const tab = computed({
@@ -29,18 +30,15 @@
 
   const breadcrumb = computed(() => [
     { label: 'Resources', href: '/resources' },
-    {
-      label: record?.name ?? project.value.name,
-      href: record ? `/resources/${record.id}` : undefined
-    }
+    record ? { label: record.name, href: `/resources/${record.id}` } : { label: 'Not found' }
   ])
 
   const onSubmit = (_event: Event, values: EditResourceProject) => {
+    if (!record) return
     saving.value = true
     setTimeout(() => {
       project.value = values
       saving.value = false
-      if (!record) return
       updateResource(record.id, {
         name: values.name.trim(),
         status: values.active ? 'Live' : 'Inactive'
@@ -54,9 +52,14 @@
 <template>
   <ConsoleLayout.Breadcrumb :items="breadcrumb" />
   <EditResource
+    v-if="record"
     v-model:tab="tab"
     :resource="project"
     :loading="saving"
     @submit="onSubmit"
+  />
+  <ResourceNotFound
+    v-else
+    :id="String(route.params.id)"
   />
 </template>

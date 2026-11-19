@@ -65,6 +65,15 @@ describe('detail/detail-deployment-logs', () => {
     )
   })
 
+  it('tags the [ERROR] and 409 lines of a failed step as errors, never warnings', () => {
+    const view = render(DeploymentLogsFailed)
+    const failures = [...view.container.querySelectorAll('[data-testid$="__line"]')].filter((row) =>
+      /\[ERROR\]|409 Conflict/.test(row.textContent ?? '')
+    )
+    expect(failures.length).toBeGreaterThan(0)
+    for (const row of failures) expect(row.getAttribute('data-level')).toBe('error')
+  })
+
   it('InCreateFlow opens on the cloning splash with a Cloning status', () => {
     const view = render(InCreateFlow)
     expect(view.container.textContent).toContain('Cloning acme/web-app to acme')

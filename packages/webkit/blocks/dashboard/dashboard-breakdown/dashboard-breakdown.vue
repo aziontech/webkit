@@ -351,6 +351,7 @@
             inverse
             :trend="kpis[tile.metric]?.trend ?? []"
             :loading="loading"
+            :error="error"
           >
             <template #aside>
               <Hint :content="tile.description" />

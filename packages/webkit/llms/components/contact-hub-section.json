@@ -42,7 +42,7 @@
    "type": "ContactHubSectionLane[]",
    "default": "[]",
    "required": "false",
-   "doc": "The team lanes side by side, in order; each is `{ icon, title, description, action?, secondaryAction?, statusLink? }` where `action` is the lane's leading button, `secondaryAction` an outlined button after it, and `statusLink` the system status link beside them."
+   "doc": "The team lanes side by side, in order; each is `{ icon, title, description, action?, secondaryAction?, statusLink? }` where `action` is the lane's leading button, `secondaryAction` an outlined button after it, and `statusLink` the system status link beside them (its optional `severity` draws the live status)."
   },
   {
    "name": "channels",

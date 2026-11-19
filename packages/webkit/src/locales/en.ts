@@ -939,6 +939,7 @@ export const splitButton = {
 export const statTile = {
   noValue: 'No value',
   noData: 'No data',
+  loadError: "Couldn't load",
   better: 'better',
   worse: 'worse',
   unchanged: 'unchanged'

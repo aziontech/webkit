@@ -1,8 +1,12 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { useTranslate } from '../../../composables/use-translate'
+  import * as en from '../../../locales/en'
   import Button from '../../action/button/button.vue'
-  import StatusIndicator from '../../feedback/status-indicator/status-indicator.vue'
+  import StatusIndicator, {
+    type StatusIndicatorSeverity
+  } from '../../feedback/status-indicator/status-indicator.vue'
   import CardGrid from '../../layout/card-grid/card-grid.vue'
   import CardGridCell from '../../layout/card-grid/card-grid-cell/card-grid-cell.vue'
   import Module from '../../layout/module/module.vue'
@@ -25,6 +29,8 @@
     href: string
     /** Browsing context the link opens in, such as `_blank` for a new tab. */
     target?: string
+    /** The live system status, drawn as a coloured dot. Omitted, the link shows a neutral glyph and claims no status. */
+    severity?: StatusIndicatorSeverity
   }
 
   /** One team the reader can reach, rendered as a lane of the two-column frame. */
@@ -73,6 +79,7 @@
   })
 
   const attrs = useAttrs()
+  const { t } = useTranslate({ common: en.common })
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'contact-hub-section'
@@ -81,6 +88,8 @@
   const hasContent = computed(() => props.lanes.length > 0 || props.channels.length > 0)
 
   const relOf = (target?: string) => (target === '_blank' ? 'noopener noreferrer' : undefined)
+  const statusLinkName = (link: ContactHubSectionStatusLink) =>
+    link.target === '_blank' ? `${link.label} ${t('common.newTab')}` : undefined
 </script>
 
 <template>
@@ -161,12 +170,24 @@
                   :href="lane.statusLink.href"
                   :target="lane.statusLink.target"
                   :rel="relOf(lane.statusLink.target)"
+                  :aria-label="statusLinkName(lane.statusLink)"
                   class="inline-flex min-h-10 max-w-full items-center rounded-full border border-(--border-default) bg-(--bg-surface) px-(--spacing-md) text-button-lg text-(--text-default) no-underline transition-colors duration-150 ease-out hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
                 >
                   <StatusIndicator
-                    severity="success"
+                    v-if="lane.statusLink.severity"
+                    :severity="lane.statusLink.severity"
                     :label="lane.statusLink.label"
                   />
+                  <span
+                    v-else
+                    class="inline-flex items-center gap-(--spacing-xs)"
+                  >
+                    <i
+                      class="az az-wave-pulse text-(--text-muted)"
+                      aria-hidden="true"
+                    />
+                    {{ lane.statusLink.label }}
+                  </span>
                 </a>
               </div>
             </div>

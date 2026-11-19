@@ -2160,7 +2160,14 @@
       class="flex min-w-full flex-col border-t-(length:--border-width-default) border-solid border-(--border-default) bg-(--bg-surface) text-(--text-muted)"
     >
       <div class="flex items-center px-(--spacing-sm) py-(--spacing-xs)">
+        <Skeleton
+          v-if="loading && totalRows === 0"
+          width="12rem"
+          height="1rem"
+          :data-testid="`${testId}__footer-loading`"
+        />
         <Pagination
+          v-else
           class="w-full"
           :page="pageIndex + 1"
           :total="totalRows"
@@ -2168,7 +2175,18 @@
           :page-size-options="pageSizeOptions"
           @update:page="(page) => table.setPageIndex(page - 1)"
           @update:page-size="(size) => table.setPageSize(size)"
-        />
+        >
+          <template
+            v-if="loading"
+            #info
+          >
+            <Skeleton
+              width="12rem"
+              height="1rem"
+              :data-testid="`${testId}__footer-loading`"
+            />
+          </template>
+        </Pagination>
       </div>
     </div>
   </div>

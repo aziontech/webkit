@@ -1,4 +1,4 @@
-import { cleanup, fireEvent, render, waitFor } from '@testing-library/vue'
+import { cleanup, fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 
@@ -210,6 +210,30 @@ describe('auth#MfaSetup', () => {
     await waitFor(() => expect(view.getByText(/Multi-factor authentication is on/)).toBeTruthy(), {
       timeout: 2000
     })
+    await expectNoA11yViolations(view.container)
+  })
+
+  it('issues recovery codes and holds Continue until the user confirms they saved them', async () => {
+    const view = render(MfaSetup)
+    await typeCode(view.getByLabelText('Authentication code'), '123456')
+    await waitFor(() => expect(view.getByText('Save your recovery codes')).toBeTruthy(), {
+      timeout: 2000
+    })
+    const codes = within(view.getByRole('list', { name: 'Recovery codes' })).getAllByRole(
+      'listitem'
+    )
+    expect(codes).toHaveLength(8)
+    for (const item of codes) expect(item.textContent?.trim()).toMatch(/^[A-Z0-9]{8}$/)
+    expect(view.getByRole('button', { name: 'Copy recovery codes' })).toBeTruthy()
+    expect(view.getByRole('button', { name: 'Download' })).toBeTruthy()
+    const proceed = view.getByRole('button', { name: 'Continue to Console' })
+    expect(proceed.hasAttribute('disabled')).toBe(true)
+    await fireEvent.click(view.getByLabelText('I saved these codes'))
+    await waitFor(() =>
+      expect(view.getByRole('link', { name: 'Continue to Console' }).getAttribute('href')).toBe(
+        '/home'
+      )
+    )
     await expectNoA11yViolations(view.container)
   })
 })

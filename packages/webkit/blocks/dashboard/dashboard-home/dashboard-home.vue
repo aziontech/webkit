@@ -288,6 +288,7 @@
               :unit="metric.unit"
               :delta="metric.delta"
               :loading="loading"
+              :error="error"
             >
               <template #aside>
                 <Hint :content="metric.hint" />

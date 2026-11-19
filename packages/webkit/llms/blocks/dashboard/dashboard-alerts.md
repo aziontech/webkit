@@ -538,6 +538,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
               :delta-label="comparison"
               inverse
               :loading="loading"
+              :error="error"
             >
               <template #aside>
                 <Hint :content="tile.description" />

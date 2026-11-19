@@ -442,6 +442,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
                   :value="overall.score"
                   :format-value="formatScore"
                   :loading="loading"
+                  :error="error"
                 />
                 <p
                   v-if="overall.cause && !loading"

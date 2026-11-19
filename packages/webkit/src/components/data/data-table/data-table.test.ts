@@ -1398,6 +1398,21 @@ describe('DataTable', () => {
       expect(view.emitted()['row-click']).toBeUndefined()
     })
 
+    it('states no row count while the first page loads, and hides only the count on a known total', async () => {
+      const view = render(DataTable, {
+        props: { columns, data: [], paginated: true, loading: true }
+      })
+      const footer = view.getByTestId('data-table__footer')
+      expect(footer.textContent).not.toMatch(/Showing/)
+      expect(view.getByTestId('data-table__footer-loading')).toBeTruthy()
+      expect(view.queryByRole('navigation')).toBeNull()
+      await view.rerender({ columns, data: rows, paginated: true, loading: false })
+      expect(view.getByTestId('data-table__footer').textContent).toMatch(/Showing 1 to/)
+      await view.rerender({ columns, data: rows, paginated: true, loading: true })
+      expect(view.getByRole('navigation')).toBeTruthy()
+      expect(view.getByTestId('data-table__footer').textContent).not.toMatch(/Showing/)
+    })
+
     it('shows the error in an alert in place of the rows, and the error slot replaces it', () => {
       const view = render(DataTable, {
         props: { columns, data: rows, error: 'The service did not answer.' }

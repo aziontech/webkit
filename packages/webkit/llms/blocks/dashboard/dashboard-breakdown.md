@@ -565,6 +565,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
             inverse
             :trend="kpis[tile.metric]?.trend ?? []"
             :loading="loading"
+            :error="error"
           >
             <template #aside>
               <Hint :content="tile.description" />

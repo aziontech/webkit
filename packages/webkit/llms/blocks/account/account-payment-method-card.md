@@ -296,8 +296,8 @@ Each variant is the same screen in another state: `get_block("account/account-pa
   }
 
   const fieldState = (field: 'holder' | 'number' | 'expiry' | 'code') => ({
-    required: !!cardErrors[field] && !String(cardForm[field]).trim(),
-    invalid: !!cardErrors[field] && !!String(cardForm[field]).trim()
+    required: true,
+    invalid: !!cardErrors[field]
   })
 </script>
 

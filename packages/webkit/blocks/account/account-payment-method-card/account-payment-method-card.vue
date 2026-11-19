@@ -145,8 +145,8 @@
   }
 
   const fieldState = (field: 'holder' | 'number' | 'expiry' | 'code') => ({
-    required: !!cardErrors[field] && !String(cardForm[field]).trim(),
-    invalid: !!cardErrors[field] && !!String(cardForm[field]).trim()
+    required: true,
+    invalid: !!cardErrors[field]
   })
 </script>
 

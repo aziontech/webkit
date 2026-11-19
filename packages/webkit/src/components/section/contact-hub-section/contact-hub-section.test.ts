@@ -90,20 +90,30 @@ describe('ContactHubSection', () => {
   it('renders the status link in a new tab with a safe rel', () => {
     const { getByRole } = band()
 
-    const status = getByRole('link', { name: 'System status' })
+    const status = getByRole('link', { name: 'System status (opens in a new tab)' })
     expect(status.getAttribute('href')).toBe('https://status.azion.com/')
     expect(status.getAttribute('target')).toBe('_blank')
     expect(status.getAttribute('rel')).toBe('noopener noreferrer')
   })
 
-  it('draws the status link with a success status indicator carrying its label', () => {
+  it('claims no status when the lane passes none: a neutral glyph, no coloured dot', () => {
     const { getByRole } = band()
 
-    const indicator = getByRole('link', { name: 'System status' }).querySelector(
-      '[data-testid="status-indicator"]'
-    )
+    const link = getByRole('link', { name: 'System status (opens in a new tab)' })
+    expect(link.querySelector('[data-testid="status-indicator"]')).toBeNull()
+    expect(link.querySelector('.az-wave-pulse')).not.toBeNull()
+  })
+
+  it('draws the status the lane passes as a status indicator carrying its label', () => {
+    const { getByRole } = band({
+      lanes: [{ ...lanes[1], statusLink: { ...lanes[1].statusLink, severity: 'danger' } }]
+    })
+
+    const indicator = getByRole('link', {
+      name: 'System status (opens in a new tab)'
+    }).querySelector('[data-testid="status-indicator"]')
     expect(indicator).not.toBeNull()
-    expect(indicator).toHaveAttribute('data-severity', 'success')
+    expect(indicator).toHaveAttribute('data-severity', 'danger')
     expect(indicator).toHaveTextContent('System status')
   })
 

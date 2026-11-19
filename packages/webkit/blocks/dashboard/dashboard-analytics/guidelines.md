@@ -57,7 +57,10 @@ menu.
 ### E. Aggregation and variation — `Tag` (required)
 
 `Sum` names the aggregation; a second tag states the change for the period (`+10.03%`). Tags state
-facts; they are not buttons.
+facts; they are not buttons. A tile and the card that charts the same metric come from one series:
+the Requests tile is the sum of the Requests over time points, its delta is the card's change tag,
+and the Status codes classes add up to the same requests, so no number on the page contradicts
+another.
 
 ### F. Line or Bar — `ToggleGroup` (optional)
 

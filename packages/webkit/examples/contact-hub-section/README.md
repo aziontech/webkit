@@ -19,7 +19,7 @@ Example: [`site-default.vue`](./site-default.vue)
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
 
 - `lanes[]` are the two teams side by side, each an `icon`, a `title` and a one-sentence `description`, with an `action` (`label`, `href`, `trailing`) on its floor.
-- A lane's `secondaryAction` (`label`, `href`, `trailing`) adds an outlined second button after its action, and its `statusLink` (`label`, `href`, `target`) the system status link, drawn with a status indicator.
+- A lane's `secondaryAction` (`label`, `href`, `trailing`) adds an outlined second button after its action, and its `statusLink` (`label`, `href`, `target`, `severity`) the system status link. Pass `severity` only from a live status feed; without it the link shows a neutral glyph and claims no status.
 - `anchor` sets the band's id, so a page can link to it with a `#hash`.
 - `channels[]` are the self-serve links in the rows under the lanes, in the same frame, each an `icon`, a `title`, a `description`, an `href` and an optional `target` (`_blank` opens a new tab).
 
