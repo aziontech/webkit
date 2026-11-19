@@ -14545,7 +14545,7 @@ Composed DS components: `button`, `status-indicator`; for `editable`, `field-roo
 
 ```vue
 <script setup>
-  import CodeBlock from '@aziontech/webkit/code-block'
+  import KeyValueList from '@aziontech/webkit/key-value-list'
   import ToolApproval from '@aziontech/webkit/tool-approval'
   import { ref } from 'vue'
 
@@ -14562,17 +14562,15 @@ Composed DS components: `button`, `status-indicator`; for `editable`, `field-roo
       @approve="status = 'approved'"
       @deny="status = 'denied'"
     >
-      <CodeBlock
-        :tabs="[
-          {
-            label: 'Shell',
-            value: 'cmd',
-            code: 'azion deploy --env production --workload storefront',
-            language: 'bash'
-          }
-        ]"
-        :show-line-numbers="false"
-      />
+      <KeyValueList aria-label="Command to run">
+        <KeyValueList.Item label="Command">
+          <code class="text-label-code-sm [overflow-wrap:anywhere] text-(--text-default)"
+            >azion deploy --env production --workload storefront</code
+          >
+        </KeyValueList.Item>
+        <KeyValueList.Item label="Environment">production</KeyValueList.Item>
+        <KeyValueList.Item label="Workload">storefront</KeyValueList.Item>
+      </KeyValueList>
     </ToolApproval>
   </div>
 </template>
@@ -14907,7 +14905,7 @@ _None. Exports: `"./tool-call"`; type `ToolCallStatus`. Composed DS components: 
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `point-click` | `(event: MouseEvent \| KeyboardEvent, point: ChartPoint)` | Click on the plot, or Enter / Space on the focused chart, at the active index. `point` carries the index, the label and every visible series value. |
+| `point-click` | `(event: MouseEvent \| KeyboardEvent, point: ChartPoint)` | Click or tap on the plot, or Enter / Space on the focused chart, at the active index (a tap with no active index uses the point under the finger). `point` carries the index, the label and every visible series value. |
 | `legend-toggle` | `(event: MouseEvent, series: ChartSeries)` | A legend entry toggled; `series` is the consumer's own series object. |
 
 ## Slots

@@ -118,7 +118,7 @@ Composed DS components: `button`, `status-indicator`; for `editable`, `field-roo
 ## Responsive
 
 - Container queries: none.
-- Narrow: buttons wrap; the body's code scrolls inside its block.
+- Narrow: buttons wrap; the title wraps anywhere, inline code included, so the whole command in it stays readable. What will run must be readable without scrolling sideways before Approve: prefer a `KeyValueList` (or a `CodeBlock` whose lines are short, such as pretty-printed JSON) in the body, since a `CodeBlock` scrolls a long line inside itself.
 - Touch: medium buttons (44 px on coarse pointers).
 - Reflow: no horizontal scroll at 320 px; the arguments field wraps its lines, grows to 12 lines, then scrolls inside itself.
 
@@ -128,7 +128,7 @@ Composed DS components: `button`, `status-indicator`; for `editable`, `field-roo
 
 ```vue
 <script setup>
-  import CodeBlock from '@aziontech/webkit/code-block'
+  import KeyValueList from '@aziontech/webkit/key-value-list'
   import ToolApproval from '@aziontech/webkit/tool-approval'
   import { ref } from 'vue'
 
@@ -145,17 +145,15 @@ Composed DS components: `button`, `status-indicator`; for `editable`, `field-roo
       @approve="status = 'approved'"
       @deny="status = 'denied'"
     >
-      <CodeBlock
-        :tabs="[
-          {
-            label: 'Shell',
-            value: 'cmd',
-            code: 'azion deploy --env production --workload storefront',
-            language: 'bash'
-          }
-        ]"
-        :show-line-numbers="false"
-      />
+      <KeyValueList aria-label="Command to run">
+        <KeyValueList.Item label="Command">
+          <code class="text-label-code-sm [overflow-wrap:anywhere] text-(--text-default)"
+            >azion deploy --env production --workload storefront</code
+          >
+        </KeyValueList.Item>
+        <KeyValueList.Item label="Environment">production</KeyValueList.Item>
+        <KeyValueList.Item label="Workload">storefront</KeyValueList.Item>
+      </KeyValueList>
     </ToolApproval>
   </div>
 </template>

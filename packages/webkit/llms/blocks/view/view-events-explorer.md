@@ -40,7 +40,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 A medium search `Input` across events, hosts, paths and addresses, then the time zone, then outlined medium `IconButton`s for Refresh and Download CSV, each named by a `Tooltip` and an `aria-label` with the same words.
 
-**The time zone is always visible in the toolbar.** Every time on this page (the log, the chart axis, the document) is in one zone, so the toolbar says which one, beside the time controls, at every width: `Times in UTC` as muted text with a globe glyph when the zone is fixed, or a `Select` named Time zone that reads `UTC−03:00 · Sao Paulo` when the person can change it (Query variant). The `DateRangePicker` panel does not repeat it: the picker states the offset of an absolute range on its trigger and leaves the zone to the page. Use the same pattern on every page that shows metrics and logs together.
+**The time zone is always visible in the toolbar.** Every time on this page (the log, the chart axis, the document) is in one zone, so the toolbar says which one, beside the time controls, at every width: `Times in UTC` as muted text with a globe glyph when the zone is fixed, or a `Select` named Time zone that reads `UTC−03:00 · Sao Paulo` when the person can change it (Query variant). The `DateRangePicker` panel does not repeat it: the picker states the offset of an absolute range on its trigger and leaves the zone to the page. Use the same pattern on every page that shows metrics and logs together. The controls row wraps: when the filter button and the search field (never under `--container-3xs`) leave no room for the zone and the actions, those move to a line of their own at the end, so the zone never sits under the search field.
 
 ### C. Applied filters — `FilterMenu.ChipGroup` (optional)
 
@@ -1116,8 +1116,8 @@ Each variant is the same screen in another state: `get_block("view/view-events-e
     <header
       class="flex shrink-0 flex-col gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-lg) py-(--spacing-sm)"
     >
-      <header class="flex items-center gap-(--layout-group-gap)">
-        <div class="flex min-w-0 grow items-center gap-(--spacing-xs)">
+      <header class="flex flex-wrap items-center gap-x-(--layout-group-gap) gap-y-(--spacing-xs)">
+        <div class="flex min-w-0 grow basis-(--container-3xs) items-center gap-(--spacing-xs)">
           <FilterMenu
             v-model="filters"
             :fields="menuFields"
@@ -1141,7 +1141,7 @@ Each variant is the same screen in another state: `get_block("view/view-events-e
             </Input>
           </div>
         </div>
-        <div class="flex shrink-0 items-center gap-(--spacing-xs)">
+        <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
           <span
             class="text-label-sm inline-flex items-center gap-(--spacing-2xs) whitespace-nowrap text-(--text-muted)"
             data-testid="events-time-zone"

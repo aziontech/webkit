@@ -261,6 +261,7 @@ packages/webkit/src/components/ai/prompt-input/
 - Container queries: none; full width of its host. Every row is a wrapping flex row, so the line
   breaks where its controls stop fitting, at any width, with no breakpoint to keep in step.
 - Narrow: the toolbar wraps its slot controls; Submit stays at the inline end. With `queueable` while busy, Stop and Submit stay together at the inline end and never wrap onto separate lines; each keeps the 44 px target on coarse pointers. The model `Button` truncates the mode label first. The footer row wraps onto more lines; nothing scrolls sideways.
+- Shortcut menu (`/`, `@`): opens above the box, and below it when the space above the box in the visible viewport (the on-screen keyboard excluded) is shorter than the list and the space below is larger, so a composer at the top of a page or a panel never draws its list off-screen; the list carries `data-side="top|bottom"`.
 - Touch: `enterkeyhint="send"` on mobile keyboards; targets 44 px on coarse pointers.
 - Reflow: no horizontal scroll at 320 px.
 

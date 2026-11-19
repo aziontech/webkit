@@ -38,7 +38,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ### B. Tables panel — `Sidebar`, `Tooltip`, `IconButton`, `Input`, `DropdownMenu` (required)
 
-A resizable, collapsible start `Sidebar` named Tables, 288px at rest. Below `md` it starts collapsed (set on mount, so the server render matches), so the pane keeps the width of the phone; the same holds for the Editor tab's query history. While it is collapsed below `md`, an outlined small Tables `Button` leads the open table's header (an outlined History `Button` leads the Editor toolbar) and reopens it, and picking a table closes it again, so a phone always sees how to switch tables. Its header carries Refresh tables and Create Table `IconButton`s, each named by a `Tooltip`, over a Search tables `Input`. Each table row is an `Item` (`clickable`, `variant="option"`, `aria-pressed` on the open table) that opens it in the pane, beside an `Actions for <table>` `DropdownMenu` with Delete table. While the tables load, `Skeleton` lines hold the list; a search that matches nothing shows a small `EmptyState` with Clear search.
+A resizable, collapsible start `Sidebar` named Tables, 288px at rest. Below `md` it starts collapsed (set on mount, so the server render matches) in every state, the empty database included, and when reopened it slides over the pane as an overlay (with a `--spacing-2xl` strip of the pane still showing) instead of pushing it aside, so the pane always keeps the width of the phone; the same holds for the Editor tab's query history. While it is collapsed below `md`, an outlined small Tables `Button` leads the open table's header (an outlined History `Button` leads the Editor toolbar) and reopens it, and picking a table closes it again, so a phone always sees how to switch tables. Its header carries Refresh tables and Create Table `IconButton`s, each named by a `Tooltip`, over a Search tables `Input`. Each table row is an `Item` (`clickable`, `variant="option"`, `aria-pressed` on the open table) that opens it in the pane, beside an `Actions for <table>` `DropdownMenu` with Delete table. While the tables load, `Skeleton` lines hold the list; a search that matches nothing shows a small `EmptyState` with Clear search.
 
 ### C. Empty database — `EmptyState`, `Button` (required)
 
@@ -716,7 +716,9 @@ LIMIT 3;`
       v-if="activeTab === 'tables'"
       class="animate-page-enter motion-reduce:animate-none relative flex min-h-0 flex-1 overflow-hidden"
     >
-      <div class="contents [--sidebar-width:var(--container-2xs)]">
+      <div
+        class="flex min-h-0 [--sidebar-width:var(--container-2xs)] max-md:absolute max-md:inset-y-0 max-md:start-0 max-md:z-10 max-md:max-w-[calc(100%-var(--spacing-2xl))] max-md:bg-(--bg-surface) max-md:shadow-(--shadow-sm) md:contents"
+      >
         <Sidebar
           v-model:width="leftWidth"
           v-model:open="leftOpen"
@@ -1148,7 +1150,9 @@ LIMIT 3;`
       v-else
       class="relative flex min-h-0 flex-1 overflow-hidden"
     >
-      <div class="contents [--sidebar-width:var(--container-2xs)]">
+      <div
+        class="flex min-h-0 [--sidebar-width:var(--container-2xs)] max-md:absolute max-md:inset-y-0 max-md:start-0 max-md:z-10 max-md:max-w-[calc(100%-var(--spacing-2xl))] max-md:bg-(--bg-surface) max-md:shadow-(--shadow-sm) md:contents"
+      >
         <Sidebar
           v-model:width="leftWidth"
           v-model:open="leftOpen"

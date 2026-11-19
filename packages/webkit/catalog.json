@@ -7071,7 +7071,7 @@
     {
      "name": "point-click",
      "payload": "(event: MouseEvent | KeyboardEvent, point: ChartPoint)",
-     "notes": "Click on the plot, or Enter / Space on the focused chart, at the active index. `point` carries the index, the label and every visible series value."
+     "notes": "Click or tap on the plot, or Enter / Space on the focused chart, at the active index (a tap with no active index uses the point under the finger). `point` carries the index, the label and every visible series value."
     },
     {
      "name": "legend-toggle",
@@ -7278,7 +7278,7 @@
     {
      "name": "point-click",
      "payload": "(event: MouseEvent | KeyboardEvent, point: ChartPoint)",
-     "notes": "Click on the plot, or Enter / Space on the focused chart, at the active index. `point` carries the index, the label and every visible series value."
+     "notes": "Click or tap on the plot, or Enter / Space on the focused chart, at the active index (a tap with no active index uses the point under the finger). `point` carries the index, the label and every visible series value."
     },
     {
      "name": "legend-toggle",
@@ -21003,7 +21003,7 @@
      "type": "boolean",
      "default": "true",
      "required": "false",
-     "doc": "Advances to the next tab on a timer, with a visible pause control; pauses under the pointer or keyboard focus, restarts its count on a click, and never runs under reduced motion."
+     "doc": "Advances to the next tab on a timer, with a visible pause control; pauses under the pointer or keyboard focus, restarts its count on a click, and never runs under reduced motion or below `lg`."
     },
     {
      "name": "autoplayInterval",
