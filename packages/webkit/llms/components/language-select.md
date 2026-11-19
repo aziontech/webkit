@@ -107,7 +107,7 @@
   import LanguageSelect from '@aziontech/webkit/language-select'
   import { es } from '@aziontech/webkit/locales/es'
   import { ptBR } from '@aziontech/webkit/locales/pt-BR'
-  import Pagination from '@aziontech/webkit/pagination'
+  import Pagination from '@aziontech/webkit/pagination-root'
   import { ref } from 'vue'
 
   const locale = ref('en')
@@ -119,17 +119,18 @@
   <ConfigProvider
     :locale="locale"
     :catalogs="catalogs"
-    class="flex flex-col gap-(--spacing-md)"
   >
-    <Field class="max-w-(--container-xs)">
-      <Field.Label>Language</Field.Label>
-      <LanguageSelect v-model="locale" />
-    </Field>
-    <Pagination
-      v-model:page="page"
-      :total="120"
-      :page-size="10"
-    />
+    <div class="flex flex-col gap-(--spacing-md)">
+      <Field class="max-w-(--container-xs)">
+        <Field.Label>Language</Field.Label>
+        <LanguageSelect v-model="locale" />
+      </Field>
+      <Pagination
+        v-model:page="page"
+        :total="120"
+        :page-size="10"
+      />
+    </div>
   </ConfigProvider>
 </template>
 ```
