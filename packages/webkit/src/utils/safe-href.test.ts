@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { safeDownloadHref, safeHref, safeWebUrl } from './safe-href'
+import { safeHref, safeWebUrl } from './safe-href'
 
 const BLOCKED = [
   'javascript:alert(1)',
@@ -76,11 +76,11 @@ describe('safeWebUrl', () => {
   )
 })
 
-describe('safeDownloadHref', () => {
+describe('safeHref for a download', () => {
   it('keeps blob and data URLs for a download', () => {
-    expect(safeDownloadHref('blob:https://example.com/0a1b')).toBe('blob:https://example.com/0a1b')
-    expect(safeDownloadHref('data:image/png;base64,AAAA')).toBe('data:image/png;base64,AAAA')
-    expect(safeDownloadHref('/files/report.csv')).toBe('/files/report.csv')
+    expect(safeHref('blob:https://example.com/0a1b', true)).toBe('blob:https://example.com/0a1b')
+    expect(safeHref('data:image/png;base64,AAAA', true)).toBe('data:image/png;base64,AAAA')
+    expect(safeHref('/files/report.csv', true)).toBe('/files/report.csv')
   })
 
   it.each([
@@ -89,6 +89,6 @@ describe('safeDownloadHref', () => {
     'vbscript:msgbox(1)',
     '&#106;avascript:alert(1)'
   ])('blocks %j', (href) => {
-    expect(safeDownloadHref(href)).toBeNull()
+    expect(safeHref(href, true)).toBeNull()
   })
 })

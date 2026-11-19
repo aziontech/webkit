@@ -2,7 +2,7 @@
   import { computed, Transition, useAttrs } from 'vue'
 
   import { directionalIconClass } from '../../../utils/directional-icons'
-  import { safeDownloadHref, safeHref } from '../../../utils/safe-href'
+  import { safeHref } from '../../../utils/safe-href'
   import Spinner from '../../feedback/spinner/spinner.vue'
 
   export type IconButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger'
@@ -65,9 +65,7 @@
   const isInert = computed(() => props.disabled || props.loading)
 
   const linkHref = computed(() =>
-    attrs.download === undefined || attrs.download === false
-      ? safeHref(props.href)
-      : safeDownloadHref(props.href)
+    safeHref(props.href, attrs.download != null && attrs.download !== false)
   )
 
   const isAnchor = computed(() => linkHref.value !== null)
