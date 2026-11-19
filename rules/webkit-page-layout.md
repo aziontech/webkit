@@ -71,7 +71,7 @@ follows the nearest container.
 <block-id>`, or `search_blocks` → `get_block` in the webkit MCP): the block already carries
   the right container and rhythm.
 
-## Do not
+## Don't
 
 - Never hand-roll a page cap: no `mx-auto max-w-[1200px]` or `max-w-7xl` on a page root.
 - Never use `w-full` to mean full-bleed. Full-bleed is the absence of a container class.
@@ -86,7 +86,9 @@ follows the nearest container.
 - Never render a `<main>`, `AppLayout`, `Sidebar` or `AppHeader` in a page: the app layout,
   composed once in `App.vue`, owns them, and the page is the body of its default slot.
 
-## Correct
+## Example
+
+### Do
 
 A page body inside the app layout (`ConsoleLayout`, `SiteLayout`, `DocLayout` own the `<main>`):
 
@@ -97,7 +99,7 @@ A page body inside the app layout (`ConsoleLayout`, `SiteLayout`, `DocLayout` ow
 </div>
 ```
 
-## Wrong
+### Don't
 
 ```html
 <main class="mx-auto max-w-[1100px] px-6 space-y-12">…</main>

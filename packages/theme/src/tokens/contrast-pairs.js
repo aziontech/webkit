@@ -16,6 +16,9 @@ export const CONTRAST_PAIRS = [
   ['text', '--chart-tooltip-text', '--chart-tooltip-bg'],
   ['text', '--chart-tooltip-muted', '--chart-tooltip-bg'],
   ...STATUS.flatMap((s) => CONTRAST_SURFACES.map((bg) => ['icon', `--${s}-foreground`, bg])),
+  ...['success', 'warning', 'danger'].flatMap((s) =>
+    CONTRAST_SURFACES.map((bg) => ['icon', `--${s}-mark`, bg])
+  ),
   ...[
     ...[1, 2, 3, 4, 5, 6, 7, 8].map((n) => `--chart-series-${n}`),
     '--chart-series-other',

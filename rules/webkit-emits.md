@@ -27,7 +27,7 @@ convention, upheld in code review.
 - Keep model/value events value-only: `emit('update:value', next)`, `emit('sort', direction)` —
   no DOM event in the payload.
 
-## Do not
+## Don't
 
 - Never use the runtime array form `defineEmits(['click'])` — blocked by lint; payloads
   lose their types.
@@ -43,7 +43,9 @@ convention, upheld in code review.
   those emit their value only.
 - Never pass the same datum both positionally and inside a payload object.
 
-## Correct
+## Example
+
+### Do
 
 ```vue
 <script setup lang="ts">
@@ -70,7 +72,7 @@ convention, upheld in code review.
 </script>
 ```
 
-## Wrong
+### Don't
 
 ```vue
 <script setup lang="ts">

@@ -67,7 +67,7 @@ Guide, rule `webkit-site-pages` (SD-01 to SD-25); a page task runs through `/web
   with `"kind": "asset"`. Photos, covers and banners are the site's content: pass URLs the app
   serves, or `@aziontech/webkit/assets/placeholder-image.svg` until it has them.
 
-## Do not
+## Don't
 
 - Do not import a section from `/src/` or with a category prefix (`@aziontech/webkit/sections/pricing-plans-section`
   no longer exists).
@@ -91,7 +91,7 @@ Guide, rule `webkit-site-pages` (SD-01 to SD-25); a page task runs through `/web
 - Do not wrap a bare `CapabilityGridSection` in a `Module` to move its title: set `titleAlign`, or
   its capability headings rise to `h2`.
 
-## Correct
+## Example
 
 ```vue
 <script setup lang="ts">

@@ -124,7 +124,7 @@
     if (doList.value || dontList.value)
       items.push({
         id: 'do-dont',
-        text: `${t.value.bestPractices} / ${t.value.constraints}`,
+        text: `${t.value.do} / ${t.value.dont}`,
         depth: 2
       })
     if (writing.value) items.push({ id: 'writing', text: t.value.writing, depth: 2 })

@@ -34,7 +34,7 @@ composable). The rest of the contract is convention, enforced in review.
   **throws a clear error when used outside its provider**. Only the root calls
   `provide()`; leaves only inject through the composable.
 
-## Do not
+## Don't
 
 - Never return a `reactive()` object — destructuring loses reactivity. Blocked by lint.
 - Never author a composable as `.js` — consumers need the derivable return type. Blocked
@@ -53,7 +53,9 @@ composable). The rest of the contract is convention, enforced in review.
 - Never mix data fetching, HTTP clients, or store logic into a UI composable — that
   belongs in your data layer; components reach loading/empty/error states through props.
 
-## Correct
+## Example
+
+### Do
 
 ```ts
 // use-controllable.ts — pure, per-instance, readonly outward
@@ -77,7 +79,7 @@ export function useControllable<T>(
 }
 ```
 
-## Wrong
+### Don't
 
 ```ts
 // Returns reactive() (destructure loses reactivity), exposes mutable

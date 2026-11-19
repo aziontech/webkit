@@ -36,7 +36,7 @@ src/components/<name>/
   `defineEmits<{ ... }>()`, `defineModel<T>()`, `defineSlots<{ ... }>()`.
 - Author composables as `.ts` files returning refs/computed values.
 
-## Do not
+## Don't
 
 - Never put more than one component in a `.vue` file.
 - Never reorder the `<script setup>` sections or omit `defineOptions({ name, inheritAttrs: false })`.
@@ -47,7 +47,9 @@ src/components/<name>/
   folder before a second consumer exists.
 - Never add a per-component `package.json`.
 
-## Correct
+## Example
+
+### Do
 
 ```vue
 <script setup lang="ts">
@@ -81,7 +83,7 @@ src/components/<name>/
 </script>
 ```
 
-## Wrong
+### Don't
 
 ```vue
 <script setup>

@@ -21,7 +21,7 @@ it. Two kinds of block exist, and they never mix:
   tool (`npm`, `pnpm`) or you need a different title.
 - A `$ ` prompt is allowed at the start of a shell line: it is drawn muted and is not copied.
 
-## Do not
+## Don't
 
 - Do not put output in a command block, as a comment or as plain lines: never
   `curl -I https://example.com\n# HTTP/2 200`, never `$ azion version\nAzion CLI 4.23.0`. The reader
@@ -32,7 +32,7 @@ it. Two kinds of block exist, and they never mix:
 - Do not colour commands yourself: the theme's syntax tokens already draw the program
   (`azion`, `curl`) in the brand orange and flags in blue, in both themes.
 
-## Correct
+## Example
 
 ```vue
 <script setup>

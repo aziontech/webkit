@@ -25,7 +25,7 @@ enforced in code review.
   in HTML, not in JS.
 - Reserve `computed` for derived state (`isAnchor`, `testId`) — never for classes.
 
-## Do not
+## Don't
 
 - No class-preset objects in the script: `const variantClasses = {...}`,
   `const sizeClasses = {...}`, `const sharedClasses = [...]`, or a
@@ -131,7 +131,9 @@ Two cases **stay in brackets** — the paren form silently emits no CSS for them
 - **Custom-property declarations:** `[--row-bg:var(--bg-surface)]` (there is no paren shorthand for declaring a property). On a webkit tag the only custom properties you may declare are the chart palette variables (`webkit-style-override.md`).
 - **Expression values:** anything more than a lone var — `w-[calc(var(--a)*2)]`, gradients, box-shadows, or a **var with a fallback** (`bg-[var(--x,var(--y))]`). Leave these bracketed; converting them drops the style with no error.
 
-## Correct
+## Example
+
+### Do
 
 ```vue
 <template>
@@ -156,7 +158,7 @@ Two cases **stay in brackets** — the paren form silently emits no CSS for them
 </template>
 ```
 
-## Wrong
+### Don't
 
 ```vue
 <script setup>

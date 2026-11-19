@@ -18,7 +18,7 @@ conventions below are enforced by review.
 - Put fallback content **inside the `<slot>` element** in the template; the fallback
   renders whenever the consumer passes nothing.
 
-## Do not
+## Don't
 
 - Never render a `<slot>` with no `defineSlots` declaration at all — blocked by lint. Keeping every rendered slot listed in the declaration is convention + review.
 - Never name a slot in camelCase (`headerActions`) — kebab-case (`header-actions`).
@@ -27,7 +27,9 @@ conventions below are enforced by review.
   fallback content covers both cases. A display-text prop may exist as the fallback's
   source, but the slot stays the primary path.
 
-## Correct
+## Example
+
+### Do
 
 ```vue
 <script setup lang="ts">
@@ -59,7 +61,7 @@ conventions below are enforced by review.
 </template>
 ```
 
-## Wrong
+### Don't
 
 ```vue
 <script setup lang="ts">

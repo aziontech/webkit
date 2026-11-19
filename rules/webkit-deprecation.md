@@ -28,7 +28,7 @@ least one major, then removed, and `webkit/no-deprecated-component` tells you be
 - When `webkit/no-deprecated-component` flags an import of a webkit component marked
   deprecated in the catalog, migrate to the named replacement before the next major.
 
-## Do not
+## Don't
 
 - Never remove or rename a public part without a deprecation cycle first — no silent
   removals.
@@ -39,7 +39,9 @@ least one major, then removed, and `webkit/no-deprecated-component` tells you be
 - Never keep building on a deprecated webkit part once the replacement is named — the
   lint warning is the migration window, not noise to suppress.
 
-## Correct
+## Example
+
+### Do
 
 ```ts
 import type { ButtonVariant } from '@aziontech/webkit/button'
@@ -63,7 +65,7 @@ Deprecating a whole component:
 </script>
 ```
 
-## Wrong
+### Don't
 
 ```ts
 interface Props {

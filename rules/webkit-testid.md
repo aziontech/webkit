@@ -23,7 +23,7 @@ enforced by review — no lint rule checks it, so apply it deliberately.
 - Keep the `defineOptions` PascalCase name and the kebab testid derived from the same
   canonical component name.
 
-## Do not
+## Don't
 
 - Do not omit `data-testid` on an interactive component root.
 - Do not hard-code a testid literal that disagrees with the component's own name, and do
@@ -34,7 +34,9 @@ enforced by review — no lint rule checks it, so apply it deliberately.
 - Do not select by tag position, utility classes, or generated markup in tests — those
   change between webkit versions; the testid does not.
 
-## Correct
+## Example
+
+### Do
 
 ```vue
 <script setup lang="ts">
@@ -61,7 +63,7 @@ enforced by review — no lint rule checks it, so apply it deliberately.
 <Chip data-testid="plan-chip-free" />
 ```
 
-## Wrong
+### Don't
 
 ```vue
 <script setup lang="ts">

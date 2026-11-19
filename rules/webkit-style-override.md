@@ -64,7 +64,7 @@ is in `webkit-tokens.md` § "Chart palettes".
 - If no prop or slot covers a legitimate need, request the variant in the design system —
   do not patch it locally.
 
-## Do not
+## Don't
 
 - Never `<Button class="p-8" />` or `<Button :class="cls" />` — blocked by lint.
 - Never mix a layout utility with anything else (`<Button class="w-full p-4" />`): padding,
@@ -77,7 +77,9 @@ is in `webkit-tokens.md` § "Chart palettes".
 - Never `!important` against a webkit class, and never target its `data-testid`/internal
   markup from your stylesheets.
 
-## Correct
+## Example
+
+### Do
 
 ```html
 <!-- compose around it: your markup, your classes; the text goes through its props -->
@@ -94,7 +96,7 @@ is in `webkit-tokens.md` § "Chart palettes".
 <RegistrationFrame class="bg-(--bg-canvas)">…</RegistrationFrame>
 ```
 
-## Wrong
+### Don't
 
 ```html
 <Button class="p-8 bg-[#0a0a0a]" @click="submit">Create account</Button>
