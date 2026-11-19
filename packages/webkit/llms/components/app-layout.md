@@ -155,7 +155,7 @@ Unbound, each one keeps its own local state.
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import { ref } from 'vue'
 
-  const toolsOpen = ref(true)
+  const toolsOpen = ref(false)
   const splitPanelOpen = ref(true)
   const notice = ref(true)
 
