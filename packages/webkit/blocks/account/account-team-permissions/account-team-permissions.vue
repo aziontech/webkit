@@ -189,7 +189,7 @@
             label="Create Team"
             icon="az az-plus"
             variant="primary"
-            size="large"
+            size="medium"
             href="/account/teams/new"
           />
         </template>

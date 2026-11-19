@@ -1,3 +1,4 @@
+import consistentHeaderActionSize from './rules/consistent-header-action-size.js'
 import noBarrelImport from './rules/no-barrel-import.js'
 import noDeepInternalImport from './rules/no-deep-internal-import.js'
 import noDeprecatedComponent from './rules/no-deprecated-component.js'
@@ -57,7 +58,8 @@ const rules = {
   'require-readonly-composable-return': requireReadonlyComposableReturn,
   'require-composable-scope-cleanup': requireComposableScopeCleanup,
   'no-polymorphic-as-prop': noPolymorphicAsProp,
-  'no-page-navigation-menu': noPageNavigationMenu
+  'no-page-navigation-menu': noPageNavigationMenu,
+  'consistent-header-action-size': consistentHeaderActionSize
 }
 
 const FILES = [
@@ -118,7 +120,8 @@ const RECOMMENDED = {
   'require-readonly-composable-return': 'error',
   'require-composable-scope-cleanup': 'error',
   'no-polymorphic-as-prop': 'error',
-  'no-page-navigation-menu': 'warn'
+  'no-page-navigation-menu': 'warn',
+  'consistent-header-action-size': 'error'
 }
 
 export const HEURISTIC_RULES = Object.freeze([

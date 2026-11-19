@@ -32,7 +32,7 @@ A list of key and value pairs and the drawer that edits them, here environment v
 
 ### A. Page heading — `PageHeader`, `Button` (required)
 
-`PageHeader` titled EditVariables with a one-sentence description and two actions: an outlined medium Documentation and the primary large `Create Variable`, the page's only large control, which opens the drawer.
+`PageHeader` titled EditVariables with a one-sentence description and two actions: an outlined medium Documentation and the primary medium `Create Variable`, the same height as Documentation, which opens the drawer.
 
 ### B. Controls row — `PropertyFilter`, `Tooltip`, `IconButton`, `CollectionPreferences` (required)
 
@@ -917,7 +917,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-variable
           label="Create Variable"
           icon="az az-plus"
           variant="primary"
-          size="large"
+          size="medium"
           @click="openCreate"
         />
       </template>

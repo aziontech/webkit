@@ -17,7 +17,7 @@ The Personal tokens page of the account settings. A person creates a token for a
 
 ### A. Page heading — `PageHeader`, `Button` (required)
 
-Title `Personal tokens` and one sentence that says what a token does and that it is shown once. Actions: the outlined Documentation button and the primary `Create Personal Token` at `size="large"`.
+Title `Personal tokens` and one sentence that says what a token does and that it is shown once. Actions: the outlined Documentation button and the primary `Create Personal Token` at `size="medium"`.
 
 ### B. Controls row — `PropertyFilter`, `Tooltip`, `IconButton`, `CollectionPreferences` (required)
 

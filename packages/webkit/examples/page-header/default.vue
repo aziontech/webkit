@@ -20,7 +20,7 @@
       <Button
         label="Create Resource"
         icon="az az-plus"
-        variant="outline"
+        variant="primary"
         size="medium"
       />
     </template>

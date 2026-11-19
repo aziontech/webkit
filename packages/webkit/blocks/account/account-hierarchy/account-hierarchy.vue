@@ -395,7 +395,7 @@
             label="Create Workspace"
             icon="az az-plus"
             variant="primary"
-            size="large"
+            size="medium"
             href="/account/resources/new"
           />
         </template>

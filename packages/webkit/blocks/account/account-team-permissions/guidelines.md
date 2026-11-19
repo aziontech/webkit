@@ -17,7 +17,7 @@ Who can do what in the account. An admin keeps one team per role (Administrators
 
 ### A. Page heading — `PageHeader`, `Button` (required)
 
-Title `Teams and permissions` and the sentence that states the model. Actions: Documentation and the primary `Create Team` at `size="large"`, which opens the CreateTeam page.
+Title `Teams and permissions` and the sentence that states the model. Actions: Documentation and the primary `Create Team` at `size="medium"`, which opens the CreateTeam page.
 
 ### B. Controls row — `PropertyFilter`, `Tooltip`, `IconButton`, `CollectionPreferences` (required)
 

@@ -16,7 +16,7 @@
 ## Do
 
 - One PageHeader per page; it renders the page's only h1.
-- Put the Documentation link first and the create action on the outer edge, both outlined at the medium size.
+- Put the Documentation link first and the create action on the outer edge. Every action is `size="medium"`, so the row keeps one height; the create action is `variant="primary"`, Documentation and the others `variant="outline"` (`webkit/consistent-header-action-size`).
 - Do not set `class="w-full"` on the action buttons; the header makes them full width on a phone.
 - Set `titleId` when a form or landmark names itself with `aria-labelledby`.
 - `breadcrumbs`: pass a `Breadcrumb` with `items`; its last entry is the current page and should match the title.
@@ -37,7 +37,7 @@
 - [page-tabs](page-tabs.md) — the second-level navigation strip that sits above a detail page's header; a header-local tab row goes in the `tabs` slot.
 - [breadcrumb](breadcrumb.md) — the usual content of the `breadcrumbs` slot.
 - [tag](tag.md) — the usual content of the `meta` slot (a status, an environment, a version).
-- [button](button.md) — the usual content of the `actions` slot (outlined, `size="medium"`).
+- [button](button.md) — the usual content of the `actions` slot (`size="medium"`; the create action primary, the others outlined).
 
 ## Props
 
@@ -122,7 +122,7 @@ No built-in strings: the title, description and every region come from the consu
       <Button
         label="Create Resource"
         icon="az az-plus"
-        variant="outline"
+        variant="primary"
         size="medium"
       />
     </template>

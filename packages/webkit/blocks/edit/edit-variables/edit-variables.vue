@@ -705,7 +705,7 @@
           label="Create Variable"
           icon="az az-plus"
           variant="primary"
-          size="large"
+          size="medium"
           @click="openCreate"
         />
       </template>

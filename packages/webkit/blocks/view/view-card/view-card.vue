@@ -194,7 +194,7 @@
             label="Create Application"
             icon="az az-plus"
             variant="primary"
-            size="large"
+            size="medium"
             @click="(event: MouseEvent) => emit('create', event)"
           />
         </template>

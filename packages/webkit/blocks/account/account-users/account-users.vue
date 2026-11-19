@@ -356,7 +356,7 @@
             label="Invite User"
             icon="az az-user-plus"
             variant="primary"
-            size="large"
+            size="medium"
             @click="openInvite"
           />
         </template>

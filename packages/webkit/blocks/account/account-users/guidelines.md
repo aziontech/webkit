@@ -18,7 +18,7 @@ Who can sign in to the account, with which role and through which teams. An admi
 
 ### A. Page heading — `PageHeader`, `Button` (required)
 
-Title `AccountUsers` and one sentence that says access comes from teams. Actions: Documentation and the primary `Invite User` at `size="large"`, which opens the invite drawer.
+Title `AccountUsers` and one sentence that says access comes from teams. Actions: Documentation and the primary `Invite User` at `size="medium"`, which opens the invite drawer.
 
 ### B. Controls row — `PropertyFilter`, `IconButton`, `Tooltip`, `CollectionPreferences` (required)
 

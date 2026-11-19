@@ -3,11 +3,11 @@ name: page-header
 category: layout
 structure: monolithic
 status: implemented
-checksum: 232e787fbfd00fb310b0399750c22d9e632eeed881a9d7b13fe98712577d785b
-spec_version: 7
+checksum: 859cd88022cee7714f27623d0d7aa85ce7535698fe818ed9dffba4c0fa8463a2
+spec_version: 8
 template: 2
 created: 2026-11-10
-last_updated: 2026-11-15
+last_updated: 2026-11-19
 ---
 
 # PageHeader — Component Spec
@@ -35,12 +35,12 @@ The heading that opens a console page: an h1 whose `size` picks the heading toke
 - `page-tabs` — the second-level navigation strip that sits above a detail page's header; a header-local tab row goes in the `tabs` slot.
 - `breadcrumb` — the usual content of the `breadcrumbs` slot.
 - `tag` — the usual content of the `meta` slot (a status, an environment, a version).
-- `button` — the usual content of the `actions` slot (outlined, `size="medium"`).
+- `button` — the usual content of the `actions` slot (`size="medium"`; the create action primary, the others outlined).
 
 ## Best practices
 
 - One PageHeader per page; it renders the page's only h1.
-- Put the Documentation link first and the create action on the outer edge, both outlined at the medium size.
+- Put the Documentation link first and the create action on the outer edge. Every action is `size="medium"`, so the row keeps one height; the create action is `variant="primary"`, Documentation and the others `variant="outline"` (`webkit/consistent-header-action-size`).
 - Do not set `class="w-full"` on the action buttons; the header makes them full width on a phone.
 - Set `titleId` when a form or landmark names itself with `aria-labelledby`.
 - `breadcrumbs`: pass a `Breadcrumb` with `items`; its last entry is the current page and should match the title.
@@ -79,7 +79,7 @@ The heading that opens a console page: an h1 whose `size` picks the heading toke
       <Button
         label="Create Resource"
         icon="az az-plus"
-        variant="outline"
+        variant="primary"
         size="medium"
       />
     </template>

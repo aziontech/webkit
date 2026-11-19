@@ -18,7 +18,7 @@ Where an account admin arranges the account's hierarchy. Workspaces sit under gr
 
 ### A. Page heading — `PageHeader`, `Button` (required)
 
-Title `Manage resources` and one sentence on what the hierarchy decides. The page's primary, `Create Workspace` at `size="large"`, sits in the heading's actions as on every sibling list page. Refresh and the details toggle stay at the end of the toolbar, so the heading holds one action that stretches cleanly on phones.
+Title `Manage resources` and one sentence on what the hierarchy decides. The page's primary, `Create Workspace` at `size="medium"`, sits in the heading's actions as on every sibling list page. Refresh and the details toggle stay at the end of the toolbar, so the heading holds one action that stretches cleanly on phones.
 
 ### B. Toolbar — `Button`, `Tooltip`, `IconButton` (required)
 

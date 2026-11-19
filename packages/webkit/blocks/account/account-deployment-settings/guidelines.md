@@ -18,7 +18,7 @@ How every deploy in the account routes. A Deployment Setting holds a binding pol
 
 ### A. Page heading — `PageHeader`, `Button` (required)
 
-Title `Build and deployment` and one sentence that says every environment is linked automatically. Actions: Documentation and the primary `Create Deployment Setting` at `size="large"`, which opens the drawer (G).
+Title `Build and deployment` and one sentence that says every environment is linked automatically. Actions: Documentation and the primary `Create Deployment Setting` at `size="medium"`, which opens the drawer (G).
 
 ### B. What a Deployment Setting is — `Alert` (required)
 
