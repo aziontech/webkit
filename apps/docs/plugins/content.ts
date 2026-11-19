@@ -390,6 +390,21 @@ export function firstSentence(text: string): string {
   return (match ? match[1] : plain).trim()
 }
 
+function plainInline(text: string): string {
+  return text
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+    .replace(/[`*]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
+export function splitLead(text: string): { lead: string; rest: string } {
+  const source = text.replace(/<!--[\s\S]*?-->/g, '').trim()
+  const match = /^([\s\S]+?[.!?])(\s|$)/.exec(source)
+  if (!match?.[1]) return { lead: plainInline(source), rest: '' }
+  return { lead: plainInline(match[1]), rest: source.slice(match[0].length).trim() }
+}
+
 export function buildIndex(catalog: Catalog = readCatalog(), foundationSlugs: string[] = []) {
   const exampleDirs = readExampleDirs()
   const llms = llmsFiles()
@@ -496,6 +511,7 @@ export async function buildComponent(name: string, catalog: Catalog = readCatalo
     surface: entry.surface ?? 'app',
     structure: entry.structure ?? null,
     purpose: inline(entry.purpose),
+    purposeRest: inline(splitLead(String(entry.purpose ?? '')).rest),
     useWhen: ((entry.useWhen as string[]) ?? []).map(inline),
     avoidWhen: ((entry.avoidWhen as string[]) ?? []).map(inline),
     related: ((entry.related as string[]) ?? []).map((item) =>
@@ -522,6 +538,7 @@ export async function buildComponent(name: string, catalog: Catalog = readCatalo
 
 export async function renderGuidelinesFile(file: string): Promise<{
   title: string
+  lead: string
   intro: string
   sections: { heading: string; html: string; parts: DocPart[] }[]
 }> {
@@ -529,9 +546,11 @@ export async function renderGuidelinesFile(file: string): Promise<{
   const source = stripFrontMatter(readFileSync(file, 'utf8'))
   const title = /^#\s+(.+)$/m.exec(source)?.[1]?.trim() ?? basename(dirname(file))
   const [head, ...parts] = source.replace(/^#\s+.+\n/m, '').split(/^## /m)
+  const { lead, rest } = splitLead(head)
   return {
     title,
-    intro: md.render(head.trim()),
+    lead,
+    intro: rest ? md.render(rest) : '',
     sections: parts.map((part) => {
       const body = part.slice(part.indexOf('\n') + 1).trim()
       return {

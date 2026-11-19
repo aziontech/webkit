@@ -1,16 +1,20 @@
 import assert from 'node:assert/strict'
-import { readFileSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { test } from 'node:test'
+import { fileURLToPath } from 'node:url'
 
 import { scanMarkdown } from '../../../packages/webkit/scripts/lib/docs-markdown.mjs'
-
 import {
   buildComponent,
+  firstSentence,
   markdown,
   markdownParts,
   pairWord,
-  SPEC_SECTIONS
+  renderGuidelinesFile,
+  SPEC_SECTIONS,
+  splitLead
 } from '../plugins/content.ts'
+import { readBlocks, readCatalog } from '../plugins/paths.ts'
 
 const md = await markdown()
 
@@ -91,4 +95,109 @@ test('no foundations page the docs render holds a task list', () => {
     )
   )
   assert.deepEqual(findings, [])
+})
+
+const REPO_URL = new URL('../../../', import.meta.url)
+const PAIR_HEADINGS = new Set(['do', "don't", 'when to use', 'when not to use', 'example'])
+
+function plainText(text: string): string {
+  return text
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+    .replace(/[`*_]/g, '')
+    .replace(/[’‘]/g, "'")
+    .replace(/[^\p{L}\p{N}' ]+/gu, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase()
+}
+
+function repeats(source: string): string[] {
+  const prose = source.replace(/^---\n[\s\S]*?\n---\n/, '').replace(/^(```|~~~)[\s\S]*?^\1/gm, '')
+  const headings = [...prose.matchAll(/^#{1,6}\s+(.+?)\s*#*$/gm)]
+    .map(([, text]) => plainText(text ?? ''))
+    .filter((text) => text && !PAIR_HEADINGS.has(text))
+  const paragraphs = prose
+    .split(/\n\s*\n/)
+    .filter((block) => !/^\s*(#|\|)/.test(block))
+    .map(plainText)
+    .filter((text) => text.length >= 40)
+  const twice = (list: string[]) => [
+    ...new Set(list.filter((item, at) => list.indexOf(item) !== at))
+  ]
+  return [
+    ...twice(headings).map((text) => `heading "${text}" twice`),
+    ...twice(paragraphs).map((text) => `paragraph "${text.slice(0, 60)}…" twice`)
+  ]
+}
+
+function openingWords(text: string, count = 8): string {
+  return plainText(text).split(' ').slice(0, count).join(' ')
+}
+
+test('no page source the docs render repeats a heading or a paragraph', () => {
+  const pages = readFileSync(new URL('apps/docs/src/lib/foundations.ts', REPO_URL), 'utf8')
+  const files = [
+    ...[...pages.matchAll(/markdown:\s*'([^']+)'/g)].map(([, path]) => path as string),
+    ...readBlocks().map((block) => `packages/webkit/blocks/${block.dir}/guidelines.md`)
+  ].filter((path) => existsSync(new URL(path, REPO_URL)))
+  const findings = files.flatMap((path) =>
+    repeats(readFileSync(new URL(path, REPO_URL), 'utf8')).map((finding) => `${path}: ${finding}`)
+  )
+  assert.deepEqual(findings, [])
+})
+
+test('a block page header carries the guidelines lead, and the body goes on after it', async () => {
+  const findings: string[] = []
+  for (const block of readBlocks()) {
+    const file = fileURLToPath(
+      new URL(`packages/webkit/blocks/${block.dir}/guidelines.md`, REPO_URL)
+    )
+    if (!existsSync(file)) continue
+    const doc = await renderGuidelinesFile(file)
+    if (!doc.lead) findings.push(`${block.dir}: no lead sentence`)
+    const body = doc.intro.replace(/<[^>]+>/g, '')
+    if (doc.lead && openingWords(body) === openingWords(doc.lead))
+      findings.push(`${block.dir}: the intro repeats the header sentence`)
+  }
+  assert.deepEqual(findings, [])
+})
+
+test('a component page shows the purpose after the header sentence, never both', async () => {
+  assert.deepEqual(splitLead('One [link](https://example.com) `x`. Two `a.b` here.'), {
+    lead: 'One link x.',
+    rest: 'Two `a.b` here.'
+  })
+  assert.deepEqual(splitLead('Only one sentence'), { lead: 'Only one sentence', rest: '' })
+  const doc = await buildComponent('button')
+  const lead = firstSentence(String(readCatalog().imports.button?.purpose ?? ''))
+  assert.ok(lead)
+  assert.doesNotMatch(doc.purposeRest, new RegExp(lead.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')))
+})
+
+test('no example on a component page is named like an API heading of that page', () => {
+  const API = new Set(['props', 'events', 'slots', 'subcomponents', 'api', 'examples'])
+  const examples = readdirSync(new URL('packages/webkit/examples/', REPO_URL))
+  const findings = examples.flatMap((dir) => {
+    const file = new URL(`packages/webkit/examples/${dir}/examples.json`, REPO_URL)
+    if (!existsSync(file)) return []
+    const data = JSON.parse(readFileSync(file, 'utf8')) as { examples: { name: string }[] }
+    return data.examples
+      .filter((example) => API.has(plainText(example.name)))
+      .map((example) => `${dir}: example "${example.name}"`)
+  })
+  assert.deepEqual(findings, [])
+})
+
+test('the sidebar lists every page once', () => {
+  const nav = readFileSync(new URL('apps/docs/src/lib/nav.ts', REPO_URL), 'utf8')
+  const pages = readFileSync(new URL('apps/docs/src/lib/foundations.ts', REPO_URL), 'utf8')
+  const looped = [...pages.matchAll(/slug:\s*'([^']+)'/g)]
+    .map(([, slug]) => `/foundations/${slug}`)
+    .filter((path) => path !== '/foundations/getting-started')
+  const literal = [...nav.matchAll(/to:\s*'([^']+)'/g)].map(([, path]) => path as string)
+  const all = [...looped, ...literal]
+  assert.deepEqual(
+    all.filter((path, at) => all.indexOf(path) !== at),
+    []
+  )
 })

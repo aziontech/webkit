@@ -142,8 +142,8 @@
         id="usage"
         class="flex scroll-mt-20 flex-col gap-(--spacing-md)"
       >
-        <DocProse>
-          <RawHtml :html="doc.purpose" />
+        <DocProse v-if="doc.purposeRest">
+          <RawHtml :html="doc.purposeRest" />
         </DocProse>
         <DoDont
           type="usage"

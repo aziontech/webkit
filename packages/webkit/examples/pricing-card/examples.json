@@ -23,7 +23,7 @@
       "file": "with-tag.vue"
     },
     {
-      "name": "Slots",
+      "name": "Custom features and actions",
       "summary": "Default slot filled with a feature list and the actions slot replacing the default button.",
       "file": "slots.vue"
     },

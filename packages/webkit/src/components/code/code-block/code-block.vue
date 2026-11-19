@@ -866,7 +866,7 @@
                   :data-state="line.state"
                 >
                   <span
-                    class="pointer-events-none absolute inset-0 z-0 bg-(--bg-hover) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance motion-reduce:transition-none group-hover:opacity-100"
+                    class="pointer-events-none absolute inset-0 z-0 bg-(--bg-hover) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance motion-reduce:transition-none group-hover:opacity-100 group-data-[state=added]:hidden group-data-[state=removed]:hidden"
                     aria-hidden="true"
                   />
                   <span

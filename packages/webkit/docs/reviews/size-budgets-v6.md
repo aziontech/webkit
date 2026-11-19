@@ -522,3 +522,4 @@ Budget-raise: config-provider 11.5 KB → 11.6 KB (measured 11.52 KB): RV-FL-1, 
 Budget-raise: locales-pt-BR 10.7 KB → 10.8 KB (measured 10.73 KB): RV-FL-1, the same three `languageSelect` strings in Portuguese.
 Budget-raise: llms-full.txt 2,200,000 → 2,210,000 bytes: RV-FL-1, the `LanguageSelect` page (spec sections and examples) in the full AI bundle.
 Budget-raise: package unpacked size 33,400,000 → 33,450,000 bytes (measured 33,402,105): RV-FL-1, the `LanguageSelect` source, examples, catalog and llms pages, merged with the TanStack AI message blocks.
+Budget-raise: feature-tabs-section 55.25 KB → 55.3 KB (measured 55.25 KB, over by bytes): the CodeBlock it embeds no longer darkens an added or removed line on hover (two classes), because the hovered line dropped `--code-syntax-function` to 3.88:1 in light.

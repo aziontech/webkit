@@ -18,7 +18,7 @@
       "file": "regions.vue"
     },
     {
-      "name": "Slots",
+      "name": "Custom regions",
       "summary": "Four regions are slots over their built-ins. **`breadcrumbs`** over the `breadcrumbs` prop — the built-in renders the same component, but an application's trail must push a route instead of loading the document. **`title`** over the `title` prop — a prose page's name is a string, while a page ABOUT something is an identity: a mark beside the name and the maker above it. That is a title, so it goes where the `h1` goes rather than into a band of its own. **`details`** — the rows a page carries between its deck and its meta line, the subject's facts as tags or the references a reader might want instead of the body. **`actions`** — a control on the title's line, empty by default, because a masthead's built-in action region is the meta line below. Everything the slots do not replace stays shared: the order, the rhythm, the type scale, and the one column every row starts on.",
       "file": "slots.vue"
     }

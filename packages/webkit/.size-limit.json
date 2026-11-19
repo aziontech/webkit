@@ -665,7 +665,7 @@
   {
     "name": "feature-tabs-section",
     "path": "src/components/section/feature-tabs-section/feature-tabs-section.vue",
-    "limit": "55.25 KB",
+    "limit": "55.3 KB",
     "entryOnly": true
   },
   {

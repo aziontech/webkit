@@ -169,7 +169,7 @@
     <article class="flex min-w-0 flex-1 flex-col gap-(--spacing-xl)">
       <DocPageHeader
         :title="block.title"
-        :description="block.summary"
+        :description="guidelines?.lead || block.summary"
         :breadcrumbs="[{ label: t.blocks, href: '/blocks' }, { label: titleCase(block.group) }]"
         :meta-actions="metaActions"
         @action-click="onMetaAction"

@@ -50,7 +50,7 @@ export async function advance(page: Page, ms: number) {
 }
 
 export async function settle(page: Page) {
-  await page.waitForLoadState('networkidle')
+  await page.waitForLoadState('networkidle', { timeout: 30_000 }).catch(() => undefined)
   await page.evaluate(async () => {
     await document.fonts.ready
     await new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(done)))

@@ -8843,9 +8843,9 @@ Two error page families, one per audience:
 
 - **Edge** (this block, `surface: edge`): the visitors of your customers' sites. Diagnostic, left-aligned, with the request path.
 
-Words: the docs say **Azion's infrastructure**; the page itself says just **Azion**. The third hop is the **Application**, never "origin": the site's application may run on Azion's distributed infrastructure or on the customer's own servers, and the visitor does not need to know which.
-
 - **Console, site and docs** (`state/state-error-page`, `surface: app`): Azion's own users on Azion's own pages. Quiet and centred, inside the product shell.
+
+Words: the docs say **Azion's infrastructure**; the page itself says just **Azion**. The third hop is the **Application**, never "origin": the site's application may run on Azion's distributed infrastructure or on the customer's own servers, and the visitor does not need to know which.
 
 ## When to use
 

@@ -41,6 +41,7 @@ export default defineConfig({
     include: ['src/**/*.test.{ts,js}'],
     setupFiles: ['./src/test/setup.ts'],
     retry: process.env.CI ? 2 : 0,
+    provide: { perfOnCi: Boolean(process.env.CI) },
     browser: {
       enabled: true,
       provider: playwright({ contextOptions: { locale: 'en-US' } }),

@@ -226,8 +226,9 @@ describe('FilterMenu', () => {
       expect(el).not.toBeNull()
       return el as HTMLElement
     })
+    await fireEvent.click(within(picker).getByRole('button', { name: /^Enter dates/ }))
     expect(within(picker).queryByLabelText('Start time')).toBeNull()
-    const start = within(picker).getByLabelText('Start')
+    const start = await waitFor(() => within(picker).getByLabelText('Start'))
     const end = within(picker).getByLabelText('End')
     await fireEvent.update(start, '11/2/2026')
     await fireEvent.change(start)

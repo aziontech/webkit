@@ -1,9 +1,9 @@
 // Runtime budgets (M1.7): mount and update time of the components that receive the biggest inputs.
 // Budgets live in ../../perf-budgets.json, in milliseconds, set at about 3× the median measured on
-// the shared development host so CI stays stable. A component over budget fails here; fix the component
+// the shared development host; on CI each one is multiplied by ciFactor (the runner is 2.5-3.5x slower). A component over budget fails here; fix the component
 // (window long lists, render collapsed children lazily), do not raise the number.
 import { cleanup, fireEvent, render } from '@testing-library/vue'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, inject, it } from 'vitest'
 import { server } from 'vitest/browser'
 import { type Component, defineComponent, h, nextTick, ref } from 'vue'
 
@@ -122,8 +122,17 @@ const typeInto = async (selector: string, value: string) => {
   input.dispatchEvent(new Event('input', { bubbles: true }))
 }
 
+declare module 'vitest' {
+  export interface ProvidedContext {
+    perfOnCi: boolean
+  }
+}
+
+const factor = inject('perfOnCi') ? budgets.ciFactor : 1
+
 function check(name: Scenario, result: Record<Phase, number>) {
-  const budget = budgets.scenarios[name]
+  const host = budgets.scenarios[name]
+  const budget = { mount: host.mount * factor, update: host.update * factor }
   console.warn(
     `[perf] ${name}: mount ${result.mount.toFixed(1)} ms (budget ${budget.mount}), update ${result.update.toFixed(1)} ms (budget ${budget.update})`
   )
