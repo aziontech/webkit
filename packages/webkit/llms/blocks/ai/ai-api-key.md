@@ -1,6 +1,6 @@
 # AiApiKey (`ai/ai-api-key`)
 
-> Bring your own key: the reader connects their own model provider account by picking a provider in a `Select`, pasting the key in a masked `PasswordInput` (reveal toggle, never prefilled, cleared once saved) and saving it; a status row says whether a key is saved for that provider (only its masked tail shows); Save key with an empty field marks it with a `FieldError`; Test connection checks the key (running, connected or failed with the provider's message in an `Alert` with Test again) and Remove key deletes it after a `ConfirmDialog`. The block stores nothing: it emits save, test and remove for the app's key store (TanStack AI's `useByok`). Built from `PageHeader`, `Subheader`, `Card`, `Item`, `SettingsRow`, `Select`, `PasswordInput`, `FieldError`, `StatusIndicator`, `Alert`, `Button` and `ConfirmDialog`. A page body for ConsoleLayout.
+> Bring your own key: the reader picks a model provider in a `Select`, pastes a key in a masked `PasswordInput` (never prefilled, cleared once saved) and saves it; a status row shows whether a key is saved (only its masked tail) and the result of Test connection, a failure shows in an `Alert`, and Remove key asks in a `ConfirmDialog`. The block stores nothing: it emits save, test and remove for the app's key store (TanStack AI's `useByok`). Built from `PageHeader`, `Subheader`, `Card`, `Item`, `SettingsRow`, `Select`, `PasswordInput`, `FieldError`, `StatusIndicator`, `Alert`, `Button` and `ConfirmDialog`. A page body for ConsoleLayout.
 
 - Surface: app
 - Source: `blocks/ai/ai-api-key/ai-api-key.vue` in `@aziontech/webkit`
@@ -10,7 +10,7 @@
 
 ## Asked as
 
-bring your own key; byok; model provider api key; ai api key settings; use my own openai key; connect a model provider; test api key; remove api key; usar minha própria chave; chave de api do provedor de ia; testar chave de api; remover chave de api; usar mi propia clave de api
+bring your own key; byok; model provider api key; use my own openai key; test api key; usar minha própria chave de api; chave de api do provedor de ia; usar mi propia clave de api
 
 The place a reader brings their own key: they connect their own model provider account so the AI features of the app run on it. They pick a provider, paste the key once, check that it works, and can remove it later. The key is never shown again after it is saved; only its masked tail says which key is in place. The block stores nothing and calls no provider: it emits `save`, `test` and `remove`, and the app's key store does the work (TanStack AI's `useByok`, or the app's own server). It is a page body for `ConsoleLayout`, rendered in the layout's default slot; the same body fits a settings tab.
 
@@ -185,19 +185,19 @@ To go live with TanStack AI, map the `useByok` snapshot to `savedKeys` and call 
 - The `form` is named by the page title; the Select trigger and the key field carry `aria-label`s matching their row titles, and the field's description is tied with `aria-describedby`.
 - Focus order: Provider, API key, its reveal toggle, Remove key, Test connection, Save key, then the `Alert`'s Test again.
 - An empty Save key sets `aria-invalid` on the field, adds the `FieldError` to its `aria-describedby` and moves focus to it.
-- Focus is never lost: Save key keeps focus while it spins; after a successful save the field clears and focus moves to it, so the new Saved status is read in context; after a confirmed removal focus moves to the API key field, since Remove key is gone.
-- The status row is a `role="status"` region: Testing, Connected and Connection failed are announced once each; the `Alert` is announced when it appears.
+- Focus is never lost: Save key keeps focus while it spins; after a save or a confirmed removal, focus moves to the API key field.
+- The status row is a `role="status"` region, so test results are announced; the `Alert` is announced when it appears.
 - The `ConfirmDialog` traps focus, is named by its title and returns focus to Remove key.
 
 ## States
 
-- Saved: the default props; OpenAI is picked and has a saved key, not tested yet: the status reads Saved with its masked tail, and Test connection and Remove key show.
+- Saved: the default props; OpenAI has a saved key, not tested: Saved with its masked tail, Test connection and Remove key.
 - Empty: `savedKeys` is `[]`; the status reads No key saved and only Save key shows.
-- Saving: `loading`; the Provider Select, the API key field, Test connection and Remove key lock and Save key spins, keeping focus. The variant opens on an empty field, since the block never seeds the key; in use the key the reader typed stays in it.
-- Testing: `status="running"`; the status reads Testing with a spinner, Test connection spins, and Remove key and the Provider Select lock until it settles; Save key stays available for a replacement key.
+- Saving: `loading`; every control but Save key locks and Save key spins. The variant opens on an empty field (the block never seeds the key).
+- Testing: `status="running"`; Testing with a spinner, Remove key and the Provider lock, Save key stays available.
 - Success: `status="success"`; the status reads Connected.
 - Error: `status="error"` with `error`; the status reads Connection failed and the danger `Alert` gives the provider's message with Test again.
-- SaveError: `error` with `status="pending"`; the danger `Alert` says `The key wasn't saved.` with the message and no action. The variant opens on an empty field; in use the typed key stays for Save key to retry.
+- SaveError: `error` with `status="pending"`; the `Alert` says `The key wasn't saved.` with no action; Save key retries.
 
 ## Related
 
@@ -209,12 +209,12 @@ To go live with TanStack AI, map the `useByok` snapshot to `savedKeys` and call 
 ## Variants
 
 - `Saved` — primary (the code below)
-- `Empty` — No key is saved for any provider: the status reads No key saved and only Save key shows.
-- `Saving` — The key is being saved: the Provider Select, the API key field, Test connection and Remove key lock and Save key spins, keeping focus.
-- `Testing` — Test connection is running: the status reads Testing with a spinner, Test connection spins, and Remove key and the Provider Select lock until it settles; Save key stays available for a replacement key.
+- `Empty` — No key saved: only Save key shows.
+- `Saving` — The save is in flight: the controls lock and Save key spins, keeping focus.
+- `Testing` — Test connection runs: the status reads Testing, Remove key and the Provider lock.
 - `Success` — The test passed: the status reads Connected.
-- `Error` — The test failed: the status reads Connection failed and a danger Alert gives the provider's message with Test again.
-- `SaveError` — The save failed: a danger Alert says the key wasn't saved with the reason and no action; the typed key stays in the field and Save key retries.
+- `Error` — The test failed: the status reads Connection failed and an Alert gives the reason with Test again.
+- `SaveError` — The save failed: an Alert gives the reason with no action; Save key retries.
 
 Each variant is the same screen in another state: `get_block("ai/ai-api-key", { variant })`, or the file under `blocks/ai/ai-api-key/variants/`.
 
@@ -477,26 +477,26 @@ Each variant is the same screen in another state: `get_block("ai/ai-api-key", { 
           </template>
           <template #footer>
             <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
-              <Button
-                v-if="saved"
-                type="button"
-                class="me-auto"
-                label="Remove key"
-                variant="outline"
-                size="medium"
-                :disabled="saving || testing"
-                @click="removeOpen = true"
-              />
-              <Button
-                v-if="saved"
-                type="button"
-                label="Test connection"
-                variant="outline"
-                size="medium"
-                :loading="testing"
-                :disabled="saving"
-                @click="onTest"
-              />
+              <template v-if="saved">
+                <Button
+                  type="button"
+                  class="me-auto"
+                  label="Remove key"
+                  variant="outline"
+                  size="medium"
+                  :disabled="saving || testing"
+                  @click="removeOpen = true"
+                />
+                <Button
+                  type="button"
+                  label="Test connection"
+                  variant="outline"
+                  size="medium"
+                  :loading="testing"
+                  :disabled="saving"
+                  @click="onTest"
+                />
+              </template>
               <Button
                 type="submit"
                 label="Save key"

@@ -173,19 +173,19 @@ To go live with TanStack AI, map the `useByok` snapshot to `savedKeys` and call 
 - The `form` is named by the page title; the Select trigger and the key field carry `aria-label`s matching their row titles, and the field's description is tied with `aria-describedby`.
 - Focus order: Provider, API key, its reveal toggle, Remove key, Test connection, Save key, then the `Alert`'s Test again.
 - An empty Save key sets `aria-invalid` on the field, adds the `FieldError` to its `aria-describedby` and moves focus to it.
-- Focus is never lost: Save key keeps focus while it spins; after a successful save the field clears and focus moves to it, so the new Saved status is read in context; after a confirmed removal focus moves to the API key field, since Remove key is gone.
-- The status row is a `role="status"` region: Testing, Connected and Connection failed are announced once each; the `Alert` is announced when it appears.
+- Focus is never lost: Save key keeps focus while it spins; after a save or a confirmed removal, focus moves to the API key field.
+- The status row is a `role="status"` region, so test results are announced; the `Alert` is announced when it appears.
 - The `ConfirmDialog` traps focus, is named by its title and returns focus to Remove key.
 
 ## States
 
-- Saved: the default props; OpenAI is picked and has a saved key, not tested yet: the status reads Saved with its masked tail, and Test connection and Remove key show.
+- Saved: the default props; OpenAI has a saved key, not tested: Saved with its masked tail, Test connection and Remove key.
 - Empty: `savedKeys` is `[]`; the status reads No key saved and only Save key shows.
-- Saving: `loading`; the Provider Select, the API key field, Test connection and Remove key lock and Save key spins, keeping focus. The variant opens on an empty field, since the block never seeds the key; in use the key the reader typed stays in it.
-- Testing: `status="running"`; the status reads Testing with a spinner, Test connection spins, and Remove key and the Provider Select lock until it settles; Save key stays available for a replacement key.
+- Saving: `loading`; every control but Save key locks and Save key spins. The variant opens on an empty field (the block never seeds the key).
+- Testing: `status="running"`; Testing with a spinner, Remove key and the Provider lock, Save key stays available.
 - Success: `status="success"`; the status reads Connected.
 - Error: `status="error"` with `error`; the status reads Connection failed and the danger `Alert` gives the provider's message with Test again.
-- SaveError: `error` with `status="pending"`; the danger `Alert` says `The key wasn't saved.` with the message and no action. The variant opens on an empty field; in use the typed key stays for Save key to retry.
+- SaveError: `error` with `status="pending"`; the `Alert` says `The key wasn't saved.` with no action; Save key retries.
 
 ## Related
 

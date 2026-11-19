@@ -2,17 +2,17 @@
  "variants": [
   {
    "name": "Empty",
-   "summary": "No key is saved for any provider: the status reads No key saved and only Save key shows.",
+   "summary": "No key saved: only Save key shows.",
    "file": "blocks/ai/ai-api-key/variants/empty.vue"
   },
   {
    "name": "Saving",
-   "summary": "The key is being saved: the Provider Select, the API key field, Test connection and Remove key lock and Save key spins, keeping focus.",
+   "summary": "The save is in flight: the controls lock and Save key spins, keeping focus.",
    "file": "blocks/ai/ai-api-key/variants/saving.vue"
   },
   {
    "name": "Testing",
-   "summary": "Test connection is running: the status reads Testing with a spinner, Test connection spins, and Remove key and the Provider Select lock until it settles; Save key stays available for a replacement key.",
+   "summary": "Test connection runs: the status reads Testing, Remove key and the Provider lock.",
    "file": "blocks/ai/ai-api-key/variants/testing.vue"
   },
   {
@@ -22,12 +22,12 @@
   },
   {
    "name": "Error",
-   "summary": "The test failed: the status reads Connection failed and a danger Alert gives the provider's message with Test again.",
+   "summary": "The test failed: the status reads Connection failed and an Alert gives the reason with Test again.",
    "file": "blocks/ai/ai-api-key/variants/error.vue"
   },
   {
    "name": "SaveError",
-   "summary": "The save failed: a danger Alert says the key wasn't saved with the reason and no action; the typed key stays in the field and Save key retries.",
+   "summary": "The save failed: an Alert gives the reason with no action; Save key retries.",
    "file": "blocks/ai/ai-api-key/variants/save-error.vue"
   }
  ],

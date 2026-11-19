@@ -254,27 +254,26 @@
           </template>
           <template #footer>
             <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
-              <Button
-                v-if="saved"
-                type="button"
-                class="me-auto"
-                label="Remove key"
-                variant="outline"
-                size="medium"
-                :disabled="saving || testing"
-                @click="removeOpen = true"
-              />
-              <Button
-                key="button-2"
-                v-if="saved"
-                type="button"
-                label="Test connection"
-                variant="outline"
-                size="medium"
-                :loading="testing"
-                :disabled="saving"
-                @click="onTest"
-              />
+              <template v-if="saved">
+                <Button
+                  type="button"
+                  class="me-auto"
+                  label="Remove key"
+                  variant="outline"
+                  size="medium"
+                  :disabled="saving || testing"
+                  @click="removeOpen = true"
+                />
+                <Button
+                  type="button"
+                  label="Test connection"
+                  variant="outline"
+                  size="medium"
+                  :loading="testing"
+                  :disabled="saving"
+                  @click="onTest"
+                />
+              </template>
               <Button
                 type="submit"
                 label="Save key"
