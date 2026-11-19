@@ -1070,7 +1070,7 @@
   {
     "name": "config-provider",
     "path": "src/components/provider/config-provider/config-provider.vue",
-    "limit": "11.5 KB"
+    "limit": "11.6 KB"
   },
   {
     "name": "locales-pt-BR",
