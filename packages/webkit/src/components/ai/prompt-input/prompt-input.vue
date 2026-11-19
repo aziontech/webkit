@@ -389,6 +389,29 @@
   })
   onMounted(resize)
 
+  const boxEl = ref<globalThis.HTMLElement | null>(null)
+  const menuEl = ref<globalThis.HTMLElement | null>(null)
+  const menuSide = ref<'top' | 'bottom'>('top')
+  function placeMenu() {
+    const box = boxEl.value
+    const menu = menuEl.value
+    if (!box || !menu) return
+    const rect = box.getBoundingClientRect()
+    const viewport = globalThis.visualViewport
+    const top = viewport?.offsetTop ?? 0
+    const bottom = top + (viewport?.height ?? globalThis.innerHeight)
+    const above = rect.top - top
+    const below = bottom - rect.bottom
+    menuSide.value = above < menu.offsetHeight && below > above ? 'bottom' : 'top'
+  }
+  watch(menuOpen, (open) => {
+    if (!open) {
+      menuSide.value = 'top'
+      return
+    }
+    void nextTick(placeMenu)
+  })
+
   defineExpose({ focus })
 </script>
 
@@ -405,6 +428,7 @@
       :data-invalid="overBy > 0 || null"
       :data-disabled="disabled || null"
       :data-dragging="(dragging && !disabled) || null"
+      ref="boxEl"
       :data-testid="`${testId}__box`"
       class="relative flex w-full cursor-text flex-col gap-(--spacing-xs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-xs) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none focus-within:border-(--border-strong) focus-within:ring-2 focus-within:ring-(--ring-color) data-[invalid]:border-(--danger-border) data-[disabled]:bg-(--bg-disabled)"
       @pointerdown="onBoxPointerdown"
@@ -453,8 +477,10 @@
         role="listbox"
         :aria-label="query?.menu.label"
         :data-testid="`${testId}__menu`"
+        ref="menuEl"
         :data-trigger="query?.menu.trigger"
-        class="absolute inset-x-0 bottom-full z-(--z-control-overlay) m-0 mb-(--spacing-2xs) flex max-h-72 list-none flex-col overflow-y-auto rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-2xs) shadow-(--shadow-xs)"
+        :data-side="menuSide"
+        class="absolute inset-x-0 z-(--z-control-overlay) m-0 flex data-[side=bottom]:top-full data-[side=bottom]:mt-(--spacing-2xs) data-[side=top]:bottom-full data-[side=top]:mb-(--spacing-2xs) max-h-72 list-none flex-col overflow-y-auto rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-2xs) shadow-(--shadow-xs)"
       >
         <li
           v-for="(option, index) in matches"
