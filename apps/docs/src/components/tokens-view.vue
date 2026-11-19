@@ -1,19 +1,13 @@
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import CopyText from '@aziontech/webkit/copy-text'
-  import Item from '@aziontech/webkit/item-root'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import tokens from 'virtual:docs-tokens'
-  import { computed, ref } from 'vue'
+  import { computed } from 'vue'
 
   import { messages } from '../lib/i18n'
   import { titleCase } from '../lib/nav'
-  import { copyValue } from '../lib/tokens'
+  import { sharedUsage, typeGroups } from '../lib/tokens'
   import ArchitectureIntro from './tokens/architecture-intro.vue'
   import ColorPlayground from './tokens/color-playground.vue'
   import PaletteStrips from './tokens/palette-strips.vue'
-  import SpacingRhythm from './tokens/spacing-rhythm.vue'
-  import ThemePairs from './tokens/theme-pairs.vue'
   import TokenTable from './tokens/token-table.vue'
 
   defineProps<{
@@ -21,17 +15,47 @@
   }>()
 
   const t = messages
-  const colorView = ref<'table' | 'theme'>('table')
-  const views = computed(() => [
-    { label: t.value.tableView, value: 'table' },
-    { label: t.value.themeView, value: 'theme' }
-  ])
 
+  const colorGroups = computed(() =>
+    tokens.semantic.map((group) => ({ id: group.id, ...sharedUsage(group.vars) }))
+  )
   const rhythm = computed(() => tokens.spacing.filter((token) => token.responsive))
   const scale = computed(() => tokens.spacing.filter((token) => !token.responsive))
   const fontFamilies = computed(() =>
-    tokens.fonts.filter((token) => token.name.startsWith('--font'))
+    tokens.fonts.filter((token) => /^--font-(?!weight)/.test(token.name))
   )
+  const fontWeights = computed(() =>
+    tokens.fonts.filter((token) => token.name.startsWith('--font-weight'))
+  )
+  const radii = computed(() => tokens.radius.filter((token) => token.name.startsWith('--radius')))
+  const shapes = computed(() => tokens.radius.filter((token) => token.name.startsWith('--shape')))
+  const shadowGroups = computed(() =>
+    [
+      { id: 'box', title: t.value.boxShadows, prefix: '--shadow' },
+      { id: 'drop', title: t.value.dropShadows, prefix: '--drop-shadow' },
+      { id: 'inset', title: t.value.insetShadows, prefix: '--inset-shadow' }
+    ]
+      .map((group) => ({
+        ...group,
+        tokens: tokens.shadows.filter((token) => token.name.startsWith(group.prefix))
+      }))
+      .filter((group) => group.tokens.length)
+  )
+  const typeSample = computed<Record<string, string>>(() => ({
+    heading: t.value.sampleHeading,
+    title: t.value.sampleHeading,
+    body: t.value.sampleParagraph,
+    label: t.value.sampleLabel,
+    button: t.value.sampleButton,
+    link: t.value.sampleLink,
+    tag: t.value.sampleTag,
+    overline: t.value.sampleOverline,
+    amount: '$1,249.00',
+    'big-number': '12,480',
+    other: t.value.sampleHeading
+  }))
+
+  const sampleFor = (family: string) => typeSample.value[family] ?? t.value.sampleHeading
 </script>
 
 <template>
@@ -40,41 +64,25 @@
       <ArchitectureIntro />
       <ColorPlayground />
       <section
-        class="flex flex-col gap-(--spacing-md)"
+        class="flex flex-col gap-(--spacing-lg)"
         aria-labelledby="semantic-colors"
       >
-        <div class="flex flex-wrap items-center justify-between gap-(--spacing-sm)">
-          <h2
-            id="semantic-colors"
-            class="text-heading-sm"
-          >
-            {{ t.semanticColors }}
-          </h2>
-          <ToggleGroup
-            v-model="colorView"
-            :options="views"
-            :aria-label="t.view"
-            size="small"
-          />
-        </div>
-        <section
-          v-for="group in tokens.semantic"
-          :key="group.id"
-          class="flex flex-col gap-(--spacing-sm)"
+        <h2
+          id="semantic-colors"
+          class="text-heading-sm"
         >
-          <h3 class="text-label-md">{{ titleCase(group.id) }}</h3>
-          <TokenTable
-            v-if="colorView === 'table'"
-            :tokens="group.vars"
-            kind="color"
-            sample="swatch"
-            :caption="titleCase(group.id)"
-          />
-          <ThemePairs
-            v-else
-            :tokens="group.vars"
-          />
-        </section>
+          {{ t.semanticColors }}
+        </h2>
+        <TokenTable
+          v-for="group in colorGroups"
+          :key="group.id"
+          :tokens="group.tokens"
+          kind="color"
+          sample="swatch"
+          :title="titleCase(group.id)"
+          :usage="group.usage"
+          :caption="titleCase(group.id)"
+        />
       </section>
       <section
         class="flex flex-col gap-(--spacing-sm)"
@@ -94,125 +102,129 @@
     </template>
 
     <template v-else-if="kind === 'typography'">
-      <ul class="flex flex-col divide-y divide-(--border-default)">
-        <li
-          v-for="name in tokens.typography"
-          :key="name"
-        >
-          <Item
-            clickable
-            size="small"
-            class="flex-col items-start gap-(--spacing-2xs)"
-            @click="copyValue(name)"
-          >
-            <code class="text-label-code-sm text-(--text-muted)">{{ name }}</code>
-            <span :class="name">{{ t.sampleText }}</span>
-          </Item>
-        </li>
-      </ul>
-      <section class="flex flex-col gap-(--spacing-sm)">
-        <h2 class="text-heading-sm">Font families</h2>
+      <TokenTable
+        :tokens="fontFamilies"
+        kind="font"
+        sample="font"
+        sample-text="Aa Bb Cc 0123"
+        :title="t.fontFamilies"
+        :caption="t.fontFamilies"
+        :heading-level="2"
+      />
+      <TokenTable
+        :tokens="fontWeights"
+        kind="font"
+        sample="weight"
+        sample-text="Aa"
+        :title="t.fontWeights"
+        :caption="t.fontWeights"
+        :heading-level="2"
+      />
+      <section class="flex flex-col gap-(--spacing-lg)">
+        <div class="flex flex-col gap-(--spacing-2xs)">
+          <h2 class="text-heading-sm">{{ t.typeStyles }}</h2>
+          <p class="text-body-sm text-(--text-muted)">{{ t.typeStylesLead }}</p>
+        </div>
         <TokenTable
-          :tokens="fontFamilies"
-          kind="font"
-          sample="none"
-          caption="Font families"
+          v-for="group in typeGroups(tokens.typography)"
+          :key="group.id"
+          :tokens="group.vars"
+          kind="type"
+          sample="type"
+          :sample-text="sampleFor(group.id)"
+          :title="titleCase(group.id)"
+          :caption="titleCase(group.id)"
         />
       </section>
     </template>
 
     <template v-else-if="kind === 'spacing'">
-      <section class="flex flex-col gap-(--spacing-sm)">
-        <div class="flex flex-col gap-(--spacing-2xs)">
-          <h2 class="text-heading-sm">{{ t.spacingRhythm }}</h2>
-          <p class="text-body-sm text-(--text-muted)">{{ t.spacingRhythmLead }}</p>
-        </div>
-        <SpacingRhythm :tokens="rhythm" />
-      </section>
-      <section class="flex flex-col gap-(--spacing-sm)">
-        <h2 class="text-heading-sm">{{ t.spacingScale }}</h2>
-        <TokenTable
-          :tokens="scale"
-          kind="spacing"
-          sample="bar"
-          :caption="t.spacingScale"
-        />
-      </section>
+      <TokenTable
+        :tokens="rhythm"
+        kind="spacing"
+        sample="bar"
+        :title="t.spacingRhythm"
+        :description="t.spacingRhythmLead"
+        :caption="t.spacingRhythm"
+        :heading-level="2"
+      />
+      <TokenTable
+        :tokens="scale"
+        kind="spacing"
+        sample="bar"
+        :title="t.spacingScale"
+        :caption="t.spacingScale"
+        :heading-level="2"
+      />
     </template>
 
-    <TokenTable
-      v-else-if="kind === 'radius'"
-      key="radius"
-      :tokens="tokens.radius"
-      kind="radius"
-      sample="radius"
-      caption="Radius"
-    />
+    <template v-else-if="kind === 'radius'">
+      <TokenTable
+        :tokens="radii"
+        kind="radius"
+        sample="radius"
+        :title="t.radiusScale"
+        :description="t.radiusScaleLead"
+        :caption="t.radiusScale"
+        :heading-level="2"
+      />
+      <TokenTable
+        :tokens="shapes"
+        kind="radius"
+        sample="radius"
+        :title="t.shapeTokens"
+        :description="t.shapeTokensLead"
+        :caption="t.shapeTokens"
+        :heading-level="2"
+      />
+    </template>
 
-    <TokenTable
-      v-else-if="kind === 'shadows'"
-      key="shadows"
-      :tokens="tokens.shadows"
-      kind="shadow"
-      sample="shadow"
-      caption="Shadows"
-    />
+    <template v-else-if="kind === 'shadows'">
+      <TokenTable
+        v-for="group in shadowGroups"
+        :key="group.id"
+        :tokens="group.tokens"
+        kind="shadow"
+        sample="shadow"
+        :title="group.title"
+        :caption="group.title"
+        :heading-level="2"
+      />
+    </template>
 
     <template v-else-if="kind === 'motion'">
-      <section class="flex flex-col gap-(--spacing-sm)">
-        <h2 class="text-heading-sm">Easing</h2>
-        <TokenTable
-          :tokens="tokens.motion.ease"
-          kind="ease"
-          sample="none"
-          caption="Easing"
-        />
-      </section>
-      <section class="flex flex-col gap-(--spacing-sm)">
-        <h2 class="text-heading-sm">Duration</h2>
-        <TokenTable
-          :tokens="tokens.motion.duration"
-          kind="duration"
-          sample="none"
-          caption="Duration"
-        />
-      </section>
-      <section class="flex flex-col gap-(--spacing-sm)">
-        <h2 class="text-heading-sm">Animations</h2>
-        <ul class="grid grid-cols-1 gap-(--spacing-xs) md:grid-cols-2">
-          <li
-            v-for="animation in tokens.motion.animations"
-            :key="animation.name"
-            class="flex"
-          >
-            <Card class="w-full">
-              <div class="flex flex-col items-start gap-(--spacing-2xs)">
-                <CopyText :value="`animate-${animation.name}`" />
-                <code class="text-label-code-sm text-(--text-muted)">{{ animation.value }}</code>
-                <p class="text-body-sm text-(--text-muted)">{{ animation.useWhen }}</p>
-              </div>
-            </Card>
-          </li>
-        </ul>
-      </section>
+      <TokenTable
+        :tokens="tokens.motion.ease"
+        kind="ease"
+        sample="ease"
+        :title="t.easing"
+        :caption="t.easing"
+        :heading-level="2"
+      />
+      <TokenTable
+        :tokens="tokens.motion.duration"
+        kind="duration"
+        sample="duration"
+        :title="t.duration"
+        :caption="t.duration"
+        :heading-level="2"
+      />
+      <TokenTable
+        :tokens="tokens.motion.animations"
+        kind="animation"
+        :title="t.animations"
+        :description="t.animationsLead"
+        :caption="t.animations"
+        :heading-level="2"
+      />
     </template>
 
-    <template v-else-if="kind === 'z-index'">
-      <TokenTable
-        :tokens="tokens.zIndex"
-        kind="z-index"
-        sample="none"
-        caption="Z-index"
-      />
-      <section class="flex flex-col gap-(--spacing-sm)">
-        <h2 class="text-heading-sm">Breakpoints</h2>
-        <TokenTable
-          :tokens="tokens.breakpoints"
-          kind="breakpoint"
-          sample="none"
-          caption="Breakpoints"
-        />
-      </section>
-    </template>
+    <TokenTable
+      v-else-if="kind === 'z-index'"
+      key="z-index"
+      :tokens="tokens.zIndex"
+      kind="z-index"
+      caption="Z-index"
+    />
   </div>
 </template>

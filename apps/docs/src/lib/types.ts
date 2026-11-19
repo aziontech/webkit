@@ -82,6 +82,7 @@ export type Token = {
   usage?: TokenUsage
   preview?: TokenPreview
   responsive?: Record<string, string>
+  continued?: boolean
 }
 
 export type IconAsset = {
@@ -106,12 +107,12 @@ export type DocsTokens = {
   spacing: Token[]
   radius: Token[]
   shadows: Token[]
-  typography: string[]
+  typography: Token[]
   fonts: Token[]
   motion: {
     ease: Token[]
     duration: Token[]
-    animations: { name: string; value: string; useWhen: string }[]
+    animations: Token[]
   }
   zIndex: Token[]
   breakpoints: Token[]

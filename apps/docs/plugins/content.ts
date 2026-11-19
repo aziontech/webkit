@@ -599,6 +599,48 @@ function declarations(block: string): Map<string, string> {
   return out
 }
 
+function mediaSteps(
+  css: string,
+  breakpoints: Map<string, string>
+): Map<string, Record<string, string>> {
+  const names = new Map(
+    [...breakpoints].map(([name, px]) => [px, name.replace('--breakpoint-', '')])
+  )
+  const out = new Map<string, Record<string, string>>()
+  for (const match of css.matchAll(/@media \(min-width: (\d+px)\) \{([^}]*)\}/g)) {
+    const step = names.get(match[1])
+    if (!step) continue
+    for (const [name, value] of declarations(match[2]))
+      out.set(name, { ...(out.get(name) ?? {}), [step]: value })
+  }
+  return out
+}
+
+function typeStyles(
+  classes: string[],
+  theme: Map<string, string>,
+  steps: Map<string, Record<string, string>>
+) {
+  return classes.map((name) => {
+    const read = (part: string) => theme.get(`--${name}-${part}`)
+    const size = read('font-size')
+    const tracking = read('letter-spacing')
+    const value = size
+      ? [
+          `${size} / ${read('line-height') ?? 'normal'}`,
+          read('font-weight'),
+          tracking && tracking !== '0' ? tracking : ''
+        ]
+          .filter(Boolean)
+          .join(' · ')
+      : '—'
+    const responsive = steps.get(`--${name}-font-size`)
+    return responsive && size
+      ? { name, value, responsive: { _: size, ...responsive } }
+      : { name, value }
+  })
+}
+
 export function buildTokens(catalog: Catalog = readCatalog()) {
   const css = readFileSync(join(THEME, 'dist/globals.css'), 'utf8')
   const theme = new Map<string, string>()
@@ -676,7 +718,11 @@ export function buildTokens(catalog: Catalog = readCatalog()) {
       ...prefixed('--drop-shadow'),
       ...prefixed('--inset-shadow')
     ]),
-    typography: catalog.tokens.typography,
+    typography: typeStyles(
+      catalog.tokens.typography,
+      global,
+      mediaSteps(css, new Map(prefixed('--breakpoint').map((token) => [token.name, token.value])))
+    ),
     fonts: uniq([...prefixed('--font'), ...prefixed('--tracking'), ...prefixed('--leading')]),
     motion: {
       ease: prefixed('--ease'),
@@ -685,9 +731,9 @@ export function buildTokens(catalog: Catalog = readCatalog()) {
         ...pick(theme, (name) => name.startsWith('--duration'))
       ],
       animations: Object.entries(catalog.tokens.animationGuide).map(([name, info]) => ({
-        name,
+        name: `animate-${name}`,
         value: info.value,
-        useWhen: info.useWhen
+        usage: { job: info.useWhen, usedBy: '' }
       }))
     },
     zIndex: uniq([...prefixed('--z'), ...pick(light, (name) => name.startsWith('--z'))]),
