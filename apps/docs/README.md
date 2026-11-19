@@ -120,6 +120,15 @@ skills the site does not render may keep their checklists.
 A block's `## Do` / `## Don't` and `## When to use` / `## When not to use` are read by name
 (`block-page.vue`) and must keep those headings.
 
+**Say it once.** A page never shows the same text twice. The header sentence is the first
+sentence of the source, and the body goes on after it: a component page shows the first sentence
+of its `purpose` in the header and the rest under it, and a block page shows the first sentence of
+its `guidelines.md` intro in the header and the rest of the intro under it (`splitLead` in
+`plugins/content.ts`). So open the intro with the one sentence that says what the piece is, and
+do not restate it in the next one. A source the site renders has no heading or paragraph twice,
+an example is never named like an API heading (`Props`, `Events`, `Slots`), and the sidebar links
+each page once.
+
 How it is checked:
 
 - `pnpm --filter @aziontech/webkit check:docs-markdown` (the `docs-markdown` gate and the `toolkit`
@@ -127,7 +136,9 @@ How it is checked:
   label other than Do / Don't in `rules/`, `skills/`, `.specs/` and every block `guidelines.md`,
   and a task list in a page the site renders.
 - `pnpm test:docs` (`test/content.test.ts`, same gate and job) proves the pipeline drops comments,
-  renders task lists as plain lists and pairs only Do / Don't.
+  renders task lists as plain lists and pairs only Do / Don't, and fails a repeated heading or
+  paragraph in a rendered source, a header sentence repeated in the body, an example named like
+  an API heading and a page linked twice from the sidebar.
 - The visual suite checks the result on every page (`apps/visual/tests/do-dont.spec.ts`): at
   1280 px each pair sits in two columns of equal height, at 390 px the Do column comes first, a
   pair label outside the structure fails, and in light and dark the label, the icon, the text and

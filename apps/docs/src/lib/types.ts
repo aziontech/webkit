@@ -5,6 +5,7 @@ export type DocPart = { html: string } | { pair: DocPair }
 export type MarkdownDoc = { parts: DocPart[]; title: string }
 export type GuidelinesDoc = {
   title: string
+  lead: string
   intro: string
   sections: { heading: string; html: string; parts: DocPart[] }[]
 }
@@ -17,6 +18,7 @@ export type ComponentDoc = {
   surface: string
   structure: string | null
   purpose: string
+  purposeRest: string
   useWhen: string[]
   avoidWhen: string[]
   related: string[]
