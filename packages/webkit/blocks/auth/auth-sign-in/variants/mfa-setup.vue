@@ -4,16 +4,42 @@
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import Checkbox from '@aziontech/webkit/checkbox'
   import CopyButton from '@aziontech/webkit/copy-button'
   import Field from '@aziontech/webkit/field'
   import OtpInput from '@aziontech/webkit/otp-input'
   import PageHeader from '@aziontech/webkit/page-header'
   import QrCode from '@aziontech/webkit/qr-code'
-  import { nextTick, ref } from 'vue'
+  import { computed, nextTick, ref } from 'vue'
 
   const account = 'jane.doe@example.com'
   const setupKey = 'JBSW Y3DP EHPK 3PXP'
   const otpauthUri = `otpauth://totp/Azion:${encodeURIComponent(account)}?secret=${setupKey.replaceAll(' ', '')}&issuer=Azion`
+
+  const recoveryCodes = [
+    'K7QM2XPA',
+    'R4TD9WLN',
+    'B8VJ3HQE',
+    'N2CY6FMT',
+    'H5LP8KRW',
+    'W9EX4GDB',
+    'T3NA7ZQC',
+    'F6RU2MJV'
+  ]
+  const recoveryText = recoveryCodes.join('\n')
+  const codesSaved = ref(false)
+  const continueHint = computed(() =>
+    codesSaved.value ? '' : 'Confirm that you saved the recovery codes to continue.'
+  )
+
+  const downloadCodes = () => {
+    const url = URL.createObjectURL(new Blob([`${recoveryText}\n`], { type: 'text/plain' }))
+    const link = document.createElement('a')
+    link.href = url
+    link.download = 'azion-recovery-codes.txt'
+    link.click()
+    URL.revokeObjectURL(url)
+  }
 
   const code = ref('')
   const codeError = ref('')
@@ -103,7 +129,7 @@
                       v-if="enabled"
                       severity="success"
                       size="small"
-                      label="Multi-factor authentication is on. You will enter a code from the app each time you sign in."
+                      label="Multi-factor authentication is on. Save your recovery codes before you continue."
                     />
                     <Alert
                       key="alert-2"
@@ -196,14 +222,84 @@
                       </form>
                     </template>
 
-                    <Button
-                      v-else
-                      label="Continue to Console"
-                      variant="primary"
-                      size="large"
-                      class="w-full"
-                      href="/home"
-                    />
+                    <template v-else>
+                      <section
+                        class="flex flex-col gap-(--spacing-sm)"
+                        aria-labelledby="mfa-setup-recovery-title"
+                      >
+                        <div class="flex flex-col gap-(--spacing-2xs)">
+                          <h2
+                            id="mfa-setup-recovery-title"
+                            class="text-label-md text-(--text-default)"
+                          >
+                            Save your recovery codes
+                          </h2>
+                          <p class="text-body-sm text-(--text-muted)">
+                            If you lose your phone, sign in with one of these codes. Each code works
+                            once. Keep them somewhere safe, such as a password manager; they are not
+                            shown again.
+                          </p>
+                        </div>
+                        <ul
+                          class="grid grid-cols-2 gap-x-(--spacing-md) gap-y-(--spacing-2xs) rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface) p-(--spacing-sm)"
+                          aria-label="Recovery codes"
+                        >
+                          <li
+                            v-for="recoveryCode in recoveryCodes"
+                            :key="recoveryCode"
+                            class="text-label-code-sm text-(--text-default)"
+                            dir="ltr"
+                          >
+                            <code>{{ recoveryCode }}</code>
+                          </li>
+                        </ul>
+                        <div class="flex flex-wrap items-center gap-(--spacing-xs)">
+                          <Button
+                            label="Download"
+                            variant="outline"
+                            size="medium"
+                            icon="az az-download"
+                            @click="downloadCodes"
+                          />
+                          <CopyButton
+                            :value="recoveryText"
+                            aria-label="Copy recovery codes"
+                            copied-label="Recovery codes copied"
+                            variant="outline"
+                            size="medium"
+                          />
+                        </div>
+                      </section>
+
+                      <Field orientation="horizontal">
+                        <Checkbox
+                          id="mfa-setup-codes-saved"
+                          v-model="codesSaved"
+                          name="codesSaved"
+                        />
+                        <Field.Content>
+                          <Field.Label for="mfa-setup-codes-saved">I saved these codes</Field.Label>
+                        </Field.Content>
+                      </Field>
+
+                      <div class="flex flex-col gap-(--spacing-2xs)">
+                        <Button
+                          label="Continue to Console"
+                          variant="primary"
+                          size="large"
+                          class="w-full"
+                          :disabled="!codesSaved"
+                          :href="codesSaved ? '/home' : ''"
+                          aria-describedby="mfa-setup-continue-hint"
+                        />
+                        <p
+                          id="mfa-setup-continue-hint"
+                          class="text-body-sm text-(--text-muted)"
+                        >
+                          {{ continueHint }}
+                        </p>
+                      </div>
+                    </template>
                   </div>
                 </template>
               </Card>

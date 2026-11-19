@@ -26,6 +26,9 @@
   /** An identity provider offered over the email field. */
   export type SignInProvider = 'google' | 'github'
 
+  /** A way to sign in: the email form or an identity provider. */
+  export type SignInMethod = 'email' | SignInProvider
+
   /** A sign-in failure with its own copy, severity and Retry rule. */
   export type SignInFailure = 'bad-credentials' | 'service-unavailable' | 'server-error' | 'timeout'
 
@@ -51,6 +54,8 @@
     notice?: SignInNoticeKind | (string & {})
     /** The identity providers are still loading; skeleton bars hold their place. */
     providersLoading?: boolean
+    /** The method this browser signed in with last time, which carries the Last used tag; empty shows no tag. */
+    lastUsed?: SignInMethod | ''
     /** Where the product mark leads. */
     homeHref?: string
     /** Where the Documentation button leads. */
@@ -75,6 +80,7 @@
     error: '',
     notice: '',
     providersLoading: false,
+    lastUsed: '',
     homeHref: '/home',
     docsHref: '/docs',
     signUpHref: '/signup',
@@ -600,28 +606,52 @@
                             v-else
                             class="flex flex-col gap-(--spacing-sm)"
                           >
-                            <Button
-                              type="button"
-                              :label="copy.continueWithGoogle"
-                              variant="outline"
-                              size="large"
-                              icon="az-color az-google"
-                              class="w-full"
-                              @click="
-                                (event: MouseEvent) => emit('provider-click', event, 'google')
-                              "
-                            />
-                            <Button
-                              type="button"
-                              :label="copy.continueWithGithub"
-                              variant="outline"
-                              size="large"
-                              icon="az az-github"
-                              class="w-full"
-                              @click="
-                                (event: MouseEvent) => emit('provider-click', event, 'github')
-                              "
-                            />
+                            <div class="relative">
+                              <Button
+                                type="button"
+                                :label="copy.continueWithGoogle"
+                                variant="outline"
+                                size="large"
+                                icon="az-color az-google"
+                                class="w-full"
+                                @click="
+                                  (event: MouseEvent) => emit('provider-click', event, 'google')
+                                "
+                              />
+                              <div
+                                v-if="lastUsed === 'google'"
+                                class="absolute end-(--spacing-sm) top-0 -translate-y-1/2"
+                              >
+                                <Tag
+                                  :label="copy.lastUsed"
+                                  severity="info"
+                                  size="small"
+                                />
+                              </div>
+                            </div>
+                            <div class="relative">
+                              <Button
+                                type="button"
+                                :label="copy.continueWithGithub"
+                                variant="outline"
+                                size="large"
+                                icon="az az-github"
+                                class="w-full"
+                                @click="
+                                  (event: MouseEvent) => emit('provider-click', event, 'github')
+                                "
+                              />
+                              <div
+                                v-if="lastUsed === 'github'"
+                                class="absolute end-(--spacing-sm) top-0 -translate-y-1/2"
+                              >
+                                <Tag
+                                  :label="copy.lastUsed"
+                                  severity="info"
+                                  size="small"
+                                />
+                              </div>
+                            </div>
                           </div>
 
                           <Separator :label="copy.or" />
@@ -835,7 +865,7 @@
                         />
 
                         <div
-                          v-if="step === 'email'"
+                          v-if="step === 'email' && lastUsed === 'email'"
                           class="absolute end-(--spacing-sm) top-0 -translate-y-1/2"
                         >
                           <Tag
