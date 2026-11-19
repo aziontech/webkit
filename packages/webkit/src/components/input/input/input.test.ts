@@ -213,7 +213,9 @@ describe('Input', () => {
       const { getByTestId, queryByText } = render(Host)
       const root = getByTestId('input').closest('[data-size]') as HTMLElement
       expect(root.hasAttribute('data-leading')).toBe(false)
-      expect(root.querySelectorAll('[aria-hidden="true"]').length).toBe(0)
+      expect(
+        root.querySelectorAll('[aria-hidden="true"]:not([data-slot="touch-target"])').length
+      ).toBe(0)
 
       shown.value = true
       await nextTick()
@@ -227,7 +229,9 @@ describe('Input', () => {
       expect(queryByText('L')).toBeNull()
       expect(root.hasAttribute('data-leading')).toBe(false)
       expect(root.hasAttribute('data-trailing')).toBe(false)
-      expect(root.querySelectorAll('[aria-hidden="true"]').length).toBe(0)
+      expect(
+        root.querySelectorAll('[aria-hidden="true"]:not([data-slot="touch-target"])').length
+      ).toBe(0)
     })
   })
 
