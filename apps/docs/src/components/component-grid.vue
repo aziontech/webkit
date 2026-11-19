@@ -110,7 +110,7 @@
             class="w-full min-w-0 transition-colors duration-fast-02 ease-productive-entrance focus-within:border-(--border-strong) hover:border-(--border-strong) motion-reduce:transition-none"
           >
             <p
-              class="px-(--spacing-md) pt-(--spacing-sm) text-body-sm text-(--text-muted) md:hidden"
+              class="line-clamp-2 px-(--spacing-md) pt-(--spacing-sm) text-body-sm text-(--text-muted) md:hidden"
             >
               {{ item.entry?.purpose }}
             </p>
