@@ -3,7 +3,7 @@ name: stat-tile
 category: chart
 structure: monolithic
 status: implemented
-checksum: d10487116bb259c6f8a991a96c635866baa4f538e25d106b6bcff486e252fe0e
+checksum: c3972afbba42c9aaa7e644cc6c0fd702c007f33aec58f40dcb22164a12f5a353
 spec_version: 8
 created: 2026-10-20
 last_updated: 2026-11-19
@@ -95,7 +95,7 @@ The function props (`formatValue`) and the events stay Vue. `DocMarkdown` and th
 | `inverse`     | `boolean`                   | `false`         | false    | A rise is bad for this metric; flips the delta between success and danger.                                                         |
 | `trend`       | `(number \| null)[]`        | `[]`            | false    | Sparkline values, oldest first; `null` leaves a gap, as in `spark-chart`. Empty hides the sparkline.                               |
 | `loading`     | `boolean`                   | `false`         | false    | Renders Skeleton lines in place of the figure, delta and sparkline.                                                                |
-| `error`       | `string`                    | `''`            | false    | Why the value failed to load. When set, the tile shows a dash and a danger band that says it could not load, never No data.         |
+| `error`       | `string`                    | `''`            | false    | Why the value failed to load. When set, the tile shows a dash and a danger band that says it could not load, never No data.        |
 
 ## Events
 

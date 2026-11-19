@@ -6,7 +6,7 @@ status: implemented
 spec_version: 4
 created: 2026-11-05
 last_updated: 2026-11-19
-checksum: 129aa446b64038c85213667ef11272651c7fdd31a906dcd31c7af8d70d20ca60
+checksum: a60667147e93866b5c74f6a7565c147103a224438cef9312a2928b403206de79
 ---
 
 # ContactHubSection — Component Spec
@@ -72,11 +72,11 @@ The band under the Contact title band: the team lanes side by side (Sales and Su
 
 ## Props
 
-| Prop       | Type                         | Default | Required | JSDoc                                                                                                                                                                                                                                                                  |
-| ---------- | ---------------------------- | ------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `anchor`   | `string`                     | `''`    | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                                                                                                                                                                         |
+| Prop       | Type                         | Default | Required | JSDoc                                                                                                                                                                                                                                                                                                                  |
+| ---------- | ---------------------------- | ------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `anchor`   | `string`                     | `''`    | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                                                                                                                                                                                                                         |
 | `lanes`    | `ContactHubSectionLane[]`    | `[]`    | false    | The team lanes side by side, in order; each is `{ icon, title, description, action?, secondaryAction?, statusLink? }` where `action` is the lane's leading button, `secondaryAction` an outlined button after it, and `statusLink` the system status link beside them (its optional `severity` draws the live status). |
-| `channels` | `ContactHubSectionChannel[]` | `[]`    | false    | The self-serve channels in the rows under the lanes, in order; each is `{ icon, title, description, href, target? }`, rendered as a linked topic.                                                                                                                      |
+| `channels` | `ContactHubSectionChannel[]` | `[]`    | false    | The self-serve channels in the rows under the lanes, in order; each is `{ icon, title, description, href, target? }`, rendered as a linked topic.                                                                                                                                                                      |
 
 ## Events
 
