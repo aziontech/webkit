@@ -129,13 +129,13 @@ describe('HeroTitle', () => {
   it('closes the eyebrow with the blinking cursor', () => {
     const { container } = render(HeroTitle, { props: { ...props, eyebrow: 'Edge platform' } })
 
-    expect(container.querySelectorAll('.animate-blink')).toHaveLength(1)
+    expect(container.querySelectorAll('.animate-blink-settle')).toHaveLength(1)
   })
 
   it('renders no cursor when there is no eyebrow', () => {
     const { container } = render(HeroTitle, { props })
 
-    expect(container.querySelector('.animate-blink')).toBeNull()
+    expect(container.querySelector('.animate-blink-settle')).toBeNull()
   })
 
   it('renders the eyebrow label alone by default', () => {
