@@ -106,6 +106,19 @@ export const ptBR: Messages = {
       other: '{count} fontes'
     }
   },
+  promptQueue: {
+    label: 'Mensagens na fila',
+    title: {
+      one: '{count} mensagem na fila',
+      other: '{count} mensagens na fila'
+    },
+    empty: 'Nenhuma mensagem na fila',
+    remove: 'Remover da fila',
+    attachments: {
+      one: '{count} anexo',
+      other: '{count} anexos'
+    }
+  },
   suggestionGroup: {
     label: 'Prompts sugeridos'
   },

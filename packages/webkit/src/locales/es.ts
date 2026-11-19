@@ -106,6 +106,19 @@ export const es: Messages = {
       other: '{count} fuentes'
     }
   },
+  promptQueue: {
+    label: 'Mensajes en cola',
+    title: {
+      one: '{count} mensaje en cola',
+      other: '{count} mensajes en cola'
+    },
+    empty: 'No hay mensajes en cola',
+    remove: 'Quitar de la cola',
+    attachments: {
+      one: '{count} adjunto',
+      other: '{count} adjuntos'
+    }
+  },
   suggestionGroup: {
     label: 'Prompts sugeridos'
   },
