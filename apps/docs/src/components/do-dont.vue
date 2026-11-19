@@ -69,7 +69,8 @@
     v-if="columns.length"
     data-slot="do-dont"
     :data-type="type"
-    class="grid grid-cols-1 gap-(--spacing-md) md:grid-cols-2"
+    :data-single="columns.length === 1 || null"
+    class="grid grid-cols-1 gap-(--spacing-md) md:grid-cols-2 md:data-single:grid-cols-1"
   >
     <Card
       v-for="column in columns"
