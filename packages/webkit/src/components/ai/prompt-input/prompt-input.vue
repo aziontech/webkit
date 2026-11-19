@@ -334,6 +334,15 @@
     textareaEl.value?.focus()
   }
 
+  function onBoxPointerdown(event: PointerEvent): void {
+    if (props.disabled || event.button !== 0) return
+    const target = event.target as HTMLElement | null
+    if (target?.closest('textarea, button, a, input, select, label, [role="option"], [tabindex]'))
+      return
+    event.preventDefault()
+    focus()
+  }
+
   provide(PromptInputInjectionKey, {
     disabled: computed(() => props.disabled),
     accept: computed(() => props.accept),
@@ -397,7 +406,8 @@
       :data-disabled="disabled || null"
       :data-dragging="(dragging && !disabled) || null"
       :data-testid="`${testId}__box`"
-      class="relative flex w-full flex-col gap-(--spacing-xs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-xs) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none focus-within:border-(--border-strong) focus-within:ring-2 focus-within:ring-(--ring-color) data-[invalid]:border-(--danger-border) data-[disabled]:bg-(--bg-disabled)"
+      class="relative flex w-full cursor-text flex-col gap-(--spacing-xs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-xs) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none focus-within:border-(--border-strong) focus-within:ring-2 focus-within:ring-(--ring-color) data-[invalid]:border-(--danger-border) data-[disabled]:bg-(--bg-disabled)"
+      @pointerdown="onBoxPointerdown"
       @dragenter="attach?.drag"
       @dragover="attach?.drag"
       @dragleave="attach?.drag"

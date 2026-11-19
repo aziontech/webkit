@@ -193,6 +193,18 @@ describe('PromptInput', () => {
     expect(getByRole('button', { name: 'Enviar' })).toBeTruthy()
   })
 
+  it('focuses the text area from a click anywhere in the box, but not on its controls', async () => {
+    const { container } = harness({}, { actions: () => h('button', { type: 'button' }, 'Tools') })
+    const box = container.querySelector('[data-testid="prompt-input__box"]') as HTMLElement
+    const textarea = screen.getByRole('textbox')
+    textarea.blur()
+    await userEvent.click(box)
+    expect(document.activeElement).toBe(textarea)
+    textarea.blur()
+    await userEvent.click(screen.getByRole('button', { name: 'Tools' }))
+    expect(document.activeElement).not.toBe(textarea)
+  })
+
   it('has no axe violations', async () => {
     const { container } = harness({ initial: 'abc', maxLength: 10 }, { hint: () => 'Disclaimer.' })
     await expectNoA11yViolations(container)
