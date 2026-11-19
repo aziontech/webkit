@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "A spoken reply with its title, duration and transcript.",
+   "file": "examples/audio-player/default.vue"
+  },
+  {
+   "name": "Playback rates",
+   "summary": "The speed control cycles through `playback-rates`; `downloadable` adds a Download link that saves as `file-name`.",
+   "file": "examples/audio-player/playback-rates.vue"
+  },
+  {
+   "name": "Loading",
+   "summary": "The speech is still being generated: Play shows a spinner and the other controls wait.",
+   "file": "examples/audio-player/loading.vue"
+  }
+ ]
+}

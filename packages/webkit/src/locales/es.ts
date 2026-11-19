@@ -577,6 +577,23 @@ export const es: Messages = {
   fileDropzone: {
     title: 'Suelta archivos para subirlos'
   },
+  audioPlayer: {
+    label: 'Reproductor de audio',
+    play: 'Reproducir',
+    pause: 'Pausar',
+    seek: 'Buscar posición',
+    position: '{current} de {total}',
+    mute: 'Silenciar',
+    unmute: 'Activar sonido',
+    volume: 'Volumen',
+    rate: '{rate}×',
+    speed: 'Velocidad de reproducción {rate}',
+    download: 'Descargar audio',
+    downloadTitle: 'Descargar {title}',
+    loading: 'Cargando audio',
+    error: 'No se pudo reproducir el audio.',
+    transcript: 'Transcripción'
+  },
   filePreview: {
     download: 'Descargar',
     loading: 'Cargando vista previa',

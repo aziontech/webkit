@@ -577,6 +577,23 @@ export const ptBR: Messages = {
   fileDropzone: {
     title: 'Solte arquivos para enviar'
   },
+  audioPlayer: {
+    label: 'Player de áudio',
+    play: 'Reproduzir',
+    pause: 'Pausar',
+    seek: 'Buscar posição',
+    position: '{current} de {total}',
+    mute: 'Silenciar',
+    unmute: 'Ativar som',
+    volume: 'Volume',
+    rate: '{rate}×',
+    speed: 'Velocidade de reprodução {rate}',
+    download: 'Baixar áudio',
+    downloadTitle: 'Baixar {title}',
+    loading: 'Carregando áudio',
+    error: 'Não foi possível reproduzir o áudio.',
+    transcript: 'Transcrição'
+  },
   filePreview: {
     download: 'Baixar',
     loading: 'Carregando pré-visualização',

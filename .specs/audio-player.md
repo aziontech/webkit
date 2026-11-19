@@ -2,10 +2,10 @@
 name: audio-player
 category: content
 structure: monolithic
-status: approved
+status: implemented
 spec_version: 1
 template: 2
-checksum: 1353a3fe3486ade449f1a2605b27163fe374be829be580c0770045cad44cd044
+checksum: 17ee7a0b00a39a0977d7ca64e71d6039d9fba3407715352eeb88deb51b3deb2e
 created: 2026-11-19
 last_updated: 2026-11-19
 ---
@@ -127,6 +127,8 @@ _none_
 | error line             | `.text-body-xs`, `var(--text-danger)`      |
 | transcript summary     | `.text-label-sm`, `var(--text-default)`    |
 | transcript text        | `.text-body-sm`, `var(--text-muted)`       |
+| transcript spacing     | `var(--spacing-2xs)`                       |
+| summary focus shape    | `var(--shape-control)`, ring offset `var(--bg-canvas)` |
 | disabled               | `var(--text-disabled)`                     |
 | ring                   | `var(--ring-color)`                        |
 
@@ -191,7 +193,7 @@ _none_
 
 ## Performance
 
-- Bundle budget: ≤ 9 KB gzip for `./audio-player` in `.size-limit.json`, including `IconButton`, `Spinner`, `Button`, `Slider` and the locale helpers (vue external); the entry is set to the measured size plus ~0.2 KB under that ceiling.
+- Bundle budget: 9.95 KB gzip for `./audio-player` in `.size-limit.json` (measured 9.73 KB plus ~0.2 KB), including `IconButton`, `Spinner`, `Button`, `Slider` and the locale helpers (vue external).
 - Runtime budget: one `timeupdate` update per browser tick (about 4 a second), no timers of its own; every listener is on the audio element and goes with it.
 - Heavy parts: none; the browser's audio element decodes, `preload="metadata"` reads only the header until Play.
 
@@ -223,7 +225,7 @@ The component has no `variant` or `size`; the examples show the states an AI rep
 - Do not edit `.claude/docs/DESIGN.md` or `.claude/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.
-- Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
+- Do not change `structure` after `status: implemented`. To change structure, bump `spec_version` and re-author the spec.
 - Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).
 - Do not run `git` commands, `pnpm install`, or any command that changes the lockfile.
 - If anything in the spec is ambiguous or contradicts the rules, emit `BLOCKED: <one-sentence reason>` and write nothing.

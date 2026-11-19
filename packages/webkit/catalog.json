@@ -29923,6 +29923,108 @@
    "examplesFile": "catalog/examples/file-preview.json",
    "docsFile": "catalog/components/file-preview.json"
   },
+  "audio-player": {
+   "import": "@aziontech/webkit/audio-player",
+   "target": "./src/components/content/audio-player/audio-player.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/audio-player",
+   "category": "content",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "src",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Audio source: a URL, an object URL or a data URL built from base64 audio. Empty disables the controls."
+    },
+    {
+     "name": "title",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Name of the clip, shown above the controls and used as the accessible name of the control group."
+    },
+    {
+     "name": "duration",
+     "type": "number",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Length of the clip in seconds, shown until the browser reads it from the file. Unset shows a placeholder."
+    },
+    {
+     "name": "transcript",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Text the audio speaks, shown in a collapsible Transcript section under the controls. Empty hides the section."
+    },
+    {
+     "name": "playbackRates",
+     "type": "number[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Playback speeds the speed control cycles through, in order. Empty hides it; it starts at 1 when listed, else the first."
+    },
+    {
+     "name": "downloadable",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows a Download link to `src`."
+    },
+    {
+     "name": "fileName",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "File name the Download link saves the audio as. Empty lets the browser pick one."
+    },
+    {
+     "name": "loading",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "The audio is still being generated or fetched: the play control shows a spinner and the other controls are disabled."
+    },
+    {
+     "name": "error",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Why the audio cannot play. Set, the controls are disabled and this text replaces the time."
+    },
+    {
+     "name": "disabled",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Disables every control and applies the disabled tokens."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the control group when there is no `title`. Empty falls back to the catalog's Audio player."
+    }
+   ],
+   "events": [
+    {
+     "name": "play",
+     "payload": "Event",
+     "notes": "Playback started (the audio element's `play` event)."
+    },
+    {
+     "name": "pause",
+     "payload": "Event",
+     "notes": "Playback paused, by the reader or because the clip reached its end (the element's `pause` event)."
+    }
+   ],
+   "surface": "app",
+   "examplesFile": "catalog/examples/audio-player.json",
+   "docsFile": "catalog/components/audio-player.json"
+  },
   "attribute-editor": {
    "import": "@aziontech/webkit/attribute-editor",
    "target": "./src/components/input/attribute-editor/attribute-editor.vue",
