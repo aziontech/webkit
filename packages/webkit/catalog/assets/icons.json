@@ -4993,7 +4993,7 @@
    "class": "az az-microsoft-copilot",
    "set": "azionicons",
    "group": "external",
-   "category": "ai-model",
+   "category": "ai-tool",
    "label": "Microsoft Copilot",
    "keywords": [
     "brand",
@@ -5056,7 +5056,7 @@
    "class": "az az-cursor",
    "set": "azionicons",
    "group": "external",
-   "category": "developer-tool",
+   "category": "ai-tool",
    "label": "Cursor (code editor)",
    "keywords": [
     "brand",
@@ -5080,7 +5080,7 @@
    "class": "az az-mcp",
    "set": "azionicons",
    "group": "external",
-   "category": "developer-tool",
+   "category": "ai-tool",
    "label": "Model Context Protocol",
    "keywords": [
     "agent",
@@ -5095,7 +5095,7 @@
    "class": "az az-redis",
    "set": "azionicons",
    "group": "external",
-   "category": "developer-tool",
+   "category": "database",
    "label": "Redis",
    "keywords": [
     "brand",
@@ -5121,7 +5121,7 @@
    "class": "az az-turso",
    "set": "azionicons",
    "group": "external",
-   "category": "developer-tool",
+   "category": "database",
    "label": "Turso (database)",
    "keywords": [
     "brand",
@@ -5145,7 +5145,7 @@
    "class": "az az-windsurf",
    "set": "azionicons",
    "group": "external",
-   "category": "developer-tool",
+   "category": "ai-tool",
    "label": "Windsurf (code editor)",
    "keywords": [
     "brand",
@@ -5506,7 +5506,7 @@
    "class": "az-color az-microsoft-copilot",
    "set": "color",
    "group": "external",
-   "category": "ai-model",
+   "category": "ai-tool",
    "label": "Microsoft Copilot",
    "keywords": [
     "brand",
@@ -5594,7 +5594,7 @@
    "class": "az-color az-cursor",
    "set": "color",
    "group": "external",
-   "category": "developer-tool",
+   "category": "ai-tool",
    "label": "Cursor (code editor)",
    "keywords": [
     "brand",
@@ -5632,7 +5632,7 @@
    "class": "az-color az-windsurf",
    "set": "color",
    "group": "external",
-   "category": "developer-tool",
+   "category": "ai-tool",
    "label": "Windsurf (code editor)",
    "keywords": [
     "brand",
@@ -5849,10 +5849,10 @@
    "class": "az az-langgraph",
    "set": "azionicons",
    "group": "external",
-   "category": "ai-model",
+   "category": "ai-tool",
    "label": "LangGraph (agent framework)",
    "keywords": [
-    "ai model"
+    "ai tool"
    ]
   },
   {
@@ -5860,10 +5860,10 @@
    "class": "az az-neon",
    "set": "azionicons",
    "group": "external",
-   "category": "online-service",
+   "category": "database",
    "label": "Neon (serverless Postgres)",
    "keywords": [
-    "online service"
+    "database"
    ]
   },
   {
@@ -5893,10 +5893,10 @@
    "class": "az az-upstash",
    "set": "azionicons",
    "group": "external",
-   "category": "online-service",
+   "category": "database",
    "label": "Upstash (serverless data)",
    "keywords": [
-    "online service"
+    "database"
    ]
   },
   {
@@ -5904,10 +5904,10 @@
    "class": "az az-wordpress",
    "set": "azionicons",
    "group": "external",
-   "category": "framework",
+   "category": "cms",
    "label": "WordPress (CMS)",
    "keywords": [
-    "framework"
+    "cms"
    ]
   },
   {
@@ -6010,10 +6010,10 @@
    "class": "az-color az-langgraph",
    "set": "color",
    "group": "external",
-   "category": "ai-model",
+   "category": "ai-tool",
    "label": "LangGraph (agent framework)",
    "keywords": [
-    "ai model"
+    "ai tool"
    ]
   },
   {
@@ -6021,10 +6021,10 @@
    "class": "az-color az-neon",
    "set": "color",
    "group": "external",
-   "category": "online-service",
+   "category": "database",
    "label": "Neon (serverless Postgres)",
    "keywords": [
-    "online service"
+    "database"
    ]
   },
   {
@@ -6090,7 +6090,7 @@
    "class": "az-color az-turso",
    "set": "color",
    "group": "external",
-   "category": "online-service",
+   "category": "database",
    "label": "Turso (edge database)",
    "keywords": [
     "brand",
@@ -6102,10 +6102,10 @@
    "class": "az-color az-upstash",
    "set": "color",
    "group": "external",
-   "category": "online-service",
+   "category": "database",
    "label": "Upstash (serverless data)",
    "keywords": [
-    "online service"
+    "database"
    ]
   },
   {
@@ -6149,10 +6149,743 @@
    "class": "az-color az-wordpress",
    "set": "color",
    "group": "external",
-   "category": "framework",
+   "category": "cms",
    "label": "WordPress (CMS)",
    "keywords": [
+    "cms"
+   ]
+  },
+  {
+   "name": "az-stencil",
+   "class": "az-color az-stencil",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "Stencil (framework)",
+   "keywords": [
+    "web components",
+    "compiler",
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-htmx",
+   "class": "az-color az-htmx",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "htmx (framework)",
+   "keywords": [
     "framework"
+   ]
+  },
+  {
+   "name": "az-rust",
+   "class": "az-color az-rust",
+   "set": "color",
+   "group": "external",
+   "category": "language",
+   "label": "Rust (language)",
+   "keywords": [
+    "language"
+   ]
+  },
+  {
+   "name": "az-webassembly",
+   "class": "az-color az-webassembly",
+   "set": "color",
+   "group": "external",
+   "category": "language",
+   "label": "WebAssembly (language)",
+   "keywords": [
+    "language"
+   ]
+  },
+  {
+   "name": "az-kimi",
+   "class": "az-color az-kimi",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Kimi by Moonshot AI (AI model)",
+   "keywords": [
+    "ai model"
+   ]
+  },
+  {
+   "name": "az-zhipu",
+   "class": "az-color az-zhipu",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Zhipu AI, maker of GLM (AI model)",
+   "keywords": [
+    "ai model"
+   ]
+  },
+  {
+   "name": "az-minimax",
+   "class": "az-color az-minimax",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "MiniMax (AI model)",
+   "keywords": [
+    "ai model"
+   ]
+  },
+  {
+   "name": "az-ernie",
+   "class": "az-color az-ernie",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "ERNIE by Baidu (AI model)",
+   "keywords": [
+    "ai model"
+   ]
+  },
+  {
+   "name": "az-hunyuan",
+   "class": "az-color az-hunyuan",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Hunyuan by Tencent (AI model)",
+   "keywords": [
+    "ai model"
+   ]
+  },
+  {
+   "name": "az-doubao",
+   "class": "az-color az-doubao",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Doubao by ByteDance (AI model)",
+   "keywords": [
+    "ai model"
+   ]
+  },
+  {
+   "name": "az-yi",
+   "class": "az-color az-yi",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Yi by 01.AI (AI model)",
+   "keywords": [
+    "ai model"
+   ]
+  },
+  {
+   "name": "az-stepfun",
+   "class": "az-color az-stepfun",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "StepFun (AI model)",
+   "keywords": [
+    "ai model"
+   ]
+  },
+  {
+   "name": "az-baichuan",
+   "class": "az-color az-baichuan",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Baichuan (AI model)",
+   "keywords": [
+    "ai model"
+   ]
+  },
+  {
+   "name": "az-iflytek-spark",
+   "class": "az-color az-iflytek-spark",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Spark by iFlytek (AI model)",
+   "keywords": [
+    "ai model"
+   ]
+  },
+  {
+   "name": "az-sensenova",
+   "class": "az-color az-sensenova",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "SenseNova by SenseTime (AI model)",
+   "keywords": [
+    "ai model"
+   ]
+  },
+  {
+   "name": "az-internlm",
+   "class": "az-color az-internlm",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "InternLM and InternVL by Shanghai AI Laboratory (AI model)",
+   "keywords": [
+    "ai model"
+   ]
+  },
+  {
+   "name": "az-baai",
+   "class": "az-color az-baai",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "BAAI, maker of the BGE embedding and reranker models (AI model)",
+   "keywords": [
+    "ai model"
+   ]
+  },
+  {
+   "name": "az-nanonets",
+   "class": "az-color az-nanonets",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Nanonets, maker of Nanonets-OCR (AI model)",
+   "keywords": [
+    "ai model"
+   ]
+  },
+  {
+   "name": "az-hugging-face",
+   "class": "az-color az-hugging-face",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Hugging Face (AI model hub)",
+   "keywords": [
+    "ai model"
+   ]
+  },
+  {
+   "name": "az-suno",
+   "class": "az-color az-suno",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Suno, maker of the Bark audio model (AI model)",
+   "keywords": [
+    "ai model"
+   ]
+  },
+  {
+   "name": "az-fish-audio",
+   "class": "az-color az-fish-audio",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Fish Audio, maker of Fish Speech (AI model)",
+   "keywords": [
+    "ai model"
+   ]
+  },
+  {
+   "name": "az-stability-ai",
+   "class": "az-color az-stability-ai",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Stability AI, maker of Stable Audio Open (AI model)",
+   "keywords": [
+    "artificial intelligence",
+    "llm"
+   ]
+  },
+  {
+   "name": "az-nvidia",
+   "class": "az-color az-nvidia",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "NVIDIA, maker of the Parakeet and Canary speech models (AI model)",
+   "keywords": [
+    "ai model"
+   ]
+  },
+  {
+   "name": "az-coqui",
+   "class": "az-color az-coqui",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Coqui, maker of the XTTS speech model (AI model)",
+   "keywords": [
+    "ai model"
+   ]
+  },
+  {
+   "name": "az-mcp",
+   "class": "az-color az-mcp",
+   "set": "color",
+   "group": "external",
+   "category": "ai-tool",
+   "label": "Model Context Protocol (AI tool)",
+   "keywords": [
+    "agent",
+    "integration",
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-github-copilot",
+   "class": "az-color az-github-copilot",
+   "set": "color",
+   "group": "external",
+   "category": "ai-tool",
+   "label": "GitHub Copilot (AI tool)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-codex",
+   "class": "az-color az-codex",
+   "set": "color",
+   "group": "external",
+   "category": "ai-tool",
+   "label": "Codex by OpenAI (AI tool)",
+   "keywords": [
+    "ai tool"
+   ]
+  },
+  {
+   "name": "az-opencode",
+   "class": "az-color az-opencode",
+   "set": "color",
+   "group": "external",
+   "category": "ai-tool",
+   "label": "OpenCode (AI tool)",
+   "keywords": [
+    "ai tool"
+   ]
+  },
+  {
+   "name": "az-warp",
+   "class": "az-color az-warp",
+   "set": "color",
+   "group": "external",
+   "category": "ai-tool",
+   "label": "Warp (AI tool)",
+   "keywords": [
+    "ai tool"
+   ]
+  },
+  {
+   "name": "az-kiro",
+   "class": "az-color az-kiro",
+   "set": "color",
+   "group": "external",
+   "category": "ai-tool",
+   "label": "Kiro (AI tool)",
+   "keywords": [
+    "ai tool"
+   ]
+  },
+  {
+   "name": "az-datadog",
+   "class": "az-color az-datadog",
+   "set": "color",
+   "group": "external",
+   "category": "observability",
+   "label": "Datadog (observability)",
+   "keywords": [
+    "observability"
+   ]
+  },
+  {
+   "name": "az-splunk",
+   "class": "az-color az-splunk",
+   "set": "color",
+   "group": "external",
+   "category": "observability",
+   "label": "Splunk (observability)",
+   "keywords": [
+    "observability"
+   ]
+  },
+  {
+   "name": "az-elasticsearch",
+   "class": "az-color az-elasticsearch",
+   "set": "color",
+   "group": "external",
+   "category": "observability",
+   "label": "Elasticsearch (observability)",
+   "keywords": [
+    "observability"
+   ]
+  },
+  {
+   "name": "az-grafana",
+   "class": "az-color az-grafana",
+   "set": "color",
+   "group": "external",
+   "category": "observability",
+   "label": "Grafana (observability)",
+   "keywords": [
+    "observability"
+   ]
+  },
+  {
+   "name": "az-apache-kafka",
+   "class": "az-color az-apache-kafka",
+   "set": "color",
+   "group": "external",
+   "category": "observability",
+   "label": "Apache Kafka (data streaming)",
+   "keywords": [
+    "observability"
+   ]
+  },
+  {
+   "name": "az-amazon-kinesis",
+   "class": "az-color az-amazon-kinesis",
+   "set": "color",
+   "group": "external",
+   "category": "observability",
+   "label": "Amazon Kinesis Data Firehose (data streaming)",
+   "keywords": [
+    "aws",
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-amazon-s3",
+   "class": "az-color az-amazon-s3",
+   "set": "color",
+   "group": "external",
+   "category": "observability",
+   "label": "Amazon S3 (storage)",
+   "keywords": [
+    "aws",
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-microsoft-azure",
+   "class": "az-color az-microsoft-azure",
+   "set": "color",
+   "group": "external",
+   "category": "observability",
+   "label": "Microsoft Azure: Azure Monitor and Azure Blob Storage",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-google-bigquery",
+   "class": "az-color az-google-bigquery",
+   "set": "color",
+   "group": "external",
+   "category": "observability",
+   "label": "Google BigQuery (analytics)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-ibm",
+   "class": "az-color az-ibm",
+   "set": "color",
+   "group": "external",
+   "category": "observability",
+   "label": "IBM, maker of IBM QRadar (security analytics)",
+   "keywords": [
+    "observability"
+   ]
+  },
+  {
+   "name": "az-supabase",
+   "class": "az-color az-supabase",
+   "set": "color",
+   "group": "external",
+   "category": "database",
+   "label": "Supabase (database)",
+   "keywords": [
+    "database"
+   ]
+  },
+  {
+   "name": "az-postgresql",
+   "class": "az-color az-postgresql",
+   "set": "color",
+   "group": "external",
+   "category": "database",
+   "label": "PostgreSQL (database)",
+   "keywords": [
+    "database"
+   ]
+  },
+  {
+   "name": "az-mysql",
+   "class": "az-color az-mysql",
+   "set": "color",
+   "group": "external",
+   "category": "database",
+   "label": "MySQL (database)",
+   "keywords": [
+    "database"
+   ]
+  },
+  {
+   "name": "az-mongodb",
+   "class": "az-color az-mongodb",
+   "set": "color",
+   "group": "external",
+   "category": "database",
+   "label": "MongoDB (database)",
+   "keywords": [
+    "database"
+   ]
+  },
+  {
+   "name": "az-tidb",
+   "class": "az-color az-tidb",
+   "set": "color",
+   "group": "external",
+   "category": "database",
+   "label": "TiDB (database)",
+   "keywords": [
+    "database"
+   ]
+  },
+  {
+   "name": "az-drizzle",
+   "class": "az-color az-drizzle",
+   "set": "color",
+   "group": "external",
+   "category": "database",
+   "label": "Drizzle ORM (database tool)",
+   "keywords": [
+    "database"
+   ]
+  },
+  {
+   "name": "az-sanity",
+   "class": "az-color az-sanity",
+   "set": "color",
+   "group": "external",
+   "category": "cms",
+   "label": "Sanity (content management)",
+   "keywords": [
+    "cms"
+   ]
+  },
+  {
+   "name": "az-cosmic",
+   "class": "az-color az-cosmic",
+   "set": "color",
+   "group": "external",
+   "category": "cms",
+   "label": "Cosmic (content management)",
+   "keywords": [
+    "cms"
+   ]
+  },
+  {
+   "name": "az-okta",
+   "class": "az-color az-okta",
+   "set": "color",
+   "group": "external",
+   "category": "identity",
+   "label": "Okta (identity provider)",
+   "keywords": [
+    "identity"
+   ]
+  },
+  {
+   "name": "az-microsoft-entra",
+   "class": "az-color az-microsoft-entra",
+   "set": "color",
+   "group": "external",
+   "category": "identity",
+   "label": "Microsoft Entra ID (identity provider)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-auth0",
+   "class": "az-color az-auth0",
+   "set": "color",
+   "group": "external",
+   "category": "identity",
+   "label": "Auth0 by Okta (identity provider)",
+   "keywords": [
+    "identity"
+   ]
+  },
+  {
+   "name": "az-keycloak",
+   "class": "az-color az-keycloak",
+   "set": "color",
+   "group": "external",
+   "category": "identity",
+   "label": "Keycloak (open source identity provider)",
+   "keywords": [
+    "identity"
+   ]
+  },
+  {
+   "name": "az-authentik",
+   "class": "az-color az-authentik",
+   "set": "color",
+   "group": "external",
+   "category": "identity",
+   "label": "authentik (open source identity provider)",
+   "keywords": [
+    "identity"
+   ]
+  },
+  {
+   "name": "az-authelia",
+   "class": "az-color az-authelia",
+   "set": "color",
+   "group": "external",
+   "category": "identity",
+   "label": "Authelia (open source identity provider)",
+   "keywords": [
+    "identity"
+   ]
+  },
+  {
+   "name": "az-ory",
+   "class": "az-color az-ory",
+   "set": "color",
+   "group": "external",
+   "category": "identity",
+   "label": "Ory (open source identity provider)",
+   "keywords": [
+    "identity"
+   ]
+  },
+  {
+   "name": "az-zitadel",
+   "class": "az-color az-zitadel",
+   "set": "color",
+   "group": "external",
+   "category": "identity",
+   "label": "ZITADEL (open source identity provider)",
+   "keywords": [
+    "identity"
+   ]
+  },
+  {
+   "name": "az-hcaptcha",
+   "class": "az-color az-hcaptcha",
+   "set": "color",
+   "group": "external",
+   "category": "security",
+   "label": "hCaptcha (bot protection)",
+   "keywords": [
+    "security"
+   ]
+  },
+  {
+   "name": "az-recaptcha",
+   "class": "az-color az-recaptcha",
+   "set": "color",
+   "group": "external",
+   "category": "security",
+   "label": "reCAPTCHA by Google (bot protection)",
+   "keywords": [
+    "security"
+   ]
+  },
+  {
+   "name": "az-fingerprint-brand",
+   "class": "az-color az-fingerprint-brand",
+   "set": "color",
+   "group": "external",
+   "category": "security",
+   "label": "Fingerprint, the device identification service (security)",
+   "keywords": [
+    "security"
+   ]
+  },
+  {
+   "name": "az-github",
+   "class": "az-color az-github",
+   "set": "color",
+   "group": "external",
+   "category": "developer-tool",
+   "label": "GitHub (developer tool)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-github-actions",
+   "class": "az-color az-github-actions",
+   "set": "color",
+   "group": "external",
+   "category": "developer-tool",
+   "label": "GitHub Actions (developer tool)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-visual-studio-code",
+   "class": "az-color az-visual-studio-code",
+   "set": "color",
+   "group": "external",
+   "category": "developer-tool",
+   "label": "Visual Studio Code (developer tool)",
+   "keywords": [
+    "source",
+    "snippet"
+   ]
+  },
+  {
+   "name": "az-stripe",
+   "class": "az-color az-stripe",
+   "set": "color",
+   "group": "external",
+   "category": "online-service",
+   "label": "Stripe (payments)",
+   "keywords": [
+    "online service"
+   ]
+  },
+  {
+   "name": "az-resend",
+   "class": "az-color az-resend",
+   "set": "color",
+   "group": "external",
+   "category": "online-service",
+   "label": "Resend (email)",
+   "keywords": [
+    "online service"
+   ]
+  },
+  {
+   "name": "az-browserless",
+   "class": "az-color az-browserless",
+   "set": "color",
+   "group": "external",
+   "category": "online-service",
+   "label": "Browserless (headless browsers)",
+   "keywords": [
+    "online service"
    ]
   }
  ]

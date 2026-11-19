@@ -29,7 +29,13 @@ export const INTENTIONALLY_NON_SQUARE = {
   'az/az-windsurf.svg': 'the Windsurf logo, a wide wave',
   'az-color/az-jekyll.svg': 'the Jekyll test tube, a tall logo',
   'az-color/az-langgraph.svg': 'the LangGraph logo, a wide mark',
-  'az-color/az-windsurf.svg': 'the Windsurf logo, a wide wave'
+  'az-color/az-windsurf.svg': 'the Windsurf logo, a wide wave',
+  'az-color/az-drizzle.svg': 'the Drizzle logo, a wide row of strokes',
+  'az-color/az-fish-audio.svg': 'the Fish Audio logo, a wide waveform',
+  'az-color/az-ibm.svg': 'the IBM striped wordmark, a wide logo',
+  'az-color/az-mongodb.svg': 'the MongoDB leaf, a tall logo',
+  'az-color/az-ory.svg': 'the Ory logo, a tall mark',
+  'az-color/az-splunk.svg': 'the Splunk wordmark, a wide logo'
 }
 
 const EPSILON = 0.05

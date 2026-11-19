@@ -4,7 +4,7 @@
 
 yout, objects, git) and External (frameworks, AI models, developer tools, languages, online services). A monochrome icon is `az az-<name>`, coloured by the text colour; a colour logo is `az-color az-<name>`. Pick an icon by what it stands for: a product icon names only that product. Import `@aziontech/icons` once at the app entry; an `icon` prop takes the class string.
 
-487 names. These are the only values the components accept. An unknown class renders nothing. The MCP tool `list_assets({ kind: "icons" })` returns the same list (with a `query` to filter), and `catalog.json#assets.icons` points at it as data.
+552 names. These are the only values the components accept. An unknown class renders nothing. The MCP tool `list_assets({ kind: "icons" })` returns the same list (with a `query` to filter), and `catalog.json#assets.icons` points at it as data.
 
 Used by: [Alert](../components/alert.md), [ArtifactPreview](../components/artifact-preview.md), [Avatar](../components/avatar.md), [Button](../components/button.md), [Combobox](../components/combobox.md), [DocCard](../components/doc-card.md), [DocItem](../components/doc-item.md), [DocPrompt](../components/doc-prompt.md), [EmptyState](../components/empty-state.md), [FeatureItem](../components/feature-item.md), [FileDropzone](../components/file-dropzone.md), [HighlightButton](../components/highlight-button.md), [IconButton](../components/icon-button.md), [Link](../components/link.md), [SettingsGroup](../components/settings-group.md), [SplitButton](../components/split-button.md), [Tag](../components/tag.md).
 
@@ -536,7 +536,6 @@ Logos of other companies and projects. Azion does not own them; each is used to 
 | `az-color az-solidjs` | SolidJS (framework) | brand, logo |
 | `az-color az-svelte` | Svelte (framework) | brand, logo |
 | `az-color az-vue` | Vue (framework) | brand, logo |
-| `az az-wordpress` | WordPress (CMS) | framework |
 | `az-color az-docusaurus` | Docusaurus (framework) | brand, logo |
 | `az-color az-eleventy` | Eleventy (framework) | brand, logo |
 | `az-color az-gatsby` | Gatsby (framework) | brand, logo |
@@ -550,53 +549,8 @@ Logos of other companies and projects. Azion does not own them; each is used to 
 | `az-color az-vite` | Vite (build tool) | brand, logo |
 | `az-color az-vitepress` | VitePress (framework) | brand, logo |
 | `az-color az-vuepress` | VuePress (framework) | brand, logo |
-| `az-color az-wordpress` | WordPress (CMS) | framework |
-
-#### External · AI models
-
-| Class | Stands for | Keywords |
-| --- | --- | --- |
-| `az az-claude` | Claude (AI model) | brand, logo |
-| `az az-deepseek` | DeepSeek (AI model) | brand, logo |
-| `az az-gemini` | Gemini (AI model) | brand, logo |
-| `az az-grok` | Grok (AI model) | brand, logo |
-| `az az-meta` | Meta (AI models) | brand, logo |
-| `az az-microsoft-copilot` | Microsoft Copilot | brand, logo |
-| `az az-mistral` | Mistral (AI model) | brand, logo |
-| `az az-openai` | OpenAI | chatgpt, gpt, brand, logo, open |
-| `az az-perplexity` | Perplexity (AI model) | brand, logo |
-| `az az-qwen` | Qwen (AI model) | brand, logo |
-| `az-color az-claude` | Claude (AI model) | brand, logo |
-| `az-color az-deepseek` | DeepSeek (AI model) | brand, logo |
-| `az-color az-gemini` | Gemini (AI model) | brand, logo |
-| `az-color az-grok` | Grok (AI model) | brand, logo |
-| `az-color az-meta` | Meta (AI models) | brand, logo |
-| `az-color az-microsoft-copilot` | Microsoft Copilot | brand, logo |
-| `az-color az-mistral` | Mistral (AI model) | brand, logo |
-| `az-color az-openai` | OpenAI | chatgpt, gpt, brand, logo, open |
-| `az-color az-perplexity` | Perplexity (AI model) | brand, logo |
-| `az-color az-qwen` | Qwen (AI model) | brand, logo |
-| `az az-langgraph` | LangGraph (agent framework) | ai model |
-| `az-color az-langgraph` | LangGraph (agent framework) | ai model |
-
-#### External · Developer tools
-
-| Class | Stands for | Keywords |
-| --- | --- | --- |
-| `az az-cursor` | Cursor (code editor) | brand, logo |
-| `az az-github` | GitHub | brand, logo |
-| `az az-mcp` | Model Context Protocol | agent, integration, brand, logo, mcp logo |
-| `az az-redis` | Redis | brand, logo |
-| `az az-terraform` | Terraform | infrastructure as code, iac, brand, logo |
-| `az az-turso` | Turso (database) | brand, logo |
-| `az az-vite` | Vite (build tool) | brand, logo |
-| `az az-windsurf` | Windsurf (code editor) | brand, logo |
-| `az-color az-azure-devops` | Azure DevOps | brand, logo, azuredevops |
-| `az-color az-bitbucket` | Bitbucket | brand, logo |
-| `az-color az-cursor` | Cursor (code editor) | brand, logo |
-| `az-color az-gitlab` | GitLab | brand, logo |
-| `az-color az-terraform` | Terraform | infrastructure as code, iac, brand, logo |
-| `az-color az-windsurf` | Windsurf (code editor) | brand, logo |
+| `az-color az-stencil` | Stencil (framework) | web components, compiler, brand, logo |
+| `az-color az-htmx` | htmx (framework) | framework |
 
 #### External · Languages
 
@@ -613,6 +567,149 @@ Logos of other companies and projects. Azion does not own them; each is used to 
 | `az az-python` | Python | language |
 | `az-color az-nodejs` | Node.js (runtime) | language |
 | `az-color az-python` | Python | language |
+| `az-color az-rust` | Rust (language) | language |
+| `az-color az-webassembly` | WebAssembly (language) | language |
+
+#### External · AI models
+
+| Class | Stands for | Keywords |
+| --- | --- | --- |
+| `az az-claude` | Claude (AI model) | brand, logo |
+| `az az-deepseek` | DeepSeek (AI model) | brand, logo |
+| `az az-gemini` | Gemini (AI model) | brand, logo |
+| `az az-grok` | Grok (AI model) | brand, logo |
+| `az az-meta` | Meta (AI models) | brand, logo |
+| `az az-mistral` | Mistral (AI model) | brand, logo |
+| `az az-openai` | OpenAI | chatgpt, gpt, brand, logo, open |
+| `az az-perplexity` | Perplexity (AI model) | brand, logo |
+| `az az-qwen` | Qwen (AI model) | brand, logo |
+| `az-color az-claude` | Claude (AI model) | brand, logo |
+| `az-color az-deepseek` | DeepSeek (AI model) | brand, logo |
+| `az-color az-gemini` | Gemini (AI model) | brand, logo |
+| `az-color az-grok` | Grok (AI model) | brand, logo |
+| `az-color az-meta` | Meta (AI models) | brand, logo |
+| `az-color az-mistral` | Mistral (AI model) | brand, logo |
+| `az-color az-openai` | OpenAI | chatgpt, gpt, brand, logo, open |
+| `az-color az-perplexity` | Perplexity (AI model) | brand, logo |
+| `az-color az-qwen` | Qwen (AI model) | brand, logo |
+| `az-color az-kimi` | Kimi by Moonshot AI (AI model) | ai model |
+| `az-color az-zhipu` | Zhipu AI, maker of GLM (AI model) | ai model |
+| `az-color az-minimax` | MiniMax (AI model) | ai model |
+| `az-color az-ernie` | ERNIE by Baidu (AI model) | ai model |
+| `az-color az-hunyuan` | Hunyuan by Tencent (AI model) | ai model |
+| `az-color az-doubao` | Doubao by ByteDance (AI model) | ai model |
+| `az-color az-yi` | Yi by 01.AI (AI model) | ai model |
+| `az-color az-stepfun` | StepFun (AI model) | ai model |
+| `az-color az-baichuan` | Baichuan (AI model) | ai model |
+| `az-color az-iflytek-spark` | Spark by iFlytek (AI model) | ai model |
+| `az-color az-sensenova` | SenseNova by SenseTime (AI model) | ai model |
+| `az-color az-internlm` | InternLM and InternVL by Shanghai AI Laboratory (AI model) | ai model |
+| `az-color az-baai` | BAAI, maker of the BGE embedding and reranker models (AI model) | ai model |
+| `az-color az-nanonets` | Nanonets, maker of Nanonets-OCR (AI model) | ai model |
+| `az-color az-hugging-face` | Hugging Face (AI model hub) | ai model |
+| `az-color az-suno` | Suno, maker of the Bark audio model (AI model) | ai model |
+| `az-color az-fish-audio` | Fish Audio, maker of Fish Speech (AI model) | ai model |
+| `az-color az-stability-ai` | Stability AI, maker of Stable Audio Open (AI model) | artificial intelligence, llm |
+| `az-color az-nvidia` | NVIDIA, maker of the Parakeet and Canary speech models (AI model) | ai model |
+| `az-color az-coqui` | Coqui, maker of the XTTS speech model (AI model) | ai model |
+
+#### External · AI tools
+
+| Class | Stands for | Keywords |
+| --- | --- | --- |
+| `az az-microsoft-copilot` | Microsoft Copilot | brand, logo |
+| `az az-cursor` | Cursor (code editor) | brand, logo |
+| `az az-mcp` | Model Context Protocol | agent, integration, brand, logo, mcp logo |
+| `az az-windsurf` | Windsurf (code editor) | brand, logo |
+| `az-color az-microsoft-copilot` | Microsoft Copilot | brand, logo |
+| `az-color az-cursor` | Cursor (code editor) | brand, logo |
+| `az-color az-windsurf` | Windsurf (code editor) | brand, logo |
+| `az az-langgraph` | LangGraph (agent framework) | ai tool |
+| `az-color az-langgraph` | LangGraph (agent framework) | ai tool |
+| `az-color az-mcp` | Model Context Protocol (AI tool) | agent, integration, brand, logo |
+| `az-color az-github-copilot` | GitHub Copilot (AI tool) | brand, logo |
+| `az-color az-codex` | Codex by OpenAI (AI tool) | ai tool |
+| `az-color az-opencode` | OpenCode (AI tool) | ai tool |
+| `az-color az-warp` | Warp (AI tool) | ai tool |
+| `az-color az-kiro` | Kiro (AI tool) | ai tool |
+
+#### External · Developer tools
+
+| Class | Stands for | Keywords |
+| --- | --- | --- |
+| `az az-github` | GitHub | brand, logo |
+| `az az-terraform` | Terraform | infrastructure as code, iac, brand, logo |
+| `az az-vite` | Vite (build tool) | brand, logo |
+| `az-color az-azure-devops` | Azure DevOps | brand, logo, azuredevops |
+| `az-color az-bitbucket` | Bitbucket | brand, logo |
+| `az-color az-gitlab` | GitLab | brand, logo |
+| `az-color az-terraform` | Terraform | infrastructure as code, iac, brand, logo |
+| `az-color az-github` | GitHub (developer tool) | brand, logo |
+| `az-color az-github-actions` | GitHub Actions (developer tool) | brand, logo |
+| `az-color az-visual-studio-code` | Visual Studio Code (developer tool) | source, snippet |
+
+#### External · Databases
+
+| Class | Stands for | Keywords |
+| --- | --- | --- |
+| `az az-redis` | Redis | brand, logo |
+| `az az-turso` | Turso (database) | brand, logo |
+| `az az-neon` | Neon (serverless Postgres) | database |
+| `az az-upstash` | Upstash (serverless data) | database |
+| `az-color az-neon` | Neon (serverless Postgres) | database |
+| `az-color az-turso` | Turso (edge database) | brand, logo |
+| `az-color az-upstash` | Upstash (serverless data) | database |
+| `az-color az-supabase` | Supabase (database) | database |
+| `az-color az-postgresql` | PostgreSQL (database) | database |
+| `az-color az-mysql` | MySQL (database) | database |
+| `az-color az-mongodb` | MongoDB (database) | database |
+| `az-color az-tidb` | TiDB (database) | database |
+| `az-color az-drizzle` | Drizzle ORM (database tool) | database |
+
+#### External · Content management
+
+| Class | Stands for | Keywords |
+| --- | --- | --- |
+| `az az-wordpress` | WordPress (CMS) | cms |
+| `az-color az-wordpress` | WordPress (CMS) | cms |
+| `az-color az-sanity` | Sanity (content management) | cms |
+| `az-color az-cosmic` | Cosmic (content management) | cms |
+
+#### External · Observability and data
+
+| Class | Stands for | Keywords |
+| --- | --- | --- |
+| `az-color az-datadog` | Datadog (observability) | observability |
+| `az-color az-splunk` | Splunk (observability) | observability |
+| `az-color az-elasticsearch` | Elasticsearch (observability) | observability |
+| `az-color az-grafana` | Grafana (observability) | observability |
+| `az-color az-apache-kafka` | Apache Kafka (data streaming) | observability |
+| `az-color az-amazon-kinesis` | Amazon Kinesis Data Firehose (data streaming) | aws, brand, logo |
+| `az-color az-amazon-s3` | Amazon S3 (storage) | aws, brand, logo |
+| `az-color az-microsoft-azure` | Microsoft Azure: Azure Monitor and Azure Blob Storage | brand, logo |
+| `az-color az-google-bigquery` | Google BigQuery (analytics) | brand, logo |
+| `az-color az-ibm` | IBM, maker of IBM QRadar (security analytics) | observability |
+
+#### External · Identity and sign-in
+
+| Class | Stands for | Keywords |
+| --- | --- | --- |
+| `az-color az-okta` | Okta (identity provider) | identity |
+| `az-color az-microsoft-entra` | Microsoft Entra ID (identity provider) | brand, logo |
+| `az-color az-auth0` | Auth0 by Okta (identity provider) | identity |
+| `az-color az-keycloak` | Keycloak (open source identity provider) | identity |
+| `az-color az-authentik` | authentik (open source identity provider) | identity |
+| `az-color az-authelia` | Authelia (open source identity provider) | identity |
+| `az-color az-ory` | Ory (open source identity provider) | identity |
+| `az-color az-zitadel` | ZITADEL (open source identity provider) | identity |
+
+#### External · Security services
+
+| Class | Stands for | Keywords |
+| --- | --- | --- |
+| `az-color az-hcaptcha` | hCaptcha (bot protection) | security |
+| `az-color az-recaptcha` | reCAPTCHA by Google (bot protection) | security |
+| `az-color az-fingerprint-brand` | Fingerprint, the device identification service (security) | security |
 
 #### External · Online services
 
@@ -634,8 +731,6 @@ Logos of other companies and projects. Azion does not own them; each is used to 
 | `az-color az-google` | Google | brand, logo |
 | `az-color az-x-brand` | X (social network) | twitter, logo |
 | `az-color az-youtube` | YouTube | brand, logo |
-| `az az-neon` | Neon (serverless Postgres) | online service |
-| `az az-upstash` | Upstash (serverless data) | online service |
-| `az-color az-neon` | Neon (serverless Postgres) | online service |
-| `az-color az-turso` | Turso (edge database) | brand, logo |
-| `az-color az-upstash` | Upstash (serverless data) | online service |
+| `az-color az-stripe` | Stripe (payments) | online service |
+| `az-color az-resend` | Resend (email) | online service |
+| `az-color az-browserless` | Browserless (headless browsers) | online service |

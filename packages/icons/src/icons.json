@@ -92,21 +92,45 @@
           "title": "Frameworks",
           "summary": "Web frameworks and site generators an app can be built with."
         },
-        "ai-model": {
-          "title": "AI models",
-          "summary": "AI models and the companies that make them."
-        },
-        "developer-tool": {
-          "title": "Developer tools",
-          "summary": "Code hosts, editors, build tools, databases and infrastructure tools."
-        },
         "language": {
           "title": "Languages",
           "summary": "Programming and markup languages."
         },
+        "ai-model": {
+          "title": "AI models",
+          "summary": "AI models and the labs that make them: language, vision, embedding, speech and audio models, open and closed."
+        },
+        "ai-tool": {
+          "title": "AI tools",
+          "summary": "AI agents, coding assistants, agent frameworks and the Model Context Protocol that connects them to Azion."
+        },
+        "developer-tool": {
+          "title": "Developer tools",
+          "summary": "Code hosts, CI/CD, editors, build tools and infrastructure as code."
+        },
+        "database": {
+          "title": "Databases",
+          "summary": "Databases, data platforms and the ORMs an app connects to them with."
+        },
+        "cms": {
+          "title": "Content management",
+          "summary": "Headless CMSs and site builders an app reads its content from."
+        },
+        "observability": {
+          "title": "Observability and data",
+          "summary": "Log, metrics, streaming, storage and analytics platforms that Data Stream sends data to."
+        },
+        "identity": {
+          "title": "Identity and sign-in",
+          "summary": "Identity providers for single sign-on, commercial and open source."
+        },
+        "security": {
+          "title": "Security services",
+          "summary": "Bot protection, captcha and device identification services that Marketplace integrations call."
+        },
         "online-service": {
           "title": "Online services",
-          "summary": "Social networks, video and community sites, and sign-in providers."
+          "summary": "Social networks, video and community sites, and online APIs such as payments and email."
         }
       }
     }
@@ -4158,7 +4182,7 @@
       "name": "microsoft-copilot",
       "set": "mono",
       "group": "external",
-      "category": "ai-model",
+      "category": "ai-tool",
       "shows": "The Microsoft Copilot logo",
       "means": "Microsoft Copilot",
       "status": "stable",
@@ -4209,7 +4233,7 @@
       "name": "cursor",
       "set": "mono",
       "group": "external",
-      "category": "developer-tool",
+      "category": "ai-tool",
       "shows": "The Cursor logo",
       "means": "Cursor (code editor)",
       "status": "stable",
@@ -4229,7 +4253,7 @@
       "name": "mcp",
       "set": "mono",
       "group": "external",
-      "category": "developer-tool",
+      "category": "ai-tool",
       "shows": "The MCP logo",
       "means": "Model Context Protocol",
       "status": "stable",
@@ -4240,7 +4264,7 @@
       "name": "redis",
       "set": "mono",
       "group": "external",
-      "category": "developer-tool",
+      "category": "database",
       "shows": "The Redis logo",
       "means": "Redis",
       "status": "stable",
@@ -4260,7 +4284,7 @@
       "name": "turso",
       "set": "mono",
       "group": "external",
-      "category": "developer-tool",
+      "category": "database",
       "shows": "The Turso logo",
       "means": "Turso (database)",
       "status": "stable",
@@ -4280,7 +4304,7 @@
       "name": "windsurf",
       "set": "mono",
       "group": "external",
-      "category": "developer-tool",
+      "category": "ai-tool",
       "shows": "The Windsurf logo",
       "means": "Windsurf (code editor)",
       "status": "stable",
@@ -4580,7 +4604,7 @@
       "name": "microsoft-copilot",
       "set": "color",
       "group": "external",
-      "category": "ai-model",
+      "category": "ai-tool",
       "shows": "The Microsoft Copilot logo",
       "means": "Microsoft Copilot",
       "status": "stable",
@@ -4652,7 +4676,7 @@
       "name": "cursor",
       "set": "color",
       "group": "external",
-      "category": "developer-tool",
+      "category": "ai-tool",
       "shows": "The Cursor logo",
       "means": "Cursor (code editor)",
       "status": "stable",
@@ -4682,7 +4706,7 @@
       "name": "windsurf",
       "set": "color",
       "group": "external",
-      "category": "developer-tool",
+      "category": "ai-tool",
       "shows": "The Windsurf logo",
       "means": "Windsurf (code editor)",
       "status": "stable",
@@ -4862,7 +4886,7 @@
       "name": "langgraph",
       "set": "mono",
       "group": "external",
-      "category": "ai-model",
+      "category": "ai-tool",
       "shows": "The LangGraph logo",
       "means": "LangGraph (agent framework)",
       "status": "stable",
@@ -4872,7 +4896,7 @@
       "name": "neon",
       "set": "mono",
       "group": "external",
-      "category": "online-service",
+      "category": "database",
       "shows": "The Neon logo",
       "means": "Neon (serverless Postgres)",
       "status": "stable",
@@ -4902,7 +4926,7 @@
       "name": "upstash",
       "set": "mono",
       "group": "external",
-      "category": "online-service",
+      "category": "database",
       "shows": "The Upstash logo",
       "means": "Upstash (serverless data)",
       "status": "stable",
@@ -4912,7 +4936,7 @@
       "name": "wordpress",
       "set": "mono",
       "group": "external",
-      "category": "framework",
+      "category": "cms",
       "shows": "The WordPress logo",
       "means": "WordPress (CMS)",
       "status": "stable",
@@ -5002,7 +5026,7 @@
       "name": "langgraph",
       "set": "color",
       "group": "external",
-      "category": "ai-model",
+      "category": "ai-tool",
       "shows": "The LangGraph logo",
       "means": "LangGraph (agent framework)",
       "status": "stable",
@@ -5012,7 +5036,7 @@
       "name": "neon",
       "set": "color",
       "group": "external",
-      "category": "online-service",
+      "category": "database",
       "shows": "The Neon logo in green",
       "means": "Neon (serverless Postgres)",
       "status": "stable",
@@ -5072,7 +5096,7 @@
       "name": "turso",
       "set": "color",
       "group": "external",
-      "category": "online-service",
+      "category": "database",
       "shows": "The Turso logo in teal",
       "means": "Turso (edge database)",
       "status": "stable",
@@ -5082,7 +5106,7 @@
       "name": "upstash",
       "set": "color",
       "group": "external",
-      "category": "online-service",
+      "category": "database",
       "shows": "The Upstash logo in green",
       "means": "Upstash (serverless data)",
       "status": "stable",
@@ -5122,11 +5146,661 @@
       "name": "wordpress",
       "set": "color",
       "group": "external",
-      "category": "framework",
+      "category": "cms",
       "shows": "The WordPress logo in blue",
       "means": "WordPress (CMS)",
       "status": "stable",
       "legacy": ["ai-color ai-wordpress", "ai-cor ai-wordpress"]
+    },
+    {
+      "name": "stencil",
+      "set": "color",
+      "group": "external",
+      "category": "framework",
+      "shows": "The Stencil logo",
+      "means": "Stencil (framework)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "htmx",
+      "set": "color",
+      "group": "external",
+      "category": "framework",
+      "shows": "The htmx logo",
+      "means": "htmx (framework)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "rust",
+      "set": "color",
+      "group": "external",
+      "category": "language",
+      "shows": "The Rust gear logo",
+      "means": "Rust (language)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "webassembly",
+      "set": "color",
+      "group": "external",
+      "category": "language",
+      "shows": "The WebAssembly logo",
+      "means": "WebAssembly (language)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "kimi",
+      "set": "color",
+      "group": "external",
+      "category": "ai-model",
+      "shows": "The Kimi logo",
+      "means": "Kimi by Moonshot AI (AI model)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "zhipu",
+      "set": "color",
+      "group": "external",
+      "category": "ai-model",
+      "shows": "The Zhipu AI logo",
+      "means": "Zhipu AI, maker of GLM (AI model)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "minimax",
+      "set": "color",
+      "group": "external",
+      "category": "ai-model",
+      "shows": "The MiniMax logo",
+      "means": "MiniMax (AI model)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "ernie",
+      "set": "color",
+      "group": "external",
+      "category": "ai-model",
+      "shows": "The ERNIE logo",
+      "means": "ERNIE by Baidu (AI model)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "hunyuan",
+      "set": "color",
+      "group": "external",
+      "category": "ai-model",
+      "shows": "The Hunyuan logo",
+      "means": "Hunyuan by Tencent (AI model)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "doubao",
+      "set": "color",
+      "group": "external",
+      "category": "ai-model",
+      "shows": "The Doubao logo",
+      "means": "Doubao by ByteDance (AI model)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "yi",
+      "set": "color",
+      "group": "external",
+      "category": "ai-model",
+      "shows": "The Yi logo",
+      "means": "Yi by 01.AI (AI model)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "stepfun",
+      "set": "color",
+      "group": "external",
+      "category": "ai-model",
+      "shows": "The StepFun logo",
+      "means": "StepFun (AI model)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "baichuan",
+      "set": "color",
+      "group": "external",
+      "category": "ai-model",
+      "shows": "The Baichuan logo",
+      "means": "Baichuan (AI model)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "iflytek-spark",
+      "set": "color",
+      "group": "external",
+      "category": "ai-model",
+      "shows": "The iFlytek Spark logo",
+      "means": "Spark by iFlytek (AI model)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "sensenova",
+      "set": "color",
+      "group": "external",
+      "category": "ai-model",
+      "shows": "The SenseNova logo",
+      "means": "SenseNova by SenseTime (AI model)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "internlm",
+      "set": "color",
+      "group": "external",
+      "category": "ai-model",
+      "shows": "The InternLM logo",
+      "means": "InternLM and InternVL by Shanghai AI Laboratory (AI model)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "baai",
+      "set": "color",
+      "group": "external",
+      "category": "ai-model",
+      "shows": "The BAAI logo",
+      "means": "BAAI, maker of the BGE embedding and reranker models (AI model)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "nanonets",
+      "set": "color",
+      "group": "external",
+      "category": "ai-model",
+      "shows": "The Nanonets logo",
+      "means": "Nanonets, maker of Nanonets-OCR (AI model)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "hugging-face",
+      "set": "color",
+      "group": "external",
+      "category": "ai-model",
+      "shows": "The Hugging Face logo",
+      "means": "Hugging Face (AI model hub)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "suno",
+      "set": "color",
+      "group": "external",
+      "category": "ai-model",
+      "shows": "The Suno logo",
+      "means": "Suno, maker of the Bark audio model (AI model)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "fish-audio",
+      "set": "color",
+      "group": "external",
+      "category": "ai-model",
+      "shows": "The Fish Audio logo",
+      "means": "Fish Audio, maker of Fish Speech (AI model)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "stability-ai",
+      "set": "color",
+      "group": "external",
+      "category": "ai-model",
+      "shows": "The Stability AI logo",
+      "means": "Stability AI, maker of Stable Audio Open (AI model)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "nvidia",
+      "set": "color",
+      "group": "external",
+      "category": "ai-model",
+      "shows": "The NVIDIA logo",
+      "means": "NVIDIA, maker of the Parakeet and Canary speech models (AI model)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "coqui",
+      "set": "color",
+      "group": "external",
+      "category": "ai-model",
+      "shows": "The Coqui logo",
+      "means": "Coqui, maker of the XTTS speech model (AI model)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "mcp",
+      "set": "color",
+      "group": "external",
+      "category": "ai-tool",
+      "shows": "The Model Context Protocol logo",
+      "means": "Model Context Protocol (AI tool)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "github-copilot",
+      "set": "color",
+      "group": "external",
+      "category": "ai-tool",
+      "shows": "The GitHub Copilot logo",
+      "means": "GitHub Copilot (AI tool)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "codex",
+      "set": "color",
+      "group": "external",
+      "category": "ai-tool",
+      "shows": "The Codex logo",
+      "means": "Codex by OpenAI (AI tool)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "opencode",
+      "set": "color",
+      "group": "external",
+      "category": "ai-tool",
+      "shows": "The OpenCode logo",
+      "means": "OpenCode (AI tool)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "warp",
+      "set": "color",
+      "group": "external",
+      "category": "ai-tool",
+      "shows": "The Warp logo",
+      "means": "Warp (AI tool)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "kiro",
+      "set": "color",
+      "group": "external",
+      "category": "ai-tool",
+      "shows": "The Kiro logo",
+      "means": "Kiro (AI tool)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "datadog",
+      "set": "color",
+      "group": "external",
+      "category": "observability",
+      "shows": "The Datadog logo",
+      "means": "Datadog (observability)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "splunk",
+      "set": "color",
+      "group": "external",
+      "category": "observability",
+      "shows": "The Splunk logo",
+      "means": "Splunk (observability)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "elasticsearch",
+      "set": "color",
+      "group": "external",
+      "category": "observability",
+      "shows": "The Elasticsearch logo",
+      "means": "Elasticsearch (observability)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "grafana",
+      "set": "color",
+      "group": "external",
+      "category": "observability",
+      "shows": "The Grafana logo",
+      "means": "Grafana (observability)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "apache-kafka",
+      "set": "color",
+      "group": "external",
+      "category": "observability",
+      "shows": "The Apache Kafka logo",
+      "means": "Apache Kafka (data streaming)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "amazon-kinesis",
+      "set": "color",
+      "group": "external",
+      "category": "observability",
+      "shows": "The Amazon Kinesis logo",
+      "means": "Amazon Kinesis Data Firehose (data streaming)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "amazon-s3",
+      "set": "color",
+      "group": "external",
+      "category": "observability",
+      "shows": "The Amazon S3 logo",
+      "means": "Amazon S3 (storage)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "microsoft-azure",
+      "set": "color",
+      "group": "external",
+      "category": "observability",
+      "shows": "The Microsoft Azure logo",
+      "means": "Microsoft Azure: Azure Monitor and Azure Blob Storage",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "google-bigquery",
+      "set": "color",
+      "group": "external",
+      "category": "observability",
+      "shows": "The Google BigQuery logo",
+      "means": "Google BigQuery (analytics)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "ibm",
+      "set": "color",
+      "group": "external",
+      "category": "observability",
+      "shows": "The IBM striped logo",
+      "means": "IBM, maker of IBM QRadar (security analytics)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "supabase",
+      "set": "color",
+      "group": "external",
+      "category": "database",
+      "shows": "The Supabase logo",
+      "means": "Supabase (database)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "postgresql",
+      "set": "color",
+      "group": "external",
+      "category": "database",
+      "shows": "The PostgreSQL elephant",
+      "means": "PostgreSQL (database)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "mysql",
+      "set": "color",
+      "group": "external",
+      "category": "database",
+      "shows": "The MySQL dolphin",
+      "means": "MySQL (database)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "mongodb",
+      "set": "color",
+      "group": "external",
+      "category": "database",
+      "shows": "The MongoDB leaf",
+      "means": "MongoDB (database)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "tidb",
+      "set": "color",
+      "group": "external",
+      "category": "database",
+      "shows": "The TiDB logo",
+      "means": "TiDB (database)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "drizzle",
+      "set": "color",
+      "group": "external",
+      "category": "database",
+      "shows": "The Drizzle logo",
+      "means": "Drizzle ORM (database tool)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "sanity",
+      "set": "color",
+      "group": "external",
+      "category": "cms",
+      "shows": "The Sanity logo",
+      "means": "Sanity (content management)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "cosmic",
+      "set": "color",
+      "group": "external",
+      "category": "cms",
+      "shows": "The Cosmic logo",
+      "means": "Cosmic (content management)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "okta",
+      "set": "color",
+      "group": "external",
+      "category": "identity",
+      "shows": "The Okta logo",
+      "means": "Okta (identity provider)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "microsoft-entra",
+      "set": "color",
+      "group": "external",
+      "category": "identity",
+      "shows": "The Microsoft Entra ID logo",
+      "means": "Microsoft Entra ID (identity provider)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "auth0",
+      "set": "color",
+      "group": "external",
+      "category": "identity",
+      "shows": "The Auth0 logo",
+      "means": "Auth0 by Okta (identity provider)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "keycloak",
+      "set": "color",
+      "group": "external",
+      "category": "identity",
+      "shows": "The Keycloak logo",
+      "means": "Keycloak (open source identity provider)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "authentik",
+      "set": "color",
+      "group": "external",
+      "category": "identity",
+      "shows": "The authentik logo",
+      "means": "authentik (open source identity provider)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "authelia",
+      "set": "color",
+      "group": "external",
+      "category": "identity",
+      "shows": "The Authelia logo",
+      "means": "Authelia (open source identity provider)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "ory",
+      "set": "color",
+      "group": "external",
+      "category": "identity",
+      "shows": "The Ory logo",
+      "means": "Ory (open source identity provider)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "zitadel",
+      "set": "color",
+      "group": "external",
+      "category": "identity",
+      "shows": "The ZITADEL logo",
+      "means": "ZITADEL (open source identity provider)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "hcaptcha",
+      "set": "color",
+      "group": "external",
+      "category": "security",
+      "shows": "The hCaptcha logo",
+      "means": "hCaptcha (bot protection)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "recaptcha",
+      "set": "color",
+      "group": "external",
+      "category": "security",
+      "shows": "The reCAPTCHA logo",
+      "means": "reCAPTCHA by Google (bot protection)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "fingerprint-brand",
+      "set": "color",
+      "group": "external",
+      "category": "security",
+      "shows": "The Fingerprint logo",
+      "means": "Fingerprint, the device identification service (security)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "github",
+      "set": "color",
+      "group": "external",
+      "category": "developer-tool",
+      "shows": "The GitHub Octocat",
+      "means": "GitHub (developer tool)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "github-actions",
+      "set": "color",
+      "group": "external",
+      "category": "developer-tool",
+      "shows": "The GitHub Actions logo",
+      "means": "GitHub Actions (developer tool)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "visual-studio-code",
+      "set": "color",
+      "group": "external",
+      "category": "developer-tool",
+      "shows": "The Visual Studio Code logo",
+      "means": "Visual Studio Code (developer tool)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "stripe",
+      "set": "color",
+      "group": "external",
+      "category": "online-service",
+      "shows": "The Stripe logo",
+      "means": "Stripe (payments)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "resend",
+      "set": "color",
+      "group": "external",
+      "category": "online-service",
+      "shows": "The Resend logo",
+      "means": "Resend (email)",
+      "status": "stable",
+      "legacy": []
+    },
+    {
+      "name": "browserless",
+      "set": "color",
+      "group": "external",
+      "category": "online-service",
+      "shows": "The Browserless logo",
+      "means": "Browserless (headless browsers)",
+      "status": "stable",
+      "legacy": []
     }
   ]
 }
