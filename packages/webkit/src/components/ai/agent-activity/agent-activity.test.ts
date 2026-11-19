@@ -165,6 +165,28 @@ describe('AgentActivity', () => {
     )
   })
 
+  it('still announces a step that keeps running after another one failed', async () => {
+    vi.useFakeTimers()
+    const { getByTestId, rerender } = render(AgentActivity, {
+      props: {
+        steps: [
+          { key: 'a', title: 'Purging the cache', status: 'running' },
+          { key: 'b', title: 'Retrying the purge', status: 'pending' }
+        ]
+      }
+    })
+    await rerender({
+      steps: [
+        { key: 'a', title: 'Purging the cache', status: 'error' },
+        { key: 'b', title: 'Retrying the purge', status: 'running' }
+      ]
+    })
+    const live = getByTestId('agent-activity__status')
+    expect(live).toHaveTextContent('Failed: Purging the cache')
+    await vi.advanceTimersByTimeAsync(1100)
+    expect(live).toHaveTextContent('Retrying the purge')
+  })
+
   it('announces nothing for a run that was already over at mount', () => {
     const history = render(AgentActivity, {
       props: { steps: steps.map((step) => ({ ...step, status: 'success' as const })) }

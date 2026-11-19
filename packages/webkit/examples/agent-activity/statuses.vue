@@ -7,7 +7,7 @@
       key: 'purge',
       title: 'Purging the cache of example.com',
       status: 'error',
-      description: 'The purge quota for this hour is used up'
+      description: 'The purge quota for this hour is used up.'
     },
     { key: 'retry', title: 'Retrying the purge', status: 'running' },
     { key: 'deploy', title: 'Deploying the workload', status: 'canceled' },

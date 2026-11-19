@@ -4527,6 +4527,50 @@
    "examplesFile": "catalog/examples/response-loading.json",
    "docsFile": "catalog/components/response-loading.json"
   },
+  "agent-activity": {
+   "import": "@aziontech/webkit/agent-activity",
+   "target": "./src/components/ai/agent-activity/agent-activity.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/agent-activity",
+   "models": [
+    "open"
+   ],
+   "category": "ai",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "steps",
+     "type": "AgentActivityStep[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "The steps of the work, in order: each has a `key`, a `title`, a `status` from the shared status set and an optional `description`. The current step is the first running one, else the first failed one, else the last canceled one of a stopped run, else the last one that is not pending."
+    },
+    {
+     "name": "defaultOpen",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Initial open state of the step list when uncontrolled; collapsed shows only the current step."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the activity. Empty uses the locale catalog (`Agent activity`)."
+    },
+    {
+     "name": "open",
+     "type": "boolean",
+     "default": "undefined as never",
+     "required": "false",
+     "doc": "Two-way value (`v-model:open`)."
+    }
+   ],
+   "surface": "app",
+   "examplesFile": "catalog/examples/agent-activity.json",
+   "docsFile": "catalog/components/agent-activity.json"
+  },
   "artifact-canvas": {
    "import": "@aziontech/webkit/artifact-canvas",
    "target": "./src/components/ai/artifact-canvas/artifact-canvas.vue",

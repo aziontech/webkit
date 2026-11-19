@@ -104,7 +104,7 @@
   onMounted(scheduleAnnouncement)
   onScopeDispose(clearTimer)
 
-  function toggle(): void {
+  function onClick(): void {
     open.value = !isOpen.value
   }
 
@@ -124,7 +124,6 @@
 
   function announceOutcome(outcome: string): void {
     if (!outcome) return
-    clearTimer()
     announcement.value = failed.value
       ? t('agentActivity.failed', { title: failed.value.title })
       : t(stopped.value ? 'agentActivity.stopped' : 'agentActivity.finished', {
@@ -150,7 +149,7 @@
       :aria-controls="listId"
       :data-testid="`${testId}__toggle`"
       class="inline-flex min-h-6 w-fit items-center gap-(--spacing-xs) rounded-(--shape-control) text-label-sm text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) pointer-coarse:min-h-11"
-      @click="toggle"
+      @click="onClick"
     >
       <span
         class="flex w-4 shrink-0 justify-center"

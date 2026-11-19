@@ -2,7 +2,7 @@
 name: agent-activity
 category: ai
 structure: monolithic
-status: approved
+status: implemented
 spec_version: 1
 template: 2
 checksum: 4022e21e9b6066706623f33900a1c4949de5d904b3ebe72774988b46b80b80ca
