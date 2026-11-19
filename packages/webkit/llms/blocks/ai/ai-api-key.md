@@ -35,7 +35,7 @@ A `PageHeader` at `size="small"` opens the form column (`layout-column-form`) wi
 
 ### B. Key card — `Subheader`, `Card`, `Item`, `SettingsRow`, `Select`, `PasswordInput`, `FieldError`, `StatusIndicator` (required)
 
-A `Subheader` at `size="small"` (an `h2`) over a flush `Card :padded="false"` whose `Item.List` holds three `SettingsRow`s; their controls stack under the copy below the row's `md` container. Provider is a large full-width `Select` of the providers the app supports. API key is a large full-width `PasswordInput` in the code face (`monospace`) with its reveal toggle, `autocomplete="off"` and no placeholder; it starts empty, is never filled from the saved key, and clears once the saved key's masked tail changes (the app confirmed the save). Its row description is the storage note, tied to the field with `aria-describedby`; the field's own `dir="auto"` keeps a pasted key in order in right-to-left. Save key with an empty field emits nothing: the field turns `invalid`, a `FieldError` under it says `Enter an API key.` (tied through `aria-describedby`) and focus moves to the field; typing clears the error. Status is a compact row whose `StatusIndicator` says what is in place for the picked provider (No key saved, Saved, Testing, Connected, Connection failed) next to the masked tail in the code face (in a `bdi` with `dir="ltr"`, so its dots and characters keep their order in right-to-left), inside a `role="status"` region so a test result is announced.
+A `Subheader` at `size="small"` (an `h2`) over a flush `Card :padded="false"` whose `Item.List` holds three `SettingsRow`s; their controls stack under the copy below the row's `md` container. Provider is a large full-width `Select` of the providers the app supports. API key is a large full-width `PasswordInput` in the code face (`monospace`) with its reveal toggle, `autocomplete="off"` and no placeholder; it starts empty, is never filled from the saved key, and clears once the saved key's masked tail changes (the app confirmed the save). Its row description is the storage note, tied to the field with `aria-describedby`; the field's own `dir="auto"` keeps a pasted key in order in right-to-left. Save key with an empty field emits nothing: the field turns `invalid`, a `FieldError` under it says `Enter an API key.` (tied through `aria-describedby`) and focus moves to the field; typing clears the error. Status is a row whose `StatusIndicator`, starting on the controls' column, says what is in place for the picked provider (No key saved, Saved, Testing, Connected, Connection failed) next to the masked tail in the code face (in a `bdi` with `dir="ltr"`, so its dots and characters keep their order in right-to-left), inside a `role="status"` region so a test result is announced.
 
 ### C. Actions — `Button` (required)
 
@@ -171,7 +171,7 @@ To go live with TanStack AI, map the `useByok` snapshot to `savedKeys` and call 
 ## Copy
 
 - **Title:** `Model provider keys`; description: `Run the AI features on your own model provider account.`
-- **Card heading:** `API key`. **Rows:** `Provider` — `The model provider the key belongs to.`; `API key` — the storage note, by default `Saved in this browser only and sent with your own requests to the provider.`; `Status` — `Whether a key is saved for this provider and if it works.`
+- **Card heading:** `Connection`. **Rows:** `Provider` — `The model provider the key belongs to.`; `API key` — the storage note, by default `Saved in this browser only and sent with your own requests to the provider.`; `Status` — `Whether a key is saved for this provider and if it works.`
 - **Status:** `No key saved`, `Saved`, `Testing`, `Connected`, `Connection failed`; the masked tail as given, e.g. `••••3f9a`.
 - **Actions:** `Save key`, `Test connection`, `Remove key`; in the `Alert`, `Test again`.
 - **Field error:** `Enter an API key.`
@@ -398,7 +398,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-api-key", { 
 
       <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
         <Subheader
-          title="API key"
+          title="Connection"
           size="small"
         />
         <Card :padded="false">
@@ -440,6 +440,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-api-key", { 
                     monospace
                     autocomplete="off"
                     aria-label="API key"
+                    required
                     :aria-describedby="submitted && draftEmpty ? `${noteId} ${errorId}` : noteId"
                     :invalid="submitted && draftEmpty"
                     :disabled="saving"
@@ -454,11 +455,10 @@ Each variant is the same screen in another state: `get_block("ai/ai-api-key", { 
               <SettingsRow
                 title="Status"
                 description="Whether a key is saved for this provider and if it works."
-                variant="compact"
               >
                 <div
                   role="status"
-                  class="flex flex-wrap items-center justify-end gap-(--spacing-xs)"
+                  class="flex w-full flex-wrap items-center gap-(--spacing-xs)"
                 >
                   <StatusIndicator
                     :severity="state.severity"

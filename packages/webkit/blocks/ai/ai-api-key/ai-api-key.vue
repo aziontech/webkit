@@ -175,7 +175,7 @@
 
       <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
         <Subheader
-          title="API key"
+          title="Connection"
           size="small"
         />
         <Card :padded="false">
@@ -217,6 +217,7 @@
                     monospace
                     autocomplete="off"
                     aria-label="API key"
+                    required
                     :aria-describedby="submitted && draftEmpty ? `${noteId} ${errorId}` : noteId"
                     :invalid="submitted && draftEmpty"
                     :disabled="saving"
@@ -231,11 +232,10 @@
               <SettingsRow
                 title="Status"
                 description="Whether a key is saved for this provider and if it works."
-                variant="compact"
               >
                 <div
                   role="status"
-                  class="flex flex-wrap items-center justify-end gap-(--spacing-xs)"
+                  class="flex w-full flex-wrap items-center gap-(--spacing-xs)"
                 >
                   <StatusIndicator
                     :severity="state.severity"

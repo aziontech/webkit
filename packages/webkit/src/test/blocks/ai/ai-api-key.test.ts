@@ -27,7 +27,7 @@ describe('ai/ai-api-key', () => {
   it('renders the sample: OpenAI saved, only the masked tail, an empty key field', async () => {
     const view = render(AiApiKey)
     expect(view.getByRole('heading', { level: 1, name: 'Model provider keys' })).toBeTruthy()
-    expect(view.getByRole('heading', { level: 2, name: 'API key' })).toBeTruthy()
+    expect(view.getByRole('heading', { level: 2, name: 'Connection' })).toBeTruthy()
     expect(view.getByRole('combobox', { name: 'Provider' }).textContent).toContain('OpenAI')
     const field = keyField(view.container)
     expect(field.value).toBe('')
