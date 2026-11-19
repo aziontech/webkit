@@ -4,7 +4,7 @@ category: chart
 structure: monolithic
 status: implemented
 checksum: d10487116bb259c6f8a991a96c635866baa4f538e25d106b6bcff486e252fe0e
-spec_version: 7
+spec_version: 8
 created: 2026-10-20
 last_updated: 2026-11-19
 ---

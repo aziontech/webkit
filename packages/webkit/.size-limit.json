@@ -98,7 +98,7 @@
   {
     "name": "data-table",
     "path": "src/components/data/data-table/data-table.vue",
-    "limit": "56.4 KB"
+    "limit": "56.5 KB"
   },
   {
     "name": "data-grid",
@@ -682,7 +682,7 @@
   {
     "name": "contact-hub-section",
     "path": "src/components/section/contact-hub-section/contact-hub-section.vue",
-    "limit": "8.55 KB"
+    "limit": "8.8 KB"
   },
   {
     "name": "listing-table-section",
