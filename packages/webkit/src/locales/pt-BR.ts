@@ -39,6 +39,11 @@ export const ptBR: Messages = {
     download: 'Baixar {title}',
     copy: 'Copiar {title}'
   },
+  mcpAppFrame: {
+    loading: 'Carregando {title}',
+    errorTitle: 'Não é possível exibir {title}',
+    errorDescription: 'O app foi bloqueado ou não pôde ser carregado aqui.'
+  },
   chatMessage: {
     user: 'Você',
     assistant: 'Assistente de IA',

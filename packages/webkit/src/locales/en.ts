@@ -1273,6 +1273,12 @@ export const artifactPreview = {
   copy: 'Copy {title}'
 } as const
 
+export const mcpAppFrame = {
+  loading: 'Loading {title}',
+  errorTitle: "{title} can't be shown",
+  errorDescription: "The app was blocked or couldn't be loaded here."
+} as const
+
 export const chatMessage = {
   user: 'You',
   assistant: 'AI assistant',
@@ -1550,6 +1556,7 @@ export const en = {
   articleIndexSection,
   artifactCanvas,
   artifactPreview,
+  mcpAppFrame,
   attributeEditor,
   avatar,
   avatarGroup,

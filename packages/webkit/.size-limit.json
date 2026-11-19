@@ -1149,6 +1149,11 @@
     "entryOnly": true
   },
   {
+    "name": "mcp-app-frame",
+    "path": "src/components/ai/mcp-app-frame/mcp-app-frame.vue",
+    "limit": "9.2 KB"
+  },
+  {
     "name": "chat-message",
     "path": "src/components/ai/chat-message/index.ts",
     "limit": "25.1 KB"

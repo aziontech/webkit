@@ -39,6 +39,11 @@ export const es: Messages = {
     download: 'Descargar {title}',
     copy: 'Copiar {title}'
   },
+  mcpAppFrame: {
+    loading: 'Cargando {title}',
+    errorTitle: 'No se puede mostrar {title}',
+    errorDescription: 'La app se bloqueó o no se pudo cargar aquí.'
+  },
   chatMessage: {
     user: 'Tú',
     assistant: 'Asistente de IA',
