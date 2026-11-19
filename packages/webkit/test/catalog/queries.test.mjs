@@ -654,7 +654,7 @@ test('every icon carries search keywords', () => {
   assert.deepEqual(bare, [])
 })
 
-test('the Nitro and Stencil glyphs ship as monochrome brand icons', () => {
+test('the Nitro and Stencil glyphs ship as monochrome brand icons, and only Stencil has a colour logo (IC17)', () => {
   const icons = new Map(listAssets(catalog, { kind: 'icons' }).items.map((i) => [i.class, i]))
   for (const [cls, keyword] of [
     ['az az-nitro', 'server'],
@@ -674,7 +674,7 @@ test('the Nitro and Stencil glyphs ship as monochrome brand icons', () => {
     assert.equal(raw.match(/<path\b/g).length, 1, cls)
   }
   assert.ok(!icons.has('az-color az-nitro'))
-  assert.ok(!icons.has('az-color az-stencil'))
+  assert.ok(icons.has('az-color az-stencil'))
 })
 
 test('get_component points a consuming component at its asset list', () => {
