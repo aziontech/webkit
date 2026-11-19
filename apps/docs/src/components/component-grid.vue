@@ -55,10 +55,31 @@
         </template>
       </Input>
     </div>
+    <nav
+      v-if="groups.length > 1"
+      :aria-label="t.jumpToCategory"
+      class="-mx-(--spacing-md) overflow-x-auto border-b border-(--border-default) bg-(--bg-canvas) px-(--spacing-md) py-(--spacing-xs) md:sticky md:top-14 md:z-10 md:overflow-visible lg:-mx-(--spacing-xl) lg:px-(--spacing-xl)"
+    >
+      <ul class="flex gap-(--spacing-2xs) md:flex-wrap">
+        <li
+          v-for="group in groups"
+          :key="group.id"
+          class="shrink-0"
+        >
+          <a
+            :href="`#category-${group.id}`"
+            class="inline-flex min-h-8 items-center gap-(--spacing-2xs) rounded-(--shape-button) border border-(--border-default) px-(--spacing-xs) text-label-sm whitespace-nowrap text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:outline-none motion-reduce:transition-none"
+          >
+            {{ group.label }}
+            <span class="text-body-xs text-(--text-muted)">{{ group.items.length }}</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
     <section
       v-for="group in groups"
       :key="group.label"
-      class="flex flex-col gap-(--spacing-sm)"
+      class="flex scroll-mt-20 flex-col gap-(--spacing-sm) md:scroll-mt-40"
       :aria-labelledby="`category-${group.id}`"
     >
       <div class="flex flex-col gap-(--spacing-2xs)">
@@ -88,8 +109,13 @@
             :padded="false"
             class="w-full min-w-0 transition-colors duration-fast-02 ease-productive-entrance focus-within:border-(--border-strong) hover:border-(--border-strong) motion-reduce:transition-none"
           >
+            <p
+              class="px-(--spacing-md) pt-(--spacing-sm) text-body-sm text-(--text-muted) md:hidden"
+            >
+              {{ item.entry?.purpose }}
+            </p>
             <div
-              class="h-60 overflow-auto bg-(--bg-canvas) p-(--spacing-md) [contain:layout_paint]"
+              class="hidden h-48 overflow-auto bg-(--bg-canvas) p-(--spacing-md) [contain:layout_paint] md:block"
             >
               <LivePreview
                 v-if="item.entry?.exampleDir && item.entry.firstExample"
