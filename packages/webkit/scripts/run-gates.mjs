@@ -81,11 +81,8 @@ export const GATES = [
   },
   {
     id: 'docs-markdown',
-    label: "Docs Markdown: Do / Don't pairs, no task lists, comments dropped",
-    steps: [
-      ['node', 'scripts/check-docs-markdown.mjs'],
-      ['node', '--test', '../../apps/docs/test/content.test.ts']
-    ]
+    label: "Docs Markdown: Do / Don't pairs, no task lists",
+    steps: [['node', 'scripts/check-docs-markdown.mjs']]
   },
   {
     id: 'tests',

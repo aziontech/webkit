@@ -1,5 +1,8 @@
 import assert from 'node:assert/strict'
+import { readFileSync } from 'node:fs'
 import { test } from 'node:test'
+
+import { scanMarkdown } from '../../../packages/webkit/scripts/lib/docs-markdown.mjs'
 
 import {
   buildComponent,
@@ -77,4 +80,15 @@ test('a component page never renders the spec Constraints block written for agen
   assert.doesNotMatch(page, /Do not add props beyond the Props table/)
   assert.doesNotMatch(page, /Constraints — DO NOT/)
   assert.ok(doc.bestPractices.length > 0)
+})
+
+test('no foundations page the docs render holds a task list', () => {
+  const repo = new URL('../../../', import.meta.url)
+  const pages = readFileSync(new URL('apps/docs/src/lib/foundations.ts', repo), 'utf8')
+  const findings = [...pages.matchAll(/markdown:\s*'([^']+)'/g)].flatMap(([, path]) =>
+    scanMarkdown(readFileSync(new URL(path, repo), 'utf8'), { rendered: true }).map(
+      (finding) => `${path}:${finding.line} ${finding.message}`
+    )
+  )
+  assert.deepEqual(findings, [])
 })

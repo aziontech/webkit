@@ -8,7 +8,7 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../../..')
 const { STANDARDS } = await import(join(ROOT, '.claude/hooks/lib/standards.mjs'))
 const readme = readFileSync(join(ROOT, '.claude/rules/README.md'), 'utf8')
 
-const rows = [...readme.matchAll(/^\| \[([a-z-]+)\]\(\.\/\1\.md\) \| (general|webkit) \|/gm)].map(
+const rows = [...readme.matchAll(/^\| \[([a-z-]+)\]\(\.\/\1\.md\) +\| (general|webkit) +\|/gm)].map(
   (match) => ({ id: match[1], scope: match[2] })
 )
 const count = (scope) => STANDARDS.filter((standard) => standard.scope === scope).length

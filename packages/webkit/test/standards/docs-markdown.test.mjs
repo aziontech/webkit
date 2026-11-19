@@ -47,15 +47,11 @@ test('a task list is reported only in a page the docs render, and never inside c
   assert.deepEqual(scanMarkdown('```md\n## Correct\n- [ ] x\n```', { rendered: true }), [])
 })
 
-test('the rendered set includes the foundations pages and block guidelines', () => {
+test('the rendered set includes every rule and the block guidelines', () => {
   const rendered = docsSources(REPO)
     .filter((source) => source.rendered)
     .map((source) => source.path)
-  for (const path of [
-    'rules/webkit-tokens.md',
-    'rules/webkit-accessibility.md',
-    'skills/webkit-azion-api/SKILL.md'
-  ])
+  for (const path of ['rules/webkit-tokens.md', 'rules/webkit-accessibility.md'])
     assert.ok(rendered.includes(path), path)
   assert.ok(rendered.some((path) => path.endsWith('/guidelines.md')))
 })

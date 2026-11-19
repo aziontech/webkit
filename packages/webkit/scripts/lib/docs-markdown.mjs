@@ -76,17 +76,9 @@ const markdownIn = (dir, match) =>
         .map((entry) => join(entry.parentPath, entry.name))
     : []
 
-export function renderedFoundations(repo) {
-  const file = join(repo, 'apps/docs/src/lib/foundations.ts')
-  if (!existsSync(file)) return []
-  return [...readFileSync(file, 'utf8').matchAll(/markdown:\s*'([^']+)'/g)].map((match) =>
-    join(repo, match[1])
-  )
-}
-
 export function docsSources(repo) {
   const rendered = new Set([
-    ...renderedFoundations(repo),
+    ...markdownIn(join(repo, 'rules'), (name) => name.endsWith('.md')),
     ...markdownIn(join(repo, 'packages/webkit/blocks'), (name) => name === 'guidelines.md'),
     ...markdownIn(join(repo, '.specs'), (name) => name.endsWith('.md') && !name.startsWith('_'))
   ])
