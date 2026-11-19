@@ -36,6 +36,27 @@ describe('create-wizard#CreateAndDeploy', () => {
     await fireEvent.click(submit)
     await waitFor(() => expect(submit.getAttribute('aria-busy')).toBe('true'), wait)
   })
+  it('leaves at once on Cancel while nothing is answered', async () => {
+    const view = render(MultipageCreateAndDeploy)
+    await fireEvent.click(screen.getByRole('button', { name: 'Cancel' }))
+    await waitFor(() => expect(view.emitted('cancel')).toHaveLength(1), wait)
+    expect(screen.queryByRole('alertdialog')).toBeNull()
+  })
+
+  it('asks before Cancel or Back to Services discards the answers', async () => {
+    const view = render(MultipageCreateAndDeploy)
+    await fireEvent.click(screen.getByRole('button', { name: /web-app/ }))
+    await fireEvent.click(screen.getByRole('button', { name: 'Cancel' }))
+    const confirm = await screen.findByRole('alertdialog')
+    expect(within(confirm).getByText('Unsaved changes')).toBeTruthy()
+    await fireEvent.click(within(confirm).getByRole('button', { name: 'Keep editing' }))
+    await waitFor(() => expect(screen.queryByRole('alertdialog')).toBeNull(), wait)
+    expect(view.emitted('cancel')).toBeUndefined()
+    await fireEvent.click(screen.getByRole('button', { name: 'Back to Services' }))
+    const again = await screen.findByRole('alertdialog')
+    await fireEvent.click(within(again).getByRole('button', { name: 'Discard changes' }))
+    await waitFor(() => expect(view.emitted('cancel')).toHaveLength(1), wait)
+  })
 })
 
 describe('create-wizard', () => {
