@@ -41,6 +41,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 ## Blocks: Ai
 
 - [AiActionApproval (ai/ai-action-approval)](blocks/ai/ai-action-approval.md): The moment an assistant needs permission.
+- [AiApiKey (ai/ai-api-key)](blocks/ai/ai-api-key.md): The place a reader brings their own key: they connect their own model provider account so the AI features of the app run on it.
 - [AiChat (ai/ai-chat)](blocks/ai/ai-chat.md): A full page where a person talks with the generative AI assistant about their account: they ask in their own words, watch the response arrive, check where it came from, and keep going with a follow-up or a new question.
 - [AiChatDrawer (ai/ai-chat-drawer)](blocks/ai/ai-chat-drawer.md): The generative AI assistant beside the work: the reader is on a resource page — here a workload whose error rate is up — and opens the assistant in a drawer to ask about what they see, without losing the page.
 

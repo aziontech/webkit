@@ -1,0 +1,64 @@
+{
+  "id": "ai/ai-api-key",
+  "name": "AiApiKey",
+  "title": "Blocks/Ai/AiApiKey",
+  "surface": "app",
+  "summary": "Bring your own key: the reader connects their own model provider account by picking a provider in a `Select`, pasting the key in a masked `PasswordInput` (reveal toggle, never prefilled, cleared once saved) and saving it; a status row says whether a key is saved for that provider (only its masked tail shows); Save key with an empty field marks it with a `FieldError`; Test connection checks the key (running, connected or failed with the provider's message in an `Alert` with Test again) and Remove key deletes it after a `ConfirmDialog`. The block stores nothing: it emits save, test and remove for the app's key store (TanStack AI's `useByok`). Built from `PageHeader`, `Subheader`, `Card`, `Item`, `SettingsRow`, `Select`, `PasswordInput`, `FieldError`, `StatusIndicator`, `Alert`, `Button` and `ConfirmDialog`. A page body for ConsoleLayout.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "bring your own key",
+    "byok",
+    "model provider api key",
+    "ai api key settings",
+    "use my own openai key",
+    "connect a model provider",
+    "test api key",
+    "remove api key",
+    "usar minha própria chave",
+    "chave de api do provedor de ia",
+    "testar chave de api",
+    "remover chave de api",
+    "usar mi propia clave de api"
+  ],
+  "skills": ["webkit-form", "webkit-ai-surfaces", "webkit-ui-states", "webkit-errors"],
+  "primary": {
+    "name": "Saved",
+    "file": "ai-api-key.vue"
+  },
+  "files": ["sample.ts"],
+  "variants": [
+    {
+      "name": "Empty",
+      "summary": "No key is saved for any provider: the status reads No key saved and only Save key shows.",
+      "file": "variants/empty.vue"
+    },
+    {
+      "name": "Saving",
+      "summary": "The key is being saved: the Provider Select, the API key field, Test connection and Remove key lock and Save key spins, keeping focus.",
+      "file": "variants/saving.vue"
+    },
+    {
+      "name": "Testing",
+      "summary": "Test connection is running: the status reads Testing with a spinner, Test connection spins, and Remove key and the Provider Select lock until it settles; Save key stays available for a replacement key.",
+      "file": "variants/testing.vue"
+    },
+    {
+      "name": "Success",
+      "summary": "The test passed: the status reads Connected.",
+      "file": "variants/success.vue"
+    },
+    {
+      "name": "Error",
+      "summary": "The test failed: the status reads Connection failed and a danger Alert gives the provider's message with Test again.",
+      "file": "variants/error.vue"
+    },
+    {
+      "name": "SaveError",
+      "summary": "The save failed: a danger Alert says the key wasn't saved with the reason and no action; the typed key stays in the field and Save key retries.",
+      "file": "variants/save-error.vue"
+    }
+  ]
+}

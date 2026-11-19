@@ -3354,6 +3354,121 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-action-approv
 
 ---
 
+<!-- blocks/ai/ai-api-key.md -->
+
+# AiApiKey (`ai/ai-api-key`)
+
+> Bring your own key: the reader connects their own model provider account by picking a provider in a `Select`, pasting the key in a masked `PasswordInput` (reveal toggle, never prefilled, cleared once saved) and saving…
+
+- Surface: app
+- Source: `blocks/ai/ai-api-key/ai-api-key.vue` in `@aziontech/webkit`
+- MCP: `get_block("ai/ai-api-key")`
+- Components: Alert, Button, Card, ConfirmDialog, `FieldError`, Item, PageHeader, PasswordInput, Select, SettingsRow, StatusIndicator, Subheader
+- Skills: `webkit-form`, `webkit-ai-surfaces`, `webkit-ui-states`, `webkit-errors`
+
+## Asked as
+
+bring your own key; byok; model provider api key; ai api key settings; use my own openai key; connect a model provider; test api key; remove api key; usar minha própria chave; chave de api do provedor de ia; testar chave de api; remover chave de api; usar mi propia clave de api
+
+The place a reader brings their own key: they connect their own model provider account so the AI features of the app run on it. They pick a provider, paste the key once, check that it works, and can remove it later. The key is never shown again after it is saved; only its masked tail says which key is in place. The block stores nothing and calls no provider: it emits `save`, `test` and `remove`, and the app's key store does the work (TanStack AI's `useByok`, or the app's own server). It is a page body for `ConsoleLayout`, rendered in the layout's default slot; the same body fits a settings tab.
+
+## When to use
+
+- Use ai-api-key when the reader can run the app's AI features on their own model provider account (bring your own key).
+- One key per provider, picked from a short list of providers the app supports.
+- A settings page or tab where the reader saves, tests and removes that key.
+
+## When not to use
+
+- Creating or revoking the app's own access tokens for scripts and tools: use `account/account-personal-tokens`.
+- A secret a resource needs at run time (an environment variable): use `edit/edit-variables`.
+- Picking the model for one conversation: the `PromptInputModelPicker` in `ai/ai-chat`.
+- Settings that are not about a provider key: use `settings/settings-form`.
+
+## Building blocks
+
+- A. Page heading — `PageHeader` (required)
+- B. Key card — `Subheader`, `Card`, `Item`, `SettingsRow`, `Select`, `PasswordInput`, `FieldError`, `StatusIndicator` (required)
+- C. Actions — `Button` (required)
+- D. Failure — `Alert` (Error only)
+- E. Remove confirmation — `ConfirmDialog` (required)
+
+What each part takes: [blocks/ai/ai-api-key.md](blocks/ai/ai-api-key.md).
+
+## Data
+
+The block takes the providers, the saved keys' masked tails and the request states through props and emits what the reader asked for; it never holds a saved key, stores nothing and calls no provider. `AiApiKeyProvider`, `AiApiKeySavedKey`, `AiApiKeySaveValue`, `AiApiKeyStatus` and `AiApiKeyProps` are exported from `ai-api-key.vue`; `sample.ts` holds the providers and the saved key the page renders when `providers` and `savedKeys` are left out (`props.savedKeys ?? sampleSavedKeys`: `loading` and `error` here are a save or a test, not a load, so they do not empty the list).
+
+Prop: `providers`, `savedKeys`, `status`, `loading`, `error`, `storageNote`.
+
+Model: `v-model:provider`.
+
+Event: `save`, `test`, `remove`.
+
+`await byok.ready()` keeps the page from reading No key saved before the stored keys load (wrap the page in `Suspense`, or render it once `ready()` resolves). A key whose status is `error` (its `message`) and `snapshot.storageError` belong in `error`. `testProviderKey` is the app's own call (a cheap request to the provider through the app's server, or a one-token chat), which throws with the provider's message when the key is refused. A `locked` key status (passkey storage not yet unlocked) still has its masked tail: it shows as saved, and `byok.unlock()` runs before the test. Then delete `sample.ts` and its import.
+
+What each prop and event does, and the go-live code: [blocks/ai/ai-api-key.md](blocks/ai/ai-api-key.md).
+
+## Do
+
+- Keep the key field empty on every visit; show only the masked tail of a saved key.
+- Clear the field once the save succeeds, so the key does not stay in the page.
+- Say where the key is kept in the field's description, and make it true for the app.
+- Report the test result in the status row and announce it; put the provider's message in the `Alert`.
+- Ask before removing a key, and name what stops working.
+
+## Don't
+
+- Don't prefill the key field, put a sample key in a placeholder, or show a key format (`sk-…`).
+- Don't store the key, log it or send it anywhere but the app's key store from the `save` handler.
+- Don't test a key automatically on every keystroke; the reader runs Test connection.
+- Don't render a `Sidebar`, `AppHeader` or `<main>` in the page; `ConsoleLayout` owns them.
+- Don't toast a test failure; it stays on the page beside the key it is about.
+
+## Copy
+
+- **Title:** `Model provider keys`; description: `Run the AI features on your own model provider account.`
+- **Card heading:** `API key`. **Rows:** `Provider` — `The model provider the key belongs to.`; `API key` — the storage note, by default `Saved in this browser only and sent with your own requests to the provider.`; `Status` — `Whether a key is saved for this provider and if it works.`
+- **Status:** `No key saved`, `Saved`, `Testing`, `Connected`, `Connection failed`; the masked tail as given, e.g. `••••3f9a`.
+- **Actions:** `Save key`, `Test connection`, `Remove key`; in the `Alert`, `Test again`.
+- **Field error:** `Enter an API key.`
+- **Failure:** title `The key didn't work.` with the provider's message and the action `Test again` (test); title `The key wasn't saved.` with the message and no action (save).
+- **Remove:** title `Remove the <provider> key?`; description `AI features that use <provider> stop working until you save a new key.`; confirm `Remove key`.
+- Follow `skills/webkit-microcopy`: sentence case, no "please", no exclamation marks.
+
+## Accessibility
+
+- No `main` of its own (the layout's is the only one); the `PageHeader` title is the only `h1`, the card's `Subheader` is an `h2`.
+- The `form` is named by the page title; the Select trigger and the key field carry `aria-label`s matching their row titles, and the field's description is tied with `aria-describedby`.
+- Focus order: Provider, API key, its reveal toggle, Remove key, Test connection, Save key, then the `Alert`'s Test again.
+- An empty Save key sets `aria-invalid` on the field, adds the `FieldError` to its `aria-describedby` and moves focus to it.
+- Focus is never lost: Save key keeps focus while it spins; after a successful save the field clears and focus moves to it, so the new Saved status is read in context; after a confirmed removal focus moves to the API key field, since Remove key is gone.
+- The status row is a `role="status"` region: Testing, Connected and Connection failed are announced once each; the `Alert` is announced when it appears.
+- The `ConfirmDialog` traps focus, is named by its title and returns focus to Remove key.
+
+## States
+
+- Saved: the default props; OpenAI is picked and has a saved key, not tested yet: the status reads Saved with its masked tail, and Test connection and Remove key show.
+- Empty: `savedKeys` is `[]`; the status reads No key saved and only Save key shows.
+- Saving: `loading`; the Provider Select, the API key field, Test connection and Remove key lock and Save key spins, keeping focus. The variant opens on an empty field, since the block never seeds the key; in use the key the reader typed stays in it.
+- Testing: `status="running"`; the status reads Testing with a spinner, Test connection spins, and Remove key and the Provider Select lock until it settles; Save key stays available for a replacement key.
+- Success: `status="success"`; the status reads Connected.
+- Error: `status="error"` with `error`; the status reads Connection failed and the danger `Alert` gives the provider's message with Test again.
+- SaveError: `error` with `status="pending"`; the danger `Alert` says `The key wasn't saved.` with the message and no action. The variant opens on an empty field; in use the typed key stays for Save key to retry.
+
+## Related
+
+- `ai/ai-chat` — the conversation that runs on the reader's key.
+- `account/account-personal-tokens` — the app's own tokens for scripts and tools.
+- `settings/settings-form` — the settings layout and the per-card save this page follows.
+- `skills/webkit-ai-surfaces` — where AI settings sit and what they disclose.
+
+## Variants
+
+`Saved` (primary) · `Empty` · `Saving` · `Testing` · `Success` · `Error` · `SaveError`. Code: [blocks/ai/ai-api-key.md](blocks/ai/ai-api-key.md), `get_block("ai/ai-api-key", { variant })`.
+
+---
+
 <!-- blocks/ai/ai-chat.md -->
 
 # AiChat (`ai/ai-chat`)
