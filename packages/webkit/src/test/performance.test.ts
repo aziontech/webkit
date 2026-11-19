@@ -1,9 +1,13 @@
 // Runtime budgets (M1.7): mount and update time of the components that receive the biggest inputs.
 // Budgets live in ../../perf-budgets.json, in milliseconds, set at about 3× the median measured on
-// the shared development host; on CI each one is multiplied by ciFactor (the runner is 2.5-3.5x slower). A component over budget fails here; fix the component
-// (window long lists, render collapsed children lazily), do not raise the number.
+// the shared development host. Budgets are relative to the machine: before the scenarios run, the
+// suite times a fixed reference render (calibration.hostMs on the host) and multiplies every budget
+// by how much slower this machine is, never by less than 1 (ciFactor on CI) and never by more than
+// calibration.maxFactor. A slow shared runner then moves every budget with it, and a component
+// that regressed still fails. A component over budget fails here; fix the component (window long
+// lists, render collapsed children lazily), do not raise the number.
 import { cleanup, fireEvent, render } from '@testing-library/vue'
-import { afterEach, describe, expect, inject, it } from 'vitest'
+import { afterEach, beforeAll, describe, expect, inject, it } from 'vitest'
 import { server } from 'vitest/browser'
 import { type Component, defineComponent, h, nextTick, ref } from 'vue'
 
@@ -128,13 +132,58 @@ declare module 'vitest' {
   }
 }
 
-const factor = inject('perfOnCi') ? budgets.ciFactor : 1
+const CALIBRATION_RUNS = 9
+const CALIBRATION_ROWS = 3000
+
+const ReferenceList = defineComponent({
+  props: { flag: { type: Boolean, default: false } },
+  setup(props) {
+    const rows = Array.from({ length: CALIBRATION_ROWS }, (_, i) => ({ id: i, label: `Row ${i}` }))
+    return () =>
+      h(
+        'ul',
+        rows.map((row) =>
+          h('li', { key: row.id, 'data-flag': props.flag || undefined }, [
+            h('span', row.label),
+            h('span', String(row.id * 7))
+          ])
+        )
+      )
+  }
+})
+
+async function calibrate(): Promise<number> {
+  const times: number[] = []
+  for (let i = 0; i <= CALIBRATION_RUNS; i++) {
+    const flag = ref(false)
+    const t0 = performance.now()
+    render(defineComponent({ setup: () => () => h(ReferenceList, { flag: flag.value }) }))
+    await settle()
+    flag.value = true
+    await settle()
+    if (i > 0) times.push(performance.now() - t0)
+    cleanup()
+  }
+  return median(times)
+}
+
+let factor = 1
+
+beforeAll(async () => {
+  const floor = inject('perfOnCi') ? budgets.ciFactor : 1
+  const referenceMs = await calibrate()
+  const ratio = referenceMs / budgets.calibration.hostMs
+  factor = Math.max(floor, Math.min(ratio, budgets.calibration.maxFactor))
+  console.warn(
+    `[perf] calibration: reference ${referenceMs.toFixed(1)} ms (host ${budgets.calibration.hostMs}), budgets x${factor.toFixed(2)}`
+  )
+})
 
 function check(name: Scenario, result: Record<Phase, number>) {
   const host = budgets.scenarios[name]
   const budget = { mount: host.mount * factor, update: host.update * factor }
   console.warn(
-    `[perf] ${name}: mount ${result.mount.toFixed(1)} ms (budget ${budget.mount}), update ${result.update.toFixed(1)} ms (budget ${budget.update})`
+    `[perf] ${name}: mount ${result.mount.toFixed(1)} ms (budget ${budget.mount.toFixed(0)}), update ${result.update.toFixed(1)} ms (budget ${budget.update.toFixed(0)})`
   )
   if (server.browser !== 'chromium') return
   expect(result.mount, `${name} mount`).toBeLessThanOrEqual(budget.mount)

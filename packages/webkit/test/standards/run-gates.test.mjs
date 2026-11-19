@@ -18,22 +18,84 @@ const scriptsFor = (step) => {
     .map(([name]) => name)
 }
 
+const ciRuns = [...workflow.matchAll(/^\s+run: (?!\|)(.+)$/gm)].map((m) => m[1].trim())
+
+const ciCovers = (gate, step) => {
+  if (gate.root) return ciRuns.includes(step.join(' '))
+  if (step[0] === 'git') return true
+  const scripts = scriptsFor(step)
+  return (
+    (step.includes('--test') && workflow.includes('test:toolkit')) ||
+    scripts.some(
+      (name) =>
+        new RegExp(`webkit (run )?${name}\\n`).test(workflow) ||
+        new RegExp(`pnpm run ${name}\\n\\s+working-directory: packages/webkit\\n`).test(workflow)
+    )
+  )
+}
+
 test('every local gate also runs in the governance workflow', () => {
   for (const gate of GATES) {
     for (const step of gate.steps) {
-      if (step[0] === 'git') continue
-      const scripts = scriptsFor(step)
-      const ok =
-        (step.includes('--test') && workflow.includes('test:toolkit')) ||
-        scripts.some(
-          (name) =>
-            new RegExp(`webkit (run )?${name}\\n`).test(workflow) ||
-            new RegExp(`pnpm run ${name}\\n\\s+working-directory: packages/webkit\\n`).test(
-              workflow
-            )
-        )
-      assert.ok(ok, `${gate.id}: ${step.join(' ')} is not in governance.yml`)
+      assert.ok(ciCovers(gate, step), `${gate.id}: ${step.join(' ')} is not in governance.yml`)
     }
+  }
+})
+
+const CI_ONLY = {
+  'pnpm install --frozen-lockfile': 'setup',
+  'pnpm exec playwright install --with-deps chromium': 'setup',
+  'pnpm run check:audit': 'needs the npm advisory service; run pnpm gates at the root',
+  'npx depcheck --ignores="@types/*,eslint-*"': 'downloads depcheck on every run',
+  'pnpm run lint:webkit': 'about 25 s; pnpm lint:webkit, or pnpm gates at the root',
+  'pnpm run typecheck:webkit': 'about 25 s; pnpm gates at the root',
+  'pnpm run typecheck:docs': 'pnpm gates at the root',
+  'pnpm run check:webkit:type-coverage': 'about 50 s; pnpm gates at the root',
+  'pnpm check:pack': 'about 35 s of npm pack',
+  'pnpm build:docs': 'a full docs build',
+  'pnpm check:docs:links': 'needs the docs build',
+  'pnpm build:demos': 'a full demos build',
+  'pnpm --filter @aziontech/webkit test:ssr': 'about 35 s; renders every block and example',
+  'pnpm --filter @aziontech/webkit run test:consume': 'installs and builds a consumer app',
+  'pnpm --filter @aziontech/webkit run check:consumer-types': 'packs and builds a consumer app',
+  'pnpm exec vitest run --shard=${{ matrix.shard }}/4': 'the browser suite, minutes long',
+  'pnpm --filter @aziontech/webkit-visual exec playwright test --shard=${{ matrix.shard }}/4':
+    'the styled visual suite, needs the built sites',
+  'printf \'%s\\n\' "$PR_TITLE" | pnpm exec commitlint --verbose': 'needs the PR title'
+}
+
+const gateCommand = (line) => {
+  const filtered = line.match(/^pnpm --filter @aziontech\/webkit (?:run )?(\S+)$/)
+  const local = line.match(/^pnpm (?:run )?(\S+)$/)
+  const name = filtered?.[1] ?? local?.[1]
+  return GATES.some((gate) =>
+    gate.steps.some((step) =>
+      gate.root
+        ? step.join(' ') === line
+        : (name && scriptsFor(step).includes(name)) ||
+          (step.includes('--test') && name === 'test:toolkit')
+    )
+  )
+}
+
+test('every governance workflow step is a local gate or a named CI-only check', () => {
+  for (const line of ciRuns) {
+    assert.ok(
+      gateCommand(line) || line in CI_ONLY,
+      `governance.yml runs "${line}": add it to run-gates.mjs, or to CI_ONLY here with the reason`
+    )
+  }
+  for (const line of Object.keys(CI_ONLY)) {
+    assert.ok(ciRuns.includes(line), `CI_ONLY lists "${line}", which governance.yml no longer runs`)
+  }
+})
+
+test('the gates cover the checks that failed CI most often', () => {
+  for (const id of ['format', 'types-tests']) {
+    assert.ok(
+      GATES.some((g) => g.id === id),
+      `gate ${id} is missing`
+    )
   }
 })
 
