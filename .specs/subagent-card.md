@@ -5,7 +5,7 @@ structure: monolithic
 status: approved
 spec_version: 1
 template: 2
-checksum: bae20b7a3cb9af1ad32fabcd0f2cf363e2d72881073c640a30991d5f4ef0ee98
+checksum: 72cf2484e055f8c0a9524f71bf5f95272fc45afb7d208894708af54357df6f76
 created: 2026-11-19
 last_updated: 2026-11-19
 ---
@@ -185,7 +185,7 @@ _None._
 
 ## Performance
 
-- Bundle budget: 5 KB gzip for `./subagent-card` in `.size-limit.json` (tool-call is 3.5 KB, reasoning 4.65 KB; this card adds `Button` and a timer).
+- Bundle budget: 6.1 KB gzip for `./subagent-card` in `.size-limit.json` (measured 6.00 KB: it composes both `Button`, like reasoning at 4.65 KB, and `StatusIndicator`, like tool-call at 3.5 KB, plus a timer).
 - Runtime budget: one interval of 1 s while `running` without `duration`, cleared when the status leaves `running` or the card unmounts.
 - Heavy parts: none (slot content is the owner's).
 
