@@ -20,14 +20,20 @@ const foundationPages = () =>
     : []
 
 async function expectOneHairline(page: Page) {
-  const lines = await page.evaluate(findDoubledLines)
-  expect(
-    lines.map(
-      (line) =>
-        `${line.orientation} at ${line.at}px (${line.overlap}px long, gap ${line.gap}px): ${line.first} | ${line.second}`
-    ),
-    'two visible borders sit flush or 1px apart: the container draws the frame, the parts only the dividers'
-  ).toEqual([])
+  await expect
+    .poll(
+      async () =>
+        (await page.evaluate(findDoubledLines)).map(
+          (line) =>
+            `${line.orientation} at ${line.at}px (${line.overlap}px long, gap ${line.gap}px): ${line.first} | ${line.second}`
+        ),
+      {
+        message:
+          'two visible borders sit flush or 1px apart: the container draws the frame, the parts only the dividers',
+        timeout: 10_000
+      }
+    )
+    .toEqual([])
 }
 
 const pages: { name: string; path: string; modes: Mode[] }[] = [
