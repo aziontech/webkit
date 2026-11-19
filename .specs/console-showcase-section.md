@@ -7,7 +7,7 @@ spec_version: 13
 template: 2
 checksum: daec6afeffb7f31d33ec2cfc85cdc68edf3437ef29b1abde92bf93894269cc92
 created: 2026-11-11
-last_updated: 2026-11-18
+last_updated: 2026-11-19
 ---
 
 # ConsoleShowcaseSection — Component Spec

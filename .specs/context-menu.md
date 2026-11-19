@@ -5,9 +5,9 @@ structure: composition
 status: implemented
 spec_version: 5
 template: 2
-checksum: c97500d74aa2daefeed07e934cdc852e003798f1dbbceaf78a6d288aa01b4d57
+checksum: 0207f8a527c818dc27c393c9616373c4706b4ae417d1e0d672f810f5dace160d
 created: 2026-11-14
-last_updated: 2026-11-17
+last_updated: 2026-11-19
 ---
 
 # ContextMenu — Component Spec
@@ -182,7 +182,7 @@ _none_ — the panel uses the same tokens as `dropdown-menu`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons), including disabled items (`--text-disabled`).
 - `motion-reduce:animate-none` on `animate-popup-scale-*`.
 - Teleported panel: binds `dir` and `lang` from the nearest `ConfigProvider` (`usePortalLocale`).
-- Touch target: items are 32 px rows, above the 24 px floor of WCAG 2.5.8.
+- Touch target: items are the `DropdownMenu` rows: 32 px on a fine pointer, 44 px on a coarse pointer.
 
 ## Internationalization
 
@@ -201,7 +201,7 @@ No built-in strings: item labels and the panel's `aria-label` come from the cons
 
 - Container queries: none; the panel is sized between `--container-3xs` and `--container-2xs`.
 - Narrow (≤ 640 px or a narrow container): `usePlacement` picks the corner with room and keeps the panel inside the viewport; labels truncate.
-- Touch: a 500 ms long-press opens the menu at the touch point, so the right-click has a touch path; rows are 32 px.
+- Touch: a 500 ms long-press opens the menu at the touch point, so the right-click has a touch path; rows are 44 px on a coarse pointer.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom.
 
 ## Performance

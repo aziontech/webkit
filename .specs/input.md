@@ -4,9 +4,9 @@ category: input
 structure: monolithic
 status: implemented
 spec_version: 10
-checksum: 4251864bd6830255c00602ed427d998805ab671999665721c979c0b548e34f0f
+checksum: a7291055f9a4acdbc076992dc191a7d4b5063d126efa9f431d85ebbcb1cbba57
 created: 2026-05-22
-last_updated: 2026-11-17
+last_updated: 2026-11-19
 ---
 
 # Input Text — Component Spec
@@ -160,7 +160,7 @@ _none_
 - ARIA: `aria-invalid` is bound to the `invalid` prop; `aria-required` to the `required` prop; icon slots are `aria-hidden="true"` (decorative).
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons), including disabled state.
 - `motion-reduce:transition-none` on every transition-bearing class.
-- Touch target ≥40×40 px on `size="large"`; smaller sizes are intended for dense layouts where the wrapping label area extends the hit zone.
+- Touch target: drawn 28 / 32 / 40 px tall by `size` on every pointer; on a coarse pointer an invisible `aria-hidden` child (`data-slot="touch-target"`) shown only under `pointer-coarse:` extends the hit area to at least 44 px tall (a tap on it focuses the field). The drawn field does not grow, so it keeps lining up with the buttons beside it.
 
 ## Right-to-left
 
