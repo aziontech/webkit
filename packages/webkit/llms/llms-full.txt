@@ -21723,7 +21723,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 - `data-disabled` on PaginationButton mirrors the `disabled` prop; `disabled` attribute and `aria-disabled` set.
 - Data-driven mode: `Previous` is disabled on the first page, `Next` on the last; the current page button is `active` (`aria-current="page"`); the overflow ellipsis (`more`) is non-interactive: an `aria-hidden` `span`, out of the tab order, that emits nothing.
 - Responsive: the root is the `@container/pagination`. The page list stays whole at every width (`siblingCount` already caps it at seven slots, e.g. `1 2 3 4 5 … 60`), so a phone footer reads the same numbered strip as a desktop one, as in the design sample; when the box is too narrow for the info text and the controls on one line, the strip and the page-size control wrap together under the info text, aligned to the end.
-- Touch: the buttons and the page-size select are drawn at 28 px on every pointer. On a coarse pointer (`pointer-coarse:`) each button carries an invisible, `aria-hidden` hit area that extends it to 44 px tall (vertical only: the buttons are butted, so the width stays the drawn 28 px), and the select itself grows to 44 px tall inside its 28 px frame, which draws the border, surface and focus ring.
+- Touch: the buttons and the page-size select are drawn at 28 px on every pointer. On a coarse pointer (`pointer-coarse:`) each button carries an invisible, `aria-hidden` hit area that extends it to 44 px tall (vertical only: the buttons are butted, so the width stays the drawn 28 px), and the select itself grows to 44 px tall inside its 28 px frame, which draws the border, surface and focus ring; the select's text steps up to 16 px (`text-body-md`) so iOS Safari does not zoom the page when it takes focus.
 
 ## Accessibility
 
@@ -21974,7 +21974,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 ## States
 
 - Visual states: `default`, `focus-visible`, `open` (suggestions shown), `disabled`, `invalid` (query mode: after Enter or blur on a query that fails the check, then live until it passes or is cleared)
-- `data-mode` on the field wrapper mirrors `mode`; query mode sets the typed text in the code type (`text-label-code-sm`)
+- `data-mode` on the field wrapper mirrors `mode`; query mode sets the typed text in the code type through the field's `monospace` prop (`text-label-code-sm`, 16 px `text-label-code-lg` on coarse pointers)
 - `aria-expanded` on the field mirrors the open suggestions; `data-active` marks the active option
 - `data-disabled` mirrors the `disabled` prop; while disabled nothing is added, removed or submitted (no `update:query`, no `submit`)
 - `loading` (values): a `Loading values` row with a spinner in the suggestions while `loadValues` is pending, `aria-busy` on the listbox; `error`: a `Could not load values` row when it rejects. A newer call wins over a stale one.
