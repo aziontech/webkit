@@ -1,12 +1,13 @@
-const FOCUSABLE_SELECTOR =
-  'a[href], button, textarea, input, select, summary, [contenteditable="true"], [tabindex]'
+const FOCUSABLE_SELECTOR = 'a[href], button, textarea, input, select, [tabindex]'
 
 export function isTabbable(el: globalThis.HTMLElement): boolean {
-  if (el.tabIndex < 0) return false
-  if ((el as globalThis.HTMLButtonElement).disabled) return false
-  if (el.closest('[inert], [hidden], fieldset[disabled]')) return false
-  if (el instanceof globalThis.HTMLInputElement && el.type === 'hidden') return false
-  return el.getClientRects().length > 0 && globalThis.getComputedStyle(el).visibility !== 'hidden'
+  return (
+    el.tabIndex >= 0 &&
+    !(el as globalThis.HTMLButtonElement).disabled &&
+    !el.closest('[inert], [hidden], fieldset[disabled]') &&
+    el.getClientRects().length > 0 &&
+    globalThis.getComputedStyle(el).visibility !== 'hidden'
+  )
 }
 
 export function tabbableIn(root: globalThis.ParentNode): globalThis.HTMLElement[] {
@@ -18,13 +19,11 @@ export function tabbableIn(root: globalThis.ParentNode): globalThis.HTMLElement[
 export function nextTabbableAfter(
   anchor: globalThis.HTMLElement,
   exclude: globalThis.HTMLElement | null = null
-): globalThis.HTMLElement | null {
-  const all = tabbableIn(anchor.ownerDocument).filter((el) => !exclude?.contains(el))
-  return (
-    all.find(
-      (el) =>
-        !anchor.contains(el) &&
-        Boolean(anchor.compareDocumentPosition(el) & globalThis.Node.DOCUMENT_POSITION_FOLLOWING)
-    ) ?? null
+): globalThis.HTMLElement | undefined {
+  return tabbableIn(anchor.ownerDocument).find(
+    (el) =>
+      !exclude?.contains(el) &&
+      !anchor.contains(el) &&
+      Boolean(anchor.compareDocumentPosition(el) & globalThis.Node.DOCUMENT_POSITION_FOLLOWING)
   )
 }
