@@ -3,11 +3,11 @@ name: conversation
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: 7c639fb67ac0ddf3b25782e4ebde9514cd37060559d3e20f130074a43940d9e6
+checksum: 7136368085e1d1b86c7ea560b3d936c297968a472945a2812cad317b7af70e2d
 created: 2026-11-11
-last_updated: 2026-11-15
+last_updated: 2026-11-19
 ---
 
 # Conversation — Component Spec
@@ -20,6 +20,9 @@ while the reader is at the end, and stops following the moment they scroll up to
 older message — a "Scroll to the latest message" button brings them back. It is a `role="log"` whose
 own live behavior is off, so streamed tokens are never read one by one; instead each `ChatMessage`
 that finishes (or fails) hands its text to the conversation's polite live region, once.
+
+With `moreMessages`, a Load earlier messages button opens the thread and the log also emits
+`load-more` as the reader scrolls near the top; prepended messages never move what the reader sees.
 
 It also sets where messages sit for the whole thread (`layout`): `split` for a full chat page,
 `start` for a dense side panel or drawer (Cloudscape's rule for embedded surfaces).
@@ -34,6 +37,7 @@ It also sets where messages sit for the whole thread (`layout`): `split` for a f
 - A one-shot generated block on a page (a summary card, an explanation beside a chart) → render `StreamingResponse` in place.
 - A log of system events with timestamps and filtering → use `log-viewer`.
 - A list of past conversations → a `table` or `item` list; this is one thread.
+- A lost or resuming connection (`Reconnecting…`) → the app's state, not the log's: an `Alert` or `StatusIndicator` above the prompt input.
 
 ## Related
 
@@ -49,6 +53,7 @@ It also sets where messages sit for the whole thread (`layout`): `split` for a f
 - Never auto-scroll while the reader is reading an older message: the component already stops following when they scroll up.
 - Use `layout="start"` in drawers and side panels, `split` on a full page.
 - Keep one conversation per surface; a second thread is a second page or a history list.
+- Prepend older messages in the same update that sets `loadingMore` back to `false`.
 
 ## Usage
 
@@ -69,6 +74,16 @@ It also sets where messages sit for the whole thread (`layout`): `split` for a f
 </template>
 ```
 
+Loading older messages (`moreMessages`, `loadingMore`, `load-more`):
+
+```vue
+<Conversation :more-messages="hasOlder" :loading-more="loadingOlder" @load-more="loadOlder">
+  <ChatMessage v-for="message in messages" :key="message.id" :from="message.from">
+    {{ message.text }}
+  </ChatMessage>
+</Conversation>
+```
+
 ## Sub-components
 
 _None — a single root. Messages reach it through `provide`/`inject` (`injection-key.ts`): the
@@ -76,18 +91,29 @@ conversation provides its layout (context member `alignment`), a `ready` flag (t
 announced) and `announce(author, text)`._
 
 Exports: `"./conversation": "./src/components/ai/conversation/conversation.vue"`. Exported type:
-`ConversationLayout = 'split' | 'start'`. Composed DS components: `icon-button` (scroll to latest).
+`ConversationLayout = 'split' | 'start'`. Composed DS components: `icon-button` (scroll to latest),
+`button` (load earlier messages: ghost, small, `az-arrow-up`, centered first row; its `loading` state).
+
+Announcing: a message announces on mount only while the context's `ready` is true. `ready` is false
+from a request (or `loadingMore`) until the render that ends the load, so prepended messages are
+never read as new.
 
 ## Props
 
-| Prop        | Type                 | Default   | Required | JSDoc                                                                                                                                            |
-| ----------- | -------------------- | --------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `ariaLabel` | `string`             | `''`      | false    | Accessible name of the message log. Empty uses the locale catalog (`Conversation`).                                                              |
-| `layout`    | `'split' \| 'start'` | `'split'` | false    | `split` puts the user's messages at the inline end (a full chat page); `start` keeps every message at the inline start (a side panel or drawer). |
+| Prop           | Type                 | Default   | Required | JSDoc                                                                                                                                                       |
+| -------------- | -------------------- | --------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ariaLabel`    | `string`             | `''`      | false    | Accessible name of the message log. Empty uses the locale catalog (`Conversation`).                                                                         |
+| `layout`       | `'split' \| 'start'` | `'split'` | false    | `split` puts the user's messages at the inline end (a full chat page); `start` keeps every message at the inline start (a side panel or drawer).            |
+| `moreMessages` | `boolean`            | `false`   | false    | Older messages exist above the first one. A Load earlier messages button opens the thread and the log emits `load-more` as the reader scrolls near the top. |
+| `loadingMore`  | `boolean`            | `false`   | false    | The older messages are loading; the button at the top of the thread shows its spinner and holds further `load-more` requests.                               |
 
 ## Events
 
-_No events. `scrollToBottom()` is exposed for owners that need to jump to the end after sending._
+| Event       | Payload          | Notes                                                                                                                                                                                                                                                    |
+| ----------- | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `load-more` | `(event: Event)` | The button's click, or the top row came within 200 px of the viewport (`new Event('load-more')`). Not repeated while `loadingMore`, nor until older messages were prepended (the first message changed); after a failed load only the button asks again. |
+
+`scrollToBottom()` is exposed for owners that need to jump to the end after sending.
 
 ## Slots
 
@@ -99,14 +125,21 @@ _No events. `scrollToBottom()` is exposed for owners that need to jump to the en
 
 - `data-pinned` on the root while the log follows the newest message; absent once the reader scrolled up (the Scroll to latest button shows). Only the reader's own scrolling unpins it (wheel, touch, pointer on the scrollbar, keys): a scroll the browser causes — a host moving the log in the DOM, a drawer opening — is corrected back to the end while pinned.
 - `data-layout` mirrors `layout`; each message carries it as `data-alignment`.
+- `data-loading-more` on the root and `aria-busy` on the log while `loadingMore`; the button is in its `loading` state.
+- With `moreMessages` or `loadingMore` the first row (`__older`, observed by an `IntersectionObserver`) holds the button (`__load-more`).
+- Scroll anchoring: while not pinned, the first message in view (or the button, while it has focus) is the anchor; growth above it is offset in the scroll position. Native `overflow-anchor` is off.
+- Load failure: `loadingMore` returns to `false` with nothing prepended; the idle button is the retry path, nothing is announced, the error is the app's (an `Alert`).
+- No `disabled`, `readonly`, `invalid`, `empty` or `error` state of its own.
 - No `data-state` — nothing opens or closes.
 
 ## Motion & Animations
 
-| Trigger                  | Animation / Transition             | Token   | Reduced-motion fallback                         |
-| ------------------------ | ---------------------------------- | ------- | ----------------------------------------------- |
-| Scroll to latest button  | `scrollTo({ behavior: 'smooth' })` | browser | `prefers-reduced-motion: reduce` jumps (`auto`) |
-| New content while pinned | instant jump to the end            | none    | same                                            |
+| Trigger                  | Animation / Transition                | Token          | Reduced-motion fallback                         |
+| ------------------------ | ------------------------------------- | -------------- | ----------------------------------------------- |
+| Scroll to latest button  | `scrollTo({ behavior: 'smooth' })`    | browser        | `prefers-reduced-motion: reduce` jumps (`auto`) |
+| New content while pinned | instant jump to the end               | none           | same                                            |
+| Older messages prepended | instant scroll correction (no motion) | none           | same                                            |
+| Loading earlier messages | the `Button` spinner                  | `Button`'s own | `Button`'s own `motion-reduce:` fallback        |
 
 ## Tokens
 
@@ -125,9 +158,10 @@ _None._
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: the log is focusable (`tabindex="0"`) so keyboard users can scroll it; it shows an inset `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
-- Keyboard map: `Tab` reaches the log, arrows / Page Up / Page Down scroll it; `Tab` continues into the messages' controls; the Scroll to latest button is a normal button.
-- ARIA: `role="log"` with `aria-live="off"` (streaming chunks are not read) and `aria-label`; a separate visually hidden `aria-live="polite"` `aria-atomic="true"` region receives `"<author>: <text>"` when an assistant or system message completes or fails. User messages are not announced (the reader just typed them).
-- Contrast ≥4.5:1 (text) / ≥3:1 (icons) on the scroll button.
+- Keyboard map: `Tab` reaches the log, arrows / Page Up / Page Down scroll it; `Tab` continues into the messages' controls (the Load earlier messages button first); the Scroll to latest button is a normal button.
+- Focus: the button stays focusable while loading (`aria-disabled`); if it leaves while focused, the log takes focus.
+- ARIA: `role="log"` with `aria-live="off"` (streaming chunks are not read) and `aria-label`; a separate visually hidden `aria-live="polite"` `aria-atomic="true"` region receives `"<author>: <text>"` when an assistant or system message completes or fails. User messages are not announced (the reader just typed them). It also says `Loading earlier messages`, then `Earlier messages loaded` once older messages were prepended.
+- Contrast ≥4.5:1 (text) / ≥3:1 (icons) on both buttons, idle and loading (`Button`'s own colors).
 - Reduced motion: smooth scrolling is replaced by a jump.
 - Touch target: the scroll button is a medium `IconButton` (≥32 px, 44 px on coarse pointers through `IconButton`).
 
@@ -138,13 +172,16 @@ _None._
 | `conversation.label`          | `Conversation`                 | `ariaLabel`   |
 | `conversation.scrollToLatest` | `Scroll to the latest message` | —             |
 | `conversation.announcement`   | `{author}: {text}`             | —             |
+| `conversation.loadMore`       | `Load earlier messages`        | —             |
+| `conversation.loadingMore`    | `Loading earlier messages`     | —             |
+| `conversation.moreLoaded`     | `Earlier messages loaded`      | —             |
 
 - Formatting: none.
 
 ## Right-to-left
 
 - Layout: logical utilities only; `split` puts user messages at the inline end, so they move to the left under `dir="rtl"`.
-- Icons: the arrow-down glyph is not mirrored.
+- Icons: the arrow-down and arrow-up glyphs are vertical and not mirrored.
 - Keyboard: no horizontal keys.
 - User data: messages carry their own `dir` where needed (`StreamingResponse` code is `dir="ltr"`).
 
@@ -152,18 +189,18 @@ _None._
 
 - Container queries: none; the thread centers at `--layout-measure-content` and fills narrower hosts.
 - Narrow (≤ 640 px or a drawer): full width; the owner should pass `layout="start"`.
-- Touch: scroll button meets 44 px on coarse pointers.
-- Reflow: no horizontal scroll at 320 px; wide code and tables scroll inside their own blocks.
+- Touch: the scroll button and the Load earlier messages button meet 44 px on coarse pointers (both through their own `pointer-coarse` hit area).
+- Reflow: no horizontal scroll at 320 px; wide code and tables scroll inside their own blocks; the Load earlier messages label fits at 320 px and 200 % zoom without horizontal scroll.
 
 ## Performance
 
-- Bundle budget: see `.size-limit.json` (`conversation`).
-- Runtime budget: one `ResizeObserver` on the thread; no per-token work beyond a scroll assignment while pinned.
+- Bundle budget: 6.4 KB gzip (`conversation` in `.size-limit.json`), raised from 4.75 KB in v3 for the composed `Button` (about 1.2 KB, it shares `Spinner` with `IconButton`) and the scroll anchoring.
+- Runtime budget: one `ResizeObserver` on the thread; no per-token work beyond a scroll assignment while pinned. With `moreMessages`, one `IntersectionObserver` on the top row; the scroll anchor is found with a binary search over the thread's children on each scroll event.
 - Heavy parts: none; long threads are the owner's to window (keep the last N turns rendered).
 
 ## Examples
 
-_Examples in `packages/webkit/examples/conversation/`: Default (a short thread), Drawer layout (`start`), Long thread (scroll to latest)._
+_Examples in `packages/webkit/examples/conversation/`: Default (a short thread), Drawer layout (`start`), Long thread (scroll to latest), Earlier messages (`more-messages` + `@load-more` prepending three turns after a simulated delay; justified: a distinct behavior with its own loading state)._
 
 ## Constraints — DO NOT
 

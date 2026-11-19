@@ -16,6 +16,11 @@
       "name": "LongThread",
       "summary": "Twelve turns that overflow the log: it opens at the newest message, stops following when the reader scrolls up, and Scroll to the latest message brings them back.",
       "file": "long-thread.vue"
+    },
+    {
+      "name": "EarlierMessages",
+      "summary": "The log opens on the three latest turns of a longer thread: Load earlier messages (or scrolling near the top) loads three older turns at a time while the message in view stays in place, until the start of the thread.",
+      "file": "earlier-messages.vue"
     }
   ]
 }

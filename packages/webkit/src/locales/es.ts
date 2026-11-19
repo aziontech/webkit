@@ -49,7 +49,10 @@ export const es: Messages = {
   conversation: {
     label: 'Conversación',
     scrollToLatest: 'Ir al último mensaje',
-    announcement: '{author}: {text}'
+    announcement: '{author}: {text}',
+    loadMore: 'Cargar mensajes anteriores',
+    loadingMore: 'Cargando mensajes anteriores',
+    moreLoaded: 'Mensajes anteriores cargados'
   },
   promptInput: {
     label: 'Prompt',
