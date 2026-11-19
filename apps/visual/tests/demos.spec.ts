@@ -117,7 +117,7 @@ test.describe('demo flows', () => {
     const deploy = page.getByRole('button', { name: 'Deploy', exact: true })
     await expect(deploy).toBeEnabled({ timeout: 15_000 })
     await deploy.click()
-    await expect(page.getByText('Approved', { exact: true })).toBeVisible()
+    await expect(page.getByTestId('tool-approval__outcome__label')).toHaveText('Approved')
     await expect(page.getByText('is live on production').first()).toBeVisible({ timeout: 15_000 })
   })
 })

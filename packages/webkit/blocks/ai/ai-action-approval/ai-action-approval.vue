@@ -240,7 +240,12 @@
           </template>
         </template>
         <template
-          v-if="turn.role === 'assistant' && hasText(turn) && statusOf(turn) === 'success'"
+          v-if="
+            turn.role === 'assistant' &&
+            hasText(turn) &&
+            statusOf(turn) === 'success' &&
+            !(loading && turn === last)
+          "
           #actions
         >
           <ChatMessage.Actions>
