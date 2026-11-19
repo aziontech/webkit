@@ -282,7 +282,7 @@
   }
 
   const facetDisplay = (facet: ListingIndexSectionFacet) => (value: unknown) =>
-    facet.options.find((option) => option.value === value)?.label ?? ''
+    facet.options.find((option) => option.value === value)?.label ?? facet.allLabel
 
   const sortDisplay = (value: unknown) =>
     props.sorts.find((option) => option.value === value)?.label ?? ''
