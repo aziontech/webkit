@@ -248,7 +248,7 @@ folder only). 6.0 renamed every key from `./menu*` to `./sidebar-menu*`, with no
   - The connector rail and every chevron are `aria-hidden="true"` — decorative, and the indentation already conveys the hierarchy.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state. The rail (`var(--border-default)`, ≈1.5:1) is exempt: it is decorative and carries no information the indentation does not, so 1.4.11 does not apply.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
-- Touch target — **justified deviation from ≥40×40 px.** Rows are 32 px tall, matching the Figma frame's `h-button-md` and the density a product navigation needs. Every target is full-row width (≥252 px), so all clear WCAG 2.5.8's 24×24 minimum. The Figma frame's 16×16 group toggle would have failed that minimum; it is moot here, because a group title is not a control at all.
+- Touch target: rows are 32 px tall on a fine pointer, matching the Figma frame's `h-button-md` and the density a product navigation needs, and 44 px (`pointer-coarse:min-h-11`) on a coarse pointer, items and sub-menu triggers alike. Every target is full-row width (≥252 px), so all clear WCAG 2.5.8's 24×24 minimum. The Figma frame's 16×16 group toggle would have failed that minimum; it is moot here, because a group title is not a control at all.
 
 ## Right-to-left
 

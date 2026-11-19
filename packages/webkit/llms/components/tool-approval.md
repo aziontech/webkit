@@ -121,6 +121,7 @@ Composed DS components: `button`, `status-indicator`; for `editable`, `field-roo
 - Narrow: buttons wrap; the title wraps anywhere, inline code included, so the whole command in it stays readable. What will run must be readable without scrolling sideways before Approve: prefer a `KeyValueList` (or a `CodeBlock` whose lines are short, such as pretty-printed JSON) in the body, since a `CodeBlock` scrolls a long line inside itself.
 - Touch: medium buttons (44 px on coarse pointers).
 - Reflow: no horizontal scroll at 320 px; the arguments field wraps its lines, grows to 12 lines, then scrolls inside itself.
+- Touch: on coarse pointers (`pointer-coarse:`) the confirmation-phrase field and the arguments field (a `Textarea`) type at 16 px (`text-body-md`), so iOS Safari does not zoom the page on focus.
 
 ## Examples
 

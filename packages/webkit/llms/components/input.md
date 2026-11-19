@@ -85,7 +85,7 @@
 - ARIA: `aria-invalid` is bound to the `invalid` prop; `aria-required` to the `required` prop; icon slots are `aria-hidden="true"` (decorative).
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons), including disabled state.
 - `motion-reduce:transition-none` on every transition-bearing class.
-- Touch target ≥40×40 px on `size="large"`; smaller sizes are intended for dense layouts where the wrapping label area extends the hit zone.
+- Touch target: drawn 28 / 32 / 40 px tall by `size` on every pointer; on a coarse pointer an invisible `aria-hidden` child (`data-slot="touch-target"`) shown only under `pointer-coarse:` extends the hit area to at least 44 px tall (a tap on it focuses the field). The drawn field does not grow, so it keeps lining up with the buttons beside it.
 
 ## Right-to-left
 
@@ -93,6 +93,10 @@
 - Icons: the icon slots are the consumer's and do not mirror.
 - Keyboard: no horizontal arrow-key logic.
 - User data: the `<input>` renders `dir="auto"`; a `dir` attribute overrides it.
+
+## Responsive
+
+- Touch: on coarse pointers (`pointer-coarse:`) the typed text steps up to 16 px (`text-body-md`; `text-label-code-lg` in the code face), so iOS Safari does not zoom the page when the field takes focus; fine pointers keep the dense size.
 
 ## Examples
 

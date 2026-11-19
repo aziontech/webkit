@@ -81,6 +81,10 @@
 - Touch target follows the `size` (40px at `large`).
 - Direction: the tel input, each option's dial code and the closed trigger's dial code (a `dir="ltr"` span in the trigger's `#trailing` slot) render left-to-right, so a number and its `+` keep their order on a right-to-left page; the typed number still aligns to the inline start of the page (`rtl:text-end`, which resolves against the input's own `ltr` direction).
 
+## Responsive
+
+- Touch: on coarse pointers (`pointer-coarse:`) the typed text steps up to 16 px (`text-body-md`; `text-label-code-lg` in the code face), so iOS Safari does not zoom the page when the field takes focus; fine pointers keep the dense size.
+
 ## Examples
 
 ### Default

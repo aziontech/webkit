@@ -92,7 +92,7 @@
 - ARIA: inside `Tabs.List` each item is `role="tab"` with `aria-selected` and `aria-controls` (when its panel is mounted); a `Tabs.Trigger` rendered on its own, outside any `Tabs`, is a toggle `<button>` with `aria-pressed` and no `tab` role, because a `tab` outside a `tablist` fails `aria-required-parent`. `Tabs.Content` is `role="tabpanel"` labelled by its tab.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state. The dirty dot is `var(--warning-foreground)` (≥3:1 on the canvas in both themes) and the tab's accessible name carries "Unsaved changes", so colour is never the only cue.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
-- Touch target: the tab item is 32 px tall (`var(--size-8)`) — a justified deviation from 40×40 px matching the Figma tab-item size token, mitigated by the full label + padding being the hit area and by the tab list's own keyboard model.
+- Touch target: the tab item is 32 px tall (`var(--size-8)`) on a fine pointer, matching the Figma tab-item size token, and 44 px (`pointer-coarse:min-h-11`) on a coarse pointer. It grows instead of carrying an invisible hit area because the scrolling tab list clips anything outside its box.
 
 ## Right-to-left
 

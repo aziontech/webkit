@@ -7671,7 +7671,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 ## Accessibility
 
 - A `section` named by its title.
-- Tabs are a `ToggleGroup` (radio group) named by `tabsAriaLabel` or "Console views"; arrow keys move between them.
+- Tabs are a `ToggleGroup` (radio group) named by `tabsAriaLabel` or "Console views"; arrow keys move between them. On a coarse pointer each tab's hit area is at least 44 × 44 px.
 - The scene supplies its own accessible content (a mock is usually `aria-hidden` with a description in the copy).
 
 ## Examples

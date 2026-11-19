@@ -1,6 +1,6 @@
 # Command
 
-> Command Menu is a ⌘K command palette: a modal overlay with a search input and a filtered, keyboard-navigable list of actions. It wraps the `Dialog` primitive for its panel, backdrop, focus trap, scroll-lock, and Escape handling, and adds the palette chrome on top — a search `Input`, a scrollable `List` of `Item`s organized into optional `Group`s, an `Empty` state, and `Separator`s. The root owns open/closed state (controlled or uncontrolled), a global open shortcut (⌘K / Ctrl+K), the ranked filter, nested pages, and roving active-item navigation. The filter is fuzzy and ranked: an item matches on its label (prefix, then word start, then anywhere, then an in-order abbreviation such as `dpl` for "Deploy"), its `value`, or its extra `keywords`; better matches rise to the top of their group, groups rise by their best item, and the matched characters of a plain-text label are emphasized. An item can open a `Page` — a nested list such as "Switch project" — with a back control in the search bar. It differs from `dropdown` (a small trigger-anchored menu) and `select` (a form value picker): Command Menu is a full-screen search-first launcher for actions, not a positioned menu or an input control.
+> Command Menu is a ⌘K command palette: a modal overlay with a search input and a filtered, keyboard-navigable list of actions. It wraps the `Dialog` primitive for its panel, backdrop, focus trap, scroll-lock, and Escape handling, and adds the palette chrome on top — a search `Input`, a scrollable `List` of `Item`s organized into optional `Group`s, an `Empty` state, and `Separator`s. The root owns open/closed state (controlled or uncontrolled), a global open shortcut (⌘K / Ctrl+K), the ranked filter, nested pages, and roving active-item navigation. The filter is fuzzy and ranked: an item matches on its label (prefix, then word start, then anywhere, then an in-order abbreviation such as `dpl` for "Deploy"), its `value`, or its extra `keywords` (a keyword equal to the query, then one that starts with it, then one that contains it, all below a label prefix or word-start match); better matches rise to the top of their group, groups rise by their best item, and the matched characters of a plain-text label are emphasized. An item can open a `Page` — a nested list such as "Switch project" — with a back control in the search bar. It differs from `dropdown` (a small trigger-anchored menu) and `select` (a form value picker): Command Menu is a full-screen search-first launcher for actions, not a positioned menu or an input control.
 
 - Import: `import CommandRoot from '@aziontech/webkit/command-root'`
 - Compound import (dot notation, not tree-shakeable): `import Command from '@aziontech/webkit/command'`
@@ -151,7 +151,7 @@ packages/webkit/src/components/overlay/command/
 - `motion-reduce:animate-none` on the inherited `animate-popup-scale-*`; `motion-reduce:transition-none` on item `transition-colors`.
 - Ranked order is visual (CSS `order`) while the DOM keeps the consumer's order; the roving active item, `aria-selected` and `Enter` follow the visual order, so keyboard users get the ranked sequence. Highlighted characters are a `<mark>` inside the option, so the option's accessible name stays its full label.
 - Focus management: opening moves focus to the input; changing pages keeps focus in the input; closing returns focus to the element focused before the palette opened. Focus trap and scroll-lock are inherited from `Dialog`.
-- Touch target: item rows are full-width click targets ≥32 px tall, satisfying the in-overlay 24×24 px floor (WCAG 2.5.8).
+- Touch target: item rows are full-width click targets, at least 32 px tall on a fine pointer and 44 px (`pointer-coarse:min-h-11`) on a coarse pointer.
 
 ## Right-to-left
 
@@ -175,7 +175,7 @@ packages/webkit/src/components/overlay/command/
 
 - The panel width and max height come from `Dialog`; the list scrolls inside `max-h-[24rem]`. From `md` up the panel sits 15% of the viewport height from the top (`15dvh`, a viewport-relative offset no spacing token expresses), so typing never moves its top edge; below `md` it is the Dialog's sheet.
 - The back control truncates a long page heading (`truncate`, `max-w-[40%]`) so the field keeps room to type.
-- Touch: rows are full-width ≥32px; the back control is 32px tall. No hover-only affordance: the highlight follows the active row and taps activate.
+- Touch: rows are full-width, 44 px tall on a coarse pointer; the back control is 32px tall. No hover-only affordance: the highlight follows the active row and taps activate.
 
 ## Examples
 

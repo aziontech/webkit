@@ -93,6 +93,10 @@
 - Keyboard: no horizontal arrow-key logic.
 - User data: the `<input>` renders `dir="auto"`; a `dir` attribute overrides it.
 
+## Responsive
+
+- Touch: on coarse pointers (`pointer-coarse:`) the typed text steps up to 16 px (`text-body-md`; `text-label-code-lg` in the code face), so iOS Safari does not zoom the page when the field takes focus; fine pointers keep the dense size.
+
 ## Examples
 
 ### Default

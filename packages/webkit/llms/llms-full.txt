@@ -16911,7 +16911,7 @@ Exports to add to `packages/webkit/package.json#exports` (flat public names; cat
 - ARIA: each trigger is a `<button>` with `aria-expanded` reflecting open state and `aria-controls` referencing its content; the trigger button is wrapped in a heading element (`<h{headingLevel}>`, default `h3`); the content panel has `role="region"` and `aria-labelledby` referencing its trigger. A `disabled` item sets `disabled` + `aria-disabled` on its trigger.
 - Contrast ≥4.5:1 for text (title `--text-default`, body `--text-muted` on the surface) / ≥3:1 for the chevron glyph, including the disabled state (`--text-disabled`).
 - `motion-reduce:transition-none motion-reduce:animate-none` on the chevron rotation and content reveal.
-- Touch target: the `large` header is 40px tall and the full-width header row is the hit area (≥40×40). The `medium` header is 32px tall — a justified deviation matching the Figma `medium` size token, mitigated by the full-width clickable row.
+- Touch target: the `large` header is 40px tall and the full-width header row is the hit area (≥40×40). The `medium` header is 32px tall on a fine pointer, matching the Figma `medium` size token; on a coarse pointer every header is at least 44px tall (`pointer-coarse:min-h-11`). It grows instead of carrying an invisible hit area because stacked headers would overlap each other's.
 
 ## Examples
 
@@ -25037,7 +25037,7 @@ The root `Field` provides `FieldInjectionKey` (`injection-key.ts`): a generated 
 - ARIA: `aria-invalid` is bound to the `invalid` prop; `aria-required` to the `required` prop; icon slots are `aria-hidden="true"` (decorative).
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons), including disabled state.
 - `motion-reduce:transition-none` on every transition-bearing class.
-- Touch target ≥40×40 px on `size="large"`; smaller sizes are intended for dense layouts where the wrapping label area extends the hit zone.
+- Touch target: drawn 28 / 32 / 40 px tall by `size` on every pointer; on a coarse pointer an invisible `aria-hidden` child (`data-slot="touch-target"`) shown only under `pointer-coarse:` extends the hit area to at least 44 px tall (a tap on it focuses the field). The drawn field does not grow, so it keeps lining up with the buttons beside it.
 
 ## Examples
 
@@ -25444,7 +25444,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 - List states sit in `role="presentation"` rows; a visually hidden `role="status"` region announces `Loading options`, the error message, the empty text, or `{count} options` after typing.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons + borders), including disabled state.
 - `motion-reduce:transition-none motion-reduce:animate-none` on every transition/animation-bearing class.
-- Touch target ≥40×40 px on `size="large"`; smaller sizes are documented as dense-layout-only (consistent with `Input`).
+- Touch target: the trigger is drawn 28 / 32 / 40 px tall by `size`; on a coarse pointer an invisible `aria-hidden` child (`data-slot="touch-target"`) shown only under `pointer-coarse:` extends its hit area to at least 44 px tall. Option rows are 32 px on a fine pointer and 44 px on a coarse pointer, fills inset 1 px.
 - Teleported content: the teleported `role="listbox"` content binds `dir` and `lang` from the nearest `ConfigProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
 
 ## Examples
@@ -25572,7 +25572,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 - ARIA: `role="spinbutton"` on the input (native `<input type="number">` provides this); `aria-valuenow`, `aria-valuemin`, `aria-valuemax` mirror the props; `aria-invalid` mirrors `invalid`; `aria-required` mirrors `required`; spinner buttons have `aria-label` ("Increment" / "Decrement") and `tabindex="-1"` so keyboard users use arrow keys.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state.
 - `motion-reduce:transition-none` on animated state changes.
-- Touch target ≥40×40 px on the large size; spinner buttons remain ≥24×24 px on `small`/`medium` per Figma — justified because arrow keys provide the primary interaction.
+- Touch target: on a coarse pointer the two steppers sit side by side in an 80 px column (about 40 px each), and each carries an invisible `aria-hidden` child (`data-slot="touch-target"`) shown only under `pointer-coarse:` that extends its hit area to 44 px tall (the frame stops clipping on a coarse pointer so the hit area is not cut). On a fine pointer the steppers stay stacked at the drawn size; arrow keys are the primary interaction.
 
 ## Examples
 
@@ -26438,7 +26438,7 @@ packages/webkit/src/components/input/radio-group/
 - `aria-invalid` and `aria-required` on the trigger mirror the matching props.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons + borders), including disabled state.
 - `motion-reduce:transition-none motion-reduce:animate-none` on every transition/animation-bearing class.
-- Touch target ≥40×40 px on `size="large"`; smaller sizes are documented as dense-layout-only (consistent with `Input`).
+- Touch target: the trigger is drawn 28 / 32 / 40 px tall by `size`; on a coarse pointer an invisible `aria-hidden` child (`data-slot="touch-target"`) shown only under `pointer-coarse:` extends its hit area to at least 44 px tall. Option rows are 32 px on a fine pointer and 44 px (`pointer-coarse:min-h-11`) on a coarse pointer, their fills still inset 1 px so two filled rows never touch.
 - Teleported content: the teleported `role="listbox"` content binds `dir` and `lang` from the nearest `ConfigProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
 
 ## Examples
@@ -26970,7 +26970,7 @@ packages/webkit/src/components/input/radio-group/
 - Each segment is wrapped in `@aziontech/webkit/tooltip` (`side="bottom"`) surfacing its mode label (`System` / `Dark` / `Light`) on hover and keyboard focus; the tooltip owns its own `aria-describedby` wiring.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons), including the disabled state.
 - `motion-reduce:transition-none` on animated states.
-- Touch target: `large` segments are 36×30 px; `small` and `medium` segments are below the 40×40 px target, a justified deviation for a dense global control that matches `toggle-group` at the same sizes.
+- Touch target: segments are drawn 24 / 28 / 36 px wide by `size` on every pointer; on a coarse pointer each carries an invisible `aria-hidden` child (`data-slot="touch-target"`) shown only under `pointer-coarse:` that extends its hit area to 44×44 px, as `toggle-group` does.
 
 ## Examples
 
@@ -28002,7 +28002,7 @@ Exported types: `DashboardGridLayoutItem = { id: string; span: number; height?: 
 - Visible focus on links: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`.
 - Contrast ≥4.5:1 for column titles and links on `--bg-canvas`.
 - `motion-reduce:transition-none` on the link color transition.
-- Touch target: text links follow the platform convention for footer link lists (<40px height); justified deviation — targets are full-width-of-text with `--spacing-xs` separation.
+- Touch target: text links are drawn at their text height with `--spacing-xs` between them on a fine pointer; on a coarse pointer each link is 44 px tall (`pointer-coarse:min-h-11`) and the column drops its gap, so the links tile the column without overlapping.
 
 ## Examples
 
@@ -29817,7 +29817,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons), including disabled items (`--text-disabled`).
 - `motion-reduce:animate-none` on `animate-popup-scale-*`.
 - Teleported panel: binds `dir` and `lang` from the nearest `ConfigProvider` (`usePortalLocale`).
-- Touch target: items are 32 px rows, above the 24 px floor of WCAG 2.5.8.
+- Touch target: items are the `DropdownMenu` rows: 32 px on a fine pointer, 44 px on a coarse pointer.
 
 ## Examples
 
@@ -30037,7 +30037,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons), including the disabled state (validated via `--text-disabled` token).
 - `motion-reduce:animate-none` on `animate-popup-scale-*`; `motion-reduce:transition-none` on `transition-colors` for hover/selected states.
 - Teleported panel: the `role="menu"` panel binds `dir` and `lang` from the nearest `ConfigProvider` (`usePortalLocale`), so it lays out and is announced in the provider's direction and language although it renders under `body`.
-- Touch target ≥40×40 px on the trigger; option rows are 32 px tall and are activated by full-row click + keyboard, satisfying the 24×24 px target floor for in-menu items per WCAG 2.5.8.
+- Touch target ≥40×40 px on the trigger; option and sub-menu rows are 32 px tall on a fine pointer and 44 px (`pointer-coarse:min-h-11`) on a coarse pointer, full-row click targets whose fills stay inset 1 px so two filled rows never touch.
 - Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): renders a plain item.
 
 ## Examples
@@ -30798,7 +30798,7 @@ folder only). 6.0 renamed every key from `./menu*` to `./sidebar-menu*`, with no
   - The connector rail and every chevron are `aria-hidden="true"` — decorative, and the indentation already conveys the hierarchy.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state. The rail (`var(--border-default)`, ≈1.5:1) is exempt: it is decorative and carries no information the indentation does not, so 1.4.11 does not apply.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
-- Touch target — **justified deviation from ≥40×40 px.** Rows are 32 px tall, matching the Figma frame's `h-button-md` and the density a product navigation needs. Every target is full-row width (≥252 px), so all clear WCAG 2.5.8's 24×24 minimum. The Figma frame's 16×16 group toggle would have failed that minimum; it is moot here, because a group title is not a control at all.
+- Touch target: rows are 32 px tall on a fine pointer, matching the Figma frame's `h-button-md` and the density a product navigation needs, and 44 px (`pointer-coarse:min-h-11`) on a coarse pointer, items and sub-menu triggers alike. Every target is full-row width (≥252 px), so all clear WCAG 2.5.8's 24×24 minimum. The Figma frame's 16×16 group toggle would have failed that minimum; it is moot here, because a group title is not a control at all.
 
 ## Examples
 
@@ -31239,7 +31239,7 @@ even when the row carries nothing but its title.
 - ARIA: inside `Tabs.List` each item is `role="tab"` with `aria-selected` and `aria-controls` (when its panel is mounted); a `Tabs.Trigger` rendered on its own, outside any `Tabs`, is a toggle `<button>` with `aria-pressed` and no `tab` role, because a `tab` outside a `tablist` fails `aria-required-parent`. `Tabs.Content` is `role="tabpanel"` labelled by its tab.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state. The dirty dot is `var(--warning-foreground)` (≥3:1 on the canvas in both themes) and the tab's accessible name carries "Unsaved changes", so colour is never the only cue.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
-- Touch target: the tab item is 32 px tall (`var(--size-8)`) — a justified deviation from 40×40 px matching the Figma tab-item size token, mitigated by the full label + padding being the hit area and by the tab list's own keyboard model.
+- Touch target: the tab item is 32 px tall (`var(--size-8)`) on a fine pointer, matching the Figma tab-item size token, and 44 px (`pointer-coarse:min-h-11`) on a coarse pointer. It grows instead of carrying an invisible hit area because the scrolling tab list clips anything outside its box.
 
 ## Examples
 
@@ -31693,7 +31693,7 @@ focus-visible:ring-offset-(--bg-canvas)`. The step heading is a programmatic foc
 
 # Command
 
-> Command Menu is a ⌘K command palette: a modal overlay with a search input and a filtered, keyboard-navigable list of actions. It wraps the `Dialog` primitive for its panel, backdrop, focus trap, scroll-lock, and Escape handling, and adds the palette chrome on top — a search `Input`, a scrollable `List` of `Item`s organized into optional `Group`s, an `Empty` state, and `Separator`s. The root owns open/closed state (controlled or uncontrolled), a global open shortcut (⌘K / Ctrl+K), the ranked filter, nested pages, and roving active-item navigation. The filter is fuzzy and ranked: an item matches on its label (prefix, then word start, then anywhere, then an in-order abbreviation such as `dpl` for "Deploy"), its `value`, or its extra `keywords`; better matches rise to the top of their group, groups rise by their best item, and the matched characters of a plain-text label are emphasized. An item can open a `Page` — a nested list such as "Switch project" — with a back control in the search bar. It differs from `dropdown` (a small trigger-anchored menu) and `select` (a form value picker): Command Menu is a full-screen search-first launcher for actions, not a positioned menu or an input control.
+> Command Menu is a ⌘K command palette: a modal overlay with a search input and a filtered, keyboard-navigable list of actions. It wraps the `Dialog` primitive for its panel, backdrop, focus trap, scroll-lock, and Escape handling, and adds the palette chrome on top — a search `Input`, a scrollable `List` of `Item`s organized into optional `Group`s, an `Empty` state, and `Separator`s. The root owns open/closed state (controlled or uncontrolled), a global open shortcut (⌘K / Ctrl+K), the ranked filter, nested pages, and roving active-item navigation. The filter is fuzzy and ranked: an item matches on its label (prefix, then word start, then anywhere, then an in-order abbreviation such as `dpl` for "Deploy"), its `value`, or its extra `keywords` (a keyword equal to the query, then one that starts with it, then one that contains it, all below a label prefix or word-start match); better matches rise to the top of their group, groups rise by their best item, and the matched characters of a plain-text label are emphasized. An item can open a `Page` — a nested list such as "Switch project" — with a back control in the search bar. It differs from `dropdown` (a small trigger-anchored menu) and `select` (a form value picker): Command Menu is a full-screen search-first launcher for actions, not a positioned menu or an input control.
 
 - Import: `import CommandRoot from '@aziontech/webkit/command-root'`
 - Compound import (dot notation, not tree-shakeable): `import Command from '@aziontech/webkit/command'`
@@ -31842,7 +31842,7 @@ packages/webkit/src/components/overlay/command/
 - `motion-reduce:animate-none` on the inherited `animate-popup-scale-*`; `motion-reduce:transition-none` on item `transition-colors`.
 - Ranked order is visual (CSS `order`) while the DOM keeps the consumer's order; the roving active item, `aria-selected` and `Enter` follow the visual order, so keyboard users get the ranked sequence. Highlighted characters are a `<mark>` inside the option, so the option's accessible name stays its full label.
 - Focus management: opening moves focus to the input; changing pages keeps focus in the input; closing returns focus to the element focused before the palette opened. Focus trap and scroll-lock are inherited from `Dialog`.
-- Touch target: item rows are full-width click targets ≥32 px tall, satisfying the in-overlay 24×24 px floor (WCAG 2.5.8).
+- Touch target: item rows are full-width click targets, at least 32 px tall on a fine pointer and 44 px (`pointer-coarse:min-h-11`) on a coarse pointer.
 
 ## Examples
 

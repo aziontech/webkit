@@ -105,6 +105,10 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 - Motion: color transitions on state changes are `duration-150 ease-out` and pair with `motion-reduce:transition-none`.
 - Touch target ≥32×32 px for interactive children (matches root height `h-8`).
 
+## Responsive
+
+- Touch: on coarse pointers (`pointer-coarse:`) the typed text steps up to 16 px (`text-body-md`; `text-label-code-lg` in the code face), so iOS Safari does not zoom the page when the field takes focus; fine pointers keep the dense size.
+
 ## Examples
 
 ### Default

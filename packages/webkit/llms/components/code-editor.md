@@ -141,6 +141,7 @@ _none_ — monolithic. The gutter, the fallback textarea, the Monaco host, the t
 - Narrow: the editing area keeps its height and scrolls in both axes; long lines never wrap in code.
 - Touch: problem buttons are 32 px high (44 px on `pointer: coarse`).
 - Reflow: the page never scrolls horizontally; the editor scrolls inside its frame.
+- Touch: on coarse pointers (`pointer-coarse:`) the editing area and its line numbers step up to 16 px (`text-label-code-lg`), so iOS Safari does not zoom the page when the editor takes focus; fine pointers keep the dense size.
 
 ## Examples
 

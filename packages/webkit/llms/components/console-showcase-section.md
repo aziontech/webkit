@@ -66,7 +66,7 @@
 ## Accessibility
 
 - A `section` named by its title.
-- Tabs are a `ToggleGroup` (radio group) named by `tabsAriaLabel` or "Console views"; arrow keys move between them.
+- Tabs are a `ToggleGroup` (radio group) named by `tabsAriaLabel` or "Console views"; arrow keys move between them. On a coarse pointer each tab's hit area is at least 44 × 44 px.
 - The scene supplies its own accessible content (a mock is usually `aria-hidden` with a description in the copy).
 
 ## Right-to-left
@@ -87,6 +87,7 @@
 
 - Below medium the console scene is square and uncropped; from medium it is 1.9:1 with the crop applied.
 - No horizontal scroll at 320 px.
+- The tab control is the large `ToggleGroup` at every width; below 40rem it is fluid (full width, equal segments) instead of shrinking, so each tab keeps a 30 px face and its 44 px touch hit area.
 
 ## Examples
 

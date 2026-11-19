@@ -108,7 +108,7 @@
 - `aria-invalid` and `aria-required` on the trigger mirror the matching props.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons + borders), including disabled state.
 - `motion-reduce:transition-none motion-reduce:animate-none` on every transition/animation-bearing class.
-- Touch target ≥40×40 px on `size="large"`; smaller sizes are documented as dense-layout-only (consistent with `Input`).
+- Touch target: the trigger is drawn 28 / 32 / 40 px tall by `size`; on a coarse pointer an invisible `aria-hidden` child (`data-slot="touch-target"`) shown only under `pointer-coarse:` extends its hit area to at least 44 px tall. Option rows are 32 px on a fine pointer and 44 px (`pointer-coarse:min-h-11`) on a coarse pointer, their fills still inset 1 px so two filled rows never touch.
 - Teleported content: the teleported `role="listbox"` content binds `dir` and `lang` from the nearest `ConfigProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
 
 ## Examples

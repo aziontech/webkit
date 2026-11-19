@@ -61,7 +61,7 @@
 - Each segment is wrapped in `@aziontech/webkit/tooltip` (`side="bottom"`) surfacing its mode label (`System` / `Dark` / `Light`) on hover and keyboard focus; the tooltip owns its own `aria-describedby` wiring.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons), including the disabled state.
 - `motion-reduce:transition-none` on animated states.
-- Touch target: `large` segments are 36×30 px; `small` and `medium` segments are below the 40×40 px target, a justified deviation for a dense global control that matches `toggle-group` at the same sizes.
+- Touch target: segments are drawn 24 / 28 / 36 px wide by `size` on every pointer; on a coarse pointer each carries an invisible `aria-hidden` child (`data-slot="touch-target"`) shown only under `pointer-coarse:` that extends its hit area to 44×44 px, as `toggle-group` does.
 
 ## Right-to-left
 

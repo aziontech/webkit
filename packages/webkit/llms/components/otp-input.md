@@ -91,6 +91,7 @@
 - Narrow: boxes are 40 px with an 8 px gap and shrink to 24 px when the row is narrower than that, so eight boxes plus a separator fit in 320 px (checked in `apps/visual`, `geometry otp input grouped`).
 - Touch: the whole row is the input's hit area.
 - Reflow: no horizontal scroll at 320 px for `length` up to 8 with a separator.
+- Touch: on coarse pointers (`pointer-coarse:`) the hidden native input carries 16 px text (`text-body-md`), so iOS Safari does not zoom the page when the row takes focus; the boxes look the same.
 
 ## Examples
 

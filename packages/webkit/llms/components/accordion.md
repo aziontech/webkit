@@ -119,7 +119,7 @@ Exports to add to `packages/webkit/package.json#exports` (flat public names; cat
 - ARIA: each trigger is a `<button>` with `aria-expanded` reflecting open state and `aria-controls` referencing its content; the trigger button is wrapped in a heading element (`<h{headingLevel}>`, default `h3`); the content panel has `role="region"` and `aria-labelledby` referencing its trigger. A `disabled` item sets `disabled` + `aria-disabled` on its trigger.
 - Contrast ≥4.5:1 for text (title `--text-default`, body `--text-muted` on the surface) / ≥3:1 for the chevron glyph, including the disabled state (`--text-disabled`).
 - `motion-reduce:transition-none motion-reduce:animate-none` on the chevron rotation and content reveal.
-- Touch target: the `large` header is 40px tall and the full-width header row is the hit area (≥40×40). The `medium` header is 32px tall — a justified deviation matching the Figma `medium` size token, mitigated by the full-width clickable row.
+- Touch target: the `large` header is 40px tall and the full-width header row is the hit area (≥40×40). The `medium` header is 32px tall on a fine pointer, matching the Figma `medium` size token; on a coarse pointer every header is at least 44px tall (`pointer-coarse:min-h-11`). It grows instead of carrying an invisible hit area because stacked headers would overlap each other's.
 
 ## Examples
 

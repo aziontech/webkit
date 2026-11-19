@@ -81,7 +81,7 @@
 - Visible focus on links: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`.
 - Contrast ≥4.5:1 for column titles and links on `--bg-canvas`.
 - `motion-reduce:transition-none` on the link color transition.
-- Touch target: text links follow the platform convention for footer link lists (<40px height); justified deviation — targets are full-width-of-text with `--spacing-xs` separation.
+- Touch target: text links are drawn at their text height with `--spacing-xs` between them on a fine pointer; on a coarse pointer each link is 44 px tall (`pointer-coarse:min-h-11`) and the column drops its gap, so the links tile the column without overlapping.
 
 ## Right-to-left
 

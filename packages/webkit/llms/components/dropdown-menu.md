@@ -140,7 +140,7 @@
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons), including the disabled state (validated via `--text-disabled` token).
 - `motion-reduce:animate-none` on `animate-popup-scale-*`; `motion-reduce:transition-none` on `transition-colors` for hover/selected states.
 - Teleported panel: the `role="menu"` panel binds `dir` and `lang` from the nearest `ConfigProvider` (`usePortalLocale`), so it lays out and is announced in the provider's direction and language although it renders under `body`.
-- Touch target ≥40×40 px on the trigger; option rows are 32 px tall and are activated by full-row click + keyboard, satisfying the 24×24 px target floor for in-menu items per WCAG 2.5.8.
+- Touch target ≥40×40 px on the trigger; option and sub-menu rows are 32 px tall on a fine pointer and 44 px (`pointer-coarse:min-h-11`) on a coarse pointer, full-row click targets whose fills stay inset 1 px so two filled rows never touch.
 - Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): renders a plain item.
 
 ## Right-to-left
@@ -160,7 +160,7 @@ No built-in strings: every label comes from the consumer (`label` props and slot
 
 - Container queries: none; panels are sized between `--container-3xs` and `--container-2xs`, and a sub-panel never wider than the viewport less `--spacing-xs` on each side (its minimum fits a 320px screen).
 - Narrow (≤ 640 px or a narrow container): `usePlacement` keeps every panel inside the viewport. A sub-panel tries the trailing side, then the leading side; when neither has room (a phone) it opens below its row (above when below has no room), starting at the row's leading edge and shifted back inside the screen, so it never leaves the viewport and the rows above its trigger stay visible; labels truncate.
-- Touch: rows are 32 px; a sub-menu opens on tap (click) as well as hover, so nothing is hover-only.
+- Touch: rows are 44 px on a coarse pointer (32 px on a fine one); a sub-menu opens on tap (click) as well as hover, so nothing is hover-only.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom.
 
 ## Examples

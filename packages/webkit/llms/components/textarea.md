@@ -95,6 +95,7 @@ No built-in strings: the placeholder comes from the `placeholder` prop.
 - Narrow (≤ 640 px or a narrow container): the text wraps; with `autoResize` a narrower field grows taller, since the height follows the wrapped lines.
 - Touch: the field is the target (≥ 32 px with `autoResize` and one row, 80 px otherwise); no hover-only affordance.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom; a `resizable="horizontal"` or `"both"` field can be dragged wider by the person.
+- Touch: on coarse pointers (`pointer-coarse:`) the typed text steps up to 16 px (`text-body-md`; `text-label-code-lg` in the code face), so iOS Safari does not zoom the page when the field takes focus; fine pointers keep the dense size.
 
 ## Examples
 

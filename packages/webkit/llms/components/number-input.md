@@ -77,7 +77,7 @@
 - ARIA: `role="spinbutton"` on the input (native `<input type="number">` provides this); `aria-valuenow`, `aria-valuemin`, `aria-valuemax` mirror the props; `aria-invalid` mirrors `invalid`; `aria-required` mirrors `required`; spinner buttons have `aria-label` ("Increment" / "Decrement") and `tabindex="-1"` so keyboard users use arrow keys.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state.
 - `motion-reduce:transition-none` on animated state changes.
-- Touch target ≥40×40 px on the large size; spinner buttons remain ≥24×24 px on `small`/`medium` per Figma — justified because arrow keys provide the primary interaction.
+- Touch target: on a coarse pointer the two steppers sit side by side in an 80 px column (about 40 px each), and each carries an invisible `aria-hidden` child (`data-slot="touch-target"`) shown only under `pointer-coarse:` that extends its hit area to 44 px tall (the frame stops clipping on a coarse pointer so the hit area is not cut). On a fine pointer the steppers stay stacked at the drawn size; arrow keys are the primary interaction.
 
 ## Right-to-left
 
@@ -85,6 +85,10 @@
 - Icons: the stepper buttons point up and down and do not mirror.
 - Keyboard: no horizontal arrow-key logic.
 - User data: the `<input>` renders `dir="auto"`; a `dir` attribute overrides it.
+
+## Responsive
+
+- Touch: on coarse pointers (`pointer-coarse:`) the typed text steps up to 16 px (`text-body-md`; `text-label-code-lg` in the code face), so iOS Safari does not zoom the page when the field takes focus; fine pointers keep the dense size.
 
 ## Examples
 

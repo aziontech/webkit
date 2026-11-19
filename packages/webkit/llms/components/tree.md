@@ -147,6 +147,7 @@
 
 - The tree fills its container's width; rows keep the height of their `size` (24 / 32 / 40 px) at every width and long labels truncate.
 - Row actions stay visible on touch (no hover reveal); on narrow containers prefer a single `IconButton` that opens a `dropdown`.
+- Touch: on coarse pointers (`pointer-coarse:`) the rename field's text steps up to 16 px (`text-body-md`), so iOS Safari does not zoom the page while renaming.
 
 ## Examples
 
