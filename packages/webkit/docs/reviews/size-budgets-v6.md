@@ -511,3 +511,6 @@ Budget-raise: architecture-tabs-section 22.1 KB → 22.2 KB (measured 22.12 KB):
 
 Budget-raise: hero-section 12.45 KB → 12.6 KB (measured 12.53 KB): RV-H2-1, the hero keeps its dots behind the copy and off a diagram: `Hero`'s backdrop carries the guard classes that stop it above a marked `bottom` window and drop it beside a marked `top` or `media` window.
 Budget-raise: hero-form-section 50.7 KB → 50.8 KB (measured 50.73 KB): RV-H2-1, the same `Hero` backdrop guard classes.
+Budget-raise: config-provider 11.5 KB → 11.6 KB (measured 11.52 KB): RV-FL-1, the English catalog it carries gained the three `languageSelect` strings of the new `LanguageSelect`.
+Budget-raise: locales-pt-BR 10.7 KB → 10.8 KB (measured 10.73 KB): RV-FL-1, the same three `languageSelect` strings in Portuguese.
+Budget-raise: llms-full.txt 2,200,000 → 2,210,000 bytes: RV-FL-1, the `LanguageSelect` page (spec sections and examples) in the full AI bundle.
