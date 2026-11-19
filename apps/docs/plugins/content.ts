@@ -368,6 +368,7 @@ export type ComponentIndexItem = {
   exampleCount: number
   firstExample: string | null
   llms: string | null
+  aliases: string[]
 }
 
 export type BlockIndexItem = {
@@ -410,6 +411,9 @@ export function buildIndex(catalog: Catalog = readCatalog(), foundationSlugs: st
   const llms = llmsFiles()
   const byComponent = new Map(exampleDirs.map((entry) => [entry.data.component, entry]))
   const names = new Set([...componentNames(catalog), ...byComponent.keys()])
+  const aliasesOf = new Map<string, string[]>()
+  for (const [alias, target] of Object.entries((catalog.aliases ?? {}) as Record<string, string>))
+    aliasesOf.set(target, [...(aliasesOf.get(target) ?? []), alias])
   const components: ComponentIndexItem[] = [...names].sort().map((name) => {
     const entry = (catalog.imports[name] ?? {}) as CatalogEntry
     const examples = byComponent.get(name)
@@ -424,12 +428,15 @@ export function buildIndex(catalog: Catalog = readCatalog(), foundationSlugs: st
         titlePath[titlePath.length - 2]?.toLowerCase() ??
         'other',
       surface: entry.surface ?? 'app',
-      purpose: firstSentence(entry.purpose ?? (parent?.purpose as string | undefined) ?? ''),
+      purpose: plainInline(
+        firstSentence(entry.purpose ?? (parent?.purpose as string | undefined) ?? '')
+      ),
       import: entry.import ?? `@aziontech/webkit/${name}`,
       exampleDir: examples?.dir ?? null,
       exampleCount: examples?.data.examples.length ?? 0,
       firstExample: examples?.data.examples[0]?.file ?? null,
-      llms: llmsFile(llms, 'components', name)
+      llms: llmsFile(llms, 'components', name),
+      aliases: aliasesOf.get(name) ?? []
     }
   })
   const blocks: BlockIndexItem[] = readBlocks().map((block) => ({
@@ -438,7 +445,7 @@ export function buildIndex(catalog: Catalog = readCatalog(), foundationSlugs: st
     title: block.name.replace(/([a-z0-9])([A-Z])/g, '$1 $2'),
     group: block.dir.split('/').slice(0, -1).join('/') || block.dir,
     surface: block.surface ?? 'app',
-    summary: firstSentence(block.summary ?? ''),
+    summary: plainInline(firstSentence(block.summary ?? '')),
     states: block.states,
     dir: block.dir,
     uses: (

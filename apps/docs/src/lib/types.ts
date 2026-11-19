@@ -44,6 +44,7 @@ export type ComponentIndexItem = {
   exampleCount: number
   firstExample: string | null
   llms: string | null
+  aliases: string[]
 }
 
 export type BlockIndexItem = {
