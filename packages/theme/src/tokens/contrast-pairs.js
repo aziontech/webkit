@@ -46,10 +46,6 @@ const READING = new Set(['body', 'text'])
 
 const FALLBACK = { foreground: '--text-default', background: '--bg-surface' }
 
-/**
- * @param {string} name
- * @returns {{ foreground: string, background: string, fill: 'background' | 'foreground' | 'swatch' }}
- */
 export function previewPair(name) {
   const reading = CONTRAST_PAIRS.filter(([role]) => READING.has(role))
   const asGround = reading.find(([, , bg]) => bg === name)
