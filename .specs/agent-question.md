@@ -2,9 +2,10 @@
 name: agent-question
 category: ai
 structure: monolithic
-status: draft
+status: approved
 spec_version: 1
 template: 2
+checksum: 373e0558058d556d603239e71947043bcda4f523ea0464b04aa96a543036d8bd
 created: 2026-11-19
 last_updated: 2026-11-19
 ---
@@ -138,7 +139,7 @@ picked option, the typed text, or `yes` / `no` on a `confirm` question. It is th
 - `pending`: the control for `type`, then Skip (ghost, when `skippable`) and Submit (primary) at the inline end; Submit is disabled while the answer is empty or blank. A `confirm` question shows No (outline) and Yes (primary) instead of Submit, both submit.
 - `running`: controls and buttons inert, Submit (or the pressed confirm button) in its loading state, `aria-busy="true"` on the card.
 - `error`: like `pending`, plus the error line under the controls in danger text; the field (or radio group) is `invalid` and described by the line.
-- `success`: a `StatusIndicator` (success) reading `Answered: <answer>`, where the answer is the picked option's label, the typed text, or the label of the confirm button that was pressed (`submitLabel` / `declineLabel` when set, otherwise the catalog Yes / No). The answer is isolated for bidirectional text: the label string wraps `{answer}` in Unicode isolates (U+2068 FIRST STRONG ISOLATE … U+2069 POP DIRECTIONAL ISOLATE), because `StatusIndicator`'s `label` has no slot for a `bdi`. An empty answer reads `Answered`.
+- `success`: a `StatusIndicator` (success) reading `Answered: <answer>`, where the answer is the picked option's label (or the raw `modelValue` when it matches no option), the typed text, or the label of the confirm button that was pressed (`submitLabel` / `declineLabel` when set, otherwise the catalog Yes / No). The answer is isolated for bidirectional text: the card passes the answer to `{answer}` already wrapped in U+2068 FIRST STRONG ISOLATE … U+2069 POP DIRECTIONAL ISOLATE, because `StatusIndicator`'s `label` has no slot for a `bdi`; the catalog strings carry no isolates. A long answer is truncated to one line by `StatusIndicator`; the label text in the DOM and the live region carry the full answer. An empty answer reads `Answered`.
 - `skipped`, `canceled`: a `StatusIndicator` (neutral) reading `Skipped` or `Question canceled`.
 - A polite live region announces each outcome and the error line.
 - The answer is kept when the status goes from `error` back to `pending` (or `running`): the model is never cleared by the card.
@@ -193,7 +194,7 @@ _None._
 - Layout: logical utilities only; the buttons align to the inline end, the glyph sits at the inline start.
 - Icons: the question glyph is not mirrored.
 - Keyboard: the options are native radios in a stacked group: ArrowDown and ArrowUp move to the next and previous option in both directions; ArrowLeft and ArrowRight follow the text direction (ArrowLeft moves to the next option under `dir="rtl"`), as `RadioGroup` provides.
-- User data: code in the title and description is `dir="ltr"`; the typed answer keeps `dir="auto"` from `Input`; `RadioGroup` does not isolate its labels, so the card renders each option label in a `bdi` through RadioGroup's `option` slot; the success receipt isolates the answer with Unicode isolates (FSI … PDI) around `{answer}`.
+- User data: code in the title and description is `dir="ltr"`; the typed answer keeps `dir="auto"` from `Input`; `RadioGroup` does not isolate its labels, so the card renders each option label in a `bdi` through RadioGroup's `option` slot; the card passes the success receipt's answer to `{answer}` already wrapped in Unicode isolates (FSI … PDI); the catalog strings carry no isolates.
 
 ## Responsive
 
