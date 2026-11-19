@@ -1,0 +1,31 @@
+{
+  "component": "image-gallery",
+  "title": "Components/Content/ImageGallery",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Four images in a grid; select one to open it larger with Previous, Next and Download.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Single",
+      "summary": "One image at its own shape, capped in width, saved under the `fileName` it is given.",
+      "file": "single.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "Generating four images: the one that arrived shows, a placeholder holds each of the other three.",
+      "file": "loading.vue"
+    },
+    {
+      "name": "Error",
+      "summary": "The generation failed: the app's message in place of the grid.",
+      "file": "error.vue"
+    },
+    {
+      "name": "Base64",
+      "summary": "Images from base64 `data` and their `mimeType`, the shape of an image part a model returns.",
+      "file": "base64.vue"
+    }
+  ]
+}
