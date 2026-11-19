@@ -808,8 +808,12 @@ function composablePage(catalog, name) {
   if (!parsed) return null
   const fn = camel(name)
   const exports = composableOrder(fn, parsed.exports)
-  const values = exports.filter((e) => e.kind === 'function' || e.kind === 'const').map((e) => e.name)
-  const types = exports.filter((e) => e.kind === 'interface' || e.kind === 'type').map((e) => e.name)
+  const values = exports
+    .filter((e) => e.kind === 'function' || e.kind === 'const')
+    .map((e) => e.name)
+  const types = exports
+    .filter((e) => e.kind === 'interface' || e.kind === 'type')
+    .map((e) => e.name)
   const imports = [
     values.length ? `import { ${values.join(', ')} } from '${entry.import}'` : null,
     types.length ? `import type { ${types.join(', ')} } from '${entry.import}'` : null
