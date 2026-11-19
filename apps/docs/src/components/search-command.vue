@@ -16,23 +16,38 @@
   const router = useRouter()
   const t = messages
 
+  const words = (title: string) => title.replace(/([a-z0-9])([A-Z])/g, '$1 $2')
+  const keywordsOf = (title: string, hint: string, extra: string[] = []) => [
+    words(title),
+    ...extra,
+    ...extra.map((alias) => alias.replace(/-/g, ' ')),
+    hint
+  ]
+
   const groups = computed(() => [
     {
       heading: t.value.foundations,
       items: FOUNDATIONS.map((page) => ({
         to: `/foundations/${page.slug}`,
         title: page.title,
-        hint: page.summary
+        hint: page.summary,
+        keywords: keywordsOf(page.title, page.summary)
       }))
     },
     {
       heading: t.value.assets,
       items: [
-        { to: '/assets#brand', title: t.value.brand, hint: t.value.brandLead },
+        {
+          to: '/assets#brand',
+          title: t.value.brand,
+          hint: t.value.brandLead,
+          keywords: keywordsOf(t.value.brand, t.value.brandLead)
+        },
         {
           to: '/assets#illustrations',
           title: t.value.illustrations,
-          hint: t.value.illustrationsLead
+          hint: t.value.illustrationsLead,
+          keywords: keywordsOf(t.value.illustrations, t.value.illustrationsLead)
         }
       ]
     },
@@ -41,7 +56,8 @@
       items: index.components.map((item) => ({
         to: `/components/${item.name}`,
         title: item.title,
-        hint: item.purpose
+        hint: item.purpose,
+        keywords: keywordsOf(item.title, item.purpose, item.aliases)
       }))
     },
     {
@@ -49,7 +65,8 @@
       items: index.blocks.map((block) => ({
         to: `/blocks/${block.id}`,
         title: block.title,
-        hint: block.summary
+        hint: block.summary,
+        keywords: keywordsOf(block.title, block.summary)
       }))
     }
   ])
@@ -78,11 +95,15 @@
           v-for="item in group.items"
           :key="item.to"
           :value="item.to"
+          :keywords="item.keywords"
         >
-          <span class="flex min-w-0 flex-col">
-            <span class="text-label-md text-(--text-default)">{{ item.title }}</span>
-            <span class="truncate text-body-xs text-(--text-muted)">{{ item.hint }}</span>
-          </span>
+          {{ item.title }}
+          <template #trailing>
+            <span
+              class="hidden max-w-56 truncate text-body-xs text-(--text-muted) sm:block md:max-w-80"
+              >{{ item.hint }}</span
+            >
+          </template>
         </CommandItem>
       </CommandGroup>
     </CommandList>
