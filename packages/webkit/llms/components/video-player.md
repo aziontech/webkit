@@ -59,7 +59,8 @@
 
 - Layout: logical utilities only (`gap`, `ps-`/`pe-`, `text-start`); the controls bar mirrors, so Play sits at the start edge.
 - Icons: none mirrored (play, pause, volume and full screen glyphs are not directional).
-- Keyboard: the seek and volume bars fill from the start edge; `Slider` maps `ArrowLeft` to forward under right-to-left.
+- Seek bar: media time does not mirror. The seek slider sits in a `dir="ltr"` box, so it fills from the left and `ArrowRight` moves forward in every direction, as Material's media progress and the browsers' own players do (spec_version 2).
+- Keyboard: the volume bar fills from the start edge; `Slider` maps `ArrowLeft` to louder under right-to-left.
 - User data: the time is wrapped in `dir="ltr"` so `1:05 / 3:20` keeps its order (the ` / ` is punctuation, the same in every shipped locale; screen readers get `videoPlayer.seekValue` instead, and the visible time is `aria-hidden`); caption text follows the track's own language.
 
 ## Internationalization

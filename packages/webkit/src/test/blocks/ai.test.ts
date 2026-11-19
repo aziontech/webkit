@@ -134,4 +134,69 @@ describe('ai', () => {
     await waitFor(() => expect(document.querySelector('[role="dialog"]')).not.toBeNull())
     expect(document.querySelector('[data-testid$="__backdrop"]')).toBeNull()
   })
+
+  it('ai-action-approval passes the edited arguments of an editable tool', async () => {
+    const calls: unknown[][] = []
+    const view = render(AiActionApproval, {
+      props: {
+        messages: [
+          { id: 'u1', role: 'user', parts: [{ type: 'text', content: 'Purge acme-store' }] },
+          {
+            id: 'a1',
+            role: 'assistant',
+            parts: [
+              {
+                type: 'tool-call',
+                id: 'call-purge',
+                name: 'purge_urls',
+                arguments: '{"urls":["https://example.com/"]}',
+                state: 'approval-requested',
+                approval: { id: 'approval-purge', needsApproval: true }
+              }
+            ]
+          }
+        ],
+        tools: { purge_urls: { title: 'Purging', approveLabel: 'Purge', editable: true } },
+        interrupts: [
+          {
+            kind: 'tool-approval',
+            toolCallId: 'call-purge',
+            resolveInterrupt: (...args: unknown[]) => calls.push(args)
+          }
+        ]
+      }
+    })
+    const field = view.getByRole('textbox') as HTMLTextAreaElement
+    await fireEvent.update(field, '{"urls":["https://example.com/a"]}')
+    await fireEvent.click(view.getByRole('button', { name: 'Purge' }))
+    expect(calls).toEqual([[true, { editedArgs: { urls: ['https://example.com/a'] } }]])
+  })
+
+  it('ai-chat-drawer draws media parts, the queue and the connection notice', async () => {
+    const view = render(AiChatDrawer, {
+      props: {
+        messages: [
+          { id: 'u1', role: 'user', parts: [{ type: 'text', content: 'Chart it' }] },
+          {
+            id: 'a1',
+            role: 'assistant',
+            parts: [
+              { type: 'image', source: { type: 'url', value: 'https://example.com/a.png' } },
+              { type: 'audio', source: { type: 'url', value: 'https://example.com/a.webm' } }
+            ]
+          }
+        ],
+        queue: [{ id: 'w1', content: 'Then purge it' }],
+        connection: 'disconnected'
+      }
+    })
+    await waitFor(() =>
+      expect(document.querySelector('[data-testid="image-gallery"]')).not.toBeNull()
+    )
+    expect(document.querySelector('[data-testid="audio-player"]')).not.toBeNull()
+    expect(document.body.textContent).toContain('Then purge it')
+    expect(document.body.textContent).toContain('Connection lost')
+    await fireEvent.click(document.querySelector<HTMLElement>('[aria-label^="Remove"]')!)
+    expect(view.emitted('remove-queued')).toHaveLength(1)
+  })
 })

@@ -3363,12 +3363,12 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-action-approv
 - Surface: app
 - Source: `blocks/ai/ai-chat/ai-chat.vue` in `@aziontech/webkit`
 - MCP: `get_block("ai/ai-chat")`
-- Components: ArtifactCanvas, ArtifactPreview, Button, ChatMessage, CodeBlock, Conversation, CopyButton, `DrawerContent`, Drawer, `DrawerTitle`, EmptyState, IconButton, PromptInput, Reasoning, Resizable, Sources, StreamingResponse, SuggestionGroup, Tag, ToolApproval, ToolCall, `use-locale`
+- Components: AgentActivity, AgentQuestion, Alert, ArtifactCanvas, ArtifactPreview, `branches`, `placeholderClip`, `usageChart`, AudioPlayer, Button, ChatMessage, CodeBlock, Conversation, CopyButton, `DrawerContent`, Drawer, `DrawerTitle`, EmptyState, FilePreview, IconButton, ImageGallery, PromptInput, PromptQueue, Reasoning, Resizable, Sources, StatusIndicator, StreamingResponse, SubagentCard, SuggestionGroup, Tag, ToolApproval, ToolCall, `use-locale`, VideoPlayer
 - Skills: `webkit-ai-surfaces`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
 
-ai chat; ai assistant; chatbot; copilot; chat with ai; generative ai chat; assistant page; ask ai; llm chat; conversational ui; prompt and response; streaming response; chat de ia; assistente de ia; assistente virtual; conversa com ia; chat con ia; asistente de ia; artifact; artifact canvas; generated file; code canvas; canvas de artefato; artefato gerado; full page chat; tanstack ai; usechat
+ai chat; ai assistant; chatbot; copilot; chat with ai; generative ai chat; assistant page; ask ai; llm chat; conversational ui; prompt and response; streaming response; chat de ia; assistente de ia; assistente virtual; conversa com ia; chat con ia; asistente de ia; artifact; artifact canvas; generated file; code canvas; canvas de artefato; artefato gerado; full page chat; tanstack ai; usechat; agent activity; subagent; agent question
 
 A full page where a person talks with the generative AI assistant about their account: they ask in their own words, watch the response arrive, check where it came from, and keep going with a follow-up or a new question. The page is the conversation; everything else (header, composer) stays still while only the log scrolls. Use it as the assistant's home; on a resource page, open the same conversation in a drawer with `ai/ai-chat-drawer`. It is a page body for `ConsoleLayout`: it fills the layout's content region (`grow basis-0 min-h-0`, never `h-dvh`), so only the log scrolls, and the layout owns the rail, the header and the `main`.
 
@@ -3399,18 +3399,23 @@ A full page where a person talks with the generative AI assistant about their ac
 - I. Composer — `PromptInput`
 - J. Artifact canvas — `ChatMessage`, `PromptInput` (Artifact)
 - K. Tool calls — `ToolCall`, `ToolApproval`, `CodeBlock`
+- L. Media — `ImageGallery`, `AudioPlayer`, `VideoPlayer`, `FilePreview`
+- M. Agent work — `AgentActivity`, `SubagentCard`, `AgentQuestion`
+- N. Queue and connection — `PromptQueue`, `StatusIndicator`, `Alert`
 
 What each part takes: [blocks/ai/ai-chat.md](blocks/ai/ai-chat.md).
 
 ## Data
 
-The block draws a conversation in the message shape of TanStack AI: each message has an `id`, a `role` and its `parts` in order (`text`, `thinking`, `tool-call`, `tool-result`), so the values `useChat` from `@tanstack/ai-vue` returns go straight into its props, with no conversion. The block calls no model and depends on no AI library; `messages.ts` declares the same shape itself (`AiChatMessage`, `AiChatPart`, `AiChatTool`, `AiChatInterrupt`, re-exported from `ai-chat.vue`), so any source that produces it works. Parts it does not draw (images, audio) are skipped. `sample.ts` holds the sample threads the variants pass. The draft in the composer stays local.
+The block draws a conversation in the message shape of TanStack AI: each message has an `id`, a `role` and its `parts` in order (`text`, `thinking`, `tool-call`, `tool-result`, `image`, `audio`, `video`, `document`, `activity`, `subagent`), so the values `useChat` from `@tanstack/ai-vue` returns go straight into its props, with no conversion. The block calls no model and depends on no AI library; `messages.ts` declares the same shape itself (`AiChatMessage`, `AiChatPart`, `AiChatTool`, `AiChatInterrupt`, re-exported from `ai-chat.vue`), so any source that produces it works. Parts it does not draw (structured output, `ui-resource`) are skipped. `sample.ts` holds the sample threads the variants pass. The draft in the composer stays local.
+
+An activity step reads, by convention, `content.title` (else its `activityType`), `content.status` (`pending`, `running`, `success` or `complete`, `error`, `canceled` or `cancelled`, `skipped`; left out, running) and `content.detail` as the line under it.
 
 What TanStack AI does not carry, the app adds in `metadata`: `sources` (the documents the response cites, numbered in order), `reasoningSeconds` (left out, the block measures the thinking time) and `stopped` (the block also marks the response that Stop ended). A message's time is its `createdAt`, formatted in the reader's locale.
 
-Prop: `messages`, `suggestions`, `followUps`, `loading`, `error`, `tools`, `interrupts`.
+Prop: `messages`, `suggestions`, `followUps`, `loading`, `error`, `tools`, `interrupts`, `queue`, `moreMessages`, `loadingMore`, `connection`, `resuming`.
 
-Event: `send`, `stop`, `retry`, `new-chat`, `feedback`, `approve`, `deny`.
+Event: `send`, `stop`, `retry`, `new-chat`, `feedback`, `approve`, `remove-queued`, `load-more`, `deny`.
 
 A tool that needs approval is declared once with `toolDefinition({ name, inputSchema, needsApproval: true })`, run on the server with `.server(...)` and passed to `useChat({ tools: [definition] })` too, so the client can match the approval request to the call. Then delete `sample.ts` and its import. `apps/demos` runs this block on `useChat` with TanStack AI's `fakeText` model (`src/lib/assistant-model.ts`), no server and no key.
 
@@ -3446,6 +3451,7 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-chat.md](bloc
 - **Stopped:** "You stopped this response."
 - **Feedback:** Helpful, Not helpful, Feedback submitted (built in).
 - Follow `skills/webkit-microcopy`: sentence case, "select" not "click", "response" not "answer", no "please".
+- **Connection:** `Reconnecting`; `Connection lost` with "Your messages send when the connection returns."
 
 ## Accessibility
 
@@ -3456,6 +3462,7 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-chat.md](bloc
 - Feedback thumbs are toggle buttons with `aria-pressed`, and the submitted state is a status message.
 - Keyboard order: header, log (focusable to scroll), each message's links and actions, follow-ups, composer.
 - Alignment never carries meaning alone: every message has its author line.
+- Reconnecting is a polite status and Connection lost an alert; the queued messages are a list named Queued messages, each with Remove from queue; a question card is a group named by its question.
 
 ## States
 
@@ -3465,6 +3472,9 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-chat.md](bloc
 - Tools: a `tool-call` part draws as a `ToolCall` titled from `tools`, its input and output in code; one with `approval` draws the `ToolApproval` card first (see `ai/ai-action-approval`).
 - Artifact: two turns that wrote top-orders.sql in two versions, the canvas open beside them on version 2; a follow-up fills the composer.
 - LongThread: six earlier turns as `messages` that overflow the log, opened on the newest response, with `followUps`.
+- Media: an answer with two charts in an `ImageGallery`, a CSV report in a `FilePreview` and an audio summary.
+- Agent: activity steps, a finished `SubagentCard` and a pending `AgentQuestion`; answering it resolves the interrupt and the card keeps the answer.
+- Queue, older messages and connection: `queue` shows a `PromptQueue` over the composer, `moreMessages` a Load earlier messages button, and `connection` a Reconnecting status or a Connection lost alert.
 
 ## Related
 
@@ -3476,7 +3486,7 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-chat.md](bloc
 
 ## Variants
 
-`Empty` (primary) · `Streaming` · `Error` · `LongThread` · `Artifact`. Code: [blocks/ai/ai-chat.md](blocks/ai/ai-chat.md), `get_block("ai/ai-chat", { variant })`.
+`Empty` (primary) · `Streaming` · `Error` · `LongThread` · `Artifact` · `Media` · `Agent`. Code: [blocks/ai/ai-chat.md](blocks/ai/ai-chat.md), `get_block("ai/ai-chat", { variant })`.
 
 ---
 
@@ -3489,7 +3499,7 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-chat.md](bloc
 - Surface: app
 - Source: `blocks/ai/ai-chat-drawer/ai-chat-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_block("ai/ai-chat-drawer")`
-- Components: Button, Card, ChatMessage, CodeBlock, Conversation, CopyButton, `DrawerContent`, Drawer, `DrawerTitle`, EmptyState, IconButton, KeyValueList, PageHeader, `PanelHeader`, PromptInput, Reasoning, Sources, StatusIndicator, StreamingResponse, SuggestionGroup, Tag, ToolApproval, ToolCall, `use-locale`
+- Components: AgentActivity, AgentQuestion, Alert, AudioPlayer, Button, Card, ChatMessage, CodeBlock, Conversation, CopyButton, `DrawerContent`, Drawer, `DrawerTitle`, EmptyState, FilePreview, IconButton, ImageGallery, KeyValueList, PageHeader, `PanelHeader`, PromptInput, PromptQueue, Reasoning, Sources, StatusIndicator, StreamingResponse, SubagentCard, SuggestionGroup, Tag, ToolApproval, ToolCall, `use-locale`, VideoPlayer
 - Skills: `webkit-ai-surfaces`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -3524,18 +3534,23 @@ The generative AI assistant beside the work: the reader is on a resource page �
 - H. Follow-up questions — `SuggestionGroup`
 - I. Composer — `PromptInput`
 - J. Tool calls — `ToolCall`, `ToolApproval`, `CodeBlock`
+- K. Media — `ImageGallery`, `AudioPlayer`, `VideoPlayer`, `FilePreview`
+- L. Agent work — `AgentActivity`, `SubagentCard`, `AgentQuestion`
+- M. Queue and connection — `PromptQueue`, `StatusIndicator`, `Alert`
 
 What each part takes: [blocks/ai/ai-chat-drawer.md](blocks/ai/ai-chat-drawer.md).
 
 ## Data
 
-The block draws a conversation in the message shape of TanStack AI: each message has an `id`, a `role` and its `parts` in order (`text`, `thinking`, `tool-call`, `tool-result`), so the values `useChat` from `@tanstack/ai-vue` returns go straight into its props, with no conversion. The block calls no model and depends on no AI library; `messages.ts` declares the same shape itself (`AiChatDrawerMessage`, `AiChatDrawerPart`, `AiChatDrawerTool`, `AiChatDrawerInterrupt`, re-exported from `ai-chat-drawer.vue`), so any source that produces it works. Parts it does not draw (images, audio) are skipped. `sample.ts` holds the sample threads the variants pass. The draft in the composer stays local.
+The block draws a conversation in the message shape of TanStack AI: each message has an `id`, a `role` and its `parts` in order (`text`, `thinking`, `tool-call`, `tool-result`, `image`, `audio`, `video`, `document`, `activity`, `subagent`), so the values `useChat` from `@tanstack/ai-vue` returns go straight into its props, with no conversion. The block calls no model and depends on no AI library; `messages.ts` declares the same shape itself (`AiChatDrawerMessage`, `AiChatDrawerPart`, `AiChatDrawerTool`, `AiChatDrawerInterrupt`, re-exported from `ai-chat-drawer.vue`), so any source that produces it works. Parts it does not draw (structured output, `ui-resource`) are skipped. `sample.ts` holds the sample threads the variants pass. The draft in the composer stays local.
+
+An activity step reads, by convention, `content.title` (else its `activityType`), `content.status` (`pending`, `running`, `success` or `complete`, `error`, `canceled` or `cancelled`, `skipped`; left out, running) and `content.detail` as the line under it.
 
 What TanStack AI does not carry, the app adds in `metadata`: `sources` (the documents the response cites, numbered in order), `reasoningSeconds` (left out, the block measures the thinking time) and `stopped` (the block also marks the response that Stop ended). A message's time is its `createdAt`, formatted in the reader's locale.
 
-Prop: `messages`, `suggestions`, `followUps`, `loading`, `error`, `tools`, `interrupts`, `v-model:open`.
+Prop: `messages`, `suggestions`, `followUps`, `loading`, `error`, `tools`, `interrupts`, `queue`, `moreMessages`, `loadingMore`, `connection`, `resuming`, `v-model:open`.
 
-Event: `send`, `stop`, `retry`, `new-chat`, `feedback`, `approve`, `deny`.
+Event: `send`, `stop`, `retry`, `new-chat`, `feedback`, `approve`, `remove-queued`, `load-more`, `deny`.
 
 A tool that needs approval is declared once with `toolDefinition({ name, inputSchema, needsApproval: true })`, run on the server with `.server(...)` and passed to `useChat({ tools: [definition] })` too, so the client can match the approval request to the call. Then delete `sample.ts` and its import. `apps/demos` runs this block on `useChat` with TanStack AI's `fakeText` model (`src/lib/assistant-model.ts`), no server and no key.
 
@@ -3563,6 +3578,7 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-chat-drawer.m
 - **Placeholder:** "Ask about <resource>".
 - **Disclaimer:** "The AI assistant can make mistakes. Check important information."
 - Errors, loading and feedback strings follow `ai/ai-chat` and `skills/webkit-microcopy`.
+- **Connection:** `Reconnecting`; `Connection lost` with "Your messages send when the connection returns."
 
 ## Accessibility
 
@@ -3571,6 +3587,7 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-chat-drawer.m
 - The log is a named `role="log"` with live behavior off; finished responses are announced once through the conversation's polite region.
 - New chat is an icon button with an accessible name; it is disabled while the thread is empty.
 - Keyboard order inside the drawer: header controls, log, message actions, follow-ups, composer.
+- Reconnecting is a polite status and Connection lost an alert; the queued messages are a list named Queued messages, each with Remove from queue; a question card is a group named by its question.
 
 ## States
 
@@ -3579,6 +3596,7 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-chat-drawer.m
 - Error: `error` set: a failed response with its partial text and Try again.
 - Tools: a `tool-call` part draws as a `ToolCall` titled from `tools`; one with `approval` draws the `ToolApproval` card first (see `ai/ai-action-approval`).
 - LongThread: six earlier turns as `messages` that overflow the drawer's log.
+- Media and agent parts, the queue, older messages and the connection draw as in `ai/ai-chat` (its Media and Agent variants).
 
 ## Related
 
@@ -12908,7 +12926,7 @@ never read as new.
 
 # Prompt Input
 
-> The composer of a generative AI chat (ChatGPT, Claude.ai and Gemini composers, AI Elements PromptInput, Cloudscape prompt input): a text area that grows with the prompt up to `maxRows`, a toolbar under it, files attached by a button, by dropping them on the box or by pasting them, a model and mode picker, dictation, a voice-conversation control that stands in for Submit while the prompt is empty, a Submit control that becomes Stop while a response is generated, a secondary row under the box (a context picker, tools, links), an optional character limit with a counter, and constraint text under it all. Enter submits; Shift+Enter adds a line; an IME composition never submits. It is controlled: the owner holds the text and the files, receives `submit` with the trimmed prompt, its references and its files, and clears them. While `status` is `pending` or `streaming` the reader can keep typing the next prompt, but cannot submit it until the response ends or they press Stop. The anatomy is composed by the app: the root draws the box, the text area, Submit / Stop / voice and the file tokens; the controls the app wants (attach, dictate, model, context, tools) are sub-components it places in the `actions`, `end` and `footer` slots. Each reads the composer through `provide` / `inject`, so the app wires nothing but its own values.
+> The composer of a generative AI chat (ChatGPT, Claude.ai and Gemini composers, AI Elements PromptInput, Cloudscape prompt input): a text area that grows with the prompt up to `maxRows`, a toolbar under it, files attached by a button, by dropping them on the box or by pasting them, a model and mode picker, dictation, a voice-conversation control that stands in for Submit while the prompt is empty, a Submit control that becomes Stop while a response is generated, a secondary row under the box (a context picker, tools, links), an optional character limit with a counter, and constraint text under it all. Enter submits; Shift+Enter adds a line; an IME composition never submits. It is controlled: the owner holds the text and the files, receives `submit` with the trimmed prompt, its references and its files, and clears them. While `status` is `pending` or `streaming` the reader can keep typing the next prompt, but cannot submit it until the response ends or they press Stop. With `queueable` the owner keeps a queue of prompts to send after the response (TanStack AI `useChat` queues a `sendMessage` made while it streams): Submit then stays beside Stop, and Enter or Submit sends the next prompt into that queue while Stop still ends the response. The anatomy is composed by the app: the root draws the box, the text area, Submit / Stop / voice and the file tokens; the controls the app wants (attach, dictate, model, context, tools) are sub-components it places in the `actions`, `end` and `footer` slots. Each reads the composer through `provide` / `inject`, so the app wires nothing but its own values.
 
 - Import: `import PromptInputRoot from '@aziontech/webkit/prompt-input-root'`
 - Compound import (dot notation, not tree-shakeable): `import PromptInput from '@aziontech/webkit/prompt-input'`
@@ -12924,6 +12942,7 @@ never read as new.
 - Placeholder is a suggested question with no end punctuation (`Ask a question`); never the only instruction.
 - Put the disclaimer and the shortcuts in `hint`, not in the placeholder.
 - Set `status` from the request so Submit turns into Stop; wire `stop` to abort it.
+- Set `queueable` only when the owner queues what is sent while a response runs, and shows the
 - Clear `v-model` and `v-model:files` in the `submit` handler and keep focus in the input.
 - Use `maxLength` only when the backend has a limit; the counter is the warning.
 - Compose only the controls the product has. Attach first at the inline start; model, dictate and
@@ -12956,13 +12975,14 @@ never read as new.
 | `maxLength` | `number` | `0` | false | Character limit; shows an `n/max` counter and blocks submit over it. `0` means no limit. |
 | `minRows` | `number` | `1` | false | Rows shown while empty. |
 | `maxRows` | `number` | `6` | false | Rows the text area grows to before it scrolls. |
-| `status` | `'ready' \| 'pending' \| 'streaming'` | `'ready'` | false | Request lifecycle: `pending` and `streaming` swap Submit for Stop and block another submit; typing stays allowed. |
+| `status` | `'ready' \| 'pending' \| 'streaming'` | `'ready'` | false | Request lifecycle: `pending` and `streaming` swap Submit for Stop and block another submit (unless `queueable`); typing stays allowed. |
 | `disabled` | `boolean` | `false` | false | Disables the text area, the submit control and every control in the slots' rows. |
 | `menus` | `PromptInputMenu[]` | `[]` | false | Shortcut menus opened by a trigger character at the start of a word: `/` for commands, `@` for things to reference. Choosing an option inserts `<trigger><label>` and adds it to `references`. |
 | `accept` | `string` | `''` | false | File filter in the native accept syntax (extensions, MIME types, wildcards) for picked, dropped and pasted files. Empty accepts every file. |
 | `maxFiles` | `number` | `0` | false | Most files attached at once; files past it are rejected. `0` means no limit. |
 | `maxFileSize` | `number` | `0` | false | Largest file in bytes; larger files are rejected. `0` means no limit. |
 | `voice` | `boolean` | `false` | false | Shows a Start voice conversation control in place of Submit while there is nothing to send; it emits `voice-start`. |
+| `queueable` | `boolean` | `false` | false | While `status` is `pending` or `streaming`, keeps Submit beside Stop and lets Enter submit, so the owner queues the prompt for after the response. |
 | `modelValue` | `string` | `''` | false | Two-way value (`v-model`). |
 | `references` | `PromptInputReference[]` | `() => []` | false | Two-way value (`v-model:references`). |
 | `files` | `PromptInputFile[]` | `() => []` | false | Two-way value (`v-model:files`). |
@@ -13097,6 +13117,7 @@ packages/webkit/src/components/ai/prompt-input/
 - `data-status` mirrors `status`; `data-disabled`; `data-invalid` while over `maxLength`; `data-dragging` on the box while files are dragged over it (only with an `AttachButton`).
 - `ready`: Submit (primary `IconButton`, `az az-arrow-up`), disabled while there is nothing to send, the prompt is over the limit, a file is loading or failed, or `disabled`. With `voice` and nothing to send (no text, no files), Start voice conversation (primary `IconButton`, `az az-headphones`) takes its place.
 - `pending` / `streaming`: Stop (secondary `IconButton`, `az az-stop`) replaces Submit; Enter does nothing.
+- `pending` / `streaming` with `queueable`: Stop stays, and Submit (primary, after Stop at the inline end) shows beside it while there is something to send; Enter and Submit emit `submit` as in `ready`. With nothing to send only Stop shows, and the voice control never does.
 - Over the limit: border turns `--danger-border`, the counter turns danger, `aria-invalid="true"`, and a polite live region says how many characters are over.
 - Dragging files over the box: a dashed `--border-selected` panel on `--bg-selected` covers the box and reads `Drop files to attach`.
 - Rejected files: a danger line under the box says how many were not added and why (`not an accepted type`, `larger than 10 MB`, `up to 3 files`), in a polite live region; it clears on the next accepted file, a removal or a submit.
@@ -13106,12 +13127,13 @@ packages/webkit/src/components/ai/prompt-input/
 ## Accessibility
 
 - Visible focus: the container shows `focus-within:ring-2 focus-within:ring-(--ring-color)`.
-- Keyboard map: `Enter` submits; `Shift+Enter` new line; `Tab` moves through the attachments, the toolbar start controls, the toolbar end controls, Submit / Stop / voice, then the footer row. IME composition (`isComposing`, or between `compositionstart` and `compositionend`) never submits.
+- Keyboard map: `Enter` submits (while a response runs only with `queueable`); `Shift+Enter` new line; `Tab` moves through the attachments, the toolbar start controls, the toolbar end controls, Submit / Stop / voice, then the footer row. IME composition (`isComposing`, or between `compositionstart` and `compositionend`) never submits.
 - Shortcut menus (`menus`): typing a trigger at the start of a word opens a listbox above the input with up to eight options matching what follows it. Focus stays in the text area, which points at the list with `aria-controls` and at the highlighted option with `aria-activedescendant` (a `textarea` cannot take `role="combobox"`); `ArrowDown`/`ArrowUp` move, `Enter` or `Tab` choose, `Escape` closes, and Enter does not submit while the list is open. A polite status reads `3 suggestions` or `No matches`. The text area lists the triggers in `aria-keyshortcuts`. References are a list named `References` of removable `Chip`s.
 - Files: the tokens are `FileTokenGroup`'s list (named `Files`) with a named remove button each; focus moves as that component defines. The drop panel is decorative (`aria-hidden`); the attach button is the keyboard path. Rejections are announced politely and shown as text.
 - Pickers: each opens a `DropdownMenu` (`menu` with `menuitemradio` / `menuitemcheckbox`), so arrows, typeahead, `Escape` and focus return come from it. The model trigger's name is its visible text (model and mode). Enabled tools are a list named `Enabled tools` of removable `Chip`s.
 - Dictation: the control's name says what pressing it does (`Dictate` / `Stop dictation`), with no `aria-pressed`; the listening status is a polite live region. Where the browser has no speech recognition the control is not rendered.
-- Focus: Submit, Stop and Start voice conversation share one place. When the control that has focus is swapped or disabled (the owner clears the prompt after a submit, a request starts or ends), focus moves to the text area instead of falling to the page.
+- Queue: with `queueable`, Stop and Submit are two named buttons in tab order (Stop first); the owner announces the queued prompt through `PromptQueue`'s list, so the composer adds no live region of its own.
+- Focus: Submit, Stop and Start voice conversation share one place, except with `queueable` while `pending` / `streaming`, when Stop and Submit sit side by side. When the control that has focus is swapped, removed or disabled (the owner clears the prompt after a submit, which hides a queue Submit; a request starts or ends), focus moves to the text area instead of falling to the page.
 - ARIA: the `<textarea>` is named by `aria-label` (no visible label, as Cloudscape allows for an input with an action button), described by the counter and the hint, `aria-invalid` over the limit; Submit, Stop and Start voice conversation are named icon buttons.
 - The placeholder never carries required information (it disappears on typing).
 - Touch target: `IconButton` medium (44 px on coarse pointers); the small picker `Button`s get the 44 px hit area on coarse pointers from `Button`.

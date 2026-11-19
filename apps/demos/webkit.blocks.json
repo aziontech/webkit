@@ -28,7 +28,7 @@
           "path": "src/blocks/ai-chat.messages.ts",
           "source": "blocks/ai/ai-chat/messages.ts",
           "variant": "Data",
-          "checksum": "sha256:7e7c05629c1484e27a604686c2ca487b2fecb94b5abbaf91e595d2aa172da733"
+          "checksum": "sha256:2c8b15659f50d9f9bf763ea0c6e123c44e37ae2cceef18ff000d5547316cb2f3"
         },
         {
           "path": "src/blocks/ai-chat.sample.ts",
@@ -37,7 +37,7 @@
           "imports": {
             "./messages": "./ai-chat.messages"
           },
-          "checksum": "sha256:7759551fc446f76839eca74b1b5010182955807f54a10b422ab18310b0690a30"
+          "checksum": "sha256:2885de1783201465aab3c2815f3f8c211ecb40428c3e8c58d85c47eb5c2f98ce"
         },
         {
           "path": "src/blocks/ai-chat.vue",
@@ -47,7 +47,7 @@
             "./messages": "./ai-chat.messages",
             "./sample": "./ai-chat.sample"
           },
-          "checksum": "sha256:ce319a69dccf2a0655d001cb4b899a39afea9118c6a23a4bbbb918b5cc926cb8"
+          "checksum": "sha256:fed790e7316df8605203ed718f5d749fc6366e4b74b04d813c2c70ea62f82442"
         }
       ]
     },

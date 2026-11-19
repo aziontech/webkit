@@ -32,7 +32,7 @@ Each read-only call it made, as a completed `ToolCall` with the tool name in cod
 
 ### D. Authorization card — `ToolApproval`, `CodeBlock`
 
-The question names the action and its target, with the command or tool in code. The description says what changes and what stays. The body is the call's input in a `CodeBlock`. Deny (outlined) and the approve button, labelled with the verb of the title (Deploy, Delete), sit at the inline end. For irreversible actions use `variant="danger"` and `confirmation-phrase` with the resource name. After a decision the buttons give way to Approved or Denied. The body shows the call's input as JSON.
+The question names the action and its target, with the command or tool in code. The description says what changes and what stays. The body is the call's input in a `CodeBlock`. Deny (outlined) and the approve button, labelled with the verb of the title (Deploy, Delete), sit at the inline end. For irreversible actions use `variant="danger"` and `confirmation-phrase` with the resource name. After a decision the buttons give way to Approved or Denied. The body shows the call's input as JSON; a tool with `editable` lets the reader edit it, Approve stays off while it does not parse, and the edit resolves the interrupt as `{ editedArgs }`.
 
 ### E. The action running — `ToolCall`
 
@@ -48,21 +48,21 @@ The block draws a conversation in the message shape of TanStack AI: each message
 
 What TanStack AI does not carry, the app adds in `metadata`: `sources` (the documents the response cites, numbered in order), `reasoningSeconds` (left out, the block measures the thinking time) and `stopped` (the block also marks the response that Stop ended). A message's time is its `createdAt`, formatted in the reader's locale.
 
-| Prop         | Type                                   | What it does                                                                                                                                             |
-| ------------ | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `messages`   | `AiActionApprovalMessage[]`            | The conversation, oldest first, as `useChat` returns it. Left out, the sample deployment renders.                                                        |
-| `loading`    | `boolean`                              | `isLoading` from `useChat`: the last response thinks, then streams, and the composer shows Stop.                                                         |
-| `error`      | `string \| Error`                      | `error` from `useChat` shows the standard sentence on the last response with Try again; a string shows that sentence instead.                            |
-| `tools`      | `Record<string, AiActionApprovalTool>` | How each tool reads, by name: `title` for the call, `question`, `description`, `approveLabel`, `variant` and `confirmationPhrase` for its approval card. |
-| `interrupts` | `interrupts` of `useChat`              | The pending approvals; the approve button and Deny resolve the one whose `toolCallId` matches the call.                                                  |
+| Prop         | Type                                   | What it does                                                                                                                                                         |
+| ------------ | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `messages`   | `AiActionApprovalMessage[]`            | The conversation, oldest first, as `useChat` returns it. Left out, the sample deployment renders.                                                                    |
+| `loading`    | `boolean`                              | `isLoading` from `useChat`: the last response thinks, then streams, and the composer shows Stop.                                                                     |
+| `error`      | `string \| Error`                      | `error` from `useChat` shows the standard sentence on the last response with Try again; a string shows that sentence instead.                                        |
+| `tools`      | `Record<string, AiActionApprovalTool>` | How each tool reads, by name: `title` for the call, `question`, `description`, `approveLabel`, `variant`, `confirmationPhrase` and `editable` for its approval card. |
+| `interrupts` | `interrupts` of `useChat`              | The pending approvals; the approve button and Deny resolve the one whose `toolCallId` matches the call.                                                              |
 
-| Event     | Payload            | When                                                                                       |
-| --------- | ------------------ | ------------------------------------------------------------------------------------------ |
-| `send`    | `(event, text)`    | The composer: call `sendMessage(text)`.                                                    |
-| `stop`    | `(event)`          | Stop while the response streams: call `stop()`. The block marks the stopped response.      |
-| `retry`   | `(event, message)` | Try again or Regenerate response: call `reload()`.                                         |
-| `approve` | `(event, call)`    | The approve button on an approval card; the block already resolved the matching interrupt. |
-| `deny`    | `(event, call)`    | Deny on an approval card; the block already resolved the matching interrupt.               |
+| Event     | Payload                 | When                                                                                                                                              |
+| --------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `send`    | `(event, text)`         | The composer: call `sendMessage(text)`.                                                                                                           |
+| `stop`    | `(event)`               | Stop while the response streams: call `stop()`. The block marks the stopped response.                                                             |
+| `retry`   | `(event, message)`      | Try again or Regenerate response: call `reload()`.                                                                                                |
+| `approve` | `(event, call, input?)` | The approve button on an approval card; `input` is the edited arguments of an `editable` tool. The block already resolved the matching interrupt. |
+| `deny`    | `(event, call)`         | Deny on an approval card; the block already resolved the matching interrupt.                                                                      |
 
 To go live, install `@tanstack/ai`, `@tanstack/ai-vue` and the adapter of your model (`@tanstack/ai-anthropic`, `@tanstack/ai-openai`…), add a server route that streams the model, and bind `useChat` to the block:
 

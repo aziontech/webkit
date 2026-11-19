@@ -3,10 +3,14 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { page, userEvent } from 'vitest/browser'
 
 import AiChat, {
+  type AiChatInterrupt,
   type AiChatMessage,
+  type AiChatQueuedMessage,
   type AiChatToolCallPart
 } from '../../../../blocks/ai/ai-chat/ai-chat.vue'
+import Agent from '../../../../blocks/ai/ai-chat/variants/agent.vue'
 import Artifact from '../../../../blocks/ai/ai-chat/variants/artifact.vue'
+import Media from '../../../../blocks/ai/ai-chat/variants/media.vue'
 
 describe('ai/ai-chat Artifact', () => {
   describe('wide', () => {
@@ -253,5 +257,331 @@ describe('ai/ai-chat', () => {
   it('shows a pending response while the reply has not started', () => {
     const view = render(AiChat, { props: { messages: [thread[0]], loading: true } })
     expect(view.container.textContent).toContain('Generating a response')
+  })
+
+  const answer = (parts: AiChatMessage['parts']): AiChatMessage[] => [
+    thread[0]!,
+    { id: 'a1', role: 'assistant', parts }
+  ]
+
+  it('draws image, audio, video and document parts with their components', () => {
+    const view = render(AiChat, {
+      props: {
+        messages: answer([
+          { type: 'image', source: { type: 'url', value: 'https://example.com/a.png' } },
+          {
+            type: 'image',
+            source: { type: 'data', value: 'iVBORw0KGgo=', mimeType: 'image/png' },
+            metadata: { alt: 'Second chart' }
+          },
+          { type: 'audio', source: { type: 'url', value: 'https://example.com/a.webm' } },
+          {
+            type: 'video',
+            source: { type: 'data', value: 'AAAA', mimeType: 'video/mp4' }
+          },
+          {
+            type: 'document',
+            source: { type: 'data', value: 'aGVsbG8=', mimeType: 'text/plain' },
+            metadata: { name: 'notes.txt' }
+          },
+          { type: 'document', source: { type: 'file', value: 'file-1' } }
+        ])
+      }
+    })
+    const root = view.container
+    expect(root.querySelectorAll('[data-testid="image-gallery"]')).toHaveLength(1)
+    expect(root.querySelectorAll('[data-testid="image-gallery"] img')).toHaveLength(2)
+    expect(root.querySelector('[data-testid="image-gallery"] img[alt="Second chart"]')).toBeTruthy()
+    expect(root.querySelector('[data-testid="audio-player"] audio')).toHaveAttribute(
+      'src',
+      'https://example.com/a.webm'
+    )
+    expect(
+      root.querySelector('[data-testid="video-player"] video')?.getAttribute('src') ??
+        root.querySelector('[data-testid="video-player"] source')?.getAttribute('src')
+    ).toBe('data:video/mp4;base64,AAAA')
+    expect(root.querySelectorAll('[data-testid="file-preview"]')).toHaveLength(1)
+    expect(root.textContent).toContain('notes.txt')
+    expect(root.textContent).toContain('hello')
+  })
+
+  it('renders the Media variant', () => {
+    const view = render(Media)
+    expect(view.container.querySelector('[data-testid="image-gallery"]')).toBeTruthy()
+    expect(view.container.textContent).toContain('traffic-report.csv')
+    expect(view.container.querySelector('[data-testid="audio-player"]')).toBeTruthy()
+  })
+
+  it('draws activity parts and the activity messages before the turn as one step list', async () => {
+    const view = render(AiChat, {
+      props: {
+        messages: [
+          thread[0]!,
+          {
+            id: 'act',
+            role: 'activity',
+            parts: [
+              {
+                type: 'activity',
+                activityType: 'search',
+                content: { title: 'Reading the docs', status: 'complete' }
+              }
+            ]
+          },
+          {
+            id: 'a1',
+            role: 'assistant',
+            parts: [
+              {
+                type: 'activity',
+                activityType: 'compare',
+                content: { status: 'cancelled', detail: 'Two builds' }
+              },
+              { type: 'text', content: 'Done.' }
+            ]
+          }
+        ]
+      }
+    })
+    const activity = view.container.querySelectorAll('[data-testid="agent-activity"]')
+    expect(activity).toHaveLength(1)
+    await userEvent.click(view.getByTestId('agent-activity__toggle'))
+    const steps = activity[0]!.querySelectorAll('[data-testid="agent-activity__step"]')
+    expect([...steps].map((step) => step.getAttribute('data-status'))).toEqual([
+      'success',
+      'canceled'
+    ])
+    expect(steps[0]!.textContent).toContain('Reading the docs')
+    expect(steps[1]!.textContent).toContain('compare')
+    expect(steps[1]!.textContent).toContain('Two builds')
+  })
+
+  it('draws a subagent with its answer and stops it', async () => {
+    let stops = 0
+    const view = render(AiChat, {
+      props: {
+        loading: true,
+        messages: answer([
+          {
+            type: 'subagent',
+            subagent: {
+              name: 'researcher',
+              description: 'Comparing builds',
+              status: 'running',
+              messages: [
+                { id: 'r1', role: 'assistant', parts: [{ type: 'text', content: 'Build 1042.' }] }
+              ],
+              stop: () => stops++
+            }
+          }
+        ])
+      }
+    })
+    const card = view.container.querySelector('[data-testid="subagent-card"]')!
+    expect(card).toHaveAttribute('data-status', 'running')
+    await userEvent.click(view.getByRole('button', { name: /^Stop/ }))
+    expect(stops).toBe(1)
+  })
+
+  it('maps a stopped subagent to canceled and a finished one to success', () => {
+    const subagent = (status: 'error' | 'finished', message?: string) =>
+      ({
+        type: 'subagent',
+        subagent: {
+          name: 'researcher',
+          status,
+          messages: [],
+          error: message ? { message } : undefined
+        }
+      }) as const
+    const view = render(AiChat, {
+      props: { messages: answer([subagent('error', 'Stopped'), subagent('finished')]) }
+    })
+    const cards = view.container.querySelectorAll('[data-testid="subagent-card"]')
+    expect([...cards].map((card) => card.getAttribute('data-status'))).toEqual([
+      'canceled',
+      'success'
+    ])
+  })
+
+  it('reads streaming and canceled tool calls', () => {
+    const view = render(AiChat, {
+      props: {
+        messages: answer([
+          { ...deploy, id: 'c1', approval: undefined, state: 'input-streaming' },
+          { ...deploy, id: 'c2', approval: undefined, state: 'input-complete' },
+          {
+            type: 'tool-result',
+            toolCallId: 'c2',
+            content: null,
+            state: 'complete',
+            outcome: 'cancelled'
+          }
+        ])
+      }
+    })
+    const calls = view.container.querySelectorAll('[data-testid="tool-call"]')
+    expect([...calls].map((call) => call.getAttribute('data-status'))).toEqual([
+      'streaming',
+      'canceled'
+    ])
+  })
+
+  it('asks a generic interrupt as a question and resolves it with the answer', async () => {
+    const answers: unknown[] = []
+    const question: AiChatInterrupt = {
+      kind: 'generic',
+      id: 'q-1',
+      message: 'Which environment?',
+      metadata: { options: [{ value: 'prod', label: 'Production' }, 'staging'] },
+      status: 'pending',
+      errors: [],
+      resolveInterrupt: (value: unknown) => answers.push(value)
+    }
+    const view = render(AiChat, { props: { messages: thread, interrupts: [question] } })
+    expect(view.getByRole('group', { name: 'Which environment?' })).toBeTruthy()
+    await userEvent.click(view.getByRole('radio', { name: 'Production' }))
+    await userEvent.click(view.getByRole('button', { name: 'Submit' }))
+    expect(answers).toEqual(['prod'])
+    await view.rerender({ messages: thread, interrupts: [] })
+    const card = view.container.querySelector('[data-testid="agent-question"]')
+    expect(card).toHaveAttribute('data-status', 'success')
+  })
+
+  it('shows the interrupt status and error, and Skip cancels it', async () => {
+    let canceled = 0
+    const question: AiChatInterrupt = {
+      kind: 'generic',
+      id: 'q-2',
+      message: 'Name the bucket?',
+      status: 'error',
+      errors: [{ message: 'The name is taken.' }],
+      resolveInterrupt: () => undefined,
+      cancel: () => canceled++
+    }
+    const view = render(AiChat, { props: { messages: thread, interrupts: [question] } })
+    expect(view.getByRole('textbox', { name: /Name the bucket/ })).toBeTruthy()
+    expect(view.container.textContent).toContain('The name is taken.')
+    await userEvent.click(view.getByRole('button', { name: 'Skip' }))
+    expect(canceled).toBe(1)
+    await view.rerender({ messages: thread, interrupts: [] })
+    expect(view.container.querySelector('[data-testid="agent-question"]')).toHaveAttribute(
+      'data-status',
+      'skipped'
+    )
+  })
+
+  it('renders the Agent variant and keeps the answered question', async () => {
+    const view = render(Agent)
+    expect(view.container.querySelector('[data-testid="agent-activity"]')).toBeTruthy()
+    expect(view.container.querySelector('[data-testid="subagent-card"]')).toHaveAttribute(
+      'data-status',
+      'success'
+    )
+    await userEvent.click(view.getByRole('radio', { name: 'Roll back to build 1041' }))
+    await userEvent.click(view.getByRole('button', { name: 'Submit' }))
+    await waitFor(() =>
+      expect(view.container.querySelector('[data-testid="agent-question"]')).toHaveAttribute(
+        'data-status',
+        'success'
+      )
+    )
+  })
+
+  it('passes edited arguments of an editable tool as editedArgs', async () => {
+    const calls: unknown[][] = []
+    const view = render(AiChat, {
+      props: {
+        messages: answer([deploy]),
+        tools: { deploy_workload: { title: 'Deploying', approveLabel: 'Deploy', editable: true } },
+        interrupts: [
+          {
+            kind: 'tool-approval',
+            toolCallId: 'call-1',
+            resolveInterrupt: (...args: unknown[]) => calls.push(args)
+          }
+        ]
+      }
+    })
+    const field = view.getByRole('textbox')
+    const original = (field as HTMLTextAreaElement).value
+    expect(JSON.parse(original)).toEqual({ workload: 'storefront' })
+    await userEvent.clear(field)
+    await userEvent.type(field, '{{"workload":"checkout"')
+    expect(view.getByRole('button', { name: 'Deploy' })).toBeDisabled()
+    await userEvent.type(field, '}')
+    await userEvent.click(view.getByRole('button', { name: 'Deploy' }))
+    expect(calls).toEqual([[true, { editedArgs: { workload: 'checkout' } }]])
+    const [[, , input]] = view.emitted('approve') as [[Event, AiChatToolCallPart, unknown]]
+    expect(input).toEqual({ workload: 'checkout' })
+  })
+
+  it('resolves an unedited editable tool with true only', async () => {
+    const calls: unknown[][] = []
+    const view = render(AiChat, {
+      props: {
+        messages: answer([deploy]),
+        tools: { deploy_workload: { title: 'Deploying', approveLabel: 'Deploy', editable: true } },
+        interrupts: [
+          {
+            kind: 'tool-approval',
+            toolCallId: 'call-1',
+            resolveInterrupt: (...args: unknown[]) => calls.push(args)
+          }
+        ]
+      }
+    })
+    await userEvent.click(view.getByRole('button', { name: 'Deploy' }))
+    expect(calls).toEqual([[true]])
+  })
+
+  it('shows the queue, sends while loading and emits remove-queued', async () => {
+    const queue: AiChatQueuedMessage[] = [
+      { id: 'w1', content: 'Then purge the cache' },
+      {
+        id: 'w2',
+        content: {
+          content: [
+            { type: 'text', content: 'Read this log' },
+            { type: 'image', source: { type: 'url', value: 'https://example.com/a.png' } }
+          ]
+        }
+      }
+    ]
+    const view = render(AiChat, { props: { messages: thread, loading: true, queue } })
+    const list = view.getByRole('list', { name: 'Queued messages' })
+    expect(list.textContent).toContain('Then purge the cache')
+    expect(list.textContent).toContain('Read this log')
+    await userEvent.type(view.getByRole('textbox', { name: 'Prompt' }), 'And the logs')
+    await userEvent.click(view.getByRole('button', { name: 'Submit' }))
+    expect((view.emitted('send') as [[Event, string]])[0]![1]).toBe('And the logs')
+    const [remove] = view.getAllByRole('button', { name: /^Remove/ })
+    await userEvent.click(remove!)
+    const [[event, item]] = view.emitted('remove-queued') as [[Event, AiChatQueuedMessage]]
+    expect(event).toBeInstanceOf(Event)
+    expect(item.id).toBe('w1')
+  })
+
+  it('does not send while loading without a queue', async () => {
+    const view = render(AiChat, { props: { messages: thread, loading: true } })
+    expect(view.queryByRole('button', { name: 'Submit' })).toBeNull()
+  })
+
+  it('offers older messages and emits load-more', async () => {
+    const view = render(AiChat, { props: { messages: thread, moreMessages: true } })
+    await userEvent.click(view.getByRole('button', { name: /earlier messages/i }))
+    expect(view.emitted('load-more')!.length).toBeGreaterThan(0)
+  })
+
+  it('shows Reconnecting and Connection lost above the composer', async () => {
+    const view = render(AiChat, { props: { messages: thread, connection: 'connecting' } })
+    expect(view.container.textContent).toContain('Reconnecting')
+    await view.rerender({ messages: thread, connection: 'connected', resuming: true })
+    expect(view.container.textContent).toContain('Reconnecting')
+    await view.rerender({ messages: thread, connection: 'error', resuming: false })
+    expect(view.container.textContent).toContain('Connection lost')
+    expect(view.container.textContent).not.toContain('Reconnecting')
+    await view.rerender({ messages: thread, connection: 'connected' })
+    expect(view.container.textContent).not.toContain('Connection lost')
   })
 })

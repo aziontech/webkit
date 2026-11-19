@@ -14,7 +14,7 @@
   "@aziontech/webkit/prompt-input-context-picker",
   "@aziontech/webkit/prompt-input-tools"
  ],
- "purpose": "The composer of a generative AI chat (ChatGPT, Claude.ai and Gemini composers, AI Elements PromptInput, Cloudscape prompt input): a text area that grows with the prompt up to `maxRows`, a toolbar under it, files attached by a button, by dropping them on the box or by pasting them, a model and mode picker, dictation, a voice-conversation control that stands in for Submit while the prompt is empty, a Submit control that becomes Stop while a response is generated, a secondary row under the box (a context picker, tools, links), an optional character limit with a counter, and constraint text under it all. Enter submits; Shift+Enter adds a line; an IME composition never submits. It is controlled: the owner holds the text and the files, receives `submit` with the trimmed prompt, its references and its files, and clears them. While `status` is `pending` or `streaming` the reader can keep typing the next prompt, but cannot submit it until the response ends or they press Stop. The anatomy is composed by the app: the root draws the box, the text area, Submit / Stop / voice and the file tokens; the controls the app wants (attach, dictate, model, context, tools) are sub-components it places in the `actions`, `end` and `footer` slots. Each reads the composer through `provide` / `inject`, so the app wires nothing but its own values.",
+ "purpose": "The composer of a generative AI chat (ChatGPT, Claude.ai and Gemini composers, AI Elements PromptInput, Cloudscape prompt input): a text area that grows with the prompt up to `maxRows`, a toolbar under it, files attached by a button, by dropping them on the box or by pasting them, a model and mode picker, dictation, a voice-conversation control that stands in for Submit while the prompt is empty, a Submit control that becomes Stop while a response is generated, a secondary row under the box (a context picker, tools, links), an optional character limit with a counter, and constraint text under it all. Enter submits; Shift+Enter adds a line; an IME composition never submits. It is controlled: the owner holds the text and the files, receives `submit` with the trimmed prompt, its references and its files, and clears them. While `status` is `pending` or `streaming` the reader can keep typing the next prompt, but cannot submit it until the response ends or they press Stop. With `queueable` the owner keeps a queue of prompts to send after the response (TanStack AI `useChat` queues a `sendMessage` made while it streams): Submit then stays beside Stop, and Enter or Submit sends the next prompt into that queue while Stop still ends the response. The anatomy is composed by the app: the root draws the box, the text area, Submit / Stop / voice and the file tokens; the controls the app wants (attach, dictate, model, context, tools) are sub-components it places in the `actions`, `end` and `footer` slots. Each reads the composer through `provide` / `inject`, so the app wires nothing but its own values.",
  "setup": null,
  "useWhen": [
   "The input of any conversation with the generative AI assistant.",
@@ -39,6 +39,7 @@
   "Placeholder is a suggested question with no end punctuation (`Ask a question`); never the only instruction.",
   "Put the disclaimer and the shortcuts in `hint`, not in the placeholder.",
   "Set `status` from the request so Submit turns into Stop; wire `stop` to abort it.",
+  "Set `queueable` only when the owner queues what is sent while a response runs, and shows the",
   "Clear `v-model` and `v-model:files` in the `submit` handler and keep focus in the input.",
   "Use `maxLength` only when the backend has a limit; the counter is the warning.",
   "Compose only the controls the product has. Attach first at the inline start; model, dictate and",
@@ -86,7 +87,7 @@
    "type": "'ready' | 'pending' | 'streaming'",
    "default": "'ready'",
    "required": "false",
-   "doc": "Request lifecycle: `pending` and `streaming` swap Submit for Stop and block another submit; typing stays allowed."
+   "doc": "Request lifecycle: `pending` and `streaming` swap Submit for Stop and block another submit (unless `queueable`); typing stays allowed."
   },
   {
    "name": "disabled",
@@ -129,6 +130,13 @@
    "default": "false",
    "required": "false",
    "doc": "Shows a Start voice conversation control in place of Submit while there is nothing to send; it emits `voice-start`."
+  },
+  {
+   "name": "queueable",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "While `status` is `pending` or `streaming`, keeps Submit beside Stop and lets Enter submit, so the owner queues the prompt for after the response."
   },
   {
    "name": "modelValue",

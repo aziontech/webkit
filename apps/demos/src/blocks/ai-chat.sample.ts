@@ -1,7 +1,7 @@
 import type { SourcesItem } from '@aziontech/webkit/sources'
 import type { SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
 
-import type { AiChatMessage } from './ai-chat.messages'
+import type { AiChatInterrupt, AiChatMessage } from './ai-chat.messages'
 
 const at = (time: string): Date => new Date(`2026-11-19T${time}:00`)
 
@@ -163,4 +163,86 @@ export const sampleArtifactThread: (AiChatMessage & { version?: number })[] = [
 export const sampleArtifactFollowUps: SuggestionGroupItem[] = [
   { id: 'email', label: 'Show the customer email too' },
   { id: 'items', label: 'Count the items of each order' }
+]
+
+export const sampleReportCsv =
+  'ZGF0ZSxyZXF1ZXN0cyxjYWNoZSBoaXQgcmF0aW8KMjAyNi0xMS0xNiwxMjA0MzMxLDkwJQoyMDI2LTExLTE3LDExODcyMDIsOTElCjIwMjYtMTEtMTgsMTI1MTk0MCw5MiUK'
+
+export const sampleAgentMessages: AiChatMessage[] = [
+  user('q1', 'Find why checkout got slower this week', '15:20'),
+  {
+    id: 'act1',
+    role: 'activity',
+    parts: [
+      {
+        type: 'activity',
+        activityType: 'search',
+        content: { title: 'Reading the metrics of acme-store', status: 'success' }
+      },
+      {
+        type: 'activity',
+        activityType: 'compare',
+        content: {
+          title: 'Comparing the last two deployments',
+          status: 'success',
+          detail: 'Builds 1041 and 1042'
+        }
+      }
+    ]
+  },
+  {
+    id: 'a1',
+    role: 'assistant',
+    parts: [
+      {
+        type: 'activity',
+        activityType: 'wait',
+        content: { title: 'Waiting for your answer', status: 'pending' }
+      },
+      {
+        type: 'subagent',
+        subagent: {
+          name: 'researcher',
+          description: 'Comparing the two deployments',
+          status: 'finished',
+          input: { application: 'acme-store', builds: [1041, 1042] },
+          messages: [
+            {
+              id: 'r1',
+              role: 'assistant',
+              parts: [
+                {
+                  type: 'text',
+                  content:
+                    'Build **1042** added a function on `/checkout` that calls `api.example.com` on every request.'
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        type: 'text',
+        content:
+          'Checkout slowed down when build 1042 went live: its new function waits on the origin for every request. I can cache the origin response or roll back to build 1041.'
+      }
+    ],
+    createdAt: at('15:21')
+  }
+]
+
+export const sampleAgentInterrupts: AiChatInterrupt[] = [
+  {
+    kind: 'generic',
+    id: 'question-fix',
+    message: 'How should I fix checkout?',
+    metadata: {
+      options: [
+        { value: 'cache', label: 'Cache the origin response for 60 seconds' },
+        { value: 'rollback', label: 'Roll back to build 1041' }
+      ]
+    },
+    status: 'pending',
+    errors: []
+  }
 ]

@@ -5365,7 +5365,7 @@
      "type": "'ready' | 'pending' | 'streaming'",
      "default": "'ready'",
      "required": "false",
-     "doc": "Request lifecycle: `pending` and `streaming` swap Submit for Stop and block another submit; typing stays allowed."
+     "doc": "Request lifecycle: `pending` and `streaming` swap Submit for Stop and block another submit (unless `queueable`); typing stays allowed."
     },
     {
      "name": "disabled",
@@ -5408,6 +5408,13 @@
      "default": "false",
      "required": "false",
      "doc": "Shows a Start voice conversation control in place of Submit while there is nothing to send; it emits `voice-start`."
+    },
+    {
+     "name": "queueable",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "While `status` is `pending` or `streaming`, keeps Submit beside Stop and lets Enter submit, so the owner queues the prompt for after the response."
     },
     {
      "name": "modelValue",
@@ -5538,7 +5545,7 @@
      "type": "'ready' | 'pending' | 'streaming'",
      "default": "'ready'",
      "required": "false",
-     "doc": "Request lifecycle: `pending` and `streaming` swap Submit for Stop and block another submit; typing stays allowed."
+     "doc": "Request lifecycle: `pending` and `streaming` swap Submit for Stop and block another submit (unless `queueable`); typing stays allowed."
     },
     {
      "name": "disabled",
@@ -5581,6 +5588,13 @@
      "default": "false",
      "required": "false",
      "doc": "Shows a Start voice conversation control in place of Submit while there is nothing to send; it emits `voice-start`."
+    },
+    {
+     "name": "queueable",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "While `status` is `pending` or `streaming`, keeps Submit beside Stop and lets Enter submit, so the owner queues the prompt for after the response."
     },
     {
      "name": "modelValue",
@@ -32620,7 +32634,10 @@
     "artefato gerado",
     "full page chat",
     "tanstack ai",
-    "usechat"
+    "usechat",
+    "agent activity",
+    "subagent",
+    "agent question"
    ],
    "skills": [
     "webkit-ai-surfaces",
@@ -32628,8 +32645,15 @@
     "webkit-microcopy"
    ],
    "components": [
+    "AgentActivity",
+    "AgentQuestion",
+    "Alert",
     "ArtifactCanvas",
     "ArtifactPreview",
+    "branches",
+    "placeholderClip",
+    "usageChart",
+    "AudioPlayer",
     "Button",
     "ChatMessage",
     "CodeBlock",
@@ -32639,21 +32663,34 @@
     "Drawer",
     "DrawerTitle",
     "EmptyState",
+    "FilePreview",
     "IconButton",
+    "ImageGallery",
     "PromptInput",
+    "PromptQueue",
     "Reasoning",
     "Resizable",
     "Sources",
+    "StatusIndicator",
     "StreamingResponse",
+    "SubagentCard",
     "SuggestionGroup",
     "Tag",
     "ToolApproval",
     "ToolCall",
-    "use-locale"
+    "use-locale",
+    "VideoPlayer"
    ],
    "imports": [
+    "@aziontech/webkit/agent-activity",
+    "@aziontech/webkit/agent-question",
+    "@aziontech/webkit/alert",
     "@aziontech/webkit/artifact-canvas",
     "@aziontech/webkit/artifact-preview",
+    "@aziontech/webkit/assets/branches.svg",
+    "@aziontech/webkit/assets/placeholder-clip.webm",
+    "@aziontech/webkit/assets/usage-chart.svg",
+    "@aziontech/webkit/audio-player",
     "@aziontech/webkit/button",
     "@aziontech/webkit/chat-message",
     "@aziontech/webkit/code-block",
@@ -32663,17 +32700,23 @@
     "@aziontech/webkit/drawer-root",
     "@aziontech/webkit/drawer-title",
     "@aziontech/webkit/empty-state",
+    "@aziontech/webkit/file-preview",
     "@aziontech/webkit/icon-button",
+    "@aziontech/webkit/image-gallery",
     "@aziontech/webkit/prompt-input-root",
+    "@aziontech/webkit/prompt-queue",
     "@aziontech/webkit/reasoning",
     "@aziontech/webkit/resizable",
     "@aziontech/webkit/sources",
+    "@aziontech/webkit/status-indicator",
     "@aziontech/webkit/streaming-response",
+    "@aziontech/webkit/subagent-card",
     "@aziontech/webkit/suggestion-group",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/tool-approval",
     "@aziontech/webkit/tool-call",
-    "@aziontech/webkit/use-locale"
+    "@aziontech/webkit/use-locale",
+    "@aziontech/webkit/video-player"
    ],
    "primary": "Empty",
    "guidelinesSummary": "A full page where a person talks with the generative AI assistant about their account: they ask in their own words, watch the response arrive, check where it came from, and keep going with a follow-up or a new question. The page is the conversation; everything else (header, composer) stays still while only the log scrolls. Use it as the assistant's home; on a resource page, open the same conversation in a drawer with `ai/ai-chat-drawer`. It is a page body for `ConsoleLayout`: it fills the layout's content region (`grow basis-0 min-h-0`, never `h-dvh`), so only the log scrolls, and the layout owns the rail, the header and the `main`.",
@@ -32689,6 +32732,12 @@
     },
     {
      "name": "Artifact"
+    },
+    {
+     "name": "Media"
+    },
+    {
+     "name": "Agent"
     }
    ],
    "file": "catalog/blocks/ai/ai-chat.json"
@@ -32723,6 +32772,10 @@
     "webkit-microcopy"
    ],
    "components": [
+    "AgentActivity",
+    "AgentQuestion",
+    "Alert",
+    "AudioPlayer",
     "Button",
     "Card",
     "ChatMessage",
@@ -32733,22 +32786,31 @@
     "Drawer",
     "DrawerTitle",
     "EmptyState",
+    "FilePreview",
     "IconButton",
+    "ImageGallery",
     "KeyValueList",
     "PageHeader",
     "PanelHeader",
     "PromptInput",
+    "PromptQueue",
     "Reasoning",
     "Sources",
     "StatusIndicator",
     "StreamingResponse",
+    "SubagentCard",
     "SuggestionGroup",
     "Tag",
     "ToolApproval",
     "ToolCall",
-    "use-locale"
+    "use-locale",
+    "VideoPlayer"
    ],
    "imports": [
+    "@aziontech/webkit/agent-activity",
+    "@aziontech/webkit/agent-question",
+    "@aziontech/webkit/alert",
+    "@aziontech/webkit/audio-player",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
     "@aziontech/webkit/chat-message",
@@ -32759,20 +32821,25 @@
     "@aziontech/webkit/drawer-root",
     "@aziontech/webkit/drawer-title",
     "@aziontech/webkit/empty-state",
+    "@aziontech/webkit/file-preview",
     "@aziontech/webkit/icon-button",
+    "@aziontech/webkit/image-gallery",
     "@aziontech/webkit/key-value-list",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/panel-header",
     "@aziontech/webkit/prompt-input-root",
+    "@aziontech/webkit/prompt-queue",
     "@aziontech/webkit/reasoning",
     "@aziontech/webkit/sources",
     "@aziontech/webkit/status-indicator",
     "@aziontech/webkit/streaming-response",
+    "@aziontech/webkit/subagent-card",
     "@aziontech/webkit/suggestion-group",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/tool-approval",
     "@aziontech/webkit/tool-call",
-    "@aziontech/webkit/use-locale"
+    "@aziontech/webkit/use-locale",
+    "@aziontech/webkit/video-player"
    ],
    "primary": "Empty",
    "guidelinesSummary": "The generative AI assistant beside the work: the reader is on a resource page — here a workload whose error rate is up — and opens the assistant in a drawer to ask about what they see, without losing the page. The drawer carries the same conversation as the full assistant page, laid out for a narrow column: every message at the inline start, a shorter composer, and support prompts written about this resource. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.",

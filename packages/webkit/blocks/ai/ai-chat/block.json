@@ -35,7 +35,10 @@
     "artefato gerado",
     "full page chat",
     "tanstack ai",
-    "usechat"
+    "usechat",
+    "agent activity",
+    "subagent",
+    "agent question"
   ],
   "skills": ["webkit-ai-surfaces", "webkit-ui-states", "webkit-microcopy"],
   "primary": {
@@ -63,6 +66,16 @@
       "name": "Artifact",
       "summary": "An answer that produced a file: the message carries an `ArtifactPreview` of top-orders.sql and the `ArtifactCanvas` sits beside the conversation in a `Resizable` pane (a `Drawer` under the md breakpoint) with its versions, Copy, Download and Close; a follow-up question fills the composer. While a new version is written the canvas takes `streaming`, which locks its pager.",
       "file": "variants/artifact.vue"
+    },
+    {
+      "name": "Media",
+      "summary": "An answer with two charts in an `ImageGallery`, a CSV report in a `FilePreview` and an audio summary in an `AudioPlayer`.",
+      "file": "variants/media.vue"
+    },
+    {
+      "name": "Agent",
+      "summary": "`AgentActivity` steps, a finished `SubagentCard` and a pending `AgentQuestion` that keeps its answer.",
+      "file": "variants/agent.vue"
     }
   ]
 }

@@ -259,21 +259,23 @@ export function mediaUrl(source: AiChatMediaSource): string {
   return `data:${source.mimeType ?? 'application/octet-stream'};base64,${source.value}`
 }
 
+function metadataText(metadata: unknown, key: string): string {
+  if (!metadata || typeof metadata !== 'object' || !(key in metadata)) return ''
+  const value = (metadata as Record<string, unknown>)[key]
+  return typeof value === 'string' ? value : ''
+}
+
 export function imageOf(part: AiChatImagePart, index: number): ImageGalleryItem | null {
   const key = part.id ?? `image-${index}`
-  if (part.source.type === 'url') return { key, src: part.source.value }
+  const alt = metadataText(part.metadata, 'alt')
+  if (part.source.type === 'url') return { key, src: part.source.value, alt }
   if (part.source.type === 'data')
-    return { key, data: part.source.value, mimeType: part.source.mimeType }
+    return { key, data: part.source.value, mimeType: part.source.mimeType, alt }
   return null
 }
 
 export function documentNameOf(part: AiChatDocumentPart): string {
-  const metadata = part.metadata
-  if (metadata && typeof metadata === 'object' && 'name' in metadata) {
-    const name = (metadata as { name?: unknown }).name
-    if (typeof name === 'string' && name) return name
-  }
-  return 'Document'
+  return metadataText(part.metadata, 'name') || 'Document'
 }
 
 const ACTIVITY_STATUS: Record<string, AgentActivityStatus> = {
