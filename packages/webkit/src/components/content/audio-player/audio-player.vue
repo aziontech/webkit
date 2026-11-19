@@ -312,7 +312,7 @@
         v-if="title"
         :id="titleId"
         :data-testid="`${testId}__title`"
-        class="min-w-0 flex-1 truncate text-label-md text-(--text-default) group-data-[disabled]/audio-player:text-(--text-disabled)"
+        class="min-w-0 flex-1 truncate text-label-md text-(--text-default)"
       >
         <bdi>{{ title }}</bdi>
       </span>
@@ -382,7 +382,7 @@
       <template v-else>
         <span
           :data-testid="`${testId}__time`"
-          class="inline-flex shrink-0 items-center text-body-xs text-(--text-muted) tabular-nums group-data-[disabled]/audio-player:text-(--text-disabled)"
+          class="inline-flex shrink-0 items-center text-body-xs text-(--text-muted) tabular-nums"
         >
           <Spinner
             v-if="buffering"
@@ -408,7 +408,7 @@
         </div>
         <span
           :data-testid="`${testId}__duration`"
-          class="shrink-0 text-body-xs text-(--text-muted) tabular-nums group-data-[disabled]/audio-player:text-(--text-disabled)"
+          class="shrink-0 text-body-xs text-(--text-muted) tabular-nums"
         >
           <bdi>{{ durationLabel }}</bdi>
         </span>
