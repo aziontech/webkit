@@ -297,7 +297,6 @@ describe('Chart', () => {
     expect(indexes.at(-1)).toBe(3)
     expect(view.getByTestId('chart').hasAttribute('data-active')).toBe(true)
     document.body.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }))
-    document.body.dispatchEvent(new PointerEvent('click', { bubbles: true }))
     await nextTick()
     expect(indexes.at(-1)).toBeNull()
   })

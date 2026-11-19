@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import {
-    onClickOutside,
     useElementSize,
+    useEventListener,
     useMounted,
     usePreferredReducedMotion
   } from '@vueuse/core'
@@ -549,8 +549,8 @@
     if (!draft.value) setActiveIndex(null)
   }
 
-  onClickOutside(stageEl, () => {
-    if (!touchActive.value) return
+  useEventListener(globalThis.document, 'pointerdown', (event: globalThis.PointerEvent) => {
+    if (!touchActive.value || stageEl.value?.contains(event.target as globalThis.Node)) return
     touchActive.value = false
     if (!draft.value) setActiveIndex(null)
   })

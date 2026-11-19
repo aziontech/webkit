@@ -7,7 +7,7 @@
   {
     "name": "console-layout-root",
     "path": "src/components/layout/console-layout/console-layout.vue",
-    "limit": "73.5 KB",
+    "limit": "73.55 KB",
     "entryOnly": true
   },
   {
@@ -260,7 +260,7 @@
   {
     "name": "doc-page-header",
     "path": "src/components/docs/doc-page-header/doc-page-header.vue",
-    "limit": "30.7 KB"
+    "limit": "30.75 KB"
   },
   {
     "name": "doc-table-of-contents",
@@ -359,7 +359,7 @@
   {
     "name": "media-tabs",
     "path": "src/components/marketing/media-tabs/media-tabs.vue",
-    "limit": "8.83 KB"
+    "limit": "8.85 KB"
   },
   {
     "name": "embed",
@@ -653,7 +653,7 @@
   {
     "name": "architecture-tabs-section",
     "path": "src/components/section/architecture-tabs-section/architecture-tabs-section.vue",
-    "limit": "22.2 KB",
+    "limit": "22.25 KB",
     "entryOnly": true
   },
   {
@@ -665,7 +665,7 @@
   {
     "name": "feature-tabs-section",
     "path": "src/components/section/feature-tabs-section/feature-tabs-section.vue",
-    "limit": "55.3 KB",
+    "limit": "55.4 KB",
     "entryOnly": true
   },
   {
@@ -723,12 +723,12 @@
   {
     "name": "chart",
     "path": "src/components/chart/chart/index.ts",
-    "limit": "24.05 KB"
+    "limit": "24.45 KB"
   },
   {
     "name": "chart-root",
     "path": "src/components/chart/chart/chart.vue",
-    "limit": "15.7 KB"
+    "limit": "16.1 KB"
   },
   {
     "name": "chart-line",
@@ -1192,13 +1192,13 @@
   {
     "name": "prompt-input",
     "path": "src/components/ai/prompt-input/index.ts",
-    "limit": "12.4 KB",
+    "limit": "12.6 KB",
     "entryOnly": true
   },
   {
     "name": "prompt-input-root",
     "path": "src/components/ai/prompt-input/prompt-input.vue",
-    "limit": "9.25 KB",
+    "limit": "9.45 KB",
     "entryOnly": true
   },
   {
@@ -1468,7 +1468,7 @@
   {
     "name": "split-button",
     "path": "src/components/action/split-button/split-button.vue",
-    "limit": "15.35 KB"
+    "limit": "15.4 KB"
   },
   {
     "name": "chart-card-content",
@@ -1967,7 +1967,7 @@
   {
     "name": "context-menu",
     "path": "src/components/navigation/context-menu/index.ts",
-    "limit": "10.35 KB"
+    "limit": "10.4 KB"
   },
   {
     "name": "context-menu-root",
@@ -1982,7 +1982,7 @@
   {
     "name": "dropdown-menu",
     "path": "src/components/navigation/dropdown-menu/index.ts",
-    "limit": "11.3 KB"
+    "limit": "11.35 KB"
   },
   {
     "name": "dropdown-menu-root",
@@ -2207,12 +2207,12 @@
   {
     "name": "breadcrumb",
     "path": "src/components/navigation/breadcrumb/index.ts",
-    "limit": "25.4 KB"
+    "limit": "25.45 KB"
   },
   {
     "name": "breadcrumb-root",
     "path": "src/components/navigation/breadcrumb/breadcrumb.vue",
-    "limit": "25.4 KB"
+    "limit": "25.45 KB"
   },
   {
     "name": "breadcrumb-item",

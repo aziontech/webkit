@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3775-16746&m=dev
   node_id: 3775:16746
-checksum: 19d3102c05e5ffa52ca3ebc9c0594ee7377091e19f7f2c3c9238359afc6a2448
+checksum: f718093b836bc3e11eb7750df8363b5a8a5380041461d8d7dd84d4341993abb7
 created: 2026-06-26
 last_updated: 2026-11-19
 ---
@@ -313,7 +313,7 @@ No built-in strings: every label comes from the consumer (`label` props and slot
 
 ## Responsive
 
-- Container queries: none; panels are sized between `--container-3xs` and `--container-2xs`, and a sub-panel never wider than the viewport less `--spacing-xs` on each side.
+- Container queries: none; panels are sized between `--container-3xs` and `--container-2xs`, and a sub-panel never wider than the viewport less `--spacing-xs` on each side (its minimum fits a 320px screen).
 - Narrow (≤ 640 px or a narrow container): `usePlacement` keeps every panel inside the viewport. A sub-panel tries the trailing side, then the leading side; when neither has room (a phone) it opens below its row (above when below has no room), starting at the row's leading edge and shifted back inside the screen, so it never leaves the viewport and the rows above its trigger stay visible; labels truncate.
 - Touch: rows are 32 px; a sub-menu opens on tap (click) as well as hover, so nothing is hover-only.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom.

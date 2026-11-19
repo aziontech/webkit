@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { useMediaQuery, usePreferredReducedMotion } from '@vueuse/core'
+  import { usePreferredReducedMotion } from '@vueuse/core'
   import { computed, onMounted, onScopeDispose, ref, useAttrs, watch } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
@@ -103,7 +103,12 @@
 
   const hasItems = computed(() => tabs.value.length > 0)
 
-  const sideBySide = useMediaQuery('(min-width: 64rem)')
+  const WIDE = '(min-width: 64rem)'
+  const sideBySide = ref(Boolean(globalThis.matchMedia?.(WIDE).matches))
+  let wideQuery: globalThis.MediaQueryList | null = null
+  const onWideChange = () => {
+    sideBySide.value = Boolean(wideQuery?.matches)
+  }
 
   const autoplayEnabled = computed(
     () =>
@@ -137,10 +142,16 @@
   )
 
   onMounted(() => {
+    wideQuery = globalThis.matchMedia?.(WIDE) ?? null
+    wideQuery?.addEventListener('change', onWideChange)
+    onWideChange()
     if (autoplayRunning.value) start()
   })
 
-  onScopeDispose(stop)
+  onScopeDispose(() => {
+    stop()
+    wideQuery?.removeEventListener('change', onWideChange)
+  })
 
   function isActive(index: number): boolean {
     return activeIndex.value === index
