@@ -3,7 +3,10 @@ export function safeHref(href?: string | null, file?: boolean): string | null {
   const plain = value.replace(/[\s\p{Cf}]/gu, '')
   const scheme = /[:&]/.test(plain.split(/[/?#\\]/)[0])
   const allowed = file ? /^(https?|mailto|tel|blob|data):/i : /^(https?|mailto|tel):/i
-  return !value || /\p{Cc}|^[/\\]{2}/u.test(plain + value) || (scheme && !allowed.test(plain))
+  return !value ||
+    /\p{Cc}/u.test(value) ||
+    /^[/\\]{2}/.test(plain) ||
+    (scheme && !allowed.test(plain))
     ? null
     : value
 }

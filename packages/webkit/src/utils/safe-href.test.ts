@@ -30,6 +30,8 @@ const BLOCKED = [
 ]
 
 const ALLOWED = [
+  '/',
+  '#',
   'https://example.com',
   'HTTP://example.com/path?q=1#top',
   'mailto:jane.doe@example.com',
