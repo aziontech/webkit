@@ -875,8 +875,8 @@
     <header
       class="flex shrink-0 flex-col gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-lg) py-(--spacing-sm)"
     >
-      <header class="flex items-center gap-(--layout-group-gap)">
-        <div class="flex min-w-0 grow items-center gap-(--spacing-xs)">
+      <header class="flex flex-wrap items-center gap-x-(--layout-group-gap) gap-y-(--spacing-xs)">
+        <div class="flex min-w-0 grow basis-(--container-3xs) items-center gap-(--spacing-xs)">
           <FilterMenu
             v-model="filters"
             :fields="menuFields"
@@ -900,7 +900,7 @@
             </Input>
           </div>
         </div>
-        <div class="flex shrink-0 items-center gap-(--spacing-xs)">
+        <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
           <span
             class="text-label-sm inline-flex items-center gap-(--spacing-2xs) whitespace-nowrap text-(--text-muted)"
             data-testid="events-time-zone"
