@@ -1,6 +1,6 @@
 # @aziontech/webkit
 
-Azion's design system for Vue 3 — 100+ accessible, token-driven components, plus the
+Azion's design system for Vue 3 — more than 250 accessible, token-driven components, plus the
 tooling that keeps every project using them on-pattern: an ESLint plugin (every rule
 `error`), a Stylelint config, an MCP server that guides AI coding tools, and a CLI that
 wires it all in one command.
@@ -9,57 +9,10 @@ wires it all in one command.
 - **Styleguide:** [`docs/STYLEGUIDE.md`](./docs/STYLEGUIDE.md) — every code standard in full, with the gate that blocks each one.
 - **Guidelines:** [`docs/GUIDELINES.md`](./docs/GUIDELINES.md) — the one-page digest (build & use on-pattern).
 
-## For AI agents: start here
-
-Creating or changing WebKit itself? Skip to "Changing WebKit (contribute)" at the end of this
-page. Building a screen or an app with WebKit? Follow these steps.
-
-1. Run `npx @aziontech/webkit init`. It installs the `webkit` MCP server, the lint, the skills and
-   rules, and writes the WebKit block into `AGENTS.md` (and `CLAUDE.md`).
-2. The app's chrome is one layout, composed once in `App.vue` around `RouterView`: `ConsoleLayout`
-   (console), `SiteLayout` (marketing site) or `DocLayout` (docs). Start it from its shell block
-   (`npx @aziontech/webkit add shell/shell-console`, `shell/shell-site`, `shell/shell-docs`): `add` writes the block
-   into your views folder and prints the path, so move that file to `src/App.vue` and replace the
-   stand-in body with `<RouterView />`. Every screen below is only a page body in that
-   layout's slot: no `<main>`, sidebar, header, footer or ⌘K palette of its own (a page opens the
-   console palette with `useConsoleLayout().openSearch()`). Only a screen with no rail (a create,
-   edit or deploy flow, sign-in) is routed outside the layout and keeps its own bar and `<main>`.
-3. A whole screen (login, signup, settings, a list, a create flow): start from a block.
-   `npx @aziontech/webkit search <the screen in plain words>`, then
-   `npx @aziontech/webkit add <block-id>` (`--variant <state>` for another state). It copies the
-   reviewed SFC into your views, checks its imports against the installed version, records it in
-   `webkit.blocks.json` and prints the route to add. Change only the content. Do not build the
-   screen from scratch. (The MCP gives an agent the same blocks: `search_blocks`, `get_block`.) Blocks are grouped by job (`<account|ai|auth|create|dashboard|detail|edit|settings|state|view|shell|top-bar>/…`),
-   one per job with its states as variants; an id from before v6 still resolves, with a `note`
-   naming the new one.
-4. A single piece: `suggest_component`, then `get_component`.
-5. Follow the `webkit-usage` skill, which points to the skill for each case.
-6. Before you hand it over: `npx @aziontech/webkit check` (the CI gate: setup, v5 names, imports,
-   lint, blocks drifting from the canonical copy) and the `webkit-ui-verify` skill.
-
-Rules for this path: [`skills/`](https://github.com/aziontech/webkit/tree/main/skills) and [`rules/`](https://github.com/aziontech/webkit/tree/main/rules). Do not use `.claude/`,
-`.specs/` or `apps/` to build screens; they belong to the people who maintain WebKit.
+Install it and render a first component with the first three steps below. Using Claude Code, Cursor or
+another AI coding tool? Do step 1, then read "Using WebKit with an AI agent" further down.
 
 ## Building with WebKit (consume)
-
-### Quick start with AI
-
-Using Claude Code, Cursor, or another AI coding tool? Paste this into your agent:
-
-> Install `@aziontech/webkit`, `@aziontech/theme`, and `@aziontech/icons` in this project,
-> then run `npx @aziontech/webkit init` to wire the lint, the MCP server, and the agent docs.
-
-The MCP server it wires gives your AI the screen blocks (`search_blocks`, `get_block`) and
-the full component catalog (`list_components`, `get_component`, `list_tokens`, `list_assets`,
-`suggest_component`, `get_best_practices`, `validate_usage`) — so it starts each screen from the
-reviewed layout and writes the right import, prop, and token on the first try.
-
-No MCP? The package ships the same content as plain files for any agent or reader:
-`node_modules/@aziontech/webkit/llms/llms.txt` (in the [llms.txt](https://llmstxt.org) format)
-links one Markdown page per block, component and foundation, a JSON API per component
-(`llms/components/<name>.json`), `llms-full.txt` holds the foundations, blocks and product
-components in one file and `llms-full-site.txt` the site and docs components. They are
-generated from `catalog.json` (`pnpm --filter @aziontech/webkit build:llms`).
 
 ### 1 · Install
 
@@ -201,6 +154,58 @@ npx @aziontech/webkit check    # CI gate: doctor + v5 names + imports + lint + b
 npx @aziontech/webkit doctor   # verify the wiring is healthy (lint, MCP, theme)
 npx -y @aziontech/webkit-mcp   # the MCP server your AI tools connect to (its own package)
 ```
+
+## Using WebKit with an AI agent
+
+### Set it up
+
+Using Claude Code, Cursor, or another AI coding tool? Paste this into your agent:
+
+> Install `@aziontech/webkit`, `@aziontech/theme`, and `@aziontech/icons` in this project,
+> then run `npx @aziontech/webkit init` to wire the lint, the MCP server, and the agent docs.
+
+The MCP server it wires gives your AI the screen blocks (`search_blocks`, `get_block`) and
+the full component catalog (`list_components`, `get_component`, `list_tokens`, `list_assets`,
+`suggest_component`, `get_best_practices`, `validate_usage`) — so it starts each screen from the
+reviewed layout and writes the right import, prop, and token on the first try.
+
+No MCP? The package ships the same content as plain files for any agent or reader:
+`node_modules/@aziontech/webkit/llms/llms.txt` (in the [llms.txt](https://llmstxt.org) format)
+links one Markdown page per block, component and foundation, a JSON API per component
+(`llms/components/<name>.json`), `llms-full.txt` holds the foundations, blocks and product
+components in one file and `llms-full-site.txt` the site and docs components. They are
+generated from `catalog.json` (`pnpm --filter @aziontech/webkit build:llms`).
+
+### Steps for an agent building a screen
+
+Creating or changing WebKit itself? Skip to "Changing WebKit (contribute)" below. Building a
+screen or an app with WebKit? Follow these steps.
+
+1. Run `npx @aziontech/webkit init`. It installs the `webkit` MCP server, the lint, the skills and
+   rules, and writes the WebKit block into `AGENTS.md` (and `CLAUDE.md`).
+2. The app's chrome is one layout, composed once in `App.vue` around `RouterView`: `ConsoleLayout`
+   (console), `SiteLayout` (marketing site) or `DocLayout` (docs). Start it from its shell block
+   (`npx @aziontech/webkit add shell/shell-console`, `shell/shell-site`, `shell/shell-docs`): `add` writes the block
+   into your views folder and prints the path, so move that file to `src/App.vue` and replace the
+   stand-in body with `<RouterView />`. Every screen below is only a page body in that
+   layout's slot: no `<main>`, sidebar, header, footer or ⌘K palette of its own (a page opens the
+   console palette with `useConsoleLayout().openSearch()`). Only a screen with no rail (a create,
+   edit or deploy flow, sign-in) is routed outside the layout and keeps its own bar and `<main>`.
+3. A whole screen (login, signup, settings, a list, a create flow): start from a block.
+   `npx @aziontech/webkit search <the screen in plain words>`, then
+   `npx @aziontech/webkit add <block-id>` (`--variant <state>` for another state). It copies the
+   reviewed SFC into your views, checks its imports against the installed version, records it in
+   `webkit.blocks.json` and prints the route to add. Change only the content. Do not build the
+   screen from scratch. (The MCP gives an agent the same blocks: `search_blocks`, `get_block`.) Blocks are grouped by job (`<account|ai|auth|create|dashboard|detail|edit|settings|state|view|shell|top-bar>/…`),
+   one per job with its states as variants; an id from before v6 still resolves, with a `note`
+   naming the new one.
+4. A single piece: `suggest_component`, then `get_component`.
+5. Follow the `webkit-usage` skill, which points to the skill for each case.
+6. Before you hand it over: `npx @aziontech/webkit check` (the CI gate: setup, v5 names, imports,
+   lint, blocks drifting from the canonical copy) and the `webkit-ui-verify` skill.
+
+Rules for this path: [`skills/`](https://github.com/aziontech/webkit/tree/main/skills) and [`rules/`](https://github.com/aziontech/webkit/tree/main/rules). Do not use `.claude/`,
+`.specs/` or `apps/` to build screens; they belong to the people who maintain WebKit.
 
 ## Changing WebKit (contribute)
 
