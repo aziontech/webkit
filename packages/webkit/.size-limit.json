@@ -1307,6 +1307,11 @@
     "limit": "6.9 KB"
   },
   {
+    "name": "video-player",
+    "path": "src/components/content/video-player/video-player.vue",
+    "limit": "12.05 KB"
+  },
+  {
     "name": "overflow-count",
     "path": "src/components/content/overflow-count/overflow-count.vue",
     "limit": "14.3 KB"

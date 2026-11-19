@@ -4,7 +4,6 @@
 
   import { useLocale } from '../../../composables/use-locale/use-locale'
   import * as en from '../../../locales/en'
-  import { cn } from '../../../utils/cn'
   import Button from '../../action/button/button.vue'
   import IconButton from '../../action/icon-button/icon-button.vue'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
@@ -236,12 +235,7 @@
     :data-status="shownStatus"
     :data-paused="paused || null"
     :data-muted="muted || null"
-    :class="
-      cn(
-        '@container/video-player flex w-full flex-col overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) [&:fullscreen]:rounded-none [&:fullscreen]:border-0',
-        attrs.class as string
-      )
-    "
+    class="@container/video-player flex w-full flex-col overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) [&:fullscreen]:rounded-none [&:fullscreen]:border-0"
   >
     <div
       v-if="generating"

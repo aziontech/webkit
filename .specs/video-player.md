@@ -2,10 +2,10 @@
 name: video-player
 category: content
 structure: monolithic
-status: approved
+status: implemented
 spec_version: 1
 template: 2
-checksum: 269104ce16ff373f94f6d7783111e14d13f0020674655c20dab0ea934c514a76
+checksum: 0c17be15c4a12b594b6bfd45bec2676d7ce2b39b70a489e12712543fef5728e4
 created: 2026-11-19
 last_updated: 2026-11-19
 ---
@@ -82,9 +82,7 @@ Plays one video file in the page with its own controls: play and pause, a seek b
 
 ## Events
 
-| Event    | Payload | Notes |
-| -------- | ------- | ----- |
-| _none_   | —       | —     |
+| _none_ | — | — |
 
 ## Slots
 
@@ -183,7 +181,7 @@ The video never plays on its own: there is no autoplay, so nothing moves until t
 
 ## Performance
 
-- Bundle budget: 9 KB gzip for `./video-player` in `.size-limit.json`, including `Slider`, `IconButton`, `Button`, `Progress`, `Skeleton` and `EmptyState`; lowered to the measured size plus about 0.2 KB at build time.
+- Bundle budget: 12.05 KB gzip for `./video-player` in `.size-limit.json` (measured 11.85 KB + 0.2 KB), including `Slider`, `IconButton`, `Button`, `Progress`, `Skeleton` and `EmptyState`, whose own budgets add up to 14.5 KB; no `cn` (tailwind-merge), the root merges the consumer class through `$attrs`.
 - Runtime budget: time updates follow the media element's `timeupdate` event (about 4 per second); no animation frame loop.
 - Heavy parts: none; `preload="metadata"` loads only the header until Play.
 
