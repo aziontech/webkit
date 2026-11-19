@@ -49,12 +49,18 @@
   const accessibility = computed(() => doc.value?.spec['Accessibility (WCAG 2.1 AA)'] ?? '')
   const rtl = computed(() => doc.value?.spec['Right-to-left'] ?? '')
 
+  const firstExample = computed(() => doc.value?.examples[0])
+  const moreExamples = computed(() => doc.value?.examples.slice(1) ?? [])
+
   const toc = computed(() => {
     if (!doc.value) return []
-    const items = [{ id: 'usage', text: t.value.whenToUse, depth: 2 }]
-    if (doc.value.examples.length) {
-      items.push({ id: 'examples', text: t.value.examples, depth: 2 })
-      for (const example of doc.value.examples)
+    const items: { id: string; text: string; depth: number }[] = []
+    if (firstExample.value && doc.value.exampleDir)
+      items.push({ id: anchor(firstExample.value.name), text: firstExample.value.name, depth: 2 })
+    items.push({ id: 'usage', text: t.value.whenToUse, depth: 2 })
+    if (moreExamples.value.length && doc.value.exampleDir) {
+      items.push({ id: 'examples', text: t.value.moreExamples, depth: 2 })
+      for (const example of moreExamples.value)
         items.push({ id: anchor(example.name), text: example.name, depth: 3 })
     }
     if (doc.value.props.length || doc.value.events.length || doc.value.slots.length)
@@ -65,6 +71,8 @@
         text: `${t.value.do} / ${t.value.dont}`,
         depth: 2
       })
+    if (doc.value.purposeRest)
+      items.push({ id: 'how-it-is-built', text: t.value.howItIsBuilt, depth: 2 })
     if (accessibility.value)
       items.push({ id: 'accessibility', text: t.value.accessibility, depth: 2 })
     if (rtl.value) items.push({ id: 'rtl', text: t.value.rightToLeftSection, depth: 2 })
@@ -138,13 +146,17 @@
         />
       </div>
 
+      <ExampleCard
+        v-if="firstExample && doc.exampleDir"
+        :dir="doc.exampleDir"
+        :example="firstExample"
+        :anchor="anchor(firstExample.name)"
+      />
+
       <section
         id="usage"
         class="flex scroll-mt-20 flex-col gap-(--spacing-md)"
       >
-        <DocProse v-if="doc.purposeRest">
-          <RawHtml :html="doc.purposeRest" />
-        </DocProse>
         <DoDont
           type="usage"
           :do-items="doc.useWhen"
@@ -167,13 +179,13 @@
       </section>
 
       <section
-        v-if="doc.examples.length && doc.exampleDir"
+        v-if="moreExamples.length && doc.exampleDir"
         id="examples"
         class="flex scroll-mt-20 flex-col gap-(--spacing-xl)"
       >
-        <h2 class="text-heading-md">{{ t.examples }}</h2>
+        <h2 class="text-heading-md">{{ t.moreExamples }}</h2>
         <ExampleCard
-          v-for="example in doc.examples"
+          v-for="example in moreExamples"
           :key="example.file"
           :dir="doc.exampleDir"
           :example="example"
@@ -250,6 +262,27 @@
           :do-items="doc.bestPractices"
           :dont-items="doc.avoidPractices"
         />
+      </section>
+
+      <section
+        v-if="doc.purposeRest"
+        id="how-it-is-built"
+        class="scroll-mt-20"
+      >
+        <details class="group flex flex-col gap-(--spacing-sm)">
+          <summary
+            class="flex cursor-pointer list-none items-center gap-(--spacing-xs) rounded-(--shape-button) text-heading-md focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:outline-none [&::-webkit-details-marker]:hidden"
+          >
+            <i
+              class="az az-chevron-down -rotate-90 text-label-md text-(--text-muted) transition-[rotate] duration-fast-02 ease-productive-entrance group-open:rotate-0 motion-reduce:transition-none rtl:rotate-90 rtl:group-open:rotate-0"
+              aria-hidden="true"
+            />
+            {{ t.howItIsBuilt }}
+          </summary>
+          <DocProse class="pt-(--spacing-sm)">
+            <RawHtml :html="doc.purposeRest" />
+          </DocProse>
+        </details>
       </section>
 
       <section
