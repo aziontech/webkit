@@ -1209,6 +1209,12 @@ export const artifactPreview = {
   copy: 'Copy {title}'
 } as const
 
+export const mcpAppFrame = {
+  loading: 'Loading {title}',
+  errorTitle: "This app can't be shown",
+  errorDescription: "The tool returned content that this page can't display safely."
+} as const
+
 export const chatMessage = {
   user: 'You',
   assistant: 'AI assistant',
@@ -1431,6 +1437,7 @@ export const en = {
   articleIndexSection,
   artifactCanvas,
   artifactPreview,
+  mcpAppFrame,
   attributeEditor,
   avatar,
   avatarGroup,

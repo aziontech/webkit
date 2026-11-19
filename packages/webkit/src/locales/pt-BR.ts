@@ -26,6 +26,12 @@ export const ptBR: Messages = {
     download: 'Baixar {title}',
     copy: 'Copiar {title}'
   },
+  mcpAppFrame: {
+    loading: 'Carregando {title}',
+    errorTitle: 'Este app não pode ser exibido',
+    errorDescription:
+      'A ferramenta retornou um conteúdo que esta página não pode exibir com segurança.'
+  },
   chatMessage: {
     user: 'Você',
     assistant: 'Assistente de IA',

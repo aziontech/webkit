@@ -199,6 +199,10 @@
       "types": "./types/components/ai/artifact-preview/artifact-preview.vue.d.ts",
       "default": "./src/components/ai/artifact-preview/artifact-preview.vue"
     },
+    "./mcp-app-frame": {
+      "types": "./types/components/ai/mcp-app-frame/mcp-app-frame.vue.d.ts",
+      "default": "./src/components/ai/mcp-app-frame/mcp-app-frame.vue"
+    },
     "./chat-message": {
       "types": "./types/components/ai/chat-message/index.d.ts",
       "default": "./src/components/ai/chat-message/index.ts"
@@ -2616,6 +2620,9 @@
       ],
       "artifact-preview": [
         "./types/components/ai/artifact-preview/artifact-preview.vue.d.ts"
+      ],
+      "mcp-app-frame": [
+        "./types/components/ai/mcp-app-frame/mcp-app-frame.vue.d.ts"
       ],
       "chat-message": [
         "./types/components/ai/chat-message/index.d.ts"
