@@ -33,7 +33,9 @@
       :key="mode ?? 'one'"
       :data-theme="mode"
       class="inline-block size-8"
-      :style="{ background: `var(${name})` }"
+      :style="{
+        background: `linear-gradient(var(${name}), var(${name})), var(--bg-canvas)`
+      }"
     />
   </span>
   <span
