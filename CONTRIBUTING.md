@@ -191,11 +191,21 @@ It runs `check:catalog`, `check:naming`, `check:marketing-inventory`, `check:blo
 `check:authoring-docs`, `check:tests`, `check:size` (the bundle budget, about 15 s), the hook tests and
 `test:toolkit` (which also builds the icon font and fails when an official Azion product or Solution,
 listed in `test/catalog/azion-products.json` and `azion-solutions.json`, has no `az az-<name>` icon).
-The `toolkit` job of `.github/workflows/governance.yml` runs the same commands on
-**every** PR, except `check:size`, which runs in the `build` job; the lint, type, size, Vitest browser
-(including `src/test/copyable-sfcs.test.ts`, which mounts every block and example) jobs run
-when `packages/webkit` changes; the docs/demos build and the styled visual job run when
-`packages/` or `apps/docs`, `apps/demos`, `apps/visual` change.
+It also runs, from the repository root and with the same commands as CI, the MCP, theme and icons
+package tests and the icons manifest, `test:docs`, Stylelint, the lint canaries, the tests TypeScript
+check (`typecheck:webkit:tests`) and the Prettier check (`check:webkit:format`, about 40 s); the last two
+were the most common reasons a Governance run went red. The `toolkit` job of
+`.github/workflows/governance.yml` runs the same commands on **every** PR, except `check:size`, which
+runs in the `build` job; the lint, type, size, Vitest browser (including
+`src/test/copyable-sfcs.test.ts`, which mounts every block and example) jobs run when
+`packages/webkit` changes; the docs/demos build and the styled visual job run when `packages/` or
+`apps/docs`, `apps/demos`, `apps/visual` change.
+
+What runs only in CI is listed, with the reason, in `CI_ONLY` in
+`packages/webkit/test/standards/run-gates.test.mjs`: ESLint, the source and docs type checks and type
+coverage (run them with the root `pnpm gates`), `test:ssr`, `check:pack`, the audit, the docs and
+demos builds, the consumer-app checks, and the browser and visual suites. That test fails when CI
+gains a step that is neither a gate nor listed there.
 
 **Spec template 2.** New specs carry `template: 2` and four more sections: `Internationalization`,
 `Right-to-left`, `Responsive` and `Performance`. `check:spec-template`, `spec-validate` and the

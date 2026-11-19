@@ -5,6 +5,7 @@ import { dirname, resolve } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 
 const PKG = resolve(dirname(fileURLToPath(import.meta.url)), '..')
+const ROOT = resolve(PKG, '../..')
 
 export const GATES = [
   {
@@ -114,6 +115,47 @@ export const GATES = [
     id: 'toolkit',
     label: 'Toolkit tests',
     steps: [['node', '--test', 'test/**/*.test.mjs']]
+  },
+  {
+    id: 'packages',
+    label: 'MCP, theme and icons package tests, icons manifest',
+    root: true,
+    steps: [
+      ['pnpm', '--filter', '@aziontech/webkit-mcp', 'test'],
+      ['pnpm', '--filter', '@aziontech/theme', 'test'],
+      ['pnpm', '--filter', '@aziontech/icons', 'test'],
+      ['pnpm', '--filter', '@aziontech/icons', 'check:manifest']
+    ]
+  },
+  {
+    id: 'docs-tests',
+    label: 'Docs Markdown pipeline tests',
+    root: true,
+    steps: [['pnpm', 'test:docs']]
+  },
+  {
+    id: 'stylelint',
+    label: 'Stylelint',
+    root: true,
+    steps: [['pnpm', 'run', 'lint:webkit:style']]
+  },
+  {
+    id: 'lint-canaries',
+    label: 'Lint canaries still fail their rule',
+    root: true,
+    steps: [['node', 'lint-canaries/index.js']]
+  },
+  {
+    id: 'types-tests',
+    label: 'Tests TypeScript check',
+    root: true,
+    steps: [['pnpm', 'run', 'typecheck:webkit:tests']]
+  },
+  {
+    id: 'format',
+    label: 'Prettier check',
+    root: true,
+    steps: [['pnpm', 'run', 'check:webkit:format']]
   }
 ]
 
@@ -137,7 +179,11 @@ function runGate(gate) {
   const started = Date.now()
   let output = ''
   for (const [cmd, ...args] of gate.steps) {
-    const res = spawnSync(cmd, args, { cwd: PKG, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 })
+    const res = spawnSync(cmd, args, {
+      cwd: gate.root ? ROOT : PKG,
+      encoding: 'utf8',
+      maxBuffer: 64 * 1024 * 1024
+    })
     output += `${res.stdout ?? ''}${res.stderr ?? ''}`
     if (res.status !== 0) {
       return { ...gate, pass: false, seconds: (Date.now() - started) / 1000, output }
@@ -153,7 +199,7 @@ export function formatTable(results) {
   )
   const failed = results.filter((r) => !r.pass).length
   return [
-    '| Gate | Command (in packages/webkit) | Result | Time |',
+    '| Gate | Command (in packages/webkit, or the repo root for root gates) | Result | Time |',
     '| --- | --- | --- | --- |',
     ...rows,
     '',
