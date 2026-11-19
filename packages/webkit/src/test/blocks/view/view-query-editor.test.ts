@@ -1,4 +1,4 @@
-import { render, waitFor } from '@testing-library/vue'
+import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 
@@ -126,9 +126,19 @@ describe('view/view-query-editor data contract', () => {
     expect(loading.container.querySelector('[aria-label="Loading tables"]')).not.toBeNull()
   })
 
-  it('emits delete-rows with the row and drops it from the table', async () => {
+  it('asks before it deletes a row, then emits delete-rows and drops it from the table', async () => {
     const view = render(ViewQueryEditor, { props: { tables: [ledger] } })
     await userEvent.click(view.getByRole('button', { name: 'Delete row 7' }))
+    const confirm = await waitFor(() => {
+      const dialog = document.querySelector('[role="alertdialog"]') as HTMLElement
+      expect(dialog?.textContent).toContain('Delete row')
+      return Array.from(dialog.querySelectorAll('button')).find(
+        (item) => item.textContent?.trim() === 'Delete row'
+      )!
+    })
+    expect(view.emitted('delete-rows')).toBeUndefined()
+    expect(view.container.textContent).toContain('Acme invoice')
+    await userEvent.click(confirm)
     const [[event, payload]] = view.emitted('delete-rows') as [
       [Event, { table: QueryEditorTable; rows: QueryEditorTable['rows'] }]
     ]
@@ -137,6 +147,37 @@ describe('view/view-query-editor data contract', () => {
     expect(payload.rows.map((row) => row.__k)).toEqual(['l-1'])
     await waitFor(() => expect(view.container.textContent).not.toContain('Acme invoice'))
     expect(ledger.rows).toHaveLength(2)
+  })
+
+  it('keeps Sort in place and puts the bulk delete in a selection bar', async () => {
+    const view = render(ViewQueryEditor, { props: { tables: [ledger] } })
+    const sort = view.getByRole('button', { name: 'Sort' })
+    await userEvent.click(view.getAllByRole('checkbox')[1]!)
+    expect(view.getByRole('button', { name: 'Sort' })).toBe(sort)
+    await userEvent.click(view.getByRole('button', { name: 'Delete 1 row' }))
+    await waitFor(() =>
+      expect(document.querySelector('[role="alertdialog"]')?.textContent).toContain('Delete row')
+    )
+    expect(view.emitted('delete-rows')).toBeUndefined()
+  })
+
+  it('asks for the table name before it emits delete-table', async () => {
+    const view = render(ViewQueryEditor, { props: { tables: [ledger] } })
+    await fireEvent.click(view.getByRole('button', { name: 'Actions for ledger' }))
+    await fireEvent.click(await waitFor(() => view.getByRole('menuitem', { name: 'Delete table' })))
+    const dialog = await waitFor(() => {
+      const found = document.querySelector('[role="alertdialog"]') as HTMLElement
+      expect(found?.textContent).toContain('Type ledger to confirm.')
+      return found
+    })
+    const confirm = Array.from(dialog.querySelectorAll('button')).find(
+      (item) => item.textContent?.trim() === 'Delete table'
+    )!
+    expect(confirm.disabled).toBe(true)
+    await userEvent.fill(dialog.querySelector('input')!, 'ledger')
+    await userEvent.click(confirm)
+    const [[, table]] = view.emitted('delete-table') as [[Event, QueryEditorTable]]
+    expect(table.id).toBe('tbl-ledger')
   })
 
   it('emits run with the statement and shows the result it is given', async () => {

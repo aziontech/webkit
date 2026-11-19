@@ -34,7 +34,7 @@ A database with no tables replaces the pane with a `Card` holding an `EmptyState
 
 ### D. Table data — `ToggleGroup`, `Input`, `Button`, `Tooltip`, `IconButton`, `DataTable` (required)
 
-The pane opens with the table name and a `ToggleGroup` switching Data and Definition. Data has a Filter rows `Input`, an outlined Sort `Button`, a Refresh `IconButton` and the primary Insert `Button`, over the rows. The rows are a compact `DataTable` (`row-key="__k"`, `selectable`, `sortable`, `paginated` at 25 rows with 25, 50 and 100 per page) named `Rows of <table>`: one column per table column with a `header-<name>` slot that shows the name, its type muted and a key on the primary key, a `cell-<name>` slot that renders values in the code font and `NULL` in muted italics, and a trailing action column with a Delete row `IconButton`. Sorting by a header sorts the loaded rows; selection resets when another table is picked. An empty table fills the `#empty` slot with a small `EmptyState` holding Insert row and Import data from CSV; a filter that matches nothing shows a small `EmptyState` named with the filter text and a Clear filter button. Each Delete row button names its row (`Delete row 3`).
+The pane opens with the table name and a `ToggleGroup` switching Data and Definition. Data has a Filter rows `Input`, an outlined Sort `Button`, a Refresh `IconButton` and the primary Insert `Button`, over the rows. The rows are a compact `DataTable` (`row-key="__k"`, `selectable`, `sortable`, `paginated` at 25 rows with 25, 50 and 100 per page) named `Rows of <table>`: one column per table column with a `header-<name>` slot that shows the name, its type muted and a key on the primary key, a `cell-<name>` slot that renders values in the code font and `NULL` in muted italics, and a trailing action column with a Delete row `IconButton` that asks in a small `ConfirmDialog` (`Delete row`, the table named in the sentence) before the row goes. Sorting by a header sorts the loaded rows; selection resets when another table is picked. An empty table fills the `#empty` slot with a small `EmptyState` holding Insert row and Import data from CSV; a filter that matches nothing shows a small `EmptyState` named with the filter text and a Clear filter button. Each Delete row button names its row (`Delete row 3`).
 
 ### E. Table definition — `Button`, `Card`, `DataTable`, `Tag` (optional)
 
@@ -58,7 +58,7 @@ Templates opens a large right `Drawer` titled SQL quick templates with a one-lin
 
 ### J. Bulk row delete — `Button` (optional)
 
-With rows selected, a danger `Delete 2 rows` `Button` takes the place of Sort in the Data toolbar; TableData opens with two rows selected (`defaultSelectedKeys`). It removes the rows from the table and emits `delete-rows`; the page sends the request and raises the success toast `2 rows deleted from events.` whose action fits the rows, Undo, which puts them back. Deleting rows is not a deploy: never View deployments, Edit or Redeploy.
+With rows selected, a selection bar opens under the Data toolbar: `2 selected`, Clear selection, and an outlined `Delete 2 rows` `Button` at its end. Sort never moves, so a second tap meant for Sort cannot land on Delete. TableData opens with two rows selected (`defaultSelectedKeys`). Delete N rows asks first in a small `ConfirmDialog` naming the count and the table; confirming removes the rows from the table and emits `delete-rows`; the page sends the request and raises the success toast `2 rows deleted from events.` whose action fits the rows, Undo, which puts them back. Deleting rows is not a deploy: never View deployments, Edit or Redeploy.
 
 ### K. Create database page — `Input`, `Button` (optional)
 
@@ -93,20 +93,20 @@ The block takes its records through props and emits every action; it fetches not
 | `v-model:table`        | `string \| null`            | The id of the open table; the first table when `null`.                                                              |
 | `v-model:sql`          | `string`                    | The statement in the editor.                                                                                        |
 
-| Event              | Payload                    | When                                                                            |
-| ------------------ | -------------------------- | ------------------------------------------------------------------------------- |
-| `run`              | `(event, sql)`             | Run query, Refresh results, or Run query in a history row's menu.               |
-| `refresh-tables`   | `(event)`                  | Refresh tables in the side panel.                                               |
-| `create-table`     | `(event)`                  | Create Table, in the side panel or the empty database.                          |
-| `delete-table`     | `(event, table)`           | Delete table in a table's menu; confirm it with `edit/edit-delete-dialog`.      |
-| `refresh`          | `(event)`                  | Refresh in the Data toolbar.                                                    |
-| `retry`            | `(event)`                  | Retry in the rows error alert.                                                  |
-| `insert-row`       | `(event, table)`           | Insert, or Insert row on an empty table.                                        |
-| `import-csv`       | `(event, table)`           | Import data from CSV on an empty table.                                         |
-| `add-column`       | `(event, table)`           | Add column in the Definition view.                                              |
-| `delete-rows`      | `(event, { table, rows })` | A row's Delete row, or Delete N rows; the rows are already gone from the table. |
-| `delete-query`     | `(event, entry)`           | Delete query in a history row's menu; the entry is already gone.                |
-| `download-results` | `(event, result)`          | Download results.                                                               |
+| Event              | Payload                    | When                                                                                 |
+| ------------------ | -------------------------- | ------------------------------------------------------------------------------------ |
+| `run`              | `(event, sql)`             | Run query, Refresh results, or Run query in a history row's menu.                    |
+| `refresh-tables`   | `(event)`                  | Refresh tables in the side panel.                                                    |
+| `create-table`     | `(event)`                  | Create Table, in the side panel or the empty database.                               |
+| `delete-table`     | `(event, table)`           | Delete table in a table's menu, once the table name is typed in its `ConfirmDialog`. |
+| `refresh`          | `(event)`                  | Refresh in the Data toolbar.                                                         |
+| `retry`            | `(event)`                  | Retry in the rows error alert.                                                       |
+| `insert-row`       | `(event, table)`           | Insert, or Insert row on an empty table.                                             |
+| `import-csv`       | `(event, table)`           | Import data from CSV on an empty table.                                              |
+| `add-column`       | `(event, table)`           | Add column in the Definition view.                                                   |
+| `delete-rows`      | `(event, { table, rows })` | A confirmed Delete row or Delete N rows; the rows are already gone from the table.   |
+| `delete-query`     | `(event, entry)`           | Delete query in a history row's menu; the entry is already gone.                     |
+| `download-results` | `(event, result)`          | Download results.                                                                    |
 
 To go live, render the block from a page that owns the database and the query runner:
 
@@ -143,7 +143,7 @@ Then delete `sample.ts` and its import.
 - Make the editor read-only and disable its toolbar while a query runs, and show Run query loading.
 - Show the outcome of a run in the Results band: the rows, a success `Alert` with what ran, or a danger `Alert` with why it failed.
 - Offer JSON beside Table for results, so the raw shape is one click away.
-- Confirm Delete table with `edit/edit-delete-dialog`.
+- Delete table asks for the table name (`ConfirmDialog` `confirmation-phrase`, the `edit/edit-delete-dialog` rule) before it emits `delete-table`; row deletes ask in a `ConfirmDialog` first.
 - Mark the page root with `data-layout-fill` (every variant but CreateDatabase), so the panes scroll on their own instead of the page.
 - Raise toasts with `toast` only; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so this page body never renders a `Toaster`.
 
@@ -187,7 +187,7 @@ Then delete `sample.ts` and its import.
 - Query: `tab="editor"` with `sql`, `history` and `result`, the Editor tab after a query ran, with the history in the side panel, the statement in the editor and its rows in Results.
 - Templates: `tab="editor"` and `defaultTemplatesOpen`, the Editor tab before anything ran, with Results ready to execute and the SQL quick templates drawer open over it.
 - Loading: `loading`, the tables list and the selected table's rows are loading; `Skeleton` lines hold the side panel and the rows table shows its loading state.
-- TableData: `table="tbl-events"` and `defaultSelectedKeys`, the events table, 137 rows paged 25 at a time, with two rows selected and Delete 2 rows in the toolbar.
+- TableData: `table="tbl-events"` and `defaultSelectedKeys`, the events table, 137 rows paged 25 at a time, with two rows selected and Delete 2 rows in the selection bar.
 - ImportCsv: the empty subscribers table with the import drawer open on a seven-row file: `plan_name` still on Skip (Insert asks to map `plan`), `referrer` skipped, three lines with errors (a non-boolean, an empty required email, a date that does not parse).
 - CreateDatabase: the create database page with its Name and Active fields; try `acme-store` for the name conflict and a name starting with `offline` for the failed request.
 - Error: `error`, the selected table's rows did not load; the Data view shows a danger `Alert` that names the table and offers Retry.
