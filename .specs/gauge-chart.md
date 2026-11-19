@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: 1c6eced2e4ae543dbe05b714a9aacfe6e74e5683ab2b870f97a759a5700e0969
+checksum: 040d4aca4dbec7bc7bd1def1f84c757526dd5ed3c61f2df33a3ba932d9525857
 created: 2026-11-11
 last_updated: 2026-11-18
 ---
@@ -137,6 +137,8 @@ _No events — the gauge is a read-out; wrap it in a link or button to make it i
 - `data-size`: `small` | `medium` | `large`
 - `data-severity` on the meter: the severity of the band the value falls in
 - `data-entered` on the arc flips after two animation frames to run its entrance
+
+- Its root carries `data-plain-ground`: it is content that must sit on a plain ground, so a `Texture` beside it hides itself, and the texture-backdrop check blocks placing it on a textured band (a texture is a backdrop for text only, RV-T2-1).
 
 ## Motion & Animations
 

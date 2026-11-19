@@ -6,7 +6,7 @@ status: implemented
 spec_version: 3
 created: 2026-11-10
 last_updated: 2026-11-18
-checksum: 08e72fc8cd72209d0ab08ee2bd521eee975e33612023bc622f3f419e84d956a1
+checksum: d285905dc099d8d923d11c2bf8841126c06bedb667aff223f2c80c8e9de95260
 ---
 
 # SparkChart — Component Spec
@@ -89,6 +89,8 @@ _No slots._
 - `data-type`: `area` | `line` | `bar`
 - `data-size`: `small` | `medium` | `large`
 - Lines and area edges are linear segments with round joins and caps; 2px stroke; the area fill fades from the hue to transparent. Bars have a 1px rounded data end and a 1px gap between them.
+
+- Its root carries `data-plain-ground`: it is content that must sit on a plain ground, so a `Texture` beside it hides itself, and the texture-backdrop check blocks placing it on a textured band (a texture is a backdrop for text only, RV-T2-1).
 
 ## Motion & Animations
 

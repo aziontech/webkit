@@ -13890,6 +13890,8 @@ _None. Exports: `"./tool-call"`; type `ToolCallStatus`. Composed DS components: 
 - `data-interactive` on a row that is a link or a button
 - Bar width: `value / max`, at least 2% when the value is above zero, 0 when it is zero
 
+- Its root carries `data-plain-ground`: it is content that must sit on a plain ground, so a `Texture` beside it hides itself, and the texture-backdrop check blocks placing it on a textured band (a texture is a backdrop for text only, RV-T2-1).
+
 ## Accessibility
 
 - The root is an `<ol>` named by `ariaLabel`; each row is an `<li>` whose text reads "name, value" in order. The bar is decorative.
@@ -14112,6 +14114,8 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 - Reflow: the visually hidden table twin sits inside an `sr-only` box so its intrinsic width never adds horizontal overflow at 320 px.
 - Server render and hydration: the default label format prints Date labels in `timeZone`. With no `timeZone` it prints UTC on the server and in the first client render, so the axis, tooltip title and summary match, and switches to the runtime's zone on mount. Midnight detection (day labels against clock labels) uses the same zone.
 - Default Date label format follows the span and spacing of the Date labels, in the chart's locale: labels within one day print the time (`14:00`), and midnight prints the day (`Nov 9`); a sub-day series that spans several days prints the day at midnight and the day with the time elsewhere (`Nov 10, 04:00`), so every tick and tooltip title names its day; daily buckets print the day (`Nov 9`); monthly buckets print the month (`Nov`). The year is added when the labels cross a calendar year. A custom `formatLabel` replaces all of this.
+
+- Its root carries `data-plain-ground`: it is content that must sit on a plain ground, so a `Texture` beside it hides itself, and the texture-backdrop check blocks placing it on a textured band (a texture is a backdrop for text only, RV-T2-1).
 
 ## Accessibility
 
@@ -14489,6 +14493,8 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 - `data-active` on the active slice, `data-dimmed` on the others
 - Reflow: the visually hidden table twin sits inside an `sr-only` box so its intrinsic width never adds horizontal overflow at 320 px.
 
+- Its root carries `data-plain-ground`: it is content that must sit on a plain ground, so a `Texture` beside it hides itself, and the texture-backdrop check blocks placing it on a textured band (a texture is a backdrop for text only, RV-T2-1).
+
 ## Accessibility
 
 - Root is a `<figure>`; the ring is one tab stop, `role="group"` with `aria-roledescription="chart"`, named by `ariaLabel`.
@@ -14626,6 +14632,8 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 - `data-severity` on the meter: the severity of the band the value falls in
 - `data-entered` on the arc flips after two animation frames to run its entrance
 
+- Its root carries `data-plain-ground`: it is content that must sit on a plain ground, so a `Texture` beside it hides itself, and the texture-backdrop check blocks placing it on a textured band (a texture is a backdrop for text only, RV-T2-1).
+
 ## Accessibility
 
 - The dial is `role="meter"` with `aria-valuemin`, `aria-valuemax`, `aria-valuenow` and `aria-valuetext` (the formatted value, then the band name: `93%, Critical`).
@@ -14739,6 +14747,8 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 - `data-bin` (0 to 4) on each shaded country; `data-entered` on marks after two animation frames
 - Server render and hydration: the land, the bubbles, the legend and the table render on the server; the country shading appears after the shapes chunk loads on the client, so the first client render matches the server.
 
+- Its root carries `data-plain-ground`: it is content that must sit on a plain ground, so a `Texture` beside it hides itself, and the texture-backdrop check blocks placing it on a textured band (a texture is a backdrop for text only, RV-T2-1).
+
 ## Accessibility
 
 - Root is a `<figure>`; the map is one tab stop: `role="group"` with `aria-roledescription="map"`, named by `ariaLabel` or the ChartCard title, described by a summary (`5 places on the map, 104K in total.`).
@@ -14832,6 +14842,8 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 - `data-type`: `area` | `line` | `bar`
 - `data-size`: `small` | `medium` | `large`
 - Lines and area edges are linear segments with round joins and caps; 2px stroke; the area fill fades from the hue to transparent. Bars have a 1px rounded data end and a 1px gap between them.
+
+- Its root carries `data-plain-ground`: it is content that must sit on a plain ground, so a `Texture` beside it hides itself, and the texture-backdrop check blocks placing it on a textured band (a texture is a backdrop for text only, RV-T2-1).
 
 ## Accessibility
 
@@ -14932,6 +14944,8 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 - `data-trend` on the delta: `good` | `bad` | `flat` — `flat` when the change rounds to zero
 - Responsive: the root is the `@container/stat-tile`; below `@3xs` of the tile the padding tightens to `--spacing-sm`.
 - Server render and hydration: the first render shows the final figure on the server and in the browser, so the two match and the HTML carries the value. The count-up from 0 starts on mount (skipped under `prefers-reduced-motion`); later changes count up from the previous value.
+
+- Its root carries `data-plain-ground`: it is content that must sit on a plain ground, so a `Texture` beside it hides itself, and the texture-backdrop check blocks placing it on a textured band (a texture is a backdrop for text only, RV-T2-1).
 
 ## Accessibility
 
@@ -15129,6 +15143,8 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 - `data-active` on the active block; `data-dimmed` on every other block while one is active
 - `data-state="open|closed"` on the readout: `open` while a block is active; `data-moving` while it follows from one block to the next
 
+- Its root carries `data-plain-ground`: it is content that must sit on a plain ground, so a `Texture` beside it hides itself, and the texture-backdrop check blocks placing it on a textured band (a texture is a backdrop for text only, RV-T2-1).
+
 ## Accessibility
 
 - The strip is one tab stop: `role="group"` named by `ariaLabel`, with `aria-roledescription="status history"`.
@@ -15294,6 +15310,8 @@ Code content scrolls inside `@aziontech/webkit/scroll-area` (`orientation="both"
 **The shell is fluid: it takes the width its container gives it and never grows past it.** Long lines are a scroll, never a wider block — so the root is a size container (`@container`, i.e. inline-size containment) and its code width is invisible to the layout above it. Without that, the block's intrinsic width leaks upward: an `auto`-sized grid track or flex row (a one-column `grid` on mobile, a `md:grid-cols-2` panel below its breakpoint) sizes itself to the widest code line and the block overflows the viewport instead of scrolling — a consumer's `min-w-0` on the wrapper cannot fix it, because `min-width` is a floor on the intrinsic contribution, not a cap. The copy control (a `CopyButton`, `variant="outline"` `size="small"`) is absolutely positioned on the non-scrolling content shell (`__content`) so it stays pinned top-right while lines scroll. **On a single-line block it centres on that row instead** (`data-single-line` on the anchor): the shell is 44 px, the control 28 px, so the `--spacing-sm` top inset would leave it 4 px below the line's own centre. Every line reserves the control's full footprint on its right (`pr-11` = 28 px control + its 12 px inset), so a long line always scrolls clear of it rather than under it. With `copyable` off (`data-copyable` absent on the root) the control is not rendered and lines reserve only `--spacing-sm` on their right.
 
 - Computed diff: the common head and tail are trimmed, then the middle runs the Myers line diff; past 1,000 edits it falls back to the whole middle removed then added, so a rewrite stays linear. A 5,000-line pair with a few hundred edits diffs in a few milliseconds.
+
+- Consumer attributes land on the root (`v-bind="$attrs"`), so a page-JSON scene can mark it `data-plain-ground` (RV-T2-1).
 
 ## Accessibility
 
@@ -16763,6 +16781,8 @@ The frame is static apart from its resize handles.
 - `workload-deploy-logs`, `cli-terminal-start`, `cli-terminal-deploy`, and `functions-start` on its `agents` and `cli` tabs replay their scene (the deployment, the CLI session, the agent transcript) over and over while they are active and on screen, so each carries a pause control outside its inert figure: an `IconButton` (`<root testid>__pause`) above the frame, at its top end corner (`functions-start`: its top start corner, clear of a host's own control at the end). `playing` → the scene runs and the control reads "Pause animation" (`common.pauseAnimation`, icon `az-pause`); `paused` → the scene stops on its settled picture (the full log, session or transcript) and the control reads "Play animation" (`common.playAnimation`, icon `az-play`); play starts the scene again from its first step. Under `prefers-reduced-motion: reduce` it starts paused; the viewer's own choice then wins over the preference.
 - `cursor` off: no collaborator cursor or name tag is drawn; the fragment's controls still open, highlight and settle on their beat.
 - Each widget owns its entrance (a `ConsoleMockupShell` replay when `active` turns on) and, for fragments, its beat while `hovered` is set or the device cannot hover. A fragment beat runs once and stops on its last frame within five seconds; the fragments that scroll a list in a loop (`workload-deploy`, `workload-domain`, `ddos-http-events`, `kv-store-security-list`, `network-shield-lists`, `real-time-metrics-panel`) run only while `hovered` is set and stay parked on a device that cannot hover. Under reduced motion every widget is drawn in its settled state.
+
+- The `window` shell root carries `data-opaque`: its own ground hides the band texture, so content drawn inside the window does not make a band texture hide (RV-T2-1).
 
 ## Accessibility
 
@@ -20263,6 +20283,8 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 - Data card: `data-state="open|closed"`; an unbound bindable node is dashed with `Not bound`; a pending bind dashes it too.
 - Loading: `aria-busy`, skeleton cards, one `role="status"` line. Empty: `EmptyState` unless the `empty` slot replaces it.
 - Edge `severity` colours the connector (`--<severity>-mark`); default `--accent`.
+
+- Its root carries `data-plain-ground`: it is content that must sit on a plain ground, so a `Texture` beside it hides itself, and the texture-backdrop check blocks placing it on a textured band (a texture is a backdrop for text only, RV-T2-1).
 
 ## Accessibility
 

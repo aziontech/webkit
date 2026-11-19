@@ -104,6 +104,19 @@ describe('ConsoleShowcaseSection', () => {
     expect(frame.style.getPropertyValue('--console-showcase-section-crop')).toBe('10.53%')
   })
 
+  it('grounds the console panel on the texture and paints none under a diagram scene', () => {
+    const consolePanel = panel()
+    expect(consolePanel.container.querySelector('[data-slot="texture"]')).not.toBeNull()
+    consolePanel.unmount()
+
+    const diagram = panel({ variant: 'diagram', texture: 'pixelate' })
+    expect(diagram.getByTestId('console-showcase-section')).toHaveAttribute(
+      'data-variant',
+      'diagram'
+    )
+    expect(diagram.container.querySelector('[data-slot="texture"]')).toBeNull()
+  })
+
   it('renders under rtl', () => {
     const { getByRole } = render({ render: () => h('div', { dir: 'rtl' }, [h(Diagram)]) })
     expect(getByRole('link', { name: /See the network/ })).toBeInTheDocument()

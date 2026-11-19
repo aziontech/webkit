@@ -419,6 +419,7 @@
   <figure
     v-bind="$attrs"
     :data-testid="testId"
+    data-plain-ground
     :data-view="view"
     :data-loading="loading || null"
     :data-error="(!loading && hasError) || null"

@@ -6,7 +6,7 @@ status: implemented
 spec_version: 5
 created: 2026-11-10
 last_updated: 2026-11-18
-checksum: d6d20425fb5f8d406b4c0eb5dd48c1fad86a869c37ed54a098e64ed324f9dfab
+checksum: d523e16d2572edfb5f796fec1faf8938bf3ff0fc5d5d948f8482493bcd273588
 ---
 
 # BarList — Component Spec
@@ -113,6 +113,8 @@ The rows are data (`items`). The state surface matches `chart`, `donut-chart`, `
 - `data-loading` mirrors `loading`; `data-refetching` mirrors `refetching`; `data-error` is set while an error shows
 - `data-interactive` on a row that is a link or a button
 - Bar width: `value / max`, at least 2% when the value is above zero, 0 when it is zero
+
+- Its root carries `data-plain-ground`: it is content that must sit on a plain ground, so a `Texture` beside it hides itself, and the texture-backdrop check blocks placing it on a textured band (a texture is a backdrop for text only, RV-T2-1).
 
 ## Motion & Animations
 

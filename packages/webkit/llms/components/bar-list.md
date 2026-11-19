@@ -69,6 +69,8 @@
 - `data-interactive` on a row that is a link or a button
 - Bar width: `value / max`, at least 2% when the value is above zero, 0 when it is zero
 
+- Its root carries `data-plain-ground`: it is content that must sit on a plain ground, so a `Texture` beside it hides itself, and the texture-backdrop check blocks placing it on a textured band (a texture is a backdrop for text only, RV-T2-1).
+
 ## Accessibility
 
 - The root is an `<ol>` named by `ariaLabel`; each row is an `<li>` whose text reads "name, value" in order. The bar is decorative.

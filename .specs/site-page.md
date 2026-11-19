@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 7
 template: 2
-checksum: 6d1a410ae025ab6a8cc747353a916b05d4b3e2b03729abd3ab2b088ded980976
+checksum: ea3f07c51e54298a048ea158f23d33088e647fd31d7967f27cf234638f429400
 created: 2026-11-12
 last_updated: 2026-11-18
 ---
@@ -120,6 +120,8 @@ Exported types, beside the component:
 - Closing bands: a closing band followed directly by another is bound with `hatch: false` (an explicit `hatch` in its `props` is overridden), so stacked closings share the lower band's closing frame; a `closing-call-to-action-section` with `variant: 'frame'` takes no gap before it; when the last column entry is a closing band that draws its frame, the trailing gap is omitted.
 - A section or scene still loading renders nothing in its place until its chunk arrives.
 - A section or scene whose chunk fails to load (network failure, deploy skew) or takes longer than 10 s renders nothing in its place, the rest of the page keeps rendering, and a development warning names the `_id` or scene; it does not retry (`defineAsyncComponent` with `timeout` and `onError`).
+
+- A scene that is not a backdrop scene (`backdropScenes` in `src/assets/scene-registry.ts`: the console mock-up and console scenes, the globes, `Illustration`, `Diagram`) is stamped `data-plain-ground` on its root, so a band texture beside it hides itself; page JSON never puts content other than text on a texture (RV-T2-1).
 
 ## Motion & Animations
 

@@ -61,6 +61,8 @@
 - The first tab is selected on render.
 - `--console-mockup-fade-start` / `--console-mockup-fade-end` are set for a `ConsoleMockup` scene when cropped.
 
+- Only the `console` panel paints the texture (RV-T2-1): `variant="diagram"` draws its scene on the plain canvas and keeps its bottom padding at every width, so a chart, diagram or any page-JSON content scene never sits on the dots or on the band edge. A scene that is not a console window takes `variant="diagram"`.
+
 ## Accessibility
 
 - A `section` named by its title.

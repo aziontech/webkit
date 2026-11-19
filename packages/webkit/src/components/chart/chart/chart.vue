@@ -621,6 +621,7 @@
   <figure
     v-bind="$attrs"
     :data-testid="testId"
+    data-plain-ground
     :data-orientation="orientation"
     :data-loading="loading || null"
     :data-error="(!loading && hasError) || null"

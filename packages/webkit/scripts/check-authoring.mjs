@@ -17,6 +17,12 @@ import {
   exampleDataApplies,
   scanExampleData
 } from '../src/eslint-plugin/lib/example-data.js'
+import {
+  scanTextureBackdrop,
+  TEXTURE_BACKDROP_DIRS,
+  TEXTURE_BACKDROP_MESSAGES,
+  textureBackdropApplies
+} from '../src/eslint-plugin/lib/texture-backdrop.js'
 import noClockInSetup from '../src/eslint-plugin/rules/no-clock-in-setup.js'
 import noPhysicalDirection from '../src/eslint-plugin/rules/no-physical-direction.js'
 import noViewportHeightCalc from '../src/eslint-plugin/rules/no-viewport-height-calc.js'
@@ -183,6 +189,20 @@ function exampleDataViolations() {
   return keys
 }
 
+function textureBackdropViolations() {
+  const keys = []
+  for (const dir of TEXTURE_BACKDROP_DIRS) {
+    for (const abs of walkAll(join(ROOT, dir))) {
+      const rel = relative(ROOT, abs).split('\\').join('/')
+      if (!textureBackdropApplies(rel)) continue
+      for (const id of scanTextureBackdrop(readFileSync(abs, 'utf-8'), rel)) {
+        keys.push(`${rel}::texture-backdrop:${id}`)
+      }
+    }
+  }
+  return keys
+}
+
 function wideTokenViolations() {
   const keys = []
   for (const dir of REPO_WIDE_TOKEN_DIRS) {
@@ -205,7 +225,8 @@ function currentViolations() {
     ...directionViolations(),
     ...clockViolations(),
     ...viewportHeightViolations(),
-    ...exampleDataViolations()
+    ...exampleDataViolations(),
+    ...textureBackdropViolations()
   ]
   for (const abs of walk(SRC)) {
     const rel = relative(ROOT, abs).split('\\').join('/')
@@ -315,6 +336,10 @@ if (introduced.length) {
       id.startsWith('signature:')
     ) {
       console.error(`    [${id}] ${DETAILS.get(k) ?? id.slice(id.indexOf(':') + 1)}`)
+    } else if (id.startsWith('texture-backdrop:')) {
+      console.error(
+        `    [${id}] ${TEXTURE_BACKDROP_MESSAGES[id.slice('texture-backdrop:'.length)]}`
+      )
     } else if (id.startsWith('example-data:')) {
       console.error(`    [${id}] ${EXAMPLE_DATA_MESSAGES[id.slice('example-data:'.length)]}`)
     } else {

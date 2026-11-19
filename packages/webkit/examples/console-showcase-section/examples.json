@@ -9,7 +9,7 @@
     },
     {
       "name": "Diagram",
-      "summary": "`variant=\"diagram\"` lets the scene keep its own height, centered on the texture, with an action under the title instead of tabs.",
+      "summary": "`variant=\"diagram\"` lets the scene keep its own height, centered on the plain canvas with no texture, with an action under the title instead of tabs.",
       "file": "diagram.vue"
     }
   ],

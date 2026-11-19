@@ -67,6 +67,8 @@
 - A section or scene still loading renders nothing in its place until its chunk arrives.
 - A section or scene whose chunk fails to load (network failure, deploy skew) or takes longer than 10 s renders nothing in its place, the rest of the page keeps rendering, and a development warning names the `_id` or scene; it does not retry (`defineAsyncComponent` with `timeout` and `onError`).
 
+- A scene that is not a backdrop scene (`backdropScenes` in `src/assets/scene-registry.ts`: the console mock-up and console scenes, the globes, `Illustration`, `Diagram`) is stamped `data-plain-ground` on its root, so a band texture beside it hides itself; page JSON never puts content other than text on a texture (RV-T2-1).
+
 ## Accessibility
 
 - The renderer adds no landmark, heading or focusable element of its own; each section owns its landmark (`<section>` named by its title) and its keyboard model.

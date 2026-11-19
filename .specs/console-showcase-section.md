@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 13
 template: 2
-checksum: 27bf53e01520f61ba9e712b440eb7ad9d86895e7c971e1f14a2cb29ef9a012bd
+checksum: 3ff69498c10aa3bce211a7d9bbdc9e1c5d0f136788c0764fc1db48b3f8aca54d
 created: 2026-11-11
 last_updated: 2026-11-18
 ---
@@ -96,6 +96,8 @@ A full-width framed panel that presents a product scene (a console mock or a dia
 - `data-variant` mirrors `variant`.
 - The first tab is selected on render.
 - `--console-mockup-fade-start` / `--console-mockup-fade-end` are set for a `ConsoleMockup` scene when cropped.
+
+- Only the `console` panel paints the texture (RV-T2-1): `variant="diagram"` draws its scene on the plain canvas and keeps its bottom padding at every width, so a chart, diagram or any page-JSON content scene never sits on the dots or on the band edge. A scene that is not a console window takes `variant="diagram"`.
 
 ## Motion & Animations
 

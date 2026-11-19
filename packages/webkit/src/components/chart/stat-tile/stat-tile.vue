@@ -113,6 +113,7 @@
     v-bind="$attrs"
     role="group"
     :data-testid="testId"
+    data-plain-ground
     :data-loading="loading || null"
     :data-variant="variant"
     :data-grouped="group ? '' : null"

@@ -253,6 +253,7 @@
   <figure
     v-bind="$attrs"
     :data-testid="testId"
+    data-plain-ground
     :data-type="type"
     :data-size="size"
     :data-loading="loading || null"

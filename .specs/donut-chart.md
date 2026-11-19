@@ -3,7 +3,7 @@ name: donut-chart
 category: chart
 structure: monolithic
 status: implemented
-checksum: 2550cb39eedf93c6c060aa108e7e7ffcd995c3025838e0fde79c7607aba1a2ce
+checksum: c48e5b88809ca94fc2a7e963be89159aa85c94cc3f692ae66cdd404f9fccfd01
 spec_version: 4
 created: 2026-10-20
 last_updated: 2026-11-18
@@ -123,6 +123,8 @@ The function props (`formatValue`) and the events stay Vue. `DocMarkdown` and th
 - `data-entered` on each slice flips after two animation frames to run the sweep
 - `data-active` on the active slice, `data-dimmed` on the others
 - Reflow: the visually hidden table twin sits inside an `sr-only` box so its intrinsic width never adds horizontal overflow at 320 px.
+
+- Its root carries `data-plain-ground`: it is content that must sit on a plain ground, so a `Texture` beside it hides itself, and the texture-backdrop check blocks placing it on a textured band (a texture is a backdrop for text only, RV-T2-1).
 
 ## Motion & Animations
 

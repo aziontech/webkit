@@ -300,6 +300,8 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - `fade="none"` leaves the layer unmasked; every other value masks it so the ink reaches zero before the layer's own edge; `top` and `bottom` are a single fade — full ink at the leading edge, zero at `--texture-fade-end`; `left` and `right` fade out toward the named edge in the same way, full ink at the opposite edge, which is how a band keeps its texture behind the media and clears it under the copy. Setting `--texture-fade-lead: transparent` adds a second ramp in from zero at the leading edge, so the layer also clears whatever overlaps that edge; `hero` sets it on its backdrop because its opening band sits under the site header, and no other band needs it
 - Custom properties tune a texture in place, set from the consumer's class: `--texture-ink` (every variant), `--texture-fade-start` / `--texture-fade-end` (where the fade holds full ink and where it reaches zero), `--texture-fade-lead` (the ink at the leading edge of `top` / `bottom`; `black` by default, `transparent` for the double fade), `--texture-from` / `--texture-to` / `--texture-direction` (the `dither` ramp's density span and axis), `--texture-pool-x` (where both `pixelate` light pools sit on the x axis), `--texture-pool-a` / `--texture-pool-b` (each pool's own `x y` position, so the two can sit on opposite edges; either falls back to `--texture-pool-x`), `--texture-wave-gain` (multiplies the ink of both `pixelate` waves, 1 by default, capped at full ink, so a band can make the motion read over the pools), `--texture-wave-pace` (scales how far both waves drift, 1 by default; 2 doubles the distance, and so the speed, without changing the animation's duration token)
 
+- A texture is a backdrop for text only (RV-T2-1). Never draw a chart, diagram, map, stat or page-JSON content scene on it; the root carries `data-slot="texture"` and hides itself (`display: none`) when its parent holds a `[data-plain-ground]` that is not inside an opaque `[data-opaque]` window. The texture-backdrop check (write time and CI) and the visual texture-backdrop spec enforce it.
+
 ## Accessibility
 
 - Visible focus: not applicable — the layer is decorative and holds no interactive control.
@@ -5501,6 +5503,8 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - A section or scene still loading renders nothing in its place until its chunk arrives.
 - A section or scene whose chunk fails to load (network failure, deploy skew) or takes longer than 10 s renders nothing in its place, the rest of the page keeps rendering, and a development warning names the `_id` or scene; it does not retry (`defineAsyncComponent` with `timeout` and `onError`).
 
+- A scene that is not a backdrop scene (`backdropScenes` in `src/assets/scene-registry.ts`: the console mock-up and console scenes, the globes, `Illustration`, `Diagram`) is stamped `data-plain-ground` on its root, so a band texture beside it hides itself; page JSON never puts content other than text on a texture (RV-T2-1).
+
 ## Accessibility
 
 - The renderer adds no landmark, heading or focusable element of its own; each section owns its landmark (`<section>` named by its title) and its keyboard model.
@@ -7658,6 +7662,8 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - `data-variant` mirrors `variant`.
 - The first tab is selected on render.
 - `--console-mockup-fade-start` / `--console-mockup-fade-end` are set for a `ConsoleMockup` scene when cropped.
+
+- Only the `console` panel paints the texture (RV-T2-1): `variant="diagram"` draws its scene on the plain canvas and keeps its bottom padding at every width, so a chart, diagram or any page-JSON content scene never sits on the dots or on the band edge. A scene that is not a console window takes `variant="diagram"`.
 
 ## Accessibility
 

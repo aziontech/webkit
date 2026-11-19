@@ -78,6 +78,7 @@ export const STANDARDS = [
     scope: 'general',
     enforce: [
       { surface: 'write-time', by: 'validate-tokens' },
+      { surface: 'write-time', by: 'validate-authoring' },
       { surface: 'ci', by: 'check-authoring' },
       { surface: 'lint', by: 'no-hardcoded-color' },
       { surface: 'lint', by: 'no-hardcoded-motion' },
@@ -91,7 +92,7 @@ export const STANDARDS = [
       { surface: 'lint', by: 'no-link-in-sentence' },
       { surface: 'ci', by: 'visual' }
     ],
-    note: 'The ratchet runs the same token-checks engine repo-wide, so an editor push cannot bypass the hook; consumers get the color/motion/override lints. Never double a line is a rendered property no static check can see: the visual job runs apps/visual/tests/doubled-lines.spec.ts (the findDoubledLines detector, once per page in the browser) over every first example, every block primary state and the docs home and foundation pages, and fails on any two visible borders flush or 1px apart. Never stack regions flush is gated the same way: apps/visual/tests/region-gaps.spec.ts (findTightRegions) fails when two consecutive page regions (a surface over a surface or a heading, outside any card, overlay, list item or article) sit closer than --layout-group-gap.'
+    note: 'The ratchet runs the same token-checks engine repo-wide, so an editor push cannot bypass the hook; consumers get the color/motion/override lints. Never double a line is a rendered property no static check can see: the visual job runs apps/visual/tests/doubled-lines.spec.ts (the findDoubledLines detector, once per page in the browser) over every first example, every block primary state and the docs home and foundation pages, and fails on any two visible borders flush or 1px apart. Never stack regions flush is gated the same way: apps/visual/tests/region-gaps.spec.ts (findTightRegions) fails when two consecutive page regions (a surface over a surface or a heading, outside any card, overlay, list item or article) sit closer than --layout-group-gap. A texture is a backdrop for text only: the texture-backdrop engine (validate-authoring at write time, check-authoring in CI) blocks a chart, diagram, map or stat placed on a Texture or in a slot a section paints a texture under, in a .vue or page JSON; Texture hides itself when the content beside it holds a [data-plain-ground]; and apps/visual/tests/texture-backdrop.spec.ts (findGraphicsOnTexture) fails when a painted texture lies under a graphic.'
   },
   {
     id: 'dependencies',

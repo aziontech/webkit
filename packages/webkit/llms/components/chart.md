@@ -179,6 +179,8 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 - Server render and hydration: the default label format prints Date labels in `timeZone`. With no `timeZone` it prints UTC on the server and in the first client render, so the axis, tooltip title and summary match, and switches to the runtime's zone on mount. Midnight detection (day labels against clock labels) uses the same zone.
 - Default Date label format follows the span and spacing of the Date labels, in the chart's locale: labels within one day print the time (`14:00`), and midnight prints the day (`Nov 9`); a sub-day series that spans several days prints the day at midnight and the day with the time elsewhere (`Nov 10, 04:00`), so every tick and tooltip title names its day; daily buckets print the day (`Nov 9`); monthly buckets print the month (`Nov`). The year is added when the labels cross a calendar year. A custom `formatLabel` replaces all of this.
 
+- Its root carries `data-plain-ground`: it is content that must sit on a plain ground, so a `Texture` beside it hides itself, and the texture-backdrop check blocks placing it on a textured band (a texture is a backdrop for text only, RV-T2-1).
+
 ## Accessibility
 
 - Root is a `<figure>` named by `ariaLabel` or by the enclosing ChartCard title (`aria-labelledby`) and described by its ChartCard description or a generated summary.

@@ -78,6 +78,8 @@
 - `data-bin` (0 to 4) on each shaded country; `data-entered` on marks after two animation frames
 - Server render and hydration: the land, the bubbles, the legend and the table render on the server; the country shading appears after the shapes chunk loads on the client, so the first client render matches the server.
 
+- Its root carries `data-plain-ground`: it is content that must sit on a plain ground, so a `Texture` beside it hides itself, and the texture-backdrop check blocks placing it on a textured band (a texture is a backdrop for text only, RV-T2-1).
+
 ## Accessibility
 
 - Root is a `<figure>`; the map is one tab stop: `role="group"` with `aria-roledescription="map"`, named by `ariaLabel` or the ChartCard title, described by a summary (`5 places on the map, 104K in total.`).

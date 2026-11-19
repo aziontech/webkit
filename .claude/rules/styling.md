@@ -357,6 +357,26 @@ Two regions of a page never sit closer than the group step, `--layout-group-gap`
 
 A static lint cannot see a rendered gap either; the styled visual suite measures it (see Enforcement).
 
+## A texture is a backdrop for text only
+
+A `Texture` (every variant, the orange `pixelate` floor above all) sits behind **text**: an eyebrow, a headline, a paragraph, the buttons of a band. Nothing that has to be read in its own lines and marks is drawn on it: a chart, a diagram, a map, a stat, and any page-JSON content scene (an accordion, a card, a code block, an embed, a key-value list, a plan feature list). The dots compete with the axis labels, the legend and the lines, and the content cannot be read (owner decision RV-T2-1, 2026-11-18).
+
+The places it is used today are the allowed ones, and they stay as they are: behind the text of a hero, a call-to-action and a newsletter band, and under the opaque windows the bands were designed around (a console mock-up in `ConsoleShowcaseSection`, the terminal in `CliTerminalSection`, the code file in `FeatureTabsSection` and `FeatureScrollSection`, the media of `MediaSplit`), where the window's own ground hides the dots.
+
+```html
+<!-- ❌ the chart is drawn on the orange floor -->
+<ConsoleShowcaseSection title="Watch every threat"><template #scene><Chart … /></template></ConsoleShowcaseSection>
+
+<!-- ✅ the diagram layout draws its scene on the plain canvas -->
+<ConsoleShowcaseSection variant="diagram" title="Watch every threat"><template #scene><Chart … /></template></ConsoleShowcaseSection>
+```
+
+How the library keeps it:
+
+- **`ConsoleShowcaseSection variant="diagram"` paints no texture.** Its `texture` prop grounds only the `console` panel; a scene that is not a console window takes `variant="diagram"`, and keeps its bottom padding on every width.
+- **A `Texture` hides itself next to content.** Every chart, `FlowDiagram`, `StatTile` and `Tracker` root carries `data-plain-ground`, and `SitePage` stamps it on every page-JSON scene that is not a backdrop scene (`ConsoleMockup`, the console scenes, the globes, `Illustration`, `Diagram`: `backdropScenes` in `src/assets/scene-registry.ts`). A `Texture` whose parent holds a `[data-plain-ground]` is `display: none`, unless that content sits inside an opaque window (`[data-opaque]`, the `window` `ConsoleMockupShell`).
+- **The rule is checked where the content is placed**, so it fails at write time and in CI, not in review (see Enforcement).
+
 ## A zero length carries no unit
 
 A zero is the one value that is identical in every unit, so the unit is pure noise — and it makes the same zero read three different ways across the codebase (`0px` here, `0rem` there, `0em` in a token). **Write `0`.**
@@ -398,6 +418,7 @@ padding: 0 var(--spacing-md);
 - Never double a line — no two visible borders flush side by side or 1px apart. The container draws the outer frame; the parts inside draw only the dividers between themselves.
 - Never let the fills of two neighbouring list rows touch: inset the fill with `border-y border-transparent bg-clip-padding forced-colors:border-y-0`, keeping the row height.
 - Never stack two page regions (a banner, a card, a framed table, a section heading) closer than `--layout-group-gap`; the stack that holds them carries the gap.
+- Never draw anything but text on a `Texture`: no chart, diagram, map or stat, and no page-JSON content scene. Use `ConsoleShowcaseSection variant="diagram"`, `texture="none"`, or a band without a texture.
 - No zero with a length unit — `0`, never `0px` / `0rem` / `0em` (in tokens, arbitrary Tailwind values, inline `style`, or authored CSS). The single exception is inside `calc()`/`min()`/`max()`/`clamp()`, where CSS requires a unit and that unit is **`rem`**.
 - No malformed token shorthand — no whitespace inside the parens (`bg-(--token )`, `bg-( --token)`) and never the inverted `[--(token)]`. The style silently never applies; blocked by `dead-token-shorthand`.
 - No `const sharedClasses = [...]`, `const variantClasses = {...}`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`. The whole "class map" pattern goes away.
@@ -498,6 +519,7 @@ Use a `data-*` attribute + a Tailwind variant. The decision lives in HTML, not i
 - **Never double a line** is gated by the `visual` CI job: [`apps/visual/tests/doubled-lines.spec.ts`](../../apps/visual/tests/doubled-lines.spec.ts) runs [`findDoubledLines`](../../apps/visual/tests/doubled-lines.ts) once per page in the browser — the first example of every component, the primary state of every block, and the docs home and foundation pages, at 390 and 1280 — and fails listing every pair of visible borders (non-zero width, opaque color, not inside a form control, not hidden or zero-size) that lie flush or 1px apart and overlap along at least 4px. [`apps/visual/scripts/doubled-lines.mjs`](../../apps/visual/scripts/doubled-lines.mjs) runs the same detector over every docs route, example and block state against a built docs site, for a full sweep before a PR.
 - **Two filled rows never touch** is gated by the styled suite [`list-row-gap.test.ts`](../../packages/webkit/src/test/list-row-gap.test.ts): it opens Select, MultiSelect, Combobox and DropdownMenu, puts a selected row next to a highlighted one, and measures a visible gap of at least 2px between the two fills, with the row height unchanged.
 - **Never stack regions flush** is gated by the same `visual` job: [`apps/visual/tests/region-gaps.spec.ts`](../../apps/visual/tests/region-gaps.spec.ts) runs [`findTightRegions`](../../apps/visual/tests/region-gaps.ts) over the same pages at the same widths. For every vertical stack (a block flow, a column flex or a grid) that is not inside a unit — a bordered or filled surface, a fixed or sticky layer, an `article`, a list item, a log or a dialog — it takes each pair of consecutive visible children and fails when the first ends on a surface (bordered on four sides or filled with a radius, at least 120 × 32px, not a control or a field wrapper) and the second starts on a surface or a heading, closer than the resolved `--layout-group-gap`. A heading is measured from its content box, so a heading's own top padding counts as space; two surfaces of the same kind (a list of like cards) are a list, not two regions. [`apps/visual/scripts/region-gaps.mjs`](../../apps/visual/scripts/region-gaps.mjs) sweeps every docs route, example and block state.
+- **A texture is a backdrop for text only** is gated three ways. At write time and in CI, the `texture-backdrop` engine ([`texture-backdrop.js`](../../packages/webkit/src/eslint-plugin/lib/texture-backdrop.js), run by [`validate-authoring.mjs`](../hooks/validate-authoring.mjs) and the [`check-authoring.mjs`](../../packages/webkit/scripts/check-authoring.mjs) ratchet over components, blocks and examples) blocks a chart, diagram, map or stat placed next to a `Texture` or in the slot of a section that paints one (`ConsoleShowcaseSection` outside `diagram`, `MediaSplitSection`, `MediaSplit`, `MediaTabs`, `Hero` with a texture, `Backdrop`), and page JSON that puts any scene but a backdrop scene on a textured `console-showcase-section` or `media-split-section`; pinned both ways in [`texture-backdrop.test.mjs`](../../packages/webkit/test/eslint-plugin/texture-backdrop.test.mjs). In the component, the styled suite [`texture-backdrop.test.ts`](../../packages/webkit/src/test/texture-backdrop.test.ts) proves `Texture` drops itself beside marked content and the Page JSON examples paint no texture under their scene. In the `visual` job, [`texture-backdrop.spec.ts`](../../apps/visual/tests/texture-backdrop.spec.ts) runs [`findGraphicsOnTexture`](../../apps/visual/tests/texture-backdrop.ts) on every example that composes a band or a texture and every block's primary state, at 390 and 1280, and fails when a painted texture lies under a `[data-plain-ground]` box; [`apps/visual/scripts/texture-backdrop.mjs`](../../apps/visual/scripts/texture-backdrop.mjs) sweeps every example and block state.
 - A future PostToolUse hook may grep `.vue` files for `const \w+Classes\s*=\s*[\{[]` and emit `BLOCKED: forbidden class preset` — until then, `echo-reporter` flags the pattern.
 - `.claude/docs/COMPONENT_REQUIREMENTS.md` § 13.w "Styling discipline" supersedes any older example in the same file that still shows the JS-presets pattern. **The data-attribute approach is the canonical pattern for new components.**
 

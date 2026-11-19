@@ -65,6 +65,8 @@
 - `cursor` off: no collaborator cursor or name tag is drawn; the fragment's controls still open, highlight and settle on their beat.
 - Each widget owns its entrance (a `ConsoleMockupShell` replay when `active` turns on) and, for fragments, its beat while `hovered` is set or the device cannot hover. A fragment beat runs once and stops on its last frame within five seconds; the fragments that scroll a list in a loop (`workload-deploy`, `workload-domain`, `ddos-http-events`, `kv-store-security-list`, `network-shield-lists`, `real-time-metrics-panel`) run only while `hovered` is set and stay parked on a device that cannot hover. Under reduced motion every widget is drawn in its settled state.
 
+- The `window` shell root carries `data-opaque`: its own ground hides the band texture, so content drawn inside the window does not make a band texture hide (RV-T2-1).
+
 ## Accessibility
 
 - Visible focus: none in an inert widget, where nothing takes focus; the pause control of the looping widgets (`workload-deploy-logs`, `cli-terminal-start`, `cli-terminal-deploy`, and `functions-start` on its `agents` and `cli` tabs) keeps the icon button's focus ring. In `function-code` the code block's file tabs and copy button keep their own focus rings, and the coding-agent switch of `functions-start` keeps the segmented button's.

@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 8
 template: 2
-checksum: aa8bf016ba470dfc3c14a453e5344b849238fdb9394f3e872e32d2c20020d0fb
+checksum: 2898dd34511092ccd9fd4f9b740f62d9ef189be59939e4e4c4730af6e16f0273
 created: 2026-10-23
 last_updated: 2026-11-18
 ---
@@ -110,6 +110,8 @@ _No slots — a widget is a closed drawing selected by `name`._
 - `workload-deploy-logs`, `cli-terminal-start`, `cli-terminal-deploy`, and `functions-start` on its `agents` and `cli` tabs replay their scene (the deployment, the CLI session, the agent transcript) over and over while they are active and on screen, so each carries a pause control outside its inert figure: an `IconButton` (`<root testid>__pause`) above the frame, at its top end corner (`functions-start`: its top start corner, clear of a host's own control at the end). `playing` → the scene runs and the control reads "Pause animation" (`common.pauseAnimation`, icon `az-pause`); `paused` → the scene stops on its settled picture (the full log, session or transcript) and the control reads "Play animation" (`common.playAnimation`, icon `az-play`); play starts the scene again from its first step. Under `prefers-reduced-motion: reduce` it starts paused; the viewer's own choice then wins over the preference.
 - `cursor` off: no collaborator cursor or name tag is drawn; the fragment's controls still open, highlight and settle on their beat.
 - Each widget owns its entrance (a `ConsoleMockupShell` replay when `active` turns on) and, for fragments, its beat while `hovered` is set or the device cannot hover. A fragment beat runs once and stops on its last frame within five seconds; the fragments that scroll a list in a loop (`workload-deploy`, `workload-domain`, `ddos-http-events`, `kv-store-security-list`, `network-shield-lists`, `real-time-metrics-panel`) run only while `hovered` is set and stay parked on a device that cannot hover. Under reduced motion every widget is drawn in its settled state.
+
+- The `window` shell root carries `data-opaque`: its own ground hides the band texture, so content drawn inside the window does not make a band texture hide (RV-T2-1).
 
 ## Motion & Animations
 

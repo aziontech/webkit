@@ -108,6 +108,8 @@ Code content scrolls inside `@aziontech/webkit/scroll-area` (`orientation="both"
 
 - Computed diff: the common head and tail are trimmed, then the middle runs the Myers line diff; past 1,000 edits it falls back to the whole middle removed then added, so a rewrite stays linear. A 5,000-line pair with a few hundred edits diffs in a few milliseconds.
 
+- Consumer attributes land on the root (`v-bind="$attrs"`), so a page-JSON scene can mark it `data-plain-ground` (RV-T2-1).
+
 ## Accessibility
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
