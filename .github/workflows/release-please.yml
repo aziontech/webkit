@@ -56,7 +56,7 @@ jobs:
           failed=0
           dispatch() {
             local workflow="$1" tag="$2"
-            if ! gh workflow run "$workflow" -f tag="$tag"; then
+            if ! gh workflow run "$workflow" --ref main -f tag="$tag"; then
               echo "::error::failed to dispatch $workflow for tag $tag"
               failed=1
             fi

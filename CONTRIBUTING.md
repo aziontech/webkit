@@ -480,12 +480,14 @@ Open an [issue](https://github.com/aziontech/webkit/issues/new) with:
 
 ## Releasing
 
-Releases are automated by [release-please](https://github.com/googleapis/release-please) ([`release-please.yml`](./.github/workflows/release-please.yml)) — the Release PR model. Merging `feat` / `fix` / breaking commits to `main` creates or updates a pending **Release PR** (version bumps + changelogs); merging that Release PR creates the per-package tags and GitHub Releases, which trigger the publish workflows via `release: published`:
+Releases are automated by [release-please](https://github.com/googleapis/release-please) ([`release-please.yml`](./.github/workflows/release-please.yml)) — the Release PR model. Merging `feat` / `fix` / breaking commits to `main` creates or updates a pending **Release PR** (version bumps + changelogs); merging that Release PR creates the per-package tags and GitHub Releases, and the same job dispatches each released package's publish workflow from `main` (a release published by hand fires them through `release: published`):
 
 - [`publish-icons.yml`](./.github/workflows/publish-icons.yml) → `@aziontech/icons`
 - [`publish-theme.yml`](./.github/workflows/publish-theme.yml) → `@aziontech/theme`
 - [`publish-webkit.yml`](./.github/workflows/publish-webkit.yml) → `@aziontech/webkit`
 - [`publish-webkit-mcp.yml`](./.github/workflows/publish-webkit-mcp.yml) → `@aziontech/webkit-mcp`
+
+Every publish job runs in the `npm` GitHub environment, so it waits for a required reviewer to approve the deployment before it gets an npm token. A publish run only starts from `main` or from a release tag of its own package, and it refuses a tag whose commit is not on `main`. Report a vulnerability as described in [`SECURITY.md`](./SECURITY.md).
 
 There is no manual release step. If you need a merge that does not produce a release, use `chore:` or `docs:` (no version bump).
 
