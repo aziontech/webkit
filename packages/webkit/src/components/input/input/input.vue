@@ -161,7 +161,7 @@
       :aria-required="isRequired || undefined"
       :data-testid="testId"
       dir="auto"
-      class="relative z-(--z-control) h-full w-full min-w-0 self-stretch border-0 bg-transparent p-0 outline-none text-label-sm group-data-[monospace]/input:text-label-code-sm text-(--text-default) placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled) read-only:cursor-default"
+      class="relative z-(--z-control) h-full w-full min-w-0 self-stretch border-0 bg-transparent p-0 outline-none text-label-sm group-data-[monospace]/input:text-label-code-sm pointer-coarse:text-body-md pointer-coarse:group-data-[monospace]/input:text-label-code-lg text-(--text-default) placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled) read-only:cursor-default"
       v-bind="{ ...autofillHints, ...passthroughAttrs }"
       :id="controlId"
       :aria-describedby="describedBy"

@@ -3,11 +3,11 @@ name: tree
 category: data
 structure: monolithic
 status: implemented
-checksum: 162a4199578a2552162e3f45be20b37a1f9260d7dad02a4ecc5366698016516d
+checksum: 42daa8ca106a97af478dce62437d0af85af6a279901d0d78cc938bb3a899ae03
 spec_version: 14
 template: 2
 created: 2026-11-10
-last_updated: 2026-11-18
+last_updated: 2026-11-19
 ---
 
 # Tree — Component Spec
@@ -274,6 +274,7 @@ Decisions taken in this draft that a reviewer should confirm before approval:
 
 - The tree fills its container's width; rows keep the height of their `size` (24 / 32 / 40 px) at every width and long labels truncate.
 - Row actions stay visible on touch (no hover reveal); on narrow containers prefer a single `IconButton` that opens a `dropdown`.
+- Touch: on coarse pointers (`pointer-coarse:`) the rename field's text steps up to 16 px (`text-body-md`), so iOS Safari does not zoom the page while renaming.
 
 ## Performance
 

@@ -7,9 +7,9 @@ spec_version: 6
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2048-5713
   node_id: 2048:5713
-checksum: aa0d2ea2b0e766ffa8ec8f0c3191a8624c01fb3dc5353e379afbb2455f0f20c9
+checksum: be4c0a338a975508e7825d505ebf9e550eeaf48277be9a25e2cb67d6e06d4dc6
 created: 2026-11-10
-last_updated: 2026-11-18
+last_updated: 2026-11-19
 ---
 
 # PhoneInput — Component Spec
@@ -143,6 +143,10 @@ _none_ — motion is owned by `InputGroup` (colour transitions) and `Select` (dr
 - Contrast ≥4.5:1 for input and dial-code text.
 - Touch target follows the `size` (40px at `large`).
 - Direction: the tel input, each option's dial code and the closed trigger's dial code (a `dir="ltr"` span in the trigger's `#trailing` slot) render left-to-right, so a number and its `+` keep their order on a right-to-left page; the typed number still aligns to the inline start of the page (`rtl:text-end`, which resolves against the input's own `ltr` direction).
+
+## Responsive
+
+- Touch: on coarse pointers (`pointer-coarse:`) the typed text steps up to 16 px (`text-body-md`; `text-label-code-lg` in the code face), so iOS Safari does not zoom the page when the field takes focus; fine pointers keep the dense size.
 
 ## Examples
 

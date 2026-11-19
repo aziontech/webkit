@@ -187,7 +187,7 @@
       :data-testid="testId"
       dir="auto"
       v-bind="{ ...PASSWORD_MANAGER_IGNORE, ...passthroughAttrs }"
-      class="relative z-(--z-control) w-full min-w-0 border-0 bg-transparent outline-none px-(--spacing-md) text-label-sm text-(--text-default) placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled) read-only:cursor-default [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+      class="relative z-(--z-control) w-full min-w-0 border-0 bg-transparent outline-none px-(--spacing-md) text-label-sm pointer-coarse:text-body-md text-(--text-default) placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled) read-only:cursor-default [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
       @input="onInput"
       @change="onChange"
     />

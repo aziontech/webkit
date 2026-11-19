@@ -746,7 +746,7 @@
                   :data-align="columnAt(col - 1)?.align ?? 'start'"
                   :data-invalid="invalid || null"
                   :data-testid="`${testId}__editor`"
-                  class="size-full min-h-10 rounded-(--shape-control) border-none bg-(--bg-surface) px-(--spacing-sm) text-start text-body-sm text-(--text-default) outline-none ring-2 ring-inset ring-(--ring-color) data-[align=end]:text-end data-[invalid]:ring-(--danger-border) pointer-coarse:min-h-11"
+                  class="size-full min-h-10 rounded-(--shape-control) border-none bg-(--bg-surface) px-(--spacing-sm) text-start text-body-sm pointer-coarse:text-body-md text-(--text-default) outline-none ring-2 ring-inset ring-(--ring-color) data-[align=end]:text-end data-[invalid]:ring-(--danger-border) pointer-coarse:min-h-11"
                   @input="onEditorInput"
                   @keydown="onEditorKeydown"
                   @blur="commit"

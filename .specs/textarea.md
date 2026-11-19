@@ -8,9 +8,9 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4722-6730
   node_id: 4722:6730
-checksum: 388efaaadc2ff124e67c75123ec04b0b44c98115545bb0bb94ea619f03e46e51
+checksum: 3d508f56a6659cf44e8bd74e1944e4a4bff53efc01e9233a89d69c82e2bb1fc1
 created: 2026-06-23
-last_updated: 2026-11-17
+last_updated: 2026-11-19
 ---
 
 # Textarea — Component Spec
@@ -191,6 +191,7 @@ No built-in strings: the placeholder comes from the `placeholder` prop.
 - Narrow (≤ 640 px or a narrow container): the text wraps; with `autoResize` a narrower field grows taller, since the height follows the wrapped lines.
 - Touch: the field is the target (≥ 32 px with `autoResize` and one row, 80 px otherwise); no hover-only affordance.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom; a `resizable="horizontal"` or `"both"` field can be dragged wider by the person.
+- Touch: on coarse pointers (`pointer-coarse:`) the typed text steps up to 16 px (`text-body-md`; `text-label-code-lg` in the code face), so iOS Safari does not zoom the page when the field takes focus; fine pointers keep the dense size.
 
 ## Performance
 

@@ -4,9 +4,9 @@ category: input
 structure: monolithic
 status: implemented
 spec_version: 10
-checksum: 4251864bd6830255c00602ed427d998805ab671999665721c979c0b548e34f0f
+checksum: 458c121bc00411fd701b79d16def19436258ff6befc08c5eac271eb9d5d0dfec
 created: 2026-05-22
-last_updated: 2026-11-17
+last_updated: 2026-11-19
 ---
 
 # Input Text — Component Spec
@@ -168,6 +168,10 @@ _none_
 - Icons: the icon slots are the consumer's and do not mirror.
 - Keyboard: no horizontal arrow-key logic.
 - User data: the `<input>` renders `dir="auto"`; a `dir` attribute overrides it.
+
+## Responsive
+
+- Touch: on coarse pointers (`pointer-coarse:`) the typed text steps up to 16 px (`text-body-md`; `text-label-code-lg` in the code face), so iOS Safari does not zoom the page when the field takes focus; fine pointers keep the dense size.
 
 ## Examples
 

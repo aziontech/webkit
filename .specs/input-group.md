@@ -7,9 +7,9 @@ spec_version: 11
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10802
   node_id: 3714:10802
-checksum: 532f252cb50256dd91ed9784c5ad5a49c15a0f6b510b9490b2a195e65b30662d
+checksum: 3b634d7b3d9da152085b5717d9962f05a901cdbee4a3fb68486686d3d8f71046
 created: 2026-07-01
-last_updated: 2026-11-17
+last_updated: 2026-11-19
 ---
 
 # InputGroup — Component Spec
@@ -233,6 +233,10 @@ Root props:
 - Contrast ≥4.5:1 for addon text against `var(--bg-canvas)`; ≥3:1 for the border in every state.
 - Motion: color transitions on state changes are `duration-150 ease-out` and pair with `motion-reduce:transition-none`.
 - Touch target ≥32×32 px for interactive children (matches root height `h-8`).
+
+## Responsive
+
+- Touch: on coarse pointers (`pointer-coarse:`) the typed text steps up to 16 px (`text-body-md`; `text-label-code-lg` in the code face), so iOS Safari does not zoom the page when the field takes focus; fine pointers keep the dense size.
 
 ## Examples
 

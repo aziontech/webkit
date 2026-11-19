@@ -8,9 +8,9 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3899-29362
   node_id: 3899:29362
-checksum: b8930cb902512497c86dec4cb42e9cfee89e356a6ed1acb89c66142cd491b875
+checksum: bd924e8ea9a504ca4cecc04187d53bd2d1d741c357b3b1ca606d202b88fae253
 created: 2026-06-25
-last_updated: 2026-11-17
+last_updated: 2026-11-19
 ---
 
 # MultiSelect — Component Spec
@@ -293,6 +293,7 @@ Chips, typed filter and a create row:
 - The trigger fills its container; with `variant="chips"` and `chipLimit` `0` the chips wrap onto several lines and the field grows (`min-h` of the size, never a fixed height).
 - Touch: chip remove buttons follow `Chip`'s target; options are 32 px rows.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom; a long chip label truncates inside the chip.
+- Touch: on coarse pointers (`pointer-coarse:`) the search field's text steps up to 16 px (`text-body-md`), so iOS Safari does not zoom the page when the searchable trigger takes focus.
 
 ## Performance
 
