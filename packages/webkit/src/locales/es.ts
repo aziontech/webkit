@@ -668,6 +668,19 @@ export const es: Messages = {
     empty: 'Este archivo está vacío.',
     truncated: 'Mostrando los primeros {shown} caracteres. Descarga el archivo para verlo completo.'
   },
+  imageGallery: {
+    label: 'Imágenes',
+    image: 'Imagen {position} de {total}',
+    position: '{position} de {total}',
+    previous: 'Imagen anterior',
+    next: 'Imagen siguiente',
+    download: 'Descargar',
+    loading: 'Generando imágenes',
+    ready: 'Imágenes listas',
+    error: 'No se pudieron cargar las imágenes',
+    broken: 'No se pudo cargar esta imagen',
+    empty: 'No hay imágenes'
+  },
   fileTokenGroup: {
     label: 'Archivos',
     remove: 'Quitar {name}',

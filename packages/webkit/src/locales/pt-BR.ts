@@ -668,6 +668,19 @@ export const ptBR: Messages = {
     empty: 'Este arquivo está vazio.',
     truncated: 'Mostrando os primeiros {shown} caracteres. Baixe o arquivo para ver tudo.'
   },
+  imageGallery: {
+    label: 'Imagens',
+    image: 'Imagem {position} de {total}',
+    position: '{position} de {total}',
+    previous: 'Imagem anterior',
+    next: 'Próxima imagem',
+    download: 'Baixar',
+    loading: 'Gerando imagens',
+    ready: 'Imagens prontas',
+    error: 'Não foi possível carregar as imagens',
+    broken: 'Não foi possível carregar esta imagem',
+    empty: 'Nenhuma imagem'
+  },
   fileTokenGroup: {
     label: 'Arquivos',
     remove: 'Remover {name}',

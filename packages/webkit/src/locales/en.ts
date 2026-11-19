@@ -506,6 +506,20 @@ export const filePreview = {
   truncated: 'Showing the first {shown} characters. Download the file to see all of it.'
 } as const
 
+export const imageGallery = {
+  label: 'Images',
+  image: 'Image {position} of {total}',
+  position: '{position} of {total}',
+  previous: 'Previous image',
+  next: 'Next image',
+  download: 'Download',
+  loading: 'Generating images',
+  ready: 'Images ready',
+  error: 'The images could not load',
+  broken: 'This image could not load',
+  empty: 'No images'
+} as const
+
 export const fileTokenGroup = {
   label: 'Files',
   remove: 'Remove {name}',
@@ -1584,6 +1598,7 @@ export const en = {
   fileDropzone,
   audioPlayer,
   filePreview,
+  imageGallery,
   fileTokenGroup,
   filterMenu,
   uploadProgress,

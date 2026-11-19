@@ -1337,6 +1337,11 @@
     "limit": "12.05 KB"
   },
   {
+    "name": "image-gallery",
+    "path": "src/components/content/image-gallery/image-gallery.vue",
+    "limit": "26.7 KB"
+  },
+  {
     "name": "overflow-count",
     "path": "src/components/content/overflow-count/overflow-count.vue",
     "limit": "14.3 KB"
