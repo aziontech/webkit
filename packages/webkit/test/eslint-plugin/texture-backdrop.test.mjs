@@ -5,6 +5,7 @@ import test from 'node:test'
 import { fileURLToPath } from 'node:url'
 
 import {
+  BACKDROP_SCENES,
   GRAPHIC_COMPONENTS,
   scanTextureBackdrop,
   textureBackdropApplies
@@ -65,7 +66,11 @@ test('stays silent on text, on a plain ground and on a framed window', () => {
 
 test('fires on page JSON that puts a graphic scene on a textured band', () => {
   assert.deepEqual(
-    json({ _id: 'console-showcase-section', props: { title: 'Firewall' }, scenes: { scene: chartScene } }),
+    json({
+      _id: 'console-showcase-section',
+      props: { title: 'Firewall' },
+      scenes: { scene: chartScene }
+    }),
     ['graphic-on-texture']
   )
   assert.deepEqual(
@@ -84,15 +89,60 @@ test('fires on page JSON that puts a graphic scene on a textured band', () => {
   )
   assert.deepEqual(
     json({
-      sections: [{ _id: 'media-split-section', scenes: { media: { component: 'Box', children: [chartScene] } } }]
+      sections: [
+        {
+          _id: 'media-split-section',
+          scenes: { media: { component: 'Box', children: [chartScene] } }
+        }
+      ]
     }),
     ['graphic-on-texture']
   )
 })
 
+test('fires on page JSON that puts any content scene on a textured band', () => {
+  for (const component of [
+    'Accordion',
+    'Card',
+    'CodeBlock',
+    'Embed',
+    'IntegrationCard',
+    'KeyValueList',
+    'PlanFeatureList'
+  ]) {
+    assert.deepEqual(
+      json({ _id: 'console-showcase-section', scenes: { scene: { component } } }),
+      ['graphic-on-texture'],
+      component
+    )
+    assert.deepEqual(
+      json({
+        _id: 'console-showcase-section',
+        props: { texture: 'none' },
+        scenes: { scene: { component } }
+      }),
+      [],
+      component
+    )
+  }
+})
+
+test('the backdrop scenes match the scene registry', () => {
+  const registry = readFileSync(join(WEBKIT, 'src/assets/scene-registry.ts'), 'utf8')
+  const list = /backdropScenes[^=]*=\s*\[([^\]]*)\]/.exec(registry)?.[1] ?? ''
+  assert.deepEqual(
+    [...list.matchAll(/'(\w+)'/g)].map((match) => match[1]),
+    BACKDROP_SCENES
+  )
+})
+
 test('stays silent on page JSON with a plain ground or no graphic', () => {
   for (const data of [
-    { _id: 'console-showcase-section', props: { variant: 'diagram' }, scenes: { scene: chartScene } },
+    {
+      _id: 'console-showcase-section',
+      props: { variant: 'diagram' },
+      scenes: { scene: chartScene }
+    },
     { _id: 'console-showcase-section', props: { texture: 'none' }, scenes: { scene: chartScene } },
     { _id: 'media-split-section', props: { texture: 'none', scene: { component: 'Chart' } } },
     { _id: 'console-showcase-section', scenes: { scene: { component: 'ConsoleMockup' } } },
@@ -105,14 +155,20 @@ test('stays silent on page JSON with a plain ground or no graphic', () => {
 test('applies to sources and page JSON of components, blocks and examples only', () => {
   assert.equal(textureBackdropApplies('packages/webkit/examples/chart/page-entry.json'), true)
   assert.equal(textureBackdropApplies('packages/webkit/examples/chart/default.vue'), true)
-  assert.equal(textureBackdropApplies('packages/webkit/blocks/view/view-table/view-table.vue'), true)
-  assert.equal(textureBackdropApplies('packages/webkit/src/components/content/texture/texture.vue'), true)
+  assert.equal(
+    textureBackdropApplies('packages/webkit/blocks/view/view-table/view-table.vue'),
+    true
+  )
+  assert.equal(
+    textureBackdropApplies('packages/webkit/src/components/content/texture/texture.vue'),
+    true
+  )
   assert.equal(textureBackdropApplies('packages/webkit/examples/chart/examples.json'), false)
   assert.equal(textureBackdropApplies('packages/webkit/src/test/texture-backdrop.test.ts'), false)
   assert.equal(textureBackdropApplies('apps/docs/src/pages/index.vue'), false)
 })
 
-test('every graphic component marks its root with data-graphic', () => {
+test('every graphic component marks its root with data-plain-ground', () => {
   const sources = []
   const walk = (dir) => {
     for (const entry of readdirSync(dir, { withFileTypes: true })) {
@@ -128,6 +184,10 @@ test('every graphic component marks its root with data-graphic', () => {
     assert.ok(file, `no source for ${name}`)
     const template = readFileSync(file, 'utf8').split('<template>')[1] ?? ''
     const root = template.slice(0, template.indexOf('>'))
-    assert.match(root, /\sdata-graphic\s/, `${relative(WEBKIT, file)} root carries no data-graphic`)
+    assert.match(
+      root,
+      /\sdata-plain-ground\s/,
+      `${relative(WEBKIT, file)} root carries no data-plain-ground`
+    )
   }
 })

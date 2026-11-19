@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { type Component, computed, type FunctionalComponent, h, useAttrs } from 'vue'
 
-  import { resolveScene } from '../../../assets/scene-registry'
+  import { isBackdropScene, resolveScene } from '../../../assets/scene-registry'
   import Container from '../../layout/container/container.vue'
   import Spacer from '../../layout/spacer/spacer.vue'
   import { resolveSection, resolveSectionEntry, warnOnce } from './site-page-sections'
@@ -47,6 +47,7 @@
     component: Component
     props: Record<string, unknown>
     children: (ResolvedTree | string)[]
+    plain: boolean
   }
 
   type ResolvedScene = ResolvedTree & { slot: string }
@@ -105,13 +106,13 @@
   ): ResolvedScene[] {
     const scenes: ResolvedScene[] = []
     for (const [slot, scene] of Object.entries({ ...translated, ...entry.scenes })) {
-      const tree = resolveTree(scene)
+      const tree = resolveTree(scene, !isBackdropScene(scene.component))
       if (tree) scenes.push({ slot, ...tree })
     }
     return scenes
   }
 
-  function resolveTree(scene: SitePageScene): ResolvedTree | null {
+  function resolveTree(scene: SitePageScene, plain = false): ResolvedTree | null {
     const component = resolveScene(scene.component)
     if (!component) {
       warnOnce(`scene:${scene.component}`, `no scene is registered as "${scene.component}".`)
@@ -122,7 +123,7 @@
       const tree = resolveTree(child)
       return tree ? [tree] : []
     })
-    return { component, props: scene.props ?? {}, children }
+    return { component, props: scene.props ?? {}, children, plain }
   }
 
   const SceneTree: FunctionalComponent<{ tree: ResolvedTree; bound?: Record<string, unknown> }> = ({
@@ -131,7 +132,7 @@
   }) =>
     h(
       tree.component,
-      { ...tree.props, ...bound },
+      { ...tree.props, ...bound, ...(tree.plain ? { 'data-plain-ground': '' } : {}) },
       tree.children.length
         ? {
             default: () =>

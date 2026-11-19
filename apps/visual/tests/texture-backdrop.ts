@@ -12,7 +12,7 @@ export type TextureBackdropSelectors = {
 export function findGraphicsOnTexture(
   selectors: TextureBackdropSelectors = {
     textures: '[data-slot="texture"]',
-    graphics: '[data-graphic]'
+    graphics: '[data-plain-ground]'
   }
 ): GraphicOnTexture[] {
   const MIN_AREA = 64
@@ -37,7 +37,7 @@ export function findGraphicsOnTexture(
   for (const graphic of graphics) {
     const box = graphic.getBoundingClientRect()
     for (const texture of textures) {
-      const ground = graphic.closest('[data-ground]')
+      const ground = graphic.closest('[data-opaque]')
       if (ground && !ground.contains(texture)) continue
       const layer = texture.getBoundingClientRect()
       const width = Math.min(box.right, layer.right) - Math.max(box.left, layer.left)

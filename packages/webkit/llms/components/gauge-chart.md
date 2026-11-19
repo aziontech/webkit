@@ -69,6 +69,8 @@
 - `data-severity` on the meter: the severity of the band the value falls in
 - `data-entered` on the arc flips after two animation frames to run its entrance
 
+- Its root carries `data-plain-ground`: it is content that must sit on a plain ground, so a `Texture` beside it hides itself, and the texture-backdrop check blocks placing it on a textured band (a texture is a backdrop for text only, RV-T2-1).
+
 ## Accessibility
 
 - The dial is `role="meter"` with `aria-valuemin`, `aria-valuemax`, `aria-valuenow` and `aria-valuetext` (the formatted value, then the band name: `93%, Critical`).

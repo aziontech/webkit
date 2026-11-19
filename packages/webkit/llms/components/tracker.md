@@ -56,6 +56,8 @@
 - `data-active` on the active block; `data-dimmed` on every other block while one is active
 - `data-state="open|closed"` on the readout: `open` while a block is active; `data-moving` while it follows from one block to the next
 
+- Its root carries `data-plain-ground`: it is content that must sit on a plain ground, so a `Texture` beside it hides itself, and the texture-backdrop check blocks placing it on a textured band (a texture is a backdrop for text only, RV-T2-1).
+
 ## Accessibility
 
 - The strip is one tab stop: `role="group"` named by `ariaLabel`, with `aria-roledescription="status history"`.

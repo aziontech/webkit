@@ -72,6 +72,8 @@
 - Responsive: the root is the `@container/stat-tile`; below `@3xs` of the tile the padding tightens to `--spacing-sm`.
 - Server render and hydration: the first render shows the final figure on the server and in the browser, so the two match and the HTML carries the value. The count-up from 0 starts on mount (skipped under `prefers-reduced-motion`); later changes count up from the previous value.
 
+- Its root carries `data-plain-ground`: it is content that must sit on a plain ground, so a `Texture` beside it hides itself, and the texture-backdrop check blocks placing it on a textured band (a texture is a backdrop for text only, RV-T2-1).
+
 ## Accessibility
 
 - The tile is a `role="group"` named by its label (`aria-labelledby`), not a region landmark, so a strip of KPI tiles adds no landmarks.

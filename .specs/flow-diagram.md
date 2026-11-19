@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 9
 template: 2
-checksum: 87e4148d47008e512ccbbaffc6fc069de295c65c7929fc57a2cebf2ac805c66e
+checksum: 9da6c77e06419cc7a3b147be592b6982a8fbf56b6256554f2a0c921a6121f18c
 created: 2026-06-25
 last_updated: 2026-11-18
 ---
@@ -148,6 +148,8 @@ The root emits nothing; the bind events live on the `flow-diagram-bind` companio
 - Data card: `data-state="open|closed"`; an unbound bindable node is dashed with `Not bound`; a pending bind dashes it too.
 - Loading: `aria-busy`, skeleton cards, one `role="status"` line. Empty: `EmptyState` unless the `empty` slot replaces it.
 - Edge `severity` colours the connector (`--<severity>-mark`); default `--accent`.
+
+- Its root carries `data-plain-ground`: it is content that must sit on a plain ground, so a `Texture` beside it hides itself, and the texture-backdrop check blocks placing it on a textured band (a texture is a backdrop for text only, RV-T2-1).
 
 ## Motion & Animations
 

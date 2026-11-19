@@ -285,7 +285,7 @@
   {
     "name": "media-split",
     "path": "src/components/marketing/media-split/media-split.vue",
-    "limit": "5.2 KB"
+    "limit": "5.28 KB"
   },
   {
     "name": "marquee",
@@ -343,7 +343,7 @@
   {
     "name": "site-page",
     "path": "src/components/marketing/site-page/site-page.vue",
-    "limit": "10.4 KB",
+    "limit": "10.55 KB",
     "entryOnly": true
   },
   {
@@ -359,7 +359,7 @@
   {
     "name": "media-tabs",
     "path": "src/components/marketing/media-tabs/media-tabs.vue",
-    "limit": "8.75 KB"
+    "limit": "8.83 KB"
   },
   {
     "name": "embed",
@@ -501,7 +501,7 @@
   {
     "name": "console-showcase-section",
     "path": "src/components/section/console-showcase-section/console-showcase-section.vue",
-    "limit": "21.65 KB"
+    "limit": "21.75 KB"
   },
   {
     "name": "process-scroll-section",
@@ -517,7 +517,7 @@
   {
     "name": "hero-form-section",
     "path": "src/components/section/hero-form-section/hero-form-section.vue",
-    "limit": "50.6 KB",
+    "limit": "50.7 KB",
     "entryOnly": true
   },
   {
@@ -653,7 +653,7 @@
   {
     "name": "architecture-tabs-section",
     "path": "src/components/section/architecture-tabs-section/architecture-tabs-section.vue",
-    "limit": "22.1 KB",
+    "limit": "22.2 KB",
     "entryOnly": true
   },
   {

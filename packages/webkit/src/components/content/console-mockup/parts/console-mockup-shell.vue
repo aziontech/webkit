@@ -249,7 +249,7 @@
     ref="rootEl"
     v-bind="$attrs"
     :data-testid="testId"
-    :data-ground="variant === 'window' || null"
+    :data-opaque="variant === 'window' || null"
     :inert="interactive ? undefined : true"
     :aria-hidden="interactive ? undefined : 'true'"
     :data-interactive="interactive || null"

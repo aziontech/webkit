@@ -15,6 +15,18 @@ export const GRAPHIC_COMPONENTS = [
   'Tracker'
 ]
 
+export const BACKDROP_SCENES = [
+  'BrandGlobeScene',
+  'ConsoleApplicationScene',
+  'ConsoleMockup',
+  'ConsoleTraceScene',
+  'Diagram',
+  'FunctionsHeroCanvas',
+  'Illustration',
+  'RuntimeApiCloud',
+  'SpinningGlobe'
+]
+
 export const GROUND_COMPONENTS = ['ConsoleMockup', 'ConsoleMockupShell']
 
 export const TEXTURE_BACKDROP_DIRS = [
@@ -25,7 +37,7 @@ export const TEXTURE_BACKDROP_DIRS = [
 
 export const TEXTURE_BACKDROP_MESSAGES = {
   'graphic-on-texture':
-    'A chart, diagram, map or stat drawn on a texture. A Texture is a backdrop for text only: its dots compete with the marks, axis labels and legend, so the graphic cannot be read. Set the host to a layout without the texture (`ConsoleShowcaseSection variant="diagram"`, `texture="none"`), or move the graphic off the textured band (.claude/rules/styling.md § "A texture is a backdrop for text only").'
+    'Content other than text drawn on a texture: a chart, diagram, map or stat, or any page-JSON scene other than a console window, globe or illustration. A Texture is a backdrop for text only: its dots compete with the marks, labels and lines, so the content cannot be read. Set the host to a layout without the texture (`ConsoleShowcaseSection variant="diagram"`, `texture="none"`), or move the graphic off the textured band (.claude/rules/styling.md § "A texture is a backdrop for text only").'
 }
 
 export function textureBackdropApplies(rel) {
@@ -43,6 +55,7 @@ const pascal = (tag) =>
     .join('')
 
 const GRAPHICS = new Set(GRAPHIC_COMPONENTS)
+const BACKDROPS = new Set(BACKDROP_SCENES)
 const GROUNDS = new Set(GROUND_COMPONENTS)
 
 const ELEMENT = 1
@@ -118,8 +131,8 @@ function scanTemplate(ast) {
 const sceneHoldsGraphic = (scene) =>
   Boolean(scene) &&
   typeof scene === 'object' &&
-  (GRAPHICS.has(scene.component) ||
-    (Array.isArray(scene.children) && scene.children.some(sceneHoldsGraphic)))
+  typeof scene.component === 'string' &&
+  !BACKDROPS.has(scene.component)
 
 const SECTION_PAINTS = {
   'console-showcase-section': (props) => props.variant !== 'diagram' && props.texture !== 'none',

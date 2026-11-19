@@ -69,8 +69,9 @@ The catalog lists the channels a component is wired for (`channels` on its entry
   (`<KeyValueListItem label="Region">US East</KeyValueListItem>`); in page JSON a string in
   `children` (`{ "component": "KeyValueListItem", "props": { "label": "Region" }, "children": ["US East"] }`).
 - A Markdown pipe table renders as the WebKit `Table`; write a pipe table, not a tag.
-- On the site, place a scene on a band with no texture behind it (`console-showcase-section` takes
-  `texture: "none"`): the texture goes behind text only.
+- On the site, place a scene on a band with no texture behind it: `console-showcase-section` with
+  `variant: "diagram"` draws its scene on the plain canvas. The texture goes behind text only
+  (see `webkit-styling`); `SitePage` marks every content scene so a texture beside it hides itself.
 - Some components are app-only, and the registry says why (an editor, a live log, a run explorer,
   the data-driven table). Show their content another way: a code fence, a `Chart`, a pipe table.
 

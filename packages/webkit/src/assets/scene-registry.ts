@@ -59,6 +59,22 @@ export const sceneAssets = {
 /** Name of a scene a section draws, as the page data spells it. */
 export type SceneName = keyof typeof sceneAssets
 
+export const backdropScenes: readonly SceneName[] = [
+  'BrandGlobeScene',
+  'ConsoleApplicationScene',
+  'ConsoleMockup',
+  'ConsoleTraceScene',
+  'Diagram',
+  'FunctionsHeroCanvas',
+  'Illustration',
+  'RuntimeApiCloud',
+  'SpinningGlobe'
+]
+
+export function isBackdropScene(name: string): boolean {
+  return (backdropScenes as readonly string[]).includes(name)
+}
+
 /** A live scene a section draws in a media cell, named by the page data. */
 export type SceneRef = {
   /** Registry name of the scene. */

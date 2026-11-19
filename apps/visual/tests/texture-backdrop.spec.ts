@@ -68,7 +68,7 @@ test('texture backdrop detector sees a chart drawn on a texture', async ({ page 
   await page.locator('[data-example][data-ready]').waitFor()
   await settle(page)
   await page.evaluate(() => {
-    const graphic = document.querySelector('[data-graphic]')
+    const graphic = document.querySelector('[data-plain-ground]')
     const layer = document.createElement('div')
     layer.setAttribute('data-slot', 'texture')
     layer.setAttribute('data-variant', 'pixelate')

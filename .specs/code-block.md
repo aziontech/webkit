@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761
   node_id: 4567:33761
-checksum: 85f73a94135f436a854e7a1a7b544aa25a75328cf382dabc243a666d543bb7b8
+checksum: fcdef2f51a29f9814f10022c08597d81ba979d97d47dacb40d365e2a5e6cd6be
 created: 2026-05-28
 last_updated: 2026-11-18
 ---
@@ -223,6 +223,8 @@ Code content scrolls inside `@aziontech/webkit/scroll-area` (`orientation="both"
 **The shell is fluid: it takes the width its container gives it and never grows past it.** Long lines are a scroll, never a wider block — so the root is a size container (`@container`, i.e. inline-size containment) and its code width is invisible to the layout above it. Without that, the block's intrinsic width leaks upward: an `auto`-sized grid track or flex row (a one-column `grid` on mobile, a `md:grid-cols-2` panel below its breakpoint) sizes itself to the widest code line and the block overflows the viewport instead of scrolling — a consumer's `min-w-0` on the wrapper cannot fix it, because `min-width` is a floor on the intrinsic contribution, not a cap. The copy control (a `CopyButton`, `variant="outline"` `size="small"`) is absolutely positioned on the non-scrolling content shell (`__content`) so it stays pinned top-right while lines scroll. **On a single-line block it centres on that row instead** (`data-single-line` on the anchor): the shell is 44 px, the control 28 px, so the `--spacing-sm` top inset would leave it 4 px below the line's own centre. Every line reserves the control's full footprint on its right (`pr-11` = 28 px control + its 12 px inset), so a long line always scrolls clear of it rather than under it. With `copyable` off (`data-copyable` absent on the root) the control is not rendered and lines reserve only `--spacing-sm` on their right.
 
 - Computed diff: the common head and tail are trimmed, then the middle runs the Myers line diff; past 1,000 edits it falls back to the whole middle removed then added, so a rewrite stays linear. A 5,000-line pair with a few hundred edits diffs in a few milliseconds.
+
+- Consumer attributes land on the root (`v-bind="$attrs"`), so a page-JSON scene can mark it `data-plain-ground` (RV-T2-1).
 
 ## Motion & Animations
 

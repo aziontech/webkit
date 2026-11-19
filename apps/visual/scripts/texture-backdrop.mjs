@@ -20,7 +20,7 @@ const { values } = parseArgs({
     filter: { type: 'string', default: '' },
     workers: { type: 'string', default: '6' },
     textures: { type: 'string', default: '[data-slot="texture"]' },
-    graphics: { type: 'string', default: '[data-graphic]' }
+    graphics: { type: 'string', default: '[data-plain-ground]' }
   }
 })
 

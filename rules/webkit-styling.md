@@ -61,6 +61,21 @@ just inside a container's frame.
   `-me-px` flush, a `ring-1` painted into the frame's pixel): the same pixel reads as one
   line, touching pixels read as two.
 
+## A texture is a backdrop for text only
+
+A WebKit `Texture` (the orange `pixelate` floor above all) sits behind text: an eyebrow,
+a headline, a paragraph, the buttons of a band. Never draw a chart, a diagram, a map, a stat
+tile, or a page-JSON content scene (a card, a list, a code block, an embed) on it: the dots
+run through the axis labels, the legend and the lines, and nobody can read them.
+
+- For a scene that is not a console window, use `ConsoleShowcaseSection variant="diagram"`:
+  it draws the scene on the plain canvas. In page JSON write `"variant": "diagram"`.
+- Elsewhere, pass `texture="none"` to the band, or move the content to a band without one.
+- The console mock-ups, the terminal and the code file the site bands were designed around
+  keep their texture: their own window covers the dots.
+- WebKit guards it at runtime too: a `Texture` hides itself when the content beside it is a
+  chart, a diagram or a page-JSON content scene (marked `data-plain-ground`).
+
 ## Two filled rows never touch
 
 In a list of rows (a select or combobox option, a menu item, a command item, a sidebar or tree row), the hover, highlighted, active and selected fills of two neighbouring rows are separated by a **2px gap**. The row keeps its full height, so the hit area and the touch target do not shrink; only the painted fill is inset, 1px from the top and 1px from the bottom edge. This is the market pattern (Radix and shadcn menus, Linear, Vercel Geist, Raycast): each highlighted row is its own rounded surface, and a selected row next to a highlighted one reads as two surfaces, never as one merged block.

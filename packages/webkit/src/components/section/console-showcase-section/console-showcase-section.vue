@@ -198,7 +198,9 @@
         marks="all"
       >
         <div
-          class="relative w-full overflow-hidden px-(--spacing-xl) pt-(--spacing-md) pb-(--spacing-xl) md:pb-0"
+          :data-variant="variant"
+          :data-testid="`${testId}__frame`"
+          class="relative w-full overflow-hidden px-(--spacing-xl) pt-(--spacing-md) pb-(--spacing-xl) md:data-[variant=console]:pb-0"
         >
           <Texture
             v-if="variant === 'console'"

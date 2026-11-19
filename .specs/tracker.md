@@ -6,7 +6,7 @@ status: implemented
 spec_version: 7
 created: 2026-11-10
 last_updated: 2026-11-18
-checksum: 0a93d314e2119f6563ebe2e3b9c9467e2bd853b42469f524a83aa6171992791c
+checksum: 312b6ddaf5d6fcc9998ed40ba773ec95c3d54e15253dc74472dd80659c1bf456
 ---
 
 # Tracker — Component Spec
@@ -107,6 +107,8 @@ _No slots._
 - `data-severity` on each block: `success` | `warning` | `danger` | `info` | `none`
 - `data-active` on the active block; `data-dimmed` on every other block while one is active
 - `data-state="open|closed"` on the readout: `open` while a block is active; `data-moving` while it follows from one block to the next
+
+- Its root carries `data-plain-ground`: it is content that must sit on a plain ground, so a `Texture` beside it hides itself, and the texture-backdrop check blocks placing it on a textured band (a texture is a backdrop for text only, RV-T2-1).
 
 ## Motion & Animations
 

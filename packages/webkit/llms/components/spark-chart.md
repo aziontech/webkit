@@ -50,6 +50,8 @@
 - `data-size`: `small` | `medium` | `large`
 - Lines and area edges are linear segments with round joins and caps; 2px stroke; the area fill fades from the hue to transparent. Bars have a 1px rounded data end and a 1px gap between them.
 
+- Its root carries `data-plain-ground`: it is content that must sit on a plain ground, so a `Texture` beside it hides itself, and the texture-backdrop check blocks placing it on a textured band (a texture is a backdrop for text only, RV-T2-1).
+
 ## Accessibility
 
 - With `ariaLabel` the SVG is `role="img"` named by it; without, it is `aria-hidden` and the number beside it carries the information.

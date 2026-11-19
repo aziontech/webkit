@@ -690,6 +690,7 @@
 
 <template>
   <div
+    v-bind="$attrs"
     :class="
       cn(
         'group/code-block flex h-[var(--code-block-height,auto)] w-full @container flex-col overflow-hidden rounded-(--shape-control) bg-(--bg-surface) data-[bordered]:border data-[bordered]:border-(--border-default) data-[type=output]:bg-(--bg-canvas)',

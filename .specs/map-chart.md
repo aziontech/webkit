@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: 966f9c6a38e5a0290ee8a49c6cd174b01bb8717b9263ea7ffe442a632f20de72
+checksum: c4be7ce6bf9b2dc40f209c9915bf37526f4e92662211a089363339d0467bd8f7
 created: 2026-11-11
 last_updated: 2026-11-18
 ---
@@ -122,6 +122,8 @@ The function props (`formatValue`) and the events stay Vue. `DocMarkdown` and th
 - `data-geometry`: `loading` | `ready` while the country shapes chunk loads (only when `regions` is set)
 - `data-bin` (0 to 4) on each shaded country; `data-entered` on marks after two animation frames
 - Server render and hydration: the land, the bubbles, the legend and the table render on the server; the country shading appears after the shapes chunk loads on the client, so the first client render matches the server.
+
+- Its root carries `data-plain-ground`: it is content that must sit on a plain ground, so a `Texture` beside it hides itself, and the texture-backdrop check blocks placing it on a textured band (a texture is a backdrop for text only, RV-T2-1).
 
 ## Motion & Animations
 
