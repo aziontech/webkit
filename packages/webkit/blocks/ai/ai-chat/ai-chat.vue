@@ -19,10 +19,12 @@
     type McpAppFrameMessage,
     type McpAppFrameResource
   } from '@aziontech/webkit/mcp-app-frame'
-  import type { PromptInputStatus } from '@aziontech/webkit/prompt-input'
+  import type { PromptInputFile, PromptInputStatus } from '@aziontech/webkit/prompt-input'
+  import PromptInputAttachButton from '@aziontech/webkit/prompt-input-attach-button'
   import PromptInput from '@aziontech/webkit/prompt-input-root'
   import PromptQueue from '@aziontech/webkit/prompt-queue'
   import Reasoning from '@aziontech/webkit/reasoning'
+  import Skeleton from '@aziontech/webkit/skeleton'
   import Sources from '@aziontech/webkit/sources'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import StreamingResponse from '@aziontech/webkit/streaming-response'
@@ -39,16 +41,22 @@
     activitiesBefore,
     type AiChatConnection,
     type AiChatInterrupt,
+    type AiChatInterruptError,
     type AiChatMessage,
     type AiChatQuestion,
     type AiChatQueuedMessage,
+    type AiChatSendContent,
     type AiChatTool,
+    type AiChatToolAnswer,
     type AiChatToolCallPart,
     type AiChatUiResourcePart,
+    answerable,
     answerInterrupt,
     approvalOf,
+    contentOf,
     documentNameOf,
-    hasText,
+    hasAnswer,
+    interruptErrorText,
     isQuestion,
     json,
     needsApproval,
@@ -59,20 +67,27 @@
     segmentsOf,
     skipInterrupt,
     stopSubagent,
+    structuredOf,
     subagentStatusOf,
     subagentTextOf,
     textOf,
+    toolContentOf,
+    toolQuestionOf,
     toolStatusOf
   } from './messages'
   import { sampleSuggestions } from './sample'
 
   export type {
     AiChatActivityPart,
+    AiChatAttachment,
     AiChatAudioPart,
     AiChatConnection,
+    AiChatContent,
+    AiChatDataSource,
     AiChatDocumentPart,
     AiChatImagePart,
     AiChatInterrupt,
+    AiChatInterruptError,
     AiChatMediaSource,
     AiChatMessage,
     AiChatMessageMetadata,
@@ -80,11 +95,14 @@
     AiChatPart,
     AiChatQueuedMessage,
     AiChatRole,
+    AiChatSendContent,
+    AiChatStructuredOutputPart,
     AiChatSubagentPart,
     AiChatSubagentStatus,
     AiChatTextPart,
     AiChatThinkingPart,
     AiChatTool,
+    AiChatToolAnswer,
     AiChatToolCallPart,
     AiChatToolCallState,
     AiChatToolResultPart,
@@ -113,8 +131,10 @@
     error?: string | { message: string } | null
     /** How each tool reads, by tool name; a tool left out shows its name. */
     tools?: Record<string, AiChatTool>
-    /** Pending requests, as `useChat` returns `interrupts`; Approve and Deny resolve the matching approval, and a generic one asks its question. */
+    /** Pending requests, as `useChat` returns `interrupts`; Approve and Deny resolve the matching approval, a generic one asks its question, and an unbound one asks it for the app to route. */
     interrupts?: ReadonlyArray<AiChatInterrupt>
+    /** Why the answers to pending requests were not sent, as `useChat` returns `interruptErrors`; a retryable one offers Retry. */
+    interruptErrors?: ReadonlyArray<AiChatInterruptError>
     /** Messages waiting to be sent, as `useChat` returns `queue`; given, the composer sends while a response runs. */
     queue?: ReadonlyArray<AiChatQueuedMessage>
     /** Older messages exist, as `useChat` returns `hasOlderMessages`. */
@@ -125,6 +145,18 @@
     connection?: AiChatConnection
     /** The chat is rejoining a run after a reload, as `useChat` returns `resuming`. */
     resuming?: boolean
+    /** The conversation is being restored, as `useChat` returns `isHydrating`; placeholders show in place of the empty state. */
+    hydrating?: boolean
+    /** A response is being generated for this chat elsewhere, as `useChat` returns `sessionGenerating`. */
+    sessionGenerating?: boolean
+    /** The reader may attach files; `send` then hands over the multimodal content `sendMessage` takes. */
+    attachable?: boolean
+    /** The files the reader may attach, in the native accept syntax. */
+    accept?: string
+    /** Most files attached to one message. */
+    maxFiles?: number
+    /** Largest file in bytes. */
+    maxFileSize?: number
     /** Turns a widget's resource into a trusted https address when it has no inline HTML; left out, only inline widgets show. */
     resolveAppUrl?: (resource: McpAppFrameResource) => string | Promise<string>
   }
@@ -137,16 +169,23 @@
     error: '',
     tools: () => ({}),
     interrupts: () => [],
+    interruptErrors: () => [],
     queue: undefined,
     moreMessages: false,
     loadingMore: false,
     connection: 'connected',
     resuming: false,
+    hydrating: false,
+    sessionGenerating: false,
+    attachable: false,
+    accept: 'image/*,application/pdf',
+    maxFiles: 4,
+    maxFileSize: 10485760,
     resolveAppUrl: undefined
   })
 
   const emit = defineEmits<{
-    send: [event: MouseEvent | KeyboardEvent, text: string]
+    send: [event: MouseEvent | KeyboardEvent, content: AiChatSendContent]
     stop: [event: MouseEvent]
     retry: [event: MouseEvent, message: AiChatMessage]
     'new-chat': [event: MouseEvent]
@@ -160,6 +199,9 @@
       reply: (message: McpAppFrameMessage) => void
     ]
     'load-more': [event: Event]
+    'answer-interrupt': [event: Event, interrupt: AiChatInterrupt, value: string]
+    'answer-tool': [event: Event, answer: AiChatToolAnswer]
+    'retry-interrupts': [event: MouseEvent]
   }>()
 
   const appFrames = new Map<string, InstanceType<typeof McpAppFrame>>()
@@ -176,6 +218,7 @@
   const { formatDate } = useLocale()
 
   const prompt = ref('')
+  const files = ref<PromptInputFile[]>([])
   const composerEl = ref<InstanceType<typeof PromptInput> | null>(null)
   const ratings = ref<Record<string, ChatMessageFeedbackValue | null>>({})
   const stoppedIds = ref<Set<string>>(new Set())
@@ -183,6 +226,8 @@
   const answers = ref<Record<string, string>>({})
   const askedAfter = ref<Record<string, string>>({})
   const settled = ref<Record<string, AiChatQuestion>>({})
+  const routed = ref<Record<string, boolean>>({})
+  const toolAnswers = ref<Record<string, AiChatQuestion>>({})
 
   const turns = computed(() =>
     props.messages.filter((message) => message.role === 'user' || message.role === 'assistant')
@@ -201,7 +246,7 @@
   function statusOf(turn: AiChatMessage): ChatMessageStatus {
     if (turn.role === 'user' || turn !== last.value) return 'success'
     if (failure.value) return 'error'
-    if (props.loading) return hasText(turn) ? 'streaming' : 'pending'
+    if (props.loading) return hasAnswer(turn) ? 'streaming' : 'pending'
     return 'success'
   }
 
@@ -212,6 +257,7 @@
     () =>
       !reconnecting.value && (props.connection === 'disconnected' || props.connection === 'error')
   )
+  const retryable = computed(() => props.interruptErrors.some((error) => error.retryable !== false))
 
   const pendingQuestions = computed(() => props.interrupts.filter(isQuestion))
   watch(
@@ -223,7 +269,13 @@
   )
 
   const questions = computed(() => {
-    const live = pendingQuestions.value.map(questionOf)
+    const live = pendingQuestions.value
+      .map(questionOf)
+      .map((question) =>
+        !question.bound && routed.value[question.id]
+          ? { ...question, status: 'running' as const }
+          : question
+      )
     const ids = new Set(live.map((question) => question.id))
     const known = new Set(turns.value.map((turn) => turn.id))
     const groups: Record<string, AiChatQuestion[]> = {}
@@ -237,10 +289,24 @@
     return groups
   })
 
-  function answer(question: AiChatQuestion, value: string) {
+  function answer(event: Event, question: AiChatQuestion, value: string) {
     const interrupt = pendingQuestions.value.find((item) => item.id === question.id)
     settled.value[question.id] = { ...question, status: 'success', error: '' }
-    answerInterrupt(interrupt, value)
+    if (question.bound) {
+      answerInterrupt(interrupt, value)
+    } else {
+      routed.value[question.id] = true
+      if (interrupt) emit('answer-interrupt', event, interrupt, value)
+    }
+  }
+
+  function askOf(call: AiChatToolCallPart): AiChatQuestion {
+    return toolAnswers.value[call.id] ?? toolQuestionOf(call, toolOf(call))
+  }
+
+  function answerTool(event: Event, call: AiChatToolCallPart, value: string) {
+    toolAnswers.value[call.id] = { ...toolQuestionOf(call, toolOf(call)), status: 'running' }
+    emit('answer-tool', event, { toolCallId: call.id, tool: call.name, output: value })
   }
 
   function skip(question: AiChatQuestion) {
@@ -255,7 +321,7 @@
 
   const state = computed<PromptInputStatus>(() => {
     if (!props.loading) return 'ready'
-    return last.value?.role === 'assistant' && hasText(last.value) ? 'streaming' : 'pending'
+    return last.value?.role === 'assistant' && hasAnswer(last.value) ? 'streaming' : 'pending'
   })
 
   function stopped(turn: AiChatMessage): boolean {
@@ -284,10 +350,21 @@
     }
   )
 
-  function send(event: MouseEvent | KeyboardEvent, text: string) {
-    if (!text.trim() || (state.value !== 'ready' && !queueable.value)) return
+  async function send(event: MouseEvent | KeyboardEvent, text: string) {
+    const attached = files.value
+    const picked = attached.flatMap((item) => (item.file instanceof File ? [item.file] : []))
+    if ((!text.trim() && !picked.length) || (state.value !== 'ready' && !queueable.value)) return
     prompt.value = ''
-    emit('send', event, text)
+    files.value = []
+    let content: AiChatSendContent
+    try {
+      content = await contentOf(text, picked)
+    } catch {
+      prompt.value = text
+      files.value = attached
+      return
+    }
+    emit('send', event, content)
   }
 
   function stop(event: MouseEvent) {
@@ -297,11 +374,14 @@
 
   function newChat(event: MouseEvent) {
     prompt.value = ''
+    files.value = []
     stoppedIds.value.clear()
     edits.value = {}
     answers.value = {}
     askedAfter.value = {}
     settled.value = {}
+    routed.value = {}
+    toolAnswers.value = {}
     emit('new-chat', event)
   }
 
@@ -362,7 +442,29 @@
     </header>
     <div class="flex min-h-0 flex-1 flex-col">
       <div
-        v-if="!turns.length"
+        v-if="hydrating && !turns.length"
+        role="status"
+        aria-label="Loading the conversation"
+        class="layout-column-content layout-boundary-inline flex flex-1 flex-col gap-(--spacing-lg) py-(--spacing-md)"
+      >
+        <div
+          v-for="row in 3"
+          :key="row"
+          class="flex gap-(--spacing-sm)"
+        >
+          <Skeleton
+            variant="circle"
+            width="2rem"
+            height="2rem"
+          />
+          <div class="flex flex-1 flex-col gap-(--spacing-xs)">
+            <Skeleton width="25%" />
+            <Skeleton :width="row === 2 ? '50%' : '85%'" />
+          </div>
+        </div>
+      </div>
+      <div
+        v-else-if="!turns.length"
         class="layout-column-content layout-boundary-inline flex flex-1 flex-col justify-center gap-(--spacing-lg) py-(--spacing-md)"
       >
         <EmptyState
@@ -395,153 +497,203 @@
             @retry="emit('retry', $event, turn)"
           >
             <template v-if="turn.role === 'user'">{{ textOf(turn, '\n') }}</template>
-            <template v-else>
-              <template
-                v-for="segment in segmentsOf(turn, activitiesBefore(messages, turn))"
-                :key="segment.key"
+            <template
+              v-for="segment in segmentsOf(
+                turn,
+                turn.role === 'assistant' ? activitiesBefore(messages, turn) : []
+              )"
+              :key="segment.key"
+            >
+              <template v-if="turn.role === 'user' && segment.type === 'text'" />
+              <AgentActivity
+                v-else-if="segment.type === 'activity'"
+                :steps="segment.steps"
+              />
+              <Reasoning
+                v-else-if="segment.type === 'reasoning'"
+                :streaming="statusOf(turn) === 'pending'"
+                :duration="
+                  statusOf(turn) === 'pending' ? undefined : turn.metadata?.reasoningSeconds
+                "
               >
-                <AgentActivity
-                  v-if="segment.type === 'activity'"
-                  :steps="segment.steps"
-                />
-                <Reasoning
-                  v-else-if="segment.type === 'reasoning'"
-                  :streaming="statusOf(turn) === 'pending'"
-                  :duration="
-                    statusOf(turn) === 'pending' ? undefined : turn.metadata?.reasoningSeconds
+                <p class="whitespace-pre-line">{{ segment.content }}</p>
+              </Reasoning>
+              <StreamingResponse
+                v-else-if="segment.type === 'text'"
+                :content="segment.content"
+                :streaming="statusOf(turn) === 'streaming'"
+                :sources="turn.metadata?.sources ?? []"
+                :anchor="`answer-${turn.id}`"
+              />
+              <AgentQuestion
+                v-else-if="
+                  segment.type === 'tool' &&
+                  answerable(toolOf(segment.call), segment.call, segment.result)
+                "
+                v-model="answers[segment.call.id]"
+                :title="askOf(segment.call).title"
+                :type="askOf(segment.call).options.length ? 'choice' : 'text'"
+                :options="askOf(segment.call).options"
+                :status="askOf(segment.call).status"
+                @submit="(event, value) => answerTool(event, segment.call, value)"
+              />
+              <template v-else-if="segment.type === 'tool'">
+                <ToolApproval
+                  v-if="needsApproval(segment.call)"
+                  :title="
+                    toolOf(segment.call).question ||
+                    toolOf(segment.call).title ||
+                    `Run ${segment.call.name}?`
                   "
+                  :description="toolOf(segment.call).description"
+                  :approve-label="toolOf(segment.call).approveLabel"
+                  :variant="toolOf(segment.call).variant"
+                  :confirmation-phrase="toolOf(segment.call).confirmationPhrase"
+                  :status="approvalOf(segment.call)"
+                  :loading="loading && turn === last"
+                  :editable="toolOf(segment.call).editable"
+                  :invalid="toolOf(segment.call).editable && !parsesAsJson(editOf(segment.call))"
+                  :model-value="editOf(segment.call)"
+                  @update:model-value="(text) => (edits[segment.call.id] = text)"
+                  @approve="(event, text) => approve(event, segment.call, text)"
+                  @deny="deny($event, segment.call)"
                 >
-                  <p class="whitespace-pre-line">{{ segment.content }}</p>
-                </Reasoning>
-                <StreamingResponse
-                  v-else-if="segment.type === 'text'"
-                  :content="segment.content"
-                  :streaming="statusOf(turn) === 'streaming'"
-                  :sources="turn.metadata?.sources ?? []"
-                  :anchor="`answer-${turn.id}`"
-                />
-                <template v-else-if="segment.type === 'tool'">
-                  <ToolApproval
-                    v-if="needsApproval(segment.call)"
-                    :title="
-                      toolOf(segment.call).question ||
-                      toolOf(segment.call).title ||
-                      `Run ${segment.call.name}?`
+                  <CodeBlock
+                    v-if="
+                      !toolOf(segment.call).editable &&
+                      json(segment.call.input ?? segment.call.arguments)
                     "
-                    :description="toolOf(segment.call).description"
-                    :approve-label="toolOf(segment.call).approveLabel"
-                    :variant="toolOf(segment.call).variant"
-                    :confirmation-phrase="toolOf(segment.call).confirmationPhrase"
-                    :status="approvalOf(segment.call)"
-                    :loading="loading && turn === last"
-                    :editable="toolOf(segment.call).editable"
-                    :invalid="toolOf(segment.call).editable && !parsesAsJson(editOf(segment.call))"
-                    :model-value="editOf(segment.call)"
-                    @update:model-value="(text) => (edits[segment.call.id] = text)"
-                    @approve="(event, text) => approve(event, segment.call, text)"
-                    @deny="deny($event, segment.call)"
+                    :code="json(segment.call.input ?? segment.call.arguments)"
+                    language="json"
+                    :show-line-numbers="false"
+                  />
+                </ToolApproval>
+                <ToolCall
+                  v-if="!needsApproval(segment.call) || approvalOf(segment.call) === 'approved'"
+                  :name="segment.call.name"
+                  :title="toolOf(segment.call).title"
+                  :status="toolStatusOf(segment.call, segment.result)"
+                >
+                  <template
+                    v-if="json(segment.call.input ?? segment.call.arguments)"
+                    #input
                   >
                     <CodeBlock
-                      v-if="
-                        !toolOf(segment.call).editable &&
-                        json(segment.call.input ?? segment.call.arguments)
-                      "
                       :code="json(segment.call.input ?? segment.call.arguments)"
                       language="json"
                       :show-line-numbers="false"
                     />
-                  </ToolApproval>
-                  <ToolCall
-                    v-if="!needsApproval(segment.call) || approvalOf(segment.call) === 'approved'"
-                    :name="segment.call.name"
-                    :title="toolOf(segment.call).title"
-                    :status="toolStatusOf(segment.call, segment.result)"
+                  </template>
+                  <template
+                    v-if="
+                      !segment.result?.error &&
+                      segment.call.output === undefined &&
+                      toolContentOf(segment.result?.content)
+                    "
+                    #output
                   >
-                    <template
-                      v-if="json(segment.call.input ?? segment.call.arguments)"
-                      #input
+                    <p
+                      v-if="toolContentOf(segment.result?.content)?.text"
+                      class="whitespace-pre-line text-body-sm text-(--text-default)"
                     >
-                      <CodeBlock
-                        :code="json(segment.call.input ?? segment.call.arguments)"
-                        language="json"
-                        :show-line-numbers="false"
-                      />
-                    </template>
-                    <template
-                      v-if="
+                      {{ toolContentOf(segment.result?.content)?.text }}
+                    </p>
+                    <ImageGallery
+                      v-if="toolContentOf(segment.result?.content)?.images.length"
+                      :items="toolContentOf(segment.result?.content)?.images ?? []"
+                    />
+                  </template>
+                  <template
+                    v-else-if="
+                      json(segment.result?.error || segment.call.output || segment.result?.content)
+                    "
+                    #output
+                  >
+                    <CodeBlock
+                      :code="
                         json(
                           segment.result?.error || segment.call.output || segment.result?.content
                         )
                       "
-                      #output
-                    >
-                      <CodeBlock
-                        :code="
-                          json(
-                            segment.result?.error || segment.call.output || segment.result?.content
-                          )
-                        "
-                        language="json"
-                        :show-line-numbers="false"
-                      />
-                    </template>
-                  </ToolCall>
-                </template>
-                <ImageGallery
-                  v-else-if="segment.type === 'gallery'"
-                  :items="segment.images"
-                />
-                <AudioPlayer
-                  v-else-if="segment.type === 'audio'"
-                  :src="segment.src"
-                />
-                <VideoPlayer
-                  v-else-if="segment.type === 'video'"
-                  :src="segment.src"
-                  :mime-type="segment.mimeType"
-                />
-                <FilePreview
-                  v-else-if="segment.type === 'document'"
-                  :file-name="documentNameOf(segment.part)"
-                  :mime-type="segment.part.source.mimeType"
-                  :src="segment.part.source.type === 'url' ? segment.part.source.value : ''"
-                  :base64="segment.part.source.type === 'data' ? segment.part.source.value : ''"
-                />
-                <SubagentCard
-                  v-else-if="segment.type === 'subagent'"
-                  :name="segment.part.subagent.name"
-                  :title="segment.part.subagent.description"
-                  :description="segment.part.subagent.error?.message"
-                  :status="subagentStatusOf(segment.part)"
-                  :stoppable="typeof segment.part.subagent.stop === 'function'"
-                  @stop="stopSubagent(segment.part)"
-                >
-                  <StreamingResponse
-                    v-if="subagentTextOf(segment.part)"
-                    :content="subagentTextOf(segment.part)"
-                  />
-                  <template
-                    v-if="json(segment.part.subagent.input)"
-                    #input
-                  >
-                    <CodeBlock
-                      :code="json(segment.part.subagent.input)"
                       language="json"
                       :show-line-numbers="false"
                     />
                   </template>
-                </SubagentCard>
-                <McpAppFrame
-                  v-else-if="segment.type === 'app'"
-                  :ref="(el) => setAppFrame(segment.key, el)"
-                  :resource="segment.part.resource"
-                  :title="
-                    (tools[segment.part.toolName] ?? { title: '' }).title || segment.part.toolName
-                  "
-                  :resolve-url="resolveAppUrl"
-                  @message="(message) => forwardAppMessage(segment.key, segment.part, message)"
+                </ToolCall>
+              </template>
+              <ImageGallery
+                v-else-if="segment.type === 'gallery'"
+                :items="segment.images"
+              />
+              <AudioPlayer
+                v-else-if="segment.type === 'audio'"
+                :src="segment.src"
+              />
+              <VideoPlayer
+                v-else-if="segment.type === 'video'"
+                :src="segment.src"
+                :mime-type="segment.mimeType"
+              />
+              <FilePreview
+                v-else-if="segment.type === 'document'"
+                :file-name="documentNameOf(segment.part)"
+                :mime-type="segment.part.source.mimeType"
+                :src="segment.part.source.type === 'url' ? segment.part.source.value : ''"
+                :base64="segment.part.source.type === 'data' ? segment.part.source.value : ''"
+              />
+              <SubagentCard
+                v-else-if="segment.type === 'subagent'"
+                :name="segment.part.subagent.name"
+                :title="segment.part.subagent.description"
+                :description="segment.part.subagent.error?.message"
+                :status="subagentStatusOf(segment.part)"
+                :stoppable="typeof segment.part.subagent.stop === 'function'"
+                @stop="stopSubagent(segment.part)"
+              >
+                <StreamingResponse
+                  v-if="subagentTextOf(segment.part)"
+                  :content="subagentTextOf(segment.part)"
+                />
+                <template
+                  v-if="json(segment.part.subagent.input)"
+                  #input
+                >
+                  <CodeBlock
+                    :code="json(segment.part.subagent.input)"
+                    language="json"
+                    :show-line-numbers="false"
+                  />
+                </template>
+              </SubagentCard>
+              <template v-else-if="segment.type === 'structured'">
+                <Alert
+                  v-if="segment.part.status === 'error'"
+                  severity="danger"
+                  size="small"
+                  title="The structured answer failed"
+                >
+                  {{ segment.part.errorMessage || 'The answer did not match the expected format.' }}
+                </Alert>
+                <CodeBlock
+                  v-else-if="structuredOf(segment.part)"
+                  :code="structuredOf(segment.part)"
+                  language="json"
+                  :show-line-numbers="false"
+                  :aria-busy="segment.part.status === 'streaming' || undefined"
                 />
               </template>
+              <McpAppFrame
+                v-else-if="segment.type === 'app'"
+                :ref="(el) => setAppFrame(segment.key, el)"
+                :resource="segment.part.resource"
+                :title="
+                  (tools[segment.part.toolName] ?? { title: '' }).title || segment.part.toolName
+                "
+                :resolve-url="resolveAppUrl"
+                @message="(message) => forwardAppMessage(segment.key, segment.part, message)"
+              />
+            </template>
+            <template v-if="turn.role === 'assistant'">
               <p
                 v-if="stopped(turn)"
                 class="text-body-sm text-(--text-muted)"
@@ -591,8 +743,8 @@
               :options="question.options"
               :status="question.status"
               :error="question.error"
-              skippable
-              @submit="(_event, value) => answer(question, value)"
+              :skippable="question.bound"
+              @submit="(event, value) => answer(event, question, value)"
               @skip="skip(question)"
             />
           </ChatMessage>
@@ -620,17 +772,37 @@
     >
       <StatusIndicator
         v-if="reconnecting"
+        key="reconnecting"
         severity="warning"
         label="Reconnecting"
         loading
       />
       <Alert
         v-else-if="offline"
+        key="offline"
         severity="danger"
         size="small"
         title="Connection lost"
       >
         Your messages send when the connection returns.
+      </Alert>
+      <StatusIndicator
+        v-else-if="sessionGenerating && !loading"
+        key="elsewhere"
+        severity="info"
+        label="Responding in another tab"
+        loading
+      />
+      <Alert
+        key="alert-2"
+        v-if="interruptErrors.length"
+        severity="danger"
+        size="small"
+        title="Your answer was not sent"
+        :action-label="retryable ? 'Retry' : ''"
+        @action="emit('retry-interrupts', $event)"
+      >
+        {{ interruptErrorText(interruptErrors) }}
       </Alert>
       <PromptQueue
         v-if="queued.length"
@@ -640,12 +812,23 @@
       <PromptInput
         ref="composerEl"
         v-model="prompt"
+        v-model:files="files"
         :status="state"
         :queueable="queueable"
+        :disabled="hydrating"
+        :accept="accept"
+        :max-files="maxFiles"
+        :max-file-size="maxFileSize"
         :max-length="4000"
         @submit="(event, { value }) => send(event, value)"
         @stop="stop"
       >
+        <template
+          v-if="attachable"
+          #actions
+        >
+          <PromptInputAttachButton />
+        </template>
         <template #hint>
           The AI assistant can make mistakes. Check important information before you act on it.
         </template>

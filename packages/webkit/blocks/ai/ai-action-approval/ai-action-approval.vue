@@ -1,9 +1,12 @@
 <script setup lang="ts">
+  import AgentQuestion from '@aziontech/webkit/agent-question'
+  import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import ChatMessage, { type ChatMessageStatus } from '@aziontech/webkit/chat-message'
   import CodeBlock from '@aziontech/webkit/code-block'
   import Conversation from '@aziontech/webkit/conversation'
   import CopyButton from '@aziontech/webkit/copy-button'
+  import ImageGallery from '@aziontech/webkit/image-gallery'
   import type { PromptInputStatus } from '@aziontech/webkit/prompt-input'
   import PromptInput from '@aziontech/webkit/prompt-input-root'
   import StreamingResponse from '@aziontech/webkit/streaming-response'
@@ -14,30 +17,42 @@
 
   import {
     type AiActionApprovalInterrupt,
+    type AiActionApprovalInterruptError,
     type AiActionApprovalMessage,
+    type AiActionApprovalQuestion,
     type AiActionApprovalTool,
     type AiActionApprovalToolCallPart,
+    answerInterrupt,
     approvalOf,
+    hasAnswer,
     hasText,
+    interruptErrorText,
+    isQuestion,
     isToolCallPart,
     isToolResultPart,
     json,
     needsApproval,
     parsesAsJson,
+    questionOf,
     resolveInterrupt,
     segmentsOf,
+    skipInterrupt,
+    structuredOf,
     textOf,
+    toolContentOf,
     toolStatusOf
   } from './messages'
   import { sampleMessages, sampleTools } from './sample'
 
   export type {
     AiActionApprovalInterrupt,
+    AiActionApprovalInterruptError,
     AiActionApprovalMessage,
     AiActionApprovalMessageMetadata,
     AiActionApprovalOtherPart,
     AiActionApprovalPart,
     AiActionApprovalRole,
+    AiActionApprovalStructuredOutputPart,
     AiActionApprovalTextPart,
     AiActionApprovalThinkingPart,
     AiActionApprovalTool,
@@ -55,8 +70,10 @@
     error?: string | { message: string } | null
     /** How each tool reads, by tool name: the call's title, the approval question, its verb and whether it is irreversible. */
     tools?: Record<string, AiActionApprovalTool>
-    /** Pending requests, as `useChat` returns `interrupts`; the approve button and Deny resolve the matching one. */
+    /** Pending requests, as `useChat` returns `interrupts`; the approve button and Deny resolve the matching one, a generic one asks its question, and an unbound one asks it for the app to route. */
     interrupts?: ReadonlyArray<AiActionApprovalInterrupt>
+    /** Why the decisions were not sent, as `useChat` returns `interruptErrors`; a retryable one offers Retry. */
+    interruptErrors?: ReadonlyArray<AiActionApprovalInterruptError>
   }
 
   const props = withDefaults(defineProps<AiActionApprovalProps>(), {
@@ -64,7 +81,8 @@
     loading: false,
     error: '',
     tools: undefined,
-    interrupts: () => []
+    interrupts: () => [],
+    interruptErrors: () => []
   })
 
   const emit = defineEmits<{
@@ -73,12 +91,17 @@
     stop: [event: MouseEvent]
     retry: [event: MouseEvent, message: AiActionApprovalMessage]
     send: [event: MouseEvent | KeyboardEvent, text: string]
+    'answer-interrupt': [event: Event, interrupt: AiActionApprovalInterrupt, value: string]
+    'retry-interrupts': [event: MouseEvent]
   }>()
 
   const { formatDate } = useLocale()
 
   const prompt = ref('')
   const edits = ref<Record<string, string>>({})
+  const answers = ref<Record<string, string>>({})
+  const settled = ref<Record<string, AiActionApprovalQuestion>>({})
+  const routed = ref<Record<string, boolean>>({})
 
   const turns = computed(() =>
     (props.messages ?? sampleMessages).filter(
@@ -96,7 +119,7 @@
   function statusOf(turn: AiActionApprovalMessage): ChatMessageStatus {
     if (turn.role === 'user' || turn !== last.value) return 'success'
     if (failure.value) return 'error'
-    if (props.loading && !runs(turn)) return hasText(turn) ? 'streaming' : 'pending'
+    if (props.loading && !runs(turn)) return hasAnswer(turn) ? 'streaming' : 'pending'
     return 'success'
   }
 
@@ -123,7 +146,7 @@
 
   const state = computed<PromptInputStatus>(() => {
     if (!props.loading) return 'ready'
-    return last.value?.role === 'assistant' && (hasText(last.value) || runs(last.value))
+    return last.value?.role === 'assistant' && (hasAnswer(last.value) || runs(last.value))
       ? 'streaming'
       : 'pending'
   })
@@ -152,6 +175,38 @@
   function deny(event: MouseEvent, call: AiActionApprovalToolCallPart) {
     emit('deny', event, call)
     resolveInterrupt(props.interrupts, call, false)
+  }
+
+  const pendingQuestions = computed(() => props.interrupts.filter(isQuestion))
+  const retryable = computed(() => props.interruptErrors.some((error) => error.retryable !== false))
+
+  const questions = computed(() => {
+    const live = pendingQuestions.value
+      .map(questionOf)
+      .map((question) =>
+        !question.bound && routed.value[question.id]
+          ? { ...question, status: 'running' as const }
+          : question
+      )
+    const ids = new Set(live.map((question) => question.id))
+    return [...live, ...Object.values(settled.value).filter((question) => !ids.has(question.id))]
+  })
+
+  function answer(event: Event, question: AiActionApprovalQuestion, value: string) {
+    const interrupt = pendingQuestions.value.find((item) => item.id === question.id)
+    settled.value[question.id] = { ...question, status: 'success', error: '' }
+    if (question.bound) {
+      answerInterrupt(interrupt, value)
+    } else {
+      routed.value[question.id] = true
+      if (interrupt) emit('answer-interrupt', event, interrupt, value)
+    }
+  }
+
+  function skip(question: AiActionApprovalQuestion) {
+    const interrupt = pendingQuestions.value.find((item) => item.id === question.id)
+    settled.value[question.id] = { ...question, status: 'skipped', error: '' }
+    skipInterrupt(interrupt)
   }
 
   function send(event: MouseEvent | KeyboardEvent, value: string) {
@@ -244,6 +299,25 @@
                 </template>
                 <template
                   v-if="
+                    !segment.result?.error &&
+                    segment.call.output === undefined &&
+                    toolContentOf(segment.result?.content)
+                  "
+                  #output
+                >
+                  <p
+                    v-if="toolContentOf(segment.result?.content)?.text"
+                    class="whitespace-pre-line text-body-sm text-(--text-default)"
+                  >
+                    {{ toolContentOf(segment.result?.content)?.text }}
+                  </p>
+                  <ImageGallery
+                    v-if="toolContentOf(segment.result?.content)?.images.length"
+                    :items="toolContentOf(segment.result?.content)?.images ?? []"
+                  />
+                </template>
+                <template
+                  v-else-if="
                     json(segment.result?.error || segment.call.output || segment.result?.content)
                   "
                   #output
@@ -257,6 +331,23 @@
                   />
                 </template>
               </ToolCall>
+            </template>
+            <template v-else-if="segment.type === 'structured'">
+              <Alert
+                v-if="segment.part.status === 'error'"
+                severity="danger"
+                size="small"
+                title="The structured answer failed"
+              >
+                {{ segment.part.errorMessage || 'The answer did not match the expected format.' }}
+              </Alert>
+              <CodeBlock
+                v-else-if="structuredOf(segment.part)"
+                :code="structuredOf(segment.part)"
+                language="json"
+                :show-line-numbers="false"
+                :aria-busy="segment.part.status === 'streaming' || undefined"
+              />
             </template>
           </template>
         </template>
@@ -285,8 +376,38 @@
           </ChatMessage.Actions>
         </template>
       </ChatMessage>
+      <ChatMessage
+        v-if="questions.length"
+        from="assistant"
+      >
+        <AgentQuestion
+          v-for="question in questions"
+          :key="question.id"
+          v-model="answers[question.id]"
+          :title="question.title"
+          :type="question.options.length ? 'choice' : 'text'"
+          :options="question.options"
+          :status="question.status"
+          :error="question.error"
+          :skippable="question.bound"
+          @submit="(event, value) => answer(event, question, value)"
+          @skip="skip(question)"
+        />
+      </ChatMessage>
     </Conversation>
-    <footer class="layout-column-content layout-boundary-inline pb-(--spacing-md)">
+    <footer
+      class="layout-column-content layout-boundary-inline flex flex-col gap-(--spacing-xs) pb-(--spacing-md)"
+    >
+      <Alert
+        v-if="interruptErrors.length"
+        severity="danger"
+        size="small"
+        title="Your decision was not sent"
+        :action-label="retryable ? 'Retry' : ''"
+        @action="emit('retry-interrupts', $event)"
+      >
+        {{ interruptErrorText(interruptErrors) }}
+      </Alert>
       <PromptInput
         v-model="prompt"
         :status="state"

@@ -11,11 +11,16 @@
     isLoading,
     error,
     interrupts,
+    interruptErrors,
     queue,
     hasOlderMessages,
     connectionStatus,
     resuming,
+    isHydrating,
+    sessionGenerating,
     sendMessage,
+    addToolResult,
+    retryInterrupts,
     stop,
     reload,
     clear,
@@ -78,7 +83,13 @@
     :loading-more="loadingOlder"
     :connection="connectionStatus"
     :resuming="resuming"
-    @send="(_event, text) => sendMessage(text)"
+    :interrupt-errors="interruptErrors"
+    :hydrating="isHydrating"
+    :session-generating="sessionGenerating"
+    attachable
+    @send="(_event, content) => sendMessage(content)"
+    @answer-tool="(_event, answer) => addToolResult(answer)"
+    @retry-interrupts="retryInterrupts()"
     @remove-queued="(_event, item) => cancelQueued(item.id)"
     @load-more="loadOlder()"
     @stop="stop()"

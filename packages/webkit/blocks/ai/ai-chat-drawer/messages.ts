@@ -130,7 +130,18 @@ export interface AiChatDrawerUiResourcePart {
   serverId?: string
 }
 
-/** A part the conversation does not draw, such as structured output. */
+/** A typed answer the assistant returned against a schema; `data` is set once it is complete. */
+export interface AiChatDrawerStructuredOutputPart {
+  type: 'structured-output'
+  status: 'streaming' | 'complete' | 'error'
+  raw: string
+  data?: unknown
+  partial?: unknown
+  reasoning?: string
+  errorMessage?: string
+}
+
+/** A part the conversation does not draw. */
 export interface AiChatDrawerOtherPart {
   type: string
 }
@@ -148,6 +159,7 @@ export type AiChatDrawerPart =
   | AiChatDrawerActivityPart
   | AiChatDrawerSubagentPart
   | AiChatDrawerUiResourcePart
+  | AiChatDrawerStructuredOutputPart
   | AiChatDrawerOtherPart
 
 /** What the app adds to a message beside its parts. */
@@ -190,6 +202,10 @@ export interface AiChatDrawerTool {
   confirmationPhrase?: string
   /** The reader may edit the call's arguments, as JSON, before approving. */
   editable?: boolean
+  /** The reader answers this tool in the chat: the block asks `question` (else the title) and hands the answer back for `addToolResult`. */
+  answerable?: boolean
+  /** The answers the reader picks from when `answerable`; left out, the reader types one. */
+  options?: AgentQuestionOption[]
 }
 
 /** A pending request from the chat, as TanStack AI's `useChat` returns it in `interrupts`. */
@@ -205,6 +221,42 @@ export interface AiChatDrawerInterrupt {
   resolveInterrupt?: unknown
   cancel?: unknown
 }
+
+/** A failed attempt to send the answers to pending requests, as `useChat` returns it in `interruptErrors`. */
+export interface AiChatDrawerInterruptError {
+  message: string
+  retryable?: boolean
+  code?: string
+}
+
+/** The answer to a tool the reader answers, in the shape `addToolResult` takes. */
+export interface AiChatDrawerToolAnswer {
+  toolCallId: string
+  tool: string
+  output: unknown
+}
+
+/** Inline base64 bytes of a file the reader attached. */
+export interface AiChatDrawerDataSource {
+  type: 'data'
+  value: string
+  mimeType: string
+}
+
+/** A file the reader attached to a message, as a TanStack AI content part. */
+export interface AiChatDrawerAttachment {
+  type: 'image' | 'audio' | 'video' | 'document'
+  source: AiChatDrawerDataSource
+  metadata: { name: string }
+}
+
+/** A message with attachments, as `sendMessage` takes it. */
+export interface AiChatDrawerContent {
+  content: Array<AiChatDrawerTextPart | AiChatDrawerAttachment>
+}
+
+/** What the reader sent: the text alone, or the text with its attachments. */
+export type AiChatDrawerSendContent = string | AiChatDrawerContent
 
 /** A message waiting to be sent, as `useChat` returns it in `queue`. */
 export interface AiChatDrawerQueuedMessage {
@@ -222,6 +274,7 @@ export interface AiChatDrawerQuestion {
   options: AgentQuestionOption[]
   status: AgentQuestionStatus
   error: string
+  bound: boolean
 }
 
 /** A rendered piece of an assistant message. */
@@ -241,9 +294,14 @@ export type AiChatDrawerSegment =
   | { type: 'document'; key: string; part: AiChatDrawerDocumentPart }
   | { type: 'subagent'; key: string; part: AiChatDrawerSubagentPart }
   | { type: 'app'; key: string; part: AiChatDrawerUiResourcePart }
+  | { type: 'structured'; key: string; part: AiChatDrawerStructuredOutputPart }
 
 export const isUiResourcePart = (part: AiChatDrawerPart): part is AiChatDrawerUiResourcePart =>
   part.type === 'ui-resource'
+
+export const isStructuredOutputPart = (
+  part: AiChatDrawerPart
+): part is AiChatDrawerStructuredOutputPart => part.type === 'structured-output'
 
 export const isTextPart = (part: AiChatDrawerPart): part is AiChatDrawerTextPart =>
   part.type === 'text'
@@ -368,6 +426,13 @@ export function hasText(message: AiChatDrawerMessage): boolean {
   return message.parts.some((part) => isTextPart(part) && part.content.length > 0)
 }
 
+export function hasAnswer(message: AiChatDrawerMessage): boolean {
+  return (
+    hasText(message) ||
+    message.parts.some((part) => isStructuredOutputPart(part) && part.raw.length > 0)
+  )
+}
+
 export function hasThinking(message: AiChatDrawerMessage): boolean {
   return message.parts.some(isThinkingPart)
 }
@@ -387,8 +452,13 @@ export function segmentsOf(
     ? [{ type: 'activity', key: 'activity', steps }]
     : []
   const thinking = message.parts
-    .filter(isThinkingPart)
-    .map((part) => part.content)
+    .flatMap((part) =>
+      isThinkingPart(part)
+        ? [part.content]
+        : isStructuredOutputPart(part) && part.reasoning
+          ? [part.reasoning]
+          : []
+    )
     .join('\n\n')
   if (thinking) segments.push({ type: 'reasoning', key: 'reasoning', content: thinking })
   message.parts.forEach((part, index) => {
@@ -423,6 +493,8 @@ export function segmentsOf(
       segments.push({ type: 'subagent', key: `subagent-${index}`, part })
     } else if (isUiResourcePart(part)) {
       segments.push({ type: 'app', key: `app-${part.toolCallId}-${index}`, part })
+    } else if (isStructuredOutputPart(part)) {
+      segments.push({ type: 'structured', key: `structured-${index}`, part })
     }
   })
   return segments
@@ -438,6 +510,53 @@ export function toolStatusOf(
   if (call.state === 'complete' || result?.state === 'complete') return 'success'
   if (call.state === 'awaiting-input' || call.state === 'input-streaming') return 'streaming'
   return 'running'
+}
+
+export function structuredOf(part: AiChatDrawerStructuredOutputPart): string {
+  if (part.status === 'complete') return json(part.data)
+  return json(part.partial) || part.raw
+}
+
+export interface AiChatDrawerToolContent {
+  text: string
+  images: ImageGalleryItem[]
+}
+
+export function toolContentOf(content: unknown): AiChatDrawerToolContent | null {
+  if (!Array.isArray(content) || !content.length) return null
+  const texts: string[] = []
+  const images: ImageGalleryItem[] = []
+  for (const [index, part] of (content as AiChatDrawerPart[]).entries()) {
+    if (!part || typeof part !== 'object') return null
+    if (isTextPart(part)) texts.push(part.content)
+    else if (isImagePart(part)) {
+      const image = imageOf(part, index)
+      if (image) images.push(image)
+    } else return null
+  }
+  return { text: texts.filter(Boolean).join('\n\n'), images }
+}
+
+export function answerable(
+  tool: AiChatDrawerTool | undefined,
+  call: AiChatDrawerToolCallPart,
+  result?: AiChatDrawerToolResultPart
+): boolean {
+  return Boolean(tool?.answerable) && call.output === undefined && !result && call.state !== 'error'
+}
+
+export function toolQuestionOf(
+  call: AiChatDrawerToolCallPart,
+  tool: AiChatDrawerTool
+): AiChatDrawerQuestion {
+  return {
+    id: call.id,
+    title: tool.question || tool.title || `Answer ${call.name}`,
+    options: tool.options ?? [],
+    status: 'pending',
+    error: '',
+    bound: true
+  }
 }
 
 export function needsApproval(call: AiChatDrawerToolCallPart): boolean {
@@ -491,7 +610,7 @@ export function resolveInterrupt(
 }
 
 export function isQuestion(interrupt: AiChatDrawerInterrupt): boolean {
-  return interrupt.kind === 'generic' && Boolean(interrupt.id)
+  return (interrupt.kind === 'generic' || interrupt.kind === 'unbound') && Boolean(interrupt.id)
 }
 
 function optionsIn(value: unknown): AgentQuestionOption[] {
@@ -523,7 +642,8 @@ export function questionOf(interrupt: AiChatDrawerInterrupt): AiChatDrawerQuesti
     title: interrupt.message || 'The agent needs an answer to continue.',
     options: options.length ? options : optionsIn(interrupt.payload),
     status: QUESTION_STATUS[interrupt.status ?? ''] ?? 'pending',
-    error: interrupt.errors?.[0]?.message ?? ''
+    error: interrupt.errors?.[0]?.message ?? '',
+    bound: interrupt.kind !== 'unbound'
   }
 }
 
@@ -535,6 +655,48 @@ export function answerInterrupt(interrupt: AiChatDrawerInterrupt | undefined, va
 export function skipInterrupt(interrupt: AiChatDrawerInterrupt | undefined): void {
   const cancel = interrupt?.cancel
   if (typeof cancel === 'function') cancel.call(interrupt)
+}
+
+export function interruptErrorText(errors: ReadonlyArray<AiChatDrawerInterruptError>): string {
+  return [...new Set(errors.map((error) => error.message).filter(Boolean))].join(' ')
+}
+
+const ATTACHMENT_KINDS = ['image', 'audio', 'video'] as const
+
+export function attachmentKindOf(mimeType: string): AiChatDrawerAttachment['type'] {
+  return ATTACHMENT_KINDS.find((kind) => mimeType.startsWith(`${kind}/`)) ?? 'document'
+}
+
+function base64Of(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => {
+      const url = typeof reader.result === 'string' ? reader.result : ''
+      resolve(url.slice(url.indexOf(',') + 1))
+    }
+    reader.onerror = () => reject(reader.error)
+    reader.readAsDataURL(file)
+  })
+}
+
+export async function attachmentOf(file: File): Promise<AiChatDrawerAttachment> {
+  const mimeType = file.type || 'application/octet-stream'
+  return {
+    type: attachmentKindOf(mimeType),
+    source: { type: 'data', value: await base64Of(file), mimeType },
+    metadata: { name: file.name }
+  }
+}
+
+export async function contentOf(
+  text: string,
+  files: ReadonlyArray<File>
+): Promise<AiChatDrawerSendContent> {
+  if (!files.length) return text
+  const attachments = await Promise.all(files.map(attachmentOf))
+  return {
+    content: [...(text.trim() ? [{ type: 'text' as const, content: text }] : []), ...attachments]
+  }
 }
 
 export function queueItemOf(message: AiChatDrawerQueuedMessage): PromptQueueItem {

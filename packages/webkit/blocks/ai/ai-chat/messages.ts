@@ -130,7 +130,18 @@ export interface AiChatUiResourcePart {
   serverId?: string
 }
 
-/** A part the conversation does not draw, such as structured output. */
+/** A typed answer the assistant returned against a schema; `data` is set once it is complete. */
+export interface AiChatStructuredOutputPart {
+  type: 'structured-output'
+  status: 'streaming' | 'complete' | 'error'
+  raw: string
+  data?: unknown
+  partial?: unknown
+  reasoning?: string
+  errorMessage?: string
+}
+
+/** A part the conversation does not draw. */
 export interface AiChatOtherPart {
   type: string
 }
@@ -148,6 +159,7 @@ export type AiChatPart =
   | AiChatActivityPart
   | AiChatSubagentPart
   | AiChatUiResourcePart
+  | AiChatStructuredOutputPart
   | AiChatOtherPart
 
 /** What the app adds to a message beside its parts. */
@@ -190,6 +202,10 @@ export interface AiChatTool {
   confirmationPhrase?: string
   /** The reader may edit the call's arguments, as JSON, before approving. */
   editable?: boolean
+  /** The reader answers this tool in the chat: the block asks `question` (else the title) and hands the answer back for `addToolResult`. */
+  answerable?: boolean
+  /** The answers the reader picks from when `answerable`; left out, the reader types one. */
+  options?: AgentQuestionOption[]
 }
 
 /** A pending request from the chat, as TanStack AI's `useChat` returns it in `interrupts`. */
@@ -205,6 +221,42 @@ export interface AiChatInterrupt {
   resolveInterrupt?: unknown
   cancel?: unknown
 }
+
+/** A failed attempt to send the answers to pending requests, as `useChat` returns it in `interruptErrors`. */
+export interface AiChatInterruptError {
+  message: string
+  retryable?: boolean
+  code?: string
+}
+
+/** The answer to a tool the reader answers, in the shape `addToolResult` takes. */
+export interface AiChatToolAnswer {
+  toolCallId: string
+  tool: string
+  output: unknown
+}
+
+/** Inline base64 bytes of a file the reader attached. */
+export interface AiChatDataSource {
+  type: 'data'
+  value: string
+  mimeType: string
+}
+
+/** A file the reader attached to a message, as a TanStack AI content part. */
+export interface AiChatAttachment {
+  type: 'image' | 'audio' | 'video' | 'document'
+  source: AiChatDataSource
+  metadata: { name: string }
+}
+
+/** A message with attachments, as `sendMessage` takes it. */
+export interface AiChatContent {
+  content: Array<AiChatTextPart | AiChatAttachment>
+}
+
+/** What the reader sent: the text alone, or the text with its attachments. */
+export type AiChatSendContent = string | AiChatContent
 
 /** A message waiting to be sent, as `useChat` returns it in `queue`. */
 export interface AiChatQueuedMessage {
@@ -222,6 +274,7 @@ export interface AiChatQuestion {
   options: AgentQuestionOption[]
   status: AgentQuestionStatus
   error: string
+  bound: boolean
 }
 
 /** A rendered piece of an assistant message. */
@@ -236,9 +289,13 @@ export type AiChatSegment =
   | { type: 'document'; key: string; part: AiChatDocumentPart }
   | { type: 'subagent'; key: string; part: AiChatSubagentPart }
   | { type: 'app'; key: string; part: AiChatUiResourcePart }
+  | { type: 'structured'; key: string; part: AiChatStructuredOutputPart }
 
 export const isUiResourcePart = (part: AiChatPart): part is AiChatUiResourcePart =>
   part.type === 'ui-resource'
+
+export const isStructuredOutputPart = (part: AiChatPart): part is AiChatStructuredOutputPart =>
+  part.type === 'structured-output'
 
 export const isTextPart = (part: AiChatPart): part is AiChatTextPart => part.type === 'text'
 
@@ -359,6 +416,13 @@ export function hasText(message: AiChatMessage): boolean {
   return message.parts.some((part) => isTextPart(part) && part.content.length > 0)
 }
 
+export function hasAnswer(message: AiChatMessage): boolean {
+  return (
+    hasText(message) ||
+    message.parts.some((part) => isStructuredOutputPart(part) && part.raw.length > 0)
+  )
+}
+
 export function hasThinking(message: AiChatMessage): boolean {
   return message.parts.some(isThinkingPart)
 }
@@ -378,8 +442,13 @@ export function segmentsOf(
     ? [{ type: 'activity', key: 'activity', steps }]
     : []
   const thinking = message.parts
-    .filter(isThinkingPart)
-    .map((part) => part.content)
+    .flatMap((part) =>
+      isThinkingPart(part)
+        ? [part.content]
+        : isStructuredOutputPart(part) && part.reasoning
+          ? [part.reasoning]
+          : []
+    )
     .join('\n\n')
   if (thinking) segments.push({ type: 'reasoning', key: 'reasoning', content: thinking })
   message.parts.forEach((part, index) => {
@@ -414,6 +483,8 @@ export function segmentsOf(
       segments.push({ type: 'subagent', key: `subagent-${index}`, part })
     } else if (isUiResourcePart(part)) {
       segments.push({ type: 'app', key: `app-${part.toolCallId}-${index}`, part })
+    } else if (isStructuredOutputPart(part)) {
+      segments.push({ type: 'structured', key: `structured-${index}`, part })
     }
   })
   return segments
@@ -429,6 +500,50 @@ export function toolStatusOf(
   if (call.state === 'complete' || result?.state === 'complete') return 'success'
   if (call.state === 'awaiting-input' || call.state === 'input-streaming') return 'streaming'
   return 'running'
+}
+
+export function structuredOf(part: AiChatStructuredOutputPart): string {
+  if (part.status === 'complete') return json(part.data)
+  return json(part.partial) || part.raw
+}
+
+export interface AiChatToolContent {
+  text: string
+  images: ImageGalleryItem[]
+}
+
+export function toolContentOf(content: unknown): AiChatToolContent | null {
+  if (!Array.isArray(content) || !content.length) return null
+  const texts: string[] = []
+  const images: ImageGalleryItem[] = []
+  for (const [index, part] of (content as AiChatPart[]).entries()) {
+    if (!part || typeof part !== 'object') return null
+    if (isTextPart(part)) texts.push(part.content)
+    else if (isImagePart(part)) {
+      const image = imageOf(part, index)
+      if (image) images.push(image)
+    } else return null
+  }
+  return { text: texts.filter(Boolean).join('\n\n'), images }
+}
+
+export function answerable(
+  tool: AiChatTool | undefined,
+  call: AiChatToolCallPart,
+  result?: AiChatToolResultPart
+): boolean {
+  return Boolean(tool?.answerable) && call.output === undefined && !result && call.state !== 'error'
+}
+
+export function toolQuestionOf(call: AiChatToolCallPart, tool: AiChatTool): AiChatQuestion {
+  return {
+    id: call.id,
+    title: tool.question || tool.title || `Answer ${call.name}`,
+    options: tool.options ?? [],
+    status: 'pending',
+    error: '',
+    bound: true
+  }
 }
 
 export function needsApproval(call: AiChatToolCallPart): boolean {
@@ -482,7 +597,7 @@ export function resolveInterrupt(
 }
 
 export function isQuestion(interrupt: AiChatInterrupt): boolean {
-  return interrupt.kind === 'generic' && Boolean(interrupt.id)
+  return (interrupt.kind === 'generic' || interrupt.kind === 'unbound') && Boolean(interrupt.id)
 }
 
 function optionsIn(value: unknown): AgentQuestionOption[] {
@@ -514,7 +629,8 @@ export function questionOf(interrupt: AiChatInterrupt): AiChatQuestion {
     title: interrupt.message || 'The agent needs an answer to continue.',
     options: options.length ? options : optionsIn(interrupt.payload),
     status: QUESTION_STATUS[interrupt.status ?? ''] ?? 'pending',
-    error: interrupt.errors?.[0]?.message ?? ''
+    error: interrupt.errors?.[0]?.message ?? '',
+    bound: interrupt.kind !== 'unbound'
   }
 }
 
@@ -526,6 +642,48 @@ export function answerInterrupt(interrupt: AiChatInterrupt | undefined, value: s
 export function skipInterrupt(interrupt: AiChatInterrupt | undefined): void {
   const cancel = interrupt?.cancel
   if (typeof cancel === 'function') cancel.call(interrupt)
+}
+
+export function interruptErrorText(errors: ReadonlyArray<AiChatInterruptError>): string {
+  return [...new Set(errors.map((error) => error.message).filter(Boolean))].join(' ')
+}
+
+const ATTACHMENT_KINDS = ['image', 'audio', 'video'] as const
+
+export function attachmentKindOf(mimeType: string): AiChatAttachment['type'] {
+  return ATTACHMENT_KINDS.find((kind) => mimeType.startsWith(`${kind}/`)) ?? 'document'
+}
+
+function base64Of(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => {
+      const url = typeof reader.result === 'string' ? reader.result : ''
+      resolve(url.slice(url.indexOf(',') + 1))
+    }
+    reader.onerror = () => reject(reader.error)
+    reader.readAsDataURL(file)
+  })
+}
+
+export async function attachmentOf(file: File): Promise<AiChatAttachment> {
+  const mimeType = file.type || 'application/octet-stream'
+  return {
+    type: attachmentKindOf(mimeType),
+    source: { type: 'data', value: await base64Of(file), mimeType },
+    metadata: { name: file.name }
+  }
+}
+
+export async function contentOf(
+  text: string,
+  files: ReadonlyArray<File>
+): Promise<AiChatSendContent> {
+  if (!files.length) return text
+  const attachments = await Promise.all(files.map(attachmentOf))
+  return {
+    content: [...(text.trim() ? [{ type: 'text' as const, content: text }] : []), ...attachments]
+  }
 }
 
 export function queueItemOf(message: AiChatQueuedMessage): PromptQueueItem {
