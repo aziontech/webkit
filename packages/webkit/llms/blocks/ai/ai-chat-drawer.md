@@ -544,10 +544,21 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
 
   const queueable = computed(() => props.queue !== undefined)
   const queued = computed(() => (props.queue ?? []).map(queueItemOf))
-  const reconnecting = computed(() => props.connection === 'connecting' || props.resuming)
+  const wasConnected = ref(props.connection === 'connected')
+  watch(
+    () => props.connection,
+    (value) => {
+      if (value === 'connected') wasConnected.value = true
+    }
+  )
+  const reconnecting = computed(
+    () => (wasConnected.value && props.connection === 'connecting') || props.resuming
+  )
   const offline = computed(
     () =>
-      !reconnecting.value && (props.connection === 'disconnected' || props.connection === 'error')
+      !reconnecting.value &&
+      (props.connection === 'error' ||
+        (wasConnected.value && props.connection === 'disconnected'))
   )
   const retryable = computed(() => props.interruptErrors.some((error) => error.retryable !== false))
 

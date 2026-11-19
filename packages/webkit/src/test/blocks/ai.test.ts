@@ -189,7 +189,7 @@ describe('ai', () => {
           }
         ],
         queue: [{ id: 'w1', content: 'Then purge it' }],
-        connection: 'disconnected'
+        connection: 'error'
       }
     })
     await waitFor(() =>

@@ -67,7 +67,7 @@
             "./messages": "./ai-chat.messages",
             "./sample": "./ai-chat.sample"
           },
-          "checksum": "sha256:168dcc0d6620c708f192c1edf6cbfd6fec3c7ddaa526d5ee85c618fd85093637"
+          "checksum": "sha256:bafbcbdb4f6d076c58b15c19c662542393b2eb1f118929a8c0302f8806007603"
         }
       ]
     },

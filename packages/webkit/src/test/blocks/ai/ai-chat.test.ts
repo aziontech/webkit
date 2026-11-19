@@ -587,8 +587,11 @@ describe('ai/ai-chat', () => {
   })
 
   it('shows Reconnecting and Connection lost above the composer', async () => {
-    const view = render(AiChat, { props: { messages: thread, connection: 'connecting' } })
+    const view = render(AiChat, { props: { messages: thread, connection: 'connected' } })
+    await view.rerender({ messages: thread, connection: 'connecting' })
     expect(view.container.textContent).toContain('Reconnecting')
+    await view.rerender({ messages: thread, connection: 'disconnected' })
+    expect(view.container.textContent).toContain('Connection lost')
     await view.rerender({ messages: thread, connection: 'connected', resuming: true })
     expect(view.container.textContent).toContain('Reconnecting')
     await view.rerender({ messages: thread, connection: 'error', resuming: false })
@@ -596,6 +599,13 @@ describe('ai/ai-chat', () => {
     expect(view.container.textContent).not.toContain('Reconnecting')
     await view.rerender({ messages: thread, connection: 'connected' })
     expect(view.container.textContent).not.toContain('Connection lost')
+  })
+
+  it('stays quiet while the first connection is still being made', async () => {
+    const view = render(AiChat, { props: { messages: thread, connection: 'disconnected' } })
+    expect(view.container.textContent).not.toContain('Connection lost')
+    await view.rerender({ messages: thread, connection: 'connecting' })
+    expect(view.container.textContent).not.toContain('Reconnecting')
   })
 
   it('draws a tool widget in a sandboxed frame and lets the app answer it', async () => {
