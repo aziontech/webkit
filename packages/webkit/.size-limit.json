@@ -1127,6 +1127,11 @@
     "limit": "11.65 KB"
   },
   {
+    "name": "agent-question",
+    "path": "src/components/ai/agent-question/agent-question.vue",
+    "limit": "16 KB"
+  },
+  {
     "name": "response-loading",
     "path": "src/components/ai/response-loading/response-loading.vue",
     "limit": "2.6 KB"
