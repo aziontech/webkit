@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 13
 template: 2
-checksum: 3ff69498c10aa3bce211a7d9bbdc9e1c5d0f136788c0764fc1db48b3f8aca54d
+checksum: daec6afeffb7f31d33ec2cfc85cdc68edf3437ef29b1abde92bf93894269cc92
 created: 2026-11-11
 last_updated: 2026-11-18
 ---
@@ -122,7 +122,7 @@ None of its own; `Texture` stops under reduced motion.
 ## Accessibility (WCAG 2.1 AA)
 
 - A `section` named by its title.
-- Tabs are a `ToggleGroup` (radio group) named by `tabsAriaLabel` or "Console views"; arrow keys move between them.
+- Tabs are a `ToggleGroup` (radio group) named by `tabsAriaLabel` or "Console views"; arrow keys move between them. On a coarse pointer each tab's hit area is at least 44 × 44 px.
 - The scene supplies its own accessible content (a mock is usually `aria-hidden` with a description in the copy).
 
 ## Internationalization
@@ -143,6 +143,7 @@ None of its own; `Texture` stops under reduced motion.
 
 - Below medium the console scene is square and uncropped; from medium it is 1.9:1 with the crop applied.
 - No horizontal scroll at 320 px.
+- The tab control is the large `ToggleGroup` at every width; below 40rem it is fluid (full width, equal segments) instead of shrinking, so each tab keeps a 30 px face and its 44 px touch hit area.
 
 ## Performance
 

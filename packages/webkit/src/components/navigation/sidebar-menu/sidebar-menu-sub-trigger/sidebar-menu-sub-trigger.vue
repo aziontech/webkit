@@ -95,10 +95,11 @@
 
   const arrowIcon = computed(() => (isInline.value ? 'az az-chevron-down' : 'az az-chevron-right'))
 
-  const ROW_CLASS = 'group/row relative flex h-8 w-full shrink-0 items-center'
+  const ROW_CLASS =
+    'group/row relative flex h-8 pointer-coarse:min-h-11 w-full shrink-0 items-center'
 
   const CONTROL_CLASS =
-    'group relative flex h-8 shrink-0 items-center gap-(--spacing-xs) ' +
+    'group relative flex h-8 pointer-coarse:min-h-11 shrink-0 items-center gap-(--spacing-xs) ' +
     'rounded-(--shape-control) border-y border-transparent bg-clip-padding forced-colors:border-y-0 pe-(--spacing-xs) py-(--spacing-2xs) text-start ' +
     'text-(--text-default) ' +
     "before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-(--bg-hover) before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance " +

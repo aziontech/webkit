@@ -38,7 +38,7 @@
       {{ title }}
     </span>
     <div
-      class="flex flex-col items-start gap-(--spacing-xs) group-data-[variant=console]/footer:flex-row group-data-[variant=console]/footer:flex-wrap group-data-[variant=console]/footer:items-center group-data-[variant=console]/footer:gap-x-(--spacing-md)"
+      class="flex flex-col items-start gap-(--spacing-xs) pointer-coarse:gap-0 group-data-[variant=console]/footer:flex-row group-data-[variant=console]/footer:flex-wrap group-data-[variant=console]/footer:items-center group-data-[variant=console]/footer:gap-x-(--spacing-md)"
     >
       <slot />
     </div>
