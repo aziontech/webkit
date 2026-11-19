@@ -62,7 +62,7 @@
     minRows?: number
     /** Rows the text area grows to before it scrolls. */
     maxRows?: number
-    /** Request lifecycle: `pending` and `streaming` swap Submit for Stop and block another submit; typing stays allowed. */
+    /** Request lifecycle: `pending` and `streaming` swap Submit for Stop and block another submit (unless `queueable`); typing stays allowed. */
     status?: PromptInputStatus
     /** Disables the text area, the submit control and every control in the slots' rows. */
     disabled?: boolean
@@ -76,6 +76,8 @@
     maxFileSize?: number
     /** Shows a Start voice conversation control in place of Submit while there is nothing to send; it emits `voice-start`. */
     voice?: boolean
+    /** While `status` is `pending` or `streaming`, keeps Submit beside Stop and lets Enter submit, so the owner queues the prompt for after the response. */
+    queueable?: boolean
   }
 
   const props = withDefaults(defineProps<PromptInputProps>(), {
@@ -90,7 +92,8 @@
     accept: '',
     maxFiles: 0,
     maxFileSize: 0,
-    voice: false
+    voice: false,
+    queueable: false
   })
 
   const model = defineModel<string>({ default: '' })
@@ -159,7 +162,7 @@
   const canSubmit = computed<boolean>(
     () =>
       !props.disabled &&
-      !busy.value &&
+      (!busy.value || props.queueable) &&
       overBy.value === 0 &&
       hasContent.value &&
       !filesPending.value
@@ -171,7 +174,7 @@
   const rejection = ref<string>('')
   const controlEl = ref<HTMLElement | null>(null)
   const control = computed<string>(() => {
-    if (busy.value) return 'stop'
+    if (busy.value) return props.queueable && canSubmit.value ? 'stop-submit' : 'stop'
     if (showVoice.value) return 'voice'
     return canSubmit.value ? 'submit' : 'submit-off'
   })
@@ -532,6 +535,16 @@
             @click="(event: MouseEvent) => emit('stop', event)"
           />
           <IconButton
+            v-if="busy && queueable && canSubmit"
+            key="queue"
+            icon="az az-arrow-up"
+            variant="primary"
+            size="medium"
+            :ariaLabel="t('promptInput.submit')"
+            :data-testid="`${testId}__submit`"
+            @click="submit"
+          />
+          <IconButton
             v-else-if="showVoice"
             key="voice"
             icon="az az-headphones"
@@ -543,7 +556,7 @@
             @click="(event: MouseEvent) => emit('voice-start', event)"
           />
           <IconButton
-            v-else
+            v-else-if="!busy"
             key="submit"
             icon="az az-arrow-up"
             variant="primary"

@@ -337,7 +337,10 @@
         >
           {{ timeText }}
         </span>
-        <div class="min-w-32 flex-1">
+        <div
+          dir="ltr"
+          class="min-w-32 flex-1"
+        >
           <Slider
             :data-testid="`${testId}__seek`"
             :min="0"

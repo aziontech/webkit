@@ -3,11 +3,11 @@ name: prompt-input
 category: ai
 structure: composition
 status: implemented
-spec_version: 6
+spec_version: 7
 template: 2
-checksum: b30969c0fabf95d50fd5d933bcd45e7923f7c0ef0f0853dfd4c936809c571b18
+checksum: ad325edc5565a1cd898416135652414d8014058ee4a40854a5412de564ee9db4
 created: 2026-11-11
-last_updated: 2026-11-17
+last_updated: 2026-11-19
 ---
 
 # PromptInput — Component Spec
@@ -26,6 +26,9 @@ submits.
 It is controlled: the owner holds the text and the files, receives `submit` with the trimmed prompt,
 its references and its files, and clears them. While `status` is `pending` or `streaming` the reader
 can keep typing the next prompt, but cannot submit it until the response ends or they press Stop.
+With `queueable` the owner keeps a queue of prompts to send after the response (TanStack AI
+`useChat` queues a `sendMessage` made while it streams): Submit then stays beside Stop, and Enter
+or Submit sends the next prompt into that queue while Stop still ends the response.
 
 The anatomy is composed by the app: the root draws the box, the text area, Submit / Stop / voice and
 the file tokens; the controls the app wants (attach, dictate, model, context, tools) are
@@ -59,6 +62,8 @@ sub-components it places in the `actions`, `end` and `footer` slots. Each reads 
 - Placeholder is a suggested question with no end punctuation (`Ask a question`); never the only instruction.
 - Put the disclaimer and the shortcuts in `hint`, not in the placeholder.
 - Set `status` from the request so Submit turns into Stop; wire `stop` to abort it.
+- Set `queueable` only when the owner queues what is sent while a response runs, and shows the
+  queue (`PromptQueue` above the composer) so the reader can remove a prompt before it is sent.
 - Clear `v-model` and `v-model:files` in the `submit` handler and keep focus in the input.
 - Use `maxLength` only when the backend has a limit; the counter is the warning.
 - Compose only the controls the product has. Attach first at the inline start; model, dictate and
@@ -264,13 +269,14 @@ packages/webkit/src/components/ai/prompt-input/
 | `maxLength`   | `number`                              | `0`       | false    | Character limit; shows an `n/max` counter and blocks submit over it. `0` means no limit.                                                                                                       |
 | `minRows`     | `number`                              | `1`       | false    | Rows shown while empty.                                                                                                                                                                        |
 | `maxRows`     | `number`                              | `6`       | false    | Rows the text area grows to before it scrolls.                                                                                                                                                 |
-| `status`      | `'ready' \| 'pending' \| 'streaming'` | `'ready'` | false    | Request lifecycle: `pending` and `streaming` swap Submit for Stop and block another submit; typing stays allowed.                                                                              |
+| `status`      | `'ready' \| 'pending' \| 'streaming'` | `'ready'` | false    | Request lifecycle: `pending` and `streaming` swap Submit for Stop and block another submit (unless `queueable`); typing stays allowed.                                                          |
 | `disabled`    | `boolean`                             | `false`   | false    | Disables the text area, the submit control and every control in the slots' rows.                                                                                                               |
 | `menus`       | `PromptInputMenu[]`                   | `[]`      | false    | Shortcut menus opened by a trigger character at the start of a word: `/` for commands, `@` for things to reference. Choosing an option inserts `<trigger><label>` and adds it to `references`. |
 | `accept`      | `string`                              | `''`      | false    | File filter in the native accept syntax (extensions, MIME types, wildcards) for picked, dropped and pasted files. Empty accepts every file.                                                    |
 | `maxFiles`    | `number`                              | `0`       | false    | Most files attached at once; files past it are rejected. `0` means no limit.                                                                                                                   |
 | `maxFileSize` | `number`                              | `0`       | false    | Largest file in bytes; larger files are rejected. `0` means no limit.                                                                                                                          |
 | `voice`       | `boolean`                             | `false`   | false    | Shows a Start voice conversation control in place of Submit while there is nothing to send; it emits `voice-start`.                                                                            |
+| `queueable`   | `boolean`                             | `false`   | false    | While `status` is `pending` or `streaming`, keeps Submit beside Stop and lets Enter submit, so the owner queues the prompt for after the response.                                             |
 
 Types: `PromptInputMenu = { trigger: string; label: string; options: PromptInputMenuOption[] }`, `PromptInputMenuOption = { value: string; label: string; description?: string; icon?: string }` (also the option shape of the model, mode, context and tools pickers), `PromptInputReference = { trigger: string; value: string; label: string }`, `PromptInputFile = FileTokenGroupItem` (`{ file: File | FileTokenGroupFile; loading?: boolean; progress?: number; error?: string; warning?: string }`), `PromptInputRejectReason = 'accept' | 'max-files' | 'max-file-size'`, `PromptInputDictateTranscriber = 'browser' | 'app'`.
 
@@ -286,7 +292,7 @@ Types: `PromptInputMenu = { trigger: string; label: string; options: PromptInput
 
 | Event         | Payload                                                                                                                          | When                                                                                                                                                                                                                                                                                                                                                                               |
 | ------------- | -------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `submit`      | `(event: MouseEvent \| KeyboardEvent, payload: { value: string; references: PromptInputReference[]; files: PromptInputFile[] })` | Enter (without Shift, outside an IME composition) or Submit, while `status` is `ready`, the prompt is within the limit, it has text or files, and no file is loading or failed. `event` is the Enter keydown or the Submit click; `payload.value` is trimmed; `payload.references` holds the references whose `<trigger><label>` is still in the text; `payload.files` is `files`. |
+| `submit`      | `(event: MouseEvent \| KeyboardEvent, payload: { value: string; references: PromptInputReference[]; files: PromptInputFile[] })` | Enter (without Shift, outside an IME composition) or Submit, while `status` is `ready` (or any status with `queueable`), the prompt is within the limit, it has text or files, and no file is loading or failed. `event` is the Enter keydown or the Submit click; `payload.value` is trimmed; `payload.references` holds the references whose `<trigger><label>` is still in the text; `payload.files` is `files`. |
 | `stop`        | `(event: MouseEvent)`                                                                                                            | Stop pressed while `pending` or `streaming`.                                                                                                                                                                                                                                                                                                                                       |
 | `voice-start` | `(event: MouseEvent)`                                                                                                            | The Start voice conversation control was pressed (`voice`, nothing to send, `status` `ready`). The app opens and owns the audio session.                                                                                                                                                                                                                                           |
 | `reject`      | `(event: Event, payload: { files: File[]; reason: PromptInputRejectReason })`                                                    | Picked, dropped or pasted files were not attached: they do not match `accept`, are larger than `maxFileSize`, or are past `maxFiles`. Once per reason; `event` is the change, drop or paste event. The composer also shows the reason under the box.                                                                                                                               |
@@ -306,6 +312,7 @@ Types: `PromptInputMenu = { trigger: string; label: string; options: PromptInput
 - `data-status` mirrors `status`; `data-disabled`; `data-invalid` while over `maxLength`; `data-dragging` on the box while files are dragged over it (only with an `AttachButton`).
 - `ready`: Submit (primary `IconButton`, `az az-arrow-up`), disabled while there is nothing to send, the prompt is over the limit, a file is loading or failed, or `disabled`. With `voice` and nothing to send (no text, no files), Start voice conversation (primary `IconButton`, `az az-headphones`) takes its place.
 - `pending` / `streaming`: Stop (secondary `IconButton`, `az az-stop`) replaces Submit; Enter does nothing.
+- `pending` / `streaming` with `queueable`: Stop stays, and Submit (primary, after Stop at the inline end) shows beside it while there is something to send; Enter and Submit emit `submit` as in `ready`. With nothing to send only Stop shows, and the voice control never does.
 - Over the limit: border turns `--danger-border`, the counter turns danger, `aria-invalid="true"`, and a polite live region says how many characters are over.
 - Dragging files over the box: a dashed `--border-selected` panel on `--bg-selected` covers the box and reads `Drop files to attach`.
 - Rejected files: a danger line under the box says how many were not added and why (`not an accepted type`, `larger than 10 MB`, `up to 3 files`), in a polite live region; it clears on the next accepted file, a removal or a submit.
@@ -339,12 +346,13 @@ _None._
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: the container shows `focus-within:ring-2 focus-within:ring-(--ring-color)`.
-- Keyboard map: `Enter` submits; `Shift+Enter` new line; `Tab` moves through the attachments, the toolbar start controls, the toolbar end controls, Submit / Stop / voice, then the footer row. IME composition (`isComposing`, or between `compositionstart` and `compositionend`) never submits.
+- Keyboard map: `Enter` submits (while a response runs only with `queueable`); `Shift+Enter` new line; `Tab` moves through the attachments, the toolbar start controls, the toolbar end controls, Submit / Stop / voice, then the footer row. IME composition (`isComposing`, or between `compositionstart` and `compositionend`) never submits.
 - Shortcut menus (`menus`): typing a trigger at the start of a word opens a listbox above the input with up to eight options matching what follows it. Focus stays in the text area, which points at the list with `aria-controls` and at the highlighted option with `aria-activedescendant` (a `textarea` cannot take `role="combobox"`); `ArrowDown`/`ArrowUp` move, `Enter` or `Tab` choose, `Escape` closes, and Enter does not submit while the list is open. A polite status reads `3 suggestions` or `No matches`. The text area lists the triggers in `aria-keyshortcuts`. References are a list named `References` of removable `Chip`s.
 - Files: the tokens are `FileTokenGroup`'s list (named `Files`) with a named remove button each; focus moves as that component defines. The drop panel is decorative (`aria-hidden`); the attach button is the keyboard path. Rejections are announced politely and shown as text.
 - Pickers: each opens a `DropdownMenu` (`menu` with `menuitemradio` / `menuitemcheckbox`), so arrows, typeahead, `Escape` and focus return come from it. The model trigger's name is its visible text (model and mode). Enabled tools are a list named `Enabled tools` of removable `Chip`s.
 - Dictation: the control's name says what pressing it does (`Dictate` / `Stop dictation`), with no `aria-pressed`; the listening status is a polite live region. Where the browser has no speech recognition the control is not rendered.
-- Focus: Submit, Stop and Start voice conversation share one place. When the control that has focus is swapped or disabled (the owner clears the prompt after a submit, a request starts or ends), focus moves to the text area instead of falling to the page.
+- Queue: with `queueable`, Stop and Submit are two named buttons in tab order (Stop first); the owner announces the queued prompt through `PromptQueue`'s list, so the composer adds no live region of its own.
+- Focus: Submit, Stop and Start voice conversation share one place, except with `queueable` while `pending` / `streaming`, when Stop and Submit sit side by side. When the control that has focus is swapped, removed or disabled (the owner clears the prompt after a submit, which hides a queue Submit; a request starts or ends), focus moves to the text area instead of falling to the page.
 - ARIA: the `<textarea>` is named by `aria-label` (no visible label, as Cloudscape allows for an input with an action button), described by the counter and the hint, `aria-invalid` over the limit; Submit, Stop and Start voice conversation are named icon buttons.
 - The placeholder never carries required information (it disappears on typing).
 - Touch target: `IconButton` medium (44 px on coarse pointers); the small picker `Button`s get the 44 px hit area on coarse pointers from `Button`.
@@ -395,7 +403,7 @@ _None._
 
 - Container queries: none; full width of its host. Every row is a wrapping flex row, so the line
   breaks where its controls stop fitting, at any width, with no breakpoint to keep in step.
-- Narrow: the toolbar wraps its slot controls; Submit stays at the inline end. The model `Button` truncates the mode label first. The footer row wraps onto more lines; nothing scrolls sideways.
+- Narrow: the toolbar wraps its slot controls; Submit stays at the inline end. With `queueable` while busy, Stop and Submit stay together at the inline end and never wrap onto separate lines; each keeps the 44 px target on coarse pointers. The model `Button` truncates the mode label first. The footer row wraps onto more lines; nothing scrolls sideways.
 - Touch: `enterkeyhint="send"` on mobile keyboards; targets 44 px on coarse pointers.
 - Reflow: no horizontal scroll at 320 px.
 
@@ -463,6 +471,11 @@ model and effort `DropdownMenu`s, send that becomes stop, IME-safe Enter).
   `index.ts` / `index.d.ts`, whose default export is the same component with its parts attached and
   which re-exports every v5 type; `./prompt-input-root` points at the root `.vue`, and each part has
   its own export.
+- **Queueing is opt-in (`queueable`, spec_version 7).** TanStack AI `useChat` queues a message sent
+  while a run streams (`queue`, `cancelQueued`); ChatGPT and Claude.ai let the reader type and
+  send the next message the same way. The composer only lets the submit through while busy; the
+  owner holds the queue and draws it with `PromptQueue`. Off by default, so every v6 composer keeps
+  blocking a submit while busy. The name is the capability adjective of `prop-vocabulary.md`.
 - **Names.** `ModelPicker` and `ContextPicker`, not `…Select`: they open a `DropdownMenu`, not the
   `select` listbox, and `ContextMenu` is already the right-click menu's name.
 
@@ -477,13 +490,19 @@ and the other dictation errors stated; focus moves to the text area when the foc
 voice control swaps; dictation uses a changing name, not `aria-pressed`; gzip budgets declared;
 the wrapping rows explained. Tokens, right-to-left, internationalization and reuse passed.
 
+spec_version 7 (`queueable`), second-agent review 2026-11-19: returned with two findings, both
+folded in: the Focus bullet now covers Stop and Submit side by side, and Responsive keeps the pair
+together at the inline end. Naming, reuse, states, internationalization, right-to-left, tokens and
+performance passed.
+
 ## Examples
 
-_Examples in `packages/webkit/examples/prompt-input/`: Default (the full composer), Streaming (Stop), Character limit, With attachments and actions, Disabled, Shortcut menus (`/` commands and `@` references)._
+_Examples in `packages/webkit/examples/prompt-input/`: Default (the full composer), Streaming (Stop), Character limit, With attachments and actions, Disabled, Shortcut menus (`/` commands and `@` references), Queue (`queueable` with a `PromptQueue` above the composer)._
 
 Default composes every part like the reference composer. With attachments and actions is justified
 beyond the states: it shows `v-model:files` with upload state and the limits, which Default only
-starts empty.
+starts empty. Queue is justified by the `queueable` prop: it is the only example where Submit and
+Stop show together and a prompt sent while busy lands in the queue.
 
 ## Constraints — DO NOT
 

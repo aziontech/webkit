@@ -28,7 +28,7 @@ function renderNodes(
           {
             dir: 'ltr',
             class:
-              'rounded-(--shape-control) bg-(--bg-surface-raised) px-1 py-px text-label-code text-(--text-default)'
+              'rounded-(--shape-control) bg-(--bg-surface-raised) px-1 py-px text-label-code-sm text-(--text-default)'
           },
           node.value
         )

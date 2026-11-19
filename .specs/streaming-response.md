@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: 5b7660534581fabed4421feb9c06569283975757dda75b0786d89714542645bc
+checksum: d09a6ee1b4fca8ac80fe2435e0c240de031e711adf469d083ef3ec89551699d0
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -119,7 +119,7 @@ _No slots — the content is the `content` string._
 | ----------- | -------------------------------------------------------------------------------------------------- |
 | body        | `.text-body-md`, `var(--text-default)`                                                             |
 | headings    | `.text-heading-sm` (`#`), `.text-heading-xs`, `.text-heading-2xs`, `.text-label-md`                |
-| inline code | `.text-label-code`, `var(--bg-surface-raised)`, `var(--shape-control)`                             |
+| inline code | `.text-label-code-sm`, `var(--bg-surface-raised)`, `var(--shape-control)`                          |
 | links       | `var(--text-link)`                                                                                 |
 | quote       | `var(--border-strong)`, `var(--text-muted)`                                                        |
 | table       | `var(--border-default)`, `var(--border-muted)`, header `var(--bg-surface-raised)`, `.text-body-sm` |

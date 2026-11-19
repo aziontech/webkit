@@ -23,6 +23,7 @@
     isToolResultPart,
     json,
     needsApproval,
+    parsesAsJson,
     resolveInterrupt,
     segmentsOf,
     textOf,
@@ -67,7 +68,7 @@
   })
 
   const emit = defineEmits<{
-    approve: [event: MouseEvent, call: AiActionApprovalToolCallPart]
+    approve: [event: MouseEvent, call: AiActionApprovalToolCallPart, input?: unknown]
     deny: [event: MouseEvent, call: AiActionApprovalToolCallPart]
     stop: [event: MouseEvent]
     retry: [event: MouseEvent, message: AiActionApprovalMessage]
@@ -77,6 +78,7 @@
   const { formatDate } = useLocale()
 
   const prompt = ref('')
+  const edits = ref<Record<string, string>>({})
 
   const turns = computed(() =>
     (props.messages ?? sampleMessages).filter(
@@ -102,7 +104,7 @@
     return turn.parts.some(
       (part) =>
         isToolCallPart(part) &&
-        toolStatusOf(part) === 'running' &&
+        ['running', 'streaming'].includes(toolStatusOf(part)) &&
         (!needsApproval(part) || approvalOf(part) === 'approved')
     )
   }
@@ -134,10 +136,22 @@
     return toolLabels.value[call.name] ?? { title: '' }
   }
 
-  function decide(event: MouseEvent, call: AiActionApprovalToolCallPart, approved: boolean) {
-    if (approved) emit('approve', event, call)
-    else emit('deny', event, call)
-    resolveInterrupt(props.interrupts, call, approved)
+  function editOf(call: AiActionApprovalToolCallPart): string {
+    return edits.value[call.id] ?? json(call.input ?? call.arguments)
+  }
+
+  function approve(event: MouseEvent, call: AiActionApprovalToolCallPart, text: string) {
+    const edited =
+      toolOf(call).editable && text !== json(call.input ?? call.arguments)
+        ? (JSON.parse(text) as unknown)
+        : undefined
+    emit('approve', event, call, edited)
+    resolveInterrupt(props.interrupts, call, true, edited)
+  }
+
+  function deny(event: MouseEvent, call: AiActionApprovalToolCallPart) {
+    emit('deny', event, call)
+    resolveInterrupt(props.interrupts, call, false)
   }
 
   function send(event: MouseEvent | KeyboardEvent, value: string) {
@@ -195,11 +209,18 @@
                 :confirmation-phrase="toolOf(segment.call).confirmationPhrase"
                 :status="approvalOf(segment.call)"
                 :loading="loading && turn === last"
-                @approve="decide($event, segment.call, true)"
-                @deny="decide($event, segment.call, false)"
+                :editable="toolOf(segment.call).editable"
+                :invalid="toolOf(segment.call).editable && !parsesAsJson(editOf(segment.call))"
+                :model-value="editOf(segment.call)"
+                @update:model-value="(text) => (edits[segment.call.id] = text)"
+                @approve="(event, text) => approve(event, segment.call, text)"
+                @deny="deny($event, segment.call)"
               >
                 <CodeBlock
-                  v-if="json(segment.call.input ?? segment.call.arguments)"
+                  v-if="
+                    !toolOf(segment.call).editable &&
+                    json(segment.call.input ?? segment.call.arguments)
+                  "
                   :code="json(segment.call.input ?? segment.call.arguments)"
                   language="json"
                   :show-line-numbers="false"

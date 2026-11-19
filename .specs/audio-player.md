@@ -3,9 +3,9 @@ name: audio-player
 category: content
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: 17ee7a0b00a39a0977d7ca64e71d6039d9fba3407715352eeb88deb51b3deb2e
+checksum: e4fd5938d02390681d8e8db1f6cfd69c21d9d5f55f684123e4bc9900756e8f89
 created: 2026-11-19
 last_updated: 2026-11-19
 ---
@@ -180,7 +180,8 @@ _none_
 
 - Layout: logical utilities only (`gap`, `ps-`/`pe-`, `text-start`); the row mirrors, so the current time sits at the start and the duration at the end.
 - Icons: none mirrored; play, pause, volume and download glyphs keep their shape (media glyphs do not flip).
-- Keyboard: the sliders follow `Slider`'s right-to-left map (`ArrowLeft` moves forward in right-to-left).
+- Seek bar: media time does not mirror. The seek slider sits in a `dir="ltr"` box, so it fills from the left and `ArrowRight` moves forward in every direction, as Material's media progress and the browsers' own players do (spec_version 2).
+- Keyboard: the volume slider follows `Slider`'s right-to-left map (`ArrowLeft` raises it in right-to-left).
 - User data: the times and the speed label are wrapped in `bdi` so `0:42` and `1.5×` keep their order; the title and the transcript are `dir="auto"`.
 
 ## Responsive

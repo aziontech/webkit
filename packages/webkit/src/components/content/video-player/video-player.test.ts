@@ -211,6 +211,8 @@ describe('VideoPlayer', () => {
       slots: { default: () => h(Default) }
     })
     expect(view.getByTestId(`${TEST_ID}__time`).getAttribute('dir')).toBe('ltr')
+    expect(view.getByTestId(`${TEST_ID}__seek`).closest('[dir]')).toHaveAttribute('dir', 'ltr')
+    expect(view.getByTestId(`${TEST_ID}__volume`).closest('[dir]')).toHaveAttribute('dir', 'rtl')
     await expectNoA11yViolations(view.container)
   })
 

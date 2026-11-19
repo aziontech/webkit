@@ -390,7 +390,10 @@
           />
           <bdi v-else>{{ currentLabel }}</bdi>
         </span>
-        <div class="min-w-24 flex-1">
+        <div
+          dir="ltr"
+          class="min-w-24 flex-1"
+        >
           <Slider
             :model-value="seekValue"
             :min="0"

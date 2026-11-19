@@ -93,7 +93,7 @@
         </span>
         <code
           dir="ltr"
-          class="truncate rounded-(--shape-control) bg-(--bg-surface-raised) px-1 text-label-code text-(--text-muted)"
+          class="truncate rounded-(--shape-control) bg-(--bg-surface-raised) px-1 text-label-code-sm text-(--text-muted)"
           >{{ name }}</code
         >
         <i
@@ -118,7 +118,7 @@
         </span>
         <code
           dir="ltr"
-          class="truncate rounded-(--shape-control) bg-(--bg-surface-raised) px-1 text-label-code text-(--text-muted)"
+          class="truncate rounded-(--shape-control) bg-(--bg-surface-raised) px-1 text-label-code-sm text-(--text-muted)"
           >{{ name }}</code
         >
       </div>

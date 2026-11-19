@@ -213,6 +213,7 @@ describe('AudioPlayer', () => {
     const root = view.getByTestId(TEST_ID)
     expect(root.closest('[dir="rtl"]')).toBeTruthy()
     expect(view.getByTestId(`${TEST_ID}__time`).querySelector('bdi')).toBeTruthy()
+    expect(view.getByTestId(`${TEST_ID}__seek`).closest('[dir]')).toHaveAttribute('dir', 'ltr')
     await expectNoA11yViolations(view.container)
   })
 })

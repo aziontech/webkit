@@ -106,6 +106,30 @@ describe('PromptInput', () => {
     }
   )
 
+  it.each(['pending', 'streaming'] as const)(
+    'keeps Stop and submits beside it while %s with queueable',
+    async (status) => {
+      const { getByRole, queryByRole, submitted, stops, value } = harness({
+        initial: 'next prompt',
+        status,
+        queueable: true
+      })
+      const stop = getByRole('button', { name: 'Stop generating' })
+      const send = getByRole('button', { name: 'Submit' })
+      expect(stop.compareDocumentPosition(send) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+      await userEvent.click(getByRole('textbox'))
+      await userEvent.keyboard('{Enter}')
+      expect(submitted).toEqual(['next prompt'])
+      await userEvent.click(send)
+      expect(submitted).toEqual(['next prompt', 'next prompt'])
+      value.value = ''
+      await nextTick()
+      expect(queryByRole('button', { name: 'Submit' })).toBeNull()
+      await userEvent.click(stop)
+      expect(stops).toHaveLength(1)
+    }
+  )
+
   it('counts characters and blocks submit over the limit', async () => {
     const { getByRole, getByTestId, submitted } = harness({ initial: 'abcdef', maxLength: 4 })
     const textarea = getByRole('textbox')
