@@ -44,6 +44,41 @@ const many = (n: number): Turn[] =>
     status: 'success'
   }))
 
+function older(initial: Turn[], options: { moreMessages?: boolean; loadingMore?: boolean } = {}) {
+  const turns = ref<Turn[]>(initial)
+  const state = ref({ moreMessages: true, loadingMore: false, ...options })
+  const onLoadMore = vi.fn()
+  const Host = defineComponent({
+    setup: () => () =>
+      h('div', { style: 'height: 240px; display: flex; flex-direction: column' }, [
+        h(
+          Conversation,
+          { ...state.value, onLoadMore },
+          {
+            default: () =>
+              turns.value.map((turn) =>
+                h(
+                  ChatMessage,
+                  { key: turn.id, from: turn.from, status: turn.status },
+                  () => turn.text
+                )
+              )
+          }
+        )
+      ])
+  })
+  return { ...render(Host), turns, state, onLoadMore }
+}
+
+const earlier = (n: number, from = 1000): Turn[] =>
+  many(n).map((turn) => ({ ...turn, id: turn.id + from, text: `Older ${turn.id} `.repeat(12) }))
+
+function readerScrollsTo(log: HTMLElement, top: number): void {
+  log.dispatchEvent(new WheelEvent('wheel', { deltaY: -400 }))
+  log.scrollTop = top
+  log.dispatchEvent(new Event('scroll'))
+}
+
 describe('Conversation', () => {
   beforeAll(() => {
     const style = document.createElement('style')
@@ -139,6 +174,115 @@ describe('Conversation', () => {
     expect(getByTestId('conversation__scroll-to-latest')).toHaveAccessibleName(
       'Scroll to the latest message'
     )
+    await expectNoA11yViolations(container)
+  })
+
+  it('shows no load control unless older messages exist', () => {
+    const { queryByTestId } = thread(many(2))
+    expect(queryByTestId('conversation__older')).toBeNull()
+  })
+
+  it('loads older messages from the button with the click as the payload', async () => {
+    const { getByRole, onLoadMore } = older(many(2))
+    await frame()
+    onLoadMore.mockClear()
+    await userEvent.click(getByRole('button', { name: 'Load earlier messages' }))
+    expect(onLoadMore).toHaveBeenCalledTimes(1)
+    expect(onLoadMore.mock.calls[0][0]).toBeInstanceOf(MouseEvent)
+  })
+
+  it('marks the loading state and holds further requests while loading', async () => {
+    const { getByRole, getByTestId, onLoadMore, state } = older(many(2))
+    await frame()
+    onLoadMore.mockClear()
+    state.value = { ...state.value, loadingMore: true }
+    await frame()
+    const button = getByRole('button', { name: 'Loading earlier messages' })
+    expect(button).toHaveAttribute('aria-disabled', 'true')
+    expect(getByRole('log')).toHaveAttribute('aria-busy', 'true')
+    expect(getByTestId('conversation')).toHaveAttribute('data-loading-more')
+    expect(getByTestId('conversation__announcer')).toHaveTextContent('Loading earlier messages')
+    await userEvent.click(button)
+    expect(onLoadMore).not.toHaveBeenCalled()
+  })
+
+  it('asks for older messages when the reader scrolls near the top, once per load', async () => {
+    const { getByRole, onLoadMore, state } = older(many(12))
+    await frame()
+    expect(onLoadMore).not.toHaveBeenCalled()
+    readerScrollsTo(getByRole('log'), 0)
+    await vi.waitFor(() => expect(onLoadMore).toHaveBeenCalledTimes(1))
+    expect(onLoadMore.mock.calls[0][0]).toBeInstanceOf(Event)
+    expect(onLoadMore.mock.calls[0][0].type).toBe('load-more')
+    state.value = { ...state.value, loadingMore: true }
+    await frame()
+    state.value = { ...state.value, loadingMore: false }
+    await frame()
+    await frame()
+    expect(onLoadMore).toHaveBeenCalledTimes(1)
+  })
+
+  it('keeps the message in view where it was when older messages are prepended', async () => {
+    const { getByRole, getAllByTestId, turns, state } = older(many(12))
+    await frame()
+    const log = getByRole('log')
+    readerScrollsTo(log, Math.round(log.scrollHeight / 2))
+    await frame()
+    const top = log.getBoundingClientRect().top
+    const inView = getAllByTestId('chat-message').find(
+      (message) => message.getBoundingClientRect().bottom > top
+    ) as HTMLElement
+    const before = inView.getBoundingClientRect().top
+    state.value = { ...state.value, loadingMore: true }
+    await frame()
+    turns.value = [...earlier(6), ...turns.value]
+    state.value = { ...state.value, loadingMore: false }
+    await frame()
+    expect(Math.abs(inView.getBoundingClientRect().top - before)).toBeLessThan(2)
+    expect(log.scrollTop).toBeGreaterThan(0)
+  })
+
+  it('announces the load without reading the prepended messages as new', async () => {
+    const { getByTestId, turns, state } = older(many(2))
+    await frame()
+    state.value = { ...state.value, loadingMore: true }
+    await frame()
+    turns.value = [...earlier(4), ...turns.value]
+    state.value = { ...state.value, loadingMore: false }
+    await frame()
+    await frame()
+    const announcer = getByTestId('conversation__announcer')
+    expect(announcer).toHaveTextContent('Earlier messages loaded')
+    expect(announcer).not.toHaveTextContent('Older')
+  })
+
+  it('keeps the button as the retry path when a load adds nothing', async () => {
+    const { getByRole, getByTestId, onLoadMore, state } = older(many(2))
+    await frame()
+    onLoadMore.mockClear()
+    state.value = { ...state.value, loadingMore: true }
+    await frame()
+    state.value = { ...state.value, loadingMore: false }
+    await frame()
+    await frame()
+    expect(onLoadMore).not.toHaveBeenCalled()
+    expect(getByTestId('conversation__announcer')).not.toHaveTextContent('Earlier messages loaded')
+    await userEvent.click(getByRole('button', { name: 'Load earlier messages' }))
+    expect(onLoadMore).toHaveBeenCalledTimes(1)
+  })
+
+  it('moves focus to the log when the focused button leaves at the start of the thread', async () => {
+    const { getByRole, state } = older(many(2))
+    await frame()
+    getByRole('button', { name: 'Load earlier messages' }).focus()
+    state.value = { moreMessages: false, loadingMore: false }
+    await frame()
+    expect(document.activeElement).toBe(getByRole('log'))
+  })
+
+  it('has no axe violations with the load control', async () => {
+    const { container } = older(many(2))
+    await frame()
     await expectNoA11yViolations(container)
   })
 })

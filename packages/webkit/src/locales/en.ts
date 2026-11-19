@@ -1232,7 +1232,10 @@ export const citation = {
 export const conversation = {
   label: 'Conversation',
   scrollToLatest: 'Scroll to the latest message',
-  announcement: '{author}: {text}'
+  announcement: '{author}: {text}',
+  loadMore: 'Load earlier messages',
+  loadingMore: 'Loading earlier messages',
+  moreLoaded: 'Earlier messages loaded'
 } as const
 
 export const promptInput = {

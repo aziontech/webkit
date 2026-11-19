@@ -47,7 +47,10 @@ export const ptBR: Messages = {
   conversation: {
     label: 'Conversa',
     scrollToLatest: 'Ir para a última mensagem',
-    announcement: '{author}: {text}'
+    announcement: '{author}: {text}',
+    loadMore: 'Carregar mensagens anteriores',
+    loadingMore: 'Carregando mensagens anteriores',
+    moreLoaded: 'Mensagens anteriores carregadas'
   },
   promptInput: {
     label: 'Prompt',
