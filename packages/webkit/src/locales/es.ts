@@ -28,9 +28,8 @@ export const es: Messages = {
   },
   mcpAppFrame: {
     loading: 'Cargando {title}',
-    errorTitle: 'Esta app no se puede mostrar',
-    errorDescription:
-      'La herramienta devolvió contenido que esta página no puede mostrar de forma segura.'
+    errorTitle: 'No se puede mostrar {title}',
+    errorDescription: 'La app se bloqueó o no se pudo cargar aquí.'
   },
   chatMessage: {
     user: 'Tú',

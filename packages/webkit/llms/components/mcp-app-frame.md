@@ -58,16 +58,16 @@
 - `loading` starts on mount and whenever the resource's content changes (its `uri`, `mimeType`, `text` or `blob`); a new `resolveUrl` function alone does not restart it. While `resolveUrl` is pending no `iframe` exists and a `Skeleton` at the starting height holds the place. A `resolveUrl` result that settles after the resource changed or the component unmounted is discarded. Once the document is known (the `srcdoc` built or the URL resolved), a new `iframe` is created for it (keyed, so listeners and posts never cross two widgets) and stays rendered and in layout, with the `Skeleton` absolutely on top, until that `iframe`'s first `load`. The root carries `data-loading` and `aria-busy="true"`, and a polite `role="status"` says `Loading {title}`.
 - Messages are accepted from the moment the `iframe` exists, before its `load`, because a widget sends its handshake while it starts; early size messages apply too.
 - `ready` follows the first `load` of the current `iframe`: the `Skeleton` goes.
-- `error` (`data-error` on the root) replaces the `iframe` with an `Alert` (`severity="warning"`) saying the app cannot be shown. It happens when the resource is not inline HTML and there is no `resolveUrl`; when `resolveUrl` returns an empty string or a URL that is not absolute `https:`, throws, or rejects; when a `blob` is not valid base64 UTF-8; and on a second `load` of the same `iframe` (the widget navigated). A resolved URL that fails on the network cannot be detected (an `iframe` fires no `error` event), so its failure shows inside the frame and does not become `error`.
+- `error` (`data-error` on the root) replaces the `iframe` with an `Alert` (`severity="warning"`) naming the app that cannot be shown; the root then drops its own border and fill so the Alert's frame is the only line. Recovery (a retry) belongs to the app, next to the `tool-call` row. It happens when the resource is not inline HTML and there is no `resolveUrl`; when `resolveUrl` returns an empty string or a URL that is not absolute `https:`, throws, or rejects; when a `blob` is not valid base64 UTF-8; and on a second `load` of the same `iframe` (the widget navigated). A resolved URL that fails on the network cannot be detected (an `iframe` fires no `error` event), so its failure shows inside the frame and does not become `error`.
 - Inline: a resource is shown inline when its `mimeType` is `text/html` (with any parameters, such as `;profile=mcp-app`) and it carries `text` or a base64 `blob`; every other resource goes through `resolveUrl`.
-- Height: the frame starts at `max(48, min(240, maxHeight))` px and follows the widget's size message (MCP-UI `ui-size-change` with `payload.height`, MCP Apps `ui/notifications/size-changed` with `params.height`), a finite number clamped between 48 px and `max(48, maxHeight)` (48 px is the floor even when `maxHeight` is smaller), written to `--mcp-app-frame-view-height`; the widget scrolls inside beyond that. A size message whose height is not a finite number is dropped. Size messages are not emitted.
+- Height: the frame starts at `max(48, min(240, maxHeight))` px and follows the widget's size message (MCP-UI `ui-size-change` with `payload.height`, MCP Apps `ui/notifications/size-changed` with `params.height`), a finite number clamped between 48 px and `max(48, maxHeight)` (48 px is the floor even when `maxHeight` is smaller), written to `--mcp-app-frame-view-height`; the widget scrolls inside beyond that. A size message whose height is not a finite number is dropped. Size messages are not emitted. A smaller `maxHeight` clamps the current height again.
 - Accepted messages: `source` is the current `iframe`'s window, `origin` is `null`, and the data is a plain object that is either an MCP-UI message (a string `type` of 1 to 128 characters, an optional plain-object `payload`, an optional string `messageId`) or a JSON-RPC 2.0 message (`jsonrpc: '2.0'` with a string `method` or a string or number `id`; optional plain-object or array `params`, any `result`, plain-object `error`). Everything else is dropped silently.
 
 ## Accessibility
 
-- Visible focus: the widget draws focus inside its own document; the frame adds no focusable element of its own.
+- Visible focus: the widget draws focus inside its own document; the frame adds no focusable element of its own, and its root shows the ring token (`focus-within:ring-2 focus-within:ring-(--ring-color)`) while focus is inside the widget, so the reader sees they are in third-party content.
 - Keyboard map: `Tab` moves into the widget and on through it; the frame intercepts no key.
-- ARIA: `title` renders as the `iframe`'s `title`; the root carries `aria-busy="true"` while loading; the loading text is a `role="status"` region; the blocked state is an `Alert`.
+- ARIA: `title` renders as the `iframe`'s `title`; the root carries `aria-busy="true"` while loading; the loading text is a `role="status"` region that stays rendered and is emptied when loading ends; the blocked state is an `Alert`.
 - Contrast: the `iframe` element keeps the page's `color-scheme` (the theme sets `light` or `dark`). A widget that declares no `color-scheme` gets the browser's opaque light canvas with dark default text in the dark theme (the two schemes differ), and is transparent over `var(--bg-surface)` with dark default text in the light theme, so a default-styled widget reads in both. A widget that declares `color-scheme: light dark` is transparent over `var(--bg-surface)` with the browser's matching default text. Loading (`Skeleton`) and blocked (`Alert`) keep their own token contrast; the frame adds only its border.
 - Touch target: not applicable; controls belong to the widget.
 
@@ -80,11 +80,11 @@
 
 ## Internationalization
 
-| Key                            | English source                                                   | Override prop |
-| ------------------------------ | ---------------------------------------------------------------- | ------------- |
-| `mcpAppFrame.loading`          | `Loading {title}`                                                | —             |
-| `mcpAppFrame.errorTitle`       | `This app can't be shown`                                        | —             |
-| `mcpAppFrame.errorDescription` | `The tool returned content that this page can't display safely.` | —             |
+| Key                            | English source                                    | Override prop |
+| ------------------------------ | ------------------------------------------------- | ------------- |
+| `mcpAppFrame.loading`          | `Loading {title}`                                 | —             |
+| `mcpAppFrame.errorTitle`       | `{title} can't be shown`                          | —             |
+| `mcpAppFrame.errorDescription` | `The app was blocked or couldn't be loaded here.` | —             |
 
 - Formatting: none. The widget's own text is the widget's.
 
@@ -160,11 +160,9 @@
 
   const allowedTools = ['select_plan']
   const frame = ref(null)
-  const requests = ref([])
 
   const onMessage = (message) => {
     if (!('jsonrpc' in message) || message.id === undefined) return
-    requests.value = [...requests.value, message.method ?? 'response']
     if (message.method === 'ui/initialize') {
       frame.value?.post({
         jsonrpc: '2.0',
@@ -198,19 +196,13 @@
 </script>
 
 <template>
-  <div class="flex w-full max-w-(--container-3xl) flex-col gap-(--spacing-sm)">
+  <div class="w-full max-w-(--container-3xl)">
     <McpAppFrame
       ref="frame"
       :resource="resource"
       title="Plan picker from the billing tool"
       @message="onMessage"
     />
-    <p
-      v-if="requests.length"
-      class="text-body-sm text-(--text-muted)"
-    >
-      Requests from the widget: {{ requests.join(', ') }}
-    </p>
   </div>
 </template>
 ```
@@ -221,33 +213,33 @@
 <script setup>
   import McpAppFrame from '@aziontech/webkit/mcp-app-frame'
 
-  const trusted = {
-    uri: 'ui://status/overview',
-    mimeType: 'text/uri-list',
-    text: 'https://example.com/'
+  const widgetUrls = {
+    'ui://status/overview': 'https://example.com/'
   }
 
-  const untrusted = {
+  const known = {
+    uri: 'ui://status/overview',
+    mimeType: 'text/html;profile=mcp-app'
+  }
+
+  const unknown = {
     uri: 'ui://unknown/report',
     mimeType: 'text/uri-list',
-    text: 'http://example.org/report'
+    text: 'https://example.org/report'
   }
 
-  const trustedServers = ['ui://status/']
-
-  const resolveUrl = (resource) =>
-    trustedServers.some((prefix) => resource.uri.startsWith(prefix)) ? (resource.text ?? '') : ''
+  const resolveUrl = (resource) => widgetUrls[resource.uri] ?? ''
 </script>
 
 <template>
   <div class="flex w-full max-w-(--container-3xl) flex-col gap-(--spacing-md)">
     <McpAppFrame
-      :resource="trusted"
+      :resource="known"
       :resolve-url="resolveUrl"
       title="Status overview from the status tool"
     />
     <McpAppFrame
-      :resource="untrusted"
+      :resource="unknown"
       :resolve-url="resolveUrl"
       title="Report from an unknown tool"
     />

@@ -128,6 +128,13 @@
     { immediate: true }
   )
 
+  watch(
+    () => props.maxHeight,
+    (maxHeight) => {
+      height.value = clampHeight(height.value, maxHeight)
+    }
+  )
+
   useEventListener(defaultWindow, 'message', onMessage)
 
   onScopeDispose(() => {
@@ -215,12 +222,12 @@
     if (!view || event.source !== view || event.origin !== 'null') return
     const message = readMessage(event.data)
     if (!message) return
+    canPost = true
     if (isSizeMessage(message)) {
       const size = readSize(message)
       if (size !== null) height.value = clampHeight(size, props.maxHeight)
       return
     }
-    canPost = true
     emit('message', message)
   }
 
@@ -238,7 +245,7 @@
 <template>
   <div
     v-bind="$attrs"
-    class="relative w-full overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface)"
+    class="relative w-full overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) focus-within:ring-2 focus-within:ring-(--ring-color) data-[error]:overflow-visible data-[error]:border-0 data-[error]:bg-transparent"
     :style="viewStyle"
     :data-testid="testId"
     :data-loading="phase === 'loading' || null"
@@ -248,9 +255,8 @@
     <Alert
       v-if="phase === 'error'"
       severity="warning"
-      :title="t('mcpAppFrame.errorTitle')"
+      :title="t('mcpAppFrame.errorTitle', { title })"
       :label="t('mcpAppFrame.errorDescription')"
-      class="rounded-none border-0"
       :data-testid="`${testId}__error`"
     />
     <div
@@ -272,20 +278,19 @@
         :data-testid="`${testId}__view`"
         @load="onLoad"
       />
-      <template v-if="phase === 'loading'">
-        <Skeleton
-          width="100%"
-          height="100%"
-          class="absolute inset-0"
-          :data-testid="`${testId}__loading`"
-        />
-        <span
-          role="status"
-          class="sr-only"
-        >
-          {{ t('mcpAppFrame.loading', { title }) }}
-        </span>
-      </template>
+      <Skeleton
+        v-if="phase === 'loading'"
+        width="100%"
+        height="100%"
+        class="absolute inset-0"
+        :data-testid="`${testId}__loading`"
+      />
     </div>
+    <span
+      role="status"
+      class="sr-only"
+    >
+      {{ phase === 'loading' ? t('mcpAppFrame.loading', { title }) : '' }}
+    </span>
   </div>
 </template>

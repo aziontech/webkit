@@ -9,7 +9,7 @@
     },
     {
       "name": "Resolved URL",
-      "summary": "Two ui:// resources with no inline HTML: resolveUrl turns one into an https URL and blocks the other, which shows the blocked state.",
+      "summary": "Two ui:// resources with no inline HTML: resolveUrl looks each uri up in a table the app owns, loads the known one from its https URL and blocks the unknown one, which shows the blocked state.",
       "file": "resolved-url.vue"
     },
     {

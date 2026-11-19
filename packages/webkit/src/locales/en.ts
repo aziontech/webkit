@@ -1211,8 +1211,8 @@ export const artifactPreview = {
 
 export const mcpAppFrame = {
   loading: 'Loading {title}',
-  errorTitle: "This app can't be shown",
-  errorDescription: "The tool returned content that this page can't display safely."
+  errorTitle: "{title} can't be shown",
+  errorDescription: "The app was blocked or couldn't be loaded here."
 } as const
 
 export const chatMessage = {

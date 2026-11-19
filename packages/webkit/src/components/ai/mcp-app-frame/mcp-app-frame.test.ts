@@ -57,7 +57,7 @@ describe('McpAppFrame', () => {
   })
 
   it('shows the loading state until the widget loads', async () => {
-    const { getByTestId, getByRole, queryByRole } = render(McpAppFrame, {
+    const { getByTestId, getByRole } = render(McpAppFrame, {
       props: { resource: widget(''), title }
     })
     const root = getByTestId('mcp-app-frame')
@@ -66,7 +66,7 @@ describe('McpAppFrame', () => {
     expect(getByRole('status')).toHaveTextContent(`Loading ${title}`)
     await ready(getByTestId)
     expect(root).not.toHaveAttribute('aria-busy')
-    expect(queryByRole('status')).toBeNull()
+    expect(getByRole('status')).toHaveTextContent('')
   })
 
   it('keeps the widget out of the parent document and its storage', async () => {
@@ -190,7 +190,7 @@ describe('McpAppFrame', () => {
     })
     await waitFor(() => expect(getByTestId('mcp-app-frame')).toHaveAttribute('data-error'))
     expect(frameOf(container)).toBeNull()
-    expect(getByTestId('mcp-app-frame__error')).toHaveTextContent("This app can't be shown")
+    expect(getByTestId('mcp-app-frame__error')).toHaveTextContent(`${title} can't be shown`)
   })
 
   it('decodes a base64 blob and blocks one that is not valid', async () => {
@@ -282,11 +282,22 @@ describe('McpAppFrame', () => {
     expect(frame.getAttribute('srcdoc')).toContain('<p>Widget</p>')
   })
 
-  it('answers the handshake and a tool call in the default example', async () => {
-    const { container, getByText } = render(DefaultExample)
-    await waitFor(() => expect(getByText(/Requests from the widget: ui\/initialize/)).toBeTruthy())
-    const frame = frameOf(container)!
-    expect(frame).toHaveAttribute('title', title)
+  it('answers the handshake in the default example, so the widget reports its size', async () => {
+    const { container, getByTestId } = render(DefaultExample)
+    const root = getByTestId('mcp-app-frame')
+    await waitFor(() =>
+      expect(root.style.getPropertyValue('--mcp-app-frame-view-height')).not.toBe('240px')
+    )
+    expect(frameOf(container)).toHaveAttribute('title', title)
+  })
+
+  it('clamps the current height again when maxHeight shrinks', async () => {
+    const { getByTestId, rerender } = render(McpAppFrame, {
+      props: { resource: widget(''), title, maxHeight: 640 }
+    })
+    const root = getByTestId('mcp-app-frame')
+    await rerender({ resource: widget(''), title, maxHeight: 120 })
+    expect(root.style.getPropertyValue('--mcp-app-frame-view-height')).toBe('120px')
   })
 
   it('has no axe violations when ready or blocked', async () => {

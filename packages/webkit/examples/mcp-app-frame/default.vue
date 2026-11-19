@@ -58,11 +58,9 @@
 
   const allowedTools = ['select_plan']
   const frame = ref(null)
-  const requests = ref([])
 
   const onMessage = (message) => {
     if (!('jsonrpc' in message) || message.id === undefined) return
-    requests.value = [...requests.value, message.method ?? 'response']
     if (message.method === 'ui/initialize') {
       frame.value?.post({
         jsonrpc: '2.0',
@@ -96,18 +94,12 @@
 </script>
 
 <template>
-  <div class="flex w-full max-w-(--container-3xl) flex-col gap-(--spacing-sm)">
+  <div class="w-full max-w-(--container-3xl)">
     <McpAppFrame
       ref="frame"
       :resource="resource"
       title="Plan picker from the billing tool"
       @message="onMessage"
     />
-    <p
-      v-if="requests.length"
-      class="text-body-sm text-(--text-muted)"
-    >
-      Requests from the widget: {{ requests.join(', ') }}
-    </p>
   </div>
 </template>

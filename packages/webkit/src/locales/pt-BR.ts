@@ -28,9 +28,8 @@ export const ptBR: Messages = {
   },
   mcpAppFrame: {
     loading: 'Carregando {title}',
-    errorTitle: 'Este app não pode ser exibido',
-    errorDescription:
-      'A ferramenta retornou um conteúdo que esta página não pode exibir com segurança.'
+    errorTitle: 'Não é possível exibir {title}',
+    errorDescription: 'O app foi bloqueado ou não pôde ser carregado aqui.'
   },
   chatMessage: {
     user: 'Você',
