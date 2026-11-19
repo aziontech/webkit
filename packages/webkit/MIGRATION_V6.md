@@ -1269,43 +1269,44 @@ now passes the DOM event as its first argument, and the item it concerns second.
 not rewrite handlers: a handler that ignores its arguments (`@retry="reload"`,
 `@confirm="save()"`) keeps working; a handler that reads them needs the new signature.
 
-| Component               | Event               | v5 payload                       | v6 payload                                          |
-| ----------------------- | ------------------- | -------------------------------- | --------------------------------------------------- |
-| `SuggestionGroup`       | `select`            | `(item)`                         | `(event, item)`                                     |
-| `ConversationHistory`   | `remove`            | `(id)`                           | `(event, id)`                                       |
-| `PromptInput`           | `submit`            | `(value, references)`            | `(event, { value, references, files })`             |
-| `PromptInput`           | `stop`              | `()`                             | `(event)`                                           |
-| `ToolApproval`          | `approve`, `deny`   | `()`                             | `(event)`                                           |
-| `ArtifactCanvas`        | `close`             | `()`                             | `(event)` (a `KeyboardEvent` when Escape closes it) |
-| `ArtifactPreview`       | `open`              | `()`                             | `(event)`                                           |
-| `ChatMessage`           | `retry`             | `()`                             | `(event)`                                           |
-| `Reasoning`             | `skip`              | `()`                             | `(event)`                                           |
-| `FeedbackReasonDialog`  | `submit`            | `(payload)`                      | `(event, payload)`                                  |
-| `TopologyDiagram`       | `remove`            | `(key)`                          | `FlowDiagramBind` `(event)`                         |
-| `TopologyDiagram`       | `create`            | `(key)`                          | `FlowDiagramBind` `(event)`                         |
-| `TopologyDiagram`       | `bind`              | `(key, value)`                   | `FlowDiagramBind` `(event, value)`                  |
-| `DataTable`             | `filter-apply`      | `(filters)`                      | `(event, filters)`                                  |
-| `DataTable`             | `filter-remove`     | `(filter)`                       | `(event, filter)`                                   |
-| `Table.Filter`          | `apply`             | `(filters)`                      | `(event, filters)`                                  |
-| `CollectionPreferences` | `confirm`           | `(value)`                        | `(event, value)`                                    |
-| `CollectionPreferences` | `cancel`            | `()`                             | `(event)`                                           |
-| `PropertyFilter`        | `submit`            | `(payload)`                      | `(event, payload)`                                  |
-| `ButtonGroup`           | `click`             | `({ id })`                       | `(event, id)`                                       |
-| `UploadProgress`        | `cancel`, `retry`   | `(id?)`                          | `(event, id?)`                                      |
-| `UploadProgress`        | `close`             | `()`                             | `(event)`                                           |
-| `ConfirmDialog`         | `confirm`, `cancel` | `()`                             | `(event)`                                           |
-| `FileTokenGroup`        | `remove`            | `(index, item)`                  | `(event, { index, item })`                          |
-| `AttributeEditor`       | `add`               | `({ index, groupIndex? })`       | `(event, { index, groupIndex? })`                   |
-| `AttributeEditor`       | `remove`            | `({ index, item, groupIndex? })` | `(event, { index, item, groupIndex? })`             |
-| `Combobox`              | `create`            | `(value)`                        | `(event, value)`                                    |
-| `DatePicker`            | `apply`             | `(value)`                        | `(event, value)`                                    |
-| `CopyButton`            | `copy`              | `(value)`                        | `(event, value)`                                    |
-| `CopyPromptButton`      | `copy`              | `(value)`                        | `(event, value)`                                    |
-| `CodeBlock`             | `copy`              | `(code)`                         | `(event, code)`                                     |
-| `LogViewer`             | `copy`              | `(value)`                        | `(event, value)`                                    |
-| `ArtifactCanvas`        | `copy`              | `(value)`                        | `(event, value)`                                    |
-| `ArtifactPreview`       | `copy`              | `(value)`                        | `(event, value)`                                    |
-| `DocAgentCard`          | `copy`              | `(value)`                        | `(event, value)`                                    |
+| Component               | Event               | v5 payload                       | v6 payload                                                                 |
+| ----------------------- | ------------------- | -------------------------------- | -------------------------------------------------------------------------- |
+| `SuggestionGroup`       | `select`            | `(item)`                         | `(event, item)`                                                            |
+| `ConversationHistory`   | `remove`            | `(id)`                           | `(event, id)`                                                              |
+| `PromptInput`           | `submit`            | `(value, references)`            | `(event, { value, references, files })`                                    |
+| `PromptInput`           | `stop`              | `()`                             | `(event)`                                                                  |
+| `ToolApproval`          | `approve`           | `()`                             | `(event, input)`: `input` is the edited arguments (`''` unless `editable`) |
+| `ToolApproval`          | `deny`              | `()`                             | `(event)`                                                                  |
+| `ArtifactCanvas`        | `close`             | `()`                             | `(event)` (a `KeyboardEvent` when Escape closes it)                        |
+| `ArtifactPreview`       | `open`              | `()`                             | `(event)`                                                                  |
+| `ChatMessage`           | `retry`             | `()`                             | `(event)`                                                                  |
+| `Reasoning`             | `skip`              | `()`                             | `(event)`                                                                  |
+| `FeedbackReasonDialog`  | `submit`            | `(payload)`                      | `(event, payload)`                                                         |
+| `TopologyDiagram`       | `remove`            | `(key)`                          | `FlowDiagramBind` `(event)`                                                |
+| `TopologyDiagram`       | `create`            | `(key)`                          | `FlowDiagramBind` `(event)`                                                |
+| `TopologyDiagram`       | `bind`              | `(key, value)`                   | `FlowDiagramBind` `(event, value)`                                         |
+| `DataTable`             | `filter-apply`      | `(filters)`                      | `(event, filters)`                                                         |
+| `DataTable`             | `filter-remove`     | `(filter)`                       | `(event, filter)`                                                          |
+| `Table.Filter`          | `apply`             | `(filters)`                      | `(event, filters)`                                                         |
+| `CollectionPreferences` | `confirm`           | `(value)`                        | `(event, value)`                                                           |
+| `CollectionPreferences` | `cancel`            | `()`                             | `(event)`                                                                  |
+| `PropertyFilter`        | `submit`            | `(payload)`                      | `(event, payload)`                                                         |
+| `ButtonGroup`           | `click`             | `({ id })`                       | `(event, id)`                                                              |
+| `UploadProgress`        | `cancel`, `retry`   | `(id?)`                          | `(event, id?)`                                                             |
+| `UploadProgress`        | `close`             | `()`                             | `(event)`                                                                  |
+| `ConfirmDialog`         | `confirm`, `cancel` | `()`                             | `(event)`                                                                  |
+| `FileTokenGroup`        | `remove`            | `(index, item)`                  | `(event, { index, item })`                                                 |
+| `AttributeEditor`       | `add`               | `({ index, groupIndex? })`       | `(event, { index, groupIndex? })`                                          |
+| `AttributeEditor`       | `remove`            | `({ index, item, groupIndex? })` | `(event, { index, item, groupIndex? })`                                    |
+| `Combobox`              | `create`            | `(value)`                        | `(event, value)`                                                           |
+| `DatePicker`            | `apply`             | `(value)`                        | `(event, value)`                                                           |
+| `CopyButton`            | `copy`              | `(value)`                        | `(event, value)`                                                           |
+| `CopyPromptButton`      | `copy`              | `(value)`                        | `(event, value)`                                                           |
+| `CodeBlock`             | `copy`              | `(code)`                         | `(event, code)`                                                            |
+| `LogViewer`             | `copy`              | `(value)`                        | `(event, value)`                                                           |
+| `ArtifactCanvas`        | `copy`              | `(value)`                        | `(event, value)`                                                           |
+| `ArtifactPreview`       | `copy`              | `(value)`                        | `(event, value)`                                                           |
+| `DocAgentCard`          | `copy`              | `(value)`                        | `(event, value)`                                                           |
 
 <!-- snippet: partial -->
 

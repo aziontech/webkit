@@ -1070,17 +1070,17 @@
   {
     "name": "config-provider",
     "path": "src/components/provider/config-provider/config-provider.vue",
-    "limit": "11.6 KB"
+    "limit": "12.3 KB"
   },
   {
     "name": "locales-pt-BR",
     "path": "src/locales/pt-BR.ts",
-    "limit": "10.7 KB"
+    "limit": "11.55 KB"
   },
   {
     "name": "locales-es",
     "path": "src/locales/es.ts",
-    "limit": "10.85 KB"
+    "limit": "11.65 KB"
   },
   {
     "name": "phone-input",
