@@ -2549,6 +2549,10 @@
       "types": "./types/components/content/file-preview/file-preview.vue.d.ts",
       "default": "./src/components/content/file-preview/file-preview.vue"
     },
+    "./video-player": {
+      "types": "./types/components/content/video-player/video-player.vue.d.ts",
+      "default": "./src/components/content/video-player/video-player.vue"
+    },
     "./attribute-editor": {
       "types": "./types/components/input/attribute-editor/attribute-editor.vue.d.ts",
       "default": "./src/components/input/attribute-editor/attribute-editor.vue"

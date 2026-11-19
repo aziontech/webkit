@@ -1213,6 +1213,22 @@ export const ptBR: Messages = {
     hotspotNext: 'Próxima',
     hotspotFinish: 'Concluir'
   },
+  videoPlayer: {
+    label: 'Vídeo',
+    play: 'Reproduzir',
+    pause: 'Pausar',
+    seek: 'Avançar ou voltar',
+    seekValue: '{current} de {duration}',
+    mute: 'Silenciar',
+    volume: 'Volume',
+    captions: 'Legendas (CC)',
+    captionsShort: 'CC',
+    enterFullscreen: 'Tela cheia',
+    exitFullscreen: 'Sair da tela cheia',
+    pending: 'Aguardando para gerar',
+    running: 'Gerando vídeo',
+    error: 'Não foi possível carregar o vídeo'
+  },
   wizard: {
     stepOf: 'Etapa {step} de {total}',
     optional: 'Opcional',
