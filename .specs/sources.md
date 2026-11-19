@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: 1dbd2049d86acff909b932b931abde58e7fd59abc7963cffbdc3e4340a73f61b
+checksum: 6b8d53e16f311c38a35a37eb971495664fd77829c50d60f1902ece5785470834
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -123,6 +123,7 @@ _None._
 - Keyboard map: `Tab` to the trigger, `Enter` / `Space` toggles; `Tab` through the links.
 - ARIA: `button` with `aria-expanded` / `aria-controls`; the list is an `<ol aria-label="Sources">` so numbers are announced by position; the visual number chip is `aria-hidden`.
 - External links open in a new tab with `rel="noopener noreferrer"`.
+- Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): shows the title as plain text.
 
 ## Internationalization
 

@@ -3,6 +3,7 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
+  import { safeHref } from '../../../utils/safe-href'
   import IconButton from '../../action/icon-button/icon-button.vue'
   import Brand from '../../content/brand/brand.vue'
   import StatusIndicator from '../../feedback/status-indicator/status-indicator.vue'
@@ -143,7 +144,7 @@
         #brand
       >
         <a
-          :href="home"
+          :href="safeHref(home) ?? undefined"
           :aria-label="homeAriaLabel || t('siteFooterSection.home')"
           class="inline-flex w-fit items-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
         >

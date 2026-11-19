@@ -7,7 +7,7 @@ spec_version: 6
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-18
-checksum: f73d1b2ba970a9e422d9a721fea30abd22a3aaa7ff4e64dd8dd7b8e0a196d1a5
+checksum: e4ed8e6bc7e76fa70b0df7ae5db460d46dc8b54fb3aa621c540b3b64a7ec28c8
 ---
 
 # ArticleBodySection — Component Spec
@@ -135,6 +135,7 @@ The reading page of an article. A brand banner sits over a three-column grid: th
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text uses `--text-default` / `--text-muted`.
 - `motion-reduce:transition-none` on every transition.
 - Touch target ≥40×40 px — owned by `icon-button` and `split-button`.
+- Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): shows the link label as plain text.
 
 ## Internationalization
 

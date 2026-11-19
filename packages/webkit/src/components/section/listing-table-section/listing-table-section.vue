@@ -2,6 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import LazyNodes from '../../../composables/use-lazy-chunks/lib/lazy-nodes'
+  import { safeHref } from '../../../utils/safe-href'
   import Button from '../../action/button/button.vue'
   import Item from '../../content/item/item.vue'
   import ItemContent from '../../content/item/item-content.vue'
@@ -146,7 +147,7 @@
                 <ItemContent class="gap-(--spacing-xs)">
                   <ItemTitle>
                     <a
-                      :href="row.href"
+                      :href="safeHref(row.href) ?? undefined"
                       class="text-pretty text-label-lg text-(--text-default) after:absolute after:inset-0 after:content-['']"
                     >
                       {{ row.values[titleKey] }}
@@ -217,7 +218,7 @@
                 >
                   <a
                     v-if="index === 0"
-                    :href="row.href"
+                    :href="safeHref(row.href) ?? undefined"
                     class="text-label-lg text-(--text-default)"
                     >{{ row.values[column.key] }}</a
                   >

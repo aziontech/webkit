@@ -2,6 +2,7 @@
   import { computed, useAttrs, useId } from 'vue'
 
   import { cn } from '../../../utils/cn'
+  import { safeHref } from '../../../utils/safe-href'
   import {
     provideNavigationMenuItemContext,
     useNavigationMenuContext
@@ -94,7 +95,7 @@
     :data-testid="testId"
   >
     <a
-      :href="href"
+      :href="safeHref(href) ?? undefined"
       :class="cn(ENTRY_CLASS, attrs.class as string | undefined)"
       :data-testid="`${testId}__link`"
       :data-active="active ? '' : undefined"

@@ -4,6 +4,7 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import { directionalIconClass } from '../../../utils/directional-icons'
+  import { safeHref } from '../../../utils/safe-href'
 
   export type LinkSize = 'small' | 'medium' | 'large'
   export type LinkTarget = '_self' | '_blank'
@@ -22,7 +23,7 @@
     disabled?: boolean
     /** Azion icon class for the trailing icon; set shows it. Empty shows the external-link glyph only for `_blank` targets. */
     icon?: string
-    /** Destination URL for the anchor. Empty renders `#`. */
+    /** Destination URL for the anchor. Empty, or an unsafe URL (javascript, data and other script schemes), renders `#`. */
     href?: string
     /** Link target when navigating. */
     target?: LinkTarget
@@ -70,7 +71,7 @@
 
 <template>
   <a
-    :href="href || '#'"
+    :href="safeHref(href) ?? '#'"
     :target="target"
     :rel="target === '_blank' ? 'noopener noreferrer' : undefined"
     v-bind="$attrs"

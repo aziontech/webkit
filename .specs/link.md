@@ -4,7 +4,7 @@ category: navigation
 structure: monolithic
 status: implemented
 spec_version: 6
-checksum: 414aa78fb9272be6325bd7b0257f39985b42ce01c328c853eb2c7bf845b99f11
+checksum: 03a7672887b666784dbb184225cc87e07f4c62221b1b4ff55291bb0a446a1c19
 created: 2026-05-22
 last_updated: 2026-11-15
 figma:
@@ -74,7 +74,7 @@ Helps users move between views or sections. Migrated from the existing implement
 | `size`     | `'small' \| 'medium' \| 'large'` | `'large'` | false    | Size token; affects height and typography (large 40px, medium 32px, small 28px), matching Button.                       |
 | `disabled` | `boolean`                        | `false`   | false    | Disables interaction and applies disabled tokens.                                                                       |
 | `icon`     | `string`                         | `''`      | false    | Azion icon class for the trailing icon; set shows it. Empty shows `az az-external-link` only when `target` is `_blank`. |
-| `href`     | `string`                         | `''`      | false    | Destination URL for the anchor. Empty renders `#`.                                                                      |
+| `href`     | `string`                         | `''`      | false    | Destination URL for the anchor. Empty, or an unsafe URL (`javascript:`, `data:`), renders `#`.                                                                      |
 | `target`   | `'_blank' \| '_self'`            | `'_self'` | false    | Link target when navigating.                                                                                            |
 
 ## Events
@@ -126,6 +126,7 @@ Helps users move between views or sections. Migrated from the existing implement
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
+- Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): points at `#`.
 
 ## Right-to-left
 

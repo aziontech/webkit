@@ -3,6 +3,7 @@ import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
 import { expectNoA11yViolations } from '../../../test/axe'
+import { UNSAFE_URLS } from '../../../test/unsafe-urls'
 import Sources from './sources.vue'
 
 const items = [
@@ -20,6 +21,14 @@ describe('Sources', () => {
     expect(
       render(Sources, { props: { items }, attrs: { 'data-testid': 'mine' } }).getByTestId('mine')
     ).toBeTruthy()
+  })
+
+  it.each(UNSAFE_URLS)('renders the title as plain text for the unsafe href %j', (href) => {
+    const { queryByRole, getByText } = render(Sources, {
+      props: { items: [{ title: 'Poisoned', href }], defaultOpen: true }
+    })
+    expect(queryByRole('link')).toBeNull()
+    expect(getByText('Poisoned').closest('a')).toBeNull()
   })
 
   it('renders nothing without items', () => {

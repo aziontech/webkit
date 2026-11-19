@@ -3,12 +3,12 @@ import { describe, expect, it } from 'vitest'
 import { nextTick } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
+import { safeHref } from '../../../utils/safe-href'
 import {
   type MarkdownParse,
   parseInline,
   parseMarkdown,
-  parseMarkdownIncremental,
-  safeHref
+  parseMarkdownIncremental
 } from '../lib/parse-markdown'
 import StreamingResponse from './streaming-response.vue'
 

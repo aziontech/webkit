@@ -10924,7 +10924,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-waf-tunin
 | `icon` | `string` | `''` | false | Azion icon class for the icon drawn beside the label. |
 | `iconPosition` | `'leading' \| 'trailing'` | `'leading'` | false | Which side of the label the icon sits on. `leading` is a glyph that names the action; `trailing` is a glyph that points at where it goes. |
 | `animated` | `boolean` | `false` | false | Nudges a trailing icon along its axis on hover. Off by default; marketing CTAs opt in. |
-| `href` | `string` | `''` | false | When set, renders as a link (`<a>`). |
+| `href` | `string` | `''` | false | When set to a safe URL, renders as a link (`<a>`); an unsafe URL is ignored, and a `download` attribute keeps `blob:` / `data:` (see Accessibility). |
 | `target` | `'_blank' \| '_self'` | `'_self'` | false | Link target when `href` is set. |
 | `type` | `'button' \| 'submit' \| 'reset'` | `'button'` | false | Native button type. `submit` lets the control submit its form; `disabled` and `loading` still block it. Ignored when `href` is set. |
 
@@ -10963,6 +10963,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-waf-tunin
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
 - Forced colors: the filled variants (primary, secondary, danger) have no border of their own, so under `forced-colors: active` every button draws a 1px `ButtonBorder` edge (`GrayText` when disabled); outside forced colors nothing changes.
+- Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): stays a native button (with `download`, `blob:` and `data:` are kept).
 
 ## Examples
 
@@ -11374,7 +11375,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 | `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
 | `loading` | `boolean` | `false` | false | Shows loading state and disables activation. |
 | `icon` | `string` | `''` | false | Azion icon class for the leading icon. |
-| `href` | `string` | `''` | false | When set, renders as an anchor link. |
+| `href` | `string` | `''` | false | When set to a safe URL, renders as an anchor link; an unsafe URL is ignored (see Accessibility). |
 | `target` | `'_blank' \| '_self'` | `'_self'` | false | Link target when `href` is set. |
 
 ## Events
@@ -11403,6 +11404,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 - `motion-reduce:transition-none` on every transition class.
 - Pause, Stop, Hide (WCAG 2.2.2): the glow turns once and stops by itself after 4.2 seconds, resting on the static glow; `motion-reduce:animate-none` keeps it still from the start.
 - Touch target ≥40×40 px at `size: 'large'`; smaller sizes are for dense toolbars and surface a larger hit area via the surrounding container.
+- Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): stays a native button.
 
 ## Examples
 
@@ -11473,7 +11475,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 | `size` | `'small' \| 'medium' \| 'large'` | `'large'` | false | Size token; affects height, padding, and typography. |
 | `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
 | `loading` | `boolean` | `false` | false | Shows loading state and disables activation. |
-| `href` | `string` | `''` | false | When set, renders as a link (`<a>`). |
+| `href` | `string` | `''` | false | When set to a safe URL, renders as a link (`<a>`); an unsafe URL is ignored, and a `download` attribute keeps `blob:` / `data:` (see Accessibility). |
 | `target` | `'_blank' \| '_self'` | `'_self'` | false | Link target when `href` is set. |
 | `iconTransition` | `boolean` | `false` | false | Animates icon swaps with enter/leave transitions. |
 | `iconClass` | `string` | `''` | false | Extra classes applied to the icon glyph. |
@@ -11506,6 +11508,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 - `motion-reduce:transition-none` on animated states; the icon swap also starts from `scale-100` under reduced motion.
 - Accessible name: `aria-label` (static or bound) or `aria-labelledby` is mandatory; `webkit/require-accessible-name` flags an IconButton with neither, and an empty name renders no `aria-label` attribute.
 - Touch target ≥40×40 px where the control is interactive.
+- Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): stays a native button (with `download`, `blob:` and `data:` are kept).
 
 ## Examples
 
@@ -12627,7 +12630,7 @@ packages/webkit/src/components/ai/chat-message/
 | --- | --- | --- | --- | --- |
 | `index` | `number` | `—` | true | 1-based number of the source, in the order the response first cites it. |
 | `title` | `string` | `''` | false | Title of the source, shown in the tooltip and read in the accessible name. |
-| `href` | `string` | `''` | false | Where the reference points: `#<anchor>-source-<n>` for the `Sources` list under the response, or the source URL. Without it the number is plain text. |
+| `href` | `string` | `''` | false | Where the reference points: `#<anchor>-source-<n>` for the `Sources` list under the response, or the source URL. Without it, or when it is unsafe (`javascript:`, `data:`), the number is plain text. |
 
 ## Sub-components
 
@@ -12644,6 +12647,7 @@ _None. Exports: `"./citation"`. Composed DS components: `tooltip`._
 - Keyboard map: `Tab` reaches a linked citation; `Enter` follows it; focus shows the tooltip.
 - ARIA: `aria-label="Source 1: Real-Time Purge"` (the visible digit alone is not a name).
 - Touch target: inline text reference; exempt from the 24 px minimum as inline text (WCAG 2.5.8 exception).
+- Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): renders the unlinked note.
 
 ## Examples
 
@@ -14071,6 +14075,7 @@ shared with `StreamingResponse`._
 - Keyboard map: `Tab` to the trigger, `Enter` / `Space` toggles; `Tab` through the links.
 - ARIA: `button` with `aria-expanded` / `aria-controls`; the list is an `<ol aria-label="Sources">` so numbers are announced by position; the visual number chip is `aria-hidden`.
 - External links open in a new tab with `rel="noopener noreferrer"`.
+- Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): shows the title as plain text.
 
 ## Examples
 
@@ -14117,7 +14122,7 @@ shared with `StreamingResponse`._
 
 # Streaming Response
 
-> Renders a model's Markdown as it streams in (AI Elements Response / Streamdown), safely. The content is parsed by a small Markdown parser into a tree and rendered with Vue elements — never `v-html` — so raw HTML in model output shows as text, `javascript:` and `data:` links are dropped (only `http(s)`, `mailto`, relative and `#` links survive), and images render as their alt text. It covers what responses use: paragraphs, headings, bold, italic, inline code, links, lists, block quotes, GFM tables, rules and fenced code (rendered with `CodeBlock`, copyable). Incomplete Markdown is tolerated while streaming: an unclosed `**` renders bold to the end, an unclosed code fence stays a plain `<pre>` until it closes (no highlighting churn), and a half-written link shows its text only. Numbered citations `[1]` become `Citation` references resolved against `sources`, linked to the `Sources` list under the response through a shared `anchor`. A blinking caret marks the end while `streaming`; the region is `aria-busy` until the stream ends.
+> Renders a model's Markdown as it streams in (AI Elements Response / Streamdown), safely. The content is parsed by a small Markdown parser into a tree and rendered with Vue elements — never `v-html` — so raw HTML in model output shows as text, `javascript:`, `data:` and protocol-relative links are dropped (only `http(s)`, `mailto`, `tel`, relative and `#` links survive, checked by the shared `safeHref`), and images render as their alt text. It covers what responses use: paragraphs, headings, bold, italic, inline code, links, lists, block quotes, GFM tables, rules and fenced code (rendered with `CodeBlock`, copyable). Incomplete Markdown is tolerated while streaming: an unclosed `**` renders bold to the end, an unclosed code fence stays a plain `<pre>` until it closes (no highlighting churn), and a half-written link shows its text only. Numbered citations `[1]` become `Citation` references resolved against `sources`, linked to the `Sources` list under the response through a shared `anchor`. A blinking caret marks the end while `streaming`; the region is `aria-busy` until the stream ends.
 
 - Import: `import StreamingResponse from '@aziontech/webkit/streaming-response'`
 - Category: ai · Surface: app · Structure: monolithic
@@ -14152,7 +14157,7 @@ shared with `StreamingResponse`._
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `content` | `string` | `''` | false | The model's Markdown so far. Parsed into elements, never injected as HTML: raw tags render as text and only http(s), mailto, relative and hash links survive. |
+| `content` | `string` | `''` | false | The model's Markdown so far. Parsed into elements, never injected as HTML: raw tags render as text and only http(s), mailto, tel, relative and hash links survive. |
 | `streaming` | `boolean` | `false` | false | Tokens are still arriving: shows the caret, marks the region busy and keeps an unclosed code fence as plain text until it closes. |
 | `sources` | `SourcesItem[]` | `[]` | false | Sources the `[n]` citations in the content resolve against (title in the tooltip and the accessible name). |
 | `anchor` | `string` | `''` | false | The `anchor` of the `Sources` list under the response; citations link to its items. Empty renders unlinked numbers. |
@@ -29698,6 +29703,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none` on color transitions.
 - Touch target ≥40×40 px on interactive segments (padding + min height).
+- Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): points at `#`.
 
 ## Examples
 
@@ -30034,6 +30040,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 - `motion-reduce:animate-none` on `animate-popup-scale-*`; `motion-reduce:transition-none` on `transition-colors` for hover/selected states.
 - Teleported panel: the `role="menu"` panel binds `dir` and `lang` from the nearest `ConfigProvider` (`usePortalLocale`), so it lays out and is announced in the provider's direction and language although it renders under `body`.
 - Touch target ≥40×40 px on the trigger; option rows are 32 px tall and are activated by full-row click + keyboard, satisfying the 24×24 px target floor for in-menu items per WCAG 2.5.8.
+- Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): renders a plain item.
 
 ## Examples
 
@@ -30134,7 +30141,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 | `size` | `'small' \| 'medium' \| 'large'` | `'large'` | false | Size token; affects height and typography (large 40px, medium 32px, small 28px), matching Button. |
 | `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
 | `icon` | `string` | `''` | false | Azion icon class for the trailing icon; set shows it. Empty shows `az az-external-link` only when `target` is `_blank`. |
-| `href` | `string` | `''` | false | Destination URL for the anchor. Empty renders `#`. |
+| `href` | `string` | `''` | false | Destination URL for the anchor. Empty, or an unsafe URL (`javascript:`, `data:`), renders `#`. |
 | `target` | `'_blank' \| '_self'` | `'_self'` | false | Link target when navigating. |
 
 ## Events
@@ -30168,6 +30175,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
+- Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): points at `#`.
 
 ## Examples
 

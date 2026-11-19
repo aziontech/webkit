@@ -2,6 +2,7 @@
   import { computed, Transition, useAttrs } from 'vue'
 
   import { directionalIconClass } from '../../../utils/directional-icons'
+  import { safeHref } from '../../../utils/safe-href'
   import Spinner from '../../feedback/spinner/spinner.vue'
 
   export type IconButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger'
@@ -28,7 +29,7 @@
     disabled?: boolean
     /** Shows loading state and disables activation. */
     loading?: boolean
-    /** When set, renders as an anchor link. */
+    /** When set to a safe URL, renders as an anchor link; a javascript, data or other unsafe URL is ignored and the control stays a button. With a download attribute, blob and data URLs are kept. */
     href?: string
     /** Link target when `href` is set. */
     target?: IconButtonTarget
@@ -63,7 +64,11 @@
 
   const isInert = computed(() => props.disabled || props.loading)
 
-  const isAnchor = computed(() => Boolean(props.href))
+  const linkHref = computed(() =>
+    safeHref(props.href, attrs['download'] != null && attrs['download'] !== false)
+  )
+
+  const isAnchor = computed(() => linkHref.value !== null)
 
   const ROOT_CLASS =
     "group/icon-button [:where(&)]:relative inline-flex shrink-0 items-center justify-center rounded-(--shape-button) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:opacity-0 after:content-[''] after:transition-opacity after:duration-fast-02 after:ease-productive-entrance hover:before:opacity-100 active:after:opacity-100 motion-reduce:before:transition-none motion-reduce:after:transition-none disabled:before:hidden disabled:after:hidden not-data-[inert]:data-[variant=primary]:bg-(--primary) not-data-[inert]:data-[variant=primary]:text-(--primary-foreground) not-data-[inert]:data-[variant=primary]:before:bg-(--bg-hover) not-data-[inert]:data-[variant=primary]:after:bg-(--bg-active) not-data-[inert]:data-[variant=secondary]:bg-(--secondary) not-data-[inert]:data-[variant=secondary]:text-(--secondary-foreground) not-data-[inert]:data-[variant=secondary]:before:bg-(--bg-hover) not-data-[inert]:data-[variant=secondary]:after:bg-(--bg-active) not-data-[inert]:data-[variant=outline]:border not-data-[inert]:data-[variant=outline]:border-(--border-default) not-data-[inert]:data-[variant=outline]:bg-(--bg-surface) not-data-[inert]:data-[variant=outline]:text-(--text-default) not-data-[inert]:data-[variant=outline]:before:bg-(--bg-mask) not-data-[inert]:data-[variant=outline]:after:bg-(--bg-active) not-data-[inert]:data-[variant=ghost]:bg-transparent not-data-[inert]:data-[variant=ghost]:text-(--text-default) not-data-[inert]:data-[variant=ghost]:before:bg-(--bg-mask) not-data-[inert]:data-[variant=ghost]:after:bg-(--bg-active) not-data-[inert]:data-[variant=danger]:border not-data-[inert]:data-[variant=danger]:border-(--danger-border) not-data-[inert]:data-[variant=danger]:bg-(--danger) not-data-[inert]:data-[variant=danger]:text-(--danger-foreground) not-data-[inert]:data-[variant=danger]:before:bg-(--bg-hover) not-data-[inert]:data-[variant=danger]:after:bg-(--bg-active) data-[inert]:border-transparent data-[inert]:bg-(--bg-disabled) data-[inert]:text-(--text-disabled) data-[inert]:before:hidden data-[inert]:after:hidden data-[loading]:cursor-wait data-[disabled]:cursor-not-allowed data-[size=large]:size-10 data-[size=large]:text-button-lg data-[size=medium]:size-8 data-[size=medium]:text-button-md data-[size=small]:size-7 data-[size=small]:text-button-md"
@@ -84,7 +89,7 @@
   <a
     v-if="isAnchor"
     v-bind="$attrs"
-    :href="href"
+    :href="linkHref ?? undefined"
     :target="target"
     :rel="target === '_blank' ? 'noopener noreferrer' : undefined"
     :class="ROOT_CLASS"

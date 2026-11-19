@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { safeHref } from '../../../../utils/safe-href'
+
   defineOptions({
     name: 'FlowDiagramTitle',
     inheritAttrs: false
@@ -37,8 +39,8 @@
     class="flex min-h-11 min-w-0 items-center gap-(--spacing-xs) px-(--spacing-md) pt-(--spacing-2xs) pb-(--spacing-sm)"
   >
     <a
-      v-if="href"
-      :href="href"
+      v-if="safeHref(href)"
+      :href="safeHref(href) ?? undefined"
       :data-testid="`${testId}__link`"
       class="group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-control) text-label-md text-(--text-default) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
     >

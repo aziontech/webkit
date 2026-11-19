@@ -62,6 +62,7 @@
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text uses `--text-default` / `--text-muted`.
 - `motion-reduce:transition-none` on every transition.
 - Touch target ≥40×40 px — owned by `icon-button` and `split-button`.
+- Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): shows the link label as plain text.
 
 ## Right-to-left
 

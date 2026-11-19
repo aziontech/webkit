@@ -3,6 +3,7 @@
 
   import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
+  import { safeHref } from '../../../../utils/safe-href'
   import CopyButton from '../../../action/copy-button/copy-button.vue'
   import FlowDiagramAnchor from '../flow-diagram-anchor/flow-diagram-anchor.vue'
   import FlowDiagramDescription from '../flow-diagram-description/flow-diagram-description.vue'
@@ -135,7 +136,7 @@
               <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                 <a
                   v-if="field.href"
-                  :href="field.href"
+                  :href="safeHref(field.href) ?? undefined"
                   target="_blank"
                   rel="noopener noreferrer"
                   dir="auto"

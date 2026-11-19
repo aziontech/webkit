@@ -3,6 +3,7 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
+  import { safeHref } from '../../../utils/safe-href'
   import Button from '../../action/button/button.vue'
   import StatusIndicator, {
     type StatusIndicatorSeverity
@@ -167,7 +168,7 @@
                 />
                 <a
                   v-if="lane.statusLink"
-                  :href="lane.statusLink.href"
+                  :href="safeHref(lane.statusLink.href) ?? undefined"
                   :target="lane.statusLink.target"
                   :rel="relOf(lane.statusLink.target)"
                   :aria-label="statusLinkName(lane.statusLink)"

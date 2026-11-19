@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, nextTick, ref, useAttrs, useId, watch } from 'vue'
 
+  import { safeHref } from '../../../utils/safe-href'
   import Button from '../../action/button/button.vue'
   import Alert from '../../feedback/alert/alert.vue'
   import Field from '../../input/field/field.vue'
@@ -272,7 +273,7 @@
             {{ description }}
             <a
               v-if="descriptionLink"
-              :href="descriptionLink.href"
+              :href="safeHref(descriptionLink.href) ?? undefined"
               class="underline underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:rounded-(--shape-flat) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color) motion-reduce:transition-none"
               >{{ descriptionLink.label }}</a
             >{{ descriptionAfter }}

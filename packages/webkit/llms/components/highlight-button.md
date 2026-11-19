@@ -41,7 +41,7 @@
 | `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
 | `loading` | `boolean` | `false` | false | Shows loading state and disables activation. |
 | `icon` | `string` | `''` | false | Azion icon class for the leading icon. |
-| `href` | `string` | `''` | false | When set, renders as an anchor link. |
+| `href` | `string` | `''` | false | When set to a safe URL, renders as an anchor link; an unsafe URL is ignored (see Accessibility). |
 | `target` | `'_blank' \| '_self'` | `'_self'` | false | Link target when `href` is set. |
 
 ## Events
@@ -70,6 +70,7 @@
 - `motion-reduce:transition-none` on every transition class.
 - Pause, Stop, Hide (WCAG 2.2.2): the glow turns once and stops by itself after 4.2 seconds, resting on the static glow; `motion-reduce:animate-none` keeps it still from the start.
 - Touch target ≥40×40 px at `size: 'large'`; smaller sizes are for dense toolbars and surface a larger hit area via the surrounding container.
+- Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): stays a native button.
 
 ## Right-to-left
 

@@ -53,6 +53,7 @@
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `faq`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion; the accordion carries its own fallback.
 - Touch target ≥40×40 px — owned by the accordion triggers.
+- Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): shows the link label as plain text.
 
 ## Examples
 

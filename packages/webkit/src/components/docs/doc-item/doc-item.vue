@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { safeHref } from '../../../utils/safe-href'
   import Item from '../../content/item/item.vue'
   import ItemActions from '../../content/item/item-actions.vue'
   import ItemContent from '../../content/item/item-content.vue'
@@ -45,7 +46,7 @@
     default(): unknown
   }>()
 
-  const isLink = computed(() => props.href.length > 0)
+  const isLink = computed(() => safeHref(props.href) !== null)
 
   const isExternal = computed(
     () => props.target === '_blank' || /^(https?:)?\/\/|^mailto:/.test(props.href)
@@ -74,7 +75,7 @@
       <ItemTitle>
         <a
           v-if="isLink"
-          :href="href"
+          :href="safeHref(href) ?? undefined"
           :target="target"
           :rel="target === '_blank' ? 'noreferrer' : undefined"
           class="text-inherit no-underline after:absolute after:inset-0 after:content-[''] focus-visible:outline-none"

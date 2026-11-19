@@ -7,7 +7,7 @@ spec_version: 7
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6288
   node_id: 3374:6288
-checksum: 0169e30a8187e1d43bba92a032d182cbab95080a80e36fae9699da2d9b470d0a
+checksum: 82e8db5eec3acd558c4056096e2847ad36d52137bcd2a013a2860741944c5ff5
 created: 2026-05-25
 last_updated: 2026-11-15
 ---
@@ -121,6 +121,7 @@ Single segment in a breadcrumb trail. Ancestor segments use muted label text and
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none` on color transitions.
 - Touch target ≥40×40 px on interactive segments (padding + min height).
+- Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): points at `#`.
 
 ## Right-to-left
 

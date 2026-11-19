@@ -3,6 +3,7 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
+  import { safeHref } from '../../../utils/safe-href'
   import type { ThirdPartyLogoMark } from '../../content/third-party-logo/third-party-logo.vue'
   import CardGrid from '../../layout/card-grid/card-grid.vue'
   import CardGridCell from '../../layout/card-grid/card-grid-cell/card-grid-cell.vue'
@@ -120,7 +121,7 @@
             :padded="false"
           >
             <a
-              :href="item.href"
+              :href="safeHref(item.href) ?? undefined"
               :target="item.target"
               :rel="item.target === '_blank' ? 'noopener' : undefined"
               class="group/post flex h-full flex-col transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) motion-reduce:transition-none"

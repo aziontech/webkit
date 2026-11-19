@@ -5,6 +5,7 @@
   import { useLazyChunks } from '../../../composables/use-lazy-chunks'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
+  import { safeHref } from '../../../utils/safe-href'
   import Button from '../../action/button/button.vue'
   import Item from '../../content/item/item.vue'
   import ItemContent from '../../content/item/item-content.vue'
@@ -533,7 +534,7 @@
                       </span>
                       <ItemTitle>
                         <a
-                          :href="row.href"
+                          :href="safeHref(row.href) ?? undefined"
                           class="text-pretty text-label-lg text-(--text-default) after:absolute after:inset-0 after:content-['']"
                         >
                           {{ row.values[nameKey] }}
@@ -626,7 +627,7 @@
                         />
                       </span>
                       <a
-                        :href="row.href"
+                        :href="safeHref(row.href) ?? undefined"
                         class="min-w-0 whitespace-normal text-pretty text-label-lg text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
                       >
                         {{ row.values[column.key] }}

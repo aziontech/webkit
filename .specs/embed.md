@@ -4,7 +4,7 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: 19997ca5fade11875e12eac59d8393a5470685047a9cf24403493bde33fce15a
+checksum: c894e6980b6e9291948a5c781c6a0cd69930853bd06a0c1c251d464361b69550
 created: 2026-09-22
 last_updated: 2026-11-18
 ---
@@ -65,7 +65,7 @@ A responsive `iframe` for third-party content — a demo, a player, a status pag
 
 | Prop    | Type                            | Default   | Required | JSDoc                                                                    |
 | ------- | ------------------------------- | --------- | -------- | ------------------------------------------------------------------------ |
-| `src`   | `string`                        | `—`       | true     | URL of the document to embed.                                            |
+| `src`   | `string`                        | `—`       | true     | URL of the document to embed. Only an absolute `http(s)` URL is framed; anything else renders the title as text. |
 | `title` | `string`                        | `—`       | true     | Accessible name for the embedded document, announced before its content. |
 | `ratio` | `'video' \| 'square' \| 'wide'` | `'video'` | false    | Aspect ratio the frame holds while it scales.                            |
 
@@ -79,7 +79,7 @@ A responsive `iframe` for third-party content — a demo, a player, a status pag
 
 ## States
 
-- Visual states: `default`
+- Visual states: `default`, `unavailable` (the `src` is not an absolute `http(s)` URL: no `iframe`, the `title` shows as muted text in the reserved box)
 - `data-ratio` mirrors the `ratio` prop and drives the frame's aspect ratio
 - The frame reserves its aspect ratio before the document loads, so the page does not shift when it arrives
 
@@ -108,6 +108,7 @@ _none_
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the embedded document carries its own contrast; the frame contributes only its border.
 - `motion-reduce:transition-none motion-reduce:transform-none` — not applicable, the frame is static.
 - Touch target ≥40×40 px — not applicable; any control belongs to the embedded document.
+- Only an absolute `http(s)` `src` is framed, always with a fixed `sandbox` (no top-level navigation); any other `src` shows the `title` as text.
 
 ## Examples
 

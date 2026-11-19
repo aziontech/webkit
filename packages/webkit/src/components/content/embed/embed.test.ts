@@ -2,12 +2,13 @@ import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
 import { expectNoA11yViolations } from '../../../test/axe'
+import { UNSAFE_URLS } from '../../../test/unsafe-urls'
 import Embed from './embed.vue'
 
 const TESTID = 'embed'
 
 const props = {
-  src: 'about:blank',
+  src: 'https://example.com/demo',
   title: 'An interactive demo of an edge function responding to a request'
 }
 
@@ -77,6 +78,25 @@ describe('Embed', () => {
     expect(root.tagName).toBe('SECTION')
     expect(root.className).toContain('max-w-(--container-4xl)')
   })
+
+  it('sandboxes the frame without top-level navigation', () => {
+    const { container } = render(Embed, { props })
+    const sandbox = container.querySelector('iframe')?.getAttribute('sandbox')?.split(' ') ?? []
+
+    expect(sandbox).toContain('allow-scripts')
+    expect(sandbox).not.toContain('allow-top-navigation')
+    expect(sandbox).not.toContain('allow-top-navigation-by-user-activation')
+  })
+
+  it.each([...UNSAFE_URLS, 'about:blank', '/demo', '//example.com/demo', 'ftp://example.com'])(
+    'renders the title as text instead of framing %j',
+    (src) => {
+      const { container, getByTestId } = render(Embed, { props: { ...props, src } })
+
+      expect(container.querySelector('iframe')).toBeNull()
+      expect(getByTestId(`${TESTID}__unavailable`)).toHaveTextContent(props.title)
+    }
+  )
 
   it('has no a11y violations', async () => {
     const { container } = render(Embed, { props })

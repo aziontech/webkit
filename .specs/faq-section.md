@@ -6,7 +6,7 @@ status: implemented
 spec_version: 2
 created: 2026-11-05
 last_updated: 2026-11-16
-checksum: 4a9768e37a1361e546770a3149863dea609a73011f790bee9dd417a2e84f577f
+checksum: 41961c9f710cefb45f6d642c30c4411ec2373132bf0cbd375033e1eda995711e
 ---
 
 # FaqSection — Component Spec
@@ -109,6 +109,7 @@ _none_
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `faq`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion; the accordion carries its own fallback.
 - Touch target ≥40×40 px — owned by the accordion triggers.
+- Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): shows the link label as plain text.
 
 ## Examples
 

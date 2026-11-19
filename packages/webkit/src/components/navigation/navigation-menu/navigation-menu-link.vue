@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { safeHref } from '../../../utils/safe-href'
   import NavigationMenuTrigger from './navigation-menu-trigger.vue'
 
   defineOptions({ name: 'NavigationMenuLink', inheritAttrs: false })
@@ -24,7 +25,7 @@
 <template>
   <NavigationMenuTrigger
     v-bind="$attrs"
-    :href="href"
+    :href="safeHref(href) ?? undefined"
     :active="active"
     :close-on-click="closeOnClick"
   >

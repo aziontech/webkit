@@ -82,7 +82,7 @@
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "When set, renders as a link (`<a>`)."
+   "doc": "When set to a safe URL, renders as a link (`<a>`); an unsafe URL is ignored, and a `download` attribute keeps `blob:` / `data:` (see Accessibility)."
   },
   {
    "name": "target",

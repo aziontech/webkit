@@ -2,6 +2,7 @@ import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
 import { expectNoA11yViolations } from '../../../test/axe'
+import { UNSAFE_URLS } from '../../../test/unsafe-urls'
 import Citation from './citation.vue'
 
 describe('Citation', () => {
@@ -37,6 +38,12 @@ describe('Citation', () => {
     const { getByRole, queryByRole } = render(Citation, { props: { index: 3 } })
     expect(queryByRole('link')).toBeNull()
     expect(getByRole('note', { name: 'Source 3' })).toBeTruthy()
+  })
+
+  it.each(UNSAFE_URLS)('renders the unlinked note for the unsafe href %j', (href) => {
+    const { getByRole, queryByRole } = render(Citation, { props: { index: 2, href } })
+    expect(queryByRole('link')).toBeNull()
+    expect(getByRole('note', { name: 'Source 2' })).toBeTruthy()
   })
 
   it('has no axe violations', async () => {

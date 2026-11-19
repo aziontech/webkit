@@ -4,6 +4,7 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import { cn } from '../../../utils/cn'
+  import { safeHref } from '../../../utils/safe-href'
   import Tag, { type TagSeverity, type TagVariant } from '../tag/tag.vue'
 
   defineOptions({
@@ -140,8 +141,8 @@
               :data-testid="`${testId}__title`"
             >
               <a
-                v-if="href"
-                :href="href"
+                v-if="safeHref(href)"
+                :href="safeHref(href) ?? undefined"
                 class="text-(--text-default) no-underline outline-none after:absolute after:inset-0 after:content-[''] focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-(--ring-color)"
                 ><bdi>{{ title }}</bdi></a
               >

@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { safeHref } from '../../../utils/safe-href'
   import Carousel from '../../content/carousel/carousel.vue'
   import CarouselItem from '../../content/carousel/carousel-item/carousel-item.vue'
   import CarouselNext from '../../content/carousel/carousel-next/carousel-next.vue'
@@ -100,7 +101,7 @@
           <h3 class="m-0 text-heading-sm text-balance text-(--text-default)">
             <a
               v-if="item.href"
-              :href="item.href"
+              :href="safeHref(item.href) ?? undefined"
               class="text-inherit no-underline after:absolute after:inset-0 after:rounded-(--shape-card) focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-(--ring-color)"
               >{{ item.title }}</a
             >

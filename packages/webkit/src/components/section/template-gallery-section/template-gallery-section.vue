@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { safeHref } from '../../../utils/safe-href'
   import Button from '../../action/button/button.vue'
   import Texture from '../../content/texture/texture.vue'
   import CardGrid from '../../layout/card-grid/card-grid.vue'
@@ -158,7 +159,7 @@
                     </div>
                     <a
                       v-if="template.href"
-                      :href="template.href"
+                      :href="safeHref(template.href) ?? undefined"
                       :tabindex="deployLabel ? -1 : undefined"
                       :aria-hidden="deployLabel ? 'true' : undefined"
                       :aria-label="deployLabel ? undefined : template.title"

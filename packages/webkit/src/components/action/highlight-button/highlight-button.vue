@@ -2,6 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import { directionalIconClass } from '../../../utils/directional-icons'
+  import { safeHref } from '../../../utils/safe-href'
   import Spinner from '../../feedback/spinner/spinner.vue'
 
   export type HighlightButtonSize = 'small' | 'medium' | 'large'
@@ -23,7 +24,7 @@
     loading?: boolean
     /** Azion icon class for the leading icon. */
     icon?: string
-    /** When set, renders as an anchor link. */
+    /** When set to a safe URL, renders as an anchor link; a javascript, data or other unsafe URL is ignored and the control stays a button. */
     href?: string
     /** Link target when href is set. */
     target?: HighlightButtonTarget
@@ -50,7 +51,9 @@
 
   const isInert = computed(() => props.disabled || props.loading)
 
-  const isAnchor = computed(() => Boolean(props.href))
+  const linkHref = computed(() => safeHref(props.href))
+
+  const isAnchor = computed(() => linkHref.value !== null)
 
   const ROOT_CLASS =
     'group/highlight relative inline-flex items-center justify-center isolate overflow-hidden whitespace-nowrap p-px ' +
@@ -112,7 +115,7 @@
   <a
     v-if="isAnchor"
     v-bind="$attrs"
-    :href="href"
+    :href="linkHref ?? undefined"
     :target="target"
     :rel="target === '_blank' ? 'noopener noreferrer' : undefined"
     :class="ROOT_CLASS"

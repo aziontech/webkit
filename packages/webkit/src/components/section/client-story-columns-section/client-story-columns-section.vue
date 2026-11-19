@@ -4,6 +4,7 @@
   import { clientBrand } from '../../../assets/logos/clients/brands'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
+  import { safeHref } from '../../../utils/safe-href'
   import type { ThirdPartyLogoTreatment } from '../../content/third-party-logo/third-party-logo.vue'
   import Module from '../../layout/module/module.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
@@ -176,7 +177,7 @@
               class="h-full max-lg:border-0!"
             >
               <a
-                :href="cell.href"
+                :href="safeHref(cell.href) ?? undefined"
                 :aria-label="`${story}, ${cell.name}: ${cell.story}`"
                 class="@container relative block h-full overflow-hidden focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:outline-none focus-visible:ring-inset"
               >
@@ -267,7 +268,7 @@
                 </template>
               </LogoWall>
               <a
-                :href="cell.href"
+                :href="safeHref(cell.href) ?? undefined"
                 tabindex="-1"
                 aria-hidden="true"
                 class="relative isolate flex-1 bg-(--bg-canvas) p-(--spacing-lg) before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:bg-(--bg-hover) before:opacity-0 before:transition-opacity before:duration-moderate-01 before:ease-productive-entrance group-hover/card:before:opacity-100 motion-reduce:before:transition-none"

@@ -3,6 +3,7 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
+  import { safeHref } from '../../../utils/safe-href'
 
   /**
    * The previous / next pair closing a docs page. A side with no destination
@@ -58,7 +59,7 @@
   >
     <a
       v-if="previous"
-      :href="previous.href"
+      :href="safeHref(previous.href) ?? undefined"
       :data-testid="`${testId}__previous`"
       class="group flex flex-col items-start gap-(--spacing-2xs) rounded-(--shape-control) p-(--spacing-xs) no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color)"
       @click="emit('navigate', $event, previous)"
@@ -77,7 +78,7 @@
     <span v-else />
     <a
       v-if="next"
-      :href="next.href"
+      :href="safeHref(next.href) ?? undefined"
       :data-testid="`${testId}__next`"
       class="group flex flex-col items-end gap-(--spacing-2xs) rounded-(--shape-control) p-(--spacing-xs) no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color)"
       @click="emit('navigate', $event, next)"

@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { safeHref } from '../../../utils/safe-href'
+
   defineOptions({
     name: 'FeatureItem',
     inheritAttrs: false
@@ -40,7 +42,7 @@
 
   const hasDescription = () => Boolean(slots.default) || props.description.length > 0
 
-  const isLink = computed<boolean>(() => props.href.length > 0)
+  const isLink = computed<boolean>(() => safeHref(props.href) !== null)
 </script>
 
 <template>

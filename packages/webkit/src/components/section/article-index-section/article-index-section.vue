@@ -3,6 +3,7 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
+  import { safeHref } from '../../../utils/safe-href'
   import Button from '../../action/button/button.vue'
   import ToggleGroup from '../../action/toggle-group/toggle-group.vue'
   import Avatar from '../../content/avatar/avatar.vue'
@@ -436,7 +437,7 @@
                       <span class="text-overline-sm text-(--text-muted)">{{ item.meta }}</span>
                       <h3 class="m-0">
                         <a
-                          :href="item.href"
+                          :href="safeHref(item.href) ?? undefined"
                           :target="item.target"
                           :rel="item.target === '_blank' ? 'noopener' : undefined"
                           class="text-pretty text-heading-sm text-(--text-default) no-underline after:absolute after:inset-0 after:content-[''] focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-(--ring-color)"

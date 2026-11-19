@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, onBeforeUnmount, useAttrs, useSlots, watch } from 'vue'
 
+  import { safeHref } from '../../../../utils/safe-href'
   import { useDropdownContext } from '../composables/use-dropdown-context'
   import type { DropdownMenuItemType } from '../injection-key'
   import { DropdownMenuGroupInjectionKey } from '../injection-key'
@@ -56,7 +57,8 @@
   )
 
   const hasCommand = computed(() => props.command.length > 0)
-  const isLink = computed(() => props.href.length > 0 && !props.disabled)
+  const linkHref = computed(() => safeHref(props.href))
+  const isLink = computed(() => linkHref.value !== null && !props.disabled)
   const hasLeading = () => Boolean(slots['leading'])
   const hasTrailing = () => Boolean(slots['trailing'])
 
@@ -133,7 +135,7 @@
     <component
       :is="isLink ? 'a' : 'div'"
       v-bind="attrs"
-      :href="isLink ? href : undefined"
+      :href="isLink ? (linkHref ?? undefined) : undefined"
       :role="role"
       tabindex="-1"
       :aria-checked="ariaChecked"

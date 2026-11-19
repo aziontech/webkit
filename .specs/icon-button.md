@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: 3b6590d0c99e0c11c3668226e9f91c0a95ddca4fcf348d5a9854716445acbd3c
+checksum: 329cb0bd71fecf4f1334139ea35d8bd354205ac7a50576e682baf25ef307f974
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -81,7 +81,7 @@ A square control that triggers an action with a glyph and no visible text: close
 | `size`           | `'small' \| 'medium' \| 'large'`                               | `'large'`   | false    | Size token; affects height, padding, and typography.                                                                                                                        |
 | `disabled`       | `boolean`                                                      | `false`     | false    | Disables interaction and applies disabled tokens.                                                                                                                           |
 | `loading`        | `boolean`                                                      | `false`     | false    | Shows loading state and disables activation.                                                                                                                                |
-| `href`           | `string`                                                       | `''`        | false    | When set, renders as a link (`<a>`).                                                                                                                                        |
+| `href`           | `string`                                                       | `''`        | false    | When set to a safe URL, renders as a link (`<a>`); an unsafe URL is ignored, and a `download` attribute keeps `blob:` / `data:` (see Accessibility).                                                                                                                                        |
 | `target`         | `'_blank' \| '_self'`                                          | `'_self'`   | false    | Link target when `href` is set.                                                                                                                                             |
 | `iconTransition` | `boolean`                                                      | `false`     | false    | Animates icon swaps with enter/leave transitions.                                                                                                                           |
 | `iconClass`      | `string`                                                       | `''`        | false    | Extra classes applied to the icon glyph.                                                                                                                                    |
@@ -138,6 +138,7 @@ A square control that triggers an action with a glyph and no visible text: close
 - `motion-reduce:transition-none` on animated states; the icon swap also starts from `scale-100` under reduced motion.
 - Accessible name: `aria-label` (static or bound) or `aria-labelledby` is mandatory; `webkit/require-accessible-name` flags an IconButton with neither, and an empty name renders no `aria-label` attribute.
 - Touch target ≥40×40 px where the control is interactive.
+- Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): stays a native button (with `download`, `blob:` and `data:` are kept).
 
 ## Right-to-left
 

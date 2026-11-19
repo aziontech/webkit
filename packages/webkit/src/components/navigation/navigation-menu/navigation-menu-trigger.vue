@@ -2,6 +2,7 @@
   import { computed, onMounted, onUnmounted, ref, useAttrs, watch } from 'vue'
 
   import { cn } from '../../../utils/cn'
+  import { safeHref } from '../../../utils/safe-href'
   import {
     useNavigationMenuContext,
     useOptionalNavigationMenuItemContext
@@ -180,7 +181,7 @@
     :is="componentTag"
     ref="controlEl"
     v-bind="passthroughAttrs"
-    :href="isLink ? href : undefined"
+    :href="isLink ? (safeHref(href) ?? undefined) : undefined"
     :type="isLink ? undefined : 'button'"
     :class="cn(ROOT_CLASS, attrs.class as string | undefined)"
     :data-testid="testId"

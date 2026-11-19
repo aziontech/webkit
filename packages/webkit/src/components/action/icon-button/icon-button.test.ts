@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 
 import Default from '../../../../examples/icon-button/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
+import { UNSAFE_URLS } from '../../../test/unsafe-urls'
 import IconButton from './icon-button.vue'
 
 const VARIANTS = ['primary', 'secondary', 'outline', 'ghost', 'danger'] as const
@@ -18,6 +19,14 @@ describe('IconButton', () => {
     expect(el.tagName).toBe('BUTTON')
     expect(el).toHaveAttribute('type', 'button')
     expect(el).toHaveAttribute('aria-label', 'Add')
+  })
+
+  it.each(UNSAFE_URLS)('stays a native button for the unsafe href %j', (href) => {
+    const { getByTestId } = render(IconButton, {
+      props: { icon: 'az az-external-link', ariaLabel: 'Open', href }
+    })
+    expect(getByTestId('icon-button').tagName).toBe('BUTTON')
+    expect(getByTestId('icon-button')).not.toHaveAttribute('href')
   })
 
   it('honors a consumer-provided data-testid', () => {

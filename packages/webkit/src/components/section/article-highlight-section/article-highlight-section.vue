@@ -5,6 +5,7 @@
   import { eventDirection, logicalArrowKey } from '../../../composables/use-direction'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
+  import { safeHref } from '../../../utils/safe-href'
   import Button from '../../action/button/button.vue'
   import IconButton from '../../action/icon-button/icon-button.vue'
   import type { CardGridColumns } from '../../layout/card-grid/card-grid.vue'
@@ -295,7 +296,7 @@
                     <span class="text-overline-sm text-(--text-muted)">{{ current.meta }}</span>
                     <h2 class="m-0 text-balance text-heading-lg text-(--text-default)">
                       <a
-                        :href="current.href"
+                        :href="safeHref(current.href) ?? undefined"
                         class="text-inherit no-underline after:absolute after:inset-0 after:content-[''] focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-(--ring-color)"
                       >
                         {{ current.title }}

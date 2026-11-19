@@ -4,6 +4,7 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
+  import { safeHref } from '../../../utils/safe-href'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
   import { type ChartColor, colorToken, formatCompact, isFiniteNumber } from '../lib'
@@ -221,7 +222,7 @@
       >
         <component
           :is="row.tag"
-          :href="row.href || undefined"
+          :href="safeHref(row.href) ?? undefined"
           :type="row.tag === 'button' ? 'button' : undefined"
           :data-interactive="row.interactive || null"
           :data-testid="`${testId}__row`"

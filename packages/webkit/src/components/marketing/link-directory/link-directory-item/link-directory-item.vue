@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { safeHref } from '../../../../utils/safe-href'
+
   defineOptions({
     name: 'LinkDirectoryItem',
     inheritAttrs: false
@@ -42,7 +44,7 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'link-directory-item'
   )
 
-  const linked = computed(() => props.href.length > 0)
+  const linked = computed(() => safeHref(props.href) !== null)
 
   const onClick = (event: MouseEvent) => {
     if (!linked.value) return

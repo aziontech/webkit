@@ -3,6 +3,7 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
+  import { safeHref } from '../../../utils/safe-href'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
 
   defineOptions({
@@ -15,7 +16,7 @@
     index: number
     /** Title of the source, shown in the tooltip and read in the accessible name. */
     title?: string
-    /** Where the reference points: `#<anchor>-source-<n>` for the `Sources` list under the response, or the source URL. Without it the number is plain text. */
+    /** Where the reference points: `#<anchor>-source-<n>` for the `Sources` list under the response, or the source URL. Without it, or when it is not a safe URL (javascript, data and other script schemes), the number is plain text. */
     href?: string
   }
 
@@ -33,7 +34,8 @@
       ? t('citation.label', { index: props.index, title: props.title })
       : t('citation.labelUntitled', { index: props.index })
   )
-  const external = computed<boolean>(() => /^https?:\/\//i.test(props.href))
+  const linkHref = computed<string | null>(() => safeHref(props.href))
+  const external = computed<boolean>(() => /^https?:\/\//i.test(linkHref.value ?? ''))
 </script>
 
 <template>
@@ -42,9 +44,9 @@
     :disabled="!title"
   >
     <a
-      v-if="href"
+      v-if="linkHref"
       v-bind="$attrs"
-      :href="href"
+      :href="linkHref ?? undefined"
       :target="external ? '_blank' : undefined"
       :rel="external ? 'noopener noreferrer' : undefined"
       :aria-label="label"

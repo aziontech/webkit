@@ -3,6 +3,7 @@ import { render } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { expectNoA11yViolations } from '../../../test/axe'
+import { UNSAFE_MARKDOWN_HREFS } from '../../../test/unsafe-urls'
 import { toast } from '../../feedback/toast/composables/use-toast-store'
 import ArticleBodySection from './article-body-section.vue'
 
@@ -256,6 +257,12 @@ describe('ArticleBodySection', () => {
       '_blank',
       'noopener'
     )
+  })
+
+  it.each(UNSAFE_MARKDOWN_HREFS)('renders a body link to %j as plain text', (href) => {
+    const { getByText, queryByRole } = band({ body: `Open the [trap](${href}) now.` })
+    expect(queryByRole('link', { name: 'trap' })).toBeNull()
+    expect(getByText(/trap/).closest('a')).toBeNull()
   })
 
   it('renders code blocks, numbered lists and inline runs', () => {

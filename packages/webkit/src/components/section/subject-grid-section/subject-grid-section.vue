@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { safeHref } from '../../../utils/safe-href'
   import Button from '../../action/button/button.vue'
   import CardGrid from '../../layout/card-grid/card-grid.vue'
   import Module from '../../layout/module/module.vue'
@@ -144,7 +145,7 @@
                   :key="article.href"
                 >
                   <a
-                    :href="article.href"
+                    :href="safeHref(article.href) ?? undefined"
                     class="text-body-sm text-(--text-muted) underline underline-offset-2 transition-colors duration-150 ease-out hover:text-(--text-default) focus-visible:rounded-(--shape-flat) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color) motion-reduce:transition-none"
                   >
                     {{ article.label }}

@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { safeHref } from '../../../utils/safe-href'
+
   /**
    * A navigational tile. It draws no rule and no radius of its own — DocCardGroup
    * frames the set and its 1px gaps rule between cells — but it must paint an
@@ -46,7 +48,7 @@
     icon(): unknown
   }>()
 
-  const isLink = computed(() => props.href.length > 0)
+  const isLink = computed(() => safeHref(props.href) !== null)
 
   const isExternal = computed(
     () => props.target === '_blank' || /^(https?:)?\/\/|^mailto:/.test(props.href)
