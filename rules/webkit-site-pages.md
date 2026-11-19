@@ -10,7 +10,7 @@ How a section is found, imported and fed is rule `webkit-sections`; how the colu
 is rule `webkit-page-layout`. This rule says what a page may put on that column, and why. The
 skill that runs a page task end to end is `/webkit-site-pages`.
 
-Each rule is written the same way: the rule, **Incorrect**, **Correct**, **Why** and
+Each rule is written the same way: the rule, **Don't**, **Do**, **Why** and
 **Exceptions** (`none` when there are none).
 
 ## Where the content comes from
