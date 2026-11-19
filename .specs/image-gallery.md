@@ -2,7 +2,7 @@
 name: image-gallery
 category: content
 structure: monolithic
-status: approved
+status: implemented
 spec_version: 1
 template: 2
 created: 2026-11-19

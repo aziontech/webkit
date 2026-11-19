@@ -29923,6 +29923,54 @@
    "examplesFile": "catalog/examples/file-preview.json",
    "docsFile": "catalog/components/file-preview.json"
   },
+  "image-gallery": {
+   "import": "@aziontech/webkit/image-gallery",
+   "target": "./src/components/content/image-gallery/image-gallery.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/image-gallery",
+   "category": "content",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "items",
+     "type": "ImageGalleryItem[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Images to show, each from a URL (`src`) or base64 `data` with its `mimeType`."
+    },
+    {
+     "name": "loading",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Images are still generating: placeholders fill the grid after the images already in `items`, up to `expectedCount`."
+    },
+    {
+     "name": "expectedCount",
+     "type": "number",
+     "default": "1",
+     "required": "false",
+     "doc": "Number of images expected while `loading`; the grid shows a placeholder for each one not in `items` yet."
+    },
+    {
+     "name": "error",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Why the images could not load or generate. Set, the gallery shows the error state in place of the grid, with this text under its title."
+    }
+   ],
+   "events": [
+    {
+     "name": "download",
+     "payload": "(event: MouseEvent, item: ImageGalleryItem)",
+     "notes": "Download in the viewer was pressed for `item`. Download is a link with the `download` attribute, so the browser saves a same-origin, `blob:` or `data:` image unless the handler calls `preventDefault()`; browsers ignore `download` on a cross-origin URL and open it instead, so an app with cross-origin images handles this event (`preventDefault()` and its own download)."
+    }
+   ],
+   "surface": "app",
+   "examplesFile": "catalog/examples/image-gallery.json",
+   "docsFile": "catalog/components/image-gallery.json"
+  },
   "attribute-editor": {
    "import": "@aziontech/webkit/attribute-editor",
    "target": "./src/components/input/attribute-editor/attribute-editor.vue",

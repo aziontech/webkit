@@ -234,24 +234,26 @@ describe('ImageGallery', () => {
     expect(view.getByRole('list', { name: 'Imagens' })).toBeTruthy()
     expect(view.getByRole('button', { name: 'Imagem 1 de 2' })).toBeTruthy()
   })
-})
 
-describe('image-source', () => {
-  it('prefers src, keeps a data URL as is and defaults the media type', () => {
-    expect(imageSource({ src: 'https://example.com/a.png', data: PIXEL })).toBe(
-      'https://example.com/a.png'
-    )
-    expect(imageSource({ data: 'data:image/webp;base64,AAAA' })).toBe('data:image/webp;base64,AAAA')
-    expect(imageSource({ data: 'AAAA' })).toBe('data:image/png;base64,AAAA')
-    expect(imageSource({})).toBe('')
-  })
+  describe('image-source', () => {
+    it('prefers src, keeps a data URL as is and defaults the media type', () => {
+      expect(imageSource({ src: 'https://example.com/a.png', data: PIXEL })).toBe(
+        'https://example.com/a.png'
+      )
+      expect(imageSource({ data: 'data:image/webp;base64,AAAA' })).toBe(
+        'data:image/webp;base64,AAAA'
+      )
+      expect(imageSource({ data: 'AAAA' })).toBe('data:image/png;base64,AAAA')
+      expect(imageSource({})).toBe('')
+    })
 
-  it('names the download from the item, the URL or the media type', () => {
-    expect(imageFileName({ fileName: 'cover.png' }, 1)).toBe('cover.png')
-    expect(imageFileName({ src: 'https://example.com/images/harbor.jpg?v=2' }, 2)).toBe(
-      'harbor.jpg'
-    )
-    expect(imageFileName({ data: 'AAAA', mimeType: 'image/jpeg' }, 3)).toBe('image-3.jpg')
-    expect(imageFileName({ data: 'data:image/webp;base64,AAAA' }, 4)).toBe('image-4.webp')
+    it('names the download from the item, the URL or the media type', () => {
+      expect(imageFileName({ fileName: 'cover.png' }, 1)).toBe('cover.png')
+      expect(imageFileName({ src: 'https://example.com/images/harbor.jpg?v=2' }, 2)).toBe(
+        'harbor.jpg'
+      )
+      expect(imageFileName({ data: 'AAAA', mimeType: 'image/jpeg' }, 3)).toBe('image-3.jpg')
+      expect(imageFileName({ data: 'data:image/webp;base64,AAAA' }, 4)).toBe('image-4.webp')
+    })
   })
 })

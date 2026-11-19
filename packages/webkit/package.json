@@ -4115,6 +4115,9 @@
       "file-preview": [
         "./types/components/content/file-preview/file-preview.vue.d.ts"
       ],
+      "image-gallery": [
+        "./types/components/content/image-gallery/image-gallery.vue.d.ts"
+      ],
       "attribute-editor": [
         "./types/components/input/attribute-editor/attribute-editor.vue.d.ts"
       ],

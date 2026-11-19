@@ -1309,7 +1309,7 @@
   {
     "name": "image-gallery",
     "path": "src/components/content/image-gallery/image-gallery.vue",
-    "limit": "30 KB"
+    "limit": "26.7 KB"
   },
   {
     "name": "overflow-count",
