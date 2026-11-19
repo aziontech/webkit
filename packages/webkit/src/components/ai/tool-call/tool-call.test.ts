@@ -18,14 +18,31 @@ describe('ToolCall', () => {
 
   it.each([
     ['pending', 'Waiting'],
+    ['streaming', 'Preparing'],
     ['running', 'Running'],
     ['success', 'Completed'],
     ['error', 'Failed'],
+    ['canceled', 'Canceled'],
     ['denied', 'Denied']
   ] as const)('shows %s as text in a status region', (status, text) => {
     const { getByTestId, getByRole } = render(ToolCall, { props: { name: 'purge_urls', status } })
     expect(getByTestId('tool-call')).toHaveAttribute('data-status', status)
     expect(getByRole('status')).toHaveTextContent(text)
+  })
+
+  it('tells preparing apart from running in text and busy state', async () => {
+    const { getByRole, getByTestId, rerender } = render(ToolCall, {
+      props: { name: 'create_cache_rule', status: 'streaming' }
+    })
+    expect(getByRole('status')).toHaveTextContent('Preparing')
+    expect(getByTestId('tool-call__status')).toHaveAttribute('aria-busy', 'true')
+    expect(getByTestId('tool-call__status')).toHaveAttribute('data-severity', 'neutral')
+    await rerender({ name: 'create_cache_rule', status: 'running' })
+    expect(getByRole('status')).toHaveTextContent('Running')
+    expect(getByTestId('tool-call__status')).toHaveAttribute('data-severity', 'info')
+    await rerender({ name: 'create_cache_rule', status: 'canceled' })
+    expect(getByRole('status')).toHaveTextContent('Canceled')
+    expect(getByTestId('tool-call__status')).not.toHaveAttribute('aria-busy')
   })
 
   it('shows the name as code and the title as text', () => {

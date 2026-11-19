@@ -13595,7 +13595,7 @@ types `SuggestionGroupItem`, `SuggestionGroupOrientation`._
 
 # Tool Approval
 
-> A user-authorized action in a conversation (Cloudscape user-authorized actions, AI Elements Confirmation): the agent proposes something with consequences — call a tool, run a command, deploy, delete — and the reader approves or denies it before anything runs. The card states the action as a question (``Allow `npm test`?``), says what will happen, shows exactly what will run in its body (a `CodeBlock` with the command, `KeyValueList` with parameters), and offers Deny and Approve. Once decided, the buttons give way to the outcome in text (`Approved`, `Denied`, `Request expired`) so the decision stays in the thread. Irreversible actions (`variant="danger"`) turn Approve destructive and can require typing a phrase first. It is a card in the conversation, not a dialog: it does not trap focus and does not take initial focus; `focus()` moves focus to its heading when the owner wants to bring the reader to it.
+> A user-authorized action in a conversation (Cloudscape user-authorized actions, AI Elements Confirmation): the agent proposes something with consequences — call a tool, run a command, deploy, delete — and the reader approves or denies it before anything runs. The card states the action as a question (``Allow `npm test`?``), says what will happen, shows exactly what will run in its body (a `CodeBlock` with the command, `KeyValueList` with parameters), and offers Deny and Approve. Once decided, the buttons give way to the outcome in text (`Approved`, `Denied`, `Request expired`) so the decision stays in the thread. Irreversible actions (`variant="danger"`) turn Approve destructive and can require typing a phrase first. With `editable` (opt-in) the reader corrects the call's arguments in a code field before approving; the edit comes back through `v-model` and `approve`. It is a card in the conversation, not a dialog: it does not trap focus and does not take initial focus; `focus()` moves focus to its heading when the owner wants to bring the reader to it.
 
 - Import: `import ToolApproval from '@aziontech/webkit/tool-approval'`
 - Category: ai · Surface: app · Structure: monolithic
@@ -13605,6 +13605,7 @@ types `SuggestionGroupItem`, `SuggestionGroupOrientation`._
 - Use ToolApproval only inside an AI conversation when an agent asks permission to run a tool or command; for a person confirming an action they started use ConfirmDialog.
 - One-time authorization of a consequential action proposed by an agent: a production deployment, a purge, a command.
 - An irreversible action (delete): add `confirmationPhrase`.
+- Arguments the reader may want to correct first (a URL list, a limit): add `editable`.
 
 ## Do
 
@@ -13613,6 +13614,8 @@ types `SuggestionGroupItem`, `SuggestionGroupOrientation`._
 - Never pre-focus or pre-select Approve for a risky action.
 - Do not leave a request pending forever: expire it (`status="expired"`) and have the assistant say nothing ran.
 - After Deny, the assistant acknowledges in the conversation ("Skipping that step.").
+- With `editable`, bind `v-model` to the arguments as formatted JSON, set `invalid` while they do not parse, and run the call with the `input` that `approve` carries.
+- Keep `editable` off for irreversible actions unless the edit is the point: the phrase confirms the target, the edit can change it.
 
 ## Don’t
 
@@ -13639,12 +13642,15 @@ types `SuggestionGroupItem`, `SuggestionGroupOrientation`._
 | `approveLabel` | `string` | `''` | false | Text of the approve button, the verb of the title (`Deploy`, `Delete`). Empty uses the locale catalog (`Approve`). |
 | `denyLabel` | `string` | `''` | false | Text of the deny button. Empty uses the locale catalog (`Deny`). |
 | `loading` | `boolean` | `false` | false | A decision is being sent; both buttons are inert and Approve shows its loading state. |
+| `editable` | `boolean` | `false` | false | Lets the reader edit the call's input in a code field before approving; the edit comes back through `v-model` and `approve`. |
+| `invalid` | `boolean` | `false` | false | The edited input cannot be used (it does not parse): the field shows an error and Approve stays disabled. Has no effect without `editable`. |
+| `modelValue` | `string` | `''` | false | Two-way value (`v-model`). |
 
 ## Events
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `approve` | `(event: MouseEvent)` |  |
+| `approve` | `(event: MouseEvent, input: string)` |  |
 | `deny` | `(event: MouseEvent)` |  |
 
 ## Slots
@@ -13656,20 +13662,29 @@ types `SuggestionGroupItem`, `SuggestionGroupOrientation`._
 ## Sub-components
 
 _None. Exports: `"./tool-approval"`; types `ToolApprovalStatus`, `ToolApprovalVariant`.
-Composed DS components: `button`, `status-indicator`; the title and description reuse
+Composed DS components: `button`, `status-indicator`; for `editable`, `field-root`, `textarea` and `field-error` under a plain `<label>` (no `field-label`, to keep its `Hint` out of the bundle); the title and description reuse
 `StreamingResponse`'s inline renderer so backticks render as code (no HTML). Exposes `focus()`._
+
+## v-model
+
+| Model | Type | Default | Emits | Notes |
+| --- | --- | --- | --- | --- |
+| `v-model` | `string` | `''` | `update:modelValue` | The call's arguments as text (usually JSON); the reader edits them with `editable`. Unbound, local and empty. |
 
 ## States
 
 - `data-status` mirrors `status`; `data-variant`.
 - `pending`: phrase field (when `confirmationPhrase`), Deny (outlined) and Approve (primary, or danger with `variant="danger"`); Approve disabled until the phrase matches.
+- `editable` + `pending`: a monospace `Textarea` labelled `Arguments` under the body, growing to 12 lines, then scrolling; disabled while `loading`.
+- `invalid` (with `editable` + `pending`): the field is `aria-invalid` with its `FieldError`; Approve is disabled (with `confirmationPhrase`, it also needs the phrase).
+- `editable` once resolved: the field stays `readonly` as the record of the arguments that ran.
 - `approved` (success), `denied` (warning), `expired` (neutral): a `StatusIndicator` with the outcome; the typed phrase resets when the card returns to `pending`.
 
 ## Accessibility
 
 - Visible focus: buttons and the phrase input show `focus-visible:ring-2 focus-visible:ring-(--ring-color)`; the heading shows a ring when `focus()` moves focus to it.
-- Keyboard map: `Tab` through the body, the phrase field, Deny, Approve; `Enter` / `Space` activates. No focus trap, no initial focus (Cloudscape: the one-time decision card is not a dialog).
-- ARIA: `role="group"` labelled by its `h3` title and described by the description; the phrase field has a visible `<label>`; a polite live region announces the outcome; outcomes are text, never color alone.
+- Keyboard map: `Tab` through the body, the arguments field (with `editable`), the phrase field, Deny, Approve; in the arguments field `Enter` adds a line and `Tab` leaves it; `Enter` / `Space` activate Deny and Approve. No focus trap, no initial focus (Cloudscape: the one-time decision card is not a dialog).
+- ARIA: `role="group"` labelled by its `h3` title and described by the description; both fields have visible `<label>`s; the invalid arguments field is `aria-invalid` and described by its `FieldError` (`role="alert"`); a polite live region announces the outcome; outcomes are text, never color alone.
 
 ## Examples
 
@@ -13718,7 +13733,7 @@ Composed DS components: `button`, `status-indicator`; the title and description 
 
 # Tool Call
 
-> One tool or command the agent invoked, shown in the conversation (AI Elements Tool, Cloudscape progressive steps): a row with the tool name in code font, an optional plain description, and a status (`Waiting`, `Running…`, `Completed`, `Failed`, `Denied`), with the call's input and output in a collapsible panel. It is the record of what the agent did; authorization before it runs is `ToolApproval`.
+> One tool or command the agent invoked, shown in the conversation (AI Elements Tool, Cloudscape progressive steps): a row with the tool name in code font, an optional plain description, and a status (`Waiting`, `Preparing…`, `Running…`, `Completed`, `Failed`, `Canceled`, `Denied`), with the call's input and output in a collapsible panel. It is the record of what the agent did; authorization before it runs is `ToolApproval`.
 
 - Import: `import ToolCall from '@aziontech/webkit/tool-call'`
 - Category: ai · Surface: app · Structure: monolithic
@@ -13732,6 +13747,7 @@ Composed DS components: `button`, `status-indicator`; the title and description 
 - Name the tool exactly as it is (`list_workloads`) and describe it in plain words (`Listing your workloads`).
 - Collapse details by default; open them on error so the reader sees why.
 - Redact secrets from inputs and outputs.
+- Map an SDK's states: arguments arriving → `streaming`; executing → `running`; awaiting approval → `pending`; result → `success`; failure → `error`; stopped by the reader (outcome cancelled) → `canceled`; approval refused (outcome denied) → `denied`.
 
 ## Don’t
 
@@ -13751,7 +13767,7 @@ Composed DS components: `button`, `status-indicator`; the title and description 
 | --- | --- | --- | --- | --- |
 | `name` | `string` | `—` | true | The tool or command identifier, shown in code font (`list_workloads`). |
 | `title` | `string` | `''` | false | What the call does in the reader's words (`Listing your workloads`). Empty shows only the name. |
-| `status` | `'pending' \| 'running' \| 'success' \| 'error' \| 'denied'` | `'running'` | false | `pending` waits for authorization, `running` is in flight, then `success`, `error` or `denied` (the reader refused it). |
+| `status` | `'pending' \| 'streaming' \| 'running' \| 'success' \| 'error' \| 'canceled' \| 'denied'` | `'running'` | false | `pending` waits for authorization, `streaming` receives its arguments, `running` is in flight, then `success`, `error`, `canceled` (stopped before it finished) or `denied` (the reader refused it). |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled; details start collapsed. |
 | `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
 
@@ -13775,14 +13791,14 @@ _None. Exports: `"./tool-call"`; type `ToolCallStatus`. Composed DS components: 
 ## States
 
 - `data-status` mirrors `status`; `data-state="open|closed"` only when a slot makes it expandable.
-- Status mapping: `pending` neutral, `running` info with spinner, `success` success, `error` danger, `denied` warning.
+- Status mapping: `pending` neutral, `streaming` neutral with spinner (`Preparing…`), `running` info with spinner (`Running…`), `success` success, `error` danger, `canceled` neutral, `denied` warning. Every status is distinct in text, never by color or spinner alone.
 - Without `input` / `output` the row is static (no button).
 
 ## Accessibility
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color)` on the trigger.
 - Keyboard map: `Tab` to the trigger, `Enter` / `Space` toggles the details.
-- ARIA: the trigger is a `button` with `aria-expanded` / `aria-controls`; the status is a `StatusIndicator` inside a `role="status"` region the ToolCall owns (StatusIndicator itself is not live), so a change from Running to Completed is announced; Input and Output are `section`s labelled by their `h4`.
+- ARIA: the trigger is a `button` with `aria-expanded` / `aria-controls`; the status is a `StatusIndicator` inside a `role="status"` region the ToolCall owns (StatusIndicator itself is not live), so a change from Preparing to Running to Completed (or Canceled) is announced; Input and Output are `section`s labelled by their `h4`.
 - Status is conveyed in text, never by color alone.
 
 ## Examples
@@ -13802,6 +13818,11 @@ _None. Exports: `"./tool-call"`; type `ToolCallStatus`. Composed DS components: 
       status="pending"
     />
     <ToolCall
+      name="create_cache_rule"
+      title="Creating a cache rule for images"
+      status="streaming"
+    />
+    <ToolCall
       name="list_workloads"
       title="Listing your workloads"
       status="running"
@@ -13815,6 +13836,11 @@ _None. Exports: `"./tool-call"`; type `ToolCallStatus`. Composed DS components: 
       name="get_metrics"
       title="Reading the error rate"
       status="error"
+    />
+    <ToolCall
+      name="list_certificates"
+      title="Listing your certificates"
+      status="canceled"
     />
     <ToolCall
       name="delete_domain"

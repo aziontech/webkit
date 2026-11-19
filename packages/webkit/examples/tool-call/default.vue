@@ -10,6 +10,11 @@
       status="pending"
     />
     <ToolCall
+      name="create_cache_rule"
+      title="Creating a cache rule for images"
+      status="streaming"
+    />
+    <ToolCall
       name="list_workloads"
       title="Listing your workloads"
       status="running"
@@ -23,6 +28,11 @@
       name="get_metrics"
       title="Reading the error rate"
       status="error"
+    />
+    <ToolCall
+      name="list_certificates"
+      title="Listing your certificates"
+      status="canceled"
     />
     <ToolCall
       name="delete_domain"

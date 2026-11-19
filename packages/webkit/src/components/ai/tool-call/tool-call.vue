@@ -6,7 +6,8 @@
   import type { StatusIndicatorSeverity } from '../../feedback/status-indicator/status-indicator.vue'
   import StatusIndicator from '../../feedback/status-indicator/status-indicator.vue'
 
-  export type ToolCallStatus = 'pending' | 'running' | 'success' | 'error' | 'denied'
+  export type ToolCallStatus =
+    'pending' | 'streaming' | 'running' | 'success' | 'error' | 'canceled' | 'denied'
 
   defineOptions({
     name: 'ToolCall',
@@ -18,7 +19,7 @@
     name: string
     /** What the call does in the reader's words (`Listing your workloads`). Empty shows only the name. */
     title?: string
-    /** `pending` waits for authorization, `running` is in flight, then `success`, `error` or `denied` (the reader refused it). */
+    /** `pending` waits for authorization, `streaming` receives its arguments, `running` is in flight, then `success`, `error`, `canceled` (stopped before it finished) or `denied` (the reader refused it). */
     status?: ToolCallStatus
     /** Initial open state when uncontrolled; details start collapsed. */
     defaultOpen?: boolean
@@ -127,7 +128,7 @@
       >
         <StatusIndicator
           :severity="severity"
-          :loading="status === 'running'"
+          :loading="status === 'running' || status === 'streaming'"
           :label="t(`toolCall.${status}`)"
           :data-testid="`${testId}__status`"
         />

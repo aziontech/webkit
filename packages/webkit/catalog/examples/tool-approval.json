@@ -11,9 +11,9 @@
    "file": "examples/tool-approval/irreversible.vue"
   },
   {
-   "name": "Resolved",
-   "summary": "The three outcomes that stay in the thread after a decision: Approved, Denied and Request expired, each in text with its status dot.",
-   "file": "examples/tool-approval/resolved.vue"
+   "name": "Editable",
+   "summary": "The agent asks to purge two URLs and the reader corrects the list before approving: the arguments open in a code field, Purge stays disabled while the JSON does not parse, and once approved the field stays read-only with the arguments that ran.",
+   "file": "examples/tool-approval/editable.vue"
   }
  ]
 }

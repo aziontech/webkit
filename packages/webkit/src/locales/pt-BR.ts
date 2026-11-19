@@ -7,7 +7,9 @@ export const ptBR: Messages = {
     approved: 'Aprovado',
     denied: 'Negado',
     expired: 'Pedido expirado',
-    confirmLabel: 'Digite {phrase} para confirmar'
+    confirmLabel: 'Digite {phrase} para confirmar',
+    arguments: 'Argumentos',
+    invalidArguments: 'Estes argumentos não são válidos. Corrija-os para aprovar.'
   },
   responseLoading: {
     generating: 'Gerando uma resposta'
@@ -111,9 +113,11 @@ export const ptBR: Messages = {
   },
   toolCall: {
     pending: 'Aguardando',
+    streaming: 'Preparando',
     running: 'Executando',
     success: 'Concluído',
     error: 'Falhou',
+    canceled: 'Cancelado',
     denied: 'Negado',
     input: 'Entrada',
     output: 'Saída'

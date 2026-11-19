@@ -511,3 +511,4 @@ Budget-raise: architecture-tabs-section 22.1 KB → 22.2 KB (measured 22.12 KB):
 
 Budget-raise: hero-section 12.45 KB → 12.6 KB (measured 12.53 KB): RV-H2-1, the hero keeps its dots behind the copy and off a diagram: `Hero`'s backdrop carries the guard classes that stop it above a marked `bottom` window and drop it beside a marked `top` or `media` window.
 Budget-raise: hero-form-section 50.7 KB → 50.8 KB (measured 50.73 KB): RV-H2-1, the same `Hero` backdrop guard classes.
+Budget-raise: tool-approval 11.65 KB → 14.2 KB (measured 13.77 KB): AI-A, editable arguments before approval (TanStack AI approvals with edited arguments): the opt-in arguments field composes `Field`, `Textarea` and `FieldError`.

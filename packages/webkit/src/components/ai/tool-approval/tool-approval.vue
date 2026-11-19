@@ -5,6 +5,9 @@
   import * as en from '../../../locales/en'
   import Button from '../../action/button/button.vue'
   import StatusIndicator from '../../feedback/status-indicator/status-indicator.vue'
+  import Field from '../../input/field/field.vue'
+  import FieldError from '../../input/field/field-error/field-error.vue'
+  import Textarea from '../../input/textarea/textarea.vue'
   import MarkdownInline from '../lib/markdown-inline'
   import { parseInline } from '../lib/parse-markdown'
 
@@ -33,6 +36,10 @@
     denyLabel?: string
     /** A decision is being sent; both buttons are inert and Approve shows its loading state. */
     loading?: boolean
+    /** Lets the reader edit the call's input in a code field before approving; the edit comes back through `v-model` and `approve`. */
+    editable?: boolean
+    /** The edited input cannot be used (it does not parse): the field shows an error and Approve stays disabled. Only with `editable`. */
+    invalid?: boolean
   }
 
   const props = withDefaults(defineProps<ToolApprovalProps>(), {
@@ -42,15 +49,20 @@
     confirmationPhrase: '',
     approveLabel: '',
     denyLabel: '',
-    loading: false
+    loading: false,
+    editable: false,
+    invalid: false
   })
 
   const emit = defineEmits<{
-    /** The reader authorized the action. */
-    approve: [event: MouseEvent]
+    /** The reader authorized the action; `input` is the call's input as approved (the edit with `editable`). */
+    approve: [event: MouseEvent, input: string]
     /** The reader refused it; the assistant acknowledges in the conversation. */
     deny: [event: MouseEvent]
   }>()
+
+  /** The call's input as text (its arguments, usually formatted JSON); the reader edits it with `editable`. */
+  const model = defineModel<string>({ default: '' })
 
   const slots = defineSlots<{
     /** What exactly will run: a `CodeBlock` with the command, or `KeyValueList` with the parameters. */
@@ -63,6 +75,7 @@
   const titleId = `${uid}-title`
   const descriptionId = `${uid}-description`
   const phraseId = `${uid}-phrase`
+  const argumentsId = `${uid}-arguments`
 
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'tool-approval'
@@ -72,8 +85,11 @@
   const titleNodes = computed(() => parseInline(props.title))
   const descriptionNodes = computed(() => parseInline(props.description))
   const confirmed = computed<boolean>(
-    () => !props.confirmationPhrase || typed.value.trim() === props.confirmationPhrase
+    () =>
+      (!props.confirmationPhrase || typed.value.trim() === props.confirmationPhrase) &&
+      !(props.editable && props.invalid)
   )
+  const argumentsInvalid = computed<boolean>(() => props.invalid && props.status === 'pending')
   const resolvedLabel = computed<string>(() => {
     if (props.status === 'approved') return t('toolApproval.approved')
     if (props.status === 'denied') return t('toolApproval.denied')
@@ -95,7 +111,7 @@
 
   function approve(event: MouseEvent): void {
     if (props.loading || props.status !== 'pending' || !confirmed.value) return
-    emit('approve', event)
+    emit('approve', event, model.value)
   }
 
   function deny(event: MouseEvent): void {
@@ -153,6 +169,39 @@
     >
       <slot />
     </div>
+    <Field
+      v-if="editable"
+      :invalid="argumentsInvalid"
+      :disabled="loading && status === 'pending'"
+      :data-testid="`${testId}__arguments`"
+    >
+      <label
+        :for="argumentsId"
+        class="text-label-sm text-(--text-default)"
+      >
+        {{ t('toolApproval.arguments') }}
+      </label>
+      <Textarea
+        :id="argumentsId"
+        v-model="model"
+        dir="ltr"
+        spellcheck="false"
+        autocomplete="off"
+        monospace
+        auto-resize
+        :min-rows="3"
+        :max-rows="12"
+        :readonly="status !== 'pending'"
+        :data-testid="`${testId}__arguments-input`"
+        class="w-full"
+      />
+      <FieldError
+        v-if="argumentsInvalid"
+        :data-testid="`${testId}__arguments-error`"
+      >
+        {{ t('toolApproval.invalidArguments') }}
+      </FieldError>
+    </Field>
     <template v-if="status === 'pending'">
       <div
         v-if="confirmationPhrase"

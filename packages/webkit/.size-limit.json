@@ -1124,7 +1124,7 @@
   {
     "name": "tool-approval",
     "path": "src/components/ai/tool-approval/tool-approval.vue",
-    "limit": "11.65 KB"
+    "limit": "14.2 KB"
   },
   {
     "name": "response-loading",

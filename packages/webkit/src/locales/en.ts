@@ -1186,7 +1186,9 @@ export const toolApproval = {
   approved: 'Approved',
   denied: 'Denied',
   expired: 'Request expired',
-  confirmLabel: 'Type {phrase} to confirm'
+  confirmLabel: 'Type {phrase} to confirm',
+  arguments: 'Arguments',
+  invalidArguments: 'These arguments are not valid. Correct them to approve.'
 } as const
 
 export const responseLoading = {
@@ -1301,9 +1303,11 @@ export const suggestionGroup = {
 
 export const toolCall = {
   pending: 'Waiting',
+  streaming: 'Preparing',
   running: 'Running',
   success: 'Completed',
   error: 'Failed',
+  canceled: 'Canceled',
   denied: 'Denied',
   input: 'Input',
   output: 'Output'
