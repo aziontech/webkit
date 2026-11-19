@@ -1300,6 +1300,20 @@ export const sources = {
   }
 } as const
 
+export const promptQueue = {
+  label: 'Queued messages',
+  title: {
+    one: '{count} message queued',
+    other: '{count} messages queued'
+  },
+  empty: 'No messages queued',
+  remove: 'Remove from queue',
+  attachments: {
+    one: '{count} attachment',
+    other: '{count} attachments'
+  }
+} as const
+
 export const suggestionGroup = {
   label: 'Suggested prompts'
 } as const
@@ -1516,6 +1530,7 @@ export const en = {
   popover,
   progress,
   promptInput,
+  promptQueue,
   propertyFilter,
   reasoning,
   resizable,

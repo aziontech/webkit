@@ -259,6 +259,10 @@
       "types": "./types/components/ai/prompt-input/prompt-input-tools/prompt-input-tools.vue.d.ts",
       "default": "./src/components/ai/prompt-input/prompt-input-tools/prompt-input-tools.vue"
     },
+    "./prompt-queue": {
+      "types": "./types/components/ai/prompt-queue/prompt-queue.vue.d.ts",
+      "default": "./src/components/ai/prompt-queue/prompt-queue.vue"
+    },
     "./reasoning": {
       "types": "./types/components/ai/reasoning/reasoning.vue.d.ts",
       "default": "./src/components/ai/reasoning/reasoning.vue"
@@ -2661,6 +2665,9 @@
       ],
       "prompt-input-tools": [
         "./types/components/ai/prompt-input/prompt-input-tools/prompt-input-tools.vue.d.ts"
+      ],
+      "prompt-queue": [
+        "./types/components/ai/prompt-queue/prompt-queue.vue.d.ts"
       ],
       "reasoning": [
         "./types/components/ai/reasoning/reasoning.vue.d.ts"

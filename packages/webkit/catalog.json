@@ -5549,6 +5549,40 @@
    ],
    "surface": "app"
   },
+  "prompt-queue": {
+   "import": "@aziontech/webkit/prompt-queue",
+   "target": "./src/components/ai/prompt-queue/prompt-queue.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/prompt-queue",
+   "category": "ai",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "items",
+     "type": "PromptQueueItem[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "The waiting messages, in the order they will be sent."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the list. Empty uses the locale catalog (`Queued messages`)."
+    }
+   ],
+   "events": [
+    {
+     "name": "remove",
+     "payload": "(event: MouseEvent, item: PromptQueueItem)",
+     "notes": ""
+    }
+   ],
+   "surface": "app",
+   "examplesFile": "catalog/examples/prompt-queue.json",
+   "docsFile": "catalog/components/prompt-queue.json"
+  },
   "reasoning": {
    "import": "@aziontech/webkit/reasoning",
    "target": "./src/components/ai/reasoning/reasoning.vue",

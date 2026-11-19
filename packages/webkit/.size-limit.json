@@ -1252,6 +1252,11 @@
     "limit": "2 KB"
   },
   {
+    "name": "prompt-queue",
+    "path": "src/components/ai/prompt-queue/prompt-queue.vue",
+    "limit": "4.7 KB"
+  },
+  {
     "name": "tool-call",
     "path": "src/components/ai/tool-call/tool-call.vue",
     "limit": "3.5 KB"
