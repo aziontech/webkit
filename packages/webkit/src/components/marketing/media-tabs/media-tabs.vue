@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { usePreferredReducedMotion } from '@vueuse/core'
+  import { useMediaQuery, usePreferredReducedMotion } from '@vueuse/core'
   import { computed, onMounted, onScopeDispose, ref, useAttrs, watch } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
@@ -103,8 +103,14 @@
 
   const hasItems = computed(() => tabs.value.length > 0)
 
+  const sideBySide = useMediaQuery('(min-width: 64rem)')
+
   const autoplayEnabled = computed(
-    () => props.autoplay && tabs.value.length > 1 && reducedMotion.value !== 'reduce'
+    () =>
+      props.autoplay &&
+      sideBySide.value &&
+      tabs.value.length > 1 &&
+      reducedMotion.value !== 'reduce'
   )
 
   const autoplayRunning = computed(
