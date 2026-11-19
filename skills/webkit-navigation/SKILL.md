@@ -1,6 +1,6 @@
 ---
 name: webkit-navigation
-description: Two navigation shells for UI on @aziontech/webkit — the persistent console shell is `ConsoleLayout` (@aziontech/webkit/console-layout), composed ONCE in App.vue around RouterView (navigation rail from `navigation` data with an href per row, header breadcrumbs, the ⌘K search palette, the account and its menu, the `actions` slot, `useConsoleLayout().openSearch()` from a page), and every browse page is only a body in its default slot with no `<main>` or chrome of its own; the focused creation shell (no rail, one AppHeader with back + brand + breadcrumb + avatar — the `top-bar/top-bar-creation` block every create block carries) heads create flows (`create/*`: a new resource, an import, deploying a template) routed outside the layout; editing a resource and a resource's deploy progress are page bodies inside it. A page picks exactly ONE shell, renders exactly ONE AppHeader, and the signed-in user stays visible in both. Also fixes the page body inside the console: `layout-boundary` + a column class, a first-level list opening on its PageHeader (the create action, large) over one band of controls and a flush borderless Card table, tabbed detail pages opening flush on PageTabs with the primary button on the TAB ROW (medium), and the breadcrumb levels — no trail at first level, `module › resource name` at second level, never a tab. Fixes the navigation levels too: page navigation lives in the rail, two levels at most (a product's resources on level 1 when it has 3 or fewer, a drill level when it has more), a page has only its PageTabs (at most 7) and no in-page menu, a destination offered once per screen, no rail row that routes into a resource, and active rows that agree with the route. Fixes where drawers sit in that path: a drawer opens only over the screen that owns its item (a tab of a resource), never as the first surface of a product or resource — Configure, Settings and Edit navigate to the resource's page — and the stack is one `large` drawer plus at most one `medium` nested drawer, never a third.
+description: Two navigation shells for UI on @aziontech/webkit — the persistent console shell is `ConsoleLayout` (@aziontech/webkit/console-layout), composed ONCE in App.vue around RouterView (navigation rail from `navigation` data with an href per row, header breadcrumbs, the ⌘K search palette, the account and its menu, the `actions` slot, `useConsoleLayout().openSearch()` from a page), and every browse page is only a body in its default slot with no `<main>` or chrome of its own; the focused creation shell (no rail, one AppHeader with back + brand + breadcrumb + avatar — the `top-bar/top-bar-creation` block every create block carries) heads create flows (`create/*`: a new resource, an import, deploying a template) routed outside the layout; editing a resource and a resource's deploy progress are page bodies inside it. A page picks exactly ONE shell, renders exactly ONE AppHeader, and the signed-in user stays visible in both. Also fixes the page body inside the console: `layout-boundary` + a column class, a first-level list opening on its PageHeader (the create action primary, medium like every heading action) over one band of controls and a flush borderless Card table, tabbed detail pages opening flush on PageTabs with the primary button on the TAB ROW (medium), and the breadcrumb levels — no trail at first level, `module › resource name` at second level, never a tab. Fixes the navigation levels too: page navigation lives in the rail, two levels at most (a product's resources on level 1 when it has 3 or fewer, a drill level when it has more), a page has only its PageTabs (at most 7) and no in-page menu, a destination offered once per screen, no rail row that routes into a resource, and active rows that agree with the route. Fixes where drawers sit in that path: a drawer opens only over the screen that owns its item (a tab of a resource), never as the first surface of a product or resource — Configure, Settings and Edit navigate to the resource's page — and the stack is one `large` drawer plus at most one `medium` nested drawer, never a third.
 status: active
 last_updated: 2026-11-17
 scope: general
@@ -491,7 +491,7 @@ narrow the list and the table they narrow.
           <Button
             label="Create Application"
             variant="primary"
-            size="large"
+            size="medium"
             icon="az az-plus"
           />
         </template>
@@ -527,8 +527,8 @@ narrow the list and the table they narrow.
 
 - **The heading names the module.** The trail starts at the second level, so at first level the
   `PageHeader` is the only place the name appears — never a lone crumb repeating it.
-- **The create action is the heading's**, and it is the page's only `large` control; everything on the
-  controls row is `medium`. Never move the create button onto the controls row.
+- **The create action is the heading's**: `primary`, at `medium` like every other heading action; everything on the
+  controls row is `medium` too. Never move the create button onto the controls row.
 - **The controls row and the table are ONE band**, stacked at the group step — not two sections.
 - **The table is framed by the card, not itself:** `Card :padded="false"` + `Table :bordered="false"`
   — the card is the only border, so the table sits edge-to-edge.

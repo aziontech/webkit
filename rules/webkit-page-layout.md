@@ -61,6 +61,9 @@ follows the nearest container.
   rhythm: `PageHeader` for the page heading, `Subheader` or `SettingsGroup` for a band title,
   `SettingsRow` for a settings row, `PageTabs` for a detail page's tab strip, and `SaveBar` for the
   sticky action bar (`variant="plain"` is the form-column footer).
+- Give every action in a `PageHeader` the same `size="medium"`, so the row keeps one height. The
+  create action stands out by colour, `variant="primary"`; Documentation and every other action are
+  `variant="outline"`. `webkit/consistent-header-action-size` flags any other size.
 - Let a tab panel start one group step (`--layout-group-gap`) below its tab strip. `Tabs.Content`
   already carries that top padding (and so does a Markdown `<Tabs>` in `DocMarkdown`), so put no `mt-*`, `pt-*` or `gap` of
   your own between `Tabs.List` and the panels; any other strip that switches what shows below it
@@ -81,6 +84,8 @@ follows the nearest container.
   The stack that holds them carries the gap: the parent section `gap-(--layout-section-gap)`, even
   when its first child is a banner rather than a section.
 - Never write a literal length (`px`, `rem`) for a layout width; every measure is a token.
+- Never make the create action taller than the actions beside it (`size="large"` in a
+  `PageHeader`): emphasis comes from `variant="primary"`, not from height.
 - Never use a viewport breakpoint (`md:`, `lg:`) for a layout that lives inside a band; it breaks
   the moment the band moves into a drawer or a split view.
 - Never render a `<main>`, `AppLayout`, `Sidebar` or `AppHeader` in a page: the app layout,

@@ -78,7 +78,7 @@ the band is one `useCollection` call:
   <div class="layout-boundary">
     <div class="layout-column flex min-h-full min-w-0 flex-col">
       <!-- THE PAGE HEADING. At first level this is the only place the module's name
-           appears. The create action lives HERE, and it is the page's one `large` control. -->
+           appears. The create action lives HERE: primary, at the same medium size as every other action in the row. -->
       <PageHeader
         size="medium"
         title="Applications"
@@ -88,7 +88,7 @@ the band is one `useCollection` call:
           <Button
             label="Create application"
             variant="primary"
-            size="large"
+            size="medium"
             icon="az az-plus"
           />
         </template>
@@ -140,9 +140,11 @@ name appears. Title, one line of what the module is, `size="medium"`, and the cr
 `#actions`. The page is only a body in the layout's default slot: it sets its own `layout-boundary` and
 column, and renders no `<main>` (`/webkit-layout`).
 
-**The size ladder is what makes the two rows read as two rows.** The heading's action is the page's only
-`large` (40px) control; **everything** on the controls row is `medium` (32px) — the property filter, the
-icon buttons beside it. What the page is _for_ reads first, what _narrows_ the list reads second.
+**One height in the heading, colour for emphasis.** Every action in the `PageHeader` actions slot is
+`size="medium"` (32px), the create action included: buttons side by side share one height
+(`/webkit-quick-cleanup`, control size rhythm). The create action stands out by colour, `variant="primary"`;
+Documentation and any other action stay `variant="outline"`. The controls row below is `medium` too.
+What the page is _for_ reads first because it is the one primary button, not because it is taller.
 
 **Where each action goes.** The page's create action is the heading's. An action on the **listing** — a
 bulk operation over the selected rows — sits in the controls row beside the preferences. Never move the
@@ -309,7 +311,7 @@ item. Four cards a row in a wide container, one in a narrow one — the grid use
 - The controls row and the table are **one band** at the group step — never a section step between the
   filter and the rows it narrows.
 - A first-level module index **opens with a `PageHeader`** (`size="medium"`) carrying the create action.
-- **The heading's action is the page's only `large` control; the whole controls row is `medium`.**
+- **Every heading action is `medium`; the create action is the one `primary`, the rest `outline`.** The whole controls row is `medium` too (`webkit/consistent-header-action-size`).
 - `Card :padded="false"` + `Table :bordered="false"` — never a padded card around a bordered table.
 - **One `PropertyFilter`** narrows the list — no row of Selects, no separate search field beside it, no
   badged funnel button.
