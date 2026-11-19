@@ -11,9 +11,8 @@ wires it all in one command.
 
 ## For AI agents: start here
 
-Pick the path by what you are about to do.
-
-### I am building a screen or an app with WebKit (consume)
+Creating or changing WebKit itself? Skip to "Changing WebKit (contribute)" at the end of this
+page. Building a screen or an app with WebKit? Follow these steps.
 
 1. Run `npx @aziontech/webkit init`. It installs the `webkit` MCP server, the lint, the skills and
    rules, and writes the WebKit block into `AGENTS.md` (and `CLAUDE.md`).
@@ -40,15 +39,6 @@ Pick the path by what you are about to do.
 
 Rules for this path: [`skills/`](https://github.com/aziontech/webkit/tree/main/skills) and [`rules/`](https://github.com/aziontech/webkit/tree/main/rules). Do not use `.claude/`,
 `.specs/` or `apps/` to build screens; they belong to the people who maintain WebKit.
-
-### I am creating or changing WebKit (contribute)
-
-1. Read [`.claude/AGENTS.md`](https://github.com/aziontech/webkit/blob/main/.claude/AGENTS.md).
-2. Every component starts from a spec in `.specs/`, through `/component-create`.
-3. Every block in `blocks/` is a screen agents copy and every folder in `examples/` documents a component.
-   Changed one? Run `pnpm --filter @aziontech/webkit build:catalog`; the docs page and the styled
-   visual test follow from the files.
-4. Before the PR: "What to update when WebKit changes", in [CONTRIBUTING.md](https://github.com/aziontech/webkit/blob/main/CONTRIBUTING.md).
 
 ## Building with WebKit (consume)
 
@@ -214,14 +204,20 @@ npx -y @aziontech/webkit-mcp   # the MCP server your AI tools connect to (its ow
 
 ## Changing WebKit (contribute)
 
-This package lives in the [`aziontech/webkit`](https://github.com/aziontech/webkit) monorepo. Read
-[`.claude/AGENTS.md`](https://github.com/aziontech/webkit/blob/main/.claude/AGENTS.md) and [CONTRIBUTING.md](https://github.com/aziontech/webkit/blob/main/CONTRIBUTING.md) (its
-"What to update when WebKit changes" section) before changing a component, an example or a skill.
+This package lives in the [`aziontech/webkit`](https://github.com/aziontech/webkit) monorepo.
 
-A new or moved export is written as a plain path and then typed by `pnpm --filter @aziontech/webkit build:exports`
-(`check:exports` fails until it is). `pnpm pack` builds `types/` (`build:types`) and removes it afterwards;
-`check:consumer-types` packs the three packages, installs them into a fresh Vite `vue-ts` app and runs its
-`npm run build` (needs the network; CI job `consumer-types`).
+1. Read [`.claude/AGENTS.md`](https://github.com/aziontech/webkit/blob/main/.claude/AGENTS.md).
+2. Every component starts from a spec in `.specs/`, through `/component-create`.
+3. Every block in `blocks/` is a screen agents copy and every folder in `examples/` documents a component.
+   Changed one? Run `pnpm --filter @aziontech/webkit build:catalog`; the docs page and the styled
+   visual test follow from the files.
+4. A new or moved export is written as a plain path and then typed by
+   `pnpm --filter @aziontech/webkit build:exports` (`check:exports` fails until it is). `pnpm pack`
+   builds `types/` (`build:types`) and removes it afterwards; `check:consumer-types` packs the three
+   packages, installs them into a fresh Vite `vue-ts` app and runs its `npm run build` (needs the
+   network; CI job `consumer-types`).
+5. Before the PR: "What to update when WebKit changes", in
+   [CONTRIBUTING.md](https://github.com/aziontech/webkit/blob/main/CONTRIBUTING.md).
 
 ## Packages
 
