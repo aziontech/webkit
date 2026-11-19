@@ -90,6 +90,28 @@ export const ptBR: Messages = {
     tools: 'Ferramentas',
     toolsEnabled: 'Ferramentas ativadas'
   },
+  agentActivity: {
+    label: 'Atividade do agente',
+    steps: {
+      one: '{count} etapa',
+      other: '{count} etapas'
+    },
+    finished: {
+      one: '{count} etapa concluída',
+      other: '{count} etapas concluídas'
+    },
+    stopped: {
+      one: 'Interrompida após {count} etapa',
+      other: 'Interrompida após {count} etapas'
+    },
+    failed: 'Falhou: {title}',
+    pending: 'Pendente',
+    running: 'Em andamento',
+    success: 'Concluída',
+    error: 'Falhou',
+    canceled: 'Cancelada',
+    skipped: 'Ignorada'
+  },
   reasoning: {
     thinking: 'Pensando',
     thoughtBriefly: 'Pensou por alguns segundos',
