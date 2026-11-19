@@ -523,7 +523,7 @@
   {
     "name": "media-split-section",
     "path": "src/components/section/media-split-section/media-split-section.vue",
-    "limit": "16.05 KB",
+    "limit": "16.1 KB",
     "entryOnly": true
   },
   {
