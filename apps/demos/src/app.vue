@@ -8,7 +8,7 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import { ptBR } from '@aziontech/webkit/locales/pt-BR'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import ThemeSwitcher, { type ThemeSwitcherValue } from '@aziontech/webkit/theme-switcher'
+  import type { ThemeSwitcherValue } from '@aziontech/webkit/theme-switcher'
   import { Toaster } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed } from 'vue'
@@ -18,6 +18,7 @@
   import { account, navigation } from './lib/navigation'
   import { settings } from './lib/settings'
   import { resources } from './lib/store'
+  import { announcement } from './router'
 
   const catalogs = { 'pt-BR': ptBR }
   const route = useRoute()
@@ -52,6 +53,11 @@
     if (value === 'action:create') router.push('/resources/new')
     if (value === 'action:theme') theme.value = theme.value === 'dark' ? 'light' : 'dark'
   }
+
+  const onAccountSelect = (_event: MouseEvent | KeyboardEvent, value: string | number) => {
+    if (value === 'theme:system' || value === 'theme:dark' || value === 'theme:light')
+      theme.value = value.slice('theme:'.length) as ThemeSwitcherValue
+  }
 </script>
 
 <template>
@@ -68,6 +74,7 @@
       :breadcrumbs="breadcrumbs"
       :account="account"
       @search-select="onSearchSelect"
+      @account-select="onAccountSelect"
     >
       <template #actions="{ compact }">
         <template v-if="compact">
@@ -188,19 +195,46 @@
             </template>
           </DropdownMenu.Item>
         </DropdownMenu.Group>
-        <DropdownMenu.Group>
-          <div
-            class="flex h-8 min-h-8 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-2xs)"
+        <DropdownMenu.Group label="Theme">
+          <DropdownMenu.Item
+            value="theme:system"
+            label="System"
+            type="radio"
+            :selected="theme === 'system'"
           >
-            <span class="flex-1 truncate text-start text-label-sm text-(--text-default)"
-              >Theme</span
-            >
-            <ThemeSwitcher
-              v-model="theme"
-              size="small"
-              aria-label="Theme"
-            />
-          </div>
+            <template #trailing>
+              <i
+                class="az az-desktop"
+                aria-hidden="true"
+              />
+            </template>
+          </DropdownMenu.Item>
+          <DropdownMenu.Item
+            value="theme:dark"
+            label="Dark"
+            type="radio"
+            :selected="theme === 'dark'"
+          >
+            <template #trailing>
+              <i
+                class="az az-moon"
+                aria-hidden="true"
+              />
+            </template>
+          </DropdownMenu.Item>
+          <DropdownMenu.Item
+            value="theme:light"
+            label="Light"
+            type="radio"
+            :selected="theme === 'light'"
+          >
+            <template #trailing>
+              <i
+                class="az az-sun"
+                aria-hidden="true"
+              />
+            </template>
+          </DropdownMenu.Item>
         </DropdownMenu.Group>
         <DropdownMenu.Group>
           <DropdownMenu.Item
@@ -227,19 +261,22 @@
           </DropdownMenu.Item>
         </DropdownMenu.Group>
         <DropdownMenu.Group>
-          <div class="flex flex-col gap-(--spacing-sm) px-(--spacing-2xs) py-(--spacing-2xs)">
-            <Button
-              label="Upgrade to Pro"
-              variant="secondary"
-              size="medium"
-              class="w-full"
-            />
-            <div class="flex justify-center px-(--spacing-xs)">
-              <StatusIndicator
-                severity="success"
-                label="All systems normal"
+          <DropdownMenu.Item
+            value="upgrade"
+            label="Upgrade to Pro"
+          >
+            <template #trailing>
+              <i
+                class="az az-sparkles"
+                aria-hidden="true"
               />
-            </div>
+            </template>
+          </DropdownMenu.Item>
+          <div class="flex justify-center px-(--spacing-xs) py-(--spacing-2xs)">
+            <StatusIndicator
+              severity="success"
+              label="All systems normal"
+            />
           </div>
         </DropdownMenu.Group>
       </template>
@@ -248,6 +285,12 @@
       <RouterView name="dialog" />
     </ConsoleLayoutRoot>
     <DemoBar />
+    <p
+      class="sr-only"
+      aria-live="polite"
+    >
+      {{ announcement }}
+    </p>
     <Toaster position="bottom-end" />
   </ConfigProvider>
 </template>

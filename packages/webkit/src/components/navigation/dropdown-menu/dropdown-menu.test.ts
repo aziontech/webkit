@@ -602,6 +602,17 @@ describe('DropdownMenu', () => {
       expect((document.activeElement as HTMLElement).dataset['testid']).toBe('after')
     })
 
+    it('Tab keeps focus on the trigger, never the body, when nothing tabbable follows it', async () => {
+      render(Host)
+      await nextTick()
+      control().focus()
+      await userEvent.keyboard('{Enter}')
+      await waitFor(() => expect(focused()).toBe('Profile'))
+      await userEvent.keyboard('{Tab}')
+      await waitFor(() => expect(getPanel()).toBeNull())
+      expect(document.activeElement).toBe(control())
+    })
+
     it('Shift+Tab closes and returns focus to the trigger', async () => {
       await openWith('{Enter}')
       await waitFor(() => expect(focused()).toBe('Profile'))

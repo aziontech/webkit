@@ -21,7 +21,7 @@ Composed once in `App.vue` around `RouterView` (imported from `console-layout-ro
 
 ### B. Actions — `Button` (required)
 
-In the `actions` slot: Create (`primary`, `medium`, with its icon) while not compact. In the page body: Documentation (`outline`) and the create action, and Upgrade to Pro (`secondary`) in the account menu.
+In the `actions` slot: Create (`primary`, `medium`, with its icon) while not compact. In the page body: Documentation (`outline`) and the create action, and Upgrade to Pro as an item of the account menu.
 
 ### C. Agent — `HighlightButton` (required)
 
@@ -41,11 +41,11 @@ In the `search` slot: Recents (only while the query is empty) and Actions, as `C
 
 ### G. Account menu — `DropdownMenu` (required)
 
-In the `account-menu` slot, as `DropdownMenu.Group`s: identity, Account settings and Personal tokens, the theme, Docs, Log out, and the Upgrade to Pro and system status foot. The layout opens it from the rail footer and from the header avatar. The layout emits `account-select` `(event, value)` for each item; the block answers `logout` by emitting `sign-out` `(event)` and clears nothing itself.
+In the `account-menu` slot, as `DropdownMenu.Group`s: identity, Account settings and Personal tokens, the theme, Docs, Log out, and the Upgrade to Pro item over the system status foot. Every control in it is a `DropdownMenu.Item`, so the arrow keys reach all of them: a button or a segmented control inside a menu is skipped by the arrows and breaks the menu pattern. The layout opens it from the rail footer and from the header avatar. The layout emits `account-select` `(event, value)` for each item; the block answers `logout` by emitting `sign-out` `(event)`, sets the theme on `theme:system`, `theme:dark` and `theme:light`, and clears nothing itself.
 
-### H. Theme — `ThemeSwitcher` (required)
+### H. Theme — `DropdownMenu.Item` radios (required)
 
-Inside the account menu, labelled `Theme`.
+Inside the account menu, a `DropdownMenu.Group` labelled `Theme` with three `type="radio"` items, System, Dark and Light, bound to `useColorMode()`. Not a `ThemeSwitcher`: its buttons are not menu items, so the keyboard cannot reach them inside the menu.
 
 ### I. System status — `StatusIndicator` (required)
 

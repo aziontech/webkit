@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: 1be6dc59b5827bfa2d0be7e57a1d698fe8b015888a11a5c4cad931cc9a9d0363
+checksum: 99e022d09c5a65caf585e28cb97786f5eb69788bbb4888177f4086d83e4465ec
 created: 2026-11-12
-last_updated: 2026-11-17
+last_updated: 2026-11-19
 ---
 
 # SiteLayout — Component Spec
@@ -118,7 +118,8 @@ The marketing site's chrome, composed once in the app: `SiteHeaderSection` on to
 ## Accessibility (WCAG 2.1 AA)
 
 - Landmarks: the bar is the `SiteHeaderSection` banner named "Azion"; the sections are inside the layout's single `<main>`; the footer is the `SiteFooterSection` `contentinfo`. A page must not render a second `<main>`.
-- Keyboard map: `Tab` runs bar → page → footer; `⌘K` / `Ctrl K` opens the palette (owned by `Command`); in the palette `ArrowUp` / `ArrowDown` move, `Enter` chooses, `Escape` closes and returns focus. The bar's menus and sheet own their keyboard models.
+- Skip link: the first `Tab` stop is a `SkipLink` (`Skip to content`, visible on focus); it moves focus to the `<main>` (given a generated `id`), past the bar.
+- Keyboard map: `Tab` runs skip link → bar → page → footer; `⌘K` / `Ctrl K` opens the palette (owned by `Command`); in the palette `ArrowUp` / `ArrowDown` move, `Enter` chooses, `Escape` closes and returns focus. The bar's menus and sheet own their keyboard models.
 - Visible focus and contrast: owned by the composed components; the canvas tokens keep text ≥ 4.5:1 in light and dark.
 
 ## Internationalization

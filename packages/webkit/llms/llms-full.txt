@@ -8408,7 +8408,7 @@ What each prop and event does, and the go-live code: [blocks/settings/settings-f
 - Surface: app
 - Source: `blocks/shell/shell-console/shell-console.vue` in `@aziontech/webkit`
 - MCP: `get_block("shell/shell-console")`
-- Components: Alert, Avatar, Badge, Button, Card, Command, ConsoleLayout, `ConsoleLayoutRoot`, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, DropdownMenu, EmptyState, HighlightButton, IconButton, Input, Item, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, Select, StatusIndicator, `TableCellId`, `TableCellStatus`, Tabs, Tag, ThemeSwitcher, Toast, Tooltip, `use-color-mode`
+- Components: Alert, Avatar, Badge, Button, Card, Command, ConsoleLayout, `ConsoleLayoutRoot`, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, DropdownMenu, EmptyState, HighlightButton, IconButton, Input, Item, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, Select, StatusIndicator, `TableCellId`, `TableCellStatus`, Tabs, Tag, Toast, Tooltip, `use-color-mode`
 - Skills: `webkit-navigation`, `webkit-layout`
 
 ## Asked as
@@ -8437,7 +8437,7 @@ The application shell every signed-in page renders inside. The user browses and 
 - E. Icon actions — `IconButton` (required)
 - F. Palette groups — `Command` (required)
 - G. Account menu — `DropdownMenu` (required)
-- H. Theme — `ThemeSwitcher` (required)
+- H. Theme — `DropdownMenu.Item` radios (required)
 - I. System status — `StatusIndicator` (required)
 - J. Page title — `PageHeader` (stand-in body)
 - K. Table frame — `Card` (stand-in body)
@@ -27203,6 +27203,7 @@ Unbound, each one keeps its own local state.
 
 ## Accessibility
 
+- Skip link: the first focusable element is a `SkipLink` (`Skip to content`, from its locale catalog), visually hidden until focused; activating it moves focus to the content region (`app-layout__content`, which takes `tabindex="-1"` for the jump), past the navigation and the header. Every layout built on `AppLayout` (`ConsoleLayout`) gets it by construction.
 - Visible focus: the separator shows `var(--accent)` on `focus-visible`; the region buttons are `IconButton` with their own ring.
 - Keyboard map: `Tab` reaches the region controls in DOM order (navigation, header, content, split panel, tools). On the split separator: `ArrowUp` / `ArrowDown` grow and shrink a bottom panel; `ArrowLeft` / `ArrowRight` grow and shrink a side panel (mirrored under RTL); `Shift` makes the step 64 px instead of 16 px; `Home` / `End` go to the minimum / maximum. `Escape` closes a compact drawer (from `Drawer`) and returns focus to the control that opened it. The split panel and tools bodies are focusable scroll regions (`tabindex="0"`, `role="group"` named by their heading), so a keyboard reader can scroll them when they hold no control.
 - ARIA: the tools region and the split panel are `<section aria-labelledby>` their header title (`<h2>`); the separator is `role="separator"` with `aria-orientation`, `aria-valuenow` / `aria-valuemin` / `aria-valuemax` in pixels, `aria-controls` the split panel and an accessible name from the catalog. The compact drawers are named by `navigationAriaLabel` and `toolsLabel`. The layout adds no landmark of its own around the content; the consumer's `<main>` and `Sidebar` `<nav>` are the landmarks.
@@ -27530,7 +27531,8 @@ packages/webkit/src/components/layout/console-layout/
 ## Accessibility
 
 - Landmarks: the rail is the `Sidebar` `<nav>` named by `ariaLabel`; the header is `AppHeader` (`<header>`); the page body is inside the layout's single `<main>`. A page body must not render a second `<main>`.
-- Keyboard map: `Tab` runs rail (wordmark, `sidebar-header`, navigation) → header → page; `⌘K` / `Ctrl K` opens the palette (owned by `Command`); on wide layouts `⌘B` / `Ctrl B` toggles the rail and writes `v-model:navigation-open` (the Sidebar's `shortcut`, off while compact and while typing in a field); in the palette `ArrowUp` / `ArrowDown` move, `Enter` chooses, `Escape` closes and returns focus. The rail keyboard map is `SidebarMenu`'s; the compact drawer closes on `Escape` and returns focus to the hamburger (`AppLayout`).
+- Skip link: the first `Tab` stop is the `SkipLink` `AppLayout` renders (`Skip to content`); it jumps past the rail and the header to the content region that holds the `<main>`.
+- Keyboard map: `Tab` runs skip link → rail (wordmark, `sidebar-header`, navigation) → header → page; `⌘K` / `Ctrl K` opens the palette (owned by `Command`); on wide layouts `⌘B` / `Ctrl B` toggles the rail and writes `v-model:navigation-open` (the Sidebar's `shortcut`, off while compact and while typing in a field); in the palette `ArrowUp` / `ArrowDown` move, `Enter` chooses, `Escape` closes and returns focus. The rail keyboard map is `SidebarMenu`'s; the compact drawer closes on `Escape` and returns focus to the hamburger (`AppLayout`).
 - Names: the compact hamburger (`Open navigation`), the brand link (`Azion home`), the rail account trigger (`Account menu`, an icon button) come from the locale catalog; the avatar carries the account name. The header avatar trigger shows the initials, so its name starts with them (`JD, account menu`, `consoleLayout.accountMenuFor`) to meet WCAG 2.5.3 Label in Name (a speech user says what they see); with an account image it has no visible text and is named `Account menu`.
 - Account menu: choosing an option by pointer or keyboard emits `account-select`; the keyboard map inside the menu is `DropdownMenu`'s.
 - Visible focus: every interactive part is a WebKit control with its own ring; the brand link and the avatar button use `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.

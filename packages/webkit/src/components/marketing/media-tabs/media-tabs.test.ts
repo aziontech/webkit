@@ -358,6 +358,30 @@ describe('MediaTabs', () => {
     expect(hidden).toHaveLength(ITEMS.length - 1)
   })
 
+  it('takes the inactive media out of the tab order with inert', async () => {
+    const { container } = render(MediaTabs, {
+      props: { items: ITEMS, autoplay: false },
+      slots: { media: `<button type="button">Play {{ params.index }}</button>` }
+    })
+    const inertButtons = () =>
+      [...container.querySelectorAll('[inert] button')].map((button) => button.textContent)
+    const plays = [...container.querySelectorAll('button')].filter((button) =>
+      button.textContent?.startsWith('Play')
+    )
+
+    expect(plays.length).toBeGreaterThan(0)
+    expect(inertButtons()).not.toContain('Play 0')
+    expect(inertButtons()).toContain('Play 1')
+    for (const host of container.querySelectorAll('[inert]')) {
+      expect(host.getAttribute('aria-hidden')).toBe('true')
+    }
+
+    await fireEvent.click(rowsOf(container)[1]!.querySelector('button')!)
+    await nextTick()
+    expect(inertButtons()).toContain('Play 0')
+    expect(inertButtons()).not.toContain('Play 1')
+  })
+
   it('hands the media slot its item, index and active flag', () => {
     const { container } = render(MediaTabs, {
       props: { items: ITEMS, autoplay: false },

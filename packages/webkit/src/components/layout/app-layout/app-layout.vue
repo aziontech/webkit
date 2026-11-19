@@ -6,6 +6,7 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import IconButton from '../../action/icon-button/icon-button.vue'
+  import SkipLink from '../../navigation/skip-link/skip-link.vue'
   import Drawer from '../../overlay/drawer/drawer.vue'
   import DrawerContent from '../../overlay/drawer/drawer-content.vue'
   import DrawerTitle from '../../overlay/drawer/drawer-title.vue'
@@ -287,6 +288,7 @@
   const toolsTitleId = `${uid}-tools-title`
   const splitTitleId = `${uid}-split-title`
   const splitId = `${uid}-split`
+  const contentId = `${uid}-content`
 </script>
 
 <template>
@@ -301,6 +303,10 @@
     :data-split-panel-position="position"
     class="@container/app-layout relative flex h-full min-h-0 w-full min-w-0 overflow-hidden bg-(--bg-canvas)"
   >
+    <SkipLink
+      :href="`#${contentId}`"
+      :data-testid="`${testId}__skip-link`"
+    />
     <div
       v-if="showNavigation()"
       :data-testid="`${testId}__navigation`"
@@ -335,6 +341,7 @@
             <slot name="notifications" />
           </div>
           <div
+            :id="contentId"
             :data-testid="`${testId}__content`"
             class="flex min-h-0 min-w-0 flex-1 flex-col overflow-auto"
           >

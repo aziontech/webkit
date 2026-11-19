@@ -1,11 +1,11 @@
 # ShellConsole (`shell/shell-console`)
 
-> The console shell as one component: `ConsoleLayout`, composed once in the app around RouterView, so a console page is only its body. Its `navigation` is the Azion console tree as data (Overview, Workloads, Deployments; Build, Secure, Store, Observe; Marketplace and the Settings drill-in), each row with an `href` the layout follows with the app's router, and the active row follows the route; it renders the resizable, collapsible rail with the wordmark and the account at its foot, the header with breadcrumbs, the search trigger, the app's actions and the avatar, the ⌘K palette listing every navigation page, and the single main. Below 768 px of its own width the rail becomes a drawer opened from the header's menu button. This block fills the slots: Create (`Button`) and Agent (`HighlightButton`), icon-only (`IconButton` with a `Tooltip`) while compact; Recents and Actions as `Command` groups; the account menu (`DropdownMenu` with `ThemeSwitcher`, Upgrade to Pro and `StatusIndicator`). The body is a stand-in list page (`PageHeader` and a `Card`) for view/view-table, which owns the controls row and the table; a page opens the same palette with useConsoleLayout().openSearch().
+> The console shell as one component: `ConsoleLayout`, composed once in the app around RouterView, so a console page is only its body. Its `navigation` is the Azion console tree as data (Overview, Workloads, Deployments; Build, Secure, Store, Observe; Marketplace and the Settings drill-in), each row with an `href` the layout follows with the app's router, and the active row follows the route; it renders the resizable, collapsible rail with the wordmark and the account at its foot, the header with breadcrumbs, the search trigger, the app's actions and the avatar, the ⌘K palette listing every navigation page, and the single main. Below 768 px of its own width the rail becomes a drawer opened from the header's menu button. This block fills the slots: Create (`Button`) and Agent (`HighlightButton`), icon-only (`IconButton` with a `Tooltip`) while compact; Recents and Actions as `Command` groups; the account menu (`DropdownMenu` whose theme choice is a group of radio items and Upgrade to Pro an item, over a `StatusIndicator`). The body is a stand-in list page (`PageHeader` and a `Card`) for view/view-table, which owns the controls row and the table; a page opens the same palette with useConsoleLayout().openSearch().
 
 - Surface: app
 - Source: `blocks/shell/shell-console/shell-console.vue` in `@aziontech/webkit`
 - MCP: `get_block("shell/shell-console")`
-- Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Badge](../../components/badge.md), [Button](../../components/button.md), [Card](../../components/card.md), [Command](../../components/command.md), [ConsoleLayout](../../components/console-layout.md), `ConsoleLayoutRoot`, [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [HighlightButton](../../components/highlight-button.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Select](../../components/select.md), [StatusIndicator](../../components/status-indicator.md), `TableCellId`, `TableCellStatus`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [ThemeSwitcher](../../components/theme-switcher.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-color-mode`
+- Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Badge](../../components/badge.md), [Button](../../components/button.md), [Card](../../components/card.md), [Command](../../components/command.md), [ConsoleLayout](../../components/console-layout.md), `ConsoleLayoutRoot`, [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [HighlightButton](../../components/highlight-button.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Select](../../components/select.md), [StatusIndicator](../../components/status-indicator.md), `TableCellId`, `TableCellStatus`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-color-mode`
 - Skills: `webkit-navigation`, `webkit-layout`
 
 ## Asked as
@@ -33,7 +33,7 @@ Composed once in `App.vue` around `RouterView` (imported from `console-layout-ro
 
 ### B. Actions — `Button` (required)
 
-In the `actions` slot: Create (`primary`, `medium`, with its icon) while not compact. In the page body: Documentation (`outline`) and the create action, and Upgrade to Pro (`secondary`) in the account menu.
+In the `actions` slot: Create (`primary`, `medium`, with its icon) while not compact. In the page body: Documentation (`outline`) and the create action, and Upgrade to Pro as an item of the account menu.
 
 ### C. Agent — `HighlightButton` (required)
 
@@ -53,11 +53,11 @@ In the `search` slot: Recents (only while the query is empty) and Actions, as `C
 
 ### G. Account menu — `DropdownMenu` (required)
 
-In the `account-menu` slot, as `DropdownMenu.Group`s: identity, Account settings and Personal tokens, the theme, Docs, Log out, and the Upgrade to Pro and system status foot. The layout opens it from the rail footer and from the header avatar. The layout emits `account-select` `(event, value)` for each item; the block answers `logout` by emitting `sign-out` `(event)` and clears nothing itself.
+In the `account-menu` slot, as `DropdownMenu.Group`s: identity, Account settings and Personal tokens, the theme, Docs, Log out, and the Upgrade to Pro item over the system status foot. Every control in it is a `DropdownMenu.Item`, so the arrow keys reach all of them: a button or a segmented control inside a menu is skipped by the arrows and breaks the menu pattern. The layout opens it from the rail footer and from the header avatar. The layout emits `account-select` `(event, value)` for each item; the block answers `logout` by emitting `sign-out` `(event)`, sets the theme on `theme:system`, `theme:dark` and `theme:light`, and clears nothing itself.
 
-### H. Theme — `ThemeSwitcher` (required)
+### H. Theme — `DropdownMenu.Item` radios (required)
 
-Inside the account menu, labelled `Theme`.
+Inside the account menu, a `DropdownMenu.Group` labelled `Theme` with three `type="radio"` items, System, Dark and Light, bound to `useColorMode()`. Not a `ThemeSwitcher`: its buttons are not menu items, so the keyboard cannot reach them inside the menu.
 
 ### I. System status — `StatusIndicator` (required)
 
@@ -155,7 +155,6 @@ Each variant is the same screen in another state: `get_block("shell/shell-consol
   import IconButton from '@aziontech/webkit/icon-button'
   import PageHeader from '@aziontech/webkit/page-header'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { useColorMode } from '@aziontech/webkit/use-color-mode'
 
@@ -339,6 +338,8 @@ Each variant is the same screen in another state: `get_block("shell/shell-consol
 
   const onAccountSelect = (event: MouseEvent | KeyboardEvent, value: string | number) => {
     if (value === 'logout') emit('sign-out', event)
+    else if (value === 'theme:system' || value === 'theme:dark' || value === 'theme:light')
+      theme.value = value.slice('theme:'.length) as typeof theme.value
   }
 </script>
 
@@ -465,17 +466,46 @@ Each variant is the same screen in another state: `get_block("shell/shell-consol
           </template>
         </DropdownMenu.Item>
       </DropdownMenu.Group>
-      <DropdownMenu.Group>
-        <div
-          class="flex h-8 min-h-8 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-2xs)"
+      <DropdownMenu.Group label="Theme">
+        <DropdownMenu.Item
+          value="theme:system"
+          label="System"
+          type="radio"
+          :selected="theme === 'system'"
         >
-          <span class="flex-1 truncate text-start text-label-sm text-(--text-default)">Theme</span>
-          <ThemeSwitcher
-            v-model="theme"
-            size="small"
-            aria-label="Theme"
-          />
-        </div>
+          <template #trailing>
+            <i
+              class="az az-desktop"
+              aria-hidden="true"
+            />
+          </template>
+        </DropdownMenu.Item>
+        <DropdownMenu.Item
+          value="theme:dark"
+          label="Dark"
+          type="radio"
+          :selected="theme === 'dark'"
+        >
+          <template #trailing>
+            <i
+              class="az az-moon"
+              aria-hidden="true"
+            />
+          </template>
+        </DropdownMenu.Item>
+        <DropdownMenu.Item
+          value="theme:light"
+          label="Light"
+          type="radio"
+          :selected="theme === 'light'"
+        >
+          <template #trailing>
+            <i
+              class="az az-sun"
+              aria-hidden="true"
+            />
+          </template>
+        </DropdownMenu.Item>
       </DropdownMenu.Group>
       <DropdownMenu.Group>
         <DropdownMenu.Item
@@ -502,19 +532,22 @@ Each variant is the same screen in another state: `get_block("shell/shell-consol
         </DropdownMenu.Item>
       </DropdownMenu.Group>
       <DropdownMenu.Group>
-        <div class="flex flex-col gap-(--spacing-sm) px-(--spacing-2xs) py-(--spacing-2xs)">
-          <Button
-            label="Upgrade to Pro"
-            variant="secondary"
-            size="medium"
-            class="w-full"
-          />
-          <div class="flex justify-center px-(--spacing-xs)">
-            <StatusIndicator
-              severity="success"
-              label="All systems operational"
+        <DropdownMenu.Item
+          value="upgrade"
+          label="Upgrade to Pro"
+        >
+          <template #trailing>
+            <i
+              class="az az-sparkles"
+              aria-hidden="true"
             />
-          </div>
+          </template>
+        </DropdownMenu.Item>
+        <div class="flex justify-center px-(--spacing-xs) py-(--spacing-2xs)">
+          <StatusIndicator
+            severity="success"
+            label="All systems operational"
+          />
         </div>
       </DropdownMenu.Group>
     </template>

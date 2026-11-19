@@ -312,6 +312,7 @@
             :key="`${item.title}-${index}`"
             :data-active="isActive(index) || null"
             :aria-hidden="!isActive(index) || undefined"
+            :inert="!isActive(index) || undefined"
             class="z-10 col-start-1 row-start-1 flex min-w-0 group-data-[orientation=vertical]/media-tabs:absolute group-data-[orientation=vertical]/media-tabs:inset-0 translate-y-(--spacing-lg) items-center justify-center opacity-0 transition-[translate,opacity] duration-moderate-02 ease-productive-entrance data-[active]:translate-y-0 data-[active]:opacity-100 motion-reduce:translate-y-0 motion-reduce:transition-none"
           >
             <slot

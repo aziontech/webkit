@@ -55,6 +55,17 @@ afterEach(() => {
 })
 
 describe('AppLayout', () => {
+  it('opens with a skip link that jumps focus past the navigation to the content', async () => {
+    const { getByTestId, container } = render(layout())
+    const skip = getByTestId('app-layout__skip-link')
+    expect(container.querySelector('a[href], button')).toBe(skip)
+    expect(skip.textContent?.trim()).toBe('Skip to content')
+    const content = getByTestId('app-layout__content')
+    expect(skip.getAttribute('href')).toBe(`#${content.id}`)
+    await fireEvent.click(skip)
+    expect(document.activeElement).toBe(content)
+  })
+
   it('renders every region and the fallback data-testid', () => {
     const { getByTestId, getByText } = render(layout())
     const root = getByTestId('app-layout')

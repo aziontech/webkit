@@ -1,5 +1,6 @@
 import { nextTick, onScopeDispose, readonly, type Ref, ref, watch } from 'vue'
 
+import { nextTabbableAfter } from '../../utils/tabbable'
 import { useOverlayLayer } from '../use-overlay-layer'
 import type { Align, Side } from '../use-placement'
 import { registerShortcut } from './lib/shortcut-registry'
@@ -232,9 +233,14 @@ export function useMenuRoot(options: UseMenuRootOptions): UseMenuRootReturn {
       setOpen(false)
       focusTrigger()
     } else if (event.key === 'Tab') {
-      if (event.shiftKey) event.preventDefault()
+      event.preventDefault()
+      const panel = panelEl.value
       setOpen(false)
       focusTrigger()
+      if (event.shiftKey) return
+      const from = globalThis.document?.activeElement as globalThis.HTMLElement | null
+      if (!from || from === globalThis.document.body || panel?.contains(from)) return
+      nextTabbableAfter(from, panel)?.focus()
     } else if (
       !typing &&
       event.key.length === 1 &&

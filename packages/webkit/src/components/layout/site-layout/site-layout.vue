@@ -1,9 +1,10 @@
 <script setup lang="ts">
-  import { computed, ref, useAttrs, watch } from 'vue'
+  import { computed, ref, useAttrs, useId, watch } from 'vue'
 
   import { useAppNavigation } from '../../../composables/use-app-navigation'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
+  import SkipLink from '../../navigation/skip-link/skip-link.vue'
   import Command from '../../overlay/command/command.vue'
   import CommandEmpty from '../../overlay/command/command-empty/command-empty.vue'
   import CommandGroup from '../../overlay/command/command-group/command-group.vue'
@@ -120,6 +121,7 @@
   const PAGE_VALUE = 'site-layout:page:'
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'site-layout')
+  const mainId = `${useId()}-main`
 
   const paletteGroups = computed(() => {
     const groups = props.navigation.menus.map((menu) => ({
@@ -195,12 +197,17 @@
     :data-nav-overlay="navOverlay || null"
     class="flex min-h-dvh w-full min-w-0 flex-col bg-(--bg-canvas) text-(--text-default) data-[nav-overlay]:grid data-[nav-overlay]:grid-rows-[1fr_auto] data-[nav-overlay]:[&>div>header]:[grid-area:1/1/3/2] data-[nav-overlay]:[&>div>header]:self-start data-[nav-overlay]:[&>main]:[grid-area:1/1] data-[nav-overlay]:[&>main+div]:[grid-area:2/1]"
   >
+    <SkipLink
+      :href="`#${mainId}`"
+      :data-testid="`${testId}__skip-link`"
+    />
     <SiteHeaderSection
       v-bind="navigation"
       :data-testid="`${testId}__nav`"
       @search="openSearch"
     />
     <main
+      :id="mainId"
       :data-testid="`${testId}__main`"
       class="flex min-w-0 flex-1 flex-col"
     >

@@ -5,9 +5,9 @@ structure: composition
 status: implemented
 spec_version: 13
 template: 2
-checksum: 9de12ea77b209537adc934229f7e8de6a0c18c1cb95025388132e87125347364
+checksum: c57ebc5b8bb3738a62eb1dce8f7e7c20b72ef13124ec582a664c522fd66cd05e
 created: 2026-11-12
-last_updated: 2026-11-17
+last_updated: 2026-11-19
 ---
 
 # ConsoleLayout — Component Spec
@@ -224,7 +224,8 @@ packages/webkit/src/components/layout/console-layout/
 ## Accessibility (WCAG 2.1 AA)
 
 - Landmarks: the rail is the `Sidebar` `<nav>` named by `ariaLabel`; the header is `AppHeader` (`<header>`); the page body is inside the layout's single `<main>`. A page body must not render a second `<main>`.
-- Keyboard map: `Tab` runs rail (wordmark, `sidebar-header`, navigation) → header → page; `⌘K` / `Ctrl K` opens the palette (owned by `Command`); on wide layouts `⌘B` / `Ctrl B` toggles the rail and writes `v-model:navigation-open` (the Sidebar's `shortcut`, off while compact and while typing in a field); in the palette `ArrowUp` / `ArrowDown` move, `Enter` chooses, `Escape` closes and returns focus. The rail keyboard map is `SidebarMenu`'s; the compact drawer closes on `Escape` and returns focus to the hamburger (`AppLayout`).
+- Skip link: the first `Tab` stop is the `SkipLink` `AppLayout` renders (`Skip to content`); it jumps past the rail and the header to the content region that holds the `<main>`.
+- Keyboard map: `Tab` runs skip link → rail (wordmark, `sidebar-header`, navigation) → header → page; `⌘K` / `Ctrl K` opens the palette (owned by `Command`); on wide layouts `⌘B` / `Ctrl B` toggles the rail and writes `v-model:navigation-open` (the Sidebar's `shortcut`, off while compact and while typing in a field); in the palette `ArrowUp` / `ArrowDown` move, `Enter` chooses, `Escape` closes and returns focus. The rail keyboard map is `SidebarMenu`'s; the compact drawer closes on `Escape` and returns focus to the hamburger (`AppLayout`).
 - Names: the compact hamburger (`Open navigation`), the brand link (`Azion home`), the rail account trigger (`Account menu`, an icon button) come from the locale catalog; the avatar carries the account name. The header avatar trigger shows the initials, so its name starts with them (`JD, account menu`, `consoleLayout.accountMenuFor`) to meet WCAG 2.5.3 Label in Name (a speech user says what they see); with an account image it has no visible text and is named `Account menu`.
 - Account menu: choosing an option by pointer or keyboard emits `account-select`; the keyboard map inside the menu is `DropdownMenu`'s.
 - Visible focus: every interactive part is a WebKit control with its own ring; the brand link and the avatar button use `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.

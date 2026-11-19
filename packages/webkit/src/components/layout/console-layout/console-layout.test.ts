@@ -80,6 +80,16 @@ const mount = (
 
 describe('ConsoleLayout', () => {
   describe('basics', () => {
+    it('opens with the skip link, whose target holds the main landmark', async () => {
+      const { getByTestId, getByRole, container } = mount()
+      const skip = getByTestId('app-layout__skip-link')
+      expect(container.querySelector('a[href], button')).toBe(skip)
+      const target = document.getElementById(skip.getAttribute('href')!.slice(1))!
+      expect(target.contains(getByRole('main'))).toBe(true)
+      await fireEvent.click(skip)
+      expect(document.activeElement).toBe(target)
+    })
+
     it('renders the chrome around one main landmark holding the page body', () => {
       const { getByTestId, getAllByRole, getByText } = mount()
       expect(getByTestId('console-layout')).toBeTruthy()

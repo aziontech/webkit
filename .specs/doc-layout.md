@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 9
 template: 2
-checksum: f3efd9155650a1fbf3a76d2815ac79b914e333a557ab5e1369309c6828ff2637
+checksum: 2a7a04081f502f7a95d101f9732a4611d7677db11ed05f671090f42a21f01619
 created: 2026-11-12
-last_updated: 2026-11-18
+last_updated: 2026-11-19
 ---
 
 # DocLayout — Component Spec
@@ -163,7 +163,8 @@ A page (the route's component) is only its article; its anchored headings fill t
 ## Accessibility (WCAG 2.1 AA)
 
 - Landmarks: the header is `AppHeader` (`<header>` named by the catalog `Documentation sections` on its section links); the rail is the `Sidebar` `<nav>` named by `ariaLabel`; the article is inside the single `<main>`; the end rail is an `<aside>` holding the `DocTableOfContents` navigation landmarks. A page must not render a second `<main>`.
-- Keyboard map: `Tab` runs header → rail → article → end rail → footer; the rail's resize handle is a focusable `separator` (`Resize navigation`) moved with `ArrowLeft` / `ArrowRight`, its collapse button (`Collapse navigation`) folds the rail and the edge affordance's button (`Expand navigation`) brings it back, all owned by `Sidebar`; `⌘K` / `Ctrl K` opens the palette (`Command`); the compact menu button opens the drawer, `Escape` closes it and returns focus. Choosing an outline entry moves focus to its heading (made focusable with `tabindex="-1"`).
+- Skip link: the first `Tab` stop is a `SkipLink` (`Skip to content`, visible on focus); it moves focus to the `<main>` (given a generated `id`), past the header and the rail.
+- Keyboard map: `Tab` runs skip link → header → rail → article → end rail → footer; the rail's resize handle is a focusable `separator` (`Resize navigation`) moved with `ArrowLeft` / `ArrowRight`, its collapse button (`Collapse navigation`) folds the rail and the edge affordance's button (`Expand navigation`) brings it back, all owned by `Sidebar`; `⌘K` / `Ctrl K` opens the palette (`Command`); the compact menu button opens the drawer, `Escape` closes it and returns focus. Choosing an outline entry moves focus to its heading (made focusable with `tabindex="-1"`).
 - Names: the mark link (`Azion Docs home`), the compact menu button (`Open documentation navigation`) and the search (`Search docs`) come from the locale catalog.
 - Visible focus: composed controls own their rings; the mark link uses `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
 
