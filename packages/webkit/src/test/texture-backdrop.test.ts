@@ -14,7 +14,10 @@ import StatTileGroupPageEntry from '../../examples/stat-tile-group/page-entry.vu
 import Chart from '../components/chart/chart/chart.vue'
 import ChartLine from '../components/chart/chart/chart-line/chart-line.vue'
 import Texture from '../components/content/texture/texture.vue'
+import FlowDiagram from '../components/data/flow-diagram/flow-diagram.vue'
+import Hero from '../components/marketing/hero/hero.vue'
 import SitePage from '../components/marketing/site-page/site-page.vue'
+import HeroSection from '../components/section/hero-section/hero-section.vue'
 import MediaSplitSection from '../components/section/media-split-section/media-split-section.vue'
 
 const chart = () =>
@@ -192,5 +195,109 @@ describe('Texture is a backdrop for text only', () => {
       }
     })
     await expect.poll(() => container.querySelector('[data-plain-ground]')).not.toBeNull()
+  })
+})
+
+const NODES = [
+  { id: 'domain', eyebrow: 'Domain', icon: 'az az-domains', title: 'shop.example.com' },
+  { id: 'workload', eyebrow: 'Workload', icon: 'az az-workloads', title: 'shop-prod' }
+]
+
+const diagram = () => h(FlowDiagram, { ariaLabel: 'Request path', nodes: NODES })
+
+const overlap = (a: DOMRect, b: DOMRect) =>
+  Math.max(0, Math.min(a.right, b.right) - Math.max(a.left, b.left)) *
+  Math.max(0, Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top))
+
+const texturesUnder = (container: Element, graphic: Element) => {
+  const box = graphic.getBoundingClientRect()
+  return [...container.querySelectorAll('[data-slot="texture"]')]
+    .filter(painted)
+    .map((texture) => texture.getBoundingClientRect())
+    .filter((layer) => layer.width > 0 && layer.height > 0 && overlap(layer, box) > 0)
+}
+
+const centerHero = (bottom: () => unknown) =>
+  render(HeroSection, {
+    props: {
+      variant: 'center',
+      title: 'Put your application close to users in seconds',
+      description: 'Create a workload and it is live in every data center.'
+    },
+    slots: { bottom }
+  })
+
+describe('Hero keeps its dots behind the copy, never under a diagram', () => {
+  it('stops the dot field above a diagram in the bottom window', async () => {
+    const { container } = centerHero(diagram)
+    await expect.poll(() => container.querySelector('[data-plain-ground]')).not.toBeNull()
+    const graphic = container.querySelector('[data-plain-ground]')!
+    const title = container.querySelector('h1')!
+    const textures = [...container.querySelectorAll('[data-slot="texture"]')].filter(painted)
+    expect(textures.length).toBeGreaterThan(0)
+    expect(
+      textures.some((t) => overlap(t.getBoundingClientRect(), title.getBoundingClientRect()) > 0)
+    ).toBe(true)
+    expect(texturesUnder(container, graphic)).toEqual([])
+  })
+
+  it('keeps the dot field under a bottom window that holds no diagram', async () => {
+    const { container } = centerHero(() =>
+      h('p', { 'data-testid': 'command' }, 'npm create azion@latest')
+    )
+    await settle()
+    const command = container.querySelector('[data-testid="command"]')!
+    expect(texturesUnder(container, command).length).toBeGreaterThan(0)
+  })
+
+  it('drops the dot field when a diagram stands in the top window', async () => {
+    const { container } = render(Hero, {
+      props: { texture: 'dots' },
+      slots: { default: () => h('h1', 'Build'), top: diagram }
+    })
+    await expect.poll(() => container.querySelector('[data-plain-ground]')).not.toBeNull()
+    expect(texturesUnder(container, container.querySelector('[data-plain-ground]')!)).toEqual([])
+  })
+
+  it('drops the dot field when a chart stands beside the copy', async () => {
+    const { container } = render(Hero, {
+      props: { texture: 'dots' },
+      slots: { default: () => h('h1', 'Build'), media: chart }
+    })
+    await expect.poll(() => container.querySelector('[data-plain-ground]')).not.toBeNull()
+    expect(texturesUnder(container, container.querySelector('[data-plain-ground]')!)).toEqual([])
+  })
+
+  it('keeps the dot field under an opaque window in the bottom slot', async () => {
+    const { container } = centerHero(() =>
+      h('div', { 'data-opaque': '', class: 'w-80' }, [diagram()])
+    )
+    await expect.poll(() => container.querySelector('[data-plain-ground]')).not.toBeNull()
+    expect(
+      texturesUnder(container, container.querySelector('[data-opaque]')!).length
+    ).toBeGreaterThan(0)
+  })
+
+  it('paints no dots under a page JSON diagram scene in a centered hero', async () => {
+    const { container } = render(SitePage, {
+      props: {
+        sections: [
+          {
+            _id: 'hero-section',
+            props: { variant: 'center', title: 'Every request takes the shortest path' },
+            scenes: {
+              bottom: {
+                component: 'FlowDiagram',
+                props: { ariaLabel: 'Request path', nodes: NODES }
+              }
+            }
+          }
+        ]
+      }
+    })
+    await expect.poll(() => container.querySelector('[data-plain-ground]')).not.toBeNull()
+    await settle()
+    expect(texturesUnder(container, container.querySelector('[data-plain-ground]')!)).toEqual([])
+    expect(container.querySelectorAll('[data-slot="texture"]').length).toBeGreaterThan(0)
   })
 })

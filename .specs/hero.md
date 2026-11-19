@@ -3,10 +3,10 @@ name: hero
 category: marketing
 structure: composition
 status: implemented
-spec_version: 8
-checksum: fe59a9ea712eb41a7d55961bbb947aba025bd9a71b0a7fd38370e327ff8c03ce
+spec_version: 9
+checksum: 718c84d447bb3c3c54ae46dcdab172c301218cc69b0c4881b70322c8a3633b1b
 created: 2026-09-22
-last_updated: 2026-11-15
+last_updated: 2026-11-19
 ---
 
 # Hero — Component Spec
@@ -148,6 +148,7 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 - `data-align` carries where the content column sits vertically in a `screen` band. The column takes the band's leftover height, (`start`, `center` or `end`), so `center` is the centre of the space actually available — a `bottom` asset reserves its height and the copy centres above it, while a `top` asset overlays and claims none
 - The band is an `isolate` stacking context, so its layer order never leaks into the page. Layer tokens set that order: `--hero-banner-z-background` (0), `--hero-banner-z-top` / `--hero-banner-z-bottom` (1), `--hero-banner-z-content` (10)
 - Each asset window clips its slotted child, so an asset larger than the band shows only the part the window frames. Custom properties place it: `--hero-banner-top-height` / `--hero-banner-bottom-height` size the window, and `--hero-banner-top-x` / `-y`, `--hero-banner-bottom-x` / `-y`, `--hero-banner-background-x` / `-y` move the asset inside it
+- Texture behind text only: the backdrop (`data-slot="hero-backdrop"`, under the `texture` prop and the `background` slot) spans the content and the floor by default, so dots run under a console window or a command in the `bottom` window. When a window holds content marked `data-plain-ground` (a chart, `FlowDiagram`, `StatTile`, `Tracker` or a page-JSON content scene) outside an opaque `data-opaque` ground, the backdrop keeps clear of it: with the mark in the `bottom` window (`data-slot="hero-bottom"`) it stops at that window's top edge, so the dots stay behind the copy and end above the diagram; with the mark in the `top` window (`data-slot="hero-top"`) or the `media` cell (`data-slot="hero-media"`), which share the content's area, the band draws no backdrop at all. The floor texture drops itself beside the same mark (see `texture`)
 - The backdrop sets `--texture-fade-lead: transparent`, so a `top` / `bottom` fade on the `texture` layer — or on a `texture` in the `background` slot — ramps in from zero at its leading edge as well as fading out: the opening band sits under the site header, and the texture must clear it. Outside a hero the same fades stay single
 - `data-floor` present when `floorTexture` paints the floor window. The window then takes a fluid default height (`clamp(9rem, 30dvh, 34rem)`) so a `screen` band still measures one screen on a laptop and caps at the design's field where there is room; with no floor texture it stays `auto` and is sized by its slotted child. `--hero-banner-bottom-height` overrides either, and `--hero-banner-floor-ink` (0.6) sets how strongly the texture reads
 - The floor holds the `bottom` window and the `marquee` strip in one block, so a single ground covers both: `--hero-banner-floor-bg` (transparent by default) paints it, which is how a design plinths the floor a shade off the band's own canvas

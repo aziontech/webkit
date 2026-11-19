@@ -9,7 +9,10 @@ import { findGraphicsOnTexture } from './texture-backdrop'
 
 const WIDTHS = [390, 1280]
 
-const EXAMPLES = resolve(dirname(fileURLToPath(import.meta.url)), '../../../packages/webkit/examples')
+const EXAMPLES = resolve(
+  dirname(fileURLToPath(import.meta.url)),
+  '../../../packages/webkit/examples'
+)
 
 const TEXTURED = /Texture|Backdrop|Section|SitePage|Hero\b|MediaSplit|MediaTabs|MediaScroll|_id/
 
@@ -78,3 +81,30 @@ test('texture backdrop detector sees a chart drawn on a texture', async ({ page 
   const found = await page.evaluate(findGraphicsOnTexture)
   expect(found.map((hit) => hit.graphic)).toContain('chart')
 })
+
+for (const width of WIDTHS) {
+  const mode: Mode = { theme: 'light', width }
+  test(`texture backdrop hero keeps its dots off a diagram in the bottom window ${label(mode)}`, async ({
+    page
+  }) => {
+    await prepare(page, mode)
+    await page.goto(`${DOCS}/frame/example/hero-section/site-scene${query(mode)}`)
+    await page.locator('[data-example][data-ready]').waitFor()
+    await settle(page)
+    const marked = await page.evaluate(() => {
+      const scene = document.querySelector('[data-slot="hero-bottom"] svg')
+      scene?.setAttribute('data-plain-ground', '')
+      return scene !== null
+    })
+    expect(marked).toBe(true)
+    await expectNoGraphicOnTexture(page)
+    const behindTitle = await page.evaluate(() => {
+      const title = document.querySelector('h1')!.getBoundingClientRect()
+      return [...document.querySelectorAll('[data-slot="texture"]')].some((texture) => {
+        const layer = texture.getBoundingClientRect()
+        return texture.checkVisibility() && layer.top < title.bottom && layer.bottom > title.top
+      })
+    })
+    expect(behindTitle).toBe(true)
+  })
+}
