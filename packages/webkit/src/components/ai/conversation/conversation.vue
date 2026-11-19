@@ -254,7 +254,7 @@
           if (entries.some((entry) => entry.isIntersecting) && !requested)
             request(new Event('load-more'))
         },
-        { root: viewportEl.value, rootMargin: `${LOOKAHEAD}px 0px 0px 0px` }
+        { root: viewportEl.value, rootMargin: `${LOOKAHEAD}px 0% 0% 0%` }
       )
       if (olderEl.value) watcher.observe(olderEl.value)
     }

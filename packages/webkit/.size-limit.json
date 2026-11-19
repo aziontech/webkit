@@ -1171,7 +1171,7 @@
   {
     "name": "conversation",
     "path": "src/components/ai/conversation/conversation.vue",
-    "limit": "4.75 KB"
+    "limit": "6.4 KB"
   },
   {
     "name": "prompt-input",

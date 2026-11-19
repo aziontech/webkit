@@ -2,10 +2,10 @@
 name: conversation
 category: ai
 structure: monolithic
-status: approved
+status: implemented
 spec_version: 3
 template: 2
-checksum: bc3e07e2c3f6a0bf0f1ecba3ee65c4b14e728a1ba3c8f369d4ecf7d4af28293c
+checksum: 7136368085e1d1b86c7ea560b3d936c297968a472945a2812cad317b7af70e2d
 created: 2026-11-11
 last_updated: 2026-11-19
 ---
@@ -21,12 +21,8 @@ older message — a "Scroll to the latest message" button brings them back. It i
 own live behavior is off, so streamed tokens are never read one by one; instead each `ChatMessage`
 that finishes (or fails) hands its text to the conversation's polite live region, once.
 
-A long thread does not have to arrive whole. When the app keeps only the latest turns and older
-ones exist on the server, it sets `moreMessages`: a Load earlier messages button opens the thread,
-and the log also asks for them (`load-more`) on its own as the reader scrolls near the top. While
-`loadingMore` is true the button shows its spinner and reads `Loading earlier messages`. When the
-older messages arrive above the first one, the message the reader was looking at stays exactly where
-it was on screen: the log moves its scroll position by the height that was added above it.
+With `moreMessages`, a Load earlier messages button opens the thread and the log also emits
+`load-more` as the reader scrolls near the top; prepended messages never move what the reader sees.
 
 It also sets where messages sit for the whole thread (`layout`): `split` for a full chat page,
 `start` for a dense side panel or drawer (Cloudscape's rule for embedded surfaces).
@@ -41,7 +37,7 @@ It also sets where messages sit for the whole thread (`layout`): `split` for a f
 - A one-shot generated block on a page (a summary card, an explanation beside a chart) → render `StreamingResponse` in place.
 - A log of system events with timestamps and filtering → use `log-viewer`.
 - A list of past conversations → a `table` or `item` list; this is one thread.
-- A lost or resuming connection to the model (`Reconnecting…`, `Connection lost`) → it is the app's state, not the log's: show an `Alert` (`severity="warning"`) or a `StatusIndicator` (`loading`) above the prompt input, where the reader looks before sending.
+- A lost or resuming connection (`Reconnecting…`) → the app's state, not the log's: an `Alert` or `StatusIndicator` above the prompt input.
 
 ## Related
 
@@ -57,7 +53,7 @@ It also sets where messages sit for the whole thread (`layout`): `split` for a f
 - Never auto-scroll while the reader is reading an older message: the component already stops following when they scroll up.
 - Use `layout="start"` in drawers and side panels, `split` on a full page.
 - Keep one conversation per surface; a second thread is a second page or a history list.
-- With `moreMessages`, set `loadingMore` while the older messages load and prepend them in the same update that sets it back to `false`, so the log keeps the reader's place and does not announce the old messages as new.
+- Prepend older messages in the same update that sets `loadingMore` back to `false`.
 
 ## Usage
 
@@ -96,14 +92,11 @@ announced) and `announce(author, text)`._
 
 Exports: `"./conversation": "./src/components/ai/conversation/conversation.vue"`. Exported type:
 `ConversationLayout = 'split' | 'start'`. Composed DS components: `icon-button` (scroll to latest),
-`button` (load earlier messages: `variant="ghost"`, `size="small"`, leading `az-arrow-up` icon, centered
-as the first row of the thread; its own `loading` state while they load).
+`button` (load earlier messages: ghost, small, `az-arrow-up`, centered first row; its `loading` state).
 
-Announcing new messages: a message announces itself only when it mounts after the conversation's
-`ready` flag is true (or when its status turns to `success` / `error`). The conversation sets `ready`
-to `false` from the moment it emits `load-more` (or `loadingMore` turns on) until the update that ends
-the load has rendered (older messages were prepended, or the render after `loadingMore` turns back to `false`), so
-messages prepended in that update mount while `ready` is false and are never read as new.
+Announcing: a message announces on mount only while the context's `ready` is true. `ready` is false
+from a request (or `loadingMore`) until the render that ends the load, so prepended messages are
+never read as new.
 
 ## Props
 
@@ -116,9 +109,9 @@ messages prepended in that update mount while `ready` is false and are never rea
 
 ## Events
 
-| Event       | Payload          | Notes                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
-| ----------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `load-more` | `(event: Event)` | `moreMessages`: the Load earlier messages button was pressed (its click), or the top of the thread came within 200 px of the viewport (`new Event('load-more')`). The app prepends the older messages and sets `loadingMore` meanwhile. Not repeated while `loadingMore` is true. After a request, the top row emits again only once older messages were prepended (the first message of the thread changed); if nothing was added (the load failed), only the Load earlier messages button asks again. |
+| Event       | Payload          | Notes                                                                                                                                                                                                                                                    |
+| ----------- | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `load-more` | `(event: Event)` | The button's click, or the top row came within 200 px of the viewport (`new Event('load-more')`). Not repeated while `loadingMore`, nor until older messages were prepended (the first message changed); after a failed load only the button asks again. |
 
 `scrollToBottom()` is exposed for owners that need to jump to the end after sending.
 
@@ -132,12 +125,11 @@ messages prepended in that update mount while `ready` is false and are never rea
 
 - `data-pinned` on the root while the log follows the newest message; absent once the reader scrolled up (the Scroll to latest button shows). Only the reader's own scrolling unpins it (wheel, touch, pointer on the scrollbar, keys): a scroll the browser causes — a host moving the log in the DOM, a drawer opening — is corrected back to the end while pinned.
 - `data-layout` mirrors `layout`; each message carries it as `data-alignment`.
-- `data-loading-more` on the root and `aria-busy="true"` on the log while `loadingMore`; the button at the top of the thread is in its `loading` state (spinner, `aria-busy`, `aria-disabled`) and reads `Loading earlier messages`.
-- With `moreMessages` or `loadingMore`, the top of the thread shows the Load earlier messages button (`__load-more`); with neither, nothing is shown above the first message.
-- Scroll anchoring: while the reader is not at the end, the first message in view is the anchor; when the thread grows above it (older messages prepended, the top row changing height), the log moves its scroll position by the same amount, so nothing the reader sees moves. While the Load earlier messages button holds focus (a keyboard press, or a click in a browser that focuses buttons) the button is the anchor instead: it stays where it was and the loaded messages appear right under it, next in the reading and `Tab` order. The native `overflow-anchor` is turned off on the log so the browser does not move it a second time. While pinned to the end, the log stays at the end.
-- The top row (`__older`) is observed with an `IntersectionObserver` whose root is the log and whose `rootMargin` reaches 200 px above it; it renders only while `moreMessages` or `loadingMore`. The row holds only the button: no separate sentinel element, nothing hidden for assistive technology.
-- Load failure: the app keeps `moreMessages` true and sets `loadingMore` back to `false` without prepending. The button returns to its idle label as the retry path; the top row does not ask again until older messages are prepended; `Earlier messages loaded` is not announced. The error message is the app's (an `Alert` in the block), not the log's.
-- No `disabled`, `readonly` or `invalid` state, and no built-in `empty` or `error` rendering: an empty thread renders nothing, or only the Load earlier messages button with `moreMessages`; a failed load is described above.
+- `data-loading-more` on the root and `aria-busy` on the log while `loadingMore`; the button is in its `loading` state.
+- With `moreMessages` or `loadingMore` the first row (`__older`, observed by an `IntersectionObserver`) holds the button (`__load-more`).
+- Scroll anchoring: while not pinned, the first message in view (or the button, while it has focus) is the anchor; growth above it is offset in the scroll position. Native `overflow-anchor` is off.
+- Load failure: `loadingMore` returns to `false` with nothing prepended; the idle button is the retry path, nothing is announced, the error is the app's (an `Alert`).
+- No `disabled`, `readonly`, `invalid`, `empty` or `error` state of its own.
 - No `data-state` — nothing opens or closes.
 
 ## Motion & Animations
@@ -166,10 +158,10 @@ _None._
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: the log is focusable (`tabindex="0"`) so keyboard users can scroll it; it shows an inset `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
-- Keyboard map: `Tab` reaches the log, arrows / Page Up / Page Down scroll it; `Tab` continues into the messages' controls (the Load earlier messages button first, when shown); the Scroll to latest button is a normal button. Loading older messages never depends on scrolling: the button is the keyboard and screen-reader path.
-- Focus is kept through a load: the button stays mounted and focusable while loading (`aria-disabled`, not `disabled`); if it unmounts because no older messages remain while it held focus, the log takes focus (never the document body).
-- ARIA: `role="log"` with `aria-live="off"` (streaming chunks are not read) and `aria-label`; a separate visually hidden `aria-live="polite"` `aria-atomic="true"` region receives `"<author>: <text>"` when an assistant or system message completes or fails. User messages are not announced (the reader just typed them). The same region says `Loading earlier messages` when `loadingMore` turns on and `Earlier messages loaded` only when the first message of the thread changed (older messages were prepended) after a request; prepended messages are never announced (see Sub-components, Announcing new messages).
-- Contrast ≥4.5:1 (text) / ≥3:1 (icons) on the scroll button and on the Load earlier messages button, idle (ghost: `--text-default` on the thread's surface) and loading (`--text-disabled` on `--bg-disabled`, `Button`'s own inert colors).
+- Keyboard map: `Tab` reaches the log, arrows / Page Up / Page Down scroll it; `Tab` continues into the messages' controls (the Load earlier messages button first); the Scroll to latest button is a normal button.
+- Focus: the button stays focusable while loading (`aria-disabled`); if it leaves while focused, the log takes focus.
+- ARIA: `role="log"` with `aria-live="off"` (streaming chunks are not read) and `aria-label`; a separate visually hidden `aria-live="polite"` `aria-atomic="true"` region receives `"<author>: <text>"` when an assistant or system message completes or fails. User messages are not announced (the reader just typed them). It also says `Loading earlier messages`, then `Earlier messages loaded` once older messages were prepended.
+- Contrast ≥4.5:1 (text) / ≥3:1 (icons) on both buttons, idle and loading (`Button`'s own colors).
 - Reduced motion: smooth scrolling is replaced by a jump.
 - Touch target: the scroll button is a medium `IconButton` (≥32 px, 44 px on coarse pointers through `IconButton`).
 
@@ -202,13 +194,13 @@ _None._
 
 ## Performance
 
-- Bundle budget: 4.75 KB gzip (`conversation` in `.size-limit.json`), including the `Button` dependency (it shares `Spinner` with `IconButton`).
+- Bundle budget: 6.4 KB gzip (`conversation` in `.size-limit.json`), raised from 4.75 KB in v3 for the composed `Button` (about 1.2 KB, it shares `Spinner` with `IconButton`) and the scroll anchoring.
 - Runtime budget: one `ResizeObserver` on the thread; no per-token work beyond a scroll assignment while pinned. With `moreMessages`, one `IntersectionObserver` on the top row; the scroll anchor is found with a binary search over the thread's children on each scroll event.
 - Heavy parts: none; long threads are the owner's to window (keep the last N turns rendered).
 
 ## Examples
 
-_Examples in `packages/webkit/examples/conversation/`: Default (a short thread), Drawer layout (`start`), Long thread (scroll to latest), Earlier messages (`more-messages` with `@load-more` prepending three older turns after a short simulated delay while `loading-more`, until the start of the thread; justified because loading older messages is a distinct behavior with its own loading state and scroll anchoring)._
+_Examples in `packages/webkit/examples/conversation/`: Default (a short thread), Drawer layout (`start`), Long thread (scroll to latest), Earlier messages (`more-messages` + `@load-more` prepending three turns after a simulated delay; justified: a distinct behavior with its own loading state)._
 
 ## Constraints — DO NOT
 

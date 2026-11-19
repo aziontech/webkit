@@ -1,5 +1,5 @@
 {
- "purpose": "The scrolling message log of a generative AI chat. It holds the thread (`ChatMessage` items, then whatever follows the last response: suggestions, an approval card), keeps the newest message in view while the reader is at the end, and stops following the moment they scroll up to read or copy an older message — a \"Scroll to the latest message\" button brings them back. It is a `role=\"log\"` whose own live behavior is off, so streamed tokens are never read one by one; instead each `ChatMessage` that finishes (or fails) hands its text to the conversation's polite live region, once. It also sets where messages sit for the whole thread (`layout`): `split` for a full chat page, `start` for a dense side panel or drawer (Cloudscape's rule for embedded surfaces).",
+ "purpose": "The scrolling message log of a generative AI chat. It holds the thread (`ChatMessage` items, then whatever follows the last response: suggestions, an approval card), keeps the newest message in view while the reader is at the end, and stops following the moment they scroll up to read or copy an older message — a \"Scroll to the latest message\" button brings them back. It is a `role=\"log\"` whose own live behavior is off, so streamed tokens are never read one by one; instead each `ChatMessage` that finishes (or fails) hands its text to the conversation's polite live region, once. With `moreMessages`, a Load earlier messages button opens the thread and the log also emits `load-more` as the reader scrolls near the top; prepended messages never move what the reader sees. It also sets where messages sit for the whole thread (`layout`): `split` for a full chat page, `start` for a dense side panel or drawer (Cloudscape's rule for embedded surfaces).",
  "useWhen": [
   "Any surface where a person and the generative AI assistant exchange messages: the assistant page, the assistant drawer, an in-flow helper.",
   "A transcript that grows while the reader watches it (streaming responses, tool calls appearing)."
@@ -7,7 +7,8 @@
  "avoidWhen": [
   "A one-shot generated block on a page (a summary card, an explanation beside a chart) → render `StreamingResponse` in place.",
   "A log of system events with timestamps and filtering → use `log-viewer`.",
-  "A list of past conversations → a `table` or `item` list; this is one thread."
+  "A list of past conversations → a `table` or `item` list; this is one thread.",
+  "A lost or resuming connection (`Reconnecting…`) → the app's state, not the log's: an `Alert` or `StatusIndicator` above the prompt input."
  ],
  "related": [
   "`chat-message` — the item the log holds; announces itself through this component.",
@@ -20,6 +21,7 @@
   "Pin the prompt input under the conversation; only the log scrolls.",
   "Never auto-scroll while the reader is reading an older message: the component already stops following when they scroll up.",
   "Use `layout=\"start\"` in drawers and side panels, `split` on a full page.",
-  "Keep one conversation per surface; a second thread is a second page or a history list."
+  "Keep one conversation per surface; a second thread is a second page or a history list.",
+  "Prepend older messages in the same update that sets `loadingMore` back to `false`."
  ]
 }
