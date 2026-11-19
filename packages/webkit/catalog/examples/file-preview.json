@@ -11,9 +11,9 @@
    "file": "examples/file-preview/image.vue"
   },
   {
-   "name": "Text",
-   "summary": "A long log file cut at `max-length`, with the note that says how much is shown.",
-   "file": "examples/file-preview/text.vue"
+   "name": "PDF",
+   "summary": "A PDF invoice handed over as base64 bytes, the shape a chat document part carries, drawn in the browser's own PDF viewer; where the browser has none, the no-preview state points at Download.",
+   "file": "examples/file-preview/pdf.vue"
   }
  ]
 }

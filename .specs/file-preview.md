@@ -2,10 +2,10 @@
 name: file-preview
 category: content
 structure: monolithic
-status: approved
+status: implemented
 spec_version: 2
 template: 2
-checksum: 04ae9747d3edca4cf80cf1f1e2ae7f631eb1a99c0877302edae5f7d6f8877702
+checksum: 83b5d0eb4ce605ec78e719c012cd1e4c115a5bc64063afcebe8b36f8b27c9031
 created: 2026-11-16
 last_updated: 2026-11-19
 ---
@@ -69,17 +69,17 @@ The preview of one stored file in a storage or object browser, or of a document 
 
 ## Props
 
-| Prop        | Type      | Default   | Required | JSDoc                                                                                                   |
-| ----------- | --------- | --------- | -------- | ------------------------------------------------------------------------------------------------------- |
-| `fileName`  | `string`  | —         | true     | Name of the file, shown in the header and used as the image's alternative text.                         |
-| `mimeType`  | `string`  | `''`      | false    | Media type of the file (`image/png`, `application/json`). Empty reads the type from the file extension. |
-| `bytes`     | `number`  | undefined | false    | Size of the whole file in bytes, shown beside the type. Unset hides the size.                           |
-| `src`       | `string`  | `''`      | false    | URL of an image or PDF file to draw. Set, it wins over `base64`.                                        |
+| Prop        | Type      | Default   | Required | JSDoc                                                                                                                                                                                          |
+| ----------- | --------- | --------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `fileName`  | `string`  | —         | true     | Name of the file, shown in the header and used as the image's alternative text.                                                                                                                |
+| `mimeType`  | `string`  | `''`      | false    | Media type of the file (`image/png`, `application/json`). Empty reads the type from the file extension.                                                                                        |
+| `bytes`     | `number`  | undefined | false    | Size of the whole file in bytes, shown beside the type. Unset hides the size.                                                                                                                  |
+| `src`       | `string`  | `''`      | false    | URL of an image or PDF file to draw. Set, it wins over `base64`.                                                                                                                               |
 | `base64`    | `string`  | `''`      | false    | Base64 bytes of the file, for an app that holds the file rather than a URL. Text and JSON are decoded into the body when `content` is empty; an image or PDF with no `src` is drawn from them. |
-| `content`   | `string`  | `''`      | false    | Text of a text or JSON file. JSON that parses is pretty-printed; JSON that does not shows as text. Set, it wins over `base64`. |
-| `maxLength` | `number`  | `20000`   | false    | Characters of text shown before the rest is cut, with a note that says how much is shown.               |
-| `loading`   | `boolean` | `false`   | false    | Shows a placeholder in the body while the app fetches the file; the header stays.                       |
-| `error`     | `string`  | `''`      | false    | Why the preview could not load. Set, the body shows the error state with this text.                     |
+| `content`   | `string`  | `''`      | false    | Text of a text or JSON file. JSON that parses is pretty-printed; JSON that does not shows as text. Set, it wins over `base64`.                                                                 |
+| `maxLength` | `number`  | `20000`   | false    | Characters of text shown before the rest is cut, with a note that says how much is shown.                                                                                                      |
+| `loading`   | `boolean` | `false`   | false    | Shows a placeholder in the body while the app fetches the file; the header stays.                                                                                                              |
+| `error`     | `string`  | `''`      | false    | Why the preview could not load. Set, the body shows the error state with this text.                                                                                                            |
 
 ## Events
 
@@ -176,7 +176,7 @@ _none_
 
 ## Performance
 
-- Bundle budget: 6.9 KB for `./file-preview` gzip in `.size-limit.json` (measured 6.8 KB + ~0.1 KB).
+- Bundle budget: 7.6 KB for `./file-preview` gzip in `.size-limit.json` (v2 measured 7.52 KB + ~0.1 KB; raised from 6.9 KB for the PDF viewer branch, the base64 decoding with its object URL lifecycle, and the audio, video and PDF glyphs).
 - Runtime budget: pretty-printing and cutting run once per `content` change; at most `maxLength` characters reach the DOM.
 - Heavy parts: none (no highlighter, no PDF library: the browser's viewer draws a PDF; `CodeBlock` stays out of the bundle).
 - Base64: decoded once per `base64` change; an image or PDF becomes one object URL, revoked when the source changes or the component unmounts.

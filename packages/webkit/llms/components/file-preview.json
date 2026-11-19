@@ -8,18 +8,20 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "The preview of one stored file in a storage or object browser: a header with the file's glyph, name, type and size, a Download action, and a body that shows the file the way it can be read. An image renders as the image, text as wrapped monospace text, JSON pretty-printed, and any other type a no-preview state that points at Download. Long text is cut at `maxLength` characters with a note that says so. It renders what the app hands it (an image URL, the text it fetched); it fetches nothing.",
+ "purpose": "The preview of one stored file in a storage or object browser, or of a document in an AI conversation (a PDF the reader attaches or a model returns): a header with the file's glyph, name, type and size, a Download action, and a body that shows the file the way it can be read. An image renders as the image, a PDF in the browser's own PDF viewer, text as wrapped monospace text, JSON pretty-printed, and any other type a no-preview state that points at Download. Audio and video files are recognized (their glyph and type) and show the file card with Download; this component plays nothing. Long text is cut at `maxLength` characters with a note that says so. The file comes as a URL (`src`), as text (`content`) or as base64 bytes (`base64`, the shape a chat message carries); it renders what the app hands it and fetches nothing.",
  "setup": null,
  "useWhen": [
   "The detail pane or drawer of a file browser when a row is opened (`view/view-file-browser`, an Edge Storage bucket, a KV value).",
   "Showing an uploaded object before it is published or replaced.",
+  "A document part or an attachment in an AI conversation: a PDF, a text file or an image, from a URL or from base64 bytes.",
   "Any screen that shows one file and needs a type-aware fallback for files it cannot draw."
  ],
  "avoidWhen": [
   "Editing a file — use `CodeEditor`.",
   "Highlighted source code with tabs and copy — use `CodeBlock`.",
   "A list of files with upload progress — use `FileTokenGroup` or `UploadProgress`.",
-  "A log stream — use `LogViewer`."
+  "A log stream — use `LogViewer`.",
+  "Playing audio or video — this component shows those files as a card with Download, not a player."
  ],
  "related": [
   "`CodeBlock` — syntax-highlighted code; heavier, for a code sample rather than a stored object.",
@@ -31,7 +33,9 @@
   "Pass `mimeType` from the object's `Content-Type`; leave it empty and the file name's extension decides.",
   "Fetch only the first part of a large text file (a ranged request) and pass `bytes` with the full size, so the header shows the real size while the body shows the first part.",
   "Handle `download` with the app's own signed or authorized URL; the component never builds one.",
-  "Pass an object URL (`URL.createObjectURL`) or a short-lived signed URL as `src`; revoke an object URL when the preview closes."
+  "Pass an object URL (`URL.createObjectURL`) or a short-lived signed URL as `src`; revoke an object URL when the preview closes.",
+  "When the app holds the bytes rather than a URL (a chat message part with base64 data), pass them as `base64` with `mimeType`; the component makes its own object URL for an image or PDF and revokes it when the source changes or the preview unmounts. Text and JSON are decoded into the body.",
+  "A PDF is drawn by the browser's own viewer; where there is none (most phones, a viewer turned off), the body shows the no-preview state and Download stays."
  ],
  "props": [
   {
@@ -60,14 +64,21 @@
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "URL of an image file to draw. An image with no `src` shows the no-preview state."
+   "doc": "URL of an image or PDF file to draw. Set, it wins over `base64`."
+  },
+  {
+   "name": "base64",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Base64 bytes of the file, for an app that holds the file rather than a URL. Text and JSON are decoded into the body when `content` is empty; an image or PDF with no `src` is drawn from them."
   },
   {
    "name": "content",
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "Text of a text or JSON file. JSON that parses is pretty-printed; JSON that does not shows as text."
+   "doc": "Text of a text or JSON file. JSON that parses is pretty-printed; JSON that does not shows as text. Set, it wins over `base64`."
   },
   {
    "name": "maxLength",
@@ -117,8 +128,8 @@
    "file": "examples/file-preview/image.vue"
   },
   {
-   "name": "Text",
-   "file": "examples/file-preview/text.vue"
+   "name": "PDF",
+   "file": "examples/file-preview/pdf.vue"
   }
  ],
  "docs": "components/file-preview.md"

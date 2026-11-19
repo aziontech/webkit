@@ -68,7 +68,7 @@ export function formatJson(content: string): string {
   }
 }
 
-export function decodeBase64(base64: string): Uint8Array | null {
+export function decodeBase64(base64: string): Uint8Array<ArrayBuffer> | null {
   try {
     const binary = atob(base64.replace(/^data:[^,]*;base64,/i, '').replace(/\s+/g, ''))
     const bytes = new Uint8Array(binary.length)
