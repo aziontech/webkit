@@ -808,7 +808,7 @@
                       </div>
 
                       <Accordion.Content>
-                        <div class="px-(--spacing-md) pt-(--spacing-xs)">
+                        <div>
                           <Alert
                             severity="warning"
                             size="small"

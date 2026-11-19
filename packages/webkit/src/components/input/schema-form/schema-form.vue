@@ -572,7 +572,7 @@
       >
         <AccordionItem :value="node.path">
           <AccordionTrigger>{{ node.label || t('schemaForm.advanced') }}</AccordionTrigger>
-          <AccordionContent>
+          <AccordionContent :padded="false">
             <div
               class="flex min-w-0 flex-col gap-(--spacing-md) pb-(--spacing-md) text-(--text-default)"
             >

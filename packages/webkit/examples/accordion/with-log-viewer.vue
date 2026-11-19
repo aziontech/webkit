@@ -38,7 +38,7 @@
   >
     <Accordion.Item value="deploy-482">
       <Accordion.Trigger>Deploy #482 — production</Accordion.Trigger>
-      <Accordion.Content>
+      <Accordion.Content :padded="false">
         <div class="h-[420px]">
           <LogViewer
             :lines="lines"

@@ -326,7 +326,7 @@
                             >
                           </Accordion.Trigger>
                           <Accordion.Content>
-                            <div class="flex min-w-0 flex-col gap-(--spacing-sm) p-(--spacing-md)">
+                            <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
                               <div
                                 class="grid grid-cols-1 items-start gap-(--spacing-lg) sm:grid-cols-2"
                               >
@@ -374,7 +374,7 @@
                             >
                           </Accordion.Trigger>
                           <Accordion.Content>
-                            <div class="flex min-w-0 flex-col gap-(--spacing-sm) p-(--spacing-md)">
+                            <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
                               <Field
                                 v-for="field in variables"
                                 :key="field.name"

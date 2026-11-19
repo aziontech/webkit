@@ -445,6 +445,32 @@ describe('Accordion', () => {
       expect(chevron.getAttribute('aria-hidden')).toBe('true')
     })
 
+    it('pads the content body by default and drops the padding when padded is false', () => {
+      const padded = render(
+        defineComponent({
+          components: { Accordion, AccordionItem, AccordionTrigger, AccordionContent },
+          template: `
+            <Accordion type="multiple" :default-value="['a', 'b']" icon-position="leading" size="large">
+              <AccordionItem value="a">
+                <AccordionTrigger>Logs</AccordionTrigger>
+                <AccordionContent data-testid="text">Text</AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="b">
+                <AccordionTrigger>Raw</AccordionTrigger>
+                <AccordionContent :padded="false" data-testid="flush">Log</AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          `
+        })
+      )
+      const body = padded.getByTestId('text').firstElementChild as HTMLElement
+      expect(body.hasAttribute('data-padded')).toBe(true)
+      expect(body.dataset['iconPosition']).toBe('leading')
+      expect(body.dataset['size']).toBe('large')
+      const flush = padded.getByTestId('flush').firstElementChild as HTMLElement
+      expect(flush.hasAttribute('data-padded')).toBe(false)
+    })
+
     // ---- Accessibility --------------------------------------------------------------------
     it('has no axe violations closed and with an item open', async () => {
       const view = render(host({ defaultValue: 'overview' }))

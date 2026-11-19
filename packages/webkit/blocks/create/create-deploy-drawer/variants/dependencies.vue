@@ -741,7 +741,7 @@
                               <span class="text-label-sm text-(--text-default)">Dependencies</span>
                             </Accordion.Trigger>
                             <Accordion.Content>
-                              <div class="min-w-0 px-(--spacing-md) py-(--spacing-md)">
+                              <div class="min-w-0">
                                 <div
                                   v-if="row.key === 'service' && reloading"
                                   aria-busy="true"

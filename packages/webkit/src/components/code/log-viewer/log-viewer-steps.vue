@@ -200,7 +200,7 @@
             </span>
           </span>
         </Accordion.Trigger>
-        <Accordion.Content>
+        <Accordion.Content :padded="false">
           <LogViewer
             :lines="step.lines"
             :bordered="false"

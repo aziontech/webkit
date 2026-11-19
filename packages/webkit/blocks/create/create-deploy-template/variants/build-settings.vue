@@ -345,7 +345,7 @@
                             >
                           </Accordion.Trigger>
                           <Accordion.Content>
-                            <div class="flex min-w-0 flex-col gap-(--spacing-sm) p-(--spacing-md)">
+                            <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
                               <Field>
                                 <Field.Label>Build preset</Field.Label>
                                 <Select
@@ -413,7 +413,7 @@
                             >
                           </Accordion.Trigger>
                           <Accordion.Content>
-                            <div class="flex min-w-0 flex-col gap-(--spacing-sm) p-(--spacing-md)">
+                            <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
                               <Field
                                 v-for="field in variables"
                                 :key="field.name"

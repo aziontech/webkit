@@ -19,7 +19,7 @@
 - Give every `Accordion.Item` a unique `value`; the open state is keyed by it, and `default-value` / `v-model` refer to it.
 - Bind `v-model` to a string in `type="single"` and to an array in `type="multiple"`; set `collapsible` to `false` only when one item must always stay open.
 - Set the trigger's `headingLevel` to fit the page outline (default `3`) — each trigger is wrapped in a real heading.
-- `Accordion.Content` applies no padding; pad the content you put inside it.
+- `Accordion.Content` pads its body on the trigger's inset (`--accordion-inset`) with `--spacing-xs` above and `--spacing-md` below, so the answer starts on the question's left edge (after the chevron when `icon-position` is `leading`). Pass `:padded="false"` for edge-to-edge content (a `LogViewer`, a table) that owns its spacing.
 - Set `size` and `icon-position` on the root, not per item — they are provided to every item through context.
 
 ## Don’t
@@ -68,7 +68,8 @@ The root ships a **compound API**: an `index.ts` (beside `accordion.vue`) attach
 - `accordion-trigger/accordion-trigger.vue` — The clickable header row (Figma "Header"): renders the title plus the `az az-chevron-down` glyph, toggles the item through the injected context, and exposes `aria-expanded` / `aria-controls`. To satisfy the ARIA accordion pattern, the `<button>` is wrapped in a heading element.
   - Props: `headingLevel?: 2 | 3 | 4 | 5 | 6` (default `3` — heading level of the wrapping `<h{headingLevel}>` for correct document outline).
   - Slot: `default` — header title content.
-- `accordion-content/accordion-content.vue` — The collapsible panel. Mounts only when its item is open, reads the content/trigger ids from context, and exposes `role="region"` + `aria-labelledby`. The container applies no padding — the slotted content owns its own spacing.
+- `accordion-content/accordion-content.vue` — The collapsible panel. Mounts only when its item is open, reads the content/trigger ids from context, and exposes `role="region"` + `aria-labelledby`. The padding sits on an inner wrapper, so the height reveal still closes to zero.
+  - Props: `padded?: boolean` (default `true` — pads the body on the trigger's inset, after the chevron when it leads, with `--spacing-xs` above and `--spacing-md` below; set false for edge-to-edge content such as a `LogViewer` or table rows).
   - Slot: `default` — panel body content.
 
 Resulting layout (no per-component `package.json` — dropped repo-wide; the root `packages/webkit/package.json#exports` resolves every path; `.d.ts` is generated at publish time, never committed):

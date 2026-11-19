@@ -1365,7 +1365,7 @@ Each variant is the same screen in another state: `get_block("view/view-events-e
                           </span>
                         </Accordion.Trigger>
 
-                        <Accordion.Content>
+                        <Accordion.Content :padded="false">
                           <div
                             v-for="field in category.fields"
                             :key="field.id"

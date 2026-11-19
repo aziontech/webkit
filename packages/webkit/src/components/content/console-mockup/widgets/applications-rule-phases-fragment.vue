@@ -146,7 +146,7 @@
                 icon-position="leading"
               >
                 <Accordion.Item
-                  v-for="(phase, phaseIndex) in PHASES"
+                  v-for="phase in PHASES"
                   :key="phase.value"
                   :value="phase.value"
                 >
@@ -154,8 +154,7 @@
                     :data-cursor="phase.value"
                     :class="[
                       'bg-(--bg-canvas)! [&>span]:flex-1!',
-                      phaseIndex > 0 ? 'border-t border-(--border-default)' : '',
-                      frame.open.includes(phase.value) ? '' : 'border-b-0!'
+                      frame.open.includes(phase.value) ? 'border-b border-(--border-default)' : ''
                     ]"
                   >
                     <span class="flex min-w-0 items-center gap-(--spacing-sm)">
@@ -168,7 +167,7 @@
                     </span>
                   </Accordion.Trigger>
 
-                  <Accordion.Content>
+                  <Accordion.Content :padded="false">
                     <div class="flex w-full flex-col [&>*:last-child]:border-b-0">
                       <Table.Row
                         v-for="(rule, index) in phase.rules"

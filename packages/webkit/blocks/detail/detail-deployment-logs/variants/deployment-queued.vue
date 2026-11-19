@@ -293,9 +293,7 @@
                 </div>
 
                 <Accordion.Content>
-                  <div
-                    class="grid grid-cols-1 gap-(--spacing-lg) px-(--spacing-md) pt-(--spacing-xs) pb-(--spacing-md) sm:grid-cols-2 lg:grid-cols-4"
-                  >
+                  <div class="grid grid-cols-1 gap-(--spacing-lg) sm:grid-cols-2 lg:grid-cols-4">
                     <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
                       <span class="text-label-sm text-(--text-muted)">Binding policy</span>
                       <span class="flex min-w-0 items-center gap-(--spacing-2xs)">

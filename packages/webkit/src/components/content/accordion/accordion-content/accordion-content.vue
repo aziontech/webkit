@@ -8,6 +8,15 @@
     inheritAttrs: false
   })
 
+  export interface AccordionContentProps {
+    /** Pads the body on the trigger's inset with space below; set false for edge-to-edge content such as a LogViewer or table rows. */
+    padded?: boolean
+  }
+
+  withDefaults(defineProps<AccordionContentProps>(), {
+    padded: true
+  })
+
   defineSlots<{
     default(): unknown
   }>()
@@ -102,9 +111,16 @@
       :data-state="itemCtx.open.value ? 'open' : 'closed'"
       :data-size="ctx.size.value"
       :class="attrs.class"
-      class="overflow-hidden transition-[height] duration-150 ease-out motion-reduce:transition-none text-(--text-muted) data-[size=medium]:text-body-xs data-[size=large]:text-body-sm"
+      class="overflow-hidden transition-[height] duration-150 ease-out motion-reduce:transition-none text-body-sm text-(--text-muted)"
     >
-      <slot />
+      <div
+        :data-padded="padded || null"
+        :data-size="ctx.size.value"
+        :data-icon-position="ctx.iconPosition.value"
+        class="data-[padded]:px-[var(--accordion-inset,var(--spacing-md))] data-[padded]:pt-(--spacing-xs) data-[padded]:pb-(--spacing-md) data-[padded]:data-[icon-position=leading]:data-[size=medium]:ps-[calc(var(--accordion-inset,var(--spacing-md))+var(--text-body-sm-font-size)+var(--spacing-xs))] data-[padded]:data-[icon-position=leading]:data-[size=large]:ps-[calc(var(--accordion-inset,var(--spacing-md))+var(--text-body-md-font-size)+var(--spacing-xs))]"
+      >
+        <slot />
+      </div>
     </div>
   </Transition>
 </template>

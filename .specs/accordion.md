@@ -7,7 +7,7 @@ spec_version: 10
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=480-876
   node_id: '480:876'
-checksum: 7980c006e06cc50b6e5f9f94669e3c3969a6d5d229829f3cf738928e4fb057ae
+checksum: 0b5a4629a31b7c425d76c60032e9d01e400dc98469f47f518aacce8e4a0d695c
 created: 2026-06-26
 last_updated: 2026-11-18
 ---
@@ -42,7 +42,7 @@ A vertically stacked set of disclosure items: each item has a clickable header t
 - Give every `Accordion.Item` a unique `value`; the open state is keyed by it, and `default-value` / `v-model` refer to it.
 - Bind `v-model` to a string in `type="single"` and to an array in `type="multiple"`; set `collapsible` to `false` only when one item must always stay open.
 - Set the trigger's `headingLevel` to fit the page outline (default `3`) — each trigger is wrapped in a real heading.
-- `Accordion.Content` applies no padding; pad the content you put inside it.
+- `Accordion.Content` pads its body on the trigger's inset (`--accordion-inset`) with `--spacing-xs` above and `--spacing-md` below, so the answer starts on the question's left edge (after the chevron when `icon-position` is `leading`). Pass `:padded="false"` for edge-to-edge content (a `LogViewer`, a table) that owns its spacing.
 - Set `size` and `icon-position` on the root, not per item — they are provided to every item through context.
 
 ## Usage
@@ -102,7 +102,8 @@ The root ships a **compound API**: an `index.ts` (beside `accordion.vue`) attach
 - `accordion-trigger/accordion-trigger.vue` — The clickable header row (Figma "Header"): renders the title plus the `az az-chevron-down` glyph, toggles the item through the injected context, and exposes `aria-expanded` / `aria-controls`. To satisfy the ARIA accordion pattern, the `<button>` is wrapped in a heading element.
   - Props: `headingLevel?: 2 | 3 | 4 | 5 | 6` (default `3` — heading level of the wrapping `<h{headingLevel}>` for correct document outline).
   - Slot: `default` — header title content.
-- `accordion-content/accordion-content.vue` — The collapsible panel. Mounts only when its item is open, reads the content/trigger ids from context, and exposes `role="region"` + `aria-labelledby`. The container applies no padding — the slotted content owns its own spacing.
+- `accordion-content/accordion-content.vue` — The collapsible panel. Mounts only when its item is open, reads the content/trigger ids from context, and exposes `role="region"` + `aria-labelledby`. The padding sits on an inner wrapper, so the height reveal still closes to zero.
+  - Props: `padded?: boolean` (default `true` — pads the body on the trigger's inset, after the chevron when it leads, with `--spacing-xs` above and `--spacing-md` below; set false for edge-to-edge content such as a `LogViewer` or table rows).
   - Slot: `default` — panel body content.
 
 Resulting layout (no per-component `package.json` — dropped repo-wide; the root `packages/webkit/package.json#exports` resolves every path; `.d.ts` is generated at publish time, never committed):
@@ -179,19 +180,18 @@ Props below belong to the root `Accordion`. Sub-component props are documented i
 
 ## Tokens
 
-| Region                                   | Token (DESIGN.md)                                                                            |
-| ---------------------------------------- | -------------------------------------------------------------------------------------------- |
-| header title typography (large / medium) | `.text-body-md` / `.text-body-sm`                                                            |
-| content body typography (large / medium) | `.text-body-sm` / `.text-body-xs`                                                            |
-| header title text                        | `var(--text-default)`                                                                        |
-| content body text                        | `var(--text-muted)`                                                                          |
-| disabled text                            | `var(--text-disabled)`                                                                       |
-| header divider (bottom border, open)     | `var(--border-default)`                                                                      |
-| item divider between closed items        | `var(--border-muted)` — none under the last item, whose bottom edge belongs to the container |
-| header padding-x                         | `--accordion-inset`, default `var(--spacing-md)`                                             |
-| content padding                          | _none_ — the panel is flush; its inset belongs to whatever the consumer puts in it           |
-| header gap (icon trailing / leading)     | `var(--spacing-sm)` / `var(--spacing-xs)`                                                    |
-| focus ring / ring offset                 | `var(--ring-color)` / `var(--bg-canvas)`                                                     |
+| Region                                   | Token (DESIGN.md)                                                                                                                                                      |
+| ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| header title typography (large / medium) | `.text-body-md` / `.text-body-sm`                                                                                                                                      |
+| content body typography (large / medium) | `.text-body-sm` / `.text-body-sm`                                                                                                                                      |
+| header title text                        | `var(--text-default)`                                                                                                                                                  |
+| content body text                        | `var(--text-muted)`                                                                                                                                                    |
+| disabled text                            | `var(--text-disabled)`                                                                                                                                                 |
+| item divider                             | `var(--border-default)` under every item but the last, open or closed (no line between a trigger and its content)                                                      |
+| header padding-x                         | `--accordion-inset`, default `var(--spacing-md)`                                                                                                                       |
+| content padding (`padded`)               | `--accordion-inset` inline (default `var(--spacing-md)`), plus the chevron and `var(--spacing-xs)` when it leads; `var(--spacing-xs)` above, `var(--spacing-md)` below |
+| header gap (icon trailing / leading)     | `var(--spacing-sm)` / `var(--spacing-xs)`                                                                                                                              |
+| focus ring / ring offset                 | `var(--ring-color)` / `var(--bg-canvas)`                                                                                                                               |
 
 ## Theme gaps
 
@@ -212,7 +212,7 @@ Props below belong to the root `Accordion`. Sub-component props are documented i
 
 ## Examples
 
-- **Default** — a single-mode accordion with a few items, one open via `default-value`.
+- **Default** — a single-mode accordion with a few items, one open via `default-value`; each answer starts on its question's left edge.
 - **Sizes** — composite story rendering `medium` and `large` side by side.
 - **IconPosition** — composite story rendering `trailing` and `leading` chevron placement side by side. _Justification:_ `iconPosition` is a visual variant axis taken straight from the Figma variant matrix, exactly like `size`; the canonical one-composite-story-per-axis pattern applies.
 - **Disabled** — an accordion whose middle item carries the per-item `disabled` prop, demonstrating the non-toggling state.

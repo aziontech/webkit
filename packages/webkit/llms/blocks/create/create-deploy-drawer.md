@@ -820,7 +820,7 @@ Each variant is the same screen in another state: `get_block("create/create-depl
                             <span class="text-label-sm text-(--text-default)">Dependencies</span>
                           </Accordion.Trigger>
                           <Accordion.Content>
-                            <div class="min-w-0 px-(--spacing-md) py-(--spacing-md)">
+                            <div class="min-w-0">
                               <p
                                 v-if="!row.dependencies.length"
                                 class="text-body-sm text-(--text-muted)"

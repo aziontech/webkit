@@ -1173,7 +1173,7 @@
                           </span>
                         </Accordion.Trigger>
 
-                        <Accordion.Content>
+                        <Accordion.Content :padded="false">
                           <div
                             v-for="field in category.fields"
                             :key="field.id"

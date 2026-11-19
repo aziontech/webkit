@@ -88,20 +88,16 @@
             size="large"
           >
             <AccordionItem
-              v-for="(item, index) in items"
+              v-for="item in items"
               :key="item.value"
               :value="item.value"
-              :class="[
-                'border-(--border-default) data-[state=open]:border-b',
-                index === items.length - 1 && 'border-b-0 data-[state=open]:border-b-0'
-              ]"
             >
               <AccordionTrigger
-                class="border-b-0! py-(--spacing-md) data-[state=open]:min-h-0 data-[state=open]:pb-0"
+                class="py-(--spacing-md) data-[state=open]:min-h-0 data-[state=open]:pb-0"
               >
                 <span class="text-body-md text-(--text-default)">{{ item.question }}</span>
               </AccordionTrigger>
-              <AccordionContent>
+              <AccordionContent :padded="false">
                 <p
                   class="m-0 max-w-(--container-2xl) px-(--accordion-inset) pt-(--spacing-xs) pb-(--spacing-md) text-body-sm text-(--text-muted)"
                 >

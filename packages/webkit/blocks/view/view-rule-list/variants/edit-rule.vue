@@ -1109,7 +1109,7 @@
                     </span>
                   </span>
                 </Accordion.Trigger>
-                <Accordion.Content>
+                <Accordion.Content :padded="false">
                   <div>
                     <DataTable
                       v-if="loading || group.total"

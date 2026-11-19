@@ -67,7 +67,6 @@
         v-for="entry in entries"
         :key="entry.value"
         :value="entry.value"
-        class="last:border-b-0 last:data-[state=closed]:[&_button]:border-b-0"
       >
         <div
           data-doc-chrome
@@ -79,7 +78,7 @@
             >{{ entry.title }}</AccordionTrigger
           >
         </div>
-        <AccordionContent>
+        <AccordionContent :padded="false">
           <div
             class="px-(--spacing-md) pt-(--spacing-sm) pb-(--spacing-md) [&>*>*:first-child]:mt-0 [&>*>*:first-child]:pt-0"
           >

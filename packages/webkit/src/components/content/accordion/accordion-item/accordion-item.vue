@@ -68,7 +68,7 @@
     :data-testid="testId"
     :data-state="open ? 'open' : 'closed'"
     :data-disabled="disabled || null"
-    class="flex flex-col border-(--border-muted) not-last:data-[state=closed]:border-b"
+    class="flex flex-col border-(--border-default) not-last:border-b"
   >
     <slot />
   </div>
