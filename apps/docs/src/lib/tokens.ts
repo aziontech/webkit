@@ -2,7 +2,9 @@ import { toast } from '@aziontech/webkit/toast'
 import { copyText } from '@aziontech/webkit/utils/clipboard'
 
 import { messages } from './i18n'
-import type { Token, TokenUsage } from './types'
+import type { Token } from './types'
+
+export { sharedUsage, type TokenGroup, usageGroups, usageSections } from './token-usage'
 
 export type TokenKind =
   | 'color'
@@ -114,40 +116,6 @@ export function typeGroups(styles: Token[]): { id: string; vars: Token[] }[] {
         )
     }))
     .filter((group) => group.vars.length)
-}
-
-const usageKey = (usage: TokenUsage) => `${usage.job}\u0000${usage.usedBy}`
-
-export function sharedUsage(tokens: Token[]): { usage?: TokenUsage; tokens: Token[] } {
-  const keys = [...new Set(tokens.flatMap((token) => (token.usage ? [usageKey(token.usage)] : [])))]
-  const first = tokens.find((token) => token.usage)?.usage
-  if (keys.length === 1 && first)
-    return { usage: first, tokens: tokens.map(({ usage: _usage, ...token }) => token) }
-  const rank = (token: Token) => (token.usage ? keys.indexOf(usageKey(token.usage)) : keys.length)
-  return { tokens: [...tokens].sort((a, b) => rank(a) - rank(b)) }
-}
-
-export type TokenGroup = { usage?: TokenUsage; tokens: Token[] }
-
-export function usageGroups(tokens: Token[]): TokenGroup[] {
-  const runs = new Map<string, TokenGroup>()
-  for (const token of tokens) {
-    if (!token.usage) continue
-    const key = usageKey(token.usage)
-    const run = runs.get(key) ?? { usage: token.usage, tokens: [] }
-    run.tokens.push(token)
-    runs.set(key, run)
-  }
-  const shared = [...runs.values()].filter((run) => run.tokens.length > 1)
-  const grouped = new Set(shared.flatMap((run) => run.tokens))
-  const alone = tokens.filter((token) => !grouped.has(token))
-  return [
-    ...(alone.length ? [{ tokens: alone }] : []),
-    ...shared.map((run) => ({
-      usage: run.usage,
-      tokens: run.tokens.map(({ usage: _usage, ...token }) => token)
-    }))
-  ]
 }
 
 export function cubicBezier(value: string): [number, number, number, number] | null {

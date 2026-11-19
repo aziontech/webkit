@@ -252,7 +252,7 @@ describe('ai', () => {
     const card = within(within(document.body).getByRole('group', { name: 'Which region?' }))
     await fireEvent.update(card.getByRole('textbox'), 'us-east')
     await fireEvent.click(card.getByRole('button', { name: 'Submit' }))
-    expect(view.emitted('answer-tool')?.[0]?.[1]).toEqual({
+    expect(view.emitted<unknown[]>('answer-tool')?.[0]?.[1]).toEqual({
       toolCallId: 'call-3',
       tool: 'pick_region',
       output: 'us-east'
@@ -271,7 +271,7 @@ describe('ai', () => {
       document.querySelector<HTMLElement>('[data-testid="prompt-input__submit"]')!
     )
     await waitFor(() => expect(view.emitted('send')).toHaveLength(1))
-    expect(view.emitted('send')?.[0]?.[1]).toEqual({
+    expect(view.emitted<unknown[]>('send')?.[0]?.[1]).toEqual({
       content: [
         {
           type: 'document',
@@ -327,6 +327,6 @@ describe('ai', () => {
     const card = within(view.getByRole('group', { name: 'Approve the change window?' }))
     await fireEvent.update(card.getByRole('textbox'), 'Yes')
     await fireEvent.click(card.getByRole('button', { name: 'Submit' }))
-    expect(view.emitted('answer-interrupt')?.[0]?.slice(1)).toEqual([workflow, 'Yes'])
+    expect(view.emitted<unknown[]>('answer-interrupt')?.[0]?.slice(1)).toEqual([workflow, 'Yes'])
   })
 })

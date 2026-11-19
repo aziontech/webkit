@@ -48,7 +48,9 @@ into HTML strings (`markdownParts()`, lines 237–309), and the page injects tho
 
 `DocMarkdown` is never used by the site (`grep -rn DocMarkdown apps/docs` finds nothing). So a
 Markdown page can only be headings, paragraphs, lists, tables and code: there is no way to show
-`<Steps>`, `<Tabs>`, `<Note>`, `<CodeGroup>` or `<CardGroup>`. The Getting started page
+`<Steps>`, `<Tabs>`, `<Note>`, `<CodeGroup>` or `<CardGroup>`, and no inline `<Tooltip>`
+(`DOC_MARKDOWN_INLINE_TAGS` in `parse-doc-markdown.ts`), so a term cannot carry its explanation on
+hover the way it can on the Azion docs. The Getting started page
 (`packages/webkit/README.md`) has 10 numbered install steps that render as a plain list, where
 `DocSteps` exists for exactly that.
 
