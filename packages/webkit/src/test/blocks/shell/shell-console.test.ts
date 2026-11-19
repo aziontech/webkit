@@ -180,3 +180,28 @@ describe('shell/shell-console sign-out', () => {
     expect(calls[0][0]).toBeInstanceOf(MouseEvent)
   })
 })
+
+describe('shell/shell-console account menu keyboard', () => {
+  it('reaches every entry with the arrow keys: the theme radios and Upgrade are menu items', async () => {
+    const view = render(ConsoleShell)
+    const footer = within(view.getByTestId('console-layout__account'))
+    await fireEvent.click(footer.getByRole('button', { name: 'Account menu' }))
+    const menu = await waitFor(() => within(document.body).getByRole('menu'))
+    expect(menu.querySelectorAll('button:not([role^="menuitem"])')).toHaveLength(0)
+    const names: string[] = []
+    await waitFor(() => expect(document.activeElement?.getAttribute('role')).toBe('menuitem'))
+    for (let step = 0; step < 12; step += 1) {
+      const name = document.activeElement?.textContent?.trim() ?? ''
+      if (names.includes(name)) break
+      names.push(name)
+      await fireEvent.keyDown(document.activeElement as HTMLElement, { key: 'ArrowDown' })
+    }
+    expect(names).toEqual(
+      expect.arrayContaining(['System', 'Dark', 'Light', 'Upgrade to Pro', 'Log out'])
+    )
+    const dark = within(menu).getByRole('menuitemradio', { name: 'Dark' })
+    await fireEvent.click(dark)
+    await waitFor(() => expect(dark.getAttribute('aria-checked')).toBe('true'))
+    await fireEvent.click(within(menu).getByRole('menuitemradio', { name: 'System' }))
+  })
+})
