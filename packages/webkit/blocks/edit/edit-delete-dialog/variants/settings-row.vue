@@ -2,34 +2,23 @@
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import Field from '@aziontech/webkit/field'
-  import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
   import { toast } from '@aziontech/webkit/toast'
-  import { computed, onScopeDispose, ref, useId, watch } from 'vue'
+  import { onScopeDispose, ref } from 'vue'
 
   import { sampleResourceName } from '../sample'
 
   const resource = { name: sampleResourceName }
 
   const open = ref(false)
-  const confirmation = ref('')
   const submitting = ref(false)
-  const confirmId = useId()
   let deleteTimer: ReturnType<typeof setTimeout> | undefined
 
   onScopeDispose(() => clearTimeout(deleteTimer))
 
-  const canDelete = computed(() => confirmation.value.trim() === resource.name)
-  const confirmLabel = computed(() => `Type ${resource.name} to confirm`)
-
-  watch(open, (isOpen) => {
-    if (isOpen) confirmation.value = ''
-  })
-
   const remove = () => {
-    if (!canDelete.value || submitting.value) return
+    if (submitting.value) return
     submitting.value = true
     clearTimeout(deleteTimer)
     deleteTimer = setTimeout(() => {
@@ -66,7 +55,7 @@
           confirm-label="Delete resource"
           cancel-label="Cancel"
           :loading="submitting"
-          :disabled="!canDelete"
+          :confirmation-phrase="resource.name"
           @confirm="remove"
         >
           <template #trigger>
@@ -88,15 +77,6 @@
               >
               for more details.
             </Alert>
-            <Field :disabled="submitting">
-              <Field.Label :for="confirmId">{{ confirmLabel }}</Field.Label>
-              <Input
-                :id="confirmId"
-                v-model="confirmation"
-                autocomplete="off"
-                @keydown.enter="remove"
-              />
-            </Field>
           </div>
         </ConfirmDialog>
       </Item.Actions>

@@ -59,7 +59,7 @@ A large `ConfirmDialog` titled `Change the type of <column>`: a warning `Alert` 
 
 ### H. Truncate table dialog — `ConfirmDialog`, `CodeEditor`, `Input` (required)
 
-A medium `ConfirmDialog` titled `Truncate <table>`, following `edit/edit-delete-dialog`: a warning `Alert`, one sentence with what goes (every row, with the count) and what stays (columns, types, constraints), the `TRUNCATE TABLE <table>;` statement in a read-only `CodeEditor` without line numbers, and a `Field` whose label asks to type the table name. The danger Truncate table button enables only when it matches.
+A medium `ConfirmDialog` titled `Truncate <table>`, following `edit/edit-delete-dialog`: a warning `Alert`, one sentence with what goes (every row, with the count) and what stays (columns, types, constraints), the `TRUNCATE TABLE <table>;` statement in a read-only `CodeEditor` without line numbers, and the typed confirmation `ConfirmDialog` draws from `confirmation-phrase` with the table name. The danger Truncate table button enables only when it matches exactly.
 
 ### Outcome toasts — through `toast`
 
@@ -881,14 +881,12 @@ Each variant is the same screen in another state: `get_block("edit/edit-schema",
     emit('change-type', event, { table: target, column: { ...column }, type })
   }
 
-  const truncateConfirm = ref('')
   const truncateSubmitting = submitting
-  const canTruncate = computed(() => truncateConfirm.value.trim() === table.value?.name)
   const openTruncate = () => {
     truncateOpen.value = true
   }
   const confirmTruncate = (event: Event) => {
-    if (!canTruncate.value || truncateSubmitting.value || !table.value) return
+    if (truncateSubmitting.value || !table.value) return
     const target = table.value
     const removed = target.rowCount
     pending.value = {
@@ -921,7 +919,6 @@ Each variant is the same screen in another state: `get_block("edit/edit-schema",
       for (const column of table.value?.columns ?? []) rowForm[column.name] = ''
       rowSubmitted.value = false
     }
-    if (next === 'truncate') truncateConfirm.value = ''
   })
 
   const FAILURES: Partial<Record<SchemaEditorDialog, string>> = {
@@ -1733,6 +1730,10 @@ Each variant is the same screen in another state: `get_block("edit/edit-schema",
       v-model:open="truncateOpen"
       :title="`Truncate ${table?.name ?? ''}`"
       size="medium"
+      confirm-label="Truncate table"
+      :confirmation-phrase="table?.name ?? ''"
+      :loading="truncateSubmitting"
+      @confirm="confirmTruncate"
     >
       <div class="flex flex-col gap-(--spacing-md)">
         <Alert
@@ -1751,36 +1752,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-schema",
           :show-line-numbers="false"
           aria-label="Statement that will run"
         />
-        <Field>
-          <Field.Label
-            >Type <code class="text-label-code-sm">{{ table?.name }}</code> to confirm.</Field.Label
-          >
-          <Input
-            v-model="truncateConfirm"
-            size="large"
-            class="w-full"
-            autocomplete="off"
-            @keydown.enter="confirmTruncate"
-          />
-        </Field>
       </div>
-      <template #actions="{ close }">
-        <Button
-          label="Cancel"
-          variant="outline"
-          size="medium"
-          :disabled="truncateSubmitting"
-          @click="close"
-        />
-        <Button
-          label="Truncate table"
-          variant="danger"
-          size="medium"
-          :loading="truncateSubmitting"
-          :disabled="!canTruncate"
-          @click="confirmTruncate"
-        />
-      </template>
     </ConfirmDialog>
   </div>
 </template>

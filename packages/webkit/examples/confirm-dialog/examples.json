@@ -18,6 +18,11 @@
       "file": "run-again.vue"
     },
     {
+      "name": "TypedConfirmation",
+      "summary": "An irreversible delete: `confirmation-phrase` adds the field, and the danger button enables once the resource name is typed exactly.",
+      "file": "typed-confirmation.vue"
+    },
+    {
       "name": "SaveOrDiscard",
       "summary": "The guard on a form that can be saved from the dialog: the `actions` slot replaces the two buttons with Keep editing, an outlined Discard changes and a primary Save changes.",
       "file": "save-or-discard.vue"

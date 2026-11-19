@@ -42,7 +42,7 @@
   },
   {
    "name": "DangerZone",
-   "summary": "The settings page ending with the Danger zone band: a flush card row for Delete this project with a danger button. The confirmation dialog warns that it cannot be undone, links to the docs, and enables Delete only when the typed name matches; the name sits in a code chip with a copy button, and Delete holds its loading state while the request runs.",
+   "summary": "The settings page ending with the Danger zone band: a flush card row for Delete this project with a danger button. The confirmation dialog warns that it cannot be undone, links to the docs, and enables Delete only when the typed name matches exactly (`ConfirmDialog` `confirmation-phrase`), and Delete holds its loading state while the request runs.",
    "file": "blocks/edit/edit-resource/variants/danger-zone.vue"
   },
   {

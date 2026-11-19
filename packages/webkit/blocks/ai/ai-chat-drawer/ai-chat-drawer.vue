@@ -42,7 +42,7 @@
   import ToolCall from '@aziontech/webkit/tool-call'
   import { useLocale } from '@aziontech/webkit/use-locale'
   import VideoPlayer from '@aziontech/webkit/video-player'
-  import { computed, ref, watch } from 'vue'
+  import { computed, nextTick, ref, watch } from 'vue'
 
   import {
     activitiesBefore,
@@ -372,6 +372,16 @@
     (now, before) => {
       if (before && !now) composerEl.value?.focus()
     }
+  )
+
+  watch(
+    open,
+    async (isOpen) => {
+      if (!isOpen) return
+      await nextTick()
+      composerEl.value?.focus()
+    },
+    { flush: 'post' }
   )
 
   async function send(event: MouseEvent | KeyboardEvent, text: string) {

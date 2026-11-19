@@ -53,7 +53,7 @@ Every cell is a preset from `@aziontech/webkit/table`, so the list reads like ev
 
 ### H. Delete confirmation — `ConfirmDialog`, `Alert`, `Input` (required)
 
-The `edit/edit-delete-dialog` dialog, opened from the row menu without a trigger of its own: a medium `ConfirmDialog` titled `Delete resource`, a warning `Alert` (`Once confirmed, this action can't be reversed.`), one sentence of consequence, and an `Input` labelled by `Type <name> to confirm.` The danger `Delete resource` enables only when the typed text matches the row's name; confirming removes the row. The typed text resets each time the dialog opens.
+The `edit/edit-delete-dialog` dialog, opened from the row menu without a trigger of its own: a medium `ConfirmDialog` titled `Delete resource`, a warning `Alert` (`Once confirmed, this action can't be reversed.`), one sentence of consequence, and the typed confirmation `ConfirmDialog` draws from `confirmation-phrase` (`Type <name> to confirm.`, exact and case-sensitive). The danger `Delete resource` enables only when the typed text matches the row's name; confirming removes the row. The typed text resets each time the dialog opens.
 
 ### I. No matching resources — `EmptyState`, `Button` (required)
 

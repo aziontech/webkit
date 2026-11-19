@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: fb23c0139f2b070a87ef1ef0b8c85aa01bf38c85335045b2dd2ce5677e3adcab
+checksum: 25803f70de6e466a8919dac2f747391f4b69723f020268f2b1b622ad3d8c2d1a
 created: 2026-11-11
-last_updated: 2026-11-17
+last_updated: 2026-11-19
 ---
 
 # ConversationHistory — Component Spec
@@ -36,7 +36,7 @@ The list of past conversations with an assistant, in a side panel or drawer: tit
 
 - Title each conversation from its first prompt, short; the full title shows on hover through `title`.
 - Fix the reference time so the groups match on the server and the client: set `now` on the app's `ConfigProvider` once (every time-relative component below reads it), or pass `now` here to override it for this list.
-- Confirm deletes of anything older than today with a `ConfirmDialog` in the `remove` handler.
+- Never delete on the first tap: open a `ConfirmDialog` from the `remove` handler and remove the item from `@confirm` (the Default example), or remove it at once and offer Undo in a toast.
 
 ## Usage
 
@@ -117,6 +117,7 @@ _none_
 - Each conversation is a `button` with its title as the name; the open one carries `aria-current="page"`.
 - Delete is an `IconButton` named `Delete <title>`, shown on every row (not hover-only), so it is reachable by keyboard and touch.
 - Keyboard: `Tab` moves through rows and their Delete; `Enter`/`Space` open a conversation.
+- Focus after a delete: when the owner removes the item whose Delete was pressed and focus was lost with it (on `body`, or on the closed `ConfirmDialog`), focus moves to the conversation that took its place, else the last one, else the list itself (`tabindex="-1"`). Tests: `conversation-history.test.ts` › moves focus to the next row after a delete.
 - Loading sets `aria-busy` on the list.
 
 ## Internationalization
@@ -156,7 +157,7 @@ _none_
 
 ## Examples
 
-- Default — a chat page rail with conversations across all five groups, one open, Delete on each row; Empty and Loading states.
+- Default — a chat page rail with conversations across all five groups, one open, Delete on each row that asks in a `ConfirmDialog` before it removes the conversation; Empty and Loading states.
 
 ## Constraints — DO NOT
 

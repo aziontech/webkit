@@ -489,13 +489,8 @@ Each variant is the same screen in another state: `get_block("edit/edit-variable
 
   const pending = ref<Variable | null>(null)
   const deleteOpen = ref(false)
-  const confirmation = ref('')
-  const confirmLabelId = useId()
-  const canDelete = computed(
-    () => Boolean(pending.value) && confirmation.value.trim() === pending.value?.key
-  )
   const confirmDelete = (event: Event) => {
-    if (!canDelete.value || !pending.value) return
+    if (!pending.value) return
     const key = pending.value.key
     emit('delete', event, pending.value)
     rows.value = rows.value.filter((variable) => variable.id !== pending.value?.id)
@@ -519,7 +514,6 @@ Each variant is the same screen in another state: `get_block("edit/edit-variable
     }
     if (value === 'delete') {
       pending.value = row
-      confirmation.value = ''
       deleteOpen.value = true
     }
   }
@@ -1500,6 +1494,9 @@ Each variant is the same screen in another state: `get_block("edit/edit-variable
       v-model:open="deleteOpen"
       title="Delete variable"
       size="medium"
+      confirm-label="Delete variable"
+      :confirmation-phrase="pending?.key ?? ''"
+      @confirm="confirmDelete"
     >
       <div class="flex flex-col gap-(--spacing-md)">
         <Alert
@@ -1510,35 +1507,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-variable
           The selected variable will be deleted, and services in its scope stop reading it on their
           next deployment.
         </p>
-        <p
-          :id="confirmLabelId"
-          class="m-0 text-body-sm text-(--text-default)"
-        >
-          Type <code class="text-label-code-sm">{{ pending?.key }}</code> to confirm.
-        </p>
-        <Input
-          v-model="confirmation"
-          :aria-labelledby="confirmLabelId"
-          autocomplete="off"
-          class="w-full"
-          @keydown.enter="confirmDelete"
-        />
       </div>
-      <template #actions="{ close }">
-        <Button
-          label="Cancel"
-          variant="outline"
-          size="medium"
-          @click="close"
-        />
-        <Button
-          label="Delete variable"
-          variant="danger"
-          size="medium"
-          :disabled="!canDelete"
-          @click="confirmDelete"
-        />
-      </template>
     </ConfirmDialog>
   </div>
 </template>

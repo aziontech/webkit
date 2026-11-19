@@ -2,7 +2,7 @@
  "examples": [
   {
    "name": "Default",
-   "summary": "The rail of an assistant page: conversations grouped Today, Yesterday, Previous 7 days, Previous 30 days and Older against a fixed `now`, the open one current, and Delete on every row.",
+   "summary": "The rail of an assistant page: conversations grouped Today, Yesterday, Previous 7 days, Previous 30 days and Older against a fixed `now`, the open one current, and Delete on every row, which asks in a `ConfirmDialog` before the conversation goes.",
    "file": "examples/conversation-history/default.vue"
   },
   {

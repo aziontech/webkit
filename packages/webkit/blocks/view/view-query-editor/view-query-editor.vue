@@ -4,6 +4,7 @@
   import Card from '@aziontech/webkit/card'
   import CodeBlock from '@aziontech/webkit/code-block'
   import CodeEditor, { type CodeEditorMarker } from '@aziontech/webkit/code-editor'
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import Drawer from '@aziontech/webkit/drawer-root'
@@ -177,8 +178,18 @@
     selectedTableId.value = id
     if (narrowViewport()) leftOpen.value = false
   }
-  const onTableAction = (event: Event, value: unknown, table: QueryEditorTable) => {
-    if (value === 'delete') emit('delete-table', event, table)
+  const tablePendingDelete = ref<QueryEditorTable | null>(null)
+  const tableDeleteOpen = ref(false)
+  const onTableAction = (_event: Event, value: unknown, table: QueryEditorTable) => {
+    if (value !== 'delete') return
+    tablePendingDelete.value = table
+    tableDeleteOpen.value = true
+  }
+  const confirmTableDelete = (event: MouseEvent) => {
+    const table = tablePendingDelete.value
+    if (!table) return
+    tableDeleteOpen.value = false
+    emit('delete-table', event, table)
   }
 
   const schemaColumns: TableColumn[] = [
@@ -257,15 +268,24 @@
     table.rows = table.rows.filter((row) => !keys.has(row.__k))
     emit('delete-rows', event, { table, rows })
   }
-  const deleteRow = (event: MouseEvent, row: QueryEditorRow) => {
-    const table = tableList.value.find((item) => item.id === selectedTable.value?.id)
-    if (table) removeRows(event, table, new Set([row.__k]))
+  const rowsPendingDelete = ref<string[]>([])
+  const rowsDeleteOpen = ref(false)
+  const rowsDeleteCount = computed(() => rowsPendingDelete.value.length)
+  const rowsDeleteNoun = computed(() => (rowsDeleteCount.value === 1 ? 'row' : 'rows'))
+  const askDeleteRows = (keys: string[]) => {
+    if (!keys.length) return
+    rowsPendingDelete.value = keys
+    rowsDeleteOpen.value = true
   }
-  const deleteSelected = (event: MouseEvent) => {
+  const deleteRow = (_event: MouseEvent, row: QueryEditorRow) => askDeleteRows([row.__k])
+  const deleteSelected = () => askDeleteRows([...selectedKeys.value])
+  const confirmRowsDelete = (event: MouseEvent) => {
     const table = tableList.value.find((item) => item.id === selectedTable.value?.id)
-    if (!table || !selectedKeys.value.length) return
-    removeRows(event, table, new Set(selectedKeys.value))
-    selectedKeys.value = []
+    const keys = new Set(rowsPendingDelete.value)
+    rowsDeleteOpen.value = false
+    if (!table || !keys.size) return
+    removeRows(event, table, keys)
+    selectedKeys.value = selectedKeys.value.filter((key) => !keys.has(key))
   }
 
   const historySource = computed<QueryEditorHistoryEntry[]>(
@@ -714,17 +734,6 @@ LIMIT 3;`
               </div>
               <div class="ms-auto flex items-center gap-(--spacing-xs)">
                 <Button
-                  v-if="selectedKeys.length"
-                  key="delete-rows"
-                  :label="`Delete ${selectedKeys.length} ${selectedKeys.length === 1 ? 'row' : 'rows'}`"
-                  variant="danger"
-                  size="medium"
-                  icon="az az-trash"
-                  @click="deleteSelected"
-                />
-                <Button
-                  v-else
-                  key="sort"
                   label="Sort"
                   variant="outline"
                   size="medium"
@@ -749,6 +758,29 @@ LIMIT 3;`
               </div>
             </div>
 
+            <div
+              v-if="selectedKeys.length && !error"
+              class="flex flex-wrap items-center gap-(--spacing-xs) border-b border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-sm) py-(--spacing-xs)"
+            >
+              <span class="text-label-sm text-(--text-default)"
+                >{{ selectedKeys.length }} selected</span
+              >
+              <Button
+                label="Clear selection"
+                variant="ghost"
+                size="small"
+                @click="selectedKeys = []"
+              />
+              <div class="ms-auto flex items-center gap-(--spacing-xs)">
+                <Button
+                  :label="`Delete ${selectedKeys.length} ${selectedKeys.length === 1 ? 'row' : 'rows'}`"
+                  variant="outline"
+                  size="small"
+                  icon="az az-trash"
+                  @click="deleteSelected"
+                />
+              </div>
+            </div>
             <div
               v-if="error"
               class="p-(--spacing-md)"
@@ -1268,5 +1300,24 @@ LIMIT 3;`
         </PanelBody>
       </DrawerContent>
     </Drawer>
+
+    <ConfirmDialog
+      v-model:open="rowsDeleteOpen"
+      :title="rowsDeleteCount === 1 ? 'Delete row' : `Delete ${rowsDeleteCount} rows`"
+      :description="`${rowsDeleteCount === 1 ? 'The row is' : `${rowsDeleteCount} rows are`} deleted from ${selectedTable?.name ?? 'the table'}. This can't be undone.`"
+      :confirm-label="`Delete ${rowsDeleteNoun}`"
+      size="small"
+      @confirm="confirmRowsDelete"
+    />
+
+    <ConfirmDialog
+      v-model:open="tableDeleteOpen"
+      title="Delete table"
+      :description="`${tablePendingDelete?.name ?? 'The table'} and its ${tablePendingDelete?.rows.length ?? 0} rows are deleted. This can't be undone.`"
+      confirm-label="Delete table"
+      :confirmation-phrase="tablePendingDelete?.name ?? ''"
+      size="medium"
+      @confirm="confirmTableDelete"
+    />
   </div>
 </template>

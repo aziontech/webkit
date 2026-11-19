@@ -229,7 +229,7 @@ A tool that needs approval is declared once with `toolDefinition({ name, inputSc
 
 ## Accessibility
 
-- The drawer traps focus while open and returns it to Agent when it closes; `DrawerTitle` names the dialog.
+- On open, focus goes to the prompt, never to New chat, so a stray Enter sends nothing and wipes nothing. The drawer returns focus to Agent when it closes; `DrawerTitle` names the dialog.
 - Agent exposes `aria-expanded`.
 - The log is a named `role="log"` with live behavior off; finished responses are announced once through the conversation's polite region.
 - New chat is an icon button with an accessible name; it is disabled while the thread is empty.

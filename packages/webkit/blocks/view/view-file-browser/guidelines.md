@@ -50,7 +50,7 @@ Folders sort first with a link-coloured folder glyph; the folder name is a `Butt
 
 ### H. Delete confirmation — `ConfirmDialog`, `Alert`, `Input` (required)
 
-The root's `select` event hands the option and the row to the page: Open enters the folder, Delete opens the `edit/edit-delete-dialog` dialog without a trigger of its own. A medium `ConfirmDialog` titled `Delete file` or `Delete folder`, a warning `Alert` (`Once confirmed, this action can't be reversed.`), one sentence of consequence (a folder goes with all its files), and an `Input` labelled by `Type <name> to confirm.`; the danger confirm repeats the title and enables only when the typed text matches the name. The typed text resets each time it opens.
+The root's `select` event hands the option and the row to the page: Open enters the folder, Delete opens the `edit/edit-delete-dialog` dialog without a trigger of its own. A medium `ConfirmDialog` titled `Delete file` or `Delete folder`, a warning `Alert` (`Once confirmed, this action can't be reversed.`), one sentence of consequence (a folder goes with all its files), and the typed confirmation `ConfirmDialog` draws from `confirmation-phrase` (`Type <name> to confirm.`, exact and case-sensitive); the danger confirm repeats the title and enables only when the typed text matches the name. The typed text resets each time it opens.
 
 ### I. Empty folder — `EmptyState`, `SplitButton` (required)
 

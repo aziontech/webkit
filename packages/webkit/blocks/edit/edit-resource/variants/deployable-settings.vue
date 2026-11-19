@@ -24,7 +24,7 @@
   import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed, nextTick, reactive, ref, useId, watch } from 'vue'
+  import { computed, nextTick, reactive, ref, watch } from 'vue'
 
   type LabeledOption = SelectOptionItem<string | number>
 
@@ -245,16 +245,8 @@
   const discard = () => Object.assign(form, JSON.parse(baseline.value) as typeof form)
 
   const deleteOpen = ref(false)
-  const deleteConfirmation = ref('')
-  const deleteLabelId = useId()
-  const canDelete = computed(() => deleteConfirmation.value.trim() === record.name)
-
-  watch(deleteOpen, (isOpen) => {
-    if (isOpen) deleteConfirmation.value = ''
-  })
 
   const confirmDelete = () => {
-    if (!canDelete.value) return
     deleteOpen.value = false
   }
 </script>
@@ -931,6 +923,9 @@
                           v-model:open="deleteOpen"
                           title="Delete resource"
                           size="medium"
+                          confirm-label="Delete resource"
+                          :confirmation-phrase="record.name"
+                          @confirm="confirmDelete"
                         >
                           <template #trigger>
                             <Button
@@ -949,35 +944,7 @@
                             <p class="m-0 text-body-sm text-(--text-muted)">
                               The resource will be deleted, along with its domains and deployments.
                             </p>
-                            <p
-                              :id="deleteLabelId"
-                              class="m-0 text-body-sm text-(--text-default)"
-                            >
-                              Type {{ record.name }} to confirm.
-                            </p>
-                            <Input
-                              v-model="deleteConfirmation"
-                              :aria-labelledby="deleteLabelId"
-                              autocomplete="off"
-                              class="w-full"
-                              @keydown.enter="confirmDelete"
-                            />
                           </div>
-                          <template #actions="{ close }">
-                            <Button
-                              label="Cancel"
-                              variant="outline"
-                              size="medium"
-                              @click="close"
-                            />
-                            <Button
-                              label="Delete resource"
-                              variant="danger"
-                              size="medium"
-                              :disabled="!canDelete"
-                              @click="confirmDelete"
-                            />
-                          </template>
                         </ConfirmDialog>
                       </SettingsRow>
                     </Item.List>

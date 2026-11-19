@@ -1,9 +1,10 @@
 <script setup lang="ts">
-  import { computed, useAttrs } from 'vue'
+  import { computed, ref, useAttrs, useId, watch } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import Button from '../../action/button/button.vue'
+  import Input from '../../input/input/input.vue'
   import Dialog from '../dialog/dialog.vue'
   import DialogContent from '../dialog/dialog-content.vue'
   import DialogDescription from '../dialog/dialog-description.vue'
@@ -40,6 +41,8 @@
     loading?: boolean
     /** Disables the confirm button, for a confirmation that needs input first. */
     disabled?: boolean
+    /** A phrase the reader must type, exactly and with the same case, before confirm enables; usually the resource name. Empty asks for no typing. */
+    confirmationPhrase?: string
     /** Initial open state when uncontrolled. */
     defaultOpen?: boolean
   }
@@ -52,6 +55,7 @@
     size: 'medium',
     loading: false,
     disabled: false,
+    confirmationPhrase: '',
     defaultOpen: false
   })
 
@@ -81,6 +85,33 @@
     Object.fromEntries(Object.entries(attrs).filter(([key]) => key !== 'data-testid'))
   )
 
+  const phraseId = `${useId()}-phrase`
+  const typed = ref('')
+  const confirmEl = ref<{ $el: HTMLElement } | null>(null)
+
+  const phraseLabel = computed(() => {
+    const [before = '', after = ''] = t('confirmDialog.typeToConfirm').split('{phrase}')
+    return { before, after }
+  })
+  const phraseMatches = computed(
+    () => !props.confirmationPhrase || typed.value.trim() === props.confirmationPhrase
+  )
+  const confirmDisabled = computed(() => props.disabled || !phraseMatches.value)
+
+  watch(
+    () => [open.value, props.confirmationPhrase],
+    () => {
+      typed.value = ''
+    }
+  )
+
+  const onPhraseKeydown = (event: KeyboardEvent) => {
+    if (event.key !== 'Enter' || event.isComposing) return
+    event.preventDefault()
+    if (confirmDisabled.value || props.loading) return
+    confirmEl.value?.$el.click()
+  }
+
   const close = () => {
     open.value = false
   }
@@ -92,7 +123,7 @@
   }
 
   const confirm = (event: MouseEvent) => {
-    if (props.disabled || props.loading) return
+    if (confirmDisabled.value || props.loading) return
     emit('confirm', event)
   }
 </script>
@@ -119,6 +150,34 @@
       <PanelBody>
         <DialogDescription v-if="description">{{ description }}</DialogDescription>
         <slot />
+        <div
+          v-if="confirmationPhrase"
+          class="mt-(--spacing-md) flex flex-col gap-(--spacing-xs) first:mt-0"
+        >
+          <p
+            :id="phraseId"
+            class="m-0 text-body-sm text-(--text-default)"
+          >
+            {{ phraseLabel.before
+            }}<code
+              :data-testid="`${testId}__phrase-text`"
+              class="text-label-code-sm"
+              >{{ confirmationPhrase }}</code
+            >{{ phraseLabel.after }}
+          </p>
+          <Input
+            v-model="typed"
+            :data-testid="`${testId}__phrase`"
+            :aria-labelledby="phraseId"
+            :disabled="loading"
+            :spellcheck="false"
+            autocomplete="off"
+            size="large"
+            class="w-full"
+            data-autofocus
+            @keydown="onPhraseKeydown"
+          />
+        </div>
       </PanelBody>
       <PanelFooter>
         <div
@@ -131,7 +190,7 @@
           >
             <Button
               :data-testid="`${testId}__cancel`"
-              data-autofocus
+              :data-autofocus="confirmationPhrase ? undefined : ''"
               :label="cancelLabel || t('confirmDialog.cancel')"
               variant="ghost"
               size="medium"
@@ -139,11 +198,12 @@
               @click="cancel"
             />
             <Button
+              ref="confirmEl"
               :data-testid="`${testId}__confirm`"
               :label="confirmLabel || t('confirmDialog.confirm')"
               :variant="variant"
               :loading="loading"
-              :disabled="disabled"
+              :disabled="confirmDisabled"
               size="medium"
               @click="confirm"
             />

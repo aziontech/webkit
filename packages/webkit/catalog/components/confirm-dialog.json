@@ -1,10 +1,10 @@
 {
- "purpose": "A small confirmation dialog: a title, one sentence of description, and a Cancel plus a confirm button whose `variant` says how destructive the outcome is (`danger` for a removal or a discard, `primary` for a commit). The unsaved-changes guard uses the same shell; the `actions` slot replaces the two buttons when the guard can also save. Built from `Dialog`, `Panel` parts and `Button`.",
+ "purpose": "A small confirmation dialog: a title, one sentence of description, and a Cancel plus a confirm button whose `variant` says how destructive the outcome is (`danger` for a removal or a discard, `primary` for a commit). The unsaved-changes guard uses the same shell; the `actions` slot replaces the two buttons when the guard can also save. Built from `Dialog`, `Panel` parts, `Button` and, for a typed confirmation, `Input`.",
  "useWhen": [
   "Use ConfirmDialog whenever the person must confirm an action they started (delete, discard, publish), including typed-name confirmation; an agent asking to run a tool uses ToolApproval, and a modal with your own body uses Dialog.",
   "Before a removal (Remove domain, Delete resource) or a re-run (Clear again).",
   "When someone leaves a form with unsaved changes.",
-  "A deletion that needs typed confirmation: put the field in the default slot and set `disabled` until it matches."
+  "A deletion that needs typed confirmation: set `confirmation-phrase` to the resource name; the dialog renders the field and keeps the confirm button disabled until the text matches."
  ],
  "avoidWhen": [
   "A form of several fields → use `dialog` with your own body.",
@@ -20,6 +20,7 @@
   "The confirm label repeats the verb of the title (Remove Domain, Discard changes), never OK or Yes.",
   "`variant=\"danger\"` only when the outcome removes or discards something; a commit is `primary`.",
   "Close the dialog from `@confirm` once the action has run; keep it open with `loading` while it runs.",
+  "Typed confirmation has one rule everywhere: the reader types the resource name (`confirmation-phrase`), the match is case-sensitive after trimming the ends, the confirm button stays disabled until it matches, `Enter` in the field confirms once it matches, and the field empties every time the dialog opens. Do not hand-write the field.",
   "Below `md` the buttons stack full width with the confirm button on top, the same order as `save-bar`."
  ]
 }

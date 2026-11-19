@@ -3718,7 +3718,7 @@ What each prop and event does, and the go-live code: [blocks/ai/ai-chat-drawer.m
 
 ## Accessibility
 
-- The drawer traps focus while open and returns it to Agent when it closes; `DrawerTitle` names the dialog.
+- On open, focus goes to the prompt, never to New chat, so a stray Enter sends nothing and wipes nothing. The drawer returns focus to Agent when it closes; `DrawerTitle` names the dialog.
 - Agent exposes `aria-expanded`.
 - The log is a named `role="log"` with live behavior off; finished responses are announced once through the conversation's polite region.
 - New chat is an icon button with an accessible name; it is disabled while the thread is empty.
@@ -7511,12 +7511,12 @@ What each prop and event does, and the go-live code: [blocks/detail/detail-versi
 
 # EditDeleteDialog (`edit/edit-delete-dialog`)
 
-> The destructive confirmation a resource list uses for Delete: a warning `Alert`, a sentence naming what goes with the resource and a Help Center link, then a prompt that shows the resource name in code type with a `Co…
+> The destructive confirmation a resource list uses for Delete: a warning `Alert`, a sentence naming what goes with the resource and a Help Center link, then the typed confirmation `ConfirmDialog` draws from `confirmati…
 
 - Surface: app
 - Source: `blocks/edit/edit-delete-dialog/edit-delete-dialog.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/edit-delete-dialog")`
-- Components: Alert, Button, ConfirmDialog, CopyButton, Field, Input, Item, PageHeader, Toast
+- Components: Alert, Button, ConfirmDialog, Item, PageHeader, Toast
 - Skills: `webkit-ux-heuristics`, `webkit-microcopy`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -7543,9 +7543,8 @@ The last stop before a resource is gone for good. The user chose Delete from a r
 
 - A. Dialog and trigger — `ConfirmDialog`, `Button` (required)
 - B. Consequence — `Alert` (required)
-- C. Name and copy — `CopyButton` (required)
-- D. Typed confirmation — `Input` (required)
-- E. Trigger — `Button` (required)
+- C. Typed confirmation — `ConfirmDialog` `confirmation-phrase` (required)
+- D. Trigger — `Button` (required)
 
 What each part takes: [blocks/edit/edit-delete-dialog.md](blocks/edit/edit-delete-dialog.md).
 
@@ -7553,7 +7552,7 @@ What each part takes: [blocks/edit/edit-delete-dialog.md](blocks/edit/edit-delet
 
 The block takes the resource name and the request state through props and emits the delete; it fetches nothing. `DeleteDialogProps` is exported from `edit-delete-dialog.vue`, and `sample.ts` holds the sample name the block shows when `name` is left out.
 
-Prop: `name`, `loading`, `error`, `defaultConfirmation`, `defaultOpen`, `v-model:open`.
+Prop: `name`, `loading`, `error`, `defaultOpen`, `v-model:open`.
 
 Event: `delete`.
 
@@ -7566,9 +7565,9 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-delete-di
 - Name the resource kind in the title and the resource itself in the chip, so the user knows exactly what goes.
 - Keep the confirm button disabled until the trimmed value equals the name; that is the prevention, not a toast after the fact.
 - Reset the typed value each time the dialog opens.
-- Let the user copy the name from the chip; never block paste in the input.
+- Never block paste in the input.
 - Put the consequence in the `Alert` and the sentence below it, before the input that asks for the decision.
-- Use the SettingsRow variant on a settings page, so the confirmation is a real labelled `Field`.
+- Use the SettingsRow variant on a settings page.
 
 ## Don't
 
@@ -7585,7 +7584,7 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-delete-di
 - **Trigger:** verb and object, e.g. "Delete resource" on a visible button; "Delete" in a row menu.
 - **Alert:** one fact, e.g. "Once confirmed, this action can't be reversed."
 - **Consequence:** one sentence naming what goes with it, e.g. "The selected bucket will be deleted, along with all its files."
-- **Prompt:** "Type" before the name chip and "to confirm." after it; never a position such as "in the box below".
+- **Prompt:** "Type `name` to confirm.", written by `ConfirmDialog` from the locale catalog; never a position such as "in the box below".
 - **Confirm:** the title's verb and object, e.g. "Delete resource"; never "OK", "Confirm" or "Yes".
 - **Cancel:** exactly "Cancel".
 - Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
@@ -7593,17 +7592,15 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-delete-di
 ## Accessibility
 
 - `ConfirmDialog` traps focus, closes on Escape and returns focus to the trigger.
-- The input is named by the prompt paragraph through `aria-labelledby`, so a screen reader hears the name to type.
-- The `CopyButton` is named "Copy resource-01" and announces "Copied" once it copies.
+- The input is named by the prompt through `aria-labelledby`, so a screen reader hears the name to type, and it takes focus when the dialog opens.
 - Enter in the input confirms only when the name matches; otherwise focus moves on to Cancel and Delete in reading order.
-- In the SettingsRow variant the `Field` label carries the prompt, so the name to type is part of the input's accessible name.
 - While the delete runs, the confirm button announces its busy state and the dialog stays open.
 
 ## States
 
 - Default: the danger trigger is visible (`v-model:open` false); opening it shows the warning, the name chip and the empty input with Delete resource disabled.
-- SettingsRow: the settings-page danger zone; an outlined `Item` row opens the medium `ConfirmDialog` asking for the name through a labelled `Field`, with Delete resource disabled until it matches and loading while it runs.
-- Error: `error` set with `defaultOpen` and `defaultConfirmation`: the server refuses the delete (the resource is still used by two workloads); the dialog stays open with the typed name, a danger `Alert` says why, and Delete can run again.
+- SettingsRow: the settings-page danger zone; an outlined `Item` row opens the medium `ConfirmDialog` asking for the name through `confirmation-phrase`, with Delete resource disabled until it matches and loading while it runs.
+- Error: `error` set with `defaultOpen`: the server refuses the delete (the resource is still used by two workloads); the dialog stays open, a danger `Alert` says why, and Delete can run again (in a live flow the typed name stays in the field).
 
 ## Related
 
@@ -7629,7 +7626,7 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-delete-di
 - Surface: app
 - Source: `blocks/edit/edit-function/edit-function.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/edit-function")`
-- Components: Alert, Button, Card, CodeEditor, CopyButton, EmptyState, `FieldError`, IconButton, Input, Item, KeyValueList, Link, `LogViewerContent`, LogViewer, PageTabs, RadioGroup, `ResizableHandle`, `ResizablePane`, `ResizableRoot`, SaveBar, Select, SettingsGroup, SettingsRow, StatusIndicator, Switch, Tabs, Tag, Textarea, Toast, ToggleGroup, Tooltip, Trace
+- Components: Alert, Button, Card, CodeEditor, ConfirmDialog, CopyButton, EmptyState, `FieldError`, IconButton, Input, Item, KeyValueList, Link, `LogViewerContent`, LogViewer, PageTabs, RadioGroup, `ResizableHandle`, `ResizablePane`, `ResizableRoot`, SaveBar, Select, SettingsGroup, SettingsRow, StatusIndicator, Switch, Tabs, Tag, Textarea, Toast, ToggleGroup, Tooltip, Trace
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-form`
 
 ## Asked as
@@ -7759,7 +7756,7 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-function.
 - Surface: app
 - Source: `blocks/edit/edit-resource/edit-resource.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/edit-resource")`
-- Components: Alert, Button, Card, CodeBlock, CodeEditor, ConfirmDialog, ConsoleLayout, CopyButton, DataTable, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, DropdownMenu, Field, `FieldDescription`, `FieldError`, IconButton, Input, Item, Link, MultiSelect, NumberInput, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, PasswordInput, RadioGroup, SaveBar, Select, SettingsGroup, SettingsRow, Switch, Tabs, Tag, Textarea, Toast, Tooltip, `use-unsaved-changes`
+- Components: Alert, Button, Card, CodeBlock, CodeEditor, ConfirmDialog, ConsoleLayout, DataTable, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, DropdownMenu, Field, `FieldDescription`, `FieldError`, IconButton, Input, Item, Link, MultiSelect, NumberInput, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, PasswordInput, RadioGroup, SaveBar, Select, SettingsGroup, SettingsRow, Switch, Tabs, Tag, Textarea, Toast, Tooltip, `use-unsaved-changes`
 - Skills: `webkit-form`, `webkit-errors`, `webkit-layout`, `webkit-ux-heuristics`
 
 ## Asked as
@@ -7825,7 +7822,7 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-resource.
 - Offer Save changes in the leave dialog when the form can be saved from there; the user keeps their work without going back.
 - Say when the record changed elsewhere as soon as it is known, and ask before Save overwrites it.
 - Keep the edits on screen after a reload with an Undo, so a stale form never loses work silently.
-- Ask for the resource name before a delete, with a copy button beside the name.
+- Ask for the resource name before a delete, through `ConfirmDialog` `confirmation-phrase`.
 - Raise toasts with `toast` only; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so this page body never renders a `Toaster`.
 
 ## Don't
@@ -7852,7 +7849,7 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-resource.
 - **Server error on a section:** what happened, then what was kept, e.g. "The endpoint did not answer the test record, so the stream was not saved. Your other changes are still here."; the field reason is one line, e.g. "The endpoint did not answer within 10 seconds."
 - **Leave dialog:** "Unsaved changes", "This page has changes you haven't saved. If you leave now, they're discarded." (with Save: "Save them before you leave, or discard them and continue."); buttons "Keep editing", "Discard changes", "Save changes". These are the built-in `unsavedChanges` messages in en, pt-BR and es.
 - **Changed elsewhere:** "Changed elsewhere." + "This project was saved by someone else after you opened it. …"; button "Reload"; dialog "Overwrite changes made elsewhere?" with "Go back" and "Overwrite and save"; after a reload "Edits discarded." with "Undo".
-- **Danger zone:** section "Danger zone" with "Actions that cannot be undone."; row "Delete this project"; dialog "Delete project", "Once confirmed, this action can't be reversed.", "To confirm, type <name>"; buttons "Cancel" and "Delete project".
+- **Danger zone:** section "Danger zone" with "Actions that cannot be undone."; row "Delete this project"; dialog "Delete project", "Once confirmed, this action can't be reversed.", "Type <name> to confirm."; buttons "Cancel" and "Delete project".
 - Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
@@ -7868,7 +7865,7 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-resource.
 - The dirty tab mark is `aria-hidden`; a visually hidden "Unsaved changes" joins the tab's accessible name, and under forced colors the dot paints in `CanvasText`.
 - The leave dialog is a `ConfirmDialog`: focus moves into it, Escape and the close button count as Keep editing, and focus returns to the control that asked to leave.
 - The changed-elsewhere notice sits in a polite live region and takes focus after Reload so the change of values is announced; both its actions are real buttons.
-- The delete confirmation `Input` is labelled by the "To confirm, type …" sentence (`aria-labelledby`); the `CopyButton` has its own name ("Copy the project name") and announces Copied.
+- The delete confirmation `Input` is labelled by the "Type … to confirm." sentence (`aria-labelledby`) and takes focus when the dialog opens.
 
 ## States
 
@@ -9718,7 +9715,7 @@ What each prop and event does, and the go-live code: [blocks/top-bar/top-bar-cre
 - Surface: app
 - Source: `blocks/view/view-card/view-card.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-card")`
-- Components: Alert, Button, Card, CardList, CollectionPreferences, ConfirmDialog, EmptyState, Input, Link, PageHeader, Pagination, PropertyFilter, Tag, `use-collection`, `use-locale`
+- Components: Alert, Button, Card, CardList, CollectionPreferences, ConfirmDialog, EmptyState, Link, PageHeader, Pagination, PropertyFilter, Tag, `use-collection`, `use-locale`
 - Skills: `webkit-lists`, `webkit-ui-states`
 
 ## Asked as
@@ -9800,7 +9797,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-card.md](
 - **Filter:** placeholder and `aria-label` name what is filtered, e.g. "Filter applications".
 - **Bulk action:** the verb, then the count in parentheses, e.g. "Delete", "Delete (3)".
 - **Field labels:** one or two words, sentence case, no colon, e.g. "Status", "Domain", "Region", "Requests in 24h", "Owner". Preferences title: "Card preferences".
-- **Delete dialog:** title `Delete <n> applications`, consequence `The selected applications will be deleted, along with their domains and settings:` followed by the names, prompt `Type delete to confirm.`, actions `Cancel` and `Delete applications` (singular for one).
+- **Delete dialog:** title `Delete <n> applications`, consequence `The selected applications will be deleted, along with their domains and settings:` followed by the names, prompt `Type <name> to confirm.` for one, `Type delete to confirm.` for several, actions `Cancel` and `Delete applications` (singular for one).
 - **No match:** "No matching applications", then "No application matches these filters.", and the action "Clear filters".
 - **Empty:** title states the fact, e.g. "No applications yet"; description is one sentence with what to do, e.g. "Create an application to start serving traffic."
 - Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
@@ -9984,7 +9981,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-events-ex
 - Surface: app
 - Source: `blocks/view/view-file-browser/view-file-browser.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-file-browser")`
-- Components: Alert, Breadcrumb, Button, Card, CollectionPreferences, Combobox, ConfirmDialog, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, EmptyState, Field, FileDropzone, FileTokenGroup, IconButton, Input, `PanelBody`, `PanelFooter`, `PanelHeader`, SplitButton, `TableCellActions`, `TableCellTime`, `TableSearch`, Toast, Tooltip, UploadProgress
+- Components: Alert, Breadcrumb, Button, Card, CollectionPreferences, Combobox, ConfirmDialog, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, EmptyState, Field, FileDropzone, FileTokenGroup, IconButton, `PanelBody`, `PanelFooter`, `PanelHeader`, SplitButton, `TableCellActions`, `TableCellTime`, `TableSearch`, Toast, Tooltip, UploadProgress
 - Skills: `webkit-tables`, `webkit-lists`, `webkit-ui-states`
 
 ## Asked as
@@ -10258,7 +10255,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-marketpla
 - Surface: app
 - Source: `blocks/view/view-query-editor/view-query-editor.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-query-editor")`
-- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, CodeBlock, CodeEditor, DataTable, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, `FieldError`, FileDropzone, FileTokenGroup, IconButton, Input, Item, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, SaveBar, Select, SettingsGroup, SettingsRow, Sidebar, Skeleton, Switch, Tabs, Tag, Toast, ToggleGroup, Tooltip
+- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, CodeBlock, CodeEditor, ConfirmDialog, DataTable, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, `FieldError`, FileDropzone, FileTokenGroup, IconButton, Input, Item, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, SaveBar, Select, SettingsGroup, SettingsRow, Sidebar, Skeleton, Switch, Tabs, Tag, Toast, ToggleGroup, Tooltip
 - Skills: `webkit-layout`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -10319,7 +10316,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-query-edi
 - Make the editor read-only and disable its toolbar while a query runs, and show Run query loading.
 - Show the outcome of a run in the Results band: the rows, a success `Alert` with what ran, or a danger `Alert` with why it failed.
 - Offer JSON beside Table for results, so the raw shape is one click away.
-- Confirm Delete table with `edit/edit-delete-dialog`.
+- Delete table asks for the table name (`ConfirmDialog` `confirmation-phrase`, the `edit/edit-delete-dialog` rule) before it emits `delete-table`; row deletes ask in a `ConfirmDialog` first.
 - Mark the page root with `data-layout-fill` (every variant but CreateDatabase), so the panes scroll on their own instead of the page.
 - Raise toasts with `toast` only; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so this page body never renders a `Toaster`.
 
@@ -10363,7 +10360,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-query-edi
 - Query: `tab="editor"` with `sql`, `history` and `result`, the Editor tab after a query ran, with the history in the side panel, the statement in the editor and its rows in Results.
 - Templates: `tab="editor"` and `defaultTemplatesOpen`, the Editor tab before anything ran, with Results ready to execute and the SQL quick templates drawer open over it.
 - Loading: `loading`, the tables list and the selected table's rows are loading; `Skeleton` lines hold the side panel and the rows table shows its loading state.
-- TableData: `table="tbl-events"` and `defaultSelectedKeys`, the events table, 137 rows paged 25 at a time, with two rows selected and Delete 2 rows in the toolbar.
+- TableData: `table="tbl-events"` and `defaultSelectedKeys`, the events table, 137 rows paged 25 at a time, with two rows selected and Delete 2 rows in the selection bar.
 - ImportCsv: the empty subscribers table with the import drawer open on a seven-row file: `plan_name` still on Skip (Insert asks to map `plan`), `referrer` skipped, three lines with errors (a non-boolean, an empty required email, a date that does not parse).
 - CreateDatabase: the create database page with its Name and Active fields; try `acme-store` for the name conflict and a name starting with `offline` for the failed request.
 - Error: `error`, the selected table's rows did not load; the Data view shows a danger `Alert` that names the table and offers Retry.
@@ -10513,7 +10510,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-rule-list
 - Surface: app
 - Source: `blocks/view/view-table/view-table.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-table")`
-- Components: Alert, Button, Card, CollectionPreferences, ConfirmDialog, DataTable, `DropdownMenuGroup`, `DropdownMenuItem`, EmptyState, IconButton, Input, PageHeader, PropertyFilter, StatusIndicator, `TableCellActions`, `TableCellId`, `TableCellLink`, `TableCellStatus`, `TableCellTime`, Tag, Tooltip, `use-collection`
+- Components: Alert, Button, Card, CollectionPreferences, ConfirmDialog, DataTable, `DropdownMenuGroup`, `DropdownMenuItem`, EmptyState, IconButton, PageHeader, PropertyFilter, StatusIndicator, `TableCellActions`, `TableCellId`, `TableCellLink`, `TableCellStatus`, `TableCellTime`, Tag, Tooltip, `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -12844,7 +12841,7 @@ never read as new.
 
 - Title each conversation from its first prompt, short; the full title shows on hover through `title`.
 - Fix the reference time so the groups match on the server and the client: set `now` on the app's `ConfigProvider` once (every time-relative component below reads it), or pass `now` here to override it for this list.
-- Confirm deletes of anything older than today with a `ConfirmDialog` in the `remove` handler.
+- Never delete on the first tap: open a `ConfirmDialog` from the `remove` handler and remove the item from `@confirm` (the Default example), or remove it at once and offer Undo in a toast.
 
 ## Don’t
 
@@ -12893,6 +12890,7 @@ never read as new.
 - Each conversation is a `button` with its title as the name; the open one carries `aria-current="page"`.
 - Delete is an `IconButton` named `Delete <title>`, shown on every row (not hover-only), so it is reachable by keyboard and touch.
 - Keyboard: `Tab` moves through rows and their Delete; `Enter`/`Space` open a conversation.
+- Focus after a delete: when the owner removes the item whose Delete was pressed and focus was lost with it (on `body`, or on the closed `ConfirmDialog`), focus moves to the conversation that took its place, else the last one, else the list itself (`tabindex="-1"`). Tests: `conversation-history.test.ts` › moves focus to the next row after a delete.
 - Loading sets `aria-busy` on the list.
 
 ## Examples
@@ -12901,8 +12899,9 @@ never read as new.
 
 ```vue
 <script setup>
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import ConversationHistory from '@aziontech/webkit/conversation-history'
-  import { ref } from 'vue'
+  import { computed, ref } from 'vue'
 
   const now = '2026-11-11T15:00:00'
   const items = ref([
@@ -12919,9 +12918,22 @@ never read as new.
   ])
   const active = ref('c2')
 
+  const pendingId = ref(null)
+  const confirmOpen = ref(false)
+  const pendingTitle = computed(
+    () => items.value.find((item) => item.id === pendingId.value)?.title ?? ''
+  )
+
   const remove = (event, id) => {
+    pendingId.value = id
+    confirmOpen.value = true
+  }
+
+  const confirmRemove = () => {
+    const id = pendingId.value
     items.value = items.value.filter((item) => item.id !== id)
     if (active.value === id) active.value = null
+    confirmOpen.value = false
   }
 </script>
 
@@ -12933,6 +12945,14 @@ never read as new.
       :now="now"
       removable
       @remove="remove"
+    />
+    <ConfirmDialog
+      v-model:open="confirmOpen"
+      title="Delete conversation"
+      :description="`${pendingTitle} and its messages are deleted. This can't be undone.`"
+      confirm-label="Delete conversation"
+      size="small"
+      @confirm="confirmRemove"
     />
   </div>
 </template>
@@ -31878,7 +31898,7 @@ packages/webkit/src/components/overlay/command/
 
 # Confirm Dialog
 
-> A small confirmation dialog: a title, one sentence of description, and a Cancel plus a confirm button whose `variant` says how destructive the outcome is (`danger` for a removal or a discard, `primary` for a commit). The unsaved-changes guard uses the same shell; the `actions` slot replaces the two buttons when the guard can also save. Built from `Dialog`, `Panel` parts and `Button`.
+> A small confirmation dialog: a title, one sentence of description, and a Cancel plus a confirm button whose `variant` says how destructive the outcome is (`danger` for a removal or a discard, `primary` for a commit). The unsaved-changes guard uses the same shell; the `actions` slot replaces the two buttons when the guard can also save. Built from `Dialog`, `Panel` parts, `Button` and, for a typed confirmation, `Input`.
 
 - Import: `import ConfirmDialog from '@aziontech/webkit/confirm-dialog'`
 - Category: overlay · Surface: app · Structure: monolithic
@@ -31888,13 +31908,14 @@ packages/webkit/src/components/overlay/command/
 - Use ConfirmDialog whenever the person must confirm an action they started (delete, discard, publish), including typed-name confirmation; an agent asking to run a tool uses ToolApproval, and a modal with your own body uses Dialog.
 - Before a removal (Remove domain, Delete resource) or a re-run (Clear again).
 - When someone leaves a form with unsaved changes.
-- A deletion that needs typed confirmation: put the field in the default slot and set `disabled` until it matches.
+- A deletion that needs typed confirmation: set `confirmation-phrase` to the resource name; the dialog renders the field and keeps the confirm button disabled until the text matches.
 
 ## Do
 
 - The confirm label repeats the verb of the title (Remove Domain, Discard changes), never OK or Yes.
 - `variant="danger"` only when the outcome removes or discards something; a commit is `primary`.
 - Close the dialog from `@confirm` once the action has run; keep it open with `loading` while it runs.
+- Typed confirmation has one rule everywhere: the reader types the resource name (`confirmation-phrase`), the match is case-sensitive after trimming the ends, the confirm button stays disabled until it matches, `Enter` in the field confirms once it matches, and the field empties every time the dialog opens. Do not hand-write the field.
 - Below `md` the buttons stack full width with the confirm button on top, the same order as `save-bar`.
 
 ## Don’t
@@ -31921,6 +31942,7 @@ packages/webkit/src/components/overlay/command/
 | `size` | `'small' \| 'medium'` | `'medium'` | false | Width of the dialog. |
 | `loading` | `boolean` | `false` | false | Shows a spinner on the confirm button while the action runs; Cancel, `Esc` and the overlay stop closing the dialog until it clears. |
 | `disabled` | `boolean` | `false` | false | Disables the confirm button, for a confirmation that needs input first. |
+| `confirmationPhrase` | `string` | `''` | false | A phrase the reader must type, exactly and with the same case, before confirm enables; usually the resource name. Empty asks for no typing. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled (`v-model:open` unbound). |
 | `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
 
@@ -31928,7 +31950,7 @@ packages/webkit/src/components/overlay/command/
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `confirm` | `(event: MouseEvent)` | The confirm button was activated; not emitted while `disabled` or `loading`. |
+| `confirm` | `(event: MouseEvent)` | The confirm button was activated; not emitted while `disabled`, `loading` or before the phrase matches. |
 | `cancel` | `(event: MouseEvent)` | The cancel button was activated; the dialog closes. Not emitted while `loading`. |
 
 ## Slots
@@ -31951,7 +31973,8 @@ packages/webkit/src/components/overlay/command/
 ## Accessibility
 
 - Visible focus: owned by the buttons and `dialog`.
-- Keyboard map: on open, focus lands on Cancel, the least destructive action (WAI-ARIA alert dialog pattern; Cancel carries `data-autofocus`, which the shared focus trap honours); with the `actions` slot it lands on the first focusable control, or on the slot control marked `data-autofocus`. `Esc` closes; `Tab` is trapped in the dialog and focus returns to the trigger on close (from `dialog`). There is no close button: an alert dialog is answered with Cancel, the confirm button or `Esc`. Tests: `confirm-dialog.test.ts` › opens with focus on Cancel.
+- Keyboard map: with `confirmationPhrase`, focus lands on the phrase field (the confirm button is disabled until it matches), and `Enter` in the field confirms once the text matches. Otherwise, on open, focus lands on Cancel, the least destructive action (WAI-ARIA alert dialog pattern; Cancel carries `data-autofocus`, which the shared focus trap honours); with the `actions` slot it lands on the first focusable control, or on the slot control marked `data-autofocus`. `Esc` closes; `Tab` is trapped in the dialog and focus returns to the trigger on close (from `dialog`). There is no close button: an alert dialog is answered with Cancel, the confirm button or `Esc`. Tests: `confirm-dialog.test.ts` › opens with focus on Cancel.
+- The phrase field is labelled by its sentence (`aria-labelledby`, "Type `name` to confirm." from the locale catalog, `confirmDialog.typeToConfirm`). Tests: `confirm-dialog.test.ts` › typed confirmation.
 - ARIA: the panel is `role="alertdialog"` (it interrupts with a decision), named by its title and described by its description (`DialogTitle`, `DialogDescription`; `aria-describedby` only when a description renders).
 - Nested: opened from a `Drawer` or a `Dialog`, it is the top overlay layer, so `Esc` closes the confirm only, and while `loading` it closes nothing.
 - Contrast ≥4.5:1, owned by the composed parts.

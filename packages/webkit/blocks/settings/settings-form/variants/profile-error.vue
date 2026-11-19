@@ -16,7 +16,7 @@
   import Tag from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
-  import { computed, nextTick, reactive, ref, useId } from 'vue'
+  import { computed, nextTick, reactive, ref } from 'vue'
 
   const form = reactive({
     accountName: 'Acme',
@@ -84,19 +84,13 @@
   }
 
   const deleteOpen = ref(false)
-  const deleteConfirmation = ref('')
   const deleting = ref(false)
-  const deleteLabelId = useId()
   const savedName = computed<string>(() => JSON.parse(baseline.value).accountName)
-  const canDelete = computed(
-    () => deleteConfirmation.value.trim() === savedName.value && !deleting.value
-  )
   const openDelete = () => {
-    deleteConfirmation.value = ''
     deleteOpen.value = true
   }
   const confirmDelete = () => {
-    if (!canDelete.value) return
+    if (deleting.value) return
     deleting.value = true
     setTimeout(() => {
       deleting.value = false
@@ -675,6 +669,10 @@
       variant="danger"
       title="Delete account"
       size="medium"
+      confirm-label="Delete account"
+      :confirmation-phrase="savedName"
+      :loading="deleting"
+      @confirm="confirmDelete"
     >
       <div class="flex flex-col gap-(--spacing-md)">
         <Alert
@@ -685,39 +683,7 @@
           The account, its applications, domains, users and invoices are deleted with all their
           data.
         </p>
-        <p
-          :id="deleteLabelId"
-          class="m-0 text-body-sm text-(--text-default)"
-        >
-          Type <code class="text-label-code-sm">{{ savedName }}</code> to confirm.
-        </p>
-        <Input
-          v-model="deleteConfirmation"
-          :aria-labelledby="deleteLabelId"
-          autocomplete="off"
-          class="w-full"
-          @keydown.enter.prevent="confirmDelete"
-        />
       </div>
-      <template #actions="{ close }">
-        <Button
-          type="button"
-          label="Cancel"
-          variant="outline"
-          size="medium"
-          :disabled="deleting"
-          @click="close"
-        />
-        <Button
-          type="button"
-          label="Delete account"
-          variant="danger"
-          size="medium"
-          :disabled="!canDelete"
-          :loading="deleting"
-          @click="confirmDelete"
-        />
-      </template>
     </ConfirmDialog>
   </div>
 </template>

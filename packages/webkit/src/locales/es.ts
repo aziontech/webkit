@@ -401,7 +401,8 @@ export const es: Messages = {
   },
   confirmDialog: {
     confirm: 'Confirmar',
-    cancel: 'Cancelar'
+    cancel: 'Cancelar',
+    typeToConfirm: 'Escribe {phrase} para confirmar.'
   },
   consoleLayout: {
     navigation: 'Navegación principal',

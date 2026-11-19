@@ -15,7 +15,7 @@
 
 - Title each conversation from its first prompt, short; the full title shows on hover through `title`.
 - Fix the reference time so the groups match on the server and the client: set `now` on the app's `ConfigProvider` once (every time-relative component below reads it), or pass `now` here to override it for this list.
-- Confirm deletes of anything older than today with a `ConfirmDialog` in the `remove` handler.
+- Never delete on the first tap: open a `ConfirmDialog` from the `remove` handler and remove the item from `@confirm` (the Default example), or remove it at once and offer Undo in a toast.
 
 ## Don’t
 
@@ -65,6 +65,7 @@
 - Each conversation is a `button` with its title as the name; the open one carries `aria-current="page"`.
 - Delete is an `IconButton` named `Delete <title>`, shown on every row (not hover-only), so it is reachable by keyboard and touch.
 - Keyboard: `Tab` moves through rows and their Delete; `Enter`/`Space` open a conversation.
+- Focus after a delete: when the owner removes the item whose Delete was pressed and focus was lost with it (on `body`, or on the closed `ConfirmDialog`), focus moves to the conversation that took its place, else the last one, else the list itself (`tabindex="-1"`). Tests: `conversation-history.test.ts` › moves focus to the next row after a delete.
 - Loading sets `aria-busy` on the list.
 
 ## Right-to-left
@@ -102,8 +103,9 @@
 
 ```vue
 <script setup>
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import ConversationHistory from '@aziontech/webkit/conversation-history'
-  import { ref } from 'vue'
+  import { computed, ref } from 'vue'
 
   const now = '2026-11-11T15:00:00'
   const items = ref([
@@ -120,9 +122,22 @@
   ])
   const active = ref('c2')
 
+  const pendingId = ref(null)
+  const confirmOpen = ref(false)
+  const pendingTitle = computed(
+    () => items.value.find((item) => item.id === pendingId.value)?.title ?? ''
+  )
+
   const remove = (event, id) => {
+    pendingId.value = id
+    confirmOpen.value = true
+  }
+
+  const confirmRemove = () => {
+    const id = pendingId.value
     items.value = items.value.filter((item) => item.id !== id)
     if (active.value === id) active.value = null
+    confirmOpen.value = false
   }
 </script>
 
@@ -134,6 +149,14 @@
       :now="now"
       removable
       @remove="remove"
+    />
+    <ConfirmDialog
+      v-model:open="confirmOpen"
+      title="Delete conversation"
+      :description="`${pendingTitle} and its messages are deleted. This can't be undone.`"
+      confirm-label="Delete conversation"
+      size="small"
+      @confirm="confirmRemove"
     />
   </div>
 </template>

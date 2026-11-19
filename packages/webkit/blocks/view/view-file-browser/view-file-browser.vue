@@ -22,7 +22,6 @@
   import FileDropzone from '@aziontech/webkit/file-dropzone'
   import FileTokenGroup, { type FileTokenGroupItem } from '@aziontech/webkit/file-token-group'
   import IconButton from '@aziontech/webkit/icon-button'
-  import Input from '@aziontech/webkit/input'
   import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
@@ -33,7 +32,7 @@
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import UploadProgress, { type UploadProgressItem } from '@aziontech/webkit/upload-progress'
-  import { computed, nextTick, ref, useId, watch } from 'vue'
+  import { computed, nextTick, ref, watch } from 'vue'
 
   import { sampleFolders, sampleStorageName } from './sample'
 
@@ -288,11 +287,6 @@
 
   const pending = ref<FileRow | null>(null)
   const deleteOpen = ref(false)
-  const confirmation = ref('')
-  const confirmLabelId = useId()
-  const canDelete = computed(
-    () => pending.value !== null && confirmation.value.trim() === pending.value.name
-  )
 
   const onRowAction = (event: Event, value: DropdownMenuItemValue, item: FileRow) => {
     if (value === 'open') openEntry(event, item)
@@ -300,13 +294,12 @@
     if (value === 'move') openMove([item])
     if (value !== 'delete') return
     pending.value = item
-    confirmation.value = ''
     deleteOpen.value = true
   }
 
   const confirmDelete = (event: Event) => {
     const entry = pending.value?.entry
-    if (!canDelete.value || !entry) return
+    if (!entry) return
     items.value = items.value.filter((item) => item !== entry)
     deleteOpen.value = false
     emit('delete', event, entry)
@@ -808,6 +801,9 @@
       v-model:open="deleteOpen"
       :title="pending?.kind === 'folder' ? 'Delete folder' : 'Delete file'"
       size="medium"
+      :confirm-label="pending?.kind === 'folder' ? 'Delete folder' : 'Delete file'"
+      :confirmation-phrase="pending?.name ?? ''"
+      @confirm="confirmDelete"
     >
       <div class="flex flex-col gap-(--spacing-md)">
         <Alert
@@ -821,35 +817,7 @@
               : 'The selected file will be deleted.'
           }}
         </p>
-        <p
-          :id="confirmLabelId"
-          class="m-0 text-body-sm text-(--text-default)"
-        >
-          Type <code class="text-label-code-sm">{{ pending?.name }}</code> to confirm.
-        </p>
-        <Input
-          v-model="confirmation"
-          :aria-labelledby="confirmLabelId"
-          autocomplete="off"
-          class="w-full"
-          @keydown.enter="confirmDelete"
-        />
       </div>
-      <template #actions="{ close }">
-        <Button
-          label="Cancel"
-          variant="outline"
-          size="medium"
-          @click="close"
-        />
-        <Button
-          :label="pending?.kind === 'folder' ? 'Delete folder' : 'Delete file'"
-          variant="danger"
-          size="medium"
-          :disabled="!canDelete"
-          @click="confirmDelete"
-        />
-      </template>
     </ConfirmDialog>
     <Dialog
       v-model:open="uploadOpen"

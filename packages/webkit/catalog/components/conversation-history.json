@@ -16,6 +16,6 @@
  "bestPractices": [
   "Title each conversation from its first prompt, short; the full title shows on hover through `title`.",
   "Fix the reference time so the groups match on the server and the client: set `now` on the app's `ConfigProvider` once (every time-relative component below reads it), or pass `now` here to override it for this list.",
-  "Confirm deletes of anything older than today with a `ConfirmDialog` in the `remove` handler."
+  "Never delete on the first tap: open a `ConfirmDialog` from the `remove` handler and remove the item from `@confirm` (the Default example), or remove it at once and offer Undo in a toast."
  ]
 }

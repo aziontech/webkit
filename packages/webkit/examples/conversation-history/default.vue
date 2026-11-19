@@ -1,6 +1,7 @@
 <script setup>
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import ConversationHistory from '@aziontech/webkit/conversation-history'
-  import { ref } from 'vue'
+  import { computed, ref } from 'vue'
 
   const now = '2026-11-11T15:00:00'
   const items = ref([
@@ -17,9 +18,22 @@
   ])
   const active = ref('c2')
 
+  const pendingId = ref(null)
+  const confirmOpen = ref(false)
+  const pendingTitle = computed(
+    () => items.value.find((item) => item.id === pendingId.value)?.title ?? ''
+  )
+
   const remove = (event, id) => {
+    pendingId.value = id
+    confirmOpen.value = true
+  }
+
+  const confirmRemove = () => {
+    const id = pendingId.value
     items.value = items.value.filter((item) => item.id !== id)
     if (active.value === id) active.value = null
+    confirmOpen.value = false
   }
 </script>
 
@@ -31,6 +45,14 @@
       :now="now"
       removable
       @remove="remove"
+    />
+    <ConfirmDialog
+      v-model:open="confirmOpen"
+      title="Delete conversation"
+      :description="`${pendingTitle} and its messages are deleted. This can't be undone.`"
+      confirm-label="Delete conversation"
+      size="small"
+      @confirm="confirmRemove"
     />
   </div>
 </template>

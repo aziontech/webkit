@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/view/view-table/view-table.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-table")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DropdownMenuGroup`, `DropdownMenuItem`, [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [PageHeader](../../components/page-header.md), [PropertyFilter](../../components/property-filter.md), [StatusIndicator](../../components/status-indicator.md), `TableCellActions`, `TableCellId`, `TableCellLink`, `TableCellStatus`, `TableCellTime`, [Tag](../../components/tag.md), [Tooltip](../../components/tooltip.md), `use-collection`
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DropdownMenuGroup`, `DropdownMenuItem`, [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [PageHeader](../../components/page-header.md), [PropertyFilter](../../components/property-filter.md), [StatusIndicator](../../components/status-indicator.md), `TableCellActions`, `TableCellId`, `TableCellLink`, `TableCellStatus`, `TableCellTime`, [Tag](../../components/tag.md), [Tooltip](../../components/tooltip.md), `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -65,7 +65,7 @@ Every cell is a preset from `@aziontech/webkit/table`, so the list reads like ev
 
 ### H. Delete confirmation — `ConfirmDialog`, `Alert`, `Input` (required)
 
-The `edit/edit-delete-dialog` dialog, opened from the row menu without a trigger of its own: a medium `ConfirmDialog` titled `Delete resource`, a warning `Alert` (`Once confirmed, this action can't be reversed.`), one sentence of consequence, and an `Input` labelled by `Type <name> to confirm.` The danger `Delete resource` enables only when the typed text matches the row's name; confirming removes the row. The typed text resets each time the dialog opens.
+The `edit/edit-delete-dialog` dialog, opened from the row menu without a trigger of its own: a medium `ConfirmDialog` titled `Delete resource`, a warning `Alert` (`Once confirmed, this action can't be reversed.`), one sentence of consequence, and the typed confirmation `ConfirmDialog` draws from `confirmation-phrase` (`Type <name> to confirm.`, exact and case-sensitive). The danger `Delete resource` enables only when the typed text matches the row's name; confirming removes the row. The typed text resets each time the dialog opens.
 
 ### I. No matching resources — `EmptyState`, `Button` (required)
 
@@ -209,7 +209,6 @@ Each variant is the same screen in another state: `get_block("view/view-table", 
   import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
-  import Input from '@aziontech/webkit/input'
   import PageHeader from '@aziontech/webkit/page-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
   import TableCellActions from '@aziontech/webkit/table-cell-actions'
@@ -219,7 +218,7 @@ Each variant is the same screen in another state: `get_block("view/view-table", 
   import TableCellTime from '@aziontech/webkit/table-cell-time'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
-  import { computed, ref, useId, watch } from 'vue'
+  import { computed, ref, watch } from 'vue'
 
   import { sampleResources } from './sample'
 
@@ -331,11 +330,6 @@ Each variant is the same screen in another state: `get_block("view/view-table", 
 
   const pending = ref<TableViewResource | null>(null)
   const deleteOpen = ref(false)
-  const confirmation = ref('')
-  const confirmLabelId = useId()
-  const canDelete = computed(
-    () => pending.value !== null && confirmation.value.trim() === pending.value.name
-  )
 
   const onRowAction = (event: Event, value: DropdownMenuItemValue, row: TableViewResource) => {
     if (value !== 'delete') {
@@ -343,13 +337,12 @@ Each variant is the same screen in another state: `get_block("view/view-table", 
       return
     }
     pending.value = row
-    confirmation.value = ''
     deleteOpen.value = true
   }
 
   const confirmDelete = (event: Event) => {
     const resource = pending.value
-    if (!canDelete.value || !resource) return
+    if (!resource) return
     items.value = items.value.filter((item) => item.id !== resource.id)
     deleteOpen.value = false
     emit('delete', event, resource)
@@ -596,6 +589,9 @@ Each variant is the same screen in another state: `get_block("view/view-table", 
       v-model:open="deleteOpen"
       title="Delete resource"
       size="medium"
+      confirm-label="Delete resource"
+      :confirmation-phrase="pending?.name ?? ''"
+      @confirm="confirmDelete"
     >
       <div class="flex flex-col gap-(--spacing-md)">
         <Alert
@@ -605,35 +601,7 @@ Each variant is the same screen in another state: `get_block("view/view-table", 
         <p class="m-0 text-body-sm text-(--text-muted)">
           The selected resource will be deleted, along with its domains and settings.
         </p>
-        <p
-          :id="confirmLabelId"
-          class="m-0 text-body-sm text-(--text-default)"
-        >
-          Type <code class="text-label-code-sm">{{ pending?.name }}</code> to confirm.
-        </p>
-        <Input
-          v-model="confirmation"
-          :aria-labelledby="confirmLabelId"
-          autocomplete="off"
-          class="w-full"
-          @keydown.enter="confirmDelete"
-        />
       </div>
-      <template #actions="{ close }">
-        <Button
-          label="Cancel"
-          variant="outline"
-          size="medium"
-          @click="close"
-        />
-        <Button
-          label="Delete resource"
-          variant="danger"
-          size="medium"
-          :disabled="!canDelete"
-          @click="confirmDelete"
-        />
-      </template>
     </ConfirmDialog>
   </div>
 </template>
