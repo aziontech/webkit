@@ -1,0 +1,24 @@
+{
+ "purpose": "A searchable picker for the interface language: a `Select` whose trigger and rows show each language's flag and its name in that language (`English`, `Português (Brasil)`, `Español`), with a search box at the top of the list that filters by language name, BCP 47 tag or country. `v-model` holds the BCP 47 tag of the picked language, ready to hand to `ConfigProvider`'s `locale`. It offers the languages WebKit ships catalogs for (`en`, `pt-BR`, `es`) and takes the consumer's own list through `options`. It is the language counterpart of the country picker inside `phone-input`, and reuses its flag sprite and search behaviour.",
+ "useWhen": [
+  "A language switch for the whole app or a page: a header, a footer, a settings page or a sign-in screen.",
+  "A form field that asks which language a user, a page or a notification is written in."
+ ],
+ "avoidWhen": [
+  "Two or three languages that must stay visible side by side on a toolbar → use `toggle-group`.",
+  "Picking a country (for a phone number, an address) → use `phone-input` or `select`.",
+  "Setting the language of WebKit's own strings → that is `config-provider`'s `locale`; bind this picker's `v-model` to it."
+ ],
+ "related": [
+  "`config-provider` — takes the picked tag as `locale` and translates everything below it.",
+  "`select` — the picker this component is built on; use it directly for any other list of choices.",
+  "`phone-input` — the same flag sprite and searchable list, for the dial code of a phone number.",
+  "`field` — wraps the picker with a label and a description when it sits in a form."
+ ],
+ "bestPractices": [
+  "Bind `v-model` to the same value as `ConfigProvider`'s `locale`, so the picker and the strings move together.",
+  "Name languages in their own language (`Português (Brasil)`, not `Portuguese (Brazil)`): a reader who cannot read the current language still finds theirs.",
+  "Give each option a `country` only when it tells regional variants apart or the tag has no region (`en` → `US`); a flag stands for a country, never for a language on its own, so the name always sits next to it.",
+  "Put it in a `Field` with a `Field.Label` in a form; on a toolbar or a footer, give it an `aria-label` only if the built-in `Language` name does not fit."
+ ]
+}

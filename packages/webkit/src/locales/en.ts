@@ -619,6 +619,12 @@ export const kbd = {
   arrowRight: '→'
 } as const
 
+export const languageSelect = {
+  label: 'Language',
+  search: 'Search language',
+  noMatch: 'No language found.'
+} as const
+
 export const link = {
   label: 'Learn more'
 } as const
@@ -1490,6 +1496,7 @@ export const en = {
   heroFormSection,
   keyValueList,
   kbd,
+  languageSelect,
   link,
   listingIndexSection,
   logoWall,

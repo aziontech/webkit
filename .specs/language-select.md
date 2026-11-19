@@ -2,12 +2,12 @@
 name: language-select
 category: input
 structure: monolithic
-status: approved
+status: implemented
 spec_version: 1
 template: 2
 created: 2026-11-19
 last_updated: 2026-11-19
-checksum: 5a3bb2c8853a2a6a3e71a824bf032070e3a811bb49fed5b2b741d1726a934ee7
+checksum: bb7889204b0569096bf918c9c23b28a22109a15ac2eed1ef5753c8f92595e2c1
 ---
 
 # LanguageSelect — Component Spec
@@ -86,9 +86,7 @@ Notes on the built-in `options`: `[{ value: 'en', label: 'English', country: 'US
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
-| `update:modelValue` | `string` | v-model: the tag of the picked language. |
+_none_ — the only event is `update:modelValue`, emitted by the `v-model` above.
 
 ## Slots
 
@@ -117,6 +115,7 @@ _none_ — motion is owned by `Select` (trigger colour transitions and the dropd
 |---|---|
 | option tag text | `var(--text-muted)` |
 | option tag typography | `.text-label-code-sm` |
+| active row (keyboard) | `var(--bg-hover)` |
 | empty line text | `var(--text-muted)` |
 | empty line typography | `.text-label-sm` |
 | empty line padding.x | `var(--spacing-xs)` |
@@ -172,7 +171,7 @@ _none_ — motion is owned by `Select` (trigger colour transitions and the dropd
 The examples in `packages/webkit/examples/language-select/` render on the docs site (`/components/language-select`):
 
 - Default — the picker with the built-in languages inside a `Field` with a `Field.Label`, wired to a `ConfigProvider` so a line of WebKit text under it changes language.
-- Options — a consumer list with regional variants (`en-US`, `en-GB`, `fr-FR`, `fr-CA`, `ar`); justified because `options` and the flag-from-region rule change what the picker offers.
+- Options — a consumer list with regional variants and other scripts (`en-US`, `en-GB`, `fr-FR`, `fr-CA`, `de-DE`, `ja-JP`, `ar`); justified because `options` and the flag-from-region rule change what the picker offers.
 - Sizes — every `size` side by side.
 - Disabled — `disabled`.
 

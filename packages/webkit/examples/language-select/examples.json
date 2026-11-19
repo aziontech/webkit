@@ -1,0 +1,26 @@
+{
+  "component": "language-select",
+  "title": "Components/Input/LanguageSelect",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Inside a `Field` and bound to `ConfigProvider`'s `locale`: pick a language and the pagination under it, the picker's own search box and its empty line change language. Type a language, a tag or a country to filter.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Options",
+      "summary": "`options` replaces the built-in languages with your own list. Regional variants take their flag from the tag's region (`en-GB`, `fr-CA`); `country` sets it when the tag has none (`ar` → `SA`).",
+      "file": "options.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "Every `size` side by side: `small`, `medium` (the default) and `large`.",
+      "file": "sizes.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "`disabled` keeps the list closed; the picked language stays visible.",
+      "file": "disabled.vue"
+    }
+  ]
+}
