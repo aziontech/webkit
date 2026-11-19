@@ -33575,6 +33575,7 @@
     "Button",
     "Card",
     "Checkbox",
+    "ConfirmDialog",
     "EmptyState",
     "Field",
     "IconButton",
@@ -33589,7 +33590,8 @@
     "Switch",
     "Tag",
     "Tooltip",
-    "use-locale"
+    "use-locale",
+    "use-unsaved-changes"
    ],
    "imports": [
     "@aziontech/webkit/accordion",
@@ -33600,6 +33602,7 @@
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
     "@aziontech/webkit/checkbox",
+    "@aziontech/webkit/confirm-dialog",
     "@aziontech/webkit/empty-state",
     "@aziontech/webkit/field",
     "@aziontech/webkit/icon-button",
@@ -33614,7 +33617,8 @@
     "@aziontech/webkit/switch",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/tooltip",
-    "@aziontech/webkit/use-locale"
+    "@aziontech/webkit/use-locale",
+    "@aziontech/webkit/use-unsaved-changes"
    ],
    "primary": "ConnectGit",
    "guidelinesSummary": "A focused page, outside the console shell, where the user turns a template into a running project. They chose a template in the Creation Center and now need to see what it clones, connect a Git provider if they have none, name the repository it creates, fill the settings the template requires and deploy. The same column then shows the build and the outcome, so the user never leaves the page.",
@@ -33730,6 +33734,7 @@
     "Button",
     "Card",
     "CodeEditor",
+    "ConfirmDialog",
     "DrawerContent",
     "Drawer",
     "DrawerTitle",
@@ -33764,13 +33769,15 @@
     "toast",
     "ToggleGroup",
     "Tooltip",
-    "use-locale"
+    "use-locale",
+    "use-unsaved-changes"
    ],
    "imports": [
     "@aziontech/webkit/alert",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
     "@aziontech/webkit/code-editor",
+    "@aziontech/webkit/confirm-dialog",
     "@aziontech/webkit/drawer-content",
     "@aziontech/webkit/drawer-root",
     "@aziontech/webkit/drawer-title",
@@ -33805,7 +33812,8 @@
     "@aziontech/webkit/toast",
     "@aziontech/webkit/toggle-group",
     "@aziontech/webkit/tooltip",
-    "@aziontech/webkit/use-locale"
+    "@aziontech/webkit/use-locale",
+    "@aziontech/webkit/use-unsaved-changes"
    ],
    "primary": "Default",
    "guidelinesSummary": "The right-side drawer that adds or edits something that only exists inside another resource: a domain, a DNS record, an environment, a variable, a rule. The user is working on the resource behind it and must keep it in view, so the form slides over the page instead of replacing it. They fill a few sections, press the one commit button and land back where they were, with the new item in the list. The drawer opens over a console page: ItemRows and NestedDrawer draw that page as a page body for `ConsoleLayout` (the layout owns the rail, the header and the `main`).",
@@ -33978,6 +33986,7 @@
     "Breadcrumb",
     "Button",
     "Card",
+    "ConfirmDialog",
     "FieldDescription",
     "FieldError",
     "IconButton",
@@ -33995,7 +34004,8 @@
     "Switch",
     "Tag",
     "Textarea",
-    "toast"
+    "toast",
+    "use-unsaved-changes"
    ],
    "imports": [
     "@aziontech/webkit/alert",
@@ -34005,6 +34015,7 @@
     "@aziontech/webkit/breadcrumb-root",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
+    "@aziontech/webkit/confirm-dialog",
     "@aziontech/webkit/field-description",
     "@aziontech/webkit/field-error",
     "@aziontech/webkit/icon-button",
@@ -34022,7 +34033,8 @@
     "@aziontech/webkit/switch",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/textarea",
-    "@aziontech/webkit/toast"
+    "@aziontech/webkit/toast",
+    "@aziontech/webkit/use-unsaved-changes"
    ],
    "primary": "Default",
    "guidelinesSummary": "The page a first-level resource is created on when everything it needs fits on one screen. The user arrives from the module's `Create <Object>` button, answers the required fields at the top, leaves the defaulted ones folded under Advanced, and commits from a bar that never scrolls away. The page has its own URL, its own creation header and no sidebar, so it survives a reload and the back button, and leaving it returns to the list.",
@@ -34263,6 +34275,7 @@
     "Breadcrumb",
     "Button",
     "Card",
+    "ConfirmDialog",
     "Field",
     "FieldDescription",
     "FieldError",
@@ -34283,6 +34296,7 @@
     "Textarea",
     "toast",
     "ToggleGroup",
+    "use-unsaved-changes",
     "Wizard"
    ],
    "imports": [
@@ -34293,6 +34307,7 @@
     "@aziontech/webkit/breadcrumb-root",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
+    "@aziontech/webkit/confirm-dialog",
     "@aziontech/webkit/field",
     "@aziontech/webkit/field-description",
     "@aziontech/webkit/field-error",
@@ -34313,6 +34328,7 @@
     "@aziontech/webkit/textarea",
     "@aziontech/webkit/toast",
     "@aziontech/webkit/toggle-group",
+    "@aziontech/webkit/use-unsaved-changes",
     "@aziontech/webkit/wizard"
    ],
    "primary": "WhereItRuns",

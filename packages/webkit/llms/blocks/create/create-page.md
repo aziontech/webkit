@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/create/create-page/create-page.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-page")`
-- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), `FieldDescription`, `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [MultiSelect](../../components/multi-select.md), [NumberInput](../../components/number-input.md), [PageHeader](../../components/page-header.md), [RadioGroup](../../components/radio-group.md), [RadioGroup](../../components/radio-group.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md)
+- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [ConfirmDialog](../../components/confirm-dialog.md), `FieldDescription`, `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [MultiSelect](../../components/multi-select.md), [NumberInput](../../components/number-input.md), [PageHeader](../../components/page-header.md), [RadioGroup](../../components/radio-group.md), [RadioGroup](../../components/radio-group.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), `use-unsaved-changes`
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`, `webkit-layout`
 
 ## Asked as
@@ -56,6 +56,10 @@ On/off settings use `SettingsRow variant="compact"` with a `Switch` hard right a
 
 `SaveBar variant="centered"`, a raised card centred at the bottom of the form that stays on screen while the form scrolls under it, at every width. It is the last child of the scrolling region, so the last field always scrolls clear of it. Its `#leading` slot holds what sits at the start, when there is something: an outlined Import `Button` and one muted line on the domain form, nothing on the others. On a phone the muted line hides, so Import keeps its label beside Cancel and Save; the Domain name description already says a paste imports. Its `#actions` slot holds outlined Cancel and the primary submit, both medium `Button`s. The submit is the form's only `type="submit"`. A long create uses the same bar.
 
+### G. Leaving with typed work — `useUnsavedChanges`, `ConfirmDialog` (required)
+
+Cancel and the header Back both leave the page, so both ask first once the form differs from what it opened with: `useUnsavedChanges(() => form)` tracks it, Cancel and Back `await guard.confirmLeave()` before the page emits `cancel`, and one `ConfirmDialog v-bind="guard.dialogProps"` asks "Unsaved changes" with Keep editing and Discard changes. A clean form leaves at once, with no dialog, and the browser's own prompt covers a reload or a tab close while dirty. In a router app pair it with `onBeforeRouteLeave(() => guard.confirmLeave())` so a link or the browser Back asks too.
+
 ## Data
 
 The block keeps the form as a local draft, validates it and emits `submit` with the values; it sends no request. `CreatePageValues` and `CreatePageProps` are exported from `create-page.vue`. The page owns the request: it sets `loading` while it runs, and on failure sets `error`, which the block shows in an error toast with Retry; on success the page shows the toast and opens the new domain.
@@ -66,10 +70,10 @@ The block keeps the form as a local draft, validates it and emits `submit` with 
 | `loading`       | `boolean`                   | The create request is in flight; the `fieldset` locks and Save spins.               |
 | `error`         | `string`                    | Why the request failed, the description of the error toast with Retry.              |
 
-| Event    | Payload           | When                                                                      |
-| -------- | ----------------- | ------------------------------------------------------------------------- |
-| `submit` | `(event, values)` | Save on a valid form, and Retry in the error toast; `values` are trimmed. |
-| `cancel` | `(event)`         | Cancel in the bar.                                                        |
+| Event    | Payload           | When                                                                               |
+| -------- | ----------------- | ---------------------------------------------------------------------------------- |
+| `submit` | `(event, values)` | Save on a valid form, and Retry in the error toast; `values` are trimmed.          |
+| `cancel` | `(event)`         | Cancel in the bar or the header Back, once the user confirms leaving a dirty form. |
 
 To go live, render the block from a page that owns the request:
 
@@ -173,6 +177,7 @@ Each variant is the same screen in another state: `get_block("create/create-page
   import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import FieldError from '@aziontech/webkit/field-error'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
@@ -183,6 +188,7 @@ Each variant is the same screen in another state: `get_block("create/create-page
   import SettingsRow from '@aziontech/webkit/settings-row'
   import Switch from '@aziontech/webkit/switch'
   import { toast } from '@aziontech/webkit/toast'
+  import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import { reactive, ref, watch } from 'vue'
 
   /** The values of the Create Domain form. */
@@ -276,6 +282,16 @@ Each variant is the same screen in another state: `get_block("create/create-page
     domain: form.domain.trim()
   })
 
+  const guard = useUnsavedChanges(() => form, {
+    enabled: () => !props.loading
+  })
+  const discardDialog = guard.dialogProps
+  const discardLabels = guard.labels
+
+  const onCancel = async (event: MouseEvent) => {
+    if (await guard.confirmLeave()) emit('cancel', event)
+  }
+
   const submit = (event: Event) => {
     if (props.loading || !validate()) return
     emit('submit', event, values())
@@ -303,6 +319,7 @@ Each variant is the same screen in another state: `get_block("create/create-page
           aria-label="Back to Domains"
           variant="outline"
           size="small"
+          @click="onCancel"
         />
         <AppHeader.Brand
           href="/home"
@@ -457,7 +474,7 @@ Each variant is the same screen in another state: `get_block("create/create-page
                 label="Cancel"
                 variant="outline"
                 size="medium"
-                @click="(event: MouseEvent) => emit('cancel', event)"
+                @click="onCancel"
               />
               <Button
                 label="Save"
@@ -471,6 +488,26 @@ Each variant is the same screen in another state: `get_block("create/create-page
         </div>
       </form>
     </main>
+    <ConfirmDialog
+      v-bind="discardDialog"
+      data-testid="unsaved-changes-dialog"
+    >
+      <template #actions>
+        <Button
+          :label="discardLabels.keepEditing"
+          variant="ghost"
+          size="medium"
+          data-autofocus
+          @click="guard.keepEditing"
+        />
+        <Button
+          :label="discardLabels.discard"
+          variant="danger"
+          size="medium"
+          @click="guard.discardAndLeave"
+        />
+      </template>
+    </ConfirmDialog>
   </div>
 </template>
 ```

@@ -4308,7 +4308,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-deplo
 - Surface: app
 - Source: `blocks/create/create-deploy-template/create-deploy-template.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-deploy-template")`
-- Components: Accordion, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, Checkbox, EmptyState, Field, IconButton, Input, `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, Item, Link, Select, Skeleton, Switch, Tag, Tooltip, `use-locale`
+- Components: Accordion, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, Checkbox, ConfirmDialog, EmptyState, Field, IconButton, Input, `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, Item, Link, Select, Skeleton, Switch, Tag, Tooltip, `use-locale`, `use-unsaved-changes`
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -4353,6 +4353,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-deplo
 
 ## Do
 
+- Leaving with typed work: on the Form state the header Back asks first once the scope, the repository name, its visibility or any setting or variable differs from what the form opened with: `useUnsavedChanges` tracks them, Back `await`s `guard.confirmLeave()` before it leaves, and one `ConfirmDialog v-bind="guard.dialogProps"` asks "Unsaved changes" with Keep editing and Discard changes. An untouched form leaves at once. In a router app pair it with `onBeforeRouteLeave(() => guard.confirmLeave())`.
 - Keep the template preview card at the top of the column through every phase, so the user always sees what is being deployed.
 - Ask for Git first; show the form only once a provider is connected.
 - Let Deploy check the form: show each missing required value under its field and open the collapsed group that holds it. Disable Deploy only while the settings load, or on an upload until a Root (/) is picked.
@@ -4434,7 +4435,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-deplo
 - Surface: app
 - Source: `blocks/create/create-drawer/create-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-drawer")`
-- Components: Alert, Button, Card, CodeEditor, `DrawerContent`, Drawer, `DrawerTitle`, `DrawerTrigger`, `DropdownMenuGroup`, `DropdownMenuItem`, `DropdownMenuRoot`, `DropdownMenuTrigger`, Field, `FieldDescription`, `FieldError`, Hint, IconButton, Input, InputGroup, Item, KeyValueList, Link, NumberInput, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, RadioGroup, SchemaForm, Select, SettingsGroup, SettingsRow, StatusIndicator, Switch, Textarea, Toast, ToggleGroup, Tooltip, `use-locale`
+- Components: Alert, Button, Card, CodeEditor, ConfirmDialog, `DrawerContent`, Drawer, `DrawerTitle`, `DrawerTrigger`, `DropdownMenuGroup`, `DropdownMenuItem`, `DropdownMenuRoot`, `DropdownMenuTrigger`, Field, `FieldDescription`, `FieldError`, Hint, IconButton, Input, InputGroup, Item, KeyValueList, Link, NumberInput, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, RadioGroup, SchemaForm, Select, SettingsGroup, SettingsRow, StatusIndicator, Switch, Textarea, Toast, ToggleGroup, Tooltip, `use-locale`, `use-unsaved-changes`
 - Skills: `webkit-create-surface`, `webkit-navigation`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -4473,6 +4474,7 @@ The right-side drawer that adds or edits something that only exists inside anoth
 - I. Context alert — `Alert` (optional)
 - J. Footer — `PanelFooter`, `Button` (required)
 - K. Certificate import — `SettingsGroup`, `Field`, `Button`, `PanelFooter` (optional)
+- L. Discard guard — `ConfirmDialog` (required)
 
 What each part takes: [blocks/create/create-drawer.md](blocks/create/create-drawer.md).
 
@@ -4528,7 +4530,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-drawe
 - Required fields carry the Required marker from the start; an error is a `Field.Error` with `role="alert"` and the control is `aria-invalid`.
 - The choice cards are a radio group named by the Domain source label; each card's title and description are the radio's name and description.
 - The loading button keeps its label and announces the busy state; the disabled `fieldset` keeps keyboard users out of the form while saving.
-- Escape, the close button and the overlay all dismiss; none of them submit.
+- Escape, the close button and the overlay all dismiss; none of them submit. With typed input they open the Unsaved changes `alertdialog` first, focused on Keep editing; Escape there closes only the alert and the drawer keeps the form.
 
 ## States
 
@@ -4683,7 +4685,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-hub.m
 - Surface: app
 - Source: `blocks/create/create-page/create-page.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-page")`
-- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, `FieldDescription`, `FieldError`, IconButton, Input, Item, MultiSelect, NumberInput, PageHeader, RadioGroup, RadioGroup, SaveBar, Select, SettingsGroup, SettingsRow, Switch, Tag, Textarea, Toast
+- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, ConfirmDialog, `FieldDescription`, `FieldError`, IconButton, Input, Item, MultiSelect, NumberInput, PageHeader, RadioGroup, RadioGroup, SaveBar, Select, SettingsGroup, SettingsRow, Switch, Tag, Textarea, Toast, `use-unsaved-changes`
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`, `webkit-layout`
 
 ## Asked as
@@ -4716,6 +4718,7 @@ The page a first-level resource is created on when everything it needs fits on o
 - D. Field rows — `SettingsRow`, `Input`, `FieldError` (required)
 - E. Switch rows — `Switch` (optional)
 - F. Commit bar — `SaveBar`, `Button` (required)
+- G. Leaving with typed work — `useUnsavedChanges`, `ConfirmDialog` (required)
 
 What each part takes: [blocks/create/create-page.md](blocks/create/create-page.md).
 
@@ -5035,7 +5038,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-resou
 - Surface: app
 - Source: `blocks/create/create-wizard/create-wizard.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-wizard")`
-- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, Field, `FieldDescription`, `FieldError`, Hint, IconButton, Input, Item, PageHeader, RadioGroup, RadioGroup, Select, SettingsGroup, SettingsRow, Skeleton, Subheader, Switch, Tag, Textarea, Toast, ToggleGroup, Wizard
+- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, ConfirmDialog, Field, `FieldDescription`, `FieldError`, Hint, IconButton, Input, Item, PageHeader, RadioGroup, RadioGroup, Select, SettingsGroup, SettingsRow, Skeleton, Subheader, Switch, Tag, Textarea, Toast, ToggleGroup, `use-unsaved-changes`, Wizard
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -5072,6 +5075,7 @@ The page a first-level resource is created on one step at a time. It is the `Wiz
 - H. Long entry — `Textarea`, `FieldError` (optional)
 - I. Review — `Subheader`, `Alert`, `Card`, `Item`, `Tag`, `Button` (required)
 - J. Create and deploy — `Card`, `Field`, `Input`, `Item`, `RadioGroup` (CreateAndDeploy)
+- K. Leaving with typed work — `useUnsavedChanges`, `ConfirmDialog` (required)
 
 What each part takes: [blocks/create/create-wizard.md](blocks/create/create-wizard.md).
 
@@ -7874,7 +7878,7 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-resource.
 - WafSettings: a WAF rule set's Main Settings tab with General, Status (Active and the Blocking or Learning Mode `Select`) and Threats, one row per threat family with a Sensitivity `Select` beside its `Switch`; the Sensitivity is disabled while its threat is off, and Save confirms in a toast.
 - ResourceSettings: a first-level resource with no tabs at its own settings route; Save checks every field before it commits.
 - UnsavedChanges: after one edit; the save bar is up with Discard and Save.
-- Saving: while the request is in flight; Save is loading and Discard is disabled.
+- Saving: while the request is in flight; the fieldset is disabled, so no field can change under the save, Save is loading and Discard is disabled.
 - DataStream: a data stream at its own settings route with General, Source, Sampling, Template and Destination; the destination fields follow the connector, Save sends one test record, and an endpoint that does not answer raises the section `Alert` of the state-form-validation rule.
 - StaleRecord: the form holds edits and the record changed elsewhere; the warning notice with Reload is up, Save asks before overwriting, Reload turns the notice into Edits discarded with Undo.
 - DangerZone: the settings end with the Danger zone; Delete project opens the typed-name confirmation, enabled only on a match, loading while the delete runs.
@@ -28433,7 +28437,7 @@ context, so a consumer never wires one part to the other.
 
 - Visual states: `default`
 - `data-variant` mirrors the `variant` prop on the root
-- Floating inset: while a `floating` bar is mounted it publishes its measured height on the document root as `--save-bar-inset` (for a scroll region of its own, such as a code editor, to pad its bottom) and `--toast-offset-bottom` (so the `toaster` stacks above the bar), and updates both when the bar resizes. When the bar would cover the end of the content, the root grows to the bar's height so the last field can scroll clear of it; when there is nothing left to cover, the root stays at zero height. Both properties are removed when the bar unmounts or changes to another `variant`. The other variants publish nothing.
+- Floating inset: while a `floating` bar is mounted it publishes its measured height on the document root as `--save-bar-inset` (for a scroll region of its own, such as a code editor, to pad its bottom) and `--toast-offset-bottom` (so the `toaster` stacks above the bar), and updates both when the bar resizes. When the bar would cover the end of the content, the root grows to the bar's height so the last field can scroll clear of it, whether the content scrolls in a scroll region of its own or the page itself scrolls; when there is nothing left to cover, the root stays at zero height. Both properties are removed when the bar unmounts or changes to another `variant`. The other variants publish nothing.
 - Responsive: the root is the `@container/save-bar`. `floating` and `docked` put the message and the actions on one row from `@xl` of the bar; below it the actions stack full width under the message, Save on top. `plain` stacks the same way below `@md`. `fade` keeps `leading` (Back) and the actions on one row at every width, the actions at the inline end. `centered` keeps the card centred and one row at every width: the optional `leading` or `default` content first, then the actions; the card never grows wider than the bar and lets clicks through around it. The bar keeps `env(safe-area-inset-bottom)` clear on phones.
 
 ## Accessibility
