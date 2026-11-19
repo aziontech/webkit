@@ -11,6 +11,17 @@ export const ptBR: Messages = {
     arguments: 'Argumentos',
     invalidArguments: 'Estes argumentos não são válidos. Corrija-os para aprovar.'
   },
+  agentQuestion: {
+    submit: 'Enviar',
+    yes: 'Sim',
+    no: 'Não',
+    skip: 'Pular',
+    answered: 'Respondida: {answer}',
+    answeredWithoutValue: 'Respondida',
+    skipped: 'Pulada',
+    canceled: 'Pergunta cancelada',
+    error: 'Não foi possível enviar a resposta. Tente de novo.'
+  },
   responseLoading: {
     generating: 'Gerando uma resposta'
   },

@@ -4517,6 +4517,125 @@
    "examplesFile": "catalog/examples/tool-approval.json",
    "docsFile": "catalog/components/tool-approval.json"
   },
+  "agent-question": {
+   "import": "@aziontech/webkit/agent-question",
+   "target": "./src/components/ai/agent-question/agent-question.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/agent-question",
+   "models": [
+    "modelValue"
+   ],
+   "category": "ai",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "title",
+     "type": "string",
+     "default": "—",
+     "required": "true",
+     "doc": "The question the agent asks, ending with a question mark. Backticks render as code."
+    },
+    {
+     "name": "description",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "One or two sentences on why the agent asks or what it does with the answer; backticks render as code."
+    },
+    {
+     "name": "type",
+     "type": "'choice' | 'text' | 'confirm'",
+     "default": "'choice'",
+     "required": "false",
+     "doc": "The answer control: `choice` lists `options` as radios, `text` shows a one-line field, `confirm` shows No and Yes buttons."
+    },
+    {
+     "name": "options",
+     "type": "AgentQuestionOption[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "The answers of a `choice` question: `{ value, label, description?, disabled? }`. Ignored by the other types."
+    },
+    {
+     "name": "placeholder",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Short example shown in the empty field of a `text` question."
+    },
+    {
+     "name": "status",
+     "type": "'pending' | 'running' | 'success' | 'error' | 'canceled' | 'skipped'",
+     "default": "'pending'",
+     "required": "false",
+     "doc": "`pending` asks; `running` sends the answer; `success`, `skipped` and `canceled` replace the controls with the outcome; `error` asks again."
+    },
+    {
+     "name": "error",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Why the last answer was not accepted, shown under the controls. Empty with `status=\"error\"` uses the locale catalog."
+    },
+    {
+     "name": "skippable",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Offers Skip, for a question the agent can go on without."
+    },
+    {
+     "name": "submitLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Text of the submit button (Yes on a `confirm` question). Empty uses the locale catalog (`Submit`, `Yes`)."
+    },
+    {
+     "name": "declineLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Text of the No button of a `confirm` question. Empty uses the locale catalog (`No`)."
+    },
+    {
+     "name": "skipLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Text of the Skip button. Empty uses the locale catalog (`Skip`)."
+    },
+    {
+     "name": "modelValue",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
+    }
+   ],
+   "events": [
+    {
+     "name": "submit",
+     "payload": "(event: Event, value: string)",
+     "notes": ""
+    },
+    {
+     "name": "skip",
+     "payload": "(event: MouseEvent)",
+     "notes": ""
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "Context the reader needs to answer, between the question and the control: a `CodeBlock`, a `KeyValueList`."
+    }
+   ],
+   "surface": "app",
+   "examplesFile": "catalog/examples/agent-question.json",
+   "docsFile": "catalog/components/agent-question.json"
+  },
   "response-loading": {
    "import": "@aziontech/webkit/response-loading",
    "target": "./src/components/ai/response-loading/response-loading.vue",

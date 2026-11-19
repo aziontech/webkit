@@ -146,6 +146,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 ## Components: AI
 
+- [AgentQuestion](components/agent-question.md): A question the agent asks the reader in the middle of a run, before it can go on (a human-in-the-loop interrupt, Cloudscape follow-up input, the "ask the user" step of coding agents): pick one of a few options, type a…
 - [ArtifactCanvas](components/artifact-canvas.md): The side panel that shows one generated artifact in full next to the conversation: a SQL file, a configuration, a table of results, a document.
 - [ArtifactPreview](components/artifact-preview.md): A card for something the assistant generated — a file, a code snippet, a table, a configuration (Cloudscape artifact previews, AI Elements Artifact).
 - [ChatMessage](components/chat-message.md): One message in a generative AI conversation (Cloudscape's chat bubble, AI Elements' Message): who wrote it (avatar and author line), the content, and — once the response is complete — the inline actions a reader takes…

@@ -1,0 +1,26 @@
+{
+  "component": "agent-question",
+  "title": "Components/AI/AgentQuestion",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The agent pauses to ask which environment to use: the reader picks an option and submits, or skips; the card then keeps the answer in the thread as text.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Types",
+      "summary": "The three answer controls: a choice between options, a one-line text answer, and a yes-or-no confirm whose buttons say what each answer does; every submit button names its outcome.",
+      "file": "types.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "The answer is being sent: the field is inert and Submit shows its loading state until the run takes the answer.",
+      "file": "loading.vue"
+    },
+    {
+      "name": "Resolved",
+      "summary": "The outcomes that stay in the thread: answered with the answer in text, skipped, canceled, and a failed answer with its error line and the controls kept for a retry.",
+      "file": "resolved.vue"
+    }
+  ]
+}

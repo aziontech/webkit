@@ -11,6 +11,17 @@ export const es: Messages = {
     arguments: 'Argumentos',
     invalidArguments: 'Estos argumentos no son válidos. Corrígelos para aprobar.'
   },
+  agentQuestion: {
+    submit: 'Enviar',
+    yes: 'Sí',
+    no: 'No',
+    skip: 'Omitir',
+    answered: 'Respondida: {answer}',
+    answeredWithoutValue: 'Respondida',
+    skipped: 'Omitida',
+    canceled: 'Pregunta cancelada',
+    error: 'No se pudo enviar la respuesta. Inténtalo de nuevo.'
+  },
   responseLoading: {
     generating: 'Generando una respuesta'
   },

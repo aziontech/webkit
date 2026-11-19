@@ -187,6 +187,10 @@
       "types": "./types/components/ai/tool-approval/tool-approval.vue.d.ts",
       "default": "./src/components/ai/tool-approval/tool-approval.vue"
     },
+    "./agent-question": {
+      "types": "./types/components/ai/agent-question/agent-question.vue.d.ts",
+      "default": "./src/components/ai/agent-question/agent-question.vue"
+    },
     "./response-loading": {
       "types": "./types/components/ai/response-loading/response-loading.vue.d.ts",
       "default": "./src/components/ai/response-loading/response-loading.vue"
@@ -2611,6 +2615,9 @@
       ],
       "tool-approval": [
         "./types/components/ai/tool-approval/tool-approval.vue.d.ts"
+      ],
+      "agent-question": [
+        "./types/components/ai/agent-question/agent-question.vue.d.ts"
       ],
       "response-loading": [
         "./types/components/ai/response-loading/response-loading.vue.d.ts"
