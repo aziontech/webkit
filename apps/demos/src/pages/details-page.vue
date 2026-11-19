@@ -10,6 +10,7 @@
     type ResourceDetailResource,
     type ResourceDetailTab
   } from '../blocks/resource-detail.vue'
+  import ResourceNotFound from '../components/resource-not-found.vue'
   import { findResource } from '../lib/store'
 
   const route = useRoute()
@@ -19,14 +20,14 @@
   const requested = String(globalThis.history?.state?.tab ?? '') as ResourceDetailTab
   const tab = ref<ResourceDetailTab>(TABS.includes(requested) ? requested : 'overview')
 
-  const resource = computed<ResourceDetailResource>(() => {
+  const resource = computed<ResourceDetailResource | undefined>(() => {
     const found = record.value
-    if (!found) return sampleResource
+    if (!found) return undefined
     return {
       ...sampleResource,
       name: found.name,
       domain: found.domain,
-      status: found.status === 'Live' ? 'Ready' : 'Inactive',
+      status: found.status,
       statusSeverity: found.status === 'Live' ? 'success' : 'neutral',
       createdAt: found.modifiedAt,
       createdBy: found.owner
@@ -35,12 +36,12 @@
 
   const breadcrumb = computed(() => [
     { label: 'Resources', href: '/resources' },
-    { label: resource.value.name }
+    { label: resource.value?.name ?? 'Not found' }
   ])
 
   const onResourceAction = async (_event: Event, value: unknown) => {
     if (value === 'settings' && record.value) router.push(`/resources/${record.value.id}/edit`)
-    if (value === 'copy-url') {
+    if (value === 'copy-url' && resource.value) {
       if (await copyText(`https://${resource.value.domain}`))
         toast.success('URL copied.', { closable: true })
     }
@@ -50,9 +51,14 @@
 <template>
   <ConsoleLayout.Breadcrumb :items="breadcrumb" />
   <ResourceDetail
+    v-if="resource"
     v-model:tab="tab"
     :resource="resource"
     @resource-action="onResourceAction"
     @connect-repository="tab = 'build'"
+  />
+  <ResourceNotFound
+    v-else
+    :id="String(route.params.id)"
   />
 </template>
