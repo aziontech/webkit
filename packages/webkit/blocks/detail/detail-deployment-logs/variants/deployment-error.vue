@@ -231,20 +231,21 @@
           id: '1',
           time: '14:03:01',
           type: 'text',
-          level: 'warn',
+          level: 'error',
           message: '[ERROR] [manifest] Error while creating rule"Deliver static assets"'
         },
         {
           id: '2',
           time: '14:03:02',
           type: 'text',
+          level: 'error',
           message: '409 Conflict: a rule with this behavior is already bound to service web-app'
         },
         {
           id: '3',
           time: '14:03:03',
           type: 'text',
-          level: 'warn',
+          level: 'error',
           message: '[ERROR] [manifest] Deploy aborted. Nothing was published.'
         }
       ]
