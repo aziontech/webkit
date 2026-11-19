@@ -1,4 +1,4 @@
-import { cleanup, fireEvent, render, waitFor } from '@testing-library/vue'
+import { cleanup, fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 
 import AiActionApproval, {
@@ -166,7 +166,8 @@ describe('ai', () => {
         ]
       }
     })
-    const field = view.getByRole('textbox') as HTMLTextAreaElement
+    const approval = view.container.querySelector<HTMLElement>('[data-testid="tool-approval"]')!
+    const field = within(approval).getByRole('textbox') as HTMLTextAreaElement
     await fireEvent.update(field, '{"urls":["https://example.com/a"]}')
     await fireEvent.click(view.getByRole('button', { name: 'Purge' }))
     expect(calls).toEqual([[true, { editedArgs: { urls: ['https://example.com/a'] } }]])

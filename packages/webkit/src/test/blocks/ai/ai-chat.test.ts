@@ -1,4 +1,4 @@
-import { render, waitFor } from '@testing-library/vue'
+import { render, waitFor, within } from '@testing-library/vue'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { page, userEvent } from 'vitest/browser'
 
@@ -360,7 +360,6 @@ describe('ai/ai-chat', () => {
     let stops = 0
     const view = render(AiChat, {
       props: {
-        loading: true,
         messages: answer([
           {
             type: 'subagent',
@@ -379,7 +378,7 @@ describe('ai/ai-chat', () => {
     })
     const card = view.container.querySelector('[data-testid="subagent-card"]')!
     expect(card).toHaveAttribute('data-status', 'running')
-    await userEvent.click(view.getByRole('button', { name: /^Stop/ }))
+    await userEvent.click(within(card as HTMLElement).getByRole('button', { name: /^Stop/ }))
     expect(stops).toBe(1)
   })
 
@@ -440,12 +439,15 @@ describe('ai/ai-chat', () => {
     }
     const view = render(AiChat, { props: { messages: thread, interrupts: [question] } })
     expect(view.getByRole('group', { name: 'Which environment?' })).toBeTruthy()
-    await userEvent.click(view.getByRole('radio', { name: 'Production' }))
-    await userEvent.click(view.getByRole('button', { name: 'Submit' }))
+    const card = within(view.getByRole('group', { name: 'Which environment?' }))
+    await userEvent.click(card.getByRole('radio', { name: 'Production' }))
+    await userEvent.click(card.getByRole('button', { name: 'Submit' }))
     expect(answers).toEqual(['prod'])
     await view.rerender({ messages: thread, interrupts: [] })
-    const card = view.container.querySelector('[data-testid="agent-question"]')
-    expect(card).toHaveAttribute('data-status', 'success')
+    expect(view.container.querySelector('[data-testid="agent-question"]')).toHaveAttribute(
+      'data-status',
+      'success'
+    )
   })
 
   it('shows the interrupt status and error, and Skip cancels it', async () => {
@@ -460,9 +462,10 @@ describe('ai/ai-chat', () => {
       cancel: () => canceled++
     }
     const view = render(AiChat, { props: { messages: thread, interrupts: [question] } })
-    expect(view.getByRole('textbox', { name: /Name the bucket/ })).toBeTruthy()
+    const card = view.container.querySelector<HTMLElement>('[data-testid="agent-question"]')!
+    expect(within(card).getByRole('textbox')).toBeTruthy()
     expect(view.container.textContent).toContain('The name is taken.')
-    await userEvent.click(view.getByRole('button', { name: 'Skip' }))
+    await userEvent.click(within(card).getByRole('button', { name: 'Skip' }))
     expect(canceled).toBe(1)
     await view.rerender({ messages: thread, interrupts: [] })
     expect(view.container.querySelector('[data-testid="agent-question"]')).toHaveAttribute(
@@ -478,8 +481,9 @@ describe('ai/ai-chat', () => {
       'data-status',
       'success'
     )
-    await userEvent.click(view.getByRole('radio', { name: 'Roll back to build 1041' }))
-    await userEvent.click(view.getByRole('button', { name: 'Submit' }))
+    const card = within(view.getByRole('group', { name: 'How should I fix checkout?' }))
+    await userEvent.click(card.getByRole('radio', { name: 'Roll back to build 1041' }))
+    await userEvent.click(card.getByRole('button', { name: 'Submit' }))
     await waitFor(() =>
       expect(view.container.querySelector('[data-testid="agent-question"]')).toHaveAttribute(
         'data-status',
@@ -503,7 +507,8 @@ describe('ai/ai-chat', () => {
         ]
       }
     })
-    const field = view.getByRole('textbox')
+    const approval = view.container.querySelector<HTMLElement>('[data-testid="tool-approval"]')!
+    const field = within(approval).getByRole('textbox')
     const original = (field as HTMLTextAreaElement).value
     expect(JSON.parse(original)).toEqual({ workload: 'storefront' })
     await userEvent.clear(field)
