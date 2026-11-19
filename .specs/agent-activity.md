@@ -45,7 +45,7 @@ a step only when it has been the current one for a second, and the outcome once,
 
 - Title each step `<Verb>ing <what>` in the reader's words, no end punctuation: `Searching the docs`, never a tool identifier.
 - Keep one step `running` at a time; later steps stay `pending` until they start.
-- When a step fails, mark it `error` and the steps it blocked `canceled`.
+- When a step fails, mark it `error` and the steps that will no longer run `canceled`.
 - Keep the steps collapsed in a chat once the answer arrives; the answer is the main content.
 - Key each step by something stable, such as the id of the activity message it comes from.
 - Use 3 to 7 steps; merge fine-grained ticks into one step and update its `description` instead.
@@ -72,7 +72,7 @@ a step only when it has been the current one for a second, and the outcome once,
 
 | Prop          | Type                  | Default    | Required | JSDoc                                                                                                                                                                               |
 | ------------- | --------------------- | ---------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `steps`       | `AgentActivityStep[]` | `[]`       | false    | The steps of the work, in order: each has a `key`, a `title`, a `status` from the shared status set and an optional `description`. The first running step, else the first failed one, else the last one that is not pending, else the first, is current. |
+| `steps`       | `AgentActivityStep[]` | `[]`       | false    | The steps of the work, in order: each has a `key`, a `title`, a `status` from the shared status set and an optional `description`. The current step is the first running one, else the first failed one, else the last canceled one of a stopped run, else the last one that is not pending. |
 | `defaultOpen` | `boolean`             | `false`    | false    | Initial open state of the step list when uncontrolled; collapsed shows only the current step.                                                                                       |
 | `ariaLabel`   | `string`              | `''`       | false    | Accessible name of the activity. Empty uses the locale catalog (`Agent activity`).                                                                                                  |
 
@@ -98,10 +98,11 @@ _No slots._
 ## States
 
 - `data-status` on the root mirrors the current step's status; `data-state="open|closed"` when there is more than one step.
-- Current step: the first `running` step, else the first `error` step, else the last step that is not `pending` (between two steps, the one just finished), else the first step (a plan that has not started). Collapsed shows only it, so a failed run shows the failed step, never a trailing `canceled` one; open shows every step in order, the current one marked `aria-current="step"`. `data-status` mirrors the same step.
+- Current step (the one rule): the first `running` step, else the first `error` step, else, when the run is stopped (see Outcomes), the last `canceled` step, else the last step that is not `pending` (between two steps, the one just finished, so the root reads `success` while the next step has not started), else the first step (a plan that has not started). Collapsed shows only it, so a failed run shows the failed step, never a trailing `canceled` one; open shows every step in order, the current one marked `aria-current="step"`. `data-status` mirrors the same step.
+- The step list `ol` (id from `useId()`) is always rendered: collapsed it holds only the current step's `li`, open it holds every step.
 - The disclosure (`{count} steps`, chevron) appears only with two or more steps.
-- Step glyphs: `running` a `Spinner`; `success` a check circle; `error` a cross circle; `canceled` a stop circle; `skipped` a minus circle; `pending` a dashed ring. Pending, canceled and skipped titles are muted.
-- Outcomes: the run is failed when a step is `error`; stopped when no step is `running`, `pending` or `error` and at least one is `canceled` (the reader or the owner stopped it; the current step is then the last `canceled` one, and `data-status` is `canceled`); finished when every step is `success` or `skipped`.
+- Step glyphs: `running` a `Spinner`; `success` `az az-circle-check`; `error` `az az-circle-x`; `canceled` `az az-circle-stop`; `skipped` `az az-circle-minus`; `pending` a CSS ring at the glyph size (`rounded-full border border-dashed border-(--text-muted)`), not an icon. Pending, canceled and skipped titles are muted.
+- Outcomes: the run is failed when a step is `error`; stopped when no step is `running`, `pending` or `error` and at least one is `canceled` (the reader or the owner stopped it; the current-step rule then picks the last `canceled` step, so `data-status` is `canceled`); finished when every step is `success` or `skipped`.
 - No steps: the root renders no rows and no `data-status`; the polite region stays in the DOM, so the first step announced after an empty mount is heard.
 - `loading`, `disabled`, `readonly` and `invalid` do not apply: progress is carried by the `running` step status, and the toggle is the only control.
 
@@ -120,7 +121,7 @@ _No slots._
 | step title       | `.text-body-sm`, `var(--text-default)`; pending, canceled, skipped `var(--text-muted)`        |
 | step description | `.text-body-sm`, `var(--text-muted)`                                                          |
 | toggle           | `.text-label-sm`, `var(--text-muted)` → hover `var(--text-default)`                           |
-| glyphs           | success `var(--success-mark)`, error `var(--danger-mark)`, canceled / skipped / running Spinner / pending dashed ring `var(--text-muted)` |
+| glyphs           | `az-circle-check` `var(--success-mark)`, `az-circle-x` `var(--danger-mark)`; `az-circle-stop`, `az-circle-minus`, the running Spinner and the pending ring border `var(--text-muted)` |
 | gaps             | `var(--spacing-2xs)`, `var(--spacing-xs)`                                                     |
 | ring             | `var(--ring-color)`                                                                           |
 
@@ -133,7 +134,7 @@ _None._
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color)` on the toggle.
 - Pattern: the toggle and the step list follow the WAI-ARIA APG Disclosure (Show/Hide) pattern; the step list is a static ordered list.
 - Keyboard map: `Tab` to the toggle, `Enter` / `Space` expands or collapses the step list. The steps are not focusable.
-- ARIA: the root is a `role="group"` named by `ariaLabel`; the steps are an ordered list (`ol`); the current step has `aria-current="step"`; each glyph is `aria-hidden` and a visually hidden status word (`Done`, `Failed`, …) follows each title; the toggle is a `button` with `aria-expanded` and `aria-controls`.
+- ARIA: the root is a `role="group"` named by `ariaLabel`; the steps are an ordered list (`ol`); the current step has `aria-current="step"`; each glyph is `aria-hidden` and a visually hidden status word (`Done`, `Failed`, …) follows each title; the toggle is a `button` with `aria-expanded` and `aria-controls`, which always targets the step list `ol` (rendered in both states).
 - Announcements: one visually hidden `aria-live="polite"` region, outside the list. It announces a running step's title once it has stayed current for one second (fast ticks are never read), then the outcome once: `Finished {count} steps` when the run becomes finished, `Stopped after {count} steps` when it becomes stopped ({count} is the number of `success` steps in both), or `Failed: {title}` when a step errors. A stopped run is never announced as finished. An outcome is announced only when it changes after mount: an instance mounted with a finished or failed run (a chat history re-render) announces nothing; a step already running at mount is live work and is announced after the same one-second dwell. The one-second timer is cleared on every step change and on unmount (`onScopeDispose`). The list itself is not live.
 - Contrast ≥4.5:1 on titles and the muted text; every glyph colour (`--success-mark`, `--danger-mark`, `--text-muted`) meets 3:1 and APCA Lc 45 for icons.
 - Reduced motion: the spinner and the chevron stop moving; the status words carry the state.
@@ -154,7 +155,7 @@ _None._
 | `agentActivity.canceled`  | `Canceled`                        | —             |
 | `agentActivity.skipped`   | `Skipped`                         | —             |
 
-- Formatting: plural rules through `Intl.PluralRules`; the count through `Intl.NumberFormat`. Step titles and descriptions come translated from the owner.
+- Formatting: plural rules through `Intl.PluralRules` and the count through `Intl.NumberFormat`, both with the provider locale (the same locale the messages resolve from); a plural form the catalog lacks falls back to `other`. Step titles and descriptions come translated from the owner.
 
 ## Right-to-left
 
@@ -165,7 +166,8 @@ _None._
 
 ## Responsive
 
-- Container queries: none.
+- Container queries: none — a single column whose rows wrap, the same at every container width.
+- Hover: only the toggle's colour changes on hover; nothing is hover-only.
 - Narrow: titles and descriptions wrap; nothing truncates.
 - Touch: the toggle is text-sized with a 24 px minimum height (44 px on coarse pointers).
 - Reflow: no horizontal scroll at 320 px and 200 % zoom.
