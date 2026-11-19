@@ -1,13 +1,14 @@
 import { readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
+import { geometryIssues } from './lib/svg-geometry.mjs'
 
 const SVG_DIRS = ['./src/svg-raw/az/']
+const GEOMETRY_DIRS = ['az', 'az-color']
 
 const issues = {
   placeholder: [],
   stroke: [],
-  nonSquareViewBox: [],
-  nonStandardSize: [],
+  geometry: [],
   filenameSpace: [],
   noPath: [],
   clipPath: [],
@@ -52,29 +53,20 @@ for (const dir of SVG_DIRS) {
       })
     }
 
-    const viewBoxMatch = content.match(/viewBox="([^"]*)"/)
-    if (viewBoxMatch) {
-      const vb = viewBoxMatch[1]
-      const [, , w, h] = vb.split(/\s+/).map(Number)
-
-      if (w !== h) {
-        issues.nonSquareViewBox.push({
-          file: filePath,
-          detail: `viewBox="${vb}" (${w}x${h}, not square)`
-        })
-      } else if (w !== 24 || h !== 24) {
-        issues.nonStandardSize.push({
-          file: filePath,
-          detail: `viewBox="${vb}" (${w}x${h}, expected 24x24)`
-        })
-      }
-    }
-
     if (content.includes('<clipPath') || content.includes('clip-path=')) {
       issues.clipPath.push({
         file: filePath,
         detail: 'Uses <clipPath> — may not render in icon font'
       })
+    }
+  }
+}
+
+for (const set of GEOMETRY_DIRS) {
+  const dir = `./src/svg-raw/${set}/`
+  for (const file of readdirSync(dir).filter((f) => f.endsWith('.svg'))) {
+    for (const detail of geometryIssues(readFileSync(join(dir, file), 'utf-8'), `${set}/${file}`)) {
+      issues.geometry.push({ file: join(dir, file), detail })
     }
   }
 }
@@ -100,19 +92,21 @@ printSection('FILENAME WITH SPACES (build may fail)', issues.filenameSpace, 'err
 printSection('STROKE-BASED PATHS (icon fonts only support fills)', issues.stroke, 'warn')
 printSection('fill="black" (should use "currentColor" for theming)', issues.fillBlack, 'warn')
 printSection('CLIP-PATH USAGE (may not render in icon font)', issues.clipPath, 'warn')
-printSection('NON-SQUARE VIEWBOX (icons should be square)', issues.nonSquareViewBox, 'warn')
-printSection('NON-STANDARD SIZE (expected 24x24)', issues.nonStandardSize, 'info')
+printSection(
+  'DISTORTED GEOMETRY (canvas, viewBox, scaling, drawn proportions)',
+  issues.geometry,
+  'error'
+)
 
-const errorCount = issues.placeholder.length + issues.noPath.length + issues.filenameSpace.length
-const warnCount =
-  issues.stroke.length +
-  issues.fillBlack.length +
-  issues.clipPath.length +
-  issues.nonSquareViewBox.length
-const infoCount = issues.nonStandardSize.length
+const errorCount =
+  issues.placeholder.length +
+  issues.noPath.length +
+  issues.filenameSpace.length +
+  issues.geometry.length
+const warnCount = issues.stroke.length + issues.fillBlack.length + issues.clipPath.length
 
 console.log('────────────────────────────────────────────────────────')
-console.log(`Summary: ${errorCount} errors, ${warnCount} warnings, ${infoCount} info`)
+console.log(`Summary: ${errorCount} errors, ${warnCount} warnings`)
 
 if (errorCount > 0) {
   console.log('\n🔴 There are critical issues that must be fixed before build.')
