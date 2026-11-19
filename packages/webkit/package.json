@@ -195,6 +195,10 @@
       "types": "./types/components/ai/response-loading/response-loading.vue.d.ts",
       "default": "./src/components/ai/response-loading/response-loading.vue"
     },
+    "./agent-activity": {
+      "types": "./types/components/ai/agent-activity/agent-activity.vue.d.ts",
+      "default": "./src/components/ai/agent-activity/agent-activity.vue"
+    },
     "./artifact-canvas": {
       "types": "./types/components/ai/artifact-canvas/artifact-canvas.vue.d.ts",
       "default": "./src/components/ai/artifact-canvas/artifact-canvas.vue"
@@ -2621,6 +2625,9 @@
       ],
       "response-loading": [
         "./types/components/ai/response-loading/response-loading.vue.d.ts"
+      ],
+      "agent-activity": [
+        "./types/components/ai/agent-activity/agent-activity.vue.d.ts"
       ],
       "artifact-canvas": [
         "./types/components/ai/artifact-canvas/artifact-canvas.vue.d.ts"

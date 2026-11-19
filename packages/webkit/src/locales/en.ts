@@ -1294,6 +1294,29 @@ export const promptInput = {
   toolsEnabled: 'Enabled tools'
 } as const
 
+export const agentActivity = {
+  label: 'Agent activity',
+  steps: {
+    one: '{count} step',
+    other: '{count} steps'
+  },
+  finished: {
+    one: 'Finished {count} step',
+    other: 'Finished {count} steps'
+  },
+  stopped: {
+    one: 'Stopped after {count} step',
+    other: 'Stopped after {count} steps'
+  },
+  failed: 'Failed: {title}',
+  pending: 'Pending',
+  running: 'Running',
+  success: 'Done',
+  error: 'Failed',
+  canceled: 'Canceled',
+  skipped: 'Skipped'
+} as const
+
 export const reasoning = {
   thinking: 'Thinking',
   thoughtBriefly: 'Thought for a few seconds',
@@ -1545,6 +1568,7 @@ export const en = {
   promptInput,
   promptQueue,
   propertyFilter,
+  agentActivity,
   reasoning,
   resizable,
   schemaForm,

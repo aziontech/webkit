@@ -1221,6 +1221,11 @@
     "entryOnly": true
   },
   {
+    "name": "agent-activity",
+    "path": "src/components/ai/agent-activity/agent-activity.vue",
+    "limit": "4 KB"
+  },
+  {
     "name": "reasoning",
     "path": "src/components/ai/reasoning/reasoning.vue",
     "limit": "4.65 KB"

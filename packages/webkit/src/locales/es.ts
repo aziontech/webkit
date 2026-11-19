@@ -106,6 +106,28 @@ export const es: Messages = {
     tools: 'Herramientas',
     toolsEnabled: 'Herramientas activadas'
   },
+  agentActivity: {
+    label: 'Actividad del agente',
+    steps: {
+      one: '{count} paso',
+      other: '{count} pasos'
+    },
+    finished: {
+      one: '{count} paso completado',
+      other: '{count} pasos completados'
+    },
+    stopped: {
+      one: 'Detenido tras {count} paso',
+      other: 'Detenido tras {count} pasos'
+    },
+    failed: 'Falló: {title}',
+    pending: 'Pendiente',
+    running: 'En curso',
+    success: 'Hecho',
+    error: 'Falló',
+    canceled: 'Cancelado',
+    skipped: 'Omitido'
+  },
   reasoning: {
     thinking: 'Pensando',
     thoughtBriefly: 'Pensó durante unos segundos',
