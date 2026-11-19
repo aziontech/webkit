@@ -14,14 +14,20 @@
   import StreamingResponse from '@aziontech/webkit/streaming-response'
   import SuggestionGroup from '@aziontech/webkit/suggestion-group'
   import Tag from '@aziontech/webkit/tag'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 
+  import { type AiChatMessage, textOf } from '../messages'
   import { sampleArtifactFollowUps, sampleArtifactThread, sampleArtifactVersions } from '../sample'
 
   const ARTIFACT = 'top-orders.sql'
   const turns = sampleArtifactThread
   const versions = sampleArtifactVersions
   const followUps = sampleArtifactFollowUps
+
+  const { formatDate } = useLocale()
+  const timeOf = (turn: AiChatMessage) =>
+    turn.createdAt ? formatDate(turn.createdAt, { hour: '2-digit', minute: '2-digit' }) : ''
 
   const version = ref(versions.length - 1)
   const canvasOpen = ref(true)
@@ -114,12 +120,12 @@
               <ChatMessage
                 v-for="turn in turns"
                 :key="turn.id"
-                :from="turn.from"
-                :timestamp="turn.time"
+                :from="turn.role === 'user' ? 'user' : 'assistant'"
+                :timestamp="timeOf(turn)"
               >
-                <template v-if="turn.from === 'user'">{{ turn.content }}</template>
+                <template v-if="turn.role === 'user'">{{ textOf(turn, '\n') }}</template>
                 <template v-else>
-                  <StreamingResponse :content="turn.content" />
+                  <StreamingResponse :content="textOf(turn)" />
                   <div
                     v-if="turn.version !== undefined"
                     data-artifact-open
@@ -135,13 +141,13 @@
                   </div>
                 </template>
                 <template
-                  v-if="turn.from === 'assistant'"
+                  v-if="turn.role === 'assistant'"
                   #actions
                 >
                   <ChatMessage.Actions>
                     <CopyButton
                       size="small"
-                      :value="turn.content"
+                      :value="textOf(turn)"
                     />
                     <ChatMessage.Feedback v-model="ratings[turn.id]" />
                   </ChatMessage.Actions>

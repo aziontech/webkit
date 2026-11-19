@@ -1,8 +1,11 @@
 <script setup lang="ts">
   import AiActionApproval from '../ai-action-approval.vue'
-  import { sampleDeleteAction } from '../sample'
+  import { sampleDeleteMessages, sampleTools } from '../sample'
 </script>
 
 <template>
-  <AiActionApproval :action="sampleDeleteAction" />
+  <AiActionApproval
+    :messages="sampleDeleteMessages"
+    :tools="sampleTools"
+  />
 </template>

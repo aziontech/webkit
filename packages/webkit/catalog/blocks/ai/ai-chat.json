@@ -24,6 +24,7 @@
  "sfcFile": "blocks/ai/ai-chat/ai-chat.vue",
  "guidelinesFile": "blocks/ai/ai-chat/guidelines.md",
  "fileSources": {
+  "messages.ts": "blocks/ai/ai-chat/messages.ts",
   "sample.ts": "blocks/ai/ai-chat/sample.ts"
  }
 }

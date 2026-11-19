@@ -3,7 +3,7 @@
   "name": "AiActionApproval",
   "title": "Blocks/Ai/AiActionApproval",
   "surface": "app",
-  "summary": "A user-authorized action inside a generative AI conversation: the reader asks the assistant to deploy, the assistant records the read-only call it made (`ToolCall`), explains in `StreamingResponse` and proposes the deployment as an `ToolApproval` card whose title names the command in code, whose body shows the exact command in a `CodeBlock`, and whose Deny and Deploy buttons decide. Approving turns the card into Approved and adds a running `ToolCall` that completes, followed by a `ChatMessage` that reports what changed with Copy (`CopyButton`); denying or letting the request expire records the outcome on the card and the assistant says nothing ran. The `PromptInput` shows Stop while the approved action runs. Built from `Conversation`, `ChatMessage`, `ToolCall`, `StreamingResponse`, `ToolApproval`, `CodeBlock`, `CopyButton` and `PromptInput`. A page body for ConsoleLayout that fills its content region.",
+  "summary": "A user-authorized action inside a generative AI conversation, from the messages of TanStack AI's `useChat`: the read-only call shows as a completed `ToolCall`, the explanation in `StreamingResponse`, and the call that needs approval as a `ToolApproval` card with its input in a `CodeBlock`. Deploy or Deny resolves the `useChat` interrupt; approved, the call runs under the card and the assistant reports what changed, with Copy and Retry after a failure. Built from `Conversation`, `ChatMessage`, `ToolCall`, `StreamingResponse`, `ToolApproval`, `CodeBlock`, `CopyButton`, `Button` and `PromptInput`. A page body for ConsoleLayout that fills its content region.",
   "preview": {
     "layout": "fullscreen",
     "background": "dark"
@@ -29,7 +29,7 @@
     "name": "Pending",
     "file": "ai-action-approval.vue"
   },
-  "files": ["sample.ts"],
+  "files": ["messages.ts", "sample.ts"],
   "variants": [
     {
       "name": "Irreversible",
@@ -47,9 +47,9 @@
       "file": "variants/denied.vue"
     },
     {
-      "name": "Expired",
-      "summary": "Nobody decided in time: the card reads Request expired and the assistant says nothing was deployed.",
-      "file": "variants/expired.vue"
+      "name": "Running",
+      "summary": "After Deploy: the card reads Approved, the deployment call runs under it and the composer shows Stop until it finishes.",
+      "file": "variants/running.vue"
     },
     {
       "name": "Error",

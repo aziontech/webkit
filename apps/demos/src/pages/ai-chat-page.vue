@@ -1,104 +1,54 @@
 <script setup lang="ts">
-  import type { SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
-  import { computed, onBeforeUnmount, ref } from 'vue'
+  import { useChat } from '@tanstack/ai-vue'
+  import { computed } from 'vue'
 
   import AiChat, { type AiChatMessage } from '../blocks/ai-chat.vue'
   import { answerFor } from '../lib/assistant'
+  import { assistantConnection, assistantTools, deployWorkload } from '../lib/assistant-model'
 
-  const messages = ref<AiChatMessage[]>([])
-  const followUps = ref<SuggestionGroupItem[]>([])
-  const loading = ref(false)
-  let nextId = 1
-  let timer: ReturnType<typeof setTimeout> | undefined
-
-  const clock = () =>
-    new Intl.DateTimeFormat(undefined, { hour: '2-digit', minute: '2-digit' }).format(new Date())
-
-  const stopTimers = () => {
-    clearTimeout(timer)
-    clearInterval(timer)
-  }
-
-  const lastAssistant = computed(() => {
-    const last = messages.value[messages.value.length - 1]
-    return last?.from === 'assistant' ? last : undefined
+  const { messages, isLoading, error, interrupts, sendMessage, stop, reload, clear } = useChat({
+    connection: assistantConnection,
+    threadId: 'demo-assistant',
+    tools: [deployWorkload]
   })
 
-  const update = (patch: Partial<AiChatMessage>) => {
-    const target = lastAssistant.value
-    if (!target) return
-    messages.value = messages.value.map((message) =>
-      message.id === target.id ? { ...message, ...patch } : message
-    )
-  }
-
-  const finish = () => {
-    stopTimers()
-    loading.value = false
-  }
-
-  const respond = (question: string) => {
-    const answer = answerFor(question)
-    followUps.value = []
-    loading.value = true
-    update({ content: '', stopped: false })
-    timer = setTimeout(() => {
-      update({ reasoning: answer.reasoning, reasoningSeconds: 1, sources: answer.sources })
-      let index = 0
-      timer = setInterval(() => {
-        index = Math.min(answer.content.length, index + 6)
-        update({ content: answer.content.slice(0, index) })
-        if (index < answer.content.length) return
-        followUps.value = answer.followUps
-        finish()
-      }, 30)
-    }, 1400)
-  }
-
-  const questionBefore = (message: AiChatMessage) => {
-    const index = messages.value.findIndex((item) => item.id === message.id)
-    return messages.value
+  const questionBefore = (index: number) => {
+    const question = messages.value
       .slice(0, index)
       .reverse()
-      .find((item) => item.from === 'user')?.content
+      .find((message) => message.role === 'user')
+    return question?.parts.map((part) => (part.type === 'text' ? part.content : '')).join('') ?? ''
   }
 
-  const onSend = (_event: Event, text: string) => {
-    const time = clock()
-    messages.value = [
-      ...messages.value,
-      { id: String(nextId++), from: 'user', content: text, time },
-      { id: String(nextId++), from: 'assistant', content: '', time }
-    ]
-    respond(text)
-  }
+  const withSources = computed<AiChatMessage[]>(() =>
+    messages.value.map((message, index) =>
+      message.role === 'assistant' && !message.parts.some((part) => part.type === 'tool-call')
+        ? {
+            ...message,
+            metadata: { ...message.metadata, sources: answerFor(questionBefore(index)).sources }
+          }
+        : message
+    )
+  )
 
-  const onStop = () => {
-    finish()
-    update({ stopped: true })
-  }
-
-  const onRetry = (_event: Event, message: AiChatMessage) => {
-    respond(questionBefore(message) ?? '')
-  }
-
-  const onNewChat = () => {
-    finish()
-    messages.value = []
-    followUps.value = []
-  }
-
-  onBeforeUnmount(stopTimers)
+  const followUps = computed(() => {
+    const last = withSources.value[withSources.value.length - 1]
+    if (isLoading.value || last?.role !== 'assistant' || !last.metadata?.sources) return []
+    return answerFor(questionBefore(withSources.value.length - 1)).followUps
+  })
 </script>
 
 <template>
   <AiChat
-    :messages="messages"
+    :messages="withSources"
     :follow-ups="followUps"
-    :loading="loading"
-    @send="onSend"
-    @stop="onStop"
-    @retry="onRetry"
-    @new-chat="onNewChat"
+    :loading="isLoading"
+    :error="error"
+    :tools="assistantTools"
+    :interrupts="interrupts"
+    @send="(_event, text) => sendMessage(text)"
+    @stop="stop()"
+    @retry="reload()"
+    @new-chat="clear()"
   />
 </template>
