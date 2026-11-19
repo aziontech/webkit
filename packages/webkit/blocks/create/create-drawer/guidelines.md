@@ -65,6 +65,10 @@ One info `Alert` at the end of the last section for a fact that governs the whol
 
 In the Certificate state the drawer imports a TLS certificate. A `ToggleGroup` picks Server certificate (certificate and private key) or Trusted CA (certificate only), and the section hint follows it. The certificate is a required `Field` with a code-font `Textarea` for the PEM text and an outlined Upload file `Button` beside its label that reads a .pem, .crt or .cer file into the same field and announces the file it loaded. As soon as the text holds a certificate, a details panel reads it in the browser: Issued to, Issued by, Valid from and Expires in a two-column `KeyValueList`, the expiry carrying a `StatusIndicator` (success with the days left, warning within 30 days with a line saying to renew it, danger once expired), and a note when intermediate certificates follow. Text that is not a PEM certificate, an expired certificate and a missing or malformed private key are errors under their fields, shown only after Save, with focus on the first. The private key's description says it is stored encrypted and never shown again. Save closes the drawer and raises a success toast with the expiry date.
 
+### L. Discard guard — `ConfirmDialog` (required)
+
+One `ConfirmDialog v-bind="guard.dialogProps"` from `useUnsavedChanges`, with Keep editing (focused) and a danger Discard changes. While the form differs from what it opened with, Escape, an overlay tap and Close open it instead of closing the drawer; a clean form closes at once.
+
 ## Data
 
 The block takes its option lists, its starting values and the save state through props and emits the values; it fetches and saves nothing. `CreateDrawerProps`, `CreateDrawerValues`, `CreateDrawerEnvironment` and `CreateDrawerCertificate` are exported from `create-drawer.vue`, and `sample.ts` holds the environments and certificates the block renders when those props are left out.
