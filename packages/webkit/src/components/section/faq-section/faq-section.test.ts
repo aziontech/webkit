@@ -3,6 +3,7 @@ import { render, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
 import { expectNoA11yViolations } from '../../../test/axe'
+import { UNSAFE_MARKDOWN_HREFS } from '../../../test/unsafe-urls'
 import FaqSection from './faq-section.vue'
 
 const TESTID = 'faq-section'
@@ -57,6 +58,15 @@ describe('FaqSection', () => {
 
     expect(getByTestId('retail-faq')).toBeInTheDocument()
     expect(queryByTestId(TESTID)).toBeNull()
+  })
+
+  it.each(UNSAFE_MARKDOWN_HREFS)('renders an answer link to %j as plain text', async (href) => {
+    const { getByRole, getByText, queryByRole } = band({
+      items: [{ question: 'Is it safe?', answer: `Open the [trap](${href}) now.` }]
+    })
+    await open(getByRole, 'Is it safe?')
+    expect(queryByRole('link', { name: 'trap' })).toBeNull()
+    expect(getByText(/trap/).closest('a')).toBeNull()
   })
 
   it('sets the anchor as the band id', () => {

@@ -5,6 +5,7 @@ import Default from '../../../../examples/link/default.vue'
 import Disabled from '../../../../examples/link/disabled.vue'
 import Sizes from '../../../../examples/link/sizes.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
+import { UNSAFE_URLS } from '../../../test/unsafe-urls'
 import Link from './link.vue'
 
 describe('Link', () => {
@@ -14,6 +15,11 @@ describe('Link', () => {
 
     expect(root.tagName).toBe('A')
     expect(getByTestId('link__label').textContent?.trim()).toBe('Learn More')
+  })
+
+  it.each(UNSAFE_URLS)('points at # instead of the unsafe href %j', (href) => {
+    const { getByTestId } = render(Link, { props: { label: 'Docs', href } })
+    expect(getByTestId('link')).toHaveAttribute('href', '#')
   })
 
   it('honors a consumer-provided data-testid across sub-elements', () => {

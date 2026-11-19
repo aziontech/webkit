@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { safeHref } from '../../../utils/safe-href'
   import Button from '../../action/button/button.vue'
   import StatusIndicator from '../../feedback/status-indicator/status-indicator.vue'
   import CardGrid from '../../layout/card-grid/card-grid.vue'
@@ -158,7 +159,7 @@
                 />
                 <a
                   v-if="lane.statusLink"
-                  :href="lane.statusLink.href"
+                  :href="safeHref(lane.statusLink.href) ?? undefined"
                   :target="lane.statusLink.target"
                   :rel="relOf(lane.statusLink.target)"
                   class="inline-flex min-h-10 max-w-full items-center rounded-full border border-(--border-default) bg-(--bg-surface) px-(--spacing-md) text-button-lg text-(--text-default) no-underline transition-colors duration-150 ease-out hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"

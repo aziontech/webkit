@@ -3,6 +3,7 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
+  import { safeHref } from '../../../utils/safe-href'
   import Button from '../../action/button/button.vue'
   import Input from '../../input/input/input.vue'
   import Popover from '../../overlay/popover/popover.vue'
@@ -179,7 +180,7 @@
             >
               <a
                 v-if="entry.href"
-                :href="entry.href"
+                :href="safeHref(entry.href) ?? undefined"
                 target="_blank"
                 rel="noopener noreferrer"
                 class="flex min-h-7 items-center gap-(--spacing-2xs) rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-default) no-underline transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"

@@ -3,6 +3,7 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
+  import { safeHref } from '../../../utils/safe-href'
   import CardGrid from '../../layout/card-grid/card-grid.vue'
   import CardGridCell from '../../layout/card-grid/card-grid-cell/card-grid-cell.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
@@ -103,7 +104,7 @@
       >
         <a
           v-if="item.href"
-          :href="item.href"
+          :href="safeHref(item.href) ?? undefined"
           :aria-label="`${linkText}, ${item.alt}`"
           class="group/logo relative isolate flex aspect-square group-data-[variant=rectangle]/logo-wall:aspect-3/2 items-center justify-center px-(--spacing-md) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:bg-(--bg-hover) before:opacity-0 before:transition-opacity before:duration-moderate-01 before:ease-productive-entrance hover:before:opacity-100 motion-reduce:before:transition-none"
           @click="onItemClick($event, item)"

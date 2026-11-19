@@ -4,6 +4,7 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
+  import { safeHref } from '../../../utils/safe-href'
   import Button from '../../action/button/button.vue'
   import type { ThirdPartyLogoMark } from '../../content/third-party-logo/third-party-logo.vue'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
@@ -389,7 +390,7 @@
               class="border-b border-(--border-default) last:border-b-0 sm:border-e sm:max-lg:even:border-e-0 sm:max-lg:data-last-row-sm:border-b-0 lg:nth-[3n]:border-e-0 lg:data-last-row-lg:border-b-0"
             >
               <a
-                :href="item.href"
+                :href="safeHref(item.href) ?? undefined"
                 :target="item.target"
                 :rel="item.target === '_blank' ? 'noopener' : undefined"
                 :aria-label="cardLabel(item)"

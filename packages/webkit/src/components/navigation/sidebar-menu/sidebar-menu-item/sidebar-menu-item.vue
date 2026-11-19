@@ -3,6 +3,7 @@
 
   import { cn } from '../../../../utils/cn'
   import { directionalIconClass } from '../../../../utils/directional-icons'
+  import { safeHref } from '../../../../utils/safe-href'
   import type { Severity } from '../../../../utils/severity'
   import Tag from '../../../content/tag/tag.vue'
   import { SidebarInjectionKey } from '../../../layout/sidebar/injection-key'
@@ -73,7 +74,7 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'sidebar-menu-item')
 
-  const isAnchor = computed(() => Boolean(props.href) && !props.disabled)
+  const isAnchor = computed(() => safeHref(props.href) !== null && !props.disabled)
   const rail = computed(() => sidebar?.rail === true)
   const showTag = () => !rail.value && (Boolean(props.tagValue) || Boolean(slots['tag']))
 

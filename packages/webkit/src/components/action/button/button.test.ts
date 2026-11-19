@@ -7,9 +7,25 @@ import Disabled from '../../../../examples/button/disabled.vue'
 import Loading from '../../../../examples/button/loading.vue'
 import Types from '../../../../examples/button/variants.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
+import { UNSAFE_URLS } from '../../../test/unsafe-urls'
 import Button from './button.vue'
 
 describe('Button', () => {
+  it.each(UNSAFE_URLS)('stays a native button for the unsafe href %j', (href) => {
+    const { getByTestId } = render(Button, { props: { label: 'Go', href } })
+    const root = getByTestId('button')
+    expect(root.tagName).toBe('BUTTON')
+    expect(root).not.toHaveAttribute('href')
+  })
+
+  it('keeps a blob or data href when the button downloads', () => {
+    const { getByTestId } = render(Button, {
+      props: { label: 'Save', href: 'data:image/png;base64,AAAA' },
+      attrs: { download: 'image.png' }
+    })
+    expect(getByTestId('button')).toHaveAttribute('href', 'data:image/png;base64,AAAA')
+  })
+
   describe('rendering & polymorphism', () => {
     it('renders default slot content as the label, and label when the slot is empty', () => {
       const slotted = render(Button, { slots: { default: 'Deploy now' } })

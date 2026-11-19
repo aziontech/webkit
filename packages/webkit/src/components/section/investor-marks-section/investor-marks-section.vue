@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { safeHref } from '../../../utils/safe-href'
   import BentoGrid from '../../layout/bento-grid/bento-grid.vue'
   import BentoGridCell from '../../layout/bento-grid/bento-grid-cell/bento-grid-cell.vue'
   import Module from '../../layout/module/module.vue'
@@ -95,7 +96,7 @@
             :padded="false"
           >
             <a
-              :href="item.href"
+              :href="safeHref(item.href) ?? undefined"
               target="_blank"
               rel="noopener noreferrer"
               :aria-label="`${linkLabel}, ${item.name} (opens in a new tab)`"

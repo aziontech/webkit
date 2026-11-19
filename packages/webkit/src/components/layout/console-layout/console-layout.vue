@@ -31,6 +31,7 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import { cn } from '../../../utils/cn'
+  import { safeHref } from '../../../utils/safe-href'
   import IconButton from '../../action/icon-button/icon-button.vue'
   import SearchTrigger from '../../action/search-trigger/search-trigger.vue'
   import Avatar from '../../content/avatar/avatar.vue'
@@ -474,7 +475,7 @@
                 class="flex h-14 shrink-0 items-center border-b border-(--border-default) px-(--spacing-md)"
               >
                 <a
-                  :href="home"
+                  :href="safeHref(home) ?? undefined"
                   :aria-label="t('consoleLayout.home')"
                   class="flex h-6 w-fit items-center rounded-(--shape-button) px-(--spacing-xs) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
                 >
@@ -574,7 +575,7 @@
                   </Tooltip>
                   <a
                     v-if="!pageControl"
-                    :href="home"
+                    :href="safeHref(home) ?? undefined"
                     :aria-label="t('consoleLayout.home')"
                     class="flex h-6 w-fit shrink-0 items-center @max-xs:hidden rounded-(--shape-button) px-(--spacing-2xs) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
                   >

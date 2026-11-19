@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, onMounted, onScopeDispose, ref, useAttrs } from 'vue'
 
+  import { safeHref } from '../../../utils/safe-href'
   import Eyebrow from '../../content/eyebrow/eyebrow.vue'
   import Texture, {
     type TextureFade,
@@ -118,7 +119,7 @@
 
   const hasDescription = () => Boolean(slots.default) || props.description.length > 0
 
-  const isMediaLink = computed<boolean>(() => props.mediaHref.length > 0)
+  const isMediaLink = computed<boolean>(() => safeHref(props.mediaHref) !== null)
 
   const frame = computed(() => (props.framed ? RegistrationFrame : 'div'))
   const frameProps = computed(() =>

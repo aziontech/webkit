@@ -2,6 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import { directionalIconClass } from '../../../utils/directional-icons'
+  import { safeDownloadHref, safeHref } from '../../../utils/safe-href'
   import Spinner from '../../feedback/spinner/spinner.vue'
 
   export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'link'
@@ -32,7 +33,7 @@
     iconPosition?: ButtonIconPosition
     /** Nudges a trailing icon along its axis on hover. Off by default; marketing CTAs opt in. */
     animated?: boolean
-    /** When set, renders as an anchor link. */
+    /** When set to a safe URL, renders as an anchor link; a javascript, data or other unsafe URL is ignored and the control stays a button. With a download attribute, blob and data URLs are kept. */
     href?: string
     /** Link target when `href` is set. */
     target?: ButtonTarget
@@ -70,7 +71,13 @@
 
   const isInert = computed(() => props.disabled || props.loading)
 
-  const isAnchor = computed(() => Boolean(props.href))
+  const linkHref = computed(() =>
+    attrs.download === undefined || attrs.download === false
+      ? safeHref(props.href)
+      : safeDownloadHref(props.href)
+  )
+
+  const isAnchor = computed(() => linkHref.value !== null)
 
   const ROOT_CLASS =
     "group/button relative inline-flex items-center justify-center whitespace-nowrap rounded-(--shape-button) forced-colors:border forced-colors:border-[ButtonBorder] forced-colors:disabled:border-[GrayText] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:opacity-0 after:content-[''] after:transition-opacity after:duration-fast-02 after:ease-productive-entrance hover:before:opacity-100 active:after:opacity-100 motion-reduce:before:transition-none motion-reduce:after:transition-none disabled:before:hidden disabled:after:hidden not-data-[inert]:data-[variant=primary]:bg-(--primary) not-data-[inert]:data-[variant=primary]:text-(--primary-foreground) not-data-[inert]:data-[variant=primary]:before:bg-(--bg-hover) not-data-[inert]:data-[variant=primary]:after:bg-(--bg-active) not-data-[inert]:data-[variant=secondary]:bg-(--secondary) not-data-[inert]:data-[variant=secondary]:text-(--secondary-foreground) not-data-[inert]:data-[variant=secondary]:before:bg-(--bg-hover) not-data-[inert]:data-[variant=secondary]:after:bg-(--bg-active) not-data-[inert]:data-[variant=outline]:border not-data-[inert]:data-[variant=outline]:border-(--border-default) not-data-[inert]:data-[variant=outline]:bg-(--bg-surface) not-data-[inert]:data-[variant=outline]:text-(--text-default) not-data-[inert]:data-[variant=outline]:before:bg-(--bg-mask) not-data-[inert]:data-[variant=outline]:after:bg-(--bg-active) not-data-[inert]:data-[variant=ghost]:bg-transparent not-data-[inert]:data-[variant=ghost]:text-(--text-default) not-data-[inert]:data-[variant=ghost]:before:bg-(--bg-mask) not-data-[inert]:data-[variant=ghost]:after:bg-(--bg-active) not-data-[inert]:data-[variant=danger]:border not-data-[inert]:data-[variant=danger]:border-(--danger-border) not-data-[inert]:data-[variant=danger]:bg-(--danger) not-data-[inert]:data-[variant=danger]:text-(--danger-foreground) not-data-[inert]:data-[variant=danger]:before:bg-(--bg-hover) not-data-[inert]:data-[variant=danger]:after:bg-(--bg-active) not-data-[inert]:data-[variant=link]:bg-transparent not-data-[inert]:data-[variant=link]:text-(--text-link) not-data-[inert]:data-[variant=link]:underline-offset-2 not-data-[inert]:data-[variant=link]:transition-colors not-data-[inert]:data-[variant=link]:duration-fast-02 not-data-[inert]:data-[variant=link]:ease-productive-entrance not-data-[inert]:data-[variant=link]:hover:text-(--text-link-hover) not-data-[inert]:data-[variant=link]:hover:underline not-data-[inert]:data-[variant=link]:motion-reduce:transition-none not-data-[inert]:data-[variant=link]:before:hidden not-data-[inert]:data-[variant=link]:after:hidden not-data-[inert]:data-[variant=link]:forced-colors:border-0 not-data-[inert]:data-[variant=link]:forced-colors:text-[LinkText] data-[inert]:not-data-[variant=link]:border-transparent data-[inert]:not-data-[variant=link]:bg-(--bg-disabled) data-[inert]:not-data-[variant=link]:text-(--text-disabled) data-[inert]:not-data-[variant=link]:before:hidden data-[inert]:not-data-[variant=link]:after:hidden data-[inert]:data-[variant=link]:border-transparent data-[inert]:data-[variant=link]:text-(--text-disabled) data-[inert]:data-[variant=link]:before:hidden data-[inert]:data-[variant=link]:after:hidden data-[inert]:data-[variant=link]:forced-colors:border-0 data-[loading]:cursor-wait data-[disabled]:cursor-not-allowed not-data-[variant=link]:data-[size=large]:min-w-20 not-data-[variant=link]:data-[size=large]:h-10 not-data-[variant=link]:data-[size=large]:px-(--spacing-md) not-data-[variant=link]:data-[size=large]:text-button-lg not-data-[variant=link]:data-[size=medium]:min-w-16 not-data-[variant=link]:data-[size=medium]:h-8 not-data-[variant=link]:data-[size=medium]:px-(--spacing-sm) not-data-[variant=link]:data-[size=medium]:text-button-md not-data-[variant=link]:data-[size=small]:min-w-14 not-data-[variant=link]:data-[size=small]:h-7 not-data-[variant=link]:data-[size=small]:px-(--spacing-xs) not-data-[variant=link]:data-[size=small]:text-button-md data-[variant=link]:text-body-sm"
@@ -91,7 +98,7 @@
   <a
     v-if="isAnchor"
     v-bind="$attrs"
-    :href="href"
+    :href="linkHref ?? undefined"
     :target="target"
     :rel="target === '_blank' ? 'noopener noreferrer' : undefined"
     :class="ROOT_CLASS"

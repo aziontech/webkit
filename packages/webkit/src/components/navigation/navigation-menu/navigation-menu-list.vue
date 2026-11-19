@@ -2,6 +2,7 @@
   import { computed, ref, useAttrs, useId } from 'vue'
 
   import { cn } from '../../../utils/cn'
+  import { safeHref } from '../../../utils/safe-href'
   import { useNavigationMenuContext } from './composables/use-navigation-menu-context'
   import { useNavigationMenuListHighlight } from './composables/use-navigation-menu-list-highlight'
   import { provideNavigationMenuListHighlightContext } from './composables/use-navigation-menu-list-highlight-context'
@@ -79,7 +80,7 @@
     <a
       v-if="isLabelLink"
       :id="headingId"
-      :href="href"
+      :href="safeHref(href) ?? undefined"
       class="flex shrink-0 items-center border border-transparent border-b-(--border-default) mx-(--spacing-md) pb-(--spacing-xs) mb-(--spacing-xs) text-overline-xs text-(--text-muted) cursor-pointer no-underline transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
       :data-testid="`${testId}__label`"
       @click="onLabelClick"

@@ -3,6 +3,7 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
+  import { safeHref } from '../../../utils/safe-href'
 
   defineOptions({
     name: 'AppHeaderBrand',
@@ -31,7 +32,7 @@
   const attrs = useAttrs()
   const { t } = useTranslate({ appHeader: en.appHeader })
 
-  const isLink = computed(() => props.href.length > 0)
+  const isLink = computed(() => safeHref(props.href) !== null)
 
   const hasLabel = computed(() => props.label.length > 0)
 

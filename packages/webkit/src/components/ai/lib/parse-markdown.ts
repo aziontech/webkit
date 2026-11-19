@@ -1,3 +1,5 @@
+import { safeHref } from '../../../utils/safe-href'
+
 export type MarkdownInline =
   | { type: 'text'; value: string }
   | { type: 'strong'; children: MarkdownInline[] }
@@ -15,14 +17,6 @@ export type MarkdownBlock =
   | { type: 'quote'; children: MarkdownInline[] }
   | { type: 'table'; header: MarkdownInline[][]; rows: MarkdownInline[][][] }
   | { type: 'rule' }
-
-const SAFE_HREF = /^(https?:\/\/|mailto:|\/(?!\/)|#)/i
-
-export function safeHref(href: string): string | null {
-  const value = href.trim()
-  if (!value || [...value].some((char) => char.charCodeAt(0) < 32)) return null
-  return SAFE_HREF.test(value) ? value : null
-}
 
 function pushText(out: MarkdownInline[], value: string): void {
   if (!value) return

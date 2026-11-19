@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { safeHref } from '../../../utils/safe-href'
   import Module from '../../layout/module/module.vue'
   import Faq from '../../marketing/faq/faq.vue'
 
@@ -64,8 +65,11 @@
       const start = match.index ?? 0
       if (start > cursor) runs.push({ text: answer.slice(cursor, start) })
       const [whole, label, href, strong, emphasis] = match
-      if (label !== undefined && href !== undefined) {
-        runs.push({ text: label, href, external: EXTERNAL_HREF.test(href) })
+      const linkHref = href === undefined ? null : safeHref(href)
+      if (label !== undefined && linkHref !== null) {
+        runs.push({ text: label, href: linkHref, external: EXTERNAL_HREF.test(linkHref) })
+      } else if (label !== undefined) {
+        runs.push({ text: label })
       } else if (strong !== undefined) {
         runs.push({ text: strong, strong: true })
       } else {

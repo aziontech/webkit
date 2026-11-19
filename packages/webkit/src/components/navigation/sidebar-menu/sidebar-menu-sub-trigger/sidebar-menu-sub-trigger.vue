@@ -14,6 +14,7 @@
   import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
   import { cn } from '../../../../utils/cn'
+  import { safeHref } from '../../../../utils/safe-href'
   import IconButton from '../../../action/icon-button/icon-button.vue'
   import { SidebarInjectionKey } from '../../../layout/sidebar/injection-key'
   import { useSidebarMenuSubContext } from '../composables/use-sidebar-menu-sub-context'
@@ -233,7 +234,7 @@
         ref="labelEl"
         :id="sub.triggerId"
         :type="hasReference ? undefined : 'button'"
-        :href="hasReference && !disabled ? href : undefined"
+        :href="hasReference && !disabled ? (safeHref(href) ?? undefined) : undefined"
         :disabled="hasReference ? undefined : disabled || undefined"
         :tabindex="disabled && hasReference ? -1 : undefined"
         :aria-expanded="!hasReference && isInline ? sub.open.value : undefined"

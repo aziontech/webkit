@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { safeHref } from '../../../utils/safe-href'
   import ThirdPartyLogo, {
     type ThirdPartyLogoTreatment,
     type ThirdPartyLogoVariant
@@ -211,7 +212,7 @@
             </div>
             <a
               v-else
-              :href="cell.href"
+              :href="safeHref(cell.href) ?? undefined"
               :data-fill="cell.fill ?? 'canvas'"
               :data-theme="cell.fill === 'white' ? 'light' : undefined"
               class="relative flex h-full min-w-0 flex-col items-center justify-center overflow-hidden p-(--spacing-xl) transition-colors duration-fast-02 ease-productive-entrance focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) motion-reduce:transition-none data-[fill=canvas]:bg-(--bg-canvas) data-[fill=canvas]:hover:bg-(--bg-surface-raised) data-[fill=primary]:bg-(--primary) data-[fill=primary]:hover:brightness-90 data-[fill=surface]:bg-(--bg-surface) data-[fill=white]:bg-(--bg-surface)"

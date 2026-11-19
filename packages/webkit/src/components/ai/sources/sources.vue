@@ -3,6 +3,7 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
+  import { safeHref } from '../../../utils/safe-href'
   import type { SourcesItem } from './types'
   import { sourceAnchor } from './types'
 
@@ -126,8 +127,8 @@
         </span>
         <span class="flex min-w-0 flex-col">
           <a
-            v-if="item.href"
-            :href="item.href"
+            v-if="safeHref(item.href)"
+            :href="safeHref(item.href) ?? undefined"
             :target="external(item.href) ? '_blank' : undefined"
             :rel="external(item.href) ? 'noopener noreferrer' : undefined"
             class="truncate text-body-sm text-(--text-link) underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"

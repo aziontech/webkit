@@ -5,6 +5,7 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import { copyText } from '../../../utils/clipboard'
+  import { safeHref } from '../../../utils/safe-href'
   import IconButton from '../../action/icon-button/icon-button.vue'
   import type { SplitButtonItem } from '../../action/split-button/split-button.vue'
   import SplitButton from '../../action/split-button/split-button.vue'
@@ -177,7 +178,10 @@
     for (const match of text.matchAll(INLINE)) {
       const index = match.index ?? 0
       if (index > last) runs.push({ kind: 'text', text: text.slice(last, index) })
-      if (match[1] !== undefined) runs.push({ kind: 'link', text: match[1], href: match[2] ?? '' })
+      const linkHref = match[1] === undefined ? null : safeHref(match[2])
+      if (match[1] !== undefined && linkHref !== null) {
+        runs.push({ kind: 'link', text: match[1], href: linkHref })
+      } else if (match[1] !== undefined) runs.push({ kind: 'text', text: match[1] })
       else if (match[3] !== undefined) runs.push({ kind: 'strong', text: match[3] })
       else if (match[4] !== undefined) runs.push({ kind: 'code', text: match[4] })
       else runs.push({ kind: 'em', text: match[5] ?? '' })
@@ -595,7 +599,7 @@
                       :key="link.href"
                     >
                       <a
-                        :href="link.href"
+                        :href="safeHref(link.href) ?? undefined"
                         :target="isExternal(link.href) ? '_blank' : undefined"
                         :rel="isExternal(link.href) ? 'noopener' : undefined"
                         class="flex items-center gap-(--spacing-sm) rounded-(--shape-flat) py-(--spacing-2xs) text-body-sm text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color) motion-reduce:transition-none"

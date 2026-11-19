@@ -3,6 +3,7 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
+  import { safeHref } from '../../../utils/safe-href'
   import { buildRail, measureRail, RAIL_INDENT, RAIL_STROKE } from './toc-rail'
 
   /**
@@ -282,7 +283,7 @@
           class="flex"
         >
           <a
-            :href="link.href"
+            :href="safeHref(link.href) ?? undefined"
             :target="isExternal(link.href) ? '_blank' : undefined"
             :rel="isExternal(link.href) ? 'noreferrer' : undefined"
             class="flex w-full items-center gap-(--spacing-xs) rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-muted) no-underline transition-colors duration-moderate-01 ease-productive-entrance hover:text-(--text-default) focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--ring-color) motion-reduce:transition-none"
