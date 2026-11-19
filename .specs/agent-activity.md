@@ -2,10 +2,10 @@
 name: agent-activity
 category: ai
 structure: monolithic
-status: draft
+status: approved
 spec_version: 1
 template: 2
-checksum: pending
+checksum: 4022e21e9b6066706623f33900a1c4949de5d904b3ebe72774988b46b80b80ca
 created: 2026-11-19
 last_updated: 2026-11-19
 ---
