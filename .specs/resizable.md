@@ -4,11 +4,11 @@ category: layout
 structure: composition
 status: implemented
 spec_version: 4
-checksum: 0c487aa1477c95e239c447b4f78f4ba070b7256a4657794c63cff609aaedfad8
+checksum: c9c8a0ce17ec132518139d8af515d6244425c67434c059d47c30c6fd80f22367
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit
 created: 2026-08-16
-last_updated: 2026-11-15
+last_updated: 2026-11-19
 ---
 
 # Resizable Panel — Component Spec
@@ -99,7 +99,7 @@ Neither part is an overlay, so neither is named `Trigger` or `Content` and neith
 `resizable-pane` props:
 
 - `basis` — `number`, default unset. The pane length in pixels along the group axis, two-way through `v-model:basis`. Leave unset for the pane that absorbs the remaining space.
-- `min` — `number`, default `96`. Smallest length in pixels a drag may set.
+- `min` — `number`, default `96`. Smallest length in pixels a drag may set. On the flexible pane it is also the length the group keeps for it (at most half the group) before the sized panes give way.
 - `max` — `number`, default `720`. Largest length in pixels a drag may set.
 - `open` — `boolean`, default `true`. Whether the pane is shown at its length; `false` renders it at zero length. Two-way through `v-model:open`. The pane stays mounted, so its content keeps its state.
 - `collapsible` — `boolean`, default `false`. Whether dragging past the minimum collapses the pane instead of stopping at it.
@@ -189,6 +189,13 @@ _none_
 - Keyboard: on a horizontal group `ArrowLeft`/`ArrowRight` nudge the handle toward the start/end panel, swapped under `dir="rtl"` (`useDirection(handleEl)`), so `ArrowRight` always moves the handle right on screen.
 - Pointer: the drag delta is inverted on horizontal groups under `rtl`, because the first panel sits on the right.
 - User data: none.
+
+## Responsive
+
+- Narrow group: the flexible pane keeps `min(min, 50%)` of the group's axis, and a sized pane shrinks below its `basis` when the group is too small to hold both, so a fixed-pixel pane never crushes its neighbour to a sliver. The `basis` value itself is unchanged; the pane returns to it when the group grows again.
+- Phones: below the `md` width a horizontal group shows two panes at under half a phone each; set `orientation="vertical"` there so the panes stack (the console-layout `FillPage` example switches on a `(max-width: 767px)` media query).
+- Touch: the handle's hit area is 16px across the axis; dragging works with any pointer.
+- Container queries: none; the orientation is a prop, decided by the consumer.
 
 ## Examples
 

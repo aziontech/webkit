@@ -56,6 +56,25 @@ describe('Resizable', () => {
     expect(sized.style.width).toBe('300px')
   })
 
+  it('shrinks a sized pane before the flexible one drops under its minimum on a narrow group', () => {
+    const { getAllByTestId } = render(
+      h(
+        Resizable,
+        { style: 'display: flex; width: 240px' },
+        {
+          default: () => [
+            h(ResizablePane, { min: 120 }, { default: () => 'source' }),
+            h(ResizablePane, { basis: 320, min: 160 }, { default: () => 'preview' })
+          ]
+        }
+      )
+    )
+    const [flexible, sized] = getAllByTestId('resizable-pane')
+    expect(flexible.offsetWidth).toBe(120)
+    expect(sized.offsetWidth).toBe(120)
+    expect(sized.style.width).toBe('320px')
+  })
+
   it('publishes the adjacent pane bounds on the separator', async () => {
     const { getByRole } = render(group())
     // The pane AFTER the handle registers in its own `mounted`, one tick later than the
