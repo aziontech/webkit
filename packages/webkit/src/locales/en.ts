@@ -1189,6 +1189,23 @@ export const tutorialPanel = {
   hotspotFinish: 'Finish'
 } as const
 
+export const videoPlayer = {
+  label: 'Video',
+  play: 'Play',
+  pause: 'Pause',
+  seek: 'Seek',
+  seekValue: '{current} of {duration}',
+  mute: 'Mute',
+  volume: 'Volume',
+  captions: 'Captions (CC)',
+  captionsShort: 'CC',
+  enterFullscreen: 'Enter full screen',
+  exitFullscreen: 'Exit full screen',
+  pending: 'Waiting to generate',
+  running: 'Generating video',
+  error: 'The video could not load'
+} as const
+
 export const wizard = {
   stepOf: 'Step {step} of {total}',
   optional: 'Optional',
@@ -1570,6 +1587,7 @@ export const en = {
   fileTokenGroup,
   filterMenu,
   uploadProgress,
+  videoPlayer,
   footer,
   gaugeChart,
   appHeader,

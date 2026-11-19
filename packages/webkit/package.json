@@ -2569,6 +2569,10 @@
       "types": "./types/components/content/audio-player/audio-player.vue.d.ts",
       "default": "./src/components/content/audio-player/audio-player.vue"
     },
+    "./video-player": {
+      "types": "./types/components/content/video-player/video-player.vue.d.ts",
+      "default": "./src/components/content/video-player/video-player.vue"
+    },
     "./attribute-editor": {
       "types": "./types/components/input/attribute-editor/attribute-editor.vue.d.ts",
       "default": "./src/components/input/attribute-editor/attribute-editor.vue"
@@ -4145,6 +4149,9 @@
       ],
       "audio-player": [
         "./types/components/content/audio-player/audio-player.vue.d.ts"
+      ],
+      "video-player": [
+        "./types/components/content/video-player/video-player.vue.d.ts"
       ],
       "attribute-editor": [
         "./types/components/input/attribute-editor/attribute-editor.vue.d.ts"

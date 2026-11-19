@@ -1293,6 +1293,22 @@ export const es: Messages = {
     hotspotNext: 'Siguiente',
     hotspotFinish: 'Finalizar'
   },
+  videoPlayer: {
+    label: 'Video',
+    play: 'Reproducir',
+    pause: 'Pausar',
+    seek: 'Buscar',
+    seekValue: '{current} de {duration}',
+    mute: 'Silenciar',
+    volume: 'Volumen',
+    captions: 'Subtítulos (CC)',
+    captionsShort: 'CC',
+    enterFullscreen: 'Pantalla completa',
+    exitFullscreen: 'Salir de pantalla completa',
+    pending: 'Esperando para generar',
+    running: 'Generando video',
+    error: 'No se pudo cargar el video'
+  },
   wizard: {
     stepOf: 'Paso {step} de {total}',
     optional: 'Opcional',
