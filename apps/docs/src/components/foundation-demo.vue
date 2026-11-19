@@ -24,13 +24,16 @@
     class="flex flex-col gap-(--spacing-sm)"
   >
     <div class="flex flex-wrap items-center gap-(--spacing-sm)">
-      <LanguageSelect
+      <div
         v-if="kind === 'locale'"
-        v-model="locale"
-        :aria-label="t.demoLanguage"
-        size="small"
-        class="w-56"
-      />
+        class="w-full sm:w-64"
+      >
+        <LanguageSelect
+          v-model="locale"
+          :aria-label="t.demoLanguage"
+          size="small"
+        />
+      </div>
       <ToggleGroup
         v-else
         v-model="dir"
