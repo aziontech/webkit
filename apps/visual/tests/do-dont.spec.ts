@@ -25,20 +25,19 @@ const pages = routes().filter(
 
 for (const path of pages) {
   test(`do and don't side by side ${path}`, async ({ page }) => {
+    test.slow()
     await prepare(page, { theme: 'light', width: 1280 })
     await page.goto(`${DOCS}${path}${query({ theme: 'light', width: 1280 })}`)
     await settle(page)
     const wide = await page.evaluate(findBrokenPairs)
     const contrast = await page.evaluate(findPairContrastFailures)
     if (await page.locator('[data-slot="do-dont"]').count()) {
-      await page.evaluate(() => {
-        document.documentElement.dataset.theme = 'dark'
-      })
-      await settle(page)
-      contrast.push(...(await page.evaluate(findPairContrastFailures)))
-      await page.evaluate(() => {
-        document.documentElement.dataset.theme = 'light'
-      })
+      const dark = await page.context().newPage()
+      await prepare(dark, { theme: 'dark', width: 1280 })
+      await dark.goto(`${DOCS}${path}${query({ theme: 'dark', width: 1280 })}`)
+      await settle(dark)
+      contrast.push(...(await dark.evaluate(findPairContrastFailures)))
+      await dark.close()
     }
     await page.setViewportSize({ width: 390, height: 844 })
     await settle(page)
