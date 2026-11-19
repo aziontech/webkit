@@ -11,18 +11,11 @@
   import { index } from '../lib/data'
   import { FOUNDATIONS } from '../lib/foundations'
   import { messages } from '../lib/i18n'
+  import { searchKeywords } from '../lib/search'
 
   const open = defineModel<boolean>('open', { default: false })
   const router = useRouter()
   const t = messages
-
-  const words = (title: string) => title.replace(/([a-z0-9])([A-Z])/g, '$1 $2')
-  const keywordsOf = (title: string, hint: string, extra: string[] = []) => [
-    words(title),
-    ...extra,
-    ...extra.map((alias) => alias.replace(/-/g, ' ')),
-    hint
-  ]
 
   const groups = computed(() => [
     {
@@ -31,7 +24,7 @@
         to: `/foundations/${page.slug}`,
         title: page.title,
         hint: page.summary,
-        keywords: keywordsOf(page.title, page.summary)
+        keywords: searchKeywords(page.title, page.summary)
       }))
     },
     {
@@ -41,13 +34,13 @@
           to: '/assets#brand',
           title: t.value.brand,
           hint: t.value.brandLead,
-          keywords: keywordsOf(t.value.brand, t.value.brandLead)
+          keywords: searchKeywords(t.value.brand, t.value.brandLead)
         },
         {
           to: '/assets#illustrations',
           title: t.value.illustrations,
           hint: t.value.illustrationsLead,
-          keywords: keywordsOf(t.value.illustrations, t.value.illustrationsLead)
+          keywords: searchKeywords(t.value.illustrations, t.value.illustrationsLead)
         }
       ]
     },
@@ -57,7 +50,7 @@
         to: `/components/${item.name}`,
         title: item.title,
         hint: item.purpose,
-        keywords: keywordsOf(item.title, item.purpose, item.aliases)
+        keywords: searchKeywords(item.title, item.purpose, item.aliases)
       }))
     },
     {
@@ -66,7 +59,7 @@
         to: `/blocks/${block.id}`,
         title: block.title,
         hint: block.summary,
-        keywords: keywordsOf(block.title, block.summary)
+        keywords: searchKeywords(block.title, block.summary)
       }))
     }
   ])

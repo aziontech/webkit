@@ -5,6 +5,7 @@
   import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import Field from '@aziontech/webkit/field'
   import FieldDescription from '@aziontech/webkit/field-description'
   import FieldError from '@aziontech/webkit/field-error'
@@ -20,6 +21,7 @@
   import Skeleton from '@aziontech/webkit/skeleton'
   import Switch from '@aziontech/webkit/switch'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import Wizard from '@aziontech/webkit/wizard'
   import { computed, onBeforeUnmount, reactive, ref } from 'vue'
 
@@ -67,6 +69,10 @@
     cache: Record<CachePolicyId, { enabled: boolean; values: Record<string, string> }>
     origin: { enabled: boolean; type: OriginType; values: Record<string, string> }
   }
+
+  const emit = defineEmits<{
+    cancel: [event: MouseEvent]
+  }>()
 
   const breadcrumb = [{ label: 'Services', href: '/services' }, { label: 'Create Service' }]
   const projectModes = [
@@ -690,6 +696,24 @@
       submitting.value = false
     }, 1200)
   }
+
+  const guard = useUnsavedChanges(
+    () => ({
+      projectMode: projectMode.value,
+      projectName: projectName.value,
+      project: projectPicker.chosen,
+      deployment: deploymentPicker.chosen,
+      scratch,
+      form
+    }),
+    { enabled: () => !submitting.value }
+  )
+  const discardDialog = guard.dialogProps
+  const discardLabels = guard.labels
+
+  const onCancel = async (event: MouseEvent) => {
+    if (await guard.confirmLeave()) emit('cancel', event)
+  }
 </script>
 
 <template>
@@ -701,6 +725,7 @@
           aria-label="Back to Services"
           variant="outline"
           size="small"
+          @click="onCancel"
         />
         <AppHeader.Brand
           href="/home"
@@ -746,6 +771,7 @@
           :loading="submitting"
           @next="onNext"
           @submit="submit"
+          @cancel="onCancel"
         >
           <Wizard.Step
             title="Project"
@@ -1623,5 +1649,25 @@
         </Wizard>
       </div>
     </main>
+    <ConfirmDialog
+      v-bind="discardDialog"
+      data-testid="unsaved-changes-dialog"
+    >
+      <template #actions>
+        <Button
+          :label="discardLabels.keepEditing"
+          variant="ghost"
+          size="medium"
+          data-autofocus
+          @click="guard.keepEditing"
+        />
+        <Button
+          :label="discardLabels.discard"
+          variant="danger"
+          size="medium"
+          @click="guard.discardAndLeave"
+        />
+      </template>
+    </ConfirmDialog>
   </div>
 </template>

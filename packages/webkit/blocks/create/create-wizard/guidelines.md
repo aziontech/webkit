@@ -68,6 +68,8 @@ Two steps, Project then Domain and deployment, with the last action reading "Cre
 
 The Wizard's Cancel and the header Back both leave the flow, so both ask first once the form or the chosen policy differs from what the flow opened with: `useUnsavedChanges(() => form)` tracks it, Cancel and Back `await guard.confirmLeave()` before the page emits `cancel`, and one `ConfirmDialog v-bind="guard.dialogProps"` asks "Unsaved changes" with Keep editing and Discard changes. A clean form leaves at once, with no dialog, and the browser's own prompt covers a reload or a tab close while dirty. In a router app pair it with `onBeforeRouteLeave(() => guard.confirmLeave())` so a link or the browser Back asks too.
 
+CreateAndDeploy does the same: Cancel and Back to Services ask once the project choice, the project's cache and origin settings or the domain and deployment fields differ from the opened page, and the page emits `cancel` only after a clean leave or Discard changes.
+
 ## Data
 
 The block keeps the form as a local draft, validates each step and emits `submit` with the values; it sends no request. `CreateWizardPolicy`, `CreateWizardValues`, `CreateWizardSubmission` and `CreateWizardProps` are exported from `create-wizard.vue`, and `sample.ts` holds the sample policies the chooser lists when `policies` is left out. The page owns the request: it sets `loading` while it runs, and on failure sets `error`, which the block shows in an error toast with Retry; on success the page shows the toast and opens the list.
@@ -159,7 +161,7 @@ Then delete `sample.ts` and its import.
 - ModuleOff: acme-staging was chosen with IP filtering off (`defaultStep="module"`, `defaultPolicy="acme-staging"`), so the IP filtering step shows the warning, the switch card and the note.
 - ListSettings: the settings step (`defaultStep="settings"`, a `defaultPolicy` and a Name in `defaultValues`); Type as radio choice cards and the List textarea, with Previous and Next (Review follows). Next with an empty list stays and shows the message.
 - Review: the last step (`defaultStep="review"` with a `defaultPolicy` and `defaultValues`), read-only, with the create action in the footer. Where it runs is one `Alert` whose severity says whether anything will read the resource; What gets created pairs each value with the property it is sent as and shows long lists as their first five `Tag`s and a count; What can reference it names the consumers. Each band that maps to a step has an outlined Edit (`aria-label` names the band) that jumps back to that step. Create re-validates every step and, on a failure, opens the first step with an error; on success it emits `submit`, `loading` spins it and `error` raises the error toast with Retry.
-- CreateAndDeploy: Create Service on its Project step with the paged project list; Next is gated on the project, and step two ends on Create and deploy with its loading state.
+- CreateAndDeploy: Create Service on its Project step with the paged project list; Next is gated on the project, and step two ends on Create and deploy with its loading state. Cancel and Back to Services emit `cancel`, asking first once anything is answered.
 
 ## Review step
 

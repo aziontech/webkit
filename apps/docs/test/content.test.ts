@@ -13,7 +13,8 @@ import {
   pairWord,
   renderGuidelinesFile,
   SPEC_SECTIONS,
-  splitLead
+  splitLead,
+  stripReviewerNotes
 } from '../plugins/content.ts'
 import { readBlocks, readCatalog } from '../plugins/paths.ts'
 import { usageKey, usageSections } from '../src/lib/token-usage.ts'
@@ -220,4 +221,29 @@ test('the Color page states each shared usage once, over every family it covers'
   assert.ok(sections.some((section) => section.ids.length > 1))
   const view = readFileSync(new URL('apps/docs/src/components/tokens-view.vue', REPO_URL), 'utf8')
   assert.match(view, /usageSections\(tokens\.semantic\)/)
+})
+
+test('a search hint drops the benchmark notes a purpose carries for reviewers', () => {
+  assert.equal(
+    stripReviewerNotes(
+      'Shows what an agent is doing (Cloudscape progressive steps, AI Elements Chain of Thought): the current step.'
+    ),
+    'Shows what an agent is doing: the current step.'
+  )
+  assert.equal(
+    stripReviewerNotes(
+      "Key and value tags of one resource, after Cloudscape's tag editor, built on AttributeEditor."
+    ),
+    'Key and value tags of one resource, built on AttributeEditor.'
+  )
+  assert.equal(
+    stripReviewerNotes(
+      "A toolbar of icon actions (a code panel, a preview), after Cloudscape's button group."
+    ),
+    'A toolbar of icon actions (a code panel, a preview).'
+  )
+  assert.equal(
+    stripReviewerNotes('A list of rows (environment variables, headers) or columns.'),
+    'A list of rows (environment variables, headers) or columns.'
+  )
 })
