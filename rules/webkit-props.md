@@ -25,7 +25,7 @@ checked in review.
 - Model a two-way value with **`defineModel`**, not a plain prop plus a manual
   `update:*` event.
 
-## Do not
+## Don't
 
 - Never use the runtime object form `defineProps({ variant: { type: String } })` — blocked
   by `webkit/require-authoring-standards`. Same for runtime `defineEmits([...])`.
@@ -38,7 +38,9 @@ checked in review.
 - Never turn a slot-shaped concern into a prop (config arrays of UI). Props are data and
   scalar config; UI structure is composed in slots.
 
-## Correct
+## Example
+
+### Do
 
 ```vue
 <script setup lang="ts">
@@ -67,7 +69,7 @@ checked in review.
 </script>
 ```
 
-## Wrong
+### Don't
 
 ```vue
 <script setup lang="ts">

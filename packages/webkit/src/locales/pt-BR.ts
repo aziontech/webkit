@@ -805,6 +805,11 @@ export const ptBR: Messages = {
     arrowLeft: '←',
     arrowRight: '→'
   },
+  languageSelect: {
+    label: 'Idioma',
+    search: 'Buscar idioma',
+    noMatch: 'Nenhum idioma encontrado.'
+  },
   link: {
     label: 'Saiba mais'
   },

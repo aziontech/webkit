@@ -40,15 +40,14 @@
   const heading = computed(() => `h${Math.min(Math.max(props.level, 2), 6)}`)
   const labels = computed(() => {
     if (props.type === 'usage') return { do: t.value.whenToUse, dont: t.value.whenNotToUse }
-    if (props.type === 'example') return { do: t.value.correct, dont: t.value.wrong }
-    return { do: t.value.bestPractices, dont: t.value.constraints }
+    return { do: t.value.do, dont: t.value.dont }
   })
   const columns = computed(() =>
     [
       {
         side: 'do',
         label: labels.value.do,
-        icon: 'az az-circle-check text-(--success-foreground)',
+        icon: 'az az-circle-check text-(--success-mark)',
         html: props.doHtml,
         items: props.doItems,
         code: codeOnly(props.doHtml) && !props.doItems.length
@@ -56,7 +55,7 @@
       {
         side: 'dont',
         label: labels.value.dont,
-        icon: 'az az-circle-x text-(--danger-foreground)',
+        icon: 'az az-circle-x text-(--danger-mark)',
         html: props.dontHtml,
         items: props.dontItems,
         code: codeOnly(props.dontHtml) && !props.dontItems.length
@@ -70,7 +69,8 @@
     v-if="columns.length"
     data-slot="do-dont"
     :data-type="type"
-    class="grid grid-cols-1 gap-(--spacing-md) md:grid-cols-2"
+    :data-single="columns.length === 1 || null"
+    class="grid grid-cols-1 gap-(--spacing-md) md:grid-cols-2 md:data-single:grid-cols-1"
   >
     <Card
       v-for="column in columns"

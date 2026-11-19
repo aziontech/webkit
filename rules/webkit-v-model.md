@@ -28,7 +28,7 @@ write instead.
   `modelValue` pair onto `defineModel` is **not** breaking: the public contract
   (`v-model`, the `update:modelValue` event) stays identical.
 
-## Do not
+## Don't
 
 - Never declare a `modelValue` prop plus an `update:modelValue` emit by hand when
   `defineModel` expresses it — blocked by lint.
@@ -39,7 +39,9 @@ write instead.
 - Never leave a model untyped (`defineModel()` with no generic).
 - Never name a model off-vocabulary (`visible`, `show`, `value`, `isToggled`).
 
-## Correct
+## Example
+
+### Do
 
 ```vue
 <script setup lang="ts">
@@ -61,7 +63,7 @@ write instead.
 <SearchField v-model="query" v-model:open="menuOpen" />
 ```
 
-## Wrong
+### Don't
 
 ```vue
 <script setup lang="ts">

@@ -13,7 +13,7 @@ Seed data, placeholders, mocks, fixtures and screenshots are **sample data**. Wr
 - Start blank forms **empty**, and never seed a field the person edits with a sample value: sample emails and names belong in tables, lists and menus, not as a field's starting value. A placeholder is at most a short example in this format (`m@example.com`) or nothing.
 - Label a company tax field `Tax ID`, with no mask.
 
-## Do not
+## Don't
 
 - Do not invent a domain or a brand (`edgeflow.com`, `company.com`, `mydomain.com`, `example.app`, `Contoso`).
 - Do not use one country's identity formats in sample data: no CPF, CNPJ, CEP or SSN values, labels or masks (`00.000.000/0001-00`, `00000-000`), no `+55` phones, no `R$` amounts.

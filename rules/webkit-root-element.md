@@ -20,7 +20,7 @@ inside class strings is enforced separately by the stylelint config and the
 - Expose **functions only** via `defineExpose` (`focus()`, `open()`) — and only when a prop,
   event, or `v-model` cannot express the interaction. Default to exposing nothing.
 
-## Do not
+## Don't
 
 - Never switch the root with an `as`/`is` **string prop** — use a data prop like `href`.
   Blocked by lint.
@@ -30,7 +30,9 @@ inside class strings is enforced separately by the stylelint config and the
 - Never `defineExpose` internal reactive state (`internalValue`, raw element refs) — the
   imperative surface is a small set of named functions.
 
-## Correct
+## Example
+
+### Do
 
 ```vue
 <script setup lang="ts">
@@ -77,7 +79,7 @@ inside class strings is enforced separately by the stylelint config and the
 </script>
 ```
 
-## Wrong
+### Don't
 
 ```vue
 <script setup lang="ts">

@@ -55,20 +55,67 @@ export function sourceHref(href: string, file: string): string {
   return `${SOURCE_URL}${target}${hash ? `#${hash}` : ''}`
 }
 
-const HTML_COMMENT = /^<!--[\s\S]*?-->$/
+const HTML_COMMENT = /<!--[\s\S]*?-->/g
+const ONLY_COMMENTS = /^(?:\s*<!--[\s\S]*?-->)+\s*$/
+const TASK_MARKER = /^\[[ xX]\]\s+/
 
 type CoreState = { tokens: ReturnType<InstanceType<typeof MarkdownIt>['parse']> }
+type InlineChildren = NonNullable<CoreState['tokens'][number]['children']>
+
+function dropInlineComments(children: InlineChildren): InlineChildren {
+  const kept: InlineChildren = []
+  let open = false
+  for (const child of children) {
+    if (child.type !== 'text') {
+      if (!open) kept.push(child)
+      continue
+    }
+    let text = child.content
+    if (open) {
+      const close = text.indexOf('-->')
+      if (close === -1) continue
+      text = text.slice(close + 3)
+      open = false
+    }
+    text = text.replace(HTML_COMMENT, '')
+    const start = text.indexOf('<!--')
+    if (start !== -1) {
+      text = text.slice(0, start)
+      open = true
+    }
+    child.content = text
+    if (text) kept.push(child)
+  }
+  return kept
+}
 
 export function dropHtmlComments(state: CoreState): void {
   const comment = (at: number) =>
     state.tokens[at]?.type === 'paragraph_open' &&
-    HTML_COMMENT.test(state.tokens[at + 1]?.content.trim() ?? '')
+    ONLY_COMMENTS.test(state.tokens[at + 1]?.content ?? '')
   const kept: CoreState['tokens'] = []
   for (let at = 0; at < state.tokens.length; at++) {
-    if (comment(at)) at += 2
-    else kept.push(state.tokens[at])
+    if (comment(at)) {
+      at += 2
+      continue
+    }
+    const token = state.tokens[at]
+    if (token.type === 'inline' && token.children)
+      token.children = dropInlineComments(token.children)
+    kept.push(token)
   }
   state.tokens = kept
+}
+
+export function dropTaskMarkers(state: CoreState): void {
+  state.tokens.forEach((token, at) => {
+    if (token.type !== 'list_item_open') return
+    const inline = state.tokens.slice(at + 1, at + 4).find((next) => next.type === 'inline')
+    const first = inline?.children?.[0]
+    if (!inline || first?.type !== 'text' || !TASK_MARKER.test(first.content)) return
+    first.content = first.content.replace(TASK_MARKER, '')
+    inline.content = inline.content.replace(TASK_MARKER, '')
+  })
 }
 
 export async function markdown(file = ''): Promise<InstanceType<typeof MarkdownIt>> {
@@ -78,7 +125,8 @@ export async function markdown(file = ''): Promise<InstanceType<typeof MarkdownI
     linkify: true,
     highlight: (code, lang) => highlight(hl, code, lang || 'txt')
   })
-  md.core.ruler.after('block', 'drop-html-comments', dropHtmlComments)
+  md.core.ruler.after('inline', 'drop-html-comments', dropHtmlComments)
+  md.core.ruler.after('drop-html-comments', 'drop-task-markers', dropTaskMarkers)
   if (file) {
     const render = md.renderer.rules.link_open
     md.renderer.rules.link_open = (tokens, index, options, env, self) => {
@@ -104,17 +152,15 @@ function stripFrontMatter(source: string): string {
   return source.replace(/^---\n[\s\S]*?\n---\n/, '')
 }
 
-export type PairType = 'usage' | 'guidance' | 'example'
+export type PairType = 'usage' | 'guidance'
 export type DocPair = { type: PairType; level: number; do: string; dont: string }
 export type DocPart = { html: string } | { pair: DocPair }
 
 const PAIR_WORDS: { type: PairType; side: 'do' | 'dont'; pattern: RegExp }[] = [
   { type: 'usage', side: 'do', pattern: /^when to use$/i },
   { type: 'usage', side: 'dont', pattern: /^when not to use$/i },
-  { type: 'guidance', side: 'do', pattern: /^(do|recommended)$/i },
-  { type: 'guidance', side: 'dont', pattern: /^(don['’]t|do not|never|avoid)$/i },
-  { type: 'example', side: 'do', pattern: /^(correct|good)$/i },
-  { type: 'example', side: 'dont', pattern: /^(wrong|incorrect|bad)$/i }
+  { type: 'guidance', side: 'do', pattern: /^do$/i },
+  { type: 'guidance', side: 'dont', pattern: /^don['’]t$/i }
 ]
 
 export function pairWord(text: string): { type: PairType; side: 'do' | 'dont' } | null {
@@ -397,14 +443,13 @@ export function buildIndex(catalog: Catalog = readCatalog(), foundationSlugs: st
   }
 }
 
-const SPEC_SECTIONS = [
+export const SPEC_SECTIONS = [
   'Accessibility (WCAG 2.1 AA)',
   'Right-to-left',
   'Internationalization',
   'Responsive',
   'v-model',
-  'States',
-  'Constraints — DO NOT'
+  'States'
 ]
 
 function specSections(name: string): Record<string, string> {
@@ -599,6 +644,48 @@ function declarations(block: string): Map<string, string> {
   return out
 }
 
+function mediaSteps(
+  css: string,
+  breakpoints: Map<string, string>
+): Map<string, Record<string, string>> {
+  const names = new Map(
+    [...breakpoints].map(([name, px]) => [px, name.replace('--breakpoint-', '')])
+  )
+  const out = new Map<string, Record<string, string>>()
+  for (const match of css.matchAll(/@media \(min-width: (\d+px)\) \{([^}]*)\}/g)) {
+    const step = names.get(match[1])
+    if (!step) continue
+    for (const [name, value] of declarations(match[2]))
+      out.set(name, { ...(out.get(name) ?? {}), [step]: value })
+  }
+  return out
+}
+
+function typeStyles(
+  classes: string[],
+  theme: Map<string, string>,
+  steps: Map<string, Record<string, string>>
+) {
+  return classes.map((name) => {
+    const read = (part: string) => theme.get(`--${name}-${part}`)
+    const size = read('font-size')
+    const tracking = read('letter-spacing')
+    const value = size
+      ? [
+          `${size} / ${read('line-height') ?? 'normal'}`,
+          read('font-weight'),
+          tracking && tracking !== '0' ? tracking : ''
+        ]
+          .filter(Boolean)
+          .join(' · ')
+      : '—'
+    const responsive = steps.get(`--${name}-font-size`)
+    return responsive && size
+      ? { name, value, responsive: { _: size, ...responsive } }
+      : { name, value }
+  })
+}
+
 export function buildTokens(catalog: Catalog = readCatalog()) {
   const css = readFileSync(join(THEME, 'dist/globals.css'), 'utf8')
   const theme = new Map<string, string>()
@@ -676,7 +763,11 @@ export function buildTokens(catalog: Catalog = readCatalog()) {
       ...prefixed('--drop-shadow'),
       ...prefixed('--inset-shadow')
     ]),
-    typography: catalog.tokens.typography,
+    typography: typeStyles(
+      catalog.tokens.typography,
+      global,
+      mediaSteps(css, new Map(prefixed('--breakpoint').map((token) => [token.name, token.value])))
+    ),
     fonts: uniq([...prefixed('--font'), ...prefixed('--tracking'), ...prefixed('--leading')]),
     motion: {
       ease: prefixed('--ease'),
@@ -685,9 +776,9 @@ export function buildTokens(catalog: Catalog = readCatalog()) {
         ...pick(theme, (name) => name.startsWith('--duration'))
       ],
       animations: Object.entries(catalog.tokens.animationGuide).map(([name, info]) => ({
-        name,
+        name: `animate-${name}`,
         value: info.value,
-        useWhen: info.useWhen
+        usage: { job: info.useWhen, usedBy: '' }
       }))
     },
     zIndex: uniq([...prefixed('--z'), ...pick(light, (name) => name.startsWith('--z'))]),

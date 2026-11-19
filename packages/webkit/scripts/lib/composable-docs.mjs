@@ -54,7 +54,9 @@ function keyName(source, key) {
 
 function memberOf(source, m) {
   if (m.type === 'TSPropertySignature') {
-    const type = m.typeAnnotation ? oneLine(slice(source, m.typeAnnotation.typeAnnotation)) : 'unknown'
+    const type = m.typeAnnotation
+      ? oneLine(slice(source, m.typeAnnotation.typeAnnotation))
+      : 'unknown'
     return {
       name: keyName(source, m.key),
       type,
@@ -135,7 +137,9 @@ function describeDeclaration(source, node, wrapper) {
         doc
       }
     }
-    const type = d.id.typeAnnotation ? oneLine(slice(source, d.id.typeAnnotation.typeAnnotation)) : ''
+    const type = d.id.typeAnnotation
+      ? oneLine(slice(source, d.id.typeAnnotation.typeAnnotation))
+      : ''
     return { kind: 'const', name: d.id.name, type, doc }
   }
   return null
@@ -182,7 +186,8 @@ function moduleExports(file, seen = new Set()) {
     } else if (stmt.type === 'ExportNamedDeclaration' && stmt.declaration) {
       const node = stmt.declaration
       const name =
-        node.id?.name ?? (node.type === 'VariableDeclaration' ? node.declarations[0]?.id?.name : null)
+        node.id?.name ??
+        (node.type === 'VariableDeclaration' ? node.declarations[0]?.id?.name : null)
       if (name && local.has(name)) result.push(local.get(name))
     } else if (stmt.type === 'ExportNamedDeclaration') {
       for (const spec of stmt.specifiers) {

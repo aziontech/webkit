@@ -36,7 +36,7 @@ Not every component has every state — a button has `disabled` + `loading`; a d
 - When authoring a local component, list its state surface up front and render every state —
   a silent empty list or an invisible error is a missing state, not a smaller component.
 
-## Do not
+## Don't
 
 - Never render a state with a `:class` ternary (`loading ? 'opacity-80' : ''`) — use
   `data-loading` + a `data-[loading]:` variant.
@@ -47,7 +47,9 @@ Not every component has every state — a button has `disabled` + `loading`; a d
 - Never ship a data-driven view that only handles the happy path — `loading`, `empty`, and
   `error` are part of the component, not per-screen afterthoughts.
 
-## Correct
+## Example
+
+### Do
 
 ```html
 <!-- the component renders its states; the page only supplies the trigger -->
@@ -64,7 +66,7 @@ Not every component has every state — a button has `disabled` + `loading`; a d
 </div>
 ```
 
-## Wrong
+### Don't
 
 ```html
 <!-- :class ternary, hand-rolled placeholder and empty string, fetching inside -->

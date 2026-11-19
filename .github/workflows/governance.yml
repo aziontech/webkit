@@ -355,6 +355,12 @@ jobs:
       - name: Authoring docs ratchet (no new out-of-standard skill or agent docs)
         run: pnpm --filter @aziontech/webkit run check:authoring-docs
 
+      - name: Docs Markdown — one Do / Don't vocabulary, no task list in a rendered page
+        run: pnpm --filter @aziontech/webkit run check:docs-markdown
+
+      - name: Docs Markdown pipeline tests (HTML comments dropped, task lists plain, pair words)
+        run: pnpm test:docs
+
   smoke:
     name: Consumer smoke test (init and build)
     needs: changes

@@ -2,7 +2,7 @@ import './reflow.css'
 
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
-import { h } from 'vue'
+import { h, type VNode } from 'vue'
 
 import CardPageEntry from '../../examples/card/page-entry.vue'
 import ChartPageEntry from '../../examples/chart/page-entry.vue'
@@ -31,7 +31,7 @@ const chart = () =>
     () => h(ChartLine)
   )
 
-const band = (content: () => unknown) =>
+const band = (content: () => VNode) =>
   render({
     render: () =>
       h('div', { class: 'relative h-64 w-[40rem]' }, [

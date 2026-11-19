@@ -115,7 +115,7 @@ message string; `level` on a heading component; `label` on a group part.
   optional with a `''` default: vue-tsc leaves `aria-*` attributes uncamelized, so a required
   `ariaLabel` fails `aria-label="…"` in a create-vue app.
 
-## Do not
+## Don't
 
 - Never introduce a prop whose concept already has a canonical name under a different name.
 - Never use `xs`/`sm`/`md`/`lg`/`xl` tokens for `size`, and never reorder the union.
@@ -128,7 +128,9 @@ message string; `level` on a heading component; `label` on a group part.
   `Drawer` (the X renders by itself; never add `DialogClose` / `DrawerClose` by hand) and to
   `false` everywhere else.
 
-## Correct
+## Example
+
+### Do
 
 ```ts
 // banner.vue — canonical vocabulary throughout
@@ -146,7 +148,7 @@ interface Props {
 const open = defineModel<boolean>('open')   // anything that opens: open
 ```
 
-## Wrong
+### Don't
 
 ```ts
 interface Props {

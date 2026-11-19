@@ -518,3 +518,7 @@ Budget-raise: locales-pt-BR 10.7 KB → 11.55 KB (measured 11.47 KB): the same s
 Budget-raise: locales-es 10.85 KB → 11.65 KB (measured 11.58 KB): the same strings in Spanish.
 Budget-raise: conversation 4.75 KB → 6.4 KB (measured 6.25 KB): AI-B, Load earlier messages composes `Button` (sharing `Spinner` with `IconButton`) and keeps the reader's place when older messages are prepended.
 Budget-raise: file-preview 6.9 KB → 7.6 KB (measured 7.52 KB): AI-K, the PDF viewer, base64 sources with their object-URL lifecycle, and the PDF, audio and video glyphs.
+Budget-raise: config-provider 11.5 KB → 11.6 KB (measured 11.52 KB): RV-FL-1, the English catalog it carries gained the three `languageSelect` strings of the new `LanguageSelect`.
+Budget-raise: locales-pt-BR 10.7 KB → 10.8 KB (measured 10.73 KB): RV-FL-1, the same three `languageSelect` strings in Portuguese.
+Budget-raise: llms-full.txt 2,200,000 → 2,210,000 bytes: RV-FL-1, the `LanguageSelect` page (spec sections and examples) in the full AI bundle.
+Budget-raise: package unpacked size 33,400,000 → 33,450,000 bytes (measured 33,402,105): RV-FL-1, the `LanguageSelect` source, examples, catalog and llms pages, merged with the TanStack AI message blocks.

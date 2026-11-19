@@ -227,6 +227,7 @@ const CI_ENFORCERS = new Set([
   'vitest',
   'check-tests',
   'check-authoring-docs',
+  'check-docs-markdown',
   'check-complete',
   'check-size-ratchet',
   'check-spec-integrity',

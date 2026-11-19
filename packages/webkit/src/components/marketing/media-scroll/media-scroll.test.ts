@@ -58,12 +58,12 @@ async function scrollTo(y: number): Promise<void> {
   await nextTick()
 }
 
-function rowsOf(container: HTMLElement): globalThis.HTMLLIElement[] {
+function rowsOf(container: Element): globalThis.HTMLLIElement[] {
   const list = container.querySelector('ol')
   return list ? ([...list.children] as globalThis.HTMLLIElement[]) : []
 }
 
-function activeTitle(container: HTMLElement): string {
+function activeTitle(container: Element): string {
   const row = rowsOf(container).find((item) => item.getAttribute('data-active') !== null)
   return row?.querySelector('button')?.textContent?.trim() ?? ''
 }

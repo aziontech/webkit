@@ -11,8 +11,8 @@
   import ApiTable from '../components/api-table.vue'
   import DoDont from '../components/do-dont.vue'
   import ExampleCard from '../components/example-card.vue'
-  import TableOfContents from '../components/table-of-contents.vue'
   import RawHtml from '../components/raw-html.vue'
+  import TableOfContents from '../components/table-of-contents.vue'
   import { componentMarkdown, copyText } from '../lib/copy'
   import { cached, index, keys } from '../lib/data'
   import { messages } from '../lib/i18n'
@@ -48,7 +48,6 @@
 
   const accessibility = computed(() => doc.value?.spec['Accessibility (WCAG 2.1 AA)'] ?? '')
   const rtl = computed(() => doc.value?.spec['Right-to-left'] ?? '')
-  const dont = computed(() => doc.value?.spec['Constraints — DO NOT'] ?? '')
 
   const toc = computed(() => {
     if (!doc.value) return []
@@ -60,10 +59,10 @@
     }
     if (doc.value.props.length || doc.value.events.length || doc.value.slots.length)
       items.push({ id: 'api', text: t.value.api, depth: 2 })
-    if (doc.value.bestPractices.length || doc.value.avoidPractices.length || dont.value)
+    if (doc.value.bestPractices.length || doc.value.avoidPractices.length)
       items.push({
         id: 'do-dont',
-        text: `${t.value.bestPractices} / ${t.value.constraints}`,
+        text: `${t.value.do} / ${t.value.dont}`,
         depth: 2
       })
     if (accessibility.value)
@@ -243,14 +242,13 @@
       </section>
 
       <section
-        v-if="doc.bestPractices.length || doc.avoidPractices.length || dont"
+        v-if="doc.bestPractices.length || doc.avoidPractices.length"
         id="do-dont"
         class="scroll-mt-20"
       >
         <DoDont
           :do-items="doc.bestPractices"
           :dont-items="doc.avoidPractices"
-          :dont-html="dont"
         />
       </section>
 

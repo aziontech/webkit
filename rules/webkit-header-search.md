@@ -65,7 +65,7 @@ groups go in their `search` slot; a page opens the console palette with
 - Start from a shell block (`shell/shell-console`, `shell/shell-docs`, `shell/shell-site`): each
   layout already renders its header with the trigger and the palette.
 
-## Do not
+## Don't
 
 - Do not hand-roll the field (`<button>` or a read-only `Input` with a magnifier and a `Kbd`), and
   do not put a bare magnifier `IconButton` in a header.

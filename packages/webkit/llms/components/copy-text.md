@@ -89,6 +89,7 @@
 
 - Container queries: none; the box is inline and as wide as its value, capped at `max-w-full`.
 - Narrow (≤ 640 px or a narrow container): the value never wraps (`whitespace-nowrap`, no break at hyphens) and truncates with an ellipsis; the copy button never shrinks.
+- The truncating value keeps 2 px of block padding (`py-0.5`) inside its clip, because the code typography sets a line height of 1: without it the clip cuts descenders (`g` in `--bg-canvas` reads as `q`).
 - Touch: the copy button is always visible (no hover-only affordance); 28 / 32 px with a 44 px hit area on `pointer: coarse`.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom — the value truncates instead.
 

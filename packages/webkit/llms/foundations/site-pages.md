@@ -12,7 +12,7 @@ How a section is found, imported and fed is rule `webkit-sections`; how the colu
 is rule `webkit-page-layout`. This rule says what a page may put on that column, and why. The
 skill that runs a page task end to end is `/webkit-site-pages`.
 
-Each rule is written the same way: the rule, **Incorrect**, **Correct**, **Why** and
+Each rule is written the same way: the rule, **Don't**, **Do**, **Why** and
 **Exceptions** (`none` when there are none).
 
 ## Where the content comes from
@@ -74,9 +74,9 @@ its documentation wins.
 Every band on a page is a WebKit page section (`list_components` with category `sections`, or
 `llms/components/*-section.md`), in a `variant` its spec documents.
 
-- **Incorrect:** a pricing page draws a plan matrix from `Table` and `Card` in the page file; a
+- **Don't:** a pricing page draws a plan matrix from `Table` and `Card` in the page file; a
   hero uses a `variant` value its spec does not list.
-- **Correct:** the matrix is `plan-comparison-section`; the hero's `variant` is one of the values
+- **Do:** the matrix is `plan-comparison-section`; the hero's `variant` is one of the values
   in `hero-section`'s Props table.
 
 **Why:** the sections are the reviewed catalog of the design. A band outside it has no reviewed
@@ -90,8 +90,8 @@ A new page or band is seeded verbatim from the section's site JSON example
 (`examples/<name>/site-*.json`, printed in the component's docs page and its `llms` page), so it
 opens on reviewed Azion copy and bank assets, never on placeholder copy.
 
-- **Incorrect:** a new band opens with "Your headline here" and a stock photo, to fill in later.
-- **Correct:** the band opens with the title, description, actions and assets of the site JSON
+- **Don't:** a new band opens with "Your headline here" and a stock photo, to fill in later.
+- **Do:** the band opens with the title, description, actions and assets of the site JSON
   example of the layout picked; copy changes afterwards only on request (SD-03).
 
 **Why:** the example is already reviewed for voice, facts and assets. Placeholder copy reaches
@@ -105,8 +105,8 @@ A page is `SitePage` (or the sections in the site column) and nothing else. A ba
 covers is added to WebKit as a section first (`/webkit-adoption`, "file the gap upstream"), then
 placed like any other.
 
-- **Incorrect:** a page renders `SitePage` and hand-builds one more band in its own markup below.
-- **Correct:** the band is specified and built as a WebKit section, released, and listed in the
+- **Don't:** a page renders `SitePage` and hand-builds one more band in its own markup below.
+- **Do:** the band is specified and built as a WebKit section, released, and listed in the
   page JSON.
 
 **Why:** a hand-built band skips the review, drifts from the system and cannot be reused on the
@@ -120,9 +120,9 @@ careers page, the success-case library and the hero gallery.
 A campaign or other creative page may arrange sections in its own order, but keeps the sources:
 facts from the knowledge base (SD-16), labels from SD-04, assets from the bank (SD-13).
 
-- **Incorrect:** a campaign page uses stock photography, a claim with no source and a label
+- **Don't:** a campaign page uses stock photography, a claim with no source and a label
   invented for the campaign.
-- **Correct:** the campaign arranges sections in its own order with bank assets, sourced claims and
+- **Do:** the campaign arranges sections in its own order with bank assets, sourced claims and
   listed labels; art the bank lacks is reported (SD-19), not drawn.
 
 **Why:** a creative page is still an Azion page. Its freedom is in the composition, not in the
@@ -136,9 +136,9 @@ Colours, type, spacing and motion come from `@aziontech/theme` tokens (rule `web
 edge of the frame has one owner, the page has one `h1` (the hero's), the hero and the first band
 sit on one vertical, and no rule sits on the window edge.
 
-- **Incorrect:** a band draws its own top rule under the bottom rule of the band above it; a
+- **Don't:** a band draws its own top rule under the bottom rule of the band above it; a
   section adds a second `h1`; a colour is typed as a hex value.
-- **Correct:** each edge is drawn once by the band that owns it, the hero carries the only `h1`,
+- **Do:** each edge is drawn once by the band that owns it, the hero carries the only `h1`,
   every value is a token.
 
 **Why:** the framed column is what makes the site read as one system. A doubled rule or a raw
@@ -154,9 +154,9 @@ and any frame it sits in or against, and hand every edge one of them already dra
 (`flush`, or `borders` without that side). Only the rules are deduplicated; the four corner marks
 stay.
 
-- **Incorrect:** a frame inside a section that already draws its frame, every edge left on, so the
+- **Don't:** a frame inside a section that already draws its frame, every edge left on, so the
   left, right and bottom rules show twice; two frames side by side each drawing the shared edge.
-- **Correct:** the inner frame takes `flush` for the sides its section draws; frames in a row hand
+- **Do:** the inner frame takes `flush` for the sides its section draws; frames in a row hand
   the shared edge to one neighbour (`flush="left"`); every frame keeps its corner marks.
 
 **Why:** the frame cannot see its containers. Left at its default inside another frame it doubles
@@ -179,8 +179,8 @@ SD-04.
 After a band hero, the first column section opens on the hero's bottom rule: its `SitePage` entry
 takes `gap: 'none'`.
 
-- **Incorrect:** a `title-band` hero, a hatched `Spacer`, then the first section.
-- **Correct:** `{ _id: 'capability-grid-section', gap: 'none', props }` as the first entry of
+- **Don't:** a `title-band` hero, a hatched `Spacer`, then the first section.
+- **Do:** `{ _id: 'capability-grid-section', gap: 'none', props }` as the first entry of
   `sections` under a `title-band` hero.
 
 **Why:** a band hero is already a ruled strip of the column; a gap under it cuts the opening off
@@ -194,9 +194,9 @@ from the content it introduces.
 The client marquee (`marqueeMarks`) appears only on the `center` screen hero, and only on Home and
 the product index page. No band hero carries one.
 
-- **Incorrect:** a Support page opens with a `center-band` hero carrying a strip of client logos;
+- **Don't:** a Support page opens with a `center-band` hero carrying a strip of client logos;
   a product page opens on `center` with the marquee.
-- **Correct:** the Support page keeps `center-band` and drops the strip; the product page opens on
+- **Do:** the Support page keeps `center-band` and drops the strip; the product page opens on
   `title-band` with `marqueeMarks` left empty.
 
 **Why:** a band hero is a compact strip; the marquee needs the first screen to read as proof, not
@@ -211,9 +211,9 @@ narrow headline measure so it breaks over two lines; `long` for about 51 to 90 c
 the full column so it breaks over three at most. A headline over about 90 characters is
 rewritten. Count the string as it renders, in each locale.
 
-- **Incorrect:** a 30-character headline set `long`, so it runs on one line; an 80-character
+- **Don't:** a 30-character headline set `long`, so it runs on one line; an 80-character
   headline left `short`, so it runs to four lines.
-- **Correct:** the length setting matches the copy, and the rendered headline holds two lines when
+- **Do:** the length setting matches the copy, and the rendered headline holds two lines when
   short and three when long.
 
 **Why:** a fixed line count gives every opening the same rhythm, whatever the page.
@@ -226,8 +226,8 @@ headlines wrap further; the count is reported there, never failed.
 Every hero carries an `eyebrow`, and the hero draws it with its `//` prefix. On a product page the
 eyebrow is the product's name as the site menu writes it.
 
-- **Incorrect:** a hero with no eyebrow, or an eyebrow that types its own `//` into the string.
-- **Correct:** `eyebrow: 'Cache'`, which the hero renders as `// Cache`.
+- **Don't:** a hero with no eyebrow, or an eyebrow that types its own `//` into the string.
+- **Do:** `eyebrow: 'Cache'`, which the hero renders as `// Cache`.
 
 **Why:** the eyebrow places the page in the site before the headline is read, and the prefix is
 part of the site's typographic signature.
@@ -241,8 +241,8 @@ part of the site's typographic signature.
 A section below the hero may carry an `eyebrow` or not. When it does, the eyebrow is plain text:
 the `//` prefix belongs to the hero and the pricing sections (`plan-comparison-section`) only.
 
-- **Incorrect:** a review asks for an eyebrow on every band; a band types `// ` into its eyebrow.
-- **Correct:** a band carries an eyebrow when it helps the reader place it, as plain text, and goes
+- **Don't:** a review asks for an eyebrow on every band; a band types `// ` into its eyebrow.
+- **Do:** a band carries an eyebrow when it helps the reader place it, as plain text, and goes
   without one otherwise.
 
 **Why:** an eyebrow on every band stops reading as a signal; the hero's (SD-09) is the one that is
@@ -266,11 +266,11 @@ is left out (no empty band, no gap for it):
 | 7   | FAQ             | `faq-section`                                | 6 to 12 questions, the first "What is <product>?"                                            |
 | 8   | Closing         | `closing-call-to-action-section`             | the category's shared closing band, `variant: 'primary'`                                     |
 
-- **Incorrect:** a product page with a `platform-directory-section`, a `recognition-marquee-section`,
+- **Don't:** a product page with a `platform-directory-section`, a `recognition-marquee-section`,
   a `compliance-logos-section`, a `network-section`, a `stats-section`, a mid-page
   `template-gallery-section`, a second closing band, a `media-split-section` with `codeTabs`, the
   linked use-case grid of `capability-grid-section`, or a client marquee in the hero.
-- **Correct:** the eight bands above, the ones without content left out, the same bands and counts
+- **Do:** the eight bands above, the ones without content left out, the same bands and counts
   in every language.
 
 **Why:** the pattern was decided once for every product (2026-10-20); a page that drifts from it
@@ -299,9 +299,9 @@ One `media-split-stack-section` band per catalog Use Case, each with one bank as
 action, never two bands on the same docs page; the template gallery, when present, holds an even
 number of at least 6 templates.
 
-- **Incorrect:** a Solution page with a reference-architecture band, a resource grid, or a client
+- **Don't:** a Solution page with a reference-architecture band, a resource grid, or a client
   marquee in the hero.
-- **Correct:** the bands above in order, the shared bands (quotes, directory, network, compliance,
+- **Do:** the bands above in order, the shared bands (quotes, directory, network, compliance,
   recognition, closing) identical to the ones every other page shows.
 
 **Why:** the Solution pages are read side by side; one pattern makes them comparable and lets the
@@ -316,9 +316,9 @@ shared bands stay one source.
 No title, description, eyebrow, label or quote changes unless the person asked for that change,
 to that section, in this session.
 
-- **Incorrect:** asked to switch the Cache hero to another layout, the agent also rewrites its
+- **Don't:** asked to switch the Cache hero to another layout, the agent also rewrites its
   description to fit.
-- **Correct:** the layout changes and the description stays; if the copy no longer fits, the agent
+- **Do:** the layout changes and the description stays; if the copy no longer fits, the agent
   says so and waits.
 
 **Why:** copy carries reviewed facts, voice and translations in three languages. A silent edit
@@ -342,9 +342,9 @@ no label of their own):
 Any other label (a card's link, a band's secondary action) comes from `azion-brand-voice`. One
 primary and one outlined action per hero; no phone numbers.
 
-- **Incorrect:** `Start free`, `Start for Free`, `Talk to a specialist`, or two primary actions in
+- **Don't:** `Start free`, `Start for Free`, `Talk to a specialist`, or two primary actions in
   one hero.
-- **Correct:** `primaryAction: { label: 'Start for free', href }`, `secondaryAction: { label: 'Docs', href }`.
+- **Do:** `primaryAction: { label: 'Start for free', href }`, `secondaryAction: { label: 'Docs', href }`.
 
 **Why:** one lexicon tells the visitor the same action has the same name everywhere and keeps
 conversion data comparable.
@@ -356,9 +356,9 @@ conversion data comparable.
 Positioning, claims, metrics, use cases, personas and proof are read from `azion-kb` before any
 copy is drafted. A slot with no source stays out of the page and goes into the report.
 
-- **Incorrect:** a hero states a performance figure no knowledge-base file holds; a quote band names
+- **Don't:** a hero states a performance figure no knowledge-base file holds; a quote band names
   a customer with no case study behind it.
-- **Correct:** every claim in the brief carries its knowledge-base path; a slot with no source is
+- **Do:** every claim in the brief carries its knowledge-base path; a slot with no source is
   left out and listed.
 
 **Why:** a page is a public claim. The knowledge base is where marketing keeps the claims it
@@ -372,8 +372,8 @@ marketing before the page is built.
 Product names follow `company-definitions/product-naming.md` and terms follow
 `brand-guidelines/terminology.md`, both in `azion-kb`. No deprecated name, no forbidden term.
 
-- **Incorrect:** "edge application", "edge firewall", "edge location".
-- **Correct:** "Applications", "Firewall", "data center".
+- **Don't:** "edge application", "edge firewall", "edge location".
+- **Do:** "Applications", "Firewall", "data center".
 
 **Why:** a product name is part of the product; a deprecated one on the site contradicts the
 console and the docs.
@@ -394,9 +394,9 @@ Copy is measured in rendered lines at 1280 × 800 on the English page, next to S
 | Solution | band title / description            | ≤ 2 / 2–3 |
 | Solution | template description (at 1024)      | ≤ 2       |
 
-- **Incorrect:** a highlight description that runs to six lines, or one line that leaves the card
+- **Don't:** a highlight description that runs to six lines, or one line that leaves the card
   half empty.
-- **Correct:** the copy is cut or extended within the budget, and the report lists any field the
+- **Do:** the copy is cut or extended within the budget, and the report lists any field the
   person keeps outside it.
 
 **Why:** equal line counts keep cards in a row the same height and the page's rhythm even.
@@ -407,8 +407,8 @@ Copy is measured in rendered lines at 1280 × 800 on the English page, next to S
 
 A section renders its props as text. Emphasis is the hero's `highlight`; a link is an action.
 
-- **Incorrect:** `description: 'Run **anywhere** with [Functions](https://example.com)'`.
-- **Correct:** `description: 'Run anywhere with Functions'`, and the link as the band's
+- **Don't:** `description: 'Run **anywhere** with [Functions](https://example.com)'`.
+- **Do:** `description: 'Run anywhere with Functions'`, and the link as the band's
   `primaryAction`.
 
 **Why:** the asterisks and brackets render literally on the page and in its translations.
@@ -427,8 +427,8 @@ The bank is what WebKit ships: the client and partner marks, badges and illustra
 Logos, icons, illustrations and diagrams come from the bank in their approved variants. No remote
 image URL and no local copy.
 
-- **Incorrect:** a logo loaded from an azion.com URL, or an SVG pasted into the page's folder.
-- **Correct:** `import zoop from '@aziontech/webkit/assets/zoop-extended-color.svg'` passed as the
+- **Don't:** a logo loaded from an azion.com URL, or an SVG pasted into the page's folder.
+- **Do:** `import zoop from '@aziontech/webkit/assets/zoop-extended-color.svg'` passed as the
   item's `logo`; an illustration named from the registry.
 
 **Why:** the bank holds the approved version of each asset with its light and dark variants. A
@@ -443,8 +443,8 @@ A brand mark uses its colour version (`ThirdPartyLogo` `variant="color"`). Witho
 wall, the muted text tone (`variant="current"` under muted text); elsewhere the default text tone
 (`current`), then `monochrome`.
 
-- **Incorrect:** a black mark where a colour version exists; a muted mark outside a marquee.
-- **Correct:** the colour version wherever it exists; the muted tone only in a strip of many marks.
+- **Don't:** a black mark where a colour version exists; a muted mark outside a marquee.
+- **Do:** the colour version wherever it exists; the muted tone only in a strip of many marks.
 
 **Why:** a mark in its own colour is how a brand is recognised; a strip mutes its marks so many
 logos read as one line of proof.
@@ -456,9 +456,9 @@ logos read as one line of proof.
 Render the candidates (the docs site's illustration foundation, or the section's example) and
 look before assigning one. A name is not evidence of what an asset draws.
 
-- **Incorrect:** an e-commerce band gets the scene whose name mentions retail, unrendered; it draws
+- **Don't:** an e-commerce band gets the scene whose name mentions retail, unrendered; it draws
   customer stacks.
-- **Correct:** the band gets the scene whose drawing shows a store, a cart and a product grid, and
+- **Do:** the band gets the scene whose drawing shows a store, a cart and a product grid, and
   the report says it was checked by render.
 
 **Why:** some names describe the use an asset was first made for, not what it shows; no lint or
@@ -473,8 +473,8 @@ the closest candidates. A stand-in goes on the page only when the person picks i
 listed as a stand-in until the bank has the right art. New art is added to the bank first, then
 used.
 
-- **Incorrect:** the closest scene placed without a word, or a local file another page carries.
-- **Correct:** "the bank has no multi-tenant SaaS scene; closest: …", the person picks one, the
+- **Don't:** the closest scene placed without a word, or a local file another page carries.
+- **Do:** "the bank has no multi-tenant SaaS scene; closest: …", the person picks one, the
   report lists it as a stand-in.
 
 **Why:** a silent stand-in hides a gap nobody files; a local copy breaks SD-13 and goes stale.
@@ -486,8 +486,8 @@ used.
 Illustrations in one row or stack fill a similar share of their canvas, measured on the drawn
 content in the rendered page, not on the canvas size.
 
-- **Incorrect:** three stacked bands, one drawing filling half its canvas, another most of it.
-- **Correct:** scenes whose drawings fill a similar share; when no fitting set matches, the report
+- **Don't:** three stacked bands, one drawing filling half its canvas, another most of it.
+- **Do:** scenes whose drawings fill a similar share; when no fitting set matches, the report
   lists each share and the person decides.
 
 **Why:** the eye compares neighbours; uneven fill reads as uneven importance or a layout bug.

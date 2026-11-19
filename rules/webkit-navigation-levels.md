@@ -41,7 +41,7 @@ screen that owns its item: `rail (level 1 → level 2) → resource list → res
   drawer with that resource's create form over the form that needs it (`large` from a page, `medium`
   from a drawer), and saving selects the new resource. This holds for first-level resources too.
 
-## Do not
+## Don't
 
 - Do not render a navigation inside a page body: no `SidebarMenu`, no side list or column of pages,
   no `ToggleGroup`, `Select` or second tab row that switches between pages. Page navigation is the
@@ -60,7 +60,9 @@ screen that owns its item: `rail (level 1 → level 2) → resource list → res
 - Do not put `PageTabs`, a breadcrumb or any other navigation inside a drawer. A drawer that needs
   one is a page.
 
-## Correct
+## Example
+
+### Do
 
 Edge DNS has 2 resources, so they sit on level 1. Security has more than 3, so it drills into
 level 2. Every row opens a list; a policy's own pages are its tabs:
@@ -99,7 +101,7 @@ const navigation = [
 ]
 ```
 
-## Wrong
+### Don't
 
 A rail drill level whose rows route into one default policy; the same pages repeated by a
 `SidebarMenu` inside that policy's tab would be wrong too:

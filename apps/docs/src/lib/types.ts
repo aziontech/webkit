@@ -1,5 +1,5 @@
 export type Highlighted = { code: string; html: string }
-export type PairType = 'usage' | 'guidance' | 'example'
+export type PairType = 'usage' | 'guidance'
 export type DocPair = { type: PairType; level: number; do: string; dont: string }
 export type DocPart = { html: string } | { pair: DocPair }
 export type MarkdownDoc = { parts: DocPart[]; title: string }
@@ -106,12 +106,12 @@ export type DocsTokens = {
   spacing: Token[]
   radius: Token[]
   shadows: Token[]
-  typography: string[]
+  typography: Token[]
   fonts: Token[]
   motion: {
     ease: Token[]
     duration: Token[]
-    animations: { name: string; value: string; useWhen: string }[]
+    animations: Token[]
   }
   zIndex: Token[]
   breakpoints: Token[]

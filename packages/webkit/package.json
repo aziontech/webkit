@@ -39,6 +39,7 @@
     "check:authoring": "node scripts/check-authoring.mjs",
     "update:authoring": "node scripts/check-authoring.mjs --update",
     "check:authoring-docs": "node scripts/check-authoring-docs.mjs",
+    "check:docs-markdown": "node scripts/check-docs-markdown.mjs",
     "update:authoring-docs": "node scripts/check-authoring-docs.mjs --update",
     "check:tests": "node scripts/check-tests.mjs",
     "check:spec-status": "node scripts/check-spec-status.mjs",
@@ -1138,6 +1139,10 @@
     "./phone-input": {
       "types": "./types/components/input/phone-input/phone-input.vue.d.ts",
       "default": "./src/components/input/phone-input/phone-input.vue"
+    },
+    "./language-select": {
+      "types": "./types/components/input/language-select/language-select.vue.d.ts",
+      "default": "./src/components/input/language-select/language-select.vue"
     },
     "./hint": {
       "types": "./types/components/input/hint/hint.vue.d.ts",
@@ -3353,6 +3358,9 @@
       ],
       "phone-input": [
         "./types/components/input/phone-input/phone-input.vue.d.ts"
+      ],
+      "language-select": [
+        "./types/components/input/language-select/language-select.vue.d.ts"
       ],
       "hint": [
         "./types/components/input/hint/hint.vue.d.ts"

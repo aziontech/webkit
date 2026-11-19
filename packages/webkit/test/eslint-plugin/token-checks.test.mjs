@@ -267,7 +267,10 @@ test('off-brand-orange fires on --text-primary and on any orange step but the lo
     'class="text-brand-primary-300"',
     'fill: var(--color-alpha-orange-200)'
   ]) {
-    assert.ok(ids(content).includes('off-brand-orange'), `expected off-brand-orange for: ${content}`)
+    assert.ok(
+      ids(content).includes('off-brand-orange'),
+      `expected off-brand-orange for: ${content}`
+    )
   }
 })
 

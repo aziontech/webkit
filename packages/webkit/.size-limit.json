@@ -1089,6 +1089,12 @@
     "entryOnly": true
   },
   {
+    "name": "language-select",
+    "path": "src/components/input/language-select/language-select.vue",
+    "limit": "28.75 KB",
+    "entryOnly": true
+  },
+  {
     "name": "select",
     "path": "src/components/input/select/index.ts",
     "limit": "22.4 KB"

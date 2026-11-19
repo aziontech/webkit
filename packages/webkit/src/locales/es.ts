@@ -805,6 +805,11 @@ export const es: Messages = {
     arrowLeft: '←',
     arrowRight: '→'
   },
+  languageSelect: {
+    label: 'Idioma',
+    search: 'Buscar idioma',
+    noMatch: 'No se encontró ningún idioma.'
+  },
   link: {
     label: 'Más información'
   },
