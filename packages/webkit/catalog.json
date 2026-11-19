@@ -4410,6 +4410,9 @@
    "target": "./src/components/ai/tool-approval/tool-approval.vue",
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/tool-approval",
+   "models": [
+    "modelValue"
+   ],
    "category": "ai",
    "structure": "monolithic",
    "props": [
@@ -4468,12 +4471,33 @@
      "default": "false",
      "required": "false",
      "doc": "A decision is being sent; both buttons are inert and Approve shows its loading state."
+    },
+    {
+     "name": "editable",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Lets the reader edit the call's input in a code field before approving; the edit comes back through `v-model` and `approve`."
+    },
+    {
+     "name": "invalid",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "The edited input cannot be used (it does not parse): the field shows an error and Approve stays disabled. Has no effect without `editable`."
+    },
+    {
+     "name": "modelValue",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
     }
    ],
    "events": [
     {
      "name": "approve",
-     "payload": "(event: MouseEvent)",
+     "payload": "(event: MouseEvent, input: string)",
      "notes": ""
     },
     {
@@ -5787,10 +5811,10 @@
     },
     {
      "name": "status",
-     "type": "'pending' | 'running' | 'success' | 'error' | 'denied'",
+     "type": "'pending' | 'streaming' | 'running' | 'success' | 'error' | 'canceled' | 'denied'",
      "default": "'running'",
      "required": "false",
-     "doc": "`pending` waits for authorization, `running` is in flight, then `success`, `error` or `denied` (the reader refused it)."
+     "doc": "`pending` waits for authorization, `streaming` receives its arguments, `running` is in flight, then `success`, `error`, `canceled` (stopped before it finished) or `denied` (the reader refused it)."
     },
     {
      "name": "defaultOpen",

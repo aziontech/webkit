@@ -9,7 +9,7 @@ export const es: Messages = {
     expired: 'Solicitud vencida',
     confirmLabel: 'Escribe {phrase} para confirmar',
     arguments: 'Argumentos',
-    invalidArguments: 'Corrige los argumentos para aprobar'
+    invalidArguments: 'Estos argumentos no son válidos. Corrígelos para aprobar.'
   },
   responseLoading: {
     generating: 'Generando una respuesta'

@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 9
 template: 2
-checksum: 5e9a2dec3f2604c90a6a3d580dd5b338d1cd044d6498757c77363c506d651257
+checksum: 9bae9555351f5970b2273ae487f540400ace904df0df583945fd789b095140d4
 created: 2026-11-11
 last_updated: 2026-11-19
 ---
@@ -21,12 +21,8 @@ question (``Allow `npm test`?``), says what will happen, shows exactly what will
 `CodeBlock` with the command, `KeyValueList` with parameters), and offers Deny and Approve. Once
 decided, the buttons give way to the outcome in text (`Approved`, `Denied`, `Request expired`) so the
 decision stays in the thread. Irreversible actions (`variant="danger"`) turn Approve destructive and can
-require typing a phrase first. With `editable` the reader can correct the call's input (its arguments,
-as text) in a code field before approving; the corrected input comes back through `v-model` and with
-the `approve` event, so the owner runs the call with it (SDKs that accept edited arguments on approval,
-such as an approval interrupt resolved with edited arguments). Agent-UI libraries surveyed (AI Elements
-Confirmation, Cloudscape user-authorized actions) offer approve and deny only; the edit is opt-in so the
-default card stays a plain yes or no.
+require typing a phrase first. With `editable` (opt-in) the reader corrects the call's arguments in a
+code field before approving; the edit comes back through `v-model` and `approve`.
 
 It is a card in the conversation, not a dialog: it does not trap focus and does not take initial
 focus; `focus()` moves focus to its heading when the owner wants to bring the reader to it.
@@ -36,7 +32,7 @@ focus; `focus()` moves focus to its heading when the owner wants to bring the re
 - Use ToolApproval only inside an AI conversation when an agent asks permission to run a tool or command; for a person confirming an action they started use ConfirmDialog.
 - One-time authorization of a consequential action proposed by an agent: a production deployment, a purge, a command.
 - An irreversible action (delete): add `confirmationPhrase`.
-- A call whose arguments the reader may want to correct first (a URL list, a limit, a target): add `editable` and bind `v-model` to the arguments as text.
+- Arguments the reader may want to correct first (a URL list, a limit): add `editable`.
 
 ## When NOT to use
 
@@ -58,7 +54,7 @@ focus; `focus()` moves focus to its heading when the owner wants to bring the re
 - Never pre-focus or pre-select Approve for a risky action.
 - Do not leave a request pending forever: expire it (`status="expired"`) and have the assistant say nothing ran.
 - After Deny, the assistant acknowledges in the conversation ("Skipping that step.").
-- With `editable`, always bind `v-model`, seeded with the arguments as formatted JSON (unbound, the field starts empty and `approve` carries `''`); parse them yourself and set `invalid` while they do not parse; run the call with the `input` the `approve` event carries, never with the original arguments.
+- With `editable`, bind `v-model` to the arguments as formatted JSON, set `invalid` while they do not parse, and run the call with the `input` that `approve` carries.
 - Keep `editable` off for irreversible actions unless the edit is the point: the phrase confirms the target, the edit can change it.
 
 ## Usage
@@ -133,36 +129,36 @@ With editable arguments:
 ## Sub-components
 
 _None. Exports: `"./tool-approval"`; types `ToolApprovalStatus`, `ToolApprovalVariant`.
-Composed DS components: `button`, `status-indicator`, and for `editable` the arguments field: `field-root` (the Field context: `invalid`, `disabled`, `aria-describedby`), `textarea` (`monospace`, `autoResize`, `maxRows` 12) and `field-error` (the invalid message, registered with the Field). The label is a plain `<label>` bound to the field's id (passed to the `Textarea`, which the Field context then uses) (`field-label` is not used: its `Hint` is not needed here and would add to the bundle); the title and description reuse
+Composed DS components: `button`, `status-indicator`; for `editable`, `field-root`, `textarea` and `field-error` under a plain `<label>` (no `field-label`, to keep its `Hint` out of the bundle); the title and description reuse
 `StreamingResponse`'s inline renderer so backticks render as code (no HTML). Exposes `focus()`._
 
 ## Props
 
-| Prop                 | Type                                               | Default     | Required | JSDoc                                                                                                                       |
-| -------------------- | -------------------------------------------------- | ----------- | -------- | --------------------------------------------------------------------------------------------------------------------------- |
-| `title`              | `string`                                           | —           | true     | The question, naming the action: ``Allow `npm test`?``, `Approve deployment to production?`. Backticks render as code.      |
-| `description`        | `string`                                           | `''`        | false    | One or two sentences on what will happen and to what; backticks render as code.                                             |
-| `status`             | `'pending' \| 'approved' \| 'denied' \| 'expired'` | `'pending'` | false    | `pending` asks; `approved`, `denied` and `expired` replace the buttons with the outcome in text.                            |
-| `variant`            | `'primary' \| 'danger'`                            | `'primary'` | false    | `danger` for an action that cannot be undone: the approve button turns destructive.                                         |
-| `confirmationPhrase` | `string`                                           | `''`        | false    | A word the reader must type before Approve enables, for irreversible actions (the resource name). Empty asks for no typing. |
-| `approveLabel`       | `string`                                           | `''`        | false    | Text of the approve button, the verb of the title (`Deploy`, `Delete`). Empty uses the locale catalog (`Approve`).          |
-| `denyLabel`          | `string`                                           | `''`        | false    | Text of the deny button. Empty uses the locale catalog (`Deny`).                                                            |
-| `loading`            | `boolean`                                          | `false`     | false    | A decision is being sent; both buttons are inert and Approve shows its loading state.                                       |
-| `editable`           | `boolean`                                          | `false`     | false    | Lets the reader edit the call's input in a code field before approving; the edit comes back through `v-model` and `approve`. |
+| Prop                 | Type                                               | Default     | Required | JSDoc                                                                                                                                       |
+| -------------------- | -------------------------------------------------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `title`              | `string`                                           | —           | true     | The question, naming the action: ``Allow `npm test`?``, `Approve deployment to production?`. Backticks render as code.                      |
+| `description`        | `string`                                           | `''`        | false    | One or two sentences on what will happen and to what; backticks render as code.                                                             |
+| `status`             | `'pending' \| 'approved' \| 'denied' \| 'expired'` | `'pending'` | false    | `pending` asks; `approved`, `denied` and `expired` replace the buttons with the outcome in text.                                            |
+| `variant`            | `'primary' \| 'danger'`                            | `'primary'` | false    | `danger` for an action that cannot be undone: the approve button turns destructive.                                                         |
+| `confirmationPhrase` | `string`                                           | `''`        | false    | A word the reader must type before Approve enables, for irreversible actions (the resource name). Empty asks for no typing.                 |
+| `approveLabel`       | `string`                                           | `''`        | false    | Text of the approve button, the verb of the title (`Deploy`, `Delete`). Empty uses the locale catalog (`Approve`).                          |
+| `denyLabel`          | `string`                                           | `''`        | false    | Text of the deny button. Empty uses the locale catalog (`Deny`).                                                                            |
+| `loading`            | `boolean`                                          | `false`     | false    | A decision is being sent; both buttons are inert and Approve shows its loading state.                                                       |
+| `editable`           | `boolean`                                          | `false`     | false    | Lets the reader edit the call's input in a code field before approving; the edit comes back through `v-model` and `approve`.                |
 | `invalid`            | `boolean`                                          | `false`     | false    | The edited input cannot be used (it does not parse): the field shows an error and Approve stays disabled. Has no effect without `editable`. |
 
 ## v-model
 
-| Model     | Type     | Default | Emits               | Notes                                                                                                                                                       |
-| --------- | -------- | ------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model` | `string` | `''`    | `update:modelValue` | The call's input as text (its arguments, usually formatted JSON). With `editable` the reader edits it while `pending`. Unbound, the edit is local and starts empty. |
+| Model     | Type     | Default | Emits               | Notes                                                                                                         |
+| --------- | -------- | ------- | ------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `v-model` | `string` | `''`    | `update:modelValue` | The call's arguments as text (usually JSON); the reader edits them with `editable`. Unbound, local and empty. |
 
 ## Events
 
-| Event     | Payload               | When                                                                             |
-| --------- | --------------------- | -------------------------------------------------------------------------------- |
+| Event     | Payload                              | When                                                                                                                                                                                                                                           |
+| --------- | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `approve` | `(event: MouseEvent, input: string)` | Approve pressed while `pending`, not `loading`, not `invalid` (with `editable`), and the phrase (if any) matches. `input` is the model value at that moment: the reader's edit with `editable`, otherwise the value bound (`''` when unbound). |
-| `deny`    | `(event: MouseEvent)` | Deny pressed while `pending` and not `loading`.                                  |
+| `deny`    | `(event: MouseEvent)`                | Deny pressed while `pending` and not `loading`.                                                                                                                                                                                                |
 
 - Payload change in spec_version 9: `approve` gained the trailing `input` argument. The DOM event stays first, so existing `(event) => …` handlers keep working and no codemod entry is needed.
 
@@ -176,9 +172,9 @@ Composed DS components: `button`, `status-indicator`, and for `editable` the arg
 
 - `data-status` mirrors `status`; `data-variant`.
 - `pending`: phrase field (when `confirmationPhrase`), Deny (outlined) and Approve (primary, or danger with `variant="danger"`); Approve disabled until the phrase matches.
-- `editable` + `pending`: the arguments field — a `Textarea` (`monospace`, `autoResize`, `maxRows` 12) labelled `Arguments` — under the body, growing with its content up to 12 lines, then scrolling inside itself; it is disabled (and not focusable) while `loading`.
-- `invalid` (with `editable` + `pending`): the Field is invalid, so the field is `aria-invalid` and described by its `FieldError` (`Correct the arguments to approve`); Approve is disabled. With `confirmationPhrase` too, Approve needs both: the phrase typed and `invalid` false.
-- `editable` once resolved: the field stays as the record, `readonly`, with the arguments as they were approved (or as they stood when denied or expired), so the thread never shows the original arguments for a call that ran with edited ones.
+- `editable` + `pending`: a monospace `Textarea` labelled `Arguments` under the body, growing to 12 lines, then scrolling; disabled while `loading`.
+- `invalid` (with `editable` + `pending`): the field is `aria-invalid` with its `FieldError`; Approve is disabled (with `confirmationPhrase`, it also needs the phrase).
+- `editable` once resolved: the field stays `readonly` as the record of the arguments that ran.
 - `approved` (success), `denied` (warning), `expired` (neutral): a `StatusIndicator` with the outcome; the typed phrase resets when the card returns to `pending`.
 
 ## Motion & Animations
@@ -187,15 +183,15 @@ _No motion of its own; `Button` handles its loading spinner._
 
 ## Tokens
 
-| Region       | Token                                                                                                      |
-| ------------ | ---------------------------------------------------------------------------------------------------------- |
-| frame        | `var(--bg-surface)`, `var(--border-default)` (danger pending: `var(--danger-border)`), `var(--shape-card)` |
-| title        | `.text-heading-2xs`, `var(--text-default)`                                                                 |
-| description  | `.text-body-sm`, `var(--text-muted)`                                                                       |
-| shield glyph | `var(--text-muted)` / `var(--danger-foreground)`                                                           |
-| phrase input | `var(--border-default)`, `var(--shape-control)`, `.text-body-sm`                                           |
-| arguments field | `Textarea` tokens (`monospace`); label `.text-label-sm`, `var(--text-default)`; error `FieldError` tokens |
-| padding/gaps | `var(--spacing-md)`, `var(--spacing-sm)`, `var(--spacing-xs)`                                              |
+| Region          | Token                                                                                                      |
+| --------------- | ---------------------------------------------------------------------------------------------------------- |
+| frame           | `var(--bg-surface)`, `var(--border-default)` (danger pending: `var(--danger-border)`), `var(--shape-card)` |
+| title           | `.text-heading-2xs`, `var(--text-default)`                                                                 |
+| description     | `.text-body-sm`, `var(--text-muted)`                                                                       |
+| shield glyph    | `var(--text-muted)` / `var(--danger-foreground)`                                                           |
+| phrase input    | `var(--border-default)`, `var(--shape-control)`, `.text-body-sm`                                           |
+| arguments field | `Textarea` tokens (`monospace`); label `.text-label-sm`, `var(--text-default)`; error `FieldError` tokens  |
+| padding/gaps    | `var(--spacing-md)`, `var(--spacing-sm)`, `var(--spacing-xs)`                                              |
 
 ## Theme gaps
 
@@ -204,21 +200,21 @@ _None._
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: buttons and the phrase input show `focus-visible:ring-2 focus-visible:ring-(--ring-color)`; the heading shows a ring when `focus()` moves focus to it.
-- Keyboard map: `Tab` through the body, the arguments field (with `editable`), the phrase field, Deny, Approve; inside the arguments field `Enter` inserts a new line and never approves, and `Tab` leaves the field (it inserts no tab character); `Enter` / `Space` activate only Deny and Approve. No focus trap, no initial focus (Cloudscape: the one-time decision card is not a dialog).
-- ARIA: `role="group"` labelled by its `h3` title and described by the description; the phrase field and the arguments field have visible `<label>`s; the invalid arguments field is `aria-invalid` and described by its `FieldError`, whose `role="alert"` announces it when the arguments stop parsing; a polite live region announces the outcome; outcomes are text, never color alone.
+- Keyboard map: `Tab` through the body, the arguments field (with `editable`), the phrase field, Deny, Approve; in the arguments field `Enter` adds a line and `Tab` leaves it; `Enter` / `Space` activate Deny and Approve. No focus trap, no initial focus (Cloudscape: the one-time decision card is not a dialog).
+- ARIA: `role="group"` labelled by its `h3` title and described by the description; both fields have visible `<label>`s; the invalid arguments field is `aria-invalid` and described by its `FieldError` (`role="alert"`); a polite live region announces the outcome; outcomes are text, never color alone.
 
 ## Internationalization
 
-| Key                         | English source             | Override prop  |
-| --------------------------- | -------------------------- | -------------- |
-| `toolApproval.approve`      | `Approve`                  | `approveLabel` |
-| `toolApproval.deny`         | `Deny`                     | `denyLabel`    |
-| `toolApproval.approved`     | `Approved`                 | —              |
-| `toolApproval.denied`       | `Denied`                   | —              |
-| `toolApproval.expired`      | `Request expired`          | —              |
-| `toolApproval.confirmLabel` | `Type {phrase} to confirm` | —              |
-| `toolApproval.arguments`    | `Arguments`                | —              |
-| `toolApproval.invalidArguments` | `Correct the arguments to approve` | —      |
+| Key                             | English source                                            | Override prop  |
+| ------------------------------- | --------------------------------------------------------- | -------------- |
+| `toolApproval.approve`          | `Approve`                                                 | `approveLabel` |
+| `toolApproval.deny`             | `Deny`                                                    | `denyLabel`    |
+| `toolApproval.approved`         | `Approved`                                                | —              |
+| `toolApproval.denied`           | `Denied`                                                  | —              |
+| `toolApproval.expired`          | `Request expired`                                         | —              |
+| `toolApproval.confirmLabel`     | `Type {phrase} to confirm`                                | —              |
+| `toolApproval.arguments`        | `Arguments`                                               | —              |
+| `toolApproval.invalidArguments` | `These arguments are not valid. Correct them to approve.` | —              |
 
 - Formatting: none.
 

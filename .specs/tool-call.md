@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 7
 template: 2
-checksum: 54714f00f0408d82333f7bfb6c4a893db6f2c8f046dfb20a11ed8f80e8e05319
+checksum: c195ed9bcddabdbb5c16fe26d815ca155eb10b7804d3496cd9355db6444934ad
 created: 2026-11-11
 last_updated: 2026-11-19
 ---
@@ -41,9 +41,7 @@ input and output in a collapsible panel. It is the record of what the agent did;
 - Name the tool exactly as it is (`list_workloads`) and describe it in plain words (`Listing your workloads`).
 - Collapse details by default; open them on error so the reader sees why.
 - Redact secrets from inputs and outputs.
-- Show `streaming` while the model is still writing the arguments, so the reader does not read a call that has not started as running; switch to `running` once the arguments are complete and the call executes.
-- Show `canceled` when the reader stopped the response or the call before it finished, and `denied` only when the reader refused an approval: the two read differently in the thread.
-- An SDK state maps one to one: arguments not received or still arriving → `streaming`; arguments complete and executing → `running`; waiting for an approval → `pending`; a result → `success`; a failure → `error`; a result whose outcome is cancelled → `canceled`; a refused approval or a result whose outcome is denied → `denied`.
+- Map an SDK's states: arguments arriving → `streaming`; executing → `running`; awaiting approval → `pending`; result → `success`; failure → `error`; stopped by the reader (outcome cancelled) → `canceled`; approval refused (outcome denied) → `denied`.
 
 ## Usage
 
@@ -77,12 +75,12 @@ _None. Exports: `"./tool-call"`; type `ToolCallStatus`. Composed DS components: 
 
 ## Props
 
-| Prop          | Type                                                         | Default     | Required | JSDoc                                                                                                                   |
-| ------------- | ------------------------------------------------------------ | ----------- | -------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `name`        | `string`                                                     | —           | true     | The tool or command identifier, shown in code font (`list_workloads`).                                                  |
-| `title`       | `string`                                                     | `''`        | false    | What the call does in the reader's words (`Listing your workloads`). Empty shows only the name.                         |
+| Prop          | Type                                                                                      | Default     | Required | JSDoc                                                                                                                                                                                                |
+| ------------- | ----------------------------------------------------------------------------------------- | ----------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `name`        | `string`                                                                                  | —           | true     | The tool or command identifier, shown in code font (`list_workloads`).                                                                                                                               |
+| `title`       | `string`                                                                                  | `''`        | false    | What the call does in the reader's words (`Listing your workloads`). Empty shows only the name.                                                                                                      |
 | `status`      | `'pending' \| 'streaming' \| 'running' \| 'success' \| 'error' \| 'canceled' \| 'denied'` | `'running'` | false    | `pending` waits for authorization, `streaming` receives its arguments, `running` is in flight, then `success`, `error`, `canceled` (stopped before it finished) or `denied` (the reader refused it). |
-| `defaultOpen` | `boolean`                                                    | `false`     | false    | Initial open state when uncontrolled; details start collapsed.                                                          |
+| `defaultOpen` | `boolean`                                                                                 | `false`     | false    | Initial open state when uncontrolled; details start collapsed.                                                                                                                                       |
 
 ## v-model
 
@@ -105,15 +103,14 @@ _No events._
 
 - `data-status` mirrors `status`; `data-state="open|closed"` only when a slot makes it expandable.
 - Status mapping: `pending` neutral, `streaming` neutral with spinner (`Preparing…`), `running` info with spinner (`Running…`), `success` success, `error` danger, `canceled` neutral, `denied` warning. Every status is distinct in text, never by color or spinner alone.
-- `streaming` may already show the partial arguments in `input`; the owner fills the slot as they arrive.
 - Without `input` / `output` the row is static (no button).
 
 ## Motion & Animations
 
-| Trigger            | Animation / Transition                                           | Token     | Reduced-motion fallback         |
-| ------------------ | ---------------------------------------------------------------- | --------- | ------------------------------- |
-| chevron open/close | `transition-transform duration-fast-02 ease-productive-entrance` | `fast-02` | `motion-reduce:transition-none` |
-| running / streaming spinner | `Spinner` inside `StatusIndicator`                      | component | handled by `Spinner`            |
+| Trigger                     | Animation / Transition                                           | Token     | Reduced-motion fallback         |
+| --------------------------- | ---------------------------------------------------------------- | --------- | ------------------------------- |
+| chevron open/close          | `transition-transform duration-fast-02 ease-productive-entrance` | `fast-02` | `motion-reduce:transition-none` |
+| running / streaming spinner | `Spinner` inside `StatusIndicator`                               | component | handled by `Spinner`            |
 
 ## Tokens
 
@@ -138,17 +135,17 @@ _None._
 
 ## Internationalization
 
-| Key                | English source | Override prop |
-| ------------------ | -------------- | ------------- |
-| `toolCall.pending` | `Waiting`      | —             |
-| `toolCall.streaming` | `Preparing`  | —             |
-| `toolCall.running` | `Running`      | —             |
-| `toolCall.success` | `Completed`    | —             |
-| `toolCall.error`   | `Failed`       | —             |
-| `toolCall.canceled` | `Canceled`    | —             |
-| `toolCall.denied`  | `Denied`       | —             |
-| `toolCall.input`   | `Input`        | —             |
-| `toolCall.output`  | `Output`       | —             |
+| Key                  | English source | Override prop |
+| -------------------- | -------------- | ------------- |
+| `toolCall.pending`   | `Waiting`      | —             |
+| `toolCall.streaming` | `Preparing`    | —             |
+| `toolCall.running`   | `Running`      | —             |
+| `toolCall.success`   | `Completed`    | —             |
+| `toolCall.error`     | `Failed`       | —             |
+| `toolCall.canceled`  | `Canceled`     | —             |
+| `toolCall.denied`    | `Denied`       | —             |
+| `toolCall.input`     | `Input`        | —             |
+| `toolCall.output`    | `Output`       | —             |
 
 - Formatting: none.
 

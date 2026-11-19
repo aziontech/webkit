@@ -11,7 +11,7 @@
     />
     <ToolCall
       name="create_cache_rule"
-      title="Preparing a cache rule for images"
+      title="Creating a cache rule for images"
       status="streaming"
     />
     <ToolCall

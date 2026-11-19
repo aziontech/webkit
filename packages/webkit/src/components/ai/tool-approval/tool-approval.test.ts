@@ -96,9 +96,11 @@ describe('ToolApproval', () => {
     await nextTick()
     const field = getByLabelText('Arguments')
     expect(field).toHaveAttribute('aria-invalid', 'true')
-    expect(field).toHaveAccessibleDescription('Correct the arguments to approve')
+    expect(field).toHaveAccessibleDescription(
+      'These arguments are not valid. Correct them to approve.'
+    )
     expect(getByTestId('tool-approval__arguments-error')).toHaveTextContent(
-      'Correct the arguments to approve'
+      'These arguments are not valid. Correct them to approve.'
     )
     const approve = getByRole('button', { name: 'Approve' })
     expect(approve).toBeDisabled()

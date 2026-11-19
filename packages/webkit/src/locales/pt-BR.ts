@@ -9,7 +9,7 @@ export const ptBR: Messages = {
     expired: 'Pedido expirado',
     confirmLabel: 'Digite {phrase} para confirmar',
     arguments: 'Argumentos',
-    invalidArguments: 'Corrija os argumentos para aprovar'
+    invalidArguments: 'Estes argumentos não são válidos. Corrija-os para aprovar.'
   },
   responseLoading: {
     generating: 'Gerando uma resposta'

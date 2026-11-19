@@ -1,6 +1,6 @@
 # Tool Call
 
-> One tool or command the agent invoked, shown in the conversation (AI Elements Tool, Cloudscape progressive steps): a row with the tool name in code font, an optional plain description, and a status (`Waiting`, `Running…`, `Completed`, `Failed`, `Denied`), with the call's input and output in a collapsible panel. It is the record of what the agent did; authorization before it runs is `ToolApproval`.
+> One tool or command the agent invoked, shown in the conversation (AI Elements Tool, Cloudscape progressive steps): a row with the tool name in code font, an optional plain description, and a status (`Waiting`, `Preparing…`, `Running…`, `Completed`, `Failed`, `Canceled`, `Denied`), with the call's input and output in a collapsible panel. It is the record of what the agent did; authorization before it runs is `ToolApproval`.
 
 - Import: `import ToolCall from '@aziontech/webkit/tool-call'`
 - Category: ai · Surface: app · Structure: monolithic
@@ -15,6 +15,7 @@
 - Name the tool exactly as it is (`list_workloads`) and describe it in plain words (`Listing your workloads`).
 - Collapse details by default; open them on error so the reader sees why.
 - Redact secrets from inputs and outputs.
+- Map an SDK's states: arguments arriving → `streaming`; executing → `running`; awaiting approval → `pending`; result → `success`; failure → `error`; stopped by the reader (outcome cancelled) → `canceled`; approval refused (outcome denied) → `denied`.
 
 ## Don’t
 
@@ -35,7 +36,7 @@
 | --- | --- | --- | --- | --- |
 | `name` | `string` | `—` | true | The tool or command identifier, shown in code font (`list_workloads`). |
 | `title` | `string` | `''` | false | What the call does in the reader's words (`Listing your workloads`). Empty shows only the name. |
-| `status` | `'pending' \| 'running' \| 'success' \| 'error' \| 'denied'` | `'running'` | false | `pending` waits for authorization, `running` is in flight, then `success`, `error` or `denied` (the reader refused it). |
+| `status` | `'pending' \| 'streaming' \| 'running' \| 'success' \| 'error' \| 'canceled' \| 'denied'` | `'running'` | false | `pending` waits for authorization, `streaming` receives its arguments, `running` is in flight, then `success`, `error`, `canceled` (stopped before it finished) or `denied` (the reader refused it). |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled; details start collapsed. |
 | `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
 
@@ -59,14 +60,14 @@ _None. Exports: `"./tool-call"`; type `ToolCallStatus`. Composed DS components: 
 ## States
 
 - `data-status` mirrors `status`; `data-state="open|closed"` only when a slot makes it expandable.
-- Status mapping: `pending` neutral, `running` info with spinner, `success` success, `error` danger, `denied` warning.
+- Status mapping: `pending` neutral, `streaming` neutral with spinner (`Preparing…`), `running` info with spinner (`Running…`), `success` success, `error` danger, `canceled` neutral, `denied` warning. Every status is distinct in text, never by color or spinner alone.
 - Without `input` / `output` the row is static (no button).
 
 ## Accessibility
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color)` on the trigger.
 - Keyboard map: `Tab` to the trigger, `Enter` / `Space` toggles the details.
-- ARIA: the trigger is a `button` with `aria-expanded` / `aria-controls`; the status is a `StatusIndicator` inside a `role="status"` region the ToolCall owns (StatusIndicator itself is not live), so a change from Running to Completed is announced; Input and Output are `section`s labelled by their `h4`.
+- ARIA: the trigger is a `button` with `aria-expanded` / `aria-controls`; the status is a `StatusIndicator` inside a `role="status"` region the ToolCall owns (StatusIndicator itself is not live), so a change from Preparing to Running to Completed (or Canceled) is announced; Input and Output are `section`s labelled by their `h4`.
 - Status is conveyed in text, never by color alone.
 
 ## Right-to-left
@@ -78,15 +79,17 @@ _None. Exports: `"./tool-call"`; type `ToolCallStatus`. Composed DS components: 
 
 ## Internationalization
 
-| Key                | English source | Override prop |
-| ------------------ | -------------- | ------------- |
-| `toolCall.pending` | `Waiting`      | —             |
-| `toolCall.running` | `Running`      | —             |
-| `toolCall.success` | `Completed`    | —             |
-| `toolCall.error`   | `Failed`       | —             |
-| `toolCall.denied`  | `Denied`       | —             |
-| `toolCall.input`   | `Input`        | —             |
-| `toolCall.output`  | `Output`       | —             |
+| Key                  | English source | Override prop |
+| -------------------- | -------------- | ------------- |
+| `toolCall.pending`   | `Waiting`      | —             |
+| `toolCall.streaming` | `Preparing`    | —             |
+| `toolCall.running`   | `Running`      | —             |
+| `toolCall.success`   | `Completed`    | —             |
+| `toolCall.error`     | `Failed`       | —             |
+| `toolCall.canceled`  | `Canceled`     | —             |
+| `toolCall.denied`    | `Denied`       | —             |
+| `toolCall.input`     | `Input`        | —             |
+| `toolCall.output`    | `Output`       | —             |
 
 - Formatting: none.
 
@@ -114,6 +117,11 @@ _None. Exports: `"./tool-call"`; type `ToolCallStatus`. Composed DS components: 
       status="pending"
     />
     <ToolCall
+      name="create_cache_rule"
+      title="Creating a cache rule for images"
+      status="streaming"
+    />
+    <ToolCall
       name="list_workloads"
       title="Listing your workloads"
       status="running"
@@ -127,6 +135,11 @@ _None. Exports: `"./tool-call"`; type `ToolCallStatus`. Composed DS components: 
       name="get_metrics"
       title="Reading the error rate"
       status="error"
+    />
+    <ToolCall
+      name="list_certificates"
+      title="Listing your certificates"
+      status="canceled"
     />
     <ToolCall
       name="delete_domain"

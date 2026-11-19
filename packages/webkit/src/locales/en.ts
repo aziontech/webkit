@@ -1188,7 +1188,7 @@ export const toolApproval = {
   expired: 'Request expired',
   confirmLabel: 'Type {phrase} to confirm',
   arguments: 'Arguments',
-  invalidArguments: 'Correct the arguments to approve'
+  invalidArguments: 'These arguments are not valid. Correct them to approve.'
 } as const
 
 export const responseLoading = {

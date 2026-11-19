@@ -1,6 +1,6 @@
 # Tool Approval
 
-> A user-authorized action in a conversation (Cloudscape user-authorized actions, AI Elements Confirmation): the agent proposes something with consequences — call a tool, run a command, deploy, delete — and the reader approves or denies it before anything runs. The card states the action as a question (``Allow `npm test`?``), says what will happen, shows exactly what will run in its body (a `CodeBlock` with the command, `KeyValueList` with parameters), and offers Deny and Approve. Once decided, the buttons give way to the outcome in text (`Approved`, `Denied`, `Request expired`) so the decision stays in the thread. Irreversible actions (`variant="danger"`) turn Approve destructive and can require typing a phrase first. It is a card in the conversation, not a dialog: it does not trap focus and does not take initial focus; `focus()` moves focus to its heading when the owner wants to bring the reader to it.
+> A user-authorized action in a conversation (Cloudscape user-authorized actions, AI Elements Confirmation): the agent proposes something with consequences — call a tool, run a command, deploy, delete — and the reader approves or denies it before anything runs. The card states the action as a question (``Allow `npm test`?``), says what will happen, shows exactly what will run in its body (a `CodeBlock` with the command, `KeyValueList` with parameters), and offers Deny and Approve. Once decided, the buttons give way to the outcome in text (`Approved`, `Denied`, `Request expired`) so the decision stays in the thread. Irreversible actions (`variant="danger"`) turn Approve destructive and can require typing a phrase first. With `editable` (opt-in) the reader corrects the call's arguments in a code field before approving; the edit comes back through `v-model` and `approve`. It is a card in the conversation, not a dialog: it does not trap focus and does not take initial focus; `focus()` moves focus to its heading when the owner wants to bring the reader to it.
 
 - Import: `import ToolApproval from '@aziontech/webkit/tool-approval'`
 - Category: ai · Surface: app · Structure: monolithic
@@ -11,6 +11,7 @@
 - Use ToolApproval only inside an AI conversation when an agent asks permission to run a tool or command; for a person confirming an action they started use ConfirmDialog.
 - One-time authorization of a consequential action proposed by an agent: a production deployment, a purge, a command.
 - An irreversible action (delete): add `confirmationPhrase`.
+- Arguments the reader may want to correct first (a URL list, a limit): add `editable`.
 
 ## Do
 
@@ -19,6 +20,8 @@
 - Never pre-focus or pre-select Approve for a risky action.
 - Do not leave a request pending forever: expire it (`status="expired"`) and have the assistant say nothing ran.
 - After Deny, the assistant acknowledges in the conversation ("Skipping that step.").
+- With `editable`, bind `v-model` to the arguments as formatted JSON, set `invalid` while they do not parse, and run the call with the `input` that `approve` carries.
+- Keep `editable` off for irreversible actions unless the edit is the point: the phrase confirms the target, the edit can change it.
 
 ## Don’t
 
@@ -46,12 +49,15 @@
 | `approveLabel` | `string` | `''` | false | Text of the approve button, the verb of the title (`Deploy`, `Delete`). Empty uses the locale catalog (`Approve`). |
 | `denyLabel` | `string` | `''` | false | Text of the deny button. Empty uses the locale catalog (`Deny`). |
 | `loading` | `boolean` | `false` | false | A decision is being sent; both buttons are inert and Approve shows its loading state. |
+| `editable` | `boolean` | `false` | false | Lets the reader edit the call's input in a code field before approving; the edit comes back through `v-model` and `approve`. |
+| `invalid` | `boolean` | `false` | false | The edited input cannot be used (it does not parse): the field shows an error and Approve stays disabled. Has no effect without `editable`. |
+| `modelValue` | `string` | `''` | false | Two-way value (`v-model`). |
 
 ## Events
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `approve` | `(event: MouseEvent)` |  |
+| `approve` | `(event: MouseEvent, input: string)` |  |
 | `deny` | `(event: MouseEvent)` |  |
 
 ## Slots
@@ -63,38 +69,49 @@
 ## Sub-components
 
 _None. Exports: `"./tool-approval"`; types `ToolApprovalStatus`, `ToolApprovalVariant`.
-Composed DS components: `button`, `status-indicator`; the title and description reuse
+Composed DS components: `button`, `status-indicator`; for `editable`, `field-root`, `textarea` and `field-error` under a plain `<label>` (no `field-label`, to keep its `Hint` out of the bundle); the title and description reuse
 `StreamingResponse`'s inline renderer so backticks render as code (no HTML). Exposes `focus()`._
+
+## v-model
+
+| Model     | Type     | Default | Emits               | Notes                                                                                                         |
+| --------- | -------- | ------- | ------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `v-model` | `string` | `''`    | `update:modelValue` | The call's arguments as text (usually JSON); the reader edits them with `editable`. Unbound, local and empty. |
 
 ## States
 
 - `data-status` mirrors `status`; `data-variant`.
 - `pending`: phrase field (when `confirmationPhrase`), Deny (outlined) and Approve (primary, or danger with `variant="danger"`); Approve disabled until the phrase matches.
+- `editable` + `pending`: a monospace `Textarea` labelled `Arguments` under the body, growing to 12 lines, then scrolling; disabled while `loading`.
+- `invalid` (with `editable` + `pending`): the field is `aria-invalid` with its `FieldError`; Approve is disabled (with `confirmationPhrase`, it also needs the phrase).
+- `editable` once resolved: the field stays `readonly` as the record of the arguments that ran.
 - `approved` (success), `denied` (warning), `expired` (neutral): a `StatusIndicator` with the outcome; the typed phrase resets when the card returns to `pending`.
 
 ## Accessibility
 
 - Visible focus: buttons and the phrase input show `focus-visible:ring-2 focus-visible:ring-(--ring-color)`; the heading shows a ring when `focus()` moves focus to it.
-- Keyboard map: `Tab` through the body, the phrase field, Deny, Approve; `Enter` / `Space` activates. No focus trap, no initial focus (Cloudscape: the one-time decision card is not a dialog).
-- ARIA: `role="group"` labelled by its `h3` title and described by the description; the phrase field has a visible `<label>`; a polite live region announces the outcome; outcomes are text, never color alone.
+- Keyboard map: `Tab` through the body, the arguments field (with `editable`), the phrase field, Deny, Approve; in the arguments field `Enter` adds a line and `Tab` leaves it; `Enter` / `Space` activate Deny and Approve. No focus trap, no initial focus (Cloudscape: the one-time decision card is not a dialog).
+- ARIA: `role="group"` labelled by its `h3` title and described by the description; both fields have visible `<label>`s; the invalid arguments field is `aria-invalid` and described by its `FieldError` (`role="alert"`); a polite live region announces the outcome; outcomes are text, never color alone.
 
 ## Right-to-left
 
 - Layout: logical utilities; buttons align to the inline end.
 - Icons: the shield is not mirrored.
 - Keyboard: none.
-- User data: code in the title and body is `dir="ltr"`.
+- User data: code in the title and body is `dir="ltr"`; the arguments field is `dir="ltr"` (arguments are code).
 
 ## Internationalization
 
-| Key                         | English source             | Override prop  |
-| --------------------------- | -------------------------- | -------------- |
-| `toolApproval.approve`      | `Approve`                  | `approveLabel` |
-| `toolApproval.deny`         | `Deny`                     | `denyLabel`    |
-| `toolApproval.approved`     | `Approved`                 | —              |
-| `toolApproval.denied`       | `Denied`                   | —              |
-| `toolApproval.expired`      | `Request expired`          | —              |
-| `toolApproval.confirmLabel` | `Type {phrase} to confirm` | —              |
+| Key                             | English source                                            | Override prop  |
+| ------------------------------- | --------------------------------------------------------- | -------------- |
+| `toolApproval.approve`          | `Approve`                                                 | `approveLabel` |
+| `toolApproval.deny`             | `Deny`                                                    | `denyLabel`    |
+| `toolApproval.approved`         | `Approved`                                                | —              |
+| `toolApproval.denied`           | `Denied`                                                  | —              |
+| `toolApproval.expired`          | `Request expired`                                         | —              |
+| `toolApproval.confirmLabel`     | `Type {phrase} to confirm`                                | —              |
+| `toolApproval.arguments`        | `Arguments`                                               | —              |
+| `toolApproval.invalidArguments` | `These arguments are not valid. Correct them to approve.` | —              |
 
 - Formatting: none.
 
@@ -103,7 +120,7 @@ Composed DS components: `button`, `status-indicator`; the title and description 
 - Container queries: none.
 - Narrow: buttons wrap; the body's code scrolls inside its block.
 - Touch: medium buttons (44 px on coarse pointers).
-- Reflow: no horizontal scroll at 320 px.
+- Reflow: no horizontal scroll at 320 px; the arguments field wraps its lines, grows to 12 lines, then scrolls inside itself.
 
 ## Examples
 
@@ -170,29 +187,49 @@ Composed DS components: `button`, `status-indicator`; the title and description 
 </template>
 ```
 
-### Resolved
+### Editable
 
 ```vue
 <script setup>
   import ToolApproval from '@aziontech/webkit/tool-approval'
+  import { computed, ref } from 'vue'
+
+  const status = ref('pending')
+  const input = ref(
+    JSON.stringify(
+      { urls: ['https://www.example.com/styles.css', 'https://www.example.com/app.js'] },
+      null,
+      2
+    )
+  )
+
+  const invalid = computed(() => {
+    try {
+      JSON.parse(input.value)
+      return false
+    } catch {
+      return true
+    }
+  })
+
+  function onApprove(event, value) {
+    input.value = JSON.stringify(JSON.parse(value), null, 2)
+    status.value = 'approved'
+  }
 </script>
 
 <template>
-  <div class="flex w-full max-w-(--container-3xl) flex-col gap-(--spacing-sm)">
+  <div class="w-full max-w-(--container-3xl)">
     <ToolApproval
+      v-model="input"
       title="Allow `purge_urls`?"
-      description="Purges https://www.example.com/styles.css from every data center."
-      status="approved"
-    />
-    <ToolApproval
-      title="Approve deployment to production?"
-      description="Deploys the current build of storefront to production."
-      status="denied"
-    />
-    <ToolApproval
-      title="Allow `delete_cache_rule`?"
-      description="Removes the rule that caches images for one day."
-      status="expired"
+      description="Purges these URLs from every data center. Edit the list before you approve."
+      approve-label="Purge"
+      editable
+      :invalid="invalid"
+      :status="status"
+      @approve="onApprove"
+      @deny="status = 'denied'"
     />
   </div>
 </template>
