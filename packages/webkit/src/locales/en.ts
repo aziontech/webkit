@@ -477,6 +477,24 @@ export const fileDropzone = {
   title: 'Drop files to upload'
 } as const
 
+export const audioPlayer = {
+  label: 'Audio player',
+  play: 'Play',
+  pause: 'Pause',
+  seek: 'Seek',
+  position: '{current} of {total}',
+  mute: 'Mute',
+  unmute: 'Unmute',
+  volume: 'Volume',
+  rate: '{rate}×',
+  speed: 'Playback speed {rate}',
+  download: 'Download audio',
+  downloadTitle: 'Download {title}',
+  loading: 'Loading audio',
+  error: 'The audio could not play.',
+  transcript: 'Transcript'
+} as const
+
 export const filePreview = {
   download: 'Download',
   loading: 'Loading preview',
@@ -1547,6 +1565,7 @@ export const en = {
   errorBoundary,
   field,
   fileDropzone,
+  audioPlayer,
   filePreview,
   fileTokenGroup,
   filterMenu,

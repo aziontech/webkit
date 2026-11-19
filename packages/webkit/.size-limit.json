@@ -1322,6 +1322,11 @@
     "limit": "1.4 KB"
   },
   {
+    "name": "audio-player",
+    "path": "src/components/content/audio-player/audio-player.vue",
+    "limit": "9.95 KB"
+  },
+  {
     "name": "file-preview",
     "path": "src/components/content/file-preview/file-preview.vue",
     "limit": "6.9 KB"
