@@ -151,7 +151,7 @@
                           class="flex items-center justify-between gap-(--spacing-sm) rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface) ps-(--spacing-sm) pe-(--spacing-2xs) py-(--spacing-2xs)"
                         >
                           <code
-                            class="text-label-code text-(--text-default)"
+                            class="text-label-code-sm text-(--text-default)"
                             dir="ltr"
                             >{{ setupKey }}</code
                           >

@@ -96,7 +96,7 @@
       <p class="text-label-sm text-(--text-default)">Can't scan the code?</p>
       <div class="flex items-center gap-(--spacing-xs)">
         <code
-          class="text-label-code text-(--text-default)"
+          class="text-label-code-sm text-(--text-default)"
           dir="ltr"
           >{{ secret.match(/.{1,4}/g).join(' ') }}</code
         >

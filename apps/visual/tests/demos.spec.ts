@@ -15,7 +15,8 @@ const ROUTES = [
   { name: 'onboarding', path: '/onboarding' },
   { name: 'onboarding-plan', path: '/onboarding/plan' },
   { name: 'onboarding-profile', path: '/onboarding/profile' },
-  { name: 'assistant', path: '/assistant' }
+  { name: 'assistant', path: '/assistant' },
+  { name: 'ai-keys', path: '/settings/ai-keys' }
 ]
 
 const MODES: Mode[] = [

@@ -15,6 +15,10 @@
   import FilePreview from '@aziontech/webkit/file-preview'
   import IconButton from '@aziontech/webkit/icon-button'
   import ImageGallery from '@aziontech/webkit/image-gallery'
+  import McpAppFrame, {
+    type McpAppFrameMessage,
+    type McpAppFrameResource
+  } from '@aziontech/webkit/mcp-app-frame'
   import type { PromptInputStatus } from '@aziontech/webkit/prompt-input'
   import PromptInput from '@aziontech/webkit/prompt-input-root'
   import PromptQueue from '@aziontech/webkit/prompt-queue'
@@ -40,6 +44,7 @@
     type AiChatQueuedMessage,
     type AiChatTool,
     type AiChatToolCallPart,
+    type AiChatUiResourcePart,
     answerInterrupt,
     approvalOf,
     documentNameOf,
@@ -83,6 +88,7 @@
     AiChatToolCallPart,
     AiChatToolCallState,
     AiChatToolResultPart,
+    AiChatUiResourcePart,
     AiChatVideoPart
   } from './messages'
 
@@ -119,6 +125,8 @@
     connection?: AiChatConnection
     /** The chat is rejoining a run after a reload, as `useChat` returns `resuming`. */
     resuming?: boolean
+    /** Turns a widget's resource into a trusted https address when it has no inline HTML; left out, only inline widgets show. */
+    resolveAppUrl?: (resource: McpAppFrameResource) => string | Promise<string>
   }
 
   const props = withDefaults(defineProps<AiChatProps>(), {
@@ -133,7 +141,8 @@
     moreMessages: false,
     loadingMore: false,
     connection: 'connected',
-    resuming: false
+    resuming: false,
+    resolveAppUrl: undefined
   })
 
   const emit = defineEmits<{
@@ -145,8 +154,24 @@
     approve: [event: MouseEvent, call: AiChatToolCallPart, input?: unknown]
     deny: [event: MouseEvent, call: AiChatToolCallPart]
     'remove-queued': [event: MouseEvent, item: AiChatQueuedMessage]
+    'app-message': [
+      message: McpAppFrameMessage,
+      part: AiChatUiResourcePart,
+      reply: (message: McpAppFrameMessage) => void
+    ]
     'load-more': [event: Event]
   }>()
+
+  const appFrames = new Map<string, InstanceType<typeof McpAppFrame>>()
+
+  function setAppFrame(key: string, el: unknown) {
+    if (el) appFrames.set(key, el as InstanceType<typeof McpAppFrame>)
+    else appFrames.delete(key)
+  }
+
+  function forwardAppMessage(key: string, part: AiChatUiResourcePart, message: McpAppFrameMessage) {
+    emit('app-message', message, part, (reply) => appFrames.get(key)?.post(reply))
+  }
 
   const { formatDate } = useLocale()
 
@@ -506,6 +531,16 @@
                     />
                   </template>
                 </SubagentCard>
+                <McpAppFrame
+                  v-else-if="segment.type === 'app'"
+                  :ref="(el) => setAppFrame(segment.key, el)"
+                  :resource="segment.part.resource"
+                  :title="
+                    (tools[segment.part.toolName] ?? { title: '' }).title || segment.part.toolName
+                  "
+                  :resolve-url="resolveAppUrl"
+                  @message="(message) => forwardAppMessage(segment.key, segment.part, message)"
+                />
               </template>
               <p
                 v-if="stopped(turn)"

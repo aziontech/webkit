@@ -90,7 +90,8 @@ export const navigation: ConsoleLayoutNavGroup[] = [
               { id: 'settings-build-deployment', label: 'Build and deployment' },
               { id: 'settings-environments', label: 'Environments' },
               { id: 'settings-users', label: 'Users management' },
-              { id: 'settings-teams', label: 'Teams and permissions' }
+              { id: 'settings-teams', label: 'Teams and permissions' },
+              { id: 'settings-ai-keys', label: 'AI provider keys', href: '/settings/ai-keys' }
             ]
           },
           {

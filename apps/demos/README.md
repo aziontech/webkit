@@ -27,6 +27,7 @@ pnpm preview:demos   # preview the build on http://localhost:4174
 | `/settings`                          | `settings/settings-form`                                     | Account settings with save all / per group / per card                                            |
 | `/onboarding` → `/plan` → `/profile` | `account/account-onboarding-form`                            | One wizard, its step bound to the route; creating the organization goes to the list              |
 | `/assistant`                         | `ai/ai-chat`                                                 | AI assistant: prompt, streamed answer with reasoning and sources, suggestions                    |
+| `/settings/ai-keys`                  | `ai/ai-api-key`                                              | Bring your own key: pick a provider, save, test and remove a key, kept in memory                 |
 
 `src/app.vue` is the `shell/shell-console` block: it composes `ConsoleLayout` once around `RouterView`
 with the demo's navigation (`src/lib/navigation.ts`), the breadcrumbs from the route meta, the ⌘K

@@ -59,6 +59,12 @@ export const routes: RouteRecordRaw[] = [
     meta: { breadcrumbs: [{ label: 'Account settings' }, { label: 'Profile' }] }
   },
   { path: '/assistant', name: 'assistant', component: () => import('./pages/ai-chat-page.vue') },
+  {
+    path: '/settings/ai-keys',
+    name: 'ai-keys',
+    component: () => import('./pages/ai-api-key-page.vue'),
+    meta: { breadcrumbs: [{ label: 'Account settings' }, { label: 'AI provider keys' }] }
+  },
   { path: '/:path(.*)*', redirect: '/resources' }
 ]
 

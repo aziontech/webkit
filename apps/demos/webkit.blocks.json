@@ -21,6 +21,26 @@
         }
       ]
     },
+    "ai/ai-api-key": {
+      "version": "5.13.0",
+      "files": [
+        {
+          "path": "src/blocks/ai-api-key.sample.ts",
+          "source": "blocks/ai/ai-api-key/sample.ts",
+          "variant": "Data",
+          "checksum": "sha256:fb899366711dc7a2760f114800b148cae4abe71246ffb3d4121fb2160b1db49b"
+        },
+        {
+          "path": "src/blocks/ai-api-key.vue",
+          "source": "blocks/ai/ai-api-key/ai-api-key.vue",
+          "variant": "Saved",
+          "imports": {
+            "./sample": "./ai-api-key.sample"
+          },
+          "checksum": "sha256:e57f261215541ea96db3289f1a34e172a1c682176831caddd83e5928cea1e272"
+        }
+      ]
+    },
     "ai/ai-chat": {
       "version": "5.13.0",
       "files": [
@@ -28,7 +48,7 @@
           "path": "src/blocks/ai-chat.messages.ts",
           "source": "blocks/ai/ai-chat/messages.ts",
           "variant": "Data",
-          "checksum": "sha256:2c8b15659f50d9f9bf763ea0c6e123c44e37ae2cceef18ff000d5547316cb2f3"
+          "checksum": "sha256:f14b9224f14fcd2cc72c6ca250d326826704a5dfce99e6f3744283e3fc1d2ff0"
         },
         {
           "path": "src/blocks/ai-chat.sample.ts",
@@ -47,7 +67,7 @@
             "./messages": "./ai-chat.messages",
             "./sample": "./ai-chat.sample"
           },
-          "checksum": "sha256:fed790e7316df8605203ed718f5d749fc6366e4b74b04d813c2c70ea62f82442"
+          "checksum": "sha256:ce254253b0d879222f42d5e02b0520496f8ba5987ae72de234730808a8b9a561"
         }
       ]
     },

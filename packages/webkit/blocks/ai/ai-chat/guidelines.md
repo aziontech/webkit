@@ -76,6 +76,10 @@ The `activity` parts of a response, and the `activity` messages between the read
 
 With `queue` the composer keeps Submit beside Stop while a response runs (`queueable`), and the waiting messages show in a `PromptQueue` above it, each removable. Above the composer a warning `StatusIndicator` reads Reconnecting while `connection` is `connecting` or `resuming` is set, and a danger `Alert` says the connection was lost while it is `disconnected` or `error`.
 
+### O. Tool widgets — `McpAppFrame`
+
+A `ui-resource` part (an MCP app a tool returned) draws as a `McpAppFrame` under its call: a sandboxed frame with no network and no reach into the page, titled from `tools` or the tool name. Inline HTML shows as it is; a widget given only by address shows when `resolveAppUrl` returns a trusted `https` address for it. Every message the widget sends reaches the app through `app-message` with a `reply` that answers the widget; the block never acts on one, so the app decides which tool a widget may call and sends sensitive ones through approval.
+
 ## Data
 
 The block draws a conversation in the message shape of TanStack AI: each message has an `id`, a `role` and its `parts` in order (`text`, `thinking`, `tool-call`, `tool-result`, `image`, `audio`, `video`, `document`, `activity`, `subagent`), so the values `useChat` from `@tanstack/ai-vue` returns go straight into its props, with no conversion. The block calls no model and depends on no AI library; `messages.ts` declares the same shape itself (`AiChatMessage`, `AiChatPart`, `AiChatTool`, `AiChatInterrupt`, re-exported from `ai-chat.vue`), so any source that produces it works. Parts it does not draw (structured output, `ui-resource`) are skipped. `sample.ts` holds the sample threads the variants pass. The draft in the composer stays local.
@@ -84,32 +88,34 @@ An activity step reads, by convention, `content.title` (else its `activityType`)
 
 What TanStack AI does not carry, the app adds in `metadata`: `sources` (the documents the response cites, numbered in order), `reasoningSeconds` (left out, the block measures the thinking time) and `stopped` (the block also marks the response that Stop ended). A message's time is its `createdAt`, formatted in the reader's locale.
 
-| Prop           | Type                            | What it does                                                                                                                                                        |
-| -------------- | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `messages`     | `AiChatMessage[]`               | The conversation, oldest first, as `useChat` returns it. Empty, the empty state renders.                                                                            |
-| `suggestions`  | `SuggestionGroupItem[]`         | The starter prompts under the empty state.                                                                                                                          |
-| `followUps`    | `SuggestionGroupItem[]`         | Follow-up questions under the last finished response.                                                                                                               |
-| `loading`      | `boolean`                       | `isLoading` from `useChat`: the last response thinks, then streams, and the composer shows Stop.                                                                    |
-| `error`        | `string \| Error`               | `error` from `useChat` shows the standard sentence on the last response with Try again; a string shows that sentence instead.                                       |
-| `tools`        | `Record<string, AiChatTool>`    | How each tool reads, by name: `title` for the call, `question`, `description`, `approveLabel`, `variant` `confirmationPhrase` and `editable` for its approval card. |
-| `interrupts`   | `interrupts` of `useChat`       | The pending approvals and questions; the approve button and Deny resolve the one whose `toolCallId` matches the call, and a generic one asks its question.          |
-| `queue`        | `queue` of `useChat`            | The messages waiting to be sent, shown above the composer; given, the composer sends while a response runs.                                                         |
-| `moreMessages` | `boolean`                       | `hasOlderMessages` of `useChat`: the log offers Load earlier messages.                                                                                              |
-| `loadingMore`  | `boolean`                       | The older messages are loading.                                                                                                                                     |
-| `connection`   | `connectionStatus` of `useChat` | `connecting` shows Reconnecting, `disconnected` or `error` shows Connection lost; default `connected`.                                                              |
-| `resuming`     | `boolean`                       | `resuming` of `useChat`: Reconnecting while a run is rejoined.                                                                                                      |
+| Prop            | Type                                      | What it does                                                                                                                                                        |
+| --------------- | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `messages`      | `AiChatMessage[]`                         | The conversation, oldest first, as `useChat` returns it. Empty, the empty state renders.                                                                            |
+| `suggestions`   | `SuggestionGroupItem[]`                   | The starter prompts under the empty state.                                                                                                                          |
+| `followUps`     | `SuggestionGroupItem[]`                   | Follow-up questions under the last finished response.                                                                                                               |
+| `loading`       | `boolean`                                 | `isLoading` from `useChat`: the last response thinks, then streams, and the composer shows Stop.                                                                    |
+| `error`         | `string \| Error`                         | `error` from `useChat` shows the standard sentence on the last response with Try again; a string shows that sentence instead.                                       |
+| `tools`         | `Record<string, AiChatTool>`              | How each tool reads, by name: `title` for the call, `question`, `description`, `approveLabel`, `variant` `confirmationPhrase` and `editable` for its approval card. |
+| `interrupts`    | `interrupts` of `useChat`                 | The pending approvals and questions; the approve button and Deny resolve the one whose `toolCallId` matches the call, and a generic one asks its question.          |
+| `queue`         | `queue` of `useChat`                      | The messages waiting to be sent, shown above the composer; given, the composer sends while a response runs.                                                         |
+| `moreMessages`  | `boolean`                                 | `hasOlderMessages` of `useChat`: the log offers Load earlier messages.                                                                                              |
+| `loadingMore`   | `boolean`                                 | The older messages are loading.                                                                                                                                     |
+| `connection`    | `connectionStatus` of `useChat`           | `connecting` shows Reconnecting, `disconnected` or `error` shows Connection lost; default `connected`.                                                              |
+| `resuming`      | `boolean`                                 | `resuming` of `useChat`: Reconnecting while a run is rejoined.                                                                                                      |
+| `resolveAppUrl` | `(resource) => string \| Promise<string>` | Gives a widget that has no inline HTML a trusted `https` address; left out, only inline widgets show.                                                               |
 
-| Event           | Payload                 | When                                                                                                                                              |
-| --------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `send`          | `(event, text)`         | The composer, a starter prompt or a follow-up: call `sendMessage(text)`.                                                                          |
-| `stop`          | `(event)`               | Stop while the response streams: call `stop()`. The block marks the stopped response.                                                             |
-| `retry`         | `(event, message)`      | Try again or Regenerate response: call `reload()`.                                                                                                |
-| `new-chat`      | `(event)`               | New chat: call `clear()`.                                                                                                                         |
-| `feedback`      | `({ message, value })`  | The reader rated a response.                                                                                                                      |
-| `approve`       | `(event, call, input?)` | The approve button on an approval card; `input` is the edited arguments of an `editable` tool. The block already resolved the matching interrupt. |
-| `remove-queued` | `(event, item)`         | Remove on a queued message: call `cancelQueued(item.id)`.                                                                                         |
-| `load-more`     | `(event)`               | Load earlier messages, or the top of the log reached: call `loadOlderMessages()`.                                                                 |
-| `deny`          | `(event, call)`         | Deny on an approval card; the block already resolved the matching interrupt.                                                                      |
+| Event           | Payload                  | When                                                                                                                                              |
+| --------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `send`          | `(event, text)`          | The composer, a starter prompt or a follow-up: call `sendMessage(text)`.                                                                          |
+| `stop`          | `(event)`                | Stop while the response streams: call `stop()`. The block marks the stopped response.                                                             |
+| `retry`         | `(event, message)`       | Try again or Regenerate response: call `reload()`.                                                                                                |
+| `new-chat`      | `(event)`                | New chat: call `clear()`.                                                                                                                         |
+| `feedback`      | `({ message, value })`   | The reader rated a response.                                                                                                                      |
+| `approve`       | `(event, call, input?)`  | The approve button on an approval card; `input` is the edited arguments of an `editable` tool. The block already resolved the matching interrupt. |
+| `remove-queued` | `(event, item)`          | Remove on a queued message: call `cancelQueued(item.id)`.                                                                                         |
+| `app-message`   | `(message, part, reply)` | A widget sent a message: check it against the tools the widget may call, then answer with `reply(message)`.                                       |
+| `load-more`     | `(event)`                | Load earlier messages, or the top of the log reached: call `loadOlderMessages()`.                                                                 |
+| `deny`          | `(event, call)`          | Deny on an approval card; the block already resolved the matching interrupt.                                                                      |
 
 To go live, install `@tanstack/ai`, `@tanstack/ai-vue` and the adapter of your model (`@tanstack/ai-anthropic`, `@tanstack/ai-openai`…), add a server route that streams the model, and bind `useChat` to the block:
 

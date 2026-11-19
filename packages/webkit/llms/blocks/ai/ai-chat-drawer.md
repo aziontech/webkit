@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/ai/ai-chat-drawer/ai-chat-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_block("ai/ai-chat-drawer")`
-- Components: [AgentActivity](../../components/agent-activity.md), [AgentQuestion](../../components/agent-question.md), [Alert](../../components/alert.md), [AudioPlayer](../../components/audio-player.md), [Button](../../components/button.md), [Card](../../components/card.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [Conversation](../../components/conversation.md), [CopyButton](../../components/copy-button.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [EmptyState](../../components/empty-state.md), [FilePreview](../../components/file-preview.md), [IconButton](../../components/icon-button.md), [ImageGallery](../../components/image-gallery.md), [KeyValueList](../../components/key-value-list.md), [PageHeader](../../components/page-header.md), `PanelHeader`, [PromptInput](../../components/prompt-input.md), [PromptQueue](../../components/prompt-queue.md), [Reasoning](../../components/reasoning.md), [Sources](../../components/sources.md), [StatusIndicator](../../components/status-indicator.md), [StreamingResponse](../../components/streaming-response.md), [SubagentCard](../../components/subagent-card.md), [SuggestionGroup](../../components/suggestion-group.md), [Tag](../../components/tag.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), `use-locale`, [VideoPlayer](../../components/video-player.md)
+- Components: [AgentActivity](../../components/agent-activity.md), [AgentQuestion](../../components/agent-question.md), [Alert](../../components/alert.md), [AudioPlayer](../../components/audio-player.md), [Button](../../components/button.md), [Card](../../components/card.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [Conversation](../../components/conversation.md), [CopyButton](../../components/copy-button.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [EmptyState](../../components/empty-state.md), [FilePreview](../../components/file-preview.md), [IconButton](../../components/icon-button.md), [ImageGallery](../../components/image-gallery.md), [KeyValueList](../../components/key-value-list.md), [McpAppFrame](../../components/mcp-app-frame.md), [PageHeader](../../components/page-header.md), `PanelHeader`, [PromptInput](../../components/prompt-input.md), [PromptQueue](../../components/prompt-queue.md), [Reasoning](../../components/reasoning.md), [Sources](../../components/sources.md), [StatusIndicator](../../components/status-indicator.md), [StreamingResponse](../../components/streaming-response.md), [SubagentCard](../../components/subagent-card.md), [SuggestionGroup](../../components/suggestion-group.md), [Tag](../../components/tag.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), `use-locale`, [VideoPlayer](../../components/video-player.md)
 - Skills: `webkit-ai-surfaces`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -82,6 +82,10 @@ The `activity` parts of a response, and the `activity` messages between the read
 
 With `queue` the composer keeps Submit beside Stop while a response runs (`queueable`), and the waiting messages show in a `PromptQueue` above it, each removable. Above the composer a warning `StatusIndicator` reads Reconnecting while `connection` is `connecting` or `resuming` is set, and a danger `Alert` says the connection was lost while it is `disconnected` or `error`.
 
+### N. Tool widgets — `McpAppFrame`
+
+A `ui-resource` part (an MCP app a tool returned) draws as a `McpAppFrame` under its call: a sandboxed frame with no network and no reach into the page, titled from `tools` or the tool name. Inline HTML shows as it is; a widget given only by address shows when `resolveAppUrl` returns a trusted `https` address for it. Every message the widget sends reaches the app through `app-message` with a `reply` that answers the widget; the block never acts on one, so the app decides which tool a widget may call and sends sensitive ones through approval.
+
 ## Data
 
 The block draws a conversation in the message shape of TanStack AI: each message has an `id`, a `role` and its `parts` in order (`text`, `thinking`, `tool-call`, `tool-result`, `image`, `audio`, `video`, `document`, `activity`, `subagent`), so the values `useChat` from `@tanstack/ai-vue` returns go straight into its props, with no conversion. The block calls no model and depends on no AI library; `messages.ts` declares the same shape itself (`AiChatDrawerMessage`, `AiChatDrawerPart`, `AiChatDrawerTool`, `AiChatDrawerInterrupt`, re-exported from `ai-chat-drawer.vue`), so any source that produces it works. Parts it does not draw (structured output, `ui-resource`) are skipped. `sample.ts` holds the sample threads the variants pass. The draft in the composer stays local.
@@ -90,33 +94,35 @@ An activity step reads, by convention, `content.title` (else its `activityType`)
 
 What TanStack AI does not carry, the app adds in `metadata`: `sources` (the documents the response cites, numbered in order), `reasoningSeconds` (left out, the block measures the thinking time) and `stopped` (the block also marks the response that Stop ended). A message's time is its `createdAt`, formatted in the reader's locale.
 
-| Prop           | Type                               | What it does                                                                                                                                                        |
-| -------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `messages`     | `AiChatDrawerMessage[]`            | The conversation, oldest first, as `useChat` returns it. Empty, the empty state renders.                                                                            |
-| `suggestions`  | `SuggestionGroupItem[]`            | The starter prompts under the empty state.                                                                                                                          |
-| `followUps`    | `SuggestionGroupItem[]`            | Follow-up questions under the last finished response.                                                                                                               |
-| `loading`      | `boolean`                          | `isLoading` from `useChat`: the last response thinks, then streams, and the composer shows Stop.                                                                    |
-| `error`        | `string \| Error`                  | `error` from `useChat` shows the standard sentence on the last response with Try again; a string shows that sentence instead.                                       |
-| `tools`        | `Record<string, AiChatDrawerTool>` | How each tool reads, by name: `title` for the call, `question`, `description`, `approveLabel`, `variant` `confirmationPhrase` and `editable` for its approval card. |
-| `interrupts`   | `interrupts` of `useChat`          | The pending approvals and questions; the approve button and Deny resolve the one whose `toolCallId` matches the call, and a generic one asks its question.          |
-| `queue`        | `queue` of `useChat`               | The messages waiting to be sent, shown above the composer; given, the composer sends while a response runs.                                                         |
-| `moreMessages` | `boolean`                          | `hasOlderMessages` of `useChat`: the log offers Load earlier messages.                                                                                              |
-| `loadingMore`  | `boolean`                          | The older messages are loading.                                                                                                                                     |
-| `connection`   | `connectionStatus` of `useChat`    | `connecting` shows Reconnecting, `disconnected` or `error` shows Connection lost; default `connected`.                                                              |
-| `resuming`     | `boolean`                          | `resuming` of `useChat`: Reconnecting while a run is rejoined.                                                                                                      |
-| `v-model:open` | `boolean`                          | Whether the drawer is open (open by default); Agent opens it and its close button closes it.                                                                        |
+| Prop            | Type                                      | What it does                                                                                                                                                        |
+| --------------- | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `messages`      | `AiChatDrawerMessage[]`                   | The conversation, oldest first, as `useChat` returns it. Empty, the empty state renders.                                                                            |
+| `suggestions`   | `SuggestionGroupItem[]`                   | The starter prompts under the empty state.                                                                                                                          |
+| `followUps`     | `SuggestionGroupItem[]`                   | Follow-up questions under the last finished response.                                                                                                               |
+| `loading`       | `boolean`                                 | `isLoading` from `useChat`: the last response thinks, then streams, and the composer shows Stop.                                                                    |
+| `error`         | `string \| Error`                         | `error` from `useChat` shows the standard sentence on the last response with Try again; a string shows that sentence instead.                                       |
+| `tools`         | `Record<string, AiChatDrawerTool>`        | How each tool reads, by name: `title` for the call, `question`, `description`, `approveLabel`, `variant` `confirmationPhrase` and `editable` for its approval card. |
+| `interrupts`    | `interrupts` of `useChat`                 | The pending approvals and questions; the approve button and Deny resolve the one whose `toolCallId` matches the call, and a generic one asks its question.          |
+| `queue`         | `queue` of `useChat`                      | The messages waiting to be sent, shown above the composer; given, the composer sends while a response runs.                                                         |
+| `moreMessages`  | `boolean`                                 | `hasOlderMessages` of `useChat`: the log offers Load earlier messages.                                                                                              |
+| `loadingMore`   | `boolean`                                 | The older messages are loading.                                                                                                                                     |
+| `connection`    | `connectionStatus` of `useChat`           | `connecting` shows Reconnecting, `disconnected` or `error` shows Connection lost; default `connected`.                                                              |
+| `resuming`      | `boolean`                                 | `resuming` of `useChat`: Reconnecting while a run is rejoined.                                                                                                      |
+| `resolveAppUrl` | `(resource) => string \| Promise<string>` | Gives a widget that has no inline HTML a trusted `https` address; left out, only inline widgets show.                                                               |
+| `v-model:open`  | `boolean`                                 | Whether the drawer is open (open by default); Agent opens it and its close button closes it.                                                                        |
 
-| Event           | Payload                 | When                                                                                                                                              |
-| --------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `send`          | `(event, text)`         | The composer, a starter prompt or a follow-up: call `sendMessage(text)`.                                                                          |
-| `stop`          | `(event)`               | Stop while the response streams: call `stop()`. The block marks the stopped response.                                                             |
-| `retry`         | `(event, message)`      | Try again or Regenerate response: call `reload()`.                                                                                                |
-| `new-chat`      | `(event)`               | New chat: call `clear()`.                                                                                                                         |
-| `feedback`      | `({ message, value })`  | The reader rated a response.                                                                                                                      |
-| `approve`       | `(event, call, input?)` | The approve button on an approval card; `input` is the edited arguments of an `editable` tool. The block already resolved the matching interrupt. |
-| `remove-queued` | `(event, item)`         | Remove on a queued message: call `cancelQueued(item.id)`.                                                                                         |
-| `load-more`     | `(event)`               | Load earlier messages, or the top of the log reached: call `loadOlderMessages()`.                                                                 |
-| `deny`          | `(event, call)`         | Deny on an approval card; the block already resolved the matching interrupt.                                                                      |
+| Event           | Payload                  | When                                                                                                                                              |
+| --------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `send`          | `(event, text)`          | The composer, a starter prompt or a follow-up: call `sendMessage(text)`.                                                                          |
+| `stop`          | `(event)`                | Stop while the response streams: call `stop()`. The block marks the stopped response.                                                             |
+| `retry`         | `(event, message)`       | Try again or Regenerate response: call `reload()`.                                                                                                |
+| `new-chat`      | `(event)`                | New chat: call `clear()`.                                                                                                                         |
+| `feedback`      | `({ message, value })`   | The reader rated a response.                                                                                                                      |
+| `approve`       | `(event, call, input?)`  | The approve button on an approval card; `input` is the edited arguments of an `editable` tool. The block already resolved the matching interrupt. |
+| `remove-queued` | `(event, item)`          | Remove on a queued message: call `cancelQueued(item.id)`.                                                                                         |
+| `app-message`   | `(message, part, reply)` | A widget sent a message: check it against the tools the widget may call, then answer with `reply(message)`.                                       |
+| `load-more`     | `(event)`                | Load earlier messages, or the top of the log reached: call `loadOlderMessages()`.                                                                 |
+| `deny`          | `(event, call)`          | Deny on an approval card; the block already resolved the matching interrupt.                                                                      |
 
 To go live, install `@tanstack/ai`, `@tanstack/ai-vue` and the adapter of your model (`@tanstack/ai-anthropic`, `@tanstack/ai-openai`…), add a server route that streams the model, and bind `useChat` to the block:
 
@@ -262,6 +268,10 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
   import IconButton from '@aziontech/webkit/icon-button'
   import ImageGallery from '@aziontech/webkit/image-gallery'
   import KeyValueList from '@aziontech/webkit/key-value-list'
+  import McpAppFrame, {
+    type McpAppFrameMessage,
+    type McpAppFrameResource
+  } from '@aziontech/webkit/mcp-app-frame'
   import PageHeader from '@aziontech/webkit/page-header'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import type { PromptInputStatus } from '@aziontech/webkit/prompt-input'
@@ -289,6 +299,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
     type AiChatDrawerQueuedMessage,
     type AiChatDrawerTool,
     type AiChatDrawerToolCallPart,
+    type AiChatDrawerUiResourcePart,
     answerInterrupt,
     approvalOf,
     documentNameOf,
@@ -332,6 +343,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
     AiChatDrawerToolCallPart,
     AiChatDrawerToolCallState,
     AiChatDrawerToolResultPart,
+    AiChatDrawerUiResourcePart,
     AiChatDrawerVideoPart
   } from './messages'
 
@@ -368,6 +380,8 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
     connection?: AiChatDrawerConnection
     /** The chat is rejoining a run after a reload, as `useChat` returns `resuming`. */
     resuming?: boolean
+    /** Turns a widget's resource into a trusted https address when it has no inline HTML; left out, only inline widgets show. */
+    resolveAppUrl?: (resource: McpAppFrameResource) => string | Promise<string>
   }
 
   const props = withDefaults(defineProps<AiChatDrawerProps>(), {
@@ -382,7 +396,8 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
     moreMessages: false,
     loadingMore: false,
     connection: 'connected',
-    resuming: false
+    resuming: false,
+    resolveAppUrl: undefined
   })
 
   const emit = defineEmits<{
@@ -394,11 +409,31 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
     approve: [event: MouseEvent, call: AiChatDrawerToolCallPart, input?: unknown]
     deny: [event: MouseEvent, call: AiChatDrawerToolCallPart]
     'remove-queued': [event: MouseEvent, item: AiChatDrawerQueuedMessage]
+    'app-message': [
+      message: McpAppFrameMessage,
+      part: AiChatDrawerUiResourcePart,
+      reply: (message: McpAppFrameMessage) => void
+    ]
     'load-more': [event: Event]
   }>()
 
   /** Whether the assistant drawer is open; Agent opens it and its close button closes it. */
   const open = defineModel<boolean>('open', { default: true })
+
+  const appFrames = new Map<string, InstanceType<typeof McpAppFrame>>()
+
+  function setAppFrame(key: string, el: unknown) {
+    if (el) appFrames.set(key, el as InstanceType<typeof McpAppFrame>)
+    else appFrames.delete(key)
+  }
+
+  function forwardAppMessage(
+    key: string,
+    part: AiChatDrawerUiResourcePart,
+    message: McpAppFrameMessage
+  ) {
+    emit('app-message', message, part, (reply) => appFrames.get(key)?.post(reply))
+  }
 
   const { formatDate } = useLocale()
 
@@ -814,6 +849,19 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
                           />
                         </template>
                       </SubagentCard>
+                      <McpAppFrame
+                        v-else-if="segment.type === 'app'"
+                        :ref="(el) => setAppFrame(segment.key, el)"
+                        :resource="segment.part.resource"
+                        :title="
+                          (tools[segment.part.toolName] ?? { title: '' }).title ||
+                          segment.part.toolName
+                        "
+                        :resolve-url="resolveAppUrl"
+                        @message="
+                          (message) => forwardAppMessage(segment.key, segment.part, message)
+                        "
+                      />
                     </template>
                     <p
                       v-if="stopped(turn)"
@@ -1058,6 +1106,15 @@ export interface AiChatDrawerSubagentPart {
   }
 }
 
+/** An interactive widget a tool returned (an MCP app), drawn in a sandboxed frame. */
+export interface AiChatDrawerUiResourcePart {
+  type: 'ui-resource'
+  resource: { uri: string; mimeType: string; text?: string; blob?: string }
+  toolCallId: string
+  toolName: string
+  serverId?: string
+}
+
 /** A part the conversation does not draw, such as structured output. */
 export interface AiChatDrawerOtherPart {
   type: string
@@ -1075,6 +1132,7 @@ export type AiChatDrawerPart =
   | AiChatDrawerDocumentPart
   | AiChatDrawerActivityPart
   | AiChatDrawerSubagentPart
+  | AiChatDrawerUiResourcePart
   | AiChatDrawerOtherPart
 
 /** What the app adds to a message beside its parts. */
@@ -1167,6 +1225,10 @@ export type AiChatDrawerSegment =
   | { type: 'video'; key: string; src: string; mimeType: string }
   | { type: 'document'; key: string; part: AiChatDrawerDocumentPart }
   | { type: 'subagent'; key: string; part: AiChatDrawerSubagentPart }
+  | { type: 'app'; key: string; part: AiChatDrawerUiResourcePart }
+
+export const isUiResourcePart = (part: AiChatDrawerPart): part is AiChatDrawerUiResourcePart =>
+  part.type === 'ui-resource'
 
 export const isTextPart = (part: AiChatDrawerPart): part is AiChatDrawerTextPart =>
   part.type === 'text'
@@ -1344,6 +1406,8 @@ export function segmentsOf(
         segments.push({ type: 'document', key: part.id ?? `document-${index}`, part })
     } else if (isSubagentPart(part)) {
       segments.push({ type: 'subagent', key: `subagent-${index}`, part })
+    } else if (isUiResourcePart(part)) {
+      segments.push({ type: 'app', key: `app-${part.toolCallId}-${index}`, part })
     }
   })
   return segments

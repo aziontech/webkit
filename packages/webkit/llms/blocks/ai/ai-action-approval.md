@@ -610,6 +610,15 @@ export interface AiActionApprovalSubagentPart {
   }
 }
 
+/** An interactive widget a tool returned (an MCP app), drawn in a sandboxed frame. */
+export interface AiActionApprovalUiResourcePart {
+  type: 'ui-resource'
+  resource: { uri: string; mimeType: string; text?: string; blob?: string }
+  toolCallId: string
+  toolName: string
+  serverId?: string
+}
+
 /** A part the conversation does not draw, such as structured output. */
 export interface AiActionApprovalOtherPart {
   type: string
@@ -627,6 +636,7 @@ export type AiActionApprovalPart =
   | AiActionApprovalDocumentPart
   | AiActionApprovalActivityPart
   | AiActionApprovalSubagentPart
+  | AiActionApprovalUiResourcePart
   | AiActionApprovalOtherPart
 
 /** What the app adds to a message beside its parts. */
@@ -719,6 +729,11 @@ export type AiActionApprovalSegment =
   | { type: 'video'; key: string; src: string; mimeType: string }
   | { type: 'document'; key: string; part: AiActionApprovalDocumentPart }
   | { type: 'subagent'; key: string; part: AiActionApprovalSubagentPart }
+  | { type: 'app'; key: string; part: AiActionApprovalUiResourcePart }
+
+export const isUiResourcePart = (
+  part: AiActionApprovalPart
+): part is AiActionApprovalUiResourcePart => part.type === 'ui-resource'
 
 export const isTextPart = (part: AiActionApprovalPart): part is AiActionApprovalTextPart =>
   part.type === 'text'
@@ -897,6 +912,8 @@ export function segmentsOf(
         segments.push({ type: 'document', key: part.id ?? `document-${index}`, part })
     } else if (isSubagentPart(part)) {
       segments.push({ type: 'subagent', key: `subagent-${index}`, part })
+    } else if (isUiResourcePart(part)) {
+      segments.push({ type: 'app', key: `app-${part.toolCallId}-${index}`, part })
     }
   })
   return segments

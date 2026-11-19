@@ -589,4 +589,44 @@ describe('ai/ai-chat', () => {
     await view.rerender({ messages: thread, connection: 'connected' })
     expect(view.container.textContent).not.toContain('Connection lost')
   })
+
+  it('draws a tool widget in a sandboxed frame and lets the app answer it', async () => {
+    const replies: string[] = []
+    const script = `addEventListener('message', (event) => { if (event.data && event.data.id === 7) parent.postMessage({ type: 'notify', payload: { message: event.data.result.ok } }, '*') }); parent.postMessage({ jsonrpc: '2.0', id: 7, method: 'ui/initialize', params: {} }, '*')`
+    const widget: AiChatMessage = {
+      id: 'a1',
+      role: 'assistant',
+      parts: [
+        {
+          type: 'ui-resource',
+          resource: {
+            uri: 'ui://billing/plan-picker',
+            mimeType: 'text/html;profile=mcp-app',
+            text: `<p>Plans</p><script>${script}<${'/'}script>`
+          },
+          toolCallId: 'call-1',
+          toolName: 'pick_plan'
+        }
+      ]
+    }
+    const view = render(AiChat, {
+      props: {
+        messages: [thread[0], widget],
+        tools: { pick_plan: { title: 'Plan picker' } },
+        'onApp-message': (message: unknown, _part: unknown, reply: (answer: unknown) => void) => {
+          if (typeof message === 'object' && message && 'jsonrpc' in message) {
+            reply({ jsonrpc: '2.0', id: 7, result: { ok: 'answered' } })
+          } else replies.push(JSON.stringify(message))
+        }
+      }
+    })
+    const frame = view.container.querySelector('[data-testid="mcp-app-frame__view"]')
+    expect(frame).toHaveAttribute('title', 'Plan picker')
+    expect(frame).toHaveAttribute('sandbox', 'allow-scripts')
+    await waitFor(() =>
+      expect(replies).toEqual([
+        JSON.stringify({ type: 'notify', payload: { message: 'answered' } })
+      ])
+    )
+  })
 })

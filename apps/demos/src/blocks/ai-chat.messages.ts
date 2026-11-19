@@ -121,6 +121,15 @@ export interface AiChatSubagentPart {
   }
 }
 
+/** An interactive widget a tool returned (an MCP app), drawn in a sandboxed frame. */
+export interface AiChatUiResourcePart {
+  type: 'ui-resource'
+  resource: { uri: string; mimeType: string; text?: string; blob?: string }
+  toolCallId: string
+  toolName: string
+  serverId?: string
+}
+
 /** A part the conversation does not draw, such as structured output. */
 export interface AiChatOtherPart {
   type: string
@@ -138,6 +147,7 @@ export type AiChatPart =
   | AiChatDocumentPart
   | AiChatActivityPart
   | AiChatSubagentPart
+  | AiChatUiResourcePart
   | AiChatOtherPart
 
 /** What the app adds to a message beside its parts. */
@@ -225,6 +235,10 @@ export type AiChatSegment =
   | { type: 'video'; key: string; src: string; mimeType: string }
   | { type: 'document'; key: string; part: AiChatDocumentPart }
   | { type: 'subagent'; key: string; part: AiChatSubagentPart }
+  | { type: 'app'; key: string; part: AiChatUiResourcePart }
+
+export const isUiResourcePart = (part: AiChatPart): part is AiChatUiResourcePart =>
+  part.type === 'ui-resource'
 
 export const isTextPart = (part: AiChatPart): part is AiChatTextPart => part.type === 'text'
 
@@ -398,6 +412,8 @@ export function segmentsOf(
         segments.push({ type: 'document', key: part.id ?? `document-${index}`, part })
     } else if (isSubagentPart(part)) {
       segments.push({ type: 'subagent', key: `subagent-${index}`, part })
+    } else if (isUiResourcePart(part)) {
+      segments.push({ type: 'app', key: `app-${part.toolCallId}-${index}`, part })
     }
   })
   return segments
