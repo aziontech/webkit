@@ -151,6 +151,7 @@
         :dir="doc.exampleDir"
         :example="firstExample"
         :anchor="anchor(firstExample.name)"
+        :heading-level="2"
       />
 
       <section
