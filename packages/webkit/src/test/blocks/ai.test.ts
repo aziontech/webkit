@@ -129,6 +129,22 @@ describe('ai', () => {
     expect(view.emitted('new-chat')).toHaveLength(1)
   })
 
+  it('ai-chat-drawer puts focus in the prompt on open, never on New chat', async () => {
+    const view = render(AiChatDrawer, {
+      props: {
+        open: false,
+        'onUpdate:open': (open: boolean) => view.rerender({ open }),
+        messages: [
+          { id: 'u1', role: 'user', parts: [{ type: 'text', content: 'Is it cached?' }] },
+          { id: 'a1', role: 'assistant', parts: [{ type: 'text', content: 'Yes.' }] }
+        ]
+      }
+    })
+    await fireEvent.click(view.getByRole('button', { name: 'Agent' }))
+    await waitFor(() => expect(document.activeElement?.tagName).toBe('TEXTAREA'))
+    expect(document.activeElement?.getAttribute('aria-label')).not.toBe('New chat')
+  })
+
   it('ai-chat-drawer opens the assistant from Agent without dimming the page', async () => {
     const view = render(AiChatDrawer)
     await fireEvent.click(view.getByRole('button', { name: 'Agent' }))
