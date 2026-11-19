@@ -116,6 +116,31 @@ describe('edit-function data contract', () => {
     expect(view.container.textContent).toContain('1 field')
   })
 
+  it('asks before Remove form wipes the fields', async () => {
+    const view = render(FunctionEditorArguments)
+    await userEvent.click(view.getByRole('button', { name: 'Remove form' }))
+    const dialog = await waitFor(() => {
+      const found = document.querySelector<HTMLElement>('[role="alertdialog"]')
+      expect(found).toBeTruthy()
+      return found!
+    }, wait)
+    expect(view.container.textContent).toContain('2 fields')
+    await userEvent.click(buttonIn(dialog, 'Cancel'))
+    await waitFor(() => expect(document.querySelector('[role="alertdialog"]')).toBeNull(), wait)
+    expect(view.container.textContent).toContain('2 fields')
+    await userEvent.click(view.getByRole('button', { name: 'Remove form' }))
+    const again = await waitFor(() => {
+      const found = document.querySelector<HTMLElement>('[role="alertdialog"]')
+      expect(found).toBeTruthy()
+      return found!
+    }, wait)
+    await userEvent.click(buttonIn(again, 'Remove form'))
+    await waitFor(
+      () => expect(view.container.textContent).toContain('This form has no fields'),
+      wait
+    )
+  })
+
   it('shows the empty form state for fields []', async () => {
     const view = render(EditFunction, { props: { defaultDocument: 'arguments', fields: [] } })
     await waitFor(() => expect(view.container.textContent).toContain('This form has no fields'))

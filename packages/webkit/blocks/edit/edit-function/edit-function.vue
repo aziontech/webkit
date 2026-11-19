@@ -3,6 +3,7 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import CodeEditor, { type CodeEditorMonacoModule } from '@aziontech/webkit/code-editor'
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import EmptyState from '@aziontech/webkit/empty-state'
   import FieldError from '@aziontech/webkit/field-error'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -300,9 +301,11 @@
       target?.focus()
     })
   }
+  const removeFormOpen = ref(false)
   const removeForm = () => {
     form.schema = cleanSchema
     draftFields.value = []
+    removeFormOpen.value = false
   }
 
   const onTypeChange = (field: SchemaField) => {
@@ -470,14 +473,24 @@
                           :disabled="saving"
                           @click="addField"
                         />
-                        <Button
-                          label="Remove form"
-                          variant="outline"
-                          size="medium"
-                          icon="az az-x"
-                          :disabled="saving"
-                          @click="removeForm"
-                        />
+                        <ConfirmDialog
+                          v-model:open="removeFormOpen"
+                          title="Remove form"
+                          :description="`The ${draftFields.length} ${draftFields.length === 1 ? 'field' : 'fields'} of the argument form are removed. Discard brings them back until you save.`"
+                          confirm-label="Remove form"
+                          size="small"
+                          @confirm="removeForm"
+                        >
+                          <template #trigger>
+                            <Button
+                              label="Remove form"
+                              variant="outline"
+                              size="medium"
+                              icon="az az-x"
+                              :disabled="saving"
+                            />
+                          </template>
+                        </ConfirmDialog>
                       </div>
                     </div>
                     <div
