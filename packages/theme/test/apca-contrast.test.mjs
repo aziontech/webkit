@@ -31,19 +31,18 @@ const STATUS = ['success', 'warning', 'danger', 'info']
 
 const PAIRS = [
   ...SURFACES.map((bg) => ['body', '--text-default', bg]),
-  ...[
-    '--text-muted',
-    '--text-brand',
-    '--text-link',
-    '--text-link-hover',
-    '--text-danger'
-  ].flatMap((fg) => SURFACES.map((bg) => ['text', fg, bg])),
+  ...['--text-muted', '--text-brand', '--text-link', '--text-link-hover', '--text-danger'].flatMap(
+    (fg) => SURFACES.map((bg) => ['text', fg, bg])
+  ),
   ...FILLS.map((fill) => ['text', `--${fill}-foreground`, `--${fill}`]),
   ['text', '--brand-blue-foreground', '--brand-blue'],
   ['text', '--text-contrast', '--bg-contrast'],
   ['text', '--chart-tooltip-text', '--chart-tooltip-bg'],
   ['text', '--chart-tooltip-muted', '--chart-tooltip-bg'],
   ...STATUS.flatMap((s) => SURFACES.map((bg) => ['icon', `--${s}-foreground`, bg])),
+  ...['success', 'warning', 'danger'].flatMap((s) =>
+    SURFACES.map((bg) => ['icon', `--${s}-mark`, bg])
+  ),
   ...[
     ...[1, 2, 3, 4, 5, 6, 7, 8].map((n) => `--chart-series-${n}`),
     '--chart-series-other',

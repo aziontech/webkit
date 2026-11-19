@@ -80,6 +80,14 @@ export const GATES = [
     steps: [['node', 'scripts/check-authoring-docs.mjs']]
   },
   {
+    id: 'docs-markdown',
+    label: "Docs Markdown: Do / Don't pairs, no task lists, comments dropped",
+    steps: [
+      ['node', 'scripts/check-docs-markdown.mjs'],
+      ['node', '--test', '../../apps/docs/test/content.test.ts']
+    ]
+  },
+  {
     id: 'tests',
     label: 'Every component has a test',
     steps: [['node', 'scripts/check-tests.mjs']]
