@@ -8,9 +8,9 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
   node_id: 2053:7649
-checksum: 25827fa440ca7971d838c1066a523f4c4f917f4c7283a0770cfa6e3f6c4d4065
+checksum: 0d1ebec7c97492b47e2170236a7bb71587a8181f7ccaa1014212023b6c8435ed
 created: 2026-11-15
-last_updated: 2026-11-18
+last_updated: 2026-11-19
 ---
 
 # DataTable — Component Spec
@@ -269,7 +269,7 @@ Per-column slots are name-computed at runtime, one per column id, so they are ty
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `selected`
-- Data states: `loading` (skeleton rows, `aria-busy`), `error` (the `error` prop set: rows replaced by the `error` slot in an `alert` region, `__error`), `empty` (no rows: the `empty` slot, `__empty`). Precedence: loading, then error, then empty.
+- Data states: `loading` (skeleton rows, `aria-busy`; the footer states no count it does not know: with no rows yet it shows one `Skeleton` line (`__footer-loading`) in place of the `Pagination`, and with a known total it keeps the page controls and shows the `Skeleton` in place of the `Showing … of …` text), `error` (the `error` prop set: rows replaced by the `error` slot in an `alert` region, `__error`), `empty` (no rows: the `empty` slot, `__empty`). Precedence: loading, then error, then empty.
 - The viewport is always a scroll container (`overflow: auto`): horizontal scroll is automatic when columns overflow; vertical scroll engages only when `maxHeight` constrains the content.
 - `data-frozen` on TableHeader (`true`), TableHeadCell / TableCell (`start` | `end`), and TableRow (`true`). A frozen head/body cell renders a CSS-only fade (gradient pseudo-element) just outside its inner edge that dissolves the horizontally scrolling content into the row background (`from-transparent` → `var(--table-row-bg)`, the row-published color, so it matches the row on hover/selected) — `frozen=start` fades on the right, `frozen=end` on the left. The fade tints nothing; it only masks the content sliding under the pinned column.
 - `data-state` on TableRow: `selected` | `unselected`; `data-selected` mirrors the `selected` prop; `aria-selected` set when selected.
