@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: 819c78238347eef713334d3e91219e8d2ac0c9de7eae70bfdd7bb9a0bab9deec
+checksum: 4ded841892ba857a13e9e8d949f28574e3b8c91dd55b1d49747135b59d2cb135
 created: 2026-11-11
 last_updated: 2026-11-16
 ---
@@ -112,6 +112,7 @@ _none_
 ## Responsive
 
 - Fills its column up to `--container-xs`; fixed at that width from large.
+- Touch: the copy button is large; the read-only command field can take focus, so on coarse pointers (`pointer-coarse:`) its text steps up to 16 px (`text-label-code-lg`) and iOS Safari does not zoom the page.
 
 ## Performance
 

@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
   node_id: 2053:7649
-checksum: 0e5a833caa6a54154f21929a7e79ad9d8c747ef658eaf9d9d764fc5c7d29ac71
+checksum: 9fc962cf942feef6ebdf12cbe93ee913bd445e4469cc6b48bbf9aaa2d85dc52c
 created: 2026-11-15
 last_updated: 2026-11-19
 ---
@@ -252,7 +252,7 @@ Fixed sizes (no token exists for them): cell and header height `min-h-10` (40 px
 - Narrow (≤ 640 px or a narrow container): the viewport scrolls sideways inside the grid, with the frozen first column still in view; the toolbar wraps.
 - Touch: cells and headers are 44 px high under `pointer: coarse` (40 px otherwise); the resize handle's hit area is 44 px under `pointer: coarse` (24 px otherwise); editing opens on a second tap; nothing is hover-only.
 - Reflow: a data grid is the WCAG 1.4.10 exception for two-dimensional content: the grid scrolls horizontally inside its frame, never the page.
-- Touch: on coarse pointers (`pointer-coarse:`) the cell editor's text steps up to 16 px (`text-body-md`), so iOS Safari does not zoom the page while editing a cell.
+- Touch: on coarse pointers (`pointer-coarse:`) the cell editor's text, the text field and the native `select` alike, steps up to 16 px (`text-body-md`), so iOS Safari does not zoom the page while editing a cell.
 
 ## Performance
 

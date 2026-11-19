@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 8
 template: 2
-checksum: c09da8179b25a1d6697880dea45196a6ad148c91ae9a635dd5eb5e5b23a21e0c
+checksum: 1e5311955859c934a858d78dc57ae345ba56087a259752f4ae555c52c537c3b7
 created: 2026-11-11
 last_updated: 2026-11-17
 ---
@@ -166,7 +166,7 @@ Built-in query grammar: `clause (AND | OR clause)*`, where a clause is `<propert
 ## States
 
 - Visual states: `default`, `focus-visible`, `open` (suggestions shown), `disabled`, `invalid` (query mode: after Enter or blur on a query that fails the check, then live until it passes or is cleared)
-- `data-mode` on the field wrapper mirrors `mode`; query mode sets the typed text in the code type (`text-label-code-sm`)
+- `data-mode` on the field wrapper mirrors `mode`; query mode sets the typed text in the code type through the field's `monospace` prop (`text-label-code-sm`, 16 px `text-label-code-lg` on coarse pointers)
 - `aria-expanded` on the field mirrors the open suggestions; `data-active` marks the active option
 - `data-disabled` mirrors the `disabled` prop; while disabled nothing is added, removed or submitted (no `update:query`, no `submit`)
 - `loading` (values): a `Loading values` row with a spinner in the suggestions while `loadValues` is pending, `aria-busy` on the listbox; `error`: a `Could not load values` row when it rejects. A newer call wins over a stale one.
@@ -264,7 +264,7 @@ Built-in query grammar: `clause (AND | OR clause)*`, where a clause is `<propert
 
 - Container queries: `@container/property-filter` on the root; the token row wraps.
 - Narrow (≤ 640 px or a narrow container): the field takes the full width, tokens wrap onto several lines, the count moves to the end of the last line.
-- Touch: options are 44 px high on `pointer: coarse`; nothing depends on hover.
+- Touch: options are 44 px high on `pointer: coarse`; on coarse pointers (`pointer-coarse:`) the typed text steps up to 16 px (`text-body-md`, `text-label-code-lg` in query mode), so iOS Safari does not zoom the page on focus; nothing depends on hover.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom; long tokens truncate inside the chip.
 
 ## Performance

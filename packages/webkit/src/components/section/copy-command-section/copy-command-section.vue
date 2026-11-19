@@ -50,7 +50,7 @@
         dir="ltr"
         :value="value"
         :aria-label="label"
-        class="h-full min-w-0 flex-1 border-0 bg-(--bg-surface) px-(--spacing-md) text-label-code-sm text-(--text-default) outline-none"
+        class="h-full min-w-0 flex-1 border-0 bg-(--bg-surface) px-(--spacing-md) text-label-code-sm pointer-coarse:text-label-code-lg text-(--text-default) outline-none"
       />
       <CopyButton
         size="large"

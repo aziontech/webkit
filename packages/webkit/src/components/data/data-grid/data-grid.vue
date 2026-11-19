@@ -721,7 +721,7 @@
                 :value="draft"
                 :aria-label="columnAt(col - 1)?.header"
                 :data-testid="`${testId}__editor`"
-                class="size-full min-h-10 rounded-(--shape-control) border-none bg-(--bg-surface) px-(--spacing-sm) text-body-sm text-(--text-default) outline-none ring-2 ring-inset ring-(--ring-color) pointer-coarse:min-h-11"
+                class="size-full min-h-10 rounded-(--shape-control) border-none bg-(--bg-surface) px-(--spacing-sm) text-body-sm pointer-coarse:text-body-md text-(--text-default) outline-none ring-2 ring-inset ring-(--ring-color) pointer-coarse:min-h-11"
                 @keydown="onEditorKeydown"
                 @change="onEditorInput"
                 @blur="commit"

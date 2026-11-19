@@ -702,7 +702,7 @@
     <div
       ref="fieldEl"
       :data-mode="mode"
-      class="w-full min-w-0 [&[data-mode=query]_input]:text-label-code-sm"
+      class="w-full min-w-0"
     >
       <Input
         :model-value="isQuery ? queryText : draft"
@@ -723,6 +723,7 @@
         "
         :disabled="disabled"
         :invalid="showError"
+        :monospace="isQuery"
         :data-testid="`${testId}__input`"
         size="medium"
         @update:model-value="onInput"

@@ -47,7 +47,7 @@
   >
     <select
       :value="model"
-      class="h-full w-full cursor-pointer appearance-none rounded-(--shape-control) border-0 bg-transparent ps-(--spacing-sm) pe-7 text-label-sm text-(--text-muted) focus-visible:outline-none pointer-coarse:-my-2 pointer-coarse:h-11 [&>option]:bg-(--bg-surface) [&>option]:text-(--text-default)"
+      class="h-full w-full cursor-pointer appearance-none rounded-(--shape-control) border-0 bg-transparent ps-(--spacing-sm) pe-7 text-label-sm pointer-coarse:text-body-md text-(--text-muted) focus-visible:outline-none pointer-coarse:-my-2 pointer-coarse:h-11 [&>option]:bg-(--bg-surface) [&>option]:text-(--text-default)"
       :aria-label="t('pagination.pageSize')"
       @change="onChange"
     >

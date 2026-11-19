@@ -45,12 +45,12 @@ const template = (source) => {
 }
 
 const typedControls = (source) =>
-  [...template(source).matchAll(/<(input|textarea)\b(?:[^>"']|"[^"]*"|'[^']*')*>/g)]
+  [...template(source).matchAll(/<(input|textarea|select)\b(?:[^>"']|"[^"]*"|'[^']*')*>/g)]
     .map((match) => match[0])
     .filter((tag) => {
       const type = tag.match(/\stype="([^"]*)"/)?.[1]
       if (type && NOT_TYPED.has(type)) return false
-      return !/\sreadonly(?=[\s/>])/.test(tag)
+      return !/\stabindex="-1"/.test(tag)
     })
 
 const sixteenOnTouch = (tag) =>
@@ -66,7 +66,7 @@ test('the theme still has 16px type classes to step up to', () => {
   assert.ok(!SIXTEEN.includes('text-label-sm'))
 })
 
-test('every typed native control steps its text up to 16px on coarse pointers', () => {
+test('every typed native control, select and focusable read-only field steps its text up to 16px on coarse pointers', () => {
   const missing = []
   for (const dir of SCANNED) {
     for (const file of vueFiles(join(ROOT, dir))) {
