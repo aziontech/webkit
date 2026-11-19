@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 67a5941d8a29452b2efcf9487b659a3e10de5ed10cef326e9f32a8b325e90681
+checksum: 77cba97eb4660866eb016f5dc13d00ae38dcd22879bfab8a4a15fb24c8655fd2
 created: 2026-11-16
 last_updated: 2026-11-16
 ---
@@ -113,7 +113,6 @@ The link appears and disappears instantly on focus and blur; no transition or an
 - Contrast: `--text-default` on `--bg-surface` ≥ 4.5:1 in light and dark; the ring token ≥ 3:1 against `--bg-canvas`.
 - Motion: none (see `## Motion & Animations`).
 - Touch target: min height 40 px while shown (44 px on coarse pointers).
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Internationalization
 

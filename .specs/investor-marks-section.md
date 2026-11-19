@@ -6,7 +6,7 @@ status: implemented
 spec_version: 3
 created: 2026-11-04
 last_updated: 2026-11-16
-checksum: 2b757982c21d91bf9554a1495e2be8a9aa7e092c909cc3d70aa14d12828e5f50
+checksum: df9a72ce3462d707f21b06b2849f0b54d767631935279660b039ef149d16fb14
 template: 2
 ---
 
@@ -123,7 +123,6 @@ The investors band: a centered section title over a two-column bento grid where 
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): link line `var(--text-default)` on `var(--bg-hover)`.
 - `motion-reduce:transition-none motion-reduce:transform-none` on every transition above.
 - Touch target ≥40×40 px — each link is a full 12rem-tall cell.
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Internationalization
 

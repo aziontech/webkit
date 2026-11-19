@@ -4,7 +4,7 @@ category: docs
 structure: monolithic
 status: implemented
 spec_version: 4
-checksum: 06fe6e9b7d1acbd8b87a2d81aa27589c6e6f453e09fe4f6c3f5ba9ef1401ff68
+checksum: f9df0fd44645b8d79db517f4b41196a507615966c4f0269e26743666281f5c29
 created: 2026-08-22
 last_updated: 2026-11-18
 ---
@@ -126,7 +126,6 @@ The "On this page" rail: the page's own headings, the active one lit, nested hea
 - The marker is never the only signal: the active entry also changes ink and carries `aria-current`, so the state does not depend on seeing the dash.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
 - Touch target: entries are padded rows; the rail itself is not interactive.
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Performance
 

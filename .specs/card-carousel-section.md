@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: 85ed48e1e57592ff053f6da36abde229515582fd4e77d33f75d8d8380572aa05
+checksum: 8e6f6bf4bb2dceac38b1557422bbfe574a65a8eb55c460981d999c41ea42450c
 created: 2026-11-12
 last_updated: 2026-11-17
 ---
@@ -144,7 +144,6 @@ It is a page section — the site places it from a `{ _id: 'card-carousel-sectio
 - Contrast ≥4.5:1: copy is `var(--text-muted)` on `var(--bg-surface)`; the link label is `var(--text-muted)` at rest; the arrow is `var(--text-brand)`, the logo orange (≥3:1 as a decorative graphic).
 - `motion-reduce:transition-none` on every transition; the track never auto-advances (WCAG 2.2.2 does not apply).
 - Touch target ≥40×40 px: the controls are 40×40; a card link spans its whole card.
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Internationalization
 

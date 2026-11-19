@@ -84,7 +84,6 @@ right-to-left: the start region is on the right there. 6.0 removed the physical 
 - Contrast ≥4.5:1 for text and icons in slotted content.
 - `motion-reduce:*` on any animated slotted controls (owned by children).
 - Touch target ≥40×40 px on slotted buttons (owned by children).
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the brand renders without a link, as with an empty `href`. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Examples
 

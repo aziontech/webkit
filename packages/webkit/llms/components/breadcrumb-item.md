@@ -62,7 +62,7 @@
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none` on color transitions.
 - Touch target ≥40×40 px on interactive segments (padding + min height).
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the crumb points at `#`, as with an empty `href`. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
+- Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): points at `#`.
 
 ## Right-to-left
 

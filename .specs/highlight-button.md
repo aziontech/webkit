@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4313-20621
   node_id: 4313:20500
-checksum: 859820df86e22ba6b1722dfe999449deb3d4691d81c23630dfc8496eeba29cf4
+checksum: 608b2d0a735ed5f9432a6584331d0bc6e9bad26d9e6eab05704da3a2773cc00a
 created: 2026-06-01
 last_updated: 2026-11-15
 ---
@@ -137,7 +137,7 @@ Visually emphasized action trigger built on a brand-accent gradient with a conti
 - `motion-reduce:transition-none` on every transition class.
 - Pause, Stop, Hide (WCAG 2.2.2): the glow turns once and stops by itself after 4.2 seconds, resting on the static glow; `motion-reduce:animate-none` keeps it still from the start.
 - Touch target ≥40×40 px at `size: 'large'`; smaller sizes are for dense toolbars and surface a larger hit area via the surrounding container.
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the control stays a native button and still emits `click`. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
+- Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): stays a native button.
 
 ## Right-to-left
 

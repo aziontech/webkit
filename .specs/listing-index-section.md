@@ -7,7 +7,7 @@ spec_version: 9
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-16
-checksum: ef800b1996fdda191e5a9408f75de3925d47abf8339070fae06579d3f2768de3
+checksum: 020c143d0925c302656e019f628c6319fe41855582782bddd26e01078aaaf96c
 ---
 
 # ListingIndexSection — Component Spec
@@ -173,7 +173,6 @@ _none_
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): row links and group headings `var(--text-default)`, headers and meta `var(--text-muted)`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the field, select and button transitions belong to the composed components, which carry their own reduced-motion fallback; this band adds no motion.
 - Touch target ≥40×40 px — the search field, selects and empty-state button are large; each phone row link stretches over its whole item and each table row is a whole-row target.
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Internationalization
 

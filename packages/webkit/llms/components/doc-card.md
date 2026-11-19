@@ -67,7 +67,6 @@
 - A card that leaves the documentation (absolute URL, `mailto:`, or explicit `target="_blank"`) carries `rel="noreferrer"` and swaps the chevron for a diagonal arrow, so the destination change is visible and not colour-only.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
 - Touch target: the whole tile is the hit area, comfortably over 40×40 px.
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the card renders without a link, as with an empty `href`. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Right-to-left
 

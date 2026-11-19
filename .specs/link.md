@@ -4,7 +4,7 @@ category: navigation
 structure: monolithic
 status: implemented
 spec_version: 6
-checksum: c5f8ad9369c94300a4f9b52b598ac298d07dd550a18a6b824cac7d567e910773
+checksum: 03a7672887b666784dbb184225cc87e07f4c62221b1b4ff55291bb0a446a1c19
 created: 2026-05-22
 last_updated: 2026-11-15
 figma:
@@ -126,7 +126,7 @@ Helps users move between views or sections. Migrated from the existing implement
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the anchor points at `#`, as with an empty `href`. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
+- Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): points at `#`.
 
 ## Right-to-left
 

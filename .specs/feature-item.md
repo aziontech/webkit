@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: 14bd06af40e557d122fb6316d76c45ab07dc5e9ae8a8c19381f59de6e1ce21c9
+checksum: 749d5b865d3764ae876c3836afdf929faea73d7283c99b5bbd0ed08ec92a1eab
 created: 2026-09-24
 last_updated: 2026-11-16
 ---
@@ -131,7 +131,6 @@ One claim stated in three parts: a glyph, a short headline it shares a line with
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): `var(--text-default)` for the heading, `var(--text-muted)` for the description, `var(--primary)` for the glyph and `var(--text-brand)`, the logo orange, for the hovered headline (an owner-accepted brand exception in light) — all against the fill the surrounding cell provides.
 - `motion-reduce:transition-none` on both transitions a linked claim carries.
 - Touch target ≥40×40 px — the whole claim is the target, so it is the cell's own height; a topic is never smaller than its heading plus its sentence.
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the item renders without a link, as with an empty `href`. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Right-to-left
 

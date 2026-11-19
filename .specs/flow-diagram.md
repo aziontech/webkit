@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 9
 template: 2
-checksum: 6267759ea149b3fba515a4dc9ae55f287b49b14d421078cec804430de65bd6b1
+checksum: 9da6c77e06419cc7a3b147be592b6982a8fbf56b6256554f2a0c921a6121f18c
 created: 2026-06-25
 last_updated: 2026-11-18
 ---
@@ -183,7 +183,6 @@ The root emits nothing; the bind events live on the `flow-diagram-bind` companio
 - Connectors, ports and edge labels are `aria-hidden`; data mode adds a hidden `Connections` list (`{from} to {to}, {label}`).
 - `Tab` reaches links, the Details toggle (`aria-expanded`, closed details `inert`), copy and bind controls; the scroll area is focusable only when it overflows.
 - Status is a dot plus text; the dashes stop after six runs; `motion-reduce:animate-none`; focus ring `--ring-color`.
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the title renders as plain text, as with an empty `href`. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Internationalization
 

@@ -7,7 +7,7 @@ spec_version: 4
 template: 2
 created: 2026-11-04
 last_updated: 2026-11-16
-checksum: 2faf88b689b945713de145a5517b22d72f0738860ed7359f0f174bd6c9953d6c
+checksum: 707d24e3cd942b763e87662616ec5e09fcde5ec209b84f0a84d96bcb495827c9
 ---
 
 # ClientMosaicSection — Component Spec
@@ -135,7 +135,6 @@ The client mosaic: a framed bento grid of customer cells where a story cell carr
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): story text `var(--text-default)` over the canvas gradient; marks are inked to their fill through `logoTreatment`.
 - `motion-reduce:transition-none` on the fill transition.
 - Touch target ≥40×40 px — each mark cell is a full grid cell.
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Internationalization
 

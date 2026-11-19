@@ -82,7 +82,6 @@
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the label is `--text-default` on `--bg-hover` over `--bg-surface`. The marks are consumer-supplied images; WCAG 1.4.11 exempts logotypes from the contrast minimum, and the component adds no colour filter, so a mark must carry its own legibility against `var(--bg-surface)`. Anything in `aside` is ordinary content and is bound by the minimum in full.
 - `motion-reduce:transition-none` / `motion-reduce:before:transition-none` on every hover transition. The band never auto-scrolls, so WCAG 2.2.2 (pause, stop, hide) does not apply.
 - Touch target ≥40×40 px — a linked cell's anchor is its whole square.
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Examples
 

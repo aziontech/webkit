@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3775-16746&m=dev
   node_id: 3775:16746
-checksum: d1b1344f02865838e2ca0727e0347de42012f5c5bcb6c96584c35f9421ad821b
+checksum: 0e7e24c2a35c8604f798340c89890c4f5291d5552f3da58a8f6eb27a6ed8a002
 created: 2026-06-26
 last_updated: 2026-11-17
 ---
@@ -297,7 +297,7 @@ Sub-menus and checkable options:
 - `motion-reduce:animate-none` on `animate-popup-scale-*`; `motion-reduce:transition-none` on `transition-colors` for hover/selected states.
 - Teleported panel: the `role="menu"` panel binds `dir` and `lang` from the nearest `ConfigProvider` (`usePortalLocale`), so it lays out and is announced in the provider's direction and language although it renders under `body`.
 - Touch target ≥40×40 px on the trigger; option rows are 32 px tall and are activated by full-row click + keyboard, satisfying the 24×24 px target floor for in-menu items per WCAG 2.5.8.
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the item renders as a plain menu item instead of a link. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
+- Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): renders a plain item.
 
 ## Internationalization
 

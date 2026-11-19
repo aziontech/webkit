@@ -7,7 +7,7 @@ spec_version: 13
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5993-33335
   node_id: '5993:33335'
-checksum: e0439e28505d6ab3e75a27f0bc7c2c54c3bc338ad2fd7e3998a019a436a443be
+checksum: cd9f8df96ed0d92010b3c9964a70cc9875ba86603d81f33a0f91da4644d06016
 created: 2026-08-03
 last_updated: 2026-11-17
 ---
@@ -523,7 +523,6 @@ and the Figma row height), and its `rounded-lg` (8 px) becomes `var(--shape-cont
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state. The rail (`var(--border-default)`, ≈1.5:1) is exempt: it is decorative and carries no information the indentation does not, so 1.4.11 does not apply.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target — **justified deviation from ≥40×40 px.** Rows are 32 px tall, matching the Figma frame's `h-button-md` and the density a product navigation needs. Every target is full-row width (≥252 px), so all clear WCAG 2.5.8's 24×24 minimum. The Figma frame's 16×16 group toggle would have failed that minimum; it is moot here, because a group title is not a control at all.
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the item renders as a button, as with an empty `href`. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Right-to-left
 

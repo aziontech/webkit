@@ -7,7 +7,7 @@ spec_version: 7
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-16
-checksum: 9a0a6b23026d438362d618626308bb4bbe67861dd67d9c7e911f33f7987eac0b
+checksum: da32012b67e812bcc7ae91081ba8cbc33f69b6f6f6764bf2af3d206d967ee027
 ---
 
 # ArticleCardsSection — Component Spec
@@ -122,7 +122,6 @@ A titled row of three linked article cards on one hairline frame grid with no gu
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text uses `--text-default` / `--text-muted` on the canvas.
 - `motion-reduce:transition-none` on every transition.
 - Touch target ≥40×40 px — the whole card is the target.
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Internationalization
 

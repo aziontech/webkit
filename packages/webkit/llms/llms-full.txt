@@ -10962,7 +10962,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-waf-tunin
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
 - Forced colors: the filled variants (primary, secondary, danger) have no border of their own, so under `forced-colors: active` every button draws a 1px `ButtonBorder` edge (`GrayText` when disabled); outside forced colors nothing changes.
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the control stays a native button and still emits `click`; with a `download` attribute, `blob:` and `data:` URLs are kept for the file. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
+- Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): stays a native button (with `download`, `blob:` and `data:` are kept).
 
 ## Examples
 
@@ -11403,7 +11403,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 - `motion-reduce:transition-none` on every transition class.
 - Pause, Stop, Hide (WCAG 2.2.2): the glow turns once and stops by itself after 4.2 seconds, resting on the static glow; `motion-reduce:animate-none` keeps it still from the start.
 - Touch target ≥40×40 px at `size: 'large'`; smaller sizes are for dense toolbars and surface a larger hit area via the surrounding container.
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the control stays a native button and still emits `click`. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
+- Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): stays a native button.
 
 ## Examples
 
@@ -11507,7 +11507,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 - `motion-reduce:transition-none` on animated states; the icon swap also starts from `scale-100` under reduced motion.
 - Accessible name: `aria-label` (static or bound) or `aria-labelledby` is mandatory; `webkit/require-accessible-name` flags an IconButton with neither, and an empty name renders no `aria-label` attribute.
 - Touch target ≥40×40 px where the control is interactive.
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the control stays a native button and still emits `click`; with a `download` attribute, `blob:` and `data:` URLs are kept for the file. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
+- Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): stays a native button (with `download`, `blob:` and `data:` are kept).
 
 ## Examples
 
@@ -12646,7 +12646,7 @@ _None. Exports: `"./citation"`. Composed DS components: `tooltip`._
 - Keyboard map: `Tab` reaches a linked citation; `Enter` follows it; focus shows the tooltip.
 - ARIA: `aria-label="Source 1: Real-Time Purge"` (the visible digit alone is not a name).
 - Touch target: inline text reference; exempt from the 24 px minimum as inline text (WCAG 2.5.8 exception).
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the number renders as the unlinked `role="note"` chip, like a citation without `href`. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
+- Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): renders the unlinked note.
 
 ## Examples
 
@@ -14051,7 +14051,7 @@ shared with `StreamingResponse`._
 - Keyboard map: `Tab` to the trigger, `Enter` / `Space` toggles; `Tab` through the links.
 - ARIA: `button` with `aria-expanded` / `aria-controls`; the list is an `<ol aria-label="Sources">` so numbers are announced by position; the visual number chip is `aria-hidden`.
 - External links open in a new tab with `rel="noopener noreferrer"`.
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the source title renders as plain text, like a source without `href`. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
+- Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): shows the title as plain text.
 
 ## Examples
 
@@ -14796,7 +14796,6 @@ _None. Exports: `"./tool-call"`; type `ToolCallStatus`. Composed DS components: 
 - Name and value text clear 4.5:1 on the tinted fill and on the bare surface in both themes.
 - Interactive rows are 32px tall and full width; a transparent hit area (`before:` pseudo-element, 4px above and below) makes the pointer target 40px without changing the look.
 - Forced colors: the bar fill keeps its colour (`forced-color-adjust: none`); forced to `Canvas` it vanished and left only the labels (`src/test/forced-colors-charts.test.ts`).
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Examples
 
@@ -18665,7 +18664,6 @@ name.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
 - `motion-reduce:transition-none` on the hover and glow transitions.
 - Touch target: the whole tile is the title's target; the action is a regular `Button`.
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the title activates as a button, as with an empty `href`. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Examples
 
@@ -19249,7 +19247,6 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 - A link that opens a new tab carries a visually hidden `(opens in a new tab)`.
 - The trigger stops its click from bubbling, so opening the list inside a clickable table row does not fire the row's `row-click`; the wrapper itself is not interactive and lets other clicks through.
 - Contrast: the secondary `Tag` and the muted summary meet 4.5:1 in both themes.
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Examples
 
@@ -21520,7 +21517,6 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 - Connectors, ports and edge labels are `aria-hidden`; data mode adds a hidden `Connections` list (`{from} to {to}, {label}`).
 - `Tab` reaches links, the Details toggle (`aria-expanded`, closed details `inert`), copy and bind controls; the scroll area is focusable only when it overflows.
 - Status is a dot plus text; the dashes stop after six runs; `motion-reduce:animate-none`; focus ring `--ring-color`.
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the title renders as plain text, as with an empty `href`. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Examples
 
@@ -27060,7 +27056,6 @@ right-to-left: the start region is on the right there. 6.0 removed the physical 
 - Contrast ≥4.5:1 for text and icons in slotted content.
 - `motion-reduce:*` on any animated slotted controls (owned by children).
 - Touch target ≥40×40 px on slotted buttons (owned by children).
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the brand renders without a link, as with an empty `href`. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Examples
 
@@ -27521,7 +27516,6 @@ packages/webkit/src/components/layout/console-layout/
 - Visible focus: every interactive part is a WebKit control with its own ring; the brand link and the avatar button use `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
 - Choosing a row in the compact drawer closes it.
 - A page's control crumb is the last item of the header's `Breadcrumb` list (while compact, the only items of a `Breadcrumb` list that holds just the controls); it carries its own accessible name (`aria-label` on `Select.Trigger`, e.g. `Switch environment`).
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Examples
 
@@ -27984,7 +27978,6 @@ Exported types: `DashboardGridLayoutItem = { id: string; span: number; height?: 
 - Contrast ≥4.5:1 for column titles and links on `--bg-canvas`.
 - `motion-reduce:transition-none` on the link color transition.
 - Touch target: text links follow the platform convention for footer link lists (<40px height); justified deviation — targets are full-width-of-text with `--spacing-xs` separation.
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Examples
 
@@ -29683,7 +29676,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none` on color transitions.
 - Touch target ≥40×40 px on interactive segments (padding + min height).
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the crumb points at `#`, as with an empty `href`. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
+- Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): points at `#`.
 
 ## Examples
 
@@ -30020,7 +30013,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 - `motion-reduce:animate-none` on `animate-popup-scale-*`; `motion-reduce:transition-none` on `transition-colors` for hover/selected states.
 - Teleported panel: the `role="menu"` panel binds `dir` and `lang` from the nearest `ConfigProvider` (`usePortalLocale`), so it lays out and is announced in the provider's direction and language although it renders under `body`.
 - Touch target ≥40×40 px on the trigger; option rows are 32 px tall and are activated by full-row click + keyboard, satisfying the 24×24 px target floor for in-menu items per WCAG 2.5.8.
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the item renders as a plain menu item instead of a link. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
+- Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): renders a plain item.
 
 ## Examples
 
@@ -30155,7 +30148,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the anchor points at `#`, as with an empty `href`. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
+- Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): points at `#`.
 
 ## Examples
 
@@ -30289,7 +30282,6 @@ Every part is attached to the compound (`NavigationMenu.List`, …) and importab
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Examples
 
@@ -30782,7 +30774,6 @@ folder only). 6.0 renamed every key from `./menu*` to `./sidebar-menu*`, with no
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state. The rail (`var(--border-default)`, ≈1.5:1) is exempt: it is decorative and carries no information the indentation does not, so 1.4.11 does not apply.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target — **justified deviation from ≥40×40 px.** Rows are 32 px tall, matching the Figma frame's `h-button-md` and the density a product navigation needs. Every target is full-row width (≥252 px), so all clear WCAG 2.5.8's 24×24 minimum. The Figma frame's 16×16 group toggle would have failed that minimum; it is moot here, because a group title is not a control at all.
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the item renders as a button, as with an empty `href`. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Examples
 
@@ -30904,7 +30895,6 @@ folder only). 6.0 renamed every key from `./menu*` to `./sidebar-menu*`, with no
 - Contrast: `--text-default` on `--bg-surface` ≥ 4.5:1 in light and dark; the ring token ≥ 3:1 against `--bg-canvas`.
 - Motion: none (see `## Motion & Animations`).
 - Touch target: min height 40 px while shown (44 px on coarse pointers).
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Examples
 

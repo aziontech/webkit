@@ -6,7 +6,7 @@ status: implemented
 spec_version: 6
 created: 2026-11-05
 last_updated: 2026-11-18
-checksum: 76e6e5b12087de55c0becb1ad984d5b24445515203e34a0f91cb5b33178020d4
+checksum: 69d97d31e6d2e8d9bb7fef202cde1dc1926c694c1f9cb6457f38fc86bcbe5a73
 template: 2
 ---
 
@@ -148,7 +148,6 @@ The marketing site's own navigation: a sticky bar with the Azion mark, the mega-
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by the composed components.
 - `motion-reduce:transition-none` on the mark link; the sheet and the panels own their reduced-motion fallbacks.
 - Touch target ≥40×40 px — the medium buttons and icon buttons meet it.
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Internationalization
 

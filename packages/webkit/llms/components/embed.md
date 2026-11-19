@@ -56,7 +56,7 @@
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the embedded document carries its own contrast; the frame contributes only its border.
 - `motion-reduce:transition-none motion-reduce:transform-none` — not applicable, the frame is static.
 - Touch target ≥40×40 px — not applicable; any control belongs to the embedded document.
-- Frame safety: only an absolute `http` or `https` `src` is framed (checked by the shared `safeWebUrl` in `src/utils/safe-href.ts`). A `javascript:`, `data:`, `about:`, relative or protocol-relative `src`, in any case or hidden behind spaces, tabs or HTML entities, renders the `title` as muted plain text in the frame box (`embed__unavailable`) instead of an `iframe`. The `iframe` always carries a fixed `sandbox` (`allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-presentation`, never top-level navigation) and `referrerpolicy="strict-origin-when-cross-origin"`. Do not frame a same-origin page that renders untrusted content.
+- Only an absolute `http(s)` `src` is framed, always with a fixed `sandbox` (no top-level navigation); any other `src` shows the `title` as text.
 
 ## Examples
 

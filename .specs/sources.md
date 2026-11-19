@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: 077b29bfc7da34d15688738b76421f1e8effa346b90d5a50ecfc1dccdab56200
+checksum: 6b8d53e16f311c38a35a37eb971495664fd77829c50d60f1902ece5785470834
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -123,7 +123,7 @@ _None._
 - Keyboard map: `Tab` to the trigger, `Enter` / `Space` toggles; `Tab` through the links.
 - ARIA: `button` with `aria-expanded` / `aria-controls`; the list is an `<ol aria-label="Sources">` so numbers are announced by position; the visual number chip is `aria-hidden`.
 - External links open in a new tab with `rel="noopener noreferrer"`.
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the source title renders as plain text, like a source without `href`. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
+- Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): shows the title as plain text.
 
 ## Internationalization
 

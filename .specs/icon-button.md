@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: 07ab8586669e22153fb0f313a8c70f2e9623d7c5c1ea2e3cc565551a312fcf03
+checksum: 329cb0bd71fecf4f1334139ea35d8bd354205ac7a50576e682baf25ef307f974
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -138,7 +138,7 @@ A square control that triggers an action with a glyph and no visible text: close
 - `motion-reduce:transition-none` on animated states; the icon swap also starts from `scale-100` under reduced motion.
 - Accessible name: `aria-label` (static or bound) or `aria-labelledby` is mandatory; `webkit/require-accessible-name` flags an IconButton with neither, and an empty name renders no `aria-label` attribute.
 - Touch target ≥40×40 px where the control is interactive.
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the control stays a native button and still emits `click`; with a `download` attribute, `blob:` and `data:` URLs are kept for the file. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
+- Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): stays a native button (with `download`, `blob:` and `data:` are kept).
 
 ## Right-to-left
 

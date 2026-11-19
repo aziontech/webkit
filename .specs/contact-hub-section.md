@@ -6,7 +6,7 @@ status: implemented
 spec_version: 4
 created: 2026-11-05
 last_updated: 2026-11-16
-checksum: 8196961b96c5bc7fa778dc11f09a2babf6715b9724a8c0671707247fa1b00aa5
+checksum: fc2af4d999f42b65d1ab04cce85a8552cccbb7cd6bcbf90cabd0d1732fc41fd8
 ---
 
 # ContactHubSection — Component Spec
@@ -128,7 +128,6 @@ The band under the Contact title band: the team lanes side by side (Sales and Su
 - `motion-reduce:transition-none` on the status link's colour transition.
 - Touch target ≥40×40 px — the status link is at least `h-10` (`min-h-10`), buttons are large, channels are whole-cell links.
 - Reflow: the status link has `min-h-10` and `max-w-full`, and the lane floor wraps its buttons and the status link onto new lines, so nothing overflows a narrow column or a 200% zoom.
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Examples
 

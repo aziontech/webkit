@@ -7,7 +7,7 @@ spec_version: 6
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-18
-checksum: 789ac17aefb7de80f0aceacd57741b2c5ce0822f295ec248bed299893d4d1a0e
+checksum: e4ed8e6bc7e76fa70b0df7ae5db460d46dc8b54fb3aa621c540b3b64a7ec28c8
 ---
 
 # ArticleBodySection — Component Spec
@@ -135,7 +135,7 @@ The reading page of an article. A brand banner sits over a three-column grid: th
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text uses `--text-default` / `--text-muted`.
 - `motion-reduce:transition-none` on every transition.
 - Touch target ≥40×40 px — owned by `icon-button` and `split-button`.
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link label in the body renders as plain text; other links lose their `href`. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
+- Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): shows the link label as plain text.
 
 ## Internationalization
 

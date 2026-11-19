@@ -7,7 +7,7 @@ spec_version: 7
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5467-1638
   node_id: 5467:1638
-checksum: 02644e9e4cc83be9cf3d3f0c22fd270edaa918425b494c009cb36c318c10c8c3
+checksum: a79772ae429a0b86c7a32adf98d3e129be811e10fa8933b1b6e603e380335131
 created: 2026-08-10
 last_updated: 2026-11-17
 ---
@@ -234,7 +234,6 @@ Tree-shaking alternative — the standalone root and each sub-component from its
 - Contrast ≥4.5:1 for column titles and links on `--bg-canvas`.
 - `motion-reduce:transition-none` on the link color transition.
 - Touch target: text links follow the platform convention for footer link lists (<40px height); justified deviation — targets are full-width-of-text with `--spacing-xs` separation.
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Examples
 

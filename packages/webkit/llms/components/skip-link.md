@@ -59,7 +59,6 @@
 - Contrast: `--text-default` on `--bg-surface` ≥ 4.5:1 in light and dark; the ring token ≥ 3:1 against `--bg-canvas`.
 - Motion: none (see `## Motion & Animations`).
 - Touch target: min height 40 px while shown (44 px on coarse pointers).
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Right-to-left
 

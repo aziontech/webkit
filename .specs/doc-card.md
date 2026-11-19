@@ -4,7 +4,7 @@ category: docs
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: ab7624434be80936c6e3b2291f23b500ab45fec55ed703e18041a455323207e6
+checksum: 1d27fecec1d3f8c24f039e8324a7f5a9d8cdfd8e4973738b4a315fdde55b5897
 created: 2026-08-22
 last_updated: 2026-11-15
 ---
@@ -124,7 +124,6 @@ One cell of the grid a documentation page scans across: a leading glyph, an opti
 - A card that leaves the documentation (absolute URL, `mailto:`, or explicit `target="_blank"`) carries `rel="noreferrer"` and swaps the chevron for a diagonal arrow, so the destination change is visible and not colour-only.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
 - Touch target: the whole tile is the hit area, comfortably over 40×40 px.
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the card renders without a link, as with an empty `href`. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Right-to-left
 

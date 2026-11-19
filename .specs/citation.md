@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 4d6d0a29c65abb9dad52a96ca987a6eb848c5105ab226c8e9bc8fa8477ed7f7f
+checksum: 08f94ca36d550521813b1634d31c568f431140a2c82cff7a9815961f2d259cbb
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -102,7 +102,7 @@ _None._
 - Keyboard map: `Tab` reaches a linked citation; `Enter` follows it; focus shows the tooltip.
 - ARIA: `aria-label="Source 1: Real-Time Purge"` (the visible digit alone is not a name).
 - Touch target: inline text reference; exempt from the 24 px minimum as inline text (WCAG 2.5.8 exception).
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the number renders as the unlinked `role="note"` chip, like a citation without `href`. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
+- Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): renders the unlinked note.
 
 ## Internationalization
 

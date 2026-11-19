@@ -4,7 +4,7 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: f5766c9f933cd90c9ddd82574bda353438f9df29131beb426d59e39ed803ae5a
+checksum: c894e6980b6e9291948a5c781c6a0cd69930853bd06a0c1c251d464361b69550
 created: 2026-09-22
 last_updated: 2026-11-18
 ---
@@ -108,7 +108,7 @@ _none_
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the embedded document carries its own contrast; the frame contributes only its border.
 - `motion-reduce:transition-none motion-reduce:transform-none` — not applicable, the frame is static.
 - Touch target ≥40×40 px — not applicable; any control belongs to the embedded document.
-- Frame safety: only an absolute `http` or `https` `src` is framed (checked by the shared `safeWebUrl` in `src/utils/safe-href.ts`). A `javascript:`, `data:`, `about:`, relative or protocol-relative `src`, in any case or hidden behind spaces, tabs or HTML entities, renders the `title` as muted plain text in the frame box (`embed__unavailable`) instead of an `iframe`. The `iframe` always carries a fixed `sandbox` (`allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-presentation`, never top-level navigation) and `referrerpolicy="strict-origin-when-cross-origin"`. Do not frame a same-origin page that renders untrusted content.
+- Only an absolute `http(s)` `src` is framed, always with a fixed `sandbox` (no top-level navigation); any other `src` shows the `title` as text.
 
 ## Examples
 

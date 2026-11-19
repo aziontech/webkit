@@ -81,7 +81,6 @@
 - Name and value text clear 4.5:1 on the tinted fill and on the bare surface in both themes.
 - Interactive rows are 32px tall and full width; a transparent hit area (`before:` pseudo-element, 4px above and below) makes the pointer target 40px without changing the look.
 - Forced colors: the bar fill keeps its colour (`forced-color-adjust: none`); forced to `Canvas` it vanished and left only the labels (`src/test/forced-colors-charts.test.ts`).
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Examples
 

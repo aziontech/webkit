@@ -54,7 +54,6 @@
 - `motion-reduce:before:transition-none` on the hover fill.
 - Touch target ≥40×40 px — each mark face spans its column.
 - `reveal="hover"`: the list carries the one accessible name (`ariaLabel`, else the built-in "Customer stories"); each card is one link named "<link label>, <client>: <story>", so its logo is decorative (`alt=""`); focus opens the card the same way hover does and the ring is drawn inside the card; `az-arrow-up-right` mirrors under right-to-left.
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the link renders without an `href`, so it is not a link and not focusable. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Internationalization
 

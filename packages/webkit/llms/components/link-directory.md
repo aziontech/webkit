@@ -87,7 +87,6 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the row's title is `var(--text-default)` and its description `var(--text-muted)` on `var(--bg-canvas)`, and the hover plate keeps both on `var(--bg-hover)`.
 - `motion-reduce:transition-none` on the row's hover transition, on the same class string.
 - Touch target ≥40×40 px: a row is at least 44 px tall and spans the column's full width, and its hover plate is pulled past the text on both sides so the target is the row, not the words.
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the item renders without a link, as with an empty `href`. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Examples
 

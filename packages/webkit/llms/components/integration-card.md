@@ -77,7 +77,6 @@
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
 - `motion-reduce:transition-none` on the hover and glow transitions.
 - Touch target: the whole tile is the title's target; the action is a regular `Button`.
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the title activates as a button, as with an empty `href`. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Right-to-left
 

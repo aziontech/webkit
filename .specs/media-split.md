@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 9
-checksum: 6519dd962820106d0a2a4064ccb3df325399a76794fd2627aa2151fe353142bb
+checksum: 5c4dffd6655c9935619a19e466babac14013e8c5941e15a959b271d4ada95ffd
 created: 2026-09-22
 last_updated: 2026-11-18
 ---
@@ -206,7 +206,6 @@ Whether the band ever splits is `orientation`'s call. `horizontal` is the band p
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the headline is `var(--text-default)` on `var(--bg-surface)`; the description uses `var(--text-muted)`, which clears AA on the dark canvas and is a known theme-level shortfall on the light one (see `stats`).
 - `motion-reduce:transition-none motion-reduce:transform-none` — not applicable, the band is static.
 - Touch target — the band composes no control of its own; the small buttons its `actions` pattern calls for stand 28 px tall, which clears WCAG 2.2 AA 2.5.8 (24×24 px) but is under this package's own 40×40 px house floor.
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the media renders without a link, as with an empty `mediaHref`. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Right-to-left
 

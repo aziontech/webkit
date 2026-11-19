@@ -76,7 +76,6 @@
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): `var(--text-default)` for the heading, `var(--text-muted)` for the description, `var(--primary)` for the glyph and `var(--text-brand)`, the logo orange, for the hovered headline (an owner-accepted brand exception in light) — all against the fill the surrounding cell provides.
 - `motion-reduce:transition-none` on both transitions a linked claim carries.
 - Touch target ≥40×40 px — the whole claim is the target, so it is the cell's own height; a topic is never smaller than its heading plus its sentence.
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the item renders without a link, as with an empty `href`. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
 
 ## Right-to-left
 

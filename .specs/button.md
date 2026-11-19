@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 10
 template: 2
-checksum: 08bade71359aea87c77276ae9492f77cebf2db7b0254f8becffb97cdbb21662b
+checksum: 927643cf3957410f8b9506fb6532b8b360424aeeb0106960fa3bfeb91d717190
 created: 2026-05-22
 last_updated: 2026-11-16
 ---
@@ -150,7 +150,7 @@ The labelled control that triggers an action. `variant` ranks the action in its 
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
 - Forced colors: the filled variants (primary, secondary, danger) have no border of their own, so under `forced-colors: active` every button draws a 1px `ButtonBorder` edge (`GrayText` when disabled); outside forced colors nothing changes.
-- Link safety: every `href` from props or data goes through the shared `safeHref` check (`src/utils/safe-href.ts`). A `javascript:`, `data:`, `vbscript:` or other script URL, a protocol-relative `//host` URL, and the same hidden behind mixed case, spaces, tabs or HTML entities is dropped: the control stays a native button and still emits `click`; with a `download` attribute, `blob:` and `data:` URLs are kept for the file. `http`, `https`, `mailto`, `tel`, relative and `#` links are kept.
+- Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): stays a native button (with `download`, `blob:` and `data:` are kept).
 
 ## Right-to-left
 
