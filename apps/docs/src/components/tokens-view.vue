@@ -4,7 +4,7 @@
 
   import { messages } from '../lib/i18n'
   import { titleCase } from '../lib/nav'
-  import { sharedUsage, typeGroups } from '../lib/tokens'
+  import { typeGroups, usageSections } from '../lib/tokens'
   import ArchitectureIntro from './tokens/architecture-intro.vue'
   import ColorPlayground from './tokens/color-playground.vue'
   import PaletteStrips from './tokens/palette-strips.vue'
@@ -17,7 +17,11 @@
   const t = messages
 
   const colorGroups = computed(() =>
-    tokens.semantic.map((group) => ({ id: group.id, ...sharedUsage(group.vars) }))
+    usageSections(tokens.semantic).map((section) => ({
+      ...section,
+      id: section.ids.join('-'),
+      title: section.ids.map(titleCase).join(', ')
+    }))
   )
   const rhythm = computed(() => tokens.spacing.filter((token) => token.responsive))
   const scale = computed(() => tokens.spacing.filter((token) => !token.responsive))
@@ -79,9 +83,9 @@
           :tokens="group.tokens"
           kind="color"
           sample="swatch"
-          :title="titleCase(group.id)"
+          :title="group.title"
           :usage="group.usage"
-          :caption="titleCase(group.id)"
+          :caption="group.title"
         />
       </section>
       <section

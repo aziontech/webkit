@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url'
 import { scanMarkdown } from '../../../packages/webkit/scripts/lib/docs-markdown.mjs'
 import {
   buildComponent,
+  buildTokens,
   firstSentence,
   markdown,
   markdownParts,
@@ -15,6 +16,7 @@ import {
   splitLead
 } from '../plugins/content.ts'
 import { readBlocks, readCatalog } from '../plugins/paths.ts'
+import { usageKey, usageSections } from '../src/lib/token-usage.ts'
 
 const md = await markdown()
 
@@ -200,4 +202,22 @@ test('the sidebar lists every page once', () => {
     all.filter((path, at) => all.indexOf(path) !== at),
     []
   )
+})
+
+test('the Color page states each shared usage once, over every family it covers', () => {
+  const sections = usageSections(buildTokens().semantic as Parameters<typeof usageSections>[0])
+  const keys = sections.flatMap((section) => (section.usage ? [usageKey(section.usage)] : []))
+  assert.deepEqual(
+    sections
+      .filter(
+        (section) =>
+          section.usage &&
+          keys.indexOf(usageKey(section.usage)) !== keys.lastIndexOf(usageKey(section.usage))
+      )
+      .map((section) => section.ids.join(', ')),
+    []
+  )
+  assert.ok(sections.some((section) => section.ids.length > 1))
+  const view = readFileSync(new URL('apps/docs/src/components/tokens-view.vue', REPO_URL), 'utf8')
+  assert.match(view, /usageSections\(tokens\.semantic\)/)
 })
