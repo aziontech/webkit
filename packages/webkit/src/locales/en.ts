@@ -1365,6 +1365,18 @@ export const toolCall = {
   output: 'Output'
 } as const
 
+export const subagentCard = {
+  pending: 'Waiting',
+  running: 'Running',
+  success: 'Completed',
+  error: 'Failed',
+  canceled: 'Stopped',
+  stop: 'Stop',
+  stopAgent: 'Stop {name}',
+  input: 'Task',
+  activity: 'Activity'
+} as const
+
 export const paymentBrand = {
   unknown: 'Card'
 } as const
@@ -1608,6 +1620,7 @@ export const en = {
   toggleGroup,
   trace,
   toolCall,
+  subagentCard,
   flowDiagram,
   tracker,
   tree,

@@ -171,6 +171,17 @@ export const ptBR: Messages = {
     input: 'Entrada',
     output: 'Saída'
   },
+  subagentCard: {
+    pending: 'Aguardando',
+    running: 'Executando',
+    success: 'Concluído',
+    error: 'Falhou',
+    canceled: 'Interrompido',
+    stop: 'Parar',
+    stopAgent: 'Parar {name}',
+    input: 'Tarefa',
+    activity: 'Atividade'
+  },
   alert: {
     close: 'Fechar mensagem'
   },

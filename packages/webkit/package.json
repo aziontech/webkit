@@ -291,6 +291,10 @@
       "types": "./types/components/ai/suggestion-group/suggestion-group.vue.d.ts",
       "default": "./src/components/ai/suggestion-group/suggestion-group.vue"
     },
+    "./subagent-card": {
+      "types": "./types/components/ai/subagent-card/subagent-card.vue.d.ts",
+      "default": "./src/components/ai/subagent-card/subagent-card.vue"
+    },
     "./tool-call": {
       "types": "./types/components/ai/tool-call/tool-call.vue.d.ts",
       "default": "./src/components/ai/tool-call/tool-call.vue"
@@ -2697,6 +2701,9 @@
       ],
       "suggestion-group": [
         "./types/components/ai/suggestion-group/suggestion-group.vue.d.ts"
+      ],
+      "subagent-card": [
+        "./types/components/ai/subagent-card/subagent-card.vue.d.ts"
       ],
       "tool-call": [
         "./types/components/ai/tool-call/tool-call.vue.d.ts"

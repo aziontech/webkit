@@ -171,6 +171,17 @@ export const es: Messages = {
     input: 'Entrada',
     output: 'Salida'
   },
+  subagentCard: {
+    pending: 'En espera',
+    running: 'En ejecución',
+    success: 'Completado',
+    error: 'Falló',
+    canceled: 'Detenido',
+    stop: 'Detener',
+    stopAgent: 'Detener {name}',
+    input: 'Tarea',
+    activity: 'Actividad'
+  },
   alert: {
     close: 'Cerrar mensaje'
   },

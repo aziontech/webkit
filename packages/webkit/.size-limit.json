@@ -1070,7 +1070,7 @@
   {
     "name": "config-provider",
     "path": "src/components/provider/config-provider/config-provider.vue",
-    "limit": "11.5 KB"
+    "limit": "11.6 KB"
   },
   {
     "name": "locales-pt-BR",
@@ -1265,6 +1265,11 @@
     "name": "prompt-queue",
     "path": "src/components/ai/prompt-queue/prompt-queue.vue",
     "limit": "4.7 KB"
+  },
+  {
+    "name": "subagent-card",
+    "path": "src/components/ai/subagent-card/subagent-card.vue",
+    "limit": "6.1 KB"
   },
   {
     "name": "tool-call",

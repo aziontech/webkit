@@ -6002,6 +6002,97 @@
    "examplesFile": "catalog/examples/suggestion-group.json",
    "docsFile": "catalog/components/suggestion-group.json"
   },
+  "subagent-card": {
+   "import": "@aziontech/webkit/subagent-card",
+   "target": "./src/components/ai/subagent-card/subagent-card.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/subagent-card",
+   "models": [
+    "open"
+   ],
+   "category": "ai",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "name",
+     "type": "string",
+     "default": "—",
+     "required": "true",
+     "doc": "The helper agent's identifier, shown in code font (`researcher`)."
+    },
+    {
+     "name": "title",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "What the helper is doing in the reader's words (`Comparing cache plans`). Empty shows only the name."
+    },
+    {
+     "name": "description",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "One summary line under the row: the latest step, the result, or the error message. Empty hides the line."
+    },
+    {
+     "name": "status",
+     "type": "'pending' | 'running' | 'success' | 'error' | 'canceled'",
+     "default": "'running'",
+     "required": "false",
+     "doc": "`pending` waits on the reader, `running` is in flight, then `success`, `error` or `canceled` (stopped)."
+    },
+    {
+     "name": "duration",
+     "type": "number",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Seconds the helper has worked, when the host knows it. Without it the card counts its own running time, held while `pending`, frozen once the run ends."
+    },
+    {
+     "name": "stoppable",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Offers `Stop` while the status is `running` or `pending`."
+    },
+    {
+     "name": "defaultOpen",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Initial open state when uncontrolled; the helper's messages start collapsed."
+    },
+    {
+     "name": "open",
+     "type": "boolean",
+     "default": "undefined as never",
+     "required": "false",
+     "doc": "Two-way value (`v-model:open`)."
+    }
+   ],
+   "events": [
+    {
+     "name": "stop",
+     "payload": "(event: MouseEvent)",
+     "notes": "The reader pressed `Stop`; the owner stops the helper and sets `status` to `canceled`."
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "The helper's own messages (`StreamingResponse`, `ToolCall`, a nested `SubagentCard`)."
+    },
+    {
+     "name": "input",
+     "scope": "—",
+     "notes": "The task the main agent gave the helper (`CodeBlock`, `KeyValueList`, or a sentence)."
+    }
+   ],
+   "surface": "app",
+   "examplesFile": "catalog/examples/subagent-card.json",
+   "docsFile": "catalog/components/subagent-card.json"
+  },
   "tool-call": {
    "import": "@aziontech/webkit/tool-call",
    "target": "./src/components/ai/tool-call/tool-call.vue",
