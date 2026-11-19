@@ -87,8 +87,13 @@ export function matchCommand(
   const text = label.toLowerCase()
   const direct = substringMatch(text, q)
   if (direct) return direct
-  const keywordHit = keywords.some((keyword) => keyword.toLowerCase().includes(q))
-  if (keywordHit) return { score: 0.65, ranges: [] }
+  const keywordScore = keywords.reduce((best, keyword) => {
+    const word = keyword.toLowerCase()
+    if (word === q) return Math.max(best, 0.85)
+    if (word.startsWith(q)) return Math.max(best, 0.75)
+    return word.includes(q) ? Math.max(best, 0.65) : best
+  }, 0)
+  if (keywordScore) return { score: keywordScore, ranges: [] }
   return subsequenceMatch(text, q) ?? NONE
 }
 

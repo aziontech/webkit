@@ -684,6 +684,16 @@ describe('Command', () => {
       expect(matchCommand('team', 'Invite', ['team']).score).toBeGreaterThan(0)
     })
 
+    it('ranks an exact keyword over a keyword prefix over a keyword substring', () => {
+      const exact = matchCommand('modal', 'Dialog', ['modal']).score
+      const prefix = matchCommand('modal', 'Sheet', ['modal sheet']).score
+      const inner = matchCommand('modal', 'Command', ['A search-first modal launcher']).score
+      expect(exact).toBeGreaterThan(prefix)
+      expect(prefix).toBeGreaterThan(inner)
+      expect(inner).toBeGreaterThan(0)
+      expect(matchCommand('set', 'Settings Domains').score).toBeGreaterThan(exact)
+    })
+
     it('keyboard order follows the rank: the best group and item lead', async () => {
       const onSelect = vi.fn()
       render(ranked(onSelect))
