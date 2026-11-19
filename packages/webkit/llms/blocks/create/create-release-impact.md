@@ -801,9 +801,7 @@ Each variant is the same screen in another state: `get_block("create/create-rele
                           </span>
                         </Accordion.Trigger>
                         <Accordion.Content>
-                          <div
-                            class="flex min-w-0 flex-col gap-(--spacing-sm)"
-                          >
+                          <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
                             <Alert
                               v-if="group.rows.some((row) => row.sharedWith?.length)"
                               severity="info"
