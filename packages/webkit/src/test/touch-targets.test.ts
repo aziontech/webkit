@@ -77,7 +77,7 @@ describe('tap targets on a coarse pointer (styled)', () => {
     ])('%s answers a tap across 44px of height', async (_name, component, id) => {
       await touch()
       const view = await mount(component)
-      const field = byTestId(view.container, id)[0]!
+      const field = byTestId(view.container as HTMLElement, id)[0]!
       const target = field.tagName === 'INPUT' ? field.parentElement! : field
       expect(target.getBoundingClientRect().height).toBeLessThan(44)
       expect(hitSpan(target, 'y')).toBeGreaterThanOrEqual(44)

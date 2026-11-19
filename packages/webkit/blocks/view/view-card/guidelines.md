@@ -34,7 +34,7 @@ One `PropertyFilter` bound with `v-bind="propertyFilterProps"` grows to fill the
 
 An outlined medium Delete `Button` with the trash icon beside the filter acts on the selected cards. Its label counts the selection, `Delete (3)`, from `selectedCount`, and it is disabled at zero. It is the trigger of the confirmation dialog below. A list with more bulk actions keeps the most common one as a button and moves the rest into one Actions menu beside it.
 
-### D. Delete confirmation — `ConfirmDialog`, `Alert`, `Input` (required)
+### D. Delete confirmation — `ConfirmDialog`, `Alert` (required)
 
 The `edit/edit-delete-dialog` pattern adapted to a selection: a medium `ConfirmDialog` whose trigger is the Delete (n) button, titled with the count (`Delete 3 applications`, `Delete application` for one). The body stacks the warning `Alert` (`Once confirmed, this action can't be reversed.`), one sentence of consequence that lists the selected names, and the typed confirmation from `ConfirmDialog` `confirmation-phrase`: one application asks for its name, several ask for `delete` (a list of names cannot be retyped, so the confirmation is the verb), matched exactly and case-sensitive. The actions are Cancel and a danger `Delete applications` that enables only once the text matches; confirming removes the selected items and clears the selection. The typed word resets each time the dialog opens.
 

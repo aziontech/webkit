@@ -48,7 +48,7 @@ Folders sort first with a link-coloured folder glyph; the folder name is a `Butt
 
 `TableCellActions`, named after the file ("Actions for logo.svg"), opens a menu placed `bottom-end`: Open for a folder or Download for a file in the first group, Delete alone in the last group. The `..` row has no menu.
 
-### H. Delete confirmation — `ConfirmDialog`, `Alert`, `Input` (required)
+### H. Delete confirmation — `ConfirmDialog`, `Alert` (required)
 
 The root's `select` event hands the option and the row to the page: Open enters the folder, Delete opens the `edit/edit-delete-dialog` dialog without a trigger of its own. A medium `ConfirmDialog` titled `Delete file` or `Delete folder`, a warning `Alert` (`Once confirmed, this action can't be reversed.`), one sentence of consequence (a folder goes with all its files), and the typed confirmation `ConfirmDialog` draws from `confirmation-phrase` (`Type <name> to confirm.`, exact and case-sensitive); the danger confirm repeats the title and enables only when the typed text matches the name. The typed text resets each time it opens.
 

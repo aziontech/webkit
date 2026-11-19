@@ -51,7 +51,7 @@ Every cell is a preset from `@aziontech/webkit/table`, so the list reads like ev
 
 `TableCellActions` (an ellipsis button named after the row, e.g. "Actions for resource-01") opens a menu: the everyday actions (Deploy, View details, Clone) in one group, Delete alone in the last group. The root's `select` event hands the option value and the row to the page; Delete opens the confirmation below.
 
-### H. Delete confirmation — `ConfirmDialog`, `Alert`, `Input` (required)
+### H. Delete confirmation — `ConfirmDialog`, `Alert` (required)
 
 The `edit/edit-delete-dialog` dialog, opened from the row menu without a trigger of its own: a medium `ConfirmDialog` titled `Delete resource`, a warning `Alert` (`Once confirmed, this action can't be reversed.`), one sentence of consequence, and the typed confirmation `ConfirmDialog` draws from `confirmation-phrase` (`Type <name> to confirm.`, exact and case-sensitive). The danger `Delete resource` enables only when the typed text matches the row's name; confirming removes the row. The typed text resets each time the dialog opens.
 

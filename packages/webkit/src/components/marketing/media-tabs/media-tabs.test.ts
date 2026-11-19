@@ -391,7 +391,7 @@ describe('MediaTabs', () => {
       expect(host.getAttribute('aria-hidden')).toBe('true')
     }
 
-    await fireEvent.click(rowsOf(container)[1]!.querySelector('button')!)
+    await fireEvent.click(rowsOf(container as HTMLElement)[1]!.querySelector('button')!)
     await nextTick()
     expect(inertButtons()).toContain('Play 0')
     expect(inertButtons()).not.toContain('Play 1')

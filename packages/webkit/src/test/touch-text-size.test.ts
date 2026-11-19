@@ -76,7 +76,10 @@ describe('typed text on touch screens (styled)', () => {
     })
 
     it('keeps a monospace Input in the code face at 16px', () => {
-      const { getByRole } = render(Input, { props: { monospace: true, ariaLabel: 'Slug' } })
+      const { getByRole } = render(Input, {
+        props: { monospace: true },
+        attrs: { 'aria-label': 'Slug' }
+      })
       const control = getByRole('textbox')
 
       expect(fontSize(control)).toBe(16)

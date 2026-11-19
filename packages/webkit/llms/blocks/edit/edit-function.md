@@ -55,7 +55,7 @@ In TestRun the Code document becomes a vertical `ResizableRoot`: the editor is t
 4. Trace: one sentence on how to read it, then the `Trace` waterfall bound with `v-model:selected-key`, so the selected span's details (service, start, duration, share, attributes) open under it. While running, a status line says the trace appears when the run finishes.
 5. Logs: a `LogViewer` with `LogViewerContent` on the same clock as the trace, `copyable`, and its loading state while running.
 
-### E. Arguments split — `ResizableRoot`, `ResizablePane`, `ResizableHandle`, `CodeEditor`, `Button` (required)
+### E. Arguments split — `ResizableRoot`, `ResizablePane`, `ResizableHandle`, `CodeEditor`, `Button`, `ConfirmDialog` (required)
 
 A count of fields and the outlined Add field and Remove form `Button`s sit above a `ResizableRoot`. Remove form asks first in a small `ConfirmDialog` (the field count, and that Discard brings them back until Save) before it empties the schema. The left `ResizablePane` holds the schema as JSON in a `CodeEditor` (`language="json"`, `fill`, `pad-line-numbers` and the same `loadMonaco`); it is `collapsible` with a minimum and maximum width. The `ResizableHandle` resizes it and collapses it past its minimum. The right pane holds the fields form; both panes describe the same argument form. A `ResizeObserver` on the split keeps the fields usable: while the split is narrower than 640 px (a phone) the `ResizableRoot` turns `vertical`, with the schema on top at 240 px and the fields below at full width; wider, the schema is capped at 45% of the split so the fields never drop under their minimum.
 

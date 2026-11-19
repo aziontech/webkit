@@ -135,8 +135,16 @@ describe('ai', () => {
         open: false,
         'onUpdate:open': (open: boolean) => view.rerender({ open }),
         messages: [
-          { id: 'u1', role: 'user', parts: [{ type: 'text', content: 'Is it cached?' }] },
-          { id: 'a1', role: 'assistant', parts: [{ type: 'text', content: 'Yes.' }] }
+          {
+            id: 'u1',
+            role: 'user' as const,
+            parts: [{ type: 'text' as const, content: 'Is it cached?' }]
+          },
+          {
+            id: 'a1',
+            role: 'assistant' as const,
+            parts: [{ type: 'text' as const, content: 'Yes.' }]
+          }
         ]
       }
     })

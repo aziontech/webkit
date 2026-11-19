@@ -4,7 +4,7 @@ category: overlay
 structure: monolithic
 status: implemented
 checksum: 95547c59d598e70c4d83f4982255b0280057cde4b3898795504c554c1c79df4d
-spec_version: 8
+spec_version: 9
 created: 2026-11-10
 last_updated: 2026-11-19
 ---

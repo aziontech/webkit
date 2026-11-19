@@ -68,7 +68,7 @@ A Results band with its own search `Input`, a `ToggleGroup` switching Table and 
 
 Templates opens a large right `Drawer` titled SQL quick templates with a one-line description, a Search templates `Input` and one outlined clickable `Item` per snippet (a small `EmptyState` with Clear search when none matches). Choosing a card loads its SQL into the editor and closes the drawer.
 
-### J. Bulk row delete — `Button` (optional)
+### J. Bulk row delete — `Button`, `ConfirmDialog` (optional)
 
 With rows selected, a selection bar opens under the Data toolbar: `2 selected`, Clear selection, and an outlined `Delete 2 rows` `Button` at its end. Sort never moves, so a second tap meant for Sort cannot land on Delete. TableData opens with two rows selected (`defaultSelectedKeys`). Delete N rows asks first in a small `ConfirmDialog` naming the count and the table; confirming removes the rows from the table and emits `delete-rows`; the page sends the request and raises the success toast `2 rows deleted from events.` whose action fits the rows, Undo, which puts them back. Deleting rows is not a deploy: never View deployments, Edit or Redeploy.
 
