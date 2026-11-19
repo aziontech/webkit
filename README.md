@@ -31,9 +31,8 @@ Every component follows one [component lifecycle](./CONTRIBUTING.md#component-li
 
 ## For AI agents: start here
 
-Pick the path by what you are about to do.
-
-### I am building a screen or an app with WebKit (consume)
+Creating or changing WebKit itself? Skip to [Changing WebKit](#changing-webkit-contribute). Building
+a screen or an app with WebKit? Follow these steps.
 
 1. Run `npx @aziontech/webkit init`. It installs the `webkit` MCP server, the lint, the skills and
    rules, and writes the WebKit block into `AGENTS.md` (and `CLAUDE.md`).
@@ -54,17 +53,6 @@ Pick the path by what you are about to do.
 
 Rules for this path: [`skills/`](./skills/) and [`rules/`](./rules/). Do not use `.claude/`,
 `.specs/` or `apps/` to build screens; they belong to the people who maintain WebKit.
-
-### I am creating or changing WebKit (contribute)
-
-1. Read [`.claude/AGENTS.md`](./.claude/AGENTS.md).
-2. Follow the [component lifecycle](./CONTRIBUTING.md#component-lifecycle): Add, Change,
-   Deprecate, Remove. Every component starts from a spec in `.specs/`, through `/component-new`.
-3. Every block in `packages/webkit/blocks/` is a screen agents copy and every folder in
-   `packages/webkit/examples/` documents a component. Changed one? Run
-   `pnpm --filter @aziontech/webkit build:catalog`; the docs page and the styled visual test follow
-   from the files.
-4. Before the PR: "What to update when WebKit changes", in [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## Building with WebKit (consume)
 
@@ -161,6 +149,14 @@ migration), **Deprecate** (`@deprecated` naming the replacement and the removal 
 one major) and **Remove** (a major, with everything the component shipped removed together).
 Designers file the issue forms and review screenshots: see
 [For designers](./CONTRIBUTING.md#for-designers).
+
+1. Read [`.claude/AGENTS.md`](./.claude/AGENTS.md).
+2. Every component starts from a spec in `.specs/`, through `/component-new`.
+3. Every block in `packages/webkit/blocks/` is a screen agents copy and every folder in
+   `packages/webkit/examples/` documents a component. Changed one? Run
+   `pnpm --filter @aziontech/webkit build:catalog`; the docs page and the styled visual test follow
+   from the files.
+4. Before the PR: "What to update when WebKit changes", in [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ### What is in this repository
 
