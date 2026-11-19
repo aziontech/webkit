@@ -162,7 +162,9 @@ describe('shell/shell-console', () => {
 
 describe('shell/shell-console sign-out', () => {
   it('emits sign-out with the event when Log out is chosen, and nothing for other items', async () => {
-    const view = render(ConsoleShell)
+    const host = document.body.appendChild(document.createElement('div'))
+    host.style.width = '1280px'
+    const view = render(ConsoleShell, { container: host })
     const footer = within(view.getByTestId('console-layout__account'))
     await fireEvent.click(footer.getByRole('button', { name: 'Account menu' }))
     const settings = await waitFor(() =>

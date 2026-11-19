@@ -537,6 +537,12 @@ describe('ConsoleLayout', () => {
       }
     }
 
+    const wideContainer = () => {
+      const host = document.createElement('div')
+      host.style.width = '1200px'
+      return document.body.appendChild(host)
+    }
+
     const currentRow = (scroller: HTMLElement) =>
       scroller.querySelector<HTMLElement>('[aria-current="page"]') as HTMLElement
 
@@ -549,6 +555,7 @@ describe('ConsoleLayout', () => {
     it('scrolls the rail, not the page, to a current row below the fold', async () => {
       const pageScroll = document.scrollingElement?.scrollTop ?? 0
       const { getByTestId, rerender } = render(ConsoleLayout, {
+        container: wideContainer(),
         props: { navigation: longNavigation, activeId: 'row-0' }
       })
       const scroller = scrollerOf(getByTestId)
@@ -563,6 +570,7 @@ describe('ConsoleLayout', () => {
 
     it('scrolls back up to a current row above the visible part', async () => {
       const { getByTestId, rerender } = render(ConsoleLayout, {
+        container: wideContainer(),
         props: { navigation: longNavigation, activeId: 'row-0' }
       })
       const scroller = scrollerOf(getByTestId)
@@ -578,6 +586,7 @@ describe('ConsoleLayout', () => {
     it('scrolls the rail to the current row on mount', async () => {
       await withShortRail(async () => {
         const { getByTestId } = render(ConsoleLayout, {
+          container: wideContainer(),
           props: { navigation: longNavigation, activeId: 'row-36' }
         })
         const scroller = getByTestId('console-layout__navigation__scroll')
@@ -588,6 +597,7 @@ describe('ConsoleLayout', () => {
 
     it('leaves the rail where it is when the current row is already visible', async () => {
       const { getByTestId, rerender } = render(ConsoleLayout, {
+        container: wideContainer(),
         props: { navigation: longNavigation, activeId: 'row-0' }
       })
       const scroller = scrollerOf(getByTestId)
