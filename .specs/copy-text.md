@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 2
 template: 2
-checksum: 5c7b44a8fe9657d6cd0d6fd4eff4f398cfe21443f00235684a32a30f17d5b8d0
+checksum: 5164341bf451364cf6403d8af57260696755299aa780d0e7b254f34f195d4f8e
 created: 2026-11-16
 last_updated: 2026-11-17
 ---
@@ -141,6 +141,7 @@ CopyText shows one code value (a CSS custom property, a utility class, a CNAME, 
 
 - Container queries: none; the box is inline and as wide as its value, capped at `max-w-full`.
 - Narrow (≤ 640 px or a narrow container): the value never wraps (`whitespace-nowrap`, no break at hyphens) and truncates with an ellipsis; the copy button never shrinks.
+- The truncating value keeps 2 px of block padding (`py-0.5`) inside its clip, because the code typography sets a line height of 1: without it the clip cuts descenders (`g` in `--bg-canvas` reads as `q`).
 - Touch: the copy button is always visible (no hover-only affordance); 28 / 32 px with a 44 px hit area on `pointer: coarse`.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom — the value truncates instead.
 

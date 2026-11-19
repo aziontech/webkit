@@ -56,7 +56,7 @@
     <span
       dir="ltr"
       :title="value"
-      class="min-w-0 truncate text-start"
+      class="min-w-0 truncate py-0.5 text-start"
       :data-testid="`${testId}__value`"
       >{{ value }}</span
     >
