@@ -4174,6 +4174,7 @@
   "filter-menu-chips": "filter-menu-chip-group",
   "flow": "flow-diagram",
   "flow-diagram-parallel": "flow-diagram-group",
+  "flow-parallel": "flow-diagram-group",
   "frame-box": "registration-frame",
   "global-header": "app-header",
   "help-panel-links": "help-panel-footer",
