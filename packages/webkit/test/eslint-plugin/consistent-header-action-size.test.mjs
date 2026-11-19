@@ -53,7 +53,10 @@ test('consistent-header-action-size', () => {
         errors: [{ messageId: 'size' }]
       },
       {
-        code: sfc('<div class="flex"><icon-button icon="az az-refresh" aria-label="Refresh" size="small" /></div>', 'page-header'),
+        code: sfc(
+          '<div class="flex"><icon-button icon="az az-refresh" aria-label="Refresh" size="small" /></div>',
+          'page-header'
+        ),
         errors: [{ messageId: 'size' }]
       }
     ]

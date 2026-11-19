@@ -369,7 +369,7 @@
   {
     "name": "faq",
     "path": "src/components/marketing/faq/faq.vue",
-    "limit": "4.7 KB"
+    "limit": "4.8 KB"
   },
   {
     "name": "media-tile",
@@ -677,7 +677,7 @@
   {
     "name": "faq-section",
     "path": "src/components/section/faq-section/faq-section.vue",
-    "limit": "7.2 KB"
+    "limit": "7.3 KB"
   },
   {
     "name": "contact-hub-section",
@@ -1315,7 +1315,7 @@
   {
     "name": "schema-form",
     "path": "src/components/input/schema-form/schema-form.vue",
-    "limit": "61.05 KB"
+    "limit": "61.2 KB"
   },
   {
     "name": "use-unsaved-changes",
@@ -1529,7 +1529,7 @@
   {
     "name": "accordion",
     "path": "src/components/content/accordion/index.ts",
-    "limit": "3.25 KB"
+    "limit": "3.35 KB"
   },
   {
     "name": "accordion-item",
@@ -1544,7 +1544,7 @@
   {
     "name": "accordion-content",
     "path": "src/components/content/accordion/accordion-content/accordion-content.vue",
-    "limit": "1.25 KB"
+    "limit": "1.4 KB"
   },
   {
     "name": "pricing-card",

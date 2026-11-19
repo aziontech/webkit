@@ -523,3 +523,5 @@ Budget-raise: locales-pt-BR 10.7 KB → 10.8 KB (measured 10.73 KB): RV-FL-1, th
 Budget-raise: llms-full.txt 2,200,000 → 2,210,000 bytes: RV-FL-1, the `LanguageSelect` page (spec sections and examples) in the full AI bundle.
 Budget-raise: package unpacked size 33,400,000 → 33,450,000 bytes (measured 33,402,105): RV-FL-1, the `LanguageSelect` source, examples, catalog and llms pages, merged with the TanStack AI message blocks.
 Budget-raise: feature-tabs-section 55.25 KB → 55.3 KB (measured 55.25 KB, over by bytes): the CodeBlock it embeds no longer darkens an added or removed line on hover (two classes), because the hovered line dropped `--code-syntax-function` to 3.88:1 in light.
+Budget-raise: accordion 3.25 KB → 3.35 KB, accordion-content 1.25 KB → 1.4 KB (measured 3.31 KB, 1.38 KB): RV-AC-1, the `padded` prop, the inner body wrapper and the inset classes that start the answer on the question's left edge, after the chevron when it leads.
+Budget-raise: faq 4.7 KB → 4.8 KB, faq-section 7.2 KB → 7.3 KB, schema-form 61.05 KB → 61.2 KB (measured 4.73, 7.21 and 61.12 KB): RV-AC-1, the same Accordion classes in the components that bundle it.
