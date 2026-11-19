@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url'
 import { defineConfig } from '@playwright/test'
 
 const DOCS_PORT = 4173
@@ -19,7 +20,8 @@ export default defineConfig({
       maxDiffPixels: 100,
       animations: 'disabled',
       caret: 'hide',
-      scale: 'css'
+      scale: 'css',
+      stylePath: fileURLToPath(new URL('./tests/screenshot.css', import.meta.url))
     }
   },
   use: {
