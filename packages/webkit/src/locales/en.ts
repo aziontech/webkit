@@ -485,6 +485,7 @@ export const filePreview = {
   noPreviewDetail: 'Download the file to open it.',
   error: 'The preview could not load',
   empty: 'This file is empty.',
+  document: 'Preview of {name}',
   truncated: 'Showing the first {shown} characters. Download the file to see all of it.'
 } as const
 

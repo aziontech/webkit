@@ -585,6 +585,7 @@ export const ptBR: Messages = {
     noPreviewDetail: 'Baixe o arquivo para abri-lo.',
     error: 'Não foi possível carregar a pré-visualização',
     empty: 'Este arquivo está vazio.',
+    document: 'Pré-visualização de {name}',
     truncated: 'Mostrando os primeiros {shown} caracteres. Baixe o arquivo para ver tudo.'
   },
   fileTokenGroup: {

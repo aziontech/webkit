@@ -585,6 +585,7 @@ export const es: Messages = {
     noPreviewDetail: 'Descarga el archivo para abrirlo.',
     error: 'No se pudo cargar la vista previa',
     empty: 'Este archivo está vacío.',
+    document: 'Vista previa de {name}',
     truncated: 'Mostrando los primeros {shown} caracteres. Descarga el archivo para verlo completo.'
   },
   fileTokenGroup: {

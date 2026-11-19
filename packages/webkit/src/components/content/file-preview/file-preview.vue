@@ -1,12 +1,18 @@
 <script setup lang="ts">
-  import { computed, ref, useAttrs, useId, watch } from 'vue'
+  import { computed, onMounted, onScopeDispose, ref, useAttrs, useId, watch } from 'vue'
 
   import { useLocale } from '../../../composables/use-locale/use-locale'
   import * as en from '../../../locales/en'
   import Button from '../../action/button/button.vue'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
-  import { extensionOf, filePreviewType, formatJson } from './lib/file-type'
+  import {
+    decodeBase64,
+    decodeBase64Text,
+    extensionOf,
+    filePreviewType,
+    formatJson
+  } from './lib/file-type'
 
   export type { FilePreviewType } from './lib/file-type'
 
@@ -22,9 +28,11 @@
     mimeType?: string
     /** Size of the whole file in bytes, shown beside the type. Unset hides the size. */
     bytes?: number
-    /** URL of an image file to draw. An image with no `src` shows the no-preview state. */
+    /** URL of an image or PDF file to draw. Set, it wins over `base64`. */
     src?: string
-    /** Text of a text or JSON file. JSON that parses is pretty-printed; JSON that does not shows as text. */
+    /** Base64 bytes of the file, for an app that holds the file rather than a URL. Text and JSON are decoded into the body when `content` is empty; an image or PDF with no `src` is drawn from them. */
+    base64?: string
+    /** Text of a text or JSON file. JSON that parses is pretty-printed; JSON that does not shows as text. Set, it wins over `base64`. */
     content?: string
     /** Characters of text shown before the rest is cut, with a note that says how much is shown. */
     maxLength?: number
@@ -38,6 +46,7 @@
     mimeType: '',
     bytes: undefined,
     src: '',
+    base64: '',
     content: '',
     maxLength: 20000,
     loading: false,
@@ -59,6 +68,9 @@
   const nameId = useId()
 
   const imageFailed = ref(false)
+  const mounted = ref(false)
+  const pdfViewer = ref(false)
+  const objectUrl = ref('')
 
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'file-preview'
@@ -66,14 +78,24 @@
 
   const declaredType = computed(() => filePreviewType(props.mimeType, props.fileName))
 
+  const drawnSrc = computed(() => props.src || objectUrl.value)
+
   const shownType = computed(() =>
-    declaredType.value === 'image' && (!props.src || imageFailed.value)
+    declaredType.value === 'image' && (!drawnSrc.value || imageFailed.value)
       ? 'unknown'
       : declaredType.value
   )
 
+  const pdfShown = computed(
+    () => shownType.value === 'pdf' && mounted.value && pdfViewer.value && !!drawnSrc.value
+  )
+
+  const sourceText = computed(() =>
+    props.content || !props.base64 ? props.content : decodeBase64Text(props.base64)
+  )
+
   const text = computed(() =>
-    shownType.value === 'json' ? formatJson(props.content) : props.content
+    shownType.value === 'json' ? formatJson(sourceText.value) : sourceText.value
   )
 
   const truncated = computed(() => text.value.length > props.maxLength)
@@ -85,9 +107,15 @@
   const icon = computed(() =>
     shownType.value === 'image'
       ? 'az az-image'
-      : shownType.value === 'json'
-        ? 'az az-json'
-        : 'az az-file'
+      : shownType.value === 'pdf'
+        ? 'az az-file-pdf'
+        : shownType.value === 'audio'
+          ? 'az az-headphones'
+          : shownType.value === 'video'
+            ? 'az az-video'
+            : shownType.value === 'json'
+              ? 'az az-json'
+              : 'az az-file'
   )
 
   const meta = computed(() =>
@@ -103,12 +131,39 @@
     t('filePreview.truncated', { shown: formatNumber(visibleText.value.length) })
   )
 
+  function releaseObjectUrl() {
+    if (objectUrl.value) URL.revokeObjectURL(objectUrl.value)
+    objectUrl.value = ''
+  }
+
+  function makeObjectUrl() {
+    releaseObjectUrl()
+    if (!mounted.value || props.src || !props.base64) return
+    if (declaredType.value !== 'image' && declaredType.value !== 'pdf') return
+    const bytes = decodeBase64(props.base64)
+    if (!bytes) return
+    const type = props.mimeType || (declaredType.value === 'pdf' ? 'application/pdf' : '')
+    objectUrl.value = URL.createObjectURL(new Blob([bytes], { type }))
+  }
+
   watch(
-    () => props.src,
+    () => [props.src, props.base64],
     () => {
       imageFailed.value = false
     }
   )
+
+  watch(
+    () => [mounted.value, props.src, props.base64, props.mimeType, declaredType.value],
+    makeObjectUrl
+  )
+
+  onMounted(() => {
+    pdfViewer.value = navigator.pdfViewerEnabled !== false
+    mounted.value = true
+  })
+
+  onScopeDispose(releaseObjectUrl)
 </script>
 
 <template>
@@ -197,19 +252,36 @@
       >
         <img
           :data-testid="`${testId}__image`"
-          :src="src"
+          :src="drawnSrc"
           :alt="fileName"
           class="max-h-(--container-xs) max-w-full object-contain"
           @error="imageFailed = true"
         />
       </div>
+      <object
+        v-else-if="pdfShown"
+        :data-testid="`${testId}__document`"
+        :data="drawnSrc"
+        type="application/pdf"
+        :title="t('filePreview.document', { name: fileName })"
+        :aria-label="t('filePreview.document', { name: fileName })"
+        class="block h-(--container-lg) w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color)"
+      >
+        <EmptyState
+          :data-testid="`${testId}__unsupported`"
+          :title="t('filePreview.noPreview')"
+          :description="t('filePreview.noPreviewDetail')"
+          icon="az az-file-pdf"
+          size="small"
+        />
+      </object>
       <EmptyState
         key="empty-state-2"
-        v-else-if="shownType === 'unknown'"
+        v-else-if="['unknown', 'pdf', 'audio', 'video'].includes(shownType)"
         :data-testid="`${testId}__unsupported`"
         :title="t('filePreview.noPreview')"
         :description="t('filePreview.noPreviewDetail')"
-        icon="az az-file"
+        :icon="icon"
         size="small"
       />
       <p
