@@ -82,7 +82,6 @@ export type Token = {
   usage?: TokenUsage
   preview?: TokenPreview
   responsive?: Record<string, string>
-  continued?: boolean
 }
 
 export type IconAsset = {

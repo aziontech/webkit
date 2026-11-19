@@ -1,7 +1,13 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 
-import { markdown, markdownParts, pairWord } from '../plugins/content.ts'
+import {
+  buildComponent,
+  markdown,
+  markdownParts,
+  pairWord,
+  SPEC_SECTIONS
+} from '../plugins/content.ts'
 
 const md = await markdown()
 
@@ -61,4 +67,14 @@ test('a Do and Don’t heading pair, and a labelled list, become one pair part',
     assert.match(list[0].pair.do, /a/)
     assert.match(list[0].pair.dont, /b/)
   }
+})
+
+test('a component page never renders the spec Constraints block written for agents', async () => {
+  assert.ok(!SPEC_SECTIONS.some((heading) => /constraints/i.test(heading)))
+  const doc = await buildComponent('button')
+  assert.ok(!Object.keys(doc.spec).some((heading) => /constraints/i.test(heading)))
+  const page = JSON.stringify(doc)
+  assert.doesNotMatch(page, /Do not add props beyond the Props table/)
+  assert.doesNotMatch(page, /Constraints — DO NOT/)
+  assert.ok(doc.bestPractices.length > 0)
 })

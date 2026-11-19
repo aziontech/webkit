@@ -443,14 +443,13 @@ export function buildIndex(catalog: Catalog = readCatalog(), foundationSlugs: st
   }
 }
 
-const SPEC_SECTIONS = [
+export const SPEC_SECTIONS = [
   'Accessibility (WCAG 2.1 AA)',
   'Right-to-left',
   'Internationalization',
   'Responsive',
   'v-model',
-  'States',
-  'Constraints — DO NOT'
+  'States'
 ]
 
 function specSections(name: string): Record<string, string> {
