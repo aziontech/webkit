@@ -30207,14 +30207,21 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "URL of an image file to draw. An image with no `src` shows the no-preview state."
+     "doc": "URL of an image or PDF file to draw. Set, it wins over `base64`."
+    },
+    {
+     "name": "base64",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Base64 bytes of the file, for an app that holds the file rather than a URL. Text and JSON are decoded into the body when `content` is empty; an image or PDF with no `src` is drawn from them."
     },
     {
      "name": "content",
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Text of a text or JSON file. JSON that parses is pretty-printed; JSON that does not shows as text."
+     "doc": "Text of a text or JSON file. JSON that parses is pretty-printed; JSON that does not shows as text. Set, it wins over `base64`."
     },
     {
      "name": "maxLength",

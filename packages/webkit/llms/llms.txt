@@ -202,7 +202,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [CurrencyAmount](components/currency-amount.md): Use CurrencyAmount to typeset one money amount anywhere; a money metric with a delta and a sparkline is a StatTile.
 - [Embed](components/embed.md): A responsive `iframe` for third-party content — a demo, a player, a status page, a form — that keeps its aspect ratio at every width and always carries the accessible name an `iframe` needs.
 - [Eyebrow](components/eyebrow.md): Overline is the short uppercase label set above a headline to name the section, panel or group it opens (the "eyebrow").
-- [FilePreview](components/file-preview.md): The preview of one stored file in a storage or object browser: a header with the file's glyph, name, type and size, a Download action, and a body that shows the file the way it can be read.
+- [FilePreview](components/file-preview.md): The preview of one stored file in a storage or object browser, or of a document in an AI conversation (a PDF the reader attaches or a model returns): a header with the file's glyph, name, type and size, a Download act…
 - [HelpPanel](components/help-panel.md): The content of a help side region: a topic's title, a few sections of short guidance, and the "Learn more" links that leave for the documentation.
 - [Illustration](components/illustration.md): Renders an **official product illustration** — one of the scenes drawn in the Assets library in Figma and exported as an SVG that ships with this package.
 - [ImageGallery](components/image-gallery.md): The images of one response: a responsive grid of thumbnails that opens one image larger in a `Dialog`, with previous, next and Download.

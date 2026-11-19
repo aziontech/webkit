@@ -3,23 +3,24 @@ name: file-preview
 category: content
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: ed9ecae2b56357757b987c0fec6412dd1f7c0352397fe0b0933cecfbe3067881
+checksum: 83b5d0eb4ce605ec78e719c012cd1e4c115a5bc64063afcebe8b36f8b27c9031
 created: 2026-11-16
-last_updated: 2026-11-17
+last_updated: 2026-11-19
 ---
 
 # FilePreview — Component Spec
 
 ## Purpose
 
-The preview of one stored file in a storage or object browser: a header with the file's glyph, name, type and size, a Download action, and a body that shows the file the way it can be read. An image renders as the image, text as wrapped monospace text, JSON pretty-printed, and any other type a no-preview state that points at Download. Long text is cut at `maxLength` characters with a note that says so. It renders what the app hands it (an image URL, the text it fetched); it fetches nothing.
+The preview of one stored file in a storage or object browser, or of a document in an AI conversation (a PDF the reader attaches or a model returns): a header with the file's glyph, name, type and size, a Download action, and a body that shows the file the way it can be read. An image renders as the image, a PDF in the browser's own PDF viewer, text as wrapped monospace text, JSON pretty-printed, and any other type a no-preview state that points at Download. Audio and video files are recognized (their glyph and type) and show the file card with Download; this component plays nothing. Long text is cut at `maxLength` characters with a note that says so. The file comes as a URL (`src`), as text (`content`) or as base64 bytes (`base64`, the shape a chat message carries); it renders what the app hands it and fetches nothing.
 
 ## When to use
 
 - The detail pane or drawer of a file browser when a row is opened (`view/view-file-browser`, an Edge Storage bucket, a KV value).
 - Showing an uploaded object before it is published or replaced.
+- A document part or an attachment in an AI conversation: a PDF, a text file or an image, from a URL or from base64 bytes.
 - Any screen that shows one file and needs a type-aware fallback for files it cannot draw.
 
 ## When NOT to use
@@ -28,6 +29,7 @@ The preview of one stored file in a storage or object browser: a header with the
 - Highlighted source code with tabs and copy — use `CodeBlock`.
 - A list of files with upload progress — use `FileTokenGroup` or `UploadProgress`.
 - A log stream — use `LogViewer`.
+- Playing audio or video — this component shows those files as a card with Download, not a player.
 
 ## Related
 
@@ -42,6 +44,8 @@ The preview of one stored file in a storage or object browser: a header with the
 - Fetch only the first part of a large text file (a ranged request) and pass `bytes` with the full size, so the header shows the real size while the body shows the first part.
 - Handle `download` with the app's own signed or authorized URL; the component never builds one.
 - Pass an object URL (`URL.createObjectURL`) or a short-lived signed URL as `src`; revoke an object URL when the preview closes.
+- When the app holds the bytes rather than a URL (a chat message part with base64 data), pass them as `base64` with `mimeType`; the component makes its own object URL for an image or PDF and revokes it when the source changes or the preview unmounts. Text and JSON are decoded into the body.
+- A PDF is drawn by the browser's own viewer; where there is none (most phones, a viewer turned off), the body shows the no-preview state and Download stays.
 
 ## Usage
 
@@ -65,16 +69,17 @@ The preview of one stored file in a storage or object browser: a header with the
 
 ## Props
 
-| Prop        | Type      | Default   | Required | JSDoc                                                                                                   |
-| ----------- | --------- | --------- | -------- | ------------------------------------------------------------------------------------------------------- |
-| `fileName`  | `string`  | —         | true     | Name of the file, shown in the header and used as the image's alternative text.                         |
-| `mimeType`  | `string`  | `''`      | false    | Media type of the file (`image/png`, `application/json`). Empty reads the type from the file extension. |
-| `bytes`     | `number`  | undefined | false    | Size of the whole file in bytes, shown beside the type. Unset hides the size.                           |
-| `src`       | `string`  | `''`      | false    | URL of an image file to draw. An image with no `src` shows the no-preview state.                        |
-| `content`   | `string`  | `''`      | false    | Text of a text or JSON file. JSON that parses is pretty-printed; JSON that does not shows as text.      |
-| `maxLength` | `number`  | `20000`   | false    | Characters of text shown before the rest is cut, with a note that says how much is shown.               |
-| `loading`   | `boolean` | `false`   | false    | Shows a placeholder in the body while the app fetches the file; the header stays.                       |
-| `error`     | `string`  | `''`      | false    | Why the preview could not load. Set, the body shows the error state with this text.                     |
+| Prop        | Type      | Default   | Required | JSDoc                                                                                                                                                                                          |
+| ----------- | --------- | --------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `fileName`  | `string`  | —         | true     | Name of the file, shown in the header and used as the image's alternative text.                                                                                                                |
+| `mimeType`  | `string`  | `''`      | false    | Media type of the file (`image/png`, `application/json`). Empty reads the type from the file extension.                                                                                        |
+| `bytes`     | `number`  | undefined | false    | Size of the whole file in bytes, shown beside the type. Unset hides the size.                                                                                                                  |
+| `src`       | `string`  | `''`      | false    | URL of an image or PDF file to draw. Set, it wins over `base64`.                                                                                                                               |
+| `base64`    | `string`  | `''`      | false    | Base64 bytes of the file, for an app that holds the file rather than a URL. Text and JSON are decoded into the body when `content` is empty; an image or PDF with no `src` is drawn from them. |
+| `content`   | `string`  | `''`      | false    | Text of a text or JSON file. JSON that parses is pretty-printed; JSON that does not shows as text. Set, it wins over `base64`.                                                                 |
+| `maxLength` | `number`  | `20000`   | false    | Characters of text shown before the rest is cut, with a note that says how much is shown.                                                                                                      |
+| `loading`   | `boolean` | `false`   | false    | Shows a placeholder in the body while the app fetches the file; the header stays.                                                                                                              |
+| `error`     | `string`  | `''`      | false    | Why the preview could not load. Set, the body shows the error state with this text.                                                                                                            |
 
 ## Events
 
@@ -90,10 +95,15 @@ The preview of one stored file in a storage or object browser: a header with the
 
 ## States
 
-- `data-type`: `image` | `text` | `json` | `unknown`, the way the body draws the file (derived from `mimeType`, then the extension).
+- `data-type`: `image` | `pdf` | `audio` | `video` | `text` | `json` | `unknown`, the kind of file the body draws (derived from `mimeType`, then the extension: `application/pdf` or `.pdf`, `audio/*` or an audio extension, `video/*` or a video extension).
+- Header glyph per type: `image` `az az-image`, `pdf` `az az-file-pdf`, `audio` `az az-headphones`, `video` `az az-video`, `json` `az az-json`, `text` and `unknown` `az az-file`.
+- A PDF with a source is an `object` (`type="application/pdf"`) of that source in the browser's PDF viewer, `var(--container-lg)` tall, with the ring token on keyboard focus; its fallback content is the no-preview state. Where the browser reports no PDF viewer (`navigator.pdfViewerEnabled` is `false`), or the PDF has no source, `data-type` stays `pdf` (glyph and type in the header) and only the body shows the no-preview state.
+- Server render: `navigator` and `URL.createObjectURL` exist only in the browser, so the server and the first client render show a PDF's body as the no-preview state, and an image or PDF given only as `base64` with no source yet. After mount the component makes the object URL from `base64` and swaps the PDF `object` in when a viewer exists and a source resolves.
+- An audio or video file keeps its `data-type` and glyph and shows the no-preview body; no player.
+- `base64` is plain base64 or a base64 data URL (`data:application/pdf;base64,…`, the prefix is dropped). Text is decoded as UTF-8. `base64` that does not decode draws nothing: an image falls back to the no-preview state, a PDF shows the no-preview body, text shows the empty-file line.
 - `data-loading` mirrors `loading`; the body is a `Skeleton` in a `role="status"` region and `aria-busy` is set.
 - `error` set: the body is an `EmptyState` with the error text; Download stays available.
-- An image that fails to load falls back to the no-preview state.
+- An image that fails to load, or has no source, falls back to the no-preview state.
 - Text over `maxLength` sets `data-truncated` and shows the truncation note.
 - A text or JSON file with no content shows the empty-file line.
 
@@ -112,6 +122,8 @@ _none_
 | name          | `.text-label-md`, `var(--text-default)`     |
 | type and size | `.text-body-xs`, `var(--text-muted)`        |
 | text and JSON | `.text-body-code-sm`, `var(--text-default)` |
+| PDF height    | `var(--container-lg)`                       |
+| PDF focus     | `var(--ring-color)`                         |
 | ring          | `var(--ring-color)`                         |
 
 ## Theme gaps
@@ -124,10 +136,11 @@ _none_
 
 - The root is a `section` named by the file name (`aria-labelledby`).
 - The image's `alt` is the file name.
+- The PDF `object` is named `Preview of <file>` (`title` and `aria-label`), so a screen reader announces the embedded document; the browser's viewer owns the keyboard inside it.
 - The text body is a focusable, scrollable region (`tabindex="0"`, `role="region"`, named `Contents of <file>`) so a keyboard user can scroll it.
 - Loading is a `role="status"` region named `Loading preview`; the root has `aria-busy`.
 - Download is a real `Button` with a visible label; the glyph is decorative (`aria-hidden`).
-- Keyboard: `Tab` reaches the `actions` slot, Download and the text body; arrow keys scroll the text body.
+- Keyboard: `Tab` reaches the `actions` slot, Download, the text body and the PDF viewer; arrow keys scroll the text body.
 - Contrast ≥4.5:1 for the name, the meta line and the text.
 
 ## Internationalization
@@ -141,6 +154,7 @@ _none_
 | `filePreview.noPreviewDetail` | `Download the file to open it.`                                             | —             |
 | `filePreview.error`           | `The preview could not load`                                                | `error`       |
 | `filePreview.empty`           | `This file is empty.`                                                       | —             |
+| `filePreview.document`        | `Preview of {name}`                                                         | —             |
 | `filePreview.truncated`       | `Showing the first {shown} characters. Download the file to see all of it.` | —             |
 
 - Formatting: `formatFileSize` (`Intl.NumberFormat` units) for `bytes`, `formatNumber` for the truncation count, both with the `ConfigProvider` locale.
@@ -149,6 +163,7 @@ _none_
 
 - Layout: logical utilities only (`gap`, `ps-`/`pe-`, `text-start`); the header mirrors.
 - Icons: none mirrored (file glyphs, download).
+- The PDF viewer is the browser's; it follows the document's own direction.
 - Keyboard: unchanged.
 - User data: the file name is in `<bdi>`; the text body is `dir="auto"` so code keeps its order on a right-to-left page.
 
@@ -157,20 +172,22 @@ _none_
 - Container queries: none; it fills its column or drawer.
 - Narrow (≤ 640 px): the name truncates with an ellipsis, the meta line stays under it, the Download label stays.
 - Touch: the Download button and the `actions` slot keep the `Button` touch target.
-- Reflow: no horizontal page scroll at 320 px; long text lines wrap, and an image scales down to the body width.
+- Reflow: no horizontal page scroll at 320 px; long text lines wrap, an image scales down to the body width, and the PDF viewer fills the body width at a fixed height.
 
 ## Performance
 
-- Bundle budget: 6.9 KB for `./file-preview` gzip in `.size-limit.json` (measured 6.8 KB + ~0.1 KB).
+- Bundle budget: 7.6 KB for `./file-preview` gzip in `.size-limit.json` (v2 measured 7.52 KB + ~0.1 KB; raised from 6.9 KB for the PDF viewer branch, the base64 decoding with its object URL lifecycle, and the audio, video and PDF glyphs).
 - Runtime budget: pretty-printing and cutting run once per `content` change; at most `maxLength` characters reach the DOM.
-- Heavy parts: none (no highlighter; `CodeBlock` stays out of the bundle).
+- Heavy parts: none (no highlighter, no PDF library: the browser's viewer draws a PDF; `CodeBlock` stays out of the bundle).
+- Base64: decoded once per `base64` change; an image or PDF becomes one object URL, revoked when the source changes or the component unmounts.
 
 ## Examples
 
-The component has no `variant` or `size`; its axis is the file type it is given, so one example per type (Image, Text, Unknown) stands in for the composite Variants example, plus the Loading and Error states.
+The component has no `variant` or `size`; its axis is the file type it is given, so one example per type (Image, PDF, Text, Unknown) stands in for the composite Variants example, plus the Loading and Error states.
 
 - Default — a JSON file, pretty-printed.
 - Image — an image file drawn from `src`.
+- PDF — a PDF invoice from base64 bytes, in the browser's PDF viewer.
 - Text — a long text file cut at `maxLength`, with the truncation note.
 - Unknown — a binary file with the no-preview state and Download.
 - Loading — the placeholder while the file loads.
