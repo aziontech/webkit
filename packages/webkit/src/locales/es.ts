@@ -9,6 +9,17 @@ export const es: Messages = {
     expired: 'Solicitud vencida',
     confirmLabel: 'Escribe {phrase} para confirmar'
   },
+  agentQuestion: {
+    submit: 'Enviar',
+    yes: 'Sí',
+    no: 'No',
+    skip: 'Omitir',
+    answered: 'Respondida: {answer}',
+    answeredWithoutValue: 'Respondida',
+    skipped: 'Omitida',
+    canceled: 'Pregunta cancelada',
+    error: 'No se pudo enviar la respuesta. Inténtalo de nuevo.'
+  },
   responseLoading: {
     generating: 'Generando una respuesta'
   },

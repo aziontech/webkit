@@ -1189,6 +1189,18 @@ export const toolApproval = {
   confirmLabel: 'Type {phrase} to confirm'
 } as const
 
+export const agentQuestion = {
+  submit: 'Submit',
+  yes: 'Yes',
+  no: 'No',
+  skip: 'Skip',
+  answered: 'Answered: {answer}',
+  answeredWithoutValue: 'Answered',
+  skipped: 'Skipped',
+  canceled: 'Question canceled',
+  error: 'The answer could not be sent. Try again.'
+} as const
+
 export const responseLoading = {
   generating: 'Generating a response'
 } as const
@@ -1424,6 +1436,7 @@ export const dataTable = {
 
 export const en = {
   toolApproval,
+  agentQuestion,
   responseLoading,
   alert,
   appLayout,

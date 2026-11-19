@@ -9,6 +9,17 @@ export const ptBR: Messages = {
     expired: 'Pedido expirado',
     confirmLabel: 'Digite {phrase} para confirmar'
   },
+  agentQuestion: {
+    submit: 'Enviar',
+    yes: 'Sim',
+    no: 'Não',
+    skip: 'Pular',
+    answered: 'Respondida: {answer}',
+    answeredWithoutValue: 'Respondida',
+    skipped: 'Pulada',
+    canceled: 'Pergunta cancelada',
+    error: 'Não foi possível enviar a resposta. Tente de novo.'
+  },
   responseLoading: {
     generating: 'Gerando uma resposta'
   },
