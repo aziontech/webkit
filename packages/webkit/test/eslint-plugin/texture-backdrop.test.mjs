@@ -42,6 +42,9 @@ test('fires on a graphic in a slot a section paints a texture under', () => {
     '<MediaSplitSection title="Requests"><DonutChart /></MediaSplitSection>',
     '<MediaSplit><template #media><GaugeChart /></template></MediaSplit>',
     '<Hero floor-texture="pixelate"><template #bottom><Tracker /></template></Hero>',
+    '<Hero texture="dots"><Chart /></Hero>',
+    '<Hero texture="dots"><template #default><h1>Build</h1><FlowDiagram /></template></Hero>',
+    '<Hero texture="dots"><template #background><MapChart /></template></Hero>',
     '<Backdrop><SparkChart /></Backdrop>'
   ]) {
     assert.deepEqual(vue(template), ['graphic-on-texture'], template)
@@ -57,6 +60,10 @@ test('stays silent on text, on a plain ground and on a framed window', () => {
     '<ConsoleShowcaseSection texture="none"><template #scene><FlowDiagram /></template></ConsoleShowcaseSection>',
     '<MediaSplit texture="none"><template #media><Chart /></template></MediaSplit>',
     '<Hero><template #bottom><Chart /></template></Hero>',
+    '<Hero texture="dots"><h1>Build</h1><template #bottom><FlowDiagram /></template></Hero>',
+    '<Hero texture="dots"><template #top><Chart /></template></Hero>',
+    '<Hero texture="dots"><template #media><DonutChart /></template></Hero>',
+    '<HeroSection variant="center" title="Build"><template #bottom><FlowDiagram /></template></HeroSection>',
     '<div><Texture variant="pixelate" /><ConsoleMockupShell><FlowDiagram /></ConsoleMockupShell></div>',
     '<ConsoleShowcaseSection><template #scene><ConsoleMockup scene="workload" /></template></ConsoleShowcaseSection>'
   ]) {
@@ -146,7 +153,12 @@ test('stays silent on page JSON with a plain ground or no graphic', () => {
     { _id: 'console-showcase-section', props: { texture: 'none' }, scenes: { scene: chartScene } },
     { _id: 'media-split-section', props: { texture: 'none', scene: { component: 'Chart' } } },
     { _id: 'console-showcase-section', scenes: { scene: { component: 'ConsoleMockup' } } },
-    { _id: 'hero-section', props: { title: 'Build' } }
+    { _id: 'hero-section', props: { title: 'Build' } },
+    {
+      _id: 'hero-section',
+      props: { variant: 'center', title: 'Build' },
+      scenes: { bottom: { component: 'FlowDiagram' } }
+    }
   ]) {
     assert.deepEqual(json(data), [], JSON.stringify(data))
   }

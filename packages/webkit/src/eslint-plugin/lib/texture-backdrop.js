@@ -94,8 +94,7 @@ const PAINTS = {
     staticProp(node, 'variant')?.value !== 'diagram' && !off(node, 'texture'),
   MediaSplitSection: (node) => !off(node, 'texture'),
   MediaSplit: (node) => !off(node, 'texture'),
-  MediaTabs: (node) => set(node, 'texture'),
-  Hero: (node) => set(node, 'texture') || set(node, 'floorTexture')
+  MediaTabs: (node) => set(node, 'texture')
 }
 
 const children = (node) => (node.children ?? []).filter((child) => child.type === ELEMENT)
@@ -109,6 +108,27 @@ const holdsGraphic = (node) => {
   return false
 }
 
+const slotOf = (node) => {
+  if (node.tag !== 'template') return 'default'
+  const slot = (node.props ?? []).find((prop) => prop.type === DIRECTIVE && prop.name === 'slot')
+  return slot ? (slot.arg?.content ?? 'default') : 'default'
+}
+
+const graphicInSlots = (node, names) =>
+  children(node).some((child) =>
+    names.includes(slotOf(child))
+      ? child.tag === 'template'
+        ? holdsGraphic(child)
+        : holdsGraphic({ children: [child] })
+      : false
+  )
+
+const SLOT_PAINTS = {
+  Hero: (node) =>
+    (set(node, 'texture') && graphicInSlots(node, ['default', 'background'])) ||
+    (set(node, 'floorTexture') && graphicInSlots(node, ['bottom']))
+}
+
 function scanTemplate(ast) {
   const found = []
   const visit = (node) => {
@@ -118,6 +138,8 @@ function scanTemplate(ast) {
       if (tag === 'Texture' && PAINTS.Texture(child)) {
         const siblings = { children: kids.filter((other) => other !== child) }
         if (holdsGraphic(siblings)) found.push('graphic-on-texture')
+      } else if (SLOT_PAINTS[tag]?.(child)) {
+        found.push('graphic-on-texture')
       } else if (tag !== 'Texture' && PAINTS[tag]?.(child) && holdsGraphic(child)) {
         found.push('graphic-on-texture')
       }

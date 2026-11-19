@@ -490,7 +490,7 @@
   {
     "name": "hero-section",
     "path": "src/components/section/hero-section/hero-section.vue",
-    "limit": "12.45 KB",
+    "limit": "12.6 KB",
     "entryOnly": true
   },
   {
@@ -517,7 +517,7 @@
   {
     "name": "hero-form-section",
     "path": "src/components/section/hero-form-section/hero-form-section.vue",
-    "limit": "50.7 KB",
+    "limit": "50.8 KB",
     "entryOnly": true
   },
   {

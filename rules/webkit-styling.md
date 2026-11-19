@@ -73,6 +73,9 @@ run through the axis labels, the legend and the lines, and nobody can read them.
 - Elsewhere, pass `texture="none"` to the band, or move the content to a band without one.
 - The console mock-ups, the terminal and the code file the site bands were designed around
   keep their texture: their own window covers the dots.
+- A hero keeps its dots behind the headline and off a diagram: put the diagram in the
+  `HeroSection` (or `Hero`) `bottom` or `top` slot, never in the copy, and the band leaves a
+  plain ground under it.
 - WebKit guards it at runtime too: a `Texture` hides itself when the content beside it is a
   chart, a diagram or a page-JSON content scene (marked `data-plain-ground`).
 

@@ -508,3 +508,6 @@ Budget-raise: media-tabs 8.75 KB → 8.83 KB (measured 8.76 KB): RV-T2-1, a text
 Budget-raise: console-showcase-section 21.65 KB → 21.75 KB (measured 21.67 KB): RV-T2-1, a texture is a backdrop for text only: the `Texture` it paints carries the `data-plain-ground` guard class (it hides itself beside a chart, diagram or content scene), and the diagram layout keeps its bottom padding at every width.
 Budget-raise: hero-form-section 50.6 KB → 50.7 KB (measured 50.60 KB): RV-T2-1, a texture is a backdrop for text only: the `Texture` it paints carries the `data-plain-ground` guard class (it hides itself beside a chart, diagram or content scene).
 Budget-raise: architecture-tabs-section 22.1 KB → 22.2 KB (measured 22.12 KB): RV-T2-1, a texture is a backdrop for text only: the `Texture` it paints carries the `data-plain-ground` guard class (it hides itself beside a chart, diagram or content scene).
+
+Budget-raise: hero-section 12.45 KB → 12.6 KB (measured 12.53 KB): RV-H2-1, the hero keeps its dots behind the copy and off a diagram: `Hero`'s backdrop carries the guard classes that stop it above a marked `bottom` window and drop it beside a marked `top` or `media` window.
+Budget-raise: hero-form-section 50.7 KB → 50.8 KB (measured 50.73 KB): RV-H2-1, the same `Hero` backdrop guard classes.
