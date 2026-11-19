@@ -4115,6 +4115,9 @@
       "file-preview": [
         "./types/components/content/file-preview/file-preview.vue.d.ts"
       ],
+      "video-player": [
+        "./types/components/content/video-player/video-player.vue.d.ts"
+      ],
       "attribute-editor": [
         "./types/components/input/attribute-editor/attribute-editor.vue.d.ts"
       ],
