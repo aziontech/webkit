@@ -114,6 +114,15 @@
       height.value = rect?.height ?? 0
     })
   })
+  onMounted(() => {
+    const rect = rootEl.value?.getBoundingClientRect()
+    if (rect) {
+      width.value = rect.width
+      height.value = rect.height
+    }
+    rowWidth.value = rowEl.value?.getBoundingClientRect().width ?? 0
+  })
+
   useResizeObserver(rowEl, (entries) => {
     const rect = entries[0]?.contentRect
     globalThis.requestAnimationFrame?.(() => {

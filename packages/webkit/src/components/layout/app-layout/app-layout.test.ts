@@ -195,6 +195,21 @@ describe('AppLayout', () => {
     expect(dialog.querySelector('[data-drawer="true"]')).toBeTruthy()
   })
 
+  it('is compact before the first frame paints, so a phone never sees the rail', async () => {
+    const { getByTestId, queryByText } = render(layout({}, 390))
+    await nextTick()
+    expect(getByTestId('compact').textContent).toBe('true')
+    expect(getByTestId('app-layout').dataset.navigation).toBe('closed')
+    expect(queryByText('nav links')).toBeNull()
+  })
+
+  it('stays wide on the first frame when it has room', async () => {
+    const { getByTestId, getByText } = render(layout({}, 1200))
+    await nextTick()
+    expect(getByTestId('compact').textContent).toBe('false')
+    expect(getByText('nav links')).toBeTruthy()
+  })
+
   it('closes the navigation drawer from the navigation scope', async () => {
     const { getByTestId, getByText, findByRole, queryByRole } = render(layout({}, 500))
     await waitFor(() => expect(getByTestId('compact').textContent).toBe('true'))
