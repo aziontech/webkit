@@ -185,7 +185,9 @@ describe('shell/shell-console sign-out', () => {
 
 describe('shell/shell-console account menu keyboard', () => {
   it('reaches every entry with the arrow keys: the theme radios and Upgrade are menu items', async () => {
-    const view = render(ConsoleShell)
+    const host = document.body.appendChild(document.createElement('div'))
+    host.style.width = '1280px'
+    const view = render(ConsoleShell, { container: host })
     const footer = within(view.getByTestId('console-layout__account'))
     await fireEvent.click(footer.getByRole('button', { name: 'Account menu' }))
     const menu = await waitFor(() => within(document.body).getByRole('menu'))

@@ -555,7 +555,9 @@ describe('Sidebar', () => {
     })
 
     it('Resizable story renders the handle, the trigger and a sized rail', async () => {
-      const { getByTestId } = render(Resizable)
+      const host = document.body.appendChild(document.createElement('div'))
+      host.style.width = '1280px'
+      const { getByTestId } = render(Resizable, { container: host })
 
       expect(getByTestId('sidebar__handle')).toBeTruthy()
       expect(getByTestId('sidebar__collapse')).toBeTruthy()

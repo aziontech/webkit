@@ -387,6 +387,7 @@
     domReadOnly: isReadonly.value,
     lineNumbers: props.showLineNumbers ? (props.padLineNumbers ? padLineNumber : 'on') : 'off',
     minimap: { enabled: false },
+    renderFinalNewline: 'on' as const,
     automaticLayout: true,
     scrollBeyondLastLine: false,
     fontLigatures: false,
