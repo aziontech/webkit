@@ -104,7 +104,7 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 
 ### O. Last used — `Tag` (email step only)
 
-`severity="info"`, `size="small"`, `Last used`, pinned to the top-end corner of the primary action to point at the method the user signed in with last time. Decorative help, never a status.
+`severity="info"`, `size="small"`, `Last used`, pinned to the top-end corner of the button of the method this browser signed in with last time: the `lastUsed` prop (`email`, `google` or `github`). Empty by default, so a first-time visitor sees no tag; the app sets it only from what it stored at the last sign-in. Decorative help, never a status.
 
 ### P. Card heading — `PageHeader` (required)
 
@@ -122,7 +122,7 @@ The card checks nothing against the API itself: it emits `sign-in` with `(event,
 
 ## Data
 
-The block takes its starting values and the request state through props and emits every action; it fetches nothing and fakes no answer. `SignInProps`, `SignInValues`, `SignInStep`, `SignInFailure` and `SignInNoticeKind` are exported from `auth-sign-in.vue`. The card keeps its own draft (the email, the password, the reset fields) and sends it with `submit`; the outcome comes back as `loading`, then `error` or `notice`. It has no sample records: the variants pass the props of each state. PersonalToken, RejectedToken and NoAccessToken render their own card, `token-sign-in.vue` (listed in `files`), not the primary: it takes no account fields, and its contract is below the primary's.
+The block takes its starting values and the request state through props and emits every action; it fetches nothing and fakes no answer. `SignInProps`, `SignInValues`, `SignInStep`, `SignInMethod`, `SignInFailure` and `SignInNoticeKind` are exported from `auth-sign-in.vue`. The card keeps its own draft (the email, the password, the reset fields) and sends it with `submit`; the outcome comes back as `loading`, then `error` or `notice`. It has no sample records: the variants pass the props of each state. PersonalToken, RejectedToken and NoAccessToken render their own card, `token-sign-in.vue` (listed in `files`), not the primary: it takes no account fields, and its contract is below the primary's.
 
 | Prop                                                             | Type                    | What it does                                                                                                                                                                                                   |
 | ---------------------------------------------------------------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -132,6 +132,7 @@ The block takes its starting values and the request state through props and emit
 | `error`                                                          | `string`                | Why the request failed. `bad-credentials` (401), `service-unavailable` (503), `server-error` (500) and `timeout` carry their own copy, severity and Retry; any other text shows as a danger notice with Retry. |
 | `notice`                                                         | `string`                | A non-error outcome: `session-expired`, `signed-in` or `password-updated`, or any text as an info notice.                                                                                                      |
 | `providersLoading`                                               | `boolean`               | The identity providers are still loading; two `Skeleton` bars hold the place of Google and GitHub.                                                                                                             |
+| `lastUsed`                                                       | `SignInMethod \| ''`    | The method this browser signed in with last time (`email`, `google` or `github`); its button carries the `Last used` tag. Empty by default: no tag.                                                            |
 | `homeHref`, `docsHref`, `signUpHref`, `termsHref`, `privacyHref` | `string`                | Where the product mark, Documentation, Sign up and the two terms links lead.                                                                                                                                   |
 
 | Event            | Payload                         | When                                                                                                         |
@@ -315,7 +316,7 @@ To go live, render the block from the route that owns the session and pass what 
 - ServerError: `error="server-error"`; 500 on the request; a danger notice with Retry in the card instead of a toast.
 - Timeout: `error="timeout"`; no response; the same notice as the 500 in warning, with Retry, because the request may have gone through.
 - EmailAlreadyRegistered: 409 on Sign up; a danger notice with Sign in and reset your password as links, the address left in the field.
-- MfaSetup: turning on multi-factor authentication: three numbered steps, a `QrCode` of the `otpauth://` URI the API returns (issuer, account and secret) with the setup key and its `CopyButton` for people who cannot scan, then an `OtpInput` in a `Field`. The code submits on `complete` or Verify code; a wrong code (`000000` in the demo) clears it, marks the field invalid with the reason and keeps focus; no answer (`999999`) is a warning notice with Retry; success is a success notice and Continue to Console.
+- MfaSetup: turning on multi-factor authentication: three numbered steps, a `QrCode` of the `otpauth://` URI the API returns (issuer, account and secret) with the setup key and its `CopyButton` for people who cannot scan, then an `OtpInput` in a `Field`. The code submits on `complete` or Verify code; a wrong code (`000000` in the demo) clears it, marks the field invalid with the reason and keeps focus; no answer (`999999`) is a warning notice with Retry; success is a success notice, then the recovery codes the API issues once: eight 8-character codes in a monospace list with Download and Copy, and an `I saved these codes` checkbox that Continue to Console waits for, so the recovery path MfaCode offers always has codes behind it.
 - MfaCode: the sign-in challenge after the password: a 6-digit `OtpInput`, focused when the challenge opens (not with `autofocus`), that submits on `complete`, Use a recovery code (an 8-character alphanumeric `OtpInput` grouped by 4) and Sign in with another account. Same outcomes as MfaSetup: field reason for a rejected code, warning notice with Retry when the check does not answer.
 - OauthConsent: the authorize screen. The app (square `Avatar` with its initials, name, publisher, site), the signed-in account in an outlined `Item` with Switch account, the scopes in an `Item.List`, the redirect URL and where to revoke, then Deny / Allow. The pressed answer shows its loading state and locks the other; the outcome lands in the notice slot (`success` for Allow, `info` for Deny) and both stay locked.
 - DeviceAuthorization: device or CLI sign-in. The code the terminal printed (`WDJB-MJHT`) in large mono text, the request details in a split `KeyValueList`, the account and the two scopes, Cancel / Confirm. `The code does not match? Enter the code from your terminal` swaps to an 8-character alphanumeric `OtpInput` grouped by 4: a rejected code (`00000000` in the demo) is the field's reason, cleared and focused; no answer (`99999999`) is a warning notice with Retry; an accepted code returns to the confirm step showing it. Confirm reports `success`, Cancel `info`.
@@ -353,7 +354,7 @@ To go live, render the block from the route that owns the session and pass what 
 - `ServerError` — 500 on Sign in, on the password step: tied to no field, so where the console would toast, the card keeps a danger message with Retry.
 - `Timeout` — No response to Sign in, on the password step: the same message as the 500 but warning, because the request may still have gone through, with Retry.
 - `EmailAlreadyRegistered` — 409 on Sign up: a danger message carrying the two ways out as links, Sign in or reset your password, with the address left in the field.
-- `MfaSetup` — Turn on multi-factor authentication: steps, the QR code with a copyable setup key, and a 6-digit OtpInput that verifies on complete; wrong code on the field, no answer as a warning with Retry.
+- `MfaSetup` — Turn on multi-factor authentication: steps, the QR code with a copyable setup key, and a 6-digit OtpInput that verifies on complete; wrong code on the field, no answer as a warning with Retry; on success, recovery codes to download or copy, confirmed saved before Continue.
 - `MfaCode` — The sign-in MFA challenge: a 6-digit OtpInput, focused when the challenge opens, that submits when full, a recovery-code mode (8 characters, grouped), and Sign in with another account.
 - `OauthConsent` — The OAuth authorize screen: the requesting app with its publisher and site, the signed-in account with Switch account, the scopes it asks for as a list, where Allow sends you, and Deny / Allow, each settling in the card's notice.
 - `DeviceAuthorization` — Device or CLI authorization: the code the terminal printed, shown large to compare, the request details (application, device, IP address, time), the account and scopes, Cancel / Confirm, and a typed code entry (8 characters, grouped by 4) when the codes do not match.
@@ -394,6 +395,9 @@ Each variant is the same screen in another state: `get_block("auth/auth-sign-in"
   /** An identity provider offered over the email field. */
   export type SignInProvider = 'google' | 'github'
 
+  /** A way to sign in: the email form or an identity provider. */
+  export type SignInMethod = 'email' | SignInProvider
+
   /** A sign-in failure with its own copy, severity and Retry rule. */
   export type SignInFailure = 'bad-credentials' | 'service-unavailable' | 'server-error' | 'timeout'
 
@@ -419,6 +423,8 @@ Each variant is the same screen in another state: `get_block("auth/auth-sign-in"
     notice?: SignInNoticeKind | (string & {})
     /** The identity providers are still loading; skeleton bars hold their place. */
     providersLoading?: boolean
+    /** The method this browser signed in with last time, which carries the Last used tag; empty shows no tag. */
+    lastUsed?: SignInMethod | ''
     /** Where the product mark leads. */
     homeHref?: string
     /** Where the Documentation button leads. */
@@ -443,6 +449,7 @@ Each variant is the same screen in another state: `get_block("auth/auth-sign-in"
     error: '',
     notice: '',
     providersLoading: false,
+    lastUsed: '',
     homeHref: '/home',
     docsHref: '/docs',
     signUpHref: '/signup',
@@ -968,28 +975,52 @@ Each variant is the same screen in another state: `get_block("auth/auth-sign-in"
                             v-else
                             class="flex flex-col gap-(--spacing-sm)"
                           >
-                            <Button
-                              type="button"
-                              :label="copy.continueWithGoogle"
-                              variant="outline"
-                              size="large"
-                              icon="az-color az-google"
-                              class="w-full"
-                              @click="
-                                (event: MouseEvent) => emit('provider-click', event, 'google')
-                              "
-                            />
-                            <Button
-                              type="button"
-                              :label="copy.continueWithGithub"
-                              variant="outline"
-                              size="large"
-                              icon="az az-github"
-                              class="w-full"
-                              @click="
-                                (event: MouseEvent) => emit('provider-click', event, 'github')
-                              "
-                            />
+                            <div class="relative">
+                              <Button
+                                type="button"
+                                :label="copy.continueWithGoogle"
+                                variant="outline"
+                                size="large"
+                                icon="az-color az-google"
+                                class="w-full"
+                                @click="
+                                  (event: MouseEvent) => emit('provider-click', event, 'google')
+                                "
+                              />
+                              <div
+                                v-if="lastUsed === 'google'"
+                                class="absolute end-(--spacing-sm) top-0 -translate-y-1/2"
+                              >
+                                <Tag
+                                  :label="copy.lastUsed"
+                                  severity="info"
+                                  size="small"
+                                />
+                              </div>
+                            </div>
+                            <div class="relative">
+                              <Button
+                                type="button"
+                                :label="copy.continueWithGithub"
+                                variant="outline"
+                                size="large"
+                                icon="az az-github"
+                                class="w-full"
+                                @click="
+                                  (event: MouseEvent) => emit('provider-click', event, 'github')
+                                "
+                              />
+                              <div
+                                v-if="lastUsed === 'github'"
+                                class="absolute end-(--spacing-sm) top-0 -translate-y-1/2"
+                              >
+                                <Tag
+                                  :label="copy.lastUsed"
+                                  severity="info"
+                                  size="small"
+                                />
+                              </div>
+                            </div>
                           </div>
 
                           <Separator :label="copy.or" />
@@ -1203,7 +1234,7 @@ Each variant is the same screen in another state: `get_block("auth/auth-sign-in"
                         />
 
                         <div
-                          v-if="step === 'email'"
+                          v-if="step === 'email' && lastUsed === 'email'"
                           class="absolute end-(--spacing-sm) top-0 -translate-y-1/2"
                         >
                           <Tag

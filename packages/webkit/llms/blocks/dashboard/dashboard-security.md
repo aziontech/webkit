@@ -715,6 +715,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
             inverse
             :trend="summary.blocked.trend"
             :loading="loading"
+            :error="error"
           >
             <template #aside>
               <Hint
@@ -732,6 +733,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
             :delta-label="periodComparison"
             :trend="summary.inspected.trend"
             :loading="loading"
+            :error="error"
           >
             <template #aside>
               <Hint content="Requests checked against security rules across every service." />
@@ -748,6 +750,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
             inverse
             :trend="summary.blockRate.trend"
             :loading="loading"
+            :error="error"
           >
             <template #aside>
               <Hint content="Share of inspected requests blocked as attacks." />

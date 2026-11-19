@@ -52,7 +52,7 @@
   },
   {
    "name": "MfaSetup",
-   "summary": "Turn on multi-factor authentication: steps, the QR code with a copyable setup key, and a 6-digit OtpInput that verifies on complete; wrong code on the field, no answer as a warning with Retry.",
+   "summary": "Turn on multi-factor authentication: steps, the QR code with a copyable setup key, and a 6-digit OtpInput that verifies on complete; wrong code on the field, no answer as a warning with Retry; on success, recovery codes to download or copy, confirmed saved before Continue.",
    "file": "blocks/auth/auth-sign-in/variants/mfa-setup.vue"
   },
   {

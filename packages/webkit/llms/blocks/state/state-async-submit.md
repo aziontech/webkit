@@ -820,7 +820,7 @@ export const sampleFailedSteps: AsyncSubmitStep[] = [
   {
     id: 'rules',
     title: 'Routing rules',
-    description: 'Request rules and cache policies applied',
+    description: 'Routing rules were refused',
     status: 'error',
     duration: '4s',
     tag: { label: 'Failed', severity: 'danger' },
@@ -835,20 +835,21 @@ export const sampleFailedSteps: AsyncSubmitStep[] = [
         id: '1',
         time: '13:48:09',
         type: 'text',
-        level: 'warn',
+        level: 'error',
         message: '[ERROR] - # Routing rules rejected the configuration'
       },
       {
         id: '2',
         time: '13:48:10',
         type: 'text',
+        level: 'error',
         message: "409 Conflict: rule 'default-cache' already bound to this domain"
       },
       {
         id: '3',
         time: '13:48:11',
         type: 'text',
-        level: 'warn',
+        level: 'error',
         message: '[ERROR] - # Deploy finalized with errors. Nothing was published.'
       }
     ]

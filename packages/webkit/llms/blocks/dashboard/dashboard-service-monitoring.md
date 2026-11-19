@@ -357,6 +357,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
               inverse
               :trend="service.trend"
               :loading="loading"
+              :error="error"
             >
               <template #aside>
                 <StatusIndicator
