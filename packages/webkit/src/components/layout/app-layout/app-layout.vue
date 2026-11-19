@@ -255,6 +255,7 @@
   }
 
   onMounted(() => {
+    width.value = rootEl.value?.offsetWidth ?? 0
     const stored = readStored()
     if (!stored) return
     if (typeof stored.navigationOpen === 'boolean') navigationOpen.value = stored.navigationOpen

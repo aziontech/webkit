@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "Every region at once: the navigation rail, the global header with a help button, a flash message, the breadcrumbs, the page, the split panel under it with the selected service, and the help panel in the tools region.",
+      "summary": "Every region at once: the navigation rail, the global header with a help button, a flash message, the breadcrumbs, the page, the split panel under it with the selected service, and a help button that opens the help panel in the tools region.",
       "file": "default.vue"
     },
     {
