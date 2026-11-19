@@ -52,6 +52,7 @@
       :locale="kind === 'locale' ? locale : 'en'"
       :catalogs="catalogs"
       :dir="kind === 'direction' ? dir : 'auto'"
+      data-example="auth/auth-sign-in"
       class="h-144 overflow-hidden rounded-(--shape-card) border border-(--border-default) *:h-full!"
     >
       <AuthSignIn />

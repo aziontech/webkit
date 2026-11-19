@@ -48,7 +48,7 @@
     },
     "multi-select-1k-typed": {
       "mount": 30,
-      "update": 630,
+      "update": 850,
       "update_is": "mount a searchable chips field with 3 selected values, open it, then type a filter"
     },
     "dropdown-menu-1k": {

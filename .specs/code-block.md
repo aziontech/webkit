@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761
   node_id: 4567:33761
-checksum: fcdef2f51a29f9814f10022c08597d81ba979d97d47dacb40d365e2a5e6cd6be
+checksum: e1ed9e02872c7c5b673a5c0de9bdd34e954f7db4a9d6b6ad907730abe29d7ef3
 created: 2026-05-28
 last_updated: 2026-11-18
 ---
@@ -234,7 +234,7 @@ Code content scrolls inside `@aziontech/webkit/scroll-area` (`orientation="both"
 | tab panel change — a tab click, a controlled `value` change, or the active tab's `code` being replaced | content enters **line by line**: each row slides from the direction of travel + fades, `24ms` a line, the step capped at 12 lines | `duration-moderate-02` · `ease-productive-entrance` (DESIGN.md § Motion primitives) | `motion-reduce:transform-none motion-reduce:opacity-100 motion-reduce:transition-none` |
 | tab panel height — on the same triggers as the panel change                                            | the shell animates between the two panels' heights (pin the old height, measure the new, transition `height`)                     | `duration-moderate-02` · `ease-productive-entrance` (DESIGN.md § Motion primitives) | skipped entirely under `prefers-reduced-motion` (height snaps)                         |
 | tab label hover                                                                                        | `transition-colors duration-fast-02 ease-productive-entrance`                                                                     | `duration-fast-02` · `ease-productive-entrance`                                     | `motion-reduce:transition-none`                                                        |
-| code line hover                                                                                        | `transition-opacity duration-fast-02 ease-productive-entrance` on row ghost layer (`--bg-hover`)                                  | `duration-fast-02` · `ease-productive-entrance` (DESIGN.md § Interactive states)    | `motion-reduce:transition-none`                                                        |
+| code line hover                                                                                        | `transition-opacity duration-fast-02 ease-productive-entrance` on row ghost layer (`--bg-hover`), none on added or removed lines  | `duration-fast-02` · `ease-productive-entrance` (DESIGN.md § Interactive states)    | `motion-reduce:transition-none`                                                        |
 | line entrance (`animateLines`)                                                                         | per-line slide from `-8px` + opacity, staggered `40ms`                                                                            | `duration-moderate-02` · `ease-productive-entrance`                                 | `motion-reduce:transform-none motion-reduce:opacity-100 motion-reduce:transition-none` |
 
 ## Tokens
