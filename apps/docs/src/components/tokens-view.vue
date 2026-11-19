@@ -36,8 +36,6 @@
 
 <template>
   <div class="flex flex-col gap-(--spacing-xl)">
-    <p class="text-body-sm text-(--text-muted)">{{ t.copyHint }}</p>
-
     <template v-if="kind === 'color'">
       <ArchitectureIntro />
       <ColorPlayground />

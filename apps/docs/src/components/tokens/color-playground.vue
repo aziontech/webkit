@@ -6,10 +6,8 @@
   import { computed, ref, watch } from 'vue'
 
   import { messages } from '../../lib/i18n'
-  import { resolvedTheme, settings } from '../../lib/settings'
   import { tailwindClass } from '../../lib/tokens'
-  import type { Token } from '../../lib/types'
-  import InlineCode from './inline-code.vue'
+  import type { Token, TokenPreview } from '../../lib/types'
 
   type Category = 'theme' | 'background' | 'text' | 'border'
 
@@ -40,9 +38,17 @@
   const token = computed(
     () => options.value.find((item) => item.name === selected.value) ?? options.value[0]
   )
-  const mode = computed(() => resolvedTheme(settings.theme))
-  const current = computed(() =>
-    mode.value === 'dark' ? (token.value?.dark ?? token.value?.value) : token.value?.value
+  const preview = computed<TokenPreview>(
+    () =>
+      token.value?.preview ?? {
+        foreground: '--text-default',
+        background: '--bg-surface',
+        fill: 'swatch'
+      }
+  )
+  const swatch = computed(() => preview.value.fill === 'swatch' && category.value !== 'border')
+  const label = computed(() =>
+    preview.value.fill === 'foreground' ? t.value.sampleText : (token.value?.name ?? '')
   )
 
   watch(category, () => {
@@ -91,79 +97,41 @@
     </div>
     <div
       v-if="token"
-      class="grid grid-cols-1 gap-(--spacing-md) md:grid-cols-2"
+      class="flex flex-col gap-(--spacing-xs)"
     >
       <div
         :data-category="category"
-        class="flex min-h-48 items-center justify-center rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-lg) data-[category=background]:bg-(--preview) data-[category=border]:border-2 data-[category=border]:border-(--preview) data-[category=theme]:bg-(--preview)"
-        :style="{ '--preview': `var(${token.name})` }"
+        :data-fill="preview.fill"
+        :data-swatch="swatch || null"
+        class="flex min-h-48 items-center justify-center rounded-(--shape-card) border border-(--border-default) bg-(--color-playground-background) p-(--spacing-lg) text-(--color-playground-foreground) data-[category=border]:border-2 data-[category=border]:border-(--color-playground-token) data-[swatch]:bg-(--color-playground-token)"
+        :style="{
+          '--color-playground-token': `var(${token.name})`,
+          '--color-playground-foreground': `var(${preview.foreground})`,
+          '--color-playground-background': `var(${preview.background})`
+        }"
       >
         <span
-          :data-category="category"
-          class="text-heading-sm text-(--text-default) data-[category=text]:text-(--preview) data-[category=theme]:rounded-(--shape-control) data-[category=theme]:bg-(--bg-surface) data-[category=theme]:px-(--spacing-xs)"
-          >{{ category === 'text' ? t.sampleText : token.name }}</span
+          :data-swatch="swatch || null"
+          class="text-heading-sm data-[swatch]:rounded-(--shape-control) data-[swatch]:bg-(--bg-surface) data-[swatch]:px-(--spacing-xs) data-[swatch]:text-(--text-default)"
+          >{{ label }}</span
         >
       </div>
-      <dl
-        class="flex flex-col gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md)"
+      <div
+        class="flex flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-2xs) text-body-xs text-(--text-muted)"
       >
-        <div class="flex flex-col gap-(--spacing-2xs)">
-          <dt class="text-overline-sm text-(--text-muted)">{{ t.tailwind }}</dt>
-          <dd><CopyText :value="tailwindClass(token.name, 'color')" /></dd>
-        </div>
-        <div class="flex flex-col gap-(--spacing-2xs)">
-          <dt class="text-overline-sm text-(--text-muted)">{{ t.cssVariable }}</dt>
-          <dd><CopyText :value="`var(${token.name})`" /></dd>
-        </div>
-        <div class="flex flex-col gap-(--spacing-2xs)">
-          <dt class="text-overline-sm text-(--text-muted)">
-            {{ t.current }} · {{ mode === 'dark' ? t.dark : t.light }}
-          </dt>
-          <dd class="flex items-center gap-(--spacing-xs)">
-            <span
-              class="size-4 rounded-(--shape-control) border border-(--border-default)"
-              :style="{ background: `var(${token.name})` }"
-              aria-hidden="true"
-            />
-            <code class="text-label-code-sm">{{ current }}</code>
-          </dd>
-        </div>
-        <div class="flex flex-col gap-(--spacing-2xs)">
-          <dt class="text-overline-sm text-(--text-muted)">{{ t.light }} → {{ t.dark }}</dt>
-          <dd class="flex flex-wrap items-center gap-(--spacing-xs)">
-            <span
-              data-theme="light"
-              class="size-4 rounded-(--shape-control) border border-(--border-default)"
-              :style="{ background: `var(${token.name})` }"
-              aria-hidden="true"
-            />
-            <code class="text-label-code-sm">{{ token.value }}</code>
-            <i
-              class="az az-arrow-right text-(--text-muted)"
-              aria-hidden="true"
-            />
-            <span
-              data-theme="dark"
-              class="size-4 rounded-(--shape-control) border border-(--border-default)"
-              :style="{ background: `var(${token.name})` }"
-              aria-hidden="true"
-            />
-            <code class="text-label-code-sm">{{ token.dark ?? token.value }}</code>
-          </dd>
-        </div>
-        <div
-          v-if="token.usage"
-          class="flex flex-col gap-(--spacing-2xs)"
-        >
-          <dt class="text-overline-sm text-(--text-muted)">{{ t.usage }}</dt>
-          <dd class="flex flex-col gap-(--spacing-2xs)">
-            <span class="text-body-sm">{{ token.usage.job }}</span>
-            <span class="text-body-xs text-(--text-muted)">
-              {{ t.usedBy }}: <InlineCode :text="token.usage.usedBy" />
-            </span>
-          </dd>
-        </div>
-      </dl>
+        <span class="flex items-center gap-(--spacing-2xs)"
+          >{{ t.tailwind }}
+          <CopyText
+            size="small"
+            :value="tailwindClass(token.name, 'color')"
+        /></span>
+        <span class="flex items-center gap-(--spacing-2xs)"
+          >{{ t.cssVariable }}
+          <CopyText
+            size="small"
+            :value="`var(${token.name})`"
+        /></span>
+      </div>
     </div>
   </section>
 </template>

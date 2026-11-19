@@ -69,11 +69,18 @@ export type DocsIndex = {
 
 export type TokenUsage = { job: string; usedBy: string }
 
+export type TokenPreview = {
+  foreground: string
+  background: string
+  fill: 'background' | 'foreground' | 'swatch'
+}
+
 export type Token = {
   name: string
   value: string
   dark?: string
   usage?: TokenUsage
+  preview?: TokenPreview
   responsive?: Record<string, string>
 }
 

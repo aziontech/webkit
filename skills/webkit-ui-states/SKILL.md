@@ -2,7 +2,7 @@
 name: webkit-ui-states
 description: Every data-backed view in a @aziontech/webkit app declares its full state surface — loading, empty, partial, error, success — not just the happy path, AND behaves correctly while an async action is in flight and when it fails. Use when building or reviewing any screen that fetches, filters, submits, or paginates. Maps each state to the shipped component (Skeleton, EmptyState, Alert), locks the scope off one flag while an action runs (trigger :loading + every field :disabled, released in finally), and reports request errors via toast.
 status: active
-last_updated: 2026-11-12
+last_updated: 2026-11-19
 scope: general
 enforced_by: [webkit-component-states, webkit-prefer-over-custom, ui-verify]
 ---
@@ -344,6 +344,10 @@ Rules:
   when it unmounts: a page's copy is either inert, or, when it mounted first, it silences every
   toast in the app once the user leaves that page. A full page routed outside the console layout
   (a create page, an onboarding step) is still a route of the same app, not a root.
+- **Toasts sit at the bottom-end corner, the `Toaster` default** (bottom right in a left-to-right
+  page). It is the corner a reader reaches last, so a toast never covers the title, the navigation
+  or the primary action, and every app puts toasts in the same place. Don't pass `position` to the
+  `Toaster` or `ToastPlugin`.
 - **Use the typed shortcut for the severity:** `toast.error` for failures, `toast.success` for the
   happy path, `toast.promise` to track a request end-to-end.
 - **The message is actionable.** State what failed and the recovery; attach an

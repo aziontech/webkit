@@ -2,6 +2,12 @@ import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 
+import {
+  CONTRAST_PAIRS,
+  CONTRAST_SURFACES,
+  CONTRAST_TARGETS,
+  previewPair
+} from '../src/tokens/contrast-pairs.js'
 import { compileThemeVars } from '../src/tokens/theme-colors.js'
 
 const APCA_0_0_98G_4G = {
@@ -23,49 +29,9 @@ const APCA_0_0_98G_4G = {
   loClip: 0.1
 }
 
-const TARGETS = { body: 75, text: 60, icon: 45, mark: 30, border: 15 }
-
-const SURFACES = ['--bg-canvas', '--bg-surface', '--bg-surface-raised']
-const FILLS = ['primary', 'secondary', 'accent', 'success', 'warning', 'danger', 'info']
-const STATUS = ['success', 'warning', 'danger', 'info']
-
-const PAIRS = [
-  ...SURFACES.map((bg) => ['body', '--text-default', bg]),
-  ...[
-    '--text-muted',
-    '--text-brand',
-    '--text-link',
-    '--text-link-hover',
-    '--text-danger'
-  ].flatMap((fg) => SURFACES.map((bg) => ['text', fg, bg])),
-  ...FILLS.map((fill) => ['text', `--${fill}-foreground`, `--${fill}`]),
-  ['text', '--brand-blue-foreground', '--brand-blue'],
-  ['text', '--text-contrast', '--bg-contrast'],
-  ['text', '--chart-tooltip-text', '--chart-tooltip-bg'],
-  ['text', '--chart-tooltip-muted', '--chart-tooltip-bg'],
-  ...STATUS.flatMap((s) => SURFACES.map((bg) => ['icon', `--${s}-foreground`, bg])),
-  ...[
-    ...[1, 2, 3, 4, 5, 6, 7, 8].map((n) => `--chart-series-${n}`),
-    '--chart-series-other',
-    ...STATUS.map((s) => `--chart-status-${s}`),
-    ...['negative', 'negative-2', 'negative-3', 'positive-3', 'positive-2', 'positive'].map(
-      (step) => `--chart-diverging-${step}`
-    ),
-    ...['critical', 'high', 'medium', 'low'].map((l) => `--severity-${l}`),
-    '--primary',
-    '--accent',
-    '--brand-blue',
-    '--border-selected',
-    '--ring-color'
-  ].flatMap((fg) => SURFACES.map((bg) => ['mark', fg, bg])),
-  ...[
-    '--border-default',
-    '--border-muted',
-    '--border-input',
-    '--border-strong',
-    '--danger-border'
-  ].flatMap((fg) => SURFACES.map((bg) => ['border', fg, bg]))
-]
+const TARGETS = CONTRAST_TARGETS
+const SURFACES = CONTRAST_SURFACES
+const PAIRS = CONTRAST_PAIRS
 
 const EXCEPTIONS = [
   {
@@ -220,4 +186,57 @@ test('every exception is recorded with its reason in rules/webkit-tokens.md', ()
         `${e.fg} row does not name ${variant}`
       )
   }
+})
+
+const EXPLORER_GROUPS = [
+  'primary',
+  'secondary',
+  'accent',
+  'success',
+  'warning',
+  'danger',
+  'info',
+  'bg',
+  'text',
+  'border'
+]
+
+for (const variant of ['light', 'dark']) {
+  test(`${variant}: the docs Color Explorer previews every color token with a documented pair that passes`, () => {
+    const names = Object.keys(vars[variant]).filter((name) =>
+      EXPLORER_GROUPS.some((group) => name.startsWith(`--${group}`))
+    )
+    assert.ok(names.includes('--bg-contrast') && names.includes('--text-contrast'))
+    const failures = []
+    for (const name of names) {
+      const { foreground, background } = previewPair(name)
+      const pair = PAIRS.find(
+        ([tier, fg, bg]) => fg === foreground && bg === background && ['body', 'text'].includes(tier)
+      )
+      if (!pair) {
+        failures.push(`${name}: ${foreground} on ${background} is not a documented text pair`)
+        continue
+      }
+      const lc = measure(variant, foreground, background)
+      if (lc < TARGETS[pair[0]] && !exceptionFor(variant, foreground, background))
+        failures.push(`${name}: ${foreground} on ${background} is Lc ${lc.toFixed(1)}`)
+    }
+    assert.deepEqual(failures, [])
+  })
+}
+
+test('the Color Explorer draws each contrast surface with its own foreground', () => {
+  assert.deepEqual(previewPair('--bg-contrast'), {
+    foreground: '--text-contrast',
+    background: '--bg-contrast',
+    fill: 'background'
+  })
+  assert.deepEqual(previewPair('--text-contrast'), {
+    foreground: '--text-contrast',
+    background: '--bg-contrast',
+    fill: 'foreground'
+  })
+  assert.equal(previewPair('--primary').foreground, '--primary-foreground')
+  assert.equal(previewPair('--primary-foreground').background, '--primary')
+  assert.equal(previewPair('--bg-backdrop').fill, 'swatch')
 })

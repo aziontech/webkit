@@ -254,9 +254,6 @@
     </Drawer>
 
     <SearchCommand v-model:open="searchOpen" />
-    <Toaster
-      v-if="hasCopyToasts"
-      position="bottom-center"
-    />
+    <Toaster v-if="hasCopyToasts" />
   </div>
 </template>

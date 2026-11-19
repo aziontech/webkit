@@ -57,7 +57,7 @@
       block?.layout === 'fullscreen' ? '' : 'p-(--spacing-lg)'
     ]"
   >
-    <Toaster position="bottom-end" />
+    <Toaster />
     <component
       :is="live"
       v-if="live"
