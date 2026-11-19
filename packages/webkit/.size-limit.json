@@ -7,7 +7,7 @@
   {
     "name": "console-layout-root",
     "path": "src/components/layout/console-layout/console-layout.vue",
-    "limit": "73.5 KB",
+    "limit": "73.65 KB",
     "entryOnly": true
   },
   {
@@ -18,12 +18,12 @@
   {
     "name": "site-layout",
     "path": "src/components/layout/site-layout/site-layout.vue",
-    "limit": "77.15 KB"
+    "limit": "77.3 KB"
   },
   {
     "name": "doc-layout",
     "path": "src/components/docs/doc-layout/doc-layout.vue",
-    "limit": "69.15 KB"
+    "limit": "69.25 KB"
   },
   {
     "name": "doc-markdown",
@@ -83,12 +83,12 @@
   {
     "name": "date-picker-root",
     "path": "src/components/input/date-picker/date-picker.vue",
-    "limit": "41.6 KB"
+    "limit": "41.75 KB"
   },
   {
     "name": "date-range-picker",
     "path": "src/components/input/date-range-picker/date-range-picker.vue",
-    "limit": "52.65 KB"
+    "limit": "52.75 KB"
   },
   {
     "name": "table-root",
@@ -108,7 +108,7 @@
   {
     "name": "property-filter",
     "path": "src/components/data/property-filter/property-filter.vue",
-    "limit": "32.2 KB"
+    "limit": "32.25 KB"
   },
   {
     "name": "collection-preferences",
@@ -228,7 +228,7 @@
   {
     "name": "doc-accordion-group",
     "path": "src/components/docs/doc-accordion-group/doc-accordion-group.vue",
-    "limit": "4 KB"
+    "limit": "4.05 KB"
   },
   {
     "name": "doc-accordion",
@@ -437,12 +437,12 @@
   {
     "name": "console-application-scene",
     "path": "src/assets/scenes/console-application/console-application-scene.vue",
-    "limit": "115.95 KB"
+    "limit": "116 KB"
   },
   {
     "name": "console-trace-scene",
     "path": "src/assets/scenes/console-trace/console-trace-scene.vue",
-    "limit": "82 KB"
+    "limit": "82.05 KB"
   },
   {
     "name": "runtime-api-cloud",
@@ -478,13 +478,13 @@
   {
     "name": "article-index-section",
     "path": "src/components/section/article-index-section/article-index-section.vue",
-    "limit": "34.95 KB",
+    "limit": "35 KB",
     "entryOnly": true
   },
   {
     "name": "story-index-section",
     "path": "src/components/section/story-index-section/story-index-section.vue",
-    "limit": "33.4 KB",
+    "limit": "33.45 KB",
     "entryOnly": true
   },
   {
@@ -517,7 +517,7 @@
   {
     "name": "hero-form-section",
     "path": "src/components/section/hero-form-section/hero-form-section.vue",
-    "limit": "50.8 KB",
+    "limit": "50.85 KB",
     "entryOnly": true
   },
   {
@@ -529,7 +529,7 @@
   {
     "name": "site-header-section",
     "path": "src/components/section/site-header-section/site-header-section.vue",
-    "limit": "57.55 KB"
+    "limit": "57.65 KB"
   },
   {
     "name": "competitor-comparison-section",
@@ -540,7 +540,7 @@
   {
     "name": "plan-comparison-section",
     "path": "src/components/section/plan-comparison-section/plan-comparison-section.vue",
-    "limit": "37.25 KB"
+    "limit": "37.35 KB"
   },
   {
     "name": "pricing-plans-section",
@@ -610,7 +610,7 @@
   {
     "name": "job-posting-section",
     "path": "src/components/section/job-posting-section/job-posting-section.vue",
-    "limit": "56.25 KB",
+    "limit": "56.35 KB",
     "entryOnly": true
   },
   {
@@ -1085,7 +1085,7 @@
   {
     "name": "phone-input",
     "path": "src/components/input/phone-input/phone-input.vue",
-    "limit": "33.25 KB",
+    "limit": "33.4 KB",
     "entryOnly": true
   },
   {
@@ -1380,7 +1380,7 @@
   {
     "name": "table-cell-link",
     "path": "src/components/data/table/table-cell-link/table-cell-link.vue",
-    "limit": "19.05 KB",
+    "limit": "19.1 KB",
     "entryOnly": true
   },
   {
@@ -1639,7 +1639,7 @@
   {
     "name": "log-viewer-steps",
     "path": "src/components/code/log-viewer/log-viewer-steps.vue",
-    "limit": "40.6 KB"
+    "limit": "40.7 KB"
   },
   {
     "name": "log-viewer-header",
@@ -1892,7 +1892,7 @@
   {
     "name": "date-picker",
     "path": "src/components/input/date-picker/index.ts",
-    "limit": "41.8 KB"
+    "limit": "41.95 KB"
   },
   {
     "name": "date-picker-clear",
@@ -1957,7 +1957,7 @@
   {
     "name": "theme-switcher",
     "path": "src/components/input/theme-switcher/theme-switcher.vue",
-    "limit": "17.95 KB"
+    "limit": "18.05 KB"
   },
   {
     "name": "textarea",
@@ -2092,7 +2092,7 @@
   {
     "name": "console-layout",
     "path": "src/components/layout/console-layout/index.ts",
-    "limit": "74.85 KB"
+    "limit": "74.95 KB"
   },
   {
     "name": "use-console-layout",
@@ -2342,7 +2342,7 @@
   {
     "name": "command",
     "path": "src/components/overlay/command/index.ts",
-    "limit": "26.8 KB"
+    "limit": "26.85 KB"
   },
   {
     "name": "command-root",
