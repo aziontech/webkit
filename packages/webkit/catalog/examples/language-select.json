@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Inside a `Field` and bound to `ConfigProvider`'s `locale`: pick a language and the pagination under it, the picker's own search box and its empty line change language. Type a language, a tag or a country to filter.",
+   "file": "examples/language-select/default.vue"
+  },
+  {
+   "name": "Options",
+   "summary": "`options` replaces the built-in languages with your own list. Regional variants take their flag from the tag's region (`en-GB`, `fr-CA`); `country` sets it when the tag has none (`ar` → `SA`).",
+   "file": "examples/language-select/options.vue"
+  },
+  {
+   "name": "Sizes",
+   "summary": "Every `size` side by side: `small`, `medium` (the default) and `large`.",
+   "file": "examples/language-select/sizes.vue"
+  }
+ ]
+}

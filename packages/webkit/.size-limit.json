@@ -1070,12 +1070,12 @@
   {
     "name": "config-provider",
     "path": "src/components/provider/config-provider/config-provider.vue",
-    "limit": "11.5 KB"
+    "limit": "11.6 KB"
   },
   {
     "name": "locales-pt-BR",
     "path": "src/locales/pt-BR.ts",
-    "limit": "10.7 KB"
+    "limit": "10.8 KB"
   },
   {
     "name": "locales-es",
@@ -1086,6 +1086,12 @@
     "name": "phone-input",
     "path": "src/components/input/phone-input/phone-input.vue",
     "limit": "33.25 KB",
+    "entryOnly": true
+  },
+  {
+    "name": "language-select",
+    "path": "src/components/input/language-select/language-select.vue",
+    "limit": "28.75 KB",
     "entryOnly": true
   },
   {

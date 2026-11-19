@@ -1120,6 +1120,10 @@
       "types": "./types/components/input/phone-input/phone-input.vue.d.ts",
       "default": "./src/components/input/phone-input/phone-input.vue"
     },
+    "./language-select": {
+      "types": "./types/components/input/language-select/language-select.vue.d.ts",
+      "default": "./src/components/input/language-select/language-select.vue"
+    },
     "./hint": {
       "types": "./types/components/input/hint/hint.vue.d.ts",
       "default": "./src/components/input/hint/hint.vue"
@@ -3307,6 +3311,9 @@
       ],
       "phone-input": [
         "./types/components/input/phone-input/phone-input.vue.d.ts"
+      ],
+      "language-select": [
+        "./types/components/input/language-select/language-select.vue.d.ts"
       ],
       "hint": [
         "./types/components/input/hint/hint.vue.d.ts"

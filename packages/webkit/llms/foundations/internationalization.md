@@ -51,6 +51,10 @@ default, is stuck in one language and drifts from the rest of the product.
   with `ptBR` from `@aziontech/webkit/locales/pt-BR` (`es` from `/locales/es`; English is built
   in). Every component below it switches, dates and numbers included (`Intl` through the same
   locale).
+- Let people change the language with `<LanguageSelect v-model="locale" />`
+  (`@aziontech/webkit/language-select`) bound to the same `locale` the provider reads. Your own
+  screen copy follows it too: read `useLocale().locale` and pick the text from a table keyed by
+  locale, as the `auth/auth-sign-in` block does.
 - Rename a built-in string for the whole app with `messages` on `ConfigProvider`:
   `:messages="{ wizard: { submit: 'Deploy' }, kbd: { ctrl: 'Strg' } }"`. The keys are the
   catalog's (`group.key`): `group` is the component's camelCase name (`sidebarMenu`,

@@ -14,6 +14,12 @@ const en = {
   theme: 'Theme',
   language: 'Language',
   direction: 'Text direction',
+  demoLanguage: 'Demo language',
+  demoDirection: 'Demo direction',
+  demoLocaleNote:
+    'The sign-in block under ConfigProvider: its copy and every WebKit string follow the language.',
+  demoDirectionNote:
+    'The sign-in block under ConfigProvider: every side, gap and arrow mirrors with the direction.',
   rightToLeft: 'Right-to-left',
   leftToRight: 'Left-to-right',
   github: 'WebKit on GitHub',
@@ -227,6 +233,12 @@ const ptBR: Messages = {
   theme: 'Tema',
   language: 'Idioma',
   direction: 'Direção do texto',
+  demoLanguage: 'Idioma da demonstração',
+  demoDirection: 'Direção da demonstração',
+  demoLocaleNote:
+    'O bloco de login dentro do ConfigProvider: o texto dele e todo texto do WebKit seguem o idioma.',
+  demoDirectionNote:
+    'O bloco de login dentro do ConfigProvider: cada lado, espaço e seta espelha com a direção.',
   rightToLeft: 'Direita para a esquerda',
   leftToRight: 'Esquerda para a direita',
   github: 'WebKit no GitHub',
@@ -430,6 +442,12 @@ const es: Messages = {
   theme: 'Tema',
   language: 'Idioma',
   direction: 'Dirección del texto',
+  demoLanguage: 'Idioma de la demostración',
+  demoDirection: 'Dirección de la demostración',
+  demoLocaleNote:
+    'El bloque de inicio de sesión dentro de ConfigProvider: su texto y todo texto de WebKit siguen el idioma.',
+  demoDirectionNote:
+    'El bloque de inicio de sesión dentro de ConfigProvider: cada lado, espacio y flecha se refleja con la dirección.',
   rightToLeft: 'Derecha a izquierda',
   leftToRight: 'Izquierda a derecha',
   github: 'WebKit en GitHub',

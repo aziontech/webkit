@@ -1,13 +1,14 @@
 <script setup lang="ts">
   import ConfigProvider from '@aziontech/webkit/config-provider'
+  import LanguageSelect from '@aziontech/webkit/language-select'
   import { es } from '@aziontech/webkit/locales/es'
   import { ptBR } from '@aziontech/webkit/locales/pt-BR'
-  import Pagination from '@aziontech/webkit/pagination'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import tokens from 'virtual:docs-tokens'
   import { ref } from 'vue'
 
-  import { LOCALES } from '../lib/i18n'
+  import AuthSignIn from '../../../../packages/webkit/blocks/auth/auth-sign-in/auth-sign-in.vue'
+  import { messages as t } from '../lib/i18n'
   import TokenTable from './tokens/token-table.vue'
 
   defineProps<{ kind: 'locale' | 'direction' | 'devices' }>()
@@ -15,47 +16,45 @@
   const catalogs = { 'pt-BR': ptBR, es }
   const locale = ref('pt-BR')
   const dir = ref<'ltr' | 'rtl'>('rtl')
-  const page = ref(3)
-  const pageSize = ref(10)
 </script>
 
 <template>
   <section
     v-if="kind === 'locale' || kind === 'direction'"
-    class="flex flex-col gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) p-(--spacing-md)"
+    class="flex flex-col gap-(--spacing-sm)"
   >
-    <ToggleGroup
-      key="toggle-group-1"
-      v-if="kind === 'locale'"
-      v-model="locale"
-      :options="LOCALES"
-      aria-label="Demo language"
-      size="small"
-    />
-    <ToggleGroup
-      key="toggle-group-2"
-      v-else
-      v-model="dir"
-      :options="[
-        { label: 'ltr', value: 'ltr' },
-        { label: 'rtl', value: 'rtl' }
-      ]"
-      aria-label="Demo direction"
-      size="small"
-    />
+    <div class="flex flex-wrap items-center gap-(--spacing-sm)">
+      <div
+        v-if="kind === 'locale'"
+        class="w-full sm:w-64"
+      >
+        <LanguageSelect
+          v-model="locale"
+          :aria-label="t.demoLanguage"
+          size="small"
+        />
+      </div>
+      <ToggleGroup
+        v-else
+        v-model="dir"
+        :options="[
+          { label: 'ltr', value: 'ltr' },
+          { label: 'rtl', value: 'rtl' }
+        ]"
+        :aria-label="t.demoDirection"
+        size="small"
+      />
+      <span class="text-body-sm text-(--text-muted)">
+        {{ kind === 'locale' ? t.demoLocaleNote : t.demoDirectionNote }}
+      </span>
+    </div>
     <ConfigProvider
       :locale="kind === 'locale' ? locale : 'en'"
       :catalogs="catalogs"
       :dir="kind === 'direction' ? dir : 'auto'"
-      class="overflow-x-auto"
+      class="h-144 overflow-hidden rounded-(--shape-card) border border-(--border-default) *:h-full!"
     >
-      <Pagination
-        v-model:page="page"
-        v-model:page-size="pageSize"
-        :total="200"
-        :page-size-options="[10, 25, 50]"
-        :sibling-count="1"
-      />
+      <AuthSignIn />
     </ConfigProvider>
   </section>
   <section
