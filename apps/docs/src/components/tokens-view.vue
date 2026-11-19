@@ -212,6 +212,7 @@
       <TokenTable
         :tokens="tokens.motion.animations"
         kind="animation"
+        sample="animation"
         :title="t.animations"
         :description="t.animationsLead"
         :caption="t.animations"
