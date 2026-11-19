@@ -7,7 +7,9 @@ export const es: Messages = {
     approved: 'Aprobado',
     denied: 'Denegado',
     expired: 'Solicitud vencida',
-    confirmLabel: 'Escribe {phrase} para confirmar'
+    confirmLabel: 'Escribe {phrase} para confirmar',
+    arguments: 'Argumentos',
+    invalidArguments: 'Corrige los argumentos para aprobar'
   },
   responseLoading: {
     generating: 'Generando una respuesta'
@@ -111,9 +113,11 @@ export const es: Messages = {
   },
   toolCall: {
     pending: 'En espera',
+    streaming: 'Preparando',
     running: 'En ejecución',
     success: 'Completado',
     error: 'Falló',
+    canceled: 'Cancelado',
     denied: 'Denegado',
     input: 'Entrada',
     output: 'Salida'
