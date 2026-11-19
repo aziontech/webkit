@@ -92,7 +92,7 @@ for (const width of WIDTHS) {
     await page.locator('[data-example][data-ready]').waitFor()
     await settle(page)
     const marked = await page.evaluate(() => {
-      const scene = document.querySelector('[data-slot="hero-bottom"] svg')
+      const scene = document.querySelector('[data-slot="hero-bottom"] .flex')
       scene?.setAttribute('data-plain-ground', '')
       return scene !== null
     })
