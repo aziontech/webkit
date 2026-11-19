@@ -57,7 +57,7 @@
     number: number
     /** Plan billed. */
     plan: string
-    /** AccountBilling cycle. */
+    /** Billing cycle. */
     cycle: BillingCycle
     /** Seats billed. */
     seats: number
@@ -107,7 +107,7 @@
     email: string
     /** Whether the plan renews on its own. */
     autoRenewal: boolean
-    /** AccountBilling address, on one line. */
+    /** Billing address, on one line. */
     address: string
     /** Tax ID; empty shows the empty-value marker. */
     taxId: string
@@ -251,7 +251,7 @@
     { accessorKey: 'plan', header: 'Plan', sortable: true, minWidth: 96 },
     { accessorKey: 'cycle', header: 'Cycle', minWidth: 100 },
     { accessorKey: 'seats', header: 'Seats', sortable: true, minWidth: 80 },
-    { accessorKey: 'billedAt', header: 'AccountBilling date', sortable: true, minWidth: 130 },
+    { accessorKey: 'billedAt', header: 'Billing date', sortable: true, minWidth: 130 },
     { accessorKey: 'amount', header: 'Amount', sortable: true, minWidth: 110 },
     { accessorKey: 'paymentMethod', header: 'Payment method', grow: 2, minWidth: 200 },
     { accessorKey: 'status', header: 'Status', sortable: true, minWidth: 110 },
@@ -325,7 +325,7 @@
   <div class="layout-boundary">
     <div class="layout-column flex min-w-0 flex-col gap-(--layout-group-gap)">
       <PageHeader
-        title="AccountBilling"
+        title="Billing"
         description="Your plan, your invoices and the cards they are charged to."
       >
         <template #actions>
@@ -705,7 +705,7 @@
                   :loading="loading"
                   aria-label="Payment information"
                 >
-                  <KeyValueList.Item label="AccountBilling email">
+                  <KeyValueList.Item label="Billing email">
                     <span
                       v-if="paymentInformation?.email"
                       dir="ltr"
@@ -719,7 +719,7 @@
                       :label="paymentInformation.autoRenewal ? 'On' : 'Off'"
                     />
                   </KeyValueList.Item>
-                  <KeyValueList.Item label="AccountBilling address">
+                  <KeyValueList.Item label="Billing address">
                     <template v-if="paymentInformation?.address">{{
                       paymentInformation.address
                     }}</template>

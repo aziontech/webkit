@@ -89,7 +89,7 @@
     {
       label: 'GitHub',
       links: [
-        { label: 'Azion ShellDocs', href: 'https://github.com/aziontech', icon: 'az az-github' },
+        { label: 'Azion Docs', href: 'https://github.com/aziontech', icon: 'az az-github' },
         {
           label: 'Contribute to this page',
           href: 'https://github.com/aziontech/azion',
@@ -134,7 +134,7 @@
     },
     {
       title: 'Developers',
-      links: ['ShellDocs', 'API Reference', 'Dev Tools', 'Release Notes', 'Marketplace', 'Status']
+      links: ['Docs', 'API Reference', 'Dev Tools', 'Release Notes', 'Marketplace', 'Status']
     },
     { title: 'Company', links: ['About', 'Customers', 'Partners', 'Careers', 'Blog', 'Contact'] }
   ]

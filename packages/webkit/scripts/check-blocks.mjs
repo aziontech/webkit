@@ -4,6 +4,7 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 
+import { checkBlockCodeNames } from './lib/block-code-names.mjs'
 import { checkDataContract } from './lib/block-data.mjs'
 import { readBlocks } from './lib/blocks.mjs'
 import { checkGuidelines, checkToastRegion, primaryComponents } from './lib/guidelines.mjs'
@@ -162,7 +163,8 @@ async function main() {
     ...(warnIntents ? metadata.errors : [...metadata.errors, ...metadata.warnings]),
     ...guidelines.errors,
     ...checkSummaryComponents(blocks),
-    ...checkToastRegions(blocks)
+    ...checkToastRegions(blocks),
+    ...checkBlockCodeNames(blocks)
   ]
   if (warnIntents) {
     for (const w of metadata.warnings) process.stdout.write(`⚠ ${w}\n`)
@@ -219,7 +221,7 @@ async function main() {
   }
   if (errors.length || regressions.length) {
     process.stderr.write(
-      '\nEvery block in packages/webkit/blocks is a screen the AI copies: it needs intents in block.json, real skills, a guidelines.md whose building blocks and states match the SFC and block.json, SFCs that pass the consumer lint, no Toaster outside an app root (blocks/shell), and a data contract: typed props in, events out, sample records in a separate file, variants that import the primary instead of copying it.\n'
+      '\nEvery block in packages/webkit/blocks is a screen the AI copies: it needs intents in block.json, real skills, a guidelines.md whose building blocks and states match the SFC and block.json, SFCs that pass the consumer lint, no Toaster outside an app root (blocks/shell), no block code name (AccountBilling) in text a person reads, and a data contract: typed props in, events out, sample records in a separate file, variants that import the primary instead of copying it.\n'
     )
     process.exit(1)
   }

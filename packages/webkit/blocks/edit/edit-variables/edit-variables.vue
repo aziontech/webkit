@@ -505,9 +505,9 @@
     try {
       jsonError.value = parseJsonObject(text)
         ? ''
-        : 'EditVariables must be a JSON object with key/value pairs.'
+        : 'Variables must be a JSON object with key/value pairs.'
     } catch {
-      jsonError.value = 'EditVariables must be valid JSON.'
+      jsonError.value = 'Variables must be valid JSON.'
     }
   })
 
@@ -689,7 +689,7 @@
 <template>
   <div class="layout-column layout-boundary flex flex-col">
     <PageHeader
-      title="EditVariables"
+      title="Variables"
       description="Configure variable names, values, and settings for use across your projects."
     >
       <template #actions>
@@ -975,7 +975,7 @@
             >
               <legend class="sr-only">{{ drawerTitle }}</legend>
               <SettingsGroup
-                label="EditVariables"
+                label="Variables"
                 hint="Store values your services read at runtime. Add one row per variable, or import a .env file."
               >
                 <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
@@ -1002,7 +1002,7 @@
                     <ToggleGroup
                       v-model="view"
                       :options="VIEW_OPTIONS"
-                      aria-label="EditVariables view"
+                      aria-label="Variables view"
                       size="medium"
                     />
                   </div>
@@ -1016,7 +1016,7 @@
                       :add-disabled="!canAdd"
                       add-button-label="Add variable"
                       remove-button-label="Remove variable"
-                      aria-label="EditVariables"
+                      aria-label="Variables"
                     >
                       <template #row="{ index, remove, removable, removeLabel }">
                         <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
@@ -1156,7 +1156,7 @@
                   <template v-else>
                     <Textarea
                       v-model="jsonText"
-                      aria-label="EditVariables JSON"
+                      aria-label="Variables JSON"
                       :invalid="!!jsonError"
                       :aria-describedby="jsonError ? formId + '-json-message' : undefined"
                     />

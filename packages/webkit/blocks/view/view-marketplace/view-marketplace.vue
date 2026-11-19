@@ -289,7 +289,7 @@
   <div class="layout-boundary">
     <div class="layout-column flex min-h-full flex-col">
       <PageHeader
-        title="ViewMarketplace"
+        title="Marketplace"
         description="Find integrations that run on your applications."
       >
         <template #actions>

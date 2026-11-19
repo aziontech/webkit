@@ -23,7 +23,7 @@ How every deploy in the account routes. A Deployment Setting holds a binding pol
 ## When not to use
 
 - The deployment settings of one service: use `edit/edit-resource#DeployableSettings`.
-- Only the create form: use `create/create-drawer#AccountDeploymentSettings`.
+- Only the create form: use `create/create-drawer#DeploymentSettings`.
 - Running a deploy: use `create/create-deploy-drawer`.
 
 ## Building blocks
@@ -54,7 +54,7 @@ The view-table controls row (`view/view-table`): a `PropertyFilter` over name, r
 
 ### G. Create and edit drawer — `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Field`, `Textarea`, `RadioGroup` (required)
 
-This page owns the Deployment Setting form, in a large right `Drawer` (`create/create-drawer#AccountDeploymentSettings` should match it field for field): General (Name, required and unique; Description; Active `Switch`) and Routing and policy (binding policy and deployment policy as `RadioGroup`s with a description each, starting from the saved defaults). Edit opens the same form filled, titled `Edit Deployment Setting`, with the deployment policy locked because it cannot change after creation. Cancel and the primary `Create Deployment Setting` or `Save changes`, which applies the setting to the table at once, closes the drawer and emits `create` or `update`. A missing or taken name shows on the field after submit and focus moves to it.
+This page owns the Deployment Setting form, in a large right `Drawer` (`create/create-drawer#DeploymentSettings` should match it field for field): General (Name, required and unique; Description; Active `Switch`) and Routing and policy (binding policy and deployment policy as `RadioGroup`s with a description each, starting from the saved defaults). Edit opens the same form filled, titled `Edit Deployment Setting`, with the deployment policy locked because it cannot change after creation. Cancel and the primary `Create Deployment Setting` or `Save changes`, which applies the setting to the table at once, closes the drawer and emits `create` or `update`. A missing or taken name shows on the field after submit and focus moves to it.
 
 ### H. Loading and no services — `Skeleton` (conditional)
 
@@ -159,7 +159,7 @@ Then delete `sample.ts` and its import, and persist `bind`, `create`, `update`, 
 
 ## Related
 
-- `create/create-drawer#AccountDeploymentSettings` — the create form this page opens.
+- `create/create-drawer#DeploymentSettings` — the create form this page opens.
 - `edit/edit-resource#DeployableSettings` — the deployment settings of one service.
 - `view/view-table` — the list pattern of the Deployment Settings table.
 - `edit/edit-resource#UnsavedChanges` — the SaveBar pattern of the defaults.

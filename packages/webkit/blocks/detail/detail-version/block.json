@@ -86,7 +86,7 @@
     },
     {
       "name": "CacheSettings",
-      "summary": "The draft on its Cache Settings tab: the cache settings table (browser cache, edge cache, a tiered cache `Tag`, last modified) and the add or edit `Drawer` that holds the cache-settings rows of Templates/Platform/Edit/EditResource: Browser cache, Edge cache with stale, large file and tiered cache, and a collapsible Advanced cache key that ends on Adaptive delivery and a Device groups `MultiSelect`.",
+      "summary": "The draft on its Cache Settings tab: the cache settings table (browser cache, edge cache, a tiered cache `Tag`, last modified) and the add or edit `Drawer` that holds the cache-settings rows of `edit/edit-resource`: Browser cache, Edge cache with stale, large file and tiered cache, and a collapsible Advanced cache key that ends on Adaptive delivery and a Device groups `MultiSelect`.",
       "file": "variants/cache-settings.vue"
     },
     {

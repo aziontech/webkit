@@ -21,7 +21,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ### A. Page heading — `PageHeader`, `Button` (required)
 
-`PageHeader` at its medium size: "ViewMarketplace" and one sentence of purpose. The actions slot holds only the outlined medium Documentation `Button`, which opens the docs in a new tab.
+`PageHeader` at its medium size: "Marketplace" and one sentence of purpose. The actions slot holds only the outlined medium Documentation `Button`, which opens the docs in a new tab.
 
 ### B. Featured — `IntegrationCard` (required)
 
@@ -61,7 +61,7 @@ An "Install" `h3` ("Install on another application" once installed somewhere) ov
 
 ### K. Solution page — `Card`, `Select`, `Field`, `KeyValueList`, `DocProse` (optional)
 
-The drawer's content as a page, for the integration's own URL (the variant adds `Tabs`, `Link`, `Table` and `Tag`). A `Link` back to ViewMarketplace, the `PageHeader`, then `Tabs` for Overview (`DocProse`), Usage (how to set it up, with the setting names in code), Changelog (an ordered version history, newest first, `Latest` as an info `Tag`) and Applications (a `Table` of the applications running it with their version, `TableCellStatus` Up to date or Update available, and an `Update to <version>` button). Beside it, an install card: a required Application `Select` whose options carry an `Installed` or `Update available` `Tag` (installed and current ones are disabled) and a submit that reads Install or Update; under it the facts in `KeyValueList`. Install and Update are async runs with the same toast as the drawer (Configure, Open application).
+The drawer's content as a page, for the integration's own URL (the variant adds `Tabs`, `Link`, `Table` and `Tag`). A `Link` back to Marketplace, the `PageHeader`, then `Tabs` for Overview (`DocProse`), Usage (how to set it up, with the setting names in code), Changelog (an ordered version history, newest first, `Latest` as an info `Tag`) and Applications (a `Table` of the applications running it with their version, `TableCellStatus` Up to date or Update available, and an `Update to <version>` button). Beside it, an install card: a required Application `Select` whose options carry an `Installed` or `Update available` `Tag` (installed and current ones are disabled) and a submit that reads Install or Update; under it the facts in `KeyValueList`. Install and Update are async runs with the same toast as the drawer (Configure, Open application).
 
 ### L. Configure screen — `Field`, `Select`, `Alert`, `Button` (optional)
 
@@ -161,7 +161,7 @@ Then delete `sample.ts` and its import.
 
 ## Copy
 
-- **Title:** "ViewMarketplace". Description: "Find integrations that run on your applications."
+- **Title:** "Marketplace". Description: "Find integrations that run on your applications."
 - **Sections:** "Featured", "All integrations".
 - **Filter:** placeholder and `aria-label` "Search integrations".
 - **Tile action:** "Install" or "Configure"; its `aria-label` adds the name.

@@ -33,7 +33,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ### A. Page heading — `PageHeader`, `Button` (required)
 
-`PageHeader` at its medium size: "ViewMarketplace" and one sentence of purpose. The actions slot holds only the outlined medium Documentation `Button`, which opens the docs in a new tab.
+`PageHeader` at its medium size: "Marketplace" and one sentence of purpose. The actions slot holds only the outlined medium Documentation `Button`, which opens the docs in a new tab.
 
 ### B. Featured — `IntegrationCard` (required)
 
@@ -73,7 +73,7 @@ An "Install" `h3` ("Install on another application" once installed somewhere) ov
 
 ### K. Solution page — `Card`, `Select`, `Field`, `KeyValueList`, `DocProse` (optional)
 
-The drawer's content as a page, for the integration's own URL (the variant adds `Tabs`, `Link`, `Table` and `Tag`). A `Link` back to ViewMarketplace, the `PageHeader`, then `Tabs` for Overview (`DocProse`), Usage (how to set it up, with the setting names in code), Changelog (an ordered version history, newest first, `Latest` as an info `Tag`) and Applications (a `Table` of the applications running it with their version, `TableCellStatus` Up to date or Update available, and an `Update to <version>` button). Beside it, an install card: a required Application `Select` whose options carry an `Installed` or `Update available` `Tag` (installed and current ones are disabled) and a submit that reads Install or Update; under it the facts in `KeyValueList`. Install and Update are async runs with the same toast as the drawer (Configure, Open application).
+The drawer's content as a page, for the integration's own URL (the variant adds `Tabs`, `Link`, `Table` and `Tag`). A `Link` back to Marketplace, the `PageHeader`, then `Tabs` for Overview (`DocProse`), Usage (how to set it up, with the setting names in code), Changelog (an ordered version history, newest first, `Latest` as an info `Tag`) and Applications (a `Table` of the applications running it with their version, `TableCellStatus` Up to date or Update available, and an `Update to <version>` button). Beside it, an install card: a required Application `Select` whose options carry an `Installed` or `Update available` `Tag` (installed and current ones are disabled) and a submit that reads Install or Update; under it the facts in `KeyValueList`. Install and Update are async runs with the same toast as the drawer (Configure, Open application).
 
 ### L. Configure screen — `Field`, `Select`, `Alert`, `Button` (optional)
 
@@ -173,7 +173,7 @@ Then delete `sample.ts` and its import.
 
 ## Copy
 
-- **Title:** "ViewMarketplace". Description: "Find integrations that run on your applications."
+- **Title:** "Marketplace". Description: "Find integrations that run on your applications."
 - **Sections:** "Featured", "All integrations".
 - **Filter:** placeholder and `aria-label` "Search integrations".
 - **Tile action:** "Install" or "Configure"; its `aria-label` adds the name.
@@ -223,7 +223,7 @@ Then delete `sample.ts` and its import.
 - `InstallError` — The install failed on checkout: the danger Alert with the reason and Reinstall, and the permanent failure toast with Edit and Reinstall.
 - `NoMatch` — The Integrations tab with a search that matches no integration: the Featured row hides, the token stays and a medium EmptyState offers Clear filters.
 - `Loading` — The catalog is loading: the integration search is disabled and skeleton integration tiles hold the grid.
-- `SolutionPage` — The integration as a full page (Waiting Room): a Back to ViewMarketplace `Link`, the `PageHeader`, `Tabs` for Overview, Usage, Changelog (version history, Latest marked) and Applications (a `Table` of the applications running it, `TableCellStatus` Up to date or Update available and an Update to <version> action), beside an install card whose Application `Select` tags each application Installed or Update available. Install and Update are async runs that end in a toast with Configure and Open application.
+- `SolutionPage` — The integration as a full page (Waiting Room): a Back to Marketplace `Link`, the `PageHeader`, `Tabs` for Overview, Usage, Changelog (version history, Latest marked) and Applications (a `Table` of the applications running it, `TableCellStatus` Up to date or Update available and an Update to <version> action), beside an install card whose Application `Select` tags each application Installed or Update available. Install and Update are async runs that end in a toast with Configure and Open application.
 - `Configure` — The screen behind Configure: the integration's settings on one application (Queue visitors `Switch`, Capacity and Queue page title fields, Session length `Select`) in `SettingsGroup`s, errors after Save with a summary `Alert`, and a `SaveBar` with Discard and Save; saving is not a deploy, so its toast has no Redeploy.
 
 Each variant is the same screen in another state: `get_block("view/view-marketplace", { variant })`, or the file under `blocks/view/view-marketplace/variants/`.
@@ -522,7 +522,7 @@ Each variant is the same screen in another state: `get_block("view/view-marketpl
   <div class="layout-boundary">
     <div class="layout-column flex min-h-full flex-col">
       <PageHeader
-        title="ViewMarketplace"
+        title="Marketplace"
         description="Find integrations that run on your applications."
       >
         <template #actions>

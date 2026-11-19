@@ -135,7 +135,7 @@
       >
         <Link
           href="/marketplace"
-          label="Back to ViewMarketplace"
+          label="Back to Marketplace"
           size="medium"
         />
       </nav>
