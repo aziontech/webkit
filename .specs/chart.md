@@ -3,11 +3,11 @@ name: chart
 category: chart
 structure: composition
 status: implemented
-checksum: 302fe6d49e409a09b31e867f10ad049a2be15d07fcb2bad1ef4aa1aff8e9a9ae
+checksum: ab3e604e44d65e94ff4cda6993c7a889e85ccf321e7a5bed299e1f020cdce5ed
 spec_version: 14
 template: 2
 created: 2026-10-20
-last_updated: 2026-11-18
+last_updated: 2026-11-19
 ---
 
 # Chart — Component Spec
@@ -236,7 +236,7 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 
 | Event           | Payload                                                   | Notes                                                                                                                                               |
 | --------------- | --------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `point-click`   | `(event: MouseEvent \| KeyboardEvent, point: ChartPoint)` | Click on the plot, or Enter / Space on the focused chart, at the active index. `point` carries the index, the label and every visible series value. |
+| `point-click`   | `(event: MouseEvent \| KeyboardEvent, point: ChartPoint)` | Click or tap on the plot, or Enter / Space on the focused chart, at the active index (a tap with no active index uses the point under the finger). `point` carries the index, the label and every visible series value. |
 | `legend-toggle` | `(event: MouseEvent, series: ChartSeries)`                | A legend entry toggled; `series` is the consumer's own series object.                                                                               |
 
 ## Slots
@@ -349,7 +349,7 @@ The entrance is a composition assembling on first paint with a per-series stagge
 
 - Container queries: none; the plot measures its own box and fills its container (`height` is a minimum).
 - Narrow (≤ 640 px or a narrow container): category labels thin to the width they have; the legend wraps.
-- Touch: legend buttons ≥ 24 px; with a brush the plot sets `touch-action: pan-y`, so a horizontal drag selects and a vertical drag scrolls the page. Hover-only readings are reachable from the keyboard and in the table twin.
+- Touch: legend buttons ≥ 24 px; with a brush the plot sets `touch-action: pan-y`, so a horizontal drag selects and a vertical drag scrolls the page. A tap (touch or pen) sets the active index under the finger, so the tooltip and crosshair show and stay after the finger lifts; a tap outside the plot clears it, and the tap's click fires `point-click` for that point. Hover-only readings are also reachable from the keyboard and in the table twin.
 - Reflow: no horizontal scroll at 320 px; the hidden twin sits in an `sr-only` box.
 
 ## Performance
