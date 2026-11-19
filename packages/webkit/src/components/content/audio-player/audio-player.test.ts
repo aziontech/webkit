@@ -76,12 +76,12 @@ describe('AudioPlayer', () => {
 
     await browserUser.click(view.getByRole('button', { name: 'Play' }))
     await waitFor(() => expect(view.emitted('play')).toHaveLength(1))
-    expect((view.emitted('play')?.[0]?.[0] as Event).type).toBe('play')
+    expect((view.emitted('play') as [Event][])[0][0].type).toBe('play')
     expect(view.getByTestId(TEST_ID).hasAttribute('data-playing')).toBe(true)
 
     await browserUser.click(view.getByRole('button', { name: 'Pause' }))
     await waitFor(() => expect(view.emitted('pause')).toHaveLength(1))
-    expect((view.emitted('pause')?.[0]?.[0] as Event).type).toBe('pause')
+    expect((view.emitted('pause') as [Event][])[0][0].type).toBe('pause')
     expect(view.getByTestId(TEST_ID).hasAttribute('data-playing')).toBe(false)
     expect(view.getByRole('button', { name: 'Play' })).toBeTruthy()
   })

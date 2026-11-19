@@ -30365,6 +30365,123 @@
    "examplesFile": "catalog/examples/audio-player.json",
    "docsFile": "catalog/components/audio-player.json"
   },
+  "video-player": {
+   "import": "@aziontech/webkit/video-player",
+   "target": "./src/components/content/video-player/video-player.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/video-player",
+   "category": "content",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "src",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "URL of the video: https, blob or data."
+    },
+    {
+     "name": "mimeType",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Media type, such as video/mp4."
+    },
+    {
+     "name": "poster",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Still image shown before play."
+    },
+    {
+     "name": "captions",
+     "type": "VideoPlayerCaption[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "WebVTT caption tracks."
+    },
+    {
+     "name": "status",
+     "type": "'pending' | 'running' | 'success' | 'error'",
+     "default": "'success'",
+     "required": "false",
+     "doc": "Generation status; success plays."
+    },
+    {
+     "name": "progress",
+     "type": "number",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Percent done while generating; unset is indeterminate."
+    },
+    {
+     "name": "error",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Message of the error state."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name; empty reads Video."
+    }
+   ],
+   "surface": "app",
+   "examplesFile": "catalog/examples/video-player.json",
+   "docsFile": "catalog/components/video-player.json"
+  },
+  "image-gallery": {
+   "import": "@aziontech/webkit/image-gallery",
+   "target": "./src/components/content/image-gallery/image-gallery.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/image-gallery",
+   "category": "content",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "items",
+     "type": "ImageGalleryItem[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Images to show, each from a URL (`src`) or base64 `data` with its `mimeType`."
+    },
+    {
+     "name": "loading",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Images are still generating: placeholders fill the grid after the images already in `items`, up to `expectedCount`."
+    },
+    {
+     "name": "expectedCount",
+     "type": "number",
+     "default": "1",
+     "required": "false",
+     "doc": "Number of images expected while `loading`; the grid shows a placeholder for each one not in `items` yet."
+    },
+    {
+     "name": "error",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Why the images could not load or generate. Set, the gallery shows the error state in place of the grid, with this text under its title."
+    }
+   ],
+   "events": [
+    {
+     "name": "download",
+     "payload": "(event: MouseEvent, item: ImageGalleryItem)",
+     "notes": "Download in the viewer was pressed for `item`. Download is a link with the `download` attribute, so the browser saves a same-origin, `blob:` or `data:` image unless the handler calls `preventDefault()`; browsers ignore `download` on a cross-origin URL and open it instead, so an app with cross-origin images handles this event (`preventDefault()` and its own download)."
+    }
+   ],
+   "surface": "app",
+   "examplesFile": "catalog/examples/image-gallery.json",
+   "docsFile": "catalog/components/image-gallery.json"
+  },
   "attribute-editor": {
    "import": "@aziontech/webkit/attribute-editor",
    "target": "./src/components/input/attribute-editor/attribute-editor.vue",
