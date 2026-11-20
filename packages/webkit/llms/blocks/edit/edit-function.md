@@ -402,7 +402,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-function
   const savedService = computed<FunctionEditorService>(() => props.service ?? sampleService)
   const savedFields = computed<SchemaField[]>(() => props.fields ?? sampleFields)
 
-  const split = computed(() => Boolean(slots['code-panel']))
+  const split = () => Boolean(slots['code-panel'])
   const form = reactive<FunctionEditorService>({ ...savedService.value })
   const draftFields = ref<SchemaField[]>(structuredClone(toRaw(savedFields.value)))
   const expanded = ref(new Set<string>(props.defaultOpenKeys))
@@ -652,14 +652,14 @@ Each variant is the same screen in another state: `get_block("edit/edit-function
                   class="flex min-h-0 flex-1 flex-col"
                 >
                   <component
-                    :is="split ? ResizableRoot : 'div'"
-                    :orientation="split ? 'vertical' : undefined"
-                    :aria-label="split ? 'Code and test run' : undefined"
+                    :is="split() ? ResizableRoot : 'div'"
+                    :orientation="split() ? 'vertical' : undefined"
+                    :aria-label="split() ? 'Code and test run' : undefined"
                     class="flex min-h-0 w-full flex-1 flex-col"
                   >
                     <component
-                      :is="split ? ResizablePane : 'div'"
-                      :aria-label="split ? 'Source code' : undefined"
+                      :is="split() ? ResizablePane : 'div'"
+                      :aria-label="split() ? 'Source code' : undefined"
                       class="flex min-h-0 w-full flex-1 flex-col"
                     >
                       <div class="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
