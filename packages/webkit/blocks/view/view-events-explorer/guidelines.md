@@ -54,7 +54,7 @@ The fields panel (D) is the `view-events-explorer#Fields` piece of the inventory
 
 ### H. Query bar — `Tooltip`, `IconButton` (optional)
 
-Variant Query only; it adds `PropertyFilter` (`mode="query"`), `DateRangePicker` and `Select` to the page, in place of the Filter popover and the search field.
+Variant Query only; it adds `PropertyFilter` (`mode="query"`), `DateRangePicker` and `Select` to the page, in the block's `toolbar` slot, in place of the Filter popover and the search field.
 
 For people who type their questions. `DateRangePicker` replaces the Period field of the Filter popover: relative ranges (Last 15 minutes to Last 24 hours), an absolute range typed in the chosen time zone and bounded to the retained days, and Previous and Next, which move the window by its own length. Beside it a `Select` named Time zone shows the zone at all times (`UTC+00:00`, `UTC−03:00 · Sao Paulo`) and changes it; the picker binds the same `v-model:time-zone`, so a typed range is read in that zone. The times in the log, the chart axis and the document follow that zone. `PropertyFilter` in query mode replaces both the Filter popover and the search field: one query string (`level = Error AND host = api.example.com`), suggestions for the word at the caret, the reason under the field when the query is invalid, and the match count. Enter applies it; a query that mixes AND and OR shows a message instead of guessing. A value picked in the fields panel adds or removes its `field = value` clause, so the panel and the query never disagree.
 
@@ -70,11 +70,11 @@ Variant Sessions only; it adds `Tabs` and `DropdownMenu` to the page.
 
 Above the controls row, one tab per open investigation; each keeps its own filters, search and period, and switching tabs closes the open document. New investigation (a transparent `IconButton`) adds a tab, up to five; past the limit a status line says to close one. The actions `DropdownMenu` renames, duplicates or closes the active tab. Rename opens an inline `Input` over the tab (also F2 or a double click on it): Enter keeps the name, Escape restores it. Each tab is `closable` while more than one is open: the × on the tab closes it with the pointer, and Delete on the focused tab closes it from the keyboard (the tab announces the shortcut through `aria-keyshortcuts`); focus moves to the tab before it. The last tab cannot be closed. The × is not a separate focusable button: inside a `tablist` anything focusable that is not a tab fails `aria-required-children`, so the keyboard path is Delete, as in the WAI-ARIA tabs pattern, and the actions menu keeps Close investigation for discovery.
 
-### K. Document tools — `Input`, `IconButton`, `Tooltip` (optional)
+### K. Document tools — `Chip`, `Input`, `IconButton`, `Tooltip` (optional)
 
-Variant EventDocument only; it adds `CopyButton` to the page.
+Variant EventDocument only; it adds `CopyButton` to the page and fills the block's `document-fields` slot.
 
-The document lists every field of the event. Search in this event narrows the list to fields whose name or value matches and highlights the match. Each filterable value has Filter by (keep only events with it) and Exclude (hide them) buttons that apply to the log; an exclusion shows as a `Host is not legacy.example.com` chip with the other filters. Copy copies the fields shown as JSON; the full JSON document stays below.
+The document lists every field of the event. Search in this event narrows the list to fields whose name or value matches and highlights the match. Each filterable value has Filter by (keep only events with it) and Exclude (hide them) buttons that apply to the log; an exclusion shows as a `Host is not legacy.example.com` `Chip` with the other filters (the block draws it for any `v-model:exclusions`). Copy copies the fields shown as JSON; the full JSON document stays below.
 
 ## Data
 
@@ -96,6 +96,15 @@ The block takes its events through props and emits every action; it fetches noth
 | `v-model:search`          | `string`                        | The search text.                                                                                                                                                                                                                                                                              |
 | `v-model:page`            | `number`                        | The table page, 1-based, back to `1` when the filters or the search change.                                                                                                                                                                                                                   |
 | `v-model:page-size`       | `number`                        | Rows per page, `25` by default.                                                                                                                                                                                                                                                               |
+| `timeZone`                | `string`                        | The IANA zone the times, the chart and the period are written in, and the zone the controls row names. `UTC` by default.                                                                                                                                                                      |
+| `match`                   | `(event) => boolean`            | A test every event must pass besides the filters, such as a typed query (Query passes its `PropertyFilter` query here).                                                                                                                                                                       |
+| `v-model:exclusions`      | `EventsExplorerFilters`         | Values per field id the log hides; each shows as a removable `Field is not value` chip beside the filter chips.                                                                                                                                                                               |
+| `v-model:selected-key`    | `string`                        | The id of the event whose document is open; empty for none.                                                                                                                                                                                                                                   |
+
+| Slot              | Props                           | What it replaces                                                                                                                                                         |
+| ----------------- | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `toolbar`         | `{ exportCsv, exportDisabled }` | The controls row and the filter chips. Query puts its time range, zone, query bar and saved and recent queries here; `exportCsv` downloads the log shown.                |
+| `document-fields` | `{ event, fields }`             | The fields of the open event in its document. `fields` lists every field with a value (`EventsExplorerDocumentField`); EventDocument adds search, Filter by and Exclude. |
 
 | Event       | Payload           | When                                                        |
 | ----------- | ----------------- | ----------------------------------------------------------- |
@@ -201,7 +210,7 @@ Then delete `sample.ts` and its import, and give `fields` its own list. A log th
 - Empty: a workspace with no traffic yet (`events` is `[]`); the summary reads zero, the chart is flat and the log shows No events yet.
 - Error: the event request failed (`error` is set); the fields panel stays and the log pane shows a danger `Alert` with the message and Retry, which emits `retry`.
 - Query: `level = Error AND host = api.example.com` over the last 24 hours, with two saved and two recent queries.
-- Sessions: three investigation tabs, API errors active.
+- Sessions: three investigation tabs, API errors active; the tabs sit above the block, which each tab feeds through `v-model:filters` and `v-model:search`.
 - EventDocument: an error event's document open, with Host is not legacy.example.com applied.
 
 ## Related
