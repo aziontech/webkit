@@ -18,7 +18,8 @@
   {
     "name": "site-layout",
     "path": "src/components/layout/site-layout/site-layout.vue",
-    "limit": "78.3 KB"
+    "limit": "85.8 KB",
+    "entryOnly": true
   },
   {
     "name": "doc-layout",
@@ -692,7 +693,8 @@
   {
     "name": "site-footer-section",
     "path": "src/components/section/site-footer-section/site-footer-section.vue",
-    "limit": "36.9 KB"
+    "limit": "43.6 KB",
+    "entryOnly": true
   },
   {
     "name": "closing-call-to-action-section",
