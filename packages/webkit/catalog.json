@@ -30322,6 +30322,63 @@
    "kind": "composable",
    "treeShakeableImport": "@aziontech/webkit/use-time-range"
   },
+  "use-shortcuts": {
+   "import": "@aziontech/webkit/use-shortcuts",
+   "target": "./src/composables/use-shortcuts/index.ts",
+   "kind": "composable",
+   "treeShakeableImport": "@aziontech/webkit/use-shortcuts"
+  },
+  "shortcuts-dialog": {
+   "import": "@aziontech/webkit/shortcuts-dialog",
+   "target": "./src/components/overlay/shortcuts-dialog/shortcuts-dialog.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/shortcuts-dialog",
+   "models": [
+    "open"
+   ],
+   "category": "overlay",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "title",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Dialog title. Empty uses the locale catalog (`Keyboard shortcuts`)."
+    },
+    {
+     "name": "shortcut",
+     "type": "string",
+     "default": "'?'",
+     "required": "false",
+     "doc": "Keys that open the list, in the `useShortcuts` syntax; listed under the general group. Empty binds no key."
+    },
+    {
+     "name": "defaultOpen",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Initial open state when uncontrolled (`v-model:open` unbound)."
+    },
+    {
+     "name": "open",
+     "type": "boolean",
+     "default": "undefined as never",
+     "required": "false",
+     "doc": "Two-way value (`v-model:open`)."
+    }
+   ],
+   "slots": [
+    {
+     "name": "trigger",
+     "scope": "—",
+     "notes": "The control that opens the list (a menu item, an icon button)."
+    }
+   ],
+   "surface": "app",
+   "examplesFile": "catalog/examples/shortcuts-dialog.json",
+   "docsFile": "catalog/components/shortcuts-dialog.json"
+  },
   "file-preview": {
    "import": "@aziontech/webkit/file-preview",
    "target": "./src/components/content/file-preview/file-preview.vue",

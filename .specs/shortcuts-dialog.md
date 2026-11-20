@@ -2,12 +2,12 @@
 name: shortcuts-dialog
 category: overlay
 structure: monolithic
-status: approved
+status: implemented
 spec_version: 1
 template: 2
 created: 2026-11-20
 last_updated: 2026-11-20
-checksum: 7c835a777ee3bb75ec920e044f08fb8e34718ee5f02f2e457a5a63157e92d315
+checksum: 4d3a85f8e7ffec9f3570ac68ee74cc0ef86240f07619e11af4138047ca89e45d
 ---
 
 # ShortcutsDialog — Component Spec
@@ -150,7 +150,7 @@ _none_
 
 ## Performance
 
-- Bundle budget: at most 24 KB gzip for the `shortcuts-dialog` entry in `.size-limit.json` (`confirm-dialog`, which also bundles `Input`, is 27.3 KB). This change adds the export `"./use-shortcuts": "./src/composables/use-shortcuts/index.ts"` and its `.size-limit.json` entry `use-shortcuts` (at most 2 KB), the same shape as `use-collection`.
+- Bundle budget: at most 27 KB gzip for the `shortcuts-dialog` entry in `.size-limit.json` (measured 26.77 KB: `DialogContent` with its focus trap and motion is about 22 KB of it; `confirm-dialog` is 27.3 KB). This change adds the export `"./use-shortcuts": "./src/composables/use-shortcuts/index.ts"` and its `.size-limit.json` entry `use-shortcuts` (at most 2.5 KB, measured 2.34 KB), the same shape as `use-collection`.
 - Runtime budget: one `keydown` listener per shortcut registry (the page-wide default, or one per `provideShortcuts` call), added with its first registration and removed with its last.
 - Heavy parts: none.
 

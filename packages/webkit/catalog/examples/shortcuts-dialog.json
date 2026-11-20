@@ -1,0 +1,9 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "A page registers its shortcuts with `useShortcuts` in two groups; `?` or the trigger opens the generated list, `/` focuses the search field and `⌘S` / `Ctrl S` saves.",
+   "file": "examples/shortcuts-dialog/default.vue"
+  }
+ ]
+}
