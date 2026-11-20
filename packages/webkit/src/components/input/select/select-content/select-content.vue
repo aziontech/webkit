@@ -107,7 +107,7 @@
         :data-align="resolvedAlign"
         :style="panelStyle"
         :data-variant="ctx.variant.value"
-        class="fixed z-(--z-control-overlay) flex max-h-[20rem] flex-col overflow-hidden rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-xs) data-[variant=ghost]:min-w-(--container-3xs)"
+        class="fixed z-(--z-control-overlay) flex max-h-[20rem] flex-col overflow-hidden rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-xs) min-w-(--container-3xs)"
         @keydown="onKeydown"
       >
         <div

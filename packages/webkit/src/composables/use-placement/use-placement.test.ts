@@ -132,6 +132,29 @@ describe('computePlacement (pure geometry)', () => {
     expect(r.maxWidth).toBeNull()
   })
 
+  it('matchTriggerWidth with a wider panel minimum keeps the panel inside the boundary', () => {
+    const atEdge = computePlacement(
+      base({
+        triggerRect: rect(900, 100, 80, 40),
+        panelSize: { width: 256, height: 100 },
+        matchTriggerWidth: true,
+        panelMinWidth: 256
+      })
+    )
+    expect(atEdge.width).toBe(256)
+    expect(atEdge.left + atEdge.width).toBeLessThanOrEqual(1000 - 8)
+
+    const roomy = computePlacement(
+      base({
+        triggerRect: rect(100, 100, 80, 40),
+        panelSize: { width: 256, height: 100 },
+        matchTriggerWidth: true,
+        panelMinWidth: 256
+      })
+    )
+    expect(roomy.left).toBe(100)
+  })
+
   it('applies a per-axis collision padding to that axis only', () => {
     // A sheet pinned to a page column: 300px of horizontal inset, 8px vertically.
     const r = computePlacement(

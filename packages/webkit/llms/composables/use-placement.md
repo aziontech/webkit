@@ -122,6 +122,7 @@ type CollisionPadding = number | { x: number; y: number }
 | `collisionPadding` | `CollisionPadding` | yes | Minimum distance kept from the boundary edges, together or per axis. |
 | `alignOffset` | `number` | no | Shift along the alignment axis, in px, away from the aligned edge (towards the inline end for `center`). |
 | `matchTriggerWidth` | `boolean` | no | Vertical sides only: the panel spans exactly the trigger, so it is never shifted or capped across. |
+| `panelMinWidth` | `number` | no | With matchTriggerWidth: the panel's own minimum width, in px. A panel wider than its trigger is kept inside the boundary. |
 
 ## `ComputePlacementResult`
 
