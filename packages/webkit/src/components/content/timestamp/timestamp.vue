@@ -32,10 +32,12 @@
     timeZone: ''
   })
 
-  const ABSOLUTE: Intl.DateTimeFormatOptions = {
+  const DAY: Intl.DateTimeFormatOptions = {
     year: 'numeric',
     month: 'short',
-    day: 'numeric',
+    day: 'numeric'
+  }
+  const TIME: Intl.DateTimeFormatOptions = {
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit',
@@ -59,11 +61,13 @@
   const zone = computed<string>(
     () => chosenZone.value || (mounted.value ? browserZone.value : 'UTC')
   )
+  const absolute = (target: Date, zoned: Intl.DateTimeFormatOptions): string =>
+    `${formatDate(target, { ...DAY, ...zoned })}, ${formatDate(target, { ...TIME, ...zoned })}`
   const inZone = (target: Date, timeZone: string): string => {
     try {
-      return formatDate(target, timeZone ? { ...ABSOLUTE, timeZone } : ABSOLUTE)
+      return absolute(target, timeZone ? { timeZone } : {})
     } catch {
-      return formatDate(target, { ...ABSOLUTE, timeZone: 'UTC' })
+      return absolute(target, { timeZone: 'UTC' })
     }
   }
 
@@ -205,6 +209,7 @@
       <time
         :datetime="date.toISOString()"
         dir="auto"
+        data-allow-mismatch="text"
         >{{ text }}</time
       >
     </button>
