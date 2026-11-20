@@ -24,12 +24,18 @@ export function hasFlag(code: string): boolean {
   return FLAG_SPRITE_ROWS.includes(code.toLowerCase())
 }
 
-export function flagStyle(code: string, sprite: string): Record<string, string> | null {
+export type FlagShape = 'rectangle' | 'round'
+
+export function flagStyle(
+  code: string,
+  sprite: string,
+  shape: FlagShape = 'rectangle'
+): Record<string, string> | null {
   const row = FLAG_SPRITE_ROWS.indexOf(code.toLowerCase()) + 1
   if (row === 0) return null
   return {
     backgroundImage: sprite ? `url(${sprite})` : 'none',
-    backgroundPosition: `0 ${(row / FLAG_SPRITE_ROWS.length) * 100}%`,
-    backgroundSize: '100% auto'
+    backgroundPosition: `${shape === 'round' ? '50%' : '0'} ${(row / FLAG_SPRITE_ROWS.length) * 100}%`,
+    backgroundSize: shape === 'round' ? `auto ${(FLAG_SPRITE_ROWS.length + 1) * 100}%` : '100% auto'
   }
 }

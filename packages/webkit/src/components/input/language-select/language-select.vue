@@ -20,19 +20,24 @@
   /** Size token forwarded to the Select trigger. */
   export type LanguageSelectSize = 'small' | 'medium' | 'large'
 
+  /** Trigger look: the full field, or the compact switcher for a header or a toolbar. */
+  export type LanguageSelectVariant = 'outline' | 'ghost'
+
   /** One language offered by the picker. */
   export interface LanguageSelectOption {
     /** BCP 47 tag of the language, such as pt-BR. */
     value: string
-    /** The language named in itself, such as Português (Brasil). */
-    label: string
-    /** ISO 3166-1 alpha-2 code of the flag; taken from the tag's region when omitted. */
+    /** The language named in itself, such as Português (Brasil); named from the tag in its own language when omitted. */
+    label?: string
+    /** ISO 3166-1 alpha-2 code of the flag; taken from the tag's region, else its likely region, when omitted. */
     country?: string
   }
 
   export interface LanguageSelectProps {
-    /** Languages offered, in order: value is a BCP 47 tag, label the language named in itself, and country the ISO 3166-1 alpha-2 code of the flag (taken from the tag's region when omitted). */
+    /** Languages offered, in order: value is a BCP 47 tag, label the language named in itself (derived from the tag when omitted), and country the ISO 3166-1 alpha-2 code of the flag (taken from the tag's region, else its likely region, when omitted). */
     options?: LanguageSelectOption[]
+    /** Trigger look: outline is the full field (round flag and name) for forms and settings; ghost is the compact switcher (round flag and short code, no border until hover) for a header, a toolbar or a footer. */
+    variant?: LanguageSelectVariant
     /** Trigger text while no language is picked. Empty uses the locale catalog (`Language`). */
     placeholder?: string
     /** Size token forwarded to the Select trigger. Heights: small=28px, medium=32px, large=40px. */
@@ -48,10 +53,11 @@
   }
   const props = withDefaults(defineProps<LanguageSelectProps>(), {
     options: () => [
-      { value: 'en', label: 'English', country: 'US' },
-      { value: 'pt-BR', label: 'Português (Brasil)', country: 'BR' },
-      { value: 'es', label: 'Español', country: 'ES' }
+      { value: 'en-US', label: 'English (United States)' },
+      { value: 'pt-BR', label: 'Português (Brasil)' },
+      { value: 'es-ES', label: 'Español (España)' }
     ],
+    variant: 'outline',
     placeholder: '',
     size: 'medium',
     disabled: false,
@@ -88,11 +94,25 @@
 
   const countryOf = (option: LanguageSelectOption): string => {
     if (option.country) return option.country.toUpperCase()
-    const region = option.value
-      .split('-')
-      .slice(1)
-      .find((part) => /^[A-Za-z]{2}$/.test(part))
-    return region ? region.toUpperCase() : ''
+    try {
+      const region = new Intl.Locale(option.value).maximize().region ?? ''
+      return /^[A-Za-z]{2}$/.test(region) ? region.toUpperCase() : ''
+    } catch {
+      return ''
+    }
+  }
+
+  const labelOf = (option: LanguageSelectOption): string => {
+    if (option.label) return option.label
+    try {
+      const name = new Intl.DisplayNames([option.value], {
+        type: 'language',
+        languageDisplay: 'standard'
+      }).of(option.value)
+      return name ? name.charAt(0).toLocaleUpperCase(option.value) + name.slice(1) : option.value
+    } catch {
+      return option.value
+    }
   }
 
   const selectedOption = computed(() => props.options.find((o) => o.value === model.value))
@@ -100,6 +120,15 @@
   const selectedCountry = computed(() =>
     selectedOption.value ? countryOf(selectedOption.value) : ''
   )
+
+  const shortCode = computed(() => {
+    const option = selectedOption.value
+    if (!option) return ''
+    const country = selectedCountry.value
+    if (!country) return option.value.split(/[-_]/)[0]?.toUpperCase() ?? ''
+    const shared = props.options.some((o) => o.value !== option.value && countryOf(o) === country)
+    return shared ? option.value.toUpperCase() : country
+  })
 
   const namers = (type: 'language' | 'region') =>
     [...new Set(['en', locale.value])].flatMap((tag) => {
@@ -150,7 +179,7 @@
         const country = countryOf(o)
         return {
           key: o.value,
-          text: o.label,
+          text: labelOf(o),
           keywords: [
             o.value,
             country,
@@ -186,9 +215,10 @@
     @update:open="setOpen"
     :model-value="model"
     :size="size"
+    :variant="variant"
     :disabled="disabled"
     :placeholder="placeholder || t('languageSelect.label')"
-    :display-value="() => selectedOption?.label ?? model"
+    :display-value="() => (selectedOption ? labelOf(selectedOption) : model)"
     :data-testid="testId"
     @update:model-value="onPick"
   >
@@ -196,18 +226,26 @@
       :id="triggerId"
       :aria-label="triggerLabel"
       :data-testid="`${testId}__trigger`"
-      class="pointer-coarse:min-h-11"
+      class="pointer-coarse:min-h-11 data-[variant=ghost]:[&>[data-slot=value]]:sr-only"
       @keydown="onTriggerKeydown"
     >
       <template #leading>
         <i
           v-if="selectedCountry && hasFlag(selectedCountry)"
-          :style="flagStyle(selectedCountry, flagSprite)"
-          class="block w-4 shrink-0 aspect-[22/15] bg-no-repeat"
+          :style="flagStyle(selectedCountry, flagSprite, 'round')"
+          class="block size-4 shrink-0 rounded-full bg-no-repeat ring-1 ring-inset ring-(--border-muted)"
           aria-hidden="true"
           :data-country="selectedCountry"
           :data-testid="`${testId}__selected-flag`"
         />
+        <span
+          v-if="variant === 'ghost' && shortCode"
+          aria-hidden="true"
+          dir="ltr"
+          :data-testid="`${testId}__code`"
+          class="shrink-0 group-data-[disabled]:text-(--text-disabled)"
+          >{{ shortCode }}</span
+        >
       </template>
     </SelectTrigger>
     <SelectContent
@@ -245,8 +283,8 @@
         <template #leading>
           <i
             v-if="countryOf(option) && hasFlag(countryOf(option))"
-            :style="flagStyle(countryOf(option), flagSprite)"
-            class="block w-4 aspect-[22/15] bg-no-repeat"
+            :style="flagStyle(countryOf(option), flagSprite, 'round')"
+            class="block size-4 shrink-0 rounded-full bg-no-repeat ring-1 ring-inset ring-(--border-muted)"
             aria-hidden="true"
             :data-country="countryOf(option)"
             :data-testid="`${testId}__flag`"
@@ -255,17 +293,8 @@
         <span
           :lang="option.value"
           dir="auto"
-          >{{ option.label }}</span
+          >{{ labelOf(option) }}</span
         >
-        <template #tag>
-          <span
-            dir="ltr"
-            :data-testid="`${testId}__tag`"
-            class="shrink-0 text-label-code-sm text-(--text-muted)"
-          >
-            {{ option.value }}
-          </span>
-        </template>
       </SelectItem>
       <p
         v-if="filteredOptions.length === 0"

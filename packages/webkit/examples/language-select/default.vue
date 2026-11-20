@@ -7,7 +7,7 @@
   import Pagination from '@aziontech/webkit/pagination-root'
   import { ref } from 'vue'
 
-  const locale = ref('en')
+  const locale = ref('en-US')
   const page = ref(1)
   const catalogs = { 'pt-BR': ptBR, es }
 </script>

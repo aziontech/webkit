@@ -2,7 +2,7 @@
   import LanguageSelect from '@aziontech/webkit/language-select'
   import { ref } from 'vue'
 
-  const locale = ref('es')
+  const locale = ref('es-ES')
 </script>
 
 <template>
