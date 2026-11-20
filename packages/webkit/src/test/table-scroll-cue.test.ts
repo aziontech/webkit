@@ -6,7 +6,9 @@ import { commands, page } from 'vitest/browser'
 import type { Component } from 'vue'
 import { defineComponent, h, nextTick } from 'vue'
 
+import ScanResults from '../../blocks/dashboard/dashboard-scan-results/dashboard-scan-results.vue'
 import RulesList from '../../blocks/view/view-rule-list/view-rule-list.vue'
+import ViewTable from '../../blocks/view/view-table/view-table.vue'
 import DataGridDefault from '../../examples/data-grid/default.vue'
 import DataGridRowSelection from '../../examples/data-grid/row-selection.vue'
 import TableDefault from '../../examples/table/default.vue'
@@ -96,17 +98,18 @@ describe('a table that scrolls sideways shows a cue at the hidden edge', () => {
         const { scroll, viewport, start, end } = parts(container, id)
         expect(viewport.scrollWidth).toBeGreaterThan(viewport.clientWidth)
 
-        expect(scroll.dataset['overflowEnd']).toBe('true')
+        expect(scroll.dataset['overflowEnd']).toBeTruthy()
         expect(shown(end)).toBe(true)
         expect(getComputedStyle(end!).backgroundImage).toContain('gradient')
         const box = scroll.getBoundingClientRect()
         const fade = end!.getBoundingClientRect()
         if (dir === 'rtl') expect(fade.left).toBeCloseTo(box.left, 0)
         else expect(fade.right).toBeCloseTo(box.right, 0)
+        expect(fade.width).toBe(24)
         expect(shown(start)).toBe(false)
 
         await scrollTo(viewport, dir, 'middle')
-        expect(scroll.dataset['overflowStart']).toBe('true')
+        expect(scroll.dataset['overflowStart']).toBeTruthy()
         expect(shown(start)).toBe(true)
         expect(shown(end)).toBe(true)
 
@@ -143,7 +146,7 @@ describe('a table that scrolls sideways shows a cue at the hidden edge', () => {
     )
     await settle()
     const { scroll, end } = parts(container, 'data-table')
-    expect(scroll.dataset['overflowEnd']).toBe('true')
+    expect(scroll.dataset['overflowEnd']).toBeTruthy()
     expect(shown(end)).toBe(false)
   })
 
@@ -241,4 +244,51 @@ describe('view/view-rule-list on a phone', () => {
       }
     }
   )
+})
+
+describe('a fade never covers content that is fully visible', () => {
+  it.each([
+    { extra: 3, fade: 0 },
+    { extra: 10, fade: 10 },
+    { extra: 200, fade: 24 }
+  ])('a $extra px overflow draws a $fade px fade', async ({ extra, fade }) => {
+    const columns: TableColumn[] = [
+      { accessorKey: 'name', header: 'Name', principal: true, width: 200 },
+      { accessorKey: 'region', header: 'Region', width: 200 + extra }
+    ]
+    const { container } = mount(
+      () => h(DataTable, { data: rows, columns, rowKey: 'id', ariaLabel: 'Workloads' }),
+      'ltr',
+      400
+    )
+    await settle()
+    const { viewport, end } = parts(container, 'data-table')
+    expect(viewport.scrollWidth - viewport.clientWidth).toBe(extra)
+    expect(shown(end)).toBe(fade > 0)
+    if (fade) expect(end!.getBoundingClientRect().width).toBe(fade)
+  })
+
+  describe('blocks whose tables fit at 1280', () => {
+    afterEach(async () => {
+      await page.viewport(414, 896)
+    })
+
+    it.each([
+      { name: 'dashboard/dashboard-scan-results', view: ScanResults },
+      { name: 'view/view-table', view: ViewTable },
+      { name: 'view/view-rule-list', view: RulesList }
+    ])('$name shows no fade', async ({ view }) => {
+      await page.viewport(1280, 900)
+      const { container } = render(view as Component)
+      await settle()
+      await settle()
+      const fades = Array.from(
+        container.querySelectorAll<HTMLElement>(
+          '[data-testid$="__fade-start"], [data-testid$="__fade-end"]'
+        )
+      )
+      expect(fades.length).toBeGreaterThan(0)
+      for (const fade of fades) expect(shown(fade), fade.dataset['testid']).toBe(false)
+    })
+  })
 })

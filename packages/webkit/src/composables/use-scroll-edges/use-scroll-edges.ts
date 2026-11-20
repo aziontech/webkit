@@ -9,12 +9,12 @@ import {
   toValue
 } from 'vue'
 
-/** Which inline edges of a sideways scroller still hide content. */
+/** How far content runs past each inline edge of a sideways scroller. */
 export interface UseScrollEdgesReturn {
-  /** Content is scrolled past the inline start edge. */
-  start: Readonly<Ref<boolean>>
-  /** Content runs past the inline end edge. */
-  end: Readonly<Ref<boolean>>
+  /** Hidden px past the inline start edge, at most 24; 0 when 4 or less. */
+  start: Readonly<Ref<number>>
+  /** Hidden px past the inline end edge, at most 24; 0 when 4 or less. */
+  end: Readonly<Ref<number>>
   /** Measure again; bind it to the scroller's scroll event. */
   measure: () => void
 }
@@ -22,16 +22,17 @@ export interface UseScrollEdgesReturn {
 export function useScrollEdges(
   scroller: MaybeRefOrGetter<HTMLElement | null | undefined>
 ): UseScrollEdgesReturn {
-  const start = ref<boolean>(false)
-  const end = ref<boolean>(false)
+  const start = ref<number>(0)
+  const end = ref<number>(0)
   let observer: ResizeObserver | null = null
 
   const measure = (): void => {
     const el = toValue(scroller)
     if (!el) return
     const offset = Math.abs(el.scrollLeft)
-    start.value = offset > 1
-    end.value = el.scrollWidth - el.clientWidth - offset > 1
+    const hidden = (px: number): number => (px > 4 ? Math.min(24, Math.round(px)) : 0)
+    start.value = hidden(offset)
+    end.value = hidden(el.scrollWidth - el.clientWidth - offset)
   }
 
   onMounted(() => {

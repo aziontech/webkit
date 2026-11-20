@@ -1792,10 +1792,8 @@
         @scroll.passive="onViewportScroll"
       >
         <div
-          class="group/table flex w-max min-w-full flex-col"
+          class="flex w-max min-w-full flex-col"
           :class="stacked ? 'w-full!' : undefined"
-          :data-overflow-start="overflowStart || undefined"
-          :data-overflow-end="overflowEnd || undefined"
         >
           <div
             v-if="stacked && selectable && !loading && rowTotal > 0"
@@ -2196,12 +2194,14 @@
       <span
         aria-hidden="true"
         :data-testid="`${testId}__fade-start`"
-        class="pointer-events-none absolute inset-y-0 start-0 z-20 hidden w-6 bg-gradient-to-l from-transparent to-(--bg-surface) group-data-[overflow-start]/scroll:block group-has-[[data-frozen=start]]/scroll:invisible rtl:bg-gradient-to-r forced-colors:forced-color-adjust-none forced-colors:to-[Canvas]"
+        :style="{ width: `${overflowStart}px` }"
+        class="pointer-events-none absolute inset-y-0 start-0 z-20 hidden bg-gradient-to-l from-transparent to-(--bg-surface) group-data-[overflow-start]/scroll:block group-has-[[data-frozen=start]]/scroll:invisible rtl:bg-gradient-to-r forced-colors:forced-color-adjust-none forced-colors:to-[Canvas]"
       />
       <span
         aria-hidden="true"
         :data-testid="`${testId}__fade-end`"
-        class="pointer-events-none absolute inset-y-0 end-0 z-20 hidden w-6 bg-gradient-to-r from-transparent to-(--bg-surface) group-data-[overflow-end]/scroll:block group-has-[[data-frozen=end]]/scroll:invisible rtl:bg-gradient-to-l forced-colors:forced-color-adjust-none forced-colors:to-[Canvas]"
+        :style="{ width: `${overflowEnd}px` }"
+        class="pointer-events-none absolute inset-y-0 end-0 z-20 hidden bg-gradient-to-r from-transparent to-(--bg-surface) group-data-[overflow-end]/scroll:block group-has-[[data-frozen=end]]/scroll:invisible rtl:bg-gradient-to-l forced-colors:forced-color-adjust-none forced-colors:to-[Canvas]"
       />
     </div>
     <template v-if="reorderActive">

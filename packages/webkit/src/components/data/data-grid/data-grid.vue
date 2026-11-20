@@ -142,12 +142,9 @@
     return `${ranged}|${cursor}|${edit}`
   }
 
-  const frozenWidth = computed<number>(() => {
-    let width = 0
-    for (let col = 0; col < offset.value + (props.frozenFirstColumn ? 1 : 0); col++)
-      width += widthAt(col)
-    return width
-  })
+  const frozenWidth = computed<number>(
+    () => offset.value * SELECT_WIDTH + (props.frozenFirstColumn ? widthAt(offset.value) : 0)
+  )
   const viewportEl = ref<HTMLElement | null>(null)
   const {
     start: overflowStart,
@@ -811,13 +808,14 @@
       <span
         aria-hidden="true"
         :data-testid="`${testId}__fade-start`"
-        :style="{ insetInlineStart: `${frozenWidth}px` }"
-        class="pointer-events-none absolute inset-y-0 start-0 z-20 hidden w-6 bg-gradient-to-l from-transparent to-(--bg-surface) group-data-[overflow-start]/scroll:block rtl:bg-gradient-to-r forced-colors:forced-color-adjust-none forced-colors:to-[Canvas]"
+        :style="{ insetInlineStart: `${frozenWidth}px`, width: `${overflowStart}px` }"
+        class="pointer-events-none absolute inset-y-0 start-0 z-20 hidden bg-gradient-to-l from-transparent to-(--bg-surface) group-data-[overflow-start]/scroll:block rtl:bg-gradient-to-r forced-colors:forced-color-adjust-none forced-colors:to-[Canvas]"
       />
       <span
         aria-hidden="true"
         :data-testid="`${testId}__fade-end`"
-        class="pointer-events-none absolute inset-y-0 end-0 z-20 hidden w-6 bg-gradient-to-r from-transparent to-(--bg-surface) group-data-[overflow-end]/scroll:block group-has-[[data-frozen=end]]/scroll:invisible rtl:bg-gradient-to-l forced-colors:forced-color-adjust-none forced-colors:to-[Canvas]"
+        :style="{ width: `${overflowEnd}px` }"
+        class="pointer-events-none absolute inset-y-0 end-0 z-20 hidden bg-gradient-to-r from-transparent to-(--bg-surface) group-data-[overflow-end]/scroll:block group-has-[[data-frozen=end]]/scroll:invisible rtl:bg-gradient-to-l forced-colors:forced-color-adjust-none forced-colors:to-[Canvas]"
       />
     </div>
     <div
