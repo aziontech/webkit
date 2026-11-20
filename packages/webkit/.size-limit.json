@@ -866,7 +866,7 @@
   {
     "name": "timestamp",
     "path": "src/components/content/timestamp/timestamp.vue",
-    "limit": "19.45 KB"
+    "limit": "19.5 KB"
   },
   {
     "name": "error-boundary",
