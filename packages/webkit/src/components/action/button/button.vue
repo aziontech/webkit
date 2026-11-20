@@ -167,7 +167,7 @@
     :tabindex="isAnchor && isInert && !hasReason ? -1 : undefined"
     :aria-disabled="isInert || undefined"
     :aria-busy="loading || undefined"
-    :title="hasReason ? disabledReason : undefined"
+    :title="hasReason ? disabledReason : (attrs['title'] as string | undefined)"
     :data-disabled="disabled ? '' : undefined"
     :data-loading="loading ? '' : undefined"
     :data-inert="isInert ? '' : undefined"
