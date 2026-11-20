@@ -4,6 +4,7 @@
   import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
+  import LanguageSelect from '@aziontech/webkit/language-select'
   import PageHeader from '@aziontech/webkit/page-header'
   import SaveBar from '@aziontech/webkit/save-bar'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
@@ -59,11 +60,6 @@
     { label: '(UTC-05:00) New York', value: 'america-new_york' },
     { label: '(UTC-03:00) São Paulo', value: 'america-sao_paulo' },
     { label: '(UTC+00:00) London', value: 'europe-london' }
-  ]
-  const languages = [
-    { label: 'English', value: 'en' },
-    { label: 'Português', value: 'pt' },
-    { label: 'Español', value: 'es' }
   ]
   const labelOf = (list: SelectOptionItem[]) => (value: string) =>
     list.find((option) => option.value === value)?.label ?? ''
@@ -276,27 +272,14 @@
                   description="The interface language."
                 >
                   <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                    <Select
+                    <LanguageSelect
+                      id="profile-language"
                       v-model="form.language"
                       size="large"
                       :disabled="submitting"
+                      aria-label="Language"
                       class="w-full"
-                      :display-value="labelOf(languages)"
-                    >
-                      <Select.Trigger
-                        id="profile-language"
-                        aria-label="Language"
-                      />
-                      <Select.Content>
-                        <Select.Item
-                          v-for="option in languages"
-                          :key="option.value"
-                          :value="option.value"
-                        >
-                          {{ option.label }}
-                        </Select.Item>
-                      </Select.Content>
-                    </Select>
+                    />
                   </div>
                 </SettingsRow>
               </Item.List>

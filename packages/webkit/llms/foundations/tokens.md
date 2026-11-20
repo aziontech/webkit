@@ -178,6 +178,20 @@ sets these variables on the dashboard's root element, and every chart inside re-
   `:style` or `[--chart-series-1:…]` classes; `webkit/no-style-override` allows exactly these
   variables (`CHART_PALETTE_VARIABLES` in `@aziontech/webkit/eslint-plugin`) and nothing else.
 
+## One outline per toolbar
+
+Outlined controls side by side in a header or a toolbar share one border colour: the toolbar's
+`--border-default`, the outline of `IconButton variant="outline"`, `Button variant="outline"` and
+`SearchTrigger`. `--border-input` is the form field outline; it belongs to a text field you type in
+and to a field in a form, never to a button-like control in a header. A header language switch is
+`LanguageSelect variant="ghost"`, not a field-sized `Select`; a header switcher of any other kind is
+`Select variant="ghost"`.
+
+- **Do:** a search field, a ghost `LanguageSelect`, outline icon buttons: one border colour in the row.
+- **Don't:** a field-sized `Select` (`--border-input`) between outline icon buttons (`--border-default`).
+
+The styled visual suite checks it on every docs page, example and block (`toolbar-outlines.spec.ts`).
+
 ## Use a variant only when the component has it
 
 A token pair is not a variant. `--accent` and `--accent-foreground` exist, but `Button` has no accent

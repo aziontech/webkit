@@ -675,7 +675,7 @@ const CATALOGS: Record<string, Messages> = { en, 'pt-BR': ptBR, es }
 
 export const LOCALES = [
   { value: 'en', label: 'English' },
-  { value: 'pt-BR', label: 'Português' },
+  { value: 'pt-BR', label: 'Português (Brasil)' },
   { value: 'es', label: 'Español' }
 ]
 

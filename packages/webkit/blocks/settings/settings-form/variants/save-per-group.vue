@@ -4,23 +4,15 @@
   import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
+  import LanguageSelect from '@aziontech/webkit/language-select'
   import PageHeader from '@aziontech/webkit/page-header'
-  import Select from '@aziontech/webkit/select'
   import SettingsRow from '@aziontech/webkit/settings-row'
   import Subheader from '@aziontech/webkit/subheader'
   import Switch from '@aziontech/webkit/switch'
   import { toast } from '@aziontech/webkit/toast'
   import { computed, nextTick, reactive, type Ref, ref } from 'vue'
 
-  const languages = [
-    { label: 'English', value: 'en' },
-    { label: 'Português', value: 'pt' },
-    { label: 'Español', value: 'es' }
-  ]
-  const languageLabel = (value: string) =>
-    languages.find((option) => option.value === value)?.label ?? ''
-
-  const general = reactive({ fullName: 'Alex Morgan', language: 'en' })
+  const general = reactive({ fullName: 'Alex Morgan', language: 'en-US' })
   const savingGeneral = ref(false)
 
   const notifications = reactive({ productUpdates: true, securityAlerts: true })
@@ -103,27 +95,14 @@
                 description="The interface language."
               >
                 <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                  <Select
+                  <LanguageSelect
+                    id="preferences-language"
                     v-model="general.language"
                     size="large"
                     :disabled="savingGeneral"
+                    aria-label="Language"
                     class="w-full"
-                    :display-value="languageLabel"
-                  >
-                    <Select.Trigger
-                      id="preferences-language"
-                      aria-label="Language"
-                    />
-                    <Select.Content>
-                      <Select.Item
-                        v-for="option in languages"
-                        :key="option.value"
-                        :value="option.value"
-                      >
-                        {{ option.label }}
-                      </Select.Item>
-                    </Select.Content>
-                  </Select>
+                  />
                 </div>
               </SettingsRow>
             </Item.List>

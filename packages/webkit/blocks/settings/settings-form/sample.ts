@@ -4,6 +4,6 @@ export const sampleProfile: SettingsFormProfile = {
   fullName: 'Alex Morgan',
   email: '',
   timezone: 'utc',
-  language: 'en',
+  language: 'en-US',
   productUpdates: true
 }
