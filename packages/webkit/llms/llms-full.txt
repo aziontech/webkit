@@ -2201,6 +2201,7 @@ What each prop and event does, and the go-live code: [blocks/account/account-act
 - The filter and the period picker carry `aria-label`s; icon buttons have names that match their tooltips.
 - Category is text in a tag, never colour alone; the relative date has the exact time on its tooltip.
 - User and IP cells keep their own direction (`dir="auto"`, `dir="ltr"`) inside a right-to-left page.
+- `/` focuses the property filter from anywhere on the page, except while typing in a field.
 
 ## States
 
@@ -2307,6 +2308,8 @@ What each prop and event does, and the go-live code: [blocks/account/account-bil
 - Icon buttons have names that match their tooltips; each download names its invoice and each row menu names its card.
 - The `PaymentBrand` plate is decorative wherever the brand is written next to it, and named in the methods table.
 - Invoice IDs, card digits and the billing email keep left-to-right direction inside a right-to-left page.
+- `/` focuses the invoices property filter from anywhere on the page, except while typing in a field.
+- The payment methods rows are one tab stop: Arrow Up and Arrow Down move between rows, Home and End jump to the first and last, and Delete or Backspace opens the remove dialog for a card that is not the default. After a removal, focus lands on the next row.
 
 ## States
 
@@ -2453,7 +2456,7 @@ What each prop and event does, and the go-live code: [blocks/account/account-cha
 - Surface: app
 - Source: `blocks/account/account-deployment-settings/account-deployment-settings.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-deployment-settings")`
-- Components: Accordion, Alert, Button, Card, CollectionPreferences, ConfirmDialog, DataTable, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, IconButton, Input, Item, PageHeader, Pagination, `PanelBody`, `PanelFooter`, `PanelHeader`, PropertyFilter, RadioGroup, SaveBar, Select, SettingsGroup, SettingsRow, Skeleton, Switch, Table, `TableCellActions`, `TableCellStatus`, `TableCellTime`, Tag, Textarea, Toast, Tooltip, `use-collection`
+- Components: Accordion, Alert, Button, Card, CollectionPreferences, ConfirmDialog, DataTable, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, IconButton, Input, Item, Kbd, PageHeader, Pagination, `PanelBody`, `PanelFooter`, `PanelHeader`, PropertyFilter, RadioGroup, SaveBar, Select, SettingsGroup, SettingsRow, Skeleton, Switch, Table, `TableCellActions`, `TableCellStatus`, `TableCellTime`, Tag, Textarea, Toast, Tooltip, `use-collection`
 - Skills: `webkit-form`, `webkit-tables`, `webkit-lists`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -2485,6 +2488,7 @@ How every deploy in the account routes. A Deployment Setting holds a binding pol
 - G. Create and edit drawer — `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Field`, `Textarea`, `RadioGroup` (required)
 - H. Loading and no services — `Skeleton` (conditional)
 - Outcomes — through `toast`
+- I. Shortcut keycap — `Kbd` (optional)
 
 What each part takes: [blocks/account/account-deployment-settings.md](blocks/account/account-deployment-settings.md).
 
@@ -2532,6 +2536,7 @@ What each prop and event does, and the go-live code: [blocks/account/account-dep
 - The filter is named Filter Deployment Settings; Refresh and Download CSV are icon buttons with an accessible name and a tooltip; the row menu is named `Actions for <setting>`.
 - The Services cell is focusable so its tooltip with the service names is reachable by keyboard.
 - The SaveBar motion has a `motion-reduce` fallback.
+- `⌘ S` (`Ctrl S` off Apple) saves the deployment defaults while the `SaveBar` shows unsaved changes, the same as Save, and stops the browser's own save; with no changes it does nothing. Save carries `aria-keyshortcuts` and a `Kbd` keycap.
 
 ## States
 
@@ -2635,7 +2640,7 @@ What each prop and event does, and the go-live code: [blocks/account/account-hie
 ## Accessibility
 
 - The table is a `treegrid` labelled by the Resources heading. Rows carry `aria-level`, `aria-setsize`, `aria-posinset`, `aria-expanded` when they have children, and `aria-selected` when selected.
-- One row is in the tab order. Arrow Up and Arrow Down move between rows, Home and End go to the first and last, Arrow Right opens a row or moves into it, Arrow Left closes it or goes to its parent (mirrored right to left), Enter toggles it and Space selects it. Tab reaches the checkbox, ID copy and row menu of the focused row.
+- One row is in the tab order. Arrow Up and Arrow Down move between rows, Home and End go to the first and last, Arrow Right opens a row or moves into it, Arrow Left closes it or goes to its parent (mirrored right to left), Enter toggles it, Space selects it, and Delete or Backspace opens the delete dialog for it (with what it holds); after the delete, focus lands on the next row. Tab reaches the checkbox, ID copy and row menu of the focused row.
 - The chevron is pointer-only and hidden from assistive technology; the row's `aria-expanded` is the state.
 - The action row is a `role="group"` named `Resource actions` (plain Tab order, no arrow-key toolbar); disabled bulk buttons stay visible so the actions are discoverable.
 - The details heading is a polite live region, so a change of selection is announced.
@@ -2740,6 +2745,7 @@ What each prop and event does, and the go-live code: [blocks/account/account-mfa
 - The Switch is named Require MFA and the setting description explains the effect.
 - The row menu is named `Actions for <person>`; status is text, not color.
 - Both confirmations are dialogs that return focus to their trigger.
+- `/` focuses the property filter from anywhere on the page, except while typing in a field.
 
 ## States
 
@@ -3049,6 +3055,8 @@ What each prop and event does, and the go-live code: [blocks/account/account-per
 - The `PropertyFilter` (Filter tokens) and every icon-only button carry an `aria-label`; the row menu is named `Actions for <token>`.
 - The drawer and the dialogs trap focus, are named by their titles and return focus to their trigger; the first invalid field takes focus after Create.
 - The reveal labels the secret field `Token`; the copy result is announced once, by the `CopyButton`.
+- `/` focuses the property filter from anywhere on the page, except while typing in a field.
+- The rows are one tab stop: Arrow Up and Arrow Down move between rows, Home and End jump to the first and last, and Delete or Backspace asks to revoke an active token or to delete a revoked or expired one, as the row menu does. After a delete, focus lands on the next row.
 
 ## States
 
@@ -3080,7 +3088,7 @@ What each prop and event does, and the go-live code: [blocks/account/account-per
 - Surface: app
 - Source: `blocks/account/account-team-permissions/account-team-permissions.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-team-permissions")`
-- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, Checkbox, CollectionPreferences, Combobox, ConfirmDialog, DataTable, DropdownMenu, EmptyState, Field, IconButton, Input, PageHeader, PropertyFilter, SaveBar, SettingsGroup, Switch, Table, `TableCellActions`, `TableCellLink`, `TableCellStatus`, `TableCellTags`, Textarea, Toast, Tooltip, `use-collection`
+- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, Checkbox, CollectionPreferences, Combobox, ConfirmDialog, DataTable, DropdownMenu, EmptyState, Field, IconButton, Input, Kbd, PageHeader, PropertyFilter, SaveBar, SettingsGroup, Switch, Table, `TableCellActions`, `TableCellLink`, `TableCellStatus`, `TableCellTags`, Textarea, Toast, Tooltip, `use-collection`, `use-shortcuts`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -3162,6 +3170,11 @@ What each prop and event does, and the go-live code: [blocks/account/account-tea
 - The filter is named Filter teams; Refresh and Download CSV carry an accessible name and a tooltip.
 - The Back button of the creation frame is named `Back to Teams and permissions`.
 - Table name links say where they go on their tooltip; the row menu is named `Actions for <team>`.
+- `/` focuses the property filter from anywhere on the page, except while typing in a field.
+- The team rows are one tab stop: Arrow Up and Arrow Down move between rows, Home and End jump to the first and last, Enter edits the focused team as the row menu's Edit does, and Delete or Backspace opens the delete dialog. After a delete, focus lands on the next row.
+- Create Team opens with focus in the Name field.
+- `⌘ Enter` (`Ctrl Enter` off Apple) submits Create Team from any field, the same as Create.
+- In Edit Team, `⌘ S` (`Ctrl S` off Apple) saves while the team has unsaved changes, the same as Save changes; with no changes it does nothing. Both buttons carry `aria-keyshortcuts` and a `Kbd` keycap.
 
 ## States
 
@@ -3274,6 +3287,8 @@ What each prop and event does, and the go-live code: [blocks/account/account-use
 - The invite form is a `form` named Invite User; each `Field` ties its label, description and error to the control, and `Field.Error` is announced when it appears.
 - After a failed Send, focus moves to the first invalid control.
 - The owner's locked controls are disabled and the reason is on the tooltip, not only in color.
+- `/` focuses the property filter from anywhere on the page, except while typing in a field.
+- The rows are one tab stop: Arrow Up and Arrow Down move between rows, Home and End jump to the first and last, Enter opens the person's profile, and Delete or Backspace opens the remove (or cancel invitation) dialog; the owner's row ignores Delete. After a removal, focus lands on the next row.
 
 ## States
 
@@ -4001,7 +4016,7 @@ What each prop and event does, and the go-live code: [blocks/auth/auth-sign-in.m
 - Surface: app
 - Source: `blocks/create/create-deploy-drawer/create-deploy-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-deploy-drawer")`
-- Components: Accordion, Alert, Avatar, Button, Card, `DrawerContent`, Drawer, `DrawerTitle`, `DrawerTrigger`, DropdownMenu, EmptyState, Input, Item, Link, `PanelBody`, `PanelFooter`, `PanelHeader`, Popover, RadioGroup, Separator, SettingsGroup, Skeleton, Spinner, Tag, Toast, ToggleGroup, Tooltip
+- Components: Accordion, Alert, Avatar, Button, Card, `DrawerContent`, Drawer, `DrawerTitle`, `DrawerTrigger`, DropdownMenu, EmptyState, Input, Item, Kbd, Link, `PanelBody`, `PanelFooter`, `PanelHeader`, Popover, RadioGroup, Separator, SettingsGroup, Skeleton, Spinner, Tag, Toast, ToggleGroup, Tooltip, `use-shortcuts`
 - Skills: `webkit-create-surface`, `webkit-navigation`, `webkit-form`, `webkit-ui-states`
 
 ## Asked as
@@ -4035,6 +4050,7 @@ The drawer a platform deploys from, opened by Deploy on a service or a project. 
 - F. Project — `ToggleGroup`, `Item`, `Tag`, `Link`, `Tooltip`, `Popover`, `DropdownMenu` (required on a service)
 - G. Environment — `RadioGroup`, `Tag` (required)
 - H. Projects impacted and commit — `Item`, `Tag`, `Link`, `Tooltip`, `Popover`, `PanelFooter`, `Button` (required on a service)
+- I. Shortcut keycap — `Kbd` (optional)
 
 What each part takes: [blocks/create/create-deploy-drawer.md](blocks/create/create-deploy-drawer.md).
 
@@ -4098,6 +4114,8 @@ What each prop and event does, and the go-live code: [blocks/create/create-deplo
 ## Accessibility
 
 - The drawer traps focus while open and returns it to the Deploy trigger on close.
+- Opening the drawer moves focus to its first control.
+- **⌘ Enter deploys (`Ctrl Enter` off Apple)** through the form's submit, the same path as Deploy. It stays inert while Deploy is disabled (loading, load error, a build running, no environment); Deploy carries `aria-keyshortcuts` and an `aria-hidden` `Kbd`, and the `?` dialog lists it under Drawer.
 - The `form` and the `ToggleGroup` carry `aria-label`s; the environment group is named by its `aria-label`.
 - The version menu is a `role="menu"` moved with the arrow keys, each version a `menuitem` named by its version, author and age; the current one carries `aria-current`; search inputs have an `aria-label` that matches the placeholder.
 - Each impacted environment group has an `aria-label` with its count, e.g. "Projects impacted in Production (3)".
@@ -4358,7 +4376,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-deplo
 - Surface: app
 - Source: `blocks/create/create-deploy-template/create-deploy-template.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-deploy-template")`
-- Components: Accordion, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, Checkbox, ConfirmDialog, EmptyState, Field, IconButton, Input, `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, Item, Link, Select, Skeleton, Switch, Tag, Tooltip, `use-escape-to-cancel`, `use-locale`, `use-unsaved-changes`
+- Components: Accordion, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, Checkbox, ConfirmDialog, EmptyState, Field, IconButton, Input, `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, Item, Kbd, Link, Select, Skeleton, Switch, Tag, Tooltip, `use-escape-to-cancel`, `use-locale`, `use-shortcuts`, `use-unsaved-changes`
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -4437,6 +4455,8 @@ What each prop and event does, and the go-live code: [blocks/create/create-deplo
 ## Accessibility
 
 - **Escape on the page = Cancel.** Escape runs the same path as Back to Creation Center: `useEscapeToCancel` emits `back` from the template step, and the Form `await`s `guard.confirmLeave()` first, so an edited form opens the Unsaved changes dialog. It stays inert while an IME is composing, when another handler already used the key, while a menu, listbox, popover, tooltip or dialog is open, and when focus is in a control that uses Escape itself. Edit and settings pages are places, not tasks: Escape stays inert there.
+- **The Form opens with the cursor in Scope**, its first field.
+- **⌘ Enter deploys (`Ctrl Enter` off Apple)** through the same function as the Deploy button, from any field; the button carries `aria-keyshortcuts` and an `aria-hidden` `Kbd`, and the `?` dialog lists Deploy.
 - One `main` landmark under the header; the step title is an `h2` and the settings group an `h3`.
 - The back `IconButton`, the brand link and the account button each have an `aria-label`.
 - The repository name has a visible `Field.Label` tied to its input by its `Field`; the privacy switch is labelled Public repository and announces its on or off state.
@@ -4486,7 +4506,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-deplo
 - Surface: app
 - Source: `blocks/create/create-drawer/create-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-drawer")`
-- Components: Alert, Button, Card, CodeEditor, ConfirmDialog, `DrawerContent`, Drawer, `DrawerTitle`, `DrawerTrigger`, `DropdownMenuGroup`, `DropdownMenuItem`, `DropdownMenuRoot`, `DropdownMenuTrigger`, Field, `FieldDescription`, `FieldError`, Hint, IconButton, Input, InputGroup, Item, KeyValueList, Link, NumberInput, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, RadioGroup, SchemaForm, Select, SettingsGroup, SettingsRow, StatusIndicator, Switch, Textarea, Toast, ToggleGroup, Tooltip, `use-locale`, `use-unsaved-changes`
+- Components: Alert, Button, Card, CodeEditor, ConfirmDialog, `DrawerContent`, Drawer, `DrawerTitle`, `DrawerTrigger`, `DropdownMenuGroup`, `DropdownMenuItem`, `DropdownMenuRoot`, `DropdownMenuTrigger`, Field, `FieldDescription`, `FieldError`, Hint, IconButton, Input, InputGroup, Item, Kbd, KeyValueList, Link, NumberInput, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, RadioGroup, SchemaForm, Select, SettingsGroup, SettingsRow, StatusIndicator, Switch, Textarea, Toast, ToggleGroup, Tooltip, `use-locale`, `use-shortcuts`, `use-unsaved-changes`
 - Skills: `webkit-create-surface`, `webkit-navigation`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -4526,6 +4546,7 @@ The right-side drawer that adds or edits something that only exists inside anoth
 - J. Footer — `PanelFooter`, `Button` (required)
 - K. Certificate import — `SettingsGroup`, `Field`, `Button`, `PanelFooter` (optional)
 - L. Discard guard — `ConfirmDialog` (required)
+- M. Shortcut keycap — `Kbd` (optional)
 
 What each part takes: [blocks/create/create-drawer.md](blocks/create/create-drawer.md).
 
@@ -4576,6 +4597,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-drawe
 ## Accessibility
 
 - The drawer traps focus while open, moves it to the first field on open and returns it to the trigger on close.
+- **⌘ Enter submits the drawer (`Ctrl Enter` off Apple).** `useShortcuts` binds `meta+enter` to the drawer form's `requestSubmit()`, with the form as the shortcut's element, so with two drawers stacked only the top one submits. It stays inert while saving; the submit button carries `aria-keyshortcuts` and an `aria-hidden` `Kbd`, and the `?` dialog lists the action under Drawer.
 - The `form` has an `aria-label` that matches the title; `DrawerTitle` names the dialog.
 - Every select trigger is described by its `Field.Description` (or its `Field.Error`) through the `Field`, so the consequence is read with the value.
 - Required fields carry the Required marker from the start; an error is a `Field.Error` with `role="alert"` and the control is `aria-invalid`.
@@ -4736,7 +4758,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-hub.m
 - Surface: app
 - Source: `blocks/create/create-page/create-page.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-page")`
-- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, ConfirmDialog, `FieldDescription`, `FieldError`, IconButton, Input, Item, MultiSelect, NumberInput, PageHeader, RadioGroup, RadioGroup, SaveBar, Select, SettingsGroup, SettingsRow, Switch, Tag, Textarea, Toast, `use-escape-to-cancel`, `use-unsaved-changes`
+- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, ConfirmDialog, `FieldDescription`, `FieldError`, IconButton, Input, Item, Kbd, MultiSelect, NumberInput, PageHeader, RadioGroup, RadioGroup, SaveBar, Select, SettingsGroup, SettingsRow, Switch, Tag, Textarea, Toast, `use-escape-to-cancel`, `use-shortcuts`, `use-unsaved-changes`
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`, `webkit-layout`
 
 ## Asked as
@@ -4770,6 +4792,7 @@ The page a first-level resource is created on when everything it needs fits on o
 - E. Switch rows — `Switch` (optional)
 - F. Commit bar — `SaveBar`, `Button` (required)
 - G. Leaving with typed work — `useUnsavedChanges`, `ConfirmDialog` (required)
+- H. Shortcut keycap — `Kbd` (optional)
 
 What each part takes: [blocks/create/create-page.md](blocks/create/create-page.md).
 
@@ -4816,6 +4839,8 @@ What each prop and event does, and the go-live code: [blocks/create/create-page.
 ## Accessibility
 
 - **Escape on the page = Cancel.** `useEscapeToCancel(onCancel)` runs the same path as the Cancel button: a clean form leaves at once, an edited one opens the Unsaved changes dialog. It stays inert while the create request is in flight, while an IME is composing, when another handler already used the key, while a menu, listbox, popover, tooltip or dialog is open (the open Select or DatePicker closes first, and Escape on the Unsaved changes dialog only keeps editing) and when focus is in a control that uses Escape itself (an open combobox, a search field). Edit and settings pages are places, not tasks: Escape stays inert there.
+- **The page opens with the cursor in the first field.** `onMounted` focuses Name (CreatePurge: the chosen Layer card), so a keyboard user types at once.
+- **⌘ Enter submits (`Ctrl Enter` off Apple).** `useShortcuts` binds `meta+enter` to the form's `requestSubmit()`, the same path as the bar's submit button, from any field and from the Purge list textarea, where a bare Enter only adds a line. It stays inert while the request is in flight and lists the action (Create domain, Purge…) in the `?` dialog. The submit button carries `aria-keyshortcuts` and an `aria-hidden` `Kbd` that prints the platform's key.
 - One `main` landmark holding one `form`, labelled by the `PageHeader` title through `aria-labelledby`, with `novalidate` so the page's own messages replace the browser's.
 - A `fieldset` with a visually hidden `legend` groups the sections.
 - Each message is tied to its control with `aria-describedby` and appears only on submit; `required` and `invalid` are announced through the control's own state.
@@ -4856,7 +4881,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-page.
 - Surface: app
 - Source: `blocks/create/create-release-impact/create-release-impact.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-release-impact")`
-- Components: Accordion, Alert, Badge, Button, Card, Checkbox, ConfirmDialog, EmptyState, Field, Input, OverflowCount, PageHeader, SaveBar, Select, Skeleton, Spinner, Switch, Tag, Toast, ToggleGroup, Tooltip
+- Components: Accordion, Alert, Badge, Button, Card, Checkbox, ConfirmDialog, EmptyState, Field, Input, Kbd, OverflowCount, PageHeader, SaveBar, Select, Skeleton, Spinner, Switch, Tag, Toast, ToggleGroup, Tooltip, `use-shortcuts`
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-ui-states`, `webkit-errors`
 
 ## Asked as
@@ -4888,6 +4913,7 @@ The Review and deploy page of a release that carries several resources at once: 
 - F. Impact — `Card`, `ToggleGroup`, `Spinner`, `Skeleton`, `Alert`, `Button` (required)
 - G. Footer and commit — `SaveBar`, `Button`, `ConfirmDialog` (required)
 - Before the review: choosing the Deployment Settings
+- H. Shortcut keycap — `Kbd` (optional)
 
 What each part takes: [blocks/create/create-release-impact.md](blocks/create/create-release-impact.md).
 
@@ -4937,6 +4963,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-relea
 - The Impact region is `aria-busy` while loading and announces it in a `role="status"` line.
 - In ChooseSettings each group is a `role="group"` named by its heading, each choice card is a `label` around its `Checkbox`, the selected count is a polite live region, and a loading workloads count is read as text rather than a bare `Skeleton`.
 - The `ConfirmDialog` traps focus and returns it to Deploy release.
+- `⌘ Enter` (`Ctrl Enter` off Apple) opens the deploy confirmation, the same as Deploy release, and does nothing while the release can't be deployed; the release is only deployed from the confirmation. Deploy release carries `aria-keyshortcuts` and a `Kbd` keycap.
 
 ## States
 
@@ -5090,7 +5117,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-resou
 - Surface: app
 - Source: `blocks/create/create-wizard/create-wizard.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-wizard")`
-- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, ConfirmDialog, Field, `FieldDescription`, `FieldError`, Hint, IconButton, Input, Item, PageHeader, RadioGroup, RadioGroup, Select, SettingsGroup, SettingsRow, Skeleton, Subheader, Switch, Tag, Textarea, Toast, ToggleGroup, `use-escape-to-cancel`, `use-unsaved-changes`, Wizard
+- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, ConfirmDialog, Field, `FieldDescription`, `FieldError`, Hint, IconButton, Input, Item, PageHeader, RadioGroup, RadioGroup, Select, SettingsGroup, SettingsRow, Skeleton, Subheader, Switch, Tag, Textarea, Toast, ToggleGroup, `use-escape-to-cancel`, `use-shortcuts`, `use-unsaved-changes`, Wizard
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -5177,6 +5204,8 @@ What each prop and event does, and the go-live code: [blocks/create/create-wizar
 ## Accessibility
 
 - **Escape on the page = Cancel.** `useEscapeToCancel(onCancel)` runs the same path as the Wizard's Cancel, in every step and in CreateAndDeploy: a clean form leaves at once, an edited one opens the Unsaved changes dialog. It stays inert while the create request is in flight, while an IME is composing, when another handler already used the key, while a menu, listbox, popover, tooltip or dialog is open (the open Select or DatePicker closes first, and Escape on the Unsaved changes dialog only keeps editing) and when focus is in a control that uses Escape itself (an open combobox, a search field). Edit and settings pages are places, not tasks: Escape stays inert there.
+- **The page opens with the cursor in the first field of its step** (Search policies, the checked choice, or the Project choice in CreateAndDeploy).
+- **⌘ Enter runs the Wizard's primary button (`Ctrl Enter` off Apple):** Next with the same step check, Create Access List or Create and deploy on the last step. It fires from any field, a textarea included, stays inert while the create request is in flight and is listed in the `?` dialog as Next step or the create action.
 - The `Wizard` takes an `aria-label` naming the flow; locked rail steps cannot be focused or activated, and focus moves to the new step's heading on every step change.
 - The page has one `h1` (the `PageHeader`); each step heading is an `h2` drawn by the Wizard.
 - Host rows are native `button`s with `aria-pressed`; the chooser's search has an `aria-label` and Enter selects the first match.
@@ -6725,7 +6754,7 @@ What each prop and event does, and the go-live code: [blocks/detail/detail-deplo
 - Surface: app
 - Source: `blocks/detail/detail-dns-zone/detail-dns-zone.vue` in `@aziontech/webkit`
 - MCP: `get_block("detail/detail-dns-zone")`
-- Components: Alert, Button, Card, CollectionPreferences, CopyButton, DataTable, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, EmptyState, Field, `FieldDescription`, `FieldError`, FileDropzone, IconButton, Input, `InputGroupRoot`, `ItemList`, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, PropertyFilter, SaveBar, SettingsGroup, SettingsRow, Switch, `TableCellActions`, `TableCellId`, `TableCellLink`, Tabs, Tag, Textarea, Toast, Tooltip, `use-collection`
+- Components: Alert, Button, Card, CollectionPreferences, CopyButton, DataTable, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, EmptyState, Field, `FieldDescription`, `FieldError`, FileDropzone, IconButton, Input, `InputGroupRoot`, `ItemList`, Kbd, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, PropertyFilter, SaveBar, SettingsGroup, SettingsRow, Switch, `TableCellActions`, `TableCellId`, `TableCellLink`, Tabs, Tag, Textarea, Toast, Tooltip, `use-collection`
 - Skills: `webkit-tables`, `webkit-form`, `webkit-navigation`
 
 ## Asked as
@@ -6760,6 +6789,7 @@ The detail page of a resource that owns a long list of records, here a DNS zone.
 - I. Empty and no-match — `EmptyState`, `Button` (required)
 - J. Row actions — `TableCellActions`, `DropdownMenuGroup`, `DropdownMenuItem` (required)
 - K. Load failure — `Alert` (optional)
+- L. Shortcut keycap — `Kbd` (optional)
 
 What each part takes: [blocks/detail/detail-dns-zone.md](blocks/detail/detail-dns-zone.md).
 
@@ -6813,6 +6843,7 @@ What each prop and event does, and the go-live code: [blocks/detail/detail-dns-z
 - The property filter has an `aria-label` that matches its placeholder, "Filter records".
 - Focus order follows reading order: tabs, form fields, save bar; or heading actions, the property filter, toolbar, table, pagination.
 - Tab panel entrances respect reduced motion.
+- `⌘ S` (`Ctrl S` off Apple) saves the zone settings while the `SaveBar` shows unsaved changes, the same as Save, and stops the browser's own save; with no changes it does nothing. Save carries `aria-keyshortcuts` and a `Kbd` keycap.
 
 ## States
 
@@ -7270,7 +7301,7 @@ What each prop and event does, and the go-live code: [blocks/detail/detail-produ
 - Surface: app
 - Source: `blocks/detail/detail-resource/detail-resource.vue` in `@aziontech/webkit`
 - MCP: `get_block("detail/detail-resource")`
-- Components: Accordion, Alert, Avatar, Button, Card, CodeBlock, ConfirmDialog, ConsoleLayout, CopyButton, DataTable, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, `FlowDiagramBind`, FlowDiagram, IconButton, Input, `InputGroupRoot`, Item, Link, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, Popover, SaveBar, Select, SettingsGroup, SettingsRow, StatusIndicator, Subheader, Tabs, Tag, Toast, ToggleGroup, Tooltip, `use-locale`, `use-unsaved-changes`
+- Components: Accordion, Alert, Avatar, Button, Card, CodeBlock, ConfirmDialog, ConsoleLayout, CopyButton, DataTable, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, `FlowDiagramBind`, FlowDiagram, IconButton, Input, `InputGroupRoot`, Item, Kbd, Link, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, Popover, SaveBar, Select, SettingsGroup, SettingsRow, StatusIndicator, Subheader, Tabs, Tag, Toast, ToggleGroup, Tooltip, `use-locale`, `use-unsaved-changes`
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-ui-states`
 
 ## Asked as
@@ -7368,6 +7399,7 @@ What each prop and event does, and the go-live code: [blocks/detail/detail-resou
 - Links that open a new tab add "(opens in a new tab)" in visually hidden text; decorative icons are `aria-hidden`.
 - Every icon-only button has an `aria-label` and a `Tooltip` with the same words, e.g. "Resource actions", "Add domain".
 - Status uses a `StatusIndicator` with a text label, never color alone.
+- In the build variants (Application build, Resource build, Resource build connected), `⌘ S` (`Ctrl S` off Apple) saves while the `SaveBar` shows unsaved changes, the same as Save; with no changes it does nothing. Save carries `aria-keyshortcuts` and a `Kbd` keycap.
 
 ## States
 
@@ -7679,7 +7711,7 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-delete-di
 - Surface: app
 - Source: `blocks/edit/edit-function/edit-function.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/edit-function")`
-- Components: Alert, Button, Card, CodeEditor, ConfirmDialog, CopyButton, EmptyState, `FieldError`, IconButton, Input, Item, KeyValueList, Link, `LogViewerContent`, LogViewer, PageTabs, RadioGroup, `ResizableHandle`, `ResizablePane`, `ResizableRoot`, SaveBar, Select, SettingsGroup, SettingsRow, StatusIndicator, Switch, Tabs, Tag, Textarea, Toast, ToggleGroup, Tooltip, Trace
+- Components: Alert, Button, Card, CodeEditor, ConfirmDialog, CopyButton, EmptyState, `FieldError`, IconButton, Input, Item, Kbd, KeyValueList, Link, `LogViewerContent`, LogViewer, PageTabs, RadioGroup, `ResizableHandle`, `ResizablePane`, `ResizableRoot`, SaveBar, Select, SettingsGroup, SettingsRow, StatusIndicator, Switch, Tabs, Tag, Textarea, Toast, ToggleGroup, Tooltip, Trace, `use-shortcuts`
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-form`
 
 ## Asked as
@@ -7715,6 +7747,7 @@ The editing page of a service whose behavior lives in source code. The user writ
 - H. Field settings — `SettingsRow`, `Input`, `Select`, `Switch`, `Textarea`, `FieldError` (required)
 - I. Settings tab — `SettingsGroup`, `Card`, `Item`, `SettingsRow`, `Input`, `RadioGroup`, `Switch`, `FieldError` (required)
 - J. Save bar — `SaveBar`, `Button`, `Alert` (required)
+- K. Shortcut keycap — `Kbd` (optional)
 
 What each part takes: [blocks/edit/edit-function.md](blocks/edit/edit-function.md).
 
@@ -7774,6 +7807,8 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-function.
 - The save bar's motion respects reduced motion.
 - In TestRun the vertical split is labeled "Code and test run", its panes "Source code" and "Test run", and the handle "Resize the test run". The pane is a `section` named by its Test run heading, with Trace and Logs as `h3`s.
 - The trace is a `treegrid` with one tab stop (see `Trace`); the running state is announced by a `status` line.
+- `⌘ S` (`Ctrl S` off Apple) saves while the `SaveBar` shows unsaved changes, the same as Save, and stops the browser's own save; with no changes it does nothing. Save carries `aria-keyshortcuts` and a `Kbd` keycap.
+- In the Test run variant, `⌘ Enter` (`Ctrl Enter` off Apple) runs the test from anywhere on the Code tab, the source editor included, where a bare `Enter` stays a new line. Run test carries `aria-keyshortcuts` and a `Kbd` keycap.
 
 ## States
 
@@ -7809,7 +7844,7 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-function.
 - Surface: app
 - Source: `blocks/edit/edit-resource/edit-resource.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/edit-resource")`
-- Components: Alert, Button, Card, CodeBlock, CodeEditor, ConfirmDialog, ConsoleLayout, DataTable, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, DropdownMenu, Field, `FieldDescription`, `FieldError`, IconButton, Input, Item, Link, MultiSelect, NumberInput, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, PasswordInput, RadioGroup, SaveBar, Select, SettingsGroup, SettingsRow, Switch, Tabs, Tag, Textarea, Toast, Tooltip, `use-unsaved-changes`
+- Components: Alert, Button, Card, CodeBlock, CodeEditor, ConfirmDialog, ConsoleLayout, DataTable, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, DropdownMenu, Field, `FieldDescription`, `FieldError`, IconButton, Input, Item, Kbd, Link, MultiSelect, NumberInput, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, PasswordInput, RadioGroup, SaveBar, Select, SettingsGroup, SettingsRow, Switch, Tabs, Tag, Textarea, Toast, Tooltip, `use-unsaved-changes`
 - Skills: `webkit-form`, `webkit-errors`, `webkit-layout`, `webkit-ux-heuristics`
 
 ## Asked as
@@ -7846,6 +7881,7 @@ The settings page of one existing resource. The user comes here to change how th
 - I. Leave guard — `Tabs`, `SaveBar` (optional)
 - J. Changed elsewhere — `Button`, `SaveBar` (optional)
 - K. Danger zone — `SettingsGroup`, `Card`, `SettingsRow`, `Button`, `Input` (optional)
+- L. Shortcut keycap — `Kbd` (optional)
 
 What each part takes: [blocks/edit/edit-resource.md](blocks/edit/edit-resource.md).
 
@@ -7919,6 +7955,7 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-resource.
 - The leave dialog is a `ConfirmDialog`: focus moves into it, Escape and the close button count as Keep editing, and focus returns to the control that asked to leave.
 - The changed-elsewhere notice sits in a polite live region and takes focus after Reload so the change of values is announced; both its actions are real buttons.
 - The delete confirmation `Input` is labelled by the "Type … to confirm." sentence (`aria-labelledby`) and takes focus when the dialog opens.
+- `⌘ S` (`Ctrl S` off Apple) saves while the `SaveBar` shows unsaved changes, the same as Save, and stops the browser's own save; with no changes it does nothing. Save carries `aria-keyshortcuts` and a `Kbd` keycap. Every variant with a `SaveBar` answers it the same way.
 
 ## States
 
@@ -8201,7 +8238,7 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-schema.md
 - Surface: app
 - Source: `blocks/edit/edit-variables/edit-variables.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/edit-variables")`
-- Components: Alert, AttributeEditor, Avatar, Button, Card, Checkbox, CollectionPreferences, ConfirmDialog, DataTable, `DrawerContent`, Drawer, `DrawerTitle`, `DrawerTrigger`, DropdownMenu, EmptyState, Field, `FieldDescription`, `FieldError`, IconButton, Input, `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, MultiSelect, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, PropertyFilter, SettingsGroup, Switch, `TableCellActions`, `TableCellId`, `TableCellLink`, Textarea, Toast, ToggleGroup, Tooltip, `use-collection`
+- Components: Alert, AttributeEditor, Avatar, Button, Card, Checkbox, CollectionPreferences, ConfirmDialog, DataTable, `DrawerContent`, Drawer, `DrawerTitle`, `DrawerTrigger`, DropdownMenu, EmptyState, Field, `FieldDescription`, `FieldError`, IconButton, Input, `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, Kbd, MultiSelect, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, PropertyFilter, SettingsGroup, Switch, `TableCellActions`, `TableCellId`, `TableCellLink`, Textarea, Toast, ToggleGroup, Tooltip, `use-collection`, `use-shortcuts`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-create-surface`
 
 ## Asked as
@@ -8240,6 +8277,7 @@ A list of key and value pairs and the drawer that edits them, here environment v
 - L. List states — `EmptyState`, `Button` (required)
 - M. Delete confirmation — `ConfirmDialog`, `Alert`, `Input`, `Button` (required)
 - N. Network list drawer — `Drawer`, `SettingsGroup`, `ToggleGroup`, `Button`, `Textarea`, `FieldDescription`, `AttributeEditor`, `MultiSelect` (optional)
+- O. Shortcut keycap — `Kbd` (optional)
 
 What each part takes: [blocks/edit/edit-variables.md](blocks/edit/edit-variables.md).
 
@@ -8299,6 +8337,9 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-variables
 - Adding a pair moves focus to its new Key field; removing one moves focus to the pair now in its place (or Add variable); both are announced in a polite live region by `AttributeEditor`.
 - The paste panel's `Textarea` is described by its report, so skipped lines and replaced keys are read with the field; Paste .env exposes `aria-expanded`, and applying announces how many variables were added.
 - The drawer traps focus while open and returns it to Create Variable on close.
+- `/` focuses the property filter from anywhere on the page, except while typing in a field.
+- The table rows are one tab stop: Arrow Up and Arrow Down move between rows, Home and End jump to the first and last, Enter opens the focused variable in the edit drawer as the row menu's Edit does, and Delete or Backspace opens the delete dialog. After a delete, focus lands on the next row.
+- `⌘ Enter` (`Ctrl Enter` off Apple) submits the open drawer's form from any field, the same as Save, in the create and edit drawer, the Paste .env drawer and the network list drawer. Save carries `aria-keyshortcuts` and a `Kbd` keycap.
 
 ## States
 
@@ -8336,7 +8377,7 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-variables
 - Surface: app
 - Source: `blocks/settings/settings-form/settings-form.vue` in `@aziontech/webkit`
 - MCP: `get_block("settings/settings-form")`
-- Components: Alert, Button, Card, ConfirmDialog, Field, `FieldError`, Input, Item, LanguageSelect, Link, PageHeader, SaveBar, Select, SettingsGroup, SettingsRow, Skeleton, Subheader, Switch, Tag, Textarea, Toast, `use-unsaved-changes`
+- Components: Alert, Button, Card, ConfirmDialog, Field, `FieldError`, Input, Item, Kbd, LanguageSelect, Link, PageHeader, SaveBar, Select, SettingsGroup, SettingsRow, Skeleton, Subheader, Switch, Tag, Textarea, Toast, `use-unsaved-changes`
 - Skills: `webkit-form`, `webkit-errors`, `webkit-ux-heuristics`
 
 ## Asked as
@@ -8368,6 +8409,7 @@ The place the user goes to change how an account or a project behaves. They scan
 - C. Setting rows — `SettingsRow`, `Input`, `FieldError`, `Select`, `Switch` (required)
 - D. Save — `SaveBar`, `Button` (required)
 - E. Profile sections — `SettingsRow`, `Card`, `Item`, `Input`, `Select`, `Switch`, `Button` (Profile only)
+- F. Shortcut keycap — `Kbd` (optional)
 
 What each part takes: [blocks/settings/settings-form.md](blocks/settings/settings-form.md).
 
@@ -8423,6 +8465,8 @@ What each prop and event does, and the go-live code: [blocks/settings/settings-f
 - Every control has an `aria-label` that repeats its row title; errors are linked with `aria-describedby` only while they show.
 - Disabling the `fieldset` while saving takes every control out of interaction at once; Save announces its loading state.
 - Focus order follows reading order: the rows from top to bottom, then Discard and Save.
+- `⌘ S` (`Ctrl S` off Apple) saves while the form has unsaved changes, the same as Save, and stops the browser's own save; with no changes it does nothing. Save carries `aria-keyshortcuts` and a `Kbd` keycap. The Profile variants answer it the same way.
+- The save-per-card and save-per-group variants have no `SaveBar` and bind no `⌘ S`: each card or group keeps its own Save button.
 
 ## States
 
@@ -9234,7 +9278,7 @@ What each prop and event does, and the go-live code: [blocks/state/state-first-u
 - Surface: app
 - Source: `blocks/state/state-form-validation/state-form-validation.vue` in `@aziontech/webkit`
 - MCP: `get_block("state/state-form-validation")`
-- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, DropdownMenu, Field, `FieldError`, IconButton, Input, Item, MultiSelect, NumberInput, PageHeader, RadioGroup, SaveBar, Select, SettingsRow, Skeleton, Subheader, Switch, Textarea, Toast, Tooltip
+- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, DropdownMenu, Field, `FieldError`, IconButton, Input, Item, Kbd, MultiSelect, NumberInput, PageHeader, RadioGroup, SaveBar, Select, SettingsRow, Skeleton, Subheader, Switch, Textarea, Toast, Tooltip
 - Skills: `webkit-form`, `webkit-errors`, `webkit-ui-states`
 
 ## Asked as
@@ -9341,6 +9385,7 @@ What each prop and event does, and the go-live code: [blocks/state/state-form-va
 - Toasts are announced by the app's `Toaster` region; the error toast keeps its Retry reachable by keyboard.
 - A section `Alert` sits in reading order before the fields it governs; its action is a real button reachable by keyboard.
 - In SectionRejected focus moves to the refused field with `preventScroll`, so the scroll to the section heading is the only movement; the reloading `Skeleton` has an accessible name.
+- In Section rejected, `⌘ S` (`Ctrl S` off Apple) submits the form, the same as Save, and stops the browser's own save; it does nothing while the form submits or a section reloads. Save carries `aria-keyshortcuts` and a `Kbd` keycap.
 
 ## States
 
@@ -9865,6 +9910,8 @@ What each prop and event does, and the go-live code: [blocks/view/view-card.md](
 - Focus order follows reading order: heading actions, filter, Delete, Preferences, Select all items, each card's checkbox and link, pagination.
 - The delete dialog traps focus, names itself by its title, labels its input by the prompt and returns focus to Delete (n) when it closes.
 - The preferences dialog traps focus, is named by its title and returns focus to its trigger when it closes.
+- `/` focuses the property filter from anywhere on the page, except while typing in a field.
+- Cards are reached with Tab (each card's checkbox and link); Space toggles the focused checkbox. Delete deletes nothing on its own: select the cards, then Delete (n) asks before it deletes.
 
 ## States
 
@@ -9995,8 +10042,9 @@ What each prop and event does, and the go-live code: [blocks/view/view-events-ex
 - The Errors value carries an `aria-label` with its share of all events.
 - Every icon-only button has an `aria-label`; decorative glyphs are `aria-hidden="true"`. The row detail button names its event and carries `aria-expanded`.
 - Value options in the fields-panel popovers are buttons with `aria-pressed`, so applied values are announced; the Filter menu's own rows come from `FilterMenu`.
+- The log rows are one tab stop: Arrow Up and Arrow Down move between rows, Home and End jump to the first and last, and Enter opens the focused event's document, as a click on the row does.
 - The document drawer traps focus while open and closes on Escape; motion is turned off under `prefers-reduced-motion`.
-- Query: the bar is a `combobox` whose invalid state sets `aria-invalid` and points `aria-describedby` at the reason; the mixed AND / OR message and the saved-query confirmations are `role="status"`.
+- Query: `/` focuses the query bar from anywhere on the page, except while typing in a field; the bar is a `combobox` whose invalid state sets `aria-invalid` and points `aria-describedby` at the reason; the mixed AND / OR message and the saved-query confirmations are `role="status"`.
 - Sessions: the tabs follow the `Tabs` keyboard map (arrows, Home, End); F2 renames and Delete closes the focused tab, and the same actions sit in a named menu for pointer and screen-reader users; focus returns to the tab after rename or close.
 - EventDocument: Filter by and Exclude are toggle buttons (`aria-pressed`) named with the field and value; the match count of the document search is announced in a `role="status"`.
 
@@ -10134,6 +10182,8 @@ What each prop and event does, and the go-live code: [blocks/view/view-file-brow
 - The `Breadcrumb` crumbs are links the keyboard reaches in order; the last crumb is the current folder.
 - Folder and `..` names are buttons, so a keyboard user opens a folder or goes up with Tab and Enter; the row click is the pointer shortcut and the Open option in the row menu repeats it.
 - Focus order follows reading order: search, Refresh, Download CSV, Columns, path, Add to files, the rows.
+- `/` focuses the folder search from anywhere on the page, except while typing in a field.
+- The rows are one tab stop: Arrow Up and Arrow Down move between rows, Home and End jump to the first and last, Enter opens the focused folder or file (or goes up from `..`), Space selects a file when moving is on, and Delete or Backspace opens the delete dialog for a file or folder. After a delete, focus lands on the next row.
 - `TableCellTime` names the author and reads the absolute time to screen readers.
 - The drop overlay is `aria-hidden`: dragging is a pointer path, and Add to files with Browse files is the keyboard path to the same upload.
 - `UploadProgress` is a region named File transfers with a polite status that announces each file finishing and the outcome; percentages are not announced. The toast repeats the outcome for people who collapsed the card.
@@ -10174,7 +10224,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-file-brow
 - Surface: app
 - Source: `blocks/view/view-marketplace/view-marketplace.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-marketplace")`
-- Components: Alert, Button, Card, DataTable, DocProse, `DrawerContent`, Drawer, `DrawerTitle`, EmptyState, Field, Input, IntegrationCard, Item, KeyValueList, Link, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, PropertyFilter, SaveBar, Select, SettingsGroup, SettingsRow, Skeleton, Switch, `TableCellStatus`, Tabs, Tag, Toast, `use-collection`
+- Components: Alert, Button, Card, DataTable, DocProse, `DrawerContent`, Drawer, `DrawerTitle`, EmptyState, Field, Input, IntegrationCard, Item, Kbd, KeyValueList, Link, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, PropertyFilter, SaveBar, Select, SettingsGroup, SettingsRow, Skeleton, Switch, `TableCellStatus`, Tabs, Tag, Toast, `use-collection`
 - Skills: `webkit-lists`, `webkit-form`, `webkit-errors`, `webkit-ui-states`
 
 ## Asked as
@@ -10269,9 +10319,11 @@ What each prop and event does, and the go-live code: [blocks/view/view-marketpla
 - The layout owns the one `main` landmark; the `PageHeader` title is the only `h1`, each section heading an `h2`, each tile name an `h3`.
 - Each tile's target is a real button named by the integration; the action button sits above it and is named with the integration, so "Install" is never ambiguous in a list.
 - The Installed state is text in a `Tag`, never colour alone.
+- `/` focuses the integrations search from anywhere on the page, except while typing in a field.
 - The drawer traps focus, is named by `DrawerTitle`, closes on Escape and returns focus to what opened it; its form has an accessible name.
 - The Application field is required and labelled; its error is tied to the `Select` through the `Field`, and focus stays on Install so the person can correct and resubmit.
 - Toasts never take focus and are announced politely, the failure toast assertively; the failure toast stays until closed and its actions are reachable by keyboard.
+- In Configure, `⌘ S` (`Ctrl S` off Apple) saves the settings while the `SaveBar` shows unsaved changes, the same as Save; with no changes it does nothing. Save carries `aria-keyshortcuts` and a `Kbd` keycap.
 
 ## States
 
@@ -10308,7 +10360,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-marketpla
 - Surface: app
 - Source: `blocks/view/view-query-editor/view-query-editor.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-query-editor")`
-- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, CodeBlock, CodeEditor, ConfirmDialog, DataTable, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, `FieldError`, FileDropzone, FileTokenGroup, IconButton, Input, Item, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, SaveBar, Select, SettingsGroup, SettingsRow, Sidebar, Skeleton, Switch, Tabs, Tag, Toast, ToggleGroup, Tooltip
+- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, CodeBlock, CodeEditor, ConfirmDialog, DataTable, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, `FieldError`, FileDropzone, FileTokenGroup, IconButton, Input, Item, Kbd, PageHeader, PageTabs, `PanelBody`, `PanelFooter`, `PanelHeader`, SaveBar, Select, SettingsGroup, SettingsRow, Sidebar, Skeleton, Switch, Tabs, Tag, Toast, ToggleGroup, Tooltip, `use-shortcuts`
 - Skills: `webkit-layout`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -10347,6 +10399,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 - J. Bulk row delete — `Button`, `ConfirmDialog` (optional)
 - K. Create database page — `Input`, `Button` (optional)
 - L. Import data from CSV — `Drawer`, `Alert`, `DataTable`, `Button` (optional)
+- M. Shortcut keycap — `Kbd` (optional)
 
 What each part takes: [blocks/view/view-query-editor.md](blocks/view/view-query-editor.md).
 
@@ -10404,6 +10457,8 @@ What each prop and event does, and the go-live code: [blocks/view/view-query-edi
 - `ToggleGroup`s are named ("Table view", "Result view") and each paged table names its own pagination.
 - The templates drawer traps focus while open and closes on Escape.
 - In the import drawer each mapping `Select` is named `Table column for <CSV column>`, the mapping and the per-line errors are named lists, and the ready count is a polite live region, so changing a mapping announces the new count.
+- `⌘ Enter` (`Ctrl Enter` off Apple) runs the query from anywhere on the page, the SQL editor included, where a bare `Enter` stays a new line; it does nothing while a query runs. Run query carries `aria-keyshortcuts` and a `Kbd` keycap.
+- Create Database opens with focus in the Name field, and `⌘ Enter` (`Ctrl Enter` off Apple) submits it from any field, the same as Create Database.
 
 ## States
 
@@ -10443,7 +10498,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-query-edi
 - Surface: app
 - Source: `blocks/view/view-rule-list/view-rule-list.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-rule-list")`
-- Components: Accordion, Alert, AttributeEditor, Button, Card, Combobox, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, `FieldDescription`, IconButton, Input, Item, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, RadioGroup, SaveBar, Select, SettingsGroup, SettingsRow, Switch, Tag, Toast, Tooltip
+- Components: Accordion, Alert, AttributeEditor, Button, Card, Combobox, DataTable, `DialogContent`, `DialogDescription`, Dialog, `DialogTitle`, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, `FieldDescription`, IconButton, Input, Item, Kbd, PageHeader, `PanelBody`, `PanelFooter`, `PanelHeader`, RadioGroup, SaveBar, Select, SettingsGroup, SettingsRow, Switch, Tag, Toast, Tooltip
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -10475,6 +10530,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 - E. Order controls — `Input`, `IconButton`, `Tooltip`, `DropdownMenu` (required)
 - F. Save bar and review — `SaveBar`, `Button`, `Dialog`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Alert` (required)
 - G. States — `EmptyState`, `Alert` (required)
+- H. Shortcut keycap — `Kbd` (optional)
 
 What each part takes: [blocks/view/view-rule-list.md](blocks/view/view-rule-list.md).
 
@@ -10528,6 +10584,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-rule-list
 - The `Switch` is named "Run <rule>"; its visible Active or Inactive text is hidden from the accessibility tree so the state is read once, from `aria-checked`.
 - The review dialog traps focus, returns it to Review changes on close, and is not dismissible while saving; the failure `Alert` is read when it appears.
 - Drop targets show a 2 px accent line and the dragged row fades; transitions respect reduced motion.
+- `⌘ S` (`Ctrl S` off Apple) opens Review changes while the rules have unsaved changes, the same as the `SaveBar`'s primary button, so the save still goes through the review; with no changes it does nothing. Review changes carries `aria-keyshortcuts` and a `Kbd` keycap.
 
 ## States
 
@@ -10661,6 +10718,8 @@ What each prop and event does, and the go-live code: [blocks/view/view-table.md]
 - The delete dialog traps focus, is named by its title and labels its input by the prompt.
 - The preferences dialog traps focus, is named by its title and returns focus to its trigger when it closes.
 - Sorting is announced by the table header; the row menu is reachable by keyboard and closes back to its trigger.
+- `/` focuses the property filter from anywhere on the page, except while typing in a field.
+- The rows are one tab stop: Arrow Up and Arrow Down move between rows, Home and End jump to the first and last, Enter opens the focused row as View details does (a click on the row itself does nothing; the name link opens it), and Delete or Backspace opens the delete dialog for it. After a delete, focus lands on the next row (the previous one when the last row went).
 - Links that open a new tab add "(opens in a new tab)" in visually hidden text; the `+N` popover names its count and the copy buttons name what they copy.
 
 ## States
@@ -10787,6 +10846,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-template-
 - The focus ring is drawn inside the tile on the stretched target, so it is never clipped by the grid.
 - The drawer traps focus, is named by `DrawerTitle`, closes on Escape and returns focus to the tile that opened it.
 - The `PropertyFilter` is named by its `aria-label` and announces the match count after each change.
+- `/` focuses the search from anywhere on the page, except while typing in a field.
 - The loading band is `aria-busy`; the failure `Alert` is announced and its Retry is a button.
 
 ## States
@@ -21087,7 +21147,8 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `row-click` | `(event: MouseEvent, row: TRow)` | Fires when a rendered row is clicked. `event` is the click; `row` is the clicked record. |
+| `row-click` | `(event: MouseEvent \| KeyboardEvent, row: TRow)` | Fires when a rendered row is clicked, or when `Enter` is pressed on a focused row (keyboard rows, below). `event` is the click or the key press; `row` is the record. |
+| `row-remove` | `(event: KeyboardEvent, row: TRow)` | `Delete` (or `Backspace`, which a Mac keyboard's delete key sends) was pressed on a focused row. The table removes nothing: the app asks first (a `ConfirmDialog`) and then drops the record from `data`. |
 | `filter-apply` | `(event: Event, filters: TableAppliedFilter[])` | `TableFilter` committed a pick or a token — the explicit re-query signal for `manualFiltering`. |
 | `filter-remove` | `(event: Event, filter: TableAppliedFilter)` | One applied filter was removed (a `FilterMenu.ChipGroup` chip). |
 | `refresh` | `(event: Event)` | Refresh requested; the app refetches. `event` is the click of `TableRefreshButton`, or `new Event('refresh')` when `reload()` is called. |
@@ -21151,7 +21212,8 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
 ## Accessibility
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on the sort button and any interactive cell content.
-- Keyboard map: `Tab` focuses the sort button of each sortable column (one tab stop per column, as in the APG sortable table: the header cell itself is not focusable and carries `aria-sort`) and interactive cell content; `Enter`/`Space` on the sort button toggles the sort; row click is mouse/touch (no keyboard trap). Body rows are not focusable, so `row-click` is never the only way to open a record: the principal column carries a real link or button (`TableCellLink`, or the `cell-<id>` slot with an anchor, as the Default example does), which keyboard and screen-reader users reach instead (WCAG 2.1.1).
+- Keyboard map: `Tab` focuses the sort button of each sortable column (one tab stop per column, as in the APG sortable table: the header cell itself is not focusable and carries `aria-sort`) and interactive cell content; `Enter`/`Space` on the sort button toggles the sort; row click is mouse/touch (no keyboard trap). The principal column still carries a real link or button (`TableCellLink`, or the `cell-<id>` slot with an anchor, as the Default example does), which keyboard and screen-reader users reach with `Tab` (WCAG 2.1.1).
+- Keyboard rows (the console keyboard standard, `rules/webkit-keyboard.md`): when the table has a `row-click` or a `row-remove` listener (or tree rows), body rows become one roving tab stop (one row `tabindex="0"`, the rest `-1`, the last focused row kept as the stop) with the same inset ring as tree rows. `Arrow Down` / `Arrow Up` move between rows, `Home` / `End` go to the first / last row, `Enter` emits `row-click` with the key press, `Space` toggles the row's selection when `selectable` allows it, and `Delete` / `Backspace` emits `row-remove` (never with `⌘`, `Ctrl`, `Alt` or `Shift` held). Keys pressed on a control inside the row (a checkbox, the row menu) belong to that control. When the row that held focus leaves `data` and focus fell to the page (the delete was confirmed in a dialog that closed, or the row itself was focused), focus moves to the row now at its index, else the previous row, else the table element (`tabindex="-1"`, ring on `focus-visible`); it waits while a modal layer is open, and leaves focus alone when the person moved it elsewhere. Without those listeners body rows are not focusable. Tests: `data-table.test.ts` › keyboard rows.
 - ARIA: `role="table"` sits on the grid element inside the scroll viewport (testid `<testid>__table`), not on the root: the root also holds the toolbar, applied filters, the focusable scroll viewport, the stacked select-all, the empty state and the pagination, and any of those inside a `table` is an unallowed child (`aria-required-children`). Every `aria-*` attribute passed to `DataTable` (`aria-label`, `aria-labelledby`, `aria-describedby`…) is forwarded to that element, as are `aria-busy` (loading) and `aria-rowcount` (windowed); every other attribute stays on the root. The pagination is a plain region under the viewport (`<testid>__footer`), not a `rowgroup`, and the `caption` slot renders as the table's first child. `table-caption` is a plain element (no `role`) that names the table through `aria-labelledby` unless the consumer names it with `aria-label`/`aria-labelledby`. `table-header`/`table-body` `role="rowgroup"`; `table-footer` has no role (it hosts pagination or an action, not rows); `table-row` `role="row"`; `table-head-cell` `role="columnheader"` with `aria-sort` when sortable; `table-cell` `role="cell"`; selected rows set `aria-selected`.
 - Virtual rows keep their position for assistive technology: `aria-rowcount` on the `role="table"` element (rows + header) and `aria-rowindex` on each rendered row.
 - Reorderable rows: each grip is a button named `Reorder <row name>, position <n> of <total>` and described by a visually hidden hint (`Drag, or press Arrow Up or Arrow Down to move.`, or the lock reason). Arrow Up / Arrow Down / Home / End move the row and keep focus on its grip; `Esc` cancels a drag. A polite `role="status"` region announces `Moved <name> to position <n> of <total>.` (keyboard) or `Dropped …` (pointer). Dragging is never the only way to reorder (WCAG 2.5.7).
@@ -22037,6 +22099,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 ## Accessibility
 
 - Visible focus: the field's own `focus-within` ring (from `input`); tokens and buttons keep theirs.
+- Page search key: while mounted and not `disabled`, the filter registers `/` with `useShortcuts` (listed in `ShortcutsDialog` as `propertyFilter.focusShortcut`, Focus search), so `/` focuses the field from anywhere on the page, never while typing in another field, with `⌘`, `Ctrl` or `Alt` held, or from inside a modal layer that does not hold the filter (the console keyboard standard, `rules/webkit-keyboard.md`). Tests: `property-filter.test.ts` › page search key.
 - Keyboard map (query mode): typing opens the suggestions for the word at the caret; `ArrowDown`/`ArrowUp` move the active option (wrapping); `Enter` applies the active option (it replaces the word and moves the caret after it) or submits the query; `Escape` closes the suggestions, then clears the text; `ArrowLeft`/`ArrowRight`, `Home`/`End` and clicks move the caret and the suggestions follow it; `Backspace` only edits text.
 - In query mode an invalid query sets `aria-invalid` on the field and `aria-describedby` to the message, which sits in a polite live region under the field; the token group is not rendered.
 - Keyboard map (tokens mode): typing opens the suggestions; `ArrowDown`/`ArrowUp` move the active option (wrapping); `Enter` applies the active option or commits the typed text; `Escape` closes the suggestions, then clears the text; `Backspace` in an empty field removes the last token (with `grouped`: cancels a pending new group first, then removes the last token of the last group).
@@ -27265,7 +27328,7 @@ Unbound, each one keeps its own local state.
 ## Accessibility
 
 - Skip link: the first focusable element is a `SkipLink` (`Skip to content`, from its locale catalog), visually hidden until focused; activating it moves focus to the content region (`app-layout__content`, which takes `tabindex="-1"` for the jump), past the navigation and the header. Every layout built on `AppLayout` (`ConsoleLayout`) gets it by construction.
-- Visible focus: the separator shows `var(--accent)` on `focus-visible`; the region buttons are `IconButton` with their own ring.
+- Visible focus: the separator shows `var(--accent)` and the focus ring (`focus-visible:ring-2 focus-visible:ring-(--ring-color)`, no offset: the separator sits on the panel edge) on `focus-visible`; the region buttons are `IconButton` with their own ring.
 - Keyboard map: `Tab` reaches the region controls in DOM order (navigation, header, content, split panel, tools). On the split separator: `ArrowUp` / `ArrowDown` grow and shrink a bottom panel; `ArrowLeft` / `ArrowRight` grow and shrink a side panel (mirrored under RTL); `Shift` makes the step 64 px instead of 16 px; `Home` / `End` go to the minimum / maximum. `Escape` closes a compact drawer (from `Drawer`) and returns focus to the control that opened it. The split panel and tools bodies are focusable scroll regions (`tabindex="0"`, `role="group"` named by their heading), so a keyboard reader can scroll them when they hold no control.
 - ARIA: the tools region and the split panel are `<section aria-labelledby>` their header title (`<h2>`); the separator is `role="separator"` with `aria-orientation`, `aria-valuenow` / `aria-valuemin` / `aria-valuemax` in pixels, `aria-controls` the split panel and an accessible name from the catalog. The compact drawers are named by `navigationAriaLabel` and `toolsLabel`. The layout adds no landmark of its own around the content; the consumer's `<main>` and `Sidebar` `<nav>` are the landmarks.
 - Contrast ≥4.5:1 for the region titles; ≥3:1 for the separator against the surfaces.
@@ -27593,7 +27656,7 @@ packages/webkit/src/components/layout/console-layout/
 
 - Landmarks: the rail is the `Sidebar` `<nav>` named by `ariaLabel`; the header is `AppHeader` (`<header>`); the page body is inside the layout's single `<main>`. A page body must not render a second `<main>`.
 - Skip link: the first `Tab` stop is the `SkipLink` `AppLayout` renders (`Skip to content`); it jumps past the rail and the header to the content region that holds the `<main>`.
-- Keyboard map: `Tab` runs skip link → rail (wordmark, `sidebar-header`, navigation) → header → page; `⌘K` / `Ctrl K` opens the palette (owned by `Command`); on wide layouts `⌘B` / `Ctrl B` toggles the rail and writes `v-model:navigation-open` (the Sidebar's `shortcut`, off while compact and while typing in a field); in the palette `ArrowUp` / `ArrowDown` move, `Enter` chooses, `Escape` closes and returns focus. The rail keyboard map is `SidebarMenu`'s; the compact drawer closes on `Escape` and returns focus to the hamburger (`AppLayout`).
+- Keyboard map: `Tab` runs skip link → rail (wordmark, `sidebar-header`, navigation) → header → page; `⌘K` / `Ctrl K` opens the palette (owned by `Command`); on wide layouts `⌘B` / `Ctrl B` toggles the rail and writes `v-model:navigation-open` (the Sidebar's `shortcut`, off while compact and while typing in a field); in the palette `ArrowUp` / `ArrowDown` move, `Enter` chooses, `Escape` closes and returns focus. `?` (`Shift /`) opens the layout's one `ShortcutsDialog`, which lists every shortcut the current screen registers with `useShortcuts` (`@aziontech/webkit/use-shortcuts`); the layout lists `⌘K` there (`consoleLayout.searchShortcut`) without binding it a second time (`Command` owns the key). The app does not mount a second `ShortcutsDialog` under the layout. Tests: `console-layout.test.ts` › shortcuts list. The rail keyboard map is `SidebarMenu`'s; the compact drawer closes on `Escape` and returns focus to the hamburger (`AppLayout`).
 - Names: the compact hamburger (`Open navigation`), the brand link (`Azion home`), the rail account trigger (`Account menu`, an icon button) come from the locale catalog; the avatar carries the account name. The header avatar trigger shows the initials, so its name starts with them (`JD, account menu`, `consoleLayout.accountMenuFor`) to meet WCAG 2.5.3 Label in Name (a speech user says what they see); with an account image it has no visible text and is named `Account menu`.
 - Account menu: choosing an option by pointer or keyboard emits `account-select`; the keyboard map inside the menu is `DropdownMenu`'s.
 - Visible focus: every interactive part is a WebKit control with its own ring; the brand link and the avatar button use `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
@@ -28282,7 +28345,7 @@ Exported types: `DashboardGridLayoutItem = { id: string; span: number; height?: 
 
 - Visible focus: owned by the controls in the `actions` slot.
 - Keyboard map: `Tab` moves through the actions in DOM order; the header itself is not interactive.
-- ARIA: the root is a `header` element and the title is the page's only `h1`; `titleId` lets a form or landmark reference it with `aria-labelledby`. The breadcrumb comes first in reading order (its own `nav` landmark), then the h1, the meta, the description, the actions and the tabs. The icon wrapper is `aria-hidden`.
+- ARIA: the root is a `header` element and the title is the page's only `h1`. The `h1` carries `tabindex="-1"` and no focus ring (`outline-none`): it is not a tab stop, but a router or a page can move focus to it on navigation so a screen reader announces the page (the console keyboard standard, `rules/webkit-keyboard.md`); it is a heading, not a control, so it draws no ring; `titleId` lets a form or landmark reference it with `aria-labelledby`. The breadcrumb comes first in reading order (its own `nav` landmark), then the h1, the meta, the description, the actions and the tabs. The icon wrapper is `aria-hidden`.
 - Keyboard map with regions: `Tab` reaches the breadcrumb links, then the actions, then the tabs (which own their arrow-key model).
 - Contrast ≥4.5:1 for the title and the muted description.
 - Touch target: the actions keep the Button sizes; on a phone they stretch to full width.
@@ -28490,6 +28553,7 @@ context, so a consumer never wires one part to the other.
 - Disable Discard and set `loading` on Save while saving.
 - Do not build a centred action pill by hand (a sticky footer with a bordered card and a shadow): that is `variant="centered"`.
 - `floating` and `docked` are for the dirty state of a settings page; `centered` and `plain` are for a create page or a form saved as one unit and stay on screen.
+- Listen to `save` to give the page `⌘ S` (`Ctrl S` off Apple): run the same save as the Save button, and do nothing when the form has no unsaved changes. Show the shortcut on Save with `Kbd` and `aria-keyshortcuts="Meta+S Control+S"` (the console keyboard standard, `rules/webkit-keyboard.md`).
 
 ## Don’t
 
@@ -28509,6 +28573,12 @@ context, so a consumer never wires one part to the other.
 | --- | --- | --- | --- | --- |
 | `variant` | `'floating' \| 'docked' \| 'plain' \| 'fade' \| 'centered'` | `'floating'` | false | How the bar sits at the bottom of its scroll region. See the variant table below. |
 
+## Events
+
+| Event | Payload | Notes |
+| --- | --- | --- |
+| `save` | `(event: KeyboardEvent)` |  |
+
 ## Slots
 
 | Slot | Scope | Notes |
@@ -28527,7 +28597,7 @@ context, so a consumer never wires one part to the other.
 ## Accessibility
 
 - Visible focus: owned by the action buttons.
-- Keyboard map: `Tab` reaches Discard, then Save, in reading order (the column is reversed visually on a phone so Save sits on top).
+- Keyboard map: `Tab` reaches Discard, then Save, in reading order (the column is reversed visually on a phone so Save sits on top). With a `save` listener, `⌘ S` (`Ctrl S` off Apple) emits `save` from anywhere on the page, also while typing in a field (a shortcut with a modifier), and the browser's Save page dialog never opens; inside an open modal layer it fires only for a bar inside that layer (registered through `useShortcuts` with the bar as its element). Tests: `save-bar.test.ts` › save shortcut.
 - ARIA: the root is a `footer`; the status glyph is `aria-hidden`. The message region (`__message`, the `leading` / default slot) is a polite live region (`role="status"`), so a bar that appears when the form turns dirty announces its status sentence (WCAG 4.1.3 Status Messages) without moving focus.
 - Contrast ≥4.5:1 for the status sentence.
 
@@ -28538,12 +28608,14 @@ context, so a consumer never wires one part to the other.
 ```vue
 <script setup>
   import Button from '@aziontech/webkit/button'
+  import Kbd from '@aziontech/webkit/kbd'
   import SaveBar from '@aziontech/webkit/save-bar'
   import { ref } from 'vue'
 
   const saving = ref(false)
 
   const save = () => {
+    if (saving.value) return
     saving.value = true
     setTimeout(() => {
       saving.value = false
@@ -28556,7 +28628,7 @@ context, so a consumer never wires one part to the other.
     <div class="layout-boundary-inline flex-1 py-(--spacing-lg) text-body-sm text-(--text-muted)">
       The settings form scrolls under the bar.
     </div>
-    <SaveBar>
+    <SaveBar @save="save">
       You have unsaved changes.
       <template #actions>
         <Button
@@ -28567,12 +28639,20 @@ context, so a consumer never wires one part to the other.
           :disabled="saving"
         />
         <Button
-          label="Save"
           variant="primary"
           size="medium"
+          aria-keyshortcuts="Meta+S Control+S"
           :loading="saving"
           @click="save"
-        />
+        >
+          Save
+          <Kbd
+            meta
+            size="small"
+            aria-hidden="true"
+            >S</Kbd
+          >
+        </Button>
       </template>
     </SaveBar>
   </div>
@@ -29208,7 +29288,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
   The region also keeps `var(--spacing-2xs)` of padding — and the same as `scroll-padding` — inside
   the clip, because the first row's focus ring (`ring-2` over `ring-offset-2`) reaches 4 px past the
   row and a viewport flush against it would cut the ring off.
-  The **drag handle is a focusable `role="separator"`**, so the gesture has a keyboard equivalent:
+  The **drag handle is a focusable `role="separator"`** with an inset focus ring (`focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color)`), inset because the rail clips anything drawn past its edge, so the gesture has a keyboard equivalent:
   `ArrowLeft` / `ArrowRight` nudge the width, `ArrowLeft` past the snap boundary collapses, and
   `ArrowRight` from the collapsed splitter brings the rail back. Pointer-wise that same collapsed
   splitter is click-to-restore as well as drag-to-size, so the edge is never a drag-only control.
@@ -32174,7 +32254,7 @@ packages/webkit/src/components/overlay/command/
 ## Accessibility
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
-- Keyboard map: `Enter`/`Space` on the trigger opens the dialog and moves focus to its first focusable control. Focus is trapped: `Tab` on the last control wraps to the first and `Shift+Tab` on the first wraps to the last. `Escape` closes it (unless the consumer blocks dismissal) and focus returns to the trigger; when the dialog was opened without a `Dialog.Trigger` (controlled `v-model:open`), focus returns to whatever element held it when the dialog opened. Tests: `dialog.test.ts` › keyboard map (spec).
+- Keyboard map: `Enter`/`Space` on the trigger opens the dialog and moves focus into it: to the control marked `data-autofocus`, else the first form field (a text input, textarea, select, combobox or spinbutton), else the first focusable control, so a dialog that opens with a form starts in its first field rather than on the close button. Focus is trapped: `Tab` on the last control wraps to the first and `Shift+Tab` on the first wraps to the last. `Escape` closes it (unless the consumer blocks dismissal) and focus returns to the trigger; when the dialog was opened without a `Dialog.Trigger` (controlled `v-model:open`), focus returns to whatever element held it when the dialog opened. Tests: `dialog.test.ts` › keyboard map (spec).
 - ARIA: the panel is `role="dialog"` with `aria-modal="true"`, `aria-labelledby` on the `DialogTitle` id, and `aria-describedby` on the `DialogDescription` id **only while a `DialogDescription` is mounted** (it registers itself, as in `Popover`), so the dialog never references a missing id. A consumer `role` passed to `DialogContent` (for example `role="alertdialog"` from `ConfirmDialog`) replaces `dialog`.
 - Nested overlays: every open `DialogContent` joins the shared overlay layer stack (`composables/use-overlay-layer`). Only the top layer handles `Escape` and `Tab` trapping, so `Escape` in a dialog opened from a `Drawer` closes the dialog only, and a `Popover` teleported out of a dialog keeps its own `Tab` containment. Tests: `dialog.test.ts` › nested overlays.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
@@ -32333,7 +32413,7 @@ packages/webkit/src/components/overlay/command/
 ## Accessibility
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
-- Keyboard map: `Enter`/`Space` on the trigger opens the drawer and moves focus to its first focusable control. Focus is trapped: `Tab` on the last control wraps to the first and `Shift+Tab` on the first wraps to the last. `Escape` closes it and focus returns to the trigger, or, when opened without a `Drawer.Trigger`, to the element that held focus when it opened. Tests: `drawer.test.ts` › keyboard map (spec).
+- Keyboard map: `Enter`/`Space` on the trigger opens the drawer and moves focus into it: to the control marked `data-autofocus`, else the first form field (a text input, textarea, select, combobox or spinbutton), else the first focusable control, so a drawer that opens with a form starts in its first field rather than on the close button. Focus is trapped: `Tab` on the last control wraps to the first and `Shift+Tab` on the first wraps to the last. `Escape` closes it and focus returns to the trigger, or, when opened without a `Drawer.Trigger`, to the element that held focus when it opened. Tests: `drawer.test.ts` › keyboard map (spec).
 - ARIA: the panel is `role="dialog"` with `aria-modal="true"` (`false` with `:modal="false"`, where focus moves in on open but `Tab` is not trapped), `aria-labelledby` on the `DrawerTitle` id, and `aria-describedby` on the `DrawerDescription` id only while a `DrawerDescription` is mounted.
 - Nested overlays: every open `DrawerContent` joins the shared overlay layer stack, so only the top layer handles `Escape` and `Tab` trapping: `Escape` in a `ConfirmDialog` opened from the drawer closes the confirm and leaves the drawer open. Tests: `drawer.test.ts` › nested overlays.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
@@ -33055,7 +33135,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on the trigger wrapper.
 - Hoverable (WCAG 1.4.13): the panel takes the pointer. Leaving the trigger closes the tooltip after a 100 ms grace, and entering the panel within the grace keeps it open (so text can be read under magnification); leaving the panel closes it after the same grace. Tests: `tooltip.test.ts` › hoverable content.
 - Touch: a long-press (500 ms `pointerdown` with `pointerType` `touch`) opens the tooltip; it hides 1.5 s after the finger lifts. A mouse press never opens it.
-- Keyboard map: `Tab` onto the trigger opens the tooltip at once (no hover delay); `Escape` closes it and focus stays on the trigger; `Tab` away closes it; the tooltip never takes or traps focus. Tests: `tooltip.test.ts` › keyboard map (spec).
+- Keyboard map: `Tab` onto the trigger opens the tooltip at once (no hover delay); `Escape` closes it and focus stays on the trigger; `Tab` away closes it; the tooltip never takes or traps focus. `Escape` is taken only while the tooltip is open: closing removes the trigger's `aria-describedby` at once, and a page that reads open overlays (`useEscapeToCancel`) counts a tooltip only while a control still points to it, so the next `Escape` reaches the page even while the leave animation runs. Tests: `tooltip.test.ts` › keyboard map (spec).
 - Nested overlays: while open, the tooltip joins the shared overlay layer stack (`useOverlayLayer`) as a transient layer (it never takes focus, so it does not pause a dialog's focus trap). Inside a `Dialog`, `Drawer` or `Popover`, the first `Escape` closes only the tooltip; the next one reaches the host. Tests: `tooltip.test.ts` › inside an open Dialog, Escape closes only the tooltip.
 - ARIA: `role="tooltip"` on the panel; the slotted control references the panel via `aria-describedby` (merged into a WebKit `Button` / `IconButton` or native control at render, otherwise forwarded onto the first focusable element in the slot after mount; on the wrapper only when the slot has none). The wrapper itself has no `role` and no tab stop. `aria-hidden="true"` when `data-state="closed"`.
 - Contrast ≥4.5:1 — text against surface verified in both light and dark modes.
@@ -33453,13 +33533,22 @@ Composable `@aziontech/webkit/use-focus-trap`. The signatures and option tables 
 
 ```ts
 import { useFocusTrap } from '@aziontech/webkit/use-focus-trap'
+import type { UseFocusTrapOptions } from '@aziontech/webkit/use-focus-trap'
 ```
 
 ## `useFocusTrap`
 
 ```ts
-function useFocusTrap(containerEl: MaybeRefOrGetter<HTMLElement | null | undefined>, active: MaybeRefOrGetter<boolean>, isTop: MaybeRefOrGetter<boolean> = true): void
+function useFocusTrap(containerEl: MaybeRefOrGetter<HTMLElement | null | undefined>, active: MaybeRefOrGetter<boolean>, isTop: MaybeRefOrGetter<boolean> = true, options: UseFocusTrapOptions = {}): void
 ```
+
+## `UseFocusTrapOptions`
+
+Options of `useFocusTrap`.
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `initialFocus` | `'first' \| 'field'` | no | What takes focus when the trap turns on, after an element marked `data-autofocus`: the first tabbable element, or the first form field (falling back to the first tabbable element when there is none). |
 
 ---
 

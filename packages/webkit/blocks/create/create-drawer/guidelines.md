@@ -69,6 +69,10 @@ In the Certificate state the drawer imports a TLS certificate. A `ToggleGroup` p
 
 One `ConfirmDialog v-bind="guard.dialogProps"` from `useUnsavedChanges`, with Keep editing (focused) and a danger Discard changes. While the form differs from what it opened with, Escape, an overlay tap and Close open it instead of closing the drawer; a clean form closes at once.
 
+### M. Shortcut keycap — `Kbd` (optional)
+
+A small `Kbd` (`aria-hidden`) inside the primary button shows its keyboard shortcut (⌘ S to save, ⌘ Enter to submit or run, Ctrl off Apple); the button carries the same keys in `aria-keyshortcuts`.
+
 ## Data
 
 The block takes its option lists, its starting values and the save state through props and emits the values; it fetches and saves nothing. `CreateDrawerProps`, `CreateDrawerValues`, `CreateDrawerEnvironment` and `CreateDrawerCertificate` are exported from `create-drawer.vue`, and `sample.ts` holds the environments and certificates the block renders when those props are left out.
@@ -168,6 +172,7 @@ Then delete `sample.ts` and its import.
 ## Accessibility
 
 - The drawer traps focus while open, moves it to the first field on open and returns it to the trigger on close.
+- **⌘ Enter submits the drawer (`Ctrl Enter` off Apple).** `useShortcuts` binds `meta+enter` to the drawer form's `requestSubmit()`, with the form as the shortcut's element, so with two drawers stacked only the top one submits. It stays inert while saving; the submit button carries `aria-keyshortcuts` and an `aria-hidden` `Kbd`, and the `?` dialog lists the action under Drawer.
 - The `form` has an `aria-label` that matches the title; `DrawerTitle` names the dialog.
 - Every select trigger is described by its `Field.Description` (or its `Field.Error`) through the `Field`, so the consequence is read with the value.
 - Required fields carry the Required marker from the start; an error is a `Field.Error` with `role="alert"` and the control is `aria-invalid`.

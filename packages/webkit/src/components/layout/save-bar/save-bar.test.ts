@@ -2,7 +2,7 @@ import '../../../test/reflow.css'
 
 import { render, within } from '@testing-library/vue'
 import { describe, expect, it, vi } from 'vitest'
-import { nextTick, ref } from 'vue'
+import { defineComponent, nextTick, ref } from 'vue'
 
 import Centered from '../../../../examples/save-bar/centered.vue'
 import Default from '../../../../examples/save-bar/default.vue'
@@ -157,6 +157,57 @@ describe('SaveBar', () => {
     document.body.appendChild(host)
     return host
   }
+
+  describe('save shortcut', () => {
+    const press = (init: ConstructorParameters<typeof KeyboardEvent>[1]) => {
+      const event = new KeyboardEvent('keydown', { bubbles: true, cancelable: true, ...init })
+      document.body.dispatchEvent(event)
+      return event
+    }
+    const apple = /mac/i.test(navigator.platform || navigator.userAgent)
+    const saveKeys = apple ? { key: 's', metaKey: true } : { key: 's', ctrlKey: true }
+
+    it('emits save on Command S or Control S and prevents the browser save', async () => {
+      const onSave = vi.fn()
+      const { unmount } = render(SaveBar, { attrs: { onSave } })
+      await nextTick()
+      const event = press(saveKeys)
+      expect(onSave).toHaveBeenCalledTimes(1)
+      expect(onSave.mock.calls[0]![0]).toBe(event)
+      expect(event.defaultPrevented).toBe(true)
+      unmount()
+      press(saveKeys)
+      expect(onSave).toHaveBeenCalledTimes(1)
+    })
+
+    it('fires while typing in a field, and not on a bare S', async () => {
+      const onSave = vi.fn()
+      const Host = defineComponent({
+        components: { SaveBar },
+        setup: () => ({ onSave }),
+        template:
+          '<div><input aria-label="Name" data-testid="field" /><SaveBar @save="onSave" /></div>'
+      })
+      const { getByTestId } = render(Host)
+      await nextTick()
+      const field = getByTestId('field')
+      field.focus()
+      field.dispatchEvent(
+        new KeyboardEvent('keydown', { bubbles: true, cancelable: true, key: 's' })
+      )
+      expect(onSave).not.toHaveBeenCalled()
+      field.dispatchEvent(
+        new KeyboardEvent('keydown', { bubbles: true, cancelable: true, ...saveKeys })
+      )
+      expect(onSave).toHaveBeenCalledTimes(1)
+    })
+
+    it('leaves the browser save alone when nothing listens to save', async () => {
+      render(SaveBar)
+      await nextTick()
+      expect(press(saveKeys).defaultPrevented).toBe(false)
+    })
+  })
 
   describe('in a narrow box', () => {
     const mountIn = (width: number) =>

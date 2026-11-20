@@ -132,6 +132,7 @@ Then delete `sample.ts` and its import.
 - Links that open a new tab add "(opens in a new tab)" in visually hidden text; decorative icons are `aria-hidden`.
 - Every icon-only button has an `aria-label` and a `Tooltip` with the same words, e.g. "Resource actions", "Add domain".
 - Status uses a `StatusIndicator` with a text label, never color alone.
+- In the build variants (Application build, Resource build, Resource build connected), `⌘ S` (`Ctrl S` off Apple) saves while the `SaveBar` shows unsaved changes, the same as Save; with no changes it does nothing. Save carries `aria-keyshortcuts` and a `Kbd` keycap.
 
 ## States
 

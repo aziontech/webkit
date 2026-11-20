@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/create/create-release-impact/create-release-impact.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-release-impact")`
-- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Badge](../../components/badge.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), [ConfirmDialog](../../components/confirm-dialog.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [Input](../../components/input.md), [OverflowCount](../../components/overflow-count.md), [PageHeader](../../components/page-header.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [Skeleton](../../components/skeleton.md), [Spinner](../../components/spinner.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md)
+- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Badge](../../components/badge.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), [ConfirmDialog](../../components/confirm-dialog.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [Input](../../components/input.md), [Kbd](../../components/kbd.md), [OverflowCount](../../components/overflow-count.md), [PageHeader](../../components/page-header.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [Skeleton](../../components/skeleton.md), [Spinner](../../components/spinner.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-shortcuts`
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-ui-states`, `webkit-errors`
 
 ## Asked as
@@ -68,6 +68,10 @@ The `Card` footer sums the reach in one sentence: projects, environments and Dep
 ### Before the review: choosing the Deployment Settings
 
 When the release starts from the settings rather than from a service, a ChooseSettings step comes first, with the same page frame and footer. One sentence says what a Deployment Setting binds and that picking one deploys into everything that uses it. Below it, a large search `Input` counting the settings, and on the end side the number selected with transparent Select all and Clear. The settings are horizontal `Field` choice cards with a `Checkbox`, grouped under a small heading (Your Deployment Settings, Managed): the name with a Shared (warning) or Managed `Tag`, the policy line, up to three environment `Tag`s and an `OverflowCount` chip (+N) that names the rest from the keyboard and to screen readers, and the workloads it affects, a `Skeleton` while that count loads. An inactive setting cannot be picked: it sits in its own group as a dashed note with an Inactive `Tag`, one sentence and a link to activate it. A search with no match shows a small `EmptyState` with Clear search. Continue (primary) stays disabled, with the reason in the footer hint, until one setting is selected.
+
+### H. Shortcut keycap — `Kbd` (optional)
+
+A small `Kbd` (`aria-hidden`) inside the primary button shows its keyboard shortcut (⌘ S to save, ⌘ Enter to submit or run, Ctrl off Apple); the button carries the same keys in `aria-keyshortcuts`.
 
 ## Data
 
@@ -155,6 +159,7 @@ Then delete `sample.ts` and its import.
 - The Impact region is `aria-busy` while loading and announces it in a `role="status"` line.
 - In ChooseSettings each group is a `role="group"` named by its heading, each choice card is a `label` around its `Checkbox`, the selected count is a polite live region, and a loading workloads count is read as text rather than a bare `Skeleton`.
 - The `ConfirmDialog` traps focus and returns it to Deploy release.
+- `⌘ Enter` (`Ctrl Enter` off Apple) opens the deploy confirmation, the same as Deploy release, and does nothing while the release can't be deployed; the release is only deployed from the confirmation. Deploy release carries `aria-keyshortcuts` and a `Kbd` keycap.
 
 ## States
 
@@ -195,6 +200,7 @@ Each variant is the same screen in another state: `get_block("create/create-rele
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import Field from '@aziontech/webkit/field'
   import Input from '@aziontech/webkit/input'
+  import Kbd from '@aziontech/webkit/kbd'
   import PageHeader from '@aziontech/webkit/page-header'
   import SaveBar from '@aziontech/webkit/save-bar'
   import Select from '@aziontech/webkit/select'
@@ -205,6 +211,7 @@ Each variant is the same screen in another state: `get_block("create/create-rele
   import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
 
   import { sampleImpact, sampleResources } from './sample'
@@ -494,6 +501,16 @@ Each variant is the same screen in another state: `get_block("create/create-rele
     confirmOpen.value = false
     deploy(event)
   }
+
+  useShortcuts({
+    keys: 'meta+enter',
+    label: 'Deploy release',
+    group: 'Page',
+    when: () => canDeploy.value && !confirmOpen.value,
+    handler: () => {
+      confirmOpen.value = true
+    }
+  })
 
   watch(
     () => [props.deploying, props.deployed, props.deployError],
@@ -1189,13 +1206,22 @@ Each variant is the same screen in another state: `get_block("create/create-rele
               <div class="w-full md:w-fit">
                 <Button
                   class="w-full"
-                  :label="deploying ? 'Deploying…' : 'Deploy release'"
                   variant="primary"
                   size="medium"
                   icon="az az-cloud-upload"
                   :disabled="!canDeploy"
                   :loading="deploying"
-                />
+                  :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
+                >
+                  {{ deploying ? 'Deploying…' : 'Deploy release' }}
+                  <Kbd
+                    v-if="!deploying"
+                    meta
+                    key-name="enter"
+                    size="small"
+                    aria-hidden="true"
+                  />
+                </Button>
               </div>
             </template>
           </ConfirmDialog>

@@ -22,9 +22,15 @@ const openDrawer = async (label: RegExp) => {
   return dialog() as HTMLElement
 }
 
+const visibleText = (element: HTMLElement) => {
+  const copy = element.cloneNode(true) as HTMLElement
+  copy.querySelectorAll('[aria-hidden="true"]').forEach((node) => node.remove())
+  return copy.textContent?.trim()
+}
+
 const buttonIn = (root: Document | HTMLElement, text: string) =>
   Array.from(root.querySelectorAll('button')).find(
-    (button) => button.textContent?.trim() === text
+    (button) => visibleText(button) === text
   ) as HTMLButtonElement
 
 const wait = { timeout: 4000 }
@@ -165,5 +171,33 @@ describe('variables data contract', () => {
   it('opens on the create drawer with defaultOpen', async () => {
     render(VariablesList, { props: { variables: given, defaultOpen: true } })
     await waitFor(() => expect(dialog()?.textContent).toContain('Create Variable'))
+  })
+})
+
+const apple = /mac/i.test(navigator.platform || navigator.userAgent)
+const pressShortcut = (key: string, target: Element = document.body) => {
+  const event = new KeyboardEvent('keydown', {
+    key,
+    metaKey: apple,
+    ctrlKey: !apple,
+    bubbles: true,
+    cancelable: true
+  })
+  target.dispatchEvent(event)
+  return event
+}
+
+describe('edit-variables keyboard', () => {
+  it('submits the create drawer on Command Enter from a field', async () => {
+    const { emitted } = render(VariablesList)
+    const { panel, key, value } = await openCreate()
+    const save = Array.from(panel.querySelectorAll('button')).find(
+      (button) => visibleText(button) === 'Save'
+    ) as HTMLButtonElement
+    expect(save.getAttribute('aria-keyshortcuts')).toBe('Meta+Enter Control+Enter')
+    await userEvent.type(key, 'NEW_KEY')
+    await userEvent.type(value, 'on')
+    expect(pressShortcut('Enter', value).defaultPrevented).toBe(true)
+    await waitFor(() => expect(emitted().save).toHaveLength(1))
   })
 })

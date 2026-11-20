@@ -219,6 +219,8 @@ A file's object key is `path + entry.name`. To go live on Azion Object Storage, 
 - The `Breadcrumb` crumbs are links the keyboard reaches in order; the last crumb is the current folder.
 - Folder and `..` names are buttons, so a keyboard user opens a folder or goes up with Tab and Enter; the row click is the pointer shortcut and the Open option in the row menu repeats it.
 - Focus order follows reading order: search, Refresh, Download CSV, Columns, path, Add to files, the rows.
+- `/` focuses the folder search from anywhere on the page, except while typing in a field.
+- The rows are one tab stop: Arrow Up and Arrow Down move between rows, Home and End jump to the first and last, Enter opens the focused folder or file (or goes up from `..`), Space selects a file when moving is on, and Delete or Backspace opens the delete dialog for a file or folder. After a delete, focus lands on the next row.
 - `TableCellTime` names the author and reads the absolute time to screen readers.
 - The drop overlay is `aria-hidden`: dragging is a pointer path, and Add to files with Browse files is the keyboard path to the same upload.
 - `UploadProgress` is a region named File transfers with a polite status that announces each file finishing and the outcome; percentages are not announced. The toast repeats the outcome for people who collapsed the card.
@@ -526,7 +528,7 @@ Each variant is the same screen in another state: `get_block("view/view-file-bro
     if (item.kind === 'folder') openFolder(path.value + item.name)
     emit('open', event, item.entry)
   }
-  const onRowClick = (event: MouseEvent, item: FileRow) => {
+  const onRowClick = (event: MouseEvent | KeyboardEvent, item: FileRow) => {
     if (item.kind === 'parent') goUp()
     else openEntry(event, item)
   }
@@ -555,6 +557,10 @@ Each variant is the same screen in another state: `get_block("view/view-file-bro
     if (value !== 'delete') return
     pending.value = item
     deleteOpen.value = true
+  }
+
+  const onRowRemove = (event: KeyboardEvent, item: FileRow) => {
+    if (item.kind !== 'parent') onRowAction(event, 'delete', item)
   }
 
   const confirmDelete = (event: Event) => {
@@ -794,6 +800,7 @@ Each variant is the same screen in another state: `get_block("view/view-file-bro
               :loading="loading"
               export-filename="files.csv"
               @row-click="onRowClick"
+              @row-remove="onRowRemove"
             >
               <template #toolbar="{ selectedRows, selectedCount, clearSelection }">
                 <div

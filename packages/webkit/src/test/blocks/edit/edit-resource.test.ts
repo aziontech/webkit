@@ -170,3 +170,37 @@ describe('edit-resource data contract', () => {
     )
   })
 })
+
+const apple = /mac/i.test(navigator.platform || navigator.userAgent)
+const pressShortcut = (key: string, target: Element = document.body) => {
+  const event = new KeyboardEvent('keydown', {
+    key,
+    metaKey: apple,
+    ctrlKey: !apple,
+    bubbles: true,
+    cancelable: true
+  })
+  target.dispatchEvent(event)
+  return event
+}
+
+describe('edit-resource save shortcut', () => {
+  it('saves on Command S only while the form has changes, and labels Save with the keys', async () => {
+    const { emitted } = render(EditResource)
+    const clean = pressShortcut('s')
+    expect(clean.defaultPrevented).toBe(false)
+    expect(emitted().submit).toBeUndefined()
+    const name = document.getElementById('resource-name') as HTMLInputElement
+    await fireEvent.update(name, 'acme-shop')
+    const save = await waitFor(() => screen.getByRole('button', { name: 'Save' }))
+    expect(save.getAttribute('aria-keyshortcuts')).toBe('Meta+S Control+S')
+    expect(save.querySelector('[data-testid="kbd"]')?.getAttribute('aria-hidden')).toBe('true')
+    name.focus()
+    const event = pressShortcut('s', name)
+    expect(event.defaultPrevented).toBe(true)
+    const submits = emitted().submit as [Event, { name: string }][]
+    expect(submits).toHaveLength(1)
+    expect(submits[0]![0]).toBe(event)
+    expect(submits[0]![1].name).toBe('acme-shop')
+  })
+})

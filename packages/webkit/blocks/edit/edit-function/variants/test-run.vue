@@ -10,6 +10,7 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
+  import Kbd from '@aziontech/webkit/kbd'
   import KeyValueList from '@aziontech/webkit/key-value-list'
   import Link from '@aziontech/webkit/link'
   import LogViewerContent from '@aziontech/webkit/log-viewer-content'
@@ -32,6 +33,8 @@
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
   import Trace, { type TraceSpan } from '@aziontech/webkit/trace'
+  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
+  import type { editor as MonacoEditor } from 'monaco-editor'
   import { computed, nextTick, onBeforeUnmount, reactive, ref, useId, watch } from 'vue'
 
   import { sampleFields, sampleService } from '../sample'
@@ -218,6 +221,20 @@
   }
 
   onBeforeUnmount(() => clearTimeout(runTimer))
+  useShortcuts({
+    keys: 'meta+enter',
+    label: 'Run test',
+    group: 'Page',
+    when: () => activeTab.value === 'code' && !running.value,
+    handler: () => runTest()
+  })
+  const onSourceReady = async (editor: unknown) => {
+    const { KeyCode, KeyMod } = await import('monaco-editor')
+    const sourceEditor = editor as MonacoEditor.ICodeEditor
+    sourceEditor.addCommand(KeyMod.CtrlCmd | KeyCode.Enter, () => {
+      if (!running.value) runTest()
+    })
+  }
   const form = reactive({ ...sampleService })
   const fields = ref<SchemaField[]>(structuredClone(sampleFields))
   const expanded = ref(new Set<string>())
@@ -399,6 +416,10 @@
     baseline.value = snapshot()
     toast.success(`${form.name} saved.`)
   }
+  const onSaveShortcut = () => {
+    if (!dirty.value || saving.value) return
+    save()
+  }
 </script>
 
 <template>
@@ -450,13 +471,21 @@
                 </p>
                 <span class="ms-auto flex">
                   <Button
-                    label="Run test"
                     variant="secondary"
                     size="medium"
                     icon="az az-play"
                     :loading="running"
+                    :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
                     @click="runTest"
-                  />
+                  >
+                    Run test
+                    <Kbd
+                      meta
+                      key-name="enter"
+                      size="small"
+                      aria-hidden="true"
+                    />
+                  </Button>
                 </span>
               </div>
               <div class="flex min-h-0 flex-1 flex-col">
@@ -486,6 +515,7 @@
                                 :loader="loadMonaco"
                                 :invalid="!!codeError"
                                 aria-label="Source code"
+                                @ready="onSourceReady"
                                 @update:model-value="codeError = ''"
                               />
                             </div>
@@ -1321,7 +1351,10 @@
       leave-active-class="transition-[translate,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
       leave-to-class="translate-y-2 opacity-0"
     >
-      <SaveBar v-if="dirty || saving">
+      <SaveBar
+        v-if="dirty || saving"
+        @save="onSaveShortcut"
+      >
         <template
           v-if="saveError"
           #leading
@@ -1345,12 +1378,20 @@
             @click="discard"
           />
           <Button
-            label="Save"
             variant="primary"
             size="medium"
             :loading="saving"
             @click="save"
-          />
+            aria-keyshortcuts="Meta+S Control+S"
+          >
+            Save
+            <Kbd
+              meta
+              size="small"
+              aria-hidden="true"
+              >S</Kbd
+            >
+          </Button>
         </template>
       </SaveBar>
     </Transition>

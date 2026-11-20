@@ -23,9 +23,15 @@ const openDrawer = async (label: RegExp) => {
   return dialog() as HTMLElement
 }
 
+const visibleText = (node: HTMLElement) => {
+  const copy = node.cloneNode(true) as HTMLElement
+  copy.querySelectorAll('[aria-hidden="true"]').forEach((hidden) => hidden.remove())
+  return copy.textContent?.trim()
+}
+
 const buttonIn = (root: HTMLElement, text: string) =>
   Array.from(root.querySelectorAll('button')).find(
-    (button) => button.textContent?.trim() === text
+    (button) => visibleText(button) === text
   ) as HTMLButtonElement
 
 const wait = { timeout: 4000 }
@@ -301,5 +307,73 @@ describe('create-drawer#FunctionInstance', () => {
     await userEvent.keyboard('{Escape}')
     await waitFor(() => expect(dialogs()).toHaveLength(0), wait)
     expect(document.querySelector('[role="alertdialog"]')).toBeNull()
+  })
+})
+
+const apple = /mac/i.test(navigator.platform || navigator.userAgent)
+
+const pressSubmitShortcut = (target: Element) =>
+  target.dispatchEvent(
+    new KeyboardEvent('keydown', {
+      key: 'Enter',
+      metaKey: apple,
+      ctrlKey: !apple,
+      bubbles: true,
+      cancelable: true
+    })
+  )
+
+describe('create-drawer keyboard', () => {
+  it('opens with the cursor in the first field and submits with Cmd or Ctrl Enter', async () => {
+    const view = render(CreateInDrawer, {
+      props: { open: true, 'onUpdate:open': () => undefined }
+    })
+    const dialog = await screen.findByRole('dialog')
+    const environment = within(dialog).getByRole('combobox', { name: /Environment/ })
+    await waitFor(() => expect(document.activeElement).toBe(environment), wait)
+    const submit = within(dialog).getByRole('button', { name: 'Add Domain' })
+    expect(submit.getAttribute('aria-keyshortcuts')).toBe('Meta+Enter Control+Enter')
+    const domain = within(dialog).getByRole('textbox', { name: /Domain/ })
+    await fireEvent.update(domain, 'acme-store')
+    await fireEvent.click(environment)
+    await fireEvent.click(await screen.findByRole('option', { name: 'Production' }))
+    pressSubmitShortcut(domain)
+    await waitFor(() => expect(view.emitted('submit')).toHaveLength(1), wait)
+    const [event, values] = view.emitted<unknown[]>('submit')?.[0] ?? []
+    expect(event).toBeInstanceOf(Event)
+    expect(values).toMatchObject({ domain: 'acme-store', environment: 'Production' })
+  })
+
+  it('ignores the shortcut while the save is in flight', async () => {
+    const view = render(CreateInDrawer, {
+      props: { open: true, loading: true, 'onUpdate:open': () => undefined }
+    })
+    const dialog = await screen.findByRole('dialog')
+    pressSubmitShortcut(dialog)
+    await new Promise((resolve) => setTimeout(resolve, 50))
+    expect(view.emitted('submit')).toBeUndefined()
+  })
+
+  it('submits only the top drawer when Create Environment stacks above Add Domain', async () => {
+    render(CreateEnvironment)
+    await fireEvent.click(screen.getByRole('button', { name: 'Add Domain' }))
+    const domain = await waitFor(() => {
+      expect(dialogs()).toHaveLength(1)
+      return lastDialog()
+    })
+    await fireEvent.click(within(domain).getByRole('combobox', { name: /^Environment/ }))
+    await fireEvent.click(await screen.findByRole('option', { name: 'Create Environment' }))
+    const stacked = await waitFor(() => {
+      expect(dialogs()).toHaveLength(2)
+      return lastDialog()
+    })
+    const name = within(stacked).getByRole('textbox', { name: /^Name\b/ })
+    await fireEvent.update(name, 'Canary')
+    pressSubmitShortcut(name)
+    await waitFor(() => expect(dialogs()).toHaveLength(1), wait)
+    expect(within(domain).getByRole('combobox', { name: /^Environment/ }).textContent).toContain(
+      'Canary'
+    )
+    expect(domain.textContent).not.toContain('This field is required.')
   })
 })

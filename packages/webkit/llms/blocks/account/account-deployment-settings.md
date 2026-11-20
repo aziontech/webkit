@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/account/account-deployment-settings/account-deployment-settings.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-deployment-settings")`
-- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), [Pagination](../../components/pagination.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [RadioGroup](../../components/radio-group.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Skeleton](../../components/skeleton.md), [Switch](../../components/switch.md), [Table](../../components/table.md), `TableCellActions`, `TableCellStatus`, `TableCellTime`, [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`
+- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [PageHeader](../../components/page-header.md), [Pagination](../../components/pagination.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [RadioGroup](../../components/radio-group.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Skeleton](../../components/skeleton.md), [Switch](../../components/switch.md), [Table](../../components/table.md), `TableCellActions`, `TableCellStatus`, `TableCellTime`, [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`
 - Skills: `webkit-form`, `webkit-tables`, `webkit-lists`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -63,6 +63,10 @@ On the first load (`loading` with no `settings`), `Skeleton`s take the place of 
 ### Outcomes — through `toast`
 
 Saving defaults, rebinding, creating, editing, cloning and deleting end in a toast; a rebind onto a shared setting is a warning. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
+
+### I. Shortcut keycap — `Kbd` (optional)
+
+A small `Kbd` (`aria-hidden`) inside the primary button shows its keyboard shortcut (⌘ S to save, ⌘ Enter to submit or run, Ctrl off Apple); the button carries the same keys in `aria-keyshortcuts`.
 
 ## Data
 
@@ -149,6 +153,7 @@ Then delete `sample.ts` and its import, and persist `bind`, `create`, `update`, 
 - The filter is named Filter Deployment Settings; Refresh and Download CSV are icon buttons with an accessible name and a tooltip; the row menu is named `Actions for <setting>`.
 - The Services cell is focusable so its tooltip with the service names is reachable by keyboard.
 - The SaveBar motion has a `motion-reduce` fallback.
+- `⌘ S` (`Ctrl S` off Apple) saves the deployment defaults while the `SaveBar` shows unsaved changes, the same as Save, and stops the browser's own save; with no changes it does nothing. Save carries `aria-keyshortcuts` and a `Kbd` keycap.
 
 ## States
 
@@ -193,6 +198,7 @@ Each variant is the same screen in another state: `get_block("account/account-de
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
+  import Kbd from '@aziontech/webkit/kbd'
   import PageHeader from '@aziontech/webkit/page-header'
   import Pagination from '@aziontech/webkit/pagination-root'
   import PanelBody from '@aziontech/webkit/panel-body'
@@ -325,7 +331,7 @@ Each variant is the same screen in another state: `get_block("account/account-de
   })
 
   const emit = defineEmits<{
-    save: [event: MouseEvent, values: DeploymentSettingsDefaultsValues]
+    save: [event: MouseEvent | KeyboardEvent, values: DeploymentSettingsDefaultsValues]
     discard: [event: MouseEvent]
     refresh: [event: MouseEvent]
     bind: [binding: DeploymentSettingsBinding]
@@ -433,10 +439,14 @@ Each variant is the same screen in another state: `get_block("account/account-de
     Object.assign(form, saved)
     emit('discard', event)
   }
-  const save = (event: MouseEvent) => {
+  const save = (event: MouseEvent | KeyboardEvent) => {
     if (props.saving) return
     toast.dismiss(SAVE_TOAST)
     emit('save', event, { ...form })
+  }
+  const onSaveShortcut = (event: KeyboardEvent) => {
+    if (!dirty.value || props.saving) return
+    save(event)
   }
   const showFailure = () => {
     toast.error("The deployment defaults weren't saved.", {
@@ -1215,7 +1225,10 @@ Each variant is the same screen in another state: `get_block("account/account-de
         leave-active-class="transition-[translate,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
         leave-to-class="translate-y-2 opacity-0"
       >
-        <SaveBar v-if="dirty || saving">
+        <SaveBar
+          v-if="dirty || saving"
+          @save="onSaveShortcut"
+        >
           You have unsaved changes.
           <template #actions>
             <Button
@@ -1227,12 +1240,20 @@ Each variant is the same screen in another state: `get_block("account/account-de
               @click="discard"
             />
             <Button
-              label="Save"
               variant="primary"
               size="medium"
               :loading="saving"
               @click="save"
-            />
+              aria-keyshortcuts="Meta+S Control+S"
+            >
+              Save
+              <Kbd
+                meta
+                size="small"
+                aria-hidden="true"
+                >S</Kbd
+              >
+            </Button>
           </template>
         </SaveBar>
       </Transition>

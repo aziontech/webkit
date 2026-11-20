@@ -51,6 +51,10 @@ Choice cards, a `RadioGroup` with `variant="card"` and one item per environment 
 
 Every project the chosen environment's shared Deployment Settings deploy to, grouped by environment, the current one tagged Selected, with its domains shown like the Project card. `PanelFooter` holds one primary medium `Button` reading Deploy on the right, of `type="submit"`. On its left, once a version differs from the live one, one muted line counts the changes and names the environment they go live in.
 
+### I. Shortcut keycap — `Kbd` (optional)
+
+A small `Kbd` (`aria-hidden`) inside the primary button shows its keyboard shortcut (⌘ S to save, ⌘ Enter to submit or run, Ctrl off Apple); the button carries the same keys in `aria-keyshortcuts`.
+
 ## Data
 
 The block takes the deploy targets through props and emits every action; it fetches and deploys nothing. The record types (`DeployDrawerResource`, `DeployDrawerProjectGroup`, `DeployDrawerEnvironment`, `DeployDrawerImpact`, `DeployDrawerBuild`, `DeployDrawerValues`) and `DeployDrawerProps` are exported from `create-deploy-drawer.vue`, and `sample.ts` holds the sample records the Service drawer renders when they are left out (never while `loading` or `error` is set).
@@ -150,6 +154,8 @@ Then delete `sample.ts` and its import. The page reports the run through the toa
 ## Accessibility
 
 - The drawer traps focus while open and returns it to the Deploy trigger on close.
+- Opening the drawer moves focus to its first control.
+- **⌘ Enter deploys (`Ctrl Enter` off Apple)** through the form's submit, the same path as Deploy. It stays inert while Deploy is disabled (loading, load error, a build running, no environment); Deploy carries `aria-keyshortcuts` and an `aria-hidden` `Kbd`, and the `?` dialog lists it under Drawer.
 - The `form` and the `ToggleGroup` carry `aria-label`s; the environment group is named by its `aria-label`.
 - The version menu is a `role="menu"` moved with the arrow keys, each version a `menuitem` named by its version, author and age; the current one carries `aria-current`; search inputs have an `aria-label` that matches the placeholder.
 - Each impacted environment group has an `aria-label` with its count, e.g. "Projects impacted in Production (3)".

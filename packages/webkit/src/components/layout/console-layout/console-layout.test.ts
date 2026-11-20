@@ -517,6 +517,23 @@ describe('ConsoleLayout', () => {
     })
   })
 
+  describe('shortcuts list', () => {
+    it('opens one shortcuts list on ? that lists the search shortcut', async () => {
+      const { unmount } = mount()
+      await nextTick()
+      document.body.dispatchEvent(
+        new KeyboardEvent('keydown', { key: '?', shiftKey: true, bubbles: true, cancelable: true })
+      )
+      await waitFor(() => {
+        const dialogs = Array.from(document.body.querySelectorAll('[role="dialog"]'))
+        expect(dialogs).toHaveLength(1)
+        expect(dialogs[0]!.textContent).toContain('Keyboard shortcuts')
+        expect(dialogs[0]!.textContent).toContain('Search pages and commands')
+      })
+      unmount()
+    })
+  })
+
   describe('active row in view', () => {
     const longNavigation: ConsoleLayoutNavGroup[] = [
       {

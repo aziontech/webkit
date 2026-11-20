@@ -140,4 +140,43 @@ describe('account/tokens', () => {
       name: 'Local CLI'
     })
   })
+
+  describe('keyboard', () => {
+    const bodyRows = () =>
+      Array.from(document.body.querySelectorAll<HTMLElement>('[data-focus-row]'))
+    const rowOf = (name: string) => bodyRows().find((row) => row.textContent?.includes(name))!
+    const key = (target: Element, init: ConstructorParameters<typeof KeyboardEvent>[1]) =>
+      target.dispatchEvent(
+        new KeyboardEvent('keydown', { bubbles: true, cancelable: true, ...init })
+      )
+
+    it('asks to revoke an active token on Delete', async () => {
+      render(Tokens)
+      await waitFor(() => expect(bodyRows().length).toBe(4))
+      const row = rowOf('Local CLI')
+      row.focus()
+      key(row, { key: 'Delete' })
+      await waitFor(() => expect(dialog()?.textContent).toContain('Revoke token'))
+    })
+
+    it('deletes a revoked token after the confirm and focuses the next row', async () => {
+      const view = render(Tokens)
+      await waitFor(() => expect(bodyRows().length).toBe(4))
+      const list = bodyRows()
+      const row = rowOf('Nightly export')
+      const index = list.indexOf(row)
+      const expected = (list[index + 1] ?? list[index - 1])!.textContent!.slice(0, 20)
+      row.focus()
+      key(row, { key: 'Delete' })
+      await waitFor(() => expect(dialog()?.textContent).toContain('Delete token'))
+      await fireEvent.click(buttonByText('Delete token', dialog()!))
+      await waitFor(() => expect(dialog()).toBeNull())
+      await waitFor(() => {
+        expect(document.activeElement?.hasAttribute('data-focus-row')).toBe(true)
+        expect(document.activeElement?.textContent).toContain(expected)
+      })
+      expect(bodyRows()).toHaveLength(3)
+      expect(view.emitted<unknown[]>('delete')).toHaveLength(1)
+    })
+  })
 })

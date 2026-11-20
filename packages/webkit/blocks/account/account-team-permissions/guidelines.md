@@ -137,6 +137,11 @@ Then delete `sample.ts` and its import.
 - The filter is named Filter teams; Refresh and Download CSV carry an accessible name and a tooltip.
 - The Back button of the creation frame is named `Back to Teams and permissions`.
 - Table name links say where they go on their tooltip; the row menu is named `Actions for <team>`.
+- `/` focuses the property filter from anywhere on the page, except while typing in a field.
+- The team rows are one tab stop: Arrow Up and Arrow Down move between rows, Home and End jump to the first and last, Enter edits the focused team as the row menu's Edit does, and Delete or Backspace opens the delete dialog. After a delete, focus lands on the next row.
+- Create Team opens with focus in the Name field.
+- `⌘ Enter` (`Ctrl Enter` off Apple) submits Create Team from any field, the same as Create.
+- In Edit Team, `⌘ S` (`Ctrl S` off Apple) saves while the team has unsaved changes, the same as Save changes; with no changes it does nothing. Both buttons carry `aria-keyshortcuts` and a `Kbd` keycap.
 
 ## States
 

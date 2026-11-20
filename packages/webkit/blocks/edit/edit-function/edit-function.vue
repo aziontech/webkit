@@ -9,6 +9,7 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
+  import Kbd from '@aziontech/webkit/kbd'
   import Link from '@aziontech/webkit/link'
   import PageTabs from '@aziontech/webkit/page-tabs'
   import RadioGroup from '@aziontech/webkit/radio-group'
@@ -370,6 +371,10 @@
       return
     }
     emit('submit', event, { ...form, fields: structuredClone(toRaw(draftFields.value)) })
+  }
+  const onSaveShortcut = (event: KeyboardEvent) => {
+    if (!dirty.value || saving.value) return
+    save(event)
   }
 </script>
 
@@ -1170,7 +1175,10 @@
       leave-active-class="transition-[translate,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
       leave-to-class="translate-y-2 opacity-0"
     >
-      <SaveBar v-if="dirty || saving">
+      <SaveBar
+        v-if="dirty || saving"
+        @save="onSaveShortcut"
+      >
         <template
           v-if="saveError"
           #leading
@@ -1194,12 +1202,20 @@
             @click="discard"
           />
           <Button
-            label="Save"
             variant="primary"
             size="medium"
             :loading="saving"
             @click="save"
-          />
+            aria-keyshortcuts="Meta+S Control+S"
+          >
+            Save
+            <Kbd
+              meta
+              size="small"
+              aria-hidden="true"
+              >S</Kbd
+            >
+          </Button>
         </template>
       </SaveBar>
     </Transition>

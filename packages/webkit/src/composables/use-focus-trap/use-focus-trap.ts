@@ -6,10 +6,28 @@ import { tabbableIn } from '../../utils/tabbable'
 
 const AUTOFOCUS_SELECTOR = '[data-autofocus]:not([disabled])'
 
+const NOT_FIELD_INPUT_TYPES = new Set(['button', 'submit', 'reset', 'image', 'file', 'hidden'])
+
+/** Options of `useFocusTrap`. */
+export interface UseFocusTrapOptions {
+  /** What takes focus when the trap turns on, after an element marked `data-autofocus`: the first tabbable element, or the first form field (falling back to the first tabbable element when there is none). */
+  initialFocus?: 'first' | 'field'
+}
+
+const isField = (el: HTMLElement): boolean => {
+  const tag = el.tagName.toLowerCase()
+  if (tag === 'textarea' || tag === 'select') return true
+  if (tag === 'input') return !NOT_FIELD_INPUT_TYPES.has((el as HTMLInputElement).type)
+  if (el.isContentEditable) return true
+  const role = el.getAttribute('role')
+  return role === 'combobox' || role === 'textbox' || role === 'spinbutton'
+}
+
 export function useFocusTrap(
   containerEl: MaybeRefOrGetter<HTMLElement | null | undefined>,
   active: MaybeRefOrGetter<boolean>,
-  isTop: MaybeRefOrGetter<boolean> = true
+  isTop: MaybeRefOrGetter<boolean> = true,
+  options: UseFocusTrapOptions = {}
 ): void {
   useEventListener(
     () => (toValue(active) ? defaultDocument : undefined),
@@ -55,7 +73,9 @@ export function useFocusTrap(
       void nextTick(() => {
         const root = toValue(containerEl)
         if (!root) return
-        const first = root.querySelector<HTMLElement>(AUTOFOCUS_SELECTOR) ?? tabbableIn(root)[0]
+        const tabbable = tabbableIn(root)
+        const field = options.initialFocus === 'field' ? tabbable.find(isField) : undefined
+        const first = root.querySelector<HTMLElement>(AUTOFOCUS_SELECTOR) ?? field ?? tabbable[0]
         if (first) {
           first.focus()
         } else {

@@ -10,6 +10,7 @@
   import Field from '@aziontech/webkit/field'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
+  import Kbd from '@aziontech/webkit/kbd'
   import PageHeader from '@aziontech/webkit/page-header'
   import SaveBar from '@aziontech/webkit/save-bar'
   import SettingsGroup from '@aziontech/webkit/settings-group'
@@ -17,7 +18,8 @@
   import Table from '@aziontech/webkit/table'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
-  import { computed, nextTick, reactive, ref } from 'vue'
+  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
+  import { computed, nextTick, onMounted, reactive, ref } from 'vue'
 
   type PermissionAction = 'view' | 'edit'
 
@@ -157,6 +159,20 @@
       toast.success(`Team "${form.name.trim()}" created with ${selected.value.length} permissions.`)
     }, 700)
   }
+
+  const formEl = ref<HTMLFormElement | null>(null)
+  const nameEl = ref<InstanceType<typeof Input> | null>(null)
+
+  onMounted(() => nameEl.value?.focus())
+
+  useShortcuts({
+    keys: 'meta+enter',
+    label: 'Create team',
+    group: 'Page',
+    element: formEl,
+    when: () => !submitting.value,
+    handler: () => formEl.value?.requestSubmit()
+  })
 </script>
 
 <template>
@@ -188,6 +204,7 @@
       class="animate-page-enter motion-reduce:animate-none flex min-h-0 flex-1 flex-col overflow-auto"
     >
       <form
+        ref="formEl"
         class="flex min-h-0 flex-1 flex-col"
         aria-labelledby="create-team-title"
         novalidate
@@ -223,6 +240,7 @@
                       >
                         <Field.Label for="team-name">Name</Field.Label>
                         <Input
+                          ref="nameEl"
                           id="team-name"
                           v-model="form.name"
                           placeholder="Developers"
@@ -410,12 +428,20 @@
                 href="/account/teams"
               />
               <Button
-                label="Create"
                 variant="primary"
                 size="medium"
                 type="submit"
                 :loading="submitting"
-              />
+                :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
+              >
+                Create
+                <Kbd
+                  meta
+                  key-name="enter"
+                  size="small"
+                  aria-hidden="true"
+                />
+              </Button>
             </template>
           </SaveBar>
         </div>

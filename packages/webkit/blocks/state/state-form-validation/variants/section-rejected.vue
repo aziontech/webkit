@@ -11,6 +11,7 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
+  import Kbd from '@aziontech/webkit/kbd'
   import MultiSelect from '@aziontech/webkit/multi-select'
   import NumberInput from '@aziontech/webkit/number-input'
   import RadioGroup from '@aziontech/webkit/radio-group'
@@ -675,7 +676,10 @@
           </fieldset>
         </div>
 
-        <SaveBar variant="plain">
+        <SaveBar
+          variant="plain"
+          @save="submit"
+        >
           <template #actions>
             <Button
               type="button"
@@ -686,13 +690,21 @@
               @click="emit('cancel', $event)"
             />
             <Button
-              label="Save"
               variant="primary"
               size="medium"
               :loading="submitting"
               :disabled="reloading"
               type="submit"
-            />
+              aria-keyshortcuts="Meta+S Control+S"
+            >
+              Save
+              <Kbd
+                meta
+                size="small"
+                aria-hidden="true"
+                >S</Kbd
+              >
+            </Button>
           </template>
         </SaveBar>
       </form>

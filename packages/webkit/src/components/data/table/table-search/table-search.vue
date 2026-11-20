@@ -1,6 +1,7 @@
 <script setup lang="ts">
-  import { computed, inject, useAttrs } from 'vue'
+  import { computed, inject, ref, useAttrs } from 'vue'
 
+  import { useShortcuts } from '../../../../composables/use-shortcuts'
   import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
   import Input from '../../../input/input/input.vue'
@@ -37,6 +38,15 @@
   })
   const setFilter = (value: string) => ctx?.table.value?.setGlobalFilter(value)
 
+  const fieldEl = ref<InstanceType<typeof Input> | null>(null)
+
+  useShortcuts({
+    keys: '/',
+    label: () => t('tableSearch.focusShortcut'),
+    element: () => (fieldEl.value?.$el as HTMLElement | null | undefined) ?? null,
+    handler: () => fieldEl.value?.focus()
+  })
+
   if (!ctx) {
     console.warn('[webkit] TableSearch renders outside a Table and filters nothing.')
   }
@@ -44,6 +54,7 @@
 
 <template>
   <Input
+    ref="fieldEl"
     size="small"
     v-bind="$attrs"
     :data-testid="testId"

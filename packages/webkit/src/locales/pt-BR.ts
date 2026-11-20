@@ -412,7 +412,8 @@ export const ptBR: Messages = {
     accountMenuFor: '{initials}, menu da conta',
     searchPlaceholder: 'Buscar páginas e comandos',
     noMatch: 'Nenhuma página ou comando corresponde à busca.',
-    pages: 'Páginas'
+    pages: 'Páginas',
+    searchShortcut: 'Buscar páginas e comandos'
   },
   copyButton: {
     fallbackTitle: 'Copie manualmente',
@@ -938,6 +939,7 @@ export const ptBR: Messages = {
   },
   propertyFilter: {
     label: 'Filtrar',
+    focusShortcut: 'Focar na busca',
     placeholder: 'Filtrar por propriedade ou texto',
     suggestions: 'Sugestões',
     useText: 'Usar: “{text}”',
@@ -1156,7 +1158,8 @@ export const ptBR: Messages = {
   },
   tableSearch: {
     placeholder: 'Buscar',
-    label: 'Buscar na tabela'
+    label: 'Buscar na tabela',
+    focusShortcut: 'Focar na busca'
   },
   tableSortButton: {
     ascending: 'Ordenado em ordem crescente',
@@ -1368,6 +1371,9 @@ export const ptBR: Messages = {
   },
   searchTrigger: {
     label: 'Buscar'
+  },
+  saveBar: {
+    saveShortcut: 'Salvar alterações'
   },
   shortcutsDialog: {
     title: 'Atalhos de teclado',

@@ -7,6 +7,7 @@
   import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
   import Field from '@aziontech/webkit/field'
   import Input from '@aziontech/webkit/input'
+  import Kbd from '@aziontech/webkit/kbd'
   import KeyValueList from '@aziontech/webkit/key-value-list'
   import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
@@ -17,6 +18,7 @@
   import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup, { type ToggleGroupOption } from '@aziontech/webkit/toggle-group'
   import { useLocale } from '@aziontech/webkit/use-locale'
+  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import { computed, nextTick, reactive, ref, watch } from 'vue'
 
@@ -263,6 +265,15 @@ mr+L2DBwFXtW2qJfNedf/9rU
     }
     if (await guard.confirmLeave()) open.value = false
   }
+
+  useShortcuts({
+    keys: 'meta+enter',
+    label: 'Save certificate',
+    group: 'Drawer',
+    element: formEl,
+    when: () => open.value && !submitting.value,
+    handler: () => formEl.value?.requestSubmit()
+  })
 </script>
 
 <template>
@@ -454,16 +465,25 @@ mr+L2DBwFXtW2qJfNedf/9rU
           </fieldset>
         </PanelBody>
 
-        <PanelFooter
-          ><div class="flex w-full justify-end">
+        <PanelFooter>
+          <div class="flex w-full justify-end">
             <Button
               type="submit"
-              label="Save"
               variant="primary"
               size="medium"
               :loading="submitting"
-            /></div
-        ></PanelFooter>
+              :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
+            >
+              Save
+              <Kbd
+                meta
+                key-name="enter"
+                size="small"
+                aria-hidden="true"
+              />
+            </Button>
+          </div>
+        </PanelFooter>
       </form>
     </DrawerContent>
   </Drawer>

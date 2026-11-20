@@ -311,6 +311,10 @@
     }
   }
 
+  const onMethodRemove = (event: KeyboardEvent, method: BillingPaymentMethod) => {
+    if (!method.default) onMethodAction(event, 'remove', method)
+  }
+
   const removeMethod = (event: Event) => {
     const method = pendingRemoval.value
     if (!method) return
@@ -761,6 +765,7 @@
                   sortable
                   :bordered="false"
                   aria-label="Payment methods"
+                  @row-remove="onMethodRemove"
                 >
                   <template #cell-holder="{ row, value }">
                     <span class="flex min-w-0 items-center gap-(--spacing-xs)">

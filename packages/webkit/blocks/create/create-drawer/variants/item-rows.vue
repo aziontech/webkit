@@ -8,6 +8,7 @@
   import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
+  import Kbd from '@aziontech/webkit/kbd'
   import PageHeader from '@aziontech/webkit/page-header'
   import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
@@ -16,6 +17,7 @@
   import SettingsRow from '@aziontech/webkit/settings-row'
   import Switch from '@aziontech/webkit/switch'
   import { toast } from '@aziontech/webkit/toast'
+  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import { nextTick, reactive, ref, watch } from 'vue'
 
@@ -101,6 +103,17 @@
     }
     if (await guard.confirmLeave()) drawerOpen.value = false
   }
+
+  const formEl = ref<HTMLFormElement | null>(null)
+
+  useShortcuts({
+    keys: 'meta+enter',
+    label: 'Add origin',
+    group: 'Drawer',
+    element: formEl,
+    when: () => drawerOpen.value && !submitting.value,
+    handler: () => formEl.value?.requestSubmit()
+  })
 </script>
 
 <template>
@@ -140,6 +153,7 @@
     >
       <DrawerContent>
         <form
+          ref="formEl"
           class="flex min-h-0 flex-1 flex-col"
           aria-label="Add Origin"
           novalidate
@@ -336,12 +350,20 @@
               <div class="w-full md:w-fit">
                 <Button
                   class="w-full"
-                  label="Add Origin"
                   variant="primary"
                   size="medium"
                   :loading="submitting"
                   type="submit"
-                />
+                  :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
+                >
+                  Add Origin
+                  <Kbd
+                    meta
+                    key-name="enter"
+                    size="small"
+                    aria-hidden="true"
+                  />
+                </Button>
               </div>
             </div>
           </PanelFooter>

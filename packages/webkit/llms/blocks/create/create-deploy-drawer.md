@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/create/create-deploy-drawer/create-deploy-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-deploy-drawer")`
-- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DrawerTrigger`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Input](../../components/input.md), [Item](../../components/item.md), [Link](../../components/link.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Popover](../../components/popover.md), [RadioGroup](../../components/radio-group.md), [Separator](../../components/separator.md), [SettingsGroup](../../components/settings-group.md), [Skeleton](../../components/skeleton.md), [Spinner](../../components/spinner.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md)
+- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DrawerTrigger`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Input](../../components/input.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [Link](../../components/link.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Popover](../../components/popover.md), [RadioGroup](../../components/radio-group.md), [Separator](../../components/separator.md), [SettingsGroup](../../components/settings-group.md), [Skeleton](../../components/skeleton.md), [Spinner](../../components/spinner.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-shortcuts`
 - Skills: `webkit-create-surface`, `webkit-navigation`, `webkit-form`, `webkit-ui-states`
 
 ## Asked as
@@ -62,6 +62,10 @@ Choice cards, a `RadioGroup` with `variant="card"` and one item per environment 
 ### H. Projects impacted and commit — `Item`, `Tag`, `Link`, `Tooltip`, `Popover`, `PanelFooter`, `Button` (required on a service)
 
 Every project the chosen environment's shared Deployment Settings deploy to, grouped by environment, the current one tagged Selected, with its domains shown like the Project card. `PanelFooter` holds one primary medium `Button` reading Deploy on the right, of `type="submit"`. On its left, once a version differs from the live one, one muted line counts the changes and names the environment they go live in.
+
+### I. Shortcut keycap — `Kbd` (optional)
+
+A small `Kbd` (`aria-hidden`) inside the primary button shows its keyboard shortcut (⌘ S to save, ⌘ Enter to submit or run, Ctrl off Apple); the button carries the same keys in `aria-keyshortcuts`.
 
 ## Data
 
@@ -162,6 +166,8 @@ Then delete `sample.ts` and its import. The page reports the run through the toa
 ## Accessibility
 
 - The drawer traps focus while open and returns it to the Deploy trigger on close.
+- Opening the drawer moves focus to its first control.
+- **⌘ Enter deploys (`Ctrl Enter` off Apple)** through the form's submit, the same path as Deploy. It stays inert while Deploy is disabled (loading, load error, a build running, no environment); Deploy carries `aria-keyshortcuts` and an `aria-hidden` `Kbd`, and the `?` dialog lists it under Drawer.
 - The `form` and the `ToggleGroup` carry `aria-label`s; the environment group is named by its `aria-label`.
 - The version menu is a `role="menu"` moved with the arrow keys, each version a `menuitem` named by its version, author and age; the current one carries `aria-current`; search inputs have an `aria-label` that matches the placeholder.
 - Each impacted environment group has an `aria-label` with its count, e.g. "Projects impacted in Production (3)".
@@ -225,6 +231,7 @@ Each variant is the same screen in another state: `get_block("create/create-depl
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
+  import Kbd from '@aziontech/webkit/kbd'
   import Link from '@aziontech/webkit/link'
   import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
@@ -238,6 +245,7 @@ Each variant is the same screen in another state: `get_block("create/create-depl
   import Tag from '@aziontech/webkit/tag'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { computed, reactive, ref, watch } from 'vue'
 
   import {
@@ -534,6 +542,17 @@ Each variant is the same screen in another state: `get_block("create/create-depl
     })
     open.value = false
   }
+
+  const formEl = ref<HTMLFormElement | null>(null)
+
+  useShortcuts({
+    keys: 'meta+enter',
+    label: 'Deploy',
+    group: 'Drawer',
+    element: formEl,
+    when: () => open.value && !blocked.value,
+    handler: () => formEl.value?.requestSubmit()
+  })
 </script>
 
 <template>
@@ -553,6 +572,7 @@ Each variant is the same screen in another state: `get_block("create/create-depl
 
     <DrawerContent>
       <form
+        ref="formEl"
         class="flex min-h-0 flex-1 flex-col"
         :aria-label="title"
         novalidate
@@ -1394,12 +1414,20 @@ Each variant is the same screen in another state: `get_block("create/create-depl
             </p>
             <span v-else />
             <Button
-              label="Deploy"
               variant="primary"
               size="medium"
               :disabled="blocked"
               type="submit"
-            />
+              :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
+            >
+              Deploy
+              <Kbd
+                meta
+                key-name="enter"
+                size="small"
+                aria-hidden="true"
+              />
+            </Button>
           </div>
         </PanelFooter>
       </form>

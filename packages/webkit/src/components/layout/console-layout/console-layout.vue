@@ -28,6 +28,7 @@
     toMenuGroups,
     useAppNavigation
   } from '../../../composables/use-app-navigation'
+  import { useShortcuts } from '../../../composables/use-shortcuts'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import { cn } from '../../../utils/cn'
@@ -53,6 +54,7 @@
   import CommandInput from '../../overlay/command/command-input/command-input.vue'
   import CommandItem from '../../overlay/command/command-item/command-item.vue'
   import CommandList from '../../overlay/command/command-list/command-list.vue'
+  import ShortcutsDialog from '../../overlay/shortcuts-dialog/shortcuts-dialog.vue'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
   import AppHeader from '../app-header/app-header.vue'
   import AppHeaderCenter from '../app-header/app-header-center.vue'
@@ -189,6 +191,8 @@
 
   const attrs = useAttrs()
   const { t } = useTranslate({ consoleLayout: en.consoleLayout })
+
+  useShortcuts({ keys: 'meta+k', label: () => t('consoleLayout.searchShortcut') })
 
   const query = ref('')
   const railWidth = ref<number | null>(null)
@@ -750,5 +754,6 @@
         <CommandEmpty>{{ t('consoleLayout.noMatch') }}</CommandEmpty>
       </CommandList>
     </Command>
+    <ShortcutsDialog :data-testid="`${testId}__shortcuts`" />
   </div>
 </template>

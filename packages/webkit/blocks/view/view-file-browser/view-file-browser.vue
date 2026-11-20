@@ -266,7 +266,7 @@
     if (item.kind === 'folder') openFolder(path.value + item.name)
     emit('open', event, item.entry)
   }
-  const onRowClick = (event: MouseEvent, item: FileRow) => {
+  const onRowClick = (event: MouseEvent | KeyboardEvent, item: FileRow) => {
     if (item.kind === 'parent') goUp()
     else openEntry(event, item)
   }
@@ -295,6 +295,10 @@
     if (value !== 'delete') return
     pending.value = item
     deleteOpen.value = true
+  }
+
+  const onRowRemove = (event: KeyboardEvent, item: FileRow) => {
+    if (item.kind !== 'parent') onRowAction(event, 'delete', item)
   }
 
   const confirmDelete = (event: Event) => {
@@ -534,6 +538,7 @@
               :loading="loading"
               export-filename="files.csv"
               @row-click="onRowClick"
+              @row-remove="onRowRemove"
             >
               <template #toolbar="{ selectedRows, selectedCount, clearSelection }">
                 <div

@@ -19,10 +19,15 @@ afterEach(() => cleanup())
 const dialog = () =>
   document.querySelector('[role="dialog"], [role="alertdialog"]') as HTMLElement | null
 
+const visibleText = (element: HTMLElement) => {
+  const copy = element.cloneNode(true) as HTMLElement
+  copy.querySelectorAll('[aria-hidden="true"]').forEach((node) => node.remove())
+  return copy.textContent?.trim()
+}
+
 const buttonByText = (text: string, root: Document | HTMLElement = document) =>
-  Array.from(root.querySelectorAll('button')).find(
-    (button) => button.textContent?.trim() === text
-  ) as HTMLButtonElement | undefined
+  Array.from(root.querySelectorAll('button')).find((button) => visibleText(button) === text) as
+    HTMLButtonElement | undefined
 describe('account/account-deployment-settings', () => {
   it('shows the SaveBar after a default changes, and Discard restores it', async () => {
     const view = render(UnsavedChanges)
@@ -192,5 +197,39 @@ describe('account/account-deployment-settings', () => {
     const view = render(Empty)
     expect(view.getByText('No services yet')).toBeTruthy()
     await expectNoA11yViolations(view.container)
+  })
+})
+
+const apple = /mac/i.test(navigator.platform || navigator.userAgent)
+const pressShortcut = (key: string, target: Element = document.body) => {
+  const event = new KeyboardEvent('keydown', {
+    key,
+    metaKey: apple,
+    ctrlKey: !apple,
+    bubbles: true,
+    cancelable: true
+  })
+  target.dispatchEvent(event)
+  return event
+}
+
+describe('account/account-deployment-settings save shortcut', () => {
+  it('saves on Command S while the defaults have changes', async () => {
+    const view = render(BuildDeployment, { props: { defaultDraft: { bindingPolicy: 'FLEXIBLE' } } })
+    const save = buttonByText('Save', view.container as HTMLElement)!
+    expect(save.getAttribute('aria-keyshortcuts')).toBe('Meta+S Control+S')
+    expect(save.querySelector('[data-testid="kbd"]')).not.toBeNull()
+    const event = pressShortcut('s')
+    expect(event.defaultPrevented).toBe(true)
+    const [payload, values] = view.emitted<unknown[]>('save')?.[0] ?? []
+    expect(payload).toBe(event)
+    expect(values).toMatchObject({ bindingPolicy: 'FLEXIBLE' })
+  })
+
+  it('does nothing on Command S while the defaults are unchanged', async () => {
+    const view = render(BuildDeployment)
+    const event = pressShortcut('s')
+    expect(event.defaultPrevented).toBe(false)
+    expect(view.emitted('save')).toBeUndefined()
   })
 })

@@ -133,7 +133,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
   The region also keeps `var(--spacing-2xs)` of padding — and the same as `scroll-padding` — inside
   the clip, because the first row's focus ring (`ring-2` over `ring-offset-2`) reaches 4 px past the
   row and a viewport flush against it would cut the ring off.
-  The **drag handle is a focusable `role="separator"`**, so the gesture has a keyboard equivalent:
+  The **drag handle is a focusable `role="separator"`** with an inset focus ring (`focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color)`), inset because the rail clips anything drawn past its edge, so the gesture has a keyboard equivalent:
   `ArrowLeft` / `ArrowRight` nudge the width, `ArrowLeft` past the snap boundary collapses, and
   `ArrowRight` from the collapsed splitter brings the rail back. Pointer-wise that same collapsed
   splitter is click-to-restore as well as drag-to-size, so the edge is never a drag-only control.

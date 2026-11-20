@@ -10,6 +10,7 @@
   import FieldDescription from '@aziontech/webkit/field-description'
   import IconButton from '@aziontech/webkit/icon-button'
   import Item from '@aziontech/webkit/item'
+  import Kbd from '@aziontech/webkit/kbd'
   import PageHeader from '@aziontech/webkit/page-header'
   import RadioGroup from '@aziontech/webkit/radio-group'
   import SaveBar from '@aziontech/webkit/save-bar'
@@ -18,8 +19,9 @@
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
   import { useEscapeToCancel } from '@aziontech/webkit/use-escape-to-cancel'
+  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
-  import { computed, reactive, ref, watch } from 'vue'
+  import { computed, onMounted, reactive, ref, watch } from 'vue'
 
   interface PurgeError {
     type: 'helper' | 'invalid' | 'required'
@@ -131,6 +133,22 @@
   const onLeave = () => guard.confirmLeave()
 
   useEscapeToCancel(onLeave)
+
+  const formEl = ref<HTMLFormElement | null>(null)
+
+  useShortcuts({
+    keys: 'meta+enter',
+    label: 'Purge',
+    group: 'Page',
+    element: formEl,
+    when: () => !submitting.value,
+    handler: () => formEl.value?.requestSubmit()
+  })
+
+  onMounted(() =>
+    formEl.value?.querySelector<HTMLInputElement>('input[name="purge-layer"]:checked')?.focus()
+  )
+
   const SAVE_FAILURES = 0
   let failuresLeft = SAVE_FAILURES
 
@@ -205,6 +223,7 @@
 
     <main class="animate-page-enter motion-reduce:animate-none flex min-h-0 flex-1 flex-col">
       <form
+        ref="formEl"
         class="flex min-h-0 flex-1 flex-col"
         aria-labelledby="create-purge-title"
         novalidate
@@ -339,12 +358,20 @@
                 @click="onLeave"
               />
               <Button
-                label="Purge"
                 variant="primary"
                 size="medium"
                 type="submit"
                 :loading="submitting"
-              />
+                :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
+              >
+                Purge
+                <Kbd
+                  meta
+                  key-name="enter"
+                  size="small"
+                  aria-hidden="true"
+                />
+              </Button>
             </template>
           </SaveBar>
         </div>

@@ -9,13 +9,15 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
+  import Kbd from '@aziontech/webkit/kbd'
   import PageHeader from '@aziontech/webkit/page-header'
   import SaveBar from '@aziontech/webkit/save-bar'
   import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
   import Switch from '@aziontech/webkit/switch'
   import { toast } from '@aziontech/webkit/toast'
-  import { computed, nextTick, onBeforeUnmount, reactive, ref } from 'vue'
+  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
+  import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 
   const breadcrumb = [{ label: 'Databases', href: '/databases' }, { label: 'Create Database' }]
 
@@ -103,6 +105,19 @@
     clearTimeout(timer)
     toast.dismiss(CREATE_TOAST)
   })
+
+  const formEl = ref<HTMLFormElement | null>(null)
+
+  onMounted(() => nameInputEl.value?.focus())
+
+  useShortcuts({
+    keys: 'meta+enter',
+    label: 'Create database',
+    group: 'Page',
+    element: formEl,
+    when: () => !submitting.value,
+    handler: () => formEl.value?.requestSubmit()
+  })
 </script>
 
 <template>
@@ -144,6 +159,7 @@
 
     <main class="animate-page-enter motion-reduce:animate-none flex min-h-0 flex-1 flex-col">
       <form
+        ref="formEl"
         class="flex min-h-0 flex-1 flex-col"
         aria-labelledby="create-database-title"
         novalidate
@@ -246,12 +262,20 @@
                 @click="cancel"
               />
               <Button
-                label="Create Database"
                 variant="primary"
                 size="medium"
                 type="submit"
                 :loading="submitting"
-              />
+                :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
+              >
+                Create Database
+                <Kbd
+                  meta
+                  key-name="enter"
+                  size="small"
+                  aria-hidden="true"
+                />
+              </Button>
             </template>
           </SaveBar>
         </div>

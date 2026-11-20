@@ -20,6 +20,7 @@
 - Disable Discard and set `loading` on Save while saving.
 - Do not build a centred action pill by hand (a sticky footer with a bordered card and a shadow): that is `variant="centered"`.
 - `floating` and `docked` are for the dirty state of a settings page; `centered` and `plain` are for a create page or a form saved as one unit and stay on screen.
+- Listen to `save` to give the page `⌘ S` (`Ctrl S` off Apple): run the same save as the Save button, and do nothing when the form has no unsaved changes. Show the shortcut on Save with `Kbd` and `aria-keyshortcuts="Meta+S Control+S"` (the console keyboard standard, `rules/webkit-keyboard.md`).
 
 ## Don’t
 
@@ -40,6 +41,12 @@
 | --- | --- | --- | --- | --- |
 | `variant` | `'floating' \| 'docked' \| 'plain' \| 'fade' \| 'centered'` | `'floating'` | false | How the bar sits at the bottom of its scroll region. See the variant table below. |
 
+## Events
+
+| Event | Payload | Notes |
+| --- | --- | --- |
+| `save` | `(event: KeyboardEvent)` |  |
+
 ## Slots
 
 | Slot | Scope | Notes |
@@ -58,7 +65,7 @@
 ## Accessibility
 
 - Visible focus: owned by the action buttons.
-- Keyboard map: `Tab` reaches Discard, then Save, in reading order (the column is reversed visually on a phone so Save sits on top).
+- Keyboard map: `Tab` reaches Discard, then Save, in reading order (the column is reversed visually on a phone so Save sits on top). With a `save` listener, `⌘ S` (`Ctrl S` off Apple) emits `save` from anywhere on the page, also while typing in a field (a shortcut with a modifier), and the browser's Save page dialog never opens; inside an open modal layer it fires only for a bar inside that layer (registered through `useShortcuts` with the bar as its element). Tests: `save-bar.test.ts` › save shortcut.
 - ARIA: the root is a `footer`; the status glyph is `aria-hidden`. The message region (`__message`, the `leading` / default slot) is a polite live region (`role="status"`), so a bar that appears when the form turns dirty announces its status sentence (WCAG 4.1.3 Status Messages) without moving focus.
 - Contrast ≥4.5:1 for the status sentence.
 
@@ -71,7 +78,11 @@
 
 ## Internationalization
 
-No built-in strings: the status sentence and the action labels come from the consumer's slots.
+The status sentence and the action labels come from the consumer's slots. One built-in string labels the shortcut in the `ShortcutsDialog` list:
+
+| Key                   | English source | Override prop |
+| --------------------- | -------------- | ------------- |
+| `saveBar.saveShortcut` | `Save changes` | —             |
 
 - Formatting: none.
 
@@ -89,12 +100,14 @@ No built-in strings: the status sentence and the action labels come from the con
 ```vue
 <script setup>
   import Button from '@aziontech/webkit/button'
+  import Kbd from '@aziontech/webkit/kbd'
   import SaveBar from '@aziontech/webkit/save-bar'
   import { ref } from 'vue'
 
   const saving = ref(false)
 
   const save = () => {
+    if (saving.value) return
     saving.value = true
     setTimeout(() => {
       saving.value = false
@@ -107,7 +120,7 @@ No built-in strings: the status sentence and the action labels come from the con
     <div class="layout-boundary-inline flex-1 py-(--spacing-lg) text-body-sm text-(--text-muted)">
       The settings form scrolls under the bar.
     </div>
-    <SaveBar>
+    <SaveBar @save="save">
       You have unsaved changes.
       <template #actions>
         <Button
@@ -118,12 +131,20 @@ No built-in strings: the status sentence and the action labels come from the con
           :disabled="saving"
         />
         <Button
-          label="Save"
           variant="primary"
           size="medium"
+          aria-keyshortcuts="Meta+S Control+S"
           :loading="saving"
           @click="save"
-        />
+        >
+          Save
+          <Kbd
+            meta
+            size="small"
+            aria-hidden="true"
+            >S</Kbd
+          >
+        </Button>
       </template>
     </SaveBar>
   </div>

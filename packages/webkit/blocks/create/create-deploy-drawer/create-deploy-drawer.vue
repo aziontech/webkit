@@ -11,6 +11,7 @@
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
+  import Kbd from '@aziontech/webkit/kbd'
   import Link from '@aziontech/webkit/link'
   import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
@@ -24,6 +25,7 @@
   import Tag from '@aziontech/webkit/tag'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { computed, reactive, ref, watch } from 'vue'
 
   import {
@@ -320,6 +322,17 @@
     })
     open.value = false
   }
+
+  const formEl = ref<HTMLFormElement | null>(null)
+
+  useShortcuts({
+    keys: 'meta+enter',
+    label: 'Deploy',
+    group: 'Drawer',
+    element: formEl,
+    when: () => open.value && !blocked.value,
+    handler: () => formEl.value?.requestSubmit()
+  })
 </script>
 
 <template>
@@ -339,6 +352,7 @@
 
     <DrawerContent>
       <form
+        ref="formEl"
         class="flex min-h-0 flex-1 flex-col"
         :aria-label="title"
         novalidate
@@ -1180,12 +1194,20 @@
             </p>
             <span v-else />
             <Button
-              label="Deploy"
               variant="primary"
               size="medium"
               :disabled="blocked"
               type="submit"
-            />
+              :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
+            >
+              Deploy
+              <Kbd
+                meta
+                key-name="enter"
+                size="small"
+                aria-hidden="true"
+              />
+            </Button>
           </div>
         </PanelFooter>
       </form>

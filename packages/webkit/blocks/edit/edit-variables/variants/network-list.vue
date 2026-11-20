@@ -9,6 +9,7 @@
   import FieldDescription from '@aziontech/webkit/field-description'
   import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
+  import Kbd from '@aziontech/webkit/kbd'
   import MultiSelect from '@aziontech/webkit/multi-select'
   import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
@@ -17,6 +18,7 @@
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { computed, nextTick, ref, useId, watch } from 'vue'
 
   type ListEntry = { value: string; note: string; pasted: boolean }
@@ -74,6 +76,15 @@
   const submitted = ref(false)
   const submitting = ref(false)
   const formEl = ref<HTMLFormElement | null>(null)
+
+  useShortcuts({
+    keys: 'meta+enter',
+    label: 'Save network list',
+    group: 'Drawer',
+    element: formEl,
+    when: () => drawerOpen.value && !submitting.value,
+    handler: () => formEl.value?.requestSubmit()
+  })
 
   const isIPv4 = (value: string) => {
     const parts = value.split('.')
@@ -477,11 +488,19 @@
           ><div class="flex w-full justify-end">
             <Button
               type="submit"
-              label="Save"
               variant="primary"
               size="medium"
               :loading="submitting"
-            /></div
+              :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
+            >
+              Save
+              <Kbd
+                meta
+                key-name="enter"
+                size="small"
+                aria-hidden="true"
+              />
+            </Button></div
         ></PanelFooter>
       </form>
     </DrawerContent>

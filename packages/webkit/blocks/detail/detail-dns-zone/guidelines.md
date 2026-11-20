@@ -61,6 +61,10 @@ The table's `#empty` slot tells the two cases apart through `useCollection`'s `s
 
 When `error` is set, a danger `Alert` with Retry takes the records table's place; the heading and the controls row stay, the controls disabled.
 
+### L. Shortcut keycap — `Kbd` (optional)
+
+A small `Kbd` (`aria-hidden`) inside the primary button shows its keyboard shortcut (⌘ S to save, ⌘ Enter to submit or run, Ctrl off Apple); the button carries the same keys in `aria-keyshortcuts`.
+
 ## Data
 
 The page takes the zone, its records and both requests' state through props and emits every action; it fetches nothing and fakes no save or refresh. `DnsZoneDetailZone`, `DnsZoneDetailRecord`, `DnsZoneDetailSettings` and `DnsZoneDetailProps` are exported from `detail-dns-zone.vue`, and `sample.ts` holds the sample zone and record the page renders when `zone` or `records` is left out (the records never while `loading` or `error` is set). The settings form keeps its own draft; `zone` is the baseline Discard returns to, and a new `zone` resets the form to it.
@@ -162,6 +166,7 @@ Then delete `sample.ts` and its import.
 - The property filter has an `aria-label` that matches its placeholder, "Filter records".
 - Focus order follows reading order: tabs, form fields, save bar; or heading actions, the property filter, toolbar, table, pagination.
 - Tab panel entrances respect reduced motion.
+- `⌘ S` (`Ctrl S` off Apple) saves the zone settings while the `SaveBar` shows unsaved changes, the same as Save, and stops the browser's own save; with no changes it does nothing. Save carries `aria-keyshortcuts` and a `Kbd` keycap.
 
 ## States
 

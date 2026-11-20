@@ -10,6 +10,7 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
+  import Kbd from '@aziontech/webkit/kbd'
   import PageHeader from '@aziontech/webkit/page-header'
   import SaveBar from '@aziontech/webkit/save-bar'
   import SettingsGroup from '@aziontech/webkit/settings-group'
@@ -18,8 +19,9 @@
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import { useEscapeToCancel } from '@aziontech/webkit/use-escape-to-cancel'
+  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
-  import { computed, reactive, ref } from 'vue'
+  import { computed, onMounted, reactive, ref } from 'vue'
 
   interface FormErrors {
     name: string
@@ -205,6 +207,21 @@
   const onLeave = () => guard.confirmLeave()
 
   useEscapeToCancel(onLeave)
+
+  const formEl = ref<HTMLFormElement | null>(null)
+  const nameEl = ref<InstanceType<typeof Input> | null>(null)
+
+  useShortcuts({
+    keys: 'meta+enter',
+    label: 'Create zone',
+    group: 'Page',
+    element: formEl,
+    when: () => !submitting.value,
+    handler: () => formEl.value?.requestSubmit()
+  })
+
+  onMounted(() => nameEl.value?.focus())
+
   const SAVE_FAILURES = 0
   let failuresLeft = SAVE_FAILURES
 
@@ -278,6 +295,7 @@
 
     <main class="animate-page-enter motion-reduce:animate-none flex min-h-0 flex-1 flex-col">
       <form
+        ref="formEl"
         class="flex min-h-0 flex-1 flex-col"
         aria-labelledby="create-zone-title"
         novalidate
@@ -313,6 +331,7 @@
                         description="Identifies the zone in this list. It is not the domain."
                       >
                         <Input
+                          ref="nameEl"
                           v-model="form.name"
                           size="large"
                           class="w-full"
@@ -496,12 +515,20 @@
                 @click="onLeave"
               />
               <Button
-                label="Save"
                 variant="primary"
                 size="medium"
                 type="submit"
                 :loading="submitting"
-              />
+                :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
+              >
+                Save
+                <Kbd
+                  meta
+                  key-name="enter"
+                  size="small"
+                  aria-hidden="true"
+                />
+              </Button>
             </template>
           </SaveBar>
         </div>

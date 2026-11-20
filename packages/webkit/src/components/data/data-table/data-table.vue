@@ -184,7 +184,8 @@
   )
 
   const emit = defineEmits<{
-    'row-click': [event: MouseEvent, row: TRow]
+    'row-click': [event: MouseEvent | KeyboardEvent, row: TRow]
+    'row-remove': [event: KeyboardEvent, row: TRow]
     'filter-apply': [event: Event, filters: TableAppliedFilter[]]
     'filter-remove': [event: Event, filter: TableAppliedFilter]
     refresh: [event: Event]
@@ -811,7 +812,7 @@
     return 'none'
   }
 
-  const onRowClick = (event: MouseEvent, row: Row<RowRecord>) => {
+  const onRowClick = (event: MouseEvent | KeyboardEvent, row: Row<RowRecord>) => {
     if (props.selectOnRowClick && props.selectable && row.getCanSelect()) {
       row.toggleSelected()
     }
@@ -1565,9 +1566,14 @@
     doc.addEventListener('touchend', onEnd)
     event.preventDefault()
   }
+  const hasListener = (name: string): boolean =>
+    Boolean((instance?.vnode.props as Record<string, unknown> | null | undefined)?.[name])
+  const rowFocusActive = computed<boolean>(
+    () => treeActive.value || hasListener('onRowClick') || hasListener('onRowRemove')
+  )
   const treeFocusId = ref<string | null>(null)
   const treeTabStop = computed<string | undefined>(() =>
-    treeActive.value
+    rowFocusActive.value
       ? treeFocusId.value && rowIndexById.value.has(treeFocusId.value)
         ? treeFocusId.value
         : rows.value[0]?.id
@@ -1590,8 +1596,8 @@
     return placement
   })
   const treeRowEl = (id: string): HTMLElement | undefined =>
-    Array.from(rootEl.value?.querySelectorAll<HTMLElement>('[data-tree-row]') ?? []).find(
-      (el) => el.getAttribute('data-tree-row') === id
+    Array.from(rootEl.value?.querySelectorAll<HTMLElement>('[data-focus-row]') ?? []).find(
+      (el) => el.getAttribute('data-focus-row') === id
     )
   const focusTreeRow = async (id: string): Promise<void> => {
     treeFocusId.value = id
@@ -1618,11 +1624,46 @@
     row.toggleExpanded(open)
     if (inside) void focusTreeRow(row.id)
   }
+  let focusedIndex = -1
   const onTreeFocusin = (row: Row<RowRecord>): void => {
     treeFocusId.value = row.id
+    focusedIndex = rowIndexById.value.get(row.id) ?? -1
   }
+  const focusLost = (): boolean => {
+    const active = globalThis.document?.activeElement
+    return !active || active === globalThis.document.body
+  }
+  const focusAfterRemoval = (attempt = 0): void => {
+    const list = rows.value
+    const id = treeFocusId.value
+    if (!id || rowIndexById.value.has(id) || focusedIndex < 0) return
+    const modalOpen = Boolean(globalThis.document?.querySelector('[aria-modal="true"]'))
+    if ((modalOpen || !focusLost()) && attempt < 60) {
+      globalThis.requestAnimationFrame(() => focusAfterRemoval(attempt + 1))
+      return
+    }
+    if (!focusLost()) return
+    const target = list[focusedIndex] ?? list[focusedIndex - 1]
+    if (target) {
+      void focusTreeRow(target.id)
+      return
+    }
+    treeFocusId.value = null
+    rootEl.value?.querySelector<HTMLElement>('[data-focus-table]')?.focus()
+  }
+  watch(
+    () => rowIndexById.value,
+    () => {
+      if (!rowFocusActive.value || !treeFocusId.value) return
+      if (rowIndexById.value.has(treeFocusId.value)) return
+      if (typeof globalThis.requestAnimationFrame !== 'function') return
+      void nextTick(() => focusAfterRemoval())
+    },
+    { flush: 'post' }
+  )
   const onTreeKeydown = (event: KeyboardEvent, row: Row<RowRecord>): void => {
-    if (!treeActive.value || event.target !== event.currentTarget) return
+    if (!rowFocusActive.value || event.target !== event.currentTarget) return
+    if (event.altKey || event.ctrlKey || event.metaKey) return
     const list = rows.value
     const index = rowIndexById.value.get(row.id) ?? -1
     const go = (target: Row<RowRecord> | undefined): void => {
@@ -1639,11 +1680,13 @@
       case 'End':
         return go(list[list.length - 1])
       case 'ArrowRight':
+        if (!treeActive.value) return
         event.preventDefault()
         if (row.getCanExpand() && !row.getIsExpanded()) toggleTreeRow(row, true)
         else if (row.getIsExpanded()) go(list[index + 1])
         return
       case 'ArrowLeft':
+        if (!treeActive.value) return
         event.preventDefault()
         if (row.getIsExpanded()) toggleTreeRow(row, false)
         else {
@@ -1652,14 +1695,25 @@
         }
         return
       case 'Enter':
-        if (!row.getCanExpand()) return
+        if (treeActive.value && row.getCanExpand()) {
+          event.preventDefault()
+          toggleTreeRow(row)
+          return
+        }
+        if (!hasListener('onRowClick')) return
         event.preventDefault()
-        toggleTreeRow(row)
+        onRowClick(event, row)
         return
       case ' ':
         if (!props.selectable || !row.getCanSelect()) return
         event.preventDefault()
         row.toggleSelected()
+        return
+      case 'Delete':
+      case 'Backspace':
+        if (!hasListener('onRowRemove') || event.shiftKey) return
+        event.preventDefault()
+        emit('row-remove', event, typed<TRow>(row.original))
         return
       default:
     }
@@ -1769,10 +1823,12 @@
           v-bind="tableAttrs()"
           :role="treeActive ? 'treegrid' : 'table'"
           :data-tree="treeActive || undefined"
+          :tabindex="rowFocusActive ? -1 : undefined"
+          :data-focus-table="rowFocusActive || undefined"
           :data-testid="`${testId}__table`"
           :aria-busy="loading || loadingMore || undefined"
           :aria-rowcount="windowed ? rowTotal + 1 : undefined"
-          class="flex w-full flex-col"
+          class="flex w-full flex-col outline-none focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--ring-color)"
         >
           <TableCaption v-if="$slots['caption']">
             <slot name="caption" />
@@ -1920,6 +1976,7 @@
                     dropOf(row.id),
                     orderedIds.length,
                     treeActive,
+                    rowFocusActive,
                     row.getIsExpanded(),
                     row.id === treeTabStop,
                     treePlacement.get(row.id),
@@ -1933,8 +1990,9 @@
                   :aria-expanded="
                     treeActive && row.getCanExpand() ? row.getIsExpanded() : undefined
                   "
-                  :tabindex="treeActive ? (row.id === treeTabStop ? 0 : -1) : undefined"
+                  :tabindex="rowFocusActive ? (row.id === treeTabStop ? 0 : -1) : undefined"
                   :data-tree-row="treeActive ? row.id : undefined"
+                  :data-focus-row="rowFocusActive ? row.id : undefined"
                   :data-depth="treeActive ? row.depth : undefined"
                   :data-reorder-row="reorderActive ? row.id : undefined"
                   :data-dragging="dragId === row.id || undefined"
@@ -1951,7 +2009,7 @@
                   ]"
                   @click="onRowClick($event, row)"
                   @keydown="onTreeKeydown($event, row)"
-                  @focusin="treeActive && onTreeFocusin(row)"
+                  @focusin="rowFocusActive && onTreeFocusin(row)"
                 >
                   <TableCell
                     v-if="reorderActive"

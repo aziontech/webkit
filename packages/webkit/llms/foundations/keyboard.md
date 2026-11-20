@@ -58,18 +58,15 @@ macOS, `Ctrl` on Windows, Linux and ChromeOS.
   ```
 
 - Put focus on the `h1` when a browse page opens, so the page is announced and the next `Tab`
-  starts at the top of its content. `PageHeader` takes a `title-id` for it:
+  starts at the top of its content. The `PageHeader` `h1` already carries `tabindex="-1"` and draws
+  no ring, so a router or the page only calls `focus()` on it (`title-id` gives it an id):
 
   ```vue
   <script setup>
     import PageHeader from '@aziontech/webkit/page-header'
     import { onMounted } from 'vue'
 
-    onMounted(() => {
-      const title = document.getElementById('page-title')
-      title?.setAttribute('tabindex', '-1')
-      title?.focus({ preventScroll: true })
-    })
+    onMounted(() => document.getElementById('page-title')?.focus({ preventScroll: true }))
   </script>
 
   <template>
@@ -86,37 +83,42 @@ macOS, `Ctrl` on Windows, Linux and ChromeOS.
 - Route `Esc` on a full-page task through the same guard as the Cancel button
   (`useUnsavedChanges` from `@aziontech/webkit/use-unsaved-changes`), so unsaved work is never lost
   to a key.
-- Save with `⌘ S` on a page that has a `SaveBar`, and say so in the bar with `Kbd`:
+- Save with `⌘ S` on a page that has a `SaveBar`: listen to its `save` event, which the bar emits
+  on `⌘ S` (`Ctrl S`) after it stops the browser's own save and lists the shortcut under `?`. Save
+  only when there are unsaved changes, and show the key on the Save button with `Kbd`:
 
   ```vue
   <script setup>
     import Button from '@aziontech/webkit/button'
     import Kbd from '@aziontech/webkit/kbd'
     import SaveBar from '@aziontech/webkit/save-bar'
-    import { onBeforeUnmount, onMounted } from 'vue'
+    import { ref } from 'vue'
 
-    const save = () => {}
-
-    const onKeydown = (event) => {
-      if ((event.metaKey || event.ctrlKey) && !event.altKey && event.key.toLowerCase() === 's') {
-        event.preventDefault()
-        save()
-      }
+    const dirty = ref(true)
+    const save = () => {
+      dirty.value = false
     }
-
-    onMounted(() => window.addEventListener('keydown', onKeydown))
-    onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
+    const onSaveShortcut = () => {
+      if (dirty.value) save()
+    }
   </script>
 
   <template>
-    <SaveBar>
-      You have unsaved changes. Press <Kbd meta>S</Kbd> to save.
+    <SaveBar @save="onSaveShortcut">
+      You have unsaved changes.
       <template #actions>
         <Button
-          label="Save"
           aria-keyshortcuts="Meta+S Control+S"
           @click="save"
-        />
+        >
+          Save
+          <Kbd
+            meta
+            size="small"
+            aria-hidden="true"
+            >S</Kbd
+          >
+        </Button>
       </template>
     </SaveBar>
   </template>
@@ -124,14 +126,18 @@ macOS, `Ctrl` on Windows, Linux and ChromeOS.
 
 - Give a menu action its shortcut through `DropdownMenu.Item`'s `command`: the item prints the
   keycap and runs the same action when the key is pressed.
-- Bind `/` to the page's search field (`TableSearch`, `Input type="search"`), and keep `⌘ K` for
-  the palette the layout already renders.
-- Register every shortcut a screen adds where the `?` list can read it, so the list always matches
-  what the screen does. A shortcut that is not in the list does not exist for the person using it.
+- Bind `/` to the page's search field, and keep `⌘ K` for the palette the layout already renders.
+  `PropertyFilter` and `TableSearch` bind `/` themselves while they are mounted; bind it yourself
+  only for another field (`Input type="search"`) with `useShortcuts`.
+- Register every shortcut a screen adds where the `?` list can read it (`useShortcuts` from
+  `@aziontech/webkit/use-shortcuts`, with a `label`), so the list always matches what the screen
+  does. A shortcut that is not in the list does not exist for the person using it. `ConsoleLayout`
+  renders the one `ShortcutsDialog`; an app without it mounts one `ShortcutsDialog` in its shell.
 - Let a `DataTable` move with the arrow keys, open the row with `Enter` and select it with
-  `Space`. `Delete` (`Backspace` on a Mac keyboard, whose delete key sends it) opens a
-  `ConfirmDialog`, never deletes on the key alone; after the delete, move focus to the next row,
-  else the previous row, else the table.
+  `Space`: the rows take the keys once the table has a `row-click` or `row-remove` listener.
+  `Delete` (`Backspace` on a Mac keyboard, whose delete key sends it) emits `row-remove`; open a
+  `ConfirmDialog` from it, never delete on the key alone. After the delete the table moves focus to
+  the next row, else the previous row, else the table.
 - Return focus to the trigger when anything closes. `Dialog`, `Drawer`, `Popover` and
   `DropdownMenu` do it for you; a panel you build yourself must do the same.
 - Show every shortcut where the action is offered: `Kbd` in the menu item or beside the control

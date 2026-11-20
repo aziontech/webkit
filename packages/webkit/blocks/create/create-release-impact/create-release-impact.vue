@@ -7,6 +7,7 @@
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import Field from '@aziontech/webkit/field'
   import Input from '@aziontech/webkit/input'
+  import Kbd from '@aziontech/webkit/kbd'
   import PageHeader from '@aziontech/webkit/page-header'
   import SaveBar from '@aziontech/webkit/save-bar'
   import Select from '@aziontech/webkit/select'
@@ -17,6 +18,7 @@
   import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
 
   import { sampleImpact, sampleResources } from './sample'
@@ -306,6 +308,16 @@
     confirmOpen.value = false
     deploy(event)
   }
+
+  useShortcuts({
+    keys: 'meta+enter',
+    label: 'Deploy release',
+    group: 'Page',
+    when: () => canDeploy.value && !confirmOpen.value,
+    handler: () => {
+      confirmOpen.value = true
+    }
+  })
 
   watch(
     () => [props.deploying, props.deployed, props.deployError],
@@ -1001,13 +1013,22 @@
               <div class="w-full md:w-fit">
                 <Button
                   class="w-full"
-                  :label="deploying ? 'Deploying…' : 'Deploy release'"
                   variant="primary"
                   size="medium"
                   icon="az az-cloud-upload"
                   :disabled="!canDeploy"
                   :loading="deploying"
-                />
+                  :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
+                >
+                  {{ deploying ? 'Deploying…' : 'Deploy release' }}
+                  <Kbd
+                    v-if="!deploying"
+                    meta
+                    key-name="enter"
+                    size="small"
+                    aria-hidden="true"
+                  />
+                </Button>
               </div>
             </template>
           </ConfirmDialog>

@@ -21,9 +21,10 @@
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
   import { useEscapeToCancel } from '@aziontech/webkit/use-escape-to-cancel'
+  import { useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import Wizard from '@aziontech/webkit/wizard'
-  import { computed, reactive, ref, watch } from 'vue'
+  import { type ComponentPublicInstance, computed, onMounted, reactive, ref, watch } from 'vue'
 
   import { samplePolicies } from './sample'
 
@@ -348,6 +349,36 @@
 
   useEscapeToCancel(onCancel, { enabled: () => !props.loading })
 
+  const wizardEl = ref<ComponentPublicInstance | null>(null)
+
+  const FIELD_SELECTOR =
+    'input:not([type="hidden"]), textarea, select, [role="combobox"], [role="radio"][tabindex="0"]'
+
+  const wizardRoot = () => (wizardEl.value?.$el as HTMLElement | undefined) ?? null
+
+  const focusFirstField = () => {
+    const root = wizardRoot()
+    const field = root?.querySelector<HTMLElement>(FIELD_SELECTOR)
+    const checked =
+      field instanceof HTMLInputElement && field.type === 'radio'
+        ? root?.querySelector<HTMLElement>(`input[name="${CSS.escape(field.name)}"]:checked`)
+        : null
+    ;(checked ?? field)?.focus()
+  }
+
+  useShortcuts({
+    keys: 'meta+enter',
+    label: () =>
+      stepIndex.value === definitions.value.length - 1 ? 'Create access list' : 'Next step',
+    group: 'Page',
+    element: wizardRoot,
+    when: () => !props.loading,
+    handler: () =>
+      [...(wizardRoot()?.querySelectorAll<HTMLButtonElement>('button') ?? [])].pop()?.click()
+  })
+
+  onMounted(focusFirstField)
+
   watch(
     () => props.error,
     (message) => {
@@ -410,6 +441,7 @@
         />
 
         <Wizard
+          ref="wizardEl"
           v-model="stepIndex"
           aria-label="Create Access List"
           submit-label="Create Access List"

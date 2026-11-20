@@ -9,6 +9,7 @@
   import FieldDescription from '@aziontech/webkit/field-description'
   import Hint from '@aziontech/webkit/hint'
   import Input from '@aziontech/webkit/input'
+  import Kbd from '@aziontech/webkit/kbd'
   import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
@@ -17,6 +18,7 @@
   import Switch from '@aziontech/webkit/switch'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
+  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import { nextTick, reactive, ref, watch } from 'vue'
 
@@ -93,6 +95,17 @@
     }
     if (await guard.confirmLeave()) open.value = false
   }
+
+  const formEl = ref<HTMLFormElement | null>(null)
+
+  useShortcuts({
+    keys: 'meta+enter',
+    label: 'Create deployment settings',
+    group: 'Drawer',
+    element: formEl,
+    when: () => open.value && !submitting.value,
+    handler: () => formEl.value?.requestSubmit()
+  })
 </script>
 
 <template>
@@ -116,6 +129,7 @@
 
     <DrawerContent>
       <form
+        ref="formEl"
         class="flex min-h-0 flex-1 flex-col"
         aria-label="Create Deployment Settings"
         novalidate
@@ -273,12 +287,20 @@
           <div class="flex w-full flex-wrap items-center justify-between gap-(--spacing-sm)">
             <div class="flex min-w-0 items-center gap-(--spacing-sm)" />
             <Button
-              label="Create Deployment Settings"
               variant="primary"
               size="medium"
               :loading="submitting"
               type="submit"
-            />
+              :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
+            >
+              Create Deployment Settings
+              <Kbd
+                meta
+                key-name="enter"
+                size="small"
+                aria-hidden="true"
+              />
+            </Button>
           </div>
         </PanelFooter>
       </form>

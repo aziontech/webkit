@@ -78,6 +78,17 @@ describe('PageHeader', () => {
     expect(getByRole('heading', { level: 1 }).id).toBe('profile-title')
   })
 
+  it('takes programmatic focus on the h1 without a tab stop or a ring', () => {
+    const { getByRole } = within(
+      render(PageHeader, { props: { title: 'Resources' } }).container as HTMLElement
+    )
+    const heading = getByRole('heading', { level: 1 })
+    expect(heading.tabIndex).toBe(-1)
+    heading.focus()
+    expect(document.activeElement).toBe(heading)
+    expect(getComputedStyle(heading).outlineStyle).toBe('none')
+  })
+
   it('renders the examples', () => {
     const def = within(render(Default).container as HTMLElement)
     expect(def.getAllByRole('link').length + def.getAllByRole('button').length).toBe(2)

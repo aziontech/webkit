@@ -19,6 +19,7 @@
   import Input from '@aziontech/webkit/input'
   import InputGroupRoot from '@aziontech/webkit/input-group-root'
   import ItemList from '@aziontech/webkit/item-list'
+  import Kbd from '@aziontech/webkit/kbd'
   import PageHeader from '@aziontech/webkit/page-header'
   import PageTabs from '@aziontech/webkit/page-tabs'
   import PropertyFilter from '@aziontech/webkit/property-filter'
@@ -199,6 +200,10 @@
   const save = (event: Event) => {
     if (saving.value || !validate()) return
     emit('submit', event, { ...settings })
+  }
+  const onSaveShortcut = (event: KeyboardEvent) => {
+    if (!dirty.value || saving.value) return
+    save(event)
   }
 
   const discard = (event: MouseEvent) => {
@@ -488,6 +493,7 @@
           <SaveBar
             v-if="dirty || saving"
             variant="docked"
+            @save="onSaveShortcut"
           >
             You have unsaved changes.
 
@@ -502,11 +508,19 @@
               />
               <Button
                 type="submit"
-                label="Save"
                 variant="primary"
                 size="medium"
                 :loading="saving"
-              />
+                aria-keyshortcuts="Meta+S Control+S"
+              >
+                Save
+                <Kbd
+                  meta
+                  size="small"
+                  aria-hidden="true"
+                  >S</Kbd
+                >
+              </Button>
             </template>
           </SaveBar>
         </Transition>

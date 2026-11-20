@@ -14,6 +14,7 @@
   import InputGroupAddon from '@aziontech/webkit/input-group-addon'
   import InputGroupInput from '@aziontech/webkit/input-group-input'
   import InputGroupRoot from '@aziontech/webkit/input-group-root'
+  import Kbd from '@aziontech/webkit/kbd'
   import MultiSelect from '@aziontech/webkit/multi-select'
   import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
@@ -23,6 +24,7 @@
   import Textarea from '@aziontech/webkit/textarea'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { computed, nextTick, reactive, ref, useId, watch } from 'vue'
 
   type ScopeRef = { type: string; id: string; name: string }
@@ -381,6 +383,15 @@
   })
 
   const formEl = ref<HTMLFormElement | null>(null)
+
+  useShortcuts({
+    keys: 'meta+enter',
+    label: 'Save variables',
+    group: 'Drawer',
+    element: formEl,
+    when: () => drawerOpen.value && !submitting.value,
+    handler: () => formEl.value?.requestSubmit()
+  })
   const submit = async () => {
     if (submitting.value) return
     if (view.value === 'JSON') {
@@ -820,12 +831,20 @@
           <div class="flex w-full flex-wrap items-center justify-between gap-(--spacing-sm)">
             <div class="flex min-w-0 items-center gap-(--spacing-sm)"></div>
             <Button
-              label="Save"
               variant="primary"
               size="medium"
               :loading="submitting"
               type="submit"
-            />
+              :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
+            >
+              Save
+              <Kbd
+                meta
+                key-name="enter"
+                size="small"
+                aria-hidden="true"
+              />
+            </Button>
           </div>
         </PanelFooter>
       </form>

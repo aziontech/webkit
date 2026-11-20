@@ -14,12 +14,14 @@
   import InputGroupAddon from '@aziontech/webkit/input-group-addon'
   import InputGroupInput from '@aziontech/webkit/input-group-input'
   import InputGroupRoot from '@aziontech/webkit/input-group-root'
+  import Kbd from '@aziontech/webkit/kbd'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import Switch from '@aziontech/webkit/switch'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { useEscapeToCancel } from '@aziontech/webkit/use-escape-to-cancel'
+  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
-  import { computed, reactive, ref } from 'vue'
+  import { computed, onMounted, reactive, ref } from 'vue'
 
   interface TemplateSetting {
     name: string
@@ -141,6 +143,24 @@
     if (buildSettings.some(isMissing)) buildOpen.value = 'build'
     if (variables.some(isMissing)) variablesOpen.value = 'variables'
   }
+
+  const panelEl = ref<HTMLElement | null>(null)
+
+  useShortcuts({
+    keys: 'meta+enter',
+    label: 'Deploy',
+    group: 'Page',
+    element: panelEl,
+    handler: deploy
+  })
+
+  onMounted(() =>
+    panelEl.value
+      ?.querySelector<HTMLElement>(
+        '[role="combobox"], input:not([type="hidden"]), textarea, select'
+      )
+      ?.focus()
+  )
 </script>
 
 <template>
@@ -242,6 +262,7 @@
         </Card>
 
         <div
+          ref="panelEl"
           data-phase="form"
           class="flex w-full flex-col items-center gap-(--spacing-xl)"
         >
@@ -501,11 +522,19 @@
             <template #footer>
               <Button
                 class="w-full"
-                label="Deploy"
                 variant="primary"
                 size="large"
+                :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
                 @click="deploy"
-              />
+              >
+                Deploy
+                <Kbd
+                  meta
+                  key-name="enter"
+                  size="small"
+                  aria-hidden="true"
+                />
+              </Button>
             </template>
           </Card>
 

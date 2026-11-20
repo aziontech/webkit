@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/account/account-team-permissions/account-team-permissions.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-team-permissions")`
-- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), [CollectionPreferences](../../components/collection-preferences.md), [Combobox](../../components/combobox.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [PageHeader](../../components/page-header.md), [PropertyFilter](../../components/property-filter.md), [SaveBar](../../components/save-bar.md), [SettingsGroup](../../components/settings-group.md), [Switch](../../components/switch.md), [Table](../../components/table.md), `TableCellActions`, `TableCellLink`, `TableCellStatus`, `TableCellTags`, [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`
+- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), [CollectionPreferences](../../components/collection-preferences.md), [Combobox](../../components/combobox.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Kbd](../../components/kbd.md), [PageHeader](../../components/page-header.md), [PropertyFilter](../../components/property-filter.md), [SaveBar](../../components/save-bar.md), [SettingsGroup](../../components/settings-group.md), [Switch](../../components/switch.md), [Table](../../components/table.md), `TableCellActions`, `TableCellLink`, `TableCellStatus`, `TableCellTags`, [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-shortcuts`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -149,6 +149,11 @@ Then delete `sample.ts` and its import.
 - The filter is named Filter teams; Refresh and Download CSV carry an accessible name and a tooltip.
 - The Back button of the creation frame is named `Back to Teams and permissions`.
 - Table name links say where they go on their tooltip; the row menu is named `Actions for <team>`.
+- `/` focuses the property filter from anywhere on the page, except while typing in a field.
+- The team rows are one tab stop: Arrow Up and Arrow Down move between rows, Home and End jump to the first and last, Enter edits the focused team as the row menu's Edit does, and Delete or Backspace opens the delete dialog. After a delete, focus lands on the next row.
+- Create Team opens with focus in the Name field.
+- `⌘ Enter` (`Ctrl Enter` off Apple) submits Create Team from any field, the same as Create.
+- In Edit Team, `⌘ S` (`Ctrl S` off Apple) saves while the team has unsaved changes, the same as Save changes; with no changes it does nothing. Both buttons carry `aria-keyshortcuts` and a `Kbd` keycap.
 
 ## States
 
@@ -343,6 +348,10 @@ Each variant is the same screen in another state: `get_block("account/account-te
     emit('row-action', event, { value, team })
   }
 
+  const onRowOpen = (event: MouseEvent | KeyboardEvent, row: TeamRow) => {
+    if (event instanceof KeyboardEvent) onAction(event, 'edit', row)
+  }
+
   const remove = (event: MouseEvent) => {
     const team = pending.value
     if (!team) return
@@ -477,6 +486,8 @@ Each variant is the same screen in another state: `get_block("account/account-te
               sortable
               :bordered="false"
               aria-label="Teams"
+              @row-click="onRowOpen"
+              @row-remove="(event, row) => onAction(event, 'delete', row)"
             >
               <template #cell-name="{ row }">
                 <div class="flex min-w-0 items-center gap-(--spacing-xs)">

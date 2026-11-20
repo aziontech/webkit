@@ -1,5 +1,9 @@
 <script setup lang="ts">
-  import { computed, nextTick, onScopeDispose, ref, useAttrs, watch } from 'vue'
+  import { computed, getCurrentInstance, nextTick, onScopeDispose, ref, useAttrs, watch } from 'vue'
+
+  import { useShortcuts } from '../../../composables/use-shortcuts'
+  import { useTranslate } from '../../../composables/use-translate'
+  import * as en from '../../../locales/en'
 
   /** `floating` overlays the bottom of the scroll region without moving the content, `docked` takes its own row at the bottom, `plain` closes a form column with its actions on the right, `fade` closes a wizard step with no border, the content fading into the canvas above it, `centered` floats the actions as a raised card centred over the bottom of a create page. */
   export type SaveBarVariant = 'floating' | 'docked' | 'plain' | 'fade' | 'centered'
@@ -18,6 +22,11 @@
     variant: 'floating'
   })
 
+  const emit = defineEmits<{
+    /** Command S (Control S off Apple) was pressed while the bar is shown; the browser's own save is prevented. Bound only when listened to. */
+    save: [event: KeyboardEvent]
+  }>()
+
   defineSlots<{
     /** The status sentence on the left, such as You have unsaved changes. */
     default(): unknown
@@ -28,6 +37,8 @@
   }>()
 
   const attrs = useAttrs()
+  const instance = getCurrentInstance()
+  const { t } = useTranslate({ saveBar: en.saveBar })
 
   const rootEl = ref<HTMLElement | null>(null)
   const shellEl = ref<HTMLElement | null>(null)
@@ -36,6 +47,14 @@
   let measured = -1
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'save-bar')
+
+  useShortcuts({
+    keys: 'meta+s',
+    label: () => t('saveBar.saveShortcut'),
+    when: () => Boolean(instance?.vnode.props?.['onSave']),
+    element: rootEl,
+    handler: (event) => emit('save', event)
+  })
 
   const rootStyle = computed(() => (reserved.value ? { height: `${reserved.value}px` } : undefined))
 

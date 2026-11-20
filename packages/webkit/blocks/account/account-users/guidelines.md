@@ -135,6 +135,8 @@ Then delete `sample.ts` and its import.
 - The invite form is a `form` named Invite User; each `Field` ties its label, description and error to the control, and `Field.Error` is announced when it appears.
 - After a failed Send, focus moves to the first invalid control.
 - The owner's locked controls are disabled and the reason is on the tooltip, not only in color.
+- `/` focuses the property filter from anywhere on the page, except while typing in a field.
+- The rows are one tab stop: Arrow Up and Arrow Down move between rows, Home and End jump to the first and last, Enter opens the person's profile, and Delete or Backspace opens the remove (or cancel invitation) dialog; the owner's row ignores Delete. After a removal, focus lands on the next row.
 
 ## States
 

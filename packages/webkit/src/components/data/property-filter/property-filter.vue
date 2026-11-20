@@ -15,6 +15,7 @@
     tokenText
   } from '../../../composables/use-collection/lib/property-filter'
   import { usePlacement } from '../../../composables/use-placement'
+  import { useShortcuts } from '../../../composables/use-shortcuts'
   import { usePortalLocale, useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import Button from '../../action/button/button.vue'
@@ -389,6 +390,14 @@
   )
 
   const inputEl = (): HTMLInputElement | null | undefined => fieldEl.value?.querySelector('input')
+
+  useShortcuts({
+    keys: '/',
+    label: () => t('propertyFilter.focusShortcut'),
+    element: () => fieldEl.value,
+    when: () => !props.disabled,
+    handler: () => inputEl()?.focus()
+  })
 
   const insertAtCaret = (insert: string): void => {
     const { from, to } = context.value

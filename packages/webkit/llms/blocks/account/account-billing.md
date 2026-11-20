@@ -153,6 +153,8 @@ Then delete `sample.ts` and its import.
 - Icon buttons have names that match their tooltips; each download names its invoice and each row menu names its card.
 - The `PaymentBrand` plate is decorative wherever the brand is written next to it, and named in the methods table.
 - Invoice IDs, card digits and the billing email keep left-to-right direction inside a right-to-left page.
+- `/` focuses the invoices property filter from anywhere on the page, except while typing in a field.
+- The payment methods rows are one tab stop: Arrow Up and Arrow Down move between rows, Home and End jump to the first and last, and Delete or Backspace opens the remove dialog for a card that is not the default. After a removal, focus lands on the next row.
 
 ## States
 
@@ -495,6 +497,10 @@ Each variant is the same screen in another state: `get_block("account/account-bi
       pendingRemoval.value = method
       removeOpen.value = true
     }
+  }
+
+  const onMethodRemove = (event: KeyboardEvent, method: BillingPaymentMethod) => {
+    if (!method.default) onMethodAction(event, 'remove', method)
   }
 
   const removeMethod = (event: Event) => {
@@ -947,6 +953,7 @@ Each variant is the same screen in another state: `get_block("account/account-bi
                   sortable
                   :bordered="false"
                   aria-label="Payment methods"
+                  @row-remove="onMethodRemove"
                 >
                   <template #cell-holder="{ row, value }">
                     <span class="flex min-w-0 items-center gap-(--spacing-xs)">

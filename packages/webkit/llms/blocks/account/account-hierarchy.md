@@ -146,7 +146,7 @@ Then delete `sample.ts` and its import.
 ## Accessibility
 
 - The table is a `treegrid` labelled by the Resources heading. Rows carry `aria-level`, `aria-setsize`, `aria-posinset`, `aria-expanded` when they have children, and `aria-selected` when selected.
-- One row is in the tab order. Arrow Up and Arrow Down move between rows, Home and End go to the first and last, Arrow Right opens a row or moves into it, Arrow Left closes it or goes to its parent (mirrored right to left), Enter toggles it and Space selects it. Tab reaches the checkbox, ID copy and row menu of the focused row.
+- One row is in the tab order. Arrow Up and Arrow Down move between rows, Home and End go to the first and last, Arrow Right opens a row or moves into it, Arrow Left closes it or goes to its parent (mirrored right to left), Enter toggles it, Space selects it, and Delete or Backspace opens the delete dialog for it (with what it holds); after the delete, focus lands on the next row. Tab reaches the checkbox, ID copy and row menu of the focused row.
 - The chevron is pointer-only and hidden from assistive technology; the row's `aria-expanded` is the state.
 - The action row is a `role="group"` named `Resource actions` (plain Tab order, no arrow-key toolbar); disabled bulk buttons stay visible so the actions are discoverable.
 - The details heading is a polite live region, so a change of selection is announced.
@@ -765,6 +765,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
                   selectable
                   :bordered="false"
                   :aria-labelledby="`${uid}-resources`"
+                  @row-remove="(_event, row) => onRowAction('delete', row)"
                 >
                   <template #cell-name="{ row }">
                     <span class="flex min-w-0 items-center gap-(--spacing-xs)">

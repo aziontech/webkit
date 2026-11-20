@@ -135,13 +135,21 @@
   const pending = ref<TableViewResource | null>(null)
   const deleteOpen = ref(false)
 
+  const askDelete = (row: TableViewResource) => {
+    pending.value = row
+    deleteOpen.value = true
+  }
+
+  const onRowOpen = (event: MouseEvent | KeyboardEvent, row: TableViewResource) => {
+    if (event instanceof KeyboardEvent) emit('row-action', event, { value: 'view', resource: row })
+  }
+
   const onRowAction = (event: Event, value: DropdownMenuItemValue, row: TableViewResource) => {
     if (value !== 'delete') {
       emit('row-action', event, { value, resource: row })
       return
     }
-    pending.value = row
-    deleteOpen.value = true
+    askDelete(row)
   }
 
   const confirmDelete = (event: Event) => {
@@ -277,6 +285,8 @@
                   :loading="loading || fetching"
                   sortable
                   :bordered="false"
+                  @row-click="onRowOpen"
+                  @row-remove="(_event, row) => askDelete(row)"
                 >
                   <template #cell-name="{ row }">
                     <TableCellLink

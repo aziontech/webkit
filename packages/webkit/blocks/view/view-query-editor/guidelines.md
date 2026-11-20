@@ -74,6 +74,10 @@ An empty table's Data view offers Insert row and Import data from CSV, and accep
 
 Validation runs on Insert, as the state-form-validation rule says: a table column mapped twice, a NOT NULL column with no CSV column, nothing mapped, or every row failing shows a danger `Alert` in the section that has to change, and nothing is inserted. A primary key may stay unmapped (the database assigns it). While inserting, the fieldset is disabled and Insert spins; then the drawer closes, the rows appear in the table and a success toast `4 rows inserted into subscribers.` says how many rows were skipped and offers Undo. Importing rows is not a deploy, so Edit and Redeploy do not apply.
 
+### M. Shortcut keycap — `Kbd` (optional)
+
+A small `Kbd` (`aria-hidden`) inside the primary button shows its keyboard shortcut (⌘ S to save, ⌘ Enter to submit or run, Ctrl off Apple); the button carries the same keys in `aria-keyshortcuts`.
+
 ## Data
 
 The block takes its records through props and emits every action; it fetches nothing and runs no SQL. `QueryEditorTable`, `QueryEditorHistoryEntry`, `QueryEditorResult` and `QueryEditorProps` are exported from `view-query-editor.vue`, and `sample.ts` holds the sample tables, history and statement the block renders when `tables`, `history` or `sql` is left out (the tables and history never while `loading` or `error` is set).
@@ -178,6 +182,8 @@ Then delete `sample.ts` and its import.
 - `ToggleGroup`s are named ("Table view", "Result view") and each paged table names its own pagination.
 - The templates drawer traps focus while open and closes on Escape.
 - In the import drawer each mapping `Select` is named `Table column for <CSV column>`, the mapping and the per-line errors are named lists, and the ready count is a polite live region, so changing a mapping announces the new count.
+- `⌘ Enter` (`Ctrl Enter` off Apple) runs the query from anywhere on the page, the SQL editor included, where a bare `Enter` stays a new line; it does nothing while a query runs. Run query carries `aria-keyshortcuts` and a `Kbd` keycap.
+- Create Database opens with focus in the Name field, and `⌘ Enter` (`Ctrl Enter` off Apple) submits it from any field, the same as Create Database.
 
 ## States
 

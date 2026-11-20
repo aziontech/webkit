@@ -224,6 +224,49 @@ describe('PropertyFilter', () => {
     await expectNoA11yViolations(listbox)
   })
 
+  describe('page search key', () => {
+    const slash = (target: EventTarget) => {
+      const event = new KeyboardEvent('keydown', {
+        key: '/',
+        bubbles: true,
+        cancelable: true
+      })
+      target.dispatchEvent(event)
+      return event
+    }
+
+    it('focuses the field on / and prevents the typed slash', async () => {
+      const view = render(PropertyFilter, { props: { properties } })
+      await nextTick()
+      const event = slash(document.body)
+      expect(document.activeElement).toBe(view.getByRole('combobox'))
+      expect(event.defaultPrevented).toBe(true)
+    })
+
+    it('does not take / while typing in another field', async () => {
+      const outside = document.createElement('input')
+      outside.setAttribute('aria-label', 'Other')
+      document.body.append(outside)
+      try {
+        render(PropertyFilter, { props: { properties } })
+        await nextTick()
+        outside.focus()
+        const event = slash(outside)
+        expect(document.activeElement).toBe(outside)
+        expect(event.defaultPrevented).toBe(false)
+      } finally {
+        outside.remove()
+      }
+    })
+
+    it('does not take / while disabled', async () => {
+      const view = render(PropertyFilter, { props: { properties, disabled: true } })
+      await nextTick()
+      slash(document.body)
+      expect(document.activeElement).not.toBe(view.getByRole('combobox'))
+    })
+  })
+
   describe('query mode', () => {
     const lastText = (emitted: Record<string, unknown[][]>) =>
       emitted['update:text']?.at(-1)?.[0] as string | undefined

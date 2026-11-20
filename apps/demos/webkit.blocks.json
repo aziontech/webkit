@@ -143,7 +143,7 @@
       ]
     },
     "settings/settings-form": {
-      "version": "5.12.3",
+      "version": "5.13.0",
       "files": [
         {
           "path": "src/blocks/settings-form.sample.ts",
@@ -158,7 +158,7 @@
           "imports": {
             "./sample": "./settings-form.sample"
           },
-          "checksum": "sha256:fe084661335c5d11f3b635e9067b284e564b84271c4e32b40778669a28ee019e"
+          "checksum": "sha256:00d6bc3d98d6344847ec3f1d67956f4fdb0c8a6d44db832473384e23bf6ad769"
         }
       ]
     },

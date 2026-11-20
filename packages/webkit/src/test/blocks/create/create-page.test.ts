@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/vue'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { userEvent } from 'vitest/browser'
-import { nextTick } from 'vue'
+import { type Component, createApp, nextTick } from 'vue'
 
 import SinglePageCreate from '../../../../blocks/create/create-page/create-page.vue'
 import CreateOrganization from '../../../../blocks/create/create-page/variants/create-organization.vue'
@@ -230,5 +230,117 @@ describe('create-page#CreateOrganization', () => {
     await fireEvent.update(screen.getByRole('textbox', { name: 'Name' }), 'Northwind Studio')
     await fireEvent.click(screen.getByRole('button', { name: 'Create Organization' }))
     await waitFor(() => expect(screen.getByText('Northwind Studio created.')).toBeTruthy(), wait)
+  })
+})
+
+const apple = /mac/i.test(navigator.platform || navigator.userAgent)
+
+const mountAttached = (component: Component, props: Record<string, unknown> = {}) => {
+  const host = document.body.appendChild(document.createElement('div'))
+  const app = createApp(component, props)
+  app.mount(host)
+  return () => {
+    app.unmount()
+    host.remove()
+  }
+}
+
+const pressSubmitShortcut = (target: Element) =>
+  target.dispatchEvent(
+    new KeyboardEvent('keydown', {
+      key: 'Enter',
+      metaKey: apple,
+      ctrlKey: !apple,
+      bubbles: true,
+      cancelable: true
+    })
+  )
+
+describe('create-page keyboard', () => {
+  it('opens with the cursor in Name and submits with Cmd or Ctrl Enter from a field', async () => {
+    const onSubmit = vi.fn()
+    const unmount = mountAttached(SinglePageCreate, { onSubmit })
+    try {
+      const name = screen.getByRole('textbox', { name: 'Name' })
+      await waitFor(() => expect(document.activeElement).toBe(name), wait)
+      const save = screen.getByRole('button', { name: 'Save' })
+      expect(save.getAttribute('aria-keyshortcuts')).toBe('Meta+Enter Control+Enter')
+      await fireEvent.update(name, 'acme-domain')
+      await fireEvent.update(screen.getByRole('textbox', { name: 'Domain name' }), 'example.com')
+      pressSubmitShortcut(name)
+      await waitFor(() => expect(onSubmit).toHaveBeenCalledTimes(1), wait)
+      const [event, values] = onSubmit.mock.calls[0] ?? []
+      expect(event).toBeInstanceOf(Event)
+      expect(values).toEqual({
+        name: 'acme-domain',
+        domain: 'example.com',
+        dnssec: false,
+        active: true
+      })
+    } finally {
+      unmount()
+    }
+  })
+
+  it('ignores the shortcut while the create request is in flight', async () => {
+    const view = render(SinglePageCreate, {
+      props: { defaultValues: { name: 'acme-domain', domain: 'example.com' }, loading: true }
+    })
+    pressSubmitShortcut(document.body)
+    await new Promise((resolve) => setTimeout(resolve, 50))
+    expect(view.emitted('submit')).toBeUndefined()
+  })
+
+  it('opens CreateService and CreateZone in Name', async () => {
+    for (const page of [CreateService, CreateZone]) {
+      const unmount = mountAttached(page)
+      try {
+        await waitFor(
+          () => expect(document.activeElement).toBe(screen.getByRole('textbox', { name: 'Name' })),
+          wait
+        )
+      } finally {
+        unmount()
+      }
+    }
+  })
+
+  it('opens CreatePurge on the chosen layer; Enter in the list adds a line, the shortcut purges', async () => {
+    const unmount = mountAttached(CreatePurge)
+    try {
+      await waitFor(() => {
+        const active = document.activeElement as HTMLInputElement | null
+        expect(active?.name).toBe('purge-layer')
+        expect(active?.checked).toBe(true)
+      }, wait)
+      const purge = screen.getByRole('button', { name: 'Purge' })
+      expect(purge.getAttribute('aria-keyshortcuts')).toBe('Meta+Enter Control+Enter')
+      const list = screen.getByRole('textbox', { name: /list$/ }) as HTMLTextAreaElement
+      await userEvent.click(list)
+      await userEvent.keyboard('example.com/a{Enter}example.com/b')
+      expect(list.value).toBe('example.com/a\nexample.com/b')
+      expect(purge.getAttribute('aria-busy')).not.toBe('true')
+      pressSubmitShortcut(list)
+      await waitFor(() => expect(purge.getAttribute('aria-busy')).toBe('true'), wait)
+      await waitFor(
+        () => expect(screen.getByText('Purge started for 2 entries.')).toBeTruthy(),
+        wait
+      )
+    } finally {
+      unmount()
+    }
+  })
+
+  it('creates the organization with the shortcut', async () => {
+    const unmount = mountAttached(CreateOrganization)
+    try {
+      const name = screen.getByRole('textbox', { name: 'Name' })
+      await waitFor(() => expect(document.activeElement).toBe(name), wait)
+      await fireEvent.update(name, 'Northwind Studio')
+      pressSubmitShortcut(name)
+      await waitFor(() => expect(screen.getByText('Northwind Studio created.')).toBeTruthy(), wait)
+    } finally {
+      unmount()
+    }
   })
 })

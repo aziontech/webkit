@@ -156,6 +156,8 @@ Then delete `sample.ts` and its import.
 - The `PropertyFilter` (Filter tokens) and every icon-only button carry an `aria-label`; the row menu is named `Actions for <token>`.
 - The drawer and the dialogs trap focus, are named by their titles and return focus to their trigger; the first invalid field takes focus after Create.
 - The reveal labels the secret field `Token`; the copy result is announced once, by the `CopyButton`.
+- `/` focuses the property filter from anywhere on the page, except while typing in a field.
+- The rows are one tab stop: Arrow Up and Arrow Down move between rows, Home and End jump to the first and last, and Delete or Backspace asks to revoke an active token or to delete a revoked or expired one, as the row menu does. After a delete, focus lands on the next row.
 
 ## States
 
@@ -445,6 +447,9 @@ Each variant is the same screen in another state: `get_block("account/account-pe
   const revokeOpen = ref(false)
   const deleteOpen = ref(false)
 
+  const removalOf = (row: TokenRow): DropdownMenuItemValue =>
+    !row.revoked && row.status !== 'Expired' ? 'revoke' : 'delete'
+
   const onAction = (value: DropdownMenuItemValue, row: TokenRow) => {
     pending.value = items.value.find((token) => token.id === row.id) ?? null
     if (value === 'revoke') revokeOpen.value = true
@@ -595,6 +600,7 @@ Each variant is the same screen in another state: `get_block("account/account-pe
               sortable
               :bordered="false"
               aria-label="Personal tokens"
+              @row-remove="(_event, row) => onAction(removalOf(row), row)"
             >
               <template #cell-name="{ value }">
                 <span class="truncate text-label-sm text-(--text-default)">{{ value }}</span>

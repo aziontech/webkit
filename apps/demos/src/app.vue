@@ -7,6 +7,7 @@
   import HighlightButton from '@aziontech/webkit/highlight-button'
   import IconButton from '@aziontech/webkit/icon-button'
   import { ptBR } from '@aziontech/webkit/locales/pt-BR'
+  import ShortcutsDialog from '@aziontech/webkit/shortcuts-dialog'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import type { ThemeSwitcherValue } from '@aziontech/webkit/theme-switcher'
   import { Toaster } from '@aziontech/webkit/toast'
@@ -67,7 +68,10 @@
     :dir="settings.dir"
     class="min-h-dvh"
   >
-    <RouterView v-if="focused" />
+    <template v-if="focused">
+      <RouterView />
+      <ShortcutsDialog />
+    </template>
     <ConsoleLayoutRoot
       v-else
       :navigation="navigation"

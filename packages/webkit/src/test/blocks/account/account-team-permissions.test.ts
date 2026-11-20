@@ -12,9 +12,15 @@ useToastRegion()
 
 afterEach(() => cleanup())
 
+const visibleText = (element: HTMLElement) => {
+  const copy = element.cloneNode(true) as HTMLElement
+  copy.querySelectorAll('[aria-hidden="true"]').forEach((node) => node.remove())
+  return copy.textContent?.trim()
+}
+
 const buttonByText = (text: string, root: Document | HTMLElement = document) =>
   Array.from(root.querySelectorAll('button')).find(
-    (button) => button.textContent?.trim() === text
+    (button) => visibleText(button) === text
   ) as HTMLButtonElement
 
 const memberNames = () =>
@@ -175,5 +181,43 @@ describe('account/account-team-permissions EditTeam', () => {
     await userEvent.click(view.getByRole('button', { name: 'Delete team' }))
     const dialog = await view.findByRole('alertdialog', { name: 'Delete team' })
     expect(dialog.textContent).toContain('Its 3 members lose the permissions it grants.')
+  })
+})
+
+const apple = /mac/i.test(navigator.platform || navigator.userAgent)
+const pressShortcut = (key: string, target: Element = document.body) => {
+  const event = new KeyboardEvent('keydown', {
+    key,
+    metaKey: apple,
+    ctrlKey: !apple,
+    bubbles: true,
+    cancelable: true
+  })
+  target.dispatchEvent(event)
+  return event
+}
+
+describe('account/account-team-permissions keyboard', () => {
+  it('submits Create Team on Command Enter', async () => {
+    const view = render(CreateTeam)
+    const name = view.getByLabelText(/^Name/) as HTMLInputElement
+    const create = buttonByText('Create')
+    expect(create.getAttribute('aria-keyshortcuts')).toBe('Meta+Enter Control+Enter')
+    await fireEvent.update(name, '')
+    expect(pressShortcut('Enter', name).defaultPrevented).toBe(true)
+    await waitFor(() => expect(view.getByText('This field is required.')).toBeTruthy())
+  })
+
+  it('saves Edit Team on Command S only once it has changes', async () => {
+    const view = render(EditTeam)
+    const save = view.getByRole('button', { name: 'Save changes' })
+    expect(save.getAttribute('aria-keyshortcuts')).toBe('Meta+S Control+S')
+    pressShortcut('s')
+    expect(save.getAttribute('aria-busy')).not.toBe('true')
+    const name = view.getByLabelText(/^Name\b/) as HTMLInputElement
+    await fireEvent.update(name, 'Developers and QA')
+    name.focus()
+    expect(pressShortcut('s', name).defaultPrevented).toBe(true)
+    await waitFor(() => expect(save.getAttribute('aria-busy')).toBe('true'))
   })
 })

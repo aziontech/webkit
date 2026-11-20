@@ -149,6 +149,8 @@ Then delete `sample.ts` and its import. A list too large for the browser moves t
 - The delete dialog traps focus, is named by its title and labels its input by the prompt.
 - The preferences dialog traps focus, is named by its title and returns focus to its trigger when it closes.
 - Sorting is announced by the table header; the row menu is reachable by keyboard and closes back to its trigger.
+- `/` focuses the property filter from anywhere on the page, except while typing in a field.
+- The rows are one tab stop: Arrow Up and Arrow Down move between rows, Home and End jump to the first and last, Enter opens the focused row as View details does (a click on the row itself does nothing; the name link opens it), and Delete or Backspace opens the delete dialog for it. After a delete, focus lands on the next row (the previous one when the last row went).
 - Links that open a new tab add "(opens in a new tab)" in visually hidden text; the `+N` popover names its count and the copy buttons name what they copy.
 
 ## States

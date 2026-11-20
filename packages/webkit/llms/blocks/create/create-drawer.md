@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/create/create-drawer/create-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-drawer")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeEditor](../../components/code-editor.md), [ConfirmDialog](../../components/confirm-dialog.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DrawerTrigger`, `DropdownMenuGroup`, `DropdownMenuItem`, `DropdownMenuRoot`, `DropdownMenuTrigger`, [Field](../../components/field.md), `FieldDescription`, `FieldError`, [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [InputGroup](../../components/input-group.md), [Item](../../components/item.md), [KeyValueList](../../components/key-value-list.md), [Link](../../components/link.md), [NumberInput](../../components/number-input.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [RadioGroup](../../components/radio-group.md), [SchemaForm](../../components/schema-form.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [StatusIndicator](../../components/status-indicator.md), [Switch](../../components/switch.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-locale`, `use-unsaved-changes`
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeEditor](../../components/code-editor.md), [ConfirmDialog](../../components/confirm-dialog.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DrawerTrigger`, `DropdownMenuGroup`, `DropdownMenuItem`, `DropdownMenuRoot`, `DropdownMenuTrigger`, [Field](../../components/field.md), `FieldDescription`, `FieldError`, [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [InputGroup](../../components/input-group.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [KeyValueList](../../components/key-value-list.md), [Link](../../components/link.md), [NumberInput](../../components/number-input.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [RadioGroup](../../components/radio-group.md), [SchemaForm](../../components/schema-form.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [StatusIndicator](../../components/status-indicator.md), [Switch](../../components/switch.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-locale`, `use-shortcuts`, `use-unsaved-changes`
 - Skills: `webkit-create-surface`, `webkit-navigation`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -80,6 +80,10 @@ In the Certificate state the drawer imports a TLS certificate. A `ToggleGroup` p
 ### L. Discard guard — `ConfirmDialog` (required)
 
 One `ConfirmDialog v-bind="guard.dialogProps"` from `useUnsavedChanges`, with Keep editing (focused) and a danger Discard changes. While the form differs from what it opened with, Escape, an overlay tap and Close open it instead of closing the drawer; a clean form closes at once.
+
+### M. Shortcut keycap — `Kbd` (optional)
+
+A small `Kbd` (`aria-hidden`) inside the primary button shows its keyboard shortcut (⌘ S to save, ⌘ Enter to submit or run, Ctrl off Apple); the button carries the same keys in `aria-keyshortcuts`.
 
 ## Data
 
@@ -180,6 +184,7 @@ Then delete `sample.ts` and its import.
 ## Accessibility
 
 - The drawer traps focus while open, moves it to the first field on open and returns it to the trigger on close.
+- **⌘ Enter submits the drawer (`Ctrl Enter` off Apple).** `useShortcuts` binds `meta+enter` to the drawer form's `requestSubmit()`, with the form as the shortcut's element, so with two drawers stacked only the top one submits. It stays inert while saving; the submit button carries `aria-keyshortcuts` and an `aria-hidden` `Kbd`, and the `?` dialog lists the action under Drawer.
 - The `form` has an `aria-label` that matches the title; `DrawerTitle` names the dialog.
 - Every select trigger is described by its `Field.Description` (or its `Field.Error`) through the `Field`, so the consequence is read with the value.
 - Required fields carry the Required marker from the start; an error is a `Field.Error` with `role="alert"` and the control is `aria-invalid`.
@@ -239,12 +244,14 @@ Each variant is the same screen in another state: `get_block("create/create-draw
   import Field from '@aziontech/webkit/field'
   import FieldDescription from '@aziontech/webkit/field-description'
   import InputGroup from '@aziontech/webkit/input-group'
+  import Kbd from '@aziontech/webkit/kbd'
   import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import RadioGroup from '@aziontech/webkit/radio-group'
   import Select from '@aziontech/webkit/select'
   import SettingsGroup from '@aziontech/webkit/settings-group'
+  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import { computed, nextTick, reactive, ref, watch } from 'vue'
 
@@ -503,6 +510,17 @@ Each variant is the same screen in another state: `get_block("create/create-draw
     if (!validate()) return
     emit('submit', event, { ...form, host: fullDomain.value })
   }
+
+  const formEl = ref<HTMLFormElement | null>(null)
+
+  useShortcuts({
+    keys: 'meta+enter',
+    label: () => props.submitLabel || props.title,
+    group: 'Drawer',
+    element: formEl,
+    when: () => open.value && !props.loading,
+    handler: () => formEl.value?.requestSubmit()
+  })
 </script>
 
 <template>
@@ -528,6 +546,7 @@ Each variant is the same screen in another state: `get_block("create/create-draw
   >
     <DrawerContent>
       <form
+        ref="formEl"
         class="flex min-h-0 flex-1 flex-col"
         :aria-label="title"
         novalidate
@@ -690,12 +709,20 @@ Each variant is the same screen in another state: `get_block("create/create-draw
         <PanelFooter>
           <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
             <Button
-              :label="submitLabel || title"
               variant="primary"
               size="medium"
               :loading="loading"
               type="submit"
-            />
+              :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
+            >
+              {{ submitLabel || title }}
+              <Kbd
+                meta
+                key-name="enter"
+                size="small"
+                aria-hidden="true"
+              />
+            </Button>
           </div>
         </PanelFooter>
       </form>
