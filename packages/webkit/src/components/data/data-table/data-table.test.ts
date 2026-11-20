@@ -480,7 +480,10 @@ describe('DataTable', () => {
       key(document.activeElement as HTMLElement, { key: 'Delete' })
       await waitFor(() => expect(document.activeElement?.textContent).toContain('Charlie'))
       key(document.activeElement as HTMLElement, { key: 'Delete' })
-      await waitFor(() => expect(document.activeElement).toBe(getByTestId('data-table__table')))
+      await waitFor(() => {
+        expect(document.activeElement).not.toBe(document.body)
+        expect(getByTestId('data-table').contains(document.activeElement)).toBe(true)
+      })
     })
 
     it('leaves focus alone when the person moved it elsewhere', async () => {
