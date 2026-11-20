@@ -4,6 +4,7 @@
   import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
+  import Kbd from '@aziontech/webkit/kbd'
   import PageHeader from '@aziontech/webkit/page-header'
   import SaveBar from '@aziontech/webkit/save-bar'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
@@ -106,6 +107,11 @@
     }
     toast.dismiss(SAVE_TOAST)
     emit('submit', event, { ...form })
+  }
+
+  const onSaveShortcut = (event: KeyboardEvent) => {
+    if (!dirty.value || submitting.value) return
+    submit(event)
   }
 
   const showFailure = () => {
@@ -330,7 +336,10 @@
       </fieldset>
     </div>
 
-    <SaveBar variant="plain">
+    <SaveBar
+      variant="plain"
+      @save="onSaveShortcut"
+    >
       <template #actions>
         <Button
           type="button"
@@ -341,13 +350,21 @@
           @click="discard"
         />
         <Button
-          label="Save"
           variant="primary"
           size="medium"
           :loading="submitting"
           :disabled="!dirty"
           @click="submit"
-        />
+          aria-keyshortcuts="Meta+S Control+S"
+        >
+          Save
+          <Kbd
+            meta
+            size="small"
+            aria-hidden="true"
+            >S</Kbd
+          >
+        </Button>
       </template>
     </SaveBar>
   </form>
