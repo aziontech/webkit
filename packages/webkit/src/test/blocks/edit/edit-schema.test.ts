@@ -90,6 +90,14 @@ describe('edit/edit-schema data contract', () => {
     expect(container.textContent).not.toContain('customers')
   })
 
+  it('shows only the type name in a column Type picker, not the type description', async () => {
+    render(EditSchema, { props: { tables: [invoices] } })
+    await waitFor(() => expect(drawer()).not.toBeNull())
+    const trigger = drawer().querySelector<HTMLElement>('[data-testid="select-trigger"]')!
+    await waitFor(() => expect(trigger.textContent).toContain('int8'))
+    expect(trigger.textContent).not.toContain('Signed eight-byte integer')
+  })
+
   it('emits create-table with the values and closes once the request ends', async () => {
     const { emitted, rerender } = render(EditSchema, { props: { tables: [invoices] } })
     await waitFor(() => expect(drawer()).not.toBeNull())

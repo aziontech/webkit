@@ -1240,6 +1240,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-schema",
                         v-model="createForm.columns[index].type"
                         size="large"
                         class="w-full"
+                        :display-value="(value: string) => value"
                       >
                         <Select.Trigger>
                           <template #leading>

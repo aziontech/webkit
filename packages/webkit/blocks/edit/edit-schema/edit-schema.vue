@@ -1047,6 +1047,7 @@
                         v-model="createForm.columns[index].type"
                         size="large"
                         class="w-full"
+                        :display-value="(value: string) => value"
                       >
                         <Select.Trigger>
                           <template #leading>
