@@ -30310,6 +30310,12 @@
    "kind": "composable",
    "treeShakeableImport": "@aziontech/webkit/use-unsaved-changes"
   },
+  "use-escape-to-cancel": {
+   "import": "@aziontech/webkit/use-escape-to-cancel",
+   "target": "./src/composables/use-escape-to-cancel/index.ts",
+   "kind": "composable",
+   "treeShakeableImport": "@aziontech/webkit/use-escape-to-cancel"
+  },
   "use-pinned-row": {
    "import": "@aziontech/webkit/use-pinned-row",
    "target": "./src/composables/use-pinned-row/index.ts",
@@ -33604,6 +33610,7 @@
     "Switch",
     "Tag",
     "Tooltip",
+    "use-escape-to-cancel",
     "use-locale",
     "use-unsaved-changes"
    ],
@@ -33631,6 +33638,7 @@
     "@aziontech/webkit/switch",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/use-escape-to-cancel",
     "@aziontech/webkit/use-locale",
     "@aziontech/webkit/use-unsaved-changes"
    ],
@@ -34019,6 +34027,7 @@
     "Tag",
     "Textarea",
     "toast",
+    "use-escape-to-cancel",
     "use-unsaved-changes"
    ],
    "imports": [
@@ -34048,6 +34057,7 @@
     "@aziontech/webkit/tag",
     "@aziontech/webkit/textarea",
     "@aziontech/webkit/toast",
+    "@aziontech/webkit/use-escape-to-cancel",
     "@aziontech/webkit/use-unsaved-changes"
    ],
    "primary": "Default",
@@ -34310,6 +34320,7 @@
     "Textarea",
     "toast",
     "ToggleGroup",
+    "use-escape-to-cancel",
     "use-unsaved-changes",
     "Wizard"
    ],
@@ -34342,6 +34353,7 @@
     "@aziontech/webkit/textarea",
     "@aziontech/webkit/toast",
     "@aziontech/webkit/toggle-group",
+    "@aziontech/webkit/use-escape-to-cancel",
     "@aziontech/webkit/use-unsaved-changes",
     "@aziontech/webkit/wizard"
    ],

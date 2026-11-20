@@ -112,6 +112,7 @@ Then delete `sample.ts` and its import.
 
 ## Accessibility
 
+- **Escape on the page = Cancel.** Escape runs the same path as Back to Creation Center: `useEscapeToCancel` emits `back` from the template step, and the Form `await`s `guard.confirmLeave()` first, so an edited form opens the Unsaved changes dialog. It stays inert while an IME is composing, when another handler already used the key, while a menu, listbox, popover, tooltip or dialog is open, and when focus is in a control that uses Escape itself. Edit and settings pages are places, not tasks: Escape stays inert there.
 - One `main` landmark under the header; the step title is an `h2` and the settings group an `h3`.
 - The back `IconButton`, the brand link and the account button each have an `aria-label`.
 - The repository name has a visible `Field.Label` tied to its input by its `Field`; the privacy switch is labelled Public repository and announces its on or off state.

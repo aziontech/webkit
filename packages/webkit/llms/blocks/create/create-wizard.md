@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/create/create-wizard/create-wizard.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-wizard")`
-- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [ConfirmDialog](../../components/confirm-dialog.md), [Field](../../components/field.md), `FieldDescription`, `FieldError`, [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), [RadioGroup](../../components/radio-group.md), [RadioGroup](../../components/radio-group.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Skeleton](../../components/skeleton.md), [Subheader](../../components/subheader.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), `use-unsaved-changes`, [Wizard](../../components/wizard.md)
+- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [ConfirmDialog](../../components/confirm-dialog.md), [Field](../../components/field.md), `FieldDescription`, `FieldError`, [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), [RadioGroup](../../components/radio-group.md), [RadioGroup](../../components/radio-group.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Skeleton](../../components/skeleton.md), [Subheader](../../components/subheader.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), `use-escape-to-cancel`, `use-unsaved-changes`, [Wizard](../../components/wizard.md)
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -78,7 +78,7 @@ Two steps, Project then Domain and deployment, with the last action reading "Cre
 
 ### K. Leaving with typed work — `useUnsavedChanges`, `ConfirmDialog` (required)
 
-The Wizard's Cancel and the header Back both leave the flow, so both ask first once the form or the chosen policy differs from what the flow opened with: `useUnsavedChanges(() => form)` tracks it, Cancel and Back `await guard.confirmLeave()` before the page emits `cancel`, and one `ConfirmDialog v-bind="guard.dialogProps"` asks "Unsaved changes" with Keep editing and Discard changes. A clean form leaves at once, with no dialog, and the browser's own prompt covers a reload or a tab close while dirty. In a router app pair it with `onBeforeRouteLeave(() => guard.confirmLeave())` so a link or the browser Back asks too.
+The Wizard's Cancel and the header Back both leave the flow, so both ask first once the form or the chosen policy differs from what the flow opened with: `useUnsavedChanges(() => form)` tracks it, Cancel and Back `await guard.confirmLeave()` before the page emits `cancel`, and one `ConfirmDialog v-bind="guard.dialogProps"` asks "Unsaved changes" with Keep editing and Discard changes. A clean form leaves at once, with no dialog, and the browser's own prompt covers a reload or a tab close while dirty. In a router app pair it with `onBeforeRouteLeave(() => guard.confirmLeave())` so a link or the browser Back asks too. Escape runs the same Cancel path through `useEscapeToCancel(onCancel)`.
 
 CreateAndDeploy does the same: Cancel and Back to Services ask once the project choice, the project's cache and origin settings or the domain and deployment fields differ from the opened page, and the page emits `cancel` only after a clean leave or Discard changes.
 
@@ -160,6 +160,7 @@ Then delete `sample.ts` and its import.
 
 ## Accessibility
 
+- **Escape on the page = Cancel.** `useEscapeToCancel(onCancel)` runs the same path as the Wizard's Cancel, in every step and in CreateAndDeploy: a clean form leaves at once, an edited one opens the Unsaved changes dialog. It stays inert while the create request is in flight, while an IME is composing, when another handler already used the key, while a menu, listbox, popover, tooltip or dialog is open (the open Select or DatePicker closes first, and Escape on the Unsaved changes dialog only keeps editing) and when focus is in a control that uses Escape itself (an open combobox, a search field). Edit and settings pages are places, not tasks: Escape stays inert there.
 - The `Wizard` takes an `aria-label` naming the flow; locked rail steps cannot be focused or activated, and focus moves to the new step's heading on every step change.
 - The page has one `h1` (the `PageHeader`); each step heading is an `h2` drawn by the Wizard.
 - Host rows are native `button`s with `aria-pressed`; the chooser's search has an `aria-label` and Enter selects the first match.
@@ -236,6 +237,7 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
   import Tag from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
+  import { useEscapeToCancel } from '@aziontech/webkit/use-escape-to-cancel'
   import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import Wizard from '@aziontech/webkit/wizard'
   import { computed, reactive, ref, watch } from 'vue'
@@ -326,7 +328,7 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
 
   const emit = defineEmits<{
     submit: [event: MouseEvent, values: CreateWizardSubmission]
-    cancel: [event: MouseEvent]
+    cancel: [event: MouseEvent | KeyboardEvent]
   }>()
 
   const breadcrumb = [
@@ -557,9 +559,11 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
   const discardDialog = guard.dialogProps
   const discardLabels = guard.labels
 
-  const onCancel = async (event: MouseEvent) => {
+  const onCancel = async (event: MouseEvent | KeyboardEvent) => {
     if (await guard.confirmLeave()) emit('cancel', event)
   }
+
+  useEscapeToCancel(onCancel, { enabled: () => !props.loading })
 
   watch(
     () => props.error,

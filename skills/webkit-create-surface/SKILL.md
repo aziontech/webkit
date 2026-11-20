@@ -2,7 +2,7 @@
 name: webkit-create-surface
 description: Where a create or settings form LIVES, and what it is built from. Use whenever you add or review a flow that creates a resource, edits one, or asks a question that commits — a "New X" button, a create route, an "add" affordance inside a detail page, a settings tab. Fixes the surface (a first-level resource creates on a PAGE; anything created inside a resource opens a DRAWER; nothing creates in a dialog), the anatomy every one of them shares (Section band with a Hint glyph over a flush card of rows, control right or stacked when wide), what belongs behind the collapsed Advanced band (the endpoint's not-required, already-defaulted fields), and the commit model (create pages carry a persistent bar; settings pages mount one only once something is edited), and how a flow picks an existing resource (an Existing / New band whose picker carries search past 7 options and Load more).
 status: active
-last_updated: 2026-11-19
+last_updated: 2026-11-20
 scope: general
 enforced_by: [ui-verify, webkit-component-states, webkit-accessibility, webkit-prefer-over-custom]
 ---
@@ -179,6 +179,11 @@ it — a hidden bar still reserves its space.
   changes (`guard.discardAndLeave`). A page calls `await guard.confirmLeave()` before it emits
   `cancel` and pairs it with `onBeforeRouteLeave(() => guard.confirmLeave())`; a drawer binds
   `:open` and asks in its `@update:open` handler. A clean form leaves at once, with no dialog.
+- **Escape on a full-page create = Cancel.** A create page or wizard calls
+  `useEscapeToCancel(onCancel)` from `@aziontech/webkit/use-escape-to-cancel`, so Escape runs the
+  Cancel path above (clean leaves, dirty asks). It stays inert while the request is in flight, while a
+  menu, listbox, popover, tooltip or dialog is open, during IME composition, and when a control used
+  the key. Edit and settings pages are places, not tasks: Escape stays inert there.
 
 ### Creating is not deploying
 
@@ -265,6 +270,7 @@ would ship without search never exists.
 - [ ] Create page: persistent Cancel + Save. Settings page: bar mounts on first edit, with Discard.
 - [ ] Drawer: one Save, no Cancel.
 - [ ] A dirty form asks before Cancel, Back, X, overlay or Escape discards it; a clean one leaves at once.
+- [ ] Escape on a full-page create runs Cancel (`useEscapeToCancel`); edit and settings pages ignore it.
 - [ ] Save creates and stops — no deploy, no publish, no charge as a side effect.
 - [ ] The success toast names the resource and offers a way to open it.
 - [ ] One `submitting` flag locks the fieldset AND every control; released in `finally`.

@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/create/create-deploy-template/create-deploy-template.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-deploy-template")`
-- Components: [Accordion](../../components/accordion.md), [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), [ConfirmDialog](../../components/confirm-dialog.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, [Item](../../components/item.md), [Link](../../components/link.md), [Select](../../components/select.md), [Skeleton](../../components/skeleton.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [Tooltip](../../components/tooltip.md), `use-locale`, `use-unsaved-changes`
+- Components: [Accordion](../../components/accordion.md), [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), [ConfirmDialog](../../components/confirm-dialog.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, [Item](../../components/item.md), [Link](../../components/link.md), [Select](../../components/select.md), [Skeleton](../../components/skeleton.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [Tooltip](../../components/tooltip.md), `use-escape-to-cancel`, `use-locale`, `use-unsaved-changes`
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -124,6 +124,7 @@ Then delete `sample.ts` and its import.
 
 ## Accessibility
 
+- **Escape on the page = Cancel.** Escape runs the same path as Back to Creation Center: `useEscapeToCancel` emits `back` from the template step, and the Form `await`s `guard.confirmLeave()` first, so an edited form opens the Unsaved changes dialog. It stays inert while an IME is composing, when another handler already used the key, while a menu, listbox, popover, tooltip or dialog is open, and when focus is in a control that uses Escape itself. Edit and settings pages are places, not tasks: Escape stays inert there.
 - One `main` landmark under the header; the step title is an `h2` and the settings group an `h3`.
 - The back `IconButton`, the brand link and the account button each have an `aria-label`.
 - The repository name has a visible `Field.Label` tied to its input by its `Field`; the privacy switch is labelled Public repository and announces its on or off state.
@@ -184,6 +185,7 @@ Each variant is the same screen in another state: `get_block("create/create-depl
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import Link from '@aziontech/webkit/link'
+  import { useEscapeToCancel } from '@aziontech/webkit/use-escape-to-cancel'
   import { computed } from 'vue'
 
   import { sampleAccount, sampleTemplate } from './sample'
@@ -223,7 +225,7 @@ Each variant is the same screen in another state: `get_block("create/create-depl
 
   const emit = defineEmits<{
     /** Back to Creation Center was pressed. */
-    back: [event: MouseEvent]
+    back: [event: MouseEvent | KeyboardEvent]
     /** The account menu button was pressed. */
     account: [event: MouseEvent]
     /** Continue with GitHub was pressed. */
@@ -233,6 +235,8 @@ Each variant is the same screen in another state: `get_block("create/create-depl
     /** Browse templates was pressed. */
     browse: [event: MouseEvent]
   }>()
+
+  useEscapeToCancel((event) => emit('back', event))
 
   const currentTemplate = computed(() => props.template ?? sampleTemplate)
   const currentAccount = computed(() => props.account ?? sampleAccount)

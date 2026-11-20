@@ -4308,7 +4308,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-deplo
 - Surface: app
 - Source: `blocks/create/create-deploy-template/create-deploy-template.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-deploy-template")`
-- Components: Accordion, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, Checkbox, ConfirmDialog, EmptyState, Field, IconButton, Input, `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, Item, Link, Select, Skeleton, Switch, Tag, Tooltip, `use-locale`, `use-unsaved-changes`
+- Components: Accordion, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, Checkbox, ConfirmDialog, EmptyState, Field, IconButton, Input, `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, Item, Link, Select, Skeleton, Switch, Tag, Tooltip, `use-escape-to-cancel`, `use-locale`, `use-unsaved-changes`
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -4386,6 +4386,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-deplo
 
 ## Accessibility
 
+- **Escape on the page = Cancel.** Escape runs the same path as Back to Creation Center: `useEscapeToCancel` emits `back` from the template step, and the Form `await`s `guard.confirmLeave()` first, so an edited form opens the Unsaved changes dialog. It stays inert while an IME is composing, when another handler already used the key, while a menu, listbox, popover, tooltip or dialog is open, and when focus is in a control that uses Escape itself. Edit and settings pages are places, not tasks: Escape stays inert there.
 - One `main` landmark under the header; the step title is an `h2` and the settings group an `h3`.
 - The back `IconButton`, the brand link and the account button each have an `aria-label`.
 - The repository name has a visible `Field.Label` tied to its input by its `Field`; the privacy switch is labelled Public repository and announces its on or off state.
@@ -4685,7 +4686,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-hub.m
 - Surface: app
 - Source: `blocks/create/create-page/create-page.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-page")`
-- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, ConfirmDialog, `FieldDescription`, `FieldError`, IconButton, Input, Item, MultiSelect, NumberInput, PageHeader, RadioGroup, RadioGroup, SaveBar, Select, SettingsGroup, SettingsRow, Switch, Tag, Textarea, Toast, `use-unsaved-changes`
+- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, ConfirmDialog, `FieldDescription`, `FieldError`, IconButton, Input, Item, MultiSelect, NumberInput, PageHeader, RadioGroup, RadioGroup, SaveBar, Select, SettingsGroup, SettingsRow, Switch, Tag, Textarea, Toast, `use-escape-to-cancel`, `use-unsaved-changes`
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`, `webkit-layout`
 
 ## Asked as
@@ -4764,6 +4765,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-page.
 
 ## Accessibility
 
+- **Escape on the page = Cancel.** `useEscapeToCancel(onCancel)` runs the same path as the Cancel button: a clean form leaves at once, an edited one opens the Unsaved changes dialog. It stays inert while the create request is in flight, while an IME is composing, when another handler already used the key, while a menu, listbox, popover, tooltip or dialog is open (the open Select or DatePicker closes first, and Escape on the Unsaved changes dialog only keeps editing) and when focus is in a control that uses Escape itself (an open combobox, a search field). Edit and settings pages are places, not tasks: Escape stays inert there.
 - One `main` landmark holding one `form`, labelled by the `PageHeader` title through `aria-labelledby`, with `novalidate` so the page's own messages replace the browser's.
 - A `fieldset` with a visually hidden `legend` groups the sections.
 - Each message is tied to its control with `aria-describedby` and appears only on submit; `required` and `invalid` are announced through the control's own state.
@@ -5038,7 +5040,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-resou
 - Surface: app
 - Source: `blocks/create/create-wizard/create-wizard.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-wizard")`
-- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, ConfirmDialog, Field, `FieldDescription`, `FieldError`, Hint, IconButton, Input, Item, PageHeader, RadioGroup, RadioGroup, Select, SettingsGroup, SettingsRow, Skeleton, Subheader, Switch, Tag, Textarea, Toast, ToggleGroup, `use-unsaved-changes`, Wizard
+- Components: Alert, AppHeader, Avatar, Brand, Breadcrumb, Button, Card, ConfirmDialog, Field, `FieldDescription`, `FieldError`, Hint, IconButton, Input, Item, PageHeader, RadioGroup, RadioGroup, Select, SettingsGroup, SettingsRow, Skeleton, Subheader, Switch, Tag, Textarea, Toast, ToggleGroup, `use-escape-to-cancel`, `use-unsaved-changes`, Wizard
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -5124,6 +5126,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-wizar
 
 ## Accessibility
 
+- **Escape on the page = Cancel.** `useEscapeToCancel(onCancel)` runs the same path as the Wizard's Cancel, in every step and in CreateAndDeploy: a clean form leaves at once, an edited one opens the Unsaved changes dialog. It stays inert while the create request is in flight, while an IME is composing, when another handler already used the key, while a menu, listbox, popover, tooltip or dialog is open (the open Select or DatePicker closes first, and Escape on the Unsaved changes dialog only keeps editing) and when focus is in a control that uses Escape itself (an open combobox, a search field). Edit and settings pages are places, not tasks: Escape stays inert there.
 - The `Wizard` takes an `aria-label` naming the flow; locked rail steps cannot be focused or activated, and focus moves to the new step's heading on every step change.
 - The page has one `h1` (the `PageHeader`); each step heading is an `h2` drawn by the Wizard.
 - Host rows are native `button`s with `aria-pressed`; the chooser's search has an `aria-label` and Enter selects the first match.
@@ -33215,6 +33218,33 @@ function useDirection(target?: MaybeRefOrGetter<Target>): Readonly<Ref<Direction
 ## Other exports
 
 `resolveDirection` · `eventDirection` · `logicalArrowKey` · `Direction`. Signatures and fields: [composables/use-direction.md](composables/use-direction.md).
+
+---
+
+<!-- composables/use-escape-to-cancel.md -->
+
+# useEscapeToCancel
+
+Composable `@aziontech/webkit/use-escape-to-cancel`. The signatures and option tables below are read from its typed source, [`src/composables/use-escape-to-cancel/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/webkit/src/composables/use-escape-to-cancel/index.ts).
+
+```ts
+import { useEscapeToCancel } from '@aziontech/webkit/use-escape-to-cancel'
+import type { UseEscapeToCancelOptions } from '@aziontech/webkit/use-escape-to-cancel'
+```
+
+## `useEscapeToCancel`
+
+```ts
+function useEscapeToCancel(onEscape: (event: globalThis.KeyboardEvent) => void, options: UseEscapeToCancelOptions = {}): void
+```
+
+## `UseEscapeToCancelOptions`
+
+Options of `useEscapeToCancel`.
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `enabled` | `MaybeRefOrGetter<boolean>` | no | Turns the shortcut off (for example while the create request is in flight). |
 
 ---
 
