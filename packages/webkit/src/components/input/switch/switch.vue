@@ -114,14 +114,16 @@
     >
       <template v-if="variant === 'privacy'">
         <i
-          aria-hidden="true"
-          :data-testid="`${testId}__lock`"
-          class="az az-lock text-body-2xs leading-none text-(--bg-surface) group-data-[checked]:hidden"
-        />
-        <i
+          v-if="isChecked"
           aria-hidden="true"
           :data-testid="`${testId}__lock-open`"
-          class="az az-lock-open hidden text-body-2xs leading-none text-(--accent) group-data-[checked]:inline"
+          class="az az-lock-open text-body-2xs leading-none text-(--accent)"
+        />
+        <i
+          v-else
+          aria-hidden="true"
+          :data-testid="`${testId}__lock`"
+          class="az az-lock text-body-2xs leading-none text-(--bg-surface)"
         />
       </template>
     </span>
