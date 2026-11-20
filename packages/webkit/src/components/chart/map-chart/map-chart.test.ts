@@ -102,7 +102,7 @@ describe('MapChart', () => {
     const onPoint = vi.fn()
     const view = render({
       render: () =>
-        h('div', { style: 'width: 640px' }, [
+        h('div', { style: 'width: 640px; pointer-events: none' }, [
           h(MapChart, {
             regions,
             points,
