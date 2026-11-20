@@ -95,6 +95,7 @@
 - `data-disabled`, `data-invalid`, `data-required`, `data-readonly`, `data-filled` mirror the matching props (or the selection state for `data-filled`)
 - `data-selected` on `<SelectItem>` when the option's value is part of the current selection
 - Long lists: above 300 options the list mounts in chunks of 100 as they scroll near view (unmounted chunks keep their height, 32 px per option), so opening a 1,000-option list stays within its runtime budget. The first arrow, `Home` or `End` key in the list mounts every option before moving focus, so keyboard navigation always reaches every option.
+- `variant="outline"`: the panel takes the trigger's width and at least `--container-3xs`, so a select in a narrow cell (a table column type, a grid filter) still opens a list that reads; a panel wider than its trigger stays inside the viewport, lined up with the trigger's start edge when it fits
 - `data-side` (`bottom` | `top`) and `data-align` (`start`) on the listbox panel mirror where it landed after flipping; `start` follows the text direction, so under `rtl` the panel lines up with the field's right edge
 
 ## Accessibility

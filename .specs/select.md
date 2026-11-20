@@ -7,9 +7,9 @@ spec_version: 15
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10801
   node_id: 3714:10801
-checksum: 8c381cbdba4c75957563542cbadb7c47ac513f1222afe6db31ace192d5ffac01
+checksum: 0df491847163b8105eaa438565236df1983a191a2becb669eae75618294f426a
 created: 2026-06-15
-last_updated: 2026-11-19
+last_updated: 2026-11-20
 ---
 
 # Select — Component Spec
@@ -139,6 +139,7 @@ _none_
 - `data-disabled`, `data-invalid`, `data-required`, `data-readonly`, `data-filled` mirror the matching props (or the selection state for `data-filled`)
 - `data-selected` on `<SelectItem>` when the option's value is part of the current selection
 - Long lists: above 300 options the list mounts in chunks of 100 as they scroll near view (unmounted chunks keep their height, 32 px per option), so opening a 1,000-option list stays within its runtime budget. The first arrow, `Home` or `End` key in the list mounts every option before moving focus, so keyboard navigation always reaches every option.
+- `variant="outline"`: the panel takes the trigger's width and at least `--container-3xs`, so a select in a narrow cell (a table column type, a grid filter) still opens a list that reads; a panel wider than its trigger stays inside the viewport, lined up with the trigger's start edge when it fits
 - `data-side` (`bottom` | `top`) and `data-align` (`start`) on the listbox panel mirror where it landed after flipping; `start` follows the text direction, so under `rtl` the panel lines up with the field's right edge
 
 ## Motion & Animations
@@ -158,7 +159,7 @@ _none_
 | surface (trigger disabled)           | `var(--bg-disabled)`                                                                                                            |
 | surface (transparent hover / open)   | `var(--bg-mask)`                                                                                                                |
 | typography (transparent trigger)     | `.text-label-md`                                                                                                                |
-| panel min width (transparent)        | `var(--container-3xs)`                                                                                                          |
+| panel min width (both variants)      | `var(--container-3xs)`                                                                                                          |
 | surface (panel)                      | `var(--bg-surface-raised)`                                                                                                      |
 | surface (option hover)               | `var(--bg-hover)`                                                                                                               |
 | surface (option selected)            | `var(--bg-selected)`                                                                                                            |
@@ -184,6 +185,7 @@ _none_
 ## Decisions and open questions
 
 - **`variant` on Select (2026-11-12).** The console's workload page ends its breadcrumb on the environment (`Production ⌄`) drawn as text, and the design sample got it by overriding the trigger with `!` classes (`border-0! bg-transparent! h-6! …`). The look is now `variant="ghost"`, named from the shared vocabulary (`ghost` = no surface until hover, as `Button` and `ButtonGroup`); the bordered field is `outline`, the default, so no existing select changes. Decided: the transparent trigger keeps the `size` heights (28 px at `small`, not the sample's 24 px) so its target stays the same as every other small control; it zeroes the focus ring offset like the sample, since it sits inside a line of text; and its panel takes at least `--container-3xs` instead of the trigger's width, which would be a few characters wide. The `./select` budget moves from 19.75 KB to 20 KB (measured 19.91 KB, up from 19.73 KB).
+- **Panel min width on every variant (2026-11-20).** A select in a narrow column (the Type cell of the Create Table drawer, about 70 px) opened a list as narrow as its trigger, so options read `int2 S` and `numeri`. The outline panel now takes at least `--container-3xs` too, like the ghost panel, and placement keeps a panel wider than its trigger inside the viewport.
 
 ## Theme gaps
 

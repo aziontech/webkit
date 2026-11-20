@@ -23888,7 +23888,7 @@ The imperative API is backed by a small reactive store composable, declared here
 ## States
 
 - Visual states: `default`, `empty`, `at limit` (Add disabled), `invalid` (per cell), `disabled`
-- `data-size` mirrors `size`; `data-disabled` mirrors `disabled`; `data-mode` is `list` or `grouped`
+- `data-size` mirrors `size`; `data-disabled` mirrors `disabled`; `data-mode` is `list` or `grouped`; `data-fit` is the container width (`md`, `xl` or `3xl`) from which the row layout applies (see Responsive)
 - Each row carries `data-row` with its index (and `data-group` in grouped mode)
 - With `reorderable`: the row or group being dragged carries `data-dragging` (dimmed, dashed `var(--accent)` outline) and the one under the pointer carries `data-drop` (`before` or `after`, a 2 px `var(--accent)` line on that edge); Move up is disabled on the first row of a group and Move down on the last; every reorder control is disabled with `disabled`
 
@@ -26566,6 +26566,7 @@ packages/webkit/src/components/input/radio-group/
 - `data-disabled`, `data-invalid`, `data-required`, `data-readonly`, `data-filled` mirror the matching props (or the selection state for `data-filled`)
 - `data-selected` on `<SelectItem>` when the option's value is part of the current selection
 - Long lists: above 300 options the list mounts in chunks of 100 as they scroll near view (unmounted chunks keep their height, 32 px per option), so opening a 1,000-option list stays within its runtime budget. The first arrow, `Home` or `End` key in the list mounts every option before moving focus, so keyboard navigation always reaches every option.
+- `variant="outline"`: the panel takes the trigger's width and at least `--container-3xs`, so a select in a narrow cell (a table column type, a grid filter) still opens a list that reads; a panel wider than its trigger stays inside the viewport, lined up with the trigger's start edge when it fits
 - `data-side` (`bottom` | `top`) and `data-align` (`start`) on the listbox panel mirror where it landed after flipping; `start` follows the text direction, so under `rtl` the panel lines up with the field's right edge
 
 ## Accessibility
@@ -31645,11 +31646,12 @@ State matrix:
 | invalid step | `Wizard.Step` `invalid` | The step root carries `data-invalid`. Its rail step carries `data-invalid` and renders the `Stepper.Step` `error` state: the danger dot with the warning glyph and the screen-reader word `Needs attention`. |
 | step reached | the `v-model` index once held a step | That step and every step before it stay reachable from the rail after the reader goes back. |
 | narrow box | wizard box under `@2xl` | The rail is not displayed (`@max-2xl/wizard:hidden`). The root shows its own `Step n of N` progress line (`wizard.stepOf`, `aria-live="polite"`, `data-testid="<testid>__progress"`) at the top of the content column in place of the step header's overline, which hides at that width; the step title follows it and the footer stays below. |
+| narrow footer | wizard box under `@sm` (408 px) | The footer wraps: Cancel and Previous share the first row (Cancel at the start, Previous at the end) and the primary action takes the full width on its own row below, so a long `submitLabel` is never cut off. The order on screen is the DOM and focus order: Cancel, Previous, primary. |
 
 Layout from `@2xl` of the wizard's own box (`@container/wizard`, so a wizard in a drawer or split view follows that box): a row with the rail column (`@2xl/wizard:w-(--container-3xs) @2xl/wizard:shrink-0`) on the start
 side and the content column (`min-w-0 flex-1`) beside it. The content column stacks the active step,
 then the footer. The footer is a row with Cancel at the start and Previous + Next grouped at the end,
-separated from the content by a top border.
+separated from the content by a top border. The footer row wraps (`flex-wrap`, the Previous + Next group too) rather than overflow, and under `@sm` of the wizard box it stacks as the narrow footer state describes.
 
 - Server render and hydration: steps register from their own setup, after the root has rendered, so until mount the root does not use the step count. The step shown, `data-active-step` and Previous follow the requested `v-model` index (clamped at 0), and the primary action reads Next; on mount the index is clamped to the registered steps and the last step reads the submit label. The server HTML and the first client render therefore match.
 

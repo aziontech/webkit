@@ -290,6 +290,13 @@
     () => props.reorderable && grouped.value && groupList.value.length > 1
   )
   const actionCount = (group: TItem[]) => (rowReorderShown(group) ? 4 : 1)
+  const fit = computed<'md' | 'xl' | '3xl'>(() => {
+    const actions = Math.max(1, ...groupList.value.map(actionCount))
+    const control = props.size === 'small' ? 28 : props.size === 'medium' ? 32 : 40
+    const row = columnCount.value * 140 + actions * control + (actions - 1) * 4
+    if (row <= 472) return 'md'
+    return row <= 644 ? 'xl' : '3xl'
+  })
 
   const restoreFocus = async (active: Element | null, fallback: string) => {
     await nextTick()
@@ -446,10 +453,11 @@
   <div
     ref="rootEl"
     v-bind="$attrs"
-    class="group/attribute-editor @container/attribute-editor flex w-full min-w-0 flex-col gap-(--spacing-md)"
+    class="group group/attribute-editor @container/attribute-editor flex w-full min-w-0 flex-col gap-(--spacing-md)"
     :style="columnsStyle"
     :data-testid="testId"
     :data-size="size"
+    :data-fit="fit"
     :data-mode="grouped ? 'grouped' : 'list'"
     :data-disabled="disabled || null"
   >
@@ -553,7 +561,7 @@
             <div
               v-if="!slots.row && definition.length && group.length"
               aria-hidden="true"
-              class="hidden min-w-0 gap-(--spacing-sm) text-label-sm text-(--text-default) @md/attribute-editor:grid @md/attribute-editor:grid-cols-[repeat(var(--attribute-editor-columns),minmax(0,1fr))_auto]"
+              class="hidden min-w-0 grid-cols-[repeat(var(--attribute-editor-columns),minmax(0,1fr))_auto] gap-(--spacing-sm) text-label-sm text-(--text-default) group-data-[fit=md]:@md/attribute-editor:grid group-data-[fit=xl]:@xl/attribute-editor:grid group-data-[fit=3xl]:@3xl/attribute-editor:grid"
               :data-testid="`${testId}__header`"
             >
               <span
@@ -578,7 +586,7 @@
               <li
                 v-for="(item, index) in group"
                 :key="rowKey(item)"
-                class="relative flex min-w-0 flex-col gap-(--spacing-sm) border-t border-(--border-muted) pt-(--spacing-sm) first:border-t-0 first:pt-0 @md/attribute-editor:border-t-0 @md/attribute-editor:pt-0 data-[joined]:border-t-0 data-[joined]:pt-0 data-[dragging]:rounded-(--shape-card) data-[dragging]:opacity-60 data-[dragging]:outline-dashed data-[dragging]:outline-2 data-[dragging]:outline-offset-2 data-[dragging]:outline-(--accent) data-[drop]:before:pointer-events-none data-[drop]:before:absolute data-[drop]:before:inset-x-0 data-[drop]:before:h-0.5 data-[drop]:before:bg-(--accent) data-[drop]:before:content-[''] data-[drop=before]:before:-top-(--spacing-2xs) data-[drop=after]:before:-bottom-(--spacing-2xs)"
+                class="relative flex min-w-0 flex-col gap-(--spacing-sm) border-t border-(--border-muted) pt-(--spacing-sm) first:border-t-0 first:pt-0 group-data-[fit=md]:@md/attribute-editor:border-t-0 group-data-[fit=xl]:@xl/attribute-editor:border-t-0 group-data-[fit=3xl]:@3xl/attribute-editor:border-t-0 group-data-[fit=md]:@md/attribute-editor:pt-0 group-data-[fit=xl]:@xl/attribute-editor:pt-0 group-data-[fit=3xl]:@3xl/attribute-editor:pt-0 data-[joined]:border-t-0 data-[joined]:pt-0 data-[dragging]:rounded-(--shape-card) data-[dragging]:opacity-60 data-[dragging]:outline-dashed data-[dragging]:outline-2 data-[dragging]:outline-offset-2 data-[dragging]:outline-(--accent) data-[drop]:before:pointer-events-none data-[drop]:before:absolute data-[drop]:before:inset-x-0 data-[drop]:before:h-0.5 data-[drop]:before:bg-(--accent) data-[drop]:before:content-[''] data-[drop=before]:before:-top-(--spacing-2xs) data-[drop=after]:before:-bottom-(--spacing-2xs)"
                 :data-row="index"
                 :data-group="grouped ? groupIndex : undefined"
                 :data-joined="grouped && index > 0 ? '' : undefined"
@@ -622,7 +630,7 @@
                   "
                 >
                   <div
-                    class="flex min-w-0 flex-col gap-(--spacing-sm) @md/attribute-editor:grid @md/attribute-editor:grid-cols-[repeat(var(--attribute-editor-columns),minmax(0,1fr))_auto] @md/attribute-editor:items-start"
+                    class="flex min-w-0 grid-cols-[repeat(var(--attribute-editor-columns),minmax(0,1fr))_auto] flex-col gap-(--spacing-sm) group-data-[fit=md]:@md/attribute-editor:grid group-data-[fit=xl]:@xl/attribute-editor:grid group-data-[fit=3xl]:@3xl/attribute-editor:grid group-data-[fit=md]:@md/attribute-editor:items-start group-data-[fit=xl]:@xl/attribute-editor:items-start group-data-[fit=3xl]:@3xl/attribute-editor:items-start"
                   >
                     <Field
                       v-for="column in definition"
@@ -635,9 +643,10 @@
                       :disabled="disabled"
                       :data-testid="`${testId}__cell`"
                     >
-                      <FieldLabel class="@md/attribute-editor:sr-only">{{
-                        column.label
-                      }}</FieldLabel>
+                      <FieldLabel
+                        class="group-data-[fit=md]:@md/attribute-editor:sr-only group-data-[fit=xl]:@xl/attribute-editor:sr-only group-data-[fit=3xl]:@3xl/attribute-editor:sr-only"
+                        >{{ column.label }}</FieldLabel
+                      >
                       <slot
                         :name="`cell-${column.key}`"
                         :item="item"
@@ -772,7 +781,7 @@
                         <span
                           v-else
                           aria-hidden="true"
-                          class="hidden @md/attribute-editor:block group-data-[size=small]/attribute-editor:w-7 group-data-[size=medium]/attribute-editor:w-8 group-data-[size=large]/attribute-editor:w-10"
+                          class="hidden group-data-[fit=md]:@md/attribute-editor:block group-data-[fit=xl]:@xl/attribute-editor:block group-data-[fit=3xl]:@3xl/attribute-editor:block group-data-[size=small]/attribute-editor:w-7 group-data-[size=medium]/attribute-editor:w-8 group-data-[size=large]/attribute-editor:w-10"
                         />
                       </slot>
                     </div>

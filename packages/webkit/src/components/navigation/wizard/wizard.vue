@@ -227,7 +227,8 @@
         <slot />
       </div>
       <div
-        class="flex items-center justify-between gap-(--spacing-xs) border-t border-(--border-default) pt-(--spacing-md)"
+        :data-testid="`${testId}__footer`"
+        class="flex flex-wrap items-center justify-between gap-(--spacing-xs) border-t border-(--border-default) pt-(--spacing-md)"
       >
         <Button
           variant="ghost"
@@ -235,7 +236,9 @@
           :disabled="loading"
           @click="onCancel"
         />
-        <div class="flex items-center gap-(--spacing-xs)">
+        <div
+          class="ms-auto flex flex-wrap items-center justify-end gap-(--spacing-xs) @max-sm/wizard:contents"
+        >
           <Button
             v-if="shown > 0"
             variant="secondary"
@@ -247,6 +250,7 @@
             variant="primary"
             :label="isLast ? submitLabel || t('wizard.submit') : t('wizard.next')"
             :loading="loading"
+            class="@max-sm/wizard:w-full"
             @click="onPrimary"
           />
         </div>

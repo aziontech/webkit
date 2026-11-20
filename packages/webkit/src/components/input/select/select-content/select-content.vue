@@ -65,8 +65,13 @@
     side: 'bottom',
     align: 'start',
     sideOffset: 4,
-    matchTriggerWidth: ctx.variant.value !== 'ghost'
+    collisionPadding: ctx.variant.value === 'ghost' ? 8 : { x: 0, y: 8 }
   })
+
+  const panelWidth = () =>
+    ctx.variant.value === 'ghost'
+      ? null
+      : { minWidth: 'var(--container-3xs)', width: `${ctx.triggerEl.value?.offsetWidth ?? 0}px` }
 
   const { onKeydown } = useListboxContent({
     root: rootEl,
@@ -105,7 +110,7 @@
         :class="attrs.class"
         :data-side="resolvedSide"
         :data-align="resolvedAlign"
-        :style="panelStyle"
+        :style="[panelStyle, panelWidth()]"
         :data-variant="ctx.variant.value"
         class="fixed z-(--z-control-overlay) flex max-h-[20rem] flex-col overflow-hidden rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-xs) data-[variant=ghost]:min-w-(--container-3xs)"
         @keydown="onKeydown"

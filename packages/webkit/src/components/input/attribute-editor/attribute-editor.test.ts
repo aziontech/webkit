@@ -59,6 +59,29 @@ describe('AttributeEditor', () => {
       expect(view.getByRole('list', { name: 'Variables' })).toBeTruthy()
     })
 
+    it('states the container width its row layout needs in data-fit', () => {
+      const pair = render(Harness([{ key: 'A', value: '1' }]))
+      expect(pair.getByTestId('attribute-editor').dataset['fit']).toBe('md')
+      pair.unmount()
+      const four = [
+        { key: 'name', label: 'Name' },
+        { key: 'type', label: 'Type' },
+        { key: 'default', label: 'Default' },
+        { key: 'primary', label: 'Primary' }
+      ]
+      const wide = render(Harness([{ name: 'id' }], { definition: four }))
+      expect(wide.getByTestId('attribute-editor').dataset['fit']).toBe('xl')
+      wide.unmount()
+      const reorder = render(
+        Harness([{ name: 'id' }, { name: 'created_at' }], {
+          definition: four,
+          reorderable: true,
+          size: 'large'
+        })
+      )
+      expect(reorder.getByTestId('attribute-editor').dataset['fit']).toBe('3xl')
+    })
+
     it('shows the empty text with no rows', () => {
       const view = render(Harness([]))
       expect(view.getByTestId('attribute-editor__empty').textContent).toContain('No items yet.')

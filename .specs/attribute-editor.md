@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 7
 template: 2
-checksum: b35335337e9c3dfc94520d7d12f36e47682e591033a7ad56863abe390717bb82
+checksum: 79c2e64ad87184c940fa41071d22d8cb3a558a2ad750e688b1c9a052c5be4d24
 created: 2026-11-11
-last_updated: 2026-11-15
+last_updated: 2026-11-20
 ---
 
 # AttributeEditor — Component Spec
@@ -136,7 +136,7 @@ Dynamic slot `cell-<key>` (scope `AttributeEditorCellScope<TItem, TItem[key]>`: 
 ## States
 
 - Visual states: `default`, `empty`, `at limit` (Add disabled), `invalid` (per cell), `disabled`
-- `data-size` mirrors `size`; `data-disabled` mirrors `disabled`; `data-mode` is `list` or `grouped`
+- `data-size` mirrors `size`; `data-disabled` mirrors `disabled`; `data-mode` is `list` or `grouped`; `data-fit` is the container width (`md`, `xl` or `3xl`) from which the row layout applies (see Responsive)
 - Each row carries `data-row` with its index (and `data-group` in grouped mode)
 - With `reorderable`: the row or group being dragged carries `data-dragging` (dimmed, dashed `var(--accent)` outline) and the one under the pointer carries `data-drop` (`before` or `after`, a 2 px `var(--accent)` line on that edge); Move up is disabled on the first row of a group and Move down on the last; every reorder control is disabled with `disabled`
 
@@ -208,7 +208,7 @@ Rows appear and leave without animation; the controls keep their own transitions
 
 ## Responsive
 
-- Container queries: `@container/attribute-editor` on the root; at `@md` (472 px) the cells sit in one grid row under a shared header, below it every cell stacks with its own visible label and rows are divided by a line.
+- Container queries: `@container/attribute-editor` on the root. The cells sit in one grid row under a shared header once the box can give every column at least 128 px beside the row actions; below that every cell stacks with its own visible label and rows are divided by a line. The root states which width that is in `data-fit`: `md` (472 px) for a row up to 472 px wide, `xl` (644 px) up to 644 px, `3xl` (876 px) beyond, where a row is 140 px per column plus the row actions (Remove, and the grip and Move up / Move down when `reorderable`) at the control size. Two columns with Remove switch at `@md`; four columns with the reorder controls stack until `@3xl`, so a select in a cell is never squeezed to a few characters.
 - Narrow (≤ 640 px or a narrow container): stacked cells, Remove at the end of the row.
 - Touch: buttons follow `size`; nothing depends on hover (the Remove and Move tooltips repeat their accessible names). Dragging needs a pointer; on touch the Move up / Move down buttons reorder.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom.
