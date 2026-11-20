@@ -1489,6 +1489,13 @@ export const searchTrigger = {
   label: 'Search'
 } as const
 
+export const shortcutsDialog = {
+  title: 'Keyboard shortcuts',
+  show: 'Show keyboard shortcuts',
+  general: 'General',
+  emptyTitle: 'No keyboard shortcuts here'
+} as const
+
 export const copyPromptButton = {
   label: 'Copy prompt',
   copied: 'Copied',
@@ -1703,6 +1710,7 @@ export const en = {
   clientStoryColumnsSection,
   copyCommandSection,
   searchTrigger,
+  shortcutsDialog,
   copyPromptButton,
   docAgentCard,
   common,

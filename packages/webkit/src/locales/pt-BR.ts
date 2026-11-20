@@ -1369,6 +1369,12 @@ export const ptBR: Messages = {
   searchTrigger: {
     label: 'Buscar'
   },
+  shortcutsDialog: {
+    title: 'Atalhos de teclado',
+    show: 'Mostrar atalhos de teclado',
+    general: 'Geral',
+    emptyTitle: 'Nenhum atalho de teclado aqui'
+  },
   copyPromptButton: {
     label: 'Copiar prompt',
     copied: 'Copiado',

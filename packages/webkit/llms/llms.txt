@@ -381,6 +381,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [HoverCard](components/hover-card.md): Rich preview that appears beside a link or name when the pointer rests on it or keyboard focus reaches it, and goes away when both leave.
 - [Panel](components/panel.md): The shell inside an overlay: a sized surface with a header for the title and the close control, a body that scrolls and a footer for the actions.
 - [Popover](components/popover.md): Anchored, **non-modal** overlay that opens from a consumer-supplied trigger and renders rich, interactive content — a header (title + optional description + close), a free-form body, and a footer for actions — in a fl…
+- [ShortcutsDialog](components/shortcuts-dialog.md): The list of every keyboard shortcut the current screen offers, opened with `?` (Shift+/) as the console keyboard standard asks.
 - [Tooltip](components/tooltip.md): Surfaces a short hint anchored to a trigger element when the user hovers, focuses, or long-presses it.
 
 ## Components: Providers
@@ -449,6 +450,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [useLocale](composables/use-locale.md): `useLocale` and 19 more exports (options, return, helpers and types).
 - [usePinnedRow](composables/use-pinned-row.md): `usePinnedRow` and 2 more exports (options, return, helpers and types).
 - [usePlacement](composables/use-placement.md): `usePlacement` and 12 more exports (options, return, helpers and types).
+- [useShortcuts](composables/use-shortcuts.md): `useShortcuts` and 17 more exports (options, return, helpers and types).
 - [useTimeRange](composables/use-time-range.md): `useTimeRange` and 5 more exports (options, return, helpers and types).
 - [useUnsavedChanges](composables/use-unsaved-changes.md): `useUnsavedChanges` and 3 more exports (options, return, helpers and types).
 

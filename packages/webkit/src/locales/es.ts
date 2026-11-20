@@ -1368,6 +1368,12 @@ export const es: Messages = {
   searchTrigger: {
     label: 'Buscar'
   },
+  shortcutsDialog: {
+    title: 'Atajos de teclado',
+    show: 'Mostrar atajos de teclado',
+    general: 'General',
+    emptyTitle: 'No hay atajos de teclado aquí'
+  },
   copyPromptButton: {
     label: 'Copiar prompt',
     copied: 'Copiado',

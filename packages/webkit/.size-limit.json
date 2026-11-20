@@ -2593,5 +2593,15 @@
     "name": "card-grid-cell",
     "path": "src/components/layout/card-grid/card-grid-cell/card-grid-cell.vue",
     "limit": "1.65 KB"
+  },
+  {
+    "name": "use-shortcuts",
+    "path": "src/composables/use-shortcuts/index.ts",
+    "limit": "2.5 KB"
+  },
+  {
+    "name": "shortcuts-dialog",
+    "path": "src/components/overlay/shortcuts-dialog/shortcuts-dialog.vue",
+    "limit": "27 KB"
   }
 ]
