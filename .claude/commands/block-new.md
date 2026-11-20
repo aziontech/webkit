@@ -61,8 +61,10 @@ the SFC. A variant imports the primary (`import X from '../<name>.vue'`) and pas
 or slots; only a genuinely different screen may stay a full SFC. `npx @aziontech/webkit add`
 copies the `files` beside the SFC as `<stem>.<file>` and rewrites the local imports, and
 `get_block` returns them under `files`. `check:blocks` fails on a primary without props, a
-primary that holds records, and a variant that repeats 90 % or more of the primary
-(`scripts/blocks-data-baseline.json` freezes the legacy findings and only shrinks). The exemplar is
+primary that holds records, a variant that repeats 90 % or more of the primary, and a variant
+of 60 lines or more that copies 60 % or more of the primary and adds its own code (a fork, which
+misses every later fix to the primary) (`scripts/blocks-data-baseline.json` freezes the legacy
+findings and only shrinks). The exemplar is
 `view/view-table`.
 
 The catalog (`build:catalog`), the MCP (`get_block` returns `guidelines.md` with the SFC),
