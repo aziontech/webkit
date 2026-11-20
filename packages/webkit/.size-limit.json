@@ -94,17 +94,17 @@
   {
     "name": "table-root",
     "path": "src/components/data/table/table.vue",
-    "limit": "1.95 KB"
+    "limit": "2.3 KB"
   },
   {
     "name": "data-table",
     "path": "src/components/data/data-table/data-table.vue",
-    "limit": "57.05 KB"
+    "limit": "57.45 KB"
   },
   {
     "name": "data-grid",
     "path": "src/components/data/data-grid/data-grid.vue",
-    "limit": "10.5 KB"
+    "limit": "11.15 KB"
   },
   {
     "name": "property-filter",
@@ -438,7 +438,7 @@
   {
     "name": "console-application-scene",
     "path": "src/assets/scenes/console-application/console-application-scene.vue",
-    "limit": "118.35 KB"
+    "limit": "118.75 KB"
   },
   {
     "name": "console-trace-scene",
@@ -627,7 +627,7 @@
   {
     "name": "listing-index-section",
     "path": "src/components/section/listing-index-section/listing-index-section.vue",
-    "limit": "40.2 KB",
+    "limit": "40.45 KB",
     "entryOnly": true
   },
   {
@@ -688,7 +688,7 @@
   {
     "name": "listing-table-section",
     "path": "src/components/section/listing-table-section/listing-table-section.vue",
-    "limit": "25.05 KB"
+    "limit": "25.25 KB"
   },
   {
     "name": "site-footer-section",
@@ -1656,7 +1656,7 @@
   {
     "name": "table",
     "path": "src/components/data/table/index.ts",
-    "limit": "7.6 KB"
+    "limit": "7.9 KB"
   },
   {
     "name": "table-header",
