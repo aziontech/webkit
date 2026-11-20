@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 9
-checksum: 5c4dffd6655c9935619a19e466babac14013e8c5941e15a959b271d4ada95ffd
+checksum: 1132558252697dbeccb7338a1491e7b80748bbc84ea3f6f7312241246f564279
 created: 2026-09-22
 last_updated: 2026-11-18
 ---
@@ -162,6 +162,7 @@ Whether the band ever splits is `orientation`'s call. `horizontal` is the band p
 - `data-size` mirrors the `size` prop; `large` sets the headline at `heading-xl` and the description at `body-lg`, and pads the copy cell `var(--spacing-2xl)` on every side instead of `var(--spacing-xl)`, for a band whose copy cell holds only a headline and its actions. While a horizontal band is split but narrower than 72rem, its halves are too narrow for that padding, so the large copy cell pads `var(--spacing-xl)` there and the `heading-xl` headline keeps its width (a two-line headline stays two lines from the split up). The padding follows the type, so a call site never re-spaces a large band by hand
 - `data-align` mirrors the `align` prop; `start` spreads the copy column so the headline sits at the cell's top and the actions on its floor, `center` gathers the stack and its actions on the cell's vertical middle. The text stays flush with the leading edge either way
 - `data-media-href` is present when `mediaHref` is set, and is what turns the band into a link: the media cell is a single `<a>` named by the band's `title`, and a chevron affordance sits at its closing lower corner — `opacity-0` at rest, revealed on `hover` anywhere on the band and on the cell's own `focus-visible`, so the keyboard reaches the same affordance the pointer does. The affordance is `aria-hidden` decoration, never a nested control: the cell is the link
+- An unsafe `mediaHref` (`javascript:`, `data:`, any non-web scheme, `//host`) counts as unset: no `data-media-href`, no link, and a click on the band follows nothing.
 - A band carrying `mediaHref` is clickable as a whole: the pointer turns to `cursor-pointer`, and a click anywhere outside a control follows the URL — in a new tab with `Cmd`/`Ctrl` held, and not at all while the reader is selecting text or when a consumer's own `click` listener called `preventDefault()`. Links and buttons inside the band keep their own destinations. The keyboard path is the media cell's link, so the band adds no tab stop
 - Hovering a band carrying `mediaHref` lights every link in the `actions` slot as if it were hovered itself — its hover overlay shows and a trailing icon nudges forward — and pressing the band shows their active overlay, so the band and its action read as one target. Actions rendered as `<button>` are left alone
 

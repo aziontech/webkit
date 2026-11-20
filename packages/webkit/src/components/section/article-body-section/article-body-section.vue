@@ -333,7 +333,8 @@
     const prompt = encodeURIComponent(
       t('articleBodySection.assistantPrompt', { url: props.article.href })
     )
-    window.open(template.replace('{prompt}', prompt), '_blank', 'noopener')
+    const url = safeHref(template.replace('{prompt}', prompt))
+    if (url) window.open(url, '_blank', 'noopener')
   }
 
   const spy = (): void => {

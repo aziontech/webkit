@@ -7,7 +7,7 @@ spec_version: 6
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-18
-checksum: e4ed8e6bc7e76fa70b0df7ae5db460d46dc8b54fb3aa621c540b3b64a7ec28c8
+checksum: fa6dc873fd8d4b510eb9840bcc339cc4755c7007380ca67db7becf203c85312b
 ---
 
 # ArticleBodySection — Component Spec
@@ -99,6 +99,7 @@ The reading page of an article. A brand banner sits over a three-column grid: th
 - The left rail renders only the groups that are set, and is omitted when none is
 - Copying: the copy-link button and the `link` menu entry copy the current page URL (`article.href` when there is none); the copy-feed button (when `share.copyFeed` and `share.feed` are set) copies `share.feed`; the split button's main action copies the page as markdown (headline, deck, body); each success raises a success toast (`share.copiedLink` / `copiedFeed` / `copiedPage`, or the locale default), and a failed clipboard write raises an error toast. Toasts render where the page mounts a `Toaster`
 - Copy-page menu: the `link` entry copies the URL; the `markdown` entry opens the page as plain-text markdown in a new tab; an entry whose `value` is a key of `assistants` opens that template in a new tab with `{prompt}` replaced by the encoded prompt `Read <article.href> so I can ask questions about it.`
+- An assistant template that resolves to an unsafe URL (`javascript:`, `data:`, any non-web scheme, `//host`) opens nothing.
 - Byline: with `authors`, overlapping large avatars (photo, or initials without one) lead the byline; with `author`, the names sit above the date and read time
 - Prose: fenced code blocks render as `pre`/`code`; numbered lists as `ol`; a full `http` link opens in a new tab
 - The eyebrow is plain text with no `//` prefix: that prefix belongs to the hero and the pricing sections only.

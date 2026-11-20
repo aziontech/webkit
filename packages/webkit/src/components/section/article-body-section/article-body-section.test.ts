@@ -259,6 +259,23 @@ describe('ArticleBodySection', () => {
     )
   })
 
+  it('does not open an assistant whose template is not a safe link', async () => {
+    const open = vi.spyOn(window, 'open').mockReturnValue(null)
+    const { getByRole, findByRole } = band({
+      copyPage: {
+        label: 'Copy page',
+        menu: [...copyPage.menu, { value: 'bad', label: 'Open in Bad', icon: 'az az-sparkles' }]
+      },
+      assistants: { bad: 'javascript:alert({prompt})' }
+    })
+
+    await userEvent.click(getByRole('button', { name: /more|options|menu/i }))
+    await userEvent.click(await findByRole('menuitem', { name: 'Open in Bad' }))
+
+    expect(open).not.toHaveBeenCalled()
+    open.mockRestore()
+  })
+
   it.each(UNSAFE_MARKDOWN_HREFS)('renders a body link to %j as plain text', (href) => {
     const { getByText, queryByRole } = band({ body: `Open the [trap](${href}) now.` })
     expect(queryByRole('link', { name: 'trap' })).toBeNull()
