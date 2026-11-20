@@ -2,6 +2,7 @@
   import { computed, nextTick, onBeforeUnmount, ref, useAttrs, useId } from 'vue'
 
   import { eventDirection, logicalArrowKey } from '../../../composables/use-direction'
+  import { useScrollEdges } from '../../../composables/use-scroll-edges'
   import { intlLocale, useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import { copyText } from '../../../utils/clipboard'
@@ -140,6 +141,19 @@
       editing.value?.row === row ? `${editing.value.col}:${invalid.value}:${draft.value}` : ''
     return `${ranged}|${cursor}|${edit}`
   }
+
+  const frozenWidth = computed<number>(() => {
+    let width = 0
+    for (let col = 0; col < offset.value + (props.frozenFirstColumn ? 1 : 0); col++)
+      width += widthAt(col)
+    return width
+  })
+  const viewportEl = ref<HTMLElement | null>(null)
+  const {
+    start: overflowStart,
+    end: overflowEnd,
+    measure: measureEdges
+  } = useScrollEdges(viewportEl)
 
   const cellId = (row: number, col: number): string => `${uid}-r${row}-c${col}`
   const frozenStyle = (col: number): Record<string, string> | undefined => {
@@ -583,208 +597,228 @@
       />
     </div>
     <div
-      :data-testid="`${testId}__viewport`"
-      :style="maxHeight ? { maxHeight } : undefined"
-      class="min-h-0 min-w-0 overflow-auto [scrollbar-width:thin]"
+      :data-testid="`${testId}__scroll`"
+      :data-overflow-start="overflowStart || undefined"
+      :data-overflow-end="overflowEnd || undefined"
+      class="group/scroll relative flex min-h-0 min-w-0 flex-col"
     >
       <div
-        v-bind="gridAttrs"
-        role="grid"
-        :aria-label="ariaLabel || undefined"
-        :aria-rowcount="rows.length + 1"
-        :aria-colcount="colCount"
-        aria-multiselectable="true"
-        :aria-readonly="readonly || undefined"
-        :data-testid="`${testId}__grid`"
-        class="flex w-max min-w-full flex-col"
-        @copy="onCopy"
-        @paste="onPaste"
+        ref="viewportEl"
+        :data-testid="`${testId}__viewport`"
+        :style="maxHeight ? { maxHeight } : undefined"
+        class="min-h-0 min-w-0 overflow-auto [scrollbar-width:thin]"
+        @scroll.passive="measureEdges"
       >
         <div
-          role="row"
-          aria-rowindex="1"
-          class="sticky top-0 z-2 flex border-b-(length:--border-width-default) border-solid border-(--border-default) bg-(--bg-surface-raised)"
+          v-bind="gridAttrs"
+          role="grid"
+          :aria-label="ariaLabel || undefined"
+          :aria-rowcount="rows.length + 1"
+          :aria-colcount="colCount"
+          aria-multiselectable="true"
+          :aria-readonly="readonly || undefined"
+          :data-testid="`${testId}__grid`"
+          class="flex w-max min-w-full flex-col"
+          @copy="onCopy"
+          @paste="onPaste"
         >
           <div
-            v-for="col in colCount"
-            :id="cellId(HEADER, col - 1)"
-            :key="col"
-            role="columnheader"
-            :tabindex="active.row === HEADER && active.col === col - 1 ? 0 : -1"
-            :aria-colindex="col"
-            :data-frozen="frozen(col - 1)"
-            :data-resizing="resizing === columnAt(col - 1)?.id || null"
-            :data-testid="
-              columnAt(col - 1)
-                ? `${testId}__head-${columnAt(col - 1)?.id}`
-                : `${testId}__select-all`
-            "
-            :style="{ width: `${widthAt(col - 1)}px`, ...frozenStyle(col - 1) }"
-            class="relative flex min-h-10 shrink-0 items-center bg-(--bg-surface-raised) px-(--spacing-sm) text-label-sm text-(--text-muted) outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) data-[frozen]:sticky data-[frozen]:z-1 pointer-coarse:min-h-11"
-            @focus="onCellFocus(HEADER, col - 1)"
-            @keydown="(event) => onCellKeydown(event, HEADER, col - 1)"
-            @pointerdown="(event) => onCellPointerdown(event, HEADER, col - 1)"
+            role="row"
+            aria-rowindex="1"
+            class="sticky top-0 z-2 flex border-b-(length:--border-width-default) border-solid border-(--border-default) bg-(--bg-surface-raised)"
           >
-            <Checkbox
-              v-if="col - 1 < offset"
-              :model-value="allSelected"
-              :indeterminate="selectedRows.length > 0 && !allSelected"
-              :tabindex="-1"
-              :aria-label="t('dataGrid.selectAll')"
-              class="mx-auto"
-              @update:model-value="toggleAll"
-            />
-            <template v-else>
-              <span
-                :data-align="columnAt(col - 1)?.align ?? 'start'"
-                class="min-w-0 flex-1 truncate text-start data-[align=end]:text-end"
-                >{{ columnAt(col - 1)?.header }}</span
-              >
-              <span
-                :id="`${cellId(HEADER, col - 1)}-resize`"
-                role="separator"
-                tabindex="-1"
-                aria-orientation="vertical"
-                :aria-valuenow="widthAt(col - 1)"
-                :aria-valuemin="columnAt(col - 1)?.minWidth ?? 64"
-                :aria-valuemax="MAX_WIDTH"
-                :aria-label="t('dataGrid.resize', { column: columnAt(col - 1)?.header ?? '' })"
-                :data-testid="`${testId}__resize-${columnAt(col - 1)?.id}`"
-                class="absolute inset-y-0 -end-3 z-1 w-6 cursor-col-resize touch-none after:absolute after:inset-y-2 after:start-1/2 after:w-px after:bg-(--border-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) pointer-coarse:-end-[1.375rem] pointer-coarse:w-11"
-                @pointerdown="(event) => startResize(event, columnAt(col - 1) as DataGridColumn)"
-                @keydown="
-                  (event) => onResizeKeydown(event, columnAt(col - 1) as DataGridColumn, col - 1)
-                "
+            <div
+              v-for="col in colCount"
+              :id="cellId(HEADER, col - 1)"
+              :key="col"
+              role="columnheader"
+              :tabindex="active.row === HEADER && active.col === col - 1 ? 0 : -1"
+              :aria-colindex="col"
+              :data-frozen="frozen(col - 1)"
+              :data-resizing="resizing === columnAt(col - 1)?.id || null"
+              :data-testid="
+                columnAt(col - 1)
+                  ? `${testId}__head-${columnAt(col - 1)?.id}`
+                  : `${testId}__select-all`
+              "
+              :style="{ width: `${widthAt(col - 1)}px`, ...frozenStyle(col - 1) }"
+              class="relative flex min-h-10 shrink-0 items-center bg-(--bg-surface-raised) px-(--spacing-sm) text-label-sm text-(--text-muted) outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) data-[frozen]:sticky data-[frozen]:z-1 pointer-coarse:min-h-11"
+              @focus="onCellFocus(HEADER, col - 1)"
+              @keydown="(event) => onCellKeydown(event, HEADER, col - 1)"
+              @pointerdown="(event) => onCellPointerdown(event, HEADER, col - 1)"
+            >
+              <Checkbox
+                v-if="col - 1 < offset"
+                :model-value="allSelected"
+                :indeterminate="selectedRows.length > 0 && !allSelected"
+                :tabindex="-1"
+                :aria-label="t('dataGrid.selectAll')"
+                class="mx-auto"
+                @update:model-value="toggleAll"
               />
-            </template>
-          </div>
-        </div>
-
-        <div
-          v-for="(row, r) in rows"
-          :key="keyOf(row, r)"
-          v-memo="[
-            row,
-            selectedSet.has(idOf(row)),
-            rowState(r),
-            widthsKey,
-            colCount,
-            readonly,
-            frozenFirstColumn,
-            columns,
-            locale
-          ]"
-          role="row"
-          :aria-rowindex="r + 2"
-          :aria-selected="selectable ? selectedSet.has(idOf(row)) : undefined"
-          :data-state="selectedSet.has(idOf(row)) ? 'selected' : null"
-          :data-testid="`${testId}__row`"
-          class="group/row flex border-b-(length:--border-width-default) border-solid border-(--border-default) [content-visibility:auto] [contain-intrinsic-size:auto_2.5rem] last:border-b-0"
-        >
-          <div
-            v-for="col in colCount"
-            :id="cellId(r, col - 1)"
-            :key="col"
-            role="gridcell"
-            :tabindex="active.row === r && active.col === col - 1 ? 0 : -1"
-            :aria-colindex="col"
-            :aria-selected="inRange(r, col - 1)"
-            :aria-readonly="readonlyAt(col - 1) || undefined"
-            :data-selected="inRange(r, col - 1) || null"
-            :data-editing="(editing?.row === r && editing?.col === col - 1) || null"
-            :data-invalid="(editing?.row === r && editing?.col === col - 1 && invalid) || null"
-            :data-frozen="frozen(col - 1)"
-            :data-testid="
-              columnAt(col - 1)
-                ? `${testId}__cell-${r}-${columnAt(col - 1)?.id}`
-                : `${testId}__select-${r}`
-            "
-            :style="{ width: `${widthAt(col - 1)}px`, ...frozenStyle(col - 1) }"
-            class="relative flex min-h-10 shrink-0 cursor-default items-center bg-(--bg-surface) px-(--spacing-sm) outline-none transition-colors duration-150 ease-out group-hover/row:bg-(--bg-canvas) group-data-[state=selected]/row:bg-(--bg-selected) data-[selected]:bg-(--bg-selected) focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) data-[frozen]:sticky data-[frozen]:z-1 data-[editing]:p-0 motion-reduce:transition-none pointer-coarse:min-h-11"
-            @focus="onCellFocus(r, col - 1)"
-            @keydown="(event) => onCellKeydown(event, r, col - 1)"
-            @pointerdown="(event) => onCellPointerdown(event, r, col - 1)"
-            @dblclick="(event) => startEdit(event, r, col - 1)"
-          >
-            <Checkbox
-              v-if="col - 1 < offset"
-              :model-value="selectedSet.has(idOf(row))"
-              :tabindex="-1"
-              :aria-label="t('dataGrid.selectRow', { row: rowName(row, r) })"
-              class="mx-auto"
-              @update:model-value="toggleRow(r)"
-            />
-            <template v-else-if="editing?.row === r && editing?.col === col - 1">
-              <select
-                v-if="columnAt(col - 1)?.type === 'select'"
-                :id="`${cellId(r, col - 1)}-editor`"
-                :value="draft"
-                :aria-label="columnAt(col - 1)?.header"
-                :data-testid="`${testId}__editor`"
-                class="size-full min-h-10 rounded-(--shape-control) border-none bg-(--bg-surface) px-(--spacing-sm) text-body-sm pointer-coarse:text-body-md text-(--text-default) outline-none ring-2 ring-inset ring-(--ring-color) pointer-coarse:min-h-11"
-                @keydown="onEditorKeydown"
-                @change="onEditorInput"
-                @blur="commit"
-              >
-                <option
-                  v-for="option in columnAt(col - 1)?.options ?? []"
-                  :key="String(option.value)"
-                  :value="String(option.value)"
-                >
-                  {{ option.label }}
-                </option>
-              </select>
               <template v-else>
-                <input
+                <span
+                  :data-align="columnAt(col - 1)?.align ?? 'start'"
+                  class="min-w-0 flex-1 truncate text-start data-[align=end]:text-end"
+                  >{{ columnAt(col - 1)?.header }}</span
+                >
+                <span
+                  :id="`${cellId(HEADER, col - 1)}-resize`"
+                  role="separator"
+                  tabindex="-1"
+                  aria-orientation="vertical"
+                  :aria-valuenow="widthAt(col - 1)"
+                  :aria-valuemin="columnAt(col - 1)?.minWidth ?? 64"
+                  :aria-valuemax="MAX_WIDTH"
+                  :aria-label="t('dataGrid.resize', { column: columnAt(col - 1)?.header ?? '' })"
+                  :data-testid="`${testId}__resize-${columnAt(col - 1)?.id}`"
+                  class="absolute inset-y-0 -end-3 z-1 w-6 cursor-col-resize touch-none after:absolute after:inset-y-2 after:start-1/2 after:w-px after:bg-(--border-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) pointer-coarse:-end-[1.375rem] pointer-coarse:w-11"
+                  @pointerdown="(event) => startResize(event, columnAt(col - 1) as DataGridColumn)"
+                  @keydown="
+                    (event) => onResizeKeydown(event, columnAt(col - 1) as DataGridColumn, col - 1)
+                  "
+                />
+              </template>
+            </div>
+          </div>
+
+          <div
+            v-for="(row, r) in rows"
+            :key="keyOf(row, r)"
+            v-memo="[
+              row,
+              selectedSet.has(idOf(row)),
+              rowState(r),
+              widthsKey,
+              colCount,
+              readonly,
+              frozenFirstColumn,
+              columns,
+              locale
+            ]"
+            role="row"
+            :aria-rowindex="r + 2"
+            :aria-selected="selectable ? selectedSet.has(idOf(row)) : undefined"
+            :data-state="selectedSet.has(idOf(row)) ? 'selected' : null"
+            :data-testid="`${testId}__row`"
+            class="group/row flex border-b-(length:--border-width-default) border-solid border-(--border-default) [content-visibility:auto] [contain-intrinsic-size:auto_2.5rem] last:border-b-0"
+          >
+            <div
+              v-for="col in colCount"
+              :id="cellId(r, col - 1)"
+              :key="col"
+              role="gridcell"
+              :tabindex="active.row === r && active.col === col - 1 ? 0 : -1"
+              :aria-colindex="col"
+              :aria-selected="inRange(r, col - 1)"
+              :aria-readonly="readonlyAt(col - 1) || undefined"
+              :data-selected="inRange(r, col - 1) || null"
+              :data-editing="(editing?.row === r && editing?.col === col - 1) || null"
+              :data-invalid="(editing?.row === r && editing?.col === col - 1 && invalid) || null"
+              :data-frozen="frozen(col - 1)"
+              :data-testid="
+                columnAt(col - 1)
+                  ? `${testId}__cell-${r}-${columnAt(col - 1)?.id}`
+                  : `${testId}__select-${r}`
+              "
+              :style="{ width: `${widthAt(col - 1)}px`, ...frozenStyle(col - 1) }"
+              class="relative flex min-h-10 shrink-0 cursor-default items-center bg-(--bg-surface) px-(--spacing-sm) outline-none transition-colors duration-150 ease-out group-hover/row:bg-(--bg-canvas) group-data-[state=selected]/row:bg-(--bg-selected) data-[selected]:bg-(--bg-selected) focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) data-[frozen]:sticky data-[frozen]:z-1 data-[editing]:p-0 motion-reduce:transition-none pointer-coarse:min-h-11"
+              @focus="onCellFocus(r, col - 1)"
+              @keydown="(event) => onCellKeydown(event, r, col - 1)"
+              @pointerdown="(event) => onCellPointerdown(event, r, col - 1)"
+              @dblclick="(event) => startEdit(event, r, col - 1)"
+            >
+              <Checkbox
+                v-if="col - 1 < offset"
+                :model-value="selectedSet.has(idOf(row))"
+                :tabindex="-1"
+                :aria-label="t('dataGrid.selectRow', { row: rowName(row, r) })"
+                class="mx-auto"
+                @update:model-value="toggleRow(r)"
+              />
+              <template v-else-if="editing?.row === r && editing?.col === col - 1">
+                <select
+                  v-if="columnAt(col - 1)?.type === 'select'"
                   :id="`${cellId(r, col - 1)}-editor`"
                   :value="draft"
-                  type="text"
-                  :inputmode="columnAt(col - 1)?.type === 'number' ? 'decimal' : undefined"
                   :aria-label="columnAt(col - 1)?.header"
-                  :aria-invalid="invalid || undefined"
-                  :aria-describedby="invalid ? `${cellId(r, col - 1)}-error` : undefined"
-                  :data-align="columnAt(col - 1)?.align ?? 'start'"
-                  :data-invalid="invalid || null"
                   :data-testid="`${testId}__editor`"
-                  class="size-full min-h-10 rounded-(--shape-control) border-none bg-(--bg-surface) px-(--spacing-sm) text-start text-body-sm pointer-coarse:text-body-md text-(--text-default) outline-none ring-2 ring-inset ring-(--ring-color) data-[align=end]:text-end data-[invalid]:ring-(--danger-border) pointer-coarse:min-h-11"
-                  @input="onEditorInput"
+                  class="size-full min-h-10 rounded-(--shape-control) border-none bg-(--bg-surface) px-(--spacing-sm) text-body-sm pointer-coarse:text-body-md text-(--text-default) outline-none ring-2 ring-inset ring-(--ring-color) pointer-coarse:min-h-11"
                   @keydown="onEditorKeydown"
+                  @change="onEditorInput"
                   @blur="commit"
-                />
-                <span
-                  v-if="invalid"
-                  :id="`${cellId(r, col - 1)}-error`"
-                  role="alert"
-                  :data-testid="`${testId}__error`"
-                  class="absolute start-0 top-full z-3 mt-(--spacing-2xs) whitespace-nowrap rounded-(--shape-control) border-(length:--border-width-default) border-solid border-(--danger-border) bg-(--bg-surface) px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-default)"
-                  >{{ t('dataGrid.invalidNumber') }}</span
                 >
+                  <option
+                    v-for="option in columnAt(col - 1)?.options ?? []"
+                    :key="String(option.value)"
+                    :value="String(option.value)"
+                  >
+                    {{ option.label }}
+                  </option>
+                </select>
+                <template v-else>
+                  <input
+                    :id="`${cellId(r, col - 1)}-editor`"
+                    :value="draft"
+                    type="text"
+                    :inputmode="columnAt(col - 1)?.type === 'number' ? 'decimal' : undefined"
+                    :aria-label="columnAt(col - 1)?.header"
+                    :aria-invalid="invalid || undefined"
+                    :aria-describedby="invalid ? `${cellId(r, col - 1)}-error` : undefined"
+                    :data-align="columnAt(col - 1)?.align ?? 'start'"
+                    :data-invalid="invalid || null"
+                    :data-testid="`${testId}__editor`"
+                    class="size-full min-h-10 rounded-(--shape-control) border-none bg-(--bg-surface) px-(--spacing-sm) text-start text-body-sm pointer-coarse:text-body-md text-(--text-default) outline-none ring-2 ring-inset ring-(--ring-color) data-[align=end]:text-end data-[invalid]:ring-(--danger-border) pointer-coarse:min-h-11"
+                    @input="onEditorInput"
+                    @keydown="onEditorKeydown"
+                    @blur="commit"
+                  />
+                  <span
+                    v-if="invalid"
+                    :id="`${cellId(r, col - 1)}-error`"
+                    role="alert"
+                    :data-testid="`${testId}__error`"
+                    class="absolute start-0 top-full z-3 mt-(--spacing-2xs) whitespace-nowrap rounded-(--shape-control) border-(length:--border-width-default) border-solid border-(--danger-border) bg-(--bg-surface) px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-default)"
+                    >{{ t('dataGrid.invalidNumber') }}</span
+                  >
+                </template>
               </template>
-            </template>
-            <bdi
-              v-else
-              :data-align="columnAt(col - 1)?.align ?? 'start'"
-              :data-readonly="readonlyAt(col - 1) || null"
-              class="min-w-0 flex-1 truncate text-start data-[align=end]:text-end data-[align=end]:tabular-nums data-[readonly]:text-(--text-muted)"
-              >{{ displayAt(row, col - 1) }}</bdi
-            >
+              <bdi
+                v-else
+                :data-align="columnAt(col - 1)?.align ?? 'start'"
+                :data-readonly="readonlyAt(col - 1) || null"
+                class="min-w-0 flex-1 truncate text-start data-[align=end]:text-end data-[align=end]:tabular-nums data-[readonly]:text-(--text-muted)"
+                >{{ displayAt(row, col - 1) }}</bdi
+              >
+            </div>
           </div>
         </div>
+        <div
+          v-if="rows.length === 0"
+          :data-testid="`${testId}__empty`"
+          class="sticky start-0 w-full"
+        >
+          <slot name="empty">
+            <EmptyState
+              size="small"
+              icon="az az-table"
+              :title="t('dataGrid.emptyTitle')"
+              :description="t('dataGrid.emptyDescription')"
+            />
+          </slot>
+        </div>
       </div>
-      <div
-        v-if="rows.length === 0"
-        :data-testid="`${testId}__empty`"
-        class="sticky start-0 w-full"
-      >
-        <slot name="empty">
-          <EmptyState
-            size="small"
-            icon="az az-table"
-            :title="t('dataGrid.emptyTitle')"
-            :description="t('dataGrid.emptyDescription')"
-          />
-        </slot>
-      </div>
+      <span
+        aria-hidden="true"
+        :data-testid="`${testId}__fade-start`"
+        :style="{ insetInlineStart: `${frozenWidth}px` }"
+        class="pointer-events-none absolute inset-y-0 start-0 z-20 hidden w-6 bg-gradient-to-l from-transparent to-(--bg-surface) group-data-[overflow-start]/scroll:block rtl:bg-gradient-to-r forced-colors:forced-color-adjust-none forced-colors:to-[Canvas]"
+      />
+      <span
+        aria-hidden="true"
+        :data-testid="`${testId}__fade-end`"
+        class="pointer-events-none absolute inset-y-0 end-0 z-20 hidden w-6 bg-gradient-to-r from-transparent to-(--bg-surface) group-data-[overflow-end]/scroll:block group-has-[[data-frozen=end]]/scroll:invisible rtl:bg-gradient-to-l forced-colors:forced-color-adjust-none forced-colors:to-[Canvas]"
+      />
     </div>
     <div
       role="status"

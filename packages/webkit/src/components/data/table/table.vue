@@ -1,15 +1,7 @@
 <script setup lang="ts">
-  import {
-    computed,
-    nextTick,
-    onBeforeUnmount,
-    onMounted,
-    provide,
-    ref,
-    useAttrs,
-    useId
-  } from 'vue'
+  import { computed, provide, ref, useAttrs, useId } from 'vue'
 
+  import { useScrollEdges } from '../../../composables/use-scroll-edges'
   import { type TableAppliedFilter, type TableDensity, TableInjectionKey } from './injection-key'
 
   defineOptions({
@@ -95,27 +87,11 @@
   })
 
   const viewportEl = ref<HTMLElement | null>(null)
-  const overflowStart = ref<boolean>(false)
-  const overflowEnd = ref<boolean>(false)
-  const measureEdges = (): void => {
-    const el = viewportEl.value
-    if (!el) return
-    const offset = Math.abs(el.scrollLeft)
-    overflowStart.value = offset > 1
-    overflowEnd.value = el.scrollWidth - el.clientWidth - offset > 1
-  }
-  let edgeObserver: ResizeObserver | null = null
-  onMounted(() => {
-    void nextTick(() => {
-      measureEdges()
-      const el = viewportEl.value
-      if (!el || typeof ResizeObserver === 'undefined') return
-      edgeObserver = new ResizeObserver(measureEdges)
-      edgeObserver.observe(el)
-      if (el.firstElementChild) edgeObserver.observe(el.firstElementChild)
-    })
-  })
-  onBeforeUnmount(() => edgeObserver?.disconnect())
+  const {
+    start: overflowStart,
+    end: overflowEnd,
+    measure: measureEdges
+  } = useScrollEdges(viewportEl)
 </script>
 
 <template>
@@ -149,27 +125,44 @@
     </div>
 
     <div
-      ref="viewportEl"
-      tabindex="0"
-      :data-scroll="maxHeight ? 'both' : 'horizontal'"
-      :data-testid="`${testId}__viewport`"
-      class="relative min-h-0 min-w-0 max-h-(--table-viewport-height) overflow-x-auto overflow-y-hidden data-[scroll=both]:overflow-y-auto [scrollbar-width:thin] [scrollbar-color:var(--border-muted)_transparent] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--border-default) motion-reduce:scroll-auto"
-      @scroll.passive="measureEdges"
+      :data-testid="`${testId}__scroll`"
+      :data-overflow-start="overflowStart || undefined"
+      :data-overflow-end="overflowEnd || undefined"
+      class="group/scroll relative flex min-h-0 min-w-0 flex-col"
     >
       <div
-        class="group/table flex w-max min-w-full flex-col"
-        :data-overflow-start="overflowStart || undefined"
-        :data-overflow-end="overflowEnd || undefined"
+        ref="viewportEl"
+        tabindex="0"
+        :data-scroll="maxHeight ? 'both' : 'horizontal'"
+        :data-testid="`${testId}__viewport`"
+        class="relative min-h-0 min-w-0 max-h-(--table-viewport-height) overflow-x-auto overflow-y-hidden data-[scroll=both]:overflow-y-auto [scrollbar-width:thin] [scrollbar-color:var(--border-muted)_transparent] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--border-default) motion-reduce:scroll-auto"
+        @scroll.passive="measureEdges"
       >
         <div
-          v-bind="tableAttrs"
-          role="table"
-          :data-testid="`${testId}__table`"
-          class="flex w-full flex-col"
+          class="group/table flex w-max min-w-full flex-col"
+          :data-overflow-start="overflowStart || undefined"
+          :data-overflow-end="overflowEnd || undefined"
         >
-          <slot />
+          <div
+            v-bind="tableAttrs"
+            role="table"
+            :data-testid="`${testId}__table`"
+            class="flex w-full flex-col"
+          >
+            <slot />
+          </div>
         </div>
       </div>
+      <span
+        aria-hidden="true"
+        :data-testid="`${testId}__fade-start`"
+        class="pointer-events-none absolute inset-y-0 start-0 z-20 hidden w-6 bg-gradient-to-l from-transparent to-(--bg-surface) group-data-[overflow-start]/scroll:block group-has-[[data-frozen=start]]/scroll:invisible rtl:bg-gradient-to-r forced-colors:forced-color-adjust-none forced-colors:to-[Canvas]"
+      />
+      <span
+        aria-hidden="true"
+        :data-testid="`${testId}__fade-end`"
+        class="pointer-events-none absolute inset-y-0 end-0 z-20 hidden w-6 bg-gradient-to-r from-transparent to-(--bg-surface) group-data-[overflow-end]/scroll:block group-has-[[data-frozen=end]]/scroll:invisible rtl:bg-gradient-to-l forced-colors:forced-color-adjust-none forced-colors:to-[Canvas]"
+      />
     </div>
 
     <slot name="footer" />

@@ -38,6 +38,7 @@
 
   import { eventDirection, logicalArrowKey } from '../../../composables/use-direction'
   import { scrollParent } from '../../../composables/use-lazy-chunks'
+  import { useScrollEdges } from '../../../composables/use-scroll-edges'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import { downloadCsv, toCsv } from '../../../utils/csv'
@@ -896,8 +897,8 @@
       style['width'] = `${width}px !important`
     }
     const frozen = meta.frozen
-    if (frozen === 'start') style['left'] = `${leftOffsetOf(column.id)}px`
-    else if (frozen === 'end') style['right'] = `${rightOffsetOf(column.id)}px`
+    if (frozen === 'start') style['insetInlineStart'] = `${leftOffsetOf(column.id)}px`
+    else if (frozen === 'end') style['insetInlineEnd'] = `${rightOffsetOf(column.id)}px`
     return Object.keys(style).length > 0 ? style : undefined
   }
 
@@ -1035,16 +1036,11 @@
   })
   const visibleHeightOf = (el: HTMLElement): number =>
     Math.min(el.clientHeight, globalThis.innerHeight || el.clientHeight)
-  const overflowStart = ref<boolean>(false)
-  const overflowEnd = ref<boolean>(false)
-  const measureEdges = (): void => {
-    const el = viewportElement()
-    if (!el) return
-    const offset = Math.abs(el.scrollLeft)
-    overflowStart.value = offset > 1
-    overflowEnd.value = el.scrollWidth - el.clientWidth - offset > 1
-  }
-  let edgeObserver: ResizeObserver | null = null
+  const {
+    start: overflowStart,
+    end: overflowEnd,
+    measure: measureEdges
+  } = useScrollEdges(() => viewportElement() ?? null)
 
   const onViewportScroll = (event: Event): void => {
     measureEdges()
@@ -1251,7 +1247,6 @@
     moreObserver?.disconnect()
     lazyObserver?.disconnect()
     rowObserver?.disconnect()
-    edgeObserver?.disconnect()
     globalThis.cancelAnimationFrame(heightsFrame)
   })
 
@@ -1342,12 +1337,6 @@
     if (Number.isFinite(token) && token > 0) stackWidth.value = token
     void nextTick(() => {
       measureAutoWidths()
-      measureEdges()
-      const el = viewportElement()
-      if (!el || typeof ResizeObserver === 'undefined') return
-      edgeObserver = new ResizeObserver(measureEdges)
-      edgeObserver.observe(el)
-      if (el.firstElementChild) edgeObserver.observe(el.firstElementChild)
     })
     const fonts = (globalThis.document as Document & { fonts?: { ready?: Promise<unknown> } }).fonts
     if (fonts?.ready) void fonts.ready.then(() => measureAutoWidths())
@@ -1789,254 +1778,135 @@
       />
     </div>
 
-    <ScrollArea
-      ref="viewportEl"
-      :orientation="viewportHeight ? 'both' : 'horizontal'"
-      :data-testid="`${testId}__viewport`"
-      class="min-w-0 max-h-(--table-viewport-height)"
-      @scroll.passive="onViewportScroll"
+    <div
+      :data-testid="`${testId}__scroll`"
+      :data-overflow-start="overflowStart || undefined"
+      :data-overflow-end="overflowEnd || undefined"
+      class="group/scroll relative flex min-h-0 min-w-0 flex-col"
     >
-      <div
-        class="group/table flex w-max min-w-full flex-col"
-        :class="stacked ? 'w-full!' : undefined"
-        :data-overflow-start="overflowStart || undefined"
-        :data-overflow-end="overflowEnd || undefined"
+      <ScrollArea
+        ref="viewportEl"
+        :orientation="viewportHeight ? 'both' : 'horizontal'"
+        :data-testid="`${testId}__viewport`"
+        class="min-w-0 max-h-(--table-viewport-height)"
+        @scroll.passive="onViewportScroll"
       >
         <div
-          v-if="stacked && selectable && !loading && rowTotal > 0"
-          :data-testid="`${testId}__stacked-select-all`"
-          class="flex min-h-10 items-center gap-(--spacing-xs) px-(--spacing-sm) pt-(--spacing-xs)"
+          class="group/table flex w-max min-w-full flex-col"
+          :class="stacked ? 'w-full!' : undefined"
+          :data-overflow-start="overflowStart || undefined"
+          :data-overflow-end="overflowEnd || undefined"
         >
-          <Checkbox
-            :id="selectAllId"
-            :model-value="pageSelection === 'all'"
-            :indeterminate="pageSelection === 'some'"
-            @update:model-value="(v) => toggleAllPageRows(!!v)"
-          />
-          <label
-            :for="selectAllId"
-            class="cursor-pointer text-label-sm text-(--text-default)"
-            >{{ t('table.selectAll') }}</label
+          <div
+            v-if="stacked && selectable && !loading && rowTotal > 0"
+            :data-testid="`${testId}__stacked-select-all`"
+            class="flex min-h-10 items-center gap-(--spacing-xs) px-(--spacing-sm) pt-(--spacing-xs)"
           >
-        </div>
-        <div
-          v-bind="tableAttrs()"
-          :role="treeActive ? 'treegrid' : 'table'"
-          :data-tree="treeActive || undefined"
-          :tabindex="rowFocusActive ? -1 : undefined"
-          :data-focus-table="rowFocusActive || undefined"
-          :data-testid="`${testId}__table`"
-          :aria-busy="loading || loadingMore || undefined"
-          :aria-rowcount="windowed ? rowTotal + 1 : undefined"
-          class="flex w-full flex-col outline-none focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--ring-color)"
-        >
-          <TableCaption v-if="$slots['caption']">
-            <slot name="caption" />
-          </TableCaption>
-          <template v-if="columns.length > 0">
-            <TableHeader
-              frozen
-              :density="density"
-              :class="stacked ? 'sr-only!' : undefined"
+            <Checkbox
+              :id="selectAllId"
+              :model-value="pageSelection === 'all'"
+              :indeterminate="pageSelection === 'some'"
+              @update:model-value="(v) => toggleAllPageRows(!!v)"
+            />
+            <label
+              :for="selectAllId"
+              class="cursor-pointer text-label-sm text-(--text-default)"
+              >{{ t('table.selectAll') }}</label
             >
-              <TableRow>
-                <TableHeadCell
-                  v-if="reorderActive"
-                  key="reorder"
-                  type="checkbox"
-                  :frozen="reorderHandleFrozen ? 'start' : undefined"
-                  data-slot="reorder-cell"
-                >
-                  <span class="sr-only">{{ t('dataTable.reorderColumn') }}</span>
-                </TableHeadCell>
-                <TableHeadCell
-                  v-if="selectable"
-                  key="select"
-                  type="checkbox"
-                  :frozen="selectionFrozen ? 'start' : undefined"
-                  :style="selectionStyle"
-                >
-                  <Checkbox
-                    v-if="!stacked"
-                    :model-value="pageSelection === 'all'"
-                    :indeterminate="pageSelection === 'some'"
-                    :aria-label="t('table.selectAll')"
-                    @update:model-value="(v) => toggleAllPageRows(!!v)"
-                  />
-                </TableHeadCell>
-                <TableHeadCell
-                  v-for="header in headers"
-                  :key="header.id"
-                  :type="metaOf(header.column).type ?? 'default'"
-                  :grow="metaOf(header.column).grow ?? 1"
-                  :align="metaOf(header.column).align ?? 'start'"
-                  :frozen="metaOf(header.column).frozen"
-                  :style="cellStyleOf(header.column)"
-                  :sortable="header.column.getCanSort()"
-                  :sort-direction="sortDirectionOf(header.column)"
-                  :resizable="isResizableColumn(header.column)"
-                  :resizing="resizingColumnId === header.column.id"
-                  :resize-handler="(event) => startResize(header.column, event)"
-                  @sort="(direction) => header.column.toggleSorting(direction === 'descending')"
-                >
-                  <slot
-                    v-if="hasSlot('header-' + header.column.id)"
-                    :name="headerSlotOf(header.column.id)"
-                    :column="typed<Column<TRow, unknown>>(header.column)"
-                  />
-                  <template v-else-if="header.column.columnDef.header">{{
-                    header.column.columnDef.header
-                  }}</template>
-                </TableHeadCell>
-              </TableRow>
-            </TableHeader>
-
-            <TableBody
-              v-if="loading"
-              key="skeleton"
-              :class="stacked ? 'gap-(--spacing-xs) p-(--spacing-xs)' : undefined"
-            >
-              <TableRow
-                v-for="n in skeletonRowCount"
-                :key="'sk-' + n"
-                :class="
-                  stacked
-                    ? 'flex-wrap rounded-(--shape-control) border! py-(--spacing-2xs)'
-                    : undefined
-                "
+          </div>
+          <div
+            v-bind="tableAttrs()"
+            :role="treeActive ? 'treegrid' : 'table'"
+            :data-tree="treeActive || undefined"
+            :tabindex="rowFocusActive ? -1 : undefined"
+            :data-focus-table="rowFocusActive || undefined"
+            :data-testid="`${testId}__table`"
+            :aria-busy="loading || loadingMore || undefined"
+            :aria-rowcount="windowed ? rowTotal + 1 : undefined"
+            class="flex w-full flex-col outline-none focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--ring-color)"
+          >
+            <TableCaption v-if="$slots['caption']">
+              <slot name="caption" />
+            </TableCaption>
+            <template v-if="columns.length > 0">
+              <TableHeader
+                frozen
+                :density="density"
+                :class="stacked ? 'sr-only!' : undefined"
               >
-                <TableCell
-                  v-if="reorderActive"
-                  key="reorder"
-                  type="checkbox"
-                  :frozen="reorderHandleFrozen ? 'start' : undefined"
-                  :class="stacked ? 'static! before:hidden! after:hidden!' : undefined"
-                />
-                <TableCell
-                  v-if="selectable"
-                  key="select"
-                  type="checkbox"
-                  :frozen="selectionFrozen ? 'start' : undefined"
-                  :style="selectionStyle"
-                  :class="stacked ? 'static! before:hidden! after:hidden!' : undefined"
-                >
-                  <Skeleton
-                    variant="rectangle"
-                    width="16px"
-                    height="16px"
-                  />
-                </TableCell>
-                <TableCell
-                  v-for="header in headers"
-                  :key="header.id"
-                  :style="viewOf(header.column.id).style"
-                  :grow="viewOf(header.column.id).grow"
-                  :align="viewOf(header.column.id).align"
-                  :frozen="viewOf(header.column.id).frozen"
-                  :type="viewOf(header.column.id).type"
-                  :class="viewOf(header.column.id).stackedClass"
-                >
-                  <Skeleton
-                    v-if="viewOf(header.column.id).type !== 'action'"
-                    height="0.875rem"
-                  />
-                </TableCell>
-              </TableRow>
-            </TableBody>
+                <TableRow>
+                  <TableHeadCell
+                    v-if="reorderActive"
+                    key="reorder"
+                    type="checkbox"
+                    :frozen="reorderHandleFrozen ? 'start' : undefined"
+                    data-slot="reorder-cell"
+                  >
+                    <span class="sr-only">{{ t('dataTable.reorderColumn') }}</span>
+                  </TableHeadCell>
+                  <TableHeadCell
+                    v-if="selectable"
+                    key="select"
+                    type="checkbox"
+                    :frozen="selectionFrozen ? 'start' : undefined"
+                    :style="selectionStyle"
+                  >
+                    <Checkbox
+                      v-if="!stacked"
+                      :model-value="pageSelection === 'all'"
+                      :indeterminate="pageSelection === 'some'"
+                      :aria-label="t('table.selectAll')"
+                      @update:model-value="(v) => toggleAllPageRows(!!v)"
+                    />
+                  </TableHeadCell>
+                  <TableHeadCell
+                    v-for="header in headers"
+                    :key="header.id"
+                    :type="metaOf(header.column).type ?? 'default'"
+                    :grow="metaOf(header.column).grow ?? 1"
+                    :align="metaOf(header.column).align ?? 'start'"
+                    :frozen="metaOf(header.column).frozen"
+                    :style="cellStyleOf(header.column)"
+                    :sortable="header.column.getCanSort()"
+                    :sort-direction="sortDirectionOf(header.column)"
+                    :resizable="isResizableColumn(header.column)"
+                    :resizing="resizingColumnId === header.column.id"
+                    :resize-handler="(event) => startResize(header.column, event)"
+                    @sort="(direction) => header.column.toggleSorting(direction === 'descending')"
+                  >
+                    <slot
+                      v-if="hasSlot('header-' + header.column.id)"
+                      :name="headerSlotOf(header.column.id)"
+                      :column="typed<Column<TRow, unknown>>(header.column)"
+                    />
+                    <template v-else-if="header.column.columnDef.header">{{
+                      header.column.columnDef.header
+                    }}</template>
+                  </TableHeadCell>
+                </TableRow>
+              </TableHeader>
 
-            <Transition
-              appear
-              :enter-active-class="bodyEnterActiveClass"
-              :enter-from-class="bodyEnterFromClass"
-              :enter-to-class="bodyEnterToClass"
-              @after-enter="onBodyEntered"
-              @enter-cancelled="onBodyEntered"
-            >
               <TableBody
-                v-if="!loading && !error && rowTotal > 0"
-                key="rows"
+                v-if="loading"
+                key="skeleton"
                 :class="stacked ? 'gap-(--spacing-xs) p-(--spacing-xs)' : undefined"
-                :style="virtualPadding"
               >
                 <TableRow
-                  v-for="(row, index) in renderedRows"
-                  :key="row.id"
-                  :ref="virtualActive ? (el) => trackRow(el, row.id) : undefined"
-                  v-memo="[
-                    row.getIsSelected(),
-                    row.original,
-                    columnViews,
-                    striped,
-                    windowed,
-                    virtualActive,
-                    windowStart + index,
-                    reorderActive,
-                    reorderLocked,
-                    dragId === row.id,
-                    dropOf(row.id),
-                    orderedIds.length,
-                    treeActive,
-                    rowFocusActive,
-                    row.getIsExpanded(),
-                    row.id === treeTabStop,
-                    treePlacement.get(row.id),
-                    row.id === liveBoundaryId
-                  ]"
-                  :selected="row.getIsSelected()"
-                  :aria-rowindex="windowed ? windowStart + index + 2 : undefined"
-                  :aria-level="treeActive ? row.depth + 1 : undefined"
-                  :aria-setsize="treePlacement.get(row.id)?.setsize"
-                  :aria-posinset="treePlacement.get(row.id)?.posinset"
-                  :aria-expanded="
-                    treeActive && row.getCanExpand() ? row.getIsExpanded() : undefined
-                  "
-                  :tabindex="rowFocusActive ? (row.id === treeTabStop ? 0 : -1) : undefined"
-                  :data-tree-row="treeActive ? row.id : undefined"
-                  :data-focus-row="rowFocusActive ? row.id : undefined"
-                  :data-depth="treeActive ? row.depth : undefined"
-                  :data-reorder-row="reorderActive ? row.id : undefined"
-                  :data-dragging="dragId === row.id || undefined"
-                  :data-drop="dropOf(row.id)"
-                  :data-live-boundary="row.id === liveBoundaryId || undefined"
-                  :class="[
+                  v-for="n in skeletonRowCount"
+                  :key="'sk-' + n"
+                  :class="
                     stacked
                       ? 'flex-wrap rounded-(--shape-control) border! py-(--spacing-2xs)'
-                      : undefined,
-                    striped && (windowStart + index) % 2 === 1
-                      ? '[--table-row-bg:var(--bg-surface-raised)]'
-                      : undefined,
-                    'relative transition-[opacity] duration-fast-02 ease-productive-entrance motion-reduce:transition-none after:pointer-events-none after:absolute after:inset-0 after:z-20 data-[dragging]:opacity-60 data-[dragging]:after:outline-dashed data-[dragging]:after:outline-2 data-[dragging]:after:-outline-offset-2 data-[dragging]:after:outline-(--accent) data-[drop=before]:after:shadow-[inset_0_2px_0_var(--accent)] data-[drop=after]:after:shadow-[inset_0_-2px_0_var(--accent)] data-[live-boundary]:shadow-[inset_0_2px_0_var(--success)] outline-none focus-visible:after:outline-2 focus-visible:after:-outline-offset-2 focus-visible:after:outline-solid focus-visible:after:outline-(--ring-color)'
-                  ]"
-                  @click="onRowClick($event, row)"
-                  @keydown="onTreeKeydown($event, row)"
-                  @focusin="rowFocusActive && onTreeFocusin(row)"
+                      : undefined
+                  "
                 >
                   <TableCell
                     v-if="reorderActive"
                     key="reorder"
                     type="checkbox"
                     :frozen="reorderHandleFrozen ? 'start' : undefined"
-                    data-slot="reorder-cell"
                     :class="stacked ? 'static! before:hidden! after:hidden!' : undefined"
-                  >
-                    <IconButton
-                      icon="az az-menu"
-                      variant="outline"
-                      size="small"
-                      :ariaLabel="reorderHandleLabelOf(row.id, windowStart + index)"
-                      :aria-describedby="reorderHintId"
-                      :disabled="reorderLocked || !canMoveId(row.id)"
-                      :data-reorder-handle="row.id"
-                      :data-testid="`${testId}__reorder-handle`"
-                      class="cursor-grab touch-none active:cursor-grabbing"
-                      @click.stop
-                      @keydown="(event: KeyboardEvent) => onHandleKeydown(event, row.id)"
-                      @pointerdown="(event: PointerEvent) => onHandlePointerdown(event, row.id)"
-                      @pointermove="onHandlePointermove"
-                      @pointerup="onHandlePointerup"
-                      @pointercancel="onHandlePointercancel"
-                    />
-                  </TableCell>
+                  />
                   <TableCell
                     v-if="selectable"
                     key="select"
@@ -2045,159 +1915,295 @@
                     :style="selectionStyle"
                     :class="stacked ? 'static! before:hidden! after:hidden!' : undefined"
                   >
-                    <Checkbox
-                      v-if="row.getCanSelect()"
-                      :model-value="row.getIsSelected()"
-                      :aria-label="t('table.selectRow')"
-                      @update:model-value="(v) => row.toggleSelected(!!v)"
+                    <Skeleton
+                      variant="rectangle"
+                      width="16px"
+                      height="16px"
                     />
                   </TableCell>
                   <TableCell
-                    v-for="cell in row.getVisibleCells()"
-                    :key="cell.id"
-                    :style="viewOf(cell.column.id).style"
-                    :grow="viewOf(cell.column.id).grow"
-                    :align="viewOf(cell.column.id).align"
-                    :frozen="viewOf(cell.column.id).frozen"
-                    :type="viewOf(cell.column.id).type"
-                    :class="viewOf(cell.column.id).stackedClass"
+                    v-for="header in headers"
+                    :key="header.id"
+                    :style="viewOf(header.column.id).style"
+                    :grow="viewOf(header.column.id).grow"
+                    :align="viewOf(header.column.id).align"
+                    :frozen="viewOf(header.column.id).frozen"
+                    :type="viewOf(header.column.id).type"
+                    :class="viewOf(header.column.id).stackedClass"
                   >
-                    <span
-                      v-if="viewOf(cell.column.id).stackedField"
-                      aria-hidden="true"
-                      :data-testid="`${testId}__stacked-label`"
-                      class="w-2/5 shrink-0 truncate text-label-sm text-(--text-muted)"
-                      >{{ stackedLabelOf(cell.column) }}</span
-                    >
-                    <span
-                      v-if="treeActive && viewOf(cell.column.id).principal"
-                      aria-hidden="true"
-                      data-slot="tree-gutter"
-                      class="flex shrink-0 justify-end"
-                      :style="{
-                        inlineSize: `calc(var(--spacing-md) * ${row.depth} + var(--size-7))`
-                      }"
-                    >
-                      <span
-                        v-if="row.getCanExpand()"
-                        aria-hidden="true"
-                        :data-testid="`${testId}__expand-toggle`"
-                        class="flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-(--shape-button) border-(length:--border-width-default) border-solid border-(--border-default) bg-(--bg-surface) text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-canvas) motion-reduce:transition-none"
-                        @click.stop="toggleTreeRow(row)"
-                      >
-                        <i
-                          class="text-body-xs"
-                          :class="
-                            row.getIsExpanded()
-                              ? 'az az-chevron-down'
-                              : 'az az-chevron-right rtl:-scale-x-100'
-                          "
-                        />
-                      </span>
-                    </span>
-                    <slot
-                      v-if="hasSlot('cell-' + cell.column.id)"
-                      :name="cellSlotOf(cell.column.id)"
-                      :row="typed<TRow>(row.original)"
-                      :value="cell.getValue()"
+                    <Skeleton
+                      v-if="viewOf(header.column.id).type !== 'action'"
+                      height="0.875rem"
                     />
-                    <span
-                      v-else
-                      class="min-w-0 flex-1 truncate"
-                      >{{ cell.getValue() }}</span
-                    >
                   </TableCell>
                 </TableRow>
-                <div
-                  v-if="lazyActive"
-                  ref="lazySentinelEl"
-                  role="presentation"
-                  aria-hidden="true"
-                  :data-testid="`${testId}__lazy-rows`"
-                  :style="{ height: `${lazyGap}px` }"
-                />
               </TableBody>
-            </Transition>
-          </template>
+
+              <Transition
+                appear
+                :enter-active-class="bodyEnterActiveClass"
+                :enter-from-class="bodyEnterFromClass"
+                :enter-to-class="bodyEnterToClass"
+                @after-enter="onBodyEntered"
+                @enter-cancelled="onBodyEntered"
+              >
+                <TableBody
+                  v-if="!loading && !error && rowTotal > 0"
+                  key="rows"
+                  :class="stacked ? 'gap-(--spacing-xs) p-(--spacing-xs)' : undefined"
+                  :style="virtualPadding"
+                >
+                  <TableRow
+                    v-for="(row, index) in renderedRows"
+                    :key="row.id"
+                    :ref="virtualActive ? (el) => trackRow(el, row.id) : undefined"
+                    v-memo="[
+                      row.getIsSelected(),
+                      row.original,
+                      columnViews,
+                      striped,
+                      windowed,
+                      virtualActive,
+                      windowStart + index,
+                      reorderActive,
+                      reorderLocked,
+                      dragId === row.id,
+                      dropOf(row.id),
+                      orderedIds.length,
+                      treeActive,
+                      rowFocusActive,
+                      row.getIsExpanded(),
+                      row.id === treeTabStop,
+                      treePlacement.get(row.id),
+                      row.id === liveBoundaryId
+                    ]"
+                    :selected="row.getIsSelected()"
+                    :aria-rowindex="windowed ? windowStart + index + 2 : undefined"
+                    :aria-level="treeActive ? row.depth + 1 : undefined"
+                    :aria-setsize="treePlacement.get(row.id)?.setsize"
+                    :aria-posinset="treePlacement.get(row.id)?.posinset"
+                    :aria-expanded="
+                      treeActive && row.getCanExpand() ? row.getIsExpanded() : undefined
+                    "
+                    :tabindex="rowFocusActive ? (row.id === treeTabStop ? 0 : -1) : undefined"
+                    :data-tree-row="treeActive ? row.id : undefined"
+                    :data-focus-row="rowFocusActive ? row.id : undefined"
+                    :data-depth="treeActive ? row.depth : undefined"
+                    :data-reorder-row="reorderActive ? row.id : undefined"
+                    :data-dragging="dragId === row.id || undefined"
+                    :data-drop="dropOf(row.id)"
+                    :data-live-boundary="row.id === liveBoundaryId || undefined"
+                    :class="[
+                      stacked
+                        ? 'flex-wrap rounded-(--shape-control) border! py-(--spacing-2xs)'
+                        : undefined,
+                      striped && (windowStart + index) % 2 === 1
+                        ? '[--table-row-bg:var(--bg-surface-raised)]'
+                        : undefined,
+                      'relative transition-[opacity] duration-fast-02 ease-productive-entrance motion-reduce:transition-none after:pointer-events-none after:absolute after:inset-0 after:z-20 data-[dragging]:opacity-60 data-[dragging]:after:outline-dashed data-[dragging]:after:outline-2 data-[dragging]:after:-outline-offset-2 data-[dragging]:after:outline-(--accent) data-[drop=before]:after:shadow-[inset_0_2px_0_var(--accent)] data-[drop=after]:after:shadow-[inset_0_-2px_0_var(--accent)] data-[live-boundary]:shadow-[inset_0_2px_0_var(--success)] outline-none focus-visible:after:outline-2 focus-visible:after:-outline-offset-2 focus-visible:after:outline-solid focus-visible:after:outline-(--ring-color)'
+                    ]"
+                    @click="onRowClick($event, row)"
+                    @keydown="onTreeKeydown($event, row)"
+                    @focusin="rowFocusActive && onTreeFocusin(row)"
+                  >
+                    <TableCell
+                      v-if="reorderActive"
+                      key="reorder"
+                      type="checkbox"
+                      :frozen="reorderHandleFrozen ? 'start' : undefined"
+                      data-slot="reorder-cell"
+                      :class="stacked ? 'static! before:hidden! after:hidden!' : undefined"
+                    >
+                      <IconButton
+                        icon="az az-menu"
+                        variant="outline"
+                        size="small"
+                        :ariaLabel="reorderHandleLabelOf(row.id, windowStart + index)"
+                        :aria-describedby="reorderHintId"
+                        :disabled="reorderLocked || !canMoveId(row.id)"
+                        :data-reorder-handle="row.id"
+                        :data-testid="`${testId}__reorder-handle`"
+                        class="cursor-grab touch-none active:cursor-grabbing"
+                        @click.stop
+                        @keydown="(event: KeyboardEvent) => onHandleKeydown(event, row.id)"
+                        @pointerdown="(event: PointerEvent) => onHandlePointerdown(event, row.id)"
+                        @pointermove="onHandlePointermove"
+                        @pointerup="onHandlePointerup"
+                        @pointercancel="onHandlePointercancel"
+                      />
+                    </TableCell>
+                    <TableCell
+                      v-if="selectable"
+                      key="select"
+                      type="checkbox"
+                      :frozen="selectionFrozen ? 'start' : undefined"
+                      :style="selectionStyle"
+                      :class="stacked ? 'static! before:hidden! after:hidden!' : undefined"
+                    >
+                      <Checkbox
+                        v-if="row.getCanSelect()"
+                        :model-value="row.getIsSelected()"
+                        :aria-label="t('table.selectRow')"
+                        @update:model-value="(v) => row.toggleSelected(!!v)"
+                      />
+                    </TableCell>
+                    <TableCell
+                      v-for="cell in row.getVisibleCells()"
+                      :key="cell.id"
+                      :style="viewOf(cell.column.id).style"
+                      :grow="viewOf(cell.column.id).grow"
+                      :align="viewOf(cell.column.id).align"
+                      :frozen="viewOf(cell.column.id).frozen"
+                      :type="viewOf(cell.column.id).type"
+                      :class="viewOf(cell.column.id).stackedClass"
+                    >
+                      <span
+                        v-if="viewOf(cell.column.id).stackedField"
+                        aria-hidden="true"
+                        :data-testid="`${testId}__stacked-label`"
+                        class="w-2/5 shrink-0 truncate text-label-sm text-(--text-muted)"
+                        >{{ stackedLabelOf(cell.column) }}</span
+                      >
+                      <span
+                        v-if="treeActive && viewOf(cell.column.id).principal"
+                        aria-hidden="true"
+                        data-slot="tree-gutter"
+                        class="flex shrink-0 justify-end"
+                        :style="{
+                          inlineSize: `calc(var(--spacing-md) * ${row.depth} + var(--size-7))`
+                        }"
+                      >
+                        <span
+                          v-if="row.getCanExpand()"
+                          aria-hidden="true"
+                          :data-testid="`${testId}__expand-toggle`"
+                          class="flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-(--shape-button) border-(length:--border-width-default) border-solid border-(--border-default) bg-(--bg-surface) text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-canvas) motion-reduce:transition-none"
+                          @click.stop="toggleTreeRow(row)"
+                        >
+                          <i
+                            class="text-body-xs"
+                            :class="
+                              row.getIsExpanded()
+                                ? 'az az-chevron-down'
+                                : 'az az-chevron-right rtl:-scale-x-100'
+                            "
+                          />
+                        </span>
+                      </span>
+                      <slot
+                        v-if="hasSlot('cell-' + cell.column.id)"
+                        :name="cellSlotOf(cell.column.id)"
+                        :row="typed<TRow>(row.original)"
+                        :value="cell.getValue()"
+                      />
+                      <span
+                        v-else
+                        class="min-w-0 flex-1 truncate"
+                        >{{ cell.getValue() }}</span
+                      >
+                    </TableCell>
+                  </TableRow>
+                  <div
+                    v-if="lazyActive"
+                    ref="lazySentinelEl"
+                    role="presentation"
+                    aria-hidden="true"
+                    :data-testid="`${testId}__lazy-rows`"
+                    :style="{ height: `${lazyGap}px` }"
+                  />
+                </TableBody>
+              </Transition>
+            </template>
+          </div>
         </div>
-      </div>
-      <div
-        v-if="moreShown"
-        :data-testid="`${testId}__more`"
-        class="sticky start-0 flex w-full flex-col"
-      >
         <div
-          v-if="moreArmed"
-          ref="moreSentinelEl"
-          aria-hidden="true"
-          :data-testid="`${testId}__more-sentinel`"
-          class="h-px w-full"
-        />
-        <div
-          role="status"
-          class="flex min-h-10 items-center justify-center gap-(--spacing-xs) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-muted)"
+          v-if="moreShown"
+          :data-testid="`${testId}__more`"
+          class="sticky start-0 flex w-full flex-col"
         >
-          <template v-if="loadingMore">
-            <Spinner
-              aria-hidden="true"
-              class="size-4"
-            />
-            <span :data-testid="`${testId}__more-loading`">{{ t('dataTable.loadingMore') }}</span>
-          </template>
-          <Button
-            v-else-if="moreRows"
-            variant="ghost"
-            size="small"
-            :label="t('dataTable.loadMore')"
-            :data-testid="`${testId}__more-button`"
-            @click="requestMore"
+          <div
+            v-if="moreArmed"
+            ref="moreSentinelEl"
+            aria-hidden="true"
+            :data-testid="`${testId}__more-sentinel`"
+            class="h-px w-full"
           />
-          <span
-            v-else
-            :data-testid="`${testId}__more-end`"
-            >{{ t('dataTable.noMoreRows') }}</span
+          <div
+            role="status"
+            class="flex min-h-10 items-center justify-center gap-(--spacing-xs) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-muted)"
           >
+            <template v-if="loadingMore">
+              <Spinner
+                aria-hidden="true"
+                class="size-4"
+              />
+              <span :data-testid="`${testId}__more-loading`">{{ t('dataTable.loadingMore') }}</span>
+            </template>
+            <Button
+              v-else-if="moreRows"
+              variant="ghost"
+              size="small"
+              :label="t('dataTable.loadMore')"
+              :data-testid="`${testId}__more-button`"
+              @click="requestMore"
+            />
+            <span
+              v-else
+              :data-testid="`${testId}__more-end`"
+              >{{ t('dataTable.noMoreRows') }}</span
+            >
+          </div>
         </div>
-      </div>
-      <Transition
-        enter-active-class="transition-opacity duration-300 ease-out motion-reduce:transition-none"
-        enter-from-class="opacity-0"
-        enter-to-class="opacity-100"
-      >
-        <div
-          v-if="!loading && error"
-          role="alert"
-          :data-testid="`${testId}__error`"
-          class="sticky start-0 w-full"
+        <Transition
+          enter-active-class="transition-opacity duration-300 ease-out motion-reduce:transition-none"
+          enter-from-class="opacity-0"
+          enter-to-class="opacity-100"
         >
-          <slot
-            name="error"
-            :message="error"
+          <div
+            v-if="!loading && error"
+            role="alert"
+            :data-testid="`${testId}__error`"
+            class="sticky start-0 w-full"
           >
-            <EmptyState
-              size="small"
-              icon="az az-triangle-alert"
-              :title="t('table.errorTitle')"
-              :description="error"
-            />
-          </slot>
-        </div>
-        <div
-          v-else-if="!loading && rowTotal === 0"
-          :data-testid="`${testId}__empty`"
-          class="sticky start-0 w-full"
-        >
-          <slot name="empty">
-            <EmptyState
-              size="small"
-              icon="az az-table"
-              :title="t('table.emptyTitle')"
-              :description="t('table.emptyDescription')"
-            />
-          </slot>
-        </div>
-      </Transition>
-    </ScrollArea>
+            <slot
+              name="error"
+              :message="error"
+            >
+              <EmptyState
+                size="small"
+                icon="az az-triangle-alert"
+                :title="t('table.errorTitle')"
+                :description="error"
+              />
+            </slot>
+          </div>
+          <div
+            v-else-if="!loading && rowTotal === 0"
+            :data-testid="`${testId}__empty`"
+            class="sticky start-0 w-full"
+          >
+            <slot name="empty">
+              <EmptyState
+                size="small"
+                icon="az az-table"
+                :title="t('table.emptyTitle')"
+                :description="t('table.emptyDescription')"
+              />
+            </slot>
+          </div>
+        </Transition>
+      </ScrollArea>
+      <span
+        aria-hidden="true"
+        :data-testid="`${testId}__fade-start`"
+        class="pointer-events-none absolute inset-y-0 start-0 z-20 hidden w-6 bg-gradient-to-l from-transparent to-(--bg-surface) group-data-[overflow-start]/scroll:block group-has-[[data-frozen=start]]/scroll:invisible rtl:bg-gradient-to-r forced-colors:forced-color-adjust-none forced-colors:to-[Canvas]"
+      />
+      <span
+        aria-hidden="true"
+        :data-testid="`${testId}__fade-end`"
+        class="pointer-events-none absolute inset-y-0 end-0 z-20 hidden w-6 bg-gradient-to-r from-transparent to-(--bg-surface) group-data-[overflow-end]/scroll:block group-has-[[data-frozen=end]]/scroll:invisible rtl:bg-gradient-to-l forced-colors:forced-color-adjust-none forced-colors:to-[Canvas]"
+      />
+    </div>
     <template v-if="reorderActive">
       <span
         :id="reorderHintId"
