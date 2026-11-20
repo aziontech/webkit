@@ -20,10 +20,15 @@ export function findMixedToolbarOutlines(): MixedOutline[] {
   const MAX_HEIGHT = 56
   const ROW_TOLERANCE = 2
 
-  const transparent = (color: string) =>
-    color === 'transparent' ||
-    /rgba\([^)]*,\s*0(\.0+)?\)$/.test(color) ||
-    /\/\s*0(\.0+)?%?\)$/.test(color)
+  const MIN_ALPHA = 0.1
+
+  const transparent = (color: string) => {
+    if (color === 'transparent') return true
+    const alpha = /rgba\([^)]*,\s*([\d.]+)\)$/.exec(color) ?? /\/\s*([\d.]+)(%?)\)$/.exec(color)
+    if (!alpha?.[1]) return false
+    const value = parseFloat(alpha[1]) / (alpha[2] === '%' ? 100 : 1)
+    return value < MIN_ALPHA
+  }
 
   const describe = (element: Element) => {
     const testId = element.getAttribute('data-testid')
