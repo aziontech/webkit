@@ -1,4 +1,4 @@
-import { useEventListener, useResizeObserver } from '@vueuse/core'
+import { useResizeObserver } from '@vueuse/core'
 import {
   computed,
   type ComputedRef,
@@ -20,6 +20,8 @@ export interface UseFlowDiagramFitReturn {
   overflowStart: ComputedRef<boolean>
   /** Content continues past the inline end. */
   overflowEnd: ComputedRef<boolean>
+  /** Re-reads the overflow edges; bind it to the scroll event. */
+  measureEdges: () => void
 }
 
 const overflows = (el: HTMLElement): boolean => el.scrollWidth > el.clientWidth + 1
@@ -29,12 +31,8 @@ export const useFlowDiagramFit = (
   listEl: Ref<HTMLElement | null>,
   orientation: MaybeRefOrGetter<'horizontal' | 'vertical' | 'responsive'>
 ): UseFlowDiagramFitReturn => {
-  const fixed = (): FlowDiagramDirection | null => {
-    const value = toValue(orientation)
-    if (value === 'horizontal') return 'row'
-    if (value === 'vertical') return 'column'
-    return null
-  }
+  const fixed = (): FlowDiagramDirection | null =>
+    (({ horizontal: 'row', vertical: 'column', responsive: null }) as const)[toValue(orientation)]
 
   const direction = ref<FlowDiagramDirection>(fixed() ?? 'column')
   const overflowStart = ref<boolean>(false)
@@ -73,11 +71,11 @@ export const useFlowDiagramFit = (
   watch(() => toValue(orientation), schedule)
   useResizeObserver(() => scrollEl.value, schedule)
   useResizeObserver(() => listEl.value, schedule)
-  useEventListener(() => scrollEl.value, 'scroll', measureEdges, { passive: true })
 
   return {
     direction: computed(() => direction.value),
     overflowStart: computed(() => overflowStart.value),
-    overflowEnd: computed(() => overflowEnd.value)
+    overflowEnd: computed(() => overflowEnd.value),
+    measureEdges
   }
 }

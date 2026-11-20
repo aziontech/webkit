@@ -111,7 +111,7 @@
     props.loading ? [] : props.edges
   )
 
-  const { direction, overflowStart, overflowEnd } = useFlowDiagramFit(
+  const { direction, overflowStart, overflowEnd, measureEdges } = useFlowDiagramFit(
     scrollEl,
     containerEl,
     () => props.orientation
@@ -166,7 +166,8 @@
       :data-overflow-start="overflowStart || null"
       :data-overflow-end="overflowEnd || null"
       :data-testid="`${testId}__viewport`"
-      class="w-full overflow-x-auto overscroll-x-contain p-(--spacing-md) outline-none [scrollbar-width:thin] [scrollbar-color:var(--border-muted)_transparent] focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset motion-reduce:scroll-auto [--flow-diagram-fade-direction:to_right] rtl:[--flow-diagram-fade-direction:to_left] data-[overflow-start]:[--flow-diagram-fade-start:transparent] data-[overflow-end]:[--flow-diagram-fade-end:transparent] [&:is([data-overflow-start],[data-overflow-end])]:[mask-image:linear-gradient(var(--flow-diagram-fade-direction),var(--flow-diagram-fade-start,black)_0,black_var(--spacing-2xl),black_calc(100%-var(--spacing-2xl)),var(--flow-diagram-fade-end,black)_100%)] [&:is([data-overflow-start],[data-overflow-end])]:[mask-mode:alpha]"
+      @scroll.passive="measureEdges"
+      class="w-full overflow-x-auto overscroll-x-contain p-(--spacing-md) outline-none [scrollbar-width:thin] [scrollbar-color:var(--border-muted)_transparent] focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset [--flow-diagram-fade-direction:to_right] rtl:[--flow-diagram-fade-direction:to_left] data-[overflow-start]:[--flow-diagram-fade-start:transparent] data-[overflow-end]:[--flow-diagram-fade-end:transparent] [&:is([data-overflow-start],[data-overflow-end])]:[mask-image:linear-gradient(var(--flow-diagram-fade-direction),var(--flow-diagram-fade-start,black)_0,black_var(--spacing-2xl),black_calc(100%-var(--spacing-2xl)),var(--flow-diagram-fade-end,black)_100%)]"
     >
       <span
         v-if="loading"
