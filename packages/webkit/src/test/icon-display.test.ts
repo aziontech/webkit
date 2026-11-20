@@ -1,5 +1,6 @@
 import './reflow.css'
-import '@aziontech/icons'
+import '../../../icons/dist/azionicons.css'
+import '../../../icons/dist/azionicons-color.css'
 
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { page } from 'vitest/browser'
