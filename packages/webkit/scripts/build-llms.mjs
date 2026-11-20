@@ -1054,6 +1054,17 @@ function foundations(catalog) {
       body: [rule('webkit-accessibility')]
     },
     {
+      slug: 'keyboard',
+      title: 'Keyboard',
+      summary:
+        'The console keyboard contract: focus on open, Esc, Enter and Cmd+Enter, Cmd+S, Cmd+K, /, ?, list keys, and no single-key shortcut while typing.',
+      body: [rule('webkit-keyboard')],
+      compact: [
+        section(readRepo('rules/webkit-keyboard.md'), /^## The contract/),
+        "Do, Don't, the Vue samples and what enforces each key, in full: `foundations/keyboard.md`."
+      ]
+    },
+    {
       slug: 'site-pages',
       title: 'Site pages (Web Design Guide)',
       summary:

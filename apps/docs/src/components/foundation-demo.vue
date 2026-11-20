@@ -9,9 +9,10 @@
 
   import AuthSignIn from '../../../../packages/webkit/blocks/auth/auth-sign-in/auth-sign-in.vue'
   import { messages as t } from '../lib/i18n'
+  import KeyboardShortcuts from './keyboard-shortcuts.vue'
   import TokenTable from './tokens/token-table.vue'
 
-  defineProps<{ kind: 'locale' | 'direction' | 'devices' }>()
+  defineProps<{ kind: 'locale' | 'direction' | 'devices' | 'keyboard' }>()
 
   const catalogs = { 'pt-BR': ptBR, es }
   const locale = ref('pt-BR')
@@ -58,6 +59,7 @@
       <AuthSignIn />
     </ConfigProvider>
   </section>
+  <KeyboardShortcuts v-else-if="kind === 'keyboard'" />
   <section
     v-else
     class="flex flex-col gap-(--spacing-md)"

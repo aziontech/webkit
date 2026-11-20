@@ -1493,6 +1493,8 @@ an icon-only control, which `webkit/require-accessible-name` requires on every `
 - Give every interactive piece a **keyboard map** and implement exactly that
   (dialog: `Esc` closes, `Tab` is trapped; menu: arrows move, `Enter` selects,
   `Esc` closes). Anything clickable must be reachable and operable by keyboard.
+  The screen around the pieces follows one console-wide contract (focus on open, `Esc`,
+  `⌘ S`, `/`, `?`, list keys): rule `webkit-keyboard`.
 - Generate ids with Vue's **`useId()`** for every `for` / `aria-labelledby` /
   `aria-describedby` association — stable across SSR.
 - Style focus with a **`focus-visible`** ring using the ring token
@@ -1577,6 +1579,36 @@ const hintId = useId() // stable id for the ARIA association
 <!-- overlay that neither traps focus nor restores it to the trigger on close -->
 <div v-if="open" role="dialog">…</div>
 ```
+
+---
+
+<!-- foundations/keyboard.md -->
+
+# Keyboard
+
+> The console keyboard contract: focus on open, Esc, Enter and Cmd+Enter, Cmd+S, Cmd+K, /, ?, list keys, and no single-key shortcut while typing.
+
+## The contract
+
+| Moment | Behaviour |
+| --- | --- |
+| Opening a task (create page, drawer, form dialog) | Focus lands in the first field. |
+| Opening a page you browse (list, detail, settings) | Focus lands on the page `h1` (`tabindex="-1"`, no visible ring), so a screen reader announces the page. |
+| `Esc` | Closes the top layer only: menu, then dialog, then drawer. On a full-page task it means Cancel, through the unsaved-changes guard. On a browse page it does nothing. |
+| `Enter`, `⌘ Enter` (`Ctrl Enter` off Apple) | `Enter` submits a short single-line form; `⌘ Enter` submits from a textarea or the code editor. |
+| `⌘ S` (`Ctrl S`) | Saves a page that has a `SaveBar`, and stops the browser's own save. |
+| `⌘ K` (`Ctrl K`) | Opens the command palette (rule `webkit-header-search`). |
+| `/` | Focuses the page's search field, when the page has one. |
+| `?` (`Shift /`) | Opens the list of every shortcut the current screen offers. |
+| Lists and tables | Arrow keys move between rows, `Enter` opens, `Space` selects, `Delete` asks before it deletes. |
+| After an action | Closing returns focus to the trigger; deleting moves focus to the next row, else the previous row, else the list. |
+| Always | A single-key shortcut never fires while typing in a field (`input`, `textarea`, `contenteditable`, a combobox) or with a modifier held. |
+
+`⌘` is the Command key on Apple platforms; everywhere else the same shortcut is `Ctrl`. Write the
+shortcut once with the Apple key in code (`meta`) and let `Kbd` print the platform's key: `⌘` on
+macOS, `Ctrl` on Windows, Linux and ChromeOS.
+
+Do, Don't, the Vue samples and what enforces each key, in full: `foundations/keyboard.md`.
 
 ---
 

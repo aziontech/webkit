@@ -2,7 +2,7 @@
 name: ui-craft
 description: Contributor review gate for WebKit itself — required on every new or changed component, example and block before its PR opens. Umbrella for UI taste and PRO UX on @aziontech/webkit. Explains the 3 principles and the non-negotiable rules, then routes to the focused skills — mechanics (usage), structure (ux-heuristics, ui-states, form, create-surface, errors, tables, lists, navigation, microcopy), layout (the page container system), foundation (quick-cleanup), cross-cutting quality (theming-dark-mode, data-viz), polish (motion-polish, final-polish), verification (ui-verify), and adoption.
 status: active
-last_updated: 2026-11-14
+last_updated: 2026-11-20
 scope: webkit
 enforced_by: [review]
 ---
@@ -108,6 +108,32 @@ text-body-* > text-label-* > text-overline-*`). See `/webkit-quick-cleanup`.
 > Accessibility is enforced by the shipped `accessibility` rule and verified at runtime by
 > `/webkit-ui-verify` (axe on the rendered screen).
 
+## Keyboard
+
+Every new or changed block, example and console-facing component holds the console keyboard
+contract (consumer rule `rules/webkit-keyboard.md`, owner decision KB01). Check it with the keyboard
+alone before the PR opens; the `keyboard` check of the styled visual suite drives the same keys over
+every block and demo, and each overlay and list component's browser test covers the keys inside it.
+
+- **Focus on open.** A task (create page, form drawer or dialog) opens with focus in its first
+  field; a browse page (list, detail, settings) opens with focus on its `h1` (`tabindex="-1"`, no
+  ring drawn on the heading).
+- **`Esc`.** Closes the top layer only (menu, then dialog, then drawer, through the shared overlay
+  stack). On a full-page task it is Cancel, through the unsaved-changes guard; on a browse page it
+  does nothing.
+- **Submit and save.** `Enter` submits a short single-line form; `⌘ Enter` (`Ctrl Enter` off Apple)
+  submits from a textarea or the code editor; `⌘ S` (`Ctrl S`) saves a page that has a `SaveBar`
+  and prevents the browser's save.
+- **Search and help.** `⌘ K` is the layout's palette only; `/` focuses the page's search field when
+  it has one; `?` opens the list of every shortcut the screen answers, and nothing is missing from it.
+- **Lists and tables.** Arrows move between rows, `Enter` opens, `Space` selects, `Delete` asks
+  first; after a delete focus moves to the next row, else the previous one, else the list.
+- **Focus after an action.** Closing returns focus to the trigger; focus never lands on `body`.
+- **Typing is safe.** No single-key shortcut fires in an `input`, `textarea`, `contenteditable` or
+  combobox, or with a modifier held; no shortcut takes a key the browser or a screen reader needs.
+- **Shown where offered.** A menu item or bar that has a shortcut prints it with `Kbd` and sets
+  `aria-keyshortcuts` on its control; never plain `Cmd+S` text, never one platform's key hard-coded.
+
 ## The progression — route by phase
 
 Run roughly in this order; polish amplifies a sound structure, it can't rescue a broken one.
@@ -145,4 +171,5 @@ Run roughly in this order; polish amplifies a sound structure, it can't rescue a
 - [ ] The right child skill ran for the task (structure before polish).
 - [ ] Every component is from `@aziontech/webkit`; every visual value is a token.
 - [ ] Structure is sound (states, feedback, a11y) before any polish or delight was added.
+- [ ] The keyboard contract holds (focus on open, `Esc`, `⌘ S`, `/`, `?`, list keys, nothing fires while typing).
 - [ ] The screen was verified for real (`/webkit-ui-verify`), not assumed — both themes, no console errors.

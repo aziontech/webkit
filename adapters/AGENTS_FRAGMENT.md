@@ -95,7 +95,10 @@ product components in one file (`llms-full-site.txt` for the site and docs compo
   `data-theme` the theme follows the device; pin it with `<html data-theme="light">` or
   `<html data-theme="dark">`.
 - **Accessible & keyboard-operable.** Label every field, keep a visible focus ring, mirror state in
-  ARIA, no click handler without a key handler.
+  ARIA, no click handler without a key handler. Every console screen answers the same keys: focus in the first
+  field of a task and on the `h1` of a browse page, `Esc` closes the top layer, `⌘ S` saves a
+  `SaveBar` page, `/` searches, `?` lists the shortcuts, and no single-key shortcut fires while
+  typing (rule `webkit-keyboard`).
 - **Right-to-left ready.** Logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`,
   `text-start`, `border-s`, `rounded-s`); webkit `icon` props already mirror directional glyphs, and
   only an `<i>` glyph you draw yourself takes `rtl:-scale-x-100` (never a class on a webkit tag); arrow-key

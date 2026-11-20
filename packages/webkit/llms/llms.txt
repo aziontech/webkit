@@ -17,6 +17,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [Right-to-left](foundations/right-to-left.md): Logical sides only, so every screen mirrors under dir="rtl"; what mirrors and what does not.
 - [Devices](foundations/devices.md): Viewport breakpoints for the shell, container queries for the content, touch targets and reflow at 320 px.
 - [Accessibility](foundations/accessibility.md): WCAG 2.1 AA rules every component and screen follows: names, focus, keyboard, contrast, motion.
+- [Keyboard](foundations/keyboard.md): The console keyboard contract: focus on open, Esc, Enter and Cmd+Enter, Cmd+S, Cmd+K, /, ?, list keys, and no single-key shortcut while typing.
 - [Site pages (Web Design Guide)](foundations/site-pages.md): The Web Design Guide, SD-01 to SD-25 (SD-07 headline lines, SD-04 action labels): sections, heroes, line budgets and assets of every Azion web page.
 - [Using WebKit in an app](foundations/usage.md): Start from a block, find a component, import it tree-shakeably, app-level setup and the quality checklist.
 - [Illustrations](foundations/illustrations.md): The official product illustration scenes, drawn into the page as inline SVG and repainted from the theme.

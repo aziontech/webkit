@@ -70,6 +70,8 @@ groups go in their `search` slot; a page opens the console palette with
 - Do not hand-roll the field (`<button>` or a read-only `Input` with a magnifier and a `Kbd`), and
   do not put a bare magnifier `IconButton` in a header.
 - Do not bind `⌘K` yourself with a `keydown` listener: `Command` (or the trigger) owns it.
+  The other console shortcuts (`/`, `?`, `⌘ S`, `Esc`) are in rule
+  [`webkit-keyboard`](./webkit-keyboard.md).
 - Do not mount a second `SearchTrigger` or `Command` inside a page rendered by an app layout: the
   layout's palette is the one palette.
 - Do not add search to a focused task header (sign-in, a create flow: back, brand, breadcrumb,
