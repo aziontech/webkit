@@ -9,6 +9,7 @@
   import FieldDescription from '@aziontech/webkit/field-description'
   import Input from '@aziontech/webkit/input'
   import InputGroup from '@aziontech/webkit/input-group'
+  import Kbd from '@aziontech/webkit/kbd'
   import Link from '@aziontech/webkit/link'
   import NumberInput from '@aziontech/webkit/number-input'
   import PanelBody from '@aziontech/webkit/panel-body'
@@ -18,6 +19,7 @@
   import SettingsGroup from '@aziontech/webkit/settings-group'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
+  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import { computed, nextTick, reactive, ref, watch } from 'vue'
 
@@ -128,6 +130,17 @@
     }
     if (await guard.confirmLeave()) open.value = false
   }
+
+  const formEl = ref<HTMLFormElement | null>(null)
+
+  useShortcuts({
+    keys: 'meta+enter',
+    label: 'Add record',
+    group: 'Drawer',
+    element: formEl,
+    when: () => open.value && !submitting.value,
+    handler: () => formEl.value?.requestSubmit()
+  })
 </script>
 
 <template>
@@ -150,6 +163,7 @@
     </DrawerTrigger>
     <DrawerContent>
       <form
+        ref="formEl"
         class="flex min-h-0 flex-1 flex-col"
         aria-label="Add Record"
         novalidate
@@ -343,12 +357,20 @@
         <PanelFooter>
           <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
             <Button
-              label="Add Record"
               variant="primary"
               size="medium"
               :loading="submitting"
               type="submit"
-            />
+              :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
+            >
+              Add Record
+              <Kbd
+                meta
+                key-name="enter"
+                size="small"
+                aria-hidden="true"
+              />
+            </Button>
           </div>
         </PanelFooter>
       </form>

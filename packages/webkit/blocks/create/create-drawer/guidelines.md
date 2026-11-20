@@ -168,6 +168,7 @@ Then delete `sample.ts` and its import.
 ## Accessibility
 
 - The drawer traps focus while open, moves it to the first field on open and returns it to the trigger on close.
+- **⌘ Enter submits the drawer (`Ctrl Enter` off Apple).** `useShortcuts` binds `meta+enter` to the drawer form's `requestSubmit()`, with the form as the shortcut's element, so with two drawers stacked only the top one submits. It stays inert while saving; the submit button carries `aria-keyshortcuts` and an `aria-hidden` `Kbd`, and the `?` dialog lists the action under Drawer.
 - The `form` has an `aria-label` that matches the title; `DrawerTitle` names the dialog.
 - Every select trigger is described by its `Field.Description` (or its `Field.Error`) through the `Field`, so the consequence is read with the value.
 - Required fields carry the Required marker from the start; an error is a `Field.Error` with `role="alert"` and the control is `aria-invalid`.

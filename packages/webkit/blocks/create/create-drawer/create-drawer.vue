@@ -8,12 +8,14 @@
   import Field from '@aziontech/webkit/field'
   import FieldDescription from '@aziontech/webkit/field-description'
   import InputGroup from '@aziontech/webkit/input-group'
+  import Kbd from '@aziontech/webkit/kbd'
   import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import RadioGroup from '@aziontech/webkit/radio-group'
   import Select from '@aziontech/webkit/select'
   import SettingsGroup from '@aziontech/webkit/settings-group'
+  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import { computed, nextTick, reactive, ref, watch } from 'vue'
 
@@ -272,6 +274,17 @@
     if (!validate()) return
     emit('submit', event, { ...form, host: fullDomain.value })
   }
+
+  const formEl = ref<HTMLFormElement | null>(null)
+
+  useShortcuts({
+    keys: 'meta+enter',
+    label: () => props.submitLabel || props.title,
+    group: 'Drawer',
+    element: formEl,
+    when: () => open.value && !props.loading,
+    handler: () => formEl.value?.requestSubmit()
+  })
 </script>
 
 <template>
@@ -297,6 +310,7 @@
   >
     <DrawerContent>
       <form
+        ref="formEl"
         class="flex min-h-0 flex-1 flex-col"
         :aria-label="title"
         novalidate
@@ -459,12 +473,20 @@
         <PanelFooter>
           <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
             <Button
-              :label="submitLabel || title"
               variant="primary"
               size="medium"
               :loading="loading"
               type="submit"
-            />
+              :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
+            >
+              {{ submitLabel || title }}
+              <Kbd
+                meta
+                key-name="enter"
+                size="small"
+                aria-hidden="true"
+              />
+            </Button>
           </div>
         </PanelFooter>
       </form>

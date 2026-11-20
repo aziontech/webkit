@@ -10,6 +10,7 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
+  import Kbd from '@aziontech/webkit/kbd'
   import MultiSelect from '@aziontech/webkit/multi-select'
   import NumberInput from '@aziontech/webkit/number-input'
   import PageHeader from '@aziontech/webkit/page-header'
@@ -19,8 +20,9 @@
   import Switch from '@aziontech/webkit/switch'
   import { toast } from '@aziontech/webkit/toast'
   import { useEscapeToCancel } from '@aziontech/webkit/use-escape-to-cancel'
+  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
-  import { computed, reactive, ref } from 'vue'
+  import { computed, onMounted, reactive, ref } from 'vue'
 
   interface PortOption {
     label: string
@@ -114,6 +116,20 @@
 
   useEscapeToCancel(onLeave)
 
+  const formEl = ref<HTMLFormElement | null>(null)
+  const nameEl = ref<InstanceType<typeof Input> | null>(null)
+
+  useShortcuts({
+    keys: 'meta+enter',
+    label: 'Create service',
+    group: 'Page',
+    element: formEl,
+    when: () => !submitting.value,
+    handler: () => formEl.value?.requestSubmit()
+  })
+
+  onMounted(() => nameEl.value?.focus())
+
   const validate = () => {
     errors.name = form.name.trim() ? '' : 'This field is required.'
     errors.httpPorts = form.httpPorts.length ? '' : 'Select at least one HTTP port.'
@@ -193,6 +209,7 @@
     </AppHeader>
     <main class="animate-page-enter motion-reduce:animate-none min-h-0 flex-1 overflow-auto">
       <form
+        ref="formEl"
         class="flex min-h-full flex-col"
         aria-label="Create Service"
         novalidate
@@ -223,6 +240,7 @@
                       <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                         <div class="flex w-full flex-col gap-(--spacing-xs)">
                           <Input
+                            ref="nameEl"
                             v-model="form.name"
                             size="large"
                             class="w-full"
@@ -567,12 +585,20 @@
               @click="onLeave"
             />
             <Button
-              label="Save"
               variant="primary"
               size="medium"
               :loading="submitting"
               @click="submit"
-            />
+              :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
+            >
+              Save
+              <Kbd
+                meta
+                key-name="enter"
+                size="small"
+                aria-hidden="true"
+              />
+            </Button>
           </template>
         </SaveBar>
       </form>

@@ -1,6 +1,7 @@
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
+import { type Component, createApp } from 'vue'
 
 import MultipageCreate from '../../../../blocks/create/create-wizard/create-wizard.vue'
 import MultipageCreateAndDeploy from '../../../../blocks/create/create-wizard/variants/create-and-deploy.vue'
@@ -187,5 +188,85 @@ describe('create-wizard#Review', () => {
     expect(screen.getByText('and 2 more')).toBeTruthy()
     await fireEvent.click(screen.getByRole('button', { name: 'Edit list settings' }))
     expect(await screen.findByRole('heading', { name: 'List settings' })).toBeTruthy()
+  })
+})
+
+const apple = /mac/i.test(navigator.platform || navigator.userAgent)
+
+const mountAttached = (component: Component, props: Record<string, unknown> = {}) => {
+  const host = document.body.appendChild(document.createElement('div'))
+  const app = createApp(component, props)
+  app.mount(host)
+  return () => {
+    app.unmount()
+    host.remove()
+  }
+}
+
+const pressSubmitShortcut = (target: Element) =>
+  target.dispatchEvent(
+    new KeyboardEvent('keydown', {
+      key: 'Enter',
+      metaKey: apple,
+      ctrlKey: !apple,
+      bubbles: true,
+      cancelable: true
+    })
+  )
+
+describe('create-wizard keyboard', () => {
+  it('opens with the cursor in the first field of the first step', async () => {
+    const unmount = mountAttached(MultipageCreate)
+    await waitFor(
+      () =>
+        expect(document.activeElement).toBe(
+          screen.getByRole('textbox', { name: 'Search policies' })
+        ),
+      wait
+    )
+    unmount()
+  })
+
+  it('advances the current step with Cmd or Ctrl Enter through the same check as Next', async () => {
+    const unmount = mountAttached(MultipageListSettings)
+    const wizard = screen.getByTestId('wizard')
+    await waitFor(() => expect(wizard.contains(document.activeElement)).toBe(true), wait)
+    unmount()
+    render(MultipageListSettings)
+    const items = screen.getByRole('textbox', { name: 'List' }) as HTMLTextAreaElement
+    pressSubmitShortcut(items)
+    expect(await screen.findByText('This field is required.', {}, wait)).toBeTruthy()
+    expect(screen.queryByRole('heading', { level: 2, name: 'Review' })).toBeNull()
+    await fireEvent.update(items, '13335')
+    pressSubmitShortcut(items)
+    expect(await screen.findByRole('heading', { level: 2, name: 'Review' }, wait)).toBeTruthy()
+  })
+
+  it('creates from Review with the shortcut', async () => {
+    const view = render(MultipageCreate, {
+      props: {
+        defaultStep: 'review',
+        defaultPolicy: 'acme-production',
+        defaultValues: { name: 'office-ranges', items: '13335' }
+      }
+    })
+    await screen.findByRole('button', { name: 'Create Access List' })
+    pressSubmitShortcut(document.body)
+    await waitFor(() => expect(view.emitted('submit')).toHaveLength(1), wait)
+    const [event, values] = view.emitted<unknown[]>('submit')?.[0] ?? []
+    expect(event).toBeInstanceOf(MouseEvent)
+    expect(values).toMatchObject({ name: 'office-ranges', items: '13335' })
+  })
+
+  it('opens CreateAndDeploy on the project choice', async () => {
+    const unmount = mountAttached(MultipageCreateAndDeploy)
+    await waitFor(() => {
+      const active = document.activeElement as HTMLElement | null
+      expect(active?.getAttribute('role')).toBe('radio')
+      expect(active?.closest('[role="radiogroup"]')?.getAttribute('aria-label')).toBe(
+        'Where the project comes from'
+      )
+    }, wait)
+    unmount()
   })
 })

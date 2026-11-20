@@ -150,6 +150,8 @@ Then delete `sample.ts` and its import. The page reports the run through the toa
 ## Accessibility
 
 - The drawer traps focus while open and returns it to the Deploy trigger on close.
+- Opening the drawer moves focus to its first control.
+- **⌘ Enter deploys (`Ctrl Enter` off Apple)** through the form's submit, the same path as Deploy. It stays inert while Deploy is disabled (loading, load error, a build running, no environment); Deploy carries `aria-keyshortcuts` and an `aria-hidden` `Kbd`, and the `?` dialog lists it under Drawer.
 - The `form` and the `ToggleGroup` carry `aria-label`s; the environment group is named by its `aria-label`.
 - The version menu is a `role="menu"` moved with the arrow keys, each version a `menuitem` named by its version, author and age; the current one carries `aria-current`; search inputs have an `aria-label` that matches the placeholder.
 - Each impacted environment group has an `aria-label` with its count, e.g. "Projects impacted in Production (3)".

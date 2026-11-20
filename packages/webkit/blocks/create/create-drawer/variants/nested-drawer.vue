@@ -8,6 +8,7 @@
   import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
+  import Kbd from '@aziontech/webkit/kbd'
   import PageHeader from '@aziontech/webkit/page-header'
   import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
@@ -15,6 +16,7 @@
   import Select from '@aziontech/webkit/select'
   import SettingsRow from '@aziontech/webkit/settings-row'
   import { toast } from '@aziontech/webkit/toast'
+  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import { nextTick, reactive, ref, watch } from 'vue'
 
@@ -127,6 +129,27 @@
     }
     if (await childGuard.confirmLeave()) childOpen.value = false
   }
+
+  const parentFormEl = ref<HTMLFormElement | null>(null)
+  const childFormEl = ref<HTMLFormElement | null>(null)
+
+  useShortcuts({
+    keys: 'meta+enter',
+    label: 'Add rule',
+    group: 'Drawer',
+    element: parentFormEl,
+    when: () => parentOpen.value && !submitting.value,
+    handler: () => parentFormEl.value?.requestSubmit()
+  })
+
+  useShortcuts({
+    keys: 'meta+enter',
+    label: 'Create origin',
+    group: 'Drawer',
+    element: childFormEl,
+    when: () => childOpen.value && !childSubmitting.value,
+    handler: () => childFormEl.value?.requestSubmit()
+  })
 </script>
 
 <template>
@@ -166,6 +189,7 @@
     >
       <DrawerContent>
         <form
+          ref="parentFormEl"
           class="flex min-h-0 flex-1 flex-col"
           aria-label="Add Rule"
           novalidate
@@ -295,12 +319,20 @@
               <div class="w-full md:w-fit">
                 <Button
                   class="w-full"
-                  label="Add Rule"
                   variant="primary"
                   size="medium"
                   :loading="submitting"
                   type="submit"
-                />
+                  :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
+                >
+                  Add Rule
+                  <Kbd
+                    meta
+                    key-name="enter"
+                    size="small"
+                    aria-hidden="true"
+                  />
+                </Button>
               </div>
             </div>
           </PanelFooter>
@@ -316,6 +348,7 @@
     >
       <DrawerContent>
         <form
+          ref="childFormEl"
           class="flex min-h-0 flex-1 flex-col"
           aria-label="Create Origin"
           novalidate
@@ -412,12 +445,20 @@
               <div class="w-full md:w-fit">
                 <Button
                   class="w-full"
-                  label="Create Origin"
                   variant="primary"
                   size="medium"
                   :loading="childSubmitting"
                   type="submit"
-                />
+                  :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
+                >
+                  Create Origin
+                  <Kbd
+                    meta
+                    key-name="enter"
+                    size="small"
+                    aria-hidden="true"
+                  />
+                </Button>
               </div>
             </div>
           </PanelFooter>

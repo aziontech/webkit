@@ -11,6 +11,7 @@
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
+  import Kbd from '@aziontech/webkit/kbd'
   import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
@@ -18,6 +19,7 @@
   import Separator from '@aziontech/webkit/separator'
   import SettingsGroup from '@aziontech/webkit/settings-group'
   import Tag from '@aziontech/webkit/tag'
+  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { computed, reactive, ref, watch } from 'vue'
 
   interface Version {
@@ -217,6 +219,17 @@
     Object.keys(versionOpen).forEach((key) => delete versionOpen[key])
     environment.value = 'Production'
   })
+
+  const formEl = ref<HTMLFormElement | null>(null)
+
+  useShortcuts({
+    keys: 'meta+enter',
+    label: 'Deploy',
+    group: 'Drawer',
+    element: formEl,
+    when: () => open.value,
+    handler: () => formEl.value?.requestSubmit()
+  })
 </script>
 
 <template>
@@ -236,6 +249,7 @@
 
     <DrawerContent>
       <form
+        ref="formEl"
         class="flex min-h-0 flex-1 flex-col"
         aria-label="Deploy"
         novalidate
@@ -604,11 +618,19 @@
           <div class="flex w-full flex-wrap items-center justify-between gap-(--spacing-sm)">
             <div class="flex min-w-0 items-center gap-(--spacing-sm)" />
             <Button
-              label="Deploy"
               variant="primary"
               size="medium"
               type="submit"
-            />
+              :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
+            >
+              Deploy
+              <Kbd
+                meta
+                key-name="enter"
+                size="small"
+                aria-hidden="true"
+              />
+            </Button>
           </div>
         </PanelFooter>
       </form>

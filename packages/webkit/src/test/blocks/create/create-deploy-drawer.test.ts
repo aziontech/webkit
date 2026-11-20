@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, within } from '@testing-library/vue'
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
 import CreateDeployDrawer from '../../../../blocks/create/create-deploy-drawer/create-deploy-drawer.vue'
@@ -75,5 +75,43 @@ describe('create-deploy-drawer', () => {
     expect(within(dialog).getByRole('button', { name: 'Deploy' }).hasAttribute('disabled')).toBe(
       true
     )
+  })
+})
+
+const apple = /mac/i.test(navigator.platform || navigator.userAgent)
+
+const pressSubmitShortcut = (target: Element) =>
+  target.dispatchEvent(
+    new KeyboardEvent('keydown', {
+      key: 'Enter',
+      metaKey: apple,
+      ctrlKey: !apple,
+      bubbles: true,
+      cancelable: true
+    })
+  )
+
+describe('create-deploy-drawer keyboard', () => {
+  it('moves focus into the drawer and deploys with Cmd or Ctrl Enter', async () => {
+    const view = render(CreateDeployDrawer, {
+      props: { open: true, 'onUpdate:open': () => undefined }
+    })
+    const dialog = await screen.findByRole('dialog')
+    await waitFor(() => expect(dialog.contains(document.activeElement)).toBe(true))
+    const deploy = within(dialog).getByRole('button', { name: 'Deploy' })
+    expect(deploy.getAttribute('aria-keyshortcuts')).toBe('Meta+Enter Control+Enter')
+    pressSubmitShortcut(document.activeElement as HTMLElement)
+    await waitFor(() => expect(view.emitted('submit')).toHaveLength(1))
+    expect(view.emitted<unknown[]>('submit')?.[0]?.[0]).toBeInstanceOf(Event)
+  })
+
+  it('ignores the shortcut while a build runs', async () => {
+    const view = render(CreateDeployDrawer, {
+      props: { open: true, build: { name: 'acme-store', version: 'C7', elapsed: 4 } }
+    })
+    const dialog = await screen.findByRole('dialog')
+    pressSubmitShortcut(dialog)
+    await new Promise((resolve) => setTimeout(resolve, 50))
+    expect(view.emitted('submit')).toBeUndefined()
   })
 })

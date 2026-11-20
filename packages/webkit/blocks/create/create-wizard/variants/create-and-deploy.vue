@@ -22,9 +22,17 @@
   import Switch from '@aziontech/webkit/switch'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { useEscapeToCancel } from '@aziontech/webkit/use-escape-to-cancel'
+  import { useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import Wizard from '@aziontech/webkit/wizard'
-  import { computed, onBeforeUnmount, reactive, ref } from 'vue'
+  import {
+    type ComponentPublicInstance,
+    computed,
+    onBeforeUnmount,
+    onMounted,
+    reactive,
+    ref
+  } from 'vue'
 
   interface Option extends SelectOptionItem {
     description?: string
@@ -717,6 +725,35 @@
   }
 
   useEscapeToCancel(onCancel, { enabled: () => !submitting.value })
+
+  const wizardEl = ref<ComponentPublicInstance | null>(null)
+
+  const FIELD_SELECTOR =
+    'input:not([type="hidden"]), textarea, select, [role="combobox"], [role="radio"][tabindex="0"]'
+
+  const wizardRoot = () => (wizardEl.value?.$el as HTMLElement | undefined) ?? null
+
+  const focusFirstField = () => {
+    const root = wizardRoot()
+    const field = root?.querySelector<HTMLElement>(FIELD_SELECTOR)
+    const checked =
+      field instanceof HTMLInputElement && field.type === 'radio'
+        ? root?.querySelector<HTMLElement>(`input[name="${CSS.escape(field.name)}"]:checked`)
+        : null
+    ;(checked ?? field)?.focus()
+  }
+
+  useShortcuts({
+    keys: 'meta+enter',
+    label: () => (stepIndex.value === 1 ? 'Create and deploy' : 'Next step'),
+    group: 'Page',
+    element: wizardRoot,
+    when: () => !submitting.value,
+    handler: () =>
+      [...(wizardRoot()?.querySelectorAll<HTMLButtonElement>('button') ?? [])].pop()?.click()
+  })
+
+  onMounted(focusFirstField)
 </script>
 
 <template>
@@ -768,6 +805,7 @@
         />
 
         <Wizard
+          ref="wizardEl"
           v-model="stepIndex"
           aria-label="Create Service"
           submit-label="Create and deploy"

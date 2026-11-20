@@ -1,6 +1,7 @@
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
+import { type Component, createApp } from 'vue'
 
 import CreateDeployTemplate from '../../../../blocks/create/create-deploy-template/create-deploy-template.vue'
 import DeployTemplateForm from '../../../../blocks/create/create-deploy-template/variants/form.vue'
@@ -148,5 +149,46 @@ describe('create-deploy-template#Form', () => {
     await fireEvent.click(within(confirm).getByRole('button', { name: 'Keep editing' }))
     await waitFor(() => expect(screen.queryByRole('alertdialog')).toBeNull())
     expect(name.value).toBe('acme-store')
+  })
+})
+
+const apple = /mac/i.test(navigator.platform || navigator.userAgent)
+
+const mountAttached = (component: Component, props: Record<string, unknown> = {}) => {
+  const host = document.body.appendChild(document.createElement('div'))
+  const app = createApp(component, props)
+  app.mount(host)
+  return () => {
+    app.unmount()
+    host.remove()
+  }
+}
+
+const pressSubmitShortcut = (target: Element) =>
+  target.dispatchEvent(
+    new KeyboardEvent('keydown', {
+      key: 'Enter',
+      metaKey: apple,
+      ctrlKey: !apple,
+      bubbles: true,
+      cancelable: true
+    })
+  )
+
+describe('create-deploy-template#Form keyboard', () => {
+  it('opens with the cursor in Scope and deploys with Cmd or Ctrl Enter', async () => {
+    const unmount = mountAttached(DeployTemplateForm)
+    await waitFor(() => {
+      const active = document.activeElement as HTMLElement | null
+      expect(active?.getAttribute('role')).toBe('combobox')
+      expect(active?.textContent).toContain('jane-doe')
+    })
+    unmount()
+    render(DeployTemplateForm)
+    const deploy = screen.getByRole('button', { name: 'Deploy' })
+    expect(deploy.getAttribute('aria-keyshortcuts')).toBe('Meta+Enter Control+Enter')
+    expect(screen.queryByText('NUXT_STORE_ACCESS_TOKEN is required.')).toBeNull()
+    pressSubmitShortcut(screen.getByRole('textbox', { name: /repository name/i }))
+    expect(await screen.findByText('NUXT_STORE_ACCESS_TOKEN is required.')).toBeTruthy()
   })
 })

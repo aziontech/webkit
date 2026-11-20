@@ -9,6 +9,7 @@
   import FieldDescription from '@aziontech/webkit/field-description'
   import Input from '@aziontech/webkit/input'
   import InputGroup from '@aziontech/webkit/input-group'
+  import Kbd from '@aziontech/webkit/kbd'
   import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
@@ -18,6 +19,7 @@
   import Switch from '@aziontech/webkit/switch'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
+  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import { computed, nextTick, reactive, ref, watch } from 'vue'
 
@@ -338,6 +340,28 @@
     }
     if (await environmentGuard.confirmLeave()) environmentOpen.value = false
   }
+
+  const formEl = ref<HTMLFormElement | null>(null)
+
+  const environmentFormEl = ref<HTMLFormElement | null>(null)
+
+  useShortcuts({
+    keys: 'meta+enter',
+    label: 'Add domain',
+    group: 'Drawer',
+    element: formEl,
+    when: () => open.value && !submitting.value,
+    handler: () => formEl.value?.requestSubmit()
+  })
+
+  useShortcuts({
+    keys: 'meta+enter',
+    label: 'Create environment',
+    group: 'Drawer',
+    element: environmentFormEl,
+    when: () => environmentOpen.value && !environmentSubmitting.value,
+    handler: () => environmentFormEl.value?.requestSubmit()
+  })
 </script>
 
 <template>
@@ -368,6 +392,7 @@
   >
     <DrawerContent>
       <form
+        ref="formEl"
         class="flex min-h-0 flex-1 flex-col"
         aria-label="Add Domain"
         novalidate
@@ -521,12 +546,20 @@
         <PanelFooter>
           <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
             <Button
-              label="Add Domain"
               variant="primary"
               size="medium"
               :loading="submitting"
               type="submit"
-            />
+              :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
+            >
+              Add Domain
+              <Kbd
+                meta
+                key-name="enter"
+                size="small"
+                aria-hidden="true"
+              />
+            </Button>
           </div>
         </PanelFooter>
       </form>
@@ -540,6 +573,7 @@
   >
     <DrawerContent>
       <form
+        ref="environmentFormEl"
         class="flex min-h-0 flex-1 flex-col"
         aria-label="Create Environment"
         novalidate
@@ -783,12 +817,20 @@
         <PanelFooter>
           <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
             <Button
-              label="Create Environment"
               variant="primary"
               size="medium"
               :loading="environmentSubmitting"
               type="submit"
-            />
+              :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
+            >
+              Create Environment
+              <Kbd
+                meta
+                key-name="enter"
+                size="small"
+                aria-hidden="true"
+              />
+            </Button>
           </div>
         </PanelFooter>
       </form>

@@ -11,6 +11,7 @@
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
+  import Kbd from '@aziontech/webkit/kbd'
   import Link from '@aziontech/webkit/link'
   import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
@@ -24,6 +25,7 @@
   import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { computed, onBeforeUnmount, reactive, ref, watch } from 'vue'
 
   interface Version {
@@ -555,6 +557,17 @@
     clearTimeout(runTimer)
     toast.dismiss(RUN_TOAST)
   })
+
+  const formEl = ref<HTMLFormElement | null>(null)
+
+  useShortcuts({
+    keys: 'meta+enter',
+    label: 'Deploy',
+    group: 'Drawer',
+    element: formEl,
+    when: () => open.value && canDeploy.value,
+    handler: () => formEl.value?.requestSubmit()
+  })
 </script>
 
 <template>
@@ -575,6 +588,7 @@
 
       <DrawerContent>
         <form
+          ref="formEl"
           class="flex min-h-0 flex-1 flex-col"
           aria-label="Deploy"
           novalidate
@@ -1383,13 +1397,21 @@
                 </p>
               </div>
               <Button
-                label="Deploy"
                 variant="primary"
                 size="medium"
                 type="submit"
                 :disabled="!canDeploy"
                 :aria-describedby="blocker ? 'deploy-drawer-dependencies-blocker' : undefined"
-              />
+                :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
+              >
+                Deploy
+                <Kbd
+                  meta
+                  key-name="enter"
+                  size="small"
+                  aria-hidden="true"
+                />
+              </Button>
             </div>
           </PanelFooter>
         </form>
