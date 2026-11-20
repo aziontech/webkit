@@ -1,4 +1,6 @@
 export const COPY_RATIO = 0.9
+export const FORK_RATIO = 0.6
+const FORK_MIN_LINES = 60
 const RECORD_LIMIT = 3
 
 export function scriptOf(sfc) {
@@ -47,6 +49,11 @@ export function dataContractKeys(id, block) {
   for (const variant of block.variants || []) {
     if (sharedLineRatio(block.sfc, variant.sfc) >= COPY_RATIO)
       keys.push(`${id}:variant-copy:${variant.name}`)
+    else if (
+      String(variant.sfc).split('\n').length >= FORK_MIN_LINES &&
+      sharedLineRatio(variant.sfc, block.sfc) >= FORK_RATIO
+    )
+      keys.push(`${id}:variant-fork:${variant.name}`)
   }
   return keys
 }
