@@ -7,7 +7,7 @@ spec_version: 23
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
   node_id: 2053:7649
-checksum: f3d11ed485b1593ffee3f1256efff7e9ed7428c139db01aa92bcc2e4c11174c5
+checksum: cce95cb102cfaf11b6c9170d166bc061c29383fb45b42bbb11aa54a687c06a28
 created: 2026-06-16
 last_updated: 2026-11-20
 ---
@@ -206,6 +206,7 @@ _none_ — sort comes from `Table.HeadCell` (`sort`) and row clicks fall through
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `selected`
 - The viewport is always a scroll container (`overflow: auto`): horizontal scroll is automatic when columns overflow; vertical scroll engages only when `maxHeight` constrains the content.
 - `data-frozen` on TableHeader (`true`), TableHeadCell / TableCell (`start` | `end`), and TableRow (`true`). A frozen head/body cell renders a CSS-only fade (gradient pseudo-element) just outside its inner edge that dissolves the horizontally scrolling content into the row background (`from-transparent` → `var(--table-row-bg)`, the row-published color, so it matches the row on hover/selected) — `frozen=start` fades on the right, `frozen=end` on the left. The fade tints nothing; it only masks the content sliding under the pinned column.
+- Scroll cue: the scroll viewport sits in a `__scroll` frame that sets `data-overflow-start` / `data-overflow-end` from the scroll position (re-measured on scroll and on resize). While content is hidden past an inline edge, an `aria-hidden` 24 px gradient (`__fade-start` / `__fade-end`, `from-transparent` to `var(--bg-surface)`, pointer events off) covers that edge of the viewport, so a phone shows that columns continue; it follows the inline direction under `dir="rtl"`, has no motion, and keeps its gradient under forced colors (fading to `Canvas`). A frozen column on that edge draws its own fade, so the viewport cue stays hidden there.
 - `data-state` on TableRow: `selected` | `unselected`; `data-selected` mirrors the `selected` prop; `aria-selected` set when selected.
 - `data-type` on TableHeadCell (`default` | `checkbox` | `action` | `slot`) and TableCell (`default` | `checkbox` | `action`).
 - `data-align` on head/body cells: `start` | `center` | `end`.
@@ -240,6 +241,7 @@ The root itself is static. `TableFilter` animates through the `FilterMenu` or `P
 | outer border width                                                      | `var(--border-width-default)`                                   |
 | frozen column surface / edge fade (follow the row via `--table-row-bg`) | `var(--bg-surface)` · `var(--bg-canvas)` · `var(--bg-selected)` |
 | frozen column edge fade (dissolves scrolling content)                   | `var(--bg-surface)`                                             |
+| viewport scroll cue (edge fade over the hidden inline edge)             | `var(--bg-surface)`                                             |
 | row hover                                                               | `var(--bg-canvas)`                                              |
 | row selected                                                            | `var(--bg-selected)`                                            |
 | text                                                                    | `var(--text-default)`                                           |

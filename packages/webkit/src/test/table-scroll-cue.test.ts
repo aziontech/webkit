@@ -2,10 +2,11 @@ import './reflow.css'
 
 import { render } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
-import { commands } from 'vitest/browser'
+import { commands, page } from 'vitest/browser'
 import type { Component } from 'vue'
 import { defineComponent, h, nextTick } from 'vue'
 
+import RulesList from '../../blocks/view/view-rule-list/view-rule-list.vue'
 import DataGridDefault from '../../examples/data-grid/default.vue'
 import DataGridRowSelection from '../../examples/data-grid/row-selection.vue'
 import TableDefault from '../../examples/table/default.vue'
@@ -206,4 +207,38 @@ describe('two frozen end columns keep their own places', () => {
       expect(Math.min(a.right, b.right) - Math.max(a.left, b.left)).toBeLessThanOrEqual(0.5)
     }
   })
+})
+
+describe('view/view-rule-list on a phone', () => {
+  afterEach(async () => {
+    await page.viewport(414, 896)
+  })
+
+  it.each(['ltr', 'rtl'] as const)(
+    'keeps every on/off switch beside the Move column (%s)',
+    async (dir) => {
+      await page.viewport(390, 844)
+      const { container } = mount(() => h(RulesList as Component), dir, 390)
+      await settle()
+      await settle()
+      const rowsWithSwitch = Array.from(
+        container.querySelectorAll<HTMLElement>('[role="row"]')
+      ).filter((row) => row.querySelector('[role="switch"]'))
+      expect(rowsWithSwitch.length).toBeGreaterThan(0)
+      for (const row of rowsWithSwitch) {
+        const ends = Array.from(
+          row.querySelectorAll<HTMLElement>('[role="cell"][data-frozen="end"]')
+        )
+        expect(ends).toHaveLength(2)
+        const [status, move] = ends.map((el) => el.getBoundingClientRect())
+        expect(
+          Math.min(status!.right, move!.right) - Math.max(status!.left, move!.left)
+        ).toBeLessThanOrEqual(0.5)
+        const toggle = row.querySelector<HTMLElement>('[role="switch"]')!.getBoundingClientRect()
+        const middle = (toggle.left + toggle.right) / 2
+        expect(middle).toBeGreaterThan(status!.left)
+        expect(middle).toBeLessThan(status!.right)
+      }
+    }
+  )
 })
