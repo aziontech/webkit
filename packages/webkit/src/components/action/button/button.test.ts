@@ -491,4 +491,12 @@ describe('Button', () => {
       expect(target?.className).toContain('inset-[min(0rem,calc(50%-22px))]')
     })
   })
+
+  it('keeps a title passed by the consumer', () => {
+    const view = render(Button, {
+      props: { label: 'Open' },
+      attrs: { title: 'Open the full name' }
+    })
+    expect(view.container.querySelector('button')?.getAttribute('title')).toBe('Open the full name')
+  })
 })

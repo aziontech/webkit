@@ -164,7 +164,7 @@
     :rel="isAnchor && target === '_blank' ? 'noopener noreferrer' : undefined"
     :type="isAnchor ? undefined : type"
     :disabled="!isAnchor && disabled && !hasReason ? true : undefined"
-    :tabindex="isAnchor && isInert && !hasReason ? -1 : undefined"
+    :tabindex="isAnchor && isInert && !hasReason ? -1 : (attrs['tabindex'] as number | undefined)"
     :aria-disabled="isInert || undefined"
     :aria-busy="loading || undefined"
     :title="hasReason ? disabledReason : (attrs['title'] as string | undefined)"
