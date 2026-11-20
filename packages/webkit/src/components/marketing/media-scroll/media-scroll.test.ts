@@ -285,6 +285,24 @@ describe('MediaScroll', () => {
     }
   })
 
+  it('opens a focused claim on the next render, before the scroll settles, so Tab reaches its actions', async () => {
+    const release = pinGeometry()
+    try {
+      const { container, emitted } = render(MediaScroll, {
+        props: { items: ITEMS },
+        slots: { actions: () => h('a', { href: '#' }, 'Docs') }
+      })
+      rowsOf(container)[2].querySelector('button')?.focus()
+      await nextTick()
+      expect(activeTitle(container)).toBe(ITEMS[2].title)
+      await scrollTo(globalThis.scrollY)
+      expect(activeTitle(container)).toBe(ITEMS[2].title)
+      expect(emitted('active-index-change')).toEqual([[2]])
+    } finally {
+      release()
+    }
+  })
+
   it('keeps every claim in the accessibility tree while the band rests', async () => {
     const { container } = render(MediaScroll, { props: { items: ITEMS } })
     for (const item of ITEMS) {

@@ -75,6 +75,25 @@ describe('useEscapeToCancel', () => {
     expect(onEscape).not.toHaveBeenCalled()
   })
 
+  it('runs while a closed overlay is still leaving the page', () => {
+    const { onEscape } = setup()
+    mount('<div role="tooltip" data-state="closed">Help text</div>')
+    press(document.body)
+    expect(onEscape).toHaveBeenCalledTimes(1)
+  })
+
+  it('ignores Escape while a tooltip describes its trigger, and runs once nothing points to it', () => {
+    const { onEscape } = setup()
+    const host = mount(
+      '<button type="button" aria-describedby="tip">Info</button><div role="tooltip" id="tip">Help text</div>'
+    )
+    press(document.body)
+    expect(onEscape).not.toHaveBeenCalled()
+    host.querySelector('button')!.removeAttribute('aria-describedby')
+    press(document.body)
+    expect(onEscape).toHaveBeenCalledTimes(1)
+  })
+
   it('ignores Escape on an open combobox', () => {
     const { onEscape } = setup()
     const host = mount('<input role="combobox" aria-expanded="true" aria-label="Region" />')

@@ -26,8 +26,16 @@ const OWN_ESCAPE_SELECTOR = [
   'input[type="search"]'
 ].join(', ')
 
+const isLeavingTooltip = (element: globalThis.Element) =>
+  element.getAttribute('role') === 'tooltip' &&
+  element.id !== '' &&
+  !document.querySelector(`[aria-describedby~="${globalThis.CSS.escape(element.id)}"]`)
+
 const isShown = (element: globalThis.Element) =>
-  element.getClientRects().length > 0 && !element.closest('[hidden], [inert]')
+  element.getAttribute('data-state') !== 'closed' &&
+  !isLeavingTooltip(element) &&
+  element.getClientRects().length > 0 &&
+  !element.closest('[hidden], [inert]')
 
 const usesEscape = (target: globalThis.EventTarget | null) => {
   if (!(target instanceof globalThis.Element)) return false

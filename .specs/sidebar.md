@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3735-14866
   node_id: 3735:14866
-checksum: 6d70d05c844b812fabc98a8af8304a9ddfe2d28178f83a982979e8b3fec22db7
+checksum: b0626e3a7b6d30f162e879a69bbe9e3e10b62d607853e0261d490b01b5dbe0a1
 created: 2026-05-22
 last_updated: 2026-11-16
 ---
@@ -566,7 +566,7 @@ canvas the tokens fall back to.
   The region also keeps `var(--spacing-2xs)` of padding — and the same as `scroll-padding` — inside
   the clip, because the first row's focus ring (`ring-2` over `ring-offset-2`) reaches 4 px past the
   row and a viewport flush against it would cut the ring off.
-  The **drag handle is a focusable `role="separator"`**, so the gesture has a keyboard equivalent:
+  The **drag handle is a focusable `role="separator"`** with an inset focus ring (`focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color)`), inset because the rail clips anything drawn past its edge, so the gesture has a keyboard equivalent:
   `ArrowLeft` / `ArrowRight` nudge the width, `ArrowLeft` past the snap boundary collapses, and
   `ArrowRight` from the collapsed splitter brings the rail back. Pointer-wise that same collapsed
   splitter is click-to-restore as well as drag-to-size, so the edge is never a drag-only control.
