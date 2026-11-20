@@ -190,7 +190,7 @@ describe('Select', () => {
     it('gives the panel a minimum width of its own on both variants, beyond the trigger width', async () => {
       const view = render(Host)
       await fireEvent.click(view.getByTestId('select-trigger'))
-      expect(getContent()!.classList.contains('min-w-(--container-3xs)')).toBe(true)
+      expect(getContent()!.style.minWidth).toBe('var(--container-3xs)')
     })
 
     it('defaults to the outlined variant and mirrors variant on the root, trigger and panel', async () => {

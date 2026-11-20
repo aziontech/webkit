@@ -62,8 +62,6 @@ export interface ComputePlacementInput {
   alignOffset?: number
   /** Vertical sides only: the panel spans exactly the trigger, so it is never shifted or capped across. */
   matchTriggerWidth?: boolean
-  /** With matchTriggerWidth: the panel's own minimum width, in px. A panel wider than its trigger is kept inside the boundary. */
-  panelMinWidth?: number
 }
 
 export interface ComputePlacementResult {
@@ -237,9 +235,8 @@ export function computePlacement(input: ComputePlacementInput): ComputePlacement
     vertical ? boundary.width - 2 * padding.x : boundary.height - 2 * padding.y
   )
   const cross = locked
-    ? Math.max(trigger.width, Math.min(input.panelMinWidth ?? 0, crossAvailable))
+    ? trigger.width
     : Math.min(vertical ? panelSize.width : panelSize.height, crossAvailable)
-  const pinned = locked && cross <= trigger.width
 
   const width = vertical ? cross : main
   const height = vertical ? main : cross
@@ -258,7 +255,7 @@ export function computePlacement(input: ComputePlacementInput): ComputePlacement
     else top = trigger.top + trigger.height / 2 - height / 2 + alignOffset
   }
 
-  if (!pinned) left = clamp(left, boundary.left + padding.x, boundary.right - padding.x - width)
+  if (!locked) left = clamp(left, boundary.left + padding.x, boundary.right - padding.x - width)
   top = clamp(top, boundary.top + padding.y, boundary.bottom - padding.y - height)
 
   return {
@@ -377,10 +374,7 @@ export function usePlacement({
       sideOffset: toValue(sideOffset),
       alignOffset: toValue(alignOffset),
       collisionPadding,
-      matchTriggerWidth,
-      panelMinWidth: matchTriggerWidth
-        ? (Number.parseFloat(globalThis.getComputedStyle(panel).minWidth) || 0) * frame.scaleX
-        : 0
+      matchTriggerWidth
     })
     resolvedSide.value = result.side
     resolvedAlign.value = result.align
