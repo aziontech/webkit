@@ -7,7 +7,7 @@ spec_version: 7
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4281-4543
   node_id: 4281:4543
-checksum: 4b9ff5d6e8f4087469f214e2e337a68243ac211e932cd51b7746bbbb4bd25fb3
+checksum: 2774bcab96fe18e67906321a042e0ac482bb8f5cf23ea735edd5723078d1d4fd
 created: 2026-06-02
 last_updated: 2026-11-17
 ---
@@ -144,7 +144,7 @@ The panel is positioned with the standalone **`translate`** property, never `top
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on the trigger wrapper.
 - Hoverable (WCAG 1.4.13): the panel takes the pointer. Leaving the trigger closes the tooltip after a 100 ms grace, and entering the panel within the grace keeps it open (so text can be read under magnification); leaving the panel closes it after the same grace. Tests: `tooltip.test.ts` › hoverable content.
 - Touch: a long-press (500 ms `pointerdown` with `pointerType` `touch`) opens the tooltip; it hides 1.5 s after the finger lifts. A mouse press never opens it.
-- Keyboard map: `Tab` onto the trigger opens the tooltip at once (no hover delay); `Escape` closes it and focus stays on the trigger; `Tab` away closes it; the tooltip never takes or traps focus. Tests: `tooltip.test.ts` › keyboard map (spec).
+- Keyboard map: `Tab` onto the trigger opens the tooltip at once (no hover delay); `Escape` closes it and focus stays on the trigger; `Tab` away closes it; the tooltip never takes or traps focus. `Escape` is taken only while the tooltip is open: as the panel leaves it is marked `data-state="closed"` and `aria-hidden="true"` at once, so a page that reads open overlays (`useEscapeToCancel`) gets the next `Escape` even while the leave animation runs. Tests: `tooltip.test.ts` › keyboard map (spec).
 - Nested overlays: while open, the tooltip joins the shared overlay layer stack (`useOverlayLayer`) as a transient layer (it never takes focus, so it does not pause a dialog's focus trap). Inside a `Dialog`, `Drawer` or `Popover`, the first `Escape` closes only the tooltip; the next one reaches the host. Tests: `tooltip.test.ts` › inside an open Dialog, Escape closes only the tooltip.
 - ARIA: `role="tooltip"` on the panel; the slotted control references the panel via `aria-describedby` (merged into a WebKit `Button` / `IconButton` or native control at render, otherwise forwarded onto the first focusable element in the slot after mount; on the wrapper only when the slot has none). The wrapper itself has no `role` and no tab stop. `aria-hidden="true"` when `data-state="closed"`.
 - Contrast ≥4.5:1 — text against surface verified in both light and dark modes.

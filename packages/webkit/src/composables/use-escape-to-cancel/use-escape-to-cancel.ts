@@ -27,7 +27,9 @@ const OWN_ESCAPE_SELECTOR = [
 ].join(', ')
 
 const isShown = (element: globalThis.Element) =>
-  element.getClientRects().length > 0 && !element.closest('[hidden], [inert]')
+  element.getAttribute('data-state') !== 'closed' &&
+  element.getClientRects().length > 0 &&
+  !element.closest('[hidden], [inert]')
 
 const usesEscape = (target: globalThis.EventTarget | null) => {
   if (!(target instanceof globalThis.Element)) return false

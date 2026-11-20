@@ -75,6 +75,13 @@ describe('useEscapeToCancel', () => {
     expect(onEscape).not.toHaveBeenCalled()
   })
 
+  it('runs while a closed overlay is still leaving the page', () => {
+    const { onEscape } = setup()
+    mount('<div role="tooltip" data-state="closed">Help text</div>')
+    press(document.body)
+    expect(onEscape).toHaveBeenCalledTimes(1)
+  })
+
   it('ignores Escape on an open combobox', () => {
     const { onEscape } = setup()
     const host = mount('<input role="combobox" aria-expanded="true" aria-label="Region" />')

@@ -1,8 +1,10 @@
 import { fireEvent, render } from '@testing-library/vue'
-import { afterEach, describe, expect, it } from 'vitest'
-import { defineComponent, nextTick, ref } from 'vue'
+import { afterEach, describe, expect, it, vi } from 'vitest'
+import { userEvent } from 'vitest/browser'
+import { defineComponent, h, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/hint/default.vue'
+import { useEscapeToCancel } from '../../../composables/use-escape-to-cancel'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Hint from './hint.vue'
 
@@ -101,6 +103,56 @@ describe('Hint', () => {
     await settle()
 
     expect(checked.value).toBe(false)
+  })
+
+  it('closes when Tab leaves the trigger and leaves the next Escape to the page', async () => {
+    const onEscape = vi.fn()
+    const Form = defineComponent({
+      setup() {
+        useEscapeToCancel(onEscape)
+        return () => [
+          h(Hint, { content: TEXT }),
+          h('input', { 'aria-label': 'Name', 'data-testid': 'name' })
+        ]
+      }
+    })
+    const { getByTestId } = render(Form)
+    await settle()
+
+    getByTestId('hint__trigger').focus()
+    await settle()
+    expect(getByTestId('hint').getAttribute('data-state')).toBe('open')
+
+    await userEvent.keyboard('{Tab}')
+    expect(document.activeElement).toBe(getByTestId('name'))
+    expect(getByTestId('hint').getAttribute('data-state')).toBe('closed')
+    expect(panel()?.getAttribute('data-state') ?? 'closed').toBe('closed')
+
+    await userEvent.keyboard('{Escape}')
+    expect(onEscape).toHaveBeenCalledTimes(1)
+  })
+
+  it('takes Escape only while open, then hands the next one on', async () => {
+    const onEscape = vi.fn()
+    const Form = defineComponent({
+      setup() {
+        useEscapeToCancel(onEscape)
+        return () => h(Hint, { content: TEXT })
+      }
+    })
+    const { getByTestId } = render(Form)
+    await settle()
+
+    getByTestId('hint__trigger').focus()
+    await settle()
+    await userEvent.keyboard('{Escape}')
+    await settle()
+    expect(getByTestId('hint').getAttribute('data-state')).toBe('closed')
+    expect(onEscape).not.toHaveBeenCalled()
+
+    await new Promise((resolve) => setTimeout(resolve, 400))
+    await userEvent.keyboard('{Escape}')
+    expect(onEscape).toHaveBeenCalledTimes(1)
   })
 
   it('honours a consumer-supplied data-testid on the root and the trigger', async () => {
