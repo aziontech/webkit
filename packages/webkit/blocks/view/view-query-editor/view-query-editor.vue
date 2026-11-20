@@ -137,7 +137,7 @@
     refresh: [event: MouseEvent]
     retry: [event: MouseEvent]
     'insert-row': [event: MouseEvent, table: QueryEditorTable]
-    'import-csv': [event: MouseEvent, table: QueryEditorTable]
+    'import-csv': [event: Event, table: QueryEditorTable]
     'add-column': [event: MouseEvent, table: QueryEditorTable]
     'delete-rows': [event: Event, payload: { table: QueryEditorTable; rows: QueryEditorRow[] }]
     'delete-query': [event: Event, entry: QueryEditorHistoryEntry]
@@ -865,6 +865,8 @@ LIMIT 3;`
                     key="empty-state-1"
                     v-if="!tableRows.length"
                     size="small"
+                    @dragover.prevent
+                    @drop.prevent="(event: DragEvent) => emit('import-csv', event, selectedTable!)"
                     icon="az az-table"
                     title="This table is empty"
                     description="Insert a row, import a CSV file or drop one here."

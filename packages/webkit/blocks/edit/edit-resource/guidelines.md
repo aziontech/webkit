@@ -55,7 +55,7 @@ A setting with a side effect beyond this resource carries a warning `Alert` abov
 
 `useUnsavedChanges(() => form)` keeps the saved baseline: `isDirty` drives the save bar and the `dirty` mark on the Settings `Tabs.Trigger` (a dot after the label, "Unsaved changes" for screen readers), `commit()` moves the baseline after a save and `discard()` restores it. Leaving while dirty (another tab, another route through `onBeforeRouteLeave(() => confirmLeave())`, a reload) asks first: the composable warns on `beforeunload` and drives one `ConfirmDialog` bound with `v-bind="dialogProps"`, whose actions are Keep editing, Discard changes and, when `onSave` is given, Save changes, which saves and then leaves. See `skills/webkit-form`.
 
-### J. Changed elsewhere — `Button`, `SaveBar` (optional)
+### J. Changed elsewhere — `Alert`, `ConfirmDialog`, `Button`, `SaveBar` (optional)
 
 When the record was saved by someone else after the form opened, a warning `Alert` sits between the heading and the first section: a bold "Changed elsewhere." lead, one sentence that says nothing was lost and what Save will do, and a secondary Reload button in its action slot. Save does not overwrite silently: it opens a `ConfirmDialog` (kind `primary`) with Go back and Overwrite and save. Reload swaps the edits for the saved values and the notice becomes an info `Alert` "Edits discarded." with Undo, which brings the edits back. The save bar's hint and Discard label follow the notice ("Saving overwrites the version saved elsewhere.", "Discard and reload"). This is the state-form-validation rule (`state/state-form-validation`, SectionRejected) applied to an edit: one message above the form, the recovery action on it.
 
@@ -69,19 +69,25 @@ A small `Kbd` (`aria-hidden`) inside the primary button shows its keyboard short
 
 ## Data
 
-ProjectSettings takes the saved settings through props and emits the values on Save; it fetches nothing and saves nothing. `EditResourceProject` and `EditResourceProps` are exported from `edit-resource.vue`, and `sample.ts` holds the sample project the block renders when `resource` is left out. The other states are separate screens with their own fields.
+ProjectSettings takes the saved settings through props and emits the values on Save; it fetches nothing and saves nothing. `EditResourceProject` and `EditResourceProps` are exported from `edit-resource.vue`, and `sample.ts` holds the sample project the block renders when `resource` is left out. StaleRecord passes `defaultDraft` and `stale`, and DangerZone fills the `sections` slot; the other states are separate screens with their own fields.
 
-| Prop          | Type                  | What it does                                                                                                               |
-| ------------- | --------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `resource`    | `EditResourceProject` | The saved settings; the form opens on them and Discard returns to them. A new value resets the form.                       |
-| `loading`     | `boolean`             | The save is in flight: the fieldset and Discard disable and Save spins. When it turns off with no `error`, the bar leaves. |
-| `error`       | `string`              | Why the save failed, the description of the error toast with Retry; the edits stay.                                        |
-| `v-model:tab` | `string`              | The active page tab, `main-settings` by default; bind it to the route.                                                     |
+| Prop           | Type                           | What it does                                                                                                                           |
+| -------------- | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `resource`     | `EditResourceProject`          | The saved settings; the form opens on them and Discard returns to them. A new value resets the form.                                   |
+| `defaultDraft` | `Partial<EditResourceProject>` | Unsaved edits the form opens with on top of `resource`, so the save bar is up.                                                         |
+| `stale`        | `EditResourceProject`          | The version saved elsewhere after the form opened: the Changed elsewhere notice, Reload with Undo, and the overwrite question on Save. |
+| `loading`      | `boolean`                      | The save is in flight: the fieldset and Discard disable and Save spins. When it turns off with no `error`, the bar leaves.             |
+| `error`        | `string`                       | Why the save failed, the description of the error toast with Retry; the edits stay.                                                    |
+| `v-model:tab`  | `string`                       | The active page tab, `main-settings` by default; bind it to the route.                                                                 |
 
 | Event     | Payload           | When                                                    |
 | --------- | ----------------- | ------------------------------------------------------- |
 | `submit`  | `(event, values)` | Save with a valid Name; `values` is the whole settings. |
 | `discard` | `(event)`         | Discard; the form is already back on the saved values.  |
+
+| Slot       | What it holds                                                                  |
+| ---------- | ------------------------------------------------------------------------------ |
+| `sections` | Sections after Subscription modules, inside the form, such as the Danger zone. |
 
 To go live, render the block from a page that owns the request:
 

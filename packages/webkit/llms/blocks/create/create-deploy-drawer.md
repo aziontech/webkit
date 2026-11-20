@@ -71,23 +71,31 @@ A small `Kbd` (`aria-hidden`) inside the primary button shows its keyboard short
 
 The block takes the deploy targets through props and emits every action; it fetches and deploys nothing. The record types (`DeployDrawerResource`, `DeployDrawerProjectGroup`, `DeployDrawerEnvironment`, `DeployDrawerImpact`, `DeployDrawerBuild`, `DeployDrawerValues`) and `DeployDrawerProps` are exported from `create-deploy-drawer.vue`, and `sample.ts` holds the sample records the Service drawer renders when they are left out (never while `loading` or `error` is set).
 
-| Prop            | Type                          | What it does                                                                           |
-| --------------- | ----------------------------- | -------------------------------------------------------------------------------------- |
-| `resources`     | `DeployDrawerResource[]`      | The resources with their Ready versions and the dependencies they reference.           |
-| `projectGroups` | `DeployDrawerProjectGroup[]`  | The projects Use existing offers, in groups.                                           |
-| `newProject`    | `DeployDrawerProject`         | The project Create new makes.                                                          |
-| `environments`  | `DeployDrawerEnvironment[]`   | The environments to go live in, the first selected by default.                         |
-| `impacted`      | `DeployDrawerImpact[]`        | The projects the shared Deployment Settings reach, per environment.                    |
-| `defaultValues` | `Partial<DeployDrawerValues>` | The versions, project and environment every open resets to.                            |
-| `build`         | `DeployDrawerBuild`           | A build in progress: a Building row replaces Resources, the rest is inert, Deploy off. |
-| `loading`       | `boolean`                     | The deploy targets are loading; `Skeleton` blocks, Deploy disabled.                    |
-| `error`         | `string`                      | Why they failed to load, in a danger `Alert` with Retry; Deploy disabled.              |
-| `v-model:open`  | `boolean`                     | Whether the drawer shows; the trigger opens it and Deploy closes it.                   |
+| Prop                      | Type                          | What it does                                                                                |
+| ------------------------- | ----------------------------- | ------------------------------------------------------------------------------------------- |
+| `resources`               | `DeployDrawerResource[]`      | The resources with their Ready versions and the dependencies they reference.                |
+| `projectGroups`           | `DeployDrawerProjectGroup[]`  | The projects Use existing offers, in groups.                                                |
+| `newProject`              | `DeployDrawerProject`         | The project Create new makes.                                                               |
+| `environments`            | `DeployDrawerEnvironment[]`   | The environments to go live in, the first selected by default.                              |
+| `impacted`                | `DeployDrawerImpact[]`        | The projects the shared Deployment Settings reach, per environment.                         |
+| `defaultValues`           | `Partial<DeployDrawerValues>` | The versions, project and environment every open resets to.                                 |
+| `build`                   | `DeployDrawerBuild`           | A build in progress: a Building row replaces Resources, the rest is inert, Deploy off.      |
+| `loading`                 | `boolean`                     | The deploy targets are loading; `Skeleton` blocks, Deploy disabled.                         |
+| `error`                   | `string`                      | Why they failed to load, in a danger `Alert` with Retry; Deploy disabled.                   |
+| `v-model:open`            | `boolean`                     | Whether the drawer shows; the trigger opens it and Deploy closes it.                        |
+| `dependenciesOpen`        | `boolean`                     | Opens every Dependencies disclosure when the drawer opens.                                  |
+| `dependenciesLoadingKeys` | `string[]`                    | Resources whose dependencies are reloading: `Skeleton` rows, a status line, Deploy waits.   |
+| `impactedLoading`         | `boolean`                     | Projects impacted are reloading: `Skeleton` rows, `aria-busy`, a status line, Deploy waits. |
+| `blocker`                 | `string`                      | Why Deploy cannot run, said in the footer and tied to Deploy by `aria-describedby`.         |
+| `v-model:versions`        | `Record<string, string>`      | The picked version per resource key; every open resets it to `defaultValues`.               |
+| `v-model:environment`     | `string`                      | The chosen environment; every open resets it to `defaultValues`.                            |
 
 | Event    | Payload           | When                                                                                     |
 | -------- | ----------------- | ---------------------------------------------------------------------------------------- |
 | `submit` | `(event, values)` | Deploy; `values` carry the picked version per resource, the project and the environment. |
 | `retry`  | `(event)`         | Retry in the load error.                                                                 |
+
+The `environment-alerts` slot renders under the environment choices with `{ environment, project }`, for alerts about what the chosen environment changes. A dependency with `sharedWith` carries a Shared `Tag` in a `Tooltip` naming the other services, and one info `Alert` above the list says it deploys at one version; Projects impacted shows only when there are projects, with an environment heading and a count per group once they span more than one environment.
 
 To go live, render the block from a page that owns the request and the deploy:
 
@@ -242,11 +250,11 @@ Each variant is the same screen in another state: `get_block("create/create-depl
   import SettingsGroup from '@aziontech/webkit/settings-group'
   import Skeleton from '@aziontech/webkit/skeleton'
   import Spinner from '@aziontech/webkit/spinner'
-  import Tag from '@aziontech/webkit/tag'
+  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
-  import { computed, reactive, ref, watch } from 'vue'
+  import { computed, reactive, ref, useId, watch } from 'vue'
 
   import {
     sampleDefaultValues,
@@ -283,6 +291,8 @@ Each variant is the same screen in another state: `get_block("create/create-depl
     icon: string
     /** A note shown instead of the version picker; empty for a pickable resource. */
     note: string
+    /** Other services that reference it; set, it carries a Shared tag and deploys at one version for all of them. */
+    sharedWith?: string[]
     /** How many Ready versions exist; the list may hold only the most recent. */
     total: number
     /** The most recent Ready versions, newest first. */
@@ -347,6 +357,10 @@ Each variant is the same screen in another state: `get_block("create/create-depl
     description: string
     /** A short tag beside the name (Last used); empty for none. */
     tag: string
+    /** The color of the tag; info when left out. */
+    tagSeverity?: TagSeverity
+    /** Locked: the choice card shows but cannot be picked. */
+    disabled?: boolean
   }
 
   /** A project the deployment reaches through shared Deployment Settings. */
@@ -413,6 +427,14 @@ Each variant is the same screen in another state: `get_block("create/create-depl
     loading?: boolean
     /** Why the deploy targets could not load; a danger alert with Retry replaces the sections. */
     error?: string
+    /** Opens every Dependencies disclosure when the drawer opens. */
+    dependenciesOpen?: boolean
+    /** Keys of the resources whose dependencies are reloading; skeleton rows stand in and Deploy waits. */
+    dependenciesLoadingKeys?: string[]
+    /** The projects impacted are reloading; skeleton rows stand in and Deploy waits. */
+    impactedLoading?: boolean
+    /** Why Deploy cannot run, said in the footer; empty leaves Deploy to the other states. */
+    blocker?: string
   }
 
   const props = withDefaults(defineProps<DeployDrawerProps>(), {
@@ -424,7 +446,11 @@ Each variant is the same screen in another state: `get_block("create/create-depl
     defaultValues: undefined,
     build: undefined,
     loading: false,
-    error: ''
+    error: '',
+    dependenciesOpen: false,
+    dependenciesLoadingKeys: () => [],
+    impactedLoading: false,
+    blocker: ''
   })
 
   const emit = defineEmits<{
@@ -433,6 +459,17 @@ Each variant is the same screen in another state: `get_block("create/create-depl
   }>()
 
   const open = defineModel<boolean>('open', { default: false })
+
+  /** The picked version id per resource key; every open resets it to defaultValues. */
+  const picks = defineModel<Record<string, string>>('versions', { default: () => ({}) })
+
+  /** The environment it goes live in; every open resets it to defaultValues. */
+  const environment = defineModel<string>('environment', { default: '' })
+
+  defineSlots<{
+    /** Alerts under the environment choices, for what the chosen environment changes. */
+    'environment-alerts'(props: { environment: string; project: DeployDrawerProject }): unknown
+  }>()
 
   const pending = computed(() => props.loading || props.error !== '')
   const resources = computed<DeployDrawerResource[]>(
@@ -466,11 +503,11 @@ Each variant is the same screen in another state: `get_block("create/create-depl
   type Dependency = DeployDrawerDependency
   type ProjectView = DeployDrawerProject
 
-  const picks = reactive<Record<string, string>>({ ...initial.value.versions })
+  picks.value = { ...initial.value.versions }
+  environment.value = initial.value.environment
   const versionOpen = reactive<Record<string, boolean>>({})
   const projectMode = ref<DeployDrawerProjectMode>(initial.value.projectMode)
   const projectId = ref(initial.value.projectId)
-  const environment = ref(initial.value.environment)
 
   const project = computed<ProjectView>(() =>
     projectMode.value === 'new'
@@ -481,8 +518,8 @@ Each variant is the same screen in another state: `get_block("create/create-depl
         projectGroups.value[0]?.projects[0] ?? { name: '' })
   )
 
-  const versionOf = (row: Dependency) =>
-    row.versions.find((entry) => entry.id === picks[row.key]) ?? row.versions[0]
+  const versionOf = (row: Dependency): DeployDrawerVersion | undefined =>
+    row.versions.find((entry) => entry.id === picks.value[row.key]) ?? row.versions[0]
 
   const versionSummary = (row: Dependency) =>
     row.total > row.versions.length
@@ -496,7 +533,7 @@ Each variant is the same screen in another state: `get_block("create/create-depl
     () =>
       resources.value
         .flatMap((row) => [row, ...row.dependencies])
-        .filter((row) => row.versions.length && versionOf(row).id !== liveVersionId(row)).length
+        .filter((row) => row.versions.length && versionOf(row)?.id !== liveVersionId(row)).length
   )
 
   const changeSummary = computed(
@@ -505,14 +542,30 @@ Each variant is the same screen in another state: `get_block("create/create-depl
   )
 
   const pickVersion = (row: Dependency, id: string) => {
-    picks[row.key] = id
+    picks.value = { ...picks.value, [row.key]: id }
     versionOpen[row.key] = false
   }
 
+  const listFormat = (names: string[]) =>
+    names.length > 1 ? `${names.slice(0, -1).join(', ')} and ${names.at(-1)}` : (names[0] ?? '')
+
+  const sharedDependency = (row: DeployDrawerResource) =>
+    row.dependencies.find((dependency) => dependency.sharedWith?.length)
+
+  const dependenciesLoading = (row: DeployDrawerResource) =>
+    props.dependenciesLoadingKeys.includes(row.key)
+
+  const impactedCount = computed(() =>
+    impacted.value.reduce((total, group) => total + group.projects.length, 0)
+  )
+
+  const projectsLabel = (count: number) => `${count} ${count === 1 ? 'project' : 'projects'}`
+
+  const blockerId = useId()
+
   const reset = () => {
     const values = initial.value
-    Object.keys(picks).forEach((key) => delete picks[key])
-    Object.assign(picks, values.versions)
+    picks.value = { ...values.versions }
     Object.keys(versionOpen).forEach((key) => delete versionOpen[key])
     projectMode.value = values.projectMode
     projectId.value = values.projectId
@@ -523,7 +576,14 @@ Each variant is the same screen in another state: `get_block("create/create-depl
     if (isOpen) reset()
   })
 
-  const blocked = computed(() => pending.value || !!props.build)
+  const blocked = computed(
+    () =>
+      pending.value ||
+      !!props.build ||
+      !!props.blocker ||
+      props.impactedLoading ||
+      props.dependenciesLoadingKeys.length > 0
+  )
 
   const title = computed(() => (props.build ? 'Build and deployment' : 'Deploy'))
 
@@ -534,7 +594,7 @@ Each variant is the same screen in another state: `get_block("create/create-depl
         resources.value
           .flatMap((row) => [row, ...row.dependencies])
           .filter((row) => row.versions.length)
-          .map((row) => [row.key, versionOf(row).id])
+          .map((row) => [row.key, versionOf(row)?.id ?? ''])
       ),
       projectMode: projectMode.value,
       projectId: project.value.id ?? '',
@@ -730,7 +790,7 @@ Each variant is the same screen in another state: `get_block("create/create-depl
                           />
                         </span>
                         <Item.Description>
-                          {{ row.note || versionOf(row).name }}
+                          {{ row.note || versionOf(row)?.name }}
                         </Item.Description>
                       </Item.Content>
                       <Item.Actions
@@ -782,7 +842,7 @@ Each variant is the same screen in another state: `get_block("create/create-depl
                               :key="entry.id"
                               :value="entry.id"
                               :label="entry.name"
-                              :selected="entry.id === versionOf(row).id"
+                              :selected="entry.id === versionOf(row)?.id"
                               :aria-label="`${entry.name}${entry.active ? ', active' : ''}, by ${entry.author}, ${entry.createdAgo}`"
                             >
                               <template #leading>
@@ -834,6 +894,7 @@ Each variant is the same screen in another state: `get_block("create/create-depl
                         type="single"
                         collapsible
                         size="medium"
+                        :default-value="dependenciesOpen ? 'dependencies' : undefined"
                       >
                         <Accordion.Item value="dependencies">
                           <Accordion.Trigger>
@@ -841,151 +902,221 @@ Each variant is the same screen in another state: `get_block("create/create-depl
                           </Accordion.Trigger>
                           <Accordion.Content>
                             <div class="min-w-0">
+                              <div
+                                v-if="dependenciesLoading(row)"
+                                aria-busy="true"
+                                class="flex flex-col gap-(--spacing-sm)"
+                              >
+                                <div
+                                  v-for="line in row.dependencies.length"
+                                  :key="line"
+                                  aria-hidden="true"
+                                  class="flex min-w-0 items-center gap-(--spacing-sm)"
+                                >
+                                  <Skeleton
+                                    variant="circle"
+                                    width="var(--size-4)"
+                                    height="var(--size-4)"
+                                  />
+                                  <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-xs)">
+                                    <Skeleton
+                                      width="40%"
+                                      height="var(--size-3)"
+                                    />
+                                    <Skeleton
+                                      width="70%"
+                                      height="var(--size-3)"
+                                    />
+                                  </div>
+                                  <Skeleton
+                                    width="var(--size-24)"
+                                    height="var(--size-7)"
+                                  />
+                                </div>
+                              </div>
                               <p
-                                v-if="!row.dependencies.length"
+                                v-else-if="!row.dependencies.length"
                                 class="text-body-sm text-(--text-muted)"
                               >
                                 {{ row.name }} references no other resources.
                               </p>
-                              <Item.Group v-else>
-                                <Item
-                                  v-for="dependency in row.dependencies"
-                                  :key="dependency.key"
-                                  variant="inline"
+                              <div
+                                v-else
+                                class="flex flex-col gap-(--spacing-sm)"
+                              >
+                                <Alert
+                                  v-if="sharedDependency(row)"
+                                  severity="info"
                                   size="small"
-                                >
-                                  <Item.Media>
-                                    <span class="flex size-5 items-center justify-center">
-                                      <i
-                                        :class="dependency.icon"
-                                        class="text-body-xs text-(--text-muted)"
-                                        aria-hidden="true"
-                                      />
-                                    </span>
-                                  </Item.Media>
-                                  <Item.Content>
-                                    <span
-                                      class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)"
-                                    >
-                                      <span class="shrink-0 text-body-sm text-(--text-muted)">
-                                        {{ dependency.label }}
-                                      </span>
-                                      <Item.Title>{{ dependency.name }}</Item.Title>
-                                      <Tag
-                                        v-if="!dependency.note"
-                                        :label="
-                                          dependency.versions.length ? 'Ready' : 'No ready version'
-                                        "
-                                        :severity="
-                                          dependency.versions.length ? 'success' : 'warning'
-                                        "
-                                        size="small"
-                                        class="shrink-0"
-                                      />
-                                    </span>
-                                    <Item.Description>
-                                      {{ dependency.note || versionOf(dependency).name }}
-                                    </Item.Description>
-                                  </Item.Content>
-                                  <Item.Actions v-if="!dependency.note">
-                                    <DropdownMenu
-                                      v-model:open="versionOpen[dependency.key]"
-                                      side="bottom"
-                                      align="end"
-                                      @select="(_event, id) => pickVersion(dependency, String(id))"
-                                    >
-                                      <DropdownMenu.Trigger>
-                                        <Button
-                                          label="Change version"
-                                          :aria-label="`Change version of ${dependency.name}`"
-                                          variant="outline"
-                                          size="small"
-                                          icon="az az-chevron-down"
-                                          icon-position="trailing"
-                                          :disabled="!dependency.versions.length"
+                                  :label="`${sharedDependency(row)?.name} is shared, so it deploys at one version. Changing it here changes it for ${listFormat(sharedDependency(row)?.sharedWith ?? [])} too.`"
+                                />
+                                <Item.Group>
+                                  <Item
+                                    v-for="dependency in row.dependencies"
+                                    :key="dependency.key"
+                                    variant="inline"
+                                    size="small"
+                                  >
+                                    <Item.Media>
+                                      <span class="flex size-5 items-center justify-center">
+                                        <i
+                                          :class="dependency.icon"
+                                          class="text-body-xs text-(--text-muted)"
+                                          aria-hidden="true"
                                         />
-                                      </DropdownMenu.Trigger>
-                                      <template #header>
-                                        <div
-                                          class="flex flex-col gap-(--spacing-xs) px-(--spacing-xs) pb-(--spacing-xs)"
+                                      </span>
+                                    </Item.Media>
+                                    <Item.Content>
+                                      <span
+                                        class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)"
+                                      >
+                                        <span class="shrink-0 text-body-sm text-(--text-muted)">
+                                          {{ dependency.label }}
+                                        </span>
+                                        <Item.Title>{{ dependency.name }}</Item.Title>
+                                        <Tooltip
+                                          v-if="dependency.sharedWith?.length"
+                                          :content="`Also referenced by ${listFormat(dependency.sharedWith ?? [])}.`"
                                         >
-                                          <p class="text-label-sm text-(--text-muted)">
-                                            {{ versionSummary(dependency) }}
-                                          </p>
-                                          <Input
-                                            v-if="dependency.total > dependency.versions.length"
-                                            size="medium"
-                                            placeholder="Search versions"
-                                            aria-label="Search versions"
-                                          >
-                                            <template #leading>
-                                              <i
-                                                class="az az-search"
-                                                aria-hidden="true"
-                                              />
-                                            </template>
-                                          </Input>
-                                        </div>
-                                      </template>
-                                      <DropdownMenu.Group>
-                                        <DropdownMenu.Item
-                                          v-for="entry in dependency.versions"
-                                          :key="entry.id"
-                                          :value="entry.id"
-                                          :label="entry.name"
-                                          :selected="entry.id === versionOf(dependency).id"
-                                          :aria-label="`${entry.name}${entry.active ? ', active' : ''}, by ${entry.author}, ${entry.createdAgo}`"
-                                        >
-                                          <template #leading>
-                                            <Avatar
-                                              :alt="entry.author"
-                                              :label="entry.author"
-                                              size="small"
-                                              variant="square"
-                                            />
-                                          </template>
                                           <span
-                                            class="inline-flex min-w-0 items-center gap-(--spacing-xs)"
+                                            tabindex="0"
+                                            class="inline-flex shrink-0 rounded-(--shape-button) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+                                            :aria-label="`Shared, also referenced by ${listFormat(dependency.sharedWith ?? [])}`"
                                           >
-                                            <span class="truncate">{{ entry.name }}</span>
                                             <Tag
-                                              v-if="entry.active"
-                                              label="Active"
-                                              severity="success"
+                                              label="Shared"
+                                              severity="info"
                                               size="small"
-                                              class="shrink-0"
+                                              icon="az az-link"
                                             />
                                           </span>
-                                          <template #trailing>
-                                            <span class="text-body-xs text-(--text-muted)">{{
-                                              entry.createdAgo
-                                            }}</span>
-                                          </template>
-                                        </DropdownMenu.Item>
-                                      </DropdownMenu.Group>
-                                      <template
-                                        v-if="dependency.total > dependency.versions.length"
-                                        #bottom
+                                        </Tooltip>
+                                        <Tag
+                                          v-if="!dependency.note"
+                                          :label="
+                                            dependency.versions.length
+                                              ? 'Ready'
+                                              : 'No ready version'
+                                          "
+                                          :severity="
+                                            dependency.versions.length ? 'success' : 'warning'
+                                          "
+                                          size="small"
+                                          class="shrink-0"
+                                        />
+                                      </span>
+                                      <Item.Description>
+                                        {{
+                                          dependency.note ||
+                                          versionOf(dependency)?.name ||
+                                          'Build a version to deploy it.'
+                                        }}
+                                      </Item.Description>
+                                    </Item.Content>
+                                    <Item.Actions v-if="!dependency.note">
+                                      <DropdownMenu
+                                        v-model:open="versionOpen[dependency.key]"
+                                        side="bottom"
+                                        align="end"
+                                        @select="
+                                          (_event, id) => pickVersion(dependency, String(id))
+                                        "
                                       >
-                                        <div
-                                          class="border-t border-(--border-default) px-(--spacing-2xs) pt-(--spacing-2xs)"
-                                        >
+                                        <DropdownMenu.Trigger>
                                           <Button
-                                            :label="`Load ${Math.min(dependency.versions.length, dependency.total - dependency.versions.length)} more`"
-                                            variant="ghost"
+                                            label="Change version"
+                                            :aria-label="`Change version of ${dependency.name}`"
+                                            variant="outline"
                                             size="small"
-                                            class="w-full"
+                                            icon="az az-chevron-down"
+                                            icon-position="trailing"
+                                            :disabled="!dependency.versions.length"
                                           />
-                                        </div>
-                                      </template>
-                                    </DropdownMenu>
-                                  </Item.Actions>
-                                </Item>
-                              </Item.Group>
+                                        </DropdownMenu.Trigger>
+                                        <template #header>
+                                          <div
+                                            class="flex flex-col gap-(--spacing-xs) px-(--spacing-xs) pb-(--spacing-xs)"
+                                          >
+                                            <p class="text-label-sm text-(--text-muted)">
+                                              {{ versionSummary(dependency) }}
+                                            </p>
+                                            <Input
+                                              v-if="dependency.total > dependency.versions.length"
+                                              size="medium"
+                                              placeholder="Search versions"
+                                              aria-label="Search versions"
+                                            >
+                                              <template #leading>
+                                                <i
+                                                  class="az az-search"
+                                                  aria-hidden="true"
+                                                />
+                                              </template>
+                                            </Input>
+                                          </div>
+                                        </template>
+                                        <DropdownMenu.Group>
+                                          <DropdownMenu.Item
+                                            v-for="entry in dependency.versions"
+                                            :key="entry.id"
+                                            :value="entry.id"
+                                            :label="entry.name"
+                                            :selected="entry.id === versionOf(dependency)?.id"
+                                            :aria-label="`${entry.name}${entry.active ? ', active' : ''}, by ${entry.author}, ${entry.createdAgo}`"
+                                          >
+                                            <template #leading>
+                                              <Avatar
+                                                :alt="entry.author"
+                                                :label="entry.author"
+                                                size="small"
+                                                variant="square"
+                                              />
+                                            </template>
+                                            <span
+                                              class="inline-flex min-w-0 items-center gap-(--spacing-xs)"
+                                            >
+                                              <span class="truncate">{{ entry.name }}</span>
+                                              <Tag
+                                                v-if="entry.active"
+                                                label="Active"
+                                                severity="success"
+                                                size="small"
+                                                class="shrink-0"
+                                              />
+                                            </span>
+                                            <template #trailing>
+                                              <span class="text-body-xs text-(--text-muted)">{{
+                                                entry.createdAgo
+                                              }}</span>
+                                            </template>
+                                          </DropdownMenu.Item>
+                                        </DropdownMenu.Group>
+                                        <template
+                                          v-if="dependency.total > dependency.versions.length"
+                                          #bottom
+                                        >
+                                          <div
+                                            class="border-t border-(--border-default) px-(--spacing-2xs) pt-(--spacing-2xs)"
+                                          >
+                                            <Button
+                                              :label="`Load ${Math.min(dependency.versions.length, dependency.total - dependency.versions.length)} more`"
+                                              variant="ghost"
+                                              size="small"
+                                              class="w-full"
+                                            />
+                                          </div>
+                                        </template>
+                                      </DropdownMenu>
+                                    </Item.Actions>
+                                  </Item>
+                                </Item.Group>
+                              </div>
                               <span
                                 class="sr-only"
                                 role="status"
-                              />
+                              >
+                                {{ dependenciesLoading(row) ? 'Loading dependencies' : '' }}
+                              </span>
                             </div>
                           </Accordion.Content>
                         </Accordion.Item>
@@ -1216,6 +1347,7 @@ Each variant is the same screen in another state: `get_block("create/create-depl
                   :key="entry.name"
                   :value="entry.name"
                   :description="entry.description"
+                  :disabled="entry.disabled"
                 >
                   {{ entry.name }}
                   <template
@@ -1224,26 +1356,75 @@ Each variant is the same screen in another state: `get_block("create/create-depl
                   >
                     <Tag
                       :label="entry.tag"
-                      severity="info"
+                      :severity="entry.tagSeverity ?? 'info'"
                       size="small"
                     />
                   </template>
                 </RadioGroup.Item>
               </RadioGroup>
+
+              <slot
+                name="environment-alerts"
+                :environment="environment"
+                :project="project"
+              />
             </SettingsGroup>
 
             <SettingsGroup
+              v-if="impacted.length"
               :inert="!!build || undefined"
               :data-pending="build ? 'true' : undefined"
               label="Projects impacted"
               hint="This environment deploys with shared Deployment Settings, so the deployment reaches every project below, in every environment they are linked to, and the domains they serve."
             >
-              <div class="flex min-w-0 flex-col gap-(--spacing-md)">
+              <div
+                v-if="impactedLoading"
+                aria-busy="true"
+                class="flex min-w-0 flex-col gap-(--spacing-xs)"
+              >
+                <div
+                  v-for="row in impactedCount"
+                  :key="row"
+                  aria-hidden="true"
+                  class="flex min-w-0 items-center gap-(--spacing-sm) rounded-(--shape-control) border border-(--border-default) p-(--spacing-sm)"
+                >
+                  <Skeleton
+                    width="var(--size-7)"
+                    height="var(--size-7)"
+                  />
+                  <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-xs)">
+                    <Skeleton
+                      width="40%"
+                      height="var(--size-3)"
+                    />
+                    <Skeleton
+                      width="70%"
+                      height="var(--size-3)"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div
+                v-else
+                class="flex min-w-0 flex-col gap-(--spacing-md)"
+              >
                 <div
                   v-for="group in impacted"
                   :key="group.environment"
                   class="flex min-w-0 flex-col gap-(--spacing-xs)"
                 >
+                  <p
+                    v-if="impacted.length > 1"
+                    class="flex items-center gap-(--spacing-xs) text-label-sm text-(--text-muted)"
+                  >
+                    <i
+                      class="az az-sitemap text-body-xs"
+                      aria-hidden="true"
+                    />
+                    <span
+                      >{{ group.environment }} · {{ projectsLabel(group.projects.length) }}</span
+                    >
+                  </p>
                   <ul
                     class="m-0 flex min-w-0 list-none flex-col gap-(--spacing-xs) p-0"
                     :aria-label="`Projects impacted in ${group.environment} (${group.projects.length})`"
@@ -1396,14 +1577,27 @@ Each variant is the same screen in another state: `get_block("create/create-depl
             <span
               class="sr-only"
               role="status"
-            />
+            >
+              {{ impactedLoading ? 'Loading the projects this deployment reaches' : '' }}
+            </span>
           </fieldset>
         </PanelBody>
 
         <PanelFooter>
           <div class="flex w-full flex-wrap items-center justify-between gap-(--spacing-sm)">
             <p
-              v-if="changeCount && !build"
+              v-if="blocker"
+              :id="blockerId"
+              class="flex min-w-0 items-start gap-(--spacing-xs) text-body-sm text-(--warning-foreground)"
+            >
+              <i
+                class="az az-triangle-alert mt-0.5 shrink-0 text-body-xs"
+                aria-hidden="true"
+              />
+              <span>{{ blocker }}</span>
+            </p>
+            <p
+              v-else-if="changeCount && !build"
               class="flex min-w-0 items-center gap-(--spacing-2xs) text-body-xs text-(--text-muted)"
             >
               <i
@@ -1418,6 +1612,7 @@ Each variant is the same screen in another state: `get_block("create/create-depl
               size="medium"
               :disabled="blocked"
               type="submit"
+              :aria-describedby="blocker ? blockerId : undefined"
               :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
             >
               Deploy
@@ -1440,12 +1635,15 @@ Each variant is the same screen in another state: `get_block("create/create-depl
 
 ```ts
 import type {
+  DeployDrawerDependency,
+  DeployDrawerDomainGroup,
   DeployDrawerEnvironment,
   DeployDrawerImpact,
   DeployDrawerProject,
   DeployDrawerProjectGroup,
   DeployDrawerResource,
-  DeployDrawerValues
+  DeployDrawerValues,
+  DeployDrawerVersion
 } from './create-deploy-drawer.vue'
 
 export const sampleResources: DeployDrawerResource[] = [
@@ -1868,4 +2066,207 @@ export const sampleDefaultValues: Partial<DeployDrawerValues> = {
   versions: { service: 'AG1VVDJP' },
   projectId: '1020655'
 }
+
+export interface DeployDrawerEnvironmentEntry {
+  name: string
+  description: string
+  lock?: string
+}
+
+export interface DeployDrawerReach {
+  settings: string
+  replaced: string
+  groups: DeployDrawerImpact[]
+}
+
+const domainGroup = (slug: string, environment: string, total: number): DeployDrawerDomainGroup => {
+  const shown = Math.min(total, 10)
+  return {
+    environment,
+    total,
+    summary:
+      total > shown
+        ? `${shown} of ${total} domains`
+        : `${total} ${total === 1 ? 'domain' : 'domains'}`,
+    domains: Array.from({ length: shown }, (_, index) =>
+      index ? `${slug}-alias-${index}.example.com` : `${slug}.example.com`
+    )
+  }
+}
+
+export const sampleEnvironmentEntries: DeployDrawerEnvironmentEntry[] = [
+  {
+    name: 'Production',
+    description: 'Live traffic. One version serves the domain, and deploying replaces it.'
+  },
+  {
+    name: 'Staging',
+    description: 'A copy of production for the last checks before a deploy.',
+    lock: 'storefront-strict is Strict, so checkout-api stays bound to Staging.'
+  },
+  {
+    name: 'Preview',
+    description:
+      'Every other branch. Each version keeps its own URL, so a build can be read before it is live.'
+  }
+]
+
+export const sampleLastUsedEnvironment = 'Production'
+
+export const sampleEnvironmentReach: Record<string, DeployDrawerReach> = {
+  Production: {
+    settings: 'shared-storefront',
+    replaced: 'legacy-web',
+    groups: [
+      {
+        environment: 'Production',
+        projects: [
+          {
+            id: '1020655',
+            name: 'project-01',
+            selected: true,
+            domains: [domainGroup('project-1', 'Production', 8)]
+          },
+          {
+            id: '1021347',
+            name: 'project-05',
+            domains: [domainGroup('project-5', 'Production', 36)]
+          },
+          {
+            id: '1022039',
+            name: 'project-09',
+            domains: [domainGroup('project-9', 'Production', 64)]
+          }
+        ]
+      },
+      {
+        environment: 'Preview',
+        projects: [
+          {
+            id: '1021347',
+            name: 'project-05',
+            domains: [domainGroup('preview-project-5', 'Preview', 1)]
+          }
+        ]
+      }
+    ]
+  },
+  Staging: { settings: 'storefront-strict', replaced: '', groups: [] },
+  Preview: {
+    settings: 'web-app-preview',
+    replaced: '',
+    groups: [
+      {
+        environment: 'Preview',
+        projects: [
+          {
+            id: '1020655',
+            name: 'project-01',
+            selected: true,
+            domains: [domainGroup('preview-project-1', 'Preview', 1)]
+          }
+        ]
+      }
+    ]
+  }
+}
+
+const version = (
+  id: string,
+  author: string,
+  createdAgo: string,
+  active = false
+): DeployDrawerVersion => ({
+  id,
+  name: id,
+  author,
+  createdAgo,
+  active
+})
+
+const authGateway = (prefix: string): DeployDrawerDependency => ({
+  key: `${prefix}:module-auth-gateway`,
+  label: 'Module',
+  name: 'auth-gateway',
+  icon: 'az az-code',
+  note: '',
+  sharedWith: ['checkout-api', 'account-api'],
+  total: 8,
+  versions: [
+    version('APICRFV0', 'Sam Lee', '2 days ago', true),
+    version('AQW6HBBH', 'Priya Patel', '3 days ago'),
+    version('ASA076RY', 'Chris Taylor', '5 days ago')
+  ]
+})
+
+const paymentsApi = (prefix: string): DeployDrawerDependency => ({
+  key: `${prefix}:integration-payments-api`,
+  label: 'Integration',
+  name: 'payments-api',
+  icon: 'az az-link',
+  note: 'Not versioned. Deploys with its current settings.',
+  sharedWith: [],
+  total: 0,
+  versions: []
+})
+
+const geoRedirect = (prefix: string, ready: boolean): DeployDrawerDependency => ({
+  key: `${prefix}:module-geo-redirect`,
+  label: 'Module',
+  name: 'geo-redirect',
+  icon: 'az az-code',
+  note: '',
+  sharedWith: [],
+  total: ready ? 11 : 0,
+  versions: ready
+    ? [
+        version('AK16MQ4R', 'John Smith', '2 days ago', true),
+        version('ALF0CLL8', 'Sam Lee', '4 days ago'),
+        version('AMSU2H1P', 'Priya Patel', '4 days ago')
+      ]
+    : []
+})
+
+export const sampleDependenciesByVersion = (id: string): DeployDrawerDependency[] => {
+  const prefix = `service@${id}`
+  return [authGateway(prefix), geoRedirect(prefix, id !== 'AG1VVDJP'), paymentsApi(prefix)]
+}
+
+const dependencyResources: Omit<DeployDrawerResource, 'dependencies'>[] = [
+  {
+    key: 'service',
+    label: 'Service',
+    name: 'web-app',
+    icon: 'az az-server',
+    note: '',
+    total: 6,
+    versions: [
+      version('AEO25I38', 'Sam Lee', '1 day ago', true),
+      version('AG1VVDJP', 'Priya Patel', '3 days ago'),
+      version('AHFPL906', 'Chris Taylor', '3 days ago'),
+      version('AITJB4GN', 'Riley Carter', '4 days ago'),
+      version('AK7D0ZX4', 'Ethan Brooks', '6 days ago')
+    ],
+    owner: true
+  },
+  {
+    key: 'config',
+    label: 'Resource',
+    name: 'web-app-config',
+    icon: 'az az-box',
+    note: '',
+    total: 2,
+    versions: [
+      version('AB3K9QX2', 'Riley Carter', '2 days ago', true),
+      version('AC71ZT0M', 'Jordan Kim', '8 days ago')
+    ],
+    owner: true
+  }
+]
+
+export const sampleDependencyResources = (serviceVersion: string): DeployDrawerResource[] =>
+  dependencyResources.map((row) => ({
+    ...row,
+    dependencies: row.key === 'service' ? sampleDependenciesByVersion(serviceVersion) : []
+  }))
 ```

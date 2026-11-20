@@ -2,6 +2,11 @@ import { fireEvent, render, screen, waitFor, within } from '@testing-library/vue
 import { describe, expect, it } from 'vitest'
 
 import CreateDeployDrawer from '../../../../blocks/create/create-deploy-drawer/create-deploy-drawer.vue'
+import Dependencies from '../../../../blocks/create/create-deploy-drawer/variants/dependencies.vue'
+import Environment from '../../../../blocks/create/create-deploy-drawer/variants/environment.vue'
+import LoadError from '../../../../blocks/create/create-deploy-drawer/variants/load-error.vue'
+import Loading from '../../../../blocks/create/create-deploy-drawer/variants/loading.vue'
+import NoEnvironment from '../../../../blocks/create/create-deploy-drawer/variants/no-environment.vue'
 import { useToastRegion } from '../../toast-region'
 
 useToastRegion()
@@ -113,5 +118,58 @@ describe('create-deploy-drawer keyboard', () => {
     pressSubmitShortcut(dialog)
     await new Promise((resolve) => setTimeout(resolve, 50))
     expect(view.emitted('submit')).toBeUndefined()
+  })
+})
+
+describe.each([
+  ['Loading', Loading],
+  ['LoadError', LoadError],
+  ['NoEnvironment', NoEnvironment]
+])('create-deploy-drawer#%s', (_name, Variant) => {
+  it('keeps the disabled Deploy with the Cmd Enter keycap the drawer submits with', async () => {
+    render(Variant)
+    await fireEvent.click(screen.getByRole('button', { name: 'Deploy' }))
+    const dialog = await screen.findByRole('dialog')
+    const deploy = within(dialog).getByRole('button', { name: 'Deploy' }) as HTMLButtonElement
+    expect(deploy.disabled).toBe(true)
+    expect(deploy.getAttribute('aria-keyshortcuts')).toBe('Meta+Enter Control+Enter')
+    expect(deploy.querySelector('kbd')).not.toBeNull()
+  })
+})
+
+describe('create-deploy-drawer#Environment', () => {
+  it('locks Strict Staging, warns about the second environment and reloads the projects on a switch', async () => {
+    render(Environment)
+    await fireEvent.click(screen.getByRole('button', { name: 'Deploy' }))
+    const dialog = await screen.findByRole('dialog')
+    const panel = within(dialog)
+    expect((panel.getByRole('radio', { name: /^Staging/ }) as HTMLInputElement).disabled).toBe(true)
+    expect(panel.getByText(/replaces legacy-web with web-app there/)).toBeTruthy()
+    expect(panel.getByText(/goes live in 2 environments at once/)).toBeTruthy()
+    expect(panel.getByRole('list', { name: 'Projects impacted in Preview (1)' })).toBeTruthy()
+    await fireEvent.click(panel.getByRole('radio', { name: /^Preview/ }))
+    const deploy = panel.getByRole('button', { name: 'Deploy' }) as HTMLButtonElement
+    expect(deploy.disabled).toBe(true)
+    expect(dialog.textContent).toContain('Loading the projects this deployment reaches')
+    await waitFor(() => expect(deploy.disabled).toBe(false))
+    expect(panel.queryByText('Projects impacted')).toBeNull()
+  })
+})
+
+describe('create-deploy-drawer#Dependencies', () => {
+  it('names the dependency with no ready version and keeps Deploy disabled until it is fixed', async () => {
+    render(Dependencies)
+    await fireEvent.click(screen.getByRole('button', { name: 'Deploy' }))
+    const dialog = await screen.findByRole('dialog')
+    const panel = within(dialog)
+    const deploy = panel.getByRole('button', { name: 'Deploy' }) as HTMLButtonElement
+    expect(deploy.disabled).toBe(true)
+    const reason = document.getElementById(deploy.getAttribute('aria-describedby') ?? '')
+    expect(reason?.textContent).toContain('geo-redirect has no ready version')
+    expect(panel.getByText(/auth-gateway is shared, so it deploys at one version/)).toBeTruthy()
+    expect(
+      panel.getByLabelText(/^Shared, also referenced by checkout-api and account-api/)
+    ).toBeTruthy()
+    expect(panel.getByText('web-app-config references no other resources.')).toBeTruthy()
   })
 })

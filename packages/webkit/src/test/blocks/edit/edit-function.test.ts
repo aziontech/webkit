@@ -47,7 +47,7 @@ describe('edit-function#Arguments', () => {
     )
   })
 
-  const argumentsProps = { defaultDocument: 'arguments' as const, defaultOpenKeys: ['field-1'] }
+  const argumentsProps = { document: 'arguments' as const, defaultOpenKeys: ['field-1'] }
 
   it('emits submit with the values, then toasts when loading ends', async () => {
     const view = render(EditFunction, { props: argumentsProps })
@@ -90,7 +90,7 @@ describe('edit-function data contract', () => {
   it('renders the service and fields it is given instead of the sample', async () => {
     const view = render(EditFunction, {
       props: {
-        defaultDocument: 'arguments',
+        document: 'arguments',
         service: {
           name: 'acme-router',
           executionEnvironment: 'gateway',
@@ -149,7 +149,7 @@ describe('edit-function data contract', () => {
   })
 
   it('shows the empty form state for fields []', async () => {
-    const view = render(EditFunction, { props: { defaultDocument: 'arguments', fields: [] } })
+    const view = render(EditFunction, { props: { document: 'arguments', fields: [] } })
     await waitFor(() => expect(view.container.textContent).toContain('This form has no fields'))
   })
 })
@@ -176,7 +176,7 @@ const pressShortcut = (key: string, target: Element = document.body) => {
 }
 
 describe('edit-function keyboard', () => {
-  const argumentsProps = { defaultDocument: 'arguments' as const, defaultOpenKeys: ['field-1'] }
+  const argumentsProps = { document: 'arguments' as const, defaultOpenKeys: ['field-1'] }
 
   it('saves on Command S only while the function has changes', async () => {
     const view = render(EditFunction, { props: argumentsProps })
@@ -200,5 +200,28 @@ describe('edit-function keyboard', () => {
     expect(run.getAttribute('aria-busy')).not.toBe('true')
     expect(pressShortcut('Enter').defaultPrevented).toBe(true)
     await waitFor(() => expect(run.getAttribute('aria-busy')).toBe('true'))
+  })
+})
+
+describe('edit-function#TestRun', () => {
+  it('renders the block with the test run pane under the editor and saves through it', async () => {
+    const view = render(FunctionEditorTestRun)
+    expect(view.getByRole('group', { name: 'Code and test run' })).toBeTruthy()
+    expect(view.getByRole('group', { name: 'Source code' })).toBeTruthy()
+    expect(view.getByRole('heading', { name: 'Test run' })).toBeTruthy()
+    await userEvent.click(view.getByRole('tab', { name: 'Settings' }))
+    expect(pressShortcut('Enter').defaultPrevented).toBe(false)
+    const name = document.getElementById('service-name') as HTMLInputElement
+    await userEvent.type(name, '-v2')
+    await fireEvent.click(await waitFor(() => buttonIn(document, 'Save')))
+    await waitFor(
+      () => expect(document.body.textContent).toContain('image-optimizer-v2 saved.'),
+      wait
+    )
+  })
+
+  it('leaves the plain block without the split', () => {
+    const view = render(EditFunction)
+    expect(view.queryByRole('group', { name: 'Code and test run' })).toBeNull()
   })
 })

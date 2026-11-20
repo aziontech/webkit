@@ -33,7 +33,7 @@ A `CodeEditor` with `fill` and `pad-line-numbers` takes the pane: zero-padded li
 
 ### D. Test run — `ResizableRoot`, `ResizablePane`, `ResizableHandle` (optional)
 
-Variant TestRun only; it adds `StatusIndicator`, `CopyButton`, `KeyValueList`, `Trace`, `LogViewer` and `LogViewerContent` to the page.
+Variant TestRun only: it renders the block and fills its `editor-actions` and `code-panel` slots, adding `StatusIndicator`, `CopyButton`, `KeyValueList`, `Trace`, `LogViewer` and `LogViewerContent` to the page.
 
 In TestRun the Code document becomes a vertical `ResizableRoot`: the editor is the flexible pane, and the Test run pane under it has a `basis`, a minimum and a maximum height and collapses past its minimum, so the editor can take the whole height back. The pane scrolls on its own and reads top to bottom like the invocation page of the design sample:
 
@@ -75,21 +75,27 @@ A small `Kbd` (`aria-hidden`) inside the primary button shows its keyboard short
 
 The block takes the saved service and the request state through props and emits the save; it fetches nothing. `FunctionEditorService`, `FunctionEditorField`, `FunctionEditorValues` and `FunctionEditorProps` are exported from `edit-function.vue`, and `sample.ts` holds the sample service and fields the block renders when `service` or `fields` is left out. The editor keeps its own draft; Discard returns to the props.
 
-| Prop              | Type                             | What it does                                                                                        |
-| ----------------- | -------------------------------- | --------------------------------------------------------------------------------------------------- |
-| `service`         | `FunctionEditorService`          | The saved name, execution environment, status, code and argument schema (JSON text).                |
-| `fields`          | `FunctionEditorField[]`          | The saved argument fields, in order. Pass `[]` for a service with no form.                          |
-| `defaultDraft`    | `Partial<FunctionEditorService>` | Unsaved edits the editor opens with, so the save bar is up.                                         |
-| `defaultTab`      | `'code' \| 'settings'`           | The tab the page opens on.                                                                          |
-| `defaultDocument` | `'code' \| 'arguments'`          | The document of the Code tab the page opens on.                                                     |
-| `defaultOpenKeys` | `string[]`                       | Ids of the fields that open expanded.                                                               |
-| `loading`         | `boolean`                        | The save is in flight; when it ends with no `error` the editor takes the draft as saved and toasts. |
-| `error`           | `string`                         | Why the save failed, shown in the danger `Alert` of the save bar.                                   |
+| Prop               | Type                             | What it does                                                                                        |
+| ------------------ | -------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `service`          | `FunctionEditorService`          | The saved name, execution environment, status, code and argument schema (JSON text).                |
+| `fields`           | `FunctionEditorField[]`          | The saved argument fields, in order. Pass `[]` for a service with no form.                          |
+| `defaultDraft`     | `Partial<FunctionEditorService>` | Unsaved edits the editor opens with, so the save bar is up.                                         |
+| `v-model:tab`      | `'code' \| 'settings'`           | The active tab, `code` by default; pass `tab` alone to open on a tab.                               |
+| `v-model:document` | `'code' \| 'arguments'`          | The document of the Code tab, `code` by default; pass `document` alone to open on one.              |
+| `defaultOpenKeys`  | `string[]`                       | Ids of the fields that open expanded.                                                               |
+| `loading`          | `boolean`                        | The save is in flight; when it ends with no `error` the editor takes the draft as saved and toasts. |
+| `error`            | `string`                         | Why the save failed, shown in the danger `Alert` of the save bar.                                   |
 
-| Event     | Payload           | When                                                                |
-| --------- | ----------------- | ------------------------------------------------------------------- |
-| `submit`  | `(event, values)` | Save, once Name and Code are filled; `values` holds the fields too. |
-| `discard` | `(event)`         | Discard; the draft is already back to the saved props.              |
+| Event          | Payload           | When                                                                                   |
+| -------------- | ----------------- | -------------------------------------------------------------------------------------- |
+| `submit`       | `(event, values)` | Save, once Name and Code are filled; `values` holds the fields too.                    |
+| `discard`      | `(event)`         | Discard; the draft is already back to the saved props.                                 |
+| `editor-ready` | `(editor)`        | The Code document's Monaco editor mounted; add commands to it, such as Run on ⌘ Enter. |
+
+| Slot             | What it holds                                                                                                                    |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `editor-actions` | Actions at the end of the editor toolbar, such as Run test.                                                                      |
+| `code-panel`     | A `ResizableHandle` and a `ResizablePane` under the Code document, such as the Test run pane; the editor becomes the first pane. |
 
 To go live, render the block from a page that owns the request:
 
@@ -164,11 +170,11 @@ Then delete `sample.ts` and its import.
 
 ## States
 
-- Code: the default, `defaultTab` `code`: the Code tab with the Code document filling the editor pane.
-- Arguments: `defaultDocument` `arguments` with `defaultOpenKeys`: the Arguments document of image-optimizer, the schema on the left and two fields on the right, one expanded.
+- Code: the default, `tab` `code`: the Code tab with the Code document filling the editor pane.
+- Arguments: `document` `arguments` with `defaultOpenKeys`: the Arguments document of image-optimizer, the schema on the left and two fields on the right, one expanded.
 - NoArguments: a `service` with an empty schema and `fields` `[]`: the Arguments document of a service with no form, the empty schema and the no fields empty state.
 - TestRun: the Code document with a finished test run of image-optimizer under it, the origin fetch selected in the trace; Run test shows the running state.
-- Settings: `defaultTab` `settings`: the Settings tab with General, Runtime, Execution environment and Status; editing raises the save bar.
+- Settings: `tab` `settings`: the Settings tab with General, Runtime, Execution environment and Status; editing raises the save bar.
 - Saving: `loading` with a `defaultDraft`: a change to the Code document is being saved; Save shows its loading state, Discard and the fields are disabled and the editors are read-only.
 
 ## Related

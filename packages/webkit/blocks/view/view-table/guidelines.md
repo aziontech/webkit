@@ -159,7 +159,7 @@ Then delete `sample.ts` and its import. A list too large for the browser moves t
 - Empty: every resource was deleted on an account that is not new (`resources` is `[]`); `useCollection` reports `empty`, the heading and controls stay, and a flush card with Create Resource and Documentation replaces the table.
 - Loading: the first load (`loading` with no `resources`); the heading stays, the filter, Download CSV and preferences are disabled, Refresh spins and the table shows its skeleton rows.
 - Error: the resources could not load (`error` is set); the heading and the disabled controls stay, and a danger `Alert` with the message and Retry takes the table's place.
-- Deployments: the deployments list with Version (Current tag), Status with a spinner while Building and the run's duration, the project link, the environment tag and the author with the time; a row click opens the deployment, the row menu holds View details, Redeploy and Promote to production, and Refresh, no match and empty behave as in Default and Empty.
+- Deployments: the deployments list with Version (Current tag), Status with a spinner while Building and the run's duration, the project link, the environment tag and the author with the time; a row click opens the deployment, the row menu holds View details, Redeploy (queues a new run, with a toast) and Promote to production (asks first), and Refresh, no match and empty behave as in Default and Empty.
 
 ## Related
 

@@ -60,6 +60,12 @@ The block takes the run through props and emits every action; it runs no deploy 
 | `retry`    | `(event, items)` | Retry failed; `items` are the failed rows to deploy again. |
 | `redeploy` | `(event)`        | Redeploy in the outcome toast; deploy every setting again. |
 
+| Slot      | What it holds                                                                                           |
+| --------- | ------------------------------------------------------------------------------------------------------- |
+| `actions` | The page actions under the heading; left empty, Show progress. Drop puts Deploy a folder there instead. |
+
+A run whose rows are all queued has not started: the block raises no toast for it. Drop renders the block with its two Deployment Settings queued, opens its own confirm beside it, and on Deploy to Production opens the progress dialog and moves the rows through the run.
+
 To go live, render the block from a page that owns the deploy and pass its rows as they change:
 
 ```vue

@@ -4,7 +4,7 @@
 
 <template>
   <EditFunction
-    default-document="arguments"
+    document="arguments"
     :default-open-keys="['field-1']"
   />
 </template>

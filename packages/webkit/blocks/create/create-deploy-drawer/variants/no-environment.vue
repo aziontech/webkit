@@ -6,10 +6,12 @@
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
   import EmptyState from '@aziontech/webkit/empty-state'
+  import Kbd from '@aziontech/webkit/kbd'
   import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import SettingsGroup from '@aziontech/webkit/settings-group'
+  import { toAriaKeyshortcuts } from '@aziontech/webkit/use-shortcuts'
   import { ref } from 'vue'
 
   const open = ref(false)
@@ -87,13 +89,21 @@
               Add an environment to deploy.
             </p>
             <Button
-              label="Deploy"
               variant="primary"
               size="medium"
               type="submit"
               disabled
               aria-describedby="deploy-drawer-no-environment-reason"
-            />
+              :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
+            >
+              Deploy
+              <Kbd
+                meta
+                key-name="enter"
+                size="small"
+                aria-hidden="true"
+              />
+            </Button>
           </div>
         </PanelFooter>
       </form>

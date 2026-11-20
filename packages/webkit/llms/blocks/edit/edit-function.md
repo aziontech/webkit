@@ -45,7 +45,7 @@ A `CodeEditor` with `fill` and `pad-line-numbers` takes the pane: zero-padded li
 
 ### D. Test run — `ResizableRoot`, `ResizablePane`, `ResizableHandle` (optional)
 
-Variant TestRun only; it adds `StatusIndicator`, `CopyButton`, `KeyValueList`, `Trace`, `LogViewer` and `LogViewerContent` to the page.
+Variant TestRun only: it renders the block and fills its `editor-actions` and `code-panel` slots, adding `StatusIndicator`, `CopyButton`, `KeyValueList`, `Trace`, `LogViewer` and `LogViewerContent` to the page.
 
 In TestRun the Code document becomes a vertical `ResizableRoot`: the editor is the flexible pane, and the Test run pane under it has a `basis`, a minimum and a maximum height and collapses past its minimum, so the editor can take the whole height back. The pane scrolls on its own and reads top to bottom like the invocation page of the design sample:
 
@@ -87,21 +87,27 @@ A small `Kbd` (`aria-hidden`) inside the primary button shows its keyboard short
 
 The block takes the saved service and the request state through props and emits the save; it fetches nothing. `FunctionEditorService`, `FunctionEditorField`, `FunctionEditorValues` and `FunctionEditorProps` are exported from `edit-function.vue`, and `sample.ts` holds the sample service and fields the block renders when `service` or `fields` is left out. The editor keeps its own draft; Discard returns to the props.
 
-| Prop              | Type                             | What it does                                                                                        |
-| ----------------- | -------------------------------- | --------------------------------------------------------------------------------------------------- |
-| `service`         | `FunctionEditorService`          | The saved name, execution environment, status, code and argument schema (JSON text).                |
-| `fields`          | `FunctionEditorField[]`          | The saved argument fields, in order. Pass `[]` for a service with no form.                          |
-| `defaultDraft`    | `Partial<FunctionEditorService>` | Unsaved edits the editor opens with, so the save bar is up.                                         |
-| `defaultTab`      | `'code' \| 'settings'`           | The tab the page opens on.                                                                          |
-| `defaultDocument` | `'code' \| 'arguments'`          | The document of the Code tab the page opens on.                                                     |
-| `defaultOpenKeys` | `string[]`                       | Ids of the fields that open expanded.                                                               |
-| `loading`         | `boolean`                        | The save is in flight; when it ends with no `error` the editor takes the draft as saved and toasts. |
-| `error`           | `string`                         | Why the save failed, shown in the danger `Alert` of the save bar.                                   |
+| Prop               | Type                             | What it does                                                                                        |
+| ------------------ | -------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `service`          | `FunctionEditorService`          | The saved name, execution environment, status, code and argument schema (JSON text).                |
+| `fields`           | `FunctionEditorField[]`          | The saved argument fields, in order. Pass `[]` for a service with no form.                          |
+| `defaultDraft`     | `Partial<FunctionEditorService>` | Unsaved edits the editor opens with, so the save bar is up.                                         |
+| `v-model:tab`      | `'code' \| 'settings'`           | The active tab, `code` by default; pass `tab` alone to open on a tab.                               |
+| `v-model:document` | `'code' \| 'arguments'`          | The document of the Code tab, `code` by default; pass `document` alone to open on one.              |
+| `defaultOpenKeys`  | `string[]`                       | Ids of the fields that open expanded.                                                               |
+| `loading`          | `boolean`                        | The save is in flight; when it ends with no `error` the editor takes the draft as saved and toasts. |
+| `error`            | `string`                         | Why the save failed, shown in the danger `Alert` of the save bar.                                   |
 
-| Event     | Payload           | When                                                                |
-| --------- | ----------------- | ------------------------------------------------------------------- |
-| `submit`  | `(event, values)` | Save, once Name and Code are filled; `values` holds the fields too. |
-| `discard` | `(event)`         | Discard; the draft is already back to the saved props.              |
+| Event          | Payload           | When                                                                                   |
+| -------------- | ----------------- | -------------------------------------------------------------------------------------- |
+| `submit`       | `(event, values)` | Save, once Name and Code are filled; `values` holds the fields too.                    |
+| `discard`      | `(event)`         | Discard; the draft is already back to the saved props.                                 |
+| `editor-ready` | `(editor)`        | The Code document's Monaco editor mounted; add commands to it, such as Run on ⌘ Enter. |
+
+| Slot             | What it holds                                                                                                                    |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `editor-actions` | Actions at the end of the editor toolbar, such as Run test.                                                                      |
+| `code-panel`     | A `ResizableHandle` and a `ResizablePane` under the Code document, such as the Test run pane; the editor becomes the first pane. |
 
 To go live, render the block from a page that owns the request:
 
@@ -176,11 +182,11 @@ Then delete `sample.ts` and its import.
 
 ## States
 
-- Code: the default, `defaultTab` `code`: the Code tab with the Code document filling the editor pane.
-- Arguments: `defaultDocument` `arguments` with `defaultOpenKeys`: the Arguments document of image-optimizer, the schema on the left and two fields on the right, one expanded.
+- Code: the default, `tab` `code`: the Code tab with the Code document filling the editor pane.
+- Arguments: `document` `arguments` with `defaultOpenKeys`: the Arguments document of image-optimizer, the schema on the left and two fields on the right, one expanded.
 - NoArguments: a `service` with an empty schema and `fields` `[]`: the Arguments document of a service with no form, the empty schema and the no fields empty state.
 - TestRun: the Code document with a finished test run of image-optimizer under it, the origin fetch selected in the trace; Run test shows the running state.
-- Settings: `defaultTab` `settings`: the Settings tab with General, Runtime, Execution environment and Status; editing raises the save bar.
+- Settings: `tab` `settings`: the Settings tab with General, Runtime, Execution environment and Status; editing raises the save bar.
 - Saving: `loading` with a `defaultDraft`: a change to the Code document is being saved; Save shows its loading state, Discard and the fields are disabled and the editors are read-only.
 
 ## Related
@@ -316,10 +322,6 @@ Each variant is the same screen in another state: `get_block("edit/edit-function
     fields?: FunctionEditorField[]
     /** Unsaved edits the editor opens with on top of the service, so it starts dirty. */
     defaultDraft?: Partial<FunctionEditorService>
-    /** The tab the editor opens on. */
-    defaultTab?: FunctionEditorTab
-    /** The document the Code tab opens on. */
-    defaultDocument?: FunctionEditorDocument
     /** Ids of the fields that open expanded. */
     defaultOpenKeys?: string[]
     /** The save is in flight: the save bar stays, Save spins, Discard and the editors lock. */
@@ -332,8 +334,6 @@ Each variant is the same screen in another state: `get_block("edit/edit-function
     service: undefined,
     fields: undefined,
     defaultDraft: () => ({}),
-    defaultTab: 'code',
-    defaultDocument: 'code',
     defaultOpenKeys: () => [],
     loading: false,
     error: ''
@@ -342,6 +342,17 @@ Each variant is the same screen in another state: `get_block("edit/edit-function
   const emit = defineEmits<{
     submit: [event: Event, values: FunctionEditorValues]
     discard: [event: MouseEvent]
+    'editor-ready': [editor: unknown]
+  }>()
+
+  const activeTab = defineModel<FunctionEditorTab>('tab', { default: 'code' })
+  const activeDocument = defineModel<FunctionEditorDocument>('document', { default: 'code' })
+
+  const slots = defineSlots<{
+    /** Actions at the end of the editor toolbar, beside the document switch. */
+    'editor-actions'(): unknown
+    /** A pane under the Code document; when given, a handle splits it from the editor. */
+    'code-panel'(): unknown
   }>()
 
   type SchemaField = FunctionEditorField
@@ -391,8 +402,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-function
   const savedService = computed<FunctionEditorService>(() => props.service ?? sampleService)
   const savedFields = computed<SchemaField[]>(() => props.fields ?? sampleFields)
 
-  const activeTab = ref<string>(props.defaultTab)
-  const activeDocument = ref<string>(props.defaultDocument)
+  const split = computed(() => Boolean(slots['code-panel']))
   const form = reactive<FunctionEditorService>({ ...savedService.value })
   const draftFields = ref<SchemaField[]>(structuredClone(toRaw(savedFields.value)))
   const expanded = ref(new Set<string>(props.defaultOpenKeys))
@@ -634,38 +644,52 @@ Each variant is the same screen in another state: `get_block("edit/edit-function
                       : 'The fields an instance is asked for, and their defaults.'
                   }}
                 </p>
+                <slot name="editor-actions" />
               </div>
               <div class="flex min-h-0 flex-1 flex-col">
                 <div
                   v-show="activeDocument === 'code'"
                   class="flex min-h-0 flex-1 flex-col"
                 >
-                  <div class="flex min-h-0 w-full flex-1 flex-col">
-                    <div class="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
-                      <div class="flex min-h-0 flex-1 flex-col">
-                        <CodeEditor
-                          :readonly="saving"
-                          id="service-source-code"
-                          v-model="form.code"
-                          language="javascript"
-                          path="index.js"
-                          fill
-                          :bordered="false"
-                          pad-line-numbers
-                          :loader="loadMonaco"
-                          :invalid="!!codeError"
-                          aria-label="Source code"
-                          @update:model-value="codeError = ''"
-                        />
-                      </div>
-                    </div>
-                    <div
-                      v-if="codeError"
-                      class="px-(--spacing-sm) py-(--spacing-xs)"
+                  <component
+                    :is="split ? ResizableRoot : 'div'"
+                    :orientation="split ? 'vertical' : undefined"
+                    :aria-label="split ? 'Code and test run' : undefined"
+                    class="flex min-h-0 w-full flex-1 flex-col"
+                  >
+                    <component
+                      :is="split ? ResizablePane : 'div'"
+                      :aria-label="split ? 'Source code' : undefined"
+                      class="flex min-h-0 w-full flex-1 flex-col"
                     >
-                      <FieldError>{{ codeError }}</FieldError>
-                    </div>
-                  </div>
+                      <div class="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
+                        <div class="flex min-h-0 flex-1 flex-col">
+                          <CodeEditor
+                            :readonly="saving"
+                            id="service-source-code"
+                            v-model="form.code"
+                            language="javascript"
+                            path="index.js"
+                            fill
+                            :bordered="false"
+                            pad-line-numbers
+                            :loader="loadMonaco"
+                            :invalid="!!codeError"
+                            aria-label="Source code"
+                            @ready="(editor: unknown) => emit('editor-ready', editor)"
+                            @update:model-value="codeError = ''"
+                          />
+                        </div>
+                      </div>
+                      <div
+                        v-if="codeError"
+                        class="px-(--spacing-sm) py-(--spacing-xs)"
+                      >
+                        <FieldError>{{ codeError }}</FieldError>
+                      </div>
+                    </component>
+                    <slot name="code-panel" />
+                  </component>
                 </div>
                 <div
                   v-show="activeDocument === 'arguments'"
@@ -1435,6 +1459,9 @@ Each variant is the same screen in another state: `get_block("edit/edit-function
 ## `sample.ts`
 
 ```ts
+import type { LogViewerLine } from '@aziontech/webkit/log-viewer-root'
+import type { TraceSpan } from '@aziontech/webkit/trace'
+
 import type { FunctionEditorField, FunctionEditorService } from './edit-function.vue'
 
 const sampleCode = `const ALLOWED = ['webp', 'avif']
@@ -1537,4 +1564,101 @@ export const sampleServiceWithoutArguments: FunctionEditorService = {
   code: authCode,
   schema: JSON.stringify({ type: 'object', properties: {} }, null, 2)
 }
+
+export const sampleRunRequest = 'GET /img/hero.jpg?format=avif'
+export const sampleRunSpans: TraceSpan[] = [
+  { id: 'root', name: 'image-optimizer', service: 'Function', start: 0, duration: 412 },
+  {
+    id: 'parse',
+    parentId: 'root',
+    name: 'parse-request',
+    service: 'Compute',
+    start: 4,
+    duration: 12,
+    attributes: { 'args.defaultFormat': 'webp', 'args.quality': 80 }
+  },
+  {
+    id: 'origin',
+    parentId: 'root',
+    name: 'fetch-origin',
+    service: 'Network',
+    start: 16,
+    duration: 186,
+    attributes: {
+      'http.method': 'GET',
+      'http.url': 'https://assets.example.com/img/hero.jpg',
+      'http.status_code': 200
+    }
+  },
+  {
+    id: 'dns',
+    parentId: 'origin',
+    name: 'dns-lookup',
+    service: 'Network',
+    start: 16,
+    duration: 14
+  },
+  {
+    id: 'tls',
+    parentId: 'origin',
+    name: 'tls-handshake',
+    service: 'Security',
+    start: 30,
+    duration: 31
+  },
+  {
+    id: 'response',
+    parentId: 'origin',
+    name: 'origin-response',
+    service: 'Network',
+    start: 61,
+    duration: 141
+  },
+  {
+    id: 'decode',
+    parentId: 'root',
+    name: 'decode',
+    service: 'Compute',
+    start: 202,
+    duration: 54
+  },
+  {
+    id: 'encode',
+    parentId: 'root',
+    name: 'encode',
+    service: 'Compute',
+    start: 256,
+    duration: 92,
+    attributes: { 'image.format': 'avif', 'image.bytes': 421888 }
+  },
+  {
+    id: 'cache',
+    parentId: 'root',
+    name: 'put-cache',
+    service: 'Storage',
+    start: 348,
+    duration: 38
+  }
+]
+export const sampleRunLines: LogViewerLine[] = [
+  { id: 'l1', time: '0 ms', type: 'text', message: 'Run started: ' + sampleRunRequest },
+  {
+    id: 'l2',
+    time: '4 ms',
+    type: 'text',
+    message: 'args { defaultFormat:"webp", quality: 80 }'
+  },
+  { id: 'l3', time: '16 ms', type: 'text', message: 'Cache miss, fetching assets.example.com' },
+  { id: 'l4', time: '202 ms', type: 'text', message: 'Origin answered 200, image/jpeg, 2.4 MB' },
+  { id: 'l5', time: '348 ms', type: 'text', message: 'Encoded 412 KB, 83% smaller' },
+  { id: 'l6', time: '412 ms', type: 'success', message: 'Run finished with 200' }
+]
+export const sampleRunDetails = [
+  { label: 'Started', value: 'Nov 10, 2026, 14:28' },
+  { label: 'Duration', value: '412 ms' },
+  { label: 'Data center', value: 'US East (Washington)' },
+  { label: 'Memory', value: '38 MB of 128 MB' }
+]
+
+export const sampleRunId = 'run_7f21c9'
 ```

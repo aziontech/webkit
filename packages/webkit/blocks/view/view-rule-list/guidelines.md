@@ -58,7 +58,7 @@ A small `Kbd` (`aria-hidden`) inside the primary button shows its keyboard short
 
 ## Data
 
-The block takes its rules through props and emits every action; it fetches nothing. `RuleListRule`, `RuleListEdit` and `RuleListProps` are exported from `view-rule-list.vue`, and `sample.ts` holds the sample application and firewall rules the block renders when `rules` is left out (and never while `loading` or `error` is set). Moves and switches stay a local draft until Save.
+The block takes its rules through props and emits every action; it fetches nothing. `RuleListRule`, `RuleListEdit` and `RuleListProps` are exported from `view-rule-list.vue`, and `sample.ts` holds the sample application and firewall rules the block renders when `rules` is left out (and never while `loading` or `error` is set). Moves and switches stay a local draft until Save. A new `rules` list (a rule edited or added elsewhere) updates the rows and keeps the unsaved moves and switches on top of it; a rule that was not there before lands where the list puts it and opens its phase.
 
 | Prop                | Type                          | What it does                                                                                                 |
 | ------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------ |

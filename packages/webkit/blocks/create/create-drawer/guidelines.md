@@ -77,24 +77,26 @@ A small `Kbd` (`aria-hidden`) inside the primary button shows its keyboard short
 
 The block takes its option lists, its starting values and the save state through props and emits the values; it fetches and saves nothing. `CreateDrawerProps`, `CreateDrawerValues`, `CreateDrawerEnvironment` and `CreateDrawerCertificate` are exported from `create-drawer.vue`, and `sample.ts` holds the environments and certificates the block renders when those props are left out.
 
-| Prop                    | Type                          | What it does                                                                                   |
-| ----------------------- | ----------------------------- | ---------------------------------------------------------------------------------------------- |
-| `environments`          | `CreateDrawerEnvironment[]`   | Every environment of the account, listed in the Environment select.                            |
-| `connectedEnvironments` | `string[]`                    | The environments the resource already publishes to; picking another one says it connects it.   |
-| `certificates`          | `CreateDrawerCertificate[]`   | The certificates Bring my own domain can pick; the one covering the address is preselected.    |
-| `defaultValues`         | `Partial<CreateDrawerValues>` | The values the form opens on (the edited domain); every open resets to them.                   |
-| `title`                 | `string`                      | The trigger label, drawer title and form name (`Add Domain`).                                  |
-| `description`           | `string`                      | The muted line under the title.                                                                |
-| `submitLabel`           | `string`                      | The footer button label; empty uses `title`.                                                   |
-| `open` (`v-model:open`) | `boolean`                     | Whether the drawer is open; the page closes it after a successful save.                        |
-| `defaultOpen`           | `boolean`                     | Opens the drawer on mount.                                                                     |
-| `loading`               | `boolean`                     | The save is in flight: the fieldset locks and the footer button spins.                         |
-| `error`                 | `string`                      | Why the save failed, shown in the danger `Alert` with Retry above the footer; the values stay. |
+| Prop                                           | Type                          | What it does                                                                                                                                        |
+| ---------------------------------------------- | ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `environments`                                 | `CreateDrawerEnvironment[]`   | Every environment of the account, listed in the Environment select.                                                                                 |
+| `connectedEnvironments`                        | `string[]`                    | The environments the resource already publishes to; picking another one says it connects it.                                                        |
+| `certificates`                                 | `CreateDrawerCertificate[]`   | The certificates Bring my own domain can pick; the one covering the address is preselected.                                                         |
+| `defaultValues`                                | `Partial<CreateDrawerValues>` | The values the form opens on (the edited domain); every open resets to them.                                                                        |
+| `title`                                        | `string`                      | The trigger label, drawer title and form name (`Add Domain`).                                                                                       |
+| `description`                                  | `string`                      | The muted line under the title.                                                                                                                     |
+| `submitLabel`                                  | `string`                      | The footer button label; empty uses `title`.                                                                                                        |
+| `open` (`v-model:open`)                        | `boolean`                     | Whether the drawer is open; the page closes it after a successful save.                                                                             |
+| `defaultOpen`                                  | `boolean`                     | Opens the drawer on mount.                                                                                                                          |
+| `environmentOpen` (`v-model:environment-open`) | `boolean`                     | Set when Create Environment is picked; the page opens its Create Environment drawer, and an environment it then adds to `environments` is selected. |
+| `loading`                                      | `boolean`                     | The save is in flight: the fieldset locks and the footer button spins.                                                                              |
+| `error`                                        | `string`                      | Why the save failed, shown in the danger `Alert` with Retry above the footer; the values stay.                                                      |
 
-| Event         | Payload           | When                                                                                     |
-| ------------- | ----------------- | ---------------------------------------------------------------------------------------- |
-| `submit`      | `(event, values)` | A valid Add Domain, or Retry in the error alert; `values` adds `host`, the full address. |
-| `update:open` | `(open)`          | The trigger, or the close button, the overlay or Escape once the guard allows it.        |
+| Event                    | Payload           | When                                                                                     |
+| ------------------------ | ----------------- | ---------------------------------------------------------------------------------------- |
+| `submit`                 | `(event, values)` | A valid Add Domain, or Retry in the error alert; `values` adds `host`, the full address. |
+| `update:open`            | `(open)`          | The trigger, or the close button, the overlay or Escape once the guard allows it.        |
+| `update:environmentOpen` | `(open)`          | The Create Environment option at the foot of the Environment select.                     |
 
 The `trigger` slot replaces the Add button (an environment menu, a row menu) and receives `open` to call.
 

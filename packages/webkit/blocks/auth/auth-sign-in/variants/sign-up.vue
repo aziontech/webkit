@@ -15,17 +15,43 @@
   import Separator from '@aziontech/webkit/separator'
   import { nextTick, onScopeDispose, reactive, ref } from 'vue'
 
+  import type { SignInProvider } from '../auth-sign-in.vue'
+
+  /** A sign-up failure with its own copy and exits. */
+  export type SignUpFailure = 'email-taken'
+
+  export interface SignUpProps {
+    /** The email the form opens on, such as the address a failed sign-up kept. */
+    defaultEmail?: string
+    /** Why sign-up fails: the notice opens with it, and every submit answers with it. */
+    error?: SignUpFailure | ''
+  }
+
   interface CardNotice {
     severity: AlertSeverity
     label: string
     exits?: boolean
   }
 
-  const failure: string = ''
-  const email = ref('')
+  const props = withDefaults(defineProps<SignUpProps>(), {
+    defaultEmail: '',
+    error: ''
+  })
+
+  const emit = defineEmits<{
+    'provider-click': [event: MouseEvent, provider: SignInProvider]
+  }>()
+
+  const takenNotice: CardNotice = {
+    severity: 'danger',
+    label: 'This email is already registered.',
+    exits: true
+  }
+
+  const email = ref(props.defaultEmail)
   const password = ref('')
   const errors = reactive({ email: '', password: '' })
-  const cardNotice = ref<CardNotice | null>(null)
+  const cardNotice = ref<CardNotice | null>(props.error === 'email-taken' ? takenNotice : null)
   const verifying = ref(false)
   let requestTimer: ReturnType<typeof setTimeout> | undefined
 
@@ -67,8 +93,8 @@
     requestTimer = setTimeout(() => {
       verifying.value = false
       cardNotice.value =
-        failure === 'email-taken'
-          ? { severity: 'danger', label: 'This email is already registered.', exits: true }
+        props.error === 'email-taken'
+          ? takenNotice
           : {
               severity: 'success',
               label: `Account created. We sent a verification link to ${email.value.trim()}.`
@@ -158,6 +184,7 @@
                       icon="az-color az-google"
                       class="w-full"
                       :disabled="verifying"
+                      @click="(event: MouseEvent) => emit('provider-click', event, 'google')"
                     />
                     <Button
                       type="button"
@@ -167,6 +194,7 @@
                       icon="az az-github"
                       class="w-full"
                       :disabled="verifying"
+                      @click="(event: MouseEvent) => emit('provider-click', event, 'github')"
                     />
                   </div>
 

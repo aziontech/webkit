@@ -1,6 +1,6 @@
 # ShellConsole (`shell/shell-console`)
 
-> The console shell as one component: `ConsoleLayout`, composed once in the app around RouterView, so a console page is only its body. Its `navigation` is the Azion console tree as data (Overview, Workloads, Deployments; Build, Secure, Store, Observe; Marketplace and the Settings drill-in), each row with an `href` the layout follows with the app's router, and the active row follows the route; it renders the resizable, collapsible rail with the wordmark and the account at its foot, the header with breadcrumbs, the search trigger, the app's actions and the avatar, the ⌘K palette listing every navigation page, and the single main. Below 768 px of its own width the rail becomes a drawer opened from the header's menu button. This block fills the slots: Create (`Button`) and Agent (`HighlightButton`), icon-only (`IconButton` with a `Tooltip`) while compact; Recents and Actions as `Command` groups; the account menu (`DropdownMenu` whose theme choice is a group of radio items and Upgrade to Pro an item, over a `StatusIndicator`). The body is a stand-in list page (`PageHeader` and a `Card`) for view/view-table, which owns the controls row and the table; a page opens the same palette with useConsoleLayout().openSearch().
+> The console shell as one component: `ConsoleLayout`, composed once in the app around RouterView, so a console page is only its body. Its `navigation` is the Azion console tree as data (Overview, Workloads, Deployments; Build, Secure, Store, Observe; Marketplace and the Settings drill-in), each row with an `href` the layout follows with the app's router, and the active row follows the route; it renders the resizable, collapsible rail with the wordmark and the account at its foot, the header with breadcrumbs, the search trigger, the app's actions and the avatar, the ⌘K palette listing every navigation page, and the single main. Below 768 px of its own width the rail becomes a drawer opened from the header's menu button. This block fills the slots: Create (`Button`) and Agent (`HighlightButton`), icon-only (`IconButton` with a `Tooltip`) while compact; Recents and Actions as `Command` groups; the account menu (`DropdownMenu` whose theme choice is a group of radio items and Upgrade to Pro an item, over a `StatusIndicator`). The body is a stand-in list page (`PageHeader` and a `Card`) for view/view-table, which owns the controls row and the table; a page opens the same palette with useConsoleLayout().openSearch(). The shell mounts the app's one `Toaster`, and the other states render it and fill its slots (the body, `actions`, `sidebar-header`, `header-leading`, `notifications`, `tools`, with `v-model:tools-open`) instead of copying it.
 
 - Surface: app
 - Source: `blocks/shell/shell-console/shell-console.vue` in `@aziontech/webkit`
@@ -71,9 +71,24 @@ The list page's title and description, with Documentation and the create action 
 
 Flush (`:padded="false"`), standing in for the page body; the list page's controls row and table come from `view/view-table` (Table toolbar parts), never a hand-built row of buttons in the shell.
 
+### L. Toast region — `Toaster` (required)
+
+The app's one toast region, at `bottom-end`, mounted once by the shell because it is the app root. Pages and the other states only call `toast`; none renders a `Toaster` of its own.
+
 ## Data
 
-The shell takes no props: `navigation`, `account` and the recents are its own constants, which the app replaces with its navigation file and signed-in user. It emits one event:
+`navigation`, `account` and the recents are the shell's own constants, which the app replaces with its navigation file and signed-in user. The states render the shell and fill its slots instead of copying it:
+
+| Slot             | Scope         | What goes in it                                                               |
+| ---------------- | ------------- | ----------------------------------------------------------------------------- |
+| default          |               | The page body (`<RouterView />` in the app); a stand-in list page when empty. |
+| `actions`        | `{ compact }` | Header actions after Create and Agent (the Notifications bell).               |
+| `sidebar-header` | `{ compact }` | Content under the wordmark in the rail (the AccountSwitch switcher).          |
+| `header-leading` | `{ compact }` | Content before the breadcrumbs in the header (the switcher while compact).    |
+| `notifications`  |               | Flash messages above the page body.                                           |
+| `tools`          |               | The tools region beside the content (the notification list).                  |
+
+`v-model:tools-open` opens and closes the tools region, and `tools-label` names it. It emits one event:
 
 | Event      | Payload   | When                                    |
 | ---------- | --------- | --------------------------------------- |
@@ -155,10 +170,37 @@ Each variant is the same screen in another state: `get_block("shell/shell-consol
   import IconButton from '@aziontech/webkit/icon-button'
   import PageHeader from '@aziontech/webkit/page-header'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import { Toaster } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { useColorMode } from '@aziontech/webkit/use-color-mode'
 
+  export interface ShellConsoleProps {
+    /** Accessible name of the tools region the tools slot fills. */
+    toolsLabel?: string
+  }
+
+  withDefaults(defineProps<ShellConsoleProps>(), {
+    toolsLabel: ''
+  })
+
   const emit = defineEmits<{ 'sign-out': [event: MouseEvent | KeyboardEvent] }>()
+
+  const toolsOpen = defineModel<boolean>('toolsOpen', { default: false })
+
+  defineSlots<{
+    /** The page body; a stand-in list page when empty. */
+    default(): unknown
+    /** Header actions after Create and Agent. */
+    actions(props: { compact: boolean }): unknown
+    /** Content before the breadcrumbs in the header. */
+    'header-leading'(props: { compact: boolean }): unknown
+    /** Content under the wordmark in the rail. */
+    'sidebar-header'(props: { compact: boolean }): unknown
+    /** Flash messages above the page body. */
+    notifications(): unknown
+    /** The tools region beside the content. */
+    tools(): unknown
+  }>()
 
   const navigation: ConsoleLayoutNavGroup[] = [
     {
@@ -348,9 +390,31 @@ Each variant is the same screen in another state: `get_block("shell/shell-consol
     :navigation="navigation"
     :account="account"
     active-id="applications"
+    v-model:tools-open="toolsOpen"
+    :tools-label="toolsLabel"
     @search-select="onSearchSelect"
     @account-select="onAccountSelect"
   >
+    <template
+      v-if="$slots['sidebar-header']"
+      #sidebar-header="{ compact }"
+    >
+      <slot
+        name="sidebar-header"
+        :compact="compact"
+      />
+    </template>
+
+    <template
+      v-if="$slots['header-leading']"
+      #header-leading="{ compact }"
+    >
+      <slot
+        name="header-leading"
+        :compact="compact"
+      />
+    </template>
+
     <template #actions="{ compact }">
       <template v-if="compact">
         <Tooltip
@@ -389,6 +453,10 @@ Each variant is the same screen in another state: `get_block("shell/shell-consol
           icon="az az-ask-azion"
         />
       </template>
+      <slot
+        name="actions"
+        :compact="compact"
+      />
     </template>
 
     <template #search="{ query }">
@@ -552,41 +620,58 @@ Each variant is the same screen in another state: `get_block("shell/shell-consol
       </DropdownMenu.Group>
     </template>
 
-    <div class="layout-boundary">
-      <div class="layout-column flex flex-col gap-(--layout-group-gap)">
-        <PageHeader
-          title="Applications"
-          description="Build, deploy, and manage your applications."
-        >
-          <template #actions>
-            <Button
-              label="Documentation"
-              icon="az az-book"
-              variant="outline"
-              size="medium"
-              href="https://www.azion.com/en/documentation/"
-              target="_blank"
-            />
-            <Button
-              label="Create Application"
-              icon="az az-plus"
-              variant="outline"
-              size="medium"
-            />
-          </template>
-        </PageHeader>
+    <template
+      v-if="$slots.notifications"
+      #notifications
+    >
+      <slot name="notifications" />
+    </template>
 
-        <Card :padded="false">
-          <template #default>
-            <div
-              class="flex min-h-(--container-3xs) items-center justify-center text-body-sm text-(--text-muted)"
-            >
-              The page body: view/view-table
-            </div>
-          </template>
-        </Card>
+    <template
+      v-if="$slots.tools"
+      #tools
+    >
+      <slot name="tools" />
+    </template>
+
+    <slot>
+      <div class="layout-boundary">
+        <div class="layout-column flex flex-col gap-(--layout-group-gap)">
+          <PageHeader
+            title="Applications"
+            description="Build, deploy, and manage your applications."
+          >
+            <template #actions>
+              <Button
+                label="Documentation"
+                icon="az az-book"
+                variant="outline"
+                size="medium"
+                href="https://www.azion.com/en/documentation/"
+                target="_blank"
+              />
+              <Button
+                label="Create Application"
+                icon="az az-plus"
+                variant="outline"
+                size="medium"
+              />
+            </template>
+          </PageHeader>
+
+          <Card :padded="false">
+            <template #default>
+              <div
+                class="flex min-h-(--container-3xs) items-center justify-center text-body-sm text-(--text-muted)"
+              >
+                The page body: view/view-table
+              </div>
+            </template>
+          </Card>
+        </div>
       </div>
-    </div>
+    </slot>
+    <Toaster position="bottom-end" />
   </ConsoleLayoutRoot>
 </template>
 ```

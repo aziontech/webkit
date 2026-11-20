@@ -170,14 +170,36 @@
     }
   }
 
+  const keepUnsaved = (before: Snapshot, savedBefore: Snapshot, savedNow: Snapshot) => {
+    for (const { value } of ALL_PHASES) {
+      const order = before.order[value] ?? []
+      if (order.join() !== (savedBefore.order[value] ?? []).join()) {
+        const rank = (id: string) => {
+          const at = order.indexOf(id)
+          return at < 0 ? order.length : at
+        }
+        draft[value] = [...draft[value]].sort((a, b) => rank(a.id) - rank(b.id))
+      }
+      for (const item of draft[value]) {
+        const local = before.active[item.id]
+        const changedHere = local !== undefined && local !== savedBefore.active[item.id]
+        if (changedHere && savedNow.active[item.id] === savedBefore.active[item.id])
+          item.active = local
+      }
+    }
+  }
+
   let seeded = false
   watch(
     source,
     (next) => {
+      const before = seeded ? snapshot() : null
+      const savedBefore = saved.value
       for (const { value } of ALL_PHASES) {
         draft[value] = next.filter((item) => item.phase === value).map((item) => ({ ...item }))
       }
       saved.value = snapshot()
+      if (before) keepUnsaved(before, savedBefore, saved.value)
       if (!seeded && next.length) {
         seeded = true
         applyEdits(props.defaultEdits)
@@ -204,6 +226,12 @@
       .filter(({ value }) => draft[value].some(matches))
       .map(({ value }) => value)
     openPhases.value = [...new Set([...openPhases.value, ...hits])]
+  })
+  watch(source, (next, previous) => {
+    if (!previous?.length) return
+    const known = new Set(previous.map((item) => item.id))
+    const added = next.filter((item) => !known.has(item.id)).map((item) => item.phase)
+    if (added.length) openPhases.value = [...new Set([...openPhases.value, ...added])]
   })
 
   const groups = computed(() =>

@@ -6,6 +6,7 @@ import {
   samplePartialItems,
   sampleRunningItems
 } from '../../../../blocks/create/create-deploy-progress-dialog/sample'
+import DeployProgressDrop from '../../../../blocks/create/create-deploy-progress-dialog/variants/drop.vue'
 import { useToastRegion } from '../../toast-region'
 
 useToastRegion()
@@ -59,5 +60,18 @@ describe('create-deploy-progress-dialog', () => {
     expect(
       within(dialog).getByRole('heading', { name: 'Deployed 1 Deployment Setting' })
     ).toBeTruthy()
+  })
+
+  it('Drop: confirms the dropped folder, then runs it in the progress dialog with no toast while it shows', async () => {
+    render(DeployProgressDrop)
+    const confirm = await screen.findByRole('dialog', { name: 'New production deployment' })
+    expect(within(confirm).getByRole('list', { name: 'Dropped files' })).toBeTruthy()
+    expect(screen.queryByText(/It keeps running if you leave/, visible)).toBeNull()
+    await fireEvent.click(within(confirm).getByRole('button', { name: 'Deploy to Production' }))
+    const progress = await screen.findByRole('dialog', { name: /Deploying 0 of 2/ }, wait)
+    expect(within(progress).getByRole('button', { name: 'Hide' })).toBeTruthy()
+    expect(screen.queryByText(/It keeps running if you leave/, visible)).toBeNull()
+    await fireEvent.click(within(progress).getByRole('button', { name: 'Hide' }))
+    expect(await screen.findByText(/It keeps running if you leave/, visible, wait)).toBeTruthy()
   })
 })

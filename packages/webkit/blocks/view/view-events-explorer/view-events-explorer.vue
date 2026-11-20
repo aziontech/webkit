@@ -7,6 +7,7 @@
     type ChartSeries
   } from '@aziontech/webkit/chart'
   import Checkbox from '@aziontech/webkit/checkbox'
+  import Chip from '@aziontech/webkit/chip'
   import CodeBlock from '@aziontech/webkit/code-block'
   import DataTable, { type TableColumn, type TableExposed } from '@aziontech/webkit/data-table'
   import DrawerContent from '@aziontech/webkit/drawer-content'
@@ -117,6 +118,20 @@
   /** Applied values per filter field; period holds the time range. */
   export type EventsExplorerFilters = FilterMenuModel
 
+  /** One field of the open event, as the document lists it. */
+  export interface EventsExplorerDocumentField {
+    /** Id of the field. */
+    id: string
+    /** Label of the field. */
+    label: string
+    /** The value as written in the document. */
+    value: string
+    /** The value as the event holds it, the one a filter applies. */
+    raw: FilterMenuValue
+    /** The log can be filtered by this field. */
+    filterable: boolean
+  }
+
   export interface EventsExplorerProps {
     /** The events. Left out, the sample renders. Filtered, searched and paged in the browser unless total is set. */
     events?: EventsExplorerEvent[]
@@ -140,6 +155,10 @@
     loading?: boolean
     /** Why the events could not load; a danger alert with Retry replaces the log. */
     error?: string
+    /** IANA time zone the times, the chart and the period are written in. */
+    timeZone?: string
+    /** An extra test every event must pass besides the filters, such as a typed query. */
+    match?: (event: EventsExplorerEvent) => boolean
   }
 
   const props = withDefaults(defineProps<EventsExplorerProps>(), {
@@ -153,7 +172,9 @@
     moreRows: false,
     loadingMore: false,
     loading: false,
-    error: ''
+    error: '',
+    timeZone: 'UTC',
+    match: undefined
   })
 
   const emit = defineEmits<{
@@ -169,6 +190,20 @@
   const search = defineModel<string>('search', { default: '' })
   const page = defineModel<number>('page', { default: 1 })
   const pageSize = defineModel<number>('pageSize', { default: 25 })
+  const selectedKey = defineModel<string>('selectedKey', { default: '' })
+  const exclusions = defineModel<EventsExplorerFilters>('exclusions', {
+    default: () => ({})
+  })
+
+  defineSlots<{
+    /** Replaces the controls row and the filter chips; exportCsv downloads the log shown. */
+    toolbar?(props: { exportCsv: () => void; exportDisabled: boolean }): unknown
+    /** Replaces the fields of the open event in its document. */
+    'document-fields'?(props: {
+      event: EventsExplorerEvent
+      fields: EventsExplorerDocumentField[]
+    }): unknown
+  }>()
 
   type EventRow = EventsExplorerEvent & { time: string; sourceLabel: string }
 
@@ -197,7 +232,7 @@
     formatDate(value, {
       month: 'short',
       day: '2-digit',
-      timeZone: 'UTC'
+      timeZone: props.timeZone
     })
   const clockFormat = (value: Date | number | string) =>
     formatDate(value, {
@@ -205,14 +240,14 @@
       minute: '2-digit',
       second: '2-digit',
       hour12: false,
-      timeZone: 'UTC'
+      timeZone: props.timeZone
     })
   const axisFormat = (value: Date | number | string) =>
     formatDate(value, {
       hour: '2-digit',
       minute: '2-digit',
       hour12: false,
-      timeZone: 'UTC'
+      timeZone: props.timeZone
     })
   const isDate = (value: unknown): value is Date =>
     value instanceof Date && !Number.isNaN(value.getTime())
@@ -482,16 +517,41 @@
   )
 
   const filteredEvents = computed(() =>
-    eventRows.value.filter((event) =>
-      filterFields.value.every((field) => {
-        const values = filters.value[field.id]
-        if (!values?.length) return true
-        return field.match(event, values)
-      })
+    eventRows.value.filter(
+      (event) =>
+        filterFields.value.every((field) => {
+          const values = filters.value[field.id]
+          if (!values?.length) return true
+          return field.match(event, values)
+        }) &&
+        Object.entries(exclusions.value).every(
+          ([id, values]) => !values.includes(event[id] as FilterMenuValue)
+        ) &&
+        (!props.match || props.match(event))
     )
   )
 
-  watch(filters, () => {
+  const exclusionChips = computed(() =>
+    Object.entries(exclusions.value).flatMap(([id, values]) => {
+      const field = eventField(id)
+      return values.map((value) => ({
+        key: `${id}:${String(value)}`,
+        id,
+        value,
+        label: field?.label ?? id,
+        text: formatEventValue(field, value)
+      }))
+    })
+  )
+
+  const removeExclusion = (id: string, value: FilterMenuValue) => {
+    exclusions.value = {
+      ...exclusions.value,
+      [id]: (exclusions.value[id] ?? []).filter((item) => item !== value)
+    }
+  }
+
+  watch([filters, exclusions], () => {
     page.value = 1
   })
 
@@ -669,15 +729,19 @@
     return 'success'
   }
 
-  const selectedId = ref('')
+  const selectedId = selectedKey
   const selectedEvent = computed(
     () => matchedEvents.value.find((event) => event.id === selectedId.value) ?? null
   )
   const documentEvent = ref<EventRow | null>(null)
   const traceView = ref<TraceView>('waterfall')
-  watch(selectedEvent, (event) => {
-    if (event) documentEvent.value = event
-  })
+  watch(
+    selectedEvent,
+    (event) => {
+      if (event) documentEvent.value = event
+    },
+    { immediate: true }
+  )
 
   const logMinWidth = 480
   const documentMinWidth = 348
@@ -787,6 +851,20 @@
     return value !== undefined && value !== null && value !== ''
   }
 
+  const documentFields = computed<EventsExplorerDocumentField[]>(() => {
+    const event = documentEvent.value
+    if (!event) return []
+    return eventFields.value
+      .filter((field) => hasEventValue(event, field.id))
+      .map((field) => ({
+        id: field.id,
+        label: field.label,
+        value: formatEventValue(field, event[field.id]),
+        raw: event[field.id] as FilterMenuValue,
+        filterable: canFilterField(field)
+      }))
+  })
+
   const documentRows = computed(() => {
     const event = selectedEvent.value
     if (!event) return []
@@ -875,78 +953,114 @@
     <header
       class="flex shrink-0 flex-col gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-lg) py-(--spacing-sm)"
     >
-      <header class="flex flex-wrap items-center gap-x-(--layout-group-gap) gap-y-(--spacing-xs)">
-        <div class="flex min-w-0 grow basis-(--container-3xs) items-center gap-(--spacing-xs)">
-          <FilterMenu
+      <slot
+        name="toolbar"
+        :export-csv="exportCsv"
+        :export-disabled="!tableEl"
+      >
+        <header class="flex flex-wrap items-center gap-x-(--layout-group-gap) gap-y-(--spacing-xs)">
+          <div class="flex min-w-0 grow basis-(--container-3xs) items-center gap-(--spacing-xs)">
+            <FilterMenu
+              v-model="filters"
+              :fields="menuFields"
+              class="shrink-0"
+              data-testid="filter-button"
+            />
+            <div class="flex min-w-36 grow basis-(--container-2xs)">
+              <Input
+                v-model="search"
+                size="medium"
+                placeholder="Search events, hosts, paths or addresses"
+                aria-label="Search events"
+                class="w-full"
+              >
+                <template #leading>
+                  <i
+                    class="az az-search"
+                    aria-hidden="true"
+                  />
+                </template>
+              </Input>
+            </div>
+          </div>
+          <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
+            <span
+              class="text-label-sm inline-flex items-center gap-(--spacing-2xs) whitespace-nowrap text-(--text-muted)"
+              data-testid="events-time-zone"
+            >
+              <i
+                class="az az-globe"
+                aria-hidden="true"
+              />
+              Times in {{ timeZone }}
+            </span>
+            <Tooltip
+              content="Refresh"
+              class="shrink-0"
+            >
+              <IconButton
+                icon="az az-refresh"
+                variant="outline"
+                size="medium"
+                :loading="loading"
+                aria-label="Refresh"
+                data-testid="refresh-button"
+                @click="(event: MouseEvent) => emit('refresh', event)"
+              />
+            </Tooltip>
+            <Tooltip
+              content="Download CSV"
+              class="shrink-0"
+            >
+              <IconButton
+                icon="az az-download"
+                variant="outline"
+                size="medium"
+                :disabled="!tableEl"
+                aria-label="Download CSV"
+                data-testid="export-button"
+                @click="exportCsv"
+              />
+            </Tooltip>
+          </div>
+        </header>
+
+        <div
+          v-if="exclusionChips.length"
+          class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)"
+        >
+          <FilterMenu.ChipGroup
             v-model="filters"
             :fields="menuFields"
-            class="shrink-0"
-            data-testid="filter-button"
+            data-testid="filter-chips"
           />
-          <div class="flex min-w-36 grow basis-(--container-2xs)">
-            <Input
-              v-model="search"
-              size="medium"
-              placeholder="Search events, hosts, paths or addresses"
-              aria-label="Search events"
-              class="w-full"
-            >
-              <template #leading>
-                <i
-                  class="az az-search"
-                  aria-hidden="true"
-                />
-              </template>
-            </Input>
-          </div>
-        </div>
-        <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
           <span
-            class="text-label-sm inline-flex items-center gap-(--spacing-2xs) whitespace-nowrap text-(--text-muted)"
-            data-testid="events-time-zone"
+            v-for="chip in exclusionChips"
+            :key="chip.key"
+            class="inline-flex w-fit max-w-full"
           >
-            <i
-              class="az az-globe"
-              aria-hidden="true"
-            />
-            Times in UTC
+            <Chip
+              :label="`${chip.label} is not ${chip.text}`"
+              variant="filled"
+              size="medium"
+              removable
+              data-testid="exclusion-chip"
+              @remove="removeExclusion(chip.id, chip.value)"
+            >
+              <span class="flex min-w-0 items-center gap-(--spacing-2xs)">
+                <span class="truncate text-(--text-muted)">{{ chip.label }} is not</span>
+                <span class="truncate">{{ chip.text }}</span>
+              </span>
+            </Chip>
           </span>
-          <Tooltip
-            content="Refresh"
-            class="shrink-0"
-          >
-            <IconButton
-              icon="az az-refresh"
-              variant="outline"
-              size="medium"
-              :loading="loading"
-              aria-label="Refresh"
-              data-testid="refresh-button"
-              @click="(event: MouseEvent) => emit('refresh', event)"
-            />
-          </Tooltip>
-          <Tooltip
-            content="Download CSV"
-            class="shrink-0"
-          >
-            <IconButton
-              icon="az az-download"
-              variant="outline"
-              size="medium"
-              :disabled="!tableEl"
-              aria-label="Download CSV"
-              data-testid="export-button"
-              @click="exportCsv"
-            />
-          </Tooltip>
         </div>
-      </header>
-
-      <FilterMenu.ChipGroup
-        v-model="filters"
-        :fields="menuFields"
-        data-testid="filter-chips"
-      />
+        <FilterMenu.ChipGroup
+          v-else
+          v-model="filters"
+          :fields="menuFields"
+          data-testid="filter-chips"
+        />
+      </slot>
     </header>
 
     <section
@@ -1529,21 +1643,27 @@
                       </p>
                     </div>
 
-                    <dl
-                      class="grid min-w-0 grid-cols-[minmax(0,8rem)_minmax(0,1fr)] items-baseline gap-x-(--spacing-md) gap-y-(--spacing-sm)"
+                    <slot
+                      name="document-fields"
+                      :event="documentEvent"
+                      :fields="documentFields"
                     >
-                      <template
-                        v-for="row in documentRows"
-                        :key="row.id"
+                      <dl
+                        class="grid min-w-0 grid-cols-[minmax(0,8rem)_minmax(0,1fr)] items-baseline gap-x-(--spacing-md) gap-y-(--spacing-sm)"
                       >
-                        <dt class="min-w-0 text-label-sm text-(--text-muted)">{{ row.label }}</dt>
-                        <dd
-                          class="m-0 min-w-0 break-words text-label-code-sm text-(--text-default)"
+                        <template
+                          v-for="row in documentRows"
+                          :key="row.id"
                         >
-                          {{ row.value }}
-                        </dd>
-                      </template>
-                    </dl>
+                          <dt class="min-w-0 text-label-sm text-(--text-muted)">{{ row.label }}</dt>
+                          <dd
+                            class="m-0 min-w-0 break-words text-label-code-sm text-(--text-default)"
+                          >
+                            {{ row.value }}
+                          </dd>
+                        </template>
+                      </dl>
+                    </slot>
                   </div>
 
                   <div
@@ -1623,19 +1743,25 @@
                 </p>
               </div>
 
-              <dl
-                class="grid min-w-0 grid-cols-[minmax(0,8rem)_minmax(0,1fr)] items-baseline gap-x-(--spacing-md) gap-y-(--spacing-sm)"
+              <slot
+                name="document-fields"
+                :event="documentEvent"
+                :fields="documentFields"
               >
-                <template
-                  v-for="row in documentRows"
-                  :key="row.id"
+                <dl
+                  class="grid min-w-0 grid-cols-[minmax(0,8rem)_minmax(0,1fr)] items-baseline gap-x-(--spacing-md) gap-y-(--spacing-sm)"
                 >
-                  <dt class="min-w-0 text-label-sm text-(--text-muted)">{{ row.label }}</dt>
-                  <dd class="m-0 min-w-0 break-words text-label-code-sm text-(--text-default)">
-                    {{ row.value }}
-                  </dd>
-                </template>
-              </dl>
+                  <template
+                    v-for="row in documentRows"
+                    :key="row.id"
+                  >
+                    <dt class="min-w-0 text-label-sm text-(--text-muted)">{{ row.label }}</dt>
+                    <dd class="m-0 min-w-0 break-words text-label-code-sm text-(--text-default)">
+                      {{ row.value }}
+                    </dd>
+                  </template>
+                </dl>
+              </slot>
             </div>
 
             <div

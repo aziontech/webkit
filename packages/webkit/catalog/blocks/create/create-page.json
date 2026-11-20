@@ -2,7 +2,7 @@
  "variants": [
   {
    "name": "CreateZone",
-   "summary": "Create Zone after importing a zone file: Import sits in the bar's leading slot (pasting a zone file into Domain name does the same), Name and Domain name take the zone origin, and a Records section lists each imported record with its type Tag, value and TTL, a Remove per row and a Discard import action in the card footer. The SOA and the nameservers are never imported; each import, failure and discard confirms in a toast. The Records section previews the first 50 records with an 'and N more' line, and a re-import skips records already listed.",
+   "summary": "Create Zone after importing a zone file: Import sits in the bar's leading slot (pasting a zone file into Domain name does the same), Name and Domain name take the zone origin, and a Records section lists each imported record with its type Tag, value and TTL, a Remove per row and a Discard import action in the card footer. The SOA and the nameservers are never imported; each import and failure confirms in a toast, and each Remove and Discard import in a toast with Undo. The Records section previews the first 50 records with an 'and N more' line, and a re-import skips records already listed.",
    "file": "blocks/create/create-page/variants/create-zone.vue"
   },
   {

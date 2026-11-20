@@ -67,7 +67,7 @@ A setting with a side effect beyond this resource carries a warning `Alert` abov
 
 `useUnsavedChanges(() => form)` keeps the saved baseline: `isDirty` drives the save bar and the `dirty` mark on the Settings `Tabs.Trigger` (a dot after the label, "Unsaved changes" for screen readers), `commit()` moves the baseline after a save and `discard()` restores it. Leaving while dirty (another tab, another route through `onBeforeRouteLeave(() => confirmLeave())`, a reload) asks first: the composable warns on `beforeunload` and drives one `ConfirmDialog` bound with `v-bind="dialogProps"`, whose actions are Keep editing, Discard changes and, when `onSave` is given, Save changes, which saves and then leaves. See `skills/webkit-form`.
 
-### J. Changed elsewhere — `Button`, `SaveBar` (optional)
+### J. Changed elsewhere — `Alert`, `ConfirmDialog`, `Button`, `SaveBar` (optional)
 
 When the record was saved by someone else after the form opened, a warning `Alert` sits between the heading and the first section: a bold "Changed elsewhere." lead, one sentence that says nothing was lost and what Save will do, and a secondary Reload button in its action slot. Save does not overwrite silently: it opens a `ConfirmDialog` (kind `primary`) with Go back and Overwrite and save. Reload swaps the edits for the saved values and the notice becomes an info `Alert` "Edits discarded." with Undo, which brings the edits back. The save bar's hint and Discard label follow the notice ("Saving overwrites the version saved elsewhere.", "Discard and reload"). This is the state-form-validation rule (`state/state-form-validation`, SectionRejected) applied to an edit: one message above the form, the recovery action on it.
 
@@ -81,19 +81,25 @@ A small `Kbd` (`aria-hidden`) inside the primary button shows its keyboard short
 
 ## Data
 
-ProjectSettings takes the saved settings through props and emits the values on Save; it fetches nothing and saves nothing. `EditResourceProject` and `EditResourceProps` are exported from `edit-resource.vue`, and `sample.ts` holds the sample project the block renders when `resource` is left out. The other states are separate screens with their own fields.
+ProjectSettings takes the saved settings through props and emits the values on Save; it fetches nothing and saves nothing. `EditResourceProject` and `EditResourceProps` are exported from `edit-resource.vue`, and `sample.ts` holds the sample project the block renders when `resource` is left out. StaleRecord passes `defaultDraft` and `stale`, and DangerZone fills the `sections` slot; the other states are separate screens with their own fields.
 
-| Prop          | Type                  | What it does                                                                                                               |
-| ------------- | --------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `resource`    | `EditResourceProject` | The saved settings; the form opens on them and Discard returns to them. A new value resets the form.                       |
-| `loading`     | `boolean`             | The save is in flight: the fieldset and Discard disable and Save spins. When it turns off with no `error`, the bar leaves. |
-| `error`       | `string`              | Why the save failed, the description of the error toast with Retry; the edits stay.                                        |
-| `v-model:tab` | `string`              | The active page tab, `main-settings` by default; bind it to the route.                                                     |
+| Prop           | Type                           | What it does                                                                                                                           |
+| -------------- | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `resource`     | `EditResourceProject`          | The saved settings; the form opens on them and Discard returns to them. A new value resets the form.                                   |
+| `defaultDraft` | `Partial<EditResourceProject>` | Unsaved edits the form opens with on top of `resource`, so the save bar is up.                                                         |
+| `stale`        | `EditResourceProject`          | The version saved elsewhere after the form opened: the Changed elsewhere notice, Reload with Undo, and the overwrite question on Save. |
+| `loading`      | `boolean`                      | The save is in flight: the fieldset and Discard disable and Save spins. When it turns off with no `error`, the bar leaves.             |
+| `error`        | `string`                       | Why the save failed, the description of the error toast with Retry; the edits stay.                                                    |
+| `v-model:tab`  | `string`                       | The active page tab, `main-settings` by default; bind it to the route.                                                                 |
 
 | Event     | Payload           | When                                                    |
 | --------- | ----------------- | ------------------------------------------------------- |
 | `submit`  | `(event, values)` | Save with a valid Name; `values` is the whole settings. |
 | `discard` | `(event)`         | Discard; the form is already back on the saved values.  |
+
+| Slot       | What it holds                                                                  |
+| ---------- | ------------------------------------------------------------------------------ |
+| `sections` | Sections after Subscription modules, inside the form, such as the Danger zone. |
 
 To go live, render the block from a page that owns the request:
 
@@ -237,8 +243,10 @@ Each variant is the same screen in another state: `get_block("edit/edit-resource
 
 ```vue
 <script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
@@ -270,6 +278,10 @@ Each variant is the same screen in another state: `get_block("edit/edit-resource
   export interface EditResourceProps {
     /** The saved settings; the form opens on them and Discard returns to them. Left out, the sample renders. */
     resource?: EditResourceProject
+    /** Unsaved edits the form opens with on top of the resource, so it starts dirty. */
+    defaultDraft?: Partial<EditResourceProject>
+    /** The version saved elsewhere after the form opened: a notice offers Reload, and Save asks before it overwrites. */
+    stale?: EditResourceProject
     /** The save is in flight: the fieldset and Discard lock and Save spins. */
     loading?: boolean
     /** Why the save failed, shown in the error toast with Retry; the edits are kept. */
@@ -278,6 +290,8 @@ Each variant is the same screen in another state: `get_block("edit/edit-resource
 
   const props = withDefaults(defineProps<EditResourceProps>(), {
     resource: undefined,
+    defaultDraft: () => ({}),
+    stale: undefined,
     loading: false,
     error: ''
   })
@@ -288,6 +302,11 @@ Each variant is the same screen in another state: `get_block("edit/edit-resource
   }>()
 
   const activeTab = defineModel<string>('tab', { default: 'main-settings' })
+
+  defineSlots<{
+    /** Sections after Subscription modules, inside the form, such as the Danger zone. */
+    sections(): unknown
+  }>()
 
   const tabs = [
     { value: 'overview', label: 'Overview' },
@@ -345,8 +364,37 @@ Each variant is the same screen in another state: `get_block("edit/edit-resource
   const form = reactive<EditResourceProject>(copyOf(record.value))
   const saving = computed(() => props.loading)
   const baseline = ref(JSON.stringify(record.value))
+  Object.assign(form, copyOf({ ...record.value, ...props.defaultDraft }))
   const dirty = computed(() => JSON.stringify(form) !== baseline.value)
   const SAVE_TOAST = 'resource-save'
+
+  const freshness = ref<'conflict' | 'reloaded' | null>(props.stale ? 'conflict' : null)
+  const overwriteOpen = ref(false)
+  const noticeEl = ref<{ $el?: HTMLElement } | null>(null)
+  let editsBeforeReload: EditResourceProject | null = null
+
+  watch(
+    () => props.stale,
+    (next) => {
+      freshness.value = next ? 'conflict' : null
+      editsBeforeReload = null
+    }
+  )
+
+  const reload = () => {
+    if (!props.stale) return
+    editsBeforeReload = copyOf(form)
+    baseline.value = JSON.stringify(props.stale)
+    Object.assign(form, copyOf(props.stale))
+    freshness.value = 'reloaded'
+    nextTick(() => noticeEl.value?.$el?.focus?.())
+  }
+
+  const undoReload = () => {
+    if (editsBeforeReload) Object.assign(form, editsBeforeReload)
+    editsBeforeReload = null
+    freshness.value = 'conflict'
+  }
 
   watch(
     () => JSON.stringify(record.value),
@@ -371,10 +419,25 @@ Each variant is the same screen in another state: `get_block("edit/edit-resource
       nextTick(() => document.getElementById('resource-name')?.focus())
       return
     }
+    if (freshness.value === 'conflict') {
+      overwriteOpen.value = true
+      return
+    }
+    submit(event)
+  }
+
+  const submit = async (event: Event) => {
     toast.dismiss(SAVE_TOAST)
     emit('submit', event, copyOf(form))
     await nextTick()
-    if (!props.loading && !props.error) baseline.value = JSON.stringify(form)
+    if (props.loading || props.error) return
+    baseline.value = JSON.stringify(form)
+    freshness.value = null
+  }
+
+  const overwrite = (event: MouseEvent) => {
+    overwriteOpen.value = false
+    submit(event)
   }
 
   const onSaveShortcut = (event: KeyboardEvent) => {
@@ -403,11 +466,17 @@ Each variant is the same screen in another state: `get_block("edit/edit-resource
         return
       }
       baseline.value = JSON.stringify(form)
+      freshness.value = null
     }
   )
 
   const discard = (event: MouseEvent) => {
+    if (freshness.value === 'conflict') {
+      reload()
+      return
+    }
     Object.assign(form, JSON.parse(baseline.value) as EditResourceProject)
+    freshness.value = null
     emit('discard', event)
   }
 </script>
@@ -443,8 +512,57 @@ Each variant is the same screen in another state: `get_block("edit/edit-resource
                 size="small"
               />
 
+              <div
+                v-if="stale"
+                class="mt-(--layout-section-gap)"
+                aria-live="polite"
+              >
+                <Alert
+                  v-if="freshness === 'conflict'"
+                  key="conflict"
+                  ref="noticeEl"
+                  severity="warning"
+                  data-testid="stale-record-notice"
+                >
+                  <strong class="font-medium">Changed elsewhere.</strong>
+                  This project was saved by someone else after you opened it. Reload to see their
+                  values, or keep editing and confirm the overwrite when you save.
+                  <template #actions>
+                    <Button
+                      type="button"
+                      label="Reload"
+                      variant="secondary"
+                      size="medium"
+                      icon="az az-refresh"
+                      :disabled="saving"
+                      @click="reload"
+                    />
+                  </template>
+                </Alert>
+                <Alert
+                  v-else-if="freshness === 'reloaded'"
+                  key="reloaded"
+                  ref="noticeEl"
+                  severity="info"
+                  data-testid="stale-record-reloaded"
+                >
+                  <strong class="font-medium">Edits discarded.</strong>
+                  The form now shows the values saved elsewhere. Undo brings your edits back.
+                  <template #actions>
+                    <Button
+                      type="button"
+                      label="Undo"
+                      variant="secondary"
+                      size="medium"
+                      @click="undoReload"
+                    />
+                  </template>
+                </Alert>
+              </div>
+
               <fieldset
-                class="mx-0 mt-(--layout-section-gap) flex min-w-0 flex-col border-0 p-0"
+                :data-stale="stale ? '' : null"
+                class="mx-0 mt-(--layout-section-gap) flex min-w-0 flex-col border-0 p-0 data-[stale]:mt-(--spacing-lg)"
                 :disabled="saving"
               >
                 <legend class="sr-only">Main settings</legend>
@@ -558,6 +676,8 @@ Each variant is the same screen in another state: `get_block("edit/edit-resource
                     </template>
                   </Card>
                 </SettingsGroup>
+
+                <slot name="sections" />
               </fieldset>
             </div>
 
@@ -572,13 +692,20 @@ Each variant is the same screen in another state: `get_block("edit/edit-resource
                 @save="onSaveShortcut"
               >
                 Project settings changed.
-                <span class="text-(--text-muted)"
+                <span
+                  v-if="freshness === 'conflict'"
+                  class="text-(--text-muted)"
+                  >Saving overwrites the version saved elsewhere.</span
+                >
+                <span
+                  v-else
+                  class="text-(--text-muted)"
                   >Saving publishes them on the next deployment.</span
                 >
                 <template #actions>
                   <Button
                     type="button"
-                    label="Discard"
+                    :label="freshness === 'conflict' ? 'Discard and reload' : 'Discard'"
                     variant="outline"
                     size="medium"
                     :disabled="saving"
@@ -603,6 +730,17 @@ Each variant is the same screen in another state: `get_block("edit/edit-resource
               </SaveBar>
             </Transition>
           </form>
+
+          <ConfirmDialog
+            v-model:open="overwriteOpen"
+            title="Overwrite changes made elsewhere?"
+            description="This project was saved elsewhere after you opened it. Saving replaces that change with your edits, and it can't be recovered afterwards."
+            confirm-label="Overwrite and save"
+            cancel-label="Go back"
+            variant="primary"
+            size="small"
+            @confirm="overwrite"
+          />
         </div>
       </section>
     </div>
@@ -627,5 +765,14 @@ export const sampleProject: EditResourceProject = {
     load_balancing: false,
     web_socket_proxy: false
   }
+}
+
+export const sampleProjectDraft: Partial<EditResourceProject> = {
+  modules: { ...sampleProject.modules, device_detection: true }
+}
+
+export const sampleStaleProject: EditResourceProject = {
+  ...sampleProject,
+  modules: { ...sampleProject.modules, image_optimization: true }
 }
 ```

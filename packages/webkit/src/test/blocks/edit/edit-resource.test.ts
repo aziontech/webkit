@@ -48,6 +48,77 @@ describe('edit-resource locked modules', () => {
   })
 })
 
+describe('edit-resource#StaleRecord', () => {
+  const button = (label: string) =>
+    Array.from(document.querySelectorAll('button')).find((el) => {
+      const copy = el.cloneNode(true) as HTMLElement
+      copy.querySelectorAll('[aria-hidden="true"]').forEach((node) => node.remove())
+      return copy.textContent?.trim() === label
+    }) as HTMLButtonElement | undefined
+
+  it('asks before Save overwrites the version saved elsewhere, then saves', async () => {
+    const view = render(StaleRecord)
+    expect(view.getByTestId('stale-record-notice').textContent).toContain('Changed elsewhere.')
+    const save = await waitFor(() => {
+      expect(button('Save')).toBeDefined()
+      return button('Save')!
+    })
+    await fireEvent.click(save)
+    const dialog = await waitFor(() => {
+      const el = document.body.querySelector<HTMLElement>('[role=alertdialog]')
+      expect(el).not.toBeNull()
+      return el!
+    })
+    expect(dialog.textContent).toContain('Overwrite changes made elsewhere?')
+    await fireEvent.click(
+      Array.from(dialog.querySelectorAll('button')).find(
+        (el) => el.textContent?.trim() === 'Overwrite and save'
+      )!
+    )
+    await waitFor(() => expect(view.queryByTestId('stale-record-notice')).toBeNull(), wait)
+    await waitFor(() => expect(button('Save')).toBeUndefined(), wait)
+  })
+
+  it('reloads the saved values and brings the edits back on Undo', async () => {
+    const view = render(StaleRecord)
+    const detection = () =>
+      view.getByRole('switch', { name: 'Device Detection' }).getAttribute('aria-checked')
+    expect(detection()).toBe('true')
+    await fireEvent.click(button('Reload')!)
+    await waitFor(() => expect(view.getByTestId('stale-record-reloaded')).toBeTruthy())
+    expect(detection()).toBe('false')
+    expect(
+      view.getByRole('switch', { name: 'Image Optimization' }).getAttribute('aria-checked')
+    ).toBe('true')
+    await fireEvent.click(button('Undo')!)
+    await waitFor(() => expect(detection()).toBe('true'))
+    expect(view.getByTestId('stale-record-notice')).toBeTruthy()
+  })
+
+  it('leaves the default page without the notice', () => {
+    const view = render(EditResource)
+    expect(view.queryByTestId('stale-record-notice')).toBeNull()
+  })
+})
+
+describe('edit-resource#DangerZone', () => {
+  it('ends the page with the Danger zone and asks for the name before deleting', async () => {
+    const view = render(DangerZone)
+    await fireEvent.click(view.getByTestId('danger-zone-delete'))
+    const dialog = await waitFor(() => {
+      const el = document.body.querySelector<HTMLElement>('[role=alertdialog]')
+      expect(el).not.toBeNull()
+      return el!
+    })
+    const confirm = Array.from(dialog.querySelectorAll('button')).find(
+      (el) => el.textContent?.trim() === 'Delete project'
+    )!
+    expect(confirm.hasAttribute('disabled')).toBe(true)
+    await fireEvent.update(dialog.querySelector('input')!, 'web-app')
+    await waitFor(() => expect(confirm.hasAttribute('disabled')).toBe(false))
+  })
+})
+
 describe('edit-resource#Saving', () => {
   it('locks every field while the save is in flight', async () => {
     render(Saving)

@@ -183,9 +183,11 @@ async function main() {
       errors.push(
         kind === 'variant-copy'
           ? `blocks/${id}: the ${variant} variant repeats 90 % or more of the primary SFC. Import the primary and pass it other props or slots.`
-          : kind === 'no-props'
-            ? `blocks/${id}: the primary SFC declares no props. Take the records, loading and error through typed props and emit the actions.`
-            : `blocks/${id}: the primary SFC holds sample records. Move them to a sample file listed in block.json "files" and pass them in as props.`
+          : kind === 'variant-fork'
+            ? `blocks/${id}: the ${variant} variant copies 60 % or more of the primary SFC and adds its own code, so it misses every later fix to the primary. Import the primary and give it the prop, slot or event the state needs.`
+            : kind === 'no-props'
+              ? `blocks/${id}: the primary SFC declares no props. Take the records, loading and error through typed props and emit the actions.`
+              : `blocks/${id}: the primary SFC holds sample records. Move them to a sample file listed in block.json "files" and pass them in as props.`
       )
     }
     if (data.fixed.length)

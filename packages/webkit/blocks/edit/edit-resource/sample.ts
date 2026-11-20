@@ -13,3 +13,12 @@ export const sampleProject: EditResourceProject = {
     web_socket_proxy: false
   }
 }
+
+export const sampleProjectDraft: Partial<EditResourceProject> = {
+  modules: { ...sampleProject.modules, device_detection: true }
+}
+
+export const sampleStaleProject: EditResourceProject = {
+  ...sampleProject,
+  modules: { ...sampleProject.modules, image_optimization: true }
+}

@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/view/view-events-explorer/view-events-explorer.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-events-explorer")`
-- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Button](../../components/button.md), [Chart](../../components/chart.md), [Checkbox](../../components/checkbox.md), [Chip](../../components/chip.md), [CodeBlock](../../components/code-block.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), [DateRangePicker](../../components/date-range-picker.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [FilterMenu](../../components/filter-menu.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), `PanelHeader`, [Popover](../../components/popover.md), [PropertyFilter](../../components/property-filter.md), [Resizable](../../components/resizable.md), [Select](../../components/select.md), [Sidebar](../../components/sidebar.md), [Skeleton](../../components/skeleton.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Tooltip](../../components/tooltip.md), [Trace](../../components/trace.md), `use-collection`, `use-locale`
+- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Button](../../components/button.md), [Chart](../../components/chart.md), [Checkbox](../../components/checkbox.md), [Chip](../../components/chip.md), [CodeBlock](../../components/code-block.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), [DateRangePicker](../../components/date-range-picker.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [FilterMenu](../../components/filter-menu.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), `PanelHeader`, [Popover](../../components/popover.md), [PropertyFilter](../../components/property-filter.md), [Resizable](../../components/resizable.md), [Select](../../components/select.md), [Sidebar](../../components/sidebar.md), [Skeleton](../../components/skeleton.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), [Trace](../../components/trace.md), `use-collection`, `use-locale`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -66,7 +66,7 @@ The fields panel (D) is the `view-events-explorer#Fields` piece of the inventory
 
 ### H. Query bar — `Tooltip`, `IconButton` (optional)
 
-Variant Query only; it adds `PropertyFilter` (`mode="query"`), `DateRangePicker` and `Select` to the page, in place of the Filter popover and the search field.
+Variant Query only; it adds `PropertyFilter` (`mode="query"`), `DateRangePicker` and `Select` to the page, in the block's `toolbar` slot, in place of the Filter popover and the search field.
 
 For people who type their questions. `DateRangePicker` replaces the Period field of the Filter popover: relative ranges (Last 15 minutes to Last 24 hours), an absolute range typed in the chosen time zone and bounded to the retained days, and Previous and Next, which move the window by its own length. Beside it a `Select` named Time zone shows the zone at all times (`UTC+00:00`, `UTC−03:00 · Sao Paulo`) and changes it; the picker binds the same `v-model:time-zone`, so a typed range is read in that zone. The times in the log, the chart axis and the document follow that zone. `PropertyFilter` in query mode replaces both the Filter popover and the search field: one query string (`level = Error AND host = api.example.com`), suggestions for the word at the caret, the reason under the field when the query is invalid, and the match count. Enter applies it; a query that mixes AND and OR shows a message instead of guessing. A value picked in the fields panel adds or removes its `field = value` clause, so the panel and the query never disagree.
 
@@ -82,11 +82,11 @@ Variant Sessions only; it adds `Tabs` and `DropdownMenu` to the page.
 
 Above the controls row, one tab per open investigation; each keeps its own filters, search and period, and switching tabs closes the open document. New investigation (a transparent `IconButton`) adds a tab, up to five; past the limit a status line says to close one. The actions `DropdownMenu` renames, duplicates or closes the active tab. Rename opens an inline `Input` over the tab (also F2 or a double click on it): Enter keeps the name, Escape restores it. Each tab is `closable` while more than one is open: the × on the tab closes it with the pointer, and Delete on the focused tab closes it from the keyboard (the tab announces the shortcut through `aria-keyshortcuts`); focus moves to the tab before it. The last tab cannot be closed. The × is not a separate focusable button: inside a `tablist` anything focusable that is not a tab fails `aria-required-children`, so the keyboard path is Delete, as in the WAI-ARIA tabs pattern, and the actions menu keeps Close investigation for discovery.
 
-### K. Document tools — `Input`, `IconButton`, `Tooltip` (optional)
+### K. Document tools — `Chip`, `Input`, `IconButton`, `Tooltip` (optional)
 
-Variant EventDocument only; it adds `CopyButton` to the page.
+Variant EventDocument only; it adds `CopyButton` to the page and fills the block's `document-fields` slot.
 
-The document lists every field of the event. Search in this event narrows the list to fields whose name or value matches and highlights the match. Each filterable value has Filter by (keep only events with it) and Exclude (hide them) buttons that apply to the log; an exclusion shows as a `Host is not legacy.example.com` chip with the other filters. Copy copies the fields shown as JSON; the full JSON document stays below.
+The document lists every field of the event. Search in this event narrows the list to fields whose name or value matches and highlights the match. Each filterable value has Filter by (keep only events with it) and Exclude (hide them) buttons that apply to the log; an exclusion shows as a `Host is not legacy.example.com` `Chip` with the other filters (the block draws it for any `v-model:exclusions`). Copy copies the fields shown as JSON; the full JSON document stays below.
 
 ## Data
 
@@ -108,6 +108,15 @@ The block takes its events through props and emits every action; it fetches noth
 | `v-model:search`          | `string`                        | The search text.                                                                                                                                                                                                                                                                              |
 | `v-model:page`            | `number`                        | The table page, 1-based, back to `1` when the filters or the search change.                                                                                                                                                                                                                   |
 | `v-model:page-size`       | `number`                        | Rows per page, `25` by default.                                                                                                                                                                                                                                                               |
+| `timeZone`                | `string`                        | The IANA zone the times, the chart and the period are written in, and the zone the controls row names. `UTC` by default.                                                                                                                                                                      |
+| `match`                   | `(event) => boolean`            | A test every event must pass besides the filters, such as a typed query (Query passes its `PropertyFilter` query here).                                                                                                                                                                       |
+| `v-model:exclusions`      | `EventsExplorerFilters`         | Values per field id the log hides; each shows as a removable `Field is not value` chip beside the filter chips.                                                                                                                                                                               |
+| `v-model:selected-key`    | `string`                        | The id of the event whose document is open; empty for none.                                                                                                                                                                                                                                   |
+
+| Slot              | Props                           | What it replaces                                                                                                                                                         |
+| ----------------- | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `toolbar`         | `{ exportCsv, exportDisabled }` | The controls row and the filter chips. Query puts its time range, zone, query bar and saved and recent queries here; `exportCsv` downloads the log shown.                |
+| `document-fields` | `{ event, fields }`             | The fields of the open event in its document. `fields` lists every field with a value (`EventsExplorerDocumentField`); EventDocument adds search, Filter by and Exclude. |
 
 | Event       | Payload           | When                                                        |
 | ----------- | ----------------- | ----------------------------------------------------------- |
@@ -213,7 +222,7 @@ Then delete `sample.ts` and its import, and give `fields` its own list. A log th
 - Empty: a workspace with no traffic yet (`events` is `[]`); the summary reads zero, the chart is flat and the log shows No events yet.
 - Error: the event request failed (`error` is set); the fields panel stays and the log pane shows a danger `Alert` with the message and Retry, which emits `retry`.
 - Query: `level = Error AND host = api.example.com` over the last 24 hours, with two saved and two recent queries.
-- Sessions: three investigation tabs, API errors active.
+- Sessions: three investigation tabs, API errors active; the tabs sit above the block, which each tab feeds through `v-model:filters` and `v-model:search`.
 - EventDocument: an error event's document open, with Host is not legacy.example.com applied.
 
 ## Related
@@ -249,6 +258,7 @@ Each variant is the same screen in another state: `get_block("view/view-events-e
     type ChartSeries
   } from '@aziontech/webkit/chart'
   import Checkbox from '@aziontech/webkit/checkbox'
+  import Chip from '@aziontech/webkit/chip'
   import CodeBlock from '@aziontech/webkit/code-block'
   import DataTable, { type TableColumn, type TableExposed } from '@aziontech/webkit/data-table'
   import DrawerContent from '@aziontech/webkit/drawer-content'
@@ -359,6 +369,20 @@ Each variant is the same screen in another state: `get_block("view/view-events-e
   /** Applied values per filter field; period holds the time range. */
   export type EventsExplorerFilters = FilterMenuModel
 
+  /** One field of the open event, as the document lists it. */
+  export interface EventsExplorerDocumentField {
+    /** Id of the field. */
+    id: string
+    /** Label of the field. */
+    label: string
+    /** The value as written in the document. */
+    value: string
+    /** The value as the event holds it, the one a filter applies. */
+    raw: FilterMenuValue
+    /** The log can be filtered by this field. */
+    filterable: boolean
+  }
+
   export interface EventsExplorerProps {
     /** The events. Left out, the sample renders. Filtered, searched and paged in the browser unless total is set. */
     events?: EventsExplorerEvent[]
@@ -382,6 +406,10 @@ Each variant is the same screen in another state: `get_block("view/view-events-e
     loading?: boolean
     /** Why the events could not load; a danger alert with Retry replaces the log. */
     error?: string
+    /** IANA time zone the times, the chart and the period are written in. */
+    timeZone?: string
+    /** An extra test every event must pass besides the filters, such as a typed query. */
+    match?: (event: EventsExplorerEvent) => boolean
   }
 
   const props = withDefaults(defineProps<EventsExplorerProps>(), {
@@ -395,7 +423,9 @@ Each variant is the same screen in another state: `get_block("view/view-events-e
     moreRows: false,
     loadingMore: false,
     loading: false,
-    error: ''
+    error: '',
+    timeZone: 'UTC',
+    match: undefined
   })
 
   const emit = defineEmits<{
@@ -411,6 +441,20 @@ Each variant is the same screen in another state: `get_block("view/view-events-e
   const search = defineModel<string>('search', { default: '' })
   const page = defineModel<number>('page', { default: 1 })
   const pageSize = defineModel<number>('pageSize', { default: 25 })
+  const selectedKey = defineModel<string>('selectedKey', { default: '' })
+  const exclusions = defineModel<EventsExplorerFilters>('exclusions', {
+    default: () => ({})
+  })
+
+  defineSlots<{
+    /** Replaces the controls row and the filter chips; exportCsv downloads the log shown. */
+    toolbar?(props: { exportCsv: () => void; exportDisabled: boolean }): unknown
+    /** Replaces the fields of the open event in its document. */
+    'document-fields'?(props: {
+      event: EventsExplorerEvent
+      fields: EventsExplorerDocumentField[]
+    }): unknown
+  }>()
 
   type EventRow = EventsExplorerEvent & { time: string; sourceLabel: string }
 
@@ -439,7 +483,7 @@ Each variant is the same screen in another state: `get_block("view/view-events-e
     formatDate(value, {
       month: 'short',
       day: '2-digit',
-      timeZone: 'UTC'
+      timeZone: props.timeZone
     })
   const clockFormat = (value: Date | number | string) =>
     formatDate(value, {
@@ -447,14 +491,14 @@ Each variant is the same screen in another state: `get_block("view/view-events-e
       minute: '2-digit',
       second: '2-digit',
       hour12: false,
-      timeZone: 'UTC'
+      timeZone: props.timeZone
     })
   const axisFormat = (value: Date | number | string) =>
     formatDate(value, {
       hour: '2-digit',
       minute: '2-digit',
       hour12: false,
-      timeZone: 'UTC'
+      timeZone: props.timeZone
     })
   const isDate = (value: unknown): value is Date =>
     value instanceof Date && !Number.isNaN(value.getTime())
@@ -724,16 +768,41 @@ Each variant is the same screen in another state: `get_block("view/view-events-e
   )
 
   const filteredEvents = computed(() =>
-    eventRows.value.filter((event) =>
-      filterFields.value.every((field) => {
-        const values = filters.value[field.id]
-        if (!values?.length) return true
-        return field.match(event, values)
-      })
+    eventRows.value.filter(
+      (event) =>
+        filterFields.value.every((field) => {
+          const values = filters.value[field.id]
+          if (!values?.length) return true
+          return field.match(event, values)
+        }) &&
+        Object.entries(exclusions.value).every(
+          ([id, values]) => !values.includes(event[id] as FilterMenuValue)
+        ) &&
+        (!props.match || props.match(event))
     )
   )
 
-  watch(filters, () => {
+  const exclusionChips = computed(() =>
+    Object.entries(exclusions.value).flatMap(([id, values]) => {
+      const field = eventField(id)
+      return values.map((value) => ({
+        key: `${id}:${String(value)}`,
+        id,
+        value,
+        label: field?.label ?? id,
+        text: formatEventValue(field, value)
+      }))
+    })
+  )
+
+  const removeExclusion = (id: string, value: FilterMenuValue) => {
+    exclusions.value = {
+      ...exclusions.value,
+      [id]: (exclusions.value[id] ?? []).filter((item) => item !== value)
+    }
+  }
+
+  watch([filters, exclusions], () => {
     page.value = 1
   })
 
@@ -911,15 +980,19 @@ Each variant is the same screen in another state: `get_block("view/view-events-e
     return 'success'
   }
 
-  const selectedId = ref('')
+  const selectedId = selectedKey
   const selectedEvent = computed(
     () => matchedEvents.value.find((event) => event.id === selectedId.value) ?? null
   )
   const documentEvent = ref<EventRow | null>(null)
   const traceView = ref<TraceView>('waterfall')
-  watch(selectedEvent, (event) => {
-    if (event) documentEvent.value = event
-  })
+  watch(
+    selectedEvent,
+    (event) => {
+      if (event) documentEvent.value = event
+    },
+    { immediate: true }
+  )
 
   const logMinWidth = 480
   const documentMinWidth = 348
@@ -1029,6 +1102,20 @@ Each variant is the same screen in another state: `get_block("view/view-events-e
     return value !== undefined && value !== null && value !== ''
   }
 
+  const documentFields = computed<EventsExplorerDocumentField[]>(() => {
+    const event = documentEvent.value
+    if (!event) return []
+    return eventFields.value
+      .filter((field) => hasEventValue(event, field.id))
+      .map((field) => ({
+        id: field.id,
+        label: field.label,
+        value: formatEventValue(field, event[field.id]),
+        raw: event[field.id] as FilterMenuValue,
+        filterable: canFilterField(field)
+      }))
+  })
+
   const documentRows = computed(() => {
     const event = selectedEvent.value
     if (!event) return []
@@ -1117,78 +1204,114 @@ Each variant is the same screen in another state: `get_block("view/view-events-e
     <header
       class="flex shrink-0 flex-col gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-lg) py-(--spacing-sm)"
     >
-      <header class="flex flex-wrap items-center gap-x-(--layout-group-gap) gap-y-(--spacing-xs)">
-        <div class="flex min-w-0 grow basis-(--container-3xs) items-center gap-(--spacing-xs)">
-          <FilterMenu
+      <slot
+        name="toolbar"
+        :export-csv="exportCsv"
+        :export-disabled="!tableEl"
+      >
+        <header class="flex flex-wrap items-center gap-x-(--layout-group-gap) gap-y-(--spacing-xs)">
+          <div class="flex min-w-0 grow basis-(--container-3xs) items-center gap-(--spacing-xs)">
+            <FilterMenu
+              v-model="filters"
+              :fields="menuFields"
+              class="shrink-0"
+              data-testid="filter-button"
+            />
+            <div class="flex min-w-36 grow basis-(--container-2xs)">
+              <Input
+                v-model="search"
+                size="medium"
+                placeholder="Search events, hosts, paths or addresses"
+                aria-label="Search events"
+                class="w-full"
+              >
+                <template #leading>
+                  <i
+                    class="az az-search"
+                    aria-hidden="true"
+                  />
+                </template>
+              </Input>
+            </div>
+          </div>
+          <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
+            <span
+              class="text-label-sm inline-flex items-center gap-(--spacing-2xs) whitespace-nowrap text-(--text-muted)"
+              data-testid="events-time-zone"
+            >
+              <i
+                class="az az-globe"
+                aria-hidden="true"
+              />
+              Times in {{ timeZone }}
+            </span>
+            <Tooltip
+              content="Refresh"
+              class="shrink-0"
+            >
+              <IconButton
+                icon="az az-refresh"
+                variant="outline"
+                size="medium"
+                :loading="loading"
+                aria-label="Refresh"
+                data-testid="refresh-button"
+                @click="(event: MouseEvent) => emit('refresh', event)"
+              />
+            </Tooltip>
+            <Tooltip
+              content="Download CSV"
+              class="shrink-0"
+            >
+              <IconButton
+                icon="az az-download"
+                variant="outline"
+                size="medium"
+                :disabled="!tableEl"
+                aria-label="Download CSV"
+                data-testid="export-button"
+                @click="exportCsv"
+              />
+            </Tooltip>
+          </div>
+        </header>
+
+        <div
+          v-if="exclusionChips.length"
+          class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)"
+        >
+          <FilterMenu.ChipGroup
             v-model="filters"
             :fields="menuFields"
-            class="shrink-0"
-            data-testid="filter-button"
+            data-testid="filter-chips"
           />
-          <div class="flex min-w-36 grow basis-(--container-2xs)">
-            <Input
-              v-model="search"
-              size="medium"
-              placeholder="Search events, hosts, paths or addresses"
-              aria-label="Search events"
-              class="w-full"
-            >
-              <template #leading>
-                <i
-                  class="az az-search"
-                  aria-hidden="true"
-                />
-              </template>
-            </Input>
-          </div>
-        </div>
-        <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
           <span
-            class="text-label-sm inline-flex items-center gap-(--spacing-2xs) whitespace-nowrap text-(--text-muted)"
-            data-testid="events-time-zone"
+            v-for="chip in exclusionChips"
+            :key="chip.key"
+            class="inline-flex w-fit max-w-full"
           >
-            <i
-              class="az az-globe"
-              aria-hidden="true"
-            />
-            Times in UTC
+            <Chip
+              :label="`${chip.label} is not ${chip.text}`"
+              variant="filled"
+              size="medium"
+              removable
+              data-testid="exclusion-chip"
+              @remove="removeExclusion(chip.id, chip.value)"
+            >
+              <span class="flex min-w-0 items-center gap-(--spacing-2xs)">
+                <span class="truncate text-(--text-muted)">{{ chip.label }} is not</span>
+                <span class="truncate">{{ chip.text }}</span>
+              </span>
+            </Chip>
           </span>
-          <Tooltip
-            content="Refresh"
-            class="shrink-0"
-          >
-            <IconButton
-              icon="az az-refresh"
-              variant="outline"
-              size="medium"
-              :loading="loading"
-              aria-label="Refresh"
-              data-testid="refresh-button"
-              @click="(event: MouseEvent) => emit('refresh', event)"
-            />
-          </Tooltip>
-          <Tooltip
-            content="Download CSV"
-            class="shrink-0"
-          >
-            <IconButton
-              icon="az az-download"
-              variant="outline"
-              size="medium"
-              :disabled="!tableEl"
-              aria-label="Download CSV"
-              data-testid="export-button"
-              @click="exportCsv"
-            />
-          </Tooltip>
         </div>
-      </header>
-
-      <FilterMenu.ChipGroup
-        v-model="filters"
-        :fields="menuFields"
-        data-testid="filter-chips"
-      />
+        <FilterMenu.ChipGroup
+          v-else
+          v-model="filters"
+          :fields="menuFields"
+          data-testid="filter-chips"
+        />
+      </slot>
     </header>
 
     <section
@@ -1771,21 +1894,27 @@ Each variant is the same screen in another state: `get_block("view/view-events-e
                       </p>
                     </div>
 
-                    <dl
-                      class="grid min-w-0 grid-cols-[minmax(0,8rem)_minmax(0,1fr)] items-baseline gap-x-(--spacing-md) gap-y-(--spacing-sm)"
+                    <slot
+                      name="document-fields"
+                      :event="documentEvent"
+                      :fields="documentFields"
                     >
-                      <template
-                        v-for="row in documentRows"
-                        :key="row.id"
+                      <dl
+                        class="grid min-w-0 grid-cols-[minmax(0,8rem)_minmax(0,1fr)] items-baseline gap-x-(--spacing-md) gap-y-(--spacing-sm)"
                       >
-                        <dt class="min-w-0 text-label-sm text-(--text-muted)">{{ row.label }}</dt>
-                        <dd
-                          class="m-0 min-w-0 break-words text-label-code-sm text-(--text-default)"
+                        <template
+                          v-for="row in documentRows"
+                          :key="row.id"
                         >
-                          {{ row.value }}
-                        </dd>
-                      </template>
-                    </dl>
+                          <dt class="min-w-0 text-label-sm text-(--text-muted)">{{ row.label }}</dt>
+                          <dd
+                            class="m-0 min-w-0 break-words text-label-code-sm text-(--text-default)"
+                          >
+                            {{ row.value }}
+                          </dd>
+                        </template>
+                      </dl>
+                    </slot>
                   </div>
 
                   <div
@@ -1865,19 +1994,25 @@ Each variant is the same screen in another state: `get_block("view/view-events-e
                 </p>
               </div>
 
-              <dl
-                class="grid min-w-0 grid-cols-[minmax(0,8rem)_minmax(0,1fr)] items-baseline gap-x-(--spacing-md) gap-y-(--spacing-sm)"
+              <slot
+                name="document-fields"
+                :event="documentEvent"
+                :fields="documentFields"
               >
-                <template
-                  v-for="row in documentRows"
-                  :key="row.id"
+                <dl
+                  class="grid min-w-0 grid-cols-[minmax(0,8rem)_minmax(0,1fr)] items-baseline gap-x-(--spacing-md) gap-y-(--spacing-sm)"
                 >
-                  <dt class="min-w-0 text-label-sm text-(--text-muted)">{{ row.label }}</dt>
-                  <dd class="m-0 min-w-0 break-words text-label-code-sm text-(--text-default)">
-                    {{ row.value }}
-                  </dd>
-                </template>
-              </dl>
+                  <template
+                    v-for="row in documentRows"
+                    :key="row.id"
+                  >
+                    <dt class="min-w-0 text-label-sm text-(--text-muted)">{{ row.label }}</dt>
+                    <dd class="m-0 min-w-0 break-words text-label-code-sm text-(--text-default)">
+                      {{ row.value }}
+                    </dd>
+                  </template>
+                </dl>
+              </slot>
             </div>
 
             <div

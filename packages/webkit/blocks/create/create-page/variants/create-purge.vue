@@ -132,7 +132,7 @@
 
   const onLeave = () => guard.confirmLeave()
 
-  useEscapeToCancel(onLeave)
+  useEscapeToCancel(onLeave, { enabled: () => !submitting.value })
 
   const formEl = ref<HTMLFormElement | null>(null)
 

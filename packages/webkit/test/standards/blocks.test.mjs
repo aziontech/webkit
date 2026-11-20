@@ -619,6 +619,16 @@ test('the data contract flags a primary with no props, inline records and copied
     ]
   })
   assert.deepEqual(keys, ['view/x:no-props', 'view/x:inline-records', 'view/x:variant-copy:Copy'])
+  const forked = [
+    primary,
+    ...Array.from({ length: 80 }, (_, line) => `<!-- state line ${line} -->`)
+  ].join('\n')
+  assert.deepEqual(
+    dataContractKeys('view/x', { sfc: primary, variants: [{ name: 'Fork', sfc: forked }] }).filter(
+      (key) => key.includes(':variant-')
+    ),
+    ['view/x:variant-fork:Fork']
+  )
   assert.ok(sharedLineRatio('a\nb\nc', 'a\nb\nc') === 1)
   assert.ok(sharedLineRatio('a\nb\nc', 'x\ny') === 0)
 })

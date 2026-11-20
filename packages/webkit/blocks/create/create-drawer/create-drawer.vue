@@ -108,6 +108,9 @@
 
   const open = defineModel<boolean>('open', { default: false })
 
+  /** Set when Create Environment is picked; the page opens its own Create Environment drawer, and an environment it adds to environments is selected. */
+  const environmentOpen = defineModel<boolean>('environmentOpen', { default: false })
+
   defineSlots<{
     /** Replaces the Add button; call open to show the drawer. */
     trigger(props: { open: () => void }): unknown
@@ -242,11 +245,19 @@
   const onEnvironmentModel = (value: string) => {
     if (value === CREATE_ENVIRONMENT) {
       environmentSelectOpen.value = false
+      environmentOpen.value = true
       return
     }
     form.environment = value
     errors.environment = ''
   }
+
+  watch(environmentOptions, (next, previous) => {
+    const added = next.find((option) => !previous.some((entry) => entry.value === option.value))
+    if (!added || !open.value) return
+    form.environment = added.value
+    errors.environment = ''
+  })
 
   const guard = useUnsavedChanges(() => form, {
     onDiscard: (baseline) => Object.assign(form, baseline),

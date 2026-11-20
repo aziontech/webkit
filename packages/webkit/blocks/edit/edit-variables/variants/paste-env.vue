@@ -22,6 +22,7 @@
   import SettingsGroup from '@aziontech/webkit/settings-group'
   import Switch from '@aziontech/webkit/switch'
   import Textarea from '@aziontech/webkit/textarea'
+  import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
@@ -386,7 +387,7 @@
 
   useShortcuts({
     keys: 'meta+enter',
-    label: 'Save variables',
+    label: 'Save variable',
     group: 'Drawer',
     element: formEl,
     when: () => drawerOpen.value && !submitting.value,
@@ -421,6 +422,9 @@
     onCreated(created)
     submitting.value = false
     drawerOpen.value = false
+    toast.success(
+      created.length === 1 ? `${created[0].key} created.` : `${created.length} variables created.`
+    )
   }
 </script>
 

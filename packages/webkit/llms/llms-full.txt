@@ -4058,9 +4058,11 @@ What each part takes: [blocks/create/create-deploy-drawer.md](blocks/create/crea
 
 The block takes the deploy targets through props and emits every action; it fetches and deploys nothing. The record types (`DeployDrawerResource`, `DeployDrawerProjectGroup`, `DeployDrawerEnvironment`, `DeployDrawerImpact`, `DeployDrawerBuild`, `DeployDrawerValues`) and `DeployDrawerProps` are exported from `create-deploy-drawer.vue`, and `sample.ts` holds the sample records the Service drawer renders when they are left out (never while `loading` or `error` is set).
 
-Prop: `resources`, `projectGroups`, `newProject`, `environments`, `impacted`, `defaultValues`, `build`, `loading`, `error`, `v-model:open`.
+Prop: `resources`, `projectGroups`, `newProject`, `environments`, `impacted`, `defaultValues`, `build`, `loading`, `error`, `v-model:open`, `dependenciesOpen`, `dependenciesLoadingKeys`, `impactedLoading`, `blocker`, `v-model:versions`, `v-model:environment`.
 
 Event: `submit`, `retry`.
+
+The `environment-alerts` slot renders under the environment choices with `{ environment, project }`, for alerts about what the chosen environment changes. A dependency with `sharedWith` carries a Shared `Tag` in a `Tooltip` naming the other services, and one info `Alert` above the list says it deploys at one version; Projects impacted shows only when there are projects, with an environment heading and a count per group once they span more than one environment.
 
 Then delete `sample.ts` and its import. The page reports the run through the toast (`state/state-async-submit`).
 
@@ -4205,6 +4207,10 @@ The block takes the run through props and emits every action; it runs no deploy 
 Prop: `items`, `resourceName`, `v-model:open`.
 
 Event: `retry`, `redeploy`.
+
+Slot: `actions`.
+
+A run whose rows are all queued has not started: the block raises no toast for it. Drop renders the block with its two Deployment Settings queued, opens its own confirm beside it, and on Deploy to Production opens the progress dialog and moves the rows through the run.
 
 Then delete `sample.ts` and its import.
 
@@ -4409,9 +4415,11 @@ What each part takes: [blocks/create/create-deploy-template.md](blocks/create/cr
 
 ## Data
 
-The block takes the template and the account through props and emits every action; it fetches nothing. `DeployTemplateProps` and `DeployTemplateTemplate` are exported from `create-deploy-template.vue`, and `sample.ts` holds the sample template and account the block renders when a prop is left out. The variants are their own screens (the later steps of the flow) and keep their own records.
+The block takes the template and the account through props and emits every action; it fetches nothing. `DeployTemplateProps` and `DeployTemplateTemplate` are exported from `create-deploy-template.vue`, and `sample.ts` holds the sample template and account the block renders when a prop is left out, and the imported repository, uploaded project and integration the variants pass. Every variant renders the block: the header, the preview card, Back and Escape come from it, and the variant fills the default slot with the step it is on and keeps that step's own records.
 
-Prop: `template`, `account`, `providersHref`.
+Prop: `template`, `account`, `providersHref`, `crumb`, `service`.
+
+Slot: `default`, `details`.
 
 Event: `back`, `account`, `connect`, `skip-git`, `browse`.
 
@@ -4421,7 +4429,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-deplo
 
 ## Do
 
-- Leaving with typed work: on the Form state the header Back asks first once the scope, the repository name, its visibility or any setting or variable differs from what the form opened with: `useUnsavedChanges` tracks them, Back `await`s `guard.confirmLeave()` before it leaves, and one `ConfirmDialog v-bind="guard.dialogProps"` asks "Unsaved changes" with Keep editing and Discard changes. An untouched form leaves at once. In a router app pair it with `onBeforeRouteLeave(() => guard.confirmLeave())`.
+- Leaving with typed work: on every form state (Form, BuildSettings, SettingsLoading, ImportFromGit, Upload, InstallIntegration) the header Back asks first once a field differs from what the form opened with (the scope, the repository name, its visibility, the build preset, a setting or a variable): `useUnsavedChanges` tracks them, Back `await`s `guard.confirmLeave()` before it leaves, and one `ConfirmDialog v-bind="guard.dialogProps"` asks "Unsaved changes" with Keep editing and Discard changes. An untouched form leaves at once. In a router app pair it with `onBeforeRouteLeave(() => guard.confirmLeave())`.
 - Keep the template preview card at the top of the column through every phase, so the user always sees what is being deployed.
 - Ask for Git first; show the form only once a provider is connected.
 - Let Deploy check the form: show each missing required value under its field and open the collapsed group that holds it. Disable Deploy only while the settings load, or on an upload until a Root (/) is picked.
@@ -4454,9 +4462,9 @@ What each prop and event does, and the go-live code: [blocks/create/create-deplo
 
 ## Accessibility
 
-- **Escape on the page = Cancel.** Escape runs the same path as Back to Creation Center: `useEscapeToCancel` emits `back` from the template step, and the Form `await`s `guard.confirmLeave()` first, so an edited form opens the Unsaved changes dialog. It stays inert while an IME is composing, when another handler already used the key, while a menu, listbox, popover, tooltip or dialog is open, and when focus is in a control that uses Escape itself. Edit and settings pages are places, not tasks: Escape stays inert there.
-- **The Form opens with the cursor in Scope**, its first field.
-- **⌘ Enter deploys (`Ctrl Enter` off Apple)** through the same function as the Deploy button, from any field; the button carries `aria-keyshortcuts` and an `aria-hidden` `Kbd`, and the `?` dialog lists Deploy.
+- **Escape on the page = Cancel.** Escape runs the same path as Back to Creation Center: `useEscapeToCancel` in the block emits `back` on every state, and a form state handles `back` with `guard.confirmLeave()`, so an edited form opens the Unsaved changes dialog. It stays inert while an IME is composing, when another handler already used the key, while a menu, listbox, popover, tooltip or dialog is open, and when focus is in a control that uses Escape itself. Edit and settings pages are places, not tasks: Escape stays inert there.
+- **Every form state opens with the cursor in its first field** (Scope on the Form).
+- **⌘ Enter deploys (`Ctrl Enter` off Apple)** through the same function as the Deploy button, from any field, on Form, BuildSettings and ImportFromGit, and runs Add to service-01 on InstallIntegration; the button carries `aria-keyshortcuts` and an `aria-hidden` `Kbd`, and the `?` dialog lists the action.
 - One `main` landmark under the header; the step title is an `h2` and the settings group an `h3`.
 - The back `IconButton`, the brand link and the account button each have an `aria-label`.
 - The repository name has a visible `Field.Label` tied to its input by its `Field`; the privacy switch is labelled Public repository and announces its on or off state.
@@ -4554,9 +4562,9 @@ What each part takes: [blocks/create/create-drawer.md](blocks/create/create-draw
 
 The block takes its option lists, its starting values and the save state through props and emits the values; it fetches and saves nothing. `CreateDrawerProps`, `CreateDrawerValues`, `CreateDrawerEnvironment` and `CreateDrawerCertificate` are exported from `create-drawer.vue`, and `sample.ts` holds the environments and certificates the block renders when those props are left out.
 
-Prop: `environments`, `connectedEnvironments`, `certificates`, `defaultValues`, `title`, `description`, `submitLabel`, `open` (`v-model:open`), `defaultOpen`, `loading`, `error`.
+Prop: `environments`, `connectedEnvironments`, `certificates`, `defaultValues`, `title`, `description`, `submitLabel`, `open` (`v-model:open`), `defaultOpen`, `environmentOpen` (`v-model:environment-open`), `loading`, `error`.
 
-Event: `submit`, `update:open`.
+Event: `submit`, `update:open`, `update:environmentOpen`.
 
 The `trigger` slot replaces the Add button (an environment menu, a row menu) and receives `open` to call.
 
@@ -4851,7 +4859,7 @@ What each prop and event does, and the go-live code: [blocks/create/create-page.
 ## States
 
 - Default: the Create Domain page at rest (no `defaultValues`, not `loading`); General holds Name and Domain name, Advanced is collapsed, the bar shows Cancel and Save. `loading` locks the form and spins Save, and `error` raises the error toast with Retry. Importing a zone file belongs to CreateZone, not to this page.
-- CreateZone: Create Zone after a zone file is imported; a Records section lists each imported record (type `Tag`, value, TTL) with a Remove `IconButton` per row and Discard import in the card footer. Import in the bar and a paste into Domain name both read a BIND zone file, skip the SOA and nameserver records, fill an empty Name and Domain name from `$ORIGIN`, and confirm in a toast; a file with no records raises an error toast. The list previews the first 50 records with an "and N more" line, and a re-import skips records already listed.
+- CreateZone: Create Zone after a zone file is imported; a Records section lists each imported record (type `Tag`, value, TTL) with a Remove `IconButton` per row and Discard import in the card footer; each removal and the discard confirm in a toast with Undo, which puts the records back. Import in the bar and a paste into Domain name both read a BIND zone file, skip the SOA and nameserver records, fill an empty Name and Domain name from `$ORIGIN`, and confirm in a toast; a file with no records raises an error toast. The list previews the first 50 records with an "and N more" line, and a re-import skips records already listed.
 - CreateOrganization: General with Name and a Mark color chosen from six `RadioGroup` cards (`variant="card"`) (each color built from semantic tokens: primary, warning, danger, success, info and the text grays, never palette primitives), each an `Avatar` with `pattern="marble"` seeded by the name in that color's `colors`, above an In the header preview drawn the same way, an Owner `Item` with Owner and Active `Tag`s, First workspace and a collapsed Advanced of `Select`s; a name already in use is invalid on submit, and the request ends in a success toast or an error toast with Retry.
 - CreatePurge: a Target band of radio choice cards for Layer and Purge type, an Arguments textarea that follows the type, a warning alert and a bar with Cancel and Purge.
 - CreateService: a long create with a small `PageHeader` (Create Service, breadcrumb Services / Create Service) and five groups of rows, each under an `h2`, under the same centred `SaveBar` with Cancel and Save.
@@ -7755,9 +7763,11 @@ What each part takes: [blocks/edit/edit-function.md](blocks/edit/edit-function.m
 
 The block takes the saved service and the request state through props and emits the save; it fetches nothing. `FunctionEditorService`, `FunctionEditorField`, `FunctionEditorValues` and `FunctionEditorProps` are exported from `edit-function.vue`, and `sample.ts` holds the sample service and fields the block renders when `service` or `fields` is left out. The editor keeps its own draft; Discard returns to the props.
 
-Prop: `service`, `fields`, `defaultDraft`, `defaultTab`, `defaultDocument`, `defaultOpenKeys`, `loading`, `error`.
+Prop: `service`, `fields`, `defaultDraft`, `v-model:tab`, `v-model:document`, `defaultOpenKeys`, `loading`, `error`.
 
-Event: `submit`, `discard`.
+Event: `submit`, `discard`, `editor-ready`.
+
+Slot: `editor-actions`, `code-panel`.
 
 Then delete `sample.ts` and its import.
 
@@ -7812,11 +7822,11 @@ What each prop and event does, and the go-live code: [blocks/edit/edit-function.
 
 ## States
 
-- Code: the default, `defaultTab` `code`: the Code tab with the Code document filling the editor pane.
-- Arguments: `defaultDocument` `arguments` with `defaultOpenKeys`: the Arguments document of image-optimizer, the schema on the left and two fields on the right, one expanded.
+- Code: the default, `tab` `code`: the Code tab with the Code document filling the editor pane.
+- Arguments: `document` `arguments` with `defaultOpenKeys`: the Arguments document of image-optimizer, the schema on the left and two fields on the right, one expanded.
 - NoArguments: a `service` with an empty schema and `fields` `[]`: the Arguments document of a service with no form, the empty schema and the no fields empty state.
 - TestRun: the Code document with a finished test run of image-optimizer under it, the origin fetch selected in the trace; Run test shows the running state.
-- Settings: `defaultTab` `settings`: the Settings tab with General, Runtime, Execution environment and Status; editing raises the save bar.
+- Settings: `tab` `settings`: the Settings tab with General, Runtime, Execution environment and Status; editing raises the save bar.
 - Saving: `loading` with a `defaultDraft`: a change to the Code document is being saved; Save shows its loading state, Discard and the fields are disabled and the editors are read-only.
 
 ## Related
@@ -7879,7 +7889,7 @@ The settings page of one existing resource. The user comes here to change how th
 - G. Template editor — `SettingsRow`, `FieldError` (optional)
 - H. Section warnings and server errors — `SettingsGroup`, `Button` (optional)
 - I. Leave guard — `Tabs`, `SaveBar` (optional)
-- J. Changed elsewhere — `Button`, `SaveBar` (optional)
+- J. Changed elsewhere — `Alert`, `ConfirmDialog`, `Button`, `SaveBar` (optional)
 - K. Danger zone — `SettingsGroup`, `Card`, `SettingsRow`, `Button`, `Input` (optional)
 - L. Shortcut keycap — `Kbd` (optional)
 
@@ -7887,11 +7897,13 @@ What each part takes: [blocks/edit/edit-resource.md](blocks/edit/edit-resource.m
 
 ## Data
 
-ProjectSettings takes the saved settings through props and emits the values on Save; it fetches nothing and saves nothing. `EditResourceProject` and `EditResourceProps` are exported from `edit-resource.vue`, and `sample.ts` holds the sample project the block renders when `resource` is left out. The other states are separate screens with their own fields.
+ProjectSettings takes the saved settings through props and emits the values on Save; it fetches nothing and saves nothing. `EditResourceProject` and `EditResourceProps` are exported from `edit-resource.vue`, and `sample.ts` holds the sample project the block renders when `resource` is left out. StaleRecord passes `defaultDraft` and `stale`, and DangerZone fills the `sections` slot; the other states are separate screens with their own fields.
 
-Prop: `resource`, `loading`, `error`, `v-model:tab`.
+Prop: `resource`, `defaultDraft`, `stale`, `loading`, `error`, `v-model:tab`.
 
 Event: `submit`, `discard`.
+
+Slot: `sections`.
 
 Then delete `sample.ts` and its import.
 
@@ -8538,12 +8550,17 @@ The application shell every signed-in page renders inside. The user browses and 
 - I. System status — `StatusIndicator` (required)
 - J. Page title — `PageHeader` (stand-in body)
 - K. Table frame — `Card` (stand-in body)
+- L. Toast region — `Toaster` (required)
 
 What each part takes: [blocks/shell/shell-console.md](blocks/shell/shell-console.md).
 
 ## Data
 
-The shell takes no props: `navigation`, `account` and the recents are its own constants, which the app replaces with its navigation file and signed-in user. It emits one event:
+`navigation`, `account` and the recents are the shell's own constants, which the app replaces with its navigation file and signed-in user. The states render the shell and fill its slots instead of copying it:
+
+Slot: default, `actions`, `sidebar-header`, `header-leading`, `notifications`, `tools`.
+
+`v-model:tools-open` opens and closes the tools region, and `tools-label` names it. It emits one event:
 
 Event: `sign-out`.
 
@@ -9944,7 +9961,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-card.md](
 - Surface: app
 - Source: `blocks/view/view-events-explorer/view-events-explorer.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-events-explorer")`
-- Components: Accordion, Alert, Button, Chart, Checkbox, Chip, CodeBlock, CopyButton, DataTable, DateRangePicker, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, FilterMenu, IconButton, Input, Item, `PanelHeader`, Popover, PropertyFilter, Resizable, Select, Sidebar, Skeleton, Tabs, Tag, Tooltip, Trace, `use-collection`, `use-locale`
+- Components: Accordion, Alert, Button, Chart, Checkbox, Chip, CodeBlock, CopyButton, DataTable, DateRangePicker, `DrawerContent`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, FilterMenu, IconButton, Input, Item, `PanelHeader`, Popover, PropertyFilter, Resizable, Select, Sidebar, Skeleton, Tabs, Tag, Toast, Tooltip, Trace, `use-collection`, `use-locale`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -9981,7 +9998,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 - H. Query bar — `Tooltip`, `IconButton` (optional)
 - I. Saved and recent queries — `Popover`, `IconButton`, `Input`, `Item`, `Tooltip` (optional)
 - J. Investigation tabs — `IconButton`, `Input`, `Tooltip` (optional)
-- K. Document tools — `Input`, `IconButton`, `Tooltip` (optional)
+- K. Document tools — `Chip`, `Input`, `IconButton`, `Tooltip` (optional)
 
 What each part takes: [blocks/view/view-events-explorer.md](blocks/view/view-events-explorer.md).
 
@@ -9989,7 +10006,9 @@ What each part takes: [blocks/view/view-events-explorer.md](blocks/view/view-eve
 
 The block takes its events through props and emits every action; it fetches nothing. `EventsExplorerEvent`, `EventsExplorerField`, `EventsExplorerBucket`, `EventsExplorerProps` and the other types are exported from `view-events-explorer.vue`, and `sample.ts` holds the sample events, fields and clock the block renders when `events` is left out (and never while `loading` or `error` is set). The filters (the period included), the search and the page are models the page can own, so it can run them on the server.
 
-Prop / model: `events`, `fields`, `categories`, `buckets`, `summary`, `total`, `now`, `moreRows`, `loadingMore`, `loading`, `error`, `v-model:filters`, `v-model:search`, `v-model:page`, `v-model:page-size`.
+Prop / model: `events`, `fields`, `categories`, `buckets`, `summary`, `total`, `now`, `moreRows`, `loadingMore`, `loading`, `error`, `v-model:filters`, `v-model:search`, `v-model:page`, `v-model:page-size`, `timeZone`, `match`, `v-model:exclusions`, `v-model:selected-key`.
+
+Slot: `toolbar`, `document-fields`.
 
 Event: `refresh`, `retry`, `select`, `load-more`.
 
@@ -10056,7 +10075,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-events-ex
 - Empty: a workspace with no traffic yet (`events` is `[]`); the summary reads zero, the chart is flat and the log shows No events yet.
 - Error: the event request failed (`error` is set); the fields panel stays and the log pane shows a danger `Alert` with the message and Retry, which emits `retry`.
 - Query: `level = Error AND host = api.example.com` over the last 24 hours, with two saved and two recent queries.
-- Sessions: three investigation tabs, API errors active.
+- Sessions: three investigation tabs, API errors active; the tabs sit above the block, which each tab feeds through `v-model:filters` and `v-model:search`.
 - EventDocument: an error event's document open, with Host is not legacy.example.com applied.
 
 ## Related
@@ -10536,7 +10555,7 @@ What each part takes: [blocks/view/view-rule-list.md](blocks/view/view-rule-list
 
 ## Data
 
-The block takes its rules through props and emits every action; it fetches nothing. `RuleListRule`, `RuleListEdit` and `RuleListProps` are exported from `view-rule-list.vue`, and `sample.ts` holds the sample application and firewall rules the block renders when `rules` is left out (and never while `loading` or `error` is set). Moves and switches stay a local draft until Save.
+The block takes its rules through props and emits every action; it fetches nothing. `RuleListRule`, `RuleListEdit` and `RuleListProps` are exported from `view-rule-list.vue`, and `sample.ts` holds the sample application and firewall rules the block renders when `rules` is left out (and never while `loading` or `error` is set). Moves and switches stay a local draft until Save. A new `rules` list (a rule edited or added elsewhere) updates the rows and keeps the unsaved moves and switches on top of it; a rule that was not there before lands where the list puts it and opens its phase.
 
 Prop: `subject`, `rules`, `loading`, `error`, `saving`, `saveError`, `defaultEdits`, `defaultSearch`, `defaultReviewOpen`.
 
@@ -10620,7 +10639,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-rule-list
 - Surface: app
 - Source: `blocks/view/view-table/view-table.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-table")`
-- Components: Alert, Button, Card, CollectionPreferences, ConfirmDialog, DataTable, `DropdownMenuGroup`, `DropdownMenuItem`, EmptyState, IconButton, PageHeader, PropertyFilter, StatusIndicator, `TableCellActions`, `TableCellId`, `TableCellLink`, `TableCellStatus`, `TableCellTime`, Tag, Tooltip, `use-collection`
+- Components: Alert, Button, Card, CollectionPreferences, ConfirmDialog, DataTable, `DropdownMenuGroup`, `DropdownMenuItem`, EmptyState, IconButton, PageHeader, PropertyFilter, StatusIndicator, `TableCellActions`, `TableCellId`, `TableCellLink`, `TableCellStatus`, `TableCellTime`, Tag, Toast, Tooltip, `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -10728,7 +10747,7 @@ What each prop and event does, and the go-live code: [blocks/view/view-table.md]
 - Empty: every resource was deleted on an account that is not new (`resources` is `[]`); `useCollection` reports `empty`, the heading and controls stay, and a flush card with Create Resource and Documentation replaces the table.
 - Loading: the first load (`loading` with no `resources`); the heading stays, the filter, Download CSV and preferences are disabled, Refresh spins and the table shows its skeleton rows.
 - Error: the resources could not load (`error` is set); the heading and the disabled controls stay, and a danger `Alert` with the message and Retry takes the table's place.
-- Deployments: the deployments list with Version (Current tag), Status with a spinner while Building and the run's duration, the project link, the environment tag and the author with the time; a row click opens the deployment, the row menu holds View details, Redeploy and Promote to production, and Refresh, no match and empty behave as in Default and Empty.
+- Deployments: the deployments list with Version (Current tag), Status with a spinner while Building and the run's duration, the project link, the environment tag and the author with the time; a row click opens the deployment, the row menu holds View details, Redeploy (queues a new run, with a toast) and Promote to production (asks first), and Refresh, no match and empty behave as in Default and Empty.
 
 ## Related
 

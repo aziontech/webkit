@@ -2,10 +2,14 @@ import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { nextTick } from 'vue'
 
+import TableViewDeployments from '../../../../blocks/view/view-table/variants/deployments.vue'
 import TableViewEmpty from '../../../../blocks/view/view-table/variants/empty.vue'
 import TableViewFailed from '../../../../blocks/view/view-table/variants/error.vue'
 import TableViewLoading from '../../../../blocks/view/view-table/variants/loading.vue'
 import ViewTable from '../../../../blocks/view/view-table/view-table.vue'
+import { useToastRegion } from '../../toast-region'
+
+useToastRegion()
 
 const resourceNames = (root: HTMLElement) =>
   Array.from(root.querySelectorAll('[role=row] a'))
@@ -144,5 +148,29 @@ describe('view/view-table block', () => {
       expect(event.defaultPrevented).toBe(false)
       expect(document.activeElement).toBe(field)
     })
+  })
+})
+
+describe('view/view-table#Deployments', () => {
+  it('queues a new run from the row menu Redeploy instead of a dead item', async () => {
+    const view = render(TableViewDeployments)
+    const versionCells = () =>
+      Array.from(document.body.querySelectorAll('[data-focus-row]')).filter((row) =>
+        row.textContent?.includes('AY3MQWWR')
+      )
+    await waitFor(() => expect(versionCells()).toHaveLength(1))
+    await fireEvent.click(view.getByRole('button', { name: 'Actions for AY3MQWWR' }))
+    const redeploy = await waitFor(() => {
+      const item = Array.from(document.body.querySelectorAll<HTMLElement>('[role=menuitem]')).find(
+        (el) => el.textContent?.includes('Redeploy')
+      )
+      expect(item).toBeDefined()
+      return item!
+    })
+    await fireEvent.click(redeploy)
+    await waitFor(() => expect(versionCells()).toHaveLength(2))
+    await waitFor(() =>
+      expect(document.body.textContent).toContain('AY3MQWWR queued for redeploy.')
+    )
   })
 })

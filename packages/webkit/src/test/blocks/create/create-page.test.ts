@@ -149,6 +149,24 @@ describe('create-page#CreateZone', () => {
     await waitFor(() => expect(screen.getByText('4 imported records discarded.')).toBeTruthy())
   })
 
+  it('offers Undo after a Remove and after Discard import, and puts the records back', async () => {
+    render(CreateZone)
+    await fireEvent.click(screen.getByRole('button', { name: 'Remove CNAME record www' }))
+    expect(recordRows()).toHaveLength(4)
+    const removed = (await screen.findByText('CNAME record www removed.', {}, wait)).closest(
+      '[data-toast-id]'
+    ) as HTMLElement
+    await fireEvent.click(within(removed).getByRole('button', { name: 'Undo' }))
+    await waitFor(() => expect(recordRows()).toHaveLength(5))
+    await fireEvent.click(screen.getByRole('button', { name: 'Discard import' }))
+    expect(screen.queryByRole('list', { name: 'Imported records' })).toBeNull()
+    const discarded = (await screen.findByText('5 imported records discarded.', {}, wait)).closest(
+      '[data-toast-id]'
+    ) as HTMLElement
+    await fireEvent.click(within(discarded).getByRole('button', { name: 'Undo' }))
+    await waitFor(() => expect(recordRows()).toHaveLength(5))
+  })
+
   it('reads a zone file pasted into Domain name and skips the SOA and nameservers', async () => {
     render(CreateZone)
     await fireEvent.click(screen.getByRole('button', { name: 'Discard import' }))

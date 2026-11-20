@@ -3,5 +3,5 @@
 </script>
 
 <template>
-  <EditFunction default-tab="settings" />
+  <EditFunction tab="settings" />
 </template>

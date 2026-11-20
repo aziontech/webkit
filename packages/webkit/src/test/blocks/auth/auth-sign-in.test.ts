@@ -16,6 +16,7 @@ import PersonalToken from '../../../../blocks/auth/auth-sign-in/variants/persona
 import ProvidersLoading from '../../../../blocks/auth/auth-sign-in/variants/providers-loading.vue'
 import RejectedToken from '../../../../blocks/auth/auth-sign-in/variants/rejected-token.vue'
 import ServerError from '../../../../blocks/auth/auth-sign-in/variants/server-error.vue'
+import SignUp from '../../../../blocks/auth/auth-sign-in/variants/sign-up.vue'
 import Submitting from '../../../../blocks/auth/auth-sign-in/variants/submitting.vue'
 import { expectNoA11yViolations } from '../../axe'
 import { useToastRegion } from '../../toast-region'
@@ -359,6 +360,29 @@ describe('auth/auth-sign-in', () => {
       '/login?reset=1'
     )
     expect(view.container.querySelector('a[href="#"]')).toBeNull()
+  })
+
+  it('EmailAlreadyRegistered: keeps the email and answers a new submit with the same notice', async () => {
+    const view = render(EmailAlreadyRegistered)
+    const email = view.getByRole('textbox', { name: /Work email/ }) as HTMLInputElement
+    expect(email.value).toBe('jane.doe@example.com')
+    expect(view.getByText(/This email is already registered/)).toBeTruthy()
+    await fireEvent.update(view.getByLabelText(/^Password/), 'Correct-horse-9!')
+    await fireEvent.click(view.getByRole('button', { name: 'Sign up' }))
+    expect(view.queryByText(/This email is already registered/)).toBeNull()
+    await waitFor(() => expect(view.getByText(/This email is already registered/)).toBeTruthy())
+    expect(view.queryByText(/Account created/)).toBeNull()
+  })
+
+  it('SignUp: the provider buttons emit provider-click', async () => {
+    const view = render(SignUp)
+    await fireEvent.click(view.getByRole('button', { name: 'Continue with Google' }))
+    await fireEvent.click(view.getByRole('button', { name: 'Continue with GitHub' }))
+    const emitted = view.emitted<unknown[]>('provider-click') ?? []
+    expect(emitted.map(([event, provider]) => [event instanceof MouseEvent, provider])).toEqual([
+      [true, 'google'],
+      [true, 'github']
+    ])
   })
 
   it('CheckInbox: Resend email sends another link', async () => {

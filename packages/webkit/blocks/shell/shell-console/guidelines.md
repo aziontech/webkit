@@ -59,9 +59,24 @@ The list page's title and description, with Documentation and the create action 
 
 Flush (`:padded="false"`), standing in for the page body; the list page's controls row and table come from `view/view-table` (Table toolbar parts), never a hand-built row of buttons in the shell.
 
+### L. Toast region — `Toaster` (required)
+
+The app's one toast region, at `bottom-end`, mounted once by the shell because it is the app root. Pages and the other states only call `toast`; none renders a `Toaster` of its own.
+
 ## Data
 
-The shell takes no props: `navigation`, `account` and the recents are its own constants, which the app replaces with its navigation file and signed-in user. It emits one event:
+`navigation`, `account` and the recents are the shell's own constants, which the app replaces with its navigation file and signed-in user. The states render the shell and fill its slots instead of copying it:
+
+| Slot             | Scope         | What goes in it                                                               |
+| ---------------- | ------------- | ----------------------------------------------------------------------------- |
+| default          |               | The page body (`<RouterView />` in the app); a stand-in list page when empty. |
+| `actions`        | `{ compact }` | Header actions after Create and Agent (the Notifications bell).               |
+| `sidebar-header` | `{ compact }` | Content under the wordmark in the rail (the AccountSwitch switcher).          |
+| `header-leading` | `{ compact }` | Content before the breadcrumbs in the header (the switcher while compact).    |
+| `notifications`  |               | Flash messages above the page body.                                           |
+| `tools`          |               | The tools region beside the content (the notification list).                  |
+
+`v-model:tools-open` opens and closes the tools region, and `tools-label` names it. It emits one event:
 
 | Event      | Payload   | When                                    |
 | ---------- | --------- | --------------------------------------- |

@@ -70,7 +70,7 @@ A small `Kbd` (`aria-hidden`) inside the primary button shows its keyboard short
 
 ## Data
 
-The block takes its rules through props and emits every action; it fetches nothing. `RuleListRule`, `RuleListEdit` and `RuleListProps` are exported from `view-rule-list.vue`, and `sample.ts` holds the sample application and firewall rules the block renders when `rules` is left out (and never while `loading` or `error` is set). Moves and switches stay a local draft until Save.
+The block takes its rules through props and emits every action; it fetches nothing. `RuleListRule`, `RuleListEdit` and `RuleListProps` are exported from `view-rule-list.vue`, and `sample.ts` holds the sample application and firewall rules the block renders when `rules` is left out (and never while `loading` or `error` is set). Moves and switches stay a local draft until Save. A new `rules` list (a rule edited or added elsewhere) updates the rows and keeps the unsaved moves and switches on top of it; a rule that was not there before lands where the list puts it and opens its phase.
 
 | Prop                | Type                          | What it does                                                                                                 |
 | ------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------ |
@@ -369,14 +369,36 @@ Each variant is the same screen in another state: `get_block("view/view-rule-lis
     }
   }
 
+  const keepUnsaved = (before: Snapshot, savedBefore: Snapshot, savedNow: Snapshot) => {
+    for (const { value } of ALL_PHASES) {
+      const order = before.order[value] ?? []
+      if (order.join() !== (savedBefore.order[value] ?? []).join()) {
+        const rank = (id: string) => {
+          const at = order.indexOf(id)
+          return at < 0 ? order.length : at
+        }
+        draft[value] = [...draft[value]].sort((a, b) => rank(a.id) - rank(b.id))
+      }
+      for (const item of draft[value]) {
+        const local = before.active[item.id]
+        const changedHere = local !== undefined && local !== savedBefore.active[item.id]
+        if (changedHere && savedNow.active[item.id] === savedBefore.active[item.id])
+          item.active = local
+      }
+    }
+  }
+
   let seeded = false
   watch(
     source,
     (next) => {
+      const before = seeded ? snapshot() : null
+      const savedBefore = saved.value
       for (const { value } of ALL_PHASES) {
         draft[value] = next.filter((item) => item.phase === value).map((item) => ({ ...item }))
       }
       saved.value = snapshot()
+      if (before) keepUnsaved(before, savedBefore, saved.value)
       if (!seeded && next.length) {
         seeded = true
         applyEdits(props.defaultEdits)
@@ -403,6 +425,12 @@ Each variant is the same screen in another state: `get_block("view/view-rule-lis
       .filter(({ value }) => draft[value].some(matches))
       .map(({ value }) => value)
     openPhases.value = [...new Set([...openPhases.value, ...hits])]
+  })
+  watch(source, (next, previous) => {
+    if (!previous?.length) return
+    const known = new Set(previous.map((item) => item.id))
+    const added = next.filter((item) => !known.has(item.id)).map((item) => item.phase)
+    if (added.length) openPhases.value = [...new Set([...openPhases.value, ...added])]
   })
 
   const groups = computed(() =>

@@ -72,6 +72,12 @@ The block takes the run through props and emits every action; it runs no deploy 
 | `retry`    | `(event, items)` | Retry failed; `items` are the failed rows to deploy again. |
 | `redeploy` | `(event)`        | Redeploy in the outcome toast; deploy every setting again. |
 
+| Slot      | What it holds                                                                                           |
+| --------- | ------------------------------------------------------------------------------------------------------- |
+| `actions` | The page actions under the heading; left empty, Show progress. Drop puts Deploy a folder there instead. |
+
+A run whose rows are all queued has not started: the block raises no toast for it. Drop renders the block with its two Deployment Settings queued, opens its own confirm beside it, and on Deploy to Production opens the progress dialog and moves the rows through the run.
+
 To go live, render the block from a page that owns the deploy and pass its rows as they change:
 
 ```vue
@@ -210,6 +216,11 @@ Each variant is the same screen in another state: `get_block("create/create-depl
 
   const open = defineModel<boolean>('open', { default: true })
 
+  defineSlots<{
+    /** The page actions under the heading; left empty, Show progress. */
+    actions?(): unknown
+  }>()
+
   const RUN_TOAST = 'deploy-progress-dialog-run'
 
   const STATUS_TAG: Record<DeployProgressDialogStatus, StatusMeta> = {
@@ -236,6 +247,8 @@ Each variant is the same screen in another state: `get_block("create/create-depl
   })
 
   const running = computed(() => counts.value.settled < counts.value.total)
+
+  const started = computed(() => items.value.some((item) => item.status !== 'queued'))
 
   const activeName = computed(
     () => items.value.find((item) => item.status === 'deploying')?.name ?? ''
@@ -301,6 +314,10 @@ Each variant is the same screen in another state: `get_block("create/create-depl
 
   const report = () => {
     const { total, done, failed } = counts.value
+    if (!started.value) {
+      toast.dismiss(RUN_TOAST)
+      return
+    }
     if (running.value) outcomeSeen.value = false
     if (open.value) {
       toast.dismiss(RUN_TOAST)
@@ -338,7 +355,7 @@ Each variant is the same screen in another state: `get_block("create/create-depl
     })
   }
 
-  watch([running, open], report)
+  watch([started, running, open], report)
 
   onMounted(report)
 
@@ -356,13 +373,15 @@ Each variant is the same screen in another state: `get_block("create/create-depl
       </p>
     </header>
     <div class="flex flex-wrap items-center gap-(--spacing-sm)">
-      <Button
-        label="Show progress"
-        variant="outline"
-        size="medium"
-        icon="az az-list"
-        @click="open = true"
-      />
+      <slot name="actions">
+        <Button
+          label="Show progress"
+          variant="outline"
+          size="medium"
+          icon="az az-list"
+          @click="open = true"
+        />
+      </slot>
     </div>
 
     <Dialog
@@ -549,4 +568,18 @@ export const samplePartialItems: DeployProgressDialogItem[] = settings.map((entr
     ? { ...entry, status: 'failed', message: failure }
     : { ...entry, status: 'done', message: '' }
 )
+
+export const sampleDropItems: DeployProgressDialogItem[] = settings.slice(0, 2).map((entry) => ({
+  ...entry,
+  status: 'queued',
+  message: ''
+}))
+
+export const sampleDroppedFiles = [
+  { path: 'dist/index.html', size: 4812 },
+  { path: 'dist/assets/app-3f9c2a.js', size: 186_204 },
+  { path: 'dist/assets/app-3f9c2a.css', size: 23_517 },
+  { path: 'dist/assets/logo.svg', size: 2_946 },
+  { path: 'dist/robots.txt', size: 68 }
+]
 ```

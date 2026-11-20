@@ -21,14 +21,16 @@
     description: string
     /** Logo glyph class. */
     icon: string
-    /** The Git provider it clones from, named in the preview card. */
-    provider: string
+    /** The Git provider it clones from, named in the preview card; left out, the card has no source line. */
+    provider?: string
     /** Provider glyph class. */
-    providerIcon: string
+    providerIcon?: string
     /** The account or organization that publishes it. */
-    scope: string
+    scope?: string
     /** The folder or repository it clones. */
-    path: string
+    path?: string
+    /** The source line over the scope and path; left out, Cloning from the provider. */
+    source?: string
   }
 
   export interface DeployTemplateProps {
@@ -38,12 +40,18 @@
     account?: string
     /** Where Manage connected providers leads. */
     providersHref?: string
+    /** The way the page was reached, the first crumb. */
+    crumb?: string
+    /** The service the project deploys to, named in the Connect a Git provider step. */
+    service?: string
   }
 
   const props = withDefaults(defineProps<DeployTemplateProps>(), {
     template: undefined,
     account: undefined,
-    providersHref: '#'
+    providersHref: '#',
+    crumb: 'Start from a template',
+    service: ''
   })
 
   const emit = defineEmits<{
@@ -59,15 +67,28 @@
     browse: [event: MouseEvent]
   }>()
 
+  defineSlots<{
+    /** The step the flow is on; left empty, the Connect a Git provider step. */
+    default?(): unknown
+    /** The source line of the preview card; left empty, Cloning from the provider over the scope and path. */
+    details?(): unknown
+  }>()
+
   useEscapeToCancel((event) => emit('back', event))
 
   const currentTemplate = computed(() => props.template ?? sampleTemplate)
   const currentAccount = computed(() => props.account ?? sampleAccount)
 
   const breadcrumb = computed(() => [
-    { label: 'Start from a template' },
+    { label: props.crumb },
     { label: currentTemplate.value.name, active: true }
   ])
+
+  const connectDescription = computed(() =>
+    props.service
+      ? `${currentTemplate.value.name} is cloned into a repository in your account, then deployed to ${props.service} on every push.`
+      : `${currentTemplate.value.name} is cloned into a repository in your account, then deployed from it on every push.`
+  )
 </script>
 
 <template>
@@ -140,97 +161,104 @@
                   </span>
                 </div>
 
-                <div class="flex w-full flex-col gap-(--spacing-2xs)">
-                  <span class="truncate text-body-2xs text-(--text-muted)"
-                    >Cloning from {{ currentTemplate.provider }}</span
-                  >
-                  <div class="flex items-center gap-(--spacing-md)">
-                    <span
-                      class="flex h-5 items-center gap-(--spacing-2xs) text-label-sm text-(--text-default)"
-                    >
-                      <i
-                        :class="currentTemplate.providerIcon"
-                        class="text-[length:inherit] leading-none"
-                        aria-hidden="true"
-                      />
-                      {{ currentTemplate.scope }}
-                    </span>
-                    <span
-                      class="flex h-5 items-center gap-(--spacing-2xs) text-label-sm text-(--text-muted)"
-                    >
-                      <i
-                        class="az az-folder text-[length:inherit] leading-none"
-                        aria-hidden="true"
-                      />
-                      {{ currentTemplate.path }}
-                    </span>
-                  </div>
+                <div
+                  v-if="$slots.details || currentTemplate.provider"
+                  class="flex w-full flex-col gap-(--spacing-2xs)"
+                >
+                  <slot name="details">
+                    <span class="truncate text-body-2xs text-(--text-muted)">{{
+                      currentTemplate.source ?? `Cloning from ${currentTemplate.provider}`
+                    }}</span>
+                    <div class="flex items-center gap-(--spacing-md)">
+                      <span
+                        class="flex h-5 items-center gap-(--spacing-2xs) text-label-sm text-(--text-default)"
+                      >
+                        <i
+                          :class="currentTemplate.providerIcon"
+                          class="text-[length:inherit] leading-none"
+                          aria-hidden="true"
+                        />
+                        {{ currentTemplate.scope }}
+                      </span>
+                      <span
+                        class="flex h-5 items-center gap-(--spacing-2xs) text-label-sm text-(--text-muted)"
+                      >
+                        <i
+                          class="az az-folder text-[length:inherit] leading-none"
+                          aria-hidden="true"
+                        />
+                        {{ currentTemplate.path }}
+                      </span>
+                    </div>
+                  </slot>
                 </div>
               </div>
             </div>
           </template>
         </Card>
 
-        <div
-          data-phase="connect"
-          class="flex w-full flex-col items-center gap-(--spacing-xl) data-[phase=success]:my-auto motion-reduce:transition-none! motion-reduce:transform-none!"
-        >
-          <EmptyState
-            bordered
-            size="medium"
-            title="Connect a Git provider"
-            :description="`${currentTemplate.name} is cloned into a repository in your account, then deployed from it on every push.`"
-            class="w-full"
+        <slot>
+          <div
+            data-phase="connect"
+            class="flex w-full flex-col items-center gap-(--spacing-xl) data-[phase=success]:my-auto motion-reduce:transition-none! motion-reduce:transform-none!"
           >
-            <template #icon>
-              <span class="relative flex size-10 items-center justify-center">
-                <span
-                  aria-hidden="true"
-                  class="absolute left-1/2 top-1/2 size-14 -translate-x-1/2 -translate-y-1/2 rounded-(--shape-card) border border-(--border-strong) bg-(--bg-canvas) opacity-5"
-                />
-                <span
-                  aria-hidden="true"
-                  class="absolute left-1/2 top-1/2 size-12 -translate-x-1/2 -translate-y-1/2 rounded-(--shape-card) border border-(--border-strong) bg-(--bg-canvas) opacity-10"
-                />
-                <span
-                  class="relative flex size-10 items-center justify-center rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface)"
-                >
-                  <i
-                    class="az az-github text-body-md leading-none text-(--text-default)"
+            <EmptyState
+              bordered
+              size="medium"
+              title="Connect a Git provider"
+              :description="connectDescription"
+              class="w-full"
+            >
+              <template #icon>
+                <span class="relative flex size-10 items-center justify-center">
+                  <span
                     aria-hidden="true"
+                    class="absolute left-1/2 top-1/2 size-14 -translate-x-1/2 -translate-y-1/2 rounded-(--shape-card) border border-(--border-strong) bg-(--bg-canvas) opacity-5"
                   />
+                  <span
+                    aria-hidden="true"
+                    class="absolute left-1/2 top-1/2 size-12 -translate-x-1/2 -translate-y-1/2 rounded-(--shape-card) border border-(--border-strong) bg-(--bg-canvas) opacity-10"
+                  />
+                  <span
+                    class="relative flex size-10 items-center justify-center rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface)"
+                  >
+                    <i
+                      class="az az-github text-body-md leading-none text-(--text-default)"
+                      aria-hidden="true"
+                    />
+                  </span>
                 </span>
-              </span>
-            </template>
-            <template #actions>
-              <Button
-                label="Continue with GitHub"
-                icon="az az-github"
-                variant="secondary"
-                size="large"
-                @click="(event: MouseEvent) => emit('connect', event)"
-              />
-              <Button
-                label="Continue without Git"
-                variant="ghost"
-                size="large"
-                @click="(event: MouseEvent) => emit('skip-git', event)"
-              />
-              <Link
-                label="Manage connected providers"
-                :href="providersHref"
-                size="large"
-              />
-            </template>
-          </EmptyState>
+              </template>
+              <template #actions>
+                <Button
+                  label="Continue with GitHub"
+                  icon="az az-github"
+                  variant="secondary"
+                  size="large"
+                  @click="(event: MouseEvent) => emit('connect', event)"
+                />
+                <Button
+                  label="Continue without Git"
+                  variant="ghost"
+                  size="large"
+                  @click="(event: MouseEvent) => emit('skip-git', event)"
+                />
+                <Link
+                  label="Manage connected providers"
+                  :href="providersHref"
+                  size="large"
+                />
+              </template>
+            </EmptyState>
 
-          <Button
-            label="Browse templates"
-            variant="outline"
-            size="medium"
-            @click="(event: MouseEvent) => emit('browse', event)"
-          />
-        </div>
+            <Button
+              label="Browse templates"
+              variant="outline"
+              size="medium"
+              @click="(event: MouseEvent) => emit('browse', event)"
+            />
+          </div>
+        </slot>
       </div>
     </main>
   </div>

@@ -2,6 +2,7 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import DataTable, {
     type DropdownMenuItemValue,
     type TableColumn,
@@ -19,6 +20,7 @@
   import TableCellLink from '@aziontech/webkit/table-cell-link'
   import TableCellTime from '@aziontech/webkit/table-cell-time'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
   import { ref } from 'vue'
@@ -215,8 +217,49 @@
     window.location.assign(`/deployments/${row.id}`)
   }
 
+  let nextDeploymentId = Math.max(...rows.map((row) => Number(row.id)))
+
+  const redeploy = (row: Deployment) => {
+    nextDeploymentId += 1
+    items.value = [
+      {
+        ...row,
+        id: String(nextDeploymentId),
+        current: false,
+        status: 'Queued',
+        duration: '',
+        deployedAt: new Date(referenceTime)
+      },
+      ...items.value
+    ]
+    toast.success(`${row.version} queued for redeploy.`, { description: row.project })
+  }
+
+  const pendingPromotion = ref<Deployment | null>(null)
+  const promoteOpen = ref(false)
+
+  const confirmPromote = () => {
+    const promoted = pendingPromotion.value
+    if (!promoted) return
+    items.value = items.value.map((row) => {
+      if (row.id === promoted.id) return { ...row, environment: 'Production', current: true }
+      if (row.project === promoted.project && row.environment === 'Production')
+        return { ...row, current: false }
+      return row
+    })
+    promoteOpen.value = false
+    toast.success(`${promoted.version} promoted to production.`, {
+      description: promoted.project
+    })
+  }
+
   const onRowAction = (value: DropdownMenuItemValue, row: Deployment) => {
     if (value === 'view') openDeployment(row)
+    if (value === 'redeploy') redeploy(row)
+    if (value === 'promote') {
+      pendingPromotion.value = row
+      promoteOpen.value = true
+    }
   }
 </script>
 
@@ -443,5 +486,18 @@
         </section>
       </section>
     </div>
+    <ConfirmDialog
+      v-model:open="promoteOpen"
+      title="Promote to production"
+      variant="primary"
+      size="medium"
+      confirm-label="Promote"
+      @confirm="confirmPromote"
+    >
+      <p class="m-0 text-body-sm text-(--text-muted)">
+        {{ pendingPromotion?.version }} becomes the current production deployment of
+        {{ pendingPromotion?.project }}, in place of the one serving traffic now.
+      </p>
+    </ConfirmDialog>
   </div>
 </template>

@@ -292,6 +292,60 @@ describe('view/view-rule-list block', () => {
     expect(adding.querySelector<HTMLInputElement>('#rule-name')!.value).toBe('')
   })
 
+  it('keeps an unsaved move when a rule is edited, and lands a new rule last in its phase (EditRule)', async () => {
+    const view = render(EditRule)
+    await fireEvent.click(view.getByRole('button', { name: 'Move Maintenance page down' }))
+    await fireEvent.click(view.getByRole('button', { name: 'Edit Docs rewrite' }))
+    await waitFor(() => expect(document.querySelector('[role="dialog"]')).not.toBeNull())
+    const drawer = document.querySelector('[role="dialog"]') as HTMLElement
+    await fireEvent.update(drawer.querySelector<HTMLInputElement>('#rule-name')!, 'Docs moved')
+    const submit = (root: HTMLElement) =>
+      Array.from(root.querySelectorAll('button')).find(
+        (button) => button.textContent?.trim() === 'Save'
+      ) as HTMLButtonElement
+    await fireEvent.click(submit(drawer))
+    await waitFor(() => expect(document.querySelector('[role="dialog"]')).toBeNull(), {
+      timeout: 3000
+    })
+    expect(requestNames(view.container as HTMLElement).slice(0, 5)).toEqual([
+      'Default rule',
+      'Redirect www',
+      'Maintenance page',
+      'API gateway',
+      'Docs moved'
+    ])
+    expect(view.container.textContent).toMatch(/2\s+changes to the rules, not saved yet\./)
+
+    await fireEvent.click(view.getAllByRole('button', { name: 'Add Rule' })[0])
+    await waitFor(() => expect(document.querySelector('[role="dialog"]')).not.toBeNull())
+    const adding = document.querySelector('[role="dialog"]') as HTMLElement
+    await fireEvent.update(adding.querySelector<HTMLInputElement>('#rule-name')!, 'Geo block')
+    const variable = adding.querySelector<HTMLInputElement>('input[role="combobox"]')!
+    await fireEvent.update(variable, '${uri}')
+    await fireEvent.blur(variable)
+    await fireEvent.click(submit(adding))
+    await waitFor(() => expect(document.querySelector('[role="dialog"]')).toBeNull(), {
+      timeout: 3000
+    })
+    expect(requestNames(view.container as HTMLElement).slice(0, 6)).toEqual([
+      'Default rule',
+      'Redirect www',
+      'Maintenance page',
+      'API gateway',
+      'Docs moved',
+      'Geo block'
+    ])
+    expect(view.container.textContent).toMatch(/2\s+changes to the rules, not saved yet\./)
+  })
+
+  it('folds the position controls into a Move menu on a phone in EditRule too', async () => {
+    await page.viewport(390, 844)
+    const view = render(EditRule)
+    await waitFor(() =>
+      expect(view.getByRole('button', { name: 'Move Docs rewrite, position 5 of 5' })).toBeTruthy()
+    )
+  })
+
   it('names each rule with a link button that emits edit with the event and the rule', async () => {
     const view = render(RulesList)
     await fireEvent.click(view.getByRole('button', { name: 'Edit Docs rewrite' }))

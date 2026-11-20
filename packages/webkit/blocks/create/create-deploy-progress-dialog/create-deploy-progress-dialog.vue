@@ -60,6 +60,11 @@
 
   const open = defineModel<boolean>('open', { default: true })
 
+  defineSlots<{
+    /** The page actions under the heading; left empty, Show progress. */
+    actions?(): unknown
+  }>()
+
   const RUN_TOAST = 'deploy-progress-dialog-run'
 
   const STATUS_TAG: Record<DeployProgressDialogStatus, StatusMeta> = {
@@ -86,6 +91,8 @@
   })
 
   const running = computed(() => counts.value.settled < counts.value.total)
+
+  const started = computed(() => items.value.some((item) => item.status !== 'queued'))
 
   const activeName = computed(
     () => items.value.find((item) => item.status === 'deploying')?.name ?? ''
@@ -151,6 +158,10 @@
 
   const report = () => {
     const { total, done, failed } = counts.value
+    if (!started.value) {
+      toast.dismiss(RUN_TOAST)
+      return
+    }
     if (running.value) outcomeSeen.value = false
     if (open.value) {
       toast.dismiss(RUN_TOAST)
@@ -188,7 +199,7 @@
     })
   }
 
-  watch([running, open], report)
+  watch([started, running, open], report)
 
   onMounted(report)
 
@@ -206,13 +217,15 @@
       </p>
     </header>
     <div class="flex flex-wrap items-center gap-(--spacing-sm)">
-      <Button
-        label="Show progress"
-        variant="outline"
-        size="medium"
-        icon="az az-list"
-        @click="open = true"
-      />
+      <slot name="actions">
+        <Button
+          label="Show progress"
+          variant="outline"
+          size="medium"
+          icon="az az-list"
+          @click="open = true"
+        />
+      </slot>
     </div>
 
     <Dialog

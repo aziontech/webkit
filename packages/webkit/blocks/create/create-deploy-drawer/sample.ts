@@ -1,10 +1,13 @@
 import type {
+  DeployDrawerDependency,
+  DeployDrawerDomainGroup,
   DeployDrawerEnvironment,
   DeployDrawerImpact,
   DeployDrawerProject,
   DeployDrawerProjectGroup,
   DeployDrawerResource,
-  DeployDrawerValues
+  DeployDrawerValues,
+  DeployDrawerVersion
 } from './create-deploy-drawer.vue'
 
 export const sampleResources: DeployDrawerResource[] = [
@@ -427,3 +430,206 @@ export const sampleDefaultValues: Partial<DeployDrawerValues> = {
   versions: { service: 'AG1VVDJP' },
   projectId: '1020655'
 }
+
+export interface DeployDrawerEnvironmentEntry {
+  name: string
+  description: string
+  lock?: string
+}
+
+export interface DeployDrawerReach {
+  settings: string
+  replaced: string
+  groups: DeployDrawerImpact[]
+}
+
+const domainGroup = (slug: string, environment: string, total: number): DeployDrawerDomainGroup => {
+  const shown = Math.min(total, 10)
+  return {
+    environment,
+    total,
+    summary:
+      total > shown
+        ? `${shown} of ${total} domains`
+        : `${total} ${total === 1 ? 'domain' : 'domains'}`,
+    domains: Array.from({ length: shown }, (_, index) =>
+      index ? `${slug}-alias-${index}.example.com` : `${slug}.example.com`
+    )
+  }
+}
+
+export const sampleEnvironmentEntries: DeployDrawerEnvironmentEntry[] = [
+  {
+    name: 'Production',
+    description: 'Live traffic. One version serves the domain, and deploying replaces it.'
+  },
+  {
+    name: 'Staging',
+    description: 'A copy of production for the last checks before a deploy.',
+    lock: 'storefront-strict is Strict, so checkout-api stays bound to Staging.'
+  },
+  {
+    name: 'Preview',
+    description:
+      'Every other branch. Each version keeps its own URL, so a build can be read before it is live.'
+  }
+]
+
+export const sampleLastUsedEnvironment = 'Production'
+
+export const sampleEnvironmentReach: Record<string, DeployDrawerReach> = {
+  Production: {
+    settings: 'shared-storefront',
+    replaced: 'legacy-web',
+    groups: [
+      {
+        environment: 'Production',
+        projects: [
+          {
+            id: '1020655',
+            name: 'project-01',
+            selected: true,
+            domains: [domainGroup('project-1', 'Production', 8)]
+          },
+          {
+            id: '1021347',
+            name: 'project-05',
+            domains: [domainGroup('project-5', 'Production', 36)]
+          },
+          {
+            id: '1022039',
+            name: 'project-09',
+            domains: [domainGroup('project-9', 'Production', 64)]
+          }
+        ]
+      },
+      {
+        environment: 'Preview',
+        projects: [
+          {
+            id: '1021347',
+            name: 'project-05',
+            domains: [domainGroup('preview-project-5', 'Preview', 1)]
+          }
+        ]
+      }
+    ]
+  },
+  Staging: { settings: 'storefront-strict', replaced: '', groups: [] },
+  Preview: {
+    settings: 'web-app-preview',
+    replaced: '',
+    groups: [
+      {
+        environment: 'Preview',
+        projects: [
+          {
+            id: '1020655',
+            name: 'project-01',
+            selected: true,
+            domains: [domainGroup('preview-project-1', 'Preview', 1)]
+          }
+        ]
+      }
+    ]
+  }
+}
+
+const version = (
+  id: string,
+  author: string,
+  createdAgo: string,
+  active = false
+): DeployDrawerVersion => ({
+  id,
+  name: id,
+  author,
+  createdAgo,
+  active
+})
+
+const authGateway = (prefix: string): DeployDrawerDependency => ({
+  key: `${prefix}:module-auth-gateway`,
+  label: 'Module',
+  name: 'auth-gateway',
+  icon: 'az az-code',
+  note: '',
+  sharedWith: ['checkout-api', 'account-api'],
+  total: 8,
+  versions: [
+    version('APICRFV0', 'Sam Lee', '2 days ago', true),
+    version('AQW6HBBH', 'Priya Patel', '3 days ago'),
+    version('ASA076RY', 'Chris Taylor', '5 days ago')
+  ]
+})
+
+const paymentsApi = (prefix: string): DeployDrawerDependency => ({
+  key: `${prefix}:integration-payments-api`,
+  label: 'Integration',
+  name: 'payments-api',
+  icon: 'az az-link',
+  note: 'Not versioned. Deploys with its current settings.',
+  sharedWith: [],
+  total: 0,
+  versions: []
+})
+
+const geoRedirect = (prefix: string, ready: boolean): DeployDrawerDependency => ({
+  key: `${prefix}:module-geo-redirect`,
+  label: 'Module',
+  name: 'geo-redirect',
+  icon: 'az az-code',
+  note: '',
+  sharedWith: [],
+  total: ready ? 11 : 0,
+  versions: ready
+    ? [
+        version('AK16MQ4R', 'John Smith', '2 days ago', true),
+        version('ALF0CLL8', 'Sam Lee', '4 days ago'),
+        version('AMSU2H1P', 'Priya Patel', '4 days ago')
+      ]
+    : []
+})
+
+export const sampleDependenciesByVersion = (id: string): DeployDrawerDependency[] => {
+  const prefix = `service@${id}`
+  return [authGateway(prefix), geoRedirect(prefix, id !== 'AG1VVDJP'), paymentsApi(prefix)]
+}
+
+const dependencyResources: Omit<DeployDrawerResource, 'dependencies'>[] = [
+  {
+    key: 'service',
+    label: 'Service',
+    name: 'web-app',
+    icon: 'az az-server',
+    note: '',
+    total: 6,
+    versions: [
+      version('AEO25I38', 'Sam Lee', '1 day ago', true),
+      version('AG1VVDJP', 'Priya Patel', '3 days ago'),
+      version('AHFPL906', 'Chris Taylor', '3 days ago'),
+      version('AITJB4GN', 'Riley Carter', '4 days ago'),
+      version('AK7D0ZX4', 'Ethan Brooks', '6 days ago')
+    ],
+    owner: true
+  },
+  {
+    key: 'config',
+    label: 'Resource',
+    name: 'web-app-config',
+    icon: 'az az-box',
+    note: '',
+    total: 2,
+    versions: [
+      version('AB3K9QX2', 'Riley Carter', '2 days ago', true),
+      version('AC71ZT0M', 'Jordan Kim', '8 days ago')
+    ],
+    owner: true
+  }
+]
+
+export const sampleDependencyResources = (serviceVersion: string): DeployDrawerResource[] =>
+  dependencyResources.map((row) => ({
+    ...row,
+    dependencies: row.key === 'service' ? sampleDependenciesByVersion(serviceVersion) : []
+  }))
