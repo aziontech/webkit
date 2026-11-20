@@ -135,13 +135,19 @@ So: the **compilation steps are justified** (two real consumption modes), but th
 ```css
 /* shared box — every colored icon */
 .az-color {
-  display: inline-block;
   width: 1em; /* scales with font-size, like a glyph's box */
   height: 1em;
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
   vertical-align: -0.125em;
+}
+
+/* display sits in a cascade layer under Tailwind utilities, so hidden, block and sm:block win */
+@layer components {
+  .az-color {
+    display: inline-block;
+  }
 }
 
 /* per icon — the vector */
