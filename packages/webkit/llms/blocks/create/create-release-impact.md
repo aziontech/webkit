@@ -1214,13 +1214,17 @@ Each variant is the same screen in another state: `get_block("create/create-rele
                   :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
                 >
                   {{ deploying ? 'Deploying…' : 'Deploy release' }}
-                  <Kbd
+                  <span
                     v-if="!deploying"
-                    meta
-                    key-name="enter"
-                    size="small"
+                    class="max-lg:hidden"
                     aria-hidden="true"
-                  />
+                  >
+                    <Kbd
+                      meta
+                      key-name="enter"
+                      size="small"
+                    />
+                  </span>
                 </Button>
               </div>
             </template>

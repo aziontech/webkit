@@ -1614,7 +1614,7 @@ const hintId = useId() // stable id for the ARIA association
 | `Esc` | Closes the top layer only: menu, then dialog, then drawer. On a full-page task it means Cancel, through the unsaved-changes guard. On a browse page it does nothing. |
 | `Enter`, `⌘ Enter` (`Ctrl Enter` off Apple) | `Enter` submits a short single-line form; `⌘ Enter` submits from a textarea or the code editor. |
 | `⌘ S` (`Ctrl S`) | Saves a page that has a `SaveBar`, and stops the browser's own save. |
-| `⌘ K` (`Ctrl K`) | Opens the command palette (rule `webkit-header-search`). |
+| `⌘ K` (`Ctrl K`) | Opens the command palette (rule [`webkit-header-search`](https://github.com/aziontech/webkit/blob/main/rules/webkit-header-search.md)). |
 | `/` | Focuses the page's search field, when the page has one. |
 | `?` (`Shift /`) | Opens the list of every shortcut the current screen offers. |
 | Lists and tables | Arrow keys move between rows, `Enter` opens, `Space` selects, `Delete` asks before it deletes. |
@@ -8406,7 +8406,7 @@ The place the user goes to change how an account or a project behaves. They scan
 
 - A. Page heading — `PageHeader` (required)
 - B. FeatureItem sections — `Subheader`, `Card`, `Item` (required)
-- C. Setting rows — `SettingsRow`, `Input`, `FieldError`, `Select`, `Switch` (required)
+- C. Setting rows — `SettingsRow`, `Input`, `FieldError`, `Select`, `LanguageSelect`, `Switch` (required)
 - D. Save — `SaveBar`, `Button` (required)
 - E. Profile sections — `SettingsRow`, `Card`, `Item`, `Input`, `Select`, `Switch`, `Button` (Profile only)
 - F. Shortcut keycap — `Kbd` (optional)

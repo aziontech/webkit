@@ -7,7 +7,7 @@ saves, searches and lists the shortcuts, on every page. WebKit components alread
 inside them (a `Dialog` traps focus and closes on `Esc`, a `DropdownMenu` moves with the arrows,
 `Command` owns `⌘K`). This rule is the contract for the screen around them: where focus lands when
 a page opens, what `Esc` means, which shortcuts exist, and what never fires while someone types.
-It completes [`webkit-accessibility`](./webkit-accessibility.md), which covers the keyboard map of
+It completes [`webkit-accessibility`](./accessibility.md), which covers the keyboard map of
 one control.
 
 ## The contract
@@ -19,7 +19,7 @@ one control.
 | `Esc`                                              | Closes the top layer only: menu, then dialog, then drawer. On a full-page task it means Cancel, through the unsaved-changes guard. On a browse page it does nothing. |
 | `Enter`, `⌘ Enter` (`Ctrl Enter` off Apple)        | `Enter` submits a short single-line form; `⌘ Enter` submits from a textarea or the code editor.                                                                      |
 | `⌘ S` (`Ctrl S`)                                   | Saves a page that has a `SaveBar`, and stops the browser's own save.                                                                                                 |
-| `⌘ K` (`Ctrl K`)                                   | Opens the command palette (rule [`webkit-header-search`](./webkit-header-search.md)).                                                                                |
+| `⌘ K` (`Ctrl K`)                                   | Opens the command palette (rule [`webkit-header-search`](https://github.com/aziontech/webkit/blob/main/rules/webkit-header-search.md)).                                                                                |
 | `/`                                                | Focuses the page's search field, when the page has one.                                                                                                              |
 | `?` (`Shift /`)                                    | Opens the list of every shortcut the current screen offers.                                                                                                          |
 | Lists and tables                                   | Arrow keys move between rows, `Enter` opens, `Space` selects, `Delete` asks before it deletes.                                                                       |
@@ -156,7 +156,7 @@ macOS, `Ctrl` on Windows, Linux and ChromeOS.
 - Do not bind `⌘ S` on a page without a `SaveBar`, and do not let it fall through to the browser's
   "Save page as".
 - Do not bind `⌘ K` yourself: `SearchTrigger` and `Command` own it (rule
-  [`webkit-header-search`](./webkit-header-search.md)).
+  [`webkit-header-search`](https://github.com/aziontech/webkit/blob/main/rules/webkit-header-search.md)).
 - Do not fire a single-key shortcut (`/`, `?`, a letter) while focus is in an `input`, a
   `textarea`, a `contenteditable` element or a combobox, or while `⌘`, `Ctrl` or `Alt` is held.
 - Do not take a key the browser or the screen reader needs: `Tab`, `F6`, `⌘ L`, `⌘ W`, `⌘ T`,

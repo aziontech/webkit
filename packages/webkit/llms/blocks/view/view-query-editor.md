@@ -1327,12 +1327,16 @@ LIMIT 3;`
             @click="runQuery"
           >
             Run query
-            <Kbd
-              meta
-              key-name="enter"
-              size="small"
+            <span
+              class="max-lg:hidden"
               aria-hidden="true"
-            />
+            >
+              <Kbd
+                meta
+                key-name="enter"
+                size="small"
+              />
+            </span>
           </Button>
           <div class="ms-auto flex items-center gap-(--spacing-xs)">
             <Button

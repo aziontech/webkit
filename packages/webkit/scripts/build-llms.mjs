@@ -1130,6 +1130,15 @@ export function buildLlms(catalog = loadCatalog()) {
   ]
 
   const found = foundations(catalog)
+  const slugs = new Set(found.map((f) => f.slug))
+  const ruleLinks = (md) =>
+    md?.replace(/\]\(\.\/webkit-([a-z0-9-]+)\.md(#[^)\s]*)?\)/g, (m, name, hash = '') =>
+      slugs.has(name) ? `](./${name}.md${hash})` : `](${REPO_URL}/rules/webkit-${name}.md${hash})`
+    )
+  for (const f of found) {
+    f.md = ruleLinks(f.md)
+    if (f.compact) f.compact = ruleLinks(f.compact)
+  }
   index.push('## Foundations', '')
   for (const f of found) {
     files[`foundations/${f.slug}.md`] = f.md
