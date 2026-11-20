@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
   node_id: 2053:7649
-checksum: 0530d44de178e78a91b213a1bd2104b94a208e43c5ecc8bf42e13952f047df9b
+checksum: 0ea7bd2ebbc7b628ce0bd2826e3040ca677c496b313b0d65e4fac95319f8f8f4
 created: 2026-11-15
 last_updated: 2026-11-20
 ---
@@ -273,6 +273,7 @@ Per-column slots are name-computed at runtime, one per column id, so they are ty
 - Data states: `loading` (skeleton rows, `aria-busy`; the footer states no count it does not know: with no rows yet it shows one `Skeleton` line (`__footer-loading`) in place of the `Pagination`, and with a known total it keeps the page controls and shows the `Skeleton` in place of the `Showing … of …` text), `error` (the `error` prop set: rows replaced by the `error` slot in an `alert` region, `__error`), `empty` (no rows: the `empty` slot, `__empty`). Precedence: loading, then error, then empty.
 - The viewport is always a scroll container (`overflow: auto`): horizontal scroll is automatic when columns overflow; vertical scroll engages only when `maxHeight` constrains the content.
 - `data-frozen` on TableHeader (`true`), TableHeadCell / TableCell (`start` | `end`), and TableRow (`true`). A frozen head/body cell renders a CSS-only fade (gradient pseudo-element) just outside its inner edge that dissolves the horizontally scrolling content into the row background (`from-transparent` → `var(--table-row-bg)`, the row-published color, so it matches the row on hover/selected) — `frozen=start` fades on the right, `frozen=end` on the left. The fade tints nothing; it only masks the content sliding under the pinned column.
+- Scroll cue: the scroll viewport sits in a `__scroll` frame that sets `data-overflow-start` / `data-overflow-end` from the scroll position (re-measured on scroll and on resize). While content is hidden past an inline edge, an `aria-hidden` 24 px gradient (`__fade-start` / `__fade-end`, `from-transparent` to `var(--bg-surface)`, pointer events off) covers that edge of the viewport, so a phone shows that columns continue; it follows the inline direction under `dir="rtl"`, has no motion, and keeps its gradient under forced colors (fading to `Canvas`). A frozen column on that edge draws its own fade, so the viewport cue stays hidden there.
 - `data-state` on TableRow: `selected` | `unselected`; `data-selected` mirrors the `selected` prop; `aria-selected` set when selected.
 - `data-type` on TableHeadCell (`default` | `checkbox` | `action` | `slot`) and TableCell (`default` | `checkbox` | `action`).
 - `data-align` on head/body cells: `start` | `center` | `end`.
@@ -317,6 +318,7 @@ Per-column slots are name-computed at runtime, one per column id, so they are ty
 | outer border width                                                      | `var(--border-width-default)`                                   |
 | frozen column surface / edge fade (follow the row via `--table-row-bg`) | `var(--bg-surface)` · `var(--bg-canvas)` · `var(--bg-selected)` |
 | frozen column edge fade (dissolves scrolling content)                   | `var(--bg-surface)`                                             |
+| viewport scroll cue (edge fade over the hidden inline edge)             | `var(--bg-surface)`                                             |
 | row hover                                                               | `var(--bg-canvas)`                                              |
 | row selected                                                            | `var(--bg-selected)`                                            |
 | text                                                                    | `var(--text-default)`                                           |
@@ -366,7 +368,7 @@ Per-column slots are name-computed at runtime, one per column id, so they are ty
 
 ## Right-to-left
 
-- Layout: logical utilities only (`start-` / `end-`, `ps-` / `pe-`, `text-start`); frozen columns pin to the inline start and end edges, so `frozen: 'start'` pins to the right under `dir="rtl"`, and the edge fades follow.
+- Layout: logical utilities only (`start-` / `end-`, `ps-` / `pe-`, `text-start`); frozen columns pin to the inline start and end edges, so `frozen: 'start'` pins to the right under `dir="rtl"`, and the edge fades follow. Sticky offsets of stacked frozen columns are written as `inset-inline-start` / `inset-inline-end`, so two end columns keep their places in both directions; the viewport scroll cue sits on the inline edges too.
 - Icons: the tree chevron mirrors (it points to the inline end when closed); the sort glyph and the reorder grip do not mirror.
 - Keyboard: tree rows read `Arrow Right` / `Arrow Left` as inline end / inline start (`logicalArrowKey`), so `Arrow Left` opens a row under `rtl`; reorder keys are vertical and do not change.
 - User data: cells render the app's content; `TableCellId` wraps identifiers in `dir="ltr"`.
@@ -374,7 +376,7 @@ Per-column slots are name-computed at runtime, one per column id, so they are ty
 ## Responsive
 
 - Container queries: the root is `@container/table`; below `@md` of the table the `toolbar` slot moves under the title. With `stackable`, below `--container-lg` of the table each row becomes a card.
-- Narrow (≤ 640 px or a narrow container): the grid keeps its columns and scrolls sideways (a console list on a phone); `stackable` opts a short list into cards.
+- Narrow (≤ 640 px or a narrow container): the grid keeps its columns and scrolls sideways (a console list on a phone), with the scroll cue on the edge that hides columns; `stackable` opts a short list into cards.
 - Touch: sort buttons, checkboxes, grips and row action buttons are at least 40 × 40 px; the sort affordance shows without hover under `@media (hover: none)`.
 - Reflow: a data table is the WCAG 1.4.10 exception for two-dimensional content: the viewport scrolls horizontally inside the table, never the page.
 

@@ -8,9 +8,9 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
   node_id: 2053:7649
-checksum: 9fc962cf942feef6ebdf12cbe93ee913bd445e4469cc6b48bbf9aaa2d85dc52c
+checksum: a6725b5de279fb9c3b95540786b3b41231d29027c69736106b534ded3095d04c
 created: 2026-11-15
-last_updated: 2026-11-19
+last_updated: 2026-11-20
 ---
 
 # DataGrid — Component Spec
@@ -152,7 +152,7 @@ An editable, spreadsheet-like grid: rows of records and typed columns where peop
 | `change`     | `(event: Event, edit: DataGridCellEdit)` | A cell edit was committed (Enter, Tab, blur, a toggle), or once per changed cell of a paste (`event` is the `ClipboardEvent`); `edit` is `{ row, columnId, value, previous }`. |
 | `row-add`    | `(event: Event)`                         | The `add` function of the toolbar slot ran; the app appends a row to the `v-model`.                                                                                            |
 | `row-remove` | `(event: Event, rows: TRow[])`           | The `remove` function of the toolbar slot ran with rows selected; the app removes them from the `v-model`.                                                                     |
-| `copy`       | `(event: ClipboardEvent, text: string)`  | Ctrl+C or Cmd+C copied the selected cell range as tab-separated text (rows by line), written to the clipboard through the `copy` event's `clipboardData`.                       |
+| `copy`       | `(event: ClipboardEvent, text: string)`  | Ctrl+C or Cmd+C copied the selected cell range as tab-separated text (rows by line), written to the clipboard through the `copy` event's `clipboardData`.                      |
 
 ## Slots
 
@@ -170,6 +170,7 @@ An editable, spreadsheet-like grid: rows of records and typed columns where peop
 - `empty`: no rows, the `empty` slot (default `EmptyState`, `dataGrid.emptyTitle`) under the header, outside the grid's rows; the header and toolbar stay.
 - No `disabled` state: a grid people may not edit is `readonly` (the cursor, ranges and copy keep working). No `loading` or `error` state of its own: the app shows a `Skeleton` or an `Alert` around the grid while it loads; DataGrid never fetches.
 - `data-frozen="start"` on the first column's cells with `frozenFirstColumn`; `data-resizing` on a header while its width is dragged.
+- Scroll cue: the viewport sits in a `__scroll` frame that sets `data-overflow-start` / `data-overflow-end` from the scroll position (re-measured on scroll and on resize). While content is hidden past an inline edge, an `aria-hidden` 24 px gradient (`__fade-start` / `__fade-end`, `from-transparent` to `var(--bg-surface)`, pointer events off) covers that edge; the start fade begins after the frozen columns. It follows the inline direction under `dir="rtl"`, has no motion, and keeps its gradient under forced colors (fading to `Canvas`).
 
 ## Motion & Animations
 
@@ -182,6 +183,7 @@ An editable, spreadsheet-like grid: rows of records and typed columns where peop
 | Region                         | Token (DESIGN.md)             |
 | ------------------------------ | ----------------------------- |
 | surface                        | `var(--bg-surface)`           |
+| scroll cue (edge fade)         | `var(--bg-surface)`           |
 | header surface                 | `var(--bg-surface-raised)`    |
 | header typography              | `.text-label-sm`              |
 | cell typography                | `.text-body-sm`               |
@@ -241,7 +243,7 @@ Fixed sizes (no token exists for them): cell and header height `min-h-10` (40 px
 
 ## Right-to-left
 
-- Layout: logical utilities only (`start-0`, `ps-` / `pe-`, `text-start` / `text-end`, `border-e`); the frozen first column pins to the inline start edge, and the resize handle sits on the inline end edge of each header.
+- Layout: logical utilities only (`start-0`, `ps-` / `pe-`, `text-start` / `text-end`, `border-e`); the frozen first column pins to the inline start edge, the scroll cue sits on the inline edges, and the resize handle sits on the inline end edge of each header.
 - Icons: none of its own; the row checkbox and the empty state are the package's components.
 - Keyboard: `Arrow Left` / `Arrow Right` follow the reading direction (`logicalArrowKey`): under `dir="rtl"` `Arrow Left` moves to the next cell; a resize handle's `Arrow Right` widens under `ltr` and `Arrow Left` widens under `rtl`.
 - User data: cell text renders in a `<bdi>`, so ids, domains and numbers keep their own direction.
@@ -249,7 +251,7 @@ Fixed sizes (no token exists for them): cell and header height `min-h-10` (40 px
 ## Responsive
 
 - Container queries: none: the grid is a two-dimensional surface that keeps its columns at every width.
-- Narrow (≤ 640 px or a narrow container): the viewport scrolls sideways inside the grid, with the frozen first column still in view; the toolbar wraps.
+- Narrow (≤ 640 px or a narrow container): the viewport scrolls sideways inside the grid, with the frozen first column still in view and the scroll cue on the edge that hides columns; the toolbar wraps.
 - Touch: cells and headers are 44 px high under `pointer: coarse` (40 px otherwise); the resize handle's hit area is 44 px under `pointer: coarse` (24 px otherwise); editing opens on a second tap; nothing is hover-only.
 - Reflow: a data grid is the WCAG 1.4.10 exception for two-dimensional content: the grid scrolls horizontally inside its frame, never the page.
 - Touch: on coarse pointers (`pointer-coarse:`) the cell editor's text, the text field and the native `select` alike, steps up to 16 px (`text-body-md`), so iOS Safari does not zoom the page while editing a cell.
