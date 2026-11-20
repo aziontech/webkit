@@ -135,6 +135,7 @@ Then delete `sample.ts` and its import.
 - The focus ring is drawn inside the tile on the stretched target, so it is never clipped by the grid.
 - The drawer traps focus, is named by `DrawerTitle`, closes on Escape and returns focus to the tile that opened it.
 - The `PropertyFilter` is named by its `aria-label` and announces the match count after each change.
+- `/` focuses the search from anywhere on the page, except while typing in a field.
 - The loading band is `aria-busy`; the failure `Alert` is announced and its Retry is a button.
 
 ## States

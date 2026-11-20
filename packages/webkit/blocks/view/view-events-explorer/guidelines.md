@@ -187,8 +187,9 @@ Then delete `sample.ts` and its import, and give `fields` its own list. A log th
 - The Errors value carries an `aria-label` with its share of all events.
 - Every icon-only button has an `aria-label`; decorative glyphs are `aria-hidden="true"`. The row detail button names its event and carries `aria-expanded`.
 - Value options in the fields-panel popovers are buttons with `aria-pressed`, so applied values are announced; the Filter menu's own rows come from `FilterMenu`.
+- The log rows are one tab stop: Arrow Up and Arrow Down move between rows, Home and End jump to the first and last, and Enter opens the focused event's document, as a click on the row does.
 - The document drawer traps focus while open and closes on Escape; motion is turned off under `prefers-reduced-motion`.
-- Query: the bar is a `combobox` whose invalid state sets `aria-invalid` and points `aria-describedby` at the reason; the mixed AND / OR message and the saved-query confirmations are `role="status"`.
+- Query: `/` focuses the query bar from anywhere on the page, except while typing in a field; the bar is a `combobox` whose invalid state sets `aria-invalid` and points `aria-describedby` at the reason; the mixed AND / OR message and the saved-query confirmations are `role="status"`.
 - Sessions: the tabs follow the `Tabs` keyboard map (arrows, Home, End); F2 renames and Delete closes the focused tab, and the same actions sit in a named menu for pointer and screen-reader users; focus returns to the tab after rename or close.
 - EventDocument: Filter by and Exclude are toggle buttons (`aria-pressed`) named with the field and value; the match count of the document search is announced in a `role="status"`.
 

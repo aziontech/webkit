@@ -159,7 +159,7 @@
   const emit = defineEmits<{
     refresh: [event: MouseEvent]
     retry: [event: MouseEvent]
-    select: [event: MouseEvent, record: EventsExplorerEvent]
+    select: [event: MouseEvent | KeyboardEvent, record: EventsExplorerEvent]
     'load-more': [event: Event]
   }>()
 
@@ -719,7 +719,7 @@
     documentDrawerOpen.value = false
   }
 
-  const openDocument = (event: MouseEvent, row: EventRow) => {
+  const openDocument = (event: MouseEvent | KeyboardEvent, row: EventRow) => {
     selectedId.value = row.id
     documentDrawerOpen.value = !isWide.value
     emit('select', event, sourceEvents.value.find((record) => record.id === row.id) ?? row)

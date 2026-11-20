@@ -272,6 +272,12 @@
       removeOpen.value = true
     }
   }
+  const onRowOpen = (event: MouseEvent | KeyboardEvent, user: UsersUser) => {
+    if (event instanceof KeyboardEvent) onAction(event, 'view', user)
+  }
+  const onRowRemove = (event: KeyboardEvent, user: UsersUser) => {
+    if (!user.owner) onAction(event, 'remove', user)
+  }
   const remove = (event: Event) => {
     const user = pending.value
     if (!user) return
@@ -435,6 +441,8 @@
               sortable
               :bordered="false"
               aria-label="Users"
+              @row-click="onRowOpen"
+              @row-remove="onRowRemove"
             >
               <template #cell-name="{ row }">
                 <div class="flex min-w-0 items-center gap-(--spacing-xs)">

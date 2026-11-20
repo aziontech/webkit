@@ -114,6 +114,7 @@ Then delete `sample.ts` and its import.
 - The Switch is named Require MFA and the setting description explains the effect.
 - The row menu is named `Actions for <person>`; status is text, not color.
 - Both confirmations are dialogs that return focus to their trigger.
+- `/` focuses the property filter from anywhere on the page, except while typing in a field.
 
 ## States
 

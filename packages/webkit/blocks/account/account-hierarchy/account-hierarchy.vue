@@ -583,6 +583,7 @@
                   selectable
                   :bordered="false"
                   :aria-labelledby="`${uid}-resources`"
+                  @row-remove="(_event, row) => onRowAction('delete', row)"
                 >
                   <template #cell-name="{ row }">
                     <span class="flex min-w-0 items-center gap-(--spacing-xs)">

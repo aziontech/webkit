@@ -258,6 +258,9 @@
   const revokeOpen = ref(false)
   const deleteOpen = ref(false)
 
+  const removalOf = (row: TokenRow): DropdownMenuItemValue =>
+    !row.revoked && row.status !== 'Expired' ? 'revoke' : 'delete'
+
   const onAction = (value: DropdownMenuItemValue, row: TokenRow) => {
     pending.value = items.value.find((token) => token.id === row.id) ?? null
     if (value === 'revoke') revokeOpen.value = true
@@ -408,6 +411,7 @@
               sortable
               :bordered="false"
               aria-label="Personal tokens"
+              @row-remove="(_event, row) => onAction(removalOf(row), row)"
             >
               <template #cell-name="{ value }">
                 <span class="truncate text-label-sm text-(--text-default)">{{ value }}</span>

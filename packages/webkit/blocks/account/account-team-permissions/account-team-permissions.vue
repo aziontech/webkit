@@ -160,6 +160,10 @@
     emit('row-action', event, { value, team })
   }
 
+  const onRowOpen = (event: MouseEvent | KeyboardEvent, row: TeamRow) => {
+    if (event instanceof KeyboardEvent) onAction(event, 'edit', row)
+  }
+
   const remove = (event: MouseEvent) => {
     const team = pending.value
     if (!team) return
@@ -294,6 +298,8 @@
               sortable
               :bordered="false"
               aria-label="Teams"
+              @row-click="onRowOpen"
+              @row-remove="(event, row) => onAction(event, 'delete', row)"
             >
               <template #cell-name="{ row }">
                 <div class="flex min-w-0 items-center gap-(--spacing-xs)">

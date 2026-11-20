@@ -1,5 +1,6 @@
 import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
+import { nextTick } from 'vue'
 
 import TableViewEmpty from '../../../../blocks/view/view-table/variants/empty.vue'
 import TableViewFailed from '../../../../blocks/view/view-table/variants/error.vue'
@@ -81,5 +82,67 @@ describe('view/view-table block', () => {
     expect(view.emitted<unknown[]>('create')).toHaveLength(1)
     expect(view.emitted<unknown[]>('refresh')).toHaveLength(1)
     expect(view.container.querySelector('[aria-busy="true"]')).toBeNull()
+  })
+
+  describe('keyboard', () => {
+    const bodyRows = () =>
+      Array.from(document.body.querySelectorAll<HTMLElement>('[data-focus-row]'))
+    const key = (target: Element, init: ConstructorParameters<typeof KeyboardEvent>[1]) =>
+      target.dispatchEvent(
+        new KeyboardEvent('keydown', { bubbles: true, cancelable: true, ...init })
+      )
+
+    it('asks before deleting the focused row on Delete and then focuses the next row', async () => {
+      const view = render(ViewTable)
+      await waitFor(() => expect(bodyRows().length).toBeGreaterThan(2))
+      const doomed = bodyRows()[1]!
+      const doomedName = doomed.querySelector('a')!.textContent!.trim()
+      const nextName = bodyRows()[2]!.querySelector('a')!.textContent!.trim()
+      doomed.focus()
+      key(doomed, { key: 'Delete' })
+      const dialog = await waitFor(() => {
+        const el = document.body.querySelector<HTMLElement>('[role=alertdialog]')
+        expect(el).not.toBeNull()
+        return el!
+      })
+      expect(dialog.textContent).toContain(doomedName)
+      const phrase = dialog.querySelector<HTMLInputElement>('input')!
+      await fireEvent.update(phrase, doomedName)
+      const confirm = Array.from(dialog.querySelectorAll('button')).find(
+        (button) => button.textContent?.trim() === 'Delete resource'
+      )!
+      await waitFor(() => expect(confirm.hasAttribute('disabled')).toBe(false))
+      await fireEvent.click(confirm)
+      await waitFor(() => expect(document.body.querySelector('[role=alertdialog]')).toBeNull())
+      await waitFor(() => {
+        expect(document.activeElement?.hasAttribute('data-focus-row')).toBe(true)
+        expect(document.activeElement?.textContent).toContain(nextName)
+      })
+      expect(view.emitted<unknown[]>('delete')).toHaveLength(1)
+    })
+
+    it('opens the focused row on Enter as View details does', async () => {
+      const view = render(ViewTable)
+      await waitFor(() => expect(bodyRows().length).toBeGreaterThan(0))
+      const row = bodyRows()[0]!
+      row.focus()
+      key(row, { key: 'Enter' })
+      const emitted = view.emitted<[Event, { value: string }]>('row-action')
+      expect(emitted).toHaveLength(1)
+      expect(emitted[0]![0]).toBeInstanceOf(KeyboardEvent)
+      expect(emitted[0]![1].value).toBe('view')
+    })
+
+    it('focuses the filter on / and types / while in it', async () => {
+      const view = render(ViewTable)
+      await nextTick()
+      const field = view.getByRole('combobox', { name: 'Filter resources' })
+      key(document.body, { key: '/' })
+      await waitFor(() => expect(document.activeElement).toBe(field))
+      const event = new KeyboardEvent('keydown', { key: '/', bubbles: true, cancelable: true })
+      field.dispatchEvent(event)
+      expect(event.defaultPrevented).toBe(false)
+      expect(document.activeElement).toBe(field)
+    })
   })
 })

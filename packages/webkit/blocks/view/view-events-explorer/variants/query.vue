@@ -776,7 +776,7 @@
     documentDrawerOpen.value = false
   }
 
-  const openDocument = (_event: MouseEvent, row: EventRecord) => {
+  const openDocument = (_event: MouseEvent | KeyboardEvent, row: EventRecord) => {
     selectedId.value = row.id
     documentDrawerOpen.value = !isWide.value
   }
