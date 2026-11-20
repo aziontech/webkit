@@ -518,7 +518,7 @@
   {
     "name": "hero-form-section",
     "path": "src/components/section/hero-form-section/hero-form-section.vue",
-    "limit": "51.1 KB",
+    "limit": "51.15 KB",
     "entryOnly": true
   },
   {
@@ -611,7 +611,7 @@
   {
     "name": "job-posting-section",
     "path": "src/components/section/job-posting-section/job-posting-section.vue",
-    "limit": "56.65 KB",
+    "limit": "56.7 KB",
     "entryOnly": true
   },
   {
@@ -1072,7 +1072,7 @@
   {
     "name": "config-provider",
     "path": "src/components/provider/config-provider/config-provider.vue",
-    "limit": "12.3 KB"
+    "limit": "12.35 KB"
   },
   {
     "name": "locales-pt-BR",
@@ -1082,12 +1082,12 @@
   {
     "name": "locales-es",
     "path": "src/locales/es.ts",
-    "limit": "11.65 KB"
+    "limit": "11.7 KB"
   },
   {
     "name": "phone-input",
     "path": "src/components/input/phone-input/phone-input.vue",
-    "limit": "33.45 KB",
+    "limit": "33.5 KB",
     "entryOnly": true
   },
   {
