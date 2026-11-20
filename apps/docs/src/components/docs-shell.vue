@@ -109,13 +109,14 @@
             :label="t.search"
             @open="searchOpen = true"
           />
-          <LanguageSelect
-            v-model="settings.locale"
-            variant="ghost"
-            :options="LOCALES"
-            :aria-label="t.language"
-            class="shrink-0"
-          />
+          <div class="hidden shrink-0 sm:block">
+            <LanguageSelect
+              v-model="settings.locale"
+              variant="ghost"
+              :options="LOCALES"
+              :aria-label="t.language"
+            />
+          </div>
           <Tooltip :content="settings.dir === 'rtl' ? t.leftToRight : t.rightToLeft">
             <IconButton
               :icon="settings.dir === 'rtl' ? 'az az-align-left' : 'az az-align-right'"
