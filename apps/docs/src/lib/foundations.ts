@@ -4,7 +4,7 @@ export type FoundationPage = {
   summary: string
   tokens?: 'color' | 'spacing' | 'typography' | 'radius' | 'shadows' | 'motion' | 'z-index'
   markdown?: string
-  demo?: 'locale' | 'direction' | 'devices'
+  demo?: 'locale' | 'direction' | 'devices' | 'keyboard'
   view?: 'icons'
 }
 
@@ -92,6 +92,14 @@ export const FOUNDATIONS: FoundationPage[] = [
     title: 'Accessibility',
     summary: 'Role, keyboard, focus and motion are built in.',
     markdown: 'rules/webkit-accessibility.md'
+  },
+  {
+    slug: 'keyboard',
+    title: 'Keyboard',
+    summary:
+      'One set of keys on every console screen: focus on open, Esc, save, search and the ? list.',
+    markdown: 'rules/webkit-keyboard.md',
+    demo: 'keyboard'
   },
   {
     slug: 'site-pages',
