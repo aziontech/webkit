@@ -619,3 +619,9 @@ This register starts from the review of 12–16 November 2026 (192 rows: 178 don
 | KB-K11 | `ConsoleLayout` renders the app's one `ShortcutsDialog` and lists `⌘K` without binding it; the demos' focused shell mounts its own. | done | `console-layout.md`, `apps/demos/src/app.vue` |
 | KB-K12 | `DataTable` rows become a roving tab stop when the table has a `row-click` or `row-remove` listener: arrows, Home/End, Enter emits `row-click` (payload now `MouseEvent \| KeyboardEvent`), Space selects, Delete/Backspace emits the new `row-remove`; after the focused row leaves `data` and focus fell to the page, focus moves to the next row, else previous, else the table region. Blocks route `row-remove` through their existing confirm. | done | `data-table.md`, list blocks |
 | KB-K13 | Size budgets raised for the shared shortcut registry and the first-field focus (29 entries, `Budget-raise:` lines in the K4 report); `llms-full.txt` budget 2,320,000 to 2,345,000 bytes for the new keyboard guidance. | done | `.size-limit.json`, `build-llms.mjs` |
+
+## 2026-11-20 — Colour logos are paid per logo (audit round 4, lane R6)
+
+| ID     | Decision | Status | Where it lives |
+| ------ | -------- | ------ | -------------- |
+| R6-01  | `import '@aziontech/icons'` loads the icon font only. The colour logos (`az-color az-<name>`, about 85 KB gzip for the 120) ship as Tailwind v4 utilities in `@aziontech/icons/azionicons-color-utilities`, which `@aziontech/webkit/styles` imports, so an app compiles only the logos its sources or its WebKit files name. The whole set stays at `@aziontech/icons/azionicons-color` for apps without Tailwind and pages that show every logo; the docs icons page loads it lazily. The `css-icons` fixture in `.size-limit-css.json` budgets the icons CSS. | done | `packages/icons/scripts/build-color-css.mjs`, `packages/webkit/src/styles.css`, `packages/webkit/.size-limit-css.json`, `MIGRATION_V6.md` |
