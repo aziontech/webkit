@@ -443,7 +443,7 @@
   {
     "name": "console-trace-scene",
     "path": "src/assets/scenes/console-trace/console-trace-scene.vue",
-    "limit": "82.35 KB"
+    "limit": "82.7 KB"
   },
   {
     "name": "runtime-api-cloud",
@@ -627,7 +627,7 @@
   {
     "name": "listing-index-section",
     "path": "src/components/section/listing-index-section/listing-index-section.vue",
-    "limit": "40.45 KB",
+    "limit": "40.55 KB",
     "entryOnly": true
   },
   {
@@ -1757,13 +1757,13 @@
   {
     "name": "flow-diagram",
     "path": "src/components/data/flow-diagram/index.ts",
-    "limit": "21.55 KB",
+    "limit": "21.9 KB",
     "entryOnly": true
   },
   {
     "name": "flow-diagram-root",
     "path": "src/components/data/flow-diagram/flow-diagram.vue",
-    "limit": "19.3 KB",
+    "limit": "19.7 KB",
     "entryOnly": true
   },
   {
