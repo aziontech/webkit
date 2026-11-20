@@ -52,6 +52,10 @@ On the first load (`loading` with no `settings`), `Skeleton`s take the place of 
 
 Saving defaults, rebinding, creating, editing, cloning and deleting end in a toast; a rebind onto a shared setting is a warning. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
 
+### I. Shortcut keycap — `Kbd` (optional)
+
+A small `Kbd` (`aria-hidden`) inside the primary button shows its keyboard shortcut (⌘ S to save, ⌘ Enter to submit or run, Ctrl off Apple); the button carries the same keys in `aria-keyshortcuts`.
+
 ## Data
 
 The block takes its records through props and emits every action; it fetches nothing. `DeploymentSettingsProps`, `DeploymentSettingsSetting`, `DeploymentSettingsService` and the other types are exported from `account-deployment-settings.vue`, and `sample.ts` holds the sample settings, services and defaults the block renders when those props are left out (and never while `loading` is set).

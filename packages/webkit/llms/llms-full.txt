@@ -2470,6 +2470,7 @@ How every deploy in the account routes. A Deployment Setting holds a binding pol
 - G. Create and edit drawer — `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Field`, `Textarea`, `RadioGroup` (required)
 - H. Loading and no services — `Skeleton` (conditional)
 - Outcomes — through `toast`
+- I. Shortcut keycap — `Kbd` (optional)
 
 What each part takes: [blocks/account/account-deployment-settings.md](blocks/account/account-deployment-settings.md).
 
@@ -4031,6 +4032,7 @@ The drawer a platform deploys from, opened by Deploy on a service or a project. 
 - F. Project — `ToggleGroup`, `Item`, `Tag`, `Link`, `Tooltip`, `Popover`, `DropdownMenu` (required on a service)
 - G. Environment — `RadioGroup`, `Tag` (required)
 - H. Projects impacted and commit — `Item`, `Tag`, `Link`, `Tooltip`, `Popover`, `PanelFooter`, `Button` (required on a service)
+- I. Shortcut keycap — `Kbd` (optional)
 
 What each part takes: [blocks/create/create-deploy-drawer.md](blocks/create/create-deploy-drawer.md).
 
@@ -4526,6 +4528,7 @@ The right-side drawer that adds or edits something that only exists inside anoth
 - J. Footer — `PanelFooter`, `Button` (required)
 - K. Certificate import — `SettingsGroup`, `Field`, `Button`, `PanelFooter` (optional)
 - L. Discard guard — `ConfirmDialog` (required)
+- M. Shortcut keycap — `Kbd` (optional)
 
 What each part takes: [blocks/create/create-drawer.md](blocks/create/create-drawer.md).
 
@@ -4771,6 +4774,7 @@ The page a first-level resource is created on when everything it needs fits on o
 - E. Switch rows — `Switch` (optional)
 - F. Commit bar — `SaveBar`, `Button` (required)
 - G. Leaving with typed work — `useUnsavedChanges`, `ConfirmDialog` (required)
+- H. Shortcut keycap — `Kbd` (optional)
 
 What each part takes: [blocks/create/create-page.md](blocks/create/create-page.md).
 
@@ -4891,6 +4895,7 @@ The Review and deploy page of a release that carries several resources at once: 
 - F. Impact — `Card`, `ToggleGroup`, `Spinner`, `Skeleton`, `Alert`, `Button` (required)
 - G. Footer and commit — `SaveBar`, `Button`, `ConfirmDialog` (required)
 - Before the review: choosing the Deployment Settings
+- H. Shortcut keycap — `Kbd` (optional)
 
 What each part takes: [blocks/create/create-release-impact.md](blocks/create/create-release-impact.md).
 
@@ -6766,6 +6771,7 @@ The detail page of a resource that owns a long list of records, here a DNS zone.
 - I. Empty and no-match — `EmptyState`, `Button` (required)
 - J. Row actions — `TableCellActions`, `DropdownMenuGroup`, `DropdownMenuItem` (required)
 - K. Load failure — `Alert` (optional)
+- L. Shortcut keycap — `Kbd` (optional)
 
 What each part takes: [blocks/detail/detail-dns-zone.md](blocks/detail/detail-dns-zone.md).
 
@@ -7723,6 +7729,7 @@ The editing page of a service whose behavior lives in source code. The user writ
 - H. Field settings — `SettingsRow`, `Input`, `Select`, `Switch`, `Textarea`, `FieldError` (required)
 - I. Settings tab — `SettingsGroup`, `Card`, `Item`, `SettingsRow`, `Input`, `RadioGroup`, `Switch`, `FieldError` (required)
 - J. Save bar — `SaveBar`, `Button`, `Alert` (required)
+- K. Shortcut keycap — `Kbd` (optional)
 
 What each part takes: [blocks/edit/edit-function.md](blocks/edit/edit-function.md).
 
@@ -7856,6 +7863,7 @@ The settings page of one existing resource. The user comes here to change how th
 - I. Leave guard — `Tabs`, `SaveBar` (optional)
 - J. Changed elsewhere — `Button`, `SaveBar` (optional)
 - K. Danger zone — `SettingsGroup`, `Card`, `SettingsRow`, `Button`, `Input` (optional)
+- L. Shortcut keycap — `Kbd` (optional)
 
 What each part takes: [blocks/edit/edit-resource.md](blocks/edit/edit-resource.md).
 
@@ -8251,6 +8259,7 @@ A list of key and value pairs and the drawer that edits them, here environment v
 - L. List states — `EmptyState`, `Button` (required)
 - M. Delete confirmation — `ConfirmDialog`, `Alert`, `Input`, `Button` (required)
 - N. Network list drawer — `Drawer`, `SettingsGroup`, `ToggleGroup`, `Button`, `Textarea`, `FieldDescription`, `AttributeEditor`, `MultiSelect` (optional)
+- O. Shortcut keycap — `Kbd` (optional)
 
 What each part takes: [blocks/edit/edit-variables.md](blocks/edit/edit-variables.md).
 
@@ -8382,6 +8391,7 @@ The place the user goes to change how an account or a project behaves. They scan
 - C. Setting rows — `SettingsRow`, `Input`, `FieldError`, `Select`, `Switch` (required)
 - D. Save — `SaveBar`, `Button` (required)
 - E. Profile sections — `SettingsRow`, `Card`, `Item`, `Input`, `Select`, `Switch`, `Button` (Profile only)
+- F. Shortcut keycap — `Kbd` (optional)
 
 What each part takes: [blocks/settings/settings-form.md](blocks/settings/settings-form.md).
 
@@ -10371,6 +10381,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 - J. Bulk row delete — `Button`, `ConfirmDialog` (optional)
 - K. Create database page — `Input`, `Button` (optional)
 - L. Import data from CSV — `Drawer`, `Alert`, `DataTable`, `Button` (optional)
+- M. Shortcut keycap — `Kbd` (optional)
 
 What each part takes: [blocks/view/view-query-editor.md](blocks/view/view-query-editor.md).
 
@@ -10501,6 +10512,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 - E. Order controls — `Input`, `IconButton`, `Tooltip`, `DropdownMenu` (required)
 - F. Save bar and review — `SaveBar`, `Button`, `Dialog`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Alert` (required)
 - G. States — `EmptyState`, `Alert` (required)
+- H. Shortcut keycap — `Kbd` (optional)
 
 What each part takes: [blocks/view/view-rule-list.md](blocks/view/view-rule-list.md).
 

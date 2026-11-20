@@ -81,6 +81,10 @@ In the Certificate state the drawer imports a TLS certificate. A `ToggleGroup` p
 
 One `ConfirmDialog v-bind="guard.dialogProps"` from `useUnsavedChanges`, with Keep editing (focused) and a danger Discard changes. While the form differs from what it opened with, Escape, an overlay tap and Close open it instead of closing the drawer; a clean form closes at once.
 
+### M. Shortcut keycap — `Kbd` (optional)
+
+A small `Kbd` (`aria-hidden`) inside the primary button shows its keyboard shortcut (⌘ S to save, ⌘ Enter to submit or run, Ctrl off Apple); the button carries the same keys in `aria-keyshortcuts`.
+
 ## Data
 
 The block takes its option lists, its starting values and the save state through props and emits the values; it fetches and saves nothing. `CreateDrawerProps`, `CreateDrawerValues`, `CreateDrawerEnvironment` and `CreateDrawerCertificate` are exported from `create-drawer.vue`, and `sample.ts` holds the environments and certificates the block renders when those props are left out.

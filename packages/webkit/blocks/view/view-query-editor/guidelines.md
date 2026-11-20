@@ -74,6 +74,10 @@ An empty table's Data view offers Insert row and Import data from CSV, and accep
 
 Validation runs on Insert, as the state-form-validation rule says: a table column mapped twice, a NOT NULL column with no CSV column, nothing mapped, or every row failing shows a danger `Alert` in the section that has to change, and nothing is inserted. A primary key may stay unmapped (the database assigns it). While inserting, the fieldset is disabled and Insert spins; then the drawer closes, the rows appear in the table and a success toast `4 rows inserted into subscribers.` says how many rows were skipped and offers Undo. Importing rows is not a deploy, so Edit and Redeploy do not apply.
 
+### M. Shortcut keycap — `Kbd` (optional)
+
+A small `Kbd` (`aria-hidden`) inside the primary button shows its keyboard shortcut (⌘ S to save, ⌘ Enter to submit or run, Ctrl off Apple); the button carries the same keys in `aria-keyshortcuts`.
+
 ## Data
 
 The block takes its records through props and emits every action; it fetches nothing and runs no SQL. `QueryEditorTable`, `QueryEditorHistoryEntry`, `QueryEditorResult` and `QueryEditorProps` are exported from `view-query-editor.vue`, and `sample.ts` holds the sample tables, history and statement the block renders when `tables`, `history` or `sql` is left out (the tables and history never while `loading` or `error` is set).
