@@ -13,14 +13,51 @@ pnpm update:visual                    # rewrite the baselines (only inside the P
 
 ## What it covers
 
-| Spec                          | Pages                                                                                                      | Matrix                                                                                                                                                                                                                     |
-| ----------------------------- | ---------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `tests/examples.spec.ts`      | `/example?path=<dir>/<file>` — the first example of every component                                        | light 1280, dark 1280, light 390                                                                                                                                                                                           |
-| `tests/blocks.spec.ts`        | `/frame/<state>/<id>` — the primary state of every block                                                   | light 1280, dark 1280, dark 390; every state of `ai/*` in light and dark at 320 and 1280 and right to left                                                                                                                 |
-| `tests/demos.spec.ts`         | every demo route, plus the flows end to end                                                                | light 1280, dark 1280, dark 390; resource routes also light 1280 right to left in pt-BR                                                                                                                                    |
-| `tests/geometry.spec.ts`      | styled geometry that the unstyled unit suite cannot see                                                    | `Table` cell presets at 360 / 768 / 1280, a reorder mid-drag beside frozen columns, the open `OverflowCount`, `OtpInput` at 320, team permissions, the token reveal and the account switcher at 320 / 1920 / right to left |
-| `tests/doubled-lines.spec.ts` | the docs home and foundation pages, the first example of every component, the primary state of every block | light 390 and 1280: fails on two visible borders flush or 1px apart                                                                                                                                                        |
-| `tests/region-gaps.spec.ts`   | the same pages                                                                                             | light 390 and 1280: fails on two page regions (a surface over a surface or a heading) closer than `--layout-group-gap`                                                                                                     |
+| Spec                          | Pages                                                                                                      | Matrix                                                                                                                                                                                                                                                            |
+| ----------------------------- | ---------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `tests/examples.spec.ts`      | `/example?path=<dir>/<file>` — the first example of every component                                        | light 1280, dark 1280, light 390                                                                                                                                                                                                                                  |
+| `tests/blocks.spec.ts`        | `/frame/<state>/<id>` — the primary state of every block                                                   | light 1280, dark 1280, dark 390; every state of `ai/*` in light and dark at 320 and 1280 and right to left                                                                                                                                                        |
+| `tests/demos.spec.ts`         | every demo route, plus the flows end to end                                                                | light 1280, dark 1280, dark 390; resource routes also light 1280 right to left in pt-BR                                                                                                                                                                           |
+| `tests/geometry.spec.ts`      | styled geometry that the unstyled unit suite cannot see                                                    | `Table` cell presets at 360 / 768 / 1280, a reorder mid-drag beside frozen columns, the open `OverflowCount`, `OtpInput` at 320, team permissions, the token reveal and the account switcher at 320 / 1920 / right to left                                        |
+| `tests/doubled-lines.spec.ts` | the docs home and foundation pages, the first example of every component, the primary state of every block | light 390 and 1280: fails on two visible borders flush or 1px apart                                                                                                                                                                                               |
+| `tests/region-gaps.spec.ts`   | the same pages                                                                                             | light 390 and 1280: fails on two page regions (a surface over a surface or a heading) closer than `--layout-group-gap`                                                                                                                                            |
+| `tests/keyboard.spec.ts`      | the same pages, plus every demo route                                                                      | light 1280: presses Tab through the page and fails on a control Tab never reaches, a stop with no visible focus ring, focus trapped outside a modal, the wrong entry focus, or Esc that skips the unsaved-changes guard, unless `keyboard-baseline.json` lists it |
+
+## Keyboard sweep
+
+`tests/keyboard.spec.ts` checks the console keyboard standard (owner decision 2026-11-20) on every
+page it visits:
+
+- **Reach**: every visible, enabled control (`button`, `a[href]`, a field, `[tabindex]` of 0 or
+  more, `role=button|link|tab|menuitem|checkbox|switch|combobox`) is a Tab stop, outside inert or
+  hidden regions. In a roving group (`radiogroup`, `tablist`, `toolbar`, `menu`, `listbox`, `grid`,
+  `tree`) and among radios of one name, one member reached counts for the group. The sweep stops
+  after 200 stops or when focus wraps.
+- **Ring**: at every stop the control, its `::before` / `::after`, an ancestor (`focus-within`) or a
+  neighbour (`peer-` and `group-` styles) shows an outline, a box shadow or a ring layer that it did
+  not show before focus.
+- **Trap**: focus never cycles without leaving the page, unless a modal is open. A text area or an
+  editor gets one Escape before Tab, the way `CodeEditor` lets focus out; an iframe is stepped through.
+- **Entry**: a task starts with focus in its first field; a page you browse starts on the body or
+  the `h1`, or inside the overlay it opens. A block is a task when it is in the `create` group, and
+  its `block.json` can say otherwise with `"keyboard": { "entry": "field" | "page" }`.
+- **Esc**: a block whose `block.json` has `"keyboard": { "escape": "cancel" }`, and the demo's
+  Create Resource page, open the unsaved-changes guard when Esc is pressed on a dirty form; the demo
+  also leaves on Esc when the form is clean.
+
+Known violations are listed per page in `keyboard-baseline.json`, which only shrinks: a new
+violation fails the test, and a fixed one is reported as an annotation so the entry can go. The full
+sweep runs against built sites and rewrites the baseline, keeping only what still fails (`--init`
+records everything, for a first run only):
+
+```bash
+pnpm build:docs && pnpm build:demos
+node ../docs/scripts/serve.mjs &   # PORT=4173
+(cd ../demos && node node_modules/vite/bin/vite.js preview --port 4174) &
+node scripts/keyboard.mjs                    # the CI scope at 1280
+node scripts/keyboard.mjs --all --widths 390,1280   # every example and block state
+node scripts/keyboard.mjs --write-baseline   # drop entries that pass now
+```
 
 New examples, blocks and demo routes are picked up from the files: add an example to
 `packages/webkit/examples/<name>/` and the docs page and its visual test exist; the only manual
