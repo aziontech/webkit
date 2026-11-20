@@ -1,5 +1,5 @@
 import '../../../test/reflow.css'
-import '@aziontech/icons'
+import '../../../../../icons/dist/azionicons.css'
 
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'

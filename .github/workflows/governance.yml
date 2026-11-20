@@ -320,6 +320,9 @@ jobs:
       - name: Hook tests (spec, authoring and reference hooks)
         run: pnpm --filter @aziontech/webkit run test:hooks
 
+      - name: Build the icon font
+        run: pnpm build:icons
+
       - name: Toolkit unit tests (ESLint rules, catalog queries, CLI, stylelint config)
         run: pnpm --filter @aziontech/webkit test:toolkit
 
