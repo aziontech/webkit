@@ -143,6 +143,7 @@ Then delete `sample.ts` and its import.
 - The Impact region is `aria-busy` while loading and announces it in a `role="status"` line.
 - In ChooseSettings each group is a `role="group"` named by its heading, each choice card is a `label` around its `Checkbox`, the selected count is a polite live region, and a loading workloads count is read as text rather than a bare `Skeleton`.
 - The `ConfirmDialog` traps focus and returns it to Deploy release.
+- `⌘ Enter` (`Ctrl Enter` off Apple) opens the deploy confirmation, the same as Deploy release, and does nothing while the release can't be deployed; the release is only deployed from the confirmation. Deploy release carries `aria-keyshortcuts` and a `Kbd` keycap.
 
 ## States
 

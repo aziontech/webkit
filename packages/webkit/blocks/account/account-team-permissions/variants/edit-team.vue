@@ -13,6 +13,7 @@
   import Field from '@aziontech/webkit/field'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
+  import Kbd from '@aziontech/webkit/kbd'
   import PageHeader from '@aziontech/webkit/page-header'
   import SaveBar from '@aziontech/webkit/save-bar'
   import SettingsGroup from '@aziontech/webkit/settings-group'
@@ -239,6 +240,10 @@
       baseline.value = snapshot()
       toast.success(`Team "${form.name}" updated.`)
     }, 700)
+  }
+  const onSaveShortcut = () => {
+    if (!dirty.value || submitting.value) return
+    submit()
   }
 
   const discard = () => {
@@ -601,7 +606,10 @@
           </div>
         </div>
 
-        <SaveBar variant="centered">
+        <SaveBar
+          variant="centered"
+          @save="onSaveShortcut"
+        >
           <template v-if="dirty">You have unsaved changes.</template>
           <template #actions>
             <Button
@@ -624,13 +632,21 @@
               href="/account/teams"
             />
             <Button
-              label="Save changes"
               variant="primary"
               size="medium"
               type="submit"
               :disabled="!dirty"
               :loading="submitting"
-            />
+              aria-keyshortcuts="Meta+S Control+S"
+            >
+              Save changes
+              <Kbd
+                meta
+                size="small"
+                aria-hidden="true"
+                >S</Kbd
+              >
+            </Button>
           </template>
         </SaveBar>
       </form>

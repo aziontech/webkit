@@ -4,6 +4,7 @@
   import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
+  import Kbd from '@aziontech/webkit/kbd'
   import PageHeader from '@aziontech/webkit/page-header'
   import RadioGroup from '@aziontech/webkit/radio-group'
   import SaveBar from '@aziontech/webkit/save-bar'
@@ -81,6 +82,11 @@
       baseline.value = JSON.stringify(form)
       saving.value = false
     }, 900)
+  }
+
+  const onSaveShortcut = () => {
+    if (!dirty.value || saving.value) return
+    save()
   }
 
   const discard = () => Object.assign(form, JSON.parse(baseline.value) as typeof form)
@@ -268,7 +274,10 @@
       leave-active-class="transition-[translate,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
       leave-to-class="translate-y-2 opacity-0"
     >
-      <SaveBar v-if="dirty || saving">
+      <SaveBar
+        v-if="dirty || saving"
+        @save="onSaveShortcut"
+      >
         You have unsaved changes.
 
         <template #actions>
@@ -281,12 +290,20 @@
             @click="discard"
           />
           <Button
-            label="Save"
             variant="primary"
             size="medium"
             :loading="saving"
             @click="save"
-          />
+            aria-keyshortcuts="Meta+S Control+S"
+          >
+            Save
+            <Kbd
+              meta
+              size="small"
+              aria-hidden="true"
+              >S</Kbd
+            >
+          </Button>
         </template>
       </SaveBar>
     </Transition>

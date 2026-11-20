@@ -139,3 +139,51 @@ describe('settings/settings-form', () => {
     }
   )
 })
+
+const apple = /mac/i.test(navigator.platform || navigator.userAgent)
+const pressShortcut = (key: string, target: Element = document.body) => {
+  const event = new KeyboardEvent('keydown', {
+    key,
+    metaKey: apple,
+    ctrlKey: !apple,
+    bubbles: true,
+    cancelable: true
+  })
+  target.dispatchEvent(event)
+  return event
+}
+
+describe('settings/settings-form save shortcut', () => {
+  it('saves on Command S only once the form changes', async () => {
+    const view = render(SettingsForm)
+    const save = view.getByRole('button', { name: 'Save' })
+    expect(save.getAttribute('aria-keyshortcuts')).toBe('Meta+S Control+S')
+    expect(save.querySelector('[data-testid="kbd"]')).not.toBeNull()
+    const clean = pressShortcut('s')
+    expect(clean.defaultPrevented).toBe(true)
+    expect(view.emitted('submit')).toBeUndefined()
+    const email = view.getByLabelText('Email') as HTMLInputElement
+    await fireEvent.update(email, 'alex.morgan@example.com')
+    email.focus()
+    pressShortcut('s', email)
+    const [event, values] = view.emitted<unknown[]>('submit')?.[0] ?? []
+    expect(event).toBeInstanceOf(KeyboardEvent)
+    expect(values).toMatchObject({ email: 'alex.morgan@example.com' })
+  })
+
+  it('saves the Profile variant on Command S and leaves the browser save alone when clean', async () => {
+    const view = render(Profile)
+    expect(pressShortcut('s').defaultPrevented).toBe(false)
+    const name = view.getByRole('textbox', { name: 'Account name' }) as HTMLInputElement
+    await fireEvent.update(name, 'Acme Labs')
+    await fireEvent.update(
+      view.getByRole('textbox', { name: 'Billing emails' }),
+      'billing@example.com'
+    )
+    const save = await waitFor(() => view.getByRole('button', { name: 'Save' }))
+    expect(save.getAttribute('aria-keyshortcuts')).toBe('Meta+S Control+S')
+    name.focus()
+    expect(pressShortcut('s', name).defaultPrevented).toBe(true)
+    await waitFor(() => expect(save.getAttribute('aria-busy')).toBe('true'))
+  })
+})

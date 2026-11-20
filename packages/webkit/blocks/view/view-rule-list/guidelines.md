@@ -143,6 +143,7 @@ Then delete `sample.ts` and its import.
 - The `Switch` is named "Run <rule>"; its visible Active or Inactive text is hidden from the accessibility tree so the state is read once, from `aria-checked`.
 - The review dialog traps focus, returns it to Review changes on close, and is not dismissible while saving; the failure `Alert` is read when it appears.
 - Drop targets show a 2 px accent line and the dragged row fades; transitions respect reduced motion.
+- `⌘ S` (`Ctrl S` off Apple) opens Review changes while the rules have unsaved changes, the same as the `SaveBar`'s primary button, so the save still goes through the review; with no changes it does nothing. Review changes carries `aria-keyshortcuts` and a `Kbd` keycap.
 
 ## States
 

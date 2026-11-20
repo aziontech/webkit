@@ -22,6 +22,7 @@
   import InputGroupAddon from '@aziontech/webkit/input-group-addon'
   import InputGroupInput from '@aziontech/webkit/input-group-input'
   import InputGroupRoot from '@aziontech/webkit/input-group-root'
+  import Kbd from '@aziontech/webkit/kbd'
   import MultiSelect from '@aziontech/webkit/multi-select'
   import PageHeader from '@aziontech/webkit/page-header'
   import PanelBody from '@aziontech/webkit/panel-body'
@@ -38,6 +39,7 @@
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { useCollection } from '@aziontech/webkit/use-collection'
+  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { computed, nextTick, reactive, ref, useId, watch } from 'vue'
 
   import { sampleVariables } from './sample'
@@ -304,6 +306,10 @@
       pending.value = row
       deleteOpen.value = true
     }
+  }
+
+  const onRowOpen = (event: MouseEvent | KeyboardEvent, row: Variable) => {
+    if (event instanceof KeyboardEvent) onRowAction(event, 'edit', row)
   }
 
   const SECRET_MASK = '••••••••'
@@ -603,6 +609,15 @@
   })
 
   const formEl = ref<HTMLFormElement | null>(null)
+
+  useShortcuts({
+    keys: 'meta+enter',
+    label: 'Save variable',
+    group: 'Drawer',
+    element: formEl,
+    when: () => drawerOpen.value && !submitting.value,
+    handler: () => formEl.value?.requestSubmit()
+  })
   const finishSave = ({ variable, values }: VariablesSavePayload) => {
     if (variable) {
       onUpdated(variable.id, values)
@@ -796,6 +811,8 @@
                 :loading="loading || fetching"
                 sortable
                 :bordered="false"
+                @row-click="onRowOpen"
+                @row-remove="(event, row) => onRowAction(event, 'delete', row)"
               >
                 <template #cell-key="{ value }">
                   <div class="flex min-w-0 items-center gap-(--spacing-xs)">
@@ -1266,12 +1283,20 @@
             <div class="flex w-full flex-wrap items-center justify-between gap-(--spacing-sm)">
               <div class="flex min-w-0 items-center gap-(--spacing-sm)"></div>
               <Button
-                label="Save"
                 variant="primary"
                 size="medium"
                 :loading="submitting"
                 type="submit"
-              />
+                :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
+              >
+                Save
+                <Kbd
+                  meta
+                  key-name="enter"
+                  size="small"
+                  aria-hidden="true"
+                />
+              </Button>
             </div>
           </PanelFooter>
         </form>

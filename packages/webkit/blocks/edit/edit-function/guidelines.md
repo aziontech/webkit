@@ -155,6 +155,8 @@ Then delete `sample.ts` and its import.
 - The save bar's motion respects reduced motion.
 - In TestRun the vertical split is labeled "Code and test run", its panes "Source code" and "Test run", and the handle "Resize the test run". The pane is a `section` named by its Test run heading, with Trace and Logs as `h3`s.
 - The trace is a `treegrid` with one tab stop (see `Trace`); the running state is announced by a `status` line.
+- `⌘ S` (`Ctrl S` off Apple) saves while the `SaveBar` shows unsaved changes, the same as Save, and stops the browser's own save; with no changes it does nothing. Save carries `aria-keyshortcuts` and a `Kbd` keycap.
+- In the Test run variant, `⌘ Enter` (`Ctrl Enter` off Apple) runs the test from anywhere on the Code tab, the source editor included, where a bare `Enter` stays a new line. Run test carries `aria-keyshortcuts` and a `Kbd` keycap.
 
 ## States
 

@@ -14,6 +14,7 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
+  import Kbd from '@aziontech/webkit/kbd'
   import PageTabs from '@aziontech/webkit/page-tabs'
   import PanelBody from '@aziontech/webkit/panel-body'
   import PanelHeader from '@aziontech/webkit/panel-header'
@@ -23,6 +24,7 @@
   import Tag from '@aziontech/webkit/tag'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { computed, onMounted, ref, watch } from 'vue'
 
   import { sampleHistory, sampleSql, sampleTables } from './sample'
@@ -371,6 +373,13 @@
     if (!sql || running.value) return
     emit('run', event, sql)
   }
+  useShortcuts({
+    keys: 'meta+enter',
+    label: 'Run query',
+    group: 'Page',
+    when: () => !running.value,
+    handler: (event) => runQuery(event)
+  })
   const onHistoryAction = (event: Event, value: unknown, item: QueryEditorHistoryEntry) => {
     if (value === 'run') {
       applyTemplate(item.sql)
@@ -1070,13 +1079,21 @@ LIMIT 3;`
             />
           </div>
           <Button
-            label="Run query"
             variant="primary"
             size="medium"
             icon="az az-play"
             :loading="running"
+            :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
             @click="runQuery"
-          />
+          >
+            Run query
+            <Kbd
+              meta
+              key-name="enter"
+              size="small"
+              aria-hidden="true"
+            />
+          </Button>
           <div class="ms-auto flex items-center gap-(--spacing-xs)">
             <Button
               label="Prettify"

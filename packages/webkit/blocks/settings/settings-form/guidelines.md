@@ -135,6 +135,8 @@ Then delete `sample.ts` and its import.
 - Every control has an `aria-label` that repeats its row title; errors are linked with `aria-describedby` only while they show.
 - Disabling the `fieldset` while saving takes every control out of interaction at once; Save announces its loading state.
 - Focus order follows reading order: the rows from top to bottom, then Discard and Save.
+- `⌘ S` (`Ctrl S` off Apple) saves while the form has unsaved changes, the same as Save, and stops the browser's own save; with no changes it does nothing. Save carries `aria-keyshortcuts` and a `Kbd` keycap. The Profile variants answer it the same way.
+- The save-per-card and save-per-group variants have no `SaveBar` and bind no `⌘ S`: each card or group keeps its own Save button.
 
 ## States
 

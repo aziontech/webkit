@@ -15,6 +15,7 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
+  import Kbd from '@aziontech/webkit/kbd'
   import PageHeader from '@aziontech/webkit/page-header'
   import Pagination from '@aziontech/webkit/pagination-root'
   import PanelBody from '@aziontech/webkit/panel-body'
@@ -147,7 +148,7 @@
   })
 
   const emit = defineEmits<{
-    save: [event: MouseEvent, values: DeploymentSettingsDefaultsValues]
+    save: [event: MouseEvent | KeyboardEvent, values: DeploymentSettingsDefaultsValues]
     discard: [event: MouseEvent]
     refresh: [event: MouseEvent]
     bind: [binding: DeploymentSettingsBinding]
@@ -255,10 +256,14 @@
     Object.assign(form, saved)
     emit('discard', event)
   }
-  const save = (event: MouseEvent) => {
+  const save = (event: MouseEvent | KeyboardEvent) => {
     if (props.saving) return
     toast.dismiss(SAVE_TOAST)
     emit('save', event, { ...form })
+  }
+  const onSaveShortcut = (event: KeyboardEvent) => {
+    if (!dirty.value || props.saving) return
+    save(event)
   }
   const showFailure = () => {
     toast.error("The deployment defaults weren't saved.", {
@@ -1037,7 +1042,10 @@
         leave-active-class="transition-[translate,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
         leave-to-class="translate-y-2 opacity-0"
       >
-        <SaveBar v-if="dirty || saving">
+        <SaveBar
+          v-if="dirty || saving"
+          @save="onSaveShortcut"
+        >
           You have unsaved changes.
           <template #actions>
             <Button
@@ -1049,12 +1057,20 @@
               @click="discard"
             />
             <Button
-              label="Save"
               variant="primary"
               size="medium"
               :loading="saving"
               @click="save"
-            />
+              aria-keyshortcuts="Meta+S Control+S"
+            >
+              Save
+              <Kbd
+                meta
+                size="small"
+                aria-hidden="true"
+                >S</Kbd
+              >
+            </Button>
           </template>
         </SaveBar>
       </Transition>

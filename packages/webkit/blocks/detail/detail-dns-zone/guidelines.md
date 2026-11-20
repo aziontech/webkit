@@ -162,6 +162,7 @@ Then delete `sample.ts` and its import.
 - The property filter has an `aria-label` that matches its placeholder, "Filter records".
 - Focus order follows reading order: tabs, form fields, save bar; or heading actions, the property filter, toolbar, table, pagination.
 - Tab panel entrances respect reduced motion.
+- `⌘ S` (`Ctrl S` off Apple) saves the zone settings while the `SaveBar` shows unsaved changes, the same as Save, and stops the browser's own save; with no changes it does nothing. Save carries `aria-keyshortcuts` and a `Kbd` keycap.
 
 ## States
 

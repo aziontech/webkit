@@ -161,6 +161,7 @@ Then delete `sample.ts` and its import.
 - The leave dialog is a `ConfirmDialog`: focus moves into it, Escape and the close button count as Keep editing, and focus returns to the control that asked to leave.
 - The changed-elsewhere notice sits in a polite live region and takes focus after Reload so the change of values is announced; both its actions are real buttons.
 - The delete confirmation `Input` is labelled by the "Type … to confirm." sentence (`aria-labelledby`) and takes focus when the dialog opens.
+- `⌘ S` (`Ctrl S` off Apple) saves while the `SaveBar` shows unsaved changes, the same as Save, and stops the browser's own save; with no changes it does nothing. Save carries `aria-keyshortcuts` and a `Kbd` keycap. Every variant with a `SaveBar` answers it the same way.
 
 ## States
 

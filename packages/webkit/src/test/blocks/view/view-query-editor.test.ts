@@ -2,6 +2,7 @@ import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 
+import CreateDatabase from '../../../../blocks/view/view-query-editor/variants/create-database.vue'
 import ImportCsv from '../../../../blocks/view/view-query-editor/variants/import-csv.vue'
 import QueryEditorQuery from '../../../../blocks/view/view-query-editor/variants/query.vue'
 import ViewQueryEditor, {
@@ -202,5 +203,51 @@ describe('view/view-query-editor data contract', () => {
     expect(view.container.textContent).toContain("Couldn't load the rows of ledger.")
     await userEvent.click(view.getByRole('button', { name: 'Retry' }))
     expect(view.emitted('retry')).toHaveLength(1)
+  })
+})
+
+const apple = /mac/i.test(navigator.platform || navigator.userAgent)
+const pressShortcut = (key: string, target: Element = document.body) => {
+  const event = new KeyboardEvent('keydown', {
+    key,
+    metaKey: apple,
+    ctrlKey: !apple,
+    bubbles: true,
+    cancelable: true
+  })
+  target.dispatchEvent(event)
+  return event
+}
+
+describe('view/view-query-editor keyboard', () => {
+  it('runs the query on Command Enter from the SQL editor', async () => {
+    const view = render(ViewQueryEditor, { props: { tab: 'editor', sql: 'SELECT 1;' } })
+    const run = view.getByRole('button', { name: 'Run query' })
+    expect(run.getAttribute('aria-keyshortcuts')).toBe('Meta+Enter Control+Enter')
+    const editor = view.getByRole('textbox', { name: 'SQL editor' })
+    editor.focus()
+    const event = pressShortcut('Enter', editor)
+    expect(event.defaultPrevented).toBe(true)
+    const [[payload, sql]] = view.emitted('run') as [[Event, string]]
+    expect(payload).toBe(event)
+    expect(sql).toBe('SELECT 1;')
+  })
+
+  it('does not run on Command Enter while a query is in flight', () => {
+    const view = render(ViewQueryEditor, {
+      props: { tab: 'editor', sql: 'SELECT 1;', running: true }
+    })
+    pressShortcut('Enter')
+    expect(view.emitted('run')).toBeUndefined()
+  })
+
+  it('submits Create Database on Command Enter', async () => {
+    const view = render(CreateDatabase)
+    const name = view.getByRole('textbox', { name: 'Name' })
+    expect(
+      view.getByRole('button', { name: 'Create Database' }).getAttribute('aria-keyshortcuts')
+    ).toBe('Meta+Enter Control+Enter')
+    pressShortcut('Enter', name)
+    await waitFor(() => expect(view.getByText('This field is required.')).toBeTruthy())
   })
 })

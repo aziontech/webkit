@@ -156,6 +156,7 @@ Then delete `sample.ts` and its imports in the variants.
 - Toasts are announced by the app's `Toaster` region; the error toast keeps its Retry reachable by keyboard.
 - A section `Alert` sits in reading order before the fields it governs; its action is a real button reachable by keyboard.
 - In SectionRejected focus moves to the refused field with `preventScroll`, so the scroll to the section heading is the only movement; the reloading `Skeleton` has an accessible name.
+- In Section rejected, `⌘ S` (`Ctrl S` off Apple) submits the form, the same as Save, and stops the browser's own save; it does nothing while the form submits or a section reloads. Save carries `aria-keyshortcuts` and a `Kbd` keycap.
 
 ## States
 

@@ -4,6 +4,7 @@
   import Field from '@aziontech/webkit/field'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
+  import Kbd from '@aziontech/webkit/kbd'
   import Link from '@aziontech/webkit/link'
   import PageHeader from '@aziontech/webkit/page-header'
   import SaveBar from '@aziontech/webkit/save-bar'
@@ -67,6 +68,11 @@
           : 'The queue is off; every visitor goes straight in.'
       })
     }, 800)
+  }
+
+  const onSaveShortcut = () => {
+    if (!dirty.value || saving.value) return
+    save()
   }
 </script>
 
@@ -180,7 +186,10 @@
         </SettingsGroup>
       </form>
 
-      <SaveBar v-if="dirty">
+      <SaveBar
+        v-if="dirty"
+        @save="onSaveShortcut"
+      >
         Waiting Room settings changed, not saved yet.
         <template #actions>
           <Button
@@ -193,12 +202,20 @@
           />
           <Button
             type="button"
-            label="Save"
             variant="primary"
             size="medium"
             :loading="saving"
             @click="save"
-          />
+            aria-keyshortcuts="Meta+S Control+S"
+          >
+            Save
+            <Kbd
+              meta
+              size="small"
+              aria-hidden="true"
+              >S</Kbd
+            >
+          </Button>
         </template>
       </SaveBar>
     </div>

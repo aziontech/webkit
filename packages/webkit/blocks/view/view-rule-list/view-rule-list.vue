@@ -13,6 +13,7 @@
   import Field from '@aziontech/webkit/field'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
+  import Kbd from '@aziontech/webkit/kbd'
   import PageHeader from '@aziontech/webkit/page-header'
   import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
@@ -404,6 +405,10 @@
     saveFailed.value = false
     reviewOpen.value = true
   }
+  const onSaveShortcut = () => {
+    if (!dirty.value || saving.value || reviewOpen.value) return
+    openReview()
+  }
   const save = (event: MouseEvent) => {
     if (saving.value) return
     saveFailed.value = false
@@ -769,7 +774,10 @@
         </p>
       </section>
 
-      <SaveBar v-if="dirty">
+      <SaveBar
+        v-if="dirty"
+        @save="onSaveShortcut"
+      >
         {{ changeCount }} {{ changeCount === 1 ? 'change' : 'changes' }} to the rules, not saved
         yet.
         <template #actions>
@@ -783,12 +791,20 @@
           />
           <Button
             type="button"
-            label="Review changes"
             variant="primary"
             size="medium"
             :disabled="saving"
             @click="openReview"
-          />
+            aria-keyshortcuts="Meta+S Control+S"
+          >
+            Review changes
+            <Kbd
+              meta
+              size="small"
+              aria-hidden="true"
+              >S</Kbd
+            >
+          </Button>
         </template>
       </SaveBar>
     </div>

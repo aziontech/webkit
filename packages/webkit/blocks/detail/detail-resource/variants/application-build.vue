@@ -16,6 +16,7 @@
   import Input from '@aziontech/webkit/input'
   import InputGroupRoot from '@aziontech/webkit/input-group-root'
   import Item from '@aziontech/webkit/item'
+  import Kbd from '@aziontech/webkit/kbd'
   import Link from '@aziontech/webkit/link'
   import PageTabs from '@aziontech/webkit/page-tabs'
   import PanelBody from '@aziontech/webkit/panel-body'
@@ -145,6 +146,10 @@
   })
   guard.commit()
   const dirty = guard.isDirty
+  const onSaveShortcut = () => {
+    if (!dirty.value || saving.value) return
+    commitSave()
+  }
   const leaveDialog = guard.dialogProps
   const leaveLabels = guard.labels
 
@@ -467,7 +472,10 @@
           leave-active-class="transition-[translate,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
           leave-to-class="translate-y-2 opacity-0"
         >
-          <SaveBar v-if="dirty || saving">
+          <SaveBar
+            v-if="dirty || saving"
+            @save="onSaveShortcut"
+          >
             Build settings changed.
             <span class="text-(--text-muted)">Saving applies them to the next build.</span>
             <template #actions>
@@ -480,12 +488,20 @@
                 @click="guard.discard()"
               />
               <Button
-                label="Save"
                 variant="primary"
                 size="medium"
                 :loading="saving"
                 @click="commitSave"
-              />
+                aria-keyshortcuts="Meta+S Control+S"
+              >
+                Save
+                <Kbd
+                  meta
+                  size="small"
+                  aria-hidden="true"
+                  >S</Kbd
+                >
+              </Button>
             </template>
           </SaveBar>
         </Transition>

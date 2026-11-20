@@ -178,6 +178,8 @@ Then delete `sample.ts` and its import.
 - `ToggleGroup`s are named ("Table view", "Result view") and each paged table names its own pagination.
 - The templates drawer traps focus while open and closes on Escape.
 - In the import drawer each mapping `Select` is named `Table column for <CSV column>`, the mapping and the per-line errors are named lists, and the ready count is a polite live region, so changing a mapping announces the new count.
+- `⌘ Enter` (`Ctrl Enter` off Apple) runs the query from anywhere on the page, the SQL editor included, where a bare `Enter` stays a new line; it does nothing while a query runs. Run query carries `aria-keyshortcuts` and a `Kbd` keycap.
+- Create Database opens with focus in the Name field, and `⌘ Enter` (`Ctrl Enter` off Apple) submits it from any field, the same as Create Database.
 
 ## States
 

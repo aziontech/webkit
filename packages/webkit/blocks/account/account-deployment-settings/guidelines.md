@@ -137,6 +137,7 @@ Then delete `sample.ts` and its import, and persist `bind`, `create`, `update`, 
 - The filter is named Filter Deployment Settings; Refresh and Download CSV are icon buttons with an accessible name and a tooltip; the row menu is named `Actions for <setting>`.
 - The Services cell is focusable so its tooltip with the service names is reachable by keyboard.
 - The SaveBar motion has a `motion-reduce` fallback.
+- `⌘ S` (`Ctrl S` off Apple) saves the deployment defaults while the `SaveBar` shows unsaved changes, the same as Save, and stops the browser's own save; with no changes it does nothing. Save carries `aria-keyshortcuts` and a `Kbd` keycap.
 
 ## States
 

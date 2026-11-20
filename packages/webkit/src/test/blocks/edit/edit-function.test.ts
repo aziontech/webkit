@@ -7,15 +7,22 @@ import EditFunction, {
 } from '../../../../blocks/edit/edit-function/edit-function.vue'
 import FunctionEditorArguments from '../../../../blocks/edit/edit-function/variants/arguments.vue'
 import FunctionEditorSaving from '../../../../blocks/edit/edit-function/variants/saving.vue'
+import FunctionEditorTestRun from '../../../../blocks/edit/edit-function/variants/test-run.vue'
 import { useToastRegion } from '../../toast-region'
 
 useToastRegion()
 
 const wait = { timeout: 4000 }
 
+const visibleText = (element: HTMLElement) => {
+  const copy = element.cloneNode(true) as HTMLElement
+  copy.querySelectorAll('[aria-hidden="true"]').forEach((node) => node.remove())
+  return copy.textContent?.trim()
+}
+
 const buttonIn = (root: Document | HTMLElement, text: string) =>
   Array.from(root.querySelectorAll('button')).find(
-    (button) => button.textContent?.trim() === text
+    (button) => visibleText(button) === text
   ) as HTMLButtonElement
 
 afterEach(() => {
@@ -152,5 +159,46 @@ describe('edit-function#Saving', () => {
     render(FunctionEditorSaving)
     await waitFor(() => expect(buttonIn(document, 'Discard').disabled).toBe(true))
     expect(buttonIn(document, 'Save').getAttribute('aria-busy')).toBe('true')
+  })
+})
+
+const apple = /mac/i.test(navigator.platform || navigator.userAgent)
+const pressShortcut = (key: string, target: Element = document.body) => {
+  const event = new KeyboardEvent('keydown', {
+    key,
+    metaKey: apple,
+    ctrlKey: !apple,
+    bubbles: true,
+    cancelable: true
+  })
+  target.dispatchEvent(event)
+  return event
+}
+
+describe('edit-function keyboard', () => {
+  const argumentsProps = { defaultDocument: 'arguments' as const, defaultOpenKeys: ['field-1'] }
+
+  it('saves on Command S only while the function has changes', async () => {
+    const view = render(EditFunction, { props: argumentsProps })
+    expect(pressShortcut('s').defaultPrevented).toBe(false)
+    expect(view.emitted('submit')).toBeUndefined()
+    await userEvent.click(view.getByRole('button', { name: 'Move quality up' }))
+    const save = await waitFor(() => buttonIn(document, 'Save'))
+    expect(save.getAttribute('aria-keyshortcuts')).toBe('Meta+S Control+S')
+    expect(save.querySelector('[data-testid="kbd"]')).not.toBeNull()
+    const event = pressShortcut('s')
+    expect(event.defaultPrevented).toBe(true)
+    const emitted = view.emitted<unknown[]>('submit') as [Event, FunctionEditorValues][]
+    expect(emitted).toHaveLength(1)
+    expect(emitted[0]![0]).toBe(event)
+  })
+
+  it('runs the test on Command Enter in the Test run variant', async () => {
+    const view = render(FunctionEditorTestRun)
+    const run = view.getByRole('button', { name: 'Run test' })
+    expect(run.getAttribute('aria-keyshortcuts')).toBe('Meta+Enter Control+Enter')
+    expect(run.getAttribute('aria-busy')).not.toBe('true')
+    expect(pressShortcut('Enter').defaultPrevented).toBe(true)
+    await waitFor(() => expect(run.getAttribute('aria-busy')).toBe('true'))
   })
 })

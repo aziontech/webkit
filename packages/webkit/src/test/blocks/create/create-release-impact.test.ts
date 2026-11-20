@@ -96,3 +96,26 @@ describe('create-release-impact', () => {
     expect(screen.queryByText('No Deployment Settings match')).toBeNull()
   })
 })
+
+const apple = /mac/i.test(navigator.platform || navigator.userAgent)
+const pressShortcut = (key: string, target: Element = document.body) => {
+  const event = new KeyboardEvent('keydown', {
+    key,
+    metaKey: apple,
+    ctrlKey: !apple,
+    bubbles: true,
+    cancelable: true
+  })
+  target.dispatchEvent(event)
+  return event
+}
+
+describe('create-release-impact keyboard', () => {
+  it('opens the deploy confirmation on Command Enter', async () => {
+    render(CreateReleaseImpact)
+    const deploy = screen.getByRole('button', { name: /Deploy release/ })
+    expect(deploy.getAttribute('aria-keyshortcuts')).toBe('Meta+Enter Control+Enter')
+    expect(pressShortcut('Enter').defaultPrevented).toBe(true)
+    expect(await screen.findByRole('alertdialog')).toBeTruthy()
+  })
+})
