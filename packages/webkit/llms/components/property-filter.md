@@ -92,6 +92,7 @@
 ## Accessibility
 
 - Visible focus: the field's own `focus-within` ring (from `input`); tokens and buttons keep theirs.
+- Page search key: while mounted and not `disabled`, the filter registers `/` with `useShortcuts` (listed in `ShortcutsDialog` as `propertyFilter.focusShortcut`, Focus search), so `/` focuses the field from anywhere on the page, never while typing in another field, with `⌘`, `Ctrl` or `Alt` held, or from inside a modal layer that does not hold the filter (the console keyboard standard, `rules/webkit-keyboard.md`). Tests: `property-filter.test.ts` › page search key.
 - Keyboard map (query mode): typing opens the suggestions for the word at the caret; `ArrowDown`/`ArrowUp` move the active option (wrapping); `Enter` applies the active option (it replaces the word and moves the caret after it) or submits the query; `Escape` closes the suggestions, then clears the text; `ArrowLeft`/`ArrowRight`, `Home`/`End` and clicks move the caret and the suggestions follow it; `Backspace` only edits text.
 - In query mode an invalid query sets `aria-invalid` on the field and `aria-describedby` to the message, which sits in a polite live region under the field; the token group is not rendered.
 - Keyboard map (tokens mode): typing opens the suggestions; `ArrowDown`/`ArrowUp` move the active option (wrapping); `Enter` applies the active option or commits the typed text; `Escape` closes the suggestions, then clears the text; `Backspace` in an empty field removes the last token (with `grouped`: cancels a pending new group first, then removes the last token of the last group).
@@ -116,6 +117,7 @@
 | Key                                                    | English source                                                                                | Override prop |
 | ------------------------------------------------------ | --------------------------------------------------------------------------------------------- | ------------- |
 | `propertyFilter.label`                                 | Filter                                                                                        | `ariaLabel`   |
+| `propertyFilter.focusShortcut`                         | Focus search                                                                                  | —             |
 | `propertyFilter.placeholder`                           | Filter by property or text                                                                    | `placeholder` |
 | `propertyFilter.suggestions`                           | Suggestions                                                                                   | —             |
 | `propertyFilter.useText`                               | Use: “{text}”                                                                                 | —             |

@@ -11455,8 +11455,13 @@
    "events": [
     {
      "name": "row-click",
-     "payload": "(event: MouseEvent, row: TRow)",
-     "notes": "Fires when a rendered row is clicked. `event` is the click; `row` is the clicked record."
+     "payload": "(event: MouseEvent | KeyboardEvent, row: TRow)",
+     "notes": "Fires when a rendered row is clicked, or when `Enter` is pressed on a focused row (keyboard rows, below). `event` is the click or the key press; `row` is the record."
+    },
+    {
+     "name": "row-remove",
+     "payload": "(event: KeyboardEvent, row: TRow)",
+     "notes": "`Delete` (or `Backspace`, which a Mac keyboard's delete key sends) was pressed on a focused row. The table removes nothing: the app asks first (a `ConfirmDialog`) and then drops the record from `data`."
     },
     {
      "name": "filter-apply",
@@ -19417,6 +19422,13 @@
      "default": "'floating'",
      "required": "false",
      "doc": "How the bar sits at the bottom of its scroll region. See the variant table below."
+    }
+   ],
+   "events": [
+    {
+     "name": "save",
+     "payload": "(event: KeyboardEvent)",
+     "notes": ""
     }
    ],
    "slots": [
@@ -31916,6 +31928,7 @@
     "IconButton",
     "Input",
     "Item",
+    "Kbd",
     "PageHeader",
     "Pagination",
     "PanelBody",
@@ -31956,6 +31969,7 @@
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
     "@aziontech/webkit/item",
+    "@aziontech/webkit/kbd",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/pagination-root",
     "@aziontech/webkit/panel-body",
@@ -32526,6 +32540,7 @@
     "Field",
     "IconButton",
     "Input",
+    "Kbd",
     "PageHeader",
     "PropertyFilter",
     "SaveBar",
@@ -32539,7 +32554,8 @@
     "Textarea",
     "toast",
     "Tooltip",
-    "use-collection"
+    "use-collection",
+    "use-shortcuts"
    ],
    "imports": [
     "@aziontech/webkit/alert",
@@ -32559,6 +32575,7 @@
     "@aziontech/webkit/field",
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
+    "@aziontech/webkit/kbd",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/property-filter",
     "@aziontech/webkit/save-bar",
@@ -32572,7 +32589,8 @@
     "@aziontech/webkit/textarea",
     "@aziontech/webkit/toast",
     "@aziontech/webkit/tooltip",
-    "@aziontech/webkit/use-collection"
+    "@aziontech/webkit/use-collection",
+    "@aziontech/webkit/use-shortcuts"
    ],
    "primary": "Default",
    "guidelinesSummary": "Who can do what in the account. An admin keeps one team per role (Administrators, Developers, Security, Finance), sees what each grants and how many people it covers, and creates or edits a team by ticking View and Edit per resource in one matrix. People get permissions only through teams; nothing is granted per person, so the list of teams is the whole access model. The list is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`. Create Team and Edit Team are full pages in the creation frame instead (building block I).",
@@ -33398,6 +33416,7 @@
     "EmptyState",
     "Input",
     "Item",
+    "Kbd",
     "Link",
     "PanelBody",
     "PanelFooter",
@@ -33411,7 +33430,8 @@
     "Tag",
     "toast",
     "ToggleGroup",
-    "Tooltip"
+    "Tooltip",
+    "use-shortcuts"
    ],
    "imports": [
     "@aziontech/webkit/accordion",
@@ -33427,6 +33447,7 @@
     "@aziontech/webkit/empty-state",
     "@aziontech/webkit/input",
     "@aziontech/webkit/item",
+    "@aziontech/webkit/kbd",
     "@aziontech/webkit/link",
     "@aziontech/webkit/panel-body",
     "@aziontech/webkit/panel-footer",
@@ -33440,7 +33461,8 @@
     "@aziontech/webkit/tag",
     "@aziontech/webkit/toast",
     "@aziontech/webkit/toggle-group",
-    "@aziontech/webkit/tooltip"
+    "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/use-shortcuts"
    ],
    "primary": "Service",
    "guidelinesSummary": "The drawer a platform deploys from, opened by Deploy on a service or a project. The user is about to put a version into traffic and needs to confirm exactly what goes out (each resource and dependency at a version), where it goes (a project and one of its environments) and what else it reaches (every project that shares the environment's Deployment Settings). One Deploy at the foot commits all of it.",
@@ -33661,6 +33683,7 @@
     "InputGroupInput",
     "InputGroupRoot",
     "Item",
+    "Kbd",
     "Link",
     "Select",
     "Skeleton",
@@ -33669,6 +33692,7 @@
     "Tooltip",
     "use-escape-to-cancel",
     "use-locale",
+    "use-shortcuts",
     "use-unsaved-changes"
    ],
    "imports": [
@@ -33689,6 +33713,7 @@
     "@aziontech/webkit/input-group-input",
     "@aziontech/webkit/input-group-root",
     "@aziontech/webkit/item",
+    "@aziontech/webkit/kbd",
     "@aziontech/webkit/link",
     "@aziontech/webkit/select",
     "@aziontech/webkit/skeleton",
@@ -33697,6 +33722,7 @@
     "@aziontech/webkit/tooltip",
     "@aziontech/webkit/use-escape-to-cancel",
     "@aziontech/webkit/use-locale",
+    "@aziontech/webkit/use-shortcuts",
     "@aziontech/webkit/use-unsaved-changes"
    ],
    "primary": "ConnectGit",
@@ -33830,6 +33856,7 @@
     "Input",
     "InputGroup",
     "Item",
+    "Kbd",
     "KeyValueList",
     "Link",
     "NumberInput",
@@ -33849,6 +33876,7 @@
     "ToggleGroup",
     "Tooltip",
     "use-locale",
+    "use-shortcuts",
     "use-unsaved-changes"
    ],
    "imports": [
@@ -33873,6 +33901,7 @@
     "@aziontech/webkit/input",
     "@aziontech/webkit/input-group",
     "@aziontech/webkit/item",
+    "@aziontech/webkit/kbd",
     "@aziontech/webkit/key-value-list",
     "@aziontech/webkit/link",
     "@aziontech/webkit/number-input",
@@ -33892,6 +33921,7 @@
     "@aziontech/webkit/toggle-group",
     "@aziontech/webkit/tooltip",
     "@aziontech/webkit/use-locale",
+    "@aziontech/webkit/use-shortcuts",
     "@aziontech/webkit/use-unsaved-changes"
    ],
    "primary": "Default",
@@ -34071,6 +34101,7 @@
     "IconButton",
     "Input",
     "Item",
+    "Kbd",
     "MultiSelect",
     "NumberInput",
     "PageHeader",
@@ -34085,6 +34116,7 @@
     "Textarea",
     "toast",
     "use-escape-to-cancel",
+    "use-shortcuts",
     "use-unsaved-changes"
    ],
    "imports": [
@@ -34101,6 +34133,7 @@
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
     "@aziontech/webkit/item",
+    "@aziontech/webkit/kbd",
     "@aziontech/webkit/multi-select",
     "@aziontech/webkit/number-input",
     "@aziontech/webkit/page-header",
@@ -34115,6 +34148,7 @@
     "@aziontech/webkit/textarea",
     "@aziontech/webkit/toast",
     "@aziontech/webkit/use-escape-to-cancel",
+    "@aziontech/webkit/use-shortcuts",
     "@aziontech/webkit/use-unsaved-changes"
    ],
    "primary": "Default",
@@ -34172,6 +34206,7 @@
     "EmptyState",
     "Field",
     "Input",
+    "Kbd",
     "OverflowCount",
     "PageHeader",
     "SaveBar",
@@ -34182,7 +34217,8 @@
     "Tag",
     "toast",
     "ToggleGroup",
-    "Tooltip"
+    "Tooltip",
+    "use-shortcuts"
    ],
    "imports": [
     "@aziontech/webkit/accordion",
@@ -34195,6 +34231,7 @@
     "@aziontech/webkit/empty-state",
     "@aziontech/webkit/field",
     "@aziontech/webkit/input",
+    "@aziontech/webkit/kbd",
     "@aziontech/webkit/overflow-count",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/save-bar",
@@ -34205,7 +34242,8 @@
     "@aziontech/webkit/tag",
     "@aziontech/webkit/toast",
     "@aziontech/webkit/toggle-group",
-    "@aziontech/webkit/tooltip"
+    "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/use-shortcuts"
    ],
    "primary": "Ready",
    "guidelinesSummary": "The Review and deploy page of a release that carries several resources at once: a service, the policy in front of it, its storage, its error page and every dependency they reference. The user is about to put all of it into traffic and needs to see, before deploying, which version of each resource goes out, which dependencies go with it, and every Deployment Setting, environment and project the release reaches. One Deploy release at the foot commits it, after one confirmation.",
@@ -34378,6 +34416,7 @@
     "toast",
     "ToggleGroup",
     "use-escape-to-cancel",
+    "use-shortcuts",
     "use-unsaved-changes",
     "Wizard"
    ],
@@ -34411,6 +34450,7 @@
     "@aziontech/webkit/toast",
     "@aziontech/webkit/toggle-group",
     "@aziontech/webkit/use-escape-to-cancel",
+    "@aziontech/webkit/use-shortcuts",
     "@aziontech/webkit/use-unsaved-changes",
     "@aziontech/webkit/wizard"
    ],
@@ -35575,6 +35615,7 @@
     "Input",
     "InputGroupRoot",
     "ItemList",
+    "Kbd",
     "PageHeader",
     "PageTabs",
     "PanelBody",
@@ -35617,6 +35658,7 @@
     "@aziontech/webkit/input",
     "@aziontech/webkit/input-group-root",
     "@aziontech/webkit/item-list",
+    "@aziontech/webkit/kbd",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/page-tabs",
     "@aziontech/webkit/panel-body",
@@ -35951,6 +35993,7 @@
     "Input",
     "InputGroupRoot",
     "Item",
+    "Kbd",
     "Link",
     "PageHeader",
     "PageTabs",
@@ -35995,6 +36038,7 @@
     "@aziontech/webkit/input",
     "@aziontech/webkit/input-group-root",
     "@aziontech/webkit/item",
+    "@aziontech/webkit/kbd",
     "@aziontech/webkit/link",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/page-tabs",
@@ -36337,6 +36381,7 @@
     "IconButton",
     "Input",
     "Item",
+    "Kbd",
     "KeyValueList",
     "Link",
     "LogViewerContent",
@@ -36358,7 +36403,8 @@
     "toast",
     "ToggleGroup",
     "Tooltip",
-    "Trace"
+    "Trace",
+    "use-shortcuts"
    ],
    "imports": [
     "@aziontech/webkit/alert",
@@ -36372,6 +36418,7 @@
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
     "@aziontech/webkit/item",
+    "@aziontech/webkit/kbd",
     "@aziontech/webkit/key-value-list",
     "@aziontech/webkit/link",
     "@aziontech/webkit/log-viewer-content",
@@ -36393,7 +36440,8 @@
     "@aziontech/webkit/toast",
     "@aziontech/webkit/toggle-group",
     "@aziontech/webkit/tooltip",
-    "@aziontech/webkit/trace"
+    "@aziontech/webkit/trace",
+    "@aziontech/webkit/use-shortcuts"
    ],
    "primary": "Code",
    "guidelinesSummary": "The editing page of a service whose behavior lives in source code. The user writes and saves the code, defines the argument form each instance of the service asks for (its fields, types and defaults), and adjusts the service's settings. The editor fills the page so the code has room, and one save bar commits code, arguments and settings together. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header with the Services breadcrumb, the ⌘K palette and the `main`. The editor pins its own panes, so its root carries `data-layout-fill`: the layout's `main` stops scrolling and the root fills it (`h-dvh` only sizes a standalone preview).",
@@ -36510,6 +36558,7 @@
     "IconButton",
     "Input",
     "Item",
+    "Kbd",
     "Link",
     "MultiSelect",
     "NumberInput",
@@ -36552,6 +36601,7 @@
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
     "@aziontech/webkit/item",
+    "@aziontech/webkit/kbd",
     "@aziontech/webkit/link",
     "@aziontech/webkit/multi-select",
     "@aziontech/webkit/number-input",
@@ -36880,6 +36930,7 @@
     "InputGroupAddon",
     "InputGroupInput",
     "InputGroupRoot",
+    "Kbd",
     "MultiSelect",
     "PageHeader",
     "PanelBody",
@@ -36895,7 +36946,8 @@
     "toast",
     "ToggleGroup",
     "Tooltip",
-    "use-collection"
+    "use-collection",
+    "use-shortcuts"
    ],
    "imports": [
     "@aziontech/webkit/alert",
@@ -36921,6 +36973,7 @@
     "@aziontech/webkit/input-group-addon",
     "@aziontech/webkit/input-group-input",
     "@aziontech/webkit/input-group-root",
+    "@aziontech/webkit/kbd",
     "@aziontech/webkit/multi-select",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/panel-body",
@@ -36936,7 +36989,8 @@
     "@aziontech/webkit/toast",
     "@aziontech/webkit/toggle-group",
     "@aziontech/webkit/tooltip",
-    "@aziontech/webkit/use-collection"
+    "@aziontech/webkit/use-collection",
+    "@aziontech/webkit/use-shortcuts"
    ],
    "primary": "List",
    "guidelinesSummary": "A list of key and value pairs and the drawer that edits them, here environment variables. The user scans the variables already defined, then opens Create Variable to type or paste several pairs at once, mark the sensitive ones as secret, and select where they apply (the whole account, or specific environments, projects, services or policies) before saving them in one step. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header, the ⌘K palette and the `main`.",
@@ -37018,6 +37072,7 @@
     "FieldError",
     "Input",
     "Item",
+    "Kbd",
     "Link",
     "PageHeader",
     "SaveBar",
@@ -37041,6 +37096,7 @@
     "@aziontech/webkit/field-error",
     "@aziontech/webkit/input",
     "@aziontech/webkit/item",
+    "@aziontech/webkit/kbd",
     "@aziontech/webkit/link",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/save-bar",
@@ -37763,6 +37819,7 @@
     "IconButton",
     "Input",
     "Item",
+    "Kbd",
     "MultiSelect",
     "NumberInput",
     "PageHeader",
@@ -37791,6 +37848,7 @@
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
     "@aziontech/webkit/item",
+    "@aziontech/webkit/kbd",
     "@aziontech/webkit/multi-select",
     "@aziontech/webkit/number-input",
     "@aziontech/webkit/page-header",
@@ -38418,6 +38476,7 @@
     "Input",
     "IntegrationCard",
     "Item",
+    "Kbd",
     "KeyValueList",
     "Link",
     "PageHeader",
@@ -38451,6 +38510,7 @@
     "@aziontech/webkit/input",
     "@aziontech/webkit/integration-card",
     "@aziontech/webkit/item",
+    "@aziontech/webkit/kbd",
     "@aziontech/webkit/key-value-list",
     "@aziontech/webkit/link",
     "@aziontech/webkit/page-header",
@@ -38565,6 +38625,7 @@
     "IconButton",
     "Input",
     "Item",
+    "Kbd",
     "PageHeader",
     "PageTabs",
     "PanelBody",
@@ -38581,7 +38642,8 @@
     "Tag",
     "toast",
     "ToggleGroup",
-    "Tooltip"
+    "Tooltip",
+    "use-shortcuts"
    ],
    "imports": [
     "@aziontech/webkit/alert",
@@ -38606,6 +38668,7 @@
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
     "@aziontech/webkit/item",
+    "@aziontech/webkit/kbd",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/page-tabs",
     "@aziontech/webkit/panel-body",
@@ -38622,7 +38685,8 @@
     "@aziontech/webkit/tag",
     "@aziontech/webkit/toast",
     "@aziontech/webkit/toggle-group",
-    "@aziontech/webkit/tooltip"
+    "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/use-shortcuts"
    ],
    "primary": "Tables",
    "guidelinesSummary": "The workspace of one SQL database. The user comes here to see which tables exist, read and edit a table's rows or its definition, and write and run queries against the data. Two tabs share one layout: a resizable side panel that lists things (tables, or past queries) beside a working pane that shows the one in use. This block is a page body: render it in the default slot of `ConsoleLayout` (`shell/shell-console`), which owns the rail, the header and the `main`. The editor is a workspace: its root carries `data-layout-fill`, so the layout's `main` stops scrolling, the root fills it, and the side panel, the rows, the editor and the results each scroll on their own at every width (`h-dvh` only sizes a standalone preview). CreateDatabase is a focused create page with its own header and no rail, rendered outside it.",
@@ -38709,6 +38773,7 @@
     "IconButton",
     "Input",
     "Item",
+    "Kbd",
     "PageHeader",
     "PanelBody",
     "PanelFooter",
@@ -38745,6 +38810,7 @@
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
     "@aziontech/webkit/item",
+    "@aziontech/webkit/kbd",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/panel-body",
     "@aziontech/webkit/panel-footer",

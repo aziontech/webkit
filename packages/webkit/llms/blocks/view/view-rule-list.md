@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/view/view-rule-list/view-rule-list.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-rule-list")`
-- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [AttributeEditor](../../components/attribute-editor.md), [Button](../../components/button.md), [Card](../../components/card.md), [Combobox](../../components/combobox.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldDescription`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [RadioGroup](../../components/radio-group.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md)
+- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [AttributeEditor](../../components/attribute-editor.md), [Button](../../components/button.md), [Card](../../components/card.md), [Combobox](../../components/combobox.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldDescription`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [RadioGroup](../../components/radio-group.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md)
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -155,6 +155,7 @@ Then delete `sample.ts` and its import.
 - The `Switch` is named "Run <rule>"; its visible Active or Inactive text is hidden from the accessibility tree so the state is read once, from `aria-checked`.
 - The review dialog traps focus, returns it to Review changes on close, and is not dismissible while saving; the failure `Alert` is read when it appears.
 - Drop targets show a 2 px accent line and the dragged row fades; transitions respect reduced motion.
+- `⌘ S` (`Ctrl S` off Apple) opens Review changes while the rules have unsaved changes, the same as the `SaveBar`'s primary button, so the save still goes through the review; with no changes it does nothing. Review changes carries `aria-keyshortcuts` and a `Kbd` keycap.
 
 ## States
 
@@ -207,6 +208,7 @@ Each variant is the same screen in another state: `get_block("view/view-rule-lis
   import Field from '@aziontech/webkit/field'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
+  import Kbd from '@aziontech/webkit/kbd'
   import PageHeader from '@aziontech/webkit/page-header'
   import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
@@ -598,6 +600,10 @@ Each variant is the same screen in another state: `get_block("view/view-rule-lis
     saveFailed.value = false
     reviewOpen.value = true
   }
+  const onSaveShortcut = () => {
+    if (!dirty.value || saving.value || reviewOpen.value) return
+    openReview()
+  }
   const save = (event: MouseEvent) => {
     if (saving.value) return
     saveFailed.value = false
@@ -963,7 +969,10 @@ Each variant is the same screen in another state: `get_block("view/view-rule-lis
         </p>
       </section>
 
-      <SaveBar v-if="dirty">
+      <SaveBar
+        v-if="dirty"
+        @save="onSaveShortcut"
+      >
         {{ changeCount }} {{ changeCount === 1 ? 'change' : 'changes' }} to the rules, not saved
         yet.
         <template #actions>
@@ -977,12 +986,20 @@ Each variant is the same screen in another state: `get_block("view/view-rule-lis
           />
           <Button
             type="button"
-            label="Review changes"
             variant="primary"
             size="medium"
             :disabled="saving"
             @click="openReview"
-          />
+            aria-keyshortcuts="Meta+S Control+S"
+          >
+            Review changes
+            <Kbd
+              meta
+              size="small"
+              aria-hidden="true"
+              >S</Kbd
+            >
+          </Button>
         </template>
       </SaveBar>
     </div>

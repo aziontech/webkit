@@ -152,6 +152,8 @@ Then delete `sample.ts` and its import.
 - Focus order follows reading order: heading actions, filter, Delete, Preferences, Select all items, each card's checkbox and link, pagination.
 - The delete dialog traps focus, names itself by its title, labels its input by the prompt and returns focus to Delete (n) when it closes.
 - The preferences dialog traps focus, is named by its title and returns focus to its trigger when it closes.
+- `/` focuses the property filter from anywhere on the page, except while typing in a field.
+- Cards are reached with Tab (each card's checkbox and link); Space toggles the focused checkbox. Delete deletes nothing on its own: select the cards, then Delete (n) asks before it deletes.
 
 ## States
 

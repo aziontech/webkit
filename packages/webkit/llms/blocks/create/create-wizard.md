@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/create/create-wizard/create-wizard.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-wizard")`
-- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [ConfirmDialog](../../components/confirm-dialog.md), [Field](../../components/field.md), `FieldDescription`, `FieldError`, [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), [RadioGroup](../../components/radio-group.md), [RadioGroup](../../components/radio-group.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Skeleton](../../components/skeleton.md), [Subheader](../../components/subheader.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), `use-escape-to-cancel`, `use-unsaved-changes`, [Wizard](../../components/wizard.md)
+- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [ConfirmDialog](../../components/confirm-dialog.md), [Field](../../components/field.md), `FieldDescription`, `FieldError`, [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), [RadioGroup](../../components/radio-group.md), [RadioGroup](../../components/radio-group.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Skeleton](../../components/skeleton.md), [Subheader](../../components/subheader.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), `use-escape-to-cancel`, `use-shortcuts`, `use-unsaved-changes`, [Wizard](../../components/wizard.md)
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -161,6 +161,8 @@ Then delete `sample.ts` and its import.
 ## Accessibility
 
 - **Escape on the page = Cancel.** `useEscapeToCancel(onCancel)` runs the same path as the Wizard's Cancel, in every step and in CreateAndDeploy: a clean form leaves at once, an edited one opens the Unsaved changes dialog. It stays inert while the create request is in flight, while an IME is composing, when another handler already used the key, while a menu, listbox, popover, tooltip or dialog is open (the open Select or DatePicker closes first, and Escape on the Unsaved changes dialog only keeps editing) and when focus is in a control that uses Escape itself (an open combobox, a search field). Edit and settings pages are places, not tasks: Escape stays inert there.
+- **The page opens with the cursor in the first field of its step** (Search policies, the checked choice, or the Project choice in CreateAndDeploy).
+- **⌘ Enter runs the Wizard's primary button (`Ctrl Enter` off Apple):** Next with the same step check, Create Access List or Create and deploy on the last step. It fires from any field, a textarea included, stays inert while the create request is in flight and is listed in the `?` dialog as Next step or the create action.
 - The `Wizard` takes an `aria-label` naming the flow; locked rail steps cannot be focused or activated, and focus moves to the new step's heading on every step change.
 - The page has one `h1` (the `PageHeader`); each step heading is an `h2` drawn by the Wizard.
 - Host rows are native `button`s with `aria-pressed`; the chooser's search has an `aria-label` and Enter selects the first match.
@@ -238,9 +240,10 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
   import { useEscapeToCancel } from '@aziontech/webkit/use-escape-to-cancel'
+  import { useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import Wizard from '@aziontech/webkit/wizard'
-  import { computed, reactive, ref, watch } from 'vue'
+  import { type ComponentPublicInstance, computed, onMounted, reactive, ref, watch } from 'vue'
 
   import { samplePolicies } from './sample'
 
@@ -565,6 +568,36 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
 
   useEscapeToCancel(onCancel, { enabled: () => !props.loading })
 
+  const wizardEl = ref<ComponentPublicInstance | null>(null)
+
+  const FIELD_SELECTOR =
+    'input:not([type="hidden"]), textarea, select, [role="combobox"], [role="radio"][tabindex="0"]'
+
+  const wizardRoot = () => (wizardEl.value?.$el as HTMLElement | undefined) ?? null
+
+  const focusFirstField = () => {
+    const root = wizardRoot()
+    const field = root?.querySelector<HTMLElement>(FIELD_SELECTOR)
+    const checked =
+      field instanceof HTMLInputElement && field.type === 'radio'
+        ? root?.querySelector<HTMLElement>(`input[name="${CSS.escape(field.name)}"]:checked`)
+        : null
+    ;(checked ?? field)?.focus()
+  }
+
+  useShortcuts({
+    keys: 'meta+enter',
+    label: () =>
+      stepIndex.value === definitions.value.length - 1 ? 'Create access list' : 'Next step',
+    group: 'Page',
+    element: wizardRoot,
+    when: () => !props.loading,
+    handler: () =>
+      [...(wizardRoot()?.querySelectorAll<HTMLButtonElement>('button') ?? [])].pop()?.click()
+  })
+
+  onMounted(focusFirstField)
+
   watch(
     () => props.error,
     (message) => {
@@ -627,6 +660,7 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
         />
 
         <Wizard
+          ref="wizardEl"
           v-model="stepIndex"
           aria-label="Create Access List"
           submit-label="Create Access List"

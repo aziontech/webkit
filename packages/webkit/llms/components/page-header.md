@@ -70,7 +70,7 @@
 
 - Visible focus: owned by the controls in the `actions` slot.
 - Keyboard map: `Tab` moves through the actions in DOM order; the header itself is not interactive.
-- ARIA: the root is a `header` element and the title is the page's only `h1`; `titleId` lets a form or landmark reference it with `aria-labelledby`. The breadcrumb comes first in reading order (its own `nav` landmark), then the h1, the meta, the description, the actions and the tabs. The icon wrapper is `aria-hidden`.
+- ARIA: the root is a `header` element and the title is the page's only `h1`. The `h1` carries `tabindex="-1"` and no focus ring (`outline-none`): it is not a tab stop, but a router or a page can move focus to it on navigation so a screen reader announces the page (the console keyboard standard, `rules/webkit-keyboard.md`); it is a heading, not a control, so it draws no ring; `titleId` lets a form or landmark reference it with `aria-labelledby`. The breadcrumb comes first in reading order (its own `nav` landmark), then the h1, the meta, the description, the actions and the tabs. The icon wrapper is `aria-hidden`.
 - Keyboard map with regions: `Tab` reaches the breadcrumb links, then the actions, then the tabs (which own their arrow-key model).
 - Contrast ≥4.5:1 for the title and the muted description.
 - Touch target: the actions keep the Button sizes; on a phone they stretch to full width.

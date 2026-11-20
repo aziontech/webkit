@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/view/view-query-editor/view-query-editor.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/view-query-editor")`
-- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeBlock](../../components/code-block.md), [CodeEditor](../../components/code-editor.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), `FieldError`, [FileDropzone](../../components/file-dropzone.md), [FileTokenGroup](../../components/file-token-group.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Sidebar](../../components/sidebar.md), [Skeleton](../../components/skeleton.md), [Switch](../../components/switch.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md)
+- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeBlock](../../components/code-block.md), [CodeEditor](../../components/code-editor.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), `FieldError`, [FileDropzone](../../components/file-dropzone.md), [FileTokenGroup](../../components/file-token-group.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Sidebar](../../components/sidebar.md), [Skeleton](../../components/skeleton.md), [Switch](../../components/switch.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-shortcuts`
 - Skills: `webkit-layout`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -190,6 +190,8 @@ Then delete `sample.ts` and its import.
 - `ToggleGroup`s are named ("Table view", "Result view") and each paged table names its own pagination.
 - The templates drawer traps focus while open and closes on Escape.
 - In the import drawer each mapping `Select` is named `Table column for <CSV column>`, the mapping and the per-line errors are named lists, and the ready count is a polite live region, so changing a mapping announces the new count.
+- `⌘ Enter` (`Ctrl Enter` off Apple) runs the query from anywhere on the page, the SQL editor included, where a bare `Enter` stays a new line; it does nothing while a query runs. Run query carries `aria-keyshortcuts` and a `Kbd` keycap.
+- Create Database opens with focus in the Name field, and `⌘ Enter` (`Ctrl Enter` off Apple) submits it from any field, the same as Create Database.
 
 ## States
 
@@ -248,6 +250,7 @@ Each variant is the same screen in another state: `get_block("view/view-query-ed
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
+  import Kbd from '@aziontech/webkit/kbd'
   import PageTabs from '@aziontech/webkit/page-tabs'
   import PanelBody from '@aziontech/webkit/panel-body'
   import PanelHeader from '@aziontech/webkit/panel-header'
@@ -257,6 +260,7 @@ Each variant is the same screen in another state: `get_block("view/view-query-ed
   import Tag from '@aziontech/webkit/tag'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
   import { computed, onMounted, ref, watch } from 'vue'
 
   import { sampleHistory, sampleSql, sampleTables } from './sample'
@@ -605,6 +609,13 @@ Each variant is the same screen in another state: `get_block("view/view-query-ed
     if (!sql || running.value) return
     emit('run', event, sql)
   }
+  useShortcuts({
+    keys: 'meta+enter',
+    label: 'Run query',
+    group: 'Page',
+    when: () => !running.value,
+    handler: (event) => runQuery(event)
+  })
   const onHistoryAction = (event: Event, value: unknown, item: QueryEditorHistoryEntry) => {
     if (value === 'run') {
       applyTemplate(item.sql)
@@ -1304,13 +1315,21 @@ LIMIT 3;`
             />
           </div>
           <Button
-            label="Run query"
             variant="primary"
             size="medium"
             icon="az az-play"
             :loading="running"
+            :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
             @click="runQuery"
-          />
+          >
+            Run query
+            <Kbd
+              meta
+              key-name="enter"
+              size="small"
+              aria-hidden="true"
+            />
+          </Button>
           <div class="ms-auto flex items-center gap-(--spacing-xs)">
             <Button
               label="Prettify"

@@ -2,7 +2,7 @@
  "examples": [
   {
    "name": "Floating",
-   "summary": "The bar a dirty settings page shows: it overlays the bottom of the scroll region without moving the content, with the status sentence on the left and Discard and Save on the right.",
+   "summary": "The bar a dirty settings page shows: it overlays the bottom of the scroll region without moving the content, with the status sentence on the left and Discard and Save on the right; Command S (Control S off Apple) saves, shown on the Save button.",
    "file": "examples/save-bar/default.vue"
   },
   {

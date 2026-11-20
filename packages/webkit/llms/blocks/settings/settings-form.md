@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/settings/settings-form/settings-form.vue` in `@aziontech/webkit`
 - MCP: `get_block("settings/settings-form")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [ConfirmDialog](../../components/confirm-dialog.md), [Field](../../components/field.md), `FieldError`, [Input](../../components/input.md), [Item](../../components/item.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Skeleton](../../components/skeleton.md), [Subheader](../../components/subheader.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), `use-unsaved-changes`
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [ConfirmDialog](../../components/confirm-dialog.md), [Field](../../components/field.md), `FieldError`, [Input](../../components/input.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Skeleton](../../components/skeleton.md), [Subheader](../../components/subheader.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), `use-unsaved-changes`
 - Skills: `webkit-form`, `webkit-errors`, `webkit-ux-heuristics`
 
 ## Asked as
@@ -147,6 +147,8 @@ Then delete `sample.ts` and its import.
 - Every control has an `aria-label` that repeats its row title; errors are linked with `aria-describedby` only while they show.
 - Disabling the `fieldset` while saving takes every control out of interaction at once; Save announces its loading state.
 - Focus order follows reading order: the rows from top to bottom, then Discard and Save.
+- `⌘ S` (`Ctrl S` off Apple) saves while the form has unsaved changes, the same as Save, and stops the browser's own save; with no changes it does nothing. Save carries `aria-keyshortcuts` and a `Kbd` keycap. The Profile variants answer it the same way.
+- The save-per-card and save-per-group variants have no `SaveBar` and bind no `⌘ S`: each card or group keeps its own Save button.
 
 ## States
 
@@ -194,6 +196,7 @@ Each variant is the same screen in another state: `get_block("settings/settings-
   import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
+  import Kbd from '@aziontech/webkit/kbd'
   import PageHeader from '@aziontech/webkit/page-header'
   import SaveBar from '@aziontech/webkit/save-bar'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
@@ -296,6 +299,11 @@ Each variant is the same screen in another state: `get_block("settings/settings-
     }
     toast.dismiss(SAVE_TOAST)
     emit('submit', event, { ...form })
+  }
+
+  const onSaveShortcut = (event: KeyboardEvent) => {
+    if (!dirty.value || submitting.value) return
+    submit(event)
   }
 
   const showFailure = () => {
@@ -520,7 +528,10 @@ Each variant is the same screen in another state: `get_block("settings/settings-
       </fieldset>
     </div>
 
-    <SaveBar variant="plain">
+    <SaveBar
+      variant="plain"
+      @save="onSaveShortcut"
+    >
       <template #actions>
         <Button
           type="button"
@@ -531,13 +542,21 @@ Each variant is the same screen in another state: `get_block("settings/settings-
           @click="discard"
         />
         <Button
-          label="Save"
           variant="primary"
           size="medium"
           :loading="submitting"
           :disabled="!dirty"
           @click="submit"
-        />
+          aria-keyshortcuts="Meta+S Control+S"
+        >
+          Save
+          <Kbd
+            meta
+            size="small"
+            aria-hidden="true"
+            >S</Kbd
+          >
+        </Button>
       </template>
     </SaveBar>
   </form>

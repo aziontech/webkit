@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/detail/detail-dns-zone/detail-dns-zone.vue` in `@aziontech/webkit`
 - MCP: `get_block("detail/detail-dns-zone")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldDescription`, `FieldError`, [FileDropzone](../../components/file-dropzone.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `InputGroupRoot`, `ItemList`, [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [SaveBar](../../components/save-bar.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Switch](../../components/switch.md), `TableCellActions`, `TableCellId`, `TableCellLink`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldDescription`, `FieldError`, [FileDropzone](../../components/file-dropzone.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `InputGroupRoot`, `ItemList`, [Kbd](../../components/kbd.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [SaveBar](../../components/save-bar.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Switch](../../components/switch.md), `TableCellActions`, `TableCellId`, `TableCellLink`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`
 - Skills: `webkit-tables`, `webkit-form`, `webkit-navigation`
 
 ## Asked as
@@ -174,6 +174,7 @@ Then delete `sample.ts` and its import.
 - The property filter has an `aria-label` that matches its placeholder, "Filter records".
 - Focus order follows reading order: tabs, form fields, save bar; or heading actions, the property filter, toolbar, table, pagination.
 - Tab panel entrances respect reduced motion.
+- `⌘ S` (`Ctrl S` off Apple) saves the zone settings while the `SaveBar` shows unsaved changes, the same as Save, and stops the browser's own save; with no changes it does nothing. Save carries `aria-keyshortcuts` and a `Kbd` keycap.
 
 ## States
 
@@ -228,6 +229,7 @@ Each variant is the same screen in another state: `get_block("detail/detail-dns-
   import Input from '@aziontech/webkit/input'
   import InputGroupRoot from '@aziontech/webkit/input-group-root'
   import ItemList from '@aziontech/webkit/item-list'
+  import Kbd from '@aziontech/webkit/kbd'
   import PageHeader from '@aziontech/webkit/page-header'
   import PageTabs from '@aziontech/webkit/page-tabs'
   import PropertyFilter from '@aziontech/webkit/property-filter'
@@ -408,6 +410,10 @@ Each variant is the same screen in another state: `get_block("detail/detail-dns-
   const save = (event: Event) => {
     if (saving.value || !validate()) return
     emit('submit', event, { ...settings })
+  }
+  const onSaveShortcut = (event: KeyboardEvent) => {
+    if (!dirty.value || saving.value) return
+    save(event)
   }
 
   const discard = (event: MouseEvent) => {
@@ -697,6 +703,7 @@ Each variant is the same screen in another state: `get_block("detail/detail-dns-
           <SaveBar
             v-if="dirty || saving"
             variant="docked"
+            @save="onSaveShortcut"
           >
             You have unsaved changes.
 
@@ -711,11 +718,19 @@ Each variant is the same screen in another state: `get_block("detail/detail-dns-
               />
               <Button
                 type="submit"
-                label="Save"
                 variant="primary"
                 size="medium"
                 :loading="saving"
-              />
+                aria-keyshortcuts="Meta+S Control+S"
+              >
+                Save
+                <Kbd
+                  meta
+                  size="small"
+                  aria-hidden="true"
+                  >S</Kbd
+                >
+              </Button>
             </template>
           </SaveBar>
         </Transition>

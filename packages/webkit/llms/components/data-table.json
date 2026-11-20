@@ -347,8 +347,13 @@
  "events": [
   {
    "name": "row-click",
-   "payload": "(event: MouseEvent, row: TRow)",
-   "notes": "Fires when a rendered row is clicked. `event` is the click; `row` is the clicked record."
+   "payload": "(event: MouseEvent | KeyboardEvent, row: TRow)",
+   "notes": "Fires when a rendered row is clicked, or when `Enter` is pressed on a focused row (keyboard rows, below). `event` is the click or the key press; `row` is the record."
+  },
+  {
+   "name": "row-remove",
+   "payload": "(event: KeyboardEvent, row: TRow)",
+   "notes": "`Delete` (or `Backspace`, which a Mac keyboard's delete key sends) was pressed on a focused row. The table removes nothing: the app asks first (a `ConfirmDialog`) and then drops the record from `data`."
   },
   {
    "name": "filter-apply",

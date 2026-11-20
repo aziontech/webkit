@@ -125,6 +125,7 @@ Then delete `sample.ts` and its import.
 - The filter and the period picker carry `aria-label`s; icon buttons have names that match their tooltips.
 - Category is text in a tag, never colour alone; the relative date has the exact time on its tooltip.
 - User and IP cells keep their own direction (`dir="auto"`, `dir="ltr"`) inside a right-to-left page.
+- `/` focuses the property filter from anywhere on the page, except while typing in a field.
 
 ## States
 

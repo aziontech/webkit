@@ -161,6 +161,8 @@ Then delete `sample.ts` and its import. A list too large for the browser moves t
 - The delete dialog traps focus, is named by its title and labels its input by the prompt.
 - The preferences dialog traps focus, is named by its title and returns focus to its trigger when it closes.
 - Sorting is announced by the table header; the row menu is reachable by keyboard and closes back to its trigger.
+- `/` focuses the property filter from anywhere on the page, except while typing in a field.
+- The rows are one tab stop: Arrow Up and Arrow Down move between rows, Home and End jump to the first and last, Enter opens the focused row as View details does (a click on the row itself does nothing; the name link opens it), and Delete or Backspace opens the delete dialog for it. After a delete, focus lands on the next row (the previous one when the last row went).
 - Links that open a new tab add "(opens in a new tab)" in visually hidden text; the `+N` popover names its count and the copy buttons name what they copy.
 
 ## States
@@ -331,13 +333,21 @@ Each variant is the same screen in another state: `get_block("view/view-table", 
   const pending = ref<TableViewResource | null>(null)
   const deleteOpen = ref(false)
 
+  const askDelete = (row: TableViewResource) => {
+    pending.value = row
+    deleteOpen.value = true
+  }
+
+  const onRowOpen = (event: MouseEvent | KeyboardEvent, row: TableViewResource) => {
+    if (event instanceof KeyboardEvent) emit('row-action', event, { value: 'view', resource: row })
+  }
+
   const onRowAction = (event: Event, value: DropdownMenuItemValue, row: TableViewResource) => {
     if (value !== 'delete') {
       emit('row-action', event, { value, resource: row })
       return
     }
-    pending.value = row
-    deleteOpen.value = true
+    askDelete(row)
   }
 
   const confirmDelete = (event: Event) => {
@@ -473,6 +483,8 @@ Each variant is the same screen in another state: `get_block("view/view-table", 
                   :loading="loading || fetching"
                   sortable
                   :bordered="false"
+                  @row-click="onRowOpen"
+                  @row-remove="(_event, row) => askDelete(row)"
                 >
                   <template #cell-name="{ row }">
                     <TableCellLink
