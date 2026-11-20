@@ -439,6 +439,31 @@ describe('Drawer', () => {
       }
     )
 
+    it('opens a form on its first field, not on the close button', async () => {
+      const withForm = defineComponent({
+        components: { Drawer, DrawerClose, DrawerContent, DrawerTitle },
+        setup() {
+          return { open: ref(true) }
+        },
+        template: `
+        <Drawer v-model:open="open">
+          <DrawerContent>
+            <DrawerTitle>Create</DrawerTitle>
+            <DrawerClose />
+            <form>
+              <input type="text" aria-label="Name" data-testid="name-field" />
+            </form>
+          </DrawerContent>
+        </Drawer>
+      `
+      })
+      render(withForm)
+      await settle()
+      await vi.waitFor(() => {
+        expect(document.activeElement).toBe(byTestId('name-field'))
+      })
+    })
+
     it('Tab on the last control wraps to the first (focus is trapped)', async () => {
       await openWithKey('{Enter}')
       byTestId('last-action')!.focus()

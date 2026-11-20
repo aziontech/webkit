@@ -407,6 +407,31 @@ describe('Dialog', () => {
       }
     )
 
+    it('opens a form on its first field, not on the close button', async () => {
+      const withForm = defineComponent({
+        components: { Dialog, DialogClose, DialogContent, DialogTitle },
+        setup() {
+          return { open: ref(true) }
+        },
+        template: `
+        <Dialog v-model:open="open">
+          <DialogContent>
+            <DialogTitle>Create</DialogTitle>
+            <DialogClose />
+            <form>
+              <input type="text" aria-label="Name" data-testid="name-field" />
+            </form>
+          </DialogContent>
+        </Dialog>
+      `
+      })
+      render(withForm)
+      await settle()
+      await vi.waitFor(() => {
+        expect(document.activeElement).toBe(byTestId('name-field'))
+      })
+    })
+
     it('Tab on the last control wraps to the first (focus is trapped)', async () => {
       await openWithKey('{Enter}')
       byTestId('last-action')!.focus()

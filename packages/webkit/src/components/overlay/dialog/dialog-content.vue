@@ -76,7 +76,7 @@
     },
     { immediate: true }
   )
-  useFocusTrap(contentEl, isOpen, isFocusTop)
+  useFocusTrap(contentEl, isOpen, isFocusTop, { initialFocus: 'field' })
 
   useEventListener(defaultDocument, 'keydown', (event: globalThis.KeyboardEvent) => {
     if (!isOpen.value || event.key !== 'Escape' || event.defaultPrevented) return
