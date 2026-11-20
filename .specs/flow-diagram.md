@@ -5,16 +5,16 @@ structure: composition
 status: implemented
 spec_version: 9
 template: 2
-checksum: 9da6c77e06419cc7a3b147be592b6982a8fbf56b6256554f2a0c921a6121f18c
+checksum: 44408d2befe368693ab335963b768af6156d9e04bc3020d4e283f640b0b3d943
 created: 2026-06-25
-last_updated: 2026-11-18
+last_updated: 2026-11-20
 ---
 
 # FlowDiagram — Component Spec
 
 ## Purpose
 
-The one in-product diagram (owner decision RV-Y1, 2026-11-18): it kept the old FlowDiagram parts and replaced TopologyDiagram in the 6.0 clean break. A naked root lays steps out and draws the connectors. **Data mode** (`nodes` + `edges`): edges set the columns and each node renders the richest card its data allows. **Composed mode**: hand-written parts in the default slot. `orientation="responsive"` stacks into a rail below a 36rem container.
+The one in-product diagram (owner decision RV-Y1, 2026-11-18): it kept the old FlowDiagram parts and replaced TopologyDiagram in the 6.0 clean break. A naked root lays steps out and draws the connectors. **Data mode** (`nodes` + `edges`): edges set the columns and each node renders the richest card its data allows. **Composed mode**: hand-written parts in the default slot. `orientation="responsive"` lays the steps in a row only when the whole row fits its container, and stacks them into a rail otherwise.
 
 ## When to use
 
@@ -142,12 +142,13 @@ The root emits nothing; the bind events live on the `flow-diagram-bind` companio
 
 ## States
 
-- List: `data-orientation`, `data-align`, `data-uniform`, `data-labelled` (wider gap for edge labels), `data-stacked` (rail drawn, ports hidden).
+- List: `data-orientation`, `data-direction` (`row` or `column`, the layout in use), `data-align`, `data-uniform`, `data-labelled` (wider gap for edge labels), `data-stacked` (rail drawn, ports hidden).
 - Node: `data-disabled`, `data-dashed`, `data-terminal`, `data-node-key`, `data-entry` / `data-exit` (ports show only where a connector attaches).
 - Title: every row is one small control high (`min-h-7`) with `--spacing-sm` of bottom padding, so a button in the `actions` slot sits as far from the divider below as the header text sits from the border above, and cards with and without controls keep the same anchor height (their connectors stay level).
 - Data card: `data-state="open|closed"`; an unbound bindable node is dashed with `Not bound`; a pending bind dashes it too.
 - Loading: `aria-busy`, skeleton cards, one `role="status"` line. Empty: `EmptyState` unless the `empty` slot replaces it.
 - Edge `severity` colours the connector (`--<severity>-mark`); default `--accent`.
+- Scroll area (`__viewport`): `data-overflow-start` / `data-overflow-end` while content lies past that inline edge; it fades that edge and takes `tabindex="0"`.
 
 - Its root carries `data-plain-ground`: it is content that must sit on a plain ground, so a `Texture` beside it hides itself, and the texture-backdrop check blocks placing it on a textured band (a texture is a backdrop for text only, RV-T2-1).
 
@@ -200,16 +201,19 @@ The root emits nothing; the bind events live on the `flow-diagram-bind` companio
 
 ## Right-to-left
 
-- Logical utilities only; the engine reads `direction`, mirrors elbows and ports, and puts the rail and its labels on the inline start.
+- Logical utilities only; the engine reads `direction`, mirrors elbows and ports, and puts the rail and its labels on the inline start. The overflow fade reads the scroll offset as a magnitude and flips its gradient under `rtl:`.
 
 ## Responsive
 
-- `responsive` stacks below a 36rem container into a rail in reading order, labels beside it; `horizontal` scrolls in its own area; `vertical` always stacks.
+- `responsive` measures the row against its container (a ResizeObserver, re-checked when the container or the steps resize) and keeps the row only when every step fits; otherwise it stacks into a rail in reading order, labels beside it, so no step is ever clipped. Server render and first paint use the rail. The resolved layout is `data-direction="row|column"` on the list.
+- `horizontal` keeps the row and scrolls in its own area; `vertical` always stacks.
+- When the steps still overflow (a `horizontal` row, or a step wider than the rail), the scroll area keeps a thin visible scrollbar, becomes focusable, and fades the inline edge that still has content (`data-overflow-start`, `data-overflow-end`); the fade follows the text direction in right-to-left and is static, so it needs no reduced-motion fallback.
 
 ## Performance
 
 - Budgets (`.size-limit.json`): `flow-diagram-root` and `flow-diagram` are `entryOnly` — about 20 KB and 22 KB gzip, with the data-mode card as a lazy chunk (~9–11 KB, it carries `copy-button`); `flow-diagram-bind` ~15 KB (dropdown-menu, tooltip); the card parts under 2.5 KB each.
 - Connectors re-measure on resize, DOM mutations and edge changes, in one animation frame.
+- The row-or-rail check runs once per animation frame on resize: it sets the row on the list, reads the scroll width, and settles the layout before paint (no flicker, no second render pass).
 
 ## Examples
 
@@ -225,6 +229,7 @@ The root emits nothing; the bind events live on the `flow-diagram-bind` companio
 - **RV-Y1 (decided 2026-11-18, owner)** — one diagram named `flow-diagram` replaces the old `flow-diagram` and `topology-diagram` (removed in 6.0; `Parallel` is now `Group`, `levels` became `nodes` + `edges`, see MIGRATION_V6.md). The bind control is the `flow-diagram-bind` companion, status is a dot and text, and `responsive` stacks on phones by default.
 - **RV-F2-1 (decided 2026-11-18, owner)** — usable from Vue, Markdown and page JSON: `<FlowDiagram nodes edges />` in `DocMarkdown`, and the `FlowDiagram` scene in `SitePage` (no `flow-diagram-section`: only page sections take an `_id`).
 - Rows with controls get `--spacing-sm` below the buttons (owner, 2026-11-18: the + button nearly touched the divider).
+- **2026-11-20 (audit round 4, R3)** — `responsive` no longer switches at a fixed 36rem container: it measures and keeps the row only when it fits (the default example at 768 and the topology at 1280 hid nodes off-screen). Overflowing rows fade their inline edges like the tables.
 
 ## Constraints — DO NOT
 

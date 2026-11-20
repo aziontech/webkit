@@ -471,7 +471,7 @@
                 :terminal="node.key === 'origin'"
               >
                 <div
-                  class="flex w-full min-w-0 flex-col @xl/flow-diagram:w-(--size-56) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) transition-colors duration-moderate-01 ease-productive-entrance hover:border-(--border-strong) has-[:focus-visible]:border-(--border-strong) motion-reduce:transition-none"
+                  class="flex w-full min-w-0 flex-col in-data-[direction=row]:w-(--size-56) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) transition-colors duration-moderate-01 ease-productive-entrance hover:border-(--border-strong) has-[:focus-visible]:border-(--border-strong) motion-reduce:transition-none"
                 >
                   <FlowDiagram.Anchor>
                     <div

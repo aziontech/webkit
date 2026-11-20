@@ -21582,7 +21582,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 
 # Flow Diagram
 
-> The one in-product diagram (owner decision RV-Y1, 2026-11-18): it kept the old FlowDiagram parts and replaced TopologyDiagram in the 6.0 clean break. A naked root lays steps out and draws the connectors. **Data mode** (`nodes` + `edges`): edges set the columns and each node renders the richest card its data allows. **Composed mode**: hand-written parts in the default slot. `orientation="responsive"` stacks into a rail below a 36rem container.
+> The one in-product diagram (owner decision RV-Y1, 2026-11-18): it kept the old FlowDiagram parts and replaced TopologyDiagram in the 6.0 clean break. A naked root lays steps out and draws the connectors. **Data mode** (`nodes` + `edges`): edges set the columns and each node renders the richest card its data allows. **Composed mode**: hand-written parts in the default slot. `orientation="responsive"` lays the steps in a row only when the whole row fits its container, and stacks them into a rail otherwise.
 
 - Import: `import FlowDiagramRoot from '@aziontech/webkit/flow-diagram-root'`
 - Compound import (dot notation, not tree-shakeable): `import FlowDiagram from '@aziontech/webkit/flow-diagram'`
@@ -21660,12 +21660,13 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 
 ## States
 
-- List: `data-orientation`, `data-align`, `data-uniform`, `data-labelled` (wider gap for edge labels), `data-stacked` (rail drawn, ports hidden).
+- List: `data-orientation`, `data-direction` (`row` or `column`, the layout in use), `data-align`, `data-uniform`, `data-labelled` (wider gap for edge labels), `data-stacked` (rail drawn, ports hidden).
 - Node: `data-disabled`, `data-dashed`, `data-terminal`, `data-node-key`, `data-entry` / `data-exit` (ports show only where a connector attaches).
 - Title: every row is one small control high (`min-h-7`) with `--spacing-sm` of bottom padding, so a button in the `actions` slot sits as far from the divider below as the header text sits from the border above, and cards with and without controls keep the same anchor height (their connectors stay level).
 - Data card: `data-state="open|closed"`; an unbound bindable node is dashed with `Not bound`; a pending bind dashes it too.
 - Loading: `aria-busy`, skeleton cards, one `role="status"` line. Empty: `EmptyState` unless the `empty` slot replaces it.
 - Edge `severity` colours the connector (`--<severity>-mark`); default `--accent`.
+- Scroll area (`__viewport`): `data-overflow-start` / `data-overflow-end` while content lies past that inline edge; it fades that edge and takes `tabindex="0"`.
 
 - Its root carries `data-plain-ground`: it is content that must sit on a plain ground, so a `Texture` beside it hides itself, and the texture-backdrop check blocks placing it on a textured band (a texture is a backdrop for text only, RV-T2-1).
 

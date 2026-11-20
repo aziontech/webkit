@@ -106,6 +106,64 @@ describe('FlowDiagram', () => {
     expect(new Set(widths).size).toBe(1)
   })
 
+  it('stays a column when the row would not fit, so no node is clipped', async () => {
+    const { container } = render(() => h('div', { style: 'width: 720px' }, [h(Default)]))
+    await waitFor(() => expect(cards(container).length).toBe(5))
+    const list = container.querySelector('[data-testid="flow-diagram__list"]') as HTMLElement
+    await waitFor(() => expect(list.dataset['direction']).toBe('column'))
+    const viewport = container.querySelector(
+      '[data-testid="flow-diagram__viewport"]'
+    ) as HTMLElement
+    const edge = viewport.getBoundingClientRect().right
+    for (const card of cards(container))
+      expect(card.getBoundingClientRect().right).toBeLessThanOrEqual(edge + 0.5)
+    expect(viewport.hasAttribute('data-overflow-end')).toBe(false)
+    expect(viewport.hasAttribute('tabindex')).toBe(false)
+  })
+
+  it('switches to a row once the container is wide enough, and back', async () => {
+    const { container } = render(() =>
+      h('div', { 'data-testid': 'frame', style: 'width: 1400px' }, [h(Default)])
+    )
+    const frame = container.querySelector('[data-testid="frame"]') as HTMLElement
+    const list = () => container.querySelector('[data-testid="flow-diagram__list"]') as HTMLElement
+    await waitFor(() => expect(cards(container).length).toBe(5))
+    await waitFor(() => expect(list().dataset['direction']).toBe('row'))
+    frame.style.width = '720px'
+    await waitFor(() => expect(list().dataset['direction']).toBe('column'))
+    frame.style.width = '1400px'
+    await waitFor(() => expect(list().dataset['direction']).toBe('row'))
+  })
+
+  it.each(['ltr', 'rtl'])(
+    'fades the inline edges a horizontal row can still scroll to (%s)',
+    async (dir) => {
+      const { container } = render(() =>
+        h('div', { dir, style: 'width: 480px' }, [
+          h(FlowDiagram, { orientation: 'horizontal' }, () =>
+            ['Client', 'Edge', 'Application', 'Function', 'Origin'].map((label) =>
+              h(FlowDiagramNode, { key: label, class: 'min-w-(--size-48)' }, () => label)
+            )
+          )
+        ])
+      )
+      const viewport = container.querySelector(
+        '[data-testid="flow-diagram__viewport"]'
+      ) as HTMLElement
+      await waitFor(() => expect(viewport.hasAttribute('data-overflow-end')).toBe(true))
+      expect(viewport.hasAttribute('data-overflow-start')).toBe(false)
+      expect(viewport.getAttribute('tabindex')).toBe('0')
+      const style = getComputedStyle(viewport)
+      expect(style.maskImage).toContain('linear-gradient')
+      expect(style.getPropertyValue('--flow-diagram-fade-direction').trim()).toBe(
+        dir === 'rtl' ? 'to left' : 'to right'
+      )
+      viewport.scrollLeft = (dir === 'rtl' ? -1 : 1) * viewport.scrollWidth
+      await waitFor(() => expect(viewport.hasAttribute('data-overflow-start')).toBe(true))
+      expect(viewport.hasAttribute('data-overflow-end')).toBe(false)
+    }
+  )
+
   it('stages a bind until Apply in the topology', async () => {
     const user = userEvent.setup()
     const { container } = render(Topology)

@@ -1,6 +1,6 @@
 # Flow Diagram
 
-> The one in-product diagram (owner decision RV-Y1, 2026-11-18): it kept the old FlowDiagram parts and replaced TopologyDiagram in the 6.0 clean break. A naked root lays steps out and draws the connectors. **Data mode** (`nodes` + `edges`): edges set the columns and each node renders the richest card its data allows. **Composed mode**: hand-written parts in the default slot. `orientation="responsive"` stacks into a rail below a 36rem container.
+> The one in-product diagram (owner decision RV-Y1, 2026-11-18): it kept the old FlowDiagram parts and replaced TopologyDiagram in the 6.0 clean break. A naked root lays steps out and draws the connectors. **Data mode** (`nodes` + `edges`): edges set the columns and each node renders the richest card its data allows. **Composed mode**: hand-written parts in the default slot. `orientation="responsive"` lays the steps in a row only when the whole row fits its container, and stacks them into a rail otherwise.
 
 - Import: `import FlowDiagramRoot from '@aziontech/webkit/flow-diagram-root'`
 - Compound import (dot notation, not tree-shakeable): `import FlowDiagram from '@aziontech/webkit/flow-diagram'`
@@ -80,12 +80,13 @@
 
 ## States
 
-- List: `data-orientation`, `data-align`, `data-uniform`, `data-labelled` (wider gap for edge labels), `data-stacked` (rail drawn, ports hidden).
+- List: `data-orientation`, `data-direction` (`row` or `column`, the layout in use), `data-align`, `data-uniform`, `data-labelled` (wider gap for edge labels), `data-stacked` (rail drawn, ports hidden).
 - Node: `data-disabled`, `data-dashed`, `data-terminal`, `data-node-key`, `data-entry` / `data-exit` (ports show only where a connector attaches).
 - Title: every row is one small control high (`min-h-7`) with `--spacing-sm` of bottom padding, so a button in the `actions` slot sits as far from the divider below as the header text sits from the border above, and cards with and without controls keep the same anchor height (their connectors stay level).
 - Data card: `data-state="open|closed"`; an unbound bindable node is dashed with `Not bound`; a pending bind dashes it too.
 - Loading: `aria-busy`, skeleton cards, one `role="status"` line. Empty: `EmptyState` unless the `empty` slot replaces it.
 - Edge `severity` colours the connector (`--<severity>-mark`); default `--accent`.
+- Scroll area (`__viewport`): `data-overflow-start` / `data-overflow-end` while content lies past that inline edge; it fades that edge and takes `tabindex="0"`.
 
 - Its root carries `data-plain-ground`: it is content that must sit on a plain ground, so a `Texture` beside it hides itself, and the texture-backdrop check blocks placing it on a textured band (a texture is a backdrop for text only, RV-T2-1).
 
@@ -98,7 +99,7 @@
 
 ## Right-to-left
 
-- Logical utilities only; the engine reads `direction`, mirrors elbows and ports, and puts the rail and its labels on the inline start.
+- Logical utilities only; the engine reads `direction`, mirrors elbows and ports, and puts the rail and its labels on the inline start. The overflow fade reads the scroll offset as a magnitude and flips its gradient under `rtl:`.
 
 ## Internationalization
 
@@ -116,7 +117,9 @@
 
 ## Responsive
 
-- `responsive` stacks below a 36rem container into a rail in reading order, labels beside it; `horizontal` scrolls in its own area; `vertical` always stacks.
+- `responsive` measures the row against its container (a ResizeObserver, re-checked when the container or the steps resize) and keeps the row only when every step fits; otherwise it stacks into a rail in reading order, labels beside it, so no step is ever clipped. Server render and first paint use the rail. The resolved layout is `data-direction="row|column"` on the list.
+- `horizontal` keeps the row and scrolls in its own area; `vertical` always stacks.
+- When the steps still overflow (a `horizontal` row, or a step wider than the rail), the scroll area keeps a thin visible scrollbar, becomes focusable, and fades the inline edge that still has content (`data-overflow-start`, `data-overflow-end`); the fade follows the text direction in right-to-left and is static, so it needs no reduced-motion fallback.
 
 ## Examples
 
