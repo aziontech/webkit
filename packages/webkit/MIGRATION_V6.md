@@ -705,19 +705,20 @@ New standalone paths: `tabs-list`, `tabs-trigger`, `tabs-content`, `dialog-heade
 
 #### Event payloads (handlers that read the arguments need a hand edit)
 
-| Component                | Event                     | v5 payload                       | v6 payload                                                                                                           |
-| ------------------------ | ------------------------- | -------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| `TutorialPanel.Provider` | `start`, `exit`, `finish` | `(id)`                           | `(event, id)` (`finish` is now `complete`)                                                                           |
-| `ButtonGroup`            | `toggle`                  | `({ id, pressed })`              | `(event, { id, pressed })`                                                                                           |
-| `Alert`                  | `close`                   | `(event?)` (none after `life`)   | `(event)` (an `Event` of type `timeout` after `life`)                                                                |
-| `ErrorBoundary`          | `retry`                   | `(event?)` (none for `resetKey`) | `(event)` (`retry` Event when the slot passes none, `reset` Event for `resetKey`)                                    |
-| `DataTable`              | `reorder`                 | `(payload)`                      | `(event, payload)`                                                                                                   |
-| `DashboardGrid`          | `item-move`               | `(payload)`                      | `(event, payload)`                                                                                                   |
-| `DashboardGrid`          | `item-resize`             | `(payload)`                      | `(event, payload)`                                                                                                   |
-| `TransferList`           | `move`                    | `(payload)`                      | `(event, payload)`; the slot and exposed `move(event, direction)` / `moveAll(event, direction)` take the event first |
-| `DataTable`              | `refresh`                 | `()`                             | `(event)`: the Table.RefreshButton click, or `new Event('refresh')` from `reload()`                                  |
-| `DataTable`              | `export`                  | `(rows)`                         | `(event, rows)`: the Table.Export click, or `new Event('export')` from `exportCsv()`                                 |
-| `DataTable`              | `load-more`               | `()`                             | `(event)`: the Load more click, or `new Event('load-more')` when the end of the rows nears the viewport              |
+| Component                | Event                     | v5 payload                       | v6 payload                                                                                                                                             |
+| ------------------------ | ------------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `TutorialPanel.Provider` | `start`, `exit`, `finish` | `(id)`                           | `(event, id)` (`finish` is now `complete`)                                                                                                             |
+| `ButtonGroup`            | `toggle`                  | `({ id, pressed })`              | `(event, { id, pressed })`                                                                                                                             |
+| `Alert`                  | `close`                   | `(event?)` (none after `life`)   | `(event)` (an `Event` of type `timeout` after `life`)                                                                                                  |
+| `ErrorBoundary`          | `retry`                   | `(event?)` (none for `resetKey`) | `(event)` (`retry` Event when the slot passes none, `reset` Event for `resetKey`)                                                                      |
+| `DataTable`              | `reorder`                 | `(payload)`                      | `(event, payload)`                                                                                                                                     |
+| `DataTable`              | `row-click`               | `(event: MouseEvent, row)`       | `(event: MouseEvent \| KeyboardEvent, row)`: Enter on a focused row fires it too; a handler typed `MouseEvent` widens to `MouseEvent \| KeyboardEvent` |
+| `DashboardGrid`          | `item-move`               | `(payload)`                      | `(event, payload)`                                                                                                                                     |
+| `DashboardGrid`          | `item-resize`             | `(payload)`                      | `(event, payload)`                                                                                                                                     |
+| `TransferList`           | `move`                    | `(payload)`                      | `(event, payload)`; the slot and exposed `move(event, direction)` / `moveAll(event, direction)` take the event first                                   |
+| `DataTable`              | `refresh`                 | `()`                             | `(event)`: the Table.RefreshButton click, or `new Event('refresh')` from `reload()`                                                                    |
+| `DataTable`              | `export`                  | `(rows)`                         | `(event, rows)`: the Table.Export click, or `new Event('export')` from `exportCsv()`                                                                   |
+| `DataTable`              | `load-more`               | `()`                             | `(event)`: the Load more click, or `new Event('load-more')` when the end of the rows nears the viewport                                                |
 
 #### Types and data fields (a hand edit where the codemod cannot see the data)
 

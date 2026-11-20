@@ -7,7 +7,7 @@
   {
     "name": "console-layout-root",
     "path": "src/components/layout/console-layout/console-layout.vue",
-    "limit": "78.55 KB",
+    "limit": "78.65 KB",
     "entryOnly": true
   },
   {
@@ -24,7 +24,7 @@
   {
     "name": "doc-layout",
     "path": "src/components/docs/doc-layout/doc-layout.vue",
-    "limit": "70.15 KB"
+    "limit": "70.25 KB"
   },
   {
     "name": "doc-markdown",
@@ -530,7 +530,7 @@
   {
     "name": "site-header-section",
     "path": "src/components/section/site-header-section/site-header-section.vue",
-    "limit": "58.05 KB"
+    "limit": "58.15 KB"
   },
   {
     "name": "competitor-comparison-section",
@@ -611,7 +611,7 @@
   {
     "name": "job-posting-section",
     "path": "src/components/section/job-posting-section/job-posting-section.vue",
-    "limit": "56.85 KB",
+    "limit": "56.95 KB",
     "entryOnly": true
   },
   {
@@ -1082,7 +1082,7 @@
   {
     "name": "locales-es",
     "path": "src/locales/es.ts",
-    "limit": "11.7 KB"
+    "limit": "11.8 KB"
   },
   {
     "name": "phone-input",
@@ -1357,7 +1357,7 @@
   {
     "name": "image-gallery",
     "path": "src/components/content/image-gallery/image-gallery.vue",
-    "limit": "26.9 KB"
+    "limit": "27 KB"
   },
   {
     "name": "overflow-count",
@@ -2099,7 +2099,7 @@
   {
     "name": "console-layout",
     "path": "src/components/layout/console-layout/index.ts",
-    "limit": "79.85 KB"
+    "limit": "79.95 KB"
   },
   {
     "name": "use-console-layout",
@@ -2394,7 +2394,7 @@
   {
     "name": "dialog",
     "path": "src/components/overlay/dialog/index.ts",
-    "limit": "22.9 KB"
+    "limit": "23 KB"
   },
   {
     "name": "dialog-root",

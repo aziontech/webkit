@@ -230,7 +230,7 @@
   })
   const onSourceReady = async (editor: unknown) => {
     const { KeyCode, KeyMod } = await import('monaco-editor')
-    const sourceEditor = editor as MonacoEditor.ICodeEditor
+    const sourceEditor = editor as MonacoEditor.IStandaloneCodeEditor
     sourceEditor.addCommand(KeyMod.CtrlCmd | KeyCode.Enter, () => {
       if (!running.value) runTest()
     })

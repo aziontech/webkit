@@ -56,7 +56,7 @@
   }
 
   const CREATE_TOAST = 'create-database'
-  let timer = 0
+  let timer: ReturnType<typeof setTimeout> | undefined
 
   const submit = () => {
     if (submitting.value) return

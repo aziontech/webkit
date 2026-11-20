@@ -28,7 +28,7 @@ A `PageHeader` at `size="small"` opens the form column (`layout-column-form`) wi
 
 Each topic is a section with a `Subheader` at `size="small"` (so every topic is an `h2` under the page `h1`) over a flush `Card :padded="false"` whose content is an `Item.List`. Sections stack at the section step; the heading and its card sit at the group gap. In SaveAll the sections share one `fieldset` with a visually hidden `legend`; in SavePerGroup and SavePerCard each card holds its own `fieldset`.
 
-### C. Setting rows — `SettingsRow`, `Input`, `FieldError`, `Select`, `Switch` (required)
+### C. Setting rows — `SettingsRow`, `Input`, `FieldError`, `Select`, `LanguageSelect`, `Switch` (required)
 
 One `SettingsRow` per setting, with a `title` and a one-sentence `description`. Text and choices take a large full-width `Input` or `Select`; a yes-or-no setting is a `Switch` in a `variant="compact"` row. Each control has an `aria-label` matching the row title. Required controls take `required` from the start; a failed Save turns the control `invalid` and a `FieldError` with an id tied through `aria-describedby` says what to fix. SavePerCard uses stacked `Field`s (a `Field.Label` over its control) under an info `Alert` instead of rows.
 

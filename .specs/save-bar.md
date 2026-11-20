@@ -4,7 +4,7 @@ category: layout
 structure: monolithic
 status: implemented
 checksum: dee3260e1a3cbd5cf6c74afcdbfe9457a551d9622ba1167f9719eb99785c2691
-spec_version: 4
+spec_version: 5
 template: 2
 created: 2026-11-10
 last_updated: 2026-11-20
