@@ -18,7 +18,7 @@
   "@aziontech/webkit/flow-diagram-item",
   "@aziontech/webkit/flow-diagram-bind"
  ],
- "purpose": "The one in-product diagram (owner decision RV-Y1, 2026-11-18): it kept the old FlowDiagram parts and replaced TopologyDiagram in the 6.0 clean break. A naked root lays steps out and draws the connectors. **Data mode** (`nodes` + `edges`): edges set the columns and each node renders the richest card its data allows. **Composed mode**: hand-written parts in the default slot. `orientation=\"responsive\"` stacks into a rail below a 36rem container.",
+ "purpose": "The one in-product diagram (owner decision RV-Y1, 2026-11-18): it kept the old FlowDiagram parts and replaced TopologyDiagram in the 6.0 clean break. A naked root lays steps out and draws the connectors. **Data mode** (`nodes` + `edges`): edges set the columns and each node renders the richest card its data allows. **Composed mode**: hand-written parts in the default slot. `orientation=\"responsive\"` lays the steps in a row only when the whole row fits its container, and stacks them into a rail otherwise.",
  "setup": null,
  "useWhen": [
   "A request path or pipeline: steps in order joined by connectors.",
