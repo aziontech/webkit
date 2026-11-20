@@ -2562,6 +2562,10 @@
       "types": "./types/composables/use-unsaved-changes/index.d.ts",
       "default": "./src/composables/use-unsaved-changes/index.ts"
     },
+    "./use-escape-to-cancel": {
+      "types": "./types/composables/use-escape-to-cancel/index.d.ts",
+      "default": "./src/composables/use-escape-to-cancel/index.ts"
+    },
     "./use-pinned-row": {
       "types": "./types/composables/use-pinned-row/index.d.ts",
       "default": "./src/composables/use-pinned-row/index.ts"
@@ -4156,6 +4160,9 @@
       ],
       "use-unsaved-changes": [
         "./types/composables/use-unsaved-changes/index.d.ts"
+      ],
+      "use-escape-to-cancel": [
+        "./types/composables/use-escape-to-cancel/index.d.ts"
       ],
       "use-pinned-row": [
         "./types/composables/use-pinned-row/index.d.ts"
