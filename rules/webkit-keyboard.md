@@ -127,8 +127,9 @@ macOS, `Ctrl` on Windows, Linux and ChromeOS.
 - Register every shortcut a screen adds where the `?` list can read it, so the list always matches
   what the screen does. A shortcut that is not in the list does not exist for the person using it.
 - Let a `DataTable` move with the arrow keys, open the row with `Enter` and select it with
-  `Space`. `Delete` opens a `ConfirmDialog`, never deletes on the key alone; after the delete,
-  move focus to the next row, else the previous row, else the table.
+  `Space`. `Delete` (`Backspace` on a Mac keyboard, whose delete key sends it) opens a
+  `ConfirmDialog`, never deletes on the key alone; after the delete, move focus to the next row,
+  else the previous row, else the table.
 - Return focus to the trigger when anything closes. `Dialog`, `Drawer`, `Popover` and
   `DropdownMenu` do it for you; a panel you build yourself must do the same.
 - Show every shortcut where the action is offered: `Kbd` in the menu item or beside the control
