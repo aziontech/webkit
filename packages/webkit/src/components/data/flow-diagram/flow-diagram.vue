@@ -1,11 +1,11 @@
 <script setup lang="ts">
-  import { useResizeObserver } from '@vueuse/core'
   import { computed, defineAsyncComponent, provide, ref, useAttrs, useSlots } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import { cn } from '../../../utils/cn'
   import { useFlowDiagramConnectors } from './composables/use-flow-diagram-connectors'
+  import { useFlowDiagramFit } from './composables/use-flow-diagram-fit'
   import FlowDiagramGroup from './flow-diagram-group/flow-diagram-group.vue'
   import FlowDiagramNode from './flow-diagram-node/flow-diagram-node.vue'
   import { FlowDiagramInjectionKey } from './injection-key'
@@ -107,18 +107,16 @@
 
   const scrollEl = ref<HTMLElement | null>(null)
   const containerEl = ref<HTMLElement | null>(null)
-  const scrollable = ref<boolean>(false)
   const { paths, labels, viewBox, vertical } = useFlowDiagramConnectors(containerEl, () =>
     props.loading ? [] : props.edges
   )
 
-  useResizeObserver(
-    () => scrollEl.value,
-    () => {
-      const el = scrollEl.value
-      scrollable.value = Boolean(el && el.scrollWidth > el.clientWidth + 1)
-    }
+  const { direction, overflowStart, overflowEnd } = useFlowDiagramFit(
+    scrollEl,
+    containerEl,
+    () => props.orientation
   )
+  const scrollable = computed<boolean>(() => overflowStart.value || overflowEnd.value)
 
   provide(FlowDiagramInjectionKey, {
     testId,
@@ -165,7 +163,10 @@
       v-else
       ref="scrollEl"
       :tabindex="scrollable ? 0 : undefined"
-      class="w-full overflow-x-auto overscroll-x-contain p-(--spacing-md) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset"
+      :data-overflow-start="overflowStart || null"
+      :data-overflow-end="overflowEnd || null"
+      :data-testid="`${testId}__viewport`"
+      class="w-full overflow-x-auto overscroll-x-contain p-(--spacing-md) outline-none [scrollbar-width:thin] [scrollbar-color:var(--border-muted)_transparent] focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset motion-reduce:scroll-auto [--flow-diagram-fade-direction:to_right] rtl:[--flow-diagram-fade-direction:to_left] data-[overflow-start]:[--flow-diagram-fade-start:transparent] data-[overflow-end]:[--flow-diagram-fade-end:transparent] [&:is([data-overflow-start],[data-overflow-end])]:[mask-image:linear-gradient(var(--flow-diagram-fade-direction),var(--flow-diagram-fade-start,black)_0,black_var(--spacing-2xl),black_calc(100%-var(--spacing-2xl)),var(--flow-diagram-fade-end,black)_100%)] [&:is([data-overflow-start],[data-overflow-end])]:[mask-mode:alpha]"
     >
       <span
         v-if="loading"
@@ -198,12 +199,13 @@
           role="list"
           :aria-hidden="loading || undefined"
           :data-orientation="orientation"
+          :data-direction="direction"
           :data-align="align"
           :data-uniform="uniform || null"
           :data-labelled="labelled || null"
           :data-stacked="vertical || null"
           :data-testid="`${testId}__list`"
-          class="relative flex w-full gap-(--spacing-xl) data-[orientation=vertical]:flex-col data-[orientation=responsive]:flex-col @xl/flow-diagram:data-[orientation=responsive]:flex-row data-[orientation=horizontal]:w-fit data-[orientation=horizontal]:min-w-full @xl/flow-diagram:data-[orientation=responsive]:w-fit @xl/flow-diagram:data-[orientation=responsive]:min-w-full data-[orientation=horizontal]:data-[align=start]:items-start data-[orientation=horizontal]:data-[align=center]:items-center @xl/flow-diagram:data-[orientation=responsive]:data-[align=start]:items-start @xl/flow-diagram:data-[orientation=responsive]:data-[align=center]:items-center data-[labelled]:gap-x-(--spacing-2xl) data-[orientation=horizontal]:data-[uniform]:grid data-[orientation=horizontal]:data-[uniform]:auto-cols-fr data-[orientation=horizontal]:data-[uniform]:grid-flow-col data-[orientation=horizontal]:data-[uniform]:*:self-stretch @xl/flow-diagram:data-[orientation=responsive]:data-[uniform]:grid @xl/flow-diagram:data-[orientation=responsive]:data-[uniform]:auto-cols-fr @xl/flow-diagram:data-[orientation=responsive]:data-[uniform]:grid-flow-col @xl/flow-diagram:data-[orientation=responsive]:data-[uniform]:*:self-stretch data-[stacked]:[&_[data-slot=flow-diagram-port]]:hidden [&_[data-slot=flow-diagram-node]:not([data-entry])_[data-slot=flow-diagram-port][data-side=end]]:hidden [&_[data-slot=flow-diagram-node]:not([data-exit])_[data-slot=flow-diagram-port][data-side=start]]:hidden"
+          class="relative flex w-full gap-(--spacing-xl) data-[direction=column]:flex-col data-[direction=row]:w-fit data-[direction=row]:min-w-full data-[direction=row]:data-[align=start]:items-start data-[direction=row]:data-[align=center]:items-center data-[labelled]:gap-x-(--spacing-2xl) data-[direction=row]:data-[uniform]:grid data-[direction=row]:data-[uniform]:auto-cols-fr data-[direction=row]:data-[uniform]:grid-flow-col data-[direction=row]:data-[uniform]:*:self-stretch data-[stacked]:[&_[data-slot=flow-diagram-port]]:hidden [&_[data-slot=flow-diagram-node]:not([data-entry])_[data-slot=flow-diagram-port][data-side=end]]:hidden [&_[data-slot=flow-diagram-node]:not([data-exit])_[data-slot=flow-diagram-port][data-side=start]]:hidden"
         >
           <slot v-if="composed()" />
           <template v-else>

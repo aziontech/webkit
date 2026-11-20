@@ -285,17 +285,13 @@ export const useFlowDiagramConnectors = (
   onScopeDispose(() => globalThis.cancelAnimationFrame(frame))
   watch(() => toValue(edges), schedule, { deep: true })
 
-  useResizeObserver(() => containerEl.value, measure)
-  useMutationObserver(
-    () => containerEl.value,
-    () => measure(),
-    {
-      childList: true,
-      subtree: true,
-      attributes: true,
-      attributeFilter: ['data-disabled', 'data-state']
-    }
-  )
+  useResizeObserver(() => containerEl.value, schedule)
+  useMutationObserver(() => containerEl.value, schedule, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    attributeFilter: ['data-disabled', 'data-state']
+  })
 
   return {
     paths: computed(() => paths.value),
