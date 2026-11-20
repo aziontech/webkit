@@ -26937,7 +26937,7 @@ packages/webkit/src/components/input/radio-group/
 
 # Theme Switcher
 
-> A compact segmented control drawn like `toggle-group` (same radius, border, surface and 28 / 32 / 40 heights, so it sits in a row of header controls beside an `IconButton`, `Select` or `SearchTrigger` of the same size) that lets the user pick the app color-theme mode — `system`, `dark`, or `light` — via three icon-only segments. It reflects and emits the selected mode through `v-model` and applies no global side effect itself (the app decides what each mode means). Unlike `switch` (a boolean toggle) or `tabs` (view navigation), it is a fixed three-way single-select over the theme modes.
+> A compact segmented control drawn like `toggle-group` (same radius, surface and 28 / 32 / 40 heights, with the header outline `--border-default`, so it sits in a row of header controls beside an `IconButton`, `Select` or `SearchTrigger` of the same size) that lets the user pick the app color-theme mode — `system`, `dark`, or `light` — via three icon-only segments. It reflects and emits the selected mode through `v-model` and applies no global side effect itself (the app decides what each mode means). Unlike `switch` (a boolean toggle) or `tabs` (view navigation), it is a fixed three-way single-select over the theme modes.
 
 - Import: `import ThemeSwitcher from '@aziontech/webkit/theme-switcher'`
 - Category: input · Surface: app · Structure: monolithic
@@ -26962,7 +26962,7 @@ packages/webkit/src/components/input/radio-group/
 
 ## Related
 
-- `toggle-group` — the generic mutually exclusive option group, with labels and sizes; ThemeSwitcher shares its look (radius, border, surface, indicator, sizes).
+- `toggle-group` — the generic mutually exclusive option group, with labels and sizes; ThemeSwitcher shares its look (radius, surface, indicator, sizes), with the header controls' `--border-default` outline instead of its `--border-muted`, so a header row draws one outline colour.
 - `switch` — boolean toggle for a single setting.
 
 ## Props

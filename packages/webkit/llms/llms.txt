@@ -308,7 +308,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [Switch](components/switch.md): Control-only pill toggle `Switch` (36×20 px).
 - [TagEditor](components/tag-editor.md): Key and value tags of one resource, after Cloudscape's tag editor, built on `AttributeEditor`.
 - [Textarea](components/textarea.md): Collects multi-line free-form text from the user.
-- [ThemeSwitcher](components/theme-switcher.md): A compact segmented control drawn like `toggle-group` (same radius, border, surface and 28 / 32 / 40 heights, so it sits in a row of header controls beside an `IconButton`, `Select` or `SearchTrigger` of the same size…
+- [ThemeSwitcher](components/theme-switcher.md): A compact segmented control drawn like `toggle-group` (same radius, surface and 28 / 32 / 40 heights, with the header outline `--border-default`, so it sits in a row of header controls beside an `IconButton`, `Select`…
 
 ## Components: Layout
 

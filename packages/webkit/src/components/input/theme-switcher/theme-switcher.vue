@@ -145,7 +145,7 @@
   watch(() => [model.value, props.size], scheduleIndicatorSync)
 
   const ROOT_CLASS =
-    'group relative inline-flex w-fit shrink-0 items-stretch gap-(--spacing-2xs) p-(--spacing-2xs) rounded-(--shape-button) border border-(--border-muted) bg-(--bg-surface) data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10'
+    'group relative inline-flex w-fit shrink-0 items-stretch gap-(--spacing-2xs) p-(--spacing-2xs) rounded-(--shape-button) border border-(--border-default) bg-(--bg-surface) data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10'
 
   const SEGMENT_CLASS =
     'relative z-(--z-control) inline-flex shrink-0 items-center justify-center rounded-(--shape-button) cursor-pointer group-data-[size=small]:w-6 group-data-[size=medium]:w-7 group-data-[size=large]:w-9 text-label-sm group-data-[size=large]:text-label-md data-[state=active]:text-(--text-default) data-[state=inactive]:text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) [&:not([data-state=active])]:hover:bg-(--bg-hover) hover:text-(--text-default) disabled:cursor-not-allowed disabled:text-(--text-disabled)'
