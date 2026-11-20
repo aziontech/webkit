@@ -195,6 +195,31 @@ describe('ConsoleLayout', () => {
       expect(router.push).not.toHaveBeenCalled()
     })
 
+    it('does not run a javascript: row chosen by keyboard in the rail or the palette', async () => {
+      const probe = globalThis as typeof globalThis & { __consoleLayoutProbe?: number }
+      const href = 'javascript:globalThis.__consoleLayoutProbe=1'
+      const onNavigate = vi.fn()
+      const { getByRole } = mount({
+        onNavigate,
+        searchOpen: true,
+        navigation: [{ items: [{ id: 'bad', label: 'Bad page', href }] }]
+      })
+      const dialog = await waitFor(() => within(document.body).getByRole('dialog'))
+      await userEvent.type(within(dialog).getByRole('combobox'), 'Bad')
+      await userEvent.keyboard('{Enter}')
+      await waitFor(() => expect(onNavigate).toHaveBeenCalledTimes(1))
+      expect(onNavigate.mock.calls[0]![0]).toBeInstanceOf(KeyboardEvent)
+      await userEvent.keyboard('{Escape}')
+      await waitFor(() => expect(within(document.body).queryByRole('dialog')).toBeNull())
+      const control = getByRole('button', { name: 'Bad page' })
+      expect(control.hasAttribute('href')).toBe(false)
+      control.focus()
+      await userEvent.keyboard('{Enter}')
+      await new Promise((resolve) => setTimeout(resolve, 100))
+      expect(onNavigate).toHaveBeenCalledTimes(2)
+      expect(probe.__consoleLayoutProbe).toBeUndefined()
+    })
+
     it('shows the breadcrumbs and follows a crumb route with the router', async () => {
       const router = fakeRouter('/workloads/42')
       const { getByRole } = mount(

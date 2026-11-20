@@ -532,6 +532,18 @@ describe('MediaSplit', () => {
       expect(open).not.toHaveBeenCalled()
     })
 
+    it('stays inert with a javascript: mediaHref', async () => {
+      const open = stubOpen()
+      const { getByRole, getByTestId } = render(MediaSplit, {
+        props: { title: TITLE, src: SRC, alt: ALT, mediaHref: 'javascript:alert(1)' }
+      })
+
+      await fireEvent.click(getByRole('heading', { level: 2 }), { metaKey: true })
+
+      expect(open).not.toHaveBeenCalled()
+      expect(getByTestId('media-split__media').hasAttribute('href')).toBe(false)
+    })
+
     it('yields to a consumer click listener that prevents the default', async () => {
       const open = stubOpen()
       const { getByRole } = render(MediaSplit, {

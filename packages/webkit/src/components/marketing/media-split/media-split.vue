@@ -119,7 +119,8 @@
 
   const hasDescription = () => Boolean(slots.default) || props.description.length > 0
 
-  const isMediaLink = computed<boolean>(() => safeHref(props.mediaHref) !== null)
+  const mediaLink = computed<string | null>(() => safeHref(props.mediaHref))
+  const isMediaLink = computed<boolean>(() => mediaLink.value !== null)
 
   const frame = computed(() => (props.framed ? RegistrationFrame : 'div'))
   const frameProps = computed(() =>
@@ -136,15 +137,16 @@
   onScopeDispose(() => rootEl.value?.removeEventListener('click', followBand))
 
   function followBand(event: MouseEvent) {
-    if (!isMediaLink.value || event.defaultPrevented) return
+    const href = mediaLink.value
+    if (!href || event.defaultPrevented) return
     if ((event.target as globalThis.Element).closest('a, button, input, select, textarea, label'))
       return
     if (globalThis.getSelection()?.toString()) return
     if (event.metaKey || event.ctrlKey) {
-      globalThis.open(props.mediaHref, '_blank', 'noopener')
+      globalThis.open(href, '_blank', 'noopener')
       return
     }
-    globalThis.location.assign(props.mediaHref)
+    globalThis.location.assign(href)
   }
 </script>
 
@@ -231,7 +233,7 @@
         >
           <component
             :is="isMediaLink ? 'a' : 'div'"
-            :href="isMediaLink ? mediaHref : undefined"
+            :href="mediaLink ?? undefined"
             :aria-label="isMediaLink ? title : undefined"
             :data-testid="`${testId}__media`"
             class="group/media relative flex h-full min-w-0 items-center justify-center overflow-hidden group-data-[media-fill=surface]/split:bg-(--bg-surface) group-data-[media-fill=canvas]/split:bg-(--bg-canvas) group-data-[media-padded]/split:p-(--spacing-xl) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset"

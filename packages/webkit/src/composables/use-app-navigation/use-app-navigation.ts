@@ -13,6 +13,7 @@ import type {
   SidebarMenuNode,
   SidebarMenuSubType
 } from '../../components/navigation/sidebar-menu/injection-key'
+import { safeHref } from '../../utils/safe-href'
 
 /** One row of a layout's navigation tree. */
 export interface AppNavItem {
@@ -88,7 +89,7 @@ export function useAppNavigation(): UseAppNavigationReturn {
 
   const currentPath = computed(() => (router ? router.currentRoute.value.path : locationPath.value))
 
-  const hrefOf = (link: AppLinkTarget): string | undefined => link.href || undefined
+  const hrefOf = (link: AppLinkTarget): string | undefined => safeHref(link.href) ?? undefined
 
   const inApp = (href: string) => href.startsWith('/') && !href.startsWith('//')
 

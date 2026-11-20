@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: 99e022d09c5a65caf585e28cb97786f5eb69788bbb4888177f4086d83e4465ec
+checksum: fc90d113fc0640472ee8fd7a9d29e9d8deb9eae9bfda74a91d4c925a652f5c04
 created: 2026-11-12
 last_updated: 2026-11-19
 ---
@@ -95,6 +95,7 @@ The marketing site's chrome, composed once in the app: `SiteHeaderSection` on to
 
 - Visual states: `default`; the palette `open` / `closed`; the bar's sheet and mega-menus own their states (`SiteHeaderSection`).
 - `navOverlay` (mirrored on `data-nav-overlay`): the root becomes a one-column grid where the bar and the main landmark share the first row, so the first band runs under the bar (a home page whose hero art fills the top); the bar stays sticky to the end of the page and the footer takes the second row.
+- Unsafe `href` on a navigation row, crumb, section or palette page (`javascript:`, `data:`, any non-web scheme, `//host`): the row renders with no link and choosing it, by pointer or keyboard, follows nothing; `navigate` still fires, so the handler decides.
 - Not applicable: `loading`, `empty`, `error`, `disabled`, `readonly`, `invalid` (the sections own their states).
 
 ## Motion & Animations
