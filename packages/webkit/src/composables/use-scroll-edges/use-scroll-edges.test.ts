@@ -73,23 +73,6 @@ describe('useScrollEdges', () => {
     expect(sink.edges?.end.value).toBe(24)
   })
 
-  it('reports a frozen cell on each inline edge', async () => {
-    const sink: { edges?: UseScrollEdgesReturn; el?: HTMLElement } = {}
-    render(host('ltr', sink))
-    await settle()
-    expect(sink.edges?.frozenStart.value).toBe(false)
-    expect(sink.edges?.frozenEnd.value).toBe(false)
-    const content = sink.el?.firstElementChild as HTMLElement
-    content.setAttribute('data-frozen', 'start')
-    sink.edges?.measure()
-    expect(sink.edges?.frozenStart.value).toBe(true)
-    expect(sink.edges?.frozenEnd.value).toBe(false)
-    content.setAttribute('data-frozen', 'end')
-    sink.edges?.measure()
-    expect(sink.edges?.frozenStart.value).toBe(false)
-    expect(sink.edges?.frozenEnd.value).toBe(true)
-  })
-
   it('reports no edge when the content fits', async () => {
     const sink: { edges?: UseScrollEdgesReturn; el?: HTMLElement } = {}
     render(host('ltr', sink))

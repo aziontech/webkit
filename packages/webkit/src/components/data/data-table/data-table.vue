@@ -1039,8 +1039,6 @@
   const {
     start: overflowStart,
     end: overflowEnd,
-    frozenStart,
-    frozenEnd,
     measure: measureEdges
   } = useScrollEdges(() => viewportElement() ?? null)
 
@@ -1784,8 +1782,6 @@
       :data-testid="`${testId}__scroll`"
       :data-overflow-start="overflowStart || undefined"
       :data-overflow-end="overflowEnd || undefined"
-      :data-frozen-start="frozenStart || undefined"
-      :data-frozen-end="frozenEnd || undefined"
       class="group/scroll relative flex min-h-0 min-w-0 flex-col"
     >
       <ScrollArea
@@ -2199,13 +2195,13 @@
         aria-hidden="true"
         :data-testid="`${testId}__fade-start`"
         :style="{ width: `${overflowStart}px` }"
-        class="pointer-events-none absolute inset-y-0 start-0 z-20 hidden bg-gradient-to-l from-transparent to-(--bg-surface) group-data-[overflow-start]/scroll:block group-data-[frozen-start]/scroll:invisible rtl:bg-gradient-to-r forced-colors:forced-color-adjust-none forced-colors:to-[Canvas]"
+        class="pointer-events-none absolute inset-y-0 start-0 z-5 hidden bg-gradient-to-l from-transparent to-(--bg-surface) group-data-[overflow-start]/scroll:block rtl:bg-gradient-to-r forced-colors:forced-color-adjust-none forced-colors:to-[Canvas]"
       />
       <span
         aria-hidden="true"
         :data-testid="`${testId}__fade-end`"
         :style="{ width: `${overflowEnd}px` }"
-        class="pointer-events-none absolute inset-y-0 end-0 z-20 hidden bg-gradient-to-r from-transparent to-(--bg-surface) group-data-[overflow-end]/scroll:block group-data-[frozen-end]/scroll:invisible rtl:bg-gradient-to-l forced-colors:forced-color-adjust-none forced-colors:to-[Canvas]"
+        class="pointer-events-none absolute inset-y-0 end-0 z-5 hidden bg-gradient-to-r from-transparent to-(--bg-surface) group-data-[overflow-end]/scroll:block rtl:bg-gradient-to-l forced-colors:forced-color-adjust-none forced-colors:to-[Canvas]"
       />
     </div>
     <template v-if="reorderActive">

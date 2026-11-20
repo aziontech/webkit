@@ -84,7 +84,7 @@ export const TOKEN_CHECKS = [
     id: 'has-on-scroll-frame',
     regex: /(?<![\w-])(?:group|peer)-has-(?:\[[^\s"'`]*\]|[\w-]+)\/scroll:/g,
     message:
-      'A :has() variant read from the scroll frame (`group-has-[…]/scroll:`). The frame wraps every row, so Chromium re-checks the :has() whenever a row mounts and restyles the whole table on every scroll frame (the 10k-row virtual DataTable went from 228 ms to 3,580 ms of style recalc). Measure the state in script, set a data attribute on the frame and read it with `group-data-[…]/scroll:` (.claude/rules/styling.md).'
+      'A :has() variant read from the scroll frame (`group-has-[…]/scroll:`). The frame wraps every row, so Chromium re-checks the :has() whenever a row mounts and restyles the whole table on every scroll frame (the 10k-row virtual DataTable went from 228 ms to 3,580 ms of style recalc). Get the result from the stacking order (the table scroll cue sits below the frozen cells), or measure the state in script, set a data attribute on the frame and read it with `group-data-[…]/scroll:` (.claude/rules/styling.md).'
   },
   {
     id: 'rtl-double-flip',
