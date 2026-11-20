@@ -1,4 +1,5 @@
 import '../../../test/reflow.css'
+import '@aziontech/icons'
 
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
@@ -397,16 +398,30 @@ describe('Switch', () => {
       host.remove()
     })
 
-    it('renders both lock glyphs for variant="privacy" and none for default', () => {
+    it('renders one lock glyph for variant="privacy", chosen by state, and none for default', async () => {
       const privacy = render(Switch, {
         props: { variant: 'privacy' },
         attrs: { 'aria-label': 'Public' }
       })
-      expect(privacy.getByTestId('switch__lock')).toBeTruthy()
-      expect(privacy.getByTestId('switch__lock-open')).toBeTruthy()
+      const visibleLocks = () =>
+        [...privacy.getByTestId('switch__handle').querySelectorAll('.az')].filter(
+          (node) => getComputedStyle(node).display !== 'none'
+        )
+
+      expect(visibleLocks()).toHaveLength(1)
+      expect(visibleLocks()[0]?.classList.contains('az-lock')).toBe(true)
+      expect(privacy.queryByTestId('switch__lock-open')).toBeNull()
+
+      await fireEvent.click(privacy.getByTestId('switch'))
+
+      expect(visibleLocks()).toHaveLength(1)
+      expect(visibleLocks()[0]?.classList.contains('az-lock-open')).toBe(true)
+      expect(privacy.queryByTestId('switch__lock')).toBeNull()
       privacy.unmount()
+
       const plain = render(Switch, { attrs: { 'aria-label': 'Public' } })
       expect(plain.queryByTestId('switch__lock')).toBeNull()
+      expect(plain.queryByTestId('switch__lock-open')).toBeNull()
     })
   })
 

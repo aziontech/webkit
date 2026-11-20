@@ -3,20 +3,20 @@ name: switch
 category: input
 structure: monolithic
 status: implemented
-spec_version: 16
+spec_version: 17
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-1247
   node_id: 2027:1247
-checksum: 7aa6553943b543c061c17e960158414b588b9021f5fa5314fa3909a826714ba2
+checksum: c3a10962224ac3d35ad1ce2a0c5677fec967f81966663f2dd26a95cde9a9c5f5
 created: 2026-05-22
-last_updated: 2026-11-15
+last_updated: 2026-11-20
 ---
 
 # Switch — Component Spec
 
 ## Purpose
 
-Control-only pill toggle `Switch` (36×20 px). Two visual types: `default` (plain handle) and `privacy` (handle carries a `az-lock` / `az-lock-open` icon mirroring the toggled state; both glyphs render and `group-data-[checked]:` shows the right one, so no class is chosen in script). No label or description — wrap it in a horizontal `Field` or a `Field.Label` choice card for labeled layouts, or place it bare where the label already exists outside the control (an ItemGroup row names the field with `Item.Title`). Because the bare form has no wrapper to defer to, the control owns its own `disabled` state.
+Control-only pill toggle `Switch` (36×20 px). Two visual types: `default` (plain handle) and `privacy` (handle carries a `az-lock` / `az-lock-open` icon mirroring the toggled state; exactly one glyph renders, chosen by the toggled state with `v-if` / `v-else`, so the handle never shows both locks). No label or description — wrap it in a horizontal `Field` or a `Field.Label` choice card for labeled layouts, or place it bare where the label already exists outside the control (an ItemGroup row names the field with `Item.Title`). Because the bare form has no wrapper to defer to, the control owns its own `disabled` state.
 
 ## When to use
 

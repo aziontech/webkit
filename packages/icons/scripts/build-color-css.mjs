@@ -37,8 +37,13 @@ const files = loadManifest()
   .map((entry) => `${glyphName(entry)}.svg`)
 
 const sharedSelector = COLOR_BASE
-const sharedRule = `.${sharedSelector} {
-  display: inline-block;
+const sharedRule = `@layer components {
+  .${sharedSelector} {
+    display: inline-block;
+  }
+}
+
+.${sharedSelector} {
   width: 1em;
   height: 1em;
   background-repeat: no-repeat;

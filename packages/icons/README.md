@@ -120,13 +120,19 @@ The CSS is **not** a font glyph and **not** base64. Each SVG is inlined as a **p
 ```css
 /* shared box — applies to every colored icon */
 .az-color {
-  display: inline-block;
   width: 1em; /* scales with font-size, like a glyph's box */
   height: 1em;
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
   vertical-align: -0.125em;
+}
+
+/* display sits in a cascade layer under Tailwind utilities, so hidden, block and sm:block win */
+@layer components {
+  .az-color {
+    display: inline-block;
+  }
 }
 
 /* one rule per icon — the vector, percent-encoded (not base64) */
@@ -205,9 +211,15 @@ The generated CSS base class sets the following properties on the icon prefix (`
   font-variant: normal;
   text-transform: none;
   line-height: 1;
-  display: inline-block;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* display sits in a cascade layer under Tailwind utilities, so hidden, block and sm:block win */
+@layer components {
+  .az {
+    display: inline-block;
+  }
 }
 ```
 
