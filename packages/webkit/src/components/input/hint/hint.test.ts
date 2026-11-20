@@ -126,7 +126,7 @@ describe('Hint', () => {
     await userEvent.keyboard('{Tab}')
     expect(document.activeElement).toBe(getByTestId('name'))
     expect(getByTestId('hint').getAttribute('data-state')).toBe('closed')
-    expect(panel()?.getAttribute('data-state') ?? 'closed').toBe('closed')
+    expect(getByTestId('hint__trigger').hasAttribute('aria-describedby')).toBe(false)
 
     await userEvent.keyboard('{Escape}')
     expect(onEscape).toHaveBeenCalledTimes(1)

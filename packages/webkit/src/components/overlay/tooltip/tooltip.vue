@@ -162,11 +162,6 @@
     }
   }
 
-  function onBeforeLeave(el: globalThis.Element) {
-    el.setAttribute('data-state', 'closed')
-    el.setAttribute('aria-hidden', 'true')
-  }
-
   function onFocusout(event: globalThis.FocusEvent) {
     const trigger = triggerEl.value
     const next = event.relatedTarget as Node | null
@@ -241,7 +236,6 @@
     <Transition
       enter-active-class="animate-popup-scale-in motion-reduce:animate-none"
       leave-active-class="animate-popup-scale-out motion-reduce:animate-none"
-      @before-leave="onBeforeLeave"
     >
       <div
         v-if="isOpen && content"
