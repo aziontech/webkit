@@ -129,6 +129,19 @@ describe('PropertyFilter', () => {
     expect(query.emitted()['update:text']?.at(-1)).toEqual(['status = Active'])
   })
 
+  it('sets the query text in the code face of the field, and the token text in the plain one', () => {
+    const tokens = render(PropertyFilter, { props: { properties } })
+    expect(
+      tokens.getByRole('combobox').closest('[data-slot="input"]')?.hasAttribute('data-monospace')
+    ).toBe(false)
+    tokens.unmount()
+
+    const query = render(PropertyFilter, { props: { properties, mode: 'query' } })
+    expect(
+      query.getByRole('combobox').closest('[data-slot="input"]')?.hasAttribute('data-monospace')
+    ).toBe(true)
+  })
+
   it('adds, removes and submits nothing while disabled', async () => {
     const view = render(PropertyFilter, {
       props: {

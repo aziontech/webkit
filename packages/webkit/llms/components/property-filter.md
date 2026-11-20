@@ -82,7 +82,7 @@
 ## States
 
 - Visual states: `default`, `focus-visible`, `open` (suggestions shown), `disabled`, `invalid` (query mode: after Enter or blur on a query that fails the check, then live until it passes or is cleared)
-- `data-mode` on the field wrapper mirrors `mode`; query mode sets the typed text in the code type (`text-label-code-sm`)
+- `data-mode` on the field wrapper mirrors `mode`; query mode sets the typed text in the code type through the field's `monospace` prop (`text-label-code-sm`, 16 px `text-label-code-lg` on coarse pointers)
 - `aria-expanded` on the field mirrors the open suggestions; `data-active` marks the active option
 - `data-disabled` mirrors the `disabled` prop; while disabled nothing is added, removed or submitted (no `update:query`, no `submit`)
 - `loading` (values): a `Loading values` row with a spinner in the suggestions while `loadValues` is pending, `aria-busy` on the listbox; `error`: a `Could not load values` row when it rejects. A newer call wins over a stale one.
@@ -146,7 +146,7 @@
 
 - Container queries: `@container/property-filter` on the root; the token row wraps.
 - Narrow (≤ 640 px or a narrow container): the field takes the full width, tokens wrap onto several lines, the count moves to the end of the last line.
-- Touch: options are 44 px high on `pointer: coarse`; nothing depends on hover.
+- Touch: options are 44 px high on `pointer: coarse`; on coarse pointers (`pointer-coarse:`) the typed text steps up to 16 px (`text-body-md`, `text-label-code-lg` in query mode), so iOS Safari does not zoom the page on focus; nothing depends on hover.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom; long tokens truncate inside the chip.
 
 ## Examples

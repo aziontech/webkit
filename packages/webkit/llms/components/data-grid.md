@@ -128,7 +128,7 @@
 - Narrow (≤ 640 px or a narrow container): the viewport scrolls sideways inside the grid, with the frozen first column still in view; the toolbar wraps.
 - Touch: cells and headers are 44 px high under `pointer: coarse` (40 px otherwise); the resize handle's hit area is 44 px under `pointer: coarse` (24 px otherwise); editing opens on a second tap; nothing is hover-only.
 - Reflow: a data grid is the WCAG 1.4.10 exception for two-dimensional content: the grid scrolls horizontally inside its frame, never the page.
-- Touch: on coarse pointers (`pointer-coarse:`) the cell editor's text steps up to 16 px (`text-body-md`), so iOS Safari does not zoom the page while editing a cell.
+- Touch: on coarse pointers (`pointer-coarse:`) the cell editor's text, the text field and the native `select` alike, steps up to 16 px (`text-body-md`), so iOS Safari does not zoom the page while editing a cell.
 
 ## Examples
 

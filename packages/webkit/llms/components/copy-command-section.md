@@ -65,6 +65,7 @@
 ## Responsive
 
 - Fills its column up to `--container-xs`; fixed at that width from large.
+- Touch: the copy button is large; the read-only command field can take focus, so on coarse pointers (`pointer-coarse:`) its text steps up to 16 px (`text-label-code-lg`) and iOS Safari does not zoom the page.
 
 ## Examples
 

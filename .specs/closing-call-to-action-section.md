@@ -6,7 +6,7 @@ status: implemented
 spec_version: 9
 created: 2026-11-05
 last_updated: 2026-11-18
-checksum: 6b7ea93b1a4718f2681a034eb052acba3940dc4cb59e1ddd5469a4424f1e5b45
+checksum: 5006bed197352a588f13f584244ae020c956775d0e098ebd80d223ae1b2bf821
 template: 2
 ---
 
@@ -153,7 +153,7 @@ One built-in string pair: the typed line's pause control reads `common.pauseAnim
 
 - Container queries: none of its own; `call-to-action` lays out the panel.
 - Narrow (below `lg`): the command line takes the full width above the actions.
-- Touch: the actions are large buttons and the copy button is large; nothing depends on hover.
+- Touch: the actions are large buttons and the copy button is large; the read-only command field can take focus, so on coarse pointers (`pointer-coarse:`) its text steps up to 16 px (`text-label-code-lg`) and iOS Safari does not zoom the page; nothing depends on hover.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom; a long command scrolls inside its field.
 
 ## Performance

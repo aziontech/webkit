@@ -174,7 +174,7 @@
               v-bind="PASSWORD_MANAGER_IGNORE"
               :value="current.copy.text"
               :aria-label="lineAriaLabel || undefined"
-              class="h-full min-w-0 flex-1 border-0 bg-(--bg-surface) px-(--spacing-md) text-label-code-sm text-(--text-default) outline-none"
+              class="h-full min-w-0 flex-1 border-0 bg-(--bg-surface) px-(--spacing-md) text-label-code-sm pointer-coarse:text-label-code-lg text-(--text-default) outline-none"
             />
             <CopyButton
               size="large"

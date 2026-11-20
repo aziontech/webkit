@@ -8,11 +8,15 @@
   import CodeView from './code-view.vue'
   import RawHtml from './raw-html.vue'
 
-  const props = defineProps<{
-    dir: string
-    example: { name: string; summary: string; file: string; json?: string }
-    anchor: string
-  }>()
+  const props = withDefaults(
+    defineProps<{
+      dir: string
+      example: { name: string; summary: string; file: string; json?: string }
+      anchor: string
+      headingLevel?: 2 | 3
+    }>(),
+    { headingLevel: 3 }
+  )
 
   const live = computed(() => cached<Component>(keys.example(props.dir, props.example.file)))
   const source = computed(() =>
@@ -62,12 +66,13 @@
     :aria-labelledby="`${anchor}-title`"
   >
     <div class="flex flex-col gap-(--spacing-2xs)">
-      <h3
+      <component
+        :is="`h${headingLevel}`"
         :id="`${anchor}-title`"
         class="text-heading-sm"
       >
         {{ title }}
-      </h3>
+      </component>
       <DocProse v-if="example.summary">
         <RawHtml
           tag="p"
