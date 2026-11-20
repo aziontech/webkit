@@ -2478,6 +2478,10 @@
       "types": "./types/css.d.ts",
       "default": "./src/styles/country-flags.css"
     },
+    "./use-announcer": {
+      "types": "./types/composables/use-announcer/index.d.ts",
+      "default": "./src/composables/use-announcer/index.ts"
+    },
     "./use-controllable": {
       "types": "./types/composables/use-controllable/index.d.ts",
       "default": "./src/composables/use-controllable/index.ts"
@@ -4105,6 +4109,9 @@
       ],
       "styles/country-flags": [
         "./types/css.d.ts"
+      ],
+      "use-announcer": [
+        "./types/composables/use-announcer/index.d.ts"
       ],
       "use-controllable": [
         "./types/composables/use-controllable/index.d.ts"

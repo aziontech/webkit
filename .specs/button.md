@@ -3,11 +3,11 @@ name: button
 category: action
 structure: monolithic
 status: implemented
-spec_version: 10
+spec_version: 11
 template: 2
-checksum: 927643cf3957410f8b9506fb6532b8b360424aeeb0106960fa3bfeb91d717190
+checksum: 238c42c6009131ec03f86077c6203ee7615812248b6538712cec7bdcfee626bd
 created: 2026-05-22
-last_updated: 2026-11-16
+last_updated: 2026-11-20
 ---
 
 # Button — Component Spec
@@ -47,6 +47,8 @@ The labelled control that triggers an action. `variant` ranks the action in its 
 - Keep one `variant="primary"` per view or region; use `danger` only for destructive actions.
 - `variant="link"` has no box: no height, padding or surface, `text-body-sm` in the link colour, underlined on hover. `size` does not apply to it; place it where body text sits (a cell, a summary line, under a section).
 - Set `loading` while the action resolves: it swaps the icon for a spinner, sets `aria-busy` and suppresses `click`, so the handler needs no extra guard.
+- Give `loading` a `loadingLabel` that names the work (`Saving changes`), so a screen reader hears that it started.
+- When a button is disabled for a reason the person can act on (a missing permission, an unfinished step), say it in `disabledReason` instead of leaving a dead control.
 - Use `iconPosition="leading"` for a glyph that names the action and `"trailing"` for one that points where it goes; add `animated` only on marketing CTAs with a trailing icon.
 - Put brand or product marks in the `leading` slot; `icon` takes an Azion icon class.
 - `label` is required and is the accessible name; never pass an empty string to get an icon-only control.
@@ -79,19 +81,21 @@ The labelled control that triggers an action. `variant` ranks the action in its 
 
 ## Props
 
-| Prop           | Type                                                                     | Default     | Required | JSDoc                                                                                                                                     |
-| -------------- | ------------------------------------------------------------------------ | ----------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `label`        | `string`                                                                 | `''`        | false    | Visible label text, the fallback of the default slot (pass one or the other). Use `IconButton` for icon-only controls.                    |
-| `variant`      | `'primary' \| 'secondary' \| 'outline' \| 'ghost' \| 'danger' \| 'link'` | `'primary'` | false    | Visual variant. `link` draws an inline text action in the link colour, with no box.                                                       |
-| `size`         | `'small' \| 'medium' \| 'large'`                                         | `'large'`   | false    | Size token; affects height, padding, and typography.                                                                                      |
-| `disabled`     | `boolean`                                                                | `false`     | false    | Disables interaction and applies disabled tokens.                                                                                         |
-| `loading`      | `boolean`                                                                | `false`     | false    | Shows loading state and disables activation.                                                                                              |
-| `icon`         | `string`                                                                 | `''`        | false    | Azion icon class for the icon drawn beside the label.                                                                                     |
-| `iconPosition` | `'leading' \| 'trailing'`                                                | `'leading'` | false    | Which side of the label the icon sits on. `leading` is a glyph that names the action; `trailing` is a glyph that points at where it goes. |
-| `animated`     | `boolean`                                                                | `false`     | false    | Nudges a trailing icon along its axis on hover. Off by default; marketing CTAs opt in.                                                    |
-| `href`         | `string`                                                                 | `''`        | false    | When set to a safe URL, renders as a link (`<a>`); an unsafe URL is ignored, and a `download` attribute keeps `blob:` / `data:` (see Accessibility).                                                                                                      |
-| `target`       | `'_blank' \| '_self'`                                                    | `'_self'`   | false    | Link target when `href` is set.                                                                                                           |
-| `type`         | `'button' \| 'submit' \| 'reset'`                                        | `'button'`  | false    | Native button type. `submit` lets the control submit its form; `disabled` and `loading` still block it. Ignored when `href` is set.       |
+| Prop             | Type                                                                     | Default     | Required | JSDoc                                                                                                                                                |
+| ---------------- | ------------------------------------------------------------------------ | ----------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `label`          | `string`                                                                 | `''`        | false    | Visible label text, the fallback of the default slot (pass one or the other). Use `IconButton` for icon-only controls.                               |
+| `variant`        | `'primary' \| 'secondary' \| 'outline' \| 'ghost' \| 'danger' \| 'link'` | `'primary'` | false    | Visual variant. `link` draws an inline text action in the link colour, with no box.                                                                  |
+| `size`           | `'small' \| 'medium' \| 'large'`                                         | `'large'`   | false    | Size token; affects height, padding, and typography.                                                                                                 |
+| `disabled`       | `boolean`                                                                | `false`     | false    | Disables interaction and applies disabled tokens.                                                                                                    |
+| `loading`        | `boolean`                                                                | `false`     | false    | Shows loading state and disables activation.                                                                                                         |
+| `icon`           | `string`                                                                 | `''`        | false    | Azion icon class for the icon drawn beside the label.                                                                                                |
+| `iconPosition`   | `'leading' \| 'trailing'`                                                | `'leading'` | false    | Which side of the label the icon sits on. `leading` is a glyph that names the action; `trailing` is a glyph that points at where it goes.            |
+| `animated`       | `boolean`                                                                | `false`     | false    | Nudges a trailing icon along its axis on hover. Off by default; marketing CTAs opt in.                                                               |
+| `href`           | `string`                                                                 | `''`        | false    | When set to a safe URL, renders as a link (`<a>`); an unsafe URL is ignored, and a `download` attribute keeps `blob:` / `data:` (see Accessibility). |
+| `target`         | `'_blank' \| '_self'`                                                    | `'_self'`   | false    | Link target when `href` is set.                                                                                                                      |
+| `type`           | `'button' \| 'submit' \| 'reset'`                                        | `'button'`  | false    | Native button type. `submit` lets the control submit its form; `disabled` and `loading` still block it. Ignored when `href` is set.                  |
+| `disabledReason` | `string`                                                                 | `''`        | false    | Why the action is unavailable. While `disabled`, the button stays focusable and carries this text as its description, shown by the browser on hover. |
+| `loadingLabel`   | `string`                                                                 | `''`        | false    | What a screen reader hears when `loading` starts, such as `Saving changes`. Empty announces nothing.                                                 |
 
 ## Events
 
@@ -112,6 +116,9 @@ The labelled control that triggers an action. `variant` ranks the action in its 
 - `data-disabled` mirrors the `disabled` prop; `data-loading` the `loading` prop; `data-inert` is set while disabled or loading
 - `data-size` mirrors `size`; every variant, size and inert utility switches on these `data-*` attributes in one flat class (no class presets in script)
 - `data-variant` mirrors `variant`; with `variant="link"` the button has no box (no height, padding, surface or state layer), the label is `text-body-sm` in `var(--text-link)` turning `var(--text-link-hover)` and underlined on hover, and `size` is ignored; disabled and loading drop it to `var(--text-disabled)`; under forced colors it reads as `LinkText` with no border.
+- With `disabledReason` set on a `disabled` button, the root carries `aria-disabled` instead of the native `disabled` attribute, so it keeps its place in the tab order; `click` is still suppressed and the look is the disabled one. The reason is the root's `title`: the browser shows it on hover and assistive technology reads it as the button's description. The button depends on no overlay: a styled `Tooltip` around it is the consumer's choice, and it now opens on focus too, because the button can take focus.
+- When `loading` turns on and `loadingLabel` is set, it is announced once through the shared polite live region (`useAnnouncer`). With no `loadingLabel` only `aria-busy` marks the state: the button has no built-in string.
+- The root is one element: an anchor when `href` is set, otherwise a button. Its inner parts carry `data-slot`: `content`, `icon`, `label`, `touch-target`.
 - With `type="submit"`, `disabled` (native) and `loading` (the click is cancelled) both stop the form from submitting, including implicit submission on `Enter`
 - Touch: the drawn size is unchanged (28/32/40 px, all above the 24 px minimum); on a coarse pointer an invisible `[data-slot=touch-target]` span extends the hit area to at least 44 × 44 px around the button.
 
@@ -162,7 +169,7 @@ The labelled control that triggers an action. `variant` ranks the action in its 
 
 ## Internationalization
 
-- No built-in strings: the label (and an `aria-label` when given) are consumer copy.
+- No built-in strings: the label, `disabledReason`, `loadingLabel` (and an `aria-label` when given) are consumer copy.
 
 ## Responsive
 
@@ -189,6 +196,7 @@ The labelled control that triggers an action. `variant` ranks the action in its 
 - Large (size)
 - Icon
 - Disabled
+- Disabled reason (`disabledReason`)
 - Form submit (`type`) — `type` only acts inside a form, so this story renders one with a field, a reset and a submit Button
 
 ## Constraints — DO NOT

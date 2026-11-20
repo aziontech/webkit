@@ -33,6 +33,11 @@
       "file": "disabled.vue"
     },
     {
+      "name": "DisabledReason",
+      "summary": "`disabled-reason` says why the action is unavailable: the button stays focusable and the reason is its description.",
+      "file": "disabled-reason.vue"
+    },
+    {
       "name": "FormSubmit",
       "summary": "`type=\"submit\"` makes the Button its form's submit control, so a click or Enter inside a field submits it; `type=\"reset\"` clears the form. The default `type=\"button\"` never submits.",
       "file": "form-submit.vue"

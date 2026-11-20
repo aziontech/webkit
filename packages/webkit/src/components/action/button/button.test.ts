@@ -1,9 +1,10 @@
 import userEvent from '@testing-library/user-event'
 import { fireEvent, render } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it } from 'vitest'
 
 import Default from '../../../../examples/button/default.vue'
 import Disabled from '../../../../examples/button/disabled.vue'
+import DisabledReason from '../../../../examples/button/disabled-reason.vue'
 import Loading from '../../../../examples/button/loading.vue'
 import Types from '../../../../examples/button/variants.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -387,6 +388,96 @@ describe('Button', () => {
     it('Loading story renders the spinner', () => {
       const { getByTestId } = render(Loading)
       expect(getByTestId('button__loading')).toBeTruthy()
+    })
+  })
+
+  describe('one root', () => {
+    it('marks its inner parts with data-slot', () => {
+      const { getByRole } = render(Button, { props: { label: 'Save', icon: 'az az-save' } })
+      const button = getByRole('button')
+      expect(button.querySelector('[data-slot="content"]')).toBeTruthy()
+      expect(button.querySelector('[data-slot="icon"]')).toBeTruthy()
+      expect(button.querySelector('[data-slot="label"]')?.textContent).toBe('Save')
+    })
+
+    it('renders nothing around the button while there is no reason', () => {
+      const { container, getByRole } = render(Button, { props: { label: 'Save', disabled: true } })
+      expect(getByRole('button').parentElement).toBe(container)
+    })
+  })
+
+  describe('disabled reason', () => {
+    const reason = 'Only an account owner can delete an application.'
+
+    it('keeps the button focusable and unavailable, and never emits click', async () => {
+      const user = userEvent.setup()
+      const view = render(Button, {
+        props: { label: 'Delete', disabled: true, disabledReason: reason }
+      })
+      const button = view.getByRole('button') as HTMLButtonElement
+      expect(button.disabled).toBe(false)
+      expect(button.getAttribute('aria-disabled')).toBe('true')
+      expect(button.hasAttribute('data-disabled')).toBe(true)
+      button.focus()
+      expect(document.activeElement).toBe(button)
+      await user.click(button)
+      await user.keyboard('{Enter}')
+      expect(view.emitted('click')).toBeUndefined()
+    })
+
+    it('carries the reason as the description of the button, with nothing around it', async () => {
+      const view = render(DisabledReason)
+      const button = view.getByRole('button', {
+        name: 'Delete application',
+        description: reason
+      })
+      expect(button.getAttribute('title')).toBe(reason)
+      expect(button.parentElement).toBe(view.container)
+      await expectNoA11yViolations(view.container)
+    })
+
+    it('does not submit its form', async () => {
+      const user = userEvent.setup()
+      let submits = 0
+      const view = render({
+        components: { Button },
+        setup: () => ({ onSubmit: (event: Event) => (event.preventDefault(), submits++) }),
+        template: `<form @submit="onSubmit"><input aria-label="Name" /><Button type="submit" label="Save" disabled disabled-reason="Fill in the name first." /></form>`
+      })
+      await user.click(view.getByRole('button', { name: 'Save' }))
+      await user.type(view.container.querySelector('input') as HTMLInputElement, '{Enter}')
+      expect(submits).toBe(0)
+    })
+
+    it('ignores the reason while the button is enabled', () => {
+      const { container, getByRole } = render(Button, {
+        props: { label: 'Delete', disabledReason: reason }
+      })
+      expect(getByRole('button').parentElement).toBe(container)
+      expect(getByRole('button').hasAttribute('aria-disabled')).toBe(false)
+      expect(getByRole('button').hasAttribute('title')).toBe(false)
+    })
+  })
+
+  describe('loading announcement', () => {
+    const spoken = () => document.querySelector('[data-webkit-announcer]')?.textContent ?? ''
+
+    afterEach(() => {
+      document.querySelector('[data-webkit-announcer]')?.remove()
+    })
+
+    it('announces nothing without a loadingLabel', async () => {
+      const view = render(Button, { props: { label: 'Save' } })
+      await view.rerender({ loading: true })
+      expect(spoken()).toBe('')
+      expect(view.getByRole('button').getAttribute('aria-busy')).toBe('true')
+    })
+
+    it('announces loadingLabel when given', async () => {
+      const view = render(Button, { props: { label: 'Save', loadingLabel: 'Saving changes' } })
+      expect(spoken()).toBe('')
+      await view.rerender({ loading: true })
+      expect(spoken()).toBe('Saving changes')
     })
   })
 

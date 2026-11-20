@@ -922,7 +922,11 @@ export const ptBR: Messages = {
   phoneInput: {
     dialCode: 'Código de discagem do país',
     search: 'Buscar país',
-    noMatch: 'Nenhum país encontrado.'
+    noMatch: 'Nenhum país encontrado.',
+    results: {
+      one: '{count} país',
+      other: '{count} países'
+    }
   },
   transferList: {
     moveSelectedToTarget: 'Mover selecionados para o destino',

@@ -18,6 +18,6 @@
   "`v-model` holds the national digits only; read `number` from the `phone-change` payload when you need the E.164 value.",
   "Use `complete` from `phone-change` to decide `invalid` and the `Field.Error` on submit; the control shows no incomplete-number message of its own.",
   "The field starts on the United States. Set `default-country` to start on another country (an ISO 3166-1 alpha-2 code from `countries`), or bind `v-model:country` when the form owns the country.",
-  "`searchPlaceholder` and `searchEmptyLabel` default to English; pass translated copy in localized UIs."
+  "`searchPlaceholder` and `noMatch` default to English; pass translated copy in localized UIs."
  ]
 }

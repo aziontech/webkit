@@ -922,7 +922,11 @@ export const es: Messages = {
   phoneInput: {
     dialCode: 'Código de marcación del país',
     search: 'Buscar país',
-    noMatch: 'No se encontró ningún país.'
+    noMatch: 'No se encontró ningún país.',
+    results: {
+      one: '{count} país',
+      other: '{count} países'
+    }
   },
   transferList: {
     moveSelectedToTarget: 'Mover seleccionados al destino',

@@ -439,6 +439,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 ## Composables
 
+- [useAnnouncer](composables/use-announcer.md): `useAnnouncer` and 1 more exports (options, return, helpers and types).
 - [useCollection](composables/use-collection.md): `useCollection` and 36 more exports (options, return, helpers and types).
 - [useColorMode](composables/use-color-mode.md): `useColorMode` and 6 more exports (options, return, helpers and types).
 - [useConsoleLayout](composables/use-console-layout.md): `useConsoleLayout` and 2 more exports (options, return, helpers and types).

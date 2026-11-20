@@ -6303,6 +6303,20 @@
      "default": "'button'",
      "required": "false",
      "doc": "Native button type. `submit` lets the control submit its form; `disabled` and `loading` still block it. Ignored when `href` is set."
+    },
+    {
+     "name": "disabledReason",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Why the action is unavailable. While `disabled`, the button stays focusable and carries this text as its description, shown by the browser on hover."
+    },
+    {
+     "name": "loadingLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "What a screen reader hears when `loading` starts, such as `Saving changes`. Empty announces nothing."
     }
    ],
    "events": [
@@ -15717,11 +15731,11 @@
      "doc": "Placeholder of the search box that filters the dial-code list. Empty uses the locale catalog (`Search country`)."
     },
     {
-     "name": "searchEmptyLabel",
+     "name": "noMatch",
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Shown in the dial-code list when no country matches the search. Empty uses the locale catalog (`No country found.`)."
+     "doc": "Shown in the dial-code list, and announced, when no country matches the search. Empty uses the locale catalog (`No country found.`)."
     },
     {
      "name": "modelValue",
@@ -29740,6 +29754,12 @@
    "target": "./src/styles/country-flags.css",
    "kind": "style",
    "treeShakeableImport": "@aziontech/webkit/styles/country-flags"
+  },
+  "use-announcer": {
+   "import": "@aziontech/webkit/use-announcer",
+   "target": "./src/composables/use-announcer/index.ts",
+   "kind": "composable",
+   "treeShakeableImport": "@aziontech/webkit/use-announcer"
   },
   "use-controllable": {
    "import": "@aziontech/webkit/use-controllable",

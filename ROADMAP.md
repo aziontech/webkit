@@ -20,15 +20,43 @@ component, block and doc first.
 
 **1. Stabilize the 6.0 branch (before launch)**
 
-| #   | Item                                                                                                                                                                                   | Status (2026-11-19)        |
-| --- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
-| 1.1 | Full audit and fixes                                                                                                                                                                   | In progress                |
-| 1.2 | Logos of every integration Azion supports: web frameworks, AI models, observability platforms (Datadog, Splunk, …). Includes M2.10 row 58                                              | In progress (its own lane) |
-| 1.3 | Decide whether components also ship as Markdown and JSON besides Vue now, then build it. Content components already have all three (DECISIONS RV-K2-1); the open question is the rest  | Needs owner                |
-| 1.4 | Final full audit and fixes                                                                                                                                                             | Not started                |
-| 1.5 | Full visual review of every component and block, and the fixes it finds                                                                                                                | Not started                |
-| 1.6 | The docs site uses WebKit exactly as an app does: its own doc components and a consumer setup. Detail below (owner, 2026-11-20). Runs before 1.5, so the visual review sees the result | Not started                |
+| #   | Item                                                                                                                                                                                                                                                                                                                                                                                                     | Status (2026-11-19)          |
+| --- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
+| 1.1 | Full audit and fixes                                                                                                                                                                                                                                                                                                                                                                                     | In progress                  |
+| 1.2 | Logos of every integration Azion supports: web frameworks, AI models, observability platforms (Datadog, Splunk, …). Includes M2.10 row 58                                                                                                                                                                                                                                                                | In progress (its own lane)   |
+| 1.3 | Decide whether components also ship as Markdown and JSON besides Vue now, then build it. Content components already have all three (DECISIONS RV-K2-1); the open question is the rest                                                                                                                                                                                                                    | Needs owner                  |
+| 1.4 | Final full audit and fixes                                                                                                                                                                                                                                                                                                                                                                               | Not started                  |
+| 1.5 | Full visual review of every component and block, and the fixes it finds                                                                                                                                                                                                                                                                                                                                  | Not started                  |
+| 1.6 | The docs site uses WebKit exactly as an app does: its own doc components and a consumer setup. Detail below (owner, 2026-11-20). Runs before 1.5, so the visual review sees the result                                                                                                                                                                                                                   | Not started                  |
+| 1.7 | Code quality, maintainability and extension of every component and block, by one technical spec: [`.claude/docs/CODE_QUALITY.md`](./.claude/docs/CODE_QUALITY.md). Detail below (owner, 2026-11-20). Runs after 1.6 and before 1.4 and 1.5, so the final audit and the visual review see the result                                                                                                      | Not started                  |
 | 1.8 | Every component and block tested on every browser engine and on real devices, automated in CI: first on our own server with Playwright (Chromium, real Edge, Firefox, the Safari engine, phone and tablet sizes with touch), then on real devices through an external service. Detail below (owner, 2026-11-20). Phase A runs before 1.4 and 1.5, so the final audit and the visual review see its fixes | Not started (trial run done) |
+
+**1.7 in detail — code quality before `main` (owner, 2026-11-20).** A comparison of Button, Select
+and Table with shadcn and Cloudscape found WebKit the lightest of the three and ahead of shadcn on
+states and accessibility, but with code that is hard to maintain: 42 component files over 400
+lines (`data-table.vue` has 2,175, with 31 props and 11 models), templates written twice, style
+strings on one 4,400-character line, seven components that read their slot's vnodes, and block
+variants that are 1,800-line near-copies of their block. The spec is general: it sets the
+standards and the run measures every component and block against them. The run decides every
+point itself, comparing shadcn and Cloudscape by the rules in the spec's section 2, and records
+each decision in `DECISIONS.md` (`CQ-<n>`); only a push needs the owner. In short:
+
+1. **Limits, gated:** 400 lines per component file, 200 per script, 60 per function, 200
+   characters per line; a file over the limit is split by feature into composables and parts.
+2. **Nothing written twice:** one root per component, grouped class lines, shared composables,
+   a clone detector in CI.
+3. **Extension points on every component:** `data-slot` on every part, exported props types and,
+   new, an exported context composable so an app can write its own parts.
+4. **One contract for lists:** an `options` data prop instead of reading slots, and the same
+   loading, error, load-more, empty and no-match states on every list component.
+5. **Accessibility gaps against Cloudscape:** one announcer for screen readers, `disabledReason`
+   on action controls, native `table` elements.
+6. **Blocks:** a block is a folder (page, parts, logic, sample data) and a variant is a state of
+   it, never a copy.
+
+Six phases: measure, foundations and gates, internal refactor (no API change, tests unchanged,
+no pixel change), API work through the spec flow, blocks, verify. Done means every new baseline
+is empty and the full gates, browser suite and visual suite are green.
 
 **1.8 in detail — every browser engine and real devices, in CI (owner, 2026-11-20).** Today CI
 runs the component suite and the visual suite on Chromium only. Firefox and the Safari engine run

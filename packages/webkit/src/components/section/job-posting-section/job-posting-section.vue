@@ -11,7 +11,7 @@
   import type { FileTokenGroupItem } from '../../input/file-token-group/file-token-group.vue'
   import FileTokenGroup from '../../input/file-token-group/file-token-group.vue'
   import Input from '../../input/input/input.vue'
-  import { defaultCountries } from '../../input/phone-input/countries'
+  import { defaultCountries } from '../../input/phone-input/lib/country-data'
   import PhoneInput from '../../input/phone-input/phone-input.vue'
   import Module from '../../layout/module/module.vue'
   import type { ModuleHeaderAction } from '../../layout/module-header/module-header.vue'

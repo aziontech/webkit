@@ -1237,7 +1237,8 @@
     "heading": "title"
   },
   "phone-input": {
-    "@update:phone": "phone-change"
+    "@update:phone": "phone-change",
+    "searchEmptyLabel": "noMatch"
   },
   "card": {
     "#header-action": "header-actions",

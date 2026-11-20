@@ -7,9 +7,11 @@ import { defineComponent, nextTick } from 'vue'
 
 import Default from '../../../../examples/phone-input/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
+import { flagStyle, hasFlag, loadFlagSprite } from '../../../utils/country-flags'
 import Field from '../field/field.vue'
 import FieldLabel from '../field/field-label/field-label.vue'
-import { defaultCountries, flagStyle, hasFlag, loadFlagSprite, masksOf } from './countries'
+import { defaultCountries } from './lib/country-data'
+import { masksOf } from './lib/phone-mask'
 import PhoneInput, { type PhoneInputValue } from './phone-input.vue'
 
 /** The dial-code dropdown Teleports to document.body — query it from there. */
@@ -560,7 +562,7 @@ describe('PhoneInput', () => {
 
     it('shows the empty label when nothing matches', async () => {
       const { getByTestId } = render(PhoneInput, {
-        props: { searchEmptyLabel: 'Nenhum país' }
+        props: { noMatch: 'Nenhum país' }
       })
 
       await fireEvent.click(getByTestId('select-trigger'))
@@ -570,6 +572,33 @@ describe('PhoneInput', () => {
       expect(
         document.body.querySelector('[data-testid="phone-input__search-empty"]')?.textContent
       ).toContain('Nenhum país')
+    })
+
+    it('announces how many countries match, and the no-match text when none does', async () => {
+      const spoken = () => document.querySelector('[data-webkit-announcer]')?.textContent ?? ''
+      const { getByTestId } = render(PhoneInput, { props: { noMatch: 'Nothing here' } })
+
+      await fireEvent.click(getByTestId('select-trigger'))
+      await fireEvent.update(getSearch() as HTMLInputElement, 'portug')
+      expect(spoken()).toBe('1 country')
+
+      await fireEvent.update(getSearch() as HTMLInputElement, 'united')
+      expect(spoken()).toMatch(/^\d+ countries$/)
+
+      await fireEvent.update(getSearch() as HTMLInputElement, 'zzz')
+      expect(spoken()).toBe('Nothing here')
+      expect(document.body.querySelector('[data-slot="no-match"]')?.hasAttribute('role')).toBe(
+        false
+      )
+      document.querySelector('[data-webkit-announcer]')?.remove()
+    })
+
+    it('marks its parts with data-slot', () => {
+      const { getByTestId } = render(PhoneInput)
+      expect(getByTestId('phone-input__input').getAttribute('data-slot')).toBe('input')
+      expect(getByTestId('phone-input__selected-dial-code').getAttribute('data-slot')).toBe(
+        'dial-code'
+      )
     })
 
     it('picks the first match on Enter and moves focus to the number', async () => {

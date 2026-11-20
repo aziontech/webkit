@@ -1,10 +1,12 @@
 <script setup lang="ts">
   import { computed, onMounted, provide, shallowRef, useAttrs, useId, watch } from 'vue'
 
+  import { useAnnouncer } from '../../../composables/use-announcer'
   import { useFieldControl } from '../../../composables/use-field-control'
   import { useSelectSearch } from '../../../composables/use-select-search'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
+  import { flagStyle, hasFlag, loadFlagSprite } from '../../../utils/country-flags'
   import { FieldInjectionKey } from '../field/injection-key'
   import Input from '../input/input.vue'
   import InputGroup from '../input-group/input-group.vue'
@@ -13,18 +15,12 @@
   import SelectContent from '../select/select-content/select-content.vue'
   import SelectItem from '../select/select-item/select-item.vue'
   import SelectTrigger from '../select/select-trigger/select-trigger.vue'
-  import {
-    defaultCountries,
-    flagStyle,
-    formatNational,
-    hasFlag,
-    isComplete,
-    loadFlagSprite,
-    maxDigits,
-    type PhoneInputCountry,
-    placeholderFor,
-    stripToDigits
-  } from './countries'
+  import { type PhoneInputValue, usePhoneInputValue } from './composables/use-phone-input-value'
+  import { defaultCountries, type PhoneInputCountry } from './lib/country-data'
+  import { placeholderFor, stripToDigits } from './lib/phone-mask'
+
+  export type { PhoneInputValue } from './composables/use-phone-input-value'
+  export type { PhoneInputCountry } from './lib/country-data'
 
   defineOptions({
     name: 'PhoneInput',
@@ -33,20 +29,6 @@
 
   /** Size token; heights match the sibling field primitives. */
   export type PhoneInputSize = 'small' | 'medium' | 'large'
-
-  /** Snapshot of the number emitted by phone-change. */
-  export interface PhoneInputValue {
-    /** ISO 3166-1 alpha-2 code of the selected country. */
-    country: string
-    /** Dial code of the selected country, such as +1. */
-    dialCode: string
-    /** National number as digits only. */
-    digits: string
-    /** Full E.164 number (dial code followed by the digits); empty while there are no digits. */
-    number: string
-    /** True when the digit count is one the selected country allows. */
-    complete: boolean
-  }
 
   export interface PhoneInputProps {
     /** Countries offered by the dial-code Select. When omitted, uses the built-in curated list. */
@@ -69,8 +51,8 @@
     name?: string
     /** Placeholder of the search box that filters the dial-code list. Empty uses the locale catalog (`Search country`). */
     searchPlaceholder?: string
-    /** Shown in the dial-code list when no country matches the search. Empty uses the locale catalog (`No country found.`). */
-    searchEmptyLabel?: string
+    /** Shown in the dial-code list, and announced, when no country matches the search. Empty uses the locale catalog (`No country found.`). */
+    noMatch?: string
   }
   const props = withDefaults(defineProps<PhoneInputProps>(), {
     countries: () => defaultCountries,
@@ -83,7 +65,7 @@
     invalid: false,
     name: '',
     searchPlaceholder: '',
-    searchEmptyLabel: ''
+    noMatch: ''
   })
 
   const emit = defineEmits<{
@@ -95,6 +77,7 @@
 
   const attrs = useAttrs()
   const { t } = useTranslate({ phoneInput: en.phoneInput })
+  const { announce } = useAnnouncer()
   const generatedId = useId()
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'phone-input')
@@ -126,47 +109,27 @@
   })
   const triggerId = `${generatedId}-trigger`
 
-  const selectedCountry = computed<PhoneInputCountry>(
-    () =>
-      props.countries.find((c) => c.code === (country.value || props.defaultCountry)) ??
-      props.countries[0]
-  )
-
-  const displayValue = computed(() => formatNational(selectedCountry.value, model.value))
+  const { selectedCountry, displayValue, phone, typeDigits, pickCountry } = usePhoneInputValue({
+    countries: () => props.countries,
+    defaultCountry: () => props.defaultCountry,
+    digits: model,
+    country
+  })
 
   const effectivePlaceholder = computed(
     () => props.placeholder || placeholderFor(selectedCountry.value)
   )
 
-  const phone = computed<PhoneInputValue>(() => {
-    const { code, dialCode } = selectedCountry.value
-    const digits = model.value
-    return {
-      country: code,
-      dialCode,
-      digits,
-      number: digits ? `${dialCode}${digits}` : '',
-      complete: isComplete(selectedCountry.value, digits)
-    }
-  })
-
   watch(phone, (value) => emit('phone-change', value), { immediate: true })
 
   const onInput = (event: Event) => {
     const target = event.target as HTMLInputElement
-    const digits = stripToDigits(target.value).slice(0, maxDigits(selectedCountry.value))
-    const formatted = formatNational(selectedCountry.value, digits)
-    if (target.value !== formatted) {
-      target.value = formatted
-    }
-    model.value = digits
+    const formatted = typeDigits(target.value)
+    if (target.value !== formatted) target.value = formatted
   }
 
   const onCountryChange = (value: unknown) => {
-    if (typeof value !== 'string') return
-    country.value = value
-    const next = props.countries.find((c) => c.code === value) ?? selectedCountry.value
-    model.value = model.value.slice(0, maxDigits(next))
+    if (typeof value === 'string') pickCountry(value)
   }
 
   const {
@@ -198,6 +161,11 @@
     onCommit: () => document.getElementById(resolvedInputId.value)?.focus()
   })
 
+  const INPUT_CLASS =
+    'w-full h-full bg-transparent border-0 outline-none focus:ring-0 px-(--spacing-md) rtl:text-end ' +
+    'text-label-sm text-(--text-default) placeholder:text-(--text-muted) ' +
+    'disabled:cursor-not-allowed disabled:text-(--text-disabled)'
+
   const flagSprite = shallowRef('')
   onMounted(() => {
     loadFlagSprite().then((url) => {
@@ -209,6 +177,16 @@
     const keys = new Set(filtered.value.map((item) => item.key))
     return props.countries.filter((c) => keys.has(c.code))
   })
+
+  watch(
+    () => [open.value, query.value, filteredCountries.value.length] as const,
+    ([isOpen, text, count]) => {
+      if (!isOpen || !text) return
+      announce(
+        count ? t('phoneInput.results', { count }) : props.noMatch || t('phoneInput.noMatch')
+      )
+    }
+  )
 </script>
 
 <template>
@@ -241,6 +219,7 @@
         <template #leading>
           <i
             v-if="hasFlag(selectedCountry.code)"
+            data-slot="flag"
             :style="flagStyle(selectedCountry.code, flagSprite)"
             class="block w-4 shrink-0 aspect-[22/15] bg-no-repeat"
             aria-hidden="true"
@@ -251,6 +230,7 @@
         <template #trailing>
           <span
             dir="ltr"
+            data-slot="dial-code"
             :data-testid="`${testId}__selected-dial-code`"
             class="shrink-0 text-label-code-sm text-(--text-muted) group-data-[disabled]:text-(--text-disabled)"
           >
@@ -311,11 +291,11 @@
         </SelectItem>
         <p
           v-if="filteredCountries.length === 0"
-          role="status"
+          data-slot="no-match"
           :data-testid="`${testId}__search-empty`"
           class="px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-muted)"
         >
-          {{ searchEmptyLabel || t('phoneInput.noMatch') }}
+          {{ noMatch || t('phoneInput.noMatch') }}
         </p>
       </SelectContent>
       <FormValue
@@ -326,6 +306,7 @@
     </Select>
     <input
       :id="resolvedInputId"
+      data-slot="input"
       type="tel"
       dir="ltr"
       inputmode="tel"
@@ -339,7 +320,8 @@
       :aria-required="isRequired || undefined"
       :aria-describedby="describedBy"
       :data-testid="`${testId}__input`"
-      class="w-full h-full bg-transparent border-0 outline-none focus:ring-0 px-(--spacing-md) rtl:text-end text-label-sm pointer-coarse:text-body-md text-(--text-default) placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
+      class="pointer-coarse:text-body-md"
+      :class="INPUT_CLASS"
       @input="onInput"
     />
   </InputGroup>

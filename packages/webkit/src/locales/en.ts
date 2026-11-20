@@ -782,7 +782,11 @@ export const passwordRequirements = {
 export const phoneInput = {
   dialCode: 'Country dial code',
   search: 'Search country',
-  noMatch: 'No country found.'
+  noMatch: 'No country found.',
+  results: {
+    one: '{count} country',
+    other: '{count} countries'
+  }
 } as const
 
 export const transferList = {

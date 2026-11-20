@@ -8,7 +8,7 @@
   import FieldDescription from '../../input/field/field-description/field-description.vue'
   import FieldLabel from '../../input/field/field-label/field-label.vue'
   import Input from '../../input/input/input.vue'
-  import { defaultCountries } from '../../input/phone-input/countries'
+  import { defaultCountries } from '../../input/phone-input/lib/country-data'
   import PhoneInput from '../../input/phone-input/phone-input.vue'
   import Textarea from '../../input/textarea/textarea.vue'
   import type { ModuleHeaderAction } from '../../layout/module-header/module-header.vue'

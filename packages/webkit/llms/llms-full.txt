@@ -11024,6 +11024,8 @@ What each prop and event does, and the go-live code: [blocks/view/view-waf-tunin
 - Keep one `variant="primary"` per view or region; use `danger` only for destructive actions.
 - `variant="link"` has no box: no height, padding or surface, `text-body-sm` in the link colour, underlined on hover. `size` does not apply to it; place it where body text sits (a cell, a summary line, under a section).
 - Set `loading` while the action resolves: it swaps the icon for a spinner, sets `aria-busy` and suppresses `click`, so the handler needs no extra guard.
+- Give `loading` a `loadingLabel` that names the work (`Saving changes`), so a screen reader hears that it started.
+- When a button is disabled for a reason the person can act on (a missing permission, an unfinished step), say it in `disabledReason` instead of leaving a dead control.
 - Use `iconPosition="leading"` for a glyph that names the action and `"trailing"` for one that points where it goes; add `animated` only on marketing CTAs with a trailing icon.
 - Put brand or product marks in the `leading` slot; `icon` takes an Azion icon class.
 - `label` is required and is the accessible name; never pass an empty string to get an icon-only control.
@@ -11060,6 +11062,8 @@ What each prop and event does, and the go-live code: [blocks/view/view-waf-tunin
 | `href` | `string` | `''` | false | When set to a safe URL, renders as a link (`<a>`); an unsafe URL is ignored, and a `download` attribute keeps `blob:` / `data:` (see Accessibility). |
 | `target` | `'_blank' \| '_self'` | `'_self'` | false | Link target when `href` is set. |
 | `type` | `'button' \| 'submit' \| 'reset'` | `'button'` | false | Native button type. `submit` lets the control submit its form; `disabled` and `loading` still block it. Ignored when `href` is set. |
+| `disabledReason` | `string` | `''` | false | Why the action is unavailable. While `disabled`, the button stays focusable and carries this text as its description, shown by the browser on hover. |
+| `loadingLabel` | `string` | `''` | false | What a screen reader hears when `loading` starts, such as `Saving changes`. Empty announces nothing. |
 
 ## Events
 
@@ -11084,6 +11088,9 @@ What each prop and event does, and the go-live code: [blocks/view/view-waf-tunin
 - `data-disabled` mirrors the `disabled` prop; `data-loading` the `loading` prop; `data-inert` is set while disabled or loading
 - `data-size` mirrors `size`; every variant, size and inert utility switches on these `data-*` attributes in one flat class (no class presets in script)
 - `data-variant` mirrors `variant`; with `variant="link"` the button has no box (no height, padding, surface or state layer), the label is `text-body-sm` in `var(--text-link)` turning `var(--text-link-hover)` and underlined on hover, and `size` is ignored; disabled and loading drop it to `var(--text-disabled)`; under forced colors it reads as `LinkText` with no border.
+- With `disabledReason` set on a `disabled` button, the root carries `aria-disabled` instead of the native `disabled` attribute, so it keeps its place in the tab order; `click` is still suppressed and the look is the disabled one. The reason is the root's `title`: the browser shows it on hover and assistive technology reads it as the button's description. The button depends on no overlay: a styled `Tooltip` around it is the consumer's choice, and it now opens on focus too, because the button can take focus.
+- When `loading` turns on and `loadingLabel` is set, it is announced once through the shared polite live region (`useAnnouncer`). With no `loadingLabel` only `aria-busy` marks the state: the button has no built-in string.
+- The root is one element: an anchor when `href` is set, otherwise a button. Its inner parts carry `data-slot`: `content`, `icon`, `label`, `touch-target`.
 - With `type="submit"`, `disabled` (native) and `loading` (the click is cancelled) both stop the form from submitting, including implicit submission on `Enter`
 - Touch: the drawn size is unchanged (28/32/40 px, all above the 24 px minimum); on a coarse pointer an invisible `[data-slot=touch-target]` span extends the hit area to at least 44 × 44 px around the button.
 
@@ -26074,7 +26081,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 - `v-model` holds the national digits only; read `number` from the `phone-change` payload when you need the E.164 value.
 - Use `complete` from `phone-change` to decide `invalid` and the `Field.Error` on submit; the control shows no incomplete-number message of its own.
 - The field starts on the United States. Set `default-country` to start on another country (an ISO 3166-1 alpha-2 code from `countries`), or bind `v-model:country` when the form owns the country.
-- `searchPlaceholder` and `searchEmptyLabel` default to English; pass translated copy in localized UIs.
+- `searchPlaceholder` and `noMatch` default to English; pass translated copy in localized UIs.
 
 ## Don’t
 
@@ -26101,7 +26108,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 | `invalid` | `boolean` | `false` | false | Applies the invalid border on the InputGroup and sets aria-invalid on the input. |
 | `name` | `string` | `''` | false | Form field name. Set, a hidden input submits the full E.164 number (dial code followed by the digits, empty while there are none) under this name; the visible input carries no name, so a native `form` never posts a national number without its country. |
 | `searchPlaceholder` | `string` | `''` | false | Placeholder of the search box that filters the dial-code list. Empty uses the locale catalog (`Search country`). |
-| `searchEmptyLabel` | `string` | `''` | false | Shown in the dial-code list when no country matches the search. Empty uses the locale catalog (`No country found.`). |
+| `noMatch` | `string` | `''` | false | Shown in the dial-code list, and announced, when no country matches the search. Empty uses the locale catalog (`No country found.`). |
 | `modelValue` | `string` | `''` | false | Two-way value (`v-model`). |
 | `country` | `string` | `''` | false | Two-way value (`v-model:country`). |
 
@@ -26126,6 +26133,9 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 - The closed trigger mirrors a row of the list: the country's flag in the trigger's `#leading` slot, its name as the value (truncated with an ellipsis when the trigger is narrow), and its dial code in muted text in the trigger's `#trailing` slot at the inline end, which never shrinks. The country part sizes to its content and takes at most 60% of the field, so the number keeps at least 40%.
 - Narrow fields: the root is a size container (`@container/phone-input`); below 21rem (336px) the trigger hides the country name (`data-slot="value"`) and shows only the flag and the dial code, so phones from 320 to 430px keep room to type the number. The open list always shows the full names, and the trigger keeps its accessible name.
 - Completeness is reported through `phone-change`, never rendered.
+- Searching the dial-code list announces the outcome through the shared polite live region (`useAnnouncer`): the number of countries that match (`phoneInput.results`), or the `noMatch` text when none does. The no-match line in the list is plain text; it is not a live region of its own.
+- Parts carry `data-slot`: `input` (the tel input), `flag` and `dial-code` (the closed trigger), `no-match` (the empty line of the list).
+- The value logic (selected country, mask, E.164 snapshot, digit cap) lives in `composables/use-phone-input-value.ts`, the country list in `lib/country-data.ts` and the mask functions in `lib/phone-mask.ts`; `PhoneInputValue` and `PhoneInputCountry` are still exported from the component.
 - The flag sprite (`country-flags.png`, about 80 KB) loads with a dynamic `import()` after the field mounts in the browser (never on the server), so the closed trigger can show the selected flag; until it arrives the flag boxes stay blank. It is one shared request for every PhoneInput on the page.
 
 ## Accessibility
@@ -33314,6 +33324,31 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 ```
 
 2 more example(s) in [components/config-provider.md](components/config-provider.md).
+
+---
+
+<!-- composables/use-announcer.md -->
+
+# useAnnouncer
+
+Composable `@aziontech/webkit/use-announcer`. The signatures and option tables below are read from its typed source, [`src/composables/use-announcer/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/webkit/src/composables/use-announcer/index.ts).
+
+```ts
+import { useAnnouncer } from '@aziontech/webkit/use-announcer'
+import type { UseAnnouncerReturn } from '@aziontech/webkit/use-announcer'
+```
+
+## `useAnnouncer`
+
+```ts
+function useAnnouncer(): UseAnnouncerReturn
+```
+
+## `UseAnnouncerReturn`
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `announce` | `(message: string) => void` | yes | Speaks the message through the page's one polite live region. |
 
 ---
 
