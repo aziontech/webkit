@@ -2,7 +2,7 @@
 name: webkit-navigation
 description: Two navigation shells for UI on @aziontech/webkit — the persistent console shell is `ConsoleLayout` (@aziontech/webkit/console-layout), composed ONCE in App.vue around RouterView (navigation rail from `navigation` data with an href per row, header breadcrumbs, the ⌘K search palette, the account and its menu, the `actions` slot, `useConsoleLayout().openSearch()` from a page), and every browse page is only a body in its default slot with no `<main>` or chrome of its own; the focused creation shell (no rail, one AppHeader with back + brand + breadcrumb + avatar — the `top-bar/top-bar-creation` block every create block carries) heads create flows (`create/*`: a new resource, an import, deploying a template) routed outside the layout; editing a resource and a resource's deploy progress are page bodies inside it. A page picks exactly ONE shell, renders exactly ONE AppHeader, and the signed-in user stays visible in both. Also fixes the page body inside the console: `layout-boundary` + a column class, a first-level list opening on its PageHeader (the create action primary, medium like every heading action) over one band of controls and a flush borderless Card table, tabbed detail pages opening flush on PageTabs with the primary button on the TAB ROW (medium), and the breadcrumb levels — no trail at first level, `module › resource name` at second level, never a tab. Fixes the navigation levels too: page navigation lives in the rail, two levels at most (a product's resources on level 1 when it has 3 or fewer, a drill level when it has more), a page has only its PageTabs (at most 7) and no in-page menu, a destination offered once per screen, no rail row that routes into a resource, and active rows that agree with the route. Fixes where drawers sit in that path: a drawer opens only over the screen that owns its item (a tab of a resource), never as the first surface of a product or resource — Configure, Settings and Edit navigate to the resource's page — and the stack is one `large` drawer plus at most one `medium` nested drawer, never a third.
 status: active
-last_updated: 2026-11-17
+last_updated: 2026-11-20
 scope: general
 enforced_by: [webkit-navigation-levels, webkit-accessibility, webkit-prefer-over-custom, ui-verify]
 ---
@@ -259,6 +259,17 @@ magnifier on a narrow one. Add what the palette should also offer through the `s
 a second `SearchTrigger`, a second `Command` or a ⌘K binding of your own. `SiteLayout` and `DocLayout`
 carry the same search. The focused creation shell has no search: it stays on the task. Any header you
 do compose yourself follows rule `webkit-header-search` (lint `webkit/require-header-search`).
+
+#### A language switch in a header is the compact `LanguageSelect`
+
+When a header, a toolbar or a footer offers a language switch, it is
+`<LanguageSelect v-model="locale" variant="ghost" />` (`@aziontech/webkit/language-select`): a round
+flag and the country code (`US`), no border until hover, bound to the `locale` your `ConfigProvider`
+reads. Never a field-sized `Select`, a globe `Select` or a `ToggleGroup` of codes: a field outline
+next to the header's outlined buttons draws two border colours in one row. A language setting on an
+account page is the full field (the default `variant`) in a `SettingsRow`. Add a switch only where
+the product offers more than one language; the console header and the focused creation shell carry
+none.
 
 #### The rail collapses; it never disappears
 

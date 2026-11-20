@@ -3,7 +3,7 @@ name: webkit-usage
 description: Entry point for building UI on @aziontech/webkit. Use when adding or reviewing UI in a project that depends on @aziontech/webkit — compose the app layout once (ConsoleLayout, SiteLayout, DocLayout) and start each screen from a block, find the right component, import it with the flat path, style with @aziontech/theme tokens, keep bundles small, and pick the focused skill for each task (forms, tables, lists, errors, states, layout, copy, polish, verification).
 scope: general
 status: active
-last_updated: 2026-11-19
+last_updated: 2026-11-20
 enforced_by:
   [
     webkit-imports,
@@ -52,7 +52,8 @@ The chrome is composed **once**, in `App.vue`, around `RouterView`, from the lay
   trail, control crumb included, with `ConsoleLayout.Breadcrumb`, and a full-height workspace puts
   `data-layout-fill` on its root (never `calc(100dvh - …)`).
 - **Site:** `SiteLayout` — `navigation` and `footer` are the `SiteHeaderSection` and `SiteFooterSection` data. The
-  site is dark: `<html data-theme="dark">`. `SiteFooterSection` binds its language select with
+  site is dark: `<html data-theme="dark">`. `SiteFooterSection` binds its language select (the compact
+  `LanguageSelect`, round flag and country code; `languages` are BCP 47 tags) with
   `v-model:language`; switch the locale from that value.
 - **Docs:** `DocLayout` — the docs tree, section links, `outline-groups`, and `actions`,
   `navigation-footer`, `aside`, `footer` slots. The document scrolls. The page feeds the "On this
