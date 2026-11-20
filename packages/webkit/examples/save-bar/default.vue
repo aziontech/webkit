@@ -1,11 +1,13 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
+  import Kbd from '@aziontech/webkit/kbd'
   import SaveBar from '@aziontech/webkit/save-bar'
   import { ref } from 'vue'
 
   const saving = ref(false)
 
   const save = () => {
+    if (saving.value) return
     saving.value = true
     setTimeout(() => {
       saving.value = false
@@ -18,7 +20,7 @@
     <div class="layout-boundary-inline flex-1 py-(--spacing-lg) text-body-sm text-(--text-muted)">
       The settings form scrolls under the bar.
     </div>
-    <SaveBar>
+    <SaveBar @save="save">
       You have unsaved changes.
       <template #actions>
         <Button
@@ -29,12 +31,20 @@
           :disabled="saving"
         />
         <Button
-          label="Save"
           variant="primary"
           size="medium"
+          aria-keyshortcuts="Meta+S Control+S"
           :loading="saving"
           @click="save"
-        />
+        >
+          Save
+          <Kbd
+            meta
+            size="small"
+            aria-hidden="true"
+            >S</Kbd
+          >
+        </Button>
       </template>
     </SaveBar>
   </div>

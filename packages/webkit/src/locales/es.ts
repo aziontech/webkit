@@ -412,7 +412,8 @@ export const es: Messages = {
     accountMenuFor: '{initials}, menú de la cuenta',
     searchPlaceholder: 'Buscar páginas y comandos',
     noMatch: 'Ninguna página o comando coincide con la búsqueda.',
-    pages: 'Páginas'
+    pages: 'Páginas',
+    searchShortcut: 'Buscar páginas y comandos'
   },
   copyButton: {
     fallbackTitle: 'Copia manualmente',
@@ -938,6 +939,7 @@ export const es: Messages = {
   },
   propertyFilter: {
     label: 'Filtrar',
+    focusShortcut: 'Ir a la búsqueda',
     placeholder: 'Filtrar por propiedad o texto',
     suggestions: 'Sugerencias',
     useText: 'Usar: “{text}”',
@@ -1156,7 +1158,8 @@ export const es: Messages = {
   },
   tableSearch: {
     placeholder: 'Buscar',
-    label: 'Buscar en la tabla'
+    label: 'Buscar en la tabla',
+    focusShortcut: 'Ir a la búsqueda'
   },
   tableSortButton: {
     ascending: 'Orden ascendente',
@@ -1367,6 +1370,9 @@ export const es: Messages = {
   },
   searchTrigger: {
     label: 'Buscar'
+  },
+  saveBar: {
+    saveShortcut: 'Guardar cambios'
   },
   shortcutsDialog: {
     title: 'Atajos de teclado',

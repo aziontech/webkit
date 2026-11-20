@@ -3,11 +3,11 @@ name: save-bar
 category: layout
 structure: monolithic
 status: implemented
-checksum: 7502c0647b7bd0189e2ba008153485ec732efbc3e8225975ad4486ed8819a881
+checksum: c300d6c918b5065cf3376439380894d1887bd7734f5ada81243720ce8e91616e
 spec_version: 4
 template: 2
 created: 2026-11-10
-last_updated: 2026-11-15
+last_updated: 2026-11-20
 ---
 
 # SaveBar — Component Spec
@@ -42,17 +42,21 @@ The bar at the bottom of a settings or create page that holds the status of unsa
 - Disable Discard and set `loading` on Save while saving.
 - Do not build a centred action pill by hand (a sticky footer with a bordered card and a shadow): that is `variant="centered"`.
 - `floating` and `docked` are for the dirty state of a settings page; `centered` and `plain` are for a create page or a form saved as one unit and stay on screen.
+- Listen to `save` to give the page `⌘ S` (`Ctrl S` off Apple): run the same save as the Save button, and do nothing when the form has no unsaved changes. Show the shortcut on Save with `Kbd` and `aria-keyshortcuts="Meta+S Control+S"` (the console keyboard standard, `rules/webkit-keyboard.md`).
 
 ## Usage
 
 ```vue
 <script setup>
   import Button from '@aziontech/webkit/button'
+  import Kbd from '@aziontech/webkit/kbd'
   import SaveBar from '@aziontech/webkit/save-bar'
+
+  const save = () => {}
 </script>
 
 <template>
-  <SaveBar>
+  <SaveBar @save="save">
     You have unsaved changes.
     <template #actions>
       <Button
@@ -62,10 +66,19 @@ The bar at the bottom of a settings or create page that holds the status of unsa
         size="medium"
       />
       <Button
-        label="Save"
         variant="primary"
         size="medium"
-      />
+        aria-keyshortcuts="Meta+S Control+S"
+        @click="save"
+      >
+        Save
+        <Kbd
+          meta
+          size="small"
+          aria-hidden="true"
+          >S</Kbd
+        >
+      </Button>
     </template>
   </SaveBar>
 </template>
@@ -87,7 +100,9 @@ Each `variant` is one placement plus one surface, named for what a reader sees:
 
 ## Events
 
-| _none_ | — | — |
+| Event  | Payload                  | Description                                                                                                                                                                                                                                                                  |
+| ------ | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `save` | `(event: KeyboardEvent)` | `⌘ S` (`Ctrl S` off Apple) was pressed while the bar is mounted. The bar registers the shortcut only while a `save` listener is bound, prevents the browser's own save, and lists it in `ShortcutsDialog` as Save changes. The page decides whether there is anything to save. |
 
 ## Slots
 
@@ -128,13 +143,17 @@ _none_
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: owned by the action buttons.
-- Keyboard map: `Tab` reaches Discard, then Save, in reading order (the column is reversed visually on a phone so Save sits on top).
+- Keyboard map: `Tab` reaches Discard, then Save, in reading order (the column is reversed visually on a phone so Save sits on top). With a `save` listener, `⌘ S` (`Ctrl S` off Apple) emits `save` from anywhere on the page, also while typing in a field (a shortcut with a modifier), and the browser's Save page dialog never opens; inside an open modal layer it fires only for a bar inside that layer (registered through `useShortcuts` with the bar as its element). Tests: `save-bar.test.ts` › save shortcut.
 - ARIA: the root is a `footer`; the status glyph is `aria-hidden`. The message region (`__message`, the `leading` / default slot) is a polite live region (`role="status"`), so a bar that appears when the form turns dirty announces its status sentence (WCAG 4.1.3 Status Messages) without moving focus.
 - Contrast ≥4.5:1 for the status sentence.
 
 ## Internationalization
 
-No built-in strings: the status sentence and the action labels come from the consumer's slots.
+The status sentence and the action labels come from the consumer's slots. One built-in string labels the shortcut in the `ShortcutsDialog` list:
+
+| Key                   | English source | Override prop |
+| --------------------- | -------------- | ------------- |
+| `saveBar.saveShortcut` | `Save changes` | —             |
 
 - Formatting: none.
 
@@ -155,7 +174,7 @@ No built-in strings: the status sentence and the action labels come from the con
 ## Performance
 
 - Bundle budget: 2.1 KB gzip for `./save-bar` in `.size-limit.json`.
-- Runtime budget: one `ResizeObserver` on the floating bar while it is mounted; a resize writes two custom properties on the document root and measures the nearest scroll container (the page when nothing around the bar scrolls) once.
+- Runtime budget: one shortcut registration in the shared `useShortcuts` registry while a `save` listener is bound; one `ResizeObserver` on the floating bar while it is mounted; a resize writes two custom properties on the document root and measures the nearest scroll container (the page when nothing around the bar scrolls) once.
 - Heavy parts: none.
 
 ## Examples

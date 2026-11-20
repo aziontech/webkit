@@ -5,9 +5,9 @@ structure: composition
 status: implemented
 spec_version: 13
 template: 2
-checksum: c57ebc5b8bb3738a62eb1dce8f7e7c20b72ef13124ec582a664c522fd66cd05e
+checksum: d0f55fc54b08125a91daa3b96b338f095e9ccddc112815543cdf52cd0b43e331
 created: 2026-11-12
-last_updated: 2026-11-19
+last_updated: 2026-11-20
 ---
 
 # ConsoleLayout — Component Spec
@@ -225,7 +225,7 @@ packages/webkit/src/components/layout/console-layout/
 
 - Landmarks: the rail is the `Sidebar` `<nav>` named by `ariaLabel`; the header is `AppHeader` (`<header>`); the page body is inside the layout's single `<main>`. A page body must not render a second `<main>`.
 - Skip link: the first `Tab` stop is the `SkipLink` `AppLayout` renders (`Skip to content`); it jumps past the rail and the header to the content region that holds the `<main>`.
-- Keyboard map: `Tab` runs skip link → rail (wordmark, `sidebar-header`, navigation) → header → page; `⌘K` / `Ctrl K` opens the palette (owned by `Command`); on wide layouts `⌘B` / `Ctrl B` toggles the rail and writes `v-model:navigation-open` (the Sidebar's `shortcut`, off while compact and while typing in a field); in the palette `ArrowUp` / `ArrowDown` move, `Enter` chooses, `Escape` closes and returns focus. The rail keyboard map is `SidebarMenu`'s; the compact drawer closes on `Escape` and returns focus to the hamburger (`AppLayout`).
+- Keyboard map: `Tab` runs skip link → rail (wordmark, `sidebar-header`, navigation) → header → page; `⌘K` / `Ctrl K` opens the palette (owned by `Command`); on wide layouts `⌘B` / `Ctrl B` toggles the rail and writes `v-model:navigation-open` (the Sidebar's `shortcut`, off while compact and while typing in a field); in the palette `ArrowUp` / `ArrowDown` move, `Enter` chooses, `Escape` closes and returns focus. `?` (`Shift /`) opens the layout's one `ShortcutsDialog`, which lists every shortcut the current screen registers with `useShortcuts` (`@aziontech/webkit/use-shortcuts`); the layout lists `⌘K` there (`consoleLayout.searchShortcut`) without binding it a second time (`Command` owns the key). The app does not mount a second `ShortcutsDialog` under the layout. Tests: `console-layout.test.ts` › shortcuts list. The rail keyboard map is `SidebarMenu`'s; the compact drawer closes on `Escape` and returns focus to the hamburger (`AppLayout`).
 - Names: the compact hamburger (`Open navigation`), the brand link (`Azion home`), the rail account trigger (`Account menu`, an icon button) come from the locale catalog; the avatar carries the account name. The header avatar trigger shows the initials, so its name starts with them (`JD, account menu`, `consoleLayout.accountMenuFor`) to meet WCAG 2.5.3 Label in Name (a speech user says what they see); with an account image it has no visible text and is named `Account menu`.
 - Account menu: choosing an option by pointer or keyboard emits `account-select`; the keyboard map inside the menu is `DropdownMenu`'s.
 - Visible focus: every interactive part is a WebKit control with its own ring; the brand link and the avatar button use `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
@@ -244,6 +244,7 @@ packages/webkit/src/components/layout/console-layout/
 | `consoleLayout.searchPlaceholder` | `Search pages and commands`               | `searchPlaceholder` |
 | `consoleLayout.noMatch`           | `No page or command matches your search.` | —                   |
 | `consoleLayout.pages`             | `Pages`                                   | —                   |
+| `consoleLayout.searchShortcut`    | `Search pages and commands`               | —                   |
 
 - Formatting: none. Navigation, breadcrumb and account text is consumer data.
 
@@ -265,7 +266,7 @@ packages/webkit/src/components/layout/console-layout/
 
 ## Performance
 
-- Bundle budget: 66.5 KB gzip for the root `.vue` (`console-layout` in `.size-limit.json`; 66.0 KB measured, up from 65.0 KB for the `sidebar-header` region and the `Avatar` marble pattern it carries; it pulls `AppLayout`, `Sidebar`, `SidebarMenu`, `AppHeader`, `Breadcrumb`, `SearchTrigger`, `Command`, `DropdownMenu`, `Avatar`, `Tooltip`) and 1 KB for `./console-layout-breadcrumb` (0.42 KB measured).
+- Bundle budget: 66.5 KB gzip for the root `.vue` (`console-layout` in `.size-limit.json`; 66.0 KB measured, up from 65.0 KB for the `sidebar-header` region and the `Avatar` marble pattern it carries; it pulls `AppLayout`, `Sidebar`, `SidebarMenu`, `AppHeader`, `Breadcrumb`, `SearchTrigger`, `Command`, `DropdownMenu`, `Avatar`, `Tooltip`) plus `ShortcutsDialog` (the `?` list) and a list-only `useShortcuts` entry, and 1 KB for `./console-layout-breadcrumb` (0.42 KB measured).
 - Runtime budget: one `popstate` listener when no router is installed; one watcher on the route path that bumps the main's key; the active row is a computed match over the navigation leaves, and one post-flush watcher on it and on the rail element scrolls the row into view (one layout read per change); the page trail is a short list of registrations.
 - Development warning: in development only, one `MutationObserver` on the `<main>` and a scan of its `SidebarMenu` links against the navigation tree; it is removed from production builds (0.02 KB measured in the root budget for the `<main>` ref).
 - Heavy parts: none beyond the composed components; the palette content renders only while open (`Command`).

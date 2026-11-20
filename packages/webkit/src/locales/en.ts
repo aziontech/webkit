@@ -803,6 +803,7 @@ export const progress = {
 
 export const propertyFilter = {
   label: 'Filter',
+  focusShortcut: 'Focus search',
   placeholder: 'Filter by property or text',
   suggestions: 'Suggestions',
   useText: 'Use: “{text}”',
@@ -1038,7 +1039,8 @@ export const tableLiveButton = {
 
 export const tableSearch = {
   placeholder: 'Search',
-  label: 'Search the table'
+  label: 'Search the table',
+  focusShortcut: 'Focus search'
 } as const
 
 export const tableSortButton = {
@@ -1489,6 +1491,10 @@ export const searchTrigger = {
   label: 'Search'
 } as const
 
+export const saveBar = {
+  saveShortcut: 'Save changes'
+} as const
+
 export const shortcutsDialog = {
   title: 'Keyboard shortcuts',
   show: 'Show keyboard shortcuts',
@@ -1520,7 +1526,8 @@ export const consoleLayout = {
   accountMenuFor: '{initials}, account menu',
   searchPlaceholder: 'Search pages and commands',
   noMatch: 'No page or command matches your search.',
-  pages: 'Pages'
+  pages: 'Pages',
+  searchShortcut: 'Search pages and commands'
 } as const
 
 export const docLayout = {
@@ -1711,6 +1718,7 @@ export const en = {
   copyCommandSection,
   searchTrigger,
   shortcutsDialog,
+  saveBar,
   copyPromptButton,
   docAgentCard,
   common,

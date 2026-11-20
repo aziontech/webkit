@@ -410,6 +410,96 @@ describe('DataTable', () => {
     })
   })
 
+  describe('keyboard rows', () => {
+    const bodyRows = () =>
+      Array.from(document.body.querySelectorAll<HTMLElement>('[data-focus-row]'))
+    const key = (target: HTMLElement, init: ConstructorParameters<typeof KeyboardEvent>[1]) =>
+      target.dispatchEvent(
+        new KeyboardEvent('keydown', { bubbles: true, cancelable: true, ...init })
+      )
+
+    it('keeps body rows out of the tab order without a row listener', () => {
+      render(DataTable, { props: { data: rows, columns } })
+      expect(bodyRows()).toHaveLength(0)
+    })
+
+    it('moves with the arrows and opens the row on Enter', async () => {
+      const onRowClick = vi.fn()
+      render(DataTable, { props: { data: rows, columns, rowKey: 'id' }, attrs: { onRowClick } })
+      await nextTick()
+      const list = bodyRows()
+      expect(list.map((row) => row.tabIndex)).toEqual([0, -1, -1])
+      list[0]!.focus()
+      key(list[0]!, { key: 'ArrowDown' })
+      await waitFor(() => expect(document.activeElement).toBe(bodyRows()[1]))
+      key(bodyRows()[1]!, { key: 'End' })
+      await waitFor(() => expect(document.activeElement).toBe(bodyRows()[2]))
+      key(bodyRows()[2]!, { key: 'Enter' })
+      expect(onRowClick).toHaveBeenCalledTimes(1)
+      expect(onRowClick.mock.calls[0]![0]).toBeInstanceOf(KeyboardEvent)
+      expect(onRowClick.mock.calls[0]![1]).toEqual(rows[2])
+    })
+
+    it('selects on Space and asks to remove on Delete, never with a modifier', async () => {
+      const onRowRemove = vi.fn()
+      const selected = ref<string[]>([])
+      const Host = defineComponent({
+        components: { DataTable },
+        setup: () => ({ rows, columns, selected, onRowRemove }),
+        template: `<DataTable :data="rows" :columns="columns" row-key="id" selectable v-model:selected-keys="selected" @row-remove="onRowRemove" />`
+      })
+      render(Host)
+      await nextTick()
+      const first = bodyRows()[0]!
+      first.focus()
+      key(first, { key: ' ' })
+      await waitFor(() => expect(selected.value).toEqual(['1']))
+      key(first, { key: 'Delete', metaKey: true })
+      expect(onRowRemove).not.toHaveBeenCalled()
+      key(first, { key: 'Delete' })
+      key(first, { key: 'Backspace' })
+      expect(onRowRemove).toHaveBeenCalledTimes(2)
+      expect(onRowRemove.mock.calls[0]![1]).toEqual(rows[0])
+    })
+
+    it('moves focus to the next row, then the previous row, then the table after a delete', async () => {
+      const data = ref(rows.map((row) => ({ ...row })))
+      const remove = (_event: KeyboardEvent, row: { id: string }) => {
+        data.value = data.value.filter((item) => item.id !== row.id)
+      }
+      const Host = defineComponent({
+        components: { DataTable },
+        setup: () => ({ data, columns, remove }),
+        template: `<DataTable :data="data" :columns="columns" row-key="id" @row-remove="remove" />`
+      })
+      const { getByTestId } = render(Host)
+      await nextTick()
+      bodyRows()[1]!.focus()
+      key(bodyRows()[1]!, { key: 'Delete' })
+      await waitFor(() => expect(document.activeElement?.textContent).toContain('Bravo'))
+      key(document.activeElement as HTMLElement, { key: 'Delete' })
+      await waitFor(() => expect(document.activeElement?.textContent).toContain('Charlie'))
+      key(document.activeElement as HTMLElement, { key: 'Delete' })
+      await waitFor(() => expect(document.activeElement).toBe(getByTestId('data-table__table')))
+    })
+
+    it('leaves focus alone when the person moved it elsewhere', async () => {
+      const data = ref(rows.map((row) => ({ ...row })))
+      const Host = defineComponent({
+        components: { DataTable },
+        setup: () => ({ data, columns }),
+        template: `<div><button type="button" data-testid="elsewhere">Elsewhere</button><DataTable :data="data" :columns="columns" row-key="id" @row-click="() => {}" /></div>`
+      })
+      const { getByTestId } = render(Host)
+      await nextTick()
+      bodyRows()[0]!.focus()
+      getByTestId('elsewhere').focus()
+      data.value = data.value.slice(1)
+      await new Promise((resolve) => setTimeout(resolve, 50))
+      expect(document.activeElement).toBe(getByTestId('elsewhere'))
+    })
+  })
+
   describe('TableSearch — context-aware global filter (provide/inject)', () => {
     it('reads and drives the injected table global filter, emitting update:globalFilter', async () => {
       // TableSearch sits in the toolbar slot; it reads ctx.table (data-driven)
@@ -443,6 +533,36 @@ describe('DataTable', () => {
         .map((c) => c.textContent?.trim())
       expect(bodyCells).toContain('Alpha')
       expect(bodyCells).not.toContain('Charlie')
+    })
+
+    it('focuses the search on / from the page, but not while typing in a field', async () => {
+      const Tree = defineComponent({
+        components: { DataTable, Table, TableSearch },
+        setup: () => ({ rows, columns }),
+        template: `
+          <div>
+            <input aria-label="Other" data-testid="other" />
+            <DataTable :data="rows" :columns="columns">
+              <template #toolbar>
+                <TableSearch />
+              </template>
+            </DataTable>
+          </div>
+        `
+      })
+      const { getByTestId } = render(Tree)
+      await nextTick()
+      const other = getByTestId('other')
+      other.focus()
+      other.dispatchEvent(
+        new KeyboardEvent('keydown', { key: '/', bubbles: true, cancelable: true })
+      )
+      expect(document.activeElement).toBe(other)
+      other.blur()
+      document.body.dispatchEvent(
+        new KeyboardEvent('keydown', { key: '/', bubbles: true, cancelable: true })
+      )
+      expect(document.activeElement).toBe(getByTestId('table-search'))
     })
 
     // `size` is bound BEFORE v-bind="$attrs" on the inner Input, so the
