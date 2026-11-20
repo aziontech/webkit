@@ -1,9 +1,10 @@
 <script setup lang="ts">
-  import { computed, onBeforeUnmount, onMounted, provide, ref, useAttrs, useId } from 'vue'
+  import { computed, nextTick, onBeforeUnmount, provide, ref, useAttrs, useId, watch } from 'vue'
 
   import { useControllable } from '../../../composables/use-controllable'
+  import { useOverlayLayer } from '../../../composables/use-overlay-layer'
   import { usePlacement } from '../../../composables/use-placement'
-  import type { PopoverPlacement, PopoverPlacementInput } from './injection-key'
+  import type { PopoverAlign, PopoverSide, PopoverSize } from './injection-key'
   import { PopoverInjectionKey } from './injection-key'
 
   defineOptions({
@@ -18,55 +19,54 @@
     default(): unknown
   }>()
 
-  const props = withDefaults(
-    defineProps<{
-      /** Controlled open state. Use with v-model:open or update:open. When omitted, the component is uncontrolled. */
-      open?: boolean
-      /** Where the panel opens relative to the trigger. `'auto'` picks the best-fitting corner at open time. */
-      placement?: PopoverPlacementInput
-      /** Pixel gap between the trigger and the panel. */
-      offset?: number
-      /** Prevents the trigger from opening the panel and applies disabled tokens. */
-      disabled?: boolean
-      /** Panel width preset mapped to container tokens: `'small'` (`--container-xs`), `'medium'` (`--container-sm`), `'large'` (`--container-md`). When omitted, the panel sizes fluidly between `--container-3xs` and `--container-xs`. */
-      width?: 'small' | 'medium' | 'large'
-      /** Light-dismiss: when true, the panel closes on outside-click and `Esc`. Set false to keep it open until the trigger or `PopoverClose` closes it. */
-      dismissible?: boolean
-    }>(),
-    {
-      open: undefined,
-      placement: 'bottom-start',
-      offset: 4,
-      disabled: false,
-      width: undefined,
-      dismissible: true
-    }
-  )
+  export interface PopoverProps {
+    /** Side of the trigger the panel opens on, flipped when it does not fit; `'auto'` picks the side with the most room at open time. */
+    side?: PopoverSide | 'auto'
+    /** Alignment along the trigger edge. */
+    align?: PopoverAlign
+    /** Pixel gap between the trigger and the panel. */
+    sideOffset?: number
+    /** Prevents the trigger from opening the panel and applies disabled tokens. */
+    disabled?: boolean
+    /** Panel width preset mapped to container tokens: `'small'` (`--container-xs`), `'medium'` (`--container-sm`), `'large'` (`--container-md`). When omitted, the panel sizes fluidly between `--container-3xs` and `--container-xs`. */
+    size?: PopoverSize
+    /** Initial open state when uncontrolled. */
+    defaultOpen?: boolean
+    /** Light-dismiss: when true, the panel closes on outside-click and `Esc`. Set false to keep it open until the trigger or `PopoverClose` closes it. */
+    dismissible?: boolean
+  }
 
-  defineEmits<{
-    'update:open': [value: boolean]
-  }>()
+  const props = withDefaults(defineProps<PopoverProps>(), {
+    side: 'bottom',
+    align: 'start',
+    sideOffset: 4,
+    disabled: false,
+    size: undefined,
+    defaultOpen: false,
+    dismissible: true
+  })
 
-  const openModel = defineModel<boolean | undefined>('open', { default: undefined })
+  /** Controlled open state. Use with v-model:open; while unbound the popover is uncontrolled and starts at defaultOpen. */
+  const openModel = defineModel<boolean>('open', { default: undefined as never })
 
   const attrs = useAttrs()
   const uid = useId()
 
-  const triggerRef = ref<globalThis.HTMLElement | null>(null)
-  const panelRef = ref<globalThis.HTMLElement | null>(null)
+  const triggerEl = ref<globalThis.HTMLElement | null>(null)
+  const panelEl = ref<globalThis.HTMLElement | null>(null)
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'overlay-popover')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'popover')
 
   const triggerId = `${uid}-trigger`
   const contentId = `${uid}-content`
   const titleId = `${uid}-title`
   const descriptionId = `${uid}-description`
 
-  const openProp = computed(() => openModel.value ?? props.open)
+  const openProp = computed<boolean | undefined>(() => openModel.value)
 
   const isOpenState = useControllable<boolean>({
     prop: openProp,
-    defaultProp: false,
+    defaultProp: props.defaultOpen,
     onChange: (value) => {
       openModel.value = value
     }
@@ -74,23 +74,24 @@
 
   const isOpenRef = computed(() => isOpenState.value)
   const disabledRef = computed(() => props.disabled)
-  const placementRef = computed(() => props.placement)
-  const offsetRef = computed(() => props.offset)
-  const widthRef = computed(() => props.width)
+  const sizeRef = computed(() => props.size)
 
   const hasTitle = ref(false)
   const hasDescription = ref(false)
 
-  const { resolvedPlacement, panelStyle } = usePlacement({
-    triggerRef,
-    panelRef,
+  const { resolvedSide, resolvedAlign, panelStyle } = usePlacement({
+    triggerRef: triggerEl,
+    panelRef: panelEl,
     isOpen: isOpenRef,
-    placement: placementRef,
-    offset: offsetRef,
-    autoPlacements: ['bottom-start', 'bottom-end', 'top-start', 'top-end']
+    side: () => props.side,
+    align: () => props.align,
+    sideOffset: () => props.sideOffset,
+    autoSides: ['bottom', 'top']
   })
 
-  const resolvedPlacementRef = computed(() => resolvedPlacement.value as PopoverPlacement)
+  const { isTop, isFocusTop, isInsideHigherLayer, lowerLayerElement } = useOverlayLayer(isOpenRef, {
+    element: panelEl
+  })
 
   function setOpen(value: boolean) {
     if (value && props.disabled) return
@@ -98,7 +99,7 @@
   }
 
   function focusTrigger() {
-    const trigger = triggerRef.value
+    const trigger = triggerEl.value
     if (!trigger) return
     const target = trigger.matches(FOCUSABLE_SELECTOR)
       ? trigger
@@ -107,7 +108,7 @@
   }
 
   function getFocusable(): globalThis.HTMLElement[] {
-    const panel = panelRef.value
+    const panel = panelEl.value
     if (!panel) return []
     return Array.from(panel.querySelectorAll<globalThis.HTMLElement>(FOCUSABLE_SELECTOR))
   }
@@ -117,16 +118,33 @@
     if (!props.dismissible) return
     const target = event.target as globalThis.Node | null
     if (!target) return
-    if (triggerRef.value?.contains(target)) return
-    if (panelRef.value?.contains(target)) return
+    if (isInsideHigherLayer(target) || !isFocusTop.value) return
+    if (triggerEl.value?.contains(target)) return
+    if (panelEl.value?.contains(target)) return
     setOpen(false)
   }
 
+  function tabbableAfterTrigger(): globalThis.HTMLElement | null {
+    const trigger = triggerEl.value
+    const scope = lowerLayerElement() ?? globalThis.document?.body
+    if (!trigger || !scope) return null
+    const panel = panelEl.value
+    const all = Array.from(
+      scope.querySelectorAll<globalThis.HTMLElement>(FOCUSABLE_SELECTOR)
+    ).filter(
+      (el) => !panel?.contains(el) && !trigger.contains(el) && el.getClientRects().length > 0
+    )
+    const after = all.find((el) =>
+      Boolean(trigger.compareDocumentPosition(el) & globalThis.Node.DOCUMENT_POSITION_FOLLOWING)
+    )
+    return after ?? (scope === globalThis.document?.body ? null : (all[0] ?? null))
+  }
+
   function onDocumentKeydown(event: globalThis.KeyboardEvent) {
-    if (!isOpenState.value) return
+    if (!isOpenState.value || event.defaultPrevented) return
 
     if (event.key === 'Escape') {
-      if (!props.dismissible) return
+      if (!isTop.value || !props.dismissible) return
       event.preventDefault()
       setOpen(false)
       focusTrigger()
@@ -134,38 +152,62 @@
     }
 
     if (event.key === 'Tab') {
-      const trigger = triggerRef.value
-      const panel = panelRef.value
+      if (!isFocusTop.value) return
+      const trigger = triggerEl.value
+      const panel = panelEl.value
       if (!trigger || !panel) return
 
       const focusables = getFocusable()
       const active = globalThis.document?.activeElement as globalThis.HTMLElement | null
       const first = focusables[0]
       const last = focusables[focusables.length - 1]
+      const inPanel = Boolean(active && panel.contains(active))
+      const onTrigger = Boolean(active && trigger.contains(active))
 
-      if (active === trigger || !panel.contains(active)) {
+      if (onTrigger && !event.shiftKey && first) {
         event.preventDefault()
-        const target = event.shiftKey ? (last ?? trigger) : (first ?? trigger)
-        target.focus({ preventScroll: true })
+        first.focus({ preventScroll: true })
         return
       }
 
-      if (focusables.length === 0) {
+      if (!inPanel) return
+
+      if (event.shiftKey && (active === first || focusables.length === 0)) {
         event.preventDefault()
-        trigger.focus({ preventScroll: true })
-      } else if (!event.shiftKey && active === last) {
+        focusTrigger()
+        return
+      }
+
+      if (!event.shiftKey && (active === last || focusables.length === 0)) {
         event.preventDefault()
-        trigger.focus({ preventScroll: true })
-      } else if (event.shiftKey && active === first) {
-        event.preventDefault()
-        trigger.focus({ preventScroll: true })
+        const next = tabbableAfterTrigger()
+        setOpen(false)
+        if (next) next.focus({ preventScroll: true })
+        else focusTrigger()
       }
     }
   }
 
-  onMounted(() => {
-    globalThis.document?.addEventListener('mousedown', onDocumentMousedown)
-    globalThis.document?.addEventListener('keydown', onDocumentKeydown, true)
+  watch(
+    isOpenRef,
+    (open) => {
+      if (open) {
+        globalThis.document?.addEventListener('mousedown', onDocumentMousedown)
+        globalThis.document?.addEventListener('keydown', onDocumentKeydown, true)
+      } else {
+        globalThis.document?.removeEventListener('mousedown', onDocumentMousedown)
+        globalThis.document?.removeEventListener('keydown', onDocumentKeydown, true)
+      }
+    },
+    { immediate: true }
+  )
+
+  watch(isOpenRef, async (open, wasOpen) => {
+    if (!open || wasOpen) return
+    await nextTick()
+    const panel = panelEl.value
+    if (!panel || panel.contains(globalThis.document?.activeElement ?? null)) return
+    getFocusable()[0]?.focus({ preventScroll: true })
   })
 
   onBeforeUnmount(() => {
@@ -177,15 +219,16 @@
     testId: testId.value,
     isOpen: isOpenRef,
     disabled: disabledRef,
-    placement: resolvedPlacementRef,
-    width: widthRef,
+    side: resolvedSide,
+    align: resolvedAlign,
+    size: sizeRef,
     panelStyle,
     triggerId,
     contentId,
     titleId,
     descriptionId,
-    triggerRef,
-    panelRef,
+    triggerEl,
+    panelEl,
     setOpen,
     focusTrigger,
     registerTitle: () => {
@@ -211,7 +254,8 @@
     :data-testid="testId"
     :data-state="isOpenRef ? 'open' : 'closed'"
     :data-disabled="disabled || null"
-    :data-placement="placement"
+    :data-side="side"
+    :data-align="align"
     class="inline-block"
   >
     <slot />

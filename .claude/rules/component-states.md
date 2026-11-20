@@ -4,27 +4,36 @@ A component is not just its happy path. Every interactive component has a **stat
 
 ## The canonical state surface
 
-| State | Prop / trigger | How it renders |
-|---|---|---|
-| `disabled` | `disabled` prop | `data-disabled` + disabled tokens; not focusable |
-| `loading` | `loading` prop | `data-loading` + `Skeleton` / spinner affordance; interaction suppressed |
-| `invalid` | validation (form field) | `data-invalid` + error tokens + `HelperText` message |
-| `readonly` | `readonly` prop | `data-readonly`; value visible, not editable |
-| `empty` | no data (data-driven components) | the `EmptyState` component, not an ad-hoc "no results" string |
-| `error` | load/action failure (data-driven) | an error slot / message, not a bare thrown error |
-| `open` / `closed` | `open` (+ `v-model:open`) | `data-state="open|closed"` (overlays) |
+| State             | Prop / trigger                    | How it renders                                                           |
+| ----------------- | --------------------------------- | ------------------------------------------------------------------------ |
+| `disabled`        | `disabled` prop                   | `data-disabled` + disabled tokens; not focusable                         |
+| `loading`         | `loading` prop                    | `data-loading` + `Skeleton` / spinner affordance; interaction suppressed |
+| `invalid`         | validation (form field)           | `data-invalid` + error tokens + `FieldError` message                     |
+| `readonly`        | `readonly` prop                   | `data-readonly`; value visible, not editable                             |
+| `empty`           | no data (data-driven components)  | the `EmptyState` component, not an ad-hoc "no results" string            |
+| `error`           | load/action failure (data-driven) | an error slot / message, not a bare thrown error                         |
+| `open` / `closed` | `open` (+ `v-model:open`)         | `data-state="open                                                        | closed"` (overlays) |
 
 Not every component has every state — a `Button` has `disabled` + `loading`; a data `Table` adds `empty` + `error`. The spec's **state matrix** lists exactly the ones that component owns.
 
 ## The rule
 
-> Every state a component owns is **declared in the spec's state matrix** and **rendered by the component itself** — via a `data-*` attribute (styled by a Tailwind `data-[...]:` variant, per [`styling.md`](./styling.md)) or by composing the package's own state components (`Skeleton`, `EmptyState`, `HelperText`). A consumer supplies only the trigger; it never re-implements the loading placeholder or the empty message.
+> Every state a component owns is **declared in the spec's state matrix** and **rendered by the component itself** — via a `data-*` attribute (styled by a Tailwind `data-[...]:` variant, per [`styling.md`](./styling.md)) or by composing the package's own state components (`Skeleton`, `EmptyState`, `FieldDescription`). A consumer supplies only the trigger; it never re-implements the loading placeholder or the empty message.
 
 ```vue
 <template>
-  <div :data-loading="loading || null" :data-disabled="disabled || null">
-    <Skeleton v-if="loading" kind="shape" />
-    <EmptyState v-else-if="isEmpty" :title="emptyTitle" />
+  <div
+    :data-loading="loading || null"
+    :data-disabled="disabled || null"
+  >
+    <Skeleton
+      v-if="loading"
+      variant="shape"
+    />
+    <EmptyState
+      v-else-if="isEmpty"
+      :title="emptyTitle"
+    />
     <slot v-else />
   </div>
 </template>
@@ -32,7 +41,7 @@ Not every component has every state — a `Button` has `disabled` + `loading`; a
 
 - **States switch on `data-*`, styled inline** — no `loading ? 'opacity-80' : ''` ternary in `:class` (see [`styling.md`](./styling.md)).
 - **Loading / empty reuse the package's components** — `Skeleton` for placeholders, `EmptyState` for no-data. A component never hand-rolls a spinner or a "Nothing here" string that a shipped component already provides.
-- **The data that drives `loading`/`empty`/`error` comes from the consumer** (a prop, or async state the app owns). The DS ships **no** data fetching (see [`composables.md`](./composables.md) § "Out of scope"); it ships the *rendering* of each state.
+- **The data that drives `loading`/`empty`/`error` comes from the consumer** (a prop, or async state the app owns). The DS ships **no** data fetching (see [`composables.md`](./composables.md) § "Out of scope"); it ships the _rendering_ of each state.
 
 ## Hard prohibitions
 
@@ -45,7 +54,7 @@ Not every component has every state — a `Button` has `disabled` + `loading`; a
 
 - **[`validate-spec-compliance.mjs`](../hooks/validate-spec-compliance.mjs)** checks the props/events behind each state against the spec; the state-matrix section becomes a required part of the spec (see [`.specs/_template.md`](../../.specs/_template.md)).
 - **[`validate-tokens.mjs`](../hooks/validate-tokens.mjs)** + `webkit/no-style-override` keep state styling on `data-*` + tokens.
-- Storybook: each mutually-exclusive state is its own story (Loading / Disabled / Empty / Invalid) — see [`storybook-source.md`](./storybook-source.md).
+- Examples: each mutually-exclusive state is shown in an example (`examples/<name>/`, Loading / Disabled / Empty / Invalid), so the docs page and the visual suite show it.
 
 ## Why this rule exists
 

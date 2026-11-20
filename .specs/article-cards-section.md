@@ -1,0 +1,180 @@
+---
+name: article-cards-section
+category: section
+structure: monolithic
+status: implemented
+spec_version: 7
+template: 2
+created: 2026-11-05
+last_updated: 2026-11-16
+checksum: da32012b67e812bcc7ae91081ba8cbc33f69b6f6f6764bf2af3d206d967ee027
+---
+
+# ArticleCardsSection — Component Spec
+
+## Purpose
+
+A titled row of three linked article cards on one hairline frame grid with no gutter, stacking to one column on mobile. Each card is a single link: a 16:9 media cell holding the article's cover — or, when it has none, the client's mark in one flat ink that follows the theme — then the headline, the deck and a `meta` overline pinned to the foot. It is a page section — the site places it from a `{ _id: 'article-cards-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `registration-frame` and `card-grid`. `variant` places the heading only: `start` at the start (an article's closing row), `center` centred over the cards under an overline (a landing-page band); the cards keep the same shape in both.
+
+## When to use
+
+- To close a blog post with its related articles, or a success story with its related stories.
+- To show three stories as a landing-page band under a centred heading.
+
+## When NOT to use
+
+- For the full, filterable list of articles → use `article-index-section`.
+- For one featured article selected from a wall → use `article-highlight-section`.
+
+## Related
+
+- `card-grid` — the frame grid the cards sit on.
+- `article-highlight-section` — the blog's opening band.
+
+## Best practices
+
+- Give a card either `image` or `mark`; the mark is drawn only when there is no cover.
+- Keep the band to three cards so the frame row stays full.
+- Set `target: '_blank'` on a card whose article lives on another site; it opens in a new tab and says so to assistive technology.
+
+## Usage
+
+```vue
+<script setup>
+  import ArticleCardsSection from '@aziontech/webkit/article-cards-section'
+</script>
+
+<template>
+  <ArticleCardsSection
+    align="start"
+    title="Related Articles"
+    aria-label="Related Articles"
+    :items="[
+      {
+        id: 'how-to-reduce-ai-agent-latency',
+        href: '/blog/how-to-reduce-ai-agent-latency',
+        title: 'How Do You Reduce AI Agent Latency?',
+        description: 'Learn where latency builds up in AI agents.',
+        meta: 'SEP 23, 2026 • 8 min read',
+        image: '/media/blog/reduce-ai-agent-latency.png'
+      }
+    ]"
+  />
+</template>
+```
+
+## Props
+
+| Prop        | Type                        | Default   | Required | JSDoc                                                                                                                                                |
+| ----------- | --------------------------- | --------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `align`     | `ArticleCardsSectionAlign`  | `'start'` | false    | Placement of the heading: `start` sets it at the start, `center` centres it over the cards.                                                          |
+| `anchor`    | `string`                    | `''`      | false    | Id set on the band so an in-page `#hash` link can target it.                                                                                         |
+| `eyebrow`   | `string`                    | `''`      | false    | Eyebrow above the heading.                                                                                                                           |
+| `title`     | `string`                    | `''`      | false    | Headline of the band; the band renders no header when empty.                                                                                         |
+| `items`     | `ArticleCardsSectionItem[]` | `[]`      | false    | The cards, in order; each is `{ id, href, title, description, meta, image?, mark?, target? }`; a card whose `target` is `_blank` opens in a new tab. |
+| `ariaLabel` | `string`                    | `''`      | false    | Accessible name of the card grid.                                                                                                                    |
+
+## Events
+
+| _none_ | — | — |
+
+## Slots
+
+| _none_ | — | — |
+
+## States
+
+- Visual states: `default`, `hover` (the card lifts to the raised surface and its media scales up), `focus-visible` (inset ring)
+- `data-align` mirrors the `align` prop and places the heading
+- Empty: when `items` is empty the band renders nothing — not the header, not the frame
+- The header renders only when `title` is set
+- `anchor` sets the band's `id`; a card whose `target` is `_blank` links with `rel="noopener"`
+- A card title clamps to two lines (`line-clamp-2`); the clamp is visual only, so the full title stays in the accessibility tree, with no `title` attribute.
+
+## Motion & Animations
+
+| Trigger                     | Animation / Transition                                             | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback         |
+| --------------------------- | ------------------------------------------------------------------ | ------------------------------------------------- | ------------------------------- |
+| hover fill change on a card | `transition-colors duration-fast-02 ease-productive-entrance`      | inline (matches catalog)                          | `motion-reduce:transition-none` |
+| hover scale of the media    | `transition-[scale] duration-moderate-02 ease-productive-entrance` | inline (matches catalog)                          | `motion-reduce:transition-none` |
+
+## Tokens
+
+| Region            | Token (DESIGN.md)                                        |
+| ----------------- | -------------------------------------------------------- |
+| card fill         | `var(--bg-canvas)`, hover `var(--bg-surface-raised)`     |
+| media cell        | `var(--bg-surface)`, rule `var(--border-default)`        |
+| headline          | `text-heading-sm`, `var(--text-default)`                 |
+| deck and overline | `text-body-sm` / `text-overline-sm`, `var(--text-muted)` |
+| focus ring        | `var(--ring-color)`                                      |
+
+## Theme gaps
+
+| Figma variable | Temporary primitive | Follow-up |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
+
+## Accessibility (WCAG 2.1 AA)
+
+- Visible focus: each card is one link with an inset `focus-visible` ring.
+- Keyboard map: `Tab` moves card to card; `Enter` follows the link.
+- ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the grid is a `group` named by `ariaLabel` when set; the headline is the section title's `h2` and each card's headline an `h3`; a cover is decorative (`alt=""`), a client mark is named by the client; a `_blank` card appends the visually hidden `(opens in a new tab)` to its name.
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text uses `--text-default` / `--text-muted` on the canvas.
+- `motion-reduce:transition-none` on every transition.
+- Touch target ≥40×40 px — the whole card is the target.
+
+## Internationalization
+
+| Key                                 | English source         | Override prop |
+| ----------------------------------- | ---------------------- | ------------- |
+| `articleCardsSection.opensInNewTab` | `(opens in a new tab)` | —             |
+
+- Formatting: none. Every other string is editorial copy that arrives through props.
+
+## Right-to-left
+
+- Layout: logical utilities only; the frame grid mirrors through `CardGrid`.
+- Icons: none; a client mark is a logo and never mirrors.
+- Keyboard: unchanged (`Tab` order follows the DOM).
+- User data: none.
+
+## Responsive
+
+- Container queries: none; the grid is three columns from `md` and one column below (from `CardGrid`).
+- Narrow (≤ 640 px): the cards stack in one column and keep the 16:9 media cell.
+- Touch: the whole card is the target.
+- Reflow: no horizontal scroll at 320 px and 200 % zoom.
+
+## Performance
+
+- Bundle budget: the `./article-cards-section` entry in `.size-limit.json`.
+- Runtime budget: none: static.
+- Heavy parts: none; covers load lazily.
+
+## Examples
+
+- Default
+- Alignments — composite story rendering both `align` values stacked.
+
+## Constraints — DO NOT
+
+<!-- This block is injected VERBATIM into every sub-agent prompt.
+     spec-validator rejects the spec if this block is missing or shorter than the template. -->
+
+- Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
+- Do not add events beyond the Events table above. Same rule for slots and sub-components.
+- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
+- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `.claude/rules/dependencies.md`.
+- Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
+- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
+- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
+- Do not edit `.claude/docs/DESIGN.md` or `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not edit the root `package.json` or `.github/workflows/*`.
+- Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.
+- Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
+- Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).
+- Do not run `git` commands, `pnpm install`, or any command that changes the lockfile.
+- If anything in the spec is ambiguous or contradicts the rules, emit `BLOCKED: <one-sentence reason>` and write nothing.

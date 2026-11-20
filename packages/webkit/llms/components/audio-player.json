@@ -1,0 +1,148 @@
+{
+ "name": "audio-player",
+ "binding": "AudioPlayer",
+ "import": "@aziontech/webkit/audio-player",
+ "treeShakeableImport": "@aziontech/webkit/audio-player",
+ "category": "content",
+ "surface": "app",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "A compact player for one audio clip: play and pause, a seek bar between the current time and the duration, mute and volume, and, when asked for, a playback speed control, a download link and a transcript. It plays what the app hands it (a URL, an object URL or a `data:` URL built from base64 audio) on the browser's own audio element; it fetches and decodes nothing. It owns the generating, buffering and error states, so an AI reply that speaks, or a stored recording, looks the same everywhere.",
+ "setup": null,
+ "useWhen": [
+  "An AI reply that carries audio: speech generated from text, generated music or sound, an audio part of a chat message.",
+  "A voice note or recording a person attached to a message or a ticket.",
+  "Previewing one stored audio file in a detail pane or drawer."
+ ],
+ "avoidWhen": [
+  "Video, or audio that needs a picture → use `DocFrame` (a captured clip) or `Embed` (a hosted player).",
+  "Recording audio or a live voice conversation → use `PromptInput` and its dictate button.",
+  "A file of any type with a type-aware fallback → use `FilePreview`.",
+  "Background or decorative sound that the reader did not ask for → do not autoplay audio; leave it out."
+ ],
+ "related": [
+  "`FilePreview` — the preview of a stored file of any type; an audio file can open in an `AudioPlayer` instead.",
+  "`ChatMessage` — the message an audio reply sits in.",
+  "`Slider` — the seek and volume controls inside this component.",
+  "`IconButton` — the play, mute and download controls inside this component."
+ ],
+ "bestPractices": [
+  "Build `src` once from the source the app has: a URL as it is, base64 audio as `data:<mimeType>;base64,<value>`, a `Blob` as an object URL (revoke it when the player unmounts).",
+  "Pass `duration` when the generator reports it, so the time shows before the browser has read the file.",
+  "Set `loading` while the audio is being generated, so the player holds its place in the reply instead of appearing when it is done.",
+  "Pass the text the audio speaks as `transcript`; a reader who cannot hear it reads it instead (WCAG 1.2.1).",
+  "Give each player a `title` when a message holds more than one, so each control group has its own name.",
+  "Never start playback on mount; the reader presses Play.",
+  "In a narrow column only Mute is left for the volume; the device volume covers the rest on a phone."
+ ],
+ "props": [
+  {
+   "name": "src",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Audio source: a URL, an object URL or a data URL built from base64 audio. Empty disables the controls."
+  },
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Name of the clip, shown above the controls and used as the accessible name of the control group."
+  },
+  {
+   "name": "duration",
+   "type": "number",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Length of the clip in seconds, shown until the browser reads it from the file. Unset shows a placeholder."
+  },
+  {
+   "name": "transcript",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Text the audio speaks, shown in a collapsible Transcript section under the controls. Empty hides the section."
+  },
+  {
+   "name": "playbackRates",
+   "type": "number[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Playback speeds the speed control cycles through, in order. Empty hides it; it starts at 1 when listed, else the first."
+  },
+  {
+   "name": "downloadable",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows a Download link to `src`."
+  },
+  {
+   "name": "fileName",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "File name the Download link saves the audio as. Empty lets the browser pick one."
+  },
+  {
+   "name": "loading",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "The audio is still being generated or fetched: the play control shows a spinner and the other controls are disabled."
+  },
+  {
+   "name": "error",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Why the audio cannot play. Set, the controls are disabled and this text replaces the time."
+  },
+  {
+   "name": "disabled",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Disables every control and applies the disabled tokens."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the control group when there is no `title`. Empty falls back to the catalog's Audio player."
+  }
+ ],
+ "events": [
+  {
+   "name": "play",
+   "payload": "Event",
+   "notes": "Playback started (the audio element's `play` event)."
+  },
+  {
+   "name": "pause",
+   "payload": "Event",
+   "notes": "Playback paused, by the reader or because the clip reached its end (the element's `pause` event)."
+  }
+ ],
+ "slots": [],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/audio-player/default.vue"
+  },
+  {
+   "name": "Playback rates",
+   "file": "examples/audio-player/playback-rates.vue"
+  },
+  {
+   "name": "Loading",
+   "file": "examples/audio-player/loading.vue"
+  }
+ ],
+ "docs": "components/audio-player.md"
+}

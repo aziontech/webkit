@@ -1,0 +1,54 @@
+{
+ "variants": [
+  {
+   "name": "Schema",
+   "summary": "The Definition view of customers: the Columns heading with Add column over a card holding the column name, its type as a Tag, and its constraints.",
+   "file": "blocks/view/view-query-editor/variants/schema.vue"
+  },
+  {
+   "name": "NoTables",
+   "summary": "A database with no tables yet: the side panel says so and the working pane shows the Create Table empty state.",
+   "file": "blocks/view/view-query-editor/variants/no-tables.vue"
+  },
+  {
+   "name": "Query",
+   "summary": "The Editor tab after the Select all query ran: the query history in the side panel, the statement in the editor, and its three rows in the Results band, switchable to JSON.",
+   "file": "blocks/view/view-query-editor/variants/query.vue"
+  },
+  {
+   "name": "Templates",
+   "summary": "The Editor tab before anything ran, with the SQL quick templates drawer open over it: a search and one outlined clickable Item per snippet; choosing one loads its SQL into the editor and closes the drawer.",
+   "file": "blocks/view/view-query-editor/variants/templates.vue"
+  },
+  {
+   "name": "Loading",
+   "summary": "The tables and the selected table's rows are loading: Skeleton lines hold the side panel and the rows DataTable shows its loading state.",
+   "file": "blocks/view/view-query-editor/variants/loading.vue"
+  },
+  {
+   "name": "Error",
+   "summary": "The rows of the selected table failed to load: the Tables tab keeps the side panel and the table toolbar, and the Data view shows a danger Alert that names the table and offers Retry.",
+   "file": "blocks/view/view-query-editor/variants/error.vue"
+  },
+  {
+   "name": "TableData",
+   "summary": "The events table in the Data view: 137 rows in a compact `DataTable` paged 25 at a time, each column header naming its type with a key on the primary key, `NULL` in muted italics, sortable headers and row selection. Two rows are selected, so a selection bar under the toolbar shows 2 selected, Clear selection and Delete 2 rows while Sort stays in place; Delete asks in a `ConfirmDialog`, then removes the rows and emits `delete-rows`.",
+   "file": "blocks/view/view-query-editor/variants/table-data.vue"
+  },
+  {
+   "name": "ImportCsv",
+   "summary": "An empty table's Import data from CSV (also a CSV dropped on its empty state): a drawer that reads the file (`FileDropzone`, `FileTokenGroup`), maps each CSV column to a table column or Skip in a `Select` (matched by name first), checks every value against its column's type and NOT NULL with the errors listed per line, previews the first rows as they will be inserted, and inserts the valid rows with a spinner, then a toast with Undo that says how many rows were skipped.",
+   "file": "blocks/view/view-query-editor/variants/import-csv.vue"
+  },
+  {
+   "name": "CreateDatabase",
+   "summary": "The Create Database page from the design sample: Name (6 to 50 letters, numbers and hyphens) and an Advanced section with Active, under a centred save bar card with Cancel and Create Database. A taken name comes back on the field, a failed request is a toast with Retry, and success is a toast with Open database and Create Table.",
+   "file": "blocks/view/view-query-editor/variants/create-database.vue"
+  }
+ ],
+ "sfcFile": "blocks/view/view-query-editor/view-query-editor.vue",
+ "guidelinesFile": "blocks/view/view-query-editor/guidelines.md",
+ "fileSources": {
+  "sample.ts": "blocks/view/view-query-editor/sample.ts"
+ }
+}

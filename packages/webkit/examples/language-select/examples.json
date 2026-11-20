@@ -1,0 +1,36 @@
+{
+  "component": "language-select",
+  "title": "Components/Input/LanguageSelect",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The full field for a settings form: inside a `Field` and bound to `ConfigProvider`'s `locale`, each option shows its round flag and its name in its own language. Pick one and the pagination under it, the picker's search box and its empty line change language. Type a language, a tag or a country to filter.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Variants",
+      "summary": "`variant=\"ghost\"` is the compact switcher for a header or a toolbar: a round flag and the country code (`US`), no border until hover, so it sits beside the search and the outlined icon buttons without a second outline colour. The default `outline` is the full field for a form.",
+      "file": "variants.vue"
+    },
+    {
+      "name": "Options",
+      "summary": "`options` replaces the built-in languages with your own list, one locale per country as on a storefront. An option with no `label` is named in its own language (`fr-FR` → `Français (France)`); the flag comes from the tag's region, or from `country` (`ar` → `SA`). Two options in one country show the whole tag as the short code (`FR-CA`).",
+      "file": "options.vue"
+    },
+    {
+      "name": "Right-to-left",
+      "summary": "Under `dir=\"rtl\"` the flag, the short code and the chevron swap sides; the code keeps its left-to-right order and each name reads in its own direction.",
+      "file": "rtl.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "Every `size` side by side for both variants: `small`, `medium` (the default) and `large`.",
+      "file": "sizes.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "`disabled` keeps the list closed; the picked language stays visible.",
+      "file": "disabled.vue"
+    }
+  ]
+}

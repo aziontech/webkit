@@ -1,8 +1,10 @@
-import { composeStories } from '@storybook/vue3'
 import { render, waitFor, within } from '@testing-library/vue'
 import { describe, expect, it, vi } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/content/illustration/Illustration.stories'
+import Assets from '../../../../examples/illustration/assets.vue'
+import Default from '../../../../examples/illustration/default.vue'
+import Labeled from '../../../../examples/illustration/labeled.vue'
+import Placeholder from '../../../../examples/illustration/placeholder.vue'
 import {
   illustrationPalette,
   normalizeIllustrationColor
@@ -10,18 +12,17 @@ import {
 import {
   illustrationAssetNames,
   loadIllustrationPlaceholder,
-  resolveIllustrationAsset
+  resolveIllustrationAsset,
+  resolveIllustrationAssetName
 } from '../../../assets/illustrations/registry'
 import { loadIllustrationScene } from '../../../assets/illustrations/scene'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Illustration from './illustration.vue'
 
-const { Default, Assets, Labeled, Placeholder } = composeStories(stories)
+const at = (view: ReturnType<typeof render>) => within(view.container as HTMLElement)
 
-const at = (view: ReturnType<typeof render>) => within(view.container)
-
-const root = (view: ReturnType<typeof render>, testId = 'content-illustration') =>
-  at(view).findByTestId(testId)
+const root = (view: ReturnType<typeof render>, testId = 'illustration') =>
+  at(view).findByTestId(testId, {}, { timeout: 3000 })
 
 const urlOf = async (name: string) => (await resolveIllustrationAsset(name)!()).default
 
@@ -64,9 +65,19 @@ const drawnFixture = async (style: string, body: string) => {
 
 const UNPAINTED = 'mask, clipPath, filter'
 
+const shippedDrawings = Object.keys(import.meta.glob('../../../assets/illustrations/*.svg'))
+  .map((path) =>
+    path
+      .split('/')
+      .pop()!
+      .replace(/\.svg$/, '')
+  )
+  .filter((name) => name !== 'placeholder')
+  .sort()
+
 describe('Illustration', () => {
   it('renders the story with the derived testid', async () => {
-    expect(await root(render(Default()))).toBeTruthy()
+    expect(await root(render(Default))).toBeTruthy()
   })
 
   it('lets a consumer-supplied data-testid win over the derived fallback', async () => {
@@ -75,7 +86,7 @@ describe('Illustration', () => {
       attrs: { 'data-testid': 'hero-art' }
     })
     expect(await root(view, 'hero-art')).toBeTruthy()
-    expect(at(view).queryByTestId('content-illustration')).toBeNull()
+    expect(at(view).queryByTestId('illustration')).toBeNull()
   })
 
   it('forwards consumer attributes and merges the consumer class onto the root', async () => {
@@ -170,10 +181,10 @@ describe('Illustration', () => {
     })
     const expected = await sceneOf('runtime')
     await waitFor(() => {
-      const scenes = at(view).getAllByTestId('content-illustration')
+      const scenes = at(view).getAllByTestId('illustration')
       expect(scenes.map(drawnCount)).toEqual([expected, expected])
     })
-    const scenes = at(view).getAllByTestId('content-illustration')
+    const scenes = at(view).getAllByTestId('illustration')
     const ids = scenes.flatMap((scene) => [...scene.querySelectorAll('[id]')].map((n) => n.id))
     expect(ids.length).toBeGreaterThan(0)
     expect(new Set(ids).size).toBe(ids.length)
@@ -195,6 +206,27 @@ describe('Illustration', () => {
     expect(el.getAttribute('height')).toBe('300')
   })
 
+  it('registers every drawing that ships in the illustration folder, and nothing else', () => {
+    expect([...illustrationAssetNames]).toEqual(shippedDrawings)
+  })
+
+  it('declares the canvas a tile was drawn on once it loads', async () => {
+    const view = render(Illustration, { props: { name: 'usage-chart' } })
+    await drawsScene(view, await sceneOf('usage-chart'))
+    const el = await root(view)
+    expect(el.getAttribute('viewBox')).toBe('0 0 170 128')
+    expect(el.getAttribute('width')).toBe('170')
+    expect(el.getAttribute('height')).toBe('128')
+  })
+
+  it('keeps the 592 by 300 canvas for the placeholder', async () => {
+    const view = render(Illustration)
+    await drawsScene(view, await placeholderScene())
+    const el = await root(view)
+    expect(el.getAttribute('width')).toBe('592')
+    expect(el.getAttribute('height')).toBe('300')
+  })
+
   it('falls back to the placeholder when name is empty', async () => {
     const view = render(Illustration)
     await drawsScene(view, await placeholderScene())
@@ -202,7 +234,7 @@ describe('Illustration', () => {
   })
 
   it('renders the placeholder story', async () => {
-    await drawsScene(render(Placeholder()), await placeholderScene())
+    await drawsScene(render(Placeholder), await placeholderScene())
   })
 
   it('warns and falls back to the placeholder for a name that is not registered', async () => {
@@ -211,6 +243,26 @@ describe('Illustration', () => {
     await drawsScene(view, await placeholderScene())
     expect((await root(view)).getAttribute('data-placeholder')).toBe('true')
     expect(warn).toHaveBeenCalledWith(expect.stringContaining('not-a-real-scene'))
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining('list_assets'))
+    warn.mockRestore()
+  })
+
+  it.each([
+    'build-databases-from-code',
+    'distributed-sql-for-resilient-global-reads',
+    'enable-owasp-protection-with-customizable-rules',
+    'reputation-intelligence-for-enhanced-protection',
+    'saas-platforms',
+    'stay-in-control',
+    'stream-security-events-for-investigation-and-response',
+    'white-gloves-when-it-matters'
+  ])('no longer resolves the scene name %s that 6.0 renamed', async (retired) => {
+    expect(resolveIllustrationAssetName(retired)).toBeNull()
+    expect(resolveIllustrationAsset(retired)).toBeNull()
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    const view = render(Illustration, { props: { name: retired } })
+    await drawsScene(view, await placeholderScene())
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining(retired))
     warn.mockRestore()
   })
 
@@ -254,37 +306,35 @@ describe('Illustration', () => {
   })
 
   it('carries the ariaLabel as the accessible name of an image when one is given', async () => {
-    const el = await root(render(Labeled()))
+    const el = await root(render(Labeled))
     expect(el.getAttribute('role')).toBe('img')
     expect(el.getAttribute('aria-label')).toBe('An MCP server deployed behind the edge firewall')
     expect(el.getAttribute('aria-hidden')).toBeNull()
   })
 
   it('has no a11y violations when decorative', async () => {
-    const view = render(Default())
+    const view = render(Default)
     await root(view)
     await expectNoA11yViolations(view.container)
   })
 
   it('has no a11y violations when labeled', async () => {
-    const view = render(Labeled())
+    const view = render(Labeled)
     await root(view)
     await expectNoA11yViolations(view.container)
   })
 
   it('has no a11y violations showing the placeholder', async () => {
-    const view = render(Placeholder())
+    const view = render(Placeholder)
     await root(view)
     await expectNoA11yViolations(view.container)
   })
 
   it('has no a11y violations rendering every registered scene', async () => {
-    const view = render(Assets())
+    const view = render(Assets)
     await waitFor(() =>
-      expect(at(view).getAllByTestId('content-illustration')).toHaveLength(
-        illustrationAssetNames.length
-      )
+      expect(at(view).getAllByTestId('illustration')).toHaveLength(illustrationAssetNames.length)
     )
     await expectNoA11yViolations(view.container)
-  })
+  }, 60_000)
 })

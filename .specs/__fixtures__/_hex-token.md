@@ -1,6 +1,6 @@
 ---
 name: hex-token
-category: actions
+category: action
 structure: monolithic
 status: draft
 spec_version: 1
@@ -16,21 +16,21 @@ Fixture: the Tokens table references a HEX literal instead of a DESIGN.md token.
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `kind` | `'primary'` | `'primary'` | no | Visual variant. |
+| Prop   | Type        | Default     | Required | JSDoc           |
+| ------ | ----------- | ----------- | -------- | --------------- |
+| `kind` | `'primary'` | `'primary'` | no       | Visual variant. |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
+| Event   | Payload      | Notes           |
+| ------- | ------------ | --------------- |
 | `click` | `MouseEvent` | Fires on click. |
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | Body. |
+| Slot      | Scope | Notes |
+| --------- | ----- | ----- |
+| `default` | —     | Body. |
 
 ## States
 
@@ -38,21 +38,21 @@ Fixture: the Tokens table references a HEX literal instead of a DESIGN.md token.
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
+| Region     | Token (DESIGN.md) |
+| ---------- | ----------------- |
 | typography | `.text-button-lg` |
-| surface | `#0066ff` |
+| surface    | `#0066ff`         |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
+| -------------- | ------------------- | --------- |
 
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus ring.
 
-## Stories (Storybook)
+## Examples
 
 - Default
 - LightDark

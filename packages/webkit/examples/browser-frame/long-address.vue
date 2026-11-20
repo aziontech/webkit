@@ -1,0 +1,119 @@
+<script setup>
+  import BrowserFrame from '@aziontech/webkit/browser-frame'
+  import Button from '@aziontech/webkit/button'
+  import CallToAction from '@aziontech/webkit/call-to-action'
+  import CardGrid from '@aziontech/webkit/card-grid'
+  import Container from '@aziontech/webkit/container'
+  import FeatureItem from '@aziontech/webkit/feature-item'
+  import Module from '@aziontech/webkit/module'
+  import ModuleHeader from '@aziontech/webkit/module-header'
+  import RegistrationFrame from '@aziontech/webkit/registration-frame'
+  import Spacer from '@aziontech/webkit/spacer'
+</script>
+
+<template>
+  <div class="mx-auto w-full max-w-(--container-md)">
+    <BrowserFrame
+      address="https://www.azion.com/en/documentation/products/build/applications/cache-settings/tiered-cache-configuration/"
+      aria-label="Cache settings documentation in a narrow column"
+    >
+      <Container max-width="site">
+        <Spacer
+          size="small"
+          hatch
+        />
+        <Module
+          :divided="false"
+          :padded="false"
+        >
+          <template #header>
+            <ModuleHeader
+              align="split"
+              eyebrow="Platform"
+              title="Build, secure and deliver from one platform"
+              description="Run your applications, protect them and cache their responses on the same distributed network."
+            >
+              <template #actions>
+                <Button
+                  variant="outline"
+                  label="See all products"
+                />
+              </template>
+            </ModuleHeader>
+          </template>
+          <RegistrationFrame
+            flush
+            borders="y"
+            marks="all"
+          >
+            <CardGrid
+              flush
+              variant="frame"
+              :columns="3"
+              :mobile-columns="1"
+            >
+              <CardGrid.Cell variant="canvas">
+                <FeatureItem
+                  :heading-level="3"
+                  icon="az az-applications"
+                  title="Applications"
+                  description="Deploy web apps and APIs close to every user, with no servers to provision."
+                />
+              </CardGrid.Cell>
+              <CardGrid.Cell variant="canvas">
+                <FeatureItem
+                  :heading-level="3"
+                  icon="az az-firewall"
+                  title="Firewall"
+                  description="Stop DDoS, bots and injection attacks before a request reaches your origin."
+                />
+              </CardGrid.Cell>
+              <CardGrid.Cell variant="canvas">
+                <FeatureItem
+                  :heading-level="3"
+                  icon="az az-tiered-cache"
+                  title="Tiered Cache"
+                  description="Answer repeat requests from the nearest location and offload your origin."
+                />
+              </CardGrid.Cell>
+            </CardGrid>
+          </RegistrationFrame>
+        </Module>
+        <Spacer
+          size="small"
+          hatch
+        />
+        <Module
+          :divided="false"
+          :padded="false"
+        >
+          <CallToAction
+            framed
+            variant="split"
+            eyebrow="Get started"
+            title="Deploy your first application."
+            title-muted="Run it everywhere."
+            description="Start on the free plan and move to production when you are ready. No credit card required."
+          >
+            <template #actions>
+              <Button
+                variant="secondary"
+                label="Start for free"
+              />
+            </template>
+            <template #aside>
+              <Button
+                variant="outline"
+                label="Talk to sales"
+              />
+            </template>
+          </CallToAction>
+        </Module>
+        <Spacer
+          size="small"
+          hatch
+        />
+      </Container>
+    </BrowserFrame>
+  </div>
+</template>

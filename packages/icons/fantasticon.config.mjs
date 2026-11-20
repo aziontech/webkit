@@ -22,31 +22,11 @@ export default [
         indent: JSONIdent
       }
     },
-    inputDir: svgInputDir('ai'),
+    inputDir: svgInputDir('az'),
     name: 'azionicons',
     normalize: true,
     outputDir: OUTPUTDIR,
-    prefix: 'ai',
-    tag: '',
-    templates: {
-      css: TEMPLATE.css
-    }
-  },
-  {
-    assetTypes: ASSETSTYPE,
-    fontTypes: FONTTYPES,
-    fontHeight: FONTHEIGHT,
-    fontsUrl: '',
-    formatOptions: {
-      json: {
-        indent: JSONIdent
-      }
-    },
-    inputDir: svgInputDir('pi'),
-    name: 'primeicons',
-    normalize: true,
-    outputDir: OUTPUTDIR,
-    prefix: 'pi',
+    prefix: 'az',
     tag: '',
     templates: {
       css: TEMPLATE.css

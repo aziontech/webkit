@@ -11,7 +11,7 @@ enforced_by: [release-types, git-workflow]
 
 ## Purpose
 
-`pnpm audit --audit-level=high` is a required gate in CI — the **Security Scans** job in [`.github/workflows/governance.yml`](../../../.github/workflows/governance.yml) (and the local `pnpm run security:audit`). When it exits non-zero, at least one **high** or **critical** advisory matched a package in the workspace dependency graph.
+`pnpm audit --audit-level=high` is a required gate in CI — the **Security Scans** job in [`.github/workflows/governance.yml`](../../../.github/workflows/governance.yml) (and the local `pnpm run check:audit`). When it exits non-zero, at least one **high** or **critical** advisory matched a package in the workspace dependency graph.
 
 This skill takes the failing audit, finds the **minimal** version bump that clears every high+ advisory, applies it to the **owning** workspace project, and verifies the gate passes again — while honoring a strict **semver** policy so a fix never silently performs a risky major upgrade.
 
@@ -19,7 +19,7 @@ Scope discipline: `--audit-level=high` ignores `low` / `moderate`. Those stay re
 
 ## When to invoke
 
-- CI's "Audit dependencies" step fails, or `pnpm run security:audit` exits non-zero locally.
+- CI's "Audit dependencies" step fails, or `pnpm run check:audit` exits non-zero locally.
 - A dependency review surfaces a new high/critical advisory you want remediated.
 
 ## Inputs
@@ -34,7 +34,7 @@ Compare the **current resolved version** against the **minimum patched version**
 | Bump class | Example | Action |
 |---|---|---|
 | **patch** (`x.y.Z`) | `1.2.3 → 1.2.9` | ✅ **Apply automatically.** Patches are backward-compatible bug fixes. |
-| **minor** (`x.Y.z`) | `10.30.3 → 10.34.4` | ⚠️ **Apply, then validate carefully** — frozen-lockfile install + re-audit; for runtime/build deps also run the affected `governance` checks (lint / type-check / storybook build). |
+| **minor** (`x.Y.z`) | `10.30.3 → 10.34.4` | ⚠️ **Apply, then validate carefully** — frozen-lockfile install + re-audit; for runtime/build deps also run the affected `governance` checks (lint / type-check / docsbook build). |
 | **major** (`X.y.z`) | `10.x → 11.x` | 🚨 **ALERT and ASK first** (`AskUserQuestion`). Majors carry breaking changes — **never auto-apply.** Present the advisory, the current → target jump, and the blast radius (which project; runtime vs tooling). |
 
 **Pre-1.0 caveat (SemVer §4):** for a `0.y.z` package, a **minor** bump (`0.Y.z`) MAY break — treat it with the **major** rule (ALERT + ask). Only `0.y.Z` patch stays patch.
@@ -74,7 +74,7 @@ If the *only* version that clears a high advisory is a major (or a `0.x` minor) 
    pnpm install --frozen-lockfile                       # CI's first step — must pass
    cd packages/webkit && pnpm audit --audit-level=high  # CI runs the audit HERE; exit must be 0
    ```
-   For a **minor**+ bump of a runtime/build dependency, also run the affected `governance` checks (`pnpm run webkit:lint`, `pnpm run webkit:type-check`, `pnpm run storybook:build`).
+   For a **minor**+ bump of a runtime/build dependency, also run the affected `governance` checks (`pnpm run lint:webkit`, `pnpm run typecheck:webkit`, `pnpm build:docs`).
    If a high advisory remains, return to step 3 with a higher target — and **re-apply the semver policy**, because a higher target may cross into major (→ ASK).
 
 8. **Repeat** until `pnpm audit --audit-level=high` exits **0**.
@@ -110,7 +110,7 @@ Emit this Markdown report (the semver class is always visible):
 - **Never** auto-apply a **major** bump (or a `0.x` **minor**) — ALERT and ask first.
 - Keep the diff **minimal** — bump only the offending package(s); do not opportunistically refresh the whole lockfile.
 - Apply the bump to the **owning** project's manifest, not blindly to the root, unless the dependency is the root's.
-- Branches/PRs go through [`/create-branch`](../../commands/create-branch.md) and [`/open-pr`](../../commands/open-pr.md). This skill's own file is a `.claude/skills/*` change → it ships in a **separate PR from the dependency fix** (see [`.claude/rules/git-workflow.md`](../../rules/git-workflow.md)).
+- Branches/PRs go through [`/branch-create`](../../commands/branch-create.md) and [`/pr-open`](../../commands/pr-open.md). This skill's own file is a `.claude/skills/*` change → it ships in a **separate PR from the dependency fix** (see [`.claude/rules/git-workflow.md`](../../rules/git-workflow.md)).
 - A dependency bump is commit type **`chore`** (per [`CONTRIBUTING.md`](../../../CONTRIBUTING.md) § Commit convention); honor the type→bump invariant in [`.claude/rules/release-types.md`](../../rules/release-types.md).
 
 ## Fallbacks

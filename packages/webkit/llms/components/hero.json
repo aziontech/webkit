@@ -1,0 +1,221 @@
+{
+ "name": "hero",
+ "binding": "Hero",
+ "import": "@aziontech/webkit/hero",
+ "treeShakeableImport": "@aziontech/webkit/hero-root",
+ "category": "marketing",
+ "surface": "site",
+ "structure": "composition",
+ "compoundRoot": true,
+ "subcomponents": [
+  "@aziontech/webkit/hero-title"
+ ],
+ "purpose": "The opening band of a page: a full-bleed section spanning the whole viewport width whose copy is centered in a capped column, optionally filling one screen and optionally carrying a decorative backdrop behind it. It is the top layer of the page language and the owner of the page's first rule — the bottom hairline every column below it hangs from. `Hero.Title` is the copy block it centers.",
+ "setup": null,
+ "useWhen": [
+  "Use the Hero primitive only in a hand-built SFC that needs slots HeroSection does not offer.",
+  "Rendering page JSON, or you need a whole band with no custom content → the section (`hero-section`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`hero`).",
+  "As the opening band of a marketing, hub or documentation page.",
+  "Whenever a band must span the window while its copy stays on the page's measure.",
+  "For any band that carries a decorative backdrop behind its content.",
+  "With `variant=\"screen\"` when the opening should measure exactly one viewport."
+ ],
+ "avoidWhen": [
+  "For a marketing page opening placed from page JSON → use `hero-section` (or `hero-form-section` for a lead form).",
+  "For the framed column of bands below the opening → use `container`.",
+  "For one band inside that column → use `module`.",
+  "For a section header further down the page → use `module-header`, which renders an `h2`.",
+  "For a mid-page announcement → use `call-to-action` with `variant=\"announcement\"`; for the closing ask → use `call-to-action`.",
+  "For a copy-and-media pairing that is not the page opening → use `media-split`."
+ ],
+ "related": [
+  "`container` — the framed column below it; this band's `border-b` is that column's top edge.",
+  "`module` — the brick stacked inside that column.",
+  "`texture` — the backdrop the `texture` and `floorTexture` props paint, at the pitch `textureSize` and `floorTextureSize` set; reach for the `background` slot only when the layer needs more than variant, size and fade.",
+  "`media-split` — the same copy-beside-media shape at section scale, rendering an `h2`.",
+  "`call-to-action` — the mid-page announcement band (`variant=\"announcement\"`) and the closing ask."
+ ],
+ "bestPractices": [
+  "One `Hero` per page. It owns the `h1` through `Hero.Title`, and a second breaks the document outline.",
+  "Pass `variant=\"screen\"` for an opening band that should measure one screen, and declare the sticky bar's height as `--hero-banner-offset` so the band still measures exactly one screen beneath it.",
+  "Put the backdrop in the `background` slot rather than on the band's own class: the slot renders beneath the content layer and is already marked decorative.",
+  "Turn `padded` off when the slotted content owns its block rhythm; the inline inset is not optional, because it is the band inset every band below also applies: the content column is the same box a `Container` of the same `maxWidth` draws (its frame line is the page boundary the bar above the band also reads), and the copy starts `--spacing-xl` inside it, on the same edge as a `Module` title and body below.",
+  "Set the band's air with `size`, never with a padded wrapper around the copy: `large` is the opening a page leads with, and the rhythm is the same above and below so the copy and the media sit on the band's vertical centre.",
+  "Keep `titleHighlight` to the opening phrase of the headline — it is the same sentence, only painted differently.",
+  "Put the calls to action in `Hero.Title`'s `actions` slot; it stacks them full-width on narrow screens, which is what makes a hero button a comfortable thumb target.",
+  "Set `mediaAlign=\"end\"` when the media should close on the same vertical line as the frames below the band; leave it `center` when the media is a self-contained object that reads best balanced in its column.",
+  "Reach for `floorTexture` rather than wiring a texture into the `bottom` slot by hand: the window is a fixed cell, so the band already carries the ink and the horizontal falloff fitted to it, and a hand-fitted copy of that drifts.",
+  "Leave the `media` slot out entirely rather than filling it with decoration — a band with one column and a strong statement beats one with a stock image."
+ ],
+ "props": [
+  {
+   "name": "variant",
+   "type": "HeroVariant",
+   "default": "'band'",
+   "required": "false",
+   "doc": "Height of the band; `screen` fills one viewport minus `--hero-banner-offset`."
+  },
+  {
+   "name": "maxWidth",
+   "type": "HeroWidth",
+   "default": "'7xl'",
+   "required": "false",
+   "doc": "Width the inner column is capped at; `site` is the marketing measure, `full` keeps only the inset."
+  },
+  {
+   "name": "bordered",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Draw the band's bottom rule, which is the top edge of whatever follows it."
+  },
+  {
+   "name": "padded",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Apply the band's own vertical rhythm. The inline inset is always applied."
+  },
+  {
+   "name": "size",
+   "type": "HeroSize",
+   "default": "'medium'",
+   "required": "false",
+   "doc": "Vertical rhythm the band applies when `padded`, equal above and below; `large` is the opening a page leads with."
+  },
+  {
+   "name": "texture",
+   "type": "TextureVariant",
+   "default": "'none'",
+   "required": "false",
+   "doc": "Paint this texture behind the band's content; `none` leaves the backdrop to the `background` slot."
+  },
+  {
+   "name": "textureSize",
+   "type": "TextureSize",
+   "default": "'medium'",
+   "required": "false",
+   "doc": "Pitch of the tiling the `texture` prop paints — how far apart its cells sit."
+  },
+  {
+   "name": "textureFade",
+   "type": "TextureFade",
+   "default": "'none'",
+   "required": "false",
+   "doc": "Fade applied to the layer the `texture` prop paints."
+  },
+  {
+   "name": "floorTexture",
+   "type": "TextureVariant",
+   "default": "'none'",
+   "required": "false",
+   "doc": "Paint this texture standing on the band's floor, filling the `bottom` window under the brand strip."
+  },
+  {
+   "name": "floorTextureSize",
+   "type": "TextureSize",
+   "default": "'medium'",
+   "required": "false",
+   "doc": "Pitch of the tiling the `floorTexture` prop paints — how far apart its cells sit."
+  },
+  {
+   "name": "align",
+   "type": "HeroAlign",
+   "default": "'center'",
+   "required": "false",
+   "doc": "Where the content column sits vertically when the band fills a screen (`start` is the top, `end` the bottom)."
+  },
+  {
+   "name": "mediaAlign",
+   "type": "HeroMediaAlign",
+   "default": "'center'",
+   "required": "false",
+   "doc": "Where the `media` slot sits in its column: `center` balances it in the column, `end` sets its end edge on the container boundary, past the inline inset, from `md` up."
+  },
+  {
+   "name": "offset",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Height of the fixed chrome above the band, subtracted from the viewport when `variant` is `screen`; any CSS length."
+  },
+  {
+   "name": "bottomHeight",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Height of the window under the content, where the brand strip and the floor texture stand; any CSS length."
+  },
+  {
+   "name": "marquee",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Stand the brand marquee on the band's floor, under the `bottom` window."
+  },
+  {
+   "name": "marqueeMarks",
+   "type": "string[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Registry names of the marks the marquee shows, in order."
+  },
+  {
+   "name": "marqueeLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Eyebrow above the brand marquee, stating the claim the marks make."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "The band's copy, centered in the capped column above the backdrop; usually one `Hero.Title`."
+  },
+  {
+   "name": "media",
+   "scope": "—",
+   "notes": "Screenshot, diagram or form set beside the copy from `md` up. When filled, the content column becomes two equal halves from `md` up and the copy keeps the leading one; the `Hero.Title` `maxWidth` caps the copy inside its half."
+  },
+  {
+   "name": "background",
+   "scope": "—",
+   "notes": "Decorative backdrop rendered full-bleed beneath the content; marked `aria-hidden`."
+  },
+  {
+   "name": "top",
+   "scope": "—",
+   "notes": "Decorative asset window overlaying the band's top edge; clips its child, which may be larger than the window and offset inside it. It claims no space, so content still centres on the band."
+  },
+  {
+   "name": "bottom",
+   "scope": "—",
+   "notes": "Asset window standing on the band's floor; clips its child, which may be larger than the window and offset inside it. It is real content, so it **reserves its height** and `align` centres the copy in what is left. It shares the floor with the `marquee` strip, which stands under it. `floorTexture` fills this same window when the asset is one of the system's textures."
+  }
+ ],
+ "styleSeam": false,
+ "assets": [
+  {
+   "kind": "brandMarks",
+   "page": "foundations/brand-marks.md"
+  }
+ ],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/hero/default.vue"
+  },
+  {
+   "name": "Widths",
+   "file": "examples/hero/widths.vue"
+  },
+  {
+   "name": "Screen",
+   "file": "examples/hero/screen.vue"
+  }
+ ],
+ "docs": "components/hero.md"
+}

@@ -1,0 +1,191 @@
+---
+name: site-footer-section
+category: section
+structure: monolithic
+status: implemented
+spec_version: 9
+template: 2
+created: 2026-11-05
+last_updated: 2026-11-20
+checksum: 7c85b9057465e6f1a81528ebb40c582ce6bc4a6bf2bf12213d74df8361cec9fd
+---
+
+# SiteFooterSection — Component Spec
+
+## Purpose
+
+The footer under every marketing page: the link columns, then the social row beside the status indicator and the language select. It is a page section — the site places it from a `{ _id: 'site-footer-section', props }` entry and binds `props` straight onto it — and it composes `footer`, `brand`, `icon-button`, `status-indicator` and `language-select`. The bottom bar is one row, as azion.com draws it: the Azion mark (the footer's `brand` slot) and the small social icon buttons at the start, the status indicator (`status`) and the compact language switcher, a `LanguageSelect` with `variant="ghost"` (round flag and country code, `language`), at the end; below `md` it stacks, the mark and icons over the status and language. In the `site` placement the footer spans the page like `site-header-section`, opening on a full-width rule with a corner mark at each end, with no side rules. The layout is CSS only, so the server HTML and the hydrated page are the same tree. The language select keeps its own value unless the page binds `v-model:language`; its options are BCP 47 tags (`EN`, `PT-BR`, `ES`), each shown with its round flag and its name in its own language.
+
+## When to use
+
+- Use SiteFooterSection for the marketing site footer from page JSON.
+- Rendering page JSON, or you need a whole band with no custom content → the section (`site-footer-section`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`footer`).
+- As the last block of every marketing page.
+
+## When NOT to use
+
+- Inside the product console or the docs → compose `footer` directly.
+- For a closing ask above the footer → use `closing-call-to-action-section`.
+
+## Related
+
+- `footer` — the composition footer this section fills.
+- `closing-call-to-action-section` — the band that sits right above it.
+
+## Best practices
+
+- **Do** render it as the last child of the page shell, as is: in `site` it draws its own full-width top rule with its corner marks.
+- **Don't** wrap it in a bordered or padded `div` (`border-t`, `py-*`): the rules double.
+- Use `variant: 'site'` under a marketing page, so the footer spans the page like its header and opens on its own rule; the page above must not draw a bottom rule of its own.
+- Keep four link columns so the grid fills at `md`.
+- Set `target: '_blank'` on a link that leaves azion.com (Community, Status): it opens in a new tab, draws the external-link glyph after the label and tells assistive tech it opens a new tab. Never add the glyph yourself.
+- Give every social link a `label` that names the network, since the button shows only the glyph.
+
+## Usage
+
+```vue
+<script setup>
+  import SiteFooterSection from '@aziontech/webkit/site-footer-section'
+</script>
+
+<template>
+  <SiteFooterSection
+    variant="site"
+    home="/"
+    :columns="[{ title: 'Products', links: [{ label: 'Functions', href: '/products/functions' }] }]"
+    :socials="[
+      { icon: 'az az-github', label: 'Azion on GitHub', href: 'https://github.com/aziontech' }
+    ]"
+    status-label="All Systems Operational"
+    :languages="['EN', 'PT-BR', 'ES']"
+  />
+</template>
+```
+
+## Props
+
+| Prop                | Type                        | Default  | Required | JSDoc                                                                                                                                                                            |
+| ------------------- | --------------------------- | -------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `variant`           | `SiteFooterSectionVariant`  | `'site'` | false    | Where the footer sits: `site` spans the page like the site header under its own top rule, `content` runs the bands full bleed under a hairline.                                  |
+| `ariaLabel`         | `string`                    | `''`     | false    | Accessible name of the footer landmark. Empty uses the locale catalog (`Footer`).                                                                                                |
+| `home`              | `string`                    | `''`     | false    | Destination of the Azion mark; the mark is not rendered when empty.                                                                                                              |
+| `homeAriaLabel`     | `string`                    | `''`     | false    | Accessible name of the Azion mark link. Empty uses the locale catalog (`Azion home`).                                                                                            |
+| `columns`           | `SiteFooterSectionColumn[]` | `[]`     | false    | The link columns, in order; each is `{ title, links }` where every link is `{ label, href, target? }`; a `_blank` link opens in a new tab and closes on the external-link glyph. |
+| `socials`           | `SiteFooterSectionSocial[]` | `[]`     | false    | The profile icon buttons, in order; each is `{ icon, label, href }` where `label` names the button for assistive tech. They open in a new tab.                                   |
+| `statusLabel`       | `string`                    | `''`     | false    | Line of the system status indicator; the indicator is not rendered when empty.                                                                                                   |
+| `languages`         | `string[]`                  | `[]`     | false    | BCP 47 tags of the languages offered (`EN`, `PT-BR`, `ES`); each shows its round flag and its name in its own language, and the first one is selected until `v-model:language` holds another. The language select is not rendered when empty. |
+| `languageAriaLabel` | `string`                    | `''`     | false    | Accessible name of the language select, also its placeholder. Empty uses the locale catalog (`Language`).                                                                        |
+
+## v-model
+
+| Model              | Type     | Default | Emits             | Notes                                                                                                                                                                                              |
+| ------------------ | -------- | ------- | ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:language` | `string` | `''`    | `update:language` | The chosen option of the language select, one of `languages`. Empty shows the first option; choosing one emits it, so the page can switch its locale. Unbound, the select keeps its value locally. |
+
+## Events
+
+| _none_ | — | — |
+
+## Slots
+
+| _none_ | — | — |
+
+## States
+
+- Visual states: `default`
+- `data-variant` mirrors the `variant` prop on the footer
+- The Azion mark opens the bottom bar at every width, in the footer's `brand` slot
+- The status indicator sits in the footer's `status` slot and the language select in its `language` slot; below `md` they share the bottom bar at its two ends, from `md` they sit side by side at its end
+- The social buttons are small icon buttons
+- The status indicator, the language select and the Azion mark each render only when their prop is set
+- A link whose `target` is `_blank` sets `rel="noopener noreferrer"` and `data-external`, draws the `az az-external-link` glyph after its label in the label's own colour (hidden from assistive tech) and appends the catalog's “(opens in a new tab)” as screen-reader text
+- Server render and hydration: one mark, placed by CSS only, so the server HTML, the first client render and every later render are the same tree — nothing moves on mount.
+
+## Motion & Animations
+
+| Trigger          | Animation / Transition                                         | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback         |
+| ---------------- | -------------------------------------------------------------- | ------------------------------------------------- | ------------------------------- |
+| Azion mark hover | `transition-opacity duration-fast-02 ease-productive-entrance` | semantic                                          | `motion-reduce:transition-none` |
+
+## Tokens
+
+| Region          | Token (DESIGN.md)                                                       |
+| --------------- | ----------------------------------------------------------------------- |
+| top hairline    | `var(--border-default)` (`content`; the footer draws its own in `site`) |
+| external glyph  | `.text-body-xs`, the link's colour                                      |
+| mark link shape | `var(--shape-control)`                                                  |
+| mark gap        | `var(--spacing-xs)`                                                     |
+
+## Theme gaps
+
+| Figma variable | Temporary primitive | Follow-up |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
+
+## Accessibility (WCAG 2.1 AA)
+
+- Visible focus: the mark link carries `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`; links, icon buttons and the select own theirs.
+- Keyboard map: `Tab` moves through the column links, the mark, the social buttons and the language select; the select opens with `Enter` / `Space` and moves with the arrows, owned by `language-select`.
+- ARIA: the `footer` is the `contentinfo` landmark named by `ariaLabel`; each column is titled; the mark link is named by `homeAriaLabel`, each social button by its `label`, the select by `languageAriaLabel`; an external link's name ends with “(opens in a new tab)” from the locale catalog.
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by the composed components.
+- `motion-reduce:transition-none` on the mark link's opacity transition.
+- Touch target ≥24×24 px — the social buttons are small `icon-button`s (28 px, above the 24 px WCAG 2.5.8 minimum; the design keeps the social row quiet), the language select follows `language-select` (32 px, `medium`); the column links and the Azion mark link rely on the WCAG 2.5.8 spacing exception (see Responsive).
+
+## Internationalization
+
+| Key                          | English source       | Override prop       |
+| ---------------------------- | -------------------- | ------------------- |
+| `siteFooterSection.label`    | Footer               | `ariaLabel`         |
+| `siteFooterSection.home`     | Azion home           | `homeAriaLabel`     |
+| `siteFooterSection.language` | Language             | `languageAriaLabel` |
+| `common.newTab`              | (opens in a new tab) | —                   |
+
+- Formatting: none; link labels, the status line and the language options are the page's own text.
+
+## Right-to-left
+
+- Layout: logical utilities only; the Azion mark stays at the start edge and the bottom bar's start and end follow the direction.
+- Icons: the external-link glyph, the social glyphs and the language flags are not mirrored.
+- Keyboard: no arrow-key handling of its own; the select owns its arrows.
+- User data: none.
+
+## Responsive
+
+- Container queries: none; the bottom bar switches at the `md` viewport breakpoint.
+- Narrow (below `md`, 768 px; the footer reads the viewport, not its container): the bottom bar stacks — the Azion mark and the social icons first, then the status indicator and the language select at its two ends — and the columns fold to two as `footer` lays them out.
+- Touch: the small social buttons (28 px) and the select follow `icon-button` and `language-select`; the column links (26 px apart) and the Azion mark link (16 px tall, clear of the social buttons) are smaller than 24 px and rely on the WCAG 2.5.8 spacing exception; nothing depends on hover.
+- Reflow: no horizontal scroll at 320 px and 200 % zoom.
+
+## Performance
+
+- Bundle budget: 36 KB gzip, the `.size-limit.json` entry `site-footer-section` (it carries `footer`, `brand`, `icon-button`, `status-indicator` and `language-select`).
+- Runtime budget: none: static.
+- Heavy parts: none.
+
+## Examples
+
+- Default — four link columns, one of them with an external link.
+- Language — justification: `v-model:language` is behaviour no other example shows; the page reads the chosen language and names it under the footer.
+
+## Constraints — DO NOT
+
+<!-- This block is injected VERBATIM into every sub-agent prompt.
+     spec-validator rejects the spec if this block is missing or shorter than the template. -->
+
+- Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
+- Do not add events beyond the Events table above. Same rule for slots and sub-components.
+- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
+- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `.claude/rules/dependencies.md`.
+- Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
+- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
+- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
+- Do not edit `.claude/docs/DESIGN.md` or `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not edit the root `package.json` or `.github/workflows/*`.
+- Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.
+- Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
+- Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).
+- Do not run `git` commands, `pnpm install`, or any command that changes the lockfile.
+- If anything in the spec is ambiguous or contradicts the rules, emit `BLOCKED: <one-sentence reason>` and write nothing.

@@ -1,0 +1,158 @@
+<title>Battery 2 — %%PROFILE_NAME%%</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  /* Layout: sticky control bar, then one band per page with reference and AI columns of equal scale */
+  :root {
+    --bg: #f5f5f3;
+    --panel: #ffffff;
+    --fg: #1c1d1f;
+    --muted: #63666b;
+    --line: #dcdcd7;
+    --accent: #e8590c;
+    --good: #2b8a3e;
+    --mid: #b7791f;
+    --bad: #c92a2a;
+    --chip: #ecebe6;
+    --shot: #e6e5e0;
+    --display: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+    --body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']) {
+      --bg: #141516; --panel: #1c1d1f; --fg: #ececea; --muted: #9a9c9f; --line: #2e3033;
+      --accent: #ff7a33; --good: #51cf66; --mid: #fcc419; --bad: #ff6b6b; --chip: #26282a; --shot: #232527;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme='dark'] {
+    --bg: #141516; --panel: #1c1d1f; --fg: #ececea; --muted: #9a9c9f; --line: #2e3033;
+    --accent: #ff7a33; --good: #51cf66; --mid: #fcc419; --bad: #ff6b6b; --chip: #26282a; --shot: #232527;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box }
+  body { background: var(--bg); color: var(--fg); font: 14px/1.5 var(--body) }
+  body::before { content: ''; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--panel) }
+  .wrap { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)) }
+  header.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--panel); border-bottom: 1px solid var(--line) }
+  header.top .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; padding-block: 12px }
+  h1 { font: 600 20px/1.2 var(--display); margin: 0; text-wrap: balance }
+  h1 span { color: var(--accent) }
+  .stats { display: flex; gap: 14px; color: var(--muted); font-variant-numeric: tabular-nums }
+  .stats b { color: var(--fg); font-weight: 600 }
+  .controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-left: auto }
+  .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden }
+  .seg button { font: 500 13px var(--body); background: transparent; color: var(--muted); border: 0; padding: 6px 11px; cursor: pointer }
+  .seg button + button { border-left: 1px solid var(--line) }
+  .seg button[aria-pressed='true'] { background: var(--chip); color: var(--fg) }
+  button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+  select { font: 13px var(--body); padding: 5px 8px; border-radius: 8px; border: 1px solid var(--line); background: var(--panel); color: var(--fg) }
+  .op { display: none; align-items: center; gap: 6px; color: var(--muted); font-size: 13px }
+  body.overlay .op { display: inline-flex }
+  main { display: grid; gap: 28px; padding-block: 24px 64px }
+  .page { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; min-width: 0 }
+  .page > .head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; padding: 14px 16px 10px }
+  .page h2 { font: 600 16px/1.3 var(--display); margin: 0 }
+  .id { font: 12px var(--mono); color: var(--muted) }
+  .pill { font: 500 12px var(--body); padding: 1px 8px; border-radius: 99px; background: var(--chip); color: var(--muted) }
+  .score { font: 600 13px var(--mono); padding: 1px 8px; border-radius: 6px; color: var(--panel); margin-left: auto; font-variant-numeric: tabular-nums }
+  .score.s-good { background: var(--good) } .score.s-mid { background: var(--mid) } .score.s-bad { background: var(--bad) } .score.s-na { background: var(--muted) }
+  .notes { padding: 0 16px 12px; color: var(--muted); max-width: 110ch; margin: 0 }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border-top: 1px solid var(--line); max-height: 85vh; overflow: auto }
+  .col { min-width: 0; padding: 10px; display: grid; gap: 6px; align-content: start }
+  .col + .col { border-left: 1px solid var(--line) }
+  .lab { font: 500 11px var(--body); text-transform: uppercase; letter-spacing: .06em; color: var(--muted); position: sticky; top: 0; background: var(--panel); padding-block: 2px; z-index: 1 }
+  .col img { width: 100%; height: auto; display: block; background: var(--shot) }
+  .phone .cols { grid-template-columns: repeat(2, minmax(0, 393px)); justify-content: center }
+  .stack { position: relative; padding: 10px; border-top: 1px solid var(--line); max-height: 85vh; overflow: auto; display: none }
+  .stack img { width: 100%; height: auto; display: block }
+  .stack img.over { position: absolute; top: 10px; left: 10px; width: calc(100% - 20px) }
+  .phone .stack { max-width: 413px; margin: 0 auto }
+  body.overlay .cols { display: none } body.overlay .stack { display: block }
+  .missing { padding: 40px 12px; text-align: center; color: var(--bad); background: var(--shot); border-radius: 6px }
+  .hidden-by-filter { display: none }
+  @media (max-width: 720px) { .cols { grid-template-columns: 1fr } .col + .col { border-left: 0; border-top: 1px solid var(--line) } .controls { margin-left: 0 } }
+  @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto } }
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <h1>Battery 2 · <span>%%PROFILE_NAME%%</span></h1>
+    <div class="stats" id="stats"></div>
+    <div class="controls">
+      <div class="seg" role="group" aria-label="Surface">
+        <button type="button" data-f="all" aria-pressed="true">All</button>
+        <button type="button" data-f="site" aria-pressed="false">Site</button>
+        <button type="button" data-f="console" aria-pressed="false">Console</button>
+      </div>
+      <div class="seg" role="group" aria-label="View">
+        <button type="button" data-v="side" aria-pressed="true">Side by side</button>
+        <button type="button" data-v="overlay" aria-pressed="false">Overlay</button>
+      </div>
+      <label class="op" for="opacity">AI on top <input id="opacity" type="range" min="0" max="100" value="50"></label>
+      <label for="sort" class="id">Sort</label>
+      <select id="sort"><option value="order">Page order</option><option value="low">Lowest score first</option><option value="high">Highest score first</option></select>
+    </div>
+  </div>
+</header>
+<main class="wrap" id="list"></main>
+
+<script>
+  const DATA = %%DATA%%
+  const PHONE = '%%COLW%%' === '393'
+  const list = document.getElementById('list')
+  const cls = (s) => (s == null ? 's-na' : s >= 4 ? 's-good' : s >= 3 ? 's-mid' : 's-bad')
+  const esc = (t) => String(t ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c])
+  function card(p) {
+    const el = document.createElement('section')
+    el.className = 'page' + (PHONE ? ' phone' : '')
+    el.id = p.id
+    el.dataset.surface = p.surface
+    const ai = p.ai
+      ? `<img loading="lazy" src="${p.ai}" width="${p.aiW}" height="${p.aiH}" alt="AI rebuild of ${esc(p.title)}">`
+      : '<div class="missing">No AI page was produced</div>'
+    el.innerHTML = `<div class="head"><h2>${esc(p.title)}</h2><span class="id">${p.id}</span><span class="pill">${p.surface}</span>
+      <span class="score ${cls(p.score)}" title="Fidelity 0 to 5 for this profile">${p.score == null ? '–' : p.score.toFixed(1)}</span></div>
+      ${p.notes ? `<p class="notes">${esc(p.notes)}</p>` : ''}
+      <div class="cols"><div class="col"><div class="lab">Reference</div><img loading="lazy" src="${p.ref}" width="${p.refW}" height="${p.refH}" alt="Reference ${esc(p.title)}"></div>
+      <div class="col"><div class="lab">AI with WebKit</div>${ai}</div></div>
+      <div class="stack"><img loading="lazy" src="${p.ref}" alt="">${p.ai ? `<img class="over" loading="lazy" src="${p.ai}" alt="">` : ''}</div>`
+    return el
+  }
+  let order = DATA.slice()
+  function render() {
+    const s = document.getElementById('sort').value
+    order = DATA.slice()
+    if (s !== 'order') order.sort((a, b) => ((a.score ?? -1) - (b.score ?? -1)) * (s === 'low' ? 1 : -1))
+    list.replaceChildren(...order.map(card))
+    applyFilter()
+    setOpacity()
+  }
+  let filter = 'all'
+  function applyFilter() {
+    for (const el of list.children) el.classList.toggle('hidden-by-filter', filter !== 'all' && el.dataset.surface !== filter)
+    const shown = DATA.filter((p) => filter === 'all' || p.surface === filter)
+    const mean = (a) => { const v = a.map((p) => p.score).filter((x) => x != null); return v.length ? (v.reduce((x, y) => x + y, 0) / v.length).toFixed(2) : '–' }
+    document.getElementById('stats').innerHTML =
+      `<span><b>${shown.length}</b> pages</span><span>site mean <b>${mean(DATA.filter((p) => p.surface === 'site'))}</b></span><span>console mean <b>${mean(DATA.filter((p) => p.surface === 'console'))}</b></span>`
+  }
+  function setOpacity() {
+    const v = document.getElementById('opacity').value / 100
+    for (const i of list.querySelectorAll('.stack img.over')) i.style.opacity = v
+  }
+  for (const b of document.querySelectorAll('[data-f]')) b.addEventListener('click', () => {
+    filter = b.dataset.f
+    for (const x of document.querySelectorAll('[data-f]')) x.setAttribute('aria-pressed', String(x === b))
+    applyFilter()
+  })
+  for (const b of document.querySelectorAll('[data-v]')) b.addEventListener('click', () => {
+    document.body.classList.toggle('overlay', b.dataset.v === 'overlay')
+    for (const x of document.querySelectorAll('[data-v]')) x.setAttribute('aria-pressed', String(x === b))
+  })
+  document.getElementById('opacity').addEventListener('input', setOpacity)
+  document.getElementById('sort').addEventListener('change', render)
+  render()
+  if (location.hash) document.getElementById(location.hash.slice(1))?.scrollIntoView()
+</script>

@@ -1,26 +1,29 @@
-import { composeStories } from '@storybook/vue3'
 import { render, waitFor } from '@testing-library/vue'
 import { describe, expect, it, vi } from 'vitest'
 import { defineComponent, nextTick, ref } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/marketing/primitives/diagram/Diagram.stories'
+import Default from '../../../../examples/diagram/default.vue'
+import Flow from '../../../../examples/diagram/flow.vue'
+import Groups from '../../../../examples/diagram/groups.vue'
+import NodeKinds from '../../../../examples/diagram/nodes.vue'
+import Spec from '../../../../examples/diagram/spec.vue'
 import { diagrams } from '../../../assets/diagrams/registry'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Diagram, { type DiagramName } from './diagram.vue'
+import DiagramLayout from './parts/diagram-layout.vue'
+import DiagramNode from './parts/diagram-node.vue'
 import type { DiagramSpec } from './types'
-
-const { Default, Spec, NodeKinds, Groups } = composeStories(stories)
 
 const NAMES = Object.keys(diagrams) as DiagramName[]
 
-const TESTID = 'marketing-diagram'
+const TESTID = 'diagram'
 
 const spec: DiagramSpec = {
   nodes: [
-    { key: 'user', kind: 'pill', title: 'User', icon: 'pi pi-user', active: true },
-    { key: 'workload', kind: 'card', eyebrow: 'Workload', title: 'shop.example.com', lit: true },
-    { key: 'cache', kind: 'item', eyebrow: 'Cache', title: 'Served from cache' },
-    { key: 'origin', kind: 'item', eyebrow: 'Origin', title: 'origin.example.com' }
+    { key: 'user', type: 'pill', title: 'User', icon: 'az az-user', active: true },
+    { key: 'workload', type: 'card', eyebrow: 'Workload', title: 'shop.example.com', lit: true },
+    { key: 'cache', type: 'item', eyebrow: 'Cache', title: 'Served from cache' },
+    { key: 'origin', type: 'item', eyebrow: 'Origin', title: 'origin.example.com' }
   ],
   layout: {
     gap: 'wide',
@@ -114,17 +117,35 @@ describe('Diagram', () => {
     })
   })
 
+  describe('stacking', () => {
+    it('centres a row of nodes and keeps a row with branches as an indented tree', async () => {
+      const { container } = render(Diagram, { props: { spec } })
+      await ready(container)
+      expect(container.querySelector('[data-stack]')?.getAttribute('data-stack')).toBe('tree')
+
+      const flow = render(Flow)
+      await ready(flow.container)
+      const rows = [...flow.container.querySelectorAll('[data-stack]')]
+      expect(rows.map((row) => row.getAttribute('data-stack'))).toEqual(['centre'])
+    })
+  })
+
   describe('groups', () => {
     it('frames a group under its label and lets an edge reach it', async () => {
       const grouped: DiagramSpec = {
         nodes: [
-          { key: 'user', kind: 'pill', title: 'User' },
-          { key: 'origin', kind: 'item', title: 'origin.example.com' }
+          { key: 'user', type: 'pill', title: 'User' },
+          { key: 'origin', type: 'item', title: 'origin.example.com' }
         ],
         layout: {
           row: [
             { node: 'user' },
-            { group: 'backend', label: 'Your backend', kind: 'dashed', content: { node: 'origin' } }
+            {
+              group: 'backend',
+              label: 'Your backend',
+              variant: 'dashed',
+              content: { node: 'origin' }
+            }
           ]
         },
         edges: [{ from: 'user', to: 'backend' }]
@@ -243,11 +264,47 @@ describe('Diagram', () => {
       ['Default', Default],
       ['Spec', Spec],
       ['NodeKinds', NodeKinds],
-      ['Groups', Groups]
+      ['Groups', Groups],
+      ['Flow', Flow]
     ])('renders the %s story as a named image', async (_name, Story) => {
       const { findByRole } = render(Story)
 
       expect(await findByRole('img')).toHaveAccessibleName()
+    })
+  })
+
+  describe('parts data-testid', () => {
+    it('gives every node and layout container a derived testid', async () => {
+      const { container, getAllByTestId } = render(Diagram, { props: { spec } })
+      await ready(container)
+
+      const nodes = getAllByTestId('diagram-node')
+      expect(nodes.map((node) => node.getAttribute('data-diagram-node'))).toEqual([
+        'user',
+        'workload',
+        'cache',
+        'origin'
+      ])
+      expect(getAllByTestId('diagram-layout').length).toBeGreaterThan(0)
+    })
+
+    it('lets a consumer override the node and layout testids', () => {
+      const node = render(DiagramNode, {
+        props: { node: { key: 'user', type: 'pill', title: 'User' } },
+        attrs: { 'data-testid': 'custom-node' }
+      })
+      expect(node.getByTestId('custom-node').getAttribute('data-diagram-node')).toBe('user')
+      node.unmount()
+
+      const layout = render(DiagramLayout, {
+        props: {
+          item: { row: [{ node: 'user' }] },
+          nodes: { user: { key: 'user', type: 'pill', title: 'User' } }
+        },
+        attrs: { 'data-testid': 'custom-layout' }
+      })
+      expect(layout.getByTestId('custom-layout')).toBeTruthy()
+      expect(layout.getByTestId('diagram-node')).toBeTruthy()
     })
   })
 })

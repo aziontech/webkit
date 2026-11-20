@@ -6,25 +6,25 @@ const spec: DiagramSpec = {
   nodes: [
     {
       key: 'user',
-      kind: 'pill',
+      type: 'pill',
       title: 'Requests',
-      icon: 'pi pi-user',
+      icon: 'az az-user',
       active: true
     },
     {
       key: 'workload',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'Workload',
       title: 'shop.example.com',
-      icon: 'ai ai-workloads',
+      icon: 'az az-workloads',
       active: true
     },
     {
       key: 'stream',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'Data Stream',
       title: 'HTTP, firewall and function logs',
-      icon: 'ai ai-data-stream',
+      icon: 'az az-data-stream',
       status: {
         label: 'Near real time',
         severity: 'success'
@@ -34,18 +34,18 @@ const spec: DiagramSpec = {
     },
     {
       key: 'siem',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'SIEM',
       title: 'Splunk, Datadog',
-      icon: 'pi pi-chart-bar',
+      icon: 'az az-chart-bar',
       active: true
     },
     {
       key: 'lake',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Data lake',
       title: 'S3, Kafka, Elasticsearch',
-      icon: 'pi pi-database'
+      icon: 'az az-database'
     }
   ],
   layout: {

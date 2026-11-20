@@ -1,4 +1,4 @@
-name: Governance Pipeline
+name: Governance
 
 on:
   pull_request:
@@ -16,13 +16,13 @@ concurrency:
 
 jobs:
   changes:
-    name: Detect Changes
+    name: Detect changes
     runs-on: ubuntu-latest
     outputs:
       webkit: ${{ steps.filter.outputs.webkit }}
-      toolkit: ${{ steps.filter.outputs.toolkit }}
       tests: ${{ steps.filter.outputs.tests }}
       visual: ${{ steps.filter.outputs.visual }}
+      baselines: ${{ steps.filter.outputs.baselines }}
       canary: ${{ steps.filter.outputs.canary }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -33,24 +33,21 @@ jobs:
           filters: |
             webkit:
               - 'packages/webkit/**'
+              - 'packages/webkit-mcp/**'
               - 'pnpm-lock.yaml'
               - 'pnpm-workspace.yaml'
-            toolkit:
-              - '.specs/**'
-              - '.claude/hooks/**'
-              - '.claude/rules/**'
-              - '.claude/skills/**'
-              - '.claude/agents/**'
-              - 'apps/storybook/**'
-              - 'packages/webkit/**'
             tests:
               - 'packages/webkit/**'
-              - 'apps/storybook/**'
             visual:
               - 'packages/webkit/**'
               - 'packages/theme/**'
               - 'packages/icons/**'
-              - 'apps/storybook/**'
+              - 'apps/docs/**'
+              - 'apps/demos/**'
+              - 'apps/visual/**'
+              - 'pnpm-lock.yaml'
+            baselines:
+              - 'apps/visual/baselines/**'
             canary:
               - 'packages/webkit/**'
               - 'lint-canaries/**'
@@ -64,7 +61,7 @@ jobs:
               - '.github/workflows/governance.yml'
 
   security:
-    name: Security Scans
+    name: Security scans
     needs: changes
     if: needs.changes.outputs.webkit == 'true'
     runs-on: ubuntu-latest
@@ -84,7 +81,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Audit dependencies
-        run: pnpm run security:audit
+        run: pnpm run check:audit
 
       - name: Run TruffleHog (secret detection)
         uses: trufflesecurity/trufflehog@3bd2b5887eb0efb8fa18bfd1d296032924e4ffdc # main
@@ -98,8 +95,8 @@ jobs:
         working-directory: packages/webkit
         continue-on-error: true
 
-  lint-canary:
-    name: Lint Canary (broken samples must stay broken)
+  lint-canaries:
+    name: Lint canaries (broken samples must stay broken)
     needs: changes
     if: needs.changes.outputs.canary == 'true'
     runs-on: ubuntu-latest
@@ -122,7 +119,7 @@ jobs:
         run: node lint-canaries/index.js
 
   lint:
-    name: Linting & Formatting
+    name: Lint and format
     needs: changes
     if: needs.changes.outputs.webkit == 'true'
     runs-on: ubuntu-latest
@@ -142,16 +139,16 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Run ESLint (zero warnings policy)
-        run: pnpm run webkit:lint
+        run: pnpm run lint:webkit
 
       - name: Run Stylelint
-        run: pnpm run webkit:lint:style
+        run: pnpm run lint:webkit:style
 
       - name: Prettier check (fail on diff)
-        run: pnpm run webkit:format:check
+        run: pnpm run check:webkit:format
 
   types:
-    name: TypeScript & Type Coverage
+    name: Types and type coverage
     needs: changes
     if: needs.changes.outputs.webkit == 'true'
     runs-on: ubuntu-latest
@@ -170,14 +167,23 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Build the icon font
+        run: pnpm build:icons
+
       - name: TypeScript check
-        run: pnpm run webkit:type-check
+        run: pnpm run typecheck:webkit
+
+      - name: Tests TypeScript check
+        run: pnpm run typecheck:webkit:tests
+
+      - name: Docs site TypeScript check
+        run: pnpm run typecheck:docs
 
       - name: Type coverage (enforce 95% threshold)
-        run: pnpm run webkit:type-coverage
+        run: pnpm run check:webkit:type-coverage
 
   build:
-    name: Build Verification
+    name: Build
     runs-on: ubuntu-latest
     needs: [changes, lint, types]
     if: needs.changes.outputs.webkit == 'true'
@@ -197,18 +203,22 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Assert no test files leak into the tarball
-        run: pnpm pack:check
+        run: pnpm check:pack
         working-directory: packages/webkit
 
-      - name: Bundle budget (size gate)
-        run: pnpm run size
+      - name: Build the icon font
+        run: pnpm build:icons
+
+      - name: Bundle budget
+        run: pnpm run check:size
         working-directory: packages/webkit
 
-  storybook:
-    name: Storybook Build
+  site:
+    name: Build docs site and demos
     runs-on: ubuntu-latest
     needs: [changes, lint, types]
-    if: needs.changes.outputs.webkit == 'true'
+    if: needs.changes.outputs.visual == 'true'
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
@@ -224,16 +234,33 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build Storybook
-        run: pnpm storybook:build
+      - name: Build the docs site (every route prerendered)
+        run: pnpm build:docs
 
-      - name: Verify Storybook output
-        run: test -d apps/storybook/dist && echo "Storybook built successfully"
+      - name: Check that every docs link resolves
+        run: pnpm check:docs:links
 
+      - name: Check that no docs page loads the Monaco editor up front
+        run: pnpm check:docs:editor-chunks
+
+      - name: Build the demos
+        run: pnpm build:demos
+
+      - name: Upload the built sites for the visual shards
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: sites
+          path: |
+            apps/docs/dist/
+            apps/demos/dist/
+          retention-days: 3
+
+  # Runs on every PR (no path filter): these gates are the machine half of the AI flow
+  # (.claude/commands/component-new.md) and finish in under a minute. Locally:
+  # pnpm --filter @aziontech/webkit run gates
   toolkit:
-    name: Adoption Toolkit (tests + catalog drift)
+    name: Toolkit tests and catalog drift
     needs: changes
-    if: needs.changes.outputs.toolkit == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4
@@ -252,23 +279,105 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Catalog is in sync (no drift from exports/specs)
-        run: pnpm --filter @aziontech/webkit catalog:check
+      - name: PR title is a valid Conventional Commit (the squash commit release-please reads)
+        if: github.event_name == 'pull_request'
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: printf '%s\n' "$PR_TITLE" | pnpm exec commitlint --verbose
 
-      - name: Toolkit unit tests (ESLint rules, MCP, CLI, stylelint config)
+      - name: Catalog is in sync (no drift from exports/specs)
+        run: pnpm --filter @aziontech/webkit check:catalog
+
+      - name: No spec in status draft (.specs/_template.md excepted)
+        run: pnpm --filter @aziontech/webkit run check:spec-status
+
+      - name: Spec integrity — every spec approved or beyond, shipped components implemented, body checksum matches
+        run: pnpm --filter @aziontech/webkit run check:spec-integrity
+
+      - name: Spec template — specs on template 2 fill Internationalization, Right-to-left, Responsive and Performance
+        run: pnpm --filter @aziontech/webkit run check:spec-template
+
+      - name: Blocks — every block has intents, real skills and a lint-clean SFC
+        run: pnpm --filter @aziontech/webkit run check:blocks
+
+      - name: Examples — every example passes the lint `webkit init` installs (strict preset), ratcheted by a baseline
+        run: pnpm --filter @aziontech/webkit run check:examples-lint
+
+      - name: Cited names — skills, rules and blocks only cite exports that exist
+        run: pnpm --filter @aziontech/webkit run check:cited-names
+
+      - name: Naming — kebab-case English ids, block ids match folders, no synonyms or retired v6 names
+        run: pnpm --filter @aziontech/webkit run check:naming
+
+      - name: Declarations for the runtime .js modules are in sync
+        run: pnpm --filter @aziontech/webkit run check:js-dts
+
+      - name: Every source export declares types (types condition into types/)
+        run: pnpm --filter @aziontech/webkit run check:exports
+
+      - name: Marketing and docs inventory — no marketing or docs item leaves unrecorded
+        run: pnpm --filter @aziontech/webkit run check:marketing-inventory
+
+      - name: Public API changes have a codemod entry (removed or renamed export, block, prop or value)
+        run: pnpm --filter @aziontech/webkit run check:migrations
+
+      - name: Public API diff against the base branch — breaking needs "!" in the PR title and a migration, any change bumps spec_version
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: pnpm --filter @aziontech/webkit run check:api-diff
+
+      - name: Hook tests (spec, authoring and reference hooks)
+        run: pnpm --filter @aziontech/webkit run test:hooks
+
+      - name: Build the icon font
+        run: pnpm build:icons
+
+      - name: Toolkit unit tests (ESLint rules, catalog queries, CLI, stylelint config)
         run: pnpm --filter @aziontech/webkit test:toolkit
 
+      - name: MCP server tests (@aziontech/webkit-mcp over stdio)
+        run: pnpm --filter @aziontech/webkit-mcp test
+
+      - name: Theme tests (device contract, container scale in @theme, CSS types, shipped font files)
+        run: pnpm --filter @aziontech/theme test
+
+      - name: Icons package tests (published files, no runtime dependencies)
+        run: pnpm --filter @aziontech/icons test
+
+      - name: Icons manifest — every SVG documented, names follow the rules, ICONS.md current
+        run: pnpm --filter @aziontech/icons check:manifest
+
+      - name: Server rendering — every block and example renders with vue/server-renderer in Node
+        run: pnpm --filter @aziontech/webkit test:ssr
+
       - name: Construction-standard ratchet (no new authoring violations)
-        run: pnpm --filter @aziontech/webkit run authoring
+        run: pnpm --filter @aziontech/webkit run check:authoring
 
       - name: Every component has its test (testing.md)
-        run: pnpm --filter @aziontech/webkit run test:gate
+        run: pnpm --filter @aziontech/webkit run check:tests
 
-      - name: Skill/agent doc standards ratchet (no new out-of-standard docs)
-        run: pnpm --filter @aziontech/webkit run doc-standards
+      - name: Every component is complete — exports, -root, size budget, examples, visual baseline, spec status (ratcheted by a baseline)
+        run: pnpm --filter @aziontech/webkit run check:complete
+
+      - name: No new look-alike components — two components that do the same job without reusing each other (ratcheted by a baseline)
+        run: pnpm --filter @aziontech/webkit run check:look-alikes
+
+      - name: Size budgets only ratchet down (a raise needs a Budget-raise line in the PR body)
+        run: pnpm --filter @aziontech/webkit run check:size-ratchet
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+
+      - name: Authoring docs ratchet (no new out-of-standard skill or agent docs)
+        run: pnpm --filter @aziontech/webkit run check:authoring-docs
+
+      - name: Docs Markdown — one Do / Don't vocabulary, no task list in a rendered page
+        run: pnpm --filter @aziontech/webkit run check:docs-markdown
+
+      - name: Docs Markdown pipeline tests (HTML comments dropped, task lists plain, pair words)
+        run: pnpm test:docs
 
   smoke:
-    name: Consumer smoke test (init + build)
+    name: Consumer smoke test (init and build)
     needs: changes
     if: needs.changes.outputs.visual == 'true'
     runs-on: ubuntu-latest
@@ -289,7 +398,31 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Init + build a bare consumer app
-        run: pnpm --filter @aziontech/webkit run smoke:consume
+        run: pnpm --filter @aziontech/webkit run test:consume
+
+  consumer-types:
+    name: Consumer TypeScript build (fresh vue-ts app, packed tarballs)
+    needs: changes
+    if: needs.changes.outputs.webkit == 'true' || needs.changes.outputs.visual == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Pack, install into a fresh vue-ts app, run its npm run build
+        run: pnpm --filter @aziontech/webkit run check:consumer-types
 
   tests:
     name: Vitest browser (shard ${{ matrix.shard }}/4)
@@ -326,16 +459,22 @@ jobs:
         run: pnpm exec playwright install --with-deps chromium
         working-directory: packages/webkit
 
+      - name: Build the icon font
+        run: pnpm build:icons
+
       - name: Run tests (shard ${{ matrix.shard }})
         run: pnpm exec vitest run --shard=${{ matrix.shard }}/4
         working-directory: packages/webkit
 
   visual:
-    name: Storybook visual tests (shard ${{ matrix.shard }}/4)
+    name: Visual tests, styled (shard ${{ matrix.shard }}/4)
     runs-on: ubuntu-latest
-    needs: [changes, security, lint-canary, lint, types, build, storybook, tests]
+    needs: [changes, security, lint-canaries, lint, types, build, site, tests]
     if: ${{ !cancelled() && !contains(needs.*.result, 'failure') && needs.changes.outputs.visual == 'true' }}
     timeout-minutes: 30
+    container:
+      image: mcr.microsoft.com/playwright:v1.62.0-noble
+      options: --ipc=host
     strategy:
       fail-fast: false
       matrix:
@@ -355,38 +494,101 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Cache Playwright browsers
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      - name: Download the built sites
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
         with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
-          restore-keys: playwright-${{ runner.os }}-
-
-      - name: Install Playwright Chromium
-        run: pnpm exec playwright install --with-deps chromium
-        working-directory: apps/storybook
-
-      - name: Build Storybook
-        run: pnpm run storybook:build
+          name: sites
+          path: apps
 
       - name: Run visual tests (shard ${{ matrix.shard }}/4)
-        run: pnpm --filter storybook run test:visual:ci
-        env:
-          VISUAL_SHARD: ${{ matrix.shard }}/4
+        run: pnpm --filter @aziontech/webkit-visual exec playwright test --shard=${{ matrix.shard }}/4
 
-      - name: Upload diff output on failure
-        if: failure()
+      - name: Upload the report on failure or when baselines change
+        id: report
+        if: ${{ failure() || needs.changes.outputs.baselines == 'true' }}
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: visual-diff-output-shard-${{ matrix.shard }}
-          path: apps/storybook/.storybook/test-visual/__diff_output__/
+          name: visual-report-shard-${{ matrix.shard }}
+          path: |
+            apps/visual/playwright-report/
+            apps/visual/test-results/
           retention-days: 7
           if-no-files-found: ignore
 
-  governance-check:
+      - name: Link the report in the job summary
+        if: failure()
+        env:
+          REPORT_URL: ${{ steps.report.outputs.artifact-url }}
+          SHARD: ${{ matrix.shard }}
+        run: |
+          {
+            echo "### Visual diffs, shard ${SHARD}/4"
+            echo ""
+            if [ -n "$REPORT_URL" ]; then
+              echo "Playwright report with the expected, actual and diff images: [visual-report-shard-${SHARD}](${REPORT_URL})."
+            else
+              echo "No report was uploaded; read the job log."
+            fi
+            echo "Download it, unzip, and run \`npx playwright show-report playwright-report\` (or open \`playwright-report/index.html\`)."
+            echo "An intended change: regenerate the baselines with the \`baselines-regenerate\` skill."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  visual-review:
+    name: Visual baseline review
+    runs-on: ubuntu-latest
+    needs: [changes]
+    if: needs.changes.outputs.baselines == 'true'
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Build the before/after page
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          REVIEW_DIR: ${{ runner.temp }}/review
+        run: |
+          base="$(git merge-base "$BASE_SHA" HEAD)"
+          mkdir -p "$RUNNER_TEMP/before"
+          git archive "$base" apps/visual/baselines | tar -x -C "$RUNNER_TEMP/before" || true
+          node apps/visual/scripts/review-baselines.mjs \
+            --before "$RUNNER_TEMP/before/apps/visual/baselines" \
+            --after apps/visual/baselines \
+            --out "$REVIEW_DIR" \
+            --title "Visual baselines changed by this pull request"
+
+      - name: Upload the review page
+        id: review
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: visual-baseline-review
+          path: ${{ runner.temp }}/review/
+          retention-days: 14
+
+      - name: Link the review page in the job summary
+        env:
+          REVIEW_URL: ${{ steps.review.outputs.artifact-url }}
+          REVIEW_DIR: ${{ runner.temp }}/review
+        run: |
+          {
+            echo "### Visual baselines changed by this pull request"
+            echo ""
+            echo "Review page (before and after, side by side): [visual-baseline-review](${REVIEW_URL}). Download it, unzip, and open \`index.html\`."
+            echo ""
+            cat "$REVIEW_DIR/summary.md"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  gates:
     name: Governance Gate
     runs-on: ubuntu-latest
-    needs: [changes, security, lint-canary, lint, types, build, storybook, toolkit, smoke, tests, visual]
+    needs:
+      [changes, security, lint-canaries, lint, types, build, site, toolkit, smoke, tests, visual]
     if: always()
     steps:
       - name: Check all jobs passed or skipped
@@ -394,11 +596,11 @@ jobs:
           declare -A results=(
             [changes]="${{ needs.changes.result }}"
             [security]="${{ needs.security.result }}"
-            [lint-canary]="${{ needs.lint-canary.result }}"
+            [lint-canaries]="${{ needs.lint-canaries.result }}"
             [lint]="${{ needs.lint.result }}"
             [types]="${{ needs.types.result }}"
             [build]="${{ needs.build.result }}"
-            [storybook]="${{ needs.storybook.result }}"
+            [site]="${{ needs.site.result }}"
             [toolkit]="${{ needs.toolkit.result }}"
             [smoke]="${{ needs.smoke.result }}"
             [tests]="${{ needs.tests.result }}"

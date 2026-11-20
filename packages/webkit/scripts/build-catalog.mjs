@@ -1,27 +1,65 @@
 #!/usr/bin/env node
 
-import { readFileSync, writeFileSync, existsSync } from 'node:fs'
-import { dirname, resolve } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { dirname, join, relative, resolve } from 'node:path'
+import { fileURLToPath, pathToFileURL } from 'node:url'
 
-import { parseSpecFile, getSection } from '../../../.claude/hooks/_lib/spec.mjs'
-import { vocabularySnapshot } from '../../../.claude/hooks/_lib/prop-vocabulary.mjs'
+import { parseSpecFile, getSection } from '../../../.claude/hooks/lib/spec.mjs'
+import { vocabularySnapshot } from '../../../.claude/hooks/lib/prop-vocabulary.mjs'
+import { missingComponentDocs } from './lib/component-docs.mjs'
+import { kebab, readBlocks, readExamples } from './lib/blocks.mjs'
+import { GUIDELINE_FILE } from './lib/guidelines.mjs'
+import {
+  buildLlms,
+  catalogView,
+  summary as llmsSummary,
+  undocumentedExports,
+  writeLlms
+} from './build-llms.mjs'
+import { exportTarget } from './lib/exports.mjs'
+import {
+  formatStaleReferences,
+  retiredReferenceNames,
+  staleReferences
+} from './lib/catalog-references.mjs'
+import { buildAliases, buildRenamed, removedNames, retiredNames } from './lib/naming.mjs'
+import { CHANNELS, channelsOf } from './lib/content-channels.mjs'
+import { SURFACES, surfaceFromTarget } from './lib/surfaces.mjs'
+import { sameVariant } from '../src/catalog/queries.js'
+import { entryKeywords } from '../../icons/scripts/lib/icon-keywords.mjs'
+import { classOf, loadManifest } from '../../icons/scripts/lib/icons-manifest.mjs'
 import {
   animate as themeAnimate,
   useWhen as themeAnimateUseWhen
 } from '../../theme/src/tokens/primitives/animations/animate.js'
+import { buildTokenExport } from '../../theme/src/tokens/token-export.js'
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
 const REPO_ROOT = resolve(SCRIPT_DIR, '../../..')
+const PKG_ROOT = resolve(SCRIPT_DIR, '..')
 const PKG_PATH = resolve(REPO_ROOT, 'packages/webkit/package.json')
 const SPECS_DIR = resolve(REPO_ROOT, '.specs')
 const OUT_PATH = resolve(REPO_ROOT, 'packages/webkit/catalog.json')
+const PARTS_DIR = resolve(REPO_ROOT, 'packages/webkit/catalog')
+const BLOCK_HEAVY_KEYS = ['sfc', 'variants', 'guidelines', 'files']
+const COMPONENT_PROSE_KEYS = [
+  'purpose',
+  'useWhen',
+  'avoidWhen',
+  'related',
+  'bestPractices',
+  'channels'
+]
+const V6_MIGRATION = resolve(PKG_ROOT, 'src/cli/migrations/v6.json')
+const V6_BLOCKS = resolve(PKG_ROOT, 'src/cli/migrations/v6-blocks.json')
 
 const THEME_GLOBALS_CANDIDATES = [
   resolve(REPO_ROOT, 'packages/theme/dist/v3/globals.css'),
-  resolve(REPO_ROOT, 'packages/theme/dist/v4/globals.css')
+  resolve(REPO_ROOT, 'packages/theme/dist/globals.css')
 ]
-const THEME_TEXTS = resolve(REPO_ROOT, 'packages/theme/src/tokens/semantic/texts.data.js')
+const THEME_TEXTS = resolve(REPO_ROOT, 'packages/theme/src/tokens/semantic/typography.js')
+const SRC = resolve(PKG_ROOT, 'src')
+const ASSET_PART_DIR = 'catalog/assets'
 
 const PKG_NAME = '@aziontech/webkit'
 
@@ -65,10 +103,8 @@ const TOKEN_RULES = [
 ]
 
 function clean(cell) {
-  return String(cell ?? '')
-    .trim()
-    .replace(/^`|`$/g, '')
-    .trim()
+  const text = String(cell ?? '').trim()
+  return /^`[^`]*`$/.test(text) ? text.slice(1, -1).trim() : text
 }
 
 function splitRow(line) {
@@ -116,14 +152,14 @@ function categoryFromTarget(target) {
 
 function kindFromTarget(target) {
   if (target.startsWith('./src/eslint-plugin/')) return 'other'
-  if (target.startsWith('./src/mcp/')) return 'other'
+  if (target.startsWith('./src/catalog/')) return 'other'
   if (target.startsWith('./src/cli/')) return 'other'
   if (target.startsWith('./src/utils/')) return 'util'
   if (target.startsWith('./src/composables/')) return 'composable'
   if (target.startsWith('./src/svg/')) return 'svg'
   if (target.startsWith('./src/assets/')) return 'asset'
   if (target.startsWith('./src/styles/')) return 'style'
-  if (target.startsWith('./src/vite/')) return 'other'
+  if (target.startsWith('./src/locales/')) return 'locale'
   if (/\.vue$/.test(target) || /\/index\.(ts|js)$/.test(target)) return 'component'
   return 'other'
 }
@@ -163,8 +199,87 @@ function bullets(section) {
     .split('\n')
     .map((l) => l.trim())
     .filter((l) => /^[-*]\s+/.test(l))
-    .map((l) => clean(l.replace(/^[-*]\s+/, '')))
+    .map((l) => l.replace(/^[-*]\s+/, '').trim())
     .filter((l) => l && l !== '_none_')
+}
+
+export function modelProps(target) {
+  if (typeof target !== 'string') return []
+  let file = resolve(PKG_ROOT, target)
+  if (/[\\/]index\.(ts|js)$/.test(file)) {
+    file = file.replace(/index\.(ts|js)$/, `${file.split(/[\\/]/).at(-2)}.vue`)
+  }
+  if (!existsSync(file) && file.endsWith('.vue')) file = file.replace(/\.vue$/, '-root.vue')
+  if (!file.endsWith('.vue') || !existsSync(file)) return []
+  const src = readFileSync(file, 'utf-8')
+  const models = []
+  const re = /defineModel<((?:[^<>]|<[^<>]*>)*)>\(\s*(?:'([^']+)')?/g
+  for (const match of src.matchAll(re)) {
+    const name = match[2] ?? 'modelValue'
+    const rest = src.slice(match.index + match[0].length, match.index + match[0].length + 200)
+    const options = rest.match(/^\s*,?\s*\{[^]*?default:\s*([^,}\n]+?)\s*[,}\n]/)
+    let fallback = options?.[1]?.trim() ?? 'undefined'
+    const opens = (fallback.match(/[([{]/g) ?? []).length
+    const closes = (fallback.match(/[)\]}]/g) ?? []).length
+    if (opens !== closes) fallback = '—'
+    models.push({
+      name,
+      type: match[1].replace(/\s+/g, ' ').trim(),
+      default: fallback,
+      required: 'false',
+      doc:
+        name === 'modelValue'
+          ? 'Two-way value (`v-model`).'
+          : `Two-way value (\`v-model:${name}\`).`
+    })
+  }
+  return models
+}
+
+export function sourceDeprecation(source) {
+  const exports = [
+    ...source.matchAll(
+      /(\/\*\*(?:(?!\*\/)[\s\S])*\*\/\s*)?^export\s+(?:\{|\*|default\b|const\b|let\b|var\b|function\b|async\b|class\b)/gm
+    )
+  ]
+  if (!exports.length) return null
+  const notes = exports.map((match) => {
+    const doc = match[1] ?? ''
+    const tag = doc.match(/@deprecated\b([\s\S]*?)(?=\n\s*\*\s*@|\*\/)/)
+    return tag
+      ? tag[1]
+          .split('\n')
+          .map((line) => line.replace(/^\s*\*\s?/, '').trim())
+          .join(' ')
+          .trim()
+      : null
+  })
+  if (notes.some((note) => note === null)) return null
+  return notes[0] || 'Deprecated.'
+}
+
+export function componentDeprecation(source) {
+  const match = source.match(
+    /\/\*\*((?:(?!\*\/)[\s\S])*?@deprecated(?:(?!\*\/)[\s\S])*?)\*\/\s*defineOptions\(/
+  )
+  if (!match) return null
+  const tag = match[1].match(/@deprecated\b([\s\S]*?)(?=\n\s*\*\s*@|$)/)
+  return (
+    (tag?.[1] ?? '')
+      .split('\n')
+      .map((line) => line.replace(/^\s*\*\s?/, '').trim())
+      .join(' ')
+      .trim() || 'Deprecated.'
+  )
+}
+
+function targetDeprecation(target) {
+  if (typeof target !== 'string') return null
+  const file = resolve(PKG_ROOT, target)
+  if (!existsSync(file)) return null
+  if (/\.vue$/.test(target)) return componentDeprecation(readFileSync(file, 'utf-8'))
+  if (!/\.(js|mjs|ts)$/.test(target)) return null
+  return sourceDeprecation(readFileSync(file, 'utf-8'))
 }
 
 function _readSpec(subpath) {
@@ -215,13 +330,16 @@ function _readSpec(subpath) {
   }
 }
 
-function build() {
+export async function build() {
   const pkg = JSON.parse(readFileSync(PKG_PATH, 'utf-8'))
-  const exportsMap = pkg.exports || {}
+  const exportsMap = Object.fromEntries(
+    Object.entries(pkg.exports || {}).map(([key, entry]) => [key, exportTarget(entry)])
+  )
   const subpaths = Object.keys(exportsMap)
     .filter((k) => k.startsWith('./'))
     .map((k) => k.slice(2))
   const subpathSet = new Set(subpaths)
+  const v6Migration = JSON.parse(readFileSync(V6_MIGRATION, 'utf-8'))
 
   const compoundRoots = subpaths.filter((s) => {
     if (s.includes('/')) return false
@@ -237,13 +355,33 @@ function build() {
   }
 
   function parentCompound(subpath) {
-    if (subpath.endsWith('-root')) return null
+    if (subpath.endsWith('-root') || compoundRoots.includes(subpath)) return null
     const target = exportsMap[`./${subpath}`] || ''
     for (const c of compoundByLength) {
       if (subpath !== c && subpath.startsWith(`${c}-`) && target.startsWith(compoundDir(c)))
         return c
     }
     return null
+  }
+
+  const attachedCache = new Map()
+  function attachedTargets(c) {
+    if (attachedCache.has(c)) return attachedCache.get(c)
+    const index = exportsMap[`./${c}`] || ''
+    let found = null
+    if (/\/index\.ts$/.test(index)) {
+      const text = readFileSync(resolve(PKG_ROOT, index), 'utf-8')
+      const dir = dirname(index)
+      const files = new Map()
+      for (const m of text.matchAll(/^import\s+([A-Z][\w$]*)\s+from\s+'(\.[^']+)'/gm))
+        files.set(m[1], join(dir, m[2]).replace(/^(?!\.)/, './'))
+      const body = text.match(/Object\.assign\(\s*[\w$]+\s*,\s*\{([\s\S]*?)\}\s*\)/)?.[1] ?? ''
+      found = new Map()
+      for (const m of body.matchAll(/([A-Z][\w$]*)\s*:\s*([A-Z][\w$]*)/g))
+        if (files.has(m[2])) found.set(files.get(m[2]), m[1])
+    }
+    attachedCache.set(c, found)
+    return found
   }
 
   const imports = {}
@@ -271,6 +409,8 @@ function build() {
       entry.kind = 'subcomponent'
       entry.parent = parent
       entry.treeShakeableImport = importPath
+      const attached = attachedTargets(parent)
+      if (attached && !attached.has(target)) entry.attached = false
     } else if (subpath.includes('/')) {
       const seg = subpath.split('/')[0]
       entry.kind =
@@ -282,7 +422,9 @@ function build() {
               ? 'util'
               : seg === 'styles'
                 ? 'style'
-                : 'component'
+                : seg === 'locales'
+                  ? 'locale'
+                  : 'component'
       entry.treeShakeableImport = importPath
     } else {
       entry.kind = kindFromTarget(target)
@@ -313,11 +455,15 @@ function build() {
     }
 
     const spec = loadSpec(subpath) || (entry.kind === 'root' ? loadSpec(entry.rootOf) : null)
+    if (['component', 'root', 'subcomponent'].includes(entry.kind)) {
+      const modelNames = modelProps(target).map((m) => m.name)
+      if (modelNames.length) entry.models = modelNames
+    }
     if (spec) {
       entry.category = spec.category ?? categoryFromTarget(target)
       entry.structure = spec.structure
-      entry.status = spec.status
-      if (spec.props.length) entry.props = spec.props
+      const models = modelProps(target).filter((m) => !spec.props.some((p) => p.name === m.name))
+      if (spec.props.length || models.length) entry.props = [...spec.props, ...models]
       if (spec.events.length) entry.events = spec.events
       if (spec.slots.length) entry.slots = spec.slots
       if (spec.purpose) entry.purpose = spec.purpose
@@ -332,8 +478,24 @@ function build() {
     } else if (entry.kind === 'component') {
       entry.category = categoryFromTarget(target)
     }
+    const deprecation = targetDeprecation(target)
+    if (deprecation) {
+      entry.deprecated = true
+      entry.deprecation = deprecation
+    }
 
+    const surface = surfaceFromTarget(target)
+    if (surface) entry.surface = surface
+    const channels = channelsOf(target)
+    if (channels) entry.channels = channels
     imports[subpath] = entry
+  }
+
+  const blocks = readBlocks(PKG_ROOT)
+  const blockAliases = readBlockAliases(blocks)
+  const examples = readExamples(PKG_ROOT, subpathSet)
+  for (const [subpath, list] of Object.entries(examples)) {
+    if (imports[subpath]) imports[subpath].examples = list
   }
 
   return {
@@ -343,8 +505,213 @@ function build() {
     tokenRules: TOKEN_RULES,
     tokens: buildTokens(),
     vocabulary: vocabularySnapshot(),
-    imports
+    surfaces: SURFACES,
+    channels: CHANNELS,
+    aliases: buildAliases(subpaths),
+    renamed: buildRenamed(subpaths, retiredNames(v6Migration)),
+    removed: removedNames(subpaths, v6Migration),
+    imports,
+    assets: buildAssets(imports),
+    blocks,
+    blockAliases
   }
+}
+
+const ASSET_KINDS = {
+  illustrations: {
+    title: 'Illustrations',
+    summary:
+      'The official product illustration scenes, drawn into the page as inline SVG and repainted from the theme. Pass the name to `Illustration` (`name`) or to a section that shows one (`illustration`).',
+    markers: [
+      'assets/illustrations/registry.ts',
+      'components/content/illustration/illustration.vue'
+    ],
+    registry: 'src/assets/illustrations/registry.ts',
+    unknown: 'An unknown name renders a "PLACE DESIGN ASSET" placeholder and warns in the console.'
+  },
+  diagrams: {
+    title: 'Diagrams',
+    summary:
+      'The registered product architecture diagrams. Pass the name to `Diagram` (`name`) or to a section that shows one; the label is the diagram\u2019s accessible description.',
+    markers: ['assets/diagrams/registry.ts', 'components/marketing/diagram/diagram.vue'],
+    registry: 'src/assets/diagrams/registry.ts',
+    unknown: 'An unknown name draws nothing.'
+  },
+  brandMarks: {
+    title: 'Brand marks',
+    summary:
+      'Client, analyst and framework marks drawn as theme-aware SVG. Pass the name where a component asks for a mark (`Marquee` `marks`, `QuoteTabs` `mark`, `ClientQuotesSection` `mark`); the label is the accessible name. A `wordmark` entry is a brand whose terms do not let WebKit ship its logo (Splunk, Google BigQuery, Amazon S3 and Kinesis, Zoop, G2 badges, Rust, Datadog in a one-ink row): it renders as its label in plain text, in WebKit type and colour, until its owner grants the logo.',
+    markers: ['assets/brands/registry.ts'],
+    registry: 'src/assets/brands/registry.ts',
+    unknown:
+      'An unknown name is not drawn as a mark: `Marquee` prints it as a typographic wordmark, the quote components show no mark.'
+  },
+  icons: {
+    title: 'Icons',
+    summary:
+      'Every icon class of `@aziontech/icons`, grouped as Azion (products, product features, platform, solutions, services), Interface (arrows, actions, status, files, media, communication, commerce, people, devices, data, layout, objects, git) and External (frameworks, AI models, developer tools, languages, online services). A monochrome icon is `az az-<name>`, coloured by the text colour; a colour logo is `az-color az-<name>`. Pick an icon by what it stands for: a product icon names only that product. Import `@aziontech/icons` once at the app entry (the font); the colour logos come with the WebKit stylesheet, compiled only for the classes written whole in your sources. An `icon` prop takes the class string.',
+    unknown: 'An unknown class renders nothing.'
+  }
+}
+
+function objectKeys(file, variable) {
+  const src = readFileSync(resolve(PKG_ROOT, file), 'utf-8')
+  const start = src.search(new RegExp(`export const ${variable}\\b[^=]*= \\{`))
+  if (start === -1) throw new Error(`${file}: no "export const ${variable}" object`)
+  const body = src.slice(src.indexOf('{', start) + 1, src.indexOf('\n}', start))
+  const entries = []
+  for (const m of body.matchAll(/^\s*'?([a-z0-9-]+)'?:\s*(?:'([^']*)')?/gm)) {
+    entries.push({ name: m[1], value: m[2] ?? null })
+  }
+  return entries
+}
+
+function quoted(src, key, from = 0) {
+  const m = src
+    .slice(from)
+    .match(new RegExp(`\\b${key}:\\s*(["'\`])((?:\\\\.|(?!\\1)[\\s\\S])*)\\1`))
+  return m ? m[2].replace(/\\'/g, "'").replace(/\s+/g, ' ').trim() : null
+}
+
+function viewBoxOf(file) {
+  const m = readFileSync(file, 'utf-8').match(/viewBox="([^"]+)"/)
+  const [, , w, h] = (m?.[1] ?? '').split(/[\s,]+/).map(Number)
+  return w > 0 && h > 0 ? `${Math.round(w)}x${Math.round(h)}` : null
+}
+
+function importGraph() {
+  const graph = new Map()
+  const walk = (dir) => {
+    for (const e of readdirSync(dir, { withFileTypes: true })) {
+      const p = join(dir, e.name)
+      if (e.isDirectory()) walk(p)
+      else if (/\.(vue|ts|js)$/.test(e.name) && !/\.test\.|\.d\.ts$/.test(e.name)) {
+        const src = readFileSync(p, 'utf-8')
+        const deps = []
+        for (const m of src.matchAll(/(?:from\s+|import\(\s*)['"](\.{1,2}\/[^'"]+)['"]/g)) {
+          const base = resolve(dirname(p), m[1])
+          const hit = ['', '.ts', '.js', '.vue', '/index.ts', '/index.js'].find((ext) =>
+            existsSync(base + ext)
+          )
+          if (hit != null) deps.push(base + hit)
+        }
+        graph.set(p, deps)
+      }
+    }
+  }
+  walk(SRC)
+  return graph
+}
+
+function reaches(graph, from, markers) {
+  const seen = new Set()
+  const stack = [from]
+  while (stack.length) {
+    const file = stack.pop()
+    if (seen.has(file)) continue
+    seen.add(file)
+    if (markers.has(file)) return true
+    for (const dep of graph.get(file) || []) stack.push(dep)
+  }
+  return false
+}
+
+function iconItems() {
+  return loadManifest().icons.map((entry) => ({
+    name: `az-${entry.name}`,
+    class: classOf(entry),
+    set: entry.set === 'color' ? 'color' : 'azionicons',
+    group: entry.group,
+    category: entry.category,
+    label: entry.means,
+    ...(entry.product ? { product: entry.product } : {}),
+    keywords: entryKeywords(entry)
+  }))
+}
+
+export function buildAssets(imports) {
+  const items = {
+    illustrations: objectKeys(ASSET_KINDS.illustrations.registry, 'illustrationAssets')
+      .map(({ name }) => ({
+        name,
+        canvas: viewBoxOf(resolve(SRC, 'assets/illustrations', `${name}.svg`))
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name)),
+    diagrams: objectKeys(ASSET_KINDS.diagrams.registry, 'diagrams')
+      .map(({ name }) => ({
+        name,
+        label: quoted(
+          readFileSync(resolve(SRC, 'assets/diagrams', `${name}.ts`), 'utf-8'),
+          'ariaLabel'
+        )
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name)),
+    brandMarks: (() => {
+      const labels = new Map(
+        objectKeys(ASSET_KINDS.brandMarks.registry, 'brandMarkLabels').map((e) => [e.name, e.value])
+      )
+      return [
+        ...objectKeys(ASSET_KINDS.brandMarks.registry, 'brandMarks').map(({ name }) => ({
+          name,
+          label: labels.get(name) ?? name
+        })),
+        ...objectKeys(ASSET_KINDS.brandMarks.registry, 'brandWordmarks').map(({ name, value }) => ({
+          name,
+          label: value ?? name,
+          wordmark: true
+        }))
+      ].sort((a, b) => a.name.localeCompare(b.name))
+    })(),
+    icons: iconItems()
+  }
+  const graph = importGraph()
+  const componentFiles = Object.entries(imports)
+    .filter(([, e]) => e.kind === 'component' && e.target?.startsWith('./src/components/'))
+    .map(([sub, e]) => [sub, resolve(PKG_ROOT, e.target)])
+  const assets = {}
+  for (const [kind, meta] of Object.entries(ASSET_KINDS)) {
+    const { markers, registry, ...rest } = meta
+    let usedBy
+    if (markers) {
+      const set = new Set(markers.map((m) => resolve(SRC, m)))
+      usedBy = componentFiles.filter(([, file]) => reaches(graph, file, set)).map(([sub]) => sub)
+    } else {
+      usedBy = Object.entries(imports)
+        .filter(([, e]) => e.kind === 'component' && (e.props || []).some(isIconProp))
+        .map(([sub]) => sub)
+    }
+    assets[kind] = {
+      ...rest,
+      ...(registry ? { registry } : {}),
+      usedBy: usedBy.sort(),
+      count: items[kind].length,
+      items: items[kind]
+    }
+  }
+  return assets
+}
+
+export function isIconProp(prop) {
+  return /^(icon|[a-z]+Icon)$/.test(prop.name) && /string/.test(prop.type)
+}
+
+function readBlockAliases(blocks) {
+  const aliases = existsSync(V6_BLOCKS) ? JSON.parse(readFileSync(V6_BLOCKS, 'utf-8')) : {}
+  const broken = []
+  for (const [from, to] of Object.entries(aliases)) {
+    const [id, variant] = to.split('#')
+    const p = blocks[id]
+    if (blocks[from.split('#')[0]]) broken.push(`${from}: old id still names a block`)
+    else if (!p) broken.push(`${from} -> ${to}: no block "${id}"`)
+    else if (
+      variant &&
+      !sameVariant(variant, p.primary) &&
+      !p.variants.some((v) => sameVariant(v.name, variant))
+    )
+      broken.push(`${from} -> ${to}: block "${id}" has no variant "${variant}"`)
+  }
+  if (broken.length) throw new Error(`src/cli/migrations/v6-blocks.json:\n  ${broken.join('\n  ')}`)
+  return Object.fromEntries(Object.entries(aliases).sort(([a], [b]) => a.localeCompare(b)))
 }
 
 function buildTokens() {
@@ -391,12 +758,162 @@ function buildTokens() {
     }
   }
 
-  return { cssVars, typography, groups, animations, animationGuide }
+  const tokenExport = buildTokenExport()
+  const values = {}
+  for (const { name, ...entry } of tokenExport.tokens) values[name] = entry
+
+  return {
+    cssVars,
+    typography,
+    groups,
+    animations,
+    animationGuide,
+    themes: tokenExport.themes,
+    values
+  }
 }
 
-const catalog = build()
-writeFileSync(OUT_PATH, JSON.stringify(catalog, null, 2) + '\n', 'utf-8')
-const componentCount = Object.values(catalog.imports).filter((e) => e.kind === 'component').length
-process.stdout.write(
-  `catalog.json written: ${Object.keys(catalog.imports).length} exports (${componentCount} components) @ ${catalog.webkitVersion}\n`
-)
+export function splitCatalog(full) {
+  const files = {}
+  const blocks = {}
+  for (const [id, p] of Object.entries(full.blocks)) {
+    const file = `catalog/blocks/${id}.json`
+    const part = {}
+    const meta = {}
+    for (const [k, v] of Object.entries(p)) {
+      if (BLOCK_HEAVY_KEYS.includes(k)) part[k] = v
+      else meta[k] = v
+    }
+    if (part.sfc !== undefined) {
+      delete part.sfc
+      part.sfcFile = p.source
+    }
+    if (part.guidelines !== undefined) {
+      delete part.guidelines
+      part.guidelinesFile = `blocks/${id}/${GUIDELINE_FILE}`
+    }
+    if (part.files !== undefined) {
+      const dir = dirname(p.source)
+      part.fileSources = Object.fromEntries(Object.keys(part.files).map((f) => [f, `${dir}/${f}`]))
+      delete part.files
+    }
+    part.variants = (p.variants || []).map(({ sfc, ...v }) => v)
+    meta.variants = (p.variants || []).map((v) => ({ name: v.name }))
+    meta.file = file
+    blocks[id] = meta
+    files[file] = part
+  }
+  const assets = {}
+  for (const [kind, { items, ...meta }] of Object.entries(full.assets || {})) {
+    const file = `${ASSET_PART_DIR}/${kebab(kind)}.json`
+    files[file] = { items }
+    assets[kind] = { ...meta, file }
+  }
+  const imports = {}
+  for (const [subpath, e] of Object.entries(full.imports)) {
+    const meta = {}
+    const prose = {}
+    for (const [k, v] of Object.entries(e)) {
+      if (k === 'examples') continue
+      if (COMPONENT_PROSE_KEYS.includes(k)) prose[k] = v
+      else meta[k] = v
+    }
+    if (e.examples) {
+      const file = `catalog/examples/${subpath}.json`
+      meta.examplesFile = file
+      files[file] = { examples: e.examples.map(({ sfc, ...x }) => x) }
+    }
+    if (Object.keys(prose).length) {
+      const file = `catalog/components/${subpath}.json`
+      meta.docsFile = file
+      files[file] = prose
+    }
+    imports[subpath] = meta
+  }
+  return { catalog: { ...full, imports, assets, blocks }, files }
+}
+
+const serialize = (value) => JSON.stringify(value, null, 1) + '\n'
+
+function listParts(dir, out = []) {
+  if (!existsSync(dir)) return out
+  for (const e of readdirSync(dir, { withFileTypes: true })) {
+    const p = join(dir, e.name)
+    if (e.isDirectory()) listParts(p, out)
+    else out.push(relative(PKG_ROOT, p).split('\\').join('/'))
+  }
+  return out
+}
+
+function checkParts(catalog, files) {
+  const drift = []
+  const expected = { 'catalog.json': serialize(catalog) }
+  for (const [file, part] of Object.entries(files)) expected[file] = serialize(part)
+  for (const [file, text] of Object.entries(expected)) {
+    const abs = resolve(PKG_ROOT, file)
+    if (!existsSync(abs)) drift.push(`missing ${file}`)
+    else if (readFileSync(abs, 'utf-8') !== text) drift.push(`stale ${file}`)
+  }
+  for (const file of listParts(PARTS_DIR)) if (!(file in expected)) drift.push(`extra ${file}`)
+  return drift
+}
+
+if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
+  const full = await build()
+  const missingDocs = missingComponentDocs(full.imports)
+  if (missingDocs.length) {
+    process.stderr.write(
+      `✖ ${missingDocs.length} exported component(s) without agent docs in .specs/<name>.md:\n  ${missingDocs.join('\n  ')}\n` +
+        'Every exported component needs ## Purpose, ## When to use and ## When NOT to use in its spec.\n'
+    )
+    process.exit(1)
+  }
+  const { catalog, files } = splitCatalog(full)
+  const view = catalogView(catalog, (file) => JSON.parse(serialize(files[file])))
+  const undocumented = undocumentedExports(view, buildLlms(view))
+  if (undocumented.length) {
+    process.stderr.write(
+      `✖ ${undocumented.length} public export(s) missing from llms/components/:\n  ${undocumented.join('\n  ')}\n` +
+        'Every component export needs its own page, and every sub-component and -root export must be listed on its compound page.\n'
+    )
+    process.exit(1)
+  }
+  const stale = formatStaleReferences(
+    staleReferences(full, {
+      retired: retiredReferenceNames(
+        JSON.parse(readFileSync(V6_MIGRATION, 'utf-8')),
+        existsSync(V6_BLOCKS) ? JSON.parse(readFileSync(V6_BLOCKS, 'utf-8')) : {}
+      )
+    })
+  )
+  if (stale.length) {
+    process.stderr.write(
+      `${process.argv.includes('--check') ? '✖' : '⚠'} ${stale.length} stale reference(s) in spec Purpose / When to use / When NOT to use / Related:\n  ${stale.join('\n  ')}\n` +
+        'Name an export, a catalog alias or a block id; fix the text in .specs/<name>.md.\n'
+    )
+    if (process.argv.includes('--check')) process.exit(1)
+  }
+  if (process.argv.includes('--check')) {
+    const drift = checkParts(catalog, files)
+    if (drift.length) {
+      process.stderr.write(
+        `✖ catalog out of sync (${drift.length}):\n  ${drift.slice(0, 20).join('\n  ')}\nRun: pnpm --filter @aziontech/webkit build:catalog\n`
+      )
+      process.exit(1)
+    }
+    process.stdout.write(`✓ catalog.json and ${Object.keys(files).length} catalog/ files in sync\n`)
+    process.exit(0)
+  }
+  rmSync(PARTS_DIR, { recursive: true, force: true })
+  for (const [file, part] of Object.entries(files)) {
+    const abs = resolve(PKG_ROOT, file)
+    mkdirSync(dirname(abs), { recursive: true })
+    writeFileSync(abs, serialize(part), 'utf-8')
+  }
+  writeFileSync(OUT_PATH, serialize(catalog), 'utf-8')
+  const llms = writeLlms()
+  const componentCount = Object.values(catalog.imports).filter((e) => e.kind === 'component').length
+  process.stdout.write(
+    `catalog.json written: ${Object.keys(catalog.imports).length} exports (${componentCount} components), ${Object.keys(catalog.blocks).length} blocks @ ${catalog.webkitVersion}; ${Object.keys(files).length} files in catalog/\n${llmsSummary(llms)}\n`
+  )
+}

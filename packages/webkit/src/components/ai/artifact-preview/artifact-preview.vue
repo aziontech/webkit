@@ -1,0 +1,143 @@
+<script setup lang="ts">
+  import { computed, useAttrs, useId } from 'vue'
+
+  import { useTranslate } from '../../../composables/use-translate'
+  import * as en from '../../../locales/en'
+  import Button from '../../action/button/button.vue'
+  import CopyButton from '../../action/copy-button/copy-button.vue'
+  import IconButton from '../../action/icon-button/icon-button.vue'
+
+  defineOptions({
+    name: 'ArtifactPreview',
+    inheritAttrs: false
+  })
+
+  export interface ArtifactPreviewProps {
+    /** File name or title of what was generated (`cache-rules.json`). */
+    title: string
+    /** One line on what it is or does. */
+    description?: string
+    /** Facts that help recognize it: size, rows, language (`2.4 KB · JSON`). */
+    meta?: string
+    /** Icon class for the file type. */
+    icon?: string
+    /** Text the Copy control puts on the clipboard. Empty hides Copy. */
+    copyValue?: string
+    /** URL of the file for the Download control. Empty hides Download. */
+    downloadHref?: string
+    /** Shows Open, which emits `open` so the owner shows the full artifact in a side panel or page (a canvas preview). */
+    openable?: boolean
+  }
+
+  withDefaults(defineProps<ArtifactPreviewProps>(), {
+    description: '',
+    meta: '',
+    icon: 'az az-file',
+    copyValue: '',
+    downloadHref: '',
+    openable: false
+  })
+
+  const emit = defineEmits<{
+    /** The reader asked to see the whole artifact. */
+    open: [event: MouseEvent]
+    /** The content was copied; the payload is the copied text. */
+    copy: [event: MouseEvent, value: string]
+  }>()
+
+  const slots = defineSlots<{
+    /** The inline preview: a `CodeBlock`, the first rows of a table, an image. Keep it short; long content opens instead. */
+    default?(): unknown
+    /** Extra icon actions, placed before Copy and Download. */
+    actions?(): unknown
+  }>()
+
+  const attrs = useAttrs()
+  const { t } = useTranslate({ artifactPreview: en.artifactPreview })
+  const titleId = `${useId()}-title`
+
+  const testId = computed<string>(
+    () => (attrs['data-testid'] as string | undefined) ?? 'artifact-preview'
+  )
+</script>
+
+<template>
+  <article
+    v-bind="$attrs"
+    :aria-labelledby="titleId"
+    :data-testid="testId"
+    :data-openable="openable || null"
+    class="flex w-full min-w-0 flex-col overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface)"
+  >
+    <header class="flex items-center gap-(--spacing-sm) px-(--spacing-sm) py-(--spacing-xs)">
+      <span
+        aria-hidden="true"
+        class="inline-flex size-8 shrink-0 items-center justify-center rounded-(--shape-control) bg-(--bg-surface-raised) text-(--text-muted)"
+      >
+        <i :class="icon" />
+      </span>
+      <div class="flex min-w-0 flex-1 flex-col">
+        <h3
+          :id="titleId"
+          dir="auto"
+          class="m-0 truncate text-label-md text-(--text-default)"
+        >
+          {{ title }}
+        </h3>
+        <p
+          v-if="description || meta"
+          class="m-0 truncate text-body-xs text-(--text-muted)"
+        >
+          <span v-if="description">{{ description }}</span>
+          <span
+            v-if="description && meta"
+            aria-hidden="true"
+          >
+            ·
+          </span>
+          <span v-if="meta">{{ meta }}</span>
+        </p>
+      </div>
+      <div class="flex shrink-0 items-center gap-(--spacing-2xs)">
+        <slot name="actions" />
+        <CopyButton
+          v-if="copyValue"
+          size="small"
+          :value="copyValue"
+          :aria-label="t('artifactPreview.copy', { title })"
+          :data-testid="`${testId}__copy`"
+          @copy="(event, value) => emit('copy', event, value)"
+        />
+        <IconButton
+          v-if="downloadHref"
+          icon="az az-download"
+          variant="ghost"
+          size="small"
+          :href="downloadHref"
+          :ariaLabel="t('artifactPreview.download', { title })"
+          :download="title"
+          :data-testid="`${testId}__download`"
+        />
+        <Button
+          v-if="openable"
+          :label="t('artifactPreview.open')"
+          :aria-label="t('artifactPreview.openLabel', { title })"
+          variant="outline"
+          size="small"
+          icon="az az-external-link"
+          icon-position="trailing"
+          :data-testid="`${testId}__open`"
+          @click="(event: MouseEvent) => emit('open', event)"
+        />
+      </div>
+    </header>
+    <div
+      v-if="slots.default"
+      tabindex="0"
+      :data-testid="`${testId}__content`"
+      class="max-h-80 min-w-0 overflow-auto border-t border-(--border-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset"
+    >
+      <slot />
+    </div>
+  </article>
+</template>

@@ -1,0 +1,209 @@
+import '../../../test/reflow.css'
+
+import { fireEvent, render, type RenderOptions } from '@testing-library/vue'
+import { afterEach, describe, expect, it } from 'vitest'
+import { page } from 'vitest/browser'
+import { h } from 'vue'
+
+import { expectNoA11yViolations } from '../../../test/axe'
+import type { ChartSeries } from '../lib'
+import DonutChart from './donut-chart.vue'
+
+const countries: ChartSeries[] = [
+  { id: 'br', name: 'Brazil', values: [48200] },
+  { id: 'us', name: 'United States', values: [20000, 11600] },
+  { id: 'de', name: 'Germany', values: [18900] }
+]
+
+const mount = (
+  props: Record<string, unknown> = {},
+  slots: RenderOptions<typeof DonutChart>['slots'] = {}
+) =>
+  render(DonutChart, {
+    props: { series: countries, ariaLabel: 'Top WAF threat requests by country', ...props },
+    slots
+  })
+
+describe('DonutChart', () => {
+  afterEach(async () => {
+    await page.viewport(414, 896)
+  })
+
+  it('renders the fallback data-testid and lets a consumer override it', () => {
+    const fallback = mount()
+    expect(fallback.getByTestId('donut-chart').tagName).toBe('FIGURE')
+    fallback.unmount()
+    expect(mount({ 'data-testid': 'countries' }).getByTestId('countries')).toBeTruthy()
+  })
+
+  it('maps type and size to data attributes', () => {
+    const root = mount({ type: 'pie', size: 'large' }).getByTestId('donut-chart')
+    expect(root.getAttribute('data-type')).toBe('pie')
+    expect(root.getAttribute('data-size')).toBe('large')
+  })
+
+  it.each([
+    ['small', 0.66 * 128],
+    ['medium', 0.66 * 176],
+    ['large', 0.66 * 240]
+  ])(
+    'fits the center value inside the hole of the %s ring on a wide screen',
+    async (size, hole) => {
+      await page.viewport(1280, 900)
+      const view = mount({ size, series: [{ id: 'all', name: 'All', values: [126700] }] })
+      await document.fonts.ready
+      const value = view.getByTestId('donut-chart__center-value')
+      expect(value.textContent).toBe('126.7K')
+      expect(value.getBoundingClientRect().width).toBeLessThan(hole - 24)
+    }
+  )
+
+  it('draws one slice per series, summing each series, in slot order', () => {
+    const view = mount()
+    const slices = view.getByTestId('donut-chart__ring').querySelectorAll('circle')
+    expect([...slices].map((slice) => slice.getAttribute('stroke'))).toEqual([
+      'var(--chart-series-1)',
+      'var(--chart-series-2)',
+      'var(--chart-series-3)'
+    ])
+    expect(view.getByTestId('donut-chart__center').textContent).toContain('98.7K')
+    expect(view.getByTestId('donut-chart__center').textContent).toContain('Total')
+  })
+
+  it('folds slices past the cap into Other', () => {
+    const many = Array.from({ length: 8 }, (_, index) => ({
+      id: `c${index}`,
+      name: `Country ${index + 1}`,
+      values: [10 - index]
+    }))
+    const view = mount({ series: many })
+    const strokes = [...view.getByTestId('donut-chart__ring').querySelectorAll('circle')].map(
+      (slice) => slice.getAttribute('stroke')
+    )
+    expect(strokes).toHaveLength(7)
+    expect(strokes.at(-1)).toBe('var(--chart-series-other)')
+  })
+
+  it('swaps the center to the active slice and announces it', async () => {
+    const view = mount()
+    const ring = view.getByTestId('donut-chart__ring')
+    ring.focus()
+    await fireEvent.keyDown(ring, { key: 'ArrowRight' })
+    expect(view.getByTestId('donut-chart__center').textContent).toContain('48.2K')
+    expect(view.getByTestId('donut-chart__center').textContent).toContain('Brazil')
+    expect(view.getByTestId('donut-chart__live').textContent).toContain('Brazil: 48.2K, 49%')
+  })
+
+  it('hands the center slot the total and the active series', () => {
+    const view = mount(
+      {},
+      {
+        center: ({ total }: { total: number }) =>
+          h('span', { 'data-testid': 'custom-center' }, `sum ${total}`)
+      }
+    )
+    expect(view.getByTestId('custom-center').textContent).toBe('sum 98700')
+  })
+
+  it('emits slice-click with the event first and the consumer series second', async () => {
+    const view = mount()
+    const first = view.getByTestId('donut-chart__ring').querySelector('circle') as Element
+    await fireEvent.pointerEnter(first)
+    await fireEvent.click(first)
+    const clicks = view.emitted('slice-click') as unknown[][]
+    expect(clicks).toHaveLength(1)
+    expect(clicks[0]?.[0]).toBeInstanceOf(MouseEvent)
+    expect(clicks[0]?.[1]).toEqual(countries[0])
+
+    const ring = view.getByTestId('donut-chart__ring')
+    await fireEvent.keyDown(ring, { key: 'End' })
+    await fireEvent.keyDown(ring, { key: 'Enter' })
+    expect((view.emitted('slice-click') as unknown[][])[1]?.[1]).toEqual(countries[2])
+  })
+
+  it('hides a slice from the legend and keeps it listed', async () => {
+    const view = mount()
+    const items = view.getAllByTestId('donut-chart__legend-item')
+    await fireEvent.click(items[0] as Element)
+    expect(items[0]?.getAttribute('aria-pressed')).toBe('false')
+    expect(view.getByTestId('donut-chart__ring').querySelectorAll('circle')).toHaveLength(2)
+    expect(view.getAllByTestId('donut-chart__legend-item')).toHaveLength(3)
+    const toggles = view.emitted('legend-toggle') as unknown[][]
+    expect(toggles[0]?.[1]).toEqual(countries[0])
+    expect(view.emitted('update:hiddenSeries')?.[0]).toEqual([['br']])
+  })
+
+  it('explains an empty range and offers the consumer actions', async () => {
+    const view = mount(
+      {
+        series: [{ id: 'a', name: 'A', values: [0] }],
+        size: 'large',
+        emptyTitle: 'No threats match these filters',
+        emptyDescription: 'Choose another country or widen the time range.'
+      },
+      { 'empty-actions': () => h('button', { type: 'button' }, 'Clear filters') }
+    )
+    expect(view.getByTestId('donut-chart__empty__description').textContent).toContain(
+      'Choose another country'
+    )
+    expect(view.getByTestId('donut-chart__empty__icon')).toBeTruthy()
+    expect(
+      view.getByTestId('donut-chart__empty__actions').querySelector('button')?.textContent
+    ).toBe('Clear filters')
+    await expectNoA11yViolations(view.container)
+  })
+
+  it('renders exactly one state at a time', () => {
+    const loading = mount({ loading: true })
+    expect(loading.getByTestId('donut-chart__loading')).toBeTruthy()
+    expect(loading.queryByTestId('donut-chart__ring')).toBeNull()
+    loading.unmount()
+
+    const failed = mount({ error: 'Could not load this report' })
+    expect(failed.getByTestId('donut-chart__error').textContent).toContain('Could not load')
+    failed.unmount()
+
+    const empty = mount({ series: [{ id: 'a', name: 'A', values: [0] }] })
+    expect(empty.getByTestId('donut-chart__empty')).toBeTruthy()
+    expect(empty.queryByTestId('donut-chart__empty__actions')).toBeNull()
+    empty.unmount()
+
+    const table = mount({ tableView: true })
+    expect(table.getByTestId('donut-chart__table').querySelectorAll('tbody tr')).toHaveLength(3)
+    expect(table.queryByTestId('donut-chart__ring')).toBeNull()
+  })
+
+  it('keeps a table twin of every slice', () => {
+    const twin = mount().getByTestId('donut-chart__twin')
+    expect(twin.querySelectorAll('tbody tr')).toHaveLength(3)
+  })
+
+  it('has no a11y violations in the ring, pie and table views', async () => {
+    for (const props of [{}, { type: 'pie' }, { tableView: true }, { loading: true }]) {
+      const view = mount(props)
+      await expectNoA11yViolations(view.container)
+      view.unmount()
+    }
+  })
+
+  describe('table twin on devices', () => {
+    it('clips the twin inside a visually hidden box so it adds no horizontal overflow', () => {
+      const twin = mount().getByTestId('donut-chart__twin')
+
+      expect(twin.parentElement?.className).toBe('sr-only')
+    })
+  })
+
+  describe('right-to-left keys', () => {
+    it('swaps ArrowLeft and ArrowRight under dir="rtl"', async () => {
+      const view = render({
+        render: () =>
+          h('div', { dir: 'rtl' }, [h(DonutChart, { series: countries, ariaLabel: 'Countries' })])
+      })
+      const ring = view.getByTestId('donut-chart__ring')
+      ring.focus()
+      await fireEvent.keyDown(ring, { key: 'ArrowLeft' })
+      expect(view.getByTestId('donut-chart__center').textContent).toContain('Brazil')
+    })
+  })
+})

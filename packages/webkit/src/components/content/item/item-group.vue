@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, provide, useAttrs } from 'vue'
 
-  import { ItemContainerInjectionKey } from './injection-key'
+  import { ItemContainerInjectionKey, ItemListMemberInjectionKey } from './injection-key'
 
   defineOptions({
     name: 'ItemGroup',
@@ -14,11 +14,10 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'content-item-group'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'item-group')
 
-  provide(ItemContainerInjectionKey, { forceKind: 'inline' })
+  provide(ItemContainerInjectionKey, { forceVariant: 'inline' })
+  provide(ItemListMemberInjectionKey, true)
 </script>
 
 <template>

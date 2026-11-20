@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Default switch. Use the Controls panel to flip modelValue, variant, and focused.",
+   "file": "examples/switch/default.vue"
+  },
+  {
+   "name": "Variants",
+   "summary": "Both variant variants in off and on states. Privacy adds a lock (off) / lock-open (on) icon inside the handle.",
+   "file": "examples/switch/variants.vue"
+  },
+  {
+   "name": "Disabled",
+   "summary": "Disabled in both positions. The lock reads the same either way — the disabled track and handle tokens win over the checked ones — and neither click nor Space/Enter emits.",
+   "file": "examples/switch/disabled.vue"
+  }
+ ]
+}

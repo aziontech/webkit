@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "A JSON object pretty-printed, with its type, size and the Download action.",
+   "file": "examples/file-preview/default.vue"
+  },
+  {
+   "name": "Image",
+   "summary": "An image file drawn from `src`, its name as the alternative text.",
+   "file": "examples/file-preview/image.vue"
+  },
+  {
+   "name": "PDF",
+   "summary": "A PDF invoice handed over as base64 bytes, the shape a chat document part carries, drawn in the browser's own PDF viewer; where the browser has none, the no-preview state points at Download.",
+   "file": "examples/file-preview/pdf.vue"
+  }
+ ]
+}

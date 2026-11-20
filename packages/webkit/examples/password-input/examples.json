@@ -1,0 +1,46 @@
+{
+  "component": "password-input",
+  "title": "Components/Input/PasswordInput",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Default empty password input with the visibility toggle enabled.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Toggle",
+      "summary": "`toggleable=true` (default) renders the visibility toggle button on the trailing edge; `toggleable=false` renders a plain password field and frees the `suffix` slot.",
+      "file": "toggle.vue"
+    },
+    {
+      "name": "IconLeading",
+      "summary": "Leading `prefix` slot \u2014 the only icon slot honored when `toggleable=true`.",
+      "file": "icon-leading.vue"
+    },
+    {
+      "name": "Filled",
+      "summary": "Pre-populated `modelValue` shows the filled visual state and the masked rendering (driven by `:not(:placeholder-shown)`).",
+      "file": "filled.vue"
+    },
+    {
+      "name": "Invalid",
+      "summary": "Invalid state \u2014 applies danger border/ring tokens and `aria-invalid`.",
+      "file": "invalid.vue"
+    },
+    {
+      "name": "MaxLength",
+      "summary": "Hard character cap of 8 enforced by the native `maxlength` attribute.",
+      "file": "max-length.vue"
+    },
+    {
+      "name": "Monospace",
+      "summary": "An API token field: `monospace` draws the value in the code face, so the revealed token reads character by character; `autocomplete=\"off\"` keeps password managers away.",
+      "file": "monospace.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "Disabled state \u2014 the toggle button inherits the disabled state.",
+      "file": "disabled.vue"
+    }
+  ]
+}

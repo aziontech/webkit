@@ -1,0 +1,61 @@
+{
+  "component": "dropdown-menu",
+  "title": "Components/Navigation/DropdownMenu",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Default dropdown with a single unlabeled group of six options and no left/right affordances. Click the trigger to open; controls drive side, align, sideOffset, and disabled.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Groups",
+      "summary": "Two labeled groups (`Account`, `Workspace`) separated by an automatic top divider on the second group. One option carries a `command` hint, another is `selected` — the central anatomy of this component.",
+      "file": "groups.vue"
+    },
+    {
+      "name": "States",
+      "summary": "Click the trigger to open the panel and see each spec-declared option state side-by-side: `default`, `selected`, and `disabled`. The `hover` and `focus-visible` states are interactive — focus an option with the keyboard (`Down` / `Up`) or hover with the pointer to see them.",
+      "file": "states.vue"
+    },
+    {
+      "name": "Placements",
+      "summary": "The four corners (`side` `bottom` / `top` × `align` `start` / `end`) side-by-side. Click each trigger to see how the panel anchors against it. Panels are teleported to `body` and positioned with `position: fixed` against the trigger's bounding rect — no external positioning runtime.",
+      "file": "placements.vue"
+    },
+    {
+      "name": "AutoPlacement",
+      "summary": "`side=\"auto\"` lets the dropdown choose the side with the most room at open time. The four triggers below all use the same prop value — each resolves to a different side based on the available space around them. The resolved value is reflected in `data-side` on the open panel.",
+      "file": "auto-placement.vue"
+    },
+    {
+      "name": "OptionAffordances",
+      "summary": "Click the trigger to see every option affordance: plain label, `command` keyboard hint, `leading` icon slot, `trailing` content slot (with a `Tag`), `selected` state (a checked radio item with a check mark), and `disabled` state. The `command` prop and the `trailing` slot are mutually exclusive — pick one per option.",
+      "file": "option-affordances.vue"
+    },
+    {
+      "name": "WithHeaderAndFooter",
+      "summary": "Click the trigger to open the panel with the root `header` and `footer` named slots in use — typically a search input at the top and a footer action at the bottom. Both regions stick to their edges and stay outside the scrollable group list.",
+      "file": "with-header-and-footer.vue"
+    },
+    {
+      "name": "GroupsWithHeaderAndFooter",
+      "summary": "Click the trigger to open two groups each using the `header` and `footer` slots — a per-section caption above the options and a footer action below. Different from the root `header`/`footer` (which are sticky outside the scroll area), group-level slots render inline within the section.",
+      "file": "groups-with-header-and-footer.vue"
+    },
+    {
+      "name": "SubMenus",
+      "summary": "`DropdownMenu.Sub` nests a menu: `SubTrigger` is the row with the chevron and `SubContent` the panel beside it. It opens on hover, click, `Enter`, `Space` or `ArrowRight`; `ArrowLeft` or `Esc` closes it. Click the trigger to open the menu: `Move to` opens with it (`default-open`) and holds a second level; `Share` is disabled.",
+      "file": "sub-menus.vue"
+    },
+    {
+      "name": "CheckableOptions",
+      "summary": "`type=\"checkbox\"` and `type=\"radio\"` turn options into `menuitemcheckbox` / `menuitemradio` items with a check or dot and `aria-checked`. They keep the panel open on activation, so several columns can be toggled in a row; `selected` comes from your own state in the `select` handler.",
+      "file": "checkable-options.vue"
+    },
+    {
+      "name": "CustomTriggers",
+      "summary": "`DropdownMenu.Trigger` is abstract — it wires `aria-haspopup`/`aria-expanded`/`aria-controls` and the open/close click onto whatever element you put inside its default slot. Here it wraps an `IconButton` (row actions) and an `Avatar` (account menu).",
+      "file": "custom-triggers.vue"
+    }
+  ]
+}

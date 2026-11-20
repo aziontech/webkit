@@ -1,0 +1,159 @@
+{
+ "name": "console-showcase-section",
+ "binding": "ConsoleShowcaseSection",
+ "import": "@aziontech/webkit/console-showcase-section",
+ "treeShakeableImport": "@aziontech/webkit/console-showcase-section",
+ "category": "section",
+ "surface": "site",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "A full-width framed panel that presents a product scene (a console mock or a diagram) under a section title, on a texture, with optional tabs that each play one beat of the scene. The scene is a slot: the page passes a `ConsoleMockup` or a diagram and reads the selected tab from the slot scope. In `console` variant the scene keeps a 1.9:1 aspect and can be cropped and faded at the bottom. From the design sample's site `ConsoleShowcaseSection`.",
+ "setup": null,
+ "useWhen": [
+  "Use ConsoleShowcaseSection for a marketing band that plays a product scene under a section title.",
+  "Showing the product itself on a landing page.",
+  "A tour of three or four views of one screen."
+ ],
+ "avoidWhen": [
+  "For a screenshot with copy beside it — use `MediaSplitSection`.",
+  "For code — use `FeatureScrollSection` (a step with `code`) or `CliTerminalSection`."
+ ],
+ "related": [
+  "`ConsoleMockup` — the console scenes it frames.",
+  "`ToggleGroup` — the tab control.",
+  "`Texture`, `RegistrationFrame`, `ModuleHeader`."
+ ],
+ "bestPractices": [
+  "Two to four tabs, each a different view, labelled with one word.",
+  "Crop the scene only to remove empty space at its bottom (0.1–0.3)."
+ ],
+ "props": [
+  {
+   "name": "variant",
+   "type": "'console' | 'diagram'",
+   "default": "'console'",
+   "required": "false",
+   "doc": "What the panel frames: `console` crops and fades a console mock at a fixed aspect, `diagram` lets a scene keep its own height."
+  },
+  {
+   "name": "titleAlign",
+   "type": "ModuleHeaderAlign",
+   "default": "'center'",
+   "required": "false",
+   "doc": "Layout of the headline block."
+  },
+  {
+   "name": "titlePadding",
+   "type": "ModuleHeaderPadding",
+   "default": "'medium'",
+   "required": "false",
+   "doc": "Vertical padding of the headline block."
+  },
+  {
+   "name": "size",
+   "type": "ModuleHeaderSize",
+   "default": "'medium'",
+   "required": "false",
+   "doc": "Step of the headline on the heading scale."
+  },
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "In-page id set on the band so a hash link can target it."
+  },
+  {
+   "name": "eyebrow",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Eyebrow above the title."
+  },
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Headline of the band, rendered as its `h2`."
+  },
+  {
+   "name": "description",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "One or two sentences under the headline."
+  },
+  {
+   "name": "texture",
+   "type": "TextureVariant",
+   "default": "'pixelate'",
+   "required": "false",
+   "doc": "Texture the panel is grounded with."
+  },
+  {
+   "name": "textureFade",
+   "type": "TextureFade",
+   "default": "'top'",
+   "required": "false",
+   "doc": "Axis the texture fades out along."
+  },
+  {
+   "name": "tabs",
+   "type": "ConsoleShowcaseSectionTab[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Tabs over the frame, each `{ value, title }`; each plays its own beat of the scene."
+  },
+  {
+   "name": "tabsAriaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the tab control; empty uses the built-in \"Console views\"."
+  },
+  {
+   "name": "crop",
+   "type": "number",
+   "default": "0",
+   "required": "false",
+   "doc": "Share of the scene height clipped off its bottom, from 0 to 0.5, from the medium breakpoint up."
+  },
+  {
+   "name": "primaryAction",
+   "type": "ConsoleShowcaseSectionAction",
+   "default": "undefined",
+   "required": "false",
+   "doc": "First button under the headline, `secondary`; `{ label, href, trailing?, target? }`. Shown only with a label and a link."
+  },
+  {
+   "name": "secondaryAction",
+   "type": "ConsoleShowcaseSectionAction",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Second button under the headline, `outline`; same shape. Shown only with a label and a link."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "scene",
+   "scope": "`{ tab: string",
+   "notes": "undefined }` | The scene the band presents; `tab` is the selected tab value (undefined without tabs)."
+  }
+ ],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/console-showcase-section/default.vue"
+  },
+  {
+   "name": "Diagram",
+   "file": "examples/console-showcase-section/diagram.vue"
+  }
+ ],
+ "docs": "components/console-showcase-section.md"
+}

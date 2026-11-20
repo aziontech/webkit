@@ -1,0 +1,89 @@
+{
+ "name": "article-cards-section",
+ "binding": "ArticleCardsSection",
+ "import": "@aziontech/webkit/article-cards-section",
+ "treeShakeableImport": "@aziontech/webkit/article-cards-section",
+ "category": "section",
+ "surface": "site",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "A titled row of three linked article cards on one hairline frame grid with no gutter, stacking to one column on mobile. Each card is a single link: a 16:9 media cell holding the article's cover — or, when it has none, the client's mark in one flat ink that follows the theme — then the headline, the deck and a `meta` overline pinned to the foot. It is a page section — the site places it from a `{ _id: 'article-cards-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `registration-frame` and `card-grid`. `variant` places the heading only: `start` at the start (an article's closing row), `center` centred over the cards under an overline (a landing-page band); the cards keep the same shape in both.",
+ "setup": null,
+ "useWhen": [
+  "To close a blog post with its related articles, or a success story with its related stories.",
+  "To show three stories as a landing-page band under a centred heading."
+ ],
+ "avoidWhen": [
+  "For the full, filterable list of articles → use `article-index-section`.",
+  "For one featured article selected from a wall → use `article-highlight-section`."
+ ],
+ "related": [
+  "`card-grid` — the frame grid the cards sit on.",
+  "`article-highlight-section` — the blog's opening band."
+ ],
+ "bestPractices": [
+  "Give a card either `image` or `mark`; the mark is drawn only when there is no cover.",
+  "Keep the band to three cards so the frame row stays full.",
+  "Set `target: '_blank'` on a card whose article lives on another site; it opens in a new tab and says so to assistive technology."
+ ],
+ "props": [
+  {
+   "name": "align",
+   "type": "ArticleCardsSectionAlign",
+   "default": "'start'",
+   "required": "false",
+   "doc": "Placement of the heading: `start` sets it at the start, `center` centres it over the cards."
+  },
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Id set on the band so an in-page `#hash` link can target it."
+  },
+  {
+   "name": "eyebrow",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Eyebrow above the heading."
+  },
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Headline of the band; the band renders no header when empty."
+  },
+  {
+   "name": "items",
+   "type": "ArticleCardsSectionItem[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The cards, in order; each is `{ id, href, title, description, meta, image?, mark?, target? }`; a card whose `target` is `_blank` opens in a new tab."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the card grid."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/article-cards-section/default.vue"
+  },
+  {
+   "name": "Alignments",
+   "file": "examples/article-cards-section/alignments.vue"
+  }
+ ],
+ "docs": "components/article-cards-section.md"
+}

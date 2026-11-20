@@ -11,7 +11,7 @@ enforced_by: [no-invention, imports, composables]
 
 ## Purpose
 
-Before scaffolding, prove whatever logic the new component needs does not already exist somewhere. Duplicating `useToast`, `Spinner`, or `Currency` causes drift; this skill catches that.
+Before scaffolding, prove whatever logic the new component needs does not already exist somewhere. Duplicating `useToast`, `Spinner`, or `CurrencyAmount` causes drift; this skill catches that.
 
 ## When to invoke
 
@@ -22,8 +22,8 @@ Before scaffolding, prove whatever logic the new component needs does not alread
 - The full text of `.specs/<name>.md` (to know what props/events/states the component needs).
 - Read-only access to:
   - `packages/webkit/src/composables/`
-  - `packages/webkit/src/components/webkit/utils/`
-  - `packages/webkit/src/components/webkit/<category>/` (siblings of the new component)
+  - `packages/webkit/src/components/utils/`
+  - `packages/webkit/src/components/<category>/` (siblings of the new component)
   - `packages/theme/src/` (animations, transitions)
 
 ## Workflow
@@ -33,7 +33,7 @@ Before scaffolding, prove whatever logic the new component needs does not alread
    - `loading` / `spinner` → `webkit/utils/spinner`
    - `toast` / `notification` → `composables/use-toast`
    - `dialog` open/close → `composables/use-dialog`
-   - `currency` / `price` → `webkit/content/currency`
+   - `currency-amount` / `price` → `webkit/content/currency-amount`
    - `tag` → `webkit/content/tag`
    - and so on.
 3. **Emit suggestions** as a JSON array:
@@ -42,7 +42,7 @@ Before scaffolding, prove whatever logic the new component needs does not alread
      {
        "spec_needs": "loading state",
        "reuse": "@aziontech/webkit/utils/spinner",
-       "rationale": "Existing utility used in button.vue and card-pricing.vue"
+       "rationale": "Existing utility used in button.vue and pricing-card.vue"
      }
    ]
    ```
@@ -55,7 +55,7 @@ Before scaffolding, prove whatever logic the new component needs does not alread
 ## Rules
 
 - **Do not** suggest a path that does not exist. If `composables/use-toast` is not in the filesystem, do not name it.
-- **Do not** invent new utility locations. If a need cannot be satisfied by what exists, omit the row — the scaffolder will write the logic inline, and a follow-up PR can extract it.
+- **Do not** invent new utility locations. If a need cannot be satisfied by what exists, omit the row — the component-scaffolder will write the logic inline, and a follow-up PR can extract it.
 - **Do not** edit any file. This is read-only.
 
 ## Fallbacks

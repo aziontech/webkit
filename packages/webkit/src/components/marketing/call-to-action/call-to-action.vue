@@ -1,9 +1,9 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import FrameBox from '../../layout/frame-box/frame-box.vue'
-  import Overline from '../../overline/overline.vue'
-  import SectionTitle from '../section-title/section-title.vue'
+  import Eyebrow from '../../content/eyebrow/eyebrow.vue'
+  import ModuleHeader from '../../layout/module-header/module-header.vue'
+  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
 
   defineOptions({
     name: 'CallToAction',
@@ -11,28 +11,28 @@
   })
 
   /** Layout of the band. */
-  export type CallToActionKind = 'panel' | 'split' | 'lead' | 'primary'
+  export type CallToActionVariant = 'panel' | 'split' | 'lead' | 'primary' | 'announcement'
 
-  interface Props {
+  export interface CallToActionProps {
     /** Headline of the band, rendered as its `h2`. */
     title: string
     /** Second line of the headline, set in muted ink; rendered as a second span of the same `h2`. */
     titleMuted?: string
-    /** Supporting sentence — under the headline in `panel`, in the aside cell in `split`; overridden by the default slot. */
+    /** Supporting sentence — under the headline in `panel` and `lead`, in the aside cell in `split`, on the raised trailing column in `announcement`; overridden by the default slot. */
     description?: string
     /** Short uppercase overline rendered above the headline. */
     eyebrow?: string
-    /** Layout of the band: `panel` sets the copy and its controls on one surface, `split` divides it into a raised lead cell and an aside that each floor their own control, `lead` is that lead cell standing alone with every control in it, `primary` is a centred ask on the canvas lit by a pixelated, waving primary texture, with a floor. */
-    kind?: CallToActionKind
+    /** Layout of the band: `panel` sets the copy and its controls on one surface, `split` divides it into a raised lead cell and an aside that each floor their own control, `lead` is that lead cell standing alone with every control in it, `primary` is a centred ask on the canvas lit by a pixelated, waving primary texture, with a floor, `announcement` is a mid-page announcement with its actions in a wide leading column and the supporting note on a raised trailing column. */
+    variant?: CallToActionVariant
     /** Draw the band's own registration frame. Turn it off when the page already wraps the band in a frame. */
     framed?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<CallToActionProps>(), {
     titleMuted: '',
     description: '',
     eyebrow: '',
-    kind: 'panel',
+    variant: 'panel',
     framed: false
   })
 
@@ -41,25 +41,23 @@
     default?(): unknown
     /** The controls the band exists to offer; in `split`, the lead cell's primary control. */
     actions?(): unknown
-    /** The aside cell's control in `split`; ignored in `panel`, `lead` and `primary`, where every control belongs in `actions`. */
+    /** The aside cell's control in `split`; ignored in `panel`, `lead`, `primary` and `announcement`, where every control belongs in `actions`. */
     aside?(): unknown
     /** Decoration drawn behind the copy in `primary`, such as a texture; ignored in the other registers. */
     background?(): unknown
-    /** The strip that floors the band in `primary`, such as a ticker, under a hairline; ignored in the other registers. */
+    /** The strip that floors the band in `primary`, such as a marquee, under a hairline; ignored in the other registers. */
     bottom?(): unknown
   }>()
 
   const attrs = useAttrs()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'marketing-call-to-action'
-  )
+  const EYEBROW_PREFIX = '//' as const
 
-  const hasDescription = computed<boolean>(
-    () => Boolean(slots.default) || props.description.length > 0
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'call-to-action')
 
-  const frame = computed(() => (props.framed ? FrameBox : 'div'))
+  const hasDescription = () => Boolean(slots.default) || props.description.length > 0
+
+  const frame = computed(() => (props.framed ? RegistrationFrame : 'div'))
   const frameProps = computed(() =>
     props.framed ? { flush: true, borders: 'y', marks: 'all' } : {}
   )
@@ -69,7 +67,7 @@
   <section
     v-bind="$attrs"
     :data-testid="testId"
-    :data-kind="kind"
+    :data-variant="variant"
     :aria-label="title"
   >
     <component
@@ -78,18 +76,18 @@
       class="h-full"
     >
       <div
-        v-if="kind === 'split'"
+        v-if="variant === 'split'"
         class="grid lg:grid-cols-[minmax(0,7fr)_minmax(0,3fr)]"
       >
         <div
-          class="flex flex-col justify-between gap-(--spacing-xxl) bg-(--bg-surface-raised) p-(--spacing-xl)"
+          class="flex flex-col justify-between gap-(--spacing-2xl) bg-(--bg-surface-raised) p-(--spacing-xl)"
         >
           <div class="flex flex-col gap-(--spacing-lg)">
-            <Overline
+            <Eyebrow
               v-if="eyebrow"
-              prefix="//"
-              show-cursor
-              >{{ eyebrow }}</Overline
+              :prefix="EYEBROW_PREFIX"
+              cursor
+              >{{ eyebrow }}</Eyebrow
             >
             <h2 class="m-0 max-w-(--container-xl) text-balance text-heading-xl">
               <span class="block text-(--text-default)">{{ title }}</span>
@@ -110,10 +108,10 @@
         </div>
 
         <div
-          class="flex flex-col justify-between gap-(--spacing-xxl) border-t border-(--border-default) p-(--spacing-xl) lg:border-t-0 lg:border-l"
+          class="flex flex-col justify-between gap-(--spacing-2xl) border-t border-(--border-default) p-(--spacing-xl) lg:border-t-0 lg:border-s"
         >
           <p
-            v-if="hasDescription"
+            v-if="hasDescription()"
             class="m-0 text-pretty text-heading-sm text-(--text-default)"
           >
             <slot>{{ description }}</slot>
@@ -129,15 +127,15 @@
       </div>
 
       <div
-        v-else-if="kind === 'lead'"
+        v-else-if="variant === 'lead'"
         class="flex h-full flex-col justify-center gap-(--spacing-xl) bg-(--bg-surface-raised) p-(--spacing-xl)"
       >
         <div class="flex w-full max-w-(--container-2xl) flex-col gap-(--spacing-lg)">
-          <Overline
+          <Eyebrow
             v-if="eyebrow"
-            prefix="//"
-            show-cursor
-            >{{ eyebrow }}</Overline
+            :prefix="EYEBROW_PREFIX"
+            cursor
+            >{{ eyebrow }}</Eyebrow
           >
           <h2 class="m-0 text-balance text-heading-xl">
             <span class="block text-(--text-default)">{{ title }}</span>
@@ -148,7 +146,7 @@
             >
           </h2>
           <p
-            v-if="hasDescription"
+            v-if="hasDescription()"
             class="m-0 max-w-(--container-lg) text-balance text-heading-sm text-(--text-muted)"
           >
             <slot>{{ description }}</slot>
@@ -164,7 +162,7 @@
       </div>
 
       <div
-        v-else-if="kind === 'primary'"
+        v-else-if="variant === 'primary'"
         class="relative isolate overflow-clip bg-(--bg-canvas)"
       >
         <div class="relative">
@@ -176,11 +174,11 @@
           </div>
 
           <div
-            class="relative z-10 flex justify-center px-(--spacing-xl) py-[calc(var(--spacing-xxl)*1.5)] md:py-[calc(var(--spacing-xxl)*2)] [&_h2]:max-w-(--container-xl) [&_h2+p]:max-w-(--container-md)"
+            class="relative z-10 flex justify-center px-(--spacing-xl) py-[calc(var(--spacing-2xl)*1.5)] md:py-[calc(var(--spacing-2xl)*2)] [&_h2]:max-w-(--container-xl) [&_h2+p]:max-w-(--container-md)"
           >
-            <SectionTitle
+            <ModuleHeader
               :framed="false"
-              kind="centered"
+              align="center"
               size="large"
               :title="title"
               :description="description"
@@ -197,7 +195,7 @@
               >
                 <slot name="actions" />
               </template>
-            </SectionTitle>
+            </ModuleHeader>
           </div>
         </div>
 
@@ -210,12 +208,44 @@
       </div>
 
       <div
-        v-else
-        class="flex flex-col gap-(--spacing-xl) bg-(--bg-surface) p-(--spacing-xxl) md:flex-row md:items-center md:justify-between"
+        v-else-if="variant === 'announcement'"
+        class="flex flex-col md:flex-row"
       >
-        <SectionTitle
+        <div
+          class="flex flex-col justify-between gap-(--spacing-xl) bg-(--bg-surface) p-(--spacing-2xl) md:basis-2/3 md:grow"
+        >
+          <ModuleHeader
+            :framed="false"
+            align="start"
+            :title="title"
+            :eyebrow="eyebrow"
+          />
+
+          <div
+            v-if="slots.actions"
+            class="flex w-full flex-col items-stretch gap-(--spacing-sm) [&>*]:w-full md:w-auto md:flex-row md:items-center md:[&>*]:w-auto"
+          >
+            <slot name="actions" />
+          </div>
+        </div>
+
+        <div
+          v-if="hasDescription()"
+          class="bg-(--bg-surface-raised) p-(--spacing-2xl) md:basis-1/3 md:shrink-0"
+        >
+          <p class="m-0 text-pretty text-heading-sm text-(--text-muted)">
+            <slot>{{ description }}</slot>
+          </p>
+        </div>
+      </div>
+
+      <div
+        v-else
+        class="flex flex-col gap-(--spacing-xl) bg-(--bg-surface) p-(--spacing-2xl) md:flex-row md:items-center md:justify-between"
+      >
+        <ModuleHeader
           :framed="false"
-          kind="left"
+          align="start"
           :title="title"
           :eyebrow="eyebrow"
           :description="description"
@@ -226,7 +256,7 @@
           >
             <slot />
           </template>
-        </SectionTitle>
+        </ModuleHeader>
 
         <div
           v-if="slots.actions"

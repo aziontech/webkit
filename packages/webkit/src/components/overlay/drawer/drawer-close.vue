@@ -1,7 +1,9 @@
 <script setup lang="ts">
-  import { computed, inject, useAttrs } from 'vue'
+  import { inject, useAttrs } from 'vue'
 
-  import IconButton from '../../actions/icon-button/icon-button.vue'
+  import { useTranslate } from '../../../composables/use-translate'
+  import * as en from '../../../locales/en'
+  import IconButton from '../../action/icon-button/icon-button.vue'
   import { DrawerInjectionKey } from './injection-key'
 
   defineOptions({
@@ -9,36 +11,33 @@
     inheritAttrs: false
   })
 
-  const props = withDefaults(
-    defineProps<{
-      /** Accessible label for the close control. */
-      ariaLabel?: string
-    }>(),
-    {
-      ariaLabel: 'Close'
-    }
-  )
-
-  const attrs = useAttrs()
-  const ctx = inject(DrawerInjectionKey)
-
-  const handleClick = () => {
-    ctx?.close()
+  export interface DrawerCloseProps {
+    /** Accessible label for the close control. Empty uses the locale catalog (`Close`). */
+    ariaLabel?: string
   }
 
-  const isDisabled = computed(() => !ctx?.dismissible)
+  const props = withDefaults(defineProps<DrawerCloseProps>(), {
+    ariaLabel: ''
+  })
+
+  const attrs = useAttrs()
+  const { t } = useTranslate({ drawer: en.drawer })
+  const ctx = inject(DrawerInjectionKey)
+
+  const onClick = () => {
+    ctx?.close()
+  }
 </script>
 
 <template>
   <IconButton
     v-if="ctx"
-    icon="pi pi-times"
-    kind="outlined"
+    icon="az az-x"
+    variant="outline"
     size="small"
-    :ariaLabel="props.ariaLabel"
-    :disabled="isDisabled"
+    :ariaLabel="props.ariaLabel || t('drawer.close')"
     :data-testid="`${ctx.testId}__close`"
     :class="attrs.class"
-    @click="handleClick"
+    @click="onClick"
   />
 </template>

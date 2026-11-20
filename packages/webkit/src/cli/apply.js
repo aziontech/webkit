@@ -1,14 +1,17 @@
+import { spawnSync } from 'node:child_process'
 import {
   chmodSync,
   copyFileSync,
   existsSync,
   mkdirSync,
   readFileSync,
+  rmSync,
   writeFileSync
 } from 'node:fs'
 import { dirname, join } from 'node:path'
 
 import { spliceFragment } from './bundle.js'
+import { gitState, huskyBin } from './plan.js'
 
 function ensureDir(filePath) {
   mkdirSync(dirname(filePath), { recursive: true })
@@ -56,14 +59,24 @@ function applyAddDep(projectDir, action) {
   } catch (err) {
     return { action, result: 'error', detail: err.message }
   }
-  const field = action.dev ? 'devDependencies' : 'dependencies'
+  const { dev } = action
+  const field = dev ? 'devDependencies' : 'dependencies'
   pkg[field] = pkg[field] || {}
-  if (pkg[field][action.dep]) {
-    return { action, result: 'skipped', detail: `${action.dep} already present` }
+  const current = pkg[field][action.dep]
+  if (current && (current === action.version || current !== action.replace)) {
+    return {
+      action,
+      result: 'skipped',
+      detail: `${field}.${action.dep}@${current} kept (WebKit needs ${action.version})`
+    }
   }
   pkg[field][action.dep] = action.version
   writeJson(pkgPath, pkg)
-  return { action, result: 'written', detail: `${field}.${action.dep}@${action.version}` }
+  return {
+    action,
+    result: 'written',
+    detail: `${field}.${action.dep}@${action.version}${current ? ` (was ${current}, older than WebKit needs)` : ''}`
+  }
 }
 
 function applyWrite(projectDir, action) {
@@ -73,7 +86,11 @@ function applyWrite(projectDir, action) {
   }
   ensureDir(target)
   writeFileSync(target, action.content, 'utf8')
-  return { action, result: 'written', detail: action.path }
+  return {
+    action,
+    result: 'written',
+    detail: action.note ? `${action.path} (${action.note})` : action.path
+  }
 }
 
 function applyMergeJson(projectDir, action) {
@@ -140,6 +157,29 @@ function applyPatchEntry(projectDir, action) {
   }
 }
 
+function applyRemoveStarter(projectDir, action) {
+  const target = join(projectDir, action.path)
+  const src = existsSync(target) ? readFileSync(target, 'utf8') : ''
+  if (!src.includes(action.line)) {
+    return {
+      action,
+      result: 'skipped',
+      detail: `${action.path} no longer imports the starter stylesheet`
+    }
+  }
+  const lines = src.split('\n')
+  const at = lines.indexOf(action.line)
+  if (lines.some((l) => l.trim() === action.replacement)) lines.splice(at, 1)
+  else lines[at] = action.replacement
+  writeFileSync(target, lines.join('\n'), 'utf8')
+  for (const rel of action.files) rmSync(join(projectDir, rel), { force: true })
+  return {
+    action,
+    result: 'merged',
+    detail: `${action.path}: replaced the starter stylesheet import with ${action.replacement.match(/['"]([^'"]+)['"]/)?.[1]} and removed ${action.files.join(', ')}`
+  }
+}
+
 function applyFence(projectDir, action) {
   const target = join(projectDir, action.path)
   const existed = existsSync(target)
@@ -174,6 +214,28 @@ function applyCopyStamped(projectDir, action) {
   return { action, result: existed ? 'merged' : 'written', detail: action.to }
 }
 
+function applyActivateHooks(projectDir, action) {
+  const bin = huskyBin(projectDir)
+  if (!bin) {
+    return {
+      action,
+      result: 'advised',
+      detail:
+        'husky is not installed yet — run your package manager install (its "prepare" script runs husky) to activate .husky/pre-commit.'
+    }
+  }
+  const proc = spawnSync(process.execPath, [bin], { cwd: projectDir, encoding: 'utf8' })
+  const output = `${proc.stdout || ''}${proc.stderr || ''}`.trim()
+  if (proc.status !== 0 || output || !gitState(projectDir).huskyActive) {
+    return {
+      action,
+      result: 'error',
+      detail: `husky could not activate the git hooks${output ? ` (${output})` : ''} — run \`npx husky\` and check \`git config core.hooksPath\`.`
+    }
+  }
+  return { action, result: 'written', detail: 'git hooks activated (core.hooksPath = .husky/_)' }
+}
+
 function applyReportOnly(action) {
   return { action, result: action.reportResult || 'skipped', detail: action.detail }
 }
@@ -203,8 +265,14 @@ export function applyPlan(projectDir, plan) {
       case 'patch-entry':
         results.push(applyPatchEntry(projectDir, action))
         break
+      case 'remove-starter':
+        results.push(applyRemoveStarter(projectDir, action))
+        break
       case 'fence':
         results.push(applyFence(projectDir, action))
+        break
+      case 'activate-hooks':
+        results.push(applyActivateHooks(projectDir, action))
         break
       case 'advise':
         results.push({ action, result: 'advised', detail: action.message })

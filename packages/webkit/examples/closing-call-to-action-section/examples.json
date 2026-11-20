@@ -1,0 +1,57 @@
+{
+  "component": "closing-call-to-action-section",
+  "title": "Components/Marketing/Sections/ClosingCallToActionSection",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The `panel` close a solution page ends with: the overline, the headline and the sentence on one surface, the white and the outlined button side by side, over the short closing frame. Edit the props in the Controls panel — a band with no title renders nothing.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Variants",
+      "summary": "The layouts stacked: the `panel` close with two actions, then the single-action `panel` close, over the short closing frame, then the loud `primary` close under its pixelated texture.",
+      "file": "variants.vue"
+    },
+    {
+      "name": "Command",
+      "summary": "The `primary` close with a copyable install command before its actions: the line draws the `$` prompt and copies the command as written.",
+      "file": "command.vue"
+    },
+    {
+      "name": "Audiences",
+      "summary": "The `primary` close for a reader who may be a person or an agent: a switch under the title. For humans opens on two actions; For agents swaps in a copyable prompt and the agent docs. The typed word loops under both, and the description closes the band under it.",
+      "file": "audiences.vue"
+    },
+    {
+      "name": "Stacked",
+      "summary": "Two closings stacked on one page: the upper `panel` turns `hatch` off so only the lower `primary` draws the closing frame. Below, a page that ends on a band with its own actions closes on the bare `frame`, with no gap before it.",
+      "file": "stacked.vue"
+    }
+  ],
+  "site": [
+    {
+      "name": "Panel",
+      "summary": "The Careers close: a panel with one action to the job listing, then a short closing frame.",
+      "file": "site-panel.vue",
+      "json": "site-panel.json"
+    },
+    {
+      "name": "Primary",
+      "summary": "The loud close: one centred ask on the canvas, under a pixelated texture whose two waves keep travelling across it, then the tall closing frame.",
+      "file": "site-primary.vue",
+      "json": "site-primary.json"
+    },
+    {
+      "name": "Audiences",
+      "summary": "The close for a reader who may be a person or an agent: the `primary` register with a switch under the title. For humans opens on two actions; For agents swaps in a copyable prompt and the agent docs. The typed word loops under both.",
+      "file": "site-audiences.vue",
+      "json": "site-audiences.json"
+    }
+  ],
+  "siteTitle": "Templates/Marketing/Closing CTAs/ClosingCallToActionSection",
+  "sitePreview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "siteStories": ["Panel", "PanelJson", "Primary", "PrimaryJson", "Audiences", "AudiencesJson"]
+}

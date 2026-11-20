@@ -1,0 +1,186 @@
+<script setup lang="ts">
+  import { computed, onScopeDispose, ref, watch } from 'vue'
+
+  import { useMediaQuery } from '../../../../composables/use-media-query'
+  import DataTable from '../../../data/data-table/data-table.vue'
+  import Input from '../../../input/input/input.vue'
+  import Card from '../../card/card.vue'
+  import Tag from '../../tag/tag.vue'
+  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
+  import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
+
+  defineOptions({ name: 'ObjectStorageBucketsFragment' })
+
+  interface Props {
+    /** Whether this fragment is the one showing. */
+    active?: boolean
+    /** Whether the pointer is over the fragment's card; a search narrows the bucket list while it is, and clears after. */
+    hovered?: boolean
+  }
+
+  const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
+
+  const canHover = useMediaQuery('(hover: hover)', true)
+  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
+
+  const COLUMNS = [
+    { accessorKey: 'name', header: 'Name', principal: true, grow: 3 as const },
+    { accessorKey: 'access', header: 'Access' },
+    { accessorKey: 'objects', header: 'Objects' },
+    { accessorKey: 'size', header: 'Size' }
+  ]
+
+  const BUCKETS = [
+    {
+      id: 'webkit-docs-dev',
+      name: 'webkit-docs-dev',
+      access: 'Public',
+      objects: 128,
+      size: '412.6 MB'
+    },
+    {
+      id: 'azion-assets-prod',
+      name: 'azion-assets-prod',
+      access: 'Public',
+      objects: 4210,
+      size: '18.4 GB'
+    },
+    { id: 'user-uploads', name: 'user-uploads', access: 'Private', objects: 902, size: '2.1 GB' }
+  ]
+
+  const cellValue = (cell?: Record<string, unknown>) => String(cell?.['value'] ?? '')
+
+  interface Frame {
+    focused: boolean
+    search: string
+    forward: number
+    back: number
+  }
+
+  const typed = (search: string, forward: number) => ({
+    focused: true,
+    search,
+    forward,
+    back: 70
+  })
+
+  const FRAMES: Frame[] = [
+    { focused: false, search: '', forward: 0, back: 0 },
+    { focused: true, search: '', forward: 260, back: 200 },
+    typed('a', 320),
+    typed('as', 120),
+    typed('ass', 120),
+    typed('asse', 120),
+    typed('asset', 120),
+    typed('assets', 120),
+    { focused: false, search: 'assets', forward: 620, back: 220 }
+  ]
+
+  const LAST = FRAMES.length - 1
+
+  const wanted = () => props.active && (props.hovered || !canHover.value)
+
+  const step = ref(0)
+  const frame = computed(() => FRAMES[step.value])
+
+  const rows = computed(() =>
+    BUCKETS.filter((bucket) => bucket.name.includes(frame.value.search.toLowerCase()))
+  )
+
+  let timer: ReturnType<typeof globalThis.setTimeout> | null = null
+
+  const halt = () => {
+    if (timer) globalThis.clearTimeout(timer)
+    timer = null
+  }
+
+  const advance = () => {
+    halt()
+    const target = wanted() ? LAST : 0
+    if (step.value === target) return
+    if (reduced.value || !canHover.value) {
+      step.value = target
+      return
+    }
+    const forward = target > step.value
+    const next = step.value + (forward ? 1 : -1)
+    const delay = forward ? FRAMES[next].forward : FRAMES[step.value].back
+    timer = globalThis.setTimeout(() => {
+      step.value = next
+      advance()
+    }, delay)
+  }
+
+  watch(wanted, advance, { immediate: true })
+
+  onScopeDispose(halt)
+</script>
+
+<template>
+  <ConsoleMockupShell
+    variant="bare"
+    fade="bottom"
+    class="[--console-mockup-fade-start:82%]"
+    :chrome="false"
+    :active="active"
+    :width="560"
+    :mobile-width="500"
+  >
+    <div class="flex flex-col gap-(--spacing-sm) py-(--spacing-xs)">
+      <ConsoleMockupShellItem :order="0">
+        <span
+          :data-focused="frame.focused || null"
+          class="flex rounded-(--shape-control) ring-(--ring-color) ring-offset-(--bg-surface) transition-shadow duration-fast-02 ease-productive-entrance data-focused:ring-2 data-focused:ring-offset-2 motion-reduce:transition-none"
+        >
+          <Input
+            :model-value="frame.search"
+            size="medium"
+            placeholder="Search buckets"
+            aria-label="Search buckets"
+            class="w-full"
+          >
+            <template #leading>
+              <i
+                class="az az-search"
+                aria-hidden="true"
+              />
+            </template>
+          </Input>
+        </span>
+      </ConsoleMockupShellItem>
+
+      <ConsoleMockupShellItem :order="1">
+        <Card :padded="false">
+          <template #default>
+            <DataTable
+              :data="rows"
+              :columns="COLUMNS"
+              row-key="id"
+              paginated
+              :page-size="8"
+              :bordered="false"
+            >
+              <template #cell-name="cell">
+                <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+                  <i
+                    class="az az-object-storage shrink-0 text-body-lg text-(--text-muted)"
+                    aria-hidden="true"
+                  />
+                  <span class="truncate">{{ cellValue(cell) }}</span>
+                </div>
+              </template>
+
+              <template #cell-access="cell">
+                <Tag
+                  :label="cellValue(cell)"
+                  :severity="cellValue(cell) === 'Public' ? 'success' : 'neutral'"
+                  size="medium"
+                />
+              </template>
+            </DataTable>
+          </template>
+        </Card>
+      </ConsoleMockupShellItem>
+    </div>
+  </ConsoleMockupShell>
+</template>

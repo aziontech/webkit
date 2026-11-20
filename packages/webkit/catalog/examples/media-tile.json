@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "A framed panel with its caption under it: the lead in the page's ink, the sentence in the muted one, both on the same line. The scene is an official `Illustration`, inset from the frame by the `padded` default. Type a URL into `src` in the Controls panel and the tile swaps the scene for a plain image; clear `description` and the caption is the lead alone, with the frame holding its height either way.",
+   "file": "examples/media-tile/default.vue"
+  },
+  {
+   "name": "Variants",
+   "summary": "The two registers, each in the grid it belongs to. `frame` sits in `card-grid`'s `gap` register, where gutters keep every frame its own. `plain` sits in the `divider` register, where the grid draws every rule and the tile only has to fill its own background — a framed tile there would put a frame rule and a grid hairline a padding apart.",
+   "file": "examples/media-tile/variants.vue"
+  },
+  {
+   "name": "Unpadded",
+   "summary": "The same tile with the inset off: the media runs to the frame's rules instead of sitting inside them. Reach for it only when the asset already carries its own air — a composed scene wants the inset, and a band mixing the two reads as a mistake.",
+   "file": "examples/media-tile/unpadded.vue"
+  }
+ ]
+}

@@ -1,0 +1,98 @@
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import DocCallToAction from '@aziontech/webkit/doc-call-to-action'
+  import DocHeading from '@aziontech/webkit/doc-heading'
+  import DocLayout, { type DocLayoutNavGroup } from '@aziontech/webkit/doc-layout'
+  import DocPageHeader from '@aziontech/webkit/doc-page-header'
+  import DocProse from '@aziontech/webkit/doc-prose'
+  import ThemeSwitcher, { type ThemeSwitcherValue } from '@aziontech/webkit/theme-switcher'
+  import { ref } from 'vue'
+
+  const navigation: DocLayoutNavGroup[] = [
+    {
+      label: 'Fundamentals',
+      items: [
+        { id: 'overview', label: 'Overview', href: '/docs' },
+        {
+          id: 'get-started',
+          label: 'Get started',
+          defaultOpen: true,
+          children: [
+            { id: 'create-account', label: 'Create an account', href: '/docs/create-account' },
+            { id: 'first-deploy', label: 'First deploy', href: '/docs/first-deploy' }
+          ]
+        }
+      ]
+    }
+  ]
+
+  const theme = ref<ThemeSwitcherValue>('system')
+</script>
+
+<template>
+  <DocLayout
+    :navigation="navigation"
+    :sections="[
+      { label: 'Guides', href: '/docs' },
+      { label: 'Reference', href: '/docs/reference' }
+    ]"
+    active-id="first-deploy"
+  >
+    <template #actions>
+      <Button
+        label="Console"
+        variant="secondary"
+        size="medium"
+        href="https://console.azion.com"
+      />
+    </template>
+
+    <template #navigation-footer>
+      <ThemeSwitcher
+        v-model="theme"
+        aria-label="Theme"
+      />
+    </template>
+
+    <template #aside>
+      <DocCallToAction
+        title="Ready to build?"
+        label="Deploy your first application for free."
+        :primary-action="{ label: 'Start for free', href: 'https://console.azion.com/signup' }"
+      />
+    </template>
+
+    <div class="layout-boundary">
+      <div class="layout-column-content flex flex-col gap-(--spacing-lg)">
+        <DocPageHeader
+          title="First deploy"
+          description="Deploy a template and see it served from the edge."
+          :breadcrumbs="[
+            { label: 'Get started', href: '/docs/get-started' },
+            { label: 'First deploy' }
+          ]"
+        />
+        <DocProse>
+          <DocHeading
+            anchor="before-you-start"
+            :level="2"
+            >Before you start</DocHeading
+          >
+          <p>You need an Azion account and a GitHub account.</p>
+          <DocHeading
+            anchor="deploy-with-cli"
+            :level="2"
+            >Deploy with Azion CLI</DocHeading
+          >
+          <p>Install the CLI, log in and run the deploy command from your project folder.</p>
+          <DocHeading
+            anchor="next-steps"
+            :level="2"
+            >Next steps</DocHeading
+          >
+          <p>Add a domain and turn on the cache for your static assets.</p>
+        </DocProse>
+      </div>
+    </div>
+  </DocLayout>
+</template>

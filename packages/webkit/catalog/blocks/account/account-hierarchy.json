@@ -1,0 +1,29 @@
+{
+ "variants": [
+  {
+   "name": "Selected",
+   "summary": "One workspace selected: the bulk actions are enabled, Clear selection shows, and the details panel lists its role bindings and labels.",
+   "file": "blocks/account/account-hierarchy/variants/selected.vue"
+  },
+  {
+   "name": "Empty",
+   "summary": "No resource yet: a flush EmptyState with Create workspace replaces the table; the toolbar stays with the bulk actions disabled.",
+   "file": "blocks/account/account-hierarchy/variants/empty.vue"
+  },
+  {
+   "name": "Loading",
+   "summary": "The first load: the table's loading rows under its headers.",
+   "file": "blocks/account/account-hierarchy/variants/loading.vue"
+  },
+  {
+   "name": "Error",
+   "summary": "The hierarchy did not load: a danger Alert with Retry replaces the table; Retry loads it.",
+   "file": "blocks/account/account-hierarchy/variants/error.vue"
+  }
+ ],
+ "sfcFile": "blocks/account/account-hierarchy/account-hierarchy.vue",
+ "guidelinesFile": "blocks/account/account-hierarchy/guidelines.md",
+ "fileSources": {
+  "sample.ts": "blocks/account/account-hierarchy/sample.ts"
+ }
+}

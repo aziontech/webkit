@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "`Field` + `Field.Label` + `Input` + `Field.Description`. The label targets the input and the input is described by the description — no ids to wire.",
+   "file": "examples/field/default.vue"
+  },
+  {
+   "name": "DescriptionAndError",
+   "summary": "State lives on the `Field`: `required` shows the label's Required marker and sets `required` on the input; `invalid` sets `aria-invalid`. `Field.Error` is announced through `aria-describedby` next to the description.",
+   "file": "examples/field/description-and-error.vue"
+  },
+  {
+   "name": "Horizontal",
+   "summary": "`orientation=\"horizontal\"` puts a `Checkbox` or `Switch` beside a `Field.Content` that stacks its label and description.",
+   "file": "examples/field/horizontal.vue"
+  }
+ ]
+}

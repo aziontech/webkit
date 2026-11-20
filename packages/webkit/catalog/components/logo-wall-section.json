@@ -1,0 +1,22 @@
+{
+ "purpose": "The customers band: a section title over a framed logo wall of linked client marks with one signed quote in its aside, closed by a call to action. It is a page section — the site places it from a `{ _id: 'logo-wall-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `registration-frame`, `logo-wall`, `quote` and `button`.",
+ "useWhen": [
+  "Use LogoWallSection for customer logos plus one featured quote.",
+  "To prove adoption with marks and let one customer speak, early on a home or solution page."
+ ],
+ "avoidWhen": [
+  "For several quotes in turn → use `client-quotes-section`.",
+  "For marks with photos and stories in a mosaic → use `client-mosaic-section`."
+ ],
+ "related": [
+  "`logo-wall` — the wall the marks are laid in, with the quote in its aside.",
+  "`third-party-logo` — draws every mark (the wall's and the quote's) right on both themes."
+ ],
+ "bestPractices": [
+  "Eight or nine logos fill the rectangle wall beside the aside.",
+  "Pass client registry entries (`@aziontech/webkit/assets/client-registry`) as they stand: each carries `name`, `logo` and either `logoLight` (a light-theme drawing) or `artwork` (which theme a single file must be inverted on), and every mark renders through `ThirdPartyLogo`.",
+  "Without a registry entry, set `logoTreatment` per mark: `monochrome` for a mark drawn in one ink that must follow the theme, `knockout` for a black mark on a coloured fill, `color` for a colour mark, and `artwork: 'light'` for a reversed mark that must flip on the light theme; give a `logoLight` file instead when the light theme needs a different drawing.",
+  "Give the quote's company mark a `logoLight` (or an `artwork`) the same way, so it stays legible on both themes.",
+  "Keep to one or two actions under the quote: the primary (`secondary` variant) and an optional outlined `secondaryAction`."
+ ]
+}

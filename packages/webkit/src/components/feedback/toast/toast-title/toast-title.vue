@@ -11,16 +11,14 @@
   }>()
 
   const attrs = useAttrs()
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'feedback-toast__title'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'toast-title')
 </script>
 
 <template>
   <p
     v-bind="$attrs"
     :data-testid="testId"
-    class="text-label-md text-(--text-default)"
+    class="text-title-sm text-(--text-default)"
   >
     <slot />
   </p>

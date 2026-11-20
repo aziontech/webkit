@@ -9,18 +9,18 @@ const spec: DiagramSpec = {
   nodes: [
     {
       key: 'app',
-      kind: 'app',
+      type: 'app',
       title: 'App'
     },
     {
       key: 'paid',
-      kind: 'pill',
+      type: 'pill',
       title: 'Paid user?',
       active: true
     },
     {
       key: 'gpt',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'OpenAI',
       title: 'GPT-5.5',
       mark: openaiMark,
@@ -33,13 +33,13 @@ const spec: DiagramSpec = {
     },
     {
       key: 'fallback',
-      kind: 'pill',
+      type: 'pill',
       title: 'Fallback',
       active: true
     },
     {
       key: 'claude',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Anthropic',
       title: 'Claude Opus 4.7',
       logo: claudeMark,
@@ -47,19 +47,19 @@ const spec: DiagramSpec = {
     },
     {
       key: 'rps',
-      kind: 'pill',
+      type: 'pill',
       title: 'RPS > 1.5?'
     },
     {
       key: 'kimi',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Moonshot AI',
       title: 'Kimi K2.6',
-      icon: 'pi pi-moon'
+      icon: 'az az-moon'
     },
     {
       key: 'gemma',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Google',
       title: 'Gemma 4 26B',
       logo: googleMark

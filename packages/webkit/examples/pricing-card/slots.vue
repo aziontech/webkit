@@ -1,0 +1,57 @@
+<script setup>
+  import Button from '@aziontech/webkit/button'
+  import PricingCard from '@aziontech/webkit/pricing-card'
+</script>
+
+<template>
+  <PricingCard
+    title="Pro"
+    pricing-details="Billed annually or $25/mo billed monthly."
+    actions-position="middle"
+    variant="contained"
+    show-tag
+    tag-label="Popular"
+    value="20"
+    prefix="$"
+    suffix="/ mon"
+  >
+    <ul class="m-0 flex list-none flex-col gap-2 p-0 text-body-sm text-(--text-default)">
+      <li class="flex items-center gap-2">
+        <i
+          class="az az-check text-(--primary)"
+          aria-hidden="true"
+        />
+        Unlimited rules engine
+      </li>
+      <li class="flex items-center gap-2">
+        <i
+          class="az az-check text-(--primary)"
+          aria-hidden="true"
+        />
+        Global edge deployment
+      </li>
+      <li class="flex items-center gap-2">
+        <i
+          class="az az-check text-(--primary)"
+          aria-hidden="true"
+        />
+        Advanced observability
+      </li>
+      <li class="flex items-center gap-2">
+        <i
+          class="az az-check text-(--primary)"
+          aria-hidden="true"
+        />
+        24/7 support
+      </li>
+    </ul>
+    <template #actions>
+      <Button
+        label="Start with Pro"
+        variant="primary"
+        size="large"
+        class="w-full"
+      />
+    </template>
+  </PricingCard>
+</template>

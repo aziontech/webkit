@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Three sources behind a response, collapsed under `3 sources`; each item has a number, a linked title and the section it comes from.",
+   "file": "examples/sources/default.vue"
+  },
+  {
+   "name": "Open",
+   "summary": "The same list opened by default, for a surface where the reader is expected to check the sources.",
+   "file": "examples/sources/open.vue"
+  }
+ ]
+}

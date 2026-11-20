@@ -1,0 +1,120 @@
+import userEvent from '@testing-library/user-event'
+import { render } from '@testing-library/vue'
+import { describe, expect, it } from 'vitest'
+import { nextTick, ref } from 'vue'
+
+import { expectNoA11yViolations } from '../../../test/axe'
+import ToolCall from './tool-call.vue'
+
+describe('ToolCall', () => {
+  it('renders the fallback data-testid and lets a consumer override it', () => {
+    expect(render(ToolCall, { props: { name: 'list' } }).getByTestId('tool-call')).toBeTruthy()
+    expect(
+      render(ToolCall, { props: { name: 'list' }, attrs: { 'data-testid': 'mine' } }).getByTestId(
+        'mine'
+      )
+    ).toBeTruthy()
+  })
+
+  it.each([
+    ['pending', 'Waiting'],
+    ['streaming', 'Preparing'],
+    ['running', 'Running'],
+    ['success', 'Completed'],
+    ['error', 'Failed'],
+    ['canceled', 'Canceled'],
+    ['denied', 'Denied']
+  ] as const)('shows %s as text in a status region', (status, text) => {
+    const { getByTestId, getByRole } = render(ToolCall, { props: { name: 'purge_urls', status } })
+    expect(getByTestId('tool-call')).toHaveAttribute('data-status', status)
+    expect(getByRole('status')).toHaveTextContent(text)
+  })
+
+  it('tells preparing apart from running in text and busy state', async () => {
+    const { getByRole, getByTestId, rerender } = render(ToolCall, {
+      props: { name: 'create_cache_rule', status: 'streaming' }
+    })
+    expect(getByRole('status')).toHaveTextContent('Preparing')
+    expect(getByTestId('tool-call__status')).toHaveAttribute('aria-busy', 'true')
+    expect(getByTestId('tool-call__status')).toHaveAttribute('data-severity', 'neutral')
+    await rerender({ name: 'create_cache_rule', status: 'running' })
+    expect(getByRole('status')).toHaveTextContent('Running')
+    expect(getByTestId('tool-call__status')).toHaveAttribute('data-severity', 'info')
+    await rerender({ name: 'create_cache_rule', status: 'canceled' })
+    expect(getByRole('status')).toHaveTextContent('Canceled')
+    expect(getByTestId('tool-call__status')).not.toHaveAttribute('aria-busy')
+  })
+
+  it('shows the name as code and the title as text', () => {
+    const { getByText } = render(ToolCall, {
+      props: { name: 'list_workloads', title: 'Listing your workloads' }
+    })
+    expect(getByText('list_workloads').tagName).toBe('CODE')
+    expect(getByText('Listing your workloads')).toBeTruthy()
+  })
+
+  it('is static without details', () => {
+    const { queryByRole, getByTestId } = render(ToolCall, { props: { name: 'list' } })
+    expect(queryByRole('button')).toBeNull()
+    expect(getByTestId('tool-call')).not.toHaveAttribute('data-state')
+  })
+
+  it('expands input and output by keyboard', async () => {
+    const { getByRole, getByTestId, emitted } = render(ToolCall, {
+      props: { name: 'get_settings', status: 'success' },
+      slots: { input: () => '{ "id": 1 }', output: () => '{ "ttl": 60 }' }
+    })
+    const trigger = getByRole('button')
+    expect(trigger).toHaveAttribute('aria-expanded', 'false')
+    expect(getByTestId('tool-call__details')).not.toBeVisible()
+    trigger.focus()
+    await userEvent.keyboard('{Enter}')
+    expect(trigger).toHaveAttribute('aria-expanded', 'true')
+    expect(getByRole('region', { name: 'Input' })).toHaveTextContent('{ "id": 1 }')
+    expect(getByRole('region', { name: 'Output' })).toHaveTextContent('{ "ttl": 60 }')
+    expect(emitted('update:open')?.[0]).toEqual([true])
+  })
+
+  it('follows a bound v-model:open', async () => {
+    const { getByRole, getByTestId, emitted, rerender } = render(ToolCall, {
+      props: { name: 'get_settings', open: true, 'onUpdate:open': () => undefined },
+      slots: { input: () => '{ "id": 1 }' }
+    })
+    expect(getByTestId('tool-call__details')).toBeVisible()
+    await userEvent.click(getByRole('button'))
+    expect(emitted('update:open')?.[0]).toEqual([false])
+    expect(getByTestId('tool-call__details')).toBeVisible()
+    await rerender({ name: 'get_settings', open: false, 'onUpdate:open': () => undefined })
+    expect(getByTestId('tool-call__details')).not.toBeVisible()
+  })
+
+  it('has no axe violations', async () => {
+    const { container } = render(ToolCall, {
+      props: { name: 'get_settings', status: 'error', defaultOpen: true },
+      slots: { output: () => 'metrics_unavailable' }
+    })
+    await expectNoA11yViolations(container)
+  })
+
+  describe('slot presence', () => {
+    it('follows a v-if slot that appears and disappears after mount', async () => {
+      const shown = ref(false)
+      const { queryByTestId } = render({
+        components: { ToolCall },
+        setup: () => ({ shown }),
+        template: `<ToolCall name="search"><template v-if="shown" #input><span data-testid="probe">Slotted</span></template></ToolCall>`
+      })
+      expect(queryByTestId('tool-call__trigger')).toBeNull()
+
+      shown.value = true
+      await nextTick()
+      expect(queryByTestId('tool-call__trigger')).not.toBeNull()
+      expect(queryByTestId('probe')).not.toBeNull()
+
+      shown.value = false
+      await nextTick()
+      expect(queryByTestId('tool-call__trigger')).toBeNull()
+      expect(queryByTestId('probe')).toBeNull()
+    })
+  })
+})

@@ -1,0 +1,287 @@
+<script setup lang="ts">
+  import {
+    type ComponentPublicInstance,
+    computed,
+    type FunctionalComponent,
+    inject,
+    onMounted,
+    shallowRef,
+    useAttrs,
+    watch
+  } from 'vue'
+
+  import { logicalArrowKey, useDirection } from '../../../../composables/use-direction'
+  import { useTranslate } from '../../../../composables/use-translate'
+  import * as en from '../../../../locales/en'
+  import { cn } from '../../../../utils/cn'
+  import { safeHref } from '../../../../utils/safe-href'
+  import IconButton from '../../../action/icon-button/icon-button.vue'
+  import { SidebarInjectionKey } from '../../../layout/sidebar/injection-key'
+  import { useSidebarMenuSubContext } from '../composables/use-sidebar-menu-sub-context'
+  import type { SidebarMenuSubType } from '../injection-key'
+
+  defineOptions({
+    name: 'SidebarMenuSubTrigger',
+    inheritAttrs: false
+  })
+
+  export interface SidebarMenuSubTriggerProps {
+    /** Visible row text. */
+    label?: string
+    /** Whether the children expand in place or replace the menu. */
+    type?: SidebarMenuSubType
+    /** Leading glyph class. Only a drill row takes one; an inline row heads the rows beneath it and leaves the column to them. */
+    icon?: string
+    /** Destination of the row itself. Set it and the row splits into a link plus an arrow that reveals the children; leave it empty and the whole row reveals them. */
+    href?: string
+    /** Blocks toggling and pushing. */
+    disabled?: boolean
+  }
+
+  const props = withDefaults(defineProps<SidebarMenuSubTriggerProps>(), {
+    label: '',
+    type: 'inline',
+    icon: '',
+    href: '',
+    disabled: false
+  })
+
+  const emit = defineEmits<{
+    click: [event: globalThis.MouseEvent, item: { label: string; href: string }]
+  }>()
+
+  defineSlots<{
+    default(): unknown
+  }>()
+
+  const sub = useSidebarMenuSubContext()
+  const sidebar = inject(SidebarInjectionKey, null)
+  const attrs = useAttrs()
+  const dir = useDirection()
+  const { t } = useTranslate({ sidebarMenu: en.sidebarMenu })
+  const labelEl = shallowRef<globalThis.HTMLElement | null>(null)
+  const arrowEl = shallowRef<ComponentPublicInstance | null>(null)
+
+  const testId = computed(
+    () => (attrs['data-testid'] as string | undefined) ?? 'sidebar-menu-sub-trigger'
+  )
+
+  const isInline = computed(() => props.type === 'inline')
+
+  const hasReference = computed(() => props.href.length > 0)
+
+  const showIcon = computed(() => Boolean(props.icon) && !isInline.value)
+
+  const rail = computed(() => sidebar?.rail === true)
+
+  const Passthrough: FunctionalComponent = (_, { slots: inner }) => inner['default']?.()
+
+  const tip = computed(() =>
+    rail.value && sidebar?.tooltip
+      ? {
+          is: sidebar.tooltip,
+          props: { content: props.label, side: 'end' }
+        }
+      : { is: Passthrough, props: {} }
+  )
+
+  const arrowAriaLabel = computed(() => {
+    const name = props.label
+    if (!isInline.value)
+      return name ? t('sidebarMenu.openNamed', { label: name }) : t('sidebarMenu.open')
+    if (sub.open.value)
+      return name ? t('sidebarMenu.collapseNamed', { label: name }) : t('sidebarMenu.collapse')
+    return name ? t('sidebarMenu.expandNamed', { label: name }) : t('sidebarMenu.expand')
+  })
+
+  const arrowIcon = computed(() => (isInline.value ? 'az az-chevron-down' : 'az az-chevron-right'))
+
+  const ROW_CLASS =
+    'group/row relative flex h-8 pointer-coarse:min-h-11 w-full shrink-0 items-center'
+
+  const CONTROL_CLASS =
+    'group relative flex h-8 pointer-coarse:min-h-11 shrink-0 items-center gap-(--spacing-xs) ' +
+    'rounded-(--shape-control) border-y border-transparent bg-clip-padding forced-colors:border-y-0 pe-(--spacing-xs) py-(--spacing-2xs) text-start ' +
+    'text-(--text-default) ' +
+    "before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-(--bg-hover) before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance " +
+    "after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:bg-(--bg-active) after:opacity-0 after:content-[''] after:transition-opacity after:duration-fast-02 after:ease-productive-entrance " +
+    'hover:before:opacity-100 group-hover/row:before:opacity-100 active:after:opacity-100 ' +
+    'motion-reduce:before:transition-none motion-reduce:after:transition-none ' +
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--sidebar-menu-ring-offset,var(--bg-canvas))] ' +
+    'data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled) data-[disabled]:before:hidden data-[disabled]:after:hidden'
+
+  const ARROW_CLASS =
+    'absolute! end-(--spacing-2xs) top-1/2 -translate-y-1/2 ' +
+    'focus-visible:ring-offset-1! focus-visible:ring-offset-[var(--sidebar-menu-ring-offset,var(--bg-canvas))]!'
+
+  const ARROW_DISABLED_CLASS = 'bg-transparent!'
+
+  const MOTION_CLASS =
+    'transition-transform duration-fast-02 ease-productive-entrance ' +
+    'motion-reduce:transition-none motion-reduce:transform-none'
+
+  const arrowIconClass = computed(() =>
+    cn(
+      MOTION_CLASS,
+      props.disabled ? 'text-(--text-disabled)' : 'text-(--text-muted)',
+      isInline.value && sub.open.value && 'rotate-180'
+    )
+  )
+
+  const arrowClass = computed(() => cn(ARROW_CLASS, props.disabled && ARROW_DISABLED_CLASS))
+
+  const ICON_BOX_CLASS = 'flex size-8 shrink-0 items-center justify-center overflow-hidden'
+
+  const iconClass = computed(() =>
+    cn(
+      props.icon,
+      'size-4 shrink-0 leading-none text-[length:inherit]',
+      props.disabled
+        ? 'text-(--text-disabled)'
+        : 'text-(--text-muted) group-hover:text-(--text-default) group-focus-visible:text-(--text-default)'
+    )
+  )
+
+  const contentColumnClass = computed(() =>
+    showIcon.value ? 'ps-(--spacing-2xs)' : 'ps-(--spacing-sm)'
+  )
+
+  const rowClass = computed(() =>
+    cn(
+      ROW_CLASS,
+      rail.value && 'justify-center',
+      rail.value && !showIcon.value && 'hidden',
+      attrs.class as string | undefined
+    )
+  )
+
+  const labelClass = computed(() =>
+    rail.value
+      ? cn(CONTROL_CLASS, 'size-8 justify-center p-0')
+      : cn(
+          CONTROL_CLASS,
+          'w-full min-w-0 pe-[calc(var(--spacing-2xs)*3+1.75rem)]',
+          contentColumnClass.value
+        )
+  )
+
+  const labelTextClass = computed(() =>
+    rail.value ? 'sr-only' : 'min-w-0 flex-1 truncate text-start text-label-md'
+  )
+
+  const register = () => {
+    const target = hasReference.value
+      ? ((arrowEl.value?.$el as globalThis.HTMLElement | null) ?? null)
+      : labelEl.value
+    sub.registerTrigger(props.type, props.label, target)
+  }
+
+  onMounted(register)
+  watch([() => props.type, () => props.label, hasReference], register)
+
+  const activate = (event: globalThis.MouseEvent) => {
+    if (props.disabled) return
+    emit('click', event, { label: props.label, href: props.href })
+  }
+
+  const reveal = () => {
+    if (props.disabled) return
+    if (rail.value) sidebar?.expand?.()
+    if (isInline.value) sub.toggle()
+    else sub.push()
+  }
+
+  const onKeydown = (event: globalThis.KeyboardEvent) => {
+    if (props.disabled) return
+
+    const key = logicalArrowKey(event.key, dir.value)
+
+    if (key === 'ArrowRight') {
+      if (!isInline.value) {
+        event.preventDefault()
+        sub.push()
+        return
+      }
+      if (!sub.open.value) {
+        event.preventDefault()
+        sub.setOpen(true)
+      }
+      return
+    }
+
+    if (key === 'ArrowLeft' && isInline.value && sub.open.value) {
+      event.preventDefault()
+      event.stopPropagation()
+      sub.setOpen(false)
+    }
+  }
+</script>
+
+<template>
+  <div
+    v-bind="$attrs"
+    :data-testid="testId"
+    :data-type="type"
+    :data-state="sub.open.value ? 'open' : 'closed'"
+    :data-disabled="disabled ? '' : undefined"
+    :class="rowClass"
+  >
+    <component
+      :is="tip.is"
+      v-bind="tip.props"
+    >
+      <component
+        :is="hasReference ? 'a' : 'button'"
+        ref="labelEl"
+        :id="sub.triggerId"
+        :type="hasReference ? undefined : 'button'"
+        :href="hasReference && !disabled ? (safeHref(href) ?? undefined) : undefined"
+        :disabled="hasReference ? undefined : disabled || undefined"
+        :tabindex="disabled && hasReference ? -1 : undefined"
+        :aria-expanded="!hasReference && isInline ? sub.open.value : undefined"
+        :aria-controls="!hasReference && isInline ? sub.contentId : undefined"
+        :aria-disabled="disabled || undefined"
+        :data-testid="`${testId}__${hasReference ? 'reference' : 'control'}`"
+        :data-disabled="disabled ? '' : undefined"
+        :class="labelClass"
+        @click="hasReference ? activate($event) : reveal()"
+        @keydown="onKeydown"
+      >
+        <span
+          v-if="showIcon"
+          :class="ICON_BOX_CLASS"
+          aria-hidden="true"
+          :data-testid="`${testId}__icon`"
+        >
+          <i
+            :class="iconClass"
+            aria-hidden="true"
+          />
+        </span>
+        <span
+          :class="labelTextClass"
+          :data-testid="`${testId}__label`"
+        >
+          <slot>{{ label }}</slot>
+        </span>
+      </component>
+    </component>
+    <IconButton
+      v-if="!rail"
+      ref="arrowEl"
+      :icon="arrowIcon"
+      variant="ghost"
+      size="small"
+      :ariaLabel="arrowAriaLabel"
+      :aria-expanded="hasReference && isInline ? sub.open.value : undefined"
+      :aria-controls="hasReference && isInline ? sub.contentId : undefined"
+      :aria-hidden="hasReference ? undefined : 'true'"
+      :tabindex="hasReference ? undefined : -1"
+      :disabled="disabled"
+      :class="arrowClass"
+      :icon-class="arrowIconClass"
+      :data-testid="`${testId}__chevron`"
+      @click="reveal"
+    />
+  </div>
+</template>

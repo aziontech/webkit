@@ -66,6 +66,19 @@ export const primitives = {
     900: '#692402',
     950: '#401602'
   },
+  indigo: {
+    50: '#EEF2FF',
+    100: '#E0E7FF',
+    200: '#C7D2FE',
+    300: '#A5B4FC',
+    400: '#818CF8',
+    500: '#6366F1',
+    600: '#4F46E5',
+    700: '#4338CA',
+    800: '#3730A3',
+    900: '#312E81',
+    950: '#1E1B4B'
+  },
   slate: {
     50: '#F8F7FC',
     100: '#F0EFF8',
@@ -119,30 +132,24 @@ export const primitives = {
     900: '#2E0606',
     950: '#170303'
   },
-  brand,
-  surface: {
-    0: '#FFFFFF',
-    50: '#FAFAFA',
-    100: '#F5F5F5',
-    200: '#E5E5E5',
-    300: '#B2B2B2',
-    400: '#999999',
-    500: '#808080',
-    600: '#666666',
-    700: '#4D4D4D',
-    800: '#1A1A1A',
-    900: '#141414',
-    950: '#0A0A0A'
+  chart: {
+    blue: { dark: '#2F86FF' },
+    teal: { light: '#0D9488', dark: '#14A08C' },
+    violet: { light: '#6D28D9', dark: '#8B5CF6' },
+    orange: { light: '#E8590C', dark: '#E65A1E' },
+    cyan: { light: '#0891B2', dark: '#0EA5C6' },
+    lime: { light: '#4D7C0F', dark: '#6AA51A' },
+    fuchsia: { light: '#C026D3', dark: '#D946EF' },
+    'diverging-orange-2': { light: '#C96746', dark: '#CD8157' },
+    'diverging-orange-3': { light: '#B57D6A', dark: '#9D725C' },
+    'diverging-blue-2': { light: '#4377C3', dark: '#4D89D2' },
+    'diverging-blue-3': { light: '#6E8CB8', dark: '#5D7EA7' }
   },
+  brand,
   alpha
-}
-
-export const surfacePrimitives = {
-  surface: primitives.surface
 }
 
 export default {
   primitives,
-  surfacePrimitives,
   brandPrimitives
 }

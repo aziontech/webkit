@@ -5,7 +5,7 @@ import figma from 'figma'
 
 const instance = figma.selectedInstance
 
-const kind = instance.getEnum('kind', {
+const variant = instance.getEnum('kind', {
   inline: 'inline',
   default: 'default',
   outline: 'outline',
@@ -15,7 +15,7 @@ const size = instance.getEnum('size', {
   medium: 'medium',
   small: 'small'
 })
-const asChild = instance.getEnum('asChild', {
+const clickable = instance.getEnum('asChild', {
   false: false,
   true: true
 })
@@ -31,10 +31,10 @@ const hasDescription = descriptionNode.type === 'TEXT'
 const description = hasDescription ? descriptionNode.textContent : ''
 
 export default {
-  example: figma.code`<Item${kind === 'default' ? '' : figma.code` kind="${kind}"`}${size === 'medium' ? '' : figma.code` size="${size}"`}${asChild ? figma.code` as-child` : ''}>${
+  example: figma.code`<Item${variant === 'default' ? '' : figma.code` variant="${variant}"`}${size === 'medium' ? '' : figma.code` size="${size}"`}${clickable ? figma.code` clickable` : ''}>${
     showLeft
       ? figma.code`
-  <Item.Media kind="icon">
+  <Item.Media type="icon">
     ${media}
   </Item.Media>`
       : ''

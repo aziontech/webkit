@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Five generic options with the first selected.",
+   "file": "examples/toggle-group/default.vue"
+  },
+  {
+   "name": "WithDisabledOption",
+   "summary": "Four options with one disabled segment showing the lock affordance.",
+   "file": "examples/toggle-group/with-disabled-option.vue"
+  },
+  {
+   "name": "Sizes",
+   "summary": "The three steps: 28px, 32px and 40px tall. Pick the one the row it sits in already uses — a group 6px off its neighbour reads as a rendering mistake.",
+   "file": "examples/toggle-group/sizes.vue"
+  }
+ ]
+}

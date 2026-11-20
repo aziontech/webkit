@@ -1,19 +1,19 @@
 ---
 name: doc-card-group
-category: documentation
+category: docs
 structure: monolithic
 status: implemented
-spec_version: 1
-checksum: 2e73c47f340df953696fcab561e1fc6d75c9c73ae0ab6cf33e1fbd025e562588
+spec_version: 5
+checksum: 24c586889597ae0049fa7c2e42cc500cfd4a12b28309f3cf202e6454f3031bff
 created: 2026-08-22
-last_updated: 2026-09-25
+last_updated: 2026-11-17
 ---
 
 # DocCardGroup — Component Spec
 
 ## Purpose
 
-The framed, responsive grid a `DocCard` set sits in. The group is the frame, not each card: `FrameBox` draws the perimeter and the four corner registration marks once around the whole set, the grid keeps 1px gaps, and every cell paints a 1px ring into them — so two neighbours share one hairline, an incomplete last row stays simply empty, and the set reads as one object the reader scans across rather than as loose tiles. `cols` names the widest column count; the grid always steps down toward one column on a phone unless a set of tiny cells opts into two with `mobileCols`.
+The framed, responsive grid a `DocCard` set sits in. The group is the frame, not each card: `RegistrationFrame` draws the perimeter and the four corner registration marks once around the whole set, the grid keeps 1px gaps, and every cell paints a 1px ring into them — so two neighbours share one hairline, an incomplete last row stays simply empty, and the set reads as one object the reader scans across rather than as loose tiles. `columns` names the widest column count; the grid always steps down toward one column on a phone unless a set of tiny cells opts into two with `mobileColumns`.
 
 ## When to use
 
@@ -28,14 +28,15 @@ The framed, responsive grid a `DocCard` set sits in. The group is the frame, not
 ## Related
 
 - `DocCard` — the cell this frames; the group draws the perimeter and the cells paint the internal rules.
-- `FrameBox` — the layout primitive that draws the frame and the corner registration marks.
+- `RegistrationFrame` — the layout primitive that draws the frame and the corner registration marks.
 - `DocProse` — the contract around it; `data-doc-block` puts the group on the block rung of the prose ladder.
 
 ## Best practices
 
-- Pick `cols` for the widest screen and let the breakpoints do the rest; do not wrap the group in another grid.
-- Leave `mobileCols` at 1 unless every cell is a mark plus one word — a card with copy needs the whole phone width.
+- Pick `columns` for the widest screen and let the breakpoints do the rest; do not wrap the group in another grid.
+- Leave `mobileColumns` at 1 unless every cell is a mark plus one word — a card with copy needs the whole phone width.
 - Let an incomplete last row be empty; do not stretch the last card to fill it.
+- Inside a `module` with `padded` off, place the group directly in the body: the header's bottom rule and the column's side rules become the group's top and sides, the group drops its own top and side rules and top corner marks, and the cells' rings land on those rules. The group's bottom rule closes the module, so the module after it passes `divided` as `false` — every seam stays one hairline.
 
 ## Usage
 
@@ -46,17 +47,17 @@ The framed, responsive grid a `DocCard` set sits in. The group is the frame, not
 </script>
 
 <template>
-  <DocCardGroup :cols="2">
+  <DocCardGroup :columns="2">
     <DocCard
       title="Edge Application"
-      icon="pi pi-server"
+      icon="az az-server"
       href="/docs/edge-application"
     >
       Serve and cache your application at the edge, close to the people using it.
     </DocCard>
     <DocCard
       title="Edge Firewall"
-      icon="pi pi-shield"
+      icon="az az-shield"
       href="/docs/edge-firewall"
     >
       Filter and secure traffic before it reaches your origin.
@@ -67,10 +68,10 @@ The framed, responsive grid a `DocCard` set sits in. The group is the frame, not
 
 ## Props
 
-| Prop         | Type               | Default | Required | JSDoc                                                                         |
-| ------------ | ------------------ | ------- | -------- | ----------------------------------------------------------------------------- |
-| `cols`       | `1 \| 2 \| 3 \| 4` | `2`     | false    | Column count at the large breakpoint.                                         |
-| `mobileCols` | `1 \| 2`           | `1`     | false    | Column count on a phone. Two only pays when the cells are a mark plus a word. |
+| Prop            | Type               | Default | Required | JSDoc                                                                                                        |
+| --------------- | ------------------ | ------- | -------- | ------------------------------------------------------------------------------------------------------------ |
+| `columns`       | `1 \| 2 \| 3 \| 4` | `2`     | false    | Column count at the large breakpoint. A Markdown `CardGroup cols` attribute maps here (through DocMarkdown). |
+| `mobileColumns` | `1 \| 2`           | `1`     | false    | Column count on a phone. Two only pays when the cells are a mark plus a word.                                |
 
 ## Events
 
@@ -85,7 +86,7 @@ The framed, responsive grid a `DocCard` set sits in. The group is the frame, not
 ## States
 
 - Visual states: `default` (the component is not interactive and holds no state)
-- `data-cols` and `data-mobile-cols` mirror the props; Tailwind data-variants switch the grid's column count on them at the `sm` and `lg` breakpoints
+- `data-columns` and `data-mobile-columns` mirror `columns` and `mobileColumns`; Tailwind data-variants switch the grid's column count on them at the `sm` and `lg` breakpoints
 - `data-doc-block` is the `DocProse` contract (the group takes the block rung of the ladder)
 
 ## Motion & Animations
@@ -112,10 +113,10 @@ _none_
 - Contrast: the frame and the hairline rules are decorative; every readable surface belongs to the cells, which own their contrast.
 - Touch target: not applicable; the component itself is not interactive.
 
-## Stories (Storybook)
+## Examples
 
 - Default — two linked cards on the default two-column grid.
-- Columns — composite story at `cols` 3, this component's single variant axis (the column count), shown at an odd count so the incomplete-last-row behaviour is visible. It is the Types story under a name that matches the axis, justified here because the axis is numeric rather than a `kind`.
+- Columns — composite story at `columns` 3, this component's single variant axis (the column count), shown at an odd count so the incomplete-last-row behaviour is visible. It is the Types story under a name that matches the axis, justified here because the axis is numeric rather than a `kind`.
 
 ## Constraints — DO NOT
 
@@ -130,11 +131,9 @@ _none_
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
-- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
-- Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
+- Do not edit `.claude/docs/DESIGN.md` or `.claude/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.

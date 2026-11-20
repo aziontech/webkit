@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Default small currency with prefix and billing-period suffix.",
+   "file": "examples/currency-amount/default.vue"
+  },
+  {
+   "name": "Sizes",
+   "summary": "The three steps of the ladder. `large` bottom-aligns the suffix against the figure; the smaller two centre it.",
+   "file": "examples/currency-amount/sizes.vue"
+  }
+ ]
+}

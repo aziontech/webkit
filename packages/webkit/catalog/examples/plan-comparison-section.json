@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Band links",
+   "summary": "A plan `description` under each name says who the plan is for, and a band `action` closes a product band with its own rates page.",
+   "file": "examples/plan-comparison-section/band-links.vue"
+  },
+  {
+   "name": "Hints and marks",
+   "summary": "Rows with a `hint` open a popover titled by the label; included and not-included cells draw their marks with a tooltip of the label. With no closing link, the last row draws the closing rule. Below 1024px the plan picker carries a search field.",
+   "file": "examples/plan-comparison-section/hints-and-marks.vue"
+  },
+  {
+   "name": "Support tiers",
+   "summary": "The same matrix on the Support page: Developer, Business, Enterprise and Mission-Critical as the columns, across the Support and the Professional Services bands, each closing on its pricing link. Narrow the canvas below 1024px to see the picker, which opens on Enterprise.",
+   "file": "examples/plan-comparison-section/support-tiers.vue"
+  }
+ ]
+}

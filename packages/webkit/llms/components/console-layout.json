@@ -1,0 +1,209 @@
+{
+ "name": "console-layout",
+ "binding": "ConsoleLayout",
+ "import": "@aziontech/webkit/console-layout",
+ "treeShakeableImport": "@aziontech/webkit/console-layout-root",
+ "category": "layout",
+ "surface": "app",
+ "structure": "composition",
+ "compoundRoot": true,
+ "subcomponents": [
+  "@aziontech/webkit/console-layout-breadcrumb"
+ ],
+ "purpose": "The console chrome, composed once in the app: `AppLayout` with the navigation rail (`Sidebar` + `SidebarMenu`, the brand on top and the account at the foot), the global header (breadcrumbs, `SearchTrigger`, the app's own actions and the account avatar) and the `Command` search palette wired to the trigger and to ⌘K / Ctrl K. The navigation is data (`navigation`, each row with an `href` that is followed with the app's router when it is an in-app path), the active row follows the current route, and the page body is the default slot inside the layout's `<main>`. A page opens the palette with `useConsoleLayout().openSearch()`, sets its own trail with `ConsoleLayout.Breadcrumb`, and fills a fixed-height main with `data-layout-fill` on its root. Platform blocks are only page bodies rendered through this slot; they never carry the chrome themselves.",
+ "setup": null,
+ "useWhen": [
+  "Use ConsoleLayout once at the app root of the Azion console; every page is its body.",
+  "Every signed-in console page: put one `ConsoleLayout` in the app's root (around `RouterView`) and render each page block as its default slot.",
+  "A product area that needs the console navigation, breadcrumbs, the ⌘K palette and the account menu without hand-composing `AppLayout`, `Sidebar`, `SidebarMenu`, `AppHeader`, `SearchTrigger` and `Command`."
+ ],
+ "avoidWhen": [
+  "A focused flow with no navigation rail (a creation wizard, sign-in) → render the page on its own or with the flow's own header.",
+  "Public marketing pages → `SiteLayout`. Documentation → `DocLayout`.",
+  "When the page needs the split panel → compose `AppLayout` directly; `ConsoleLayout` covers the navigation, header, notifications, tools and content regions."
+ ],
+ "related": [
+  "`AppLayout` — the frame this layout fills; it owns the compact drawers and the scrolling content region.",
+  "`Sidebar`, `SidebarMenu` — the rail and the data-driven navigation tree (`navigation` is mapped onto `SidebarMenu` groups).",
+  "`SearchTrigger`, `Command` — the header search and the palette it opens; the palette lists every navigation page.",
+  "`Breadcrumb` — the header trail on wide layouts (`breadcrumbs`); while compact, only a page's control crumbs.",
+  "`shell/shell-console` — the block that shows this layout with sample console navigation."
+ ],
+ "bestPractices": [
+  "Compose the layout once, in the app's root, around `RouterView`; each route renders only its page body. Never copy the chrome into a page.",
+  "Give every navigation row an `id` and an `href`: an in-app path (`/workloads`) is followed with the app's router when one is installed (a named route becomes a path through `router.resolve(...).href`), an external URL loads normally, and a row with no `href` is left to your `navigate` handler. Never `to`, `path` or `route` on a row (lint `webkit/prefer-href-in-menu-node`). Leave `activeId` empty so the active row follows the route; set it only for a page whose route matches no row.",
+  "Pass a static trail through `breadcrumbs` (derive it from the route meta); leave it empty on first-level pages.",
+  "A page that owns its trail (a loaded name, a control crumb) renders `ConsoleLayout.Breadcrumb`: `items` are the crumbs, the default slot the trailing controls (a `Select` with `variant=\"ghost\"`, `size=\"small\"`, an `aria-label`, no `w-full`). It replaces the layout's trail while the page is mounted and renders nothing in place. While compact the crumbs are hidden, but the controls stay in the header in place of the brand, so a phone user always sees and can switch the environment.",
+  "Put the app's own header actions (`Create`, `Agent`) in the `actions` slot and render them icon-only while `compact`.",
+  "Put the account menu groups (`DropdownMenu.Group`) in the `account-menu` slot; the layout renders the avatar and the trigger.",
+  "Put an account switcher in `sidebar-header` (full width under the wordmark, the design sample's rail) and, below the compact breakpoint, in `header-leading` while `compact`; page-level flash messages go in `notifications`, and help or the notifications list in `tools` (toggled from a bell in `actions` with `toggleTools`).",
+  "A page's control crumb is its `ConsoleLayout.Breadcrumb`, never `App.vue`'s `breadcrumbs` slot.",
+  "A workspace page (editor, pinned panes) puts `data-layout-fill` on its root: the `<main>` becomes a fixed-height, non-scrolling region the root fills. Never size a body with `100dvh` or `calc(100dvh - var(--layout-header-height))` (lint `webkit/no-viewport-height-calc`, also run by the authoring ratchet over blocks and examples).",
+  "Bind `v-model:navigation-open` when the rail's state must survive a reload or be driven from elsewhere (a `Collapse sidebar` / `Expand sidebar` command in the `search` slot); persist it in the app. The rail's own collapse control and the edge affordance keep working either way.",
+  "Open the palette from inside a page with `useConsoleLayout().openSearch()` (imported from `@aziontech/webkit/use-console-layout`); never mount a second `Command`. `useConsoleLayout()` throws outside a `ConsoleLayout`, so a misplaced call fails loudly.",
+  "A page body that also renders on its own (a block preview, a docs example, a test) calls `useConsoleLayout({ optional: true })`, which returns `null` outside a layout, and guards the call (`layout?.openSearch()`). Never wrap `useConsoleLayout()` in `try` / `catch`.",
+  "The page entrance (`animate-page-enter`) plays on every route path change: the `<main>` is keyed on the path, so the page body remounts when the path changes and is kept when only the query or the hash changes. Keep state that must survive a path change (a list filter, a draft) in the route query or in the app's store, not in the page body; a `KeepAlive` belongs inside a page body (tabbed views), not around `RouterView`.",
+  "The page body renders no `<main>` of its own and no `AppLayout`: the layout owns the landmark. Frame the body with `layout-boundary` + `layout-column` for list and form pages, or flush (`PageTabs` first) for detail pages.",
+  "A destination appears once per screen (rule `webkit-navigation-levels`): never render a `SidebarMenu` in the page body: page navigation lives in the rail and a page has only its `PageTabs`. The rail holds two levels at most: a product with 3 or fewer resources lists them on level 1, a product with more is a drill row whose level lists them, and no drill level nests another. In development builds the layout scans the `SidebarMenu`s in its `<main>` after mount, on each route change and on page mutations, and when a row `href` has the same path (query and hash ignored) as a `navigation` row on screen (the top level, its inline children and the open drill level; a closed drill level is not on screen), it calls `console.warn` once per route with both labels and the route. Production builds drop the check (`import.meta.env.DEV`)."
+ ],
+ "props": [
+  {
+   "name": "navigation",
+   "type": "ConsoleLayoutNavGroup[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The navigation tree: groups of rows, each `{ id, label, icon?, href?, tagValue?, disabled?, kind?, children?, groups? }`; an in-app `href` is followed with the app's router."
+  },
+  {
+   "name": "activeId",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Id of the current row. Empty matches the current route against each row's `href`."
+  },
+  {
+   "name": "breadcrumbs",
+   "type": "BreadcrumbItemData[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The trail shown in the header on wide layouts (hidden while compact); each is `{ label, href? }` and the last one is the current page."
+  },
+  {
+   "name": "home",
+   "type": "string",
+   "default": "'/'",
+   "required": "false",
+   "doc": "Where the brand mark links."
+  },
+  {
+   "name": "account",
+   "type": "ConsoleLayoutAccount",
+   "default": "undefined",
+   "required": "false",
+   "doc": "The signed-in account, `{ name, email?, src? }`, shown at the foot of the rail and as the header avatar; nothing is rendered when absent."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the navigation landmark. Empty uses the locale catalog (`Main navigation`)."
+  },
+  {
+   "name": "searchPlaceholder",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Placeholder of the palette's input. Empty uses the locale catalog (`Search pages and commands`)."
+  },
+  {
+   "name": "toolsLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Title of the tools region (help, notifications). Empty uses `AppLayout`'s catalog (`Help`)."
+  },
+  {
+   "name": "searchOpen",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Two-way value (`v-model:searchOpen`)."
+  },
+  {
+   "name": "toolsOpen",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Two-way value (`v-model:toolsOpen`)."
+  },
+  {
+   "name": "navigationOpen",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Two-way value (`v-model:navigationOpen`)."
+  }
+ ],
+ "events": [
+  {
+   "name": "navigate",
+   "payload": "(event: MouseEvent | KeyboardEvent, item: ConsoleLayoutNavItem)",
+   "notes": "Fired when a navigation row or a palette page is chosen; the layout then follows its `href` (an in-app path with the app's router). A row without `href` is left to this handler. Event first."
+  },
+  {
+   "name": "search-select",
+   "payload": "(event: MouseEvent | KeyboardEvent, value: string | number)",
+   "notes": "Fired when a palette item from the `search` slot is chosen; `value` is that item's value. Event first."
+  },
+  {
+   "name": "account-select",
+   "payload": "(event: MouseEvent | KeyboardEvent, value: string | number)",
+   "notes": "Fired when an option of the `account-menu` slot is chosen, by click or by keyboard (`Enter` / `Space`), from the rail footer or the header avatar; `value` is the option's `value`. Event first."
+  }
+ ],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "The page body, rendered inside the layout's `<main>`; a body whose root carries `data-layout-fill` fills a fixed-height, non-scrolling main."
+  },
+  {
+   "name": "actions",
+   "scope": "{ compact: boolean, toggleTools: () => void }",
+   "notes": "The app's header actions, between the search trigger and the avatar; render them icon-only while `compact`; `toggleTools` opens and closes the tools region (a notifications bell)."
+  },
+  {
+   "name": "header-leading",
+   "scope": "{ compact: boolean }",
+   "notes": "Content at the start of the header, before the breadcrumbs (an account or organization switcher)."
+  },
+  {
+   "name": "sidebar-header",
+   "scope": "{ compact: boolean }",
+   "notes": "Content in the rail under the wordmark, above the navigation (a full-width account or organization switcher); `compact` is true when the rail is the compact drawer (render nothing there to keep the switcher in `header-leading`). Rendered only when given; a region whose slot renders nothing (a false `v-if`) is hidden."
+  },
+  {
+   "name": "breadcrumbs",
+   "scope": "—",
+   "notes": "An app-wide composed trail that replaces the one built from `breadcrumbs`; a page's `ConsoleLayout.Breadcrumb` replaces both; hidden while compact."
+  },
+  {
+   "name": "notifications",
+   "scope": "—",
+   "notes": "Flash messages (`Alert`) above the page, kept in view while the page scrolls."
+  },
+  {
+   "name": "tools",
+   "scope": "—",
+   "notes": "The tools region's body (a `HelpPanel` or the notifications list), opened with `v-model:tools-open`."
+  },
+  {
+   "name": "search",
+   "scope": "{ query: string }",
+   "notes": "Extra `Command.Group`s (recent resources, commands) listed before the navigation pages in the palette."
+  },
+  {
+   "name": "account-menu",
+   "scope": "—",
+   "notes": "`DropdownMenu.Group`s of the account menu, opened from the account row in the rail and from the header avatar; a chosen option is reported by `account-select`."
+  }
+ ],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/console-layout/default.vue"
+  },
+  {
+   "name": "PageOpensSearch",
+   "file": "examples/console-layout/page-opens-search.vue"
+  },
+  {
+   "name": "NavigationOpen",
+   "file": "examples/console-layout/navigation-open.vue"
+  }
+ ],
+ "docs": "components/console-layout.md"
+}

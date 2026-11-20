@@ -6,17 +6,17 @@ const spec: DiagramSpec = {
   nodes: [
     {
       key: 'user',
-      kind: 'pill',
+      type: 'pill',
       title: 'User',
-      icon: 'pi pi-user',
+      icon: 'az az-user',
       active: true
     },
     {
       key: 'application',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'Application',
       title: 'Rules in order, every request',
-      icon: 'ai ai-rules-engine',
+      icon: 'az az-rules-engine',
       active: true,
       status: {
         label: '2 phases',
@@ -25,25 +25,25 @@ const spec: DiagramSpec = {
     },
     {
       key: 'cache',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Deliver',
       title: 'Static assets from cache',
-      icon: 'ai ai-tiered-cache',
+      icon: 'az az-layers',
       active: true
     },
     {
       key: 'function',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Run',
       title: 'auth-handler on /account',
-      icon: 'ai ai-edge-functions'
+      icon: 'az az-functions'
     },
     {
       key: 'origin',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Origin',
       title: 'Your API on /api',
-      icon: 'pi pi-database'
+      icon: 'az az-database'
     }
   ],
   layout: {

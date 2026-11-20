@@ -9,6 +9,12 @@
 //   - a new composable authored as .js                       → composables are .ts (composables.md)
 //   - @deprecated with no replacement/version                → name it (deprecation.md)
 //   - a prose comment anywhere under packages/               → API docs only (comments.md)
+//   - a literal UI string in a component template / prop default → locale catalog (webkit-strings.md)
+//   - a composable returning reactive()/a raw ref()/no return type, or leaking a listener,
+//     timer, frame or observer with no onScopeDispose                 (composables.md)
+//   - defineProps declaring `as` / `asChild`                          (root-element.md)
+//   - a chart, diagram, map or stat drawn on a Texture, in a .vue or page JSON of
+//     components, blocks or examples                                  (styling.md)
 //
 // Same discipline as validate-tokens.mjs: reconstruct the RESULTING file content, and only
 // block when a check's occurrence count GROWS past the baseline's.
@@ -17,7 +23,18 @@
 import { readFileSync } from 'node:fs'
 import { relative, resolve } from 'node:path'
 
-import { CONTENT_CHECKS, MESSAGES } from './_lib/authoring-checks.mjs'
+import { CONTENT_CHECKS, MESSAGES } from './lib/authoring-checks.mjs'
+import {
+  appliesToBuiltInStrings,
+  scanBuiltInStrings,
+  STRING_MESSAGES
+} from './lib/built-in-strings.mjs'
+import { scanSignatures, SIGNATURE_MESSAGES } from './lib/signature-checks.mjs'
+import {
+  scanTextureBackdrop,
+  TEXTURE_BACKDROP_MESSAGES,
+  textureBackdropApplies
+} from './lib/texture-backdrop.mjs'
 
 const ROOT = process.cwd()
 const TARGET_PREFIX = 'packages/webkit/src/'
@@ -99,6 +116,53 @@ async function main() {
     if (!c.applies(relPath)) continue
     const added = occurrences(c, result, relPath) - occurrences(c, baseline, relPath)
     if (added > 0) violations.push({ id: c.id, message: c.message, added })
+  }
+
+  if (appliesToBuiltInStrings(relPath)) {
+    const before = scanBuiltInStrings(baseline)
+    const after = scanBuiltInStrings(result)
+    for (const id of Object.keys(STRING_MESSAGES)) {
+      const added =
+        after.filter((found) => found === id).length - before.filter((found) => found === id).length
+      if (added > 0) violations.push({ id: `i18n:${id}`, message: STRING_MESSAGES[id], added })
+    }
+  }
+
+  const textureRel = relPath.split('\\').join('/')
+  if (textureBackdropApplies(textureRel)) {
+    const before = scanTextureBackdrop(baseline, textureRel)
+    const after = scanTextureBackdrop(result, textureRel)
+    for (const id of Object.keys(TEXTURE_BACKDROP_MESSAGES)) {
+      const added =
+        after.filter((found) => found === id).length - before.filter((found) => found === id).length
+      if (added > 0) {
+        violations.push({
+          id: `texture-backdrop:${id}`,
+          message: TEXTURE_BACKDROP_MESSAGES[id],
+          added
+        })
+      }
+    }
+  }
+
+  if (inWebkitSrc) {
+    const before = scanSignatures(filePath, baseline)
+    const after = scanSignatures(filePath, result)
+    for (const id of Object.keys(SIGNATURE_MESSAGES)) {
+      const added =
+        after.filter((found) => found.id === id).length -
+        before.filter((found) => found.id === id).length
+      if (added > 0) {
+        const sites = after
+          .filter((found) => found.id === id)
+          .map((found) => `\n      line ${found.line}: ${found.message}`)
+        violations.push({
+          id: `signature:${id}`,
+          message: `${SIGNATURE_MESSAGES[id]}${sites.join('')}`,
+          added
+        })
+      }
+    }
   }
 
   if (violations.length === 0) process.exit(0)

@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "A Visa plate before `Ending in 4242`: the plate is named `Visa` because the text beside it does not say the brand.",
+   "file": "examples/payment-brand/default.vue"
+  },
+  {
+   "name": "Brands",
+   "summary": "Every drawn mark (Visa, Mastercard, American Express, Diners Club, JCB, Discover, Elo, Hipercard, UnionPay) and the generic card glyph for a brand without a mark (Maestro), at `medium` and `small`. Names as the payment API returns them are normalized.",
+   "file": "examples/payment-brand/brands.vue"
+  }
+ ]
+}

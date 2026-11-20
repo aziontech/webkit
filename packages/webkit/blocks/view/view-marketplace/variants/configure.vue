@@ -1,0 +1,223 @@
+<script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
+  import Button from '@aziontech/webkit/button'
+  import Field from '@aziontech/webkit/field'
+  import Input from '@aziontech/webkit/input'
+  import Item from '@aziontech/webkit/item'
+  import Kbd from '@aziontech/webkit/kbd'
+  import Link from '@aziontech/webkit/link'
+  import PageHeader from '@aziontech/webkit/page-header'
+  import SaveBar from '@aziontech/webkit/save-bar'
+  import Select from '@aziontech/webkit/select'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
+  import SettingsRow from '@aziontech/webkit/settings-row'
+  import Switch from '@aziontech/webkit/switch'
+  import { toast } from '@aziontech/webkit/toast'
+  import { computed, nextTick, reactive, ref } from 'vue'
+
+  interface FormErrors {
+    capacity?: string
+    title?: string
+  }
+
+  const SESSION_OPTIONS = [
+    { value: '5', label: '5 minutes' },
+    { value: '15', label: '15 minutes' },
+    { value: '30', label: '30 minutes' },
+    { value: '60', label: '1 hour' }
+  ]
+
+  const saved = ref({ enabled: true, capacity: '400', title: 'You are in line', session: '15' })
+  const form = reactive({ ...saved.value })
+  const dirty = computed(() => JSON.stringify(form) !== JSON.stringify(saved.value))
+  const submitted = ref(false)
+  const saving = ref(false)
+  const formEl = ref<HTMLElement | null>(null)
+
+  const errors = computed((): FormErrors => {
+    if (!submitted.value) return {}
+    const out: FormErrors = {}
+    const capacity = Number(form.capacity)
+    if (!form.capacity.trim()) out.capacity = 'Enter the requests per second to let in.'
+    else if (!Number.isInteger(capacity) || capacity < 1)
+      out.capacity = 'Enter a whole number of 1 or more.'
+    if (!form.title.trim()) out.title = 'Enter the title visitors see while they wait.'
+    return out
+  })
+
+  const discard = () => {
+    Object.assign(form, saved.value)
+    submitted.value = false
+  }
+
+  const save = () => {
+    submitted.value = true
+    if (saving.value) return
+    if (Object.keys(errors.value).length) {
+      nextTick(() => formEl.value?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus())
+      return
+    }
+    saving.value = true
+    setTimeout(() => {
+      saved.value = { ...form }
+      saving.value = false
+      submitted.value = false
+      toast.success('Waiting Room settings saved.', {
+        description: form.enabled
+          ? `storefront queues visitors above ${form.capacity} requests per second.`
+          : 'The queue is off; every visitor goes straight in.'
+      })
+    }, 800)
+  }
+
+  const onSaveShortcut = () => {
+    if (!dirty.value || saving.value) return
+    save()
+  }
+</script>
+
+<template>
+  <div class="layout-boundary">
+    <div class="layout-column flex min-h-full flex-col">
+      <nav
+        aria-label="Breadcrumb"
+        class="pt-(--layout-group-gap)"
+      >
+        <Link
+          href="/marketplace/waiting-room"
+          label="Back to Waiting Room"
+          size="medium"
+        />
+      </nav>
+      <PageHeader
+        title="Configure Waiting Room"
+        description="Settings of Waiting Room 1.4.0 on storefront. They apply from the next request."
+      />
+
+      <form
+        ref="formEl"
+        class="layout-section-start flex min-w-0 flex-col pb-(--layout-boundary-end)"
+        novalidate
+        aria-label="Waiting Room settings"
+        @submit.prevent="save"
+      >
+        <Alert
+          v-if="Object.keys(errors).length"
+          severity="danger"
+          label="Some settings need a fix before they can be saved."
+        />
+
+        <SettingsGroup
+          label="Queue"
+          hint="When the queue starts and what visitors see while they wait."
+        >
+          <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
+            <Item.List>
+              <SettingsRow
+                title="Queue visitors"
+                description="Off lets every visitor in and keeps the settings below."
+                variant="compact"
+              >
+                <Switch
+                  v-model="form.enabled"
+                  aria-label="Queue visitors"
+                  :disabled="saving"
+                />
+              </SettingsRow>
+            </Item.List>
+            <Field
+              required
+              :invalid="Boolean(errors.capacity)"
+              :disabled="saving || !form.enabled"
+            >
+              <Field.Label>Capacity</Field.Label>
+              <Input
+                v-model="form.capacity"
+                size="large"
+                inputmode="numeric"
+                autocomplete="off"
+              />
+              <Field.Error v-if="errors.capacity">{{ errors.capacity }}</Field.Error>
+              <Field.Description v-else
+                >Requests per second let through. Above it, new visitors wait in
+                line.</Field.Description
+              >
+            </Field>
+            <Field
+              required
+              :invalid="Boolean(errors.title)"
+              :disabled="saving || !form.enabled"
+            >
+              <Field.Label>Queue page title</Field.Label>
+              <Input
+                v-model="form.title"
+                size="large"
+                autocomplete="off"
+              />
+              <Field.Error v-if="errors.title">{{ errors.title }}</Field.Error>
+            </Field>
+          </div>
+        </SettingsGroup>
+
+        <SettingsGroup
+          label="Sessions"
+          hint="How long a visitor who got in keeps their place."
+        >
+          <Field :disabled="saving || !form.enabled">
+            <Field.Label>Session length</Field.Label>
+            <Select
+              v-model="form.session"
+              size="large"
+            >
+              <Select.Trigger class="w-full" />
+              <Select.Content>
+                <Select.Item
+                  v-for="option in SESSION_OPTIONS"
+                  :key="option.value"
+                  :value="option.value"
+                  >{{ option.label }}</Select.Item
+                >
+              </Select.Content>
+            </Select>
+            <Field.Description
+              >Shorter sessions free places sooner when visitors leave.</Field.Description
+            >
+          </Field>
+        </SettingsGroup>
+      </form>
+
+      <SaveBar
+        v-if="dirty"
+        @save="onSaveShortcut"
+      >
+        Waiting Room settings changed, not saved yet.
+        <template #actions>
+          <Button
+            type="button"
+            label="Discard"
+            variant="outline"
+            size="medium"
+            :disabled="saving"
+            @click="discard"
+          />
+          <Button
+            type="button"
+            variant="primary"
+            size="medium"
+            :loading="saving"
+            @click="save"
+            aria-keyshortcuts="Meta+S Control+S"
+          >
+            Save
+            <Kbd
+              meta
+              size="small"
+              aria-hidden="true"
+              >S</Kbd
+            >
+          </Button>
+        </template>
+      </SaveBar>
+    </div>
+  </div>
+</template>

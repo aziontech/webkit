@@ -6,7 +6,11 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 
-import { scanTokens, tokenChecksApply } from '../../src/eslint-plugin/token-checks.js'
+import {
+  scanTokens,
+  tokenChecksApply,
+  tokenChecksFor
+} from '../../src/eslint-plugin/lib/token-checks.js'
 
 /** All violated check ids for a snippet. */
 const ids = (content) => scanTokens(content)
@@ -26,7 +30,7 @@ test('zero-with-unit fires on a zero length carrying a unit', () => {
 
 test('the completed unit list catches the logical/root-relative units (ENG-46996)', () => {
   // Representative new units; the theme test (zero-unit.test.mjs) pins the full set. Kept
-  // in sync with LENGTH_UNITS in packages/theme/src/scripts/zero-unit.mjs.
+  // in sync with LENGTH_UNITS in packages/theme/scripts/lib/zero-unit.mjs.
   for (const unit of ['vi', 'vb', 'svi', 'dvb', 'rex', 'rch', 'ric', 'rcap']) {
     assert.ok(ids(`x: 0${unit}`).includes('zero-with-unit'), `0${unit} slipped through`)
   }
@@ -95,7 +99,7 @@ test('the arbitrary-value guardrails catch the paren spelling as well as the bra
     ['typography-raw-length', 'text-[length:var(--text-body-md)]', 'text-(length:--text-body-md)'],
     ['leading-raw', 'leading-[1.5]', 'leading-(--leading-body)'],
     ['tracking-raw', 'tracking-[0.5px]', 'tracking-(--tracking-tight)'],
-    ['font-family-raw', 'font-[family-name:var(--font-sora)]', 'font-(family-name:--font-sora)'],
+    ['font-family-raw', 'font-[family-name:var(--font-sans)]', 'font-(family-name:--font-sans)'],
     ['animate-arbitrary', 'animate-[spin_1s]', 'animate-(--animation-spin)'],
     ['motion-hardcoded', 'duration-[200ms]', 'duration-(--duration-fast)']
   ]
@@ -112,7 +116,7 @@ test('the paren spellings named in ENG-47001 acceptance are all caught', () => {
     ['leading-(--y)', 'leading-raw'],
     ['tracking-(--z)', 'tracking-raw'],
     ['text-(length:--text-body-md)', 'typography-raw-length'],
-    ['font-(family-name:--font-sora)', 'font-family-raw']
+    ['font-(family-name:--font-sans)', 'font-family-raw']
   ]) {
     assert.ok(ids(content).includes(id), `expected ${id} for: ${content}`)
   }
@@ -159,7 +163,7 @@ test('dead-token-shorthand fires on a paren shorthand that emits no CSS', () => 
 test('dead-token-shorthand stays silent on every VALID token spelling', () => {
   for (const content of [
     'class="bg-(--bg-surface) text-(--text-default) rounded-(--shape-card)"',
-    'class="text-(length:--text-body-md) font-(family-name:--font-sora)"',
+    'class="text-(length:--text-body-md) font-(family-name:--font-sans)"',
     'class="data-[disabled]:bg-(--bg-disabled)"',
     // Declaring a custom property keeps its brackets — the sanctioned form.
     'class="[--table-row-bg:var(--bg-surface)]"',
@@ -180,12 +184,170 @@ test('dead-token-shorthand stays silent on every VALID token spelling', () => {
   }
 })
 
+test('container-query-on-container fires when an element queries its own container', () => {
+  for (const content of [
+    // The one that shipped: Trace declared its name column on the container itself.
+    'class="@container/trace flex [--trace-name:9rem] @xl/trace:[--trace-name:13rem]"',
+    'class="@xl/panel:grid-cols-2 @container/panel grid"',
+    "cn('@container/card p-(--spacing-sm) @max-md/card:hidden', attrs.class)",
+    'class="@container/bar @min-[47rem]/bar:flex"'
+  ]) {
+    assert.ok(
+      ids(content).includes('container-query-on-container'),
+      `expected container-query-on-container for: ${content}`
+    )
+  }
+})
+
+test('container-query-on-container stays silent when the query sits on a child', () => {
+  for (const content of [
+    '<div class="@container/trace flex"><div class="[--trace-name:9rem] @xl/trace:[--trace-name:13rem]"></div></div>',
+    // Unnamed container queries a parent; a different named container is fine.
+    'class="@container @xl:flex"',
+    'class="@container/inner @xl/outer:flex"',
+    'class="@container/trace-name @xl/trace:flex"'
+  ]) {
+    assert.ok(
+      !ids(content).includes('container-query-on-container'),
+      `expected container-query-on-container silent for: ${content}`
+    )
+  }
+})
+
+test('has-on-scroll-frame fires on a :has() variant read from the scroll frame', () => {
+  for (const content of [
+    // The one that shipped: the table scroll cue hid under a frozen column this way.
+    'class="hidden group-data-[overflow-end]/scroll:block group-has-[[data-frozen=end]]/scroll:invisible"',
+    'class="peer-has-[:checked]/scroll:hidden"',
+    'class="md:group-has-focus/scroll:ring-2"'
+  ]) {
+    assert.ok(
+      ids(content).includes('has-on-scroll-frame'),
+      `expected has-on-scroll-frame for: ${content}`
+    )
+  }
+})
+
+test('has-on-scroll-frame stays silent on a data attribute or another group', () => {
+  for (const content of [
+    'class="group-data-[frozen-end]/scroll:invisible group-data-[overflow-end]/scroll:block"',
+    'class="group-has-[a:focus-visible]/row:opacity-100"',
+    'class="group-has-[[data-frozen=end]]/scroller-card:invisible"'
+  ]) {
+    assert.ok(
+      !ids(content).includes('has-on-scroll-frame'),
+      `expected has-on-scroll-frame silent for: ${content}`
+    )
+  }
+})
+
+test('rtl-double-flip fires when a directional icon also rotates under rtl', () => {
+  for (const content of [
+    'class="az az-arrow-right rtl:rotate-180"',
+    'class="az az-chevron-left md:rtl:-rotate-180"',
+    "cn('rtl:rotate-180 az az-log-out', attrs.class)",
+    'class="az az-circle-arrow-left data-[open]:rtl:rotate-180"'
+  ]) {
+    assert.ok(ids(content).includes('rtl-double-flip'), `expected rtl-double-flip for: ${content}`)
+  }
+})
+
+test('rtl-double-flip stays silent on a single flip or a non-directional glyph', () => {
+  for (const content of [
+    'class="az az-arrow-right rtl:-scale-x-100"',
+    'class="az az-chevron-down rtl:rotate-180"',
+    'class="az az-arrow-right"',
+    'class="az az-arrow-right-left rtl:rotate-180"',
+    'class="az az-arrow-right rtl:rotate-180x"',
+    '<i class="az az-arrow-right"></i><i class="az az-chevron-down rtl:rotate-180"></i>'
+  ]) {
+    assert.ok(
+      !ids(content).includes('rtl-double-flip'),
+      `expected rtl-double-flip silent for: ${content}`
+    )
+  }
+})
+
+test('rtl-double-flip covers exactly DIRECTIONAL_ICONS', async () => {
+  const { DIRECTIONAL_ICONS } = await import('../../src/utils/directional-icons.ts')
+  for (const icon of DIRECTIONAL_ICONS) {
+    assert.ok(
+      ids(`class="ai ${icon} rtl:rotate-180"`).includes('rtl-double-flip'),
+      `${icon} is directional but rtl-double-flip misses it`
+    )
+  }
+  for (const icon of ['az-chevron-up', 'az-arrow-up', 'az-arrow-down', 'az-refresh', 'az-redo']) {
+    assert.ok(!DIRECTIONAL_ICONS.has(icon))
+    assert.ok(
+      !ids(`class="ai ${icon} rtl:rotate-180"`).includes('rtl-double-flip'),
+      `${icon} is not directional but rtl-double-flip fires`
+    )
+  }
+})
+
+test('off-brand-orange fires on --text-primary and on any orange step but the logo orange', () => {
+  for (const content of [
+    'class="text-(--text-primary)"',
+    "colors: ['var(--text-primary)']",
+    'color: var(--color-orange-300);',
+    'class="bg-(--color-brand-primary-700)"',
+    'class="text-brand-primary-300"',
+    'fill: var(--color-alpha-orange-200)'
+  ]) {
+    assert.ok(
+      ids(content).includes('off-brand-orange'),
+      `expected off-brand-orange for: ${content}`
+    )
+  }
+})
+
+test('off-brand-orange stays silent on the logo orange and on the primary roles', () => {
+  for (const content of [
+    'class="text-(--text-brand)"',
+    'class="bg-(--primary) text-(--primary-foreground)"',
+    'class="text-primary"',
+    'class="text-(--text-primary-foreground)"',
+    'color: var(--color-orange-500);',
+    'class="bg-(--primary-mask)"',
+    'class="text-(--chart-series-4)"'
+  ]) {
+    assert.ok(!ids(content).includes('off-brand-orange'), `expected silence for: ${content}`)
+  }
+})
+
+test('tokenChecksFor runs only the wide checks over blocks, examples and given extra dirs', () => {
+  const WIDE = ['rtl-double-flip', 'off-brand-orange']
+  const idsFor = (rel, dirs) => tokenChecksFor(rel, dirs).map((c) => c.id)
+  assert.ok(idsFor('packages/webkit/src/components/action/button/button.vue').includes('hex-color'))
+  for (const rel of [
+    'packages/webkit/blocks/login/login.vue',
+    'packages/webkit/examples/button/default.vue'
+  ]) {
+    assert.deepEqual(idsFor(rel), WIDE, rel)
+  }
+  assert.deepEqual(idsFor('site/src/nav.vue'), [])
+  assert.deepEqual(idsFor('site/src/nav.vue', ['site/src/']), WIDE)
+  for (const rel of [
+    'packages/webkit/examples/button/button.test.ts',
+    'packages/webkit/examples/button/examples.json',
+    'packages/webkit/src/composables/use-controllable.ts'
+  ]) {
+    assert.deepEqual(idsFor(rel), [], rel)
+  }
+  assert.ok(
+    !scanTokens(
+      'class="text-sm az az-arrow-right"',
+      tokenChecksFor('packages/webkit/examples/a/a.vue')
+    ).length
+  )
+})
+
 test('tokenChecksApply scopes enforcement to component sources', () => {
-  assert.ok(tokenChecksApply('packages/webkit/src/components/actions/button/button.vue'))
+  assert.ok(tokenChecksApply('packages/webkit/src/components/action/button/button.vue'))
   assert.ok(tokenChecksApply('packages/webkit/src/components/data/table/injection-key.ts'))
   // Tests assert browser-serialized values (a collapsed height reads back as '0px')
   // and use @ts-expect-error to exercise type surfaces — exempt on both surfaces.
-  assert.ok(!tokenChecksApply('packages/webkit/src/components/actions/button/button.test.ts'))
-  assert.ok(!tokenChecksApply('packages/webkit/src/components/actions/button/button.spec.ts'))
+  assert.ok(!tokenChecksApply('packages/webkit/src/components/action/button/button.test.ts'))
+  assert.ok(!tokenChecksApply('packages/webkit/src/components/action/button/button.spec.ts'))
   assert.ok(!tokenChecksApply('packages/webkit/src/composables/use-controllable.ts'))
 })

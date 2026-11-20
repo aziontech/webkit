@@ -1,0 +1,37 @@
+<script setup>
+  import Button from '@aziontech/webkit/button'
+  import EmptyState from '@aziontech/webkit/empty-state'
+  import Link from '@aziontech/webkit/link'
+</script>
+
+<template>
+  <div class="flex w-full flex-col gap-(--spacing-xl)">
+    <EmptyState
+      v-for="size in ['small', 'medium']"
+      :key="size"
+      :size="size"
+      title="No resource yet"
+      description="Get started by creating your first resource."
+      icon="az az-inbox"
+    >
+      <template #actions>
+        <div class="flex gap-(--spacing-3)">
+          <Button
+            variant="secondary"
+            label="Secondary Item"
+          />
+          <Button
+            variant="outline"
+            label="Create Item"
+          />
+        </div>
+        <Link
+          label="Docs"
+          icon="az az-arrow-right"
+          size="medium"
+          href="#"
+        />
+      </template>
+    </EmptyState>
+  </div>
+</template>

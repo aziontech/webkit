@@ -37,7 +37,7 @@ describe('expectNoPlaceholderOnlyLabels', () => {
     })
 
     it('surfaces the offending control so the failure is actionable', () => {
-      const container = mount('<input data-testid="input-text" placeholder="Search" />')
+      const container = mount('<input data-testid="input" placeholder="Search" />')
 
       // The offender list is the assertion's `actual`: the message states the rule,
       // and the reporter prints the array in the diff. Asserting `actual` pins the
@@ -50,7 +50,7 @@ describe('expectNoPlaceholderOnlyLabels', () => {
       }
 
       expect((thrown as { actual?: string[] } | undefined)?.actual).toEqual([
-        '<input data-testid="input-text" placeholder="Search">'
+        '<input data-testid="input" placeholder="Search">'
       ])
     })
   })

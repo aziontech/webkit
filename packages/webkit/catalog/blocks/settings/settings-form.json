@@ -1,0 +1,54 @@
+{
+ "variants": [
+  {
+   "name": "Saving",
+   "summary": "While the save is in flight: the whole fieldset is disabled, Discard is disabled and Save shows its loading state.",
+   "file": "blocks/settings/settings-form/variants/saving.vue"
+  },
+  {
+   "name": "SaveError",
+   "summary": "The server rejects the save: Save stops loading, an error toast says the profile was not saved and that the changes are kept, with Retry; the form stays dirty with every entry in place.",
+   "file": "blocks/settings/settings-form/variants/save-error.vue"
+  },
+  {
+   "name": "SavePerGroup",
+   "summary": "A settings page split into topic groups that each save on their own: a page heading, then one section per topic, each a `Subheader` over a flush `Card` of `Item` rows whose footer carries a secondary Save for that group only. Saving one group disables just its own fieldset; the other stays editable. Preferences is the example, with General (Full name, Language) and Notifications (Product updates, Security alerts). Built from `PageHeader`, `Subheader`, `SettingsRow`, `Card`, `Item`, `Input`, `Select`, `Switch` and `Button`.",
+   "file": "blocks/settings/settings-form/variants/save-per-group.vue"
+  },
+  {
+   "name": "SavingOneGroup",
+   "summary": "General is saving: its Save shows the loading state and its rows are disabled, while Notifications stays editable and can be saved on its own.",
+   "file": "blocks/settings/settings-form/variants/saving-one-group.vue"
+  },
+  {
+   "name": "SavePerCard",
+   "summary": "A long configuration page split into titled cards that each own their save: a page heading, then one `Card` per topic with an info `Alert`, stacked label-and-control fields inside a fieldset, and a footer whose secondary Save commits that card alone, beside an optional docs `Link`. Project settings is the example, with Preview Toolbar and Deployment Protection. Built from `PageHeader`, `Card`, `Alert`, `Field`, `Select`, `Switch`, `Link` and `Button`.",
+   "file": "blocks/settings/settings-form/variants/save-per-card.vue"
+  },
+  {
+   "name": "SavingOneCard",
+   "summary": "Preview Toolbar is saving: its Save shows the loading state and its selects are disabled, while Deployment Protection stays editable.",
+   "file": "blocks/settings/settings-form/variants/saving-one-card.vue"
+  },
+  {
+   "name": "Profile",
+   "summary": "The profile page of a signed-in account: a small page heading over seven stacked `SettingsGroup`s (General, Company information, Address information, Login settings, Source control, Appearance, Danger zone), each a flush `Card` of rows, with the `SaveBar` that rises once a saved field changes. Account name comes filled; Billing emails starts empty and is required; both are checked on Save. Requiring MFA lives in `account/account-mfa-settings`, linked from the Login settings row; source-control actions open the provider; Delete account asks in a `ConfirmDialog` that takes the account name typed. A save that fails with no field to blame raises an error toast with Retry and keeps the changes.",
+   "file": "blocks/settings/settings-form/variants/profile.vue"
+  },
+  {
+   "name": "ProfileLoading",
+   "summary": "The profile's first load: three cards of Skeleton rows in place of the sections, the heading kept.",
+   "file": "blocks/settings/settings-form/variants/profile-loading.vue"
+  },
+  {
+   "name": "ProfileError",
+   "summary": "The account did not load: a danger Alert with Retry replaces the profile sections; Retry loads them.",
+   "file": "blocks/settings/settings-form/variants/profile-error.vue"
+  }
+ ],
+ "sfcFile": "blocks/settings/settings-form/settings-form.vue",
+ "guidelinesFile": "blocks/settings/settings-form/guidelines.md",
+ "fileSources": {
+  "sample.ts": "blocks/settings/settings-form/sample.ts"
+ }
+}

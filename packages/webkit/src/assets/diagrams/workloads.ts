@@ -6,25 +6,25 @@ const spec: DiagramSpec = {
   nodes: [
     {
       key: 'user',
-      kind: 'pill',
+      type: 'pill',
       title: 'User',
-      icon: 'pi pi-user',
+      icon: 'az az-user',
       active: true
     },
     {
       key: 'routing',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'Routing',
       title: 'Nearest data center',
-      icon: 'pi pi-directions',
+      icon: 'az az-directions',
       active: true
     },
     {
       key: 'workload',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'Workload',
       title: 'shop.example.com',
-      icon: 'ai ai-workloads',
+      icon: 'az az-workloads',
       status: {
         label: 'Live',
         severity: 'success'
@@ -34,18 +34,18 @@ const spec: DiagramSpec = {
     },
     {
       key: 'cache',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Cache',
       title: 'Served from cache',
-      icon: 'ai ai-tiered-cache',
+      icon: 'az az-layers',
       active: true
     },
     {
       key: 'origin',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Origin',
       title: 'origin.example.com',
-      icon: 'pi pi-database'
+      icon: 'az az-database'
     }
   ],
   layout: {

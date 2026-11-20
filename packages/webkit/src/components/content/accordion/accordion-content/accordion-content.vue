@@ -8,6 +8,15 @@
     inheritAttrs: false
   })
 
+  export interface AccordionContentProps {
+    /** Pads the body on the trigger's inset with space below; set false for edge-to-edge content such as a LogViewer or table rows. */
+    padded?: boolean
+  }
+
+  withDefaults(defineProps<AccordionContentProps>(), {
+    padded: true
+  })
+
   defineSlots<{
     default(): unknown
   }>()
@@ -24,48 +33,65 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'content-accordion-content'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'accordion-content')
+
+  const cancels = new WeakMap<globalThis.HTMLElement, () => void>()
 
   const prefersReducedMotion = () =>
     typeof globalThis.matchMedia === 'function' &&
     globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-  const onEnter = (el: globalThis.Element, done: () => void) => {
-    const node = el as globalThis.HTMLElement
-    if (prefersReducedMotion()) {
+  const seconds = (list: string) => list.split(',').map((d) => parseFloat(d) || 0)
+
+  const transitionMs = (node: globalThis.HTMLElement) => {
+    const style = globalThis.getComputedStyle(node)
+    const durations = seconds(style.transitionDuration)
+    const delays = seconds(style.transitionDelay)
+    return Math.max(0, ...durations.map((d, i) => d + (delays[i % delays.length] ?? 0))) * 1000
+  }
+
+  const animateHeight = (
+    node: globalThis.HTMLElement,
+    from: number,
+    to: number,
+    done: () => void
+  ) => {
+    cancels.get(node)?.()
+    const duration = prefersReducedMotion() || from === to ? 0 : transitionMs(node)
+    if (duration <= 0) {
+      node.style.height = ''
       done()
       return
     }
-    const target = node.scrollHeight
-    node.style.height = '0'
-    node.style.transition = 'height 150ms ease-out'
+    node.style.height = `${from}px`
     void node.offsetHeight
-    node.style.height = `${target}px`
+    node.style.height = `${to}px`
+    const onEnd = (event: globalThis.TransitionEvent) => {
+      if (event.target === node && event.propertyName === 'height') finish()
+    }
+    const timer = setTimeout(() => finish(), duration + 50)
+    const stop = () => {
+      clearTimeout(timer)
+      node.removeEventListener('transitionend', onEnd)
+      cancels.delete(node)
+    }
     const finish = () => {
+      stop()
       node.style.height = ''
-      node.style.transition = ''
       done()
     }
-    node.addEventListener('transitionend', finish, { once: true })
+    cancels.set(node, stop)
+    node.addEventListener('transitionend', onEnd)
+  }
+
+  const onEnter = (el: globalThis.Element, done: () => void) => {
+    const node = el as globalThis.HTMLElement
+    animateHeight(node, 0, node.scrollHeight, done)
   }
 
   const onLeave = (el: globalThis.Element, done: () => void) => {
     const node = el as globalThis.HTMLElement
-    if (prefersReducedMotion()) {
-      done()
-      return
-    }
-    node.style.height = `${node.scrollHeight}px`
-    node.style.transition = 'height 150ms ease-out'
-    void node.offsetHeight
-    node.style.height = '0'
-    const finish = () => {
-      node.style.transition = ''
-      done()
-    }
-    node.addEventListener('transitionend', finish, { once: true })
+    animateHeight(node, node.scrollHeight, 0, done)
   }
 </script>
 
@@ -85,9 +111,16 @@
       :data-state="itemCtx.open.value ? 'open' : 'closed'"
       :data-size="ctx.size.value"
       :class="attrs.class"
-      class="overflow-hidden text-(--text-muted) data-[size=medium]:text-body-xs data-[size=large]:text-body-sm"
+      class="overflow-hidden transition-[height] duration-150 ease-out motion-reduce:transition-none text-body-sm text-(--text-muted)"
     >
-      <slot />
+      <div
+        :data-padded="padded || null"
+        :data-size="ctx.size.value"
+        :data-icon-position="ctx.iconPosition.value"
+        class="data-[padded]:px-[var(--accordion-inset,var(--spacing-md))] data-[padded]:pt-(--spacing-xs) data-[padded]:pb-(--spacing-md) data-[padded]:data-[icon-position=leading]:data-[size=medium]:ps-[calc(var(--accordion-inset,var(--spacing-md))+var(--text-body-sm-font-size)+var(--spacing-xs))] data-[padded]:data-[icon-position=leading]:data-[size=large]:ps-[calc(var(--accordion-inset,var(--spacing-md))+var(--text-body-md-font-size)+var(--spacing-xs))]"
+      >
+        <slot />
+      </div>
     </div>
   </Transition>
 </template>

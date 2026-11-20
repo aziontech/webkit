@@ -1,0 +1,21 @@
+{
+ "purpose": "A native video player with play and pause, seek with time, mute and volume, captions and full screen. It also shows the states of a generated video before it plays: generating (with an optional percentage) and error. It plays the URL the app hands it (https, `blob:` or `data:`) and fetches nothing.",
+ "useWhen": [
+  "A generated or attached video in a chat message or artifact, from generating to playing.",
+  "A recorded clip in an app screen."
+ ],
+ "avoidWhen": [
+  "A third-party player page (YouTube, Vimeo) → use `embed`.",
+  "A docs clip → use `doc-frame`.",
+  "A stored file of any type → use `file-preview`."
+ ],
+ "related": [
+  "`embed` — third-party players.",
+  "`file-preview` — stored files of any type."
+ ],
+ "bestPractices": [
+  "Give a `poster` and an `aria-label`.",
+  "Mark the caption track in the page's language as `default`.",
+  "Pass `progress` only when the generator reports one."
+ ]
+}

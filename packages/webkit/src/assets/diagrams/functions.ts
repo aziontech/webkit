@@ -6,25 +6,25 @@ const spec: DiagramSpec = {
   nodes: [
     {
       key: 'user',
-      kind: 'pill',
+      type: 'pill',
       title: 'Request',
-      icon: 'pi pi-user',
+      icon: 'az az-user',
       active: true
     },
     {
       key: 'application',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'Application',
       title: 'Rule: run a function on /account',
-      icon: 'ai ai-rules-engine',
+      icon: 'az az-rules-engine',
       active: true
     },
     {
       key: 'function',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'Functions',
       title: 'auth-handler',
-      icon: 'ai ai-edge-functions',
+      icon: 'az az-functions',
       status: {
         label: 'No cold start',
         severity: 'success'
@@ -34,18 +34,18 @@ const spec: DiagramSpec = {
     },
     {
       key: 'response',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Answered here',
       title: 'Response from the edge',
-      icon: 'pi pi-check',
+      icon: 'az az-check',
       active: true
     },
     {
       key: 'origin',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Origin',
       title: 'Your API',
-      icon: 'pi pi-database'
+      icon: 'az az-database'
     }
   ],
   layout: {

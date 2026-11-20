@@ -1,0 +1,34 @@
+[block-hero-title-band kind=title-band]
+  [marketing-hero kind=band size=large align=center width=5xl aria-label='Trusted by Leading Companies']
+    [marketing-hero-title width=4xl centered=true]
+      text: // ⏎ Customers
+      h1 "Trusted by Leading Companies"
+      button "See cases" → #cases
+      button "Talk to a Specialist" → https://www.azion.com/en/contact/
+[marketing-section-container width=site]
+  [block-client-mosaic-cells]
+    [marketing-section-module kind=left]
+      [marketing-logo-wall kind=rectangle aria-label='Magalu']
+        [marketing-card-grid kind=frame columns=3 mobile-columns=2 filled=true]
+          [marketing-card-grid-cell]
+      [marketing-logo-wall kind=rectangle aria-label='Dafiti']
+        [marketing-card-grid kind=frame columns=3 mobile-columns=2 filled=true]
+          [marketing-card-grid-cell]
+      [marketing-logo-wall kind=rectangle aria-label='MadeiraMadeira']
+        [marketing-card-grid kind=frame columns=3 mobile-columns=2 filled=true]
+          [marketing-card-grid-cell]
+  · section-gap (hatched spacer band)
+  [block-recognition-marquee aria-label='Recognized as a Market Leader']
+    [marketing-section-module kind=left]
+      [marketing-section-title kind=centered size=medium]
+        h2 "Recognized as a Market Leader"
+      list (7): Named a Leader and Fast Mover, and the only vendor whose platform meets every key criterion the report sets for a full-stack edge deployment. GigaOm Radar for Full-Stack Edge Deployments v3 · Evaluated as a Strong Performer among the edge development platforms that matter most. The Forrester Wave™: Edge Development Platforms · Covered as a vendor in the market guide that defines the edge distribution platform category, in two consecutive editions. Gartner Market Guide for Edge Distribution Platforms · Recognized as Latin America Company of the Year in the edge distribution platform industry, after being profiled among the Companies to Action on the Frost Radar™. Frost & Sullivan Latin America Company of the Year · Positioned as a Challenger and Fast Mover, with the application and API security stack evaluated as one platform rather than a set of bolt-ons. GigaOm Radar for Application and API Security v5 · Recognized as a Leader in CDN, Web Security, and DDoS Protection, and a High Performer in Cloud Security, WAF, Bot Detection and Mitigation, SSL & TLS Certificate Tools, and API Security Tools. G2 Reports · Recognized as a Leader in CDN and a High Performer in Web Security, DDoS Protection, WAF, Bot Detection and Mitigation, SSL & TLS Certificate Tools, and DNS Security Solution. G2 Reports
+  · section-gap (hatched spacer band)
+  [block-closing-call-to-action-primary kind=primary]
+    [marketing-section-module kind=left]
+      [marketing-call-to-action kind=primary aria-label='Build, secure, and scale applications everywhere.']
+        [marketing-section-title kind=centered size=large]
+          h2 "Build, secure, and scale applications everywhere."
+          p "Get faster launches, lower latency, and less infrastructure overhead from day one."
+          button "Start free" → https://console.azion.com/signup?tck=generic_cta
+          button "Talk to a specialist" → https://www.azion.com/en/contact/

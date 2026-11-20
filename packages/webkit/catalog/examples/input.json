@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Default empty input at medium size.",
+   "file": "examples/input/default.vue"
+  },
+  {
+   "name": "Sizes",
+   "summary": "All size variants side by side.",
+   "file": "examples/input/sizes.vue"
+  },
+  {
+   "name": "Icons",
+   "summary": "The `prefix` slot, the `suffix` slot, and both combined.",
+   "file": "examples/input/icons.vue"
+  }
+ ]
+}

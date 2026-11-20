@@ -1,0 +1,102 @@
+{
+ "name": "dialog",
+ "binding": "Dialog",
+ "import": "@aziontech/webkit/dialog",
+ "treeShakeableImport": "@aziontech/webkit/dialog-root",
+ "category": "overlay",
+ "surface": "app",
+ "structure": "composition",
+ "compoundRoot": true,
+ "subcomponents": [
+  "@aziontech/webkit/dialog-close",
+  "@aziontech/webkit/dialog-content",
+  "@aziontech/webkit/dialog-description",
+  "@aziontech/webkit/dialog-title",
+  "@aziontech/webkit/dialog-trigger",
+  "@aziontech/webkit/dialog-header",
+  "@aziontech/webkit/dialog-body",
+  "@aziontech/webkit/dialog-footer"
+ ],
+ "purpose": "Modal surface above the page, built on the shared Panel shell. `Dialog.Content` is the whole modal: it teleports to `body`, renders the dimmed overlay behind the panel, traps focus and scroll-locks the page, so the page behind cannot be clicked, scrolled or tabbed to while the dialog is open. The consumer composes a trigger and the panel regions (header, body, footer); the header gets the close (X) button on its own unless `closable` is false; the body is the only region that scrolls. Below `md` it renders as a full-width bottom sheet.",
+ "setup": null,
+ "useWhen": [
+  "A focused, blocking modal task or confirmation that should sit centered over the page and trap focus.",
+  "The interaction must be completed or dismissed before returning to the page."
+ ],
+ "avoidWhen": [
+  "The content is a side panel or a long form that should slide from an edge, over the screen that owns it → use `drawer` (nothing inside a drawer navigates; a destination of its own is a page).",
+  "It is small contextual content anchored to a trigger (a menu, info bubble, picker) → use a popover / `dropdown-menu`."
+ ],
+ "related": [
+  "`drawer` — edge-anchored panel for secondary tasks / long content.",
+  "`dropdown-menu` — trigger-anchored menu for actions/options."
+ ],
+ "bestPractices": [
+  "Do not add an overlay, a portal or a close button by hand: `Dialog.Content` renders the overlay and the portal, and the header renders the close button while `closable` is true (the default). Set `:closable=\"false\"` only when the dialog must be answered through its footer actions.",
+  "While an action is in flight, set `:dismissible=\"false\"` and `:closable=\"false\"` together so neither Escape, the overlay nor the close button can close it.",
+  "One clear primary action; keep the body scannable.",
+  "Bind the open state with `v-model:open`, or `:open` plus an `@update:open` handler typed `(open: boolean) => void`. The payload is always a `boolean`, so the handler needs no cast and no `Boolean(...)`."
+ ],
+ "props": [
+  {
+   "name": "defaultOpen",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Initial open state when uncontrolled."
+  },
+  {
+   "name": "closable",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Shows the close (X) button at the end of the dialog header. False removes it; Escape and overlay click still follow `dismissible`."
+  },
+  {
+   "name": "dismissible",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Light-dismiss: when true, overlay click and Escape close the dialog. It does not govern the close button; see `closable`."
+  },
+  {
+   "name": "size",
+   "type": "DialogSize",
+   "default": "'medium'",
+   "required": "false",
+   "doc": "Panel max-width preset passed to the inner Panel."
+  },
+  {
+   "name": "open",
+   "type": "boolean",
+   "default": "undefined as never",
+   "required": "false",
+   "doc": "Two-way value (`v-model:open`)."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "—"
+  }
+ ],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/dialog/default.vue"
+  },
+  {
+   "name": "Sizes",
+   "file": "examples/dialog/sizes.vue"
+  },
+  {
+   "name": "ScrollContent",
+   "file": "examples/dialog/scroll-content.vue"
+  }
+ ],
+ "docs": "components/dialog.md"
+}

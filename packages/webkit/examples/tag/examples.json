@@ -1,0 +1,26 @@
+{
+  "component": "tag",
+  "title": "Components/Content/Tag",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Default primary tag at medium size.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Severities",
+      "summary": "All severity variants side by side; `highlight` is the brand orange as a tint, for the one value a list singles out (the Owner role).",
+      "file": "severities.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "Medium row (24px, `--spacing-xs` padding and gap) and small row (20px, `--spacing-2xs` padding and gap), each with default shape, pill, icon, and icon + pill.",
+      "file": "sizes.vue"
+    },
+    {
+      "name": "WithIcon",
+      "summary": "Leading icon via the `icon` prop (Azion icon class) across severity variants.",
+      "file": "with-icon.vue"
+    }
+  ]
+}

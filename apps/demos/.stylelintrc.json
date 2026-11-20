@@ -1,0 +1,3 @@
+{
+  "extends": ["stylelint-config-recommended-vue", "@aziontech/webkit/stylelint-config"]
+}

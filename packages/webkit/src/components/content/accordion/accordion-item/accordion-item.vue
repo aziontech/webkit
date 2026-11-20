@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import { computed, inject, onBeforeUnmount, onMounted, provide, ref, useAttrs } from 'vue'
 
-  import { cn } from '../../../../utils/cn'
   import { AccordionInjectionKey, AccordionItemInjectionKey } from '../injection-key'
 
   defineOptions({
@@ -9,14 +8,14 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface AccordionItemProps {
     /** Unique identifier used by the open-state model. */
     value: string
     /** Prevents this item from toggling. */
     disabled?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<AccordionItemProps>(), {
     disabled: false
   })
 
@@ -30,11 +29,9 @@
   }
 
   const attrs = useAttrs()
-  const root = ref<globalThis.HTMLElement | null>(null)
+  const rootEl = ref<globalThis.HTMLElement | null>(null)
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'content-accordion-item'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'accordion-item')
 
   const open = computed(() => ctx.isOpen(props.value))
   const disabled = computed(() => props.disabled)
@@ -50,7 +47,13 @@
   })
 
   onMounted(() => {
-    ctx.register({ value: props.value, disabled: props.disabled, el: root })
+    ctx.register({
+      value: props.value,
+      get disabled() {
+        return props.disabled
+      },
+      el: rootEl
+    })
   })
 
   onBeforeUnmount(() => {
@@ -60,17 +63,12 @@
 
 <template>
   <div
-    ref="root"
+    ref="rootEl"
     v-bind="$attrs"
     :data-testid="testId"
     :data-state="open ? 'open' : 'closed'"
     :data-disabled="disabled || null"
-    :class="
-      cn(
-        'flex flex-col border-b border-(--border-muted) data-[state=open]:border-b-0',
-        attrs.class as string | undefined
-      )
-    "
+    class="flex flex-col border-(--border-default) not-last:border-b"
   >
     <slot />
   </div>

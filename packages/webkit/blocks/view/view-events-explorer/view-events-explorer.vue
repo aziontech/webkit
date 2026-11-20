@@ -1,0 +1,1801 @@
+<script setup lang="ts">
+  import Accordion from '@aziontech/webkit/accordion'
+  import Alert from '@aziontech/webkit/alert'
+  import Chart, {
+    type ChartColor,
+    type ChartRange,
+    type ChartSeries
+  } from '@aziontech/webkit/chart'
+  import Checkbox from '@aziontech/webkit/checkbox'
+  import Chip from '@aziontech/webkit/chip'
+  import CodeBlock from '@aziontech/webkit/code-block'
+  import DataTable, { type TableColumn, type TableExposed } from '@aziontech/webkit/data-table'
+  import DrawerContent from '@aziontech/webkit/drawer-content'
+  import Drawer from '@aziontech/webkit/drawer-root'
+  import DrawerTitle from '@aziontech/webkit/drawer-title'
+  import EmptyState from '@aziontech/webkit/empty-state'
+  import Field from '@aziontech/webkit/field'
+  import FilterMenu, {
+    type FilterMenuField,
+    type FilterMenuModel,
+    type FilterMenuRange,
+    type FilterMenuValue
+  } from '@aziontech/webkit/filter-menu'
+  import IconButton from '@aziontech/webkit/icon-button'
+  import Input from '@aziontech/webkit/input'
+  import Item from '@aziontech/webkit/item-root'
+  import PanelHeader from '@aziontech/webkit/panel-header'
+  import Popover from '@aziontech/webkit/popover'
+  import Resizable from '@aziontech/webkit/resizable'
+  import Sidebar from '@aziontech/webkit/sidebar-root'
+  import Skeleton from '@aziontech/webkit/skeleton'
+  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import Tooltip from '@aziontech/webkit/tooltip'
+  import Trace, { type TraceSpan, type TraceView } from '@aziontech/webkit/trace'
+  import { useLocale } from '@aziontech/webkit/use-locale'
+  import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+
+  import { sampleCategories, sampleEvents, sampleFields, sampleNow } from './sample'
+
+  /** Severity of an event; it colors the level tag and stacks the volume chart. */
+  export type EventsExplorerEventLevel = 'Error' | 'Warning' | 'Info' | 'Debug'
+
+  /** One event of the log. */
+  export interface EventsExplorerEvent {
+    /** Stable key of the event. */
+    id: string
+    /** When the event happened; the Time column, the period filter and the chart read it. */
+    at: Date
+    /** Source key: http, security, services or access (any other key shows as written). */
+    source: string
+    /** Severity of the event. */
+    level: EventsExplorerEventLevel
+    /** One-line description, the Event column and the heading of the document. */
+    message: string
+    /** Spans of the request the event records; when set, the document shows its trace. */
+    spans?: TraceSpan[]
+    /** Every other value, keyed by the id of a field in fields. */
+    [field: string]: unknown
+  }
+
+  /** How a field value is written: a locale number, or a number of milliseconds. */
+  export type EventsExplorerFieldFormat = 'number' | 'milliseconds'
+
+  /** One field of the events: a table column, a row of the fields panel and a key of the document. */
+  export interface EventsExplorerField {
+    /** Key of the value on each event; time and sourceLabel are derived from at and source. */
+    id: string
+    /** Column header and fields panel label. */
+    label: string
+    /** Always shown and locked in the fields panel. */
+    core?: boolean
+    /** The principal column of the table. */
+    principal?: boolean
+    /** Id of the category that groups the field in the fields panel while it is hidden. */
+    category?: string
+    /** Share of the spare width the column takes. */
+    grow?: TableColumn['grow']
+    /** Narrowest width of the column, in pixels. */
+    minWidth?: number
+    /** Alignment of the column; end for numbers. */
+    align?: TableColumn['align']
+    /** Writes the value in the code font. */
+    mono?: boolean
+    /** How the value is written. */
+    format?: EventsExplorerFieldFormat
+  }
+
+  /** A group of hidden fields in the fields panel. */
+  export interface EventsExplorerFieldCategory {
+    /** Key the fields name in their category. */
+    id: string
+    /** Heading of the group. */
+    label: string
+  }
+
+  /** One bar of the volume chart. */
+  export interface EventsExplorerBucket {
+    /** Start of the bar. */
+    at: Date
+    /** End of the bar. */
+    end: Date
+    /** Events in the bar. */
+    total: number
+    /** Events in the bar per level. */
+    levels: Record<string, number>
+  }
+
+  /** The numbers above the chart. */
+  export interface EventsExplorerSummary {
+    /** Events that match. */
+    total: number
+    /** Of them, events at the Error level. */
+    errors: number
+    /** Mean request time in milliseconds, or null when no event has one. */
+    avgRequestTimeMs: number | null
+  }
+
+  /** Applied values per filter field; period holds the time range. */
+  export type EventsExplorerFilters = FilterMenuModel
+
+  /** One field of the open event, as the document lists it. */
+  export interface EventsExplorerDocumentField {
+    /** Id of the field. */
+    id: string
+    /** Label of the field. */
+    label: string
+    /** The value as written in the document. */
+    value: string
+    /** The value as the event holds it, the one a filter applies. */
+    raw: FilterMenuValue
+    /** The log can be filtered by this field. */
+    filterable: boolean
+  }
+
+  export interface EventsExplorerProps {
+    /** The events. Left out, the sample renders. Filtered, searched and paged in the browser unless total is set. */
+    events?: EventsExplorerEvent[]
+    /** The fields of the events, in order; the columns, the fields panel and the document follow them. Left out, the sample fields. */
+    fields?: EventsExplorerField[]
+    /** The categories of the fields panel, in order. Left out, derived from the fields. */
+    categories?: EventsExplorerFieldCategory[]
+    /** The volume chart bars. Left out, counted from the events in the period. */
+    buckets?: EventsExplorerBucket[]
+    /** The numbers above the chart. Left out, counted from the events that match. */
+    summary?: EventsExplorerSummary
+    /** Every event that matches on the server: events is then one page the server already filtered, and the pages follow page and pageSize. */
+    total?: number
+    /** The moment relative periods end at. Left out, the sample clock. */
+    now?: Date
+    /** More events exist after the last one; the table offers to load more. */
+    moreRows?: boolean
+    /** The next events are loading. */
+    loadingMore?: boolean
+    /** A request is in flight: skeletons hold the numbers and the chart, and the table shows its loading rows. */
+    loading?: boolean
+    /** Why the events could not load; a danger alert with Retry replaces the log. */
+    error?: string
+    /** IANA time zone the times, the chart and the period are written in. */
+    timeZone?: string
+    /** An extra test every event must pass besides the filters, such as a typed query. */
+    match?: (event: EventsExplorerEvent) => boolean
+  }
+
+  const props = withDefaults(defineProps<EventsExplorerProps>(), {
+    events: undefined,
+    fields: undefined,
+    categories: undefined,
+    buckets: undefined,
+    summary: undefined,
+    total: undefined,
+    now: undefined,
+    moreRows: false,
+    loadingMore: false,
+    loading: false,
+    error: '',
+    timeZone: 'UTC',
+    match: undefined
+  })
+
+  const emit = defineEmits<{
+    refresh: [event: MouseEvent]
+    retry: [event: MouseEvent]
+    select: [event: MouseEvent | KeyboardEvent, record: EventsExplorerEvent]
+    'load-more': [event: Event]
+  }>()
+
+  const filters = defineModel<EventsExplorerFilters>('filters', {
+    default: () => ({ period: ['24h'] })
+  })
+  const search = defineModel<string>('search', { default: '' })
+  const page = defineModel<number>('page', { default: 1 })
+  const pageSize = defineModel<number>('pageSize', { default: 25 })
+  const selectedKey = defineModel<string>('selectedKey', { default: '' })
+  const exclusions = defineModel<EventsExplorerFilters>('exclusions', {
+    default: () => ({})
+  })
+
+  defineSlots<{
+    /** Replaces the controls row and the filter chips; exportCsv downloads the log shown. */
+    toolbar?(props: { exportCsv: () => void; exportDisabled: boolean }): unknown
+    /** Replaces the fields of the open event in its document. */
+    'document-fields'?(props: {
+      event: EventsExplorerEvent
+      fields: EventsExplorerDocumentField[]
+    }): unknown
+  }>()
+
+  type EventRow = EventsExplorerEvent & { time: string; sourceLabel: string }
+
+  type AppliedValue = FilterMenuValue
+
+  interface FilterOption {
+    value: AppliedValue
+    label: string
+    custom?: boolean
+  }
+
+  interface FilterField {
+    label: string
+    id: string
+    kind: 'range' | 'options'
+    options: FilterOption[]
+    formatValue?: (value: AppliedValue) => string
+    match: (event: EventRow, values: AppliedValue[]) => boolean
+  }
+
+  const { formatDate, formatNumber } = useLocale()
+
+  const nowDate = computed(() => props.now ?? sampleNow)
+
+  const dayFormat = (value: Date | number | string) =>
+    formatDate(value, {
+      month: 'short',
+      day: '2-digit',
+      timeZone: props.timeZone
+    })
+  const clockFormat = (value: Date | number | string) =>
+    formatDate(value, {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false,
+      timeZone: props.timeZone
+    })
+  const axisFormat = (value: Date | number | string) =>
+    formatDate(value, {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+      timeZone: props.timeZone
+    })
+  const isDate = (value: unknown): value is Date =>
+    value instanceof Date && !Number.isNaN(value.getTime())
+
+  const formatEventTime = (date: Date) =>
+    isDate(date) ? `${dayFormat(date)}, ${clockFormat(date)}` : ''
+
+  const formatEventClock = (date: unknown) => (isDate(date) ? axisFormat(date) : '')
+
+  const formatEventClockSeconds = (date: unknown) => (isDate(date) ? clockFormat(date) : '')
+
+  const eventSources: Record<string, string> = {
+    http: 'HTTP Requests',
+    security: 'Security',
+    services: 'Services',
+    access: 'Access Control'
+  }
+
+  const eventSourceOptions = Object.entries(eventSources).map(([value, label]) => ({
+    value,
+    label
+  }))
+
+  const eventLevels: Record<EventsExplorerEventLevel, TagSeverity> = {
+    Error: 'danger',
+    Warning: 'warning',
+    Info: 'info',
+    Debug: 'neutral'
+  }
+
+  const eventLevelSeverity = (level: EventsExplorerEventLevel) => eventLevels[level] ?? 'neutral'
+
+  const levelOrder = Object.keys(eventLevels) as EventsExplorerEventLevel[]
+
+  const eventLevelOptions = levelOrder.map((value) => ({ value, label: value }))
+
+  const eventPeriods: FilterOption[] = [
+    { value: '15m', label: 'Last 15 minutes' },
+    { value: '1h', label: 'Last hour' },
+    { value: '6h', label: 'Last 6 hours' },
+    { value: '24h', label: 'Last 24 hours' },
+    { value: 'custom', label: 'Custom range', custom: true }
+  ]
+
+  const periodMinutes: Record<string, number> = { '15m': 15, '1h': 60, '6h': 360, '24h': 1440 }
+
+  const fullWindowMinutes = periodMinutes['24h']
+
+  const withinRange = (date: Date, range: FilterMenuRange | null) => {
+    if (!range) return true
+    const { start, end } = range
+    if (!start && !end) return true
+    if (!isDate(date)) return false
+    if (start && date.getTime() < start.getTime()) return false
+    if (end) {
+      const midnight =
+        end.getHours() === 0 &&
+        end.getMinutes() === 0 &&
+        end.getSeconds() === 0 &&
+        end.getMilliseconds() === 0
+      const bound = midnight
+        ? new Date(end.getFullYear(), end.getMonth(), end.getDate(), 23, 59, 59, 999)
+        : end
+      if (date.getTime() > bound.getTime()) return false
+    }
+    return true
+  }
+
+  const periodRange = (value: AppliedValue, now = nowDate.value): FilterMenuRange => {
+    if (value && typeof value === 'object') {
+      return { start: value.start ?? null, end: value.end ?? now }
+    }
+    const minutes = periodMinutes[value] ?? fullWindowMinutes
+    return { start: new Date(now.getTime() - minutes * 60000), end: now }
+  }
+
+  const matchPeriod = (date: Date, values: AppliedValue[]) => {
+    const [period] = values ?? []
+    if (!period || period === 'custom' || !isDate(date)) return true
+    return withinRange(date, periodRange(period))
+  }
+
+  const formatPeriod = (value: AppliedValue) => {
+    if (!value || typeof value !== 'object') return ''
+    const { start, end } = value
+    if (!start) return end ? `Until ${formatEventClock(end)}` : ''
+    const sameDay = end && dayFormat(start) === dayFormat(end)
+    const from = `${dayFormat(start)}, ${formatEventClock(start)}`
+    if (!end) return `Since ${from}`
+    return sameDay
+      ? `${from} to ${formatEventClock(end)}`
+      : `${from} to ${dayFormat(end)}, ${formatEventClock(end)}`
+  }
+
+  const eventFields = computed(() => props.fields ?? sampleFields)
+
+  const eventFieldCategories = computed<EventsExplorerFieldCategory[]>(() => {
+    if (props.categories) return props.categories
+    if (!props.fields) return sampleCategories
+    const ids = [...new Set(props.fields.map((field) => field.category ?? ''))].filter(Boolean)
+    return ids.map((category) => ({ label: category, id: category }))
+  })
+
+  const coreFields = computed(() => eventFields.value.filter((field) => field.core))
+
+  const optionalFields = computed(() => eventFields.value.filter((field) => !field.core))
+
+  const eventField = (id: string) => eventFields.value.find((field) => field.id === id)
+
+  const formatEventValue = (field: EventsExplorerField | undefined, value: unknown) => {
+    if (value === undefined || value === null || value === '') return '—'
+    if (typeof value !== 'number' || !field?.format) return String(value)
+    return field.format === 'number' ? formatNumber(value) : `${value} ms`
+  }
+
+  const serverMode = computed(() => props.total !== undefined)
+
+  const sourceEvents = computed<EventsExplorerEvent[]>(
+    () => props.events ?? (props.loading || props.error ? [] : sampleEvents)
+  )
+
+  const eventRows = computed<EventRow[]>(() =>
+    sourceEvents.value.map((event) => ({
+      ...event,
+      time: formatEventTime(event.at),
+      sourceLabel: eventSources[event.source] ?? event.source
+    }))
+  )
+
+  const searchEvents = (list: EventRow[], term: string) => {
+    const needle = term.trim().toLowerCase()
+    if (!needle) return list
+    return list.filter((event) =>
+      eventFields.value.some((field) => {
+        const value = event[field.id]
+        return value !== undefined && value !== null && String(value).toLowerCase().includes(needle)
+      })
+    )
+  }
+
+  const fieldValueCounts = (list: EventRow[], id: string) => {
+    const counts = new Map<AppliedValue, number>()
+    for (const event of list) {
+      const value = event[id] as AppliedValue | undefined | null
+      if (value === undefined || value === null || value === '') continue
+      counts.set(value, (counts.get(value) ?? 0) + 1)
+    }
+    return [...counts.entries()]
+      .map(([value, count]) => ({ value, count }))
+      .sort((a, b) => b.count - a.count)
+  }
+
+  const countFieldValues = (list: EventRow[], id: string) => {
+    const values = new Set<unknown>()
+    for (const event of list) {
+      const value = event[id]
+      if (value !== undefined && value !== null && value !== '') values.add(value)
+    }
+    return values.size
+  }
+
+  const bucketCountFor = (windowMinutes: number) => {
+    if (windowMinutes <= 15) return 12
+    if (windowMinutes <= 60) return 20
+    return 32
+  }
+
+  const eventBuckets = (
+    list: EventRow[],
+    range: FilterMenuRange | null
+  ): EventsExplorerBucket[] => {
+    const end = (range?.end ?? nowDate.value).getTime()
+    const start = (range?.start ?? new Date(end - fullWindowMinutes * 60000)).getTime()
+    const span = Math.max(1, end - start)
+    const bars = bucketCountFor(span / 60000)
+    const width = span / bars
+    const result = Array.from({ length: bars }, (_, index) => ({
+      at: new Date(start + index * width),
+      end: new Date(start + (index + 1) * width),
+      total: 0,
+      levels: Object.fromEntries(levelOrder.map((level) => [level, 0]))
+    }))
+    for (const event of list) {
+      if (!isDate(event.at)) continue
+      const offset = event.at.getTime() - start
+      if (offset < 0 || offset > span) continue
+      const bucket = result[Math.min(bars - 1, Math.floor(offset / width))]
+      bucket.total += 1
+      if (bucket.levels[event.level] !== undefined) bucket.levels[event.level] += 1
+    }
+    return result
+  }
+
+  const eventSummary = (list: EventRow[]): EventsExplorerSummary => {
+    const errors = list.filter((event) => event.level === 'Error').length
+    const times = list
+      .map((event) => event.requestTimeMs)
+      .filter((value): value is number => typeof value === 'number')
+    return {
+      total: list.length,
+      errors,
+      avgRequestTimeMs: times.length
+        ? Math.round(times.reduce((sum, value) => sum + value, 0) / times.length)
+        : null
+    }
+  }
+
+  const baseFilterFields: FilterField[] = [
+    {
+      label: 'Period',
+      id: 'period',
+      kind: 'range',
+      options: eventPeriods,
+      formatValue: formatPeriod,
+      match: (event, values) => matchPeriod(event.at, values)
+    },
+    {
+      label: 'Source',
+      id: 'source',
+      kind: 'options',
+      options: eventSourceOptions,
+      match: (event, values) => values.includes(event.source)
+    },
+    {
+      label: 'Level',
+      id: 'level',
+      kind: 'options',
+      options: eventLevelOptions,
+      match: (event, values) => values.includes(event.level)
+    }
+  ]
+
+  const baseFilterIds = new Set(baseFilterFields.map((field) => field.id))
+
+  const activeFieldIds = computed(() =>
+    Object.keys(filters.value).filter(
+      (id) => !baseFilterIds.has(id) && Boolean(filters.value[id]?.length)
+    )
+  )
+
+  const filterFields = computed<FilterField[]>(() => [
+    ...baseFilterFields,
+    ...activeFieldIds.value.map((id): FilterField => {
+      const field = eventField(id)
+      return {
+        id,
+        label: field?.label ?? id,
+        kind: 'options',
+        options: fieldValueCounts(eventRows.value, id).map(({ value }) => ({
+          value,
+          label: formatEventValue(field, value)
+        })),
+        match: (event: EventRow, values: readonly unknown[]) => values.includes(event[id])
+      }
+    })
+  ])
+
+  const menuFields = computed<FilterMenuField[]>(() =>
+    filterFields.value.map((field) => ({
+      label: field.label,
+      id: field.id,
+      type: field.kind === 'range' ? 'date' : 'multiple',
+      options: (field.options ?? [])
+        .filter((option) => !option.custom)
+        .map((option) => ({ value: option.value as string | number, label: option.label }))
+    }))
+  )
+
+  const filteredEvents = computed(() =>
+    eventRows.value.filter(
+      (event) =>
+        filterFields.value.every((field) => {
+          const values = filters.value[field.id]
+          if (!values?.length) return true
+          return field.match(event, values)
+        }) &&
+        Object.entries(exclusions.value).every(
+          ([id, values]) => !values.includes(event[id] as FilterMenuValue)
+        ) &&
+        (!props.match || props.match(event))
+    )
+  )
+
+  const exclusionChips = computed(() =>
+    Object.entries(exclusions.value).flatMap(([id, values]) => {
+      const field = eventField(id)
+      return values.map((value) => ({
+        key: `${id}:${String(value)}`,
+        id,
+        value,
+        label: field?.label ?? id,
+        text: formatEventValue(field, value)
+      }))
+    })
+  )
+
+  const removeExclusion = (id: string, value: FilterMenuValue) => {
+    exclusions.value = {
+      ...exclusions.value,
+      [id]: (exclusions.value[id] ?? []).filter((item) => item !== value)
+    }
+  }
+
+  watch([filters, exclusions], () => {
+    page.value = 1
+  })
+
+  const tableEl = ref<TableExposed<EventRow> | null>(null)
+  const exportCsv = () => tableEl.value?.exportCsv({ filename: 'events.csv' })
+
+  const matchedEvents = computed(() =>
+    serverMode.value ? eventRows.value : searchEvents(filteredEvents.value, search.value)
+  )
+
+  watch(search, () => {
+    page.value = 1
+  })
+
+  const appliedPeriod = computed(() => filters.value.period?.[0] ?? '')
+
+  const activeWindow = computed(() => periodRange(appliedPeriod.value))
+
+  const windowLabel = computed(() => {
+    const period = appliedPeriod.value
+    if (period && typeof period === 'object') return formatPeriod(period)
+    return eventPeriods.find((option) => option.value === period)?.label ?? 'Last 24 hours'
+  })
+
+  const selectTimeRange = ({ start, end }: FilterMenuRange) => {
+    filters.value = { ...filters.value, period: [{ start, end }] }
+  }
+
+  const buckets = computed(
+    () => props.buckets ?? eventBuckets(matchedEvents.value, activeWindow.value)
+  )
+  const summary = computed(() => props.summary ?? eventSummary(matchedEvents.value))
+
+  const errorShareLabel = computed(() =>
+    summary.value.total
+      ? `${((summary.value.errors / summary.value.total) * 100).toFixed(1)}% of events`
+      : 'none'
+  )
+
+  const noTraffic = computed(() => !serverMode.value && !sourceEvents.value.length)
+
+  const defaultColumns = () => {
+    const known = ['host', 'status', 'remoteAddress'].filter((id) => eventField(id))
+    return known.length ? known : optionalFields.value.slice(0, 3).map((field) => field.id)
+  }
+
+  const shownColumns = ref(defaultColumns())
+  const fieldsOpen = ref(true)
+  const fieldSearch = ref('')
+
+  const matchesFieldSearch = (field: EventsExplorerField) => {
+    const term = fieldSearch.value.trim().toLowerCase()
+    if (!term) return true
+    return field.label.toLowerCase().includes(term) || field.id.toLowerCase().includes(term)
+  }
+
+  const shownFields = computed<Array<EventsExplorerField & { locked?: boolean }>>(() => [
+    ...coreFields.value.filter(matchesFieldSearch).map((field) => ({ ...field, locked: true })),
+    ...optionalFields.value.filter(
+      (field) => shownColumns.value.includes(field.id) && matchesFieldSearch(field)
+    )
+  ])
+
+  const fieldCategories = computed(() =>
+    eventFieldCategories.value
+      .map((category) => ({
+        ...category,
+        fields: optionalFields.value.filter(
+          (field) =>
+            field.category === category.id &&
+            !shownColumns.value.includes(field.id) &&
+            matchesFieldSearch(field)
+        )
+      }))
+      .filter((category) => category.fields.length)
+  )
+
+  const hasFieldMatches = computed(
+    () => shownFields.value.length > 0 || fieldCategories.value.length > 0
+  )
+
+  const categoryFilterCount = (category: { fields: EventsExplorerField[] }) =>
+    category.fields.filter((field) => filters.value[field.id]?.length).length
+
+  const defaultCategories = () => eventFieldCategories.value.slice(0, 1).map(({ id }) => id)
+
+  const openCategories = ref(defaultCategories())
+
+  watch(
+    () => eventFields.value.map((field) => field.id).join(' '),
+    () => {
+      shownColumns.value = defaultColumns()
+      openCategories.value = defaultCategories()
+    }
+  )
+
+  const collapsedBeforeSearch = ref<string[] | null>(null)
+  watch(fieldSearch, (term, previous) => {
+    const searching = Boolean(term.trim())
+    if (searching && !previous.trim()) collapsedBeforeSearch.value = [...openCategories.value]
+    if (searching) {
+      openCategories.value = fieldCategories.value.map((category) => category.id)
+      return
+    }
+    openCategories.value = collapsedBeforeSearch.value ?? defaultCategories()
+    collapsedBeforeSearch.value = null
+  })
+
+  const fieldCounts = computed(() =>
+    Object.fromEntries(
+      eventFields.value.map((field) => [field.id, countFieldValues(matchedEvents.value, field.id)])
+    )
+  )
+
+  const topValues = 6
+
+  const unfilterableFields = new Set(['time', 'sourceLabel'])
+
+  const canFilterField = (field: EventsExplorerField) => !unfilterableFields.has(field.id)
+
+  const topFieldValues = (id: string) =>
+    fieldValueCounts(matchedEvents.value, id).slice(0, topValues)
+
+  const fieldValueOverflow = (id: string) =>
+    Math.max(0, countFieldValues(matchedEvents.value, id) - topValues)
+
+  const isValueApplied = (id: string, value: AppliedValue) =>
+    (filters.value[id] ?? []).includes(value)
+
+  const toggleColumn = (id: string) => {
+    shownColumns.value = shownColumns.value.includes(id)
+      ? shownColumns.value.filter((shown) => shown !== id)
+      : [...shownColumns.value, id]
+  }
+
+  const toggleFieldValue = (id: string, value: AppliedValue) => {
+    const current = filters.value[id] ?? []
+    const next = current.includes(value)
+      ? current.filter((applied) => applied !== value)
+      : [...current, value]
+    filters.value = { ...filters.value, [id]: next }
+  }
+
+  const toColumn = (field: EventsExplorerField): TableColumn => ({
+    accessorKey: field.id,
+    header: field.label,
+    sortable: true,
+    ...(field.principal ? { principal: true } : {}),
+    ...(field.grow ? { grow: field.grow } : {}),
+    ...(field.minWidth ? { minWidth: field.minWidth } : {}),
+    ...(field.align ? { align: field.align } : {})
+  })
+
+  const columns = computed<TableColumn[]>(() => [
+    { id: 'detail', header: '', width: 44, align: 'center', hideable: false },
+    ...(compactLog.value
+      ? coreFields.value.filter((field) => field.id === 'message').map(toColumn)
+      : coreFields.value.map(toColumn)),
+    ...optionalFields.value.filter((field) => shownColumns.value.includes(field.id)).map(toColumn)
+  ])
+
+  const customCellFields = ['status']
+  const genericColumns = computed(() =>
+    optionalFields.value.filter(
+      (field) => shownColumns.value.includes(field.id) && !customCellFields.includes(field.id)
+    )
+  )
+
+  const statusField = computed(() => eventField('status'))
+
+  const statusSeverity = (status: unknown) => {
+    if (typeof status !== 'number') return null
+    if (status >= 500) return 'danger'
+    if (status >= 400) return 'warning'
+    return 'success'
+  }
+
+  const selectedId = selectedKey
+  const selectedEvent = computed(
+    () => matchedEvents.value.find((event) => event.id === selectedId.value) ?? null
+  )
+  const documentEvent = ref<EventRow | null>(null)
+  const traceView = ref<TraceView>('waterfall')
+  watch(
+    selectedEvent,
+    (event) => {
+      if (event) documentEvent.value = event
+    },
+    { immediate: true }
+  )
+
+  const logMinWidth = 480
+  const documentMinWidth = 348
+  const fieldsPanelWidth = 268
+
+  const explorerEl = ref<HTMLElement | null>(null)
+  const explorerWidth = ref(0)
+  let explorerObserver: ResizeObserver | null = null
+
+  const showFieldsPanel = computed(
+    () => explorerWidth.value === 0 || explorerWidth.value >= fieldsPanelWidth + logMinWidth
+  )
+
+  const isWide = computed(
+    () =>
+      explorerWidth.value === 0 ||
+      explorerWidth.value >= fieldsPanelWidth + logMinWidth + documentMinWidth
+  )
+
+  const compactLog = computed(() => !isWide.value)
+
+  const documentDrawerOpen = ref(false)
+
+  onMounted(() => {
+    if (!explorerEl.value) return
+    explorerWidth.value = explorerEl.value.offsetWidth
+    explorerObserver = new ResizeObserver(([entry]) => {
+      explorerWidth.value = entry.contentRect.width
+    })
+    explorerObserver.observe(explorerEl.value)
+  })
+
+  watch(isWide, (wide) => {
+    documentDrawerOpen.value = !wide && Boolean(selectedId.value)
+  })
+
+  const closeDocument = () => {
+    selectedId.value = ''
+    documentDrawerOpen.value = false
+  }
+
+  const openDocument = (event: MouseEvent | KeyboardEvent, row: EventRow) => {
+    selectedId.value = row.id
+    documentDrawerOpen.value = !isWide.value
+    emit('select', event, sourceEvents.value.find((record) => record.id === row.id) ?? row)
+  }
+
+  const documentCollapsed = computed({
+    get: () => !selectedEvent.value,
+    set: (collapsed) => {
+      if (collapsed) closeDocument()
+    }
+  })
+
+  const documentPaneExpanded = computed({
+    get: () => isWide.value && !documentCollapsed.value,
+    set: (expanded) => {
+      if (!expanded) closeDocument()
+    }
+  })
+
+  watch(documentDrawerOpen, (open) => {
+    if (!open && !isWide.value) selectedId.value = ''
+  })
+
+  const fieldsWidth = ref(fieldsPanelWidth)
+  const documentWidth = ref(400)
+
+  const documentMaxWidth = computed(() => {
+    if (explorerWidth.value === 0) return Infinity
+    const fieldsUsed = showFieldsPanel.value && fieldsOpen.value ? fieldsWidth.value : 0
+    return Math.max(documentMinWidth, explorerWidth.value - fieldsUsed - logMinWidth)
+  })
+
+  watch(
+    [documentMaxWidth, documentWidth],
+    ([max, width]) => {
+      if (width > max) documentWidth.value = max
+    },
+    { flush: 'sync' }
+  )
+
+  const summaryPriority = [
+    'host',
+    'requestMethod',
+    'requestUri',
+    'status',
+    'serviceName',
+    'serviceDurationMs',
+    'ruleName',
+    'requestTimeMs',
+    'remoteAddress',
+    'country',
+    'cacheStatus',
+    'resourceId'
+  ]
+
+  const summaryLimit = 6
+
+  const summaryOrder = computed(() => {
+    const known = summaryPriority.filter((id) => eventField(id))
+    return known.length ? known : optionalFields.value.map((field) => field.id)
+  })
+
+  const hasEventValue = (event: EventRow, id: string) => {
+    const value = event[id]
+    return value !== undefined && value !== null && value !== ''
+  }
+
+  const documentFields = computed<EventsExplorerDocumentField[]>(() => {
+    const event = documentEvent.value
+    if (!event) return []
+    return eventFields.value
+      .filter((field) => hasEventValue(event, field.id))
+      .map((field) => ({
+        id: field.id,
+        label: field.label,
+        value: formatEventValue(field, event[field.id]),
+        raw: event[field.id] as FilterMenuValue,
+        filterable: canFilterField(field)
+      }))
+  })
+
+  const documentRows = computed(() => {
+    const event = selectedEvent.value
+    if (!event) return []
+    return summaryOrder.value
+      .filter((id) => hasEventValue(event, id))
+      .slice(0, summaryLimit)
+      .map((id) => {
+        const field = eventField(id)
+        return { id, label: field?.label ?? id, value: formatEventValue(field, event[id]) }
+      })
+  })
+
+  const documentTabs = computed(() => {
+    const event = selectedEvent.value
+    if (!event) return []
+    const payload = Object.fromEntries(
+      eventFields.value
+        .filter((field) => hasEventValue(event, field.id))
+        .map((field) => [field.id, event[field.id]])
+    )
+    return [
+      {
+        label: 'Document',
+        value: 'document',
+        language: 'json',
+        code: JSON.stringify(payload, null, 2)
+      }
+    ]
+  })
+
+  const levelColors: Record<EventsExplorerEventLevel, ChartColor> = {
+    Error: 'severity-critical',
+    Warning: 'severity-medium',
+    Info: 'severity-low',
+    Debug: 'severity-info'
+  }
+
+  const volumeLabels = computed(() => buckets.value.map((bucket) => bucket.at))
+
+  const volumeSeries = computed<ChartSeries[]>(() =>
+    levelOrder.map((level) => ({
+      name: level,
+      id: level,
+      color: levelColors[level] ?? 'other',
+      values: buckets.value.map((bucket) => bucket.levels[level] ?? 0)
+    }))
+  )
+
+  const busiestIndex = computed(() =>
+    buckets.value.reduce(
+      (highest, bucket, index) =>
+        bucket.total > (buckets.value[highest]?.total ?? 0) ? index : highest,
+      0
+    )
+  )
+
+  const busiestBucket = computed(() => buckets.value[busiestIndex.value] ?? null)
+
+  const selectVolume = (span: ChartRange | null) => {
+    if (!span) return
+    const from = buckets.value[span[0]]
+    const to = buckets.value[span[1]]
+    if (from && to) selectTimeRange({ start: from.at, end: to.end })
+  }
+
+  const chartSummary = computed(() => {
+    if (!busiestBucket.value?.total) return `No events in the ${windowLabel.value.toLowerCase()}.`
+    return `Busiest bucket at ${formatEventClock(busiestBucket.value.at)} with ${busiestBucket.value.total} events.`
+  })
+
+  const chartLabel = computed(
+    () =>
+      `Event volume, ${windowLabel.value.toLowerCase()}. ${chartSummary.value} Drag across the chart, or hold Shift with the arrow keys and press Enter, to filter the log to a span.`
+  )
+
+  onBeforeUnmount(() => {
+    explorerObserver?.disconnect()
+  })
+</script>
+
+<template>
+  <div
+    data-layout-fill
+    class="flex h-dvh min-h-0 flex-col"
+  >
+    <header
+      class="flex shrink-0 flex-col gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-lg) py-(--spacing-sm)"
+    >
+      <slot
+        name="toolbar"
+        :export-csv="exportCsv"
+        :export-disabled="!tableEl"
+      >
+        <header class="flex flex-wrap items-center gap-x-(--layout-group-gap) gap-y-(--spacing-xs)">
+          <div class="flex min-w-0 grow basis-(--container-3xs) items-center gap-(--spacing-xs)">
+            <FilterMenu
+              v-model="filters"
+              :fields="menuFields"
+              class="shrink-0"
+              data-testid="filter-button"
+            />
+            <div class="flex min-w-36 grow basis-(--container-2xs)">
+              <Input
+                v-model="search"
+                size="medium"
+                placeholder="Search events, hosts, paths or addresses"
+                aria-label="Search events"
+                class="w-full"
+              >
+                <template #leading>
+                  <i
+                    class="az az-search"
+                    aria-hidden="true"
+                  />
+                </template>
+              </Input>
+            </div>
+          </div>
+          <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
+            <span
+              class="text-label-sm inline-flex items-center gap-(--spacing-2xs) whitespace-nowrap text-(--text-muted)"
+              data-testid="events-time-zone"
+            >
+              <i
+                class="az az-globe"
+                aria-hidden="true"
+              />
+              Times in {{ timeZone }}
+            </span>
+            <Tooltip
+              content="Refresh"
+              class="shrink-0"
+            >
+              <IconButton
+                icon="az az-refresh"
+                variant="outline"
+                size="medium"
+                :loading="loading"
+                aria-label="Refresh"
+                data-testid="refresh-button"
+                @click="(event: MouseEvent) => emit('refresh', event)"
+              />
+            </Tooltip>
+            <Tooltip
+              content="Download CSV"
+              class="shrink-0"
+            >
+              <IconButton
+                icon="az az-download"
+                variant="outline"
+                size="medium"
+                :disabled="!tableEl"
+                aria-label="Download CSV"
+                data-testid="export-button"
+                @click="exportCsv"
+              />
+            </Tooltip>
+          </div>
+        </header>
+
+        <div
+          v-if="exclusionChips.length"
+          class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)"
+        >
+          <FilterMenu.ChipGroup
+            v-model="filters"
+            :fields="menuFields"
+            data-testid="filter-chips"
+          />
+          <span
+            v-for="chip in exclusionChips"
+            :key="chip.key"
+            class="inline-flex w-fit max-w-full"
+          >
+            <Chip
+              :label="`${chip.label} is not ${chip.text}`"
+              variant="filled"
+              size="medium"
+              removable
+              data-testid="exclusion-chip"
+              @remove="removeExclusion(chip.id, chip.value)"
+            >
+              <span class="flex min-w-0 items-center gap-(--spacing-2xs)">
+                <span class="truncate text-(--text-muted)">{{ chip.label }} is not</span>
+                <span class="truncate">{{ chip.text }}</span>
+              </span>
+            </Chip>
+          </span>
+        </div>
+        <FilterMenu.ChipGroup
+          v-else
+          v-model="filters"
+          :fields="menuFields"
+          data-testid="filter-chips"
+        />
+      </slot>
+    </header>
+
+    <section
+      ref="explorerEl"
+      class="animate-content-enter motion-reduce:animate-none relative flex min-h-0 min-w-0 flex-1 overflow-hidden"
+    >
+      <Resizable
+        orientation="horizontal"
+        aria-label="Events explorer"
+        class="min-h-0 min-w-0 flex-1"
+      >
+        <Resizable.Pane aria-label="Events">
+          <div class="flex h-full min-h-0 min-w-0 flex-1">
+            <div
+              v-if="showFieldsPanel"
+              key="fields-panel"
+              class="contents [--sidebar-width:var(--container-2xs)]"
+            >
+              <Sidebar
+                v-model:open="fieldsOpen"
+                v-model:width="fieldsWidth"
+                resizable
+                collapsible
+                aria-label="Fields"
+                collapse-aria-label="Hide the fields panel"
+                expand-aria-label="Show the fields panel"
+                resize-aria-label="Resize the fields panel"
+              >
+                <template #header>
+                  <div class="px-(--spacing-xs)">
+                    <Input
+                      v-model="fieldSearch"
+                      size="medium"
+                      class="w-full"
+                      placeholder="Search fields"
+                      aria-label="Search fields"
+                    >
+                      <template #leading>
+                        <i
+                          class="az az-search"
+                          aria-hidden="true"
+                        />
+                      </template>
+                    </Input>
+                  </div>
+                </template>
+
+                <div>
+                  <div
+                    class="flex items-baseline justify-between gap-(--spacing-xs) px-(--spacing-xs) pb-(--spacing-2xs) pt-(--spacing-2xs)"
+                  >
+                    <span class="text-label-sm text-(--text-muted)">Shown</span>
+                    <span class="text-label-sm text-(--text-muted)">Values</span>
+                  </div>
+
+                  <div
+                    v-for="field in shownFields"
+                    :key="field.id"
+                    class="group flex items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-2xs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) motion-reduce:transition-none"
+                  >
+                    <div class="min-w-0 flex-1">
+                      <Field
+                        orientation="horizontal"
+                        :disabled="field.locked"
+                      >
+                        <Checkbox
+                          :model-value="true"
+                          :id="`event-field-${field.id}`"
+                          @update:model-value="toggleColumn(field.id)"
+                        />
+                        <Field.Label>
+                          <span class="truncate">{{ field.label }}</span>
+                        </Field.Label>
+                      </Field>
+                    </div>
+
+                    <Popover
+                      v-if="canFilterField(field) && fieldCounts[field.id]"
+                      side="end"
+                      align="start"
+                    >
+                      <div
+                        class="shrink-0 cursor-pointer text-label-code-sm tabular-nums text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) group-hover:text-(--text-default) motion-reduce:transition-none"
+                      >
+                        <Popover.Trigger
+                          role="button"
+                          tabindex="0"
+                          :aria-label="`Filter by ${field.label}, ${fieldCounts[field.id]} values`"
+                        >
+                          {{ fieldCounts[field.id] }}
+                        </Popover.Trigger>
+                      </div>
+
+                      <Popover.Content>
+                        <div class="flex min-w-0 flex-col p-(--spacing-2xs)">
+                          <p
+                            class="px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-muted)"
+                          >
+                            {{ field.label }} · top values
+                          </p>
+
+                          <Item
+                            v-for="entry in topFieldValues(field.id)"
+                            :key="String(entry.value)"
+                            clickable
+                            variant="option"
+                            :aria-pressed="isValueApplied(field.id, entry.value)"
+                            @click="toggleFieldValue(field.id, entry.value)"
+                          >
+                            <span class="flex min-w-0 flex-1 items-center gap-(--spacing-xs)">
+                              <span
+                                class="min-w-0 flex-1 truncate text-label-code-sm text-(--text-default)"
+                              >
+                                {{ formatEventValue(field, entry.value) }}
+                              </span>
+                              <span
+                                class="shrink-0 text-label-code-sm tabular-nums text-(--text-muted)"
+                              >
+                                {{ entry.count }}
+                              </span>
+                              <i
+                                v-if="isValueApplied(field.id, entry.value)"
+                                class="az az-check shrink-0 text-(--primary)"
+                                aria-hidden="true"
+                              />
+                            </span>
+                          </Item>
+
+                          <p
+                            v-if="fieldValueOverflow(field.id)"
+                            class="px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-muted)"
+                          >
+                            {{ fieldValueOverflow(field.id) }} more values in this window.
+                          </p>
+                        </div>
+                      </Popover.Content>
+                    </Popover>
+
+                    <span
+                      v-else
+                      class="shrink-0 px-(--spacing-2xs) text-label-code-sm tabular-nums text-(--text-muted) data-empty:text-(--text-disabled)"
+                      :data-empty="fieldCounts[field.id] ? null : true"
+                      :aria-label="`${fieldCounts[field.id]} distinct values`"
+                    >
+                      {{ fieldCounts[field.id] }}
+                    </span>
+                  </div>
+
+                  <div
+                    v-if="fieldCategories.length"
+                    class="mt-(--spacing-xs)"
+                  >
+                    <Accordion
+                      v-model="openCategories"
+                      type="multiple"
+                      size="medium"
+                      icon-position="leading"
+                    >
+                      <Accordion.Item
+                        v-for="category in fieldCategories"
+                        :key="category.id"
+                        :value="category.id"
+                      >
+                        <Accordion.Trigger>
+                          <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+                            <span class="truncate text-label-sm text-(--text-default)">
+                              {{ category.label }}
+                            </span>
+                            <Tag
+                              v-if="categoryFilterCount(category)"
+                              :label="String(categoryFilterCount(category))"
+                              severity="info"
+                              size="small"
+                            />
+                          </span>
+                        </Accordion.Trigger>
+
+                        <Accordion.Content :padded="false">
+                          <div
+                            v-for="field in category.fields"
+                            :key="field.id"
+                            class="group flex items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-2xs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) motion-reduce:transition-none"
+                          >
+                            <div class="min-w-0 flex-1">
+                              <Field orientation="horizontal">
+                                <Checkbox
+                                  :model-value="false"
+                                  :id="`event-field-${field.id}`"
+                                  @update:model-value="toggleColumn(field.id)"
+                                />
+                                <Field.Label>
+                                  <span class="truncate">{{ field.label }}</span>
+                                </Field.Label>
+                              </Field>
+                            </div>
+
+                            <Popover
+                              v-if="canFilterField(field) && fieldCounts[field.id]"
+                              side="end"
+                              align="start"
+                            >
+                              <div
+                                class="shrink-0 cursor-pointer text-label-code-sm tabular-nums text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) group-hover:text-(--text-default) motion-reduce:transition-none"
+                              >
+                                <Popover.Trigger
+                                  role="button"
+                                  tabindex="0"
+                                  :aria-label="`Filter by ${field.label}, ${fieldCounts[field.id]} values`"
+                                >
+                                  {{ fieldCounts[field.id] }}
+                                </Popover.Trigger>
+                              </div>
+
+                              <Popover.Content>
+                                <div class="flex min-w-0 flex-col p-(--spacing-2xs)">
+                                  <p
+                                    class="px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-muted)"
+                                  >
+                                    {{ field.label }} · top values
+                                  </p>
+
+                                  <Item
+                                    v-for="entry in topFieldValues(field.id)"
+                                    :key="String(entry.value)"
+                                    clickable
+                                    variant="option"
+                                    :aria-pressed="isValueApplied(field.id, entry.value)"
+                                    @click="toggleFieldValue(field.id, entry.value)"
+                                  >
+                                    <span
+                                      class="flex min-w-0 flex-1 items-center gap-(--spacing-xs)"
+                                    >
+                                      <span
+                                        class="min-w-0 flex-1 truncate text-label-code-sm text-(--text-default)"
+                                      >
+                                        {{ formatEventValue(field, entry.value) }}
+                                      </span>
+                                      <span
+                                        class="shrink-0 text-label-code-sm tabular-nums text-(--text-muted)"
+                                      >
+                                        {{ entry.count }}
+                                      </span>
+                                      <i
+                                        v-if="isValueApplied(field.id, entry.value)"
+                                        class="az az-check shrink-0 text-(--primary)"
+                                        aria-hidden="true"
+                                      />
+                                    </span>
+                                  </Item>
+
+                                  <p
+                                    v-if="fieldValueOverflow(field.id)"
+                                    class="px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-muted)"
+                                  >
+                                    {{ fieldValueOverflow(field.id) }} more values in this window.
+                                  </p>
+                                </div>
+                              </Popover.Content>
+                            </Popover>
+
+                            <span
+                              v-else
+                              class="shrink-0 px-(--spacing-2xs) text-label-code-sm tabular-nums text-(--text-muted) data-empty:text-(--text-disabled)"
+                              :data-empty="fieldCounts[field.id] ? null : true"
+                              :aria-label="`${fieldCounts[field.id]} distinct values`"
+                            >
+                              {{ fieldCounts[field.id] }}
+                            </span>
+                          </div>
+                        </Accordion.Content>
+                      </Accordion.Item>
+                    </Accordion>
+                  </div>
+
+                  <p
+                    v-if="!hasFieldMatches"
+                    class="px-(--spacing-xs) py-(--spacing-sm) text-body-sm text-(--text-muted)"
+                  >
+                    No fields match "{{ fieldSearch }}".
+                  </p>
+                </div>
+              </Sidebar>
+            </div>
+
+            <div
+              v-if="error"
+              class="flex min-w-0 flex-1 flex-col overflow-hidden p-(--spacing-md)"
+            >
+              <Alert
+                severity="danger"
+                :label="error"
+                action-label="Retry"
+                @action="(event: MouseEvent) => emit('retry', event)"
+              />
+            </div>
+            <div
+              v-else
+              class="flex min-w-0 flex-1 flex-col overflow-hidden"
+            >
+              <section
+                class="flex shrink-0 flex-col gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
+              >
+                <div class="flex flex-wrap items-end gap-(--spacing-md)">
+                  <dl class="flex flex-wrap items-end gap-(--spacing-xl)">
+                    <div class="flex flex-col">
+                      <dt class="text-label-sm text-(--text-muted)">Events</dt>
+                      <dd class="m-0 text-heading-xs tabular-nums text-(--text-default)">
+                        <Skeleton
+                          v-if="loading"
+                          width="4rem"
+                          height="1.5rem"
+                        />
+                        <template v-else>{{ formatNumber(summary.total) }}</template>
+                      </dd>
+                    </div>
+                    <div class="flex flex-col">
+                      <dt class="text-label-sm text-(--text-muted)">Errors</dt>
+                      <dd
+                        class="m-0 text-heading-xs tabular-nums text-(--text-default) data-raised:text-(--danger-foreground)"
+                        :data-raised="summary.errors ? true : null"
+                        :aria-label="`${summary.errors} errors, ${errorShareLabel}`"
+                      >
+                        <Skeleton
+                          v-if="loading"
+                          width="3rem"
+                          height="1.5rem"
+                        />
+                        <template v-else>{{ formatNumber(summary.errors) }}</template>
+                      </dd>
+                    </div>
+                    <div class="flex flex-col">
+                      <dt class="text-label-sm text-(--text-muted)">Avg request time</dt>
+                      <dd class="m-0 text-heading-xs tabular-nums text-(--text-default)">
+                        <Skeleton
+                          v-if="loading"
+                          width="4rem"
+                          height="1.5rem"
+                        />
+                        <template v-else>{{
+                          summary.avgRequestTimeMs === null ? '—' : `${summary.avgRequestTimeMs} ms`
+                        }}</template>
+                      </dd>
+                    </div>
+                  </dl>
+                </div>
+
+                <Skeleton
+                  v-if="loading"
+                  height="5rem"
+                />
+                <Chart
+                  v-else
+                  :range="null"
+                  :series="volumeSeries"
+                  :labels="volumeLabels"
+                  :format-label="formatEventClock"
+                  :height="80"
+                  :aria-label="chartLabel"
+                  @update:range="selectVolume"
+                >
+                  <Chart.Axis
+                    type="x"
+                    :ticks="3"
+                  />
+                  <Chart.Brush />
+                  <Chart.Bar
+                    type="histogram"
+                    stacked
+                  />
+                  <Chart.Crosshair />
+                  <Chart.Tooltip total>
+                    <template #footer
+                      >Click to filter to this bucket, or drag to select a span.</template
+                    >
+                  </Chart.Tooltip>
+                </Chart>
+              </section>
+
+              <section class="flex min-h-0 min-w-0 flex-1 flex-col">
+                <div class="flex min-h-0 flex-1">
+                  <DataTable
+                    ref="tableEl"
+                    v-model:page="page"
+                    v-model:page-size="pageSize"
+                    :data="matchedEvents"
+                    :columns="columns"
+                    row-key="id"
+                    sortable
+                    paginated
+                    :manual-pagination="total !== undefined"
+                    :row-count="total"
+                    :more-rows="moreRows"
+                    :loading-more="loadingMore"
+                    :bordered="false"
+                    density="compact"
+                    max-height="100%"
+                    class="w-full"
+                    :loading="loading"
+                    @row-click="openDocument"
+                    @load-more="(event: Event) => emit('load-more', event)"
+                  >
+                    <template #header-detail>
+                      <span class="sr-only">Open the event document</span>
+                    </template>
+
+                    <template #cell-detail="{ row }">
+                      <IconButton
+                        :icon="row.id === selectedId ? 'az az-chevron-down' : 'az az-chevron-right'"
+                        variant="ghost"
+                        size="small"
+                        :aria-label="`Open event ${row.id}`"
+                        :aria-expanded="row.id === selectedId"
+                        @click.stop="openDocument($event, row)"
+                      />
+                    </template>
+
+                    <template #cell-time="{ value }">
+                      <span
+                        class="min-w-0 truncate text-label-code-sm tabular-nums text-(--text-muted)"
+                      >
+                        {{ value }}
+                      </span>
+                    </template>
+
+                    <template #cell-level="{ value }">
+                      <Tag
+                        :label="String(value)"
+                        :severity="eventLevelSeverity(value as EventsExplorerEventLevel)"
+                        size="small"
+                      />
+                    </template>
+
+                    <template #cell-message="{ value, row }">
+                      <div
+                        v-if="compactLog"
+                        class="flex min-w-0 flex-col gap-(--spacing-2xs) py-(--spacing-2xs)"
+                      >
+                        <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+                          <Tag
+                            :label="String(row.level)"
+                            :severity="eventLevelSeverity(row.level)"
+                            size="small"
+                            class="shrink-0"
+                          />
+                          <span
+                            class="shrink-0 text-label-code-sm tabular-nums text-(--text-muted)"
+                            >{{ formatEventClockSeconds(row.at) }}</span
+                          >
+                          <span class="min-w-0 truncate text-body-xs text-(--text-muted)">{{
+                            row.sourceLabel
+                          }}</span>
+                        </div>
+                        <span class="whitespace-normal break-words text-(--text-default)">{{
+                          value
+                        }}</span>
+                      </div>
+                      <span
+                        v-else
+                        class="min-w-0 truncate text-(--text-default)"
+                        >{{ value }}</span
+                      >
+                    </template>
+
+                    <template #cell-status="{ value }">
+                      <span
+                        class="min-w-0 truncate text-label-code-sm tabular-nums text-(--text-default) data-[severity=danger]:text-(--danger-foreground) data-[severity=warning]:text-(--warning-foreground)"
+                        :data-severity="statusSeverity(value)"
+                      >
+                        {{ formatEventValue(statusField, value) }}
+                      </span>
+                    </template>
+
+                    <template
+                      v-for="field in genericColumns"
+                      :key="field.id"
+                      #[`cell-${field.id}`]="{ value }"
+                    >
+                      <span
+                        class="min-w-0 truncate text-(--text-default) data-mono:text-label-code-sm data-numeric:tabular-nums"
+                        :data-mono="field.mono || null"
+                        :data-numeric="field.align === 'end' || null"
+                      >
+                        {{ formatEventValue(field, value) }}
+                      </span>
+                    </template>
+
+                    <template #empty>
+                      <EmptyState
+                        v-if="noTraffic"
+                        key="no-traffic"
+                        size="small"
+                        icon="az az-inbox"
+                        title="No events yet"
+                        description="Events appear here as soon as traffic reaches this workspace's resources."
+                      />
+                      <EmptyState
+                        v-else-if="search.trim()"
+                        key="no-match"
+                        size="small"
+                        icon="az az-search"
+                        title="No events match this search"
+                        description="Clear the search, or widen the period to cover more of the log."
+                      />
+                      <EmptyState
+                        v-else
+                        key="no-events"
+                        size="small"
+                        icon="az az-filter-off"
+                        title="No events in this window"
+                        description="Widen the period or clear a filter to see more of the log."
+                      />
+                    </template>
+                  </DataTable>
+                </div>
+              </section>
+            </div>
+          </div>
+        </Resizable.Pane>
+        <Resizable.Handle
+          v-if="documentPaneExpanded"
+          aria-label="Resize the event panel"
+        />
+        <Resizable.Pane
+          v-model:basis="documentWidth"
+          v-model:open="documentPaneExpanded"
+          collapsible
+          :min="320"
+          :max="512"
+          aria-label="Event document"
+        >
+          <aside
+            :inert="!documentPaneExpanded"
+            aria-labelledby="event-document-title"
+            class="flex h-full min-h-0 min-w-0 flex-col border-s border-(--border-default) bg-(--bg-surface)"
+          >
+            <div
+              class="flex items-center justify-between gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
+            >
+              <h2
+                id="event-document-title"
+                class="min-w-0 truncate text-heading-2xs text-(--text-default)"
+              >
+                Event
+              </h2>
+              <Tooltip content="Close">
+                <IconButton
+                  icon="az az-x"
+                  variant="ghost"
+                  size="small"
+                  aria-label="Close the event document"
+                  @click="closeDocument"
+                />
+              </Tooltip>
+            </div>
+            <div class="min-h-0 flex-1 overflow-y-auto">
+              <div
+                v-if="documentEvent"
+                class="min-w-0"
+              >
+                <div class="flex min-w-0 flex-col">
+                  <div
+                    class="flex min-w-0 flex-col gap-(--spacing-md) p-(--spacing-md) pb-(--spacing-lg)"
+                  >
+                    <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
+                      <div class="flex flex-wrap items-center gap-(--spacing-xs)">
+                        <Tag
+                          :label="documentEvent.level"
+                          :severity="eventLevelSeverity(documentEvent.level)"
+                          size="small"
+                        />
+                        <Tag
+                          :label="documentEvent.sourceLabel"
+                          severity="neutral"
+                          size="small"
+                        />
+                      </div>
+                      <p class="text-body-md text-(--text-default)">{{ documentEvent.message }}</p>
+                      <p class="text-label-code-sm tabular-nums text-(--text-muted)">
+                        {{ documentEvent.time }}
+                      </p>
+                    </div>
+
+                    <slot
+                      name="document-fields"
+                      :event="documentEvent"
+                      :fields="documentFields"
+                    >
+                      <dl
+                        class="grid min-w-0 grid-cols-[minmax(0,8rem)_minmax(0,1fr)] items-baseline gap-x-(--spacing-md) gap-y-(--spacing-sm)"
+                      >
+                        <template
+                          v-for="row in documentRows"
+                          :key="row.id"
+                        >
+                          <dt class="min-w-0 text-label-sm text-(--text-muted)">{{ row.label }}</dt>
+                          <dd
+                            class="m-0 min-w-0 break-words text-label-code-sm text-(--text-default)"
+                          >
+                            {{ row.value }}
+                          </dd>
+                        </template>
+                      </dl>
+                    </slot>
+                  </div>
+
+                  <div
+                    v-if="documentEvent.spans?.length"
+                    class="flex min-w-0 flex-col gap-(--spacing-xs) pb-(--spacing-lg)"
+                  >
+                    <h3 class="px-(--spacing-md) text-label-sm text-(--text-default)">Trace</h3>
+                    <div class="border-y border-(--border-muted)">
+                      <Trace
+                        :key="documentEvent.id"
+                        :spans="documentEvent.spans"
+                        :bordered="false"
+                        v-model:view="traceView"
+                        highlight-critical-path
+                        :aria-label="`Trace of request ${String(documentEvent.requestId ?? documentEvent.id)}`"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
+                    <h3 class="px-(--spacing-md) text-label-sm text-(--text-default)">
+                      Event document
+                    </h3>
+                    <div class="min-w-0">
+                      <CodeBlock
+                        :tabs="documentTabs"
+                        :bordered="false"
+                        show-line-numbers
+                        copy-aria-label="Copy the event document as JSON"
+                        class="w-full"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </Resizable.Pane>
+      </Resizable>
+    </section>
+
+    <Drawer
+      v-model:open="documentDrawerOpen"
+      size="large"
+      side="end"
+    >
+      <DrawerContent>
+        <PanelHeader class="w-full">
+          <DrawerTitle>Event</DrawerTitle>
+        </PanelHeader>
+        <div class="min-h-0 flex-1 overflow-auto">
+          <div
+            v-if="documentEvent"
+            class="flex min-w-0 flex-col"
+          >
+            <div
+              class="flex min-w-0 flex-col gap-(--spacing-md) p-(--spacing-md) pb-(--spacing-lg)"
+            >
+              <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
+                <div class="flex flex-wrap items-center gap-(--spacing-xs)">
+                  <Tag
+                    :label="documentEvent.level"
+                    :severity="eventLevelSeverity(documentEvent.level)"
+                    size="small"
+                  />
+                  <Tag
+                    :label="documentEvent.sourceLabel"
+                    severity="neutral"
+                    size="small"
+                  />
+                </div>
+                <p class="text-body-md text-(--text-default)">
+                  {{ documentEvent.message }}
+                </p>
+                <p class="text-label-code-sm tabular-nums text-(--text-muted)">
+                  {{ documentEvent.time }}
+                </p>
+              </div>
+
+              <slot
+                name="document-fields"
+                :event="documentEvent"
+                :fields="documentFields"
+              >
+                <dl
+                  class="grid min-w-0 grid-cols-[minmax(0,8rem)_minmax(0,1fr)] items-baseline gap-x-(--spacing-md) gap-y-(--spacing-sm)"
+                >
+                  <template
+                    v-for="row in documentRows"
+                    :key="row.id"
+                  >
+                    <dt class="min-w-0 text-label-sm text-(--text-muted)">{{ row.label }}</dt>
+                    <dd class="m-0 min-w-0 break-words text-label-code-sm text-(--text-default)">
+                      {{ row.value }}
+                    </dd>
+                  </template>
+                </dl>
+              </slot>
+            </div>
+
+            <div
+              v-if="documentEvent.spans?.length"
+              class="flex min-w-0 flex-col gap-(--spacing-xs) pb-(--spacing-lg)"
+            >
+              <h3 class="px-(--spacing-md) text-label-sm text-(--text-default)">Trace</h3>
+              <div class="border-y border-(--border-muted)">
+                <Trace
+                  :key="documentEvent.id"
+                  :spans="documentEvent.spans"
+                  :bordered="false"
+                  v-model:view="traceView"
+                  highlight-critical-path
+                  :aria-label="`Trace of request ${String(documentEvent.requestId ?? documentEvent.id)}`"
+                />
+              </div>
+            </div>
+
+            <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
+              <h3 class="px-(--spacing-md) text-label-sm text-(--text-default)">Event document</h3>
+              <div class="min-w-0">
+                <CodeBlock
+                  :tabs="documentTabs"
+                  :bordered="false"
+                  show-line-numbers
+                  copy-aria-label="Copy the event document as JSON"
+                  class="w-full"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </DrawerContent>
+    </Drawer>
+  </div>
+</template>

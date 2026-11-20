@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, provide, ref, toRef, useAttrs, useId } from 'vue'
+  import { computed, provide, ref, toRef, useAttrs, useId, watch } from 'vue'
 
   import { useControllable } from '../../../composables/use-controllable'
   import { DrawerInjectionKey, type DrawerSide, type DrawerSize } from './injection-key'
@@ -13,48 +13,48 @@
     default(): unknown
   }>()
 
-  const props = withDefaults(
-    defineProps<{
-      /** Controlled open state. Use with `v-model:open`. */
-      open?: boolean
-      /** Initial open state when uncontrolled. */
-      defaultOpen?: boolean
-      /** When true, overlay click and Escape close the drawer. */
-      dismissible?: boolean
-      /** Edge the drawer panel slides from. */
-      side?: DrawerSide
-      /** Panel max-width preset (`small` 384px, `medium` 672px, `large` 1024px). Height is always 100% viewport. */
-      size?: DrawerSize
-    }>(),
-    {
-      open: undefined,
-      defaultOpen: false,
-      dismissible: true,
-      side: 'right',
-      size: 'medium'
-    }
-  )
+  export interface DrawerProps {
+    /** Initial open state when uncontrolled. */
+    defaultOpen?: boolean
+    /** Light-dismiss: when true, overlay click and Escape close the drawer. It does not govern the close button; see `closable`. */
+    dismissible?: boolean
+    /** Shows the close (X) button at the end of the drawer header. False removes it; Escape and overlay click still follow `dismissible`. */
+    closable?: boolean
+    /** Renders the overlay, traps focus and locks page scroll. False leaves the page beside the drawer usable: no overlay, no focus trap, no scroll lock, aria-modal false; Escape, the close button and focus restore still work. */
+    modal?: boolean
+    /** Edge the drawer panel slides from, in reading direction: start is the left edge in ltr and the right edge in rtl. */
+    side?: DrawerSide
+    /** Panel width preset: `small` `--container-sm`, `medium` 30% of the screen (at least `--container-md`), `large` 40% of the screen (at least `--container-lg`), the widest and the default. Height is always 100% viewport. */
+    size?: DrawerSize
+  }
 
-  const emit = defineEmits<{
-    'update:open': [value: boolean]
-  }>()
+  const props = withDefaults(defineProps<DrawerProps>(), {
+    defaultOpen: false,
+    dismissible: true,
+    closable: true,
+    modal: true,
+    side: 'end',
+    size: 'large'
+  })
 
-  const openModel = defineModel<boolean | undefined>('open', { default: undefined })
+  /** Controlled open state. Use with v-model:open; while unbound the drawer starts at defaultOpen. */
+  const openModel = defineModel<boolean>('open', { default: undefined as never })
 
   const attrs = useAttrs()
   const uid = useId()
-  const triggerRef = ref<HTMLElement | null>(null)
+  const triggerEl = ref<HTMLElement | null>(null)
+  const returnFocusEl = ref<HTMLElement | null>(null)
+  const hasDescription = ref(false)
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'overlay-drawer')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'drawer')
 
-  const openProp = computed(() => openModel.value ?? props.open)
+  const openProp = computed<boolean | undefined>(() => openModel.value)
 
   const isOpen = useControllable<boolean>({
     prop: openProp,
     defaultProp: props.defaultOpen,
     onChange: (value) => {
       openModel.value = value
-      emit('update:open', value)
     }
   })
 
@@ -63,26 +63,60 @@
   }
 
   const closeDrawer = () => {
+    isOpen.set(false)
+  }
+
+  const dismissDrawer = () => {
     if (!props.dismissible) return
     isOpen.set(false)
   }
 
+  watch(
+    () => isOpen.value,
+    (open) => {
+      if (open && typeof document !== 'undefined') {
+        returnFocusEl.value = document.activeElement as HTMLElement | null
+      }
+    },
+    { flush: 'sync' }
+  )
+
   provide(DrawerInjectionKey, {
     testId: testId.value,
     isOpen: computed(() => isOpen.value),
-    dismissible: props.dismissible,
+    get dismissible() {
+      return props.dismissible
+    },
+    get closable() {
+      return props.closable
+    },
+    get modal() {
+      return props.modal
+    },
     size: toRef(props, 'size'),
     open: openDrawer,
     close: closeDrawer,
+    dismiss: dismissDrawer,
     titleId: `${uid}-title`,
     descriptionId: `${uid}-description`,
-    triggerRef,
-    side: props.side
+    hasDescription,
+    registerDescription: () => {
+      hasDescription.value = true
+    },
+    unregisterDescription: () => {
+      hasDescription.value = false
+    },
+    triggerEl,
+    returnFocusEl,
+    get side() {
+      return props.side
+    }
   })
 </script>
 
 <template>
   <div
+    v-bind="$attrs"
     :data-state="isOpen ? 'open' : 'closed'"
     :data-testid="testId"
   >

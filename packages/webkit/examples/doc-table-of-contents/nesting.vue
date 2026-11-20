@@ -1,0 +1,33 @@
+<script setup>
+  import DocTableOfContents from '@aziontech/webkit/doc-table-of-contents'
+</script>
+
+<template>
+  <div class="max-w-64">
+    <DocTableOfContents
+      :items="[
+        { id: 'overview', text: 'Overview', depth: 2 },
+        { id: 'templates', text: 'Templates', depth: 3 },
+        { id: 'presets', text: 'Framework presets', depth: 3 },
+        { id: 'domains', text: 'Domains', depth: 2 },
+        { id: 'certificates', text: 'Certificates', depth: 3 }
+      ]"
+      active-id="presets"
+      :groups="[
+        {
+          label: 'Repository',
+          links: [
+            { label: 'View source', href: 'https://github.com/aziontech', icon: 'az az-github' }
+          ]
+        },
+        {
+          label: 'Community',
+          links: [
+            { label: 'Discord', href: 'https://discord.gg', icon: 'az az-comments' },
+            { label: 'Forum', href: 'https://forum.example', icon: 'az az-users' }
+          ]
+        }
+      ]"
+    />
+  </div>
+</template>

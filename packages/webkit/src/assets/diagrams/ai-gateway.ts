@@ -6,23 +6,23 @@ const spec: DiagramSpec = {
   nodes: [
     {
       key: 'app',
-      kind: 'app',
+      type: 'app',
       title: 'App'
     },
     {
       key: 'firewall',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'Firewall',
       title: 'WAF, rate limits, DDoS',
-      icon: 'ai ai-edge-firewall',
+      icon: 'az az-firewall',
       active: true
     },
     {
       key: 'gateway',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'Functions',
       title: 'AI Gateway',
-      icon: 'ai ai-edge-functions',
+      icon: 'az az-functions',
       status: {
         label: 'Key valid',
         severity: 'success'
@@ -32,18 +32,18 @@ const spec: DiagramSpec = {
     },
     {
       key: 'inference',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'AI Inference',
       title: 'Models on Azion',
-      icon: 'ai ai-edge-ai',
+      icon: 'az az-ai-inference',
       active: true
     },
     {
       key: 'providers',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Connectors',
       title: 'Third-party providers',
-      icon: 'ai ai-edge-connectors'
+      icon: 'az az-connectors'
     }
   ],
   layout: {

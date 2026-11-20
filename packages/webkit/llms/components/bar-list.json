@@ -1,0 +1,154 @@
+{
+ "name": "bar-list",
+ "binding": "BarList",
+ "import": "@aziontech/webkit/bar-list",
+ "treeShakeableImport": "@aziontech/webkit/bar-list",
+ "category": "chart",
+ "surface": "app",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Use BarList for a ranked top-N breakdown inside a chart card; a list of mixed rows with actions is Item rows. A ranked list of named values: each row is a tinted bar whose length is the value against the largest one, with the name inside the bar and the formatted value in a right-aligned column. It reads as a list, not a chart — no axes, no grid — so it suits top-N breakdowns inside a card, where a horizontal `chart` would spend its width on an axis gutter.",
+ "setup": null,
+ "useWhen": [
+  "Top-N breakdowns inside a card: top paths, top countries, top user agents, top rules triggered.",
+  "A ranking where the name matters as much as the size, and names are long enough to need the bar's full width.",
+  "Rows that lead somewhere — a filtered view of that path or country — via `href` or `item-click`."
+ ],
+ "avoidWhen": [
+  "Several series per category, or values over time → use `chart`.",
+  "A share of a whole where the parts sum to 100% → use `donut-chart`.",
+  "One value against a limit (quota, usage) → use `progress`."
+ ],
+ "related": [
+  "`chart` — horizontal bars with an axis, for comparing several series per category.",
+  "`donut-chart` — the share view of the same breakdown when the parts sum to a whole.",
+  "`chart-card` — the box a BarList sits in on a dashboard."
+ ],
+ "bestPractices": [
+  "Keep it to about ten rows; fold the tail into an \"Other\" row in the data rather than scrolling.",
+  "Leave `sort` on `descending` for rankings; use `none` only when the order itself carries meaning (pipeline steps, weekdays).",
+  "Pass the same `formatValue` as the chart beside it so a number reads the same in both.",
+  "Give interactive rows a destination the user expects — a filtered view of that item — not a detail drawer of the whole list."
+ ],
+ "props": [
+  {
+   "name": "items",
+   "type": "BarListItem[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Rows to rank; each item is `{ id?: string; name: string; value: number; href?: string }`. An item with `href` renders as a link."
+  },
+  {
+   "name": "sort",
+   "type": "'descending' | 'ascending' | 'none'",
+   "default": "'descending'",
+   "required": "false",
+   "doc": "Row order; `none` keeps the order of `items`."
+  },
+  {
+   "name": "color",
+   "type": "ChartColor",
+   "default": "1",
+   "required": "false",
+   "doc": "Hue of the bars: a categorical slot (1–8), `other`, or a status. The fill is that hue tinted over the surface."
+  },
+  {
+   "name": "clickable",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Renders rows without an `href` as buttons that emit `item-click`."
+  },
+  {
+   "name": "formatValue",
+   "type": "(value: number) => string",
+   "default": "formatCompact",
+   "required": "false",
+   "doc": "Formats the value column."
+  },
+  {
+   "name": "loading",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Renders Skeleton rows in place of the list."
+  },
+  {
+   "name": "refetching",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Holds the previous rows at reduced opacity while new data loads (the same as `chart`)."
+  },
+  {
+   "name": "error",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Error message; when set, the list renders an error state in an `alert` region instead of rows: a bordered small `EmptyState` with the error mark, `barList.errorTitle` and the message (the `error` slot replaces it)."
+  },
+  {
+   "name": "emptyTitle",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Title of the empty state shown when `items` is empty. Empty uses the locale catalog (`No data available`)."
+  },
+  {
+   "name": "emptyDescription",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Supporting line under the empty title: why the list is empty, or what to do next."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the list."
+  }
+ ],
+ "events": [
+  {
+   "name": "item-click",
+   "payload": "(event: MouseEvent, item: BarListItem)",
+   "notes": "A row activated — a clickable row, or a link row (the link still navigates). `item` is the consumer's own item object."
+  }
+ ],
+ "slots": [
+  {
+   "name": "empty",
+   "scope": "—",
+   "notes": "Replaces the default `EmptyState` shown when `items` is empty."
+  },
+  {
+   "name": "empty-actions",
+   "scope": "—",
+   "notes": "Actions under the default empty state (a Clear filters or Retry)."
+  },
+  {
+   "name": "error",
+   "scope": "—",
+   "notes": "Replaces the default error state shown while `error` is set."
+  }
+ ],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/bar-list/default.vue"
+  },
+  {
+   "name": "Interactive",
+   "file": "examples/bar-list/interactive.vue"
+  },
+  {
+   "name": "Loading",
+   "file": "examples/bar-list/loading.vue"
+  }
+ ],
+ "docs": "components/bar-list.md"
+}

@@ -4,18 +4,15 @@
     "allow": [
       "Bash(pnpm install)",
       "Bash(pnpm install:*)",
-      "Bash(pnpm webkit:lint)",
-      "Bash(pnpm webkit:lint:*)",
-      "Bash(pnpm webkit:type-check)",
-      "Bash(pnpm webkit:type-coverage)",
-      "Bash(pnpm webkit:format)",
-      "Bash(pnpm webkit:format:check)",
-      "Bash(pnpm storybook:build)",
-      "Bash(pnpm storybook:dev)",
-      "Bash(pnpm storybook:preview)",
-      "Bash(pnpm icons:build)",
-      "Bash(pnpm icons:validate)",
-      "Bash(pnpm governance)",
+      "Bash(pnpm lint:webkit)",
+      "Bash(pnpm lint:webkit:*)",
+      "Bash(pnpm typecheck:webkit)",
+      "Bash(pnpm check:webkit:type-coverage)",
+      "Bash(pnpm format:webkit)",
+      "Bash(pnpm check:webkit:format)",
+      "Bash(pnpm build:icons)",
+      "Bash(pnpm check:icons)",
+      "Bash(pnpm gates)",
       "Bash(pnpm --filter:*)",
       "Bash(npx prettier:*)",
       "Bash(npx eslint:*)",
@@ -50,11 +47,11 @@
           },
           {
             "type": "command",
-            "command": "node .claude/hooks/validate-story-source.mjs"
+            "command": "node .claude/hooks/validate-authoring.mjs"
           },
           {
             "type": "command",
-            "command": "node .claude/hooks/validate-authoring.mjs"
+            "command": "node .claude/hooks/validate-naming.mjs"
           }
         ]
       },

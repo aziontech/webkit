@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Default large link to an off-site page; the `_blank` target adds the external-link icon.",
+   "file": "examples/link/default.vue"
+  },
+  {
+   "name": "Sizes",
+   "summary": "All size variants side by side.",
+   "file": "examples/link/sizes.vue"
+  },
+  {
+   "name": "Disabled",
+   "summary": "Disabled state; interaction is blocked and the disabled tokens apply.",
+   "file": "examples/link/disabled.vue"
+  }
+ ]
+}

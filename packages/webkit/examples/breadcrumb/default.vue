@@ -1,0 +1,18 @@
+<script setup>
+  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
+
+  const items = [
+    { label: 'Page Name', href: '#' },
+    { label: 'Page Name', href: '#' },
+    { label: 'Page Name', href: '#' },
+    { label: 'Page Name', href: '#' },
+    { label: 'Current Page', active: true }
+  ]
+</script>
+
+<template>
+  <Breadcrumb
+    :items="items"
+    class="max-w-[42.5rem]"
+  />
+</template>

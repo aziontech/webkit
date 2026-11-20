@@ -1,0 +1,9 @@
+[
+  "create/create-page:variant-fork:CreateOrganization",
+  "create/create-page:variant-fork:CreateZone",
+  "create/create-resource-picker:variant-fork:OptionalBinding",
+  "shell/shell-console:inline-records",
+  "shell/shell-docs:inline-records",
+  "shell/shell-docs:no-props",
+  "shell/shell-site:no-props"
+]

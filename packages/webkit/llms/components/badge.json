@@ -1,0 +1,86 @@
+{
+ "name": "badge",
+ "binding": "Badge",
+ "import": "@aziontech/webkit/badge",
+ "treeShakeableImport": "@aziontech/webkit/badge",
+ "category": "content",
+ "surface": "app",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Use Badge only for a number attached to something else (unread count, 12, 99+). For the state of a resource use StatusIndicator, for a category or outcome word use Tag, for a removable or selectable token use Chip, and for the \"+N\" of a truncated list use OverflowCount. Badge is a compact, non-interactive count with severity-based color coding, commonly overlaid on icons, avatars or buttons, or set beside a heading. It differs from its sibling `tag`: `tag` carries words (optional leading icon, optional pill shape, masked surfaces), whereas `badge` carries a number on a fully filled surface with no icon affordance.",
+ "setup": null,
+ "useWhen": [
+  "A number attached to another element: a bell with its unread count, a section heading with how many items it holds.",
+  "Color the count through `variant` (the brand look: `primary`, `secondary`) or `severity` (neutral / info / success / warning / danger) with a fully filled surface; `severity` wins when both are set."
+ ],
+ "avoidWhen": [
+  "A status word (Active, Failed, Deploying) → use `status-indicator`.",
+  "A category or outcome word (Production, Beta, Allowed) → use `tag`.",
+  "The label is user-removable or selectable → use `chip`.",
+  "The \"+N\" that opens the hidden items of a truncated list → use `overflow-count`."
+ ],
+ "related": [
+  "`tag` — labelled status/category chip with optional icon and pill shape; use when the label is descriptive, not a count.",
+  "`chip` — interactive/removable token; use when the user can select or dismiss it."
+ ],
+ "bestPractices": [
+  "Keep the content to a number (`12`, `99+`); words belong in `tag` or `status-indicator`.",
+  "Drive color from `variant` or `severity`, never a hardcoded color or a raw palette class."
+ ],
+ "props": [
+  {
+   "name": "label",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Fallback text when the default slot is empty."
+  },
+  {
+   "name": "variant",
+   "type": "'primary' | 'secondary'",
+   "default": "'primary'",
+   "required": "false",
+   "doc": "Brand look of the badge surface and label, used when `severity` is not set."
+  },
+  {
+   "name": "severity",
+   "type": "'neutral' | 'info' | 'success' | 'warning' | 'danger'",
+   "default": "—",
+   "required": "false",
+   "doc": "Status colour of the badge surface and label; wins over `variant` when set. `neutral` uses the `var(--bg-surface)` / `var(--text-default)` surface. The values are the shared `Severity` scale (exported from this component)."
+  },
+  {
+   "name": "size",
+   "type": "'small' | 'medium' | 'large'",
+   "default": "'medium'",
+   "required": "false",
+   "doc": "Size token; `small` is 20px tall, `medium` is 24px, `large` is 30px."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "Main content; falls back to `label` when empty."
+  }
+ ],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/badge/default.vue"
+  },
+  {
+   "name": "Severities",
+   "file": "examples/badge/severities.vue"
+  },
+  {
+   "name": "Sizes",
+   "file": "examples/badge/sizes.vue"
+  }
+ ],
+ "docs": "components/badge.md"
+}

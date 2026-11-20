@@ -1,20 +1,25 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/navigation/link/Link.stories'
+import Default from '../../../../examples/link/default.vue'
+import Disabled from '../../../../examples/link/disabled.vue'
+import Sizes from '../../../../examples/link/sizes.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
+import { UNSAFE_URLS } from '../../../test/unsafe-urls'
 import Link from './link.vue'
-
-const { Default, Sizes, Disabled } = composeStories(stories)
 
 describe('Link', () => {
   it('renders as an anchor with the default testid and label', () => {
     const { getByTestId } = render(Link, { props: { label: 'Learn More' } })
-    const root = getByTestId('navigation-link')
+    const root = getByTestId('link')
 
     expect(root.tagName).toBe('A')
-    expect(getByTestId('navigation-link__label').textContent?.trim()).toBe('Learn More')
+    expect(getByTestId('link__label').textContent?.trim()).toBe('Learn More')
+  })
+
+  it.each(UNSAFE_URLS)('points at # instead of the unsafe href %j', (href) => {
+    const { getByTestId } = render(Link, { props: { label: 'Docs', href } })
+    expect(getByTestId('link')).toHaveAttribute('href', '#')
   })
 
   it('honors a consumer-provided data-testid across sub-elements', () => {
@@ -26,14 +31,18 @@ describe('Link', () => {
     expect(getByTestId('custom-link').tagName).toBe('A')
     expect(getByTestId('custom-link__content')).toBeTruthy()
     expect(getByTestId('custom-link__label').textContent?.trim()).toBe('Docs')
-    expect(getByTestId('custom-link__ghost')).toBeTruthy()
+  })
+
+  it('renders no surface element behind the label', () => {
+    const { queryByTestId } = render(Link, { props: { label: 'Docs' } })
+    expect(queryByTestId('link__ghost')).toBeNull()
   })
 
   it('applies href and defaults target to _self with no rel', () => {
     const { getByTestId } = render(Link, {
       props: { href: 'https://example.com', target: '_self' }
     })
-    const root = getByTestId('navigation-link')
+    const root = getByTestId('link')
 
     expect(root.getAttribute('href')).toBe('https://example.com')
     expect(root.getAttribute('target')).toBe('_self')
@@ -44,42 +53,105 @@ describe('Link', () => {
     const { getByTestId } = render(Link, {
       props: { href: 'https://example.com', target: '_blank' }
     })
-    const root = getByTestId('navigation-link')
+    const root = getByTestId('link')
 
     expect(root.getAttribute('target')).toBe('_blank')
     expect(root.getAttribute('rel')).toBe('noopener noreferrer')
   })
 
-  it('renders the trailing icon when showIcon is true', () => {
-    const { getByTestId } = render(Link, {
-      props: { showIcon: true, icon: 'pi pi-external-link' }
-    })
-    const icon = getByTestId('navigation-link__icon')
+  it('renders the trailing icon when icon is set, hidden from assistive tech', () => {
+    const { getByTestId } = render(Link, { props: { icon: 'az az-arrow-right' } })
+    const icon = getByTestId('link__icon')
 
-    expect(icon.className).toContain('pi')
-    expect(icon.className).toContain('pi-external-link')
+    expect(icon.classList.contains('az-arrow-right')).toBe(true)
     expect(icon.getAttribute('aria-hidden')).toBe('true')
   })
 
-  it('omits the trailing icon when showIcon is false', () => {
-    const { queryByTestId } = render(Link, { props: { showIcon: false } })
+  it('renders no icon for a same-tab link by default', () => {
+    const { queryByTestId } = render(Link, { props: { href: '/domains' } })
 
-    expect(queryByTestId('navigation-link__icon')).toBeNull()
+    expect(queryByTestId('link__icon')).toBeNull()
+  })
+
+  it('shows the external-link glyph for a _blank target when icon is empty', () => {
+    const { getByTestId } = render(Link, {
+      props: { href: 'https://example.com', target: '_blank' }
+    })
+
+    expect(getByTestId('link__icon').classList.contains('az-external-link')).toBe(true)
+  })
+
+  it('ignores a removed showIcon attribute', () => {
+    const { queryByTestId, getByTestId } = render(Link, { attrs: { showIcon: true } })
+
+    expect(queryByTestId('link__icon')).toBeNull()
+    expect(getByTestId('link').hasAttribute('showicon')).toBe(true)
+  })
+
+  it('renders the default slot as the label, falling back to label and the catalog', () => {
+    const slotted = render(Link, {
+      props: { label: 'Prop label' },
+      slots: { default: 'Slotted label' }
+    })
+    expect(slotted.getByTestId('link__label').textContent?.trim()).toBe('Slotted label')
+    slotted.unmount()
+
+    const fallback = render(Link)
+    expect(fallback.getByTestId('link__label').textContent?.trim()).toBe('Learn more')
+  })
+
+  it('renders # when href is empty so the anchor stays focusable', () => {
+    const { getByTestId } = render(Link)
+
+    expect(getByTestId('link').getAttribute('href')).toBe('#')
+  })
+
+  it('forwards consumer attributes and listeners to the anchor', async () => {
+    let focused = 0
+    const { getByTestId } = render(Link, {
+      props: { label: 'Report', href: '/report.csv' },
+      attrs: {
+        id: 'report-link',
+        'aria-describedby': 'report-hint',
+        download: 'report.csv',
+        'data-track': 'report',
+        class: 'consumer-class',
+        onFocus: () => {
+          focused += 1
+        }
+      }
+    })
+    const root = getByTestId('link')
+
+    expect(root.id).toBe('report-link')
+    expect(root.getAttribute('aria-describedby')).toBe('report-hint')
+    expect(root.getAttribute('download')).toBe('report.csv')
+    expect(root.getAttribute('data-track')).toBe('report')
+    expect(root.classList.contains('consumer-class')).toBe(true)
+
+    root.focus()
+    expect(focused).toBe(1)
+  })
+
+  it('omits the trailing icon when no icon is set and the target stays in the tab', () => {
+    const { queryByTestId } = render(Link, { props: { icon: '', target: '_self' } })
+
+    expect(queryByTestId('link__icon')).toBeNull()
   })
 
   it('emits click with the MouseEvent when enabled', async () => {
     const { getByTestId, emitted } = render(Link, { props: { disabled: false } })
 
-    await fireEvent.click(getByTestId('navigation-link'))
+    await fireEvent.click(getByTestId('link'))
 
-    const clicks = emitted().click
+    const clicks = emitted<unknown[]>().click
     expect(clicks).toHaveLength(1)
     expect(clicks[0][0]).toBeInstanceOf(MouseEvent)
   })
 
   it('does not emit click and exposes disabled a11y state when disabled', async () => {
     const { getByTestId, emitted } = render(Link, { props: { disabled: true } })
-    const root = getByTestId('navigation-link')
+    const root = getByTestId('link')
 
     expect(root.getAttribute('aria-disabled')).toBe('true')
     expect(root.getAttribute('tabindex')).toBe('-1')
@@ -92,7 +164,7 @@ describe('Link', () => {
 
   it('reflects the size prop on data-size and has no disabled attrs when enabled', () => {
     const { getByTestId } = render(Link, { props: { size: 'medium', disabled: false } })
-    const root = getByTestId('navigation-link')
+    const root = getByTestId('link')
 
     expect(root.getAttribute('data-size')).toBe('medium')
     expect(root.getAttribute('aria-disabled')).toBeNull()
@@ -102,7 +174,7 @@ describe('Link', () => {
 
   it.each(['small', 'medium', 'large'] as const)('renders size variant %s', (size) => {
     const { getByTestId } = render(Link, { props: { size } })
-    expect(getByTestId('navigation-link').getAttribute('data-size')).toBe(size)
+    expect(getByTestId('link').getAttribute('data-size')).toBe(size)
   })
 
   it('has no a11y violations in the default render', async () => {
@@ -117,12 +189,12 @@ describe('Link', () => {
 
   it('renders the composed Default story', () => {
     const { getByTestId } = render(Default)
-    expect(getByTestId('navigation-link').tagName).toBe('A')
+    expect(getByTestId('link').tagName).toBe('A')
   })
 
   it('renders the composed Sizes story', () => {
     const { getAllByTestId } = render(Sizes)
-    const sizes = getAllByTestId('navigation-link').map((el) => el.getAttribute('data-size'))
+    const sizes = getAllByTestId('link').map((el) => el.getAttribute('data-size'))
     expect(sizes).toContain('large')
     expect(sizes).toContain('medium')
     expect(sizes).toContain('small')
@@ -130,6 +202,6 @@ describe('Link', () => {
 
   it('renders the composed Disabled story with disabled a11y state', () => {
     const { getByTestId } = render(Disabled)
-    expect(getByTestId('navigation-link').getAttribute('aria-disabled')).toBe('true')
+    expect(getByTestId('link').getAttribute('aria-disabled')).toBe('true')
   })
 })

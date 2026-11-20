@@ -1,0 +1,72 @@
+{
+  "id": "edit/edit-variables",
+  "name": "EditVariables",
+  "title": "Blocks/Edit/EditVariables",
+  "surface": "app",
+  "summary": "A key/value editor, drawn as a variables list page and the Create Variable drawer its heading action opens. The list follows the view-table recipe: one client-mode `useCollection` drives a `PropertyFilter`, `CollectionPreferences` and a data-driven `DataTable`, with a state-first-use and a no-match `EmptyState`; each row's Edit opens the drawer on that variable, Clone inserts a copy below it, and Delete opens the typed `ConfirmDialog` of edit-delete-dialog. In the drawer the variables are an `AttributeEditor` (add, remove, focus, announcements, minimum one row) whose `row` slot draws each variable as a pair of `InputGroupRoot` rows with `InputGroupInput` fields, a Key row with a Remove button and a Value row with a show-value button and a Secret checkbox, beside a Form or JSON view and an Upload of a .env file; every scope is an `InputGroupRoot` joining its label, a `MultiSelect` of resources and an enable `Switch`, with Global giving way to any specific scope. Required and invalid states appear only after Save is pressed; every create, edit, clone and delete raises a success toast, and a save that fails keeps the drawer open with a danger `Alert`. Built from `AttributeEditor`, `PageHeader`, `PropertyFilter`, `CollectionPreferences`, `SettingsGroup`, `DataTable`, `Card`, `EmptyState`, `TableCellId`, `TableCellLink`, `TableCellActions`, `Avatar`, `DropdownMenu`, `ConfirmDialog`, `Alert`, `Input`, `IconButton`, `Tooltip`, `Drawer` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `InputGroupRoot`, `InputGroupAddon`, `InputGroupInput`, `Checkbox`, `ToggleGroup`, `MultiSelect`, `Switch`, `FieldError` and `Button`; the JSON view is a webkit `Textarea`. A page body for ConsoleLayout.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "variables",
+    "environment variables",
+    "env vars",
+    "secrets",
+    "create variable",
+    "edit variable",
+    "variables list",
+    "variáveis",
+    "variáveis de ambiente",
+    "segredos",
+    "criar variável",
+    "key value editor",
+    "attribute editor",
+    ".env upload",
+    "editor de chave e valor",
+    "delete variable",
+    "clone variable",
+    "paste .env",
+    "paste env file",
+    "import .env",
+    "colar .env",
+    "importar variáveis",
+    "dotenv",
+    "network list",
+    "ip list",
+    "asn list",
+    "country list",
+    "bulk paste",
+    "lista de rede",
+    "lista de ips",
+    "lista de red",
+    "variables page",
+    "variables block",
+    "environment variables page",
+    "list of variables",
+    "página de variáveis"
+  ],
+  "skills": ["webkit-lists", "webkit-tables", "webkit-form", "webkit-create-surface"],
+  "primary": {
+    "name": "List",
+    "file": "edit-variables.vue"
+  },
+  "files": ["sample.ts"],
+  "variants": [
+    {
+      "name": "Create",
+      "summary": "The list page with the create drawer open on load (`defaultOpen`): one empty Key and Value pair in an `AttributeEditor`, the Form view selected and Global the only scope switched on, all reset each time the drawer opens. Add variable waits for the last pair to be filled; Save flags the empty or malformed fields only after it is pressed, then emits `save` with the pairs and their scope.",
+      "file": "variants/create.vue"
+    },
+    {
+      "name": "PasteEnv",
+      "summary": "Create Variable opens the drawer with the Paste .env panel open on a pasted file: the report counts the pairs found, names the line that will be skipped, the key repeated in the text and the key already in the list whose value will be replaced, and Add 3 variables merges them into the rows, announces the count and returns focus to Paste .env.",
+      "file": "variants/paste-env.vue"
+    },
+    {
+      "name": "NetworkList",
+      "summary": "Create Network List opens a drawer with a Name, a type `ToggleGroup` (IP/CIDR, ASN, Countries) and the entries as an `AttributeEditor` of address and comment rows; Paste list holds a pasted list of nine lines whose report counts 7 entries, names the 2 lines that are not valid addresses and the line already in the list, and Add 7 entries appends them as rows where each invalid line shows its own error. Countries is a `MultiSelect`; Save checks every row and raises a success toast.",
+      "file": "variants/network-list.vue"
+    }
+  ]
+}

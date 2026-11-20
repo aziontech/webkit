@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Default spinner sized with `size-4` and colored through `currentColor`.",
+   "file": "examples/spinner/default.vue"
+  },
+  {
+   "name": "Sizes",
+   "summary": "The spinner scales with the theme `size-*` utilities applied through `class`; color inherits from the parent.",
+   "file": "examples/spinner/sizes.vue"
+  }
+ ]
+}

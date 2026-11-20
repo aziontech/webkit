@@ -1,0 +1,27 @@
+{
+ "purpose": "CopyText shows one code value (a CSS custom property, a utility class, a CNAME, a key ID, a one-line command) in monospace inside a quiet bordered box, with an always-visible `CopyButton` at its inline end that copies the value. It composes `CopyButton` for the clipboard write, the copied confirmation, the live announcement and the manual-copy fallback, so it re-implements none of them. Unlike `CopyButton` (icon only, no visible value) and `TableCellId` (an identifier laid out for a table cell), CopyText is the inline \"show this value and let me copy it\" pattern for prose, key/value lists, token tables and cards.",
+ "useWhen": [
+  "Show a short code value the reader will paste elsewhere, next to its label: a design token (`--spacing-2xl`), a class (`p-(--spacing-2xl)`), a CNAME, an API key ID, a one-line CLI command.",
+  "Token tables, key/value rows, setup steps and cards outside a data table."
+ ],
+ "avoidWhen": [
+  "The value is not shown, only copied → use `copy-button`.",
+  "An identifier inside a data table cell → use `table-cell-id`.",
+  "A multi-line snippet or a block of code → use `code-block`.",
+  "A keyboard shortcut → use `kbd`.",
+  "A secret that must stay masked until revealed → use `password-input` (`readonly`) with a `copy-button`."
+ ],
+ "related": [
+  "`copy-button` — the control CopyText composes; use it alone when the value is not displayed.",
+  "`table-cell-id` — the same idea laid out for a table cell (fills the cell, outline button).",
+  "`code-block` — multi-line code with its own copy control.",
+  "`kbd` — keycaps for shortcuts, not copyable values."
+ ],
+ "bestPractices": [
+  "Pass the exact text in `value`; CopyText shows and copies the same string.",
+  "Keep values to one line. A long value truncates with an ellipsis; the full value stays in the `title`, in the accessible name of the copy button and in the clipboard.",
+  "Pass `ariaLabel` when the value alone does not say what it is (`Copy CNAME`); the default reads `Copy {value}`.",
+  "Listen to `copy` for analytics or a toast; it fires only after the clipboard write succeeds.",
+  "Use `size=\"small\"` in dense tables and lists."
+ ]
+}

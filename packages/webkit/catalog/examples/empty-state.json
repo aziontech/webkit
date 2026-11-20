@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Default empty state: the standardized featured-icon tile, title, description, and actions.",
+   "file": "examples/empty-state/default.vue"
+  },
+  {
+   "name": "Sizes",
+   "summary": "The size variants — small and medium — stacked.",
+   "file": "examples/empty-state/sizes.vue"
+  },
+  {
+   "name": "Icon",
+   "summary": "The standardized featured-icon tile adornment, driven by the `icon` prop.",
+   "file": "examples/empty-state/icon.vue"
+  }
+ ]
+}

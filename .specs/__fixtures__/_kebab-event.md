@@ -1,6 +1,6 @@
 ---
 name: kebab-event
-category: actions
+category: action
 structure: monolithic
 status: draft
 spec_version: 1
@@ -16,21 +16,21 @@ Fixture: an event uses camelCase instead of kebab-case — spec-validator must r
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `kind` | `'primary'` | `'primary'` | no | Visual variant. |
+| Prop   | Type        | Default     | Required | JSDoc           |
+| ------ | ----------- | ----------- | -------- | --------------- |
+| `kind` | `'primary'` | `'primary'` | no       | Visual variant. |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
+| Event     | Payload      | Notes                     |
+| --------- | ------------ | ------------------------- |
 | `onClick` | `MouseEvent` | Wrong: should be `click`. |
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | Body. |
+| Slot      | Scope | Notes |
+| --------- | ----- | ----- |
+| `default` | —     | Body. |
 
 ## States
 
@@ -38,20 +38,20 @@ Fixture: an event uses camelCase instead of kebab-case — spec-validator must r
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
+| Region     | Token (DESIGN.md) |
+| ---------- | ----------------- |
 | typography | `.text-button-lg` |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
+| -------------- | ------------------- | --------- |
 
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus ring.
 
-## Stories (Storybook)
+## Examples
 
 - Default
 - LightDark

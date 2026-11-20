@@ -1,0 +1,30 @@
+{
+  "name": "@aziontech/webkit-demos",
+  "version": "0.1.0",
+  "private": true,
+  "description": "WebKit demos: routed console flows assembled from blocks with `webkit add`, on mock data",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview --port 4174 --strictPort",
+    "lint": "eslint . --max-warnings 0",
+    "check:format": "prettier --check \"**/*.{js,mjs,ts,vue,css,json,md}\""
+  },
+  "dependencies": {
+    "@aziontech/icons": "workspace:*",
+    "@aziontech/theme": "workspace:*",
+    "@aziontech/webkit": "workspace:*",
+    "@tanstack/ai": "1.5.0",
+    "@tanstack/ai-vue": "1.0.1",
+    "vue": "^3.5.29",
+    "vue-router": "^4.6.4"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@vitejs/plugin-vue": "^5.2.4",
+    "tailwindcss": "^4.3.3",
+    "vite": "^8.3.4"
+  }
+}

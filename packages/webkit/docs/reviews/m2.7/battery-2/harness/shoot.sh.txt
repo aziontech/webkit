@@ -1,0 +1,12 @@
+#!/bin/bash
+# usage: shoot.sh <outdir> <id> <url> <light|dark> [expand]
+# Captures <id>--desktop.png (1440x900, DPR1) and <id>--iphone.png (Playwright iPhone 15, CSS scale), full page,
+# in mcr.microsoft.com/playwright:v1.62.0-noble with host networking, so http://localhost:<port> works.
+set -euo pipefail
+OUT=$(realpath -m "$1"); case "$OUT" in /data/eval-m27b/*) ;; *) echo "outdir must be under /data/eval-m27b" >&2; exit 2;; esac; ID=$2; URL=$3; SCHEME=${4:-light}; EXP=${5:-}
+mkdir -p "$OUT"; J=$(mktemp -p "$OUT" .job-XXXX.json)
+if [ -n "$EXP" ]; then X=',"expand":true'; else X=''; fi
+echo "[{\"id\":\"$ID\",\"url\":\"$URL\",\"scheme\":\"$SCHEME\",\"noDismiss\":true,\"wait\":2500$X}]" > "$J"
+timeout 600 podman run --rm --ipc=host --network=host -v /data/eval-m27b:/data/eval-m27b -w /data/eval-m27b/pw \
+  mcr.microsoft.com/playwright:v1.62.0-noble node /data/eval-m27b/bin/cap2.mjs "$J" "$OUT" | tail -1
+rm -f "$J"

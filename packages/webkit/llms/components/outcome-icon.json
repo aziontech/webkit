@@ -1,0 +1,82 @@
+{
+ "name": "outcome-icon",
+ "binding": "OutcomeIcon",
+ "import": "@aziontech/webkit/outcome-icon",
+ "treeShakeableImport": "@aziontech/webkit/outcome-icon",
+ "category": "feedback",
+ "surface": "app",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Use OutcomeIcon for the bare round glyph that says how one run ended, with no label; with a label, the state of a resource is a StatusIndicator. A small round mark that states how something ended: a check for success, a cross for danger, an exclamation for warning and a dash for neutral (not set, not run). It replaces the design sample's `StateMark` and `SuccessMark`. With `animated` the disc scales in and the glyph draws itself when the mark appears and every time its severity changes, so an outcome screen or a finished row can mark the moment a run lands; under reduced motion it shows at once.",
+ "setup": null,
+ "useWhen": [
+  "At the head of an outcome screen (deploy succeeded or failed), at the large size, animated.",
+  "In a checklist or a list of steps, at the small size, to say a step is done or not set.",
+  "Beside a label that reports a finished run, when the run's state turns from running to an outcome."
+ ],
+ "avoidWhen": [
+  "A state that is still running → use `spinner` or `status-indicator` with `loading`.",
+  "A labelled status pill in a table cell → use `tag` or `status-indicator`.",
+  "A message with text and actions → use `alert` or `toast`."
+ ],
+ "related": [
+  "`status-indicator` — a coloured dot with a label, for live states.",
+  "`tag` — a labelled pill for a state.",
+  "`toast` — reports the outcome of an async action wherever the user is."
+ ],
+ "bestPractices": [
+  "Pair the mark with words that say the same thing; the mark is not the only cue.",
+  "Animate only the mark that just changed; a list of animated marks on load is noise.",
+  "Give a specific `ariaLabel` (`Deployed`, `Done`) when the catalog name is too generic."
+ ],
+ "props": [
+  {
+   "name": "severity",
+   "type": "'success' | 'danger' | 'warning' | 'neutral'",
+   "default": "'success'",
+   "required": "false",
+   "doc": "The outcome the mark shows: a check, a cross, an exclamation or a dash."
+  },
+  {
+   "name": "size",
+   "type": "'small' | 'medium' | 'large'",
+   "default": "'medium'",
+   "required": "false",
+   "doc": "Size token: 16, 20 or 48 px."
+  },
+  {
+   "name": "animated",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Scales the disc in and draws the glyph when it appears or its severity changes; static under reduced motion."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name. Empty uses the locale catalog name of the severity."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/outcome-icon/default.vue"
+  },
+  {
+   "name": "Sizes",
+   "file": "examples/outcome-icon/sizes.vue"
+  },
+  {
+   "name": "Animated",
+   "file": "examples/outcome-icon/animated.vue"
+  }
+ ],
+ "docs": "components/outcome-icon.md"
+}

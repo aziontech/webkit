@@ -9,13 +9,13 @@ import { readdirSync, readFileSync, existsSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, join, resolve } from 'node:path'
 
-import { STANDARDS, STANDARDS_BY_ID } from '../../../../.claude/hooks/_lib/standards.mjs'
+import { STANDARDS, STANDARDS_BY_ID } from '../../../../.claude/hooks/lib/standards.mjs'
 import {
   CONTENT_CHECKS,
   STANDARD_BY_CHECK,
   MESSAGES
-} from '../../../../.claude/hooks/_lib/authoring-checks.mjs'
-import { parseEnforcedBy } from '../../../../.claude/hooks/_lib/authoring-docs-checks.mjs'
+} from '../../../../.claude/hooks/lib/authoring-checks.mjs'
+import { parseEnforcedBy } from '../../../../.claude/hooks/lib/authoring-docs-checks.mjs'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 const ROOT = resolve(HERE, '../../../..')
@@ -25,7 +25,7 @@ const ruleIds = readdirSync(join(ROOT, '.claude/rules'))
   .map((f) => f.replace(/\.md$/, ''))
 
 // The consumer rule population that shipped skills reference in their enforced_by.
-const CONSUMER_RULES_DIR = 'packages/webkit/cli-templates/claude/rules'
+const CONSUMER_RULES_DIR = 'rules'
 const consumerRuleIds = readdirSync(join(ROOT, CONSUMER_RULES_DIR))
   .filter((f) => f.endsWith('.md') && f !== 'README.md')
   .map((f) => f.replace(/\.md$/, ''))
@@ -35,16 +35,16 @@ const dirNames = (rel) =>
     .filter((d) => d.isDirectory())
     .map((d) => d.name)
 
-// Both skill populations: internal (.claude/skills) and consumer (cli-templates).
+// Both skill populations: internal (.claude/skills) and consumer (skills/ at the repo root).
 const SKILLS = [
   ...dirNames('.claude/skills').map((id) => ({
     id,
     path: join('.claude/skills', id, 'SKILL.md'),
     valid: new Set([...ruleIds, 'review'])
   })),
-  ...dirNames('packages/webkit/cli-templates/claude/skills').map((id) => ({
+  ...dirNames('skills').map((id) => ({
     id,
-    path: join('packages/webkit/cli-templates/claude/skills', id, 'SKILL.md'),
+    path: join('skills', id, 'SKILL.md'),
     valid: new Set([...consumerRuleIds, 'ui-verify', 'review'])
   }))
 ]
@@ -124,16 +124,16 @@ test('every mechanized check maps to a standard enforced write-time by validate-
 })
 
 test('hook, CI ratchet, and consumer lint all share the single authoring-checks engine', () => {
-  const ENGINE = 'packages/webkit/src/eslint-plugin/authoring-checks.js'
+  const ENGINE = 'packages/webkit/src/eslint-plugin/lib/authoring-checks.js'
   assert.ok(existsSync(join(ROOT, ENGINE)), 'canonical engine missing from the package')
 
-  // write-time hook → the _lib shim → the package engine
+  // write-time hook → the lib shim → the package engine
   const hook = readFileSync(join(ROOT, '.claude/hooks/validate-authoring.mjs'), 'utf-8')
-  assert.match(hook, /_lib\/authoring-checks\.mjs/, 'hook does not import the shim')
-  const shim = readFileSync(join(ROOT, '.claude/hooks/_lib/authoring-checks.mjs'), 'utf-8')
+  assert.match(hook, /lib\/authoring-checks\.mjs/, 'hook does not import the shim')
+  const shim = readFileSync(join(ROOT, '.claude/hooks/lib/authoring-checks.mjs'), 'utf-8')
   assert.match(
     shim,
-    /packages\/webkit\/src\/eslint-plugin\/authoring-checks\.js/,
+    /packages\/webkit\/src\/eslint-plugin\/lib\/authoring-checks\.js/,
     'shim does not re-export the package engine'
   )
 
@@ -143,45 +143,51 @@ test('hook, CI ratchet, and consumer lint all share the single authoring-checks 
 
   // consumer lint rule → the package engine
   const rule = readFileSync(
-    join(ROOT, 'packages/webkit/src/eslint-plugin/rules/authoring-standards.js'),
+    join(ROOT, 'packages/webkit/src/eslint-plugin/rules/require-authoring-standards.js'),
     'utf-8'
   )
-  assert.match(rule, /\.\.\/authoring-checks\.js/, 'consumer lint rule does not import the engine')
+  assert.match(
+    rule,
+    /\.\.\/lib\/authoring-checks\.js/,
+    'consumer lint rule does not import the engine'
+  )
 })
 
-test('the token, spec-compliance, and story-source engines are shared by hook AND ratchet', () => {
+test('the token and spec-compliance engines are shared by hook AND ratchet', () => {
   const ratchet = readFileSync(join(ROOT, 'packages/webkit/scripts/check-authoring.mjs'), 'utf-8')
 
   // token engine: package canonical, hook via shim, ratchet direct
-  assert.ok(existsSync(join(ROOT, 'packages/webkit/src/eslint-plugin/token-checks.js')))
-  const tokenShim = readFileSync(join(ROOT, '.claude/hooks/_lib/token-checks.mjs'), 'utf-8')
-  assert.match(tokenShim, /eslint-plugin\/token-checks\.js/, 'token shim does not re-export')
+  assert.ok(existsSync(join(ROOT, 'packages/webkit/src/eslint-plugin/lib/token-checks.js')))
+  const tokenShim = readFileSync(join(ROOT, '.claude/hooks/lib/token-checks.mjs'), 'utf-8')
+  assert.match(tokenShim, /eslint-plugin\/lib\/token-checks\.js/, 'token shim does not re-export')
   const tokenHook = readFileSync(join(ROOT, '.claude/hooks/validate-tokens.mjs'), 'utf-8')
-  assert.match(tokenHook, /_lib\/token-checks\.mjs/, 'validate-tokens does not import the shim')
+  assert.match(tokenHook, /lib\/token-checks\.mjs/, 'validate-tokens does not import the shim')
   assert.match(ratchet, /token-checks\.js/, 'ratchet does not import the token engine')
 
-  // spec-compliance engine (DS-internal): hook + ratchet share _lib
-  assert.ok(existsSync(join(ROOT, '.claude/hooks/_lib/spec-compliance-checks.mjs')))
+  // spec-compliance engine (DS-internal): hook + ratchet share lib
+  assert.ok(existsSync(join(ROOT, '.claude/hooks/lib/spec-compliance-checks.mjs')))
   const specHook = readFileSync(join(ROOT, '.claude/hooks/validate-spec-compliance.mjs'), 'utf-8')
-  assert.match(specHook, /_lib\/spec-compliance-checks\.mjs/, 'spec hook does not use the engine')
+  assert.match(specHook, /lib\/spec-compliance-checks\.mjs/, 'spec hook does not use the engine')
   assert.match(ratchet, /spec-compliance-checks\.mjs/, 'ratchet does not import the spec engine')
-
-  // story-source engine: hook + ratchet share _lib
-  assert.ok(existsSync(join(ROOT, '.claude/hooks/_lib/story-source-checks.mjs')))
-  const storyHook = readFileSync(join(ROOT, '.claude/hooks/validate-story-source.mjs'), 'utf-8')
-  assert.match(storyHook, /_lib\/story-source-checks\.mjs/, 'story hook does not use the engine')
-  assert.match(ratchet, /story-source-checks\.mjs/, 'ratchet does not import the story engine')
 })
 
-test('authoring-docs hook AND ratchet share the single _lib/authoring-docs-checks engine', () => {
-  assert.ok(existsSync(join(ROOT, '.claude/hooks/_lib/authoring-docs-checks.mjs')))
+test('authoring-docs hook AND ratchet share the single lib/authoring-docs-checks engine', () => {
+  assert.ok(existsSync(join(ROOT, '.claude/hooks/lib/authoring-docs-checks.mjs')))
   const hook = readFileSync(join(ROOT, '.claude/hooks/validate-authoring-docs.mjs'), 'utf-8')
-  assert.match(hook, /_lib\/authoring-docs-checks\.mjs/, 'hook does not import the engine')
+  assert.match(hook, /lib\/authoring-docs-checks\.mjs/, 'hook does not import the engine')
   const ratchet = readFileSync(
     join(ROOT, 'packages/webkit/scripts/check-authoring-docs.mjs'),
     'utf-8'
   )
   assert.match(ratchet, /authoring-docs-checks\.mjs/, 'ratchet does not import the engine')
+})
+
+test('spec-integrity hook AND CI gate share the single lib/spec-integrity engine', () => {
+  assert.ok(existsSync(join(ROOT, '.claude/hooks/lib/spec-integrity.mjs')))
+  const hook = readFileSync(join(ROOT, '.claude/hooks/enforce-spec-exists.mjs'), 'utf-8')
+  assert.match(hook, /lib\/spec-integrity\.mjs/, 'hook does not import the engine')
+  const gate = readFileSync(join(ROOT, 'packages/webkit/scripts/check-spec-integrity.mjs'), 'utf-8')
+  assert.match(gate, /lib\/spec-integrity\.mjs/, 'CI gate does not import the engine')
 })
 
 // The skill-side invariant: a skill is guidance, so on its own it is advisory. Every skill
@@ -217,10 +223,17 @@ const CI_ENFORCERS = new Set([
   'size-limit',
   'type-check',
   'vuejs-accessibility',
-  'storybook-build',
+  'visual',
   'vitest',
   'check-tests',
-  'check-authoring-docs'
+  'check-authoring-docs',
+  'check-docs-markdown',
+  'check-complete',
+  'check-size-ratchet',
+  'check-spec-integrity',
+  'check-api-diff',
+  'check-naming',
+  'package-size'
 ])
 
 test("every 'ci' enforcer is a known gate (no free-form/fictional names)", () => {
@@ -239,13 +252,66 @@ test('every shipped eslint rule is claimed by a standard (no orphan gates)', asy
   for (const s of STANDARDS) {
     for (const e of s.enforce || []) if (e.surface === 'lint') claimed.add(e.by)
   }
-  // prefer-webkit-component steers ADOPTION (use webkit instead of a foreign lib) —
-  // deliberately not a construction standard.
-  const ORPHAN_OK = new Set(['prefer-webkit-component'])
+  // prefer-webkit-component, require-header-search and no-page-navigation-menu steer ADOPTION (use
+  // webkit instead of a foreign lib; search in an app header through SearchTrigger; one navigation
+  // per level, rule webkit-navigation-levels) — deliberately not construction standards.
+  const ORPHAN_OK = new Set([
+    'prefer-webkit-component',
+    'require-header-search',
+    'no-page-navigation-menu'
+  ])
   for (const name of Object.keys(rules)) {
     assert.ok(
       claimed.has(name) || ORPHAN_OK.has(name),
       `eslint rule "${name}" is not claimed by any standard (add it to enforce[] or ORPHAN_OK)`
     )
   }
+})
+
+test('naming: hook, CI gate and consumer lint share one engine and the migrate maps', () => {
+  const ENGINE = 'packages/webkit/scripts/lib/naming-rules.mjs'
+  assert.ok(existsSync(join(ROOT, ENGINE)), 'naming engine missing')
+  const shim = readFileSync(join(ROOT, '.claude/hooks/lib/naming-checks.mjs'), 'utf-8')
+  assert.match(
+    shim,
+    /packages\/webkit\/scripts\/lib\/naming-rules\.mjs/,
+    'shim does not re-export the engine'
+  )
+  const hook = readFileSync(join(ROOT, '.claude/hooks/validate-naming.mjs'), 'utf-8')
+  assert.match(hook, /lib\/naming-checks\.mjs/, 'validate-naming does not import the shim')
+  const gate = readFileSync(join(ROOT, 'packages/webkit/scripts/check-naming.mjs'), 'utf-8')
+  assert.match(gate, /lib\/naming-rules\.mjs/, 'check-naming does not run the engine')
+  const gatesFile = ['scripts/gates.mjs', 'scripts/run-gates.mjs']
+    .map((f) => join(ROOT, 'packages/webkit', f))
+    .find((f) => existsSync(f))
+  assert.match(
+    readFileSync(gatesFile, 'utf-8'),
+    /check-naming\.mjs/,
+    'no CI gate runs check-naming'
+  )
+  const lint = readFileSync(
+    join(ROOT, 'packages/webkit/src/eslint-plugin/rules/no-deprecated-name.js'),
+    'utf-8'
+  )
+  assert.match(lint, /cli\/migrate\.js/, 'no-deprecated-name does not read the webkit migrate maps')
+  const vocab = readFileSync(join(ROOT, ENGINE), 'utf-8')
+  assert.match(vocab, /lib\/prop-vocabulary\.mjs/, 'the engine does not check the prop vocabulary')
+})
+
+test('naming: every engine rule id is documented in naming.md, and every documented id exists', async () => {
+  const { RULES } = await import('../../scripts/lib/naming-rules.mjs')
+  const doc = readFileSync(join(ROOT, '.claude/rules/naming.md'), 'utf-8')
+  const section = doc.split(/^## How it is checked/m)[1]?.split(/^## /m)[0] ?? ''
+  const documented = new Set([...section.matchAll(/^\|\s*`([a-z0-9-]+)`/gm)].map((m) => m[1]))
+  const ids = Object.keys(RULES)
+  assert.deepEqual(
+    ids.filter((id) => !documented.has(id)),
+    [],
+    'engine rules missing from naming.md § How it is checked'
+  )
+  assert.deepEqual(
+    [...documented].filter((id) => !ids.includes(id)),
+    [],
+    'naming.md documents rule ids the engine does not have'
+  )
 })

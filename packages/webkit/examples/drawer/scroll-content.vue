@@ -1,0 +1,68 @@
+<script setup>
+  import Button from '@aziontech/webkit/button'
+  import DrawerContent from '@aziontech/webkit/drawer-content'
+  import DrawerDescription from '@aziontech/webkit/drawer-description'
+  import Drawer from '@aziontech/webkit/drawer-root'
+  import DrawerTitle from '@aziontech/webkit/drawer-title'
+  import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
+  import PanelBody from '@aziontech/webkit/panel-body'
+  import PanelFooter from '@aziontech/webkit/panel-footer'
+  import PanelHeader from '@aziontech/webkit/panel-header'
+  import { ref } from 'vue'
+
+  const open = ref(false)
+  const scrollSections = Array.from({ length: 12 }, (_, index) => ({
+    title: `Section ${index + 1}`,
+    body: `Scrollable drawer body copy for section ${index + 1}. Only PanelBody scrolls; header and footer stay in the panel layout.`
+  }))
+</script>
+
+<template>
+  <Drawer
+    v-model:open="open"
+    dismissible
+    side="end"
+    size="large"
+  >
+    <DrawerTrigger>
+      <Button
+        label="Open scrollable drawer"
+        variant="primary"
+      />
+    </DrawerTrigger>
+    <DrawerContent>
+      <PanelHeader class="w-full">
+        <DrawerTitle>Scrollable drawer</DrawerTitle>
+      </PanelHeader>
+      <PanelBody>
+        <div class="flex flex-col gap-(--spacing-4)">
+          <DrawerDescription>
+            Place long forms, lists, or settings inside PanelBody. Only the body scrolls inside
+            ScrollArea while header and footer stay in the panel layout.
+          </DrawerDescription>
+          <section
+            v-for="section in scrollSections"
+            :key="section.title"
+            class="flex flex-col gap-(--spacing-2) rounded-(--shape-control) border border-(length:--border-width-default) border-(--border-muted) p-(--spacing-4)"
+          >
+            <h3 class="m-0 text-body-md text-(--text-default)">{{ section.title }}</h3>
+            <p class="m-0 text-body-sm text-(--text-muted)">{{ section.body }}</p>
+          </section>
+        </div>
+      </PanelBody>
+      <PanelFooter>
+        <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
+          <Button
+            label="Cancel"
+            variant="outline"
+            @click="open = false"
+          />
+          <Button
+            label="Save"
+            variant="primary"
+          />
+        </div>
+      </PanelFooter>
+    </DrawerContent>
+  </Drawer>
+</template>

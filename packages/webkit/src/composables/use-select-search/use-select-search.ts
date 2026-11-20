@@ -29,13 +29,15 @@ export interface UseSelectSearchOptions {
 }
 
 export interface UseSelectSearchReturn {
-  open: Ref<boolean>
-  query: Ref<string>
+  open: Readonly<Ref<boolean>>
+  query: Readonly<Ref<string>>
   filtered: ComputedRef<SelectSearchItem[]>
   activeKey: ComputedRef<string | undefined>
   activeIndex: Readonly<Ref<number>>
   searchId: string
   optionId: (key: string) => string
+  setOpen: (next: boolean) => void
+  setQuery: (next: string) => void
   setActive: (index: number) => void
   onTriggerKeydown: (event: KeyboardEvent) => void
   onContentKeydown: (event: KeyboardEvent) => void
@@ -84,6 +86,14 @@ export function useSelectSearch(options: UseSelectSearchOptions): UseSelectSearc
     await nextTick()
     if (activeKey.value)
       document.getElementById(optionId(activeKey.value))?.scrollIntoView({ block: 'nearest' })
+  }
+
+  const setOpen = (next: boolean) => {
+    open.value = next
+  }
+
+  const setQuery = (next: string) => {
+    query.value = next
   }
 
   const setActive = (index: number) => {
@@ -168,13 +178,15 @@ export function useSelectSearch(options: UseSelectSearchOptions): UseSelectSearc
   })
 
   return {
-    open,
-    query,
+    open: readonly(open),
+    query: readonly(query),
     filtered,
     activeKey,
     activeIndex: readonly(activeIndex),
     searchId,
     optionId,
+    setOpen,
+    setQuery,
     setActive,
     onTriggerKeydown,
     onContentKeydown,

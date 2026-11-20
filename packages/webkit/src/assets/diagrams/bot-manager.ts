@@ -6,25 +6,25 @@ const spec: DiagramSpec = {
   nodes: [
     {
       key: 'user',
-      kind: 'pill',
+      type: 'pill',
       title: 'Request',
-      icon: 'pi pi-user',
+      icon: 'az az-user',
       active: true
     },
     {
       key: 'firewall',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'Firewall',
       title: 'Rule: run Bot Management',
-      icon: 'ai ai-edge-firewall',
+      icon: 'az az-firewall',
       active: true
     },
     {
       key: 'bots',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'Bot Management',
       title: 'Score, then classify',
-      icon: 'ai ai-bot-manager',
+      icon: 'az az-bot-manager',
       status: {
         label: 'Score 12',
         severity: 'info'
@@ -34,18 +34,18 @@ const spec: DiagramSpec = {
     },
     {
       key: 'human',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Human',
       title: 'Request allowed',
-      icon: 'pi pi-user',
+      icon: 'az az-user',
       active: true
     },
     {
       key: 'bot',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Bad bot',
       title: 'Deny, drop or delay',
-      icon: 'pi pi-ban'
+      icon: 'az az-ban'
     }
   ],
   layout: {

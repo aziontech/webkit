@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "A stacked group bound with `v-model`: one tab stop, the arrow keys move the selection, and the disabled option is skipped.",
+   "file": "examples/radio-group/default.vue"
+  },
+  {
+   "name": "Horizontal",
+   "summary": "`orientation=\"horizontal\"` lays three short options in a row that wraps in a narrow container.",
+   "file": "examples/radio-group/horizontal.vue"
+  },
+  {
+   "name": "Disabled",
+   "summary": "`disabled` on the group disables every option and keeps the selection visible.",
+   "file": "examples/radio-group/disabled.vue"
+  }
+ ]
+}

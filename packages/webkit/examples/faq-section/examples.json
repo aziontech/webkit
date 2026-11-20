@@ -1,0 +1,44 @@
+{
+  "component": "faq-section",
+  "title": "Components/Marketing/Sections/FaqSection",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The Retail page questions. The second answer carries a markdown link inside its sentence; open it to see the link rendered in place. Edit the props in the Controls panel — a band with no items renders nothing.",
+      "file": "default.vue"
+    }
+  ],
+  "site": [
+    {
+      "name": "WithLink",
+      "summary": "The Retail page questions. The second answer carries a markdown link inside its sentence.",
+      "file": "site-with-link.vue",
+      "json": "site-with-link.json"
+    },
+    {
+      "name": "Plain",
+      "summary": "The Functions page questions, every answer plain text.",
+      "file": "site-plain.vue",
+      "json": "site-plain.json"
+    },
+    {
+      "name": "RichAnswers",
+      "summary": "The GDPR page questions. Each answer runs to several paragraphs, one of them a bullet list, written as markdown in the answer string.",
+      "file": "site-rich-answers.vue",
+      "json": "site-rich-answers.json"
+    }
+  ],
+  "siteTitle": "Templates/Marketing/Content/FaqSection",
+  "sitePreview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "siteStories": [
+    "WithLink",
+    "WithLinkJson",
+    "Plain",
+    "PlainJson",
+    "RichAnswers",
+    "RichAnswersJson"
+  ]
+}

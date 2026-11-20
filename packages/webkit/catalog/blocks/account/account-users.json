@@ -1,0 +1,34 @@
+{
+ "variants": [
+  {
+   "name": "Invite",
+   "summary": "The Invite User drawer open over the list: Email and Teams (Developers preselected), Cancel and Send invitation; Send with an empty, malformed or existing email or no team shows the error on that field and focuses it.",
+   "file": "blocks/account/account-users/variants/invite.vue"
+  },
+  {
+   "name": "EditRole",
+   "summary": "The Edit role dialog open for Jordan Reyes: a role Select (Admin, Developer, Viewer) whose description says what the role allows, Cancel and Save role; saving changes the Role tag and raises a toast with Undo.",
+   "file": "blocks/account/account-users/variants/edit-role.vue"
+  },
+  {
+   "name": "OnlyOwner",
+   "summary": "An account with only its owner: the owner's row, then a small EmptyState that invites the first teammate.",
+   "file": "blocks/account/account-users/variants/only-owner.vue"
+  },
+  {
+   "name": "Loading",
+   "summary": "The first load: the controls row and the table's loading rows.",
+   "file": "blocks/account/account-users/variants/loading.vue"
+  },
+  {
+   "name": "Error",
+   "summary": "The users did not load: a danger Alert with Retry replaces the table; Retry loads them.",
+   "file": "blocks/account/account-users/variants/error.vue"
+  }
+ ],
+ "sfcFile": "blocks/account/account-users/account-users.vue",
+ "guidelinesFile": "blocks/account/account-users/guidelines.md",
+ "fileSources": {
+  "sample.ts": "blocks/account/account-users/sample.ts"
+ }
+}

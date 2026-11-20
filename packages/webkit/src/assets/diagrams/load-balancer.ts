@@ -6,25 +6,25 @@ const spec: DiagramSpec = {
   nodes: [
     {
       key: 'user',
-      kind: 'pill',
+      type: 'pill',
       title: 'User',
-      icon: 'pi pi-user',
+      icon: 'az az-user',
       active: true
     },
     {
       key: 'application',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'Application',
       title: 'Rule: balance the origin pool',
-      icon: 'ai ai-rules-engine',
+      icon: 'az az-rules-engine',
       active: true
     },
     {
       key: 'balancer',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'Load Balancer',
       title: 'Weighted, with health checks',
-      icon: 'ai ai-load-balancer',
+      icon: 'az az-load-balancer',
       status: {
         label: '3 origins',
         severity: 'success'
@@ -34,25 +34,25 @@ const spec: DiagramSpec = {
     },
     {
       key: 'east',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Origin',
       title: 'origin-a · us-east',
-      icon: 'pi pi-server',
+      icon: 'az az-server',
       active: true
     },
     {
       key: 'west',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Origin',
       title: 'origin-b · eu-west',
-      icon: 'pi pi-server'
+      icon: 'az az-server'
     },
     {
       key: 'south',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Origin',
       title: 'origin-c · sa-east',
-      icon: 'pi pi-server',
+      icon: 'az az-server',
       status: {
         label: 'Unhealthy',
         severity: 'warning'

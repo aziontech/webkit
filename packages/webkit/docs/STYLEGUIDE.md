@@ -7,7 +7,7 @@ is not followed (lint at commit, hooks at write-time, CI on the PR, mandatory re
 the rest). Nothing here is a suggestion.
 
 The one-page digest is [`GUIDELINES.md`](./GUIDELINES.md); the machine-readable registry
-pairing each standard with its gate is `.claude/hooks/_lib/standards.mjs`, and each
+pairing each standard with its gate is `.claude/hooks/lib/standards.mjs`, and each
 standard's canonical rule file lives in `.claude/rules/` (shipped to consumer projects as
 `.claude/rules/webkit-*.md` by `npx @aziontech/webkit init`).
 
@@ -35,7 +35,7 @@ standard's canonical rule file lives in `.claude/rules/` (shipped to consumer pr
 17. [Compound API (composition components)](#17-compound-api-composition-components)
 18. [Dependencies](#18-dependencies)
 19. [Design-system authoring (spec-first)](#19-design-system-authoring-spec-first)
-20. [Storybook & documentation](#20-storybook--documentation)
+20. [Examples & documentation](#20-examples--documentation)
 21. [Releases & git](#21-releases--git)
 22. [Enforcement map](#22-enforcement-map)
 
@@ -50,8 +50,8 @@ the answer, and using it is what makes light/dark theming work for free.
 | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
 | Color      | `var(--primary)` · `var(--bg-surface)` · `var(--text-default)` · `var(--border-default)` · feedback `--success/--warning/--danger/--info` (+ `-contrast`/`-border`) | `#f3652b` · `rgb(…)` · `hsl(…)` · Tailwind palette (`text-blue-600`, `bg-gray-500`)        |
 | Typography | generated classes — `text-heading-md`, `text-body-sm`, `text-button-lg`, `text-label-md`, `text-overline-md` (font + size + line-height + tracking bundled)         | `text-sm` · `leading-*` · `tracking-*` · `font-family` · `text-[length:…]`                 |
-| Spacing    | the semantic scale `var(--spacing-xxs…xxl)` — `p-(--spacing-md)`, `gap-(--spacing-sm)`                                                                              | the primitive numeric scale (`--spacing-1…-96`) · `p-4` when a token applies · `p-[13px]`  |
-| Shape      | `rounded-(--shape-button)` · `--shape-card` · `--shape-elements` · `rounded-[inherit]` for pseudo-elements                                                          | `rounded-lg` · numeric radii                                                               |
+| Spacing    | the semantic scale `var(--spacing-2xs…2xl)` — `p-(--spacing-md)`, `gap-(--spacing-sm)`                                                                              | the primitive numeric scale (`--spacing-1…-96`) · `p-4` when a token applies · `p-[13px]`  |
+| Shape      | `rounded-(--shape-button)` · `--shape-card` · `--shape-control` · `rounded-[inherit]` for pseudo-elements                                                           | `rounded-lg` · numeric radii                                                               |
 | Shadow     | `shadow-(--shadow-md)`                                                                                                                                              | bare `shadow-md` · hex/rgb elevation · legacy `--card-shadow`                              |
 | Motion     | catalogued `animate-*` utilities + `transition-*` with token durations; **every** motion class pairs with `motion-reduce:`                                          | local `@keyframes` · `animate-[…]` / `duration-[…]` arbitrary values · animation libraries |
 
@@ -67,19 +67,19 @@ stylelint config (consumer lint).
 
 **A component has one name — the kebab-case name — and every surface derives from it.**
 
-| Surface                    | Form                                 | Example (`empty-state`)                                  |
-| -------------------------- | ------------------------------------ | -------------------------------------------------------- |
-| spec file + frontmatter    | kebab                                | `.specs/empty-state.md`                                  |
-| folder + `.vue` file       | kebab                                | `content/empty-state/empty-state.vue`                    |
-| export subpath             | kebab                                | `"./empty-state"`                                        |
-| `defineOptions({ name })`  | PascalCase                           | `EmptyState`                                             |
-| `data-testid` fallback     | `<category>-<name>` / `input-<name>` | `content-empty-state`                                    |
-| import binding + story tag | PascalCase of the subpath            | `import EmptyState from '@aziontech/webkit/empty-state'` |
+| Surface                      | Form                      | Example (`empty-state`)                                  |
+| ---------------------------- | ------------------------- | -------------------------------------------------------- |
+| spec file + frontmatter      | kebab                     | `.specs/empty-state.md`                                  |
+| folder + `.vue` file         | kebab                     | `content/empty-state/empty-state.vue`                    |
+| export subpath               | kebab                     | `"./empty-state"`                                        |
+| `defineOptions({ name })`    | PascalCase                | `EmptyState`                                             |
+| `data-testid` fallback       | the kebab name itself     | `empty-state`                                            |
+| import binding + example tag | PascalCase of the subpath | `import EmptyState from '@aziontech/webkit/empty-state'` |
 
 Plurality is part of the name: a single token is `chip`; a container for many is a
 different component (`chip-group`), never a plural spelling of the same one.
 
-**Enforced by:** `validate-spec-compliance` + `validate-story-source` (write-time **and** re-run repo-wide by the CI ratchet).
+**Enforced by:** `validate-spec-compliance` (write-time **and** re-run repo-wide by the CI ratchet).
 
 ---
 
@@ -88,7 +88,6 @@ different component (`chip-group`), never a plural spelling of the same one.
 **One component, one folder; two components differ only in what they do, never in how
 their files are arranged.**
 
-<!-- prettier-ignore -->
 ```text
 <category>/<name>/
 ├── <name>.vue              # the root component (kebab file = canonical name)
@@ -100,13 +99,12 @@ their files are arranged.**
     └── <name>-<part>.vue
 ```
 
-- Categories (`actions`, `inputs`, `data`, `overlay`, …) organize the **folder** and the
-  Storybook tree — never the public import path.
+- Categories (`action`, `input`, `data`, `overlay`, …) organize the **folder** and the
+  docs navigation — never the public import path.
 - **Co-locate** what only this component uses; promote to a shared `composables/` folder
   only when a second component needs it.
 - The `<script setup>` **section order is fixed**:
 
-<!-- prettier-ignore -->
 ```text
 imports → defineOptions({ name, inheritAttrs: false }) → types → props → emits
 → models (defineModel) → slots → inject/composables → local state → computed
@@ -123,27 +121,26 @@ convention + review.
 **Props are declared with a named `interface Props` consumed by `defineProps<Props>()`,
 wrapped in `withDefaults`. Every public prop carries JSDoc. No `any`.**
 
-<!-- prettier-ignore -->
 ```ts
 // ✅
 /** Visual variant. */
-export type ButtonKind = 'primary' | 'secondary' | 'outlined' | 'text'
+export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost'
 
 interface Props {
   /** Visual variant. */
-  kind?: ButtonKind
+  variant?: ButtonVariant
   /** Disables interaction. */
   disabled?: boolean
   /** Leading icon name. */
   icon?: string
 }
-const props = withDefaults(defineProps<Props>(), { kind: 'primary', disabled: false, icon: '' })
+const props = withDefaults(defineProps<Props>(), { variant: 'primary', disabled: false, icon: '' })
 
 // ❌
-defineProps({ kind: { type: String }, isDisabled: Boolean })   // runtime form, is- prefix
+defineProps({ variant: { type: String }, isDisabled: Boolean })   // runtime form, is- prefix
 ```
 
-- **Variant unions are named, exported types** (`ButtonKind`) so consumers and stories can
+- **Variant unions are named, exported types** (`ButtonVariant`) so consumers and examples can
   reference them.
 - **Optional text props default to `''`**, never `undefined` (stable bindings, no
   `"undefined"` rendering). `undefined` is only for props where absence ≠ empty
@@ -152,10 +149,10 @@ defineProps({ kind: { type: String }, isDisabled: Boolean })   // runtime form, 
 - **Never declare `class` (or `style`) in `defineProps`** — consumer classes flow through
   `useAttrs()` (§11).
 - JSDoc is one plain sentence — no angle brackets in script comments (breaks the SFC
-  compiler on Storybook's second parse).
+  compiler in builds that run the Vue plugin twice).
 - A two-way value is **not** a prop — it is `defineModel` (§6).
 
-**Enforced by:** `webkit/authoring-standards` (runtime `defineProps({})` → error, commit +
+**Enforced by:** `webkit/require-authoring-standards` (runtime `defineProps({})` → error, commit +
 CI) · `validate-tokens` (`any`, `class` in props) · `validate-spec-compliance` (names,
 defaults) · type-coverage ≥ 95%.
 
@@ -165,23 +162,23 @@ defaults) · type-coverage ≥ 95%.
 
 **The same concept ships under the same prop name, type, and default on every component.**
 
-| Concept                              | Canonical                                                      | Banned aliases                                              |
-| ------------------------------------ | -------------------------------------------------------------- | ----------------------------------------------------------- |
-| Visual/structural variant            | `kind` (string union)                                          | `variant`, `appearance`, `intent`, `cardStyle`, `mediaKind` |
-| Severity / status color              | `severity`                                                     | `status`                                                    |
-| Size                                 | `size: 'small' \| 'medium' \| 'large'` (this order; subset ok) | `xs/sm/md/lg/xl`, reordered unions                          |
-| Light-dismiss (outside-click / Esc)  | `dismissible`                                                  | `dismissable`, `closeable`                                  |
-| Explicit close affordance (X button) | `closable`                                                     | — (distinct concept)                                        |
-| Primary heading text                 | `title`                                                        | `heading`, `header`                                         |
-| Primary two-way value                | `modelValue` (default `v-model`)                               | `value`, `isToggled`                                        |
-| Overlay open state                   | `open` (+ `v-model:open`), seed `defaultOpen`                  | `visible`, `show`, `opened`                                 |
-| Disabled / Loading                   | `disabled` / `loading`, default `false`                        | `isDisabled`, `isLoading`, `enabled`                        |
-| Icon                                 | `icon: string`                                                 | `iconName`, `leadingIcon`                                   |
-| Accessible name                      | `ariaLabel` (+ `xAriaLabel` for sub-parts)                     | `aria-label` as a prop                                      |
-| Booleans (any)                       | positive polarity — `visible`, `open`, `active`, `expanded`    | `hidden`, `closed`, `inactive`, `collapsed`                 |
-| Value change                         | `v-model` / `update:<x>` only                                  | a redundant `<x>-change` echo alongside `update:<x>`        |
+| Concept                              | Canonical                                                      | Banned aliases                                           |
+| ------------------------------------ | -------------------------------------------------------------- | -------------------------------------------------------- |
+| Visual variant (the look)            | `variant` (string union); `type` for a sort of part            | `kind`, `appearance`, `intent`, `cardStyle`, `mediaKind` |
+| Severity / status color              | `severity`                                                     | `status`                                                 |
+| Size                                 | `size: 'small' \| 'medium' \| 'large'` (this order; subset ok) | `xs/sm/md/lg/xl`, reordered unions                       |
+| Light-dismiss (outside-click / Esc)  | `dismissible`                                                  | `dismissable`, `closeable`                               |
+| Explicit close affordance (X button) | `closable`                                                     | — (distinct concept)                                     |
+| Primary heading text                 | `title`                                                        | `heading`, `header`                                      |
+| Primary two-way value                | `modelValue` (default `v-model`)                               | `value`, `isToggled`                                     |
+| Overlay open state                   | `open` (+ `v-model:open`), seed `defaultOpen`                  | `visible`, `show`, `opened`                              |
+| Disabled / Loading                   | `disabled` / `loading`, default `false`                        | `isDisabled`, `isLoading`, `enabled`                     |
+| Icon                                 | `icon: string`                                                 | `iconName`, `leadingIcon`                                |
+| Accessible name                      | `ariaLabel` (+ `xAriaLabel` for sub-parts)                     | `aria-label` as a prop                                   |
+| Booleans (any)                       | positive polarity — `visible`, `open`, `active`, `expanded`    | `hidden`, `closed`, `inactive`, `collapsed`              |
+| Value change                         | `v-model` / `update:<x>` only                                  | a redundant `<x>-change` echo alongside `update:<x>`     |
 
-`size` house default: **actions/links default to `large`; everything else `medium`.**
+`size` house default: **actions/links default to `large`; everything else `medium`** (`drawer` is the one exception: it defaults to `large`).
 
 **Enforced by:** `validate-spec-compliance` (write-time + the CI ratchet; the dictionary lives in
 `prop-vocabulary.mjs` and is stamped into `catalog.json` for the MCP).
@@ -193,7 +190,6 @@ defaults) · type-coverage ≥ 95%.
 **Every two-way value goes through `defineModel()` — controlled and uncontrolled in one
 macro. Never a hand-rolled `modelValue` prop + `update:modelValue` emit.**
 
-<!-- prettier-ignore -->
 ```ts
 // ✅ primary value — consumer writes v-model="x"
 const model = defineModel<string>({ default: '' })
@@ -216,7 +212,7 @@ const emit = defineEmits<{ 'update:modelValue': [v: string] }>()
 - Renaming a model, adding a required second model, or changing its type is a **breaking
   change** (major).
 
-**Enforced by:** `webkit/authoring-standards` + `webkit/prefer-define-model` (error,
+**Enforced by:** `webkit/require-authoring-standards` + `webkit/prefer-define-model` (error,
 commit + CI) · `validate-authoring` (write-time) · the DS CI ratchet.
 
 ---
@@ -224,10 +220,11 @@ commit + CI) · `validate-authoring` (write-time) · the DS CI ratchet.
 ## 7. Events (emits)
 
 **Events are declared with the type-only `defineEmits` form, named in kebab-case, and
-split into two kinds with two payload shapes.**
+split into two variants with two payload shapes.**
 
-<!-- prettier-ignore -->
 ```ts
+interface MenuItem { id: string; label: string }
+
 const emit = defineEmits<{
   'update:modelValue': [value: string]                  // model — the new value only
   'item-click': [event: MouseEvent, item: MenuItem]     // activation — DOM event FIRST
@@ -245,7 +242,7 @@ const emit = defineEmits<{
 - No camelCase names, no `on`-prefixed props to fake events, no runtime array form
   (`defineEmits(['click'])`).
 
-**Enforced by:** `webkit/authoring-standards` (runtime form) · `validate-spec-compliance`
+**Enforced by:** `webkit/require-authoring-standards` (runtime form) · `validate-spec-compliance`
 (camelCase, echo events) — payload order is convention + review in consumer projects.
 
 ---
@@ -255,9 +252,11 @@ const emit = defineEmits<{
 **Every slot is declared in a typed `defineSlots<{…}>()`. Named slots are kebab-case.
 Scoped payloads are named-key objects. Fallback content lives inside the `<slot>`.**
 
-<!-- prettier-ignore -->
 ```vue
 <script setup lang="ts">
+interface TableRow { id: string; label: string }
+
+defineProps<{ rows: TableRow[] }>()
 defineSlots<{
   /** Default content. */
   default(): unknown
@@ -267,9 +266,11 @@ defineSlots<{
 </script>
 
 <template>
-  <slot name="row" :item="row" :index="i">
-    {{ row.label }}   <!-- fallback when the consumer passes nothing -->
-  </slot>
+  <div v-for="(row, i) in rows" :key="row.id">
+    <slot name="row" :item="row" :index="i">
+      {{ row.label }}   <!-- fallback when the consumer passes nothing -->
+    </slot>
+  </div>
 </template>
 ```
 
@@ -277,7 +278,7 @@ defineSlots<{
 - Do not add a prop as a **substitute** for a slot's content (config-array / text-prop
   anti-pattern). A prop whose only role is slot-fallback display text is named `label`.
 
-**Enforced by:** `webkit/authoring-standards` (`<slot>` with no `defineSlots` → error) ·
+**Enforced by:** `webkit/require-authoring-standards` (`<slot>` with no `defineSlots` → error) ·
 `validate-spec-compliance` — per-slot listing is convention + review.
 
 ---
@@ -312,14 +313,19 @@ Behaviour (B):
 - State inside the function = per-instance; module scope = deliberate singleton
   (explicit in the name/doc).
 
-<!-- prettier-ignore -->
 ```ts
 // ✅
+import { readonly, ref, toValue, type MaybeRefOrGetter } from 'vue'
+
 export function useCounter(start: MaybeRefOrGetter<number>) {
   const n = ref(toValue(start))
   return { count: readonly(n), increment: () => n.value++ }
 }
+```
 
+<!-- snippet: partial -->
+
+```ts
 // ❌ blocked
 export function useCounter() { return reactive({ n: 0 }) }   // reactive return
 // use-counter.js                                             // .js composable
@@ -328,9 +334,10 @@ export function useCounter() { return reactive({ n: 0 }) }   // reactive return
 Out of scope: data-fetching composables (`useQuery` wrappers, HTTP) are a consuming-app
 concern — the design system ships none and its composables never do I/O.
 
-**Enforced by:** `webkit/authoring-standards` (`reactive()` return, `.js` composable →
-error) · `validate-authoring` + the DS ratchet — cleanup/`toValue` are convention +
-review.
+**Enforced by:** `webkit/require-readonly-composable-return` (`reactive()` or raw `ref()` return, no
+return type → error) · `webkit/require-composable-scope-cleanup` (listener/timer/frame/observer with no
+`onScopeDispose` → error) · `webkit/require-authoring-standards` (`.js` composable → error) ·
+`validate-authoring` + the DS ratchet — `toValue` arguments are convention + review.
 
 ---
 
@@ -340,27 +347,27 @@ review.
 attributes consumed by Tailwind `data-[…]:` variants. No JS class presets, no `<style>`
 blocks, no component-local CSS.**
 
-<!-- prettier-ignore -->
 ```vue
 <!-- ✅ one class attribute; data-* switches variants -->
 <button
-  :data-kind="kind"
+  :data-variant="variant"
   :data-disabled="disabled || null"
   class="inline-flex items-center rounded-(--shape-button)
     transition-colors duration-150 ease-out motion-reduce:transition-none
-    data-[kind=primary]:bg-(--primary) data-[kind=primary]:text-(--primary-contrast)
-    data-[kind=secondary]:bg-(--secondary)
+    data-[variant=primary]:bg-(--primary) data-[variant=primary]:text-(--primary-foreground)
+    data-[variant=secondary]:bg-(--secondary)
     data-[disabled]:bg-(--bg-disabled) data-[disabled]:cursor-not-allowed"
 >
   <slot />
 </button>
 ```
 
-<!-- prettier-ignore -->
+<!-- snippet: partial -->
+
 ```ts
 // ❌ the whole class-map pattern is banned
-const kindClasses = { primary: 'bg-(--primary)' }
-const rootClasses = computed(() => [shared, kindClasses[props.kind]])
+const variantClasses = { primary: 'bg-(--primary)' }
+const rootClasses = computed(() => [shared, variantClasses[props.variant]])
 ```
 
 - Conditional styling = a `data-*` attribute + a Tailwind variant — never a `:class`
@@ -391,11 +398,14 @@ attributes explicitly, and exposes a minimal imperative API.**
 - **`defineExpose` is minimal and intentional:** expose functions (`focus()`, `open()`),
   never internal reactive state; default to exposing nothing.
 
-<!-- prettier-ignore -->
 ```vue
 <script setup lang="ts">
+import { computed, useAttrs } from 'vue'
+import { cn } from '@aziontech/webkit/utils/cn'
+
 defineOptions({ name: 'Card', inheritAttrs: false })
 const attrs = useAttrs()
+const testId = computed(() => (attrs['data-testid'] as string) ?? 'card')
 </script>
 
 <template>
@@ -407,7 +417,8 @@ const attrs = useAttrs()
 ```
 
 **Enforced by:** `validate-tokens` (`class` in props) · `validate-references` (phantom
-`asChild`) — `defineExpose` minimality and polymorphism are review.
+`asChild`) · `webkit/no-polymorphic-as-prop` (`as`/`asChild` prop → error, also in
+`validate-authoring` + the DS ratchet) — `defineExpose` minimality is review.
 
 ---
 
@@ -421,7 +432,7 @@ trigger.**
 | --------------- | ------------------- | --------------------------------------------------- |
 | `disabled`      | prop                | `data-disabled` + disabled tokens; not focusable    |
 | `loading`       | prop                | `data-loading` + `Skeleton`; interaction suppressed |
-| `invalid`       | validation          | `data-invalid` + error tokens + `HelperText`        |
+| `invalid`       | validation          | `data-invalid` + error tokens + `FieldError`        |
 | `readonly`      | prop                | `data-readonly`; visible, not editable              |
 | `empty`         | no data             | the `EmptyState` component — never an ad-hoc string |
 | `error`         | load/action failure | an error slot/message                               |
@@ -460,13 +471,12 @@ reduced-motion ship with it.**
 
 ## 14. data-testid
 
-**The root carries `data-testid`, defaulting to `<category>-<name>` (`input-<name>` for
-inputs), and the consumer's value wins.**
+**The root carries `data-testid`, defaulting to the component's own name, and the consumer's
+value wins.**
 
-<!-- prettier-ignore -->
 ```ts
 const attrs = useAttrs()
-const testId = computed(() => (attrs['data-testid'] as string) ?? 'input-chip')
+const testId = computed(() => (attrs['data-testid'] as string) ?? 'chip')
 ```
 
 Interactive sub-elements a test must reach get their own derived testid
@@ -480,19 +490,24 @@ Interactive sub-elements a test must reach get their own derived testid
 
 **Mark → keep one major → remove.** A public part slated for removal is first marked
 `@deprecated` **naming the replacement and the removal version**, ships at least one
-major in that state, and is removed in a subsequent major (`BREAKING CHANGE:`).
+major in that state, and is removed in a subsequent major (`BREAKING CHANGE:`). This cycle
+applies from 6.0 on: 6.0 itself was the clean break that removed every older name outright
+(`MIGRATION_V6.md` + `webkit migrate v6`).
 
-<!-- prettier-ignore -->
 ```ts
-/** @deprecated since 4.2 — use `kind` instead. Removed in 5.0. */
-variant?: string
+export interface AlertProps {
+  /** @deprecated since 6.2 — use `severity` instead. Removed in 7.0. */
+  tone?: 'info' | 'danger'
+  /** Colour meaning of the message. */
+  severity?: 'info' | 'danger'
+}
 ```
 
 - A bare `@deprecated` (no replacement/version) is blocked.
 - The deprecated part keeps working during its cycle — annotate, don't mutate.
 - `catalog.json` carries the deprecation so the MCP steers AI code off it before removal.
 
-**Enforced by:** `webkit/authoring-standards` (bare `@deprecated`) ·
+**Enforced by:** `webkit/require-authoring-standards` (bare `@deprecated`) ·
 `webkit/no-deprecated-component` (imports of deprecated components, with the suggested
 replacement) · release-please maps removal (`!` / `BREAKING CHANGE:`) to a major.
 
@@ -503,12 +518,15 @@ replacement) · release-please maps removal (`!` / `BREAKING CHANGE:`) to a majo
 **Every component is a flat, single-segment public import; the category lives only in the
 folder.**
 
-<!-- prettier-ignore -->
 ```ts
 // ✅
 import Button from '@aziontech/webkit/button'
 import TableRoot from '@aziontech/webkit/table-root'   // root-only, tree-shakeable
+```
 
+<!-- snippet: partial -->
+
+```ts
 // ❌ all blocked
 import { Button } from '@aziontech/webkit'             // barrel — retains the catalog
 import X from '@aziontech/webkit/feedback/skeleton'    // category in the path
@@ -521,7 +539,7 @@ import Chip from '@aziontech/webkit/chips'             // binding ≠ subpath
   dot-notation — the compound path retains every sub-component.
 - Icons: side-effect import only (`import '@aziontech/icons'`), never a whole-set binding.
 
-**Enforced by:** `webkit/valid-import-path` (autofixes typos) · `no-barrel-import` ·
+**Enforced by:** `webkit/no-unknown-import` (autofixes typos) · `no-barrel-import` ·
 `no-deep-internal-import` · `prefer-tree-shakeable-root` · `no-whole-icon-set-import` —
 all error · `validate-references` (write-time).
 
@@ -544,7 +562,8 @@ against `.size-limit.json`; unbudgeted paths stay gated by review.
 `Object.assign`) plus a tree-shakeable `-root` export, and shares state root→leaf through
 `provide`/`inject`.**
 
-<!-- prettier-ignore -->
+<!-- snippet: partial -->
+
 ```ts
 // index.ts — runtime + the type vue-tsc derives
 import Table from './table.vue'
@@ -562,7 +581,7 @@ export default Object.assign(Table, { Row: TableRow })
 - Anatomy is **elements, not props**: structural parts are sub-components the consumer
   composes; props are for bulk data (`data` + `columns`) and scalar config — never
   config-arrays of UI.
-- Shared state flows through context composables (§9) so `<Table.Search>` wires nothing.
+- Shared state flows through context composables (§9) so `<TableSearch>` wires nothing.
 - A part earns sub-component status only when it owns its own markup/a11y/state.
 
 **Enforced by:** catalog drift check (CI) + review; phantom imports blocked by
@@ -600,26 +619,29 @@ Internal to the webkit repo — how its own components come to exist.
   (another DS, Figma naming, library examples, an inherited CONTRACT.md) is rewritten to
   these conventions before the spec is written. The spec wins over the source.
 - The creation pipeline (`/component-create`) is spec → validate → discovery → scaffold →
-  story → echo cross-check → lint/type/build gates; every write passes the hooks.
+  test + examples → echo cross-check → lint/type/build gates; every write passes the hooks.
 
 **Enforced by:** `enforce-spec-exists` · `enforce-component-create` ·
 `validate-spec-compliance` · the echo-reporter cross-check.
 
 ---
 
-## 20. Storybook & documentation
+## 20. Examples & documentation
 
-- **"Show code" is a runnable SFC:** every story sets an explicit
-  `parameters.docs.source.code` built with `toSfc` — one `<script setup>` with the real
-  imports, one `<template>` with PascalCase tags. No dynamic source, no `v-bind="args"`
-  in snippets, no lowercase tags, nothing the consumer can't paste and run.
-- `parameters.docs` is a plain object literal; composite stories render the same const
-  they show (zero drift).
-- Story set: Default + one composite story per multi-option axis + one story per
-  mutually-exclusive state — never one-story-per-variant.
-- No Figma links in stories — the story documents API and behavior.
+- **The example is the code shown:** every component's examples live in
+  `packages/webkit/examples/<name>/` — `examples.json` (`component`, `title`, `examples[]`
+  with `name`, `summary`, `file`) and one copyable `.vue` per example with the real
+  `@aziontech/webkit/*` imports and PascalCase tags. The docs site renders the file and shows
+  the same file as source, so there is nothing to drift.
+- Example set: Default + one composite example per multi-option axis + one example per
+  mutually-exclusive state — never one-example-per-variant.
+- No Figma links in examples — the example documents API and behavior.
+- Adding an example is enough: the docs page (`/components/<name>`, `/frame/example/<name>/<file>`)
+  and the styled visual test of the first example follow from the files.
 
-**Enforced by:** `validate-story-source` (write-time + the CI ratchet) · Storybook build (CI).
+**Enforced by:** the catalog drift gate (`examples.json` against the exports) · the copyable,
+hydration, server-render and a11y harnesses (every example) · the docs build and the styled
+visual suite (`apps/visual`, CI).
 
 ---
 
@@ -633,7 +655,7 @@ Internal to the webkit repo — how its own components come to exist.
 - Branch from **`main`**, PR to `main`; branches named `<type>/<ISSUE>-<slug>`; shared
   docs/rules in a separate PR from component code.
 - Reshaping any public contract (prop/event/model/payload) is a **major**, updating spec,
-  argTypes, and "Show code" together.
+  examples and docs together.
 
 **Enforced by:** commitlint (commit) · branch protection + required checks + 2 approvals
 (technical + design) on the PR.
@@ -643,16 +665,16 @@ Internal to the webkit repo — how its own components come to exist.
 ## 22. Enforcement map
 
 One definition, three surfaces — the same engine
-(`packages/webkit/src/eslint-plugin/authoring-checks.js`) runs in the design system's
+(`packages/webkit/src/eslint-plugin/lib/authoring-checks.js`) runs in the design system's
 write-time hook, its CI ratchet, and the consumer's lint; an invariant test fails CI if a
 standard loses its gate.
 
-| Gate                                              | Where it runs                                                     | Blocks                                                                                                                                                               |
-| ------------------------------------------------- | ----------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Write-time hooks                                  | the DS authoring pipeline (`exit 2` on save)                      | off-spec code, raw values, phantom imports, off-vocabulary props, non-runnable stories, authoring anti-patterns                                                      |
-| `webkit/authoring-standards` + the 10 usage lints | the consumer's pre-commit (husky) + their CI — every rule `error` | manual v-model, runtime props/emits, undeclared slots, composable anti-patterns, bare `@deprecated`, wrong imports, style overrides, raw colors                      |
-| DS CI (`governance.yml`)                          | every PR                                                          | the authoring ratchet (no new violations), lint zero-warnings, `vue-tsc` + 95% type coverage, toolkit tests + catalog drift, security, Storybook build, summary gate |
-| Mandatory review                                  | every PR (2 approvals: technical + design)                        | everything a regex cannot verify — script order, `defineExpose` minimality, state-matrix completeness, behavioural a11y                                              |
+| Gate                                                      | Where it runs                                                     | Blocks                                                                                                                                                                                         |
+| --------------------------------------------------------- | ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Write-time hooks                                          | the DS authoring pipeline (`exit 2` on save)                      | off-spec code, raw values, phantom imports, off-vocabulary props, authoring anti-patterns                                                                                                      |
+| `webkit/require-authoring-standards` + the 10 usage lints | the consumer's pre-commit (husky) + their CI — every rule `error` | manual v-model, runtime props/emits, undeclared slots, composable anti-patterns, bare `@deprecated`, wrong imports, style overrides, raw colors                                                |
+| DS CI (`governance.yml`)                                  | every PR                                                          | the authoring ratchet (no new violations), lint zero-warnings, `vue-tsc` + 95% type coverage, toolkit tests + catalog drift, security, docs and demos build, styled visual tests, summary gate |
+| Mandatory review                                          | every PR (2 approvals: technical + design)                        | everything a regex cannot verify — script order, `defineExpose` minimality, state-matrix completeness, behavioural a11y                                                                        |
 
 Nothing is advisory: every standard on this page blocks a merge through at least one of
 these gates.

@@ -1,0 +1,229 @@
+{
+ "name": "prompt-input",
+ "binding": "PromptInput",
+ "import": "@aziontech/webkit/prompt-input",
+ "treeShakeableImport": "@aziontech/webkit/prompt-input-root",
+ "category": "ai",
+ "surface": "app",
+ "structure": "composition",
+ "compoundRoot": true,
+ "subcomponents": [
+  "@aziontech/webkit/prompt-input-attach-button",
+  "@aziontech/webkit/prompt-input-dictate-button",
+  "@aziontech/webkit/prompt-input-model-picker",
+  "@aziontech/webkit/prompt-input-context-picker",
+  "@aziontech/webkit/prompt-input-tools"
+ ],
+ "purpose": "The composer of a generative AI chat (ChatGPT, Claude.ai and Gemini composers, AI Elements PromptInput, Cloudscape prompt input): a text area that grows with the prompt up to `maxRows`, a toolbar under it, files attached by a button, by dropping them on the box or by pasting them, a model and mode picker, dictation, a voice-conversation control that stands in for Submit while the prompt is empty, a Submit control that becomes Stop while a response is generated, a secondary row under the box (a context picker, tools, links), an optional character limit with a counter, and constraint text under it all. Enter submits; Shift+Enter adds a line; an IME composition never submits. It is controlled: the owner holds the text and the files, receives `submit` with the trimmed prompt, its references and its files, and clears them. While `status` is `pending` or `streaming` the reader can keep typing the next prompt, but cannot submit it until the response ends or they press Stop. With `queueable` the owner keeps a queue of prompts to send after the response (TanStack AI `useChat` queues a `sendMessage` made while it streams): Submit then stays beside Stop, and Enter or Submit sends the next prompt into that queue while Stop still ends the response. The anatomy is composed by the app: the root draws the box, the text area, Submit / Stop / voice and the file tokens; the controls the app wants (attach, dictate, model, context, tools) are sub-components it places in the `actions`, `end` and `footer` slots. Each reads the composer through `provide` / `inject`, so the app wires nothing but its own values.",
+ "setup": null,
+ "useWhen": [
+  "The input of any conversation with the generative AI assistant.",
+  "A single \"Ask about this page\" box that opens a conversation."
+ ],
+ "avoidWhen": [
+  "A text field in a form → `textarea` inside `field`.",
+  "Search over a list → `input` with a search icon or `property-filter`.",
+  "A command palette → `command`.",
+  "A file upload form → `file-dropzone` with `file-token-group` in a `field`."
+ ],
+ "related": [
+  "`textarea` — the form control; this one has no visible label and submits on Enter.",
+  "`conversation` — the log above it; only the log scrolls.",
+  "`suggestion-group` — prompts the reader can send without typing.",
+  "`file-token-group` — what the attached files render as (horizontal, removable).",
+  "`file-dropzone` — the drop target for a page-wide drop; the composer box is its own drop target.",
+  "`dropdown-menu` — what the model, context and tools pickers open.",
+  "`select` (`variant=\"ghost\"`) — a plain single choice the app adds to the toolbar itself."
+ ],
+ "bestPractices": [
+  "Placeholder is a suggested question with no end punctuation (`Ask a question`); never the only instruction.",
+  "Put the disclaimer and the shortcuts in `hint`, not in the placeholder.",
+  "Set `status` from the request so Submit turns into Stop; wire `stop` to abort it.",
+  "Set `queueable` only when the owner queues what is sent while a response runs, and shows the",
+  "Clear `v-model` and `v-model:files` in the `submit` handler and keep focus in the input.",
+  "Use `maxLength` only when the backend has a limit; the counter is the warning.",
+  "Compose only the controls the product has. Attach first at the inline start; model, dictate and",
+  "Show the upload state on each file (`loading`, `progress`, `error`); Submit waits for them.",
+  "Set `voice` only when the product has a voice conversation; Submit replaces it as soon as there is"
+ ],
+ "props": [
+  {
+   "name": "placeholder",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Hint shown while empty, a suggested question with no end punctuation. Empty uses the locale catalog (`Ask a question`)."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the text area; the input has no visible label. Empty uses the locale catalog (`Prompt`)."
+  },
+  {
+   "name": "maxLength",
+   "type": "number",
+   "default": "0",
+   "required": "false",
+   "doc": "Character limit; shows an `n/max` counter and blocks submit over it. `0` means no limit."
+  },
+  {
+   "name": "minRows",
+   "type": "number",
+   "default": "1",
+   "required": "false",
+   "doc": "Rows shown while empty."
+  },
+  {
+   "name": "maxRows",
+   "type": "number",
+   "default": "6",
+   "required": "false",
+   "doc": "Rows the text area grows to before it scrolls."
+  },
+  {
+   "name": "status",
+   "type": "'ready' | 'pending' | 'streaming'",
+   "default": "'ready'",
+   "required": "false",
+   "doc": "Request lifecycle: `pending` and `streaming` swap Submit for Stop and block another submit (unless `queueable`); typing stays allowed."
+  },
+  {
+   "name": "disabled",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Disables the text area, the submit control and every control in the slots' rows."
+  },
+  {
+   "name": "menus",
+   "type": "PromptInputMenu[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Shortcut menus opened by a trigger character at the start of a word: `/` for commands, `@` for things to reference. Choosing an option inserts `<trigger><label>` and adds it to `references`."
+  },
+  {
+   "name": "accept",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "File filter in the native accept syntax (extensions, MIME types, wildcards) for picked, dropped and pasted files. Empty accepts every file."
+  },
+  {
+   "name": "maxFiles",
+   "type": "number",
+   "default": "0",
+   "required": "false",
+   "doc": "Most files attached at once; files past it are rejected. `0` means no limit."
+  },
+  {
+   "name": "maxFileSize",
+   "type": "number",
+   "default": "0",
+   "required": "false",
+   "doc": "Largest file in bytes; larger files are rejected. `0` means no limit."
+  },
+  {
+   "name": "voice",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows a Start voice conversation control in place of Submit while there is nothing to send; it emits `voice-start`."
+  },
+  {
+   "name": "queueable",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "While `status` is `pending` or `streaming`, keeps Submit beside Stop and lets Enter submit, so the owner queues the prompt for after the response."
+  },
+  {
+   "name": "modelValue",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Two-way value (`v-model`)."
+  },
+  {
+   "name": "references",
+   "type": "PromptInputReference[]",
+   "default": "() => []",
+   "required": "false",
+   "doc": "Two-way value (`v-model:references`)."
+  },
+  {
+   "name": "files",
+   "type": "PromptInputFile[]",
+   "default": "() => []",
+   "required": "false",
+   "doc": "Two-way value (`v-model:files`)."
+  }
+ ],
+ "events": [
+  {
+   "name": "submit",
+   "payload": "(event: MouseEvent | KeyboardEvent, payload: { value: string; references: PromptInputReference[]; files: PromptInputFile[] })",
+   "notes": ""
+  },
+  {
+   "name": "stop",
+   "payload": "(event: MouseEvent)",
+   "notes": ""
+  },
+  {
+   "name": "voice-start",
+   "payload": "(event: MouseEvent)",
+   "notes": ""
+  },
+  {
+   "name": "reject",
+   "payload": "(event: Event, payload: { files: File[]; reason: PromptInputRejectReason })",
+   "notes": ""
+  }
+ ],
+ "slots": [
+  {
+   "name": "attachments",
+   "scope": "—",
+   "notes": "Attached context the app draws itself, above the text, before the file tokens and the references."
+  },
+  {
+   "name": "actions",
+   "scope": "—",
+   "notes": "Controls at the inline start of the toolbar (`PromptInput.AttachButton`); inside a `fieldset` disabled with the input."
+  },
+  {
+   "name": "end",
+   "scope": "—",
+   "notes": "Controls at the inline end of the toolbar, before Submit (`PromptInput.ModelPicker`, `PromptInput.DictateButton`); disabled with the input."
+  },
+  {
+   "name": "footer",
+   "scope": "—",
+   "notes": "The secondary row under the box (`PromptInput.ContextPicker`, `PromptInput.Tools`, links); wraps on narrow screens; disabled with the input."
+  },
+  {
+   "name": "hint",
+   "scope": "—",
+   "notes": "Constraint text under everything; referenced by `aria-describedby`."
+  }
+ ],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/prompt-input/default.vue"
+  },
+  {
+   "name": "Streaming",
+   "file": "examples/prompt-input/streaming.vue"
+  },
+  {
+   "name": "CharacterLimit",
+   "file": "examples/prompt-input/character-limit.vue"
+  }
+ ],
+ "docs": "components/prompt-input.md"
+}

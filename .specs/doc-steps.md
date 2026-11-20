@@ -1,34 +1,35 @@
 ---
 name: doc-steps
-category: documentation
-structure: monolithic
+category: docs
+structure: composition
 status: implemented
-spec_version: 1
-checksum: 796605c993f1cc0665f090cc5b78b4570d2c55b700593b3948c0823481390c69
+spec_version: 3
+checksum: c8d5eb5113ab0e331420fff39f3ce829004a542ebd023527642a67e2609b2be3
 created: 2026-08-22
-last_updated: 2026-09-25
+last_updated: 2026-11-16
 ---
 
 # DocSteps — Component Spec
 
 ## Purpose
 
-The ordered walkthrough from the docs frame: a column of `DocStep` children joined by a rail. Each step registers itself through the context this root provides and reads its number back, so the numbering is a fact of the document order — an author writes titles, never numbers, and reordering the page renumbers it. The final registered step is marked last, which is what drops its connector and trailing space.
+The ordered walkthrough from the docs frame: a column of `DocSteps.Step` children joined by a rail. Each step registers itself through the context this root provides and reads its number back, so the numbering is a fact of the document order — an author writes titles, never numbers, and reordering the page renumbers it. The final registered step is marked last, which is what drops its connector and trailing space.
 
 ## When to use
 
+- Use DocSteps only inside documentation prose for numbered instructions read top to bottom.
 - A procedure the reader performs in order: install, link, deploy.
 - Any "follow these steps" band in documentation prose, however short.
 
 ## When NOT to use
 
-- For a wizard or form flow inside the application — that is the console's own stepper surface, not documentation chrome.
+- For a wizard or form flow inside the application — that is `Stepper` (or `Wizard`), not documentation chrome.
 - For an unordered list of options or features — order is the whole claim this component makes; a list that has none is a plain list or `DocItem` rows.
 - For a single instruction — one step is a sentence, not a walkthrough.
 
 ## Related
 
-- `DocStep` — the sibling root this numbers; a step registers with this context on mount and throws when rendered outside one.
+- `Stepper` — the app's interactive step rail. Both number their steps with the same shared step registry (`useStepRegistry`), which reads the order from the page, so a step inserted between two others takes its place in the count.
 - `DocProse` — the contract around it. The column marks itself `data-doc-block`, so it takes the block rung of the prose ladder.
 
 ## Best practices
@@ -41,18 +42,27 @@ The ordered walkthrough from the docs frame: a column of `DocStep` children join
 
 ```vue
 <script setup>
-  import DocStep from '@aziontech/webkit/doc-step'
   import DocSteps from '@aziontech/webkit/doc-steps'
 </script>
 
 <template>
   <DocSteps>
-    <DocStep title="Install the Azion CLI"> Homebrew is the shortest path on macOS. </DocStep>
-    <DocStep title="Link the project" />
-    <DocStep title="Deploy" />
+    <DocSteps.Step title="Install the Azion CLI">
+      Homebrew is the shortest path on macOS.
+    </DocSteps.Step>
+    <DocSteps.Step title="Link the project" />
+    <DocSteps.Step title="Deploy" />
   </DocSteps>
 </template>
 ```
+
+`@aziontech/webkit/doc-steps-root` is the root alone, without `Step` attached, for an app that
+only renders steps through `DocMarkdown`.
+
+## Sub-components
+
+- `doc-steps.vue` — the root column; provides the numbering context.
+- `doc-steps-step.vue` — `DocSteps.Step`, one numbered step: the circled index, the rail that continues to the next step, the step heading (`title` prop, `''` default) and an optional body in its default slot. It registers with the root's context during setup and reads its index back, so an author writes a title and never a number; rendered outside `DocSteps` it throws (`useDocStepsContext must be used within DocSteps.`). The circle and the rail are `aria-hidden`; the heading carries `data-doc-chrome`, the rail `data-step-connector`, the body `data-step-body`; the final step drops its rail through a last-child CSS variant. Test id `doc-steps-step`. It has no standalone export: it only renders inside `DocSteps`, so it ships attached to the compound.
 
 ## Props
 
@@ -64,14 +74,14 @@ The ordered walkthrough from the docs frame: a column of `DocStep` children join
 
 ## Slots
 
-| Slot      | Scope | Notes                                                         |
-| --------- | ----- | ------------------------------------------------------------- |
-| `default` | —     | The `DocStep` children, in the order they should be numbered. |
+| Slot      | Scope | Notes                                                               |
+| --------- | ----- | ------------------------------------------------------------------- |
+| `default` | —     | The `DocSteps.Step` children, in the order they should be numbered. |
 
 ## States
 
 - Visual states: `default` (the column is not interactive and holds no visual state of its own)
-- Provides the numbering context: each `DocStep` registers on mount and deregisters on unmount; `index` is the 1-based document order and `last` marks the final registration, which suppresses that step's connector
+- Provides the numbering context (the shared step registry): each `DocSteps.Step` registers in setup, hands over its element on mount and deregisters on unmount; `index` is the 1-based position on the page; the final step's connector is suppressed by a last-child CSS variant
 - `data-doc-block` is the `DocProse` contract (the column takes the block rung of the ladder)
 
 ## Motion & Animations
@@ -94,11 +104,11 @@ _none_
 
 - Visible focus: the column is not focusable; `Tab` reaches only interactive content nested inside a step's body.
 - Keyboard map: none of its own.
-- ARIA: the column is a plain block. The circled indices and the rail are decorative (`aria-hidden`, owned by `DocStep`), so assistive tech reads the step headings and bodies in document order — the same order the numbers claim.
-- Contrast: inherited from `DocStep`; the column paints nothing.
+- ARIA: the column is a plain block. The circled indices and the rail are decorative (`aria-hidden`, owned by `DocSteps.Step`), so assistive tech reads the step headings and bodies in document order — the same order the numbers claim.
+- Contrast: inherited from `DocSteps.Step`; the column paints nothing.
 - Touch target: not applicable; the component is not interactive.
 
-## Stories (Storybook)
+## Examples
 
 - Default — five titled steps, the shape the docs frame specifies. Composite by necessity: the public API is slots-only, so there is nothing for an arg-driven story to drive.
 - With step content (`WithBody`) — steps carrying prose bodies of different heights, so the rail visibly stretches to cover them. Justified in writing here because the body is a slot-shaped axis no control can reach, and the connector behaviour only reads against bodies of unequal height.
@@ -116,11 +126,9 @@ _none_
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
-- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
-- Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
+- Do not edit `.claude/docs/DESIGN.md` or `.claude/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.

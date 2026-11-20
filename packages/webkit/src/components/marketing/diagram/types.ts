@@ -1,7 +1,7 @@
-import type { TagSeverity } from '../../tag/tag.vue'
+import type { TagSeverity } from '../../content/tag/tag.vue'
 
 /** How a leaf of the diagram is drawn. */
-export type DiagramNodeKind = 'card' | 'pill' | 'tile' | 'app' | 'item'
+export type DiagramNodeType = 'card' | 'pill' | 'tile' | 'app' | 'item'
 
 /** Status chip on the header row of a card. */
 export interface DiagramNodeStatus {
@@ -16,7 +16,7 @@ export interface DiagramNode {
   /** Id the layout and the edges refer to. */
   key: string
   /** How the leaf is drawn. */
-  kind: DiagramNodeKind
+  type: DiagramNodeType
   /** Main text of the leaf; the name row of a card, the hover title of an icon-only tile. */
   title: string
   /** What the leaf is: beside the glyph on a card's header row, under the title on an item. */
@@ -42,7 +42,7 @@ export type DiagramRowAlign = 'start' | 'center'
 export type DiagramRowGap = 'default' | 'wide'
 
 /** Border style of a group. */
-export type DiagramGroupKind = 'solid' | 'dashed'
+export type DiagramGroupVariant = 'solid' | 'dashed'
 
 /** Tint that marks a group as an inside. */
 export type DiagramGroupFill = 'none' | 'primary' | 'secondary'
@@ -56,7 +56,7 @@ export type DiagramLayoutItem =
   | {
       group: string
       label: string
-      kind?: DiagramGroupKind
+      variant?: DiagramGroupVariant
       fill?: DiagramGroupFill
       content: DiagramLayoutItem
     }

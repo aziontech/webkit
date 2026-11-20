@@ -1,0 +1,18 @@
+import { tokenRef } from '../token-ref.js'
+
+export const success = {
+  light: {
+    success: tokenRef('primitives.green.300'),
+    'success-border': tokenRef('primitives.alpha.green.400'),
+    'success-foreground': tokenRef('primitives.green.900'),
+    'success-mark': tokenRef('primitives.green.700')
+  },
+  dark: {
+    success: tokenRef('primitives.green.900'),
+    'success-border': tokenRef('primitives.alpha.green.400'),
+    'success-foreground': tokenRef('primitives.green.400'),
+    'success-mark': tokenRef('primitives.green.600')
+  }
+}
+
+export default { success }

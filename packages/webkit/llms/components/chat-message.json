@@ -1,0 +1,130 @@
+{
+ "name": "chat-message",
+ "binding": "ChatMessage",
+ "import": "@aziontech/webkit/chat-message",
+ "treeShakeableImport": "@aziontech/webkit/chat-message-root",
+ "category": "ai",
+ "surface": "app",
+ "structure": "composition",
+ "compoundRoot": true,
+ "subcomponents": [
+  "@aziontech/webkit/chat-message-actions",
+  "@aziontech/webkit/chat-message-feedback"
+ ],
+ "purpose": "One message in a generative AI conversation (Cloudscape's chat bubble, AI Elements' Message): who wrote it (avatar and author line), the content, and — once the response is complete — the inline actions a reader takes on it (copy, regenerate, thumbs up / down). It owns the message lifecycle: `pending` (waiting for the first token: the loading text), `streaming` (content arriving, busy, no actions), `success` (actions shown; announced once to screen readers through the `Conversation`) and `error` (an error line with Try again). User messages sit in a filled bubble; assistant messages are flat, full width, beside the assistant mark; system messages are a muted centered line. Alignment comes from the enclosing `Conversation`.",
+ "setup": null,
+ "useWhen": [
+  "Every turn of a chat with the generative AI assistant: the person's prompt, the assistant's response, a system note (\"Conversation restarted\").",
+  "A response that must show its lifecycle (loading, streaming, failure) and its actions."
+ ],
+ "avoidWhen": [
+  "A generated block outside a conversation (a summary on a page) → `StreamingResponse` alone.",
+  "A notification or toast about the product → `alert` / `toast`.",
+  "A comment thread between people → not this component; it carries AI semantics (feedback thumbs, regenerate)."
+ ],
+ "related": [
+  "`conversation` — the log that holds messages, sets alignment and announces finished ones.",
+  "`streaming-response` — the safe Markdown renderer for assistant content.",
+  "`reasoning`, `sources`, `tool-call`, `artifact-preview` — parts that stack inside an assistant message.",
+  "`copy-button`, `icon-button` — the actions composed into `ChatMessage.Actions`.",
+  "`response-loading` — what `pending` renders."
+ ],
+ "bestPractices": [
+  "Pass `status` from your request: `pending` until the first token, `streaming` while tokens arrive, then `success` or `error`.",
+  "Keep actions to five or fewer, always visible (no hover-only): copy, regenerate, feedback.",
+  "Use `grouped` for a second message by the same author so stacked bubbles read as one turn (only the first shows the avatar).",
+  "Never put the feedback thumbs on non-AI content."
+ ],
+ "props": [
+  {
+   "name": "from",
+   "type": "'user' | 'assistant' | 'system'",
+   "default": "'assistant'",
+   "required": "false",
+   "doc": "Who wrote the message: the person (`user`), the generative AI assistant, or the product (`system`)."
+  },
+  {
+   "name": "author",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Author name shown over the message and read in its accessible name. Empty uses the locale catalog (`You`, `AI assistant`, `System`)."
+  },
+  {
+   "name": "timestamp",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Time the message was sent, already formatted for display (`10:42`). Added to the accessible name."
+  },
+  {
+   "name": "status",
+   "type": "'pending' | 'streaming' | 'success' | 'error'",
+   "default": "'success'",
+   "required": "false",
+   "doc": "Lifecycle: `pending` shows the loading text, `streaming` marks the content busy, `success` shows the actions, `error` shows the error line with Try again."
+  },
+  {
+   "name": "grouped",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Follows a message by the same author: drops the avatar and the author line so stacked messages read as one turn."
+  },
+  {
+   "name": "errorMessage",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Error text shown while `status` is `error`. Empty uses the locale catalog."
+  },
+  {
+   "name": "loadingLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Loading text shown while `status` is `pending`. Empty uses `ResponseLoading`'s own (`Generating a response`)."
+  }
+ ],
+ "events": [
+  {
+   "name": "retry",
+   "payload": "(event: MouseEvent)",
+   "notes": ""
+  }
+ ],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "The content: text, `StreamingResponse`, `Reasoning`, `Sources`, artifacts. Not rendered while `pending`."
+  },
+  {
+   "name": "avatar",
+   "scope": "—",
+   "notes": "Replaces the default avatar (person glyph for the user, the assistant mark for the AI)."
+  },
+  {
+   "name": "actions",
+   "scope": "—",
+   "notes": "Inline actions, usually `ChatMessage.Actions`; shown only when `status` is `success`."
+  }
+ ],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/chat-message/default.vue"
+  },
+  {
+   "name": "Actions",
+   "file": "examples/chat-message/actions.vue"
+  },
+  {
+   "name": "Lifecycle",
+   "file": "examples/chat-message/lifecycle.vue"
+  }
+ ],
+ "docs": "components/chat-message.md"
+}

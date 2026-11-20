@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Every status of a tool call in the order an agent goes through them: waiting for authorization, preparing while the arguments arrive, running, completed, failed, canceled and denied, each with its status in text.",
+   "file": "examples/tool-call/default.vue"
+  },
+  {
+   "name": "WithDetails",
+   "summary": "A completed call whose input and output open under the row as code, and a failed call opened by default so the reader sees the error.",
+   "file": "examples/tool-call/with-details.vue"
+  }
+ ]
+}

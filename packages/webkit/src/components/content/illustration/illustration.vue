@@ -1,11 +1,7 @@
 <script setup lang="ts">
   import { computed, shallowRef, useAttrs, useId, useTemplateRef, watch } from 'vue'
 
-  import {
-    type IllustrationAssetLoader,
-    loadIllustrationPlaceholder,
-    resolveIllustrationAsset
-  } from '../../../assets/illustrations/registry'
+  import type { IllustrationAssetLoader } from '../../../assets/illustrations/registry'
   import type { IllustrationScene } from '../../../assets/illustrations/scene'
 
   defineOptions({
@@ -13,21 +9,21 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface IllustrationProps {
     /** Name of an official scene in the illustration asset library. */
     name?: string
     /** Accessible name; empty keeps the illustration decorative and hidden from assistive tech. */
     ariaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<IllustrationProps>(), {
     name: '',
     ariaLabel: ''
   })
 
   const attrs = useAttrs()
   const scope = useId()
-  const root = useTemplateRef<globalThis.SVGSVGElement>('root')
+  const rootEl = useTemplateRef<globalThis.SVGSVGElement>('rootEl')
 
   const scene = shallowRef<IllustrationScene | null>(null)
   const placeheld = shallowRef(false)
@@ -44,25 +40,21 @@
   watch(
     () => props.name,
     (name) => {
-      const load = name ? resolveIllustrationAsset(name) : null
-      if (!load) {
-        if (name) {
-          console.warn(`[webkit] <Illustration>: no asset registered under name "${name}".`)
-        }
-        paint(loadIllustrationPlaceholder)
-          .then((painted) => {
-            if (props.name && resolveIllustrationAsset(props.name)) return
-            scene.value = painted
-            placeheld.value = true
-          })
-          .catch(warnUnloaded)
-        return
-      }
-      paint(load)
-        .then((painted) => {
+      if (typeof document === 'undefined') return
+      import('../../../assets/illustrations/registry')
+        .then(({ loadIllustrationPlaceholder, resolveIllustrationAsset }) => {
           if (props.name !== name) return
-          scene.value = painted
-          placeheld.value = false
+          const load = name ? resolveIllustrationAsset(name) : null
+          if (!load && name) {
+            console.warn(
+              `[webkit] <Illustration>: no scene named "${name}". Names: llms/foundations/illustrations.md or the MCP tool list_assets.`
+            )
+          }
+          return paint(load ?? loadIllustrationPlaceholder).then((painted) => {
+            if (props.name !== name) return
+            scene.value = painted
+            placeheld.value = !load
+          })
         })
         .catch(warnUnloaded)
     },
@@ -70,7 +62,7 @@
   )
 
   watch(
-    [root, scene],
+    [rootEl, scene],
     ([element, painted]) => {
       if (element && painted) {
         element.replaceChildren(...painted.draw(scope))
@@ -81,11 +73,16 @@
 
   const viewBox = computed(() => scene.value?.viewBox || '0 0 592 300')
 
+  const frame = computed(() => {
+    const [, , width, height] = viewBox.value.split(/[\s,]+/).map(Number)
+    return placeheld.value || !(width > 0 && height > 0)
+      ? { width: 592, height: 300 }
+      : { width, height }
+  })
+
   const decorative = computed(() => placeheld.value || props.ariaLabel.length === 0)
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'content-illustration'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'illustration')
 
   const passthroughAttrs = computed(() => {
     const rest = { ...attrs }
@@ -97,15 +94,15 @@
 <template>
   <svg
     v-if="scene"
-    ref="root"
+    ref="rootEl"
     :viewBox="viewBox"
     :role="decorative ? undefined : 'img'"
     :aria-label="decorative ? undefined : ariaLabel"
     :aria-hidden="decorative || undefined"
     :data-testid="testId"
     :data-placeholder="placeheld || undefined"
-    width="592"
-    height="300"
+    :width="frame.width"
+    :height="frame.height"
     fill="none"
     class="block h-auto w-full"
     v-bind="passthroughAttrs"

@@ -12,11 +12,11 @@ afterEach(() => {
 describe('BrowserFrame', () => {
   it('renders and exposes the fallback data-testid', () => {
     const { getByTestId } = render(BrowserFrame)
-    expect(getByTestId('content-browser-frame')).toBeTruthy()
-    expect(getByTestId('content-browser-frame__viewport').tagName).toBe('IFRAME')
-    expect(getByTestId('content-browser-frame__width-handle')).toBeTruthy()
-    expect(getByTestId('content-browser-frame__height-handle')).toBeTruthy()
-    expect(getByTestId('content-browser-frame__corner-handle')).toBeTruthy()
+    expect(getByTestId('browser-frame')).toBeTruthy()
+    expect(getByTestId('browser-frame__viewport').tagName).toBe('IFRAME')
+    expect(getByTestId('browser-frame__width-handle')).toBeTruthy()
+    expect(getByTestId('browser-frame__height-handle')).toBeTruthy()
+    expect(getByTestId('browser-frame__corner-handle')).toBeTruthy()
   })
 
   it('lets a consumer override data-testid', () => {
@@ -32,8 +32,8 @@ describe('BrowserFrame', () => {
     const { getByTestId } = render(BrowserFrame, {
       props: { width: 768, minWidth: 360, maxWidth: 1440 }
     })
-    const handle = getByTestId('content-browser-frame__width-handle')
-    const viewport = getByTestId('content-browser-frame__viewport')
+    const handle = getByTestId('browser-frame__width-handle')
+    const viewport = getByTestId('browser-frame__viewport')
     expect(handle.getAttribute('role')).toBe('separator')
     expect(handle.getAttribute('tabindex')).toBe('0')
     expect(handle.getAttribute('aria-orientation')).toBe('vertical')
@@ -48,8 +48,8 @@ describe('BrowserFrame', () => {
     const { getByTestId } = render(BrowserFrame, {
       props: { height: 1024, minHeight: 400, maxHeight: 1200 }
     })
-    const handle = getByTestId('content-browser-frame__height-handle')
-    const viewport = getByTestId('content-browser-frame__viewport')
+    const handle = getByTestId('browser-frame__height-handle')
+    const viewport = getByTestId('browser-frame__viewport')
     expect(handle.getAttribute('role')).toBe('separator')
     expect(handle.getAttribute('tabindex')).toBe('0')
     expect(handle.getAttribute('aria-orientation')).toBe('horizontal')
@@ -62,7 +62,7 @@ describe('BrowserFrame', () => {
 
   it('reports the default height and limits', () => {
     const { getByTestId } = render(BrowserFrame)
-    const handle = getByTestId('content-browser-frame__height-handle')
+    const handle = getByTestId('browser-frame__height-handle')
     expect(handle.getAttribute('aria-valuenow')).toBe('800')
     expect(handle.getAttribute('aria-valuemin')).toBe('320')
     expect(handle.getAttribute('aria-valuemax')).toBe('1440')
@@ -70,33 +70,31 @@ describe('BrowserFrame', () => {
 
   it('names the handles with the defaults and the overrides', () => {
     const defaults = render(BrowserFrame)
-    expect(
-      defaults.getByTestId('content-browser-frame__width-handle').getAttribute('aria-label')
-    ).toBe('Resize preview width')
-    expect(
-      defaults.getByTestId('content-browser-frame__height-handle').getAttribute('aria-label')
-    ).toBe('Resize preview height')
+    expect(defaults.getByTestId('browser-frame__width-handle').getAttribute('aria-label')).toBe(
+      'Resize preview width'
+    )
+    expect(defaults.getByTestId('browser-frame__height-handle').getAttribute('aria-label')).toBe(
+      'Resize preview height'
+    )
     defaults.unmount()
 
     const { getByTestId } = render(BrowserFrame, {
       props: { widthHandleAriaLabel: 'Page width', heightHandleAriaLabel: 'Page height' }
     })
-    expect(getByTestId('content-browser-frame__width-handle').getAttribute('aria-label')).toBe(
-      'Page width'
-    )
-    expect(getByTestId('content-browser-frame__height-handle').getAttribute('aria-label')).toBe(
+    expect(getByTestId('browser-frame__width-handle').getAttribute('aria-label')).toBe('Page width')
+    expect(getByTestId('browser-frame__height-handle').getAttribute('aria-label')).toBe(
       'Page height'
     )
   })
 
   it('keeps the corner handle pointer-only and hidden from assistive tech', () => {
     const { getAllByRole, getByTestId } = render(BrowserFrame)
-    const corner = getByTestId('content-browser-frame__corner-handle')
+    const corner = getByTestId('browser-frame__corner-handle')
     expect(corner.getAttribute('aria-hidden')).toBe('true')
     expect(corner.hasAttribute('tabindex')).toBe(false)
     expect(getAllByRole('separator')).toEqual([
-      getByTestId('content-browser-frame__width-handle'),
-      getByTestId('content-browser-frame__height-handle')
+      getByTestId('browser-frame__width-handle'),
+      getByTestId('browser-frame__height-handle')
     ])
   })
 
@@ -105,7 +103,7 @@ describe('BrowserFrame', () => {
     host.style.display = 'none'
     globalThis.document.body.appendChild(host)
     const { getByTestId, unmount } = render(BrowserFrame, { container: host })
-    const handle = getByTestId('content-browser-frame__width-handle')
+    const handle = getByTestId('browser-frame__width-handle')
     expect(handle.getAttribute('aria-valuenow')).toBe('320')
     expect(handle.getAttribute('aria-valuetext')).toBe('320 pixels wide')
     unmount()
@@ -116,41 +114,41 @@ describe('BrowserFrame', () => {
     const { getByTestId, getByText } = render(BrowserFrame, {
       props: { address: 'https://www.azion.com/en/pricing', width: 600, height: 700 }
     })
-    const address = getByTestId('content-browser-frame__address')
+    const address = getByTestId('browser-frame__address')
     const dots = address.parentElement?.firstElementChild
     expect(dots?.getAttribute('aria-hidden')).toBe('true')
     expect(getByText('https://www.azion.co').closest('[aria-hidden="true"]')).toBeTruthy()
     expect(getByText('m/en/pricing').closest('[aria-hidden="true"]')).toBeTruthy()
-    expect(getByTestId('content-browser-frame__copy').closest('[aria-hidden="true"]')).toBeNull()
+    expect(getByTestId('browser-frame__copy').closest('[aria-hidden="true"]')).toBeNull()
 
-    await fireEvent.focus(getByTestId('content-browser-frame__width-handle'))
+    await fireEvent.focus(getByTestId('browser-frame__width-handle'))
     expect(getByText('600 × 700').closest('[aria-hidden="true"]')).toBeTruthy()
   })
 
   it('renders the address bar only when address is set', () => {
     const empty = render(BrowserFrame)
-    expect(empty.queryByTestId('content-browser-frame__address')).toBeNull()
+    expect(empty.queryByTestId('browser-frame__address')).toBeNull()
     empty.unmount()
 
     const { getByTestId } = render(BrowserFrame, {
       props: { address: 'https://www.azion.com/en/pricing' }
     })
-    expect(getByTestId('content-browser-frame__address').textContent).toBe(
+    expect(getByTestId('browser-frame__address').textContent).toBe(
       'https://www.azion.com/en/pricing'
     )
   })
 
   it('renders the copy button only when address is set', () => {
     const empty = render(BrowserFrame)
-    expect(empty.queryByTestId('content-browser-frame__copy')).toBeNull()
+    expect(empty.queryByTestId('browser-frame__copy')).toBeNull()
     expect(empty.queryByRole('button')).toBeNull()
     empty.unmount()
 
     const { getByTestId } = render(BrowserFrame, {
       props: { address: 'https://www.azion.com/en/pricing' }
     })
-    const copy = getByTestId('content-browser-frame__copy')
-    expect(getByTestId('content-browser-frame__address').contains(copy)).toBe(true)
+    const copy = getByTestId('browser-frame__copy')
+    expect(getByTestId('browser-frame__address').contains(copy)).toBe(true)
     expect(copy.querySelector('button')).toBeTruthy()
   })
 
@@ -187,13 +185,13 @@ describe('BrowserFrame', () => {
 
   it('shows the size readout while a handle is focused', async () => {
     const { getByTestId } = render(BrowserFrame, { props: { width: 600, height: 700 } })
-    const root = getByTestId('content-browser-frame')
+    const root = getByTestId('browser-frame')
     expect(root.textContent).not.toContain('600 × 700')
 
-    await fireEvent.focus(getByTestId('content-browser-frame__height-handle'))
+    await fireEvent.focus(getByTestId('browser-frame__height-handle'))
     expect(root.textContent).toContain('600 × 700')
 
-    await fireEvent.blur(getByTestId('content-browser-frame__height-handle'))
+    await fireEvent.blur(getByTestId('browser-frame__height-handle'))
     expect(root.textContent).not.toContain('600 × 700')
   })
 
@@ -201,7 +199,7 @@ describe('BrowserFrame', () => {
     const { getByTestId, emitted } = render(BrowserFrame, {
       props: { width: 600, maxWidth: 650, 'onUpdate:width': () => undefined }
     })
-    const handle = getByTestId('content-browser-frame__width-handle')
+    const handle = getByTestId('browser-frame__width-handle')
 
     await fireEvent.keyDown(handle, { key: 'ArrowRight' })
     await fireEvent.keyDown(handle, { key: 'ArrowRight', shiftKey: true })
@@ -219,7 +217,7 @@ describe('BrowserFrame', () => {
     const { getByTestId, emitted } = render(BrowserFrame, {
       props: { height: 700, maxHeight: 750, 'onUpdate:height': () => undefined }
     })
-    const handle = getByTestId('content-browser-frame__height-handle')
+    const handle = getByTestId('browser-frame__height-handle')
 
     await fireEvent.keyDown(handle, { key: 'ArrowDown' })
     await fireEvent.keyDown(handle, { key: 'ArrowDown', shiftKey: true })
@@ -237,7 +235,7 @@ describe('BrowserFrame', () => {
     const { getByTestId, queryByTestId } = render(BrowserFrame, {
       slots: { default: () => h('p', { 'data-testid': 'slot-content' }, 'Hello frame') }
     })
-    const iframe = getByTestId('content-browser-frame__viewport') as globalThis.HTMLIFrameElement
+    const iframe = getByTestId('browser-frame__viewport') as globalThis.HTMLIFrameElement
     await waitFor(() =>
       expect(
         iframe.contentDocument?.body.querySelector('[data-testid="slot-content"]')?.textContent

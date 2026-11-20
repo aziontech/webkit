@@ -1,0 +1,59 @@
+{
+  "id": "ai/ai-api-key",
+  "name": "AiApiKey",
+  "title": "Blocks/Ai/AiApiKey",
+  "surface": "app",
+  "summary": "Bring your own key: the reader picks a model provider in a `Select`, pastes a key in a masked `PasswordInput` (never prefilled, cleared once saved) and saves it; a status row shows whether a key is saved (only its masked tail) and the result of Test connection, a failure shows in an `Alert`, and Remove key asks in a `ConfirmDialog`. The block stores nothing: it emits save, test and remove for the app's key store (TanStack AI's `useByok`). Built from `PageHeader`, `Subheader`, `Card`, `Item`, `SettingsRow`, `Select`, `PasswordInput`, `FieldError`, `StatusIndicator`, `Alert`, `Button` and `ConfirmDialog`. A page body for ConsoleLayout.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "bring your own key",
+    "byok",
+    "model provider api key",
+    "use my own openai key",
+    "test api key",
+    "usar minha própria chave de api",
+    "chave de api do provedor de ia",
+    "usar mi propia clave de api"
+  ],
+  "skills": ["webkit-form", "webkit-ai-surfaces", "webkit-ui-states", "webkit-errors"],
+  "primary": {
+    "name": "Saved",
+    "file": "ai-api-key.vue"
+  },
+  "files": ["sample.ts"],
+  "variants": [
+    {
+      "name": "Empty",
+      "summary": "No key saved: only Save key shows.",
+      "file": "variants/empty.vue"
+    },
+    {
+      "name": "Saving",
+      "summary": "The save is in flight: the controls lock and Save key spins, keeping focus.",
+      "file": "variants/saving.vue"
+    },
+    {
+      "name": "Testing",
+      "summary": "Test connection runs: the status reads Testing, Remove key and the Provider lock.",
+      "file": "variants/testing.vue"
+    },
+    {
+      "name": "Success",
+      "summary": "The test passed: the status reads Connected.",
+      "file": "variants/success.vue"
+    },
+    {
+      "name": "Error",
+      "summary": "The test failed: the status reads Connection failed and an Alert gives the reason with Test again.",
+      "file": "variants/error.vue"
+    },
+    {
+      "name": "SaveError",
+      "summary": "The save failed: an Alert gives the reason with no action; Save key retries.",
+      "file": "variants/save-error.vue"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Hover or focus the glyph to reveal the hint.",
+   "file": "examples/hint/default.vue"
+  },
+  {
+   "name": "Placements",
+   "summary": "The four anchors. Hover each glyph to see where its tooltip opens.",
+   "file": "examples/hint/placements.vue"
+  }
+ ]
+}

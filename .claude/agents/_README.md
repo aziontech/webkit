@@ -29,18 +29,18 @@ If anything is ambiguous, emit a `BLOCKED: <reason>` line and write no files.
 
 ## Catalog
 
-| Sub-agent                | Skill it executes    | Reads (rules)                                                                                                                                                                                                              | Writes                                                                        |
-| ------------------------ | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| `spec-author.md`         | `spec-create`        | tokens, naming, dependencies, migration, storybook                                                                                                                                                                         | `.specs/<name>.md` (draft)                                                    |
-| `spec-validator.md`      | `spec-validate`      | tokens, naming                                                                                                                                                                                                             | spec frontmatter only (status, checksum, last_updated)                        |
-| `figma-extractor.md`     | `figma-discover`     | migration                                                                                                                                                                                                                  | stdout JSON only                                                              |
-| `token-mapper.md`        | `token-map`          | tokens                                                                                                                                                                                                                     | stdout Markdown only                                                          |
-| `reuse-auditor.md`       | `reuse-audit`        | dependencies                                                                                                                                                                                                               | stdout JSON only                                                              |
-| `structure-decider.md`   | `structure-decide`   | naming                                                                                                                                                                                                                     | stdout 2 lines only                                                           |
-| `scaffolder.md`          | `component-scaffold` | **no-invention, naming, component-structure, props, prop-vocabulary, v-model, emits, event-payloads, slots, composables, root-element, component-states, styling, tokens, accessibility, testid, dependencies, migration** | `<name>.vue`, sub-components, `injection-key.ts`, root `package.json#exports` |
-| `storybook-writer.md`    | `storybook-write`    | naming, tokens, **storybook**, no-invention                                                                                                                                                                                | `apps/storybook/src/stories/components/<category>/<PascalName>.stories.js`              |
-| `code-connect-writer.md` | `code-connect-write` | naming, migration                                                                                                                                                                                                          | `<name>.figma.ts`                                                             |
-| `echo-reporter.md`       | `echo-report`        | naming, tokens, storybook                                                                                                                                                                                                  | stdout report only                                                            |
+| Sub-agent                 | Skill it executes    | Reads (rules)                                                                                                                                                                                                              | Writes                                                                        |
+| ------------------------- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| `spec-creator.md`         | `spec-create`        | tokens, naming, dependencies, migration, examples                                                                                                                                                                          | `.specs/<name>.md` (draft)                                                    |
+| `spec-validator.md`       | `spec-validate`      | tokens, naming                                                                                                                                                                                                             | spec frontmatter only (status, checksum, last_updated)                        |
+| `spec-reviewer.md`        | — (fixed checklist)  | naming, prop-vocabulary, component-states, accessibility, tokens, dependencies, bundle-budget                                                                                                                              | stdout JSON verdict only (`/component-new` step 4)                            |
+| `figma-extractor.md`      | `figma-extract`      | migration                                                                                                                                                                                                                  | stdout JSON only                                                              |
+| `token-mapper.md`         | `token-map`          | tokens                                                                                                                                                                                                                     | stdout Markdown only                                                          |
+| `reuse-auditor.md`        | `reuse-audit`        | dependencies                                                                                                                                                                                                               | stdout JSON only                                                              |
+| `structure-decider.md`    | `structure-decide`   | naming                                                                                                                                                                                                                     | stdout 2 lines only                                                           |
+| `component-scaffolder.md` | `component-scaffold` | **no-invention, naming, component-structure, props, prop-vocabulary, v-model, emits, event-payloads, slots, composables, root-element, component-states, styling, tokens, accessibility, testid, dependencies, migration** | `<name>.vue`, sub-components, `injection-key.ts`, root `package.json#exports` |
+| `code-connect-writer.md`  | `code-connect-write` | naming, migration                                                                                                                                                                                                          | `<name>.figma.ts`                                                             |
+| `echo-reporter.md`        | `echo-report`        | naming, tokens, examples                                                                                                                                                                                                   | stdout report only                                                            |
 
 ## Rules catalog ([.claude/rules/](../rules/))
 
@@ -52,7 +52,7 @@ If anything is ambiguous, emit a `BLOCKED: <reason>` line and write no files.
 | `styling.md`             | **Classes inline on the root.** No JS class presets, no `<style>` block, variants via `data-*`     |
 | `component-structure.md` | Fixed folder layout + `<script setup>` section order                                               |
 | `props.md`               | Typed `interface Props` + `withDefaults` + JSDoc; exported variant unions                          |
-| `prop-vocabulary.md`     | One canonical name/type/default per concept (`kind`, `size`, `disabled`…)                          |
+| `prop-vocabulary.md`     | One canonical name/type/default per concept (`variant`, `size`, `disabled`…)                       |
 | `v-model.md`             | Two-way values via `defineModel` — controlled + uncontrolled, one macro                            |
 | `emits.md`               | Typed `defineEmits`, kebab names, model vs. activation                                             |
 | `event-payloads.md`      | Activation events emit `(event, item)` — DOM event first                                           |
@@ -61,16 +61,16 @@ If anything is ambiguous, emit a `BLOCKED: <reason>` line and write no files.
 | `root-element.md`        | Own the root: polymorphism via `href`, `$attrs` forwarding, minimal `defineExpose`                 |
 | `component-states.md`    | Declared, rendered state surface (loading/empty/error via DS components)                           |
 | `accessibility.md`       | Role, keyboard, focus, `motion-reduce` — owned by the component                                    |
-| `testid.md`              | `data-testid` derived `<category>-<name>` / `input-<name>`, overridable                            |
+| `testid.md`              | `data-testid` is the component's own name (`button`, `dialog-header`), overridable                 |
 | `deprecation.md`         | Mark `@deprecated` → one major → remove                                                            |
 | `bundle-budget.md`       | Per-entry budget recorded in `.size-limit.json`; automated CI gate pending — review holds the line |
 
 ## Source-of-truth docs ([.claude/docs/](../docs/))
 
-| File                        | Purpose                                                                                                                            |
-| --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `DESIGN.md`                 | Tokens (typography, spacing, container, shape, shadow, colors), animation catalog, forbidden list                                  |
-| `COMPONENT_REQUIREMENTS.md` | Component pattern: TypeScript, naming, slots, BEM data-testid, ARIA, Composition Pattern, Storybook discipline, Styling discipline |
+| File                        | Purpose                                                                                                                           |
+| --------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `DESIGN.md`                 | Tokens (typography, spacing, container, shape, shadow, colors), animation catalog, forbidden list                                 |
+| `COMPONENT_REQUIREMENTS.md` | Component pattern: TypeScript, naming, slots, BEM data-testid, ARIA, Composition Pattern, examples discipline, Styling discipline |
 
 ## Rules every agent file inherits
 

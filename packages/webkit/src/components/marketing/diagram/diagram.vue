@@ -2,7 +2,7 @@
   import { computed, ref, shallowRef, useAttrs, watch } from 'vue'
 
   import { useDiagramConnectors } from './composables/use-diagram-connectors'
-  import DiagramLayout from './diagram-layout/diagram-layout.vue'
+  import DiagramLayout from './parts/diagram-layout.vue'
   import type { DiagramNode, DiagramSpec } from './types'
 
   defineOptions({ name: 'Diagram', inheritAttrs: false })
@@ -10,11 +10,11 @@
   export type {
     DiagramEdge,
     DiagramGroupFill,
-    DiagramGroupKind,
+    DiagramGroupVariant,
     DiagramLayoutItem,
     DiagramNode,
-    DiagramNodeKind,
     DiagramNodeStatus,
+    DiagramNodeType,
     DiagramRowAlign,
     DiagramRowGap,
     DiagramSpec
@@ -50,7 +50,7 @@
     | 'workloads-isolate-per-request'
     | 'workloads-security'
 
-  interface Props {
+  export interface DiagramProps {
     /** Name of an official diagram in the asset library; ignored when spec is set. */
     name?: DiagramName
     /** The nodes, their layout and the edges between them, for a diagram the library does not have. */
@@ -59,7 +59,7 @@
     ariaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<DiagramProps>(), {
     name: undefined,
     spec: undefined,
     ariaLabel: ''
@@ -69,10 +69,10 @@
 
   const dev = (import.meta as ImportMeta & { env?: { DEV?: boolean } }).env?.DEV === true
 
-  const canvas = ref<globalThis.HTMLElement | null>(null)
+  const canvasEl = ref<globalThis.HTMLElement | null>(null)
   const named = shallowRef<DiagramSpec | null>(null)
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'marketing-diagram')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'diagram')
   const drawn = computed<DiagramSpec | null>(() => props.spec ?? named.value)
   const label = computed(() => props.ariaLabel || drawn.value?.ariaLabel || '')
   const nodes = computed<Record<string, DiagramNode>>(() =>
@@ -101,7 +101,7 @@
   )
 
   const { width, height, paths, labels, ports, ready } = useDiagramConnectors(
-    canvas,
+    canvasEl,
     () => drawn.value?.edges ?? []
   )
 
@@ -119,7 +119,7 @@
   >
     <div
       v-if="drawn"
-      ref="canvas"
+      ref="canvasEl"
       aria-hidden="true"
       :data-testid="`${testId}__canvas`"
       :data-ready="ready || null"
@@ -159,7 +159,7 @@
         v-for="chip in labels"
         :key="chip.key"
         :data-active="chip.active || null"
-        class="absolute -translate-1/2 rounded-full border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xxs) text-label-code-sm whitespace-nowrap text-(--text-muted) data-[active]:text-(--text-default)"
+        class="absolute -translate-1/2 rounded-full border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-2xs) text-label-code-sm whitespace-nowrap text-(--text-muted) data-[active]:text-(--text-default)"
         :style="at(chip.x, chip.y)"
       >
         {{ chip.label }}

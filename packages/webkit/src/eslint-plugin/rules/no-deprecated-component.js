@@ -1,5 +1,5 @@
-import { loadCatalog } from '../catalog.js'
-import { ctxCwd } from '../util.js'
+import { loadCatalog } from '../lib/catalog.js'
+import { ctxCwd } from '../lib/rule-utils.js'
 
 export default {
   meta: {
@@ -32,7 +32,14 @@ export default {
       context.report({
         node: sourceNode,
         messageId: 'deprecated',
-        data: { source, hint: replacement ? ` Use '${replacement}' instead.` : '' },
+        data: {
+          source,
+          hint: replacement
+            ? ` Use '${replacement}' instead.`
+            : entry.deprecation
+              ? ` ${entry.deprecation.charAt(0).toUpperCase()}${entry.deprecation.slice(1)}`
+              : ''
+        },
         suggest: replacement
           ? [
               {

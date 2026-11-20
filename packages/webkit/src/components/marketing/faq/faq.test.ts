@@ -1,4 +1,4 @@
-import { userEvent } from '@storybook/test'
+import userEvent from '@testing-library/user-event'
 import { render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { h } from 'vue'
@@ -6,7 +6,7 @@ import { h } from 'vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Faq from './faq.vue'
 
-const TESTID = 'marketing-faq'
+const TESTID = 'faq'
 const TITLE = 'Frequently asked questions'
 
 const items = [
@@ -117,7 +117,7 @@ describe('Faq', () => {
 
     expect(getByTestId(TESTID)).toBeInTheDocument()
     expect(queryAllByRole('button')).toHaveLength(0)
-    expect(queryByTestId('layout-frame-box')).toBeNull()
+    expect(queryByTestId('registration-frame')).toBeNull()
   })
 
   it('renders no question when items is omitted', () => {
@@ -150,13 +150,13 @@ describe('Faq', () => {
   it('draws no frame of its own by default', () => {
     const { queryByTestId } = render(Faq, { props: { title: TITLE, items } })
 
-    expect(queryByTestId('layout-frame-box')).toBeNull()
+    expect(queryByTestId('registration-frame')).toBeNull()
   })
 
   it('draws its own registration frame when framed', () => {
     const { getByTestId } = render(Faq, { props: { title: TITLE, items, framed: true } })
 
-    expect(getByTestId('layout-frame-box')).toBeInTheDocument()
+    expect(getByTestId('registration-frame')).toBeInTheDocument()
   })
 
   it('keeps the heading and the questions in one band when framed', () => {

@@ -1,8 +1,4 @@
-## [4.2.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@4.2.0...@aziontech/webkit@4.2.1) (2026-07-23)
-
-### Bug Fixes
-
-- [Inputs] normalize z-index across all inputs (ENG-46735) ([#783](https://github.com/aziontech/webkit/issues/783)) ([25d201d](https://github.com/aziontech/webkit/commit/25d201d5ae0e6054b9189bc81c76b7d9fc8c5055))
+# Changelog
 
 ## [5.13.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@5.12.3...@aziontech/webkit@5.13.0) (2026-11-17)
 
@@ -366,6 +362,12 @@
 ### Documentation
 
 * **webkit:** document the Release-As version override ([#863](https://github.com/aziontech/webkit/issues/863)) ([672ae65](https://github.com/aziontech/webkit/commit/672ae654b63918b4e6e73c1eb3cba801cb834faa))
+
+## [4.2.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@4.2.0...@aziontech/webkit@4.2.1) (2026-07-23)
+
+### Bug Fixes
+
+- [Inputs] normalize z-index across all inputs (ENG-46735) ([#783](https://github.com/aziontech/webkit/issues/783)) ([25d201d](https://github.com/aziontech/webkit/commit/25d201d5ae0e6054b9189bc81c76b7d9fc8c5055))
 
 ## [4.2.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@4.1.0...@aziontech/webkit@4.2.0) (2026-07-23)
 

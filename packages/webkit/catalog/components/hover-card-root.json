@@ -1,0 +1,24 @@
+{
+ "purpose": "Rich preview that appears beside a link or name when the pointer rests on it or keyboard focus reaches it, and goes away when both leave. The root `HoverCard` owns the open state, the open and close delays and positioning (the shared `usePlacement`, the same engine as `Popover`); `HoverCard.Trigger` wraps the element being previewed; `HoverCard.Content` is the floating card. It sits between `Tooltip` (one line of plain text) and `Popover` (opened by a click, holds interactive content): the card shows a few lines of supplementary context, such as a person, a resource or a commit, without asking for a click.",
+ "useWhen": [
+  "Use HoverCard for a read-only rich preview (a definition, a user card, a link preview) shown on hover or focus; interactive content is a Popover and a one-line hint is a Tooltip.",
+  "Previewing what a link points to before following it: a user handle in an audit log, a resource name in a table, a commit hash.",
+  "Showing a summary (status, owner, last update) that the destination page also shows."
+ ],
+ "avoidWhen": [
+  "A one-line label or hint for an icon → use `tooltip`.",
+  "Content the user must act on (buttons, forms) or must be able to reach by touch → use `popover`.",
+  "The only place a piece of information appears. Hover and focus are not available everywhere; the card must repeat what the destination already shows."
+ ],
+ "related": [
+  "`tooltip` — plain-text hint, same hover-and-focus model, no rich content.",
+  "`popover` — click-opened panel with focus management for interactive content; same positioning.",
+  "`avatar`, `tag` — typical content of a card."
+ ],
+ "bestPractices": [
+  "Wrap a link or a button: the trigger must be focusable on its own so keyboard users get the card too.",
+  "Keep the card to a heading line, two or three facts and at most one secondary link; it is a preview, not a page.",
+  "Keep the default delays (500 ms to open, 300 ms to close) so the card does not flash while the pointer crosses a list; shorten `openDelay` only for a single, deliberate target.",
+  "The pointer can move from the trigger onto the card without closing it, so a link inside the card is reachable; `Esc` closes it."
+ ]
+}

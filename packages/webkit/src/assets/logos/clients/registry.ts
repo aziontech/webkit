@@ -1,16 +1,17 @@
 import agibankColor from './agibank-extended-color.svg'
 import agibank from './agibank-extended-reversed.svg'
-import americamovil from './americamovil-extended-color.svg'
+import americaMovil from './america-movil-extended-color.svg'
+import { CLIENT_BRANDS, type ClientBrand, normalizeClientName } from './brands'
 import caixa from './caixa-extended-color.svg'
 import caixaSymbol from './caixa-symbol-color.svg'
-import cocacola from './cocacola-extended-color.svg'
+import cocaCola from './coca-cola-extended-color.svg'
 import dafitiMono from './dafiti-extended-mono.svg'
 import dafiti from './dafiti-extended-reversed.svg'
 import exame from './exame-extended-color.svg'
 import fourbankColor from './fourbank-extended-color.svg'
 import fourbank from './fourbank-extended-reversed.svg'
-import gfgMono from './gfg-extended-mono.svg'
-import gfg from './gfg-extended-reversed.svg'
+import globalFashionGroupMono from './global-fashion-group-extended-mono.svg'
+import globalFashionGroup from './global-fashion-group-extended-reversed.svg'
 import gpaColor from './gpa-extended-color.svg'
 import gpa from './gpa-extended-reversed.svg'
 import gpaSymbol from './gpa-symbol-color.svg'
@@ -33,8 +34,8 @@ import nznColor from './nzn-extended-color.svg'
 import nzn from './nzn-extended-reversed.svg'
 import gpaPhoto from './photos/gpa-photo.jpg'
 import netshoesPhoto from './photos/netshoes-photo.jpg'
-import primevideoMono from './primevideo-extended-mono.svg'
-import primevideo from './primevideo-extended-reversed.svg'
+import primeVideoMono from './prime-video-extended-mono.svg'
+import primeVideo from './prime-video-extended-reversed.svg'
 import radwareColor from './radware-extended-color.svg'
 import radware from './radware-extended-reversed.svg'
 import renner from './renner-extended-color.svg'
@@ -42,12 +43,10 @@ import rennerSymbol from './renner-symbol-reversed.svg'
 import traySymbol from './tray-symbol-color.svg'
 import zoop from './zoop-extended-color.svg'
 
-export type ClientArtwork = 'light' | 'dark' | 'color'
+export type { ClientBrand } from './brands'
+export { CLIENT_BRANDS, clientBrand, normalizeClientName } from './brands'
 
-export interface ClientBrand {
-  base: string
-  glow: string
-}
+export type ClientArtwork = 'light' | 'dark' | 'color'
 
 export interface Client {
   name: string
@@ -71,27 +70,20 @@ export const MONOCHROME_FILTER = 'brightness-0 [[data-theme=dark]_&]:invert'
 
 export const KNOCKOUT_FILTER = 'brightness-0'
 
-const BRAND = {
-  renner: { base: '#7a0202', glow: '#ef0000' },
-  madeira: { base: '#ae3d00', glow: '#f0801c' },
-  herospark: { base: '#a31e3a', glow: '#ff305c' },
-  magalu: { base: '#00264b', glow: '#0f88ff' }
-} satisfies Record<string, ClientBrand>
-
 export const CLIENTS: Client[] = [
   { name: 'Agibank', logo: agibank, logoLight: agibankColor },
   { name: 'iFood', logo: ifood, artwork: 'color' },
   { name: 'Radware', logo: radware, logoLight: radwareColor },
-  { name: 'América Móvil', logo: americamovil, artwork: 'color' },
+  { name: 'América Móvil', logo: americaMovil, artwork: 'color' },
   { name: 'GPA', logo: gpa, logoLight: gpaColor },
   { name: 'Fourbank', logo: fourbank, logoLight: fourbankColor },
-  { name: 'Global Fashion Group', logo: gfg, logoLight: gfgMono },
+  { name: 'Global Fashion Group', logo: globalFashionGroup, logoLight: globalFashionGroupMono },
   {
     name: 'HeroSpark',
     logo: herospark,
     artwork: 'color',
     symbol: herosparkSymbol,
-    brand: BRAND.herospark
+    brand: CLIENT_BRANDS['herospark']
   },
   { name: 'Itaú', logo: itau, artwork: 'light' },
   {
@@ -99,25 +91,25 @@ export const CLIENTS: Client[] = [
     logo: magalu,
     artwork: 'color',
     symbol: magaluSymbol,
-    brand: BRAND.magalu
+    brand: CLIENT_BRANDS['magalu']
   },
   {
     name: 'MadeiraMadeira',
     logo: madeira,
     logoLight: madeiraColor,
     symbol: madeiraSymbol,
-    brand: BRAND.madeira
+    brand: CLIENT_BRANDS['madeiramadeira']
   },
   {
     name: 'Renner',
     logo: renner,
     artwork: 'color',
     symbol: rennerSymbol,
-    brand: BRAND.renner
+    brand: CLIENT_BRANDS['renner']
   },
   { name: 'Netshoes', logo: netshoes, logoLight: netshoesColor },
-  { name: 'Coca-Cola', logo: cocacola, artwork: 'color' },
-  { name: 'Prime Video', logo: primevideo, logoLight: primevideoMono },
+  { name: 'Coca-Cola', logo: cocaCola, artwork: 'color' },
+  { name: 'Prime Video', logo: primeVideo, logoLight: primeVideoMono },
   { name: 'Dafiti', logo: dafiti, logoLight: dafitiMono },
   { name: 'Caixa', logo: caixa, artwork: 'color' },
   { name: 'Exame', logo: exame, artwork: 'color' },
@@ -133,13 +125,6 @@ export const CLIENT_PHOTOS: Record<string, string> = {
 
 export const clientPhoto = (client: Pick<Client, 'name'> | null | undefined): string =>
   CLIENT_PHOTOS[normalizeClientName(client?.name)] ?? ''
-
-export const normalizeClientName = (name: string | null | undefined): string =>
-  (name ?? '')
-    .normalize('NFD')
-    .replace(/\p{Diacritic}/gu, '')
-    .toLowerCase()
-    .replace(/[^a-z0-9]/g, '')
 
 export const CLIENT_SYMBOLS: Record<string, string> = {
   caixaeconomicafederal: caixaSymbol,

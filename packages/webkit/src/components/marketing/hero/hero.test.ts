@@ -3,8 +3,9 @@ import { describe, expect, it } from 'vitest'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import Hero from './hero.vue'
+import HeroTitle from './hero-title/hero-title.vue'
 
-const TESTID = 'marketing-hero'
+const TESTID = 'hero'
 
 describe('Hero', () => {
   it('renders with the default testid and the default band configuration', () => {
@@ -13,7 +14,7 @@ describe('Hero', () => {
 
     expect(root).toBeInTheDocument()
     expect(root.tagName).toBe('SECTION')
-    expect(root).toHaveAttribute('data-kind', 'band')
+    expect(root).toHaveAttribute('data-variant', 'band')
     expect(root).toHaveAttribute('data-width', '7xl')
     expect(root).toHaveAttribute('data-bordered')
     expect(root).toHaveAttribute('data-padded')
@@ -41,25 +42,25 @@ describe('Hero', () => {
     }
   )
 
-  it.each(['band', 'screen'] as const)('mirrors the %s kind onto data-kind', (kind) => {
-    const { getByTestId } = render(Hero, { props: { kind } })
-    expect(getByTestId(TESTID)).toHaveAttribute('data-kind', kind)
+  it.each(['band', 'screen'] as const)('mirrors the %s variant onto data-variant', (variant) => {
+    const { getByTestId } = render(Hero, { props: { variant: variant } })
+    expect(getByTestId(TESTID)).toHaveAttribute('data-variant', variant)
   })
 
   it('exposes offset and bottomHeight as custom properties on the root', () => {
     const { getByTestId } = render(Hero, { props: { offset: '3.5rem', bottomHeight: '8rem' } })
     const root = getByTestId(TESTID)
 
-    expect(root.style.getPropertyValue('--banner-offset')).toBe('3.5rem')
-    expect(root.style.getPropertyValue('--banner-bottom-height')).toBe('8rem')
+    expect(root.style.getPropertyValue('--hero-banner-offset')).toBe('3.5rem')
+    expect(root.style.getPropertyValue('--hero-banner-bottom-height')).toBe('8rem')
   })
 
   it('sets no custom properties when offset and bottomHeight are empty', () => {
     const { getByTestId } = render(Hero)
     const root = getByTestId(TESTID)
 
-    expect(root.style.getPropertyValue('--banner-offset')).toBe('')
-    expect(root.style.getPropertyValue('--banner-bottom-height')).toBe('')
+    expect(root.style.getPropertyValue('--hero-banner-offset')).toBe('')
+    expect(root.style.getPropertyValue('--hero-banner-bottom-height')).toBe('')
   })
 
   it('drops its bottom rule when bordered is false', () => {
@@ -94,16 +95,16 @@ describe('Hero', () => {
         props: { texture },
         slots: { default: '<h1>Headline</h1>' }
       })
-      const layer = getByTestId('marketing-texture-material')
+      const layer = getByTestId('texture')
 
-      expect(layer).toHaveAttribute('data-kind', texture)
+      expect(layer).toHaveAttribute('data-variant', texture)
       expect(layer.closest('[aria-hidden="true"]')).not.toBeNull()
     }
   )
 
   it('paints no texture by default', () => {
     const { queryByTestId } = render(Hero, { slots: { default: '<h1>Headline</h1>' } })
-    expect(queryByTestId('marketing-texture-material')).toBeNull()
+    expect(queryByTestId('texture')).toBeNull()
   })
 
   it('lets the background slot stand beside the texture', () => {
@@ -114,19 +115,40 @@ describe('Hero', () => {
     const backdrop = getByText('artwork').closest('[aria-hidden="true"]') as HTMLElement
 
     expect(backdrop).not.toBeNull()
-    expect(backdrop).toContainElement(getByTestId('marketing-texture-material'))
+    expect(backdrop).toContainElement(getByTestId('texture'))
   })
 
-  it.each(['top', 'center', 'bottom'] as const)(
+  it.each(['start', 'center', 'end'] as const)(
     'carries the %s content alignment on data-align',
     (align) => {
-      const { getByTestId } = render(Hero, { props: { kind: 'screen', align } })
+      const { getByTestId } = render(Hero, { props: { variant: 'screen', align } })
       expect(getByTestId(TESTID)).toHaveAttribute('data-align', align)
     }
   )
 
+  it('aligns the title block from align and mobileAlign and paints titleHighlight', () => {
+    const { getByRole, getByText } = render(HeroTitle, {
+      props: {
+        title: 'on the edge.',
+        titleHighlight: 'Build anything',
+        align: 'center',
+        mobileAlign: 'start'
+      }
+    })
+    const header = getByRole('banner')
+    expect(header).toHaveAttribute('data-align', 'center')
+    expect(header).toHaveAttribute('data-mobile-align', 'start')
+    expect(getByText('Build anything').tagName).toBe('SPAN')
+  })
+
+  it('leaves the title block mobile alignment unset by default', () => {
+    const { getByRole } = render(HeroTitle, { props: { title: 'Headline' } })
+    expect(getByRole('banner')).toHaveAttribute('data-align', 'start')
+    expect(getByRole('banner')).not.toHaveAttribute('data-mobile-align')
+  })
+
   it('centers its content by default', () => {
-    const { getByTestId } = render(Hero, { props: { kind: 'screen' } })
+    const { getByTestId } = render(Hero, { props: { variant: 'screen' } })
     expect(getByTestId(TESTID)).toHaveAttribute('data-align', 'center')
   })
 
@@ -135,7 +157,7 @@ describe('Hero', () => {
       props: { texture: 'dots', textureFade: 'bottom' },
       slots: { default: '<h1>Headline</h1>' }
     })
-    expect(getByTestId('marketing-texture-material')).toHaveAttribute('data-fade', 'bottom')
+    expect(getByTestId('texture')).toHaveAttribute('data-fade', 'bottom')
   })
 
   it('paints the texture at the medium pitch by default', () => {
@@ -143,7 +165,7 @@ describe('Hero', () => {
       props: { texture: 'dots' },
       slots: { default: '<h1>Headline</h1>' }
     })
-    expect(getByTestId('marketing-texture-material')).toHaveAttribute('data-size', 'medium')
+    expect(getByTestId('texture')).toHaveAttribute('data-size', 'medium')
   })
 
   it.each(['small', 'medium', 'large'] as const)(
@@ -153,7 +175,7 @@ describe('Hero', () => {
         props: { texture: 'dots', textureSize },
         slots: { default: '<h1>Headline</h1>' }
       })
-      expect(getByTestId('marketing-texture-material')).toHaveAttribute('data-size', textureSize)
+      expect(getByTestId('texture')).toHaveAttribute('data-size', textureSize)
     }
   )
 
@@ -200,9 +222,9 @@ describe('Hero', () => {
         props: { floorTexture },
         slots: { default: '<h1>Headline</h1>' }
       })
-      const layer = getByTestId('marketing-texture-material')
+      const layer = getByTestId('texture')
 
-      expect(layer).toHaveAttribute('data-kind', floorTexture)
+      expect(layer).toHaveAttribute('data-variant', floorTexture)
       expect(layer.closest('[data-floor]')).not.toBeNull()
     }
   )
@@ -220,11 +242,11 @@ describe('Hero', () => {
       props: { texture: 'dots', floorTexture: 'pixelate' },
       slots: { default: '<h1>Headline</h1>' }
     })
-    const [backdrop, floor] = getAllByTestId('marketing-texture-material')
+    const [backdrop, floor] = getAllByTestId('texture')
 
-    expect(backdrop).toHaveAttribute('data-kind', 'dots')
+    expect(backdrop).toHaveAttribute('data-variant', 'dots')
     expect(backdrop.closest('[data-floor]')).toBeNull()
-    expect(floor).toHaveAttribute('data-kind', 'pixelate')
+    expect(floor).toHaveAttribute('data-variant', 'pixelate')
     expect(floor.closest('[data-floor]')).not.toBeNull()
   })
 
@@ -238,7 +260,7 @@ describe('Hero', () => {
       },
       slots: { default: '<h1>Headline</h1>' }
     })
-    const [backdrop, floor] = getAllByTestId('marketing-texture-material')
+    const [backdrop, floor] = getAllByTestId('texture')
 
     expect(backdrop).toHaveAttribute('data-size', 'small')
     expect(floor).toHaveAttribute('data-size', 'large')
@@ -252,42 +274,50 @@ describe('Hero', () => {
     const window = getByTestId(TESTID).querySelector('[data-floor]') as HTMLElement
 
     expect(window).toContainElement(getByText('field'))
-    expect(window).toContainElement(getByTestId('marketing-texture-material'))
+    expect(window).toContainElement(getByTestId('texture'))
   })
 
   it('stands no brand strip on the floor by default', () => {
     const { queryByTestId } = render(Hero, { slots: { default: '<h1>Headline</h1>' } })
-    expect(queryByTestId('marketing-ticker')).toBeNull()
+    expect(queryByTestId('marquee')).toBeNull()
   })
 
-  it('stands the brand strip on the floor when carousel is set', async () => {
+  it('stands the brand strip on the floor when marquee is set', async () => {
     const { getByTestId, findByTestId } = render(Hero, {
-      props: { carousel: true, carouselMarks: ['Itau', 'NZN'] },
+      props: { marquee: true, marqueeMarks: ['Itau', 'NZN'] },
       slots: { default: '<h1>Headline</h1>' }
     })
-    const strip = await findByTestId('marketing-ticker')
+    const strip = await findByTestId('marquee')
 
     expect(getByTestId(TESTID)).toContainElement(strip)
     expect(strip.closest('[aria-hidden="true"]')).toBeNull()
     expect(strip).toHaveTextContent('NZN')
   })
 
-  it('names the strip with an overline when carouselLabel is set', async () => {
+  it('names the strip with an overline when marqueeLabel is set', async () => {
     const { findByTestId } = render(Hero, {
-      props: { carousel: true, carouselMarks: ['NZN'], carouselLabel: 'Trusted in production' },
+      props: { marquee: true, marqueeMarks: ['NZN'], marqueeLabel: 'Trusted in production' },
       slots: { default: '<h1>Headline</h1>' }
     })
-    const strip = await findByTestId('marketing-ticker')
+    const strip = await findByTestId('marquee')
 
     expect(strip).toHaveTextContent('Trusted in production')
   })
 
+  it('ignores the removed carousel props', () => {
+    const { queryByTestId } = render(Hero, {
+      attrs: { carousel: true, carouselMarks: ['NZN'], carouselLabel: 'Old label' },
+      slots: { default: '<h1>Headline</h1>' }
+    })
+    expect(queryByTestId('marquee')).toBeNull()
+  })
+
   it('shares one floor between the bottom window and the strip', async () => {
     const { findByTestId, getByText } = render(Hero, {
-      props: { carousel: true, carouselMarks: ['NZN'] },
+      props: { marquee: true, marqueeMarks: ['NZN'] },
       slots: { bottom: '<div>field</div>', default: '<h1>Headline</h1>' }
     })
-    const strip = await findByTestId('marketing-ticker')
+    const strip = await findByTestId('marquee')
 
     expect(strip.parentElement?.parentElement).toContainElement(getByText('field'))
   })
@@ -353,7 +383,7 @@ describe('Hero', () => {
 
   it('has no accessibility violations with both asset windows filled', async () => {
     const { container } = render(Hero, {
-      props: { kind: 'screen', texture: 'dots', textureFade: 'bottom' },
+      props: { variant: 'screen', texture: 'dots', textureFade: 'bottom' },
       slots: {
         top: '<div>scene</div>',
         bottom: '<div>carousel</div>',
@@ -373,10 +403,10 @@ describe('Hero', () => {
 
   it('has no accessibility violations with the brand strip on the floor', async () => {
     const { container, findByTestId } = render(Hero, {
-      props: { carousel: true, carouselMarks: ['NZN', 'Itau'] },
+      props: { marquee: true, marqueeMarks: ['NZN', 'Itau'] },
       slots: { default: '<h1>Headline</h1>' }
     })
-    await findByTestId('marketing-ticker')
+    await findByTestId('marquee')
     await expectNoA11yViolations(container)
   })
 

@@ -1,0 +1,70 @@
+[block-hero-title-band kind=title-band]
+  [marketing-hero kind=band size=large align=center width=5xl aria-label='Learning Center']
+    [marketing-hero-title width=4xl centered=true]
+      h1 "Learning Center"
+      p "Practical knowledge to speed up, secure, and scale applications."
+      button "See articles" → #subjects
+      button "Talk to a Specialist" → https://www.azion.com/en/contact/
+    [marketing-ticker kind=plain size=small width=5xl content=marks]
+      text "Trusted by mission-critical workloads"
+      list (11): Global Fashion Group · HeroSpark · Itaú · NZN · Netshoes · Caixa · Agibank · Prime Video · América Móvil · GPA · Fourbank
+[marketing-section-container width=site]
+  · section-gap (hatched spacer band)
+  [block-subject-library]
+    [marketing-section-module kind=left]
+      [marketing-card-grid kind=divider columns=3 mobile-columns=1 filled=true]
+        h3 "API Security"
+        p "Understand threat risks, implement a robust API Security checklist, and learn architecture best practices to protect your applications with maximum performance."
+        list (7): What is API Security? · API Gateway vs. API Security · OWASP API Security Top 10 · OWASP Top 10 for LLMs · REST vs. GraphQL Security · API Security Checklist · API Security Best Practices
+        h3 "AI"
+        p "Discover the transformative power of Artificial Intelligence (AI), a field at the forefront of innovation and technology."
+        list (7): What is Artificial Intelligence (AI)? · What is Machine Learning? · What is RAG? · What is Vector Search? · What are AI Agents? · Model Context Protocol (MCP) · What is AI Inference?
+        h3 "Bots"
+        p "Bots are automated software programs that perform repetitive tasks on websites and applications. While some bots like search engine crawlers are beneficial, malicious bots can cause significant harm to businesses in multiple ways."
+        list (4): What is a Bot? · What is a Bot Attack? · What is Bot Management? · What is Credential Stuffing?
+        h3 "CDN"
+        p "The primary goal of a CDN is to reduce latency and improve the speed at which static content is delivered by caching it on servers closer to the end-users"
+        list (4): What is a CDN? · What is Caching? · What is Micro Caching? · What is Tiered Caching?
+        h3 "DNS"
+        p "Understand the Domain Name System (DNS), a fundamental technology that enables internet connectivity by translating domain names into IP addresses."
+        list (4): What is DNS? · How DNS cache works? · What is DNSSEC? · What is DNS resolution | DNS troubleshooting
+        h3 "DDoS Attacks"
+        p "Get precious insights into DDoS attacks: what they are, the motivation behind them, their many kinds and the protective measures available to fortify your defenses today."
+        list (4): What is a DDoS Attack? · What is a Botnet? · What are Application Layer Attacks? · What is DDoS Protection and Mitigation?
+        h3 "Jamstack"
+        p "With Jamstack you decouple the frontend and backend of a website, allowing for faster performance, better scalability, and improved security."
+        list (4): What is Jamstack? · Why use Jamstack? · Jamstack and Ecommerce · Top Jamstack Frameworks
+        h3 "HTTP Status & Error Troubleshooting"
+        p "Understand HTTP status codes, troubleshoot common errors like 403 Forbidden, 502 Bad Gateway, 503 Service Unavailable, and 504 Gateway Timeout. Learn causes, solutions, and best practices for handling HTTP errors."
+        list (6): HTTP Status Codes Explained · 403 Forbidden: Causes and How to Fix · 502 Bad Gateway: Causes and Solutions · 503 Service Unavailable: Causes and Troubleshooting · 504 Gateway Timeout: Causes and How to Fix · HTTP 413 Payload Too Large: Causes and Solutions
+        h3 "Microservices"
+        p "Microservices architecture involves independent, deployable services, offering modularity and scalability."
+        list (3): What are Microservices? · Designing Microservices Applications · Monolithic Applications vs. Microservices
+        h3 "Network Layer"
+        p "Discover how the network layer enables data packet routing and delivery between networks, ensuring efficient communication through addressing, packet forwarding, and optimal path selection."
+        list (4): What is the Network Layer? · What is Network Security? · What is Routing? · What is GRE Tunneling?
+        h3 "Observability"
+        p "Observability is the ability to understand the internal state of a system by examining its external outputs. Learn about metrics, logs, traces, and how to implement modern monitoring in distributed architectures."
+        list (6): What is Observability? · Observability Three Pillars · Monitoring vs Observability · What is Telemetry? · What are Metrics? · What is Real-Time Monitoring?
+        h3 "Performance"
+        p "Optimizing site speed can outsize the user experience, SEO rankings, and conversion rates. Website performance provides a competitive advantage over slower sites."
+        list (4): What is Site Speed? · Why Website Performance Impact Conversion Rates? · What is Latency? · What is Load Balancing?
+        h3 "Storage and Database"
+        p "Master the complete landscape of data storage and databases for modern applications. Learn when to use SQL vs NoSQL, how Object Storage reduces costs, why vector databases power AI applications, and how distributed architectures deliver low-latency data access globally."
+        list (6): What is Storage and Database? · What is a Relational Database? · What is Object Storage and Blob Storage? · What is NoSQL and Key-Value Store? · What is a Vector Database? · What is Database Security?
+        h3 "Serverless"
+        p "Serverless computing is transforming the way applications are developed, deployed, and scaled. Developers can abstract the underlying infrastructure and focus on write code and deliver value to their users."
+        list (4): What is Serverless? · Serverless vs. Containers · What is Function-as-a-Service (FasS)? · What is Platform-as-a-Service (PaaS)?
+        h3 "TLS"
+        p "Explore the world of TLS. Master TLS 1.3 and mTLS to strengthen machine identity with Zero Trust, eliminating handshake latencies and ensuring the cryptographic resilience of your applications at the Edge."
+        list (6): What is TLS? · TLS vs. mTLS · TLS Ciphers - Security and Performance in the Handshake · Post-Quantum Cryptography (PQC) · Security for AI Agents · TLS Handshake Troubleshooting
+        h3 "Web Application Security"
+        p "Get to know the processes, practices, and technologies designed to protect web applications from threats and vulnerabilities that could compromise their integrity, availability, or confidentiality."
+        list (5): What is Web Application Security? · What is the OWASP Top 10 List of Threats? · What is a Web Application Firewall (WAF)? · How Does a WAF Protect Against Threats? · Zero Trust vs. Traditional Security
+        [marketing-call-to-action kind=lead aria-label='Put what you learned to work.']
+          text: // ⏎ Next step
+          h2 "Put what you learned to work. On Azion."
+          p "Deploy your first application in minutes, or talk to our team about your architecture."
+          button "Start Free" → https://console.azion.com/signup
+          button "Talk to our team" → https://www.azion.com/en/contact/
+  [marketing-section-gap-end]

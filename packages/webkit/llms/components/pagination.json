@@ -1,0 +1,118 @@
+{
+ "name": "pagination",
+ "binding": "Pagination",
+ "import": "@aziontech/webkit/pagination",
+ "treeShakeableImport": "@aziontech/webkit/pagination-root",
+ "category": "data",
+ "surface": "app",
+ "structure": "composition",
+ "compoundRoot": true,
+ "subcomponents": [
+  "@aziontech/webkit/pagination-button",
+  "@aziontech/webkit/pagination-description",
+  "@aziontech/webkit/pagination-page-size"
+ ],
+ "purpose": "Pagination controls for tables and lists, pixel-perfect to Figma, in two modes. **Composition mode** (default): a three-region landmark — page-info text, navigation buttons (Previous / page numbers / overflow / Next), and a rows-per-page selector — wired by hand through slots, with the consumer owning the current page, total, and page-size state. **Data-driven mode**: pass `total` (and optionally `page` / `pageSize`) and the Pagination renders its own info text, Previous / windowed page numbers / overflow ellipsis / Next, and the rows-per-page selector, emitting `update:page` / `update:pageSize` so the consumer can bind state via `v-model`. This component owns markup, tokens, and a11y; the data engine is a small internal page-window calculation — **no external pagination library**. Pairs with the [`Table`](table.md) component.",
+ "setup": null,
+ "useWhen": [
+  "Use Pagination to page through the rows of a table or list; alternative versions of one AI response use ResponseBranches.",
+  "A list or table outside `table`'s own footer needs page navigation and a rows-per-page selector.",
+  "You know the item count — pass `total` and bind `v-model:page` / `v-model:page-size`; the component renders the info text, the windowed page numbers and the selector.",
+  "The page strip needs custom content (a different info line, extra controls) — compose `Pagination.Description`, `Pagination.Button` and `Pagination.PageSize` through the slots."
+ ],
+ "avoidWhen": [
+  "The rows live in a data-driven `table` → set `paginated` on the table; it renders this pagination in its footer and wires it for you.",
+  "It is the previous / next pair at the end of a documentation page → use `doc-previous-next`.",
+  "The content loads more as the reader scrolls or clicks \"Load more\" → use a `button` at the end of the list."
+ ],
+ "related": [
+  "`table` — renders a wired pagination in its footer when `paginated` is set.",
+  "`doc-previous-next` — previous / next links between documentation pages, not numbered pages of a list."
+ ],
+ "bestPractices": [
+  "Prefer data-driven mode (`total` set); in composition mode the root emits nothing and you own every button's `active` / `disabled` state and every click.",
+  "`page` is 1-based. Changing the page size through the selector emits `update:pageSize` and resets the page to `1`.",
+  "Keep `page-size-options` aligned with what your data source accepts; the default is `[10, 25, 50, 100]`.",
+  "Tune `sibling-count` (default `1`) instead of hiding buttons — it controls how many numbers sit on each side of the current page before the overflow ellipsis.",
+  "Set `aria-label` when a page carries more than one pagination, so each navigation landmark has a distinct name."
+ ],
+ "props": [
+  {
+   "name": "total",
+   "type": "number",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Total item count. When set, the Pagination runs in data-driven mode and renders its own controls."
+  },
+  {
+   "name": "pageSizeOptions",
+   "type": "number[]",
+   "default": "[10, 25, 50, 100]",
+   "required": "false",
+   "doc": "Page-size options offered in the rows-per-page selector."
+  },
+  {
+   "name": "siblingCount",
+   "type": "number",
+   "default": "1",
+   "required": "false",
+   "doc": "Page numbers shown on each side of the current page before collapsing into an overflow ellipsis."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name for the navigation landmark. Empty uses the locale catalog (`Pagination`)."
+  },
+  {
+   "name": "page",
+   "type": "number",
+   "default": "1",
+   "required": "false",
+   "doc": "Two-way value (`v-model:page`)."
+  },
+  {
+   "name": "pageSize",
+   "type": "number",
+   "default": "10",
+   "required": "false",
+   "doc": "Two-way value (`v-model:pageSize`)."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "info",
+   "scope": "—",
+   "notes": "Left region: page-info text (typically PaginatorInfo). In data-driven mode, overrides the default \"Showing X to Y of Z entries\" text."
+  },
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "Center region: pagination navigation buttons (composition mode only — ignored in data-driven mode, where the buttons are rendered internally)."
+  },
+  {
+   "name": "controls",
+   "scope": "—",
+   "notes": "Right region: rows-per-page selector (PaginatorPageSize). In data-driven mode, overrides the internally-rendered selector."
+  }
+ ],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/pagination/default.vue"
+  },
+  {
+   "name": "Buttons",
+   "file": "examples/pagination/buttons.vue"
+  },
+  {
+   "name": "DataDriven",
+   "file": "examples/pagination/data-driven.vue"
+  }
+ ],
+ "docs": "components/pagination.md"
+}

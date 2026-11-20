@@ -1,0 +1,17 @@
+/* @aziontech/webkit design-system styles. Import this once from your app entry. */
+@import '@aziontech/theme';
+@import '@aziontech/theme/fonts.css';
+
+/* The demos render every block, so they register every WebKit component. An app imports
+   './webkit.sources.css' instead (see `npx @aziontech/webkit init`). */
+@import '@aziontech/webkit/styles/all';
+@source './';
+
+/* Text rendering. The type ladder is drawn at these settings, so they are the design
+   system's default — and they live here, in your file, so you can change them. */
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "component": "date-picker",
+  "title": "Components/Input/DatePicker",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "One date in a field: the trigger shows the picked day, the panel holds the month grid (Month and Year selects between its arrows jump straight to any month), a typed date field and Apply.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "The three trigger sizes — `small`, `medium`, and `large`.",
+      "file": "sizes.vue"
+    },
+    {
+      "name": "Horizontal",
+      "summary": "`orientation=\"horizontal\"` places the date and time fields and Apply beside the month grid, with a full-height divider.",
+      "file": "horizontal.vue"
+    },
+    {
+      "name": "MinMax",
+      "summary": "`min` and `max` disable the days outside a window two months either side of the reference day.",
+      "file": "min-max.vue"
+    },
+    {
+      "name": "WithTime",
+      "summary": "`show-time` adds a time field (type a time or pick one from the 30-minute list), so the value carries a time of day; the trigger shows it after the date.",
+      "file": "with-time.vue"
+    },
+    {
+      "name": "Clearable",
+      "summary": "`clearable` adds a clear control on the trigger that empties the committed date.",
+      "file": "clearable.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "`disabled` locks the trigger and keeps the committed date visible.",
+      "file": "disabled.vue"
+    },
+    {
+      "name": "ClearPart",
+      "file": "clear-part.vue",
+      "summary": "`DatePicker.Clear` in the `footer` slot empties the draft date inside the panel."
+    }
+  ]
+}

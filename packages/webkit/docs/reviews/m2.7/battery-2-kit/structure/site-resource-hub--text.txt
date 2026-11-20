@@ -1,0 +1,90 @@
+//
+RESOURCE HUB
+Articles, ebooks, and customer stories
+
+Practical guides on performance, security, and scale, and the results teams get running on the Azion Platform.
+
+Start for free
+Talk to sales
+Explore all resources
+All content types
+All categories
+All industries
+BLOG • NOV 12, 2026
+Can your store handle Black Friday? Prepare your cache before the peak
+
+Prepare your store's cache for Black Friday: what to cache, TTL, Tiered Cache, Stale cache, cache warming with azion warmup, purge, and offload metrics.
+
+READ MORE
+BLOG • NOV 11, 2026
+WAF, Firewall, and WAAP: how Azion organizes protection
+
+What's the difference between Firewall, WAF, and WAAP at Azion? See why WAF is a Firewall module, how rules are ordered, and how to find what blocked a request.
+
+READ MORE
+BLOG • NOV 10, 2026
+Black Friday bots: protect login, checkout, and APIs
+
+How to protect e-commerce from Black Friday bots without blocking customers: Bot Manager and WAF on login, checkout, and APIs, calibrated in phases.
+
+READ MORE
+BLOG • OCT 28, 2026
+How to structure an AI SaaS with security on Azion
+
+See how to combine your application, database, AI inference, and security on Azion, with Firewall and WAF policies versioned alongside the code.
+
+READ MORE
+BLOG • OCT 28, 2026
+How to protect a SaaS that's under attack, without migrating or rewriting anything
+
+Scraping, mass logins, or SQL injection on your SaaS? See how to turn on WAF, Bot Manager, and rate limiting in front of the app, without migrating or changing code.
+
+READ MORE
+BLOG • OCT 22, 2026
+PHP2Shell: Azion releases a hotfix on Marketplace for CVE-2026-109618 and CVE-2026-109619
+
+PHP2Shell combines two critical (CVSS 9.2) remote code execution flaws in the PHP runtime. See what the Azion hotfix blocks, how to apply it in minutes, and why updating PHP is still the permanent fix.
+
+READ MORE
+E-BOOKS • OCT 15, 2026
+Security for applications, APIs, and AI agents
+
+Learn how to bring security policies into deployment, automate protection, and monitor traffic across applications, APIs, and AI agents.
+
+READ MORE
+BLOG • OCT 14, 2026
+Azion MCP servers: Connect Your Coding Agent to Azion
+
+Azion MCP servers connect Claude Code, Cursor, and other coding agents to the Azion documentation and API, with a dry_run preview before each write.
+
+READ MORE
+BLOG • OCT 7, 2026
+Bringing application security into the deployment process
+
+Integrate application, API, and AI agent protection into deployment with reusable policies, security reviews, and validation in Real-Time Events.
+
+READ MORE
+BLOG • OCT 5, 2026
+The agent that writes your code also suggests your security policy
+
+See how the open-source Azion MCP Server lets coding agents like Claude Code and Codex query Azion docs and propose security policies (WAF, Firewall, rate limiting) via Terraform, for team review before deploy.
+
+READ MORE
+COMPARISONS • OCT 3, 2026
+Cloudflare Alternative Comparison: Azion vs Cloudflare
+
+Azion vs Cloudflare: the same platform on every plan, more than one way to recover from failures, and Enterprise support that answers in minutes.
+
+READ MORE
+COMPARISONS • OCT 3, 2026
+F5 Alternative Comparison: Azion vs F5
+
+Azion vs F5: one managed platform for every application. No appliances, no licensing matrix, and a path off BIG-IP one app at a time.
+
+READ MORE
+Load more
+//
+STAY UP TO DATE
+Product updates, event highlights, and industry insights, delivered to your inbox.
+Subscribe to our newsletter
+Subscribe

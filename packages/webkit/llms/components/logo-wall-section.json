@@ -1,0 +1,123 @@
+{
+ "name": "logo-wall-section",
+ "binding": "LogoWallSection",
+ "import": "@aziontech/webkit/logo-wall-section",
+ "treeShakeableImport": "@aziontech/webkit/logo-wall-section",
+ "category": "section",
+ "surface": "site",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The customers band: a section title over a framed logo wall of linked client marks with one signed quote in its aside, closed by a call to action. It is a page section — the site places it from a `{ _id: 'logo-wall-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `registration-frame`, `logo-wall`, `quote` and `button`.",
+ "setup": null,
+ "useWhen": [
+  "Use LogoWallSection for customer logos plus one featured quote.",
+  "To prove adoption with marks and let one customer speak, early on a home or solution page."
+ ],
+ "avoidWhen": [
+  "For several quotes in turn → use `client-quotes-section`.",
+  "For marks with photos and stories in a mosaic → use `client-mosaic-section`."
+ ],
+ "related": [
+  "`logo-wall` — the wall the marks are laid in, with the quote in its aside.",
+  "`third-party-logo` — draws every mark (the wall's and the quote's) right on both themes."
+ ],
+ "bestPractices": [
+  "Eight or nine logos fill the rectangle wall beside the aside.",
+  "Pass client registry entries (`@aziontech/webkit/assets/client-registry`) as they stand: each carries `name`, `logo` and either `logoLight` (a light-theme drawing) or `artwork` (which theme a single file must be inverted on), and every mark renders through `ThirdPartyLogo`.",
+  "Without a registry entry, set `logoTreatment` per mark: `monochrome` for a mark drawn in one ink that must follow the theme, `knockout` for a black mark on a coloured fill, `color` for a colour mark, and `artwork: 'light'` for a reversed mark that must flip on the light theme; give a `logoLight` file instead when the light theme needs a different drawing.",
+  "Give the quote's company mark a `logoLight` (or an `artwork`) the same way, so it stays legible on both themes.",
+  "Keep to one or two actions under the quote: the primary (`secondary` variant) and an optional outlined `secondaryAction`."
+ ],
+ "props": [
+  {
+   "name": "variant",
+   "type": "LogoWallSectionVariant",
+   "default": "'wall'",
+   "required": "false",
+   "doc": "Layout of the band: `wall` sets the client marks with the quote in their aside, `quote` sets the quote alone as a full-width band (the design sample's QuoteBand) and needs no logos."
+  },
+  {
+   "name": "quoteVariant",
+   "type": "LogoWallSectionQuoteVariant",
+   "default": "'signed'",
+   "required": "false",
+   "doc": "Register of the quote in the `quote` layout: the featured `highlight` or the band-sized `signed` sentence."
+  },
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "In-page id set on the band so a hash link can target it."
+  },
+  {
+   "name": "eyebrow",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Eyebrow above the section title."
+  },
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Headline of the band, rendered by the section title as its `h2`; the band renders no header when empty."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the logo wall."
+  },
+  {
+   "name": "logos",
+   "type": "LogoWallSectionLogo[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The client marks, in order; each is `{ name, logo, logoLight?, logoTreatment?, artwork?, href? }` where `logoTreatment` is the shared `ThirdPartyLogoTreatment` (`'color'`, `'monochrome'` or `'knockout'`, the `ThirdPartyLogo` looks) and `artwork` is the registry's `'color'`, `'light'` or `'dark'`."
+  },
+  {
+   "name": "quote",
+   "type": "LogoWallSectionQuote",
+   "default": "undefined",
+   "required": "false",
+   "doc": "The signed quote in the wall's aside; `{ text, name, jobTitle, logo, logoAlt, logoLight?, artwork? }`. Omitted when absent."
+  },
+  {
+   "name": "primaryAction",
+   "type": "ModuleHeaderAction",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Button under the quote; `{ label, href, trailing?, target? }`. Omitted when absent."
+  },
+  {
+   "name": "secondaryAction",
+   "type": "ModuleHeaderAction",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Outlined button beside the primary one under the quote; `{ label, href, trailing?, target? }`. Omitted when absent."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/logo-wall-section/default.vue"
+  },
+  {
+   "name": "Quote band",
+   "file": "examples/logo-wall-section/quote-band.vue"
+  },
+  {
+   "name": "Registry",
+   "file": "examples/logo-wall-section/registry.vue"
+  }
+ ],
+ "docs": "components/logo-wall-section.md"
+}

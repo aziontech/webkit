@@ -1,37 +1,37 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import Button from '../../../actions/button/button.vue'
+  import Button from '../../../action/button/button.vue'
 
   defineOptions({
     name: 'ToastAction',
     inheritAttrs: false
   })
 
-  defineProps<{
+  export interface ToastActionProps {
     /** Visible label of the action control. */
     label: string
-  }>()
+  }
+
+  defineProps<ToastActionProps>()
 
   const emit = defineEmits<{
     click: [event: MouseEvent]
   }>()
 
   const attrs = useAttrs()
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'feedback-toast__action'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'toast-action')
 
-  const handleClick = (event: MouseEvent) => emit('click', event)
+  const onClick = (event: MouseEvent) => emit('click', event)
 </script>
 
 <template>
   <Button
     v-bind="$attrs"
-    kind="text"
+    variant="ghost"
     size="small"
     :label="label"
     :data-testid="testId"
-    @click="handleClick"
+    @click="onClick"
   />
 </template>

@@ -1,21 +1,21 @@
 <script setup lang="ts">
-  import { computed, inject, useAttrs } from 'vue'
+  import { inject } from 'vue'
 
-  import { TableInjectionKey, TableRowGroupKey } from '../injection-key'
+  import { TableRowGroupInjectionKey } from '../injection-key'
 
   defineOptions({
     name: 'TableRow',
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface TableRowProps {
     /** Applies the selected row surface and aria-selected. */
     selected?: boolean
     /** Sticks the row to the top of the scroll container (pinned row). */
     frozen?: boolean
   }
 
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<TableRowProps>(), {
     selected: false,
     frozen: false
   })
@@ -24,22 +24,15 @@
     default(): unknown
   }>()
 
-  const attrs = useAttrs()
-  const ctx = inject(TableInjectionKey, null)
-  const group = inject(TableRowGroupKey, { hoverable: true })
-
-  const testId = computed<string>(
-    () =>
-      (attrs['data-testid'] as string | undefined) ??
-      (ctx ? `${ctx.testId}__row` : 'data-table__row')
-  )
+  const group = inject(TableRowGroupInjectionKey, { hoverable: true })
+  const fallbackTestId = 'table-row'
 </script>
 
 <template>
   <div
     v-bind="$attrs"
     role="row"
-    :data-testid="testId"
+    :data-testid="$attrs['data-testid'] ?? fallbackTestId"
     :data-state="selected ? 'selected' : 'unselected'"
     :data-selected="selected || null"
     :data-frozen="frozen || null"

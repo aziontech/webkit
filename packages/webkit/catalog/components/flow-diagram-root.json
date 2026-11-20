@@ -1,0 +1,27 @@
+{
+ "purpose": "The one in-product diagram (owner decision RV-Y1, 2026-11-18): it kept the old FlowDiagram parts and replaced TopologyDiagram in the 6.0 clean break. A naked root lays steps out and draws the connectors. **Data mode** (`nodes` + `edges`): edges set the columns and each node renders the richest card its data allows. **Composed mode**: hand-written parts in the default slot. `orientation=\"responsive\"` lays the steps in a row only when the whole row fits its container, and stacks them into a rail otherwise.",
+ "useWhen": [
+  "A request path or pipeline: steps in order joined by connectors.",
+  "A deployment or service topology with status, metrics, details and bind controls."
+ ],
+ "avoidWhen": [
+  "A marketing architecture drawing from the official library → use `diagram`.",
+  "A numbered set of instructions → use `doc-steps`."
+ ],
+ "related": [
+  "`diagram` — the marketing figure (closed drawing library).",
+  "`status-indicator` — the status dot and text in a node header."
+ ],
+ "bestPractices": [
+  "Prefer data mode; compose by hand only for markup the card cannot express.",
+  "Join adjacent columns; an edge that skips a column can cross it.",
+  "Put timing or failure on the edge (`label`, `severity`) when the hop failed, on the node when the resource did.",
+  "Use `orientation=\"horizontal\"` for fixed-size scenes and mock-ups.",
+  "A one-resource slot puts `flow-diagram-bind` in the `actions` slot."
+ ],
+ "channels": [
+  "app",
+  "docs",
+  "site"
+ ]
+}

@@ -1,0 +1,124 @@
+export type FoundationPage = {
+  slug: string
+  title: string
+  summary: string
+  tokens?: 'color' | 'spacing' | 'typography' | 'radius' | 'shadows' | 'motion' | 'z-index'
+  markdown?: string
+  demo?: 'locale' | 'direction' | 'devices' | 'keyboard'
+  view?: 'icons'
+}
+
+export const FOUNDATIONS: FoundationPage[] = [
+  {
+    slug: 'getting-started',
+    title: 'Getting started',
+    summary: 'Install WebKit, add the theme and render the first component.',
+    markdown: 'packages/webkit/README.md'
+  },
+  {
+    slug: 'color',
+    title: 'Color',
+    summary: 'Semantic color tokens for light and dark, and the primitive palette behind them.',
+    tokens: 'color',
+    markdown: 'rules/webkit-tokens.md'
+  },
+  {
+    slug: 'typography',
+    title: 'Typography',
+    summary: 'Named type styles set in Rubik and Roboto Mono.',
+    tokens: 'typography'
+  },
+  {
+    slug: 'spacing',
+    title: 'Spacing',
+    summary: 'The semantic rhythm (2xs to 2xl) and the numeric scale.',
+    tokens: 'spacing'
+  },
+  {
+    slug: 'radius',
+    title: 'Radius',
+    summary: 'Corner radii and the shape tokens components read.',
+    tokens: 'radius'
+  },
+  {
+    slug: 'shadow',
+    title: 'Shadows',
+    summary: 'Elevation, drop and inset shadows.',
+    tokens: 'shadows'
+  },
+  {
+    slug: 'motion',
+    title: 'Motion',
+    summary: 'Easing curves, durations and the catalogued animations.',
+    tokens: 'motion',
+    markdown: 'rules/webkit-motion.md'
+  },
+  {
+    slug: 'z-index',
+    title: 'Z-index',
+    summary: 'Stacking layers for fields, popups and overlays.',
+    tokens: 'z-index'
+  },
+  {
+    slug: 'icon',
+    title: 'Icons',
+    summary:
+      'Every icon of @aziontech/icons, grouped as Azion products and platform, interface glyphs and third-party logos. Select one to copy it.',
+    view: 'icons'
+  },
+  {
+    slug: 'internationalization',
+    title: 'Languages',
+    summary: 'Built-in strings in English, Portuguese and Spanish through ConfigProvider.',
+    markdown: 'rules/webkit-strings.md',
+    demo: 'locale'
+  },
+  {
+    slug: 'right-to-left',
+    title: 'Right-to-left',
+    summary: 'Logical sides only, so every screen mirrors under dir="rtl".',
+    markdown: 'rules/webkit-direction.md',
+    demo: 'direction'
+  },
+  {
+    slug: 'devices',
+    title: 'Layout and devices',
+    summary: 'Container types, rhythm, breakpoints and how screens adapt.',
+    markdown: 'rules/webkit-page-layout.md',
+    demo: 'devices'
+  },
+  {
+    slug: 'accessibility',
+    title: 'Accessibility',
+    summary: 'Role, keyboard, focus and motion are built in.',
+    markdown: 'rules/webkit-accessibility.md'
+  },
+  {
+    slug: 'keyboard',
+    title: 'Keyboard',
+    summary:
+      'One set of keys on every console screen: focus on open, Esc, save, search and the ? list.',
+    markdown: 'rules/webkit-keyboard.md',
+    demo: 'keyboard'
+  },
+  {
+    slug: 'site-pages',
+    title: 'Site pages',
+    summary: 'The Web Design Guide: SD-01 to SD-25 for every Azion web page.',
+    markdown: 'rules/webkit-site-pages.md'
+  },
+  {
+    slug: 'azion-api',
+    title: 'Calling the Azion API',
+    summary: 'CORS, a dev proxy and an edge proxy, and where the personal token lives.',
+    markdown: 'skills/webkit-azion-api/SKILL.md'
+  },
+  {
+    slug: 'query-explorer',
+    title: 'Query explorer',
+    summary: 'A Metrics and Events GraphQL explorer built from WebKit components.',
+    markdown: 'skills/webkit-query-explorer/SKILL.md'
+  }
+]
+
+export const FOUNDATION_SLUGS = FOUNDATIONS.map((page) => page.slug)

@@ -1,0 +1,35 @@
+{
+  "component": "logo-wall-section",
+  "title": "Components/Marketing/Sections/LogoWallSection",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The band as the customers page places it: the overline and headline over a nine-mark logo wall, with one signed quote from Zoop in the aside and a link out to its case study. Edit the props in the Controls panel — a band with no logos and no quote renders only its title.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Quote band",
+      "summary": "`variant=\"quote\"` sets the quote alone as a full-width band, with no logos: the design sample's QuoteBand. `quote-variant=\"highlight\"` gives it the featured register with the mark beside the text.",
+      "file": "quote-band.vue"
+    },
+    {
+      "name": "Registry",
+      "summary": "The wall built straight from the client registry: each entry's light/dark pair, or its single file with the `artwork` that says which theme inverts it, is drawn right on both themes by `ThirdPartyLogo`; the quote's company mark comes from the registry too, and an outlined `secondary-action` sits beside the primary one.",
+      "file": "registry.vue"
+    }
+  ],
+  "site": [
+    {
+      "name": "Default",
+      "summary": "Nine client logos, each linked to its success case, beside a Zoop quote. A linked logo lifts and shows Read story on hover and focus.",
+      "file": "site-default.vue",
+      "json": "site-default.json"
+    }
+  ],
+  "siteTitle": "Templates/Marketing/Social Proof/LogoWallSection",
+  "sitePreview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "siteStories": ["Default", "DefaultJson"]
+}

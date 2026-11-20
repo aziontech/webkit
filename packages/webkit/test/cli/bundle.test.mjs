@@ -1,11 +1,13 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync, readdirSync } from 'node:fs'
+import { existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync, readdirSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join, sep } from 'node:path'
 
 import {
+  agentsDir,
   bodyHash,
+  fragmentFile,
   classify,
   CLAUDE_TEMPLATES,
   FRAGMENT_END,
@@ -17,6 +19,7 @@ import {
   stamp,
   stripMarker
 } from '../../src/cli/bundle.js'
+import { copyAiBundle } from '../../scripts/copy-ai-bundle.mjs'
 
 function walkMarkdownRelative(dir, base = dir) {
   const out = []
@@ -41,7 +44,7 @@ function walkMarkdownRelative(dir, base = dir) {
 test('every .md under the templates dir is in the bundle (nothing is silently dropped)', () => {
   const expected = []
   for (const sub of ['rules', 'skills', 'agents']) {
-    const abs = join(CLAUDE_TEMPLATES, sub)
+    const abs = sub === 'agents' ? agentsDir(CLAUDE_TEMPLATES) : join(CLAUDE_TEMPLATES, sub)
     for (const rel of walkMarkdownRelative(abs)) {
       expected.push(`${sub}/${rel}`)
     }
@@ -89,10 +92,10 @@ test('listBundle accepts an injected templates dir (for testing exclusions/fixtu
   try {
     mkdirSync(join(dir, 'rules'), { recursive: true })
     mkdirSync(join(dir, 'skills', 'foo'), { recursive: true })
-    mkdirSync(join(dir, 'agents'), { recursive: true })
+    mkdirSync(join(dir, 'adapters', 'claude', 'agents'), { recursive: true })
     writeFileSync(join(dir, 'rules', 'a.md'), '# a')
     writeFileSync(join(dir, 'skills', 'foo', 'SKILL.md'), '# skill')
-    writeFileSync(join(dir, 'agents', 'b.md'), '# b')
+    writeFileSync(join(dir, 'adapters', 'claude', 'agents', 'b.md'), '# b')
     writeFileSync(join(dir, 'rules', 'ignored.txt'), 'not markdown')
     mkdirSync(join(dir, 'skills', 'foo', 'references'), { recursive: true })
     writeFileSync(join(dir, 'skills', 'foo', 'references', 'notes.md'), '# not shipped')
@@ -214,6 +217,36 @@ test('spliceFragment: a stray second fenced block collapses to one', () => {
   assert.ok(idempotent(stray, 'NEWBODY'))
 })
 
+test('spliceFragment: a lone start marker (no end marker) is replaced, not left stale', () => {
+  const source = `# Proj\n\n${FRAGMENT_START}\n## @aziontech/webkit design system\nStale body.\n\n## User Section\nkeep\n`
+  const result = spliceFragment(source, 'NEWBODY')
+  assert.ok(!result.includes('Stale body.'), 'the stale fragment must be gone')
+  assert.equal(result.split(FRAGMENT_START).length - 1, 1)
+  assert.equal(result.split(FRAGMENT_END).length - 1, 1)
+  assert.ok(result.startsWith('# Proj'))
+  assert.ok(result.includes(`${FRAGMENT_START}\nNEWBODY\n${FRAGMENT_END}`))
+  assert.ok(result.includes('## User Section\nkeep'))
+  assert.ok(idempotent(source, 'NEWBODY'))
+})
+
+test('spliceFragment: a lone start marker at the end of the file is replaced', () => {
+  const source = `# Proj\n\n${FRAGMENT_START}\n## @aziontech/webkit design system\nStale.\n`
+  const result = spliceFragment(source, 'NEWBODY')
+  assert.equal(result, `# Proj\n\n${FRAGMENT_START}\nNEWBODY\n${FRAGMENT_END}\n`)
+})
+
+test('spliceFragment: a lone start marker next to a fenced block is removed', () => {
+  const fenced = spliceFragment('', 'OLD')
+  const source = `${FRAGMENT_START}\n## @aziontech/webkit design system\nStale.\n\n## User Section\nkeep\n\n${fenced}`
+  const result = spliceFragment(source, 'NEWBODY')
+  assert.ok(!result.includes('Stale.'))
+  assert.ok(!result.includes('OLD'))
+  assert.equal(result.split(FRAGMENT_START).length - 1, 1)
+  assert.equal(result.split(FRAGMENT_END).length - 1, 1)
+  assert.ok(result.includes('## User Section\nkeep'))
+  assert.ok(idempotent(source, 'NEWBODY'))
+})
+
 test('spliceFragment is idempotent across every case', () => {
   const legacyBody = '## @aziontech/webkit design system\nOld.\n'
   const cases = [
@@ -319,4 +352,44 @@ test('classify: unstamped-identical for a byte-identical copy made before sync e
 test('classify: unstamped-different for an unmarked copy that diverged from the template', () => {
   const template = 'body\n'
   assert.equal(classify(template, 'a different body\n'), 'unstamped-different')
+})
+
+test('the bundle is read from the repo-root layout: skills/, rules/, adapters/', () => {
+  assert.ok(agentsDir(CLAUDE_TEMPLATES).endsWith(join('adapters', 'claude', 'agents')))
+  assert.ok(fragmentFile(CLAUDE_TEMPLATES).endsWith(join('adapters', 'AGENTS_FRAGMENT.md')))
+  const bundle = listBundle()
+  assert.ok(bundle.includes('rules/webkit-sections.md'))
+  assert.ok(bundle.includes('rules/webkit-page-layout.md'))
+  assert.ok(bundle.includes('rules/webkit-header-search.md'))
+  assert.ok(bundle.includes('rules/webkit-navigation-levels.md'))
+  assert.ok(bundle.includes('rules/webkit-direction.md'))
+  assert.ok(bundle.includes('rules/webkit-strings.md'))
+  assert.ok(bundle.includes('rules/webkit-keyboard.md'))
+  assert.ok(bundle.includes('agents/webkit-advisor.md'))
+  assert.equal(bundle.filter((rel) => rel.startsWith('skills/')).length, 23)
+})
+
+test('copyAiBundle writes skills/, rules/ and adapters/ only — no legacy cli-templates/ copy', () => {
+  const pkg = mkdtempSync(join(tmpdir(), 'webkit-pkg-'))
+  try {
+    copyAiBundle(join(import.meta.dirname, '../../../..'), pkg)
+    assert.deepEqual(readdirSync(pkg).sort(), ['adapters', 'rules', 'skills'])
+    assert.equal(existsSync(join(pkg, 'cli-templates')), false)
+  } finally {
+    rmSync(pkg, { recursive: true, force: true })
+  }
+})
+
+test('the CLI never falls back to the legacy agents/ or CLAUDE.fragment.md layout', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'webkit-legacy-'))
+  try {
+    mkdirSync(join(dir, 'agents'), { recursive: true })
+    writeFileSync(join(dir, 'agents', 'old.md'), '# old')
+    writeFileSync(join(dir, 'CLAUDE.fragment.md'), '# old')
+    assert.equal(agentsDir(dir), join(dir, 'adapters', 'claude', 'agents'))
+    assert.equal(fragmentFile(dir), join(dir, 'adapters', 'AGENTS_FRAGMENT.md'))
+    assert.deepEqual(listBundle(dir), [])
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
 })

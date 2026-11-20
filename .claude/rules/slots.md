@@ -14,13 +14,13 @@ Slots are the **anatomy** surface of a component (where the consumer puts conten
     /** Rendered per row; receives the row record. */
     row(props: { item: TableRow; index: number }): unknown
     /** Leading adornment. */
-    prefix(): unknown
+    leading(): unknown
   }>()
 </script>
 
 <template>
   <div>
-    <span class="prefix"><slot name="prefix" /></span>
+    <span><slot name="leading" /></span>
     <slot name="row" :item="row" :index="i">
       <!-- fallback: shown when the consumer passes no row slot -->
       {{ row.label }}
@@ -30,7 +30,7 @@ Slots are the **anatomy** surface of a component (where the consumer puts conten
 ```
 
 - **`defineSlots` is typed**, so the consumer's editor knows a slot exists and what a scoped slot yields. An untyped slot is invisible to tooling and to the spec check.
-- **Named slots are kebab-case** (`prefix`, `header-actions`), matching how the consumer writes `<template #header-actions>`.
+- **Named slots are kebab-case** (`leading`, `header-actions`), matching how the consumer writes `<template #header-actions>`.
 - **Scoped-slot payload is an object** with named keys (`{ item, index }`) — never positional. It follows the same "smallest thing that identifies the subject" logic as [`event-payloads.md`](./event-payloads.md).
 - **Fallback content goes inside the `<slot>`**. Do not add a `label`/`text` prop *as a substitute* for a default slot; the slot with fallback content covers both cases. (A prop whose only role is slot-fallback display text uses `label` — see [`prop-vocabulary.md`](./prop-vocabulary.md) — but the slot is still the primary path.)
 - **Only slots the spec lists.** No extra slots (see [`no-invention.md`](./no-invention.md)); the count is top-level `defineSlots` entries (scoped-slot props do not count as slots).
@@ -46,7 +46,7 @@ Slots are the **anatomy** surface of a component (where the consumer puts conten
 ## Enforcement
 
 - **[`validate-spec-compliance.mjs`](../hooks/validate-spec-compliance.mjs)** counts top-level `defineSlots` entries and blocks slots not in the spec's Slots table (scoped-slot props are correctly skipped).
-- The scaffolder emits `defineSlots` from the spec's Slots table with the declared scoped payloads.
+- The component-scaffolder emits `defineSlots` from the spec's Slots table with the declared scoped payloads.
 
 ## Why this rule exists
 

@@ -1,15 +1,16 @@
 ---
 name: <kebab-case-name>
-category: <actions|code|content|data|documentation|feedback|inputs|layout|marketing|navigation|overlay|templates|utils>
+category: <action|ai|chart|code|content|data|docs|feedback|input|layout|marketing|navigation|overlay|provider|section>
 structure: <monolithic|composition>
 status: draft
 spec_version: 1
+template: 2
 figma:
   url: <https://figma.com/design/...>
   node_id: <e.g. 10:42>
-checksum: <sha256-of-body — filled by spec-validator on approval>
+checksum: 9f6a5dfc5b1dde68851607a090f837d733fdc4a3fb7a847083aa781c187133ca
 created: <YYYY-MM-DD>
-last_updated: <YYYY-MM-DD>
+last_updated: 2026-11-15
 ---
 
 # <Name> — Component Spec
@@ -55,9 +56,8 @@ last_updated: <YYYY-MM-DD>
      (every sub-component listed in the Sub-components section, in the order
      the consumer would compose them). For structure: monolithic, render the
      root with the most representative props.
-     This block is injected verbatim into the Storybook
-     parameters.docs.description.component by the storybook-write skill;
-     do NOT also paste it into the Storybook story by hand. -->
+     The catalog and the docs page show this block as the usage of the
+     component; the examples in examples/<name>/ are separate files. -->
 
 ```vue
 <script setup>
@@ -115,7 +115,7 @@ import DialogContent from '@aziontech/webkit/dialog-content'
 ## Sub-components
 
 <!-- Omit this section when structure: monolithic. -->
-<!-- For structure: composition, list every public sub-component AND the folder layout the scaffolder must emit. Each sub-component lives in its own folder under the root component, one folder per part. The file name keeps the full prefix (e.g. `dialog-trigger.vue`, never `index.vue`) so traces and editor breadcrumbs stay unambiguous. -->
+<!-- For structure: composition, list every public sub-component AND the folder layout the component-scaffolder must emit. Each sub-component lives in its own folder under the root component, one folder per part. The file name keeps the full prefix (e.g. `dialog-trigger.vue`, never `index.vue`) so traces and editor breadcrumbs stay unambiguous. -->
 <!-- Composition components ship a COMPOUND API: an `index.ts` that uses `Object.assign` to attach every sub-component to the root (vue-tsc generates the adjacent `index.d.ts`, so `<Root.Part>` is typed; never hand-write the `.d.ts` — it is gitignored). Consumers reach `<Root.Part>` with one import, while the standalone sub-component imports remain for tree-shaking. Member names mirror THIS component's anatomy (`SortButton`, not a generic `Trigger`); `Trigger`/`Content` are for overlay/disclosure components only. See `.claude/rules/compound-api.md`. -->
 
 - `<name>-trigger/<name>-trigger.vue` — purpose
@@ -128,7 +128,7 @@ import DialogContent from '@aziontech/webkit/dialog-content'
 
 <!-- Resulting layout (composition, canonical):
 
-  packages/webkit/src/components/webkit/<category>/<name>/
+  packages/webkit/src/components/<category>/<name>/
   ├── <name>.vue
   ├── index.ts                    (compound: Object.assign attaches every sub-component; vue-tsc emits index.d.ts)
   ├── package.json                (main/module → ./index.ts, types → ./index.d.ts)
@@ -161,13 +161,13 @@ export default Object.assign(Root, { Part: RootPart })
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
 | `label` | `string` | `''` | false | Text content rendered inside the component. |
-| `kind` | `'primary' \| 'secondary' \| 'outlined' \| 'text'` | `'primary'` | false | Visual variant. |
+| `variant` | `'primary' \| 'secondary' \| 'outline' \| 'ghost'` | `'primary'` | false | Visual variant. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'large'` | false | Size token; affects height, padding, typography. |
 | `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
 
 <!-- Rules enforced by spec-validator:
      - kebab-case prop names; no `is`/`has` prefix on booleans.
-     - Visual variants always named `kind`. Sizes always named `size`.
+     - Visual variants always named `variant` (a sort of part is `type`). Sizes always named `size`.
      - Every prop has a JSDoc one-liner; no empty cells.
      - Types are union literals or primitives; no `any`.
      - Required is `true` / `false` — never `yes` / `no`, so the column reads as the
@@ -258,21 +258,61 @@ export default Object.assign(Root, { Part: RootPart })
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states
 - Touch target ≥40×40 px (or justified deviation)
 
-## Stories (Storybook)
+## Internationalization
 
-Canonical layout — matches `apps/storybook/src/stories/webkit/actions/button/Button.stories.js`. Composite stories (`Types`, `Sizes`) render every variant side-by-side in a single frame; state stories use the reusable `Template` with an args delta.
+<!-- Required on template 2 (every spec created by spec-create from 2026-11-12 on).
+     List every built-in string the component renders or announces (visible text, aria-label,
+     aria-live text, placeholder, title) as a message key, its English source and the
+     prop that overrides it. Dates, numbers, currency, relative time and plurals go through
+     `Intl` with the locale from `ConfigProvider`. Write "No built-in strings" when that is true. -->
+
+| Key | English source | Override prop |
+|---|---|---|
+| `<name>.<part>` | `<English text>` | `<prop or —>` |
+
+- Formatting: `<Intl API used, or "none">`
+
+## Right-to-left
+
+<!-- Required on template 2. How the component renders under `dir="rtl"`. -->
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`); `<any exception and why>`
+- Icons: `<mirrored icons (arrows, chevrons) / non-mirrored icons (play, logos, code)>`
+- Keyboard: `<which arrow key moves where under rtl (ArrowLeft = next in rtl, ...)>`
+- User data: `<bdi> / dir="auto" around <domains, IDs, code, or "none">`
+
+## Responsive
+
+<!-- Required on template 2. Behaviour from 320 px to 2560 px and in narrow containers. -->
+
+- Container queries: `<@container breakpoints the component reacts to, or "none: fixed size">`
+- Narrow (≤ 640 px or a narrow container): `<what changes: stacking, sheet, truncation, ...>`
+- Touch: targets ≥ 24 px (44 px on `pointer: coarse`); `<hover-only affordances and their touch alternative>`
+- Reflow: no horizontal scroll at 320 px and 200 % zoom (WCAG 1.4.10, 1.4.12); `<exceptions such as data tables>`
+
+## Performance
+
+<!-- Required on template 2. The budgets CI and review hold the component to. -->
+
+- Bundle budget: `<gzip kB for the tree-shakeable entry in .size-limit.json>`
+- Runtime budget: `<interaction or render budget, e.g. "1k options open in < 100 ms", or "none: static">`
+- Heavy parts: `<lazy-loaded parts (editor, charts), virtualization, or "none">`
+
+## Examples
+
+Canonical layout — composite examples (`variants.vue`, `sizes.vue`) render every variant of one axis side-by-side in a single frame; state examples (`loading.vue`, `disabled.vue`) change only the prop they demonstrate.
 
 - Default
-- Types — composite story rendering every `kind` value side-by-side. Omit when the component has only one `kind`.
-- Sizes — composite story rendering every `size` value side-by-side. Omit when the component has only one `size`.
+- Variants — composite example rendering every `variant` value side-by-side. Omit when the component has only one `variant`.
+- Sizes — composite example rendering every `size` value side-by-side. Omit when the component has only one `size`.
 - Loading — only when the component has a `loading` prop.
 - Disabled — only when the component has a `disabled` prop.
 
 <!-- Rules:
-     - DO NOT add LightDark, Accessibility (with play), Playground, WithSlots, WithComposition, Controlled, Uncontrolled stories unless the spec explicitly justifies them in writing here.
-     - Storybook addons (a11y, docs autodocs, backgrounds) cover the rest automatically without a dedicated story.
-     - For each additional state story (Loading/Disabled), the args delta is the prop being demonstrated — nothing else.
-     - Do NOT replace Types/Sizes with one-story-per-variant (Primary/Secondary/...). The composite stories are the canonical pattern. -->
+     - DO NOT add LightDark, Accessibility (with play), Playground, WithSlots, WithComposition, Controlled, Uncontrolled examples unless the spec explicitly justifies them in writing here.
+     - The harnesses (a11y, hydration, server render) and the styled visual suite cover every example automatically.
+     - For each additional state example (Loading/Disabled), the prop delta is the prop being demonstrated — nothing else.
+     - Do NOT replace Variants/Sizes with one-example-per-variant (Primary/Secondary/...). The composite examples are the canonical pattern. -->
 
 
 ## Constraints — DO NOT
@@ -288,11 +328,9 @@ Canonical layout — matches `apps/storybook/src/stories/webkit/actions/button/B
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
-- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
-- Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
+- Do not edit `.claude/docs/DESIGN.md` or `.claude/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.

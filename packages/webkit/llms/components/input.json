@@ -1,0 +1,151 @@
+{
+ "name": "input",
+ "binding": "Input",
+ "import": "@aziontech/webkit/input",
+ "treeShakeableImport": "@aziontech/webkit/input",
+ "category": "input",
+ "surface": "app",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Single-line text input for forms and inline editing. Renders a bordered field with optional leading/trailing icon slots. Visual states (hover, focus, filled) are driven by native CSS pseudo-classes, not props. The component is the field only — labels, helper text, and error messages live in the wrapping form-field layer. Aligned with Figma frame `562:6774` (Webkit / Input).",
+ "setup": null,
+ "useWhen": [
+  "Capture a single line of free-form text (names, titles, search terms).",
+  "Use Input with a search icon to filter a list in place; to open the ⌘K palette use SearchTrigger."
+ ],
+ "avoidWhen": [
+  "The value spans multiple lines → use `textarea`.",
+  "The value is strictly numeric → use `number-input`.",
+  "The user must choose from a fixed set → use `select` / `multi-select`."
+ ],
+ "related": [
+  "`textarea` — multi-line free text.",
+  "`number-input` — numeric input with stepper semantics.",
+  "`field` — wraps this input with label, description and error; the input reads its id, `aria-describedby` and state from it."
+ ],
+ "bestPractices": [
+  "Wrap it in `Field` when you need a label, helper text, or validation message.",
+  "Set an appropriate `type`/`inputmode` for the content (email, url, …).",
+  "Set `monospace` on a field whose value is code-like: a CLI command, an ID, a token, a hash, a path. Pair it with `:spellcheck=\"false\"`.",
+  "A read-only command or ID the user copies: `readonly` + `monospace` inside an `InputGroup` with a `CopyButton`, and a description saying why it cannot change.",
+  "Do not set `monospace` on prose values (names, titles, e-mails, domains typed by the user).",
+  "Do not restyle a read-only field (dashed border, transparent fill): it is the same filled field, made non-editable; the reason belongs in the field's description."
+ ],
+ "props": [
+  {
+   "name": "placeholder",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Placeholder shown when the field is empty."
+  },
+  {
+   "name": "type",
+   "type": "'text' | 'email' | 'number'",
+   "default": "'text'",
+   "required": "false",
+   "doc": "Native input type. Restricted to single-line variants the field treats identically."
+  },
+  {
+   "name": "maxLength",
+   "type": "number | undefined",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Native `maxlength` — maximum number of characters allowed."
+  },
+  {
+   "name": "autocomplete",
+   "type": "string | undefined",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Native `autocomplete` token on the `<input>` (e.g. `email`, `username`, `off`). Omitted when unset."
+  },
+  {
+   "name": "spellcheck",
+   "type": "boolean | undefined",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Native `spellcheck` on the `<input>`. Set `false` for slugs, IDs and domains. Omitted when unset: the default is an explicit `undefined`, because Vue would otherwise cast an absent boolean to `false` and render `spellcheck=\"false\"` on every field."
+  },
+  {
+   "name": "size",
+   "type": "'small' | 'medium' | 'large'",
+   "default": "'medium'",
+   "required": "false",
+   "doc": "Size token; affects height only — padding and typography are constant. Heights: small=28px, medium=32px, large=40px."
+  },
+  {
+   "name": "disabled",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Disables interaction and applies disabled tokens."
+  },
+  {
+   "name": "readonly",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Marks the field read-only: value is visible, focusable and copyable but not editable. Keeps the filled field (surface and solid border) with no hover border and a default cursor (`data-readonly`); distinct from the disabled field."
+  },
+  {
+   "name": "required",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Marks the field as required; sets native `required` and `aria-required`. Visual indicator (asterisk) is owned by the wrapping form-field, not by this component."
+  },
+  {
+   "name": "invalid",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Applies the invalid border + ring tokens and sets `aria-invalid`."
+  },
+  {
+   "name": "monospace",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Sets the value and placeholder in the monospace code face (`.text-label-code-sm`) for CLI commands, IDs, tokens and hashes (`data-monospace`)."
+  },
+  {
+   "name": "modelValue",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Two-way value (`v-model`)."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "leading",
+   "scope": "",
+   "notes": "Hidden from assistive tech (`aria-hidden=\"true\"`). Logical: it sits on the right under `dir=\"rtl\"`."
+  },
+  {
+   "name": "trailing",
+   "scope": "",
+   "notes": "Hidden from assistive tech (`aria-hidden=\"true\"`)."
+  }
+ ],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/input/default.vue"
+  },
+  {
+   "name": "Sizes",
+   "file": "examples/input/sizes.vue"
+  },
+  {
+   "name": "Icons",
+   "file": "examples/input/icons.vue"
+  }
+ ],
+ "docs": "components/input.md"
+}

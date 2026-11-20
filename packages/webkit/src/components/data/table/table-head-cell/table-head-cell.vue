@@ -1,27 +1,29 @@
 <script setup lang="ts">
-  import { computed, inject, useAttrs } from 'vue'
+  import { computed, inject, useAttrs, useId } from 'vue'
 
-  import { TableInjectionKey, TableRowGroupKey } from '../injection-key'
+  import { useTranslate } from '../../../../composables/use-translate'
+  import * as en from '../../../../locales/en'
+  import { TableRowGroupInjectionKey, type TableSortDirection } from '../injection-key'
   import TableSortButton from '../table-sort-button/table-sort-button.vue'
 
-  export type TableHeadCellKind = 'default' | 'checkbox' | 'action' | 'slot'
+  export type TableHeadCellType = 'default' | 'checkbox' | 'action' | 'slot'
   export type TableHeadCellAlign = 'start' | 'center' | 'end'
   export type TableHeadCellGrow = 1 | 2 | 3
   export type TableHeadCellFrozen = 'start' | 'end'
-  export type SortDirection = 'none' | 'ascending' | 'descending'
+  export type { TableSortDirection }
 
   defineOptions({
     name: 'TableHeadCell',
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface TableHeadCellProps {
     /** checkbox = select-all column; action = 40px header matching an action body cell; slot = free-form. */
-    kind?: TableHeadCellKind
+    type?: TableHeadCellType
     /** Renders the sort button and the sort affordance. */
     sortable?: boolean
     /** Current sort direction; controlled. */
-    sortDirection?: SortDirection
+    sortDirection?: TableSortDirection
     /** Text alignment. */
     align?: TableHeadCellAlign
     /** Flex weight; the principal column uses 2 (see `principal`). */
@@ -37,9 +39,8 @@
     /** Pointer handler (mousedown/touchstart) that starts the resize drag. */
     resizeHandler?: (event: MouseEvent | globalThis.TouchEvent) => void
   }
-
-  const props = withDefaults(defineProps<Props>(), {
-    kind: 'default',
+  const props = withDefaults(defineProps<TableHeadCellProps>(), {
+    type: 'default',
     sortable: false,
     sortDirection: 'none',
     align: 'start',
@@ -60,33 +61,34 @@
   }>()
 
   const attrs = useAttrs()
-  const ctx = inject(TableInjectionKey, null)
-  const group = inject(TableRowGroupKey, { hoverable: false })
+  const { t } = useTranslate({ tableHeadCell: en.tableHeadCell })
+  const group = inject(TableRowGroupInjectionKey, { hoverable: false })
   const compact = computed<boolean>(() => group.compact === true)
 
   const testId = computed<string>(
-    () =>
-      (attrs['data-testid'] as string | undefined) ??
-      (ctx ? `${ctx.testId}__head-cell` : 'data-table__head-cell')
+    () => (attrs['data-testid'] as string | undefined) ?? 'table-head-cell'
   )
 
+  const labelId = useId()
+  const sortById = useId()
+
   const growAttr = computed<number | null>(() =>
-    props.kind === 'checkbox' || props.kind === 'action'
+    props.type === 'checkbox' || props.type === 'action'
       ? null
       : (props.grow ?? (props.principal ? 2 : 1))
   )
 
-  const ariaSort = computed<SortDirection | undefined>(() =>
+  const ariaSort = computed<TableSortDirection | undefined>(() =>
     props.sortable ? props.sortDirection : undefined
   )
 
-  const handleSort = (direction: 'ascending' | 'descending') => {
+  const onSort = (direction: 'ascending' | 'descending') => {
     emit('sort', direction)
   }
 
   const toggleSort = () => {
     if (!props.sortable) return
-    handleSort(props.sortDirection === 'ascending' ? 'descending' : 'ascending')
+    onSort(props.sortDirection === 'ascending' ? 'descending' : 'ascending')
   }
 </script>
 
@@ -95,7 +97,7 @@
     v-bind="$attrs"
     role="columnheader"
     :data-testid="testId"
-    :data-kind="kind"
+    :data-type="type"
     :data-sortable="sortable || null"
     :data-sort="sortable ? sortDirection : null"
     :data-align="align"
@@ -103,24 +105,34 @@
     :data-frozen="frozen ?? null"
     :data-compact="compact || null"
     :aria-sort="ariaSort"
-    :tabindex="sortable ? 0 : undefined"
     @click="toggleSort"
     @keydown.enter.prevent="toggleSort"
     @keydown.space.prevent="toggleSort"
-    class="group/head relative flex h-11 min-w-0 items-center gap-(--spacing-xs) px-(--spacing-sm) data-[sortable]:cursor-pointer data-[sortable]:select-none data-[sortable]:focus-visible:outline-none data-[sortable]:focus-visible:ring-2 data-[sortable]:focus-visible:ring-inset data-[sortable]:focus-visible:ring-(--ring-color) data-[compact]:h-9 data-[compact]:px-(--spacing-xs) text-label-sm text-(--text-muted) data-[align=start]:text-start data-[align=center]:text-center data-[align=end]:text-end data-[align=start]:justify-start data-[align=center]:justify-center data-[align=end]:justify-end data-[grow=1]:flex-[1_0_5rem] data-[grow=2]:flex-[2_0_5rem] data-[grow=3]:flex-[3_0_5rem] data-[kind=checkbox]:w-10 data-[kind=checkbox]:flex-none data-[kind=checkbox]:justify-center data-[kind=checkbox]:px-0 data-[kind=action]:ml-auto data-[kind=action]:w-10 data-[kind=action]:flex-none data-[kind=action]:justify-center data-[kind=action]:px-0 data-[frozen=start]:sticky data-[frozen=start]:left-0 data-[frozen=end]:sticky data-[frozen=end]:right-0 data-[frozen]:z-10 data-[frozen]:bg-[var(--table-row-bg,var(--bg-surface))] data-[frozen=start]:after:pointer-events-none data-[frozen=start]:after:absolute data-[frozen=start]:after:inset-y-0 data-[frozen=start]:after:-right-6 data-[frozen=start]:after:w-6 data-[frozen=start]:after:content-[''] data-[frozen=start]:after:bg-gradient-to-l data-[frozen=start]:after:from-transparent data-[frozen=start]:after:to-[var(--table-row-bg,var(--bg-surface))] data-[frozen=end]:before:pointer-events-none data-[frozen=end]:before:absolute data-[frozen=end]:before:inset-y-0 data-[frozen=end]:before:-left-6 data-[frozen=end]:before:w-6 data-[frozen=end]:before:content-[''] data-[frozen=end]:before:bg-gradient-to-r data-[frozen=end]:before:from-transparent data-[frozen=end]:before:to-[var(--table-row-bg,var(--bg-surface))]"
+    class="group/head relative flex h-11 min-w-0 items-center gap-(--spacing-xs) px-(--spacing-sm) data-[sortable]:cursor-pointer data-[sortable]:select-none data-[compact]:h-9 data-[compact]:px-(--spacing-xs) text-label-sm text-(--text-muted) data-[align=start]:text-start data-[align=center]:text-center data-[align=end]:text-end data-[align=start]:justify-start data-[align=center]:justify-center data-[align=end]:justify-end data-[grow=1]:flex-[1_0_5rem] data-[grow=2]:flex-[2_0_5rem] data-[grow=3]:flex-[3_0_5rem] data-[type=checkbox]:w-10 data-[type=checkbox]:flex-none data-[type=checkbox]:justify-center data-[type=checkbox]:px-0 data-[type=action]:ms-auto data-[type=action]:w-10 data-[type=action]:flex-none data-[type=action]:justify-center data-[type=action]:px-0 data-[frozen=start]:sticky data-[frozen=start]:start-0 data-[frozen=end]:sticky data-[frozen=end]:end-0 data-[frozen]:z-10 data-[frozen]:bg-[var(--table-row-bg,var(--bg-surface))] data-[frozen=start]:after:pointer-events-none data-[frozen=start]:after:absolute data-[frozen=start]:after:inset-y-0 data-[frozen=start]:after:-end-6 data-[frozen=start]:after:w-6 data-[frozen=start]:after:content-[''] group-data-[overflow-start]/scroll:data-[frozen=start]:after:bg-gradient-to-l rtl:group-data-[overflow-start]/scroll:data-[frozen=start]:after:bg-gradient-to-r data-[frozen=start]:after:from-transparent data-[frozen=start]:after:to-[var(--table-row-bg,var(--bg-surface))] data-[frozen=end]:before:pointer-events-none data-[frozen=end]:before:absolute data-[frozen=end]:before:inset-y-0 data-[frozen=end]:before:-start-6 data-[frozen=end]:before:w-6 data-[frozen=end]:before:content-[''] group-data-[overflow-end]/scroll:data-[frozen=end]:before:bg-gradient-to-r rtl:group-data-[overflow-end]/scroll:data-[frozen=end]:before:bg-gradient-to-l data-[frozen=end]:before:from-transparent data-[frozen=end]:before:to-[var(--table-row-bg,var(--bg-surface))]"
   >
-    <slot v-if="kind === 'checkbox' || kind === 'action'" />
+    <slot v-if="type === 'checkbox' || type === 'action'" />
     <template v-else>
-      <span class="min-w-0 flex-1 truncate text-[length:inherit]"><slot /></span>
+      <span
+        :id="labelId"
+        class="min-w-0 flex-1 truncate text-[length:inherit]"
+        ><slot
+      /></span>
       <span
         v-if="sortable"
-        class="flex h-full shrink-0 items-center justify-center opacity-0 transition-opacity duration-150 ease-out motion-reduce:transition-none group-hover/head:opacity-100 group-focus-visible/head:opacity-100 focus-within:opacity-100 group-data-[sort=ascending]/head:opacity-100 group-data-[sort=descending]/head:opacity-100"
+        :id="sortById"
+        hidden
+        >{{ t('tableHeadCell.sortBy') }}</span
+      >
+      <span
+        v-if="sortable"
+        class="flex h-full shrink-0 items-center justify-center opacity-0 transition-opacity duration-150 ease-out motion-reduce:transition-none group-hover/head:opacity-100 focus-within:opacity-100 group-data-[sort=ascending]/head:opacity-100 group-data-[sort=descending]/head:opacity-100"
         @click.stop
         @keydown.stop
       >
         <TableSortButton
-          :direction="sortDirection"
-          @toggle="handleSort"
+          :sort-direction="sortDirection"
+          :aria-labelledby="`${sortById} ${labelId}`"
+          @sort="onSort"
         />
       </span>
     </template>
@@ -128,9 +140,9 @@
       v-if="resizable"
       role="separator"
       aria-orientation="vertical"
-      aria-label="Resize column"
+      :aria-label="t('tableHeadCell.resize')"
       :data-resizing="resizing || null"
-      class="absolute inset-y-0 right-0 z-20 w-2 shrink-0 cursor-col-resize touch-none select-none before:absolute before:inset-y-2 before:right-0 before:w-[2px] before:rounded-full before:bg-transparent before:content-[''] before:transition-colors before:duration-150 before:ease-out motion-reduce:before:transition-none hover:before:bg-(--border-strong) data-[resizing]:before:bg-(--ring-color)"
+      class="absolute inset-y-0 end-0 z-20 w-2 shrink-0 cursor-col-resize touch-none select-none before:absolute before:inset-y-2 before:end-0 before:w-[2px] before:rounded-full before:bg-transparent before:content-[''] before:transition-colors before:duration-150 before:ease-out motion-reduce:before:transition-none hover:before:bg-(--border-strong) data-[resizing]:before:bg-(--ring-color)"
       @mousedown.stop="resizeHandler"
       @touchstart.stop="resizeHandler"
       @click.stop

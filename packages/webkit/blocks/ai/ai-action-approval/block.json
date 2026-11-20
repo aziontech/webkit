@@ -1,0 +1,60 @@
+{
+  "id": "ai/ai-action-approval",
+  "name": "AiActionApproval",
+  "title": "Blocks/Ai/AiActionApproval",
+  "surface": "app",
+  "summary": "A user-authorized action inside a generative AI conversation, from the messages of TanStack AI's `useChat`: the read-only call shows as a completed `ToolCall`, the explanation in `StreamingResponse`, and the call that needs approval as a `ToolApproval` card with its input in a `CodeBlock`. Deploy or Deny resolves the `useChat` interrupt; approved, the call runs under the card and the assistant reports what changed, with Copy and Retry after a failure. Built from `Conversation`, `ChatMessage`, `ToolCall`, `StreamingResponse`, `ToolApproval`, `CodeBlock`, `CopyButton`, `Button` and `PromptInput`. A page body for ConsoleLayout that fills its content region.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "ai action approval",
+    "approve ai action",
+    "user authorized action",
+    "agent asks permission",
+    "human in the loop",
+    "tool call approval",
+    "confirm agent command",
+    "allow tool",
+    "aprovar ação da ia",
+    "autorizar ação do agente",
+    "confirmar comando",
+    "aprobar acción de la ia",
+    "approve an agent action",
+    "tool approval in chat"
+  ],
+  "skills": ["webkit-ai-surfaces", "webkit-ui-states", "webkit-errors"],
+  "primary": {
+    "name": "Pending",
+    "file": "ai-action-approval.vue"
+  },
+  "files": ["messages.ts", "sample.ts"],
+  "variants": [
+    {
+      "name": "Irreversible",
+      "summary": "The assistant proposes deleting a domain nobody uses: the card turns danger and Delete stays disabled until the reader types the domain name.",
+      "file": "variants/irreversible.vue"
+    },
+    {
+      "name": "Approved",
+      "summary": "After Deploy: the card reads Approved, the deployment call completed, and the assistant reports the new build is live with the previous one kept for rollback.",
+      "file": "variants/approved.vue"
+    },
+    {
+      "name": "Denied",
+      "summary": "After Deny: the card reads Denied, the deployment call is recorded as denied, and the assistant acknowledges that nothing was deployed.",
+      "file": "variants/denied.vue"
+    },
+    {
+      "name": "Running",
+      "summary": "After Deploy: the card reads Approved, the deployment call runs under it and the composer shows Stop until it finishes.",
+      "file": "variants/running.vue"
+    },
+    {
+      "name": "Error",
+      "summary": "The approved deployment fails: the deployment call reads failed, and the assistant says what failed and that production still serves the previous version, with Retry beside Copy.",
+      "file": "variants/error.vue"
+    }
+  ]
+}

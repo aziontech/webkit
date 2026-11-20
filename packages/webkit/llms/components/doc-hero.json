@@ -1,0 +1,83 @@
+{
+ "name": "doc-hero",
+ "binding": "DocHero",
+ "import": "@aziontech/webkit/doc-hero",
+ "treeShakeableImport": "@aziontech/webkit/doc-hero",
+ "category": "docs",
+ "surface": "docs",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The masthead of a documentation home: a display-size `h1`, a deck capped at a readable measure, an action row (the primary `Get started`, then `CopyPromptButton`) and one muted note under it that says what the prompt does. It carries the air the home needs — `--spacing-2xl` above and below, `--spacing-xl` between the deck and the actions — so the front door reads as a front door and not as one more article. An article page uses `DocPageHeader` instead.",
+ "setup": null,
+ "useWhen": [
+  "Use DocHero only on the documentation home; marketing page openings use HeroSection.",
+  "The top of a documentation home or a docs section landing (`shell/shell-docs`, variant `Landing`)."
+ ],
+ "avoidWhen": [
+  "On an article or reference page → use `DocPageHeader` (breadcrumb, last updated, page actions).",
+  "On the marketing site → use `Hero` or a page section."
+ ],
+ "related": [
+  "`DocPageHeader` — the article masthead.",
+  "`CopyPromptButton` — the second action of the row.",
+  "`DocAgentCard` — the agent card that usually opens the first section under the hero."
+ ],
+ "bestPractices": [
+  "Keep the title short (`Welcome to Azion Docs`) and the deck to one or two sentences.",
+  "Put `Button variant=\"primary\" size=\"large\"` first and `CopyPromptButton` second in `#actions`; say what the prompt does in `#note`.",
+  "Do not wrap it in `DocProse`; it is page chrome (`data-doc-chrome`)."
+ ],
+ "props": [
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "The page title, set at display size as the page's `h1`."
+  },
+  {
+   "name": "description",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "The deck under the title: what the docs cover, in one or two sentences."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "title",
+   "scope": "",
+   "notes": "Replaces the title text, for a title that is more than a string."
+  },
+  {
+   "name": "default",
+   "scope": "",
+   "notes": "Replaces the description text."
+  },
+  {
+   "name": "actions",
+   "scope": "",
+   "notes": "The action row: the primary `Button` first, then `CopyPromptButton`."
+  },
+  {
+   "name": "note",
+   "scope": "",
+   "notes": "One muted line under the actions that says what the prompt does."
+  }
+ ],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/doc-hero/default.vue"
+  },
+  {
+   "name": "Title only",
+   "file": "examples/doc-hero/title-only.vue"
+  }
+ ],
+ "docs": "components/doc-hero.md"
+}

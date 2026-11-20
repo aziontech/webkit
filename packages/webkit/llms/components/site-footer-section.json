@@ -1,0 +1,121 @@
+{
+ "name": "site-footer-section",
+ "binding": "SiteFooterSection",
+ "import": "@aziontech/webkit/site-footer-section",
+ "treeShakeableImport": "@aziontech/webkit/site-footer-section",
+ "category": "section",
+ "surface": "site",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The footer under every marketing page: the link columns, then the social row beside the status indicator and the language select. It is a page section — the site places it from a `{ _id: 'site-footer-section', props }` entry and binds `props` straight onto it — and it composes `footer`, `brand`, `icon-button`, `status-indicator` and `language-select`. The bottom bar is one row, as azion.com draws it: the Azion mark (the footer's `brand` slot) and the small social icon buttons at the start, the status indicator (`status`) and the compact language switcher, a `LanguageSelect` with `variant=\"ghost\"` (round flag and country code, `language`), at the end; below `md` it stacks, the mark and icons over the status and language. In the `site` placement the footer spans the page like `site-header-section`, opening on a full-width rule with a corner mark at each end, with no side rules. The layout is CSS only, so the server HTML and the hydrated page are the same tree. The language select keeps its own value unless the page binds `v-model:language`; its options are BCP 47 tags (`EN`, `PT-BR`, `ES`), each shown with its round flag and its name in its own language.",
+ "setup": null,
+ "useWhen": [
+  "Use SiteFooterSection for the marketing site footer from page JSON.",
+  "Rendering page JSON, or you need a whole band with no custom content → the section (`site-footer-section`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`footer`).",
+  "As the last block of every marketing page."
+ ],
+ "avoidWhen": [
+  "Inside the product console or the docs → compose `footer` directly.",
+  "For a closing ask above the footer → use `closing-call-to-action-section`."
+ ],
+ "related": [
+  "`footer` — the composition footer this section fills.",
+  "`closing-call-to-action-section` — the band that sits right above it."
+ ],
+ "bestPractices": [
+  "**Do** render it as the last child of the page shell, as is: in `site` it draws its own full-width top rule with its corner marks.",
+  "**Don't** wrap it in a bordered or padded `div` (`border-t`, `py-*`): the rules double.",
+  "Use `variant: 'site'` under a marketing page, so the footer spans the page like its header and opens on its own rule; the page above must not draw a bottom rule of its own.",
+  "Keep four link columns so the grid fills at `md`.",
+  "Set `target: '_blank'` on a link that leaves azion.com (Community, Status): it opens in a new tab, draws the external-link glyph after the label and tells assistive tech it opens a new tab. Never add the glyph yourself.",
+  "Give every social link a `label` that names the network, since the button shows only the glyph."
+ ],
+ "props": [
+  {
+   "name": "variant",
+   "type": "SiteFooterSectionVariant",
+   "default": "'site'",
+   "required": "false",
+   "doc": "Where the footer sits: `site` spans the page like the site header under its own top rule, `content` runs the bands full bleed under a hairline."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the footer landmark. Empty uses the locale catalog (`Footer`)."
+  },
+  {
+   "name": "home",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Destination of the Azion mark; the mark is not rendered when empty."
+  },
+  {
+   "name": "homeAriaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the Azion mark link. Empty uses the locale catalog (`Azion home`)."
+  },
+  {
+   "name": "columns",
+   "type": "SiteFooterSectionColumn[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The link columns, in order; each is `{ title, links }` where every link is `{ label, href, target? }`; a `_blank` link opens in a new tab and closes on the external-link glyph."
+  },
+  {
+   "name": "socials",
+   "type": "SiteFooterSectionSocial[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The profile icon buttons, in order; each is `{ icon, label, href }` where `label` names the button for assistive tech. They open in a new tab."
+  },
+  {
+   "name": "statusLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Line of the system status indicator; the indicator is not rendered when empty."
+  },
+  {
+   "name": "languages",
+   "type": "string[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "BCP 47 tags of the languages offered (`EN`, `PT-BR`, `ES`); each shows its round flag and its name in its own language, and the first one is selected until `v-model:language` holds another. The language select is not rendered when empty."
+  },
+  {
+   "name": "languageAriaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the language select, also its placeholder. Empty uses the locale catalog (`Language`)."
+  },
+  {
+   "name": "language",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Two-way value (`v-model:language`)."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/site-footer-section/default.vue"
+  },
+  {
+   "name": "Language",
+   "file": "examples/site-footer-section/language.vue"
+  }
+ ],
+ "docs": "components/site-footer-section.md"
+}

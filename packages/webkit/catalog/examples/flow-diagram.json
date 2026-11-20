@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The data-driven default draws every field it is given: an icon and type over the name, a location, a status dot and text, metrics in the footer, details that open, and labelled edges with their timing. The edges also set the columns, so the two services that serve in parallel share one.",
+   "file": "examples/flow-diagram/default.vue"
+  },
+  {
+   "name": "Composed",
+   "summary": "The naked root with parts written by hand: plain labelled steps, a group of parallel steps, and one node built from Header, Title, Description and Footer items. The connectors are drawn the same way as in the data mode.",
+   "file": "examples/flow-diagram/composed.vue"
+  },
+  {
+   "name": "Request path",
+   "summary": "Three equal boxes (`uniform`) for an error page: You, Azion and the Application, with the failing hop as a danger edge labelled 502. When the row does not fit its container it stacks into a vertical rail, so a phone needs no second list and no box is ever cut off.",
+   "file": "examples/flow-diagram/request-path.vue"
+  }
+ ]
+}

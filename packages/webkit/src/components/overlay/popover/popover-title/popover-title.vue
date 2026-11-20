@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, onBeforeUnmount, onMounted, useAttrs } from 'vue'
 
-  import { usePopoverContext } from '../injection-key'
+  import { usePopoverContext } from '../composables/use-popover-context'
 
   defineOptions({
     name: 'PopoverTitle',
@@ -15,9 +15,7 @@
   const attrs = useAttrs()
   const ctx = usePopoverContext()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__title`
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'popover-title')
 
   onMounted(() => {
     ctx.registerTitle()
@@ -33,7 +31,7 @@
     v-bind="attrs"
     :id="ctx.titleId"
     :data-testid="testId"
-    class="text-body-sm text-(--text-default)"
+    class="text-title-sm text-(--text-default)"
   >
     <slot />
   </h2>

@@ -6,7 +6,7 @@ import {
 /** A point on the globe as longitude and latitude, in radians. */
 export type GlobePoint = readonly [longitude: number, latitude: number]
 
-/** A PoP: where it sits on the globe, and its cell on the flat map. */
+/** A data center: where it sits on the globe, and its cell on the flat map. */
 export interface GlobeNode {
   /** Longitude and latitude, in radians. */
   point: GlobePoint

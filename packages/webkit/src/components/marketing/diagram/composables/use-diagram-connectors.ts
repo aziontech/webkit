@@ -37,6 +37,8 @@ interface Box {
   top: number
   bottom: number
   middle: number
+  centre: number
+  tree: boolean
 }
 
 interface End {
@@ -94,16 +96,67 @@ const drop = (s: Box, t: Box, inset: number): Route => {
   }
 }
 
+const stack = (s: Box, t: Box, radius: number): Route => {
+  const from = s.centre
+  const to = t.centre
+  const mid = (s.bottom + t.top) / 2
+  const ends: [End, End] = [
+    { x: from, y: s.bottom, side: 'bottom' },
+    { x: to, y: t.top, side: 'top' }
+  ]
+  if (Math.abs(from - to) < 1) {
+    return { d: `M${from} ${s.bottom} V${t.top}`, label: { x: from, y: mid }, ends }
+  }
+  const way = to > from ? 1 : -1
+  const r = Math.max(0, Math.min(radius, Math.abs(to - from) / 2, (t.top - s.bottom) / 2))
+  return {
+    d: `M${from} ${s.bottom} V${mid - r} Q${from} ${mid} ${from + way * r} ${mid} H${to - way * r} Q${to} ${mid} ${to} ${mid + r} V${t.top}`,
+    label: { x: (from + to) / 2, y: mid },
+    ends
+  }
+}
+
+const MIRRORED_SIDE: Record<DiagramSide, DiagramSide> = {
+  left: 'right',
+  right: 'left',
+  top: 'top',
+  bottom: 'bottom'
+}
+
+const mirrorPath = (d: string, width: number): string =>
+  d
+    .replace(/([MVHQC])([^MVHQC]*)/g, (_, command: string, args: string) => {
+      if (command === 'V') return `${command}${args}`
+      const values = args.trim().split(/\s+/).map(Number)
+      const flipped = values.map((value, index) =>
+        command === 'H' || index % 2 === 0 ? width - value : value
+      )
+      return `${command}${flipped.join(' ')} `
+    })
+    .trim()
+
+const mirrorRoute = (routed: Route, width: number): Route => ({
+  d: mirrorPath(routed.d, width),
+  label: { x: width - routed.label.x, y: routed.label.y },
+  ends: routed.ends.map((end) => ({
+    x: width - end.x,
+    y: end.y,
+    side: MIRRORED_SIDE[end.side]
+  })) as [End, End]
+})
+
 const route = (s: Box, t: Box, inset: number, radius: number): Route => {
   if (t.left >= s.right - 0.5) return curve(s, t)
-  if (t.top >= s.bottom - 0.5 && t.left - (s.left + inset) >= 2 * radius) {
+  const below = t.top >= s.bottom - 0.5
+  if (below && !(s.tree && t.tree)) return stack(s, t, radius)
+  if (below && t.left - (s.left + inset) >= 2 * radius) {
     return elbow(s, t, inset, radius)
   }
   return drop(s, t, inset)
 }
 
 export function useDiagramConnectors(
-  canvas: Ref<globalThis.HTMLElement | null>,
+  canvas: MaybeRefOrGetter<globalThis.HTMLElement | null>,
   edges: MaybeRefOrGetter<DiagramEdge[]>
 ): UseDiagramConnectorsReturn {
   const width = ref(0)
@@ -115,10 +168,11 @@ export function useDiagramConnectors(
 
   let observer: globalThis.ResizeObserver | null = null
   let frame = 0
+  let disposed = false
 
   const measure = () => {
     frame = 0
-    const element = canvas.value
+    const element = toValue(canvas)
     if (!element) return
     const frameBox = element.getBoundingClientRect()
     const style = globalThis.getComputedStyle(element)
@@ -128,17 +182,24 @@ export function useDiagramConnectors(
       ) || 16
     const inset = toPx(style.getPropertyValue('--spacing-md'), rootSize)
     const radius = toPx(style.getPropertyValue('--shape-card'), rootSize)
+    const rtl = style.direction === 'rtl'
+    const span = frameBox.width
+    const inline = (x: number) => (rtl ? span - x : x)
 
     const box = (key: string): Box | null => {
       const node = element.querySelector(`[data-diagram-node="${key}"]`)
       if (!node) return null
       const r = node.getBoundingClientRect()
+      const start = inline(rtl ? r.right - frameBox.left : r.left - frameBox.left)
+      const end = inline(rtl ? r.left - frameBox.left : r.right - frameBox.left)
       return {
-        left: r.left - frameBox.left,
-        right: r.right - frameBox.left,
+        left: start,
+        right: end,
         top: r.top - frameBox.top,
         bottom: r.bottom - frameBox.top,
-        middle: (r.top + r.bottom) / 2 - frameBox.top
+        middle: (r.top + r.bottom) / 2 - frameBox.top,
+        centre: (start + end) / 2,
+        tree: node.parentElement?.closest('[data-stack]')?.getAttribute('data-stack') === 'tree'
       }
     }
 
@@ -152,7 +213,8 @@ export function useDiagramConnectors(
       if (!source || !target) continue
       const key = `${edge.from}-${edge.to}`
       const active = Boolean(edge.active)
-      const routed = route(source, target, inset, radius)
+      const logical = route(source, target, inset, radius)
+      const routed = rtl ? mirrorRoute(logical, span) : logical
       nextPaths.push({ key, d: routed.d, active })
       if (edge.label) nextLabels.push({ key, ...routed.label, active, label: edge.label })
       for (const end of routed.ends) {
@@ -177,12 +239,12 @@ export function useDiagramConnectors(
   }
 
   const schedule = () => {
-    if (frame) return
+    if (frame || disposed) return
     frame = globalThis.requestAnimationFrame(measure)
   }
 
   watch(
-    canvas,
+    () => toValue(canvas),
     (element) => {
       observer?.disconnect()
       if (!element) return
@@ -198,8 +260,10 @@ export function useDiagramConnectors(
   watch(() => toValue(edges), schedule, { deep: true })
 
   onScopeDispose(() => {
+    disposed = true
     observer?.disconnect()
     if (frame) globalThis.cancelAnimationFrame(frame)
+    frame = 0
   })
 
   return {

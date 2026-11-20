@@ -1,0 +1,116 @@
+<script setup lang="ts">
+  import { duration } from '@aziontech/theme/animations'
+  import { computed, onScopeDispose, useAttrs } from 'vue'
+
+  import { isFiniteNumber, keepIds } from '../../lib'
+  import { useChartContext } from '../composables/use-chart-context'
+
+  defineOptions({ name: 'ChartScatter', inheritAttrs: false })
+
+  export interface ChartScatterProps {
+    /** Ids of the series drawn as dots; empty draws every visible series. */
+    ids?: string[]
+  }
+
+  const props = withDefaults(defineProps<ChartScatterProps>(), {
+    ids: () => []
+  })
+
+  const attrs = useAttrs()
+  const ctx = useChartContext()
+  const ids = computed<readonly string[]>((previous) => keepIds(previous, props.ids))
+
+  onScopeDispose(
+    ctx.registerMark(() => ({ type: 'scatter', stacked: false, labeled: false, ids: ids.value }))
+  )
+
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'chart-scatter')
+
+  const groups = computed(() => {
+    const layout = ctx.category.value
+    const scale = ctx.valueScale.value
+    const vertical = ctx.orientation.value === 'vertical'
+    return ctx.resolveSeries(ids.value).map((entry, order) => ({
+      id: entry.id,
+      color: entry.color,
+      delay: `calc(${duration['fast-01']} * ${order})`,
+      dots: entry.values.flatMap((value, index) => {
+        if (!isFiniteNumber(value)) return []
+        const along = layout.position(index)
+        const across = scale(value)
+        return [{ index, x: vertical ? along : across, y: vertical ? across : along }]
+      })
+    }))
+  })
+
+  const dotAt = <T extends { index: number }>(dots: readonly T[], index: number): T | undefined => {
+    let low = 0
+    let high = dots.length - 1
+    while (low <= high) {
+      const middle = (low + high) >> 1
+      const found = dots[middle]
+      if (found.index === index) return found
+      if (found.index < index) low = middle + 1
+      else high = middle - 1
+    }
+    return undefined
+  }
+
+  const activeDots = computed(() => {
+    const index = ctx.activeIndex.value
+    if (index === null) return new Map<string, { x: number; y: number }>()
+    return new Map(
+      groups.value.flatMap((group) => {
+        const dot = dotAt(group.dots, index)
+        return dot ? [[group.id, { x: dot.x, y: dot.y }] as const] : []
+      })
+    )
+  })
+
+  const dimmed = (id: string) => ctx.emphasized.value !== null && ctx.emphasized.value !== id
+</script>
+
+<template>
+  <svg
+    v-bind="$attrs"
+    :data-testid="testId"
+    aria-hidden="true"
+    :width="ctx.size.value.width"
+    :height="ctx.size.value.height"
+    class="pointer-events-none col-start-1 row-start-1 overflow-visible"
+  >
+    <g
+      v-for="group in groups"
+      :key="group.id"
+      :data-series="group.id"
+      :data-dimmed="dimmed(group.id) || null"
+      :data-entered="ctx.entered.value || null"
+      :style="{ transitionDelay: group.delay }"
+      class="opacity-0 transition-opacity duration-slow-01 ease-productive-entrance motion-reduce:transition-none data-[entered]:opacity-100 data-[entered]:data-[dimmed]:opacity-30"
+    >
+      <g v-memo="[group.dots, group.color]">
+        <circle
+          v-for="dot in group.dots"
+          :key="dot.index"
+          v-memo="[dot.x, dot.y, group.color]"
+          :cx="dot.x"
+          :cy="dot.y"
+          r="4"
+          :fill="group.color"
+          stroke="var(--bg-surface)"
+          stroke-width="1.5"
+        />
+      </g>
+      <circle
+        v-if="activeDots.get(group.id)"
+        :cx="activeDots.get(group.id)?.x"
+        :cy="activeDots.get(group.id)?.y"
+        r="6"
+        :fill="group.color"
+        data-active
+        stroke="var(--bg-surface)"
+        stroke-width="1.5"
+      />
+    </g>
+  </svg>
+</template>

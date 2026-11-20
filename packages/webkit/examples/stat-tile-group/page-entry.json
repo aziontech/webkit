@@ -1,0 +1,56 @@
+{
+  "_id": "console-showcase-section",
+  "props": {
+    "variant": "diagram",
+    "eyebrow": "Usage",
+    "title": "Your month at a glance",
+    "description": "What your applications served this month."
+  },
+  "scenes": {
+    "scene": {
+      "component": "StatTileGroup",
+      "props": {
+        "ariaLabel": "Usage"
+      },
+      "children": [
+        {
+          "component": "StatTile",
+          "props": {
+            "label": "Data transferred",
+            "value": 842,
+            "unit": "GB",
+            "delta": 12.4
+          }
+        },
+        {
+          "component": "StatTile",
+          "props": {
+            "label": "Requests / second",
+            "value": 1240,
+            "unit": "/s",
+            "delta": 3.8
+          }
+        },
+        {
+          "component": "StatTile",
+          "props": {
+            "label": "Bandwidth saving",
+            "value": 588,
+            "unit": "GB",
+            "delta": 6.2
+          }
+        },
+        {
+          "component": "StatTile",
+          "props": {
+            "label": "Data offload",
+            "value": 70,
+            "unit": "%",
+            "delta": -1.5,
+            "inverse": true
+          }
+        }
+      ]
+    }
+  }
+}

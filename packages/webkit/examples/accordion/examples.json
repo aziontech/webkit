@@ -1,0 +1,42 @@
+{
+  "component": "accordion",
+  "title": "Components/Content/Accordion",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Single-mode accordion with one item open via `default-value`.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "`medium` and `large` sizes side by side.",
+      "file": "sizes.vue"
+    },
+    {
+      "name": "IconPosition",
+      "summary": "`trailing` and `leading` chevron placement side by side.",
+      "file": "icon-position.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "The middle item carries the per-item `disabled` prop and cannot toggle.",
+      "file": "disabled.vue"
+    },
+    {
+      "name": "WithLogViewer",
+      "summary": "Real composition: the `Accordion.Content` slot takes any component. Here each deploy item wraps a full `LogViewer` (header and content) over a deploy log.",
+      "file": "with-log-viewer.vue"
+    },
+    {
+      "name": "Multiple",
+      "summary": "`type=\"multiple\"` with two items open at once via an array `default-value`.",
+      "file": "multiple.vue"
+    },
+    {
+      "name": "Page JSON",
+      "summary": "The same content in the marketing site's page JSON: `Accordion` is a scene, so a band places it by name in its `scene` slot (here `console-showcase-section` with `variant: \"diagram\"` and `texture: \"none\"`, so nothing is painted behind it) and `SitePage` renders the entry with no code. Its items are the scene's `children`: each `AccordionItem` holds an `AccordionTrigger` and an `AccordionContent`, and their text is a text child.",
+      "file": "page-entry.vue",
+      "json": "page-entry.json"
+    }
+  ]
+}

@@ -2,12 +2,15 @@
   import { usePreferredReducedMotion } from '@vueuse/core'
   import { computed, onMounted, onScopeDispose, ref, useAttrs, watch } from 'vue'
 
-  import FrameBox from '../../layout/frame-box/frame-box.vue'
-  import TextureMaterial, {
-    type TextureMaterialFade,
-    type TextureMaterialKind,
-    type TextureMaterialSize
-  } from '../texture-material/texture-material.vue'
+  import { useTranslate } from '../../../composables/use-translate'
+  import * as en from '../../../locales/en'
+  import IconButton from '../../action/icon-button/icon-button.vue'
+  import Texture, {
+    type TextureFade,
+    type TextureSize,
+    type TextureVariant
+  } from '../../content/texture/texture.vue'
+  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
 
   defineOptions({
     name: 'MediaTabs',
@@ -29,93 +32,105 @@
   /** What moves the selection as the reader points at a row. */
   export type MediaTabsSelectOn = 'hover' | 'click'
   /** Which side of the media the tabs sit on. */
-  export type MediaTabsPosition = 'left' | 'right' | 'top' | 'bottom'
+  export type MediaTabsSide = 'start' | 'end' | 'top' | 'bottom'
   /** Height each row is held to beside the media, and the title scale of a row of tabs. */
   export type MediaTabsSize = 'small' | 'medium' | 'large'
 
-  interface Props {
-    /** The tabs, in order, at most three when the position is left or right and five when it is top or bottom; each item is a title, its description, and the image shown while it is active. Items past the limit are not rendered. */
+  export interface MediaTabsProps {
+    /** The tabs, in order, at most three when the tabs side is start or end and five when it is top or bottom; each item is a title, its description, and the image shown while it is active. Items past the limit are not rendered. */
     items?: MediaTabsItem[]
-    /** Which side of the media the tabs sit on. Below the large breakpoint every position stacks, with the active tab's media inside its row. */
-    position?: MediaTabsPosition
+    /** Which side of the media the tabs sit on. Below the large breakpoint every side stacks, with the active tab's media inside its row. */
+    tabsSide?: MediaTabsSide
     /** Height each row is held to, as a multiple of the band's own padding step: three, four and a half, six. In a row of tabs, small sets the title and description two steps down. */
     size?: MediaTabsSize
     /** What moves the selection as the reader points at a row. A click always selects, on either setting. */
     selectOn?: MediaTabsSelectOn
-    /** Advances to the next tab on a timer; pauses under the pointer or keyboard focus, restarts its count on a click, and never runs under reduced motion. */
-    autoPlay?: boolean
+    /** Advances to the next tab on a timer, with a visible pause control; pauses under the pointer or keyboard focus, restarts its count on a click, and never runs under reduced motion. */
+    autoplay?: boolean
     /** Milliseconds each tab is held before the band advances. */
-    autoPlayInterval?: number
+    autoplayInterval?: number
     /** Advances a hairline along the active row's bottom edge while the timer runs. */
     showProgress?: boolean
     /** Texture the media column is grounded with; `none` leaves it bare. */
-    texture?: TextureMaterialKind
+    texture?: TextureVariant
     /** Pitch of the ground's tiling — how far apart its cells sit. */
-    textureSize?: TextureMaterialSize
+    textureSize?: TextureSize
     /** How the ground fades out before the column's edges. */
-    textureFade?: TextureMaterialFade
+    textureFade?: TextureFade
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<MediaTabsProps>(), {
     items: () => [],
-    position: 'left',
+    tabsSide: 'start',
     size: 'medium',
     selectOn: 'hover',
-    autoPlay: true,
-    autoPlayInterval: 5000,
+    autoplay: true,
+    autoplayInterval: 5000,
     showProgress: true,
     texture: 'none',
     textureSize: 'medium',
     textureFade: 'vignette'
   })
 
-  const emit = defineEmits<{
-    /** The selection moved; the DOM event that moved it, then the index now shown. */
-    'tab-change': [event: Event, index: number]
-  }>()
+  /** Index of the tab shown; moved by a click, a hover or the autoplay timer. */
+  const activeIndex = defineModel<number>({ default: 0 })
 
   defineSlots<{
     /** The tab's medium; replaces the image built from the item's own source. */
-    media(props: { item: MediaTabsItem; index: number; active: boolean }): unknown
+    media?(props: { item: MediaTabsItem; index: number; active: boolean }): unknown
   }>()
 
   const attrs = useAttrs()
   const reducedMotion = usePreferredReducedMotion()
+  const { t } = useTranslate({ common: en.common })
 
   const PROGRESS_TICK_MS = 100
   const MAX_TABS = { vertical: 3, horizontal: 5 } as const
 
-  const activeIndex = ref(0)
   const elapsed = ref(0)
+  const paused = ref(false)
   const pointerInside = ref(false)
   const focusInside = ref(false)
-  let ticker: ReturnType<typeof globalThis.setInterval> | null = null
+  let marquee: ReturnType<typeof globalThis.setInterval> | null = null
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'marketing-media-tabs'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'media-tabs')
 
   const orientation = computed(() =>
-    props.position === 'top' || props.position === 'bottom' ? 'horizontal' : 'vertical'
+    props.tabsSide === 'top' || props.tabsSide === 'bottom' ? 'horizontal' : 'vertical'
   )
 
   const tabs = computed(() => props.items.slice(0, MAX_TABS[orientation.value]))
 
   const hasItems = computed(() => tabs.value.length > 0)
 
-  const autoPlayEnabled = computed(
-    () => props.autoPlay && tabs.value.length > 1 && reducedMotion.value !== 'reduce'
+  const WIDE = '(min-width: 64rem)'
+  const sideBySide = ref(Boolean(globalThis.matchMedia?.(WIDE).matches))
+  let wideQuery: globalThis.MediaQueryList | null = null
+  const onWideChange = () => {
+    sideBySide.value = Boolean(wideQuery?.matches)
+  }
+
+  const autoplayEnabled = computed(
+    () =>
+      props.autoplay &&
+      sideBySide.value &&
+      tabs.value.length > 1 &&
+      reducedMotion.value !== 'reduce'
   )
 
-  const autoPlayRunning = computed(
-    () => autoPlayEnabled.value && !pointerInside.value && !focusInside.value
+  const autoplayRunning = computed(
+    () => autoplayEnabled.value && !paused.value && !pointerInside.value && !focusInside.value
+  )
+
+  const pauseLabel = computed(() =>
+    paused.value ? t('common.resumeRotation') : t('common.pauseRotation')
   )
 
   const progress = computed(() =>
-    Math.min(100, Math.max(0, (elapsed.value / props.autoPlayInterval) * 100))
+    Math.min(100, Math.max(0, (elapsed.value / props.autoplayInterval) * 100))
   )
 
-  watch(autoPlayRunning, (running) => (running ? start() : stop()))
+  watch(autoplayRunning, (running) => (running ? start() : stop()))
 
   watch(
     () => tabs.value.length,
@@ -127,29 +142,35 @@
   )
 
   onMounted(() => {
-    if (autoPlayRunning.value) start()
+    wideQuery = globalThis.matchMedia?.(WIDE) ?? null
+    wideQuery?.addEventListener('change', onWideChange)
+    onWideChange()
+    if (autoplayRunning.value) start()
   })
 
-  onScopeDispose(stop)
+  onScopeDispose(() => {
+    stop()
+    wideQuery?.removeEventListener('change', onWideChange)
+  })
 
   function isActive(index: number): boolean {
     return activeIndex.value === index
   }
 
   function stop(): void {
-    if (ticker === null) return
-    globalThis.clearInterval(ticker)
-    ticker = null
+    if (marquee === null) return
+    globalThis.clearInterval(marquee)
+    marquee = null
   }
 
   function start(): void {
     stop()
-    ticker = globalThis.setInterval(tick, PROGRESS_TICK_MS)
+    marquee = globalThis.setInterval(tick, PROGRESS_TICK_MS)
   }
 
   function tick(): void {
     elapsed.value += PROGRESS_TICK_MS
-    if (elapsed.value < props.autoPlayInterval) return
+    if (elapsed.value < props.autoplayInterval) return
     elapsed.value = 0
     activeIndex.value = (activeIndex.value + 1) % tabs.value.length
   }
@@ -171,21 +192,24 @@
     focusInside.value = false
   }
 
-  function move(event: globalThis.Event, index: number): void {
+  function move(index: number): void {
     elapsed.value = 0
     if (index === activeIndex.value) return
     activeIndex.value = index
-    emit('tab-change', event, index)
   }
 
-  function point(event: globalThis.Event, index: number): void {
+  function point(index: number): void {
     if (props.selectOn !== 'hover') return
-    move(event, index)
+    move(index)
   }
 
-  function select(event: globalThis.MouseEvent, index: number): void {
+  function togglePause(): void {
+    paused.value = !paused.value
+  }
+
+  function select(index: number): void {
     pointerInside.value = false
-    move(event, index)
+    move(index)
   }
 </script>
 
@@ -193,12 +217,13 @@
   <div
     v-bind="$attrs"
     :data-testid="testId"
-    :data-position="position"
+    :data-tabs-side="tabsSide"
     :data-orientation="orientation"
     :data-size="size"
     :data-select-on="selectOn"
-    :data-autoplay="autoPlayRunning || null"
-    class="group/media-tabs [--media-tabs-row:calc(var(--spacing-xl)*4.5)] data-[size=small]:[--media-tabs-row:calc(var(--spacing-xl)*3)] data-[size=large]:[--media-tabs-row:calc(var(--spacing-xl)*6)]"
+    :data-autoplay="autoplayRunning || null"
+    :data-paused="(autoplayEnabled && paused) || null"
+    class="group/media-tabs relative [--media-tabs-row:calc(var(--spacing-xl)*4.5)] data-[size=small]:[--media-tabs-row:calc(var(--spacing-xl)*3)] data-[size=large]:[--media-tabs-row:calc(var(--spacing-xl)*6)]"
     @pointerenter="enterPointer"
     @pointerleave="leavePointer"
     @focusin="enterFocus"
@@ -206,7 +231,7 @@
   >
     <div
       v-if="hasItems"
-      class="flex flex-col group-data-[position=left]/media-tabs:lg:flex-row group-data-[position=right]/media-tabs:lg:flex-row-reverse group-data-[position=bottom]/media-tabs:lg:flex-col-reverse"
+      class="flex flex-col group-data-[tabs-side=start]/media-tabs:lg:flex-row group-data-[tabs-side=end]/media-tabs:lg:flex-row-reverse group-data-[tabs-side=bottom]/media-tabs:lg:flex-col-reverse"
     >
       <ul
         class="flex flex-col group-data-[orientation=horizontal]/media-tabs:lg:flex-row group-data-[orientation=vertical]/media-tabs:lg:w-[calc(50%+var(--spacing-xl))] group-data-[orientation=vertical]/media-tabs:lg:shrink-0"
@@ -215,27 +240,27 @@
           v-for="(item, index) in tabs"
           :key="`${item.title}-${index}`"
           :data-active="isActive(index) || null"
-          class="group/row flex flex-col lg:min-h-(--media-tabs-row) group-data-[orientation=horizontal]/media-tabs:lg:min-h-0 group-data-[orientation=horizontal]/media-tabs:lg:min-w-0 group-data-[orientation=horizontal]/media-tabs:lg:flex-1 group-data-[orientation=horizontal]/media-tabs:lg:not-first:[&>div]:border-l-0 group-data-[position=right]/media-tabs:lg:[&>div]:data-[borders~=left]:border-l-0"
-          @pointerenter="point($event, index)"
+          class="group/row flex flex-col lg:min-h-(--media-tabs-row) group-data-[orientation=horizontal]/media-tabs:lg:min-h-0 group-data-[orientation=horizontal]/media-tabs:lg:min-w-0 group-data-[orientation=horizontal]/media-tabs:lg:flex-1 group-data-[orientation=horizontal]/media-tabs:lg:not-first:[&>div]:border-s-0 group-data-[tabs-side=end]/media-tabs:lg:[&>div]:data-[borders~=left]:border-s-0"
+          @pointerenter="point(index)"
         >
-          <FrameBox
+          <RegistrationFrame
             borders="all"
             marks="all"
             flush="top"
             class="relative flex flex-1 flex-col justify-center bg-(--bg-surface) transition-colors duration-moderate-01 ease-out group-data-[active]/row:bg-(--bg-surface-raised) before:pointer-events-none before:absolute before:inset-0 before:bg-(--bg-hover) before:opacity-0 before:transition-opacity before:duration-fast-02 before:ease-productive-entrance before:content-[''] hover:before:opacity-100 group-data-[active]/row:before:hidden motion-reduce:transition-none motion-reduce:before:transition-none"
           >
             <div
-              class="flex flex-col gap-(--spacing-md) p-(--spacing-xl) group-data-[orientation=horizontal]/media-tabs:lg:gap-(--spacing-xs) group-data-[orientation=horizontal]/media-tabs:lg:p-(--spacing-md) group-data-[orientation=horizontal]/media-tabs:group-data-[size=small]/media-tabs:lg:gap-(--spacing-xxs)"
+              class="flex flex-col gap-(--spacing-md) p-(--spacing-xl) group-data-[orientation=horizontal]/media-tabs:lg:gap-(--spacing-xs) group-data-[orientation=horizontal]/media-tabs:lg:p-(--spacing-md) group-data-[orientation=horizontal]/media-tabs:group-data-[size=small]/media-tabs:lg:gap-(--spacing-2xs)"
             >
               <h3
-                class="m-0 text-heading-md text-(--text-default) group-data-[orientation=horizontal]/media-tabs:group-data-[size=small]/media-tabs:lg:text-heading-xs"
+                class="m-0 text-heading-md text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance group-hover/row:text-(--text-default) group-data-[active]/row:text-(--text-default) motion-reduce:transition-none group-data-[orientation=horizontal]/media-tabs:group-data-[size=small]/media-tabs:lg:text-heading-xs"
               >
                 <button
                   type="button"
                   :aria-current="isActive(index) ? 'true' : undefined"
-                  class="m-0 cursor-pointer p-0 text-left after:absolute after:inset-0 after:content-[''] focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
-                  @click="select($event, index)"
-                  @focus="point($event, index)"
+                  class="m-0 cursor-pointer p-0 text-start after:absolute after:inset-0 after:content-[''] focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
+                  @click="select(index)"
+                  @focus="point(index)"
                 >
                   {{ item.title }}
                 </button>
@@ -268,24 +293,30 @@
             </div>
 
             <span
-              v-if="isActive(index) && showProgress && autoPlayEnabled"
+              v-if="isActive(index)"
+              aria-hidden="true"
+              class="pointer-events-none absolute inset-x-0 top-0 h-(--border-width-2) bg-(--primary)"
+            />
+
+            <span
+              v-if="isActive(index) && showProgress && autoplayEnabled"
               aria-hidden="true"
               data-progress
               :style="{ width: `${progress}%` }"
-              class="absolute bottom-0 left-0 h-px bg-(--primary) transition-[width] duration-fast-01 ease-linear motion-reduce:transition-none"
+              class="absolute bottom-0 start-0 h-px bg-(--primary) transition-[width] duration-fast-01 ease-linear motion-reduce:transition-none"
             />
-          </FrameBox>
+          </RegistrationFrame>
         </li>
       </ul>
 
-      <FrameBox
+      <RegistrationFrame
         borders="all"
         marks="all"
-        :flush="position === 'left' ? ['left', 'top'] : 'top'"
+        :flush="tabsSide === 'start' ? ['left', 'top'] : 'top'"
         class="relative hidden overflow-hidden bg-[var(--media-tabs-media-bg,var(--bg-canvas))] lg:block lg:min-w-0 group-data-[orientation=vertical]/media-tabs:lg:flex-1"
       >
-        <TextureMaterial
-          :kind="texture"
+        <Texture
+          :variant="texture"
           :size="textureSize"
           :fade="textureFade"
         />
@@ -298,6 +329,7 @@
             :key="`${item.title}-${index}`"
             :data-active="isActive(index) || null"
             :aria-hidden="!isActive(index) || undefined"
+            :inert="!isActive(index) || undefined"
             class="z-10 col-start-1 row-start-1 flex min-w-0 group-data-[orientation=vertical]/media-tabs:absolute group-data-[orientation=vertical]/media-tabs:inset-0 translate-y-(--spacing-lg) items-center justify-center opacity-0 transition-[translate,opacity] duration-moderate-02 ease-productive-entrance data-[active]:translate-y-0 data-[active]:opacity-100 motion-reduce:translate-y-0 motion-reduce:transition-none"
           >
             <slot
@@ -315,7 +347,16 @@
             </slot>
           </div>
         </div>
-      </FrameBox>
+      </RegistrationFrame>
     </div>
+    <IconButton
+      v-if="hasItems && autoplayEnabled"
+      :icon="paused ? 'az az-play' : 'az az-pause'"
+      :aria-label="pauseLabel"
+      variant="outline"
+      size="small"
+      class="absolute end-(--spacing-xs) top-(--spacing-xs) z-20"
+      @click="togglePause"
+    />
   </div>
 </template>

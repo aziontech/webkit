@@ -6,25 +6,25 @@ const spec: DiagramSpec = {
   nodes: [
     {
       key: 'user',
-      kind: 'pill',
+      type: 'pill',
       title: 'Request',
-      icon: 'pi pi-user',
+      icon: 'az az-user',
       active: true
     },
     {
       key: 'firewall',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'Firewall',
       title: 'Rule: run the WAF',
-      icon: 'ai ai-edge-firewall',
+      icon: 'az az-firewall',
       active: true
     },
     {
       key: 'waf',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'WAF',
       title: 'SQLi, XSS, RCE scored',
-      icon: 'ai ai-waf-rules',
+      icon: 'az az-waf',
       status: {
         label: 'Blocking',
         severity: 'success'
@@ -34,18 +34,18 @@ const spec: DiagramSpec = {
     },
     {
       key: 'application',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Application',
       title: 'Clean traffic goes on',
-      icon: 'ai ai-edge-application',
+      icon: 'az az-applications',
       active: true
     },
     {
       key: 'blocked',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Block',
       title: '403 to the attacker',
-      icon: 'pi pi-ban'
+      icon: 'az az-ban'
     }
   ],
   layout: {

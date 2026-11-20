@@ -1,3 +1,4 @@
+import assert from 'node:assert/strict'
 import test from 'node:test'
 import { fileURLToPath } from 'node:url'
 import { RuleTester } from 'eslint'
@@ -7,7 +8,7 @@ import tsParser from '@typescript-eslint/parser'
 // Point every rule's catalog loader at the fixture (version-locked, deterministic).
 process.env.WEBKIT_CATALOG_PATH = fileURLToPath(new URL('./fixtures/catalog.json', import.meta.url))
 
-const validImportPath = (await import('../../src/eslint-plugin/rules/valid-import-path.js')).default
+const noUnknownImport = (await import('../../src/eslint-plugin/rules/no-unknown-import.js')).default
 const noDeepInternalImport = (
   await import('../../src/eslint-plugin/rules/no-deep-internal-import.js')
 ).default
@@ -19,6 +20,10 @@ const noHardcodedColor = (await import('../../src/eslint-plugin/rules/no-hardcod
   .default
 const noHardcodedMotion = (await import('../../src/eslint-plugin/rules/no-hardcoded-motion.js'))
   .default
+const noPhysicalDirection = (await import('../../src/eslint-plugin/rules/no-physical-direction.js'))
+  .default
+const { logicalClass, mirroredGradient, physicalDirectionClasses } =
+  await import('../../src/eslint-plugin/lib/direction-classes.js')
 const preferTreeShakeableRoot = (
   await import('../../src/eslint-plugin/rules/prefer-tree-shakeable-root.js')
 ).default
@@ -29,10 +34,38 @@ const preferWebkitComponent = (
   await import('../../src/eslint-plugin/rules/prefer-webkit-component.js')
 ).default
 const noStyleOverride = (await import('../../src/eslint-plugin/rules/no-style-override.js')).default
+const { LAYOUT_CLASS_FAMILIES: ALLOWED_LAYOUT } =
+  await import('../../src/eslint-plugin/lib/layout-classes.js')
 const preferDefineModel = (await import('../../src/eslint-plugin/rules/prefer-define-model.js'))
   .default
-const authoringStandards = (await import('../../src/eslint-plugin/rules/authoring-standards.js'))
+const requireAuthoringStandards = (
+  await import('../../src/eslint-plugin/rules/require-authoring-standards.js')
+).default
+const requireContainerWidth = (
+  await import('../../src/eslint-plugin/rules/require-container-width.js')
+).default
+const requireHeaderSearch = (await import('../../src/eslint-plugin/rules/require-header-search.js'))
   .default
+const noWrappedPageChrome = (
+  await import('../../src/eslint-plugin/rules/no-wrapped-page-chrome.js')
+).default
+const noOutputInCommand = (await import('../../src/eslint-plugin/rules/no-output-in-command.js'))
+  .default
+const noRootRelativeAsset = (
+  await import('../../src/eslint-plugin/rules/no-root-relative-asset.js')
+).default
+const preferHrefInMenuNode = (
+  await import('../../src/eslint-plugin/rules/prefer-href-in-menu-node.js')
+).default
+const noGapAfterClosingSection = (
+  await import('../../src/eslint-plugin/rules/no-gap-after-closing-section.js')
+).default
+const noClockInSetup = (await import('../../src/eslint-plugin/rules/no-clock-in-setup.js')).default
+const noDroppedChildren = (await import('../../src/eslint-plugin/rules/no-dropped-children.js'))
+  .default
+const noViewportHeightCalc = (
+  await import('../../src/eslint-plugin/rules/no-viewport-height-calc.js')
+).default
 
 const js = new RuleTester({ languageOptions: { ecmaVersion: 2022, sourceType: 'module' } })
 const vue = new RuleTester({
@@ -48,8 +81,8 @@ const vueTs = new RuleTester({
   }
 })
 
-test('valid-import-path', () => {
-  js.run('valid-import-path', validImportPath, {
+test('no-unknown-import', () => {
+  js.run('no-unknown-import', noUnknownImport, {
     valid: [
       "import Button from '@aziontech/webkit/button'",
       "import Table from '@aziontech/webkit/table'",
@@ -79,7 +112,7 @@ test('no-deep-internal-import', () => {
   js.run('no-deep-internal-import', noDeepInternalImport, {
     valid: [
       "import Button from '@aziontech/webkit/button'",
-      // unknown-but-not-deep is valid-import-path's job:
+      // unknown-but-not-deep is no-unknown-import's job:
       "import X from '@aziontech/webkit/buton'"
     ],
     invalid: [
@@ -210,7 +243,7 @@ test('no-hardcoded-motion (script + template)', () => {
   js.run('no-hardcoded-motion', noHardcodedMotion, {
     valid: [
       // catalogued utility + tokens: fine
-      "const c = 'animate-slide-in-left motion-reduce:animate-none'",
+      "const c = 'animate-slide-in-start motion-reduce:animate-none'",
       "const c = 'transition-colors duration-150 ease-out motion-reduce:transition-none'",
       // timing from tokens in a style string: fine
       "const s = 'transition: opacity var(--duration-fast-01)'",
@@ -235,7 +268,7 @@ test('no-hardcoded-motion (script + template)', () => {
     valid: [
       // motion + escape on the same static class string
       {
-        code: '<template><aside class="animate-slide-in-left motion-reduce:animate-none">x</aside></template>',
+        code: '<template><aside class="animate-slide-in-start motion-reduce:animate-none">x</aside></template>',
         filename: 'a.vue'
       },
       // no motion at all
@@ -252,7 +285,7 @@ test('no-hardcoded-motion (script + template)', () => {
     invalid: [
       // static class with motion and no reduced-motion escape
       {
-        code: '<template><aside class="animate-slide-in-left">x</aside></template>',
+        code: '<template><aside class="animate-slide-in-start">x</aside></template>',
         filename: 'd.vue',
         errors: [{ messageId: 'pairing' }]
       },
@@ -272,6 +305,379 @@ test('no-hardcoded-motion (script + template)', () => {
         code: '<template><div style="transition: opacity 200ms">x</div></template>',
         filename: 'g.vue',
         errors: [{ messageId: 'styleTiming' }]
+      }
+    ]
+  })
+})
+
+test('direction classes: physical → logical mapping', () => {
+  const cases = {
+    'ml-2': 'ms-2',
+    '-mr-px': '-me-px',
+    'pl-4': 'ps-4',
+    'md:pr-[12px]': 'md:pe-[12px]',
+    'left-0': 'start-0',
+    '-right-2': '-end-2',
+    'text-left': 'text-start',
+    'hover:text-right': 'hover:text-end',
+    'border-l': 'border-s',
+    'border-r-2': 'border-e-2',
+    'border-l-(--border-default)': 'border-s-(--border-default)',
+    'rounded-l-md': 'rounded-s-md',
+    'rounded-tr-lg': 'rounded-se-lg',
+    'rounded-bl': 'rounded-es',
+    'float-right': 'float-end',
+    'scroll-pl-4': 'scroll-ps-4',
+    '!pl-2': '!ps-2',
+    'pl-2!': 'ps-2!'
+  }
+  for (const [from, to] of Object.entries(cases)) assert.equal(logicalClass(from), to, from)
+  for (const fine of [
+    'ms-2',
+    'px-4',
+    'inset-x-0',
+    'text-center',
+    'border-x',
+    'rounded-md',
+    'start-0'
+  ]) {
+    assert.equal(logicalClass(fine), null, fine)
+  }
+  assert.deepEqual(physicalDirectionClasses('absolute left-1/2 -translate-x-1/2 top-0'), [])
+  assert.deepEqual(
+    physicalDirectionClasses('absolute left-1/2 top-0').map((h) => h.fix),
+    ['start-1/2']
+  )
+})
+
+test('physical gradients need an rtl: pair', () => {
+  assert.equal(mirroredGradient('bg-gradient-to-r'), 'rtl:bg-gradient-to-l')
+  assert.equal(mirroredGradient('bg-linear-to-tl'), 'rtl:bg-linear-to-tr')
+  assert.equal(mirroredGradient('after:bg-gradient-to-l'), 'rtl:after:bg-gradient-to-r')
+  assert.equal(mirroredGradient('bg-gradient-to-b'), null)
+  assert.equal(mirroredGradient('rtl:bg-gradient-to-l'), null)
+  assert.deepEqual(physicalDirectionClasses('bg-gradient-to-r from-(--a) rtl:bg-gradient-to-l'), [])
+  assert.deepEqual(physicalDirectionClasses('ltr:bg-linear-to-r rtl:bg-linear-to-l'), [])
+  assert.deepEqual(
+    physicalDirectionClasses('bg-linear-to-l to-transparent').map((h) => h.fix),
+    ['bg-linear-to-l rtl:bg-linear-to-r']
+  )
+  assert.deepEqual(physicalDirectionClasses('bg-gradient-to-r', { gradients: false }), [])
+})
+
+test('no-physical-direction (template + script + fix)', () => {
+  vue.run('no-physical-direction', noPhysicalDirection, {
+    valid: [
+      {
+        code: '<template><div class="ms-2 pe-4 text-start border-s">x</div></template>',
+        filename: 'a.vue'
+      },
+      {
+        code: '<template><span class="absolute left-1/2 -translate-x-1/2">x</span></template>',
+        filename: 'b.vue'
+      },
+      { code: '<template><Tooltip placement="right-start" /></template>', filename: 'c.vue' },
+      {
+        code: "<script setup>const side = 'left-edge'</script><template><i /></template>",
+        filename: 'd.vue'
+      },
+      {
+        code: '<template><span class="bg-gradient-to-r rtl:bg-gradient-to-l">x</span></template>',
+        filename: 'j.vue'
+      },
+      { code: '<template><span class="bg-linear-to-b">x</span></template>', filename: 'k.vue' },
+      {
+        code: '<template><span class="bg-gradient-to-r">x</span></template>',
+        filename: 'l.vue',
+        options: [{ gradients: false }]
+      }
+    ],
+    invalid: [
+      {
+        code: '<template><div class="ml-2 p-4 text-right">x</div></template>',
+        output: '<template><div class="ms-2 p-4 text-end">x</div></template>',
+        filename: 'e.vue',
+        errors: [{ messageId: 'physical' }]
+      },
+      {
+        code: `<template><div :class="['pl-4', open && 'border-r']">x</div></template>`,
+        output: `<template><div :class="['ps-4', open && 'border-e']">x</div></template>`,
+        filename: 'f.vue',
+        errors: [{ messageId: 'physical' }, { messageId: 'physical' }]
+      },
+      {
+        code: '<template><div class="bg-gradient-to-r from-(--bg-canvas)">x</div></template>',
+        output:
+          '<template><div class="bg-gradient-to-r rtl:bg-gradient-to-l from-(--bg-canvas)">x</div></template>',
+        filename: 'h.vue',
+        errors: [{ messageId: 'physical' }]
+      },
+      {
+        code: `<template><div :class="open ? 'bg-linear-to-l' : ''">x</div></template>`,
+        output: `<template><div :class="open ? 'bg-linear-to-l rtl:bg-linear-to-r' : ''">x</div></template>`,
+        filename: 'i.vue',
+        errors: [{ messageId: 'physical' }]
+      },
+      {
+        code: `<script setup>import { cn } from '@aziontech/webkit/utils/cn'\nconst c = cn('rounded-l-md', { 'mr-1': true })</script><template><i :class="c" /></template>`,
+        output: `<script setup>import { cn } from '@aziontech/webkit/utils/cn'\nconst c = cn('rounded-s-md', { 'me-1': true })</script><template><i :class="c" /></template>`,
+        filename: 'g.vue',
+        errors: [{ messageId: 'physical' }, { messageId: 'physical' }]
+      }
+    ]
+  })
+})
+
+test('no-gap-after-closing-section', () => {
+  const imports = `<script setup>
+import ClosingCallToActionSection from '@aziontech/webkit/closing-call-to-action-section'
+import NewsletterSection from '@aziontech/webkit/newsletter-section'
+import Spacer from '@aziontech/webkit/spacer'
+import RegistrationFrame from '@aziontech/webkit/registration-frame'
+import Texture from '@aziontech/webkit/texture'
+import FaqSection from '@aziontech/webkit/faq-section'
+import TemplateGallerySection from '@aziontech/webkit/template-gallery-section'
+</script>`
+  const sfc = (template) => `${imports}<template>${template}</template>`
+  vue.run('no-gap-after-closing-section', noGapAfterClosingSection, {
+    valid: [
+      {
+        code: sfc('<Spacer hatch /><ClosingCallToActionSection title="Go" />'),
+        filename: 'a.vue'
+      },
+      {
+        code: sfc(
+          '<FaqSection /><Spacer hatch /><RegistrationFrame borders="none"><Texture kind="lines" /></RegistrationFrame>'
+        ),
+        filename: 'b.vue'
+      },
+      {
+        code: sfc(
+          '<ClosingCallToActionSection title="Go" /><RegistrationFrame borders="y"><FaqSection /></RegistrationFrame>'
+        ),
+        filename: 'c.vue'
+      },
+      {
+        code: '<template><ClosingCallToActionSection /><Spacer hatch /></template>',
+        filename: 'd.vue'
+      },
+      {
+        code: sfc(
+          '<ClosingCallToActionSection kind="panel" :hatch="false" /><Spacer hatch /><ClosingCallToActionSection kind="primary" />'
+        ),
+        filename: 'h.vue'
+      },
+      { code: sfc('<TemplateGallerySection title="Go" /><Spacer hatch />'), filename: 'k.vue' },
+      {
+        code: sfc('<TemplateGallerySection :closing="false" title="Go" /><Spacer hatch />'),
+        filename: 'l.vue'
+      }
+    ],
+    invalid: [
+      {
+        code: sfc('<ClosingCallToActionSection title="Go" />\n  <Spacer hatch />'),
+        filename: 'e.vue',
+        errors: [{ messageId: 'doubled' }]
+      },
+      {
+        code: sfc('<newsletter-section /><!-- end --><spacer hatch />'),
+        filename: 'f.vue',
+        errors: [{ messageId: 'doubled' }]
+      },
+      {
+        code: sfc(
+          '<ClosingCallToActionSection title="Go" /><RegistrationFrame borders="none" marks="all"><Texture kind="lines" /></RegistrationFrame>'
+        ),
+        filename: 'g.vue',
+        errors: [{ messageId: 'doubled' }]
+      },
+      {
+        code: sfc('<ClosingCallToActionSection :hatch="true" title="Go" /><Spacer hatch />'),
+        filename: 'i.vue',
+        errors: [{ messageId: 'doubled' }]
+      },
+      {
+        code: sfc('<ClosingCallToActionSection :hatch="stacked" title="Go" /><Spacer hatch />'),
+        filename: 'j.vue',
+        errors: [{ messageId: 'doubled' }]
+      },
+      {
+        code: sfc('<TemplateGallerySection closing title="Go" /><Spacer hatch />'),
+        filename: 'm.vue',
+        errors: [{ messageId: 'doubled' }]
+      },
+      {
+        code: sfc('<template-gallery-section :closing="last" /><spacer hatch />'),
+        filename: 'n.vue',
+        errors: [{ messageId: 'doubled' }]
+      }
+    ]
+  })
+})
+
+test('no-wrapped-page-chrome', () => {
+  const sfc = (
+    template,
+    from = '@aziontech/webkit/site-footer-section',
+    name = 'SiteFooterSection'
+  ) => `<script setup>import ${name} from '${from}'</script><template>${template}</template>`
+  vue.run('no-wrapped-page-chrome', noWrappedPageChrome, {
+    valid: [
+      {
+        code: sfc('<div class="flex flex-col"><main /><SiteFooterSection /></div>'),
+        filename: 'a.vue'
+      },
+      {
+        code: sfc(
+          '<div class="sticky top-0 z-40"><SiteHeaderSection /></div>',
+          '@aziontech/webkit/site-header-section',
+          'SiteHeaderSection'
+        ),
+        filename: 'b.vue'
+      },
+      {
+        code: '<template><div class="border-t"><SiteFooterSection /></div></template>',
+        filename: 'c.vue'
+      },
+      { code: sfc('<div class="border-t"><Footer /></div>'), filename: 'd.vue' }
+    ],
+    invalid: [
+      {
+        code: sfc(
+          '<div class="w-full border-t border-(--border-default)"><SiteFooterSection /></div>'
+        ),
+        filename: 'e.vue',
+        errors: [{ messageId: 'wrapped' }]
+      },
+      {
+        code: sfc('<div class="md:py-8"><site-footer-section /></div>'),
+        filename: 'f.vue',
+        errors: [{ messageId: 'wrapped' }]
+      },
+      {
+        code: sfc(
+          '<header class="border-b"><SiteHeaderSection /></header>',
+          '@aziontech/webkit/site-header-section',
+          'SiteHeaderSection'
+        ),
+        filename: 'g.vue',
+        errors: [{ messageId: 'wrapped' }]
+      }
+    ]
+  })
+})
+
+test('require-container-width', () => {
+  const sfc = (template, from = '@aziontech/webkit/card', name = 'Card') =>
+    `<script setup>import ${name} from '${from}'</script><template>${template}</template>`
+  vue.run('require-container-width', requireContainerWidth, {
+    valid: [
+      {
+        code: sfc('<div class="flex gap-4"><Card class="w-full">a</Card></div>'),
+        filename: 'a.vue'
+      },
+      {
+        code: sfc('<div class="flex"><div class="flex-1"><Card>a</Card></div></div>'),
+        filename: 'b.vue'
+      },
+      { code: sfc('<div class="flex flex-col gap-4"><Card>a</Card></div>'), filename: 'c.vue' },
+      { code: sfc('<div class="grid grid-cols-2"><Card>a</Card></div>'), filename: 'd.vue' },
+      { code: sfc('<div class="flex"><Card :class="width">a</Card></div>'), filename: 'e.vue' },
+      {
+        code: sfc('<div class="flex"><Card class="md:basis-1/2">a</Card></div>'),
+        filename: 'f.vue'
+      },
+      { code: '<template><div class="flex"><Card>a</Card></div></template>', filename: 'g.vue' },
+      {
+        code: sfc(
+          '<div class="flex"><StatTile class="grow" /></div>',
+          '@aziontech/webkit/stat-tile',
+          'StatTile'
+        ),
+        filename: 'h.vue'
+      }
+    ],
+    invalid: [
+      {
+        code: sfc('<div class="flex gap-4"><Card>a</Card><Card>b</Card></div>'),
+        filename: 'i.vue',
+        errors: [{ messageId: 'collapses' }, { messageId: 'collapses' }]
+      },
+      {
+        code: sfc('<div class="flex flex-col items-start"><Card>a</Card></div>'),
+        filename: 'j.vue',
+        errors: [{ messageId: 'collapses' }]
+      },
+      {
+        code: sfc(
+          '<div class="inline-flex"><stat-tile /></div>',
+          '@aziontech/webkit/stat-tile',
+          'StatTile'
+        ),
+        filename: 'k.vue',
+        errors: [{ messageId: 'collapses', data: { tag: 'StatTile' } }]
+      },
+      {
+        code: sfc(
+          '<section class="flex"><ChartCard class="shrink-0" /></section>',
+          '../chart-card/chart-card.vue',
+          'ChartCard'
+        ),
+        filename: 'l.vue',
+        errors: [{ messageId: 'collapses' }]
+      }
+    ]
+  })
+})
+
+test('require-header-search', () => {
+  const header = (right, extra = '') =>
+    `<template><div class="@container"><AppHeader><NavigationMenu />` +
+    `<AppHeader.End>${right}</AppHeader.End></AppHeader></div>${extra}</template>`
+  vue.run('require-header-search', requireHeaderSearch, {
+    valid: [
+      { code: header('<SearchTrigger collapsible />'), filename: 'a.vue' },
+      {
+        code: '<template><AppHeader><AppHeader.End><Avatar /></AppHeader.End></AppHeader></template>',
+        filename: 'focused.vue'
+      },
+      {
+        code: '<template><app-header><navigation-menu /></app-header><search-trigger /></template>',
+        filename: 'kebab.vue'
+      },
+      {
+        code: '<template><SearchTrigger aria-keyshortcuts="Meta+K Control+K" /></template>',
+        filename: 'b.vue'
+      },
+      { code: '<template><IconButton icon="az az-search" /></template>', filename: 'toolbar.vue' },
+      { code: '<template><Kbd meta>K</Kbd></template>', filename: 'kbd.vue' }
+    ],
+    invalid: [
+      { code: header('<Avatar />'), filename: 'c.vue', errors: [{ messageId: 'missing' }] },
+      {
+        code: '<template><Sidebar /><AppHeader><AppHeader.End /></AppHeader></template>',
+        filename: 'd.vue',
+        errors: [{ messageId: 'missing' }]
+      },
+      {
+        code: header('<SearchTrigger /><button aria-keyshortcuts="Meta+K">Search</button>'),
+        filename: 'e.vue',
+        errors: [{ messageId: 'handRolled' }]
+      },
+      {
+        code: '<template><Input readonly aria-keyshortcuts="Control+K" /></template>',
+        filename: 'f.vue',
+        errors: [{ messageId: 'handRolled' }]
+      },
+      {
+        code: header('<SearchTrigger /><IconButton icon="pi pi-search" aria-label="Search" />'),
+        filename: 'g-legacy.vue',
+        errors: [{ messageId: 'bareIcon' }]
+      },
+      {
+        code: header('<SearchTrigger /><IconButton icon="az az-search" aria-label="Search" />'),
+        filename: 'g.vue',
+        errors: [{ messageId: 'bareIcon' }]
       }
     ]
   })
@@ -300,7 +706,161 @@ test('prefer-tree-shakeable-root', () => {
       {
         code: "<script setup>import Table from '@aziontech/webkit/table'</script><template><Table/></template>",
         filename: 'd.vue',
-        errors: [{ messageId: 'preferRoot', suggestions: 1 }]
+        errors: [
+          {
+            messageId: 'preferRoot',
+            suggestions: [
+              {
+                messageId: 'useRoot',
+                output:
+                  '<script setup>import Table from "@aziontech/webkit/table-root"</script><template><Table/></template>'
+              }
+            ]
+          }
+        ]
+      },
+      // named sub-component imports move to their own entries: the -root entry has no named exports
+      {
+        code: "<script setup>\nimport Table, { TableRow as Row } from '@aziontech/webkit/table';\n</script><template><Table><Row/></Table></template>",
+        filename: 'e.vue',
+        errors: [
+          {
+            messageId: 'preferRoot',
+            suggestions: [
+              {
+                messageId: 'useRoot',
+                output:
+                  '<script setup>\nimport Table from "@aziontech/webkit/table-root";\nimport Row from "@aziontech/webkit/table-row";\n</script><template><Table><Row/></Table></template>'
+              }
+            ]
+          }
+        ]
+      },
+      // a named binding the catalog cannot place: reported, but no suggestion that would break the import
+      {
+        code: "<script setup>import Table, { useTableHelper } from '@aziontech/webkit/table'</script><template><Table/></template>",
+        filename: 'f.vue',
+        errors: [{ messageId: 'preferRootNamed', suggestions: [] }]
+      }
+    ]
+  })
+  vueTs.run('prefer-tree-shakeable-root (type imports)', preferTreeShakeableRoot, {
+    valid: [],
+    invalid: [
+      {
+        code: '<script setup lang="ts">import Table, { type TableColumn } from \'@aziontech/webkit/table\'\nconst columns: TableColumn[] = []</script><template><Table :columns="columns"/></template>',
+        filename: 'g.vue',
+        errors: [{ messageId: 'preferRootNamed', suggestions: [] }]
+      }
+    ]
+  })
+})
+
+test('no-dropped-children', () => {
+  const imp = (n, s) => `<script setup>import ${n} from '@aziontech/webkit/${s}'</script>`
+  vue.run('no-dropped-children', noDroppedChildren, {
+    valid: [
+      // the text goes through the label prop
+      {
+        code: `${imp('Button', 'button')}<template><Button label="Go home" href="/" /></template>`,
+        filename: 'a.vue'
+      },
+      // a named slot the spec lists, as a template child
+      {
+        code: `${imp('Button', 'button')}<template><Button label="Deploy"><template #prefix><i class="az az-bolt" /></template></Button></template>`,
+        filename: 'b.vue'
+      },
+      // a named slot on the component tag itself
+      {
+        code: `${imp('Button', 'button')}<template><Button label="Deploy" #prefix><i class="az az-bolt" /></Button></template>`,
+        filename: 'c.vue'
+      },
+      // whitespace between the tags renders nothing either way
+      {
+        code: `${imp('Button', 'button')}<template><Button label="Go">\n  </Button></template>`,
+        filename: 'd.vue'
+      },
+      // a component with a default slot
+      {
+        code: `${imp('Table', 'table')}<template><Table><Table.Row /></Table></template>`,
+        filename: 'e.vue'
+      },
+      // a sub-component the catalog has no slot data for is not judged
+      {
+        code: `${imp('TableRow', 'table-row')}<template><TableRow>cell</TableRow></template>`,
+        filename: 'f.vue'
+      },
+      // a native element and a non-webkit component are not judged
+      {
+        code: `<script setup>import Foo from './foo.vue'</script><template><button>Go</button><Foo>Go</Foo></template>`,
+        filename: 'g.vue'
+      },
+      // Card content in its #content slot
+      {
+        code: `${imp('Card', 'card')}<template><Card><template #content><p>Body</p></template></Card></template>`,
+        filename: 'h.vue'
+      }
+    ],
+    invalid: [
+      {
+        code: `${imp('Button', 'button')}<template><Button href="/">Go home</Button></template>`,
+        filename: 'i.vue',
+        errors: [
+          {
+            messageId: 'droppedText',
+            data: { tag: 'Button', prop: 'label' },
+            suggestions: [
+              {
+                messageId: 'useProp',
+                output: `${imp('Button', 'button')}<template><Button href="/" label="Go home" /></template>`
+              }
+            ]
+          }
+        ]
+      },
+      // an interpolation is dropped too; no suggestion (the value is not a static string)
+      {
+        code: `${imp('Button', 'button')}<template><Button>{{ text }}</Button></template>`,
+        filename: 'j.vue',
+        errors: [{ messageId: 'droppedText', suggestions: [] }]
+      },
+      // label already bound: report, but the suggestion would duplicate it
+      {
+        code: `${imp('Button', 'button')}<template><Button :label="name">Save</Button></template>`,
+        filename: 'k.vue',
+        errors: [{ messageId: 'droppedText', suggestions: [] }]
+      },
+      // a template with no slot directive is the default slot
+      {
+        code: `${imp('Button', 'button')}<template><Button label="A"><template><span>x</span></template></Button></template>`,
+        filename: 'l.vue',
+        errors: [{ messageId: 'droppedMarkup' }]
+      },
+      {
+        code: `${imp('Button', 'button')}<template><button label="A" /><Button label="A"><template #default>x</template></Button></template>`,
+        filename: 'm.vue',
+        errors: [{ messageId: 'droppedMarkup' }]
+      },
+      // markup inside Card goes to a named slot, not to the title prop
+      {
+        code: `${imp('Card', 'card')}<template><Card><div class="p-4">Body</div></Card></template>`,
+        filename: 'n.vue',
+        errors: [
+          {
+            messageId: 'droppedMarkup',
+            data: {
+              tag: 'Card',
+              slots: '#header, #content',
+              orProp: ', or pass text through its `title` prop'
+            }
+          }
+        ]
+      },
+      // a spec with no slots and no text prop
+      {
+        code: `${imp('TagChip', 'chip')}<template><tag-chip removable>Tag</tag-chip></template>`,
+        filename: 'o.vue',
+        errors: [{ messageId: 'dropped', data: { tag: 'tag-chip' } }]
       }
     ]
   })
@@ -318,6 +878,17 @@ test('no-deprecated-component', () => {
       {
         code: "import X from '@aziontech/webkit/chips'",
         errors: [{ messageId: 'deprecated', suggestions: 1 }]
+      },
+      // a non-component entry deprecated by its source JSDoc carries the note, no replacement
+      {
+        code: "import { webkitViteConfig } from '@aziontech/webkit/vite'",
+        errors: [
+          {
+            message:
+              "'@aziontech/webkit/vite' is deprecated in @aziontech/webkit. Since 6.1 — nothing to pre-bundle. Removed in 7.0.",
+            suggestions: []
+          }
+        ]
       }
     ]
   })
@@ -347,9 +918,9 @@ test('no-style-override', () => {
         code: `${imp('Button', 'button')}<template><div class="p-4"><Button /></div></template>`,
         filename: 'b.vue'
       },
-      // styleSeam component (card-box) is exempt
+      // styleSeam component (card) is exempt
       {
-        code: `${imp('CardBox', 'card-box')}<template><CardBox class="bg-[var(--bg-canvas)]" /></template>`,
+        code: `${imp('Card', 'card')}<template><Card class="bg-[var(--bg-canvas)]" /></template>`,
         filename: 'c.vue'
       },
       // allow-listed via options (binding name)
@@ -363,13 +934,75 @@ test('no-style-override', () => {
         code: `${imp('Button', 'button')}<template><Button style="color:red" /></template>`,
         filename: 'e.vue',
         options: [{ checkStyle: false }]
+      },
+      // layout utilities only: how the box sits in its parent, arbitrary values included
+      {
+        code: `${imp('Button', 'button')}<template><Button class="w-full" /></template>`,
+        filename: 'l1.vue'
+      },
+      {
+        code: `${imp('Button', 'button')}<template><Button class="w-full max-w-(--container-sm) self-start shrink-0" /></template>`,
+        filename: 'l2.vue'
+      },
+      {
+        code: `${imp('Button', 'button')}<template><Button class="max-w-[320px] self-center" /></template>`,
+        filename: 'l3.vue'
+      },
+      {
+        code: `${imp('Table', 'table')}<template><Table><Table.Row class="shrink-0" /></Table></template>`,
+        filename: 'l4.vue'
+      },
+      {
+        code: `<script setup>import DataTable from '@aziontech/webkit/data-table'\nimport TableSearch from '@aziontech/webkit/table-search'</script><template><DataTable max-height="100%" class="h-full min-h-0"><TableSearch class="flex-1" /></DataTable></template>`,
+        filename: 'l5.vue'
+      },
+      {
+        code: `${imp('Button', 'button')}<template><Button class="min-w-36 grow basis-1/3" /></template>`,
+        filename: 'l6.vue'
+      },
+      // placement in the parent: margins, grid cells, order, self-alignment, behind a breakpoint
+      {
+        code: `${imp('Button', 'button')}<template><Button class="mt-(--spacing-md) col-span-2 lg:col-span-4" /></template>`,
+        filename: 'l9.vue'
+      },
+      {
+        code: `${imp('Button', 'button')}<template><Button class="ms-auto me-2 mx-auto my-4 mb-0 m-0 order-last justify-self-end place-self-center row-span-2 col-start-1 row-start-2 md:order-first xl:mt-0 2xl:w-full lg:w-full" /></template>`,
+        filename: 'l10.vue'
+      },
+      // the console API's chart palette contract: only the --chart-* palette variables
+      {
+        code: `${imp('Table', 'table')}<template><Table style="--chart-series-1: var(--palette-1); --chart-sequential-7: var(--palette-ramp-7); --chart-diverging-neutral: var(--palette-mid)" /></template>`,
+        filename: 'p1.vue'
+      },
+      {
+        code: `${imp('Table', 'table')}<template><Table :style="{ '--chart-series-1': palette.series[0], '--chart-series-8': palette.series[7] }" /></template>`,
+        filename: 'p2.vue'
+      },
+      {
+        code: `${imp('Button', 'button')}<template><Button class="w-full [--chart-series-2:var(--palette-2)]" /></template>`,
+        filename: 'p3.vue'
       }
     ],
     invalid: [
       {
+        code: `${imp('Button', 'button')}<template><Button class="shrink-0 cursor-pointer" /></template>`,
+        filename: 'cursor.vue',
+        errors: [
+          {
+            messageId: 'overrideClasses',
+            data: { classes: 'cursor-pointer', tag: 'Button', allowed: ALLOWED_LAYOUT.join(', ') }
+          }
+        ]
+      },
+      {
+        code: `${imp('Button', 'button')}<template><Button class="flex-1 flex-col" /></template>`,
+        filename: 'flexcol.vue',
+        errors: [{ messageId: 'overrideClasses' }]
+      },
+      {
         code: `${imp('Button', 'button')}<template><Button class="p-8">x</Button></template>`,
         filename: 'f.vue',
-        errors: [{ messageId: 'override' }]
+        errors: [{ messageId: 'overrideClasses' }]
       },
       {
         code: `${imp('Button', 'button')}<template><Button :class="cls" /></template>`,
@@ -381,10 +1014,99 @@ test('no-style-override', () => {
         filename: 'h.vue',
         errors: [{ messageId: 'override' }]
       },
+      // outside the palette contract: status, axis and Other stay fixed
+      {
+        code: `${imp('Table', 'table')}<template><Table style="--chart-series-1: var(--palette-1); --chart-status-danger: var(--x)" /></template>`,
+        filename: 'p4.vue',
+        errors: [{ messageId: 'override' }]
+      },
+      {
+        code: `${imp('Table', 'table')}<template><Table :style="{ '--chart-axis': 'var(--x)' }" /></template>`,
+        filename: 'p5.vue',
+        errors: [{ messageId: 'override' }]
+      },
+      {
+        code: `${imp('Table', 'table')}<template><Table :style="palette" /></template>`,
+        filename: 'p6.vue',
+        errors: [{ messageId: 'override' }]
+      },
+      {
+        code: `${imp('Table', 'table')}<template><Table :style="{ ...palette, '--chart-series-1': 'var(--x)' }" /></template>`,
+        filename: 'p7.vue',
+        errors: [{ messageId: 'override' }]
+      },
+      {
+        code: `${imp('Button', 'button')}<template><Button class="[--chart-series-other:var(--x)] [--chart-series-9:var(--y)]" /></template>`,
+        filename: 'p8.vue',
+        errors: [
+          {
+            messageId: 'overrideClasses',
+            data: {
+              classes: '[--chart-series-other:var(--x)] [--chart-series-9:var(--y)]',
+              tag: 'Button',
+              allowed: ALLOWED_LAYOUT.join(', ')
+            }
+          }
+        ]
+      },
+      {
+        code: `${imp('Table', 'table')}<template><Table style="--chart-series-1: var(--palette-1); padding: 0" /></template>`,
+        filename: 'p9.vue',
+        errors: [{ messageId: 'override' }]
+      },
       // dot-notation sub-component of an imported compound
       {
         code: `${imp('Table', 'table')}<template><Table><Table.Row class="x" /></Table></template>`,
         filename: 'i.vue',
+        errors: [{ messageId: 'overrideClasses' }]
+      },
+      // one non-layout class next to allowed ones still fails
+      {
+        code: `${imp('Button', 'button')}<template><Button class="w-full mt-4 p-4" /></template>`,
+        filename: 'l5.vue',
+        errors: [
+          {
+            messageId: 'overrideClasses',
+            data: { classes: 'p-4', tag: 'Button', allowed: ALLOWED_LAYOUT.join(', ') }
+          }
+        ]
+      },
+      // physical margins stay out (logical ms-/me- only), and so does a negative margin
+      {
+        code: `${imp('Button', 'button')}<template><Button class="ml-4 mr-2 -mt-2" /></template>`,
+        filename: 'l11.vue',
+        errors: [
+          {
+            messageId: 'overrideClasses',
+            data: { classes: 'ml-4 mr-2 -mt-2', tag: 'Button', allowed: ALLOWED_LAYOUT.join(', ') }
+          }
+        ]
+      },
+      // look-alikes of the families are not layout utilities
+      {
+        code: `${imp('Button', 'button')}<template><Button class="w-1/2 shrink" /></template>`,
+        filename: 'l6.vue',
+        errors: [{ messageId: 'overrideClasses' }]
+      },
+      // a state or a non-layout utility behind a breakpoint is not in the list
+      {
+        code: `${imp('Button', 'button')}<template><Button class="hover:w-full lg:p-4 dark:mt-2" /></template>`,
+        filename: 'l7.vue',
+        errors: [
+          {
+            messageId: 'overrideClasses',
+            data: {
+              classes: 'hover:w-full lg:p-4 dark:mt-2',
+              tag: 'Button',
+              allowed: ALLOWED_LAYOUT.join(', ')
+            }
+          }
+        ]
+      },
+      // a bound :class stays barred even when it holds layout utilities
+      {
+        code: `${imp('Button', 'button')}<template><Button :class="'w-full'" /></template>`,
+        filename: 'l8.vue',
         errors: [{ messageId: 'override' }]
       }
     ]
@@ -443,10 +1165,10 @@ test('prefer-define-model', () => {
   })
 })
 
-test('authoring-standards (shared engine: hook + ratchet + consumer lint)', () => {
+test('require-authoring-standards (shared engine: hook + ratchet + consumer lint)', () => {
   const sfc = (script, template = '<div />') =>
     `<script setup lang="ts">${script}</script><template>${template}</template>`
-  vueTs.run('authoring-standards', authoringStandards, {
+  vueTs.run('require-authoring-standards', requireAuthoringStandards, {
     valid: [
       { code: sfc('const model = defineModel<string>()'), filename: 'a.vue' },
       {
@@ -458,9 +1180,48 @@ test('authoring-standards (shared engine: hook + ratchet + consumer lint)', () =
           '/** Size token. */ export type Size = "small" | "large"; interface Props { /** Visual variant. */ kind?: string; size?: Size } defineProps<Props>(); defineEmits<{ /** Fired on activation. */ click: [event: MouseEvent] }>()'
         ),
         filename: 'c.vue'
+      },
+      {
+        code: sfc(
+          "import { computed, useSlots } from 'vue'; defineSlots<{ /** Aside. */ aside(): unknown }>(); const slots = useSlots(); const hasAside = () => Boolean(slots.aside); const label = computed<string>(() => 'x')",
+          '<div v-if="hasAside()"><slot name="aside" /></div>'
+        ),
+        filename: 'i.vue'
+      },
+      {
+        code: sfc(
+          "import { computed, useSlots } from 'vue'; defineSlots<{ /** Cells. */ default(): unknown }>(); const slots = useSlots(); const cells = computed(() => slots.default?.() ?? [])",
+          '<div><slot /></div>'
+        ),
+        filename: 'j.vue'
+      },
+      {
+        code: sfc(
+          "import Eyebrow from './eyebrow.vue'; const PREFIX = '//' as const",
+          '<div><a href="https://www.azion.com">x</a><Eyebrow :prefix="PREFIX">Run</Eyebrow></div>'
+        ),
+        filename: '/repo/packages/webkit/src/components/content/x/x.vue'
+      },
+      {
+        code: sfc(
+          "import Eyebrow from './eyebrow.vue'",
+          '<div><Eyebrow prefix="//">Run</Eyebrow></div>'
+        ),
+        filename: '/app/src/pages/page.vue'
       }
     ],
     invalid: [
+      {
+        code: sfc(
+          "import Eyebrow from './eyebrow.vue'; import Link from './link.vue'",
+          '<ul><li v-for="item in [1]" :key="item"><Eyebrow v-if="item" prefix="//">Run</Eyebrow><link-item href="https://www.azion.com/">Docs</link-item></li></ul>'
+        ),
+        filename: '/repo/packages/webkit/src/components/content/x/x.vue',
+        errors: [
+          { messageId: 'component-attr-double-slash' },
+          { messageId: 'component-attr-double-slash' }
+        ]
+      },
       // hand-rolled v-model
       {
         code: sfc(
@@ -482,6 +1243,25 @@ test('authoring-standards (shared engine: hook + ratchet + consumer lint)', () =
         errors: [{ messageId: 'slot-without-defineslots' }]
       },
       {
+        code: sfc(
+          "import { computed, useSlots } from 'vue'; defineSlots<{ /** Aside. */ aside(): unknown }>(); const slots = useSlots(); const hasAside = computed(() => Boolean(slots.aside))",
+          '<div><slot name="aside" /></div>'
+        ),
+        filename: 'h.vue',
+        errors: [{ messageId: 'computed-slot-presence' }]
+      },
+      {
+        code: sfc(
+          "import { computed, useSlots } from 'vue'; defineSlots<{ /** Media. */ media(): unknown; /** Body. */ default(): unknown }>(); const slots = useSlots(); const hasMedia = computed<boolean>(() => Boolean(slots.media)); const hasBody = computed<Record<string, boolean>>(\n  () => ({ body: !!slots['default'] })\n)",
+          '<div><slot name="media" /><slot /></div>'
+        ),
+        filename: 'k.vue',
+        errors: [
+          { messageId: 'computed-slot-presence', line: 1 },
+          { messageId: 'computed-slot-presence', line: 1 }
+        ]
+      },
+      {
         code: sfc('const a = 1 // explains a', '<div><!-- explains the div --></div>'),
         filename: 'f.vue',
         errors: [{ messageId: 'prose-comment' }, { messageId: 'prose-comment' }]
@@ -493,7 +1273,7 @@ test('authoring-standards (shared engine: hook + ratchet + consumer lint)', () =
       }
     ]
   })
-  js.run('authoring-standards', authoringStandards, {
+  js.run('require-authoring-standards', requireAuthoringStandards, {
     valid: [
       // a well-formed composable in .ts
       {
@@ -558,6 +1338,414 @@ test('authoring-standards (shared engine: hook + ratchet + consumer lint)', () =
         code: '/**\n * Explains the value.\n * @param {string} v\n */\nexport const f = (v) => v',
         filename: 'src/typed.js',
         errors: [{ messageId: 'prose-comment' }]
+      }
+    ]
+  })
+})
+
+test('layout class families: shared constant used by the rule and the MCP', async () => {
+  const { LAYOUT_CLASS_FAMILIES, isLayoutClass, nonLayoutClasses } =
+    await import('../../src/eslint-plugin/index.js')
+  assert.deepEqual(
+    [...LAYOUT_CLASS_FAMILIES],
+    [
+      'w-full',
+      'h-full',
+      'max-w-*',
+      'min-w-*',
+      'max-h-*',
+      'min-h-*',
+      'flex-1',
+      'flex-auto',
+      'flex-initial',
+      'flex-none',
+      'grow',
+      'grow-*',
+      'basis-*',
+      'shrink-0',
+      'self-*',
+      'justify-self-*',
+      'place-self-*',
+      'order-*',
+      'col-span-*',
+      'col-start-*',
+      'col-end-*',
+      'row-span-*',
+      'row-start-*',
+      'row-end-*',
+      'm-*',
+      'mx-*',
+      'my-*',
+      'mt-*',
+      'mb-*',
+      'ms-*',
+      'me-*'
+    ]
+  )
+  for (const ok of [
+    'w-full',
+    'h-full',
+    'max-w-sm',
+    'max-w-(--container-sm)',
+    'max-w-[320px]',
+    'min-w-0',
+    'min-w-36',
+    'max-h-96',
+    'min-h-0',
+    'flex-1',
+    'flex-none',
+    'grow',
+    'grow-0',
+    'basis-1/3',
+    'self-end',
+    'shrink-0',
+    'mt-(--spacing-md)',
+    'ms-auto',
+    'col-span-2',
+    'lg:col-span-4',
+    'row-span-full',
+    'order-last',
+    'justify-self-end',
+    '2xl:w-full'
+  ]) {
+    assert.equal(isLayoutClass(ok), true, ok)
+  }
+  for (const bad of [
+    'w-1/2',
+    'h-10',
+    'max-w-',
+    'min-h-',
+    'self-',
+    'ml-4',
+    'mr-4',
+    '-mt-2',
+    'hover:mt-2',
+    'lg:p-4',
+    'col-span-',
+    'shrink',
+    'shrink-1',
+    'flex',
+    'flex-col',
+    'flex-row',
+    'flex-wrap',
+    'grow-',
+    'p-4',
+    'gap-(--spacing-sm)',
+    'cursor-pointer',
+    'text-body-md',
+    'bg-(--bg-surface)',
+    'hover:w-full',
+    ''
+  ]) {
+    assert.equal(isLayoutClass(bad), false, bad)
+  }
+  assert.deepEqual(nonLayoutClasses('w-full  mt-2 p-2 self-start text-red'), ['p-2', 'text-red'])
+})
+
+test('no-output-in-command', () => {
+  const sample = (code, language = 'bash') =>
+    `const samples = [{ label: 'Shell', language: '${language}', code: ${JSON.stringify(code)} }]`
+  js.run('no-output-in-command', noOutputInCommand, {
+    valid: [
+      sample('curl -I https://example.com'),
+      sample('# Install the CLI\ncurl -fsSL https://cli.azion.app/install.sh | bash'),
+      sample('# Install\nnpm install\n# Build\nnpm run build'),
+      sample('#!/bin/sh\nazion deploy'),
+      sample('$ azion login\n$ azion deploy'),
+      sample('$ azion deploy \\\n  --local'),
+      sample('curl -I https://example.com\n# HTTP/2 200', 'text'),
+      'const tab = { language: "bash", code: someCode }'
+    ],
+    invalid: [
+      {
+        code: sample('curl -I https://<your-azion-domain>\n# HTTP/2 200'),
+        errors: [{ messageId: 'output' }]
+      },
+      { code: sample('azion version\n# Azion CLI 4.23.0'), errors: [{ messageId: 'output' }] },
+      {
+        code: sample('azion deploy\n# => https://my-site.azion.app'),
+        errors: [{ messageId: 'output' }]
+      },
+      { code: sample('$ azion version\nAzion CLI 4.23.0'), errors: [{ messageId: 'output' }] },
+      {
+        code: 'const t = { lang: `sh`, code: `npm test\n# returns 0` }',
+        errors: [{ messageId: 'output' }]
+      }
+    ]
+  })
+  vue.run('no-output-in-command', noOutputInCommand, {
+    valid: [
+      {
+        code: `<template><DocCodeGroup :samples="[{ language: 'bash', code: 'curl -I https://x', output: 'HTTP/2 200' }]" /></template>`,
+        filename: 'a.vue'
+      }
+    ],
+    invalid: [
+      {
+        code: `<template><DocCodeGroup :samples="[{ language: 'bash', code: 'curl -I https://x\\n# HTTP/2 200' }]" /></template>`,
+        filename: 'b.vue',
+        errors: [{ messageId: 'output' }]
+      }
+    ]
+  })
+})
+
+test('no-root-relative-asset', () => {
+  js.run('no-root-relative-asset', noRootRelativeAsset, {
+    valid: [
+      "import logo from '@aziontech/webkit/assets/magalu-extended-color.svg'",
+      "const item = { logo, href: '/customers/magalu' }",
+      "const doc = '/docs/edge-application'",
+      "const remote = 'https://www.azion.com/media/careers/office-desks.jpg'",
+      'const own = `${base}/media/careers/office-desks.jpg`',
+      "const text = 'See /media/ for the press kit'",
+      {
+        code: "const own = '/media/hero.jpg'",
+        options: [{ prefixes: ['/marketing-components/'] }]
+      }
+    ],
+    invalid: [
+      {
+        code: "const logo = '/marketing-components/logos/magalu-extended-color.svg'",
+        errors: [
+          {
+            messageId: 'known',
+            data: {
+              url: '/marketing-components/logos/magalu-extended-color.svg',
+              specifier: '@aziontech/webkit/assets/magalu-extended-color.svg',
+              binding: 'magaluExtendedColor'
+            }
+          }
+        ]
+      },
+      {
+        code: "const badge = '/marketing-components/badges/soc.svg'",
+        errors: [
+          {
+            messageId: 'known',
+            data: {
+              url: '/marketing-components/badges/soc.svg',
+              specifier: '@aziontech/webkit/assets/soc-symbol-color.svg',
+              binding: 'socSymbolColor'
+            }
+          }
+        ]
+      },
+      {
+        code: "const photo = { src: '/media/careers/office-desks.jpg' }",
+        errors: [{ messageId: 'unknown' }]
+      },
+      { code: 'const cover = `/media/blog/${slug}.png`', errors: [{ messageId: 'unknown' }] },
+      {
+        code: "const hero = 'bg-[url(/media/hero.jpg)] bg-cover'",
+        errors: [{ messageId: 'unknown' }]
+      },
+      {
+        code: "const own = '/images/hero.jpg'",
+        options: [{ prefixes: ['/images/'] }],
+        errors: [{ messageId: 'unknown' }]
+      }
+    ]
+  })
+  vue.run('no-root-relative-asset', noRootRelativeAsset, {
+    valid: [
+      {
+        code: `<script setup>
+  import banner from '@aziontech/webkit/assets/placeholder-image.svg'
+</script>
+<template><ArticleBodySection :banner="banner" href="/media" /></template>`,
+        filename: 'a.vue'
+      }
+    ],
+    invalid: [
+      {
+        code: '<template><ArticleBodySection banner="/media/blog/banner.svg" /></template>',
+        filename: 'b.vue',
+        errors: [{ messageId: 'unknown' }]
+      },
+      {
+        code: `<template><ClientQuotesSection :items="[{ logo: '/marketing-components/logos/zoop-extended-color.svg' }]" /></template>`,
+        filename: 'c.vue',
+        errors: [{ messageId: 'known' }]
+      },
+      {
+        code: `<script setup>
+  const photos = [{ src: '/media/careers/team-talk.jpg' }]
+</script>
+<template><PhotoMarqueeSection :photos="photos" /></template>`,
+        filename: 'd.vue',
+        errors: [{ messageId: 'unknown' }]
+      }
+    ]
+  })
+})
+
+test('prefer-href-in-menu-node', () => {
+  js.run('prefer-href-in-menu-node', preferHrefInMenuNode, {
+    valid: [
+      "const nav = [{ id: 'home', label: 'Home', href: '/home' }]",
+      "const nav = [{ id: 'home', label: 'Home', href: '/home', path: '/home' }]",
+      "const routes = [{ path: '/home', name: 'home', component: Home }]",
+      "const crumbs = [{ label: 'Home', path: '/home' }]",
+      "const node = { id: 'docs', label: 'Docs', path: 'relative' }",
+      "const node = { id: 'docs', label: 'Docs', to: someRoute }"
+    ],
+    invalid: [
+      {
+        code: "const nav = [{ id: 'home', label: 'Home', icon: 'az az-home', path: '/home' }]",
+        errors: [{ messageId: 'alias', data: { key: 'path' } }]
+      },
+      {
+        code: "const node = { id: 'users', label: 'Users', to: { name: 'users' } }",
+        errors: [{ messageId: 'alias', data: { key: 'to' } }]
+      },
+      {
+        code: 'const node = { id: `x`, label: `X`, url: `/x/${id}` }',
+        errors: [{ messageId: 'alias', data: { key: 'url' } }]
+      }
+    ]
+  })
+  vue.run('prefer-href-in-menu-node', preferHrefInMenuNode, {
+    valid: [
+      {
+        code: `<template><Menu :groups="[{ items: [{ id: 'a', label: 'A', href: '/a' }] }]" /></template>`,
+        filename: 'a.vue'
+      }
+    ],
+    invalid: [
+      {
+        code: `<template><Menu :groups="[{ items: [{ id: 'a', label: 'A', path: '/a' }] }]" /></template>`,
+        filename: 'b.vue',
+        errors: [{ messageId: 'alias' }]
+      }
+    ]
+  })
+})
+
+test('no-clock-in-setup', () => {
+  js.run('no-clock-in-setup', noClockInSetup, {
+    valid: [
+      'const NOW = Date.UTC(2026, 10, 10, 12)',
+      'const ago = new Date(NOW - 3_600_000)',
+      "const parsed = new Date('2026-11-10T12:00:00Z')",
+      'const refresh = () => { updatedAt.value = new Date() }',
+      'onMounted(() => { now.value = Date.now() })',
+      'watch(source, () => { stamp = Date.now() })',
+      'function tick() { return Date.now() }',
+      'const later = Date.now'
+    ],
+    invalid: [
+      {
+        code: 'const referenceTime = Math.floor(Date.now() / 60_000) * 60_000',
+        errors: [{ messageId: 'clock', data: { call: 'Date.now()' } }]
+      },
+      {
+        code: 'const today = new Date()',
+        errors: [{ messageId: 'clock', data: { call: 'new Date()' } }]
+      },
+      {
+        code: 'const now = ref(Date.now())',
+        errors: [{ messageId: 'clock' }]
+      },
+      {
+        code: 'const year = computed(() => new Date().getFullYear())',
+        errors: [{ messageId: 'clock', data: { call: 'new Date()' } }]
+      }
+    ]
+  })
+  vue.run('no-clock-in-setup', noClockInSetup, {
+    valid: [
+      {
+        code: `<script setup>
+const NOW = Date.UTC(2026, 10, 10, 12)
+</script>
+<template><button @click="stamp = Date.now()">Refresh</button><Cell :value="new Date(NOW)" /></template>`,
+        filename: 'a.vue'
+      }
+    ],
+    invalid: [
+      {
+        code: `<script setup>
+const rows = [{ updatedAt: new Date(Date.now() - 7_200_000) }]
+</script>
+<template><Table :data="rows" /></template>`,
+        filename: 'b.vue',
+        errors: [{ messageId: 'clock', data: { call: 'Date.now()' } }]
+      },
+      {
+        code: `<template><span>{{ new Date().getFullYear() }}</span></template>`,
+        filename: 'c.vue',
+        errors: [{ messageId: 'clock', data: { call: 'new Date()' } }]
+      }
+    ]
+  })
+})
+
+test('no-viewport-height-calc', () => {
+  const sfc = (template, script = '') =>
+    `<script setup>${script}</script><template>${template}</template>`
+  const err = (value) => ({ messageId: 'viewportCalc', data: { value } })
+  vue.run('no-viewport-height-calc', noViewportHeightCalc, {
+    valid: [
+      { code: sfc('<div data-layout-fill class="flex min-h-0 flex-col" />'), filename: 'a.vue' },
+      { code: sfc('<div class="h-dvh" />'), filename: 'b.vue' },
+      {
+        code: sfc('<aside class="max-h-[calc(100dvh-var(--layout-header-height))]" />'),
+        filename: 'c.vue'
+      },
+      {
+        code: sfc(
+          '<aside class="sticky top-(--layout-header-height) h-[calc(100dvh-var(--layout-header-height))]" />'
+        ),
+        filename: 'd.vue'
+      },
+      {
+        code: sfc(
+          '<div class="lg:sticky lg:top-(--spacing-xl)"><div class="hidden h-[calc(100dvh-12rem)] lg:block" /></div>'
+        ),
+        filename: 'e.vue'
+      },
+      {
+        code: sfc('<div style="position: fixed; height: calc(100dvh - 3.5rem)" />'),
+        filename: 'f.vue'
+      },
+      { code: sfc('<div class="h-[calc(100%-3rem)] w-[calc(100vw-2rem)]" />'), filename: 'g.vue' },
+      {
+        code: sfc("<div :style=\"{ position: 'sticky', height: 'calc(100dvh - 4rem)' }\" />"),
+        filename: 'h.vue'
+      },
+      { code: "const label = 'calc(100dvh - 3rem) is a length'", filename: 'i.js' }
+    ],
+    invalid: [
+      {
+        code: sfc('<div class="flex h-[calc(100dvh-var(--layout-header-height))] flex-col" />'),
+        filename: 'j.vue',
+        errors: [err('h-[calc(100dvh-var(--layout-header-height))]')]
+      },
+      {
+        code: sfc('<div class="lg:min-h-[calc(100vh_-_3.5rem)]" />'),
+        filename: 'k.vue',
+        errors: [err('lg:min-h-[calc(100vh_-_3.5rem)]')]
+      },
+      {
+        code: sfc('<div style="display: flex; height: calc(100dvh - 3.5rem)" />'),
+        filename: 'l.vue',
+        errors: [err('height: calc(100dvh - 3.5rem)')]
+      },
+      {
+        code: sfc(`<div :class="cn('flex', 'h-[calc(100svh-4rem)]')" />`),
+        filename: 'm.vue',
+        errors: [err('h-[calc(100svh-4rem)]')]
+      },
+      {
+        code: sfc('<div :style="{ minHeight: \'calc(100dvh - 4rem)\' }" />'),
+        filename: 'n.vue',
+        errors: [err('minHeight: calc(100dvh - 4rem)')]
+      },
+      {
+        code: "const bodyClass = 'size-[calc(100dvh-56px)] overflow-auto'",
+        filename: 'o.js',
+        errors: [err('size-[calc(100dvh-56px)]')]
       }
     ]
   })

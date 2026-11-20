@@ -1,0 +1,15 @@
+<script setup lang="ts">
+  import CreateDeploySuccess from '../create-deploy-success.vue'
+  import { sampleCliNextSteps, sampleCliResources } from '../sample'
+</script>
+
+<template>
+  <CreateDeploySuccess
+    title="Resource created"
+    description="The resource is ready. Nothing serves it yet. Deploy it from Next steps."
+    :deployment="null"
+    :resources="sampleCliResources"
+    :next-steps="sampleCliNextSteps"
+    get-started="analytics-app"
+  />
+</template>

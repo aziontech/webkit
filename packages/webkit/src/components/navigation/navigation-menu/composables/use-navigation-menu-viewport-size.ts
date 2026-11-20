@@ -1,23 +1,23 @@
 import { nextTick, onScopeDispose, readonly, type Ref, ref, watch } from 'vue'
 
-import { getCssDimensions } from './get-css-dimensions.js'
-import { POPUP_HEIGHT, POPUP_WIDTH, VIEWPORT_WIDTH } from './navigation-menu-css-vars.js'
+import { getCssDimensions } from '../lib/css-dimensions'
+import { POPUP_HEIGHT, POPUP_WIDTH, VIEWPORT_WIDTH } from '../lib/css-vars'
 
-export interface NavigationMenuPopupSize {
+export interface NavigationMenuPopoverSize {
   width: number
   height: number
 }
 
 export interface UseNavigationMenuViewportSizeOptions {
-  activeValue: Ref<string | number | null>
-  popupEl: Ref<HTMLElement | null>
-  currentContentEl: Ref<HTMLElement | null>
-  viewportTargetEl: Ref<HTMLElement | null>
-  popupMounted: Ref<boolean>
+  activeValue: Readonly<Ref<string | number | null>>
+  popupEl: Readonly<Ref<HTMLElement | null>>
+  currentContentEl: Readonly<Ref<HTMLElement | null>>
+  viewportTargetEl: Readonly<Ref<HTMLElement | null>>
+  popupMounted: Readonly<Ref<boolean>>
 }
 
 export interface UseNavigationMenuViewportSizeReturn {
-  popupSize: Readonly<Ref<NavigationMenuPopupSize | null>>
+  popupSize: Readonly<Ref<NavigationMenuPopoverSize | null>>
   syncCurrentSize: () => Promise<void>
 }
 
@@ -28,7 +28,7 @@ export function useNavigationMenuViewportSize({
   viewportTargetEl,
   popupMounted
 }: UseNavigationMenuViewportSizeOptions): UseNavigationMenuViewportSizeReturn {
-  const popupSize = ref<NavigationMenuPopupSize | null>(null)
+  const popupSize = ref<NavigationMenuPopoverSize | null>(null)
 
   const clearFixedSize = () => {
     const popup = popupEl.value
@@ -42,7 +42,7 @@ export function useNavigationMenuViewportSize({
     popupSize.value = null
   }
 
-  const measureNatural = (): NavigationMenuPopupSize | null => {
+  const measureNatural = (): NavigationMenuPopoverSize | null => {
     const popup = popupEl.value
 
     if (!popup) {
@@ -111,7 +111,7 @@ export function useNavigationMenuViewportSize({
     return { width, height }
   }
 
-  const applySize = ({ width, height }: NavigationMenuPopupSize) => {
+  const applySize = ({ width, height }: NavigationMenuPopoverSize) => {
     const popup = popupEl.value
 
     if (!popup) {
@@ -214,7 +214,7 @@ export function useNavigationMenuViewportSize({
   })
 
   return {
-    popupSize: readonly(popupSize) as Readonly<Ref<NavigationMenuPopupSize | null>>,
+    popupSize: readonly(popupSize) as Readonly<Ref<NavigationMenuPopoverSize | null>>,
     syncCurrentSize
   }
 }

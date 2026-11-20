@@ -1,0 +1,169 @@
+{
+ "name": "gauge-chart",
+ "binding": "GaugeChart",
+ "import": "@aziontech/webkit/gauge-chart",
+ "treeShakeableImport": "@aziontech/webkit/gauge-chart",
+ "category": "chart",
+ "surface": "app",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Use GaugeChart for one value against a known range with thresholds; for threshold lines or bands inside a Chart use Chart.Reference, and for one headline metric with a delta use StatTile. Both thresholds share one model, `ChartThreshold`. One reading against a known range, drawn as a half-circle dial with the value under the arc and the scale ends beside it. Bands (thresholds) name what the value means and color the arc. It shares the chart palette, the loading, empty and error surface and the `ChartCard` naming with the rest of the chart family, and is rendered in-house SVG.",
+ "setup": null,
+ "useWhen": [
+  "A utilization or ratio with a fixed range: CPU, memory, cache hit ratio, quota used.",
+  "A latency or score against a target, where bands (healthy, busy, critical) carry the meaning.",
+  "A headline reading on a detail page or in a dashboard card, beside the time series that explains it."
+ ],
+ "avoidWhen": [
+  "A number with a change against a period and a trend → use `stat-tile`.",
+  "A value over time → use `chart` (line or area).",
+  "Progress of a task toward done → use `progress`.",
+  "Several readings to compare with each other → use `bar-list` or `chart` with horizontal bars; dials side by side compare badly."
+ ],
+ "related": [
+  "`stat-tile` — one figure with a delta and a sparkline, for a KPI row.",
+  "`chart-card` — the box a dashboard gauge sits in; the gauge takes its accessible name from the card title.",
+  "`progress` — completion of a task, not a reading."
+ ],
+ "bestPractices": [
+  "Give the range that means something for the reading (0 to 100 for a ratio, 0 to the quota for usage); the dial is meaningless without it.",
+  "Add bands only when the range has agreed limits (a quota, an SLO, a CPU ceiling); without them the arc draws in `--chart-series-1`, the default chart color, and the reading carries no judgment.",
+  "Name every band (`label`) so the value is read with its meaning, not only with a color.",
+  "Use status severities for bands (`success`, `warning`, `danger`) and the findings levels (`severity-critical` … `severity-info`) only when the reading is a severity.",
+  "Put the unit in `formatValue` (`74%`, `92 ms`) and what is measured in `label`."
+ ],
+ "props": [
+  {
+   "name": "value",
+   "type": "number | null",
+   "default": "null",
+   "required": "false",
+   "doc": "The reading. Null or absent renders the empty state."
+  },
+  {
+   "name": "min",
+   "type": "number",
+   "default": "0",
+   "required": "false",
+   "doc": "Start of the scale."
+  },
+  {
+   "name": "max",
+   "type": "number",
+   "default": "100",
+   "required": "false",
+   "doc": "End of the scale."
+  },
+  {
+   "name": "label",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Caption under the reading: what is measured, or the unit."
+  },
+  {
+   "name": "thresholds",
+   "type": "ChartThreshold[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Bands from low to high; the arc takes the color of the band the value falls in, and each band start is marked on the track."
+  },
+  {
+   "name": "formatValue",
+   "type": "(value: number) => string",
+   "default": "formatCompact",
+   "required": "false",
+   "doc": "Formats the reading and the scale ends."
+  },
+  {
+   "name": "size",
+   "type": "'small' | 'medium' | 'large'",
+   "default": "'medium'",
+   "required": "false",
+   "doc": "Width of the dial: 160, 224 or 288 pixels."
+  },
+  {
+   "name": "loading",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Renders a Skeleton sized to the dial."
+  },
+  {
+   "name": "refetching",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Holds the previous reading at reduced opacity while new data loads."
+  },
+  {
+   "name": "error",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Error message; when set, a danger Alert replaces the dial."
+  },
+  {
+   "name": "emptyTitle",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Title of the empty state shown when there is no reading. Empty uses the locale catalog (`No data available`)."
+  },
+  {
+   "name": "emptyDescription",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Supporting line under the empty title: why there is no reading, or what to do next."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the meter when it is not inside a ChartCard with a title."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "value",
+   "scope": "{ value: number; text: string; status: string }",
+   "notes": "Replaces the reading and caption under the arc."
+  },
+  {
+   "name": "empty",
+   "scope": "—",
+   "notes": "Replaces the default EmptyState."
+  },
+  {
+   "name": "empty-actions",
+   "scope": "—",
+   "notes": "Actions under the default EmptyState."
+  },
+  {
+   "name": "error",
+   "scope": "—",
+   "notes": "Replaces the default danger Alert."
+  }
+ ],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/gauge-chart/default.vue"
+  },
+  {
+   "name": "Bands",
+   "file": "examples/gauge-chart/bands.vue"
+  },
+  {
+   "name": "Sizes",
+   "file": "examples/gauge-chart/sizes.vue"
+  }
+ ],
+ "docs": "components/gauge-chart.md"
+}

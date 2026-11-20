@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "webkit": {
+      "command": "npx",
+      "args": ["-y", "@aziontech/webkit-mcp"]
+    }
+  }
+}

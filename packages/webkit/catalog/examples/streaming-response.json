@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "A finished response in Markdown: a heading, bold and inline code, a numbered list, a table and a fenced code block rendered as a copyable CodeBlock.",
+   "file": "examples/streaming-response/default.vue"
+  },
+  {
+   "name": "Streaming",
+   "summary": "Tokens arriving: the text grows every few milliseconds with a blinking caret at the end, the region is busy, and the code fence stays plain until it closes. Replay restarts it.",
+   "file": "examples/streaming-response/streaming.vue"
+  },
+  {
+   "name": "WithCitations",
+   "summary": "Numbered citations in the text resolve against the sources: each `[n]` shows the source title in a tooltip and links to item n of the Sources list under the response.",
+   "file": "examples/streaming-response/with-citations.vue"
+  }
+ ]
+}

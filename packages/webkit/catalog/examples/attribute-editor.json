@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Key and value rows with a per-cell error, a limit of ten rows and at least one row kept: Add focuses the new row's key, Remove moves focus to the next row and each change is announced.",
+   "file": "examples/attribute-editor/default.vue"
+  },
+  {
+   "name": "Groups",
+   "summary": "Rule criteria: conditions inside a group are joined by and, groups by or. Each group has its own Add condition; removing the last condition removes the group.",
+   "file": "examples/attribute-editor/groups.vue"
+  },
+  {
+   "name": "CustomCells",
+   "summary": "A `Select` and a `Switch` replace the default inputs through the `cell-<key>` slots; each control still sits inside the cell's `Field` with its label.",
+   "file": "examples/attribute-editor/custom-cells.vue"
+  }
+ ]
+}

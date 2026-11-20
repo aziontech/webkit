@@ -1,7 +1,15 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  export type BadgeSeverity = 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'default'
+  import type { Severity } from '../../../utils/severity'
+
+  export type { Severity } from '../../../utils/severity'
+
+  /** Brand look of the badge, used when no severity is set. */
+  export type BadgeVariant = 'primary' | 'secondary'
+
+  /** Status colour of the badge: the shared severity scale. */
+  export type BadgeSeverity = Severity
 
   export type BadgeSize = 'small' | 'medium' | 'large'
 
@@ -10,18 +18,21 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface BadgeProps {
     /** Fallback text when the default slot is empty. */
     label?: string
-    /** Color style for the badge surface and label. */
+    /** Brand look of the badge surface and label, used when `severity` is not set. */
+    variant?: BadgeVariant
+    /** Status colour of the badge surface and label; wins over `variant` when set. */
     severity?: BadgeSeverity
     /** Size token; `small` is 20px tall, `medium` is 24px, `large` is 30px. */
     size?: BadgeSize
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<BadgeProps>(), {
     label: '',
-    severity: 'primary',
+    variant: 'primary',
+    severity: undefined,
     size: 'medium'
   })
 
@@ -31,21 +42,17 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'content-badge')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'badge')
 
-  const resolvedSeverity = computed((): BadgeSeverity => {
-    const validSeverities: BadgeSeverity[] = [
-      'primary',
-      'secondary',
-      'success',
-      'warning',
-      'danger',
-      'default'
-    ]
-    const severity = props.severity ?? 'primary'
+  const SEVERITIES: readonly BadgeSeverity[] = ['neutral', 'info', 'success', 'warning', 'danger']
 
-    return validSeverities.includes(severity) ? severity : validSeverities[0]
-  })
+  const resolvedSeverity = computed(() =>
+    props.severity && SEVERITIES.includes(props.severity) ? props.severity : null
+  )
+
+  const resolvedVariant = computed((): BadgeVariant | null =>
+    resolvedSeverity.value ? null : props.variant === 'secondary' ? 'secondary' : 'primary'
+  )
 </script>
 
 <template>
@@ -53,14 +60,16 @@
     v-bind="$attrs"
     :data-testid="testId"
     :data-severity="resolvedSeverity"
+    :data-variant="resolvedVariant"
     :data-size="size"
     :class="attrs.class"
-    class="inline-flex items-center justify-center overflow-hidden leading-none text-label-md data-[size=small]:text-label-sm data-[size=small]:h-5 data-[size=small]:px-(--spacing-xxs) data-[size=medium]:h-6 data-[size=medium]:px-(--spacing-xs) data-[size=large]:h-[30px] data-[size=large]:px-(--spacing-xs) rounded-(--shape-elements) data-[severity=primary]:bg-(--primary) data-[severity=primary]:text-(--primary-contrast) data-[severity=secondary]:bg-(--secondary) data-[severity=secondary]:text-(--secondary-contrast) data-[severity=success]:bg-(--success) data-[severity=success]:text-(--success-contrast) data-[severity=warning]:bg-(--warning) data-[severity=warning]:text-(--warning-contrast) data-[severity=danger]:bg-(--danger) data-[severity=danger]:text-(--danger-contrast) data-[severity=default]:bg-(--bg-surface) data-[severity=default]:text-(--text-default)"
+    class="inline-flex items-center justify-center overflow-hidden leading-none text-label-md data-[size=small]:text-label-sm data-[size=small]:h-5 data-[size=small]:px-(--spacing-2xs) data-[size=medium]:h-6 data-[size=medium]:px-(--spacing-xs) data-[size=large]:h-[30px] data-[size=large]:px-(--spacing-xs) rounded-(--shape-control) data-[variant=primary]:bg-(--primary) data-[variant=primary]:text-(--primary-foreground) data-[variant=secondary]:bg-(--secondary) data-[variant=secondary]:text-(--secondary-foreground) data-[severity=info]:bg-(--info) data-[severity=info]:text-(--info-foreground) data-[severity=success]:bg-(--success) data-[severity=success]:text-(--success-foreground) data-[severity=warning]:bg-(--warning) data-[severity=warning]:text-(--warning-foreground) data-[severity=danger]:bg-(--danger) data-[severity=danger]:text-(--danger-foreground) data-[severity=neutral]:bg-(--bg-surface) data-[severity=neutral]:text-(--text-default)"
   >
     <slot v-if="$slots['default']" />
     <span
       v-else-if="label"
       :data-testid="`${testId}__label`"
+      dir="auto"
     >
       {{ label }}
     </span>

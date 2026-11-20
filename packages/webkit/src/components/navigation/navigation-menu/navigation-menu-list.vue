@@ -2,97 +2,71 @@
   import { computed, ref, useAttrs, useId } from 'vue'
 
   import { cn } from '../../../utils/cn'
-  import { useNavigationMenuRoot } from './composables/use-navigation-menu-context.js'
-  import { useNavigationMenuListHighlight } from './composables/use-navigation-menu-list-highlight.js'
-  import { provideNavigationMenuListHighlight } from './composables/use-navigation-menu-list-highlight-context.js'
-  import { createChangeEventDetails } from './composables/use-navigation-menu-root.js'
-  import {
-    navigationMenuGroupLabelClasses,
-    navigationMenuGroupLabelLinkClasses,
-    navigationMenuListGroupClasses,
-    navigationMenuListRootClasses,
-    navigationMenuListSelectorClasses
-  } from './presets/styles'
+  import { safeHref } from '../../../utils/safe-href'
+  import { useNavigationMenuContext } from './composables/use-navigation-menu-context'
+  import { useNavigationMenuListHighlight } from './composables/use-navigation-menu-list-highlight'
+  import { provideNavigationMenuListHighlightContext } from './composables/use-navigation-menu-list-highlight-context'
+  import { createChangeEventDetails } from './composables/use-navigation-menu-root'
 
   defineOptions({ name: 'NavigationMenuList', inheritAttrs: false })
 
-  interface Props {
+  export interface NavigationMenuListProps {
     /** Group heading for column lists inside content panels. */
     label?: string
     /** Optional marker rendered before the group heading. */
     prefix?: string
     /** When set, the group heading is itself a link to the section's own page. */
     href?: string
-    /** Enables sliding highlight on the root horizontal list. */
-    highlight?: boolean
-    /** Polymorphic list element. */
-    as?: string | object
+    /** Shows the sliding highlight on the root horizontal list. */
+    showHighlight?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<NavigationMenuListProps>(), {
     label: undefined,
     prefix: '',
     href: '',
-    highlight: true,
-    as: 'ul'
+    showHighlight: true
   })
 
   defineSlots<{ default(): unknown }>()
 
   const attrs = useAttrs()
   const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'navigation-menu__list'
+    () => (attrs['data-testid'] as string | undefined) ?? 'navigation-menu-list'
   )
 
-  const root = useNavigationMenuRoot()
+  const root = useNavigationMenuContext()
   const headingId = useId()
-  const listContainerRef = ref<HTMLElement | null>(null)
+  const listContainerEl = ref<HTMLElement | null>(null)
 
   const isGroup = computed(() => props.label != null && props.label !== '')
 
   const isLabelLink = computed(() => props.href !== '')
 
-  const labelClass = computed(() =>
-    cn(
-      navigationMenuGroupLabelClasses,
-      isLabelLink.value ? navigationMenuGroupLabelLinkClasses : ''
-    )
-  )
-
   const onLabelClick = (event: globalThis.MouseEvent) => {
-    if (!isLabelLink.value) {
-      return
-    }
-
     root.setValue(
       null,
       createChangeEventDetails('link-press', event, event.currentTarget as HTMLElement)
     )
   }
 
-  const useHighlight = computed(() => props.highlight && !isGroup.value)
+  const useHighlight = computed(() => props.showHighlight && !isGroup.value)
 
-  const { selectorStyle, setTarget, handleTargetPointerLeave, handleListPointerLeave } =
-    useNavigationMenuListHighlight(listContainerRef, root)
+  const { selectorStyle, setTarget, onTargetPointerleave, onListPointerleave } =
+    useNavigationMenuListHighlight(listContainerEl, root)
 
   if (useHighlight.value) {
-    provideNavigationMenuListHighlight({
+    provideNavigationMenuListHighlightContext({
       setTarget,
-      handleTargetPointerLeave
+      onTargetPointerleave
     })
   }
 
-  const listClasses = computed(() =>
-    cn(
-      isGroup.value
-        ? navigationMenuListGroupClasses
-        : [
-            navigationMenuListRootClasses,
-            root.menuOrientation.value === 'vertical' ? 'flex-col items-stretch' : ''
-          ],
-      attrs.class as string | undefined
-    )
-  )
+  const ROOT_CLASS = 'relative z-1 m-0 flex list-none items-center gap-(--spacing-xs) p-0'
+
+  const VERTICAL_CLASS = 'flex-col items-stretch'
+
+  const isVertical = computed(() => root.menuOrientation.value === 'vertical')
 </script>
 
 <template>
@@ -103,11 +77,11 @@
     :aria-labelledby="headingId"
     :data-testid="`${testId}__group`"
   >
-    <component
-      :is="isLabelLink ? 'a' : 'div'"
+    <a
+      v-if="isLabelLink"
       :id="headingId"
-      :href="isLabelLink ? href : undefined"
-      :class="labelClass"
+      :href="safeHref(href) ?? undefined"
+      class="flex shrink-0 items-center border border-transparent border-b-(--border-default) mx-(--spacing-md) pb-(--spacing-xs) mb-(--spacing-xs) text-overline-xs text-(--text-muted) cursor-pointer no-underline transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
       :data-testid="`${testId}__label`"
       @click="onLabelClick"
     >
@@ -118,47 +92,58 @@
         >{{ prefix }}</span
       >
       <span class="min-w-0 flex-1 truncate">{{ label }}</span>
-    </component>
-    <component
-      :is="props.as"
-      :class="listClasses"
+    </a>
+    <div
+      v-else
+      :id="headingId"
+      class="flex shrink-0 items-center border border-transparent border-b-(--border-default) mx-(--spacing-md) pb-(--spacing-xs) mb-(--spacing-xs) text-overline-xs text-(--text-muted)"
+      :data-testid="`${testId}__label`"
+    >
+      <span
+        v-if="prefix"
+        class="shrink-0"
+        aria-hidden="true"
+        >{{ prefix }}</span
+      >
+      <span class="min-w-0 flex-1 truncate">{{ label }}</span>
+    </div>
+    <ul
+      :class="cn('m-0 flex list-none flex-col p-0', attrs.class as string | undefined)"
       role="list"
       :data-testid="testId"
     >
       <slot />
-    </component>
+    </ul>
   </div>
   <div
     v-else-if="useHighlight"
-    ref="listContainerRef"
+    ref="listContainerEl"
     class="relative"
     :data-testid="`${testId}__highlight`"
-    @pointerleave="handleListPointerLeave"
+    @pointerleave="onListPointerleave"
   >
     <span
       aria-hidden="true"
-      :class="navigationMenuListSelectorClasses"
+      class="pointer-events-none absolute z-0 rounded-(--shape-button) bg-(--navigation-menu-highlight-background) transition-[left,top,width,height,opacity] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
       :style="selectorStyle"
       :data-testid="`${testId}__selector`"
     />
-    <component
-      :is="props.as"
-      :class="listClasses"
+    <ul
+      :class="cn(ROOT_CLASS, isVertical && VERTICAL_CLASS, attrs.class as string | undefined)"
       role="list"
       :data-testid="testId"
-      :data-open="root.menuOpen.value ? '' : undefined"
+      :data-state="root.menuOpen.value ? 'open' : 'closed'"
     >
       <slot />
-    </component>
+    </ul>
   </div>
-  <component
+  <ul
     v-else
-    :is="props.as"
-    :class="listClasses"
+    :class="cn(ROOT_CLASS, isVertical && VERTICAL_CLASS, attrs.class as string | undefined)"
     role="list"
     :data-testid="testId"
-    :data-open="root.menuOpen.value ? '' : undefined"
+    :data-state="root.menuOpen.value ? 'open' : 'closed'"
   >
     <slot />
-  </component>
+  </ul>
 </template>

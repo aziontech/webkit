@@ -1,0 +1,29 @@
+{
+ "variants": [
+  {
+   "name": "ModuleOff",
+   "summary": "acme-staging was chosen with IP filtering off, so an IP filtering step follows Where it runs: a warning Alert, the Switch choice card that turns the module on with the list, and a note on what leaving it off means.",
+   "file": "blocks/create/create-wizard/variants/module-off.vue"
+  },
+  {
+   "name": "ListSettings",
+   "summary": "The settings step of a list bound to acme-production, before Review: the Type as wide RadioGroup choice cards and the List Textarea whose label, placeholder and guidance follow the type, with Previous and Next in the Wizard footer. Next with the list empty stays on the step and shows the required message under it.",
+   "file": "blocks/create/create-wizard/variants/list-settings.vue"
+  },
+  {
+   "name": "Review",
+   "summary": "The Review step that closes the create, after List settings: three bands under small `Subheader`s. Where it runs is one `Alert` (success when the policy is ready, warning when it is unbound or its module stays off) with Edit back to the chooser; What gets created lists each value beside the property it is sent as (Name with its own Edit back to General), the entries as `Tag`s with a count and and N more, with Edit back to List settings; What can reference it lists the consumers and the field that carries the reference. Create Access List shows its loading state and the result arrives as a toast; a value that fails on create sends the user back to its step with the message under the field.",
+   "file": "blocks/create/create-wizard/variants/review.vue"
+  },
+  {
+   "name": "CreateAndDeploy",
+   "summary": "A resource that is useless until it is bound and deployed (Create Service): step one binds the project it serves, an existing one from the paged list or a new one configured in place (cache settings, origin); step two reads the project back with Change, then asks for the domain (a free platform-domain prefix or your own hostname, previewed as the address traffic arrives on), environment and certificate, the deployment the first release is cut against and a collapsed Advanced section. Next is gated on the project; the last action reads Create and deploy and shows its loading state, then the build logs (`detail/detail-deployment-logs#InCreateFlow`) and `create/create-deploy-success` follow.",
+   "file": "blocks/create/create-wizard/variants/create-and-deploy.vue"
+  }
+ ],
+ "sfcFile": "blocks/create/create-wizard/create-wizard.vue",
+ "guidelinesFile": "blocks/create/create-wizard/guidelines.md",
+ "fileSources": {
+  "sample.ts": "blocks/create/create-wizard/sample.ts"
+ }
+}

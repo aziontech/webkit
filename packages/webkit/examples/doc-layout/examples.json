@@ -1,0 +1,16 @@
+{
+  "component": "doc-layout",
+  "title": "Components/Docs/DocLayout",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The docs chrome around an article: section links and search in the sticky header, the docs tree with the theme switch at its foot, the article in the slot, whose anchored DocHeadings fill and drive the On this page rail on their own, a call to action under the rail and the footer under the article. The document scrolls; the header and both rails stay in view.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Persisted rail",
+      "summary": "The navigation rail resized by dragging its edge (or the arrow keys on its handle) and collapsed from the button at its foot, with v-model:navigation-open and v-model:navigation-width saved to local storage so the rail keeps its size and state across reloads.",
+      "file": "persisted-rail.vue"
+    }
+  ]
+}

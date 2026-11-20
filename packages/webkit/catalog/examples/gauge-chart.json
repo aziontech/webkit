@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "One reading against its range. With no bands the arc takes the first categorical slot, the same color as the first series of a Chart.",
+   "file": "examples/gauge-chart/default.vue"
+  },
+  {
+   "name": "Bands",
+   "summary": "Status colors, when the reading means a state. The bands name what CPU usage means: the arc takes the color of the band the value falls in, each band start is marked on the track, and the band name is read after the value.",
+   "file": "examples/gauge-chart/bands.vue"
+  },
+  {
+   "name": "Sizes",
+   "summary": "Dials 160, 224 and 288 pixels wide, for a KPI row, a card and a detail page.",
+   "file": "examples/gauge-chart/sizes.vue"
+  }
+ ]
+}

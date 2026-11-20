@@ -3,24 +3,28 @@ name: tag
 category: content
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 8
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-940&vars=1
   node_id: 476:940
-checksum: 91e02344ced4319f14cc42fc2e3d20d42fc5e83959dd774d967de8d91c73e2a5
+checksum: 2c5cca0907517f78281aa0d7258f753989c5cabc677d71f313cf4862a2aebf15
 created: 2026-05-22
-last_updated: 2026-07-16
+last_updated: 2026-11-15
 ---
+
 # Tag — Component Spec
 
 ## Purpose
 
-Compact status or category label with severity-based color coding. Supports optional icon, pill shape via `rounded`, and two sizes aligned with the Webkit Figma Tag component set.
+Use Tag for a read-only category or outcome word on an item (Production, Beta, Allowed) that is not a lifecycle state. The state of a resource is a StatusIndicator, a number is a Badge, a removable or selectable token is a Chip, and a level on the critical → info scale is a SeverityTag.
+
+A compact, read-only word on an item, colored by its brand look `variant` or its status colour `severity` so the category or outcome reads at a glance (Production in `variant="primary"`, Blocked in `severity="danger"`). It takes an optional leading icon, a pill shape with `rounded`, and two sizes; it is never interactive and never counts.
 
 ## When to use
 
 - Label or categorize an item with a short descriptive text, optionally with a leading icon or pill shape.
-- Show a status/category with severity color via `kind`.
+- Show a status with its colour via `severity` (`neutral`, `info`, `success`, `warning`, `danger`), or a category with a brand look via `variant` (`primary`, `accent`, `contrast`, `highlight`); `severity` wins when both are set.
+- Mark the one value a list highlights (the Owner role in a users table) with `variant="highlight"`: the brand orange as a tint, orange text on `--primary-mask`, like the success, info and warning tints.
 
 ## When NOT to use
 
@@ -34,30 +38,37 @@ Compact status or category label with severity-based color coding. Supports opti
 
 ## Best practices
 
-- Severity comes from `kind`; the optional icon is decorative — keep it `aria-hidden`.
+- Colour comes from `variant` or `severity`; the optional icon is decorative — keep it `aria-hidden`.
+- Pick the severity by meaning: `success` Active, `warning` Pending, `neutral` Inactive or a neutral category (Developer, Viewer), `info` a second role (Admin), `variant="highlight"` the one value to single out (Owner), `primary` a solid brand label. Do not use `danger` for a state that is only off (Inactive): it reads as an error.
+- Do not restyle a Tag with colour classes to get a tint; every tint is a `variant` or a `severity`.
 - Use `rounded` for the pill shape rather than a custom radius.
 
 ## Usage
 
 ```vue
 <script setup>
-import Tag from '@aziontech/webkit/tag'
+  import Tag from '@aziontech/webkit/tag'
 </script>
 
 <template>
-  <Tag label="Label" severity="primary" size="medium" />
+  <Tag
+    label="Label"
+    variant="primary"
+    size="medium"
+  />
 </template>
 ```
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `label` | `string` | `''` | false | Fallback text when the default slot is empty. |
-| `severity` | `'primary' \| 'secondary' \| 'success' \| 'info' \| 'warning' \| 'danger' \| 'accent' \| 'contrast'` | `'primary'` | false | Color style for the tag surface and label; `contrast` uses `var(--bg-contrast)` / `var(--text-contrast)`. |
-| `size` | `'small' \| 'medium'` | `'medium'` | false | Size token; `medium` is 24px tall, `small` is 20px. |
-| `rounded` | `boolean` | `false` | false | Pill shape when true. |
-| `icon` | `string` | `'undefined'` | false | PrimeIcons class for the leading icon. |
+| Prop       | Type                                                        | Default     | Required | JSDoc                                                                                                                                                                                                                        |
+| ---------- | ----------------------------------------------------------- | ----------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `label`    | `string`                                                    | `''`        | false    | Fallback text when the default slot is empty.                                                                                                                                                                                |
+| `variant`  | `'primary' \| 'accent' \| 'contrast' \| 'highlight'`        | `'primary'` | false    | Brand look of the tag surface and label, used when `severity` is not set: `primary` (solid brand orange), `accent`, `highlight` (the brand orange as a tint) and `contrast` (`var(--bg-contrast)` / `var(--text-contrast)`). |
+| `severity` | `'neutral' \| 'info' \| 'success' \| 'warning' \| 'danger'` | —           | false    | Status colour of the tag surface and label, the shared `Severity` scale exported from this component; wins over `variant` when set.                                                                                          |
+| `size`     | `'small' \| 'medium'`                                       | `'medium'`  | false    | Size token; `medium` is 24px tall, `small` is 20px.                                                                                                                                                                          |
+| `rounded`  | `boolean`                                                   | `false`     | false    | Pill shape when true.                                                                                                                                                                                                        |
+| `icon`     | `string`                                                    | `''`        | false    | Azion icon class for the leading icon.                                                                                                                                                                                       |
 
 ## Events
 
@@ -65,13 +76,14 @@ import Tag from '@aziontech/webkit/tag'
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | Main content. |
+| Slot      | Scope | Notes         |
+| --------- | ----- | ------------- |
+| `default` | —     | Main content. |
 
 ## States
 
-- Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
+- Visual states: `default`. A tag is static text: it takes no focus and has no hover or active state.
+- `data-severity` mirrors `severity` when it is set; otherwise `data-variant` mirrors `variant`.
 
 ## Motion & Animations
 
@@ -79,16 +91,18 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography (medium) | `.text-tag-md` + `leading-none` (Figma Typography/Tag/md, 12px) |
-| typography (small) | `.text-tag-sm` + `leading-none` (Figma Typography/Tag/sm, 11px) |
-| spacing (medium) | `var(--spacing-xs)` horizontal padding and icon gap |
-| spacing (small) | `var(--spacing-xxs)` horizontal padding and icon gap |
-| shape (all severities) | `var(--shape-elements)` |
-| surface (contrast) | `var(--bg-contrast)` / `var(--text-contrast)` |
-| shape (pill) | `rounded-full` |
-| ring | `var(--ring-color)` |
+| Region                 | Token (DESIGN.md)                                                                                                    |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| typography (medium)    | `.text-tag-md` + `leading-none` (Figma Typography/Tag/md, 12px)                                                      |
+| typography (small)     | `.text-tag-sm` + `leading-none` (Figma Typography/Tag/sm, 11px)                                                      |
+| spacing (medium)       | `var(--spacing-xs)` horizontal padding and icon gap                                                                  |
+| spacing (small)        | `var(--spacing-2xs)` horizontal padding and icon gap                                                                 |
+| shape (all severities) | `var(--shape-control)`                                                                                               |
+| surface (primary)      | `var(--primary)` / `var(--primary-foreground)`, WCAG AA in both themes                                               |
+| surface (contrast)     | `var(--bg-contrast)` / `var(--text-contrast)`                                                                        |
+| surface (highlight)    | `var(--primary-mask)` / `var(--text-brand)`, the logo orange: AA in dark, an owner-accepted brand exception in light |
+| shape (pill)           | `rounded-full`                                                                                                       |
+| ring                   | `var(--ring-color)`                                                                                                  |
 
 ## Theme gaps
 
@@ -96,17 +110,24 @@ _none_
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
+- Visible focus: none; the tag is not focusable. A focusable control that holds a tag draws its own ring.
 - Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `Escape` closes overlays where applicable.
 - ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state; the `highlight` label is the logo orange `#F3652B`, an owner-accepted brand exception in light (about 3:1, `rules/webkit-tokens.md` § "Contrast: APCA and WCAG 2").
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
 
-## Stories (Storybook)
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: a directional `icon` is the consumer's choice and does not mirror.
+- Keyboard: no horizontal arrow-key logic.
+- Isolation: the label renders `dir="auto"`, so a value in another script (a domain, an ID) keeps its own direction inside right-to-left UI.
+
+## Examples
 
 - Default
-- Types
+- Types — every variant and every severity.
 - Sizes
 - WithIcon
 
@@ -123,10 +144,9 @@ _none_
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=label]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Stories (Storybook)" section explicitly justifies the addition.
-- Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + per `variant` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
+- Do not edit `.claude/docs/DESIGN.md` or `.claude/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
 - Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).

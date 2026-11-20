@@ -1,10 +1,11 @@
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
+import { nextTick, ref } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import MediaTile from './media-tile.vue'
 
-const TESTID = 'marketing-media-tile'
+const TESTID = 'media-tile'
 const FRAME = `${TESTID}__frame`
 
 const TITLE = 'AI workloads.'
@@ -40,7 +41,7 @@ describe('MediaTile', () => {
     })
 
     expect(getByTestId(TESTID).tagName).toBe('FIGURE')
-    expect(captionOf(container)).toBeInTheDocument()
+    expect(captionOf(container as HTMLElement)).toBeInTheDocument()
   })
 
   it('runs the lead into the body as one caption string', () => {
@@ -48,7 +49,7 @@ describe('MediaTile', () => {
       props: { title: TITLE, description: DESCRIPTION }
     })
 
-    expect(captionOf(container)?.textContent).toBe(`${TITLE} ${DESCRIPTION}`)
+    expect(captionOf(container as HTMLElement)?.textContent).toBe(`${TITLE} ${DESCRIPTION}`)
   })
 
   it('renders the lead as the caption strong', () => {
@@ -62,7 +63,7 @@ describe('MediaTile', () => {
   it('renders the lead alone when no body is given', () => {
     const { container, getByTestId } = render(MediaTile, { props: { title: TITLE } })
 
-    expect(captionOf(container)?.textContent).toBe(TITLE)
+    expect(captionOf(container as HTMLElement)?.textContent).toBe(TITLE)
     expect(getByTestId(TESTID)).not.toHaveAttribute('data-described')
   })
 
@@ -80,7 +81,7 @@ describe('MediaTile', () => {
       slots: { default: 'Scheduled close to the request that needs them.' }
     })
 
-    expect(captionOf(container)?.textContent).toBe(
+    expect(captionOf(container as HTMLElement)?.textContent).toBe(
       `${TITLE} Scheduled close to the request that needs them.`
     )
     expect(queryByText(DESCRIPTION)).toBeNull()
@@ -182,28 +183,28 @@ describe('MediaTile', () => {
   it('frames the media in the default register', () => {
     const { getByTestId } = render(MediaTile, { props: { title: TITLE } })
 
-    expect(getByTestId(TESTID)).toHaveAttribute('data-kind', 'frame')
+    expect(getByTestId(TESTID)).toHaveAttribute('data-variant', 'frame')
     expect(getByTestId(FRAME)).toHaveAttribute('data-borders')
   })
 
   it('draws no rules around the media in the plain register', () => {
-    const { getByTestId } = render(MediaTile, { props: { title: TITLE, kind: 'plain' } })
+    const { getByTestId } = render(MediaTile, { props: { title: TITLE, variant: 'plain' } })
 
-    expect(getByTestId(TESTID)).toHaveAttribute('data-kind', 'plain')
+    expect(getByTestId(TESTID)).toHaveAttribute('data-variant', 'plain')
     expect(getByTestId(FRAME)).not.toHaveAttribute('data-borders')
   })
 
   it('captions a plain tile the same way it captions a framed one', () => {
     const { container } = render(MediaTile, {
-      props: { title: TITLE, description: DESCRIPTION, kind: 'plain' }
+      props: { title: TITLE, description: DESCRIPTION, variant: 'plain' }
     })
 
-    expect(captionOf(container)?.textContent).toBe(`${TITLE} ${DESCRIPTION}`)
+    expect(captionOf(container as HTMLElement)?.textContent).toBe(`${TITLE} ${DESCRIPTION}`)
   })
 
   it('has no a11y violations as a plain tile', async () => {
     const { container } = render(MediaTile, {
-      props: { title: TITLE, description: DESCRIPTION, kind: 'plain', src: SRC, alt: ALT }
+      props: { title: TITLE, description: DESCRIPTION, variant: 'plain', src: SRC, alt: ALT }
     })
 
     await expectNoA11yViolations(container)
@@ -223,5 +224,27 @@ describe('MediaTile', () => {
     })
 
     await expectNoA11yViolations(container)
+  })
+
+  describe('slot presence', () => {
+    it('follows a v-if slot that appears and disappears after mount', async () => {
+      const shown = ref(false)
+      const { queryByTestId } = render({
+        components: { MediaTile },
+        setup: () => ({ shown }),
+        template: `<MediaTile title="Edge"><template v-if="shown" #media><span data-testid="probe">Slotted</span></template></MediaTile>`
+      })
+      expect(queryByTestId('media-tile')?.hasAttribute('data-media')).toBe(false)
+
+      shown.value = true
+      await nextTick()
+      expect(queryByTestId('media-tile')?.hasAttribute('data-media')).toBe(true)
+      expect(queryByTestId('probe')).not.toBeNull()
+
+      shown.value = false
+      await nextTick()
+      expect(queryByTestId('media-tile')?.hasAttribute('data-media')).toBe(false)
+      expect(queryByTestId('probe')).toBeNull()
+    })
   })
 })

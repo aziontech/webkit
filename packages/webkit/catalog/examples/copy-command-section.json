@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "One shell command with the `$` prompt and a copy button, sized for a hero's actions row.",
+   "file": "examples/copy-command-section/default.vue"
+  },
+  {
+   "name": "Prompt",
+   "summary": "With `shell` off the line is a prompt for an AI agent: no `$`, and the field and copy button are named Prompt.",
+   "file": "examples/copy-command-section/prompt.vue"
+  }
+ ]
+}

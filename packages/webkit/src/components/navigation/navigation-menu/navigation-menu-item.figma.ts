@@ -16,7 +16,7 @@ export default {
   example: figma.code`<NavigationMenu.Item layout="entry" href="#"${description ? figma.code` description="${description}"` : ''} close-on-click>${
     showIcon
       ? figma.code`
-  <template #icon><i class="pi pi-box" aria-hidden="true" /></template>`
+  <template #icon><i class="az az-box" aria-hidden="true" /></template>`
       : ''
   }
   ${title}

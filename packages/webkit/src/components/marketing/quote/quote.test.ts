@@ -1,10 +1,11 @@
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
+import { nextTick, ref } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import Quote from './quote.vue'
 
-const TESTID = 'marketing-quote'
+const TESTID = 'quote'
 
 const props = {
   text: 'Magalu guarantees high availability for hundreds of global-scale applications.',
@@ -96,11 +97,11 @@ describe('Quote', () => {
   it('carries its register on the root', () => {
     const { getByTestId } = render(Quote, { props })
 
-    expect(getByTestId(TESTID)).toHaveAttribute('data-kind', 'inline')
+    expect(getByTestId(TESTID)).toHaveAttribute('data-variant', 'inline')
   })
 
   it('sets the speaker apart from the role in the signed register', () => {
-    const { container } = render(Quote, { props: { ...props, kind: 'signed' } })
+    const { container } = render(Quote, { props: { ...props, variant: 'signed' } })
     const caption = container.querySelector('figcaption')
 
     expect(caption).toHaveTextContent(props.name)
@@ -109,8 +110,8 @@ describe('Quote', () => {
 
   it.each(['signed', 'highlight'] as const)(
     'leads the %s register with the quotation mark and no typed quote character',
-    (kind) => {
-      const { getByTestId, container } = render(Quote, { props: { ...props, kind } })
+    (variant) => {
+      const { getByTestId, container } = render(Quote, { props: { ...props, variant: variant } })
       const mark = getByTestId(TESTID).querySelector('svg')
 
       expect(mark).toBeInTheDocument()
@@ -127,12 +128,12 @@ describe('Quote', () => {
 
   it('draws the likeness in the highlight register only when a photo is given', () => {
     const photo = '/people/allan.jpg'
-    const without = render(Quote, { props: { ...props, kind: 'highlight' } })
+    const without = render(Quote, { props: { ...props, variant: 'highlight' } })
 
     expect(without.container.querySelector('figcaption img')).toBeNull()
     without.unmount()
 
-    const { container } = render(Quote, { props: { ...props, kind: 'highlight', photo } })
+    const { container } = render(Quote, { props: { ...props, variant: 'highlight', photo } })
 
     expect(container.querySelector('figcaption img')).toHaveAttribute('src', photo)
   })
@@ -166,7 +167,7 @@ describe('Quote', () => {
     const highlights = ['high availability', 'global-scale applications']
     const { container } = render(Quote, { props: { ...props, highlights } })
     const quotation = container.querySelector('blockquote')
-    const phrases = [...container.querySelectorAll('blockquote [data-highlight]')].map(
+    const phrases = [...container.querySelectorAll('blockquote [data-slot="highlight"]')].map(
       (span) => span.textContent
     )
 
@@ -179,7 +180,7 @@ describe('Quote', () => {
     const { container } = render(Quote, { props: { ...props, highlights: ['not in the quote'] } })
 
     expect(container.querySelector('blockquote')).not.toHaveAttribute('data-highlighted')
-    expect(container.querySelector('[data-highlight]')).toBeNull()
+    expect(container.querySelector('[data-slot="highlight"]')).toBeNull()
   })
 
   it('ignores highlights when the default slot replaces the text', () => {
@@ -189,7 +190,7 @@ describe('Quote', () => {
     })
 
     expect(container.querySelector('blockquote')).not.toHaveAttribute('data-highlighted')
-    expect(container.querySelector('[data-highlight]')).toBeNull()
+    expect(container.querySelector('[data-slot="highlight"]')).toBeNull()
   })
 
   it('has no a11y violations with highlighted phrases', async () => {
@@ -202,7 +203,7 @@ describe('Quote', () => {
 
   it('has no a11y violations in the signed register', async () => {
     const { container } = render(Quote, {
-      props: { ...props, kind: 'signed', logo },
+      props: { ...props, variant: 'signed', logo },
       slots: { actions: '<a href="/clients">Clients</a>' }
     })
 
@@ -210,8 +211,30 @@ describe('Quote', () => {
   })
 
   it('has no a11y violations in the highlight register', async () => {
-    const { container } = render(Quote, { props: { ...props, kind: 'highlight', logo } })
+    const { container } = render(Quote, { props: { ...props, variant: 'highlight', logo } })
 
     await expectNoA11yViolations(container)
+  })
+
+  describe('slot presence', () => {
+    it('follows a v-if slot that appears and disappears after mount', async () => {
+      const shown = ref(false)
+      const { queryByTestId } = render({
+        components: { Quote },
+        setup: () => ({ shown }),
+        template: `<Quote text="Fast."><template v-if="shown" #mark><span data-testid="probe">Slotted</span></template></Quote>`
+      })
+      expect(queryByTestId('probe')).toBeNull()
+
+      shown.value = true
+      await nextTick()
+      expect(queryByTestId('probe')).not.toBeNull()
+      expect(queryByTestId('probe')).not.toBeNull()
+
+      shown.value = false
+      await nextTick()
+      expect(queryByTestId('probe')).toBeNull()
+      expect(queryByTestId('probe')).toBeNull()
+    })
   })
 })

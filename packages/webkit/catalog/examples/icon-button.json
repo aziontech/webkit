@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Default primary icon button at large size.",
+   "file": "examples/icon-button/default.vue"
+  },
+  {
+   "name": "Variants",
+   "summary": "All variants side by side.",
+   "file": "examples/icon-button/variants.vue"
+  },
+  {
+   "name": "Sizes",
+   "summary": "All size variants side by side.",
+   "file": "examples/icon-button/sizes.vue"
+  }
+ ]
+}

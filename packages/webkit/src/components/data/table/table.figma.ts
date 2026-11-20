@@ -29,32 +29,32 @@ const columns = instance
   .reduce(
     (acc, node) => {
       if (node.type !== 'INSTANCE') return acc
-      const kind = node.getEnum('kind', {
+      const type = node.getEnum('kind', {
         default: 'default',
         checkbox: 'checkbox',
         slot: 'slot'
       })
       const content = node.findText('Cell Content')
-      if (kind !== 'default' || content.type !== 'TEXT') return acc
+      if (type !== 'default' || content.type !== 'TEXT') return acc
       const sortable = node.getEnum('sortable', {
         default: false,
         true: true
       })
       return figma.code`${acc}
-    { accessorKey: '${toKey(content.textContent)}', header: '${content.textContent}'${sortable ? figma.code`, enableSorting: true` : ''} },`
+    { accessorKey: '${toKey(content.textContent)}', header: '${content.textContent}'${sortable ? figma.code`, sortable: true` : ''} },`
     },
     figma.code``
   )
 
-const paginator = instance.findInstance('_Paginator', { traverseInstances: true })
+const pagination = instance.findInstance('_Paginator', { traverseInstances: true })
 const emptyState = instance.findInstance('EmptyState', { traverseInstances: true })
 
 export default {
-  example: figma.code`<Table
+  example: figma.code`<DataTable
   :data="${template === 'empty' ? '[]' : 'rows'}"
   :columns="[${columns}
   ]"${
-    paginator.type === 'INSTANCE' && template !== 'empty'
+    pagination.type === 'INSTANCE' && template !== 'empty'
       ? figma.code`
   paginated`
       : ''
@@ -79,8 +79,8 @@ export default {
   </template>`
       : ''
   }
-</Table>`,
-  imports: ["import Table from '@aziontech/webkit/table'"],
+</DataTable>`,
+  imports: ["import DataTable from '@aziontech/webkit/data-table'"],
   id: 'table',
   metadata: { nestable: false }
 }

@@ -5,7 +5,13 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 
 import { applyPlan } from '../../src/cli/apply.js'
-import { FRAGMENT_START, LEGACY_MARKER, stamp, stripMarker } from '../../src/cli/bundle.js'
+import {
+  FRAGMENT_END,
+  FRAGMENT_START,
+  LEGACY_MARKER,
+  stamp,
+  stripMarker
+} from '../../src/cli/bundle.js'
 import { planDoctor } from '../../src/cli/doctor.js'
 import { planInit } from '../../src/cli/plan.js'
 import { planSync } from '../../src/cli/sync.js'
@@ -22,12 +28,12 @@ function makeProject() {
 }
 
 // A tiny two-rule fake templates dir — cheap and fast, and lets tests simulate "the
-// template changed" by editing these files directly instead of the real cli-templates.
+// template changed" by editing these files directly instead of the real skills/ and rules/.
 function makeTemplatesDir(overrides = {}) {
   const dir = mkdtempSync(join(tmpdir(), 'webkit-templates-'))
   mkdirSync(join(dir, 'rules'), { recursive: true })
   mkdirSync(join(dir, 'skills/webkit-sample'), { recursive: true })
-  mkdirSync(join(dir, 'agents'), { recursive: true })
+  mkdirSync(join(dir, 'adapters/claude/agents'), { recursive: true })
   writeFileSync(
     join(dir, 'rules/webkit-imports.md'),
     overrides.rule ?? '# Rule: imports\n\nUse the flat path.\n'
@@ -38,7 +44,7 @@ function makeTemplatesDir(overrides = {}) {
       '---\nname: webkit-sample\ndescription: A sample skill.\n---\n\n# Skill: webkit-sample\nBody.\n'
   )
   writeFileSync(
-    join(dir, 'CLAUDE.fragment.md'),
+    join(dir, 'adapters/AGENTS_FRAGMENT.md'),
     overrides.fragment ?? '## @aziontech/webkit design system\n\nFollow the rules.\n'
   )
   return dir
@@ -260,12 +266,36 @@ test('planSync: CLAUDE.md fragment states — missing, legacy (deduped), stale, 
 
     // stale — the fragment template changed upstream.
     writeFileSync(
-      join(templatesDir, 'CLAUDE.fragment.md'),
+      join(templatesDir, 'adapters/AGENTS_FRAGMENT.md'),
       '## @aziontech/webkit design system\n\nFollow the rules, updated.\n'
     )
     plan = planSync(project, { templatesDir, version: VERSION })
     assert.equal(plan.fragment.state, 'stale')
     assert.equal(plan.drift, true)
+  } finally {
+    rmSync(project, { recursive: true, force: true })
+    rmSync(templatesDir, { recursive: true, force: true })
+  }
+})
+
+test('planSync: a CLAUDE.md with a lone start marker is stale and applying leaves one fenced block', () => {
+  const project = makeProject()
+  const templatesDir = makeTemplatesDir()
+  try {
+    writeFileSync(
+      join(project, 'CLAUDE.md'),
+      `# Project\n\n${FRAGMENT_START}\n## @aziontech/webkit design system\nStale fragment.\n\n## Team notes\nkeep\n`
+    )
+    let plan = planSync(project, { templatesDir, version: VERSION })
+    assert.equal(plan.fragment.state, 'stale')
+    applyPlan(project, plan.actions)
+    const after = readFileSync(join(project, 'CLAUDE.md'), 'utf8')
+    assert.ok(!after.includes('Stale fragment.'))
+    assert.equal(after.split(FRAGMENT_START).length - 1, 1)
+    assert.equal(after.split(FRAGMENT_END).length - 1, 1)
+    assert.ok(after.includes('## Team notes\nkeep'))
+    plan = planSync(project, { templatesDir, version: VERSION })
+    assert.equal(plan.fragment.state, 'current')
   } finally {
     rmSync(project, { recursive: true, force: true })
     rmSync(templatesDir, { recursive: true, force: true })
@@ -318,5 +348,41 @@ test('doctor reports the claude bundle status per sync state', () => {
     assert.equal(bundle.status, 'warn')
   } finally {
     rmSync(project, { recursive: true, force: true })
+  }
+})
+
+test('planSync fences the same fragment into AGENTS.md and CLAUDE.md', () => {
+  const project = makeProject()
+  const templatesDir = makeTemplatesDir()
+  try {
+    const plan = planSync(project, { templatesDir, version: VERSION })
+    assert.equal(plan.agentsFragment.state, 'missing')
+    applyPlan(project, plan.actions)
+    const agents = readFileSync(join(project, 'AGENTS.md'), 'utf8')
+    const claude = readFileSync(join(project, 'CLAUDE.md'), 'utf8')
+    assert.match(agents, /Follow the rules\./)
+    assert.equal(agents, claude)
+    const after = planSync(project, { templatesDir, version: VERSION })
+    assert.equal(after.agentsFragment.state, 'current')
+    assert.equal(after.drift, false)
+  } finally {
+    rmSync(project, { recursive: true, force: true })
+    rmSync(templatesDir, { recursive: true, force: true })
+  }
+})
+
+test('planSync reads the adapters layout (adapters/claude/agents, adapters/AGENTS_FRAGMENT.md)', () => {
+  const project = makeProject()
+  const templatesDir = makeTemplatesDir()
+  try {
+    mkdirSync(join(templatesDir, 'adapters/claude/agents'), { recursive: true })
+    writeFileSync(join(templatesDir, 'adapters/claude/agents/webkit-advisor.md'), '# Agent\n')
+    writeFileSync(join(templatesDir, 'adapters/AGENTS_FRAGMENT.md'), '## webkit\n\nNew layout.\n')
+    applyPlan(project, planSync(project, { templatesDir, version: VERSION }).actions)
+    assert.ok(existsSync(join(project, '.claude/agents/webkit-advisor.md')))
+    assert.match(readFileSync(join(project, 'AGENTS.md'), 'utf8'), /New layout\./)
+  } finally {
+    rmSync(project, { recursive: true, force: true })
+    rmSync(templatesDir, { recursive: true, force: true })
   }
 })

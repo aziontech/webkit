@@ -1,0 +1,87 @@
+{
+ "name": "agent-activity",
+ "binding": "AgentActivity",
+ "import": "@aziontech/webkit/agent-activity",
+ "treeShakeableImport": "@aziontech/webkit/agent-activity",
+ "category": "ai",
+ "surface": "app",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Shows what an agent is doing while it works (Cloudscape progressive steps, AI Elements Chain of Thought): the current step with a running indicator (`Searching the docs`, `Reading 3 files`) and, behind a disclosure, the list of every step with its status from the shared status set. It is the display of the short progress updates an agent streams (TanStack AI `activity` parts and `role: 'activity'` messages), filled from plain props so it stays library-neutral. Screen readers hear a step only when it has been the current one for a second, and the outcome once, never every tick.",
+ "setup": null,
+ "useWhen": [
+  "An agent works through several steps before or while it answers, and the reader should see which step it is on (`Searching the docs`, `Reading 3 files`, `Writing the answer`).",
+  "A plan the agent ticks over, step by step, inside a chat message."
+ ],
+ "avoidWhen": [
+  "Nothing to report but that an answer is coming → `response-loading`.",
+  "The model's free-text thinking trace → `reasoning`.",
+  "A call with side effects, its input and output → `tool-call`; one asking for approval → `tool-approval`.",
+  "A build or deploy run with log lines per step → `log-viewer-steps`.",
+  "Moving through the pages of a form or wizard → `stepper`."
+ ],
+ "related": [
+  "`response-loading` — the waiting state before the first step arrives.",
+  "`reasoning` — thinking, not doing.",
+  "`tool-call` — one call in detail; an activity step can summarize it.",
+  "`chat-message` — the bubble the activity sits in."
+ ],
+ "bestPractices": [
+  "Title each step `<Verb>ing <what>` in the reader's words, no end punctuation: `Searching the docs`, never a tool identifier.",
+  "Keep one step `running` at a time; later steps stay `pending` until they start.",
+  "When a step fails, mark it `error` and the steps that will no longer run `canceled`.",
+  "Keep the steps collapsed in a chat once the answer arrives; the answer is the main content.",
+  "Key each step by something stable, such as the id of the activity message it comes from.",
+  "Use 3 to 7 steps; merge fine-grained ticks into one step and update its `description` instead."
+ ],
+ "props": [
+  {
+   "name": "steps",
+   "type": "AgentActivityStep[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The steps of the work, in order: each has a `key`, a `title`, a `status` from the shared status set and an optional `description`. The current step is the first running one, else the first failed one, else the last canceled one of a stopped run, else the last one that is not pending."
+  },
+  {
+   "name": "defaultOpen",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Initial open state of the step list when uncontrolled; collapsed shows only the current step."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the activity. Empty uses the locale catalog (`Agent activity`)."
+  },
+  {
+   "name": "open",
+   "type": "boolean",
+   "default": "undefined as never",
+   "required": "false",
+   "doc": "Two-way value (`v-model:open`)."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/agent-activity/default.vue"
+  },
+  {
+   "name": "Statuses",
+   "file": "examples/agent-activity/statuses.vue"
+  },
+  {
+   "name": "Streaming",
+   "file": "examples/agent-activity/streaming.vue"
+  }
+ ],
+ "docs": "components/agent-activity.md"
+}

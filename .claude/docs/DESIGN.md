@@ -1,11 +1,11 @@
 # Design guidelines for `@aziontech/webkit`
 
-How to style components under `packages/webkit/src/components/webkit/` using tokens from `@aziontech/theme`. The theme compiles tokens into CSS custom properties and utility classes; components consume those outputs — they do not redefine typography or raw visual values.
+How to style components under `packages/webkit/src/components/` using tokens from `@aziontech/theme`. The theme compiles tokens into CSS custom properties and utility classes; components consume those outputs — they do not redefine typography or raw visual values.
 
 ## Prerequisites
 
-- Import the theme stylesheet in the app (Storybook already does).
-- Rebuild theme tokens when `texts.data.js` or other token sources change: `pnpm` from the repo root, following `packages/theme` docs.
+- Import the theme stylesheet in the app (the docs site and the demos already do: `apps/docs/src/main.ts`, `apps/demos/src/main.ts`).
+- Rebuild theme tokens when `typography.js` or other token sources change: `pnpm` from the repo root, following `packages/theme` docs.
 
 ---
 
@@ -13,18 +13,18 @@ How to style components under `packages/webkit/src/components/webkit/` using tok
 
 ### Tailwind v4 (CSS-first)
 
-`@aziontech/webkit` targets **Tailwind v4 only**. `packages/theme/src/scripts/build-tokens.mjs` emits a single output — `packages/theme/dist/v4/globals.{css,scss}` — and consumers import it directly:
+`@aziontech/webkit` targets **Tailwind v4 only**. `packages/theme/scripts/build-tokens.mjs` emits a single output — `packages/theme/dist/globals.{css,scss}` — and consumers import it directly:
 
 ```css
 @import '@aziontech/theme/globals.css';
 ```
 
-That file already contains `@import "tailwindcss"` plus `@theme { --color-*, --breakpoint-*, --animate-* }`; there is **no** `tailwind-preset`, `tailwind.config.js`, or `content: []` array anywhere in the pipeline. Utility detection is done by the `@source "../../../webkit/src"` directive inside the emitted globals — that is what makes arbitrary utilities like `bg-(--primary)` or `p-(--spacing-md)` work in webkit components without any extra config on the consumer side.
+That file already contains `@import "tailwindcss"` plus `@theme { --color-*, --breakpoint-*, --animate-* }`; there is **no** `tailwind-preset`, `tailwind.config.js`, or `content: []` array anywhere in the pipeline. The theme scans no component package. Utility detection for webkit components comes from the consumer's `src/webkit.sources.css` (one `@source` per WebKit file the app imports, written by `@aziontech/webkit/vite-plugin` or `npx @aziontech/webkit css`), or from `@aziontech/webkit/styles/all` in an app that renders every component; that is what makes arbitrary utilities like `bg-(--primary)` or `p-(--spacing-md)` compile for the components the app uses, and only those.
 
 Integration points:
 
-- **Vite / Storybook:** register `@tailwindcss/vite` once. See [`apps/storybook/.storybook/main.js`](../../apps/storybook/.storybook/main.js).
-- **`@apply` inside secondary CSS files:** requires `@reference "@aziontech/theme/globals.css";` at the top of the file (Tailwind v4 constraint). Example: [`apps/storybook/src/styles/preview.css`](../../apps/storybook/src/styles/preview.css).
+- **Vite:** register `@tailwindcss/vite` once. See [`apps/docs/vite.config.ts`](../../apps/docs/vite.config.ts).
+- **`@apply` inside secondary CSS files:** requires `@reference "@aziontech/theme/globals.css";` at the top of the file (Tailwind v4 constraint). Example: [`apps/docs/src/styles/main.css`](../../apps/docs/src/styles/main.css) (`@reference "@aziontech/theme";`).
 - **`!important`:** use the v4 suffix syntax (`opacity-50!`, `size-10!`). The v3 prefix (`!opacity-50`) is forbidden.
 
 Do not add a `tailwind.config.*` file to any package under `packages/`. All theme customization lives in the token sources under `packages/theme/src/tokens/`, is compiled into `@theme { … }`, and reaches components via CSS custom properties.
@@ -37,7 +37,7 @@ Do not add a `tailwind.config.*` file to any package under `packages/`. All them
 
 Use **only** the text styles declared in:
 
-`packages/theme/src/tokens/semantic/texts.data.js`
+`packages/theme/src/tokens/semantic/typography.js`
 
 Each key (for example `text-button-lg`) becomes:
 
@@ -56,37 +56,42 @@ const sizeClasses = {
 }
 ```
 
-Reference: `packages/webkit/src/components/webkit/actions/button/button.vue`.
+Reference: `packages/webkit/src/components/action/button/button.vue`.
 
 ### Available text styles
 
-| Class                                                              | Use for                                                                                                                  |
-| ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
-| `text-big-number-lg` / `text-big-number-md` / `text-big-number-sm` | Large numeric displays                                                                                                   |
-| `text-heading-3xl` … `text-heading-sm`                             | Headings                                                                                                                 |
-| `text-heading-xs` / `text-heading-xxs`                             | Small headings — a flat 16px / 14px, no responsive ladder (a card's title, a wordmark written in type)                   |
-| `text-body-lg` … `text-body-xxs`                                   | Body copy                                                                                                                |
-| `text-body-prose-md`                                               | Long-form prose — body copy at `--leading-relaxed` (1.625); the `text-body-*` set is `snug` (1.375)                      |
-| `text-label-sm` / `text-label-md` / `text-label-lg`                | Labels, compact UI text                                                                                                  |
-| `text-label-code-sm` / `text-label-code-md` / `text-label-code-lg` | Monospace code labels (filename bar, code lines, line numbers)                                                           |
-| `text-body-code-sm`                                                | Monospace prose — a mono paragraph that WRAPS (the `label-code-*` set is `leading-none`, made for one-row-per-line code) |
-| `text-overline-md` / `text-overline-sm` / `text-overline-xs`       | Overlines (uppercase, tracking baked in)                                                                                 |
-| `text-button-lg` / `text-button-md`                                | Button labels                                                                                                            |
-| `text-link`                                                        | Inline `<a>` inside body/heading copy (inherits parent size; hover underline)                                            |
+| Class                                                              | Use for                                                                                                                                                                                                                            |
+| ------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `text-big-number-lg` / `text-big-number-md` / `text-big-number-sm` | Large numeric displays                                                                                                                                                                                                             |
+| `text-heading-3xl` … `text-heading-sm`                             | Headings                                                                                                                                                                                                                           |
+| `text-heading-xs` / `text-heading-2xs`                             | Small headings — a flat 16px / 14px, no responsive ladder (a card's title, a wordmark written in type)                                                                                                                             |
+| `text-title-lg` / `text-title-md` / `text-title-sm`                | Titles of a contained surface, medium weight (500): a dialog or drawer (lg, the heading-sm ladder), a side panel (md, 16px), a popover, card, alert or toast (sm, 14px). Page and section headings stay `text-heading-*`, regular. |
+| `text-body-lg` … `text-body-2xs`                                   | Body copy                                                                                                                                                                                                                          |
+| `text-body-prose-md`                                               | Long-form prose — body copy at `--leading-relaxed` (1.625); the `text-body-*` set is `snug` (1.375)                                                                                                                                |
+| `text-label-sm` / `text-label-md` / `text-label-lg`                | Labels, compact UI text                                                                                                                                                                                                            |
+| `text-label-code-sm` / `text-label-code-md` / `text-label-code-lg` | Monospace code labels (filename bar, code lines, line numbers)                                                                                                                                                                     |
+| `text-body-code-sm`                                                | Monospace prose — a mono paragraph that WRAPS (the `label-code-*` set is `leading-none`, made for one-row-per-line code)                                                                                                           |
+| `text-overline-md` / `text-overline-sm` / `text-overline-xs`       | Overlines (uppercase, tracking baked in)                                                                                                                                                                                           |
+| `text-button-lg` / `text-button-md`                                | Button labels                                                                                                                                                                                                                      |
+| `text-link`                                                        | Inline `<a>` inside body/heading copy (inherits parent size; quiet underline at rest, full underline on hover)                                                                                                                     |
 
 These classes are **mobile-first**: font sizes can change at `sm`, `md`, etc. Do not duplicate breakpoint logic in components.
 
+Heading tracking is in `em`, so it shrinks with the font: `text-heading-3xl` is `-0.046em` (`--tracking-tighter`) and `text-heading-2xl` is `-0.053em`, the old `-0.16rem` at their desktop size (3.5rem and 3rem). A fixed `rem` tracking on a heading that steps down on phones runs the words together. Any heading, amount or big-number role with tracking uses `em` or `0`, never `rem` or `px` (`packages/theme/test/heading-tracking.test.mjs`).
+
 ### Do not declare typography primitives in components
 
-Inside `packages/webkit/src/components/webkit/`, **never** set:
+Inside `packages/webkit/src/components/`, **never** set:
 
-- `font-family` / `font-proto-mono` / `font-sora`
+- `font-family` / `font-proto-mono` / `font-rubik`
 - `line-height` / `leading-*` (except `leading-none` on icons aligned to `text-[length:inherit]`)
 - `letter-spacing` / `tracking-*`
 - Raw `text-xs`, `text-sm`, `text-base`, `text-lg`, etc.
 - `text-(length:--text-*-font-size)` when a `text-*` class already exists for that role
 
-Font family, line height, letter spacing, and responsive font size live in `texts.data.js` and the generated `.text-*` classes. Pick the semantic class that matches the design; if none fits, add a new entry in `texts.data.js` and rebuild the theme — do not hardcode typography in the component.
+Weight is part of the role: every role is regular (400) except `text-title-*` (medium 500); never add a `font-medium` / `font-semibold` utility in a component.
+
+Font family, line height, letter spacing, and responsive font size live in `typography.js` and the generated `.text-*` classes. Pick the semantic class that matches the design; if none fits, add a new entry in `typography.js` and rebuild the theme — do not hardcode typography in the component.
 
 **Allowed:** weight or color when not part of the text bundle and required for state (prefer semantic text colors like `text-(--text-muted)`).
 
@@ -111,7 +116,9 @@ For anchors **inside** body or heading copy, use the `text-link` typography clas
 </p>
 ```
 
-For **standalone** navigation links (icon, ghost hover surface, fixed height), use `@aziontech/webkit/link` — not `text-link` alone.
+`text-link` draws a quiet underline at rest (40 % of the link colour) and a full 2px underline on hover. Never remove it from a link inside a sentence: the link blue is only about 3:1 against default text and close to 1:1 against muted text, so colour alone does not mark the link (WCAG 1.4.1).
+
+For **standalone** navigation links (icon, ghost hover surface, fixed height), use `@aziontech/webkit/link` — not `text-link` alone. A standalone `Link` underlines on hover only.
 
 ---
 
@@ -121,15 +128,15 @@ For **standalone** navigation links (icon, ghost hover surface, fixed height), u
 
 Use **only** the spacing tokens declared in:
 
-`packages/theme/src/tokens/semantic/spacings.data.js`
+`packages/theme/src/tokens/semantic/spacing.js`
 
 Each key (for example `spacing-md`) becomes a CSS variable: `--spacing-md` (mobile-first; values can change at `sm`, `xl`, etc.).
 
-Do not use the primitive scale in `packages/theme/src/tokens/primitives/shape/spacing.js` (`--spacing-1`, `--spacing-4`, …) in `components/webkit/`.
+Do not use the primitive scale in `packages/theme/src/tokens/primitives/shape/spacing.js` (`--spacing-1`, `--spacing-4`, …) in `packages/webkit/src/components/`.
 
 ### How to apply
 
-Always reference the variable for **padding**, **gap**, and **margin** (including axis-specific utilities). Do not use generated `.p-spacing-*` / `.gap-spacing-*` classes in `components/webkit/`:
+Always reference the variable for **padding**, **gap**, and **margin** (including axis-specific utilities). Do not use generated `.p-spacing-*` / `.gap-spacing-*` classes in `packages/webkit/src/components/`:
 
 ```html
 p-(--spacing-md) px-(--spacing-sm) py-(--spacing-xs) gap-(--spacing-sm) gap-x-(--spacing-md)
@@ -142,21 +149,21 @@ Breakpoint growth is baked into the CSS variables; you do not duplicate responsi
 
 | Token         | CSS variable    | Base (`_`) | Also at breakpoints |
 | ------------- | --------------- | ---------- | ------------------- |
-| `spacing-xxl` | `--spacing-xxl` | `2rem`     | `sm`, `xl`          |
+| `spacing-2xl` | `--spacing-2xl` | `2rem`     | `sm`, `xl`          |
 | `spacing-xl`  | `--spacing-xl`  | `1.5rem`   | `sm`, `xl`          |
 | `spacing-lg`  | `--spacing-lg`  | `1rem`     | `sm`                |
 | `spacing-md`  | `--spacing-md`  | `1rem`     | —                   |
 | `spacing-sm`  | `--spacing-sm`  | `0.75rem`  | —                   |
 | `spacing-xs`  | `--spacing-xs`  | `0.5rem`   | —                   |
-| `spacing-xxs` | `--spacing-xxs` | `0.25rem`  | —                   |
+| `spacing-2xs` | `--spacing-2xs` | `0.25rem`  | —                   |
 
-If none of these fit the design, add a new entry in `spacings.data.js` and rebuild the theme — do not hardcode spacing in the component.
+If none of these fit the design, add a new entry in `spacing.js` and rebuild the theme — do not hardcode spacing in the component.
 
 ### Do not
 
 - Use primitive `--spacing-1` … `--spacing-96` from `spacing.js`.
 - Use arbitrary pixel/rem values or Tailwind’s default scale (`p-4`, `gap-3`, `m-6`) in webkit components.
-- Use legacy `spacing-elements-*` names; map to `spacing-*` keys from `spacings.data.js`.
+- Use legacy `spacing-elements-*` names; map to `spacing-*` keys from `spacing.js`.
 
 Example from Button — horizontal padding and inner gap:
 
@@ -187,7 +194,7 @@ The marketing site is measured by two more tokens. `--layout-measure-site` (1388
 section, the docs home and the footer share it, which is the only reason the border-x running down
 the page is continuous — and `--layout-measure-site-header` (1620px) is the top bar's own column,
 one rung wider, since a bar's payload is chrome held apart at the two ends of the window rather than
-content read across it. `GlobalHeader kind="site"` is the one consumer of the header token. The page
+content read across it. `AppHeader variant="site"` is the one consumer of the header token. The page
 frame has its own column class, `.layout-column-site`, whose `min()` cap hands off from the measure to
 a window-less-boundary inset below it — so the frame stays inset on a phone, where a bare
 `max-w-(--layout-measure-site)` would land its rules on the window edges.
@@ -207,7 +214,7 @@ Rhythm is two steps and no more: `--layout-section-gap` between the sections of 
 
 Every layout token is a `var()` reference to `--spacing-*` / `--container-*` — never a literal length —
 which is what lets the layout scale inherit the spacing scale's breakpoints instead of restating them.
-Full catalog: **Foundations → Layout** in Storybook.
+Full catalog: **Foundations → Layout and devices** on the docs site.
 
 ### Fixed content widths
 
@@ -232,7 +239,7 @@ Use **semantic shape** tokens only:
 ```html
 rounded-(--shape-button)
 <!-- buttons -->
-rounded-(--shape-elements)
+rounded-(--shape-control)
 <!-- inputs, chips, small surfaces -->
 rounded-(--shape-card)
 <!-- cards -->
@@ -250,7 +257,7 @@ Do not use `rounded-md`, `rounded-lg`, or numeric radius in webkit components.
 
 ## Shadows (elevation)
 
-Use **primitive shadow** variables from `packages/theme/src/tokens/primitives/effects/shadow.js`. They compile to `--shadow-*` on `:root` via `compile-primitives.js`.
+Use **primitive shadow** variables from `packages/theme/src/tokens/primitives/effects/shadow.js`. They compile to `--shadow-*` on `:root` via `scripts/lib/primitives.mjs`. Dark mode redefines every step (`shadowDark` in the same file, emitted with the dark theme): a black shadow on a near-black canvas is invisible, so the dark steps are deeper (60–80 % black) and `--shadow-sm` and up add a 1 px white hairline at 6 % that traces the raised edge. Read the shadow through the variable (`shadow-(--shadow-md)`), never through Tailwind's `shadow-md`, which bakes in the light value.
 
 ### Pattern
 
@@ -272,7 +279,7 @@ Apply on the element that should cast elevation (panel shell, floating surface, 
 | `--shadow-xl`  | High emphasis overlays (use sparingly)                 |
 | `--shadow-2xl` | Maximum elevation (marketing hero cards, not forms)    |
 
-Reference: `packages/webkit/src/components/webkit/overlay/panel/panel.vue` (`shadow-(--shadow-md)`).
+Reference: `packages/webkit/src/components/overlay/panel/panel.vue` (`shadow-(--shadow-md)`).
 
 ### Related effect primitives
 
@@ -280,7 +287,7 @@ Reference: `packages/webkit/src/components/webkit/overlay/panel/panel.vue` (`sha
 
 ### Do not
 
-- Use legacy theme vars such as `--card-shadow` in `components/webkit/` — they are legacy SCSS aliases, not the primitive scale.
+- Use legacy theme vars such as `--card-shadow` in `packages/webkit/src/components/` — they are legacy SCSS aliases, not the primitive scale.
 - Hardcode `box-shadow` values or Tailwind default shadows (`shadow-md`, `shadow-lg` without `var(--shadow-*)`).
 - Use `rgb(...)` / `rgba(...)` / hex in component class strings for elevation.
 
@@ -293,22 +300,31 @@ Use **theme semantic** CSS variables so light/dark and brand stay consistent.
 ### Pattern
 
 ```html
-bg-(--primary) text-(--primary-contrast) border-(--border-default) bg-(--bg-surface)
+bg-(--primary) text-(--primary-foreground) border-(--border-default) bg-(--bg-surface)
 text-(--text-default) text-(--text-muted) ring-(--ring-color)
 ```
 
 ### Common semantic groups
 
-| Role          | Examples                                                                                                                                                                                                       |
-| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Brand actions | `--primary`, `--primary-contrast`, `--secondary`, `--secondary-contrast`                                                                                                                                       |
-| Accent        | `--accent`, `--accent-mask`, `--accent-selected`, `--accent-contrast` — the blue that marks a path or state as _other_, distinct from the brand orange. Mode-invariant.                                        |
-| Surfaces      | `--bg-canvas`, `--bg-surface`, `--bg-surface-raised`, `--bg-surface-overlay`, `--bg-hover`, `--bg-active`, `--bg-selected`, `--bg-disabled`, `--bg-mask`                                                       |
-| Placeholders  | `--bg-placeholder`, `--bg-placeholder-highlight` (see § Loading placeholders)                                                                                                                                  |
-| Text          | `--text-default`, `--text-muted`, `--text-disabled`                                                                                                                                                            |
-| Borders       | `--border-default`, `--border-muted`, `--border-strong`, `--border-selected`                                                                                                                                   |
-| Feedback      | `--success`, `--success-border`, `--success-contrast`, `--warning`, `--warning-border`, `--warning-contrast`, `--danger`, `--danger-border`, `--danger-contrast`, `--info`, `--info-border`, `--info-contrast` |
-| Code syntax   | `--code-sintax-identifier`, `--code-sintax-line-number`, `--code-sintax-keyword`, `--code-sintax-string`, `--code-sintax-function`, `--code-sintax-type`, `--code-sintax-punctuation`, `--code-sintax-comment` |
+Every fill colour pairs with a `-foreground` text colour of the same role (`--primary` / `--primary-foreground`). The one exception is the inverted surface: `--bg-contrast` takes `--text-contrast`.
+
+| Role          | Examples                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Brand actions | `--primary`, `--primary-foreground`, `--secondary`, `--secondary-foreground`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| Accent        | `--accent`, `--accent-foreground` — the blue for a live state or a connection, never an action: `Switch` on, `Slider` fill, `Tag variant="accent"`, resize handles, a dragged `Table` row, `FlowDiagram` edges and ports. There is no accent `Button`. `--accent-mask` and `--accent-selected` are defined but unused. Blue 600 with white text in light, blue 200 with black text in dark, so the Tag label and the marks pass APCA on both grounds.                                                                                                                                                                                                        |
+| Brand marks   | `--brand-blue`, `--brand-blue-foreground` — the azion.com blue (`#0072F5`), the same in both themes, for brand marks only: the `Eyebrow` cursor. The `Eyebrow` label uses the logo orange, `--primary`, as text.                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| Surfaces      | `--bg-canvas`, `--bg-surface`, `--bg-surface-raised`, `--bg-surface-overlay`, `--bg-hover`, `--bg-active`, `--bg-selected`, `--bg-disabled`, `--bg-mask`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| Placeholders  | `--bg-placeholder`, `--bg-placeholder-highlight` (see § Loading placeholders)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| Text          | `--text-default`, `--text-muted`, `--text-disabled`, `--text-danger` (error text on the page: the `FieldError` message; red.600 in light, red.200 in dark, 4.5:1 and APCA Lc 60 on every surface; never `--danger-foreground`, which is text on the `--danger` fill), `--text-brand` (the logo orange `#F3652B`, the one orange for brand text: eyebrows, quote names, directory headings, highlights, the required asterisk; primary-500 in light and dark; in light about 3:1 on white, an owner-accepted brand exception, see `rules/webkit-tokens.md` § "Contrast: APCA and WCAG 2"). `--text-primary` was removed in 6.0 (one orange, owner 2026-11-18) |
+| Borders       | `--border-default`, `--border-muted`, `--border-strong`, `--border-selected`, `--border-input` (the resting and disabled outline of a value-entry control: text fields, select and multi-select triggers, number, password and OTP boxes, date fields, checkbox, radio, switch track; same value as `--border-default` in light mode; brighter in dark mode so field outlines stay visible while dividers stay quiet)                                                                                                                                                                                                                                        |
+| Feedback      | `--success`, `--success-border`, `--success-foreground`, `--warning`, `--warning-border`, `--warning-foreground`, `--danger`, `--danger-border` (solid red.400, 3:1 or more on every surface: the invalid field outline), `--danger-foreground`, `--info`, `--info-border`, `--info-foreground`; marks on the page (status dot, outcome disc): `--success-mark`, `--warning-mark`, `--danger-mark`, `--info-mark`                                                                                                                                                                                                                                            |
+| Code syntax   | `--code-syntax-identifier`, `--code-syntax-line-number`, `--code-syntax-keyword`, `--code-syntax-string`, `--code-syntax-function`, `--code-syntax-type`, `--code-syntax-punctuation`, `--code-syntax-comment`                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| Code editor   | `--code-editor-line-height` (16 px line step of code in `CodeEditor`; Monaco reads it when the editor is created)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| Charts        | `--chart-series-1` … `--chart-series-8` and `--chart-series-other` (categories), `--chart-sequential-1` … `--chart-sequential-7` (magnitude), `--chart-diverging-negative`, `-negative-2`, `-negative-3`, `-neutral`, `-positive-3`, `-positive-2`, `-positive` (a seven-step scale around a midpoint; three steps use the end and neutral tokens only), `--chart-status-*` (a series that means a state), and the chrome `--chart-grid`, `--chart-axis`, `--chart-label`, `--chart-crosshair`, `--chart-tooltip-*`. Rules in `rules/webkit-tokens.md` § "Chart palettes"                                                                                    |
+
+Which token does which job, and which components use each one, is in [`rules/webkit-tokens.md`](../../rules/webkit-tokens.md) § "Which color token does which job". Update that table when a component starts or stops using a color token. A mock-up, example or proposal draws only variants the component's `variant` / `severity` union lists.
+
+Text on `--bg-surface-overlay` is `--text-default`. In dark the overlay fill is `#4D4D4D`, and `--text-muted` (`#B2B2B2`) on it is 3.99:1, under the 4.5:1 that WCAG 1.4.3 asks for (found by the a11y harness, M2.9 WP a11y).
 
 ### Loading placeholders
 
@@ -344,34 +360,32 @@ Reference: `skeleton.vue`. The sweep pairs with `--animate-shimmer` (see § Moti
 ### Do not
 
 - Hardcode hex/rgb/hsl in component class strings.
-- Use Tailwind palette names (`bg-gray-500`, `text-violet-600`) in `components/webkit/`.
+- Use Tailwind palette names (`bg-gray-500`, `text-violet-600`) in `packages/webkit/src/components/`.
 - Use external/legacy color utilities (`text-color`, `surface-*`) in new webkit components — map to `var(--*)` tokens instead.
 - Build a loading placeholder from an opaque surface token (`--bg-surface-overlay`, `--bg-surface-raised`) — it only reads on the one surface it was picked against. Use `--bg-placeholder` / `--bg-placeholder-highlight`.
 
-Reference: `button.vue` kind variants (`bg-(--secondary)`, `text-(--secondary-contrast)`, etc.).
+Reference: `button.vue` variants (`bg-(--secondary)`, `text-(--secondary-foreground)`, etc.).
 
 ---
 
 ## Checklist for new or updated components
 
-1. **Typography** — Pick a class from `texts.data.js`; no local font/line-height/letter-spacing.
-2. **Spacing** — `padding` / `margin` / `gap` via `p-(--spacing-*)`, `gap-(--spacing-*)`, `m-(--spacing-*)`, etc. from `spacings.data.js`.
+1. **Typography** — Pick a class from `typography.js`; no local font/line-height/letter-spacing.
+2. **Spacing** — `padding` / `margin` / `gap` via `p-(--spacing-*)`, `gap-(--spacing-*)`, `m-(--spacing-*)`, etc. from `spacing.js`.
 3. **Sizing** — `size-*` for equal width+height; `h-*` for height (theme scale from `size.js` / `height.js`).
-4. **Container** — Use `max-w-(--container-<size>)` for page sections and fixed content (cards, modals, columns), with sizes `3xs` … `7xl` from `primitives/shape/container.js`.
+4. **Container** — A page band carries one of the layout container classes (§ Layout containers), never its own `max-w-*`. `max-w-(--container-<size>)` (`3xs` … `7xl` from `primitives/shape/container.js`) is only for fixed content: cards, modals, columns.
 5. **Radius** — `rounded-(--shape-*)`.
 6. **Shadow** — `shadow-(--shadow-*)` from `primitives/effects/shadow.js` when the surface elevates.
 7. **Color** — `bg-(--…)`, `text-(--…)`, `border-(--…)`.
 8. **Interactive states** — `::before` / `::after` ghost layers for `--bg-hover` / `--bg-active`; `focus-visible:ring-2 focus-visible:ring-offset-1`; `duration-fast-02` + `ease-productive-*` (see § Interactive states).
 9. **Motion** — `duration` / `curve` from `animate.js` only; `data-state` overlays use a `presets/transitions.ts` module (see § Motion — reference: Drawer).
-10. **Storybook** — Add or update stories under `apps/storybook/src/stories/webkit/` for new states and sizes.
-
----
+10. **Examples** — Add or update examples under `packages/webkit/examples/<name>/` for new states and sizes.
 
 ---
 
 ## Animations
 
-Use **only** the named utilities below; they ship with `motion-safe` / `motion-reduce` variants enabled by the theme plugin. The `--animate-*` presets are defined in `packages/theme/src/tokens/primitives/animations/animate.js` (each with a one-line `useWhen` note) and their `@keyframes` in the sibling `keyframes.js`; `build-tokens.mjs` emits both into `dist/v4/globals.css`.
+Use **only** the named utilities below; they ship with `motion-safe` / `motion-reduce` variants enabled by the theme plugin. The `--animate-*` presets are defined in `packages/theme/src/tokens/primitives/animations/animate.js` (each with a one-line `useWhen` note) and their `@keyframes` in the sibling `keyframes.js`; `build-tokens.mjs` emits both into `dist/globals.css`.
 
 | Utility                                                              | Behavior                                                                | Duration · Easing                                                             |
 | -------------------------------------------------------------------- | ----------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
@@ -380,26 +394,27 @@ Use **only** the named utilities below; they ship with `motion-safe` / `motion-r
 | `animate-slide-down`                                                 | height 0 → auto                                                         | 220ms · `ease-in-out`                                                         |
 | `animate-popup-scale-in`                                             | scale 0.9 → 1 + fade in                                                 | `moderate-01` · `productive-entrance` (origin: `var(--popup-origin, center)`) |
 | `animate-popup-scale-out`                                            | scale 1 → 0.9 + fade out                                                | `fast-02` · `productive-exit`                                                 |
-| `animate-slide-in-left`                                              | translateX -100% → 0                                                    | `moderate-02` · `productive-entrance`                                         |
-| `animate-slide-out-left`                                             | translateX 0 → -100%                                                    | `moderate-01` · `productive-exit`                                             |
-| `animate-slide-in-right`                                             | translateX 100% → 0                                                     | `moderate-02` · `productive-entrance`                                         |
-| `animate-slide-out-right`                                            | translateX 0 → 100%                                                     | `moderate-01` · `productive-exit`                                             |
+| `animate-slide-in-start`                                             | from the start side → 0                                                 | `moderate-02` · `productive-entrance`                                         |
+| `animate-slide-out-start`                                            | 0 → the start side                                                      | `moderate-01` · `productive-exit`                                             |
+| `animate-slide-in-end`                                               | from the end side → 0                                                   | `moderate-02` · `productive-entrance`                                         |
+| `animate-slide-out-end`                                              | 0 → the end side                                                        | `moderate-01` · `productive-exit`                                             |
 | `animate-shimmer`                                                    | `background-position` 200% → -200% sweep                                | 1.6s · `linear` infinite                                                      |
 | `animate-blink`                                                      | opacity 1/0 cycle                                                       | 1s · `step-end` infinite                                                      |
 | `animate-highlight-fade`                                             | row-flash highlight, holds then fades out                               | `slow-03` · `ease-in` forwards                                                |
 | `animate-progress-indeterminate`                                     | indeterminate bar, primary sweep                                        | `slow-04` · `productive-entrance` infinite                                    |
 | `animate-progress-indeterminate-short`                               | indeterminate bar, secondary short sweep                                | `slow-04` · `expressive-entrance` (delay `slow-03`) infinite                  |
 | `animate-flow-dash`                                                  | marching dashes along an SVG stroke (`stroke-dashoffset` 24 → 0)        | `slow-02` · `linear` infinite                                                 |
+| `animate-flow-dash-settle`                                           | the same marching dashes, six runs, then still                          | `slow-02` · `linear` × 6 (4.2s)                                               |
+| `animate-spin-settle`                                                | one eased revolution, then still                                        | 4.2s · `ease-in-out` · once                                                   |
+| `animate-ping-settle`                                                | three attention rings, then still                                       | 1s · `ease-out` × 3 (3s)                                                      |
+| `animate-pulse-settle`                                               | two opacity pulses, then still at full strength                         | 2s × 2 (4s)                                                                   |
+| `animate-blink-settle`                                               | four caret blinks, then a solid caret                                   | 1s · `step-end` × 4 (4s)                                                      |
+| `animate-texture-wave-a` · `animate-texture-wave-b`                  | the two pixelate texture bands drift apart and ease to a stop, held     | 4.8s · `productive-entrance` · once, `forwards`                               |
 | `animate-spin` · `animate-ping` · `animate-pulse` · `animate-bounce` | Tailwind's stock loading/attention loops, re-registered in `animate.js` | see `animate.js`                                                              |
 
-`animate-shimmer` drives a gradient sweep and expects a `background-image` gradient plus `bg-[length:200%_100%]` — see § Loading placeholders for the canonical class string.
+**Stop within 5 seconds (WCAG 2.2.2 Pause, Stop, Hide).** Motion that starts by itself, runs beside other content and only decorates must end on its own within 5 seconds, unless the component offers a pause control. Decorative loops use a `*-settle` utility, which runs a fixed number of times and rests on a still frame. The infinite utilities (`animate-spin`, `animate-ping`, `animate-pulse`, `animate-blink`, `animate-flow-dash`, `animate-shimmer`) are for loading and live status only — a spinner, a skeleton, a caret while text streams, a dot that shows a live tail is running — where the motion is the signal and stops when the state does.
 
-The pop rides the same 9s cycle with a **negative `animation-delay` per message**
-(`-6.75s` / `-4.5s` / `-2.25s` / `0s`), which lands its 4% pop on a step boundary — the moment that
-message stops moving at the bottom. CSS cannot re-trigger an entrance once per pass; phase-locking
-one long loop to another is how you get one anyway. Fade the ends **unevenly**: deep at the top
-where messages leave (`mask-t-from-72%`), shallow at the bottom where they arrive
-(`mask-b-from-92%`) — a deep bottom fade is one message tall and lands every arrival half-faded.
+`animate-shimmer` drives a gradient sweep and expects a `background-image` gradient plus `bg-[length:200%_100%]` — see § Loading placeholders for the canonical class string.
 
 `animate-flow-dash` animates an **SVG stroke** and expects a `stroke-dasharray` whose cycle **divides 24** (`4 4` = 8, `2 4` = 6, `8 4` = 12), because 24 is the keyframe's travel: the pattern lands exactly where it started and the loop has no visible seam. A cycle that does not divide 24 (`5 5` = 10) jumps on every repeat. Like `animate-shimmer` and `animate-spin` it is `linear` — an endlessly looping animation must not accelerate, or the seam between repeats becomes visible.
 
@@ -421,14 +436,16 @@ Productive and expressive curves live in `animate.js` — see § Motion primitiv
 
 **Durations**
 
-| Token         | Value   | Typical use                              |
-| ------------- | ------- | ---------------------------------------- |
-| `fast-01`     | `70ms`  | Micro-feedback                           |
-| `fast-02`     | `110ms` | Hover / active ghost layers, popup close |
-| `moderate-01` | `150ms` | Popup open, overlay open (drawer)        |
-| `moderate-02` | `240ms` | General color/layout transitions         |
-| `slow-01`     | `400ms` | Panel close (drawer), overlay open       |
-| `slow-02`     | `700ms` | Large surface enter (drawer panel open)  |
+| Token         | Value    | Typical use                              |
+| ------------- | -------- | ---------------------------------------- |
+| `fast-01`     | `70ms`   | Micro-feedback                           |
+| `fast-02`     | `110ms`  | Hover / active ghost layers, popup close |
+| `moderate-01` | `150ms`  | Popup open, overlay open (drawer)        |
+| `moderate-02` | `240ms`  | General color/layout transitions         |
+| `slow-01`     | `400ms`  | Panel close (drawer), overlay open       |
+| `slow-02`     | `700ms`  | Large surface enter (drawer panel open)  |
+| `slow-03`     | `1100ms` | Highlight fade, indeterminate offset     |
+| `slow-04`     | `2100ms` | Indeterminate progress sweep             |
 
 **Curves**
 
@@ -445,7 +462,7 @@ Named keyframe bundles in the same file (`popup-scale-in`, `popup-scale-out`, �
 
 Canonical pattern for **`data-state`** / open-close motion. Read values **only** from `animate.js`; never hardcode `110ms`, `400ms`, or raw `cubic-bezier(...)` in components.
 
-**Reference:** `packages/webkit/src/components/webkit/overlay/drawer/presets/transitions.ts`
+**Reference:** `packages/webkit/src/components/overlay/drawer/presets/transitions.ts`
 
 1. **Import primitives** — `import { curve, duration } from '…/animate.js'`.
 2. **Declare a preset map** — per target (`panel`, `overlay`, …) and phase (`open`, `close`), pick `duration[…]` + `curve[…]`.
@@ -521,7 +538,7 @@ after:ease-productive-entrance active:after:opacity-100 motion-reduce:before:tra
 motion-reduce:after:transition-none
 ```
 
-Reference: `packages/webkit/src/components/webkit/actions/button/button.vue`.
+Reference: `packages/webkit/src/components/action/button/button.vue`.
 
 ### Reduced motion
 
@@ -544,7 +561,7 @@ For `animate-popup-scale-in/out`, set `--popup-origin` per instance to match the
 
 ### Forbidden in animations
 
-- Custom `@keyframes` declared inside a component `.vue` — keyframes live in `semantic/animations.js`.
+- Custom `@keyframes` declared inside a component `.vue` — keyframes live in `primitives/animations/keyframes.js`.
 - Hardcoded durations (`duration-[180ms]`, `transition: opacity 200ms`) — use `duration` from `animate.js`, Tailwind `duration-*` utilities, or a `presets/transitions.ts` helper (Drawer pattern).
 - Inline easing (`ease-[cubic-bezier(...)]`) — use `curve` from `animate.js` or `ease-productive-*` / `ease-expressive-*` / `ease.in` · `ease.out` · `ease.in-out`.
 - `data-state` / overlay motion without importing `duration` / `curve` from `animate.js` (no ad-hoc ms or bezier literals in `.vue` files).
@@ -560,10 +577,10 @@ For `animate-popup-scale-in/out`, set `--popup-origin` per instance to match the
 The `validate-tokens.mjs` PreToolUse hook enforces these at write time. If a hook blocks: **fix the value, do not work around it.**
 
 - **Colors:** HEX (`#fff`), RGB (`rgb(0,102,255)`), HSL, Tailwind palette names (`bg-blue-500`, `text-gray-700`), external/legacy color utilities (`text-color`, `surface-50`).
-- **Typography:** `font-family`, `font-proto-mono`, `font-sora`, `leading-*` (except `leading-none` on icons), `tracking-*`, `text-xs|sm|base|lg`, `text-(length:--text-*-font-size)` when a generated class exists.
-- **Spacing:** primitive `--spacing-1` … `--spacing-96`, legacy `spacing-elements-*`, arbitrary `p-4` / `gap-3` when a `spacings.data.js` token applies.
-- **Container:** Tailwind scale (`max-w-md`, `max-w-5xl`), arbitrary lengths (`max-w-[768px]`), legacy helpers (`.px-container`, `.py-container`, `.max-container-width`), and semantic layout tokens (`--container-px`, `--container-py`, `--container-max-width`). Use `max-w-(--container-<size>)` only (`3xs` … `7xl` from `primitives/shape/container.js`).
-- **Page layout:** a hand-rolled page cap (`max-w-*` on a page root) instead of one of the five container types, a `w-full` standing in for full-bleed, a third rhythm step beside `--layout-section-gap` / `--layout-group-gap`, and a literal length in `semantic/layouts.data.js` — every layout token is a `var()` reference to the spacing or container scale.
+- **Typography:** `font-family`, `font-proto-mono`, `font-rubik`, `leading-*` (except `leading-none` on icons), `tracking-*`, `text-xs|sm|base|lg`, `text-(length:--text-*-font-size)` when a generated class exists.
+- **Spacing:** primitive `--spacing-1` … `--spacing-96`, legacy `spacing-elements-*`, arbitrary `p-4` / `gap-3` when a `spacing.js` token applies.
+- **Container:** Tailwind scale (`max-w-md`, `max-w-5xl`), arbitrary lengths (`max-w-[768px]`). Use `max-w-(--container-<size>)` only (`3xs` … `7xl` from `primitives/shape/container.js`).
+- **Page layout:** a hand-rolled page cap (`max-w-*` on a page root) instead of one of the five container types, a `w-full` standing in for full-bleed, a third rhythm step beside `--layout-section-gap` / `--layout-group-gap`, and a literal length in `semantic/layout.js` — every layout token is a `var()` reference to the spacing or container scale.
 - **Shape:** `rounded-md`, `rounded-lg`, any numeric radius.
 - **Shadow:** legacy `--card-shadow` (SCSS alias), bare Tailwind `shadow-md` without `var(--shadow-*)`, HEX/RGB in elevation.
 - **Animations:** see § Animations § Forbidden in animations.
@@ -574,9 +591,10 @@ The `validate-tokens.mjs` PreToolUse hook enforces these at write time. If a hoo
 ## Related docs
 
 - Token architecture: `packages/theme/src/tokens/README.md`
+- Token values and purposes: the token export (`packages/theme/src/tokens/token-export.js`, purposes in `token-purpose.js`), shipped as `catalog.json#tokens.values` and the MCP `list_tokens`; every new semantic token needs a purpose
 - Component structure and API: [`COMPONENT_REQUIREMENTS.md`](./COMPONENT_REQUIREMENTS.md)
-- Storybook foundations (typography catalog): `apps/storybook/src/foundations/data/typography.js`
+- Docs foundations (typography catalog, parsed from the theme): `apps/docs/src/lib/foundations.ts`
 - Monorepo agent guide: [`../AGENTS.md`](../AGENTS.md)
 - Agent rules (discipline layer): [`../rules/`](../rules/)
 - Per-component specs: [`../../.specs/`](../../.specs/)
-- Drawer motion preset: [`../../packages/webkit/src/components/webkit/overlay/drawer/presets/transitions.ts`](../../packages/webkit/src/components/webkit/overlay/drawer/presets/transitions.ts)
+- Drawer motion preset: [`../../packages/webkit/src/components/overlay/drawer/presets/transitions.ts`](../../packages/webkit/src/components/overlay/drawer/presets/transitions.ts)

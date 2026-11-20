@@ -1,11 +1,11 @@
-# Rule: git workflow — branches and PRs always via `/create-branch` and `/open-pr`
+# Rule: git workflow — branches and PRs always via `/branch-create` and `/pr-open`
 
 When the user asks to **create a branch** or **open/make a PR** — in any phrasing, slash command, or natural language ("open a PR", "send it to a PR", "create a branch for this") — follow the canonical flows. **Do not improvise** the git/PR steps.
 
-| User intent | Flow to follow |
-|---|---|
-| Create a new branch | [`/create-branch`](../commands/create-branch.md) |
-| Commit + push + open PR | [`/open-pr`](../commands/open-pr.md) |
+| User intent             | Flow to follow                                   |
+| ----------------------- | ------------------------------------------------ |
+| Create a new branch     | [`/branch-create`](../commands/branch-create.md) |
+| Commit + push + open PR | [`/pr-open`](../commands/pr-open.md)             |
 
 These commands are the **source of truth** for the process. This rule exists only to ensure they are triggered even when the user does not type the slash explicitly.
 
@@ -15,7 +15,8 @@ These commands are the **source of truth** for the process. This rule exists onl
 - **Branch name:** kebab-case `<type>/<ISSUE>-<slug>` (or `<type>/<slug>` without an issue). `type` comes from the same Conventional Commits enum ([`CONTRIBUTING.md`](../../CONTRIBUTING.md) § Commit convention / [`commitlint.config.js`](../../commitlint.config.js)). That enum must match the release-please mapping (only `feat`/`fix`/breaking release) — see [`release-types.md`](./release-types.md).
 - **Commit:** Conventional Commits, commitlint-valid header. **Never** add `Co-Authored-By` or an attribution footer ("Generated with Claude"). **Never** `--no-verify` to skip commitlint.
 - **Every commit is signed** and lands **verified** — see [Signed commits](#signed-commits) below.
-- **Commit/push only as part of `/open-pr`** — running the command is the authorization. Do not commit unrelated changes.
+- **Commit/push only as part of `/pr-open`** — running the command is the authorization. Do not commit unrelated changes.
+- **Owner decisions go in the register.** A change that records or implements an owner decision adds or updates its row in [`.claude/docs/DECISIONS.md`](../docs/DECISIONS.md) (date, decision, status, where it lives) in the same change, so no decision lives only in a chat.
 - **Shared docs/rules in a separate PR from code.** If the diff mixes code with `.claude/rules/*`, `.claude/skills/*`, `.specs/_template.md`, etc., split them into another PR. A component's own `.specs/<name>.md` stays with the component.
 
 ## Signed commits

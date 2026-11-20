@@ -1,0 +1,180 @@
+---
+name: recognition-marquee-section
+category: section
+structure: monolithic
+status: implemented
+spec_version: 6
+created: 2026-11-04
+last_updated: 2026-11-16
+checksum: 5360d970cee2148c3edc6ab27bff341f6a9ae792716ee5dba2eb8874c6883ec0
+template: 2
+---
+
+# RecognitionMarqueeSection — Component Spec
+
+## Purpose
+
+The analyst-recognition band: a section title over a framed strip of signed quotes — one per report, marked by the firm's logo — that scrolls continuously and pauses on hover, on focus or from its pause control; the loop is the one `marquee` runs on. It is a page section — the site places it from a `{ _id: 'recognition-marquee-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `registration-frame` and `quote`.
+
+## When to use
+
+- Use RecognitionMarqueeSection only for a looping row of analyst or press quotes.
+- To list analyst reports and awards on a page that needs third-party proof.
+
+## When NOT to use
+
+- For office photos → use `photo-marquee-section`.
+- For customer quotes → use `client-quotes-section`.
+
+## Related
+
+- `quote` — the signed card each recognition renders with.
+- `photo-marquee-section` — the sibling strip of pictures with the same loop.
+
+## Best practices
+
+- Five to eight items; the loop needs enough width to read as continuous.
+- Leave `duration` at `0` to let the strip pace itself (twelve seconds per item).
+
+## Usage
+
+```vue
+<script setup>
+  import RecognitionMarqueeSection from '@aziontech/webkit/recognition-marquee-section'
+</script>
+
+<template>
+  <RecognitionMarqueeSection
+    eyebrow="Analysts"
+    title="Recognized as a market leader"
+    aria-label="Analyst recognitions"
+    :items="[
+      {
+        text: 'Named a Leader and Fast Mover.',
+        reportName: 'GigaOm Radar for Full-Stack Edge Deployments',
+        date: 'May 2026',
+        firmName: 'GigaOm',
+        logo: '/logos/gigaom-reversed.svg',
+        logoLight: '/logos/gigaom-color.svg'
+      },
+      {
+        text: 'Recognized as a Leader in CDN.',
+        reportName: 'G2 Reports',
+        date: 'March 2026',
+        firmName: 'G2',
+        logo: '/logos/g2.svg'
+      }
+    ]"
+  />
+</template>
+```
+
+## Props
+
+| Prop        | Type                              | Default | Required | JSDoc                                                                                                                                                                                       |
+| ----------- | --------------------------------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `eyebrow`   | `string`                          | `''`    | false    | Eyebrow above the section title.                                                                                                                                                            |
+| `title`     | `string`                          | `''`    | false    | Headline of the band, rendered by the section title as its `h2`; the band renders no header when empty.                                                                                     |
+| `ariaLabel` | `string`                          | `''`    | false    | Accessible name of the scrolling region.                                                                                                                                                    |
+| `duration`  | `number`                          | `0`     | false    | Seconds one loop of the strip takes; `0` paces it at twelve seconds per item.                                                                                                               |
+| `items`     | `RecognitionMarqueeSectionItem[]` | `[]`    | false    | The recognitions, in order; each is `{ text, reportName, date?, firmName, logo, logoLight? }` where `logo` is the firm's mark on the dark theme and `logoLight` the one on the light theme. |
+| `anchor`    | `string`                          | `''`    | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                                                                                              |
+
+## Events
+
+| _none_ | — | — |
+
+## Slots
+
+| _none_ | — | — |
+
+## States
+
+- Visual states: `default`, paused while the strip is hovered or holds focus, or while its pause control is pressed (the track carries `data-paused`)
+- Empty: when `items` is empty the band renders nothing
+- The list is rendered twice for a seamless loop; the duplicate is `aria-hidden` and hidden under reduced motion, where the region scrolls by hand instead
+
+## Motion & Animations
+
+| Trigger                        | Animation / Transition                                          | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                                            |
+| ------------------------------ | --------------------------------------------------------------- | ------------------------------------------------- | ------------------------------------------------------------------ |
+| continuous scroll of the strip | the brand marquee of the internal loop it shares with `marquee` | semantic (brand-marquee)                          | reduced motion stops it (the region becomes a horizontal scroller) |
+
+## Tokens
+
+| Region                | Token (DESIGN.md)       |
+| --------------------- | ----------------------- |
+| card fill             | `var(--bg-surface)`     |
+| card inset            | `var(--spacing-xl)`     |
+| card width            | `var(--container-md)`   |
+| focus ring            | `var(--ring-color)`     |
+| frame rules and marks | `var(--border-default)` |
+| anchor scroll offset  | `var(--spacing-2xl)`    |
+
+## Theme gaps
+
+| Figma variable | Temporary primitive | Follow-up |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
+
+## Accessibility (WCAG 2.1 AA)
+
+- Visible focus: the scrolling region is focusable and carries `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset`.
+- Keyboard map: `Tab` reaches the region, which pauses the loop, then the pause control (`Enter` / `Space` toggles it, WCAG 2.2.2); under reduced motion the control is hidden and arrow keys scroll the region.
+- ARIA: the band is a `<section>` named by its title (`aria-label`); the strip is a `region` named by `ariaLabel`; the second copy of the list is `aria-hidden`; each firm mark carries `firmName` as `alt`; each recognition is a `blockquote` signed by its report and date.
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `quote` on `var(--bg-surface)`.
+- `motion-reduce:animate-none` on the strip; the duplicate list is hidden so nothing moves and nothing repeats.
+- Touch target ≥40×40 px — not applicable beyond the focusable region.
+
+## Internationalization
+
+No built-in strings: every visible and announced text is a prop from the page JSON.
+
+- Formatting: none.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Motion: under `dir="rtl"` the marquee track starts offset (`rtl:translate-x-1/2`) and the animation runs reversed; `motion-reduce` stops it in both.
+- Keyboard: no horizontal arrow-key logic.
+- User data: none.
+
+## Responsive
+
+- Container queries: none: the strip is a fixed-height row that loops horizontally.
+- Narrow (below `sm`): each card is 85 % of the viewport wide, capped at `--container-md`.
+- Touch: the strip is one focusable region; hover pauses the loop on a pointer device and focus pauses it on any device.
+- Reflow: the strip clips inside its frame, so the page never scrolls horizontally at 320 px and 200 % zoom.
+
+## Performance
+
+- Bundle budget: 20.9 KB gzip, the `.size-limit.json` entry `recognition-marquee-section` (the shared marquee loop with its pause control and its locale strings).
+- Runtime budget: one CSS animation on the compositor; no script runs per frame.
+- Heavy parts: none; images decode asynchronously.
+
+## Examples
+
+- Default
+
+## Constraints — DO NOT
+
+<!-- This block is injected VERBATIM into every sub-agent prompt.
+     spec-validator rejects the spec if this block is missing or shorter than the template. -->
+
+- Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
+- Do not add events beyond the Events table above. Same rule for slots and sub-components.
+- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
+- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `.claude/rules/dependencies.md`.
+- Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
+- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
+- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
+- Do not edit `.claude/docs/DESIGN.md` or `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not edit the root `package.json` or `.github/workflows/*`.
+- Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.
+- Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
+- Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).
+- Do not run `git` commands, `pnpm install`, or any command that changes the lockfile.
+- If anything in the spec is ambiguous or contradicts the rules, emit `BLOCKED: <one-sentence reason>` and write nothing.

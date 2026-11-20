@@ -1,0 +1,367 @@
+import { fireEvent, render } from '@testing-library/vue'
+import { describe, expect, it, vi } from 'vitest'
+import { defineComponent } from 'vue'
+
+import { expectNoA11yViolations } from '../../../test/axe'
+import CarouselItem from './carousel-item/carousel-item.vue'
+import CarouselNext from './carousel-next/carousel-next.vue'
+import CarouselPrevious from './carousel-previous/carousel-previous.vue'
+import Carousel from './index'
+
+const TESTID = 'carousel'
+const ITEM_TESTID = 'carousel-item'
+const PREVIOUS_TESTID = 'carousel-previous'
+const NEXT_TESTID = 'carousel-next'
+
+const slides = ['First slide', 'Second slide', 'Third slide', 'Fourth slide', 'Fifth slide']
+
+const host = (props: Record<string, unknown> = {}) =>
+  defineComponent({
+    components: { Carousel, CarouselItem, CarouselNext, CarouselPrevious },
+    setup: () => ({ props, slides }),
+    template: `
+      <Carousel v-bind="props">
+        <template #controls>
+          <CarouselPrevious />
+          <CarouselNext />
+        </template>
+        <CarouselItem
+          v-for="slide in slides"
+          :key="slide"
+          style="width: 300px; flex: 0 0 auto"
+        >
+          <p>{{ slide }}</p>
+        </CarouselItem>
+      </Carousel>
+    `
+  })
+
+function makeTrackOverflow(container: Element): globalThis.HTMLUListElement {
+  const track = container.querySelector('ul') as globalThis.HTMLUListElement
+  track.style.cssText = 'display: flex; overflow-x: auto; width: 200px'
+  return track
+}
+
+const button = (element: globalThis.HTMLElement) => element as globalThis.HTMLButtonElement
+
+describe('Carousel', () => {
+  describe('composition', () => {
+    it('renders the carousel under the default testid', () => {
+      const { getByTestId } = render(host())
+
+      expect(getByTestId(TESTID)).toBeInTheDocument()
+    })
+
+    it('lets a consumer data-testid win over the fallback', () => {
+      const { getByTestId, queryByTestId } = render(host({ 'data-testid': 'customer-stories' }))
+
+      expect(getByTestId('customer-stories')).toBeInTheDocument()
+      expect(queryByTestId(TESTID)).toBeNull()
+    })
+
+    it('describes itself as a carousel to assistive technology', () => {
+      const { getByTestId } = render(host())
+
+      expect(getByTestId(TESTID).getAttribute('aria-roledescription')).toBe('carousel')
+    })
+
+    it('names the carousel when ariaLabel is set', () => {
+      const { getByRole } = render(host({ ariaLabel: 'Customer stories' }))
+
+      expect(getByRole('region', { name: 'Customer stories' })).toBeInTheDocument()
+    })
+
+    it('leaves the carousel unnamed when ariaLabel is unset', () => {
+      const { getByTestId } = render(host())
+
+      expect(getByTestId(TESTID).hasAttribute('aria-label')).toBe(false)
+    })
+
+    it('attaches every public sub-component to the compound root', () => {
+      expect(Carousel.Item).toBe(CarouselItem)
+      expect(Carousel.Previous).toBe(CarouselPrevious)
+      expect(Carousel.Next).toBe(CarouselNext)
+    })
+
+    it('renders one list item per slide, with its content in reading order', () => {
+      const { getAllByTestId } = render(host())
+
+      const rendered = getAllByTestId(ITEM_TESTID)
+      expect(rendered).toHaveLength(slides.length)
+      expect(rendered.map((item) => item.tagName)).toEqual(slides.map(() => 'LI'))
+      expect(rendered.map((item) => item.querySelector('p')?.textContent)).toEqual(slides)
+    })
+
+    it('makes the track keyboard-reachable', () => {
+      const { container } = render(host())
+
+      expect(container.querySelector('ul')?.getAttribute('tabindex')).toBe('0')
+    })
+
+    it('names both step controls', () => {
+      const { getByTestId } = render(host())
+
+      expect(getByTestId(PREVIOUS_TESTID).getAttribute('aria-label')).toBe('Previous slide')
+      expect(getByTestId(NEXT_TESTID).getAttribute('aria-label')).toBe('Next slide')
+    })
+
+    it('disables the previous control at the start of the track', async () => {
+      const { container, getByTestId } = render(host())
+      makeTrackOverflow(container)
+
+      await vi.waitFor(() => {
+        expect(button(getByTestId(NEXT_TESTID)).disabled).toBe(false)
+      })
+      expect(button(getByTestId(PREVIOUS_TESTID)).disabled).toBe(true)
+    })
+
+    it('marks the root scrollable once the track overflows its row', async () => {
+      const { container, getByTestId } = render(host())
+      makeTrackOverflow(container)
+
+      await vi.waitFor(() => {
+        expect(getByTestId(TESTID).getAttribute('data-scrollable')).toBe('true')
+      })
+    })
+
+    it('marks the track scrollable so it takes the grab cursor', async () => {
+      const { container } = render(host())
+      const track = makeTrackOverflow(container)
+
+      await vi.waitFor(() => {
+        expect(track.getAttribute('data-scrollable')).toBe('true')
+      })
+    })
+
+    it('leaves a track that fits its row undraggable', async () => {
+      const { container } = render(host())
+      const track = container.querySelector('ul') as globalThis.HTMLUListElement
+
+      await fireEvent.pointerDown(track, { pointerType: 'mouse', button: 0, clientX: 300 })
+      await fireEvent.pointerMove(globalThis.window, { pointerType: 'mouse', clientX: 200 })
+
+      expect(track).not.toHaveAttribute('data-dragging')
+      expect(track.scrollLeft).toBe(0)
+    })
+
+    it('drags the track with the mouse and marks it while the drag lasts', async () => {
+      const { container } = render(host())
+      const track = makeTrackOverflow(container)
+
+      await vi.waitFor(() => {
+        expect(track.getAttribute('data-scrollable')).toBe('true')
+      })
+
+      await fireEvent.pointerDown(track, { pointerType: 'mouse', button: 0, clientX: 300 })
+      expect(track).toHaveAttribute('data-dragging')
+
+      await fireEvent.pointerMove(globalThis.window, { pointerType: 'mouse', clientX: 180 })
+      expect(track.scrollLeft).toBe(120)
+
+      await fireEvent.pointerUp(globalThis.window, { pointerType: 'mouse', clientX: 180 })
+      expect(track).not.toHaveAttribute('data-dragging')
+    })
+
+    it('leaves touch to the browser, whose own scrolling carries momentum', async () => {
+      const { container } = render(host())
+      const track = makeTrackOverflow(container)
+
+      await vi.waitFor(() => {
+        expect(track.getAttribute('data-scrollable')).toBe('true')
+      })
+
+      await fireEvent.pointerDown(track, { pointerType: 'touch', button: 0, clientX: 300 })
+
+      expect(track).not.toHaveAttribute('data-dragging')
+    })
+
+    it('swallows the click a drag ends on, so a slide link is not followed', async () => {
+      const { container } = render(host())
+      const track = makeTrackOverflow(container)
+
+      await vi.waitFor(() => {
+        expect(track.getAttribute('data-scrollable')).toBe('true')
+      })
+
+      const slide = container.querySelector('li p') as globalThis.HTMLElement
+      const activated = vi.fn()
+      slide.addEventListener('click', activated)
+
+      await fireEvent.pointerDown(track, { pointerType: 'mouse', button: 0, clientX: 300 })
+      await fireEvent.pointerMove(globalThis.window, { pointerType: 'mouse', clientX: 180 })
+      await fireEvent.pointerUp(globalThis.window, { pointerType: 'mouse', clientX: 180 })
+      await fireEvent.click(slide)
+
+      expect(activated).not.toHaveBeenCalled()
+    })
+
+    it('lets a press that did not travel through to the slide', async () => {
+      const { container } = render(host())
+      const track = makeTrackOverflow(container)
+
+      await vi.waitFor(() => {
+        expect(track.getAttribute('data-scrollable')).toBe('true')
+      })
+
+      const slide = container.querySelector('li p') as globalThis.HTMLElement
+      const activated = vi.fn()
+      slide.addEventListener('click', activated)
+
+      await fireEvent.pointerDown(track, { pointerType: 'mouse', button: 0, clientX: 300 })
+      await fireEvent.pointerMove(globalThis.window, { pointerType: 'mouse', clientX: 301 })
+      await fireEvent.pointerUp(globalThis.window, { pointerType: 'mouse', clientX: 301 })
+      await fireEvent.click(slide)
+
+      expect(activated).toHaveBeenCalledTimes(1)
+    })
+
+    it('steps the track forward when the next control is pressed', async () => {
+      const { container, getByTestId } = render(host())
+      const track = makeTrackOverflow(container)
+
+      await vi.waitFor(() => {
+        expect(button(getByTestId(NEXT_TESTID)).disabled).toBe(false)
+      })
+      expect(track.scrollLeft).toBe(0)
+
+      await fireEvent.click(getByTestId(NEXT_TESTID))
+
+      await vi.waitFor(() => {
+        expect(track.scrollLeft).toBeGreaterThan(0)
+      })
+    })
+
+    it('enables the previous control once the track has been stepped', async () => {
+      const { container, getByTestId } = render(host())
+      makeTrackOverflow(container)
+
+      await vi.waitFor(() => {
+        expect(button(getByTestId(NEXT_TESTID)).disabled).toBe(false)
+      })
+      await fireEvent.click(getByTestId(NEXT_TESTID))
+
+      await vi.waitFor(() => {
+        expect(button(getByTestId(PREVIOUS_TESTID)).disabled).toBe(false)
+      })
+    })
+
+    it('steps the track back when the previous control is pressed', async () => {
+      const { container, getByTestId } = render(host())
+      const track = makeTrackOverflow(container)
+
+      await vi.waitFor(() => {
+        expect(button(getByTestId(NEXT_TESTID)).disabled).toBe(false)
+      })
+      await fireEvent.click(getByTestId(NEXT_TESTID))
+
+      let stepped = 0
+      await vi.waitFor(() => {
+        expect(button(getByTestId(PREVIOUS_TESTID)).disabled).toBe(false)
+        stepped = track.scrollLeft
+        expect(stepped).toBeGreaterThan(0)
+      })
+
+      await fireEvent.click(getByTestId(PREVIOUS_TESTID))
+
+      await vi.waitFor(() => {
+        expect(track.scrollLeft).toBeLessThan(stepped)
+      })
+    })
+
+    it('throws a clear error when a control is used outside a carousel', () => {
+      expect(() => render(CarouselPrevious)).toThrow(/must be used within Carousel/)
+      expect(() => render(CarouselNext)).toThrow(/must be used within Carousel/)
+      expect(() => render(CarouselItem)).toThrow(/must be used within Carousel/)
+    })
+
+    it('lays the row out as a ruled strip by default', () => {
+      const { container, getByTestId, getAllByTestId } = render(host())
+
+      expect(getByTestId(TESTID)).toHaveAttribute('data-variant', 'strip')
+      expect(container.querySelector('ul')).toHaveAttribute('data-variant', 'strip')
+      for (const item of getAllByTestId(ITEM_TESTID)) {
+        expect(item).toHaveAttribute('data-variant', 'strip')
+      }
+    })
+
+    it('hands the cards layout down to every item', () => {
+      const { container, getByTestId, getAllByTestId } = render(host({ variant: 'cards' }))
+
+      expect(getByTestId(TESTID)).toHaveAttribute('data-variant', 'cards')
+      expect(container.querySelector('ul')).toHaveAttribute('data-variant', 'cards')
+      for (const item of getAllByTestId(ITEM_TESTID)) {
+        expect(item).toHaveAttribute('data-variant', 'cards')
+      }
+    })
+
+    it('sizes every item medium unless it sets its own size', () => {
+      const sized = defineComponent({
+        components: { Carousel, CarouselItem },
+        template: `
+        <Carousel>
+          <CarouselItem>Default</CarouselItem>
+          <CarouselItem size="small">Small</CarouselItem>
+          <CarouselItem size="large">Large</CarouselItem>
+        </Carousel>
+      `
+      })
+      const { getAllByTestId } = render(sized)
+
+      expect(getAllByTestId(ITEM_TESTID).map((item) => item.getAttribute('data-size'))).toEqual([
+        'medium',
+        'small',
+        'large'
+      ])
+    })
+
+    it('puts the header and the step controls on one row, header first', () => {
+      const titled = defineComponent({
+        components: { Carousel, CarouselItem, CarouselNext, CarouselPrevious },
+        template: `
+        <Carousel aria-label="Use cases">
+          <template #header><h2>See how to use</h2></template>
+          <template #controls>
+            <CarouselPrevious />
+            <CarouselNext />
+          </template>
+          <CarouselItem>One</CarouselItem>
+        </Carousel>
+      `
+      })
+      const { getByRole, getByTestId } = render(titled)
+
+      const heading = getByRole('heading', { level: 2, name: 'See how to use' })
+      const row = heading.closest('[data-header]') as globalThis.HTMLElement
+      expect(row).not.toBeNull()
+      expect(row.contains(getByTestId(PREVIOUS_TESTID))).toBe(true)
+      expect(row.contains(getByTestId(NEXT_TESTID))).toBe(true)
+      expect(
+        heading.compareDocumentPosition(getByTestId(PREVIOUS_TESTID)) &
+          globalThis.Node.DOCUMENT_POSITION_FOLLOWING
+      ).toBeTruthy()
+    })
+
+    it('renders no header row when neither a header nor controls are given', () => {
+      const bare = defineComponent({
+        components: { Carousel, CarouselItem },
+        template: `<Carousel><CarouselItem>One</CarouselItem></Carousel>`
+      })
+      const { getByTestId } = render(bare)
+
+      expect(getByTestId(TESTID).children).toHaveLength(1)
+      expect(getByTestId(TESTID).firstElementChild?.tagName).toBe('UL')
+    })
+
+    it('has no a11y violations with a named, filled carousel', async () => {
+      const { container } = render(host({ ariaLabel: 'Customer stories' }))
+
+      await expectNoA11yViolations(container)
+    })
+
+    it('has no a11y violations as titled cards', async () => {
+      const { container } = render(host({ ariaLabel: 'Customer stories', variant: 'cards' }))
+
+      await expectNoA11yViolations(container)
+    })
+  })
+})

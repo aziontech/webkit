@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Root with only a raw `<input>` as its single child.",
+   "file": "examples/input-group/default.vue"
+  },
+  {
+   "name": "Sizes",
+   "summary": "The three sizes stacked (`small`=28px, `medium`=32px, `large`=40px). Match the same `size` on child input controls to keep the inner content vertically centered.",
+   "file": "examples/input-group/sizes.vue"
+  },
+  {
+   "name": "WithAddonStart",
+   "summary": "`<InputGroupAddon>` before the middle input — static-text island on the left.",
+   "file": "examples/input-group/with-addon-start.vue"
+  }
+ ]
+}

@@ -5,7 +5,7 @@ import figma from 'figma'
 
 const instance = figma.selectedInstance
 
-const kind = instance.getEnum('kind', {
+const variant = instance.getEnum('kind', {
   frame: 'frame',
   plain: 'plain'
 })
@@ -32,9 +32,9 @@ export default {
   description="${description}"`
       : ''
   }${
-    kind === 'plain'
+    variant === 'plain'
       ? figma.code`
-  kind="plain"`
+  variant="plain"`
       : ''
   }${
     padded === false

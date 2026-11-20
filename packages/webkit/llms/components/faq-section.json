@@ -1,0 +1,66 @@
+{
+ "name": "faq-section",
+ "binding": "FaqSection",
+ "import": "@aziontech/webkit/faq-section",
+ "treeShakeableImport": "@aziontech/webkit/faq-section",
+ "category": "section",
+ "surface": "site",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The frequently asked questions band near the end of a landing page: the heading in the left column and the questions on the right, each answer closed until the reader opens it, one at a time. It is a page section — the site places it from a `{ _id: 'faq-section', props }` entry and binds `props` straight onto it — and it composes `module` and `faq`. An answer is a markdown string, so it can run to several paragraphs (split by a blank line) and `- ` bullet lists, and a sentence can carry a link, bold or italic text, all without a slot or `v-html`.",
+ "setup": null,
+ "useWhen": [
+  "Use FaqSection for the questions band of a marketing page placed from page JSON (Markdown answers).",
+  "Rendering page JSON, or you need a whole band with no custom content → the section (`faq-section`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`faq`).",
+  "To answer the handful of questions a reader still has before the closing call to action."
+ ],
+ "avoidWhen": [
+  "For answers that need content beyond paragraphs, bullet lists and inline links (tables, images, code) → compose `faq` with its `answer` slot.",
+  "For a single highlighted question with an action → use `call-to-action`."
+ ],
+ "related": [
+  "`faq` — the framed accordion band this section renders.",
+  "`closing-call-to-action-section` — the band that usually follows it."
+ ],
+ "bestPractices": [
+  "Use one FAQ section per page and give it `anchor: 'faq'` so a page can link straight to it.",
+  "Keep an answer short; links use `[label](https://github.com/aziontech/webkit/blob/main/.specs/href)`, bold `**text**` and italic `*text*`.",
+  "Separate paragraphs with a blank line; start each bullet with `- ` and keep the list in its own block.",
+  "Absolute `https://` links open in a new tab; site-relative links stay in the tab."
+ ],
+ "props": [
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "In-page id set on the band so a `#hash` link can scroll to it."
+  },
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Headline of the band, rendered by the FAQ as its `h2` in the left column."
+  },
+  {
+   "name": "items",
+   "type": "FaqSectionItem[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The questions in display order; each is `{ question, answer }` where `answer` is markdown carrying paragraphs, bullet lists, links, bold and italic text."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/faq-section/default.vue"
+  }
+ ],
+ "docs": "components/faq-section.md"
+}

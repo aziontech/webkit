@@ -15,7 +15,7 @@
   const attrs = useAttrs()
 
   const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'navigation-breadcrumb-separator'
+    () => (attrs['data-testid'] as string | undefined) ?? 'breadcrumb-separator'
   )
 </script>
 
@@ -30,7 +30,7 @@
   >
     <slot>
       <i
-        class="pi pi-chevron-right size-[0.875rem]! shrink-0 text-[0.875rem]! leading-none"
+        class="az az-chevron-right size-[0.875rem]! shrink-0 rtl:-scale-x-100 text-[0.875rem]! leading-none"
         aria-hidden="true"
         :data-testid="`${testId}__icon`"
       />

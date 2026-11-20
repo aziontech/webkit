@@ -1,0 +1,18 @@
+<script setup>
+  import RuntimeApiScene from '@aziontech/webkit/assets/runtime-api-scene'
+  import HeroSection from '@aziontech/webkit/hero-section'
+</script>
+
+<template>
+  <HeroSection
+    variant="center-band"
+    eyebrow="Functions"
+    title="Run JavaScript on every request"
+    description="The Web APIs you already know, in scope inside every Function."
+    :primary-action="{ label: 'Start for free', href: '/signup' }"
+  >
+    <template #bottom>
+      <RuntimeApiScene class="max-w-(--container-2xl)" />
+    </template>
+  </HeroSection>
+</template>

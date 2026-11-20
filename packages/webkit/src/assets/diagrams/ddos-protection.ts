@@ -6,17 +6,17 @@ const spec: DiagramSpec = {
   nodes: [
     {
       key: 'user',
-      kind: 'pill',
+      type: 'pill',
       title: 'Users and attackers',
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'az az-triangle-alert',
       active: true
     },
     {
       key: 'ddos',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'DDoS Protection',
       title: 'Always-on mitigation',
-      icon: 'pi pi-shield',
+      icon: 'az az-ddos-protection',
       status: {
         label: 'Mitigated',
         severity: 'success'
@@ -26,18 +26,18 @@ const spec: DiagramSpec = {
     },
     {
       key: 'workload',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Workload',
       title: 'shop.example.com',
-      icon: 'ai ai-workloads',
+      icon: 'az az-workloads',
       active: true
     },
     {
       key: 'absorbed',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Flood',
       title: 'Absorbed at the edge',
-      icon: 'pi pi-ban'
+      icon: 'az az-ban'
     }
   ],
   layout: {

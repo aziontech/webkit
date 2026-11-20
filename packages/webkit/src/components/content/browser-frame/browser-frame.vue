@@ -2,14 +2,17 @@
   import { useElementSize } from '@vueuse/core'
   import { computed, ref, useAttrs, useId } from 'vue'
 
-  import CopyButton from '../../actions/copy-button/copy-button.vue'
+  import { eventDirection, logicalArrowKey } from '../../../composables/use-direction'
+  import { useTranslate } from '../../../composables/use-translate'
+  import * as en from '../../../locales/en'
+  import CopyButton from '../../action/copy-button/copy-button.vue'
   import { useFrameDocument } from './composables/use-frame-document'
 
   defineOptions({ name: 'BrowserFrame', inheritAttrs: false })
 
   type ResizeAxis = 'width' | 'height' | 'both'
 
-  interface Props {
+  export interface BrowserFrameProps {
     /** Read-only URL shown in the chrome's address bar; the address bar is not rendered when empty. */
     address?: string
     /** Smallest viewport width the resize handles can reach, in pixels. */
@@ -22,24 +25,24 @@
     maxHeight?: number
     /** Accessible name of the viewport; when empty it falls back to `address`, then to `Preview`. */
     ariaLabel?: string
-    /** Accessible name of the address bar's copy button. */
+    /** Accessible name of the address bar's copy button. Empty uses the locale catalog (`Copy address`). */
     copyAriaLabel?: string
-    /** Accessible name of the right-edge width handle. */
+    /** Accessible name of the right-edge width handle. Empty uses the locale catalog (`Resize preview width`). */
     widthHandleAriaLabel?: string
-    /** Accessible name of the bottom-edge height handle. */
+    /** Accessible name of the bottom-edge height handle. Empty uses the locale catalog (`Resize preview height`). */
     heightHandleAriaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<BrowserFrameProps>(), {
     address: '',
     minWidth: 320,
     maxWidth: 1920,
     minHeight: 320,
     maxHeight: 1440,
     ariaLabel: '',
-    copyAriaLabel: 'Copy address',
-    widthHandleAriaLabel: 'Resize preview width',
-    heightHandleAriaLabel: 'Resize preview height'
+    copyAriaLabel: '',
+    widthHandleAriaLabel: '',
+    heightHandleAriaLabel: ''
   })
 
   /** Simulated viewport width in pixels; undefined fills the container. */
@@ -54,10 +57,11 @@
   }>()
 
   const attrs = useAttrs()
-  const sizerRef = ref<globalThis.HTMLElement | null>(null)
-  const iframeRef = ref<globalThis.HTMLIFrameElement | null>(null)
-  const { width: containerWidth } = useElementSize(sizerRef)
-  const { body: frameBody } = useFrameDocument(iframeRef)
+  const { t } = useTranslate({ browserFrame: en.browserFrame })
+  const sizerEl = ref<globalThis.HTMLElement | null>(null)
+  const iframeEl = ref<globalThis.HTMLIFrameElement | null>(null)
+  const { width: containerWidth } = useElementSize(sizerEl)
+  const { bodyEl: frameBodyEl } = useFrameDocument(iframeEl)
   const viewportId = useId()
 
   const dragAxis = ref<ResizeAxis | null>(null)
@@ -68,7 +72,7 @@
   let startHeight = 0
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'content-browser-frame'
+    () => (attrs['data-testid'] as string | undefined) ?? 'browser-frame'
   )
 
   const resizing = computed(() => dragAxis.value !== null)
@@ -98,7 +102,7 @@
 
   const heightValueNow = computed(() => clamp(heightNow.value, props.minHeight, props.maxHeight))
 
-  const frameTitle = computed(() => props.ariaLabel || props.address || 'Preview')
+  const frameTitle = computed(() => props.ariaLabel || props.address || t('browserFrame.preview'))
 
   const addressHead = computed(() => props.address.slice(0, -12))
 
@@ -124,7 +128,7 @@
       Home: props.minWidth,
       End: props.maxWidth
     }
-    const next = targets[event.key]
+    const next = targets[logicalArrowKey(event.key, eventDirection(event))]
     if (next === undefined) return
     event.preventDefault()
     width.value = clamp(next, props.minWidth, props.maxWidth)
@@ -147,7 +151,9 @@
   const startResize = (event: globalThis.PointerEvent, axis: ResizeAxis) => {
     if (event.button !== 0) return
     const handle = event.currentTarget as globalThis.HTMLElement
-    handle.setPointerCapture(event.pointerId)
+    try {
+      handle.setPointerCapture(event.pointerId)
+    } catch {}
     originX = event.clientX
     originY = event.clientY
     startWidth = displayedWidth.value
@@ -162,7 +168,9 @@
     if (axis !== 'height') {
       const upper = container.value > 0 ? Math.min(container.value, props.maxWidth) : props.maxWidth
       width.value = clamp(
-        Math.round(startWidth + (event.clientX - originX) * 2),
+        Math.round(
+          startWidth + (event.clientX - originX) * (eventDirection(event) === 'rtl' ? -2 : 2)
+        ),
         props.minWidth,
         upper
       )
@@ -190,7 +198,7 @@
     class="group relative w-full min-w-0"
   >
     <div
-      ref="sizerRef"
+      ref="sizerEl"
       aria-hidden="true"
       class="h-0 w-full"
     />
@@ -218,6 +226,7 @@
         >
           <span
             aria-hidden="true"
+            dir="ltr"
             class="flex min-w-0 flex-1 items-center justify-center text-label-code-sm text-(--text-muted)"
           >
             <span class="min-w-0 truncate">{{ addressHead }}</span>
@@ -226,9 +235,9 @@
           <span class="-my-px -me-px flex shrink-0">
             <CopyButton
               :value="address"
-              kind="transparent"
+              variant="ghost"
               size="small"
-              :ariaLabel="copyAriaLabel"
+              :ariaLabel="copyAriaLabel || t('browserFrame.copyAddress')"
               :data-testid="`${testId}__copy`"
             />
           </span>
@@ -248,7 +257,7 @@
       >
         <iframe
           :id="viewportId"
-          ref="iframeRef"
+          ref="iframeEl"
           srcdoc=""
           :title="frameTitle"
           :data-testid="`${testId}__viewport`"
@@ -263,11 +272,11 @@
         :aria-valuenow="widthValueNow"
         :aria-valuemin="minWidth"
         :aria-valuemax="maxWidth"
-        :aria-valuetext="`${widthValueNow} pixels wide`"
+        :aria-valuetext="t('browserFrame.widthValue', { value: String(widthValueNow) })"
         :aria-controls="viewportId"
-        :aria-label="widthHandleAriaLabel"
+        :aria-label="widthHandleAriaLabel || t('browserFrame.resizeWidth')"
         :data-testid="`${testId}__width-handle`"
-        class="group/handle absolute inset-y-0 right-0 flex w-6 cursor-col-resize touch-none items-center justify-center rounded-(--shape-elements) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
+        class="group/handle absolute inset-y-0 end-0 flex w-6 cursor-col-resize touch-none items-center justify-center rounded-(--shape-control) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
         @keydown="onWidthKeydown"
         @focus="focused = true"
         @blur="focused = false"
@@ -278,7 +287,7 @@
         @lostpointercapture="stopResize"
       >
         <span
-          class="h-8 w-1 rounded-(--shape-elements) bg-(--border-strong) transition-colors duration-150 ease-out group-hover/handle:bg-(--text-default) group-focus-visible/handle:bg-(--text-default) group-data-[resizing]:bg-(--text-default) motion-reduce:transition-none"
+          class="h-8 w-1 rounded-(--shape-control) bg-(--border-strong) transition-colors duration-150 ease-out group-hover/handle:bg-(--text-default) group-focus-visible/handle:bg-(--text-default) group-data-[resizing]:bg-(--text-default) motion-reduce:transition-none"
         />
       </div>
       <div
@@ -288,11 +297,11 @@
         :aria-valuenow="heightValueNow"
         :aria-valuemin="minHeight"
         :aria-valuemax="maxHeight"
-        :aria-valuetext="`${heightValueNow} pixels tall`"
+        :aria-valuetext="t('browserFrame.heightValue', { value: String(heightValueNow) })"
         :aria-controls="viewportId"
-        :aria-label="heightHandleAriaLabel"
+        :aria-label="heightHandleAriaLabel || t('browserFrame.resizeHeight')"
         :data-testid="`${testId}__height-handle`"
-        class="group/handle absolute inset-x-0 bottom-0 flex h-6 cursor-row-resize touch-none items-center justify-center rounded-(--shape-elements) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
+        class="group/handle absolute inset-x-0 bottom-0 flex h-6 cursor-row-resize touch-none items-center justify-center rounded-(--shape-control) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
         @keydown="onHeightKeydown"
         @focus="focused = true"
         @blur="focused = false"
@@ -303,13 +312,13 @@
         @lostpointercapture="stopResize"
       >
         <span
-          class="h-1 w-8 rounded-(--shape-elements) bg-(--border-strong) transition-colors duration-150 ease-out group-hover/handle:bg-(--text-default) group-focus-visible/handle:bg-(--text-default) group-data-[resizing]:bg-(--text-default) motion-reduce:transition-none"
+          class="h-1 w-8 rounded-(--shape-control) bg-(--border-strong) transition-colors duration-150 ease-out group-hover/handle:bg-(--text-default) group-focus-visible/handle:bg-(--text-default) group-data-[resizing]:bg-(--text-default) motion-reduce:transition-none"
         />
       </div>
       <div
         aria-hidden="true"
         :data-testid="`${testId}__corner-handle`"
-        class="group/handle absolute right-0 bottom-0 z-1 flex size-6 cursor-nwse-resize touch-none items-center justify-center rounded-(--shape-elements)"
+        class="group/handle absolute end-0 bottom-0 z-1 flex size-6 cursor-nwse-resize touch-none items-center justify-center rounded-(--shape-control)"
         @pointerdown="startResize($event, 'both')"
         @pointermove="moveResize"
         @pointerup="stopResize"
@@ -317,13 +326,13 @@
         @lostpointercapture="stopResize"
       >
         <span
-          class="size-2 rounded-(--shape-elements) bg-(--border-strong) transition-colors duration-150 ease-out group-hover/handle:bg-(--text-default) group-data-[resizing]:bg-(--text-default) motion-reduce:transition-none"
+          class="size-2 rounded-(--shape-control) bg-(--border-strong) transition-colors duration-150 ease-out group-hover/handle:bg-(--text-default) group-data-[resizing]:bg-(--text-default) motion-reduce:transition-none"
         />
       </div>
     </div>
     <Teleport
-      v-if="frameBody"
-      :to="frameBody"
+      v-if="frameBodyEl"
+      :to="frameBodyEl"
     >
       <slot />
     </Teleport>

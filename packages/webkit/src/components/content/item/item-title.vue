@@ -1,7 +1,5 @@
 <script setup lang="ts">
-  import { computed, inject, useAttrs } from 'vue'
-
-  import { ItemInjectionKey } from './injection-key'
+  import { computed, useAttrs } from 'vue'
 
   defineOptions({
     name: 'ItemTitle',
@@ -13,11 +11,8 @@
   }>()
 
   const attrs = useAttrs()
-  const ctx = inject(ItemInjectionKey)
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${ctx?.testId ?? 'content-item'}__title`
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'item-title')
 </script>
 
 <template>
@@ -25,7 +20,7 @@
     v-bind="$attrs"
     data-slot="item-title"
     :data-testid="testId"
-    class="flex w-fit items-center gap-(--spacing-xs) text-body-sm text-(--text-default)"
+    class="flex w-fit items-center gap-(--spacing-xs) text-body-sm text-(--text-default) group-data-[variant=option]/item:text-body-md"
   >
     <slot />
   </div>

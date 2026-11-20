@@ -1,14 +1,15 @@
-import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../../apps/storybook/src/stories/components/marketing/primitives/hero-title/HeroTitle.stories'
+import Centered from '../../../../../examples/hero-title/centered.vue'
+import Default from '../../../../../examples/hero-title/default.vue'
+import Highlight from '../../../../../examples/hero-title/highlight.vue'
+import MobileCentered from '../../../../../examples/hero-title/mobile-centered.vue'
+import WithActions from '../../../../../examples/hero-title/with-actions.vue'
 import { expectNoA11yViolations } from '../../../../test/axe'
 import HeroTitle from './hero-title.vue'
 
-const { Default, Highlight, Centered, MobileCentered, WithActions } = composeStories(stories)
-
-const TESTID = 'marketing-hero-title'
+const TESTID = 'hero-title'
 
 const props = { title: 'Run it everywhere.' }
 
@@ -20,16 +21,18 @@ describe('HeroTitle', () => {
     expect(getByRole('heading', { level: 1 })).toHaveTextContent('Run it everywhere.')
   })
 
-  it('renders no highlight span and is not centered by default', () => {
+  it('renders no highlight span and aligns to the start by default', () => {
     const { getByTestId } = render(HeroTitle, { props })
     const root = getByTestId(TESTID)
 
-    expect(root).not.toHaveAttribute('data-centered')
+    expect(root).toHaveAttribute('data-align', 'start')
     expect(root.querySelector('h1 span')).toBeNull()
   })
 
   it('renders the highlight inside the same h1, so the accessible name is one sentence', () => {
-    const { getByRole } = render(HeroTitle, { props: { ...props, highlight: 'Build anything.' } })
+    const { getByRole } = render(HeroTitle, {
+      props: { ...props, titleHighlight: 'Build anything.' }
+    })
     const heading = getByRole('heading', { level: 1 })
 
     expect(heading.querySelector('span')).toHaveTextContent('Build anything.')
@@ -47,26 +50,26 @@ describe('HeroTitle', () => {
     expect(on.getByTestId(TESTID)).toHaveAttribute('data-sticky', 'true')
   })
 
-  it('marks the root centered when the centered prop is set', () => {
-    const { getByTestId } = render(HeroTitle, { props: { ...props, centered: true } })
+  it('marks the root centered when align is center', () => {
+    const { getByTestId } = render(HeroTitle, { props: { ...props, align: 'center' } })
 
-    expect(getByTestId(TESTID)).toHaveAttribute('data-centered', 'true')
+    expect(getByTestId(TESTID)).toHaveAttribute('data-align', 'center')
   })
 
-  it('marks the root mobile-centered only when mobileCentered is set', async () => {
+  it('sets the mobile alignment only when mobileAlign is set', async () => {
     const { getByTestId, rerender } = render(HeroTitle, { props })
-    expect(getByTestId(TESTID)).not.toHaveAttribute('data-mobile-centered')
+    expect(getByTestId(TESTID)).not.toHaveAttribute('data-mobile-align')
 
-    await rerender({ ...props, mobileCentered: true })
+    await rerender({ ...props, mobileAlign: 'center' })
     const root = getByTestId(TESTID)
-    expect(root).toHaveAttribute('data-mobile-centered', 'true')
-    expect(root).not.toHaveAttribute('data-centered')
+    expect(root).toHaveAttribute('data-mobile-align', 'center')
+    expect(root).toHaveAttribute('data-align', 'start')
   })
 
-  it('sets the headline size to large by default', () => {
+  it('sets the headline size to medium by default, the house default', () => {
     const { container } = render(HeroTitle, { props })
 
-    expect(container.querySelector('h1')).toHaveAttribute('data-size', 'large')
+    expect(container.querySelector('h1')).toHaveAttribute('data-size', 'medium')
   })
 
   it('sets the headline size to the given size', () => {
@@ -126,13 +129,13 @@ describe('HeroTitle', () => {
   it('closes the eyebrow with the blinking cursor', () => {
     const { container } = render(HeroTitle, { props: { ...props, eyebrow: 'Edge platform' } })
 
-    expect(container.querySelectorAll('.animate-blink')).toHaveLength(1)
+    expect(container.querySelectorAll('.animate-blink-settle')).toHaveLength(1)
   })
 
   it('renders no cursor when there is no eyebrow', () => {
     const { container } = render(HeroTitle, { props })
 
-    expect(container.querySelector('.animate-blink')).toBeNull()
+    expect(container.querySelector('.animate-blink-settle')).toBeNull()
   })
 
   it('renders the eyebrow label alone by default', () => {
@@ -186,7 +189,7 @@ describe('HeroTitle', () => {
       props: {
         ...props,
         eyebrow: 'Edge platform',
-        highlight: 'Build anything.',
+        titleHighlight: 'Build anything.',
         description: 'Ship from one platform.'
       }
     })
@@ -195,14 +198,14 @@ describe('HeroTitle', () => {
 
   describe('stories', () => {
     it('renders the Default story fixture', () => {
-      const { getByTestId, getByRole } = render(Default())
+      const { getByTestId, getByRole } = render(Default)
 
-      expect(getByTestId(TESTID)).not.toHaveAttribute('data-centered')
+      expect(getByTestId(TESTID)).toHaveAttribute('data-align', 'start')
       expect(getByRole('heading', { level: 1 })).toHaveTextContent('Run it everywhere.')
     })
 
     it('renders the Highlight story with the accent phrase in the h1', () => {
-      const { getByRole } = render(Highlight())
+      const { getByRole } = render(Highlight)
 
       expect(getByRole('heading', { level: 1 }).querySelector('span')).toHaveTextContent(
         'Build anything.'
@@ -210,25 +213,25 @@ describe('HeroTitle', () => {
     })
 
     it('renders the Centered story centered', () => {
-      const { getByTestId } = render(Centered())
+      const { getByTestId } = render(Centered)
 
-      expect(getByTestId(TESTID)).toHaveAttribute('data-centered', 'true')
+      expect(getByTestId(TESTID)).toHaveAttribute('data-align', 'center')
     })
 
-    it('marks the MobileCentered story mobile-centered, not centered', () => {
-      const { getByTestId } = render(MobileCentered())
+    it('marks the MobileCentered story centered below md only', () => {
+      const { getByTestId } = render(MobileCentered)
       const root = getByTestId(TESTID)
 
-      expect(root).toHaveAttribute('data-mobile-centered', 'true')
-      expect(root).not.toHaveAttribute('data-centered')
+      expect(root).toHaveAttribute('data-mobile-align', 'center')
+      expect(root).toHaveAttribute('data-align', 'start')
     })
 
     it('renders the WithActions story with both CTAs', () => {
-      const { getAllByRole } = render(WithActions())
+      const { getAllByRole } = render(WithActions)
 
       expect(getAllByRole('button').map((el) => el.textContent?.trim())).toEqual([
         'Start for free',
-        'Talk to a specialist'
+        'Talk to sales'
       ])
     })
   })

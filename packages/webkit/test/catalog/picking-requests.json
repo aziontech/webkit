@@ -1,0 +1,750 @@
+{
+  "description": "The AI-picking auditor battery (v6 duplicate audit): console-builder requests and the component (or block) that must come FIRST. tool: components = search_components, suggest = suggest_component (its block id when it recommends a block, else its best component or section). accept lists other answers that are equally right. pending: the right answer is a name another v6 lane is still adding or renaming; the case is skipped until the catalog is regenerated.",
+  "requests": [
+    {
+      "tool": "components",
+      "query": "show a loading state",
+      "top1": "skeleton"
+    },
+    {
+      "tool": "components",
+      "query": "loading",
+      "top1": "skeleton"
+    },
+    {
+      "tool": "components",
+      "query": "loading spinner",
+      "top1": "spinner"
+    },
+    {
+      "tool": "components",
+      "query": "skeleton placeholder while data loads",
+      "top1": "skeleton"
+    },
+    {
+      "tool": "components",
+      "query": "status of a deployment",
+      "top1": "status-indicator"
+    },
+    {
+      "tool": "components",
+      "query": "deployment status badge",
+      "top1": "status-indicator"
+    },
+    {
+      "tool": "components",
+      "query": "status",
+      "top1": "status-indicator"
+    },
+    {
+      "tool": "components",
+      "query": "status badge",
+      "top1": "status-indicator"
+    },
+    {
+      "tool": "components",
+      "query": "status tag",
+      "top1": "status-indicator"
+    },
+    {
+      "tool": "components",
+      "query": "show a status dot",
+      "top1": "status-indicator"
+    },
+    {
+      "tool": "components",
+      "query": "tag a resource",
+      "top1": "tag-editor"
+    },
+    {
+      "tool": "components",
+      "query": "add labels to a resource",
+      "top1": "tag-editor"
+    },
+    {
+      "tool": "components",
+      "query": "tag editor",
+      "top1": "tag-editor"
+    },
+    {
+      "tool": "components",
+      "query": "environment variables",
+      "top1": "attribute-editor"
+    },
+    {
+      "tool": "components",
+      "query": "metadata",
+      "top1": "key-value-list"
+    },
+    {
+      "tool": "components",
+      "query": "confirm a delete",
+      "top1": "confirm-dialog"
+    },
+    {
+      "tool": "components",
+      "query": "delete confirmation",
+      "top1": "confirm-dialog"
+    },
+    {
+      "tool": "components",
+      "query": "confirmation",
+      "top1": "confirm-dialog"
+    },
+    {
+      "tool": "components",
+      "query": "approve tool call",
+      "top1": "tool-approval"
+    },
+    {
+      "tool": "components",
+      "query": "pick several regions",
+      "top1": "multi-select"
+    },
+    {
+      "tool": "components",
+      "query": "multi select",
+      "top1": "multi-select"
+    },
+    {
+      "tool": "components",
+      "query": "transfer list",
+      "top1": "transfer-list",
+      "pending": "pick-list is renamed to transfer-list by the inputs lane; un-skip after the catalog is regenerated"
+    },
+    {
+      "tool": "components",
+      "query": "show a tooltip on an icon",
+      "top1": "tooltip"
+    },
+    {
+      "tool": "components",
+      "query": "help text tooltip",
+      "top1": "tooltip"
+    },
+    {
+      "tool": "components",
+      "query": "info icon",
+      "top1": "hint"
+    },
+    {
+      "tool": "components",
+      "query": "page title with actions",
+      "top1": "page-header"
+    },
+    {
+      "tool": "components",
+      "query": "page header",
+      "top1": "page-header"
+    },
+    {
+      "tool": "suggest",
+      "query": "page header",
+      "top1": "page-header"
+    },
+    {
+      "tool": "components",
+      "query": "top bar",
+      "top1": "app-header"
+    },
+    {
+      "tool": "components",
+      "query": "top navigation bar",
+      "top1": "app-header"
+    },
+    {
+      "tool": "components",
+      "query": "empty list",
+      "top1": "empty-state"
+    },
+    {
+      "tool": "components",
+      "query": "empty state",
+      "top1": "empty-state"
+    },
+    {
+      "tool": "components",
+      "query": "show code",
+      "top1": "code-block"
+    },
+    {
+      "tool": "suggest",
+      "query": "show code",
+      "top1": "code-block"
+    },
+    {
+      "tool": "components",
+      "query": "code snippet",
+      "top1": "code-block"
+    },
+    {
+      "tool": "components",
+      "query": "json viewer",
+      "top1": "code-block"
+    },
+    {
+      "tool": "components",
+      "query": "diff",
+      "top1": "code-block"
+    },
+    {
+      "tool": "components",
+      "query": "diff view",
+      "top1": "code-block"
+    },
+    {
+      "tool": "components",
+      "query": "code editor",
+      "top1": "code-editor"
+    },
+    {
+      "tool": "components",
+      "query": "show logs",
+      "top1": "log-viewer"
+    },
+    {
+      "tool": "components",
+      "query": "logs",
+      "top1": "log-viewer"
+    },
+    {
+      "tool": "components",
+      "query": "copy an API key",
+      "top1": "copy-text"
+    },
+    {
+      "tool": "components",
+      "query": "copy to clipboard",
+      "top1": "copy-button"
+    },
+    {
+      "tool": "components",
+      "query": "copy text",
+      "top1": "copy-text"
+    },
+    {
+      "tool": "components",
+      "query": "list of domains with filters",
+      "top1": "table"
+    },
+    {
+      "tool": "components",
+      "query": "table with filters",
+      "top1": "table"
+    },
+    {
+      "tool": "components",
+      "query": "filter bar",
+      "top1": "table"
+    },
+    {
+      "tool": "components",
+      "query": "table search",
+      "top1": "table-search"
+    },
+    {
+      "tool": "components",
+      "query": "column selector",
+      "top1": "collection-preferences"
+    },
+    {
+      "tool": "components",
+      "query": "show a metric",
+      "top1": "stat-tile"
+    },
+    {
+      "tool": "components",
+      "query": "metric",
+      "top1": "stat-tile"
+    },
+    {
+      "tool": "components",
+      "query": "kpi card",
+      "top1": "stat-tile"
+    },
+    {
+      "tool": "components",
+      "query": "kpi",
+      "top1": "stat-tile"
+    },
+    {
+      "tool": "components",
+      "query": "a side panel with details",
+      "top1": "drawer"
+    },
+    {
+      "tool": "components",
+      "query": "details panel",
+      "top1": "drawer"
+    },
+    {
+      "tool": "components",
+      "query": "side panel",
+      "top1": "drawer"
+    },
+    {
+      "tool": "components",
+      "query": "drawer",
+      "top1": "drawer"
+    },
+    {
+      "tool": "components",
+      "query": "open a modal",
+      "top1": "dialog"
+    },
+    {
+      "tool": "components",
+      "query": "show an error message",
+      "top1": "alert"
+    },
+    {
+      "tool": "components",
+      "query": "inline alert",
+      "top1": "alert"
+    },
+    {
+      "tool": "components",
+      "query": "info banner at top of page",
+      "top1": "alert"
+    },
+    {
+      "tool": "suggest",
+      "query": "info banner at top of page",
+      "top1": "alert"
+    },
+    {
+      "tool": "components",
+      "query": "banner",
+      "top1": "alert",
+      "pending": "the marketing banner merges into call-to-action (marketing lane); until then the export named banner wins; un-skip after the catalog is regenerated"
+    },
+    {
+      "tool": "suggest",
+      "query": "banner",
+      "top1": "alert",
+      "pending": "the marketing banner merges into call-to-action (marketing lane); until then the export named banner wins; un-skip after the catalog is regenerated"
+    },
+    {
+      "tool": "components",
+      "query": "notice",
+      "top1": "alert"
+    },
+    {
+      "tool": "components",
+      "query": "toast notification",
+      "top1": "toast"
+    },
+    {
+      "tool": "components",
+      "query": "progress of a long task",
+      "top1": "progress"
+    },
+    {
+      "tool": "components",
+      "query": "usage meter quota",
+      "top1": "progress"
+    },
+    {
+      "tool": "components",
+      "query": "upload a file",
+      "top1": "file-dropzone"
+    },
+    {
+      "tool": "components",
+      "query": "choose a date",
+      "top1": "date-picker",
+      "pending": "calendar is renamed to date-picker by the inputs lane; un-skip after the catalog is regenerated"
+    },
+    {
+      "tool": "components",
+      "query": "date picker",
+      "top1": "date-picker",
+      "pending": "calendar is renamed to date-picker by the inputs lane; un-skip after the catalog is regenerated"
+    },
+    {
+      "tool": "components",
+      "query": "date range",
+      "top1": "date-range-picker"
+    },
+    {
+      "tool": "components",
+      "query": "date range picker",
+      "top1": "date-range-picker"
+    },
+    {
+      "tool": "components",
+      "query": "pick one option",
+      "top1": "radio-group"
+    },
+    {
+      "tool": "components",
+      "query": "radio group",
+      "top1": "radio-group"
+    },
+    {
+      "tool": "components",
+      "query": "radio options as cards",
+      "top1": "radio-group"
+    },
+    {
+      "tool": "components",
+      "query": "toggle",
+      "top1": "switch",
+      "pending": "the committed catalog.json still carries the removed alias toggle → toggle-group; un-skip after the catalog is regenerated"
+    },
+    {
+      "tool": "components",
+      "query": "toggle a setting",
+      "top1": "switch"
+    },
+    {
+      "tool": "suggest",
+      "query": "toggle a setting",
+      "top1": "switch"
+    },
+    {
+      "tool": "components",
+      "query": "switch",
+      "top1": "switch"
+    },
+    {
+      "tool": "components",
+      "query": "feature flag on off",
+      "top1": "switch"
+    },
+    {
+      "tool": "components",
+      "query": "tabs",
+      "top1": "tabs"
+    },
+    {
+      "tool": "components",
+      "query": "segmented control",
+      "top1": "toggle-group"
+    },
+    {
+      "tool": "components",
+      "query": "segmented",
+      "top1": "toggle-group"
+    },
+    {
+      "tool": "components",
+      "query": "breadcrumb",
+      "top1": "breadcrumb"
+    },
+    {
+      "tool": "components",
+      "query": "sidebar navigation",
+      "top1": "sidebar"
+    },
+    {
+      "tool": "components",
+      "query": "layout",
+      "top1": "console-layout"
+    },
+    {
+      "tool": "components",
+      "query": "app shell",
+      "top1": "console-layout"
+    },
+    {
+      "tool": "components",
+      "query": "dropdown menu of actions",
+      "top1": "dropdown-menu"
+    },
+    {
+      "tool": "components",
+      "query": "row actions menu",
+      "top1": "dropdown-menu"
+    },
+    {
+      "tool": "components",
+      "query": "kebab menu",
+      "top1": "dropdown-menu"
+    },
+    {
+      "tool": "components",
+      "query": "row actions",
+      "top1": "dropdown-menu"
+    },
+    {
+      "tool": "components",
+      "query": "more actions",
+      "top1": "dropdown-menu"
+    },
+    {
+      "tool": "components",
+      "query": "context menu",
+      "top1": "context-menu",
+      "pending": "exported already but missing from the committed catalog.json; un-skip after the catalog is regenerated"
+    },
+    {
+      "tool": "components",
+      "query": "right click menu",
+      "top1": "context-menu",
+      "pending": "exported already but missing from the committed catalog.json; un-skip after the catalog is regenerated"
+    },
+    {
+      "tool": "components",
+      "query": "search box",
+      "top1": "input"
+    },
+    {
+      "tool": "components",
+      "query": "user avatar",
+      "top1": "avatar"
+    },
+    {
+      "tool": "components",
+      "query": "list",
+      "top1": "item"
+    },
+    {
+      "tool": "components",
+      "query": "list of items",
+      "top1": "item"
+    },
+    {
+      "tool": "components",
+      "query": "key value details",
+      "top1": "key-value-list"
+    },
+    {
+      "tool": "components",
+      "query": "description list",
+      "top1": "key-value-list"
+    },
+    {
+      "tool": "components",
+      "query": "card",
+      "top1": "card"
+    },
+    {
+      "tool": "components",
+      "query": "pagination",
+      "top1": "pagination"
+    },
+    {
+      "tool": "components",
+      "query": "stepper wizard",
+      "top1": "stepper",
+      "accept": ["stepper", "wizard"]
+    },
+    {
+      "tool": "components",
+      "query": "form field with label",
+      "top1": "field"
+    },
+    {
+      "tool": "components",
+      "query": "text input",
+      "top1": "input"
+    },
+    {
+      "tool": "components",
+      "query": "select",
+      "top1": "select"
+    },
+    {
+      "tool": "components",
+      "query": "combobox autocomplete",
+      "top1": "combobox"
+    },
+    {
+      "tool": "components",
+      "query": "number input",
+      "top1": "number-input"
+    },
+    {
+      "tool": "components",
+      "query": "password input",
+      "top1": "password-input"
+    },
+    {
+      "tool": "components",
+      "query": "chart",
+      "top1": "chart"
+    },
+    {
+      "tool": "components",
+      "query": "line chart",
+      "top1": "chart"
+    },
+    {
+      "tool": "components",
+      "query": "accordion",
+      "top1": "accordion"
+    },
+    {
+      "tool": "components",
+      "query": "collapsible section",
+      "top1": "accordion"
+    },
+    {
+      "tool": "suggest",
+      "query": "collapsible section",
+      "top1": "accordion"
+    },
+    {
+      "tool": "components",
+      "query": "divider",
+      "top1": "separator"
+    },
+    {
+      "tool": "components",
+      "query": "badge count",
+      "top1": "badge"
+    },
+    {
+      "tool": "components",
+      "query": "severity",
+      "top1": "severity-tag"
+    },
+    {
+      "tool": "components",
+      "query": "command palette",
+      "top1": "command"
+    },
+    {
+      "tool": "components",
+      "query": "keyboard shortcut",
+      "top1": "kbd"
+    },
+    {
+      "tool": "components",
+      "query": "help link",
+      "top1": "link"
+    },
+    {
+      "tool": "components",
+      "query": "external link",
+      "top1": "link"
+    },
+    {
+      "tool": "components",
+      "query": "button",
+      "top1": "button"
+    },
+    {
+      "tool": "components",
+      "query": "icon button",
+      "top1": "icon-button"
+    },
+    {
+      "tool": "components",
+      "query": "split button",
+      "top1": "split-button"
+    },
+    {
+      "tool": "components",
+      "query": "button group",
+      "top1": "button-group"
+    },
+    {
+      "tool": "components",
+      "query": "plan pricing card",
+      "top1": "pricing-card"
+    },
+    {
+      "tool": "components",
+      "query": "hover card",
+      "top1": "hover-card",
+      "pending": "exported already but missing from the committed catalog.json; un-skip after the catalog is regenerated"
+    },
+    {
+      "tool": "components",
+      "query": "timestamp",
+      "top1": "timestamp",
+      "pending": "exported already but missing from the committed catalog.json; un-skip after the catalog is regenerated"
+    },
+    {
+      "tool": "components",
+      "query": "relative time",
+      "top1": "timestamp",
+      "pending": "exported already but missing from the committed catalog.json; un-skip after the catalog is regenerated"
+    },
+    {
+      "tool": "components",
+      "query": "http status code",
+      "top1": "status-code",
+      "pending": "exported already but missing from the committed catalog.json; un-skip after the catalog is regenerated"
+    },
+    {
+      "tool": "components",
+      "query": "editable grid",
+      "top1": "data-grid",
+      "pending": "data-grid is a new component another lane is adding; un-skip after the catalog is regenerated"
+    },
+    {
+      "tool": "components",
+      "query": "spreadsheet",
+      "top1": "data-grid",
+      "pending": "data-grid is a new component another lane is adding; un-skip after the catalog is regenerated"
+    },
+    {
+      "tool": "components",
+      "query": "threshold line",
+      "top1": "chart-reference",
+      "pending": "exported already but missing from the committed catalog.json; un-skip after the catalog is regenerated"
+    },
+    {
+      "tool": "suggest",
+      "query": "testimonials",
+      "top1": "client-quotes-section"
+    },
+    {
+      "tool": "suggest",
+      "query": "stats",
+      "top1": "stats",
+      "accept": ["stats", "stats-section"]
+    },
+    {
+      "tool": "suggest",
+      "query": "cta",
+      "top1": "call-to-action",
+      "accept": ["call-to-action", "closing-call-to-action-section"]
+    },
+    {
+      "tool": "suggest",
+      "query": "marquee",
+      "top1": "marquee"
+    },
+    {
+      "tool": "suggest",
+      "query": "logo cloud",
+      "top1": "logo-wall"
+    },
+    {
+      "tool": "suggest",
+      "query": "feature grid",
+      "top1": "capability-grid-section"
+    },
+    {
+      "tool": "suggest",
+      "query": "comparison",
+      "top1": "plan-comparison-section",
+      "accept": ["plan-comparison-section", "competitor-comparison-section"]
+    },
+    {
+      "tool": "suggest",
+      "query": "blog index",
+      "top1": "article-index-section",
+      "pending": "article-index-blog and article-index-resource-hub merge into article-index-section (marketing lane); un-skip after the catalog is regenerated"
+    },
+    {
+      "tool": "suggest",
+      "query": "newsletter",
+      "top1": "newsletter-section"
+    },
+    {
+      "tool": "suggest",
+      "query": "sign-in screen",
+      "top1": "auth/auth-sign-in"
+    },
+    {
+      "tool": "suggest",
+      "query": "list of domains with filters",
+      "top1": "view/view-table"
+    }
+  ]
+}

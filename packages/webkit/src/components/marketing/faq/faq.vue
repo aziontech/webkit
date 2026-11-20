@@ -5,7 +5,7 @@
   import AccordionContent from '../../content/accordion/accordion-content/accordion-content.vue'
   import AccordionItem from '../../content/accordion/accordion-item/accordion-item.vue'
   import AccordionTrigger from '../../content/accordion/accordion-trigger/accordion-trigger.vue'
-  import FrameBox from '../../layout/frame-box/frame-box.vue'
+  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
 
   defineOptions({
     name: 'Faq',
@@ -22,7 +22,7 @@
     answer: string
   }
 
-  interface Props {
+  export interface FaqProps {
     /** Headline of the band, rendered as its h2 in the left column. */
     title?: string
     /** The questions and their answers, in order; each item is a value, a question, and an answer, where the value is the item's stable key. */
@@ -31,7 +31,7 @@
     framed?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<FaqProps>(), {
     title: '',
     items: () => [],
     framed: false
@@ -39,19 +39,19 @@
 
   defineSlots<{
     /** Replaces the rendered answer for every item, so an answer can carry a link or richer content. */
-    answer(props: { item: FaqItem }): unknown
+    answer?(props: { item: FaqItem }): unknown
   }>()
 
   const attrs = useAttrs()
   const headingId = useId()
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'marketing-faq')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'faq')
 
   const hasItems = computed(() => props.items.length > 0)
 
   const hasHeading = computed(() => hasItems.value && props.title.length > 0)
 
-  const frame = computed(() => (props.framed ? FrameBox : 'div'))
+  const frame = computed(() => (props.framed ? RegistrationFrame : 'div'))
   const frameProps = computed(() =>
     props.framed ? { flush: true, borders: 'y', marks: 'all' } : {}
   )
@@ -88,20 +88,16 @@
             size="large"
           >
             <AccordionItem
-              v-for="(item, index) in items"
+              v-for="item in items"
               :key="item.value"
               :value="item.value"
-              :class="[
-                'border-(--border-default) data-[state=open]:border-b',
-                index === items.length - 1 && 'border-b-0 data-[state=open]:border-b-0'
-              ]"
             >
               <AccordionTrigger
-                class="border-b-0! py-(--spacing-md) data-[state=open]:min-h-0 data-[state=open]:pb-0"
+                class="py-(--spacing-md) data-[state=open]:min-h-0 data-[state=open]:pb-0"
               >
                 <span class="text-body-md text-(--text-default)">{{ item.question }}</span>
               </AccordionTrigger>
-              <AccordionContent>
+              <AccordionContent :padded="false">
                 <p
                   class="m-0 max-w-(--container-2xl) px-(--accordion-inset) pt-(--spacing-xs) pb-(--spacing-md) text-body-sm text-(--text-muted)"
                 >

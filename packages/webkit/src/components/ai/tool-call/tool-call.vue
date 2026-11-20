@@ -1,0 +1,180 @@
+<script setup lang="ts">
+  import { computed, useAttrs, useId } from 'vue'
+
+  import { useTranslate } from '../../../composables/use-translate'
+  import * as en from '../../../locales/en'
+  import type { StatusIndicatorSeverity } from '../../feedback/status-indicator/status-indicator.vue'
+  import StatusIndicator from '../../feedback/status-indicator/status-indicator.vue'
+
+  export type ToolCallStatus =
+    'pending' | 'streaming' | 'running' | 'success' | 'error' | 'canceled' | 'denied'
+
+  defineOptions({
+    name: 'ToolCall',
+    inheritAttrs: false
+  })
+
+  export interface ToolCallProps {
+    /** The tool or command identifier, shown in code font (`list_workloads`). */
+    name: string
+    /** What the call does in the reader's words (`Listing your workloads`). Empty shows only the name. */
+    title?: string
+    /** `pending` waits for authorization, `streaming` receives its arguments, `running` is in flight, then `success`, `error`, `canceled` (stopped before it finished) or `denied` (the reader refused it). */
+    status?: ToolCallStatus
+    /** Initial open state when uncontrolled; details start collapsed. */
+    defaultOpen?: boolean
+  }
+
+  const props = withDefaults(defineProps<ToolCallProps>(), {
+    title: '',
+    status: 'running',
+    defaultOpen: false
+  })
+
+  /** Controlled open state. Use with `v-model:open`; while unbound it follows `defaultOpen` and toggles locally. */
+  const open = defineModel<boolean>('open', { default: undefined as never })
+
+  const slots = defineSlots<{
+    /** The parameters the tool is called with, usually a `CodeBlock` or `KeyValueList`. */
+    input?(): unknown
+    /** What the tool returned, or the error it failed with. */
+    output?(): unknown
+  }>()
+
+  const attrs = useAttrs()
+  const { t } = useTranslate({ toolCall: en.toolCall })
+  const uid = useId()
+  const panelId = `${uid}-panel`
+
+  const testId = computed<string>(() => (attrs['data-testid'] as string | undefined) ?? 'tool-call')
+  const isOpen = computed<boolean>(() => open.value ?? props.defaultOpen)
+  const expandable = () => Boolean(slots.input || slots.output)
+
+  const severity = computed<StatusIndicatorSeverity>(() => {
+    if (props.status === 'success') return 'success'
+    if (props.status === 'error') return 'danger'
+    if (props.status === 'denied') return 'warning'
+    if (props.status === 'running') return 'info'
+    return 'neutral'
+  })
+
+  function toggle(): void {
+    open.value = !isOpen.value
+  }
+</script>
+
+<template>
+  <div
+    v-bind="$attrs"
+    :data-testid="testId"
+    :data-status="status"
+    :data-state="expandable() ? (isOpen ? 'open' : 'closed') : undefined"
+    class="flex w-full flex-col rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface)"
+  >
+    <div class="flex min-h-10 items-center gap-(--spacing-sm) px-(--spacing-sm) py-(--spacing-xs)">
+      <button
+        v-if="expandable()"
+        type="button"
+        :aria-expanded="isOpen ? 'true' : 'false'"
+        :aria-controls="panelId"
+        :data-testid="`${testId}__trigger`"
+        class="flex min-w-0 flex-1 items-center gap-(--spacing-xs) rounded-(--shape-control) text-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+        @click="toggle"
+      >
+        <i
+          class="az az-wrench shrink-0 text-(--text-muted)"
+          aria-hidden="true"
+        />
+        <span
+          class="flex min-w-0 flex-1 flex-wrap items-center gap-x-(--spacing-xs) gap-y-(--spacing-2xs)"
+        >
+          <span
+            v-if="title"
+            class="line-clamp-2 min-w-0 text-label-sm break-words text-(--text-default)"
+          >
+            {{ title }}
+          </span>
+          <code
+            dir="ltr"
+            class="max-w-full truncate rounded-(--shape-control) bg-(--bg-surface-raised) px-1 text-label-code-sm text-(--text-muted)"
+            >{{ name }}</code
+          >
+        </span>
+        <i
+          :data-state="isOpen ? 'open' : 'closed'"
+          class="az az-chevron-down shrink-0 text-body-xs text-(--text-muted) transition-transform duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-[state=open]:rotate-180"
+          aria-hidden="true"
+        />
+      </button>
+      <div
+        v-else
+        class="flex min-w-0 flex-1 items-center gap-(--spacing-xs)"
+      >
+        <i
+          class="az az-wrench shrink-0 text-(--text-muted)"
+          aria-hidden="true"
+        />
+        <span
+          class="flex min-w-0 flex-1 flex-wrap items-center gap-x-(--spacing-xs) gap-y-(--spacing-2xs)"
+        >
+          <span
+            v-if="title"
+            class="line-clamp-2 min-w-0 text-label-sm break-words text-(--text-default)"
+          >
+            {{ title }}
+          </span>
+          <code
+            dir="ltr"
+            class="max-w-full truncate rounded-(--shape-control) bg-(--bg-surface-raised) px-1 text-label-code-sm text-(--text-muted)"
+            >{{ name }}</code
+          >
+        </span>
+      </div>
+      <span
+        role="status"
+        class="flex shrink-0"
+      >
+        <StatusIndicator
+          :severity="severity"
+          :loading="status === 'running' || status === 'streaming'"
+          :label="t(`toolCall.${status}`)"
+          :data-testid="`${testId}__status`"
+        />
+      </span>
+    </div>
+    <div
+      v-if="expandable()"
+      v-show="isOpen"
+      :id="panelId"
+      :data-testid="`${testId}__details`"
+      class="flex flex-col gap-(--spacing-sm) border-t border-(--border-default) p-(--spacing-sm)"
+    >
+      <section
+        v-if="slots.input"
+        :aria-labelledby="`${uid}-input`"
+        class="flex flex-col gap-(--spacing-xs)"
+      >
+        <h4
+          :id="`${uid}-input`"
+          class="m-0 text-label-sm text-(--text-muted)"
+        >
+          {{ t('toolCall.input') }}
+        </h4>
+        <slot name="input" />
+      </section>
+      <section
+        v-if="slots.output"
+        :aria-labelledby="`${uid}-output`"
+        class="flex flex-col gap-(--spacing-xs)"
+      >
+        <h4
+          :id="`${uid}-output`"
+          class="m-0 text-label-sm text-(--text-muted)"
+        >
+          {{ t('toolCall.output') }}
+        </h4>
+        <slot name="output" />
+      </section>
+    </div>
+  </div>
+</template>

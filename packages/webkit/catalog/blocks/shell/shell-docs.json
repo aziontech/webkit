@@ -1,0 +1,31 @@
+{
+ "variants": [
+  {
+   "name": "Article",
+   "summary": "A tutorial page body for the docs layout: masthead with breadcrumb and meta actions, a chooser of paths, callouts, steps with commands, an agent prompt, Next steps, Related resources and the pager; its anchored DocHeadings fill the layout's outline, with the GitHub and Community groups and a DocCallToAction under it.",
+   "file": "blocks/shell/shell-docs/variants/article.vue"
+  },
+  {
+   "name": "Reference",
+   "summary": "A product reference page body for the docs layout: an info callout, two actions, the request path as a Diagram in a DocFrame, a JSON CodeBlock, a term list and a two-column Next steps; its four anchored sections fill the layout's outline.",
+   "file": "blocks/shell/shell-docs/variants/reference.vue"
+  },
+  {
+   "name": "Landing",
+   "summary": "The documentation home as a page body for the docs layout, with no outline (its headings carry no anchor): a DocHero with Get started and the CopyPromptButton (agent marks) and its note, then a DocAgentCard above the Console, CLI and API cards, then objectives, coloured framework templates, Stop attacks, compliance, Follow along and the pager forward.",
+   "file": "blocks/shell/shell-docs/variants/landing.vue"
+  },
+  {
+   "name": "AgentSetup",
+   "summary": "The index of agent setup pages as a page body for the docs layout: a Tabs picker that filters the coding-agent DocCards by workflow, a comparison Table with check marks and Tags, a legend DocCallout, and Workflow, Key concepts and Common tradeoffs DocCard grids; its h2 and h3 sections fill the layout's outline.",
+   "file": "blocks/shell/shell-docs/variants/agent-setup.vue"
+  },
+  {
+   "name": "AgentGuide",
+   "summary": "One agent's setup page as a page body for the docs layout: a masthead with the agent mark, fact Tags and links, Quick start DocSteps with DocCodeGroup commands and DocMarkdown bodies, the MCP tools Table, CLI and CLAUDE.md code, agent-friendly DocItem rows, DocPrompts, tip callouts, FAQ and Troubleshooting DocAccordionGroups and the Other agents grid.",
+   "file": "blocks/shell/shell-docs/variants/agent-guide.vue"
+  }
+ ],
+ "sfcFile": "blocks/shell/shell-docs/shell-docs.vue",
+ "guidelinesFile": "blocks/shell/shell-docs/guidelines.md"
+}

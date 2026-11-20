@@ -10,7 +10,7 @@ import {
 } from 'vue'
 
 export interface UseFrameDocumentReturn {
-  body: Readonly<ShallowRef<globalThis.HTMLElement | null>>
+  bodyEl: Readonly<ShallowRef<globalThis.HTMLElement | null>>
 }
 
 const STYLE_SOURCES = 'style, link[rel="stylesheet"]'
@@ -20,7 +20,7 @@ const THEME_ATTRIBUTES = ['data-theme', 'class']
 export function useFrameDocument(
   iframe: MaybeRefOrGetter<globalThis.HTMLIFrameElement | null>
 ): UseFrameDocumentReturn {
-  const body = shallowRef<globalThis.HTMLElement | null>(null)
+  const bodyEl = shallowRef<globalThis.HTMLElement | null>(null)
 
   let frameDocument: globalThis.Document | null = null
   let clones = new Map<globalThis.Element, globalThis.Element>()
@@ -64,7 +64,7 @@ export function useFrameDocument(
     clones.forEach((clone) => clone.remove())
     clones = new Map()
     frameDocument = null
-    body.value = null
+    bodyEl.value = null
   }
 
   const attach = () => {
@@ -75,7 +75,7 @@ export function useFrameDocument(
     doc.body.style.margin = '0'
     syncStyles()
     syncTheme()
-    body.value = doc.body
+    bodyEl.value = doc.body
   }
 
   useEventListener(iframe, 'load', attach)
@@ -96,6 +96,6 @@ export function useFrameDocument(
   onScopeDispose(detach)
 
   return {
-    body: readonly(body) as Readonly<ShallowRef<globalThis.HTMLElement | null>>
+    bodyEl: readonly(bodyEl) as Readonly<ShallowRef<globalThis.HTMLElement | null>>
   }
 }

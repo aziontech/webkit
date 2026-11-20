@@ -1,0 +1,93 @@
+{
+ "name": "image-gallery",
+ "binding": "ImageGallery",
+ "import": "@aziontech/webkit/image-gallery",
+ "treeShakeableImport": "@aziontech/webkit/image-gallery",
+ "category": "content",
+ "surface": "app",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The images of one response: a responsive grid of thumbnails that opens one image larger in a `Dialog`, with previous, next and Download. It takes each image as a URL or as base64 data with its media type, so a chat can show the images a model returned in a message or a generation finished with. While images are generating it holds one `Skeleton` per expected image, and when the request fails it shows the error in place of the grid. It draws what the app hands it; it generates and fetches nothing.",
+ "setup": null,
+ "useWhen": [
+  "The images in an assistant message: one or several image parts, from a URL or base64 data.",
+  "The result of an image generation request: several images, a generating state and a failed state.",
+  "Any set of a few related images a person wants to look at one by one and download."
+ ],
+ "avoidWhen": [
+  "One stored file with its name, size and type, in a file browser — use `FilePreview`.",
+  "A row of marketing cards or images that scrolls sideways — use `Carousel`.",
+  "A picture you already have at a known size inside text or a card — a plain `img` is enough.",
+  "Files attached to a prompt before it is sent — use `FileTokenGroup`."
+ ],
+ "related": [
+  "`Dialog` — the viewer that opens one image larger.",
+  "`Skeleton` — the placeholder per expected image while images generate.",
+  "`EmptyState` — the error state, the empty state and an image that fails to load in the viewer.",
+  "`FilePreview` — one stored file with a type-aware body.",
+  "`ChatMessage` — the message an image gallery sits in."
+ ],
+ "bestPractices": [
+  "Pass `alt` from what the image shows (a model's revised prompt is a good source); an image with no `alt` is named by its position (\"Image 2 of 4\").",
+  "Give every item a stable `key` (the message id and the part index) so the grid keeps each image when items arrive one by one.",
+  "Set `expectedCount` to the number of images requested, so the placeholders match the result.",
+  "Base64 data stays in memory as a data URL; for large images prefer a URL the app serves.",
+  "Handle `download` and call `event.preventDefault()` when the image is on another origin or needs a signed URL; a same-origin, `blob:` or `data:` image downloads by itself."
+ ],
+ "props": [
+  {
+   "name": "items",
+   "type": "ImageGalleryItem[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Images to show, each from a URL (`src`) or base64 `data` with its `mimeType`."
+  },
+  {
+   "name": "loading",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Images are still generating: placeholders fill the grid after the images already in `items`, up to `expectedCount`."
+  },
+  {
+   "name": "expectedCount",
+   "type": "number",
+   "default": "1",
+   "required": "false",
+   "doc": "Number of images expected while `loading`; the grid shows a placeholder for each one not in `items` yet."
+  },
+  {
+   "name": "error",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Why the images could not load or generate. Set, the gallery shows the error state in place of the grid, with this text under its title."
+  }
+ ],
+ "events": [
+  {
+   "name": "download",
+   "payload": "(event: MouseEvent, item: ImageGalleryItem)",
+   "notes": "Download in the viewer was pressed for `item`. Download is a link with the `download` attribute, so the browser saves a same-origin, `blob:` or `data:` image unless the handler calls `preventDefault()`; browsers ignore `download` on a cross-origin URL and open it instead, so an app with cross-origin images handles this event (`preventDefault()` and its own download)."
+  }
+ ],
+ "slots": [],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/image-gallery/default.vue"
+  },
+  {
+   "name": "Single",
+   "file": "examples/image-gallery/single.vue"
+  },
+  {
+   "name": "Loading",
+   "file": "examples/image-gallery/loading.vue"
+  }
+ ],
+ "docs": "components/image-gallery.md"
+}

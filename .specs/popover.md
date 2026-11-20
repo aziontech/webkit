@@ -3,33 +3,65 @@ name: popover
 category: overlay
 structure: composition
 status: implemented
-spec_version: 2
+spec_version: 12
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-954
   node_id: 482:954
-checksum: 3a1864aa7aab1536ab016d700899fba5e7d691e9455a171bc66f96331dd15c47
+checksum: 7b91ef8f069ad94e44fba37687e59756a679825952ac422000e67903c6b4222a
 created: 2026-06-30
-last_updated: 2026-07-22
+last_updated: 2026-11-18
 ---
 
 # Popover — Component Spec
 
 ## Purpose
 
-Anchored, **non-modal** overlay that opens from a consumer-supplied trigger and renders rich, interactive content — a header (title + optional description + close), a free-form body, and a footer for actions — in a floating panel anchored to the trigger. Use for inline forms, filter builders, and contextual detail or confirmation that needs interactive children. Unlike `overlay/tooltip` (plain text, non-interactive) and `overlay/dialog` (modal, centered, focus-trapped), the popover leaves the page interactive, anchors to its trigger, and closes on `Esc` or outside-click. It differs from `navigation/dropdown`, which renders a menu of selectable options rather than free-form content.
+Anchored, **non-modal** overlay that opens from a consumer-supplied trigger and renders rich, interactive content — a header (title + optional description + close), a free-form body, and a footer for actions — in a floating panel anchored to the trigger. Use for inline forms, filter builders, and contextual detail or confirmation that needs interactive children. Unlike `tooltip` (plain text, non-interactive) and `dialog` (modal, centered, focus-trapped), the popover leaves the page interactive, anchors to its trigger, and closes on `Esc` or outside-click. It differs from `dropdown-menu`, which renders a menu of selectable options rather than free-form content.
+
+## When to use
+
+- Use Popover for rich or interactive content (a form, actions) opened by a click and closed on purpose; a one-line hint is a Tooltip and a read-only hover preview is a HoverCard.
+- Interactive content anchored to a trigger while the page stays usable: an inline form, a filter builder, a quick edit of one field.
+- Contextual detail or a light confirmation that needs buttons or links inside it.
+
+## When NOT to use
+
+- A short, non-interactive hint on hover or focus → use `tooltip`.
+- A list of actions or options to pick from → use `dropdown-menu`.
+- Choosing a form value from a list → use `select`.
+- A blocking task that must be completed or cancelled first → use `dialog`.
+- A long form or a secondary workflow → use `drawer`.
+
+## Related
+
+- `tooltip` — plain text only and non-interactive; opens on hover and focus, not on click.
+- `dropdown-menu` — same trigger and anchoring model, but renders option rows and emits `select`.
+- `dialog` — modal and centered, traps focus and locks scroll; the popover does neither.
+- `drawer` — edge-anchored modal panel for longer content.
+
+## Best practices
+
+- Place `Popover.Trigger` first and `Popover.Content` after it. The trigger wires `aria-expanded`, `aria-controls` and the click toggle onto your element, so don't bind them yourself.
+- Let `Popover.Trigger` show the pointer: its wrapper sets `cursor-pointer` (`cursor-not-allowed` when disabled), so a `Tag`, `Avatar` or icon slotted in reads as clickable. Don't put `cursor-pointer` on the slotted WebKit component — `webkit/no-style-override` blocks it.
+- Include a `Popover.Title`. The panel takes its accessible name from it through `aria-labelledby`.
+- Set `size` for forms and filter builders so the panel doesn't resize as content changes. Without it, the panel sizes fluidly between the `--container-3xs` and `--container-xs` tokens.
+- Use `side="auto"` for triggers that can sit near a viewport edge.
+- Use `side="end"` (or `"start"`) for a trigger in a narrow column or a sidebar, where the panel should open beside the trigger instead of covering the content below it. `start` and `end` follow the text direction, so the panel opens on the inline end in both `ltr` and `rtl`. Type a side held in a variable with the exported `PopoverSide` (and `PopoverAlign` for the alignment), never a cast.
+- Bind the open state with `v-model:open` (or `:open` + `@update:open`, whose handler receives a `boolean`).
+- Set `dismissible` to `false` only when an outside click would discard input. Then give the user a way out: `Popover.Close` or a footer action.
 
 ## Usage
 
 ```vue
 <script setup>
-import Popover from '@aziontech/webkit/popover'
-import Button from '@aziontech/webkit/button'
+  import Popover from '@aziontech/webkit/popover'
+  import Button from '@aziontech/webkit/button'
 </script>
 
 <template>
   <Popover>
     <Popover.Trigger>
-      <Button kind="secondary">Open popover</Button>
+      <Button variant="secondary">Open popover</Button>
     </Popover.Trigger>
 
     <Popover.Content>
@@ -50,26 +82,26 @@ Tree-shaking alternative — the standalone root + each sub-component from its o
 
 ```vue
 <script setup>
-import Popover from '@aziontech/webkit/popover-root'
-import PopoverTrigger from '@aziontech/webkit/popover-trigger'
-import PopoverContent from '@aziontech/webkit/popover-content'
-import PopoverHeader from '@aziontech/webkit/popover-header'
-import PopoverTitle from '@aziontech/webkit/popover-title'
-import PopoverDescription from '@aziontech/webkit/popover-description'
-import PopoverClose from '@aziontech/webkit/popover-close'
-import PopoverFooter from '@aziontech/webkit/popover-footer'
+  import Popover from '@aziontech/webkit/popover-root'
+  import PopoverTrigger from '@aziontech/webkit/popover-trigger'
+  import PopoverContent from '@aziontech/webkit/popover-content'
+  import PopoverHeader from '@aziontech/webkit/popover-header'
+  import PopoverTitle from '@aziontech/webkit/popover-title'
+  import PopoverDescription from '@aziontech/webkit/popover-description'
+  import PopoverClose from '@aziontech/webkit/popover-close'
+  import PopoverFooter from '@aziontech/webkit/popover-footer'
 </script>
 ```
 
 ## Sub-components
 
-The root `Popover` owns open/closed state, anchoring/placement (exposing the computed `panelStyle`), outside-click + `Esc` dismissal, focus containment and return. Shared state flows through `provide`/`inject` (`isOpen`, `triggerId`, `contentId`, `titleId`, `descriptionId`, `setOpen`, resolved `placement`, `width`, `panelStyle`, and the `panelRef` that `Popover.Content` assigns), so every sub-component is context-aware and the consumer wires nothing. **`Popover.Content` renders the single teleported, animated floating panel with its content inline** (the Select / Tooltip pattern — one `<Teleport>` + `<Transition>`, so the scale animation carries the whole panel on enter/leave); the panel element carries `role="dialog"`, the surface/border/radius/shadow tokens, the open/close `animate-popup-scale-*`, `--popup-origin` (via `panelStyle`), and `data-state` / `data-placement`, and assigns itself to the root's `panelRef` so the root's placement/focus logic operates on it. Member names mirror this component's anatomy; `Trigger` / `Content` are valid here because the popover has a real `data-state="open|closed"`.
+The root `Popover` owns open/closed state, anchoring/placement (exposing the computed `panelStyle`), outside-click + `Esc` dismissal, focus entry on open, Tab hand-off and focus return. Shared state flows through `provide`/`inject` (`isOpen`, `triggerId`, `contentId`, `titleId`, `descriptionId`, `setOpen`, resolved `side` and `align`, `size`, `panelStyle`, and the `panelEl` that `Popover.Content` assigns), so every sub-component is context-aware and the consumer wires nothing. **`Popover.Content` renders the single teleported, animated floating panel with its content inline** (the Select / Tooltip pattern — one `<Teleport>` + `<Transition>`, so the scale animation carries the whole panel on enter/leave); the panel element carries `role="dialog"`, the surface/border/radius/shadow tokens, the open/close `animate-popup-scale-*`, `--popup-origin` (via `panelStyle`), and `data-state` / `data-side` / `data-align`, and assigns itself to the root's `panelEl` so the root's placement/focus logic operates on it. Member names mirror this component's anatomy; `Trigger` / `Content` are valid here because the popover has a real `data-state="open|closed"`.
 
-- `popover-trigger/popover-trigger.vue` — slot-only abstract wrapper. Reads `inject` for `isOpen`, `triggerId`, `contentId`, `setOpen`. Renders a single inline element that toggles the panel on click and exposes `aria-haspopup="dialog"`, `aria-expanded`, `aria-controls`. The popover anchors to this element's bounding box.
+- `popover-trigger/popover-trigger.vue` — as-child trigger. Reads `inject` for `isOpen`, `triggerId`, `contentId`, `setOpen`. Renders a non-interactive inline wrapper (no `role`, no `tabindex`) with the pointer cursor (`not-allowed` when disabled) that carries `data-testid`, `data-state` and `data-disabled` and toggles the panel on the bubbling `click`. It gives `aria-haspopup="dialog"`, `aria-expanded`, `aria-controls`, `aria-disabled` (when the root is disabled) and the trigger `id` (unless the control already has one) to the slotted control, which is the one tab stop, the anchor the popover positions against and the focus-return target. When the first node in the slot is a WebKit `Button` / `IconButton` or a native control (`button`, `a[href]`, form controls, `[role=button]`, `[tabindex]` ≥ 0), or one of those as the first node inside a `Tooltip` (the trigger looks through the `Tooltip` to its slotted control), the ARIA and `id` are merged into that control at render, so server-rendered HTML already carries them on the control; for anything else (a control nested in another component) the trigger forwards them onto the first focusable element in its slot after mount and on every update. When the slot holds no focusable element (plain text, an icon, an `Avatar`, or a `Badge` / `Tag` / `SeverityTag` without slot content), the wrapper itself becomes the control: `role="button"`, `tabindex="0"` (`-1` when disabled), opening on `Enter` / `Space`; for these and for native elements this is in the server HTML too.
   - Props: _none_.
   - Events: _none_ (the root handles `update:open`).
-  - Slots: `default` with scope `{ isOpen: boolean }` — the consumer's trigger element. The wrapper attaches aria + click; the consumer must not bind those itself.
-- `popover-content/popover-content.vue` — renders the floating panel via a single `<Teleport to="body">` + `<Transition>`, with its default slot (`Popover.Header`, the free-form body, `Popover.Footer`) arranged inline as a flex column inside the panel. It owns the panel element and its surface/border/radius/shadow, `position: fixed` anchoring (from the injected `panelStyle`), `role="dialog"` + `aria-modal="false"`, `aria-labelledby` / `aria-describedby` (from injected `titleId`/`descriptionId`), the open/close `animate-popup-scale-in` / `animate-popup-scale-out`, and `data-state` / `data-placement`. It assigns the panel element to the injected `panelRef` (function ref) so the root's placement, focus, `Esc`/`Tab` and outside-click logic operate on it. Because the content lives in the same teleported element as the animation, the scale animation carries the whole panel on enter/leave.
+  - Slots: `default` with scope `{ isOpen: boolean }` — the consumer's trigger element. The trigger forwards aria + click; the consumer must not bind those itself.
+- `popover-content/popover-content.vue` — renders the floating panel via a single `<Teleport to="body">` + `<Transition>`, with its default slot (`Popover.Header`, the free-form body, `Popover.Footer`) arranged inline as a flex column inside the panel. It owns the panel element and its surface/border/radius/shadow, `position: fixed` anchoring (from the injected `panelStyle`), `role="dialog"` + `aria-modal="false"`, `aria-labelledby` / `aria-describedby` (from injected `titleId`/`descriptionId`), the open/close `animate-popup-scale-in` / `animate-popup-scale-out`, and `data-state` / `data-side` / `data-align`. It assigns the panel element to the injected `panelEl` (function ref) so the root's placement, focus, `Esc`/`Tab` and outside-click logic operate on it. Because the content lives in the same teleported element as the animation, the scale animation carries the whole panel on enter/leave.
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — the popover anatomy (`Popover.Header`, body content, `Popover.Footer`).
@@ -77,7 +109,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — `Popover.Title`, optional `Popover.Description`, and `Popover.Close`.
-- `popover-title/popover-title.vue` — title text (`.text-body-sm`, `var(--text-default)`). Registers its element id with the injected context so `Popover.Content` can reference it via `aria-labelledby`.
+- `popover-title/popover-title.vue` — title text (`.text-title-sm`, `var(--text-default)`). Registers its element id with the injected context so `Popover.Content` can reference it via `aria-labelledby`.
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — plain-text title.
@@ -85,7 +117,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — plain-text description.
-- `popover-close/popover-close.vue` — close control. Renders an `IconButton` (`pi pi-times`, `aria-label="Close"`) that calls the injected `setOpen(false)` on activation; focus returns to the trigger. Optional — omit when the popover is dismissed only by outside-click / `Esc` / a footer action.
+- `popover-close/popover-close.vue` — close control. Renders an `IconButton` (`az az-x`, `aria-label="Close"`) that calls the injected `setOpen(false)` on activation; focus returns to the trigger. Optional — omit when the popover is dismissed only by outside-click / `Esc` / a footer action.
   - Props: _none_.
   - Events: _none_ (root handles `update:open`).
   - Slots: _none_.
@@ -136,90 +168,103 @@ export default Object.assign(Popover, {
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `open` | `boolean` | `undefined` | false | Controlled open state. Use with `v-model:open` or `@update:open`. When omitted, the component is uncontrolled. |
-| `placement` | `'auto' \| 'bottom-start' \| 'bottom-end' \| 'top-start' \| 'top-end'` | `'bottom-start'` | false | Where the panel opens relative to the trigger. `'auto'` picks the best-fitting corner at open time based on available viewport space. |
-| `offset` | `number` | `4` | false | Pixel gap between the trigger and the panel. |
-| `disabled` | `boolean` | `false` | false | Prevents the trigger from opening the panel and applies disabled tokens. |
-| `width` | `'small' \| 'medium' \| 'large'` | `undefined` | false | Panel width preset mapped to container tokens: `'small'` (`var(--container-xs)`), `'medium'` (`var(--container-sm)`), `'large'` (`var(--container-md)`). When omitted, the panel sizes fluidly between `var(--container-3xs)` and `var(--container-xs)`. |
-| `dismissible` | `boolean` | `true` | false | Light-dismiss: when `true`, the panel closes on outside-click and `Esc`. Set `false` to keep it open until the trigger or `PopoverClose` closes it. |
+| Prop          | Type                                             | Default     | Required | JSDoc                                                                                                                                                                                                                                                                                                                            |
+| ------------- | ------------------------------------------------ | ----------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `side`        | `PopoverSide \| 'auto'`                          | `'bottom'`  | false    | Side of the trigger the panel opens on, flipped when it does not fit; `'auto'` picks the side with the most room at open time.                                                                                                                                                                                                   |
+| `align`       | `PopoverAlign`                                   | `'start'`   | false    | Alignment along the trigger edge.                                                                                                                                                                                                                                                                                                |
+| `sideOffset`  | `number`                                         | `4`         | false    | Pixel gap between the trigger and the panel.                                                                                                                                                                                                                                                                                     |
+| `disabled`    | `boolean`                                        | `false`     | false    | Prevents the trigger from opening the panel and applies disabled tokens.                                                                                                                                                                                                                                                         |
+| `size`        | `PopoverSize` (`'small' \| 'medium' \| 'large'`) | `undefined` | false    | Panel width preset mapped to container tokens: `'small'` (`var(--container-xs)`), `'medium'` (`var(--container-sm)`), `'large'` (`var(--container-md)`). When omitted, the panel sizes fluidly between `var(--container-3xs)` and `var(--container-xs)`. Same name as the size preset of `Dialog`, `Drawer` and `ConfirmDialog`. |
+| `defaultOpen` | `boolean`                                        | `false`     | false    | Initial open state when uncontrolled (`v-model:open` unbound).                                                                                                                                                                                                                                                                   |
+| `dismissible` | `boolean`                                        | `true`      | false    | Light-dismiss: when `true`, the panel closes on outside-click and `Esc`. Set `false` to keep it open until the trigger or `PopoverClose` closes it.                                                                                                                                                                              |
+
+Types (exported from `@aziontech/webkit/popover`): `PopoverSide` is `'top' | 'bottom' | 'start' | 'end'`; `PopoverAlign` is `'start' | 'center' | 'end'`. `start` and `end` follow the text direction: under `dir="rtl"`, `side="start"` opens on the right and `align="start"` lines the panel up with the trigger's right edge. On `start`/`end` sides, `align` runs top to bottom.
+
+## v-model
+
+| Model          | Type                   | Default     | Emits         | Notes                                                                                                                                                                                                                                                                                                               |
+| -------------- | ---------------------- | ----------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:open` | `boolean \| undefined` | `undefined` | `update:open` | Open state via `defineModel('open')`, the only declaration of `open`, so `@update:open` is typed `(value: boolean) => void`. Fires on every open/closed transition: trigger toggle, `Popover.Close`, `Esc`, and outside-click. While unbound (`undefined`) the popover is uncontrolled and starts at `defaultOpen`. |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
-| `update:open` | `boolean` | Fires on every open/closed transition; supports `v-model:open`. Emitted on trigger toggle, `Popover.Close`, `Esc`, and outside-click. |
+_No events of its own: `update:open` comes from `v-model:open` (see v-model above)._
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | Place `<Popover.Trigger>` followed by `<Popover.Content>`. |
+| Slot      | Scope | Notes                                                      |
+| --------- | ----- | ---------------------------------------------------------- |
+| `default` | —     | Place `<Popover.Trigger>` followed by `<Popover.Content>`. |
 
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - `data-state` values (root, trigger, floating panel): `open` | `closed`
 - `data-disabled` mirrors the `disabled` prop on root and trigger
-- `data-placement` on the root mirrors the `placement` prop (`'auto'` stays as `'auto'`)
-- `data-placement` on the floating panel mirrors the resolved placement (`'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'`)
+- Cursor: the trigger wrapper shows `pointer`, and `not-allowed` with `data-disabled`
+- `data-size` on the floating panel mirrors `size`
+- `data-side` / `data-align` on the root mirror the `side` / `align` props (`'auto'` stays as `'auto'`)
+- `data-side` / `data-align` on the floating panel mirror the resolved side and alignment after flipping (`'auto'` resolves to `'bottom'` or `'top'`)
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| panel open | `animate-popup-scale-in` (origin from `--popup-origin`) | semantic (`moderate-01` · `productive-entrance`) | `motion-reduce:animate-none` (instant) |
-| panel close | `animate-popup-scale-out` | semantic (`fast-02` · `productive-exit`) | `motion-reduce:animate-none` (instant) |
-| trigger / close hover / focus | `transition-colors duration-150 ease-out` | inline (matches catalog) | `motion-reduce:transition-none` |
+| Trigger                       | Animation / Transition                                  | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                |
+| ----------------------------- | ------------------------------------------------------- | ------------------------------------------------- | -------------------------------------- |
+| panel open                    | `animate-popup-scale-in` (origin from `--popup-origin`) | semantic (`moderate-01` · `productive-entrance`)  | `motion-reduce:animate-none` (instant) |
+| panel close                   | `animate-popup-scale-out`                               | semantic (`fast-02` · `productive-exit`)          | `motion-reduce:animate-none` (instant) |
+| trigger / close hover / focus | `transition-colors duration-150 ease-out`               | inline (matches catalog)                          | `motion-reduce:transition-none`        |
 
-`--popup-origin` is set per instance from the resolved `placement` (e.g. `bottom-start` → `top left`).
+`--popup-origin` is set per instance from the resolved side and alignment (e.g. `bottom` + `start` → `top left`, `top right` under `rtl`).
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| panel surface | `var(--bg-surface-raised)` |
-| panel border | `var(--border-default)` |
-| panel shape | `var(--shape-elements)` |
-| panel shadow | `var(--shadow-sm)` |
-| header / footer divider | `border-(--border-default)` |
-| header / footer spacing.y | `var(--spacing-sm)` |
-| header / footer spacing.x | `var(--spacing-md)` |
-| title typography | `.text-body-sm` |
-| title text | `var(--text-default)` |
-| description typography | `.text-body-xs` |
-| description text | `var(--text-muted)` |
-| footer button gap | `var(--spacing-xs)` |
-| close button shape | `var(--shape-button)` |
-| popup origin | `var(--popup-origin)` |
-| focus ring | `var(--ring-color)` |
+| Region                    | Token (DESIGN.md)           |
+| ------------------------- | --------------------------- |
+| panel surface             | `var(--bg-surface-raised)`  |
+| panel border              | `var(--border-default)`     |
+| panel shape               | `var(--shape-control)`      |
+| panel shadow              | `var(--shadow-sm)`          |
+| header / footer divider   | `border-(--border-default)` |
+| header / footer spacing.y | `var(--spacing-sm)`         |
+| header / footer spacing.x | `var(--spacing-md)`         |
+| title typography          | `.text-title-sm`            |
+| title text                | `var(--text-default)`       |
+| description typography    | `.text-body-xs`             |
+| description text          | `var(--text-muted)`         |
+| footer button gap         | `var(--spacing-xs)`         |
+| close button shape        | `var(--shape-button)`       |
+| popup origin              | `var(--popup-origin)`       |
+| focus ring                | `var(--ring-color)`         |
 
 ## Theme gaps
 
-| Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| `Typography/Heading/xss` (14px Sora Regular) | `.text-body-sm` | `TODO: tokenizar` — DESIGN.md documents headings only down to `text-heading-sm` (responsive ≤18px); add a flat-14px heading role if popover titles need a true heading class. |
+_None._ Resolved 2026-11-18: the title uses `.text-title-sm`, the flat 14px medium-weight title role, in place of `.text-body-sm` and then `.text-heading-2xs` (regular weight, which still read as body text), so a popover title stands out by weight like the `Dialog` and `Drawer` titles (`.text-title-lg`).
 
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on the trigger and the close button.
 - Keyboard map:
-  - On the trigger: `Enter` / `Space` toggles the panel. When it opens, focus **stays on the trigger** — it is not moved into the panel.
-  - `Esc` closes the panel and returns focus to the trigger, from anywhere (trigger or panel). `Tab` / `Shift+Tab` are **contained** within the trigger and the panel's focusable children: Tab from the trigger moves into the panel, Tab past the last panel child wraps back to the trigger, and Shift+Tab reverses. Tabbing **never** closes the panel — only `Esc` or an outside-click dismiss it.
+  - On the trigger: `Enter` / `Space` toggles the panel. When it opens (by click or key), focus **moves to the first focusable element in the panel**; when the panel has none, focus stays where it was. A panel that is open on first render (`defaultOpen`, a bound `open`) does not take focus.
+  - `Esc` closes the panel and returns focus to the trigger, from anywhere (trigger or panel).
+  - `Tab` from the trigger moves to the first panel control. `Shift+Tab` on the first panel control returns to the trigger and keeps the panel open. `Tab` past the last panel control closes the panel and moves focus to the next focusable element after the trigger in the page (or, inside a `Dialog` / `Drawer`, inside that overlay, wrapping to its first control), so keyboard users can always leave a non-modal popover.
   - Outside-click closes the panel; focus is not forced back to the trigger on outside-click.
-- ARIA: trigger exposes `aria-haspopup="dialog"`, `aria-expanded`, `aria-controls`; the floating panel (rendered by the root) uses `role="dialog"` with `aria-modal="false"`, `aria-labelledby` pointing at the `Popover.Title` id and `aria-describedby` pointing at the `Popover.Description` id (when present); `Popover.Close` is an `IconButton` with `aria-label="Close"`.
+  - Nested overlays: the popover joins the shared overlay layer stack (`useOverlayLayer`) while open, so only the top layer handles `Esc`, `Tab` and outside-click. A popover opened from a `Dialog` closes on `Esc` without closing the dialog. A `Select`, `MultiSelect`, `DropdownMenu`, `Combobox` or `Tooltip` opened inside the panel is a higher layer even though it teleports to `body`: a pointer-down inside its list never counts as outside the popover, and `Esc` closes that list first, the popover on the next `Esc`.
+  - Tests: `popover.test.ts` › keyboard map (spec), portalled children (overlay layer stack).
+  - A text `<input>` or `<textarea>` as the trigger control keeps its textbox role and gets none of `aria-haspopup`, `aria-expanded` or `aria-controls`, which ARIA does not allow on a textbox (`aria-allowed-attr`); a field that opens suggestions should be a `Combobox`.
+- ARIA: the slotted control (or the wrapper, when the slot has none) exposes `aria-haspopup="dialog"`, `aria-expanded`, `aria-controls`, with a single tab stop and in the server HTML; the floating panel (rendered by the root) uses `role="dialog"` with `aria-modal="false"`, `aria-labelledby` pointing at the `Popover.Title` id (without a title, at the trigger control's id, so the dialog always has a name) and `aria-describedby` pointing at the `Popover.Description` id (when present); `Popover.Close` is an `IconButton` with `aria-label="Close"`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons), including the disabled trigger state (validated via `--text-muted` / `--text-disabled` tokens).
 - `motion-reduce:animate-none` on `animate-popup-scale-*`; `motion-reduce:transition-none` on `transition-colors` for hover/focus states.
 - Touch target ≥40×40 px on the trigger (consumer's element — flagged in docs); the close `IconButton` follows `IconButton`'s own target sizing.
+- Teleported content: the teleported `role="dialog"` panel binds `dir` and `lang` from the nearest `ConfigProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
+- `PopoverHeader` keeps its `header` tag with `role="none"`, so an open popover does not expose a `banner` landmark (pinned by `src/test/screen-reader.test.ts`).
 
-## Stories (Storybook)
+## Examples
 
-Canonical layout — composite stories render every variant of one axis side-by-side in a single frame; state stories use the reusable `Template` with an args delta. Popover is a composition overlay whose visual identity lives in placement and optional regions, not in a `kind`/`size` axis, so the extra stories below are justified per axis.
+Canonical layout — composite stories render every variant of one axis side-by-side in a single frame; state stories use the reusable `Template` with an args delta. Popover is a composition overlay whose visual identity lives in its side and optional regions, not in a `variant`/`size` axis, so the extra stories below are justified per axis.
 
 - Default — one `Button` trigger that opens the popover, and a `Popover.Content` with a `Popover.Header` (`Popover.Title` + `Popover.Close`) and a free-form body. The canonical minimal usage: a button that calls a popover whose contents are composed by part.
-- Placements — composite story rendering all four explicit `placement` values (`bottom-start`, `bottom-end`, `top-start`, `top-end`) side-by-side. Required because `placement` is a multi-value prop axis with no other coverage; consumers need to see how each placement anchors against its trigger.
-- AutoPlacement — composite story demonstrating `placement="auto"`: triggers anchored near viewport corners so the resolver opens the panel toward the corner with the most available space. Required because `'auto'` is the only `placement` value not covered by `Placements` and is the recommended default for consumer-positioned triggers.
+- Placements — composite story rendering the four vertical corners (`bottom` / `top` × `start` / `end`) and the two inline sides (`end` + `start`, `start` + `start`) side-by-side. Required because `side` × `align` is a multi-value prop axis with no other coverage; consumers need to see how each anchors against its trigger.
+- AutoPlacement — composite story demonstrating `side="auto"`: triggers anchored near viewport edges so the resolver opens the panel toward the side with the most available space. Required because `'auto'` is the only `side` value not covered by `Placements` and is the recommended default for consumer-positioned triggers.
 - Anatomy — composite story rendering panels with different region combinations side-by-side: header + body + footer, header (title only, no description) + body, and body-only (no header, no footer). Required because `Popover.Header`, `Popover.Description`, and `Popover.Footer` are optional composition that `Default` does not exercise on its own.
 - Disabled — trigger present, panel never opens. Required because the root declares a `disabled` prop.
 
@@ -236,11 +281,9 @@ Canonical layout — composite stories render every variant of one axis side-by-
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
-- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
-- Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
+- Do not edit `.claude/docs/DESIGN.md` or `.claude/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.

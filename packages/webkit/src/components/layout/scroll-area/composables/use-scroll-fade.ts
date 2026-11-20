@@ -24,7 +24,7 @@ export interface ScrollFadeEdges {
 }
 
 export interface UseScrollFadeOptions {
-  target: Ref<globalThis.HTMLElement | null>
+  target: MaybeRefOrGetter<globalThis.HTMLElement | null>
   enabled: MaybeRefOrGetter<boolean>
   vertical: MaybeRefOrGetter<boolean>
   horizontal: MaybeRefOrGetter<boolean>
@@ -62,7 +62,7 @@ export function useScrollFade(options: UseScrollFadeOptions): UseScrollFadeRetur
   let childObserver: globalThis.MutationObserver | null = null
 
   const measure = () => {
-    const el = options.target.value
+    const el = toValue(options.target)
     if (!el || !toValue(options.enabled)) {
       edges.value = { ...EMPTY }
       return
@@ -104,7 +104,7 @@ export function useScrollFade(options: UseScrollFadeOptions): UseScrollFadeRetur
   }
 
   const observe = () => {
-    const el = toValue(options.enabled) ? options.target.value : null
+    const el = toValue(options.enabled) ? toValue(options.target) : null
     if (el === observedEl) {
       measure()
       return
@@ -129,7 +129,7 @@ export function useScrollFade(options: UseScrollFadeOptions): UseScrollFadeRetur
 
   watch(
     () => [
-      options.target.value,
+      toValue(options.target),
       toValue(options.enabled),
       toValue(options.vertical),
       toValue(options.horizontal)

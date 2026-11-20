@@ -15,7 +15,7 @@ Apply the shadcn-vue rule consistently:
 
 > Use Composition Pattern only when the consumer needs to **reorder or omit** parts the root exposes. Otherwise, monolithic with props + slots.
 
-When in doubt, choose `monolithic`. Atoms (Button, IconButton, Tag, Badge, Spinner, Currency) are always monolithic.
+When in doubt, choose `monolithic`. Atoms (Button, IconButton, Tag, Badge, Spinner, CurrencyAmount) are always monolithic.
 
 ## When to invoke
 
@@ -25,7 +25,7 @@ When in doubt, choose `monolithic`. Atoms (Button, IconButton, Tag, Badge, Spinn
 ## Inputs
 
 - The spec's Purpose, Props, Slots, and Sub-components sections (or the user's verbal description during `/spec-create`).
-- The `figma-discover` JSON if available (for the `regions` array).
+- The `figma-extract` JSON if available (for the `regions` array).
 
 ## Workflow
 
@@ -37,7 +37,7 @@ When in doubt, choose `monolithic`. Atoms (Button, IconButton, Tag, Badge, Spinn
    - Otherwise → `monolithic` (default when in doubt).
 2. **Reference the canonicals** to confirm:
    - Composition: Dialog, Tabs, Accordion, composed Card, DropdownMenu, Sheet/Drawer, Form fields.
-   - Monolithic with slots: `card-pricing.vue` (fixed layout, slot inversions).
+   - Monolithic with slots: `pricing-card.vue` (fixed layout, slot inversions).
    - Atomic: `button.vue`, `icon-button.vue`.
 3. **Emit** a single line with the verdict and a one-sentence rationale:
    ```

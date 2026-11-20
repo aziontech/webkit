@@ -6,17 +6,17 @@ const spec: DiagramSpec = {
   nodes: [
     {
       key: 'user',
-      kind: 'pill',
+      type: 'pill',
       title: 'Resolver',
-      icon: 'pi pi-globe',
+      icon: 'az az-globe',
       active: true
     },
     {
       key: 'dns',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'DNS',
       title: 'shop.example.com zone',
-      icon: 'ai ai-edge-dns',
+      icon: 'az az-edge-dns',
       status: {
         label: 'DNSSEC',
         severity: 'success'
@@ -26,25 +26,25 @@ const spec: DiagramSpec = {
     },
     {
       key: 'apex',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'A record',
       title: 'Points at the workload',
-      icon: 'ai ai-workloads',
+      icon: 'az az-workloads',
       active: true
     },
     {
       key: 'mail',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'MX record',
       title: 'Mail provider',
-      icon: 'pi pi-envelope'
+      icon: 'az az-mail'
     },
     {
       key: 'txt',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'TXT record',
       title: 'Domain verification',
-      icon: 'pi pi-key'
+      icon: 'az az-key'
     }
   ],
   layout: {

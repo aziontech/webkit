@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The Threats vs requests chart: allowed requests as an area, blocked and threat requests as lines. No series sets a color, so each takes the next categorical slot in order and the palette follows the theme. Hover, or focus the plot and use the arrow keys, to read every series at one point.",
+   "file": "examples/chart/default.vue"
+  },
+  {
+   "name": "Forms",
+   "summary": "The same three series as lines, as areas and as grouped bars. Lines and areas share a point scale; any bar switches the category axis to bands so every mark sits on a band center.",
+   "file": "examples/chart/forms.vue"
+  },
+  {
+   "name": "Stacked",
+   "summary": "Parts of a total over time. Stacked bars keep a 2px surface gap between segments and round only the top of each column.",
+   "file": "examples/chart/stacked.vue"
+  }
+ ]
+}

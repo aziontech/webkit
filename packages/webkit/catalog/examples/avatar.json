@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Default circle avatar with initials.",
+   "file": "examples/avatar/default.vue"
+  },
+  {
+   "name": "Variants",
+   "summary": "Both shape variants side by side: circle and square at medium size.",
+   "file": "examples/avatar/variants.vue"
+  },
+  {
+   "name": "Sizes",
+   "summary": "All three size presets (24 / 32 / 48 px) with initials.",
+   "file": "examples/avatar/sizes.vue"
+  }
+ ]
+}

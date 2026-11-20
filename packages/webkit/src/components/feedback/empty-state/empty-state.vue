@@ -8,12 +8,12 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface EmptyStateProps {
     /** Primary heading announcing the empty resource. */
     title: string
     /** Supporting body copy below the title. */
     description?: string
-    /** PrimeIcons/Azion icon class for the standardized adornment (e.g. `pi pi-inbox`). When set, renders a size-scaled featured-icon tile; when empty and the `icon` slot is unused, no adornment renders. */
+    /** Azion icon class for the standardized adornment (e.g. `az az-inbox`). When set, renders a size-scaled featured-icon tile; when empty and the `icon` slot is unused, no adornment renders. */
     icon?: string
     /** Size token; scales the whole block on one harmonic ramp — the adornment size, the title and description typography, the surrounding padding, and the gaps between adornment, text, and actions all step up together. */
     size?: EmptyStateSize
@@ -21,7 +21,7 @@
     bordered?: boolean
   }
 
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<EmptyStateProps>(), {
     description: '',
     icon: '',
     size: 'medium',
@@ -35,9 +35,7 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'feedback-empty-state'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'empty-state')
 </script>
 
 <template>
@@ -67,7 +65,7 @@
             class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-(--shape-card) border border-(--border-strong) bg-(--bg-canvas) opacity-10 group-data-[size=small]:size-10 group-data-[size=medium]:size-12"
           />
           <span
-            class="relative flex items-center justify-center rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) group-data-[size=small]:size-8 group-data-[size=medium]:size-10"
+            class="relative flex items-center justify-center rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) group-data-[size=small]:size-8 group-data-[size=medium]:size-10"
           >
             <i
               :class="icon"
@@ -81,7 +79,7 @@
       <p
         :data-testid="`${testId}__title`"
         :data-size="size"
-        class="text-(--text-default) data-[size=small]:text-heading-xxs data-[size=medium]:text-heading-sm"
+        class="text-(--text-default) data-[size=small]:text-heading-2xs data-[size=medium]:text-heading-sm"
       >
         {{ title }}
       </p>
@@ -97,7 +95,7 @@
     <div
       v-if="$slots['actions']"
       :data-testid="`${testId}__actions`"
-      class="flex flex-col items-center gap-(--spacing-xs)"
+      class="flex max-w-full flex-col items-center gap-(--spacing-xs)"
     >
       <slot name="actions" />
     </div>

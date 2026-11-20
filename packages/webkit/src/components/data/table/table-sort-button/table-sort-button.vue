@@ -1,68 +1,62 @@
 <script setup lang="ts">
-  import { computed, inject, useAttrs } from 'vue'
+  import { computed, useAttrs } from 'vue'
 
-  import IconButton from '../../../actions/icon-button/icon-button.vue'
-  import { TableInjectionKey } from '../injection-key'
+  import { useTranslate } from '../../../../composables/use-translate'
+  import * as en from '../../../../locales/en'
+  import IconButton from '../../../action/icon-button/icon-button.vue'
+  import { type TableSortDirection } from '../injection-key'
 
-  export type SortDirection = 'none' | 'ascending' | 'descending'
+  export type { TableSortDirection }
 
   defineOptions({
     name: 'TableSortButton',
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface TableSortButtonProps {
     /** Current sort direction shown by the glyph. */
-    direction?: SortDirection
-    /** Hides the button while keeping its layout slot. */
-    visible?: boolean
+    sortDirection?: TableSortDirection
   }
-
-  const props = withDefaults(defineProps<Props>(), {
-    direction: 'none',
-    visible: true
+  const props = withDefaults(defineProps<TableSortButtonProps>(), {
+    sortDirection: 'none'
   })
 
   const emit = defineEmits<{
-    toggle: [direction: 'ascending' | 'descending']
+    sort: [direction: 'ascending' | 'descending']
   }>()
 
   const attrs = useAttrs()
-  const ctx = inject(TableInjectionKey, null)
+  const { t } = useTranslate({ tableSortButton: en.tableSortButton })
 
   const testId = computed<string>(
-    () =>
-      (attrs['data-testid'] as string | undefined) ??
-      (ctx ? `${ctx.testId}__sort-button` : 'data-table__sort-button')
+    () => (attrs['data-testid'] as string | undefined) ?? 'table-sort-button'
   )
 
   const icon = computed<string>(() => {
-    if (props.direction === 'ascending') return 'pi pi-sort-amount-up'
-    if (props.direction === 'descending') return 'pi pi-sort-amount-down'
-    return 'pi pi-sort-alt'
+    if (props.sortDirection === 'ascending') return 'az az-arrow-up-wide-narrow'
+    if (props.sortDirection === 'descending') return 'az az-arrow-down-wide-narrow'
+    return 'az az-sort'
   })
 
   const ariaLabel = computed<string>(() => {
-    if (props.direction === 'ascending') return 'Sorted ascending'
-    if (props.direction === 'descending') return 'Sorted descending'
-    return 'Sort column'
+    if (props.sortDirection === 'ascending') return t('tableSortButton.ascending')
+    if (props.sortDirection === 'descending') return t('tableSortButton.descending')
+    return t('tableSortButton.unsorted')
   })
 
-  const handleClick = () => {
-    emit('toggle', props.direction === 'ascending' ? 'descending' : 'ascending')
+  const onClick = () => {
+    emit('sort', props.sortDirection === 'ascending' ? 'descending' : 'ascending')
   }
 </script>
 
 <template>
   <IconButton
+    v-bind="{ ...$attrs, ariaLabel }"
     :icon="icon"
-    v-bind="{ ariaLabel }"
-    kind="transparent"
+    variant="ghost"
     size="small"
     :data-testid="testId"
-    :data-visible="visible"
-    :data-direction="direction"
-    class="data-[visible=false]:invisible data-[visible=false]:pointer-events-none"
-    @click="handleClick"
+    :data-sort="sortDirection"
+    @click="onClick"
   />
 </template>

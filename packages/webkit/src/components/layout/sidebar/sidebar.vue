@@ -1,11 +1,27 @@
 <script setup lang="ts">
-  import { computed, onMounted, provide, ref, useAttrs, useSlots } from 'vue'
+  import {
+    computed,
+    markRaw,
+    onMounted,
+    onScopeDispose,
+    provide,
+    ref,
+    useAttrs,
+    useSlots
+  } from 'vue'
 
+  import { logicalArrowKey } from '../../../composables/use-direction'
+  import { useTranslate } from '../../../composables/use-translate'
+  import * as en from '../../../locales/en'
   import { cn } from '../../../utils/cn'
-  import IconButton from '../../actions/icon-button/icon-button.vue'
+  import IconButton from '../../action/icon-button/icon-button.vue'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
   import ScrollArea from '../scroll-area/scroll-area.vue'
-  import { SIDEBAR_NUDGE_STEP, useSidebarRail } from './composables/use-sidebar-rail'
+  import {
+    SIDEBAR_ICON_RAIL_TOKEN,
+    SIDEBAR_NUDGE_STEP,
+    useSidebarRail
+  } from './composables/use-sidebar-rail'
   import { SidebarInjectionKey } from './injection-key'
 
   defineOptions({
@@ -13,10 +29,16 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  /** How a collapsed sidebar leaves the layout: entirely, or down to an icon rail. */
+  export type SidebarCollapsible = 'offcanvas' | 'icon'
+
+  export interface SidebarProps {
     ariaLabel?: string
     resizable?: boolean
-    collapsible?: boolean
+    /** Adds the collapse trigger; true or offcanvas takes a collapsed sidebar out of the layout, icon keeps an icon rail. */
+    collapsible?: boolean | SidebarCollapsible
+    /** Lets Cmd+B or Ctrl+B toggle the collapsed state while the sidebar is collapsible. */
+    shortcut?: boolean
     minWidthToken?: string
     maxWidthToken?: string
     collapseAriaLabel?: string
@@ -24,45 +46,57 @@
     resizeAriaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
-    ariaLabel: 'Sidebar',
+  const props = withDefaults(defineProps<SidebarProps>(), {
+    ariaLabel: '',
     resizable: false,
     collapsible: false,
+    shortcut: false,
     minWidthToken: '--container-3xs',
     maxWidthToken: '--container-sm',
-    collapseAriaLabel: 'Collapse sidebar',
-    expandAriaLabel: 'Expand sidebar',
-    resizeAriaLabel: 'Resize sidebar'
+    collapseAriaLabel: '',
+    expandAriaLabel: '',
+    resizeAriaLabel: ''
   })
 
-  defineEmits<{
-    'update:collapsed': [value: boolean]
-    'update:width': [value: number | null]
-  }>()
+  /** Whether the rail is in the layout; false collapses it. Use with `v-model:open`. */
+  const open = defineModel<boolean>('open', { default: true })
 
-  const collapsed = defineModel<boolean>('collapsed', { default: false })
-
+  /** The sized width in px; null until the rail measures itself. Use with `v-model:width`. */
   const width = defineModel<number | null>('width', { default: null })
 
   defineSlots<{
-    default(): unknown
-    header(): unknown
-    footer(): unknown
+    default(props: { rail: boolean }): unknown
+    header(props: { rail: boolean }): unknown
+    footer(props: { rail: boolean }): unknown
   }>()
 
   const attrs = useAttrs()
+  const { t } = useTranslate({ sidebar: en.sidebar })
+  const labels = computed(() => ({
+    root: props.ariaLabel || t('sidebar.label'),
+    collapse: props.collapseAriaLabel || t('sidebar.collapse'),
+    expand: props.expandAriaLabel || t('sidebar.expand'),
+    resize: props.resizeAriaLabel || t('sidebar.resize')
+  }))
   const slots = useSlots()
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'layout-sidebar')
-
-  provide(SidebarInjectionKey, {
-    testId: testId.value,
-    get collapsible() {
-      return props.collapsible
+  const collapsed = computed<boolean>({
+    get: () => !open.value,
+    set: (value) => {
+      open.value = !value
     }
   })
 
-  const railEnabled = computed(() => props.resizable || props.collapsible)
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'sidebar')
+
+  const collapseMode = computed<SidebarCollapsible | null>(() => {
+    if (props.collapsible === 'icon') return 'icon'
+    return props.collapsible ? 'offcanvas' : null
+  })
+
+  const iconMode = computed(() => collapseMode.value === 'icon')
+
+  const railEnabled = computed(() => props.resizable || collapseMode.value !== null)
 
   const {
     railEl,
@@ -78,18 +112,68 @@
     startResize,
     tapToExpand,
     nudge,
-    measure
+    measure,
+    dir
   } = useSidebarRail({
     collapsed,
     width,
     minWidthToken: () => props.minWidthToken,
     maxWidthToken: () => props.maxWidthToken,
-    enabled: railEnabled
+    enabled: railEnabled,
+    collapsedWidthToken: () => (iconMode.value ? SIDEBAR_ICON_RAIL_TOKEN : '')
   })
+
+  const rail = computed(() => iconMode.value && collapsed.value)
+
+  provide(SidebarInjectionKey, {
+    testId: testId.value,
+    get collapsible() {
+      return collapseMode.value !== null
+    },
+    get rail() {
+      return rail.value
+    },
+    tooltip: markRaw(Tooltip),
+    expand: () => {
+      collapsed.value = false
+    }
+  })
+
+  const isEditable = (target: EventTarget | null) => {
+    if (!(target instanceof globalThis.HTMLElement)) return false
+    if (target.isContentEditable) return true
+    return ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName)
+  }
+
+  const shortcutActive = computed(() => props.shortcut && collapseMode.value !== null)
+
+  const onShortcut = (event: globalThis.KeyboardEvent) => {
+    if (!shortcutActive.value || event.defaultPrevented) return
+    if (!(event.metaKey || event.ctrlKey) || event.altKey || event.shiftKey) return
+    if (event.key.toLowerCase() !== 'b' || isEditable(event.target)) return
+    event.preventDefault()
+    collapsed.value = !collapsed.value
+  }
+
+  onMounted(() => globalThis.document.addEventListener('keydown', onShortcut))
+
+  onScopeDispose(() => globalThis.document?.removeEventListener('keydown', onShortcut))
+
+  const keyShortcuts = computed(() => (shortcutActive.value ? 'Control+B Meta+B' : undefined))
+
+  const onHandleKey = (event: globalThis.KeyboardEvent, expandOnly = false) => {
+    const key = logicalArrowKey(event.key, dir.value)
+    if (key === 'ArrowRight') nudge(SIDEBAR_NUDGE_STEP)
+    else if (key === 'ArrowLeft' && !expandOnly) nudge(-SIDEBAR_NUDGE_STEP)
+    else return
+    event.preventDefault()
+  }
 
   defineExpose({ measure })
 
-  const isOut = computed(() => collapsed.value && railEnabled.value && !resizing.value)
+  const isCollapsed = computed(() => collapsed.value && railEnabled.value && !resizing.value)
+
+  const isOut = computed(() => isCollapsed.value && !iconMode.value)
 
   const hydrated = ref(false)
 
@@ -118,7 +202,8 @@
     return {
       '--sidebar-width': width.value == null ? undefined : `${width.value}px`,
       '--sidebar-min-width': `var(${props.minWidthToken})`,
-      '--sidebar-max-width': `var(${props.maxWidthToken})`
+      '--sidebar-max-width': `var(${props.maxWidthToken})`,
+      '--sidebar-rail-width': iconMode.value ? `var(${SIDEBAR_ICON_RAIL_TOKEN})` : undefined
     }
   })
 
@@ -130,13 +215,14 @@
   const rootClass = computed(() =>
     cn(
       'flex h-full min-h-0 w-full min-w-0 flex-col',
-      'border-r border-(--border-muted) bg-(--bg-surface)',
+      'border-e border-(--border-muted) bg-(--bg-surface)',
       railEnabled.value
         ? cn(
             'relative shrink-0 overflow-hidden',
-            'data-[collapsed]:border-r-0 has-[>div>input:checked]:border-r-0',
-            'w-(--sidebar-width) has-[>div>input:checked]:w-0',
-            'min-w-(--sidebar-min-width) has-[>div>input:checked]:min-w-0 data-[resizing]:min-w-0 max-w-(--sidebar-max-width)',
+            iconMode.value
+              ? 'w-(--sidebar-width) has-[>div>input:checked]:w-(--sidebar-rail-width) min-w-(--sidebar-min-width) has-[>div>input:checked]:min-w-(--sidebar-rail-width)'
+              : 'data-[state=closed]:border-e-0 has-[>div>input:checked]:border-e-0 w-(--sidebar-width) has-[>div>input:checked]:w-0 min-w-(--sidebar-min-width) has-[>div>input:checked]:min-w-0',
+            'data-[resizing]:min-w-0 max-w-(--sidebar-max-width)',
             RAIL_MOTION_CLASS,
             props.resizable ? 'resize-x data-[hydrated]:resize-none' : undefined
           )
@@ -146,40 +232,60 @@
   )
 
   const NAV_CLASS =
-    'flex h-full min-h-0 flex-1 flex-col [--menu-item-ring-offset:var(--bg-surface)] [--menu-ring-offset:var(--bg-surface)]'
+    'flex h-full min-h-0 flex-1 flex-col [--sidebar-menu-item-ring-offset:var(--bg-surface)] [--sidebar-menu-ring-offset:var(--bg-surface)]'
 
-  const HEADER_REGION_CLASS = 'w-full shrink-0 p-(--spacing-md)'
+  const headerRegionClass = computed(() =>
+    cn(
+      'w-full shrink-0 p-(--spacing-md)',
+      rail.value ? 'overflow-hidden px-(--spacing-xs)' : undefined
+    )
+  )
 
   const INNER_MOTION_CLASS =
     'transition-[translate,opacity] duration-moderate-02 ease-expressive-entrance has-[>input:checked]:ease-productive-exit data-[resizing]:transition-none not-data-[settled]:transition-none motion-reduce:transition-none motion-reduce:translate-none'
 
-  const INNER_CLASS = cn(
-    'flex h-full min-h-0 w-full flex-col',
-    'w-[calc(var(--sidebar-width)-1px)] translate-x-0 has-[>input:checked]:-translate-x-full opacity-100 has-[>input:checked]:opacity-20',
-    INNER_MOTION_CLASS
+  const innerClass = computed(() =>
+    cn(
+      'flex h-full min-h-0 w-full flex-col',
+      iconMode.value
+        ? 'w-[calc(var(--sidebar-width)-1px)] has-[>input:checked]:w-[calc(var(--sidebar-rail-width)-1px)]'
+        : cn(
+            'w-[calc(var(--sidebar-width)-1px)] translate-x-0 has-[>input:checked]:-translate-x-full rtl:has-[>input:checked]:translate-x-full opacity-100 has-[>input:checked]:opacity-20',
+            INNER_MOTION_CLASS
+          )
+    )
   )
 
   const footerRegionClass = computed(() =>
-    props.collapsible ? 'w-full shrink-0' : 'w-full shrink-0 px-(--spacing-md) pb-(--spacing-md)'
+    collapseMode.value !== null
+      ? 'w-full shrink-0'
+      : 'w-full shrink-0 px-(--spacing-md) pb-(--spacing-md)'
   )
 
-  const footerBandClass = computed(() =>
-    props.collapsible
-      ? cn(
-          'flex h-14 items-center gap-(--spacing-xs)',
-          'border-t border-(--border-muted) px-(--spacing-md)',
-          !slots['footer'] ? 'justify-end' : undefined
-        )
-      : undefined
-  )
+  const footerBandClass = () => {
+    if (collapseMode.value === null) return undefined
+    if (rail.value) {
+      return 'flex flex-col items-center gap-(--spacing-xs) border-t border-(--border-muted) px-(--spacing-xs) py-(--spacing-sm)'
+    }
+    return cn(
+      'flex h-14 items-center gap-(--spacing-xs)',
+      'border-t border-(--border-muted) px-(--spacing-md)',
+      !slots['footer'] ? 'justify-end' : undefined
+    )
+  }
 
-  const scrollClass = computed(() =>
+  const footerSlotClass = () => {
+    if (collapseMode.value === null) return undefined
+    return rail.value ? 'flex min-w-0 justify-center' : 'min-w-0 flex-1'
+  }
+
+  const scrollClass = () =>
     cn(
       'flex min-h-0 flex-1 flex-col gap-(--spacing-md) p-(--spacing-md)',
-      'scroll-py-(--spacing-xxs)',
-      slots['header'] ? 'pt-(--spacing-xxs)' : undefined
+      'scroll-py-(--spacing-2xs)',
+      slots['header'] ? 'pt-(--spacing-2xs)' : undefined,
+      rail.value ? 'px-(--spacing-xs)' : undefined
     )
-  )
 </script>
 
 <template>
@@ -188,9 +294,10 @@
     v-bind="$attrs"
     :class="rootClass"
     :style="asideStyle"
-    :aria-label="ariaLabel"
+    :aria-label="labels.root"
     :data-testid="testId"
-    :data-collapsed="isOut ? '' : undefined"
+    :data-state="isCollapsed ? 'closed' : 'open'"
+    :data-rail="rail ? '' : undefined"
     :data-resizing="resizing ? '' : undefined"
     :data-hydrated="hydrated ? '' : undefined"
     :data-settled="settled ? '' : undefined"
@@ -198,7 +305,7 @@
     :aria-hidden="isOut ? 'true' : undefined"
   >
     <div
-      :class="INNER_CLASS"
+      :class="innerClass"
       :style="innerStyle"
       :data-resizing="resizing ? '' : undefined"
       :data-settled="settled ? '' : undefined"
@@ -215,48 +322,55 @@
       />
       <div
         v-if="$slots['header']"
-        :class="HEADER_REGION_CLASS"
+        :class="headerRegionClass"
         :data-testid="`${testId}__header`"
       >
-        <slot name="header" />
+        <slot
+          name="header"
+          :rail="rail"
+        />
       </div>
       <nav
         :class="NAV_CLASS"
         :data-testid="`${testId}__nav`"
       >
         <ScrollArea
-          :class="scrollClass"
+          :class="scrollClass()"
           tabindex="-1"
           fade
           :data-testid="`${testId}__scroll`"
         >
-          <slot />
+          <slot :rail="rail" />
         </ScrollArea>
       </nav>
       <div
-        v-if="$slots['footer'] || collapsible"
+        v-if="$slots['footer'] || collapseMode !== null"
         :class="footerRegionClass"
         :data-testid="`${testId}__footer`"
       >
-        <div :class="footerBandClass">
+        <div :class="footerBandClass()">
           <div
             v-if="$slots['footer']"
-            :class="collapsible ? 'min-w-0 flex-1' : undefined"
+            :class="footerSlotClass()"
           >
-            <slot name="footer" />
+            <slot
+              name="footer"
+              :rail="rail"
+            />
           </div>
           <Tooltip
-            v-if="collapsible"
-            :text="collapseAriaLabel"
-            placement="top"
+            v-if="collapseMode !== null"
+            :content="rail ? labels.expand : labels.collapse"
+            :side="rail ? 'end' : 'top'"
           >
             <IconButton
-              icon="pi pi-angle-double-left"
-              :ariaLabel="collapseAriaLabel"
-              kind="outlined"
+              :icon="rail ? 'az az-chevrons-right' : 'az az-chevrons-left'"
+              :ariaLabel="rail ? labels.expand : labels.collapse"
+              :aria-keyshortcuts="keyShortcuts"
+              variant="outline"
               size="small"
-              :data-testid="`${testId}__collapse`"
-              @click="collapsed = true"
+              :data-testid="`${testId}__${rail ? 'expand-button' : 'collapse'}`"
+              @click="collapsed = !rail"
             />
           </Tooltip>
         </div>
@@ -267,7 +381,7 @@
       v-if="resizable"
       role="separator"
       aria-orientation="vertical"
-      :aria-label="resizeAriaLabel"
+      :aria-label="labels.resize"
       tabindex="0"
       :aria-valuenow="valueNow"
       :aria-valuemin="valueMin"
@@ -275,14 +389,13 @@
       :data-resizing="resizing ? '' : undefined"
       :data-preview="previewing ? '' : undefined"
       :data-testid="`${testId}__handle`"
-      class="group absolute inset-y-0 right-0 z-10 w-(--spacing-xs) cursor-col-resize touch-none outline-none"
+      class="group absolute inset-y-0 end-0 z-10 w-(--spacing-xs) cursor-col-resize touch-none outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color)"
       @pointerdown="startResize"
-      @keydown.left.prevent="nudge(-SIDEBAR_NUDGE_STEP)"
-      @keydown.right.prevent="nudge(SIDEBAR_NUDGE_STEP)"
+      @keydown="onHandleKey($event)"
       @dblclick="collapsed = true"
     >
       <span
-        class="pointer-events-none absolute inset-y-0 right-0 w-(--border-2) bg-(--accent) opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100 group-data-[preview]:opacity-100 group-data-[resizing]:opacity-100 motion-reduce:transition-none"
+        class="pointer-events-none absolute inset-y-0 end-0 w-(--border-width-2) bg-(--accent) opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100 group-data-[preview]:opacity-100 group-data-[resizing]:opacity-100 motion-reduce:transition-none"
       />
     </div>
   </aside>
@@ -294,11 +407,11 @@
     leave-to-class="opacity-0"
   >
     <div
-      v-if="collapsible && collapsed"
+      v-if="collapseMode === 'offcanvas' && collapsed"
       :data-resizing="resizing ? '' : undefined"
       :data-preview="previewing ? '' : undefined"
       :data-testid="`${testId}__expand`"
-      class="group absolute inset-y-0 left-0 z-20 w-(--size-6) hover:w-(--size-10) focus-within:w-(--size-10) transition-[width] duration-moderate-02 ease-expressive-exit hover:ease-expressive-entrance focus-within:ease-expressive-entrance motion-reduce:transition-none"
+      class="group absolute inset-y-0 start-0 z-20 w-(--size-6) hover:w-(--size-10) focus-within:w-(--size-10) transition-[width] duration-moderate-02 ease-expressive-exit hover:ease-expressive-entrance focus-within:ease-expressive-entrance motion-reduce:transition-none"
       @pointerenter="startPreview"
       @pointerleave="endPreview"
       @focusin="startPreview"
@@ -308,28 +421,28 @@
         v-if="resizable"
         role="separator"
         aria-orientation="vertical"
-        :aria-label="`${expandAriaLabel} by dragging`"
+        :aria-label="t('sidebar.expandByDragging', { label: labels.expand })"
         tabindex="0"
         :aria-valuenow="valueNow"
         :aria-valuemin="valueMin"
         :aria-valuemax="valueMax"
-        class="absolute inset-y-0 left-0 w-full cursor-col-resize touch-none outline-none"
+        class="absolute inset-y-0 start-0 w-full cursor-col-resize touch-none outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color)"
         @pointerdown="startResize"
         @click="tapToExpand"
-        @keydown.right.prevent="nudge(SIDEBAR_NUDGE_STEP)"
+        @keydown="onHandleKey($event, true)"
       />
 
       <div
-        class="pointer-events-none absolute left-full top-1/2 -translate-y-1/2 translate-x-[calc(-1_*_var(--size-10))] pl-(--spacing-xxs) opacity-0 transition-[translate,opacity] duration-moderate-02 ease-expressive-exit group-hover:translate-x-0 group-hover:opacity-100 group-hover:pointer-events-auto group-hover:ease-expressive-entrance group-focus-within:translate-x-0 group-focus-within:opacity-100 group-focus-within:pointer-events-auto group-focus-within:ease-expressive-entrance motion-reduce:transition-none motion-reduce:translate-none"
+        class="pointer-events-none absolute start-full top-1/2 -translate-y-1/2 translate-x-[calc(-1_*_var(--size-10))] rtl:translate-x-(--size-10) ps-(--spacing-2xs) opacity-0 transition-[translate,opacity] duration-moderate-02 ease-expressive-exit group-hover:translate-x-0 rtl:group-hover:translate-x-0 group-hover:opacity-100 group-hover:pointer-events-auto group-hover:ease-expressive-entrance group-focus-within:translate-x-0 rtl:group-focus-within:translate-x-0 group-focus-within:opacity-100 group-focus-within:pointer-events-auto group-focus-within:ease-expressive-entrance motion-reduce:transition-none motion-reduce:translate-none"
       >
         <Tooltip
-          :text="expandAriaLabel"
-          placement="right"
+          :content="labels.expand"
+          side="end"
         >
           <IconButton
-            icon="pi pi-angle-double-right"
-            :ariaLabel="expandAriaLabel"
-            kind="outlined"
+            icon="az az-chevrons-right"
+            :ariaLabel="labels.expand"
+            variant="outline"
             size="medium"
             :data-testid="`${testId}__expand-button`"
             @click="collapsed = false"

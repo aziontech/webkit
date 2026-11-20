@@ -1,6 +1,6 @@
 ---
 name: missing-constraints
-category: actions
+category: action
 structure: monolithic
 status: draft
 spec_version: 1
@@ -16,21 +16,21 @@ Fixture: the "Constraints — DO NOT" block is absent. spec-validator must rejec
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `kind` | `'primary'` | `'primary'` | no | Visual variant. |
+| Prop   | Type        | Default     | Required | JSDoc           |
+| ------ | ----------- | ----------- | -------- | --------------- |
+| `kind` | `'primary'` | `'primary'` | no       | Visual variant. |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
+| Event   | Payload      | Notes           |
+| ------- | ------------ | --------------- |
 | `click` | `MouseEvent` | Fires on click. |
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | Body. |
+| Slot      | Scope | Notes |
+| --------- | ----- | ----- |
+| `default` | —     | Body. |
 
 ## States
 
@@ -38,20 +38,20 @@ Fixture: the "Constraints — DO NOT" block is absent. spec-validator must rejec
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
+| Region     | Token (DESIGN.md) |
+| ---------- | ----------------- |
 | typography | `.text-button-lg` |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
+| -------------- | ------------------- | --------- |
 
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus ring.
 
-## Stories (Storybook)
+## Examples
 
 - Default
 - LightDark

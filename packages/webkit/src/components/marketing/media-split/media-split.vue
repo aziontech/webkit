@@ -1,14 +1,15 @@
 <script setup lang="ts">
   import { computed, inject, onMounted, onScopeDispose, ref, useAttrs } from 'vue'
 
-  import FrameBox from '../../layout/frame-box/frame-box.vue'
-  import Overline from '../../overline/overline.vue'
-  import { BandStackInjectionKey } from '../band-stack/injection-key'
-  import TextureMaterial, {
-    type TextureMaterialFade,
-    type TextureMaterialKind,
-    type TextureMaterialSize
-  } from '../texture-material/texture-material.vue'
+  import { safeHref } from '../../../utils/safe-href'
+  import Eyebrow from '../../content/eyebrow/eyebrow.vue'
+  import Texture, {
+    type TextureFade,
+    type TextureSize,
+    type TextureVariant
+  } from '../../content/texture/texture.vue'
+  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
+  import { SplitStackInjectionKey } from '../../layout/split-stack/injection-key'
 
   defineOptions({
     name: 'MediaSplit',
@@ -16,7 +17,7 @@
   })
 
   /** Which end of the band the media occupies. */
-  export type MediaSplitKind = 'media-end' | 'media-start'
+  export type MediaSplitVariant = 'media-end' | 'media-start'
   /** Axis the band splits on. */
   export type MediaSplitOrientation = 'horizontal' | 'vertical'
   /** The cells' fill. */
@@ -24,11 +25,11 @@
   /** Level of the band's headline element. */
   export type MediaSplitHeadingLevel = 2 | 3
   /** Where the copy sits down its cell. */
-  export type MediaSplitAlign = 'top' | 'center'
+  export type MediaSplitAlign = 'start' | 'center'
   /** Type scale of the copy. */
   export type MediaSplitSize = 'medium' | 'large'
 
-  interface Props {
+  export interface MediaSplitProps {
     /** Headline of the band, rendered as its `h2`. */
     title: string
     /** Supporting paragraph under the headline; overridden by the default slot. */
@@ -39,9 +40,9 @@
     src?: string
     /** Alternative text describing what the image shows. */
     alt?: string
-    /** Which end the media sits on: the closing cell from `lg` up, or the lower one when the band is vertical. `media-end` puts the copy first. */
-    kind?: MediaSplitKind
-    /** Axis the band splits on. `horizontal` sets the cells side by side from `lg` up; `vertical` holds them stacked at every width. */
+    /** Which end the media sits on: the closing cell once the band splits, or the lower one when the band is vertical. `media-end` puts the copy first. */
+    variant?: MediaSplitVariant
+    /** Axis the band splits on. `horizontal` sets the cells side by side once the band is 60rem wide; `vertical` holds them stacked at every width. */
     orientation?: MediaSplitOrientation
     /** The copy cell's fill. `canvas` lets the band sit in the page column; `surface` lifts it onto its own plate. The media cell follows `mediaFill`. */
     fill?: MediaSplitFill
@@ -51,30 +52,30 @@
     framed?: boolean
     /** Draw the seam between the copy and the media. Turn it off for a band whose two halves should read as one plate. */
     divided?: boolean
-    /** Level of the band's headline element. Drop it to 3 when the band is a sub-band of a section a section-title has already opened with its h2, so the document outline stays in order. */
+    /** Level of the band's headline element. Drop it to 3 when the band is a sub-band of a section a module-header has already opened with its h2, so the document outline stays in order. */
     headingLevel?: MediaSplitHeadingLevel
     /** Texture the media half is grounded with; `none` leaves the cell bare. */
-    texture?: TextureMaterialKind
+    texture?: TextureVariant
     /** Pitch of the ground's tiling — how far apart its cells sit. */
-    textureSize?: TextureMaterialSize
+    textureSize?: TextureSize
     /** How the ground fades out before the cell's edges. */
-    textureFade?: TextureMaterialFade
+    textureFade?: TextureFade
     /** Inset the media from the cell's edges. An exported asset carries its own air and runs flush; a screenshot or a composed panel wants the inset. */
     mediaPadded?: boolean
     /** URL the band links to. With it set the media cell is one link named by the band's title, a click anywhere else on the band follows it, and hovering the band reveals the chevron affordance and the hover state of its link actions. */
     mediaHref?: string
-    /** Where the copy sits down its cell. `top` holds the copy at the cell's top and floors the actions so consecutive bands align on them; `center` gathers the copy and its actions into one block on the cell's vertical middle. */
+    /** Where the copy sits down its cell. `start` holds the copy at the cell's top and floors the actions so consecutive bands align on them; `center` gathers the copy and its actions into one block on the cell's vertical middle. */
     align?: MediaSplitAlign
     /** Type scale and air of the copy. `medium` sets the headline at heading-md for a band beside other content; `large` sets it at heading-xl with a larger description and pads the copy cell a step wider, for a band that carries only its headline and actions. */
     size?: MediaSplitSize
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<MediaSplitProps>(), {
     description: '',
     eyebrow: '',
     src: '',
     alt: '',
-    kind: 'media-end',
+    variant: 'media-end',
     orientation: 'horizontal',
     fill: 'canvas',
     mediaFill: 'surface',
@@ -86,7 +87,7 @@
     textureFade: 'vignette',
     mediaPadded: false,
     mediaHref: '',
-    align: 'top',
+    align: 'start',
     size: 'medium'
   })
 
@@ -99,68 +100,68 @@
     media?(): unknown
     /**
      * Optional controls under the copy, floored so consecutive bands align on them. Small
-     * buttons: `kind="secondary"` for the action, `kind="outlined"` for a second beside it,
-     * `icon="pi pi-chevron-right"` + `icon-position="trailing"` + `animated` when it leaves the page.
+     * buttons: `variant="secondary"` for the action, `variant="outline"` for a second beside it,
+     * `icon="az az-chevron-right"` + `icon-position="trailing"` + `animated` when it leaves the page.
      */
     actions?(): unknown
   }>()
 
   const attrs = useAttrs()
-  const stack = inject(BandStackInjectionKey, null)
+  const stack = inject(SplitStackInjectionKey, null)
 
-  const root = ref<globalThis.HTMLElement | null>(null)
+  const rootEl = ref<globalThis.HTMLElement | null>(null)
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'marketing-media-split'
-  )
+  const EYEBROW_PREFIX = '//' as const
 
-  const hasMedia = computed<boolean>(() => Boolean(slots.media) || props.src.length > 0)
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'media-split')
 
-  const hasDescription = computed<boolean>(
-    () => Boolean(slots.default) || props.description.length > 0
-  )
+  const hasMedia = () => Boolean(slots.media) || props.src.length > 0
 
-  const isMediaLink = computed<boolean>(() => props.mediaHref.length > 0)
+  const hasDescription = () => Boolean(slots.default) || props.description.length > 0
 
-  const frame = computed(() => (props.framed ? FrameBox : 'div'))
+  const mediaLink = computed<string | null>(() => safeHref(props.mediaHref))
+  const isMediaLink = computed<boolean>(() => mediaLink.value !== null)
+
+  const frame = computed(() => (props.framed ? RegistrationFrame : 'div'))
   const frameProps = computed(() =>
     props.framed ? { flush: true, borders: 'y', marks: 'none' } : {}
   )
 
   const framesCells = computed<boolean>(() => props.framed || Boolean(stack?.framesCells))
-  const cellFrame = computed(() => (framesCells.value ? FrameBox : 'div'))
+  const cellFrame = computed(() => (framesCells.value ? RegistrationFrame : 'div'))
   const cellFrameProps = computed(() =>
     framesCells.value ? { borders: 'none', marks: 'all' } : {}
   )
 
-  onMounted(() => root.value?.addEventListener('click', followBand))
-  onScopeDispose(() => root.value?.removeEventListener('click', followBand))
+  onMounted(() => rootEl.value?.addEventListener('click', followBand))
+  onScopeDispose(() => rootEl.value?.removeEventListener('click', followBand))
 
   function followBand(event: MouseEvent) {
-    if (!isMediaLink.value || event.defaultPrevented) return
+    const href = mediaLink.value
+    if (!href || event.defaultPrevented) return
     if ((event.target as globalThis.Element).closest('a, button, input, select, textarea, label'))
       return
     if (globalThis.getSelection()?.toString()) return
     if (event.metaKey || event.ctrlKey) {
-      globalThis.open(props.mediaHref, '_blank', 'noopener')
+      globalThis.open(href, '_blank', 'noopener')
       return
     }
-    globalThis.location.assign(props.mediaHref)
+    globalThis.location.assign(href)
   }
 </script>
 
 <template>
   <section
-    ref="root"
+    ref="rootEl"
     v-bind="$attrs"
-    class="group/split data-[media-href]:cursor-pointer"
+    class="group/split @container/media-split data-[media-href]:cursor-pointer"
     :data-testid="testId"
-    :data-kind="kind"
+    :data-variant="variant"
     :data-orientation="orientation"
     :data-fill="fill"
     :data-media-fill="mediaFill"
     :data-size="size"
-    :data-media="hasMedia || null"
+    :data-media="hasMedia() || null"
     :data-divided="divided || null"
     :data-media-padded="mediaPadded || null"
     :data-media-href="isMediaLink || null"
@@ -175,26 +176,26 @@
       <div
         :data-testid="`${testId}__cells`"
         :data-orientation="orientation"
-        class="grid h-full group-data-[divided]/split:gap-px group-data-[divided]/split:bg-(--border-default) group-data-[media]/split:data-[orientation=horizontal]:lg:grid-cols-2"
+        class="grid h-full group-data-[divided]/split:gap-px group-data-[divided]/split:bg-(--border-default) group-data-[media]/split:data-[orientation=horizontal]:@min-[60rem]/media-split:grid-cols-2"
       >
         <component
           :is="cellFrame"
           v-bind="cellFrameProps"
           :data-testid="`${testId}__copy-cell`"
           :data-orientation="orientation"
-          class="min-w-0 group-data-[kind=media-start]/split:lg:order-last group-data-[kind=media-start]/split:data-[orientation=vertical]:order-last"
+          class="min-w-0 group-data-[variant=media-start]/split:@min-[60rem]/media-split:order-last group-data-[variant=media-start]/split:data-[orientation=vertical]:order-last"
         >
           <div
-            class="flex h-full flex-col justify-between gap-(--spacing-xxl) p-(--spacing-xl) group-data-[size=large]/split:p-(--spacing-xxl) group-data-[fill=canvas]/split:bg-(--bg-canvas) group-data-[fill=surface]/split:bg-(--bg-surface) group-data-[align=center]/split:justify-center"
+            class="flex h-full flex-col justify-between gap-(--spacing-2xl) p-(--spacing-xl) group-data-[size=large]/split:p-(--spacing-2xl) group-data-[media]/split:group-data-[orientation=horizontal]/split:group-data-[size=large]/split:@min-[60rem]/media-split:@max-[72rem]/media-split:p-(--spacing-xl) group-data-[fill=canvas]/split:bg-(--bg-canvas) group-data-[fill=surface]/split:bg-(--bg-surface) group-data-[align=center]/split:justify-center"
           >
             <div
               class="flex max-w-(--container-md) flex-col gap-(--spacing-lg) group-data-[size=large]/split:max-w-(--container-lg)"
             >
-              <Overline
+              <Eyebrow
                 v-if="eyebrow"
-                prefix="//"
-                show-cursor
-                >{{ eyebrow }}</Overline
+                :prefix="EYEBROW_PREFIX"
+                cursor
+                >{{ eyebrow }}</Eyebrow
               >
 
               <component
@@ -205,7 +206,7 @@
               </component>
 
               <p
-                v-if="hasDescription"
+                v-if="hasDescription()"
                 class="m-0 text-pretty text-(--text-muted) group-data-[size=medium]/split:text-body-md group-data-[size=large]/split:text-body-lg"
               >
                 <slot>{{ description }}</slot>
@@ -225,20 +226,20 @@
 
         <component
           :is="cellFrame"
-          v-if="hasMedia"
+          v-if="hasMedia()"
           v-bind="cellFrameProps"
           :data-testid="`${testId}__media-cell`"
           class="min-w-0"
         >
           <component
             :is="isMediaLink ? 'a' : 'div'"
-            :href="isMediaLink ? mediaHref : undefined"
+            :href="mediaLink ?? undefined"
             :aria-label="isMediaLink ? title : undefined"
             :data-testid="`${testId}__media`"
             class="group/media relative flex h-full min-w-0 items-center justify-center overflow-hidden group-data-[media-fill=surface]/split:bg-(--bg-surface) group-data-[media-fill=canvas]/split:bg-(--bg-canvas) group-data-[media-padded]/split:p-(--spacing-xl) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset"
           >
-            <TextureMaterial
-              :kind="texture"
+            <Texture
+              :variant="texture"
               :size="textureSize"
               :fade="textureFade"
             />
@@ -261,9 +262,9 @@
               v-if="isMediaLink"
               aria-hidden="true"
               :data-testid="`${testId}__media-affordance`"
-              class="pointer-events-none absolute right-(--spacing-xl) bottom-(--spacing-xl) z-20 inline-flex h-7 min-w-7 translate-x-1 items-center justify-center rounded-(--shape-button) bg-(--secondary) px-(--spacing-xs) text-button-md text-(--secondary-contrast) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance group-hover/split:translate-x-0 group-hover/split:opacity-100 group-focus-visible/media:translate-x-0 group-focus-visible/media:opacity-100 motion-reduce:transition-none"
+              class="pointer-events-none absolute end-(--spacing-xl) bottom-(--spacing-xl) z-20 inline-flex h-7 min-w-7 translate-x-1 items-center justify-center rounded-(--shape-button) bg-(--secondary) px-(--spacing-xs) text-button-md text-(--secondary-foreground) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance group-hover/split:translate-x-0 group-hover/split:opacity-100 group-focus-visible/media:translate-x-0 group-focus-visible/media:opacity-100 rtl:-translate-x-1 rtl:group-hover/split:translate-x-0 rtl:group-focus-visible/media:translate-x-0 motion-reduce:transition-none"
             >
-              <i class="pi pi-chevron-right text-[length:inherit] leading-none" />
+              <i class="az az-chevron-right text-[length:inherit] leading-none rtl:-scale-x-100" />
             </span>
           </component>
         </component>

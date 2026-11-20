@@ -1,7 +1,10 @@
 <script setup lang="ts">
   import { computed, inject, useAttrs } from 'vue'
 
-  import IconButton from '../../../actions/icon-button/icon-button.vue'
+  import { useTranslate } from '../../../../composables/use-translate'
+  import * as en from '../../../../locales/en'
+  import IconButton from '../../../action/icon-button/icon-button.vue'
+  import Tooltip from '../../../overlay/tooltip/tooltip.vue'
   import { TableInjectionKey } from '../injection-key'
 
   defineOptions({
@@ -9,38 +12,42 @@
     inheritAttrs: false
   })
 
-  const props = withDefaults(
-    defineProps<{
-      /** Disables the control (in addition to the injected loading state). */
-      disabled?: boolean
-    }>(),
-    {
-      disabled: false
-    }
-  )
+  export interface TableRefreshButtonProps {
+    /** Disables the control (in addition to the injected loading state). */
+    disabled?: boolean
+    /** Spins the glyph while a refresh runs and the current rows stay on screen; the control cannot fire again meanwhile. */
+    loading?: boolean
+  }
+
+  const props = withDefaults(defineProps<TableRefreshButtonProps>(), {
+    disabled: false,
+    loading: false
+  })
 
   const attrs = useAttrs()
+  const { t } = useTranslate({ tableRefreshButton: en.tableRefreshButton })
   const ctx = inject(TableInjectionKey, null)
 
   const testId = computed<string>(
-    () =>
-      (attrs['data-testid'] as string | undefined) ??
-      (ctx ? `${ctx.testId}__refresh-button` : 'data-table__refresh-button')
+    () => (attrs['data-testid'] as string | undefined) ?? 'table-refresh-button'
   )
 
   const isDisabled = computed<boolean>(() => props.disabled || (ctx?.loading.value ?? false))
-  const onClick = (): void => ctx?.reload()
+  const onClick = (event: MouseEvent): void => ctx?.reload(event)
 </script>
 
 <template>
-  <IconButton
-    v-bind="$attrs"
-    :data-testid="testId"
-    icon="pi pi-refresh"
-    ariaLabel="Refresh"
-    kind="outlined"
-    size="medium"
-    :disabled="isDisabled"
-    @click="onClick"
-  />
+  <Tooltip :content="t('tableRefreshButton.label')">
+    <IconButton
+      v-bind="$attrs"
+      :data-testid="testId"
+      icon="az az-refresh"
+      :ariaLabel="t('tableRefreshButton.label')"
+      variant="outline"
+      size="medium"
+      :disabled="isDisabled"
+      :loading="loading"
+      @click="onClick"
+    />
+  </Tooltip>
 </template>

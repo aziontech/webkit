@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, onBeforeUnmount, onMounted, useAttrs } from 'vue'
 
-  import { usePopoverContext } from '../injection-key'
+  import { usePopoverContext } from '../composables/use-popover-context'
 
   defineOptions({
     name: 'PopoverDescription',
@@ -16,7 +16,7 @@
   const ctx = usePopoverContext()
 
   const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__description`
+    () => (attrs['data-testid'] as string | undefined) ?? 'popover-description'
   )
 
   onMounted(() => {

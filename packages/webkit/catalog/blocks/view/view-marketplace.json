@@ -1,0 +1,49 @@
+{
+ "variants": [
+  {
+   "name": "Detail",
+   "summary": "The detail drawer open on Request Signer: details, overview, permissions and the install form.",
+   "file": "blocks/view/view-marketplace/variants/detail.vue"
+  },
+  {
+   "name": "Installing",
+   "summary": "Install is running on storefront: the button shows loading, the field is disabled and the progress toast says it keeps running if the panel closes.",
+   "file": "blocks/view/view-marketplace/variants/installing.vue"
+  },
+  {
+   "name": "Installed",
+   "summary": "The install succeeded: the success Alert in the drawer, the Installed tag on the tile, Configure in the footer and the success toast with Configure and Open application.",
+   "file": "blocks/view/view-marketplace/variants/installed.vue"
+  },
+  {
+   "name": "InstallError",
+   "summary": "The install failed on checkout: the danger Alert with the reason and Reinstall, and the permanent failure toast with Edit and Reinstall.",
+   "file": "blocks/view/view-marketplace/variants/install-error.vue"
+  },
+  {
+   "name": "NoMatch",
+   "summary": "The Integrations tab with a search that matches no integration: the Featured row hides, the token stays and a medium EmptyState offers Clear filters.",
+   "file": "blocks/view/view-marketplace/variants/no-match.vue"
+  },
+  {
+   "name": "Loading",
+   "summary": "The catalog is loading: the integration search is disabled and skeleton integration tiles hold the grid.",
+   "file": "blocks/view/view-marketplace/variants/loading.vue"
+  },
+  {
+   "name": "SolutionPage",
+   "summary": "The integration as a full page (Waiting Room): a Back to Marketplace `Link`, the `PageHeader`, `Tabs` for Overview, Usage, Changelog (version history, Latest marked) and Applications (a `Table` of the applications running it, `TableCellStatus` Up to date or Update available and an Update to <version> action), beside an install card whose Application `Select` tags each application Installed or Update available. Install and Update are async runs that end in a toast with Configure and Open application.",
+   "file": "blocks/view/view-marketplace/variants/solution-page.vue"
+  },
+  {
+   "name": "Configure",
+   "summary": "The screen behind Configure: the integration's settings on one application (Queue visitors `Switch`, Capacity and Queue page title fields, Session length `Select`) in `SettingsGroup`s, errors after Save with a summary `Alert`, and a `SaveBar` with Discard and Save; saving is not a deploy, so its toast has no Redeploy.",
+   "file": "blocks/view/view-marketplace/variants/configure.vue"
+  }
+ ],
+ "sfcFile": "blocks/view/view-marketplace/view-marketplace.vue",
+ "guidelinesFile": "blocks/view/view-marketplace/guidelines.md",
+ "fileSources": {
+  "sample.ts": "blocks/view/view-marketplace/sample.ts"
+ }
+}

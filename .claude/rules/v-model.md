@@ -37,7 +37,7 @@ Every two-way value a component exposes goes through **`defineModel()`** (Vue 3.
 
 ## Reshaping an existing two-way value is breaking
 
-Moving a component from a manual `modelValue` prop + `update:modelValue` emit to `defineModel` is **not** breaking on its own — the public contract (`v-model`, the `update:modelValue` event) is identical, `defineModel` just generates it. But **renaming** the model, **adding** a required second model, or **changing** its type changes the `v-model` contract and is a major bump. Mark it `BREAKING CHANGE:` and update the spec's Props/Events tables, the story `argTypes`, and the "Show code" snippet together (see [`event-payloads.md`](./event-payloads.md) for the same discipline on events).
+Moving a component from a manual `modelValue` prop + `update:modelValue` emit to `defineModel` is **not** breaking on its own — the public contract (`v-model`, the `update:modelValue` event) is identical, `defineModel` just generates it. But **renaming** the model, **adding** a required second model, or **changing** its type changes the `v-model` contract and is a major bump. Mark it `BREAKING CHANGE:` and update the spec's Props/Events tables and the examples together (see [`event-payloads.md`](./event-payloads.md) for the same discipline on events).
 
 ## Hard prohibitions
 
@@ -49,9 +49,9 @@ Moving a component from a manual `modelValue` prop + `update:modelValue` emit to
 
 ## Enforcement
 
-- The **`webkit/prefer-define-model`** ESLint rule (in [`eslint-plugin`](../../packages/webkit/src/eslint-plugin/)) flags a `defineProps` that declares `modelValue` **and** a `defineEmits` that declares `update:modelValue` in the same `<script setup>` — the hand-rolled pattern `defineModel` replaces. `error` in `strict`, `warn` in `recommended`.
+- The **`webkit/prefer-define-model`** ESLint rule (in [`eslint-plugin`](../../packages/webkit/src/eslint-plugin/)) flags a `defineProps` that declares `modelValue` **and** a `defineEmits` that declares `update:modelValue` in the same `<script setup>` — the hand-rolled pattern `defineModel` replaces. `error` in both `strict` and `recommended`.
 - **[`validate-spec-compliance.mjs`](../hooks/validate-spec-compliance.mjs)** already blocks off-vocabulary model names (`visible`, `isToggled`) via [`prop-vocabulary.md`](./prop-vocabulary.md).
-- The scaffolder emits `defineModel` for every two-way value in the spec.
+- The component-scaffolder emits `defineModel` for every two-way value in the spec.
 
 ## Why this rule exists
 

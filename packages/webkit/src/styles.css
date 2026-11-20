@@ -1,11 +1,26 @@
-/*
- * Registers webkit's source files with Tailwind v4 so the component utility classes
- * (data-[kind=…]:bg-(--…) …) compile in the consumer's build — node_modules is
- * excluded from Tailwind's automatic content detection, so without this the components
- * render UNSTYLED.
- *
- * `@source` resolves relative to THIS stylesheet, which lives inside the package, so the
- * consumer imports it by name (`@import '@aziontech/webkit/styles'`) and never hardcodes
- * a ../node_modules path — immune to hoisting, workspaces, and pnpm symlink layouts.
- */
-@source './';
+@import '@aziontech/icons/azionicons-color-utilities';
+
+@layer components {
+  :is(
+    .az-chevron-left,
+    .az-chevron-right,
+    .az-circle-chevron-left,
+    .az-circle-chevron-right,
+    .az-chevrons-left,
+    .az-chevrons-right,
+    .az-arrow-left,
+    .az-arrow-right,
+    .az-circle-arrow-left,
+    .az-circle-arrow-right,
+    .az-arrow-down-left,
+    .az-arrow-down-right,
+    .az-caret-left,
+    .az-caret-right,
+    .az-log-in,
+    .az-log-out,
+    .az-reply,
+    .az-undo
+  ):where([dir='rtl'], [dir='rtl'] *) {
+    scale: -1 1;
+  }
+}

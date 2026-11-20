@@ -1,0 +1,36 @@
+{
+ "variants": [
+  {
+   "name": "SessionExpired",
+   "summary": "401: the session ended. Your session expired, why (signed out after 12 hours for security), and Sign in, which brings the user back to the same address. Rendered signed out, without the console rail.",
+   "file": "blocks/state/state-error-page/variants/session-expired.vue"
+  },
+  {
+   "name": "Forbidden",
+   "summary": "403: the address exists but the user's role does not include it. You don't have access to this page, who can grant it, and Request access with Switch account.",
+   "file": "blocks/state/state-error-page/variants/forbidden.vue"
+  },
+  {
+   "name": "RateLimited",
+   "summary": "429: the account sent more requests than the limit allows. Too many requests, nothing was lost, and Try again with About rate limits.",
+   "file": "blocks/state/state-error-page/variants/rate-limited.vue"
+  },
+  {
+   "name": "ServerError",
+   "summary": "500: the page failed on the server. Something went wrong on our side, nothing saved was lost, Retry (which shows its loading state while the page reloads) and System status in a new tab.",
+   "file": "blocks/state/state-error-page/variants/server-error.vue"
+  },
+  {
+   "name": "Maintenance",
+   "summary": "503: scheduled maintenance. Back soon, until when, that the applications keep serving traffic, and Retry with Status page.",
+   "file": "blocks/state/state-error-page/variants/maintenance.vue"
+  },
+  {
+   "name": "ResourceNotFound",
+   "summary": "Inside the console: the route is valid but the record is not (deleted, or a stale link). The 404 names the resource and its ID and offers Back to services.",
+   "file": "blocks/state/state-error-page/variants/resource-not-found.vue"
+  }
+ ],
+ "sfcFile": "blocks/state/state-error-page/state-error-page.vue",
+ "guidelinesFile": "blocks/state/state-error-page/guidelines.md"
+}

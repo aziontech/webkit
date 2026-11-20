@@ -1,0 +1,36 @@
+{
+ "purpose": "A band of headline figures — throughput, uptime, data centers — set in the display face at big-number scale, each in its own cell of a hairline `card-grid` with a short caption underneath. It is the proof band of a marketing page: the one place a page states its numbers, between a `module-header` and the section body.",
+ "useWhen": [
+  "Use Stats inside another band or a hand-built SFC; for product KPIs use StatTile.",
+  "Rendering page JSON, or you need a whole band with no custom content → the section (`stats-section`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`stats`).",
+  "To state a handful of measured facts (2–6) as the proof band of a marketing or landing page.",
+  "Whenever the figure itself is the message and the caption only names what was measured.",
+  "Under a `module-header`, as the opening evidence of a section."
+ ],
+ "avoidWhen": [
+  "For a single monetary amount → use `currency-amount`, which owns the amount ladder and its symbol placement.",
+  "For a plan's headline price inside a pricing card → use `pricing-card`.",
+  "For tabular or comparable figures a reader will scan row by row → use `table`.",
+  "For a label-and-value pair at body scale inside a card or list → use `item`."
+ ],
+ "related": [
+  "`module-header` — the framed section header this band usually sits under.",
+  "`card-grid` — the hairline grid the cells sit in; its `gap-px` seams are the rules between them.",
+  "`currency-amount` — a monetary amount at three reading distances, with symbol handling.",
+  "`pricing-card` — a plan card, where the headline figure is a price."
+ ],
+ "bestPractices": [
+  "The band draws no frame of its own: the rule and the corner marks belong to the `module` or `registration-frame` that the page assembles it into, so a band placed in a framed column never lands a second hairline on the column's own.",
+  "Keep the band to 2–6 figures: it reads as a row, and past six the cells stop being scannable.",
+  "Put the unit in `suffix` and the qualifier in `prefix`, so the figure itself stays the largest, highest-contrast thing in the cell.",
+  "Keep `label` to a few words — it is set at overline scale and is a caption, not a sentence.",
+  "Round the figures. A band is a claim, not a readout; `99.99%` belongs here, `99.9873%` does not.",
+  "Leave `size` at `medium` unless the band is the page's hero statement (`large`) or sits inside a denser section (`small`).",
+  "A figure never wraps. Each cell is a size container, and the big-number role sets the figure at the smaller of its `size` step and the width that fits the band's longest figure on one line: the band writes the glyph count of its longest figure (prefix, value and suffix) into `--text-big-number-characters` and the width of the gaps between those parts into `--text-big-number-inset`, so every figure in the band is set at the same size and sits on the same line. A long figure in a narrow column shrinks the whole band rather than breaking."
+ ],
+ "channels": [
+  "app",
+  "docs",
+  "site"
+ ]
+}

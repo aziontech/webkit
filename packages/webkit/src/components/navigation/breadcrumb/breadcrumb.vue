@@ -1,9 +1,12 @@
 <script setup lang="ts">
-  import { computed, useAttrs } from 'vue'
+  import { computed, ref, useAttrs } from 'vue'
 
+  import { useTranslate } from '../../../composables/use-translate'
+  import * as en from '../../../locales/en'
   import { cn } from '../../../utils/cn'
-  import BreadcrumbItem from '../breadcrumb-item/breadcrumb-item.vue'
-  import Dropdown from '../dropdown'
+  import { directionalIconClass } from '../../../utils/directional-icons'
+  import DropdownMenu from '../dropdown-menu'
+  import BreadcrumbItem from './breadcrumb-item/breadcrumb-item.vue'
   import BreadcrumbList from './breadcrumb-list.vue'
   import BreadcrumbSeparator from './breadcrumb-separator.vue'
   import { useBreadcrumbCollapse } from './composables/use-breadcrumb-collapse'
@@ -18,16 +21,19 @@
     href?: string
     showIcon?: boolean
     icon?: string
-    current?: boolean
+    active?: boolean
   }
 
-  interface Props {
-    /** Ordered path segments; the last entry is the current page when `current` is omitted. */
+  export interface BreadcrumbProps {
+    /** Ordered path segments; the last entry is the current page when `active` is omitted. */
     items?: BreadcrumbItemData[]
+    /** Accessible name of the navigation landmark; empty uses the locale catalog (`Breadcrumb`). */
+    ariaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
-    items: () => []
+  const props = withDefaults(defineProps<BreadcrumbProps>(), {
+    items: () => [],
+    ariaLabel: ''
   })
 
   const emit = defineEmits<{
@@ -39,21 +45,21 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useTranslate({ breadcrumb: en.breadcrumb })
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'navigation-breadcrumb'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'breadcrumb')
 
-  const isCollapsed = useBreadcrumbCollapse()
+  const navEl = ref<globalThis.HTMLElement | null>(null)
+  const isCollapsed = useBreadcrumbCollapse(navEl)
 
   const resolvedItems = computed(() =>
     props.items.map((item, index) => {
       const isLast = index === props.items.length - 1
-      const current = item.current ?? isLast
+      const active = item.active ?? isLast
 
       return {
         ...item,
-        current,
+        active,
         href: item.href ?? '#'
       }
     })
@@ -70,7 +76,7 @@
     () => resolvedItems.value.length > 1 && firstItem.value !== lastItem.value
   )
 
-  const handleItemClick = (event: MouseEvent, href: string) => {
+  const onItemClick = (event: MouseEvent, href: string) => {
     emit('navigate', event, href)
   }
 
@@ -80,16 +86,22 @@
   ) => {
     const href = typeof value === 'string' ? value : undefined
     if (href) {
-      handleItemClick(event as MouseEvent, href)
+      onItemClick(event as MouseEvent, href)
     }
   }
 </script>
 
 <template>
   <nav
+    ref="navEl"
     v-bind="attrs"
-    :class="cn('inline-flex w-full min-w-0 items-center', attrs.class as string | undefined)"
-    aria-label="Breadcrumb"
+    :class="
+      cn(
+        '-ms-(--spacing-xs) inline-flex w-full min-w-0 items-center',
+        attrs.class as string | undefined
+      )
+    "
+    :aria-label="ariaLabel || t('breadcrumb.label')"
     :data-testid="testId"
   >
     <template v-if="items.length">
@@ -106,12 +118,11 @@
               <BreadcrumbItem
                 :label="item.label"
                 :href="item.href"
-                :current="item.current"
+                :active="item.active"
                 :show-icon="item.showIcon"
                 :icon="item.icon"
-                :class="item.current ? 'text-(--text-default)' : undefined"
                 :data-testid="`${testId}__item-${index}`"
-                @click="(event) => !item.current && handleItemClick(event, item.href ?? '#')"
+                @click="(event) => !item.active && onItemClick(event, item.href ?? '#')"
               />
             </li>
             <BreadcrumbSeparator
@@ -129,14 +140,11 @@
             <BreadcrumbItem
               :label="firstItem.label"
               :href="firstItem.href"
-              :current="firstItem.current && !showDistinctEnds"
+              :active="firstItem.active && !showDistinctEnds"
               :show-icon="firstItem.showIcon"
               :icon="firstItem.icon"
-              :class="firstItem.current && !showDistinctEnds ? 'text-(--text-default)' : undefined"
               :data-testid="`${testId}__item-0`"
-              @click="
-                (event) => !firstItem.current && handleItemClick(event, firstItem.href ?? '#')
-              "
+              @click="(event) => !firstItem.active && onItemClick(event, firstItem.href ?? '#')"
             />
           </li>
 
@@ -147,41 +155,47 @@
               class="inline-flex items-center"
               :data-testid="`${testId}__segment-overflow`"
             >
-              <Dropdown
+              <DropdownMenu
                 :data-testid="`${testId}__overflow-menu`"
                 @select="onOverflowSelect"
               >
-                <Dropdown.Trigger
-                  aria-label="Show pages in between"
+                <DropdownMenu.Trigger
+                  :aria-label="t('breadcrumb.showHidden')"
                   :data-testid="`${testId}__overflow-trigger`"
-                  class="h-7 min-w-7 items-center justify-center rounded-(--shape-button) px-(--spacing-xs) text-button-md text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-mask) active:bg-(--bg-active) motion-reduce:transition-none"
+                  class="relative h-7 min-w-7 items-center justify-center rounded-(--shape-button) px-(--spacing-xs) text-button-md text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-mask) active:bg-(--bg-active) motion-reduce:transition-none"
                 >
                   <i
-                    class="pi pi-ellipsis-h size-[0.875rem]! shrink-0 text-[0.875rem]! leading-none"
+                    class="az az-ellipsis size-[0.875rem]! shrink-0 text-[0.875rem]! leading-none"
                     aria-hidden="true"
                   />
-                </Dropdown.Trigger>
-                <Dropdown.Group>
-                  <Dropdown.Option
+                  <span
+                    aria-hidden="true"
+                    data-slot="touch-target"
+                    class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
+                  />
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Group>
+                  <DropdownMenu.Item
                     v-for="(item, index) in middleItems"
                     :key="`${item.label}-${index}`"
                     :value="item.href ?? '#'"
+                    :href="item.href ?? '#'"
                     :label="item.label"
                     :data-testid="`${testId}__overflow-item-${index}`"
                   >
                     <template
                       v-if="item.showIcon && item.icon"
-                      #left
+                      #leading
                     >
                       <i
-                        :class="item.icon"
+                        :class="[item.icon, directionalIconClass(item.icon)]"
                         class="size-[0.875rem]! shrink-0 text-[0.875rem]! leading-none"
                         aria-hidden="true"
                       />
                     </template>
-                  </Dropdown.Option>
-                </Dropdown.Group>
-              </Dropdown>
+                  </DropdownMenu.Item>
+                </DropdownMenu.Group>
+              </DropdownMenu>
             </li>
           </template>
 
@@ -195,14 +209,12 @@
               <BreadcrumbItem
                 :label="lastItem.label"
                 :href="lastItem.href"
-                :current="lastItem.current"
+                :active="lastItem.active"
                 :show-icon="lastItem.showIcon"
                 :icon="lastItem.icon"
                 class="text-(--text-default)"
                 :data-testid="`${testId}__item-last`"
-                @click="
-                  (event) => !lastItem.current && handleItemClick(event, lastItem.href ?? '#')
-                "
+                @click="(event) => !lastItem.active && onItemClick(event, lastItem.href ?? '#')"
               />
             </li>
           </template>

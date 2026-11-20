@@ -1,0 +1,24 @@
+{
+ "variants": [
+  {
+   "name": "Loading",
+   "summary": "The first load: the heading stays, the filter, Delete and preferences are disabled, and `CardList` shows its placeholder cards with `aria-busy`.",
+   "file": "blocks/view/view-card/variants/loading.vue"
+  },
+  {
+   "name": "Error",
+   "summary": "The applications could not load: the heading and the disabled controls stay, and a danger Alert with Retry takes the cards' place.",
+   "file": "blocks/view/view-card/variants/error.vue"
+  },
+  {
+   "name": "Empty",
+   "summary": "An account with no applications: the heading and the controls stay, and the cards give way to a medium EmptyState with a small secondary Create Application button.",
+   "file": "blocks/view/view-card/variants/empty.vue"
+  }
+ ],
+ "sfcFile": "blocks/view/view-card/view-card.vue",
+ "guidelinesFile": "blocks/view/view-card/guidelines.md",
+ "fileSources": {
+  "sample.ts": "blocks/view/view-card/sample.ts"
+ }
+}

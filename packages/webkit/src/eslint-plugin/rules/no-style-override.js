@@ -1,5 +1,11 @@
-import { loadCatalog } from '../catalog.js'
-import { ctxCwd, templateBodyVisitorFactory } from '../util.js'
+import { loadCatalog } from '../lib/catalog.js'
+import {
+  isChartPaletteClass,
+  isChartPaletteObject,
+  isChartPaletteStyle
+} from '../lib/chart-palette.js'
+import { LAYOUT_CLASS_FAMILIES, nonLayoutClasses } from '../lib/layout-classes.js'
+import { ctxCwd, templateBodyVisitorFactory } from '../lib/rule-utils.js'
 
 const WEBKIT_TAG_KINDS = new Set(['component', 'root', 'subcomponent'])
 
@@ -7,12 +13,15 @@ function styleAttr(attr) {
   if (!attr || attr.type !== 'VAttribute') return null
   if (!attr.directive) {
     const name = attr.key?.name
-    return name === 'class' || name === 'style' ? { attr: name, bound: false } : null
+    if (name !== 'class' && name !== 'style') return null
+    return { attr: name, bound: false, value: attr.value?.value ?? '' }
   }
   if (attr.key?.name?.name !== 'bind') return null
   const arg = attr.key?.argument
   const argName = arg && arg.type === 'VIdentifier' ? arg.name : null
-  return argName === 'class' || argName === 'style' ? { attr: argName, bound: true } : null
+  return argName === 'class' || argName === 'style'
+    ? { attr: argName, bound: true, expression: attr.value?.expression ?? null }
+    : null
 }
 
 export default {
@@ -20,7 +29,7 @@ export default {
     type: 'suggestion',
     docs: {
       description:
-        'Disallow overriding a webkit component’s styles via class/style on its tag; compose in slots or use a personalizable component.'
+        'Disallow overriding a webkit component’s styles via class/style on its tag; compose in slots or use a personalizable component. A static class made only of layout utilities (how the box sits in its parent: w-full, h-full, min/max width and height, flex-1/auto/initial/none, grow, basis-*, shrink-0, self/justify-self/place-self, order, grid column and row placement, and logical margins), each optionally behind a breakpoint prefix (sm: to 2xl:), is allowed, and so is setting the chart palette variables (--chart-series-1..8, --chart-sequential-1..7, --chart-diverging-negative/neutral/positive) through a static style, an object-literal :style or [--chart-…:value] classes.'
     },
     schema: [
       {
@@ -34,7 +43,9 @@ export default {
     ],
     messages: {
       override:
-        "Avoid setting {{written}} on the webkit component '<{{tag}}>' — it overrides design-system styles. Compose inside its slots, or use a component built to be personalized (style_seam)."
+        "Avoid setting {{written}} on the webkit component '<{{tag}}>' — it overrides design-system styles. Compose inside its slots, or use a component built to be personalized (style_seam). Only a static class of layout utilities is allowed ({{allowed}}), plus the chart palette variables --chart-series-1..8, --chart-sequential-1..7 and --chart-diverging-*.",
+      overrideClasses:
+        "Avoid the class(es) {{classes}} on the webkit component '<{{tag}}>' — they override design-system styles. Only layout utilities are allowed on a webkit tag ({{allowed}}), plus [--chart-…:value] classes for the chart palette variables. Put the rest on a wrapper element or compose inside its slots."
     }
   },
   create(context) {
@@ -84,11 +95,24 @@ export default {
           const hit = styleAttr(attr)
           if (!hit) continue
           if (hit.attr === 'style' && !checkStyle) continue
+          if (hit.attr === 'style' && !hit.bound && isChartPaletteStyle(hit.value)) continue
+          if (hit.attr === 'style' && hit.bound && isChartPaletteObject(hit.expression)) continue
+          const allowed = LAYOUT_CLASS_FAMILIES.join(', ')
+          if (hit.attr === 'class' && !hit.bound) {
+            const rejected = nonLayoutClasses(hit.value).filter((cls) => !isChartPaletteClass(cls))
+            if (!rejected.length) continue
+            context.report({
+              node: attr,
+              messageId: 'overrideClasses',
+              data: { classes: rejected.join(' '), tag: rawName, allowed }
+            })
+            continue
+          }
           const written = hit.bound ? `:${hit.attr}` : hit.attr
           context.report({
             node: attr,
             messageId: 'override',
-            data: { written, tag: rawName }
+            data: { written, tag: rawName, allowed }
           })
         }
       }

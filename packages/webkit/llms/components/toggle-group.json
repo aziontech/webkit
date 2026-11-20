@@ -1,0 +1,118 @@
+{
+ "name": "toggle-group",
+ "binding": "ToggleGroup",
+ "import": "@aziontech/webkit/toggle-group",
+ "treeShakeableImport": "@aziontech/webkit/toggle-group",
+ "category": "action",
+ "surface": "app",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "ToggleGroup is a connected group of buttons that picks exactly one value out of a small set of related options, with a selection indicator that slides to the active segment. It renders as a `radiogroup` whose segments are `radio` buttons, is driven by an `options` array plus `v-model`, and works uncontrolled through `defaultValue`. It differs from `tabs`, which switches between content panels it owns: a segmented button only holds the chosen value and leaves rendering what that value means to the consumer.",
+ "setup": null,
+ "useWhen": [
+  "Use ToggleGroup (segmented control) to switch a view or mode in place (Table/Chart, 1h/24h), with two to five short segments; it is not a form field. For one choice in a form use RadioGroup; for an on/off setting use Switch; for the theme in app chrome use ThemeSwitcher.",
+  "Switch in place between two to five related modes, views or ranges (a time range, a list/grid view, a filter scope) where exactly one is always active.",
+  "Offer a compact single choice in a toolbar or a card header where a radio list would take too much room.",
+  "Show a choice that is currently unavailable as a disabled segment instead of hiding it; mark it `locked` when it is unavailable because of a plan or a permission."
+ ],
+ "avoidWhen": [
+  "The choice switches between content panels that belong to the control → use `tabs`.",
+  "The choice is a form field with a label, helper text or validation → use `radio-group` (`variant=\"card\"` when each option needs a description).",
+  "The value is a binary on/off setting → use `switch` (in a horizontal `field` inside a form).",
+  "The user can pick more than one option → use `checkbox` (in a horizontal `field`).",
+  "The control triggers an action instead of holding a value → use `button` or `split-button`."
+ ],
+ "related": [
+  "`tabs` — tabs that own their panels; reach for it when each option reveals its own content region.",
+  "`radio-group` — the form-field single choice; `variant=\"card\"` when each option carries a description.",
+  "`theme-switcher` — the system / light / dark choice in app chrome.",
+  "`switch` — a single boolean toggle.",
+  "`button` — a lone action; the segments here hold a value instead of firing one.",
+  "Naming: Radix and shadcn `ToggleGroup` is a group of `aria-pressed` toggles with `type=\"single\" | \"multiple\"`. This component is the single-select segmented control (Cloudscape and Geist call it a segmented control): one value is always selected and the segments are radios. There is no multiple mode; for several independent toggles use `checkbox`es or `ButtonGroup` toggles."
+ ],
+ "bestPractices": [
+  "Keep labels to one or two words: segments never wrap (`whitespace-nowrap`) and long labels truncate.",
+  "Give every option a unique `value`; values are coerced to strings and used as the list key and the selection identity, so duplicates collide.",
+  "Pass `ariaLabel` whenever no visible label names the group.",
+  "Use `fluid` to make the group fill a narrow container and share its width across segments, instead of styling the width at the call site.",
+  "Bind `v-model` when the selection lives in the parent; use `defaultValue` only to seed an uncontrolled group."
+ ],
+ "props": [
+  {
+   "name": "options",
+   "type": "`ToggleGroupOption[]` (`{ label?: string | number; value?: string | number; disabled?: boolean; locked?: boolean }`)",
+   "default": "[]",
+   "required": "false",
+   "doc": "Segmented choices shown as a mutually exclusive group."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name when no visible group label is associated."
+  },
+  {
+   "name": "defaultValue",
+   "type": "string",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Initial selection when `v-model` is not set."
+  },
+  {
+   "name": "size",
+   "type": "'small' | 'medium' | 'large'",
+   "default": "'large'",
+   "required": "false",
+   "doc": "Size token, on the same 28 / 32 / 40 rhythm every other control uses."
+  },
+  {
+   "name": "fluid",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Stretches the group to its container and lets the options share that width."
+  },
+  {
+   "name": "disabled",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Disables every option of the group."
+  },
+  {
+   "name": "name",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Form field name. Set, a hidden input carries the selected value so a native `form` submits it; `disabled` leaves it out."
+  },
+  {
+   "name": "modelValue",
+   "type": "TValue | undefined",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Two-way value (`v-model`)."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/toggle-group/default.vue"
+  },
+  {
+   "name": "WithDisabledOption",
+   "file": "examples/toggle-group/with-disabled-option.vue"
+  },
+  {
+   "name": "Sizes",
+   "file": "examples/toggle-group/sizes.vue"
+  }
+ ],
+ "docs": "components/toggle-group.md"
+}

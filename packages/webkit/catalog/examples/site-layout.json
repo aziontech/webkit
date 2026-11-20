@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The site chrome around a page of sections: SiteHeaderSection with a mega-menu and the account actions, the hero and a framed section in the slot, and SiteFooterSection closing the frame. The bar's search opens the ⌘K palette with every navigation destination.",
+   "file": "examples/site-layout/default.vue"
+  },
+  {
+   "name": "Nav overlay",
+   "summary": "The bar floats over the first band instead of stacking above it, as on a home page whose hero fills the top of the window; it stays sticky to the end of the page and the footer still closes it.",
+   "file": "examples/site-layout/navigation-overlay.vue"
+  }
+ ]
+}

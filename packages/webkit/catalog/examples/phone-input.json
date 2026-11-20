@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Inside a `Field`: the trigger shows the selected country and its dial code, the list filters as you type, and `phone-change` hands over the E.164 number and whether it is complete.",
+   "file": "examples/phone-input/default.vue"
+  },
+  {
+   "name": "DefaultCountry",
+   "summary": "`default-country` starts the field on another country (here the United Kingdom) without binding `v-model:country`; the field starts on the United States when it is not set.",
+   "file": "examples/phone-input/default-country.vue"
+  }
+ ]
+}

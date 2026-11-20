@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Outlined button trigger. Hover or focus “Hover me” to reveal the tooltip.",
+   "file": "examples/tooltip/default.vue"
+  },
+  {
+   "name": "Placements",
+   "summary": "All four anchor sides with directional arrow triggers. Hover or focus each icon button to compare sides; `start` and `end` follow the text direction.",
+   "file": "examples/tooltip/placements.vue"
+  },
+  {
+   "name": "AutoPlacement",
+   "summary": "`side=\"auto\"` lets the tooltip pick the side with the most available space at open time. The four edge-positioned triggers all share the same prop value. Hover or focus each one: its tooltip resolves to the side that fits best, reflected in `data-side`.",
+   "file": "examples/tooltip/auto-placement.vue"
+  }
+ ]
+}

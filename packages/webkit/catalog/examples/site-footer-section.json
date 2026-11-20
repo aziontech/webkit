@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The site footer with its four link columns, social row, status line and language select. Edit the props in the Controls panel — clear `home` to drop the Azion mark, `statusLabel` to drop the status line, or `languages` to drop the select.",
+   "file": "examples/site-footer-section/default.vue"
+  },
+  {
+   "name": "Language",
+   "summary": "`v-model:language` binds the language select: the page seeds `PT-BR`, and choosing another option updates the line under the footer, where a site would switch its locale.",
+   "file": "examples/site-footer-section/language.vue"
+  }
+ ]
+}

@@ -1,28 +1,67 @@
 #!/usr/bin/env node
 
 import { applyPlan } from './apply.js'
+import { applyAdd, applyRemove, MANIFEST, planAdd, planDiff, planRemove } from './blocks.js'
 import { runCanary } from './canary.js'
+import { exitCodeFor, formatCheck, runCheck, withNavigation } from './check.js'
+import { planSources, SOURCES_FILE, writeSources } from './css-sources.js'
 import { planDoctor } from './doctor.js'
+import { planMigrate, REVIEW_WARNING, SUPPORTED_VERSIONS } from './migrate.js'
+import { parseUrls } from './navigation-check.js'
 import { planInit } from './plan.js'
+import { formatSearch, formatView, runSearch, runView } from './query.js'
 import { FAIL_MODES, FORMATS, runReport } from './report.js'
-import { planSync } from './sync.js'
+import { catalogFor, resolveWebkit } from './source.js'
+import { planSync, resolveBundleRoot } from './sync.js'
+import { colorize, diffStats } from './text-diff.js'
 
 const HELP = `@aziontech/webkit — adopt the design system in one command
 
 Usage:
   npx @aziontech/webkit init [options]
+  npx @aziontech/webkit add <block-id> [--variant <name>] [--dest <dir|file.vue>] [options]
+  npx @aziontech/webkit remove <block-id|path> [--dry-run] [--json]
+  npx @aziontech/webkit diff <block-id|path> [--json]
+  npx @aziontech/webkit search <query> [--json]
+  npx @aziontech/webkit view <id> [--variant <name>] [--example <name>] [--json]
+  npx @aziontech/webkit check [--json] [--max-warnings <n>] [--no-lint] [--url <url,...>]
   npx @aziontech/webkit doctor
+  npx @aziontech/webkit css [--check]
   npx @aziontech/webkit report [options] [patterns...]
   npx @aziontech/webkit canary
   npx @aziontech/webkit sync [options]
+  npx @aziontech/webkit migrate v6 [--dry-run] [--from <major>]
 
 Commands:
   init            Wire @aziontech/webkit into the current project.
+  add             Start a screen: copy a block (the reviewed SFC) into the project, check
+                   its imports against the installed webkit, record it in webkit.blocks.json
+                   and print the route entry to add.
+  remove          Delete a copied block: its files (the primary, variants, data files and
+                   guidelines; a path removes that one file) and its webkit.blocks.json
+                   entry. Lists the app files that still import it and the route to drop.
+                   --dry-run prints what would be deleted.
+  diff            Compare a copied block with the canonical one of the installed version.
+  search          Find blocks, components and examples by plain words.
+  view            Show a block (guidelines, variants, SFC) or a component (API, examples).
+  check           CI gate: doctor + v5 names + unknown imports + ESLint + Stylelint
+                   + block drift.
   doctor          Check the wiring is healthy; report resolved dependency versions.
+  css             Rewrite src/webkit.sources.css, the WebKit files Tailwind compiles,
+                   from this app's @aziontech/webkit imports (the Vite plugin,
+                   @aziontech/webkit/vite-plugin, does it on every dev and build). --check writes nothing and
+                   exits 1 when the file is stale.
   report          Measure webkit adoption via this project's own ESLint.
   canary          Prove the design-system lint rules still reach this project.
   sync            Reconcile the copied .claude/ bundle + CLAUDE.md fragment against
-                   this webkit version's templates.
+                   this webkit version's templates. In a monorepo app with no agent
+                   files of its own, works on the repository root that has them.
+  migrate v6      Rewrite this project for the v6 major: renamed imports and components,
+                   renamed props and values, icon classes (pi pi-times → az az-x,
+                   ai ai-edge-functions → az az-functions); lists
+                   removed components to replace by hand.
+                   --from <major> sets the version the project is on (read from
+                   package.json, or detected from v3-only imports, when omitted).
 
 Options (init):
   --dry-run       Print the plan without writing anything.
@@ -32,6 +71,25 @@ Options (init):
   --no-icons      Skip @aziontech/icons (the icon font) and its entry import.
   --no-entry      Do not edit the app entry (src/main.*); print the imports instead.
   -h, --help      Show this help.
+
+Options (add):
+  --variant <name>  Also copy this variant (state) of the block, as <Name><Variant>.vue.
+  --dest <path>     Directory (or .vue file) for the copy; default: the router's views
+                    directory, else src/views, else src/pages.
+  --with-guidelines Copy the block guidelines next to it as <Name>.guidelines.md.
+  --dry-run         Print what would be written; write nothing.
+  --force           Overwrite files that already exist.
+
+Options (diff, search, view, check):
+  --json            Machine-readable output.
+  --example <name>  view: print this example of a component instead of the first.
+  --max-warnings <n> check: also fail when there are more than n warnings.
+  --no-lint         check: skip the project's ESLint and Stylelint runs (built-in
+                    scans only).
+  --url <url,...>   check: also open these running routes in Chromium (the project's
+                    Playwright) and fail on navigation levels that repeat a route or
+                    disagree on the current page (rule webkit-navigation-levels).
+  diff exits 0 when the copy matches the canonical block, 1 when it differs.
 
 Options (report):
   --format <markdown|json>   Output format (default: markdown).
@@ -48,7 +106,21 @@ Run interactively (a TTY, no --yes) and init asks about the optional pieces —
 icons, entry wiring — before writing anything.
 `
 
-const COMMANDS = new Set(['init', 'doctor', 'report', 'canary', 'sync'])
+const COMMANDS = new Set([
+  'init',
+  'add',
+  'remove',
+  'diff',
+  'search',
+  'view',
+  'check',
+  'doctor',
+  'css',
+  'report',
+  'canary',
+  'sync',
+  'migrate'
+])
 const KNOWN_FLAGS = new Set([
   '--dry-run',
   '--strict',
@@ -60,10 +132,21 @@ const KNOWN_FLAGS = new Set([
   '--check',
   '--force',
   '--json',
+  '--with-guidelines',
+  '--no-lint',
   '-h',
   '--help'
 ])
-const VALUE_FLAGS = new Set(['--format', '--fail-on'])
+const VALUE_FLAGS = new Set([
+  '--format',
+  '--fail-on',
+  '--from',
+  '--dest',
+  '--variant',
+  '--example',
+  '--max-warnings',
+  '--url'
+])
 
 function parseArgs(argv) {
   const args = argv.slice(2)
@@ -97,10 +180,18 @@ function parseArgs(argv) {
     help: flags.has('-h') || flags.has('--help'),
     format: values['--format'],
     failOn: values['--fail-on'],
-    patterns: positionals,
+    from: values['--from'],
+    args: positionals,
     check: flags.has('--check'),
     force: flags.has('--force'),
-    json: flags.has('--json')
+    json: flags.has('--json'),
+    withGuidelines: flags.has('--with-guidelines'),
+    noLint: flags.has('--no-lint'),
+    dest: values['--dest'],
+    variant: values['--variant'],
+    example: values['--example'],
+    maxWarnings: values['--max-warnings'],
+    urls: parseUrls(values['--url'])
   }
 }
 
@@ -190,9 +281,19 @@ function printSyncTable(plan) {
   )
 }
 
-function runSync(projectDir, { check, dryRun, force, json }) {
+function runSync(appDir, { check, dryRun, force, json }) {
   const applyNothing = check || dryRun
   try {
+    const bundleRoot = resolveBundleRoot(appDir)
+    if (bundleRoot.kind === 'source') {
+      process.stdout.write(
+        json
+          ? `${JSON.stringify({ drift: false, source: bundleRoot.dir, entries: [] }, null, 2)}\n`
+          : `\n@aziontech/webkit sync\n${bundleRoot.dir} holds the bundle sources (skills/, rules/, adapters/) — nothing to sync.\n`
+      )
+      return 0
+    }
+    const projectDir = bundleRoot.dir
     const plan = planSync(projectDir, { force })
 
     if (json) {
@@ -213,7 +314,7 @@ function runSync(projectDir, { check, dryRun, force, json }) {
       )
     } else {
       process.stdout.write(
-        `\n@aziontech/webkit sync${applyNothing ? ' (no changes applied)' : ''}\nproject: ${projectDir}\n\n`
+        `\n@aziontech/webkit sync${applyNothing ? ' (no changes applied)' : ''}\nproject: ${projectDir}${bundleRoot.kind === 'ancestor' ? ' (the repository root that owns the agent files)' : ''}\n\n`
       )
       printSyncTable(plan)
     }
@@ -254,11 +355,15 @@ function printResult({ action, result, detail }) {
 function printPlan(plan) {
   for (const action of plan) {
     switch (action.type) {
-      case 'add-dep':
+      case 'add-dep': {
+        const { dev } = action
         process.stdout.write(
-          `PLAN   add-dep ${action.dev ? '(dev) ' : ''}${action.dep}@${action.version}\n`
+          action.keep
+            ? `PLAN   keep ${dev ? '(dev) ' : ''}${action.dep}@${action.keep} (WebKit needs ${action.version})\n`
+            : `PLAN   add-dep ${dev ? '(dev) ' : ''}${action.dep}@${action.version}${action.replace ? ` (replaces ${action.replace})` : ''}\n`
         )
         break
+      }
       case 'advise':
         process.stdout.write(`\nPLAN   note: ${action.message}\n`)
         break
@@ -271,16 +376,275 @@ function printPlan(plan) {
       case 'patch-entry':
         process.stdout.write(`PLAN   patch ${action.path} (${action.imports.join(' · ')})\n`)
         break
+      case 'remove-starter':
+        process.stdout.write(
+          `PLAN   remove the starter ${action.files.join(', ')} and its import in ${action.path}\n`
+        )
+        break
       case 'fence':
         process.stdout.write(`PLAN   fence ${action.path}\n`)
         break
       case 'report':
         process.stdout.write(`PLAN   report ${action.state}: .claude/${action.rel}\n`)
         break
+      case 'activate-hooks':
+        process.stdout.write('PLAN   activate git hooks (npx husky)\n')
+        break
       default:
         process.stdout.write(`PLAN   ${action.type} ${action.path || ''}\n`)
     }
   }
+}
+
+function runMigrate(projectDir, target, { dryRun, from }) {
+  const version = Number(String(target || '').replace(/^v/i, ''))
+  if (!SUPPORTED_VERSIONS.includes(version)) {
+    process.stderr.write(
+      `Usage: npx @aziontech/webkit migrate v6 [--dry-run] (supported: ${SUPPORTED_VERSIONS.map((v) => `v${v}`).join(', ')})\n`
+    )
+    return 1
+  }
+  const fromMajor = from == null ? null : Number(String(from).replace(/^v/i, ''))
+  if (fromMajor != null && !Number.isInteger(fromMajor)) {
+    process.stderr.write(`--from takes a major version, such as 3 or v5 (got ${from})\n`)
+    return 1
+  }
+  const results = planMigrate(projectDir, { version, dryRun, fromMajor })
+  let changed = 0
+  let manual = 0
+  let review = 0
+  for (const { file, changes, warnings } of results) {
+    const toReview = warnings.filter((w) => REVIEW_WARNING.test(w))
+    if (changes.length) changed += 1
+    if (warnings.length > toReview.length) manual += 1
+    else if (toReview.length) review += 1
+    process.stdout.write(`${file}\n`)
+    for (const c of changes)
+      process.stdout.write(`  ${dryRun ? 'would change' : 'changed'}: ${c}\n`)
+    for (const w of warnings)
+      process.stdout.write(`  ${REVIEW_WARNING.test(w) ? 'REVIEW' : 'MANUAL'}: ${w}\n`)
+  }
+  process.stdout.write(
+    `\n${changed} file(s) ${dryRun ? 'to rewrite' : 'rewritten'}, ${manual} file(s) need a manual change${review ? `, ${review} more to review` : ''}. See MIGRATION_V6.md.\n`
+  )
+  return 0
+}
+
+const json = (value) => process.stdout.write(`${JSON.stringify(value, null, 2)}\n`)
+const useColor = () =>
+  !process.env.NO_COLOR && (Boolean(process.env.FORCE_COLOR) || Boolean(process.stdout.isTTY))
+
+function runCss(projectDir, parsed) {
+  const plan = planSources(projectDir)
+  const summary = `${plan.files.length} WebKit file(s) for ${plan.subpaths.length} import(s)`
+  if (!plan.resolved && plan.subpaths.length) {
+    process.stderr.write(
+      `@aziontech/webkit is not installed here, so ${SOURCES_FILE} cannot list the files of ${plan.subpaths.length} import(s). Install it first.\n`
+    )
+    return 1
+  }
+  if (parsed.check) {
+    process.stdout.write(`${SOURCES_FILE}: ${plan.stale ? 'stale' : 'current'} — ${summary}\n`)
+    return plan.stale ? 1 : 0
+  }
+  if (parsed.dryRun) {
+    process.stdout.write(`${plan.stale ? 'would write' : 'current'} ${SOURCES_FILE} — ${summary}\n`)
+    return 0
+  }
+  const written = writeSources(plan)
+  process.stdout.write(`${written ? 'wrote' : 'current'} ${SOURCES_FILE} — ${summary}\n`)
+  return 0
+}
+
+function refreshSourcesAfterAdd(projectDir) {
+  const plan = planSources(projectDir)
+  if (plan.current === null || !plan.resolved) return
+  if (writeSources(plan))
+    process.stdout.write(`updated ${SOURCES_FILE} — ${plan.files.length} WebKit file(s)\n`)
+}
+
+function runAdd(projectDir, id, parsed) {
+  if (!id) {
+    process.stderr.write('Usage: npx @aziontech/webkit add <block-id> (find one with `search`)\n')
+    return 1
+  }
+  const webkit = resolveWebkit(projectDir)
+  const plan = planAdd(projectDir, webkit, catalogFor(webkit), id, {
+    dest: parsed.dest,
+    variant: parsed.variant,
+    withGuidelines: parsed.withGuidelines,
+    force: parsed.force
+  })
+  const written = plan.ok && !parsed.dryRun ? applyAdd(projectDir, plan) : []
+  if (written.length && !parsed.json) refreshSourcesAfterAdd(projectDir)
+  if (parsed.json) {
+    json({
+      ok: plan.ok,
+      dryRun: parsed.dryRun,
+      ...(plan.id ? { id: plan.id, version: plan.version } : {}),
+      files: (plan.files || []).map(({ content: _content, ...f }) => f),
+      ...(plan.guidelines ? { guidelines: plan.guidelines.path } : {}),
+      imports: plan.imports,
+      route: plan.route,
+      written,
+      errors: plan.errors,
+      warnings: plan.warnings || [],
+      ...(plan.suggestions?.length ? { suggestions: plan.suggestions } : {})
+    })
+    return plan.ok ? 0 : 1
+  }
+  for (const w of plan.warnings || []) process.stderr.write(`WARN  ${w}\n`)
+  if (!plan.ok) {
+    for (const e of plan.errors) process.stderr.write(`ERROR ${e}\n`)
+    if (plan.suggestions?.length) {
+      process.stderr.write(`Did you mean: ${plan.suggestions.join(', ')}?\n`)
+    }
+    return 1
+  }
+  const verb = parsed.dryRun ? 'would write' : 'wrote'
+  process.stdout.write(`\n${plan.id} (${plan.name}) from @aziontech/webkit@${plan.version}\n`)
+  if (plan.viewsReason) process.stdout.write(`views directory: ${plan.viewsReason}\n`)
+  process.stdout.write('\n')
+  for (const f of plan.files) {
+    process.stdout.write(`${verb} ${f.path}${f.exists ? ' (overwritten)' : ''}  ← ${f.variant}\n`)
+  }
+  if (plan.guidelines) process.stdout.write(`${verb} ${plan.guidelines.path}  ← guidelines\n`)
+  process.stdout.write(`${parsed.dryRun ? 'would record' : 'recorded'} ${plan.id} in ${MANIFEST}\n`)
+  const ok = plan.imports.webkit.length
+  process.stdout.write(`imports: ${ok} @aziontech/webkit subpath(s), all exported\n`)
+  process.stdout.write(
+    `\nAdd the route${plan.route.router ? ` in ${plan.route.router}` : ''}:\n  ${plan.route.entry}\n`
+  )
+  process.stdout.write(
+    `\nChange only the content (copy, data, handlers); keep the components, their order and the classes. Read the guidelines: npx @aziontech/webkit view ${plan.id}\n`
+  )
+  if (parsed.dryRun) process.stdout.write('\nDry run — no files were written.\n')
+  return 0
+}
+
+function runRemove(projectDir, target, parsed) {
+  if (!target) {
+    process.stderr.write('Usage: npx @aziontech/webkit remove <block-id|path> [--dry-run]\n')
+    return 2
+  }
+  const plan = planRemove(projectDir, target)
+  if (!plan.ok) {
+    if (parsed.json) json(plan)
+    else process.stderr.write(`${plan.error}\n`)
+    return 1
+  }
+  const removed = parsed.dryRun ? [] : applyRemove(projectDir, plan)
+  if (removed.length && !parsed.json) refreshSourcesAfterAdd(projectDir)
+  if (parsed.json) {
+    json({ ...plan, dryRun: parsed.dryRun, removed })
+    return 0
+  }
+  const verb = parsed.dryRun ? 'would delete' : 'deleted'
+  for (const file of plan.files) {
+    process.stdout.write(
+      file.exists
+        ? `${verb} ${file.path}\n`
+        : `${file.path}: already gone, dropped from ${MANIFEST}\n`
+    )
+  }
+  process.stdout.write(
+    `${parsed.dryRun ? 'would drop' : 'dropped'} ${plan.whole ? plan.id : `${plan.files.length} file(s) of ${plan.id}`} from ${MANIFEST}\n`
+  )
+  if (plan.importers.length) {
+    process.stdout.write('\nStill imported by (remove these imports and the route):\n')
+    for (const hit of plan.importers) process.stdout.write(`  ${hit.file}: ${hit.imports}\n`)
+  }
+  if (parsed.dryRun) process.stdout.write('\nDry run — no files were deleted.\n')
+  return 0
+}
+
+function runDiff(projectDir, target, parsed) {
+  if (!target) {
+    process.stderr.write('Usage: npx @aziontech/webkit diff <block-id|path>\n')
+    return 2
+  }
+  const result = planDiff(projectDir, resolveWebkit(projectDir), target)
+  if (!result.ok) {
+    if (parsed.json) json(result)
+    else process.stderr.write(`${result.error}\n`)
+    return 2
+  }
+  const differs = result.files.some((f) => f.status !== 'identical')
+  if (parsed.json) {
+    json({ ...result, differs })
+    return differs ? 1 : 0
+  }
+  const color = useColor()
+  for (const f of result.files) {
+    const upstream = f.upstreamChanged
+      ? result.recordedVersion === result.version
+        ? ` — the installed canonical block differs from the copy recorded at the same version (${result.version})`
+        : ` — the canonical block changed since it was copied (${result.recordedVersion} → ${result.version})`
+      : ''
+    if (f.status === 'identical') {
+      process.stdout.write(`${f.path}: identical to ${f.source}${upstream}\n`)
+    } else if (f.status === 'missing') {
+      process.stdout.write(`${f.path}: missing (recorded in ${MANIFEST})\n`)
+    } else if (f.status === 'removed-upstream') {
+      process.stdout.write(`${f.path}: ${f.source} is not in @aziontech/webkit@${result.version}\n`)
+    } else {
+      const { added, removed } = diffStats(f.patch)
+      process.stdout.write(`${f.path}: +${added} -${removed} against ${f.source}${upstream}\n`)
+      process.stdout.write(color ? `${colorize(f.patch)}\n` : f.patch)
+    }
+  }
+  return differs ? 1 : 0
+}
+
+function runQuery(projectDir, command, parsed) {
+  const query = parsed.args.join(' ').trim()
+  if (!query) {
+    process.stderr.write(
+      `Usage: npx @aziontech/webkit ${command} <${command === 'view' ? 'id' : 'query'}>\n`
+    )
+    return 1
+  }
+  const catalog = catalogFor(resolveWebkit(projectDir))
+  if (command === 'search') {
+    const result = runSearch(catalog, query)
+    if (parsed.json) json(result)
+    else process.stdout.write(formatSearch(result))
+    return 0
+  }
+  const result = runView(catalog, query, { variant: parsed.variant, example: parsed.example })
+  if (parsed.json) {
+    json(result)
+    return result.ok ? 0 : 1
+  }
+  if (!result.ok) {
+    process.stderr.write(`${result.error}\n`)
+    if (result.suggestions?.length) {
+      process.stderr.write(`Did you mean: ${result.suggestions.join(', ')}?\n`)
+    }
+    return 1
+  }
+  process.stdout.write(formatView(result))
+  return 0
+}
+
+async function runCheckCommand(projectDir, parsed) {
+  let maxWarnings = null
+  if (parsed.maxWarnings != null) {
+    maxWarnings = Number(parsed.maxWarnings)
+    if (!Number.isInteger(maxWarnings)) {
+      process.stderr.write(`--max-warnings takes an integer (got ${parsed.maxWarnings})\n`)
+      return 2
+    }
+  }
+  const result = await withNavigation(
+    runCheck(projectDir, resolveWebkit(projectDir), { lint: !parsed.noLint }),
+    projectDir,
+    parsed.urls
+  )
+  const code = exitCodeFor(result, maxWarnings)
+  if (parsed.json) json({ ...result, maxWarnings, exitCode: code })
+  else process.stdout.write(formatCheck(result, maxWarnings))
+  return code
 }
 
 async function run(argv) {
@@ -308,6 +672,13 @@ async function run(argv) {
     return runDoctor(projectDir)
   }
 
+  if (command === 'css') return runCss(projectDir, parsed)
+  if (command === 'add') return runAdd(projectDir, parsed.args[0], parsed)
+  if (command === 'remove') return runRemove(projectDir, parsed.args[0], parsed)
+  if (command === 'diff') return runDiff(projectDir, parsed.args[0], parsed)
+  if (command === 'search' || command === 'view') return runQuery(projectDir, command, parsed)
+  if (command === 'check') return runCheckCommand(projectDir, parsed)
+
   if (command === 'report') {
     const format = parsed.format ?? 'markdown'
     const failOn = parsed.failOn ?? 'never'
@@ -319,7 +690,7 @@ async function run(argv) {
       process.stderr.write(`Unknown --fail-on value: ${failOn} (expected never or any)\n`)
       return 1
     }
-    const patterns = parsed.patterns.length ? parsed.patterns : ['.']
+    const patterns = parsed.args.length ? parsed.args : ['.']
     const result = runReport(projectDir, {
       format,
       failOn,
@@ -338,6 +709,10 @@ async function run(argv) {
     const result = runCanary(projectDir)
     for (const line of result.lines) process.stdout.write(`${line}\n`)
     return result.exitCode
+  }
+
+  if (command === 'migrate') {
+    return runMigrate(projectDir, parsed.args[0], { dryRun, from: parsed.from })
   }
 
   if (command === 'sync') {

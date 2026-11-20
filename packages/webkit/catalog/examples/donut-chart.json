@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Blocked threats by country. Hover a slice, or focus the ring and use the arrow keys, to swap the center to that country.",
+   "file": "examples/donut-chart/default.vue"
+  },
+  {
+   "name": "Types",
+   "summary": "A ring with the total in the center, and a solid disc with no center readout.",
+   "file": "examples/donut-chart/types.vue"
+  },
+  {
+   "name": "Sizes",
+   "summary": "Ring diameters of 128, 176 and 240 pixels.",
+   "file": "examples/donut-chart/sizes.vue"
+  }
+ ]
+}

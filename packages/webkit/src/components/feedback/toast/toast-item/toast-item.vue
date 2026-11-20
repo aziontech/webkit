@@ -1,23 +1,26 @@
 <script setup lang="ts">
-  import { computed, useAttrs } from 'vue'
+  import { computed, inject, useAttrs } from 'vue'
 
-  import Spinner from '../../../utils/spinner/spinner.vue'
-  import type { ToastType } from '../use-toast-store'
+  import Spinner from '../../../feedback/spinner/spinner.vue'
+  import type { ToastSeverity } from '../composables/use-toast-store'
+  import { ToastInjectionKey } from '../injection-key'
 
   defineOptions({
     name: 'ToastItem',
     inheritAttrs: false
   })
 
-  const props = withDefaults(
-    defineProps<{
-      /** Severity / lifecycle variant; drives the leading icon color. */
-      type?: ToastType
-    }>(),
-    {
-      type: 'default'
-    }
-  )
+  export interface ToastItemProps {
+    /** Colour meaning; drives the leading icon and its color. */
+    severity?: ToastSeverity
+    /** Work in progress: a spinner replaces the leading icon. */
+    loading?: boolean
+  }
+
+  const props = withDefaults(defineProps<ToastItemProps>(), {
+    severity: 'neutral',
+    loading: false
+  })
 
   defineSlots<{
     /** Title + description column. */
@@ -27,23 +30,23 @@
   }>()
 
   const attrs = useAttrs()
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'feedback-toast__item'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'toast-item')
 
-  const role = computed(() =>
-    props.type === 'error' || props.type === 'warning' ? 'alert' : 'status'
-  )
+  const inToaster = inject(ToastInjectionKey, null) !== null
 
-  const icons: Record<ToastType, string> = {
-    default: '',
-    success: 'pi pi-check',
-    info: 'pi pi-info-circle',
-    warning: 'pi pi-exclamation-triangle',
-    error: 'pi pi-exclamation-circle',
-    loading: ''
+  const role = computed(() => {
+    if (inToaster) return undefined
+    return props.severity === 'danger' ? 'alert' : 'status'
+  })
+
+  const icons: Record<ToastSeverity, string> = {
+    neutral: '',
+    success: 'az az-check',
+    info: 'az az-circle-info',
+    warning: 'az az-triangle-alert',
+    danger: 'az az-circle-alert'
   }
-  const icon = computed(() => icons[props.type])
+  const icon = computed(() => icons[props.severity])
 </script>
 
 <template>
@@ -51,33 +54,35 @@
     v-bind="$attrs"
     :role="role"
     :data-testid="testId"
-    :data-type="type"
-    class="group pointer-events-auto relative flex w-full items-start gap-(--spacing-sm) rounded-(--shape-elements) border-solid border-[length:var(--border-width-default,1px)] border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-sm) text-(--text-default) shadow-(--shadow-sm)"
+    :data-severity="severity"
+    :data-loading="loading || null"
+    :aria-busy="loading || undefined"
+    class="group pointer-events-auto relative flex w-full items-start gap-(--spacing-sm) rounded-(--shape-control) border-solid border-[length:var(--border-width-default,1px)] border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-sm) text-(--text-default) shadow-(--shadow-sm)"
   >
     <div class="flex min-w-0 flex-1 items-start gap-(--spacing-sm)">
       <span
-        v-if="type === 'loading' || icon"
+        v-if="loading || icon"
         class="flex h-[1lh] shrink-0 items-center text-label-md"
         aria-hidden="true"
       >
         <Spinner
-          v-if="type === 'loading'"
+          v-if="loading"
           class="size-4 text-(--text-muted)"
         />
         <i
           v-else
           :class="icon"
-          :data-type="type"
-          class="leading-none text-(--text-muted) data-[type=success]:text-(--success-contrast) data-[type=info]:text-(--info-contrast) data-[type=warning]:text-(--warning-contrast) data-[type=error]:text-(--danger-contrast)"
+          :data-severity="severity"
+          class="leading-none text-(--text-muted) data-[severity=success]:text-(--success-foreground) data-[severity=info]:text-(--info-foreground) data-[severity=warning]:text-(--warning-foreground) data-[severity=danger]:text-(--danger-foreground)"
         />
       </span>
-      <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs)">
+      <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-2xs)">
         <slot />
       </div>
     </div>
     <div
       v-if="$slots['trailing']"
-      class="-my-(--spacing-xxs) -mr-(--spacing-xs) flex shrink-0 items-center gap-(--spacing-xxs)"
+      class="-my-(--spacing-2xs) -me-(--spacing-xs) flex shrink-0 items-center gap-(--spacing-2xs)"
     >
       <slot name="trailing" />
     </div>

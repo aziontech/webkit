@@ -1,0 +1,47 @@
+{
+  "component": "stat-tile",
+  "title": "Components/Chart/StatTile",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Blocked threats rose 12.4 percent. A rise in threats is bad, so the tile sets inverse and the delta reads as a regression.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Deltas",
+      "summary": "A good rise, a bad rise with inverse, a flat change, and no delta at all.",
+      "file": "deltas.vue"
+    },
+    {
+      "name": "Variants",
+      "summary": "variant=\"mono\" (default) draws the big-number mono figure of a usage strip; variant=\"sans\" draws the large heading figure of a traffic summary. The unit is always smaller, muted and sans.",
+      "file": "variants.vue"
+    },
+    {
+      "name": "CountUp",
+      "summary": "Press Refresh to count the figure up from its previous value. Timer driven, so it is excluded from visual regression; Default is its static sibling. Reduced motion renders the final value at once.",
+      "file": "count-up.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "A Skeleton line holds the place of the figure and the delta.",
+      "file": "loading.vue"
+    },
+    {
+      "name": "Empty",
+      "summary": "No value for the range: a dash, announced as No value, over a muted placeholder line marked No data. Leave out the delta and the trend rather than showing a zero.",
+      "file": "empty.vue"
+    },
+    {
+      "name": "Markdown",
+      "summary": "The same data written in a docs page: `DocMarkdown` turns a `<StatTile value={48210} />` tag into a real `StatTile`. The attribute values are JSON, so a docs author copies them from the props or a page entry and never imports the component.",
+      "file": "markdown.vue"
+    },
+    {
+      "name": "Page JSON",
+      "summary": "The same data in the marketing site's page JSON: `StatTile` is a scene, so a band places it by name in its `scene` slot (here `console-showcase-section` with `variant: \"diagram\"`) and `SitePage` renders the entry with no code.",
+      "file": "page-entry.vue",
+      "json": "page-entry.json"
+    }
+  ]
+}

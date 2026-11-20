@@ -1,15 +1,4 @@
-## [4.2.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@4.1.0...@aziontech/theme@4.2.0) (2026-07-23)
-
-
-### Features
-
-* derive spec name from the Figma frame in /spec-create ([#791](https://github.com/aziontech/webkit/issues/791)) ([df59ab4](https://github.com/aziontech/webkit/commit/df59ab42c6ced1414ec0047abdfb9d5f067382ae))
-* **webkit:** overhaul EmptyState (icon tile, size-scaled type, dashed border) + Table empty state ([#786](https://github.com/aziontech/webkit/issues/786)) ([26ae5ee](https://github.com/aziontech/webkit/commit/26ae5ee6f6e878d85df5a3d9247e9936a00d405f))
-
-
-### Bug Fixes
-
-* [Inputs] normalize z-index across all inputs (ENG-46735) ([#783](https://github.com/aziontech/webkit/issues/783)) ([25d201d](https://github.com/aziontech/webkit/commit/25d201d5ae0e6054b9189bc81c76b7d9fc8c5055))
+# Changelog
 
 ## [5.2.2](https://github.com/aziontech/webkit/compare/@aziontech/theme@5.2.1...@aziontech/theme@5.2.2) (2026-11-03)
 
@@ -89,6 +78,19 @@
 * **theme:** lighten dark interaction overlays and unify the info border ([#855](https://github.com/aziontech/webkit/issues/855)) ([c5a4e6f](https://github.com/aziontech/webkit/commit/c5a4e6fa08dd4ae065d2c57443fcb2f9bda0da96))
 * **theme:** use gray.500 for text-muted in both light and dark ([#840](https://github.com/aziontech/webkit/issues/840)) ([33cf2b8](https://github.com/aziontech/webkit/commit/33cf2b875bd6e7a28a917663dd8933cf8f7a8f2c))
 * use @aziontech/theme/animations imports; move vue-tsc to devDependencies ([b3795d2](https://github.com/aziontech/webkit/commit/b3795d2f4b9de580d4175fb2b870b959ceefaf69))
+
+## [4.2.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@4.1.0...@aziontech/theme@4.2.0) (2026-07-23)
+
+
+### Features
+
+* derive spec name from the Figma frame in /spec-create ([#791](https://github.com/aziontech/webkit/issues/791)) ([df59ab4](https://github.com/aziontech/webkit/commit/df59ab42c6ced1414ec0047abdfb9d5f067382ae))
+* **webkit:** overhaul EmptyState (icon tile, size-scaled type, dashed border) + Table empty state ([#786](https://github.com/aziontech/webkit/issues/786)) ([26ae5ee](https://github.com/aziontech/webkit/commit/26ae5ee6f6e878d85df5a3d9247e9936a00d405f))
+
+
+### Bug Fixes
+
+* [Inputs] normalize z-index across all inputs (ENG-46735) ([#783](https://github.com/aziontech/webkit/issues/783)) ([25d201d](https://github.com/aziontech/webkit/commit/25d201d5ae0e6054b9189bc81c76b7d9fc8c5055))
 
 ## [4.1.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@4.0.0...@aziontech/theme@4.1.0) (2026-07-23)
 

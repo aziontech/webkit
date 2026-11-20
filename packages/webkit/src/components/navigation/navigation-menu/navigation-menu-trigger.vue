@@ -1,55 +1,31 @@
 <script setup lang="ts">
+  import { computed, onMounted, onUnmounted, ref, useAttrs, watch } from 'vue'
+
+  import { cn } from '../../../utils/cn'
+  import { safeHref } from '../../../utils/safe-href'
   import {
-    computed,
-    type ComputedRef,
-    inject,
-    onMounted,
-    onUnmounted,
-    ref,
-    useAttrs,
-    watch
-  } from 'vue'
-
-  import { resolveHostElement } from './composables/resolve-host-element.js'
-  import {
-    NAVIGATION_MENU_ITEM_KEY,
-    useNavigationMenuRoot
-  } from './composables/use-navigation-menu-context.js'
-  import { useNavigationMenuListHighlight } from './composables/use-navigation-menu-list-highlight-context.js'
-  import { createChangeEventDetails } from './composables/use-navigation-menu-root.js'
-  import { getNavigationMenuTriggerClasses } from './presets/styles'
-
-  interface NavigationMenuItemContext {
-    itemValue: ComputedRef<string | number>
-    open: ComputedRef<boolean>
-  }
-
-  interface NavigationMenuListHighlightContext {
-    setTarget: (element: HTMLElement | null) => void
-    handleTargetPointerLeave: (event: globalThis.Event, element: HTMLElement | null) => void
-  }
+    useNavigationMenuContext,
+    useOptionalNavigationMenuItemContext
+  } from './composables/use-navigation-menu-context'
+  import { useNavigationMenuListHighlightContext } from './composables/use-navigation-menu-list-highlight-context'
+  import { createChangeEventDetails } from './composables/use-navigation-menu-root'
+  import { resolveHostElement } from './lib/host-element'
 
   defineOptions({ name: 'NavigationMenuTrigger', inheritAttrs: false })
 
-  interface Props {
+  export interface NavigationMenuTriggerProps {
     /** Renders as a plain link when set. */
     href?: string
     /** Marks the link as the current page. */
     active?: boolean
     /** Closes the menu when the link is clicked. */
     closeOnClick?: boolean
-    /** Uses a native button element when not a link. */
-    nativeButton?: boolean
-    /** Polymorphic control element. */
-    as?: string | object
   }
 
-  const props = withDefaults(defineProps<Props>(), {
-    href: undefined,
+  const props = withDefaults(defineProps<NavigationMenuTriggerProps>(), {
+    href: '',
     active: false,
-    closeOnClick: false,
-    nativeButton: true,
-    as: undefined
+    closeOnClick: false
   })
 
   defineSlots<{ default(): unknown }>()
@@ -61,37 +37,34 @@
     return rest
   })
   const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'navigation-menu__trigger'
+    () => (attrs['data-testid'] as string | undefined) ?? 'navigation-menu-trigger'
   )
 
-  const root = useNavigationMenuRoot()
-  const listHighlight =
-    useNavigationMenuListHighlight() as NavigationMenuListHighlightContext | null
-  const itemContext = inject(NAVIGATION_MENU_ITEM_KEY, null) as NavigationMenuItemContext | null
-  const controlRef = ref<HTMLElement | null>(null)
+  const root = useNavigationMenuContext()
+  const listHighlight = useNavigationMenuListHighlightContext()
+  const itemContext = useOptionalNavigationMenuItemContext()
+  const controlEl = ref<HTMLElement | null>(null)
 
-  const isLink = computed(() => props.href != null && props.href !== '')
+  const isLink = computed(() => props.href !== '')
 
   const itemOpen = computed(() => itemContext?.open.value ?? false)
   const itemValueResolved = computed(() => itemContext?.itemValue.value ?? '')
-
-  const componentTag = computed(() => {
-    if (props.as) {
-      return props.as
-    }
-
-    if (isLink.value) {
-      return 'a'
-    }
-
-    return props.nativeButton ? 'button' : 'div'
-  })
-
-  const controlClasses = computed(() =>
-    getNavigationMenuTriggerClasses(isLink.value, attrs.class as string | undefined)
+  const controlsId = computed(() =>
+    !isLink.value && itemOpen.value ? itemContext?.contentId : undefined
   )
 
-  const resolveElement = () => resolveHostElement(controlRef.value)
+  const componentTag = computed(() => (isLink.value ? 'a' : 'button'))
+
+  const ROOT_CLASS =
+    'relative z-1 inline-flex cursor-pointer items-center gap-(--spacing-xs) ' +
+    'rounded-(--shape-button) bg-transparent px-(--spacing-sm) py-(--spacing-xs) ' +
+    'no-underline transition-colors duration-moderate-02 ease-in-out motion-reduce:transition-none ' +
+    'text-label-md text-(--text-default) ' +
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) ' +
+    'focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) ' +
+    'data-[popup-open]:text-(--text-default) data-[pressed]:text-(--text-default) data-[active]:text-(--text-default)'
+
+  const resolveElement = () => resolveHostElement(controlEl.value)
 
   const syncHighlight = () => {
     if (isLink.value && props.active) {
@@ -121,7 +94,7 @@
     }
   }
 
-  const onPointerEnter = (event: globalThis.PointerEvent) => {
+  const onPointerenter = (event: globalThis.PointerEvent) => {
     listHighlight?.setTarget(resolveElement())
 
     if (isLink.value) {
@@ -136,8 +109,8 @@
     )
   }
 
-  const onPointerLeave = (event: globalThis.PointerEvent) => {
-    listHighlight?.handleTargetPointerLeave(event, resolveElement())
+  const onPointerleave = (event: globalThis.PointerEvent) => {
+    listHighlight?.onTargetPointerleave(event, resolveElement())
 
     if (isLink.value) {
       return
@@ -187,7 +160,7 @@
     syncHighlight()
   })
 
-  watch(controlRef, syncTriggerRegistration)
+  watch(controlEl, syncTriggerRegistration)
   watch(() => props.active, syncHighlight)
 
   watch(itemOpen, (open) => {
@@ -206,23 +179,32 @@
 <template>
   <component
     :is="componentTag"
-    ref="controlRef"
+    ref="controlEl"
     v-bind="passthroughAttrs"
-    :href="isLink ? href : undefined"
-    :type="!isLink && nativeButton ? 'button' : undefined"
-    :class="controlClasses"
+    :href="isLink ? (safeHref(href) ?? undefined) : undefined"
+    :type="isLink ? undefined : 'button'"
+    :class="cn(ROOT_CLASS, attrs.class as string | undefined)"
     :data-testid="testId"
     :aria-expanded="!isLink ? itemOpen : undefined"
-    :aria-haspopup="!isLink ? true : undefined"
+    :aria-controls="controlsId"
     :aria-current="isLink && active ? 'page' : undefined"
     :data-active="isLink && active ? '' : undefined"
     :data-popup-open="!isLink && itemOpen ? '' : undefined"
     :data-pressed="!isLink && itemOpen ? '' : undefined"
-    @pointerenter="onPointerEnter"
-    @pointerleave="onPointerLeave"
+    @pointerenter="onPointerenter"
+    @pointerleave="onPointerleave"
     @click="onClick"
     @keydown="onKeydown"
   >
     <slot />
+    <span
+      v-if="!isLink"
+      class="inline-flex transition-[rotate] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none data-[state=open]:rotate-180"
+      aria-hidden="true"
+      data-testid="navigation-menu__icon"
+      :data-state="itemOpen ? 'open' : 'closed'"
+    >
+      <i class="az az-chevron-down" />
+    </span>
   </component>
 </template>

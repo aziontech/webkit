@@ -1,0 +1,453 @@
+# Console Layout
+
+> The console chrome, composed once in the app: `AppLayout` with the navigation rail (`Sidebar` + `SidebarMenu`, the brand on top and the account at the foot), the global header (breadcrumbs, `SearchTrigger`, the app's own actions and the account avatar) and the `Command` search palette wired to the trigger and to ⌘K / Ctrl K. The navigation is data (`navigation`, each row with an `href` that is followed with the app's router when it is an in-app path), the active row follows the current route, and the page body is the default slot inside the layout's `<main>`. A page opens the palette with `useConsoleLayout().openSearch()`, sets its own trail with `ConsoleLayout.Breadcrumb`, and fills a fixed-height main with `data-layout-fill` on its root. Platform blocks are only page bodies rendered through this slot; they never carry the chrome themselves.
+
+- Import: `import ConsoleLayoutRoot from '@aziontech/webkit/console-layout-root'`
+- Compound import (dot notation, not tree-shakeable): `import ConsoleLayout from '@aziontech/webkit/console-layout'`
+- Category: layout · Surface: app · Structure: composition
+- API as JSON: [console-layout.json](console-layout.json)
+
+## When to use
+
+- Use ConsoleLayout once at the app root of the Azion console; every page is its body.
+- Every signed-in console page: put one `ConsoleLayout` in the app's root (around `RouterView`) and render each page block as its default slot.
+- A product area that needs the console navigation, breadcrumbs, the ⌘K palette and the account menu without hand-composing `AppLayout`, `Sidebar`, `SidebarMenu`, `AppHeader`, `SearchTrigger` and `Command`.
+
+## Do
+
+- Compose the layout once, in the app's root, around `RouterView`; each route renders only its page body. Never copy the chrome into a page.
+- Give every navigation row an `id` and an `href`: an in-app path (`/workloads`) is followed with the app's router when one is installed (a named route becomes a path through `router.resolve(...).href`), an external URL loads normally, and a row with no `href` is left to your `navigate` handler. Never `to`, `path` or `route` on a row (lint `webkit/prefer-href-in-menu-node`). Leave `activeId` empty so the active row follows the route; set it only for a page whose route matches no row.
+- Pass a static trail through `breadcrumbs` (derive it from the route meta); leave it empty on first-level pages.
+- A page that owns its trail (a loaded name, a control crumb) renders `ConsoleLayout.Breadcrumb`: `items` are the crumbs, the default slot the trailing controls (a `Select` with `variant="ghost"`, `size="small"`, an `aria-label`, no `w-full`). It replaces the layout's trail while the page is mounted and renders nothing in place. While compact the crumbs are hidden, but the controls stay in the header in place of the brand, so a phone user always sees and can switch the environment.
+- Put the app's own header actions (`Create`, `Agent`) in the `actions` slot and render them icon-only while `compact`.
+- Put the account menu groups (`DropdownMenu.Group`) in the `account-menu` slot; the layout renders the avatar and the trigger.
+- Put an account switcher in `sidebar-header` (full width under the wordmark, the design sample's rail) and, below the compact breakpoint, in `header-leading` while `compact`; page-level flash messages go in `notifications`, and help or the notifications list in `tools` (toggled from a bell in `actions` with `toggleTools`).
+- A page's control crumb is its `ConsoleLayout.Breadcrumb`, never `App.vue`'s `breadcrumbs` slot.
+- A workspace page (editor, pinned panes) puts `data-layout-fill` on its root: the `<main>` becomes a fixed-height, non-scrolling region the root fills. Never size a body with `100dvh` or `calc(100dvh - var(--layout-header-height))` (lint `webkit/no-viewport-height-calc`, also run by the authoring ratchet over blocks and examples).
+- Bind `v-model:navigation-open` when the rail's state must survive a reload or be driven from elsewhere (a `Collapse sidebar` / `Expand sidebar` command in the `search` slot); persist it in the app. The rail's own collapse control and the edge affordance keep working either way.
+- Open the palette from inside a page with `useConsoleLayout().openSearch()` (imported from `@aziontech/webkit/use-console-layout`); never mount a second `Command`. `useConsoleLayout()` throws outside a `ConsoleLayout`, so a misplaced call fails loudly.
+- A page body that also renders on its own (a block preview, a docs example, a test) calls `useConsoleLayout({ optional: true })`, which returns `null` outside a layout, and guards the call (`layout?.openSearch()`). Never wrap `useConsoleLayout()` in `try` / `catch`.
+- The page entrance (`animate-page-enter`) plays on every route path change: the `<main>` is keyed on the path, so the page body remounts when the path changes and is kept when only the query or the hash changes. Keep state that must survive a path change (a list filter, a draft) in the route query or in the app's store, not in the page body; a `KeepAlive` belongs inside a page body (tabbed views), not around `RouterView`.
+- The page body renders no `<main>` of its own and no `AppLayout`: the layout owns the landmark. Frame the body with `layout-boundary` + `layout-column` for list and form pages, or flush (`PageTabs` first) for detail pages.
+- A destination appears once per screen (rule `webkit-navigation-levels`): never render a `SidebarMenu` in the page body: page navigation lives in the rail and a page has only its `PageTabs`. The rail holds two levels at most: a product with 3 or fewer resources lists them on level 1, a product with more is a drill row whose level lists them, and no drill level nests another. In development builds the layout scans the `SidebarMenu`s in its `<main>` after mount, on each route change and on page mutations, and when a row `href` has the same path (query and hash ignored) as a `navigation` row on screen (the top level, its inline children and the open drill level; a closed drill level is not on screen), it calls `console.warn` once per route with both labels and the route. Production builds drop the check (`import.meta.env.DEV`).
+
+## Don’t
+
+- A focused flow with no navigation rail (a creation wizard, sign-in) → render the page on its own or with the flow's own header.
+- Public marketing pages → `SiteLayout`. Documentation → `DocLayout`.
+- When the page needs the split panel → compose `AppLayout` directly; `ConsoleLayout` covers the navigation, header, notifications, tools and content regions.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- `AppLayout` — the frame this layout fills; it owns the compact drawers and the scrolling content region.
+- `Sidebar`, `SidebarMenu` — the rail and the data-driven navigation tree (`navigation` is mapped onto `SidebarMenu` groups).
+- `SearchTrigger`, `Command` — the header search and the palette it opens; the palette lists every navigation page.
+- `Breadcrumb` — the header trail on wide layouts (`breadcrumbs`); while compact, only a page's control crumbs.
+- `shell/shell-console` — the block that shows this layout with sample console navigation.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `navigation` | `ConsoleLayoutNavGroup[]` | `[]` | false | The navigation tree: groups of rows, each `{ id, label, icon?, href?, tagValue?, disabled?, kind?, children?, groups? }`; an in-app `href` is followed with the app's router. |
+| `activeId` | `string` | `''` | false | Id of the current row. Empty matches the current route against each row's `href`. |
+| `breadcrumbs` | `BreadcrumbItemData[]` | `[]` | false | The trail shown in the header on wide layouts (hidden while compact); each is `{ label, href? }` and the last one is the current page. |
+| `home` | `string` | `'/'` | false | Where the brand mark links. |
+| `account` | `ConsoleLayoutAccount` | `undefined` | false | The signed-in account, `{ name, email?, src? }`, shown at the foot of the rail and as the header avatar; nothing is rendered when absent. |
+| `ariaLabel` | `string` | `''` | false | Accessible name of the navigation landmark. Empty uses the locale catalog (`Main navigation`). |
+| `searchPlaceholder` | `string` | `''` | false | Placeholder of the palette's input. Empty uses the locale catalog (`Search pages and commands`). |
+| `toolsLabel` | `string` | `''` | false | Title of the tools region (help, notifications). Empty uses `AppLayout`'s catalog (`Help`). |
+| `searchOpen` | `boolean` | `false` | false | Two-way value (`v-model:searchOpen`). |
+| `toolsOpen` | `boolean` | `false` | false | Two-way value (`v-model:toolsOpen`). |
+| `navigationOpen` | `boolean` | `true` | false | Two-way value (`v-model:navigationOpen`). |
+
+## Events
+
+| Event | Payload | Notes |
+| --- | --- | --- |
+| `navigate` | `(event: MouseEvent \| KeyboardEvent, item: ConsoleLayoutNavItem)` | Fired when a navigation row or a palette page is chosen; the layout then follows its `href` (an in-app path with the app's router). A row without `href` is left to this handler. Event first. |
+| `search-select` | `(event: MouseEvent \| KeyboardEvent, value: string \| number)` | Fired when a palette item from the `search` slot is chosen; `value` is that item's value. Event first. |
+| `account-select` | `(event: MouseEvent \| KeyboardEvent, value: string \| number)` | Fired when an option of the `account-menu` slot is chosen, by click or by keyboard (`Enter` / `Space`), from the rail footer or the header avatar; `value` is the option's `value`. Event first. |
+
+## Slots
+
+| Slot | Scope | Notes |
+| --- | --- | --- |
+| `default` | — | The page body, rendered inside the layout's `<main>`; a body whose root carries `data-layout-fill` fills a fixed-height, non-scrolling main. |
+| `actions` | { compact: boolean, toggleTools: () => void } | The app's header actions, between the search trigger and the avatar; render them icon-only while `compact`; `toggleTools` opens and closes the tools region (a notifications bell). |
+| `header-leading` | { compact: boolean } | Content at the start of the header, before the breadcrumbs (an account or organization switcher). |
+| `sidebar-header` | { compact: boolean } | Content in the rail under the wordmark, above the navigation (a full-width account or organization switcher); `compact` is true when the rail is the compact drawer (render nothing there to keep the switcher in `header-leading`). Rendered only when given; a region whose slot renders nothing (a false `v-if`) is hidden. |
+| `breadcrumbs` | — | An app-wide composed trail that replaces the one built from `breadcrumbs`; a page's `ConsoleLayout.Breadcrumb` replaces both; hidden while compact. |
+| `notifications` | — | Flash messages (`Alert`) above the page, kept in view while the page scrolls. |
+| `tools` | — | The tools region's body (a `HelpPanel` or the notifications list), opened with `v-model:tools-open`. |
+| `search` | { query: string } | Extra `Command.Group`s (recent resources, commands) listed before the navigation pages in the palette. |
+| `account-menu` | — | `DropdownMenu.Group`s of the account menu, opened from the account row in the rail and from the header avatar; a chosen option is reported by `account-select`. |
+
+## Sub-component imports
+
+- `@aziontech/webkit/console-layout-breadcrumb`
+
+## Sub-components
+
+The root ships a compound API via `index.ts` (`Object.assign` attaches the part; vue-tsc emits `index.d.ts`), and `index.ts` re-exports the root's types (`ConsoleLayoutNavGroup`, `ConsoleLayoutNavItem`, `BreadcrumbItemData`, `ConsoleLayoutAccount`). Root binding is PascalCase `ConsoleLayout`.
+
+```
+packages/webkit/src/components/layout/console-layout/
+├── console-layout.vue          (root — the chrome, provides the context)
+├── index.ts                    (compound Object.assign)
+├── injection-key.ts            (the page context and the trail registry)
+├── composables/use-console-layout.ts
+├── console-layout.test.ts
+└── console-layout-breadcrumb/console-layout-breadcrumb.vue
+```
+
+- `console-layout-breadcrumb/console-layout-breadcrumb.vue` — a page's own trail. Renders nothing in place; registers with the layout on mount and `KeepAlive` activation, unregisters on unmount and deactivation; the latest wins and replaces the layout's `breadcrumbs` prop and slot. Does nothing outside a `ConsoleLayout`. Crumbs are followed with the app's router.
+  - Props: `items: BreadcrumbItemData[]` default `[]` — the page's crumbs, each `{ label, href? }`; without a control crumb the last one is the current page.
+  - Events: _none_ (crumb clicks are followed by the layout).
+  - Slots: `default` — one or more controls that end the trail (a `Select` with `variant="ghost"`, `size="small"` and an `aria-label`); each top-level element is its own crumb (environment then version: two `Select`s); they keep the page's reactivity.
+
+## v-model
+
+| Model                     | Type      | Default | Emits                   | Notes                                                                                                                                                                                                                                                                                      |
+| ------------------------- | --------- | ------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `v-model:search-open`     | `boolean` | `false` | `update:searchOpen`     | Whether the search palette is open; the trigger, ⌘K / Ctrl K and `openSearch()` set it.                                                                                                                                                                                                    |
+| `v-model:tools-open`      | `boolean` | `false` | `update:toolsOpen`      | Whether the tools region (help or notifications) is open beside the content; a drawer while compact.                                                                                                                                                                                       |
+| `v-model:navigation-open` | `boolean` | `true`  | `update:navigationOpen` | Whether the navigation rail is shown on wide layouts; `false` collapses it (the Sidebar's `open`). The rail's collapse control, its edge affordance and ⌘B / Ctrl B all write it. It has no effect while compact, where the rail is a drawer. Same name as `AppLayout`'s `navigationOpen`. |
+
+## States
+
+- Visual states: `default`, `compact` (from `AppLayout`: the rail becomes a drawer opened from the header, the breadcrumbs give way to the brand; when the page trail has control crumbs, they take the brand's place as a trail of their own, `__page-control`, and the brand stays in the navigation drawer), the palette `open` / `closed`.
+- `data-compact` and `data-navigation` come from `AppLayout` on the inner frame.
+- Fill: a direct child of the `<main>` with `data-layout-fill` makes the main `h-full overflow-hidden` and the child `flex-1 min-h-0`; pure CSS, right in the server render.
+- Page entrance: the `<main>` is keyed on the current route path (the router's `currentRoute.path`, or `location.pathname` on `popstate` without a router); a path change replaces the main and remounts the page body, so `animate-page-enter` replays. The first path read after mount (no router) and a change of only the query or the hash keep the main.
+- Page trail: registered on mount, so the server render shows the layout's trail and the page trail replaces it after hydration (no mismatch); use `breadcrumbs` when the first server paint must show it.
+- Unsafe `href` on a navigation row, crumb, section or palette page (`javascript:`, `data:`, any non-web scheme, `//host`): the row renders with no link and choosing it, by pointer or keyboard, follows nothing; `navigate` still fires, so the handler decides.
+- Active navigation row: `SidebarMenu`'s `activeId`; a row inside a drill level opens that level, a row inside an inline row expands it. On mount, when the rail (or the compact drawer) is rendered and whenever the active row changes, the rail's own scroller scrolls the minimum needed to bring the row into view, honouring the scroller's `scroll-padding` (the `ScrollArea` fade), with an instant jump (no smooth scroll); the page never scrolls.
+- Rail header: the `sidebar-header` region sits under the wordmark with `--spacing-md` padding; it collapses with CSS (`:empty`) when the slot renders only a false `v-if`, so the server render and the client agree.
+- Not applicable: `loading`, `empty`, `error`, `disabled`, `readonly`, `invalid` (the page body owns its states).
+
+## Accessibility
+
+- Landmarks: the rail is the `Sidebar` `<nav>` named by `ariaLabel`; the header is `AppHeader` (`<header>`); the page body is inside the layout's single `<main>`. A page body must not render a second `<main>`.
+- Skip link: the first `Tab` stop is the `SkipLink` `AppLayout` renders (`Skip to content`); it jumps past the rail and the header to the content region that holds the `<main>`.
+- Keyboard map: `Tab` runs skip link → rail (wordmark, `sidebar-header`, navigation) → header → page; `⌘K` / `Ctrl K` opens the palette (owned by `Command`); on wide layouts `⌘B` / `Ctrl B` toggles the rail and writes `v-model:navigation-open` (the Sidebar's `shortcut`, off while compact and while typing in a field); in the palette `ArrowUp` / `ArrowDown` move, `Enter` chooses, `Escape` closes and returns focus. `?` (`Shift /`) opens the layout's one `ShortcutsDialog`, which lists every shortcut the current screen registers with `useShortcuts` (`@aziontech/webkit/use-shortcuts`); the layout lists `⌘K` there (`consoleLayout.searchShortcut`) without binding it a second time (`Command` owns the key). The app does not mount a second `ShortcutsDialog` under the layout. Tests: `console-layout.test.ts` › shortcuts list. The rail keyboard map is `SidebarMenu`'s; the compact drawer closes on `Escape` and returns focus to the hamburger (`AppLayout`).
+- Names: the compact hamburger (`Open navigation`), the brand link (`Azion home`), the rail account trigger (`Account menu`, an icon button) come from the locale catalog; the avatar carries the account name. The header avatar trigger shows the initials, so its name starts with them (`JD, account menu`, `consoleLayout.accountMenuFor`) to meet WCAG 2.5.3 Label in Name (a speech user says what they see); with an account image it has no visible text and is named `Account menu`.
+- Account menu: choosing an option by pointer or keyboard emits `account-select`; the keyboard map inside the menu is `DropdownMenu`'s.
+- Visible focus: every interactive part is a WebKit control with its own ring; the brand link and the avatar button use `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
+- Choosing a row in the compact drawer closes it.
+- A page's control crumb is the last item of the header's `Breadcrumb` list (while compact, the only items of a `Breadcrumb` list that holds just the controls); it carries its own accessible name (`aria-label` on `Select.Trigger`, e.g. `Switch environment`).
+
+## Right-to-left
+
+- Layout: logical utilities only; the rail sits at the inline start and `AppLayout` mirrors the drawer side.
+- `sidebar-header` spans the rail's inline size with symmetric `--spacing-md` padding, so it needs no mirroring.
+- Icons: the breadcrumb separator and `SidebarMenu.Back` mirror through their own components; the brand and avatar are not mirrored.
+- Keyboard: arrow handling is `SidebarMenu`'s and `Command`'s, both direction-aware.
+- User data: labels render with `dir="auto"` inside `SidebarMenu`, `Breadcrumb` and `Command`.
+
+## Internationalization
+
+| Key                               | English source                            | Override prop       |
+| --------------------------------- | ----------------------------------------- | ------------------- |
+| `consoleLayout.navigation`        | `Main navigation`                         | `ariaLabel`         |
+| `consoleLayout.home`              | `Azion home`                              | —                   |
+| `consoleLayout.openNavigation`    | `Open navigation`                         | —                   |
+| `consoleLayout.accountMenu`       | `Account menu`                            | —                   |
+| `consoleLayout.accountMenuFor`    | `{initials}, account menu`                | —                   |
+| `consoleLayout.searchPlaceholder` | `Search pages and commands`               | `searchPlaceholder` |
+| `consoleLayout.noMatch`           | `No page or command matches your search.` | —                   |
+| `consoleLayout.pages`             | `Pages`                                   | —                   |
+| `consoleLayout.searchShortcut`    | `Search pages and commands`               | —                   |
+
+- Formatting: none. Navigation, breadcrumb and account text is consumer data.
+
+## Responsive
+
+- Container queries: `AppLayout` measures its own width; below its `compactBelow` the rail is a drawer and the header shows the hamburger and the brand instead of the breadcrumbs; a page's control crumbs (the environment `Select`) stay, in place of the brand. The header bar is an `@container`, so `SearchTrigger collapsible` folds to the magnifier on narrow headers.
+- Narrow: the `actions` slot receives `compact` so the app renders icon-only actions; the breadcrumb truncates only when the header runs out of room (its wrapper alone pulls the trail to the start edge, and the `Breadcrumb` inside drops its own negative start margin, so a trail that fits is never cut short); while compact the crumbs are hidden and the page's control crumbs stay, so the environment is never lost on a phone. Below the header's `@xs` (a 320 px phone) the header drops the brand mark and keeps the hamburger, so `header-leading` and the actions fit; the brand stays in the navigation drawer.
+- Rail header: `sidebar-header` sits under the wordmark at the rail's width; it is hidden with the rest of the rail content when the rail collapses, and in the compact drawer it renders with `compact: true`.
+- Touch: hamburger and avatar keep the 32 px controls of `IconButton` / `Avatar` and grow on coarse pointers through those components.
+- Reflow: no horizontal scroll at 320 px; the page body scrolls inside `AppLayout`'s content region.
+
+## Examples
+
+### Default
+
+```vue
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import Command from '@aziontech/webkit/command'
+  import ConsoleLayoutRoot, {
+    type ConsoleLayoutNavGroup
+  } from '@aziontech/webkit/console-layout-root'
+  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
+  import EmptyState from '@aziontech/webkit/empty-state'
+  import HighlightButton from '@aziontech/webkit/highlight-button'
+  import IconButton from '@aziontech/webkit/icon-button'
+  import PageHeader from '@aziontech/webkit/page-header'
+  import Tooltip from '@aziontech/webkit/tooltip'
+  import { ref } from 'vue'
+
+  const navigation: ConsoleLayoutNavGroup[] = [
+    {
+      items: [
+        { id: 'overview', label: 'Overview', icon: 'az az-home', href: '/' },
+        { id: 'workloads', label: 'Workloads', icon: 'az az-workloads', href: '/workloads' }
+      ]
+    },
+    {
+      label: 'Build',
+      items: [
+        {
+          id: 'applications',
+          label: 'Applications',
+          icon: 'az az-applications',
+          href: '/applications'
+        },
+        { id: 'functions', label: 'Functions', icon: 'az az-functions', href: '/functions' }
+      ]
+    },
+    {
+      label: 'Store',
+      items: [
+        {
+          id: 'sql-database',
+          label: 'SQL Database',
+          icon: 'az az-sql-database',
+          href: '/sql-database',
+          tagValue: 'Preview'
+        }
+      ]
+    },
+    {
+      label: 'More',
+      items: [
+        {
+          id: 'settings',
+          label: 'Settings',
+          icon: 'az az-settings',
+          type: 'drill',
+          groups: [
+            {
+              label: 'Settings',
+              items: [
+                { id: 'settings-general', label: 'General', href: '/settings' },
+                { id: 'settings-users', label: 'Users management', href: '/settings/users' }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+
+  const accountAction = ref('')
+
+  const onAccountSelect = (_event: MouseEvent | KeyboardEvent, value: string | number) => {
+    accountAction.value =
+      value === 'logout' ? 'Signing out of Acme Inc.' : 'Opening account settings'
+  }
+</script>
+
+<template>
+  <ConsoleLayoutRoot
+    :navigation="navigation"
+    :breadcrumbs="[{ label: 'Workloads', href: '/workloads' }, { label: 'edge-shop' }]"
+    :account="{ name: 'Jane Doe', email: 'jane.doe@example.com' }"
+    active-id="workloads"
+    @account-select="onAccountSelect"
+  >
+    <template #actions="{ compact }">
+      <Tooltip
+        v-if="compact"
+        content="Create"
+        side="bottom"
+      >
+        <IconButton
+          icon="az az-circle-plus"
+          variant="primary"
+          size="medium"
+          aria-label="Create"
+        />
+      </Tooltip>
+      <template v-else>
+        <Button
+          label="Create"
+          variant="primary"
+          size="medium"
+          icon="az az-circle-plus"
+        />
+        <HighlightButton
+          label="Agent"
+          size="medium"
+          icon="az az-ask-azion"
+        />
+      </template>
+    </template>
+
+    <template #search="{ query }">
+      <Command.Group
+        v-if="!query"
+        label="Recents"
+      >
+        <Command.Item value="recent:edge-shop">edge-shop</Command.Item>
+        <Command.Item value="recent:auth-handler">auth-handler</Command.Item>
+      </Command.Group>
+    </template>
+
+    <template #account-menu>
+      <DropdownMenu.Group>
+        <DropdownMenu.Item
+          value="settings"
+          label="Account settings"
+        />
+        <DropdownMenu.Item
+          value="logout"
+          label="Log out"
+        />
+      </DropdownMenu.Group>
+    </template>
+
+    <div class="layout-boundary">
+      <div class="layout-column flex flex-col gap-(--layout-group-gap)">
+        <PageHeader
+          title="edge-shop"
+          description="The workload that serves the storefront."
+        />
+        <p
+          v-if="accountAction"
+          role="status"
+          class="text-body-sm text-(--text-muted)"
+        >
+          {{ accountAction }}
+        </p>
+        <EmptyState
+          title="No deployments yet"
+          description="Deploy the workload to see its history here."
+        />
+      </div>
+    </div>
+  </ConsoleLayoutRoot>
+</template>
+```
+
+### PageOpensSearch
+
+```vue
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import ConsoleLayoutRoot, {
+    type ConsoleLayoutNavGroup
+  } from '@aziontech/webkit/console-layout-root'
+  import PageHeader from '@aziontech/webkit/page-header'
+  import { useConsoleLayout } from '@aziontech/webkit/use-console-layout'
+  import { defineComponent, h } from 'vue'
+
+  const navigation: ConsoleLayoutNavGroup[] = [
+    {
+      items: [
+        { id: 'overview', label: 'Overview', icon: 'az az-home', href: '/' },
+        { id: 'workloads', label: 'Workloads', icon: 'az az-workloads', href: '/workloads' },
+        { id: 'functions', label: 'Functions', icon: 'az az-functions', href: '/functions' }
+      ]
+    }
+  ]
+
+  const FindWorkload = defineComponent({
+    name: 'FindWorkload',
+    setup() {
+      const { openSearch } = useConsoleLayout()
+      return () =>
+        h(Button, {
+          label: 'Find a workload',
+          icon: 'az az-search',
+          variant: 'outline',
+          size: 'medium',
+          onClick: openSearch
+        })
+    }
+  })
+</script>
+
+<template>
+  <ConsoleLayoutRoot
+    :navigation="navigation"
+    active-id="workloads"
+  >
+    <div class="layout-boundary">
+      <div class="layout-column flex flex-col gap-(--layout-group-gap)">
+        <PageHeader
+          title="Workloads"
+          description="Open the same palette as the header search, from the page."
+        >
+          <template #actions>
+            <FindWorkload />
+          </template>
+        </PageHeader>
+      </div>
+    </div>
+  </ConsoleLayoutRoot>
+</template>
+```
+
+### NavigationOpen
+
+```vue
+<script setup lang="ts">
+  import Command from '@aziontech/webkit/command'
+  import ConsoleLayoutRoot, {
+    type ConsoleLayoutNavGroup
+  } from '@aziontech/webkit/console-layout-root'
+  import PageHeader from '@aziontech/webkit/page-header'
+  import { ref } from 'vue'
+
+  const navigation: ConsoleLayoutNavGroup[] = [
+    {
+      items: [
+        { id: 'overview', label: 'Overview', icon: 'az az-home', href: '/' },
+        { id: 'workloads', label: 'Workloads', icon: 'az az-workloads', href: '/workloads' },
+        { id: 'functions', label: 'Functions', icon: 'az az-functions', href: '/functions' }
+      ]
+    }
+  ]
+
+  const navigationOpen = ref(true)
+
+  const onSearchSelect = (_event: MouseEvent | KeyboardEvent, value: string | number) => {
+    if (value === 'action:sidebar') navigationOpen.value = !navigationOpen.value
+  }
+</script>
+
+<template>
+  <ConsoleLayoutRoot
+    v-model:navigation-open="navigationOpen"
+    :navigation="navigation"
+    active-id="workloads"
+    @search-select="onSearchSelect"
+  >
+    <template #search>
+      <Command.Group label="Actions">
+        <Command.Item value="action:sidebar">
+          <template #leading>
+            <i
+              :class="navigationOpen ? 'az az-chevrons-left' : 'az az-chevrons-right'"
+              aria-hidden="true"
+            />
+          </template>
+          {{ navigationOpen ? 'Collapse sidebar' : 'Expand sidebar' }}
+        </Command.Item>
+      </Command.Group>
+    </template>
+
+    <div class="layout-boundary">
+      <div class="layout-column">
+        <PageHeader
+          title="Workloads"
+          description="Press ⌘K or Ctrl K and choose Collapse sidebar to fold the rail."
+        />
+      </div>
+    </div>
+  </ConsoleLayoutRoot>
+</template>
+```

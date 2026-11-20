@@ -1,12 +1,12 @@
-import { render } from '@testing-library/vue'
+import { render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
-import { defineComponent, h, provide } from 'vue'
+import { defineComponent, h, nextTick, provide, ref } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import { DrawerPanelScrollInjectionKey } from '../drawer/injection-key'
 import type { PanelSize } from './injection-key'
 import Panel from './panel.vue'
-import PanelContent from './panel-content.vue'
+import PanelBody from './panel-body.vue'
 import PanelFooter from './panel-footer.vue'
 import PanelHeader from './panel-header.vue'
 
@@ -20,16 +20,16 @@ import PanelHeader from './panel-header.vue'
 /** Realistic composed tree: shell + all three regions with real slot content. */
 const composed = (props: Record<string, unknown> = {}, testId?: string) =>
   defineComponent({
-    components: { Panel, PanelHeader, PanelContent, PanelFooter },
+    components: { Panel, PanelHeader, PanelBody, PanelFooter },
     setup: () => ({ props, testId }),
     template: `
       <Panel v-bind="props" :data-testid="testId">
         <PanelHeader>
           <h2>Edit domain</h2>
         </PanelHeader>
-        <PanelContent>
+        <PanelBody>
           <p>Adjust the domain configuration below.</p>
-        </PanelContent>
+        </PanelBody>
         <PanelFooter>
           <button type="button">Cancel</button>
           <button type="button">Save</button>
@@ -44,7 +44,7 @@ describe('Panel', () => {
       slots: { default: () => h('span', 'shell body') }
     })
 
-    const root = getByTestId('overlay-panel')
+    const root = getByTestId('panel')
     expect(root.tagName).toBe('DIV')
     expect(getByText('shell body')).toBeTruthy()
     // Shell owns no dialog semantics — no role/aria-modal/data-state.
@@ -55,9 +55,9 @@ describe('Panel', () => {
   it('exposes the sub-components as real components and renders their semantic roots', () => {
     const { getByTestId } = render(composed())
 
-    const header = getByTestId('overlay-panel__header')
-    const footer = getByTestId('overlay-panel__footer')
-    const content = getByTestId('overlay-panel__content')
+    const header = getByTestId('panel__header')
+    const footer = getByTestId('panel__footer')
+    const content = getByTestId('panel__content')
 
     expect(header.tagName).toBe('HEADER')
     expect(footer.tagName).toBe('FOOTER')
@@ -69,9 +69,9 @@ describe('Panel', () => {
 
     // Header / Content / Footer show no model-value wiring — their testids are
     // derived purely from the injected PanelContext.testId.
-    expect(getByTestId('overlay-panel__header')).toBeTruthy()
-    expect(getByTestId('overlay-panel__content')).toBeTruthy()
-    expect(getByTestId('overlay-panel__footer')).toBeTruthy()
+    expect(getByTestId('panel__header')).toBeTruthy()
+    expect(getByTestId('panel__content')).toBeTruthy()
+    expect(getByTestId('panel__footer')).toBeTruthy()
   })
 
   it('propagates a data-testid override from the shell to the sub-component testids', () => {
@@ -83,7 +83,7 @@ describe('Panel', () => {
     expect(getByTestId('edit-domain-panel__footer').tagName).toBe('FOOTER')
 
     // The default fallback testids no longer exist once overridden.
-    expect(() => getByTestId('overlay-panel__header')).toThrow()
+    expect(() => getByTestId('panel__header')).toThrow()
   })
 
   it('renders content as a plain div (no ScrollArea) when no drawer scroll host is present', () => {
@@ -96,14 +96,14 @@ describe('Panel', () => {
     // utility classes never apply and any scroll measurement would be a false
     // negative. Scrolling is exercised through Drawer and Dialog, which are the
     // contexts that mount this shell.
-    expect(getByTestId('overlay-panel__content').tagName).toBe('DIV')
-    expect(queryByTestId('overlay-panel__scroll')).toBeNull()
+    expect(getByTestId('panel__content').tagName).toBe('DIV')
+    expect(queryByTestId('panel__scroll')).toBeNull()
     expect(getByText('Adjust the domain configuration below.')).toBeTruthy()
   })
 
   it('wraps content in a ScrollArea when a drawer scroll host is injected', () => {
     // drawer-content provides DrawerPanelScrollInjectionKey=true; simulate that
-    // ancestor so PanelContent takes its ScrollArea branch.
+    // ancestor so PanelBody takes its ScrollArea branch.
     const DrawerScrollHost = defineComponent({
       setup(_, { slots }) {
         provide(DrawerPanelScrollInjectionKey, true)
@@ -112,13 +112,13 @@ describe('Panel', () => {
     })
 
     const Tree = defineComponent({
-      components: { DrawerScrollHost, Panel, PanelContent },
+      components: { DrawerScrollHost, Panel, PanelBody },
       template: `
         <DrawerScrollHost>
           <Panel>
-            <PanelContent>
+            <PanelBody>
               <p>Scrollable region</p>
-            </PanelContent>
+            </PanelBody>
           </Panel>
         </DrawerScrollHost>
       `
@@ -126,31 +126,69 @@ describe('Panel', () => {
 
     const { getByTestId, getByText } = render(Tree)
 
-    const scroll = getByTestId('overlay-panel__scroll')
-    const content = getByTestId('overlay-panel__content')
+    const scroll = getByTestId('panel__scroll')
+    const content = getByTestId('panel__content')
     expect(scroll).toBeTruthy()
     // Content div is nested INSIDE the ScrollArea host, not a sibling.
     expect(scroll.contains(content)).toBe(true)
     expect(getByText('Scrollable region')).toBeTruthy()
   })
 
-  it.each<PanelSize>(['small', 'medium', 'large'])('renders the shell for size "%s"', (size) => {
+  it.each<PanelSize>(['small', 'medium', 'large'])('reflects size "%s" on data-width', (size) => {
     const { getByTestId } = render(composed({ size }))
-    expect(getByTestId('overlay-panel').tagName).toBe('DIV')
+    expect(getByTestId('panel').getAttribute('data-width')).toBe(size)
   })
 
-  it('renders the shell in fluid mode via the data-fluid attribute', () => {
+  it('reflects fluid mode (data-fluid attribute) on data-width', () => {
     const { getByTestId } = render(composed({ 'data-fluid': '' }))
-    expect(getByTestId('overlay-panel').tagName).toBe('DIV')
+    expect(getByTestId('panel').getAttribute('data-width')).toBe('fluid')
   })
 
-  it('renders the sizeAtMd (mobile bottom-sheet) shell', () => {
+  it('reflects sizeAtMd on data-width', () => {
     const { getByTestId } = render(composed({ sizeAtMd: true, size: 'large' }))
-    expect(getByTestId('overlay-panel').tagName).toBe('DIV')
+    expect(getByTestId('panel').getAttribute('data-width')).toBe('large-md')
+  })
+
+  it('makes an overflowing content region focusable only when nothing inside is', async () => {
+    const lines = ref(1)
+    const withButton = ref(false)
+    const view = render(
+      defineComponent({
+        setup: () => () =>
+          h(Panel, null, () =>
+            h(PanelBody, null, () => [
+              ...Array.from({ length: lines.value }, (_, i) => h('p', { key: i }, `Line ${i}`)),
+              withButton.value ? h('button', { type: 'button' }, 'Act') : null
+            ])
+          )
+      })
+    )
+    const content = view.getByTestId('panel__content')
+    content.style.height = '40px'
+    content.style.overflowY = 'auto'
+    await nextTick()
+    expect(content).not.toHaveAttribute('tabindex')
+
+    lines.value = 30
+    await waitFor(() => expect(content).toHaveAttribute('tabindex', '0'))
+
+    withButton.value = true
+    await waitFor(() => expect(content).not.toHaveAttribute('tabindex'))
   })
 
   it('has no accessibility violations on the composed tree', async () => {
     const { getByTestId } = render(composed())
-    await expectNoA11yViolations(getByTestId('overlay-panel'))
+    await expectNoA11yViolations(getByTestId('panel'))
+  })
+
+  describe('compound API (index.ts)', () => {
+    it('attaches Header, Body and Footer for dot-notation', async () => {
+      const { default: Compound } = await import('./index')
+      expect(Compound).toBe(Panel)
+      expect(Compound.Header).toBe(PanelHeader)
+      expect(Compound.Body).toBe(PanelBody)
+      expect(Compound.Footer).toBe(PanelFooter)
+      expect('Content' in Compound).toBe(false)
+    })
   })
 })

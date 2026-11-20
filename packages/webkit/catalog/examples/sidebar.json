@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The console rail, whole: a header whose search field opens a ⌘K palette, grouped navigation composed with `Menu`, and a footer carrying the account identity and its menu. The navigation scrolls inside the built-in `ScrollArea` while the header and footer stay put. `Menu` takes `role=\"presentation\"` because the sidebar is already the `<nav>` landmark — it drops its accessible name with the role, so the region has exactly one name. Expand \"Edge Functions\" for a level that opens in place behind the indent rail; activate \"Settings\" for a drill level that replaces the menu.",
+   "file": "examples/sidebar/default.vue"
+  },
+  {
+   "name": "IconRail",
+   "summary": "With `collapsible=\"icon\"` a collapsed sidebar stays in the layout as a `--size-14` icon rail instead of leaving it. Each row keeps its icon, its label moves into a `Tooltip` on hover and focus (and stays the accessible name), group labels and rows without an icon step aside, and the footer trigger turns into the expand button. `shortcut` lets Ctrl+B or Cmd+B toggle the rail; the slots receive `{ rail }` so the footer drops the account name while collapsed. The rail sits in `AppLayout`: when the layout is narrower than 768px it moves into a navigation drawer that the header's menu button opens, with the gesture off.",
+   "file": "examples/sidebar/icon-rail.vue"
+  }
+ ]
+}

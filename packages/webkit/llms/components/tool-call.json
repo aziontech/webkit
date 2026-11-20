@@ -1,0 +1,95 @@
+{
+ "name": "tool-call",
+ "binding": "ToolCall",
+ "import": "@aziontech/webkit/tool-call",
+ "treeShakeableImport": "@aziontech/webkit/tool-call",
+ "category": "ai",
+ "surface": "app",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "One tool or command the agent invoked, shown in the conversation (AI Elements Tool, Cloudscape progressive steps): a row with the tool name in code font, an optional plain description, and a status (`Waiting`, `Preparing…`, `Running…`, `Completed`, `Failed`, `Canceled`, `Denied`), with the call's input and output in a collapsible panel. It is the record of what the agent did; authorization before it runs is `ToolApproval`.",
+ "setup": null,
+ "useWhen": [
+  "An agent calls a tool, an MCP server, an API or a CLI command during a response, and the reader should see what ran and what came back."
+ ],
+ "avoidWhen": [
+  "Asking the reader to allow a call → `tool-approval` (then a `tool-call` records it).",
+  "The model's reasoning → `reasoning`.",
+  "A long-running job outside a chat → `progress` / `status-indicator` on the resource."
+ ],
+ "related": [
+  "`tool-approval` — the authorization step before a sensitive call.",
+  "`status-indicator` — the status the row shows.",
+  "`code-block`, `key-value-list` — what goes in the input and output slots."
+ ],
+ "bestPractices": [
+  "Name the tool exactly as it is (`list_workloads`) and describe it in plain words (`Listing your workloads`).",
+  "Collapse details by default; open them on error so the reader sees why.",
+  "Redact secrets from inputs and outputs.",
+  "Map an SDK's states: arguments arriving → `streaming`; executing → `running`; awaiting approval → `pending`; result → `success`; failure → `error`; stopped by the reader (outcome cancelled) → `canceled`; approval refused (outcome denied) → `denied`."
+ ],
+ "props": [
+  {
+   "name": "name",
+   "type": "string",
+   "default": "—",
+   "required": "true",
+   "doc": "The tool or command identifier, shown in code font (`list_workloads`)."
+  },
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "What the call does in the reader's words (`Listing your workloads`). Empty shows only the name."
+  },
+  {
+   "name": "status",
+   "type": "'pending' | 'streaming' | 'running' | 'success' | 'error' | 'canceled' | 'denied'",
+   "default": "'running'",
+   "required": "false",
+   "doc": "`pending` waits for authorization, `streaming` receives its arguments, `running` is in flight, then `success`, `error`, `canceled` (stopped before it finished) or `denied` (the reader refused it)."
+  },
+  {
+   "name": "defaultOpen",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Initial open state when uncontrolled; details start collapsed."
+  },
+  {
+   "name": "open",
+   "type": "boolean",
+   "default": "undefined as never",
+   "required": "false",
+   "doc": "Two-way value (`v-model:open`)."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "input",
+   "scope": "—",
+   "notes": "The parameters the tool is called with (`CodeBlock`, `KeyValueList`)."
+  },
+  {
+   "name": "output",
+   "scope": "—",
+   "notes": "What the tool returned, or the error it failed with."
+  }
+ ],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/tool-call/default.vue"
+  },
+  {
+   "name": "WithDetails",
+   "file": "examples/tool-call/with-details.vue"
+  }
+ ],
+ "docs": "components/tool-call.md"
+}

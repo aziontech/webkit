@@ -4,15 +4,46 @@ import { readFileSync, readdirSync, writeFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, join, relative, resolve } from 'node:path'
 
-import { CONTENT_CHECKS, scanFile, MESSAGES } from '../src/eslint-plugin/authoring-checks.js'
-import { scanTokens, tokenChecksApply, TOKEN_MESSAGES } from '../src/eslint-plugin/token-checks.js'
-import { collectSpecViolations } from '../../../.claude/hooks/_lib/spec-compliance-checks.mjs'
+import { CONTENT_CHECKS, scanFile, MESSAGES } from '../src/eslint-plugin/lib/authoring-checks.js'
 import {
-  checks as storyChecks,
-  STORY_RE
-} from '../../../.claude/hooks/_lib/story-source-checks.mjs'
+  scanTokens,
+  tokenChecksApply,
+  TOKEN_MESSAGES
+} from '../src/eslint-plugin/lib/token-checks.js'
+import { scanSignatures } from '../src/eslint-plugin/lib/signature-checks.js'
+import {
+  EXAMPLE_DATA_DIRS,
+  EXAMPLE_DATA_MESSAGES,
+  exampleDataApplies,
+  scanExampleData
+} from '../src/eslint-plugin/lib/example-data.js'
+import {
+  scanTextureBackdrop,
+  TEXTURE_BACKDROP_DIRS,
+  TEXTURE_BACKDROP_MESSAGES,
+  textureBackdropApplies
+} from '../src/eslint-plugin/lib/texture-backdrop.js'
+import noClockInSetup from '../src/eslint-plugin/rules/no-clock-in-setup.js'
+import noPhysicalDirection from '../src/eslint-plugin/rules/no-physical-direction.js'
+import noViewportHeightCalc from '../src/eslint-plugin/rules/no-viewport-height-calc.js'
+import { Linter } from 'eslint'
+import * as vueParser from 'vue-eslint-parser'
+import tsParser from '@typescript-eslint/parser'
+import {
+  appliesToBuiltInStrings,
+  scanBuiltInStrings,
+  STRING_MESSAGES
+} from '../src/eslint-plugin/lib/built-in-strings.js'
+import { collectSpecViolations } from '../../../.claude/hooks/lib/spec-compliance-checks.mjs'
+import {
+  REPO_WIDE_TOKEN_DIRS,
+  repoTokenChecksFor
+} from '../../../.claude/hooks/lib/token-checks.mjs'
 
-const ALL_MESSAGES = { ...MESSAGES, ...TOKEN_MESSAGES }
+const ALL_MESSAGES = { ...MESSAGES, ...TOKEN_MESSAGES, ...STRING_MESSAGES }
+const DIRECTION_DIRS = ['src/components', 'blocks', 'examples']
+const CLOCK_DIRS = ['blocks', 'examples']
+const PAGE_BODY_DIRS = ['blocks', 'examples']
 const DETAILS = new Map()
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
@@ -21,7 +52,6 @@ const SRC = join(ROOT, 'packages/webkit/src')
 const PACKAGES = join(ROOT, 'packages')
 const SKIP_DIRS = new Set(['node_modules', 'dist', '.turbo', 'coverage'])
 const PROSE_COMMENT = CONTENT_CHECKS.find((c) => c.id === 'prose-comment')
-const STORIES = join(ROOT, 'apps/storybook/src')
 const BASELINE = join(SCRIPT_DIR, 'authoring-baseline.json')
 const WIP_PREFIX = 'packages/webkit/src/components/wip/'
 
@@ -36,17 +66,185 @@ function walk(dir) {
   return out
 }
 
-function currentViolations() {
+function directionViolations() {
+  const linter = new Linter({ configType: 'flat' })
+  const config = [
+    {
+      files: ['**/*.vue', '**/*.ts', '**/*.js'],
+      languageOptions: {
+        parser: vueParser,
+        parserOptions: { parser: tsParser, ecmaVersion: 'latest', sourceType: 'module' }
+      },
+      plugins: { webkit: { rules: { 'no-physical-direction': noPhysicalDirection } } },
+      rules: { 'webkit/no-physical-direction': 'error' }
+    }
+  ]
   const keys = []
+  for (const dir of DIRECTION_DIRS) {
+    for (const abs of walk(join(ROOT, 'packages/webkit', dir))) {
+      if (!/\.(vue|ts|js)$/.test(abs) || /\.test\.ts$/.test(abs)) continue
+      const rel = relative(ROOT, abs).split('\\').join('/')
+      const messages = linter.verify(readFileSync(abs, 'utf-8'), config, { filename: abs })
+      for (const m of messages) {
+        if (m.ruleId !== 'webkit/no-physical-direction') continue
+        const key = `${rel}::direction:no-physical-direction`
+        keys.push(key)
+        DETAILS.set(key, `line ${m.line}: ${m.message}`)
+      }
+    }
+  }
+  return keys
+}
+
+function clockViolations() {
+  const linter = new Linter({ configType: 'flat' })
+  const config = [
+    {
+      files: ['**/*.vue', '**/*.ts', '**/*.js'],
+      languageOptions: {
+        parser: vueParser,
+        parserOptions: { parser: tsParser, ecmaVersion: 'latest', sourceType: 'module' }
+      },
+      plugins: { webkit: { rules: { 'no-clock-in-setup': noClockInSetup } } },
+      rules: { 'webkit/no-clock-in-setup': 'error' }
+    }
+  ]
+  const keys = []
+  for (const dir of CLOCK_DIRS) {
+    for (const abs of walk(join(ROOT, 'packages/webkit', dir))) {
+      if (!/\.(vue|ts|js)$/.test(abs) || /\.test\.ts$/.test(abs)) continue
+      const source = readFileSync(abs, 'utf-8')
+      if (!/\bDate\b/.test(source)) continue
+      const rel = relative(ROOT, abs).split('\\').join('/')
+      for (const m of linter.verify(source, config, { filename: abs })) {
+        if (m.ruleId !== 'webkit/no-clock-in-setup') continue
+        const key = `${rel}::clock:no-clock-in-setup`
+        keys.push(key)
+        DETAILS.set(key, `line ${m.line}: ${m.message}`)
+      }
+    }
+  }
+  return keys
+}
+
+function viewportHeightViolations() {
+  const linter = new Linter({ configType: 'flat' })
+  const config = [
+    {
+      files: ['**/*.vue', '**/*.ts', '**/*.js'],
+      languageOptions: {
+        parser: vueParser,
+        parserOptions: { parser: tsParser, ecmaVersion: 'latest', sourceType: 'module' }
+      },
+      plugins: { webkit: { rules: { 'no-viewport-height-calc': noViewportHeightCalc } } },
+      rules: { 'webkit/no-viewport-height-calc': 'error' }
+    }
+  ]
+  const keys = []
+  for (const dir of PAGE_BODY_DIRS) {
+    for (const abs of walk(join(ROOT, 'packages/webkit', dir))) {
+      if (!/\.(vue|ts|js)$/.test(abs) || /\.test\.ts$/.test(abs)) continue
+      const source = readFileSync(abs, 'utf-8')
+      if (!/100[dsl]?vh/.test(source)) continue
+      const rel = relative(ROOT, abs).split('\\').join('/')
+      for (const m of linter.verify(source, config, { filename: abs })) {
+        if (m.ruleId !== 'webkit/no-viewport-height-calc') continue
+        const key = `${rel}::layout:no-viewport-height-calc`
+        keys.push(key)
+        DETAILS.set(key, `line ${m.line}: ${m.message}`)
+      }
+    }
+  }
+  return keys
+}
+
+function walkAll(dir) {
+  const out = []
+  let entries = []
+  try {
+    entries = readdirSync(dir, { withFileTypes: true })
+  } catch {
+    return out
+  }
+  for (const entry of entries) {
+    const p = join(dir, entry.name)
+    if (entry.isDirectory()) {
+      if (!SKIP_DIRS.has(entry.name)) out.push(...walkAll(p))
+    } else out.push(p)
+  }
+  return out
+}
+
+function exampleDataViolations() {
+  const keys = []
+  for (const dir of EXAMPLE_DATA_DIRS) {
+    for (const abs of walkAll(join(ROOT, dir))) {
+      const rel = relative(ROOT, abs).split('\\').join('/')
+      if (!exampleDataApplies(rel)) continue
+      for (const id of scanExampleData(readFileSync(abs, 'utf-8'))) {
+        keys.push(`${rel}::example-data:${id}`)
+      }
+    }
+  }
+  return keys
+}
+
+function textureBackdropViolations() {
+  const keys = []
+  for (const dir of TEXTURE_BACKDROP_DIRS) {
+    for (const abs of walkAll(join(ROOT, dir))) {
+      const rel = relative(ROOT, abs).split('\\').join('/')
+      if (!textureBackdropApplies(rel)) continue
+      for (const id of scanTextureBackdrop(readFileSync(abs, 'utf-8'), rel)) {
+        keys.push(`${rel}::texture-backdrop:${id}`)
+      }
+    }
+  }
+  return keys
+}
+
+function wideTokenViolations() {
+  const keys = []
+  for (const dir of REPO_WIDE_TOKEN_DIRS) {
+    for (const abs of walkAll(join(ROOT, dir))) {
+      const rel = relative(ROOT, abs).split('\\').join('/')
+      if (tokenChecksApply(rel)) continue
+      const checks = repoTokenChecksFor(rel)
+      if (checks.length === 0) continue
+      for (const id of scanTokens(readFileSync(abs, 'utf-8'), checks)) {
+        keys.push(`${rel}::token:${id}`)
+      }
+    }
+  }
+  return keys
+}
+
+function currentViolations() {
+  const keys = [
+    ...wideTokenViolations(),
+    ...directionViolations(),
+    ...clockViolations(),
+    ...viewportHeightViolations(),
+    ...exampleDataViolations(),
+    ...textureBackdropViolations()
+  ]
   for (const abs of walk(SRC)) {
     const rel = relative(ROOT, abs).split('\\').join('/')
-    if (rel.startsWith(WIP_PREFIX)) continue
+    if (rel.startsWith(WIP_PREFIX) || rel.endsWith('.d.ts')) continue
     const content = readFileSync(abs, 'utf-8')
     if (/\.(vue|ts|js)$/.test(rel)) {
       for (const id of scanFile(rel, content)) keys.push(`${rel}::${id}`)
     }
+    for (const found of scanSignatures(abs, content)) {
+      const key = `${rel}::signature:${found.id}`
+      keys.push(key)
+      DETAILS.set(key, `line ${found.line}: ${found.message}`)
+    }
     if (tokenChecksApply(rel)) {
       for (const id of scanTokens(content)) keys.push(`${rel}::token:${id}`)
+    }
+    if (appliesToBuiltInStrings(rel)) {
+      for (const id of scanBuiltInStrings(content)) keys.push(`${rel}::i18n:${id}`)
     }
     if (rel.endsWith('.vue')) {
       const result = collectSpecViolations(abs, ROOT, { requireSpec: true })
@@ -62,20 +260,11 @@ function currentViolations() {
     const n = PROSE_COMMENT.count(readFileSync(abs, 'utf-8'), rel)
     for (let i = 0; i < n; i++) keys.push(`${rel}::prose-comment`)
   }
-  for (const abs of walk(STORIES)) {
-    const rel = relative(ROOT, abs).split('\\').join('/')
-    if (!STORY_RE.test(rel)) continue
-    const content = readFileSync(abs, 'utf-8')
-    for (const v of storyChecks(content, rel)) {
-      const key = `${rel}::story:${v.id}`
-      keys.push(key)
-      DETAILS.set(key, v.message)
-    }
-  }
   return keys.sort()
 }
 
 const update = process.argv.includes('--update')
+const prune = process.argv.includes('--prune')
 const current = currentViolations()
 
 if (update) {
@@ -112,9 +301,21 @@ for (const [k, n] of baseCounts) {
   for (let i = 0; i < gone; i++) fixed.push(k)
 }
 
-if (fixed.length) {
+if (prune) {
+  const drop = counts(fixed)
+  const kept = baseline.filter((k) => {
+    const n = drop.get(k) ?? 0
+    if (!n) return true
+    drop.set(k, n - 1)
+    return false
+  })
+  writeFileSync(BASELINE, JSON.stringify(kept, null, 2) + '\n')
   console.log(
-    `\n↓ ${fixed.length} baseline violation(s) fixed — prune with the authoring:update script:`
+    `authoring-baseline.json pruned: ${fixed.length} fixed violation(s) removed, nothing added.`
+  )
+} else if (fixed.length) {
+  console.log(
+    `\n↓ ${fixed.length} baseline violation(s) fixed — prune with \`node scripts/check-authoring.mjs --prune\`:`
   )
   for (const k of fixed) console.log(`  - ${k}`)
 }
@@ -128,10 +329,21 @@ if (introduced.length) {
     console.error(`  ${file}`)
     if (id.startsWith('spec:')) {
       console.error(`    [spec] ${id.slice(5)}`)
-    } else if (id.startsWith('story:')) {
-      console.error(`    [${id}] ${DETAILS.get(k) ?? id.slice(6)}`)
+    } else if (
+      id.startsWith('direction:') ||
+      id.startsWith('clock:') ||
+      id.startsWith('layout:') ||
+      id.startsWith('signature:')
+    ) {
+      console.error(`    [${id}] ${DETAILS.get(k) ?? id.slice(id.indexOf(':') + 1)}`)
+    } else if (id.startsWith('texture-backdrop:')) {
+      console.error(
+        `    [${id}] ${TEXTURE_BACKDROP_MESSAGES[id.slice('texture-backdrop:'.length)]}`
+      )
+    } else if (id.startsWith('example-data:')) {
+      console.error(`    [${id}] ${EXAMPLE_DATA_MESSAGES[id.slice('example-data:'.length)]}`)
     } else {
-      console.error(`    [${id}] ${ALL_MESSAGES[id.replace(/^token:/, '')] ?? id}`)
+      console.error(`    [${id}] ${ALL_MESSAGES[id.replace(/^(token|i18n):/, '')] ?? id}`)
     }
   }
   console.error(

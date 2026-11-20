@@ -1,23 +1,28 @@
-import { userEvent } from '@storybook/test'
-import { composeStories } from '@storybook/vue3'
+import userEvent from '@testing-library/user-event'
 import { fireEvent, render, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
+import { defineComponent, h, nextTick } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/navigation/breadcrumb/Breadcrumb.stories'
+import Default from '../../../../examples/breadcrumb/default.vue'
+import Depths from '../../../../examples/breadcrumb/depths.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
-import BreadcrumbItem from '../breadcrumb-item/breadcrumb-item.vue'
+import BreadcrumbItem from './breadcrumb-item/breadcrumb-item.vue'
 import BreadcrumbList from './breadcrumb-list.vue'
 import BreadcrumbSeparator from './breadcrumb-separator.vue'
 import Breadcrumb from './index.js'
 
-const { Default, Depths } = composeStories(stories)
+const TESTID = 'breadcrumb'
 
-const TESTID = 'navigation-breadcrumb'
+const renderMounted = async (...args: Parameters<typeof render>) => {
+  const view = render(...args)
+  await nextTick()
+  return view
+}
 
-// The Playwright test viewport is narrow (< md / 768px), so useOverlayMobile()
+// The Playwright test viewport is narrow (< md / 768px), so the breadcrumb mobile query
 // resolves TRUE and the root renders its COLLAPSED mobile layout:
 //   first item  -> `__segment-0-mobile` / `__item-0`
-//   middle items -> a Dropdown overflow menu (`__overflow-menu` / `__overflow-trigger`
+//   middle items -> a DropdownMenu overflow menu (`__overflow-menu` / `__overflow-trigger`
 //                    / `__overflow-item-<n>`) framed by `__separator-overflow-before`
 //   last item   -> `__segment-last-mobile` / `__item-last`
 // Every assertion below is grounded in that real render path (breadcrumb.vue
@@ -35,259 +40,262 @@ const TRAIL = [
 // anchor guard in src/test/setup.ts, so the navigate tests below can click the
 // breadcrumb links without tearing down the test iframe.
 
-describe('Breadcrumb (composition, data-driven root)', () => {
-  describe('compound API', () => {
-    it('attaches Root, List, Item and Separator to the compound root', () => {
-      // Grounded in index.js: Breadcrumb.Root/List/Item/Separator are assigned.
-      const compound = Breadcrumb
-      expect(compound).toBeTruthy()
-      expect(compound.Root).toBeTruthy()
-      expect(compound.List).toBe(BreadcrumbList)
-      expect(compound.Item).toBe(BreadcrumbItem)
-      expect(compound.Separator).toBeTruthy()
-      expect(compound.Separator).toBe(BreadcrumbSeparator)
-      // The compound default export IS the root component.
-      expect(compound).toBe(compound.Root)
-    })
-  })
-
-  describe('collapsed layout structure', () => {
-    it('renders a nav with aria-label Breadcrumb and the default testid', () => {
-      const { getByTestId } = render(Breadcrumb, { props: { items: TRAIL } })
-
-      const nav = getByTestId(TESTID)
-      expect(nav.tagName).toBe('NAV')
-      expect(nav.getAttribute('aria-label')).toBe('Breadcrumb')
+describe('Breadcrumb', () => {
+  describe('composition, data-driven root', () => {
+    describe('compound API', () => {
+      it('attaches List, Item and Separator to the compound root', async () => {
+        const compound = Breadcrumb
+        expect(compound.List).toBe(BreadcrumbList)
+        expect(compound.Item).toBe(BreadcrumbItem)
+        expect(compound.Separator).toBe(BreadcrumbSeparator)
+        const members = Object.keys(compound).filter((key) => /^[A-Z]/.test(key))
+        expect(members.sort()).toEqual(['Item', 'List', 'Separator'])
+      })
     })
 
-    it('renders an ordered list through the BreadcrumbList sub-component', () => {
-      const { getByTestId } = render(Breadcrumb, { props: { items: TRAIL } })
+    describe('collapsed layout structure', () => {
+      it('renders a nav with aria-label Breadcrumb and the default testid', async () => {
+        const { getByTestId } = await renderMounted(Breadcrumb, { props: { items: TRAIL } })
 
-      expect(getByTestId(`${TESTID}__list`).tagName).toBe('OL')
-    })
-
-    it('renders the first segment as an anchor carrying its href', () => {
-      const { getByTestId } = render(Breadcrumb, { props: { items: TRAIL } })
-
-      const segment = getByTestId(`${TESTID}__segment-0-mobile`)
-      expect(segment.tagName).toBe('LI')
-
-      const first = getByTestId(`${TESTID}__item-0`)
-      expect(first.tagName).toBe('A')
-      expect(first.getAttribute('href')).toBe('/home')
-      expect(getByTestId(`${TESTID}__item-0__label`).textContent?.trim()).toBe('Home')
-    })
-
-    it('renders the last segment as a current-page span', () => {
-      const { getByTestId } = render(Breadcrumb, { props: { items: TRAIL } })
-
-      const last = getByTestId(`${TESTID}__item-last`)
-      expect(last.tagName).toBe('SPAN')
-      expect(last.getAttribute('aria-current')).toBe('page')
-      expect(last.getAttribute('data-current')).toBe('true')
-      expect(getByTestId(`${TESTID}__item-last__label`).textContent?.trim()).toBe('Settings')
-    })
-
-    it('renders overflow separators as aria-hidden presentation lis', () => {
-      const { getByTestId } = render(Breadcrumb, { props: { items: TRAIL } })
-
-      const before = getByTestId(`${TESTID}__separator-overflow-before`)
-      expect(before.tagName).toBe('LI')
-      expect(before.getAttribute('role')).toBe('presentation')
-      expect(before.getAttribute('aria-hidden')).toBe('true')
-
-      // showDistinctEnds is true (3 items, first !== last), so the trailing
-      // separator before the current segment is rendered too.
-      const after = getByTestId(`${TESTID}__separator-overflow-after`)
-      expect(after.getAttribute('aria-hidden')).toBe('true')
-    })
-  })
-
-  describe('overflow menu (middle items collapsed into a Dropdown)', () => {
-    it('renders the ellipsis trigger closed by default', () => {
-      const { getByTestId } = render(Breadcrumb, { props: { items: TRAIL } })
-
-      const menu = getByTestId(`${TESTID}__overflow-menu`)
-      expect(menu.getAttribute('data-state')).toBe('closed')
-
-      const trigger = getByTestId(`${TESTID}__overflow-trigger`)
-      expect(trigger.getAttribute('aria-label')).toBe('Show pages in between')
-    })
-
-    it('opens the overflow menu on trigger click, teleporting options to the body', async () => {
-      const { getByTestId } = render(Breadcrumb, { props: { items: TRAIL } })
-
-      await fireEvent.click(getByTestId(`${TESTID}__overflow-trigger`))
-
-      // The Dropdown's data-state flips to open.
-      expect(getByTestId(`${TESTID}__overflow-menu`).getAttribute('data-state')).toBe('open')
-
-      // The panel + options are Teleported to document.body (escape the container).
-      const panel = document.body.querySelector('[role="menu"]')
-      expect(panel).toBeTruthy()
-
-      // The single middle item ("Projects") renders as a menu option.
-      const option = document.body.querySelector(
-        `[data-testid="${TESTID}__overflow-item-0"]`
-      ) as HTMLElement | null
-      expect(option).toBeTruthy()
-      expect(option?.getAttribute('role')).toBe('menuitem')
-      expect(option?.textContent).toContain('Projects')
-    })
-
-    it('renders a collapsed item icon inside its overflow option', async () => {
-      // Dropdown.Option declares `left` / `right` (not `leading`), so a mismatched
-      // slot name silently renders nothing — the icon has to be reachable here.
-      const { getByTestId } = render(Breadcrumb, {
-        props: {
-          items: [
-            { label: 'Home', href: '/home' },
-            { label: 'Projects', href: '/projects', showIcon: true, icon: 'pi pi-folder' },
-            { label: 'Settings' }
-          ]
-        }
+        const nav = getByTestId(TESTID)
+        expect(nav.tagName).toBe('NAV')
+        expect(nav.getAttribute('aria-label')).toBe('Breadcrumb')
       })
 
-      await fireEvent.click(getByTestId(`${TESTID}__overflow-trigger`))
+      it('renders an ordered list through the BreadcrumbList sub-component', async () => {
+        const { getByTestId } = await renderMounted(Breadcrumb, { props: { items: TRAIL } })
 
-      const option = document.body.querySelector(
-        `[data-testid="${TESTID}__overflow-item-0"]`
-      ) as HTMLElement | null
-      expect(option?.querySelector('i.pi-folder')).toBeTruthy()
-    })
-
-    // This was skipped as a harness limitation ("@select does not fire under test
-    // interaction"). It was not: the listener was bound to `Dropdown.Option`, which
-    // never emits `select` — the Dropdown ROOT does, from `selectOption`. Picking a
-    // collapsed crumb below `md` therefore did nothing in a real browser either. The
-    // listener moved to the root, and this is the test that holds it there.
-    it('emits navigate with the middle item href when its overflow option is selected', async () => {
-      const { getByTestId, emitted } = render(Breadcrumb, { props: { items: TRAIL } })
-
-      await fireEvent.click(getByTestId(`${TESTID}__overflow-trigger`))
-
-      const option = document.body.querySelector(
-        `[data-testid="${TESTID}__overflow-item-0"]`
-      ) as HTMLElement
-      expect(option).toBeTruthy()
-
-      // The Dropdown option selects on the full pointer sequence, not a synthetic
-      // click — userEvent fires pointerdown/up so @select -> onOverflowSelect runs.
-      await userEvent.click(option)
-
-      // Dropdown select -> onOverflowSelect -> handleItemClick -> navigate(event, '/projects').
-      const navigate = emitted().navigate as Array<[unknown, string]>
-      expect(navigate).toBeTruthy()
-      expect(navigate[0][1]).toBe('/projects')
-    })
-  })
-
-  describe('navigate event (first / last segments)', () => {
-    it('emits navigate(event, href) when the first (ancestor) segment is clicked', async () => {
-      const { getByTestId, emitted } = render(Breadcrumb, { props: { items: TRAIL } })
-
-      await fireEvent.click(getByTestId(`${TESTID}__item-0`))
-
-      const navigate = emitted().navigate as Array<[unknown, string]>
-      expect(navigate).toHaveLength(1)
-      expect(navigate[0][0]).toBeInstanceOf(MouseEvent)
-      expect(navigate[0][1]).toBe('/home')
-    })
-
-    it('does NOT emit navigate when the current (last) segment is clicked', async () => {
-      const { getByTestId, emitted } = render(Breadcrumb, { props: { items: TRAIL } })
-
-      // Root guards the last segment with `!lastItem.current` before emitting.
-      await fireEvent.click(getByTestId(`${TESTID}__item-last`))
-
-      expect(emitted().navigate).toBeUndefined()
-    })
-
-    it('emits navigate on keyboard activation of the first segment link', async () => {
-      const { getByTestId, emitted } = render(Breadcrumb, { props: { items: TRAIL } })
-
-      const first = getByTestId(`${TESTID}__item-0`) as HTMLElement
-      first.focus()
-      expect(document.activeElement).toBe(first)
-
-      // Enter activates a focused anchor -> real click -> navigate.
-      await userEvent.keyboard('{Enter}')
-
-      const navigate = emitted().navigate as Array<[unknown, string]>
-      expect(navigate).toBeTruthy()
-      expect(navigate[0][0]).toBeInstanceOf(MouseEvent)
-      expect(navigate[0][1]).toBe('/home')
-    })
-  })
-
-  describe('two items (no middle -> no overflow menu)', () => {
-    it('renders first + current with no overflow menu', () => {
-      const items = [{ label: 'Home', href: '/home' }, { label: 'Current' }]
-      const { getByTestId, queryByTestId } = render(Breadcrumb, { props: { items } })
-
-      expect(getByTestId(`${TESTID}__item-0`).tagName).toBe('A')
-      expect(getByTestId(`${TESTID}__item-last`).getAttribute('aria-current')).toBe('page')
-      // hasMiddleItems is false -> no overflow menu.
-      expect(queryByTestId(`${TESTID}__overflow-menu`)).toBeNull()
-      expect(queryByTestId(`${TESTID}__separator-overflow-before`)).toBeNull()
-    })
-  })
-
-  describe('single item', () => {
-    it('renders a lone current item with no overflow menu and no distinct-end separator', () => {
-      const { getByTestId, queryByTestId } = render(Breadcrumb, {
-        props: { items: [{ label: 'Only', current: true }] }
+        expect(getByTestId(`${TESTID}__list`).tagName).toBe('OL')
       })
 
-      // firstItem === lastItem: showDistinctEnds is false, so the first segment
-      // is rendered as the current page.
-      const first = getByTestId(`${TESTID}__item-0`)
-      expect(first.tagName).toBe('SPAN')
-      expect(first.getAttribute('aria-current')).toBe('page')
+      it('renders the first segment as an anchor carrying its href', async () => {
+        const { getByTestId } = await renderMounted(Breadcrumb, { props: { items: TRAIL } })
 
-      expect(queryByTestId(`${TESTID}__overflow-menu`)).toBeNull()
-      expect(queryByTestId(`${TESTID}__separator-overflow-after`)).toBeNull()
-    })
-  })
+        const segment = getByTestId(`${TESTID}__segment-0-mobile`)
+        expect(segment.tagName).toBe('LI')
 
-  describe('empty items -> default slot', () => {
-    it('renders default slot content when items is empty', () => {
-      const { queryByTestId, getByText } = render(Breadcrumb, {
-        props: { items: [] },
-        slots: { default: '<span>custom trail</span>' }
+        const first = getByTestId(`${TESTID}__item-0`)
+        expect(first.tagName).toBe('A')
+        expect(first.getAttribute('href')).toBe('/home')
+        expect(getByTestId(`${TESTID}__item-0__label`).textContent?.trim()).toBe('Home')
       })
 
-      // No data-driven list is rendered.
-      expect(queryByTestId(`${TESTID}__list`)).toBeNull()
-      expect(getByText('custom trail')).toBeTruthy()
-    })
-  })
+      it('renders the last segment as a current-page span', async () => {
+        const { getByTestId } = await renderMounted(Breadcrumb, { props: { items: TRAIL } })
 
-  describe('consumer data-testid override', () => {
-    it('threads a custom testid through the list, first segment, item and overflow menu', () => {
-      const { getByTestId } = render(Breadcrumb, {
-        props: { items: TRAIL },
-        attrs: { 'data-testid': 'crumbs' }
+        const last = getByTestId(`${TESTID}__item-last`)
+        expect(last.tagName).toBe('SPAN')
+        expect(last.getAttribute('aria-current')).toBe('page')
+        expect(last.getAttribute('data-active')).toBe('true')
+        expect(getByTestId(`${TESTID}__item-last__label`).textContent?.trim()).toBe('Settings')
       })
 
-      expect(getByTestId('crumbs')).toBeTruthy()
-      expect(getByTestId('crumbs__list')).toBeTruthy()
-      expect(getByTestId('crumbs__segment-0-mobile')).toBeTruthy()
-      expect(getByTestId('crumbs__item-0')).toBeTruthy()
-      expect(getByTestId('crumbs__overflow-menu')).toBeTruthy()
-    })
-  })
+      it('renders overflow separators as aria-hidden presentation lis', async () => {
+        const { getByTestId } = await renderMounted(Breadcrumb, { props: { items: TRAIL } })
 
-  describe('manual composition via compound sub-components', () => {
-    it('renders a hand-composed trail through Root/List/Item/Separator', () => {
-      const { getByTestId, getByText } = render({
-        components: {
-          BreadcrumbRoot: Breadcrumb,
-          BreadcrumbList: BreadcrumbList,
-          BreadcrumbItem: BreadcrumbItem,
-          BreadcrumbSeparator: BreadcrumbSeparator
-        },
-        template: `
+        const before = getByTestId(`${TESTID}__separator-overflow-before`)
+        expect(before.tagName).toBe('LI')
+        expect(before.getAttribute('role')).toBe('presentation')
+        expect(before.getAttribute('aria-hidden')).toBe('true')
+
+        // showDistinctEnds is true (3 items, first !== last), so the trailing
+        // separator before the current segment is rendered too.
+        const after = getByTestId(`${TESTID}__separator-overflow-after`)
+        expect(after.getAttribute('aria-hidden')).toBe('true')
+      })
+    })
+
+    describe('overflow menu (middle items collapsed into a DropdownMenu)', () => {
+      it('renders the ellipsis trigger closed by default', async () => {
+        const { getByTestId } = await renderMounted(Breadcrumb, { props: { items: TRAIL } })
+
+        const menu = getByTestId(`${TESTID}__overflow-menu`)
+        expect(menu.getAttribute('data-state')).toBe('closed')
+
+        const trigger = getByTestId(`${TESTID}__overflow-trigger`)
+        expect(trigger.getAttribute('aria-label')).toBe('Show pages in between')
+      })
+
+      it('opens the overflow menu on trigger click, teleporting options to the body', async () => {
+        const { getByTestId } = await renderMounted(Breadcrumb, { props: { items: TRAIL } })
+
+        await fireEvent.click(getByTestId(`${TESTID}__overflow-trigger`))
+
+        // The DropdownMenu's data-state flips to open.
+        expect(getByTestId(`${TESTID}__overflow-menu`).getAttribute('data-state')).toBe('open')
+
+        // The panel + options are Teleported to document.body (escape the container).
+        const panel = document.body.querySelector('[role="menu"]')
+        expect(panel).toBeTruthy()
+
+        // The single middle item ("Projects") renders as a menu option.
+        const option = document.body.querySelector(
+          `[data-testid="${TESTID}__overflow-item-0"]`
+        ) as HTMLElement | null
+        expect(option).toBeTruthy()
+        expect(option?.getAttribute('role')).toBe('menuitem')
+        expect(option?.textContent).toContain('Projects')
+      })
+
+      it('renders a collapsed item icon inside its overflow option', async () => {
+        const { getByTestId } = await renderMounted(Breadcrumb, {
+          props: {
+            items: [
+              { label: 'Home', href: '/home' },
+              { label: 'Projects', href: '/projects', showIcon: true, icon: 'az az-folder' },
+              { label: 'Settings' }
+            ]
+          }
+        })
+
+        await fireEvent.click(getByTestId(`${TESTID}__overflow-trigger`))
+
+        const option = document.body.querySelector(
+          `[data-testid="${TESTID}__overflow-item-0"]`
+        ) as HTMLElement | null
+        expect(option?.querySelector('i.az-folder')).toBeTruthy()
+      })
+
+      // This was skipped as a harness limitation ("@select does not fire under test
+      // interaction"). It was not: the listener was bound to `DropdownMenu.Option`, which
+      // never emits `select` — the DropdownMenu ROOT does, from `selectOption`. Picking a
+      // collapsed crumb below `md` therefore did nothing in a real browser either. The
+      // listener moved to the root, and this is the test that holds it there.
+      it('emits navigate with the middle item href when its overflow option is selected', async () => {
+        const { getByTestId, emitted } = await renderMounted(Breadcrumb, {
+          props: { items: TRAIL }
+        })
+
+        await fireEvent.click(getByTestId(`${TESTID}__overflow-trigger`))
+
+        const option = document.body.querySelector(
+          `[data-testid="${TESTID}__overflow-item-0"]`
+        ) as HTMLElement
+        expect(option).toBeTruthy()
+
+        // The DropdownMenu option selects on the full pointer sequence, not a synthetic
+        // click — userEvent fires pointerdown/up so @select -> onOverflowSelect runs.
+        await userEvent.click(option)
+
+        // DropdownMenu select -> onOverflowSelect -> onItemClick -> navigate(event, '/projects').
+        const navigate = emitted().navigate as Array<[unknown, string]>
+        expect(navigate).toBeTruthy()
+        expect(navigate[0][1]).toBe('/projects')
+      })
+    })
+
+    describe('navigate event (first / last segments)', () => {
+      it('emits navigate(event, href) when the first (ancestor) segment is clicked', async () => {
+        const { getByTestId, emitted } = await renderMounted(Breadcrumb, {
+          props: { items: TRAIL }
+        })
+
+        await fireEvent.click(getByTestId(`${TESTID}__item-0`))
+
+        const navigate = emitted().navigate as Array<[unknown, string]>
+        expect(navigate).toHaveLength(1)
+        expect(navigate[0][0]).toBeInstanceOf(MouseEvent)
+        expect(navigate[0][1]).toBe('/home')
+      })
+
+      it('does NOT emit navigate when the current (last) segment is clicked', async () => {
+        const { getByTestId, emitted } = await renderMounted(Breadcrumb, {
+          props: { items: TRAIL }
+        })
+
+        // Root guards the last segment with `!lastItem.active` before emitting.
+        await fireEvent.click(getByTestId(`${TESTID}__item-last`))
+
+        expect(emitted().navigate).toBeUndefined()
+      })
+
+      it('emits navigate on keyboard activation of the first segment link', async () => {
+        const { getByTestId, emitted } = await renderMounted(Breadcrumb, {
+          props: { items: TRAIL }
+        })
+
+        const first = getByTestId(`${TESTID}__item-0`) as HTMLElement
+        first.focus()
+        expect(document.activeElement).toBe(first)
+
+        // Enter activates a focused anchor -> real click -> navigate.
+        await userEvent.keyboard('{Enter}')
+
+        const navigate = emitted().navigate as Array<[unknown, string]>
+        expect(navigate).toBeTruthy()
+        expect(navigate[0][0]).toBeInstanceOf(MouseEvent)
+        expect(navigate[0][1]).toBe('/home')
+      })
+    })
+
+    describe('two items (no middle -> no overflow menu)', () => {
+      it('renders first + current with no overflow menu', async () => {
+        const items = [{ label: 'Home', href: '/home' }, { label: 'Current' }]
+        const { getByTestId, queryByTestId } = await renderMounted(Breadcrumb, { props: { items } })
+
+        expect(getByTestId(`${TESTID}__item-0`).tagName).toBe('A')
+        expect(getByTestId(`${TESTID}__item-last`).getAttribute('aria-current')).toBe('page')
+        // hasMiddleItems is false -> no overflow menu.
+        expect(queryByTestId(`${TESTID}__overflow-menu`)).toBeNull()
+        expect(queryByTestId(`${TESTID}__separator-overflow-before`)).toBeNull()
+      })
+    })
+
+    describe('single item', () => {
+      it('renders a lone current item with no overflow menu and no distinct-end separator', async () => {
+        const { getByTestId, queryByTestId } = await renderMounted(Breadcrumb, {
+          props: { items: [{ label: 'Only', active: true }] }
+        })
+
+        // firstItem === lastItem: showDistinctEnds is false, so the first segment
+        // is rendered as the current page.
+        const first = getByTestId(`${TESTID}__item-0`)
+        expect(first.tagName).toBe('SPAN')
+        expect(first.getAttribute('aria-current')).toBe('page')
+
+        expect(queryByTestId(`${TESTID}__overflow-menu`)).toBeNull()
+        expect(queryByTestId(`${TESTID}__separator-overflow-after`)).toBeNull()
+      })
+    })
+
+    describe('empty items -> default slot', () => {
+      it('renders default slot content when items is empty', async () => {
+        const { queryByTestId, getByText } = await renderMounted(Breadcrumb, {
+          props: { items: [] },
+          slots: { default: '<span>custom trail</span>' }
+        })
+
+        // No data-driven list is rendered.
+        expect(queryByTestId(`${TESTID}__list`)).toBeNull()
+        expect(getByText('custom trail')).toBeTruthy()
+      })
+    })
+
+    describe('consumer data-testid override', () => {
+      it('threads a custom testid through the list, first segment, item and overflow menu', async () => {
+        const { getByTestId } = await renderMounted(Breadcrumb, {
+          props: { items: TRAIL },
+          attrs: { 'data-testid': 'crumbs' }
+        })
+
+        expect(getByTestId('crumbs')).toBeTruthy()
+        expect(getByTestId('crumbs__list')).toBeTruthy()
+        expect(getByTestId('crumbs__segment-0-mobile')).toBeTruthy()
+        expect(getByTestId('crumbs__item-0')).toBeTruthy()
+        expect(getByTestId('crumbs__overflow-menu')).toBeTruthy()
+      })
+    })
+
+    describe('manual composition via compound sub-components', () => {
+      it('renders a hand-composed trail through the root, List, Item and Separator', async () => {
+        const { getByTestId, getByText } = await renderMounted({
+          components: {
+            BreadcrumbRoot: Breadcrumb,
+            BreadcrumbList: BreadcrumbList,
+            BreadcrumbItem: BreadcrumbItem,
+            BreadcrumbSeparator: BreadcrumbSeparator
+          },
+          template: `
           <BreadcrumbRoot>
             <BreadcrumbList data-testid="manual__list">
               <li>
@@ -295,45 +303,45 @@ describe('Breadcrumb (composition, data-driven root)', () => {
               </li>
               <BreadcrumbSeparator data-testid="manual__sep-0" />
               <li>
-                <BreadcrumbItem label="Leaf" current data-testid="manual__item-1" />
+                <BreadcrumbItem label="Leaf" active data-testid="manual__item-1" />
               </li>
             </BreadcrumbList>
           </BreadcrumbRoot>
         `
+        })
+
+        // With items empty, the slot content renders instead of the data trail.
+        expect(getByTestId('manual__list').tagName).toBe('OL')
+        expect(getByTestId('manual__sep-0').getAttribute('aria-hidden')).toBe('true')
+
+        const rootItem = getByTestId('manual__item-0')
+        expect(rootItem.tagName).toBe('A')
+        expect(rootItem.getAttribute('href')).toBe('/root')
+
+        const leaf = getByTestId('manual__item-1')
+        expect(leaf.tagName).toBe('SPAN')
+        expect(leaf.getAttribute('aria-current')).toBe('page')
+
+        expect(getByText('Root')).toBeTruthy()
+        expect(getByText('Leaf')).toBeTruthy()
       })
 
-      // With items empty, the slot content renders instead of the data trail.
-      expect(getByTestId('manual__list').tagName).toBe('OL')
-      expect(getByTestId('manual__sep-0').getAttribute('aria-hidden')).toBe('true')
-
-      const rootItem = getByTestId('manual__item-0')
-      expect(rootItem.tagName).toBe('A')
-      expect(rootItem.getAttribute('href')).toBe('/root')
-
-      const leaf = getByTestId('manual__item-1')
-      expect(leaf.tagName).toBe('SPAN')
-      expect(leaf.getAttribute('aria-current')).toBe('page')
-
-      expect(getByText('Root')).toBeTruthy()
-      expect(getByText('Leaf')).toBeTruthy()
-    })
-
-    it('keeps every hand-composed segment at this (mobile) viewport — no collapse in slot mode', () => {
-      // The Playwright viewport is below md, so the items-driven trail collapses
-      // here (see the header note). A hand-composed trail must NOT: the root
-      // cannot know which of the consumer's children are middle segments, so it
-      // renders exactly what it was given. What keeps that usable on a narrow
-      // screen is CSS (one row, ellipsized segment, row scrolls when even that
-      // is not enough), which this env cannot measure — see the ComposedMobile
-      // story for that half.
-      const { getByTestId, queryByTestId } = render({
-        components: {
-          BreadcrumbRoot: Breadcrumb,
-          BreadcrumbList: BreadcrumbList,
-          BreadcrumbItem: BreadcrumbItem,
-          BreadcrumbSeparator: BreadcrumbSeparator
-        },
-        template: `
+      it('keeps every hand-composed segment at this (mobile) viewport — no collapse in slot mode', async () => {
+        // The Playwright viewport is below md, so the items-driven trail collapses
+        // here (see the header note). A hand-composed trail must NOT: the root
+        // cannot know which of the consumer's children are middle segments, so it
+        // renders exactly what it was given. What keeps that usable on a narrow
+        // screen is CSS (one row, ellipsized segment, row scrolls when even that
+        // is not enough), which this env cannot measure — see the ComposedMobile
+        // story for that half.
+        const { getByTestId, queryByTestId } = await renderMounted({
+          components: {
+            BreadcrumbRoot: Breadcrumb,
+            BreadcrumbList: BreadcrumbList,
+            BreadcrumbItem: BreadcrumbItem,
+            BreadcrumbSeparator: BreadcrumbSeparator
+          },
+          template: `
           <BreadcrumbRoot>
             <BreadcrumbList data-testid="slot__list">
               <li><BreadcrumbItem label="Home" href="/" data-testid="slot__item-0" /></li>
@@ -342,132 +350,177 @@ describe('Breadcrumb (composition, data-driven root)', () => {
               <BreadcrumbSeparator />
               <li><BreadcrumbItem label="Projects" href="/p" data-testid="slot__item-2" /></li>
               <BreadcrumbSeparator />
-              <li><BreadcrumbItem label="Settings" current data-testid="slot__item-3" /></li>
+              <li><BreadcrumbItem label="Settings" active data-testid="slot__item-3" /></li>
             </BreadcrumbList>
           </BreadcrumbRoot>
         `
-      })
+        })
 
-      for (const index of [0, 1, 2, 3]) {
-        expect(getByTestId(`slot__item-${index}`)).toBeTruthy()
-      }
-      // None of the collapse machinery appears for a slot-composed trail.
-      expect(queryByTestId(`${TESTID}__overflow-menu`)).toBeNull()
-      expect(queryByTestId(`${TESTID}__segment-overflow`)).toBeNull()
-    })
-
-    it('emits its own click on a manually composed BreadcrumbItem', async () => {
-      const { getByTestId, emitted } = render(BreadcrumbItem, {
-        props: { label: 'Standalone', href: '/x', 'data-testid': 'solo' }
-      })
-
-      await fireEvent.click(getByTestId('solo'))
-
-      expect(emitted().click).toHaveLength(1)
-      expect(emitted().click[0][0]).toBeInstanceOf(MouseEvent)
-    })
-  })
-
-  describe('trail-length smoke', () => {
-    it.each([{ count: 1 }, { count: 2 }, { count: 4 }])(
-      'renders a $count-item trail with a first-segment item present',
-      ({ count }) => {
-        const items = Array.from({ length: count }, (_, i) => ({
-          label: `L${i}`,
-          href: `/l${i}`
-        }))
-        const { getByTestId } = render(Breadcrumb, { props: { items } })
-
-        // firstItem always renders as `__item-0` in the collapsed layout.
-        expect(getByTestId(`${TESTID}__item-0`)).toBeTruthy()
-      }
-    )
-  })
-
-  describe('story fixtures', () => {
-    it('composes the Default story into a nav trail', () => {
-      const { getByTestId } = render(Default())
-
-      expect(getByTestId(TESTID).getAttribute('aria-label')).toBe('Breadcrumb')
-      expect(getByTestId(`${TESTID}__list`).tagName).toBe('OL')
-    })
-
-    // The collapse no longer has a story of its own (the mobile-viewport stories were
-    // dropped so the set documents the versions and the viewport is exercised by hand),
-    // so it is rendered directly here. The behaviour is the component's, not a story's.
-    it('collapses the middle segments into an overflow menu below md', () => {
-      // The Playwright viewport in this file is already below md (see the note at the
-      // top), which is what puts the trail in its collapsed layout.
-      const { getByTestId } = render(Breadcrumb, {
-        props: {
-          items: [
-            { label: 'Page Name', href: '#' },
-            { label: 'Page Name', href: '#' },
-            { label: 'Page Name', href: '#' },
-            { label: 'Page Name', href: '#' },
-            { label: 'Current Page', current: true }
-          ]
+        for (const index of [0, 1, 2, 3]) {
+          expect(getByTestId(`slot__item-${index}`)).toBeTruthy()
         }
+        // None of the collapse machinery appears for a slot-composed trail.
+        expect(queryByTestId(`${TESTID}__overflow-menu`)).toBeNull()
+        expect(queryByTestId(`${TESTID}__segment-overflow`)).toBeNull()
       })
 
-      // 5 items -> 3 middle items collapse into the overflow menu.
-      expect(getByTestId(`${TESTID}__overflow-menu`)).toBeTruthy()
-      expect(getByTestId(`${TESTID}__item-last`).getAttribute('aria-current')).toBe('page')
+      it('emits its own click on a manually composed BreadcrumbItem', async () => {
+        const { getByTestId, emitted } = await renderMounted(BreadcrumbItem, {
+          props: { label: 'Standalone', href: '/x', 'data-testid': 'solo' }
+        })
+
+        await fireEvent.click(getByTestId('solo'))
+
+        expect(emitted().click).toHaveLength(1)
+        expect(emitted<unknown[]>().click[0][0]).toBeInstanceOf(MouseEvent)
+      })
     })
 
-    it('composes the Depths story: single, two-level and full five-level trails', () => {
-      const { getAllByTestId } = render(Depths())
+    describe('trail-length smoke', () => {
+      it.each([{ count: 1 }, { count: 2 }, { count: 4 }])(
+        'renders a $count-item trail with a first-segment item present',
+        async ({ count }) => {
+          const items = Array.from({ length: count }, (_, i) => ({
+            label: `L${i}`,
+            href: `/l${i}`
+          }))
+          const { getByTestId } = await renderMounted(Breadcrumb, { props: { items } })
 
-      // The story renders three Breadcrumb instances of increasing depth.
-      const [single, two, full] = getAllByTestId(TESTID)
-
-      // single: one lone current item, nothing to collapse.
-      expect(within(single).getByTestId(`${TESTID}__item-0`).getAttribute('aria-current')).toBe(
-        'page'
+          // firstItem always renders as `__item-0` in the collapsed layout.
+          expect(getByTestId(`${TESTID}__item-0`)).toBeTruthy()
+        }
       )
-      expect(within(single).queryByTestId(`${TESTID}__overflow-menu`)).toBeNull()
+    })
 
-      // two: first anchor + current last, no middle segments -> no overflow.
-      expect(within(two).getByTestId(`${TESTID}__item-0`).tagName).toBe('A')
-      expect(within(two).getByTestId(`${TESTID}__item-last`).getAttribute('aria-current')).toBe(
-        'page'
-      )
-      expect(within(two).queryByTestId(`${TESTID}__overflow-menu`)).toBeNull()
+    describe('story fixtures', () => {
+      it('composes the Default story into a nav trail', async () => {
+        const { getByTestId } = await renderMounted(Default)
 
-      // full: five items -> the middle segments collapse into the overflow menu.
-      expect(within(full).getByTestId(`${TESTID}__overflow-menu`)).toBeTruthy()
-      expect(within(full).getByTestId(`${TESTID}__item-last`).getAttribute('aria-current')).toBe(
-        'page'
-      )
+        expect(getByTestId(TESTID).getAttribute('aria-label')).toBe('Breadcrumb')
+        expect(getByTestId(`${TESTID}__list`).tagName).toBe('OL')
+      })
+
+      // The collapse no longer has a story of its own (the mobile-viewport stories were
+      // dropped so the set documents the versions and the viewport is exercised by hand),
+      // so it is rendered directly here. The behaviour is the component's, not a story's.
+      it('collapses the middle segments into an overflow menu below md', async () => {
+        // The Playwright viewport in this file is already below md (see the note at the
+        // top), which is what puts the trail in its collapsed layout.
+        const { getByTestId } = await renderMounted(Breadcrumb, {
+          props: {
+            items: [
+              { label: 'Page Name', href: '#' },
+              { label: 'Page Name', href: '#' },
+              { label: 'Page Name', href: '#' },
+              { label: 'Page Name', href: '#' },
+              { label: 'Current Page', active: true }
+            ]
+          }
+        })
+
+        // 5 items -> 3 middle items collapse into the overflow menu.
+        expect(getByTestId(`${TESTID}__overflow-menu`)).toBeTruthy()
+        expect(getByTestId(`${TESTID}__item-last`).getAttribute('aria-current')).toBe('page')
+      })
+
+      it('composes the Depths story: single, two-level and full five-level trails', async () => {
+        const { getAllByTestId } = await renderMounted(Depths)
+
+        // The story renders three Breadcrumb instances of increasing depth.
+        const [single, two, full] = getAllByTestId(TESTID)
+
+        // single: one lone current item, nothing to collapse.
+        expect(within(single).getByTestId(`${TESTID}__item-0`).getAttribute('aria-current')).toBe(
+          'page'
+        )
+        expect(within(single).queryByTestId(`${TESTID}__overflow-menu`)).toBeNull()
+
+        // two: first anchor + current last, no middle segments -> no overflow.
+        expect(within(two).getByTestId(`${TESTID}__item-0`).tagName).toBe('A')
+        expect(within(two).getByTestId(`${TESTID}__item-last`).getAttribute('aria-current')).toBe(
+          'page'
+        )
+        expect(within(two).queryByTestId(`${TESTID}__overflow-menu`)).toBeNull()
+
+        // full: five items -> the middle segments collapse into the overflow menu.
+        expect(within(full).getByTestId(`${TESTID}__overflow-menu`)).toBeTruthy()
+        expect(within(full).getByTestId(`${TESTID}__item-last`).getAttribute('aria-current')).toBe(
+          'page'
+        )
+      })
+    })
+
+    describe('accessibility', () => {
+      it('has no a11y violations for a collapsed multi-segment trail', async () => {
+        const { container } = await renderMounted(Breadcrumb, { props: { items: TRAIL } })
+
+        await expectNoA11yViolations(container)
+      })
+
+      it('has no a11y violations for a single current item', async () => {
+        const { container } = await renderMounted(Breadcrumb, {
+          props: { items: [{ label: 'Only', active: true }] }
+        })
+
+        await expectNoA11yViolations(container)
+      })
+
+      it('has no a11y violations for a trail with leading icons', async () => {
+        const { container } = await renderMounted(Breadcrumb, {
+          props: {
+            items: [
+              { label: 'Home', href: '/home', showIcon: true, icon: 'az az-home' },
+              { label: 'Current' }
+            ]
+          }
+        })
+
+        await expectNoA11yViolations(container)
+      })
     })
   })
 
-  describe('accessibility', () => {
-    it('has no a11y violations for a collapsed multi-segment trail', async () => {
-      const { container } = render(Breadcrumb, { props: { items: TRAIL } })
+  describe('audit fixes', () => {
+    const FIVE = [
+      { label: 'Home', href: '/home' },
+      { label: 'Projects', href: '/projects' },
+      { label: 'Acme', href: '/projects/acme' },
+      { label: 'Domains', href: '/projects/acme/domains' },
+      { label: 'Settings' }
+    ]
 
-      await expectNoA11yViolations(container)
-    })
-
-    it('has no a11y violations for a single current item', async () => {
-      const { container } = render(Breadcrumb, {
-        props: { items: [{ label: 'Only', current: true }] }
+    const inBox = (width: number, props: Record<string, unknown> = {}) =>
+      defineComponent({
+        setup: () => () =>
+          h('div', { style: { width: `${width}px` } }, [h(Breadcrumb, { items: FIVE, ...props })])
       })
 
-      await expectNoA11yViolations(container)
+    it('lets a consumer aria-label name the landmark', async () => {
+      const { getByTestId } = await renderMounted(Breadcrumb, {
+        props: { items: TRAIL },
+        attrs: { 'aria-label': 'You are here' }
+      })
+      expect(getByTestId(TESTID).getAttribute('aria-label')).toBe('You are here')
     })
 
-    it('has no a11y violations for a trail with leading icons', async () => {
-      const { container } = render(Breadcrumb, {
-        props: {
-          items: [
-            { label: 'Home', href: '/home', showIcon: true, icon: 'pi pi-home' },
-            { label: 'Current' }
-          ]
-        }
-      })
+    it('collapses on the width of its own box, not the window', async () => {
+      const wide = await renderMounted(inBox(1000))
+      expect(wide.queryByTestId(`${TESTID}__overflow-menu`)).toBeNull()
+      expect(wide.getByTestId(`${TESTID}__item-2`)).toBeTruthy()
+      wide.unmount()
 
-      await expectNoA11yViolations(container)
+      const narrow = await renderMounted(inBox(400))
+      expect(narrow.getByTestId(`${TESTID}__overflow-menu`)).toBeTruthy()
+    })
+
+    it('renders collapsed segments as links in the overflow menu', async () => {
+      const { getByTestId } = await renderMounted(inBox(400))
+      await fireEvent.click(getByTestId(`${TESTID}__overflow-trigger`))
+      const option = document.body.querySelector(
+        `[data-testid="${TESTID}__overflow-item-0"]`
+      ) as HTMLElement
+      expect(option.tagName).toBe('A')
+      expect(option.getAttribute('href')).toBe('/projects')
     })
   })
 })

@@ -1,0 +1,128 @@
+{
+ "name": "dashboard-grid",
+ "binding": "DashboardGrid",
+ "import": "@aziontech/webkit/dashboard-grid",
+ "treeShakeableImport": "@aziontech/webkit/dashboard-grid-root",
+ "category": "layout",
+ "surface": "app",
+ "structure": "composition",
+ "compoundRoot": true,
+ "subcomponents": [
+  "@aziontech/webkit/dashboard-grid-item"
+ ],
+ "purpose": "A configurable dashboard grid: the reader arranges the cards. `DashboardGrid` owns the layout, an array of `{ id, span, height? }` bound with `v-model:layout`, and lays one `DashboardGrid.Item` per entry on a column grid that collapses to one column in a narrow container. While `editing`, the `ChartCard` inside each item shows its drag handle and resize corner, and those handles report to the board instead of to the page: drag a card onto another or press the arrow keys on its handle to reorder, drag its corner or press the arrow keys on it to resize. Every move and resize is clamped, written back to the layout and announced in a polite live region. Taken from Cloudscape's board and board item, on top of the existing `ChartCard` handles.",
+ "setup": null,
+ "useWhen": [
+  "A dashboard whose reader chooses the order and the size of its cards, and the product keeps that layout as a preference.",
+  "A grid of cards that must be reorderable from the keyboard and announced to screen readers, not only by mouse."
+ ],
+ "avoidWhen": [
+  "A fixed dashboard whose layout the product decides → a plain CSS grid of `chart-card`s (see the `dashboard/dashboard-analytics` block).",
+  "Two or three panes whose boundary the reader drags → use `resizable`.",
+  "Reordering the rows of a list or a table → use the table's reorderable rows or `transfer-list`.",
+  "A grid of resources the reader selects, not arranges → use `card-list`."
+ ],
+ "related": [
+  "`chart-card` — the card each `DashboardGrid.Item` holds; its `DragHandle` and `ResizeHandle` drive the board.",
+  "`resizable` — split panes with a draggable divider, not a grid of cards.",
+  "`card-list` — a selectable collection of item cards with a fixed layout.",
+  "`page-header` — the title over the board, with the Edit layout and Reset layout actions beside it."
+ ],
+ "bestPractices": [
+  "Keep the layout in the page and persist it wherever the product stores preferences; the board never stores it.",
+  "Offer an explicit Edit layout toggle (`aria-pressed`) and turn `editing` on with it, so handles do not crowd the read-only view.",
+  "Give every `DashboardGrid.Item` a `label` (the card's title): it is the name the live region announces.",
+  "Offer Reset layout once the layout differs from the default.",
+  "Bound the sizes (`min-span`, `max-span`, `min-height`, `max-height`) so no card becomes unreadable."
+ ],
+ "props": [
+  {
+   "name": "columns",
+   "type": "number",
+   "default": "12",
+   "required": "false",
+   "doc": "Columns of the grid in a wide container; one column below `@3xl`."
+  },
+  {
+   "name": "minSpan",
+   "type": "number",
+   "default": "3",
+   "required": "false",
+   "doc": "Fewest columns an item may span."
+  },
+  {
+   "name": "maxSpan",
+   "type": "number",
+   "default": "12",
+   "required": "false",
+   "doc": "Most columns an item may span; capped at `columns`."
+  },
+  {
+   "name": "minHeight",
+   "type": "number",
+   "default": "240",
+   "required": "false",
+   "doc": "Smallest height in pixels a resize allows."
+  },
+  {
+   "name": "maxHeight",
+   "type": "number",
+   "default": "960",
+   "required": "false",
+   "doc": "Largest height in pixels a resize allows."
+  },
+  {
+   "name": "editing",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows the drag and resize handles of every card and lets the reader rearrange the board."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the list of items. Empty uses the locale catalog (`Dashboard`)."
+  },
+  {
+   "name": "layout",
+   "type": "DashboardGridLayoutItem[]",
+   "default": "() => []",
+   "required": "false",
+   "doc": "Two-way value (`v-model:layout`)."
+  }
+ ],
+ "events": [
+  {
+   "name": "item-move",
+   "payload": "(event: KeyboardEvent | DragEvent, payload: { id: string; from: number; to: number })",
+   "notes": "An item moved, by drop or by the keyboard; zero-based. The drop or key event comes first."
+  },
+  {
+   "name": "item-resize",
+   "payload": "(event: PointerEvent | KeyboardEvent, payload: { id: string; span: number; height: number | undefined })",
+   "notes": "A resize ended (pointer up or a resize key on the corner); that event comes first."
+  }
+ ],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "One `DashboardGrid.Item` per layout entry, in layout order."
+  }
+ ],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/dashboard-grid/default.vue"
+  },
+  {
+   "name": "Editing",
+   "file": "examples/dashboard-grid/editing.vue"
+  }
+ ],
+ "docs": "components/dashboard-grid.md"
+}

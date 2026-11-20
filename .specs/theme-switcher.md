@@ -1,51 +1,78 @@
 ---
 name: theme-switcher
-category: inputs
+category: input
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 6
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5721-5138
   node_id: 5721:5138
-checksum: e63b37d81836c498473d2036f253903a1491144b562aeb30b5110cfd0fabf22e
+checksum: 551a50b399d827bc4e1074ccf979c60836d84b3269fd366c899293fb43d0659c
 created: 2026-07-13
-last_updated: 2026-07-13
+last_updated: 2026-11-20
 ---
 
 # Theme Switcher — Component Spec
 
 ## Purpose
 
-A compact pill-shaped segmented control that lets the user pick the app color-theme mode — `system`, `dark`, or `light` — via three icon-only segments. It is a pure controlled input: it reflects and emits the selected mode with `v-model:value` and applies no global side effect itself (the app decides what each mode means). Unlike `switch` (a boolean toggle) or `tab-view` (view navigation), it is a fixed three-way single-select over the theme modes.
+A compact segmented control drawn like `toggle-group` (same radius, surface and 28 / 32 / 40 heights, with the header outline `--border-default`, so it sits in a row of header controls beside an `IconButton`, `Select` or `SearchTrigger` of the same size) that lets the user pick the app color-theme mode — `system`, `dark`, or `light` — via three icon-only segments. It reflects and emits the selected mode through `v-model` and applies no global side effect itself (the app decides what each mode means). Unlike `switch` (a boolean toggle) or `tabs` (view navigation), it is a fixed three-way single-select over the theme modes.
+
+## When to use
+
+- Use ThemeSwitcher only for the system / light / dark choice in app chrome; for any other segmented choice use ToggleGroup, and for a choice in a form use RadioGroup.
+- The app-wide color mode picker in a header, footer, account menu or settings page.
+
+## When NOT to use
+
+- A general on/off preference → use `switch`.
+- Picking one of other mutually exclusive options → use `toggle-group`.
+- Moving between views or panels → use `tabs`.
+
+## Related
+
+- `toggle-group` — the generic mutually exclusive option group, with labels and sizes; ThemeSwitcher shares its look (radius, surface, indicator, sizes), with the header controls' `--border-default` outline instead of its `--border-muted`, so a header row draws one outline colour.
+- `switch` — boolean toggle for a single setting.
+
+## Best practices
+
+- Bind with `v-model` and apply the mode in the app (for example a `data-theme` attribute, resolving `system` from `prefers-color-scheme`); the component has no side effects.
+- Persist the chosen mode on the app side so it survives a reload.
+- Match `size` to the neighbouring controls: `medium` beside the 32 px header controls, `small` inside a 32 px menu row, `large` beside 40 px controls.
+- Localize `ariaLabel`; the segment names (System, Dark, Light) are fixed in the component.
 
 ## Usage
 
 ```vue
 <script setup>
-import { ref } from 'vue'
-import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
+  import { ref } from 'vue'
+  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
 
-const theme = ref('system')
+  const theme = ref('system')
 </script>
 
 <template>
-  <ThemeSwitcher v-model:value="theme" />
+  <ThemeSwitcher v-model="theme" />
 </template>
 ```
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `value` | `'system' \| 'dark' \| 'light'` | `'system'` | false | Selected theme mode. Bind with `v-model:value`. |
-| `disabled` | `boolean` | `false` | false | Disables the whole control and applies disabled tokens. |
-| `ariaLabel` | `string` | `'Theme'` | false | Accessible name for the icon-only segmented group. |
+| Prop        | Type                                                   | Default    | Required | JSDoc                                                                                                 |
+| ----------- | ------------------------------------------------------ | ---------- | -------- | ----------------------------------------------------------------------------------------------------- |
+| `size`      | `ThemeSwitcherSize` (`'small' \| 'medium' \| 'large'`) | `'medium'` | false    | Size token, matching the height of a neighbouring IconButton, Select or ToggleGroup of the same size. |
+| `disabled`  | `boolean`                                              | `false`    | false    | Disables the whole control and applies disabled tokens.                                               |
+| `ariaLabel` | `string`                                               | `''`       | false    | Accessible name for the icon-only segmented group. Empty uses the locale catalog (`Theme`).           |
+
+## v-model
+
+| Model     | Type                            | Default    | Emits               | Notes                                                                                                                             |
+| --------- | ------------------------------- | ---------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model` | `'system' \| 'dark' \| 'light'` | `'system'` | `update:modelValue` | Selected theme mode via `defineModel`. Emits when the user selects a different mode; the component applies no side effect itself. |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
-| `update:value` | `'system' \| 'dark' \| 'light'` | Emitted when the user selects a mode. Paired with `v-model:value`. |
+| _none_ | — | — |
 
 ## Slots
 
@@ -54,51 +81,64 @@ const theme = ref('system')
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
+- `data-size` mirrors `size` on the root: 28 px (`small`), 32 px (`medium`), 40 px (`large`) tall, the same rhythm as `toggle-group`, `icon-button` and `select`; segments are 24 / 28 / 36 px wide and fill the inner height
 - `data-disabled` mirrors the `disabled` prop on the root
 - Selected segment carries `aria-checked="true"` and `data-state="active"`; unselected segments `aria-checked="false"` and `data-state="inactive"`
-- A single `aria-hidden` indicator element renders the selection highlight (`var(--bg-selected)`) and slides to the active segment (position measured from the active segment's box); segments themselves stay transparent
+- A single `aria-hidden` indicator element renders the selection highlight (`var(--bg-selected)`) and slides to the active segment (position and size measured from the active segment's box, so it follows every size); segments themselves stay transparent; the active icon uses `var(--text-default)`, the others `var(--text-muted)` until hovered
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| hover / icon color change | `transition-colors duration-fast-02 ease-productive-entrance` | semantic (`animate.js`) | `motion-reduce:transition-none` |
-| selection change | indicator slides between segments via `transition-transform duration-moderate-02 ease-productive-entrance` (position measured from the active segment) | semantic (`animate.js`) | `motion-reduce:transition-none` |
+| Trigger                   | Animation / Transition                                                                                                                                 | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback         |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------- | ------------------------------- |
+| hover / icon color change | `transition-colors duration-fast-02 ease-productive-entrance`                                                                                          | semantic (`animate.js`)                           | `motion-reduce:transition-none` |
+| selection change          | indicator slides between segments via `transition-transform duration-moderate-02 ease-productive-entrance` (position measured from the active segment) | semantic (`animate.js`)                           | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| pill surface | `var(--bg-surface)` |
-| pill border | `var(--border-default)` |
-| selected segment surface | `var(--bg-selected)` |
-| hover segment surface | `var(--bg-hover)` |
-| icon color | `var(--text-default)` |
-| disabled icon | `var(--text-disabled)` |
-| gap / padding | `var(--spacing-xxs)` |
-| ring | `var(--ring-color)` |
-| ring offset | `var(--bg-canvas)` |
+| Region                   | Token (DESIGN.md)                                                     |
+| ------------------------ | --------------------------------------------------------------------- |
+| group surface            | `var(--bg-surface)`                                                   |
+| group border             | `var(--border-default)`, the outline of the header controls beside it |
+| group and segment radius | `var(--shape-button)` (as `toggle-group`, `button`, `icon-button`)    |
+| height                   | `h-7` / `h-8` / `h-10` by `size`                                      |
+| selected segment surface | `var(--bg-selected)`                                                  |
+| hover segment surface    | `var(--bg-hover)`                                                     |
+| icon color               | `var(--text-default)` (active, hover), `var(--text-muted)` (inactive) |
+| icon size                | `text-label-sm` (`small`, `medium`), `text-label-md` (`large`)        |
+| disabled icon            | `var(--text-disabled)`                                                |
+| gap / padding            | `var(--spacing-2xs)`                                                  |
+| ring                     | `var(--ring-color)`                                                   |
+| ring offset              | `var(--bg-canvas)`                                                    |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| `--border-width-default` (0.8px) | `border-(length:--border-width-default)` (real compiled theme token) | `TODO: document --border-width-default in DESIGN.md` |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on the focused segment.
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color)` on the focused segment, drawn inside the group as on `toggle-group`.
 - Keyboard map: `Tab` moves focus into the group (roving tabindex lands on the selected segment); `ArrowLeft`/`ArrowRight` (and `ArrowUp`/`ArrowDown`) move selection between segments; `Space`/`Enter` selects the focused segment.
 - ARIA: root is `role="radiogroup"` with `aria-label` from `ariaLabel`; each segment is `role="radio"` with `aria-checked` and its own `aria-label` (`System` / `Dark` / `Light`); the glyph is `aria-hidden`. `aria-disabled` mirrors `disabled`.
-- Each segment is wrapped in `@aziontech/webkit/tooltip` (`placement="bottom"`) surfacing its mode label (`System` / `Dark` / `Light`) on hover and keyboard focus; the tooltip owns its own `aria-describedby` wiring.
+- Each segment is wrapped in `@aziontech/webkit/tooltip` (`side="bottom"`) surfacing its mode label (`System` / `Dark` / `Light`) on hover and keyboard focus; the tooltip owns its own `aria-describedby` wiring.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons), including the disabled state.
 - `motion-reduce:transition-none` on animated states.
-- Touch target: segments follow the compact Figma sizing (28px pill height, 28×20px segments) and are below the 40×40 px target; justified deviation for a dense global control, consistent with the design.
+- Touch target: segments are drawn 24 / 28 / 36 px wide by `size` on every pointer; on a coarse pointer each carries an invisible `aria-hidden` child (`data-slot="touch-target"`) shown only under `pointer-coarse:` that extends its hit area to 44×44 px, as `toggle-group` does.
 
-## Stories (Storybook)
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: the sun, moon and monitor glyphs do not mirror.
+- Keyboard: `ArrowRight`/`ArrowLeft` move to the next/previous theme, swapped under `dir="rtl"` (`logicalArrowKey`).
+- Indicator: the selection highlight is anchored with a physical `left: 0` and moved by the measured offset, so it lands on the selected option in both directions.
+- User data: none.
+
+## Examples
 
 - Default
-- Disabled — only state story; the component has a single `kind` and a single `size`, so Types/Sizes are omitted.
+- Sizes — `small`, `medium` and `large`, each beside an outline `IconButton` of the same size, so the matching height and radius are visible.
+- Disabled — the only state example; the component has a single `variant`, so Types are omitted.
 
 ## Constraints — DO NOT
 
@@ -113,14 +153,14 @@ const theme = ref('system')
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Stories (Storybook)" section explicitly justifies the addition.
-- Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + per `variant` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
+- Do not edit `.claude/docs/DESIGN.md` or `.claude/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
 - Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).
 - Do not run `git` commands, `pnpm install`, or any command that changes the lockfile.
 - If anything in the spec is ambiguous or contradicts the rules, emit `BLOCKED: <one-sentence reason>` and write nothing.
 </content>
+
 </invoke>

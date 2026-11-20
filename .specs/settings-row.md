@@ -1,0 +1,178 @@
+---
+name: settings-row
+category: layout
+structure: monolithic
+status: implemented
+checksum: bade8cff3f2c50d097409ebbfb4a9567061e1cd9579b36366c224b52c546d637
+spec_version: 8
+created: 2026-11-10
+last_updated: 2026-11-17
+---
+
+# SettingsRow — Component Spec
+
+## Purpose
+
+One setting inside a flush `Card`: an `Item` whose content carries the title and description, with the control placed by what it needs. A typed or picked field sits in a right cell capped at the 3xs container so every field on the card ends at the same edge (`field`); a switch or a button sits hard right at its natural width (`compact`); a textarea, list, radio group or editor drops under the copy at the full measure (`stacked`). A child setting indents one or two levels under a rule (`depth`). The copy top-aligns with the control, and the description always wraps in full, never truncated. In a narrow row (below `@md` of the row, a phone) a `field` control stacks under the copy at full width; a `compact` switch or button stays at the end side beside the wrapped copy. `stackable` moves the stacking point up to `@lg` for a field that needs the full measure in a drawer-width box.
+
+## When to use
+
+- Every row of a settings card: account settings, build settings, create pages, resource settings.
+- A field with a validation message under it (put the `FieldError` in the default slot after the control).
+
+## When NOT to use
+
+- A stand-alone form field with a visible label above it → use `field` around the control (`Field`, `FieldLabel`, `FieldDescription`).
+- A read-only list of label and value pairs → use `key-value-list`.
+- A navigable list row → use `item` directly.
+
+## Related
+
+- `settings-group` — the band the card of rows sits in.
+- `item` — the row primitive it renders; place rows in an `Item.List` inside the card.
+- `field-error` — the required or invalid message under the control.
+
+## Best practices
+
+- The title is the label: give the control the same text as `aria-label`.
+- Pick `variant` by the control: `field` for Input and Select, `compact` for Switch and Button, `stacked` for Textarea, radio groups and editors.
+- Show a validation message only after Save was pressed.
+- Use `depth` only for a setting that applies when the row above it is on, and render it with `v-if` on that state.
+- Let the row stack on a phone: the title and the full description on top, a `field` control under them at full width. A `compact` switch or button keeps the end side, beside the wrapped copy.
+- Set `stackable` only when the field needs the full measure in a drawer-width box (a long URL or a code value in a side drawer), where a default row would still sit beside its copy; never to fix a centred or cramped look.
+- Let a tall control (an input group of three nameservers, a textarea) sit beside the copy: the title stays at the top of the row.
+- Do not wrap the row or its copy in your own flex box to change the alignment or to stack it; use `variant` and `stackable`.
+- Do not set `stackable` on a `compact` row: a switch or a button always stays at the end side.
+- Keep the description to the one sentence that says what the setting does, and put the rest of a longer explanation in `hint`: the description is never truncated, so a long one makes a tall row, and the Hint glyph beside the title keeps the extra text out of the way until hover or focus.
+
+## Usage
+
+```vue
+<script setup>
+  import Card from '@aziontech/webkit/card'
+  import Input from '@aziontech/webkit/input'
+  import Item from '@aziontech/webkit/item'
+  import SettingsRow from '@aziontech/webkit/settings-row'
+  import Switch from '@aziontech/webkit/switch'
+  import { reactive } from 'vue'
+
+  const form = reactive({ name: '', active: true })
+</script>
+
+<template>
+  <Card :padded="false">
+    <template #default>
+      <Item.List>
+        <SettingsRow
+          title="Name"
+          description="Give a unique and descriptive name to identify the resource."
+        >
+          <Input
+            v-model="form.name"
+            size="large"
+            class="w-full"
+            aria-label="Name"
+          />
+        </SettingsRow>
+        <SettingsRow
+          title="Active"
+          description="When disabled, the resource stops serving traffic."
+          variant="compact"
+        >
+          <Switch
+            v-model="form.active"
+            aria-label="Active"
+          />
+        </SettingsRow>
+      </Item.List>
+    </template>
+  </Card>
+</template>
+```
+
+## Props
+
+| Prop          | Type                                | Default   | Required | JSDoc                                                                                                                          |
+| ------------- | ----------------------------------- | --------- | -------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `title`       | `string`                            | `—`       | true     | The setting name; the control takes the same text as its aria-label.                                                           |
+| `description` | `string`                            | `''`      | false    | One sentence under the title that says what the setting does.                                                                  |
+| `variant`     | `'field' \| 'compact' \| 'stacked'` | `'field'` | false    | Where the control sits relative to the copy.                                                                                   |
+| `depth`       | `0 \| 1 \| 2`                       | `0`       | false    | Indent depth under a rule, for a setting that only applies when its parent is on.                                              |
+| `stackable`   | `boolean`                           | `false`   | false    | Stack a field control under the copy below the lg container of the row instead of md, for a value that needs the full measure. |
+| `hint`        | `string`                            | `''`      | false    | Extra guidance in a Hint glyph beside the title; empty renders no glyph.                                                       |
+
+## Events
+
+| _none_ | — | — |
+
+## Slots
+
+| Slot          | Scope | Notes                                                                                           |
+| ------------- | ----- | ----------------------------------------------------------------------------------------------- |
+| `default`     | —     | The control, plus the FieldDescription message under it when there is one.                      |
+| `title`       | —     | Rich title content (a Tag); replaces the `title` prop. The `hint` glyph still renders after it. |
+| `description` | —     | Rich description content (links, inline code); replaces the `description` prop.                 |
+
+## States
+
+- Visual states: `default`, `hinted` (a `Hint` glyph after the title when `hint` is set)
+- `data-row-variant` mirrors `variant` and `data-depth` mirrors `depth` on the root; `data-stackable` is set when `stackable` is on
+- Alignment: the copy and the control align to the top of the row, so a title stays level with the first line of a tall control.
+- Responsive: the row is the `@container/settings-row`. The description wraps in full at every width; it is never clamped or cut with an ellipsis. From `@md` of the row up, a `field` control keeps the end cell, capped at the 3xs container; below `@md` (a phone) it moves under the copy at full width. With `stackable` the move happens below `@lg` instead. A `compact` control stays at the end side at every width; a `stacked` control is always under the copy.
+
+## Motion & Animations
+
+_none_
+
+## Tokens
+
+| Region              | Token (DESIGN.md)       |
+| ------------------- | ----------------------- |
+| field cell width    | `var(--container-3xs)`  |
+| stacked gap         | `var(--spacing-sm)`     |
+| control-message gap | `var(--spacing-xs)`     |
+| depth rule          | `var(--border-default)` |
+| depth indent        | `var(--spacing-md)`     |
+
+## Theme gaps
+
+_none_
+
+## Accessibility (WCAG 2.1 AA)
+
+- Visible focus: owned by the control in the default slot.
+- Keyboard map: `Tab` reaches the control; the row is not interactive.
+- ARIA: the row is an `Item` (a `listitem` inside `Item.List`); the control carries `aria-label` equal to the title, and a message is linked with `aria-describedby`.
+- No truncation: the description shows its full text to every user at every width (WCAG 1.4.10 Reflow). `hint` holds the longer explanation: its glyph is a focusable button whose accessible name and tooltip are the hint text, reachable with `Tab` and revealed on hover or focus.
+- Contrast ≥4.5:1 for the title and the muted description.
+
+## Examples
+
+- SettingsCard — field and stacked rows.
+- CompactRows — switches and a button; justified because `compact` changes where the control sits.
+- WithMessage — a field with its required message; justified because the message placement is part of the contract.
+- Nested — `depth` 1 and 2; justified because the indent rule is a distinct rendered state.
+- WithHint — a row whose one-sentence description is backed by a longer `hint` beside the title; justified because the Hint glyph is a distinct rendered state.
+- Stackable — a drawer-width card whose Origin URL row sets `stackable` beside a default row; justified because the earlier stacking point is a distinct rendered state.
+
+## Constraints — DO NOT
+
+<!-- This block is injected VERBATIM into every sub-agent prompt.
+     spec-validator rejects the spec if this block is missing or shorter than the template. -->
+
+- Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
+- Do not add events beyond the Events table above. Same rule for slots and sub-components.
+- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
+- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `.claude/rules/dependencies.md`.
+- Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
+- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
+- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + per `variant` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
+- Do not edit `.claude/docs/DESIGN.md` or `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not edit the root `package.json` or `.github/workflows/*`.
+- Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
+- Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).
+- Do not run `git` commands, `pnpm install`, or any command that changes the lockfile.
+- If anything in the spec is ambiguous or contradicts the rules, emit `BLOCKED: <one-sentence reason>` and write nothing.

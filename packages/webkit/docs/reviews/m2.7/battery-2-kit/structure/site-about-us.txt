@@ -1,0 +1,38 @@
+[block-hero-title-band kind=title-band]
+  [marketing-hero kind=band size=large align=center width=5xl aria-label='Build, secure, and scale applications everywhere']
+    [marketing-hero-title width=4xl centered=true]
+      text: // ⏎ About
+      h1 "Build, secure, and scale applications everywhere"
+      p "The Azion Platform runs your code, data, and security on a distributed architecture, with instant deploys and cold-start-free scale."
+      button "Join our team" → /en/careers/
+      button "Talk to sales" → /en/contact/
+[marketing-section-container width=site]
+  [block-photo-marquee aria-label='Builders, not spectators']
+    [marketing-section-module kind=left]
+      [marketing-section-title kind=horizontal size=medium]
+        h2 "Builders, not spectators"
+        p "We make every application fast and reliable. Deploy your projects instantly on the most reliable global infrastructure, leverage enterprise-grade security, and scale from zero to peak without cold starts. Our culture is built on ownership, high performance, and continuous evolution. We look for people who lead by example, challenge the status quo, and move fast regardless of the size of the proble…"
+  · section-gap (hatched spacer band)
+  [block-recognition-marquee aria-label='Recognized as a market leader']
+    [marketing-section-module kind=left]
+      [marketing-section-title kind=centered size=medium]
+        text: // ⏎ Analysis
+        h2 "Recognized as a market leader"
+      list (4): Recognized as a Leader in CDN, Web Security, and DDoS Protection, and a High Performer in Cloud Security, WAF, Bot Detection and Mitigation, SSL & TLS Certificate Tools, and API Security Tools. G2 Spring 2026 Reports · Recognized as a Leader in CDN and a High Performer in Web Security, DDoS Protection, WAF, Bot Detection and Mitigation, SSL & TLS Certificate Tools, and DNS Security Solutions. G2 Winter 2026 Reports · Named a Leader, and the only vendor whose capabilities meet every key criterion in the report. GigaOm Radar for Edge Platforms · Awarded in the Edge Serverless Computing category and recognized for consistently exceeding its customers' performance expectations. 2023 North American New Product Innovation Award
+  · section-gap (hatched spacer band)
+  [block-investor-wall aria-label='Backed by visionary investors']
+    [marketing-section-module kind=left]
+      [marketing-section-title kind=centered size=medium]
+        text: // ⏎ Investors
+        h2 "Backed by visionary investors"
+      [marketing-bento-grid columns=2 mobile-columns=1 filled=true]
+        [marketing-bento-grid-cell]
+  · section-gap (hatched spacer band)
+  [block-closing-call-to-action-primary kind=primary]
+    [marketing-section-module kind=left]
+      [marketing-call-to-action kind=primary aria-label='Build, secure, and scale applications everywhere.']
+        [marketing-section-title kind=centered size=large]
+          h2 "Build, secure, and scale applications everywhere."
+          p "Get faster launches, lower latency, and less infrastructure overhead from day one."
+          button "Start free" → https://console.azion.com/signup?tck=generic_cta
+          button "Talk to a specialist" → https://www.azion.com/en/contact/

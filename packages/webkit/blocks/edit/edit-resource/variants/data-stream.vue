@@ -1,0 +1,1129 @@
+<script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
+  import Button from '@aziontech/webkit/button'
+  import Card from '@aziontech/webkit/card'
+  import CodeBlock from '@aziontech/webkit/code-block'
+  import CodeEditor, { type CodeEditorMonacoModule } from '@aziontech/webkit/code-editor'
+  import FieldError from '@aziontech/webkit/field-error'
+  import Input from '@aziontech/webkit/input'
+  import Item from '@aziontech/webkit/item'
+  import Kbd from '@aziontech/webkit/kbd'
+  import NumberInput from '@aziontech/webkit/number-input'
+  import PageHeader from '@aziontech/webkit/page-header'
+  import PasswordInput from '@aziontech/webkit/password-input'
+  import RadioGroup from '@aziontech/webkit/radio-group'
+  import SaveBar from '@aziontech/webkit/save-bar'
+  import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
+  import SettingsGroup from '@aziontech/webkit/settings-group'
+  import SettingsRow from '@aziontech/webkit/settings-row'
+  import Switch from '@aziontech/webkit/switch'
+  import Textarea from '@aziontech/webkit/textarea'
+  import { computed, nextTick, reactive, ref } from 'vue'
+
+  type FieldProblem = { type: 'helper' | 'invalid' | 'required'; message: string }
+  type LabeledOption = SelectOptionItem
+
+  const loadMonaco = async (): Promise<CodeEditorMonacoModule> => {
+    const [{ default: EditorWorker }, { default: JsonWorker }, { default: TsWorker }] =
+      await Promise.all([
+        import('monaco-editor/editor/editor.worker?worker'),
+        import('monaco-editor/languages/features/json/json.worker?worker'),
+        import('monaco-editor/languages/features/typescript/ts.worker?worker')
+      ])
+    globalThis.MonacoEnvironment = {
+      getWorker: (_id, label) => {
+        if (label === 'json') return new JsonWorker()
+        if (label === 'typescript' || label === 'javascript') return new TsWorker()
+        return new EditorWorker()
+      }
+    }
+    return (await import('monaco-editor')) as unknown as CodeEditorMonacoModule
+  }
+
+  const sourceOptions = [
+    { value: 'applications', label: 'Applications' },
+    { value: 'functions', label: 'Functions' },
+    { value: 'firewall', label: 'Firewall' },
+    { value: 'activity', label: 'Activity history' }
+  ]
+
+  const scopeOptions = [
+    {
+      value: 'all',
+      label: 'All current and future workloads',
+      description:
+        'Collect from every workload, including the ones created later. Unlocks sampling.'
+    },
+    {
+      value: 'filtered',
+      label: 'Selected workloads',
+      description: 'Collect only from the workloads you list.'
+    }
+  ]
+
+  const presetTemplates: Record<string, { label: string; dataSet: Record<string, string> }> = {
+    'http-requests': {
+      label: 'HTTP requests',
+      dataSet: {
+        time: '$time',
+        host: '$host',
+        request_method: '$request_method',
+        request_uri: '$request_uri',
+        status: '$status',
+        bytes_sent: '$bytes_sent',
+        request_time: '$request_time',
+        upstream_cache_status: '$upstream_cache_status',
+        remote_addr: '$remote_addr',
+        geoip_country: '$geoip_country'
+      }
+    },
+    'function-runs': {
+      label: 'Function runs',
+      dataSet: {
+        time: '$time',
+        function_id: '$function_id',
+        function_name: '$function_name',
+        duration_ms: '$duration_ms',
+        status: '$status',
+        log_level: '$log_level',
+        message: '$message'
+      }
+    },
+    'firewall-events': {
+      label: 'Firewall events',
+      dataSet: {
+        time: '$time',
+        host: '$host',
+        rule_id: '$rule_id',
+        rule_action: '$rule_action',
+        threat_family: '$threat_family',
+        remote_addr: '$remote_addr',
+        request_uri: '$request_uri'
+      }
+    }
+  }
+
+  const templateOptions = [
+    ...Object.entries(presetTemplates).map(([value, template]) => ({
+      value,
+      label: template.label
+    })),
+    { value: 'custom', label: 'Custom template' }
+  ]
+
+  const connectorOptions = [
+    { value: 'standard', label: 'Standard HTTP/HTTPS POST' },
+    { value: 'kafka', label: 'Apache Kafka' },
+    { value: 's3', label: 'S3-compatible storage' },
+    { value: 'analytics', label: 'Log analytics service' }
+  ]
+
+  const labelOf = (options: LabeledOption[]) => (value: string) =>
+    options.find((option) => option.value === value)?.label ?? ''
+
+  const sourceLabel = labelOf(sourceOptions)
+  const templateLabel = labelOf(templateOptions)
+  const connectorLabel = labelOf(connectorOptions)
+
+  const record = {
+    name: 'http-to-collector',
+    active: true,
+    source: 'applications',
+    scope: 'all',
+    workloads: '',
+    sampling: true,
+    samplingRate: 25,
+    template: 'custom',
+    templateName: 'http-compact',
+    dataSet: JSON.stringify(
+      {
+        time: '$time',
+        host: '$host',
+        status: '$status',
+        request_uri: '$request_uri',
+        request_time: '$request_time',
+        upstream_cache_status: '$upstream_cache_status'
+      },
+      null,
+      2
+    ),
+    connector: 'standard',
+    url: 'https://collector.example.com/ingest',
+    payloadFormat: '$dataset',
+    lineSeparator: '\\n',
+    headers: 'Authorization:Bearer example-token',
+    bootstrapServers: '',
+    topic: '',
+    bucket: '',
+    region: '',
+    accessKey: '',
+    secretKey: '',
+    analyticsUrl: '',
+    apiKey: ''
+  }
+
+  const form = reactive(structuredClone(record))
+  const saving = ref(false)
+  const baseline = ref(JSON.stringify(record))
+  const dirty = computed(() => JSON.stringify(form) !== baseline.value)
+
+  const errors = reactive<Record<string, FieldProblem | undefined>>({})
+  const destinationError = ref('')
+
+  const URL_PATTERN = /^https?:\/\/[^\s/$.?#][^\s]*$/
+  const HEADERS_PATTERN = /^[^:\n]+:[^\n]*\S[^\n]*(\n[^:\n]+:[^\n]*\S[^\n]*){0,4}$/
+  const SERVERS_PATTERN = /^[^\s,]+(,[^\s,]+)*$/
+  const WORKLOADS_PATTERN = /^[^\n]*\S[^\n]*(\n[^\n]*\S[^\n]*)*$/
+
+  const presetDocument = computed(() => {
+    const template = presetTemplates[form.template]
+    return template ? JSON.stringify(template.dataSet, null, 2) : ''
+  })
+
+  const presetTabs = computed(() => [
+    {
+      label: 'Data set',
+      value: 'data-set',
+      language: 'json',
+      code: presetDocument.value
+    }
+  ])
+
+  const clear = (id: string) => {
+    if (errors[id]) delete errors[id]
+  }
+
+  const onDestinationChange = (id: string) => {
+    clear(id)
+    destinationError.value = ''
+  }
+
+  const required = (id: keyof typeof form) => {
+    if (!String(form[id] ?? '').trim()) {
+      errors[id] = { type: 'required', message: 'This field is required.' }
+      return false
+    }
+    return true
+  }
+
+  const validate = () => {
+    Object.keys(errors).forEach((key) => delete errors[key])
+    if (required('name') && form.name.trim().length > 250)
+      errors.name = { type: 'invalid', message: 'Use at most 250 characters.' }
+    if (
+      form.scope === 'filtered' &&
+      required('workloads') &&
+      !WORKLOADS_PATTERN.test(form.workloads.trim())
+    )
+      errors.workloads = {
+        type: 'invalid',
+        message: 'Remove the empty lines. Every line holds one workload.'
+      }
+    if (form.scope === 'all' && form.sampling) {
+      const rate = Number(form.samplingRate)
+      if (!Number.isFinite(rate) || rate < 1 || rate > 100)
+        errors.samplingRate = { type: 'invalid', message: 'Enter a rate from 1 to 100.' }
+    }
+    if (form.template === 'custom') {
+      required('templateName')
+      if (required('dataSet')) {
+        let parsed: unknown = null
+        try {
+          parsed = JSON.parse(form.dataSet)
+        } catch {
+          parsed = null
+        }
+        if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed))
+          errors.dataSet = { type: 'invalid', message: 'Write the data set as a JSON object.' }
+        else if (!Object.keys(parsed).length)
+          errors.dataSet = {
+            type: 'invalid',
+            message: 'Add at least one variable to the data set.'
+          }
+      }
+    }
+    if (form.connector === 'standard') {
+      if (required('url') && !URL_PATTERN.test(form.url.trim()))
+        errors.url = {
+          type: 'invalid',
+          message: 'Enter a valid URL. Example: https://collector.example.com/ingest.'
+        }
+      required('payloadFormat')
+      required('lineSeparator')
+      if (form.headers.trim() && !HEADERS_PATTERN.test(form.headers.trim()))
+        errors.headers = {
+          type: 'invalid',
+          message: 'Write up to 5 headers, one per line, in the Key:Value format.'
+        }
+    }
+    if (form.connector === 'kafka') {
+      if (required('bootstrapServers') && !SERVERS_PATTERN.test(form.bootstrapServers.trim()))
+        errors.bootstrapServers = {
+          type: 'invalid',
+          message: 'Separate the servers with a comma and no space.'
+        }
+      required('topic')
+    }
+    if (form.connector === 's3') {
+      required('bucket')
+      required('region')
+      required('accessKey')
+      required('secretKey')
+    }
+    if (form.connector === 'analytics') {
+      if (required('analyticsUrl') && !URL_PATTERN.test(form.analyticsUrl.trim()))
+        errors.analyticsUrl = {
+          type: 'invalid',
+          message: 'Enter a valid URL. Example: https://logs.example.com/api/v2/logs.'
+        }
+      required('apiKey')
+    }
+    return Object.keys(errors).length === 0
+  }
+
+  const focusFirstError = () =>
+    nextTick(() => {
+      const id = Object.keys(errors)[0]
+      if (id) document.getElementById(`data-stream-${id}`)?.focus()
+    })
+
+  const unreachable = (value: string) => {
+    try {
+      return new URL(value).hostname.endsWith('.invalid')
+    } catch {
+      return false
+    }
+  }
+
+  const save = () => {
+    destinationError.value = ''
+    if (!validate()) {
+      focusFirstError()
+      return
+    }
+    saving.value = true
+    setTimeout(() => {
+      saving.value = false
+      const target = form.connector === 'analytics' ? 'analyticsUrl' : 'url'
+      if (['standard', 'analytics'].includes(form.connector) && unreachable(form[target])) {
+        destinationError.value =
+          'The endpoint did not answer the test record, so the stream was not saved. Your other changes are still here.'
+        errors[target] = {
+          type: 'invalid',
+          message: 'The endpoint did not answer within 10 seconds.'
+        }
+        nextTick(() => document.getElementById('destination')?.scrollIntoView({ block: 'start' }))
+        focusFirstError()
+        return
+      }
+      baseline.value = JSON.stringify(form)
+    }, 900)
+  }
+
+  const onSaveShortcut = () => {
+    if (!dirty.value || saving.value) return
+    save()
+  }
+
+  const discard = () => {
+    Object.assign(form, JSON.parse(baseline.value) as typeof form)
+    Object.keys(errors).forEach((key) => delete errors[key])
+    destinationError.value = ''
+  }
+</script>
+
+<template>
+  <form
+    class="flex min-h-0 min-w-0 flex-1 flex-col"
+    aria-label="Data stream settings"
+    novalidate
+    @submit.prevent="save"
+  >
+    <div class="layout-column-form layout-boundary flex min-w-0 flex-1 flex-col">
+      <PageHeader
+        title="Settings"
+        description="Ship the records of your workloads to your own observability or storage platform. One stream, one destination."
+        size="small"
+      />
+
+      <fieldset
+        class="layout-section-start mx-0 flex min-w-0 flex-col border-0 p-0"
+        :disabled="saving"
+      >
+        <legend class="sr-only">Data stream settings</legend>
+
+        <SettingsGroup
+          label="General"
+          hint="How the stream is identified, and whether it is collecting records."
+          anchor="general"
+        >
+          <Card :padded="false">
+            <template #default>
+              <Item.List>
+                <TransitionGroup
+                  enter-active-class="animate-content-enter motion-reduce:animate-none"
+                >
+                  <SettingsRow
+                    key="name"
+                    title="Name"
+                    description="Give a unique and descriptive name to identify the data stream."
+                  >
+                    <Input
+                      id="data-stream-name"
+                      v-model="form.name"
+                      size="large"
+                      class="w-full"
+                      aria-label="Name"
+                      placeholder="my-data-stream"
+                      autocomplete="off"
+                      required
+                      :invalid="!!errors.name"
+                      :aria-describedby="errors.name ? 'data-stream-name-message' : undefined"
+                      :disabled="saving"
+                      @update:model-value="clear('name')"
+                    />
+                    <FieldError
+                      v-if="errors.name"
+                      id="data-stream-name-message"
+                      >{{ errors.name.message }}</FieldError
+                    >
+                  </SettingsRow>
+                  <SettingsRow
+                    key="active"
+                    title="Active"
+                    description="When off, the stream stops collecting records and nothing is sent to the destination."
+                    variant="compact"
+                  >
+                    <Switch
+                      v-model="form.active"
+                      aria-label="Active"
+                      :disabled="saving"
+                    />
+                  </SettingsRow>
+                </TransitionGroup>
+              </Item.List>
+            </template>
+          </Card>
+        </SettingsGroup>
+
+        <SettingsGroup
+          label="Source"
+          hint="Which records the stream collects, and from which workloads."
+          anchor="source"
+        >
+          <Card :padded="false">
+            <template #default>
+              <Item.List>
+                <TransitionGroup
+                  enter-active-class="animate-content-enter motion-reduce:animate-none"
+                >
+                  <SettingsRow
+                    key="source"
+                    title="Data source"
+                    description="The product the records are collected from."
+                  >
+                    <Select
+                      v-model="form.source"
+                      size="large"
+                      class="w-full"
+                      :display-value="sourceLabel"
+                      :disabled="saving"
+                      @update:model-value="clear('source')"
+                    >
+                      <Select.Trigger aria-label="Data source" />
+                      <Select.Content>
+                        <Select.Item
+                          v-for="option in sourceOptions"
+                          :key="option.value"
+                          :value="option.value"
+                        >
+                          {{ option.label }}
+                        </Select.Item>
+                      </Select.Content>
+                    </Select>
+                  </SettingsRow>
+                  <SettingsRow
+                    key="scope"
+                    title="Workloads"
+                    variant="stacked"
+                  >
+                    <RadioGroup
+                      v-model="form.scope"
+                      variant="card"
+                      name="data-stream-scope"
+                      aria-label="Workloads"
+                      :disabled="saving"
+                    >
+                      <RadioGroup.Item
+                        v-for="option in scopeOptions"
+                        :key="option.value"
+                        :value="option.value"
+                        :description="option.description"
+                        >{{ option.label }}</RadioGroup.Item
+                      >
+                    </RadioGroup>
+                  </SettingsRow>
+                  <SettingsRow
+                    v-if="form.scope === 'filtered'"
+                    key="workloads"
+                    title="Selected workloads"
+                    description="One workload per line. Only their records are sent to the destination."
+                    variant="stacked"
+                  >
+                    <Textarea
+                      id="data-stream-workloads"
+                      v-model="form.workloads"
+                      class="w-full"
+                      :rows="4"
+                      aria-label="Selected workloads"
+                      placeholder="storefront&#10;checkout-api"
+                      required
+                      :invalid="!!errors.workloads"
+                      :aria-describedby="
+                        errors.workloads ? 'data-stream-workloads-message' : undefined
+                      "
+                      :disabled="saving"
+                      @update:model-value="clear('workloads')"
+                    />
+                    <FieldError
+                      v-if="errors.workloads"
+                      id="data-stream-workloads-message"
+                      >{{ errors.workloads.message }}</FieldError
+                    >
+                  </SettingsRow>
+                </TransitionGroup>
+              </Item.List>
+            </template>
+          </Card>
+        </SettingsGroup>
+
+        <SettingsGroup
+          v-if="form.scope === 'all'"
+          label="Sampling"
+          hint="Collect a share of the records instead of all of them. Only available when the stream collects from every workload."
+          anchor="sampling"
+        >
+          <div
+            v-if="form.sampling"
+            class="mb-(--spacing-sm)"
+          >
+            <Alert
+              severity="warning"
+              label="Saving a stream with sampling on turns off every other data stream in this account."
+            />
+          </div>
+          <Card :padded="false">
+            <template #default>
+              <Item.List>
+                <TransitionGroup
+                  enter-active-class="animate-content-enter motion-reduce:animate-none"
+                >
+                  <SettingsRow
+                    key="sampling"
+                    title="Sampling"
+                    description="Collect a share of the records instead of all of them, to save resources."
+                    variant="compact"
+                  >
+                    <Switch
+                      v-model="form.sampling"
+                      aria-label="Sampling"
+                      :disabled="saving"
+                    />
+                  </SettingsRow>
+                  <SettingsRow
+                    v-if="form.sampling"
+                    key="samplingRate"
+                    title="Sampling rate"
+                    description="Percentage of records collected, from 1 to 100. The rate is statistical, and when streams differ the lowest one applies."
+                  >
+                    <NumberInput
+                      id="data-stream-samplingRate"
+                      v-model="form.samplingRate"
+                      size="large"
+                      class="w-full"
+                      :min="1"
+                      :max="100"
+                      aria-label="Sampling rate, in percent"
+                      :invalid="!!errors.samplingRate"
+                      :aria-describedby="
+                        errors.samplingRate ? 'data-stream-samplingRate-message' : undefined
+                      "
+                      :disabled="saving"
+                      @update:model-value="clear('samplingRate')"
+                    >
+                      <template #trailing>%</template>
+                    </NumberInput>
+                    <FieldError
+                      v-if="errors.samplingRate"
+                      id="data-stream-samplingRate-message"
+                      >{{ errors.samplingRate.message }}</FieldError
+                    >
+                  </SettingsRow>
+                </TransitionGroup>
+              </Item.List>
+            </template>
+          </Card>
+        </SettingsGroup>
+
+        <SettingsGroup
+          label="Template"
+          hint="The structure of each record sent to the destination."
+          anchor="template"
+        >
+          <Card :padded="false">
+            <template #default>
+              <Item.List>
+                <TransitionGroup
+                  enter-active-class="animate-content-enter motion-reduce:animate-none"
+                >
+                  <SettingsRow
+                    key="template"
+                    title="Template"
+                    description="A preset sends a fixed set of variables for one source. A custom template lets you choose the variables."
+                  >
+                    <Select
+                      v-model="form.template"
+                      size="large"
+                      class="w-full"
+                      :display-value="templateLabel"
+                      :disabled="saving"
+                      @update:model-value="clear('template')"
+                    >
+                      <Select.Trigger aria-label="Template" />
+                      <Select.Content>
+                        <Select.Item
+                          v-for="option in templateOptions"
+                          :key="option.value"
+                          :value="option.value"
+                        >
+                          {{ option.label }}
+                        </Select.Item>
+                      </Select.Content>
+                    </Select>
+                  </SettingsRow>
+                  <SettingsRow
+                    v-if="form.template === 'custom'"
+                    key="templateName"
+                    title="Template name"
+                    description="Give a unique and descriptive name to identify the custom template."
+                  >
+                    <Input
+                      id="data-stream-templateName"
+                      v-model="form.templateName"
+                      size="large"
+                      class="w-full"
+                      aria-label="Template name"
+                      placeholder="my-custom-template"
+                      autocomplete="off"
+                      required
+                      :invalid="!!errors.templateName"
+                      :aria-describedby="
+                        errors.templateName ? 'data-stream-templateName-message' : undefined
+                      "
+                      :disabled="saving"
+                      @update:model-value="clear('templateName')"
+                    />
+                    <FieldError
+                      v-if="errors.templateName"
+                      id="data-stream-templateName-message"
+                      >{{ errors.templateName.message }}</FieldError
+                    >
+                  </SettingsRow>
+                  <SettingsRow
+                    v-if="form.template === 'custom'"
+                    key="dataSet"
+                    title="Data set"
+                    description="The variables sent to the destination, as a JSON object. Each value is a variable such as $host or $status."
+                    variant="stacked"
+                  >
+                    <div class="flex w-full flex-col">
+                      <CodeEditor
+                        id="data-stream-dataSet"
+                        v-model="form.dataSet"
+                        :loader="loadMonaco"
+                        language="json"
+                        path="data-set.json"
+                        height="16rem"
+                        aria-label="Data set"
+                        :invalid="!!errors.dataSet"
+                        :aria-describedby="
+                          errors.dataSet ? 'data-stream-dataSet-message' : undefined
+                        "
+                        :disabled="saving"
+                        @update:model-value="clear('dataSet')"
+                      />
+                    </div>
+                    <FieldError
+                      v-if="errors.dataSet"
+                      id="data-stream-dataSet-message"
+                      >{{ errors.dataSet.message }}</FieldError
+                    >
+                  </SettingsRow>
+                  <SettingsRow
+                    v-else
+                    key="preset"
+                    title="Data set"
+                    description="The variables this template sends. A preset cannot be edited; choose Custom template to pick the variables yourself."
+                    variant="stacked"
+                  >
+                    <div class="w-full min-w-0">
+                      <CodeBlock
+                        :tabs="presetTabs"
+                        copy-aria-label="Copy the data set as JSON"
+                      />
+                    </div>
+                  </SettingsRow>
+                </TransitionGroup>
+              </Item.List>
+            </template>
+          </Card>
+        </SettingsGroup>
+
+        <SettingsGroup
+          label="Destination"
+          hint="The platform the records are sent to. Every value comes from that platform, and credentials cannot be read back."
+          anchor="destination"
+        >
+          <Transition
+            enter-active-class="transition duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
+            enter-from-class="translate-y-2 opacity-0"
+            leave-active-class="transition duration-fast-02 ease-productive-exit motion-reduce:transition-none"
+            leave-to-class="-translate-y-2 opacity-0"
+          >
+            <div
+              v-if="destinationError"
+              class="mb-(--spacing-sm)"
+            >
+              <Alert
+                severity="danger"
+                :label="destinationError"
+              >
+                <template #actions>
+                  <Button
+                    type="button"
+                    label="Send test record"
+                    variant="secondary"
+                    size="medium"
+                    :loading="saving"
+                    @click="save"
+                  />
+                </template>
+              </Alert>
+            </div>
+          </Transition>
+          <Card :padded="false">
+            <template #default>
+              <Item.List>
+                <TransitionGroup
+                  enter-active-class="animate-content-enter motion-reduce:animate-none"
+                >
+                  <SettingsRow
+                    key="connector"
+                    title="Connector"
+                    description="Each platform asks for different values."
+                  >
+                    <Select
+                      v-model="form.connector"
+                      size="large"
+                      class="w-full"
+                      :display-value="connectorLabel"
+                      :disabled="saving"
+                      @update:model-value="onDestinationChange('connector')"
+                    >
+                      <Select.Trigger
+                        id="data-stream-connector"
+                        aria-label="Connector"
+                      />
+                      <Select.Content>
+                        <Select.Item
+                          v-for="option in connectorOptions"
+                          :key="option.value"
+                          :value="option.value"
+                        >
+                          {{ option.label }}
+                        </Select.Item>
+                      </Select.Content>
+                    </Select>
+                  </SettingsRow>
+                  <SettingsRow
+                    v-if="form.connector === 'standard'"
+                    key="url"
+                    title="URL"
+                    description="The URL that receives the records."
+                    stackable
+                  >
+                    <Input
+                      id="data-stream-url"
+                      v-model="form.url"
+                      size="large"
+                      class="w-full"
+                      aria-label="URL"
+                      placeholder="https://collector.example.com/ingest"
+                      autocomplete="off"
+                      required
+                      :invalid="!!errors.url"
+                      :aria-describedby="errors.url ? 'data-stream-url-message' : undefined"
+                      :disabled="saving"
+                      @update:model-value="onDestinationChange('url')"
+                    />
+                    <FieldError
+                      v-if="errors.url"
+                      id="data-stream-url-message"
+                      >{{ errors.url.message }}</FieldError
+                    >
+                  </SettingsRow>
+                  <SettingsRow
+                    v-if="form.connector === 'standard'"
+                    key="payloadFormat"
+                    title="Payload format"
+                    description="The format each payload is sent in. $dataset is replaced by the records, joined by the log line separator."
+                  >
+                    <Input
+                      id="data-stream-payloadFormat"
+                      v-model="form.payloadFormat"
+                      size="large"
+                      class="w-full"
+                      aria-label="Payload format"
+                      placeholder="$dataset"
+                      autocomplete="off"
+                      required
+                      :invalid="!!errors.payloadFormat"
+                      :aria-describedby="
+                        errors.payloadFormat ? 'data-stream-payloadFormat-message' : undefined
+                      "
+                      :disabled="saving"
+                      @update:model-value="onDestinationChange('payloadFormat')"
+                    />
+                    <FieldError
+                      v-if="errors.payloadFormat"
+                      id="data-stream-payloadFormat-message"
+                      >{{ errors.payloadFormat.message }}</FieldError
+                    >
+                  </SettingsRow>
+                  <SettingsRow
+                    v-if="form.connector === 'standard'"
+                    key="lineSeparator"
+                    title="Log line separator"
+                    description="Written at the end of each record. \n puts one record per line, in NDJSON format."
+                  >
+                    <Input
+                      id="data-stream-lineSeparator"
+                      v-model="form.lineSeparator"
+                      size="large"
+                      class="w-full"
+                      aria-label="Log line separator"
+                      placeholder="\n"
+                      autocomplete="off"
+                      required
+                      :invalid="!!errors.lineSeparator"
+                      :aria-describedby="
+                        errors.lineSeparator ? 'data-stream-lineSeparator-message' : undefined
+                      "
+                      :disabled="saving"
+                      @update:model-value="onDestinationChange('lineSeparator')"
+                    />
+                    <FieldError
+                      v-if="errors.lineSeparator"
+                      id="data-stream-lineSeparator-message"
+                      >{{ errors.lineSeparator.message }}</FieldError
+                    >
+                  </SettingsRow>
+                  <SettingsRow
+                    v-if="form.connector === 'standard'"
+                    key="headers"
+                    title="Custom headers"
+                    description="Sent with every request. One per line, up to 5, in the Key:Value format."
+                    variant="stacked"
+                  >
+                    <div class="flex w-full font-code">
+                      <Textarea
+                        id="data-stream-headers"
+                        v-model="form.headers"
+                        class="w-full"
+                        :rows="3"
+                        aria-label="Custom headers"
+                        placeholder="header-name:value"
+                        required
+                        :invalid="!!errors.headers"
+                        :aria-describedby="
+                          errors.headers ? 'data-stream-headers-message' : undefined
+                        "
+                        :disabled="saving"
+                        @update:model-value="onDestinationChange('headers')"
+                      />
+                    </div>
+                    <FieldError
+                      v-if="errors.headers"
+                      id="data-stream-headers-message"
+                      >{{ errors.headers.message }}</FieldError
+                    >
+                  </SettingsRow>
+                  <SettingsRow
+                    v-if="form.connector === 'kafka'"
+                    key="bootstrapServers"
+                    title="Bootstrap servers"
+                    description="The hosts and ports of the Kafka cluster, separated by a comma and no space."
+                    variant="stacked"
+                  >
+                    <div class="flex w-full font-code">
+                      <Textarea
+                        id="data-stream-bootstrapServers"
+                        v-model="form.bootstrapServers"
+                        class="w-full"
+                        :rows="2"
+                        aria-label="Bootstrap servers"
+                        placeholder="host1:9092,host2:9092"
+                        required
+                        :invalid="!!errors.bootstrapServers"
+                        :aria-describedby="
+                          errors.bootstrapServers
+                            ? 'data-stream-bootstrapServers-message'
+                            : undefined
+                        "
+                        :disabled="saving"
+                        @update:model-value="onDestinationChange('bootstrapServers')"
+                      />
+                    </div>
+                    <FieldError
+                      v-if="errors.bootstrapServers"
+                      id="data-stream-bootstrapServers-message"
+                      >{{ errors.bootstrapServers.message }}</FieldError
+                    >
+                  </SettingsRow>
+                  <SettingsRow
+                    v-if="form.connector === 'kafka'"
+                    key="topic"
+                    title="Topic"
+                    description="The Kafka topic the records are written to."
+                  >
+                    <Input
+                      id="data-stream-topic"
+                      v-model="form.topic"
+                      size="large"
+                      class="w-full"
+                      aria-label="Topic"
+                      placeholder="edge-records"
+                      autocomplete="off"
+                      required
+                      :invalid="!!errors.topic"
+                      :aria-describedby="errors.topic ? 'data-stream-topic-message' : undefined"
+                      :disabled="saving"
+                      @update:model-value="onDestinationChange('topic')"
+                    />
+                    <FieldError
+                      v-if="errors.topic"
+                      id="data-stream-topic-message"
+                      >{{ errors.topic.message }}</FieldError
+                    >
+                  </SettingsRow>
+                  <SettingsRow
+                    v-if="form.connector === 's3'"
+                    key="bucket"
+                    title="Bucket"
+                    description="The bucket the record files are written to."
+                  >
+                    <Input
+                      id="data-stream-bucket"
+                      v-model="form.bucket"
+                      size="large"
+                      class="w-full"
+                      aria-label="Bucket"
+                      placeholder="my-records-bucket"
+                      autocomplete="off"
+                      required
+                      :invalid="!!errors.bucket"
+                      :aria-describedby="errors.bucket ? 'data-stream-bucket-message' : undefined"
+                      :disabled="saving"
+                      @update:model-value="onDestinationChange('bucket')"
+                    />
+                    <FieldError
+                      v-if="errors.bucket"
+                      id="data-stream-bucket-message"
+                      >{{ errors.bucket.message }}</FieldError
+                    >
+                  </SettingsRow>
+                  <SettingsRow
+                    v-if="form.connector === 's3'"
+                    key="region"
+                    title="Region"
+                    description="The region of the bucket, as the storage provider names it."
+                  >
+                    <Input
+                      id="data-stream-region"
+                      v-model="form.region"
+                      size="large"
+                      class="w-full"
+                      aria-label="Region"
+                      placeholder="us-east-1"
+                      autocomplete="off"
+                      required
+                      :invalid="!!errors.region"
+                      :aria-describedby="errors.region ? 'data-stream-region-message' : undefined"
+                      :disabled="saving"
+                      @update:model-value="onDestinationChange('region')"
+                    />
+                    <FieldError
+                      v-if="errors.region"
+                      id="data-stream-region-message"
+                      >{{ errors.region.message }}</FieldError
+                    >
+                  </SettingsRow>
+                  <SettingsRow
+                    v-if="form.connector === 's3'"
+                    key="accessKey"
+                    title="Access key"
+                    description="The access key of a user allowed to write to the bucket."
+                  >
+                    <Input
+                      id="data-stream-accessKey"
+                      v-model="form.accessKey"
+                      size="large"
+                      class="w-full"
+                      aria-label="Access key"
+                      placeholder="AKIAEXAMPLE"
+                      autocomplete="off"
+                      required
+                      :invalid="!!errors.accessKey"
+                      :aria-describedby="
+                        errors.accessKey ? 'data-stream-accessKey-message' : undefined
+                      "
+                      :disabled="saving"
+                      @update:model-value="onDestinationChange('accessKey')"
+                    />
+                    <FieldError
+                      v-if="errors.accessKey"
+                      id="data-stream-accessKey-message"
+                      >{{ errors.accessKey.message }}</FieldError
+                    >
+                  </SettingsRow>
+                  <SettingsRow
+                    v-if="form.connector === 's3'"
+                    key="secretKey"
+                    title="Secret key"
+                    description="The secret key paired with the access key. It cannot be read back after saving."
+                  >
+                    <PasswordInput
+                      id="data-stream-secretKey"
+                      v-model="form.secretKey"
+                      class="w-full"
+                      aria-label="Secret key"
+                      placeholder="Enter the secret key"
+                      autocomplete="off"
+                      required
+                      :invalid="!!errors.secretKey"
+                      :aria-describedby="
+                        errors.secretKey ? 'data-stream-secretKey-message' : undefined
+                      "
+                      :disabled="saving"
+                      @update:model-value="onDestinationChange('secretKey')"
+                    />
+                    <FieldError
+                      v-if="errors.secretKey"
+                      id="data-stream-secretKey-message"
+                      >{{ errors.secretKey.message }}</FieldError
+                    >
+                  </SettingsRow>
+                  <SettingsRow
+                    v-if="form.connector === 'analytics'"
+                    key="analyticsUrl"
+                    title="Intake URL"
+                    description="The intake URL of your log analytics account."
+                    stackable
+                  >
+                    <Input
+                      id="data-stream-analyticsUrl"
+                      v-model="form.analyticsUrl"
+                      size="large"
+                      class="w-full"
+                      aria-label="Intake URL"
+                      placeholder="https://logs.example.com/api/v2/logs"
+                      autocomplete="off"
+                      required
+                      :invalid="!!errors.analyticsUrl"
+                      :aria-describedby="
+                        errors.analyticsUrl ? 'data-stream-analyticsUrl-message' : undefined
+                      "
+                      :disabled="saving"
+                      @update:model-value="onDestinationChange('analyticsUrl')"
+                    />
+                    <FieldError
+                      v-if="errors.analyticsUrl"
+                      id="data-stream-analyticsUrl-message"
+                      >{{ errors.analyticsUrl.message }}</FieldError
+                    >
+                  </SettingsRow>
+                  <SettingsRow
+                    v-if="form.connector === 'analytics'"
+                    key="apiKey"
+                    title="API key"
+                    description="An API key of your log analytics account. It cannot be read back after saving."
+                  >
+                    <PasswordInput
+                      id="data-stream-apiKey"
+                      v-model="form.apiKey"
+                      class="w-full"
+                      aria-label="API key"
+                      placeholder="Enter the API key"
+                      autocomplete="off"
+                      required
+                      :invalid="!!errors.apiKey"
+                      :aria-describedby="errors.apiKey ? 'data-stream-apiKey-message' : undefined"
+                      :disabled="saving"
+                      @update:model-value="onDestinationChange('apiKey')"
+                    />
+                    <FieldError
+                      v-if="errors.apiKey"
+                      id="data-stream-apiKey-message"
+                      >{{ errors.apiKey.message }}</FieldError
+                    >
+                  </SettingsRow>
+                </TransitionGroup>
+              </Item.List>
+            </template>
+          </Card>
+        </SettingsGroup>
+      </fieldset>
+    </div>
+
+    <Transition
+      enter-active-class="transition-[translate,opacity] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
+      enter-from-class="translate-y-2 opacity-0"
+      leave-active-class="transition-[translate,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
+      leave-to-class="translate-y-2 opacity-0"
+    >
+      <SaveBar
+        v-if="dirty || saving"
+        @save="onSaveShortcut"
+      >
+        Data stream settings changed.
+        <span class="text-(--text-muted)">Saving sends one test record to the destination.</span>
+
+        <template #actions>
+          <Button
+            type="button"
+            label="Discard"
+            variant="outline"
+            size="medium"
+            :disabled="saving"
+            @click="discard"
+          />
+          <Button
+            variant="primary"
+            size="medium"
+            :loading="saving"
+            @click="save"
+            aria-keyshortcuts="Meta+S Control+S"
+          >
+            Save
+            <Kbd
+              meta
+              size="small"
+              aria-hidden="true"
+              >S</Kbd
+            >
+          </Button>
+        </template>
+      </SaveBar>
+    </Transition>
+  </form>
+</template>

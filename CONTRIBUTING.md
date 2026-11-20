@@ -5,66 +5,308 @@ Thanks for working on Webkit. This document covers how to propose changes that p
 ## Before you start
 
 - Read the [README](./README.md) for repo layout and the consumer-facing API.
+- Owner decisions are tracked in [`.claude/docs/DECISIONS.md`](./.claude/docs/DECISIONS.md), one row each with its status and where it lives; a change that records or implements one adds or updates its row in the same change.
 - Skim [`.claude/rules/`](./.claude/rules/) — these are non-negotiable:
   - [`dependencies.md`](./.claude/rules/dependencies.md) — no external positioning or animation libs.
   - [`styling.md`](./.claude/rules/styling.md) — classes on the root, no JS class presets.
   - [`migration.md`](./.claude/rules/migration.md) — never inherit, always rewrite.
   - [`no-invention.md`](./.claude/rules/no-invention.md) — the spec is the contract.
 
+## Where things live
+
+Development material and the material WebKit ships to apps never mix:
+
+- **Ships to apps** (in the npm package): `packages/*`, plus the AI bundle at the root — `skills/`,
+  `rules/` (`scope: general`) and `adapters/`.
+- **For WebKit development only**: `.claude/` (agents, commands, hooks, contributor rules and skills
+  such as the mandatory `ui-craft` review, and the process docs `PROCESS.md`, `DOC_LINTS.md`,
+  `OVERVIEW_LINT.md`, `OVERVIEW_TESTS.md`, `GOVERNANCE_IMPLEMENTATION.md`), `.specs/`,
+  `apps/docs/` (docs site), `apps/demos/`, `apps/visual/` (styled visual suite), `lint-canaries/`
+  and `.github/`.
+
+Agents of any vendor start at the root [`AGENTS.md`](./AGENTS.md).
+
 ## Local setup
 
 ```bash
 # Node >= 24, pnpm 11.x (corepack will install the pinned version)
 pnpm install
-pnpm storybook:dev
+pnpm dev:docs      # components, blocks, foundations from the files
+pnpm dev:demos     # routed flows assembled from blocks
 ```
+
+## Component lifecycle
+
+Every WebKit component goes through the same four stages: **Add**, **Change**, **Deprecate** and
+**Remove**. Each stage has one path, and the machine gates make it the only path through CI. The
+spec at `.specs/<name>.md` is the contract at every stage: it changes first, and the code follows.
+
+### Add
+
+An issue from **New component** (`.github/ISSUE_TEMPLATE/new-component.yml`) → `/component-new <issue>`
+→ spec as `draft` → review by a second agent (`spec-reviewer`), which flips it to `approved` with a
+checksum → build (component, test, examples) → machine gates → `ui-craft` review → usage check →
+PR. Each step stops the run on failure. The steps, owners and commands are in
+[Adding a component or block (AI flow)](#adding-a-component-or-block-ai-flow). When the PR is
+built, the spec moves to `implemented`.
+
+### Change
+
+An issue from **Change a component** (`.github/ISSUE_TEMPLATE/change-component.yml`), or
+**Visual bug** (`visual-bug.yml`) for a look that is wrong today. The change runs the same flow
+from step 2, with the existing spec:
+
+- **Non-breaking** (a new prop, event, slot, state or example; a fix). Edit the spec first, then
+  the code. Bump `spec_version` for any API change, and move the spec to `template: 2`. The
+  spec stays `implemented`; recompute its `checksum` after the edit:
+  ```bash
+  node -e "import('./.claude/hooks/lib/spec.mjs').then((m) => console.log(m.bodyChecksum(m.parseSpecFile('.specs/<name>.md').body)))"
+  ```
+  The PR title is `feat(webkit): …` for an addition (minor) or `fix(webkit): …` for a fix (patch).
+- **Breaking** (a removed or renamed prop, event, slot, value or export; a changed default or
+  payload). Put `!` in the PR title (`feat(webkit)!: …`): merges are squashed, so the title is the
+  commit release-please reads, and it cuts a major. Ship a codemod entry in
+  `packages/webkit/src/cli/migrations/` (the `webkit migrate` map), or, when no codemod can do it,
+  a new line naming the component in the migration guide (`packages/webkit/MIGRATION_V6.md` for
+  the current major). Bump `spec_version` too. Prefer a deprecation cycle (below) to a direct
+  break.
+
+### Deprecate
+
+Follow [`.claude/rules/deprecation.md`](./.claude/rules/deprecation.md). 6.0 was the one clean
+break: it removed every old name outright, and apps migrate once with `MIGRATION_V6.md` and
+`webkit migrate`. From 6.0 on, a removal goes through this cycle:
+
+1. Mark the part `@deprecated` in its JSDoc (a prop) or on `defineOptions` (a component), naming
+   the **replacement** and the **removal version**:
+   ```ts
+   /** @deprecated since 6.2 — use `variant` instead. Removed in 7.0. */
+   ```
+2. For a whole component, set `deprecated: true` and `replaced_by: <name>` in the spec frontmatter.
+   `build:catalog` carries the flag to `catalog.json`, the MCP steers agents off it, and the
+   `webkit/no-deprecated-component` lint flags consumers that still import it.
+3. Keep the part working, unchanged, for at least one major cycle. Marking is a `feat` or `fix`,
+   never a major.
+
+### Remove
+
+Only after one major cycle in the deprecated state. Removal is a major: `!` in the PR title and a
+`BREAKING CHANGE:` footer. Remove everything together in one PR: the spec, the `.vue` and its
+test, the examples, the `package.json#exports` entries (and `-root`), the `.size-limit.json`
+entry and the visual baselines; regenerate the catalog and the llms pages; ship the codemod entry
+or the migration note that moves consumers to the replacement.
+
+### What must ship with a component
+
+| Ships with the component                                                           | Checked by                                                                                                    |
+| ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| Spec `.specs/<name>.md`, `approved` then `implemented`, checksum matching the body | `spec-integrity` (checksum and status, in CI), `spec-status` (no draft), `spec-template`, `complete` (status) |
+| The `.vue`, matching the spec 1-to-1                                               | hooks (`enforce-spec-exists`, `validate-spec-compliance`), `authoring`                                        |
+| `<name>.test.ts` next to the root `.vue`                                           | `test-gate`                                                                                                   |
+| Examples in `packages/webkit/examples/<name>/`, one per example the spec lists     | `complete`                                                                                                    |
+| `package.json#exports` entry, plus `<name>-root` for a compound                    | `complete`                                                                                                    |
+| `.size-limit.json` entry                                                           | `complete`; `size` measures it                                                                                |
+| Regenerated `catalog.json` and `catalog/`                                          | `catalog`                                                                                                     |
+| Regenerated `llms/`                                                                | `llms`                                                                                                        |
+| Visual baselines for the first example, light and dark                             | `complete`; the `visual` job compares them                                                                    |
+
+Two more gates hold the Change and Remove stages to their rules:
+
+- `api-diff` compares the public API (exports, props, events, slots, models, sub-components)
+  with the PR's base branch. A breaking change fails without `!` in the PR title and a
+  migration: a codemod entry, or a new line naming the component in
+  `packages/webkit/MIGRATION_V<N>.md`. Any API change, breaking or not, fails without a
+  `spec_version` bump in that component's spec. Run it locally with
+  `PR_TITLE='feat(webkit)!: …' pnpm --filter @aziontech/webkit run check:api-diff`.
+- The PR title must pass commitlint; CI checks it.
+- A `locked` spec passes CI but blocks edits to its component: bump `spec_version`, set it back
+  to `approved`, re-validate, then edit. A shipped component's spec never goes back to `draft`.
+- The bundle budget only goes down. A PR that raises a limit in `.size-limit.json` needs a
+  `Budget-raise: <entry> <old> → <new>, <reason>` line in its body.
+
+### For designers
+
+You do not need to write code or run anything. You file an issue, and you review images.
+
+1. **File the right form** (GitHub, **New issue**):
+   - **New component**: a component that does not exist yet. Paste the Figma frame in the
+     **Figma URL** field when there is one; the spec is then drafted from the design.
+   - **Change a component**: a new option, state or look for an existing component. Say whether
+     current screens would change without being edited (breaking); "unsure" is fine.
+   - **Visual bug**: a component that does not look the way it was designed. Give the page, the
+     theme, the window width and a screenshot.
+2. **What happens next.** An agent picks up the issue, writes or updates the spec, builds the
+   change, runs every gate and opens a pull request that links the issue. If it cannot go on, it
+   asks its question on the issue.
+3. **Where to review.**
+   - The **Screenshots** section of the PR: light, dark, right to left, 320 px and 1920 px.
+   - The docs site of the branch: the component page and each example, in light and dark. Run
+     `pnpm dev:docs` on the branch, or ask on the PR for the pages you want to see; a hosted
+     preview per PR is not set up yet.
+   - The visual baselines. When the PR changes them, its checks include **Visual baseline
+     review**: open the job summary and download `visual-baseline-review`, a page with every
+     changed screenshot before and after, side by side. When a comparison fails, the summary of
+     the failed shard links the Playwright report with the expected, actual and diff images.
+4. **What approval means.** Approving the PR says the change matches the design in both themes and
+   at every width the screenshots cover, and that every changed screenshot is intended. Ask for
+   changes in a PR comment; the agent fixes them and pushes. Nobody edits the code by hand.
+
+## Adding a component or block (AI flow)
+
+Every component and block made from now on is built by agents through one flow, from a request to
+a pull request. The machine gates make a correct component the only path through CI; the head of
+design opens the request and approves the merge, and nobody edits the code by hand in between.
+
+1. **Request.** Open an issue from **New component** or **New block**
+   (`.github/ISSUE_TEMPLATE/`): intent, benchmark links (Cloudscape `index.html.md`, shadcn page),
+   where it is used, surface (product / marketing / docs), acceptance criteria.
+2. **Run the flow.** An agent runs `/component-new <issue>` (`.claude/commands/component-new.md`) or
+   `/block-new <issue>` (`.claude/commands/block-new.md`). Each step stops the run on
+   failure:
+
+   | Step | What happens                                                                                                                            | Owner                             |
+   | ---- | --------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
+   | 1    | Read the issue                                                                                                                          | orchestrator                      |
+   | 2    | Research the benchmarks; check the catalog for reuse (`reuse-audit`, MCP `search_components` / `search_blocks`, `catalog.json#aliases`) | orchestrator, `reuse-auditor`     |
+   | 3    | Spec as `draft` (`spec-create`, template 2) or, for a block, the block brief                                                            | `spec-creator`                    |
+   | 4    | Review by a second agent with a fixed checklist; approval flips the spec to `approved` with a checksum                                  | `spec-reviewer`, `spec-validator` |
+   | 5    | Build: component, test, examples (`packages/webkit/examples/<name>/`) — or `block.json` + `.vue` + `variants/`                          | `/component-create` sub-agents    |
+   | 6    | Machine gates (below)                                                                                                                   | orchestrator                      |
+   | 7    | `ui-craft` review on the component, its examples and every block that uses it                                                           | orchestrator                      |
+   | 8    | Usage check: a fresh agent session must pick the new piece through the MCP                                                              | `check-usage.mjs`                 |
+   | 9    | PR from `.github/pull_request_template.md`: gate table, `ui-craft` report, usage report, screenshots                                    | `/pr-open`                        |
+
+3. **Review.** The head of design approves the PR; a rejection goes back to step 3 or 5 with the
+   comments, never to a human fix.
+
+**Machine gates.** One local runner prints the table the PR pastes:
+
+```bash
+pnpm --filter @aziontech/webkit run gates            # all fast gates, in order, pass/fail table
+pnpm --filter @aziontech/webkit run gates -- --only naming,catalog --bail
+```
+
+It runs `check:catalog`, `check:naming`, `check:marketing-inventory`, `check:blocks`, `check:cited-names`,
+`check:spec-status` (no draft spec), `check:spec-template` (template-2 sections), `check:authoring`,
+`check:authoring-docs`, `check:tests`, `check:size` (the bundle budget, about 15 s), the hook tests and
+`test:toolkit` (which also builds the icon font and fails when an official Azion product or Solution,
+listed in `test/catalog/azion-products.json` and `azion-solutions.json`, has no `az az-<name>` icon).
+It also runs, from the repository root and with the same commands as CI, the MCP, theme and icons
+package tests and the icons manifest, `test:docs`, Stylelint, the lint canaries, the tests TypeScript
+check (`typecheck:webkit:tests`) and the Prettier check (`check:webkit:format`, about 40 s); the last two
+were the most common reasons a Governance run went red. The `toolkit` job of
+`.github/workflows/governance.yml` runs the same commands on **every** PR, except `check:size`, which
+runs in the `build` job; the lint, type, size, Vitest browser (including
+`src/test/copyable-sfcs.test.ts`, which mounts every block and example) jobs run when
+`packages/webkit` changes; the docs/demos build and the styled visual job run when `packages/` or
+`apps/docs`, `apps/demos`, `apps/visual` change.
+
+What runs only in CI is listed, with the reason, in `CI_ONLY` in
+`packages/webkit/test/standards/run-gates.test.mjs`: ESLint, the source and docs type checks and type
+coverage (run them with the root `pnpm gates`), `test:ssr`, `check:pack`, the audit, the docs and
+demos builds, the consumer-app checks, and the browser and visual suites. That test fails when CI
+gains a step that is neither a gate nor listed there.
+
+**Spec template 2.** New specs carry `template: 2` and four more sections: `Internationalization`,
+`Right-to-left`, `Responsive` and `Performance`. `check:spec-template`, `spec-validate` and the
+`enforce-spec-exists` hook require them on template-2 specs and on every spec created on or after
+2026-11-12; the specs that predate it stay valid.
+
+**Usage check (opt-in, paid).** Step 8 proves an agent that knows nothing about the new piece
+finds it:
+
+```bash
+pnpm --filter @aziontech/webkit run usage-check -- date-picker "Let users pick the start and end of a billing period" --report usage-report.md
+pnpm --filter @aziontech/webkit run usage-check -- auth/auth-sign-in "A sign-in screen for the console" --dry-run
+```
+
+It packs the three packages, creates a clean Vite + Vue app in a temp dir, runs
+`npx @aziontech/webkit init --yes`, points the app's `.mcp.json` at the packed MCP server (`@aziontech/webkit-mcp`), and runs
+`claude -p "<prompt>" --dangerously-skip-permissions --max-turns 40 --output-format json
+--mcp-config .mcp.json --strict-mcp-config` there. It passes when a generated `src/**/*.vue`
+imports the component (for a block: at least 80 % of the components its primary SFC imports) and
+`webkit doctor` passes. It needs the `claude` CLI and an API key and costs one agent session, so
+it is not in the PR pipeline: run it locally or through the **Usage check** workflow
+(`.github/workflows/usage-check.yml`, manual dispatch, `ANTHROPIC_API_KEY` secret). `--dry-run`
+only resolves the target and prints the plan.
+
+**Changing, deprecating or removing a component**: see [Component lifecycle](#component-lifecycle).
 
 ## The spec-driven pipeline
 
-Every new component starts as a spec at `.specs/<name>.md`. The spec is the contract; the `.vue`, story, and exports are derived from it.
+Every new component starts as a spec at `.specs/<name>.md`. The spec is the contract; the `.vue`, examples, and exports are derived from it. These are the commands the AI flow above calls in steps 3 to 5.
 
 1. **Draft the spec** — `/spec-create <name>` writes `.specs/<name>.md` with `status: draft`. Review and flip to `status: approved`.
-2. **Scaffold** — `/component-create <name>` writes the `.vue`, the `packages/webkit/package.json#exports` entry, and a minimal `.stories.js`. It will refuse to add props, events, or slots that are not in the spec.
+2. **Scaffold** — `/component-create <name>` writes the `.vue`, the `packages/webkit/package.json#exports` entry, and the examples in `packages/webkit/examples/<name>/`. It will refuse to add props, events, or slots that are not in the spec.
 3. **Verify** — `/component-verify <name>` re-runs spec compliance and validators without touching files.
 
 The spec template lives at [`.specs/_template.md`](./.specs/_template.md). The Constraints block is verbatim by design — do not edit it.
 
 ### Editing an existing component
 
-- Update the spec first; `status` must remain `approved` and the `checksum` will be recomputed by `spec-validate`.
-- Re-run `/component-verify <name>` and the relevant `pnpm webkit:*` gates.
+Spec first, then code; a shipped spec stays `implemented`. The steps, including the `checksum` and
+`spec_version` bump, are in [Component lifecycle, Change](#change). Then re-run
+`/component-verify <name>`.
 
 ### Legacy components
 
-Components in [`.claude/hooks/_lib/legacy-components.json`](./.claude/hooks/_lib/legacy-components.json) predate the pipeline. When migrating one under enforcement, rewrite the spec from scratch (see [`migration.md`](./.claude/rules/migration.md)) — do not paste from the legacy file.
+Components in [`.claude/hooks/lib/legacy-components.json`](./.claude/hooks/lib/legacy-components.json) predate the pipeline. When migrating one under enforcement, rewrite the spec from scratch (see [`migration.md`](./.claude/rules/migration.md)) — do not paste from the legacy file.
+
+## What to update when WebKit changes
+
+You only write the source. `build:catalog` and the package's `prepack` generate what AI agents read
+(`catalog.json`, its `blocks`, the packaged `skills/` and `rules/`), and CI fails the PR when the
+source and the generated files disagree. Nobody rewrites the AI files by hand.
+
+| When you…                                             | You write                                                                                          | Generated                                      | CI gate                                                             |
+| ----------------------------------------------------- | -------------------------------------------------------------------------------------------------- | ---------------------------------------------- | ------------------------------------------------------------------- |
+| Create or change a component or a section             | `.specs/<name>.md` (with Purpose, When to use, When NOT to use), the `.vue` and its examples       | `catalog.json` imports, with docs and examples | `check:catalog` (fails on a missing doc section), hooks             |
+| Create or change a block in `packages/webkit/blocks/` | `block.json` (`intents`, `skills`, `files`), the `.vue`, `sample.ts`, `variants/`, `guidelines.md` | `catalog.json` `blocks`                        | `check:blocks` (G1)                                                 |
+| Rename, deprecate or remove a component               | The spec, with `deprecated: true` / `replaced_by`                                                  | The catalog                                    | `cited-names` (G2)                                                  |
+| Create or change a skill or a rule                    | `skills/<name>/SKILL.md` or `rules/<name>.md` at the repo root                                     | The copy in the package (`prepack`)            | `cited-names` (G2), `doc-standards`, invariant tests                |
+| Change a token                                        | `packages/theme`                                                                                   | Tokens in the catalog                          | `validate-tokens`                                                   |
+| Open a new spec                                       | The spec in `status: draft`, `template: 2`, only on your branch                                    | —                                              | `spec-status` (G3): no draft lands on `main`; `check:spec-template` |
+| Release a version                                     | Nothing                                                                                            | The release, by release-please                 | —                                                                   |
+
+After any of these, run `pnpm --filter @aziontech/webkit build:catalog` and commit `catalog.json` and `catalog/`.
+A block's SFC must pass the consumer lint; legacy findings are frozen in
+`packages/webkit/scripts/blocks-baseline.json` and can only go down
+(`pnpm --filter @aziontech/webkit run check:blocks --update` after fixing some). A block also
+follows the data contract (`.claude/commands/block-new.md`, "The data contract"): typed props in,
+events out, sample records in `sample.ts` (listed in `block.json` `files`), and variants that
+import the primary instead of copying it. Blocks not yet on it are frozen in
+`packages/webkit/scripts/blocks-data-baseline.json`, which the same `--update` shrinks.
 
 ## Quality gates
 
 Before opening a PR, all of these must pass:
 
 ```bash
-pnpm webkit:lint            # ESLint, max-warnings 0
-pnpm webkit:lint:style      # Stylelint
-pnpm webkit:type-check      # vue-tsc --noEmit
-pnpm webkit:type-coverage   # type-coverage >= 95%
-pnpm webkit:format:check    # Prettier
-pnpm storybook:build        # Catches SFC compile errors invisible to vue-tsc
+pnpm lint:webkit            # ESLint, max-warnings 0
+pnpm lint:webkit:style      # Stylelint
+pnpm typecheck:webkit      # vue-tsc --noEmit
+pnpm check:webkit:type-coverage   # type-coverage >= 95%
+pnpm check:webkit:format    # Prettier
+pnpm --filter @aziontech/webkit test:ssr   # renders every block and example (SFC compile errors invisible to vue-tsc)
+pnpm build:docs             # the docs site, every route prerendered
 ```
 
 Or the aggregate:
 
 ```bash
-pnpm governance             # lint + type-check + format:check + security:audit
+pnpm gates             # lint + typecheck + format check + audit
 ```
 
 The `governance` workflow runs on every push to `main` — its status is the badge at the top of the README.
+
+The `complete` gate (`pnpm --filter @aziontech/webkit run check:complete`) fails when a root component lacks an export (or a `-root` export for an `index.ts` compound), a `.size-limit.json` entry, its examples, a visual baseline for its first example, or still has a spec in `status: approved`; current debt lives in `packages/webkit/scripts/complete-baseline.json`, which only shrinks. `check:size-ratchet` fails a PR that raises a size limit unless its body has a line starting `Budget-raise:`.
 
 ## Testing
 
 Webkit ships a co-located `*.test.ts` per component, run in **Vitest browser mode** (real Chromium — never jsdom). See [`.claude/rules/testing.md`](./.claude/rules/testing.md).
 
 ```bash
-pnpm webkit:test                              # whole suite (headless Chromium)
+pnpm test:browser-webkit                              # whole suite (headless Chromium)
 pnpm --filter @aziontech/webkit test:ui       # interactive UI (headed browser)
 pnpm --filter @aziontech/webkit test:coverage # v8 coverage report
 ```
@@ -74,46 +316,60 @@ The first run installs the browser: `pnpm --filter @aziontech/webkit exec playwr
 If pnpm aborts with a deps-verify error (common when `node_modules` is symlinked, e.g. a git worktree), prefix the command:
 
 ```bash
-PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN=false pnpm webkit:test
+PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN=false pnpm test:browser-webkit
 ```
 
-Tests never ship to npm — `packages/webkit/package.json#files` excludes them, asserted in CI by `pnpm pack:check`.
+Tests never ship to npm — `packages/webkit/package.json#files` excludes them, asserted in CI by `pnpm check:pack`.
 
-### Visual regression (Storybook test-runner)
+A test that fails for a known reason (a pre-existing failure, or a flake that passes alone) is
+listed in [`.claude/docs/KNOWN_FAILURES.md`](./.claude/docs/KNOWN_FAILURES.md) with how to re-run
+it. Check there before treating a red test as your regression, and add or remove the row in the
+commit that finds or fixes it.
 
-The unit suite above runs on an **unstyled** DOM (no Tailwind) and owns behavior/structure/ARIA. Pixels are owned by the visual layer: `@storybook/test-runner` visits every story in the built Storybook, screenshots `#storybook-root` and compares against committed baselines (`jest-image-snapshot`). Config: [`apps/storybook/.storybook/test-runner.js`](./apps/storybook/.storybook/test-runner.js).
+### Visual regression (styled, Playwright)
+
+The unit suite above runs on an **unstyled** DOM (no Tailwind) and owns behavior/structure/ARIA.
+Pixels are owned by [`apps/visual`](./apps/visual/README.md): Playwright serves the built docs
+site and demos and screenshots them **with the real theme CSS** — the first example of every
+component (`/frame/example/<dir>/<file>`) in light and dark at 1280 px and light at 390 px, the primary
+state of every block (`/frame/block/<id>/<state>`) in light and dark at 1280 px and dark at 390 px, every
+state of the AI blocks (light, dark, 320 px, right to left), every demo route (plus the demo flows
+end to end) and the geometry checks in `tests/geometry.spec.ts`.
 
 ```bash
-pnpm storybook:test:visual                    # build + serve dist + compare (one-shot)
-pnpm --filter storybook run test:visual       # compare against a running `storybook:dev`
-pnpm --filter storybook run test:visual:update# regenerate LOCAL baselines
+pnpm build:docs && pnpm build:demos
+pnpm test:visual             # compare with apps/visual/baselines
 ```
 
-Baselines are **per-platform** (font rasterization differs): `apps/storybook/.storybook/test-visual/__image_snapshots__/linux/` is the CI contract and is committed; `darwin/` is local-only and gitignored. To bootstrap or intentionally update the committed baselines, run the **Visual Regression @ Storybook** workflow manually with `update_baselines=true`, download the `visual-baselines-linux` artifact and commit its contents — never commit baselines generated on macOS. Failed comparisons write annotated diffs to `test-visual/__diff_output__/` (uploaded as a CI artifact).
-
-Opt a story out of the snapshot (it is still visited for render errors) with `parameters: { visual: false }`.
+**Add an example and you are done**: the docs page and its visual test follow from
+`packages/webkit/examples/<name>/`, and a new block from `packages/webkit/blocks/`. The only manual
+step is the baseline. Baselines are committed and are valid only when taken in
+`mcr.microsoft.com/playwright:v1.62.0-noble` (the image the CI `visual` job runs in): dispatch
+`.github/workflows/visual-baselines.yml` with `update_baselines=true`
+(`pnpm update:baselines`), review the `visual-baselines` artifact and commit it
+(`/baselines-regenerate`). Failed comparisons upload the Playwright report (with diffs) as an artifact.
 
 ## Commit convention
 
 We use [Conventional Commits](https://www.conventionalcommits.org/). Merges to `main` are **squash merges**, and [release-please](https://github.com/googleapis/release-please) parses the squashed commit — the **PR title** — to compute version bumps and changelogs through its Release PR, so the scope and type matter.
 
-| Type | When | Release |
-|---|---|---|
-| `feat` | New component, new prop/event/slot, new public export | minor |
-| `fix` | Bug fix, accessibility correction, visual regression — anything that must ship (incl. urgent production fixes) | patch |
-| `chore` | Tooling, dependency bumps, internal cleanup | none |
-| `docs` | README, spec body, JSDoc | none |
-| `style` | Formatting / whitespace only | none |
-| `refactor` | Internal restructure with no API change | none |
-| `perf` | Performance improvement (use `fix` if it must ship on its own) | none |
-| `test` | Test additions or changes | none |
-| `ci` | CI/CD pipeline changes | none |
-| `revert` | Reverting a prior commit | none |
-| `!` after type or `BREAKING CHANGE:` footer | Removed/renamed prop, event, slot, or export | major |
+| Type                                        | When                                                                                                           | Release |
+| ------------------------------------------- | -------------------------------------------------------------------------------------------------------------- | ------- |
+| `feat`                                      | New component, new prop/event/slot, new public export                                                          | minor   |
+| `fix`                                       | Bug fix, accessibility correction, visual regression — anything that must ship (incl. urgent production fixes) | patch   |
+| `chore`                                     | Tooling, dependency bumps, internal cleanup                                                                    | none    |
+| `docs`                                      | README, spec body, JSDoc                                                                                       | none    |
+| `style`                                     | Formatting / whitespace only                                                                                   | none    |
+| `refactor`                                  | Internal restructure with no API change                                                                        | none    |
+| `perf`                                      | Performance improvement (use `fix` if it must ship on its own)                                                 | none    |
+| `test`                                      | Test additions or changes                                                                                      | none    |
+| `ci`                                        | CI/CD pipeline changes                                                                                         | none    |
+| `revert`                                    | Reverting a prior commit                                                                                       | none    |
+| `!` after type or `BREAKING CHANGE:` footer | Removed/renamed prop, event, slot, or export                                                                   | major   |
 
 Types marked **none** never release on their own — they ride along in the next release cut by a `feat`/`fix`. Release-please cannot be configured to change this mapping; the full contract is [`.claude/rules/release-types.md`](./.claude/rules/release-types.md).
 
-### Message shape
+### Alert shape
 
 The commit parser accepts these forms:
 
@@ -130,7 +386,7 @@ fix: commit message
 
 Examples:
 
-- `feat(webkit): [ENG-1231] add Dropdown component`
+- `feat(webkit): [ENG-1231] add DropdownMenu component`
 - `fix(theme): correct --ring-color for dark mode`
 - `chore(icons): regenerate after source update`
 - `feat(webkit)!: drop deprecated tone prop on Button`
@@ -167,9 +423,9 @@ git config --global user.signingkey ~/.ssh/id_ed25519.pub
 git config --global commit.gpgsign true
 ```
 
-Then register that **same public key a second time** on GitHub, under [SSH and GPG keys](https://github.com/settings/keys) → **New SSH key** → **Key type: `Signing Key`**. An authentication key does not verify signatures: without the signing-key entry your commits are signed but arrive as *Unverified*, which the ruleset rejects exactly like an unsigned one. Registering the key re-verifies existing commits retroactively, so a branch you pushed before adding it does not need to be re-signed. The commit e-mail (`git config user.email`) must be a verified e-mail on your GitHub account.
+Then register that **same public key a second time** on GitHub, under [SSH and GPG keys](https://github.com/settings/keys) → **New SSH key** → **Key type: `Signing Key`**. An authentication key does not verify signatures: without the signing-key entry your commits are signed but arrive as _Unverified_, which the ruleset rejects exactly like an unsigned one. Registering the key re-verifies existing commits retroactively, so a branch you pushed before adding it does not need to be re-signed. The commit e-mail (`git config user.email`) must be a verified e-mail on your GitHub account.
 
-> **macOS:** on git < 2.34, `gpg.format ssh` fails hard — `error: unsupported value for gpg.format: ssh` on *every* git command, including `git status`. The usual cause is a stale `/usr/local/bin/git` (from the git-scm installer) shadowing the newer `/usr/bin/git` in `PATH`. Diagnose with `git --version` and `which -a git`; fix by installing a current git (`brew install git`) or removing the stale symlink.
+> **macOS:** on git < 2.34, `gpg.format ssh` fails hard — `error: unsupported value for gpg.format: ssh` on _every_ git command, including `git status`. The usual cause is a stale `/usr/local/bin/git` (from the git-scm installer) shadowing the newer `/usr/bin/git` in `PATH`. Diagnose with `git --version` and `which -a git`; fix by installing a current git (`brew install git`) or removing the stale symlink.
 
 #### Checking your own signatures locally
 
@@ -221,7 +477,7 @@ Reviewers will look for:
 2. **Token usage.** No HEX literals, no raw Tailwind palette (`bg-blue-500`), no inline `@keyframes`. Tokens only — see [`.claude/rules/styling.md`](./.claude/rules/styling.md).
 3. **No invented dependencies.** Imports resolve; no `floating-ui`, `popper`, `gsap`, `framer-motion`, etc.
 4. **Accessibility.** Keyboard paths, focus rings, `motion-reduce:*` fallbacks for any motion.
-5. **Storybook coverage.** The states listed in the spec each have a story.
+5. **Example coverage.** The states listed in the spec each appear in an example.
 
 ## Reporting bugs
 
@@ -229,19 +485,22 @@ Open an [issue](https://github.com/aziontech/webkit/issues/new) with:
 
 - Affected package and version (`@aziontech/webkit@x.y.z`).
 - Vue version and bundler (Vite/webpack/etc.).
-- Minimal reproduction — a Storybook story or a CodeSandbox is ideal.
+- Minimal reproduction — an example SFC (like those in `packages/webkit/examples/`) or a CodeSandbox is ideal.
 - Expected vs. actual behavior.
 
 ## Releasing
 
-Releases are automated by [release-please](https://github.com/googleapis/release-please) ([`release-please.yml`](./.github/workflows/release-please.yml)) — the Release PR model. Merging `feat` / `fix` / breaking commits to `main` creates or updates a pending **Release PR** (version bumps + changelogs); merging that Release PR creates the per-package tags and GitHub Releases, which trigger the publish workflows via `release: published`:
+Releases are automated by [release-please](https://github.com/googleapis/release-please) ([`release-please.yml`](./.github/workflows/release-please.yml)) — the Release PR model. Merging `feat` / `fix` / breaking commits to `main` creates or updates a pending **Release PR** (version bumps + changelogs); merging that Release PR creates the per-package tags and GitHub Releases, and the same job dispatches each released package's publish workflow from `main` (a release published by hand fires them through `release: published`):
 
-- [`package-icons.yml`](./.github/workflows/package-icons.yml) → `@aziontech/icons`
-- [`package-theme.yml`](./.github/workflows/package-theme.yml) → `@aziontech/theme`
-- [`package-webkit.yml`](./.github/workflows/package-webkit.yml) → `@aziontech/webkit`
+- [`publish-icons.yml`](./.github/workflows/publish-icons.yml) → `@aziontech/icons`
+- [`publish-theme.yml`](./.github/workflows/publish-theme.yml) → `@aziontech/theme`
+- [`publish-webkit.yml`](./.github/workflows/publish-webkit.yml) → `@aziontech/webkit`
+- [`publish-webkit-mcp.yml`](./.github/workflows/publish-webkit-mcp.yml) → `@aziontech/webkit-mcp`
+
+Every publish job runs in the `npm` GitHub environment, so it waits for a required reviewer to approve the deployment before it gets an npm token. A publish run only starts from `main` or from a release tag of its own package, and it refuses a tag whose commit is not on `main`. Report a vulnerability as described in [`SECURITY.md`](./SECURITY.md).
 
 There is no manual release step. If you need a merge that does not produce a release, use `chore:` or `docs:` (no version bump).
 
 ## Questions
 
-Open a draft PR or a GitHub issue; tag a CODEOWNER from [`.github/CODEOWNERS`](./.github/CODEOWNERS).
+Open a draft PR or a GitHub issue; tag a code owner from [`CODEOWNERS`](./CODEOWNERS).

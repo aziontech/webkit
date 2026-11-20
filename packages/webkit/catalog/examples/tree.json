@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "A bucket-like file tree three levels deep, with glyphs and size descriptions. Two folders are seeded in `v-model:open-keys`; the chevron and ArrowRight / ArrowLeft fold the rest.",
+   "file": "examples/tree/default.vue"
+  },
+  {
+   "name": "Sizes",
+   "summary": "`size` sets the row density: `small` is 24px rows for dense file explorers, `medium` (the default) 32px, `large` 40px for touch or roomy panels. Height, padding, label type and indentation step together.",
+   "file": "examples/tree/sizes.vue"
+  },
+  {
+   "name": "Selectable",
+   "summary": "With `selectable`, activating a node writes its id to `v-model:selected-key`, marks the row selected and sets `aria-selected`. The bound id is shown under the tree.",
+   "file": "examples/tree/selectable.vue"
+  }
+ ]
+}

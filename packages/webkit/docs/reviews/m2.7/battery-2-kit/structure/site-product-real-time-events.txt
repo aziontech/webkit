@@ -1,0 +1,118 @@
+[block-hero-centered-carousel kind=centered]
+  [marketing-hero kind=screen size=medium align=center width=site aria-label='Visibility on what matters']
+    [marketing-hero-title width=xl centered=true]
+      text: // ⏎ Real-Time Events
+      h1 "Visibility on what matters"
+      p "Detect, investigate, and resolve issues in seconds with high-fidelity event data that appears in under a minute—no agents required."
+      button "Start free" → https://console.azion.com/signup/
+      button "DOCS" → https://www.azion.com/en/documentation/products/observe/real-time-events/
+[marketing-section-container width=site]
+  · section-gap (hatched spacer band)
+  [block-capability-grid kind=left]
+    [marketing-card-grid kind=frame columns=3 mobile-columns=1 filled=true]
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Optimize performance in real time"
+          p "Spot latency spikes and error trends instantly. Verify fixes with the same dataset."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Investigate security events without delays"
+          p "Trace attacks instantly down to requests, IPs, user agents, and affected paths."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Correlate across products and workloads"
+          p "Analyze events from Applications, Functions, WAF, and connected Azion products in one place."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Filter, group, and sort with precision"
+          p "Create targeted views with structured fields and advanced search operators to isolate the events that matter."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Export for audits and troubleshooting"
+          p "Download and share event results to support compliance checks, incident reports, and cross-team debugging."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Build dashboards teams actually use"
+          p "Feed high-fidelity event data to your dashboards and track reliability, security, and user experience with the detail metrics tools miss."
+  · section-gap (hatched spacer band)
+  [block-client-quotes]
+    [marketing-section-module kind=left]
+      [marketing-quote-tabs]
+        [marketing-quote kind=highlight]
+          blockquote "One of the best CDN and WAF solutions I've ever used. Easy to implement and integrate, with speed and low latency that make a real difference for our customers."
+          figcaption "Julian H. IT OPS, SRE & SEC Manager at Dafiti Group"
+          button "See success stories" → /en/success-case/
+        [marketing-card-grid kind=frame columns=3 mobile-columns=2 filled=true aria-label='Client stories']
+          [marketing-card-grid-cell]
+  · section-gap (hatched spacer band)
+  text: // ⏎ Complete, not complex
+  h2 "Monitor events in real time"
+  · section-gap (hatched spacer band)
+  [block-media-split-stack-alternating kind=alternating]
+    [marketing-section-module kind=left]
+      [marketing-band-stack sticky=true]
+        [marketing-media-split kind=media-start orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Explore, inspect, and export from Console']
+          h2 "Explore, inspect, and export from Console"
+          p "View tabular event data, inspect requests in detail, and export results directly from the Azion Console without additional tooling. Docs: https://www.azion.com/en/documentation/products/observe/real-time-events/"
+          img "Integration logos for GraphQL and Grafana showing API connectivity and analytics platform integration."
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Investigate any event across your platform']
+          h2 "Investigate any event across your platform"
+          p "Access detailed data for every request, response, and security event from Applications, Functions, WAF, and all connected Azion products, drilling down to specific requests, IPs, and timestamps with field-level precision. Docs: https://www.azion.com/en/documentation/products/observe/real-time-events"
+          img "Real-Time Events interface showing data filtering and search functionality with event tables"
+        [marketing-media-split kind=media-start orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Connect your logs to Grafana and any analytics tool']
+          h2 "Connect your logs to Grafana and any analytics tool"
+          p "Use the GraphQL API to power dashboards, automate incident workflows, and share consistent operational views across your team. Query top IPs, paths, and status codes in real time, group by the dimensions that match your SLOs and KPIs, and export and share consistent views across engineering, security, and ops teams. Docs: https://www.azion.com/en/documentation/devtools/graphql-api/overview/"
+          img "Grafana and GraphQL integration concept for operational dashboards"
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Leverage advanced data transform with GraphQL']
+          h2 "Leverage advanced data transform with GraphQL"
+          p "Execute complex searches and aggregations using the GraphQL API, with advanced filtering, grouping, and sorting capabilities. Docs: https://www.azion.com/en/documentation/devtools/graphql-api/features/gql-real-time-events-fields"
+          img "Detailed view of event data showing request metrics, timestamps, and performance analysis."
+  · section-gap (hatched spacer band)
+  [block-use-case-links aria-label='Resolve operational and security issues faster']
+    [marketing-section-module kind=left]
+      [marketing-section-title kind=left size=medium]
+        h2 "Resolve operational and security issues faster"
+      [marketing-card-grid kind=divider columns=3 mobile-columns=1 filled=true]
+        [marketing-topic icon=true described=true linked=true]
+        link "Find root cause during incidents When latency spikes or errors surge, identify the requests, IPs, and timestamps causing issues in under a minute, then validate remediation with immediate feedback." → https://www.azion.com/en/documentation/use-cases/improve-performance-and-reliability/accelerate-websites-and-apis-with-a-cdn/
+        [marketing-topic icon=true described=true linked=true]
+        link "Trace attacks to specific requests When WAF blocks suspicious traffic, drill down to individual requests, IPs, and user agents to validate threats and document incidents for your security team." → https://www.azion.com/en/documentation/use-cases/secure-applications-and-networks/block-attackers-automatically-from-siem-detections/
+        [marketing-topic icon=true described=true linked=true]
+        link "Verify releases with immediate feedback Compare event patterns before and after deployments to catch new error codes, configuration issues, or performance regressions before users notice." → https://www.azion.com/en/documentation/use-cases/build-and-run-applications/build-rest-and-graphql-apis/
+        [marketing-topic icon=true described=true linked=true]
+        link "Export audit-ready event logs Filter and download event data with timestamps, IPs, and request details to support compliance checks, incident reports, and security audits." → https://www.azion.com/en/documentation/use-cases/secure-applications-and-networks/prepare-regulated-web-applications-for-security-audits/
+        [marketing-topic icon=true described=true linked=true]
+        link "Correlate events across your platform Follow a request across products and workloads to see how one event relates to another." → https://www.azion.com/en/solutions/security/
+        [marketing-topic icon=true described=true linked=true]
+        link "Build dashboards in your own tools Connect your logs to Grafana and other analytics tools to build the views your team uses." → https://www.azion.com/en/solutions/web-apps/
+  · section-gap (hatched spacer band)
+  [block-faq-section]
+    [marketing-section-module kind=left]
+      [marketing-faq]
+        h2 "Real-Time Events FAQ"
+        [content-accordion orientation=vertical size=large]
+          [content-accordion-item]
+            h3 "What is Real-Time Events?"
+          [content-accordion-item]
+            h3 "Which products generate events for Real-Time Events?"
+          [content-accordion-item]
+            h3 "How do I query data programmatically?"
+          [content-accordion-item]
+            h3 "Can I export results for audits or debugging?"
+          [content-accordion-item]
+            h3 "How quickly can I see event data?"
+          [content-accordion-item]
+            h3 "Do I need to install an agent or collector?"
+          [content-accordion-item]
+            h3 "Can I use Real-Time Events during incidents?"
+          [content-accordion-item]
+            h3 "Where can I find query examples?"
+  · section-gap (hatched spacer band)
+  [block-closing-call-to-action-split kind=split]
+    [marketing-section-module kind=left]
+      [marketing-call-to-action kind=split aria-label='See everything.']
+        text: // ⏎ Observe
+        h2 "See everything. Act faster."
+        button "Start free" → https://console.azion.com/signup?tck=observe_cta
+        p "Get clearer visibility, faster response, and fewer blind spots across your stack."
+        button "Talk to a specialist" → https://www.azion.com/en/contact/

@@ -1,0 +1,30 @@
+{
+ "purpose": "The content of a help side region: a topic's title, a few sections of short guidance, and the \"Learn more\" links that leave for the documentation. Guided tutorials belong to `tutorial-panel`. It is the thing that goes **inside** a side region, not the region itself: the consumer places it in a `Drawer` or in the page's side rail, and that host owns opening, closing and the close button. It owns no open state, so it has no `Trigger` / `Content` and no `data-state=\"open|closed\"`. Its anatomy is the anatomy of a help page — `Header`, `Section`, `Links` — composed by hand, so a topic can omit the links or carry one section or five.",
+ "useWhen": [
+  "Use HelpPanel for static page help (title, guidance, Learn more links) in the app layout's tools region.",
+  "A Console screen needs contextual help beside the work: what this page is for, what a field means, where the docs are.",
+  "The help content is loaded asynchronously and the region must reserve its space while it arrives (`loading`)."
+ ],
+ "avoidWhen": [
+  "A one-line hint attached to a single control → use `tooltip` or `hint`, or the field's `field-description`.",
+  "A guided tutorial with tasks, progress and hotspots on the real controls → use `tutorial-panel`.",
+  "The region itself (overlay, slide-in, close button, focus trap) → use `drawer`; put `help-panel` inside it.",
+  "Ordered steps the reader navigates between, with the step's form filling the column beside it → use `stepper`.",
+  "Numbered instructions inside a documentation page, read all at once → use `doc-steps` (`DocSteps.Step`).",
+  "A page with nothing configured yet, which needs one call to action → use `empty-state`."
+ ],
+ "related": [
+  "`drawer` — the host that opens, closes and traps focus around a help panel shown as an overlay.",
+  "`tutorial-panel` — guided tutorials, drawn with these parts plus its own task list.",
+  "`link` — the standalone link each `HelpPanel.Footer` row is composed from.",
+  "`skeleton` — what the panel renders in place of its content while `loading`.",
+  "`doc-prose` — long-form documentation prose; a help section is a few short paragraphs, not an article."
+ ],
+ "bestPractices": [
+  "One topic per panel. When the reader moves to another part of the page, swap the panel's content — do not stack two headers.",
+  "Keep each `Section` to a short paragraph or a short list. If the reader has to scroll a section, the content belongs in the docs and the panel should link to it.",
+  "Title sections with the question the reader is asking (`What is a workload?`), not with a noun (`Overview`).",
+  "Put links to the documentation in `HelpPanel.Footer`, at the end, not inline in every section.",
+  "Close affordances belong to the host. Do not put a close button in `HelpPanel.Header`; the `Drawer` or side rail already has one."
+ ]
+}

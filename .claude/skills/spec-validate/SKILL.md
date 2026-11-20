@@ -2,7 +2,7 @@
 name: spec-validate
 description: Validate a `.specs/<name>.md` against the schema, the body section rules, and the Constraints block. Writes the checksum and flips status from draft to approved when valid.
 status: active
-last_updated: 2026-05-22
+last_updated: 2026-11-11
 scope: webkit
 enforced_by: [prop-vocabulary, props, styling, migration]
 ---
@@ -28,8 +28,8 @@ Decide whether a spec is good enough to drive code generation. The `spec-validat
 ## Workflow
 
 1. **Parse frontmatter.** Run Ajv against `_schema.json`. Any violation → fail with the Ajv error path.
-2. **Parse body sections.** Use `.claude/hooks/_lib/spec.mjs` to extract the Props / Events / Slots / Sub-components / Tokens tables. Fail if any mandatory section is absent or contains only `TBD`.
-3. **Check Props table.** Each row must have all five cells filled. Boolean prop names must not start with `is`/`has`. Visual variant prop must be named `kind`. Size prop must be named `size`. JSDoc cell must not be empty. The Default cell must NOT be the string literal `'undefined'` or `'null'` (the quoted text, not the JS value `undefined`): for an optional text prop use `''`, for a genuinely absence-meaningful prop (`open`, `modelValue`, `src`) use unquoted `undefined`. Fail with `FAIL: prop <name> Default is the string 'undefined'; use '' or unquoted undefined` (helper: `defaultCellIsStringUndefined` in `.claude/hooks/_lib/spec.mjs`).
+2. **Parse body sections.** Use `.claude/hooks/lib/spec.mjs` to extract the Props / Events / Slots / Sub-components / Tokens tables. Fail if any mandatory section is absent or contains only `TBD`.
+3. **Check Props table.** Each row must have all five cells filled. Boolean prop names must not start with `is`/`has`. Visual variant prop must be named `variant` (a sort of part is `type`). Size prop must be named `size`. JSDoc cell must not be empty. The Default cell must NOT be the string literal `'undefined'` or `'null'` (the quoted text, not the JS value `undefined`): for an optional text prop use `''`, for a genuinely absence-meaningful prop (`open`, `modelValue`, `src`) use unquoted `undefined`. Fail with `FAIL: prop <name> Default is the string 'undefined'; use '' or unquoted undefined` (helper: `defaultCellIsStringUndefined` in `.claude/hooks/lib/spec.mjs`).
 4. **Check Events table.** Event names must be kebab-case OR `update:<prop>`. Payloads must be a TypeScript type (no `any`, no empty).
 5. **Check Slots table.** Slot names must be kebab-case. Scope must be `—` or a typed object.
 6. **Check Sub-components.** If `structure: composition`, the Sub-components section must list at least the root + one sub-component. If `structure: monolithic`, the section must be absent.
@@ -37,9 +37,10 @@ Decide whether a spec is good enough to drive code generation. The `spec-validat
    - A generated class starting with `.text-` and present in DESIGN.md.
    - A `var(--*)` that exists in DESIGN.md.
    No HEX, no RGB, no Tailwind palette, no external color utility.
-8. **Check Constraints block.** The "## Constraints — DO NOT" section must be present and must contain at least the bullets from `.specs/_template.md` (verbatim text check on the canonical bullets).
-9. **Write checksum.** If all checks pass and the input had `status: draft`, compute `sha256(body)` (everything after the closing `---` of the frontmatter), write it to the `checksum` field, and flip `status: approved`. Refresh `last_updated`.
-10. **Emit verdict.** Print `OK` or a list of failures (one per line, with the failing line number).
+8. **Check the template version.** Run `templateSectionErrors(frontmatter, body)` from `.claude/hooks/lib/spec.mjs` (the same check as `pnpm --filter @aziontech/webkit run check:spec-template` and the `enforce-spec-exists` hook). A spec with `template: 2` must have `## Internationalization`, `## Right-to-left`, `## Responsive` and `## Performance`, each filled (not empty, not `TBD`, no line left from the template's placeholders). A spec created on or after 2026-11-12 must declare `template: 2`. Specs without `template` (template 1, the specs that predate it) are exempt. Fail with `FAIL: <error>` per finding.
+9. **Check Constraints block.** The "## Constraints — DO NOT" section must be present and must contain at least the bullets from `.specs/_template.md` (verbatim text check on the canonical bullets).
+10. **Write checksum.** If all checks pass and the input had `status: draft`, compute `sha256(body)` (everything after the closing `---` of the frontmatter), write it to the `checksum` field, and flip `status: approved`. Refresh `last_updated`.
+11. **Emit verdict.** Print `OK` or a list of failures (one per line, with the failing line number).
 
 ## Outputs
 
@@ -62,6 +63,7 @@ Decide whether a spec is good enough to drive code generation. The `spec-validat
 - [ ] Frontmatter passes `_schema.json`.
 - [ ] Every body section is present and non-`TBD`.
 - [ ] Every Tokens entry resolves in DESIGN.md.
+- [ ] Template 2 specs fill the four template-2 sections; specs created on or after 2026-11-12 are on template 2.
 - [ ] Constraints block contains the canonical bullets.
 - [ ] On success: `status: approved` with a valid checksum.
 - [ ] On failure: nothing written; reasons printed; exit non-zero.

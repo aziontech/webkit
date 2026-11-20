@@ -1,0 +1,102 @@
+<script setup>
+  import Button from '@aziontech/webkit/button'
+  import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
+  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
+  import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
+  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
+</script>
+
+<template>
+  <div class="relative h-[28rem] w-full border border-dashed border-(--border-muted)">
+    <p
+      class="absolute top-(--spacing-md) left-1/2 -translate-x-1/2 text-body-sm text-(--text-muted) text-center max-w-md"
+    >
+      All four triggers use <code>side="auto"</code>.<br />
+      Each panel resolves to the best-fitting corner based on its position in the viewport.
+    </p>
+
+    <div class="absolute top-(--spacing-md) start-(--spacing-md)">
+      <DropdownMenuRoot side="auto">
+        <DropdownMenuTrigger>
+          <Button
+            variant="outline"
+            label="top-left trigger"
+          />
+        </DropdownMenuTrigger>
+        <DropdownMenuGroup>
+          <DropdownMenuItem
+            value="a"
+            label="Option A"
+          />
+          <DropdownMenuItem
+            value="b"
+            label="Option B"
+          />
+        </DropdownMenuGroup>
+      </DropdownMenuRoot>
+    </div>
+
+    <div class="absolute top-(--spacing-md) end-(--spacing-md)">
+      <DropdownMenuRoot side="auto">
+        <DropdownMenuTrigger>
+          <Button
+            variant="outline"
+            label="top-right trigger"
+          />
+        </DropdownMenuTrigger>
+        <DropdownMenuGroup>
+          <DropdownMenuItem
+            value="a"
+            label="Option A"
+          />
+          <DropdownMenuItem
+            value="b"
+            label="Option B"
+          />
+        </DropdownMenuGroup>
+      </DropdownMenuRoot>
+    </div>
+
+    <div class="absolute bottom-(--spacing-md) start-(--spacing-md)">
+      <DropdownMenuRoot side="auto">
+        <DropdownMenuTrigger>
+          <Button
+            variant="outline"
+            label="bottom-left trigger"
+          />
+        </DropdownMenuTrigger>
+        <DropdownMenuGroup>
+          <DropdownMenuItem
+            value="a"
+            label="Option A"
+          />
+          <DropdownMenuItem
+            value="b"
+            label="Option B"
+          />
+        </DropdownMenuGroup>
+      </DropdownMenuRoot>
+    </div>
+
+    <div class="absolute bottom-(--spacing-md) end-(--spacing-md)">
+      <DropdownMenuRoot side="auto">
+        <DropdownMenuTrigger>
+          <Button
+            variant="outline"
+            label="bottom-right trigger"
+          />
+        </DropdownMenuTrigger>
+        <DropdownMenuGroup>
+          <DropdownMenuItem
+            value="a"
+            label="Option A"
+          />
+          <DropdownMenuItem
+            value="b"
+            label="Option B"
+          />
+        </DropdownMenuGroup>
+      </DropdownMenuRoot>
+    </div>
+  </div>
+</template>

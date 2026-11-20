@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-938
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/feedback/toast/toaster.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/feedback/toast/toast.vue
 // component=Toast
 import figma from 'figma'
 
@@ -8,15 +8,14 @@ const instance = figma.selectedInstance
 const severity = instance.getEnum('type', {
   info: 'info',
   success: 'success',
-  error: 'error',
+  error: 'danger',
   warning: 'warning',
-  default: 'default'
+  default: 'neutral'
 })
 const loading = instance.getEnum('loading', {
   false: false,
   true: true
 })
-const type = loading ? 'loading' : severity
 const showAction = instance.getBoolean('showAction')
 const showClose = instance.getBoolean('showClose')
 
@@ -56,7 +55,7 @@ const trailing =
     : ''
 
 export default {
-  example: figma.code`<Toast.Item${type === 'default' ? '' : figma.code` type="${type}"`}>${body}${trailing}
+  example: figma.code`<Toast.Item${severity === 'neutral' ? '' : figma.code` severity="${severity}"`}${loading ? ' loading' : ''}>${body}${trailing}
 </Toast.Item>`,
   imports: ["import Toast from '@aziontech/webkit/toast'"],
   id: 'toast',

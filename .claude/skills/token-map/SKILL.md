@@ -11,16 +11,16 @@ enforced_by: [styling, migration]
 
 ## Purpose
 
-Transform the structured JSON from `figma-discover` into a deterministic mapping of `figma_variable → DESIGN.md token` rows. Flag any Figma variable that has no equivalent as a theme gap.
+Transform the structured JSON from `figma-extract` into a deterministic mapping of `figma_variable → DESIGN.md token` rows. Flag any Figma variable that has no equivalent as a theme gap.
 
 ## When to invoke
 
-- Step 2 of `/component-create`, immediately after `figma-discover`.
+- Step 2 of `/component-create`, immediately after `figma-extract`.
 - Step 1 of `/spec-create` when populating the Tokens table of a draft spec.
 
 ## Inputs
 
-- The JSON blob from `figma-discover`.
+- The JSON blob from `figma-extract`.
 - The canonical catalog in [`.claude/docs/DESIGN.md`](../../docs/DESIGN.md) (mirror of DESIGN.md).
 - The authoritative file [`.claude/docs/DESIGN.md`](../../../.claude/docs/DESIGN.md) — load read-only and use it to verify any class/var the mirror does not list.
 
@@ -33,7 +33,7 @@ Transform the structured JSON from `figma-discover` into a deterministic mapping
    - `spacing/N` → match `var(--spacing-N)`.
    - `radius/...` → match `var(--shape-*)`.
    - `shadow/...` → match `var(--shadow-*)`.
-   - `container/...` → match `var(--container-*)` or `var(--container-max-width)`.
+   - `container/...` → match `var(--container-*)` or a `--layout-measure*` token.
 3. **No fuzzy matching.** If the Figma name does not point at an exact DESIGN.md token, emit a row with `Theme gap: yes` and the closest primitive (`shadow-lg`, `gap-2`, …).
 4. **Emit two artifacts** to stdout:
    ```markdown

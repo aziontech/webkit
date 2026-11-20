@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Five titled steps — the shape the docs frame specifies.",
+   "file": "examples/doc-steps/default.vue"
+  },
+  {
+   "name": "WithBody",
+   "summary": "A step can carry anything under its heading — prose, a code block, another component — and the rail stretches to cover it.",
+   "file": "examples/doc-steps/with-body.vue"
+  }
+ ]
+}

@@ -1,7 +1,8 @@
 <script setup lang="ts">
   import { computed, onBeforeUnmount, useAttrs } from 'vue'
 
-  import { usePopoverContext } from '../injection-key'
+  import { TriggerHost } from '../../parts/trigger-host'
+  import { usePopoverContext } from '../composables/use-popover-context'
 
   defineOptions({
     name: 'PopoverTrigger',
@@ -15,20 +16,21 @@
   const attrs = useAttrs()
   const ctx = usePopoverContext()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__trigger`
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'popover-trigger')
 
   const isOpen = computed(() => ctx.isOpen.value)
   const isDisabled = computed(() => ctx.disabled.value)
 
+  const aria = computed(() => ({
+    'aria-haspopup': 'dialog',
+    'aria-expanded': String(isOpen.value),
+    'aria-controls': ctx.contentId,
+    'aria-disabled': isDisabled.value ? 'true' : undefined
+  }))
+
   function toggle() {
     if (isDisabled.value) return
     ctx.setOpen(!ctx.isOpen.value)
-  }
-
-  function onClick() {
-    toggle()
   }
 
   function onKeydown(event: globalThis.KeyboardEvent) {
@@ -40,30 +42,30 @@
     }
   }
 
-  function registerTrigger(el: globalThis.HTMLElement | null) {
-    ctx.triggerRef.value = el
+  function onControl(el: globalThis.HTMLElement | null) {
+    ctx.triggerEl.value = el
   }
 
   onBeforeUnmount(() => {
-    if (ctx.triggerRef.value) ctx.triggerRef.value = null
+    ctx.triggerEl.value = null
   })
 </script>
 
 <template>
-  <span
-    :ref="(el) => registerTrigger(el as globalThis.HTMLElement | null)"
-    :id="ctx.triggerId"
+  <TriggerHost
     v-bind="attrs"
-    :aria-haspopup="'dialog'"
-    :aria-expanded="isOpen"
-    :aria-controls="ctx.contentId"
+    :aria="aria"
+    :control-id="ctx.triggerId"
+    :disabled="isDisabled"
+    as-button
     :data-testid="testId"
     :data-state="isOpen ? 'open' : 'closed'"
     :data-disabled="isDisabled || null"
-    class="inline-flex w-fit shrink-0 data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50"
-    @click="onClick"
+    class="inline-flex w-fit shrink-0 cursor-pointer rounded-(--shape-control) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50"
+    @click="toggle"
     @keydown="onKeydown"
+    @control="onControl"
   >
     <slot :is-open="isOpen" />
-  </span>
+  </TriggerHost>
 </template>

@@ -1,4 +1,4 @@
-// Unit tests for the authoring-docs engine (.claude/hooks/_lib/authoring-docs-checks.mjs) —
+// Unit tests for the authoring-docs engine (.claude/hooks/lib/authoring-docs-checks.mjs) —
 // the shared definition behind the write-time hook (validate-authoring-docs.mjs) and the CI
 // ratchet (scripts/check-authoring-docs.mjs). A conforming doc must pass clean; a
 // deliberately out-of-standard doc must be flagged on every axis.
@@ -6,7 +6,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 
-import { scanDoc, docFileKind } from '../../../../.claude/hooks/_lib/authoring-docs-checks.mjs'
+import { scanDoc, docFileKind } from '../../../../.claude/hooks/lib/authoring-docs-checks.mjs'
 
 const ids = (rel, content) =>
   scanDoc(rel, content)
@@ -14,31 +14,33 @@ const ids = (rel, content) =>
     .sort()
 
 test('docFileKind resolves each population and skips non-governed paths', () => {
-  assert.deepEqual(docFileKind('.claude/skills/add-animation/SKILL.md'), {
+  assert.deepEqual(docFileKind('.claude/skills/animation-add/SKILL.md'), {
     kind: 'skill',
     variant: 'internal',
     scope: 'webkit',
-    unit: 'add-animation'
+    unit: 'animation-add'
   })
-  assert.deepEqual(docFileKind('.claude/agents/scaffolder.md'), {
+  assert.deepEqual(docFileKind('.claude/agents/component-scaffolder.md'), {
     kind: 'agent',
     variant: 'internal',
     scope: 'webkit',
-    unit: 'scaffolder'
+    unit: 'component-scaffolder'
   })
-  assert.deepEqual(
-    docFileKind('packages/webkit/cli-templates/claude/skills/webkit-usage/SKILL.md'),
-    { kind: 'skill', variant: 'consumer', scope: 'general', unit: 'webkit-usage' }
-  )
-  assert.deepEqual(docFileKind('packages/webkit/cli-templates/claude/agents/webkit-expert.md'), {
+  assert.deepEqual(docFileKind('skills/webkit-usage/SKILL.md'), {
+    kind: 'skill',
+    variant: 'consumer',
+    scope: 'general',
+    unit: 'webkit-usage'
+  })
+  assert.deepEqual(docFileKind('adapters/claude/agents/webkit-advisor.md'), {
     kind: 'agent',
     variant: 'consumer',
     scope: 'general',
-    unit: 'webkit-expert'
+    unit: 'webkit-advisor'
   })
   // not governed
   assert.equal(docFileKind('.claude/agents/_README.md'), null)
-  assert.equal(docFileKind('.claude/skills/add-animation/references/foo.md'), null)
+  assert.equal(docFileKind('.claude/skills/animation-add/references/foo.md'), null)
   assert.equal(docFileKind('.claude/rules/authoring-docs.md'), null)
 })
 
@@ -60,7 +62,7 @@ test('a conforming internal skill passes clean', () => {
 })
 
 test('a conforming consumer skill (webkit- prefix + status + last_updated) passes clean', () => {
-  const rel = 'packages/webkit/cli-templates/claude/skills/webkit-good/SKILL.md'
+  const rel = 'skills/webkit-good/SKILL.md'
   const content = [
     '---',
     'name: webkit-good',
@@ -91,7 +93,7 @@ test('a conforming agent (name + description + scope only) passes clean', () => 
 })
 
 test('a bad consumer skill is flagged on every axis', () => {
-  const rel = 'packages/webkit/cli-templates/claude/skills/bad-fixture/SKILL.md'
+  const rel = 'skills/bad-fixture/SKILL.md'
   const content = [
     '---',
     'name: not-the-folder-name',
@@ -100,8 +102,8 @@ test('a bad consumer skill is flagged on every axis', () => {
     '',
     '# Skill: bad fixture',
     '',
-    'Read the exemplar at `packages/webkit/src/components/actions/button/button.vue`.',
-    'Use the canonicals (`button.vue`, `card-pricing.vue`) as the shape reference.',
+    'Read the exemplar at `packages/webkit/src/components/action/button/button.vue`.',
+    'Use the canonicals (`button.vue`, `pricing-card.vue`) as the shape reference.',
     'To pick a component, find it in packages/webkit/package.json#exports.',
     'Or climb to ../../../src/components/ to see the source.'
   ].join('\n')
@@ -151,7 +153,7 @@ test('enforced_by is required on skills and exempt on agents', () => {
 })
 
 test('scope-mismatch fires when scope disagrees with the file location', () => {
-  const rel = 'packages/webkit/cli-templates/claude/agents/webkit-x.md'
+  const rel = 'adapters/claude/agents/webkit-x.md'
   const content = [
     '---',
     'name: webkit-x',
@@ -177,14 +179,14 @@ test('frontmatter-missing fires when there is no --- block', () => {
 })
 
 test('agents are not scanned for file-as-example refs', () => {
-  const rel = '.claude/agents/scaffolder.md'
+  const rel = '.claude/agents/component-scaffolder.md'
   const content = [
     '---',
-    'name: scaffolder',
+    'name: component-scaffolder',
     'description: writes components.',
     'scope: webkit',
     '---',
-    'Reference packages/webkit/src/components/actions/button/button.vue as the canonical.'
+    'Reference packages/webkit/src/components/action/button/button.vue as the canonical.'
   ].join('\n')
   assert.deepEqual(scanDoc(rel, content), [])
 })

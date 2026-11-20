@@ -1,0 +1,26 @@
+<script setup>
+  import ifoodLogo from '@aziontech/webkit/assets/ifood-extended-color.svg'
+  import itauLogo from '@aziontech/webkit/assets/itau-extended-color.svg'
+  import magaluLogo from '@aziontech/webkit/assets/magalu-extended-color.svg'
+  import netshoesLogo from '@aziontech/webkit/assets/netshoes-extended-color.svg'
+  import stoneLogo from '@aziontech/webkit/assets/stone-extended-color.svg'
+  import zoopLogo from '@aziontech/webkit/assets/zoop-extended-color.svg'
+  import LogoWall from '@aziontech/webkit/logo-wall'
+  import RegistrationFrame from '@aziontech/webkit/registration-frame'
+</script>
+
+<template>
+  <RegistrationFrame>
+    <LogoWall
+      aria-label="Clients running on Azion"
+      :items="[
+        { src: magaluLogo, alt: 'Magalu' },
+        { src: ifoodLogo, alt: 'iFood', shape: 'compact' },
+        { src: stoneLogo, alt: 'Stone' },
+        { src: netshoesLogo, alt: 'Netshoes' },
+        { src: zoopLogo, alt: 'Zoop' },
+        { src: itauLogo, alt: 'Itaú', shape: 'compact' }
+      ]"
+    />
+  </RegistrationFrame>
+</template>

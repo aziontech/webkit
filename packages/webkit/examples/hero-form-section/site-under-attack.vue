@@ -1,0 +1,111 @@
+<script setup>
+  import HeroFormSection from '@aziontech/webkit/hero-form-section'
+
+  const items = [
+    {
+      icon: 'az az-security-team',
+      title: 'Help before you become a customer',
+      description: 'Emergency mitigation for an attack in progress.'
+    },
+    {
+      icon: 'az az-secure-pillar',
+      title: '265B attacks blocked',
+      description: 'Stopped on the Azion network since 2022.'
+    },
+    {
+      icon: 'az az-build-pillar',
+      title: '35B functions a month',
+      description: 'Edge functions run every month for security controls.'
+    },
+    {
+      icon: 'az az-application-accelerator',
+      title: '+90% of requests served instantly',
+      description: 'Customer requests answered close to your users.'
+    }
+  ]
+
+  const fields = [
+    {
+      name: 'firstname',
+      type: 'text',
+      label: 'Name',
+      half: true,
+      required: true
+    },
+    {
+      name: 'lastname',
+      type: 'text',
+      label: 'Last name',
+      half: true,
+      required: true
+    },
+    {
+      name: 'email',
+      type: 'email',
+      label: 'Business email',
+      required: true
+    },
+    {
+      name: 'company',
+      type: 'text',
+      label: 'Company',
+      half: true,
+      required: true
+    },
+    {
+      name: 'domain',
+      type: 'text',
+      label: 'Website',
+      half: true
+    },
+    {
+      name: 'mobilephone',
+      type: 'phone',
+      label: 'Phone',
+      country: 'US',
+      required: true
+    }
+  ]
+
+  const messages = {
+    missing: 'This field is required.',
+    invalidEmail: 'Enter a valid email address.',
+    success: 'We will be in touch.',
+    error: 'We could not send your message. Try again.'
+  }
+
+  const marqueeMarks = [
+    'global-fashion-group',
+    'herospark',
+    'itau',
+    'nzn',
+    'netshoes',
+    'caixa',
+    'agibank',
+    'prime-video',
+    'america-movil',
+    'gpa',
+    'fourbank'
+  ]
+
+  const onSubmit = (event, values) => {
+    console.warn(event.type, values)
+  }
+</script>
+
+<template>
+  <HeroFormSection
+    eyebrow="Under Cyberattack?"
+    title-highlight=""
+    title="Mitigating Cyberattacks"
+    description="Our digital security team is available to provide immediate assistance."
+    :items="items"
+    form-aria-label="Request immediate contact"
+    :fields="fields"
+    submit-label="Request immediate contact"
+    :messages="messages"
+    marquee-label="Trusted by teams running critical workloads"
+    :marquee-marks="marqueeMarks"
+    @submit="onSubmit"
+  />
+</template>

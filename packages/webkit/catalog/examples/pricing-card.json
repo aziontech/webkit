@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Default pricing card with bottom slot placement and a contained surface.",
+   "file": "examples/pricing-card/default.vue"
+  },
+  {
+   "name": "Aligned",
+   "summary": "Three tiers whose copy is deliberately uneven: Hobby has no billing caveat, Pro has one line and Enterprise two. With `equal-height` every region sits on the same line in all three cards, so the row reads as one comparison. Drop the prop and each card sizes to its own copy, staggering the feature lists and the buttons.",
+   "file": "examples/pricing-card/aligned.vue"
+  },
+  {
+   "name": "Variants",
+   "summary": "Every slot position (bottom, middle) and card style (contained, transparent) combination.",
+   "file": "examples/pricing-card/variants.vue"
+  }
+ ]
+}

@@ -5,16 +5,16 @@ import figma from 'figma'
 
 const instance = figma.selectedInstance
 
-const kind = instance.getEnum('kind', {
-  shape: 'shape',
+const variant = instance.getEnum('kind', {
+  shape: 'rectangle',
   circle: 'circle'
 })
 
 export default {
   example:
-    kind === 'circle'
+    variant === 'circle'
       ? figma.code`<Skeleton
-  kind="circle"
+  variant="circle"
   width="40px"
   height="40px"
 />`

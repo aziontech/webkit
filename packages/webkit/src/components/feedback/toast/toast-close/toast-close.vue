@@ -1,7 +1,9 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import IconButton from '../../../actions/icon-button/icon-button.vue'
+  import { useTranslate } from '../../../../composables/use-translate'
+  import * as en from '../../../../locales/en'
+  import IconButton from '../../../action/icon-button/icon-button.vue'
 
   defineOptions({
     name: 'ToastClose',
@@ -13,21 +15,20 @@
   }>()
 
   const attrs = useAttrs()
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'feedback-toast__close'
-  )
+  const { t } = useTranslate({ toast: en.toast })
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'toast-close')
 
-  const handleClick = (event: MouseEvent) => emit('click', event)
+  const onClick = (event: MouseEvent) => emit('click', event)
 </script>
 
 <template>
   <IconButton
     v-bind="$attrs"
-    icon="pi pi-times"
-    kind="transparent"
+    icon="az az-x"
+    variant="ghost"
     size="small"
-    ariaLabel="Close notification"
+    :ariaLabel="t('toast.close')"
     :data-testid="testId"
-    @click="handleClick"
+    @click="onClick"
   />
 </template>

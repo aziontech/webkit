@@ -19,7 +19,7 @@ Convert an approved `.specs/<name>.md` into:
 - (Composition only) `packages/webkit/src/components/<category>/<name>/index.ts` — the **compound API** that attaches every sub-component to the root (`<Root.Part>`) via `Object.assign`; because it is a `.ts` file, `vue-tsc` generates the adjacent `index.d.ts` (do not hand-write it — `.d.ts` is gitignored). See [`.claude/rules/compound-api.md`](../../rules/compound-api.md).
 - New entry/entries in `packages/webkit/package.json#exports` — one per public component (root + each public sub-component). The public path keeps the short, flat form (`./dialog-trigger`) regardless of the folder nesting. For composition, the **root** export points at `index.ts` (the compound), **plus** a standalone `./<name>-root` export pointing at the root `.vue` for tree-shaking — see [`.claude/rules/compound-api.md`](../../rules/compound-api.md).
 
-Nothing else. The story, the Code Connect file, and the validation pass live in other skills.
+Nothing else. The test, the examples, the Code Connect file, and the validation pass live in other skills.
 
 **Folder layout — composition pattern (canonical, one folder per part):**
 
@@ -47,7 +47,7 @@ packages/webkit/src/components/overlay/dialog/
 **Folder layout — monolithic (unchanged):**
 
 ```
-packages/webkit/src/components/actions/button/
+packages/webkit/src/components/action/button/
 └── button.vue
 ```
 
@@ -63,14 +63,14 @@ packages/webkit/src/components/actions/button/
 - The Constraints block (verbatim).
 - [`.claude/rules/no-invention.md`](../../rules/no-invention.md), [`.claude/rules/compound-api.md`](../../rules/compound-api.md) (composition only), [`.claude/docs/COMPONENT_REQUIREMENTS.md`](../../docs/COMPONENT_REQUIREMENTS.md), [`.claude/docs/DESIGN.md`](../../docs/DESIGN.md).
 - The canonical files for cross-reference (read-only):
-  - `packages/webkit/src/components/actions/button/button.vue`
-  - `packages/webkit/src/components/actions/icon-button/icon-button.vue`
-  - `packages/webkit/src/components/content/card-pricing/card-pricing.vue`
+  - `packages/webkit/src/components/action/button/button.vue`
+  - `packages/webkit/src/components/action/icon-button/icon-button.vue`
+  - `packages/webkit/src/components/content/pricing-card/pricing-card.vue`
 
 ## Workflow
 
 1. **Read the spec.** Extract Props / Events / Slots / Sub-components / States / Tokens / Accessibility tables.
-2. **Write the root `.vue`.** Follow this skeleton verbatim and substitute spec values. Classes live inline on the root `class` attribute; variants are switched via `data-*` attributes consumed by Tailwind's `data-[attr=value]:` prefix. **No `kindClasses` / `sizeClasses` / `sharedClasses` JS presets, no `<style>` block, no `.css` file inside the component.** Full rationale: [styling.md](../../rules/styling.md).
+2. **Write the root `.vue`.** Follow this skeleton verbatim and substitute spec values. Classes live inline on the root `class` attribute; variants are switched via `data-*` attributes consumed by Tailwind's `data-[attr=value]:` prefix. **No `variantClasses` / `sizeClasses` / `sharedClasses` JS presets, no `<style>` block, no `.css` file inside the component.** Full rationale: [styling.md](../../rules/styling.md).
 
    ```vue
    <script setup lang="ts">
@@ -79,20 +79,20 @@ packages/webkit/src/components/actions/button/
      defineOptions({ name: 'PascalName', inheritAttrs: false })
 
      // Variant types — exported for VariantProps
-     export type PascalNameKind = 'primary' | 'secondary'
+     export type PascalNameVariant = 'primary' | 'secondary'
      export type PascalNameSize = 'small' | 'medium' | 'large'
 
-     interface Props {
+     export interface PascalNameProps {
        /** From spec */
-       kind?: PascalNameKind
+       variant?: PascalNameVariant
        /** From spec */
        size?: PascalNameSize
        /** From spec */
        disabled?: boolean
      }
 
-     const props = withDefaults(defineProps<Props>(), {
-       kind: 'primary',
+     const props = withDefaults(defineProps<PascalNameProps>(), {
+       variant: 'primary',
        size: 'large',
        disabled: false
      })
@@ -115,7 +115,7 @@ packages/webkit/src/components/actions/button/
      <button
        v-bind="$attrs"
        :data-testid="testId"
-       :data-kind="kind"
+       :data-variant="variant"
        :data-size="size"
        :data-disabled="disabled || null"
        :disabled="disabled"
@@ -124,8 +124,8 @@ packages/webkit/src/components/actions/button/
          transition-colors duration-150 ease-out motion-reduce:transition-none
          rounded-(--shape-button)
          focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)
-         data-[kind=primary]:bg-(--primary) data-[kind=primary]:text-(--primary-contrast)
-         data-[kind=secondary]:bg-(--secondary) data-[kind=secondary]:text-(--secondary-contrast)
+         data-[variant=primary]:bg-(--primary) data-[variant=primary]:text-(--primary-foreground)
+         data-[variant=secondary]:bg-(--secondary) data-[variant=secondary]:text-(--secondary-foreground)
          data-[size=small]:h-7 data-[size=small]:px-(--spacing-2) data-[size=small]:text-button-md
          data-[size=medium]:h-8 data-[size=medium]:px-(--spacing-3) data-[size=medium]:text-button-md
          data-[size=large]:h-10 data-[size=large]:px-(--spacing-4) data-[size=large]:text-button-lg
@@ -143,18 +143,16 @@ packages/webkit/src/components/actions/button/
    <template>
      <div
        :data-testid="testId"
-       :class="
-         cn('rounded-(--shape-card) bg-(--bg-surface) p-(--spacing-4)', attrs.class)
-       "
+       :class="cn('rounded-(--shape-card) bg-(--bg-surface) p-(--spacing-4)', attrs.class)"
      />
    </template>
    ```
 
-   Never write a `<style>` block. Never declare a `.css`/`.scss` file inside the component directory. Never declare any JavaScript variable that holds a class string (`const kindClasses = {...}`, `const sharedClasses = [...]`, etc.). Variants are HTML data-attributes, not JS dictionaries.
+   Never write a `<style>` block. Never declare a `.css`/`.scss` file inside the component directory. Never declare any JavaScript variable that holds a class string (`const variantClasses = {...}`, `const sharedClasses = [...]`, etc.). Variants are HTML data-attributes, not JS dictionaries.
 
-   **Never use backtick template literals inside `<template> :class="cn(\`...\`)"`** — the Vue HTML parser throws `Element is missing end tag` and Storybook/Vite fail to load the story. Put the flat class string in `<script setup>` as `const ROOT_CLASS = '...'` and bind `:class="cn(ROOT_CLASS, attrs.class)"`, or use a plain multiline `class="..."` on the root. See [`.claude/rules/styling.md`](../../rules/styling.md) § "Vue SFC pitfall".
+   **Never use backtick template literals inside `<template> :class="cn(\`...\`)"`** — the Vue HTML parser throws `Element is missing end tag`and Vite fails to load the component. Put the flat class string in`<script setup>`as`const ROOT_CLASS = '...'`and bind`:class="cn(ROOT_CLASS, attrs.class)"`, or use a plain multiline `class="..."` on the root. See [`.claude/rules/styling.md`](../../rules/styling.md) § "Vue SFC pitfall".
 
-   **Never put HTML-like tags in script JSDoc** (e.g. `` `<a>` ``, `<template>`) — Storybook runs two `@vitejs/plugin-vue` passes; the second re-parses compiled JS and fails with the same error. Use plain language ("anchor link") instead.
+   **Never put HTML-like tags in script JSDoc** (e.g. `` `<a>` ``, `<template>`) — a build that runs `@vitejs/plugin-vue` twice re-parses compiled JS and fails with the same error. Use plain language ("anchor link") instead.
 
 3. **(Composition only) Write each sub-component into its own folder.** For each sub-component `<name>-<part>` listed in the spec's Sub-components section, create:
 
@@ -164,7 +162,7 @@ packages/webkit/src/components/actions/button/
    - `defineOptions({ name: '<PascalRoot><PascalPart>', inheritAttrs: false })`.
    - Relative import for the shared injection key: `import { <PascalRoot>InjectionKey } from '../injection-key'` (one directory up — sibling of the root `.vue`).
    - `inject(<PascalRoot>InjectionKey)` to read shared state.
-   - Local `testId` derived from `ctx.testId` per [`bem-testid.md`](../../docs/COMPONENT_REQUIREMENTS.md). The fallback follows BEM: `'<category>-<name>__<part>'` (e.g. `'overlay-dialog__trigger'`).
+   - Local `testId` per [`testid.md`](../../rules/testid.md): the fallback is the sub-component's own name (e.g. `'dialog-trigger'`), never the parent's id.
 
 4. **(Composition only) Write `injection-key.ts`** at the **root** level of the component (sibling of `<name>.vue`, **not** inside any sub-component folder). Replace `Dialog` with the PascalCase name of your component:
 
@@ -178,26 +176,26 @@ packages/webkit/src/components/actions/button/
      isOpen: Readonly<Ref<boolean>>
    }
 
-   export const DialogInjectionKey: InjectionKey<DialogContext> = Symbol('DialogContext')
+   export const DialogInjectionKey: InjectionKey<DialogContext> = Symbol('Dialog')
    ```
 
    Root `.vue` imports it via `import { DialogInjectionKey } from './injection-key'`. Sub-components import it via `import { DialogInjectionKey } from '../injection-key'`.
 
 4b. **(Composition only) Write the compound `index.ts`** at the root level (sibling of `<name>.vue`). The root is the default export with every public sub-component attached via `Object.assign`. Member names mirror the spec's Sub-components section — strip the `<name>-` prefix and PascalCase (`dialog-trigger` → `Trigger`). Use a generic name only when the spec does (`SortButton`, not `Trigger`, when the part opens no `Content`). See [`.claude/rules/compound-api.md`](../../rules/compound-api.md).
 
-   ```ts
-   // index.ts — one source of truth; vue-tsc derives index.d.ts from it.
-   import Dialog from './dialog.vue'
-   import DialogTrigger from './dialog-trigger/dialog-trigger.vue'
-   import DialogContent from './dialog-content/dialog-content.vue'
+```ts
+// index.ts — one source of truth; vue-tsc derives index.d.ts from it.
+import Dialog from './dialog.vue'
+import DialogTrigger from './dialog-trigger/dialog-trigger.vue'
+import DialogContent from './dialog-content/dialog-content.vue'
 
-   export default Object.assign(Dialog, {
-     Trigger: DialogTrigger,
-     Content: DialogContent
-   })
-   ```
+export default Object.assign(Dialog, {
+  Trigger: DialogTrigger,
+  Content: DialogContent
+})
+```
 
-   **The index is `.ts`, not `.js`** — `vue-tsc` cannot derive declarations from a plain `.js` (no `allowJs`), so `<Dialog.Trigger>` would be untyped. **Do not hand-write `index.d.ts`** — it is gitignored and generated at publish time (by the publish workflow), not in dev. The package is consumed as source (the exports map points at `./src/...`, and `.vue` files already import `.ts` like `injection-key.ts`), so the consumer transpiles `index.ts` the same way.
+**The index is `.ts`, not `.js`** — `vue-tsc` cannot derive declarations from a plain `.js` (no `allowJs`), so `<Dialog.Trigger>` would be untyped. **Do not hand-write `index.d.ts`** — it is gitignored and generated at publish time (by the publish workflow), not in dev. The package is consumed as source (the exports map points at `./src/...`, and `.vue` files already import `.ts` like `injection-key.ts`), so the consumer transpiles `index.ts` the same way.
 
 5. **Update `packages/webkit/package.json#exports`** — add one entry per public component (the compound root, the standalone root, and each public sub-component) preserving alphabetical order inside the category. The **public export path stays flat** (`./<name>-<part>`) so consumers don't see the folder nesting; only the right-hand side changes.
 
@@ -219,7 +217,7 @@ packages/webkit/src/components/actions/button/
    "./overlay/popover-content": "./src/components/overlay/popover/popover-content/popover-content.vue"
    ```
 
-6. **Write the starter test** `<name>.test.ts` next to the root `.vue`, using the template below. Fill the root's **required** props (spec Props with no default) so the render doesn't throw. This is a **FLOOR** — render + `data-testid` fallback + consumer override + axe. It uses `render(Component)` directly (**not** `composeStories`) because the story is written later by [`storybook-write`](../storybook-write/SKILL.md); the author expands it (every event with payload, `disabled`/`loading` suppression, `v-model`, ARIA/`data-state`, keyboard, and `composeStories`) per [`.claude/rules/testing.md`](../../rules/testing.md). [`enforce-test-exists.mjs`](../../hooks/enforce-test-exists.mjs) surfaces a reminder if this file is missing.
+6. **Write the starter test** `<name>.test.ts` next to the root `.vue`, using the template below. Fill the root's **required** props (spec Props with no default) so the render doesn't throw. This is a **FLOOR** — render + `data-testid` fallback + consumer override + axe. It uses `render(Component)` directly because the examples are written later (`examples/<name>/`); the author expands it (every event with payload, `disabled`/`loading` suppression, `v-model`, ARIA/`data-state`, keyboard, and the examples as fixtures) per [`.claude/rules/testing.md`](../../rules/testing.md). [`enforce-test-exists.mjs`](../../hooks/enforce-test-exists.mjs) surfaces a reminder if this file is missing.
 
    ```ts
    // packages/webkit/src/components/<category>/<name>/<name>.test.ts
@@ -230,13 +228,13 @@ packages/webkit/src/components/actions/button/
    import <PascalName> from './<name>.vue'
 
    // Starter suite emitted by the scaffold — a FLOOR, not the ceiling. Expand per
-   // .claude/rules/testing.md: reuse the Storybook story via composeStories, then
+   // .claude/rules/testing.md: mount the examples from examples/<name>/, then
    // assert every event with its payload, disabled/loading suppression, v-model
    // round-trip, ARIA / data-state, and keyboard interaction.
    describe('<PascalName>', () => {
      it('renders and exposes the fallback data-testid', () => {
        const { getByTestId } = render(<PascalName>, { props: { /* required spec props */ } })
-       expect(getByTestId('<category>-<name>')).toBeTruthy()
+       expect(getByTestId('<name>')).toBeTruthy()
      })
 
      it('lets a consumer override data-testid', () => {
@@ -256,7 +254,7 @@ packages/webkit/src/components/actions/button/
 
    For a **composition** root, expand the starter to render a realistic composed tree (root + its sub-components) instead of the bare root, since the root alone may render empty. Still a floor — the author fills events / `provide`-`inject` / `v-model`.
 
-7. **Stop.** Do not write the story file. Do not write the `.figma.ts`. Do not run any pnpm command.
+7. **Stop.** Do not write the test or the examples. Do not write the `.figma.ts`. Do not run any pnpm command.
 
 ## Outputs
 
@@ -266,7 +264,7 @@ packages/webkit/src/components/actions/button/
 
 - Every prop, event, slot, and sub-component MUST come from the spec — no inventions. (`validate-spec-compliance.mjs` enforces this on Write; it will reject the run if you stray.)
 - (Composition only) Emit the compound `index.ts` (vue-tsc generates `index.d.ts` at publish; never hand-write it) and point the root export → `index.ts`; **also add the standalone `./<name>-root` export → root `.vue`** for tree-shaking. Member names mirror the component's anatomy. Never invent overlay part names (`Trigger`/`Content`) on a component with no open/closed state. See [`.claude/rules/compound-api.md`](../../rules/compound-api.md).
-- Use the canonicals (`button.vue`, `card-pricing.vue`) as the **shape** reference — but substitute spec content, never copy spec content from a canonical.
+- Use the canonicals (`button.vue`, `pricing-card.vue`) as the **shape** reference — but substitute spec content, never copy spec content from a canonical.
 - `withDefaults` mirrors the spec's Default column **exactly**. An optional string prop that holds renderable text defaults to `''` (`value: ''`, `label: ''`) — never `value: undefined`, never the literal `'undefined'`. Reserve `undefined` (unquoted) for props where absence ≠ empty: controlled state (`open`, `modelValue`) or an optional resource whose presence toggles rendering (`src`). When the spec's Default cell is wrong on this point, stop with `BLOCKED: prop <name> defaults to 'undefined' — should be '' (empty string)`; do not silently copy it.
 - All visual tokens come from [`.claude/docs/DESIGN.md`](../../docs/DESIGN.md). No HEX, no Tailwind palette, no raw typography.
 - A zero length carries **no unit**: `0`, never `0px` / `0rem` / `0em` — in arbitrary values (`p-[0px]`), inline `style`, or any emitted value. Units that mean something at zero (`0%`, `0s`, `0deg`, `0fr`) are fine, and inside `calc()`/`min()`/`max()`/`clamp()` — where CSS requires a unit — the zero is `0rem`. See [`.claude/rules/styling.md`](../../rules/styling.md).
@@ -278,7 +276,7 @@ packages/webkit/src/components/actions/button/
 
 ## Animations — apply the spec's Motion & Animations table verbatim
 
-- Every animation class **must** come from `packages/theme/src/tokens/semantic/animations.js` (`animate-fade-in`, `animate-fade-out`, `animate-slide-down`, `animate-popup-scale-in`, `animate-popup-scale-out`, `animate-blink`, `animate-highlight-fade`) — see [`.claude/docs/DESIGN.md`](../../docs/DESIGN.md#animations--semanticanimationsjs).
+- Every animation class **must** come from `packages/theme/src/tokens/primitives/animations/animate.js` (`animate-fade-in`, `animate-fade-out`, `animate-slide-down`, `animate-popup-scale-in`, `animate-popup-scale-out`, `animate-blink`, `animate-highlight-fade`) — see [`.claude/docs/DESIGN.md`](../../docs/DESIGN.md#animations--semanticanimationsjs).
 - Every motion-bearing class pairs with the reduced-motion escape in the same class string:
   ```
   transition-colors duration-150 ease-out motion-reduce:transition-none
@@ -313,6 +311,6 @@ packages/webkit/src/components/actions/button/
 - [ ] No HEX / Tailwind palette / raw typography / `any` / `@ts-ignore`.
 - [ ] No zero with a length unit (`0px` / `0rem` / `0em`) anywhere in the emitted files — a zero is written `0`, except inside `calc()`/`min()`/`max()`/`clamp()`, where it is `0rem`.
 - [ ] `defineOptions.name` is PascalCase and matches the directory.
-- [ ] `data-testid` fallback equals `'<category>-<name>'` on the root and `'<category>-<name>__<part>'` on each sub-component.
+- [ ] `data-testid` fallback equals `'<name>'` on the root and each sub-component's own name on it (`'<name>-<part>'`); inner elements use `${testId}__<part>`.
 - [ ] Starter `<name>.test.ts` written next to the root `.vue` (render + `data-testid` fallback + consumer override + axe; required props filled from the spec) — satisfies `enforce-test-exists.mjs`.
-- [ ] No story file written, no `.figma.ts` written, no pnpm command run.
+- [ ] No test or example written, no `.figma.ts` written, no pnpm command run.

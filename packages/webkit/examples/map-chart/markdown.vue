@@ -1,0 +1,30 @@
+<script setup>
+  import DocMarkdown from '@aziontech/webkit/doc-markdown'
+  import DocProse from '@aziontech/webkit/doc-prose'
+
+  const source = [
+    '## Requests by country',
+    '',
+    'Requests served in the last 24 hours, shaded by country.',
+    '',
+    '<MapChart',
+    '  aria-label="Requests by country"',
+    '  regions={[',
+    '    { "id": "US", "value": 48200 },',
+    '    { "id": "BR", "value": 31600 },',
+    '    { "id": "DE", "value": 18900 },',
+    '    { "id": "IN", "value": 15400 },',
+    '    { "id": "JP", "value": 9800 },',
+    '    { "id": "MX", "value": 7600 },',
+    '    { "id": "ZA", "value": 4100 },',
+    '    { "id": "AU", "value": 3900 }',
+    '  ]}',
+    '/>'
+  ].join('\n')
+</script>
+
+<template>
+  <DocProse>
+    <DocMarkdown :source="source" />
+  </DocProse>
+</template>

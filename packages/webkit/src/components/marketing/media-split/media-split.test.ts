@@ -1,13 +1,13 @@
 import { fireEvent, render } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { h } from 'vue'
+import { h, nextTick, ref } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
-import BandStack from '../band-stack/band-stack.vue'
+import SplitStack from '../../layout/split-stack/split-stack.vue'
 import MediaSplit from './media-split.vue'
 
-const TESTID = 'marketing-media-split'
-const GROUND = 'marketing-texture-material'
+const TESTID = 'media-split'
+const GROUND = 'texture'
 
 const TITLE = 'See every request as it happens.'
 const DESCRIPTION = 'Logs stream from every edge location in real time, with no agent to install.'
@@ -130,7 +130,7 @@ describe('MediaSplit', () => {
     })
 
     expect(container.querySelector('img')).toBeNull()
-    expect(columnsOf(container)).toHaveLength(1)
+    expect(columnsOf(container as HTMLElement)).toHaveLength(1)
   })
 
   it('renders a media column beside the copy when src is given', () => {
@@ -138,24 +138,27 @@ describe('MediaSplit', () => {
       props: { title: TITLE, src: SRC, alt: ALT }
     })
 
-    expect(columnsOf(container)).toHaveLength(2)
-  })
-
-  it.each(['media-end', 'media-start'] as const)('mirrors the %s kind onto data-kind', (kind) => {
-    const { getByTestId } = render(MediaSplit, { props: { title: TITLE, kind } })
-
-    expect(getByTestId(TESTID).getAttribute('data-kind')).toBe(kind)
+    expect(columnsOf(container as HTMLElement)).toHaveLength(2)
   })
 
   it.each(['media-end', 'media-start'] as const)(
-    'keeps the copy before the media in DOM order for the %s kind',
-    (kind) => {
+    'mirrors the %s variant onto data-variant',
+    (variant) => {
+      const { getByTestId } = render(MediaSplit, { props: { title: TITLE, variant: variant } })
+
+      expect(getByTestId(TESTID).getAttribute('data-variant')).toBe(variant)
+    }
+  )
+
+  it.each(['media-end', 'media-start'] as const)(
+    'keeps the copy before the media in DOM order for the %s variant',
+    (variant) => {
       const { container, getByRole } = render(MediaSplit, {
-        props: { title: TITLE, description: DESCRIPTION, src: SRC, alt: ALT, kind }
+        props: { title: TITLE, description: DESCRIPTION, src: SRC, alt: ALT, variant: variant }
       })
       const heading = getByRole('heading', { level: 2 })
       const image = getByRole('img', { name: ALT })
-      const [copy, media] = columnsOf(container)
+      const [copy, media] = columnsOf(container as HTMLElement)
 
       expect(copy.contains(heading)).toBe(true)
       expect(media.contains(image)).toBe(true)
@@ -177,7 +180,7 @@ describe('MediaSplit', () => {
       props: { title: TITLE, src: SRC, alt: ALT, orientation: 'vertical' }
     })
 
-    expect(columnsOf(container)).toHaveLength(2)
+    expect(columnsOf(container as HTMLElement)).toHaveLength(2)
   })
 
   it('keeps the copy first in DOM for a vertical band that leads with its media', () => {
@@ -188,12 +191,12 @@ describe('MediaSplit', () => {
         src: SRC,
         alt: ALT,
         orientation: 'vertical',
-        kind: 'media-start'
+        variant: 'media-start'
       }
     })
     const heading = getByRole('heading', { level: 2 })
     const image = getByRole('img', { name: ALT })
-    const [copy, media] = columnsOf(container)
+    const [copy, media] = columnsOf(container as HTMLElement)
 
     expect(copy.contains(heading)).toBe(true)
     expect(media.contains(image)).toBe(true)
@@ -225,7 +228,7 @@ describe('MediaSplit', () => {
 
   it('mirrors its copy alignment on the root, top by default', () => {
     const flush = render(MediaSplit, { props: { title: TITLE, src: SRC, alt: ALT } })
-    expect(flush.getByTestId(TESTID).getAttribute('data-align')).toBe('top')
+    expect(flush.getByTestId(TESTID).getAttribute('data-align')).toBe('start')
 
     const centred = render(MediaSplit, {
       props: { title: TITLE, src: SRC, alt: ALT, align: 'center' }
@@ -238,10 +241,10 @@ describe('MediaSplit', () => {
       props: { title: TITLE, src: SRC, alt: ALT }
     })
     const ground = getByTestId(GROUND)
-    const [, media] = columnsOf(container)
+    const [, media] = columnsOf(container as HTMLElement)
 
     expect(media.contains(ground)).toBe(true)
-    expect(ground.getAttribute('data-kind')).toBe('grid')
+    expect(ground.getAttribute('data-variant')).toBe('grid')
     expect(ground.getAttribute('data-size')).toBe('medium')
     expect(ground.getAttribute('data-fade')).toBe('vignette')
     expect(ground.getAttribute('aria-hidden')).toBe('true')
@@ -260,7 +263,7 @@ describe('MediaSplit', () => {
     })
     const ground = getByTestId(GROUND)
 
-    expect(ground.getAttribute('data-kind')).toBe('pixelate')
+    expect(ground.getAttribute('data-variant')).toBe('pixelate')
     expect(ground.getAttribute('data-size')).toBe('small')
     expect(ground.getAttribute('data-fade')).toBe('edges')
   })
@@ -270,7 +273,7 @@ describe('MediaSplit', () => {
       props: { title: TITLE, src: SRC, alt: ALT, texture: 'none' }
     })
 
-    expect(getByTestId(GROUND).getAttribute('data-kind')).toBe('none')
+    expect(getByTestId(GROUND).getAttribute('data-variant')).toBe('none')
   })
 
   it('runs the media flush to the cell unless the band asks for the inset', () => {
@@ -286,13 +289,13 @@ describe('MediaSplit', () => {
   it('draws no frame of its own by default', () => {
     const { queryByTestId } = render(MediaSplit, { props: { title: TITLE } })
 
-    expect(queryByTestId('layout-frame-box')).toBeNull()
+    expect(queryByTestId('registration-frame')).toBeNull()
   })
 
   it('draws its own registration frame when framed', () => {
     const { getByTestId } = render(MediaSplit, { props: { title: TITLE, framed: true } })
 
-    expect(getByTestId('layout-frame-box')).toBeInTheDocument()
+    expect(getByTestId('registration-frame')).toBeInTheDocument()
   })
 
   it('leaves its cells unmarked by default', () => {
@@ -306,8 +309,8 @@ describe('MediaSplit', () => {
       props: { title: TITLE, src: SRC, alt: ALT, framed: true }
     })
 
-    expect(getByTestId('layout-frame-box').getAttribute('data-borders')).toBe('bottom')
-    expect(getByTestId('layout-frame-box').getAttribute('data-marks')).toBe('none')
+    expect(getByTestId('registration-frame').getAttribute('data-borders')).toBe('bottom')
+    expect(getByTestId('registration-frame').getAttribute('data-marks')).toBe('none')
     for (const cell of CELLS) {
       expect(getByTestId(cell).getAttribute('data-marks')).toBe(EVERY_CORNER)
       expect(getByTestId(cell).getAttribute('data-borders')).toBe('none')
@@ -324,11 +327,11 @@ describe('MediaSplit', () => {
   })
 
   it('frames its two cells inside a band stack without drawing rules of its own', () => {
-    const { getByTestId, queryByTestId } = render(BandStack, {
+    const { getByTestId, queryByTestId } = render(SplitStack, {
       slots: { default: () => h(MediaSplit, { title: TITLE, src: SRC, alt: ALT }) }
     })
 
-    expect(queryByTestId('layout-frame-box')).toBeNull()
+    expect(queryByTestId('registration-frame')).toBeNull()
     for (const cell of CELLS) {
       expect(getByTestId(cell).getAttribute('data-marks')).toBe(EVERY_CORNER)
       expect(getByTestId(cell).getAttribute('data-borders')).toBe('none')
@@ -337,7 +340,7 @@ describe('MediaSplit', () => {
 
   it('keeps the copy cell before the media cell in DOM order when the cells are framed', () => {
     const { getByTestId } = render(MediaSplit, {
-      props: { title: TITLE, src: SRC, alt: ALT, framed: true, kind: 'media-start' }
+      props: { title: TITLE, src: SRC, alt: ALT, framed: true, variant: 'media-start' }
     })
     const [copy, media] = CELLS.map((cell) => getByTestId(cell))
 
@@ -407,7 +410,7 @@ describe('MediaSplit', () => {
 
   it('has no a11y violations when the image is decorative', async () => {
     const { container } = render(MediaSplit, {
-      props: { title: TITLE, description: DESCRIPTION, src: SRC, kind: 'media-start' }
+      props: { title: TITLE, description: DESCRIPTION, src: SRC, variant: 'media-start' }
     })
 
     await expectNoA11yViolations(container)
@@ -422,7 +425,7 @@ describe('MediaSplit', () => {
         src: SRC,
         alt: ALT,
         orientation: 'vertical',
-        kind: 'media-start',
+        variant: 'media-start',
         divided: false
       }
     })
@@ -461,6 +464,17 @@ describe('MediaSplit', () => {
     expect(affordance.getAttribute('aria-hidden')).toBe('true')
     expect(affordance.closest('a')).toBe(getByTestId(`${TESTID}__media`))
     expect(affordance.querySelector('button')).toBeNull()
+  })
+
+  it('offsets the chevron affordance toward the closing side in both directions', () => {
+    const { getByTestId } = render(MediaSplit, {
+      props: { title: TITLE, src: SRC, alt: ALT, mediaHref: '/site/docs' }
+    })
+
+    const classes = getByTestId(`${TESTID}__media-affordance`).classList
+    expect(classes.contains('translate-x-1')).toBe(true)
+    expect(classes.contains('rtl:-translate-x-1')).toBe(true)
+    expect(classes.contains('rtl:group-hover/split:translate-x-0')).toBe(true)
   })
 
   it('has no a11y violations with a linked media cell', async () => {
@@ -518,6 +532,18 @@ describe('MediaSplit', () => {
       expect(open).not.toHaveBeenCalled()
     })
 
+    it('stays inert with a javascript: mediaHref', async () => {
+      const open = stubOpen()
+      const { getByRole, getByTestId } = render(MediaSplit, {
+        props: { title: TITLE, src: SRC, alt: ALT, mediaHref: 'javascript:alert(1)' }
+      })
+
+      await fireEvent.click(getByRole('heading', { level: 2 }), { metaKey: true })
+
+      expect(open).not.toHaveBeenCalled()
+      expect(getByTestId('media-split__media').hasAttribute('href')).toBe(false)
+    })
+
     it('yields to a consumer click listener that prevents the default', async () => {
       const open = stubOpen()
       const { getByRole } = render(MediaSplit, {
@@ -541,5 +567,27 @@ describe('MediaSplit', () => {
     const { getByRole } = render(MediaSplit, { props: { title: TITLE, headingLevel: 3 } })
 
     expect(getByRole('heading', { level: 3 })).toHaveTextContent(TITLE)
+  })
+
+  describe('slot presence', () => {
+    it('follows a v-if slot that appears and disappears after mount', async () => {
+      const shown = ref(false)
+      const { queryByTestId } = render({
+        components: { MediaSplit },
+        setup: () => ({ shown }),
+        template: `<MediaSplit title="Edge"><template v-if="shown" #media><span data-testid="probe">Slotted</span></template></MediaSplit>`
+      })
+      expect(queryByTestId('media-split__media-cell')).toBeNull()
+
+      shown.value = true
+      await nextTick()
+      expect(queryByTestId('media-split__media-cell')).not.toBeNull()
+      expect(queryByTestId('probe')).not.toBeNull()
+
+      shown.value = false
+      await nextTick()
+      expect(queryByTestId('media-split__media-cell')).toBeNull()
+      expect(queryByTestId('probe')).toBeNull()
+    })
   })
 })

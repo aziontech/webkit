@@ -5,7 +5,7 @@ import { h, nextTick } from 'vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import QuoteTabs, { type QuoteTabsItem } from './quote-tabs.vue'
 
-const TESTID = 'marketing-quote-tabs'
+const TESTID = 'quote-tabs'
 
 const COLOUR_LOGO =
   'data:image/svg+xml;utf8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 10%22%3E%3Crect width=%2240%22 height=%2210%22 fill=%22%230086ff%22/%3E%3C/svg%3E'
@@ -44,8 +44,18 @@ const LIVE_TRANSITION = { stubs: { transition: false } }
 
 const INTERVAL = 5000
 
+// The out-in swap is over once one quote layer is left and it carries no
+// transition class; a fixed wait raced the transition on a loaded machine.
 function settle(): Promise<void> {
-  return new Promise((resolve) => globalThis.setTimeout(resolve, 400))
+  return vi.waitFor(
+    () => {
+      const layers = document.querySelectorAll(`[data-testid="${TESTID}__quote"]`)
+      expect(layers).toHaveLength(1)
+      expect(layers[0]!.getAttribute('aria-hidden')).toBeNull()
+      expect(layers[0]!.className).not.toContain('transition-')
+    },
+    { timeout: 5000 }
+  )
 }
 
 function tabsOf(container: Element): globalThis.HTMLButtonElement[] {
@@ -190,7 +200,7 @@ describe('QuoteTabs', () => {
     expect(sizer).toHaveAttribute('aria-hidden', 'true')
     expect(sizer).toHaveAttribute('inert')
     expect(sizerQuotationsOf(container)).toEqual(ITEMS.map((item) => item.text))
-    expect(sizer?.querySelector('[data-testid="marketing-quote"]')).toBeNull()
+    expect(sizer?.querySelector('[data-testid="quote"]')).toBeNull()
 
     await fireEvent.click(tabsOf(container)[3])
 
@@ -411,6 +421,32 @@ describe('QuoteTabs', () => {
     expect(bare.querySelector('a')).toBeNull()
   })
 
+  it('offers a pause control while autoplay runs that stops and resumes the rotation', async () => {
+    vi.useFakeTimers()
+    const { container, getByRole, getByTestId } = render(QuoteTabs, {
+      props: { items: ITEMS, autoplayInterval: INTERVAL }
+    })
+
+    const control = getByRole('button', { name: 'Pause rotation' })
+    await fireEvent.click(control)
+    expect(getByRole('button', { name: 'Resume rotation' })).toBe(control)
+    expect(getByTestId(TESTID)).toHaveAttribute('data-paused')
+
+    vi.advanceTimersByTime(INTERVAL * 2)
+    await nextTick()
+    expect(selectedIndex(container)).toBe(0)
+
+    await fireEvent.click(control)
+    vi.advanceTimersByTime(INTERVAL)
+    await nextTick()
+    expect(selectedIndex(container)).toBe(1)
+  })
+
+  it('renders no pause control when autoplay is off', () => {
+    const { queryByRole } = render(QuoteTabs, { props: { items: ITEMS, autoplay: false } })
+    expect(queryByRole('button', { name: 'Pause rotation' })).toBeNull()
+  })
+
   it('marks a running band with data-autoplay and draws a decorative hairline in the panel', () => {
     const { container, getByTestId } = render(QuoteTabs, { props: { items: ITEMS } })
 
@@ -422,7 +458,7 @@ describe('QuoteTabs', () => {
   it('advances to the next client once the interval elapses', async () => {
     vi.useFakeTimers()
     const { container, emitted } = render(QuoteTabs, {
-      props: { items: ITEMS, autoPlayInterval: INTERVAL }
+      props: { items: ITEMS, autoplayInterval: INTERVAL }
     })
 
     vi.advanceTimersByTime(INTERVAL / 2)
@@ -442,7 +478,7 @@ describe('QuoteTabs', () => {
   it('wraps from the last client to the first, travelling forward', async () => {
     vi.useFakeTimers()
     const { container } = render(QuoteTabs, {
-      props: { items: ITEMS, autoPlayInterval: INTERVAL }
+      props: { items: ITEMS, autoplayInterval: INTERVAL }
     })
 
     vi.advanceTimersByTime(INTERVAL * ITEMS.length)
@@ -452,10 +488,10 @@ describe('QuoteTabs', () => {
     expect(panelOf(container)).toHaveAttribute('data-direction', 'forward')
   })
 
-  it('never moves on its own and draws no hairline when autoPlay is off', async () => {
+  it('never moves on its own and draws no hairline when autoplay is off', async () => {
     vi.useFakeTimers()
     const { container, getByTestId } = render(QuoteTabs, {
-      props: { items: ITEMS, autoPlay: false, autoPlayInterval: INTERVAL }
+      props: { items: ITEMS, autoplay: false, autoplayInterval: INTERVAL }
     })
 
     expect(getByTestId(TESTID).getAttribute('data-autoplay')).toBeNull()
@@ -470,7 +506,7 @@ describe('QuoteTabs', () => {
   it('draws no hairline when showProgress is off, while the band still advances', async () => {
     vi.useFakeTimers()
     const { container } = render(QuoteTabs, {
-      props: { items: ITEMS, showProgress: false, autoPlayInterval: INTERVAL }
+      props: { items: ITEMS, showProgress: false, autoplayInterval: INTERVAL }
     })
 
     expect(progressOf(container)).toBeNull()
@@ -484,7 +520,7 @@ describe('QuoteTabs', () => {
   it('pauses while the pointer rests on the band, and resumes on leave', async () => {
     vi.useFakeTimers()
     const { container, getByTestId } = render(QuoteTabs, {
-      props: { items: ITEMS, autoPlayInterval: INTERVAL }
+      props: { items: ITEMS, autoplayInterval: INTERVAL }
     })
     const root = getByTestId(TESTID)
 
@@ -502,7 +538,7 @@ describe('QuoteTabs', () => {
   it('restarts the count on a click and keeps running with the pointer on the band', async () => {
     vi.useFakeTimers()
     const { container, getByTestId } = render(QuoteTabs, {
-      props: { items: ITEMS, autoPlayInterval: INTERVAL }
+      props: { items: ITEMS, autoplayInterval: INTERVAL }
     })
     const root = getByTestId(TESTID)
 

@@ -1,0 +1,103 @@
+{
+  "id": "dashboard/dashboard-analytics",
+  "name": "DashboardAnalytics",
+  "title": "Blocks/Dashboard/DashboardAnalytics",
+  "surface": "app",
+  "summary": "The analytics dashboard pattern: KPI tiles, charts and a table that all read the same period, so one change of range moves every region together: the Period Select in the PageHeader actions sets the comparison of every delta and the period in each exported CSV name. A StatTileGroup of four StatTiles (requests, data transferred, success rate and status 5xx, each with a sparkline and its change against the previous period) sits over a 12-column grid of ChartCards. Requests over time spans the grid as an area Chart, status codes as a multi-series line and requests by country as labeled horizontal bars share a row, and a searchable, paginated DataTable of top hosts closes it. Every card carries the same header: title with a Hint, the aggregation and variation Tags, a Line or Bar ToggleGroup for time series, an Expand IconButton that opens the card in a large Dialog, and a DropdownMenu whose Copy query copies the card's GraphQL query and Export CSV downloads its rows, each confirmed by a toast. Built from `PageHeader`, `StatTileGroup`, `StatTile`, `ChartCard`, `Chart`, `DataTable`, `Tag`, `Hint`, `ToggleGroup`, `IconButton`, `Tooltip`, `DropdownMenu`, `Dialog`, `toast`, `Input` and `EmptyState`. The Usage variant applies the same grammar to consumption: six usage tiles, this period against the previous one, a ranking of projects and a table of usage per project. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "metrics",
+    "metric panel",
+    "kpi tiles",
+    "sparkline",
+    "real-time metrics",
+    "analytics dashboard",
+    "painel de métricas",
+    "indicadores",
+    "analytics",
+    "traffic analytics",
+    "requests over time",
+    "period comparison",
+    "painel analítico",
+    "análise de tráfego",
+    "real-time metrics per product",
+    "product metrics",
+    "metrics by product",
+    "period filter",
+    "métricas por produto",
+    "métricas en tiempo real",
+    "expand chart",
+    "chart dialog",
+    "export csv",
+    "copy query",
+    "metrics overview",
+    "metrics landing",
+    "sub-dashboards",
+    "status class filter",
+    "visão geral de métricas",
+    "data dashboard",
+    "metrics dashboard",
+    "kpi dashboard",
+    "stat tiles",
+    "data transferred",
+    "usage dashboard",
+    "usage per project",
+    "consumption",
+    "breakdown charts",
+    "métricas",
+    "painel de dados",
+    "painel de uso",
+    "traffic and usage dashboard"
+  ],
+  "skills": ["webkit-data-viz", "webkit-tables", "webkit-ui-states"],
+  "primary": {
+    "name": "Default",
+    "file": "dashboard-analytics.vue"
+  },
+  "files": ["sample.ts"],
+  "variants": [
+    {
+      "name": "Loading",
+      "summary": "While the first response loads, every tile, chart and the table hold their place with a Skeleton, so the grid does not reflow when data arrives.",
+      "file": "variants/loading.vue"
+    },
+    {
+      "name": "Refetching",
+      "summary": "The period reloads over figures already shown (a new period, a Refresh): the tiles, charts and table keep their data and every chart holds its previous render at reduced opacity, so nothing jumps to a Skeleton.",
+      "file": "variants/refetching.vue"
+    },
+    {
+      "name": "Empty",
+      "summary": "No traffic in the period. The tiles show a dash with no delta or trend, and each card keeps its box with an EmptyState that says nothing was recorded.",
+      "file": "variants/empty.vue"
+    },
+    {
+      "name": "Error",
+      "summary": "The request for the period failed: the tiles read as dashes, and every card keeps its header with a danger Alert that names what did not load and offers Retry.",
+      "file": "variants/error.vue"
+    },
+    {
+      "name": "Metrics",
+      "summary": "Real-time metrics per product: a PageTabs strip switches between Applications, Functions, Firewall, DNS and Data stream, and a Period Select in the page header (Last hour, Last 24 hours, Last 7 days, Last 30 days) drives every region. Each product shows its own four StatTiles with sparkline and change against the previous period, over four ChartCards of area, line or stacked bar Charts that share one crosshair. Products with more than one dashboard add a ToggleGroup under the tabs: Applications switches between Overview, Status codes (the status card over a status and upstream status table with search and an All, 2xx, 3xx, 4xx, 5xx status-class filter) and Request breakdown (an IP address table with search); Firewall adds Denied sources. Every card menu copies its GraphQL query and exports its rows as CSV.",
+      "file": "variants/metrics.vue"
+    },
+    {
+      "name": "Expanded",
+      "summary": "The Requests over time card opened from its Expand button: a large Dialog with the card title and its description, the Line or Bar ToggleGroup shared with the card, and the chart at a 420px plot (the table card opens with ten rows per page). Closing it returns focus to Expand. Every card's menu works: Copy query copies the card's GraphQL query and Export CSV downloads its rows, each confirmed by a toast.",
+      "file": "variants/expanded.vue"
+    },
+    {
+      "name": "MetricsOverview",
+      "summary": "The real-time metrics landing page across products: a Period Select and a Refresh button in the page header, six StatTiles (requests, data transferred, cache offload, status 5xx, requests denied, function invocations) with sparkline and change, and six highlight ChartCards from Applications, Firewall and Functions. Each card keeps the full header (Sum Tag, Line or Bar ToggleGroup, Expand into a large Dialog, Copy query and Export CSV) and ends in a footer Link to its product dashboard (Open Applications dashboard).",
+      "file": "variants/metrics-overview.vue"
+    },
+    {
+      "name": "Usage",
+      "summary": "Consumption instead of traffic quality: the Data usage page, whose Period Select drives six StatTiles (requests, data transferred, jobs run, images processed, requests inspected, logs exported) with a sparkline and the change against the previous period, then data transferred this period over the previous one as two series, a labeled horizontal bar Chart ranking projects by data transferred, and a searchable, paginated DataTable of requests and data transferred per project.",
+      "file": "variants/usage.vue"
+    }
+  ]
+}

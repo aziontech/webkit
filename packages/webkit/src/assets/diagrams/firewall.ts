@@ -6,50 +6,50 @@ const spec: DiagramSpec = {
   nodes: [
     {
       key: 'user',
-      kind: 'pill',
+      type: 'pill',
       title: 'Request',
-      icon: 'pi pi-user',
+      icon: 'az az-user',
       active: true
     },
     {
       key: 'firewall',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'Firewall',
       title: 'Rules in order, before any code',
-      icon: 'ai ai-edge-firewall',
+      icon: 'az az-firewall',
       active: true,
       lit: true
     },
     {
       key: 'lists',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Network lists',
       title: 'IP, ASN and country',
-      icon: 'ai ai-network-lists',
+      icon: 'az az-network-lists',
       active: true
     },
     {
       key: 'waf',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'WAF',
       title: 'Payload inspection',
-      icon: 'ai ai-waf-rules',
+      icon: 'az az-waf',
       active: true
     },
     {
       key: 'limit',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Rate limit',
       title: 'Requests per second',
-      icon: 'pi pi-clock',
+      icon: 'az az-clock',
       active: true
     },
     {
       key: 'application',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'Application',
       title: 'storefront',
-      icon: 'ai ai-edge-application',
+      icon: 'az az-applications',
       active: true
     }
   ],

@@ -1,0 +1,34 @@
+{
+ "purpose": "A toolbar of icon actions that belong to one surface (a code panel, a table header, a preview), after Cloudscape's button group. Each item is an icon button that names itself in a tooltip: a plain action, an on / off toggle, or a menu of options. Items past `visibleCount` collapse into one More actions menu. The toolbar is one tab stop with roving focus, so a row of six icons costs the keyboard user one Tab, not six.",
+ "useWhen": [
+  "Use ButtonGroup for a toolbar of icon actions on one surface (code panel, table header); one default action with alternatives is a SplitButton.",
+  "A row of icon actions on one surface: Copy, Format, Wrap lines, Download above a code editor.",
+  "Compact actions in a panel header where labels would not fit, each explained by its tooltip.",
+  "A mix of actions and on / off view toggles (wrap lines, show whitespace) that sit together.",
+  "More actions than the space allows: keep the frequent ones visible and move the rest into the overflow menu with `visibleCount`."
+ ],
+ "avoidWhen": [
+  "A choice of exactly one option among several (view mode, period) → use `toggle-group`.",
+  "One primary action with related alternatives → use `split-button`.",
+  "A single icon action → use `icon-button` (with a `tooltip`).",
+  "Page or form actions with text labels (Save, Cancel, Create) → use `button`s laid out by the page.",
+  "A long list of commands or navigation → use `dropdown-menu`."
+ ],
+ "related": [
+  "`icon-button` — every item renders one; ButtonGroup adds the toolbar role, roving focus and overflow.",
+  "`toggle-group` — a radiogroup of mutually exclusive options; ButtonGroup toggles are independent (`aria-pressed`).",
+  "`split-button` — one main action plus a menu, with a visible text label.",
+  "`dropdown-menu` — the menu behind menu items and the More actions overflow.",
+  "`tooltip` — the visible name of each icon.",
+  "`code-editor` — the usual host of an editor toolbar (`toolbar` slot)."
+ ],
+ "bestPractices": [
+  "Give the toolbar an `aria-label` that names the surface (\"Editor actions\"), and every item a `label` that says what it does (\"Copy code\", not \"Copy\"). Write the kebab attribute (`aria-label`, `:aria-label` when the name changes, `aria-labelledby` when a visible heading already names the surface), never the camelCase `ariaLabel` attribute.",
+  "The `ariaLabel` prop is optional in the types on purpose: vue-tsc does not camelize `aria-*` attributes onto props, so a required `ariaLabel` made the obvious `aria-label=\"…\"` fail to type-check in a fresh create-vue app. The lint rule `webkit/require-accessible-name` keeps the name required instead: it flags a `ButtonGroup` with neither `aria-label` nor `aria-labelledby`.",
+  "Keep the most used actions first; `visibleCount` moves the tail into More actions, never the head.",
+  "Use a toggle only for a state the user can see change (wrapped lines); flip `pressed` in your `@toggle` handler — the component never stores it.",
+  "Set `loading` on an action while its request runs instead of disabling the whole group.",
+  "Use `variant=\"ghost\"` on a surface that already has a border (a panel header) and `outline` on the canvas.",
+  "Do not mix text buttons into the group; a text action belongs beside it as its own `Button`."
+ ]
+}

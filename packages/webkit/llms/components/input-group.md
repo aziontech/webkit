@@ -1,0 +1,185 @@
+# Input Group
+
+> Composition container that joins an input primitive with any number of adjacent controls (buttons, selects, static addons) into a single visual field (an input group, as other UI kits call it). The root only orchestrates: it draws the outer border, the `focus-within` ring, and applies inline Tailwind child-selectors so the first child rounds only on the left, the last only on the right, and internal borders collapse between siblings. Everything else is a **child**: the middle input is a raw `<input>` in the root's `default` slot; sibling controls (`<Button>`, `<Select>`, `<Input>`, or an `<InputGroup.Addon>` for static text like `https://` / `.com` / `$`) are dropped in directly alongside it. This is a breaking change from v3: the `#left` and `#right` named slots are gone — their static-text role moves to `<InputGroup.Addon>`, and their interactive role is served by placing the real component (`Button`, `Select`) as a direct child. Consumers therefore never wrap `Button`/`Select` in an inner `<div>` — the root's child selectors do that job.
+
+- Import: `import InputGroupRoot from '@aziontech/webkit/input-group-root'`
+- Compound import (dot notation, not tree-shakeable): `import InputGroup from '@aziontech/webkit/input-group'`
+- Category: input · Surface: app · Structure: composition
+- API as JSON: [input-group.json](input-group.json)
+
+## When to use
+
+- A text input that needs static prefix or suffix content inside the same border (`https://`, `.com`, a currency symbol).
+- An input joined to a control: a search field with a trailing `button`, an amount with a leading currency `select`.
+
+## Do
+
+- Put static text and icons in `InputGroup.Addon`; place real controls (`button`, `select`) as direct children with no wrapper `div`.
+- Set the same `size` on the group and on its child controls so heights line up.
+- `disabled` and `invalid` on the group reach every field control inside (`InputGroup.Input`, `Input`, `Select` and the other controls that read the Field context); a `Button` or `IconButton` in the group needs its own `disabled`. `required` only mirrors to `data-required` on the group; set it on the input or on the enclosing `Field`, whose label carries the Required marker. Inside a `Field`, the Field's state reaches the root and the controls the same way.
+- Use `InputGroup.Input` for the middle input: it is borderless, picks up the enclosing `Field`'s wiring, and spares the long raw-`<input>` class string. An `Input` placed in the group loses its own border and radius (the group reads its `data-slot="input"`), so the group's frame and its dividers stay the only lines: the group never doubles a line.
+- The root is `role="group"`; label the inner input itself, or give the group an `aria-label`.
+
+## Don’t
+
+- A phone number with a dial code → use `phone-input`.
+- A single input with only a decorative icon → use `input` and its `iconLeft` / `iconRight` slots.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- [field](field.md) — wrap the group in a `Field` for a label and description/error; `InputGroup.Input` takes the field's id, `aria-describedby` and state, and the root takes `invalid` / `disabled` / `required` from it.
+- [phone-input](phone-input.md) — input group with a dial-code select and a per-country mask.
+- [input](input.md) — the single-field primitive with icon slots.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token; affects the root's height and inner addon padding. Heights: small=28px, medium=32px, large=40px. Matches the sibling input primitives (`Input`, `Select`) — set the same `size` on child controls to keep them visually aligned. |
+| `invalid` | `boolean` | `false` | false | Renders the error border and marks the field controls inside invalid (`aria-invalid` on the input, never on the `role="group"` root, where ARIA does not allow it). |
+| `required` | `boolean` | `false` | false | Mirrors to `data-required` on the group and draws no border of its own. `aria-required` is not allowed on `role="group"`, so the required state belongs on the input (`InputGroup.Input` reads it from the Field). |
+| `disabled` | `boolean` | `false` | false | Renders the disabled visual, sets `aria-disabled="true"` on the root and disables the field controls inside (`InputGroup.Input`, `Input`, `Select`, …) through the Field context. A `Button` or `IconButton` inside needs its own `disabled`. |
+
+## Slots
+
+| Slot | Scope | Notes |
+| --- | --- | --- |
+| `default` | — | On the **root**: the full row of children in visual order — any mix of `<InputGroup.Addon>`, `<Button>`, `<Select>`, `<Input>`, raw `<input>`. Order in the template is the order rendered left-to-right. On **`<InputGroup.Addon>`**: the addon content — text (`https://`, `.com`, `$`), an Azion icon `<i>`, or any small inline node; kept short by convention (long content breaks the fixed row height). |
+
+## Sub-component imports
+
+- `@aziontech/webkit/input-group-addon`
+- `@aziontech/webkit/input-group-input`
+
+## Sub-components
+
+Folder layout:
+
+```
+packages/webkit/src/components/input/input-group/
+├── input-group.vue                      # root
+├── input-group-addon/
+│   └── input-group-addon.vue            # <InputGroup.Addon>
+├── input-group-input/
+│   └── input-group-input.vue            # <InputGroup.Input>
+└── index.ts                             # compound wire-up (Object.assign)
+```
+
+Public members of the compound:
+
+| Member               | Attached name           | Standalone export                     | Purpose                                                                                                                            |
+| -------------------- | ----------------------- | ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| Root                 | — (the compound itself) | `@aziontech/webkit/input-group-root`  | The container. Orchestrates borders, seams, focus ring, and states.                                                                |
+| `<InputGroup.Addon>` | `Addon`                 | `@aziontech/webkit/input-group-addon` | Static-content island (icon, text like `https://`, `.com`, `$`) rendered with the darker `--bg-canvas` fill and muted text.        |
+| `<InputGroup.Input>` | `Input`                 | `@aziontech/webkit/input-group-input` | Borderless middle `<input>`, with the same inline padding as `Input` (`--spacing-sm`). Props: `modelValue` (`''`), `type` (`'text' | 'email' | 'number' | 'password'`, default `'text'`: the restricted set of `Input`, plus `password`to mask a secret value that a reveal control in an addon toggles back to`text`), `placeholder` (`''`), `autocomplete`, `disabled`, `readonly`, `required`, `invalid`(all`false`); emits `update:modelValue`. Reads `id`, `aria-describedby`, `invalid`, `disabled`and`required`from an enclosing`Field` (an explicit prop/attribute wins). |
+
+The root reads `invalid`, `disabled` and `required` from an enclosing `Field` too, OR-ed with its own props, so a `Field`'s state styles the whole group. The root then provides the Field context to its children with `invalid` and `disabled` OR-ed with the group's own (the parent Field's id, description, title and `required` pass through), so the group's state reaches the controls inside.
+
+## States
+
+- Visual states on root: `default`, `hover`, `focus-within`, `invalid`, `required`, `disabled`
+- `data-size` mirrors the `size` prop and drives the root height (`small`=`h-7`, `medium`=`h-8`, `large`=`h-10`)
+- Only one focus indicator is visible when a descendant is focused: the group draws the single `focus-within` ring on its root, and the inner input primitives' own focus rings are suppressed via `[&_*]:focus-visible:!ring-0 [&_*]:focus-within:!ring-0` so `Button`, `Select.Trigger`, `Input` wrappers, and raw `<input>` share the group's ring instead of stacking their own on top
+- `data-invalid` mirrors the `invalid` prop; `aria-invalid` lands on the controls inside, not on the root
+- `data-required` mirrors the `required` prop (no `aria-required` on the group root)
+- `data-disabled` mirrors the `disabled` prop; sets `aria-disabled="true"`
+- Border semantics mirror `input` (independent, not compound):
+  - `data-invalid` → `var(--danger-border)`
+- Hover (only when not focus-within, not invalid, not disabled): `border-(--border-strong)`
+- Focus-within: 2-ring at `var(--ring-color)` with `var(--bg-canvas)` offset (suppressed when `data-disabled`)
+- Disabled: `bg-(--bg-disabled)`, `text-(--text-disabled)`, `cursor-not-allowed`, hover ignored, focus-within ring suppressed
+- Child seams (applied by the root via Tailwind child selectors):
+  - `[&>*:first-child]:rounded-l-(--shape-control)` and `[&>*:not(:first-child)]:rounded-l-none`
+  - `[&>*:last-child]:rounded-r-(--shape-control)` and `[&>*:not(:last-child)]:rounded-r-none`
+  - `[&>*:not(:last-child)]:border-r-(color:--border-default) [&>*:not(:last-child)]:border-r` — a single vertical seam between adjacent children, drawn on the left child so child components keep their own left border intact
+  - Child components' own outer borders remain — the root's outer border sits on top, so double lines are avoided by the child selector removing the _inner-facing_ border only
+
+## Accessibility
+
+- Visible focus: the root shows a `focus-within` ring (`ring-2 ring-(--ring-color) ring-offset-2 ring-offset-(--bg-canvas)`) whenever any descendant (any child control or the middle input) has focus. The middle input renders `focus:ring-0 outline-none` so the group's ring is the only visible focus indicator. Suppressed when `data-disabled` is present. Child components (`Button`, `Select`) retain their own focus behavior internally but the group's ring is visually authoritative.
+- Keyboard map: `Tab` moves through the children in DOM order. No custom keybindings on the group.
+- ARIA: root uses `role="group"` with `aria-disabled`; `aria-invalid` is set on the controls inside (ARIA 1.2 does not allow it on `group`); `required` is styling only on the root. Each child keeps its own `aria-*` — the group does not duplicate.
+- `<InputGroup.Addon>` is decorative-by-default; when its content is not conveyed elsewhere the consumer should annotate it (`aria-hidden="true"` for pure decoration, or a visible-only label the middle input references via `aria-describedby`).
+- Contrast ≥4.5:1 for addon text against `var(--bg-canvas)`; ≥3:1 for the border in every state.
+- Motion: color transitions on state changes are `duration-150 ease-out` and pair with `motion-reduce:transition-none`.
+- Touch target ≥32×32 px for interactive children (matches root height `h-8`).
+
+## Responsive
+
+- Touch: on coarse pointers (`pointer-coarse:`) the typed text steps up to 16 px (`text-body-md`; `text-label-code-lg` in the code face), so iOS Safari does not zoom the page when the field takes focus; fine pointers keep the dense size.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import InputGroupInput from '@aziontech/webkit/input-group-input'
+  import InputGroupRoot from '@aziontech/webkit/input-group-root'
+</script>
+
+<template>
+  <InputGroupRoot>
+    <InputGroupInput
+      aria-label="Domain"
+      placeholder="domain"
+    />
+  </InputGroupRoot>
+</template>
+```
+
+### Sizes
+
+```vue
+<script setup>
+  import InputGroup from '@aziontech/webkit/input-group'
+</script>
+
+<template>
+  <div class="flex flex-col gap-4">
+    <InputGroup size="small">
+      <InputGroup.Addon>https://</InputGroup.Addon>
+      <InputGroup.Input
+        aria-label="Domain"
+        placeholder="domain"
+      />
+      <InputGroup.Addon>.com</InputGroup.Addon>
+    </InputGroup>
+    <InputGroup size="medium">
+      <InputGroup.Addon>https://</InputGroup.Addon>
+      <InputGroup.Input
+        aria-label="Domain"
+        placeholder="domain"
+      />
+      <InputGroup.Addon>.com</InputGroup.Addon>
+    </InputGroup>
+    <InputGroup size="large">
+      <InputGroup.Addon>https://</InputGroup.Addon>
+      <InputGroup.Input
+        aria-label="Domain"
+        placeholder="domain"
+      />
+      <InputGroup.Addon>.com</InputGroup.Addon>
+    </InputGroup>
+  </div>
+</template>
+```
+
+### WithAddonStart
+
+```vue
+<script setup>
+  import InputGroup from '@aziontech/webkit/input-group'
+</script>
+
+<template>
+  <InputGroup>
+    <InputGroup.Addon>https://</InputGroup.Addon>
+    <InputGroup.Input
+      aria-label="Domain"
+      placeholder="domain"
+    />
+  </InputGroup>
+</template>
+```

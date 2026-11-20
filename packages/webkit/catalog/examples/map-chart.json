@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Requests by country on the dotted network map, in five sequential steps from the lowest to the highest value. Focus the map and use the arrow keys to read each country, highest first.",
+   "file": "examples/map-chart/default.vue"
+  },
+  {
+   "name": "Points",
+   "summary": "Locations as bubbles whose area follows the value, for data centers or cities.",
+   "file": "examples/map-chart/points.vue"
+  },
+  {
+   "name": "View",
+   "summary": "The map framed on one part of the world, with shaded countries and bubbles together.",
+   "file": "examples/map-chart/view.vue"
+  }
+ ]
+}

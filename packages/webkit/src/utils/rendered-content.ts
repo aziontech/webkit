@@ -14,3 +14,12 @@ export function hasRenderedContent(nodes: VNodeArrayChildren): boolean {
     return true
   })
 }
+
+export function countRenderedNodes(nodes: VNodeArrayChildren): number {
+  return nodes.reduce<number>((total, node) => {
+    if (Array.isArray(node)) return total + countRenderedNodes(node)
+    if (typeof node === 'object' && node !== null && (node as VNode).type === Fragment)
+      return total + countRenderedNodes(((node as VNode).children ?? []) as VNodeArrayChildren)
+    return total + (hasRenderedContent([node]) ? 1 : 0)
+  }, 0)
+}

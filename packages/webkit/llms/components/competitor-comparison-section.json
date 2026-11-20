@@ -1,0 +1,120 @@
+{
+ "name": "competitor-comparison-section",
+ "binding": "CompetitorComparisonSection",
+ "import": "@aziontech/webkit/competitor-comparison-section",
+ "treeShakeableImport": "@aziontech/webkit/competitor-comparison-section",
+ "category": "section",
+ "surface": "site",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The capability-by-capability comparison of Azion with one competitor on a migration landing page: a left section title over a framed table whose header row (the capability column, the Azion brand and the competitor logo) stays pinned while the page scrolls. Each category opens with a heading row; each cell is a support glyph — full, partial or none — named by a tooltip and by screen-reader text, and a capability with a definition carries an info button that opens it in a popover. It is a page section — the site places it from a `{ _id: 'competitor-comparison-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `registration-frame`, `brand`, `popover`, `icon-button` and `tooltip`.",
+ "setup": null,
+ "useWhen": [
+  "Use CompetitorComparisonSection to compare Azion with one competitor, on an \"Azion vs X\" page, across a few categories of capabilities."
+ ],
+ "avoidWhen": [
+  "To compare Azion's own plans or support tiers → use `plan-comparison-section`.",
+  "For price cards with a billing-period toggle → use `pricing-plans-section`."
+ ],
+ "related": [
+  "`plan-comparison-section` — the plan-by-plan matrix of Pricing.",
+  "`tooltip` — names each support glyph on hover and focus.",
+  "`third-party-logo` — draws the competitor's mark right on both themes."
+ ],
+ "bestPractices": [
+  "Give every row a `definition`; the info popover is where a reader learns what the capability means.",
+  "Pass the competitor's entry from `@aziontech/webkit/assets/competitor-registry` (`competitor('Akamai')`): its `logo` and `logoLight` render on first paint, server render included.",
+  "With only a `name`, the band looks the name up in the competitor registry once the page is interactive (the registry loads on demand, outside the band's bundle) and shows the name as text until then, or for a platform the registry does not hold.",
+  "For a platform outside the registry, ship both `competitor.logo` (dark theme) and `competitor.logoLight` (light theme), or one file with its `artwork`.",
+  "Set `anchor` when a page links to the table (`#compare`).",
+  "Keep `caption` equal to the title; it is the table's accessible name."
+ ],
+ "props": [
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "In-page id set on the band so a hash link can target it."
+  },
+  {
+   "name": "eyebrow",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Eyebrow above the section title."
+  },
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Headline of the band, rendered by the section title as its `h2` and naming the band; no header renders when empty."
+  },
+  {
+   "name": "caption",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Screen-reader caption naming the table."
+  },
+  {
+   "name": "columnLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Heading of the capability column."
+  },
+  {
+   "name": "fullLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Tooltip and screen-reader text of a full-support cell."
+  },
+  {
+   "name": "partialLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Tooltip and screen-reader text of a partial-support cell."
+  },
+  {
+   "name": "noneLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Tooltip and screen-reader text of an unsupported cell."
+  },
+  {
+   "name": "competitor",
+   "type": "CompetitorComparisonSectionCompetitor",
+   "default": "—",
+   "required": "true",
+   "doc": "The platform compared with Azion; `{ name, logo?, logoLight?, artwork? }` where `logo` is the dark-theme file and `logoLight` the light-theme one. With only a `name`, the logo is taken from the competitor registry once the page is interactive, and the name is the column head until then or when the registry has no entry."
+  },
+  {
+   "name": "groups",
+   "type": "CompetitorComparisonSectionGroup[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The categories, in order; each is `{ title, rows }` and a row is `{ capability, definition?, azion?, competitor? }` with each level `full`, `partial` or `none` (missing reads as `none`)."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/competitor-comparison-section/default.vue"
+  },
+  {
+   "name": "Registry",
+   "file": "examples/competitor-comparison-section/registry.vue"
+  }
+ ],
+ "docs": "components/competitor-comparison-section.md"
+}

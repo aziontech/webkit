@@ -2,7 +2,7 @@
   import { computed, inject, useAttrs } from 'vue'
 
   import { cn } from '../../../utils/cn'
-  import { PanelInjectionKey } from './injection-key'
+  import { PanelHeaderEndInjectionKey, PanelInjectionKey } from './injection-key'
 
   defineOptions({
     name: 'PanelHeader',
@@ -15,22 +15,27 @@
 
   const attrs = useAttrs()
   const ctx = inject(PanelInjectionKey)
-
-  const rootClasses = computed(() =>
-    cn(
-      'flex min-h-14 shrink-0 items-center justify-between gap-(--spacing-xs)',
-      'border-0 border-b border-b-(length:--border-width-default) border-b-(--border-muted) bg-(--bg-surface)',
-      'pl-(--spacing-lg) pr-(--spacing-md) py-(--spacing-md)',
-      attrs.class as string | undefined
-    )
+  const headerEnd = inject(PanelHeaderEndInjectionKey, null)
+  const endComponent = computed(() =>
+    headerEnd && headerEnd.panelTestId === ctx?.testId ? headerEnd.component.value : null
   )
+
+  const ROOT_CLASS =
+    'flex min-h-14 shrink-0 items-center justify-between gap-(--spacing-xs) border-0 border-b border-b-(length:--border-width-default) border-b-(--border-muted) bg-(--bg-surface) ps-(--spacing-lg) pe-(--spacing-md) py-(--spacing-md)'
 </script>
 
 <template>
   <header
-    :class="rootClasses"
+    role="none"
+    :class="cn(ROOT_CLASS, attrs.class as string | undefined)"
     :data-testid="`${ctx?.testId}__header`"
   >
-    <slot />
+    <template v-if="endComponent">
+      <div class="flex min-w-0 flex-1 items-center justify-between gap-(--spacing-xs)">
+        <slot />
+      </div>
+      <component :is="endComponent" />
+    </template>
+    <slot v-else />
   </header>
 </template>

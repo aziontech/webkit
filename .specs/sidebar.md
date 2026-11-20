@@ -3,14 +3,16 @@ name: sidebar
 category: layout
 structure: composition
 status: implemented
-spec_version: 1
+spec_version: 14
+template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3735-14866
   node_id: 3735:14866
-checksum: 434457591d1b05795ef6294eda599ce002692b420b0b5576e42c5b11d8e1a651
+checksum: b0626e3a7b6d30f162e879a69bbe9e3e10b62d607853e0261d490b01b5dbe0a1
 created: 2026-05-22
-last_updated: 2026-10-01
+last_updated: 2026-11-16
 ---
+
 # Sidebar — Component Spec
 
 ## Purpose
@@ -26,41 +28,76 @@ and every app that has a sidebar wants the same one. Two shells re-implementing 
 drift apart.
 
 Both halves are **opt-in and independent**: `resizable` adds the drag, `collapsible` adds the
-collapse trigger and the edge affordance. With neither set the component renders exactly as it
+collapse trigger and the edge affordance. `collapsible="icon"` collapses to an **icon rail** instead
+of leaving the layout, and `shortcut` adds the Ctrl+B / Cmd+B toggle. With neither set the component renders exactly as it
 always has, with the host owning the width — every existing consumer is unaffected.
+
+## When to use
+
+- Use Sidebar only when not using ConsoleLayout, which already renders the rail; put a SidebarMenu inside it.
+- The persistent navigation column of an app shell, with an optional header (brand, workspace switcher) and footer (profile, settings) around a scrolling `SidebarMenu`.
+- The user should be able to resize the rail by dragging its trailing edge (`resizable`) or take it out of the layout and bring it back (`collapsible`).
+- Wide work surfaces where the navigation should shrink to its icons rather than disappear (`collapsible="icon"`), so a destination stays one click away.
+- The rail's size or collapsed state must survive navigation or reloads — bind `v-model:width` and `v-model:open` and persist them in the app.
+
+## When NOT to use
+
+- Adjacent work areas the reader resizes (editor beside a preview, a terminal under it) → use `resizable`.
+- Horizontal top-level navigation with dropdown panels → use `navigation-menu`.
+- A temporary panel that slides over the page → use `drawer`.
+
+## Related
+
+- `sidebar-menu` — the navigation rows, groups and drill levels that go in the sidebar's default slot.
+- `resizable` — draggable splits between content regions; the sidebar's rail gesture is for navigation only.
+- `app-header` — the top bar that usually sits above the sidebar in an app shell.
+- `console-layout` — the console layout template that composes the header, the sidebar and the page.
+
+## Best practices
+
+- Put a `SidebarMenu` with `role="presentation"` in the default slot; the sidebar already renders the `nav` landmark and its `aria-label` (default `'Sidebar'`) names the region.
+- Group the rows with `SidebarMenu.Group`; the sidebar has no group part of its own.
+- Without `resizable` or `collapsible`, size the rail with a width class on the root; with either set, the sidebar owns the width and clamps it between `min-width-token` and `max-width-token`.
+- When the sidebar is revealed after mount (for example leaving a mobile layout where it was hidden), call the exposed `measure()` so the rail does not keep a zero width.
+- Keep the profile block in the `footer` slot; with `collapsible`, the collapse trigger renders in the same footer row.
+- With `collapsible="icon"`, give every top-level `SidebarMenu.Item` and drill `SidebarMenu.SubTrigger` an icon: rows without one (and inline sub-menus) step aside in the rail. Use the `{ rail }` slot scope to compact header and footer content (an avatar without the name).
+- Turn on `shortcut` for one sidebar per page only; Ctrl+B / Cmd+B is a page-wide key.
 
 ## Usage
 
-Navigation is a [`Menu`](./menu.md) in the default slot. It owns no shell, fills the width the
+Navigation is a [`SidebarMenu`](./menu.md) in the default slot. It owns no shell, fills the width the
 sidebar gives it, and adds no outer margin — so the sidebar keeps the regions and the scrolling,
 and the menu keeps the rows, the groups, the nesting and the drill levels.
 
 Two details are what make the pair correct, and neither costs more than one attribute:
 
-- **`role="presentation"` on the `Menu`.** `Sidebar` already renders the `<nav>` landmark; without
+- **`role="presentation"` on the `SidebarMenu`.** `Sidebar` already renders the `<nav>` landmark; without
   this the menu adds a second one, duplicating it in the landmark list. The menu drops its
   `aria-label` along with the role, so the sidebar's `ariaLabel` remains the one name for the
   region — nothing else to unset.
 - **Nothing to wire for focus rings.** The sidebar hands its own surface down as
-  `--menu-ring-offset` / `--menu-item-ring-offset`, so every row's focus ring is offset against the
+  `--sidebar-menu-ring-offset` / `--sidebar-menu-item-ring-offset`, so every row's focus ring is offset against the
   sidebar fill rather than the page canvas.
 
 ```vue
 <script setup>
-import Avatar from '@aziontech/webkit/avatar'
-import Dropdown from '@aziontech/webkit/dropdown'
-import IconButton from '@aziontech/webkit/icon-button'
-import Menu from '@aziontech/webkit/menu'
-import Sidebar from '@aziontech/webkit/sidebar'
-import SidebarFooter from '@aziontech/webkit/sidebar-footer'
-import SidebarHeader from '@aziontech/webkit/sidebar-header'
-import { ref } from 'vue'
+  import Avatar from '@aziontech/webkit/avatar'
+  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
+  import IconButton from '@aziontech/webkit/icon-button'
+  import Menu from '@aziontech/webkit/sidebar-menu'
+  import Sidebar from '@aziontech/webkit/sidebar'
+  import SidebarFooter from '@aziontech/webkit/sidebar-footer'
+  import SidebarHeader from '@aziontech/webkit/sidebar-header'
+  import { ref } from 'vue'
 
-const accountMenuOpen = ref(false)
+  const accountMenuOpen = ref(false)
 </script>
 
 <template>
-  <Sidebar aria-label="Console" class="h-screen w-[280px]">
+  <Sidebar
+    aria-label="Console"
+    class="h-screen w-[280px]"
+  >
     <template #header>
       <SidebarHeader>
         <!-- search, branding — stays put while the navigation below it scrolls -->
@@ -69,51 +106,96 @@ const accountMenuOpen = ref(false)
 
     <Menu role="presentation">
       <!-- Renders nothing until a drill level is pushed, so it needs no v-if. -->
-      <Menu.Back />
+      <SidebarMenu.Back />
 
-      <Menu.Group>
-        <Menu.Item label="Home" icon="ai ai-home" href="/" selected />
-      </Menu.Group>
+      <SidebarMenu.Group>
+        <SidebarMenu.Item
+          label="Home"
+          icon="az az-home"
+          href="/"
+          selected
+        />
+      </SidebarMenu.Group>
 
-      <Menu.Group label="Build">
-        <Menu.Item label="Applications" icon="ai ai-edge-application" href="/applications" />
+      <SidebarMenu.Group label="Build">
+        <SidebarMenu.Item
+          label="Applications"
+          icon="az az-applications"
+          href="/applications"
+        />
 
-        <Menu.Sub default-open>
-          <Menu.SubTrigger label="Edge Functions" kind="inline" />
-          <Menu.SubContent>
-            <Menu.Item label="Runtime APIs" href="/functions/runtime-apis" />
-          </Menu.SubContent>
-        </Menu.Sub>
-      </Menu.Group>
+        <SidebarMenu.Sub default-open>
+          <SidebarMenu.SubTrigger
+            label="Edge Functions"
+            type="inline"
+          />
+          <SidebarMenu.SubContent>
+            <SidebarMenu.Item
+              label="Runtime APIs"
+              href="/functions/runtime-apis"
+            />
+          </SidebarMenu.SubContent>
+        </SidebarMenu.Sub>
+      </SidebarMenu.Group>
 
-      <Menu.Group label="Account">
-        <Menu.Sub>
-          <Menu.SubTrigger label="Settings" icon="pi pi-cog" kind="drill" />
-          <Menu.SubContent>
-            <Menu.Group label="Organization">
-              <Menu.Item label="General" href="/settings/general" />
-              <Menu.Item label="Members" href="/settings/members" />
-            </Menu.Group>
-          </Menu.SubContent>
-        </Menu.Sub>
-      </Menu.Group>
-    </Menu>
+      <SidebarMenu.Group label="Account">
+        <SidebarMenu.Sub>
+          <SidebarMenu.SubTrigger
+            label="Settings"
+            icon="az az-settings"
+            type="drill"
+          />
+          <SidebarMenu.SubContent>
+            <SidebarMenu.Group label="Organization">
+              <SidebarMenu.Item
+                label="General"
+                href="/settings/general"
+              />
+              <SidebarMenu.Item
+                label="Members"
+                href="/settings/members"
+              />
+            </SidebarMenu.Group>
+          </SidebarMenu.SubContent>
+        </SidebarMenu.Sub>
+      </SidebarMenu.Group>
+    </SidebarMenu>
 
     <template #footer>
       <SidebarFooter class="flex items-center gap-(--spacing-xs)">
-        <Avatar kind="square" size="small" src="/avatar.jpg" alt="Rafael Umman" />
+        <Avatar
+          variant="square"
+          size="small"
+          src="/avatar.jpg"
+          alt="Alex Moreira"
+        />
         <span class="min-w-0 flex-1 truncate text-label-sm text-(--text-default)">
-          Rafael Umman
+          Alex Moreira
         </span>
-        <Dropdown v-model:open="accountMenuOpen" placement="top-end">
-          <Dropdown.Trigger>
-            <IconButton icon="pi pi-ellipsis-v" aria-label="Account menu" kind="outlined" size="small" />
-          </Dropdown.Trigger>
-          <Dropdown.Group>
-            <Dropdown.Option value="settings" label="Account Settings" />
-            <Dropdown.Option value="logout" label="Log Out" />
-          </Dropdown.Group>
-        </Dropdown>
+        <DropdownMenu
+          v-model:open="accountMenuOpen"
+          side="top"
+          align="end"
+        >
+          <DropdownMenu.Trigger>
+            <IconButton
+              icon="az az-ellipsis-vertical"
+              aria-label="Account menu"
+              variant="outline"
+              size="small"
+            />
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Group>
+            <DropdownMenu.Item
+              value="settings"
+              label="Account Settings"
+            />
+            <DropdownMenu.Item
+              value="logout"
+              label="Log Out"
+            />
+          </DropdownMenu.Group>
+        </DropdownMenu>
       </SidebarFooter>
     </template>
   </Sidebar>
@@ -124,7 +206,7 @@ const accountMenuOpen = ref(false)
 
 Turn the gesture on and the sidebar owns its own width: `v-model:width` is the sized width in px
 (`null` until the sidebar measures its own natural width on mount, after which the drag owns it),
-and `v-model:collapsed` is whether it is in the layout at all. Persist both in the consuming app —
+and `v-model:open` is whether it is in the layout at all. Persist both in the consuming app —
 they are the user's choice, and a shell that remounts per route would otherwise lose them on every
 navigation.
 
@@ -136,7 +218,7 @@ collapses. The footer region becomes a centred flex row when `collapsible` is se
 content takes `min-w-0 flex-1`.
 
 The **band** — the separator and the space above it — then belongs to that row rather than to the
-footer content, which is what makes the line run the full width of the region *past* the trigger
+footer content, which is what makes the line run the full width of the region _past_ the trigger
 instead of stopping short of it, and what keeps the trigger on the content's line instead of half a
 padding above it. `SidebarFooter` drops its own `border-t` / top padding whenever it is inside a
 collapsible sidebar for that reason, and **any other footer content must not add its own top
@@ -151,7 +233,7 @@ already had, and the two cannot drift.
 A collapsed rail leaves nothing on the page, so the way back has to be discoverable without being
 visible at rest. Resting the pointer in the leading-edge zone — or landing focus in it — **animates
 the rail back in to `--size-10`** and morphs the page beside it on the same frames, so the way back
-is something the user *sees happen* rather than a 2 px line they have to find and trust. Leaving
+is something the user _sees happen_ rather than a 2 px line they have to find and trust. Leaving
 the zone carries the sliver out again on the exit curve.
 
 Six things make it hold together:
@@ -159,7 +241,7 @@ Six things make it hold together:
 - **The zone grows with the sliver.** It is `--size-6` at rest and `--size-10` while previewing, so
   it always spans exactly what it opened. A fixed narrow zone would end where the sliver begins and
   flicker the preview on and off as the pointer crossed that seam. Both widths come from the
-  **fixed** `--size-*` scale, never `--spacing-lg`/`xl`/`xxl`, which are breakpoint-responsive — an
+  **fixed** `--size-*` scale, never `--spacing-lg`/`xl`/`2xl`, which are breakpoint-responsive — an
   `--spacing-xl` zone is 48 px on desktop, far more of the page's leading edge than a hit target
   should claim.
 - **The sliver shows the rail's surface, not its content.** The panel stays parked off the leading
@@ -168,8 +250,8 @@ Six things make it hold together:
   of them — and a chopped column reads as a rendering fault rather than an invitation.
 - **The button sits after the line, not on the sliver.** The line marks the edge; the button is
   what you reach for beyond it. It is placed at the zone's `left-full`, and because the zone's
-  width *is* the sliver's width, `100%` tracks that trailing edge frame for frame with no
-  transition of its own. Its leading `--spacing-xxs` is **padding inside the container, never a
+  width _is_ the sliver's width, `100%` tracks that trailing edge frame for frame with no
+  transition of its own. Its leading `--spacing-2xs` is **padding inside the container, never a
   margin**: the container has to stay flush against the zone so the two boxes touch. A gap there
   belongs to neither, and a pointer crossing it fires `pointerleave` — retracting the sliver out
   from under the very button it was travelling to.
@@ -208,14 +290,14 @@ this the only trace of a fully collapsed rail would be a 1 px line down the page
 
 ```vue
 <script setup>
-import Menu from '@aziontech/webkit/menu'
-import Sidebar from '@aziontech/webkit/sidebar'
-import SidebarFooter from '@aziontech/webkit/sidebar-footer'
-import { ref } from 'vue'
+  import Menu from '@aziontech/webkit/sidebar-menu'
+  import Sidebar from '@aziontech/webkit/sidebar'
+  import SidebarFooter from '@aziontech/webkit/sidebar-footer'
+  import { ref } from 'vue'
 
-// Persisted by the app — the rail remounts per route, the user's choice must not.
-const collapsed = ref(false)
-const width = ref(null)
+  // Persisted by the app — the rail remounts per route, the user's choice must not.
+  const open = ref(true)
+  const width = ref(null)
 </script>
 
 <template>
@@ -223,17 +305,22 @@ const width = ref(null)
        positioned against it, because a collapsed rail is 0 px wide and would clip it. -->
   <div class="relative flex h-screen min-h-0">
     <Sidebar
-      v-model:collapsed="collapsed"
+      v-model:open="open"
       v-model:width="width"
       resizable
       collapsible
       aria-label="Console"
     >
       <Menu role="presentation">
-        <Menu.Group label="Build">
-          <Menu.Item label="Applications" icon="ai ai-edge-application" href="/applications" selected />
-        </Menu.Group>
-      </Menu>
+        <SidebarMenu.Group label="Build">
+          <SidebarMenu.Item
+            label="Applications"
+            icon="az az-applications"
+            href="/applications"
+            selected
+          />
+        </SidebarMenu.Group>
+      </SidebarMenu>
 
       <template #footer>
         <SidebarFooter class="flex items-center gap-(--spacing-xs)">
@@ -252,70 +339,80 @@ the freed space on the same frames.
 
 ## Sub-components
 
+The compound `@aziontech/webkit/sidebar` (its `index.ts`) attaches every part for dot-notation —
+`Sidebar.Header`, `Sidebar.Footer` — and `@aziontech/webkit/sidebar-root` is the
+standalone, tree-shakeable root with nothing attached. The flat sub-component paths below keep
+working.
+
 - `sidebar-footer.vue` — Public sub-component `sidebar-footer`.
-- `sidebar-group.vue` — Public sub-component `sidebar-group`. One flat block of rows under an
-  optional title, **superseded by `Menu.Group`**: the docs, the stories and every example here
-  compose `Menu`, which does everything this does and also nests, collapses and drills. It keeps
-  working untouched for existing consumers and is **not** deprecated (no `@deprecated` tag, because
-  `webkit/no-deprecated-component` is `error` in the recommended config and would turn a consumer's
-  lint green→red on a minor). Reach for `Menu` in anything new.
 - `sidebar-header.vue` — Public sub-component `sidebar-header`.
 
-`Sidebar` does not import `Menu` and `Menu` does not import `Sidebar`; the only thing that passes
-between them is the ring-offset surface below.
+`Sidebar` does not import `SidebarMenu` and `SidebarMenu` does not import `Sidebar`. Two things pass between
+them: the ring-offset surface below, and the sidebar context (`SidebarInjectionKey`, read with
+`inject(…, null)` so a `SidebarMenu` outside a sidebar is unaffected), which tells the menu rows whether
+the sidebar is an icon rail, which side their tooltips open on, the `Tooltip` component to wrap a rail row in (handed down so
+`SidebarMenu` bundles no tooltip of its own), and how to expand it.
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `ariaLabel` | `string` | `'Sidebar'` | false | Accessible name for the navigation landmark. |
-| `resizable` | `boolean` | `false` | false | Adds the drag handle on the trailing edge; dragging past the minimum collapses the rail. |
-| `collapsible` | `boolean` | `false` | false | Adds the collapse trigger at the bottom of the rail and the edge affordance that brings a collapsed rail back. |
-| `minWidthToken` | `string` | `'--container-3xs'` | false | Theme container token the sized width is clamped up to, read off the document at runtime. |
-| `maxWidthToken` | `string` | `'--container-sm'` | false | Theme container token the sized width is clamped down to, read off the document at runtime. |
-| `collapseAriaLabel` | `string` | `'Collapse sidebar'` | false | Accessible name for the collapse trigger. |
-| `expandAriaLabel` | `string` | `'Expand sidebar'` | false | Accessible name for the control and the grab bar that bring a collapsed rail back. |
-| `resizeAriaLabel` | `string` | `'Resize sidebar'` | false | Accessible name for the drag handle separator. |
+| Prop                | Type                            | Default             | Required | JSDoc                                                                                                                                                                       |
+| ------------------- | ------------------------------- | ------------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ariaLabel`         | `string`                        | `''`                | false    | Accessible name for the navigation landmark. Empty uses the locale catalog (`Sidebar`).                                                                                     |
+| `resizable`         | `boolean`                       | `false`             | false    | Adds the drag handle on the trailing edge; dragging past the minimum collapses the rail.                                                                                    |
+| `collapsible`       | `boolean \| SidebarCollapsible` | `false`             | false    | Adds the collapse trigger; `true` or `'offcanvas'` takes a collapsed sidebar out of the layout (with the edge affordance that brings it back), `'icon'` keeps an icon rail. |
+| `shortcut`          | `boolean`                       | `false`             | false    | Lets Ctrl+B / Cmd+B toggle `open` while the sidebar is collapsible. Ignored while focus is in an editable field.                                                            |
+| `minWidthToken`     | `string`                        | `'--container-3xs'` | false    | Theme container token the sized width is clamped up to, read off the document at runtime.                                                                                   |
+| `maxWidthToken`     | `string`                        | `'--container-sm'`  | false    | Theme container token the sized width is clamped down to, read off the document at runtime.                                                                                 |
+| `collapseAriaLabel` | `string`                        | `''`                | false    | Accessible name for the collapse trigger. Empty uses the locale catalog (`Collapse sidebar`).                                                                               |
+| `expandAriaLabel`   | `string`                        | `''`                | false    | Accessible name for the control and the grab bar that bring a collapsed rail back. Empty uses the locale catalog (`Expand sidebar`).                                        |
+| `resizeAriaLabel`   | `string`                        | `''`                | false    | Accessible name for the drag handle separator. Empty uses the locale catalog (`Resize sidebar`).                                                                            |
 
-The root also owns two models:
+Exported type: `SidebarCollapsible` = `'offcanvas' | 'icon'`. `collapsible` keeps accepting a
+boolean; `true` is `'offcanvas'`, so every existing consumer is unchanged.
 
-- **`v-model:collapsed`** — `boolean`, default `false`. Whether the rail is out of the layout.
-- **`v-model:width`** — `number | null`, default `null`. The sized width in px. `null` means *not
-  sized yet*: the sidebar seeds it from its own natural width on mount, after which the gesture owns
-  it. px is the model's native unit because it is the outcome of a pointer gesture; the **bounds** it
-  is clamped to are the ones that come from tokens (`minWidthToken` / `maxWidthToken`).
+## v-model
 
-Both are inert unless `resizable` or `collapsible` is set. With neither, no inline width is applied
-and the host's own `class="w-[280px]"` governs exactly as before.
+| Model           | Type             | Default | Emits          | Notes                                                                                                                                                                                                                                                                                                                                                                          |
+| --------------- | ---------------- | ------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `v-model:open`  | `boolean`        | `true`  | `update:open`  | Whether the rail is in the layout. `false` collapses it: out of the layout (`collapsible` `true` / `'offcanvas'`) or down to its icon rail (`'icon'`) — by the trigger, the drag crossing the snap boundary, the keyboard nudge, or a double-click on the handle. Same name as shadcn's Sidebar `open`; the layouts that compose it call the same state `navigationOpen`.      |
+| `v-model:width` | `number \| null` | `null`  | `update:width` | The sized width in px, already clamped to the token bounds and emitted continuously during a drag. `null` means _not sized yet_: the sidebar seeds it from its own natural width on mount, after which the gesture owns it. px is the model's native unit because it is the outcome of a pointer gesture; the **bounds** come from tokens (`minWidthToken` / `maxWidthToken`). |
+
+Every model is inert unless `resizable` or `collapsible` is set. With neither, no inline width is
+applied and the host's own `class="w-[280px]"` governs exactly as before. The models are declared
+with `defineModel`, so their `update:*` events are not hand-declared.
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
-| `update:collapsed` | `boolean` | `v-model:collapsed` — the rail entered or left the layout, by the trigger, the drag crossing the snap boundary, the keyboard nudge, or a double-click on the handle. |
-| `update:width` | `number` | `v-model:width` — the sized width in px, already clamped to the token bounds. Emitted continuously during a drag. |
+| _none_ | — | — |
+
+The only events are the `update:*` of the models above.
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | — |
-| `header` | — | Named slot. |
-| `footer` | — | Named slot. The collapse trigger renders after this content in the same row, under one full-width separator, so a profile block and the trigger read as one footer. |
+| Slot      | Scope               | Notes                                                                                                                                                                                                                                          |
+| --------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `default` | `{ rail: boolean }` | The navigation. `rail` is true while the sidebar is collapsed to its icon rail.                                                                                                                                                                |
+| `header`  | `{ rail: boolean }` | Named slot. Use `rail` to compact the content in the icon rail.                                                                                                                                                                                |
+| `footer`  | `{ rail: boolean }` | Named slot. The collapse trigger renders after this content in the same row, under one full-width separator, so a profile block and the trigger read as one footer. In the icon rail the row stacks and the trigger becomes the expand button. |
 
 ## Exposed
 
-| Method | Notes |
-|---|---|
-| `measure()` | Re-reads the rail's natural width. For a host that reveals the sidebar *after* mount (a viewport change out of a mobile layout): a rail measured while `display: none` reports 0, which would strand it invisible. |
+| Method      | Notes                                                                                                                                                                                                              |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `measure()` | Re-reads the rail's natural width. For a host that reveals the sidebar _after_ mount (a viewport change out of a mobile layout): a rail measured while `display: none` reports 0, which would strand it invisible. |
 
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
-- `data-collapsed` on the root while the rail is out of the layout
+- `data-state="closed"` on the root while the rail is collapsed (out of the layout, or down to the icon rail), `data-state="open"` otherwise
+- `data-rail` on the root while `collapsible="icon"` and collapsed; the rail stays in the layout at
+  `var(--size-14)`, is **not** `inert` or `aria-hidden`, renders no edge affordance, and its footer
+  trigger becomes `__expand-button` (`Expand sidebar`). Menu rows inside it carry `data-rail` too:
+  labels become screen-reader-only and move into a `Tooltip`, tags and group labels step aside,
+  rows without an icon and inline sub-menus are hidden.
 - `data-resizing` on the root and on the handle while a pointer drag is in flight
 - `data-preview` on the collapsed edge zone while it is showing the rail's preview sliver
-- `data-collapsed` / `data-resizing` / `data-preview` are **reported state, not the motion
+- `data-state` / `data-resizing` / `data-preview` are **reported state, not the motion
   driver**: the collapse/expand animation itself runs off the hidden checkbox's `:checked` (see
   Motion & Animations), so these attributes exist for consumer styling hooks and for tests, not
   because the component's own CSS depends on them for that transition.
@@ -326,11 +423,11 @@ and the host's own `class="w-[280px]"` governs exactly as before.
   rail's motion off until then, so a state restored at mount lands in place; see Motion &
   Animations); not a documented consumer styling hook.
 - Region testids derived from the root: `__panel` (the fixed-width inner panel),
-  `__collapse-input` (the hidden checkbox that carries `collapsed` for CSS — not an interactive
+  `__collapse-input` (the hidden checkbox that carries the collapsed state, `!open`, for CSS — not an interactive
   control; see Accessibility), `__header`, `__nav`, `__scroll`, `__footer`, `__collapse` (the
   trigger), `__handle` (the drag separator), `__expand` / `__expand-button` (the collapsed
   affordance)
-- A collapsed rail carries `inert` + `aria-hidden`, so it holds no tab stops while it is out
+- A collapsed offcanvas rail carries `inert` + `aria-hidden`, so it holds no tab stops while it is out; an icon rail keeps its rows reachable
 
 ## Motion & Animations
 
@@ -339,28 +436,28 @@ computing an inline `transition` string. A `<input type="checkbox" class="sr-onl
 `collapsed` (`v-model`), and the root's `has-[>div>input:checked]:` variants carry the
 width/translate/opacity targets and the leave-phase easing. The variant is **scoped to that one
 input by structure** — the root's own toggle is its `> div > input`, the panel's is its `> input`.
-A bare `has-checked:` is `:has(:checked)`, which matches *any* checked descendant, so a rail whose
+A bare `has-checked:` is `:has(:checked)`, which matches _any_ checked descendant, so a rail whose
 slot holds checkboxes (a fields picker, a filter list) collapses itself the moment a consumer
 checks one. Because a native checkbox reflects `:checked` the instant it is
 toggled — by a real click, by `Space`, or simply by the server-rendered `checked` attribute before
 Vue has hydrated — this animation runs correctly even before the component's JavaScript has loaded,
 which a JS-computed `transition` string never could. `sidebar/presets/transitions.ts` no longer
 exists: the only place that still computes a transition in JS is the collapsed-rail preview sliver
-below, because its width comes from a pointer/focus gesture on a *sibling* element, not from that
+below, because its width comes from a pointer/focus gesture on a _sibling_ element, not from that
 boolean, and CSS has no way to react to a sibling's hover state without an intrusive DOM
 restructuring this component does not take on.
 
-| Trigger | Animation / Transition | Mechanism | Reduced-motion fallback |
-|---|---|---|---|
-| rail expands | `width` 0 → sized **and `min-width` 0 → the min token, on the same curve**, `translate` -100% → 0, `opacity` → 1 | root `has-[>div>input:checked]:` off — base classes: `duration-moderate-02` · `ease-expressive-entrance` | `motion-reduce:transition-none motion-reduce:translate-none` |
-| rail collapses | `width` sized → 0 **and `min-width` → 0 with it**, `translate` 0 → -100%, `opacity` → floor | root `has-[>div>input:checked]:` on — `ease-productive-exit` (same duration) | same |
-| state restored at mount (a host seeding its persisted `collapsed` / `width` in its own `onMounted`) | none — the restored rail lands in place | `not-data-[settled]:transition-none` on the root **and the panel**: `data-settled` is set two frames after mount, so the first frame paints the restored state with motion off and the second gives every later change a rendered style to tween from | — |
-| drag in flight | none — width tracks the pointer frame for frame; the panel's `translate` + `opacity` track the **pull progress** (`next / min`), so the pull is legible below the minimum where the rail itself can no longer narrow | `data-resizing` forces `transition-none` on the root **and the panel**; the panel's `translate`/`opacity` come from an inline style for the length of the drag | — |
-| collapsed edge affordance appears | `opacity` 0 → 1 | Vue `<Transition>`, unchanged | `motion-reduce:transition-none` |
-| collapsed rail previews / retracts | `width` 0 ↔ `--size-10` (the panel does not move — the sliver is surface only) | JS-computed inline `transition` (`duration['moderate-02']` · `curve['expressive-entrance']`) while entering; CSS `has-[>div>input:checked]:` exit curve takes over the instant the inline style is cleared on leave | `prefers-reduced-motion` short-circuit while entering; `motion-reduce:transition-none` on leave |
-| preview zone widens to the sliver | `width` `--size-6` ↔ `--size-10` | pure CSS `hover:` / `focus-within:` on the zone itself — no JS | `motion-reduce:transition-none` |
-| expand affordance rides the sliver in | `translate` `calc(-1 * --size-10)` ↔ 0, `opacity` 0 ↔ 1 | pure CSS `group-hover:` / `group-focus-within:` — no JS | `motion-reduce:transition-none motion-reduce:translate-none` |
-| rail trailing-edge line on hover / focus / drag / preview | `transition-opacity` | Tailwind default (see note) | `motion-reduce:transition-none` |
+| Trigger                                                                                        | Animation / Transition                                                                                                                                                                                               | Mechanism                                                                                                                                                                                                                                             | Reduced-motion fallback                                                                         |
+| ---------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| rail expands                                                                                   | `width` 0 → sized **and `min-width` 0 → the min token, on the same curve**, `translate` -100% → 0, `opacity` → 1                                                                                                     | root `has-[>div>input:checked]:` off — base classes: `duration-moderate-02` · `ease-expressive-entrance`                                                                                                                                              | `motion-reduce:transition-none motion-reduce:translate-none`                                    |
+| rail collapses                                                                                 | `width` sized → 0 **and `min-width` → 0 with it**, `translate` 0 → -100%, `opacity` → floor                                                                                                                          | root `has-[>div>input:checked]:` on — `ease-productive-exit` (same duration)                                                                                                                                                                          | same                                                                                            |
+| state restored at mount (a host seeding its persisted `open` / `width` in its own `onMounted`) | none — the restored rail lands in place                                                                                                                                                                              | `not-data-[settled]:transition-none` on the root **and the panel**: `data-settled` is set two frames after mount, so the first frame paints the restored state with motion off and the second gives every later change a rendered style to tween from | —                                                                                               |
+| drag in flight                                                                                 | none — width tracks the pointer frame for frame; the panel's `translate` + `opacity` track the **pull progress** (`next / min`), so the pull is legible below the minimum where the rail itself can no longer narrow | `data-resizing` forces `transition-none` on the root **and the panel**; the panel's `translate`/`opacity` come from an inline style for the length of the drag                                                                                        | —                                                                                               |
+| collapsed edge affordance appears                                                              | `opacity` 0 → 1                                                                                                                                                                                                      | Vue `<Transition>`, unchanged                                                                                                                                                                                                                         | `motion-reduce:transition-none`                                                                 |
+| collapsed rail previews / retracts                                                             | `width` 0 ↔ `--size-10` (the panel does not move — the sliver is surface only)                                                                                                                                       | JS-computed inline `transition` (`duration['moderate-02']` · `curve['expressive-entrance']`) while entering; CSS `has-[>div>input:checked]:` exit curve takes over the instant the inline style is cleared on leave                                   | `prefers-reduced-motion` short-circuit while entering; `motion-reduce:transition-none` on leave |
+| preview zone widens to the sliver                                                              | `width` `--size-6` ↔ `--size-10`                                                                                                                                                                                     | pure CSS `hover:` / `focus-within:` on the zone itself — no JS                                                                                                                                                                                        | `motion-reduce:transition-none`                                                                 |
+| expand affordance rides the sliver in                                                          | `translate` `calc(-1 * --size-10)` ↔ 0, `opacity` 0 ↔ 1                                                                                                                                                              | pure CSS `group-hover:` / `group-focus-within:` — no JS                                                                                                                                                                                               | `motion-reduce:transition-none motion-reduce:translate-none`                                    |
+| rail trailing-edge line on hover / focus / drag / preview                                      | `transition-opacity`                                                                                                                                                                                                 | Tailwind default (see note)                                                                                                                                                                                                                           | `motion-reduce:transition-none`                                                                 |
 
 An eased width would lag behind the cursor and read as a broken handle, so the transition is
 suppressed for the duration of a drag (`data-[resizing]:transition-none`) and handed back on
@@ -391,16 +488,16 @@ width the rail's labels were fitted to and narrowing past it truncates them (mea
 Database` ellipsizes at 225px). It keeps `min-width` and takes an inline `translate` of
 `railWidth - minWidth`, holding its trailing edge flush with the rail's (measured gap: 0px at every
 sample). Leaving it at `translate: 0` pins the content in place while the rail's edge sweeps across
-it — the reading that the content sits on a layer *beneath* the rail rather than being carried by
+it — the reading that the content sits on a layer _beneath_ the rail rather than being carried by
 it. Sliding it by pull progress while the rail stands still is the same failure, louder.
 
 **`inert` / `aria-hidden` commit on release, not mid-gesture.** `collapsed` flips while the pointer
-is still down, so the collapsed *semantics* are gated on `!resizing`: a rail that is visible and
+is still down, so the collapsed _semantics_ are gated on `!resizing`: a rail that is visible and
 tracking the pointer is never removed from the accessibility tree.
 
 An inline value that overrides one of these classes must be written as **`translate`**, never
 `transform`: the resting values come from `translate-x-0` / `has-[>input:checked]:-translate-x-full`,
-which in Tailwind v4 compile to the standalone `translate` property. `transform` is a *different*
+which in Tailwind v4 compile to the standalone `translate` property. `transform` is a _different_
 property, so an inline `transform` does not override the class — the two compose. Writing the same
 property the class writes is what makes the inline value win.
 
@@ -417,15 +514,15 @@ shut. The exit curve for the rail's own box is the productive one.
 
 ### Progressive enhancement — what still needs JavaScript, and what does not
 
-| Interaction | Works before hydration? | Why |
-|---|---|---|
-| Initial paint — correct width/collapsed state, no flash | Yes | The checkbox's `checked` attribute and the width/min/max custom properties are all in the server-rendered HTML; the CSS reacts with no script running |
-| Collapse / expand *motion* once triggered | Yes, as CSS | The animation itself (`has-[>div>input:checked]:` width/translate/opacity, the enter/exit curve) is CSS, not a JS-computed `transition` string — it plays correctly whenever the checkbox's `:checked` changes, by any means |
-| Collapsing / expanding *before hydration* | No | The visible trigger is the `IconButton`'s `@click`, which needs Vue's event binding; the hidden checkbox is intentionally `tabindex="-1"` + `aria-hidden`, so nothing pre-hydration can reach it either. Only the motion mechanism is CSS-only, not yet the trigger |
-| Trailing-edge accent line, hover/focus states already visible on the page | Yes | Plain `:hover`/`:focus-visible` on elements Vue did not need to attach — real from first paint |
-| Collapsed-rail hover/focus preview sliver | No | The zone that is hovered and the rail whose width grows are siblings (the rail must stay a sibling of the affordance — see "The collapsed rail previews itself" — so CSS has no cross-sibling hook without restructuring the DOM) |
-| Drag-to-resize | Baseline only | `resizable` adds native CSS `resize: horizontal` on the root as a zero-JS fallback (works pre-hydration, respects the same `min-width`/`max-width`); once mounted (`data-hydrated`) it is switched off (`resize-none`) in favor of the custom `role="separator"` handle, which alone provides the accessible name, `aria-valuenow`, keyboard nudge, snap-to-collapse, and a consistent cross-browser affordance the native resize grip cannot |
-| Keyboard nudge, snap-to-collapse | No | Inherently require reading pointer/key input; no CSS equivalent |
+| Interaction                                                               | Works before hydration? | Why                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| ------------------------------------------------------------------------- | ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Initial paint — correct width/collapsed state, no flash                   | Yes                     | The checkbox's `checked` attribute and the width/min/max custom properties are all in the server-rendered HTML; the CSS reacts with no script running                                                                                                                                                                                                                                                                                         |
+| Collapse / expand _motion_ once triggered                                 | Yes, as CSS             | The animation itself (`has-[>div>input:checked]:` width/translate/opacity, the enter/exit curve) is CSS, not a JS-computed `transition` string — it plays correctly whenever the checkbox's `:checked` changes, by any means                                                                                                                                                                                                                  |
+| Collapsing / expanding _before hydration_                                 | No                      | The visible trigger is the `IconButton`'s `@click`, which needs Vue's event binding; the hidden checkbox is intentionally `tabindex="-1"` + `aria-hidden`, so nothing pre-hydration can reach it either. Only the motion mechanism is CSS-only, not yet the trigger                                                                                                                                                                           |
+| Trailing-edge accent line, hover/focus states already visible on the page | Yes                     | Plain `:hover`/`:focus-visible` on elements Vue did not need to attach — real from first paint                                                                                                                                                                                                                                                                                                                                                |
+| Collapsed-rail hover/focus preview sliver                                 | No                      | The zone that is hovered and the rail whose width grows are siblings (the rail must stay a sibling of the affordance — see "The collapsed rail previews itself" — so CSS has no cross-sibling hook without restructuring the DOM)                                                                                                                                                                                                             |
+| Drag-to-resize                                                            | Baseline only           | `resizable` adds native CSS `resize: horizontal` on the root as a zero-JS fallback (works pre-hydration, respects the same `min-width`/`max-width`); once mounted (`data-hydrated`) it is switched off (`resize-none`) in favor of the custom `role="separator"` handle, which alone provides the accessible name, `aria-valuenow`, keyboard nudge, snap-to-collapse, and a consistent cross-browser affordance the native resize grip cannot |
+| Keyboard nudge, snap-to-collapse                                          | No                      | Inherently require reading pointer/key input; no CSS equivalent                                                                                                                                                                                                                                                                                                                                                                               |
 
 The native `resize` grip renders at the box's corner and is not stylable consistently across
 browsers (Chromium exposes `::-webkit-resizer`; Firefox does not) — it is a functional, not visual,
@@ -433,46 +530,56 @@ fallback for the brief pre-hydration window, not a replacement for the handle's 
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography | .text-body-sm |
-| surface | `var(--bg-surface)` |
-| text | `var(--text-default)` |
-| spacing | `var(--spacing-3)` |
-| shape | `var(--shape-elements)` |
-| ring | `var(--ring-color)` |
-| resize handle line | `var(--accent)`, `var(--border-2)` wide |
-| resize handle hit area | `var(--spacing-xs)` |
-| rail width bounds | `var(--container-3xs)` … `var(--container-sm)` (via `minWidthToken` / `maxWidthToken`) |
-| collapsed preview sliver | `var(--size-10)` |
-| collapsed edge zone | `var(--size-6)` at rest, `var(--size-10)` while previewing; `cursor: col-resize` |
-| expand button offset past the edge | `var(--spacing-xxs)` (container padding, so the boxes stay flush) |
+| Region                             | Token (DESIGN.md)                                                                      |
+| ---------------------------------- | -------------------------------------------------------------------------------------- |
+| typography                         | .text-body-sm                                                                          |
+| surface                            | `var(--bg-surface)`                                                                    |
+| text                               | `var(--text-default)`                                                                  |
+| spacing                            | `var(--spacing-3)`                                                                     |
+| shape                              | `var(--shape-control)`                                                                 |
+| ring                               | `var(--ring-color)`                                                                    |
+| resize handle line                 | `var(--accent)`, `var(--border-width-2)` wide                                          |
+| resize handle hit area             | `var(--spacing-xs)`                                                                    |
+| rail width bounds                  | `var(--container-3xs)` … `var(--container-sm)` (via `minWidthToken` / `maxWidthToken`) |
+| collapsed preview sliver           | `var(--size-10)`                                                                       |
+| collapsed edge zone                | `var(--size-6)` at rest, `var(--size-10)` while previewing; `cursor: col-resize`       |
+| expand button offset past the edge | `var(--spacing-2xs)` (container padding, so the boxes stay flush)                      |
 
 The `<nav>` region hands its own fill down to the rows inside it as
-`--menu-item-ring-offset` and `--menu-ring-offset`, both `var(--bg-surface)`. That is what makes a
-focus ring on a `MenuItem` or any `Menu` row read against the sidebar rather than against the page
+`--sidebar-menu-item-ring-offset` and `--sidebar-menu-ring-offset`, both `var(--bg-surface)`. That is what makes a
+focus ring on a `SidebarMenuItem` or any `SidebarMenu` row read against the sidebar rather than against the page
 canvas the tokens fall back to.
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `Escape` closes overlays where applicable.
   The **scroll viewport is not a tab stop** (`tabindex="-1"` on the built-in `ScrollArea`): a scroll
-  region needs one only when nothing inside it is focusable, and this one holds a `Menu` of rows —
+  region needs one only when nothing inside it is focusable, and this one holds a `SidebarMenu` of rows —
   so `Tab` reaches the first row directly instead of the box around it.
-  The region also keeps `var(--spacing-xxs)` of padding — and the same as `scroll-padding` — inside
+  The region also keeps `var(--spacing-2xs)` of padding — and the same as `scroll-padding` — inside
   the clip, because the first row's focus ring (`ring-2` over `ring-offset-2`) reaches 4 px past the
   row and a viewport flush against it would cut the ring off.
-  The **drag handle is a focusable `role="separator"`**, so the gesture has a keyboard equivalent:
+  The **drag handle is a focusable `role="separator"`** with an inset focus ring (`focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color)`), inset because the rail clips anything drawn past its edge, so the gesture has a keyboard equivalent:
   `ArrowLeft` / `ArrowRight` nudge the width, `ArrowLeft` past the snap boundary collapses, and
   `ArrowRight` from the collapsed splitter brings the rail back. Pointer-wise that same collapsed
   splitter is click-to-restore as well as drag-to-size, so the edge is never a drag-only control.
+  Right-to-left: the rail sits on the inline start, so in an `rtl` subtree the keys and the drag
+  mirror (`ArrowLeft` and a leftward drag widen it, `ArrowRight` narrows it), the expand affordance
+  slides in from the right, and its tooltip opens on the left.
+- **Shortcut** (`shortcut`): Ctrl+B / Cmd+B toggles `open` from anywhere on the page, except
+  while focus is in an input, a textarea, a select or a contenteditable host, and not when another
+  handler already called `preventDefault`. The collapse and expand triggers announce it with
+  `aria-keyshortcuts="Control+B Meta+B"`.
+- **Icon rail** (`collapsible="icon"`): every row keeps its label as its accessible name (visually
+  hidden, not removed) and shows it in a `Tooltip` on hover and focus, opening toward the inline
+  end (`right`, `left` under `rtl`). Activating a drill row in the rail expands the sidebar first.
 - ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component. Each
   separator is named (`resizeAriaLabel` / `expandAriaLabel`) because a bare separator announces
   nothing about what it sizes; the collapse trigger is named by `collapseAriaLabel`.
@@ -486,7 +593,7 @@ canvas the tokens fall back to.
 - A **collapsed rail carries `inert` and `aria-hidden`** — the content is still mounted so its width
   can animate, and it must not be reachable while it is out of the layout. That is why the control
   that brings it back is a sibling of the rail rather than inside it.
-- The **hidden checkbox that mirrors `collapsed`** (`__collapse-input`) carries `aria-hidden="true"`
+- The **hidden checkbox that mirrors the collapsed state (`!open`)** (`__collapse-input`) carries `aria-hidden="true"`
   and `tabindex="-1"`: it is a CSS state carrier, not a second control, so it is never reachable by
   keyboard or announced by a screen reader. The trigger's accessible name and role are unaffected —
   the consumer-facing control is still the `IconButton`.
@@ -498,10 +605,10 @@ canvas the tokens fall back to.
   wants, and it is not the only route — the trigger, the keyboard nudge, and double-click all reach
   the same state, so no capability depends on hitting it.
 
-## Stories (Storybook)
+## Examples
 
 - Default — the whole console rail: a header whose search field opens a ⌘K palette, grouped
-  navigation composed with `Menu` (an inline level and a drill level included), and a footer
+  navigation composed with `SidebarMenu` (an inline level and a drill level included), and a footer
   carrying the account identity and its menu. Deliberately **one** complete example rather than a
   ladder of header-only / footer-only variants: the regions are independent and each is visible
   here, while what actually needs demonstrating is how the parts sit together.
@@ -510,7 +617,43 @@ canvas the tokens fall back to.
   affordance that brings it back. None of that is expressible as an args delta on a static story,
   and the page morphing beside it needs a sibling to morph against.
 
-Every story composes `Menu`; none composes `SidebarGroup` (see Sub-components).
+- Icon Rail — **justified addition.** `collapsible="icon"` with `shortcut`, starting collapsed: the
+  icon rail, its tooltips, the `{ rail }` footer scope and the Ctrl+B toggle are a distinct
+  presentation and interaction that no args delta on Default shows.
+
+Every story composes `SidebarMenu` for its rows and groups.
+
+## Internationalization
+
+- All strings come from the locale catalog (`sidebar.label`, `sidebar.collapse`, `sidebar.expand`,
+  `sidebar.resize`, `sidebar.expandByDragging`) and each has an `*AriaLabel` prop override. The icon
+  rail adds no string: its tooltips show the consumer's own row labels.
+- Labels truncate with an ellipsis at full width; in the rail the label lives in the tooltip, which
+  wraps at `--container-3xs`.
+
+## Right-to-left
+
+- The sidebar sits on the inline start; logical utilities (`border-e`, `start-0`, `ps-`/`pe-`) mirror
+  it under `dir="rtl"`.
+- The drag and the arrow keys mirror (`logicalArrowKey`); the expand affordance slides in from the
+  right, and every tooltip (the expand button, the icon-rail rows) opens on the left.
+- The collapse / expand glyphs (`az-chevrons-left` / `-right`) keep their meaning through the
+  direction-aware placement of the trigger.
+
+## Responsive
+
+- The sidebar is a column of an app shell; below `md` the shell hides it or turns it into a drawer
+  (`app-layout` / `console-layout` own that, not the sidebar). Call `measure()` when it is revealed
+  after mount.
+- The icon rail is a fixed `var(--size-14)` column at every width; resizing is suspended while it is
+  collapsed and the drag from the rail grows it back past the minimum.
+
+## Performance
+
+- One `keydown` listener on the document while mounted (VueUse `useEventListener`, removed on scope
+  dispose); it returns immediately unless `shortcut` and `collapsible` are both set.
+- The rail renders the same rows as the full sidebar (no second tree); each rail row adds one
+  `Tooltip`, whose panel mounts only while it is open.
 
 ## Constraints — DO NOT
 
@@ -525,10 +668,9 @@ Every story composes `Menu`; none composes `SidebarGroup` (see Sub-components).
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Stories (Storybook)" section explicitly justifies the addition.
-- Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + per `variant` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
+- Do not edit `.claude/docs/DESIGN.md` or `.claude/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
 - Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).

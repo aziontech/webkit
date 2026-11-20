@@ -1,0 +1,35 @@
+{
+ "variants": [
+  {
+   "name": "Irreversible",
+   "summary": "The assistant proposes deleting a domain nobody uses: the card turns danger and Delete stays disabled until the reader types the domain name.",
+   "file": "blocks/ai/ai-action-approval/variants/irreversible.vue"
+  },
+  {
+   "name": "Approved",
+   "summary": "After Deploy: the card reads Approved, the deployment call completed, and the assistant reports the new build is live with the previous one kept for rollback.",
+   "file": "blocks/ai/ai-action-approval/variants/approved.vue"
+  },
+  {
+   "name": "Denied",
+   "summary": "After Deny: the card reads Denied, the deployment call is recorded as denied, and the assistant acknowledges that nothing was deployed.",
+   "file": "blocks/ai/ai-action-approval/variants/denied.vue"
+  },
+  {
+   "name": "Running",
+   "summary": "After Deploy: the card reads Approved, the deployment call runs under it and the composer shows Stop until it finishes.",
+   "file": "blocks/ai/ai-action-approval/variants/running.vue"
+  },
+  {
+   "name": "Error",
+   "summary": "The approved deployment fails: the deployment call reads failed, and the assistant says what failed and that production still serves the previous version, with Retry beside Copy.",
+   "file": "blocks/ai/ai-action-approval/variants/error.vue"
+  }
+ ],
+ "sfcFile": "blocks/ai/ai-action-approval/ai-action-approval.vue",
+ "guidelinesFile": "blocks/ai/ai-action-approval/guidelines.md",
+ "fileSources": {
+  "messages.ts": "blocks/ai/ai-action-approval/messages.ts",
+  "sample.ts": "blocks/ai/ai-action-approval/sample.ts"
+ }
+}

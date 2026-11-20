@@ -1,26 +1,23 @@
 <script setup lang="ts">
-  import { computed, inject, provide, useAttrs } from 'vue'
+  import { computed, provide, useAttrs } from 'vue'
 
-  import { TableInjectionKey, TableRowGroupKey } from '../injection-key'
+  import { TableRowGroupInjectionKey } from '../injection-key'
 
   defineOptions({
     name: 'TableBody',
     inheritAttrs: false
   })
 
-  provide(TableRowGroupKey, { hoverable: true })
+  provide(TableRowGroupInjectionKey, { hoverable: true })
 
   defineSlots<{
     default(): unknown
   }>()
 
   const attrs = useAttrs()
-  const ctx = inject(TableInjectionKey, null)
 
   const testId = computed<string>(
-    () =>
-      (attrs['data-testid'] as string | undefined) ??
-      (ctx ? `${ctx.testId}__body` : 'data-table__body')
+    () => (attrs['data-testid'] as string | undefined) ?? 'table-body'
   )
 </script>
 

@@ -1,0 +1,24 @@
+{
+ "variants": [
+  {
+   "name": "Required",
+   "summary": "MFA required for the account: the Switch on, no password-only warning; people without MFA still listed as Not set up until their next sign-in.",
+   "file": "blocks/account/account-mfa-settings/variants/required.vue"
+  },
+  {
+   "name": "Loading",
+   "summary": "The first load: the Switch disabled and the table's loading rows.",
+   "file": "blocks/account/account-mfa-settings/variants/loading.vue"
+  },
+  {
+   "name": "Error",
+   "summary": "The MFA status did not load: a danger Alert with Retry replaces the table and the Switch is disabled.",
+   "file": "blocks/account/account-mfa-settings/variants/error.vue"
+  }
+ ],
+ "sfcFile": "blocks/account/account-mfa-settings/account-mfa-settings.vue",
+ "guidelinesFile": "blocks/account/account-mfa-settings/guidelines.md",
+ "fileSources": {
+  "sample.ts": "blocks/account/account-mfa-settings/sample.ts"
+ }
+}

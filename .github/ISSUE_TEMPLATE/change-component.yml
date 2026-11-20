@@ -1,0 +1,61 @@
+name: Change a component
+description: Ask for a change to an existing WebKit component (a new prop or state, a new look, a behavior fix). An agent updates the spec first, then the code.
+title: 'change: <name>'
+labels: ['change-component', 'ai-flow']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This issue starts the **Change** stage of the component lifecycle
+        (`CONTRIBUTING.md`, section "Component lifecycle"). An agent updates the component's spec
+        (`.specs/<name>.md`) first, then the code, the examples and the visual baselines, and opens
+        a pull request. Describe the change you want to see; you do not need to design the API.
+        A broken pixel in the current component is a **Visual bug** instead.
+  - type: input
+    id: name
+    attributes:
+      label: Component
+      description: The component's name as the docs site shows it, in kebab-case (e.g. `button`, `date-picker`).
+      placeholder: date-picker
+    validations:
+      required: true
+  - type: textarea
+    id: change
+    attributes:
+      label: What changes
+      description: What the component should do or look like after the change. One change per issue.
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why
+      description: The screen, flow or user problem that needs it, with links when you have them.
+    validations:
+      required: true
+  - type: dropdown
+    id: breaking
+    attributes:
+      label: Does it break current uses?
+      description: Yes when a screen that uses the component today would look or behave differently without being edited (a removed or renamed option, a new default). The agent confirms it.
+      options:
+        - 'no'
+        - 'yes'
+        - unsure
+    validations:
+      required: true
+  - type: input
+    id: figma
+    attributes:
+      label: Figma URL
+      description: The Figma frame of the new design, if there is one.
+      placeholder: https://www.figma.com/design/<file>/<name>?node-id=<id>
+    validations:
+      required: false
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: Drag images here, today and the target. Light and dark when the change is visual.
+    validations:
+      required: false

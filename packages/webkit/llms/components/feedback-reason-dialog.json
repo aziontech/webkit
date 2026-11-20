@@ -1,0 +1,84 @@
+{
+ "name": "feedback-reason-dialog",
+ "binding": "FeedbackReasonDialog",
+ "import": "@aziontech/webkit/feedback-reason-dialog",
+ "treeShakeableImport": "@aziontech/webkit/feedback-reason-dialog",
+ "category": "ai",
+ "surface": "app",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Asks why an assistant response was not helpful, right after the thumbs-down in `ChatMessage.Feedback`: a small dialog with one required reason (radio buttons) and optional details, then Send feedback. It turns a bare thumbs-down into a signal the team can act on, without a page or a form of the owner's own. The owner opens it, sends the payload it emits and closes it.",
+ "setup": null,
+ "useWhen": [
+  "After a thumbs-down on an AI response, to collect the reason.",
+  "Any rating of generated content that needs a short, categorised reason."
+ ],
+ "avoidWhen": [
+  "General product feedback with several fields → a page or `Drawer` form.",
+  "A confirmation with no input → `ConfirmDialog`."
+ ],
+ "related": [
+  "`chat-message` — `ChatMessage.Feedback` holds the thumbs that open it.",
+  "`confirm-dialog` — the same dialog anatomy for a yes/no decision."
+ ],
+ "bestPractices": [
+  "Open it only after a thumbs-down; a thumbs-up needs no reason.",
+  "Keep the reasons short and mutually exclusive; the last is `Other`, and details stay optional.",
+  "Close it from the `submit` handler once the request succeeds; keep it open with `loading` while it is sent."
+ ],
+ "props": [
+  {
+   "name": "reasons",
+   "type": "{ value: string; label: string }[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Reasons offered, in order. Empty uses the catalog's five: inaccurate, not helpful, did not follow the request, unsafe or harmful, other."
+  },
+  {
+   "name": "loading",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "The feedback is being sent: Send feedback shows a spinner and the form is locked."
+  },
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Dialog title. Empty uses the locale catalog (`What went wrong?`)."
+  },
+  {
+   "name": "defaultOpen",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Initial open state when uncontrolled (`v-model:open` unbound)."
+  },
+  {
+   "name": "open",
+   "type": "boolean",
+   "default": "undefined as never",
+   "required": "false",
+   "doc": "Two-way value (`v-model:open`)."
+  }
+ ],
+ "events": [
+  {
+   "name": "submit",
+   "payload": "(event: SubmitEvent, payload: { reason: string; details: string })",
+   "notes": ""
+  }
+ ],
+ "slots": [],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/feedback-reason-dialog/default.vue"
+  }
+ ],
+ "docs": "components/feedback-reason-dialog.md"
+}

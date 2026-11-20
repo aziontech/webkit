@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The baseline Chip rendering its `label`.",
+   "file": "examples/chip/default.vue"
+  },
+  {
+   "name": "Variants",
+   "summary": "The three variants in the order they read in a filter surface: an applied value (the grey `filled` fill), an available one, and the control that adds one.",
+   "file": "examples/chip/variants.vue"
+  },
+  {
+   "name": "Sizes",
+   "summary": "Both sizes side by side.",
+   "file": "examples/chip/sizes.vue"
+  }
+ ]
+}

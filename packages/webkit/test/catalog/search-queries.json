@@ -1,0 +1,1490 @@
+{
+  "description": "Fixed query set for MCP search quality (M2.6). tool: blocks = search_blocks, components = search_components, suggest = suggest_component (block id, or component/section name). top1 is the expected first result; top3 lists every answer acceptable in the first three. A query with `pending` expects a name another v6 lane is still renaming: it is skipped until the catalog is regenerated.",
+  "queries": [
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "onboarding",
+      "top1": "account/account-onboarding-form",
+      "top3": ["account/account-onboarding-form"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "upgrade plan",
+      "top1": "account/account-change-plan-drawer",
+      "top3": ["account/account-change-plan-drawer"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "login",
+      "top1": "auth/auth-sign-in",
+      "top3": ["auth/auth-sign-in"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "sign up",
+      "top1": "auth/auth-sign-in",
+      "top3": ["auth/auth-sign-in"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "forgot password",
+      "top1": "auth/auth-sign-in",
+      "top3": ["auth/auth-sign-in"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "verify email",
+      "top1": "auth/auth-sign-in",
+      "top3": ["auth/auth-sign-in"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "manage users",
+      "top1": "account/account-users",
+      "top3": ["account/account-users"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "invite teammate",
+      "top1": "account/account-users",
+      "top3": ["account/account-users"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "api tokens",
+      "top1": "account/account-personal-tokens",
+      "top3": ["account/account-personal-tokens"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "audit log",
+      "top1": "account/account-activity-history",
+      "top3": ["account/account-activity-history"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "delete resource",
+      "top1": "edit/edit-delete-dialog",
+      "top3": ["edit/edit-delete-dialog"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "type to confirm delete",
+      "top1": "edit/edit-delete-dialog",
+      "top3": ["edit/edit-delete-dialog"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "create domain",
+      "top1": "create/create-drawer",
+      "top3": ["create/create-drawer"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "create resource page",
+      "top1": "create/create-page",
+      "top3": ["create/create-page"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "create wizard",
+      "top1": "create/create-wizard",
+      "top3": ["create/create-wizard", "create/create-deploy-template"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "import from github",
+      "top1": "create/create-hub",
+      "top3": ["create/create-hub", "create/create-deploy-template"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "deploy from template",
+      "top1": "create/create-deploy-template",
+      "top3": ["create/create-deploy-template"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "deploy success",
+      "top1": "create/create-deploy-success",
+      "top3": ["create/create-deploy-success"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "build logs",
+      "top1": "detail/detail-deployment-logs",
+      "top3": ["detail/detail-deployment-logs"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "billing",
+      "top1": "account/account-billing",
+      "top3": ["account/account-billing", "account/account-payment-method-card"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "invoices",
+      "top1": "account/account-billing",
+      "top3": ["account/account-billing", "account/account-payment-method-card"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "subscription",
+      "top1": "account/account-billing",
+      "top3": ["account/account-billing", "account/account-payment-method-card"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "checkout",
+      "top1": "account/account-change-plan-drawer",
+      "top3": ["account/account-change-plan-drawer"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "account settings",
+      "top1": "settings/settings-form",
+      "top3": ["settings/settings-form"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "my profile",
+      "top1": "settings/settings-form",
+      "top3": ["settings/settings-form"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "settings page",
+      "top1": "edit/edit-resource",
+      "top3": ["edit/edit-resource", "settings/settings-form"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "unsaved changes",
+      "top1": "edit/edit-resource",
+      "top3": ["edit/edit-resource"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "preferences page",
+      "top1": "settings/settings-form",
+      "top3": ["settings/settings-form"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "metrics dashboard",
+      "top1": "dashboard/dashboard-analytics",
+      "top3": ["dashboard/dashboard-analytics"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "traffic analytics",
+      "top1": "dashboard/dashboard-analytics",
+      "top3": ["dashboard/dashboard-analytics"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "security dashboard",
+      "top1": "dashboard/dashboard-security",
+      "top3": ["dashboard/dashboard-security"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "alerts",
+      "top1": "dashboard/dashboard-alerts",
+      "top3": ["dashboard/dashboard-alerts"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "home page",
+      "top1": "dashboard/dashboard-home",
+      "top3": ["dashboard/dashboard-home"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "uptime monitoring",
+      "top1": "dashboard/dashboard-service-monitoring",
+      "top3": ["dashboard/dashboard-service-monitoring"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "cost breakdown",
+      "top1": "dashboard/dashboard-breakdown",
+      "top3": ["dashboard/dashboard-breakdown"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "web vitals",
+      "top1": "dashboard/dashboard-health-score",
+      "top3": ["dashboard/dashboard-health-score"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "empty state",
+      "top1": "state/state-first-use",
+      "top3": ["state/state-first-use"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "loading skeleton",
+      "top1": "state/state-page-skeleton",
+      "top3": ["state/state-page-skeleton"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "form validation errors",
+      "top1": "state/state-form-validation",
+      "top3": ["state/state-form-validation"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "drag and drop upload",
+      "top1": "state/state-project-intake",
+      "top3": ["state/state-project-intake"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "object storage browser",
+      "top1": "view/view-file-browser",
+      "top3": ["view/view-file-browser"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "sql editor",
+      "top1": "view/view-query-editor",
+      "top3": ["view/view-query-editor"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "log explorer",
+      "top1": "view/view-events-explorer",
+      "top3": ["view/view-events-explorer"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "edge function editor",
+      "top1": "edit/edit-function",
+      "top3": ["edit/edit-function"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "environment variables",
+      "top1": "edit/edit-variables",
+      "top3": ["edit/edit-variables"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "rules engine",
+      "top1": "edit/edit-rule-builder",
+      "top3": ["edit/edit-rule-builder"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "dns records",
+      "top1": "detail/detail-dns-zone",
+      "top3": ["detail/detail-dns-zone"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "go-live checklist",
+      "top1": "detail/detail-production-checklist",
+      "top3": ["detail/detail-production-checklist"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "get started",
+      "top1": "detail/detail-get-started",
+      "top3": ["detail/detail-get-started"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "resource overview",
+      "top1": "detail/detail-resource",
+      "top3": ["detail/detail-resource"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "card grid",
+      "top1": "view/view-card",
+      "top3": ["view/view-card"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "app shell with sidebar",
+      "top1": "shell/shell-console",
+      "top3": ["shell/shell-console"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "docs layout",
+      "top1": "shell/shell-docs",
+      "top3": ["shell/shell-docs"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "landing page layout",
+      "top1": "shell/shell-site",
+      "top3": ["shell/shell-site"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "console header",
+      "top1": "shell/shell-console",
+      "top3": ["shell/shell-console"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "async job status",
+      "top1": "state/state-async-submit",
+      "top3": ["state/state-async-submit"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "nested drawer",
+      "top1": "create/create-drawer",
+      "top3": ["create/create-drawer"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "pt-BR",
+      "query": "cadastro",
+      "top1": "auth/auth-sign-in",
+      "top3": ["auth/auth-sign-in", "account/account-onboarding-form"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "pt-BR",
+      "query": "criar",
+      "top1": "create/create-page",
+      "top3": [
+        "create/create-page",
+        "create/create-drawer",
+        "create/create-wizard",
+        "create/create-hub"
+      ]
+    },
+    {
+      "tool": "blocks",
+      "lang": "pt-BR",
+      "query": "listagem",
+      "top1": "view/view-table",
+      "top3": ["view/view-table"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "pt-BR",
+      "query": "painel",
+      "top1": "dashboard/dashboard-analytics",
+      "top3": ["dashboard/dashboard-analytics", "dashboard/dashboard-home"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "pt-BR",
+      "query": "assinatura",
+      "top1": "account/account-billing",
+      "top3": ["account/account-billing", "account/account-payment-method-card"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "pt-BR",
+      "query": "fazer upgrade do plano",
+      "top1": "account/account-change-plan-drawer",
+      "top3": ["account/account-change-plan-drawer"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "pt-BR",
+      "query": "entrar",
+      "top1": "auth/auth-sign-in",
+      "top3": ["auth/auth-sign-in"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "pt-BR",
+      "query": "excluir",
+      "top1": "edit/edit-delete-dialog",
+      "top3": ["edit/edit-delete-dialog"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "pt-BR",
+      "query": "esqueci minha senha",
+      "top1": "auth/auth-sign-in",
+      "top3": ["auth/auth-sign-in"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "pt-BR",
+      "query": "tela de cadastro",
+      "top1": "auth/auth-sign-in",
+      "top3": ["auth/auth-sign-in"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "pt-BR",
+      "query": "primeiro acesso",
+      "top1": "dashboard/dashboard-home",
+      "top3": ["dashboard/dashboard-home", "account/account-onboarding-form"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "pt-BR",
+      "query": "configurações da conta",
+      "top1": "settings/settings-form",
+      "top3": ["settings/settings-form"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "pt-BR",
+      "query": "lista de usuários",
+      "top1": "account/account-users",
+      "top3": ["account/account-users"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "pt-BR",
+      "query": "convidar membro",
+      "top1": "account/account-users",
+      "top3": ["account/account-users"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "pt-BR",
+      "query": "variáveis de ambiente",
+      "top1": "edit/edit-variables",
+      "top3": ["edit/edit-variables"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "pt-BR",
+      "query": "editor de código",
+      "top1": "edit/edit-function",
+      "top3": ["edit/edit-function"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "pt-BR",
+      "query": "registros dns",
+      "top1": "detail/detail-dns-zone",
+      "top3": ["detail/detail-dns-zone"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "pt-BR",
+      "query": "estado vazio",
+      "top1": "state/state-first-use",
+      "top3": ["state/state-first-use"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "pt-BR",
+      "query": "carregando",
+      "top1": "state/state-page-skeleton",
+      "top3": ["state/state-page-skeleton"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "pt-BR",
+      "query": "métricas",
+      "top1": "dashboard/dashboard-analytics",
+      "top3": ["dashboard/dashboard-analytics"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "pt-BR",
+      "query": "faturas",
+      "top1": "account/account-billing",
+      "top3": ["account/account-billing", "account/account-payment-method-card"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "pt-BR",
+      "query": "trocar cartão",
+      "top1": "account/account-payment-method-card",
+      "top3": ["account/account-payment-method-card"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "pt-BR",
+      "query": "criar domínio",
+      "top1": "create/create-drawer",
+      "top3": ["create/create-drawer"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "pt-BR",
+      "query": "novo projeto",
+      "top1": "create/create-hub",
+      "top3": ["create/create-hub", "create/create-deploy-template"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "pt-BR",
+      "query": "assistente de criação",
+      "top1": "create/create-wizard",
+      "top3": ["create/create-wizard"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "pt-BR",
+      "query": "logs de build",
+      "top1": "detail/detail-deployment-logs",
+      "top3": ["detail/detail-deployment-logs"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "pt-BR",
+      "query": "painel de segurança",
+      "top1": "dashboard/dashboard-security",
+      "top3": ["dashboard/dashboard-security"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "pt-BR",
+      "query": "alterações não salvas",
+      "top1": "edit/edit-resource",
+      "top3": ["edit/edit-resource"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "pt-BR",
+      "query": "tokens de api",
+      "top1": "account/account-personal-tokens",
+      "top3": ["account/account-personal-tokens"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "pt-BR",
+      "query": "histórico de atividades",
+      "top1": "account/account-activity-history",
+      "top3": ["account/account-activity-history"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "pt-BR",
+      "query": "menu lateral",
+      "top1": "shell/shell-console",
+      "top3": ["shell/shell-console"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "pt-BR",
+      "query": "validação de formulário",
+      "top1": "state/state-form-validation",
+      "top3": ["state/state-form-validation"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "pt-BR",
+      "query": "upload de arquivos",
+      "top1": "state/state-project-intake",
+      "top3": ["state/state-project-intake", "view/view-file-browser"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "pt-BR",
+      "query": "boas-vindas",
+      "top1": "dashboard/dashboard-home",
+      "top3": ["dashboard/dashboard-home", "account/account-onboarding-form"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "pt-BR",
+      "query": "deploy concluído",
+      "top1": "create/create-deploy-success",
+      "top3": ["create/create-deploy-success"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "es",
+      "query": "iniciar sesión",
+      "top1": "auth/auth-sign-in",
+      "top3": ["auth/auth-sign-in"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "es",
+      "query": "registrarse",
+      "top1": "auth/auth-sign-in",
+      "top3": ["auth/auth-sign-in"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "es",
+      "query": "crear cuenta",
+      "top1": "auth/auth-sign-in",
+      "top3": ["auth/auth-sign-in"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "es",
+      "query": "olvidé mi contraseña",
+      "top1": "auth/auth-sign-in",
+      "top3": ["auth/auth-sign-in"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "es",
+      "query": "lista de usuarios",
+      "top1": "account/account-users",
+      "top3": ["account/account-users"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "es",
+      "query": "eliminar recurso",
+      "top1": "edit/edit-delete-dialog",
+      "top3": ["edit/edit-delete-dialog"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "es",
+      "query": "panel de métricas",
+      "top1": "dashboard/dashboard-analytics",
+      "top3": ["dashboard/dashboard-analytics"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "es",
+      "query": "facturación",
+      "top1": "account/account-billing",
+      "top3": ["account/account-billing", "account/account-payment-method-card"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "es",
+      "query": "cambiar plan",
+      "top1": "account/account-change-plan-drawer",
+      "top3": ["account/account-change-plan-drawer"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "es",
+      "query": "mejorar plan",
+      "top1": "account/account-change-plan-drawer",
+      "top3": ["account/account-change-plan-drawer"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "es",
+      "query": "configuración de la cuenta",
+      "top1": "settings/settings-form",
+      "top3": ["settings/settings-form"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "es",
+      "query": "variables de entorno",
+      "top1": "edit/edit-variables",
+      "top3": ["edit/edit-variables"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "es",
+      "query": "editor de consultas sql",
+      "top1": "view/view-query-editor",
+      "top3": ["view/view-query-editor"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "es",
+      "query": "estado vacío",
+      "top1": "state/state-first-use",
+      "top3": ["state/state-first-use"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "es",
+      "query": "crear dominio",
+      "top1": "create/create-drawer",
+      "top3": ["create/create-drawer"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "es",
+      "query": "zona dns",
+      "top1": "detail/detail-dns-zone",
+      "top3": ["detail/detail-dns-zone"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "es",
+      "query": "incorporación de usuarios",
+      "top1": "account/account-onboarding-form",
+      "top3": ["account/account-onboarding-form"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "es",
+      "query": "suscripción",
+      "top1": "account/account-billing",
+      "top3": ["account/account-billing", "account/account-payment-method-card"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "es",
+      "query": "cargando",
+      "top1": "state/state-page-skeleton",
+      "top3": ["state/state-page-skeleton"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "es",
+      "query": "registro de auditoría",
+      "top1": "account/account-activity-history",
+      "top3": ["account/account-activity-history"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "es",
+      "query": "monitoreo",
+      "top1": "dashboard/dashboard-service-monitoring",
+      "top3": ["dashboard/dashboard-service-monitoring"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "es",
+      "query": "panel de seguridad",
+      "top1": "dashboard/dashboard-security",
+      "top3": ["dashboard/dashboard-security"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "es",
+      "query": "asistente de creación",
+      "top1": "create/create-wizard",
+      "top3": ["create/create-wizard"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "remove user",
+      "top1": "account/account-users",
+      "top3": ["account/account-users", "edit/edit-delete-dialog"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "signup page",
+      "top1": "auth/auth-sign-in",
+      "top3": ["auth/auth-sign-in"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "pt-BR",
+      "query": "nova variável",
+      "top1": "edit/edit-variables",
+      "top3": ["edit/edit-variables"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "pt-BR",
+      "query": "tela inicial",
+      "top1": "dashboard/dashboard-home",
+      "top3": ["dashboard/dashboard-home"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "pt-BR",
+      "query": "excluir domínio",
+      "top1": "edit/edit-delete-dialog",
+      "top3": ["edit/edit-delete-dialog", "detail/detail-domains-card"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "es",
+      "query": "crear proyecto",
+      "top1": "create/create-hub",
+      "top3": ["create/create-hub", "create/create-deploy-template"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "es",
+      "query": "panel de alertas",
+      "top1": "dashboard/dashboard-alerts",
+      "top3": ["dashboard/dashboard-alerts"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "es",
+      "query": "pantalla de registro",
+      "top1": "auth/auth-sign-in",
+      "top3": ["auth/auth-sign-in"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "es",
+      "query": "cambiar contraseña",
+      "top1": "auth/auth-sign-in",
+      "top3": ["auth/auth-sign-in"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "es",
+      "query": "página de facturación",
+      "top1": "account/account-billing",
+      "top3": ["account/account-billing", "account/account-payment-method-card"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "es",
+      "query": "pantalla de inicio",
+      "top1": "dashboard/dashboard-home",
+      "top3": ["dashboard/dashboard-home"]
+    },
+    {
+      "tool": "components",
+      "lang": "en",
+      "query": "date picker",
+      "top1": "date-picker",
+      "top3": ["date-picker"],
+      "pending": "calendar is renamed to date-picker by the inputs lane; un-skip after the catalog is regenerated"
+    },
+    {
+      "tool": "components",
+      "lang": "en",
+      "query": "dropdown",
+      "top1": "dropdown-menu",
+      "top3": ["dropdown-menu"]
+    },
+    {
+      "tool": "components",
+      "lang": "en",
+      "query": "multi select",
+      "top1": "multi-select",
+      "top3": ["multi-select"]
+    },
+    {
+      "tool": "components",
+      "lang": "en",
+      "query": "toggle",
+      "top1": "switch",
+      "top3": ["switch", "toggle-group"]
+    },
+    {
+      "tool": "components",
+      "lang": "en",
+      "query": "notification",
+      "top1": "toast",
+      "top3": ["toast"]
+    },
+    {
+      "tool": "components",
+      "lang": "en",
+      "query": "loader",
+      "top1": "spinner",
+      "top3": ["spinner"]
+    },
+    {
+      "tool": "components",
+      "lang": "en",
+      "query": "progress bar",
+      "top1": "progress",
+      "top3": ["progress"]
+    },
+    {
+      "tool": "components",
+      "lang": "en",
+      "query": "text input",
+      "top1": "input",
+      "top3": ["input"]
+    },
+    {
+      "tool": "components",
+      "lang": "en",
+      "query": "password field",
+      "top1": "password-input",
+      "top3": ["password-input"]
+    },
+    {
+      "tool": "components",
+      "lang": "en",
+      "query": "phone number",
+      "top1": "phone-input",
+      "top3": ["phone-input"]
+    },
+    {
+      "tool": "components",
+      "lang": "en",
+      "query": "dropzone",
+      "top1": "file-dropzone",
+      "top3": ["file-dropzone"]
+    },
+    {
+      "tool": "components",
+      "lang": "en",
+      "query": "code snippet",
+      "top1": "code-block",
+      "top3": ["code-block"]
+    },
+    {
+      "tool": "components",
+      "lang": "en",
+      "query": "copy to clipboard",
+      "top1": "copy-button",
+      "top3": ["copy-button"]
+    },
+    {
+      "tool": "components",
+      "lang": "en",
+      "query": "status indicator",
+      "top1": "status-indicator",
+      "top3": ["status-indicator"]
+    },
+    {
+      "tool": "components",
+      "lang": "en",
+      "query": "keyboard shortcut",
+      "top1": "kbd",
+      "top3": ["kbd"]
+    },
+    {
+      "tool": "components",
+      "lang": "en",
+      "query": "command palette",
+      "top1": "command",
+      "top3": ["command"]
+    },
+    {
+      "tool": "components",
+      "lang": "en",
+      "query": "side sheet",
+      "top1": "drawer",
+      "top3": ["drawer"]
+    },
+    {
+      "tool": "components",
+      "lang": "en",
+      "query": "confirm dialog",
+      "top1": "confirm-dialog",
+      "top3": ["confirm-dialog", "dialog"]
+    },
+    {
+      "tool": "components",
+      "lang": "en",
+      "query": "tree view",
+      "top1": "tree",
+      "top3": ["tree"]
+    },
+    {
+      "tool": "components",
+      "lang": "en",
+      "query": "donut chart",
+      "top1": "donut-chart",
+      "top3": ["donut-chart"]
+    },
+    {
+      "tool": "components",
+      "lang": "en",
+      "query": "kpi tile",
+      "top1": "stat-tile",
+      "top3": ["stat-tile"]
+    },
+    {
+      "tool": "components",
+      "lang": "en",
+      "query": "radio",
+      "top1": "radio-group",
+      "top3": ["radio-group", "radio-group-item"]
+    },
+    {
+      "tool": "components",
+      "lang": "pt-BR",
+      "query": "botão",
+      "top1": "button",
+      "top3": ["button"]
+    },
+    {
+      "tool": "components",
+      "lang": "pt-BR",
+      "query": "caixa de seleção",
+      "top1": "checkbox",
+      "top3": ["checkbox"]
+    },
+    {
+      "tool": "components",
+      "lang": "pt-BR",
+      "query": "seletor de data",
+      "top1": "date-picker",
+      "top3": ["date-picker"],
+      "pending": "calendar is renamed to date-picker by the inputs lane; un-skip after the catalog is regenerated"
+    },
+    {
+      "tool": "components",
+      "lang": "pt-BR",
+      "query": "abas",
+      "top1": "tabs",
+      "top3": ["tabs", "page-tabs"]
+    },
+    {
+      "tool": "components",
+      "lang": "pt-BR",
+      "query": "notificação",
+      "top1": "toast",
+      "top3": ["toast"]
+    },
+    {
+      "tool": "components",
+      "lang": "pt-BR",
+      "query": "campo de texto",
+      "top1": "input",
+      "top3": ["input"]
+    },
+    {
+      "tool": "components",
+      "lang": "pt-BR",
+      "query": "senha",
+      "top1": "password-input",
+      "top3": ["password-input"]
+    },
+    {
+      "tool": "components",
+      "lang": "pt-BR",
+      "query": "telefone",
+      "top1": "phone-input",
+      "top3": ["phone-input"]
+    },
+    {
+      "tool": "components",
+      "lang": "pt-BR",
+      "query": "menu suspenso",
+      "top1": "dropdown-menu",
+      "top3": ["dropdown-menu"]
+    },
+    {
+      "tool": "components",
+      "lang": "pt-BR",
+      "query": "barra de progresso",
+      "top1": "progress",
+      "top3": ["progress"]
+    },
+    {
+      "tool": "components",
+      "lang": "pt-BR",
+      "query": "gaveta",
+      "top1": "drawer",
+      "top3": ["drawer"]
+    },
+    {
+      "tool": "components",
+      "lang": "pt-BR",
+      "query": "janela modal",
+      "top1": "dialog",
+      "top3": ["dialog"]
+    },
+    {
+      "tool": "components",
+      "lang": "pt-BR",
+      "query": "paginação",
+      "top1": "pagination",
+      "top3": ["pagination"]
+    },
+    {
+      "tool": "components",
+      "lang": "pt-BR",
+      "query": "interruptor",
+      "top1": "switch",
+      "top3": ["switch"]
+    },
+    {
+      "tool": "components",
+      "lang": "pt-BR",
+      "query": "tabela",
+      "top1": "table",
+      "top3": ["table"]
+    },
+    {
+      "tool": "components",
+      "lang": "es",
+      "query": "botón",
+      "top1": "button",
+      "top3": ["button"]
+    },
+    {
+      "tool": "components",
+      "lang": "es",
+      "query": "casilla de verificación",
+      "top1": "checkbox",
+      "top3": ["checkbox"]
+    },
+    {
+      "tool": "components",
+      "lang": "es",
+      "query": "selector de fecha",
+      "top1": "date-picker",
+      "top3": ["date-picker"],
+      "pending": "calendar is renamed to date-picker by the inputs lane; un-skip after the catalog is regenerated"
+    },
+    {
+      "tool": "components",
+      "lang": "es",
+      "query": "pestañas",
+      "top1": "tabs",
+      "top3": ["tabs", "page-tabs"]
+    },
+    {
+      "tool": "components",
+      "lang": "es",
+      "query": "notificación",
+      "top1": "toast",
+      "top3": ["toast"]
+    },
+    {
+      "tool": "components",
+      "lang": "es",
+      "query": "contraseña",
+      "top1": "password-input",
+      "top3": ["password-input"]
+    },
+    {
+      "tool": "components",
+      "lang": "es",
+      "query": "menú desplegable",
+      "top1": "dropdown-menu",
+      "top3": ["dropdown-menu"]
+    },
+    {
+      "tool": "components",
+      "lang": "es",
+      "query": "cuadro de diálogo",
+      "top1": "dialog",
+      "top3": ["dialog"]
+    },
+    {
+      "tool": "components",
+      "lang": "es",
+      "query": "paginación",
+      "top1": "pagination",
+      "top3": ["pagination"]
+    },
+    {
+      "tool": "components",
+      "lang": "es",
+      "query": "barra de progreso",
+      "top1": "progress",
+      "top3": ["progress"]
+    },
+    {
+      "tool": "components",
+      "lang": "es",
+      "query": "tabla",
+      "top1": "table",
+      "top3": ["table"]
+    },
+    {
+      "tool": "suggest",
+      "lang": "en",
+      "query": "onboarding",
+      "top1": "account/account-onboarding-form",
+      "top3": ["account/account-onboarding-form"]
+    },
+    {
+      "tool": "suggest",
+      "lang": "en",
+      "query": "upgrade plan",
+      "top1": "account/account-change-plan-drawer",
+      "top3": ["account/account-change-plan-drawer"]
+    },
+    {
+      "tool": "suggest",
+      "lang": "en",
+      "query": "login page",
+      "top1": "auth/auth-sign-in",
+      "top3": ["auth/auth-sign-in"]
+    },
+    {
+      "tool": "suggest",
+      "lang": "en",
+      "query": "button",
+      "top1": "button",
+      "top3": ["button"]
+    },
+    {
+      "tool": "suggest",
+      "lang": "en",
+      "query": "modal",
+      "top1": "dialog",
+      "top3": ["dialog"]
+    },
+    {
+      "tool": "suggest",
+      "lang": "en",
+      "query": "pricing page",
+      "top1": "pricing-plans-section",
+      "top3": ["pricing-plans-section"]
+    },
+    {
+      "tool": "suggest",
+      "lang": "en",
+      "query": "users list page",
+      "top1": "view/view-table",
+      "top3": ["view/view-table"]
+    },
+    {
+      "tool": "suggest",
+      "lang": "pt-BR",
+      "query": "tela de cadastro",
+      "top1": "auth/auth-sign-in",
+      "top3": ["auth/auth-sign-in"]
+    },
+    {
+      "tool": "suggest",
+      "lang": "pt-BR",
+      "query": "botão",
+      "top1": "button",
+      "top3": ["button"]
+    },
+    {
+      "tool": "suggest",
+      "lang": "pt-BR",
+      "query": "tela de listagem",
+      "top1": "view/view-table",
+      "top3": ["view/view-table"]
+    },
+    {
+      "tool": "suggest",
+      "lang": "es",
+      "query": "página de inicio de sesión",
+      "top1": "auth/auth-sign-in",
+      "top3": ["auth/auth-sign-in"]
+    },
+    {
+      "tool": "suggest",
+      "lang": "es",
+      "query": "botón",
+      "top1": "button",
+      "top3": ["button"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "product page",
+      "top1": "shell/shell-site",
+      "top3": ["shell/shell-site"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "solution page",
+      "top1": "shell/shell-site",
+      "top3": ["shell/shell-site"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "landing page",
+      "top1": "shell/shell-site",
+      "top3": ["shell/shell-site"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "en",
+      "query": "marketing page",
+      "top1": "shell/shell-site",
+      "top3": ["shell/shell-site"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "pt-BR",
+      "query": "página de produto",
+      "top1": "shell/shell-site",
+      "top3": ["shell/shell-site"]
+    },
+    {
+      "tool": "blocks",
+      "lang": "es",
+      "query": "página de solución",
+      "top1": "shell/shell-site",
+      "top3": ["shell/shell-site"]
+    },
+    {
+      "tool": "components",
+      "lang": "en",
+      "query": "product page",
+      "top1": "hero-section",
+      "top3": ["hero-section", "closing-call-to-action-section"]
+    },
+    {
+      "tool": "components",
+      "lang": "en",
+      "query": "solution page",
+      "top1": "hero-section",
+      "top3": ["hero-section", "capability-grid-section", "template-gallery-section"]
+    },
+    {
+      "tool": "components",
+      "lang": "en",
+      "query": "landing page",
+      "top1": "hero-section",
+      "top3": ["hero-section", "closing-call-to-action-section"]
+    },
+    {
+      "tool": "components",
+      "lang": "en",
+      "query": "pricing page",
+      "top1": "pricing-plans-section",
+      "top3": ["pricing-plans-section"]
+    },
+    {
+      "tool": "components",
+      "lang": "es",
+      "query": "página de aterrizaje",
+      "top1": "hero-section",
+      "top3": ["hero-section", "closing-call-to-action-section"]
+    },
+    {
+      "tool": "components",
+      "lang": "pt-BR",
+      "query": "página de produto",
+      "top1": "hero-section",
+      "top3": ["hero-section", "closing-call-to-action-section"]
+    },
+    {
+      "tool": "suggest",
+      "lang": "en",
+      "query": "product page",
+      "top1": "shell/shell-site",
+      "top3": ["shell/shell-site"]
+    },
+    {
+      "tool": "suggest",
+      "lang": "en",
+      "query": "landing page",
+      "top1": "shell/shell-site",
+      "top3": ["shell/shell-site"]
+    },
+    {
+      "tool": "suggest",
+      "lang": "pt-BR",
+      "query": "página de solução",
+      "top1": "shell/shell-site",
+      "top3": ["shell/shell-site"]
+    },
+    {
+      "tool": "suggest",
+      "lang": "en",
+      "query": "a dropdown to pick one region from a list",
+      "top1": "select",
+      "top3": ["select"]
+    },
+    {
+      "tool": "suggest",
+      "lang": "en",
+      "query": "pick a region",
+      "top1": "select",
+      "top3": ["select"]
+    },
+    {
+      "tool": "suggest",
+      "lang": "en",
+      "query": "user avatar menu in the header",
+      "top1": "console-layout",
+      "top3": ["console-layout", "dropdown-menu"]
+    },
+    {
+      "tool": "suggest",
+      "lang": "en",
+      "query": "code snippet with copy button",
+      "top1": "code-block",
+      "top3": ["code-block"]
+    },
+    {
+      "tool": "suggest",
+      "lang": "en",
+      "query": "tag input for adding multiple emails",
+      "top1": "tag-editor",
+      "top3": ["tag-editor", "multi-select"]
+    },
+    {
+      "tool": "suggest",
+      "lang": "en",
+      "query": "login with API token",
+      "top1": "auth/auth-sign-in",
+      "top3": ["auth/auth-sign-in"]
+    },
+    {
+      "tool": "suggest",
+      "lang": "en",
+      "query": "confirm delete",
+      "top1": "confirm-dialog",
+      "top3": ["confirm-dialog", "edit/edit-delete-dialog"]
+    },
+    {
+      "tool": "suggest",
+      "lang": "en",
+      "query": "top list",
+      "top1": "bar-list",
+      "top3": ["bar-list"]
+    },
+    {
+      "tool": "components",
+      "lang": "en",
+      "query": "ranked list",
+      "top1": "bar-list",
+      "top3": ["bar-list"]
+    },
+    {
+      "tool": "components",
+      "lang": "pt-BR",
+      "query": "lista ranqueada",
+      "top1": "bar-list",
+      "top3": ["bar-list"]
+    }
+  ]
+}

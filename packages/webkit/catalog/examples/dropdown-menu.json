@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Default dropdown with a single unlabeled group of six options and no left/right affordances. Click the trigger to open; controls drive side, align, sideOffset, and disabled.",
+   "file": "examples/dropdown-menu/default.vue"
+  },
+  {
+   "name": "Groups",
+   "summary": "Two labeled groups (`Account`, `Workspace`) separated by an automatic top divider on the second group. One option carries a `command` hint, another is `selected` — the central anatomy of this component.",
+   "file": "examples/dropdown-menu/groups.vue"
+  },
+  {
+   "name": "States",
+   "summary": "Click the trigger to open the panel and see each spec-declared option state side-by-side: `default`, `selected`, and `disabled`. The `hover` and `focus-visible` states are interactive — focus an option with the keyboard (`Down` / `Up`) or hover with the pointer to see them.",
+   "file": "examples/dropdown-menu/states.vue"
+  }
+ ]
+}

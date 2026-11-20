@@ -1,0 +1,86 @@
+{
+ "name": "eyebrow",
+ "binding": "Eyebrow",
+ "import": "@aziontech/webkit/eyebrow",
+ "treeShakeableImport": "@aziontech/webkit/eyebrow",
+ "category": "content",
+ "surface": "app",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Overline is the short uppercase label set above a headline to name the section, panel or group it opens (the \"eyebrow\"). It renders its default slot in `.text-overline-md` in the brand orange (`--text-brand`: the logo orange `#F3652B` in light and dark), optionally behind a preset code-style prefix (`//`, `<>`, `</>`) and followed by a blinking terminal-style cursor. It is purely presentational text with no interaction; the marketing headers (`module-header`, `hero-title`, `call-to-action`, `media-split`, `marquee`) and several page sections render their eyebrow (the `eyebrow` prop, or `label` on `marquee`) through it.",
+ "setup": null,
+ "useWhen": [
+  "Name a section, panel or column group with one or two words set above its headline.",
+  "Build a custom marketing header that must match the eyebrow treatment of `module-header` and `hero-title` (the `//` prefix and the blinking cursor).",
+  "Label a band inside a page section (a comparison group, a closing panel) with the same uppercase code-style mark."
+ ],
+ "avoidWhen": [
+  "The header has a headline, description and actions → use `module-header` (or `hero-title` for the hero), which already renders its `eyebrow` through Eyebrow.",
+  "The text is a status, count or category attached to an item → use `tag` or `badge`.",
+  "The text is the heading itself → use a real heading element; Eyebrow renders a `div` and is not a heading.",
+  "The text is a keyboard shortcut → use `kbd`.",
+  "The text is a field label → use `Field.Label`."
+ ],
+ "related": [
+  "`module-header` — the framed section header; renders its `eyebrow` as an Eyebrow with `prefix=\"//\"` and `cursor`.",
+  "`hero-title` — the hero copy block; renders its `eyebrow` as an Eyebrow closed by the cursor, with `single-line` turned off.",
+  "`tag` — a compact label attached to an item, not a heading companion.",
+  "`badge` — a compact count or status indicator."
+ ],
+ "bestPractices": [
+  "Keep the label to one or two words: it is set uppercase and, with the default `single-line`, stays on one line whenever it fits its container.",
+  "Turn `single-line` off only when the label can be longer than its container (narrow columns, translated copy); the label then wraps under `text-pretty`, which avoids a lone word on the last line.",
+  "Use a `prefix` from the preset set only (`//`, `<>`, `</>`); the prefix is decorative and hidden from screen readers (`aria-hidden=\"true\"`), so never put meaning in it.",
+  "Use `cursor` for one eyebrow per view at most; it blinks four times and then stays solid, and never blinks under reduced motion.",
+  "Keep the semantic heading in the element after the Eyebrow; the Eyebrow itself carries no heading role."
+ ],
+ "props": [
+  {
+   "name": "singleLine",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Keeps the prefix unbroken and the label on one line while it fits; a longer label wraps instead of overflowing."
+  },
+  {
+   "name": "cursor",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows a blinking terminal-style cursor after the label."
+  },
+  {
+   "name": "prefix",
+   "type": "'' | '//' | '<>' | '</>'",
+   "default": "''",
+   "required": "false",
+   "doc": "Preset prefix rendered before the label; empty renders no prefix."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "The label text, rendered uppercase in the brand primary color."
+  }
+ ],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/eyebrow/default.vue"
+  },
+  {
+   "name": "Prefixes",
+   "file": "examples/eyebrow/prefixes.vue"
+  },
+  {
+   "name": "Cursor",
+   "file": "examples/eyebrow/cursor.vue"
+  }
+ ],
+ "docs": "components/eyebrow.md"
+}

@@ -1,0 +1,26 @@
+{
+  "component": "avatar-group",
+  "title": "Components/Content/AvatarGroup",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Five people, three shown overlapping and a `+2` button that lists the other names.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "Every `size` side by side: `small` for table cells, `medium` for cards and headers, `large` for a profile band.",
+      "file": "sizes.vue"
+    },
+    {
+      "name": "Overflow",
+      "summary": "A 40-person team: four avatars and a `+36` button whose list scrolls through the hidden names.",
+      "file": "overflow.vue"
+    },
+    {
+      "name": "Vertical",
+      "summary": "`orientation=\"vertical\"` stacks the avatars down a narrow rail, such as who is viewing a page now.",
+      "file": "vertical.vue"
+    }
+  ]
+}

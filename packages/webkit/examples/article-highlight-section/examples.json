@@ -1,0 +1,35 @@
+{
+  "component": "article-highlight-section",
+  "title": "Components/Marketing/Sections/ArticleHighlightSection",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The Blog band with its four newest posts: the first is featured over a four-across wall of titles. Click a title, or move along the wall with the arrow, Home and End keys, to swap the featured article. WebKit ships no editorial media, so the covers here are the neutral `@aziontech/webkit/assets/placeholder-image.svg`; pass your own image URLs.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Selected",
+      "summary": "`v-model` (the selected index) opens the band on its second article; a click or an arrow key writes the new index back.",
+      "file": "selected.vue"
+    },
+    {
+      "name": "Autoplay",
+      "summary": "`autoplay` advances the featured article every `autoplay-interval` milliseconds, with a progress line along the panel's foot; it pauses while the pointer is over the band or keyboard focus is inside it, and stays still under reduced motion. `fill` makes the band fill the first viewport under the sticky site header from the large breakpoint, as the blog opens. WebKit ships no editorial media, so the covers here are the neutral `@aziontech/webkit/assets/placeholder-image.svg`; pass your own image URLs.",
+      "file": "autoplay.vue"
+    }
+  ],
+  "site": [
+    {
+      "name": "Featured",
+      "summary": "The Blog page's band: its five newest posts, the first featured over a wall of five titles in one row, as on azion.com. WebKit ships no editorial media, so the covers here are the neutral `@aziontech/webkit/assets/placeholder-image.svg`; pass your own image URLs.",
+      "file": "site-featured.vue",
+      "json": "site-featured.json"
+    }
+  ],
+  "siteTitle": "Templates/Marketing/Articles/ArticleHighlightSection",
+  "sitePreview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "siteStories": ["Featured", "FeaturedJson"]
+}

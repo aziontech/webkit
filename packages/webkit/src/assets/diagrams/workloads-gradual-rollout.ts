@@ -6,10 +6,10 @@ const spec: DiagramSpec = {
   nodes: [
     {
       key: 'workload',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'Workload',
       title: 'shop-prod',
-      icon: 'ai ai-workloads',
+      icon: 'az az-workloads',
       status: {
         label: 'Live',
         severity: 'success'
@@ -18,16 +18,16 @@ const spec: DiagramSpec = {
     },
     {
       key: 'split',
-      kind: 'pill',
+      type: 'pill',
       title: 'Traffic split',
       active: true
     },
     {
       key: 'next',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'New deployment',
       title: 'storefront v2',
-      icon: 'ai ai-edge-application',
+      icon: 'az az-applications',
       status: {
         label: 'Watching',
         severity: 'info'
@@ -37,10 +37,10 @@ const spec: DiagramSpec = {
     },
     {
       key: 'current',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Serving deployment',
       title: 'storefront v1',
-      icon: 'ai ai-edge-application'
+      icon: 'az az-applications'
     }
   ],
   layout: {

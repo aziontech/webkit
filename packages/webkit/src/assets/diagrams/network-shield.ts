@@ -6,17 +6,17 @@ const spec: DiagramSpec = {
   nodes: [
     {
       key: 'user',
-      kind: 'pill',
+      type: 'pill',
       title: 'Traffic',
-      icon: 'pi pi-globe',
+      icon: 'az az-globe',
       active: true
     },
     {
       key: 'shield',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'Network Shield',
       title: 'Network lists at the border',
-      icon: 'ai ai-network-lists',
+      icon: 'az az-network-shield',
       status: {
         label: 'L3 and L4',
         severity: 'success'
@@ -26,18 +26,18 @@ const spec: DiagramSpec = {
     },
     {
       key: 'allowed',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Allowed',
       title: 'Reaches the Firewall',
-      icon: 'ai ai-edge-firewall',
+      icon: 'az az-firewall',
       active: true
     },
     {
       key: 'dropped',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Dropped',
       title: 'Listed ASN, country or IP',
-      icon: 'pi pi-ban'
+      icon: 'az az-ban'
     }
   ],
   layout: {

@@ -1,0 +1,150 @@
+[block-hero-title-band kind=title-band]
+  [marketing-hero kind=band size=large align=center width=5xl aria-label='Technical support for every stage of your growth']
+    [marketing-hero-title width=4xl centered=true]
+      h1 "Technical support for every stage of your growth"
+      p "Designed to help you move independently. Backed by specialists when you need them."
+      button "Start Free" → https://console.azion.com/signup/
+      button "Contact Us" → /en/contact/
+    [marketing-ticker kind=plain size=small width=5xl content=marks]
+      text "Trusted by mission-critical workloads"
+      list (11): Global Fashion Group · HeroSpark · Itaú · NZN · Netshoes · Caixa · Agibank · Prime Video · América Móvil · GPA · Fourbank
+[marketing-section-container width=site]
+  · section-gap (hatched spacer band)
+  [block-capability-grid kind=left]
+    [marketing-card-grid kind=frame columns=3 mobile-columns=1 filled=true]
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Self-service by design"
+          p "Find answers through documentation, learning resources, Azion Copilot, and our community, so you can move independently."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Specialist help when you need it"
+          p "Get access to technical specialists with response time commitments based on the tier that fits your operation."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Faster execution with services"
+          p "Add Professional Services to accelerate integration, apply best practices, support critical moments, and guide your team with insights from real customer deployments."
+  · section-gap (hatched spacer band)
+  [block-compare-plans]
+    [marketing-section-module kind=left]
+      text "Comparison of the support tiers and professional services."
+      th "Support Enterprise"
+      th "Developer Start Free"
+      th "Business Contact Us"
+      th "Enterprise Contact Us"
+      th "Mission-Critical Contact Us"
+      th "// Support Get assistance when it matters most"
+      th "Self-service support"
+      th "Learning Center"
+      td "Included"
+      th "Azion Copilot (AI)"
+      td "Included"
+      th "Technical Support"
+      th "Community Support (Discord)"
+      td "Included"
+      th "24/7 support via ticket and email"
+      td "Not included"
+      td "Included"
+      th "Phone and video support"
+      td "Not included"
+      td "Included"
+      th "Slack channel"
+      td "Not included"
+      td "Paid add-on"
+      th "First response time"
+      th "General guidance"
+      td "Not included"
+      td "< 24 hours"
+      td "< 12 hours"
+      th "System impaired"
+      td "Not included"
+      td "< 12 hours"
+      th "Production system impaired"
+      td "Not included"
+      td "< 4 hours"
+      td "< 2 hours"
+      th "Production system down"
+      td "Not included"
+      td "< 2 hours"
+      td "< 1 hour"
+      td "< 30 minutes"
+      th "Business system down"
+      td "Not included"
+      td "< 15 minutes"
+      th "// Professional Services Move faster with specialist guidance"
+      th "Integration Services"
+      td "Not included"
+      td "5 hours/year included"
+      td "20 hours/year included"
+      td "60 hours/year included"
+      th "Best Practices Review"
+      td "Not included"
+      td "Paid add-on"
+      td "20 hours/year included"
+      td "40 hours/year included"
+      th "Business Events Support"
+      td "Not included"
+      td "1 event per year"
+      td "100 hours/year included"
+      th "Technical Account Manager"
+      td "Not included"
+      td "Paid add-on"
+      td "20 hours/month included"
+      th "Instructor-Led Training"
+      td "Not included"
+      td "Paid add-on"
+      th "Managed Configuration Service"
+      td "Not included"
+      td "Paid add-on"
+      th "Security Response Team"
+      td "Not included"
+      td "Paid add-on"
+      td "See Pricing"
+  · section-gap (hatched spacer band)
+  [block-client-quotes]
+    [marketing-section-module kind=left]
+      [marketing-quote-tabs]
+        [marketing-quote kind=highlight]
+          img "Contabilizei"
+          blockquote "With Azion, Contabilizei improved request delivery at the Edge, reduced infrastructure costs, and gained fast access to support whenever needed."
+          figcaption "Fabrício Santos DevSecOps Manager at Contabilizei"
+          button "See success stories" → /en/success-case/
+        [marketing-card-grid kind=frame columns=3 mobile-columns=2 filled=true aria-label='Client stories']
+          [marketing-card-grid-cell]
+  · section-gap (hatched spacer band)
+  [block-faq-section]
+    [marketing-section-module kind=left]
+      [marketing-faq]
+        h2 "Frequently Asked Questions"
+        [content-accordion orientation=vertical size=large]
+          [content-accordion-item]
+            h3 "Can I open technical support cases with Developer Support?"
+          [content-accordion-item]
+            h3 "Can I open a billing support case with Developer Support?"
+          [content-accordion-item]
+            h3 "Does the Enterprise Plan include Enterprise Support?"
+          [content-accordion-item]
+            h3 "What happens if I want to cancel my Support tier?"
+          [content-accordion-item]
+            h3 "Where can I find Support pricing?"
+          [content-accordion-item]
+            h3 "In which languages does Azion provide Support?"
+          [content-accordion-item]
+            h3 "Which support channels are available?"
+          [content-accordion-item]
+            h3 "How is first response time measured?"
+          [content-accordion-item]
+            h3 "Do Support tiers include Professional Services?"
+          [content-accordion-item]
+            h3 "Can Azion make configuration changes for me?"
+          [content-accordion-item]
+            h3 "Does Slack replace support cases?"
+  · section-gap (hatched spacer band)
+  [block-closing-call-to-action-split kind=split]
+    [marketing-section-module kind=left]
+      [marketing-call-to-action kind=split aria-label='Get the right assistance when it matters most']
+        text: // ⏎ Get Started
+        h2 "Get the right assistance when it matters most"
+        button "Talk to a Specialist" → /en/contact/
+        p "Explore how companies use Azion to improve performance, security, and reliability."
+        button "Success Stories" → /en/success-case/

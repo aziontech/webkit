@@ -13,13 +13,13 @@
   defineOptions({ name: 'SpinningGlobe', inheritAttrs: false })
 
   interface Props {
-    /** Which part of the world has its PoPs lit; the globe always shows the whole world. */
+    /** Which part of the world has its data centers lit; the globe always shows the whole world. */
     region?: NetworkMapRegion
-    /** How many PoPs are lit, from `none` to `high`. */
+    /** How many data centers are lit, from `none` to `high`. */
     density?: NetworkMapDensity
     /** Spins the globe; static when false. */
     animated?: boolean
-    /** Opacity of the landmass dots, from 0 to 1; the PoPs stay at full strength. */
+    /** Opacity of the landmass dots, from 0 to 1; the data centers stay at full strength. */
     opacity?: number
     /** Where the globe parks in the space the box leaves over. */
     position?: NetworkMapPosition
@@ -55,7 +55,7 @@
   })
 
   const attrs = useAttrs()
-  const canvas = useTemplateRef<HTMLCanvasElement>('canvas')
+  const canvasEl = useTemplateRef<HTMLCanvasElement>('canvasEl')
 
   const DENSITY_TIERS: Record<NetworkMapDensity, (keyof typeof GLOBE_NODE_TIERS)[]> = {
     none: [],
@@ -99,7 +99,7 @@
   const cleanups: Array<() => void> = []
 
   const draw = () => {
-    const el = canvas.value
+    const el = canvasEl.value
     const context = el?.getContext('2d')
     if (!el || !context || !el.width || !el.height) return
 
@@ -203,7 +203,7 @@
   }
 
   const fit = () => {
-    const el = canvas.value
+    const el = canvasEl.value
     if (!el) return
     const width = Math.round(el.clientWidth * window.devicePixelRatio)
     const height = Math.round(el.clientHeight * window.devicePixelRatio)
@@ -231,7 +231,7 @@
   watch(() => props.animated, sync)
 
   onMounted(() => {
-    const el = canvas.value
+    const el = canvasEl.value
     if (!el) return
 
     const motion = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -274,7 +274,7 @@
     class="pointer-events-none absolute inset-0 z-0 overflow-hidden text-(--text-muted) [--globe-node:var(--primary)] [--globe-grid:var(--illustration-line)] [--globe-ground:var(--illustration-ground)] data-[fade=bottom]:[mask-image:linear-gradient(to_bottom,black_0,black_var(--network-map-fade-start,16%),transparent_var(--network-map-fade-end,55%))] data-[fade=top]:[mask-image:linear-gradient(to_top,black_0,black_var(--network-map-fade-start,16%),transparent_var(--network-map-fade-end,55%))] data-[fade=left]:[mask-image:linear-gradient(to_left,black_0,black_var(--network-map-fade-start,50%),transparent_var(--network-map-fade-end,80%))] data-[fade=right]:[mask-image:linear-gradient(to_right,black_0,black_var(--network-map-fade-start,50%),transparent_var(--network-map-fade-end,80%))] data-[fade=edges]:[mask-image:linear-gradient(to_right,transparent_0,black_var(--network-map-fade-start,12%),black_calc(100%-var(--network-map-fade-start,12%)),transparent_100%)] data-[fade=vignette]:[mask-image:radial-gradient(closest-side,black_var(--network-map-fade-start,40%),transparent_var(--network-map-fade-end,100%))] data-[fade=bottom]:[mask-mode:alpha] data-[fade=top]:[mask-mode:alpha] data-[fade=left]:[mask-mode:alpha] data-[fade=right]:[mask-mode:alpha] data-[fade=edges]:[mask-mode:alpha] data-[fade=vignette]:[mask-mode:alpha]"
   >
     <canvas
-      ref="canvas"
+      ref="canvasEl"
       class="absolute inset-0 block h-full w-full"
     />
   </div>

@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Language switcher: two tabs with a filename bar, syntax highlighting, and copy.",
+   "file": "examples/code-block/default.vue"
+  },
+  {
+   "name": "WithoutLineNumbers",
+   "summary": "Same language switcher with the line-number gutter hidden.",
+   "file": "examples/code-block/without-line-numbers.vue"
+  },
+  {
+   "name": "WithoutCopy",
+   "summary": "Same language switcher with the copy control removed via `:copyable=\"false\"`, for a decorative block nobody copies from.",
+   "file": "examples/code-block/without-copy.vue"
+  }
+ ]
+}

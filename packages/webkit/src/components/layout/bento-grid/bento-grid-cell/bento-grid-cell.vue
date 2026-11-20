@@ -1,0 +1,68 @@
+<script setup lang="ts">
+  import { computed, useAttrs } from 'vue'
+
+  import RegistrationFrame from '../../../layout/registration-frame/registration-frame.vue'
+
+  defineOptions({
+    name: 'BentoGridCell',
+    inheritAttrs: false
+  })
+
+  /** How many columns the cell claims from the medium breakpoint up. */
+  export type BentoGridCellSpan = '1' | '2' | '3' | '4' | 'full'
+  /** How many rows the cell claims from the medium breakpoint up. */
+  export type BentoGridCellRows = '1' | '2'
+  /** The cell's fill. */
+  export type BentoGridCellVariant = 'surface' | 'canvas' | 'none'
+
+  export interface BentoGridCellProps {
+    /** How many columns the cell claims from the medium breakpoint up; below it every cell claims one, and only `full` takes the whole row. */
+    span?: BentoGridCellSpan
+    /** How many rows the cell claims from the medium breakpoint up. */
+    rows?: BentoGridCellRows
+    /** The cell's fill; `none` leaves the surface to the content composed inside it. */
+    variant?: BentoGridCellVariant
+    /** Pads the cell's content away from its rules; off for content that reaches the cell's edges. */
+    padded?: boolean
+  }
+
+  withDefaults(defineProps<BentoGridCellProps>(), {
+    span: '1',
+    rows: '1',
+    variant: 'surface',
+    padded: true
+  })
+
+  defineSlots<{
+    /** The cell's content, composed as real elements. */
+    default(): unknown
+  }>()
+
+  const attrs = useAttrs()
+
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'bento-grid-cell')
+</script>
+
+<template>
+  <div
+    v-bind="$attrs"
+    :data-testid="testId"
+    :data-span="span"
+    :data-rows="rows"
+    class="flex min-w-0 data-[span=full]:col-span-full data-[span=2]:md:col-span-2 data-[span=3]:md:col-span-3 data-[span=4]:md:col-span-4 data-[rows=2]:md:row-span-2"
+  >
+    <RegistrationFrame
+      :flush="['top', 'left']"
+      marks="all"
+      class="h-full w-full min-w-0"
+    >
+      <div
+        :data-variant="variant"
+        :data-padded="padded || null"
+        class="h-full data-[variant=canvas]:bg-(--bg-canvas) data-[variant=surface]:bg-(--bg-surface) data-[padded]:p-(--spacing-xl)"
+      >
+        <slot />
+      </div>
+    </RegistrationFrame>
+  </div>
+</template>

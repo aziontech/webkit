@@ -1,0 +1,20 @@
+{
+  "_id": "console-showcase-section",
+  "props": {
+    "variant": "diagram",
+    "texture": "none",
+    "eyebrow": "Demo",
+    "title": "See it in two minutes",
+    "description": "An embedded demo, framed by the band."
+  },
+  "scenes": {
+    "scene": {
+      "component": "Embed",
+      "props": {
+        "src": "https://example.com",
+        "title": "A placeholder document standing in for an embedded demo",
+        "ratio": "video"
+      }
+    }
+  }
+}

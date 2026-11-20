@@ -6,25 +6,25 @@ const spec: DiagramSpec = {
   nodes: [
     {
       key: 'user',
-      kind: 'pill',
+      type: 'pill',
       title: 'Requests',
-      icon: 'pi pi-user',
+      icon: 'az az-user',
       active: true
     },
     {
       key: 'workload',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'Workload',
       title: 'shop.example.com',
-      icon: 'ai ai-workloads',
+      icon: 'az az-workloads',
       active: true
     },
     {
       key: 'events',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'Real-Time Events',
       title: 'Every request, queryable',
-      icon: 'ai ai-real-time-events',
+      icon: 'az az-real-time-events',
       status: {
         label: 'Seconds',
         severity: 'success'
@@ -34,18 +34,18 @@ const spec: DiagramSpec = {
     },
     {
       key: 'console',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Console',
       title: 'Filter, inspect, trace',
-      icon: 'pi pi-desktop',
+      icon: 'az az-desktop',
       active: true
     },
     {
       key: 'graphql',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'GraphQL API',
       title: 'Query from your tools',
-      icon: 'ai ai-graphql'
+      icon: 'az az-graphql'
     }
   ],
   layout: {

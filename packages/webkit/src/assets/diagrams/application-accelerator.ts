@@ -6,42 +6,42 @@ const spec: DiagramSpec = {
   nodes: [
     {
       key: 'user',
-      kind: 'pill',
+      type: 'pill',
       title: 'User',
-      icon: 'pi pi-user',
+      icon: 'az az-user',
       active: true
     },
     {
       key: 'application',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'Application',
       title: 'Rule: dynamic routes',
-      icon: 'ai ai-rules-engine',
+      icon: 'az az-rules-engine',
       active: true
     },
     {
       key: 'accelerator',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'Application Accelerator',
       title: 'Tuned route, fewer round trips',
-      icon: 'ai ai-app-accelerator',
+      icon: 'az az-application-accelerator',
       active: true,
       lit: true
     },
     {
       key: 'origin',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Origin',
       title: 'api.example.com',
-      icon: 'pi pi-database',
+      icon: 'az az-database',
       active: true
     },
     {
       key: 'cache',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Cache',
       title: 'Static assets, no origin call',
-      icon: 'ai ai-tiered-cache'
+      icon: 'az az-layers'
     }
   ],
   layout: {

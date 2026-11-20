@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "A composed platform screen filling the container at the default 800-pixel height. Drag the right edge to change the width, the bottom edge to change the height, or the corner to change both, and watch the grid, the header and the closing band reflow.",
+   "file": "examples/browser-frame/default.vue"
+  },
+  {
+   "name": "LongAddress",
+   "summary": "A long address in a narrow column. The leading part ellipsizes and the last 12 characters always stay visible.",
+   "file": "examples/browser-frame/long-address.vue"
+  }
+ ]
+}

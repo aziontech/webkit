@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The full composer: attach files (pick, drop or paste), a model and effort picker, dictation, a voice-conversation control that becomes Submit once there is something to send, and a row under the box with a project picker, files, plugins and a desktop-app link. Enter submits, Shift+Enter adds a line.",
+   "file": "examples/prompt-input/default.vue"
+  },
+  {
+   "name": "Streaming",
+   "summary": "After a submit the Submit control becomes Stop while the response is generated; the reader can keep typing but cannot send until it ends or they stop it.",
+   "file": "examples/prompt-input/streaming.vue"
+  },
+  {
+   "name": "CharacterLimit",
+   "summary": "A 280-character limit: the counter shows how many are used, and over the limit the frame and counter turn danger and Submit disables.",
+   "file": "examples/prompt-input/character-limit.vue"
+  }
+ ]
+}

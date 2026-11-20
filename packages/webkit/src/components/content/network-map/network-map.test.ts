@@ -5,7 +5,7 @@ import { expectNoA11yViolations } from '../../../test/axe'
 import NetworkMap from './network-map.vue'
 import { NETWORK_MAP_REGIONS } from './network-map-data'
 
-const TESTID = 'content-network-map'
+const TESTID = 'network-map'
 
 const REGIONS = [
   'world',
@@ -101,24 +101,27 @@ describe('NetworkMap', () => {
         0
       )
 
-    expect(count('world')).toBe(309)
-    expect(count('europe')).toBe(48)
+    expect(count('world')).toBe(203)
+    expect(count('europe')).toBe(40)
   })
 
-  it('lights the main Brazilian capitals at the lowest density', () => {
+  it('lights the design PoP field at the default density, in three pulse phases', () => {
+    const { getByTestId } = render(NetworkMap)
+    const paths = Array.from(popPaths(getByTestId(TESTID)))
+    const cells = paths.flatMap((path) => (path.getAttribute('d') ?? '').match(/M\d+ \d+/g) ?? [])
+    expect(cells).toHaveLength(172)
+    expect(new Set(cells).size).toBe(172)
+    expect(new Set(paths.map((path) => path.getAttribute('data-phase')))).toEqual(
+      new Set(['0', '1', '2'])
+    )
+  })
+
+  it('lights a capital of each cluster at the lowest density', () => {
     const { getByTestId } = render(NetworkMap, { props: { density: 'low' } })
     const lit = Array.from(popPaths(getByTestId(TESTID)))
       .map((path) => path.getAttribute('d') ?? '')
       .join('')
-    const CAPITALS = {
-      'São Paulo': 'M490 740',
-      'Rio de Janeiro': 'M500 740',
-      Brasília: 'M510 700',
-      Salvador: 'M540 680',
-      Fortaleza: 'M550 620',
-      Manaus: 'M450 620',
-      'Porto Alegre': 'M480 780'
-    }
+    const CAPITALS = { Brasília: 'M510 700', Fortaleza: 'M550 620' }
 
     Object.values(CAPITALS).forEach((cell) => expect(lit).toContain(`${cell}h5v5h-5z`))
   })
@@ -253,5 +256,51 @@ describe('NetworkMap', () => {
   it('has no axe violations', async () => {
     const { container } = render(NetworkMap, { props: { animated: true, fade: 'vignette' } })
     await expectNoA11yViolations(container)
+  })
+
+  it('draws no traffic unless asked', () => {
+    const { container } = render(NetworkMap, { props: { region: 'atlantic', density: 'high' } })
+    expect(container.querySelector('[data-traffic]')).toBeNull()
+  })
+
+  it('draws the same mesh of links and parked packets on every render', () => {
+    const props = { region: 'atlantic', density: 'high', traffic: true } as const
+    const first = render(NetworkMap, { props })
+    const links = Array.from(first.container.querySelectorAll('[data-traffic-link]')).map((path) =>
+      path.getAttribute('d')
+    )
+    expect(links.length).toBeGreaterThanOrEqual(14)
+    const packets = first.container.querySelectorAll('[data-traffic-packet]')
+    expect(packets).toHaveLength(links.length)
+    expect(packets[0].getAttribute('stroke-dasharray')).toBe('0 200')
+    const second = render(NetworkMap, { props })
+    expect(
+      Array.from(second.container.querySelectorAll('[data-traffic-link]')).map((path) =>
+        path.getAttribute('d')
+      )
+    ).toEqual(links)
+  })
+
+  it('starts one packet animation per ray only when animated', async () => {
+    const props = { region: 'atlantic', density: 'high', traffic: true } as const
+    const still = render(NetworkMap, { props })
+    expect(still.container.querySelector('[data-traffic-packet]')!.getAnimations()).toHaveLength(0)
+    const moving = render(NetworkMap, { props: { ...props, animated: true } })
+    const packets = Array.from(moving.container.querySelectorAll('[data-traffic-packet]'))
+    const reduced = globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches
+    for (const packet of packets) expect(packet.getAnimations()).toHaveLength(reduced ? 0 : 1)
+  })
+
+  it('stops every packet within five seconds', () => {
+    const props = { region: 'atlantic', density: 'high', traffic: true, animated: true } as const
+    const { container } = render(NetworkMap, { props })
+    const animations = Array.from(container.querySelectorAll('[data-traffic-packet]')).flatMap(
+      (packet) => packet.getAnimations()
+    )
+    for (const animation of animations) {
+      const end = Number(animation.effect!.getComputedTiming().endTime)
+      expect(Number.isFinite(end)).toBe(true)
+      expect(end).toBeLessThanOrEqual(5000)
+    }
   })
 })

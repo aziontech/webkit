@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Binary control only — associate copy via an external label or a horizontal `Field`.",
+   "file": "examples/checkbox/default.vue"
+  },
+  {
+   "name": "Indeterminate",
+   "summary": "Tri-state visual. The parent owns the indeterminate logic (typical pattern: a \"select all\" header when some rows are selected). Sets `aria-checked=\"mixed\"` and the native input.indeterminate DOM property.",
+   "file": "examples/checkbox/indeterminate.vue"
+  },
+  {
+   "name": "Disabled",
+   "summary": "Disabled checked and unchecked controls without label chrome.",
+   "file": "examples/checkbox/disabled.vue"
+  }
+ ]
+}

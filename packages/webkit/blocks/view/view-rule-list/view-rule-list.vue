@@ -1,0 +1,914 @@
+<script setup lang="ts">
+  import Accordion from '@aziontech/webkit/accordion'
+  import Alert from '@aziontech/webkit/alert'
+  import Button from '@aziontech/webkit/button'
+  import Card from '@aziontech/webkit/card'
+  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
+  import DialogContent from '@aziontech/webkit/dialog-content'
+  import DialogDescription from '@aziontech/webkit/dialog-description'
+  import Dialog from '@aziontech/webkit/dialog-root'
+  import DialogTitle from '@aziontech/webkit/dialog-title'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
+  import EmptyState from '@aziontech/webkit/empty-state'
+  import Field from '@aziontech/webkit/field'
+  import IconButton from '@aziontech/webkit/icon-button'
+  import Input from '@aziontech/webkit/input'
+  import Kbd from '@aziontech/webkit/kbd'
+  import PageHeader from '@aziontech/webkit/page-header'
+  import PanelBody from '@aziontech/webkit/panel-body'
+  import PanelFooter from '@aziontech/webkit/panel-footer'
+  import PanelHeader from '@aziontech/webkit/panel-header'
+  import SaveBar from '@aziontech/webkit/save-bar'
+  import Switch from '@aziontech/webkit/switch'
+  import Tag from '@aziontech/webkit/tag'
+  import { toast } from '@aziontech/webkit/toast'
+  import Tooltip from '@aziontech/webkit/tooltip'
+  import { computed, nextTick, onMounted, onScopeDispose, reactive, ref, watch } from 'vue'
+
+  import { sampleApplicationRules, sampleFirewallRules } from './sample'
+
+  /** What runs the rules: an application has Request and Response phases, a firewall only Request. */
+  export type RuleListSubject = 'application' | 'firewall'
+  /** The phase a rule runs in. */
+  export type RuleListPhase = 'request' | 'response'
+
+  /** One rule, in the order it runs within its phase. */
+  export interface RuleListRule {
+    /** Stable key. */
+    id: string
+    /** Display name; it opens the rule. */
+    name: string
+    /** What the rule does, in one line. */
+    description: string
+    /** The phase it runs in. */
+    phase: RuleListPhase
+    /** Who changed it last. */
+    author: string
+    /** When it changed last, as shown. */
+    modified: string
+    /** Whether it runs; an inactive rule keeps its place. */
+    active: boolean
+    /** Pinned first in its phase: it cannot move or turn off. */
+    locked: boolean
+  }
+
+  /** An unsaved change the list opens with. */
+  export interface RuleListEdit {
+    /** The rule's phase. */
+    phase: RuleListPhase
+    /** The rule's id. */
+    id: string
+    /** The zero-based position it moves to. */
+    to?: number
+    /** The status it switches to. */
+    active?: boolean
+  }
+
+  export interface RuleListProps {
+    /** What runs the rules; it sets the phases and the copy. */
+    subject?: RuleListSubject
+    /** The saved rules of every phase, each phase in run order. Pass an empty list for none. Left out, the sample renders. */
+    rules?: RuleListRule[]
+    /** The rules are loading: each phase shows skeleton rows and the search and Add Rule disable. */
+    loading?: boolean
+    /** Why the rules could not load; a danger alert with Retry takes the phases' place. */
+    error?: string
+    /** Unsaved moves and switches the list opens with, so the save bar shows. */
+    defaultEdits?: RuleListEdit[]
+    /** The search the list opens with. */
+    defaultSearch?: string
+    /** Opens the Review changes dialog when the block opens. */
+    defaultReviewOpen?: boolean
+    /** The save is in flight: the dialog locks and Save spins. When it turns off with no saveError, the order is saved. */
+    saving?: boolean
+    /** Why the save failed, shown at the top of the review dialog; Save reads Save again. */
+    saveError?: string
+  }
+
+  const props = withDefaults(defineProps<RuleListProps>(), {
+    subject: 'application',
+    rules: undefined,
+    loading: false,
+    error: '',
+    defaultEdits: () => [],
+    defaultSearch: '',
+    defaultReviewOpen: false,
+    saving: false,
+    saveError: ''
+  })
+
+  const emit = defineEmits<{
+    edit: [event: MouseEvent, rule: RuleListRule]
+    create: [event: MouseEvent, phase?: RuleListPhase]
+    retry: [event: MouseEvent]
+    save: [event: MouseEvent, rules: RuleListRule[]]
+  }>()
+
+  const ALL_PHASES: { value: RuleListPhase; label: string }[] = [
+    { value: 'request', label: 'Request' },
+    { value: 'response', label: 'Response' }
+  ]
+
+  type Phase = RuleListPhase
+  type Rule = RuleListRule
+  type Control = 'up' | 'down' | 'position' | 'menu'
+
+  interface Snapshot {
+    order: Record<string, string[]>
+    active: Record<string, boolean>
+  }
+
+  interface ChangeLine {
+    key: string
+    name: string
+    text: string
+  }
+
+  const SUBJECT = computed(() => props.subject)
+  const PAGE_DESCRIPTION = computed(() =>
+    props.subject === 'firewall'
+      ? 'Rules run top to bottom on every request this firewall sees, until one of them refuses it. Turn a rule off to skip it without losing its place.'
+      : 'Rules run top to bottom within each phase, so their order is their behavior. Turn a rule off to skip it without losing its place.'
+  )
+  const PHASES = computed(() =>
+    props.subject === 'firewall' ? ALL_PHASES.slice(0, 1) : ALL_PHASES
+  )
+
+  const source = computed<Rule[]>(
+    () =>
+      props.rules ??
+      (props.loading || props.error
+        ? []
+        : props.subject === 'firewall'
+          ? sampleFirewallRules
+          : sampleApplicationRules)
+  )
+  const loadFailed = computed(() => props.error !== '')
+
+  const draft = reactive<Record<Phase, Rule[]>>({ request: [], response: [] })
+  const phaseLabel = (phase: Phase) =>
+    ALL_PHASES.find((item) => item.value === phase)?.label ?? phase
+
+  const snapshot = (): Snapshot => ({
+    order: Object.fromEntries(
+      PHASES.value.map(({ value }) => [value, draft[value].map((r) => r.id)])
+    ),
+    active: Object.fromEntries(
+      PHASES.value.flatMap(({ value }) => draft[value].map((r) => [r.id, r.active]))
+    )
+  })
+  const saved = ref(snapshot())
+
+  const applyEdits = (edits: RuleListEdit[]) => {
+    for (const edit of edits) {
+      const list = draft[edit.phase]
+      const from = list.findIndex((item) => item.id === edit.id)
+      if (from < 0) continue
+      if (edit.to !== undefined) list.splice(edit.to, 0, ...list.splice(from, 1))
+      if (edit.active !== undefined)
+        list[list.findIndex((item) => item.id === edit.id)].active = edit.active
+    }
+  }
+
+  const keepUnsaved = (before: Snapshot, savedBefore: Snapshot, savedNow: Snapshot) => {
+    for (const { value } of ALL_PHASES) {
+      const order = before.order[value] ?? []
+      if (order.join() !== (savedBefore.order[value] ?? []).join()) {
+        const rank = (id: string) => {
+          const at = order.indexOf(id)
+          return at < 0 ? order.length : at
+        }
+        draft[value] = [...draft[value]].sort((a, b) => rank(a.id) - rank(b.id))
+      }
+      for (const item of draft[value]) {
+        const local = before.active[item.id]
+        const changedHere = local !== undefined && local !== savedBefore.active[item.id]
+        if (changedHere && savedNow.active[item.id] === savedBefore.active[item.id])
+          item.active = local
+      }
+    }
+  }
+
+  let seeded = false
+  watch(
+    source,
+    (next) => {
+      const before = seeded ? snapshot() : null
+      const savedBefore = saved.value
+      for (const { value } of ALL_PHASES) {
+        draft[value] = next.filter((item) => item.phase === value).map((item) => ({ ...item }))
+      }
+      saved.value = snapshot()
+      if (before) keepUnsaved(before, savedBefore, saved.value)
+      if (!seeded && next.length) {
+        seeded = true
+        applyEdits(props.defaultEdits)
+      }
+    },
+    { immediate: true }
+  )
+
+  const loading = computed(() => props.loading)
+  const search = ref(props.defaultSearch)
+  const searching = computed(() => search.value.trim().length > 0)
+  const matches = (item: Rule) => {
+    const term = search.value.trim().toLowerCase()
+    if (!term) return true
+    return [item.name, item.description, item.author].some((field) =>
+      field.toLowerCase().includes(term)
+    )
+  }
+
+  const openPhases = ref<string[]>(PHASES.value.map((item) => item.value))
+  watch(search, () => {
+    if (!searching.value) return
+    const hits = PHASES.value
+      .filter(({ value }) => draft[value].some(matches))
+      .map(({ value }) => value)
+    openPhases.value = [...new Set([...openPhases.value, ...hits])]
+  })
+  watch(source, (next, previous) => {
+    if (!previous?.length) return
+    const known = new Set(previous.map((item) => item.id))
+    const added = next.filter((item) => !known.has(item.id)).map((item) => item.phase)
+    if (added.length) openPhases.value = [...new Set([...openPhases.value, ...added])]
+  })
+
+  const groups = computed(() =>
+    PHASES.value.map((phase) => {
+      const list = draft[phase.value]
+      return {
+        ...phase,
+        total: list.length,
+        items: list.filter(matches)
+      }
+    })
+  )
+
+  const saving = computed(() => props.saving)
+  const pinned = (phase: Phase) => {
+    const list = draft[phase]
+    let count = 0
+    while (count < list.length && list[count].locked) count += 1
+    return count
+  }
+  const canReorder = (phase: Phase) =>
+    !searching.value && !saving.value && draft[phase].length - pinned(phase) > 1
+  const canMove = (phase: Phase, index: number, direction: number) => {
+    if (!canReorder(phase) || index < pinned(phase)) return false
+    const to = index + direction
+    return to >= pinned(phase) && to < draft[phase].length
+  }
+  const lockReason = (phase: Phase, item: Rule) => {
+    if (item.locked) return 'The default rule runs first and stays first.'
+    if (searching.value) return 'Clear the search to change the order rules run in.'
+    if (saving.value) return 'Wait for the save to finish.'
+    if (!canReorder(phase)) return 'There is no other rule in this phase to move it past.'
+    return ''
+  }
+
+  const announcement = ref('')
+  const announce = (text: string) => {
+    announcement.value = ''
+    nextTick(() => {
+      announcement.value = text
+    })
+  }
+
+  const listEl = ref<HTMLElement | null>(null)
+  const focusControl = (id: string, control: Control) =>
+    nextTick(() => {
+      const row = listEl.value?.querySelector(`[data-rule-id="${id}"]`)
+      const target = row?.querySelector<HTMLButtonElement>(`[data-control="${control}"]`)
+      const usable =
+        target && !target.disabled
+          ? target
+          : (row?.querySelector<HTMLElement>('[data-control]:not(:disabled)') ??
+            row?.closest('[data-reorder-row]')?.querySelector<HTMLElement>('[data-reorder-handle]'))
+      usable?.focus({ preventScroll: false })
+    })
+
+  const moveTo = (phase: Phase, from: number, to: number, control?: Control) => {
+    const list = draft[phase]
+    const head = pinned(phase)
+    const target = Math.min(Math.max(to, head), list.length - 1)
+    if (from < head || target === from || !canReorder(phase)) return
+    const [moved] = list.splice(from, 1)
+    list.splice(target, 0, moved)
+    announce(
+      `${moved.name} moved to position ${target + 1} of ${list.length} in the ${phaseLabel(phase)} phase.`
+    )
+    if (control) focusControl(moved.id, control)
+  }
+  const step = (phase: Phase, index: number, direction: number, control?: Control) => {
+    if (!canMove(phase, index, direction)) return
+    moveTo(phase, index, index + direction, control)
+  }
+
+  const position = (phase: Phase, item: Rule) => draft[phase].indexOf(item)
+  const positionDraft = ref<{ value: string; id: string } | null>(null)
+  const positionValue = (phase: Phase, item: Rule) =>
+    positionDraft.value?.id === item.id
+      ? positionDraft.value.value
+      : String(position(phase, item) + 1)
+  const onPositionInput = (item: Rule, value: string) => {
+    positionDraft.value = { value, id: item.id }
+  }
+  const commitPosition = (phase: Phase, item: Rule, refocus: boolean) => {
+    const draft = positionDraft.value
+    positionDraft.value = null
+    if (!draft || draft.id !== item.id) return
+    const typed = Number.parseInt(draft.value, 10)
+    if (!Number.isFinite(typed)) return
+    moveTo(phase, position(phase, item), typed - 1, refocus ? 'position' : undefined)
+  }
+  const cancelPosition = () => {
+    positionDraft.value = null
+  }
+  const reorderRows = (phase: Phase, next: Rule[]) => {
+    if (searching.value) return
+    draft[phase] = next
+  }
+  const reorderable = (phase: Phase) => (row: Rule) => !lockReason(phase, row)
+
+  const narrow = ref(false)
+  const narrowQuery = globalThis.matchMedia?.('(width < 48rem)')
+  const onNarrowChange = (event: MediaQueryListEvent) => {
+    narrow.value = event.matches
+  }
+  onMounted(() => {
+    if (!narrowQuery) return
+    narrow.value = narrowQuery.matches
+    narrowQuery.addEventListener('change', onNarrowChange)
+  })
+  onScopeDispose(() => narrowQuery?.removeEventListener('change', onNarrowChange))
+
+  const nameColumn: TableColumn = {
+    accessorKey: 'name',
+    header: 'Name',
+    principal: true,
+    hideable: false
+  }
+  const descriptionColumn: TableColumn = {
+    accessorKey: 'description',
+    header: 'Description',
+    grow: 3
+  }
+  const modifiedColumn: TableColumn = { accessorKey: 'modified', header: 'Last modified', grow: 2 }
+  const statusColumn: TableColumn = { id: 'status', header: 'Status' }
+  const moveColumn: TableColumn = { id: 'move', header: 'Position', hideable: false }
+  const columns = computed<TableColumn[]>(() =>
+    narrow.value
+      ? [
+          nameColumn,
+          descriptionColumn,
+          modifiedColumn,
+          { ...statusColumn, width: 64, frozen: 'end' },
+          { ...moveColumn, header: 'Move', width: 56, align: 'center', frozen: 'end' }
+        ]
+      : [
+          { ...moveColumn, width: 168 },
+          nameColumn,
+          descriptionColumn,
+          { ...statusColumn, width: 152 },
+          modifiedColumn
+        ]
+  )
+
+  const onMoveSelect = (phase: Phase, item: Rule, value: DropdownMenuItemValue) => {
+    const from = position(phase, item)
+    if (value === 'top') moveTo(phase, from, pinned(phase), 'menu')
+    if (value === 'up') step(phase, from, -1, 'menu')
+    if (value === 'down') step(phase, from, 1, 'menu')
+    if (value === 'bottom') moveTo(phase, from, draft[phase].length - 1, 'menu')
+  }
+
+  const setActive = (item: Rule, value: boolean) => {
+    item.active = value
+  }
+
+  const dirty = computed(() => JSON.stringify(snapshot()) !== JSON.stringify(saved.value))
+  const changes = computed(() =>
+    PHASES.value
+      .map((phase) => ({
+        ...phase,
+        items: draft[phase.value].flatMap((item, index) => {
+          const lines: ChangeLine[] = []
+          const before = saved.value.order[phase.value].indexOf(item.id)
+          if (before !== index) {
+            lines.push({
+              key: `${item.id}-order`,
+              name: item.name,
+              text: `moves from position ${before + 1} to ${index + 1}`
+            })
+          }
+          if (saved.value.active[item.id] !== item.active) {
+            lines.push({
+              key: `${item.id}-status`,
+              name: item.name,
+              text: item.active ? 'is turned on' : 'is turned off'
+            })
+          }
+          return lines
+        })
+      }))
+      .filter((phase) => phase.items.length)
+  )
+  const changeCount = computed(() =>
+    changes.value.reduce((sum, phase) => sum + phase.items.length, 0)
+  )
+
+  const discard = () => {
+    for (const { value } of PHASES.value) {
+      const byId = Object.fromEntries(draft[value].map((item) => [item.id, item]))
+      draft[value] = saved.value.order[value].map((id) => byId[id]).filter(Boolean)
+      for (const item of draft[value]) item.active = saved.value.active[item.id]
+    }
+    announce('Changes discarded. The rules are back in their saved order.')
+  }
+
+  const reviewOpen = ref(props.defaultReviewOpen)
+  const saveFailed = ref(props.saveError !== '')
+  const openReview = () => {
+    saveFailed.value = false
+    reviewOpen.value = true
+  }
+  const onSaveShortcut = () => {
+    if (!dirty.value || saving.value || reviewOpen.value) return
+    openReview()
+  }
+  const save = (event: MouseEvent) => {
+    if (saving.value) return
+    saveFailed.value = false
+    emit(
+      'save',
+      event,
+      PHASES.value.flatMap(({ value }) => draft[value].map((item) => ({ ...item })))
+    )
+  }
+
+  watch(
+    () => props.saveError,
+    (next) => {
+      saveFailed.value = next !== ''
+    }
+  )
+
+  watch(
+    () => props.saving,
+    (now, before) => {
+      if (!before || now) return
+      if (props.saveError) {
+        saveFailed.value = true
+        return
+      }
+      saved.value = snapshot()
+      reviewOpen.value = false
+      setTimeout(() => listEl.value?.focus(), 0)
+      toast.success('Rule order saved.', {
+        description: `The ${SUBJECT.value} runs its rules in the new order.`
+      })
+    }
+  )
+</script>
+
+<template>
+  <div class="layout-boundary">
+    <div class="layout-column flex min-h-full flex-col">
+      <PageHeader
+        title="Rules"
+        :description="PAGE_DESCRIPTION"
+        size="small"
+      >
+        <template #actions>
+          <Button
+            label="Documentation"
+            icon="az az-book"
+            variant="outline"
+            size="medium"
+            href="https://example.com/docs/rules"
+            target="_blank"
+          />
+          <Button
+            label="Add Rule"
+            icon="az az-plus"
+            variant="outline"
+            size="medium"
+            :disabled="loading || loadFailed"
+            @click="(event: MouseEvent) => emit('create', event)"
+          />
+        </template>
+      </PageHeader>
+
+      <section
+        ref="listEl"
+        tabindex="-1"
+        class="layout-section-start flex min-w-0 flex-1 flex-col gap-(--layout-group-gap) pb-(--layout-boundary-end) outline-none"
+        aria-label="Rules by phase"
+      >
+        <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-sm)">
+          <div class="min-w-36 grow basis-(--container-2xs)">
+            <Input
+              v-model="search"
+              size="medium"
+              placeholder="Search rules"
+              aria-label="Search rules"
+              class="w-full"
+              :disabled="loading || loadFailed"
+            >
+              <template #leading>
+                <i
+                  class="az az-search"
+                  aria-hidden="true"
+                />
+              </template>
+            </Input>
+          </div>
+        </div>
+
+        <Alert
+          v-if="loadFailed"
+          key="load-error"
+          severity="danger"
+          :label="error"
+          action-label="Retry"
+          @action="(event: MouseEvent) => emit('retry', event)"
+        />
+        <Alert
+          v-else-if="searching"
+          key="searching"
+          severity="info"
+          label="Reordering is off while a search narrows the list. Clear the search to change the order rules run in."
+        />
+
+        <Card
+          v-if="!loadFailed"
+          :padded="false"
+        >
+          <template #default>
+            <Accordion
+              v-model="openPhases"
+              type="multiple"
+              size="large"
+              icon-position="leading"
+            >
+              <Accordion.Item
+                v-for="group in groups"
+                :key="group.value"
+                :value="group.value"
+              >
+                <Accordion.Trigger :heading-level="2">
+                  <span class="flex min-w-0 items-center gap-(--spacing-sm)">
+                    <span class="truncate">{{ group.label }} phase</span>
+                    <span
+                      class="shrink-0 text-body-xs tabular-nums text-(--text-muted)"
+                      :data-testid="`rule-list__count-${group.value}`"
+                    >
+                      {{
+                        loading
+                          ? 'Loading'
+                          : searching
+                            ? `${group.items.length} of ${group.total}`
+                            : `${group.total} ${group.total === 1 ? 'rule' : 'rules'}`
+                      }}
+                    </span>
+                  </span>
+                </Accordion.Trigger>
+                <Accordion.Content :padded="false">
+                  <div>
+                    <DataTable
+                      v-if="loading || group.total"
+                      :data="loading ? [] : group.items"
+                      :columns="columns"
+                      row-key="id"
+                      :bordered="false"
+                      :loading="loading"
+                      reorderable
+                      :row-reorderable="reorderable(group.value)"
+                      :aria-label="`${group.label} phase rules, in the order they run`"
+                      @update:data="reorderRows(group.value, $event)"
+                    >
+                      <template #cell-move="{ row }">
+                        <div
+                          v-if="narrow"
+                          :data-rule-id="row.id"
+                          class="flex items-center justify-center"
+                        >
+                          <DropdownMenu
+                            side="bottom"
+                            align="end"
+                            :disabled="Boolean(lockReason(group.value, row))"
+                            @select="(_event, value) => onMoveSelect(group.value, row, value)"
+                          >
+                            <DropdownMenu.Trigger>
+                              <IconButton
+                                icon="az az-move-vertical"
+                                variant="ghost"
+                                size="medium"
+                                data-control="menu"
+                                :disabled="Boolean(lockReason(group.value, row))"
+                                :aria-label="
+                                  lockReason(group.value, row)
+                                    ? `Move ${row.name}, position ${position(group.value, row) + 1} of ${group.total}. ${lockReason(group.value, row)}`
+                                    : `Move ${row.name}, position ${position(group.value, row) + 1} of ${group.total}`
+                                "
+                              />
+                            </DropdownMenu.Trigger>
+                            <DropdownMenu.Group>
+                              <DropdownMenu.Item
+                                value="top"
+                                label="Move to top"
+                                :disabled="!canMove(group.value, position(group.value, row), -1)"
+                              />
+                              <DropdownMenu.Item
+                                value="up"
+                                label="Move up"
+                                :disabled="!canMove(group.value, position(group.value, row), -1)"
+                              />
+                              <DropdownMenu.Item
+                                value="down"
+                                label="Move down"
+                                :disabled="!canMove(group.value, position(group.value, row), 1)"
+                              />
+                              <DropdownMenu.Item
+                                value="bottom"
+                                label="Move to bottom"
+                                :disabled="!canMove(group.value, position(group.value, row), 1)"
+                              />
+                            </DropdownMenu.Group>
+                          </DropdownMenu>
+                        </div>
+                        <div
+                          v-else
+                          :data-rule-id="row.id"
+                          class="flex items-center gap-(--spacing-2xs)"
+                        >
+                          <Tooltip
+                            :content="
+                              lockReason(group.value, row) ||
+                              'Type a position to move the rule there'
+                            "
+                          >
+                            <span
+                              class="inline-flex w-14 shrink-0 tabular-nums [&_input]:text-center"
+                            >
+                              <Input
+                                :model-value="positionValue(group.value, row)"
+                                size="small"
+                                inputmode="numeric"
+                                autocomplete="off"
+                                data-control="position"
+                                class="w-full"
+                                :disabled="Boolean(lockReason(group.value, row))"
+                                :aria-label="
+                                  lockReason(group.value, row)
+                                    ? `Position ${position(group.value, row) + 1} of ${row.name} in the ${group.label} phase. ${lockReason(group.value, row)}`
+                                    : `Position of ${row.name} in the ${group.label} phase. Type a number from ${pinned(group.value) + 1} to ${group.total} to move it.`
+                                "
+                                @update:model-value="onPositionInput(row, $event)"
+                                @focus="($event.target as HTMLInputElement).select()"
+                                @keydown.enter.prevent="commitPosition(group.value, row, true)"
+                                @keydown.esc.prevent="cancelPosition()"
+                                @blur="commitPosition(group.value, row, false)"
+                              />
+                            </span>
+                          </Tooltip>
+                          <Tooltip :content="lockReason(group.value, row) || 'Move up'">
+                            <IconButton
+                              icon="az az-chevron-up"
+                              variant="outline"
+                              size="small"
+                              data-control="up"
+                              :aria-label="
+                                lockReason(group.value, row)
+                                  ? `Move ${row.name} up. ${lockReason(group.value, row)}`
+                                  : `Move ${row.name} up`
+                              "
+                              :disabled="!canMove(group.value, position(group.value, row), -1)"
+                              @click="step(group.value, position(group.value, row), -1, 'up')"
+                            />
+                          </Tooltip>
+                          <Tooltip :content="lockReason(group.value, row) || 'Move down'">
+                            <IconButton
+                              icon="az az-chevron-down"
+                              variant="outline"
+                              size="small"
+                              data-control="down"
+                              :aria-label="
+                                lockReason(group.value, row)
+                                  ? `Move ${row.name} down. ${lockReason(group.value, row)}`
+                                  : `Move ${row.name} down`
+                              "
+                              :disabled="!canMove(group.value, position(group.value, row), 1)"
+                              @click="step(group.value, position(group.value, row), 1, 'down')"
+                            />
+                          </Tooltip>
+                        </div>
+                      </template>
+                      <template #cell-name="{ row }">
+                        <div class="flex min-w-0 items-center gap-(--spacing-2xs)">
+                          <Button
+                            variant="link"
+                            :label="row.name"
+                            data-rule-name
+                            :aria-label="`Edit ${row.name}`"
+                            class="min-w-0"
+                            @click="(event: MouseEvent) => emit('edit', event, row)"
+                          />
+                          <Tag
+                            v-if="row.locked"
+                            label="Default"
+                            severity="neutral"
+                            size="small"
+                          />
+                        </div>
+                      </template>
+                      <template #cell-description="{ row }">
+                        <span class="min-w-0 truncate text-(--text-muted)">{{
+                          row.description
+                        }}</span>
+                      </template>
+                      <template #cell-status="{ row }">
+                        <div class="flex min-h-10 min-w-0 items-center">
+                          <Field orientation="horizontal">
+                            <Switch
+                              :model-value="row.active"
+                              :disabled="row.locked || saving"
+                              :aria-label="`Run ${row.name}`"
+                              @update:model-value="setActive(row, $event)"
+                            />
+                            <Field.Label>
+                              <span
+                                class="text-body-sm max-md:sr-only"
+                                aria-hidden="true"
+                                >{{ row.active ? 'Active' : 'Inactive' }}</span
+                              >
+                            </Field.Label>
+                          </Field>
+                        </div>
+                      </template>
+                      <template #cell-modified="{ row }">
+                        <span class="min-w-0 truncate text-body-sm text-(--text-muted)"
+                          >{{ row.modified }} by {{ row.author }}</span
+                        >
+                      </template>
+                      <template #empty>
+                        <EmptyState
+                          size="small"
+                          icon="az az-search"
+                          :title="`No ${group.label.toLowerCase()} rule matches “${search.trim()}”`"
+                        >
+                          <template #actions>
+                            <Button
+                              label="Clear search"
+                              variant="outline"
+                              size="small"
+                              @click="search = ''"
+                            />
+                          </template>
+                        </EmptyState>
+                      </template>
+                    </DataTable>
+                    <EmptyState
+                      v-else
+                      size="small"
+                      :title="`No ${group.label.toLowerCase()} rules yet`"
+                      :description="`Add a rule to act on every ${group.label.toLowerCase()} this ${SUBJECT} handles.`"
+                    >
+                      <template #actions>
+                        <Button
+                          label="Add Rule"
+                          icon="az az-plus"
+                          variant="outline"
+                          size="medium"
+                          @click="(event: MouseEvent) => emit('create', event, group.value)"
+                        />
+                      </template>
+                    </EmptyState>
+                  </div>
+                </Accordion.Content>
+              </Accordion.Item>
+            </Accordion>
+          </template>
+        </Card>
+
+        <p
+          role="status"
+          aria-live="polite"
+          class="sr-only"
+          data-testid="rule-list__announcer"
+        >
+          {{ announcement }}
+        </p>
+      </section>
+
+      <SaveBar
+        v-if="dirty"
+        @save="onSaveShortcut"
+      >
+        {{ changeCount }} {{ changeCount === 1 ? 'change' : 'changes' }} to the rules, not saved
+        yet.
+        <template #actions>
+          <Button
+            type="button"
+            label="Discard"
+            variant="outline"
+            size="medium"
+            :disabled="saving"
+            @click="discard"
+          />
+          <Button
+            type="button"
+            variant="primary"
+            size="medium"
+            :disabled="saving"
+            @click="openReview"
+            aria-keyshortcuts="Meta+S Control+S"
+          >
+            Review changes
+            <Kbd
+              meta
+              size="small"
+              aria-hidden="true"
+              >S</Kbd
+            >
+          </Button>
+        </template>
+      </SaveBar>
+    </div>
+
+    <Dialog
+      v-model:open="reviewOpen"
+      :dismissible="!saving"
+      :closable="!saving"
+      size="medium"
+    >
+      <DialogContent>
+        <PanelHeader class="w-full">
+          <DialogTitle>Review changes</DialogTitle>
+        </PanelHeader>
+        <PanelBody>
+          <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
+            <Alert
+              v-if="saveFailed"
+              severity="danger"
+              :label="saveError"
+            />
+            <DialogDescription>
+              Rules run top to bottom within each phase. Saving applies this order to every
+              {{ SUBJECT === 'firewall' ? 'request' : 'request and response' }} the
+              {{ SUBJECT }} handles.
+            </DialogDescription>
+            <section
+              v-for="phase in changes"
+              :key="phase.value"
+              class="flex min-w-0 flex-col gap-(--spacing-xs)"
+              :aria-labelledby="`rules-review-${phase.value}`"
+            >
+              <h3
+                :id="`rules-review-${phase.value}`"
+                class="m-0 text-label-sm text-(--text-muted)"
+              >
+                {{ phase.label }} phase
+              </h3>
+              <ul class="m-0 flex list-none flex-col gap-(--spacing-2xs) p-0">
+                <li
+                  v-for="line in phase.items"
+                  :key="line.key"
+                  class="text-body-sm text-(--text-muted)"
+                >
+                  <span class="font-medium text-(--text-default)">{{ line.name }}</span>
+                  {{ line.text }}.
+                </li>
+              </ul>
+            </section>
+          </div>
+        </PanelBody>
+        <PanelFooter>
+          <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
+            <div class="w-full md:w-fit">
+              <Button
+                class="w-full"
+                type="button"
+                label="Cancel"
+                variant="outline"
+                :disabled="saving"
+                @click="reviewOpen = false"
+              />
+            </div>
+            <div class="w-full md:w-fit">
+              <Button
+                class="w-full"
+                type="button"
+                :label="saveFailed ? 'Save again' : 'Save'"
+                variant="primary"
+                :loading="saving"
+                @click="save"
+              />
+            </div>
+          </div>
+        </PanelFooter>
+      </DialogContent>
+    </Dialog>
+  </div>
+</template>

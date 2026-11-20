@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The Filter button opens a drill-in menu: pick a field, then its values. Author is a `multi` field with avatars, Status a `single` field and Last modified a `date` field with periods and a custom range. `FilterMenu.ChipGroup` below shows each applied field; activate a chip to reopen the menu at that field, or remove it to clear the field.",
+   "file": "examples/filter-menu/default.vue"
+  },
+  {
+   "name": "Sizes",
+   "summary": "The trigger at every `size`: `small`, `medium` (the default) and `large`, each with one filter applied so the count shows.",
+   "file": "examples/filter-menu/sizes.vue"
+  }
+ ]
+}

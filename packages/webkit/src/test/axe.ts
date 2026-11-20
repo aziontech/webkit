@@ -15,7 +15,7 @@ import { expect } from 'vitest'
  *   - target-size                              — needs the real rendered size
  *   - link-in-text-block                       — needs styling to tell a link from its text
  *   - scrollable-region-focusable              — needs real overflow / layout
- * Pixels & contrast belong to Storybook + visual regression, not to units.
+ * Pixels & contrast belong to the styled visual suite (visual/), not to units.
  * See docs/TESTING_AUDIT_2026-07-02.md §2.0.
  *
  * On top of axe it also runs `expectNoPlaceholderOnlyLabels` (below) — a custom

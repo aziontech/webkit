@@ -1,0 +1,25 @@
+import fs from 'node:fs'
+
+const J = process.argv[2]
+const D = `/data/eval-m27b/jobs/${J}`
+const job = JSON.parse(fs.readFileSync(`${D}/job.json`, 'utf8'))
+const site = job.surface === 'site'
+const vars = {
+  JOB: J,
+  SURFACE: job.surface,
+  ROLE: site ? 'web developer' : 'product (console) developer',
+  N: job.pages.length,
+  SURFACE_LONG: site ? 'pages of the azion.com marketing site' : 'screens of the Azion console',
+  DIR: D,
+  FIRST: job.pages[0],
+  THEME_RULE: site
+    ? 'The site is **dark only**: every page renders in WebKit dark theme.'
+    : 'The console is **light**: every screen renders in WebKit light theme.',
+  PORT: job.port,
+  SCHEME: site ? 'dark' : 'light',
+  EXPAND: site ? '' : ' expand',
+  PAGES: job.pages.map((p) => '`' + p + '`').join(', ')
+}
+let t = fs.readFileSync('/data/eval-m27b/bin/BRIEF.template.md', 'utf8')
+for (const [k, v] of Object.entries(vars)) t = t.replaceAll(`{{${k}}}`, String(v))
+process.stdout.write(t)

@@ -1,0 +1,57 @@
+{
+ "name": "stats-section",
+ "binding": "StatsSection",
+ "import": "@aziontech/webkit/stats-section",
+ "treeShakeableImport": "@aziontech/webkit/stats-section",
+ "category": "section",
+ "surface": "site",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The proof-by-numbers band of a marketing page: a framed row of big figures, each with its caption and optional prefix or unit. It is a page section — the site places it from a `{ _id: 'stats-section', props }` entry and binds `props` straight onto it — and it composes `module`, `registration-frame` and `stats`, which owns the figures' scale and layout.",
+ "setup": null,
+ "useWhen": [
+  "Use StatsSection for a band of proof figures placed from page JSON.",
+  "Rendering page JSON, or you need a whole band with no custom content → the section (`stats-section`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`stats`).",
+  "To state reach, scale or results in three to five figures right after a hero or a claim."
+ ],
+ "avoidWhen": [
+  "For figures that need a quote or a logo beside them → use `network-section` or `logo-wall-section`.",
+  "For a single figure inside another band → use `stats` directly."
+ ],
+ "related": [
+  "`stats` — the figure row this band frames.",
+  "`network-section` — the band that pairs claims with client outcomes."
+ ],
+ "bestPractices": [
+  "Keep `value` short and the unit in `suffix`, so the figure reads at a glance.",
+  "Three to five items; more than that and the figures stop reading as a band."
+ ],
+ "props": [
+  {
+   "name": "items",
+   "type": "StatsSectionItem[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The figures rendered as cells, in order; each item is `{ value, label, prefix?, suffix? }` where `value` is the figure, `label` its caption, and `prefix` / `suffix` the qualifier and unit set beside it."
+  },
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "In-page id set on the band so a `#hash` link can scroll to it."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/stats-section/default.vue"
+  }
+ ],
+ "docs": "components/stats-section.md"
+}

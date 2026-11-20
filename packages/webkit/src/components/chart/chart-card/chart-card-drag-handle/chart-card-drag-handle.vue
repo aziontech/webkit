@@ -1,0 +1,62 @@
+<script setup lang="ts">
+  import { computed, useAttrs } from 'vue'
+
+  import { eventDirection, logicalArrowKey } from '../../../../composables/use-direction'
+  import { useTranslate } from '../../../../composables/use-translate'
+  import * as en from '../../../../locales/en'
+  import { useChartCardContext } from '../composables/use-chart-card-context'
+  import type { ChartCardMoveDirection } from '../injection-key'
+
+  defineOptions({ name: 'ChartCardDragHandle', inheritAttrs: false })
+
+  export interface ChartCardDragHandleProps {
+    /** Accessible name of the handle. Empty uses the locale catalog (`Move card`). */
+    ariaLabel?: string
+  }
+
+  withDefaults(defineProps<ChartCardDragHandleProps>(), {
+    ariaLabel: ''
+  })
+
+  const attrs = useAttrs()
+  const { t } = useTranslate({ chartCard: en.chartCard })
+  const ctx = useChartCardContext()
+
+  const DIRECTIONS: Record<string, ChartCardMoveDirection> = {
+    ArrowUp: 'up',
+    ArrowDown: 'down',
+    ArrowLeft: 'left',
+    ArrowRight: 'right'
+  }
+
+  const testId = computed(
+    () => (attrs['data-testid'] as string | undefined) ?? 'chart-card-drag-handle'
+  )
+
+  function onKeydown(event: globalThis.KeyboardEvent) {
+    const direction = DIRECTIONS[logicalArrowKey(event.key, eventDirection(event))]
+    if (!direction) return
+    event.preventDefault()
+    ctx.move(event, direction)
+  }
+</script>
+
+<template>
+  <button
+    v-if="ctx.draggable.value"
+    v-bind="$attrs"
+    type="button"
+    :aria-label="ariaLabel || t('chartCard.move')"
+    :data-testid="testId"
+    class="relative -ms-(--spacing-2xs) inline-flex size-6 shrink-0 before:absolute before:-inset-2 before:content-[''] cursor-grab items-center justify-center rounded-(--shape-button) text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) active:cursor-grabbing"
+    @pointerdown="ctx.armDrag()"
+    @pointerup="ctx.disarmDrag()"
+    @pointercancel="ctx.disarmDrag()"
+    @keydown="onKeydown"
+  >
+    <i
+      class="az az-menu"
+      aria-hidden="true"
+    />
+  </button>
+</template>

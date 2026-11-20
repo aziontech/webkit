@@ -16,24 +16,18 @@
   const attrs = useAttrs()
   const ctx = inject(SidebarInjectionKey)
 
-  const testId = computed(
-    () =>
-      (attrs['data-testid'] as string | undefined) ??
-      `${ctx?.testId ?? 'layout-sidebar'}__footer-region`
-  )
-
-  const rootClasses = computed(() =>
-    cn(
-      'w-full shrink-0',
-      ctx?.collapsible ? undefined : 'border-t border-(--border-muted) pt-(--spacing-md)',
-      attrs.class
-    )
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'sidebar-footer')
 </script>
 
 <template>
   <div
-    :class="rootClasses"
+    :class="
+      cn(
+        'w-full shrink-0',
+        ctx?.collapsible ? undefined : 'border-t border-(--border-muted) pt-(--spacing-md)',
+        attrs.class as string | undefined
+      )
+    "
     :data-testid="testId"
   >
     <slot />

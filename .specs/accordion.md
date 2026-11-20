@@ -2,21 +2,48 @@
 name: accordion
 category: content
 structure: composition
-status: draft
-spec_version: 3
+status: implemented
+spec_version: 10
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=480-876
   node_id: '480:876'
-checksum: ee1884fc16c8e518d06a2f1643a18741358a0c887c5136fc2bacb5dbba31e0ce
+checksum: 1c46dd1282514e5fcf1deabfcbd9ca35f13faae0204ab106e1daf157c0e3d538
 created: 2026-06-26
-last_updated: 2026-07-15
+last_updated: 2026-11-19
 ---
 
 # Accordion — Component Spec
 
 ## Purpose
 
-A vertically stacked set of disclosure items: each item has a clickable header that expands or collapses its content panel. Use it to condense long content into scannable sections. Unlike `tab-view` (mutually-exclusive panels shown in place), an accordion can keep one item open at a time (`type="single"`) or several at once (`type="multiple"`), and its content expands inline below each header.
+A vertically stacked set of disclosure items: each item has a clickable header that expands or collapses its content panel. Use it to condense long content into scannable sections. Unlike `tabs` (mutually-exclusive panels shown in place), an accordion can keep one item open at a time (`type="single"`) or several at once (`type="multiple"`), and its content expands inline below each header.
+
+## When to use
+
+- Use Accordion for expandable sections in product UI; the marketing FAQ band is FaqSection.
+- Long content splits into independent sections the reader scans by heading and opens on demand (settings groups, help topics, a details list).
+- The reader may want one section open at a time (`type="single"`) or to compare several side by side (`type="multiple"`).
+- Content should expand inline below its heading, pushing the rest of the page down.
+
+## When NOT to use
+
+- The panels are mutually exclusive views shown in the same place → use `tabs`.
+- It is the frequently-asked-questions band of a marketing page → use `faq-section` (or `faq` for the band without the page-section wiring).
+- It is hierarchical navigation with expandable rows → use `sidebar-menu`.
+
+## Related
+
+- `tabs` — switches between panels in place; one panel visible, headers in a row.
+- `faq` — the marketing FAQ band that composes `accordion` with a heading column and hairline register.
+- `sidebar-menu` — expanding rows for navigation, not for revealing content.
+
+## Best practices
+
+- Give every `Accordion.Item` a unique `value`; the open state is keyed by it, and `default-value` / `v-model` refer to it.
+- Bind `v-model` to a string in `type="single"` and to an array in `type="multiple"`; set `collapsible` to `false` only when one item must always stay open.
+- Set the trigger's `headingLevel` to fit the page outline (default `3`) — each trigger is wrapped in a real heading.
+- `Accordion.Content` pads its body on the trigger's inset (`--accordion-inset`) with `--spacing-xs` above and `--spacing-md` below, so the answer starts on the question's left edge (after the chevron when `icon-position` is `leading`). Pass `:padded="false"` for edge-to-edge content (a `LogViewer`, a table) that owns its spacing.
+- Set `size` and `icon-position` on the root, not per item — they are provided to every item through context.
 
 ## Usage
 
@@ -31,7 +58,7 @@ A vertically stacked set of disclosure items: each item has a clickable header t
     collapsible
     default-value="overview"
     size="medium"
-    arrow-position="right"
+    icon-position="trailing"
   >
     <Accordion.Item value="overview">
       <Accordion.Trigger>What is Azion?</Accordion.Trigger>
@@ -63,6 +90,8 @@ Tree-shaking alternative — the same sub-components as standalone imports:
 </script>
 ```
 
+**Three ways in** (decision RV-K2-1, rule `webkit-content-channels`). Markdown writes `<AccordionGroup>` and `<Accordion>`, which render `DocAccordionGroup` (a docs piece). From the site's page JSON it is the `Accordion` scene a band draws by name (a `console-showcase-section` with `variant: "diagram"` and `texture: "none"`, so no texture sits behind it); its items are the scene's `children`, each `AccordionItem` holding an `AccordionTrigger` and an `AccordionContent` whose text is a text child.
+
 ## Sub-components
 
 The root ships a **compound API**: an `index.ts` (beside `accordion.vue`) attaches every sub-component to the root so `<Accordion.Item>` / `<Accordion.Trigger>` / `<Accordion.Content>` resolve from one import; the standalone imports above remain the tree-shaking path. The root is a disclosure component with `data-state="open|closed"`, so `Trigger` / `Content` are the correct anatomy names. Shared open-state flows through `provide`/`inject` (`injection-key.ts`), so the consumer wires nothing.
@@ -70,17 +99,18 @@ The root ships a **compound API**: an `index.ts` (beside `accordion.vue`) attach
 - `accordion-item/accordion-item.vue` — One disclosure row. Registers itself with the root by `value`, derives its own open/closed state from the injected context, and groups a `Trigger` + a `Content`.
   - Props: `value: string` (**required** — unique identifier used by the open-state model), `disabled?: boolean` (default `false` — prevents this item from toggling; from the Figma component description).
   - Slot: `default` — the item's `Accordion.Trigger` and `Accordion.Content`.
-- `accordion-trigger/accordion-trigger.vue` — The clickable header row (Figma "Header"): renders the title plus the `pi pi-chevron-down` glyph, toggles the item through the injected context, and exposes `aria-expanded` / `aria-controls`. To satisfy the ARIA accordion pattern, the `<button>` is wrapped in a heading element.
-  - Props: `level?: 2 | 3 | 4 | 5 | 6` (default `3` — heading level of the wrapping `<h{level}>` for correct document outline).
+- `accordion-trigger/accordion-trigger.vue` — The clickable header row (Figma "Header"): renders the title plus the `az az-chevron-down` glyph, toggles the item through the injected context, and exposes `aria-expanded` / `aria-controls`. To satisfy the ARIA accordion pattern, the `<button>` is wrapped in a heading element.
+  - Props: `headingLevel?: 2 | 3 | 4 | 5 | 6` (default `3` — heading level of the wrapping `<h{headingLevel}>` for correct document outline).
   - Slot: `default` — header title content.
-- `accordion-content/accordion-content.vue` — The collapsible panel. Mounts only when its item is open, reads the content/trigger ids from context, and exposes `role="region"` + `aria-labelledby`. The container applies no padding — the slotted content owns its own spacing.
+- `accordion-content/accordion-content.vue` — The collapsible panel. Mounts only when its item is open, reads the content/trigger ids from context, and exposes `role="region"` + `aria-labelledby`. The padding sits on an inner wrapper, so the height reveal still closes to zero.
+  - Props: `padded?: boolean` (default `true` — pads the body on the trigger's inset, after the chevron when it leads, with `--spacing-xs` above and `--spacing-md` below; set false for edge-to-edge content such as a `LogViewer` or table rows).
   - Slot: `default` — panel body content.
 
 Resulting layout (no per-component `package.json` — dropped repo-wide; the root `packages/webkit/package.json#exports` resolves every path; `.d.ts` is generated at publish time, never committed):
 
 ```
 packages/webkit/src/components/content/accordion/
-├── accordion.vue                 (root; owns type/value/size/arrowPosition, provides context)
+├── accordion.vue                 (root; owns type/modelValue/size/iconPosition, provides context)
 ├── index.ts                      (compound: attaches Item / Trigger / Content to the root)
 ├── injection-key.ts              (shared AccordionContext)
 ├── accordion-item/
@@ -104,22 +134,25 @@ Exports to add to `packages/webkit/package.json#exports` (flat public names; cat
 
 Props below belong to the root `Accordion`. Sub-component props are documented in the **Sub-components** section above.
 
-| Prop            | Type                         | Default     | Required | JSDoc                                                                                                                           |
-| --------------- | ---------------------------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| `type`          | `'single' \| 'multiple'`     | `'single'`  | false    | Whether one or multiple items can be open at the same time.                                                                     |
-| `value`         | `string \| string[] \| null` | `undefined` | false    | Controlled open item(s): a single `value` string in single mode, an array of values in multiple mode. Use with `v-model:value`. |
-| `defaultValue`  | `string \| string[] \| null` | `null`      | false    | Initial open item(s) when uncontrolled.                                                                                         |
-| `collapsible`   | `boolean`                    | `true`      | false    | In single mode, lets the open item collapse so that no item is open.                                                            |
-| `size`          | `'medium' \| 'large'`        | `'medium'`  | false    | Size token; affects header height, padding, and typography. Provided to every item via context.                                 |
-| `arrowPosition` | `'left' \| 'right'`          | `'right'`   | false    | Side of the header the chevron sits on. Provided to every item via context.                                                     |
+| Prop           | Type                         | Default      | Required | JSDoc                                                                                           |
+| -------------- | ---------------------------- | ------------ | -------- | ----------------------------------------------------------------------------------------------- |
+| `type`         | `'single' \| 'multiple'`     | `'single'`   | false    | Whether one or multiple items can be open at the same time.                                     |
+| `defaultValue` | `string \| string[] \| null` | `null`       | false    | Initial open item(s) when uncontrolled.                                                         |
+| `collapsible`  | `boolean`                    | `true`       | false    | In single mode, lets the open item collapse so that no item is open.                            |
+| `size`         | `'medium' \| 'large'`        | `'medium'`   | false    | Size token; affects header height, padding, and typography. Provided to every item via context. |
+| `iconPosition` | `'leading' \| 'trailing'`    | `'trailing'` | false    | Side of the header the chevron sits on. Provided to every item via context.                     |
+
+## v-model
+
+| Model     | Type                                      | Default     | Emits               | Notes                                                                                                                                                                                                                          |
+| --------- | ----------------------------------------- | ----------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `v-model` | `string \| string[] \| null \| undefined` | `undefined` | `update:modelValue` | Open item(s) via `defineModel`: a single `value` string in single mode, an array of values in multiple mode, `null` when none is open. While unbound (`undefined`) the accordion is uncontrolled and starts at `defaultValue`. |
+
+`./accordion` and `./accordion-root` export the type `AccordionValue` (`string | string[] | null`), the model's value without its unbound `undefined`.
 
 ## Events
 
-Events below are emitted by the root `Accordion`.
-
-| Event          | Payload                      | Notes                                                |
-| -------------- | ---------------------------- | ---------------------------------------------------- |
-| `update:value` | `string \| string[] \| null` | `v-model:value`. Fires when the open item(s) change. |
+| _none_ | — | — |
 
 ## Slots
 
@@ -133,57 +166,58 @@ Events below are emitted by the root `Accordion`.
 - `data-state` values: `open` | `closed` — on the item, the trigger, and the content
 - `data-disabled` mirrors the per-item `disabled` prop
 - `data-orientation`: `vertical`
+- Reflow: the trigger label region is `min-w-0`, so long trigger content truncates or wraps instead of overflowing a narrow box.
 
 ## Motion & Animations
 
-| Trigger                                              | Animation / Transition                                                                                                                                                                                                                                                                           | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                                                                                         |
-| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| chevron rotate on open                               | `transition-transform duration-150 ease-out` + `data-[state=open]:rotate-180`                                                                                                                                                                                                                    | inline (matches catalog)                          | `motion-reduce:transition-none`                                                                                 |
-| content reveal on open (on `Accordion.Content` only) | `<Transition :css="false">` with JS `@enter`/`@leave` hooks that set an inline `transition: height 150ms ease-out` and animate `height: 0 → scrollHeight` on enter and `scrollHeight → 0` on leave, clearing both inline styles on `transitionend`. The wrapper stays `overflow-hidden` at rest. | inline (JS-driven; no keyframe utility)           | Hooks short-circuit and call `done()` immediately when `matchMedia('(prefers-reduced-motion: reduce)')` matches |
-| header hover state change                            | `transition-colors duration-150 ease-out`                                                                                                                                                                                                                                                        | inline (matches catalog)                          | `motion-reduce:transition-none`                                                                                 |
+| Trigger                                              | Animation / Transition                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                                                                                                                 |
+| ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| chevron rotate on open                               | `transition-transform duration-150 ease-out` + `data-[state=open]:rotate-180`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | inline (matches catalog)                          | `motion-reduce:transition-none`                                                                                                         |
+| content reveal on open (on `Accordion.Content` only) | `transition-[height] duration-150 ease-out` on the panel class plus `<Transition :css="false">` with JS `@enter`/`@leave` hooks that set only an inline `height` (`0 → scrollHeight` on enter, `scrollHeight → 0` on leave) and clear it when the `height` transition ends, or after a fallback timer of the computed transition duration plus 50 ms when no `transitionend` fires; a panel with zero-height content, or a computed transition duration of zero, finishes at once. No inline `transition` is set, so a consumer class can override the timing. The wrapper stays `overflow-hidden` at rest. | inline (matches catalog)                          | `motion-reduce:transition-none`; the hooks also call `done()` immediately when `matchMedia('(prefers-reduced-motion: reduce)')` matches |
+| header hover state change                            | `transition-colors duration-150 ease-out`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   | inline (matches catalog)                          | `motion-reduce:transition-none`                                                                                                         |
 
-> Figma declares no motion spec for this component (the open/closed/hover states are static variants). The chevron pattern mirrors `select-trigger.vue` (`data-[state=open]:rotate-180`). The content reveal animates the real `height` of the panel via JS-driven `<Transition>` hooks — a pure-CSS keyframe cannot animate `height: 0 → auto`, and the `grid-template-rows: 0fr → 1fr` trick was rejected because it forces a `display: grid` wrapper that constrains embedded children (e.g. `LogView` with an explicit height). No component-local `@keyframes`; no shared `animate-*` utility.
+> Figma declares no motion spec for this component (the open/closed/hover states are static variants). The chevron pattern mirrors `select-trigger.vue` (`data-[state=open]:rotate-180`). The content reveal animates the real `height` of the panel via JS-driven `<Transition>` hooks — a pure-CSS keyframe cannot animate `height: 0 → auto`, and the `grid-template-rows: 0fr → 1fr` trick was rejected because it forces a `display: grid` wrapper that constrains embedded children (e.g. `LogViewer` with an explicit height). No component-local `@keyframes`; no shared `animate-*` utility.
 
 ## Tokens
 
-| Region                                   | Token (DESIGN.md)                                                                  |
-| ---------------------------------------- | ---------------------------------------------------------------------------------- |
-| header title typography (large / medium) | `.text-body-md` / `.text-body-sm`                                                  |
-| content body typography (large / medium) | `.text-body-sm` / `.text-body-xs`                                                  |
-| header title text                        | `var(--text-default)`                                                              |
-| content body text                        | `var(--text-muted)`                                                                |
-| disabled text                            | `var(--text-disabled)`                                                             |
-| header divider (bottom border, open)     | `var(--border-default)`                                                            |
-| item divider when closed                 | `var(--border-muted)`                                                              |
-| header padding-x                         | `--accordion-inset`, default `var(--spacing-md)`                                   |
-| content padding                          | _none_ — the panel is flush; its inset belongs to whatever the consumer puts in it |
-| header gap (arrow right / left)          | `var(--spacing-sm)` / `var(--spacing-xs)`                                          |
-| focus ring / ring offset                 | `var(--ring-color)` / `var(--bg-canvas)`                                           |
+| Region                                   | Token (DESIGN.md)                                                                                                                                                      |
+| ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| header title typography (large / medium) | `.text-body-md` / `.text-body-sm`                                                                                                                                      |
+| content body typography (large / medium) | `.text-body-sm` / `.text-body-sm`                                                                                                                                      |
+| header title text                        | `var(--text-default)`                                                                                                                                                  |
+| content body text                        | `var(--text-muted)`                                                                                                                                                    |
+| disabled text                            | `var(--text-disabled)`                                                                                                                                                 |
+| item divider                             | `var(--border-default)` under every item but the last, open or closed (no line between a trigger and its content)                                                      |
+| header padding-x                         | `--accordion-inset`, default `var(--spacing-md)`                                                                                                                       |
+| content padding (`padded`)               | `--accordion-inset` inline (default `var(--spacing-md)`), plus the chevron and `var(--spacing-xs)` when it leads; `var(--spacing-xs)` above, `var(--spacing-md)` below |
+| header gap (icon trailing / leading)     | `var(--spacing-sm)` / `var(--spacing-xs)`                                                                                                                              |
+| focus ring / ring offset                 | `var(--ring-color)` / `var(--bg-canvas)`                                                                                                                               |
 
 ## Theme gaps
 
-| Figma variable                                                                         | Temporary primitive                                                                              | Follow-up                                                                                                 |
-| -------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------- |
-| `Heading/xss` · `Heading/xs` (Sora Regular, line-height 1.4) used for the header title | `.text-body-sm` · `.text-body-md` (line-height 1.5, same 14px / 16px sizes, same Regular weight) | `TODO: decide whether to surface text-heading-xs/xxs in DESIGN.md, or keep the body family for the title` |
-| `Hover=True` variant (delta not resolvable via the Figma MCP bound-variable API)       | `hover:bg-(--bg-hover)` on the trigger                                                           | `TODO: confirm the header hover treatment with design`                                                    |
-| `--border-width-default` (0.8px header / item divider)                                 | `border-b` (1px)                                                                                 | `TODO: tokenize the sub-pixel border width if it must match exactly`                                      |
+| Figma variable                                                                          | Temporary primitive                                                                              | Follow-up                                                                                                 |
+| --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------- |
+| `Heading/xss` · `Heading/xs` (Rubik Regular, line-height 1.4) used for the header title | `.text-body-sm` · `.text-body-md` (line-height 1.5, same 14px / 16px sizes, same Regular weight) | `TODO: decide whether to surface text-heading-xs/2xs in DESIGN.md, or keep the body family for the title` |
+| `Hover=True` variant (delta not resolvable via the Figma MCP bound-variable API)        | `hover:bg-(--bg-hover)` on the trigger                                                           | `TODO: confirm the header hover treatment with design`                                                    |
+| `--border-width-default` (0.8px header / item divider)                                  | `border-b` (1px)                                                                                 | `TODO: tokenize the sub-pixel border width if it must match exactly`                                      |
 
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus (Figma has no focus variant; we own it): `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on each `Accordion.Trigger`.
-- Keyboard map: `Tab` / `Shift+Tab` move between triggers and into open content; `Enter` / `Space` toggle the focused item; `Arrow Down` / `Arrow Up` move focus to the next / previous trigger; `Home` / `End` move focus to the first / last trigger.
-- ARIA: each trigger is a `<button>` with `aria-expanded` reflecting open state and `aria-controls` referencing its content; the trigger button is wrapped in a heading element (`<h{level}>`, default `h3`); the content panel has `role="region"` and `aria-labelledby` referencing its trigger. A `disabled` item sets `disabled` + `aria-disabled` on its trigger.
+- Keyboard map: `Tab` / `Shift+Tab` move between triggers and into open content; `Enter` / `Space` toggle the focused item; `Arrow Down` / `Arrow Up` move focus to the next / previous trigger; `Home` / `End` move focus to the first / last trigger. The order is the document order of the items, and an item disabled after mount drops out of it at once.
+- ARIA: each trigger is a `<button>` with `aria-expanded` reflecting open state and `aria-controls` referencing its content; the trigger button is wrapped in a heading element (`<h{headingLevel}>`, default `h3`); the content panel has `role="region"` and `aria-labelledby` referencing its trigger. A `disabled` item sets `disabled` + `aria-disabled` on its trigger.
 - Contrast ≥4.5:1 for text (title `--text-default`, body `--text-muted` on the surface) / ≥3:1 for the chevron glyph, including the disabled state (`--text-disabled`).
 - `motion-reduce:transition-none motion-reduce:animate-none` on the chevron rotation and content reveal.
-- Touch target: the `large` header is 40px tall and the full-width header row is the hit area (≥40×40). The `medium` header is 32px tall — a justified deviation matching the Figma `medium` size token, mitigated by the full-width clickable row.
+- Touch target: the `large` header is 40px tall and the full-width header row is the hit area (≥40×40). The `medium` header is 32px tall on a fine pointer, matching the Figma `medium` size token; on a coarse pointer every header is at least 44px tall (`pointer-coarse:min-h-11`). It grows instead of carrying an invisible hit area because stacked headers would overlap each other's.
 
-## Stories (Storybook)
+## Examples
 
-- **Default** — a single-mode accordion with a few items, one open via `default-value`.
+- **Default** — a single-mode accordion with a few items, one open via `default-value`; each answer starts on its question's left edge.
 - **Sizes** — composite story rendering `medium` and `large` side by side.
-- **ArrowPosition** — composite story rendering `right` and `left` chevron placement side by side. _Justification:_ `arrowPosition` is a visual variant axis taken straight from the Figma variant matrix, exactly like `size`; the canonical one-composite-story-per-axis pattern applies.
+- **IconPosition** — composite story rendering `trailing` and `leading` chevron placement side by side. _Justification:_ `iconPosition` is a visual variant axis taken straight from the Figma variant matrix, exactly like `size`; the canonical one-composite-story-per-axis pattern applies.
 - **Disabled** — an accordion whose middle item carries the per-item `disabled` prop, demonstrating the non-toggling state.
 - **Multiple** — an accordion with `type="multiple"` and two items open at once. _Justification:_ single-vs-multiple is the component's core behavioral contract (called out in the Figma component description) and is the one mode the single-mode Default story cannot show.
+- Page JSON — the three Default questions as an `Accordion` scene with nested `children` in a `console-showcase-section` entry with `texture: "none"`, rendered by `SitePage`, with the JSON shown. Justified: the site channel (RV-K2-1).
 
 ## Constraints — DO NOT
 
@@ -198,11 +232,9 @@ Events below are emitted by the root `Accordion`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
-- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
-- Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
+- Do not edit `.claude/docs/DESIGN.md` or `.claude/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export and the root `package.json` main/module point at `index.ts`, `types` at `index.d.ts`. Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.

@@ -1,0 +1,157 @@
+[block-hero-centered-carousel kind=centered]
+  [marketing-hero kind=screen size=medium align=center width=site aria-label='Serverless distributed SQL with built-in vector search']
+    [marketing-hero-title width=xl centered=true]
+      text: // ⏎ SQL Database
+      h1 "Serverless distributed SQL with built-in vector search"
+      p "Store and query relational data and embeddings from global replicas for AI-powered applications."
+      button "Start free" → https://console.azion.com/signup
+      button "Docs" → https://www.azion.com/en/documentation/products/store/sql-database/
+[marketing-section-container width=site]
+  · section-gap (hatched spacer band)
+  [block-capability-grid kind=left]
+    [marketing-card-grid kind=frame columns=3 mobile-columns=1 filled=true]
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Data in your apps"
+          p "Build applications that store and access structured data natively, without external databases."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Fast global reads"
+          p "Serve data to users worldwide with quick response times from distributed replicas."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "RAG without complexity"
+          p "Build AI applications with embeddings and relational data in a single database."
+  · section-gap (hatched spacer band)
+  [block-media-split-stack-alternating kind=alternating]
+    [marketing-section-module kind=left]
+      [marketing-band-stack sticky=true]
+        [marketing-media-split kind=media-start orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Build databases from code']
+          h2 "Build databases from code"
+          p "Create, query, and manage SQLite-compatible databases from your application workflow. Connect SQL Database with Functions to build data-driven experiences on Azion Web Platform."
+          img "SQL Database code workflow with CLI and API integration."
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Distributed SQL for resilient global reads']
+          h2 "Distributed SQL for resilient global reads"
+          p "The primary instance handles writes while distributed replicas serve read-heavy workloads closer to users, helping applications stay responsive and available."
+          img "Interface representing an example of a custom query."
+  · section-gap (hatched spacer band)
+  [block-code-split-accelerator kind=left]
+    h2 "Combine relational data and vector search"
+    p "SQL Database stores structured records and embeddings together, so teams can build RAG applications without adding a separate vector database."
+    button "Learn More" → https://www.azion.com/en/documentation/products/store/sql-database/
+    [code-code-block]
+      text "sql-database.ts"
+      icon-button "Copy the code sample"
+      text: import ⏎ createDatabase ⏎ from ⏎ 'azion/sql' ⏎ import ⏎ type ⏎ AzionDatabase ⏎ AzionDatabaseResponse ⏎ from ⏎ 'azion/sql' ⏎ const ⏎ data ⏎ database ⏎ error ⏎ }: ⏎ AzionDatabaseResponse ⏎ AzionDatabase ⏎ await ⏎ createDatabase ⏎ 'app-data' ⏎ debug ⏎ true ⏎ }); ⏎ if ⏎ error ⏎ || !database) ⏎ throw ⏎ new ⏎ Error ⏎ error ⏎ ?.message ?? ⏎ 'Failed to create database' ⏎ ); ⏎ await ⏎ database ⏎ execute ⏎ ([ ⏎ 'CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, name TEXT, email TEXT)' ⏎ INSERT INTO users (name, email) VALUES ('Alice', 'alice@example.com') ⏎ ]); ⏎ const ⏎ data ⏎ users ⏎ await ⏎ database ⏎ query ⏎ ([ ⏎ 'SELECT * FROM users' ⏎ ]); ⏎ console ⏎ log ⏎ users ⏎ ?.rows);
+  · section-gap (hatched spacer band)
+  h2 "See how to use"
+  p "AI"
+  h3 "Retrieval-Augmented Generation (RAG)"
+  p "Build RAG applications with built-in vector search and AI Inference integration. Query embeddings and relational data together without a separate vector database."
+  link "Learn more" → https://www.azion.com/en/documentation/use-cases/build-and-run-ai-workloads/add-ai-features-to-existing-applications/
+  p "Security"
+  h3 "Authentication and sessions"
+  p "Store sessions, tokens, and authentication metadata in a distributed SQL layer. Validate credentials from replicas closer to users."
+  link "Learn more" → https://www.azion.com/en/documentation/products/store/sql-database/
+  p "SaaS"
+  h3 "Global replication for SaaS"
+  p "Serve shared datasets from distributed read replicas. SaaS applications stay consistent for users across regions."
+  link "Learn more" → https://www.azion.com/en/documentation/products/store/sql-database/
+  p "Personalization"
+  h3 "User profiles and preferences"
+  p "Store profiles and settings close to application logic for responsive personalization. Read-heavy workloads benefit from distributed replicas."
+  link "Learn more" → https://www.azion.com/en/documentation/products/store/sql-database/
+  p "E-commerce"
+  h3 "E-commerce product catalogs"
+  p "Query inventory and product data from replicas near customers. Keep catalog experiences responsive during traffic spikes."
+  link "Learn more" → https://www.azion.com/en/solutions/retail/
+  · section-gap (hatched spacer band)
+  [block-client-quotes]
+    [marketing-section-module kind=left]
+      [marketing-quote-tabs]
+        [marketing-quote kind=highlight]
+          img "Contabilizei"
+          blockquote "With Azion, Contabilizei improved request delivery at the Edge, reduced infrastructure costs, and gained fast access to support whenever needed."
+          figcaption "Fabrício Santos DevSecOps Manager at Contabilizei"
+          button "See success stories" → /en/success-case/
+        [marketing-card-grid kind=frame columns=3 mobile-columns=2 filled=true aria-label='Client stories']
+          [marketing-card-grid-cell]
+  · section-gap (hatched spacer band)
+  [block-platform-directory aria-label='A full-stack platform that scales instantly']
+    [marketing-section-module kind=left]
+      [marketing-section-title kind=centered size=medium]
+        h2 "A full-stack platform that scales instantly"
+      [marketing-column-navigation columns=4 mobile-columns=1 aria-label='Platform primitives']
+        [marketing-column-navigation-column]
+          text "Compute"
+          [marketing-column-navigation-item]
+          li "Functions Run serverless code closer to users"
+          [marketing-column-navigation-item]
+          li "Durable Objects Stateful compute, deployed worldwide"
+          [marketing-column-navigation-item]
+          li "Rules Engine Automate request handling with programmable rules"
+          [marketing-column-navigation-item]
+          li "Load Balancer Distribute traffic for performance and availability"
+          [marketing-column-navigation-item]
+          li "Image Processor Optimize and transform images in real time"
+        [marketing-column-navigation-column]
+          text "AI"
+          [marketing-column-navigation-item]
+          li "AI Inference Run AI models closer to users"
+          [marketing-column-navigation-item]
+          li "AI Gateway Secure, manage, and optimize AI traffic"
+        [marketing-column-navigation-column]
+          text "Data"
+          [marketing-column-navigation-item]
+          li "Object Storage Scalable, durable storage for unstructured data"
+          [marketing-column-navigation-item]
+          li "SQL Database Relational database built for distributed applications"
+          [marketing-column-navigation-item]
+          li "KV Store Globally distributed, low-latency key-value store"
+          [marketing-column-navigation-item]
+          li "Cache Accelerate content delivery and reduce origin load"
+        [marketing-column-navigation-column]
+          text "Security"
+          [marketing-column-navigation-item]
+          li "Web Application Firewall Protect human and AI applications from threats"
+          [marketing-column-navigation-item]
+          li "API Gateway Secure, manage, and scale API traffic"
+          [marketing-column-navigation-item]
+          li "Bot Manager Detect and stop automated threats instantly"
+          [marketing-column-navigation-item]
+          li "DNS Reliably host authoritative DNS zones worldwide"
+  · section-gap (hatched spacer band)
+  [block-faq-section]
+    [marketing-section-module kind=left]
+      [marketing-faq]
+        h2 "Frequently Asked Questions"
+        [content-accordion orientation=vertical size=large]
+          [content-accordion-item]
+            h3 "What is SQL Database?"
+          [content-accordion-item]
+            h3 "How does SQL Database replicate data?"
+          [content-accordion-item]
+            h3 "Can I write to replicas?"
+          [content-accordion-item]
+            h3 "Are replicas immediately consistent with the main instance?"
+          [content-accordion-item]
+            h3 "How do I query SQL Database from Functions?"
+          [content-accordion-item]
+            h3 "Can I manage databases with an API?"
+          [content-accordion-item]
+            h3 "What happens if I delete a database?"
+          [content-accordion-item]
+            h3 "What are the default limits for SQL Database?"
+          [content-accordion-item]
+            h3 "What is Vector Search in SQL Database?"
+          [content-accordion-item]
+            h3 "Is there a limit on vector dimensions?"
+  · section-gap (hatched spacer band)
+  [block-closing-call-to-action-split kind=split]
+    [marketing-section-module kind=left]
+      [marketing-call-to-action kind=split aria-label='Your data.']
+        text: // ⏎ Store
+        h2 "Your data. Available everywhere."
+        button "Start free" → https://console.azion.com/signup?tck=store_cta
+        p "Get faster access, simpler scaling, and less storage overhead as data grows."
+        button "Talk to a specialist" → https://www.azion.com/en/contact/

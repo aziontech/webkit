@@ -1,0 +1,65 @@
+<script setup lang="ts">
+  import { computed, type ComputedRef, provide, shallowReactive, useAttrs } from 'vue'
+
+  import { MultiSelectGroupInjectionKey } from '../injection-key'
+
+  defineOptions({
+    name: 'MultiSelectGroup',
+    inheritAttrs: false
+  })
+
+  export interface MultiSelectGroupProps {
+    /** Heading text rendered above the grouped options. */
+    label?: string
+  }
+  withDefaults(defineProps<MultiSelectGroupProps>(), {
+    label: ''
+  })
+
+  defineSlots<{
+    default(): unknown
+  }>()
+
+  const attrs = useAttrs()
+
+  const options = shallowReactive(new Map<symbol, ComputedRef<boolean>>())
+  provide(MultiSelectGroupInjectionKey, {
+    register: (id, visible) => {
+      options.set(id, visible)
+    },
+    unregister: (id) => {
+      options.delete(id)
+    }
+  })
+
+  const visible = computed(() => {
+    if (options.size === 0) return true
+    for (const option of options.values()) if (option.value) return true
+    return false
+  })
+
+  const testId = computed(
+    () => (attrs['data-testid'] as string | undefined) ?? 'multi-select-group'
+  )
+</script>
+
+<template>
+  <div
+    v-show="visible"
+    v-bind="$attrs"
+    role="group"
+    :aria-label="label || undefined"
+    :data-testid="testId"
+    :class="attrs.class"
+    class="flex flex-col items-stretch [&:not(:first-child)]:mt-(--spacing-sm)"
+  >
+    <div
+      v-if="label"
+      class="flex items-center px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-muted)"
+      :data-testid="`${testId}__label`"
+    >
+      {{ label }}
+    </div>
+    <slot />
+  </div>
+</template>

@@ -1,4 +1,4 @@
-// Pins the zero-with-unit gate (src/scripts/zero-unit.mjs): both sides of the rule (bare
+// Pins the zero-with-unit gate (scripts/lib/zero-unit.mjs): both sides of the rule (bare
 // zero outside math; `0rem`-only inside), the completed unit list, the multi-line calc scan,
 // mutual exclusivity, and the error message.
 
@@ -10,7 +10,7 @@ import {
   ZERO_UNIT_IN_MATH,
   findZeroMisuse,
   assertNoZeroWithUnit,
-} from '../src/scripts/zero-unit.mjs';
+} from '../scripts/lib/zero-unit.mjs';
 
 // `.test()` is stateless on these (non-global) regexes — see the module note.
 const isBare = (s) => ZERO_WITH_UNIT.test(s);

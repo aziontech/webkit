@@ -5,15 +5,14 @@ import figma from 'figma'
 
 const instance = figma.selectedInstance
 
-const kind = instance.getEnum('kind', {
+const variant = instance.getEnum('kind', {
   default: 'default',
   reduced: 'reduced',
-  extended: 'extended',
-  'move-to-the-edge': 'extended'
+  extended: 'extended'
 })
 
 export default {
-  example: figma.code`<Brand${kind === 'default' ? '' : figma.code` kind="${kind}"`} />`,
+  example: figma.code`<Brand${variant === 'default' ? '' : figma.code` variant="${variant}"`} />`,
   imports: ["import Brand from '@aziontech/webkit/brand'"],
   id: 'brand',
   metadata: { nestable: true }

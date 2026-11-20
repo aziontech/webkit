@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import FrameBox from '../../layout/frame-box/frame-box.vue'
+  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
 
   defineOptions({
     name: 'MediaTile',
@@ -9,11 +9,11 @@
   })
 
   /** Register of the tile. */
-  export type MediaTileKind = 'frame' | 'plain'
+  export type MediaTileVariant = 'frame' | 'plain'
 
-  interface Props {
+  export interface MediaTileProps {
     /** Register of the tile: frame draws the page's frame around the media alone, plain draws no rules and makes the tile itself the cell a divider grid separates. */
-    kind?: MediaTileKind
+    variant?: MediaTileVariant
     /** The caption's run-in lead, naming what the panel above it shows. */
     title: string
     /** The sentence continuing the caption after the lead; overridden by the default slot. */
@@ -30,8 +30,8 @@
     mediaScale?: number
   }
 
-  const props = withDefaults(defineProps<Props>(), {
-    kind: 'frame',
+  const props = withDefaults(defineProps<MediaTileProps>(), {
+    variant: 'frame',
     description: '',
     src: '',
     alt: '',
@@ -49,15 +49,11 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'marketing-media-tile'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'media-tile')
 
-  const hasMedia = computed<boolean>(() => Boolean(slots.media) || props.src.length > 0)
+  const hasMedia = () => Boolean(slots.media) || props.src.length > 0
 
-  const hasDescription = computed<boolean>(
-    () => Boolean(slots.default) || props.description.length > 0
-  )
+  const hasDescription = () => Boolean(slots.default) || props.description.length > 0
 
   const mediaStyle = computed(() =>
     props.mediaScale === 1 ? undefined : { scale: String(props.mediaScale) }
@@ -68,18 +64,18 @@
   <figure
     v-bind="$attrs"
     :data-testid="testId"
-    :data-kind="kind"
-    :data-media="hasMedia || null"
-    :data-described="hasDescription || null"
+    :data-variant="variant"
+    :data-media="hasMedia() || null"
+    :data-described="hasDescription() || null"
     :data-padded="padded || null"
-    class="m-0 flex h-full flex-col gap-(--spacing-lg) data-[kind=plain]:bg-(--bg-canvas)"
+    class="m-0 flex h-full flex-col gap-(--spacing-lg) data-[variant=plain]:bg-(--bg-canvas)"
   >
     <component
-      :is="kind === 'frame' ? FrameBox : 'div'"
+      :is="variant === 'frame' ? RegistrationFrame : 'div'"
       :data-testid="`${testId}__frame`"
-      :data-kind="kind"
+      :data-variant="variant"
       :data-padded="padded || null"
-      class="overflow-hidden data-[kind=frame]:min-h-64 data-[kind=plain]:min-h-32 [--illustration-fill:var(--bg-canvas)] data-[kind=frame]:bg-(--bg-canvas) data-[kind=frame]:data-[padded]:p-(--spacing-xl) data-[kind=plain]:data-[padded]:px-(--spacing-lg) data-[kind=plain]:data-[padded]:pt-(--spacing-lg)"
+      class="overflow-hidden data-[variant=frame]:min-h-64 data-[variant=plain]:min-h-32 data-[variant=frame]:bg-(--bg-canvas) data-[variant=frame]:data-[padded]:p-(--spacing-xl) data-[variant=plain]:data-[padded]:px-(--spacing-lg) data-[variant=plain]:data-[padded]:pt-(--spacing-lg)"
     >
       <div
         :data-testid="`${testId}__media`"
@@ -102,11 +98,11 @@
     </component>
 
     <figcaption
-      :data-kind="kind"
-      class="m-0 text-pretty text-body-md text-(--text-muted) data-[kind=plain]:px-(--spacing-lg) data-[kind=plain]:pb-(--spacing-lg)"
+      :data-variant="variant"
+      class="m-0 text-pretty text-body-md text-(--text-muted) data-[variant=plain]:px-(--spacing-lg) data-[variant=plain]:pb-(--spacing-lg)"
     >
       <strong class="font-medium text-(--text-default)">{{ title }}</strong>
-      <template v-if="hasDescription"
+      <template v-if="hasDescription()"
         >{{ ' ' }}<slot>{{ description }}</slot></template
       >
     </figcaption>

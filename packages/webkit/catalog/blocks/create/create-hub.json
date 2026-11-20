@@ -1,0 +1,29 @@
+{
+ "variants": [
+  {
+   "name": "Connected",
+   "summary": "GitHub connected: jane-doe is the selected scope and its ten most recently pushed repositories are listed, with Load more for the other two.",
+   "file": "blocks/create/create-hub/variants/connected.vue"
+  },
+  {
+   "name": "RepositoriesLoading",
+   "summary": "A scope just picked: six skeleton rows, hidden from assistive technology, stand in for the repositories while one status line says they are loading.",
+   "file": "blocks/create/create-hub/variants/repositories-loading.vue"
+  },
+  {
+   "name": "ConnectError",
+   "summary": "The GitHub connection failed: the connect EmptyState stays, with a danger Alert under Continue with GitHub saying the authorization did not finish; pressing the button again retries.",
+   "file": "blocks/create/create-hub/variants/connect-error.vue"
+  },
+  {
+   "name": "LoadError",
+   "summary": "The repositories of the jane-doe scope failed to load: a danger Alert with Retry takes the place of the list, while the scope Select and the search stay usable.",
+   "file": "blocks/create/create-hub/variants/load-error.vue"
+  }
+ ],
+ "sfcFile": "blocks/create/create-hub/create-hub.vue",
+ "guidelinesFile": "blocks/create/create-hub/guidelines.md",
+ "fileSources": {
+  "sample.ts": "blocks/create/create-hub/sample.ts"
+ }
+}

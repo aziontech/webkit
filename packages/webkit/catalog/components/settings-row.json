@@ -1,0 +1,29 @@
+{
+ "purpose": "One setting inside a flush `Card`: an `Item` whose content carries the title and description, with the control placed by what it needs. A typed or picked field sits in a right cell capped at the 3xs container so every field on the card ends at the same edge (`field`); a switch or a button sits hard right at its natural width (`compact`); a textarea, list, radio group or editor drops under the copy at the full measure (`stacked`). A child setting indents one or two levels under a rule (`depth`). The copy top-aligns with the control, and the description always wraps in full, never truncated. In a narrow row (below `@md` of the row, a phone) a `field` control stacks under the copy at full width; a `compact` switch or button stays at the end side beside the wrapped copy. `stackable` moves the stacking point up to `@lg` for a field that needs the full measure in a drawer-width box.",
+ "useWhen": [
+  "Every row of a settings card: account settings, build settings, create pages, resource settings.",
+  "A field with a validation message under it (put the `FieldError` in the default slot after the control)."
+ ],
+ "avoidWhen": [
+  "A stand-alone form field with a visible label above it → use `field` around the control (`Field`, `FieldLabel`, `FieldDescription`).",
+  "A read-only list of label and value pairs → use `key-value-list`.",
+  "A navigable list row → use `item` directly."
+ ],
+ "related": [
+  "`settings-group` — the band the card of rows sits in.",
+  "`item` — the row primitive it renders; place rows in an `Item.List` inside the card.",
+  "`field-error` — the required or invalid message under the control."
+ ],
+ "bestPractices": [
+  "The title is the label: give the control the same text as `aria-label`.",
+  "Pick `variant` by the control: `field` for Input and Select, `compact` for Switch and Button, `stacked` for Textarea, radio groups and editors.",
+  "Show a validation message only after Save was pressed.",
+  "Use `depth` only for a setting that applies when the row above it is on, and render it with `v-if` on that state.",
+  "Let the row stack on a phone: the title and the full description on top, a `field` control under them at full width. A `compact` switch or button keeps the end side, beside the wrapped copy.",
+  "Set `stackable` only when the field needs the full measure in a drawer-width box (a long URL or a code value in a side drawer), where a default row would still sit beside its copy; never to fix a centred or cramped look.",
+  "Let a tall control (an input group of three nameservers, a textarea) sit beside the copy: the title stays at the top of the row.",
+  "Do not wrap the row or its copy in your own flex box to change the alignment or to stack it; use `variant` and `stackable`.",
+  "Do not set `stackable` on a `compact` row: a switch or a button always stays at the end side.",
+  "Keep the description to the one sentence that says what the setting does, and put the rest of a longer explanation in `hint`: the description is never truncated, so a long one makes a tall row, and the Hint glyph beside the title keeps the extra text out of the way until hover or focus."
+ ]
+}

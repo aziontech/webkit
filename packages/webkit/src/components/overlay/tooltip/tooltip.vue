@@ -1,11 +1,16 @@
 <script setup lang="ts">
-  import { computed, onBeforeUnmount, onMounted, ref, useAttrs, useId, watch } from 'vue'
+  import { computed, onBeforeUnmount, ref, useAttrs, useId, watch } from 'vue'
 
   import { useControllable } from '../../../composables/use-controllable'
+  import { useOverlayLayer } from '../../../composables/use-overlay-layer'
   import { usePlacement } from '../../../composables/use-placement'
+  import { usePortalLocale } from '../../../composables/use-translate'
+  import { triggerControl } from '../../../utils/trigger-control'
 
-  export type TooltipPlacement = 'top' | 'right' | 'bottom' | 'left'
-  export type TooltipPlacementInput = TooltipPlacement | 'auto'
+  /** Side of the trigger the tooltip opens on; `start` and `end` follow the text direction. */
+  export type TooltipSide = 'top' | 'bottom' | 'start' | 'end'
+  /** Alignment of the tooltip along the trigger edge. */
+  export type TooltipAlign = 'start' | 'center' | 'end'
 
   defineOptions({
     name: 'Tooltip',
@@ -16,48 +21,52 @@
     default(): unknown
   }>()
 
-  interface Props {
+  export interface TooltipProps {
     /** Plain text shown inside the tooltip. */
-    text: string
-    /** Anchor side relative to the trigger. `'auto'` picks the side with the most room at open time. */
-    placement?: TooltipPlacementInput
+    content: string
+    /** Side of the trigger the tooltip opens on, flipped when it does not fit; `'auto'` picks the side with the most room at open time. */
+    side?: TooltipSide | 'auto'
+    /** Alignment along the trigger edge. */
+    align?: TooltipAlign
+    /** Pixel gap between the trigger and the tooltip. */
+    sideOffset?: number
     /** Hover-open delay in milliseconds. */
     delay?: number
     /** Disables tooltip activation. */
     disabled?: boolean
-    /** Controlled open state. Use with `v-model:open`. */
-    open?: boolean
     /** Initial open state when uncontrolled. */
     defaultOpen?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
-    placement: 'top',
+  const props = withDefaults(defineProps<TooltipProps>(), {
+    side: 'top',
+    align: 'center',
+    sideOffset: 8,
     delay: 200,
     disabled: false,
-    open: undefined,
     defaultOpen: false
   })
 
-  const emit = defineEmits<{
-    'update:open': [value: boolean]
-    show: []
-    hide: []
-  }>()
+  const CLOSE_GRACE_MS = 100
+  const LONG_PRESS_MS = 500
+  const TOUCH_HIDE_MS = 1500
 
-  const openModel = defineModel<boolean | undefined>('open', { default: undefined })
+  /** Controlled open state. Use with v-model:open; while unbound the tooltip starts at defaultOpen. */
+  const openModel = defineModel<boolean>('open', { default: undefined as never })
 
   const attrs = useAttrs()
   const uid = useId()
-  const triggerRef = ref<HTMLElement | null>(null)
-  const panelRef = ref<HTMLElement | null>(null)
+  const triggerEl = ref<HTMLElement | null>(null)
+  const panelEl = ref<HTMLElement | null>(null)
   const hoverTimer = ref<ReturnType<typeof setTimeout> | null>(null)
+  const closeTimer = ref<ReturnType<typeof setTimeout> | null>(null)
+  const pressTimer = ref<ReturnType<typeof setTimeout> | null>(null)
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'overlay-tooltip')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'tooltip')
 
   const tooltipId = computed(() => `${uid}-tooltip`)
 
-  const openProp = computed(() => openModel.value ?? props.open)
+  const openProp = computed<boolean | undefined>(() => openModel.value)
 
   const isOpen = useControllable<boolean>({
     prop: openProp,
@@ -68,19 +77,21 @@
   })
 
   const isOpenRef = computed(() => isOpen.value)
-  const placementRef = computed(() => props.placement)
-
-  const { resolvedPlacement, panelStyle, anchored, updatePosition } = usePlacement({
-    triggerRef,
-    panelRef,
+  const { resolvedSide, resolvedAlign, panelStyle, anchored, updatePosition } = usePlacement({
+    triggerRef: triggerEl,
+    panelRef: panelEl,
     isOpen: isOpenRef,
-    placement: placementRef,
-    offset: 8,
-    autoPlacements: ['top', 'bottom', 'right', 'left'],
+    side: () => props.side,
+    align: () => props.align,
+    sideOffset: () => props.sideOffset,
+    autoSides: ['top', 'bottom', 'end', 'start'],
     onDismiss: () => closeTooltip()
   })
 
-  const resolvedPlacementRef = computed(() => resolvedPlacement.value as TooltipPlacement)
+  const { isTop } = useOverlayLayer(() => isOpen.value && Boolean(props.content), {
+    element: panelEl,
+    transient: true
+  })
 
   function clearHoverTimer() {
     if (hoverTimer.value) {
@@ -89,69 +100,134 @@
     }
   }
 
+  function clearCloseTimer() {
+    if (closeTimer.value) {
+      clearTimeout(closeTimer.value)
+      closeTimer.value = null
+    }
+  }
+
+  function clearPressTimer() {
+    if (pressTimer.value) {
+      clearTimeout(pressTimer.value)
+      pressTimer.value = null
+    }
+  }
+
   function setOpen(next: boolean) {
     if (props.disabled) return
-    if (!props.text && next) return
+    if (!props.content && next) return
     isOpen.set(next)
   }
 
   function scheduleOpen() {
-    if (props.disabled || !props.text) return
+    clearCloseTimer()
+    if (props.disabled || !props.content) return
+    if (isOpen.value) return
     clearHoverTimer()
     hoverTimer.value = setTimeout(() => setOpen(true), props.delay)
   }
 
   function closeTooltip() {
     clearHoverTimer()
+    clearCloseTimer()
+    clearPressTimer()
     setOpen(false)
   }
 
+  function scheduleClose(wait: number = CLOSE_GRACE_MS) {
+    clearHoverTimer()
+    clearCloseTimer()
+    closeTimer.value = setTimeout(closeTooltip, wait)
+  }
+
+  function onPointerdown(event: globalThis.PointerEvent) {
+    if (event.pointerType !== 'touch' || props.disabled || !props.content) return
+    clearPressTimer()
+    clearCloseTimer()
+    pressTimer.value = setTimeout(() => setOpen(true), LONG_PRESS_MS)
+  }
+
+  function onPointerup(event: globalThis.PointerEvent) {
+    if (event.pointerType !== 'touch') return
+    clearPressTimer()
+    if (isOpen.value) scheduleClose(TOUCH_HIDE_MS)
+  }
+
   function onDocumentKeydown(event: globalThis.KeyboardEvent) {
-    if (!isOpen.value) return
+    if (!isOpen.value || !isTop.value || event.defaultPrevented) return
     if (event.key === 'Escape') {
       event.preventDefault()
       closeTooltip()
     }
   }
 
-  function onFocusOut(event: globalThis.FocusEvent) {
-    const trigger = triggerRef.value
+  function onFocusout(event: globalThis.FocusEvent) {
+    const trigger = triggerEl.value
     const next = event.relatedTarget as Node | null
     if (trigger?.contains(next)) return
     closeTooltip()
   }
 
   watch(
-    () => props.text,
+    () => (isOpen.value && props.content ? tooltipId.value : ''),
+    (id) => {
+      const host = triggerEl.value
+      if (!host) return
+      const el = triggerControl(host)
+      const ids = (el.getAttribute('aria-describedby') ?? '')
+        .split(' ')
+        .filter((token) => token && token !== tooltipId.value)
+      if (id) ids.push(id)
+      if (ids.length) el.setAttribute('aria-describedby', ids.join(' '))
+      else el.removeAttribute('aria-describedby')
+    },
+    { flush: 'post' }
+  )
+
+  watch(
+    () => props.content,
     () => {
       if (isOpen.value) updatePosition()
     }
   )
 
-  onMounted(() => {
-    globalThis.document?.addEventListener('keydown', onDocumentKeydown)
-  })
+  watch(
+    () => isOpen.value,
+    (open) => {
+      if (open) globalThis.document?.addEventListener('keydown', onDocumentKeydown)
+      else globalThis.document?.removeEventListener('keydown', onDocumentKeydown)
+    },
+    { immediate: true }
+  )
 
   onBeforeUnmount(() => {
     clearHoverTimer()
+    clearCloseTimer()
+    clearPressTimer()
     globalThis.document?.removeEventListener('keydown', onDocumentKeydown)
   })
+
+  const portalLocale = usePortalLocale()
 </script>
 
 <template>
   <span
-    ref="triggerRef"
+    ref="triggerEl"
     v-bind="attrs"
     class="inline-flex w-fit shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
     :data-testid="testId"
     :data-state="isOpen ? 'open' : 'closed'"
     :data-disabled="disabled || null"
-    :data-placement="resolvedPlacementRef"
-    :aria-describedby="isOpen && text ? tooltipId : undefined"
+    :data-side="resolvedSide"
+    :data-align="resolvedAlign"
     @mouseenter="scheduleOpen"
-    @mouseleave="closeTooltip"
+    @mouseleave="scheduleClose()"
+    @pointerdown="onPointerdown"
+    @pointerup="onPointerup"
+    @pointercancel="onPointerup"
     @focusin="setOpen(true)"
-    @focusout="onFocusOut"
+    @focusout="onFocusout"
   >
     <slot />
   </span>
@@ -160,23 +236,26 @@
     <Transition
       enter-active-class="animate-popup-scale-in motion-reduce:animate-none"
       leave-active-class="animate-popup-scale-out motion-reduce:animate-none"
-      @before-enter="emit('show')"
-      @before-leave="emit('hide')"
     >
       <div
-        v-if="isOpen && text"
+        v-if="isOpen && content"
+        :dir="portalLocale.dir"
+        :lang="portalLocale.lang"
         :id="tooltipId"
-        ref="panelRef"
+        ref="panelEl"
         role="tooltip"
         :data-testid="`${testId}__panel`"
         :data-state="isOpen ? 'open' : 'closed'"
-        :data-placement="resolvedPlacementRef"
+        :data-side="resolvedSide"
+        :data-align="resolvedAlign"
         :data-anchored="anchored || null"
         :aria-hidden="!isOpen"
+        @mouseenter="clearCloseTimer"
+        @mouseleave="scheduleClose()"
         :style="panelStyle"
-        class="pointer-events-none flex min-h-8 max-w-(--container-3xs) items-center justify-center overflow-clip break-words rounded-(--shape-elements) bg-(--bg-contrast) p-(--spacing-xs) text-center text-body-xs text-(--text-contrast) [transform-origin:var(--popup-origin,center)] data-[anchored]:transition-[translate] data-[anchored]:duration-fast-02 data-[anchored]:ease-productive-entrance motion-reduce:transition-none"
+        class="flex min-h-8 max-w-(--container-3xs) items-center justify-center overflow-clip break-words rounded-(--shape-control) bg-(--bg-contrast) p-(--spacing-xs) text-center text-body-xs text-(--text-contrast) [transform-origin:var(--popup-origin,center)] data-[anchored]:transition-[translate] data-[anchored]:duration-fast-02 data-[anchored]:ease-productive-entrance motion-reduce:transition-none"
       >
-        {{ text }}
+        {{ content }}
       </div>
     </Transition>
   </Teleport>

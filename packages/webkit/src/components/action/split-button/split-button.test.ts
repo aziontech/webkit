@@ -1,0 +1,300 @@
+import { cleanup, fireEvent, render, waitFor } from '@testing-library/vue'
+import { afterEach, describe, expect, it, vi } from 'vitest'
+import { defineComponent } from 'vue'
+
+import Default from '../../../../examples/split-button/default.vue'
+import { expectNoA11yViolations } from '../../../test/axe'
+import type { SplitButtonItem } from './split-button.vue'
+import SplitButton from './split-button.vue'
+
+/** Realistic deploy actions; the second row omits `value` (falls back to label),
+ *  the third is disabled. */
+const model: SplitButtonItem[] = [
+  { label: 'Deploy to staging', value: 'staging', icon: 'az az-cloud-upload' },
+  { label: 'Deploy preview' },
+  { label: 'Rollback release', value: 'rollback', disabled: true }
+]
+
+/** The DropdownMenu panel Teleports to <body>; the SplitButton hands its menu the
+ *  `split-button__menu` testid, so the panel derives from it. */
+const panel = () =>
+  document.body.querySelector<HTMLElement>('[data-testid="split-button__menu__panel"]')
+
+const options = () =>
+  Array.from(document.body.querySelectorAll('[role^="menuitem"]')) as HTMLElement[]
+
+const host = (props: Record<string, unknown> = {}) =>
+  defineComponent({
+    components: { SplitButton },
+    setup() {
+      return { props, model: (props.model as SplitButtonItem[] | undefined) ?? model }
+    },
+    template: `<SplitButton label="Deploy" v-bind="props" :items="model" />`
+  })
+
+const openMenu = async (view: ReturnType<typeof render>) => {
+  await fireEvent.click(view.getByTestId('split-button__toggle'))
+  await waitFor(() => expect(panel()).not.toBeNull())
+}
+
+afterEach(() => {
+  cleanup()
+  document.body.querySelectorAll('[data-testid$="__panel"]').forEach((el) => el.remove())
+})
+
+describe('SplitButton', () => {
+  describe('joined command and menu overlay', () => {
+    // ---- Anatomy ---------------------------------------------------------------
+    it('renders the joined segments: primary command, toggle with derived aria-label', () => {
+      const { getByTestId } = render(host())
+
+      const root = getByTestId('split-button')
+      expect(root.getAttribute('data-variant')).toBe('primary')
+      expect(root.getAttribute('data-size')).toBe('large')
+      expect(root.hasAttribute('data-disabled')).toBe(false)
+      expect(root.hasAttribute('data-loading')).toBe(false)
+
+      expect(getByTestId('split-button__primary').textContent).toContain('Deploy')
+      expect(getByTestId('split-button__toggle-button').getAttribute('aria-label')).toBe(
+        'More actions for Deploy'
+      )
+      expect(panel()).toBeNull()
+    })
+
+    it('falls back to the plain "More actions" toggle label when label is empty', () => {
+      const { getByTestId } = render(host({ label: '' }))
+      expect(getByTestId('split-button__toggle-button').getAttribute('aria-label')).toBe(
+        'More actions'
+      )
+    })
+
+    it.each(['primary', 'secondary', 'outline'] as const)(
+      'mirrors variant=%s onto the root data-variant',
+      (variant) => {
+        const { getByTestId } = render(host({ variant }))
+        expect(getByTestId('split-button').getAttribute('data-variant')).toBe(variant)
+      }
+    )
+
+    it.each(['small', 'medium', 'large'] as const)(
+      'mirrors size=%s onto the root data-size',
+      (size) => {
+        const { getByTestId } = render(host({ size }))
+        expect(getByTestId('split-button').getAttribute('data-size')).toBe(size)
+      }
+    )
+
+    it('a consumer data-testid override rebases every derived testid', () => {
+      const { getByTestId } = render(host({ 'data-testid': 'deploy-actions' }))
+      expect(getByTestId('deploy-actions')).toBeTruthy()
+      expect(getByTestId('deploy-actions__primary')).toBeTruthy()
+      expect(getByTestId('deploy-actions__toggle')).toBeTruthy()
+      expect(getByTestId('deploy-actions__toggle-button')).toBeTruthy()
+    })
+
+    // ---- Primary command --------------------------------------------------------
+    it('primary click emits click(MouseEvent, null) and does NOT open the menu', async () => {
+      const clicks: Array<[unknown, unknown]> = []
+      const { getByTestId } = render(
+        host({ onClick: (e: MouseEvent, item: unknown) => clicks.push([e, item]) })
+      )
+
+      await fireEvent.click(getByTestId('split-button__primary'))
+      await Promise.resolve()
+
+      expect(clicks).toHaveLength(1)
+      expect(clicks[0][0]).toBeInstanceOf(MouseEvent)
+      // No action mirrored while updateLabelOnSelect is off.
+      expect(clicks[0][1]).toBeNull()
+      expect(panel()).toBeNull()
+    })
+
+    // ---- Menu overlay -------------------------------------------------------------
+    it('the toggle opens a Teleported menu with one enabled row per model action', async () => {
+      const view = render(host())
+      await openMenu(view)
+
+      const rows = options()
+      expect(rows.map((row) => row.textContent?.trim())).toEqual([
+        'Deploy to staging',
+        'Deploy preview',
+        'Rollback release'
+      ])
+
+      // The disabled model entry maps to aria-disabled on its row.
+      expect(rows[2].getAttribute('aria-disabled')).toBe('true')
+
+      // The declared icon renders as a decorative element inside its row.
+      const icon = rows[0].querySelector('i[aria-hidden="true"]')
+      expect(icon).not.toBeNull()
+    })
+
+    it('opens from the toggle on ArrowDown keydown', async () => {
+      const { getByTestId } = render(host())
+      await fireEvent.keyDown(getByTestId('split-button__toggle'), { key: 'ArrowDown' })
+      await waitFor(() => expect(panel()).not.toBeNull())
+    })
+
+    it('selecting an action emits item-click(event, item) with the exact model item and closes the menu', async () => {
+      const itemClicks: Array<[unknown, SplitButtonItem]> = []
+      const view = render(
+        host({
+          onItemClick: (event: MouseEvent | KeyboardEvent, item: SplitButtonItem) =>
+            itemClicks.push([event, item])
+        })
+      )
+      await openMenu(view)
+
+      await fireEvent.click(options()[0])
+
+      expect(itemClicks).toHaveLength(1)
+      expect(itemClicks[0][0]).toBeInstanceOf(MouseEvent)
+      expect(itemClicks[0][1]).toEqual(model[0])
+      await waitFor(() => expect(panel()).toBeNull())
+    })
+
+    it('an action without value is matched through its label fallback', async () => {
+      const itemClicks: Array<[unknown, SplitButtonItem]> = []
+      const view = render(
+        host({
+          onItemClick: (event: MouseEvent | KeyboardEvent, item: SplitButtonItem) =>
+            itemClicks.push([event, item])
+        })
+      )
+      await openMenu(view)
+
+      await fireEvent.click(options()[1])
+
+      expect(itemClicks).toHaveLength(1)
+      expect(itemClicks[0][1]).toEqual(model[1])
+    })
+
+    it('a disabled action emits nothing and keeps the menu open', async () => {
+      const onItemClick = vi.fn()
+      const view = render(host({ onItemClick }))
+      await openMenu(view)
+
+      await fireEvent.click(options()[2])
+      await Promise.resolve()
+
+      expect(onItemClick).not.toHaveBeenCalled()
+      expect(panel()).not.toBeNull()
+    })
+
+    // ---- updateLabelOnSelect -------------------------------------------------------
+    it('keeps the primary label unchanged after a selection by default', async () => {
+      const view = render(host())
+      await openMenu(view)
+
+      await fireEvent.click(options()[0])
+      await waitFor(() => expect(panel()).toBeNull())
+
+      expect(view.getByTestId('split-button__primary').textContent).toContain('Deploy')
+      expect(view.getByTestId('split-button__primary').textContent).not.toContain(
+        'Deploy to staging'
+      )
+    })
+
+    it('updateLabelOnSelect mirrors the picked action onto the primary segment and menu', async () => {
+      const clicks: Array<[unknown, unknown]> = []
+      const view = render(
+        host({
+          updateLabelOnSelect: true,
+          onClick: (e: MouseEvent, item: unknown) => clicks.push([e, item])
+        })
+      )
+      await openMenu(view)
+      await fireEvent.click(options()[0])
+      await waitFor(() => expect(panel()).toBeNull())
+
+      // Primary label + toggle aria-label now mirror the selected action.
+      const primary = view.getByTestId('split-button__primary')
+      await waitFor(() => expect(primary.textContent).toContain('Deploy to staging'))
+      expect(view.getByTestId('split-button__toggle-button').getAttribute('aria-label')).toBe(
+        'More actions for Deploy to staging'
+      )
+
+      // The primary click now carries the mirrored item.
+      await fireEvent.click(primary)
+      expect(clicks).toHaveLength(1)
+      expect(clicks[0][1]).toEqual(model[0])
+
+      // Reopening shows the mirrored action as the selected row.
+      await openMenu(view)
+      const selected = options().find((row) => row.textContent?.includes('Deploy to staging'))
+      expect(selected?.hasAttribute('data-selected')).toBe(true)
+    })
+
+    it('reads the menu from items only; a removed model attribute adds no rows', async () => {
+      const view = render(SplitButton, { props: { label: 'Deploy' }, attrs: { model } })
+      await openMenu(view)
+      expect(options()).toHaveLength(0)
+    })
+
+    it('emits update:selectedKey and restores the mirrored action from v-model:selectedKey', async () => {
+      const view = render(SplitButton, {
+        props: { label: 'Deploy', items: model, updateLabelOnSelect: true, selectedKey: 'staging' }
+      })
+      expect(view.getByTestId('split-button__primary').textContent).toContain('Deploy to staging')
+      await openMenu(view)
+      await fireEvent.click(options()[1])
+      expect(view.emitted('update:selectedKey')?.[0]).toEqual(['Deploy preview'])
+    })
+
+    // ---- Suppression: disabled / loading ---------------------------------------------
+    it.each([
+      ['disabled', { disabled: true }],
+      ['loading', { loading: true }]
+    ] as const)('%s suppresses the primary click and keeps the menu shut', async (state, props) => {
+      const onClick = vi.fn()
+      const onItemClick = vi.fn()
+      const { getByTestId } = render(host({ ...props, onClick, onItemClick }))
+
+      expect(getByTestId('split-button').getAttribute(`data-${state}`)).toBe('true')
+
+      await fireEvent.click(getByTestId('split-button__primary'))
+      await fireEvent.click(getByTestId('split-button__toggle'))
+      await Promise.resolve()
+
+      expect(onClick).not.toHaveBeenCalled()
+      expect(onItemClick).not.toHaveBeenCalled()
+      expect(panel()).toBeNull()
+    })
+
+    // ---- Accessibility -----------------------------------------------------------------
+    it('has no axe violations on the open menu it owns', async () => {
+      const view = render(host())
+      await openMenu(view)
+
+      await expectNoA11yViolations(panel() as HTMLElement)
+    })
+
+    it('has no axe violations on the closed shell', async () => {
+      const view = render(host())
+      await expectNoA11yViolations(view.container)
+    })
+
+    it('puts the menu ARIA on the toggle button with a single tab stop', () => {
+      const view = render(host())
+      const toggle = view.getByTestId('split-button__toggle')
+      const button = view.getByTestId('split-button__toggle-button')
+      expect(toggle.hasAttribute('role')).toBe(false)
+      expect(toggle.hasAttribute('tabindex')).toBe(false)
+      expect(button.getAttribute('aria-haspopup')).toBe('menu')
+      expect(button.getAttribute('aria-expanded')).toBe('false')
+      expect(button.getAttribute('aria-controls')).toBeTruthy()
+    })
+
+    // ---- Story fixture ---------------------------------------------------------------
+    it('renders the Default story: Save command with its three-action toggle', async () => {
+      const view = render(Default)
+
+      await waitFor(() =>
+        expect(view.getByTestId('split-button__primary').textContent).toContain('Save')
+      )
+      expect(view.getByTestId('split-button__toggle-button').getAttribute('aria-label')).toBe(
+        'More actions for Save'
+      )
+    })
+  })
+})

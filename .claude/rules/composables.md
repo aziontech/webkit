@@ -12,7 +12,7 @@ It rests on three decisions, in priority order:
 
 Verifiable by lint/signature, without executing anything.
 
-- **Name & file.** `useXxx`, one composable per file, kebab filename (`use-controllable.ts`). **Co-located** in the component's own `composables/` folder when it is specific to that component; in [`src/composables/`](../../packages/webkit/src/composables/) when it is shared across components.
+- **Name & file.** `useXxx`, one composable per file, kebab filename (`use-controllable.ts`). **Co-located** in the component's own `composables/` folder when it is specific to that component; in [`src/composables/`](../../packages/webkit/src/composables/) when it is shared across components. A shared composable is a folder `src/composables/use-x/` holding `use-x.ts` (the code), `index.ts` (re-export only) and `use-x.test.ts`. A composable's or component's private helpers that are not composables live in a **`lib/`** folder next to it (`navigation-menu/lib/css-dimensions.ts`) — never `_lib/`, `_helpers/`, `utils/` or `data/`; `composables/` holds only `use-*.ts`. A co-located composable can still be public: `use-console-layout` is exported from `console-layout/composables/` because it only works under `ConsoleLayout`; the `use-` export prefix is reserved for composables (`check:naming` blocks a component export named `use-*`).
 - **Return.** An **object of refs / computed / functions** — never a `reactive()` object (destructuring a `reactive` loses reactivity). Reactive state that escapes is wrapped in **`readonly()`**; mutation happens only through returned functions.
 - **Arguments.** Accept **`MaybeRefOrGetter<T>`** and resolve with **`toValue()`** (the successor to `unref`) — so a caller may pass a ref, a getter, or a raw value. Do not accept a `reactive` object as an argument for the same reason you do not return one.
 - **Types.** Generics + an **explicit return type**; no `any`. Export the return type when a consumer needs to hold it (`UseControllableReturn<T>`).
@@ -63,17 +63,18 @@ Compound components (`structure: composition`, see [`compound-api.md`](./compoun
 
 ```ts
 // injection-key.ts
-export const LOG_VIEW_KEY: InjectionKey<LogViewContext> = Symbol('LogView')
+export const LogViewerInjectionKey: InjectionKey<LogViewerContext> = Symbol('LogViewer')
 
-// use-log-view-context.ts
-export function useLogViewContext(): LogViewContext {
-  const ctx = inject(LOG_VIEW_KEY, null)
-  if (!ctx) throw new Error('useLogViewContext must be used within <LogView>.')
+// composables/use-log-viewer-context.ts
+export function useLogViewerContext(): LogViewerContext {
+  const ctx = inject(LogViewerInjectionKey, null)
+  if (!ctx) throw new Error('useLogViewerContext must be used within <LogViewer>.')
   return ctx
 }
 ```
 
-- A **typed `InjectionKey<T>`** lives in `injection-key.ts` next to the root; its `Symbol()` description is the PascalCase component name (see [`imports.md`](./imports.md) for why `injection-key.ts` is imported as source).
+- A **typed `InjectionKey<T>`** lives in `injection-key.ts` next to the root, named **`<Component>[<Part>]InjectionKey`** (`LogViewerInjectionKey`, `TableRowGroupInjectionKey`); its `Symbol()` description is the same PascalCase name without the suffix (`Symbol('LogViewer')`, `Symbol('TableRowGroup')`) — never `…Context`, `…Key`, `xContextKey` or `SCREAMING_CASE` (see [`imports.md`](./imports.md) for why `injection-key.ts` is imported as source).
+- The context composable is **`composables/use-<component>[-<part>]-context.ts`** exporting **`use<Component>[<Part>]Context`** (and `provide<Component>[<Part>]Context` when the root wraps the `provide`), with the full component name (`useTutorialPanelContext`, not `useTutorialContext`).
 - `useXxxContext()` does the `inject` and **throws a clear error when used outside its provider** — a leaf rendered loose fails loudly, not silently with `undefined`.
 - The root `provide`s the context; only the root. Leaves only `inject` via this composable.
 
@@ -95,11 +96,15 @@ A composable that wraps `useQuery`/`useMutation`, derives a `queryKey`, and talk
 
 ## Enforcement
 
-- **`validate-composable.mjs`** (PreToolUse on `Write|Edit|MultiEdit`, to be added) blocks a `use-*.{ts,js}` that returns a bare `reactive(...)`, that registers a listener/timer/observer with no `onScopeDispose` in the same file, or that uses `any`. Until it lands, the pattern is flagged by `echo-reporter`.
-- The **`webkit/composable-readonly-return`** and **`webkit/composable-scope-cleanup`** ESLint rules (to be added to [`eslint-plugin`](../../packages/webkit/src/eslint-plugin/)) cover the same surface at lint time.
-- The scaffolder injects this rule whenever a component's spec declares a composable; a composable that diverges surfaces as `BLOCKED:` and stops the run.
+Both rules apply to a `use-*.ts` / `use-*.js` file (tests excluded) and ship in the `recommended` and `strict` presets of [`eslint-plugin`](../../packages/webkit/src/eslint-plugin/) as `error`:
+
+- **`webkit/require-readonly-composable-return`** — an exported `useXxx` that returns `reactive(...)`, returns a `ref()` / `shallowRef()` declared in its body (bare, or as a property of the returned object) without `readonly()` / `computed`, or (in `.ts`) has no explicit return type. A ref that holds a DOM element (typed `*Element` / `ComponentPublicInstance`, or named `…El` / `…Element`) is exempt: the caller binds it with `ref="…"`, so it must stay writable.
+- **`webkit/require-composable-scope-cleanup`** — `addEventListener`, `setInterval`, `requestAnimationFrame`, `new ResizeObserver` / `IntersectionObserver` / `MutationObserver`, or a `setTimeout` whose id is stored, in a file with no `onScopeDispose` call. `onUnmounted` alone does not count; VueUse primitives (`useEventListener`, `useIntervalFn`, `useResizeObserver`, …) own their cleanup and are not flagged.
+- **[`validate-authoring.mjs`](../hooks/validate-authoring.mjs)** (PreToolUse on `Write|Edit|MultiEdit`) runs both rules on every write under `packages/webkit/src/` and blocks when a write adds a violation; **[`check-authoring.mjs`](../../packages/webkit/scripts/check-authoring.mjs)** runs them in the CI ratchet (`signature:*` keys). One engine, [`src/eslint-plugin/lib/signature-checks.js`](../../packages/webkit/src/eslint-plugin/lib/signature-checks.js), feeds both.
+- **`webkit/require-authoring-standards`** (same presets, same engine as the hook and ratchet) blocks a composable authored as `.js` and a `return reactive(...)`.
+- The component-scaffolder injects this rule whenever a component's spec declares a composable; a composable that diverges surfaces as `BLOCKED:` and stops the run.
 - New composables are `.ts` (never `.js`) so the return type is derivable by consumers — same reason the compound `index.ts` is `.ts` (see [`compound-api.md`](./compound-api.md)).
 
 ## Why this rule exists
 
-The package already had ~22 composables that had **converged** on good patterns (`use-log-view-context` throws outside its provider; `use-dialog-motion-state` cleans up; `use-controllable` is pure) — but by habit, not by contract. Half were `.js`, they sat in two different folder conventions, and nothing guaranteed a new one would wrap its state in `readonly()`, resolve args with `toValue()`, or tear down its listeners. Writing the contract down — and enforcing the parts a signature reveals — makes the next composable correct by construction instead of by whoever wrote it remembering the last one.
+The package already had ~22 composables that had **converged** on good patterns (`use-log-viewer-context` throws outside its provider; `use-dialog-motion-state` cleans up; `use-controllable` is pure) — but by habit, not by contract. Half were `.js`, they sat in two different folder conventions, and nothing guaranteed a new one would wrap its state in `readonly()`, resolve args with `toValue()`, or tear down its listeners. Writing the contract down — and enforcing the parts a signature reveals — makes the next composable correct by construction instead of by whoever wrote it remembering the last one.

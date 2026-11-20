@@ -1,0 +1,1847 @@
+{
+  "accordion": {
+    "value": "modelValue",
+    "arrowPosition": {
+      "to": "iconPosition",
+      "values": {
+        "left": "leading",
+        "right": "trailing"
+      }
+    }
+  },
+  "accordion-root": {
+    "value": "modelValue",
+    "arrowPosition": {
+      "to": "iconPosition",
+      "values": {
+        "left": "leading",
+        "right": "trailing"
+      }
+    }
+  },
+  "alert": {
+    "severity": {
+      "to": "severity",
+      "values": {
+        "error": "danger"
+      }
+    },
+    "#action": "actions"
+  },
+  "architecture-tabs-section": {
+    "interval": "autoplayInterval",
+    "position": {
+      "to": "tabsSide",
+      "values": {
+        "left": "start",
+        "right": "end"
+      }
+    }
+  },
+  "badge": {
+    "severity": {
+      "to": "severity",
+      "values": {
+        "default": "neutral"
+      },
+      "moves": {
+        "primary": "variant",
+        "secondary": "variant"
+      }
+    }
+  },
+  "button": {
+    "kind": {
+      "to": "variant",
+      "values": {
+        "text": "ghost",
+        "outlined": "outline",
+        "transparent": "ghost"
+      }
+    },
+    "#prefix": "leading"
+  },
+  "pricing-card": {
+    "planTitle": "title",
+    "slotPosition": "actionsPosition",
+    "aligned": "equalHeight",
+    "kind": {
+      "to": "variant",
+      "values": {
+        "transparent": "ghost"
+      }
+    }
+  },
+  "code-block": {
+    "border": "bordered",
+    "value": "modelValue",
+    "lineNumbers": "showLineNumbers",
+    "kind": "type"
+  },
+  "doc-card": {
+    "overline": "eyebrow",
+    "link": "linkLabel"
+  },
+  "doc-card-group": {
+    "mobileCols": "mobileColumns",
+    "cols": "columns"
+  },
+  "feature-tabs-section": {
+    "interval": "autoplayInterval"
+  },
+  "hero": {
+    "carousel": "marquee",
+    "carouselMarks": "marqueeMarks",
+    "carouselLabel": "marqueeLabel",
+    "align": {
+      "to": "align",
+      "values": {
+        "top": "start",
+        "bottom": "end"
+      }
+    },
+    "kind": "variant",
+    "ticker": "marquee",
+    "tickerLabel": "marqueeLabel",
+    "tickerMarks": "marqueeMarks"
+  },
+  "hero-section": {
+    "carouselMarks": "marqueeMarks",
+    "carouselLabel": "marqueeLabel",
+    "highlight": "titleHighlight",
+    "kind": {
+      "to": "variant",
+      "values": {
+        "centered": "center",
+        "centered-band": "center-band",
+        "pixel-floor": "title-band"
+      }
+    },
+    "variant": {
+      "to": "variant",
+      "values": {
+        "pixel-floor": "title-band"
+      }
+    },
+    "tickerLabel": "marqueeLabel",
+    "tickerMarks": "marqueeMarks",
+    "illustration": {
+      "to": "illustration",
+      "values": {
+        "build-databases-from-code": "sql-sdk-code-cards",
+        "distributed-sql-for-resilient-global-reads": "globe-with-sql-nodes",
+        "enable-owasp-protection-with-customizable-rules": "waf-threat-families-panel",
+        "reputation-intelligence-for-enhanced-protection": "reputation-rings-hub",
+        "saas-platforms": "azion-to-commerce-tiles",
+        "stay-in-control": "traffic-and-cost-bar-chart",
+        "stream-security-events-for-investigation-and-response": "data-stream-destinations-map",
+        "white-gloves-when-it-matters": "chat-and-headset-tiles"
+      }
+    }
+  },
+  "hero-form-section": {
+    "carouselMarks": "marqueeMarks",
+    "carouselLabel": "marqueeLabel",
+    "highlight": "titleHighlight",
+    "error": "failed",
+    "tickerLabel": "marqueeLabel",
+    "tickerMarks": "marqueeMarks"
+  },
+  "item": {
+    "kind": {
+      "to": "variant",
+      "values": {
+        "outlined": "outline",
+        "transparent": "ghost"
+      }
+    },
+    "asChild": {
+      "removed": "set href to render the row as a link or clickable to render it as a button, move the child's attributes and listeners onto the Item, and drop the inner element."
+    }
+  },
+  "item-root": {
+    "kind": {
+      "to": "variant",
+      "values": {
+        "outlined": "outline",
+        "transparent": "ghost"
+      }
+    },
+    "asChild": {
+      "removed": "set href to render the row as a link or clickable to render it as a button, move the child's attributes and listeners onto the Item, and drop the inner element."
+    }
+  },
+  "log-viewer": {
+    "border": "bordered",
+    "showCopy": "copyable",
+    "warningsOnly": {
+      "removed": "bind v-model:level and set it to 'warn' to show only warnings; a line with type: 'warning' becomes type: 'text' with level: 'warn'."
+    }
+  },
+  "media-tabs": {
+    "autoPlay": "autoplay",
+    "autoPlayInterval": "autoplayInterval",
+    "position": {
+      "to": "tabsSide",
+      "values": {
+        "left": "start",
+        "right": "end"
+      }
+    }
+  },
+  "navigation-menu": {
+    "value": "modelValue",
+    "as": {
+      "removed": "each NavigationMenu part renders a fixed element (nav, ul, li, a or button, div, span); wrap the part or style it instead of swapping its element."
+    },
+    "highlight": "showHighlight",
+    "disableAnchorTracking": {
+      "to": "trackAnchor",
+      "values": {
+        "true": "false",
+        "false": "true"
+      }
+    },
+    "side": {
+      "to": "side",
+      "values": {
+        "left": "start",
+        "right": "end"
+      }
+    },
+    "@open-change-complete": "open-transition-end"
+  },
+  "navigation-menu-root": {
+    "as": {
+      "removed": "each NavigationMenu part renders a fixed element (nav, ul, li, a or button, div, span); wrap the part or style it instead of swapping its element."
+    },
+    "@open-change-complete": "open-transition-end"
+  },
+  "popover": {
+    "width": "size",
+    "placement": {
+      "to": "side",
+      "values": {
+        "left": "start",
+        "right": "end"
+      },
+      "expand": {
+        "top-start": {
+          "side": "top",
+          "align": "start"
+        },
+        "top-end": {
+          "side": "top",
+          "align": "end"
+        },
+        "right-start": {
+          "side": "end",
+          "align": "start"
+        },
+        "right-end": {
+          "side": "end",
+          "align": "end"
+        },
+        "bottom-start": {
+          "side": "bottom",
+          "align": "start"
+        },
+        "bottom-end": {
+          "side": "bottom",
+          "align": "end"
+        },
+        "left-start": {
+          "side": "start",
+          "align": "start"
+        },
+        "left-end": {
+          "side": "start",
+          "align": "end"
+        }
+      }
+    },
+    "offset": "sideOffset"
+  },
+  "progress": {
+    "shape": "variant",
+    "kind": "variant"
+  },
+  "quote-tabs": {
+    "autoPlay": "autoplay",
+    "autoPlayInterval": "autoplayInterval"
+  },
+  "severity-tag": {
+    "level": "severity"
+  },
+  "shell-mockup": {
+    "still": {
+      "to": "animated",
+      "values": {
+        "true": "false",
+        "false": "true"
+      }
+    }
+  },
+  "shell-mockup-root": {
+    "still": {
+      "to": "animated",
+      "values": {
+        "true": "false",
+        "false": "true"
+      }
+    }
+  },
+  "skeleton": {
+    "kind": {
+      "to": "variant",
+      "values": {
+        "shape": "rectangle"
+      }
+    }
+  },
+  "table": {
+    "border": "bordered",
+    "rowsPerPageOptions": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it; the page sizes are pageSizeOptions"
+    },
+    "columns": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "columnVisibility": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "data": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "enableRowSelection": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it; enableRowSelection is selectable there"
+    },
+    "enableSorting": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it; enableSorting is sortable there"
+    },
+    "error": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "estimateRowHeight": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "expanded": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "exportFilename": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "exportRows": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "filterFields": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "filters": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "getSubRows": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "globalFilter": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "headerKind": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it; use density there (it compacts the header and the rows)"
+    },
+    "initialState": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "loading": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "manualFiltering": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "manualPagination": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "manualSorting": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "pageSize": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "pageSizeOptions": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "paginated": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "pagination": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "reorderable": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "rowCount": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "rowKey": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "rowReorderable": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "rowSelectable": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "rowSelection": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "selectOnRowClick": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "sorting": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "stackable": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "state": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "striped": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "virtual": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    }
+  },
+  "table-root": {
+    "border": "bordered",
+    "rowsPerPageOptions": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it; the page sizes are pageSizeOptions"
+    },
+    "columns": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "columnVisibility": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "data": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "enableRowSelection": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it; enableRowSelection is selectable there"
+    },
+    "enableSorting": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it; enableSorting is sortable there"
+    },
+    "error": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "estimateRowHeight": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "expanded": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "exportFilename": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "exportRows": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "filterFields": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "filters": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "getSubRows": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "globalFilter": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "headerKind": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it; use density there (it compacts the header and the rows)"
+    },
+    "initialState": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "loading": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "manualFiltering": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "manualPagination": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "manualSorting": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "pageSize": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "pageSizeOptions": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "paginated": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "pagination": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "reorderable": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "rowCount": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "rowKey": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "rowReorderable": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "rowSelectable": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "rowSelection": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "selectOnRowClick": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "sorting": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "stackable": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "state": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "striped": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "virtual": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    }
+  },
+  "tabs": {
+    "value": "modelValue"
+  },
+  "theme-switcher": {
+    "value": "modelValue"
+  },
+  "calendar-root": {
+    "showTimezone": "showTimeZone",
+    "timezones": "timeZones",
+    "timezone": "timeZone"
+  },
+  "checkbox": {
+    "inputId": {
+      "to": "id",
+      "attribute": true
+    },
+    "binary": {
+      "removed": "leave value unset for a boolean v-model"
+    },
+    "tabindex": {
+      "to": "tabindex",
+      "attribute": true
+    }
+  },
+  "split-button": {
+    "model": "items",
+    "kind": {
+      "to": "variant",
+      "values": {
+        "outlined": "outline",
+        "transparent": "ghost"
+      }
+    },
+    "selected": "selectedKey"
+  },
+  "textarea": {
+    "resizable": "resize"
+  },
+  "table-header": {
+    "kind": {
+      "to": "density",
+      "values": {
+        "default": "comfortable",
+        "compact": "compact"
+      }
+    }
+  },
+  "tag": {
+    "severity": {
+      "to": "severity",
+      "values": {
+        "secondary": "neutral"
+      },
+      "moves": {
+        "primary": "variant",
+        "accent": "variant",
+        "contrast": "variant",
+        "highlight": "variant"
+      }
+    }
+  },
+  "status-indicator": {
+    "severity": {
+      "to": "severity",
+      "values": {
+        "alt": "neutral"
+      }
+    }
+  },
+  "menu-item": {
+    "tagSeverity": {
+      "to": "tagSeverity",
+      "values": {
+        "secondary": "neutral"
+      }
+    }
+  },
+  "toast": {
+    "position": {
+      "to": "position",
+      "values": {
+        "top-left": "top-start",
+        "top-right": "top-end",
+        "bottom-left": "bottom-start",
+        "bottom-right": "bottom-end"
+      }
+    }
+  },
+  "toast-root": {
+    "position": {
+      "to": "position",
+      "values": {
+        "top-left": "top-start",
+        "top-right": "top-end",
+        "bottom-left": "bottom-start",
+        "bottom-right": "bottom-end"
+      }
+    }
+  },
+  "toast-item": {
+    "type": {
+      "to": "severity",
+      "values": {
+        "error": "danger",
+        "default": "neutral"
+      }
+    }
+  },
+  "log-viewer-root": {
+    "warningsOnly": {
+      "removed": "bind v-model:level and set it to 'warn' to show only warnings; a line with type: 'warning' becomes type: 'text' with level: 'warn'."
+    }
+  },
+  "link": {
+    "showIcon": {
+      "removed": "set icon to show a trailing glyph (icon=\"az az-external-link\"); leave it empty to hide it"
+    }
+  },
+  "tabs-trigger": {
+    "selected": {
+      "removed": "a row of pressed pills outside a Tabs root is ToggleGroup; inside a root the root v-model selects the item"
+    }
+  },
+  "navigation-menu-trigger": {
+    "nativeButton": {
+      "removed": "the trigger is always a button, or an anchor with href; delete the attribute"
+    }
+  },
+  "sidebar": {
+    "collapsed": {
+      "removed": "use v-model:open, inverted: open = !collapsed"
+    }
+  },
+  "table-filter": {
+    "kind": {
+      "to": "type",
+      "values": {
+        "builder": "property"
+      }
+    },
+    "count": {
+      "removed": "TableFilter hosts FilterMenu or PropertyFilter, which count the applied filters themselves"
+    }
+  },
+  "date-picker": {
+    "mode": {
+      "removed": "DatePicker picks one date; for a range (relative or absolute, with or without times) use DateRangePicker"
+    },
+    "period": {
+      "removed": "use DateRangePicker, whose Relative tab lists the quick ranges"
+    },
+    "presets": {
+      "removed": "use DateRangePicker with relative-options for preset ranges"
+    },
+    "showTimeZone": {
+      "removed": "the time zone selector is DateRangePicker's; set ConfigProvider time-zone for the app's zone"
+    },
+    "showTimezone": {
+      "removed": "the time zone selector is DateRangePicker's; set ConfigProvider time-zone for the app's zone"
+    },
+    "timeZones": {
+      "removed": "the time zone selector is DateRangePicker's"
+    },
+    "timezones": {
+      "removed": "the time zone selector is DateRangePicker's"
+    },
+    "timezone": "timeZone",
+    "horizontal": {
+      "removed": "set orientation=\"horizontal\""
+    }
+  },
+  "date-picker-root": {
+    "mode": {
+      "removed": "DatePicker picks one date; for a range (relative or absolute, with or without times) use DateRangePicker"
+    },
+    "period": {
+      "removed": "use DateRangePicker, whose Relative tab lists the quick ranges"
+    },
+    "presets": {
+      "removed": "use DateRangePicker with relative-options for preset ranges"
+    },
+    "showTimeZone": {
+      "removed": "the time zone selector is DateRangePicker's; set ConfigProvider time-zone for the app's zone"
+    },
+    "showTimezone": {
+      "removed": "the time zone selector is DateRangePicker's; set ConfigProvider time-zone for the app's zone"
+    },
+    "timeZones": {
+      "removed": "the time zone selector is DateRangePicker's"
+    },
+    "timezones": {
+      "removed": "the time zone selector is DateRangePicker's"
+    },
+    "timezone": "timeZone",
+    "horizontal": {
+      "removed": "set orientation=\"horizontal\""
+    }
+  },
+  "radio-group": {
+    "items": "options",
+    "kind": "variant"
+  },
+  "resizable-pane": {
+    "collapsed": {
+      "removed": "use v-model:open, inverted: open = !collapsed"
+    },
+    "expanded": "open"
+  },
+  "select": {
+    "multiple": {
+      "removed": "use MultiSelect (same options, same array v-model)"
+    },
+    "kind": {
+      "to": "variant",
+      "values": {
+        "outlined": "outline",
+        "transparent": "ghost"
+      }
+    }
+  },
+  "select-root": {
+    "multiple": {
+      "removed": "use MultiSelect (same options, same array v-model)"
+    },
+    "kind": {
+      "to": "variant",
+      "values": {
+        "outlined": "outline",
+        "transparent": "ghost"
+      }
+    }
+  },
+  "switch": {
+    "focused": {
+      "removed": "use autofocus to focus it on mount"
+    },
+    "kind": "variant"
+  },
+  "transfer-list": {
+    "dataKey": "itemKey",
+    "trackBy": "itemKey"
+  },
+  "transfer-list-root": {
+    "dataKey": "itemKey",
+    "trackBy": "itemKey"
+  },
+  "attribute-editor": {
+    "empty": "emptyTitle"
+  },
+  "multi-select": {
+    "emptyText": "emptyTitle",
+    "kind": "variant"
+  },
+  "multi-select-root": {
+    "emptyText": "emptyTitle",
+    "kind": "variant"
+  },
+  "sidebar-root": {
+    "collapsed": {
+      "removed": "use v-model:open, inverted: open = !collapsed"
+    }
+  },
+  "hero-root": {
+    "carousel": "marquee",
+    "carouselMarks": "marqueeMarks",
+    "carouselLabel": "marqueeLabel",
+    "kind": "variant",
+    "ticker": "marquee",
+    "tickerLabel": "marqueeLabel",
+    "tickerMarks": "marqueeMarks"
+  },
+  "popover-root": {
+    "width": "size",
+    "placement": {
+      "to": "side",
+      "values": {
+        "left": "start",
+        "right": "end"
+      },
+      "expand": {
+        "top-start": {
+          "side": "top",
+          "align": "start"
+        },
+        "top-end": {
+          "side": "top",
+          "align": "end"
+        },
+        "right-start": {
+          "side": "end",
+          "align": "start"
+        },
+        "right-end": {
+          "side": "end",
+          "align": "end"
+        },
+        "bottom-start": {
+          "side": "bottom",
+          "align": "start"
+        },
+        "bottom-end": {
+          "side": "bottom",
+          "align": "end"
+        },
+        "left-start": {
+          "side": "start",
+          "align": "start"
+        },
+        "left-end": {
+          "side": "start",
+          "align": "end"
+        }
+      }
+    },
+    "offset": "sideOffset"
+  },
+  "backdrop": {
+    "art": "variant",
+    "kind": "variant"
+  },
+  "combobox": {
+    "emptyText": "emptyTitle"
+  },
+  "console-layout": {
+    "navigationExpanded": "navigationOpen",
+    "#header-start": "header-leading"
+  },
+  "console-layout-root": {
+    "navigationExpanded": "navigationOpen",
+    "#header-start": "header-leading"
+  },
+  "conversation-history": {
+    "label": "ariaLabel"
+  },
+  "response-branches": {
+    "label": "ariaLabel"
+  },
+  "payment-brand": {
+    "label": "ariaLabel"
+  },
+  "qr-code": {
+    "label": "ariaLabel"
+  },
+  "doc-heading": {
+    "id": "anchor"
+  },
+  "wizard": {
+    "activeStep": "modelValue"
+  },
+  "wizard-root": {
+    "activeStep": "modelValue"
+  },
+  "file-token-group": {
+    "alignment": "orientation"
+  },
+  "upload-progress": {
+    "collapsed": {
+      "removed": "use v-model:open, inverted: open = !collapsed"
+    },
+    "expanded": "open"
+  },
+  "capability-grid-section": {
+    "actions": {
+      "removed": "pass the first action as primaryAction and the second as secondaryAction (same { label, href, trailing?, target?, variant? } shape); a third action has no slot, put it in the page instead"
+    },
+    "kind": "variant",
+    "titleKind": "titleAlign",
+    "titleVariant": "titleAlign"
+  },
+  "console-showcase-section": {
+    "actions": {
+      "removed": "pass the first action as primaryAction and the second as secondaryAction (same { label, href, trailing?, target?, variant? } shape); a third action has no slot, put it in the page instead"
+    },
+    "kind": "variant",
+    "titleKind": "titleAlign",
+    "titleVariant": "titleAlign"
+  },
+  "chat-message": {
+    "state": {
+      "to": "status",
+      "values": {
+        "complete": "success"
+      }
+    }
+  },
+  "prompt-input": {
+    "state": {
+      "to": "status",
+      "values": {
+        "submitted": "pending"
+      }
+    }
+  },
+  "tool-approval": {
+    "state": "status",
+    "kind": {
+      "to": "variant",
+      "values": {
+        "default": "primary"
+      }
+    },
+    "variant": {
+      "to": "variant",
+      "values": {
+        "default": "primary"
+      }
+    }
+  },
+  "tool-call": {
+    "state": "status"
+  },
+  "stepper-step": {
+    "state": {
+      "to": "status",
+      "values": {
+        "upcoming": "pending",
+        "complete": "success",
+        "loading": "running"
+      }
+    }
+  },
+  "log-viewer-header": {
+    "#left": "start",
+    "#right": "end"
+  },
+  "tutorial-panel-provider": {
+    "@finish": "complete",
+    "active": "activeKey"
+  },
+  "topology-diagram": {
+    "expanded": "openKeys",
+    "levels": {
+      "removed": "TopologyDiagram is now FlowDiagram: pass the nodes flat in nodes and the connections in edges ({ from, to }); the edges set the columns (MIGRATION_V6.md, FlowDiagram)."
+    },
+    "@bind": {
+      "removed": "the bind control moved to the FlowDiagramBind companion: put it in the actions slot and listen to its bind, remove and create events (MIGRATION_V6.md, FlowDiagram)."
+    },
+    "@remove": {
+      "removed": "the bind control moved to the FlowDiagramBind companion: put it in the actions slot and listen to its bind, remove and create events (MIGRATION_V6.md, FlowDiagram)."
+    },
+    "@create": {
+      "removed": "the bind control moved to the FlowDiagramBind companion: put it in the actions slot and listen to its bind, remove and create events (MIGRATION_V6.md, FlowDiagram)."
+    }
+  },
+  "console-mockup": {
+    "hover": "hovered",
+    "interval": "autoplayInterval",
+    "kind": "variant"
+  },
+  "breadcrumb": {
+    "current": "active"
+  },
+  "breadcrumb-root": {
+    "current": "active"
+  },
+  "breadcrumb-item": {
+    "current": "active"
+  },
+  "sidebar-menu": {
+    "selected": "active",
+    "expanded": "openKeys"
+  },
+  "sidebar-menu-root": {
+    "selected": "active",
+    "expanded": "openKeys"
+  },
+  "sidebar-menu-item": {
+    "selected": "active",
+    "tagSeverity": {
+      "to": "tagSeverity",
+      "moves": {
+        "primary": "tagVariant",
+        "accent": "tagVariant"
+      }
+    }
+  },
+  "pagination": {
+    "selected": "active"
+  },
+  "pagination-root": {
+    "selected": "active"
+  },
+  "pagination-button": {
+    "selected": "active",
+    "kind": "type"
+  },
+  "navigation-menu-list": {
+    "highlight": "showHighlight"
+  },
+  "navigation-menu-positioner": {
+    "disableAnchorTracking": {
+      "to": "trackAnchor",
+      "values": {
+        "true": "false",
+        "false": "true"
+      }
+    },
+    "side": {
+      "to": "side",
+      "values": {
+        "left": "start",
+        "right": "end"
+      }
+    }
+  },
+  "doc-layout": {
+    "navigationExpanded": "navigationOpen",
+    "outline": {
+      "removed": "delete the prop: give each section DocHeading an anchor (level 2 or 3) inside the page and the layout lists it in the On this page rail by itself; a page with no anchored heading shows no outline rail"
+    }
+  },
+  "app-layout": {
+    "navigationLabel": "navigationAriaLabel"
+  },
+  "drawer": {
+    "side": {
+      "to": "side",
+      "values": {
+        "left": "start",
+        "right": "end"
+      }
+    }
+  },
+  "drawer-root": {
+    "side": {
+      "to": "side",
+      "values": {
+        "left": "start",
+        "right": "end"
+      }
+    }
+  },
+  "resizable": {
+    "expanded": "open"
+  },
+  "resizable-root": {
+    "expanded": "open"
+  },
+  "page-header": {
+    "#breadcrumb": "breadcrumbs"
+  },
+  "doc-page-header": {
+    "breadcrumb": "breadcrumbs",
+    "#breadcrumb": "breadcrumbs",
+    "@meta-action": "action-click"
+  },
+  "settings-row": {
+    "level": "depth",
+    "kind": "variant"
+  },
+  "dropdown-menu": {
+    "#top": "header",
+    "#bottom": "footer",
+    "placement": {
+      "to": "side",
+      "values": {
+        "left": "start",
+        "right": "end"
+      },
+      "expand": {
+        "top-start": {
+          "side": "top",
+          "align": "start"
+        },
+        "top-end": {
+          "side": "top",
+          "align": "end"
+        },
+        "right-start": {
+          "side": "end",
+          "align": "start"
+        },
+        "right-end": {
+          "side": "end",
+          "align": "end"
+        },
+        "bottom-start": {
+          "side": "bottom",
+          "align": "start"
+        },
+        "bottom-end": {
+          "side": "bottom",
+          "align": "end"
+        },
+        "left-start": {
+          "side": "start",
+          "align": "start"
+        },
+        "left-end": {
+          "side": "start",
+          "align": "end"
+        }
+      }
+    },
+    "offset": "sideOffset"
+  },
+  "dropdown-menu-root": {
+    "#top": "header",
+    "#bottom": "footer",
+    "placement": {
+      "to": "side",
+      "values": {
+        "left": "start",
+        "right": "end"
+      },
+      "expand": {
+        "top-start": {
+          "side": "top",
+          "align": "start"
+        },
+        "top-end": {
+          "side": "top",
+          "align": "end"
+        },
+        "right-start": {
+          "side": "end",
+          "align": "start"
+        },
+        "right-end": {
+          "side": "end",
+          "align": "end"
+        },
+        "bottom-start": {
+          "side": "bottom",
+          "align": "start"
+        },
+        "bottom-end": {
+          "side": "bottom",
+          "align": "end"
+        },
+        "left-start": {
+          "side": "start",
+          "align": "start"
+        },
+        "left-end": {
+          "side": "start",
+          "align": "end"
+        }
+      }
+    },
+    "offset": "sideOffset"
+  },
+  "dropdown-menu-group": {
+    "#top": "header",
+    "#bottom": "footer"
+  },
+  "input": {
+    "#prefix": "leading",
+    "#suffix": "trailing"
+  },
+  "password-input": {
+    "#prefix": "leading",
+    "#suffix": "trailing"
+  },
+  "number-input": {
+    "#prefix": "leading",
+    "#suffix": "trailing"
+  },
+  "command-item": {
+    "#prefix": "leading",
+    "#suffix": "trailing"
+  },
+  "select-item": {
+    "#left": "leading"
+  },
+  "multi-select-item": {
+    "#left": "leading"
+  },
+  "select-trigger": {
+    "#prefix": "leading"
+  },
+  "multi-select-trigger": {
+    "#prefix": "leading"
+  },
+  "accordion-trigger": {
+    "level": "headingLevel"
+  },
+  "tooltip": {
+    "text": "content",
+    "placement": {
+      "to": "side",
+      "values": {
+        "left": "start",
+        "right": "end"
+      }
+    }
+  },
+  "hint": {
+    "text": "content",
+    "placement": {
+      "to": "side",
+      "values": {
+        "left": "start",
+        "right": "end"
+      }
+    }
+  },
+  "command-group": {
+    "heading": "label"
+  },
+  "help-panel-group": {
+    "title": "label"
+  },
+  "key-value-list-group": {
+    "title": "label"
+  },
+  "command-page": {
+    "heading": "title"
+  },
+  "phone-input": {
+    "@update:phone": "phone-change",
+    "searchEmptyLabel": "noMatch"
+  },
+  "card": {
+    "#header-action": "header-actions",
+    "#action": {
+      "removed": "Card has one layout in 6.0; a catalog tile is IntegrationCard from @aziontech/webkit/integration-card, with the same props, the select event and the logo and actions slots"
+    },
+    "#content": "default",
+    "kind": {
+      "removed": "Card has one layout in 6.0; a catalog tile is IntegrationCard from @aziontech/webkit/integration-card, with the same props, the select event and the logo and actions slots"
+    },
+    "variant": {
+      "removed": "Card has one layout in 6.0; a catalog tile is IntegrationCard from @aziontech/webkit/integration-card, with the same props, the select event and the logo and actions slots"
+    },
+    "logo": {
+      "removed": "Card has one layout in 6.0; a catalog tile is IntegrationCard from @aziontech/webkit/integration-card, with the same props, the select event and the logo and actions slots"
+    },
+    "vendor": {
+      "removed": "Card has one layout in 6.0; a catalog tile is IntegrationCard from @aziontech/webkit/integration-card, with the same props, the select event and the logo and actions slots"
+    },
+    "description": {
+      "removed": "Card has one layout in 6.0; a catalog tile is IntegrationCard from @aziontech/webkit/integration-card, with the same props, the select event and the logo and actions slots"
+    },
+    "badges": {
+      "removed": "Card has one layout in 6.0; a catalog tile is IntegrationCard from @aziontech/webkit/integration-card, with the same props, the select event and the logo and actions slots"
+    },
+    "installed": {
+      "removed": "Card has one layout in 6.0; a catalog tile is IntegrationCard from @aziontech/webkit/integration-card, with the same props, the select event and the logo and actions slots"
+    },
+    "href": {
+      "removed": "Card has one layout in 6.0; a catalog tile is IntegrationCard from @aziontech/webkit/integration-card, with the same props, the select event and the logo and actions slots"
+    },
+    "featured": {
+      "removed": "Card has one layout in 6.0; a catalog tile is IntegrationCard from @aziontech/webkit/integration-card, with the same props, the select event and the logo and actions slots"
+    }
+  },
+  "code-editor": {
+    "lineNumbers": "showLineNumbers",
+    "@validate": "markers-change"
+  },
+  "chart-bar": {
+    "labeled": "showLabels",
+    "kind": "type"
+  },
+  "tree": {
+    "selectedIds": "selectedKeys",
+    "@item-dblclick": "item-double-click",
+    "expanded": "openKeys",
+    "selected": "selectedKey"
+  },
+  "card-list": {
+    "trackBy": "itemKey",
+    "selectionMode": {
+      "to": "selectionMode",
+      "values": {
+        "multi": "multiple"
+      }
+    }
+  },
+  "property-filter": {
+    "hideOperations": {
+      "to": "showOperations",
+      "values": {
+        "true": "false",
+        "false": "true"
+      }
+    }
+  },
+  "data-table": {
+    "enableSorting": "sortable",
+    "enableRowSelection": "selectable",
+    "rowSelection": "selectedKeys",
+    "expanded": "openKeys",
+    "pagination": "page",
+    "state": "snapshot",
+    "initialState": "defaultSnapshot"
+  },
+  "data-grid": {
+    "enableRowSelection": "selectable",
+    "@row-delete": "row-remove",
+    "rowSelection": "selectedKeys"
+  },
+  "table-sort-button": {
+    "direction": "sortDirection",
+    "@toggle": "sort",
+    "visible": {
+      "removed": "hide it with class=\"invisible\" (it keeps its space)"
+    }
+  },
+  "hero-title": {
+    "highlight": "titleHighlight",
+    "centered": {
+      "to": "align",
+      "values": {
+        "true": "'center'"
+      }
+    },
+    "mobileCentered": {
+      "to": "mobileAlign",
+      "values": {
+        "true": "'center'"
+      }
+    }
+  },
+  "newsletter-section": {
+    "error": "failed"
+  },
+  "media-split": {
+    "align": {
+      "to": "align",
+      "values": {
+        "top": "start"
+      }
+    },
+    "kind": "variant"
+  },
+  "network-section": {
+    "lead": "claimsEyebrow",
+    "kind": "variant"
+  },
+  "article-index-section": {
+    "categoryLabel": "categoryAriaLabel",
+    "rowKind": {
+      "to": "rowVariant",
+      "values": {
+        "centered": "center"
+      }
+    },
+    "search": {
+      "removed": "split into searchPlaceholder and searchAriaLabel"
+    },
+    "empty": {
+      "removed": "split into emptyTitle, emptyDescription and emptyActionLabel"
+    },
+    "kind": "variant"
+  },
+  "listing-index-section": {
+    "rows": "data",
+    "search": {
+      "removed": "split into searchPlaceholder, searchShortPlaceholder and searchAriaLabel"
+    },
+    "empty": {
+      "removed": "split into emptyTitle, emptyDescription and emptyActionLabel (was clearLabel)"
+    }
+  },
+  "listing-table-section": {
+    "rows": "data"
+  },
+  "module-header": {
+    "kind": {
+      "to": "align",
+      "values": {
+        "centered": "center",
+        "left": "start",
+        "horizontal": "split"
+      }
+    },
+    "variant": "align"
+  },
+  "module": {
+    "kind": {
+      "to": "align",
+      "values": {
+        "centered": "center",
+        "left": "start",
+        "horizontal": "split"
+      }
+    },
+    "variant": "align"
+  },
+  "article-cards-section": {
+    "kind": {
+      "to": "align",
+      "values": {
+        "left": "start",
+        "centered": "center"
+      }
+    },
+    "variant": "align"
+  },
+  "feature-widgets-section": {
+    "titleKind": {
+      "to": "titleAlign",
+      "values": {
+        "centered": "center",
+        "left": "start",
+        "horizontal": "split"
+      }
+    },
+    "kind": "variant",
+    "titleVariant": "titleAlign"
+  },
+  "media-scroll": {
+    "@index-change": "active-index-change"
+  },
+  "story-index-section": {
+    "search": {
+      "removed": "split into searchPlaceholder, searchShortPlaceholder and searchAriaLabel"
+    },
+    "empty": {
+      "removed": "split into emptyTitle and emptyActionLabel (was action)"
+    }
+  },
+  "chat-message-root": {
+    "state": {
+      "to": "status",
+      "values": {
+        "complete": "success"
+      }
+    }
+  },
+  "conversation": {
+    "alignment": "layout"
+  },
+  "job-posting-section": {
+    "error": "failed"
+  },
+  "icon-button": {
+    "kind": {
+      "to": "variant",
+      "values": {
+        "outlined": "outline",
+        "transparent": "ghost"
+      }
+    }
+  },
+  "copy-button": {
+    "kind": {
+      "to": "variant",
+      "values": {
+        "outlined": "outline",
+        "transparent": "ghost"
+      }
+    }
+  },
+  "button-group": {
+    "kind": {
+      "to": "variant",
+      "values": {
+        "outlined": "outline",
+        "transparent": "ghost"
+      }
+    }
+  },
+  "chip": {
+    "kind": {
+      "to": "variant",
+      "values": {
+        "outlined": "outline",
+        "transparent": "ghost"
+      }
+    }
+  },
+  "avatar": {
+    "kind": "variant"
+  },
+  "brand": {
+    "kind": "variant"
+  },
+  "third-party-logo": {
+    "kind": "variant"
+  },
+  "kbd": {
+    "kind": "variant",
+    "keyName": {
+      "to": "keyName",
+      "values": {
+        "arrow-up": "arrowUp",
+        "arrow-down": "arrowDown",
+        "arrow-left": "arrowLeft",
+        "arrow-right": "arrowRight"
+      }
+    }
+  },
+  "key-value-pairs": {
+    "kind": "variant"
+  },
+  "key-value-pairs-root": {
+    "kind": "variant"
+  },
+  "footer": {
+    "kind": "variant",
+    "signature": {
+      "removed": "delete it: the footer has no signature band any more; put the brand in the brand slot, which leads the bottom bar at every width."
+    }
+  },
+  "footer-root": {
+    "kind": "variant",
+    "signature": {
+      "removed": "delete it: the footer has no signature band any more; put the brand in the brand slot, which leads the bottom bar at every width."
+    }
+  },
+  "app-header": {
+    "kind": "variant"
+  },
+  "app-header-root": {
+    "kind": "variant"
+  },
+  "save-bar": {
+    "kind": "variant"
+  },
+  "doc-callout": {
+    "kind": "variant"
+  },
+  "doc-prompt": {
+    "kind": "variant"
+  },
+  "quote": {
+    "kind": "variant"
+  },
+  "call-to-action": {
+    "kind": "variant"
+  },
+  "marquee": {
+    "kind": "variant"
+  },
+  "carousel": {
+    "kind": "variant"
+  },
+  "carousel-root": {
+    "kind": "variant"
+  },
+  "texture": {
+    "kind": "variant"
+  },
+  "logo-wall": {
+    "kind": "variant"
+  },
+  "media-tile": {
+    "kind": "variant"
+  },
+  "card-grid": {
+    "kind": "variant"
+  },
+  "card-grid-root": {
+    "kind": "variant"
+  },
+  "card-grid-cell": {
+    "kind": "variant"
+  },
+  "bento-grid-cell": {
+    "kind": "variant"
+  },
+  "file-dropzone": {
+    "kind": "variant"
+  },
+  "radio-group-root": {
+    "kind": "variant"
+  },
+  "confirm-dialog": {
+    "kind": "variant"
+  },
+  "stat-tile": {
+    "kind": "variant"
+  },
+  "response-loading": {
+    "kind": "variant"
+  },
+  "closing-call-to-action-section": {
+    "kind": {
+      "to": "variant",
+      "values": {
+        "split": "panel"
+      }
+    },
+    "variant": {
+      "to": "variant",
+      "values": {
+        "split": "panel"
+      }
+    },
+    "titleMuted": {
+      "removed": "the split layout is gone; write the whole headline in title (SitePage joins an old title and titleMuted with a space)."
+    }
+  },
+  "feature-tiles-section": {
+    "kind": "variant"
+  },
+  "logo-wall-section": {
+    "kind": "variant",
+    "quoteKind": "quoteVariant"
+  },
+  "media-split-stack-section": {
+    "kind": {
+      "removed": "the alternating layout is gone and every picture sits at the closing end; drop the attribute."
+    },
+    "variant": {
+      "removed": "the alternating layout is gone and every picture sits at the closing end; drop the attribute."
+    }
+  },
+  "site-footer-section": {
+    "kind": "variant"
+  },
+  "process-scroll-section": {
+    "kind": "variant",
+    "titleKind": "titleAlign",
+    "titleVariant": "titleAlign"
+  },
+  "table-cell": {
+    "kind": "type"
+  },
+  "table-head-cell": {
+    "kind": "type"
+  },
+  "dropdown-menu-option": {
+    "kind": "type"
+  },
+  "dropdown-menu-item": {
+    "kind": "type"
+  },
+  "context-menu-item": {
+    "kind": "type"
+  },
+  "chart-axis": {
+    "kind": "type"
+  },
+  "field-legend": {
+    "kind": "type"
+  },
+  "helper-text": {
+    "kind": "type"
+  },
+  "donut-chart": {
+    "kind": "type"
+  },
+  "spark-chart": {
+    "kind": "type"
+  },
+  "doc-code-group": {
+    "kind": "type"
+  },
+  "artifact-canvas": {
+    "kind": "type"
+  },
+  "sidebar-menu-sub-trigger": {
+    "kind": "type"
+  },
+  "item-media": {
+    "kind": "type"
+  },
+  "flow-diagram-anchor": {
+    "type": "side"
+  },
+  "navigation-menu-popup": {
+    "kind": "variant"
+  },
+  "eyebrow": {
+    "showCursor": "cursor"
+  },
+  "template-gallery-section": {
+    "tickerLabel": "marqueeLabel",
+    "tickerMarks": "marqueeMarks"
+  },
+  "map-chart": {
+    "activeId": "activeKey"
+  },
+  "trace": {
+    "selected": "selectedKey"
+  },
+  "command": {
+    "page": "pageKey"
+  },
+  "command-root": {
+    "page": "pageKey"
+  },
+  "hover-card": {
+    "placement": {
+      "to": "side",
+      "values": {
+        "left": "start",
+        "right": "end"
+      },
+      "expand": {
+        "top-start": {
+          "side": "top",
+          "align": "start"
+        },
+        "top-end": {
+          "side": "top",
+          "align": "end"
+        },
+        "right-start": {
+          "side": "end",
+          "align": "start"
+        },
+        "right-end": {
+          "side": "end",
+          "align": "end"
+        },
+        "bottom-start": {
+          "side": "bottom",
+          "align": "start"
+        },
+        "bottom-end": {
+          "side": "bottom",
+          "align": "end"
+        },
+        "left-start": {
+          "side": "start",
+          "align": "start"
+        },
+        "left-end": {
+          "side": "start",
+          "align": "end"
+        }
+      }
+    },
+    "offset": "sideOffset"
+  },
+  "hover-card-root": {
+    "placement": {
+      "to": "side",
+      "values": {
+        "left": "start",
+        "right": "end"
+      },
+      "expand": {
+        "top-start": {
+          "side": "top",
+          "align": "start"
+        },
+        "top-end": {
+          "side": "top",
+          "align": "end"
+        },
+        "right-start": {
+          "side": "end",
+          "align": "start"
+        },
+        "right-end": {
+          "side": "end",
+          "align": "end"
+        },
+        "bottom-start": {
+          "side": "bottom",
+          "align": "start"
+        },
+        "bottom-end": {
+          "side": "bottom",
+          "align": "end"
+        },
+        "left-start": {
+          "side": "start",
+          "align": "start"
+        },
+        "left-end": {
+          "side": "start",
+          "align": "end"
+        }
+      }
+    },
+    "offset": "sideOffset"
+  },
+  "illustration": {
+    "name": {
+      "to": "name",
+      "values": {
+        "build-databases-from-code": "sql-sdk-code-cards",
+        "distributed-sql-for-resilient-global-reads": "globe-with-sql-nodes",
+        "enable-owasp-protection-with-customizable-rules": "waf-threat-families-panel",
+        "reputation-intelligence-for-enhanced-protection": "reputation-rings-hub",
+        "saas-platforms": "azion-to-commerce-tiles",
+        "stay-in-control": "traffic-and-cost-bar-chart",
+        "stream-security-events-for-investigation-and-response": "data-stream-destinations-map",
+        "white-gloves-when-it-matters": "chat-and-headset-tiles"
+      }
+    }
+  },
+  "media-split-section": {
+    "codeTabs": {
+      "removed": "a media band shows no code; put the claim and its files in FeatureScrollSection (one item per file, its code in item.code)."
+    },
+    "defaultFile": {
+      "removed": "a media band shows no code; FeatureScrollSection opens on its first step."
+    },
+    "copyAriaLabel": {
+      "removed": "a media band shows no code; set copyAriaLabel on each FeatureScrollSection item.code."
+    },
+    "diagram": {
+      "removed": "a media band shows no request-flow diagram; use ConsoleShowcaseSection with variant=\"diagram\" and the Diagram in its scene slot, or give the band an illustration, a widget or a scene."
+    },
+    "image": {
+      "removed": "the sections take art from the illustration registry only; name a registry scene in illustration (with illustrationAriaLabel) instead of passing a picture URL."
+    },
+    "illustration": {
+      "to": "illustration",
+      "values": {
+        "build-databases-from-code": "sql-sdk-code-cards",
+        "distributed-sql-for-resilient-global-reads": "globe-with-sql-nodes",
+        "enable-owasp-protection-with-customizable-rules": "waf-threat-families-panel",
+        "reputation-intelligence-for-enhanced-protection": "reputation-rings-hub",
+        "saas-platforms": "azion-to-commerce-tiles",
+        "stay-in-control": "traffic-and-cost-bar-chart",
+        "stream-security-events-for-investigation-and-response": "data-stream-destinations-map",
+        "white-gloves-when-it-matters": "chat-and-headset-tiles"
+      }
+    }
+  },
+  "settings-group": {
+    "title": "label"
+  },
+  "flow-diagram-parallel": {
+    "align": {
+      "removed": "FlowDiagram.Group stacks its nodes full width; drop align (MIGRATION_V6.md, FlowDiagram)."
+    }
+  }
+}

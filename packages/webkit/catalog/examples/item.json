@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Default surface with title, description, and a trailing action.",
+   "file": "examples/item/default.vue"
+  },
+  {
+   "name": "Outline",
+   "summary": "Outlined variant with a visible border.",
+   "file": "examples/item/outline.vue"
+  },
+  {
+   "name": "Muted",
+   "summary": "Muted variant for secondary list rows.",
+   "file": "examples/item/muted.vue"
+  }
+ ]
+}

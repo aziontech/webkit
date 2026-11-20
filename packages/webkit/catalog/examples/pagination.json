@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The compound composition form: the full pagination assembled by hand from the dot-notation sub-components — page-info text (`Pagination.Description`), Previous / numbers / overflow / Next (`Pagination.Button`), and a rows-per-page selector (`Pagination.PageSize`).",
+   "file": "examples/pagination/default.vue"
+  },
+  {
+   "name": "Buttons",
+   "summary": "`Pagination.Button` types (previous / next / number / more) and states: default, active (current page), and disabled. The buttons are butted into one segmented strip — the frame, border and end radii come from the `Pagination` root, so a consumer composes the buttons and nothing else.",
+   "file": "examples/pagination/buttons.vue"
+  },
+  {
+   "name": "DataDriven",
+   "summary": "Data-driven mode: pass `total` and bind `v-model:page` / `v-model:page-size`. The Pagination renders its own info text, windowed page numbers, overflow ellipsis, and the rows-per-page selector, emitting `update:page` / `update:pageSize`.",
+   "file": "examples/pagination/data-driven.vue"
+  }
+ ]
+}

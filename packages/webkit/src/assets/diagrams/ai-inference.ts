@@ -6,25 +6,25 @@ const spec: DiagramSpec = {
   nodes: [
     {
       key: 'user',
-      kind: 'pill',
+      type: 'pill',
       title: 'App',
-      icon: 'pi pi-comments',
+      icon: 'az az-comments',
       active: true
     },
     {
       key: 'application',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'Application',
       title: 'Rule: run the model',
-      icon: 'ai ai-rules-engine',
+      icon: 'az az-rules-engine',
       active: true
     },
     {
       key: 'inference',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'AI Inference',
       title: 'Mistral 3 Small on Azion',
-      icon: 'ai ai-edge-ai',
+      icon: 'az az-ai-inference',
       status: {
         label: 'Under 30 ms',
         severity: 'success'
@@ -34,18 +34,18 @@ const spec: DiagramSpec = {
     },
     {
       key: 'vector',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'SQL Database',
       title: 'Vector search for context',
-      icon: 'ai ai-edge-sql',
+      icon: 'az az-sql-database',
       active: true
     },
     {
       key: 'lora',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'LoRA',
       title: 'Your fine-tuned adapter',
-      icon: 'ai ai-lora'
+      icon: 'az az-lora-fine-tune'
     }
   ],
   layout: {

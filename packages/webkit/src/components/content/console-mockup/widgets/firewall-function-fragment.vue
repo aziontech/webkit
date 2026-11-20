@@ -1,0 +1,215 @@
+<script setup lang="ts">
+  import { computed, onScopeDispose, ref, watch } from 'vue'
+
+  import { useMediaQuery } from '../../../../composables/use-media-query'
+  import CodeBlock from '../../../code/code-block/code-block.vue'
+  import FieldDescription from '../../../input/field/field-description/field-description.vue'
+  import FieldLabel from '../../../input/field/field-label/field-label.vue'
+  import Input from '../../../input/input/input.vue'
+  import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
+  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
+  import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
+  import MockupCursor from '../parts/mockup-cursor.vue'
+  import MockupSelect from '../parts/mockup-select.vue'
+
+  defineOptions({ name: 'FirewallFunctionFragment' })
+
+  interface Props {
+    /** Whether this fragment is the one showing. */
+    active?: boolean
+    /** Whether the pointer is over the fragment's card; the instance's function is picked from its list while it is, and back after. */
+    hovered?: boolean
+  }
+
+  const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
+
+  const canHover = useMediaQuery('(hover: hover)', true)
+  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
+
+  const FUNCTIONS = ['qa-fn-fw', 'qa-fw02-inline-pr3882', 'qa-p-fw-fn', 'qa-qc-fwfn']
+
+  const ARGUMENTS = [
+    {
+      label: 'Arguments',
+      value: 'arguments',
+      language: 'json',
+      code: '{}'
+    }
+  ]
+
+  interface Frame {
+    cursor: MockupCursorTarget
+    press: boolean
+    focused: boolean
+    open: boolean
+    highlight: number
+    picked: string
+    forward: number
+    back: number
+  }
+
+  const IDLE: MockupCursorTarget = { key: 'function', x: 0.82, y: 1.6 }
+  const TRIGGER: MockupCursorTarget = { key: 'function', x: 0.35, y: 0.6 }
+  const option = (index: number): MockupCursorTarget => ({ key: `option-${index}`, x: 0.3, y: 0.6 })
+
+  const REST = {
+    cursor: IDLE,
+    press: false,
+    focused: false,
+    open: false,
+    highlight: -1,
+    picked: 'qa-fn-fw'
+  }
+
+  const PICKING = { ...REST, focused: true, open: true }
+
+  const FRAMES: Frame[] = [
+    { ...REST, forward: 0, back: 0 },
+    { ...REST, cursor: TRIGGER, forward: 120, back: 420 },
+    { ...REST, cursor: TRIGGER, press: true, focused: true, forward: 480, back: 160 },
+    { ...PICKING, cursor: option(1), highlight: 1, forward: 160, back: 300 },
+    { ...PICKING, cursor: option(3), highlight: 3, forward: 460, back: 420 },
+    { ...PICKING, cursor: option(3), highlight: 3, press: true, forward: 420, back: 120 },
+    {
+      ...PICKING,
+      cursor: option(3),
+      highlight: 3,
+      press: true,
+      picked: 'qa-qc-fwfn',
+      forward: 120,
+      back: 220
+    },
+    { ...REST, cursor: option(3), focused: true, picked: 'qa-qc-fwfn', forward: 200, back: 260 },
+    { ...REST, cursor: TRIGGER, picked: 'qa-qc-fwfn', forward: 260, back: 160 }
+  ]
+
+  const LAST = FRAMES.length - 1
+
+  const wanted = () => props.active && (props.hovered || !canHover.value)
+
+  const step = ref(0)
+  const frame = computed(() => FRAMES[step.value])
+
+  const stageEl = ref<globalThis.HTMLElement | null>(null)
+
+  const { position } = useMockupCursor(stageEl, () => frame.value.cursor)
+
+  let timer: ReturnType<typeof globalThis.setTimeout> | null = null
+
+  const halt = () => {
+    if (timer) globalThis.clearTimeout(timer)
+    timer = null
+  }
+
+  const advance = () => {
+    halt()
+    const target = wanted() ? LAST : 0
+    if (step.value === target) return
+    if (reduced.value || !canHover.value) {
+      step.value = target
+      return
+    }
+    const forward = target > step.value
+    const next = step.value + (forward ? 1 : -1)
+    const delay = forward ? FRAMES[next].forward : FRAMES[step.value].back
+    timer = globalThis.setTimeout(() => {
+      step.value = next
+      advance()
+    }, delay)
+  }
+
+  watch(wanted, advance, { immediate: true })
+
+  onScopeDispose(halt)
+</script>
+
+<template>
+  <ConsoleMockupShell
+    variant="bare"
+    shell="legacy"
+    fade="bottom"
+    class="[--console-mockup-fade-start:78%]"
+    :chrome="false"
+    :active="active"
+    :width="420"
+    :mobile-width="380"
+  >
+    <div
+      ref="stageEl"
+      class="relative"
+    >
+      <div class="relative flex flex-col gap-(--spacing-lg) py-(--spacing-xs)">
+        <ConsoleMockupShellItem :order="0">
+          <div class="flex flex-col gap-(--spacing-xs)">
+            <FieldLabel
+              for="firewall-function-name"
+              required
+              >Name</FieldLabel
+            >
+            <Input
+              id="firewall-function-name"
+              model-value="qa-qc-fwfi"
+              size="medium"
+              placeholder="My Firewall function instance"
+            />
+            <FieldDescription
+              >Give a unique and descriptive name to identify the Firewall function
+              instance.</FieldDescription
+            >
+          </div>
+        </ConsoleMockupShellItem>
+
+        <ConsoleMockupShellItem
+          :order="1"
+          :data-state="frame.open ? 'open' : 'closed'"
+          class="relative data-[state=open]:z-1"
+        >
+          <div class="flex flex-col gap-(--spacing-xs)">
+            <FieldLabel
+              for="firewall-function-select"
+              required
+              >Function</FieldLabel
+            >
+            <MockupSelect
+              :value="frame.picked"
+              :options="FUNCTIONS"
+              :open="frame.open"
+              :highlighted-index="frame.highlight"
+              :focused="frame.focused"
+              control-id="firewall-function-select"
+              data-cursor="function"
+              aria-label="Function"
+            />
+          </div>
+        </ConsoleMockupShellItem>
+
+        <ConsoleMockupShellItem :order="2">
+          <div class="flex flex-col gap-(--spacing-sm)">
+            <span class="flex flex-col gap-(--spacing-2xs)">
+              <span class="text-label-md text-(--text-default)">Arguments</span>
+              <span class="text-body-xs text-(--text-muted)">
+                Configure the function arguments to customize its behavior.
+              </span>
+            </span>
+            <CodeBlock
+              :tabs="ARGUMENTS"
+              show-line-numbers
+              copy-aria-label="Copy the function arguments"
+            />
+            <FieldDescription
+              >Customize the arguments in JSON format. Once set, they can be called in code using
+              event.args('arg_name').</FieldDescription
+            >
+          </div>
+        </ConsoleMockupShellItem>
+      </div>
+
+      <MockupCursor
+        name="John"
+        :x="position.x"
+        :y="position.y"
+        :pressed="frame.press"
+      />
+    </div>
+  </ConsoleMockupShell>
+</template>

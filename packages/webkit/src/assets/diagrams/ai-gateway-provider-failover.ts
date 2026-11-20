@@ -7,18 +7,18 @@ const spec: DiagramSpec = {
   nodes: [
     {
       key: 'app',
-      kind: 'app',
+      type: 'app',
       title: 'App'
     },
     {
       key: 'degraded',
-      kind: 'pill',
+      type: 'pill',
       title: 'Provider degraded?',
       active: true
     },
     {
       key: 'anthropic',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Anthropic',
       title: 'Claude Haiku 5.5',
       logo: claudeMark,
@@ -29,10 +29,10 @@ const spec: DiagramSpec = {
     },
     {
       key: 'bedrock',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Amazon Bedrock',
       title: 'Claude Haiku 5.5',
-      icon: 'pi pi-amazon',
+      icon: 'az az-cloud',
       active: true,
       lit: true
     }

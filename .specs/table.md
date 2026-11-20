@@ -2,35 +2,70 @@
 name: table
 category: data
 structure: composition
-status: approved
-spec_version: 2
+status: implemented
+spec_version: 23
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
   node_id: 2053:7649
-checksum: c2eb35affa970ba69ae3a4e134db8673ebb415a603d46d2c27742ab85303e19c
+checksum: ff619ac104c39d312bffb4a32ae76aba9529b474082508c2c51b0e6928711674
 created: 2026-06-16
-last_updated: 2026-08-24
+last_updated: 2026-11-20
 ---
 
 # Table — Component Spec
 
 ## Purpose
 
-Composition primitives for building accessible, pixel-perfect data tables, in two modes. **Composition mode** (default): compose the anatomy by hand (header / body / rows / cells) — the component owns markup, tokens, a11y, configurable column sizing (an emphasized first column), sortable headers, selectable rows, and a **freeze system** for sticky columns (e.g. an actions column) and a sticky header. **Data-driven mode**: pass `data` + `columns` and the table renders itself via the headless **`@tanstack/vue-table`** engine, still rendering through the same primitives (our markup/tokens/a11y, pixel-perfect to Figma). Pairs with the [`Paginator`](./paginator.md) component (rendered automatically in the footer when `paginated`). A top **toolbar band** (`title` / `toolbar` / `filters` slots) sits above the scroll viewport in both modes for a title, search / filter / export / column-selector actions, and removable filter chips; the `toolbar` and `filters` slots are scoped with the TanStack `table` instance (in data-driven mode) so the consumer can drive filtering, global search, and column visibility through the table's own methods.
+The table's parts and its markup-only root. Compose the anatomy by hand (`Table.Header` / `Table.Body` / `Table.Row` / `Table.HeadCell` / `Table.Cell`): the component owns markup, tokens, accessibility, column sizing (an emphasized principal column), sortable headers, selectable rows and a **freeze system** for sticky columns (an actions column) and a sticky header. The root is light: it frames the scroll viewport, the toolbar band (`title` / `toolbar` slots) and the `footer`, and loads no table engine. For repeated records pass `data` + `columns` to [`data-table`](./data-table.md) instead: DataTable renders through these same parts, and the context-aware toolbar parts (`TableSearch`, `TableFilter`, `TableExportButton`, `TableRefreshButton`, `TableLiveButton`) and the cell presets (`TableCellLink`, `TableCellId`, `TableCellStatus`, `TableCellTags`, `TableCellTime`, `TableCellActions`) go in its slots. Inside a hand-composed `Table` the toolbar parts have no rows to act on.
 
-**Engine.** Data-driven mode is driven by **`@tanstack/vue-table`** (`useVueTable` + `getCoreRowModel` / `getSortedRowModel` / `getFilteredRowModel` / `getPaginationRowModel`), covering sorting, pagination, row selection, column visibility, and global filtering — client- and server-side (`manualSorting` / `manualPagination` / `manualFiltering`). It is a pure-logic library (no markup/styles/positioning/animation), granted narrowly to this single component per [`.claude/rules/dependencies.md`](../.claude/rules/dependencies.md) § Exceptions; rendering stays 100% in our primitives. State is exposed via v-model (`sorting`, `rowSelection`, `columnVisibility`, `globalFilter`, `pagination`, plus the structured `filters` model and the aggregate `state` snapshot below). `@tanstack/virtual` remains forbidden.
+**What the compound carries.** `@aziontech/webkit/table` attaches only the structural parts (`Header`, `Body`, `Footer`, `Caption`, `Row`, `HeadCell`, `Cell`, `SortButton`, `Toolbar`), so a hand-composed table costs what its parts cost. The toolbar controls and the cell presets compose `Tooltip`, `DropdownMenu`, `Popover`, `Input` and `CopyButton`; each is imported from its own entry (`@aziontech/webkit/table-search`, `@aziontech/webkit/table-cell-status`, …) and is not attached to the compound, so a screen pays only for the ones it renders.
 
-**Toolbar & imperative API.** The toolbar band composes context-aware controls that drive the table through the injected context with no wiring: `Table.Filter` (a structured field/operator/value builder that commits removable/editable filter chips, with an escape slot to plug a custom builder such as the console's AQL), `Table.AppliedFilters` (the chips), `Table.ColumnSelector` (a column-visibility picker over the existing `columnVisibility` state), `Table.Export` (CSV download), and `Table.RefreshButton`. Structured filters are a first-class model (`v-model:filters`, an `AppliedFilter[]` distinct from the free-text `globalFilter`) mapped to the TanStack column filters client-side, or emitted for a server refetch under `manualFiltering`. A `loading` prop renders skeleton rows for dynamic (server-side) data. The root exposes a **curated imperative API** via `defineExpose` (`reload`, `clearFilters`, `exportCsv`, `getState`, `setState`) so controls or logic outside the table can drive it through a template ref, and a serializable `TableStateSnapshot` (`sorting` / `pagination` / `columnVisibility` / `columnOrder` / `globalFilter` / `filters`) is exposed via `v-model:state` + `getState()` / `setState()` + an `initialState` seed — the component stays router-agnostic, so the consuming app owns any URL / localStorage persistence. CSV serialization lives in a pure util at [`@aziontech/webkit/utils/csv`](../packages/webkit/src/utils/csv.ts) (`toCsv` + `downloadCsv`).
+**Cell presets.** Six presets render the cells every list repeats, each inside a cell (or a DataTable `#cell-<id>` slot): `TableCellLink` (a name that leaves the screen: an optional muted leading glyph (`icon`) for the provider or resource type, a 12 px external mark on an address outside the app only (never on an in-app route), a tooltip naming the destination, underline on hover; optional `+N` overflow through `OverflowCount` and a copy button pinned to the end edge), `TableCellId` (an identifier with its copy button), `TableCellStatus` (one semantic `Tag`), `TableCellTags` (as many tags as fit, the rest behind `+N`), `TableCellTime` (avatar of the author plus a relative time that updates every minute, or counts from the nearest `ConfigProvider`'s `now`, the absolute time on the tooltip and for screen readers) and `TableCellActions` (the row menu named after the row).
 
-**Types** (declared in `injection-key.ts`, re-exported for consumers): `FilterOperator` = `'eq' | 'neq' | 'contains' | 'not-contains' | 'starts-with' | 'ends-with' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'not-in' | 'is-empty' | 'is-not-empty'`; `FilterField` = `{ id: string; label: string; type: 'text' | 'number' | 'select' | 'multi-select' | 'boolean' | 'date'; operators?: FilterOperator[]; options?: { label: string; value: string | number | boolean }[] }`; `AppliedFilter` = `{ field: string; operator: FilterOperator; value: string | number | boolean | Array<string | number>; label?: string }`; `TableStateSnapshot` = `{ sorting?: SortingState; pagination?: PaginationState; columnVisibility?: VisibilityState; columnOrder?: string[]; globalFilter?: string; filters?: AppliedFilter[] }` (every field optional so `setState` / `initialState` accept a partial; JSON-serializable).
+**Types** (declared in `injection-key.ts`, re-exported by `./table`): the column and slot types DataTable takes (`TableColumn`, `TableCellSlotProps`, `TableHeaderSlotProps`, `TableToolbarSlotProps`, `TableStateSnapshot`, `TableExposed`, `TableAppliedFilter`, `TableFilterField`, `TableDensity`), so a page can type its columns from the compound it already imports. Their shapes are documented in [`data-table`](./data-table.md).
+
+## When to use
+
+- Use Table for records that share columns when you compose the rows by hand; for any console list of resources people scan, sort and act on, pass `data` + `columns` to DataTable, which renders through these parts.
+- A small, static table, or one whose cells need a layout the column model cannot express: compose `Table.Header` / `Table.Row` / `Table.Cell` by hand. The root loads no engine.
+- The parts of a DataTable: the toolbar controls and cell presets go in its slots, each imported from its own entry (`@aziontech/webkit/table-search`, `@aziontech/webkit/table-cell-status`).
+- Use Table for read-and-act content; for repeated records pass `data` + `columns` to `data-table`, and when people edit cells in place use `data-grid`.
+
+## When NOT to use
+
+- Repeated records with sorting, selection, paging, filtering, virtual rows or tree rows → use `data-table` (`data` + `columns`).
+- People edit many cells of many records in place, spreadsheet-style → use `data-grid`.
+- A short list of same-field rows added and removed inside a form (environment variables, headers) → use `attribute-editor`.
+- A short titled preview of a longer listing on a marketing page → use `listing-table-section`.
+- A feature-by-feature comparison of Azion with a competitor → use `competitor-comparison-section`.
+- Rows of mixed content (media, title, description, actions) that do not share columns → use `item`.
+- A grid of selectable cards or options → use `radio-group` with `type="card"`.
+- The same records as a grid of cards → use `card-list` (same collection, card layout).
+
+## Related
+
+- `data-table` — the data-driven table (`data` + `columns`, TanStack engine) that renders through these parts.
+- `data-grid` — the editable, spreadsheet-like grid; a separate grid (`role="grid"`, one roving tab stop, in-cell editors) that shares these tokens, not built on these parts.
+- `pagination` — the page strip; put it in a `Table.Footer` in the `footer` slot.
+- `empty-state` — compose it in a full-width row when a hand-composed table has no rows.
+- `item` — list rows without a column structure.
+- `listing-table-section` — marketing section that composes a DataTable for a linked preview of a list.
+
+## Best practices
+
+- Compose `Table` by hand only for small, static tables; for repeated data use `data-table`, which renders through these parts.
+- Mark the row-actions cell `type="action"` with `frozen="end"` so it pins to the trailing edge, and give the principal cell `principal` (or `grow="2"`).
+- Name the table: a `Table.Caption` labels it (`aria-labelledby`), or pass `aria-label` on the root.
+- Give `TableCellTime` dates from your data. Where the text must not depend on when it renders (an example, a test, a server render the browser hydrates), set `now` on the app's `ConfigProvider` and count sample dates back from that constant; never build them from `Date.now()` / `new Date()` in setup.
+- Import the root alone from `table-root`, or each part from its own entry (`table-row`), when only a few parts are used.
 
 ## Usage
 
-Composition mode — one import of the root; every part is reached via dot-notation (`<Table.Row>`, `<Table.Cell>`, …). The root binding must be PascalCase (`Table`); `table` lowercase collides with the native element.
+One import of the root; every structural part is reached via dot-notation (`<Table.Row>`, `<Table.Cell>`, …). The cell presets and toolbar controls are separate imports (`import TableCellStatus from '@aziontech/webkit/table-cell-status'`). The root binding must be PascalCase (`Table`); `table` lowercase collides with the native element.
 
 ```vue
 <script setup>
-import Table from '@aziontech/webkit/table'
+  import Table from '@aziontech/webkit/table'
 </script>
 
 <template>
@@ -39,9 +74,18 @@ import Table from '@aziontech/webkit/table'
 
     <Table.Header frozen>
       <Table.Row>
-        <Table.HeadCell :grow="2" sortable sort-direction="ascending">Name</Table.HeadCell>
+        <Table.HeadCell
+          :grow="2"
+          sortable
+          sort-direction="ascending"
+          >Name</Table.HeadCell
+        >
         <Table.HeadCell>Status</Table.HeadCell>
-        <Table.HeadCell kind="action" frozen="end"><span class="sr-only">Actions</span></Table.HeadCell>
+        <Table.HeadCell
+          type="action"
+          frozen="end"
+          ><span class="sr-only">Actions</span></Table.HeadCell
+        >
       </Table.Row>
     </Table.Header>
 
@@ -49,13 +93,17 @@ import Table from '@aziontech/webkit/table'
       <Table.Row selected>
         <Table.Cell :grow="2">acme-prod</Table.Cell>
         <Table.Cell>Active</Table.Cell>
-        <Table.Cell kind="action" frozen="end">…</Table.Cell>
+        <Table.Cell
+          type="action"
+          frozen="end"
+          >…</Table.Cell
+        >
       </Table.Row>
     </Table.Body>
 
     <template #footer>
       <Table.Footer>
-        <!-- Paginator goes here; rendered below the scroll viewport, so it never scrolls -->
+        <!-- Pagination goes here; rendered below the scroll viewport, so it never scrolls -->
       </Table.Footer>
     </template>
   </Table>
@@ -64,109 +112,7 @@ import Table from '@aziontech/webkit/table'
 
 Each sub-component is also a standalone import (`import TableRow from '@aziontech/webkit/table-row'`, …) — the tree-shaking path when only a few parts are used.
 
-Data-driven mode (TanStack engine renders the table from `data` + `columns`):
-
-```vue
-<script setup>
-import { ref } from 'vue'
-import Table from '@aziontech/webkit/table'
-
-const sorting = ref([])
-const rowSelection = ref({})
-const data = ref([{ id: '1', name: 'acme-prod', status: 'Active' }])
-const columns = [
-  { accessorKey: 'name', header: 'Name', enableSorting: true, grow: 2, frozen: 'start' },
-  { accessorKey: 'status', header: 'Status', enableSorting: true }
-]
-</script>
-
-<template>
-  <Table
-    :data="data"
-    :columns="columns"
-    enable-sorting
-    enable-row-selection
-    paginated
-    max-height="480px"
-    v-model:sorting="sorting"
-    v-model:row-selection="rowSelection"
-    @row-click="(event, row) => console.log(row)"
-  >
-    <template #title>Workloads</template>
-    <template #toolbar>
-      <!-- Context-aware: reads/drives the TanStack globalFilter via inject — no wiring -->
-      <Table.Search placeholder="Search" />
-    </template>
-    <template #filters="{ table }">
-      <Chip
-        v-if="table.getState().globalFilter"
-        :label="table.getState().globalFilter"
-        removable
-        @remove="() => table.setGlobalFilter('')"
-      />
-    </template>
-    <template #cell-status="{ value }">
-      <Tag>{{ value }}</Tag>
-    </template>
-  </Table>
-</template>
-```
-
-Full DataTable — the toolbar controls are context-aware (they read the injected table), so they need no wiring; the app persists `state` and refetches on `@refresh`:
-
-```vue
-<script setup>
-import { ref } from 'vue'
-import Table from '@aziontech/webkit/table'
-
-const tableRef = ref()
-const filters = ref([])
-const state = ref()
-const data = ref([{ id: '1', name: 'acme-prod', status: 'active' }])
-const columns = [
-  { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true },
-  { accessorKey: 'status', header: 'Status', enableSorting: true },
-  { id: 'actions', kind: 'action', hideable: false }
-]
-const filterFields = [
-  { id: 'name', label: 'Name', type: 'text' },
-  { id: 'status', label: 'Status', type: 'select', options: [{ label: 'Active', value: 'active' }] }
-]
-</script>
-
-<template>
-  <Table
-    ref="tableRef"
-    :data="data"
-    :columns="columns"
-    :filter-fields="filterFields"
-    enable-sorting
-    enable-row-selection
-    paginated
-    export-filename="workloads.csv"
-    v-model:filters="filters"
-    v-model:state="state"
-    @refresh="refetch"
-  >
-    <template #title>Workloads</template>
-    <template #toolbar>
-      <Table.Search placeholder="Search" />
-      <Table.Filter :fields="filterFields" />
-      <Table.ColumnSelector />
-      <Table.Export />
-      <Table.RefreshButton />
-    </template>
-    <template #filters>
-      <Table.AppliedFilters />
-    </template>
-    <template #cell-status="{ value }">
-      <Tag>{{ value }}</Tag>
-    </template>
-  </Table>
-</template>
-```
-
-Plug a custom filter builder (e.g. AQL) through `Table.Filter`'s `default` slot; drive the table imperatively through the ref (`tableRef.value.clearFilters()`, `tableRef.value.exportCsv()`, `tableRef.value.getState()` / `setState(snapshot)`). The app owns URL / localStorage persistence — encode `state` where it wants; the component never touches the router.
+**Three ways in** (decision RV-K2-1, rule `webkit-content-channels`). A docs page writes a Markdown pipe table, and `DocMarkdown` renders it as this `Table` (`Table.Header`, `Table.Row`, `Table.HeadCell`, `Table.Body`, `Table.Cell`; bordered, lines wrapping, column alignment from `:---:` / `---:`, inline Markdown in the cells), loaded as an async chunk, so a docs table looks like an app table. The site places a table through `listing-table-section`. Sorting, toolbars, the cell presets and the data-driven `DataTable` stay Vue.
 
 ## Sub-components
 
@@ -174,32 +120,39 @@ Plug a custom filter builder (e.g. AQL) through `Table.Filter`'s `default` slot;
      The shared injection-key.ts sits one directory up from each sub-component.
      Per-sub-component props/events are listed here (the root Props/Events/Slots tables
      below describe ONLY the root Table element).
-     Compound API: index.ts (Object.assign; vue-tsc emits the adjacent index.d.ts at publish time) attaches every sub-component
-     to the root as `Table.Header` / `Table.Row` / `Table.Cell` / … (PascalCase root required).
+     Compound API: index.ts (Object.assign; vue-tsc emits the adjacent index.d.ts at publish time) attaches the structural sub-components
+     (header through toolbar below) to the root as `Table.Header` / `Table.Row` / `Table.Cell` / … (PascalCase root required).
+     The toolbar controls and cell presets (table-search through table-cell-actions) are companion parts: standalone
+     imports only, not attached, because each composes an overlay or input component.
      No per-component package.json — the root packages/webkit/package.json#exports map points each
      public path directly at its source file. See `.claude/rules/compound-api.md`. -->
 
-- `table-header/table-header.vue` — `role="rowgroup"` header band. Props `frozen?: boolean` → sticky top within the scroll container; `variant?: 'default' | 'compact'` → `compact` shrinks the header cells' height and padding (published to the head cells through the row-group context, so the consumer sets it once on the header).
+- `table-header/table-header.vue` — `role="rowgroup"` header band. Props `frozen?: boolean` → sticky top within the scroll container; `density?: 'comfortable' | 'compact'` (default `undefined`) → `compact` shrinks the header cells' height and padding (published to the head cells through the row-group context, so the consumer sets it once on the header); DataTable passes its own `density`.
 - `table-body/table-body.vue` — `role="rowgroup"` body band.
-- `table-footer/table-footer.vue` — `role="rowgroup"` footer band (hosts the Paginator); muted text.
-- `table-caption/table-caption.vue` — accessible caption / title line; `text-label-sm` muted.
+- `table-footer/table-footer.vue` — footer band below the viewport, outside `role="table"` (hosts the Pagination); muted text.
+- `table-caption/table-caption.vue` — caption / title line that names the table (`aria-labelledby`); `text-label-sm` muted.
 - `table-row/table-row.vue` — `role="row"`, flex container. Props `selected?: boolean`, `frozen?: boolean`. Forwards native listeners (e.g. `@click`) to its root via attribute fallthrough. Bottom divider `var(--border-width-default)` / `var(--border-default)`; hover `var(--bg-canvas)`; selected `var(--bg-selected)`. The row publishes its resolved background as the `--table-row-bg` custom property so frozen cells (and their edge fade) track the row hover/selected color instead of drifting against it.
-- `table-head-cell/table-head-cell.vue` — `role="columnheader"`, height 44px. Props `kind?: 'default' | 'checkbox' | 'action' | 'slot'` (`checkbox`/`action` are 40px fixed-width so the header aligns with the body's checkbox/action cells), `sortable?: boolean`, `sortDirection?: 'none' | 'ascending' | 'descending'`, `align?: 'start' | 'center' | 'end'`, `grow?: 1 | 2 | 3` (flex weight), `principal?: boolean` (defaults the weight to `grow: 2` when `grow` is unset — the principal/emphasized column), `frozen?: 'start' | 'end'`. Emits `sort: [direction: 'ascending' | 'descending']`. Renders `table-sort-button` when `sortable`. When `resizable`, renders a drag-to-resize handle on the right edge (`resizing` reflects the active drag; `resizeHandler` is the pointer handler supplied by the data-driven root).
-- `table-cell/table-cell.vue` — `role="cell"`, min height 48px. Props `kind?: 'default' | 'checkbox' | 'action'`, `align?: 'start' | 'center' | 'end'`, `grow?: 1 | 2 | 3`, `principal?: boolean` (defaults the weight to `grow: 2` when `grow` is unset — the principal/emphasized column), `frozen?: 'start' | 'end'`, `clickable?: boolean` (underlines the cell text). Cell text never wraps (single line, truncates) — there is no wrap option. A `grow` column carries a fixed, content-independent flex basis (`flex: <grow> 0 5rem`) identical to its header cell, so the column resolves to the same width in the header and in every body row; when the table overflows it shrinks to that minimum and the viewport scrolls horizontally — instead of each row sizing the column to its own content, which misaligned the header from the body. A `width` column overrides the basis with a fixed pixel width; a `minWidth` column is measured and pinned to one resolved width (the larger of that floor and the widest of its header and rendered cells), so it reserves nothing it is not using and never truncates the chip inside it. Content (avatar, tag, icon, description, copy, "+99") is composed by the consumer via the default slot using existing primitives.
-- `table-sort-button/table-sort-button.vue` — sort control used inside `table-head-cell`, rendered as the webkit `IconButton` (`kind="transparent"`, `size="small"` → 28×28) so size, padding, and alignment match the design system. Props `direction?: 'none' | 'ascending' | 'descending'`, `visible?: boolean` (default `true`). Emits `toggle: [direction: 'ascending' | 'descending']`. Glyphs via `pi pi-sort-alt` (none) / `pi pi-sort-amount-up` (ascending) / `pi pi-sort-amount-down` (descending).
+- `table-head-cell/table-head-cell.vue` — `role="columnheader"`, height 44px. Props `type?: 'default' | 'checkbox' | 'action' | 'slot'` (`checkbox`/`action` are 40px fixed-width so the header aligns with the body's checkbox/action cells), `sortable?: boolean`, `sortDirection?: 'none' | 'ascending' | 'descending'`, `align?: 'start' | 'center' | 'end'`, `grow?: 1 | 2 | 3` (flex weight), `principal?: boolean` (defaults the weight to `grow: 2` when `grow` is unset — the principal/emphasized column), `frozen?: 'start' | 'end'`. Emits `sort: [direction: 'ascending' | 'descending']`. Renders `table-sort-button` when `sortable`; the header cell itself is not a tab stop (a pointer click anywhere on it still toggles the sort), and the button is named with the column through `aria-labelledby` (`tableHeadCell.sortBy` + the header text: `Sort by Name`), so the direction is read from the header's `aria-sort`. When `resizable`, renders a drag-to-resize handle on the right edge (`resizing` reflects the active drag; `resizeHandler` is the pointer handler DataTable supplies). `resizing` and `resizeHandler` are internal plumbing DataTable passes to its own head cells; they are not part of the composition API (a composed table resizes nothing).
+- `table-cell/table-cell.vue` — `role="cell"`, min height 48px. Props `type?: 'default' | 'checkbox' | 'action'`, `align?: 'start' | 'center' | 'end'`, `grow?: 1 | 2 | 3`, `principal?: boolean` (defaults the weight to `grow: 2` when `grow` is unset — the principal/emphasized column), `frozen?: 'start' | 'end'`, `clickable?: boolean` (underlines the cell text). Cell text stays on one line and truncates, unless the root sets `wrapLines`. A cell is never wider than the table itself (`max-w-[100cqi]` against the `@container/table` root), so one value longer than the visible table ends in an ellipsis inside the frame instead of widening the table past it; the cap never binds while the value fits, so other columns keep their widths. The consumer keeps the full value available on the truncated element (a `title`, as the version-detail tables do). A `grow` column carries a fixed, content-independent flex basis (`flex: <grow> 0 5rem`) identical to its header cell, so the column resolves to the same width in the header and in every body row; when the table overflows it shrinks to that minimum and the viewport scrolls horizontally — instead of each row sizing the column to its own content, which misaligned the header from the body. A `width` column overrides the basis with a fixed pixel width; a `minWidth` column is measured and pinned to one resolved width (the larger of that floor and the widest of its header and rendered cells), so it reserves nothing it is not using and never truncates the chip inside it. Content (avatar, tag, icon, description, copy, "+99") is composed by the consumer via the default slot using existing primitives.
+- `table-sort-button/table-sort-button.vue` — sort control used inside `table-head-cell`, rendered as the webkit `IconButton` (`variant="ghost"`, `size="small"` → 28×28) so size, padding, and alignment match the design system. Prop `sortDirection?: 'none' | 'ascending' | 'descending'` (the same name as `table-head-cell`). Emits `sort: [direction: 'ascending' | 'descending']` (the same event as `table-head-cell`). To hide it while keeping its space, pass `class="invisible"`. Glyphs via `az az-sort` (none) / `az az-arrow-up-wide-narrow` (ascending) / `az az-arrow-down-wide-narrow` (descending). Attributes (`aria-labelledby`, `class`) are forwarded to the `IconButton`; its own label (`Sort column`, `Sorted ascending`, `Sorted descending`) applies only when nothing names it.
 - `table-toolbar/table-toolbar.vue` — flex container (end-aligned) for toolbar actions placed in the `toolbar` slot; injects the table context for its testId.
-- `table-search/table-search.vue` — context-aware search input. Reads and drives the TanStack `globalFilter` through the injected table context, so it needs no wiring. Prop `placeholder?: string` (default `'Search'`).
-- `table-filter/table-filter.vue` — context-aware advanced-filter control. An `IconButton` funnel trigger opens an anchored **popover** — a floating panel positioned by the `use-placement` composable, Teleported to `body`, dismissed on outside-click or `Escape` (no Drawer, no invented overlay part). The built-in builder is rendered from `fields: FilterField[]` (default `[]`) as a field + operator + value composer (field and operator via `Select`, value via a tokenized `InputText`; typed value editors come through the escape `default` slot) with an Apply button; committing writes `AppliedFilter[]` through the injected context (and the root `v-model:filters`). Applied conditions are surfaced as `Table.AppliedFilters` chips, never rendered inside the popover. Prop `title?: string` (default `'Filters'`). Emits `apply: [filters: AppliedFilter[]]`, `clear: []`. Slots: `default` (scope `{ fields, applied, apply, clear, remove }`) is the **escape hatch** — provide a custom builder (e.g. the console's AQL) and the built-in body is not rendered; `trigger` (scope `{ open, count }`) customizes the trigger visual. Motion: `animate-popup-scale-in` / `animate-popup-scale-out` paired with `motion-reduce:animate-none`.
-- `table-applied-filters/table-applied-filters.vue` — context-aware chip row for the committed structured filters. Renders one webkit `Chip` (`removable`) per `AppliedFilter` (label = `label`, else a formatted `field operator value`), read from the injected context. Emits `remove: [event: MouseEvent, filter: AppliedFilter]` and `edit: [event: MouseEvent | KeyboardEvent, filter: AppliedFilter]` (re-opens the builder pre-filled). Slot `chip` (scope `{ filter, remove }`, where `remove(event)` takes the activation event) overrides one chip. Placed in the `filters` slot.
-- `table-column-selector/table-column-selector.vue` — context-aware column-visibility picker (the UI over the already-wired `columnVisibility`). An `IconButton` trigger opens an anchored **popover** (the same `use-placement` pattern as `Table.Filter`) listing each hideable leaf column with a `Checkbox`, toggling visibility through the injected `table`. Respects `column.getCanHide()` / the column's `hideable`. Prop `title?: string` (default `'Columns'`). Slot `trigger` (scope `{ open }`). Motion: `animate-popup-scale-in` / `animate-popup-scale-out` paired with `motion-reduce:animate-none`.
-- `table-export/table-export.vue` — context-aware export control (an `IconButton`, download glyph). Calls the injected `exportCsv(options?)`; the root emits `export` with the resolved rows (a consumer may intercept for server-side export, otherwise the built-in CSV util downloads the visible, ordered columns and filtered rows). Props `filename?: string` (default `''` → falls back to the root `exportFilename`), `scope?: 'page' | 'filtered' | 'all'` (default `'filtered'`). Slot `trigger` (scope `{ export }`).
-- `table-refresh-button/table-refresh-button.vue` — context-aware refresh control (an `IconButton`, refresh glyph). Calls the injected `reload()`; the root emits `refresh`. Binds `:disabled` to `disabled || loading` (the injected loading flag), so it can't fire mid-fetch. Prop `disabled?: boolean` (default `false`). No bespoke animation — the loading feedback is the skeleton body.
+- `table-search/table-search.vue` — Use TableSearch for one free-text search over the table's rows. A context-aware search input. Reads and drives the TanStack `globalFilter` of the enclosing DataTable through the injected context, so it needs no wiring. Props `placeholder?: string` (default `''`; empty uses the locale catalog, `Search` in English) and `ariaLabel?: string` (default `''`; empty uses `tableSearch.label`, `Search the table`), so the field is never named only by its placeholder. While mounted it registers `/` with `useShortcuts` (listed as `tableSearch.focusShortcut`, Focus search): the key focuses the field from anywhere on the page except while typing in another field, with a modifier held, or from inside a modal layer that does not hold the search (the console keyboard standard). Rendered outside a DataTable it has no rows to search and warns once in the console.
+- `table-filter/table-filter.vue` — Use TableFilter only as the toolbar slot that hosts FilterMenu (`type="menu"`) or PropertyFilter (`type="property"`) wired to the table; it is not a third filter. `type?: 'menu' | 'property'` (default `'menu'`) picks the host by data shape: `menu` renders [`FilterMenu`](./filter-menu.md) (facets picked from known values; `select`, `multi-select` and `date` fields) and `property` renders [`PropertyFilter`](./property-filter.md) (typed conditions with operators, `free-text` off and `hide-operations` on, so its tokens combine with AND like the table's `filters`). Both read and write the enclosing DataTable's `filters` model through the context (`v-model:filters`, `filter-apply` with the event first), mapped by `filter-menu-bridge.ts`. Props `fields?: TableFilterField[]` (default `[]`; empty uses the table's `filterFields`) and `title?: string` (default `''`; the menu trigger text, the property filter's accessible name; empty uses each one's catalog). Emits `apply: [event: Event, filters: TableAppliedFilter[]]`. No slots. The applied-filters row of the menu type is `FilterMenu.ChipGroup` with no `fields` in the DataTable `filters` slot; the property type shows its own tokens. Columns are chosen in `CollectionPreferences`, which reads the table's columns from context.
+- `table-export-button/table-export-button.vue` — context-aware export control (an `IconButton`, download glyph, its name repeated on a `Tooltip`). Calls the injected `exportCsv(options?)`; the root emits `export` with the resolved rows (a consumer may intercept for server-side export, otherwise the built-in CSV util downloads the visible, ordered columns and filtered rows). Props `filename?: string` (default `''` → falls back to the root `exportFilename`), `scope?: 'page' | 'filtered' | 'all'` (default `'filtered'`). Slot `trigger` (scope `{ export }`).
+- `table-refresh-button/table-refresh-button.vue` — context-aware refresh control (an `IconButton`, refresh glyph). Calls the injected `reload()`; the root emits `refresh`. Binds `:disabled` to `disabled || loading` (the injected loading flag), so it can't fire mid-fetch. Props `disabled?: boolean` (default `false`) and `loading?: boolean` (default `false`: spins the glyph and blocks a second press while a refresh runs and the current rows stay on screen — the refresh pattern; the table's own `loading` is for a first load with nothing to show). A `Tooltip` repeats its name for pointer users.
+- `table-live-button/table-live-button.vue` — context-aware live-tail toggle (a `Button`, outlined, label from the catalog `Live` with a leading dot that turns success-coloured and pulses while live, `motion-reduce:animate-none`). Reads and drives the root `live` model through the injected context; `aria-pressed` mirrors it. Disabled while the table is `loading`. Prop `disabled?: boolean`. The app starts and stops its stream on `update:live`; the table never fetches.
+- `table-cell-link/table-cell-link.vue` — cross-resource link preset. Props `label?: string`, `href?: string` (outside the app: an absolute address with a scheme or a leading `//` opens in a new tab with the external mark and a visually hidden `(opens in a new tab)`; a relative address is an in-app link in the same tab, with no mark), `to?: string | Record<string, unknown>` (in-app; the app's registered `RouterLink`, else a plain `href`; never the external mark), `destination?: string` (tooltip `Open <label> in <destination>`), `icon?: string` (default `''`; a glyph class drawn before the name in `var(--text-muted)`, outside the link and `aria-hidden`, naming the provider or the resource type: `az az-github` for a repository, `az az-workloads` for a workload), `copyable?: boolean`, `copyValue?: string`, `more?: OverflowCountItem[]`, `noun?: OverflowCountNoun` (default `undefined`; what the `more` values are, the same name as `TableCellTags`). Clicks stop at the link so a row click does not also fire. No `href`/`to` renders plain truncating text with no mark and no tooltip.
+- `table-cell-id/table-cell-id.vue` — identifier preset: the value (`dir="ltr"`, tabular numbers, truncating) and a `CopyButton` pinned to the end edge named `Copy <resource> ID`. Props `value?: string | number`, `resource?: string`.
+- `table-cell-status/table-cell-status.vue` — status preset: one `Tag` (`size="medium"`, truncating). Props `label?: string` (empty renders a muted dash), `severity?: TagSeverity` (default `neutral`), `icon?: string`. Use it over a bare `Tag` in a cell: it is the shared empty-dash rule. Use `status-indicator` for a live dot plus text, and `severity-tag` for a log severity.
+- `table-cell-tags/table-cell-tags.vue` — tag list preset: rounded secondary tags, as many as fit the cell (measured with a `ResizeObserver` against a hidden ruler), the rest behind an `OverflowCount`. Props `items?: string[]` (empty renders a muted dash), `icon?: string`, `noun?: OverflowCountNoun` (default `tag` / `tags` from the catalog).
+- `table-cell-time/table-cell-time.vue` — last-modified preset: the author's `Avatar` (name on its tooltip; an email reads as a name) and a `<time datetime>` with the relative time (`just now` under 45 s), the absolute time on its tooltip and in visually hidden text. One shared minute clock re-renders every mounted cell; under a `ConfigProvider` with `now` set, every cell reads that reference time instead, so an example, a test or a server render prints the same text wherever and whenever it renders. Props `value?: string | number | Date` (an epoch with 15 digits or more reads as microseconds, like `Timestamp`, with which it shares parsing and relative phrasing; empty or unparseable renders a muted dash), `author?: string`, `avatarSrc?: string`.
+- `table-cell-actions/table-cell-actions.vue` — row actions preset: a `DropdownMenu` (`side="bottom"` + `align="end"`) triggered by an outlined ellipsis `IconButton` named `Actions for <name>`. Props `name?: string`, `disabled?: boolean`. Emits `select: [event: MouseEvent | KeyboardEvent, value: DropdownMenuItemValue]`; `DropdownMenuItemValue` (`string | number`) is re-exported by `./table`. Default slot: `DropdownMenu.Group`s of `DropdownMenu.Item`s.
 
 <!-- Resulting layout:
 
   packages/webkit/src/components/data/table/
   ├── table.vue
-  ├── index.ts              (compound: Object.assign attaches sub-components; vue-tsc emits index.d.ts at publish)
+  ├── index.ts              (compound: Object.assign attaches the structural parts; vue-tsc emits index.d.ts at publish)
   ├── injection-key.ts
   ├── table-header/         { table-header.vue }
   ├── table-body/           { table-body.vue }
@@ -212,168 +165,118 @@ Plug a custom filter builder (e.g. AQL) through `Table.Filter`'s `default` slot;
   ├── table-toolbar/        { table-toolbar.vue }
   ├── table-search/         { table-search.vue }
   ├── table-filter/            { table-filter.vue }
-  ├── table-applied-filters/   { table-applied-filters.vue }
-  ├── table-column-selector/   { table-column-selector.vue }
-  ├── table-export/            { table-export.vue }
-  └── table-refresh-button/    { table-refresh-button.vue }
+  ├── table-export-button/            { table-export-button.vue }
+  ├── table-refresh-button/    { table-refresh-button.vue }
+  ├── table-live-button/       { table-live-button.vue }
+  ├── table-cell-link/         { table-cell-link.vue }
+  ├── table-cell-id/           { table-cell-id.vue }
+  ├── table-cell-status/       { table-cell-status.vue }
+  ├── table-cell-tags/         { table-cell-tags.vue }
+  ├── table-cell-time/         { table-cell-time.vue, minute-clock.ts }
+  └── table-cell-actions/      { table-cell-actions.vue }
 
-  No per-component package.json. Public exports stay flat: ./table (→ index.ts), ./table-header, … ./table-search, ./table-filter, ./table-applied-filters, ./table-column-selector, ./table-export, ./table-refresh-button, plus the CSV util ./utils/csv -->
+  No per-component package.json. Public exports stay flat: ./table (→ index.ts), ./table-header, … ./table-search, ./table-filter, ./table-export-button, ./table-refresh-button, ./table-live-button, ./table-cell-link, ./table-cell-id, ./table-cell-status, ./table-cell-tags, ./table-cell-time, ./table-cell-actions, plus the CSV util ./utils/csv -->
 
 ## Props
 
-<!-- Root <Table> element only. Sub-component props are listed in the Sub-components section. -->
+<!-- Root Table element only. Sub-component props are listed in the Sub-components section. -->
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `maxHeight` | `string` | `''` | false | Max height (CSS length). The viewport scrolls dynamically: horizontal scroll appears automatically when columns overflow the width; vertical scroll appears only when `maxHeight` is set smaller than the content (under the sticky header). |
-| `border` | `boolean` | `false` | false | Draw the outer card border around the table. Off by default (the table is typically framed by a surrounding surface); set `border` / `:border="…"` to draw the `var(--border-default)` outline. The internal row dividers are unaffected. |
-| `data` | `Record<string, unknown>[]` | `[]` | false | Data-driven mode: row records. |
-| `columns` | `TableColumn[]` | `[]` | false | Data-driven mode: column definitions (`{ id?, accessorKey?, header?, label?, enableSorting?, grow?, principal?, frozen?, width?, minWidth?, align?, kind?, resizable?, hideable?, orderable? }`; `width` (px) sets a fixed pixel column (also needed when a frozen column precedes another frozen column on the same edge, so sticky offsets can be summed); **`minWidth`** (px) sets a **floor** instead: the table measures the column's own content — its header, including the sort affordance, and every rendered body cell — and pins the column to the larger of the two, as **one** width applied to the header and every body cell (a per-cell `min-width` would let each row size to its own content and drift the header away from the body). It is for a column whose content is a chip or a short token: a fixed `width` there is a bet in both directions — too generous and it reserves space the rest of the row needs, too tight and the chip inside it truncates. The measured width tracks the **rendered page**, so a column can change width when paging or sorting brings longer content into view; `width` wins when both are set, and a user resize wins over both. a `grow` column without `width` keeps a shared fixed basis so the header and body stay aligned and the cell never wraps. A column with no `grow` defaults to weight `2` for the **principal** column and `1` for the rest, so the columns fill the available space proportionally. The principal column is the one flagged `principal: true`, or — when none is flagged — the first non-action column. A `kind: 'action'` column is automatically pinned to the trailing (right) edge — staying reachable while the rest scrolls horizontally — and is never resizable. **`resizable: true`** opts a column into a live mouse/touch drag-to-resize handle on its header (native pointer events; the `@tanstack/vue-table` exception covers sorting/pagination/selection/visibility, not sizing). On the first drag of any divider every flexible column freezes at its current rendered width; from then on dragging changes **only that column** and the table grows (horizontal scroll) — the others are untouched. The drag floor is the column's own content width (header label + visible body cells), so a column never shrinks past its content. Frozen and action columns ignore `resizable`. **`label`** overrides the `Table.ColumnSelector` label when `header` is not a string; **`hideable: false`** excludes the column from `Table.ColumnSelector` (e.g. the actions column); **`orderable: true`** opts the column into `columnOrder`. When non-empty, the table renders itself via TanStack. |
-| `rowKey` | `string` | `'id'` | false | Field used as the stable row id (for selection). |
-| `enableSorting` | `boolean` | `false` | false | Enable sorting globally; per-column `enableSorting` overrides. |
-| `enableRowSelection` | `boolean` | `false` | false | Add a leading selection-checkbox column. |
-| `selectOnRowClick` | `boolean` | `false` | false | Data-driven mode: clicking a row toggles its selection (requires `enableRowSelection`); interactive cells still own their own click. |
-| `headerKind` | `'default' \| 'compact'` | `'default'` | false | Header density (data-driven): `compact` shrinks the column-header row's height and padding. Forwarded to the `TableHeader`'s `kind`. |
-| `paginated` | `boolean` | `false` | false | Render a Paginator in the footer. |
-| `pageSize` | `number` | `10` | false | Rows per page when paginated. |
-| `sorting` | `SortingState` | `undefined` | false | v-model:sorting (TanStack SortingState). |
-| `rowSelection` | `RowSelectionState` | `undefined` | false | v-model:rowSelection (TanStack RowSelectionState). |
-| `columnVisibility` | `VisibilityState` | `undefined` | false | v-model:columnVisibility (TanStack VisibilityState). |
-| `globalFilter` | `string` | `undefined` | false | v-model:globalFilter text. |
-| `pagination` | `PaginationState` | `undefined` | false | v-model:pagination (TanStack PaginationState). |
-| `manualSorting` | `boolean` | `false` | false | Server-side sorting: emit events, do not sort locally. |
-| `manualPagination` | `boolean` | `false` | false | Server-side pagination: emit events, do not slice locally. |
-| `manualFiltering` | `boolean` | `false` | false | Server-side filtering: emit events, do not filter locally. |
-| `rowCount` | `number` | `undefined` | false | Total row count for manual pagination. |
-| `rowsPerPageOptions` | `number[]` | `[10, 25, 50, 100]` | false | Rows-per-page options shown in the footer selector. |
-| `loading` | `boolean` | `false` | false | Data-driven mode: render skeleton rows in the body (aligned to the visible columns) and set `aria-busy`; `Table.RefreshButton` disables/spins while true. Precedence: `loading` → skeleton, else rows, else `empty`. |
-| `filters` | `AppliedFilter[]` | `undefined` | false | v-model:filters — structured applied conditions committed by `Table.Filter`, distinct from `globalFilter`. Client-side they map to TanStack column filters; under `manualFiltering` they are emitted for a server refetch. |
-| `filterFields` | `FilterField[]` | `[]` | false | Field catalog the built-in `Table.Filter` builder offers (id, label, value type, allowed operators, select options). Omit and use `Table.Filter`'s default slot to plug a custom builder. |
-| `state` | `TableStateSnapshot` | `undefined` | false | v-model:state — an aggregate serializable snapshot layered over the per-concern models. A bound per-concern v-model (e.g. `v-model:sorting`) wins over `state` for that concern. |
-| `initialState` | `Partial<TableStateSnapshot>` | `undefined` | false | Uncontrolled seed applied once on mount; seeds only concerns that are not bound to their own v-model. |
-| `exportFilename` | `string` | `'export.csv'` | false | Default filename for `Table.Export` and `exportCsv()` when no per-call filename is given. |
+| Prop        | Type                         | Default         | Required | JSDoc                                                                                                                                                                                                                                      |
+| ----------- | ---------------------------- | --------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `maxHeight` | `string`                     | `''`            | false    | Max height (CSS length). The viewport scrolls dynamically: horizontal scroll appears automatically when columns overflow the width; vertical scroll appears only when `maxHeight` is set smaller than the content (under a frozen header). |
+| `bordered`  | `boolean`                    | `false`         | false    | Draw the outer card border around the table. Off by default (the table is typically framed by a surrounding surface); the internal row dividers are unaffected.                                                                            |
+| `density`   | `'comfortable' \| 'compact'` | `'comfortable'` | false    | Density of the body cells: `compact` shrinks their height and padding. Set `density` on `Table.Header` too for a compact header.                                                                                                           |
+| `wrapLines` | `boolean`                    | `false`         | false    | Cell text wraps onto several lines instead of truncating. Identifiers stay on one line and truncate: `code`, `kbd`, `samp`, a `dir="ltr"` span (the `TableCellId` value) and code-typography text (`text-label-code-*`).                   |
 
 ## Events
 
-<!-- Root events fire only in data-driven mode. In composition mode, sort comes from
-     table-head-cell (`sort`) and row clicks fall through on table-row. -->
-
-| Event | Payload | Notes |
-|---|---|---|
-| `update:sorting` | `value: SortingState` | v-model:sorting. |
-| `update:rowSelection` | `value: RowSelectionState` | v-model:rowSelection. |
-| `update:columnVisibility` | `value: VisibilityState` | v-model:columnVisibility. |
-| `update:globalFilter` | `value: string` | v-model:globalFilter. |
-| `update:pagination` | `value: PaginationState` | v-model:pagination. |
-| `row-click` | `(event: MouseEvent, row: Record<string, unknown>)` | Fires when a rendered row is clicked (data-driven mode). `event` is the click; `row` is the clicked record. |
-| `update:filters` | `value: AppliedFilter[]` | v-model:filters. |
-| `update:state` | `value: TableStateSnapshot` | v-model:state; debounced so bursts of changes coalesce. |
-| `filter-apply` | `filters: AppliedFilter[]` | The filter builder was committed (Apply) — the explicit re-query signal for `manualFiltering`. |
-| `filter-remove` | `filter: AppliedFilter` | One applied filter/chip was removed. |
-| `refresh` | `—` | Refresh requested (`Table.RefreshButton` or `reload()`); the app refetches. |
-| `export` | `rows: Record<string, unknown>[]` | Export requested with the resolved rows; a consumer may handle it server-side (otherwise the built-in CSV util downloads). |
+_none_ — sort comes from `Table.HeadCell` (`sort`) and row clicks fall through on `Table.Row`.
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | Composition mode: the scrollable region (TableCaption, TableHeader, TableBody). |
-| `footer` | — | Footer region rendered below the scroll viewport (e.g. TableFooter + Paginator), so it never scrolls with the body. In data-driven mode it renders automatically when `paginated`. |
-| `caption` | — | Data-driven mode: caption content (wrapped in TableCaption), fixed above the scroll viewport. |
-| `title` | — | Title text shown at the start of the toolbar band, fixed above the scroll viewport (both modes). |
-| `toolbar` | `{ table, selectedRows, selectedCount, clearSelection, loading }` | Action band (search, filter trigger, refresh, export, column-selector) above the scroll viewport, end-aligned beside the title. `table` is the TanStack instance in data-driven mode, `undefined` in composition mode; `selectedRows` / `selectedCount` / `clearSelection` expose the selection for bulk-action toolbars, and `loading` mirrors the prop. |
-| `filters` | `{ table, selectedRows, selectedCount, clearSelection, loading }` | Active-filter chips row below the toolbar (both modes); same scope as `toolbar`. |
-| `empty` | — | Data-driven mode: shown when there are no rows. Defaults to an empty-state block (illustration + title + description) following Figma; override the slot for custom copy/actions. |
-
-Per-column slots (data-driven mode) are name-computed at runtime, one per column id, so they are documented here rather than as enumerable `defineSlots` rows: `cell-<columnId>` (scope `{ row, value }`) renders custom body-cell content; `header-<columnId>` (scope `{ column }`) renders custom header content.
-
-**Imperative API (via `defineExpose`).** The root also exposes `reload()`, `clearFilters()`, `exportCsv(options?)`, `getState()`, and `setState(partial)` on its instance, so controls or app logic rendered outside the root can drive the table through a template ref (`t.clearFilters()` on `<Table ref="t" />`). Mutating methods are no-ops while `loading`. `reload()` emits `refresh` — the table is data-agnostic, so the app performs the refetch. `getState()` returns a deep-cloned `TableStateSnapshot`; `setState(partial)` writes the same per-concern models that back `v-model:state` (it does not call TanStack's `setState`). The raw TanStack instance is intentionally not on the ref — reach it through the `toolbar`/`filters` slot scope when needed. `Table.Filter` / `Table.AppliedFilters` / `Table.ColumnSelector` / `Table.Export` / `Table.RefreshButton` read this same state through the injected context, so they need no wiring.
+| Slot      | Scope | Notes                                                                                                                |
+| --------- | ----- | -------------------------------------------------------------------------------------------------------------------- |
+| `default` | —     | The scrollable region: `Table.Caption`, `Table.Header`, `Table.Body`.                                                |
+| `title`   | —     | Title text shown at the start of the toolbar band, fixed above the scroll viewport.                                  |
+| `toolbar` | —     | Action band above the scroll viewport, end-aligned beside the title.                                                 |
+| `footer`  | —     | Footer region rendered below the scroll viewport (`Table.Footer` + `Pagination`), so it never scrolls with the body. |
 
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `selected`
 - The viewport is always a scroll container (`overflow: auto`): horizontal scroll is automatic when columns overflow; vertical scroll engages only when `maxHeight` constrains the content.
 - `data-frozen` on TableHeader (`true`), TableHeadCell / TableCell (`start` | `end`), and TableRow (`true`). A frozen head/body cell renders a CSS-only fade (gradient pseudo-element) just outside its inner edge that dissolves the horizontally scrolling content into the row background (`from-transparent` → `var(--table-row-bg)`, the row-published color, so it matches the row on hover/selected) — `frozen=start` fades on the right, `frozen=end` on the left. The fade tints nothing; it only masks the content sliding under the pinned column.
+- Scroll cue: the scroll viewport sits in a `__scroll` frame that sets `data-overflow-start` / `data-overflow-end` from the scroll position (re-measured on scroll and on resize). While content is hidden past an inline edge, an `aria-hidden` gradient as wide as the hidden distance (at most 24 px, none when 4 px or less, so it never sits over text that is otherwise in view) (`__fade-start` / `__fade-end`, `from-transparent` to `var(--bg-surface)`, pointer events off) covers that edge of the viewport, so a phone shows that columns continue; it follows the inline direction under `dir="rtl"`, has no motion, and keeps its gradient under forced colors (fading to `Canvas`). A frozen column on that edge draws its own fade and paints over the cue, which sits below frozen cells and the sticky header (`z-5`).
 - `data-state` on TableRow: `selected` | `unselected`; `data-selected` mirrors the `selected` prop; `aria-selected` set when selected.
-- `data-kind` on TableHeadCell (`default` | `checkbox` | `action` | `slot`) and TableCell (`default` | `checkbox` | `action`).
+- `data-type` on TableHeadCell (`default` | `checkbox` | `action` | `slot`) and TableCell (`default` | `checkbox` | `action`).
 - `data-align` on head/body cells: `start` | `center` | `end`.
 - `data-grow` on head/body cells: `1` | `2` | `3` (flex weight).
 - `data-sortable` and `data-sort` (`none` | `ascending` | `descending`) on TableHeadCell; `aria-sort` mirrors `data-sort`.
-- `data-direction` (`none` | `ascending` | `descending`) and `data-visible` on TableSortButton.
+- `data-sort` (`none` | `ascending` | `descending`) on TableSortButton.
 - `data-clickable` on TableCell mirrors the `clickable` prop.
+- Density and wrapping: `data-density="compact"` on the root shrinks the body cells (`min-h-9`, `--spacing-2xs` block padding); `data-wrap` lets cell text (and any `.truncate` inside a cell) wrap, except identifiers: `code`, `kbd`, `samp`, `[dir=ltr]` and `text-label-code-*` elements, and any `.truncate` inside them, keep `white-space: nowrap`, so a token such as `p-(--spacing-2xl)` or an ID never splits at a hyphen; they truncate instead. A compact header is `Table.Header density="compact"`.
+- Responsive toolbar: the root is the `@container/table`; the toolbar wraps, and below `@md` of the table the `toolbar` slot moves under the title and starts at the start edge. `Table.Toolbar` wraps its controls.
+- Hover-free devices: a touch screen shows the sort glyph only on the sorted column, as on a pointer screen with no hover; tapping a sortable header sorts it, and keyboard focus reveals the sort button.
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token | Reduced-motion fallback |
-|---|---|---|---|
-| row hover / selected | `transition-colors duration-150 ease-out` | inline | `motion-reduce:transition-none` |
-| sort glyph reveal on header hover | `transition-opacity duration-150 ease-out` | inline | `motion-reduce:transition-none` |
-| filter / column-selector popover open | `animate-popup-scale-in` | `semantic/animations.js` | `motion-reduce:animate-none` |
-| filter / column-selector popover close | `animate-popup-scale-out` | `semantic/animations.js` | `motion-reduce:animate-none` |
-| data body enter (initial load / reload) | `transition-[opacity,transform] duration-300 ease-out` — enter `opacity-0 translate-y-2` → `opacity-100 translate-y-0` | inline | `motion-reduce:transition-none` |
+| Trigger                            | Animation / Transition                     | Token  | Reduced-motion fallback         |
+| ---------------------------------- | ------------------------------------------ | ------ | ------------------------------- |
+| row hover / selected               | `transition-colors duration-150 ease-out`  | inline | `motion-reduce:transition-none` |
+| sort glyph reveal on header hover  | `transition-opacity duration-150 ease-out` | inline | `motion-reduce:transition-none` |
+| live dot (`TableLiveButton`, live) | `animate-pulse`                            | inline | `motion-reduce:animate-none`    |
+
+The root itself is static. `TableFilter` animates through the `FilterMenu` or `PropertyFilter` it hosts (owned by those specs); DataTable's own motion (body enter, row drag) is in [`data-table`](./data-table.md).
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| header typography | `.text-label-sm` |
-| toolbar title typography | `.text-label-md` |
-| body cell typography | `.text-label-md` |
-| secondary / description typography | `.text-label-sm` |
-| surface | `var(--bg-surface)` |
-| outer border (card edge) | `var(--border-default)` |
-| outer border width | `var(--border-width-default)` |
+| Region                                                                  | Token (DESIGN.md)                                               |
+| ----------------------------------------------------------------------- | --------------------------------------------------------------- |
+| header typography                                                       | `.text-label-sm`                                                |
+| toolbar title typography                                                | `.text-label-md`                                                |
+| body cell typography                                                    | `.text-label-md`                                                |
+| secondary / description typography                                      | `.text-label-sm`                                                |
+| surface                                                                 | `var(--bg-surface)`                                             |
+| outer border (card edge)                                                | `var(--border-default)`                                         |
+| outer border width                                                      | `var(--border-width-default)`                                   |
 | frozen column surface / edge fade (follow the row via `--table-row-bg`) | `var(--bg-surface)` · `var(--bg-canvas)` · `var(--bg-selected)` |
-| frozen column edge fade (dissolves scrolling content) | `var(--bg-surface)` |
-| row hover | `var(--bg-canvas)` |
-| row selected | `var(--bg-selected)` |
-| text | `var(--text-default)` |
-| text muted (header / description) | `var(--text-muted)` |
-| divider | `var(--border-default)` |
-| divider width | `var(--border-width-default)` |
-| cell padding x | `var(--spacing-sm)` |
-| gap | `var(--spacing-xs)` |
-| shape (cells / surface) | `var(--shape-elements)` |
-| shape (sort button) | `var(--shape-button)` |
-| ring | `var(--ring-color)` |
+| frozen column edge fade (dissolves scrolling content)                   | `var(--bg-surface)`                                             |
+| viewport scroll cue (edge fade over the hidden inline edge)             | `var(--bg-surface)`                                             |
+| row hover                                                               | `var(--bg-canvas)`                                              |
+| row selected                                                            | `var(--bg-selected)`                                            |
+| text                                                                    | `var(--text-default)`                                           |
+| text muted (header / description)                                       | `var(--text-muted)`                                             |
+| divider                                                                 | `var(--border-default)`                                         |
+| divider width                                                           | `var(--border-width-default)`                                   |
+| cell padding x                                                          | `var(--spacing-sm)`                                             |
+| gap                                                                     | `var(--spacing-xs)`                                             |
+| shape (cells / surface)                                                 | `var(--shape-control)`                                          |
+| shape (sort button)                                                     | `var(--shape-button)`                                           |
+| ring                                                                    | `var(--ring-color)`                                             |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on the sort button and any interactive cell content.
-- Keyboard map: `Tab` focuses sortable headers and interactive cell content; `Enter`/`Space` toggles a sortable header; row click is mouse/touch (no keyboard trap).
-- ARIA: root `role="table"`; `table-header`/`table-body`/`table-footer` `role="rowgroup"`; `table-row` `role="row"`; `table-head-cell` `role="columnheader"` with `aria-sort` when sortable; `table-cell` `role="cell"`; selected rows set `aria-selected`.
+- Keyboard map: `Tab` focuses the sort button of each sortable column (one tab stop per column, as in the APG sortable table: the header cell itself is not focusable and carries `aria-sort`) and interactive cell content; `Enter`/`Space` on the sort button toggles the sort; row click is mouse/touch (no keyboard trap). Body rows are not focusable, so `row-click` is never the only way to open a record: the principal column carries a real link or button (`TableCellLink`, or the `cell-<id>` slot with an anchor, as the Default example does), which keyboard and screen-reader users reach instead (WCAG 2.1.1).
+- ARIA: `role="table"` sits on the grid element inside the scroll viewport (testid `<testid>__table`), not on the root: the root also holds the toolbar band, the focusable scroll viewport and the footer, and any of those inside a `table` is an unallowed child (`aria-required-children`). Every `aria-*` attribute passed to `Table` (`aria-label`, `aria-labelledby`, `aria-describedby`…) is forwarded to that element; every other attribute stays on the root. `table-caption` is a plain element (no `role`) that names the table through `aria-labelledby` unless the consumer names it with `aria-label`/`aria-labelledby`. The default slot is the table's content, so it holds rowgroups (and a caption) only; anything else goes in `footer` or around the `Table`. `table-header`/`table-body` `role="rowgroup"`; `table-footer` has no role (it hosts pagination or an action, not rows); `table-row` `role="row"`; `table-head-cell` `role="columnheader"` with `aria-sort` when sortable; `table-cell` `role="cell"`; selected rows set `aria-selected`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including muted header text.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
+- Pause, Stop, Hide (WCAG 2.2.2): the `TableLiveButton` dot pulses for as long as the live tail runs. The pulse is an essential status signal (it shows the stream is running, and stops when the stream stops), so it keeps `animate-pulse`; the user stops it with the same button, and `motion-reduce:animate-none` keeps it still.
 - Touch target ≥40×40 px on the sort button and row action controls.
+- Filter names: `TableFilter` hosts `FilterMenu` (its trigger counts the applied fields in its name) or `PropertyFilter` (a combobox named by `title`); see their specs.
 
-## Stories (Storybook)
+## Examples
 
-This component has no `kind`/`size` on its root, so the canonical Types/Sizes stories do not apply. Instead there is one story per scenario (the component's value is the behaviors, not root variants) plus a Full reference; each wires its events to the Actions panel.
+This component has no `type`/`size` on its root, so the canonical Types/Sizes examples do not apply. The data-driven scenarios live under [`data-table`](./data-table.md).
 
-Most stories use the data-driven API (`<Table :data :columns>` via the TanStack engine, the granted `@tanstack/vue-table` exception) with per-column `cell-<id>` slots and a shared row-action menu; one story (Composition) instead hand-composes the compound dot-notation form (`<Table.Header>` / `<Table.Row>` / `<Table.HeadCell>` / `<Table.Body>` / `<Table.Cell>`) to document the composition writing style the `## Usage` block leads with. Every story uses a small, generic dataset (≤10 anonymous rows, no real names/emails). Per the toolbar policy, **only Full Example renders the `#toolbar` / `#filters` band** — every other story omits it so the table opens straight onto its compact column-header row.
-
-- Composition — the compound dot-notation form built by hand (`<Table.Header>` / `<Table.Row>` / `<Table.HeadCell>` / `<Table.Body>` / `<Table.Cell>`, no `data`/`columns`); justified because the composition writing style is the primary documented API and needs a worked example separate from the data-driven mode.
-- With Checkboxes — selection scenario; `enable-row-selection` adds the leading checkbox column with a select-all header (all / none / indeterminate) and per-row selection via `v-model:row-selection`; justified because the selection surface (`kind="checkbox"` cell + select-all) is a distinct behavior.
-- Compact Header — a denser header via `header-kind="compact"` (reduced header-row height and padding), with no toolbar band so the table opens straight onto that header row; justified because the compact header density is a distinct presentation.
-- Bordered — the outer card border drawn via the `border` prop (`<Table border>`); justified because the opt-in surface border (off by default) is a distinct presentation toggle.
-- Selected Row — a pre-selected row (the `var(--bg-selected)` surface + `aria-selected`) seeded through `v-model:row-selection`, with `select-on-row-click` toggling selection on inert row clicks; justified because the selected-row state and row-click selection are distinct behaviors.
-- Fixed Layout with Column Sizes — every column declares an explicit pixel `width` (fixed layout, columns keep their declared size and scroll horizontally past the surface); justified because explicit column sizing is distinct from the grow-to-fill default.
-- Column Width Floors — the short-content columns declare a `minWidth` floor instead of a fixed `width`: the table measures each one (its header, sort affordance included, and every rendered cell) and pins the column to the larger of the two, so `Status` settles on its header while `Protocol` grows past the floor to fit `HTTP & HTTPS`; justified because the measured floor is the counterpart to explicit `width` and is the only sizing that is right in both directions for a chip column.
-- Resizable Columns — a simple table whose columns opt into drag-to-resize via per-column `resizable: true`; dragging a header divider resizes only that column (the others freeze) and the table grows; justified because the per-column resize affordance is a distinct behavior.
-- Sticky Column — freeze scenario; a frozen start column (Name) and a frozen actions (end) column inside a horizontally scrollable container, with the CSS-only edge fade; justified because the freeze system is the primary differentiator of this component.
-- Compact Header with Sticky Column — the compact header density (`header-kind="compact"`) combined with frozen start/end columns inside a horizontally scrollable container; justified because combining the compact header with frozen columns is a distinct composite scenario.
-- Full Example — the complete data table over the same generic ≤10-row dataset, paginated with a small `page-size` so the paginator spans a couple of pages: the only story with the toolbar band — a composed `#toolbar` (`Table.Filter` / context-aware `Table.Search` / `Table.RefreshButton` / `Table.Export` / `Table.ColumnSelector`) with a removable `#filters` row (`Table.AppliedFilters` beside the search chip) — plus select-all + sortable headers, status Tags, per-row actions, frozen Name + actions columns, every other column `resizable`, the `border` prop, and a paginator; justified because the assembled page is the canonical real-world usage.
-- Advanced Filter — the `Table.Filter` builder (field/operator/value) committing removable/editable `Table.AppliedFilters` chips over the generic dataset; justified because the structured-filter flow (build → apply → chip → edit/remove) is the headline new behavior.
-- Column Selector — `Table.ColumnSelector` toggling column visibility over the same dataset; justified because the visibility-picker UI is a distinct new affordance over the existing `columnVisibility` state.
-- Export — `Table.Export` downloading the visible / ordered / filtered rows as CSV; justified because CSV export is a distinct new capability and documents the `exportFilename` / `scope` surface.
-- Loading — `:loading="true"` rendering skeleton rows aligned to the columns, plus the empty-vs-loading precedence; justified because the dynamic / server-side loading state is a distinct presentation.
-- Serializable State — round-trips `getState()` → `setState()` (and mirrors `v-model:state`) to demonstrate save / restore without a router; justified because the state-snapshot API is the mechanism the app uses for URL / localStorage persistence and needs a worked example.
+- Default — the compound dot-notation form built by hand (`<Table.Header>` / `<Table.Row>` / `<Table.HeadCell>` / `<Table.Body>` / `<Table.Cell>`); justified as the baseline of the hand-composed API.
+- Cell Presets — every preset in one table (link with destination, domain with `+N` and copy, ID, status, tags, last modified, actions), inside a `ConfigProvider` whose fixed `now` the sample dates count back from, so the relative times read the same on every render; justified because the presets are the shared cell vocabulary every list uses.
 
 ## Constraints — DO NOT
 
@@ -388,10 +291,9 @@ Most stories use the data-driven API (`<Table :data :columns>` via the TanStack 
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Stories (Storybook)" section explicitly justifies the addition.
-- Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + per `type` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
+- Do not edit `.claude/docs/DESIGN.md` or `.claude/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export and the root `package.json` main/module point at `index.ts`, `types` at `index.d.ts`. Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.

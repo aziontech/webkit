@@ -1,0 +1,21 @@
+{
+  "component": "data-grid",
+  "title": "Components/Data/DataGrid",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A customers grid with a text, a select, a number and a boolean column and a read-only ID, the first column frozen. Click a cell or move with the arrow keys, press Enter or start typing to edit, Enter to commit and move down, Escape to cancel; Space toggles Active; Shift with an arrow selects a range that Ctrl+C copies as tab-separated text, and Ctrl+V pastes it back from the top-left cell of another range (a block copied from a spreadsheet works the same way; one value fills the whole selected range).",
+      "file": "default.vue"
+    },
+    {
+      "name": "RowSelection",
+      "summary": "`selectable` adds a checkbox column with Select all, bound with `v-model:selected-keys`. The toolbar slot's `add` and `remove` emit `row-add` and `row-remove` with the selected rows, and the page writes the new rows to the `v-model`.",
+      "file": "row-selection.vue"
+    },
+    {
+      "name": "Readonly",
+      "summary": "`readonly` while a save runs or for people who may not edit: no editor opens and every cell reads as read-only, while the cursor, the range selection and copy keep working.",
+      "file": "readonly.vue"
+    }
+  ]
+}

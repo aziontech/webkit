@@ -3,26 +3,51 @@ import { existsSync, readFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { dirname, join, relative } from 'node:path'
 
-import { loadCatalog } from '../eslint-plugin/catalog.js'
+import { loadCatalog } from '../eslint-plugin/lib/catalog.js'
 
 export const UI_EXTENSIONS = ['vue', 'astro']
 
 export const RULE_PURPOSE = {
-  'valid-import-path': 'import path that does not exist in the installed version',
+  'no-page-navigation-menu': 'free Menu in a page body (one navigation per level)',
+  'no-viewport-height-calc':
+    'page height hand-computed from the viewport (calc(100dvh - …)) instead of data-layout-fill',
+  'no-root-relative-asset':
+    'site-only /marketing-components or /media URL a copied app does not serve',
+  'no-unknown-import': 'import path that does not exist in the installed version',
   'no-deep-internal-import': 'reaches into the package internals instead of a published entry',
   'no-barrel-import': 'bare-package barrel import (there is no barrel entry)',
   'no-whole-icon-set-import': 'pulls the whole icon set instead of one icon',
   'no-hardcoded-color': 'hardcoded colour, palette class or raw text size',
   'no-hardcoded-motion': 'literal duration/easing, or motion with no reduced-motion escape',
+  'no-physical-direction': 'physical left/right utility that does not mirror under RTL',
   'prefer-tree-shakeable-root': 'compound entry imported where the root would do',
   'no-deprecated-component': 'component marked deprecated in the catalog',
+  'no-deprecated-name': 'component, prop, value or icon name WebKit 6.0 renamed or removed',
   'prefer-webkit-component': 'foreign UI library where a webkit component exists',
   'prefer-define-model': 'hand-rolled modelValue + update:modelValue pair',
   'no-style-override': 'class/style on a webkit component — restyling it',
-  'authoring-standards': 'shared authoring standards (typed slots, comments, deprecation)'
+  'require-authoring-standards': 'shared authoring standards (typed slots, comments, deprecation)',
+  'require-container-width': 'Card, StatTile or ChartCard as a flex item with no width',
+  'require-header-search': 'app header without SearchTrigger, or a hand-rolled ⌘K field',
+  'no-wrapped-page-chrome':
+    'SiteFooterSection or SiteHeaderSection inside a bordered or padded wrapper',
+  'no-output-in-command': 'shell code sample that mixes the command with what it prints',
+  'prefer-href-in-menu-node': 'navigation node naming its destination path/to/url instead of href',
+  'no-gap-after-closing-section':
+    'Spacer or closing frame after a section that draws its own close',
+  'require-accessible-name': 'IconButton or ButtonGroup with no aria-label or aria-labelledby',
+  'no-dropped-children': 'content inside a webkit component with no default slot, never rendered'
 }
 
-const TEMPLATE_ONLY_RULES = ['no-style-override']
+const TEMPLATE_ONLY_RULES = [
+  'no-style-override',
+  'require-container-width',
+  'require-header-search',
+  'no-wrapped-page-chrome',
+  'no-gap-after-closing-section',
+  'require-accessible-name',
+  'no-dropped-children'
+]
 
 export const FORMATS = new Set(['markdown', 'json'])
 export const FAIL_MODES = new Set(['never', 'any'])
@@ -33,24 +58,28 @@ function extensionOf(path) {
   return dot === -1 ? '' : base.slice(dot + 1)
 }
 
-export function resolveEslintBin(cwd) {
+export function resolvePackageBin(cwd, name) {
   const shim = join(
     cwd,
     'node_modules',
     '.bin',
-    process.platform === 'win32' ? 'eslint.cmd' : 'eslint'
+    process.platform === 'win32' ? `${name}.cmd` : name
   )
   if (existsSync(shim)) return { command: shim, prefix: [] }
 
   const require = createRequire(join(cwd, '__webkit_report__.js'))
-  const manifestPath = require.resolve('eslint/package.json')
+  const manifestPath = require.resolve(`${name}/package.json`)
   const manifest = JSON.parse(readFileSync(manifestPath, 'utf-8'))
-  const entry = typeof manifest.bin === 'string' ? manifest.bin : manifest.bin?.eslint
-  if (!entry) throw new Error('eslint package.json declares no bin')
+  const entry = typeof manifest.bin === 'string' ? manifest.bin : manifest.bin?.[name]
+  if (!entry) throw new Error(`${name} package.json declares no bin`)
   return { command: process.execPath, prefix: [join(dirname(manifestPath), entry)] }
 }
 
-function runESLint(cwd, patterns) {
+export function resolveEslintBin(cwd) {
+  return resolvePackageBin(cwd, 'eslint')
+}
+
+export function runESLint(cwd, patterns) {
   let cmd
   try {
     cmd = resolveEslintBin(cwd)

@@ -1,0 +1,92 @@
+{
+ "name": "context-menu",
+ "binding": "ContextMenu",
+ "import": "@aziontech/webkit/context-menu",
+ "treeShakeableImport": "@aziontech/webkit/context-menu-root",
+ "category": "navigation",
+ "surface": "app",
+ "structure": "composition",
+ "compoundRoot": true,
+ "subcomponents": [
+  "@aziontech/webkit/context-menu-trigger"
+ ],
+ "purpose": "Menu of actions that opens at the pointer when the user right-clicks an area, presses `Shift+F10` or the context-menu key inside it, or long-presses it on touch. It is the right-click twin of `DropdownMenu`: the root `ContextMenu` owns open state, the pointer anchor, positioning and focus return through the same internal menu core, `ContextMenu.Trigger` marks the area that listens, and the item parts are DropdownMenu's own (`Group`, `Item` with its checkbox and radio variants, `Sub`, `SubTrigger`, `SubContent`), attached to the compound so the two menus look and behave the same.",
+ "setup": null,
+ "useWhen": [
+  "Use ContextMenu for the same actions as a DropdownMenu, opened by right-click or long-press on an item; opened from a button use DropdownMenu.",
+  "Secondary actions on an object the user is pointing at: a table row, a file in a browser, a tree node, a canvas.",
+  "Power-user shortcuts that also exist elsewhere in the interface."
+ ],
+ "avoidWhen": [
+  "The only way to reach an action. Right-click is invisible; every action in a context menu must also be reachable from a visible control (a row-actions `DropdownMenu`, a toolbar button).",
+  "A menu opened from a button → use `dropdown-menu`.",
+  "A searchable palette of commands → use `command`.",
+  "Free-form content such as forms → use `popover`."
+ ],
+ "related": [
+  "`dropdown-menu` — same panel, items and keyboard model, opened from a trigger button; `ContextMenu` reuses its item parts.",
+  "`popover` — free-form floating content on the same `usePlacement` positioning.",
+  "`table` — row actions usually pair a visible `DropdownMenu` with a `ContextMenu` around the rows."
+ ],
+ "bestPractices": [
+  "Wrap the object, not the page: one `ContextMenu.Trigger` around the table body, the file grid or the tree, and read which row was targeted from your own state (for example the row the `contextmenu` came from, captured with a native `@contextmenu` on the row).",
+  "Mirror the visible row-actions menu; a context menu adds speed, never exclusive actions.",
+  "Keep it short (under about ten items), group with `ContextMenu.Group`, and put destructive actions in their own last group.",
+  "Give the panel a name with `aria-label` when the target is not obvious from focus (for example `aria-label=\"Actions for production\"`).",
+  "`disabled` gives the area back to the browser's native menu."
+ ],
+ "props": [
+  {
+   "name": "disabled",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Leaves the area to the browser's native context menu and never opens the panel."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the menu panel; when empty the panel has no name of its own."
+  },
+  {
+   "name": "open",
+   "type": "boolean",
+   "default": "undefined as never",
+   "required": "false",
+   "doc": "Two-way value (`v-model:open`)."
+  }
+ ],
+ "events": [
+  {
+   "name": "select",
+   "payload": "(event: MouseEvent | KeyboardEvent, value: DropdownMenuItemValue)",
+   "notes": "Fires when an enabled option is activated, at any sub-menu depth. The panel closes and focus returns to the element that was focused in the area, except for checkbox and radio options."
+  }
+ ],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "Place `<ContextMenu.Trigger>` (the area) followed by one or more `<ContextMenu.Group>`."
+  }
+ ],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/context-menu/default.vue"
+  },
+  {
+   "name": "WithSubMenu",
+   "file": "examples/context-menu/with-sub-menu.vue"
+  },
+  {
+   "name": "Disabled",
+   "file": "examples/context-menu/disabled.vue"
+  }
+ ],
+ "docs": "components/context-menu.md"
+}

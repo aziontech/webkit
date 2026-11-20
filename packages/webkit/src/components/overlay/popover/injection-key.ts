@@ -1,9 +1,13 @@
-import { inject, type InjectionKey, type Ref } from 'vue'
+import { type InjectionKey, type Ref } from 'vue'
 
-export type PopoverPlacement = 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'
+/** Side of the trigger the panel opens on; `start` and `end` follow the text direction. */
+export type PopoverSide = 'top' | 'bottom' | 'start' | 'end'
 
-/** Prop-level placement; `'auto'` lets the popover pick the best fit at open time. */
-export type PopoverPlacementInput = PopoverPlacement | 'auto'
+/** Alignment of the panel along the trigger edge. */
+export type PopoverAlign = 'start' | 'center' | 'end'
+
+/** Panel width preset. */
+export type PopoverSize = 'small' | 'medium' | 'large'
 
 export interface PopoverContext {
   /** Stable test-id prefix derived from the root component. */
@@ -12,10 +16,12 @@ export interface PopoverContext {
   isOpen: Ref<boolean>
   /** Whether the root is disabled — trigger refuses to open. */
   disabled: Ref<boolean>
-  /** Resolved placement passed to the floating panel as data-placement. */
-  placement: Ref<PopoverPlacement>
-  /** Panel width preset (data-width); undefined = fluid default. */
-  width: Ref<'small' | 'medium' | 'large' | undefined>
+  /** Side the panel landed on, rendered as data-side. */
+  side: Readonly<Ref<PopoverSide>>
+  /** Alignment the panel landed on, rendered as data-align. */
+  align: Readonly<Ref<PopoverAlign>>
+  /** Panel width preset (data-size); undefined = fluid default. */
+  size: Ref<PopoverSize | undefined>
   /** Fixed-position style (top/left/z-index/--popup-origin) for the floating panel. */
   panelStyle: Readonly<Ref<Record<string, string>>>
   /** Stable element ids used to wire aria-controls / aria-labelledby / aria-describedby. */
@@ -24,9 +30,9 @@ export interface PopoverContext {
   titleId: string
   descriptionId: string
   /** Mutable refs the sub-components attach DOM elements to. */
-  triggerRef: Ref<globalThis.HTMLElement | null>
+  triggerEl: Ref<globalThis.HTMLElement | null>
   /** The floating panel element. `Popover.Content` renders the panel and assigns this. */
-  panelRef: Ref<globalThis.HTMLElement | null>
+  panelEl: Ref<globalThis.HTMLElement | null>
   /** Drives open state. Sub-components never call defineEmits directly. */
   setOpen: (value: boolean) => void
   /** Returns focus to the trigger element (used on Esc and Popover.Close). */
@@ -43,12 +49,4 @@ export interface PopoverContext {
   hasDescription: Ref<boolean>
 }
 
-export const PopoverInjectionKey: InjectionKey<PopoverContext> = Symbol('PopoverContext')
-
-export function usePopoverContext(): PopoverContext {
-  const ctx = inject(PopoverInjectionKey)
-  if (!ctx) {
-    throw new Error('Popover.* sub-components must be used inside <Popover>.')
-  }
-  return ctx
-}
+export const PopoverInjectionKey: InjectionKey<PopoverContext> = Symbol('Popover')

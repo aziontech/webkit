@@ -1,0 +1,16 @@
+{
+  "component": "prompt-queue",
+  "title": "Components/AI/PromptQueue",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Two messages the reader sent while a response is generating, one with an attachment, waiting above the prompt input; removing one cancels it by id.",
+      "file": "default.vue"
+    },
+    {
+      "name": "LongMessage",
+      "summary": "A long queued message clamped to two lines, a long unbroken URL wrapped inside its row, next to a short one.",
+      "file": "long-message.vue"
+    }
+  ]
+}

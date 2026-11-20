@@ -1,0 +1,253 @@
+<script setup lang="ts">
+  import { computed, ref, useAttrs, useId, watch } from 'vue'
+
+  import { useAppNavigation } from '../../../composables/use-app-navigation'
+  import { useTranslate } from '../../../composables/use-translate'
+  import * as en from '../../../locales/en'
+  import SkipLink from '../../navigation/skip-link/skip-link.vue'
+  import Command from '../../overlay/command/command.vue'
+  import CommandEmpty from '../../overlay/command/command-empty/command-empty.vue'
+  import CommandGroup from '../../overlay/command/command-group/command-group.vue'
+  import CommandInput from '../../overlay/command/command-input/command-input.vue'
+  import CommandItem from '../../overlay/command/command-item/command-item.vue'
+  import CommandList from '../../overlay/command/command-list/command-list.vue'
+  import SiteFooterSection, {
+    type SiteFooterSectionColumn,
+    type SiteFooterSectionSocial,
+    type SiteFooterSectionVariant
+  } from '../../section/site-footer-section/site-footer-section.vue'
+  import SiteHeaderSection, {
+    type SiteHeaderSectionLink,
+    type SiteHeaderSectionMenu
+  } from '../../section/site-header-section/site-header-section.vue'
+
+  defineOptions({
+    name: 'SiteLayout',
+    inheritAttrs: false
+  })
+
+  /** The site bar, bound onto `SiteHeaderSection`. */
+  export type SiteLayoutNavigation = {
+    /** The mega-menus, in bar order. */
+    menus: SiteHeaderSectionMenu[]
+    /** Where the Azion mark links. */
+    home?: string
+    /** Bar entries that open no panel. */
+    links?: SiteHeaderSectionLink[]
+    /** The contact link. */
+    contact?: SiteHeaderSectionLink
+    /** The sign-up button. */
+    primaryAction?: SiteHeaderSectionLink
+    /** The login button. */
+    secondaryAction?: SiteHeaderSectionLink
+    /** Keeps the login button in the bar on phones too. */
+    secondaryActionOnPhones?: boolean
+  }
+
+  /** The site footer, bound onto `SiteFooterSection`. */
+  export type SiteLayoutFooter = {
+    /** `site` closes a framed page and draws its frame; `content` runs full bleed. */
+    variant?: SiteFooterSectionVariant
+    /** Accessible name of the footer landmark. */
+    ariaLabel?: string
+    /** Destination of the Azion mark. */
+    home?: string
+    /** Accessible name of the Azion mark link. */
+    homeAriaLabel?: string
+    /** The link columns, in order. */
+    columns?: SiteFooterSectionColumn[]
+    /** The profile icon buttons, in order. */
+    socials?: SiteFooterSectionSocial[]
+    /** Line of the system status indicator. */
+    statusLabel?: string
+    /** Options of the language select. */
+    languages?: string[]
+    /** Accessible name of the language select. */
+    languageAriaLabel?: string
+  }
+
+  /** A destination of the site navigation, as listed in the search palette. */
+  export type SiteLayoutPage = {
+    /** Visible text. */
+    label: string
+    /** Where it leads. */
+    href: string
+  }
+
+  export interface SiteLayoutProps {
+    /** The bar, bound onto `SiteHeaderSection`. */
+    navigation: SiteLayoutNavigation
+    /** The footer, bound onto `SiteFooterSection`; `variant` defaults to `site`. No footer when absent. */
+    footer?: SiteLayoutFooter
+    /** Placeholder of the palette's input. Empty uses the locale catalog (`Search the site`). */
+    searchPlaceholder?: string
+    /** Floats the bar over the page's first band instead of stacking it above; the bar stays sticky over the whole page. */
+    navOverlay?: boolean
+  }
+
+  const props = withDefaults(defineProps<SiteLayoutProps>(), {
+    footer: undefined,
+    searchPlaceholder: '',
+    navOverlay: false
+  })
+
+  const emit = defineEmits<{
+    /** A navigation destination was chosen in the palette; the layout then follows it. */
+    navigate: [event: globalThis.MouseEvent | globalThis.KeyboardEvent, page: SiteLayoutPage]
+    /** A palette item from the `search` slot was chosen. */
+    'search-select': [
+      event: globalThis.MouseEvent | globalThis.KeyboardEvent,
+      value: string | number
+    ]
+  }>()
+
+  /** Whether the search palette is open. Use with `v-model:search-open`. */
+  const searchOpen = defineModel<boolean>('searchOpen', { default: false })
+
+  defineSlots<{
+    /** The page's sections, rendered inside the layout's main landmark. */
+    default(): unknown
+    /** Extra palette groups listed before the navigation destinations. */
+    search(props: { query: string }): unknown
+  }>()
+
+  const { follow } = useAppNavigation()
+
+  const attrs = useAttrs()
+  const { t } = useTranslate({ siteLayout: en.siteLayout })
+
+  const query = ref('')
+
+  const PAGE_VALUE = 'site-layout:page:'
+
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'site-layout')
+  const mainId = `${useId()}-main`
+
+  const paletteGroups = computed(() => {
+    const groups = props.navigation.menus.map((menu) => ({
+      key: menu.value,
+      heading: menu.label,
+      pages: menu.columns
+        .flat()
+        .flatMap((group) => group.items)
+        .filter((item): item is typeof item & { href: string } => Boolean(item.href))
+        .map((item) => ({ label: item.label, href: item.href }))
+    }))
+    const links = [
+      ...(props.navigation.links ?? []),
+      ...(props.navigation.contact ? [props.navigation.contact] : [])
+    ]
+    if (links.length) {
+      groups.push({
+        key: 'site-layout-links',
+        heading: '',
+        pages: links.map((link) => ({ label: link.label, href: link.href }))
+      })
+    }
+    return groups
+      .filter((group) => group.pages.length)
+      .map((group) => ({
+        ...group,
+        pages: group.pages.map((page, index) => ({
+          ...page,
+          value: `${PAGE_VALUE}${group.key}:${index}`
+        }))
+      }))
+  })
+
+  const pageByValue = computed(
+    () =>
+      new Map(
+        paletteGroups.value.flatMap((group) =>
+          group.pages.map((page) => [page.value, { label: page.label, href: page.href }] as const)
+        )
+      )
+  )
+
+  watch(searchOpen, () => {
+    query.value = ''
+  })
+
+  const openSearch = () => {
+    searchOpen.value = true
+  }
+
+  const onQuery = (value: unknown) => {
+    query.value = typeof value === 'string' ? value : ''
+  }
+
+  const onPaletteSelect = (
+    event: globalThis.MouseEvent | globalThis.KeyboardEvent,
+    value: string | number
+  ) => {
+    const page = pageByValue.value.get(String(value))
+    if (!page) {
+      emit('search-select', event, value)
+      return
+    }
+    emit('navigate', event, page)
+    follow(event, page)
+  }
+</script>
+
+<template>
+  <div
+    v-bind="$attrs"
+    :data-testid="testId"
+    :data-nav-overlay="navOverlay || null"
+    class="flex min-h-dvh w-full min-w-0 flex-col bg-(--bg-canvas) text-(--text-default) data-[nav-overlay]:grid data-[nav-overlay]:grid-rows-[1fr_auto] data-[nav-overlay]:[&>div>header]:[grid-area:1/1/3/2] data-[nav-overlay]:[&>div>header]:self-start data-[nav-overlay]:[&>main]:[grid-area:1/1] data-[nav-overlay]:[&>main+div]:[grid-area:2/1]"
+  >
+    <SkipLink
+      :href="`#${mainId}`"
+      :data-testid="`${testId}__skip-link`"
+    />
+    <SiteHeaderSection
+      v-bind="navigation"
+      :data-testid="`${testId}__nav`"
+      @search="openSearch"
+    />
+    <main
+      :id="mainId"
+      :data-testid="`${testId}__main`"
+      class="flex min-w-0 flex-1 flex-col"
+    >
+      <slot />
+    </main>
+    <SiteFooterSection
+      v-if="footer"
+      variant="site"
+      v-bind="footer"
+      :data-testid="`${testId}__footer`"
+    />
+
+    <Command
+      v-model:open="searchOpen"
+      @select="onPaletteSelect"
+    >
+      <CommandInput
+        :placeholder="searchPlaceholder || t('siteLayout.searchPlaceholder')"
+        @update:model-value="onQuery"
+      />
+      <CommandList>
+        <slot
+          name="search"
+          :query="query"
+        />
+        <CommandGroup
+          v-for="group in paletteGroups"
+          :key="group.key"
+          :label="group.heading || t('siteLayout.pages')"
+        >
+          <CommandItem
+            v-for="page in group.pages"
+            :key="page.value"
+            :value="page.value"
+          >
+            {{ page.label }}
+          </CommandItem>
+        </CommandGroup>
+        <CommandEmpty>{{ t('siteLayout.noMatch') }}</CommandEmpty>
+      </CommandList>
+    </Command>
+  </div>
+</template>

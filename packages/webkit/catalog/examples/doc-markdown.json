@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "A page source with frontmatter, headings, a paragraph with inline code and a link, a list, a note, steps holding a code group, a table and a card group, rendered inside DocProse. The frontmatter is read, not shown.",
+   "file": "examples/doc-markdown/default.vue"
+  },
+  {
+   "name": "Components",
+   "summary": "An Alert tag added through the components prop, a changelog entry, and the outline beside the article built from parseDocMarkdown with the same components map.",
+   "file": "examples/doc-markdown/components.vue"
+  }
+ ]
+}

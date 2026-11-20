@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import { usePopoverContext } from '../injection-key'
+  import { usePopoverContext } from '../composables/use-popover-context'
 
   defineOptions({
     name: 'PopoverFooter',
@@ -13,11 +13,9 @@
   }>()
 
   const attrs = useAttrs()
-  const ctx = usePopoverContext()
+  usePopoverContext()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__footer`
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'popover-footer')
 </script>
 
 <template>

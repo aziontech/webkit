@@ -1,0 +1,88 @@
+[block-hero-title-band kind=title-band]
+  [marketing-hero kind=band size=large align=center width=5xl aria-label='Achieve your business goals faster with specialist guidance']
+    [marketing-hero-title width=4xl centered=true]
+      text: // ⏎ Professional Services
+      h1 "Achieve your business goals faster with specialist guidance"
+      p "Get expert-led integration, configuration, training, and support to deploy faster and make better technical decisions."
+      button "Talk to a Specialist" → /en/contact/
+    [marketing-ticker kind=plain size=small width=5xl content=marks]
+      text "Trusted by mission-critical workloads"
+      list (11): Global Fashion Group · HeroSpark · Itaú · NZN · Netshoes · Caixa · Agibank · Prime Video · América Móvil · GPA · Fourbank
+[marketing-section-container width=site]
+  · section-gap (hatched spacer band)
+  [block-capability-grid kind=left]
+    [marketing-card-grid kind=frame columns=3 mobile-columns=1 filled=true]
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Accelerate time-to-value"
+          p "Move faster from planning to production with specialist execution across integration, configuration, validation, and launch."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Reduce execution risk"
+          p "Rely on proven practices and technical expertise to make better decisions and avoid common implementation pitfalls."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Strengthen operational readiness"
+          p "Prepare for critical events, security incidents, and high-impact moments with specialist-led services that keep your business moving."
+  · section-gap (hatched spacer band)
+  [block-media-split-stack-alternating kind=alternating]
+    [marketing-section-module kind=left]
+      [marketing-band-stack sticky=true]
+        [marketing-media-split kind=media-start orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Deploy faster with confidence']
+          h2 "Deploy faster with confidence"
+          p "Accelerate implementation with specialist-led integration and configuration services designed to reduce execution risk."
+          button "Integration Services" → /en/documentation/services/integration-services/
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Make better technical decisions']
+          h2 "Make better technical decisions"
+          p "Use Azion's expertise to guide architectural decisions, best-practice adoption, and team enablement so you can operate with confidence."
+          button "Best Practices Review" → /en/documentation/services/best-practices-review/
+        [marketing-media-split kind=media-start orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Get support when it matters most']
+          h2 "Get support when it matters most"
+          p "Get specialist support for critical events, security-sensitive operations, and high-impact moments."
+          button "Business Events Support" → /en/documentation/services/business-events-support/
+  · section-gap (hatched spacer band)
+  [block-client-quotes]
+    [marketing-section-module kind=left]
+      [marketing-quote-tabs]
+        [marketing-quote kind=highlight]
+          img "Contabilizei"
+          blockquote "With Azion, Contabilizei improved request delivery at the Edge, reduced infrastructure costs, and gained fast access to support whenever needed."
+          figcaption "Fabrício Santos DevSecOps Manager at Contabilizei"
+          button "See success stories" → /en/success-case/
+        [marketing-card-grid kind=frame columns=3 mobile-columns=2 filled=true aria-label='Client stories']
+          [marketing-card-grid-cell]
+  · section-gap (hatched spacer band)
+  [block-faq-section]
+    [marketing-section-module kind=left]
+      [marketing-faq]
+        h2 "Frequently Asked Questions"
+        [content-accordion orientation=vertical size=large]
+          [content-accordion-item]
+            h3 "Are Professional Services included in Azion Support offerings?"
+          [content-accordion-item]
+            h3 "Can I buy Professional Services separately?"
+          [content-accordion-item]
+            h3 "Can Azion configure the platform on my behalf?"
+          [content-accordion-item]
+            h3 "How much does each Professional Services package cost?"
+          [content-accordion-item]
+            h3 "What are one-time service packages?"
+          [content-accordion-item]
+            h3 "Which Professional Services are one-time packages?"
+          [content-accordion-item]
+            h3 "What are recurring services?"
+          [content-accordion-item]
+            h3 "Which Professional Services are recurring services?"
+          [content-accordion-item]
+            h3 "Can I cancel Professional Services at any time?"
+          [content-accordion-item]
+            h3 "What happens if I do not use all contracted service hours?"
+  · section-gap (hatched spacer band)
+  [block-closing-call-to-action-split kind=split]
+    [marketing-section-module kind=left]
+      [marketing-call-to-action kind=split aria-label='Find the right service for your goals']
+        text: // ⏎ Get Started
+        h2 "Find the right service for your goals"
+        button "Talk to a Specialist" → /en/contact/
+        p "Explore how companies use Azion to improve performance, security, and reliability."
+        button "Success Stories" → /en/success-case/

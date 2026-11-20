@@ -1,0 +1,4498 @@
+{
+  "exports": [
+    "accordion",
+    "accordion-content",
+    "accordion-item",
+    "accordion-root",
+    "accordion-trigger",
+    "alert",
+    "app-header",
+    "app-header-root",
+    "app-layout",
+    "architecture-tabs-section",
+    "article-body-section",
+    "article-cards-section",
+    "article-highlight-section",
+    "article-index-section",
+    "artifact-canvas",
+    "artifact-preview",
+    "assets/agi-extended-color.svg",
+    "assets/agibank-extended-color.svg",
+    "assets/agibank-extended-mono.svg",
+    "assets/agibank-extended-reversed.svg",
+    "assets/ai-gateway.svg",
+    "assets/akamai-extended-color.svg",
+    "assets/akamai-extended-mono.svg",
+    "assets/akamai-extended-reversed.svg",
+    "assets/akamai-symbol-color.svg",
+    "assets/akamai-symbol-mono.svg",
+    "assets/akamai-symbol-reversed.svg",
+    "assets/alpargatas-extended-color.svg",
+    "assets/alpargatas-extended-mono.svg",
+    "assets/america-movil-extended-color.svg",
+    "assets/americanas-extended-color.svg",
+    "assets/americanas-extended-mono.svg",
+    "assets/americanas-extended-reversed.svg",
+    "assets/angeloni-extended-color.svg",
+    "assets/angular-symbol-mono.svg",
+    "assets/anthropic-extended-mono.svg",
+    "assets/arezzo-extended-color.svg",
+    "assets/arezzo-extended-mono.svg",
+    "assets/arezzo-extended-reversed.svg",
+    "assets/astro-symbol-mono.svg",
+    "assets/aws-extended-color.svg",
+    "assets/aws-extended-mono.svg",
+    "assets/aws-extended-reversed.svg",
+    "assets/axur-extended-color.svg",
+    "assets/axur-extended-mono.svg",
+    "assets/axur-extended-reversed.svg",
+    "assets/ayko-extended-mono.svg",
+    "assets/azion-highlight.svg",
+    "assets/azion-rest-api.svg",
+    "assets/azure-symbol-mono.svg",
+    "assets/b2w-extended-color.svg",
+    "assets/b2w-extended-mono.svg",
+    "assets/b2w-extended-reversed.svg",
+    "assets/banco-de-la-nacion-extended-mono.svg",
+    "assets/branches.svg",
+    "assets/brand-globe-scene",
+    "assets/browserless-symbol-mono.svg",
+    "assets/browserless-symbol-reversed.svg",
+    "assets/caixa-extended-color.svg",
+    "assets/caixa-extended-mono.svg",
+    "assets/caixa-extended-reversed.svg",
+    "assets/caixa-symbol-color.svg",
+    "assets/calvin-klein-extended-mono.svg",
+    "assets/calvin-klein-extended-reversed.svg",
+    "assets/ccpa-symbol-color.svg",
+    "assets/claude-symbol-color.svg",
+    "assets/client-registry",
+    "assets/cloudflare-extended-color.svg",
+    "assets/cloudflare-extended-reversed.svg",
+    "assets/cloudflare-symbol-color.svg",
+    "assets/cloudflare-symbol-mono.svg",
+    "assets/cloudflare-symbol-reversed.svg",
+    "assets/cobasi-extended-color.svg",
+    "assets/coca-cola-extended-color.svg",
+    "assets/coca-cola-extended-mono.svg",
+    "assets/coca-cola-extended-reversed.svg",
+    "assets/codex-symbol-mono.svg",
+    "assets/combine-data-and-vector-search.svg",
+    "assets/competitor-registry",
+    "assets/console-application-scene",
+    "assets/console-trace-scene",
+    "assets/contabilizei-extended-color.svg",
+    "assets/contabilizei-extended-mono.svg",
+    "assets/contabilizei-extended-reversed.svg",
+    "assets/contabilizei-symbol-color.png",
+    "assets/copilot-symbol-color.svg",
+    "assets/cpra-symbol-color.svg",
+    "assets/crate-and-barrel-extended-mono.svg",
+    "assets/crate-and-barrel-extended-reversed.svg",
+    "assets/crefisa-extended-color.svg",
+    "assets/crefisa-extended-mono.svg",
+    "assets/crefisa-extended-reversed.svg",
+    "assets/csu-digital-extended-color.svg",
+    "assets/cursor-symbol-mono.svg",
+    "assets/dafiti-extended-mono.svg",
+    "assets/dafiti-extended-reversed.svg",
+    "assets/datadog-symbol-color.svg",
+    "assets/datadome-extended-mono.svg",
+    "assets/datadome-extended-reversed.svg",
+    "assets/ddos-protection.svg",
+    "assets/digiplus-extended-color.svg",
+    "assets/digiplus-extended-mono.svg",
+    "assets/digiplus-extended-reversed.svg",
+    "assets/distributed-apis-tile.svg",
+    "assets/docusaurus-symbol-mono.svg",
+    "assets/drizzle-extended-color.svg",
+    "assets/elastic-symbol-mono.svg",
+    "assets/eleventy-symbol-mono.svg",
+    "assets/embratel-extended-color.svg",
+    "assets/embratel-extended-mono.svg",
+    "assets/embratel-extended-reversed.svg",
+    "assets/equinix-extended-color.svg",
+    "assets/exame-extended-color.svg",
+    "assets/exame-extended-mono.svg",
+    "assets/exame-extended-reversed.svg",
+    "assets/fam-extended-color.svg",
+    "assets/fam-extended-mono.svg",
+    "assets/fam-extended-reversed.svg",
+    "assets/fastly-extended-color.svg",
+    "assets/fastly-extended-mono.svg",
+    "assets/fastly-extended-reversed.svg",
+    "assets/fastly-symbol-color.svg",
+    "assets/fastly-symbol-mono.svg",
+    "assets/fastly-symbol-reversed.svg",
+    "assets/fauna-extended-color.svg",
+    "assets/fauna-extended-mono.svg",
+    "assets/fauna-extended-reversed.svg",
+    "assets/forrester-extended-color.svg",
+    "assets/forrester-extended-mono.svg",
+    "assets/forrester-extended-reversed.svg",
+    "assets/fourbank-extended-color.svg",
+    "assets/fourbank-extended-mono.svg",
+    "assets/fourbank-extended-reversed.svg",
+    "assets/frost-and-sullivan-extended-color.svg",
+    "assets/frost-and-sullivan-extended-mono.svg",
+    "assets/frost-and-sullivan-extended-reversed.svg",
+    "assets/g2-symbol-color.svg",
+    "assets/gartner-extended-color.svg",
+    "assets/gartner-extended-mono.svg",
+    "assets/gartner-extended-reversed.svg",
+    "assets/gatsby-symbol-mono.svg",
+    "assets/gcp-symbol-mono.svg",
+    "assets/gdpr-symbol-color.svg",
+    "assets/gemini-symbol-color.svg",
+    "assets/get-ninjas-extended-mono.svg",
+    "assets/get-ninjas-extended-reversed.svg",
+    "assets/gigaom-extended-color.svg",
+    "assets/gigaom-extended-mono.svg",
+    "assets/gigaom-extended-reversed.svg",
+    "assets/github-symbol-mono.svg",
+    "assets/global-fashion-group-extended-mono.svg",
+    "assets/global-fashion-group-extended-reversed.svg",
+    "assets/google-symbol-color.svg",
+    "assets/gpa-extended-color.svg",
+    "assets/gpa-extended-mono.svg",
+    "assets/gpa-extended-reversed.svg",
+    "assets/gpa-photo.jpg",
+    "assets/gpa-symbol-color.svg",
+    "assets/grafana-symbol-mono.svg",
+    "assets/graphql-symbol-mono.svg",
+    "assets/grendene-extended-color.svg",
+    "assets/groq-extended-mono.svg",
+    "assets/gru-airport-extended-color.svg",
+    "assets/grupo-sabemi-extended-color.svg",
+    "assets/grupo-sabemi-extended-mono.svg",
+    "assets/grupo-sabemi-extended-reversed.svg",
+    "assets/hdi-extended-color.svg",
+    "assets/hdi-extended-mono.svg",
+    "assets/hdi-extended-reversed.svg",
+    "assets/herospark-extended-color.svg",
+    "assets/herospark-extended-reversed.svg",
+    "assets/herospark-symbol-reversed.svg",
+    "assets/hexo-symbol-mono.svg",
+    "assets/hono-symbol-mono.svg",
+    "assets/hugo-symbol-mono.svg",
+    "assets/ibero-extended-color.svg",
+    "assets/ibero-extended-mono.svg",
+    "assets/ibero-extended-reversed.svg",
+    "assets/ietf-extended-color.svg",
+    "assets/ifood-extended-color.svg",
+    "assets/ifood-extended-reversed.svg",
+    "assets/ifood-symbol-color.svg",
+    "assets/incognia-extended-color.png",
+    "assets/infoblox-extended-mono.svg",
+    "assets/ipiranga-extended-color.svg",
+    "assets/ipiranga-extended-mono.svg",
+    "assets/ipiranga-extended-reversed.svg",
+    "assets/itau-extended-color.svg",
+    "assets/itau-extended-reversed.webp",
+    "assets/itau-symbol-color.svg",
+    "assets/jamstack-symbol-color.svg",
+    "assets/javascript-symbol-mono.svg",
+    "assets/jekyll-symbol-mono.svg",
+    "assets/kafka-extended-mono.svg",
+    "assets/kalunga-extended-mono.svg",
+    "assets/kalunga-extended-reversed.svg",
+    "assets/kroton-extended-color.png",
+    "assets/lendico-extended-color.svg",
+    "assets/lendico-extended-mono.svg",
+    "assets/lendico-extended-reversed.svg",
+    "assets/lgpd-symbol-color.svg",
+    "assets/locaweb-extended-color.svg",
+    "assets/loja-do-mecanico-extended-color.svg",
+    "assets/loja-do-mecanico-extended-mono.svg",
+    "assets/loja-do-mecanico-extended-reversed.svg",
+    "assets/loja-integrada-extended-color.svg",
+    "assets/loja-integrada-extended-reversed.svg",
+    "assets/madeiramadeira-extended-color.svg",
+    "assets/madeiramadeira-extended-mono.svg",
+    "assets/madeiramadeira-extended-reversed.svg",
+    "assets/madeiramadeira-symbol-color.svg",
+    "assets/madeiramadeira-symbol-reversed.svg",
+    "assets/magalu-extended-color.svg",
+    "assets/magalu-extended-mono.svg",
+    "assets/magalu-extended-reversed.svg",
+    "assets/magalu-symbol-color.png",
+    "assets/marisa-extended-color.svg",
+    "assets/marisa-extended-mono.svg",
+    "assets/marisa-extended-reversed.svg",
+    "assets/meliuz-extended-color.svg",
+    "assets/mobiauto-extended-color.svg",
+    "assets/mobiauto-extended-mono.svg",
+    "assets/mobiauto-extended-reversed.svg",
+    "assets/monashees-extended-mono.svg",
+    "assets/monashees-extended-reversed.svg",
+    "assets/mongodb-symbol-color.svg",
+    "assets/motorola-extended-color.svg",
+    "assets/motorola-extended-mono.svg",
+    "assets/motorola-extended-reversed.svg",
+    "assets/mysql-symbol-reversed.svg",
+    "assets/neogrid-extended-color.svg",
+    "assets/neon-extended-color.svg",
+    "assets/neon-extended-mono.svg",
+    "assets/neon-extended-reversed.svg",
+    "assets/netshoes-extended-color.svg",
+    "assets/netshoes-extended-reversed.svg",
+    "assets/netshoes-photo.jpg",
+    "assets/new-balance-extended-color.svg",
+    "assets/new-balance-extended-mono.svg",
+    "assets/new-balance-extended-reversed.svg",
+    "assets/nextjs-symbol-mono.svg",
+    "assets/nodejs-symbol-color.svg",
+    "assets/nuxt-extended-mono.svg",
+    "assets/nzn-extended-color.svg",
+    "assets/nzn-extended-mono.svg",
+    "assets/nzn-extended-reversed.svg",
+    "assets/omelete-co-extended-mono.svg",
+    "assets/omelete-co-extended-reversed.svg",
+    "assets/omelete-extended-color.svg",
+    "assets/omelete-extended-mono.svg",
+    "assets/omelete-extended-reversed.svg",
+    "assets/onnx-symbol-mono.svg",
+    "assets/openai-symbol-mono.svg",
+    "assets/opencode-symbol-mono.svg",
+    "assets/panasonic-extended-color.svg",
+    "assets/panasonic-extended-mono.svg",
+    "assets/panasonic-extended-reversed.svg",
+    "assets/panvel-extended-color.svg",
+    "assets/panvel-extended-mono.svg",
+    "assets/panvel-extended-reversed.svg",
+    "assets/pci-dss-symbol-color.svg",
+    "assets/pernambucanas-extended-color.svg",
+    "assets/pernambucanas-extended-mono.svg",
+    "assets/pernambucanas-extended-reversed.svg",
+    "assets/personal-tokens.svg",
+    "assets/petz-extended-color.png",
+    "assets/petz-extended-mono.svg",
+    "assets/petz-extended-reversed.svg",
+    "assets/placeholder-clip.webm",
+    "assets/placeholder-image.svg",
+    "assets/planetscale-symbol-mono.svg",
+    "assets/portobello-extended-mono.svg",
+    "assets/portocred-extended-color.svg",
+    "assets/portocred-extended-mono.svg",
+    "assets/portocred-extended-reversed.svg",
+    "assets/postgresql-symbol-color.svg",
+    "assets/preact-symbol-mono.svg",
+    "assets/prime-video-extended-color.svg",
+    "assets/prime-video-extended-mono.svg",
+    "assets/prime-video-extended-reversed.svg",
+    "assets/prisma-symbol-reversed.svg",
+    "assets/provu-extended-color.svg",
+    "assets/provu-extended-mono.svg",
+    "assets/provu-extended-reversed.svg",
+    "assets/qualcomm-extended-mono.svg",
+    "assets/qualcomm-extended-reversed.svg",
+    "assets/quero-quero-extended-color.svg",
+    "assets/quero-quero-extended-mono.svg",
+    "assets/quero-quero-extended-reversed.svg",
+    "assets/quick-start-with-templates.svg",
+    "assets/qwik-symbol-mono.svg",
+    "assets/radware-extended-color.svg",
+    "assets/radware-extended-mono.svg",
+    "assets/radware-extended-reversed.svg",
+    "assets/rbs-extended-color.svg",
+    "assets/rbs-extended-mono.svg",
+    "assets/rbs-extended-reversed.svg",
+    "assets/react-symbol-mono.svg",
+    "assets/real-time-metrics-error-rate.svg",
+    "assets/real-time-metrics-status-codes.svg",
+    "assets/redis-symbol-color.svg",
+    "assets/remix-symbol-mono.svg",
+    "assets/renner-extended-color.svg",
+    "assets/renner-extended-mono.svg",
+    "assets/renner-extended-reversed.svg",
+    "assets/renner-symbol-reversed.svg",
+    "assets/resend-extended-mono.svg",
+    "assets/resend-extended-reversed.svg",
+    "assets/rico-extended-color.svg",
+    "assets/rico-extended-mono.svg",
+    "assets/rico-extended-reversed.svg",
+    "assets/rocket-chat-extended-color.svg",
+    "assets/rocket-chat-extended-mono.svg",
+    "assets/rocket-chat-extended-reversed.svg",
+    "assets/runtime-api-cloud",
+    "assets/runtime-api-scene",
+    "assets/saffe-extended-color.svg",
+    "assets/saffe-extended-mono.svg",
+    "assets/saffe-extended-reversed.svg",
+    "assets/samsung-extended-color.svg",
+    "assets/samsung-extended-mono.svg",
+    "assets/samsung-extended-reversed.svg",
+    "assets/saraiva-extended-color.svg",
+    "assets/saraiva-extended-mono.svg",
+    "assets/saraiva-extended-reversed.svg",
+    "assets/serverless-symbol-color.svg",
+    "assets/shoptime-extended-color.svg",
+    "assets/shoptime-extended-mono.svg",
+    "assets/shoptime-extended-reversed.svg",
+    "assets/sky-extended-color.svg",
+    "assets/sky-extended-mono.svg",
+    "assets/sky-extended-reversed.svg",
+    "assets/soc-symbol-color.svg",
+    "assets/spinning-globe",
+    "assets/sqlite-symbol-mono.svg",
+    "assets/stone-extended-color.svg",
+    "assets/stripe-extended-color.svg",
+    "assets/stripe-extended-reversed.svg",
+    "assets/submarino-extended-color.svg",
+    "assets/submarino-extended-mono.svg",
+    "assets/submarino-extended-reversed.svg",
+    "assets/supabase-symbol-color.svg",
+    "assets/svelte-symbol-mono.svg",
+    "assets/tc39-symbol-mono.svg",
+    "assets/telefonica-extended-color.svg",
+    "assets/telefonica-extended-mono.svg",
+    "assets/telefonica-extended-reversed.svg",
+    "assets/terraform-symbol-mono.svg",
+    "assets/todo-cartoes-extended-mono.svg",
+    "assets/todo-cartoes-extended-reversed.svg",
+    "assets/topazio-extended-color.svg",
+    "assets/topazio-extended-mono.svg",
+    "assets/topazio-extended-reversed.svg",
+    "assets/tray-symbol-color.svg",
+    "assets/turso-symbol-mono.svg",
+    "assets/unicesumar-extended-color.svg",
+    "assets/unicesumar-extended-mono.svg",
+    "assets/unicesumar-extended-reversed.svg",
+    "assets/unicred-extended-color.svg",
+    "assets/unicred-extended-mono.svg",
+    "assets/unicred-extended-reversed.svg",
+    "assets/uninter-extended-color.svg",
+    "assets/uninter-extended-reversed.svg",
+    "assets/upstash-symbol-mono.svg",
+    "assets/usage-chart.svg",
+    "assets/vercel-extended-mono.svg",
+    "assets/vercel-extended-reversed.svg",
+    "assets/vite-symbol-mono.svg",
+    "assets/vitepress-symbol-mono.svg",
+    "assets/vtex-extended-color.svg",
+    "assets/vtex-extended-mono.svg",
+    "assets/vtex-extended-reversed.svg",
+    "assets/vue-symbol-mono.svg",
+    "assets/vuepress-symbol-mono.svg",
+    "assets/w3c-symbol-mono.svg",
+    "assets/walmart-extended-color.svg",
+    "assets/walmart-extended-mono.svg",
+    "assets/walmart-extended-reversed.svg",
+    "assets/webassembly-symbol-mono.svg",
+    "assets/windsurf-symbol-mono.svg",
+    "assets/workers-cf-symbol-color.svg",
+    "assets/zoop-extended-color.svg",
+    "attribute-editor",
+    "avatar",
+    "avatar-group",
+    "backdrop",
+    "badge",
+    "bar-list",
+    "bento-grid",
+    "bento-grid-cell",
+    "bento-grid-root",
+    "brand",
+    "breadcrumb",
+    "breadcrumb-item",
+    "breadcrumb-root",
+    "browser-frame",
+    "button",
+    "button-group",
+    "call-to-action",
+    "capability-grid-section",
+    "card",
+    "card-carousel-section",
+    "card-grid",
+    "card-grid-cell",
+    "card-grid-root",
+    "card-list",
+    "carousel",
+    "carousel-item",
+    "carousel-next",
+    "carousel-previous",
+    "carousel-root",
+    "catalog-queries",
+    "catalog.json",
+    "chart",
+    "chart-area",
+    "chart-axis",
+    "chart-bar",
+    "chart-brush",
+    "chart-card",
+    "chart-card-content",
+    "chart-card-controls",
+    "chart-card-description",
+    "chart-card-drag-handle",
+    "chart-card-footer",
+    "chart-card-header",
+    "chart-card-resize-handle",
+    "chart-card-root",
+    "chart-card-title",
+    "chart-crosshair",
+    "chart-grid",
+    "chart-legend",
+    "chart-line",
+    "chart-reference",
+    "chart-root",
+    "chart-scatter",
+    "chart-tooltip",
+    "chat-message",
+    "chat-message-actions",
+    "chat-message-feedback",
+    "chat-message-root",
+    "checkbox",
+    "chip",
+    "citation",
+    "cli-terminal-section",
+    "client-mosaic-section",
+    "client-quotes-section",
+    "client-story-columns-section",
+    "closing-call-to-action-section",
+    "code-block",
+    "code-editor",
+    "collection-preferences",
+    "combobox",
+    "command",
+    "command-empty",
+    "command-group",
+    "command-input",
+    "command-item",
+    "command-list",
+    "command-page",
+    "command-root",
+    "command-separator",
+    "competitor-comparison-section",
+    "compliance-logos-section",
+    "config-provider",
+    "confirm-dialog",
+    "console-layout",
+    "console-layout-breadcrumb",
+    "console-layout-root",
+    "console-mockup",
+    "console-showcase-section",
+    "contact-hub-section",
+    "container",
+    "context-menu",
+    "context-menu-root",
+    "context-menu-trigger",
+    "conversation",
+    "conversation-history",
+    "copy-button",
+    "copy-command-section",
+    "copy-prompt-button",
+    "copy-text",
+    "currency-amount",
+    "customer-use-cases-section",
+    "dashboard-grid",
+    "dashboard-grid-item",
+    "dashboard-grid-root",
+    "data-grid",
+    "data-table",
+    "date-picker",
+    "date-picker-clear",
+    "date-picker-root",
+    "date-range-picker",
+    "diagram",
+    "dialog",
+    "dialog-body",
+    "dialog-close",
+    "dialog-content",
+    "dialog-description",
+    "dialog-footer",
+    "dialog-header",
+    "dialog-root",
+    "dialog-title",
+    "dialog-trigger",
+    "doc-accordion",
+    "doc-accordion-group",
+    "doc-agent-card",
+    "doc-call-to-action",
+    "doc-callout",
+    "doc-card",
+    "doc-card-group",
+    "doc-changelog-entry",
+    "doc-code-group",
+    "doc-frame",
+    "doc-heading",
+    "doc-hero",
+    "doc-item",
+    "doc-layout",
+    "doc-markdown",
+    "doc-page-header",
+    "doc-previous-next",
+    "doc-prompt",
+    "doc-prose",
+    "doc-steps",
+    "doc-steps-root",
+    "doc-table-of-contents",
+    "docs/STYLEGUIDE.md",
+    "donut-chart",
+    "drawer",
+    "drawer-body",
+    "drawer-close",
+    "drawer-content",
+    "drawer-description",
+    "drawer-footer",
+    "drawer-header",
+    "drawer-root",
+    "drawer-title",
+    "drawer-trigger",
+    "dropdown-menu",
+    "dropdown-menu-group",
+    "dropdown-menu-item",
+    "dropdown-menu-root",
+    "dropdown-menu-sub",
+    "dropdown-menu-sub-content",
+    "dropdown-menu-sub-trigger",
+    "dropdown-menu-trigger",
+    "embed",
+    "empty-state",
+    "error-boundary",
+    "eslint-plugin",
+    "eyebrow",
+    "faq",
+    "faq-section",
+    "feature-item",
+    "feature-scroll-section",
+    "feature-tabs-section",
+    "feature-tiles-section",
+    "feature-widgets-section",
+    "feedback-reason-dialog",
+    "field",
+    "field-content",
+    "field-description",
+    "field-error",
+    "field-group",
+    "field-label",
+    "field-legend",
+    "field-root",
+    "field-separator",
+    "field-set",
+    "field-title",
+    "file-dropzone",
+    "file-preview",
+    "file-token-group",
+    "filter-menu",
+    "filter-menu-chip-group",
+    "filter-menu-root",
+    "flow-diagram",
+    "flow-diagram-anchor",
+    "flow-diagram-bind",
+    "flow-diagram-description",
+    "flow-diagram-footer",
+    "flow-diagram-group",
+    "flow-diagram-header",
+    "flow-diagram-item",
+    "flow-diagram-node",
+    "flow-diagram-root",
+    "flow-diagram-title",
+    "footer",
+    "footer-column",
+    "footer-link",
+    "footer-root",
+    "gauge-chart",
+    "help-panel",
+    "help-panel-footer",
+    "help-panel-group",
+    "help-panel-header",
+    "help-panel-root",
+    "hero",
+    "hero-form-section",
+    "hero-root",
+    "hero-section",
+    "hero-title",
+    "highlight-button",
+    "hint",
+    "hover-card",
+    "hover-card-content",
+    "hover-card-root",
+    "hover-card-trigger",
+    "icon-button",
+    "illustration",
+    "input",
+    "input-group",
+    "input-group-addon",
+    "input-group-input",
+    "input-group-root",
+    "integration-card",
+    "investor-marks-section",
+    "item",
+    "item-actions",
+    "item-content",
+    "item-description",
+    "item-footer",
+    "item-group",
+    "item-header",
+    "item-list",
+    "item-media",
+    "item-root",
+    "item-separator",
+    "item-title",
+    "job-posting-section",
+    "kbd",
+    "key-value-list",
+    "key-value-list-group",
+    "key-value-list-item",
+    "key-value-list-root",
+    "link",
+    "link-directory",
+    "link-directory-column",
+    "link-directory-item",
+    "link-directory-root",
+    "listing-index-section",
+    "listing-table-section",
+    "locales/es",
+    "locales/pt-BR",
+    "log-viewer",
+    "log-viewer-content",
+    "log-viewer-footer",
+    "log-viewer-header",
+    "log-viewer-root",
+    "log-viewer-steps",
+    "logo-wall",
+    "logo-wall-section",
+    "map-chart",
+    "marquee",
+    "media-scroll",
+    "media-split",
+    "media-split-section",
+    "media-split-stack-section",
+    "media-tabs",
+    "media-tile",
+    "module",
+    "module-header",
+    "multi-select",
+    "multi-select-content",
+    "multi-select-group",
+    "multi-select-item",
+    "multi-select-root",
+    "multi-select-trigger",
+    "navigation-menu",
+    "navigation-menu-content",
+    "navigation-menu-item",
+    "navigation-menu-link",
+    "navigation-menu-list",
+    "navigation-menu-root",
+    "navigation-menu-trigger",
+    "navigation-menu-viewport",
+    "network-map",
+    "network-section",
+    "newsletter-section",
+    "number-input",
+    "otp-input",
+    "outcome-icon",
+    "overflow-count",
+    "package.json",
+    "page-header",
+    "page-tabs",
+    "pagination",
+    "pagination-button",
+    "pagination-description",
+    "pagination-page-size",
+    "pagination-root",
+    "panel",
+    "panel-body",
+    "panel-footer",
+    "panel-header",
+    "panel-root",
+    "password-input",
+    "password-requirements",
+    "payment-brand",
+    "phone-input",
+    "photo-marquee-section",
+    "plan-comparison-section",
+    "plan-feature-list",
+    "platform-directory-section",
+    "popover",
+    "popover-close",
+    "popover-content",
+    "popover-description",
+    "popover-footer",
+    "popover-header",
+    "popover-root",
+    "popover-title",
+    "popover-trigger",
+    "pricing-card",
+    "pricing-plans-section",
+    "process-scroll-section",
+    "progress",
+    "prompt-input",
+    "prompt-input-attach-button",
+    "prompt-input-context-picker",
+    "prompt-input-dictate-button",
+    "prompt-input-model-picker",
+    "prompt-input-root",
+    "prompt-input-tools",
+    "property-filter",
+    "qr-code",
+    "quote",
+    "quote-tabs",
+    "radio-group",
+    "radio-group-item",
+    "radio-group-root",
+    "reasoning",
+    "recognition-marquee-section",
+    "registration-frame",
+    "resizable",
+    "resizable-handle",
+    "resizable-pane",
+    "resizable-root",
+    "response-branches",
+    "response-loading",
+    "save-bar",
+    "schema-form",
+    "scroll-area",
+    "search-trigger",
+    "select",
+    "select-content",
+    "select-group",
+    "select-item",
+    "select-root",
+    "select-trigger",
+    "separator",
+    "settings-group",
+    "settings-row",
+    "severity-tag",
+    "sidebar",
+    "sidebar-footer",
+    "sidebar-header",
+    "sidebar-menu",
+    "sidebar-menu-back",
+    "sidebar-menu-group",
+    "sidebar-menu-item",
+    "sidebar-menu-root",
+    "sidebar-menu-sub",
+    "sidebar-menu-sub-content",
+    "sidebar-menu-sub-trigger",
+    "sidebar-root",
+    "site-footer-section",
+    "site-header-section",
+    "site-layout",
+    "site-page",
+    "skeleton",
+    "skip-link",
+    "slider",
+    "sources",
+    "spacer",
+    "spark-chart",
+    "spinner",
+    "split-button",
+    "split-stack",
+    "stat-tile",
+    "stat-tile-group",
+    "stats",
+    "stats-section",
+    "status-code",
+    "status-indicator",
+    "stepper",
+    "stepper-root",
+    "stepper-step",
+    "story-index-section",
+    "streaming-response",
+    "stylelint-config",
+    "styles",
+    "styles/all",
+    "styles/country-flags",
+    "subheader",
+    "subject-grid-section",
+    "suggestion-group",
+    "svg/error-403",
+    "svg/error-404",
+    "svg/illustration-layers",
+    "switch",
+    "table",
+    "table-body",
+    "table-caption",
+    "table-cell",
+    "table-cell-actions",
+    "table-cell-id",
+    "table-cell-link",
+    "table-cell-status",
+    "table-cell-tags",
+    "table-cell-time",
+    "table-export-button",
+    "table-filter",
+    "table-footer",
+    "table-head-cell",
+    "table-header",
+    "table-live-button",
+    "table-refresh-button",
+    "table-root",
+    "table-row",
+    "table-search",
+    "table-sort-button",
+    "table-toolbar",
+    "tabs",
+    "tabs-content",
+    "tabs-list",
+    "tabs-root",
+    "tabs-trigger",
+    "tag",
+    "tag-editor",
+    "template-gallery-section",
+    "textarea",
+    "texture",
+    "theme-switcher",
+    "third-party-logo",
+    "timestamp",
+    "toast",
+    "toast-action",
+    "toast-close",
+    "toast-description",
+    "toast-item",
+    "toast-root",
+    "toast-title",
+    "toggle-group",
+    "tool-approval",
+    "tool-call",
+    "tooltip",
+    "trace",
+    "tracker",
+    "transfer-list",
+    "transfer-list-controls",
+    "transfer-list-root",
+    "transfer-list-source",
+    "transfer-list-target",
+    "tree",
+    "tutorial-panel",
+    "tutorial-panel-hotspot",
+    "tutorial-panel-provider",
+    "tutorial-panel-root",
+    "upload-progress",
+    "use-collection",
+    "use-color-mode",
+    "use-console-layout",
+    "use-controllable",
+    "use-direction",
+    "use-focus-trap",
+    "use-heading-navigation",
+    "use-locale",
+    "use-pinned-row",
+    "use-placement",
+    "use-time-range",
+    "use-unsaved-changes",
+    "utils/clipboard",
+    "utils/cn",
+    "utils/csv",
+    "vite-plugin",
+    "wizard",
+    "wizard-root",
+    "wizard-step"
+  ],
+  "blocks": [
+    "account/account-activity-history",
+    "account/account-billing",
+    "account/account-change-plan-drawer",
+    "account/account-deployment-settings",
+    "account/account-hierarchy",
+    "account/account-mfa-settings",
+    "account/account-onboarding-form",
+    "account/account-payment-method-card",
+    "account/account-personal-tokens",
+    "account/account-team-permissions",
+    "account/account-users",
+    "ai/ai-action-approval",
+    "ai/ai-chat",
+    "ai/ai-chat-drawer",
+    "auth/auth-sign-in",
+    "create/create-deploy-drawer",
+    "create/create-deploy-progress-dialog",
+    "create/create-deploy-success",
+    "create/create-deploy-template",
+    "create/create-drawer",
+    "create/create-hub",
+    "create/create-page",
+    "create/create-release-impact",
+    "create/create-resource-picker",
+    "create/create-wizard",
+    "dashboard/dashboard-alerts",
+    "dashboard/dashboard-analytics",
+    "dashboard/dashboard-breakdown",
+    "dashboard/dashboard-configurable",
+    "dashboard/dashboard-executive-summary",
+    "dashboard/dashboard-health-score",
+    "dashboard/dashboard-home",
+    "dashboard/dashboard-scan-results",
+    "dashboard/dashboard-security",
+    "dashboard/dashboard-service-monitoring",
+    "dashboard/dashboard-switcher",
+    "detail/detail-deployment-logs",
+    "detail/detail-dns-zone",
+    "detail/detail-domains-card",
+    "detail/detail-get-started",
+    "detail/detail-invocations",
+    "detail/detail-production-checklist",
+    "detail/detail-resource",
+    "detail/detail-version",
+    "edit/edit-delete-dialog",
+    "edit/edit-function",
+    "edit/edit-resource",
+    "edit/edit-rule-builder",
+    "edit/edit-schema",
+    "edit/edit-variables",
+    "settings/settings-form",
+    "shell/shell-console",
+    "shell/shell-docs",
+    "shell/shell-site",
+    "state/state-async-submit",
+    "state/state-edge-error-page",
+    "state/state-error-page",
+    "state/state-first-use",
+    "state/state-form-validation",
+    "state/state-page-skeleton",
+    "state/state-project-intake",
+    "top-bar/top-bar-auth",
+    "top-bar/top-bar-creation",
+    "view/view-card",
+    "view/view-events-explorer",
+    "view/view-file-browser",
+    "view/view-marketplace",
+    "view/view-query-editor",
+    "view/view-rule-list",
+    "view/view-table",
+    "view/view-template-browser",
+    "view/view-waf-tuning"
+  ],
+  "props": {
+    "eyebrow": {
+      "cursor": null,
+      "prefix": [
+        "",
+        "//",
+        "</>",
+        "<>"
+      ],
+      "singleLine": null
+    },
+    "tool-approval": {
+      "approveLabel": null,
+      "confirmationPhrase": null,
+      "denyLabel": null,
+      "description": null,
+      "loading": null,
+      "status": [
+        "approved",
+        "denied",
+        "expired",
+        "pending"
+      ],
+      "title": null,
+      "variant": [
+        "danger",
+        "primary"
+      ]
+    },
+    "response-loading": {
+      "delay": null,
+      "label": null,
+      "variant": [
+        "bar",
+        "inline"
+      ]
+    },
+    "artifact-canvas": {
+      "copyValue": null,
+      "downloadHref": null,
+      "meta": null,
+      "streaming": null,
+      "title": null,
+      "type": [
+        "code",
+        "document",
+        "table"
+      ],
+      "version": null,
+      "versions": null
+    },
+    "artifact-preview": {
+      "copyValue": null,
+      "description": null,
+      "downloadHref": null,
+      "icon": null,
+      "meta": null,
+      "openable": null,
+      "title": null
+    },
+    "chat-message": {
+      "author": null,
+      "errorMessage": null,
+      "from": [
+        "assistant",
+        "system",
+        "user"
+      ],
+      "grouped": null,
+      "loadingLabel": null,
+      "status": [
+        "error",
+        "pending",
+        "streaming",
+        "success"
+      ],
+      "timestamp": null
+    },
+    "chat-message-root": {
+      "author": null,
+      "errorMessage": null,
+      "from": [
+        "assistant",
+        "system",
+        "user"
+      ],
+      "grouped": null,
+      "loadingLabel": null,
+      "status": [
+        "error",
+        "pending",
+        "streaming",
+        "success"
+      ],
+      "timestamp": null
+    },
+    "citation": {
+      "href": null,
+      "index": null,
+      "title": null
+    },
+    "feedback-reason-dialog": {
+      "defaultOpen": null,
+      "loading": null,
+      "open": null,
+      "reasons": null,
+      "title": null
+    },
+    "conversation": {
+      "ariaLabel": null,
+      "layout": [
+        "split",
+        "start"
+      ]
+    },
+    "conversation-history": {
+      "ariaLabel": null,
+      "items": null,
+      "loading": null,
+      "modelValue": null,
+      "now": null,
+      "removable": null
+    },
+    "prompt-input": {
+      "accept": null,
+      "ariaLabel": null,
+      "disabled": null,
+      "files": null,
+      "maxFiles": null,
+      "maxFileSize": null,
+      "maxLength": null,
+      "maxRows": null,
+      "menus": null,
+      "minRows": null,
+      "modelValue": null,
+      "placeholder": null,
+      "references": null,
+      "status": [
+        "pending",
+        "ready",
+        "streaming"
+      ],
+      "voice": null
+    },
+    "prompt-input-root": {
+      "accept": null,
+      "ariaLabel": null,
+      "disabled": null,
+      "files": null,
+      "maxFiles": null,
+      "maxFileSize": null,
+      "maxLength": null,
+      "maxRows": null,
+      "menus": null,
+      "minRows": null,
+      "modelValue": null,
+      "placeholder": null,
+      "references": null,
+      "status": [
+        "pending",
+        "ready",
+        "streaming"
+      ],
+      "voice": null
+    },
+    "reasoning": {
+      "defaultOpen": null,
+      "duration": null,
+      "open": null,
+      "skippable": null,
+      "streaming": null
+    },
+    "response-branches": {
+      "ariaLabel": null,
+      "count": null,
+      "disabled": null,
+      "modelValue": null
+    },
+    "sources": {
+      "anchor": null,
+      "defaultOpen": null,
+      "items": null,
+      "open": null,
+      "title": null
+    },
+    "streaming-response": {
+      "anchor": null,
+      "content": null,
+      "sources": null,
+      "streaming": null
+    },
+    "suggestion-group": {
+      "ariaLabel": null,
+      "disabled": null,
+      "items": null,
+      "orientation": [
+        "horizontal",
+        "vertical"
+      ]
+    },
+    "tool-call": {
+      "defaultOpen": null,
+      "name": null,
+      "open": null,
+      "status": [
+        "denied",
+        "error",
+        "pending",
+        "running",
+        "success"
+      ],
+      "title": null
+    },
+    "button": {
+      "animated": null,
+      "disabled": null,
+      "href": null,
+      "icon": null,
+      "iconPosition": [
+        "leading",
+        "trailing"
+      ],
+      "label": null,
+      "loading": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "target": [
+        "_blank",
+        "_self"
+      ],
+      "type": [
+        "button",
+        "reset",
+        "submit"
+      ],
+      "variant": [
+        "danger",
+        "ghost",
+        "link",
+        "outline",
+        "primary",
+        "secondary"
+      ]
+    },
+    "highlight-button": {
+      "disabled": null,
+      "href": null,
+      "icon": null,
+      "label": null,
+      "loading": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "target": [
+        "_blank",
+        "_self"
+      ]
+    },
+    "copy-button": {
+      "ariaLabel": null,
+      "copiedLabel": null,
+      "disabled": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "value": null,
+      "variant": [
+        "danger",
+        "ghost",
+        "outline",
+        "primary",
+        "secondary"
+      ]
+    },
+    "copy-text": {
+      "ariaLabel": null,
+      "size": [
+        "medium",
+        "small"
+      ],
+      "value": null
+    },
+    "search-trigger": {
+      "collapsible": null,
+      "disabled": null,
+      "label": null,
+      "shortcut": null
+    },
+    "copy-prompt-button": {
+      "agents": null,
+      "closable": null,
+      "copiedLabel": null,
+      "disabled": null,
+      "label": null,
+      "open": null,
+      "value": null
+    },
+    "toggle-group": {
+      "ariaLabel": null,
+      "defaultValue": null,
+      "disabled": null,
+      "fluid": null,
+      "modelValue": null,
+      "name": null,
+      "options": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ]
+    },
+    "icon-button": {
+      "ariaLabel": null,
+      "disabled": null,
+      "href": null,
+      "icon": null,
+      "iconClass": null,
+      "iconTransition": null,
+      "loading": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "target": [
+        "_blank",
+        "_self"
+      ],
+      "type": [
+        "button",
+        "reset",
+        "submit"
+      ],
+      "variant": [
+        "danger",
+        "ghost",
+        "outline",
+        "primary",
+        "secondary"
+      ]
+    },
+    "split-button": {
+      "disabled": null,
+      "icon": null,
+      "items": null,
+      "label": null,
+      "loading": null,
+      "selectedKey": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "updateLabelOnSelect": null,
+      "variant": [
+        "outline",
+        "primary",
+        "secondary"
+      ]
+    },
+    "chart": {
+      "activeIndex": null,
+      "ariaLabel": null,
+      "cap": null,
+      "emptyDescription": null,
+      "emptyTitle": null,
+      "error": null,
+      "formatLabel": null,
+      "formatValue": null,
+      "height": null,
+      "hiddenSeries": null,
+      "labels": null,
+      "labelScale": [
+        "category",
+        "linear"
+      ],
+      "loading": null,
+      "max": null,
+      "min": null,
+      "orientation": [
+        "horizontal",
+        "vertical"
+      ],
+      "otherLabel": null,
+      "range": null,
+      "refetching": null,
+      "series": null,
+      "tableView": null,
+      "timeZone": null
+    },
+    "chart-root": {
+      "activeIndex": null,
+      "ariaLabel": null,
+      "cap": null,
+      "emptyDescription": null,
+      "emptyTitle": null,
+      "error": null,
+      "formatLabel": null,
+      "formatValue": null,
+      "height": null,
+      "hiddenSeries": null,
+      "labels": null,
+      "labelScale": [
+        "category",
+        "linear"
+      ],
+      "loading": null,
+      "max": null,
+      "min": null,
+      "orientation": [
+        "horizontal",
+        "vertical"
+      ],
+      "otherLabel": null,
+      "range": null,
+      "refetching": null,
+      "series": null,
+      "tableView": null,
+      "timeZone": null
+    },
+    "chart-card": {
+      "ariaLabel": null,
+      "draggable": null,
+      "height": null,
+      "maxHeight": null,
+      "maxSpan": null,
+      "minHeight": null,
+      "minSpan": null,
+      "resizable": null,
+      "span": null
+    },
+    "chart-card-root": {
+      "ariaLabel": null,
+      "draggable": null,
+      "height": null,
+      "maxHeight": null,
+      "maxSpan": null,
+      "minHeight": null,
+      "minSpan": null,
+      "resizable": null,
+      "span": null
+    },
+    "donut-chart": {
+      "activeIndex": null,
+      "ariaLabel": null,
+      "cap": null,
+      "emptyDescription": null,
+      "emptyTitle": null,
+      "error": null,
+      "formatValue": null,
+      "hiddenSeries": null,
+      "loading": null,
+      "otherLabel": null,
+      "refetching": null,
+      "series": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "tableView": null,
+      "totalLabel": null,
+      "type": [
+        "donut",
+        "pie"
+      ]
+    },
+    "gauge-chart": {
+      "ariaLabel": null,
+      "emptyDescription": null,
+      "emptyTitle": null,
+      "error": null,
+      "formatValue": null,
+      "label": null,
+      "loading": null,
+      "max": null,
+      "min": null,
+      "refetching": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "thresholds": null,
+      "value": null
+    },
+    "map-chart": {
+      "activeKey": null,
+      "ariaLabel": null,
+      "emptyDescription": null,
+      "emptyTitle": null,
+      "error": null,
+      "formatValue": null,
+      "loading": null,
+      "points": null,
+      "refetching": null,
+      "regions": null,
+      "tableView": null,
+      "view": [
+        "africa",
+        "americas",
+        "asia",
+        "europe",
+        "north-america",
+        "oceania",
+        "south-america",
+        "world"
+      ]
+    },
+    "stat-tile": {
+      "delta": null,
+      "deltaLabel": null,
+      "formatValue": null,
+      "inverse": null,
+      "label": null,
+      "loading": null,
+      "trend": null,
+      "unit": null,
+      "value": null,
+      "variant": null
+    },
+    "stat-tile-group": {
+      "ariaLabel": null
+    },
+    "bar-list": {
+      "ariaLabel": null,
+      "clickable": null,
+      "color": null,
+      "emptyDescription": null,
+      "emptyTitle": null,
+      "error": null,
+      "formatValue": null,
+      "items": null,
+      "loading": null,
+      "refetching": null,
+      "sort": [
+        "ascending",
+        "descending",
+        "none"
+      ]
+    },
+    "spark-chart": {
+      "ariaLabel": null,
+      "color": null,
+      "fromZero": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "type": [
+        "area",
+        "bar",
+        "line"
+      ],
+      "values": null
+    },
+    "tracker": {
+      "activeIndex": null,
+      "ariaLabel": null,
+      "error": null,
+      "items": null,
+      "loading": null
+    },
+    "tag": {
+      "icon": null,
+      "label": null,
+      "rounded": null,
+      "severity": [
+        "danger",
+        "info",
+        "neutral",
+        "success",
+        "warning"
+      ],
+      "size": [
+        "medium",
+        "small"
+      ],
+      "variant": [
+        "accent",
+        "contrast",
+        "highlight",
+        "primary"
+      ]
+    },
+    "severity-tag": {
+      "label": null,
+      "severity": [
+        "critical",
+        "high",
+        "info",
+        "low",
+        "medium"
+      ],
+      "size": [
+        "medium",
+        "small"
+      ]
+    },
+    "status-code": {
+      "code": null,
+      "method": null,
+      "size": [
+        "medium",
+        "small"
+      ]
+    },
+    "timestamp": {
+      "format": [
+        "local",
+        "relative",
+        "utc"
+      ],
+      "timeZone": null,
+      "value": null
+    },
+    "avatar": {
+      "alt": null,
+      "colors": null,
+      "icon": null,
+      "label": null,
+      "pattern": null,
+      "size": null,
+      "src": null,
+      "variant": null
+    },
+    "avatar-group": {
+      "ariaLabel": null,
+      "items": null,
+      "max": null,
+      "orientation": [
+        "horizontal",
+        "vertical"
+      ],
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ]
+    },
+    "badge": {
+      "label": null,
+      "severity": [
+        "danger",
+        "info",
+        "neutral",
+        "success",
+        "warning"
+      ],
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "variant": [
+        "primary",
+        "secondary"
+      ]
+    },
+    "brand": {
+      "decorative": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "variant": [
+        "default",
+        "extended",
+        "reduced"
+      ]
+    },
+    "browser-frame": {
+      "address": null,
+      "ariaLabel": null,
+      "copyAriaLabel": null,
+      "height": null,
+      "heightHandleAriaLabel": null,
+      "maxHeight": null,
+      "maxWidth": null,
+      "minHeight": null,
+      "minWidth": null,
+      "width": null,
+      "widthHandleAriaLabel": null
+    },
+    "accordion": {
+      "collapsible": null,
+      "defaultValue": null,
+      "iconPosition": [
+        "leading",
+        "trailing"
+      ],
+      "modelValue": null,
+      "size": [
+        "large",
+        "medium"
+      ],
+      "type": [
+        "multiple",
+        "single"
+      ]
+    },
+    "accordion-root": {
+      "collapsible": null,
+      "defaultValue": null,
+      "iconPosition": [
+        "leading",
+        "trailing"
+      ],
+      "modelValue": null,
+      "size": [
+        "large",
+        "medium"
+      ],
+      "type": [
+        "multiple",
+        "single"
+      ]
+    },
+    "card": {
+      "padded": null,
+      "title": null
+    },
+    "integration-card": {
+      "badges": null,
+      "description": null,
+      "featured": null,
+      "href": null,
+      "installed": null,
+      "logo": null,
+      "title": null,
+      "vendor": null
+    },
+    "pricing-card": {
+      "actionLabel": null,
+      "actionsPosition": [
+        "bottom",
+        "middle"
+      ],
+      "animated": null,
+      "equalHeight": null,
+      "prefix": null,
+      "pricingDetails": null,
+      "showPrefix": null,
+      "showPricingDetails": null,
+      "showSuffix": null,
+      "showTag": null,
+      "suffix": null,
+      "tagLabel": null,
+      "title": null,
+      "value": null,
+      "variant": [
+        "contained",
+        "ghost"
+      ]
+    },
+    "help-panel": {
+      "ariaLabel": null,
+      "loading": null
+    },
+    "help-panel-root": {
+      "ariaLabel": null,
+      "loading": null
+    },
+    "tutorial-panel": {
+      "ariaLabel": null,
+      "description": null,
+      "loading": null,
+      "title": null
+    },
+    "tutorial-panel-root": {
+      "ariaLabel": null,
+      "description": null,
+      "loading": null,
+      "title": null
+    },
+    "module-header": {
+      "align": [
+        "center",
+        "split",
+        "start"
+      ],
+      "description": null,
+      "descriptionWidth": [
+        "narrow",
+        "wide"
+      ],
+      "eyebrow": null,
+      "framed": null,
+      "padding": [
+        "medium",
+        "small"
+      ],
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "title": null
+    },
+    "item": {
+      "clickable": null,
+      "href": null,
+      "size": [
+        "medium",
+        "small"
+      ],
+      "variant": [
+        "default",
+        "inline",
+        "muted",
+        "option",
+        "outline"
+      ]
+    },
+    "item-root": {
+      "clickable": null,
+      "href": null,
+      "size": [
+        "medium",
+        "small"
+      ],
+      "variant": [
+        "default",
+        "inline",
+        "muted",
+        "option",
+        "outline"
+      ]
+    },
+    "currency-amount": {
+      "prefix": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "suffix": null,
+      "value": null
+    },
+    "illustration": {
+      "ariaLabel": null,
+      "name": null
+    },
+    "third-party-logo": {
+      "ariaLabel": null,
+      "artwork": [
+        "color",
+        "dark",
+        "light"
+      ],
+      "decorative": null,
+      "name": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "src": null,
+      "srcLight": null,
+      "variant": [
+        "color",
+        "current",
+        "knockout",
+        "monochrome"
+      ]
+    },
+    "console-mockup": {
+      "active": null,
+      "autoplayInterval": null,
+      "chrome": null,
+      "cursor": null,
+      "fade": [
+        "bottom",
+        "left",
+        "none",
+        "right",
+        "top",
+        "y"
+      ],
+      "hovered": null,
+      "name": [
+        "ai-inference-function",
+        "ai-inference-model",
+        "ai-inference-template",
+        "application-accelerator-cookie",
+        "application-accelerator-method",
+        "application-accelerator-query-string",
+        "application-cache",
+        "application-function",
+        "application-rule",
+        "application-version",
+        "applications-create-method",
+        "applications-device-group",
+        "applications-rule-phases",
+        "bot-manager-metrics",
+        "bot-manager-rule",
+        "bot-manager-traffic",
+        "cli-terminal-deploy",
+        "cli-terminal-start",
+        "data-stream-connector",
+        "data-stream-sampling",
+        "data-stream-source",
+        "ddos-firewall-modules",
+        "ddos-http-events",
+        "ddos-requests-metric",
+        "edge-dns-dnssec",
+        "edge-dns-nameserver",
+        "edge-dns-record",
+        "firewall-function",
+        "firewall-modules",
+        "firewall-rules-order",
+        "function-code",
+        "functions-start",
+        "image-processor-events",
+        "image-processor-module",
+        "image-processor-rule",
+        "kv-store-function",
+        "kv-store-key",
+        "kv-store-security-list",
+        "load-balancer-address",
+        "load-balancer-method",
+        "load-balancer-origins",
+        "network-shield-ip-list",
+        "network-shield-lists",
+        "network-shield-rule",
+        "object-storage-access",
+        "object-storage-browser",
+        "object-storage-buckets",
+        "real-time-events-filter",
+        "real-time-events-log",
+        "real-time-events-volume",
+        "real-time-metrics-dashboard",
+        "real-time-metrics-filter",
+        "real-time-metrics-panel",
+        "sql-database-query",
+        "sql-database-row",
+        "sql-database-table",
+        "waf-allowed-rule",
+        "waf-firewall-rule",
+        "waf-threat",
+        "workload-deploy",
+        "workload-deploy-logs",
+        "workload-deployments",
+        "workload-domain",
+        "workload-domains",
+        "workload-overview",
+        "workload-rollout-rows",
+        "workload-topology",
+        "workload-topology-chain",
+        "workload-topology-flow",
+        "workloads-list"
+      ],
+      "tab": [
+        "agents",
+        "cache-settings",
+        "cli",
+        "console",
+        "deploy",
+        "device-groups",
+        "functions",
+        "main-settings",
+        "overview",
+        "rules-engine",
+        "topology"
+      ],
+      "texture": [
+        "dither",
+        "dots",
+        "grid",
+        "lines",
+        "none",
+        "pixelate"
+      ],
+      "variant": [
+        "bare",
+        "window"
+      ],
+      "width": null
+    },
+    "kbd": {
+      "alt": null,
+      "ctrl": null,
+      "keyName": [
+        "",
+        "alt",
+        "arrowDown",
+        "arrowLeft",
+        "arrowRight",
+        "arrowUp",
+        "backspace",
+        "ctrl",
+        "delete",
+        "enter",
+        "escape",
+        "return",
+        "shift",
+        "space",
+        "tab"
+      ],
+      "keys": null,
+      "meta": null,
+      "shift": null,
+      "size": [
+        "medium",
+        "small"
+      ],
+      "variant": [
+        "combined",
+        "separate"
+      ]
+    },
+    "key-value-list": {
+      "ariaLabel": null,
+      "columns": null,
+      "loading": null,
+      "variant": [
+        "split",
+        "stacked"
+      ]
+    },
+    "overflow-count": {
+      "items": null,
+      "noun": null
+    },
+    "payment-brand": {
+      "ariaLabel": null,
+      "brand": null,
+      "decorative": null,
+      "size": [
+        "medium",
+        "small"
+      ]
+    },
+    "qr-code": {
+      "ariaLabel": null,
+      "errorCorrection": [
+        "H",
+        "L",
+        "M",
+        "Q"
+      ],
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "value": null
+    },
+    "key-value-list-root": {
+      "ariaLabel": null,
+      "columns": null,
+      "loading": null,
+      "variant": [
+        "split",
+        "stacked"
+      ]
+    },
+    "network-map": {
+      "animated": null,
+      "density": [
+        "high",
+        "low",
+        "medium",
+        "none"
+      ],
+      "fade": [
+        "bottom",
+        "edges",
+        "left",
+        "none",
+        "right",
+        "top",
+        "vignette"
+      ],
+      "offsetX": null,
+      "offsetY": null,
+      "opacity": null,
+      "position": [
+        "bottom",
+        "bottom-left",
+        "bottom-right",
+        "center",
+        "left",
+        "right",
+        "top",
+        "top-left",
+        "top-right"
+      ],
+      "region": [
+        "africa",
+        "americas",
+        "asia",
+        "atlantic",
+        "europe",
+        "north-america",
+        "oceania",
+        "south-america",
+        "world"
+      ],
+      "scale": null,
+      "traffic": null
+    },
+    "trace": {
+      "ariaLabel": null,
+      "bordered": null,
+      "highlightCriticalPath": null,
+      "highlightSlowest": null,
+      "loading": null,
+      "range": null,
+      "selectedKey": null,
+      "spans": null,
+      "view": null,
+      "zoomable": null
+    },
+    "log-viewer": {
+      "bordered": null,
+      "copyable": null,
+      "disabled": null,
+      "error": null,
+      "level": null,
+      "levels": null,
+      "lines": null,
+      "loading": null,
+      "loadingLabel": null,
+      "search": null,
+      "searchPlaceholder": null
+    },
+    "log-viewer-root": {
+      "bordered": null,
+      "copyable": null,
+      "disabled": null,
+      "error": null,
+      "level": null,
+      "levels": null,
+      "lines": null,
+      "loading": null,
+      "loadingLabel": null,
+      "search": null,
+      "searchPlaceholder": null
+    },
+    "code-block": {
+      "animateLines": null,
+      "bordered": null,
+      "code": null,
+      "copyable": null,
+      "copyAriaLabel": null,
+      "defaultValue": null,
+      "diffView": [
+        "split",
+        "unified"
+      ],
+      "language": null,
+      "modelValue": null,
+      "showLabel": null,
+      "showLineNumbers": null,
+      "tabs": null,
+      "title": null,
+      "type": [
+        "code",
+        "output"
+      ]
+    },
+    "table": {
+      "bordered": null,
+      "density": [
+        "comfortable",
+        "compact"
+      ],
+      "maxHeight": null,
+      "wrapLines": null
+    },
+    "table-root": {
+      "bordered": null,
+      "density": [
+        "comfortable",
+        "compact"
+      ],
+      "maxHeight": null,
+      "wrapLines": null
+    },
+    "data-table": {
+      "bordered": null,
+      "columns": null,
+      "columnVisibility": null,
+      "data": null,
+      "defaultSnapshot": null,
+      "density": [
+        "comfortable",
+        "compact"
+      ],
+      "error": null,
+      "estimateRowHeight": null,
+      "exportFilename": null,
+      "exportRows": null,
+      "filterFields": null,
+      "filters": null,
+      "getSubRows": null,
+      "globalFilter": null,
+      "live": null,
+      "loading": null,
+      "loadingMore": null,
+      "manualFiltering": null,
+      "manualPagination": null,
+      "manualSorting": null,
+      "maxHeight": null,
+      "moreRows": null,
+      "openKeys": null,
+      "page": null,
+      "pageSize": null,
+      "pageSizeOptions": null,
+      "paginated": null,
+      "reorderable": null,
+      "rowCount": null,
+      "rowKey": null,
+      "rowReorderable": null,
+      "rowSelectable": null,
+      "selectable": null,
+      "selectedKeys": null,
+      "selectOnRowClick": null,
+      "snapshot": null,
+      "sortable": null,
+      "sorting": null,
+      "stackable": null,
+      "striped": null,
+      "virtual": null,
+      "wrapLines": null
+    },
+    "data-grid": {
+      "ariaLabel": null,
+      "columns": null,
+      "frozenFirstColumn": null,
+      "maxHeight": null,
+      "modelValue": null,
+      "readonly": null,
+      "rowKey": null,
+      "selectable": null,
+      "selectedKeys": null
+    },
+    "property-filter": {
+      "ariaLabel": null,
+      "disabled": null,
+      "freeText": null,
+      "grouped": null,
+      "loadValues": null,
+      "mode": [
+        "query",
+        "tokens"
+      ],
+      "placeholder": null,
+      "properties": null,
+      "query": null,
+      "showOperations": null,
+      "suggest": null,
+      "text": null,
+      "totalCount": null,
+      "validate": null
+    },
+    "collection-preferences": {
+      "columns": null,
+      "container": [
+        "dialog",
+        "drawer"
+      ],
+      "defaultOpen": null,
+      "disabled": null,
+      "open": null,
+      "pageSizeOptions": null,
+      "preferences": null,
+      "sections": null,
+      "title": null
+    },
+    "card-list": {
+      "ariaLabel": null,
+      "itemKey": null,
+      "items": null,
+      "loading": null,
+      "selectedKeys": null,
+      "selectionMode": [
+        "multiple",
+        "none",
+        "single"
+      ]
+    },
+    "pagination": {
+      "ariaLabel": null,
+      "page": null,
+      "pageSize": null,
+      "pageSizeOptions": null,
+      "siblingCount": null,
+      "total": null
+    },
+    "pagination-root": {
+      "ariaLabel": null,
+      "page": null,
+      "pageSize": null,
+      "pageSizeOptions": null,
+      "siblingCount": null,
+      "total": null
+    },
+    "pagination-button": {
+      "active": null,
+      "disabled": null,
+      "type": [
+        "more",
+        "next",
+        "number",
+        "previous"
+      ]
+    },
+    "flow-diagram": {
+      "align": [
+        "center",
+        "start"
+      ],
+      "ariaLabel": null,
+      "edges": null,
+      "loading": null,
+      "nodes": null,
+      "openKeys": null,
+      "orientation": [
+        "horizontal",
+        "responsive",
+        "vertical"
+      ],
+      "uniform": null
+    },
+    "flow-diagram-root": {
+      "align": [
+        "center",
+        "start"
+      ],
+      "ariaLabel": null,
+      "edges": null,
+      "loading": null,
+      "nodes": null,
+      "openKeys": null,
+      "orientation": [
+        "horizontal",
+        "responsive",
+        "vertical"
+      ],
+      "uniform": null
+    },
+    "transfer-list": {
+      "disabled": null,
+      "itemKey": null,
+      "modelValue": null,
+      "moveOnDoubleClick": null
+    },
+    "transfer-list-root": {
+      "disabled": null,
+      "itemKey": null,
+      "modelValue": null,
+      "moveOnDoubleClick": null
+    },
+    "tree": {
+      "ariaLabel": null,
+      "editable": null,
+      "emptyDescription": null,
+      "emptyTitle": null,
+      "items": null,
+      "loading": null,
+      "openKeys": null,
+      "selectable": null,
+      "selectedKey": null,
+      "selectedKeys": null,
+      "size": null
+    },
+    "doc-call-to-action": {
+      "label": null,
+      "primaryAction": null,
+      "secondaryAction": null,
+      "title": null
+    },
+    "doc-callout": {
+      "label": null,
+      "variant": [
+        "check",
+        "danger",
+        "info",
+        "note",
+        "tip",
+        "warning"
+      ]
+    },
+    "doc-card": {
+      "eyebrow": null,
+      "href": null,
+      "icon": null,
+      "label": null,
+      "linkLabel": null,
+      "target": [
+        "_blank",
+        "_self"
+      ],
+      "title": null
+    },
+    "doc-card-group": {
+      "columns": null,
+      "mobileColumns": null
+    },
+    "doc-frame": {
+      "alt": null,
+      "autoplay": null,
+      "caption": null,
+      "hint": null,
+      "src": null
+    },
+    "doc-item": {
+      "href": null,
+      "icon": null,
+      "label": null,
+      "target": [
+        "_blank",
+        "_self"
+      ],
+      "title": null
+    },
+    "doc-layout": {
+      "activeId": null,
+      "ariaLabel": null,
+      "home": null,
+      "navigation": null,
+      "navigationOpen": null,
+      "navigationWidth": null,
+      "outlineGroups": null,
+      "rootLabel": null,
+      "searchOpen": null,
+      "sections": null
+    },
+    "doc-markdown": {
+      "components": null,
+      "source": null
+    },
+    "doc-table-of-contents": {
+      "activeId": null,
+      "groups": null,
+      "items": null,
+      "title": null
+    },
+    "doc-page-header": {
+      "breadcrumbs": null,
+      "description": null,
+      "lastUpdated": null,
+      "metaActions": null,
+      "title": null
+    },
+    "doc-previous-next": {
+      "next": null,
+      "nextLabel": null,
+      "previous": null,
+      "previousLabel": null
+    },
+    "doc-prompt": {
+      "icon": null,
+      "label": null,
+      "title": null,
+      "variant": [
+        "block",
+        "line"
+      ]
+    },
+    "doc-hero": {
+      "description": null,
+      "title": null
+    },
+    "doc-agent-card": {
+      "actionHref": null,
+      "actionLabel": null,
+      "agents": null,
+      "asideTitle": null,
+      "description": null,
+      "prompt": null,
+      "title": null
+    },
+    "doc-changelog-entry": {
+      "anchor": null,
+      "description": null,
+      "label": null,
+      "tags": null,
+      "title": null
+    },
+    "doc-accordion-group": {
+      "type": [
+        "multiple",
+        "single"
+      ]
+    },
+    "doc-accordion": {
+      "defaultOpen": null,
+      "title": null
+    },
+    "doc-code-group": {
+      "samples": null,
+      "showLabel": null,
+      "showLineNumbers": null,
+      "type": [
+        "code",
+        "output"
+      ]
+    },
+    "doc-heading": {
+      "anchor": null,
+      "label": null,
+      "level": null
+    },
+    "alert": {
+      "actionLabel": null,
+      "closable": null,
+      "icon": null,
+      "label": null,
+      "life": null,
+      "severity": [
+        "danger",
+        "info",
+        "success",
+        "warning"
+      ],
+      "size": [
+        "medium",
+        "small"
+      ],
+      "title": null
+    },
+    "empty-state": {
+      "bordered": null,
+      "description": null,
+      "icon": null,
+      "size": [
+        "medium",
+        "small"
+      ],
+      "title": null
+    },
+    "error-boundary": {
+      "description": null,
+      "propagate": null,
+      "resetKey": null,
+      "retryLabel": null,
+      "title": null
+    },
+    "status-indicator": {
+      "label": null,
+      "loading": null,
+      "severity": null
+    },
+    "toast": {
+      "closable": null,
+      "duration": null,
+      "expand": null,
+      "max": null,
+      "position": [
+        "bottom-center",
+        "bottom-end",
+        "bottom-start",
+        "top-center",
+        "top-end",
+        "top-start"
+      ]
+    },
+    "toast-root": {
+      "closable": null,
+      "duration": null,
+      "expand": null,
+      "max": null,
+      "position": [
+        "bottom-center",
+        "bottom-end",
+        "bottom-start",
+        "top-center",
+        "top-end",
+        "top-start"
+      ]
+    },
+    "skeleton": {
+      "animated": null,
+      "height": null,
+      "variant": [
+        "circle",
+        "rectangle"
+      ],
+      "width": null
+    },
+    "outcome-icon": {
+      "animated": null,
+      "ariaLabel": null,
+      "severity": [
+        "danger",
+        "neutral",
+        "success",
+        "warning"
+      ],
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ]
+    },
+    "upload-progress": {
+      "cancelable": null,
+      "floating": null,
+      "items": null,
+      "open": null,
+      "operation": [
+        "delete",
+        "move",
+        "upload"
+      ],
+      "title": null
+    },
+    "progress": {
+      "indeterminate": null,
+      "max": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "value": null,
+      "variant": null
+    },
+    "date-range-picker": {
+      "ariaLabel": null,
+      "defaultOpen": null,
+      "disabled": null,
+      "invalid": null,
+      "max": null,
+      "maxDuration": null,
+      "min": null,
+      "modelValue": null,
+      "now": null,
+      "open": null,
+      "placeholder": null,
+      "rangeSelectorMode": [
+        "absolute-only",
+        "default",
+        "relative-only"
+      ],
+      "refreshInterval": null,
+      "relativeOptions": null,
+      "showRefresh": null,
+      "showStep": null,
+      "showTime": null,
+      "showTimeZone": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "timeZone": null,
+      "timeZones": null
+    },
+    "date-picker": {
+      "ariaLabel": null,
+      "clearable": null,
+      "defaultOpen": null,
+      "disabled": null,
+      "invalid": null,
+      "max": null,
+      "min": null,
+      "modelValue": null,
+      "open": null,
+      "orientation": [
+        "horizontal",
+        "vertical"
+      ],
+      "placeholder": null,
+      "showApply": null,
+      "showFields": null,
+      "showTime": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "split": null,
+      "timeZone": null
+    },
+    "date-picker-root": {
+      "ariaLabel": null,
+      "clearable": null,
+      "defaultOpen": null,
+      "disabled": null,
+      "invalid": null,
+      "max": null,
+      "min": null,
+      "modelValue": null,
+      "open": null,
+      "orientation": [
+        "horizontal",
+        "vertical"
+      ],
+      "placeholder": null,
+      "showApply": null,
+      "showFields": null,
+      "showTime": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "split": null,
+      "timeZone": null
+    },
+    "input": {
+      "autocomplete": null,
+      "disabled": null,
+      "invalid": null,
+      "maxLength": null,
+      "modelValue": null,
+      "monospace": null,
+      "placeholder": null,
+      "readonly": null,
+      "required": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "spellcheck": null,
+      "type": [
+        "email",
+        "number",
+        "text"
+      ]
+    },
+    "input-group": {
+      "disabled": null,
+      "invalid": null,
+      "required": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ]
+    },
+    "input-group-root": {
+      "disabled": null,
+      "invalid": null,
+      "required": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ]
+    },
+    "number-input": {
+      "disabled": null,
+      "invalid": null,
+      "max": null,
+      "min": null,
+      "modelValue": null,
+      "nullable": null,
+      "placeholder": null,
+      "readonly": null,
+      "required": null,
+      "showButtons": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "step": null
+    },
+    "field": {
+      "disabled": null,
+      "invalid": null,
+      "orientation": [
+        "horizontal",
+        "responsive",
+        "vertical"
+      ],
+      "required": null
+    },
+    "field-root": {
+      "disabled": null,
+      "invalid": null,
+      "orientation": [
+        "horizontal",
+        "responsive",
+        "vertical"
+      ],
+      "required": null
+    },
+    "phone-input": {
+      "countries": null,
+      "country": null,
+      "defaultCountry": null,
+      "disabled": null,
+      "invalid": null,
+      "modelValue": null,
+      "name": null,
+      "placeholder": null,
+      "readonly": null,
+      "required": null,
+      "searchEmptyLabel": null,
+      "searchPlaceholder": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ]
+    },
+    "hint": {
+      "content": null,
+      "side": [
+        "auto",
+        "bottom",
+        "end",
+        "start",
+        "top"
+      ]
+    },
+    "otp-input": {
+      "autofocus": null,
+      "disabled": null,
+      "group": null,
+      "invalid": null,
+      "length": null,
+      "mode": [
+        "alphanumeric",
+        "numeric"
+      ],
+      "modelValue": null,
+      "required": null
+    },
+    "password-input": {
+      "autocomplete": [
+        "current-password",
+        "new-password",
+        "off"
+      ],
+      "disabled": null,
+      "invalid": null,
+      "maxLength": null,
+      "modelValue": null,
+      "monospace": null,
+      "placeholder": null,
+      "readonly": null,
+      "required": null,
+      "toggleable": null
+    },
+    "file-dropzone": {
+      "accept": null,
+      "description": null,
+      "directories": null,
+      "disabled": null,
+      "icon": null,
+      "invalid": null,
+      "multiple": null,
+      "title": null,
+      "variant": [
+        "inline",
+        "overlay"
+      ]
+    },
+    "file-token-group": {
+      "ariaLabel": null,
+      "items": null,
+      "limit": null,
+      "orientation": [
+        "horizontal",
+        "vertical"
+      ],
+      "readonly": null,
+      "showFileLastModified": null,
+      "showFileSize": null
+    },
+    "filter-menu": {
+      "defaultOpen": null,
+      "disabled": null,
+      "fields": null,
+      "label": null,
+      "modelValue": null,
+      "open": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ]
+    },
+    "filter-menu-root": {
+      "defaultOpen": null,
+      "disabled": null,
+      "fields": null,
+      "label": null,
+      "modelValue": null,
+      "open": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ]
+    },
+    "password-requirements": {
+      "requirements": null,
+      "title": null,
+      "value": null
+    },
+    "radio-group": {
+      "disabled": null,
+      "invalid": null,
+      "modelValue": null,
+      "name": null,
+      "options": null,
+      "orientation": [
+        "horizontal",
+        "vertical"
+      ],
+      "required": null,
+      "variant": [
+        "card",
+        "default"
+      ]
+    },
+    "radio-group-root": {
+      "disabled": null,
+      "invalid": null,
+      "modelValue": null,
+      "name": null,
+      "options": null,
+      "orientation": [
+        "horizontal",
+        "vertical"
+      ],
+      "required": null,
+      "variant": [
+        "card",
+        "default"
+      ]
+    },
+    "chip": {
+      "clickable": null,
+      "disabled": null,
+      "label": null,
+      "removable": null,
+      "selectable": null,
+      "selected": null,
+      "size": [
+        "medium",
+        "small"
+      ],
+      "variant": [
+        "dashed",
+        "filled",
+        "outline"
+      ]
+    },
+    "checkbox": {
+      "disabled": null,
+      "indeterminate": null,
+      "invalid": null,
+      "modelValue": null,
+      "name": null,
+      "readonly": null,
+      "value": null
+    },
+    "switch": {
+      "autofocus": null,
+      "disabled": null,
+      "invalid": null,
+      "modelValue": null,
+      "name": null,
+      "variant": [
+        "default",
+        "privacy"
+      ]
+    },
+    "slider": {
+      "ariaLabel": null,
+      "disabled": null,
+      "invalid": null,
+      "max": null,
+      "min": null,
+      "modelValue": null,
+      "readonly": null,
+      "referenceValues": null,
+      "step": null,
+      "ticks": null,
+      "unit": null
+    },
+    "theme-switcher": {
+      "ariaLabel": null,
+      "disabled": null,
+      "modelValue": null,
+      "size": null
+    },
+    "textarea": {
+      "autoResize": null,
+      "disabled": null,
+      "invalid": null,
+      "maxRows": null,
+      "minRows": null,
+      "modelValue": null,
+      "monospace": null,
+      "placeholder": null,
+      "readonly": null,
+      "required": null,
+      "resize": [
+        "both",
+        "horizontal",
+        "none",
+        "vertical"
+      ]
+    },
+    "context-menu": {
+      "ariaLabel": null,
+      "disabled": null,
+      "open": null
+    },
+    "context-menu-root": {
+      "ariaLabel": null,
+      "disabled": null,
+      "open": null
+    },
+    "dropdown-menu": {
+      "align": null,
+      "defaultOpen": null,
+      "disabled": null,
+      "open": null,
+      "side": null,
+      "sideOffset": null
+    },
+    "dropdown-menu-root": {
+      "align": null,
+      "defaultOpen": null,
+      "disabled": null,
+      "open": null,
+      "side": null,
+      "sideOffset": null
+    },
+    "multi-select": {
+      "allowCustom": null,
+      "chipLimit": null,
+      "defaultOpen": null,
+      "disabled": null,
+      "displayValue": null,
+      "emptyTitle": null,
+      "error": null,
+      "filter": null,
+      "invalid": null,
+      "loading": null,
+      "modelValue": null,
+      "name": null,
+      "open": null,
+      "placeholder": null,
+      "readonly": null,
+      "required": null,
+      "searchable": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "variant": [
+        "chips",
+        "summary"
+      ]
+    },
+    "multi-select-root": {
+      "allowCustom": null,
+      "chipLimit": null,
+      "defaultOpen": null,
+      "disabled": null,
+      "displayValue": null,
+      "emptyTitle": null,
+      "error": null,
+      "filter": null,
+      "invalid": null,
+      "loading": null,
+      "modelValue": null,
+      "name": null,
+      "open": null,
+      "placeholder": null,
+      "readonly": null,
+      "required": null,
+      "searchable": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "variant": [
+        "chips",
+        "summary"
+      ]
+    },
+    "select": {
+      "defaultOpen": null,
+      "disabled": null,
+      "displayValue": null,
+      "invalid": null,
+      "modelValue": null,
+      "name": null,
+      "open": null,
+      "placeholder": null,
+      "readonly": null,
+      "required": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "variant": [
+        "ghost",
+        "outline"
+      ]
+    },
+    "select-root": {
+      "defaultOpen": null,
+      "disabled": null,
+      "displayValue": null,
+      "invalid": null,
+      "modelValue": null,
+      "name": null,
+      "open": null,
+      "placeholder": null,
+      "readonly": null,
+      "required": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "variant": [
+        "ghost",
+        "outline"
+      ]
+    },
+    "separator": {
+      "decorative": null,
+      "label": null,
+      "orientation": [
+        "horizontal",
+        "vertical"
+      ]
+    },
+    "footer": {
+      "ariaLabel": null,
+      "variant": [
+        "console",
+        "content",
+        "site"
+      ]
+    },
+    "footer-root": {
+      "ariaLabel": null,
+      "variant": [
+        "console",
+        "content",
+        "site"
+      ]
+    },
+    "registration-frame": {
+      "borders": null,
+      "flush": null,
+      "hatch": null,
+      "marks": null
+    },
+    "spacer": {
+      "hatch": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ]
+    },
+    "app-layout": {
+      "compactBelow": null,
+      "navigationAriaLabel": null,
+      "navigationOpen": null,
+      "splitPanelOpen": null,
+      "splitPanelPosition": null,
+      "splitPanelSize": null,
+      "splitPanelTitle": null,
+      "storageKey": null,
+      "toolsLabel": null,
+      "toolsOpen": null,
+      "toolsWidth": null
+    },
+    "console-layout": {
+      "account": null,
+      "activeId": null,
+      "ariaLabel": null,
+      "breadcrumbs": null,
+      "home": null,
+      "navigation": null,
+      "navigationOpen": null,
+      "searchOpen": null,
+      "searchPlaceholder": null,
+      "toolsLabel": null,
+      "toolsOpen": null
+    },
+    "console-layout-root": {
+      "account": null,
+      "activeId": null,
+      "ariaLabel": null,
+      "breadcrumbs": null,
+      "home": null,
+      "navigation": null,
+      "navigationOpen": null,
+      "searchOpen": null,
+      "searchPlaceholder": null,
+      "toolsLabel": null,
+      "toolsOpen": null
+    },
+    "site-layout": {
+      "footer": null,
+      "navigation": null,
+      "navOverlay": null,
+      "searchOpen": null,
+      "searchPlaceholder": null
+    },
+    "dashboard-grid": {
+      "ariaLabel": null,
+      "columns": null,
+      "editing": null,
+      "layout": null,
+      "maxHeight": null,
+      "maxSpan": null,
+      "minHeight": null,
+      "minSpan": null
+    },
+    "dashboard-grid-root": {
+      "ariaLabel": null,
+      "columns": null,
+      "editing": null,
+      "layout": null,
+      "maxHeight": null,
+      "maxSpan": null,
+      "minHeight": null,
+      "minSpan": null
+    },
+    "resizable": {
+      "ariaLabel": null,
+      "orientation": [
+        "horizontal",
+        "vertical"
+      ]
+    },
+    "resizable-root": {
+      "ariaLabel": null,
+      "orientation": [
+        "horizontal",
+        "vertical"
+      ]
+    },
+    "scroll-area": {
+      "ariaLabel": null,
+      "fade": null,
+      "orientation": [
+        "both",
+        "horizontal",
+        "vertical"
+      ]
+    },
+    "page-header": {
+      "description": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "title": null,
+      "titleId": null
+    },
+    "subheader": {
+      "anchor": null,
+      "description": null,
+      "size": [
+        "medium",
+        "small"
+      ],
+      "title": null
+    },
+    "settings-group": {
+      "anchor": null,
+      "collapsible": null,
+      "hint": null,
+      "icon": null,
+      "label": null,
+      "open": null
+    },
+    "settings-row": {
+      "depth": null,
+      "description": null,
+      "hint": null,
+      "stackable": null,
+      "title": null,
+      "variant": [
+        "compact",
+        "field",
+        "stacked"
+      ]
+    },
+    "save-bar": {
+      "variant": [
+        "centered",
+        "docked",
+        "fade",
+        "floating",
+        "plain"
+      ]
+    },
+    "app-header": {
+      "ariaLabel": null,
+      "variant": [
+        "content",
+        "site"
+      ]
+    },
+    "app-header-root": {
+      "ariaLabel": null,
+      "variant": [
+        "content",
+        "site"
+      ]
+    },
+    "sidebar": {
+      "ariaLabel": null,
+      "collapseAriaLabel": null,
+      "collapsible": null,
+      "expandAriaLabel": null,
+      "maxWidthToken": null,
+      "minWidthToken": null,
+      "open": null,
+      "resizable": null,
+      "resizeAriaLabel": null,
+      "shortcut": null,
+      "width": null
+    },
+    "sidebar-root": {
+      "ariaLabel": null,
+      "collapseAriaLabel": null,
+      "collapsible": null,
+      "expandAriaLabel": null,
+      "maxWidthToken": null,
+      "minWidthToken": null,
+      "open": null,
+      "resizable": null,
+      "resizeAriaLabel": null,
+      "shortcut": null,
+      "width": null
+    },
+    "split-stack": {
+      "flush": null,
+      "sticky": null
+    },
+    "logo-wall": {
+      "ariaLabel": null,
+      "items": null,
+      "linkLabel": null,
+      "variant": null
+    },
+    "media-split": {
+      "align": null,
+      "alt": null,
+      "description": null,
+      "divided": null,
+      "eyebrow": null,
+      "fill": null,
+      "framed": null,
+      "headingLevel": null,
+      "mediaFill": null,
+      "mediaHref": null,
+      "mediaPadded": null,
+      "orientation": null,
+      "size": null,
+      "src": null,
+      "texture": null,
+      "textureFade": null,
+      "textureSize": null,
+      "title": null,
+      "variant": null
+    },
+    "marquee": {
+      "ariaLabel": null,
+      "duration": null,
+      "items": null,
+      "label": null,
+      "marks": null,
+      "size": [
+        "medium",
+        "small"
+      ],
+      "variant": [
+        "band",
+        "plain"
+      ]
+    },
+    "bento-grid": {
+      "ariaLabel": null,
+      "columns": null,
+      "flush": null,
+      "mobileColumns": null
+    },
+    "bento-grid-root": {
+      "ariaLabel": null,
+      "columns": null,
+      "flush": null,
+      "mobileColumns": null
+    },
+    "call-to-action": {
+      "description": null,
+      "eyebrow": null,
+      "framed": null,
+      "title": null,
+      "titleMuted": null,
+      "variant": null
+    },
+    "diagram": {
+      "ariaLabel": null,
+      "name": [
+        "ai-gateway",
+        "ai-gateway-latency-routing",
+        "ai-gateway-model-routing",
+        "ai-gateway-provider-failover",
+        "ai-gateway-response-cache",
+        "ai-inference",
+        "application-accelerator",
+        "applications",
+        "bot-manager",
+        "cache",
+        "data-stream",
+        "ddos-protection",
+        "edge-dns",
+        "firewall",
+        "functions",
+        "image-processor",
+        "kv-store",
+        "load-balancer",
+        "network-shield",
+        "object-storage",
+        "real-time-events",
+        "real-time-metrics",
+        "sql-database",
+        "web-application-firewall",
+        "workloads",
+        "workloads-gradual-rollout",
+        "workloads-isolate-per-request",
+        "workloads-security"
+      ],
+      "spec": null
+    },
+    "stats": {
+      "items": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ]
+    },
+    "carousel": {
+      "ariaLabel": null,
+      "variant": null
+    },
+    "carousel-root": {
+      "ariaLabel": null,
+      "variant": null
+    },
+    "backdrop": {
+      "animated": null,
+      "variant": null
+    },
+    "hero": {
+      "align": null,
+      "bordered": null,
+      "bottomHeight": null,
+      "floorTexture": null,
+      "floorTextureSize": null,
+      "marquee": null,
+      "marqueeLabel": null,
+      "marqueeMarks": null,
+      "maxWidth": null,
+      "mediaAlign": null,
+      "offset": null,
+      "padded": null,
+      "size": null,
+      "texture": null,
+      "textureFade": null,
+      "textureSize": null,
+      "variant": null
+    },
+    "hero-root": {
+      "align": null,
+      "bordered": null,
+      "bottomHeight": null,
+      "floorTexture": null,
+      "floorTextureSize": null,
+      "marquee": null,
+      "marqueeLabel": null,
+      "marqueeMarks": null,
+      "maxWidth": null,
+      "mediaAlign": null,
+      "offset": null,
+      "padded": null,
+      "size": null,
+      "texture": null,
+      "textureFade": null,
+      "textureSize": null,
+      "variant": null
+    },
+    "media-scroll": {
+      "dwell": null,
+      "items": null,
+      "showProgress": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ]
+    },
+    "quote": {
+      "highlights": null,
+      "jobTitle": null,
+      "logo": null,
+      "logoAlt": null,
+      "name": null,
+      "photo": null,
+      "text": null,
+      "variant": null
+    },
+    "media-tabs": {
+      "autoplay": null,
+      "autoplayInterval": null,
+      "items": null,
+      "modelValue": null,
+      "selectOn": [
+        "click",
+        "hover"
+      ],
+      "showProgress": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "tabsSide": [
+        "bottom",
+        "end",
+        "start",
+        "top"
+      ],
+      "texture": null,
+      "textureFade": null,
+      "textureSize": null
+    },
+    "embed": {
+      "ratio": [
+        "square",
+        "video",
+        "wide"
+      ],
+      "src": null,
+      "title": null
+    },
+    "faq": {
+      "framed": null,
+      "items": null,
+      "title": null
+    },
+    "link-directory": {
+      "ariaLabel": null,
+      "columns": null,
+      "mobileColumns": null
+    },
+    "link-directory-root": {
+      "ariaLabel": null,
+      "columns": null,
+      "mobileColumns": null
+    },
+    "breadcrumb": {
+      "ariaLabel": null,
+      "items": null
+    },
+    "breadcrumb-root": {
+      "ariaLabel": null,
+      "items": null
+    },
+    "breadcrumb-item": {
+      "active": null,
+      "disabled": null,
+      "href": null,
+      "icon": null,
+      "label": null,
+      "showIcon": null
+    },
+    "link": {
+      "disabled": null,
+      "href": null,
+      "icon": null,
+      "label": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "target": [
+        "_blank",
+        "_self"
+      ]
+    },
+    "skip-link": {
+      "href": null,
+      "label": null
+    },
+    "sidebar-menu": {
+      "activeId": null,
+      "ariaLabel": null,
+      "enterOnMount": null,
+      "groups": null,
+      "openKeys": null,
+      "path": null
+    },
+    "sidebar-menu-root": {
+      "activeId": null,
+      "ariaLabel": null,
+      "enterOnMount": null,
+      "groups": null,
+      "openKeys": null,
+      "path": null
+    },
+    "tabs": {
+      "activationMode": [
+        "automatic",
+        "manual"
+      ],
+      "defaultValue": null,
+      "modelValue": null
+    },
+    "tabs-root": {
+      "activationMode": [
+        "automatic",
+        "manual"
+      ],
+      "defaultValue": null,
+      "modelValue": null
+    },
+    "page-tabs": {
+      "align": [
+        "center",
+        "start"
+      ],
+      "column": [
+        "data",
+        "focused",
+        "form",
+        "full"
+      ],
+      "modelValue": null
+    },
+    "stepper": {
+      "ariaLabel": null,
+      "modelValue": null
+    },
+    "stepper-root": {
+      "ariaLabel": null,
+      "modelValue": null
+    },
+    "wizard": {
+      "ariaLabel": null,
+      "loading": null,
+      "modelValue": null,
+      "submitLabel": null
+    },
+    "wizard-root": {
+      "ariaLabel": null,
+      "loading": null,
+      "modelValue": null,
+      "submitLabel": null
+    },
+    "navigation-menu": {
+      "ariaLabel": null,
+      "closeDelay": null,
+      "defaultValue": null,
+      "delay": null,
+      "modelValue": null,
+      "orientation": null
+    },
+    "navigation-menu-root": {
+      "ariaLabel": null,
+      "closeDelay": null,
+      "defaultValue": null,
+      "delay": null,
+      "modelValue": null,
+      "orientation": null
+    },
+    "tooltip": {
+      "align": [
+        "center",
+        "end",
+        "start"
+      ],
+      "content": null,
+      "defaultOpen": null,
+      "delay": null,
+      "disabled": null,
+      "open": null,
+      "side": [
+        "auto",
+        "bottom",
+        "end",
+        "start",
+        "top"
+      ],
+      "sideOffset": null
+    },
+    "command": {
+      "defaultOpen": null,
+      "dismissible": null,
+      "open": null,
+      "pageKey": null,
+      "shortcut": null
+    },
+    "command-root": {
+      "defaultOpen": null,
+      "dismissible": null,
+      "open": null,
+      "pageKey": null,
+      "shortcut": null
+    },
+    "dialog": {
+      "closable": null,
+      "defaultOpen": null,
+      "dismissible": null,
+      "open": null,
+      "size": null
+    },
+    "dialog-root": {
+      "closable": null,
+      "defaultOpen": null,
+      "dismissible": null,
+      "open": null,
+      "size": null
+    },
+    "confirm-dialog": {
+      "cancelLabel": null,
+      "confirmLabel": null,
+      "defaultOpen": null,
+      "description": null,
+      "disabled": null,
+      "loading": null,
+      "open": null,
+      "size": [
+        "medium",
+        "small"
+      ],
+      "title": null,
+      "variant": [
+        "danger",
+        "primary"
+      ]
+    },
+    "drawer": {
+      "closable": null,
+      "defaultOpen": null,
+      "dismissible": null,
+      "modal": null,
+      "open": null,
+      "side": null,
+      "size": null
+    },
+    "drawer-root": {
+      "closable": null,
+      "defaultOpen": null,
+      "dismissible": null,
+      "modal": null,
+      "open": null,
+      "side": null,
+      "size": null
+    },
+    "panel": {
+      "size": null,
+      "sizeAtMd": null
+    },
+    "panel-root": {
+      "size": null,
+      "sizeAtMd": null
+    },
+    "hover-card": {
+      "align": null,
+      "closeDelay": null,
+      "defaultOpen": null,
+      "disabled": null,
+      "open": null,
+      "openDelay": null,
+      "side": null,
+      "sideOffset": null
+    },
+    "hover-card-root": {
+      "align": null,
+      "closeDelay": null,
+      "defaultOpen": null,
+      "disabled": null,
+      "open": null,
+      "openDelay": null,
+      "side": null,
+      "sideOffset": null
+    },
+    "popover": {
+      "align": null,
+      "defaultOpen": null,
+      "disabled": null,
+      "dismissible": null,
+      "open": null,
+      "side": null,
+      "sideOffset": null,
+      "size": null
+    },
+    "popover-root": {
+      "align": null,
+      "defaultOpen": null,
+      "disabled": null,
+      "dismissible": null,
+      "open": null,
+      "side": null,
+      "sideOffset": null,
+      "size": null
+    },
+    "spinner": {
+      "ariaLabel": null
+    },
+    "config-provider": {
+      "catalogs": null,
+      "dir": [
+        "auto",
+        "ltr",
+        "rtl"
+      ],
+      "locale": null,
+      "messages": null,
+      "now": null,
+      "timeZone": null
+    },
+    "architecture-tabs-section": {
+      "anchor": null,
+      "autoplay": null,
+      "autoplayInterval": null,
+      "description": null,
+      "eyebrow": null,
+      "primaryAction": null,
+      "tabs": null,
+      "tabsSide": null,
+      "title": null
+    },
+    "article-body-section": {
+      "anchor": null,
+      "article": null,
+      "assistants": null,
+      "banner": null,
+      "body": null,
+      "community": null,
+      "copyPage": null,
+      "eyebrow": null,
+      "share": null,
+      "trail": null
+    },
+    "article-cards-section": {
+      "align": null,
+      "anchor": null,
+      "ariaLabel": null,
+      "eyebrow": null,
+      "items": null,
+      "title": null
+    },
+    "article-highlight-section": {
+      "actionLabel": null,
+      "anchor": null,
+      "ariaLabel": null,
+      "autoplay": null,
+      "autoplayInterval": null,
+      "fill": null,
+      "items": null,
+      "modelValue": null
+    },
+    "article-index-section": {
+      "allLabel": null,
+      "anchor": null,
+      "ariaLabel": null,
+      "categories": null,
+      "categoryAriaLabel": null,
+      "categoryParam": null,
+      "emptyActionLabel": null,
+      "emptyDescription": null,
+      "emptyTitle": null,
+      "facets": null,
+      "filters": null,
+      "items": null,
+      "leading": null,
+      "moreLabel": null,
+      "pageSize": null,
+      "rowLabel": null,
+      "rowVariant": null,
+      "searchAriaLabel": null,
+      "searchPlaceholder": null,
+      "title": null
+    },
+    "cli-terminal-section": {
+      "anchor": null,
+      "copyAriaLabel": null,
+      "description": null,
+      "eyebrow": null,
+      "primaryAction": null,
+      "script": null,
+      "session": null,
+      "title": null
+    },
+    "client-mosaic-section": {
+      "anchor": null,
+      "ariaLabel": null,
+      "cells": null,
+      "linkLabel": null,
+      "logos": null,
+      "stories": null
+    },
+    "client-story-columns-section": {
+      "anchor": null,
+      "ariaLabel": null,
+      "cells": null,
+      "linkLabel": null,
+      "reveal": null
+    },
+    "client-quotes-section": {
+      "anchor": null,
+      "ariaLabel": null,
+      "autoplay": null,
+      "autoplayInterval": null,
+      "items": null,
+      "modelValue": null,
+      "primaryAction": null
+    },
+    "closing-call-to-action-section": {
+      "anchor": null,
+      "audiences": null,
+      "audiencesAriaLabel": null,
+      "command": null,
+      "description": null,
+      "eyebrow": null,
+      "hatch": null,
+      "lineAriaLabel": null,
+      "primaryAction": null,
+      "secondaryAction": null,
+      "title": null,
+      "typedLead": null,
+      "typedWords": null,
+      "variant": null
+    },
+    "newsletter-section": {
+      "anchor": null,
+      "description": null,
+      "eyebrow": null,
+      "failed": null,
+      "form": null,
+      "hatch": null,
+      "loading": null,
+      "submitted": null,
+      "title": null
+    },
+    "plan-comparison-section": {
+      "anchor": null,
+      "caption": null,
+      "columnLabel": null,
+      "excludedLabel": null,
+      "includedLabel": null,
+      "pickerAriaLabel": null,
+      "plans": null,
+      "primaryAction": null,
+      "sections": null
+    },
+    "competitor-comparison-section": {
+      "anchor": null,
+      "caption": null,
+      "columnLabel": null,
+      "competitor": null,
+      "eyebrow": null,
+      "fullLabel": null,
+      "groups": null,
+      "noneLabel": null,
+      "partialLabel": null,
+      "title": null
+    },
+    "compliance-logos-section": {
+      "anchor": null,
+      "ariaLabel": null,
+      "certifications": null,
+      "description": null,
+      "eyebrow": null,
+      "primaryAction": null,
+      "title": null
+    },
+    "contact-hub-section": {
+      "anchor": null,
+      "channels": null,
+      "lanes": null
+    },
+    "faq-section": {
+      "anchor": null,
+      "items": null,
+      "title": null
+    },
+    "feature-scroll-section": {
+      "anchor": null,
+      "description": null,
+      "eyebrow": null,
+      "items": null,
+      "title": null
+    },
+    "feature-tabs-section": {
+      "anchor": null,
+      "autoplay": null,
+      "autoplayInterval": null,
+      "copyAriaLabel": null,
+      "description": null,
+      "eyebrow": null,
+      "primaryAction": null,
+      "scene": null,
+      "tabs": null,
+      "title": null
+    },
+    "feature-tiles-section": {
+      "anchor": null,
+      "description": null,
+      "eyebrow": null,
+      "tiles": null,
+      "title": null,
+      "variant": null
+    },
+    "feature-widgets-section": {
+      "anchor": null,
+      "columns": null,
+      "copiedLabel": null,
+      "description": null,
+      "eyebrow": null,
+      "items": null,
+      "primaryAction": null,
+      "secondaryAction": null,
+      "title": null,
+      "titleAlign": null
+    },
+    "hero-section": {
+      "anchor": null,
+      "description": null,
+      "eyebrow": null,
+      "eyebrowPrefix": null,
+      "headerOffset": null,
+      "illustration": null,
+      "illustrationAriaLabel": null,
+      "image": null,
+      "items": null,
+      "levels": null,
+      "marqueeLabel": null,
+      "marqueeMarks": null,
+      "plain": null,
+      "primaryAction": null,
+      "secondaryAction": null,
+      "size": null,
+      "title": null,
+      "titleHighlight": null,
+      "titleLength": null,
+      "variant": null
+    },
+    "capability-grid-section": {
+      "anchor": null,
+      "columns": null,
+      "description": null,
+      "eyebrow": null,
+      "items": null,
+      "primaryAction": null,
+      "secondaryAction": null,
+      "title": null,
+      "titleAlign": null
+    },
+    "console-showcase-section": {
+      "anchor": null,
+      "crop": null,
+      "description": null,
+      "eyebrow": null,
+      "primaryAction": null,
+      "secondaryAction": null,
+      "size": null,
+      "tabs": null,
+      "tabsAriaLabel": null,
+      "texture": null,
+      "textureFade": null,
+      "title": null,
+      "titleAlign": null,
+      "titlePadding": null,
+      "variant": [
+        "console",
+        "diagram"
+      ]
+    },
+    "process-scroll-section": {
+      "anchor": null,
+      "ariaLabel": null,
+      "description": null,
+      "descriptionWidth": null,
+      "eyebrow": null,
+      "headerOffset": null,
+      "pinned": null,
+      "steps": null,
+      "title": null,
+      "titleAlign": null
+    },
+    "copy-command-section": {
+      "shell": null,
+      "value": null
+    },
+    "hero-form-section": {
+      "anchor": null,
+      "description": null,
+      "descriptionAfter": null,
+      "descriptionLink": null,
+      "eyebrow": null,
+      "failed": null,
+      "fields": null,
+      "formAriaLabel": null,
+      "items": null,
+      "loading": null,
+      "marqueeLabel": null,
+      "marqueeMarks": null,
+      "messages": null,
+      "primaryAction": null,
+      "secondaryAction": null,
+      "submitLabel": null,
+      "submitted": null,
+      "title": null,
+      "titleHighlight": null
+    },
+    "investor-marks-section": {
+      "anchor": null,
+      "eyebrow": null,
+      "items": null,
+      "linkLabel": null,
+      "title": null
+    },
+    "job-posting-section": {
+      "anchor": null,
+      "applyLabel": null,
+      "area": null,
+      "facets": null,
+      "failed": null,
+      "form": null,
+      "loading": null,
+      "messages": null,
+      "secondaryAction": null,
+      "sections": null,
+      "submitted": null,
+      "title": null
+    },
+    "listing-index-section": {
+      "anchor": null,
+      "columns": null,
+      "data": null,
+      "emptyActionLabel": null,
+      "emptyDescription": null,
+      "emptyTitle": null,
+      "facets": null,
+      "filterLabel": null,
+      "groups": null,
+      "searchAriaLabel": null,
+      "searchPlaceholder": null,
+      "searchShortPlaceholder": null,
+      "sortAriaLabel": null,
+      "sorts": null,
+      "title": null
+    },
+    "listing-table-section": {
+      "anchor": null,
+      "columns": null,
+      "data": null,
+      "primaryAction": null,
+      "title": null
+    },
+    "logo-wall-section": {
+      "anchor": null,
+      "ariaLabel": null,
+      "eyebrow": null,
+      "logos": null,
+      "primaryAction": null,
+      "quote": null,
+      "quoteVariant": null,
+      "secondaryAction": null,
+      "title": null,
+      "variant": null
+    },
+    "media-split-section": {
+      "anchor": null,
+      "description": null,
+      "eyebrow": null,
+      "illustration": null,
+      "illustrationAriaLabel": null,
+      "linked": null,
+      "orientation": null,
+      "primaryAction": null,
+      "scene": null,
+      "secondaryAction": null,
+      "size": null,
+      "texture": null,
+      "title": null,
+      "widget": null
+    },
+    "media-split-stack-section": {
+      "anchor": null,
+      "bands": null,
+      "description": null,
+      "eyebrow": null,
+      "title": null
+    },
+    "network-section": {
+      "anchor": null,
+      "benefits": null,
+      "claims": null,
+      "claimsEyebrow": null,
+      "eyebrow": null,
+      "outcomes": null,
+      "stats": null,
+      "title": null,
+      "variant": null
+    },
+    "photo-marquee-section": {
+      "anchor": null,
+      "ariaLabel": null,
+      "description": null,
+      "descriptionWidth": null,
+      "duration": null,
+      "photos": null,
+      "title": null
+    },
+    "platform-directory-section": {
+      "anchor": null,
+      "ariaLabel": null,
+      "description": null,
+      "eyebrow": null,
+      "groups": null,
+      "title": null
+    },
+    "pricing-plans-section": {
+      "anchor": null,
+      "periods": null,
+      "periodsAriaLabel": null,
+      "plans": null
+    },
+    "recognition-marquee-section": {
+      "anchor": null,
+      "ariaLabel": null,
+      "duration": null,
+      "eyebrow": null,
+      "items": null,
+      "title": null
+    },
+    "site-footer-section": {
+      "ariaLabel": null,
+      "columns": null,
+      "home": null,
+      "homeAriaLabel": null,
+      "language": null,
+      "languageAriaLabel": null,
+      "languages": null,
+      "socials": null,
+      "statusLabel": null,
+      "variant": null
+    },
+    "site-header-section": {
+      "contact": null,
+      "home": null,
+      "links": null,
+      "menus": null,
+      "primaryAction": null,
+      "secondaryAction": null,
+      "secondaryActionOnPhones": null
+    },
+    "stats-section": {
+      "anchor": null,
+      "items": null
+    },
+    "story-index-section": {
+      "anchor": null,
+      "ariaLabel": null,
+      "emptyActionLabel": null,
+      "emptyTitle": null,
+      "facets": null,
+      "filterLabel": null,
+      "items": null,
+      "linkLabel": null,
+      "moreLabel": null,
+      "pageSize": null,
+      "searchAriaLabel": null,
+      "searchPlaceholder": null,
+      "searchShortPlaceholder": null,
+      "seedFromQuery": null,
+      "title": null
+    },
+    "subject-grid-section": {
+      "anchor": null,
+      "ariaLabel": null,
+      "closing": null,
+      "subjects": null
+    },
+    "template-gallery-section": {
+      "anchor": null,
+      "closing": null,
+      "deployLabel": null,
+      "description": null,
+      "eyebrow": null,
+      "hatch": null,
+      "marqueeLabel": null,
+      "marqueeMarks": null,
+      "primaryAction": null,
+      "secondaryAction": null,
+      "templates": null,
+      "templatesAriaLabel": null,
+      "title": null
+    },
+    "customer-use-cases-section": {
+      "anchor": null,
+      "description": null,
+      "eyebrow": null,
+      "items": null,
+      "primaryAction": null,
+      "title": null
+    },
+    "card-grid": {
+      "columns": null,
+      "dividerColor": null,
+      "flush": null,
+      "layout": null,
+      "mobileColumns": null,
+      "variant": null
+    },
+    "card-grid-root": {
+      "columns": null,
+      "dividerColor": null,
+      "flush": null,
+      "layout": null,
+      "mobileColumns": null,
+      "variant": null
+    },
+    "texture": {
+      "fade": [
+        "bottom",
+        "edges",
+        "left",
+        "none",
+        "right",
+        "top",
+        "vignette"
+      ],
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "variant": [
+        "dither",
+        "dots",
+        "grid",
+        "lines",
+        "none",
+        "pixelate"
+      ]
+    },
+    "feature-item": {
+      "description": null,
+      "headingLevel": null,
+      "href": null,
+      "icon": null,
+      "title": null
+    },
+    "module": {
+      "align": null,
+      "description": null,
+      "divided": null,
+      "eyebrow": null,
+      "padded": null,
+      "title": null
+    },
+    "container": {
+      "bordered": null,
+      "maxWidth": null,
+      "padded": null
+    },
+    "site-page": {
+      "hero": null,
+      "sections": null
+    },
+    "media-tile": {
+      "alt": null,
+      "description": null,
+      "fluid": null,
+      "mediaScale": null,
+      "padded": null,
+      "src": null,
+      "title": null,
+      "variant": null
+    },
+    "quote-tabs": {
+      "ariaLabel": null,
+      "autoplay": null,
+      "autoplayInterval": null,
+      "items": null,
+      "modelValue": null,
+      "showProgress": null
+    },
+    "file-preview": {
+      "bytes": null,
+      "content": null,
+      "error": null,
+      "fileName": null,
+      "loading": null,
+      "maxLength": null,
+      "mimeType": null,
+      "src": null
+    },
+    "attribute-editor": {
+      "addButtonLabel": null,
+      "addDisabled": null,
+      "addGroupLabel": null,
+      "ariaLabel": null,
+      "definition": null,
+      "disabled": null,
+      "emptyTitle": null,
+      "errors": null,
+      "groupLimit": null,
+      "groups": null,
+      "itemRemovable": null,
+      "items": null,
+      "limit": null,
+      "minItems": null,
+      "newItem": null,
+      "removeButtonLabel": null,
+      "reorderable": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ]
+    },
+    "button-group": {
+      "ariaLabel": null,
+      "items": null,
+      "overflowLabel": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "variant": [
+        "ghost",
+        "outline"
+      ],
+      "visibleCount": null
+    },
+    "combobox": {
+      "allowCustom": null,
+      "ariaLabel": null,
+      "clearable": null,
+      "defaultOpen": null,
+      "disabled": null,
+      "emptyTitle": null,
+      "filter": null,
+      "icon": null,
+      "invalid": null,
+      "loading": null,
+      "modelValue": null,
+      "open": null,
+      "options": null,
+      "placeholder": null,
+      "readonly": null,
+      "required": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ]
+    },
+    "code-editor": {
+      "ariaLabel": null,
+      "bordered": null,
+      "diff": null,
+      "disabled": null,
+      "fill": null,
+      "height": null,
+      "invalid": null,
+      "language": null,
+      "loader": null,
+      "markers": null,
+      "modelValue": null,
+      "original": null,
+      "padLineNumbers": null,
+      "path": null,
+      "readonly": null,
+      "schema": null,
+      "showLineNumbers": null
+    },
+    "tag-editor": {
+      "ariaLabel": null,
+      "disabled": null,
+      "errors": null,
+      "keyMaxLength": null,
+      "keySuggestions": null,
+      "limit": null,
+      "reservedPrefix": null,
+      "tags": null,
+      "valueMaxLength": null,
+      "valueSuggestions": null
+    },
+    "schema-form": {
+      "disabled": null,
+      "errors": null,
+      "modelValue": null,
+      "readonly": null,
+      "schema": null,
+      "ui": null,
+      "validateOn": [
+        "blur",
+        "submit"
+      ]
+    },
+    "plan-feature-list": {
+      "ariaLabel": null,
+      "columns": null,
+      "items": null
+    },
+    "card-carousel-section": {
+      "anchor": null,
+      "ariaLabel": null,
+      "description": null,
+      "eyebrow": null,
+      "items": null,
+      "title": null
+    }
+  }
+}

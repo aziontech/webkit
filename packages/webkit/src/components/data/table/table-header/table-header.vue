@@ -1,32 +1,30 @@
 <script setup lang="ts">
-  import { computed, inject, provide, reactive, useAttrs } from 'vue'
+  import { computed, provide, reactive, useAttrs } from 'vue'
 
-  import { TableInjectionKey, TableRowGroupKey } from '../injection-key'
+  import { type TableDensity, TableRowGroupInjectionKey } from '../injection-key'
 
   defineOptions({
     name: 'TableHeader',
     inheritAttrs: false
   })
 
-  type TableHeaderKind = 'default' | 'compact'
-
-  interface Props {
+  export interface TableHeaderProps {
     /** Sticks the header to the top of the scroll container. */
     frozen?: boolean
     /** `compact` shrinks the header cells' height and padding for a denser header. */
-    kind?: TableHeaderKind
+    density?: TableDensity
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<TableHeaderProps>(), {
     frozen: false,
-    kind: 'default'
+    density: undefined
   })
 
   provide(
-    TableRowGroupKey,
+    TableRowGroupInjectionKey,
     reactive({
       hoverable: false,
-      compact: computed(() => props.kind === 'compact')
+      compact: computed(() => props.density === 'compact')
     })
   )
 
@@ -35,12 +33,9 @@
   }>()
 
   const attrs = useAttrs()
-  const ctx = inject(TableInjectionKey, null)
 
   const testId = computed<string>(
-    () =>
-      (attrs['data-testid'] as string | undefined) ??
-      (ctx ? `${ctx.testId}__header` : 'data-table__header')
+    () => (attrs['data-testid'] as string | undefined) ?? 'table-header'
   )
 </script>
 

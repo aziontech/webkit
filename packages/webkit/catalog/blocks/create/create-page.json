@@ -1,0 +1,31 @@
+{
+ "variants": [
+  {
+   "name": "CreateZone",
+   "summary": "Create Zone after importing a zone file: Import sits in the bar's leading slot (pasting a zone file into Domain name does the same), Name and Domain name take the zone origin, and a Records section lists each imported record with its type Tag, value and TTL, a Remove per row and a Discard import action in the card footer. The SOA and the nameservers are never imported; each import and failure confirms in a toast, and each Remove and Discard import in a toast with Undo. The Records section previews the first 50 records with an 'and N more' line, and a re-import skips records already listed.",
+   "file": "blocks/create/create-page/variants/create-zone.vue"
+  },
+  {
+   "name": "CreateOrganization",
+   "summary": "Create Organization: General with Name and a Mark picked from six RadioGroup card colors built from semantic tokens, each a marble Avatar seeded by the name, and an In the header preview that follows the name and the color; an Owner row with the signed-in user's Avatar and Owner and Active Tags; First workspace with its name prefilled; and a collapsed Advanced section of Selects. A name already in use is invalid on submit; Create Organization shows its loading state and confirms in a success toast, and a failed request raises an error toast with Retry.",
+   "file": "blocks/create/create-page/variants/create-organization.vue"
+  },
+  {
+   "name": "CreatePurge",
+   "summary": "Create Purge: a Target section of wide rows choosing the Layer and the Purge type with RadioGroup choice cards, an Arguments section whose monospace Textarea follows the chosen type, a warning Alert, and a bar with only Cancel and Purge, which shows its loading state and confirms in a toast (or an error toast with Retry). Choosing Tiered Cache leaves Cache Key as the only allowed type.",
+   "file": "blocks/create/create-page/variants/create-purge.vue"
+  },
+  {
+   "name": "CreateService",
+   "summary": "A long create, Create Service, under a small PageHeader, in five groups of Item rows (General, Delivery settings, Origins, Cache expiration policies and Debug rules, each under an h2) under the centred commit card with Cancel and Save: Name and Address empty, HTTP port 80 preselected, HTTPS ports disabled until a protocol with HTTPS is chosen, and the host header prefilled with ${host}.",
+   "file": "blocks/create/create-page/variants/create-service.vue"
+  },
+  {
+   "name": "RequiredFields",
+   "summary": "Create Service after Save on the empty form: Name and Address turn invalid with This field is required. under them, and typing into either clears its own error.",
+   "file": "blocks/create/create-page/variants/required-fields.vue"
+  }
+ ],
+ "sfcFile": "blocks/create/create-page/create-page.vue",
+ "guidelinesFile": "blocks/create/create-page/guidelines.md"
+}

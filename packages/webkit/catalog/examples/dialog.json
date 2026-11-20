@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Medium modal with a trigger and header/body/footer panel regions. `Dialog.Content` renders the overlay and the header gets the close button on its own.",
+   "file": "examples/dialog/default.vue"
+  },
+  {
+   "name": "Sizes",
+   "summary": "The three `size` presets. Each caps the panel max-width from the `md` breakpoint up; below `md` the dialog is a full-width bottom sheet regardless of `size`.",
+   "file": "examples/dialog/sizes.vue"
+  },
+  {
+   "name": "ScrollContent",
+   "summary": "A body taller than the dialog, centered above the page (from `md` up). Open it from the trigger: the panel bounds the surface and `PanelBody` is the only region that scrolls, so the title and the footer actions stay put while the body moves.",
+   "file": "examples/dialog/scroll-content.vue"
+  }
+ ]
+}

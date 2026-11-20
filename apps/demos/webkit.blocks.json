@@ -1,0 +1,214 @@
+{
+  "package": "@aziontech/webkit",
+  "blocks": {
+    "account/account-onboarding-form": {
+      "version": "5.12.3",
+      "files": [
+        {
+          "path": "src/blocks/onboarding-form.sample.ts",
+          "source": "blocks/account/account-onboarding-form/sample.ts",
+          "variant": "Data",
+          "checksum": "sha256:eb48717f6f8ec0e8c8618833a35d5ca275fab738b5ad41ce0a4adb437f1256e9"
+        },
+        {
+          "path": "src/blocks/onboarding-form.vue",
+          "source": "blocks/account/account-onboarding-form/account-onboarding-form.vue",
+          "variant": "Organization",
+          "imports": {
+            "./sample": "./onboarding-form.sample"
+          },
+          "checksum": "sha256:2359396a5391fce7fabd3120973650e73257465bcf99e2688fb3f633a75d2398"
+        }
+      ]
+    },
+    "ai/ai-api-key": {
+      "version": "5.13.0",
+      "files": [
+        {
+          "path": "src/blocks/ai-api-key.sample.ts",
+          "source": "blocks/ai/ai-api-key/sample.ts",
+          "variant": "Data",
+          "checksum": "sha256:fb899366711dc7a2760f114800b148cae4abe71246ffb3d4121fb2160b1db49b"
+        },
+        {
+          "path": "src/blocks/ai-api-key.vue",
+          "source": "blocks/ai/ai-api-key/ai-api-key.vue",
+          "variant": "Saved",
+          "imports": {
+            "./sample": "./ai-api-key.sample"
+          },
+          "checksum": "sha256:e57f261215541ea96db3289f1a34e172a1c682176831caddd83e5928cea1e272"
+        }
+      ]
+    },
+    "ai/ai-chat": {
+      "version": "5.13.0",
+      "files": [
+        {
+          "path": "src/blocks/ai-chat.messages.ts",
+          "source": "blocks/ai/ai-chat/messages.ts",
+          "variant": "Data",
+          "checksum": "sha256:673e51735cfe1460b0163c8acea1be529d6dec11d21b6eea7e0e3d0702ae6fbc"
+        },
+        {
+          "path": "src/blocks/ai-chat.sample.ts",
+          "source": "blocks/ai/ai-chat/sample.ts",
+          "variant": "Data",
+          "imports": {
+            "./messages": "./ai-chat.messages"
+          },
+          "checksum": "sha256:2885de1783201465aab3c2815f3f8c211ecb40428c3e8c58d85c47eb5c2f98ce"
+        },
+        {
+          "path": "src/blocks/ai-chat.vue",
+          "source": "blocks/ai/ai-chat/ai-chat.vue",
+          "variant": "Empty",
+          "imports": {
+            "./messages": "./ai-chat.messages",
+            "./sample": "./ai-chat.sample"
+          },
+          "checksum": "sha256:2d8efa97281ff7e227c08b007cdbccf2024b251f5a36d60c94f43dddb157d47d"
+        }
+      ]
+    },
+    "create/create-page": {
+      "version": "5.12.3",
+      "files": [
+        {
+          "path": "src/blocks/create-page.vue",
+          "source": "blocks/create/create-page/create-page.vue",
+          "variant": "Default",
+          "checksum": "sha256:fcb953e59d087bf2b67b45b7356e87475d99c12f794ad43d90f12f84f6e4f1ab"
+        }
+      ]
+    },
+    "detail/detail-resource": {
+      "version": "5.12.3",
+      "files": [
+        {
+          "path": "src/blocks/resource-detail.sample.ts",
+          "source": "blocks/detail/detail-resource/sample.ts",
+          "variant": "Data",
+          "checksum": "sha256:4f9cf43bce0d149c169e5a6139b42f7348b90f299ab30ea1181c4c7e6b4aae5f"
+        },
+        {
+          "path": "src/blocks/resource-detail.vue",
+          "source": "blocks/detail/detail-resource/detail-resource.vue",
+          "variant": "ResourceOverview",
+          "imports": {
+            "./sample": "./resource-detail.sample"
+          },
+          "checksum": "sha256:1ff8d6afd5197cd376892a49bae32d6409a7c3066dc475c53e26b018e4f5a942"
+        }
+      ]
+    },
+    "edit/edit-delete-dialog": {
+      "version": "5.12.3",
+      "files": [
+        {
+          "path": "src/blocks/delete-dialog.sample.ts",
+          "source": "blocks/edit/edit-delete-dialog/sample.ts",
+          "variant": "Data",
+          "checksum": "sha256:95c9d17fd788ce6a3c6db8eb8f121ecab240bee031191f599eeac1cf1315d55a"
+        },
+        {
+          "path": "src/blocks/delete-dialog.vue",
+          "source": "blocks/edit/edit-delete-dialog/edit-delete-dialog.vue",
+          "variant": "Default",
+          "imports": {
+            "./sample": "./delete-dialog.sample"
+          },
+          "checksum": "sha256:3856dbea0c9fca83afd1b0538dbe1d17638e9e5c61e8118c527565f8ca524d33"
+        }
+      ]
+    },
+    "edit/edit-resource": {
+      "version": "5.12.3",
+      "files": [
+        {
+          "path": "src/blocks/edit-resource.sample.ts",
+          "source": "blocks/edit/edit-resource/sample.ts",
+          "variant": "Data",
+          "checksum": "sha256:590758a386271cb1bc6e3a0c936d0fff158ae123831d85e628a1e3fd980f6a67"
+        },
+        {
+          "path": "src/blocks/edit-resource.vue",
+          "source": "blocks/edit/edit-resource/edit-resource.vue",
+          "variant": "ProjectSettings",
+          "imports": {
+            "./sample": "./edit-resource.sample"
+          },
+          "checksum": "sha256:d28f33e2822be3bcf8c61a3b89a203d5f225d3139ca3ebb9c4597987b920a7c6"
+        }
+      ]
+    },
+    "settings/settings-form": {
+      "version": "5.13.0",
+      "files": [
+        {
+          "path": "src/blocks/settings-form.sample.ts",
+          "source": "blocks/settings/settings-form/sample.ts",
+          "variant": "Data",
+          "checksum": "sha256:2df4ceb9d00f6b8240c92715d91be6221b192fe09db6673527d0f14cf0713a9e"
+        },
+        {
+          "path": "src/blocks/settings-form.vue",
+          "source": "blocks/settings/settings-form/settings-form.vue",
+          "variant": "SaveAll",
+          "imports": {
+            "./sample": "./settings-form.sample"
+          },
+          "checksum": "sha256:00d6bc3d98d6344847ec3f1d67956f4fdb0c8a6d44db832473384e23bf6ad769"
+        }
+      ]
+    },
+    "shell/shell-console": {
+      "version": "5.12.3",
+      "files": [
+        {
+          "path": "src/app.vue",
+          "source": "blocks/shell/shell-console/shell-console.vue",
+          "variant": "ListPage",
+          "checksum": "sha256:e15e69eecad367b652801d1d9754d4199b29b09f2647fc4e2be964faa3c3d8fb"
+        }
+      ]
+    },
+    "state/state-async-submit": {
+      "version": "5.12.3",
+      "files": [
+        {
+          "path": "src/blocks/async-submit.sample.ts",
+          "source": "blocks/state/state-async-submit/sample.ts",
+          "variant": "Data",
+          "checksum": "sha256:ebfc11bc642519dc855a4adb1c8f4172e9ed70583fb7841c6025a3253ae322b7"
+        },
+        {
+          "path": "src/blocks/async-submit.vue",
+          "source": "blocks/state/state-async-submit/state-async-submit.vue",
+          "variant": "Idle",
+          "checksum": "sha256:04d6fe9610f6cc451b0dc5792e24f043d89aaf9c3fc15ead9aac8697384a1d0e"
+        }
+      ]
+    },
+    "view/view-table": {
+      "version": "5.12.3",
+      "files": [
+        {
+          "path": "src/blocks/table-view.sample.ts",
+          "source": "blocks/view/view-table/sample.ts",
+          "variant": "Data",
+          "checksum": "sha256:99988b184bdf06b0db8c96e132316a6e7cedb144d4a6b8ff15a0d2b96bed1909"
+        },
+        {
+          "path": "src/blocks/table-view.vue",
+          "source": "blocks/view/view-table/view-table.vue",
+          "variant": "Default",
+          "imports": {
+            "./sample": "./table-view.sample"
+          },
+          "checksum": "sha256:f87338377865ca163fa5db81d1799fe05a9feb5fbb3d3b1d39b3ce2ee92a8325"
+        }
+      ]
+    }
+  }
+}

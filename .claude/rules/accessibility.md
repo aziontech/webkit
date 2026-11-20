@@ -11,6 +11,7 @@ A component in this package is accessible **by construction**, not by the consum
 - Use the **native element** whose semantics match before reaching for `role` (`<button>`, `<a href>`, `<input>`); add `role` only when no native element fits.
 - ARIA state attributes mirror the component's `data-*` state (`aria-expanded` with `data-state="open"`, `aria-disabled` with `data-disabled`, `aria-invalid` with `data-invalid`).
 - Accessible name via **`ariaLabel`** prop (+ prefixed `xAriaLabel` for sub-parts) per [`prop-vocabulary.md`](./prop-vocabulary.md) — never `aria-label` as a raw prop name.
+- **The consumer writes the kebab attribute** — `aria-label="Delete domain"`, `:aria-label="label"` — in every spec `## Usage`, example, block and skill; never the camelCase `ariaLabel=` attribute. Vue maps it onto the `ariaLabel` prop at runtime, but vue-tsc does **not** camelize `aria-*` attributes onto props (its `htmlAttributes` default is `['aria-*']`), so the **`ariaLabel` prop is declared optional with a `''` default** and bound as `ariaLabel || undefined`. A required `ariaLabel` makes the obvious `aria-label="…"` fail to type-check in a fresh create-vue app. Where the name is mandatory (an icon-only control), the requirement lives in the lint rule `webkit/require-accessible-name` (and axe in the component test), not in the prop type.
 
 ### Keyboard
 
@@ -27,6 +28,22 @@ A component in this package is accessible **by construction**, not by the consum
 
 - Every motion-bearing class pairs with **`motion-reduce:`** (`motion-reduce:transition-none` / `motion-reduce:animate-none`). No animation is exempt (see [`styling.md`](./styling.md) and the animation catalog in [`tokens.md`](../docs/DESIGN.md)).
 
+### Contrast — WCAG 2.1 AA and APCA, both
+
+Since 2026-11-14 every colour pair in the theme passes **both** WCAG 2.1 AA (4.5:1 text, 3:1 large text, icons and UI marks) **and** APCA 0.0.98G-4g at these `|Lc|` targets: **Lc 75** body text, **Lc 60** other text, **Lc 45** icons, **Lc 30** solid marks (dots, bars, chart series, the focus ring), **Lc 15** borders and dividers. A component picks its colours from token pairs that already pass — never a pair the theme does not document.
+
+The accepted exceptions are recorded once, with their reasons, in [`rules/webkit-tokens.md`](../../rules/webkit-tokens.md) § "Contrast: APCA and WCAG 2": the black label on the primary orange button (Lc 46.6, to match the logo), the dark dividers `--border-default` `#2B2B2B` / `--border-muted` `#242424` (the original look; field outlines stay `--border-input` `#535353`) brand text in the logo orange `#F3652B` in light and dark (`--text-brand`: about Lc 44 in dark; in light it misses both APCA and WCAG 2 AA 4.5:1 at about 3:1, a brand exception the owner accepted for the `Eyebrow` on 2026-11-16 and for every brand text on 2026-11-18), and three pairs a hair under their target that the owner kept as is on 2026-11-16 (light `--border-muted` on `--bg-canvas` Lc 13.3, dark `--text-muted` on `--bg-surface-raised` Lc 59.9, dark `--border-input` on `--bg-surface-raised` Lc 14.6). Do not "fix" them, and do not add one without the design owner's decision.
+
+An owner-accepted exception that the automated axe checks would flag is listed once more, as data, in [`packages/webkit/src/test/a11y-accepted.json`](../../packages/webkit/src/test/a11y-accepted.json): one axe rule, the themes it applies to, and the selector of the one part that carries the colour (today `color-contrast`, light, the parts that carry brand text in the logo orange: the Eyebrow label `[data-testid$="eyebrow__label"]`, the Quote name, the LinkDirectory column title, the HeroTitle highlight, the CompetitorComparisonSection group title, the FieldLabel asterisk, the highlight Tag and the linked FeatureItem). The a11y harness and the docs smoke test drop only those nodes; every other finding still fails. An entry there needs its row in the exceptions table; findings that are defects go to `a11y-known.json`, which stays empty.
+
+## App-level keyboard contract
+
+The keys of one control are this rule's; the keys of a whole console screen (focus when a page
+opens, what `Esc` means, `⌘ S`, `/`, `?`, list keys, nothing firing while typing) are the
+owner-approved contract in the consumer rule [`rules/webkit-keyboard.md`](../../rules/webkit-keyboard.md)
+(decision KB01). Blocks, examples and console-facing components follow it; the `ui-craft` review
+checks it, and the `keyboard` check of the styled visual suite drives it over every block and demo.
+
 ## Hard prohibitions
 
 - Do not add `role`/ARIA to fake an interactive element when a native one fits.
@@ -35,13 +52,18 @@ A component in this package is accessible **by construction**, not by the consum
 - Do not use a raw color for the focus ring — use the ring token.
 - Do not open an overlay without trapping focus and restoring it to the trigger on close.
 - Do not ship a motion class without its `motion-reduce:` fallback.
+- Do not introduce a colour pair that misses its APCA target or WCAG 2.1 AA, unless the design owner accepted it and it is in the exceptions table (a brand exception the axe checks flag also gets its narrow entry in `a11y-accepted.json`).
 - Do not name the accessible-name prop `aria-label` — use `ariaLabel` (see [`prop-vocabulary.md`](./prop-vocabulary.md)).
+- Do not declare `ariaLabel` required, and do not teach the camelCase `ariaLabel=` attribute or a `vueCompilerOptions.htmlAttributes` override — consumers write `aria-label="…"`.
 
 ## Enforcement
 
 - **`eslint-plugin-vuejs-accessibility`** runs in the flat config ([`eslint.config.js`](../../eslint.config.js)) at `error` — today `alt-text`, `aria-props`, `aria-role`, and `click-events-have-key-events` are **blocking** in CI (`lint` job, zero warnings). Expanding to the full `flat/recommended` a11y set is a **ratchet**: enable the rest, fix the violations they surface, then keep them at `error`.
-- **Automated a11y (`axe`)** is the planned per-story gate (Storybook a11y addon + `axe` assertions in the component-testing frontier, owned by the testing workstream). **It does not run yet** — until it lands, behavioural a11y (focus, keyboard, restore) is gated by mandatory review.
+- **Automated a11y (`axe`)** runs in every component test (`expectNoA11yViolations`), in the a11y harness over every block and example (`src/test/a11y-blocks-*.test.ts`, `src/test/a11y-known.json` stays empty; owner-accepted brand exceptions in `src/test/a11y-accepted.json`) and on a sample of docs routes (`pnpm test:docs:smoke`). Contrast and focus rings are checked with the theme in the styled visual suite (`apps/visual`). Behavioural a11y (focus, keyboard, restore) is still also checked in review.
+- **`webkit/require-accessible-name`** (ESLint, `error` in both presets) flags an `IconButton` or `ButtonGroup` with neither `aria-label` nor `aria-labelledby`; `test/copyable/fixtures/icon-button-name.vue` and `button-group-name.vue` proves the kebab form type-checks under create-vue compiler options; `scripts/codemod-kebab-aria-label.mjs` rewrites camelCase `ariaLabel=` attributes to the kebab form.
 - **[`validate-spec-compliance.mjs`](../hooks/validate-spec-compliance.mjs)** enforces the `ariaLabel` naming; the spec's a11y section (role + keyboard map) is required by [`.specs/_template.md`](../../.specs/_template.md).
+
+- **APCA** — [`packages/theme/test/apca-contrast.test.mjs`](../../packages/theme/test/apca-contrast.test.mjs) computes APCA 0.0.98G-4g Lc for every documented token pair (text on the surfaces, `-foreground` on its fill, icons, marks, borders) in both themes, in the theme tests of the `governance.yml` build job. It fails a pair below target that is not in the exceptions table, an exception that now passes, and an exception missing from `rules/webkit-tokens.md`. WCAG 3:1 for chart and severity marks is `chart-role.test.mjs` / `severity-role.test.mjs`.
 
 ## Why this rule exists
 

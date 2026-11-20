@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import Avatar from '../../avatar/avatar.vue'
+  import Avatar from '../../content/avatar/avatar.vue'
 
   defineOptions({
     name: 'Quote',
@@ -9,9 +9,9 @@
   })
 
   /** Register of the quote. */
-  export type QuoteKind = 'inline' | 'signed' | 'highlight'
+  export type QuoteVariant = 'inline' | 'signed' | 'highlight'
 
-  interface Props {
+  export interface QuoteProps {
     /** The quotation itself, rendered as the `blockquote` body; overridden by the default slot. */
     text: string
     /** Who said it — the attribution's lead, set in the accent. */
@@ -27,17 +27,17 @@
     /** Phrases of `text` kept in the default ink while the rest of the quotation recedes to the muted one; each is matched verbatim, and an empty list leaves the whole quotation in the default ink. Ignored when the default slot is filled. */
     highlights?: string[]
     /** Register of the quote: `inline` is the quiet unit inside a larger band, `signed` the band-sized client sentence, `highlight` the featured one. */
-    kind?: QuoteKind
+    variant?: QuoteVariant
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<QuoteProps>(), {
     name: '',
     jobTitle: '',
     photo: '',
     logo: '',
     logoAlt: '',
     highlights: () => [],
-    kind: 'inline'
+    variant: 'inline'
   })
 
   const slots = defineSlots<{
@@ -51,9 +51,9 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'marketing-quote')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'quote')
 
-  const hasMark = computed<boolean>(() => Boolean(slots.mark) || props.logo.length > 0)
+  const hasMark = () => Boolean(slots.mark) || props.logo.length > 0
 
   const hasAttribution = computed<boolean>(() => props.name.length > 0 || props.jobTitle.length > 0)
 
@@ -84,12 +84,12 @@
   <figure
     v-bind="$attrs"
     :data-testid="testId"
-    :data-kind="kind"
-    class="group m-0 flex flex-col data-[kind=inline]:gap-(--spacing-lg) data-[kind=signed]:gap-(--spacing-sm) data-[kind=highlight]:gap-(--spacing-xl) data-[kind=highlight]:md:grid data-[kind=highlight]:md:grid-cols-1 data-[kind=highlight]:md:grid-rows-1"
+    :data-variant="variant"
+    class="group m-0 flex flex-col data-[variant=inline]:gap-(--spacing-lg) data-[variant=signed]:gap-(--spacing-sm) data-[variant=highlight]:gap-(--spacing-xl) data-[variant=highlight]:md:grid data-[variant=highlight]:md:grid-cols-1 data-[variant=highlight]:md:grid-rows-1"
   >
     <div
-      v-if="hasMark"
-      class="group-data-[kind=inline]:flex group-data-[kind=inline]:h-6 group-data-[kind=inline]:items-center group-data-[kind=signed]:pb-(--spacing-md) group-data-[kind=highlight]:md:col-start-2 group-data-[kind=highlight]:md:row-start-1 group-data-[kind=highlight]:md:w-72 group-data-[kind=highlight]:md:pt-[calc(1.5rem+var(--spacing-md))]"
+      v-if="hasMark()"
+      class="group-data-[variant=inline]:flex group-data-[variant=inline]:h-6 group-data-[variant=inline]:items-center group-data-[variant=signed]:pb-(--spacing-md) group-data-[variant=highlight]:md:col-start-2 group-data-[variant=highlight]:md:row-start-1 group-data-[variant=highlight]:md:w-72 group-data-[variant=highlight]:md:pt-[calc(1.5rem+var(--spacing-md))]"
     >
       <slot name="mark">
         <img
@@ -97,24 +97,24 @@
           :alt="logoAlt || jobTitle"
           loading="lazy"
           decoding="async"
-          class="h-8 w-fit max-w-(--size-40) object-contain group-data-[kind=inline]:h-full group-data-[kind=highlight]:md:h-auto group-data-[kind=highlight]:md:max-h-24 group-data-[kind=highlight]:md:w-full group-data-[kind=highlight]:md:max-w-none"
+          class="h-8 w-fit max-w-(--size-40) object-contain group-data-[variant=inline]:h-full group-data-[variant=highlight]:md:h-auto group-data-[variant=highlight]:md:max-h-24 group-data-[variant=highlight]:md:w-full group-data-[variant=highlight]:md:max-w-none"
         />
       </slot>
     </div>
 
     <div
-      class="flex min-w-0 flex-col group-data-[kind=inline]:gap-(--spacing-md) group-data-[kind=signed]:gap-(--spacing-sm) group-data-[kind=highlight]:flex-1 group-data-[kind=highlight]:gap-(--spacing-xl) group-data-[kind=highlight]:md:col-start-1 group-data-[kind=highlight]:md:row-start-1"
+      class="flex min-w-0 flex-col group-data-[variant=inline]:gap-(--spacing-md) group-data-[variant=signed]:gap-(--spacing-sm) group-data-[variant=highlight]:flex-1 group-data-[variant=highlight]:gap-(--spacing-xl) group-data-[variant=highlight]:md:col-start-1 group-data-[variant=highlight]:md:row-start-1"
     >
       <div
-        class="flex flex-col group-data-[kind=signed]:gap-(--spacing-xs) group-data-[kind=highlight]:gap-(--spacing-md)"
+        class="flex flex-col group-data-[variant=signed]:gap-(--spacing-xs) group-data-[variant=highlight]:gap-(--spacing-md)"
       >
         <svg
-          v-if="kind !== 'inline'"
+          v-if="variant !== 'inline'"
           viewBox="0 0 34 22"
           fill="currentColor"
           xmlns="http://www.w3.org/2000/svg"
           aria-hidden="true"
-          class="w-auto shrink-0 self-start text-(--text-muted) group-data-[kind=signed]:h-4 group-data-[kind=highlight]:h-6"
+          class="w-auto shrink-0 self-start text-(--text-muted) group-data-[variant=signed]:h-4 group-data-[variant=highlight]:h-6"
         >
           <path
             d="M29.56 21.89H25.81C24.62 21.89 23.59 21.44 22.72 20.53C21.84 19.66 21.41 18.62 21.41 17.44V8.16C21.41 6.97 21.84 5.94 22.72 5.06L26.75 1.03C27.44 0.34 28.31 0 29.38 0C30.34 0 31.17 0.34 31.86 1.03C32.55 1.72 32.89 2.55 32.89 3.52C32.89 4.58 32.55 5.45 31.86 6.14L28.58 9.38H29.56C30.75 9.38 31.77 9.8 32.61 10.64C33.45 11.52 33.88 12.55 33.88 13.73V17.44C33.88 18.66 33.45 19.7 32.61 20.58C31.77 21.45 30.75 21.89 29.56 21.89Z"
@@ -126,15 +126,15 @@
 
         <blockquote
           :data-highlighted="(!slots.default && highlighted) || null"
-          class="m-0 text-(--text-default) data-[highlighted]:text-(--text-muted) group-data-[kind=inline]:text-heading-xs group-data-[kind=signed]:text-body-lg group-data-[kind=highlight]:max-w-(--container-2xl) group-data-[kind=highlight]:text-heading-lg"
+          class="m-0 text-(--text-default) data-[highlighted]:text-(--text-muted) group-data-[variant=inline]:text-heading-xs group-data-[variant=signed]:text-body-lg group-data-[variant=highlight]:max-w-(--container-2xl) group-data-[variant=highlight]:text-heading-lg"
         >
           <slot
             ><template v-if="highlighted"
               ><span
                 v-for="(segment, index) in segments"
                 :key="index"
-                :data-highlight="segment.highlight || null"
-                class="data-[highlight]:text-(--text-default)"
+                :data-slot="segment.highlight ? 'highlight' : undefined"
+                class="data-[slot=highlight]:text-(--text-default)"
                 >{{ segment.text }}</span
               ></template
             ><template v-else>{{ text }}</template></slot
@@ -144,29 +144,30 @@
 
       <figcaption
         v-if="hasAttribution"
-        class="flex items-center gap-(--spacing-md) group-data-[kind=highlight]:mt-auto"
+        class="flex items-center gap-(--spacing-md) group-data-[variant=highlight]:mt-auto"
       >
         <span
-          v-if="kind === 'highlight' && photo"
+          v-if="variant === 'highlight' && photo"
           aria-hidden="true"
         >
           <Avatar
             :src="photo"
-            kind="square"
+            variant="square"
             size="large"
           />
         </span>
         <span
-          class="flex min-w-0 flex-col text-overline-md group-data-[kind=inline]:gap-(--spacing-md) group-data-[kind=signed]:gap-(--spacing-md)"
+          class="flex min-w-0 flex-col text-overline-md group-data-[variant=inline]:gap-(--spacing-md) group-data-[variant=signed]:gap-(--spacing-md)"
         >
           <span
             v-if="name"
-            class="px-(--spacing-xxs) text-(--primary)"
+            :data-testid="`${testId}__name`"
+            class="px-(--spacing-2xs) text-(--text-brand)"
             >{{ name }}</span
           >
           <span
             v-if="jobTitle"
-            class="px-(--spacing-xxs) text-(--text-muted)"
+            class="px-(--spacing-2xs) text-(--text-muted)"
             >{{ jobTitle }}</span
           >
         </span>
@@ -175,7 +176,7 @@
 
     <div
       v-if="slots.actions"
-      class="mt-auto pt-(--spacing-md) group-data-[kind=highlight]:md:col-start-1 group-data-[kind=highlight]:md:row-start-2"
+      class="mt-auto pt-(--spacing-md) group-data-[variant=highlight]:md:col-start-1 group-data-[variant=highlight]:md:row-start-2"
     >
       <slot name="actions" />
     </div>

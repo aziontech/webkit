@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The rail of an assistant page: conversations grouped Today, Yesterday, Previous 7 days, Previous 30 days and Older against a fixed `now`, the open one current, and Delete on every row, which asks in a `ConfirmDialog` before the conversation goes.",
+   "file": "examples/conversation-history/default.vue"
+  },
+  {
+   "name": "States",
+   "summary": "Loading (five placeholder rows, `aria-busy`) and empty (`No conversations yet.`).",
+   "file": "examples/conversation-history/states.vue"
+  }
+ ]
+}

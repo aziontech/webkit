@@ -8,7 +8,7 @@
 import { readFileSync } from 'node:fs'
 import { relative, resolve } from 'node:path'
 
-import { TOKEN_CHECKS as VIOLATIONS, tokenChecksApply } from './_lib/token-checks.mjs'
+import { repoTokenChecksFor } from './lib/token-checks.mjs'
 
 const ROOT = process.cwd()
 
@@ -47,9 +47,9 @@ function readExistingFile(filePath) {
   }
 }
 
-function findViolations(text, baseline) {
+function findViolations(text, baseline, checks) {
   const found = []
-  for (const rule of VIOLATIONS) {
+  for (const rule of checks) {
     const matches = text.match(rule.regex)
     if (!matches || matches.length === 0) continue
     // Skip rules whose matches were ALREADY present in the baseline (pre-existing
@@ -83,14 +83,17 @@ async function main() {
   // *.test.* / *.spec.* — tests legitimately contain values the checks forbid (the
   // browser serializes a collapsed height as the string '0px', type tests use
   // @ts-expect-error), so the token discipline must not block writing them.
+  // Outside components only the WIDE_TOKEN_CHECKS (rtl-double-flip, off-brand-orange) run, over the
+  // apps/docs, apps/demos, blocks and examples sources the ratchet also scans.
   const relPath = relative(ROOT, resolve(filePath)).split('\\').join('/')
-  if (!tokenChecksApply(relPath)) process.exit(0)
+  const checks = repoTokenChecksFor(relPath)
+  if (checks.length === 0) process.exit(0)
 
   // For Edit/MultiEdit, baseline = existing file. For Write of new file, baseline = ''.
   const baseline = tool === 'Write' ? '' : readExistingFile(filePath)
 
   const newContents = resultingContent(tool, input.tool_input ?? {}, baseline)
-  const violations = findViolations(newContents, baseline)
+  const violations = findViolations(newContents, baseline, checks)
   if (violations.length === 0) process.exit(0)
 
   const lines = [`Webkit token validation blocked ${tool} on ${relPath}.`, '']

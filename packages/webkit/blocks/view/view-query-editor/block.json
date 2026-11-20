@@ -1,0 +1,95 @@
+{
+  "id": "view/view-query-editor",
+  "name": "ViewQueryEditor",
+  "title": "Blocks/View/ViewQueryEditor",
+  "surface": "app",
+  "summary": "The query editor page (the app passes the Databases breadcrumb to the layout): the Tables and Editor tabs, each pairing a resizable, collapsible `Sidebar` (288px at rest) with a working pane. On Editor the panel holds the query history and the pane stacks the Run query, Prettify and Templates toolbar, the SQL `CodeEditor`, and the Results band (rows paged in a `DataTable`, or JSON in a copyable `CodeBlock`); on Tables the panel lists the tables as option `Item` rows and the pane holds the selected table with its Data and Definition switch, its rows in a paged, selectable `DataTable`. A database with no tables shows the Create Table empty state, and the Templates button opens the SQL quick templates drawer. Its page-level parts are `PageTabs`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main; CreateDatabase is a focused create page with its own header and no rail, rendered outside it. Its root carries data-layout-fill (every variant but CreateDatabase), so the main stops scrolling and the panel, the rows, the editor and the results scroll on their own.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "query editor",
+    "sql editor",
+    "run query",
+    "query results",
+    "sql query page",
+    "query history",
+    "sql code editor",
+    "código sql",
+    "editor de consultas",
+    "editor sql",
+    "executar consulta",
+    "sql database",
+    "database tables",
+    "database detail",
+    "table schema",
+    "data grid",
+    "sql templates",
+    "banco de dados",
+    "banco de dados sql",
+    "tabelas do banco",
+    "create database",
+    "criar banco de dados",
+    "table rows",
+    "linhas da tabela",
+    "import csv",
+    "import data",
+    "csv import",
+    "importar csv",
+    "importar dados"
+  ],
+  "skills": ["webkit-layout", "webkit-tables", "webkit-ui-states"],
+  "primary": {
+    "name": "Tables",
+    "file": "view-query-editor.vue"
+  },
+  "files": ["sample.ts"],
+  "variants": [
+    {
+      "name": "Schema",
+      "summary": "The Definition view of customers: the Columns heading with Add column over a card holding the column name, its type as a Tag, and its constraints.",
+      "file": "variants/schema.vue"
+    },
+    {
+      "name": "NoTables",
+      "summary": "A database with no tables yet: the side panel says so and the working pane shows the Create Table empty state.",
+      "file": "variants/no-tables.vue"
+    },
+    {
+      "name": "Query",
+      "summary": "The Editor tab after the Select all query ran: the query history in the side panel, the statement in the editor, and its three rows in the Results band, switchable to JSON.",
+      "file": "variants/query.vue"
+    },
+    {
+      "name": "Templates",
+      "summary": "The Editor tab before anything ran, with the SQL quick templates drawer open over it: a search and one outlined clickable Item per snippet; choosing one loads its SQL into the editor and closes the drawer.",
+      "file": "variants/templates.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "The tables and the selected table's rows are loading: Skeleton lines hold the side panel and the rows DataTable shows its loading state.",
+      "file": "variants/loading.vue"
+    },
+    {
+      "name": "Error",
+      "summary": "The rows of the selected table failed to load: the Tables tab keeps the side panel and the table toolbar, and the Data view shows a danger Alert that names the table and offers Retry.",
+      "file": "variants/error.vue"
+    },
+    {
+      "name": "TableData",
+      "summary": "The events table in the Data view: 137 rows in a compact `DataTable` paged 25 at a time, each column header naming its type with a key on the primary key, `NULL` in muted italics, sortable headers and row selection. Two rows are selected, so a selection bar under the toolbar shows 2 selected, Clear selection and Delete 2 rows while Sort stays in place; Delete asks in a `ConfirmDialog`, then removes the rows and emits `delete-rows`.",
+      "file": "variants/table-data.vue"
+    },
+    {
+      "name": "ImportCsv",
+      "summary": "An empty table's Import data from CSV (also a CSV dropped on its empty state): a drawer that reads the file (`FileDropzone`, `FileTokenGroup`), maps each CSV column to a table column or Skip in a `Select` (matched by name first), checks every value against its column's type and NOT NULL with the errors listed per line, previews the first rows as they will be inserted, and inserts the valid rows with a spinner, then a toast with Undo that says how many rows were skipped.",
+      "file": "variants/import-csv.vue"
+    },
+    {
+      "name": "CreateDatabase",
+      "summary": "The Create Database page from the design sample: Name (6 to 50 letters, numbers and hyphens) and an Advanced section with Active, under a centred save bar card with Cancel and Create Database. A taken name comes back on the field, a failed request is a toast with Retry, and success is a toast with Open database and Create Table.",
+      "file": "variants/create-database.vue"
+    }
+  ]
+}

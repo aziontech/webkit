@@ -1,0 +1,31 @@
+{
+ "purpose": "Overlay menu that opens from a consumer-supplied trigger and renders a list of selectable options grouped into named sections. The root `DropdownMenu` owns open/closed state, positioning, focus return, and keyboard navigation; `DropdownMenu.Trigger` wires `aria-haspopup`/`aria-expanded`/`aria-controls` onto whatever element the consumer passes through its slot; `DropdownMenu.Group` groups options under an optional label; `DropdownMenu.Item` (the shadcn / Radix name) is the selectable row with leading/trailing/command affordances, and with `type=\"checkbox\"` or `type=\"radio\"` it becomes a checkable item (`menuitemcheckbox` / `menuitemradio`). `DropdownMenu.Sub`, `DropdownMenu.SubTrigger` and `DropdownMenu.SubContent` nest a sub-menu that opens on hover or with `ArrowRight` and nests to any depth. Replaces and removes the legacy monolithic input `dropdown` and the previous `dropdown-menu` composition — there is one `DropdownMenu` in the project, in `navigation/`.",
+ "useWhen": [
+  "Use DropdownMenu for a list of actions opened from a button (row actions, kebab, More); for the same actions on right-click or long-press use ContextMenu, and for a searchable palette use Command.",
+  "A menu of actions opened from a button: row actions, an account menu, an overflow (\"more\") menu.",
+  "Options grouped under section labels, optionally with keyboard-shortcut hints."
+ ],
+ "avoidWhen": [
+  "Choosing a value that a form submits → use `select` (inside a `field` for a label).",
+  "A primary action joined to a menu of alternatives → use `split-button`.",
+  "A searchable palette of commands → use `command`.",
+  "Free-form or interactive content such as forms or filters → use `popover`.",
+  "Vertical application navigation → use `sidebar-menu`."
+ ],
+ "related": [
+  "`split-button` — composes `DropdownMenu` for its chevron menu.",
+  "`select` — form control with a field trigger and a bound value.",
+  "`popover` — same trigger and anchoring model, with free-form content instead of option rows.",
+  "`command` — modal ⌘K palette with search and filtering."
+ ],
+ "bestPractices": [
+  "Give every `DropdownMenu.Item` a unique `value` and handle the root `select` event as `(event, value)`. The panel closes and focus returns to the trigger on its own.",
+  "`selected` is a display flag. The dropdown never sets it, so derive it from your own state.",
+  "Use the `command` prop or the `trailing` slot on an option, not both. A `command` shortcut is live while its option is mounted (inside a group, only while the panel is open). Every menu on the page shares one `window` listener, so a shortcut fires one option only: the one in the open menu, else the one whose trigger has focus, else the first registered.",
+  "Write `DropdownMenu.Item` (also exported as `DropdownMenuItem`); 6.0 removed the `DropdownMenu.Option` alias and the `left` / `right` slots. Items may sit directly in the root: an item outside a group renders inside the panel like a grouped one.",
+  "Add a `label` to each `DropdownMenu.Group` when there is more than one group. Put search in the root `header` slot and footer actions in `footer`; those regions stay outside the scrolling list.",
+  "Nest at most two levels of sub-menus; deeper menus are hard to steer with a pointer. Put the `DropdownMenu.Sub` inside a `DropdownMenu.Group`, and the sub-menu's options inside a `DropdownMenu.Group` in `DropdownMenu.SubContent`, the same way as the top level.",
+  "Use `type=\"checkbox\"` for independent on/off settings and `type=\"radio\"` for one choice among the options of one `DropdownMenu.Group`. Drive `selected` from your own state in the `select` handler; checkable options keep the panel open so several can be toggled in a row.",
+  "Bind the open state with `v-model:open`, or `:open` plus an `@update:open` handler typed `(open: boolean) => void`. The payload is always a `boolean`, so the handler needs no cast and no `Boolean(...)`."
+ ]
+}

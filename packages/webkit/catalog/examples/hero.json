@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The band spans the window; its copy stays on the page’s measure.",
+   "file": "examples/hero/default.vue"
+  },
+  {
+   "name": "Widths",
+   "summary": "Three caps in one view — a width only reads against another.",
+   "file": "examples/hero/widths.vue"
+  },
+  {
+   "name": "Screen",
+   "summary": "With `variant=\"screen\"` the band measures one viewport, minus whatever `--hero-banner-offset` a sticky bar above it declares.",
+   "file": "examples/hero/screen.vue"
+  }
+ ]
+}

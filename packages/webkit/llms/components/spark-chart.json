@@ -1,0 +1,97 @@
+{
+ "name": "spark-chart",
+ "binding": "SparkChart",
+ "import": "@aziontech/webkit/spark-chart",
+ "treeShakeableImport": "@aziontech/webkit/spark-chart",
+ "category": "chart",
+ "surface": "app",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "A word-sized chart: one series drawn as an area, a line or bars, with no axes, grid, legend or tooltip, filling the width of its container at a fixed height. It shows the shape of a recent history next to a number — in a stat tile, a table row or a marquee card — where a full `chart` would be too much.",
+ "setup": null,
+ "useWhen": [
+  "The shape of a metric's recent history beside its current value: requests in the last hour, latency over the day.",
+  "Rows of comparable items, each with its own trend: one SparkChart per row of a list or table.",
+  "The trend inside a `stat-tile`, which draws its `trend` through this component."
+ ],
+ "avoidWhen": [
+  "The reader needs exact values, a time axis or several series → use `chart`.",
+  "A ranking across categories → use `bar-list`.",
+  "Up/down status over discrete periods → use `tracker`."
+ ],
+ "related": [
+  "`stat-tile` — the KPI tile that renders its sparkline with SparkChart.",
+  "`chart` — the full history with axes, tooltip and legend.",
+  "`tracker` — a strip of status blocks rather than a measured shape."
+ ],
+ "bestPractices": [
+  "Pair it with the number it describes; a spark alone has no scale and says nothing exact.",
+  "Use the same buckets as the chart behind it, about twelve to thirty points.",
+  "Leave `fromZero` off for prices and latencies, where the shape matters more than the magnitude; turn it on for counts that are meaningful from zero.",
+  "Give it an `ariaLabel` only when it stands without a nearby number; otherwise keep it decorative."
+ ],
+ "props": [
+  {
+   "name": "values",
+   "type": "(number | null)[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The series, oldest first; null leaves a gap."
+  },
+  {
+   "name": "type",
+   "type": "'area' | 'line' | 'bar'",
+   "default": "'area'",
+   "required": "false",
+   "doc": "Mark drawn for the series."
+  },
+  {
+   "name": "color",
+   "type": "ChartColor",
+   "default": "1",
+   "required": "false",
+   "doc": "Hue of the mark: a categorical slot (1–8), `other`, or a status."
+  },
+  {
+   "name": "size",
+   "type": "'small' | 'medium' | 'large'",
+   "default": "'medium'",
+   "required": "false",
+   "doc": "Height: 32, 48 or 64 pixels. Width follows the container."
+  },
+  {
+   "name": "fromZero",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Starts the value range at zero instead of the lowest value; bars always start at zero."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name; when set the chart is an image, when empty it is decorative."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/spark-chart/default.vue"
+  },
+  {
+   "name": "Types",
+   "file": "examples/spark-chart/types.vue"
+  },
+  {
+   "name": "Sizes",
+   "file": "examples/spark-chart/sizes.vue"
+  }
+ ],
+ "docs": "components/spark-chart.md"
+}
