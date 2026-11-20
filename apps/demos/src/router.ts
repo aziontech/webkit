@@ -116,6 +116,11 @@ function samePage(to: RouteLocationNormalized, from: RouteLocationNormalized): b
   return next !== undefined && next === from.matched[0]?.components?.default
 }
 
+function pageTookFocus(): boolean {
+  const active = document.activeElement
+  return active instanceof HTMLElement && active !== document.body && Boolean(active.closest('main'))
+}
+
 function focusPage(): boolean {
   const target =
     document.querySelector<HTMLElement>('main h1') ??
@@ -147,6 +152,6 @@ router.afterEach(async (to, from, failure) => {
   await nextTick()
   globalThis.requestAnimationFrame(() => {
     announcement.value = ''
-    if (!focusPage()) announcement.value = document.title
+    if (pageTookFocus() || !focusPage()) announcement.value = document.title
   })
 })
