@@ -5,6 +5,7 @@ import { defineComponent, h } from 'vue'
 import ConsoleShell from '../../../../blocks/shell/shell-console/shell-console.vue'
 import AccountSwitch from '../../../../blocks/shell/shell-console/variants/account-switch.vue'
 import AccountSwitchError from '../../../../blocks/shell/shell-console/variants/account-switch-error.vue'
+import DetailPage from '../../../../blocks/shell/shell-console/variants/detail-page.vue'
 import Notifications from '../../../../blocks/shell/shell-console/variants/notifications.vue'
 import { expectNoA11yViolations } from '../../axe'
 import { useToastRegion } from '../../toast-region'
@@ -207,5 +208,53 @@ describe('shell/shell-console account menu keyboard', () => {
     await fireEvent.click(dark)
     await waitFor(() => expect(dark.getAttribute('aria-checked')).toBe('true'))
     await fireEvent.click(within(menu).getByRole('menuitemradio', { name: 'System' }))
+  })
+})
+
+describe('shell/shell-console states render the shell', () => {
+  it('Notifications: the list and the caught-up message never show together', async () => {
+    render(Notifications)
+    const list = () => document.querySelector('[data-slot="item-list"]')
+    await waitFor(() => expect(list()?.textContent).toContain('azion-site failed to deploy'))
+    expect(document.body.textContent).not.toContain('You are all caught up')
+  })
+
+  it('Notifications: the flash Edit and Redeploy settle the failed deploy', async () => {
+    const view = render(Notifications)
+    const bell = () => view.getByRole('button', { name: /^Notifications/ })
+    await waitFor(() => expect(bell().getAttribute('aria-label')).toBe('Notifications, 2 unread'))
+    const flash = () =>
+      view
+        .queryAllByRole('alert')
+        .find((alert) => alert.textContent?.includes('keeps serving traffic'))
+    await fireEvent.click(within(flash() as HTMLElement).getByRole('button', { name: 'Redeploy' }))
+    await waitFor(() => expect(flash()).toBeUndefined())
+    expect(bell().getAttribute('aria-label')).toBe('Notifications, 1 unread')
+  })
+
+  it('Notifications: Log out still emits sign-out through the shell', async () => {
+    const host = document.body.appendChild(document.createElement('div'))
+    host.style.width = '1280px'
+    const view = render(Notifications, { container: host })
+    const footer = within(view.getByTestId('console-layout__account'))
+    await fireEvent.click(footer.getByRole('button', { name: 'Account menu' }))
+    await fireEvent.click(
+      await waitFor(() => within(document.body).getByRole('menuitem', { name: 'Log out' }))
+    )
+    expect(view.emitted('sign-out')).toHaveLength(1)
+  })
+
+  it('DetailPage: the page body replaces the stand-in list page', () => {
+    const view = at(DetailPage, 1280)
+    expect(view.getByRole('tab', { name: 'Overview' })).toBeTruthy()
+    expect(view.container.textContent).toContain('The page body: detail/detail-resource')
+    expect(view.container.textContent).not.toContain('The page body: view/view-table')
+    expect(view.getAllByRole('main')).toHaveLength(1)
+  })
+
+  it('AccountSwitch: the stand-in body and the actions come from the shell', () => {
+    const view = at(AccountSwitch, 1280)
+    expect(view.getByRole('heading', { level: 1, name: 'Applications' })).toBeTruthy()
+    expect(buttonByText('Create', view.container as HTMLElement)).toBeTruthy()
   })
 })
