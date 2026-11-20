@@ -263,11 +263,11 @@ A `group-has-[…]/<frame>:` variant asks Chromium to re-check the `:has()` when
 <!-- ❌ every mounted row restyles the whole table -->
 <span class="hidden group-data-[overflow-end]/scroll:block group-has-[[data-frozen=end]]/scroll:invisible"></span>
 
-<!-- ✅ the script measures it once, the frame carries an attribute -->
-<span class="hidden group-data-[overflow-end]/scroll:block group-data-[frozen-end]/scroll:invisible"></span>
+<!-- ✅ the cue sits below the frozen cells (z-10), which paint over it -->
+<span class="z-5 hidden group-data-[overflow-end]/scroll:block"></span>
 ```
 
-Shipped in the table scroll cue until 2026-11-20 (the 10k-row virtual DataTable went from 228 ms to 3,580 ms of style recalc on a phone). Measure the state in script and set a `data-*` attribute on the frame. The **`has-on-scroll-frame`** token check blocks a `:has()` variant read from the `scroll` group at write time and in the CI ratchet, and the styled suite `table-scroll-performance.test.ts` fails when scrolling the virtual DataTable restyles the whole table.
+Shipped in the table scroll cue until 2026-11-20 (the 10k-row virtual DataTable went from 228 ms to 3,580 ms of style recalc on a phone). Get the same result from the stacking order, or measure the state in script and set a `data-*` attribute on the frame. The **`has-on-scroll-frame`** token check blocks a `:has()` variant read from the `scroll` group at write time and in the CI ratchet, and the styled suite `table-scroll-performance.test.ts` fails when scrolling the virtual DataTable restyles the whole table.
 
 ## A directional icon already mirrors — never rotate it under `rtl`
 
