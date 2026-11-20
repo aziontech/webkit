@@ -949,6 +949,7 @@
               :model-value="timeZone"
               :display-value="zoneLabel"
               size="medium"
+              variant="ghost"
               aria-label="Time zone"
               data-testid="events-time-zone"
               @update:model-value="setTimeZone"
