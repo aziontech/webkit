@@ -27,6 +27,8 @@ an icon-only control, which `webkit/require-accessible-name` requires on every `
 - Give every interactive piece a **keyboard map** and implement exactly that
   (dialog: `Esc` closes, `Tab` is trapped; menu: arrows move, `Enter` selects,
   `Esc` closes). Anything clickable must be reachable and operable by keyboard.
+  The screen around the pieces follows one console-wide contract (focus on open, `Esc`,
+  `⌘ S`, `/`, `?`, list keys): rule [`webkit-keyboard`](./webkit-keyboard.md).
 - Generate ids with Vue's **`useId()`** for every `for` / `aria-labelledby` /
   `aria-describedby` association — stable across SSR.
 - Style focus with a **`focus-visible`** ring using the ring token

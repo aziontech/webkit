@@ -589,3 +589,9 @@ This register starts from the review of 12–16 November 2026 (192 rows: 178 don
 | A3-L07d | A chart tap (touch or pen) sets the reading under the finger and keeps it until a tap outside; the tap's click fires `point-click`.                                                                                                                            | done   | `chart.vue`, `.specs/chart.md` § Responsive                                 |
 | A3-L07e | Tool approval shows what will run without sideways scrolling: the example uses a `KeyValueList`, and the title wraps anywhere. No soft-wrap option on `CodeBlock`.                                                                                             | done   | `examples/tool-approval/default.vue`, `.specs/tool-approval.md`             |
 | A3-L07f | The docs block page switches its state picker from a `ToggleGroup` to a labelled `Select` above 5 states.                                                                                                                                                    | done   | `apps/docs/src/pages/block-page.vue`                                        |
+
+## 2026-11-20 — Console keyboard standard
+
+| ID | Decision | Status | Where |
+| --- | --- | --- | --- |
+| KB01 | One keyboard standard for every console screen (owner approved 2026-11-20): focus in the first field of a task and on the `h1` of a browse page, `Esc` closes the top layer (Cancel on a full-page task, nothing on a browse page), `Enter` / `⌘ Enter`, `⌘ S` on a `SaveBar` page, `⌘ K` palette, `/` search, `?` shortcut list, list keys, focus after an action, no single-key shortcut while typing. | done | `rules/webkit-keyboard.md`, docs `/foundations/keyboard`, `.claude/skills/ui-craft` § Keyboard, `skills/webkit-ui-verify`, `.claude/rules/accessibility.md` |

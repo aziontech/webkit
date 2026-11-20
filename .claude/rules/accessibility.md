@@ -36,6 +36,14 @@ The accepted exceptions are recorded once, with their reasons, in [`rules/webkit
 
 An owner-accepted exception that the automated axe checks would flag is listed once more, as data, in [`packages/webkit/src/test/a11y-accepted.json`](../../packages/webkit/src/test/a11y-accepted.json): one axe rule, the themes it applies to, and the selector of the one part that carries the colour (today `color-contrast`, light, the parts that carry brand text in the logo orange: the Eyebrow label `[data-testid$="eyebrow__label"]`, the Quote name, the LinkDirectory column title, the HeroTitle highlight, the CompetitorComparisonSection group title, the FieldLabel asterisk, the highlight Tag and the linked FeatureItem). The a11y harness and the docs smoke test drop only those nodes; every other finding still fails. An entry there needs its row in the exceptions table; findings that are defects go to `a11y-known.json`, which stays empty.
 
+## App-level keyboard contract
+
+The keys of one control are this rule's; the keys of a whole console screen (focus when a page
+opens, what `Esc` means, `⌘ S`, `/`, `?`, list keys, nothing firing while typing) are the
+owner-approved contract in the consumer rule [`rules/webkit-keyboard.md`](../../rules/webkit-keyboard.md)
+(decision KB01). Blocks, examples and console-facing components follow it; the `ui-craft` review
+checks it, and the `keyboard` check of the styled visual suite drives it over every block and demo.
+
 ## Hard prohibitions
 
 - Do not add `role`/ARIA to fake an interactive element when a native one fits.
