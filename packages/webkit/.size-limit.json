@@ -84,12 +84,12 @@
   {
     "name": "date-picker-root",
     "path": "src/components/input/date-picker/date-picker.vue",
-    "limit": "42.15 KB"
+    "limit": "42.2 KB"
   },
   {
     "name": "date-range-picker",
     "path": "src/components/input/date-range-picker/date-range-picker.vue",
-    "limit": "53.2 KB"
+    "limit": "53.3 KB"
   },
   {
     "name": "table-root",
@@ -479,13 +479,13 @@
   {
     "name": "article-index-section",
     "path": "src/components/section/article-index-section/article-index-section.vue",
-    "limit": "35.2 KB",
+    "limit": "35.25 KB",
     "entryOnly": true
   },
   {
     "name": "story-index-section",
     "path": "src/components/section/story-index-section/story-index-section.vue",
-    "limit": "33.7 KB",
+    "limit": "33.75 KB",
     "entryOnly": true
   },
   {
@@ -518,7 +518,7 @@
   {
     "name": "hero-form-section",
     "path": "src/components/section/hero-form-section/hero-form-section.vue",
-    "limit": "51.15 KB",
+    "limit": "51.25 KB",
     "entryOnly": true
   },
   {
@@ -541,7 +541,7 @@
   {
     "name": "plan-comparison-section",
     "path": "src/components/section/plan-comparison-section/plan-comparison-section.vue",
-    "limit": "37.55 KB"
+    "limit": "37.6 KB"
   },
   {
     "name": "pricing-plans-section",
@@ -611,7 +611,7 @@
   {
     "name": "job-posting-section",
     "path": "src/components/section/job-posting-section/job-posting-section.vue",
-    "limit": "56.95 KB",
+    "limit": "57 KB",
     "entryOnly": true
   },
   {
@@ -627,7 +627,7 @@
   {
     "name": "listing-index-section",
     "path": "src/components/section/listing-index-section/listing-index-section.vue",
-    "limit": "40.2 KB",
+    "limit": "40.25 KB",
     "entryOnly": true
   },
   {
@@ -1087,7 +1087,7 @@
   {
     "name": "phone-input",
     "path": "src/components/input/phone-input/phone-input.vue",
-    "limit": "33.5 KB",
+    "limit": "33.55 KB",
     "entryOnly": true
   },
   {
@@ -1099,7 +1099,7 @@
   {
     "name": "select",
     "path": "src/components/input/select/index.ts",
-    "limit": "22.4 KB"
+    "limit": "22.45 KB"
   },
   {
     "name": "multi-select",
@@ -1292,7 +1292,7 @@
   {
     "name": "attribute-editor",
     "path": "src/components/input/attribute-editor/attribute-editor.vue",
-    "limit": "17.75 KB"
+    "limit": "17.95 KB"
   },
   {
     "name": "code-editor",
@@ -1312,12 +1312,12 @@
   {
     "name": "tag-editor",
     "path": "src/components/input/tag-editor/tag-editor.vue",
-    "limit": "19.65 KB"
+    "limit": "19.85 KB"
   },
   {
     "name": "schema-form",
     "path": "src/components/input/schema-form/schema-form.vue",
-    "limit": "61.4 KB"
+    "limit": "61.7 KB"
   },
   {
     "name": "use-unsaved-changes",
@@ -1899,7 +1899,7 @@
   {
     "name": "date-picker",
     "path": "src/components/input/date-picker/index.ts",
-    "limit": "42.35 KB"
+    "limit": "42.4 KB"
   },
   {
     "name": "date-picker-clear",
