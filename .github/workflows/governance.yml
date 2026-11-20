@@ -240,6 +240,9 @@ jobs:
       - name: Check that every docs link resolves
         run: pnpm check:docs:links
 
+      - name: Check that no docs page loads the Monaco editor up front
+        run: pnpm check:docs:editor-chunks
+
       - name: Build the demos
         run: pnpm build:demos
 
