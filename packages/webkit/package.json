@@ -4171,6 +4171,12 @@
       "use-time-range": [
         "./types/composables/use-time-range/index.d.ts"
       ],
+      "use-shortcuts": [
+        "./types/composables/use-shortcuts/index.d.ts"
+      ],
+      "shortcuts-dialog": [
+        "./types/components/overlay/shortcuts-dialog/shortcuts-dialog.vue.d.ts"
+      ],
       "file-preview": [
         "./types/components/content/file-preview/file-preview.vue.d.ts"
       ],

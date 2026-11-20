@@ -17,7 +17,7 @@ const CATALOG_PATH = resolve(PKG_ROOT, 'catalog.json')
 const SPECS_DIR = resolve(REPO_ROOT, '.specs')
 
 export const FULL_BUDGETS = {
-  'llms-full.txt': 2_310_000,
+  'llms-full.txt': 2_320_000,
   'llms-full-site.txt': 740_000
 }
 
