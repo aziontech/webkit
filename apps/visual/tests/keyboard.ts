@@ -157,10 +157,13 @@ export function keyboardStart(entry: KeyboardEntry): KeyboardStart {
     visited: new Set(),
     initial: document.activeElement === document.body ? null : document.activeElement
   }
+  const entryEl = probe.initial instanceof HTMLElement ? probe.initial : null
+  entryEl?.blur()
   for (const element of Array.from(document.body.querySelectorAll('*'))) {
     if (element.closest('svg')) continue
     probe.before.set(element, look(element))
   }
+  entryEl?.focus({ preventScroll: true })
   ;(window as unknown as { __keyboardProbe: Probe }).__keyboardProbe = probe
 
   const visible = (element: Element) => {
@@ -212,10 +215,10 @@ export function keyboardStart(entry: KeyboardEntry): KeyboardStart {
     const together = first?.closest('[role=radiogroup], [role=group]')
     const ok = Boolean(
       first &&
-        active &&
-        (active === first ||
-          first.contains(active) ||
-          (together && together.contains(active) && active.matches(FIELD)))
+      active &&
+      (active === first ||
+        first.contains(active) ||
+        (together && together.contains(active) && active.matches(FIELD)))
     )
     return {
       entry: {
@@ -340,12 +343,15 @@ export function keyboardStop(): KeyboardStop {
       active.getAttribute('class') ?? ''
     )
   const iframe = active.tagName === 'IFRAME'
-  const ring = thumb || iframe || Array.from(hosts).some((host) => {
-    const now = look(host)
-    const fresh = probe.initial && (probe.initial === host || probe.initial.contains(host))
-    const before = fresh ? ' ||  || ' : (probe.before.get(host) ?? ' ||  || ')
-    return now.replace(/\s*\|\|\s*/g, '') !== '' && now !== before
-  })
+  const ring =
+    thumb ||
+    iframe ||
+    Array.from(hosts).some((host) => {
+      const now = look(host)
+      const fresh = probe.initial && (probe.initial === host || probe.initial.contains(host))
+      const before = fresh ? ' ||  || ' : (probe.before.get(host) ?? ' ||  || ')
+      return now.replace(/\s*\|\|\s*/g, '') !== '' && now !== before
+    })
 
   const tag = active.tagName.toLowerCase()
   const role = active.getAttribute('role')
@@ -410,10 +416,7 @@ export function keyboardReach(limited: boolean): KeyboardReach {
     visited.some((stop) => stop === element || element.contains(stop) || stop.contains(element))
   let furthest: Element | null = null
   for (const stop of visited)
-    if (
-      !furthest ||
-      furthest.compareDocumentPosition(stop) & Node.DOCUMENT_POSITION_FOLLOWING
-    )
+    if (!furthest || furthest.compareDocumentPosition(stop) & Node.DOCUMENT_POSITION_FOLLOWING)
       furthest = stop
 
   const groups = new Map<string, { members: Element[]; first: Element }>()
