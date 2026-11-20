@@ -5,6 +5,7 @@ import vue from '@vitejs/plugin-vue'
 import { defineConfig, type UserConfig } from 'vite'
 import type { ViteSSGOptions } from 'vite-ssg'
 
+import { bundlerRuntimePlugin, chunkGraphPlugin } from './plugins/chunk-graph.ts'
 import { buildIndex } from './plugins/content.ts'
 import { docsPlugin } from './plugins/docs-plugin.ts'
 import { FOUNDATION_SLUGS } from './src/lib/foundations.ts'
@@ -47,6 +48,8 @@ const ssgOptions: Partial<ViteSSGOptions> = {
 export default defineConfig({
   plugins: [
     docsPlugin(),
+    bundlerRuntimePlugin(),
+    chunkGraphPlugin(),
     vue({ template: { transformAssetUrls: { includeAbsolute: false } } }),
     tailwindcss()
   ],

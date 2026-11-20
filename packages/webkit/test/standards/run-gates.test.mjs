@@ -56,6 +56,7 @@ const CI_ONLY = {
     'builds the icon font the styled browser tests load; build:docs builds it too',
   'pnpm build:docs': 'a full docs build',
   'pnpm check:docs:links': 'needs the docs build',
+  'pnpm check:docs:editor-chunks': 'needs the docs build; pnpm test:docs covers its logic',
   'pnpm build:demos': 'a full demos build',
   'pnpm --filter @aziontech/webkit test:ssr': 'about 35 s; renders every block and example',
   'pnpm --filter @aziontech/webkit run test:consume': 'installs and builds a consumer app',
