@@ -5,7 +5,7 @@
 - Surface: docs
 - Source: `blocks/shell/shell-docs/shell-docs.vue` in `@aziontech/webkit`
 - MCP: `get_block("shell/shell-docs")`
-- Components: `claudeMark`, `codexMark`, `copilotMark`, `cursorMark`, `geminiMark`, `opencodeMark`, [Brand](../../components/brand.md), [Button](../../components/button.md), [CodeBlock](../../components/code-block.md), [CopyPromptButton](../../components/copy-prompt-button.md), [DataTable](../../components/data-table.md), [Diagram](../../components/diagram.md), [DocAccordion](../../components/doc-accordion.md), [DocAccordionGroup](../../components/doc-accordion-group.md), [DocAgentCard](../../components/doc-agent-card.md), [DocCallToAction](../../components/doc-call-to-action.md), [DocCallout](../../components/doc-callout.md), [DocCard](../../components/doc-card.md), [DocCardGroup](../../components/doc-card-group.md), [DocCodeGroup](../../components/doc-code-group.md), [DocFrame](../../components/doc-frame.md), [DocHeading](../../components/doc-heading.md), [DocHero](../../components/doc-hero.md), [DocItem](../../components/doc-item.md), [DocLayout](../../components/doc-layout.md), [DocMarkdown](../../components/doc-markdown.md), [DocPageHeader](../../components/doc-page-header.md), [DocPreviousNext](../../components/doc-previous-next.md), [DocPrompt](../../components/doc-prompt.md), [DocProse](../../components/doc-prose.md), [DocSteps](../../components/doc-steps.md), [Footer](../../components/footer.md), [IconButton](../../components/icon-button.md), `ItemList`, [RegistrationFrame](../../components/registration-frame.md), [Select](../../components/select.md), [StatusIndicator](../../components/status-indicator.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [ThemeSwitcher](../../components/theme-switcher.md), [ThirdPartyLogo](../../components/third-party-logo.md), `use-color-mode`
+- Components: `claudeMark`, `codexMark`, `copilotMark`, `cursorMark`, `geminiMark`, `opencodeMark`, [Brand](../../components/brand.md), [Button](../../components/button.md), [CodeBlock](../../components/code-block.md), [CopyPromptButton](../../components/copy-prompt-button.md), [DataTable](../../components/data-table.md), [Diagram](../../components/diagram.md), [DocAccordion](../../components/doc-accordion.md), [DocAccordionGroup](../../components/doc-accordion-group.md), [DocAgentCard](../../components/doc-agent-card.md), [DocCallToAction](../../components/doc-call-to-action.md), [DocCallout](../../components/doc-callout.md), [DocCard](../../components/doc-card.md), [DocCardGroup](../../components/doc-card-group.md), [DocCodeGroup](../../components/doc-code-group.md), [DocFrame](../../components/doc-frame.md), [DocHeading](../../components/doc-heading.md), [DocHero](../../components/doc-hero.md), [DocItem](../../components/doc-item.md), [DocLayout](../../components/doc-layout.md), [DocMarkdown](../../components/doc-markdown.md), [DocPageHeader](../../components/doc-page-header.md), [DocPreviousNext](../../components/doc-previous-next.md), [DocPrompt](../../components/doc-prompt.md), [DocProse](../../components/doc-prose.md), [DocSteps](../../components/doc-steps.md), [Footer](../../components/footer.md), [IconButton](../../components/icon-button.md), `ItemList`, [LanguageSelect](../../components/language-select.md), [RegistrationFrame](../../components/registration-frame.md), [StatusIndicator](../../components/status-indicator.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [ThemeSwitcher](../../components/theme-switcher.md), [ThirdPartyLogo](../../components/third-party-logo.md), `use-color-mode`
 - Skills: `webkit-layout`, `webkit-navigation`
 
 ## Asked as
@@ -68,9 +68,9 @@ In the footer only; the header mark belongs to the layout.
 
 In the footer's status slot.
 
-### L. Language — `Select` (required)
+### L. Language — `LanguageSelect` (required)
 
-In the footer's language slot, trigger labelled `Language`.
+In the footer's language slot: `variant="ghost"`, the compact round flag and country code, named `Language` by its catalog. Never a field-sized `Select`: it would draw the field outline in the footer bar.
 
 ## Do
 
@@ -149,7 +149,7 @@ Each variant is the same screen in another state: `get_block("shell/shell-docs",
   import DocProse from '@aziontech/webkit/doc-prose'
   import Footer from '@aziontech/webkit/footer'
   import IconButton from '@aziontech/webkit/icon-button'
-  import Select from '@aziontech/webkit/select'
+  import LanguageSelect from '@aziontech/webkit/language-select'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import { useColorMode } from '@aziontech/webkit/use-color-mode'
@@ -302,8 +302,7 @@ Each variant is the same screen in another state: `get_block("shell/shell-docs",
     { icon: 'az az-reddit', label: 'Azion on Reddit', href: 'https://www.reddit.com/r/aziontech' }
   ]
 
-  const languages = ['EN', 'PT-BR', 'ES']
-  const language = ref('EN')
+  const language = ref('en-US')
 </script>
 
 <template>
@@ -439,30 +438,10 @@ Each variant is the same screen in another state: `get_block("shell/shell-docs",
           </template>
 
           <template #language>
-            <div class="w-28">
-              <Select
-                v-model="language"
-                placeholder="Language"
-              >
-                <Select.Trigger aria-label="Language">
-                  <template #leading>
-                    <i
-                      class="az az-globe text-(--text-muted)"
-                      aria-hidden="true"
-                    />
-                  </template>
-                </Select.Trigger>
-                <Select.Content>
-                  <Select.Item
-                    v-for="option in languages"
-                    :key="option"
-                    :value="option"
-                  >
-                    {{ option }}
-                  </Select.Item>
-                </Select.Content>
-              </Select>
-            </div>
+            <LanguageSelect
+              v-model="language"
+              variant="ghost"
+            />
           </template>
 
           <template #brand>

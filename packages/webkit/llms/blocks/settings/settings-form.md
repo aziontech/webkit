@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/settings/settings-form/settings-form.vue` in `@aziontech/webkit`
 - MCP: `get_block("settings/settings-form")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [ConfirmDialog](../../components/confirm-dialog.md), [Field](../../components/field.md), `FieldError`, [Input](../../components/input.md), [Item](../../components/item.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Skeleton](../../components/skeleton.md), [Subheader](../../components/subheader.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), `use-unsaved-changes`
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [ConfirmDialog](../../components/confirm-dialog.md), [Field](../../components/field.md), `FieldError`, [Input](../../components/input.md), [Item](../../components/item.md), [LanguageSelect](../../components/language-select.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Skeleton](../../components/skeleton.md), [Subheader](../../components/subheader.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), `use-unsaved-changes`
 - Skills: `webkit-form`, `webkit-errors`, `webkit-ux-heuristics`
 
 ## Asked as
@@ -194,6 +194,7 @@ Each variant is the same screen in another state: `get_block("settings/settings-
   import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
+  import LanguageSelect from '@aziontech/webkit/language-select'
   import PageHeader from '@aziontech/webkit/page-header'
   import SaveBar from '@aziontech/webkit/save-bar'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
@@ -249,11 +250,6 @@ Each variant is the same screen in another state: `get_block("settings/settings-
     { label: '(UTC-05:00) New York', value: 'america-new_york' },
     { label: '(UTC-03:00) São Paulo', value: 'america-sao_paulo' },
     { label: '(UTC+00:00) London', value: 'europe-london' }
-  ]
-  const languages = [
-    { label: 'English', value: 'en' },
-    { label: 'Português', value: 'pt' },
-    { label: 'Español', value: 'es' }
   ]
   const labelOf = (list: SelectOptionItem[]) => (value: string) =>
     list.find((option) => option.value === value)?.label ?? ''
@@ -466,27 +462,14 @@ Each variant is the same screen in another state: `get_block("settings/settings-
                   description="The interface language."
                 >
                   <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                    <Select
+                    <LanguageSelect
+                      id="profile-language"
                       v-model="form.language"
                       size="large"
                       :disabled="submitting"
+                      aria-label="Language"
                       class="w-full"
-                      :display-value="labelOf(languages)"
-                    >
-                      <Select.Trigger
-                        id="profile-language"
-                        aria-label="Language"
-                      />
-                      <Select.Content>
-                        <Select.Item
-                          v-for="option in languages"
-                          :key="option.value"
-                          :value="option.value"
-                        >
-                          {{ option.label }}
-                        </Select.Item>
-                      </Select.Content>
-                    </Select>
+                    />
                   </div>
                 </SettingsRow>
               </Item.List>
@@ -553,7 +536,7 @@ export const sampleProfile: SettingsFormProfile = {
   fullName: 'Alex Morgan',
   email: '',
   timezone: 'utc',
-  language: 'en',
+  language: 'en-US',
   productUpdates: true
 }
 ```

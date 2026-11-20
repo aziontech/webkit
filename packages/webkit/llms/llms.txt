@@ -295,7 +295,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [Hint](components/hint.md): Small info affordance — a muted `az az-circle-info` glyph on a focusable button — that reveals one short explanation on hover or focus, through `Tooltip`.
 - [Input](components/input.md): Single-line text input for forms and inline editing.
 - [InputGroup](components/input-group.md): Composition container that joins an input primitive with any number of adjacent controls (buttons, selects, static addons) into a single visual field (an input group, as other UI kits call it).
-- [LanguageSelect](components/language-select.md): A searchable picker for the interface language: a `Select` whose trigger and rows show each language's flag and its name in that language (`English`, `Português (Brasil)`, `Español`), with a search box at the top of t…
+- [LanguageSelect](components/language-select.md): A searchable picker for the interface language, built like the country picker inside `phone-input`: every option is a locale with a country (a BCP 47 tag such as `en-US`, `pt-BR`, `es-ES`), shown with that country's r…
 - [MultiSelect](components/multi-select.md): Select control specialised for choosing many options from a list.
 - [NumberInput](components/number-input.md): Numeric input field with optional increment/decrement spinner buttons.
 - [OtpInput](components/otp-input.md): The field for a one-time code: the six digits an authenticator app shows, or a code sent by email or SMS.
@@ -309,7 +309,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [Switch](components/switch.md): Control-only pill toggle `Switch` (36×20 px).
 - [TagEditor](components/tag-editor.md): Key and value tags of one resource, after Cloudscape's tag editor, built on `AttributeEditor`.
 - [Textarea](components/textarea.md): Collects multi-line free-form text from the user.
-- [ThemeSwitcher](components/theme-switcher.md): A compact segmented control drawn like `toggle-group` (same radius, border, surface and 28 / 32 / 40 heights, so it sits in a row of header controls beside an `IconButton`, `Select` or `SearchTrigger` of the same size…
+- [ThemeSwitcher](components/theme-switcher.md): A compact segmented control drawn like `toggle-group` (same radius, surface and 28 / 32 / 40 heights, with the header outline `--border-default`, so it sits in a row of header controls beside an `IconButton`, `Select`…
 
 ## Components: Layout
 

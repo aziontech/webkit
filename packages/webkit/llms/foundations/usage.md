@@ -37,7 +37,8 @@ The chrome is composed **once**, in `App.vue`, around `RouterView`, from the lay
   trail, control crumb included, with `ConsoleLayout.Breadcrumb`, and a full-height workspace puts
   `data-layout-fill` on its root (never `calc(100dvh - …)`).
 - **Site:** `SiteLayout` — `navigation` and `footer` are the `SiteHeaderSection` and `SiteFooterSection` data. The
-  site is dark: `<html data-theme="dark">`. `SiteFooterSection` binds its language select with
+  site is dark: `<html data-theme="dark">`. `SiteFooterSection` binds its language select (the compact
+  `LanguageSelect`, round flag and country code; `languages` are BCP 47 tags) with
   `v-model:language`; switch the locale from that value.
 - **Docs:** `DocLayout` — the docs tree, section links, `outline-groups`, and `actions`,
   `navigation-footer`, `aside`, `footer` slots. The document scrolls. The page feeds the "On this

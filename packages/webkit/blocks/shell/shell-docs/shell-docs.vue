@@ -8,7 +8,7 @@
   import DocProse from '@aziontech/webkit/doc-prose'
   import Footer from '@aziontech/webkit/footer'
   import IconButton from '@aziontech/webkit/icon-button'
-  import Select from '@aziontech/webkit/select'
+  import LanguageSelect from '@aziontech/webkit/language-select'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import { useColorMode } from '@aziontech/webkit/use-color-mode'
@@ -161,8 +161,7 @@
     { icon: 'az az-reddit', label: 'Azion on Reddit', href: 'https://www.reddit.com/r/aziontech' }
   ]
 
-  const languages = ['EN', 'PT-BR', 'ES']
-  const language = ref('EN')
+  const language = ref('en-US')
 </script>
 
 <template>
@@ -298,30 +297,10 @@
           </template>
 
           <template #language>
-            <div class="w-28">
-              <Select
-                v-model="language"
-                placeholder="Language"
-              >
-                <Select.Trigger aria-label="Language">
-                  <template #leading>
-                    <i
-                      class="az az-globe text-(--text-muted)"
-                      aria-hidden="true"
-                    />
-                  </template>
-                </Select.Trigger>
-                <Select.Content>
-                  <Select.Item
-                    v-for="option in languages"
-                    :key="option"
-                    :value="option"
-                  >
-                    {{ option }}
-                  </Select.Item>
-                </Select.Content>
-              </Select>
-            </div>
+            <LanguageSelect
+              v-model="language"
+              variant="ghost"
+            />
           </template>
 
           <template #brand>

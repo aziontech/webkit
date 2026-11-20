@@ -7,11 +7,11 @@
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import Footer from '@aziontech/webkit/footer'
   import IconButton from '@aziontech/webkit/icon-button'
+  import LanguageSelect from '@aziontech/webkit/language-select'
   import NavigationMenu from '@aziontech/webkit/navigation-menu'
   import PanelBody from '@aziontech/webkit/panel-body'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import SearchTrigger from '@aziontech/webkit/search-trigger'
-  import Select from '@aziontech/webkit/select'
   import Sidebar from '@aziontech/webkit/sidebar'
   import SkipLink from '@aziontech/webkit/skip-link'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
@@ -44,9 +44,6 @@
   const activeSection = computed(
     () => sections.value.find((section) => route.path.startsWith(section.to))?.to ?? ''
   )
-
-  const localeLabel = (value: unknown) =>
-    LOCALES.find((option) => option.value === value)?.label ?? String(value)
 
   function toggleDirection() {
     settings.dir = settings.dir === 'rtl' ? 'ltr' : 'rtl'
@@ -112,30 +109,13 @@
             :label="t.search"
             @open="searchOpen = true"
           />
-          <div class="hidden w-36 shrink-0 md:block">
-            <Select
+          <div class="hidden shrink-0 sm:block">
+            <LanguageSelect
               v-model="settings.locale"
-              size="medium"
-              :display-value="localeLabel"
-            >
-              <Select.Trigger :aria-label="t.language">
-                <template #leading>
-                  <i
-                    class="az az-globe text-(--text-muted)"
-                    aria-hidden="true"
-                  />
-                </template>
-              </Select.Trigger>
-              <Select.Content>
-                <Select.Item
-                  v-for="option in LOCALES"
-                  :key="option.value"
-                  :value="option.value"
-                >
-                  {{ option.label }}
-                </Select.Item>
-              </Select.Content>
-            </Select>
+              variant="ghost"
+              :options="LOCALES"
+              :aria-label="t.language"
+            />
           </div>
           <Tooltip :content="settings.dir === 'rtl' ? t.leftToRight : t.rightToLeft">
             <IconButton

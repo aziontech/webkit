@@ -624,6 +624,7 @@
         <template #actions>
           <div class="w-full sm:w-44">
             <Select
+              variant="ghost"
               v-model="timeRange"
               size="medium"
             >

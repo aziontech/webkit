@@ -56,9 +56,9 @@ In the footer only; the header mark belongs to the layout.
 
 In the footer's status slot.
 
-### L. Language — `Select` (required)
+### L. Language — `LanguageSelect` (required)
 
-In the footer's language slot, trigger labelled `Language`.
+In the footer's language slot: `variant="ghost"`, the compact round flag and country code, named `Language` by its catalog. Never a field-sized `Select`: it would draw the field outline in the footer bar.
 
 ## Do
 

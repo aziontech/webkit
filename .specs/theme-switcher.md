@@ -3,20 +3,20 @@ name: theme-switcher
 category: input
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5721-5138
   node_id: 5721:5138
-checksum: 505bcbbaa529237d4d71295c624810081490050a4fd20ad8d218e1af89a666b1
+checksum: 551a50b399d827bc4e1074ccf979c60836d84b3269fd366c899293fb43d0659c
 created: 2026-07-13
-last_updated: 2026-11-19
+last_updated: 2026-11-20
 ---
 
 # Theme Switcher — Component Spec
 
 ## Purpose
 
-A compact segmented control drawn like `toggle-group` (same radius, border, surface and 28 / 32 / 40 heights, so it sits in a row of header controls beside an `IconButton`, `Select` or `SearchTrigger` of the same size) that lets the user pick the app color-theme mode — `system`, `dark`, or `light` — via three icon-only segments. It reflects and emits the selected mode through `v-model` and applies no global side effect itself (the app decides what each mode means). Unlike `switch` (a boolean toggle) or `tabs` (view navigation), it is a fixed three-way single-select over the theme modes.
+A compact segmented control drawn like `toggle-group` (same radius, surface and 28 / 32 / 40 heights, with the header outline `--border-default`, so it sits in a row of header controls beside an `IconButton`, `Select` or `SearchTrigger` of the same size) that lets the user pick the app color-theme mode — `system`, `dark`, or `light` — via three icon-only segments. It reflects and emits the selected mode through `v-model` and applies no global side effect itself (the app decides what each mode means). Unlike `switch` (a boolean toggle) or `tabs` (view navigation), it is a fixed three-way single-select over the theme modes.
 
 ## When to use
 
@@ -31,7 +31,7 @@ A compact segmented control drawn like `toggle-group` (same radius, border, surf
 
 ## Related
 
-- `toggle-group` — the generic mutually exclusive option group, with labels and sizes; ThemeSwitcher shares its look (radius, border, surface, indicator, sizes).
+- `toggle-group` — the generic mutually exclusive option group, with labels and sizes; ThemeSwitcher shares its look (radius, surface, indicator, sizes), with the header controls' `--border-default` outline instead of its `--border-muted`, so a header row draws one outline colour.
 - `switch` — boolean toggle for a single setting.
 
 ## Best practices
@@ -98,7 +98,7 @@ A compact segmented control drawn like `toggle-group` (same radius, border, surf
 | Region                   | Token (DESIGN.md)                                                     |
 | ------------------------ | --------------------------------------------------------------------- |
 | group surface            | `var(--bg-surface)`                                                   |
-| group border             | `var(--border-muted)` (as `toggle-group`)                             |
+| group border             | `var(--border-default)`, the outline of the header controls beside it |
 | group and segment radius | `var(--shape-button)` (as `toggle-group`, `button`, `icon-button`)    |
 | height                   | `h-7` / `h-8` / `h-10` by `size`                                      |
 | selected segment surface | `var(--bg-selected)`                                                  |

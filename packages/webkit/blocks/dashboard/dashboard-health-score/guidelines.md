@@ -31,6 +31,8 @@ Title `Experience score` with one sentence on what it measures. Actions hold the
 
 ### B. Period — `Select` (required)
 
+The header `Select` is `variant="ghost"`: no border until hover, so it shares the header row with the outlined buttons beside it; a header never holds a field outline.
+
 `Last hour`, `Last 24 hours`, `Last 7 days`, labelled `Period`. Empty states name the period back to
 the reader.
 

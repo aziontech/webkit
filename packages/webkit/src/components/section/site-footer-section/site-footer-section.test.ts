@@ -178,19 +178,20 @@ describe('SiteFooterSection', () => {
     const { getByRole, getByTestId } = footer()
 
     const trigger = getByRole('combobox', { name: 'Language' })
-    expect(getByTestId(TESTID).textContent).toContain('EN')
+    expect(trigger.textContent).toContain('English')
 
     await userEvent.click(trigger)
-    await userEvent.click(getByRole('option', { name: 'PT-BR' }))
+    await userEvent.click(getByRole('option', { name: 'Português (Brasil)' }))
 
-    expect(trigger.textContent).toContain('PT-BR')
+    expect(trigger.textContent).toContain('Português (Brasil)')
+    expect(getByTestId('language-select__code').textContent).toBe('BR')
   })
 
   it('emits update:language with the chosen option', async () => {
     const { getByRole, emitted } = footer()
 
     await userEvent.click(getByRole('combobox', { name: 'Language' }))
-    await userEvent.click(getByRole('option', { name: 'ES' }))
+    await userEvent.click(getByRole('option', { name: 'Español' }))
 
     expect(emitted()['update:language']).toEqual([['ES']])
   })
@@ -199,14 +200,14 @@ describe('SiteFooterSection', () => {
     const { getByRole, getByText } = render(LanguageExample)
 
     const trigger = getByRole('combobox', { name: 'Language' })
-    expect(trigger.textContent).toContain('PT-BR')
+    expect(trigger.textContent).toContain('Português (Brasil)')
     expect(getByText('Page language: PT-BR')).toBeTruthy()
 
     await userEvent.click(trigger)
-    await userEvent.click(getByRole('option', { name: 'ES' }))
+    await userEvent.click(getByRole('option', { name: 'Español' }))
 
     expect(getByText('Page language: ES')).toBeTruthy()
-    expect(trigger.textContent).toContain('ES')
+    expect(trigger.textContent).toContain('Español')
   })
 
   it('renders no language select when languages is empty', () => {

@@ -2,7 +2,7 @@
 name: webkit-form
 description: Accessible forms on @aziontech/webkit — one Form Layout spacing reference (xs inside a field, lg between fields/rows) shared by five form types (Drawer, nested Drawer, Dialog, ItemGroup settings, Card with independent saves) that differ only in container + save model, with two internal layouts (Cards + ItemGroups / Fields separated) composing inside each. Every field carries a real label (never a placeholder-as-label), errors are tied to the control via aria-describedby, and related fields group in a real <fieldset>/<legend>; validated only on submit with the field's own invalid state as the feedback (required is static and draws no colour) — no custom error-summary block, no Alert callout for field validation. The a11y companion to /webkit-ux-heuristics (states) and /webkit-ui-states (locking + toast).
 status: active
-last_updated: 2026-11-18
+last_updated: 2026-11-20
 scope: general
 enforced_by: [webkit-accessibility, webkit-component-states, ui-verify]
 ---
@@ -594,6 +594,10 @@ Sections stack at the section gap; the first one takes no top margin.
 `title`, its guidance is `description`, and the control carries an `aria-label` with the same text for
 its accessible name. `<Field.Label>` is reserved for **Fields separated** (Approach B) and composed `Select`
 fields, where there is a real `<label for>` wired to a control `id`.
+
+**A language setting is `LanguageSelect`** (`@aziontech/webkit/language-select`), the full field
+(the default `variant="outline"`: round flag and the language named in itself) in a `field` row, with
+`aria-label="Language"`; never a `Select` of language names you list yourself.
 
 **`variant` places the control by what it needs.** `field` (the default) for `Input` and `Select`: a right
 cell capped at `--container-3xs`, so every field on the card ends at the same edge. `compact` for a

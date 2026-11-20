@@ -45,6 +45,8 @@ it scopes every region on the page.
 
 ### B. Period — `Select` (required)
 
+The header `Select` is `variant="ghost"`: no border until hover, so it shares the header row with the outlined buttons beside it; a header never holds a field outline.
+
 `Last 7 days`, `Last 30 days`, `Last 90 days`, labelled `Period`. One period for the whole page; never
 a per-card period.
 
@@ -502,6 +504,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
         <template #actions>
           <div class="w-44 shrink-0">
             <Select
+              variant="ghost"
               v-model="period"
               size="medium"
               :display-value="

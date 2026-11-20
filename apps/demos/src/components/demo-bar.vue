@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import IconButton from '@aziontech/webkit/icon-button'
-  import Select from '@aziontech/webkit/select'
+  import LanguageSelect from '@aziontech/webkit/language-select'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, ref, useId } from 'vue'
   import { useRouter } from 'vue-router'
@@ -75,9 +75,6 @@
     { value: '/onboarding', label: t.value.onboarding, icon: 'az az-flag' },
     { value: '/assistant', label: t.value.assistant, icon: 'az az-ask-azion' }
   ])
-
-  const localeLabel = (value: unknown) =>
-    LOCALES.find((option) => option.value === value)?.label ?? String(value)
 
   const onFlow = (_event: unknown, value: unknown) => router.push(String(value))
   const toggleTheme = () => (settings.theme = settings.theme === 'dark' ? 'light' : 'dark')
@@ -156,31 +153,12 @@
           @click="toggleDir"
         />
       </Tooltip>
-      <div class="w-44">
-        <Select
-          v-model="settings.locale"
-          size="medium"
-          :display-value="localeLabel"
-        >
-          <Select.Trigger :aria-label="t.language">
-            <template #leading>
-              <i
-                class="az az-globe text-(--text-muted)"
-                aria-hidden="true"
-              />
-            </template>
-          </Select.Trigger>
-          <Select.Content>
-            <Select.Item
-              v-for="option in LOCALES"
-              :key="option.value"
-              :value="option.value"
-            >
-              {{ option.label }}
-            </Select.Item>
-          </Select.Content>
-        </Select>
-      </div>
+      <LanguageSelect
+        v-model="settings.locale"
+        variant="ghost"
+        :options="LOCALES"
+        :aria-label="t.language"
+      />
     </div>
   </nav>
 </template>

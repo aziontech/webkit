@@ -7,10 +7,7 @@
   import IconButton from '../../action/icon-button/icon-button.vue'
   import Brand from '../../content/brand/brand.vue'
   import StatusIndicator from '../../feedback/status-indicator/status-indicator.vue'
-  import Select from '../../input/select/select.vue'
-  import SelectContent from '../../input/select/select-content/select-content.vue'
-  import SelectItem from '../../input/select/select-item/select-item.vue'
-  import SelectTrigger from '../../input/select/select-trigger/select-trigger.vue'
+  import LanguageSelect from '../../input/language-select/language-select.vue'
   import Footer from '../../layout/footer/footer.vue'
   import FooterColumn from '../../layout/footer/footer-column/footer-column.vue'
   import FooterLink from '../../layout/footer/footer-link/footer-link.vue'
@@ -66,7 +63,7 @@
     socials?: SiteFooterSectionSocial[]
     /** Line of the system status indicator; the indicator is not rendered when empty. */
     statusLabel?: string
-    /** Options of the language select, as the reader sees them; the first one is selected until `v-model:language` holds another. The select is not rendered when empty. */
+    /** BCP 47 tags of the languages offered, such as EN, PT-BR, ES; each shows its round flag and its name in its own language, and the first one is selected until `v-model:language` holds another. The language select is not rendered when empty. */
     languages?: string[]
     /** Accessible name of the language select, also its placeholder. Empty uses the locale catalog (`Language`). */
     languageAriaLabel?: string
@@ -96,6 +93,8 @@
       language.value = value
     }
   })
+
+  const languageOptions = computed(() => props.languages.map((value) => ({ value })))
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'site-footer-section'
@@ -182,30 +181,13 @@
         v-if="languages.length > 0"
         #language
       >
-        <div class="w-28">
-          <Select
-            v-model="selectedLanguage"
-            :placeholder="languageAriaLabel || t('siteFooterSection.language')"
-          >
-            <SelectTrigger :aria-label="languageAriaLabel || t('siteFooterSection.language')">
-              <template #leading>
-                <i
-                  class="az az-globe text-(--text-muted)"
-                  aria-hidden="true"
-                />
-              </template>
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem
-                v-for="option in languages"
-                :key="option"
-                :value="option"
-              >
-                {{ option }}
-              </SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+        <LanguageSelect
+          v-model="selectedLanguage"
+          variant="ghost"
+          :options="languageOptions"
+          :placeholder="languageAriaLabel || t('siteFooterSection.language')"
+          :aria-label="languageAriaLabel || t('siteFooterSection.language')"
+        />
       </template>
     </Footer>
   </div>

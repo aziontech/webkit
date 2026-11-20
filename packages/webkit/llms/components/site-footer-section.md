@@ -1,6 +1,6 @@
 # Site Footer Section
 
-> The footer under every marketing page: the link columns, then the social row beside the status indicator and the language select. It is a page section — the site places it from a `{ _id: 'site-footer-section', props }` entry and binds `props` straight onto it — and it composes `footer`, `brand`, `icon-button`, `status-indicator` and `select`. The bottom bar is one row, as azion.com draws it: the Azion mark (the footer's `brand` slot) and the small social icon buttons at the start, the status indicator (`status`) and the language select with its globe (`language`) at the end; below `md` it stacks, the mark and icons over the status and language. In the `site` placement the footer spans the page like `site-header-section`, opening on a full-width rule with a corner mark at each end, with no side rules. The layout is CSS only, so the server HTML and the hydrated page are the same tree. The language select keeps its own value unless the page binds `v-model:language`; its options are the labels the reader sees.
+> The footer under every marketing page: the link columns, then the social row beside the status indicator and the language select. It is a page section — the site places it from a `{ _id: 'site-footer-section', props }` entry and binds `props` straight onto it — and it composes `footer`, `brand`, `icon-button`, `status-indicator` and `language-select`. The bottom bar is one row, as azion.com draws it: the Azion mark (the footer's `brand` slot) and the small social icon buttons at the start, the status indicator (`status`) and the compact language switcher, a `LanguageSelect` with `variant="ghost"` (round flag and country code, `language`), at the end; below `md` it stacks, the mark and icons over the status and language. In the `site` placement the footer spans the page like `site-header-section`, opening on a full-width rule with a corner mark at each end, with no side rules. The layout is CSS only, so the server HTML and the hydrated page are the same tree. The language select keeps its own value unless the page binds `v-model:language`; its options are BCP 47 tags (`EN`, `PT-BR`, `ES`), each shown with its round flag and its name in its own language.
 
 - Import: `import SiteFooterSection from '@aziontech/webkit/site-footer-section'`
 - Category: section · Surface: site · Structure: monolithic
@@ -43,7 +43,7 @@
 | `columns` | `SiteFooterSectionColumn[]` | `[]` | false | The link columns, in order; each is `{ title, links }` where every link is `{ label, href, target? }`; a `_blank` link opens in a new tab and closes on the external-link glyph. |
 | `socials` | `SiteFooterSectionSocial[]` | `[]` | false | The profile icon buttons, in order; each is `{ icon, label, href }` where `label` names the button for assistive tech. They open in a new tab. |
 | `statusLabel` | `string` | `''` | false | Line of the system status indicator; the indicator is not rendered when empty. |
-| `languages` | `string[]` | `[]` | false | Options of the language select, as the reader sees them; the first one is selected until `v-model:language` holds another. The select is not rendered when empty. |
+| `languages` | `string[]` | `[]` | false | BCP 47 tags of the languages offered (`EN`, `PT-BR`, `ES`); each shows its round flag and its name in its own language, and the first one is selected until `v-model:language` holds another. The language select is not rendered when empty. |
 | `languageAriaLabel` | `string` | `''` | false | Accessible name of the language select, also its placeholder. Empty uses the locale catalog (`Language`). |
 | `language` | `string` | `''` | false | Two-way value (`v-model:language`). |
 
@@ -67,16 +67,16 @@
 ## Accessibility
 
 - Visible focus: the mark link carries `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`; links, icon buttons and the select own theirs.
-- Keyboard map: `Tab` moves through the column links, the mark, the social buttons and the language select; the select opens with `Enter` / `Space` and moves with the arrows, owned by `select`.
+- Keyboard map: `Tab` moves through the column links, the mark, the social buttons and the language select; the select opens with `Enter` / `Space` and moves with the arrows, owned by `language-select`.
 - ARIA: the `footer` is the `contentinfo` landmark named by `ariaLabel`; each column is titled; the mark link is named by `homeAriaLabel`, each social button by its `label`, the select by `languageAriaLabel`; an external link's name ends with “(opens in a new tab)” from the locale catalog.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by the composed components.
 - `motion-reduce:transition-none` on the mark link's opacity transition.
-- Touch target ≥24×24 px — the social buttons are small `icon-button`s (28 px, above the 24 px WCAG 2.5.8 minimum; the design keeps the social row quiet), the select follows `select`; the column links and the Azion mark link rely on the WCAG 2.5.8 spacing exception (see Responsive).
+- Touch target ≥24×24 px — the social buttons are small `icon-button`s (28 px, above the 24 px WCAG 2.5.8 minimum; the design keeps the social row quiet), the language select follows `language-select` (32 px, `medium`); the column links and the Azion mark link rely on the WCAG 2.5.8 spacing exception (see Responsive).
 
 ## Right-to-left
 
 - Layout: logical utilities only; the Azion mark stays at the start edge and the bottom bar's start and end follow the direction.
-- Icons: the external-link glyph, the social glyphs and the globe are not mirrored.
+- Icons: the external-link glyph, the social glyphs and the language flags are not mirrored.
 - Keyboard: no arrow-key handling of its own; the select owns its arrows.
 - User data: none.
 
@@ -95,7 +95,7 @@
 
 - Container queries: none; the bottom bar switches at the `md` viewport breakpoint.
 - Narrow (below `md`, 768 px; the footer reads the viewport, not its container): the bottom bar stacks — the Azion mark and the social icons first, then the status indicator and the language select at its two ends — and the columns fold to two as `footer` lays them out.
-- Touch: the small social buttons (28 px) and the select follow `icon-button` and `select`; the column links (26 px apart) and the Azion mark link (16 px tall, clear of the social buttons) are smaller than 24 px and rely on the WCAG 2.5.8 spacing exception; nothing depends on hover.
+- Touch: the small social buttons (28 px) and the select follow `icon-button` and `language-select`; the column links (26 px apart) and the Azion mark link (16 px tall, clear of the social buttons) are smaller than 24 px and rely on the WCAG 2.5.8 spacing exception; nothing depends on hover.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom.
 
 ## Examples
