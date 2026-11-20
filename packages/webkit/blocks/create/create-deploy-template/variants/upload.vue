@@ -1,24 +1,22 @@
 <script setup lang="ts">
-  import AppHeader from '@aziontech/webkit/app-header'
-  import Avatar from '@aziontech/webkit/avatar'
-  import Brand from '@aziontech/webkit/brand'
-  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import Field from '@aziontech/webkit/field'
-  import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import { useLocale } from '@aziontech/webkit/use-locale'
-  import { computed, ref } from 'vue'
+  import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
+  import { computed, onMounted, ref } from 'vue'
+
+  import CreateDeployTemplate from '../create-deploy-template.vue'
+  import { sampleUploadedProject } from '../sample'
 
   interface ProjectFile {
     path: string
     bytes: number
     glyph: string
   }
-
-  const breadcrumb = [{ label: 'Upload a project' }, { label: 'acme-landing', active: true }]
 
   const presets: SelectOptionItem[] = [
     { label: 'Nuxt', value: 'nuxt' },
@@ -98,230 +96,204 @@
       return 'Detected from your project. Change it if it is wrong.'
     return 'The project is built with this preset.'
   })
+
+  const guard = useUnsavedChanges(() => ({
+    projectName: projectName.value,
+    preset: preset.value,
+    root: root.value
+  }))
+  const discardDialog = guard.dialogProps
+  const discardLabels = guard.labels
+
+  const onLeave = () => guard.confirmLeave()
+
+  const panelEl = ref<HTMLElement | null>(null)
+
+  onMounted(() =>
+    panelEl.value
+      ?.querySelector<HTMLElement>(
+        '[role="combobox"], input:not([type="hidden"]), textarea, select'
+      )
+      ?.focus()
+  )
 </script>
 
 <template>
-  <div class="flex h-dvh flex-col overflow-hidden bg-(--bg-canvas)">
-    <AppHeader aria-label="Console">
-      <AppHeader.Start>
-        <IconButton
-          icon="az az-chevron-left"
-          aria-label="Back to Creation Center"
-          variant="outline"
-          size="small"
-        />
-        <AppHeader.Brand
-          href="/home"
-          aria-label="Azion home"
-        >
-          <Brand
-            variant="default"
-            size="small"
-          />
-        </AppHeader.Brand>
-        <Breadcrumb :items="breadcrumb" />
-      </AppHeader.Start>
-      <AppHeader.Center />
-      <AppHeader.End>
-        <button
-          type="button"
-          aria-label="Account settings"
-          class="rounded-full transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
-        >
-          <Avatar
-            label="name@example.com"
-            size="medium"
-            variant="square"
-          />
-        </button>
-      </AppHeader.End>
-    </AppHeader>
-
-    <main
-      class="animate-page-enter motion-reduce:animate-none relative min-w-0 flex-1 overflow-auto"
+  <CreateDeployTemplate
+    crumb="Upload a project"
+    :template="sampleUploadedProject"
+    @back="onLeave"
+  >
+    <div
+      ref="panelEl"
+      data-phase="form"
+      class="flex w-full flex-col items-center gap-(--spacing-xl)"
     >
-      <div
-        class="layout-column-focused relative flex min-h-full flex-col items-center gap-(--spacing-xl) px-(--spacing-md) py-(--spacing-2xl)"
-      >
-        <Card class="w-full">
-          <template #default>
-            <div class="flex w-full items-start gap-(--spacing-md)">
-              <span
-                class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
-              >
-                <i
-                  class="az az-folder text-body-lg leading-none text-(--text-default)"
-                  aria-hidden="true"
-                />
-              </span>
+      <Card class="w-full">
+        <template #default>
+          <div class="flex flex-col gap-(--spacing-lg)">
+            <div class="flex flex-col gap-(--spacing-2xs)">
+              <h2 class="text-heading-xs text-(--text-default)">Deploy your project</h2>
+              <p class="text-body-sm text-pretty text-(--text-muted)">
+                These files deploy once. Connect a Git provider later to ship every push
+                automatically.
+              </p>
+            </div>
 
-              <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-md)">
-                <div class="flex w-full min-w-0 flex-col overflow-hidden">
-                  <span class="flex items-center gap-(--spacing-xs)">
-                    <span class="truncate text-heading-2xs text-(--text-default)"
-                      >acme-landing</span
+            <div class="grid grid-cols-1 items-start gap-(--spacing-lg) sm:grid-cols-2">
+              <Field required>
+                <Field.Label>Project name</Field.Label>
+                <Input
+                  v-model="projectName"
+                  size="large"
+                  placeholder="my-project"
+                />
+              </Field>
+              <Field>
+                <Field.Label>Build preset</Field.Label>
+                <Select
+                  v-model="preset"
+                  size="large"
+                  placeholder="Select a preset"
+                >
+                  <Select.Trigger />
+                  <Select.Content>
+                    <Select.Item
+                      v-for="option in presets"
+                      :key="String(option.value)"
+                      :value="option.value"
                     >
+                      {{ option.label }}
+                    </Select.Item>
+                  </Select.Content>
+                </Select>
+                <Field.Description>{{ presetHelper }}</Field.Description>
+              </Field>
+            </div>
+
+            <h3 class="text-heading-2xs text-(--text-default)">Project files</h3>
+            <div class="flex w-full flex-col gap-(--spacing-lg)">
+              <div
+                class="overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised)"
+              >
+                <div class="flex items-center gap-(--spacing-sm) p-(--spacing-sm)">
+                  <span
+                    class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface)"
+                  >
+                    <i
+                      class="az az-folder-open text-body-md leading-none text-(--text-default)"
+                      aria-hidden="true"
+                    />
                   </span>
-                  <span class="text-body-xs text-(--text-muted)">
-                    Deploy this project straight from your machine.
+                  <span class="text-label-md text-(--text-default)">
+                    {{ folderSummary }}
                   </span>
                 </div>
-              </div>
-            </div>
-          </template>
-        </Card>
-
-        <div
-          data-phase="form"
-          class="flex w-full flex-col items-center gap-(--spacing-xl)"
-        >
-          <Card class="w-full">
-            <template #default>
-              <div class="flex flex-col gap-(--spacing-lg)">
-                <div class="flex flex-col gap-(--spacing-2xs)">
-                  <h2 class="text-heading-xs text-(--text-default)">Deploy your project</h2>
-                  <p class="text-body-sm text-pretty text-(--text-muted)">
-                    These files deploy once. Connect a Git provider later to ship every push
-                    automatically.
+                <div
+                  role="region"
+                  tabindex="0"
+                  :aria-label="`Files in ${folderName}`"
+                  class="max-h-56 overflow-auto overscroll-contain border-t border-(--border-muted) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color)"
+                >
+                  <ul
+                    class="list-none p-0"
+                    :aria-label="`Files in ${folderName}`"
+                  >
+                    <li
+                      v-for="file in shownFiles"
+                      :key="file.path"
+                      class="flex items-center gap-(--spacing-sm) px-(--spacing-sm) py-(--spacing-xs)"
+                    >
+                      <i
+                        :class="file.glyph"
+                        class="shrink-0 text-body-sm leading-none text-(--text-muted)"
+                        aria-hidden="true"
+                      />
+                      <span
+                        class="min-w-0 flex-1 truncate text-body-code-sm text-(--text-default)"
+                        :title="file.path"
+                      >
+                        {{ file.path }}
+                      </span>
+                      <span class="shrink-0 tabular-nums text-body-xs text-(--text-muted)">
+                        {{ formatSize(file.bytes) }}
+                      </span>
+                    </li>
+                  </ul>
+                  <p
+                    v-if="hiddenFileCount > 0"
+                    class="px-(--spacing-sm) py-(--spacing-xs) text-body-xs text-(--text-muted)"
+                  >
+                    and {{ countFormat(hiddenFileCount) }} more
                   </p>
                 </div>
-
-                <div class="grid grid-cols-1 items-start gap-(--spacing-lg) sm:grid-cols-2">
-                  <Field required>
-                    <Field.Label>Project name</Field.Label>
-                    <Input
-                      v-model="projectName"
-                      size="large"
-                      placeholder="my-project"
-                    />
-                  </Field>
-                  <Field>
-                    <Field.Label>Build preset</Field.Label>
-                    <Select
-                      v-model="preset"
-                      size="large"
-                      placeholder="Select a preset"
-                    >
-                      <Select.Trigger />
-                      <Select.Content>
-                        <Select.Item
-                          v-for="option in presets"
-                          :key="String(option.value)"
-                          :value="option.value"
-                        >
-                          {{ option.label }}
-                        </Select.Item>
-                      </Select.Content>
-                    </Select>
-                    <Field.Description>{{ presetHelper }}</Field.Description>
-                  </Field>
-                </div>
-
-                <h3 class="text-heading-2xs text-(--text-default)">Project files</h3>
-                <div class="flex w-full flex-col gap-(--spacing-lg)">
-                  <div
-                    class="overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised)"
-                  >
-                    <div class="flex items-center gap-(--spacing-sm) p-(--spacing-sm)">
-                      <span
-                        class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface)"
-                      >
-                        <i
-                          class="az az-folder-open text-body-md leading-none text-(--text-default)"
-                          aria-hidden="true"
-                        />
-                      </span>
-                      <span class="text-label-md text-(--text-default)">
-                        {{ folderSummary }}
-                      </span>
-                    </div>
-                    <div
-                      role="region"
-                      tabindex="0"
-                      :aria-label="`Files in ${folderName}`"
-                      class="max-h-56 overflow-auto overscroll-contain border-t border-(--border-muted) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color)"
-                    >
-                      <ul
-                        class="list-none p-0"
-                        :aria-label="`Files in ${folderName}`"
-                      >
-                        <li
-                          v-for="file in shownFiles"
-                          :key="file.path"
-                          class="flex items-center gap-(--spacing-sm) px-(--spacing-sm) py-(--spacing-xs)"
-                        >
-                          <i
-                            :class="file.glyph"
-                            class="shrink-0 text-body-sm leading-none text-(--text-muted)"
-                            aria-hidden="true"
-                          />
-                          <span
-                            class="min-w-0 flex-1 truncate text-body-code-sm text-(--text-default)"
-                            :title="file.path"
-                          >
-                            {{ file.path }}
-                          </span>
-                          <span class="shrink-0 tabular-nums text-body-xs text-(--text-muted)">
-                            {{ formatSize(file.bytes) }}
-                          </span>
-                        </li>
-                      </ul>
-                      <p
-                        v-if="hiddenFileCount > 0"
-                        class="px-(--spacing-sm) py-(--spacing-xs) text-body-xs text-(--text-muted)"
-                      >
-                        and {{ countFormat(hiddenFileCount) }} more
-                      </p>
-                    </div>
-                  </div>
-
-                  <Field
-                    v-if="!preset"
-                    required
-                  >
-                    <Field.Label>Root (/)</Field.Label>
-                    <Select
-                      v-model="root"
-                      size="large"
-                      placeholder="Select a file"
-                    >
-                      <Select.Trigger />
-                      <Select.Content>
-                        <Select.Item
-                          v-for="option in rootOptions"
-                          :key="option.value"
-                          :value="option.value"
-                        >
-                          {{ option.label }}
-                        </Select.Item>
-                      </Select.Content>
-                    </Select>
-                    <Field.Description>
-                      No index.html was found, so pick the file served at your site's root.
-                    </Field.Description>
-                  </Field>
-                </div>
               </div>
-            </template>
 
-            <template #footer>
-              <Button
-                class="w-full"
-                label="Deploy"
-                variant="primary"
-                size="large"
-                :disabled="!canDeploy"
-              />
-            </template>
-          </Card>
+              <Field
+                v-if="!preset"
+                required
+              >
+                <Field.Label>Root (/)</Field.Label>
+                <Select
+                  v-model="root"
+                  size="large"
+                  placeholder="Select a file"
+                >
+                  <Select.Trigger />
+                  <Select.Content>
+                    <Select.Item
+                      v-for="option in rootOptions"
+                      :key="option.value"
+                      :value="option.value"
+                    >
+                      {{ option.label }}
+                    </Select.Item>
+                  </Select.Content>
+                </Select>
+                <Field.Description>
+                  No index.html was found, so pick the file served at your site's root.
+                </Field.Description>
+              </Field>
+            </div>
+          </div>
+        </template>
 
+        <template #footer>
           <Button
-            label="Browse templates"
-            variant="outline"
-            size="medium"
+            class="w-full"
+            label="Deploy"
+            variant="primary"
+            size="large"
+            :disabled="!canDeploy"
           />
-        </div>
-      </div>
-    </main>
-  </div>
+        </template>
+      </Card>
+
+      <Button
+        label="Browse templates"
+        variant="outline"
+        size="medium"
+      />
+    </div>
+  </CreateDeployTemplate>
+  <ConfirmDialog
+    v-bind="discardDialog"
+    data-testid="unsaved-changes-dialog"
+  >
+    <template #actions>
+      <Button
+        :label="discardLabels.keepEditing"
+        variant="ghost"
+        size="medium"
+        data-autofocus
+        @click="guard.keepEditing"
+      />
+      <Button
+        :label="discardLabels.discard"
+        variant="danger"
+        size="medium"
+        @click="guard.discardAndLeave"
+      />
+    </template>
+  </ConfirmDialog>
 </template>

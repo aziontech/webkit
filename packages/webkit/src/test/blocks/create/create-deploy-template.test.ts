@@ -4,7 +4,9 @@ import { userEvent } from 'vitest/browser'
 import { type Component, createApp } from 'vue'
 
 import CreateDeployTemplate from '../../../../blocks/create/create-deploy-template/create-deploy-template.vue'
+import BuildSettings from '../../../../blocks/create/create-deploy-template/variants/build-settings.vue'
 import DeployTemplateForm from '../../../../blocks/create/create-deploy-template/variants/form.vue'
+import ImportFromGit from '../../../../blocks/create/create-deploy-template/variants/import-from-git.vue'
 import InstallIntegration from '../../../../blocks/create/create-deploy-template/variants/install-integration.vue'
 import DeployTemplateUpload from '../../../../blocks/create/create-deploy-template/variants/upload.vue'
 import WhereItRuns from '../../../../blocks/create/create-deploy-template/variants/where-it-runs.vue'
@@ -190,5 +192,43 @@ describe('create-deploy-template#Form keyboard', () => {
     expect(screen.queryByText('NUXT_STORE_ACCESS_TOKEN is required.')).toBeNull()
     pressSubmitShortcut(screen.getByRole('textbox', { name: /repository name/i }))
     expect(await screen.findByText('NUXT_STORE_ACCESS_TOKEN is required.')).toBeTruthy()
+  })
+})
+
+describe('create-deploy-template form states', () => {
+  it('ImportFromGit: names the repository it imports and asks before Escape discards an edit', async () => {
+    render(ImportFromGit)
+    expect(screen.getByText('Importing from GitHub')).toBeTruthy()
+    expect(screen.getAllByText('Import from Git').length).toBeGreaterThan(0)
+    const name = screen.getByRole('textbox', { name: /repository name/i }) as HTMLInputElement
+    await fireEvent.update(name, 'acme-store')
+    name.focus()
+    await userEvent.keyboard('{Escape}')
+    const confirm = await screen.findByRole('alertdialog')
+    await fireEvent.click(within(confirm).getByRole('button', { name: 'Keep editing' }))
+    await waitFor(() => expect(screen.queryByRole('alertdialog')).toBeNull())
+    expect(name.value).toBe('acme-store')
+  })
+
+  it('Upload: shows no Git source line and asks before Back discards an edit', async () => {
+    render(DeployTemplateUpload)
+    expect(screen.queryByText(/Cloning from/)).toBeNull()
+    await fireEvent.update(screen.getByRole('textbox', { name: /Project name/ }), 'acme-docs')
+    await fireEvent.click(screen.getByRole('button', { name: 'Back to Creation Center' }))
+    expect(await screen.findByRole('alertdialog')).toBeTruthy()
+  })
+
+  it('BuildSettings and InstallIntegration run their action with Cmd or Ctrl Enter', async () => {
+    const settings = render(BuildSettings)
+    const deploy = screen.getByRole('button', { name: 'Deploy' })
+    expect(deploy.getAttribute('aria-keyshortcuts')).toBe('Meta+Enter Control+Enter')
+    settings.unmount()
+    render(InstallIntegration)
+    expect(screen.getByText('Adds to')).toBeTruthy()
+    const add = screen.getByRole('button', { name: 'Add to service-01' })
+    expect(add.getAttribute('aria-keyshortcuts')).toBe('Meta+Enter Control+Enter')
+    expect(screen.queryByText('This field is required.')).toBeNull()
+    pressSubmitShortcut(screen.getByRole('textbox', { name: /Host header/ }))
+    expect(await screen.findByText('This field is required.')).toBeTruthy()
   })
 })

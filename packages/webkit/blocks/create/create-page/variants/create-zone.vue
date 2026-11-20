@@ -153,17 +153,31 @@
     applyParsed(parsed, 'the pasted zone file')
   }
 
+  const restoreRecords = (snapshot: ZoneRecord[], source: string) => {
+    records.value = snapshot
+    importedFrom.value = source
+  }
+
   const removeRecord = (index: number) => {
-    records.value.splice(index, 1)
+    const snapshot = [...records.value]
+    const source = importedFrom.value
+    const [record] = records.value.splice(index, 1)
     if (!records.value.length) importedFrom.value = ''
+    if (!record) return
+    toast.info(`${record.type} record ${record.name} removed.`, {
+      action: { label: 'Undo', onClick: () => restoreRecords(snapshot, source) }
+    })
   }
 
   const discardImport = () => {
-    const count = records.value.length
+    const snapshot = [...records.value]
+    const source = importedFrom.value
+    const count = snapshot.length
     records.value = []
     importedFrom.value = ''
     toast.info(
-      count === 1 ? '1 imported record discarded.' : `${count} imported records discarded.`
+      count === 1 ? '1 imported record discarded.' : `${count} imported records discarded.`,
+      { action: { label: 'Undo', onClick: () => restoreRecords(snapshot, source) } }
     )
   }
 
@@ -206,7 +220,7 @@
 
   const onLeave = () => guard.confirmLeave()
 
-  useEscapeToCancel(onLeave)
+  useEscapeToCancel(onLeave, { enabled: () => !submitting.value })
 
   const formEl = ref<HTMLFormElement | null>(null)
   const nameEl = ref<InstanceType<typeof Input> | null>(null)

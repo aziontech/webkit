@@ -40,13 +40,20 @@ An outlined medium `Button` under the step that returns to the template list. It
 
 ## Data
 
-The block takes the template and the account through props and emits every action; it fetches nothing. `DeployTemplateProps` and `DeployTemplateTemplate` are exported from `create-deploy-template.vue`, and `sample.ts` holds the sample template and account the block renders when a prop is left out. The variants are their own screens (the later steps of the flow) and keep their own records.
+The block takes the template and the account through props and emits every action; it fetches nothing. `DeployTemplateProps` and `DeployTemplateTemplate` are exported from `create-deploy-template.vue`, and `sample.ts` holds the sample template and account the block renders when a prop is left out, and the imported repository, uploaded project and integration the variants pass. Every variant renders the block: the header, the preview card, Back and Escape come from it, and the variant fills the default slot with the step it is on and keeps that step's own records.
 
 | Prop            | Type                     | What it does                                                                       |
 | --------------- | ------------------------ | ---------------------------------------------------------------------------------- |
 | `template`      | `DeployTemplateTemplate` | The template: its name in the crumb, the preview card and the connect description. |
 | `account`       | `string`                 | The signed-in account, the avatar label.                                           |
 | `providersHref` | `string`                 | Where Manage connected providers leads.                                            |
+| `crumb`         | `string`                 | The way the page was reached, the first crumb; Start from a template by default.   |
+| `service`       | `string`                 | The service the project deploys to, named in the Connect a Git provider step.      |
+
+| Slot      | What it holds                                                                                                                                 |
+| --------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `default` | The step the flow is on; left empty, the Connect a Git provider step with Browse templates.                                                   |
+| `details` | The source line of the preview card; left empty, Cloning from the provider over the scope and path. A template with no `provider` shows none. |
 
 | Event      | Payload   | When                     |
 | ---------- | --------- | ------------------------ |
@@ -79,7 +86,7 @@ Then delete `sample.ts` and its import.
 
 ## Do
 
-- Leaving with typed work: on the Form state the header Back asks first once the scope, the repository name, its visibility or any setting or variable differs from what the form opened with: `useUnsavedChanges` tracks them, Back `await`s `guard.confirmLeave()` before it leaves, and one `ConfirmDialog v-bind="guard.dialogProps"` asks "Unsaved changes" with Keep editing and Discard changes. An untouched form leaves at once. In a router app pair it with `onBeforeRouteLeave(() => guard.confirmLeave())`.
+- Leaving with typed work: on every form state (Form, BuildSettings, SettingsLoading, ImportFromGit, Upload, InstallIntegration) the header Back asks first once a field differs from what the form opened with (the scope, the repository name, its visibility, the build preset, a setting or a variable): `useUnsavedChanges` tracks them, Back `await`s `guard.confirmLeave()` before it leaves, and one `ConfirmDialog v-bind="guard.dialogProps"` asks "Unsaved changes" with Keep editing and Discard changes. An untouched form leaves at once. In a router app pair it with `onBeforeRouteLeave(() => guard.confirmLeave())`.
 - Keep the template preview card at the top of the column through every phase, so the user always sees what is being deployed.
 - Ask for Git first; show the form only once a provider is connected.
 - Let Deploy check the form: show each missing required value under its field and open the collapsed group that holds it. Disable Deploy only while the settings load, or on an upload until a Root (/) is picked.
@@ -112,9 +119,9 @@ Then delete `sample.ts` and its import.
 
 ## Accessibility
 
-- **Escape on the page = Cancel.** Escape runs the same path as Back to Creation Center: `useEscapeToCancel` emits `back` from the template step, and the Form `await`s `guard.confirmLeave()` first, so an edited form opens the Unsaved changes dialog. It stays inert while an IME is composing, when another handler already used the key, while a menu, listbox, popover, tooltip or dialog is open, and when focus is in a control that uses Escape itself. Edit and settings pages are places, not tasks: Escape stays inert there.
-- **The Form opens with the cursor in Scope**, its first field.
-- **⌘ Enter deploys (`Ctrl Enter` off Apple)** through the same function as the Deploy button, from any field; the button carries `aria-keyshortcuts` and an `aria-hidden` `Kbd`, and the `?` dialog lists Deploy.
+- **Escape on the page = Cancel.** Escape runs the same path as Back to Creation Center: `useEscapeToCancel` in the block emits `back` on every state, and a form state handles `back` with `guard.confirmLeave()`, so an edited form opens the Unsaved changes dialog. It stays inert while an IME is composing, when another handler already used the key, while a menu, listbox, popover, tooltip or dialog is open, and when focus is in a control that uses Escape itself. Edit and settings pages are places, not tasks: Escape stays inert there.
+- **Every form state opens with the cursor in its first field** (Scope on the Form).
+- **⌘ Enter deploys (`Ctrl Enter` off Apple)** through the same function as the Deploy button, from any field, on Form, BuildSettings and ImportFromGit, and runs Add to service-01 on InstallIntegration; the button carries `aria-keyshortcuts` and an `aria-hidden` `Kbd`, and the `?` dialog lists the action.
 - One `main` landmark under the header; the step title is an `h2` and the settings group an `h3`.
 - The back `IconButton`, the brand link and the account button each have an `aria-label`.
 - The repository name has a visible `Field.Label` tied to its input by its `Field`; the privacy switch is labelled Public repository and announces its on or off state.

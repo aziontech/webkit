@@ -35,3 +35,17 @@ export const samplePartialItems: DeployProgressDialogItem[] = settings.map((entr
     ? { ...entry, status: 'failed', message: failure }
     : { ...entry, status: 'done', message: '' }
 )
+
+export const sampleDropItems: DeployProgressDialogItem[] = settings.slice(0, 2).map((entry) => ({
+  ...entry,
+  status: 'queued',
+  message: ''
+}))
+
+export const sampleDroppedFiles = [
+  { path: 'dist/index.html', size: 4812 },
+  { path: 'dist/assets/app-3f9c2a.js', size: 186_204 },
+  { path: 'dist/assets/app-3f9c2a.css', size: 23_517 },
+  { path: 'dist/assets/logo.svg', size: 2_946 },
+  { path: 'dist/robots.txt', size: 68 }
+]

@@ -1,16 +1,18 @@
 <script setup lang="ts">
-  import AppHeader from '@aziontech/webkit/app-header'
-  import Avatar from '@aziontech/webkit/avatar'
-  import Brand from '@aziontech/webkit/brand'
-  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import Field from '@aziontech/webkit/field'
-  import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
+  import Kbd from '@aziontech/webkit/kbd'
   import Tag from '@aziontech/webkit/tag'
-  import { computed, reactive, ref } from 'vue'
+  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
+  import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
+  import { computed, onMounted, reactive, ref } from 'vue'
+
+  import CreateDeployTemplate from '../create-deploy-template.vue'
+  import { sampleIntegration } from '../sample'
 
   interface TemplateSetting {
     name: string
@@ -20,7 +22,6 @@
     required: boolean
   }
 
-  const breadcrumb = [{ label: 'Start from a template' }, { label: 'Origin Proxy', active: true }]
   const service = 'service-01'
   const settings: TemplateSetting[] = [
     {
@@ -65,214 +66,195 @@
   const install = () => {
     submitted.value = true
   }
+
+  const guard = useUnsavedChanges(() => values)
+  const discardDialog = guard.dialogProps
+  const discardLabels = guard.labels
+
+  const onLeave = () => guard.confirmLeave()
+
+  const panelEl = ref<HTMLElement | null>(null)
+
+  useShortcuts({
+    keys: 'meta+enter',
+    label: 'Add to ' + service,
+    group: 'Page',
+    element: panelEl,
+    handler: install
+  })
+
+  onMounted(() =>
+    panelEl.value
+      ?.querySelector<HTMLElement>(
+        '[role="combobox"], input:not([type="hidden"]), textarea, select'
+      )
+      ?.focus()
+  )
 </script>
 
 <template>
-  <div class="flex h-dvh flex-col overflow-hidden bg-(--bg-canvas)">
-    <AppHeader aria-label="Console">
-      <AppHeader.Start>
-        <IconButton
-          icon="az az-chevron-left"
-          aria-label="Back to Creation Center"
-          variant="outline"
-          size="small"
+  <CreateDeployTemplate
+    :template="sampleIntegration"
+    @back="onLeave"
+  >
+    <template #details>
+      <span class="truncate text-body-2xs text-(--text-muted)">Adds to</span>
+      <span class="flex h-5 items-center gap-(--spacing-2xs) text-label-sm text-(--text-default)">
+        <i
+          class="az az-server text-[length:inherit] leading-none"
+          aria-hidden="true"
         />
-        <AppHeader.Brand
-          href="/home"
-          aria-label="Azion home"
-        >
-          <Brand
-            variant="default"
-            size="small"
-          />
-        </AppHeader.Brand>
-        <Breadcrumb :items="breadcrumb" />
-      </AppHeader.Start>
-      <AppHeader.Center />
-      <AppHeader.End>
-        <button
-          type="button"
-          aria-label="Account settings"
-          class="rounded-full transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
-        >
-          <Avatar
-            label="name@example.com"
-            size="medium"
-            variant="square"
-          />
-        </button>
-      </AppHeader.End>
-    </AppHeader>
-
-    <main
-      class="animate-page-enter motion-reduce:animate-none relative min-w-0 flex-1 overflow-auto"
-    >
+        {{ service }}
+      </span>
+    </template>
+    <template #default>
       <div
-        class="layout-column-focused relative flex min-h-full flex-col items-center gap-(--spacing-xl) px-(--spacing-md) py-(--spacing-2xl)"
+        ref="panelEl"
+        data-phase="install"
+        class="flex w-full flex-col items-center gap-(--spacing-xl)"
       >
         <Card class="w-full">
           <template #default>
-            <div class="flex w-full items-start gap-(--spacing-md)">
-              <span
-                class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
-              >
-                <i
-                  class="az az-arrow-right-left text-body-lg leading-none text-(--text-default)"
-                  aria-hidden="true"
-                />
-              </span>
-
-              <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-md)">
-                <div class="flex w-full min-w-0 flex-col overflow-hidden">
-                  <span class="flex items-center gap-(--spacing-xs)">
-                    <span class="truncate text-heading-2xs text-(--text-default)"
-                      >Origin Proxy</span
-                    >
-                  </span>
-                  <span class="text-body-xs text-(--text-muted)">
-                    Front an origin you already run. The service receives the traffic and passes it
-                    on.
-                  </span>
-                </div>
-
-                <div class="flex w-full flex-col gap-(--spacing-2xs)">
-                  <span class="truncate text-body-2xs text-(--text-muted)">Adds to</span>
-                  <span
-                    class="flex h-5 items-center gap-(--spacing-2xs) text-label-sm text-(--text-default)"
-                  >
-                    <i
-                      class="az az-server text-[length:inherit] leading-none"
-                      aria-hidden="true"
-                    />
-                    {{ service }}
-                  </span>
-                </div>
+            <div class="flex flex-col gap-(--spacing-lg)">
+              <div class="flex flex-col gap-(--spacing-2xs)">
+                <h1 class="text-heading-xs text-(--text-default)">Configure Origin Proxy</h1>
+                <p class="text-body-sm text-pretty text-(--text-muted)">
+                  An integration template adds records and a rule to a service you already run.
+                  Nothing is cloned and nothing builds.
+                </p>
               </div>
+
+              <Field
+                v-for="setting in settings"
+                :key="setting.name"
+                :required="setting.required"
+                :invalid="!!errorOf(setting)"
+              >
+                <Field.Label :for="'setting-' + setting.name">{{ setting.label }}</Field.Label>
+                <Input
+                  :id="'setting-' + setting.name"
+                  v-model="values[setting.name]"
+                  size="large"
+                  :placeholder="setting.placeholder"
+                />
+                <Field.Description>{{ errorOf(setting) || setting.description }}</Field.Description>
+              </Field>
             </div>
           </template>
         </Card>
 
-        <div
-          data-phase="install"
-          class="flex w-full flex-col items-center gap-(--spacing-xl)"
+        <Card
+          :padded="false"
+          title="What gets added"
+          class="w-full"
         >
-          <Card class="w-full">
-            <template #default>
-              <div class="flex flex-col gap-(--spacing-lg)">
-                <div class="flex flex-col gap-(--spacing-2xs)">
-                  <h1 class="text-heading-xs text-(--text-default)">Configure Origin Proxy</h1>
-                  <p class="text-body-sm text-pretty text-(--text-muted)">
-                    An integration template adds records and a rule to a service you already run.
-                    Nothing is cloned and nothing builds.
-                  </p>
-                </div>
+          <template #default>
+            <p
+              class="border-b border-(--border-default) p-(--spacing-md) text-body-sm text-(--text-muted)"
+            >
+              These land on {{ service }}. The rule opens in its rules for you to save.
+            </p>
 
-                <Field
-                  v-for="setting in settings"
-                  :key="setting.name"
-                  :required="setting.required"
-                  :invalid="!!errorOf(setting)"
-                >
-                  <Field.Label :for="'setting-' + setting.name">{{ setting.label }}</Field.Label>
-                  <Input
-                    :id="'setting-' + setting.name"
-                    v-model="values[setting.name]"
-                    size="large"
-                    :placeholder="setting.placeholder"
-                  />
-                  <Field.Description>{{
-                    errorOf(setting) || setting.description
-                  }}</Field.Description>
-                </Field>
-              </div>
-            </template>
-          </Card>
-
-          <Card
-            :padded="false"
-            title="What gets added"
-            class="w-full"
-          >
-            <template #default>
-              <p
-                class="border-b border-(--border-default) p-(--spacing-md) text-body-sm text-(--text-muted)"
-              >
-                These land on {{ service }}. The rule opens in its rules for you to save.
+            <div
+              class="flex flex-col gap-(--spacing-sm) border-b border-(--border-default) p-(--spacing-md)"
+            >
+              <p class="text-label-sm text-(--text-default)">Records</p>
+              <p class="text-body-sm text-(--text-muted)">
+                Origin
+                <span class="text-(--text-default)">{{ preview.origin.name }}</span>
+                →
+                {{ preview.origin.address }}
               </p>
+            </div>
 
-              <div
-                class="flex flex-col gap-(--spacing-sm) border-b border-(--border-default) p-(--spacing-md)"
-              >
-                <p class="text-label-sm text-(--text-default)">Records</p>
-                <p class="text-body-sm text-(--text-muted)">
-                  Origin
-                  <span class="text-(--text-default)">{{ preview.origin.name }}</span>
-                  →
-                  {{ preview.origin.address }}
-                </p>
-              </div>
-
-              <Item.List>
-                <Item size="small">
-                  <Item.Media>
-                    <span
-                      class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
-                    >
-                      <i
-                        class="az az-sliders-horizontal text-body-md leading-none text-(--text-default)"
-                        aria-hidden="true"
-                      />
-                    </span>
-                  </Item.Media>
-                  <Item.Content>
-                    <Item.Title>{{ preview.rule.name }}</Item.Title>
-                    <Item.Description>{{ preview.rule.description }}</Item.Description>
-                  </Item.Content>
-                  <Item.Actions>
-                    <Tag
-                      label="Request phase"
-                      severity="neutral"
-                      size="small"
+            <Item.List>
+              <Item size="small">
+                <Item.Media>
+                  <span
+                    class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
+                  >
+                    <i
+                      class="az az-sliders-horizontal text-body-md leading-none text-(--text-default)"
+                      aria-hidden="true"
                     />
-                  </Item.Actions>
-                </Item>
-              </Item.List>
-
-              <ul
-                class="m-0 flex list-none flex-wrap gap-(--spacing-2xs) p-(--spacing-md) pt-0"
-                aria-label="Behaviors"
-              >
-                <li
-                  v-for="behavior in preview.behaviors"
-                  :key="behavior"
-                >
+                  </span>
+                </Item.Media>
+                <Item.Content>
+                  <Item.Title>{{ preview.rule.name }}</Item.Title>
+                  <Item.Description>{{ preview.rule.description }}</Item.Description>
+                </Item.Content>
+                <Item.Actions>
                   <Tag
-                    :label="behavior"
+                    label="Request phase"
                     severity="neutral"
                     size="small"
                   />
-                </li>
-              </ul>
-            </template>
+                </Item.Actions>
+              </Item>
+            </Item.List>
 
-            <template #footer>
-              <Button
-                class="w-full"
-                :label="'Add to ' + service"
-                variant="primary"
-                size="large"
-                @click="install"
+            <ul
+              class="m-0 flex list-none flex-wrap gap-(--spacing-2xs) p-(--spacing-md) pt-0"
+              aria-label="Behaviors"
+            >
+              <li
+                v-for="behavior in preview.behaviors"
+                :key="behavior"
+              >
+                <Tag
+                  :label="behavior"
+                  severity="neutral"
+                  size="small"
+                />
+              </li>
+            </ul>
+          </template>
+
+          <template #footer>
+            <Button
+              class="w-full"
+              variant="primary"
+              size="large"
+              :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
+              @click="install"
+            >
+              Add to {{ service }}
+              <Kbd
+                meta
+                key-name="enter"
+                size="small"
+                aria-hidden="true"
               />
-            </template>
-          </Card>
+            </Button>
+          </template>
+        </Card>
 
-          <Button
-            label="Browse templates"
-            variant="outline"
-            size="medium"
-          />
-        </div>
+        <Button
+          label="Browse templates"
+          variant="outline"
+          size="medium"
+        />
       </div>
-    </main>
-  </div>
+    </template>
+  </CreateDeployTemplate>
+  <ConfirmDialog
+    v-bind="discardDialog"
+    data-testid="unsaved-changes-dialog"
+  >
+    <template #actions>
+      <Button
+        :label="discardLabels.keepEditing"
+        variant="ghost"
+        size="medium"
+        data-autofocus
+        @click="guard.keepEditing"
+      />
+      <Button
+        :label="discardLabels.discard"
+        variant="danger"
+        size="medium"
+        @click="guard.discardAndLeave"
+      />
+    </template>
+  </ConfirmDialog>
 </template>
