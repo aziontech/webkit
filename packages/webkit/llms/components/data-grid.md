@@ -82,6 +82,7 @@
 - `empty`: no rows, the `empty` slot (default `EmptyState`, `dataGrid.emptyTitle`) under the header, outside the grid's rows; the header and toolbar stay.
 - No `disabled` state: a grid people may not edit is `readonly` (the cursor, ranges and copy keep working). No `loading` or `error` state of its own: the app shows a `Skeleton` or an `Alert` around the grid while it loads; DataGrid never fetches.
 - `data-frozen="start"` on the first column's cells with `frozenFirstColumn`; `data-resizing` on a header while its width is dragged.
+- Scroll cue: the viewport sits in a `__scroll` frame that sets `data-overflow-start` / `data-overflow-end` from the scroll position (re-measured on scroll and on resize). While content is hidden past an inline edge, an `aria-hidden` 24 px gradient (`__fade-start` / `__fade-end`, `from-transparent` to `var(--bg-surface)`, pointer events off) covers that edge; the start fade begins after the frozen columns. It follows the inline direction under `dir="rtl"`, has no motion, and keeps its gradient under forced colors (fading to `Canvas`).
 
 ## Accessibility
 
@@ -99,7 +100,7 @@
 
 ## Right-to-left
 
-- Layout: logical utilities only (`start-0`, `ps-` / `pe-`, `text-start` / `text-end`, `border-e`); the frozen first column pins to the inline start edge, and the resize handle sits on the inline end edge of each header.
+- Layout: logical utilities only (`start-0`, `ps-` / `pe-`, `text-start` / `text-end`, `border-e`); the frozen first column pins to the inline start edge, the scroll cue sits on the inline edges, and the resize handle sits on the inline end edge of each header.
 - Icons: none of its own; the row checkbox and the empty state are the package's components.
 - Keyboard: `Arrow Left` / `Arrow Right` follow the reading direction (`logicalArrowKey`): under `dir="rtl"` `Arrow Left` moves to the next cell; a resize handle's `Arrow Right` widens under `ltr` and `Arrow Left` widens under `rtl`.
 - User data: cell text renders in a `<bdi>`, so ids, domains and numbers keep their own direction.
@@ -125,7 +126,7 @@
 ## Responsive
 
 - Container queries: none: the grid is a two-dimensional surface that keeps its columns at every width.
-- Narrow (≤ 640 px or a narrow container): the viewport scrolls sideways inside the grid, with the frozen first column still in view; the toolbar wraps.
+- Narrow (≤ 640 px or a narrow container): the viewport scrolls sideways inside the grid, with the frozen first column still in view and the scroll cue on the edge that hides columns; the toolbar wraps.
 - Touch: cells and headers are 44 px high under `pointer: coarse` (40 px otherwise); the resize handle's hit area is 44 px under `pointer: coarse` (24 px otherwise); editing opens on a second tap; nothing is hover-only.
 - Reflow: a data grid is the WCAG 1.4.10 exception for two-dimensional content: the grid scrolls horizontally inside its frame, never the page.
 - Touch: on coarse pointers (`pointer-coarse:`) the cell editor's text, the text field and the native `select` alike, steps up to 16 px (`text-body-md`), so iOS Safari does not zoom the page while editing a cell.

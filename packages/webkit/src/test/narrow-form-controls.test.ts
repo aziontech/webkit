@@ -8,8 +8,11 @@ import { defineComponent, h } from 'vue'
 import Profile from '../../blocks/account/account-onboarding-form/variants/profile.vue'
 import CreateAndDeploy from '../../blocks/create/create-wizard/variants/create-and-deploy.vue'
 import EditSchema from '../../blocks/edit/edit-schema/edit-schema.vue'
-import AttributeEditor from '../components/input/attribute-editor/attribute-editor.vue'
+import AttributeEditorRoot from '../components/input/attribute-editor/attribute-editor.vue'
+import { hostable } from './hostable'
 import { useToastRegion } from './toast-region'
+
+const AttributeEditor = hostable(AttributeEditorRoot)
 
 useToastRegion()
 

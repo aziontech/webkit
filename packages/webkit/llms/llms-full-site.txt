@@ -1593,6 +1593,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 - Visual states: `default`; from `lg` the rail is `expanded` or `collapsed` (`Sidebar` `data-collapsed`, the edge affordance shown) and `resizing` while dragged; below `lg` the rail is a drawer (`open` / `closed`) opened from the header; the end rail shows from `xl` when the page registered at least one heading (the `aside` slot renders under the outline, never on its own); the palette `open` / `closed`.
 - Outline: built from the headings the page registers, in document order, updated as a page mounts, changes or leaves (a route change swaps the entries); no heading registers on the server, so the server render and the first client render carry no outline rail and it appears once the page mounts. The entry of the heading nearest the top of the viewport (under the header) carries `aria-current="location"`; choosing an entry or a heading anchor scrolls the heading under the header and updates the address hash.
+- Unsafe `href` on a navigation row, crumb, section or palette page (`javascript:`, `data:`, any non-web scheme, `//host`): the row renders with no link and choosing it, by pointer or keyboard, follows nothing; `navigate` still fires, so the handler decides.
 - Not applicable: `loading`, `empty`, `error`, `disabled`, `readonly`, `invalid` (the article owns its states).
 
 ## Accessibility
@@ -3147,6 +3148,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 - Visual states: `default`; the palette `open` / `closed`; the bar's sheet and mega-menus own their states (`SiteHeaderSection`).
 - `navOverlay` (mirrored on `data-nav-overlay`): the root becomes a one-column grid where the bar and the main landmark share the first row, so the first band runs under the bar (a home page whose hero art fills the top); the bar stays sticky to the end of the page and the footer takes the second row.
+- Unsafe `href` on a navigation row, crumb, section or palette page (`javascript:`, `data:`, any non-web scheme, `//host`): the row renders with no link and choosing it, by pointer or keyboard, follows nothing; `navigate` still fires, so the handler decides.
 - Not applicable: `loading`, `empty`, `error`, `disabled`, `readonly`, `invalid` (the sections own their states).
 
 ## Accessibility
@@ -4850,6 +4852,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - `data-size` mirrors the `size` prop; `large` sets the headline at `heading-xl` and the description at `body-lg`, and pads the copy cell `var(--spacing-2xl)` on every side instead of `var(--spacing-xl)`, for a band whose copy cell holds only a headline and its actions. While a horizontal band is split but narrower than 72rem, its halves are too narrow for that padding, so the large copy cell pads `var(--spacing-xl)` there and the `heading-xl` headline keeps its width (a two-line headline stays two lines from the split up). The padding follows the type, so a call site never re-spaces a large band by hand
 - `data-align` mirrors the `align` prop; `start` spreads the copy column so the headline sits at the cell's top and the actions on its floor, `center` gathers the stack and its actions on the cell's vertical middle. The text stays flush with the leading edge either way
 - `data-media-href` is present when `mediaHref` is set, and is what turns the band into a link: the media cell is a single `<a>` named by the band's `title`, and a chevron affordance sits at its closing lower corner — `opacity-0` at rest, revealed on `hover` anywhere on the band and on the cell's own `focus-visible`, so the keyboard reaches the same affordance the pointer does. The affordance is `aria-hidden` decoration, never a nested control: the cell is the link
+- An unsafe `mediaHref` (`javascript:`, `data:`, any non-web scheme, `//host`) counts as unset: no `data-media-href`, no link, and a click on the band follows nothing.
 - A band carrying `mediaHref` is clickable as a whole: the pointer turns to `cursor-pointer`, and a click anywhere outside a control follows the URL — in a new tab with `Cmd`/`Ctrl` held, and not at all while the reader is selecting text or when a consumer's own `click` listener called `preventDefault()`. Links and buttons inside the band keep their own destinations. The keyboard path is the media cell's link, so the band adds no tab stop
 - Hovering a band carrying `mediaHref` lights every link in the `actions` slot as if it were hovered itself — its hover overlay shows and a trailing icon nudges forward — and pressing the band shows their active overlay, so the band and its action read as one target. Actions rendered as `<button>` are left alone
 
@@ -5885,6 +5888,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - The left rail renders only the groups that are set, and is omitted when none is
 - Copying: the copy-link button and the `link` menu entry copy the current page URL (`article.href` when there is none); the copy-feed button (when `share.copyFeed` and `share.feed` are set) copies `share.feed`; the split button's main action copies the page as markdown (headline, deck, body); each success raises a success toast (`share.copiedLink` / `copiedFeed` / `copiedPage`, or the locale default), and a failed clipboard write raises an error toast. Toasts render where the page mounts a `Toaster`
 - Copy-page menu: the `link` entry copies the URL; the `markdown` entry opens the page as plain-text markdown in a new tab; an entry whose `value` is a key of `assistants` opens that template in a new tab with `{prompt}` replaced by the encoded prompt `Read <article.href> so I can ask questions about it.`
+- An assistant template that resolves to an unsafe URL (`javascript:`, `data:`, any non-web scheme, `//host`) opens nothing.
 - Byline: with `authors`, overlapping large avatars (photo, or initials without one) lead the byline; with `author`, the names sit above the date and read time
 - Prose: fenced code blocks render as `pre`/`code`; numbered lists as `ol`; a full `http` link opens in a new tab
 - The eyebrow is plain text with no `//` prefix: that prefix belongs to the hero and the pricing sections only.

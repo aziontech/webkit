@@ -337,9 +337,12 @@
       return
     }
     const minutes = presetMinutes[String(value ?? '24h')] ?? fullWindowMinutes
-    range.value =
-      relativeOptions.find((option) => option.amount * unitMs[option.unit] === minutes * 60000) ??
-      null
+    const option = relativeOptions.find(
+      (candidate) => candidate.amount * unitMs[candidate.unit] === minutes * 60000
+    )
+    range.value = option
+      ? { type: 'relative', key: option.key, amount: option.amount, unit: option.unit }
+      : null
   }
 
   const inWindow = (date: unknown) => {

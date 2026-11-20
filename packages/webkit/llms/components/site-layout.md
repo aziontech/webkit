@@ -68,6 +68,7 @@
 
 - Visual states: `default`; the palette `open` / `closed`; the bar's sheet and mega-menus own their states (`SiteHeaderSection`).
 - `navOverlay` (mirrored on `data-nav-overlay`): the root becomes a one-column grid where the bar and the main landmark share the first row, so the first band runs under the bar (a home page whose hero art fills the top); the bar stays sticky to the end of the page and the footer takes the second row.
+- Unsafe `href` on a navigation row, crumb, section or palette page (`javascript:`, `data:`, any non-web scheme, `//host`): the row renders with no link and choosing it, by pointer or keyboard, follows nothing; `navigate` still fires, so the handler decides.
 - Not applicable: `loading`, `empty`, `error`, `disabled`, `readonly`, `invalid` (the sections own their states).
 
 ## Accessibility

@@ -52,6 +52,8 @@ const CI_ONLY = {
   'pnpm run typecheck:docs': 'pnpm gates at the root',
   'pnpm run check:webkit:type-coverage': 'about 50 s; pnpm gates at the root',
   'pnpm check:pack': 'about 35 s of npm pack',
+  'pnpm build:icons':
+    'builds the icon font the styled browser tests load; build:docs builds it too',
   'pnpm build:docs': 'a full docs build',
   'pnpm check:docs:links': 'needs the docs build',
   'pnpm build:demos': 'a full demos build',

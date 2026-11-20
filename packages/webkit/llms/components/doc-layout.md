@@ -83,6 +83,7 @@
 
 - Visual states: `default`; from `lg` the rail is `expanded` or `collapsed` (`Sidebar` `data-collapsed`, the edge affordance shown) and `resizing` while dragged; below `lg` the rail is a drawer (`open` / `closed`) opened from the header; the end rail shows from `xl` when the page registered at least one heading (the `aside` slot renders under the outline, never on its own); the palette `open` / `closed`.
 - Outline: built from the headings the page registers, in document order, updated as a page mounts, changes or leaves (a route change swaps the entries); no heading registers on the server, so the server render and the first client render carry no outline rail and it appears once the page mounts. The entry of the heading nearest the top of the viewport (under the header) carries `aria-current="location"`; choosing an entry or a heading anchor scrolls the heading under the header and updates the address hash.
+- Unsafe `href` on a navigation row, crumb, section or palette page (`javascript:`, `data:`, any non-web scheme, `//host`): the row renders with no link and choosing it, by pointer or keyboard, follows nothing; `navigate` still fires, so the handler decides.
 - Not applicable: `loading`, `empty`, `error`, `disabled`, `readonly`, `invalid` (the article owns its states).
 
 ## Accessibility
