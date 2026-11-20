@@ -255,6 +255,20 @@ The **`dead-token-shorthand`** token-check blocks both spellings at write time a
 
 Shipped in `Trace` (its name column stayed at 9rem in every panel) until 2026-11-13. The **`container-query-on-container`** token check blocks it at write time and in the CI ratchet.
 
+## Never read `:has()` from a frame that wraps rows
+
+A `group-has-[…]/<frame>:` variant asks Chromium to re-check the `:has()` whenever anything inside the frame changes. On a frame that wraps a list or a table, every row a virtualizer mounts triggers that check, and a `:has()` in an ancestor position invalidates the whole frame subtree, so every visible cell restyles on every scroll frame.
+
+```html
+<!-- ❌ every mounted row restyles the whole table -->
+<span class="hidden group-data-[overflow-end]/scroll:block group-has-[[data-frozen=end]]/scroll:invisible"></span>
+
+<!-- ✅ the cue sits below the frozen cells (z-10), which paint over it -->
+<span class="z-5 hidden group-data-[overflow-end]/scroll:block"></span>
+```
+
+Shipped in the table scroll cue until 2026-11-20 (the 10k-row virtual DataTable went from 228 ms to 3,580 ms of style recalc on a phone). Get the same result from the stacking order, or measure the state in script and set a `data-*` attribute on the frame. The **`has-on-scroll-frame`** token check blocks a `:has()` variant read from the `scroll` group at write time and in the CI ratchet, and the styled suite `table-scroll-performance.test.ts` fails when scrolling the virtual DataTable restyles the whole table.
+
 ## A directional icon already mirrors — never rotate it under `rtl`
 
 `@aziontech/webkit/styles` mirrors every directional glyph (`az-arrow-right`, `az-chevron-left`, `ai-caret-*`, `az-log-in`, `az-reply`, … — the `DIRECTIONAL_ICONS` set in `src/utils/directional-icons.ts`) under `dir="rtl"` with `scale: -1 1`. Adding `rtl:rotate-180` (or `rtl:-rotate-180`) on the same glyph composes a rotation with that scale, which flips it vertically instead of horizontally: the arrow points the wrong way, and nothing errors.
@@ -530,6 +544,7 @@ Use a `data-*` attribute + a Tailwind variant. The decision lives in HTML, not i
 - `component-scaffolder` (agent) refuses to emit the `variantClasses`/`sizeClasses`/`sharedClasses`/`rootClasses` pattern. The skeleton in [`.claude/skills/component-scaffold/SKILL.md`](../skills/component-scaffold/SKILL.md) uses inline classes + `data-*` variants.
 - `validate-tokens.mjs` (PreToolUse hook) already blocks HEX/palette/raw typography regardless of where they appear.
 - **`container-query-on-container`** (same engine, write-time hook and CI ratchet) blocks a class string that declares `@container/<name>` and also uses an `@…/<name>:` variant; pinned both ways in [`token-checks.test.mjs`](../../packages/webkit/test/eslint-plugin/token-checks.test.mjs).
+- **`has-on-scroll-frame`** (same engine, write-time hook and CI ratchet) blocks a `group-has-[…]/scroll:` or `peer-has-…/scroll:` variant; pinned both ways in [`token-checks.test.mjs`](../../packages/webkit/test/eslint-plugin/token-checks.test.mjs). The styled suite [`table-scroll-performance.test.ts`](../../packages/webkit/src/test/table-scroll-performance.test.ts) holds the virtual DataTable's scroll style recalc to a machine-independent ratio (`perf-budgets.json#styleRecalc`).
 - **`rtl-double-flip`** (same engine, write-time hook and CI ratchet; marked `wide`, so `tokenChecksFor` also runs it over blocks and examples, and `repoTokenChecksFor` in `.claude/hooks/lib/token-checks.mjs` adds `apps/docs/src` and `apps/demos/src`, since the package itself never names `apps/`) blocks a class string that holds a directional `az-*` glyph together with `rtl:rotate-180` / `rtl:-rotate-180` under any variant chain; pinned both ways, and against `DIRECTIONAL_ICONS`, in [`token-checks.test.mjs`](../../packages/webkit/test/eslint-plugin/token-checks.test.mjs).
 - **`off-brand-orange`** (same engine, write-time hook and CI ratchet; marked `wide` like `rtl-double-flip`, so it runs over components, blocks, examples, `apps/docs/src` and `apps/demos/src`) blocks `--text-primary` and every `orange` / `brand-primary` / `alpha-orange` step other than the logo step `500`, as a variable or a utility; pinned both ways in [`token-checks.test.mjs`](../../packages/webkit/test/eslint-plugin/token-checks.test.mjs).
 - **`dead-token-shorthand`** (same shared token-checks engine, so write-time hook **and** the `check-authoring` CI ratchet) blocks a malformed shorthand — whitespace inside the parens, or the inverted `[--(token)]`. It is the only gate that sees this class of defect: the utility never exists, so nothing else in the pipeline has anything to complain about, and the unit suite runs unstyled. Pinned both directions (fires / stays silent on ordinary subtraction and on a nested `var()` fallback) in [`token-checks.test.mjs`](../../packages/webkit/test/eslint-plugin/token-checks.test.mjs).

@@ -261,5 +261,11 @@
       "update": 340,
       "update_is": "move the cell cursor 40 times with the arrow keys over 1,000 rows x 8 columns"
     }
+  },
+  "styleRecalc": {
+    "note": "Measured by src/test/table-scroll-performance.test.ts (styled, Chromium): style recalc time while scrolling, divided by the style recalc time of restyling the whole table on as many frames. The ratio does not depend on the machine. A scroll that restyles only the rows it mounts stays well below 1; a selector that makes every frame restyle the whole table (a :has() read from the scroll frame) drove it to about 0.6 (round 5); the scroll that restyles only the rows it mounts measures about 0.08.",
+    "data-table-10k-virtual-scroll": {
+      "maxRatio": 0.25
+    }
   }
 }

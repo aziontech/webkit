@@ -102,6 +102,7 @@ describe('a table that scrolls sideways shows a cue at the hidden edge', () => {
         expect(shown(end)).toBe(true)
         expect(getComputedStyle(end!).backgroundImage).toContain('gradient')
         const box = scroll.getBoundingClientRect()
+        end!.style.pointerEvents = 'auto'
         const fade = end!.getBoundingClientRect()
         if (dir === 'rtl') expect(fade.left).toBeCloseTo(box.left, 0)
         else expect(fade.right).toBeCloseTo(box.right, 0)
@@ -139,16 +140,29 @@ describe('a table that scrolls sideways shows a cue at the hidden edge', () => {
     expect(shown(end)).toBe(false)
   })
 
-  it('leaves the end edge to a frozen end column, which draws its own fade', async () => {
-    const { container } = mount(
-      () => h(DataTable, { data: rows, columns: twoEndFrozen, rowKey: 'id', ariaLabel: 'Rules' }),
-      'ltr'
-    )
-    await settle()
-    const { scroll, end } = parts(container, 'data-table')
-    expect(scroll.dataset['overflowEnd']).toBeTruthy()
-    expect(shown(end)).toBe(false)
-  })
+  it.each(['ltr', 'rtl'] as const)(
+    'leaves the end edge to a frozen end column, which paints over the cue and draws its own fade (%s)',
+    async (dir) => {
+      const { container } = mount(
+        () => h(DataTable, { data: rows, columns: twoEndFrozen, rowKey: 'id', ariaLabel: 'Rules' }),
+        dir
+      )
+      await settle()
+      const { scroll, end } = parts(container, 'data-table')
+      expect(scroll.dataset['overflowEnd']).toBeTruthy()
+      end!.style.pointerEvents = 'auto'
+      const fade = end!.getBoundingClientRect()
+      const x = fade.left + fade.width / 2
+      const rowEls = [...container.querySelectorAll<HTMLElement>('[role="row"]')].slice(0, 3)
+      expect(rowEls.length).toBe(3)
+      for (const rowEl of rowEls) {
+        const box = rowEl.getBoundingClientRect()
+        const top = document.elementFromPoint(x, box.top + box.height / 2)
+        expect(top?.closest('[data-frozen="end"]')).not.toBeNull()
+      }
+      end!.style.pointerEvents = ''
+    }
+  )
 
   it('starts the DataGrid start fade after its frozen columns', async () => {
     const { container } = mount(() => h(DataGridRowSelection as Component), 'rtl', 320)
