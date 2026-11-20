@@ -74,7 +74,8 @@
           :id="titleId || undefined"
           :data-testid="`${testId}__title`"
           :data-size="size"
-          class="text-balance text-(--text-default) data-[size=small]:text-heading-xs data-[size=medium]:text-heading-sm data-[size=large]:text-heading-lg"
+          tabindex="-1"
+          class="outline-none text-balance text-(--text-default) data-[size=small]:text-heading-xs data-[size=medium]:text-heading-sm data-[size=large]:text-heading-lg"
         >
           {{ title }}
         </h1>
