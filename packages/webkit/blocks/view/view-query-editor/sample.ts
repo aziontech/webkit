@@ -121,9 +121,37 @@ const events: QueryEditorTable = {
   })
 }
 
+const subscribers: QueryEditorTable = {
+  id: 'tbl-subscribers',
+  name: 'subscribers',
+  columns: [
+    { id: 'col-20', name: 'id', type: 'int8', primaryKey: true, notNull: true },
+    { id: 'col-21', name: 'email', type: 'text', primaryKey: false, notNull: true },
+    { id: 'col-22', name: 'plan', type: 'text', primaryKey: false, notNull: true },
+    { id: 'col-23', name: 'active', type: 'bool', primaryKey: false, notNull: false },
+    {
+      id: 'col-24',
+      name: 'joined_at',
+      type: 'timestamptz',
+      primaryKey: false,
+      notNull: false
+    },
+    { id: 'col-25', name: 'seats', type: 'int4', primaryKey: false, notNull: false }
+  ],
+  rows: []
+}
+
 export const sampleTables: QueryEditorTable[] = [customers, orders, invoices]
 
 export const sampleTablesWithEvents: QueryEditorTable[] = [customers, events, orders, invoices]
+
+export const sampleTablesWithSubscribers: QueryEditorTable[] = [
+  customers,
+  orders,
+  events,
+  subscribers,
+  invoices
+]
 
 export const sampleHistory: QueryEditorHistoryEntry[] = [
   { id: 'q-0', sql: sampleSql },

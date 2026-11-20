@@ -70,6 +70,65 @@ describe('view/view-query-editor Import data from CSV', () => {
   })
 })
 
+const closeImport = async () => {
+  await userEvent.click(button(/^Cancel$/))
+  await waitFor(() => expect(document.querySelector('[role="dialog"]')).toBeNull())
+}
+
+describe('view/view-query-editor ImportCsv state wraps the block', () => {
+  it('asks before the row trash deletes an imported row', async () => {
+    const view = render(ImportCsv)
+    await waitFor(() => expect(drawer()).not.toBeNull())
+    await closeImport()
+    const customers = Array.from(
+      view.container.querySelectorAll<HTMLElement>('[data-slot="item"][aria-pressed]')
+    ).find((item) => item.textContent?.trim() === 'customers')!
+    await fireEvent.click(customers)
+    await userEvent.click(view.getByRole('button', { name: 'Delete row 1' }))
+    const dialog = await waitFor(() => {
+      const found = document.querySelector('[role="alertdialog"]') as HTMLElement
+      expect(found?.textContent).toContain('Delete row')
+      return found
+    })
+    expect(view.container.textContent).toContain('jane.doe@example.com')
+    expect(dialog.textContent).toContain('customers')
+  })
+
+  it('asks for the table name when Delete table is chosen', async () => {
+    const view = render(ImportCsv)
+    await waitFor(() => expect(drawer()).not.toBeNull())
+    await closeImport()
+    await fireEvent.click(view.container.querySelector('[aria-label="Actions for orders"]')!)
+    await fireEvent.click(await waitFor(() => view.getByRole('menuitem', { name: 'Delete table' })))
+    await waitFor(() =>
+      expect(document.querySelector('[role="alertdialog"]')?.textContent).toContain(
+        'Type orders to confirm.'
+      )
+    )
+  })
+})
+
+describe('view/view-query-editor empty table drop', () => {
+  it('emits import-csv with the drop event when a file lands on the empty state', async () => {
+    const empty: QueryEditorTable = {
+      id: 'tbl-empty',
+      name: 'empty_table',
+      columns: [{ id: 'c-1', name: 'id', type: 'int8', primaryKey: true, notNull: true }],
+      rows: []
+    }
+    const view = render(ViewQueryEditor, { props: { tables: [empty] } })
+    const target = await waitFor(() => {
+      const found = view.container.querySelector('[data-testid="empty-state"]')
+      expect(found?.textContent).toContain('This table is empty')
+      return found as HTMLElement
+    })
+    await fireEvent.drop(target)
+    const [[event, table]] = view.emitted('import-csv') as [[Event, QueryEditorTable]]
+    expect(event.type).toBe('drop')
+    expect(table.id).toBe('tbl-empty')
+  })
+})
+
 describe('view/view-query-editor block', () => {
   it('marks the open table as pressed and NULL cells with data-null', () => {
     const view = render(ViewQueryEditor)
