@@ -1,0 +1,272 @@
+# CI for the stable phase — review and proposal
+
+Status: **proposal, not approved** (2026-11-20). Nothing in the workflows has changed yet.
+
+From 6.0 on, WebKit is a stable product: an existing contract changes only in a major version
+(6 to 7), and the 6.x line only adds. This document reviews the CI we have and lists what the CI
+must guarantee from now on. There are no scores: every line is a check that passes or fails.
+
+Each check below has an id, the exact condition that passes, the tool that decides it, and its
+state today (**have**, **tighten**, **new**). A check that cannot be written this way is left to
+review and is not listed.
+
+## 1. Review of the CI we have
+
+What is good and stays:
+
+- One required check, "Governance Gate", that collects every job.
+- About 60 checks already run on a pull request: lint, format, types, type coverage, 30 toolkit
+  gates, the browser suite (4 shards), the styled visual suite (4 shards), server rendering,
+  size budgets, two consumer builds, secret scan and dependency audit.
+- Actions are pinned by commit, publishing uses npm provenance, baselines only shrink.
+
+What is missing or wrong, measured on `feat/webkit-ai-ready`:
+
+| #   | Finding                                                                                                                                                                                                                                 |
+| --- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| R1  | `consumer-types` is not in the Governance Gate's `needs` list. It can fail and the pull request still merges.                                                                                                                           |
+| R2  | CI runs only on a pull request to `main`. Nothing runs on `main` after a merge, nothing runs at night, and the publish workflows run no gate before `npm publish`.                                                                      |
+| R3  | A breaking change passes today if the title has `!` and a codemod entry exists. Nothing says "not on 6.x".                                                                                                                              |
+| R4  | The API check covers component props, events, slots, models, parts and export paths. It does not cover exported types, composables, theme tokens, icon names, CLI commands, MCP tools, lint rule names, i18n keys or `data-slot` names. |
+| R5  | Nothing checks the deprecation cycle: a part can be removed without having been marked `@deprecated` in a released version.                                                                                                             |
+| R6  | A new prop or component can ship in a `fix` (patch) or in a commit type that releases nothing.                                                                                                                                          |
+| R7  | A theme-only or icons-only pull request skips the security, lint, types and build jobs (their path filter is `packages/webkit` only).                                                                                                   |
+| R8  | Three checks never block: unused dependencies (`continue-on-error`), OSSF Scorecard (`warn`), and the docs smoke test with axe (`test:docs:smoke`, not in any workflow).                                                                |
+| R9  | Tests run on Chromium only (roadmap 1.8 already plans the other engines). Only Vue `^3.5.29` latest, one Node version and one TypeScript version are tested.                                                                            |
+| R10 | Test coverage is never measured in CI. 24 tests are skipped and nothing stops the number from growing.                                                                                                                                  |
+| R11 | No static security analysis, no review of new dependencies or their licenses, no update bot for npm packages (Dependabot covers only the actions), no workflow linter.                                                                  |
+| R12 | No page-speed check on the built docs site and demos.                                                                                                                                                                                   |
+| R13 | The packed tarball is never checked by a package linter, and nothing installs the published version after a release.                                                                                                                    |
+| R14 | The toolkit gates are listed twice by hand (`run-gates.mjs` and `governance.yml`), so the local run and CI can drift.                                                                                                                   |
+| R15 | No check for look-alike families or hidden copies. Today: 6 public `*-button`, 8 `*-card`, 6 `*-input`, 5 `*-menu`; 52 component files and 23 block files draw a raw `<button>`, 39 component files a raw `<a>`, 19 a raw `<input>`.    |
+| R16 | The code-quality gates of [`CODE_QUALITY.md`](./CODE_QUALITY.md) section 4 are planned (roadmap 1.7) and not in CI yet.                                                                                                                 |
+| R17 | `eslint-plugin-vuejs-accessibility` blocks 4 rules; the rest of its recommended set is off.                                                                                                                                             |
+
+## 2. The release model the CI enforces
+
+| Branch | Holds                   | Allowed changes                                                      | Publishes                |
+| ------ | ----------------------- | -------------------------------------------------------------------- | ------------------------ |
+| `main` | the current major (6.x) | fixes (`fix`, patch) and additions (`feat`, minor). Never breaking.  | `6.y.z` as `latest`      |
+| `next` | the next major (7.0)    | everything, breaking included, each with its deprecation and codemod | `7.0.0-next.n` as `next` |
+| `6.x`  | created when 7.0 ships  | fixes only                                                           | `6.y.z` as `v6`          |
+
+`next` is opened only when the first breaking change is needed. release-please runs per branch
+(it supports a config per target branch); `main` never produces a major on its own.
+
+## 3. The checks
+
+**When** says where a check runs: **PR** (every pull request, required), **night** (scheduled on
+`main`, opens an issue on failure), **release** (before `npm publish`).
+
+### 3.1 Stable API and lifecycle
+
+| Id    | Passes when                                                                                                                                                                                                                                                                                        | Tool                                                                                     | When           | Today   |
+| ----- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | -------------- | ------- |
+| API1  | The public surface is one committed file per package, generated, and equal to what the code produces. Surface = export paths, props (name, type, default, required), events and payloads, slots and scopes, models, parts, blocks.                                                                 | `check-api-diff.mjs`, `api-snapshot.json`                                                | PR             | have    |
+| API2  | The surface also holds: exported type names and composable signatures per export path, theme CSS variables and utilities, icon names, CLI commands and flags, MCP tool names and input schemas, lint rule and preset names, i18n keys, `data-slot` names, `peerDependencies` ranges and `engines`. | same script, reading `types/`, the theme build, `icons.json`, the CLI and MCP registries | PR             | new     |
+| API3  | On `main` and `6.x`, the diff against the base branch holds no breaking entry (removed, renamed, type narrowed, default changed, optional made required, payload or slot scope changed, peer range raised). No title or label overrides it.                                                        | `check-api-diff.mjs --line stable`                                                       | PR             | tighten |
+| API4  | On `next`, every breaking entry has `!` in the title, a codemod entry in `src/cli/migrations/v7*.json` and a line in `MIGRATION_V7.md`.                                                                                                                                                            | `check-api-diff.mjs`, `check-migrations.mjs`                                             | PR             | have    |
+| API5  | On `next`, every removed or renamed part was marked `@deprecated` in the surface of the last published 6.x version.                                                                                                                                                                                | `check-api-diff.mjs` against the last release tag                                        | PR             | new     |
+| API6  | Every `@deprecated` tag matches `since <x.y> — use <name> instead. Removed in <major>.0`, the named replacement exists in the surface, and the catalog carries the same entry.                                                                                                                     | `check-deprecated-usage.mjs` (extended)                                                  | PR             | tighten |
+| API7  | No file in `src`, `blocks`, `examples`, `skills` or `rules` uses a deprecated part.                                                                                                                                                                                                                | `check-deprecated-usage.mjs`                                                             | PR             | have    |
+| API8  | A deprecated part still has its test file and at least one example (it keeps working for its cycle).                                                                                                                                                                                               | `check-tests.mjs`, `check-complete.mjs`                                                  | PR             | new     |
+| API9  | A pull request whose diff adds to the surface has a `feat` title. A `fix` or non-releasing title with an added entry fails.                                                                                                                                                                        | `check-api-diff.mjs` + commitlint                                                        | PR             | new     |
+| API10 | Every part of the surface has a `since` version in the catalog, written by the build from the release history, never by hand.                                                                                                                                                                      | `build-catalog.mjs --check`                                                              | PR             | new     |
+| API11 | The examples, blocks and component tests **of the last published version** pass unchanged against the new code (type-check, server render, browser suite). This is the behaviour half of "no existing contract changes".                                                                           | new script: overlays the last tag's tests and examples on the head                       | night, release | new     |
+| API12 | No test file is deleted and the count of `it.skip` does not grow, unless the pull request body has a `Test-removal:` line with the reason. `it.only` is never committed.                                                                                                                           | `eslint-plugin-vitest` (`no-focused-tests`, `no-disabled-tests`) + ratchet               | PR             | new     |
+| API13 | A pull request that changes a visual baseline has a `Baselines:` line in its body saying why.                                                                                                                                                                                                      | same mechanism as `Budget-raise:`                                                        | PR             | new     |
+| API14 | Every component has an approved spec whose checksum matches, and the spec, the code and the catalog agree.                                                                                                                                                                                         | `check-spec-*`, `check-catalog`                                                          | PR             | have    |
+
+### 3.2 Release
+
+| Id   | Passes when                                                                                               | Tool                                              | When        | Today     |
+| ---- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | ----------- | --------- |
+| REL1 | The pull request title is a valid Conventional Commit with a type from the enum.                          | commitlint                                        | PR          | have      |
+| REL2 | The publish workflow runs the full gate on the tag and stops before `npm publish` when one fails.         | `run-gates.mjs` in `publish-*.yml`                | release     | new       |
+| REL3 | The packed tarball has no packaging error and its types resolve in node16, bundler and node10 resolution. | `publint`, `@arethetypeswrong/cli`                | PR, release | new       |
+| REL4 | The tarball ships no test, fixture, source map or `.figma.ts`, and stays inside its size budget.          | `check:pack`, `package-size.test.mjs`             | PR          | have      |
+| REL5 | A fresh Vite + TypeScript app installs the packed tarballs, runs `webkit init` and builds.                | `test-consume.mjs`, `check-consumer-types.mjs`    | PR          | have (R1) |
+| REL6 | After publishing, a fresh app installs the version from the npm registry and builds.                      | `test-consume.mjs --from-registry`                | release     | new       |
+| REL7 | The release is published with npm provenance and carries an SBOM.                                         | `npm publish --provenance`, `anchore/sbom-action` | release     | tighten   |
+| REL8 | `package.json` version equals the tag; the catalog version equals the package version.                    | publish workflow, release-please                  | release     | have      |
+
+### 3.3 Code quality
+
+| Id   | Passes when                                                                                                                                                                                                    | Tool                                                                       | When | Today     |
+| ---- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- | ---- | --------- |
+| CQ1  | ESLint reports zero warnings; Stylelint and Prettier report no diff.                                                                                                                                           | ESLint, Stylelint, Prettier                                                | PR   | have      |
+| CQ2  | `vue-tsc` passes for source, tests and the docs app; type coverage is at least the committed number (95% today), and that number only rises.                                                                   | `vue-tsc`, `type-coverage`                                                 | PR   | tighten   |
+| CQ3  | No file, script block, function or line is over the limits of `CODE_QUALITY.md` 3.1 (400 / 200 / 60 lines, complexity 12, 200 characters).                                                                     | ESLint core `max-lines`, `max-lines-per-function`, `complexity`, `max-len` | PR   | new (1.7) |
+| CQ4  | Cloned code across components and blocks is at or below the committed count.                                                                                                                                   | `jscpd`                                                                    | PR   | new (1.7) |
+| CQ5  | No unused file, unused export or unused dependency. Replaces the non-blocking `depcheck` step.                                                                                                                 | `knip`                                                                     | PR   | new       |
+| CQ6  | No import cycle, and the import rules hold: a root `.vue` never imports its compound `index.ts`; `@tanstack/vue-table` only in `data/data-table`; components never import from `blocks`, `examples` or `apps`. | `dependency-cruiser`                                                       | PR   | new       |
+| CQ7  | Line coverage of the browser suite is at least the committed number, per component folder; the numbers only rise.                                                                                              | Vitest coverage (istanbul)                                                 | PR   | new       |
+| CQ8  | The count of type assertions (`as`) does not grow; `as never` and `as unknown as` are zero.                                                                                                                    | `check:assertions` (1.7)                                                   | PR   | new (1.7) |
+| CQ9  | Every construction rule holds: authoring ratchet, naming, composable shape, comments, example data, tests exist.                                                                                               | `check:authoring`, `check:naming`, `check:tests`                           | PR   | have      |
+| CQ10 | Every lint rule and every gate has a broken sample that still fails it.                                                                                                                                        | `lint-canaries`, toolkit tests                                             | PR   | tighten   |
+
+### 3.4 One idea, one component
+
+**Look-alike families** (several public components for the same idea):
+
+| Id   | Passes when                                                                                                                                                                                  | Tool                                      | When | Today |
+| ---- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- | ---- | ----- |
+| FAM1 | Every public root component is in exactly one family in `families.json` (a family is a purpose: "trigger an action", "pick one of many", "show a status"). A component with no family fails. | new `check:families`, reading the catalog | PR   | new   |
+| FAM2 | In a family of two or more, each member's spec names its siblings under "When to use" and "When not to use".                                                                                 | `check:families`, reading `.specs`        | PR   | new   |
+| FAM3 | A prop that two members of a family share has the same name, type and default in both (for example `size` on every button).                                                                  | `check:families`, reading the catalog     | PR   | new   |
+| FAM4 | No two members of a family have more than 80% of their props in common. Over that, one of them is a variant of the other.                                                                    | `check:families` (overlap of prop names)  | PR   | new   |
+| FAM5 | A member that is a specialization renders the family's base (IconButton and HighlightButton render through the same root as Button), checked from its imports.                               | `dependency-cruiser` rule per family      | PR   | new   |
+| FAM6 | A pull request that adds a member to an existing family has a `Family-add:` line in its body with the reason a variant or a prop was not enough.                                             | `check:families` against the base branch  | PR   | new   |
+
+**Hidden copies** (a component draws its own version of something that exists):
+
+| Id    | Passes when                                                                                                                                                                                                                                                                                                                                                                                      | Tool                                                                                        | When | Today |
+| ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------- | ---- | ----- |
+| COPY1 | Each native element and ARIA role has one owner in `owners.json`: `<button>` Button and IconButton, `<a>` Link, `<input>` Input and the input family, `<textarea>`, `<select>`, `<dialog>`, `<table>`, `<progress>`, `<hr>`, `<kbd>`, and the roles `dialog`, `menu`, `listbox`, `tab`, `switch`, `checkbox`, `tooltip`, `progressbar`. A file outside the owner's folder that writes one fails. | `vue/no-restricted-html-elements`, `vue/no-restricted-static-attribute` (eslint-plugin-vue) | PR   | new   |
+| COPY2 | The same for marker classes: `animate-spin` only in Spinner, `animate-pulse` only in Skeleton.                                                                                                                                                                                                                                                                                                   | `vue/no-restricted-class`                                                                   | PR   | new   |
+| COPY3 | Blocks and examples have zero raw owned elements: they are what an agent copies.                                                                                                                                                                                                                                                                                                                 | same rules, no baseline                                                                     | PR   | new   |
+| COPY4 | The exceptions in components are a committed list with a reason each, and the list only shrinks (52 files for `<button>` today).                                                                                                                                                                                                                                                                 | ratchet baseline                                                                            | PR   | new   |
+| COPY5 | The same rules ship in the consumer `strict` preset, so an app is told to use Button instead of a raw `<button>`.                                                                                                                                                                                                                                                                                | `@aziontech/webkit/eslint-plugin`                                                           | PR   | new   |
+| COPY6 | Copy-pasted code is caught by CQ4.                                                                                                                                                                                                                                                                                                                                                               | `jscpd`                                                                                     | PR   | new   |
+
+### 3.5 Accessibility
+
+| Id    | Passes when                                                                                                                     | Tool                                 | When | Today   |
+| ----- | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ | ---- | ------- |
+| A11Y1 | axe finds no violation in any component test, example or block, in light, dark, with overlays open; `a11y-known.json` is empty. | `axe-core` in Vitest browser         | PR   | have    |
+| A11Y2 | Every colour pair meets WCAG 2.1 AA and its APCA target, or is in the owner's exceptions table.                                 | `apca-contrast.test.mjs`             | PR   | have    |
+| A11Y3 | The full recommended set of the Vue accessibility lint is on at `error`.                                                        | `eslint-plugin-vuejs-accessibility`  | PR   | tighten |
+| A11Y4 | axe finds no violation on every route of the built docs site and demos (today a sample, and not in CI).                         | `@axe-core/playwright`               | PR   | tighten |
+| A11Y5 | Forced colours, 400% reflow, right-to-left, reduced motion and the screen-reader snapshots pass.                                | existing suites in `src/test`        | PR   | have    |
+| A11Y6 | Every interactive element in every example is at least 40 by 40 px or has a 40 px hit area.                                     | Playwright geometry in `apps/visual` | PR   | new     |
+| A11Y7 | The Lighthouse accessibility score is 100 on the docs home, one component page and one demo.                                    | Lighthouse CI                        | PR   | new     |
+
+### 3.6 Performance
+
+| Id    | Passes when                                                                                                      | Tool                                          | When | Today   |
+| ----- | ---------------------------------------------------------------------------------------------------------------- | --------------------------------------------- | ---- | ------- |
+| PERF1 | Every export is at or under its gzip budget, and no budget rises without a `Budget-raise:` line.                 | `check-size.mjs`, `check-size-ratchet`        | PR   | have    |
+| PERF2 | The CSS of the fixture apps and the package size are within budget.                                              | `check-css-size.mjs`, `package-size.test.mjs` | PR   | have    |
+| PERF3 | Every runtime scenario in `perf-budgets.json` is within its time (for example chart 10k points, tree 5k nodes).  | `performance.test.ts`                         | PR   | have    |
+| PERF4 | Importing a `-root` export pulls in no other component.                                                          | `check-size.mjs` module list                  | PR   | tighten |
+| PERF5 | On the built docs home, one component page and one demo: LCP at most 2.5 s, CLS at most 0.1, TBT at most 200 ms. | Lighthouse CI (`@lhci/cli`)                   | PR   | new     |
+| PERF6 | Every block and example renders on the server and hydrates with no warning.                                      | `ssr.test.mjs`, `hydration.test.ts`           | PR   | have    |
+
+### 3.7 Security and supply chain
+
+| Id   | Passes when                                                                                                           | Tool                                                         | When      | Today   |
+| ---- | --------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ | --------- | ------- |
+| SEC1 | No known vulnerability in the dependency tree.                                                                        | `pnpm audit`                                                 | PR, night | have    |
+| SEC2 | No verified secret in the diff.                                                                                       | TruffleHog (pinned to a release)                             | PR        | tighten |
+| SEC3 | Static analysis finds no high or critical alert.                                                                      | CodeQL (JavaScript and TypeScript)                           | PR, night | new     |
+| SEC4 | A pull request adds no dependency with a known vulnerability or a license outside the allowlist.                      | `actions/dependency-review-action`                           | PR        | new     |
+| SEC5 | The runtime `dependencies` of each package equal the committed list; an addition needs a `Dependency-add:` line.      | toolkit test                                                 | PR        | new     |
+| SEC6 | Every action is pinned to a commit, every workflow sets least-privilege `permissions`, and the workflow linters pass. | `actionlint`, `zizmor`                                       | PR        | new     |
+| SEC7 | The OSSF Scorecard result is at or above the committed threshold (mode `enforce`).                                    | `ossf/scorecard-action`                                      | PR, night | tighten |
+| SEC8 | No `v-html`, no `eval`, no `new Function` in source.                                                                  | `vue/no-v-html`, `no-eval`, `no-implied-eval`, `no-new-func` | PR        | tighten |
+| SEC9 | npm dependencies are updated by a bot, grouped weekly.                                                                | Dependabot (npm ecosystem)                                   | night     | new     |
+
+### 3.8 Compatibility
+
+| Id    | Passes when                                                                                                 | Tool                                 | When           | Today     |
+| ----- | ----------------------------------------------------------------------------------------------------------- | ------------------------------------ | -------------- | --------- |
+| COMP1 | The browser suite passes on Chromium.                                                                       | Vitest + Playwright                  | PR             | have      |
+| COMP2 | The browser suite passes on Firefox and WebKit, and on phone and tablet profiles with touch.                | Vitest + Playwright (roadmap 1.8)    | PR             | new (1.8) |
+| COMP3 | The suite passes on real devices.                                                                           | BrowserStack Automate (1.8, phase B) | night, release | new (1.8) |
+| COMP4 | The consumer build passes with the lowest supported and the latest version of Vue, TypeScript and Tailwind. | `check-consumer-types.mjs` matrix    | night, release | new       |
+| COMP5 | The CLI, the MCP server and server rendering pass on every supported Node version; `engines` declares them. | Node matrix                          | night, release | new       |
+| COMP6 | The supported browsers are a committed `browserslist`; changing it is a breaking entry (API3).              | `browserslist`, API2                 | PR             | new       |
+
+### 3.9 Docs and AI contract
+
+| Id   | Passes when                                                                                            | Tool                                                       | When  | Today   |
+| ---- | ------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------- | ----- | ------- |
+| DOC1 | `catalog.json`, `llms.txt` and the generated declarations equal what the code produces.                | `check:catalog`, `check:js-dts`, `check:exports`           | PR    | have    |
+| DOC2 | Every component is complete: spec, test, examples, size budget, visual baseline, exports.              | `check:complete`                                           | PR    | have    |
+| DOC3 | The docs site and demos build, and every internal link resolves.                                       | `build:docs`, `check:docs:links`                           | PR    | have    |
+| DOC4 | Every external link in the docs resolves.                                                              | `lychee`                                                   | night | new     |
+| DOC5 | Skills, rules and blocks cite only exports that exist; blocks have intents and pass the consumer lint. | `check:cited-names`, `check:blocks`, `check:examples-lint` | PR    | have    |
+| DOC6 | The MCP server answers its tests over stdio.                                                           | `@aziontech/webkit-mcp` tests                              | PR    | have    |
+| DOC7 | A fresh agent picks a sample of 10 components and blocks through the MCP and passes `webkit doctor`.   | `check-usage.mjs` (needs the API key)                      | night | tighten |
+
+### 3.10 The CI itself
+
+| Id  | Passes when                                                                                                   | Tool                        | When  | Today     |
+| --- | ------------------------------------------------------------------------------------------------------------- | --------------------------- | ----- | --------- |
+| CI1 | Every job of the pull-request workflow is in the Governance Gate's `needs` list.                              | toolkit test over the YAML  | PR    | new (R1)  |
+| CI2 | The toolkit steps of the workflow are generated from `run-gates.mjs`; the YAML equals the generator's output. | toolkit test                | PR    | new (R14) |
+| CI3 | Every check in this document maps to a step or a gate, and every step maps to a check here.                   | toolkit test over this file | PR    | new       |
+| CI4 | No step has `continue-on-error`; no check is in warn mode.                                                    | toolkit test over the YAML  | PR    | new (R8)  |
+| CI5 | The pull-request run finishes in 20 minutes or less (median of the last 20 runs), reported nightly.           | `gh run list`               | night | new       |
+| CI6 | Every baseline file is at or below its size on the base branch.                                               | existing ratchets           | PR    | have      |
+| CI7 | A nightly failure opens one issue and closes it when green again.                                             | workflow step               | night | new       |
+
+### 3.11 Taken from other design systems
+
+Read on 2026-11-20 from the public workflows of shadcn/ui, shadcn-vue, Reka UI, Radix, MUI,
+Primer, Carbon, Cloudscape, React Spectrum, Fluent UI, Ant Design, Vuetify, Element Plus, Chakra
+and Polaris. What they run that we do not, and that fits a stable phase:
+
+| Id    | Passes when                                                                                                                                                                                    | Tool                                                                   | When           | Seen in                             |
+| ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- | -------------- | ----------------------------------- |
+| EXT1  | The real apps that use WebKit build against the pull request's tarballs: `apps/demos` and the Azion console.                                                                                   | downstream build job                                                   | night, release | Cloudscape (`dry-run`)              |
+| EXT2  | A fresh app installs the **published** version with today's dependency versions and builds. Catches a break caused by someone else's release.                                                  | `test-consume.mjs --from-registry`, scheduled                          | night          | Ant Design (every 30 minutes)       |
+| EXT3  | `webkit init` works with npm, pnpm, yarn and bun, on a Vite app and a Nuxt app.                                                                                                                | matrix over `test-consume.mjs`                                         | night, release | shadcn/ui (`templates`)             |
+| EXT4  | Every pull request publishes an installable preview build, so the console team can try a change before it is released.                                                                         | `pkg.pr.new`                                                           | PR             | MUI, shadcn-vue, Reka, Ant Design   |
+| EXT5  | `npm publish --dry-run` passes on every pull request, not only at release time.                                                                                                                | publish workflow in dry-run mode                                       | PR             | MUI                                 |
+| EXT6  | Every root component's test proves the extension contract with one shared helper: the app's `class` reaches the root and wins, `data-testid` can be replaced, extra attributes reach the root. | `expectRootContract()` + a check that every test calls it              | PR             | Primer (className coverage)         |
+| EXT7  | No runtime scenario is more than 20% slower than on `main`. Results are stored per commit, so a slow drift is caught before it reaches the fixed budget.                                       | `benchmark-action/github-action-benchmark`                             | PR             | Primer (stress tests)               |
+| EXT8  | Every workspace package uses the same version of a shared dependency, and the lockfile has no duplicate that could be merged.                                                                  | `syncpack list-mismatches`, `pnpm dedupe --check`                      | PR             | Fluent UI, Carbon                   |
+| EXT9  | A newly locked dependency version is at least 7 days old.                                                                                                                                      | pnpm `minimumReleaseAge` (already set; add the test that it stays set) | PR             | Primer                              |
+| EXT10 | No spelling mistake in code, docs or identifiers.                                                                                                                                              | `typos`                                                                | PR             | Reka UI                             |
+| EXT11 | Pull requests merge through a merge queue: the full gate runs on the merged result, so `main` is never red.                                                                                    | GitHub merge queue (`merge_group` trigger)                             | PR             | Cloudscape                          |
+| EXT12 | A test that fails and then passes on retry is recorded; a test with 3 records in 14 days opens an issue.                                                                                       | Vitest JSON report + nightly script                                    | night          | Primer (flaky test evidence)        |
+| EXT13 | Size and performance changes are posted as one comment on the pull request (before, after, difference).                                                                                        | `check-size.mjs --report`                                              | PR             | Cloudscape, Fluent UI, Element Plus |
+
+Already covered by a check of ours, so not copied: public API snapshot (Carbon), weekly API diff
+against the published version (React Spectrum; ours runs on every pull request), "no major in
+this line" (Polaris; API3), server rendering (Radix, Element Plus), package lint (Primer; REL3),
+framework version matrix (Cloudscape, Fluent UI, Ant Design; COMP4), CodeQL and Scorecard (MUI).
+
+None of the fifteen has a check for look-alike families or hidden copies in its workflows. Section
+3.4 has no reference to follow; it is ours.
+
+### 3.12 Class strings that are easy to extend
+
+| Id   | Passes when                                                                                                                                                                        | Tool                                  | When | Today |
+| ---- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- | ---- | ----- |
+| CQ11 | A class constant has one group per line: the utilities on a line share one prefix (`data-[variant=primary]:`, `data-[size=small]:`), in the order layout, states, variants, sizes. | authoring check (reads class strings) | PR   | new   |
+| CQ12 | Every value of a variant or size union has its line in the class constant, and no line names a value that is not in the union.                                                     | authoring check + the exported type   | PR   | new   |
+
+## 4. Workflow layout
+
+| File             | Trigger                                                       | Holds                                                                      |
+| ---------------- | ------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| `governance.yml` | pull request to `main`, `next`, `6.x`; push to those branches | every **PR** check; path filters fixed (R7); one required check, same name |
+| `nightly.yml`    | every night on `main`                                         | every **night** check                                                      |
+| `publish-*.yml`  | release                                                       | the full gate on the tag, then every **release** check, then `npm publish` |
+| `codeql.yml`     | pull request, weekly                                          | SEC3                                                                       |
+
+The two required check names, "Governance Gate" and "OSSF Scorecard", do not change.
+
+## 5. Build order
+
+Each step is one pull request, and each new gate lands with its baseline so `main` stays green.
+
+| Step | What                                                                                                                                   | Depends on                                 |
+| ---- | -------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ |
+| 1    | Fix what is wrong today: R1, R7, R8, R14 (CI1, CI2, CI4), push and nightly triggers, REL2.                                             | nothing                                    |
+| 2    | Stable API: API2, API3, API5, API6, API8, API9, API10, API12, API13, the branch model and release-please per branch.                   | 6.0 merged to `main` for API3 to switch on |
+| 3    | Families and hidden copies: FAM1 to FAM6, COPY1 to COPY5, with the first `families.json` and baselines.                                | nothing                                    |
+| 4    | Code quality tools: CQ5, CQ6, CQ7; CQ3, CQ4, CQ8 arrive with roadmap 1.7.                                                              | 1.7 for three gates                        |
+| 5    | Security: SEC3, SEC4, SEC5, SEC6, SEC7, SEC9, REL3, REL7.                                                                              | nothing                                    |
+| 6    | Accessibility and performance on the built sites: A11Y3, A11Y4, A11Y6, A11Y7, PERF4, PERF5.                                            | nothing                                    |
+| 7    | Compatibility and the last-release contract test: API11, COMP2 to COMP6, REL6, DOC4, DOC7.                                             | 1.8 for COMP2, COMP3                       |
+| 8    | From other systems: EXT1 to EXT13. EXT5, EXT8, EXT9, EXT10 and EXT13 are small and go with step 1; EXT6 and CQ11, CQ12 go with step 4. | merge queue and `pkg.pr.new` need an admin |
+
+## 6. What needs the owner
+
+- **The branch model of section 2** (`main` is 6.x and never takes a breaking change; `next` for 7.0).
+- **Repository settings** only an admin can change: turn on CodeQL and the dependency graph, add
+  `next` and `6.x` to the branch ruleset, keep the two required check names.
+- **Secrets** for the night run: `ANTHROPIC_API_KEY` (DOC7) and the BrowserStack pair (COMP3).
