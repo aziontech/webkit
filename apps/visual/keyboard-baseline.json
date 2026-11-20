@@ -1,0 +1,87 @@
+{
+  "/frame/block/account/account-onboarding-form/organization": [
+    "entry: focus starts on the page, not the first field input in input \"Your full name* (Required)\""
+  ],
+  "/frame/block/ai/ai-chat-drawer/empty": [
+    "entry: focus starts on button in drawer__close \"Close\", not the first field textarea in prompt-input__textarea \"Prompt\""
+  ],
+  "/frame/block/auth/auth-sign-in/login": [
+    "entry: focus starts on the page, not the first field input in input \"Email* (Required)\""
+  ],
+  "/frame/block/create/create-page/default": [
+    "entry: focus starts on the page, not the first field input in input \"Name\""
+  ],
+  "/frame/block/create/create-resource-picker/existing": [
+    "entry: focus starts on the page, not the first field button[role=radio] in toggle-group__option \"Existing project\""
+  ],
+  "/frame/block/create/create-wizard/where-it-runs": [
+    "entry: focus starts on the page, not the first field input in input \"Search policies\""
+  ],
+  "/frame/block/shell/shell-console/list-page": [
+    "ring: no visible focus on div[role=separator] in console-layout__navigation__handle \"Resize sidebar\""
+  ],
+  "/frame/block/shell/shell-docs/default": [
+    "ring: no visible focus on div[role=separator] in doc-layout__navigation__handle \"Resize navigation\""
+  ],
+  "/frame/block/view/view-events-explorer/default": [
+    "ring: no visible focus on div[role=separator] in sidebar__handle \"Resize the fields panel\""
+  ],
+  "/frame/block/view/view-query-editor/tables": [
+    "ring: no visible focus on div[role=separator] in sidebar__handle \"Resize the tables panel\""
+  ],
+  "/frame/example/app-layout/default": [
+    "ring: no visible focus on div[role=separator] in app-layout__split-separator \"Resize panel\"",
+    "ring: no visible focus on div[role=separator] in sidebar__handle \"Resize sidebar\""
+  ],
+  "/frame/example/artifact-canvas/default": [
+    "ring: no visible focus on div[role=separator] in resizable-handle \"Resize the artifact\""
+  ],
+  "/frame/example/console-layout/default": [
+    "ring: no visible focus on div[role=separator] in console-layout__navigation__handle \"Resize sidebar\""
+  ],
+  "/frame/example/doc-layout/default": [
+    "ring: no visible focus on div[role=separator] in doc-layout__navigation__handle \"Resize navigation\""
+  ],
+  "/frame/example/feature-scroll-section/default": [
+    "reach: Tab never reaches a in button \"Docs\""
+  ],
+  "/frame/example/resizable/default": [
+    "ring: no visible focus on div[role=separator] in resizable-handle \"Resize the panel\""
+  ],
+  "demos/assistant": [
+    "ring: no visible focus on div[role=separator] in console-layout__navigation__handle \"Resize sidebar\""
+  ],
+  "demos/onboarding": [
+    "entry: focus starts on the page, not the first field input in input \"Your full name* (Required)\""
+  ],
+  "demos/onboarding/plan": [
+    "entry: focus starts on the page, not the first field input in radio-group-item__control \"I'm working on personal projects. Free p\""
+  ],
+  "demos/onboarding/profile": [
+    "entry: focus starts on the page, not the first field input in radio-group-item__control \"Personal\""
+  ],
+  "demos/resources": [
+    "ring: no visible focus on div[role=separator] in console-layout__navigation__handle \"Resize sidebar\""
+  ],
+  "demos/resources/1020655": [
+    "ring: no visible focus on div[role=separator] in console-layout__navigation__handle \"Resize sidebar\""
+  ],
+  "demos/resources/1020655/delete": [
+    "entry: focus starts on button in confirm-dialog__cancel \"Cancel\", not the first field input in input \"Typeresource-01to confirm.\""
+  ],
+  "demos/resources/1020655/deploy": [
+    "ring: no visible focus on div[role=separator] in console-layout__navigation__handle \"Resize sidebar\""
+  ],
+  "demos/resources/1020655/edit": [
+    "ring: no visible focus on div[role=separator] in console-layout__navigation__handle \"Resize sidebar\""
+  ],
+  "demos/resources/new": [
+    "entry: focus starts on the page, not the first field input in input \"Name\""
+  ],
+  "demos/settings": [
+    "ring: no visible focus on div[role=separator] in console-layout__navigation__handle \"Resize sidebar\""
+  ],
+  "demos/settings/ai-keys": [
+    "ring: no visible focus on div[role=separator] in console-layout__navigation__handle \"Resize sidebar\""
+  ]
+}

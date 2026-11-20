@@ -3,6 +3,7 @@
   "name": "EditDeleteDialog",
   "title": "Blocks/Edit/EditDeleteDialog",
   "surface": "app",
+  "keyboard": { "entry": "field" },
   "summary": "The destructive confirmation a resource list uses for Delete: a warning `Alert`, a sentence naming what goes with the resource and a Help Center link, then the typed confirmation `ConfirmDialog` draws from `confirmation-phrase`: the resource name in code type and an input the user must match exactly (case-sensitive) before Delete enables. Every resource list, a folder of files and a table of records open it from the row Delete action; the title reads Delete plus the resource kind, and a container that holds other items passes its own consequence sentence. Delete shows its loading state while the request runs (Cancel and the input are locked, the dialog cannot be dismissed), then closes with a success toast; a refused delete keeps the dialog and the typed name and swaps the warning for a danger `Alert` saying why (Error). The typed confirmation resets each time the dialog opens, so the content stays put while it closes. Built from `ConfirmDialog` (the body in its default slot, `confirmation-phrase` for the typed name, its own Cancel and Delete buttons with `loading`), `Alert` and `Button`; closed by default behind a visible danger trigger. The SettingsRow variant is the settings-page delete: an outlined `Item` row opens the same `ConfirmDialog` with the same typed name.",
   "preview": {
     "layout": "padded",
