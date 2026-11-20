@@ -124,7 +124,15 @@ function focusPage(): boolean {
   if (!target) return false
   if (!target.hasAttribute('tabindex')) {
     target.setAttribute('tabindex', '-1')
-    target.addEventListener('blur', () => target.removeAttribute('tabindex'), { once: true })
+    target.classList.add('focus:outline-none')
+    target.addEventListener(
+      'blur',
+      () => {
+        target.removeAttribute('tabindex')
+        target.classList.remove('focus:outline-none')
+      },
+      { once: true }
+    )
   }
   target.focus({ preventScroll: true })
   return true
