@@ -28,6 +28,71 @@ component, block and doc first.
 | 1.4 | Final full audit and fixes                                                                                                                                                             | Not started                |
 | 1.5 | Full visual review of every component and block, and the fixes it finds                                                                                                                | Not started                |
 | 1.6 | The docs site uses WebKit exactly as an app does: its own doc components and a consumer setup. Detail below (owner, 2026-11-20). Runs before 1.5, so the visual review sees the result | Not started                |
+| 1.8 | Every component and block tested on every browser engine and on real devices, automated in CI: first on our own server with Playwright (Chromium, real Edge, Firefox, the Safari engine, phone and tablet sizes with touch), then on real devices through an external service. Detail below (owner, 2026-11-20). Phase A runs before 1.4 and 1.5, so the final audit and the visual review see its fixes | Not started (trial run done) |
+
+**1.8 in detail — every browser engine and real devices, in CI (owner, 2026-11-20).** Today CI
+runs the component suite and the visual suite on Chromium only. Firefox and the Safari engine run
+only by hand (`test:browser-firefox`, `test:browser-webkit`, last full run in M1.11), real Edge and
+phone profiles with touch do not run at all, and no real device has ever run in CI. A trial on
+2026-11-20 (six pages on six BrowserStack devices) found a defect only Apple devices show: Safari
+writes a date as "Nov 10, 2026 at 12:00 PM" where the server writes "Nov 10, 2026, 12:00 PM", so
+`Timestamp` logged a hydration warning (fixed, `8b909cd5c`). The work has two phases, in this
+order; phase B starts only when phase A is green.
+
+_Phase A — on our server and in CI, with Playwright, no external service._
+
+1. **Engines.** Chromium, real Microsoft Edge (Playwright's `msedge` channel), Firefox and WebKit
+   (the Safari engine), all in the Playwright container image the baselines already use.
+2. **Phone and tablet profiles with touch.** A phone on Chromium (Pixel 7, 412 px), a phone on
+   WebKit (iPhone 15, 393 px), a tablet on each (Galaxy Tab S8, iPad), with `hasTouch`, the mobile
+   user agent and the device pixel ratio. Desktop stays at 1280 px.
+3. **Component suite on every engine.** The existing Vitest browser suite runs on Chromium, Edge,
+   Firefox and WebKit. Runtime budgets keep asserting on Chromium only.
+4. **A cross-engine page suite in `apps/visual`.** It opens every example of every component and
+   every state of every block, on every engine and profile above, and fails on: a page that does
+   not load or renders nothing, a script error, a hydration warning, sideways scrolling, and the
+   geometry checks we already have (doubled lines, region gaps, texture backdrop, band edges). It
+   also drives the touch paths: open and close every overlay by tap (select, combobox, dropdown,
+   dialog, drawer, popover, date picker), type in a field, swipe a carousel. Screenshots and
+   baselines stay on Chromium only, so the baseline count does not triple.
+5. **CI.** New jobs in `governance.yml`, sharded, on every PR that touches `packages/webkit`,
+   `packages/theme` or `apps/`: the component suite on Firefox and WebKit, and the page suite on all
+   four engines and the touch profiles. They are required checks, like the Chromium ones today.
+6. **Done** means every job is green on the branch, and every finding is fixed or listed with its
+   reason in `.claude/docs/KNOWN_FAILURES.md`.
+
+_Phase B — real devices through an external service, only what phase A cannot reach._
+
+The service is **BrowserStack Automate** (trial validated on 2026-11-20; it runs our Playwright
+scripts as they are). Phase A covers the engines; phase B covers what only real hardware and real
+operating systems show: Apple's own text formatting, the on-screen keyboard, the notch and home
+bar safe areas, the collapsing address bar, real touch, and Samsung's browser.
+
+1. **Devices and browsers, exactly:**
+   - iPhone, Safari, the latest iOS and the one before (iPhone 15 and one older model);
+   - iPad, Safari, the latest iPadOS;
+   - Samsung Galaxy S (latest), Chrome and Samsung Internet;
+   - Google Pixel (latest), Chrome;
+   - Samsung Galaxy Tab, Chrome;
+   - macOS, real Safari, the latest two versions;
+   - Windows 11, real Edge and real Firefox.
+2. **What runs.** The page suite of phase A, pointed at the docs site built by the same CI run
+   (through the BrowserStack Local tunnel, so nothing has to be deployed first). Not the component
+   suite and no screenshots. Android, macOS and Windows run every example and every block state
+   (about 15 minutes per device at the trial's speed). iPhone and iPad are about five times slower
+   and cannot take screenshots or use every Playwright call, so they run the first example of each
+   component, the primary state of each block and the touch paths.
+3. **CI.** A workflow of its own, `devices.yml`: every night on `feat/webkit-ai-ready` (on `main`
+   after 6.0), on every release PR, and by hand (`workflow_dispatch`) for one PR. It is not run on
+   every PR, because device minutes are paid. A failure fails the workflow, blocks the release PR
+   and lists the device, the page and the reason; each session keeps its video on BrowserStack.
+4. **What the owner provides.** A paid BrowserStack Automate plan that includes real mobile
+   devices, with at least 5 parallel sessions (the trial is 30 minutes in total), and the two
+   repository secrets `BROWSERSTACK_USERNAME` and `BROWSERSTACK_ACCESS_KEY`.
+5. **Opera** has no engine of its own (it is Chromium) and Playwright cannot drive it, so it is
+   covered by the Chromium and Edge runs; one manual pass on BrowserStack Live before the launch.
+6. **Done** means the nightly run is green on every device above for a week, and the release PR
+   shows the device run as a check.
 
 **2. Close the open leftovers (before launch).** Each row stays in its table; this is what is left,
 checked against the code on 2026-11-19:
