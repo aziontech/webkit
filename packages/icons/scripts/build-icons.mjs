@@ -28,7 +28,6 @@ try {
 
 console.log('\n📦 Step 4/7 — Creating dist/index.css barrel file...\n')
 const barrelContent = `@import './azionicons.css';
-@import './azionicons-color.css';
 `
 writeFileSync(join(DIST_DIR, 'index.css'), barrelContent, CHARSET)
 console.log('  ✔ dist/index.css created')

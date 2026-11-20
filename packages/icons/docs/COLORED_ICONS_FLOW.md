@@ -91,11 +91,11 @@ flowchart TD
 1. **Validate** — `check-svg.mjs` gates the build; failure aborts.
 2. **Clean** — wipe & recreate `dist/`.
 3. **Fonts** — `build-woff2.mjs` runs **fantasticon** for `az` (per `fantasticon.config.mjs`): emits `azionicons.woff2` + `azionicons.css` from the `templates/css.hbs` Handlebars template. **Colored icons are not touched here.**
-4. **Barrel** — write `index.css` = `@import` of `azionicons.css` + **`azionicons-color.css`**.
+4. **Barrel** — write `index.css` = `@import` of `azionicons.css` only. The colour logos are opt-in: `azionicons-color.css` (every logo) or, in a Tailwind v4 stylesheet, `azionicons-color-utilities.css` (one `@utility` per logo, compiled only when a source names it; `@aziontech/webkit/styles` imports it).
 5. **Catalogs + colored CSS** — runs three scripts in sequence:
    - `build-catalog.mjs` → `catalog.json` (mono `az`; **name + class only, no SVG bytes**)
    - `build-color-catalog.mjs` → `color-catalog.json` (colored; **inline SVG strings**)
-   - `build-color-css.mjs` → `azionicons-color.css` (colored; **data-URI `background-image`**)
+   - `build-color-css.mjs` → `azionicons-color.css` and `azionicons-color-utilities.css` (colored; **data-URI `background-image`**)
 
 ---
 
