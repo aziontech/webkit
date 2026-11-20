@@ -527,6 +527,61 @@ describe('Wizard', () => {
       expect(getComputedStyle(counter).display).not.toBe('none')
     })
 
+    const footerButtons = (view: ReturnType<typeof render>) =>
+      within(view.getByTestId('wizard__footer')).getAllByRole('button')
+
+    it('wraps the footer in a narrow box: Cancel and Previous on one row, the primary action below at full width', async () => {
+      const view = render(inBox(288))
+      await nextTick()
+      await nextTick()
+      await userEvent.click(view.getByRole('button', { name: 'Next' }))
+      await nextTick()
+
+      const footer = view.getByTestId('wizard__footer').getBoundingClientRect()
+      const [cancel, previous, primary] = footerButtons(view).map((item) =>
+        item.getBoundingClientRect()
+      )
+      expect(footerButtons(view).map((item) => item.textContent?.trim())).toEqual([
+        'Cancel',
+        'Previous',
+        'Next'
+      ])
+      expect(Math.abs(cancel!.top - previous!.top)).toBeLessThan(1)
+      expect(cancel!.left).toBeLessThan(previous!.left)
+      expect(primary!.top).toBeGreaterThanOrEqual(cancel!.bottom)
+      expect(primary!.width).toBeGreaterThan(footer.width - 2)
+      for (const rect of [cancel!, previous!, primary!]) {
+        expect(rect.left).toBeGreaterThanOrEqual(footer.left - 1)
+        expect(rect.right).toBeLessThanOrEqual(footer.right + 1)
+      }
+    })
+
+    it('keeps the footer on one row from the sm box width up', async () => {
+      const view = render(inBox(640))
+      await nextTick()
+      await nextTick()
+      await userEvent.click(view.getByRole('button', { name: 'Next' }))
+      await nextTick()
+
+      const tops = footerButtons(view).map((item) => Math.round(item.getBoundingClientRect().top))
+      expect(tops).toHaveLength(3)
+      expect(new Set(tops).size).toBe(1)
+    })
+
+    it('mirrors the footer under rtl: Cancel at the inline start on the right', async () => {
+      const view = render(
+        defineComponent({
+          components: { FlowDiagram },
+          template: `<div dir="rtl" style="width: 288px"><FlowDiagram /></div>`
+        })
+      )
+      await nextTick()
+      await nextTick()
+      const footer = view.getByTestId('wizard__footer').getBoundingClientRect()
+      const cancel = footerButtons(view)[0]!.getBoundingClientRect()
+      expect(Math.abs(cancel.right - footer.right)).toBeLessThan(1)
+    })
+
     it('translates the line', async () => {
       const view = render(inBox(400, 'pt-BR'))
       await nextTick()
