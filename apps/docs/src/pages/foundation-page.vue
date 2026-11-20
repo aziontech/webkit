@@ -1,11 +1,10 @@
 <script setup lang="ts">
   import DocPageHeader from '@aziontech/webkit/doc-page-header'
   import { useHead } from '@unhead/vue'
-  import { computed } from 'vue'
+  import { computed, defineAsyncComponent } from 'vue'
   import { useRoute } from 'vue-router'
 
   import FoundationDemo from '../components/foundation-demo.vue'
-  import IconsView from '../components/icons-view.vue'
   import MarkdownParts from '../components/markdown-parts.vue'
   import TokensView from '../components/tokens-view.vue'
   import { cached, index, keys } from '../lib/data'
@@ -13,6 +12,8 @@
   import { messages } from '../lib/i18n'
   import type { MarkdownDoc } from '../lib/types'
   import NotFound from './not-found-page.vue'
+
+  const IconsView = defineAsyncComponent(() => import('../components/icons-view.vue'))
 
   const route = useRoute()
   const t = messages

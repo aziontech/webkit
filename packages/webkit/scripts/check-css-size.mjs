@@ -34,7 +34,7 @@ function link(target, path) {
   symlinkSync(target, path, 'dir')
 }
 
-export function writeFixture(dir, imports) {
+export function writeFixture(dir, imports, entries = [], markup = '') {
   const require = createRequire(join(PKG, 'package.json'))
   const nm = join(dir, 'node_modules')
   link(PKG, join(nm, '@aziontech', 'webkit'))
@@ -42,15 +42,24 @@ export function writeFixture(dir, imports) {
     realpathSync(join(PKG, 'node_modules', '@aziontech', 'theme')),
     join(nm, '@aziontech', 'theme')
   )
+  link(
+    realpathSync(join(PKG, 'node_modules', '@aziontech', 'icons')),
+    join(nm, '@aziontech', 'icons')
+  )
   link(dirname(require.resolve('tailwindcss/package.json')), join(nm, 'tailwindcss'))
   mkdirSync(join(dir, 'src'), { recursive: true })
-  writeFileSync(join(dir, 'src', 'webkit.css'), initInternals.styleEntryContent())
+  writeFileSync(
+    join(dir, 'src', 'webkit.css'),
+    `${initInternals.styleEntryContent()}@source not '../node_modules/@aziontech/webkit/src/**/*.test.ts';\n`
+  )
   const bindings = imports.map((_, i) => `C${i}`)
   writeFileSync(
     join(dir, 'src', 'main.js'),
     [
       "import './webkit.css'",
+      ...entries.map((entry) => `import '${entry}'`),
       ...imports.map((sub, i) => `import ${bindings[i]} from '@aziontech/webkit/${sub}'`),
+      `export const markup = ${JSON.stringify(markup)}`,
       `export default [${bindings.join(', ')}]`,
       ''
     ].join('\n')
@@ -58,6 +67,16 @@ export function writeFixture(dir, imports) {
 }
 
 export async function measureFixture(dir) {
+  const cwd = process.cwd()
+  process.chdir(dir)
+  try {
+    return await buildFixture(dir)
+  } finally {
+    process.chdir(cwd)
+  }
+}
+
+async function buildFixture(dir) {
   const result = await build({
     root: dir,
     configFile: false,
@@ -89,7 +108,7 @@ async function main(only) {
   for (const e of entries) {
     const dir = mkdtempSync(join(tmpdir(), 'webkit-css-'))
     try {
-      writeFixture(dir, e.imports)
+      writeFixture(dir, e.imports, e.entries, e.markup)
       const { raw, gzip } = await measureFixture(dir)
       const sources = planSources(dir)
       const limit = limitToBytes(e.limit)

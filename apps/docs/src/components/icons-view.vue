@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import '@aziontech/icons/azionicons-color'
+
   import EmptyState from '@aziontech/webkit/empty-state'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item-root'

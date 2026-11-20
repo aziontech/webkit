@@ -24,7 +24,7 @@
     to?: string | Record<string, unknown>
     /** Where an in-app link leads (`Workloads`), for the tooltip `Open <label> in <destination>`. */
     destination?: string
-    /** Glyph class drawn before the name, muted (the provider or resource type: `az az-github`, `az az-workloads`). */
+    /** Glyph class drawn before the name, muted (the provider or resource type: `az az-git-branch`, `az az-workloads`). */
     icon?: string
     /** Adds a copy button pinned to the cell's end edge. */
     copyable?: boolean
