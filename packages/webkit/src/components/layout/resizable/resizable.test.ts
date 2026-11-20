@@ -119,6 +119,13 @@ describe('Resizable', () => {
     expect(getByRole('separator').getAttribute('aria-disabled')).toBe('true')
   })
 
+  it('draws the focus ring token on the separator, not only a fill', () => {
+    const { getByRole } = render(group())
+    const classes = getByRole('separator').classList
+    expect(classes.contains('focus-visible:ring-2')).toBe(true)
+    expect(classes.contains('focus-visible:ring-(--ring-color)')).toBe(true)
+  })
+
   it('has no axe violations on the default render', async () => {
     const { container } = render(group())
     await expectNoA11yViolations(container)

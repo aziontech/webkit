@@ -163,6 +163,7 @@ describe('AppLayout', () => {
     expect(getByRole('region', { name: 'web-app-prod' })).toBeTruthy()
     const separator = getByRole('separator', { name: 'Resize panel' })
     expect(separator.getAttribute('aria-orientation')).toBe('horizontal')
+    expect(separator.classList.contains('focus-visible:ring-(--ring-color)')).toBe(true)
     expect(separator.getAttribute('aria-valuenow')).toBe('240')
     await fireEvent.keyDown(separator, { key: 'ArrowUp' })
     expect(separator.getAttribute('aria-valuenow')).toBe('256')

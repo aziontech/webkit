@@ -469,6 +469,7 @@ describe('Sidebar', () => {
       expect(handle).toBe(getByRole('separator', { name: 'Resize navigation' }))
       expect(handle.getAttribute('tabindex')).toBe('0')
       expect(handle.getAttribute('aria-orientation')).toBe('vertical')
+      expect(handle.classList.contains('focus-visible:ring-(--ring-color)')).toBe(true)
     })
 
     it('arrow keys on the handle nudge the width, the keyboard equivalent of the drag', async () => {
