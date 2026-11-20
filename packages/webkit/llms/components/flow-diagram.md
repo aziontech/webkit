@@ -86,7 +86,7 @@
 - Data card: `data-state="open|closed"`; an unbound bindable node is dashed with `Not bound`; a pending bind dashes it too.
 - Loading: `aria-busy`, skeleton cards, one `role="status"` line. Empty: `EmptyState` unless the `empty` slot replaces it.
 - Edge `severity` colours the connector (`--<severity>-mark`); default `--accent`.
-- Scroll area (`__viewport`): `data-overflow-start` / `data-overflow-end` while content lies past that inline edge; it fades that edge and takes `tabindex="0"`.
+- Scroll area (`__viewport`): `data-overflow-start` / `data-overflow-end` while content lies past that inline edge; it fades that edge and takes `tabindex="0"`, as it does whenever its content is taller than it.
 
 - Its root carries `data-plain-ground`: it is content that must sit on a plain ground, so a `Texture` beside it hides itself, and the texture-backdrop check blocks placing it on a textured band (a texture is a backdrop for text only, RV-T2-1).
 
