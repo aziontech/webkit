@@ -179,6 +179,25 @@ describe('create-drawer', () => {
     expect(screen.queryByRole('option', { name: 'Production' })).toBeNull()
   })
 
+  it('asks the page for Create Environment and selects the environment it adds', async () => {
+    const environments = [
+      { value: 'Production', label: 'Production', deploymentPolicy: 'single_version' as const }
+    ]
+    const view = render(CreateInDrawer, { props: { defaultOpen: true, environments } })
+    const dialog = await screen.findByRole('dialog')
+    const select = within(dialog).getByRole('combobox', { name: /Environment/ })
+    await fireEvent.click(select)
+    await fireEvent.click(await screen.findByRole('option', { name: 'Create Environment' }))
+    expect(view.emitted('update:environmentOpen')?.[0]).toEqual([true])
+    await view.rerender({
+      environments: [
+        ...environments,
+        { value: 'Canary', label: 'Canary', deploymentPolicy: 'versioned_urls' as const }
+      ]
+    })
+    await waitFor(() => expect(select.textContent).toContain('Canary'))
+  })
+
   it('keeps the values after a failed save and retries from the alert', async () => {
     const view = render(CreateInDrawerSaveFailed)
     const dialog = await screen.findByRole('dialog')

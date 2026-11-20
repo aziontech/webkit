@@ -59,23 +59,31 @@ A small `Kbd` (`aria-hidden`) inside the primary button shows its keyboard short
 
 The block takes the deploy targets through props and emits every action; it fetches and deploys nothing. The record types (`DeployDrawerResource`, `DeployDrawerProjectGroup`, `DeployDrawerEnvironment`, `DeployDrawerImpact`, `DeployDrawerBuild`, `DeployDrawerValues`) and `DeployDrawerProps` are exported from `create-deploy-drawer.vue`, and `sample.ts` holds the sample records the Service drawer renders when they are left out (never while `loading` or `error` is set).
 
-| Prop            | Type                          | What it does                                                                           |
-| --------------- | ----------------------------- | -------------------------------------------------------------------------------------- |
-| `resources`     | `DeployDrawerResource[]`      | The resources with their Ready versions and the dependencies they reference.           |
-| `projectGroups` | `DeployDrawerProjectGroup[]`  | The projects Use existing offers, in groups.                                           |
-| `newProject`    | `DeployDrawerProject`         | The project Create new makes.                                                          |
-| `environments`  | `DeployDrawerEnvironment[]`   | The environments to go live in, the first selected by default.                         |
-| `impacted`      | `DeployDrawerImpact[]`        | The projects the shared Deployment Settings reach, per environment.                    |
-| `defaultValues` | `Partial<DeployDrawerValues>` | The versions, project and environment every open resets to.                            |
-| `build`         | `DeployDrawerBuild`           | A build in progress: a Building row replaces Resources, the rest is inert, Deploy off. |
-| `loading`       | `boolean`                     | The deploy targets are loading; `Skeleton` blocks, Deploy disabled.                    |
-| `error`         | `string`                      | Why they failed to load, in a danger `Alert` with Retry; Deploy disabled.              |
-| `v-model:open`  | `boolean`                     | Whether the drawer shows; the trigger opens it and Deploy closes it.                   |
+| Prop                      | Type                          | What it does                                                                                |
+| ------------------------- | ----------------------------- | ------------------------------------------------------------------------------------------- |
+| `resources`               | `DeployDrawerResource[]`      | The resources with their Ready versions and the dependencies they reference.                |
+| `projectGroups`           | `DeployDrawerProjectGroup[]`  | The projects Use existing offers, in groups.                                                |
+| `newProject`              | `DeployDrawerProject`         | The project Create new makes.                                                               |
+| `environments`            | `DeployDrawerEnvironment[]`   | The environments to go live in, the first selected by default.                              |
+| `impacted`                | `DeployDrawerImpact[]`        | The projects the shared Deployment Settings reach, per environment.                         |
+| `defaultValues`           | `Partial<DeployDrawerValues>` | The versions, project and environment every open resets to.                                 |
+| `build`                   | `DeployDrawerBuild`           | A build in progress: a Building row replaces Resources, the rest is inert, Deploy off.      |
+| `loading`                 | `boolean`                     | The deploy targets are loading; `Skeleton` blocks, Deploy disabled.                         |
+| `error`                   | `string`                      | Why they failed to load, in a danger `Alert` with Retry; Deploy disabled.                   |
+| `v-model:open`            | `boolean`                     | Whether the drawer shows; the trigger opens it and Deploy closes it.                        |
+| `dependenciesOpen`        | `boolean`                     | Opens every Dependencies disclosure when the drawer opens.                                  |
+| `dependenciesLoadingKeys` | `string[]`                    | Resources whose dependencies are reloading: `Skeleton` rows, a status line, Deploy waits.   |
+| `impactedLoading`         | `boolean`                     | Projects impacted are reloading: `Skeleton` rows, `aria-busy`, a status line, Deploy waits. |
+| `blocker`                 | `string`                      | Why Deploy cannot run, said in the footer and tied to Deploy by `aria-describedby`.         |
+| `v-model:versions`        | `Record<string, string>`      | The picked version per resource key; every open resets it to `defaultValues`.               |
+| `v-model:environment`     | `string`                      | The chosen environment; every open resets it to `defaultValues`.                            |
 
 | Event    | Payload           | When                                                                                     |
 | -------- | ----------------- | ---------------------------------------------------------------------------------------- |
 | `submit` | `(event, values)` | Deploy; `values` carry the picked version per resource, the project and the environment. |
 | `retry`  | `(event)`         | Retry in the load error.                                                                 |
+
+The `environment-alerts` slot renders under the environment choices with `{ environment, project }`, for alerts about what the chosen environment changes. A dependency with `sharedWith` carries a Shared `Tag` in a `Tooltip` naming the other services, and one info `Alert` above the list says it deploys at one version; Projects impacted shows only when there are projects, with an environment heading and a count per group once they span more than one environment.
 
 To go live, render the block from a page that owns the request and the deploy:
 

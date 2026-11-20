@@ -11,7 +11,6 @@
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Tag from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { ref } from 'vue'
 
   const domains = [
     'service-01.example.com',
@@ -24,7 +23,7 @@
     'service-01-alias-7.example.com'
   ]
   const environments = [{ name: 'Production' }, { name: 'Preview' }]
-  const environment = ref('Production')
+  const environment = defineModel<string>('environment', { default: 'Production' })
 </script>
 
 <template>

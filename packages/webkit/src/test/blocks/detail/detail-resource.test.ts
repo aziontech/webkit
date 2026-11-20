@@ -6,6 +6,7 @@ import DetailsPage from '../../../../blocks/detail/detail-resource/detail-resour
 import Application from '../../../../blocks/detail/detail-resource/variants/application.vue'
 import ApplicationBuild from '../../../../blocks/detail/detail-resource/variants/application-build.vue'
 import Service from '../../../../blocks/detail/detail-resource/variants/service.vue'
+import ServiceOverview from '../../../../blocks/detail/detail-resource/variants/service-overview.vue'
 import ConsoleLayout from '../../../components/layout/console-layout/console-layout.vue'
 import { expectNoA11yViolations } from '../../axe'
 import { useToastRegion } from '../../toast-region'
@@ -124,5 +125,18 @@ describe('detail-resource#Application', () => {
     expect(screen.getByRole('button', { name: 'Redeploy' })).toBeTruthy()
     await fireEvent.click(screen.getByRole('button', { name: 'Edit' }))
     expect(screen.getByRole('tab', { name: 'Topology' }).getAttribute('aria-selected')).toBe('true')
+  })
+})
+
+describe('detail-resource#ServiceOverview', () => {
+  it('keeps the summary card environment in step with the breadcrumb switch', async () => {
+    render(inConsoleLayout(ServiceOverview))
+    const trigger = await screen.findByRole('combobox', { name: 'Switch environment' })
+    const cardSwitch = () => document.querySelector('.az-layers')?.nextElementSibling?.textContent
+    expect(cardSwitch()).toBe('Production')
+    await fireEvent.click(trigger)
+    await fireEvent.click(await screen.findByRole('option', { name: /^Preview/ }))
+    await waitFor(() => expect(cardSwitch()).toBe('Preview'))
+    expect(trigger.textContent).toContain('Preview')
   })
 })
