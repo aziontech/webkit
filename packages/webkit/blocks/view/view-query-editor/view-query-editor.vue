@@ -1091,6 +1091,7 @@ LIMIT 3;`
               meta
               key-name="enter"
               size="small"
+              class="max-lg:hidden"
               aria-hidden="true"
             />
           </Button>
