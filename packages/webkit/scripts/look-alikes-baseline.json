@@ -1,0 +1,33 @@
+{
+  "known": [
+    "architecture-tabs-section::feature-tabs-section",
+    "article-cards-section::investor-marks-section",
+    "article-index-section::listing-index-section",
+    "article-index-section::story-index-section",
+    "button::highlight-button",
+    "button::icon-button",
+    "capability-grid-section::customer-use-cases-section",
+    "capability-grid-section::feature-widgets-section",
+    "chart-area::chart-line",
+    "chart::donut-chart",
+    "cli-terminal-section::feature-scroll-section",
+    "console-layout::doc-layout",
+    "context-menu::dropdown-menu",
+    "date-picker::date-range-picker",
+    "donut-chart::map-chart",
+    "dropdown-menu-trigger::popover-trigger",
+    "feature-scroll-section::feature-tabs-section",
+    "feature-scroll-section::feature-widgets-section",
+    "highlight-button::icon-button",
+    "input::number-input",
+    "input::password-input",
+    "listing-index-section::story-index-section",
+    "media-split-section::media-split-stack-section",
+    "multi-select-item::select-item",
+    "multi-select-trigger::select-trigger",
+    "multi-select::select",
+    "subagent-card::tool-call",
+    "transfer-list-source::transfer-list-target"
+  ],
+  "accepted": {}
+}

@@ -115,6 +115,12 @@ The public API does not change in a split. `check-api-diff.mjs` must report no d
   selection) moves to `src/composables/` and both components use it.
 - **A clone detector gates it.** Token-based duplicate detection runs over components and blocks;
   the count only goes down.
+- **A look-alike check gates what the clone detector cannot see.** Two components that do the same
+  job in different text (Button, IconButton and HighlightButton each write their own link-or-button
+  root, spinner and inert state) share no clone. `check:look-alikes` scores every pair of exported
+  components on props, behaviour, classes, template shape and catalog purpose, and fails a new pair
+  at 35% or more where neither imports the other. Phase 0 reads its 28 baseline pairs as part of the
+  work list (`node scripts/check-look-alikes.mjs --report`); each pair fixed leaves the baseline.
 
 ### 3.4 Growth goes to parts, not to the root
 
@@ -228,6 +234,7 @@ number worse.
 | ------------------------- | -------------------------------------------------------------------- |
 | `check:maintainability`   | Every limit in 3.1 (lines, function length, complexity, line length) |
 | `check:duplication`       | Cloned code across components and blocks; duplicated root templates  |
+| `check:look-alikes`       | Components that do the same job and neither uses the other (in CI)   |
 | `check:extension`         | 3.5: `data-slot` on parts, exported props types, exported context    |
 | `check:slot-reading`      | 3.6: no `isVNode` or slot walking outside the shared registry        |
 | `check:assertions`        | 3.11: count of type assertions                                       |

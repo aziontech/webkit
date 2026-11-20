@@ -107,6 +107,11 @@ export const GATES = [
     ]
   },
   {
+    id: 'look-alikes',
+    label: 'No new pair of components that do the same job without reusing each other',
+    steps: [['node', 'scripts/check-look-alikes.mjs']]
+  },
+  {
     id: 'hooks',
     label: 'Hook tests',
     steps: [['node', '../../.claude/hooks/test/run.mjs']]
