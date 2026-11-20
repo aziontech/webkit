@@ -67,6 +67,14 @@ describe('Timestamp', () => {
     expect(text).toMatch(/UTC/)
   })
 
+  it('joins the date and the time itself, so every browser engine writes the same text', () => {
+    render(inProvider({ value: VALUE, format: 'utc' }, { locale: 'en-US' }))
+
+    const time = screen.getByTestId('timestamp__text').querySelector('time')
+    expect(time?.textContent).toMatch(/^Nov 14, 2026, 12:04:31\sPM UTC$/)
+    expect(time).toHaveAttribute('data-allow-mismatch', 'text')
+  })
+
   it('reads the provider time zone, and the prop wins over it', () => {
     const tokyo = render(inProvider({ value: VALUE }, { timeZone: 'Asia/Tokyo' }))
     expect(tokyo.getByTestId('timestamp__text').textContent).toMatch(/09:04:31/)
