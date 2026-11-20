@@ -1323,6 +1323,11 @@
     "limit": "1.95 KB"
   },
   {
+    "name": "use-escape-to-cancel",
+    "path": "src/composables/use-escape-to-cancel/index.ts",
+    "limit": "1 KB"
+  },
+  {
     "name": "use-pinned-row",
     "path": "src/composables/use-pinned-row/index.ts",
     "limit": "1 KB"

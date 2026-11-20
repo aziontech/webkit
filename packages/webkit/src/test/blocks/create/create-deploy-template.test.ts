@@ -1,5 +1,6 @@
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
+import { userEvent } from 'vitest/browser'
 
 import CreateDeployTemplate from '../../../../blocks/create/create-deploy-template/create-deploy-template.vue'
 import DeployTemplateForm from '../../../../blocks/create/create-deploy-template/variants/form.vue'
@@ -112,6 +113,12 @@ describe('create-deploy-template#InstallIntegration', () => {
     expect(within(added).getByText(/origin\.example\.com/)).toBeTruthy()
     expect(screen.queryByText('This field is required.')).toBeNull()
   })
+  it('goes back to the Creation Center on Escape', async () => {
+    const view = render(CreateDeployTemplate)
+    await userEvent.keyboard('{Escape}')
+    const [event] = view.emitted<unknown[]>('back')?.[0] ?? []
+    expect(event).toBeInstanceOf(KeyboardEvent)
+  })
 })
 
 describe('create-deploy-template#Form', () => {
@@ -129,5 +136,17 @@ describe('create-deploy-template#Form', () => {
     expect(
       (screen.getByRole('textbox', { name: /repository name/i }) as HTMLInputElement).value
     ).toBe('acme-store')
+  })
+
+  it('runs the Back path on Escape: asks while edited, keeps the input on Keep editing', async () => {
+    render(DeployTemplateForm)
+    const name = screen.getByRole('textbox', { name: /repository name/i }) as HTMLInputElement
+    await fireEvent.update(name, 'acme-store')
+    name.focus()
+    await userEvent.keyboard('{Escape}')
+    const confirm = await screen.findByRole('alertdialog')
+    await fireEvent.click(within(confirm).getByRole('button', { name: 'Keep editing' }))
+    await waitFor(() => expect(screen.queryByRole('alertdialog')).toBeNull())
+    expect(name.value).toBe('acme-store')
   })
 })

@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/create/create-page/create-page.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-page")`
-- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [ConfirmDialog](../../components/confirm-dialog.md), `FieldDescription`, `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [MultiSelect](../../components/multi-select.md), [NumberInput](../../components/number-input.md), [PageHeader](../../components/page-header.md), [RadioGroup](../../components/radio-group.md), [RadioGroup](../../components/radio-group.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), `use-unsaved-changes`
+- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [ConfirmDialog](../../components/confirm-dialog.md), `FieldDescription`, `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [MultiSelect](../../components/multi-select.md), [NumberInput](../../components/number-input.md), [PageHeader](../../components/page-header.md), [RadioGroup](../../components/radio-group.md), [RadioGroup](../../components/radio-group.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), `use-escape-to-cancel`, `use-unsaved-changes`
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`, `webkit-layout`
 
 ## Asked as
@@ -58,7 +58,7 @@ On/off settings use `SettingsRow variant="compact"` with a `Switch` hard right a
 
 ### G. Leaving with typed work — `useUnsavedChanges`, `ConfirmDialog` (required)
 
-Cancel and the header Back both leave the page, so both ask first once the form differs from what it opened with: `useUnsavedChanges(() => form)` tracks it, Cancel and Back `await guard.confirmLeave()` before the page emits `cancel`, and one `ConfirmDialog v-bind="guard.dialogProps"` asks "Unsaved changes" with Keep editing and Discard changes. A clean form leaves at once, with no dialog, and the browser's own prompt covers a reload or a tab close while dirty. In a router app pair it with `onBeforeRouteLeave(() => guard.confirmLeave())` so a link or the browser Back asks too.
+Cancel and the header Back both leave the page, so both ask first once the form differs from what it opened with: `useUnsavedChanges(() => form)` tracks it, Cancel and Back `await guard.confirmLeave()` before the page emits `cancel`, and one `ConfirmDialog v-bind="guard.dialogProps"` asks "Unsaved changes" with Keep editing and Discard changes. A clean form leaves at once, with no dialog, and the browser's own prompt covers a reload or a tab close while dirty. In a router app pair it with `onBeforeRouteLeave(() => guard.confirmLeave())` so a link or the browser Back asks too. Escape runs the same Cancel path through `useEscapeToCancel(onCancel)`.
 
 ## Data
 
@@ -131,6 +131,7 @@ To go live, render the block from a page that owns the request:
 
 ## Accessibility
 
+- **Escape on the page = Cancel.** `useEscapeToCancel(onCancel)` runs the same path as the Cancel button: a clean form leaves at once, an edited one opens the Unsaved changes dialog. It stays inert while the create request is in flight, while an IME is composing, when another handler already used the key, while a menu, listbox, popover, tooltip or dialog is open (the open Select or DatePicker closes first, and Escape on the Unsaved changes dialog only keeps editing) and when focus is in a control that uses Escape itself (an open combobox, a search field). Edit and settings pages are places, not tasks: Escape stays inert there.
 - One `main` landmark holding one `form`, labelled by the `PageHeader` title through `aria-labelledby`, with `novalidate` so the page's own messages replace the browser's.
 - A `fieldset` with a visually hidden `legend` groups the sections.
 - Each message is tied to its control with `aria-describedby` and appears only on submit; `required` and `invalid` are announced through the control's own state.
@@ -188,6 +189,7 @@ Each variant is the same screen in another state: `get_block("create/create-page
   import SettingsRow from '@aziontech/webkit/settings-row'
   import Switch from '@aziontech/webkit/switch'
   import { toast } from '@aziontech/webkit/toast'
+  import { useEscapeToCancel } from '@aziontech/webkit/use-escape-to-cancel'
   import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import { reactive, ref, watch } from 'vue'
 
@@ -227,7 +229,7 @@ Each variant is the same screen in another state: `get_block("create/create-page
 
   const emit = defineEmits<{
     submit: [event: Event, values: CreatePageValues]
-    cancel: [event: MouseEvent]
+    cancel: [event: MouseEvent | KeyboardEvent]
   }>()
 
   const breadcrumb = [{ label: 'Domains', href: '/domains' }, { label: 'Create Domain' }]
@@ -288,9 +290,11 @@ Each variant is the same screen in another state: `get_block("create/create-page
   const discardDialog = guard.dialogProps
   const discardLabels = guard.labels
 
-  const onCancel = async (event: MouseEvent) => {
+  const onCancel = async (event: MouseEvent | KeyboardEvent) => {
     if (await guard.confirmLeave()) emit('cancel', event)
   }
+
+  useEscapeToCancel(onCancel, { enabled: () => !props.loading })
 
   const submit = (event: Event) => {
     if (props.loading || !validate()) return

@@ -21,6 +21,7 @@
   import Skeleton from '@aziontech/webkit/skeleton'
   import Switch from '@aziontech/webkit/switch'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import { useEscapeToCancel } from '@aziontech/webkit/use-escape-to-cancel'
   import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import Wizard from '@aziontech/webkit/wizard'
   import { computed, onBeforeUnmount, reactive, ref } from 'vue'
@@ -71,7 +72,7 @@
   }
 
   const emit = defineEmits<{
-    cancel: [event: MouseEvent]
+    cancel: [event: MouseEvent | KeyboardEvent]
   }>()
 
   const breadcrumb = [{ label: 'Services', href: '/services' }, { label: 'Create Service' }]
@@ -711,9 +712,11 @@
   const discardDialog = guard.dialogProps
   const discardLabels = guard.labels
 
-  const onCancel = async (event: MouseEvent) => {
+  const onCancel = async (event: MouseEvent | KeyboardEvent) => {
     if (await guard.confirmLeave()) emit('cancel', event)
   }
+
+  useEscapeToCancel(onCancel, { enabled: () => !submitting.value })
 </script>
 
 <template>

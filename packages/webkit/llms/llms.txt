@@ -442,6 +442,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [useConsoleLayout](composables/use-console-layout.md): `useConsoleLayout` and 2 more exports (options, return, helpers and types).
 - [useControllable](composables/use-controllable.md): `useControllable` and 2 more exports (options, return, helpers and types).
 - [useDirection](composables/use-direction.md): `useDirection` and 4 more exports (options, return, helpers and types).
+- [useEscapeToCancel](composables/use-escape-to-cancel.md): `useEscapeToCancel` and 1 more exports (options, return, helpers and types).
 - [useFocusTrap](composables/use-focus-trap.md): `useFocusTrap`.
 - [useHeadingNavigation](composables/use-heading-navigation.md): `useHeadingNavigation` and 7 more exports (options, return, helpers and types).
 - [useLocale](composables/use-locale.md): `useLocale` and 19 more exports (options, return, helpers and types).
