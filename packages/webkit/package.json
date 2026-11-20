@@ -2570,6 +2570,14 @@
       "types": "./types/composables/use-time-range/index.d.ts",
       "default": "./src/composables/use-time-range/index.ts"
     },
+    "./use-shortcuts": {
+      "types": "./types/composables/use-shortcuts/index.d.ts",
+      "default": "./src/composables/use-shortcuts/index.ts"
+    },
+    "./shortcuts-dialog": {
+      "types": "./types/components/overlay/shortcuts-dialog/shortcuts-dialog.vue.d.ts",
+      "default": "./src/components/overlay/shortcuts-dialog/shortcuts-dialog.vue"
+    },
     "./file-preview": {
       "types": "./types/components/content/file-preview/file-preview.vue.d.ts",
       "default": "./src/components/content/file-preview/file-preview.vue"
