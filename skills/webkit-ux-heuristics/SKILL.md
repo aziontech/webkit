@@ -2,10 +2,10 @@
 name: webkit-ux-heuristics
 description: Component-map discovery pass — for each UX moment (loading→Skeleton, destructive→Dialog confirm, field error→Field/Alert inline, overlay→shipped focus-trap, empty→one action) name the @aziontech/webkit component that already serves it, so the flow is sound before polish. Also owns three usability rules every surface follows — an external resource link opens in a new tab and says so (trailing az-external-link + new-tab hint), every long list (a "+N" Tag opening a Popover, an inline picker of existing resources in a create flow, a Select of existing resources) carries a count, search and Load more, and any list of options longer than 7 turns search on. State rendering + async behavior lives in /webkit-ui-states.
 status: active
-last_updated: 2026-11-17
+last_updated: 2026-11-20
 scope: general
 # prettier-ignore
-enforced_by: [webkit-prefer-over-custom, webkit-component-states, webkit-accessibility, ui-verify, review]
+enforced_by: [webkit-prefer-over-custom, webkit-component-states, webkit-accessibility, webkit-keyboard, ui-verify, review]
 ---
 
 # Skill: webkit-ux-heuristics
@@ -205,6 +205,10 @@ one renders, and how the async sequence behaves, lives in `/webkit-ui-states`.
 - Field errors sit next to the field (`Field` + `message`); never a global toast for a field-level
   error.
 - Overlays trap and restore focus via the shipped focus-trap composable; never hand-roll focus/escape.
+- Every console screen answers the keys of rule `webkit-keyboard`: focus in the first field of a
+  task and on the `h1` of a browse page, `Esc` closes the top layer only, `⌘ S` saves a `SaveBar`
+  page, `/` searches, `?` lists the screen's shortcuts, `Delete` asks first, and no single-key
+  shortcut fires while typing. Show each shortcut with `Kbd` where the action is offered.
 - Labels are literal; use `label`, never placeholder-as-label; never block paste.
 - External resources open in a new tab, carry the 12px `az-external-link` mark, and say "opens in a
   new tab" to assistive tech; in-app links stay in the tab.

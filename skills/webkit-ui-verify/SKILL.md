@@ -2,9 +2,10 @@
 name: webkit-ui-verify
 description: Drive a finished @aziontech/webkit screen in a real browser (Playwright, headless Chromium) and OBSERVE before declaring it done — screenshot both themes at multiple widths, assert zero console errors, run axe-core against the live tree, check the navigation levels (no route offered twice, one agreeing current row per level), and exercise the loading/empty/error states and the primary interaction. The runtime a11y gate the accessibility rule defers to: axe on the rendered tree, focus trap/restore observed, live-region announcements. Use as the runtime gate that verifies what the other skills prescribe, before you call any route finished.
 status: active
-last_updated: 2026-11-14
+last_updated: 2026-11-20
 scope: general
-enforced_by: [ui-verify, webkit-accessibility, webkit-component-states, webkit-navigation-levels]
+# prettier-ignore
+enforced_by: [ui-verify, webkit-accessibility, webkit-component-states, webkit-navigation-levels, webkit-keyboard]
 ---
 
 # Skill: webkit-ui-verify
@@ -94,6 +95,29 @@ npx @aziontech/webkit check --no-lint --url http://localhost:5173/policies/acme/
   **traps** focus while open and **restores** it to the trigger on close (compare
   `document.activeElement` before open and after close).
 
+- **Keyboard.** Drive the route with the keyboard alone, against rule `webkit-keyboard`:
+  - on load, focus is in the first field of a task (create page, form drawer or dialog) and on the
+    `h1` of a browse page (`document.activeElement`), with no ring drawn on the heading;
+  - `Esc` closes only the top layer (menu, then dialog, then drawer), means Cancel on a full-page
+    task (the unsaved-changes guard appears when the form is dirty) and does nothing on a browse page;
+  - `⌘ S` / `Ctrl S` saves a page with a `SaveBar` and the browser's save dialog never opens;
+    `⌘ Enter` / `Ctrl Enter` submits from a textarea or the code editor, `Enter` from a short form;
+  - `/` focuses the page's search field, `?` opens the shortcut list, and the list names every
+    shortcut the screen answers;
+  - with focus in an input, a textarea, a `contenteditable` or a combobox, `/`, `?` and letter
+    keys type into the field and trigger nothing;
+  - in a table or list, arrows move between rows, `Enter` opens, `Space` selects, `Delete` asks
+    first; after a delete focus is on the next row (or previous, or the list), never on `body`;
+  - closing anything returns focus to its trigger, and every shortcut shown in a menu or bar is a
+    `Kbd` with `aria-keyshortcuts` on its control.
+
+```js
+await page.keyboard.press('Escape')
+const onTitle = await page.evaluate(() => document.activeElement?.tagName === 'H1')
+await page.getByRole('searchbox').focus()
+await page.keyboard.press('?') // types "?", opens nothing
+```
+
 ## The runtime check
 
 Self-contained Node script — navigate, set the theme before first paint, screenshot both themes at two
@@ -171,6 +195,9 @@ Extend it per route: add `page.route()` calls to force empty/error, and a `userE
 - Overlays trap focus while open and restore it to the trigger on close; the action's feedback appears.
 - Async status (loading, saved, error) is announced via an `aria-live` region / webkit status surface —
   not colour or a silent spinner alone.
+- The keyboard alone reaches and completes the primary flow, and the screen holds the
+  `webkit-keyboard` contract: focus on open, `Esc` one layer, `⌘ S`, `/`, `?`, list keys, no
+  single-key shortcut inside a field.
 - Every visited route passes `webkit check --url`: no route offered by two navigation controls, one
   current row per control, and the current rows of all levels agree.
 - Assert **behavior, console, a11y, and visual snapshots** — never class strings, pixel positions, or
@@ -189,6 +216,7 @@ Route: /workloads
 [✗] States     empty fetch → blank panel, no EmptyState rendered
 [✗] Navigation /policies/acme/access-rules offered by "Console navigation" (nav) and "Private access" (role=navigation)
 [✓] Interaction dialog traps + restores focus; success toast appears
+[✗] Keyboard    browse page opens with focus on body, not the h1; "/" fires inside the search field
 
 fix: pass :label to <Alert>; darken the pill text token; add EmptyState to the no-data branch;
      drop the Access rules rows from the rail and the in-page menu (the policy's tabs own them).
@@ -206,4 +234,6 @@ End with: `verified — ship` or `N findings — fix before ship`.
       duplicate destination, current rows that agree.
 - [ ] Loading, empty, and error each forced and each renders its webkit state component.
 - [ ] Primary flow driven; focus traps + restores; the action's feedback appears.
+- [ ] Keyboard pass done against `webkit-keyboard`: focus on open, `Esc`, `⌘ S`, `/`, `?`, list
+      keys, and no single-key shortcut while typing.
 - [ ] Wired into CI as a smoke/visual job — this runtime gate runs on every PR, not just locally.
