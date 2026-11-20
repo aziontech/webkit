@@ -892,6 +892,14 @@ listed in `@aziontech/icons/manifest` and `ICONS.md` in the icons package:
   `ai-open`, `ai-next`, `ai-js`, `ai-ts`, `ai-azuredevops`, `ai-x` are `az-openai`, `az-nextjs`,
   `az-javascript`, `az-typescript`, `az-azure-devops`, `az-x-brand`.
 
+`import '@aziontech/icons'` now loads the icon font only. The colour logos come with
+`@aziontech/webkit/styles` (in the `webkit.css` that `webkit init` writes), which compiles only the
+logos your sources name: with that stylesheet there is nothing to change, as long as each logo's
+class is written whole in your code (`'az-color az-react'`, not `` `az-color az-${name}` ``). A logo
+named only in fetched data goes in `@source inline("az-react");` in `webkit.css`. An app without
+Tailwind, or a page that shows every logo, imports the whole set:
+`import '@aziontech/icons/azionicons-color'`.
+
 The brand mark `workers-cloudflare` (`Marquee` `marks`, `QuoteTabs` `mark`, `ClientQuotesSection` `mark`,
 `HeroSection` `carouselMarks`) is `cloudflare-workers`; rename the string by hand.
 

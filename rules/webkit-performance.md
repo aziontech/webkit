@@ -31,6 +31,7 @@ import TableRow from '@aziontech/webkit/table-row'
 
 - `@aziontech/icons` is an icon font. Import it once for its side effects (`import '@aziontech/icons'`, near the app entry) and reference icons by their CSS class.
 - Do not import a default/namespace binding (`import Icons from '@aziontech/icons'`) — the entry is CSS; a binding is meaningless and usually a mistake.
+- The colour logos (`az-color az-<name>`) are not in that entry: each is an inlined SVG, about 85 KB gzip for the whole set. WebKit's stylesheet (`./webkit.css`) compiles only the logos your sources name, so write the full class (`az-color az-react`) in the code. A logo named only in fetched data goes in `@source inline("az-react");` in `webkit.css`. Import the whole set (`import '@aziontech/icons/azionicons-color'`) only on a page that shows every logo, and load that page lazily.
 
 ## Lazy-load heavy overlays
 

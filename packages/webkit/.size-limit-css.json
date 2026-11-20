@@ -2,7 +2,7 @@
   {
     "name": "css-button",
     "imports": ["button"],
-    "limit": "11.1 KB"
+    "limit": "10.9 KB"
   },
   {
     "name": "css-console",
@@ -23,5 +23,12 @@
       "chart"
     ],
     "limit": "24.45 KB"
+  },
+  {
+    "name": "css-icons",
+    "imports": ["button"],
+    "entries": ["@aziontech/icons"],
+    "markup": "<i class=\"az az-check\"></i><i class=\"az-color az-github\"></i>",
+    "limit": "15.25 KB"
   }
 ]

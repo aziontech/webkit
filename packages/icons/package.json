@@ -52,6 +52,10 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/azionicons-color.css"
     },
+    "./azionicons-color-utilities": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/azionicons-color-utilities.css"
+    },
     "./catalog": "./dist/catalog.json",
     "./color-catalog": "./dist/color-catalog.json",
     "./manifest": "./dist/icons.json"
