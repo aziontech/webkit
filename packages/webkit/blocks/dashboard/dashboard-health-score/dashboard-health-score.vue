@@ -161,6 +161,7 @@
         <template #actions>
           <div class="w-44 shrink-0">
             <Select
+              variant="ghost"
               v-model="period"
               size="medium"
             >

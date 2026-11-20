@@ -41,6 +41,8 @@ Title `Cost breakdown` with one sentence on what it shows. Its actions hold the 
 
 ### B. Period — `Select` (required)
 
+The header `Select` is `variant="ghost"`: no border until hover, so it shares the header row with the outlined buttons beside it; a header never holds a field outline.
+
 `Last 12 months` or `Last 6 months`, labelled `Period`. It scopes every region.
 
 ### C. Export — `Button` (optional)
@@ -521,6 +523,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
         <template #actions>
           <div class="w-full md:w-48">
             <Select
+              variant="ghost"
               v-model="period"
               size="medium"
               :display-value="

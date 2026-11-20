@@ -344,6 +344,7 @@
         <template #actions>
           <div class="w-36">
             <Select
+              variant="ghost"
               v-model="quarter"
               size="medium"
             >

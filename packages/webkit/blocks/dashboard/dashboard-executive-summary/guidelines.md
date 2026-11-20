@@ -28,6 +28,8 @@ Title `Executive summary` and one sentence on what it contains. Actions hold the
 
 ### B. Quarter — `Select` (required)
 
+The header `Select` is `variant="ghost"`: no border until hover, so it shares the header row with the outlined buttons beside it; a header never holds a field outline.
+
 The reporting period, labelled `Quarter`. It scopes every region, including goals and commentary.
 
 ### C. Export — `Button` (optional)

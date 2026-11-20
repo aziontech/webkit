@@ -24,6 +24,8 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ### A. Page heading and period — `PageHeader`, `Select` (required)
 
+The header `Select` is `variant="ghost"`: no border until hover, so it shares the header row with the outlined buttons beside it; a header never holds a field outline.
+
 Title `Security` and one sentence on what the page shows, over the rest of the page in the standard
 `layout-column`. The header actions hold one medium `Select` named `Period` by its `aria-label`
 (`Last hour`, `Last 24 hours`, `Last 7 days`, `Last 30 days`); it sets the comparison label of every

@@ -307,6 +307,7 @@
         <template #actions>
           <div class="w-full md:w-48">
             <Select
+              variant="ghost"
               v-model="period"
               size="medium"
               :display-value="

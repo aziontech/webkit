@@ -136,6 +136,7 @@
       >
         <template #actions>
           <Select
+            variant="ghost"
             v-model="period"
             size="medium"
             :display-value="periodLabel"
