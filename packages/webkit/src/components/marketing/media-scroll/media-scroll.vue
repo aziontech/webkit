@@ -163,6 +163,11 @@
   }
 
   function goTo(index: number): void {
+    if (index !== activeIndex.value && index >= 0 && index < count.value) {
+      activeIndex.value = index
+      sliceProgress.value = 0
+      emit('active-index-change', index)
+    }
     const metrics = pinnedMetrics()
     if (!metrics || !trackEl.value || !frameEl.value || count.value === 0) return
     const pinnedTop = Number.parseFloat(globalThis.getComputedStyle(frameEl.value).top) || 0
