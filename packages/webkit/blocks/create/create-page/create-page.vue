@@ -16,6 +16,7 @@
   import SettingsRow from '@aziontech/webkit/settings-row'
   import Switch from '@aziontech/webkit/switch'
   import { toast } from '@aziontech/webkit/toast'
+  import { useEscapeToCancel } from '@aziontech/webkit/use-escape-to-cancel'
   import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import { reactive, ref, watch } from 'vue'
 
@@ -55,7 +56,7 @@
 
   const emit = defineEmits<{
     submit: [event: Event, values: CreatePageValues]
-    cancel: [event: MouseEvent]
+    cancel: [event: MouseEvent | KeyboardEvent]
   }>()
 
   const breadcrumb = [{ label: 'Domains', href: '/domains' }, { label: 'Create Domain' }]
@@ -116,9 +117,11 @@
   const discardDialog = guard.dialogProps
   const discardLabels = guard.labels
 
-  const onCancel = async (event: MouseEvent) => {
+  const onCancel = async (event: MouseEvent | KeyboardEvent) => {
     if (await guard.confirmLeave()) emit('cancel', event)
   }
+
+  useEscapeToCancel(onCancel, { enabled: () => !props.loading })
 
   const submit = (event: Event) => {
     if (props.loading || !validate()) return

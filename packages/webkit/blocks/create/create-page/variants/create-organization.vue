@@ -18,6 +18,7 @@
   import SettingsRow from '@aziontech/webkit/settings-row'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
+  import { useEscapeToCancel } from '@aziontech/webkit/use-escape-to-cancel'
   import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import { computed, reactive, ref } from 'vue'
 
@@ -131,6 +132,8 @@
   const discardLabels = guard.labels
 
   const onLeave = () => guard.confirmLeave()
+
+  useEscapeToCancel(onLeave)
   let failuresLeft = SAVE_FAILURES
 
   const initials = (value: string) =>

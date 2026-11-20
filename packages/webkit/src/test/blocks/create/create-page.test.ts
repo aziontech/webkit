@@ -1,5 +1,6 @@
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
+import { userEvent } from 'vitest/browser'
 import { nextTick } from 'vue'
 
 import SinglePageCreate from '../../../../blocks/create/create-page/create-page.vue'
@@ -75,6 +76,45 @@ describe('create-page', () => {
     const again = await screen.findByRole('alertdialog')
     await fireEvent.click(within(again).getByRole('button', { name: 'Discard changes' }))
     await waitFor(() => expect(view.emitted('cancel')).toHaveLength(1), wait)
+  })
+
+  it('leaves at once on Escape while the form is clean, like Cancel', async () => {
+    const view = render(SinglePageCreate)
+    screen.getByRole('textbox', { name: 'Name' }).focus()
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(view.emitted('cancel')).toHaveLength(1), wait)
+    const [event] = view.emitted<unknown[]>('cancel')?.[0] ?? []
+    expect(event).toBeInstanceOf(KeyboardEvent)
+    expect(screen.queryByRole('alertdialog')).toBeNull()
+  })
+
+  it('asks before Escape discards typed input; Escape on the alert keeps editing', async () => {
+    const view = render(SinglePageCreate)
+    const name = screen.getByRole('textbox', { name: 'Name' }) as HTMLInputElement
+    await fireEvent.update(name, 'acme-domain')
+    name.focus()
+    await userEvent.keyboard('{Escape}')
+    const confirm = await screen.findByRole('alertdialog')
+    expect(confirm.textContent).toContain('Unsaved changes')
+    await fireEvent.click(within(confirm).getByRole('button', { name: 'Keep editing' }))
+    await waitFor(() => expect(screen.queryByRole('alertdialog')).toBeNull(), wait)
+    expect(view.emitted('cancel')).toBeUndefined()
+    expect(name.value).toBe('acme-domain')
+    await userEvent.keyboard('{Escape}')
+    const again = await screen.findByRole('alertdialog')
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(again.isConnected && again.checkVisibility()).toBe(false), wait)
+    expect(view.emitted('cancel')).toBeUndefined()
+    await userEvent.keyboard('{Escape}')
+    const last = await screen.findByRole('alertdialog')
+    await fireEvent.click(within(last).getByRole('button', { name: 'Discard changes' }))
+    await waitFor(() => expect(view.emitted('cancel')).toHaveLength(1), wait)
+  })
+
+  it('stays inert on Escape while a create request is in flight', async () => {
+    const view = render(SinglePageCreate, { props: { loading: true } })
+    await userEvent.keyboard('{Escape}')
+    expect(view.emitted('cancel')).toBeUndefined()
   })
 
   it('gives Create Service a page heading and one h2 per group', () => {
@@ -169,6 +209,20 @@ describe('create-page#CreateOrganization', () => {
     expect(screen.queryByText('This field is required.')).toBeNull()
     await fireEvent.click(screen.getByRole('button', { name: 'Create Organization' }))
     expect(screen.getByText('You already belong to an organization with this name.')).toBeTruthy()
+  })
+
+  it('closes an open Select on Escape without leaving the page', async () => {
+    render(CreateOrganization)
+    await fireEvent.update(screen.getByRole('textbox', { name: 'Name' }), 'Northwind Studio')
+    await fireEvent.click(screen.getByRole('button', { name: /Advanced/ }))
+    const trigger = await screen.findByRole('combobox', { name: 'Company size' })
+    await userEvent.click(trigger)
+    await waitFor(() => expect(trigger.getAttribute('aria-expanded')).toBe('true'), wait)
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(trigger.getAttribute('aria-expanded')).toBe('false'), wait)
+    expect(screen.queryByRole('alertdialog')).toBeNull()
+    await userEvent.keyboard('{Escape}')
+    expect(await screen.findByRole('alertdialog')).toBeTruthy()
   })
 
   it('creates the organization and confirms it in a toast', async () => {

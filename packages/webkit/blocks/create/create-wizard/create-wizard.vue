@@ -20,6 +20,7 @@
   import Tag from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
+  import { useEscapeToCancel } from '@aziontech/webkit/use-escape-to-cancel'
   import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
   import Wizard from '@aziontech/webkit/wizard'
   import { computed, reactive, ref, watch } from 'vue'
@@ -110,7 +111,7 @@
 
   const emit = defineEmits<{
     submit: [event: MouseEvent, values: CreateWizardSubmission]
-    cancel: [event: MouseEvent]
+    cancel: [event: MouseEvent | KeyboardEvent]
   }>()
 
   const breadcrumb = [
@@ -341,9 +342,11 @@
   const discardDialog = guard.dialogProps
   const discardLabels = guard.labels
 
-  const onCancel = async (event: MouseEvent) => {
+  const onCancel = async (event: MouseEvent | KeyboardEvent) => {
     if (await guard.confirmLeave()) emit('cancel', event)
   }
+
+  useEscapeToCancel(onCancel, { enabled: () => !props.loading })
 
   watch(
     () => props.error,

@@ -8,6 +8,7 @@
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import Link from '@aziontech/webkit/link'
+  import { useEscapeToCancel } from '@aziontech/webkit/use-escape-to-cancel'
   import { computed } from 'vue'
 
   import { sampleAccount, sampleTemplate } from './sample'
@@ -47,7 +48,7 @@
 
   const emit = defineEmits<{
     /** Back to Creation Center was pressed. */
-    back: [event: MouseEvent]
+    back: [event: MouseEvent | KeyboardEvent]
     /** The account menu button was pressed. */
     account: [event: MouseEvent]
     /** Continue with GitHub was pressed. */
@@ -57,6 +58,8 @@
     /** Browse templates was pressed. */
     browse: [event: MouseEvent]
   }>()
+
+  useEscapeToCancel((event) => emit('back', event))
 
   const currentTemplate = computed(() => props.template ?? sampleTemplate)
   const currentAccount = computed(() => props.account ?? sampleAccount)

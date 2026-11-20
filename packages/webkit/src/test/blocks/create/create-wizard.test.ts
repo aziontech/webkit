@@ -1,5 +1,6 @@
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
+import { userEvent } from 'vitest/browser'
 
 import MultipageCreate from '../../../../blocks/create/create-wizard/create-wizard.vue'
 import MultipageCreateAndDeploy from '../../../../blocks/create/create-wizard/variants/create-and-deploy.vue'
@@ -41,6 +42,20 @@ describe('create-wizard#CreateAndDeploy', () => {
     await fireEvent.click(screen.getByRole('button', { name: 'Cancel' }))
     await waitFor(() => expect(view.emitted('cancel')).toHaveLength(1), wait)
     expect(screen.queryByRole('alertdialog')).toBeNull()
+  })
+
+  it('runs the Cancel path on Escape: leaves when clean, asks when answered', async () => {
+    const view = render(MultipageCreateAndDeploy)
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(view.emitted('cancel')).toHaveLength(1), wait)
+    view.unmount()
+    const dirty = render(MultipageCreateAndDeploy)
+    await fireEvent.click(screen.getByRole('button', { name: /web-app/ }))
+    await userEvent.keyboard('{Escape}')
+    const confirm = await screen.findByRole('alertdialog')
+    await fireEvent.click(within(confirm).getByRole('button', { name: 'Keep editing' }))
+    await waitFor(() => expect(screen.queryByRole('alertdialog')).toBeNull(), wait)
+    expect(dirty.emitted('cancel')).toBeUndefined()
   })
 
   it('asks before Cancel or Back to Services discards the answers', async () => {
@@ -94,6 +109,20 @@ describe('create-wizard', () => {
     await fireEvent.click(screen.getByRole('button', { name: 'Cancel' }))
     await waitFor(() => expect(view.emitted('cancel')).toHaveLength(1), wait)
     expect(screen.queryByRole('alertdialog')).toBeNull()
+  })
+
+  it('runs the Cancel path on Escape: leaves when clean, asks when answered', async () => {
+    const view = render(MultipageCreate)
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(view.emitted('cancel')).toHaveLength(1), wait)
+    view.unmount()
+    const dirty = render(MultipageCreate)
+    await fireEvent.click(screen.getByRole('button', { name: /acme-staging/ }))
+    await userEvent.keyboard('{Escape}')
+    const confirm = await screen.findByRole('alertdialog')
+    await fireEvent.click(within(confirm).getByRole('button', { name: 'Keep editing' }))
+    await waitFor(() => expect(screen.queryByRole('alertdialog')).toBeNull(), wait)
+    expect(dirty.emitted('cancel')).toBeUndefined()
   })
 
   it('asks before Cancel discards the answers, and stays on Keep editing', async () => {
