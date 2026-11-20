@@ -134,6 +134,26 @@ describe('SiteLayout', () => {
     expect(router.push).toHaveBeenCalledWith('/products/functions')
   })
 
+  it('does not run a javascript: destination chosen from search by keyboard', async () => {
+    const probe = globalThis as typeof globalThis & { __siteLayoutProbe?: number }
+    const onNavigate = vi.fn()
+    mount({
+      onNavigate,
+      searchOpen: true,
+      navigation: {
+        ...navigation,
+        links: [{ label: 'Bad page', href: 'javascript:globalThis.__siteLayoutProbe=1' }]
+      }
+    })
+    const dialog = await waitFor(() => within(document.body).getByRole('dialog'))
+    await userEvent.type(within(dialog).getByRole('combobox'), 'Bad')
+    await userEvent.keyboard('{Enter}')
+    await waitFor(() => expect(onNavigate).toHaveBeenCalledTimes(1))
+    expect(onNavigate.mock.calls[0]![0]).toBeInstanceOf(KeyboardEvent)
+    await new Promise((resolve) => setTimeout(resolve, 100))
+    expect(probe.__siteLayoutProbe).toBeUndefined()
+  })
+
   it('reports items of the search slot as search-select', async () => {
     const onSearchSelect = vi.fn()
     mount(
