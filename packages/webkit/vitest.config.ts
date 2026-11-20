@@ -44,7 +44,7 @@ export default defineConfig({
     provide: { perfOnCi: Boolean(process.env.CI) },
     browser: {
       enabled: true,
-      provider: playwright({ contextOptions: { locale: 'en-US' } }),
+      provider: playwright({ contextOptions: { locale: 'en-US', timezoneId: 'UTC' } }),
       headless: true,
       instances: [{ browser: 'chromium' }],
       commands: { ariaSnapshot, emulateMedia, emulateTouch, renderOnServer }
