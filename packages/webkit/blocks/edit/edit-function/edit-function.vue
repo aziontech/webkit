@@ -107,10 +107,6 @@
     fields?: FunctionEditorField[]
     /** Unsaved edits the editor opens with on top of the service, so it starts dirty. */
     defaultDraft?: Partial<FunctionEditorService>
-    /** The tab the editor opens on. */
-    defaultTab?: FunctionEditorTab
-    /** The document the Code tab opens on. */
-    defaultDocument?: FunctionEditorDocument
     /** Ids of the fields that open expanded. */
     defaultOpenKeys?: string[]
     /** The save is in flight: the save bar stays, Save spins, Discard and the editors lock. */
@@ -123,8 +119,6 @@
     service: undefined,
     fields: undefined,
     defaultDraft: () => ({}),
-    defaultTab: 'code',
-    defaultDocument: 'code',
     defaultOpenKeys: () => [],
     loading: false,
     error: ''
@@ -133,6 +127,17 @@
   const emit = defineEmits<{
     submit: [event: Event, values: FunctionEditorValues]
     discard: [event: MouseEvent]
+    'editor-ready': [editor: unknown]
+  }>()
+
+  const activeTab = defineModel<FunctionEditorTab>('tab', { default: 'code' })
+  const activeDocument = defineModel<FunctionEditorDocument>('document', { default: 'code' })
+
+  const slots = defineSlots<{
+    /** Actions at the end of the editor toolbar, beside the document switch. */
+    'editor-actions'(): unknown
+    /** A pane under the Code document; when given, a handle splits it from the editor. */
+    'code-panel'(): unknown
   }>()
 
   type SchemaField = FunctionEditorField
@@ -182,8 +187,7 @@
   const savedService = computed<FunctionEditorService>(() => props.service ?? sampleService)
   const savedFields = computed<SchemaField[]>(() => props.fields ?? sampleFields)
 
-  const activeTab = ref<string>(props.defaultTab)
-  const activeDocument = ref<string>(props.defaultDocument)
+  const split = computed(() => Boolean(slots['code-panel']))
   const form = reactive<FunctionEditorService>({ ...savedService.value })
   const draftFields = ref<SchemaField[]>(structuredClone(toRaw(savedFields.value)))
   const expanded = ref(new Set<string>(props.defaultOpenKeys))
@@ -425,38 +429,52 @@
                       : 'The fields an instance is asked for, and their defaults.'
                   }}
                 </p>
+                <slot name="editor-actions" />
               </div>
               <div class="flex min-h-0 flex-1 flex-col">
                 <div
                   v-show="activeDocument === 'code'"
                   class="flex min-h-0 flex-1 flex-col"
                 >
-                  <div class="flex min-h-0 w-full flex-1 flex-col">
-                    <div class="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
-                      <div class="flex min-h-0 flex-1 flex-col">
-                        <CodeEditor
-                          :readonly="saving"
-                          id="service-source-code"
-                          v-model="form.code"
-                          language="javascript"
-                          path="index.js"
-                          fill
-                          :bordered="false"
-                          pad-line-numbers
-                          :loader="loadMonaco"
-                          :invalid="!!codeError"
-                          aria-label="Source code"
-                          @update:model-value="codeError = ''"
-                        />
-                      </div>
-                    </div>
-                    <div
-                      v-if="codeError"
-                      class="px-(--spacing-sm) py-(--spacing-xs)"
+                  <component
+                    :is="split ? ResizableRoot : 'div'"
+                    :orientation="split ? 'vertical' : undefined"
+                    :aria-label="split ? 'Code and test run' : undefined"
+                    class="flex min-h-0 w-full flex-1 flex-col"
+                  >
+                    <component
+                      :is="split ? ResizablePane : 'div'"
+                      :aria-label="split ? 'Source code' : undefined"
+                      class="flex min-h-0 w-full flex-1 flex-col"
                     >
-                      <FieldError>{{ codeError }}</FieldError>
-                    </div>
-                  </div>
+                      <div class="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
+                        <div class="flex min-h-0 flex-1 flex-col">
+                          <CodeEditor
+                            :readonly="saving"
+                            id="service-source-code"
+                            v-model="form.code"
+                            language="javascript"
+                            path="index.js"
+                            fill
+                            :bordered="false"
+                            pad-line-numbers
+                            :loader="loadMonaco"
+                            :invalid="!!codeError"
+                            aria-label="Source code"
+                            @ready="(editor: unknown) => emit('editor-ready', editor)"
+                            @update:model-value="codeError = ''"
+                          />
+                        </div>
+                      </div>
+                      <div
+                        v-if="codeError"
+                        class="px-(--spacing-sm) py-(--spacing-xs)"
+                      >
+                        <FieldError>{{ codeError }}</FieldError>
+                      </div>
+                    </component>
+                    <slot name="code-panel" />
+                  </component>
                 </div>
                 <div
                   v-show="activeDocument === 'arguments'"

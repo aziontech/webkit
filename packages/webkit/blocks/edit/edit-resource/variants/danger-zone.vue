@@ -3,387 +3,103 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import FieldError from '@aziontech/webkit/field-error'
-  import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
-  import Kbd from '@aziontech/webkit/kbd'
-  import Link from '@aziontech/webkit/link'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import PageTabs from '@aziontech/webkit/page-tabs'
-  import SaveBar from '@aziontech/webkit/save-bar'
   import SettingsGroup from '@aziontech/webkit/settings-group'
   import SettingsRow from '@aziontech/webkit/settings-row'
-  import Switch from '@aziontech/webkit/switch'
-  import Tabs from '@aziontech/webkit/tabs'
-  import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed, nextTick, reactive, ref, watch } from 'vue'
+  import { onBeforeUnmount, ref } from 'vue'
 
-  const tabs = [
-    { value: 'overview', label: 'Overview' },
-    { value: 'build', label: 'Build' },
-    { value: 'deployments', label: 'Deployments' },
-    { value: 'variables', label: 'Variables' },
-    { value: 'caching', label: 'Caching' },
-    { value: 'integrations', label: 'Integrations' },
-    { value: 'rules', label: 'Rules' },
-    { value: 'main-settings', label: 'Settings' }
-  ]
+  import EditResource from '../edit-resource.vue'
+  import { sampleProject } from '../sample'
 
-  const activeTab = ref('main-settings')
-
-  const defaultModules = [
-    {
-      key: 'compression',
-      title: 'Compression',
-      description: 'Compress responses with gzip and Brotli before they are sent.'
-    },
-    { key: 'caching', title: 'Caching', description: 'Customize advanced cache settings.' },
-    {
-      key: 'device_detection',
-      title: 'Device Detection',
-      description: 'Expose device variables to build responsive rules.'
-    },
-    {
-      key: 'custom_code',
-      title: 'Custom Code',
-      description: 'Run your own code on each request, close to the user.'
-    },
-    {
-      key: 'image_optimization',
-      title: 'Image Optimization',
-      description: 'Resize and convert images on the fly.'
-    },
-    {
-      key: 'load_balancing',
-      title: 'Load Balancing',
-      description:
-        'Balance traffic across your upstreams for reliability and network congestion control.'
-    }
-  ]
-
-  const subscriptionModules = [
-    {
-      key: 'web_socket_proxy',
-      title: 'WebSocket Proxy',
-      description:
-        'Enhance real-time data exchange between your project and its backends using the WebSocket protocol.'
-    }
-  ]
-
-  type ResourceRecord = {
-    name: string
-    active: boolean
-    modules: Record<string, boolean>
-  }
-
-  const record: ResourceRecord = {
-    name: 'web-app',
-    active: true,
-    modules: {
-      compression: true,
-      caching: true,
-      device_detection: false,
-      custom_code: true,
-      image_optimization: false,
-      load_balancing: false,
-      web_socket_proxy: false
-    }
-  }
-
-  const form = reactive(structuredClone(record))
   const saving = ref(false)
-  const baseline = ref(JSON.stringify(record))
-  const dirty = computed(() => JSON.stringify(form) !== baseline.value)
+  const deleteOpen = ref(false)
+  const deleting = ref(false)
+  let saveTimer: ReturnType<typeof setTimeout> | undefined
+  let deleteTimer: ReturnType<typeof setTimeout> | undefined
 
-  const nameError = ref(false)
-  watch(
-    () => form.name,
-    () => {
-      nameError.value = false
-    }
-  )
-
-  const save = () => {
-    if (!form.name.trim()) {
-      nameError.value = true
-      nextTick(() => document.getElementById('resource-name')?.focus())
-      return
-    }
+  const onSubmit = () => {
     saving.value = true
-    setTimeout(() => {
-      baseline.value = JSON.stringify(form)
+    clearTimeout(saveTimer)
+    saveTimer = setTimeout(() => {
       saving.value = false
     }, 900)
   }
 
-  const onSaveShortcut = () => {
-    if (!dirty.value || saving.value) return
-    save()
-  }
-
-  const discard = () => Object.assign(form, JSON.parse(baseline.value) as ResourceRecord)
-
-  const deleteOpen = ref(false)
-  const deleting = ref(false)
-
   const confirmDelete = () => {
     if (deleting.value) return
     deleting.value = true
-    setTimeout(() => {
+    deleteTimer = setTimeout(() => {
       deleting.value = false
       deleteOpen.value = false
     }, 900)
   }
+
+  onBeforeUnmount(() => {
+    clearTimeout(saveTimer)
+    clearTimeout(deleteTimer)
+  })
 </script>
 
 <template>
-  <div class="flex min-h-0 flex-1 flex-col">
-    <div class="sticky top-0 z-1 bg-(--bg-canvas)">
-      <PageTabs v-model="activeTab">
-        <Tabs.Trigger
-          v-for="tab in tabs"
-          :key="tab.value"
-          :value="tab.value"
-          :label="tab.label"
-        />
-      </PageTabs>
-    </div>
-
-    <div class="relative flex min-h-0 flex-1 flex-col">
-      <section class="min-h-0 flex-1">
-        <div class="flex min-h-full flex-col">
-          <form
-            class="flex min-h-full flex-col"
-            aria-label="Main settings"
-            novalidate
-            @submit.prevent="save"
-          >
-            <div
-              class="layout-column-form layout-boundary-inline flex min-w-0 flex-col pb-(--layout-section-gap) pt-(--layout-section-gap)"
-            >
-              <PageHeader
-                title="Settings"
-                description="Core configuration for this project."
-                size="small"
-              />
-
-              <fieldset
-                class="mx-0 mt-(--layout-section-gap) flex min-w-0 flex-col border-0 p-0"
-                :disabled="saving"
+  <EditResource
+    :loading="saving"
+    @submit="onSubmit"
+  >
+    <template #sections>
+      <SettingsGroup
+        label="Danger zone"
+        hint="Actions that cannot be undone."
+        anchor="danger-zone"
+      >
+        <Card :padded="false">
+          <template #default>
+            <Item.List>
+              <SettingsRow
+                title="Delete this project"
+                description="Once deleted, the project, its domains and its deployments cannot be recovered."
+                variant="compact"
               >
-                <legend class="sr-only">Main settings</legend>
+                <Button
+                  type="button"
+                  label="Delete project"
+                  variant="danger"
+                  size="medium"
+                  icon="az az-trash"
+                  data-testid="danger-zone-delete"
+                  @click="deleteOpen = true"
+                />
+              </SettingsRow>
+            </Item.List>
+          </template>
+        </Card>
+      </SettingsGroup>
 
-                <SettingsGroup
-                  label="General"
-                  hint="How this project is identified across the platform, and whether it is serving traffic."
-                  anchor="general"
-                >
-                  <Card :padded="false">
-                    <template #default>
-                      <Item.List>
-                        <SettingsRow
-                          title="Name"
-                          description="A unique and descriptive name to identify the project."
-                        >
-                          <div class="flex w-full flex-col gap-(--spacing-xs)">
-                            <Input
-                              id="resource-name"
-                              v-model="form.name"
-                              size="large"
-                              :disabled="saving"
-                              class="w-full"
-                              aria-label="Name"
-                              required
-                              :invalid="nameError"
-                              :aria-describedby="nameError ? 'resource-name-message' : undefined"
-                            />
-                            <FieldError
-                              v-if="nameError"
-                              id="resource-name-message"
-                              >This field is required.</FieldError
-                            >
-                          </div>
-                        </SettingsRow>
-                        <SettingsRow
-                          title="Active"
-                          description="When disabled, the project stops serving traffic."
-                          variant="compact"
-                        >
-                          <Switch
-                            v-model="form.active"
-                            aria-label="Active"
-                            :disabled="saving"
-                          />
-                        </SettingsRow>
-                      </Item.List>
-                    </template>
-                  </Card>
-                </SettingsGroup>
-
-                <SettingsGroup
-                  label="Modules"
-                  hint="The capabilities this project runs with, each of which can be toggled here."
-                  anchor="modules"
-                >
-                  <Card :padded="false">
-                    <template #default>
-                      <Item.List>
-                        <SettingsRow
-                          v-for="mod in defaultModules"
-                          :key="mod.key"
-                          :title="mod.title"
-                          :description="mod.description"
-                          variant="compact"
-                        >
-                          <Switch
-                            v-model="form.modules[mod.key]"
-                            :aria-label="mod.title"
-                            :disabled="saving"
-                          />
-                        </SettingsRow>
-                      </Item.List>
-                    </template>
-                  </Card>
-                </SettingsGroup>
-
-                <SettingsGroup
-                  label="Subscription modules"
-                  hint="Paid add-ons that are activated with sales, not from this page."
-                  anchor="subscription-modules"
-                >
-                  <Card :padded="false">
-                    <template #default>
-                      <Item.List>
-                        <SettingsRow
-                          v-for="mod in subscriptionModules"
-                          :key="mod.key"
-                          :title="mod.title"
-                          :description="mod.description"
-                          variant="compact"
-                        >
-                          <div class="flex items-center gap-(--spacing-sm)">
-                            <Link
-                              label="Contact sales"
-                              href="https://example.com/contact-sales"
-                              target="_blank"
-                              size="small"
-                              :aria-label="`Contact sales about ${mod.title}`"
-                            />
-                            <Tooltip content="Contact sales to activate this module.">
-                              <Switch
-                                v-model="form.modules[mod.key]"
-                                disabled
-                                :aria-label="mod.title"
-                              />
-                            </Tooltip>
-                          </div>
-                        </SettingsRow>
-                      </Item.List>
-                    </template>
-                  </Card>
-                </SettingsGroup>
-
-                <SettingsGroup
-                  label="Danger zone"
-                  hint="Actions that cannot be undone."
-                  anchor="danger-zone"
-                >
-                  <Card :padded="false">
-                    <template #default>
-                      <Item.List>
-                        <SettingsRow
-                          title="Delete this project"
-                          description="Once deleted, the project, its domains and its deployments cannot be recovered."
-                          variant="compact"
-                        >
-                          <Button
-                            type="button"
-                            label="Delete project"
-                            variant="danger"
-                            size="medium"
-                            icon="az az-trash"
-                            data-testid="danger-zone-delete"
-                            @click="deleteOpen = true"
-                          />
-                        </SettingsRow>
-                      </Item.List>
-                    </template>
-                  </Card>
-                </SettingsGroup>
-              </fieldset>
-            </div>
-
-            <Transition
-              enter-active-class="transition-[translate,opacity] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
-              enter-from-class="translate-y-2 opacity-0"
-              leave-active-class="transition-[translate,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
-              leave-to-class="translate-y-2 opacity-0"
+      <ConfirmDialog
+        v-model:open="deleteOpen"
+        title="Delete project"
+        size="medium"
+        confirm-label="Delete project"
+        :confirmation-phrase="sampleProject.name"
+        :loading="deleting"
+        @confirm="confirmDelete"
+      >
+        <div class="flex flex-col gap-(--spacing-md)">
+          <Alert
+            severity="warning"
+            label="Once confirmed, this action can't be reversed."
+          />
+          <p class="m-0 text-body-sm text-(--text-muted)">
+            The project will be deleted, along with its domains and every deployment it has
+            published. Traffic to its domains stops. Check the
+            <a
+              href="https://example.com/docs/projects/delete"
+              class="text-link"
+              >Help Center</a
             >
-              <SaveBar
-                v-if="dirty || saving"
-                @save="onSaveShortcut"
-              >
-                Project settings changed.
-                <span class="text-(--text-muted)"
-                  >Saving publishes them on the next deployment.</span
-                >
-                <template #actions>
-                  <Button
-                    type="button"
-                    label="Discard"
-                    variant="outline"
-                    size="medium"
-                    :disabled="saving"
-                    @click="discard"
-                  />
-                  <Button
-                    variant="primary"
-                    size="medium"
-                    :loading="saving"
-                    @click="save"
-                    aria-keyshortcuts="Meta+S Control+S"
-                  >
-                    Save
-                    <Kbd
-                      meta
-                      size="small"
-                      aria-hidden="true"
-                      >S</Kbd
-                    >
-                  </Button>
-                </template>
-              </SaveBar>
-            </Transition>
-          </form>
-
-          <ConfirmDialog
-            v-model:open="deleteOpen"
-            title="Delete project"
-            size="medium"
-            confirm-label="Delete project"
-            :confirmation-phrase="record.name"
-            :loading="deleting"
-            @confirm="confirmDelete"
-          >
-            <div class="flex flex-col gap-(--spacing-md)">
-              <Alert
-                severity="warning"
-                label="Once confirmed, this action can't be reversed."
-              />
-              <p class="m-0 text-body-sm text-(--text-muted)">
-                The project will be deleted, along with its domains and every deployment it has
-                published. Traffic to its domains stops. Check the
-                <a
-                  href="https://example.com/docs/projects/delete"
-                  class="text-link"
-                  >Help Center</a
-                >
-                for more details.
-              </p>
-            </div>
-          </ConfirmDialog>
+            for more details.
+          </p>
         </div>
-      </section>
-    </div>
-  </div>
+      </ConfirmDialog>
+    </template>
+  </EditResource>
 </template>

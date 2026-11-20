@@ -7,6 +7,6 @@
   <EditFunction
     :service="sampleServiceWithoutArguments"
     :fields="[]"
-    default-document="arguments"
+    document="arguments"
   />
 </template>

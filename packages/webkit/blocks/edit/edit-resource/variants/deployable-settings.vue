@@ -24,6 +24,7 @@
   import Switch from '@aziontech/webkit/switch'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
+  import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, nextTick, reactive, ref, watch } from 'vue'
 
@@ -49,7 +50,16 @@
   })
   const advancedOpen = ref(false)
 
-  const domains = [
+  type DomainRow = {
+    id: string
+    domain: string
+    environment: string
+    policy: string
+    certificate: string
+    generated: boolean
+  }
+
+  const domains = ref<DomainRow[]>([
     {
       id: 'generated',
       domain: 'resource-01.azion.app',
@@ -66,7 +76,7 @@
       certificate: 'example.com wildcard',
       generated: false
     }
-  ]
+  ])
 
   const domainColumns: TableColumn[] = [
     { accessorKey: 'domain', header: 'Domain', principal: true, grow: 2 },
@@ -251,9 +261,32 @@
   const discard = () => Object.assign(form, JSON.parse(baseline.value) as typeof form)
 
   const deleteOpen = ref(false)
+  const deleting = ref(false)
 
   const confirmDelete = () => {
-    deleteOpen.value = false
+    if (deleting.value) return
+    deleting.value = true
+    setTimeout(() => {
+      deleting.value = false
+      deleteOpen.value = false
+    }, 900)
+  }
+
+  const pendingDomain = ref<DomainRow | null>(null)
+  const domainDeleteOpen = ref(false)
+
+  const onDomainAction = (value: string | number, row: DomainRow) => {
+    if (value !== 'delete') return
+    pendingDomain.value = row
+    domainDeleteOpen.value = true
+  }
+
+  const confirmDomainDelete = () => {
+    const removed = pendingDomain.value
+    if (!removed) return
+    domains.value = domains.value.filter((domain) => domain.id !== removed.id)
+    domainDeleteOpen.value = false
+    toast.success(`${removed.domain} deleted.`)
   }
 </script>
 
@@ -468,6 +501,7 @@
                             v-if="!row.generated"
                             side="bottom"
                             align="end"
+                            @select="(_event, value) => onDomainAction(value, row)"
                           >
                             <DropdownMenu.Trigger>
                               <Tooltip content="Row actions">
@@ -931,6 +965,7 @@
                           size="medium"
                           confirm-label="Delete resource"
                           :confirmation-phrase="record.name"
+                          :loading="deleting"
                           @confirm="confirmDelete"
                         >
                           <template #trigger>
@@ -1002,5 +1037,16 @@
         </template>
       </SaveBar>
     </Transition>
+    <ConfirmDialog
+      v-model:open="domainDeleteOpen"
+      title="Delete domain"
+      size="medium"
+      confirm-label="Delete domain"
+      @confirm="confirmDomainDelete"
+    >
+      <p class="m-0 text-body-sm text-(--text-muted)">
+        {{ pendingDomain?.domain }} is removed from this resource and stops answering for it.
+      </p>
+    </ConfirmDialog>
   </div>
 </template>

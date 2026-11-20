@@ -6,6 +6,7 @@ import VariablesList, {
   type VariablesSavePayload
 } from '../../../../blocks/edit/edit-variables/edit-variables.vue'
 import NetworkList from '../../../../blocks/edit/edit-variables/variants/network-list.vue'
+import PasteEnv from '../../../../blocks/edit/edit-variables/variants/paste-env.vue'
 import { expectNoA11yViolations } from '../../axe'
 import { useToastRegion } from '../../toast-region'
 
@@ -68,6 +69,32 @@ describe('variables#NetworkList', () => {
     )
     expect(panel.textContent).toContain('7 entries added from the pasted list. 2 need a fix.')
     await expectNoA11yViolations(panel)
+  })
+})
+
+describe('variables#PasteEnv', () => {
+  it('adds the pasted pairs as rows and confirms a save in a toast, as the list does', async () => {
+    render(PasteEnv)
+    const panel = await openDrawer(/Create Variable/)
+    await waitFor(() => expect(panel.textContent).toContain('3 variables found.'))
+    await fireEvent.click(buttonIn(panel, 'Add 3 variables'))
+    await waitFor(() => expect(panel.querySelectorAll('input[id*="-key-"]').length).toBe(3))
+    for (const key of ['API_BASE_URL', 'FEATURE_FLAGS']) {
+      const input = Array.from(panel.querySelectorAll<HTMLInputElement>('input[id*="-key-"]')).find(
+        (el) => el.value === key
+      )!
+      await fireEvent.update(input, `NEW_${key}`)
+    }
+    await fireEvent.click(buttonIn(panel, 'Save'))
+    await waitFor(() => expect(document.body.textContent).toContain('3 variables created.'), wait)
+  })
+
+  it('confirms a single created variable by name', async () => {
+    render(PasteEnv)
+    const panel = await openDrawer(/Create Variable/)
+    await fireEvent.click(buttonIn(panel, 'Cancel'))
+    await fireEvent.click(buttonIn(panel, 'Save'))
+    await waitFor(() => expect(document.body.textContent).toContain('CACHE_TTL created.'), wait)
   })
 })
 
