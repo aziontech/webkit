@@ -214,6 +214,33 @@ test('container-query-on-container stays silent when the query sits on a child',
   }
 })
 
+test('has-on-scroll-frame fires on a :has() variant read from the scroll frame', () => {
+  for (const content of [
+    // The one that shipped: the table scroll cue hid under a frozen column this way.
+    'class="hidden group-data-[overflow-end]/scroll:block group-has-[[data-frozen=end]]/scroll:invisible"',
+    'class="peer-has-[:checked]/scroll:hidden"',
+    'class="md:group-has-focus/scroll:ring-2"'
+  ]) {
+    assert.ok(
+      ids(content).includes('has-on-scroll-frame'),
+      `expected has-on-scroll-frame for: ${content}`
+    )
+  }
+})
+
+test('has-on-scroll-frame stays silent on a data attribute or another group', () => {
+  for (const content of [
+    'class="group-data-[frozen-end]/scroll:invisible group-data-[overflow-end]/scroll:block"',
+    'class="group-has-[a:focus-visible]/row:opacity-100"',
+    'class="group-has-[[data-frozen=end]]/scroller-card:invisible"'
+  ]) {
+    assert.ok(
+      !ids(content).includes('has-on-scroll-frame'),
+      `expected has-on-scroll-frame silent for: ${content}`
+    )
+  }
+})
+
 test('rtl-double-flip fires when a directional icon also rotates under rtl', () => {
   for (const content of [
     'class="az az-arrow-right rtl:rotate-180"',

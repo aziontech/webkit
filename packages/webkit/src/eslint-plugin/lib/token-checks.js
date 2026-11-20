@@ -81,6 +81,12 @@ export const TOKEN_CHECKS = [
       'Container-query variant on the element that declares the container. A container query never matches its own container, so `@xl/name:` on the `@container/name` element NEVER applies. Put the variant on a child of the container (.claude/rules/styling.md).'
   },
   {
+    id: 'has-on-scroll-frame',
+    regex: /(?<![\w-])(?:group|peer)-has-(?:\[[^\s"'`]*\]|[\w-]+)\/scroll:/g,
+    message:
+      'A :has() variant read from the scroll frame (`group-has-[…]/scroll:`). The frame wraps every row, so Chromium re-checks the :has() whenever a row mounts and restyles the whole table on every scroll frame (the 10k-row virtual DataTable went from 228 ms to 3,580 ms of style recalc). Measure the state in script, set a data attribute on the frame and read it with `group-data-[…]/scroll:` (.claude/rules/styling.md).'
+  },
+  {
     id: 'rtl-double-flip',
     wide: true,
     regex:
