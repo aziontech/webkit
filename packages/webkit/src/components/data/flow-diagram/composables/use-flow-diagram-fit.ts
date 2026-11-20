@@ -1,4 +1,4 @@
-import { useResizeObserver } from '@vueuse/core'
+import { useMutationObserver, useResizeObserver } from '@vueuse/core'
 import {
   computed,
   type ComputedRef,
@@ -20,6 +20,8 @@ export interface UseFlowDiagramFitReturn {
   overflowStart: ComputedRef<boolean>
   /** Content continues past the inline end. */
   overflowEnd: ComputedRef<boolean>
+  /** Content is taller than the scroll area, so it scrolls in the block direction. */
+  overflowBlock: ComputedRef<boolean>
   /** Re-reads the overflow edges; bind it to the scroll event. */
   measureEdges: () => void
 }
@@ -37,6 +39,7 @@ export const useFlowDiagramFit = (
   const direction = ref<FlowDiagramDirection>(fixed() ?? 'column')
   const overflowStart = ref<boolean>(false)
   const overflowEnd = ref<boolean>(false)
+  const overflowBlock = ref<boolean>(false)
 
   const measureEdges = (): void => {
     const el = scrollEl.value
@@ -44,6 +47,7 @@ export const useFlowDiagramFit = (
     const offset = Math.abs(el.scrollLeft)
     overflowStart.value = offset > 1
     overflowEnd.value = el.scrollWidth - el.clientWidth - offset > 1
+    overflowBlock.value = el.scrollHeight - el.clientHeight > 1
   }
 
   const fit = (): void => {
@@ -71,11 +75,13 @@ export const useFlowDiagramFit = (
   watch(() => toValue(orientation), schedule)
   useResizeObserver(() => scrollEl.value, schedule)
   useResizeObserver(() => listEl.value, schedule)
+  useMutationObserver(listEl, fit, { childList: true, subtree: true })
 
   return {
     direction: computed(() => direction.value),
     overflowStart: computed(() => overflowStart.value),
     overflowEnd: computed(() => overflowEnd.value),
+    overflowBlock: computed(() => overflowBlock.value),
     measureEdges
   }
 }

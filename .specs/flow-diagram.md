@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 9
 template: 2
-checksum: 44408d2befe368693ab335963b768af6156d9e04bc3020d4e283f640b0b3d943
+checksum: 8361a3795636e307d151bb5a01f357d1558fe009712b1a7206b934c7573ba0c3
 created: 2026-06-25
 last_updated: 2026-11-20
 ---
@@ -148,7 +148,7 @@ The root emits nothing; the bind events live on the `flow-diagram-bind` companio
 - Data card: `data-state="open|closed"`; an unbound bindable node is dashed with `Not bound`; a pending bind dashes it too.
 - Loading: `aria-busy`, skeleton cards, one `role="status"` line. Empty: `EmptyState` unless the `empty` slot replaces it.
 - Edge `severity` colours the connector (`--<severity>-mark`); default `--accent`.
-- Scroll area (`__viewport`): `data-overflow-start` / `data-overflow-end` while content lies past that inline edge; it fades that edge and takes `tabindex="0"`.
+- Scroll area (`__viewport`): `data-overflow-start` / `data-overflow-end` while content lies past that inline edge; it fades that edge and takes `tabindex="0"`, as it does whenever its content is taller than it.
 
 - Its root carries `data-plain-ground`: it is content that must sit on a plain ground, so a `Texture` beside it hides itself, and the texture-backdrop check blocks placing it on a textured band (a texture is a backdrop for text only, RV-T2-1).
 
@@ -213,7 +213,7 @@ The root emits nothing; the bind events live on the `flow-diagram-bind` companio
 
 - Budgets (`.size-limit.json`): `flow-diagram-root` and `flow-diagram` are `entryOnly` — about 20 KB and 22 KB gzip, with the data-mode card as a lazy chunk (~9–11 KB, it carries `copy-button`); `flow-diagram-bind` ~15 KB (dropdown-menu, tooltip); the card parts under 2.5 KB each.
 - Connectors re-measure on resize, DOM mutations and edge changes, in one animation frame.
-- The row-or-rail check runs once per animation frame on resize: it sets the row on the list, reads the scroll width, and settles the layout before paint (no flicker, no second render pass).
+- The row-or-rail check runs once per animation frame on resize, and at once when the steps change (a lazily loaded data card arriving): it sets the row on the list, reads the scroll width, and settles the layout before paint, so a row that does not fit is never painted or seen by assistive technology (no flicker, no second render pass).
 
 ## Examples
 

@@ -121,6 +121,18 @@ describe('FlowDiagram', () => {
     expect(viewport.hasAttribute('tabindex')).toBe(false)
   })
 
+  it('never leaves a lazily loaded row overflowing a viewport that cannot take focus', async () => {
+    const { container } = render(() => h('div', { style: 'width: 414px' }, [h(RequestPath)]))
+    await waitFor(() => expect(cards(container).length).toBe(3))
+    const viewport = container.querySelector(
+      '[data-testid="flow-diagram__viewport"]'
+    ) as HTMLElement
+    expect(viewport.scrollWidth).toBeLessThanOrEqual(viewport.clientWidth + 1)
+    expect(
+      container.querySelector('[data-testid="flow-diagram__list"]')?.getAttribute('data-direction')
+    ).toBe('column')
+  })
+
   it('switches to a row once the container is wide enough, and back', async () => {
     const { container } = render(() =>
       h('div', { 'data-testid': 'frame', style: 'width: 1400px' }, [h(Default)])

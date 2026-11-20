@@ -111,12 +111,14 @@
     props.loading ? [] : props.edges
   )
 
-  const { direction, overflowStart, overflowEnd, measureEdges } = useFlowDiagramFit(
+  const { direction, overflowStart, overflowEnd, overflowBlock, measureEdges } = useFlowDiagramFit(
     scrollEl,
     containerEl,
     () => props.orientation
   )
-  const scrollable = computed<boolean>(() => overflowStart.value || overflowEnd.value)
+  const scrollable = computed<boolean>(
+    () => overflowStart.value || overflowEnd.value || overflowBlock.value
+  )
 
   provide(FlowDiagramInjectionKey, {
     testId,
