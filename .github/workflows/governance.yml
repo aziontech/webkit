@@ -167,6 +167,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Build the icon font
+        run: pnpm build:icons
+
       - name: TypeScript check
         run: pnpm run typecheck:webkit
 
@@ -202,6 +205,9 @@ jobs:
       - name: Assert no test files leak into the tarball
         run: pnpm check:pack
         working-directory: packages/webkit
+
+      - name: Build the icon font
+        run: pnpm build:icons
 
       - name: Bundle budget
         run: pnpm run check:size
