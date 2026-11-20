@@ -3,7 +3,7 @@ name: save-bar
 category: layout
 structure: monolithic
 status: implemented
-checksum: c300d6c918b5065cf3376439380894d1887bd7734f5ada81243720ce8e91616e
+checksum: dee3260e1a3cbd5cf6c74afcdbfe9457a551d9622ba1167f9719eb99785c2691
 spec_version: 4
 template: 2
 created: 2026-11-10
@@ -173,7 +173,7 @@ The status sentence and the action labels come from the consumer's slots. One bu
 
 ## Performance
 
-- Bundle budget: 2.1 KB gzip for `./save-bar` in `.size-limit.json`.
+- Bundle budget: 4.5 KB gzip for `./save-bar` in `.size-limit.json` (4.49 KB measured; up from 2.1 KB for the `useShortcuts` registry behind the `save` shortcut, which an app loads once and shares with every other shortcut).
 - Runtime budget: one shortcut registration in the shared `useShortcuts` registry while a `save` listener is bound; one `ResizeObserver` on the floating bar while it is mounted; a resize writes two custom properties on the document root and measures the nearest scroll container (the page when nothing around the bar scrolls) once.
 - Heavy parts: none.
 
