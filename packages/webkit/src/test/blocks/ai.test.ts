@@ -1,11 +1,7 @@
 import { cleanup, fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 
-import AiActionApproval, {
-  type AiActionApprovalInterrupt,
-  type AiActionApprovalMessage,
-  type AiActionApprovalToolCallPart
-} from '../../../blocks/ai/ai-action-approval/ai-action-approval.vue'
+import AiActionApproval from '../../../blocks/ai/ai-action-approval/ai-action-approval.vue'
 import {
   sampleDeleteMessages,
   sampleFailedMessages,
@@ -13,6 +9,7 @@ import {
   sampleTools
 } from '../../../blocks/ai/ai-action-approval/sample'
 import AiChatDrawer from '../../../blocks/ai/ai-chat-drawer/ai-chat-drawer.vue'
+import type { AiChatInterrupt, AiChatMessage, AiChatToolCallPart } from '../../utils/ai-chat'
 
 afterEach(() => cleanup())
 describe('ai', () => {
@@ -22,13 +19,13 @@ describe('ai', () => {
     })
     expect(view.container.textContent).toContain('still serves the previous version')
     await fireEvent.click(view.getByRole('button', { name: 'Retry' }))
-    const [[event, message]] = view.emitted('retry') as [[Event, AiActionApprovalMessage]]
+    const [[event, message]] = view.emitted('retry') as [[Event, AiChatMessage]]
     expect(event).toBeInstanceOf(Event)
     expect(message.id).toBe('m2')
   })
 
   it('ai-action-approval renders the conversation it is given and emits approve', async () => {
-    const purge: AiActionApprovalToolCallPart = {
+    const purge: AiChatToolCallPart = {
       type: 'tool-call',
       id: 'call-purge',
       name: 'purge_urls',
@@ -67,7 +64,7 @@ describe('ai', () => {
     expect(view.container.textContent).toContain('Purge the cache of acme-store')
     expect(view.container.textContent).not.toContain('Deploy the current build')
     await fireEvent.click(view.getByRole('button', { name: 'Purge' }))
-    const [[event, call]] = view.emitted('approve') as [[Event, AiActionApprovalToolCallPart]]
+    const [[event, call]] = view.emitted('approve') as [[Event, AiChatToolCallPart]]
     expect(event).toBeInstanceOf(Event)
     expect(call.id).toBe('call-purge')
     expect(resolved).toEqual([true])
@@ -307,7 +304,7 @@ describe('ai', () => {
   })
 
   it('ai-action-approval draws structured and rich tool results, unbound approvals and interrupt errors', async () => {
-    const workflow: AiActionApprovalInterrupt = {
+    const workflow: AiChatInterrupt = {
       kind: 'unbound',
       id: 'wf-2',
       message: 'Approve the change window?',

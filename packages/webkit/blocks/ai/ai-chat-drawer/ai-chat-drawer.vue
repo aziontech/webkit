@@ -41,22 +41,19 @@
   import ToolApproval from '@aziontech/webkit/tool-approval'
   import ToolCall from '@aziontech/webkit/tool-call'
   import { useLocale } from '@aziontech/webkit/use-locale'
-  import VideoPlayer from '@aziontech/webkit/video-player'
-  import { computed, nextTick, ref, watch } from 'vue'
-
   import {
     activitiesBefore,
-    type AiChatDrawerConnection,
-    type AiChatDrawerInterrupt,
-    type AiChatDrawerInterruptError,
-    type AiChatDrawerMessage,
-    type AiChatDrawerQuestion,
-    type AiChatDrawerQueuedMessage,
-    type AiChatDrawerSendContent,
-    type AiChatDrawerTool,
-    type AiChatDrawerToolAnswer,
-    type AiChatDrawerToolCallPart,
-    type AiChatDrawerUiResourcePart,
+    type AiChatConnection,
+    type AiChatInterrupt,
+    type AiChatInterruptError,
+    type AiChatMessage,
+    type AiChatQuestion,
+    type AiChatQueuedMessage,
+    type AiChatSendContent,
+    type AiChatTool,
+    type AiChatToolAnswer,
+    type AiChatToolCallPart,
+    type AiChatUiResourcePart,
     answerable,
     answerInterrupt,
     approvalOf,
@@ -81,53 +78,23 @@
     toolContentOf,
     toolQuestionOf,
     toolStatusOf
-  } from './messages'
-  import { sampleSuggestions } from './sample'
+  } from '@aziontech/webkit/utils/ai-chat'
+  import VideoPlayer from '@aziontech/webkit/video-player'
+  import { computed, nextTick, ref, watch } from 'vue'
 
-  export type {
-    AiChatDrawerActivityPart,
-    AiChatDrawerAttachment,
-    AiChatDrawerAudioPart,
-    AiChatDrawerConnection,
-    AiChatDrawerContent,
-    AiChatDrawerDataSource,
-    AiChatDrawerDocumentPart,
-    AiChatDrawerImagePart,
-    AiChatDrawerInterrupt,
-    AiChatDrawerInterruptError,
-    AiChatDrawerMediaSource,
-    AiChatDrawerMessage,
-    AiChatDrawerMessageMetadata,
-    AiChatDrawerOtherPart,
-    AiChatDrawerPart,
-    AiChatDrawerQueuedMessage,
-    AiChatDrawerRole,
-    AiChatDrawerSendContent,
-    AiChatDrawerStructuredOutputPart,
-    AiChatDrawerSubagentPart,
-    AiChatDrawerSubagentStatus,
-    AiChatDrawerTextPart,
-    AiChatDrawerThinkingPart,
-    AiChatDrawerTool,
-    AiChatDrawerToolAnswer,
-    AiChatDrawerToolCallPart,
-    AiChatDrawerToolCallState,
-    AiChatDrawerToolResultPart,
-    AiChatDrawerUiResourcePart,
-    AiChatDrawerVideoPart
-  } from './messages'
+  import { sampleSuggestions } from './sample'
 
   /** A rating the reader gave a response. */
   export interface AiChatDrawerFeedback {
     /** The rated response. */
-    message: AiChatDrawerMessage
+    message: AiChatMessage
     /** Helpful, not helpful, or cleared. */
     value: ChatMessageFeedbackValue | null
   }
 
   export interface AiChatDrawerProps {
     /** The conversation, oldest first, as TanStack AI's `useChat` returns `messages`. Empty, the empty state renders. */
-    messages?: ReadonlyArray<AiChatDrawerMessage>
+    messages?: ReadonlyArray<AiChatMessage>
     /** Starter prompts under the empty state. Left out, the sample prompts render. */
     suggestions?: SuggestionGroupItem[]
     /** Follow-up questions shown under the last finished response. */
@@ -137,19 +104,19 @@
     /** Why the last response failed: a sentence, or the `error` of `useChat`, which shows the standard sentence. */
     error?: string | { message: string } | null
     /** How each tool reads, by tool name; a tool left out shows its name. */
-    tools?: Record<string, AiChatDrawerTool>
+    tools?: Record<string, AiChatTool>
     /** Pending requests, as `useChat` returns `interrupts`; Approve and Deny resolve the matching approval, a generic one asks its question, and an unbound one asks it for the app to route. */
-    interrupts?: ReadonlyArray<AiChatDrawerInterrupt>
+    interrupts?: ReadonlyArray<AiChatInterrupt>
     /** Why the answers to pending requests were not sent, as `useChat` returns `interruptErrors`; a retryable one offers Retry. */
-    interruptErrors?: ReadonlyArray<AiChatDrawerInterruptError>
+    interruptErrors?: ReadonlyArray<AiChatInterruptError>
     /** Messages waiting to be sent, as `useChat` returns `queue`; given, the composer sends while a response runs. */
-    queue?: ReadonlyArray<AiChatDrawerQueuedMessage>
+    queue?: ReadonlyArray<AiChatQueuedMessage>
     /** Older messages exist, as `useChat` returns `hasOlderMessages`. */
     moreMessages?: boolean
     /** The older messages are loading. */
     loadingMore?: boolean
     /** The connection to the chat, as `useChat` returns `connectionStatus`. */
-    connection?: AiChatDrawerConnection
+    connection?: AiChatConnection
     /** The chat is rejoining a run after a reload, as `useChat` returns `resuming`. */
     resuming?: boolean
     /** The conversation is being restored, as `useChat` returns `isHydrating`; placeholders show in place of the empty state. */
@@ -192,22 +159,22 @@
   })
 
   const emit = defineEmits<{
-    send: [event: MouseEvent | KeyboardEvent, content: AiChatDrawerSendContent]
+    send: [event: MouseEvent | KeyboardEvent, content: AiChatSendContent]
     stop: [event: MouseEvent]
-    retry: [event: MouseEvent, message: AiChatDrawerMessage]
+    retry: [event: MouseEvent, message: AiChatMessage]
     'new-chat': [event: MouseEvent]
     feedback: [feedback: AiChatDrawerFeedback]
-    approve: [event: MouseEvent, call: AiChatDrawerToolCallPart, input?: unknown]
-    deny: [event: MouseEvent, call: AiChatDrawerToolCallPart]
-    'remove-queued': [event: MouseEvent, item: AiChatDrawerQueuedMessage]
+    approve: [event: MouseEvent, call: AiChatToolCallPart, input?: unknown]
+    deny: [event: MouseEvent, call: AiChatToolCallPart]
+    'remove-queued': [event: MouseEvent, item: AiChatQueuedMessage]
     'app-message': [
       message: McpAppFrameMessage,
-      part: AiChatDrawerUiResourcePart,
+      part: AiChatUiResourcePart,
       reply: (message: McpAppFrameMessage) => void
     ]
     'load-more': [event: Event]
-    'answer-interrupt': [event: Event, interrupt: AiChatDrawerInterrupt, value: string]
-    'answer-tool': [event: Event, answer: AiChatDrawerToolAnswer]
+    'answer-interrupt': [event: Event, interrupt: AiChatInterrupt, value: string]
+    'answer-tool': [event: Event, answer: AiChatToolAnswer]
     'retry-interrupts': [event: MouseEvent]
   }>()
 
@@ -221,11 +188,7 @@
     else appFrames.delete(key)
   }
 
-  function forwardAppMessage(
-    key: string,
-    part: AiChatDrawerUiResourcePart,
-    message: McpAppFrameMessage
-  ) {
+  function forwardAppMessage(key: string, part: AiChatUiResourcePart, message: McpAppFrameMessage) {
     emit('app-message', message, part, (reply) => appFrames.get(key)?.post(reply))
   }
 
@@ -239,9 +202,9 @@
   const edits = ref<Record<string, string>>({})
   const answers = ref<Record<string, string>>({})
   const askedAfter = ref<Record<string, string>>({})
-  const settled = ref<Record<string, AiChatDrawerQuestion>>({})
+  const settled = ref<Record<string, AiChatQuestion>>({})
   const routed = ref<Record<string, boolean>>({})
-  const toolAnswers = ref<Record<string, AiChatDrawerQuestion>>({})
+  const toolAnswers = ref<Record<string, AiChatQuestion>>({})
 
   const turns = computed(() =>
     props.messages.filter((message) => message.role === 'user' || message.role === 'assistant')
@@ -257,7 +220,7 @@
     () => (props.loading || Boolean(failure.value)) && last.value?.role === 'user'
   )
 
-  function statusOf(turn: AiChatDrawerMessage): ChatMessageStatus {
+  function statusOf(turn: AiChatMessage): ChatMessageStatus {
     if (turn.role === 'user' || turn !== last.value) return 'success'
     if (failure.value) return 'error'
     if (props.loading) return hasAnswer(turn) ? 'streaming' : 'pending'
@@ -302,7 +265,7 @@
       )
     const ids = new Set(live.map((question) => question.id))
     const known = new Set(turns.value.map((turn) => turn.id))
-    const groups: Record<string, AiChatDrawerQuestion[]> = {}
+    const groups: Record<string, AiChatQuestion[]> = {}
     for (const question of [
       ...live,
       ...Object.values(settled.value).filter((question) => !ids.has(question.id))
@@ -313,7 +276,7 @@
     return groups
   })
 
-  function answer(event: Event, question: AiChatDrawerQuestion, value: string) {
+  function answer(event: Event, question: AiChatQuestion, value: string) {
     const interrupt = pendingQuestions.value.find((item) => item.id === question.id)
     settled.value[question.id] = { ...question, status: 'success', error: '' }
     if (question.bound) {
@@ -324,22 +287,22 @@
     }
   }
 
-  function askOf(call: AiChatDrawerToolCallPart): AiChatDrawerQuestion {
+  function askOf(call: AiChatToolCallPart): AiChatQuestion {
     return toolAnswers.value[call.id] ?? toolQuestionOf(call, toolOf(call))
   }
 
-  function answerTool(event: Event, call: AiChatDrawerToolCallPart, value: string) {
+  function answerTool(event: Event, call: AiChatToolCallPart, value: string) {
     toolAnswers.value[call.id] = { ...toolQuestionOf(call, toolOf(call)), status: 'running' }
     emit('answer-tool', event, { toolCallId: call.id, tool: call.name, output: value })
   }
 
-  function skip(question: AiChatDrawerQuestion) {
+  function skip(question: AiChatQuestion) {
     const interrupt = pendingQuestions.value.find((item) => item.id === question.id)
     settled.value[question.id] = { ...question, status: 'skipped', error: '' }
     skipInterrupt(interrupt)
   }
 
-  function editOf(call: AiChatDrawerToolCallPart): string {
+  function editOf(call: AiChatToolCallPart): string {
     return edits.value[call.id] ?? json(call.input ?? call.arguments)
   }
 
@@ -348,7 +311,7 @@
     return last.value?.role === 'assistant' && hasAnswer(last.value) ? 'streaming' : 'pending'
   })
 
-  function stopped(turn: AiChatDrawerMessage): boolean {
+  function stopped(turn: AiChatMessage): boolean {
     return Boolean(turn.metadata?.stopped) || stoppedIds.value.has(turn.id)
   }
 
@@ -359,11 +322,11 @@
       : null
   })
 
-  function timeOf(turn: AiChatDrawerMessage): string {
+  function timeOf(turn: AiChatMessage): string {
     return turn.createdAt ? formatDate(turn.createdAt, { hour: '2-digit', minute: '2-digit' }) : ''
   }
 
-  function toolOf(call: AiChatDrawerToolCallPart): AiChatDrawerTool {
+  function toolOf(call: AiChatToolCallPart): AiChatTool {
     return props.tools[call.name] ?? { title: '' }
   }
 
@@ -390,7 +353,7 @@
     if ((!text.trim() && !picked.length) || (state.value !== 'ready' && !queueable.value)) return
     prompt.value = ''
     files.value = []
-    let content: AiChatDrawerSendContent
+    let content: AiChatSendContent
     try {
       content = await contentOf(text, picked)
     } catch {
@@ -419,7 +382,7 @@
     emit('new-chat', event)
   }
 
-  function rate(message: AiChatDrawerMessage, value: ChatMessageFeedbackValue | null) {
+  function rate(message: AiChatMessage, value: ChatMessageFeedbackValue | null) {
     ratings.value[message.id] = value
     emit('feedback', { message, value })
   }
@@ -429,7 +392,7 @@
     if (item) emit('remove-queued', event, item)
   }
 
-  function approve(event: MouseEvent, call: AiChatDrawerToolCallPart, text: string) {
+  function approve(event: MouseEvent, call: AiChatToolCallPart, text: string) {
     const edited =
       toolOf(call).editable && text !== json(call.input ?? call.arguments)
         ? (JSON.parse(text) as unknown)
@@ -438,7 +401,7 @@
     resolveInterrupt(props.interrupts, call, true, edited)
   }
 
-  function deny(event: MouseEvent, call: AiChatDrawerToolCallPart) {
+  function deny(event: MouseEvent, call: AiChatToolCallPart) {
     emit('deny', event, call)
     resolveInterrupt(props.interrupts, call, false)
   }

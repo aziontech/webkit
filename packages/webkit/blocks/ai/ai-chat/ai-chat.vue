@@ -34,9 +34,6 @@
   import ToolApproval from '@aziontech/webkit/tool-approval'
   import ToolCall from '@aziontech/webkit/tool-call'
   import { useLocale } from '@aziontech/webkit/use-locale'
-  import VideoPlayer from '@aziontech/webkit/video-player'
-  import { computed, ref, watch } from 'vue'
-
   import {
     activitiesBefore,
     type AiChatConnection,
@@ -74,41 +71,11 @@
     toolContentOf,
     toolQuestionOf,
     toolStatusOf
-  } from './messages'
-  import { sampleSuggestions } from './sample'
+  } from '@aziontech/webkit/utils/ai-chat'
+  import VideoPlayer from '@aziontech/webkit/video-player'
+  import { computed, ref, watch } from 'vue'
 
-  export type {
-    AiChatActivityPart,
-    AiChatAttachment,
-    AiChatAudioPart,
-    AiChatConnection,
-    AiChatContent,
-    AiChatDataSource,
-    AiChatDocumentPart,
-    AiChatImagePart,
-    AiChatInterrupt,
-    AiChatInterruptError,
-    AiChatMediaSource,
-    AiChatMessage,
-    AiChatMessageMetadata,
-    AiChatOtherPart,
-    AiChatPart,
-    AiChatQueuedMessage,
-    AiChatRole,
-    AiChatSendContent,
-    AiChatStructuredOutputPart,
-    AiChatSubagentPart,
-    AiChatSubagentStatus,
-    AiChatTextPart,
-    AiChatThinkingPart,
-    AiChatTool,
-    AiChatToolAnswer,
-    AiChatToolCallPart,
-    AiChatToolCallState,
-    AiChatToolResultPart,
-    AiChatUiResourcePart,
-    AiChatVideoPart
-  } from './messages'
+  import { sampleSuggestions } from './sample'
 
   /** A rating the reader gave a response. */
   export interface AiChatFeedback {

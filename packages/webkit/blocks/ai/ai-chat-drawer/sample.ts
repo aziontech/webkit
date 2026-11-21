@@ -1,11 +1,10 @@
 import type { SourcesItem } from '@aziontech/webkit/sources'
 import type { SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
-
-import type { AiChatDrawerMessage } from './messages'
+import type { AiChatMessage } from '@aziontech/webkit/utils/ai-chat'
 
 const at = (time: string): Date => new Date(`2026-11-19T${time}:00`)
 
-const user = (id: string, text: string, time: string): AiChatDrawerMessage => ({
+const user = (id: string, text: string, time: string): AiChatMessage => ({
   id,
   role: 'user',
   parts: [{ type: 'text', content: text }],
@@ -17,7 +16,7 @@ const assistant = (
   text: string,
   time: string,
   extra: { reasoning?: string; reasoningSeconds?: number; sources?: SourcesItem[] } = {}
-): AiChatDrawerMessage => ({
+): AiChatMessage => ({
   id,
   role: 'assistant',
   parts: [
@@ -53,7 +52,7 @@ const errorsAnswer = [
   'Renew the certificate at the origin, or let the origin accept plain HTTP from the edge while you renew it.'
 ].join('\n')
 
-export const sampleStreamingMessages: AiChatDrawerMessage[] = [
+export const sampleStreamingMessages: AiChatMessage[] = [
   user('m1', 'Why is storefront answering with 502 errors?', '14:12'),
   assistant('m2', errorsAnswer.slice(0, 120), '14:12', {
     reasoning:
@@ -69,7 +68,7 @@ export const sampleStreamingMessages: AiChatDrawerMessage[] = [
   })
 ]
 
-export const sampleInterruptedMessages: AiChatDrawerMessage[] = [
+export const sampleInterruptedMessages: AiChatMessage[] = [
   user('m1', 'How do I purge the cache of one URL?', '10:41'),
   assistant('m2', cacheAnswer.slice(0, 104), '10:41', {
     reasoning:
@@ -115,8 +114,8 @@ const history: [string, string][] = [
   ]
 ]
 
-export const sampleLongThread: AiChatDrawerMessage[] = history.flatMap(
-  ([question, answer], index): AiChatDrawerMessage[] => [
+export const sampleLongThread: AiChatMessage[] = history.flatMap(
+  ([question, answer], index): AiChatMessage[] => [
     user(`q${index}`, question, `09:${10 + index * 4}`),
     assistant(`a${index}`, answer, `09:${11 + index * 4}`, {
       reasoning: 'Reading the workload settings of storefront.',

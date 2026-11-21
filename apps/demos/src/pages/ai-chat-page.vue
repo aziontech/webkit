@@ -1,8 +1,9 @@
 <script setup lang="ts">
+  import type { AiChatMessage } from '@aziontech/webkit/utils/ai-chat'
   import { useChat } from '@tanstack/ai-vue'
   import { computed, ref } from 'vue'
 
-  import AiChat, { type AiChatMessage } from '../blocks/ai-chat.vue'
+  import AiChat from '../blocks/ai-chat.vue'
   import { answerFor } from '../lib/assistant'
   import { assistantConnection, assistantTools, deployWorkload } from '../lib/assistant-model'
 

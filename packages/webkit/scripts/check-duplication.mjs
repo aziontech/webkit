@@ -13,9 +13,12 @@ const IGNORED = ['**/*.test.ts', '**/*.figma.ts', '**/*.md']
 export const blockOf = (file) =>
   file.startsWith('blocks/') ? file.split('/').slice(0, 3).join('/') : null
 
+export const isBlockLogic = (file) => file.endsWith('.ts') && !file.endsWith('/sample.ts')
+
 export function classify(a, b) {
   const [blockA, blockB] = [blockOf(a), blockOf(b)]
-  return blockA && blockB && blockA !== blockB ? 'between-blocks' : 'clone'
+  if (!blockA || !blockB || blockA === blockB) return 'clone'
+  return isBlockLogic(a) && isBlockLogic(b) ? 'shared-logic' : 'between-blocks'
 }
 
 export function findClones(pkgDir = PKG) {
@@ -56,6 +59,7 @@ export function findClones(pkgDir = PKG) {
 function main() {
   const all = findClones()
   const clones = all.filter((c) => c.kind === 'clone')
+  const sharedLogic = all.filter((c) => c.kind === 'shared-logic')
   const betweenBlocks = all.filter((c) => c.kind === 'between-blocks')
   const list = (items) =>
     items.map((c) => `  ${c.a}:${c.aLines}  <->  ${c.b}:${c.bLines}  (${c.lines} lines)`).join('\n')
@@ -69,6 +73,16 @@ function main() {
     console.error(
       'Remove the repetition: one template driven by data, a private part in parts/, a composable, or a variant that\n' +
         'imports its block. Do not rename or reorder code to hide a copy. There is no baseline (decision CQ-E).'
+    )
+    process.exit(1)
+  }
+  if (sharedLogic.length) {
+    console.error(
+      `✖ ${sharedLogic.length} logic module(s) copied between two blocks:\n${list(sharedLogic)}\n`
+    )
+    console.error(
+      'Move the shared types and helpers into the package (a utils/* module or a composable) and import it from\n' +
+        'each block. A block keeps its own sample data and its own markup (decision CQ-E2).'
     )
     process.exit(1)
   }

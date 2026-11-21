@@ -29,7 +29,6 @@
  "sfcFile": "blocks/ai/ai-action-approval/ai-action-approval.vue",
  "guidelinesFile": "blocks/ai/ai-action-approval/guidelines.md",
  "fileSources": {
-  "messages.ts": "blocks/ai/ai-action-approval/messages.ts",
   "sample.ts": "blocks/ai/ai-action-approval/sample.ts"
  }
 }

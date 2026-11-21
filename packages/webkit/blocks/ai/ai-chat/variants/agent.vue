@@ -1,7 +1,8 @@
 <script setup lang="ts">
+  import type { AiChatInterrupt } from '@aziontech/webkit/utils/ai-chat'
   import { ref } from 'vue'
 
-  import AiChat, { type AiChatInterrupt } from '../ai-chat.vue'
+  import AiChat from '../ai-chat.vue'
   import { sampleAgentInterrupts, sampleAgentMessages } from '../sample'
 
   const interrupts = ref<AiChatInterrupt[]>(

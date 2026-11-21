@@ -15,9 +15,9 @@
   import SuggestionGroup from '@aziontech/webkit/suggestion-group'
   import Tag from '@aziontech/webkit/tag'
   import { useLocale } from '@aziontech/webkit/use-locale'
+  import { type AiChatMessage, textOf } from '@aziontech/webkit/utils/ai-chat'
   import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 
-  import { type AiChatMessage, textOf } from '../messages'
   import { sampleArtifactFollowUps, sampleArtifactThread, sampleArtifactVersions } from '../sample'
 
   const ARTIFACT = 'top-orders.sql'

@@ -45,7 +45,7 @@
     "name": "Empty",
     "file": "ai-chat.vue"
   },
-  "files": ["messages.ts", "sample.ts"],
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "Streaming",

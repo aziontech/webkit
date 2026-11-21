@@ -3,17 +3,18 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { page, userEvent } from 'vitest/browser'
 import { nextTick } from 'vue'
 
-import AiChat, {
-  type AiChatContent,
-  type AiChatInterrupt,
-  type AiChatMessage,
-  type AiChatQueuedMessage,
-  type AiChatToolCallPart
-} from '../../../../blocks/ai/ai-chat/ai-chat.vue'
+import AiChat from '../../../../blocks/ai/ai-chat/ai-chat.vue'
 import Agent from '../../../../blocks/ai/ai-chat/variants/agent.vue'
 import Artifact from '../../../../blocks/ai/ai-chat/variants/artifact.vue'
 import Media from '../../../../blocks/ai/ai-chat/variants/media.vue'
 import type { McpAppFrameMessage } from '../../../components/ai/mcp-app-frame/mcp-app-frame.vue'
+import type {
+  AiChatContent,
+  AiChatInterrupt,
+  AiChatMessage,
+  AiChatQueuedMessage,
+  AiChatToolCallPart
+} from '../../../utils/ai-chat'
 
 describe('ai/ai-chat Artifact', () => {
   describe('wide', () => {

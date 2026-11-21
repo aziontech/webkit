@@ -233,7 +233,7 @@ number worse.
 | Gate                      | Checks                                                               |
 | ------------------------- | -------------------------------------------------------------------- |
 | `check:maintainability`   | Every limit in 3.1 (lines, function length, complexity, line length) |
-| `check:duplication`       | Cloned code across components and blocks; duplicated root templates  |
+| `check:duplication`       | Cloned code in components and in one block; logic two blocks copy    |
 | `check:look-alikes`       | Components that do the same job and neither uses the other (in CI)   |
 | `check:extension`         | 3.5: `data-slot` on parts, exported props types, exported context    |
 | `check:slot-reading`      | 3.6: no `isVNode` or slot walking outside the shared registry        |

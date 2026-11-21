@@ -2474,6 +2474,10 @@
       "types": "./types/utils/clipboard.d.ts",
       "default": "./src/utils/clipboard.ts"
     },
+    "./utils/ai-chat": {
+      "types": "./types/utils/ai-chat.d.ts",
+      "default": "./src/utils/ai-chat.ts"
+    },
     "./utils/csv": {
       "types": "./types/utils/csv.d.ts",
       "default": "./src/utils/csv.ts"
@@ -4107,6 +4111,9 @@
       ],
       "utils/clipboard": [
         "./types/utils/clipboard.d.ts"
+      ],
+      "utils/ai-chat": [
+        "./types/utils/ai-chat.d.ts"
       ],
       "utils/csv": [
         "./types/utils/csv.d.ts"

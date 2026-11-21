@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/ai/ai-action-approval/ai-action-approval.vue` in `@aziontech/webkit`
 - MCP: `get_block("ai/ai-action-approval")`
-- Components: [AgentQuestion](../../components/agent-question.md), [Alert](../../components/alert.md), [Button](../../components/button.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [Conversation](../../components/conversation.md), [CopyButton](../../components/copy-button.md), [ImageGallery](../../components/image-gallery.md), [PromptInput](../../components/prompt-input.md), [StreamingResponse](../../components/streaming-response.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), `use-locale`
+- Components: [AgentQuestion](../../components/agent-question.md), [Alert](../../components/alert.md), [Button](../../components/button.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [Conversation](../../components/conversation.md), [CopyButton](../../components/copy-button.md), [ImageGallery](../../components/image-gallery.md), [PromptInput](../../components/prompt-input.md), [StreamingResponse](../../components/streaming-response.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), `use-locale`, `utils/ai-chat`
 - Skills: `webkit-ai-surfaces`, `webkit-ui-states`, `webkit-errors`
 
 ## Asked as
@@ -64,18 +64,18 @@ A `structured-output` part draws as a JSON `CodeBlock`: the progressive `partial
 
 ## Data
 
-The block draws a conversation in the message shape of TanStack AI: each message has an `id`, a `role` and its `parts` in order (`text`, `thinking`, `tool-call`, `tool-result`, `structured-output`), so the values `useChat` from `@tanstack/ai-vue` returns go straight into its props, with no conversion. The block calls no model and depends on no AI library; `messages.ts` declares the same shape itself (`AiActionApprovalMessage`, `AiActionApprovalPart`, `AiActionApprovalTool`, `AiActionApprovalInterrupt`, re-exported from `ai-action-approval.vue`), so any source that produces it works. Parts it does not draw (images, audio) are skipped. `sample.ts` holds the sample threads the variants pass. The draft in the composer stays local.
+The block draws a conversation in the message shape of TanStack AI: each message has an `id`, a `role` and its `parts` in order (`text`, `thinking`, `tool-call`, `tool-result`, `structured-output`), so the values `useChat` from `@tanstack/ai-vue` returns go straight into its props, with no conversion. The block calls no model and depends on no AI library; `@aziontech/webkit/utils/ai-chat` declares the same shape, with the helpers that read it (`AiChatMessage`, `AiChatPart`, `AiChatTool`, `AiChatInterrupt`; import the types from there), so any source that produces it works. Parts it does not draw (images, audio) are skipped. `sample.ts` holds the sample threads the variants pass. The draft in the composer stays local.
 
 What TanStack AI does not carry, the app adds in `metadata`: `sources` (the documents the response cites, numbered in order), `reasoningSeconds` (left out, the block measures the thinking time) and `stopped` (the block also marks the response that Stop ended). A message's time is its `createdAt`, formatted in the reader's locale.
 
-| Prop              | Type                                   | What it does                                                                                                                                                                                            |
-| ----------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `messages`        | `AiActionApprovalMessage[]`            | The conversation, oldest first, as `useChat` returns it. Left out, the sample deployment renders.                                                                                                       |
-| `loading`         | `boolean`                              | `isLoading` from `useChat`: the last response thinks, then streams, and the composer shows Stop.                                                                                                        |
-| `error`           | `string \| Error`                      | `error` from `useChat` shows the standard sentence on the last response with Try again; a string shows that sentence instead.                                                                           |
-| `tools`           | `Record<string, AiActionApprovalTool>` | How each tool reads, by name: `title` for the call, `question`, `description`, `approveLabel`, `variant`, `confirmationPhrase` and `editable` for its approval card.                                    |
-| `interrupts`      | `interrupts` of `useChat`              | The pending approvals and questions; the approve button and Deny resolve the one whose `toolCallId` matches the call, a generic one asks its question, and an unbound one asks it for the app to route. |
-| `interruptErrors` | `interruptErrors` of `useChat`         | Decisions that were not sent: an alert with the reason, and Retry when one is retryable.                                                                                                                |
+| Prop              | Type                           | What it does                                                                                                                                                                                            |
+| ----------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `messages`        | `AiChatMessage[]`              | The conversation, oldest first, as `useChat` returns it. Left out, the sample deployment renders.                                                                                                       |
+| `loading`         | `boolean`                      | `isLoading` from `useChat`: the last response thinks, then streams, and the composer shows Stop.                                                                                                        |
+| `error`           | `string \| Error`              | `error` from `useChat` shows the standard sentence on the last response with Try again; a string shows that sentence instead.                                                                           |
+| `tools`           | `Record<string, AiChatTool>`   | How each tool reads, by name: `title` for the call, `question`, `description`, `approveLabel`, `variant`, `confirmationPhrase` and `editable` for its approval card.                                    |
+| `interrupts`      | `interrupts` of `useChat`      | The pending approvals and questions; the approve button and Deny resolve the one whose `toolCallId` matches the call, a generic one asks its question, and an unbound one asks it for the app to route. |
+| `interruptErrors` | `interruptErrors` of `useChat` | Decisions that were not sent: an alert with the reason, and Retry when one is retryable.                                                                                                                |
 
 | Event              | Payload                     | When                                                                                                                                              |
 | ------------------ | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -220,15 +220,13 @@ Each variant is the same screen in another state: `get_block("ai/ai-action-appro
   import ToolApproval from '@aziontech/webkit/tool-approval'
   import ToolCall from '@aziontech/webkit/tool-call'
   import { useLocale } from '@aziontech/webkit/use-locale'
-  import { computed, ref } from 'vue'
-
   import {
-    type AiActionApprovalInterrupt,
-    type AiActionApprovalInterruptError,
-    type AiActionApprovalMessage,
-    type AiActionApprovalQuestion,
-    type AiActionApprovalTool,
-    type AiActionApprovalToolCallPart,
+    type AiChatInterrupt,
+    type AiChatInterruptError,
+    type AiChatMessage,
+    type AiChatQuestion,
+    type AiChatTool,
+    type AiChatToolCallPart,
     answerInterrupt,
     approvalOf,
     hasAnswer,
@@ -248,39 +246,24 @@ Each variant is the same screen in another state: `get_block("ai/ai-action-appro
     textOf,
     toolContentOf,
     toolStatusOf
-  } from './messages'
-  import { sampleMessages, sampleTools } from './sample'
+  } from '@aziontech/webkit/utils/ai-chat'
+  import { computed, ref } from 'vue'
 
-  export type {
-    AiActionApprovalInterrupt,
-    AiActionApprovalInterruptError,
-    AiActionApprovalMessage,
-    AiActionApprovalMessageMetadata,
-    AiActionApprovalOtherPart,
-    AiActionApprovalPart,
-    AiActionApprovalRole,
-    AiActionApprovalStructuredOutputPart,
-    AiActionApprovalTextPart,
-    AiActionApprovalThinkingPart,
-    AiActionApprovalTool,
-    AiActionApprovalToolCallPart,
-    AiActionApprovalToolCallState,
-    AiActionApprovalToolResultPart
-  } from './messages'
+  import { sampleMessages, sampleTools } from './sample'
 
   export interface AiActionApprovalProps {
     /** The conversation, oldest first, as TanStack AI's `useChat` returns `messages`. Left out, the sample deployment renders. */
-    messages?: ReadonlyArray<AiActionApprovalMessage>
+    messages?: ReadonlyArray<AiChatMessage>
     /** The assistant is responding or an approved call runs, as `useChat` returns `isLoading`. */
     loading?: boolean
     /** Why the last response failed: a sentence, or the `error` of `useChat`, which shows the standard sentence. */
     error?: string | { message: string } | null
     /** How each tool reads, by tool name: the call's title, the approval question, its verb and whether it is irreversible. */
-    tools?: Record<string, AiActionApprovalTool>
+    tools?: Record<string, AiChatTool>
     /** Pending requests, as `useChat` returns `interrupts`; the approve button and Deny resolve the matching one, a generic one asks its question, and an unbound one asks it for the app to route. */
-    interrupts?: ReadonlyArray<AiActionApprovalInterrupt>
+    interrupts?: ReadonlyArray<AiChatInterrupt>
     /** Why the decisions were not sent, as `useChat` returns `interruptErrors`; a retryable one offers Retry. */
-    interruptErrors?: ReadonlyArray<AiActionApprovalInterruptError>
+    interruptErrors?: ReadonlyArray<AiChatInterruptError>
   }
 
   const props = withDefaults(defineProps<AiActionApprovalProps>(), {
@@ -293,12 +276,12 @@ Each variant is the same screen in another state: `get_block("ai/ai-action-appro
   })
 
   const emit = defineEmits<{
-    approve: [event: MouseEvent, call: AiActionApprovalToolCallPart, input?: unknown]
-    deny: [event: MouseEvent, call: AiActionApprovalToolCallPart]
+    approve: [event: MouseEvent, call: AiChatToolCallPart, input?: unknown]
+    deny: [event: MouseEvent, call: AiChatToolCallPart]
     stop: [event: MouseEvent]
-    retry: [event: MouseEvent, message: AiActionApprovalMessage]
+    retry: [event: MouseEvent, message: AiChatMessage]
     send: [event: MouseEvent | KeyboardEvent, text: string]
-    'answer-interrupt': [event: Event, interrupt: AiActionApprovalInterrupt, value: string]
+    'answer-interrupt': [event: Event, interrupt: AiChatInterrupt, value: string]
     'retry-interrupts': [event: MouseEvent]
   }>()
 
@@ -307,7 +290,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-action-appro
   const prompt = ref('')
   const edits = ref<Record<string, string>>({})
   const answers = ref<Record<string, string>>({})
-  const settled = ref<Record<string, AiActionApprovalQuestion>>({})
+  const settled = ref<Record<string, AiChatQuestion>>({})
   const routed = ref<Record<string, boolean>>({})
 
   const turns = computed(() =>
@@ -323,14 +306,14 @@ Each variant is the same screen in another state: `get_block("ai/ai-action-appro
     return 'The connection was interrupted before the response finished.'
   })
 
-  function statusOf(turn: AiActionApprovalMessage): ChatMessageStatus {
+  function statusOf(turn: AiChatMessage): ChatMessageStatus {
     if (turn.role === 'user' || turn !== last.value) return 'success'
     if (failure.value) return 'error'
     if (props.loading && !runs(turn)) return hasAnswer(turn) ? 'streaming' : 'pending'
     return 'success'
   }
 
-  function runs(turn: AiActionApprovalMessage): boolean {
+  function runs(turn: AiChatMessage): boolean {
     return turn.parts.some(
       (part) =>
         isToolCallPart(part) &&
@@ -339,7 +322,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-action-appro
     )
   }
 
-  function failed(turn: AiActionApprovalMessage): boolean {
+  function failed(turn: AiChatMessage): boolean {
     const results = turn.parts.filter(isToolResultPart)
     return turn.parts.some(
       (part) =>
@@ -358,19 +341,19 @@ Each variant is the same screen in another state: `get_block("ai/ai-action-appro
       : 'pending'
   })
 
-  function timeOf(turn: AiActionApprovalMessage): string {
+  function timeOf(turn: AiChatMessage): string {
     return turn.createdAt ? formatDate(turn.createdAt, { hour: '2-digit', minute: '2-digit' }) : ''
   }
 
-  function toolOf(call: AiActionApprovalToolCallPart): AiActionApprovalTool {
+  function toolOf(call: AiChatToolCallPart): AiChatTool {
     return toolLabels.value[call.name] ?? { title: '' }
   }
 
-  function editOf(call: AiActionApprovalToolCallPart): string {
+  function editOf(call: AiChatToolCallPart): string {
     return edits.value[call.id] ?? json(call.input ?? call.arguments)
   }
 
-  function approve(event: MouseEvent, call: AiActionApprovalToolCallPart, text: string) {
+  function approve(event: MouseEvent, call: AiChatToolCallPart, text: string) {
     const edited =
       toolOf(call).editable && text !== json(call.input ?? call.arguments)
         ? (JSON.parse(text) as unknown)
@@ -379,7 +362,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-action-appro
     resolveInterrupt(props.interrupts, call, true, edited)
   }
 
-  function deny(event: MouseEvent, call: AiActionApprovalToolCallPart) {
+  function deny(event: MouseEvent, call: AiChatToolCallPart) {
     emit('deny', event, call)
     resolveInterrupt(props.interrupts, call, false)
   }
@@ -399,7 +382,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-action-appro
     return [...live, ...Object.values(settled.value).filter((question) => !ids.has(question.id))]
   })
 
-  function answer(event: Event, question: AiActionApprovalQuestion, value: string) {
+  function answer(event: Event, question: AiChatQuestion, value: string) {
     const interrupt = pendingQuestions.value.find((item) => item.id === question.id)
     settled.value[question.id] = { ...question, status: 'success', error: '' }
     if (question.bound) {
@@ -410,7 +393,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-action-appro
     }
   }
 
-  function skip(question: AiActionApprovalQuestion) {
+  function skip(question: AiChatQuestion) {
     const interrupt = pendingQuestions.value.find((item) => item.id === question.id)
     settled.value[question.id] = { ...question, status: 'skipped', error: '' }
     skipInterrupt(interrupt)
@@ -630,754 +613,26 @@ Each variant is the same screen in another state: `get_block("ai/ai-action-appro
 </template>
 ```
 
-## `messages.ts`
-
-```ts
-import type { AgentActivityStatus, AgentActivityStep } from '@aziontech/webkit/agent-activity'
-import type { AgentQuestionOption, AgentQuestionStatus } from '@aziontech/webkit/agent-question'
-import type { ImageGalleryItem } from '@aziontech/webkit/image-gallery'
-import type { PromptQueueItem } from '@aziontech/webkit/prompt-queue'
-import type { SourcesItem } from '@aziontech/webkit/sources'
-import type { SubagentCardStatus } from '@aziontech/webkit/subagent-card'
-import type { ToolApprovalVariant } from '@aziontech/webkit/tool-approval'
-import type { ToolCallStatus } from '@aziontech/webkit/tool-call'
-
-/** Who wrote a message; the conversation draws the reader's and the assistant's. */
-export type AiActionApprovalRole = 'system' | 'user' | 'assistant' | 'activity'
-
-/** Text of a message: plain for the reader, Markdown for the assistant. */
-export interface AiActionApprovalTextPart {
-  type: 'text'
-  content: string
-}
-
-/** How the assistant reached the answer, shown in the collapsible Reasoning. */
-export interface AiActionApprovalThinkingPart {
-  type: 'thinking'
-  content: string
-}
-
-/** Where a tool call stands. */
-export type AiActionApprovalToolCallState =
-  | 'awaiting-input'
-  | 'input-streaming'
-  | 'input-complete'
-  | 'approval-requested'
-  | 'approval-responded'
-  | 'complete'
-  | 'error'
-
-/** A tool the assistant calls; one that needs approval carries `approval`. */
-export interface AiActionApprovalToolCallPart {
-  type: 'tool-call'
-  id: string
-  name: string
-  arguments: string
-  input?: unknown
-  state: AiActionApprovalToolCallState
-  output?: unknown
-  approval?: {
-    id: string
-    needsApproval: boolean
-    approved?: boolean
-  }
-}
-
-/** What a tool returned, matched to its call by `toolCallId`. */
-export interface AiActionApprovalToolResultPart {
-  type: 'tool-result'
-  toolCallId: string
-  content: unknown
-  state: 'streaming' | 'complete' | 'error'
-  outcome?: 'cancelled' | 'denied'
-  error?: string
-}
-
-/** Where the bytes of an image, audio, video or document come from: a URL, base64 data, or a provider file the block cannot draw. */
-export interface AiActionApprovalMediaSource {
-  type: 'url' | 'data' | 'file'
-  value: string
-  mimeType?: string
-}
-
-/** An image the message carries; consecutive images draw as one gallery. */
-export interface AiActionApprovalImagePart {
-  type: 'image'
-  id?: string
-  source: AiActionApprovalMediaSource
-  metadata?: unknown
-}
-
-/** An audio clip the message carries. */
-export interface AiActionApprovalAudioPart {
-  type: 'audio'
-  id?: string
-  source: AiActionApprovalMediaSource
-  metadata?: unknown
-}
-
-/** A video the message carries. */
-export interface AiActionApprovalVideoPart {
-  type: 'video'
-  id?: string
-  source: AiActionApprovalMediaSource
-  metadata?: unknown
-}
-
-/** A document the message carries, such as a PDF; `metadata.name` names it. */
-export interface AiActionApprovalDocumentPart {
-  type: 'document'
-  id?: string
-  source: AiActionApprovalMediaSource
-  metadata?: unknown
-}
-
-/** A step the agent reports; `content.title`, `content.status` and `content.detail` draw it. */
-export interface AiActionApprovalActivityPart {
-  type: 'activity'
-  activityType: string
-  content: Record<string, unknown>
-}
-
-/** Where a helper agent stands. */
-export type AiActionApprovalSubagentStatus = 'running' | 'finished' | 'error' | 'suspended'
-
-/** A helper agent the assistant started, with its own messages. */
-export interface AiActionApprovalSubagentPart {
-  type: 'subagent'
-  subagent: {
-    name: string
-    description?: string
-    status: AiActionApprovalSubagentStatus
-    messages: ReadonlyArray<AiActionApprovalMessage>
-    input?: unknown
-    error?: { message: string }
-    stop?: unknown
-  }
-}
-
-/** An interactive widget a tool returned (an MCP app), drawn in a sandboxed frame. */
-export interface AiActionApprovalUiResourcePart {
-  type: 'ui-resource'
-  resource: { uri: string; mimeType: string; text?: string; blob?: string }
-  toolCallId: string
-  toolName: string
-  serverId?: string
-}
-
-/** A typed answer the assistant returned against a schema; `data` is set once it is complete. */
-export interface AiActionApprovalStructuredOutputPart {
-  type: 'structured-output'
-  status: 'streaming' | 'complete' | 'error'
-  raw: string
-  data?: unknown
-  partial?: unknown
-  reasoning?: string
-  errorMessage?: string
-}
-
-/** A part the conversation does not draw. */
-export interface AiActionApprovalOtherPart {
-  type: string
-}
-
-/** One piece of a message, in the order it arrived. */
-export type AiActionApprovalPart =
-  | AiActionApprovalTextPart
-  | AiActionApprovalThinkingPart
-  | AiActionApprovalToolCallPart
-  | AiActionApprovalToolResultPart
-  | AiActionApprovalImagePart
-  | AiActionApprovalAudioPart
-  | AiActionApprovalVideoPart
-  | AiActionApprovalDocumentPart
-  | AiActionApprovalActivityPart
-  | AiActionApprovalSubagentPart
-  | AiActionApprovalUiResourcePart
-  | AiActionApprovalStructuredOutputPart
-  | AiActionApprovalOtherPart
-
-/** What the app adds to a message beside its parts. */
-export interface AiActionApprovalMessageMetadata {
-  /** The documents the response cites, numbered in order. */
-  sources?: SourcesItem[]
-  /** How long the assistant thought, in seconds; left out, the block measures it while it streams. */
-  reasoningSeconds?: number
-  /** The reader stopped this response; the block also marks the response Stop ends. */
-  stopped?: boolean
-}
-
-/** One message, in the shape TanStack AI's `useChat` returns. */
-export interface AiActionApprovalMessage {
-  /** Stable key. */
-  id: string
-  /** Who wrote it; `system` and `activity` messages are not drawn. */
-  role: AiActionApprovalRole
-  /** The text, reasoning and tool calls, in order. */
-  parts: ReadonlyArray<AiActionApprovalPart>
-  /** When it was written. */
-  createdAt?: Date
-  /** Sources, the thinking time and the stopped flag. */
-  metadata?: AiActionApprovalMessageMetadata & Record<string, unknown>
-}
-
-/** How a tool reads in the conversation and on its approval card. */
-export interface AiActionApprovalTool {
-  /** What the call does, in plain words. */
-  title: string
-  /** The question on the approval card, naming the action; left out, the title. */
-  question?: string
-  /** What changes and what stays, on the approval card. */
-  description?: string
-  /** The approve button label, the verb of the title. */
-  approveLabel?: string
-  /** Danger for an irreversible action. */
-  variant?: ToolApprovalVariant
-  /** The phrase the reader types before an irreversible action enables. */
-  confirmationPhrase?: string
-  /** The reader may edit the call's arguments, as JSON, before approving. */
-  editable?: boolean
-  /** The reader answers this tool in the chat: the block asks `question` (else the title) and hands the answer back for `addToolResult`. */
-  answerable?: boolean
-  /** The answers the reader picks from when `answerable`; left out, the reader types one. */
-  options?: AgentQuestionOption[]
-}
-
-/** A pending request from the chat, as TanStack AI's `useChat` returns it in `interrupts`. */
-export interface AiActionApprovalInterrupt {
-  kind: string
-  id?: string
-  toolCallId?: string
-  message?: string
-  metadata?: Readonly<Record<string, unknown>>
-  payload?: unknown
-  status?: string
-  errors?: ReadonlyArray<{ message: string }>
-  resolveInterrupt?: unknown
-  cancel?: unknown
-}
-
-/** A failed attempt to send the answers to pending requests, as `useChat` returns it in `interruptErrors`. */
-export interface AiActionApprovalInterruptError {
-  message: string
-  retryable?: boolean
-  code?: string
-}
-
-/** The answer to a tool the reader answers, in the shape `addToolResult` takes. */
-export interface AiActionApprovalToolAnswer {
-  toolCallId: string
-  tool: string
-  output: unknown
-}
-
-/** Inline base64 bytes of a file the reader attached. */
-export interface AiActionApprovalDataSource {
-  type: 'data'
-  value: string
-  mimeType: string
-}
-
-/** A file the reader attached to a message, as a TanStack AI content part. */
-export interface AiActionApprovalAttachment {
-  type: 'image' | 'audio' | 'video' | 'document'
-  source: AiActionApprovalDataSource
-  metadata: { name: string }
-}
-
-/** A message with attachments, as `sendMessage` takes it. */
-export interface AiActionApprovalContent {
-  content: Array<AiActionApprovalTextPart | AiActionApprovalAttachment>
-}
-
-/** What the reader sent: the text alone, or the text with its attachments. */
-export type AiActionApprovalSendContent = string | AiActionApprovalContent
-
-/** A message waiting to be sent, as `useChat` returns it in `queue`. */
-export interface AiActionApprovalQueuedMessage {
-  id: string
-  content: unknown
-}
-
-/** The state of the connection to the chat, as `useChat` returns `connectionStatus`. */
-export type AiActionApprovalConnection = 'disconnected' | 'connecting' | 'connected' | 'error'
-
-/** A question the agent asked through a generic interrupt, as the block draws it. */
-export interface AiActionApprovalQuestion {
-  id: string
-  title: string
-  options: AgentQuestionOption[]
-  status: AgentQuestionStatus
-  error: string
-  bound: boolean
-}
-
-/** A rendered piece of an assistant message. */
-export type AiActionApprovalSegment =
-  | { type: 'activity'; key: string; steps: AgentActivityStep[] }
-  | { type: 'reasoning'; key: string; content: string }
-  | { type: 'text'; key: string; content: string }
-  | {
-      type: 'tool'
-      key: string
-      call: AiActionApprovalToolCallPart
-      result?: AiActionApprovalToolResultPart
-    }
-  | { type: 'gallery'; key: string; images: ImageGalleryItem[] }
-  | { type: 'audio'; key: string; src: string }
-  | { type: 'video'; key: string; src: string; mimeType: string }
-  | { type: 'document'; key: string; part: AiActionApprovalDocumentPart }
-  | { type: 'subagent'; key: string; part: AiActionApprovalSubagentPart }
-  | { type: 'app'; key: string; part: AiActionApprovalUiResourcePart }
-  | { type: 'structured'; key: string; part: AiActionApprovalStructuredOutputPart }
-
-export const isUiResourcePart = (
-  part: AiActionApprovalPart
-): part is AiActionApprovalUiResourcePart => part.type === 'ui-resource'
-
-export const isStructuredOutputPart = (
-  part: AiActionApprovalPart
-): part is AiActionApprovalStructuredOutputPart => part.type === 'structured-output'
-
-export const isTextPart = (part: AiActionApprovalPart): part is AiActionApprovalTextPart =>
-  part.type === 'text'
-
-export const isThinkingPart = (part: AiActionApprovalPart): part is AiActionApprovalThinkingPart =>
-  part.type === 'thinking'
-
-export const isToolCallPart = (part: AiActionApprovalPart): part is AiActionApprovalToolCallPart =>
-  part.type === 'tool-call'
-
-export const isToolResultPart = (
-  part: AiActionApprovalPart
-): part is AiActionApprovalToolResultPart => part.type === 'tool-result'
-
-export const isImagePart = (part: AiActionApprovalPart): part is AiActionApprovalImagePart =>
-  part.type === 'image'
-
-export const isAudioPart = (part: AiActionApprovalPart): part is AiActionApprovalAudioPart =>
-  part.type === 'audio'
-
-export const isVideoPart = (part: AiActionApprovalPart): part is AiActionApprovalVideoPart =>
-  part.type === 'video'
-
-export const isDocumentPart = (part: AiActionApprovalPart): part is AiActionApprovalDocumentPart =>
-  part.type === 'document'
-
-export const isActivityPart = (part: AiActionApprovalPart): part is AiActionApprovalActivityPart =>
-  part.type === 'activity'
-
-export const isSubagentPart = (part: AiActionApprovalPart): part is AiActionApprovalSubagentPart =>
-  part.type === 'subagent'
-
-export function mediaUrl(source: AiActionApprovalMediaSource): string {
-  if (source.type === 'url') return source.value
-  if (source.type !== 'data') return ''
-  if (source.value.startsWith('data:')) return source.value
-  return `data:${source.mimeType ?? 'application/octet-stream'};base64,${source.value}`
-}
-
-function metadataText(metadata: unknown, key: string): string {
-  if (!metadata || typeof metadata !== 'object' || !(key in metadata)) return ''
-  const value = (metadata as Record<string, unknown>)[key]
-  return typeof value === 'string' ? value : ''
-}
-
-export function imageOf(part: AiActionApprovalImagePart, index: number): ImageGalleryItem | null {
-  const key = part.id ?? `image-${index}`
-  const alt = metadataText(part.metadata, 'alt')
-  if (part.source.type === 'url') return { key, src: part.source.value, alt }
-  if (part.source.type === 'data')
-    return { key, data: part.source.value, mimeType: part.source.mimeType, alt }
-  return null
-}
-
-export function documentNameOf(part: AiActionApprovalDocumentPart): string {
-  return metadataText(part.metadata, 'name') || 'Document'
-}
-
-const ACTIVITY_STATUS: Record<string, AgentActivityStatus> = {
-  pending: 'pending',
-  running: 'running',
-  success: 'success',
-  complete: 'success',
-  error: 'error',
-  canceled: 'canceled',
-  cancelled: 'canceled',
-  skipped: 'skipped'
-}
-
-export function activityStepOf(part: AiActionApprovalActivityPart, key: string): AgentActivityStep {
-  const { title, status, detail } = part.content
-  return {
-    key,
-    title: typeof title === 'string' && title ? title : part.activityType,
-    status: (typeof status === 'string' && ACTIVITY_STATUS[status]) || 'running',
-    description: typeof detail === 'string' && detail ? detail : undefined
-  }
-}
-
-export function activitiesBefore(
-  messages: ReadonlyArray<AiActionApprovalMessage>,
-  turn: AiActionApprovalMessage
-): AiActionApprovalActivityPart[] {
-  const parts: AiActionApprovalActivityPart[] = []
-  for (let index = messages.indexOf(turn) - 1; index >= 0; index--) {
-    const message = messages[index]!
-    if (message.role === 'user' || message.role === 'assistant') break
-    if (message.role === 'activity') parts.unshift(...message.parts.filter(isActivityPart))
-  }
-  return parts
-}
-
-export function subagentStatusOf(part: AiActionApprovalSubagentPart): SubagentCardStatus {
-  const { status, error } = part.subagent
-  if (status === 'finished') return 'success'
-  if (status === 'suspended') return 'pending'
-  if (status === 'error') return error?.message === 'Stopped' ? 'canceled' : 'error'
-  return 'running'
-}
-
-export function subagentTextOf(part: AiActionApprovalSubagentPart): string {
-  return part.subagent.messages
-    .filter((message) => message.role === 'assistant')
-    .map((message) => textOf(message))
-    .filter(Boolean)
-    .join('\n\n')
-}
-
-export function stopSubagent(part: AiActionApprovalSubagentPart): void {
-  const stop = part.subagent.stop
-  if (typeof stop === 'function') stop.call(part.subagent)
-}
-
-export function textOf(message: AiActionApprovalMessage, separator = '\n\n'): string {
-  return message.parts
-    .filter(isTextPart)
-    .map((part) => part.content)
-    .filter(Boolean)
-    .join(separator)
-}
-
-export function hasText(message: AiActionApprovalMessage): boolean {
-  return message.parts.some((part) => isTextPart(part) && part.content.length > 0)
-}
-
-export function hasAnswer(message: AiActionApprovalMessage): boolean {
-  return (
-    hasText(message) ||
-    message.parts.some((part) => isStructuredOutputPart(part) && part.raw.length > 0)
-  )
-}
-
-export function hasThinking(message: AiActionApprovalMessage): boolean {
-  return message.parts.some(isThinkingPart)
-}
-
-export function segmentsOf(
-  message: AiActionApprovalMessage,
-  activities: ReadonlyArray<AiActionApprovalActivityPart> = []
-): AiActionApprovalSegment[] {
-  const results = new Map<string, AiActionApprovalToolResultPart>()
-  for (const part of message.parts) {
-    if (isToolResultPart(part)) results.set(part.toolCallId, part)
-  }
-  const steps = [...activities, ...message.parts.filter(isActivityPart)].map((part, index) =>
-    activityStepOf(part, `step-${index}`)
-  )
-  const segments: AiActionApprovalSegment[] = steps.length
-    ? [{ type: 'activity', key: 'activity', steps }]
-    : []
-  const thinking = message.parts
-    .flatMap((part) =>
-      isThinkingPart(part)
-        ? [part.content]
-        : isStructuredOutputPart(part) && part.reasoning
-          ? [part.reasoning]
-          : []
-    )
-    .join('\n\n')
-  if (thinking) segments.push({ type: 'reasoning', key: 'reasoning', content: thinking })
-  message.parts.forEach((part, index) => {
-    const previous = segments[segments.length - 1]
-    if (isTextPart(part)) {
-      if (!part.content) return
-      if (previous?.type === 'text') previous.content = `${previous.content}\n\n${part.content}`
-      else segments.push({ type: 'text', key: `text-${index}`, content: part.content })
-    } else if (isToolCallPart(part)) {
-      segments.push({ type: 'tool', key: part.id, call: part, result: results.get(part.id) })
-    } else if (isImagePart(part)) {
-      const image = imageOf(part, index)
-      if (!image) return
-      if (previous?.type === 'gallery') previous.images.push(image)
-      else segments.push({ type: 'gallery', key: `gallery-${index}`, images: [image] })
-    } else if (isAudioPart(part)) {
-      const src = mediaUrl(part.source)
-      if (src) segments.push({ type: 'audio', key: part.id ?? `audio-${index}`, src })
-    } else if (isVideoPart(part)) {
-      const src = mediaUrl(part.source)
-      if (src)
-        segments.push({
-          type: 'video',
-          key: part.id ?? `video-${index}`,
-          src,
-          mimeType: part.source.mimeType ?? ''
-        })
-    } else if (isDocumentPart(part)) {
-      if (part.source.type === 'url' || part.source.type === 'data')
-        segments.push({ type: 'document', key: part.id ?? `document-${index}`, part })
-    } else if (isSubagentPart(part)) {
-      segments.push({ type: 'subagent', key: `subagent-${index}`, part })
-    } else if (isUiResourcePart(part)) {
-      segments.push({ type: 'app', key: `app-${part.toolCallId}-${index}`, part })
-    } else if (isStructuredOutputPart(part)) {
-      segments.push({ type: 'structured', key: `structured-${index}`, part })
-    }
-  })
-  return segments
-}
-
-export function toolStatusOf(
-  call: AiActionApprovalToolCallPart,
-  result?: AiActionApprovalToolResultPart
-): ToolCallStatus {
-  if (result?.outcome === 'denied' || call.approval?.approved === false) return 'denied'
-  if (result?.outcome === 'cancelled') return 'canceled'
-  if (call.state === 'error' || result?.state === 'error') return 'error'
-  if (call.state === 'complete' || result?.state === 'complete') return 'success'
-  if (call.state === 'awaiting-input' || call.state === 'input-streaming') return 'streaming'
-  return 'running'
-}
-
-export function structuredOf(part: AiActionApprovalStructuredOutputPart): string {
-  if (part.status === 'complete') return json(part.data)
-  return json(part.partial) || part.raw
-}
-
-export interface AiActionApprovalToolContent {
-  text: string
-  images: ImageGalleryItem[]
-}
-
-export function toolContentOf(content: unknown): AiActionApprovalToolContent | null {
-  if (!Array.isArray(content) || !content.length) return null
-  const texts: string[] = []
-  const images: ImageGalleryItem[] = []
-  for (const [index, part] of (content as AiActionApprovalPart[]).entries()) {
-    if (!part || typeof part !== 'object') return null
-    if (isTextPart(part)) texts.push(part.content)
-    else if (isImagePart(part)) {
-      const image = imageOf(part, index)
-      if (image) images.push(image)
-    } else return null
-  }
-  return { text: texts.filter(Boolean).join('\n\n'), images }
-}
-
-export function answerable(
-  tool: AiActionApprovalTool | undefined,
-  call: AiActionApprovalToolCallPart,
-  result?: AiActionApprovalToolResultPart
-): boolean {
-  return Boolean(tool?.answerable) && call.output === undefined && !result && call.state !== 'error'
-}
-
-export function toolQuestionOf(
-  call: AiActionApprovalToolCallPart,
-  tool: AiActionApprovalTool
-): AiActionApprovalQuestion {
-  return {
-    id: call.id,
-    title: tool.question || tool.title || `Answer ${call.name}`,
-    options: tool.options ?? [],
-    status: 'pending',
-    error: '',
-    bound: true
-  }
-}
-
-export function needsApproval(call: AiActionApprovalToolCallPart): boolean {
-  return call.state === 'approval-requested' || Boolean(call.approval?.needsApproval)
-}
-
-export function approvalOf(call: AiActionApprovalToolCallPart): 'pending' | 'approved' | 'denied' {
-  if (call.approval?.approved === true) return 'approved'
-  if (call.approval?.approved === false) return 'denied'
-  return 'pending'
-}
-
-export function json(value: unknown): string {
-  if (value === undefined || value === null || value === '') return ''
-  if (typeof value === 'string') {
-    try {
-      return JSON.stringify(JSON.parse(value), null, 2)
-    } catch {
-      return value
-    }
-  }
-  try {
-    return JSON.stringify(value, null, 2)
-  } catch {
-    return String(value)
-  }
-}
-
-export function parsesAsJson(text: string): boolean {
-  try {
-    JSON.parse(text)
-    return true
-  } catch {
-    return false
-  }
-}
-
-export function resolveInterrupt(
-  interrupts: ReadonlyArray<AiActionApprovalInterrupt> | undefined,
-  call: AiActionApprovalToolCallPart,
-  approved: boolean,
-  editedArgs?: unknown
-): void {
-  const interrupt = interrupts?.find(
-    (item) => item.kind === 'tool-approval' && item.toolCallId === call.id
-  )
-  const resolve = interrupt?.resolveInterrupt
-  if (typeof resolve !== 'function') return
-  if (editedArgs === undefined) resolve.call(interrupt, approved)
-  else resolve.call(interrupt, approved, { editedArgs })
-}
-
-export function isQuestion(interrupt: AiActionApprovalInterrupt): boolean {
-  return (interrupt.kind === 'generic' || interrupt.kind === 'unbound') && Boolean(interrupt.id)
-}
-
-function optionsIn(value: unknown): AgentQuestionOption[] {
-  if (!value || typeof value !== 'object' || !('options' in value)) return []
-  const options = (value as { options?: unknown }).options
-  if (!Array.isArray(options)) return []
-  return options.flatMap((option): AgentQuestionOption[] => {
-    if (typeof option === 'string') return [{ value: option, label: option }]
-    if (option && typeof option === 'object' && 'value' in option) {
-      const { value: answer, label } = option as { value?: unknown; label?: unknown }
-      if (typeof answer !== 'string') return []
-      return [{ value: answer, label: typeof label === 'string' ? label : answer }]
-    }
-    return []
-  })
-}
-
-const QUESTION_STATUS: Record<string, AgentQuestionStatus> = {
-  validating: 'running',
-  staged: 'running',
-  submitting: 'running',
-  error: 'error'
-}
-
-export function questionOf(interrupt: AiActionApprovalInterrupt): AiActionApprovalQuestion {
-  const options = optionsIn(interrupt.metadata)
-  return {
-    id: interrupt.id ?? '',
-    title: interrupt.message || 'The agent needs an answer to continue.',
-    options: options.length ? options : optionsIn(interrupt.payload),
-    status: QUESTION_STATUS[interrupt.status ?? ''] ?? 'pending',
-    error: interrupt.errors?.[0]?.message ?? '',
-    bound: interrupt.kind !== 'unbound'
-  }
-}
-
-export function answerInterrupt(
-  interrupt: AiActionApprovalInterrupt | undefined,
-  value: string
-): void {
-  const resolve = interrupt?.resolveInterrupt
-  if (typeof resolve === 'function') resolve.call(interrupt, value)
-}
-
-export function skipInterrupt(interrupt: AiActionApprovalInterrupt | undefined): void {
-  const cancel = interrupt?.cancel
-  if (typeof cancel === 'function') cancel.call(interrupt)
-}
-
-export function interruptErrorText(errors: ReadonlyArray<AiActionApprovalInterruptError>): string {
-  return [...new Set(errors.map((error) => error.message).filter(Boolean))].join(' ')
-}
-
-const ATTACHMENT_KINDS = ['image', 'audio', 'video'] as const
-
-export function attachmentKindOf(mimeType: string): AiActionApprovalAttachment['type'] {
-  return ATTACHMENT_KINDS.find((kind) => mimeType.startsWith(`${kind}/`)) ?? 'document'
-}
-
-function base64Of(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.onload = () => {
-      const url = typeof reader.result === 'string' ? reader.result : ''
-      resolve(url.slice(url.indexOf(',') + 1))
-    }
-    reader.onerror = () => reject(reader.error)
-    reader.readAsDataURL(file)
-  })
-}
-
-export async function attachmentOf(file: File): Promise<AiActionApprovalAttachment> {
-  const mimeType = file.type || 'application/octet-stream'
-  return {
-    type: attachmentKindOf(mimeType),
-    source: { type: 'data', value: await base64Of(file), mimeType },
-    metadata: { name: file.name }
-  }
-}
-
-export async function contentOf(
-  text: string,
-  files: ReadonlyArray<File>
-): Promise<AiActionApprovalSendContent> {
-  if (!files.length) return text
-  const attachments = await Promise.all(files.map(attachmentOf))
-  return {
-    content: [...(text.trim() ? [{ type: 'text' as const, content: text }] : []), ...attachments]
-  }
-}
-
-export function queueItemOf(message: AiActionApprovalQueuedMessage): PromptQueueItem {
-  const content =
-    message.content && typeof message.content === 'object' && 'content' in message.content
-      ? (message.content as { content: unknown }).content
-      : message.content
-  if (typeof content === 'string') return { id: message.id, text: content }
-  const parts: unknown[] = Array.isArray(content) ? content : []
-  const texts = parts.flatMap((part) =>
-    part &&
-    typeof part === 'object' &&
-    (part as { type?: unknown }).type === 'text' &&
-    typeof (part as { content?: unknown }).content === 'string'
-      ? [(part as { content: string }).content]
-      : []
-  )
-  return { id: message.id, text: texts.join(' '), attachmentCount: parts.length - texts.length }
-}
-```
-
 ## `sample.ts`
 
 ```ts
 import type {
-  AiActionApprovalMessage,
-  AiActionApprovalPart,
-  AiActionApprovalTool,
-  AiActionApprovalToolCallPart
-} from './messages'
+  AiChatMessage,
+  AiChatPart,
+  AiChatTool,
+  AiChatToolCallPart
+} from '@aziontech/webkit/utils/ai-chat'
 
 const at = (time: string): Date => new Date(`2026-11-19T${time}:00`)
 
-const request = (id: string, text: string): AiActionApprovalMessage => ({
+const request = (id: string, text: string): AiChatMessage => ({
   id,
   role: 'user',
   parts: [{ type: 'text', content: text }],
   createdAt: at('15:02')
 })
 
-const response = (id: string, parts: AiActionApprovalPart[]): AiActionApprovalMessage => ({
+const response = (id: string, parts: AiChatPart[]): AiChatMessage => ({
   id,
   role: 'assistant',
   parts,
@@ -1386,7 +641,7 @@ const response = (id: string, parts: AiActionApprovalPart[]): AiActionApprovalMe
 
 const deployInput = { workload: 'storefront', build: 'b-4821', environment: 'production' }
 
-const readBuild: AiActionApprovalToolCallPart = {
+const readBuild: AiChatToolCallPart = {
   type: 'tool-call',
   id: 'call-build',
   name: 'get_build',
@@ -1396,15 +651,12 @@ const readBuild: AiActionApprovalToolCallPart = {
   output: { build: 'b-4821', checks: 'passed', finishedAt: '14:56' }
 }
 
-const explanation: AiActionApprovalPart = {
+const explanation: AiChatPart = {
   type: 'text',
   content: 'Build `b-4821` passed its checks 6 minutes ago. Deploying it needs your approval.'
 }
 
-const deploy = (
-  state: AiActionApprovalToolCallPart['state'],
-  approved?: boolean
-): AiActionApprovalToolCallPart => ({
+const deploy = (state: AiChatToolCallPart['state'], approved?: boolean): AiChatToolCallPart => ({
   type: 'tool-call',
   id: 'call-deploy',
   name: 'deploy_workload',
@@ -1416,7 +668,7 @@ const deploy = (
 
 const deployRequest = request('m1', 'Deploy the current build of storefront to production')
 
-export const sampleTools: Record<string, AiActionApprovalTool> = {
+export const sampleTools: Record<string, AiChatTool> = {
   get_build: { title: 'Reading the latest build of storefront' },
   deploy_workload: {
     title: 'Deploying storefront to production',
@@ -1437,17 +689,17 @@ export const sampleTools: Record<string, AiActionApprovalTool> = {
   }
 }
 
-export const sampleMessages: AiActionApprovalMessage[] = [
+export const sampleMessages: AiChatMessage[] = [
   deployRequest,
   response('m2', [readBuild, explanation, deploy('approval-requested')])
 ]
 
-export const sampleRunningMessages: AiActionApprovalMessage[] = [
+export const sampleRunningMessages: AiChatMessage[] = [
   deployRequest,
   response('m2', [readBuild, explanation, deploy('approval-responded', true)])
 ]
 
-export const sampleApprovedMessages: AiActionApprovalMessage[] = [
+export const sampleApprovedMessages: AiChatMessage[] = [
   deployRequest,
   response('m2', [
     readBuild,
@@ -1461,7 +713,7 @@ export const sampleApprovedMessages: AiActionApprovalMessage[] = [
   ])
 ]
 
-export const sampleDeniedMessages: AiActionApprovalMessage[] = [
+export const sampleDeniedMessages: AiChatMessage[] = [
   deployRequest,
   response('m2', [
     readBuild,
@@ -1481,7 +733,7 @@ export const sampleDeniedMessages: AiActionApprovalMessage[] = [
   ])
 ]
 
-export const sampleFailedMessages: AiActionApprovalMessage[] = [
+export const sampleFailedMessages: AiChatMessage[] = [
   deployRequest,
   response('m2', [
     readBuild,
@@ -1502,7 +754,7 @@ export const sampleFailedMessages: AiActionApprovalMessage[] = [
   ])
 ]
 
-export const sampleDeleteMessages: AiActionApprovalMessage[] = [
+export const sampleDeleteMessages: AiChatMessage[] = [
   request('m1', 'Delete the domain old.example.com, nobody uses it anymore'),
   response('m2', [
     {

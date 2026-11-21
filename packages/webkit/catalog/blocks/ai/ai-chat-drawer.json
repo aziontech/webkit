@@ -19,7 +19,6 @@
  "sfcFile": "blocks/ai/ai-chat-drawer/ai-chat-drawer.vue",
  "guidelinesFile": "blocks/ai/ai-chat-drawer/guidelines.md",
  "fileSources": {
-  "messages.ts": "blocks/ai/ai-chat-drawer/messages.ts",
   "sample.ts": "blocks/ai/ai-chat-drawer/sample.ts"
  }
 }
