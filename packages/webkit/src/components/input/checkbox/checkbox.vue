@@ -33,7 +33,11 @@
     }
   )
 
-  /** Two-way bound value: a boolean when `value` is unset; with `value`, an array to add it to and remove it from, or a scalar set to `value` when checked and to null when unchecked. An unset (undefined) model with `value` is treated as an empty array. */
+  /**
+   * Two-way bound value: a boolean when `value` is unset; with `value`, an array to add it to and
+   * remove it from, or a scalar set to `value` when checked and to null when unchecked. An unset
+   * (undefined) model with `value` is treated as an empty array.
+   */
   const model = defineModel<TModel>({ default: undefined as never })
 
   const attrs = useAttrs()
@@ -124,11 +128,26 @@
 
     model.value = current as TModel
   }
+
+  const ROOT_CLASS =
+    'group relative inline-flex size-[1.125rem] shrink-0 items-center justify-center align-middle rounded-(--shape-button) border border-(--border-input) bg-(--bg-surface) ' +
+    "text-transparent before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-(--bg-hover) before:opacity-0 before:content-[''] " +
+    'before:transition-opacity before:duration-fast-02 before:ease-productive-entrance after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] ' +
+    "after:bg-(--bg-active) after:opacity-0 after:content-[''] after:transition-opacity after:duration-fast-02 after:ease-productive-entrance hover:before:opacity-100 " +
+    'active:after:opacity-100 motion-reduce:before:transition-none motion-reduce:after:transition-none has-[:focus-visible]:outline-none has-[:focus-visible]:ring-2 ' +
+    'has-[:focus-visible]:ring-(--ring-color) has-[:focus-visible]:ring-offset-1 has-[:focus-visible]:ring-offset-(--bg-canvas) focus-within:before:opacity-0 ' +
+    'has-[:focus-visible]:before:opacity-0 ' +
+    'data-[invalid]:not-data-[checked]:not-data-[indeterminate]:border-(--danger-border) ' +
+    'data-[checked]:border-(--primary) data-[checked]:bg-(--primary) data-[checked]:text-(--primary-foreground) data-[checked]:before:hidden data-[checked]:after:hidden ' +
+    'data-[indeterminate]:border-(--primary) data-[indeterminate]:bg-(--primary) data-[indeterminate]:text-(--primary-foreground) data-[indeterminate]:before:hidden ' +
+    'data-[indeterminate]:after:hidden ' +
+    'data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed data-[disabled]:border-(--border-input) data-[disabled]:bg-(--bg-disabled) data-[disabled]:opacity-50 ' +
+    'data-[disabled]:before:hidden data-[disabled]:after:hidden ' +
+    'data-[readonly]:pointer-events-none data-[readonly]:cursor-not-allowed data-[readonly]:before:hidden data-[readonly]:after:hidden'
 </script>
 
 <template>
   <span
-    :class="attrs.class"
     :data-testid="testId"
     :data-state="dataState"
     :data-checked="isChecked || null"
@@ -136,7 +155,7 @@
     :data-disabled="isDisabled || null"
     :data-invalid="isInvalid || null"
     :data-readonly="readonly || null"
-    class="group relative inline-flex size-[1.125rem] shrink-0 items-center justify-center align-middle rounded-(--shape-button) border border-(--border-input) bg-(--bg-surface) text-transparent before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-(--bg-hover) before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:bg-(--bg-active) after:opacity-0 after:content-[''] after:transition-opacity after:duration-fast-02 after:ease-productive-entrance hover:before:opacity-100 active:after:opacity-100 motion-reduce:before:transition-none motion-reduce:after:transition-none has-[:focus-visible]:outline-none has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-(--ring-color) has-[:focus-visible]:ring-offset-1 has-[:focus-visible]:ring-offset-(--bg-canvas) focus-within:before:opacity-0 has-[:focus-visible]:before:opacity-0 data-[invalid]:not-data-[checked]:not-data-[indeterminate]:border-(--danger-border) data-[checked]:border-(--primary) data-[checked]:bg-(--primary) data-[checked]:text-(--primary-foreground) data-[checked]:before:hidden data-[checked]:after:hidden data-[indeterminate]:border-(--primary) data-[indeterminate]:bg-(--primary) data-[indeterminate]:text-(--primary-foreground) data-[indeterminate]:before:hidden data-[indeterminate]:after:hidden data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed data-[disabled]:border-(--border-input) data-[disabled]:bg-(--bg-disabled) data-[disabled]:opacity-50 data-[disabled]:before:hidden data-[disabled]:after:hidden data-[readonly]:pointer-events-none data-[readonly]:cursor-not-allowed data-[readonly]:before:hidden data-[readonly]:after:hidden"
+    :class="[ROOT_CLASS, attrs.class]"
   >
     <input
       :id="controlId || ''"

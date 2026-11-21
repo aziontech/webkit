@@ -71,7 +71,27 @@
   const isAnchor = computed(() => linkHref.value !== null)
 
   const ROOT_CLASS =
-    "group/icon-button [:where(&)]:relative inline-flex shrink-0 items-center justify-center rounded-(--shape-button) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:opacity-0 after:content-[''] after:transition-opacity after:duration-fast-02 after:ease-productive-entrance hover:before:opacity-100 active:after:opacity-100 motion-reduce:before:transition-none motion-reduce:after:transition-none disabled:before:hidden disabled:after:hidden not-data-[inert]:data-[variant=primary]:bg-(--primary) not-data-[inert]:data-[variant=primary]:text-(--primary-foreground) not-data-[inert]:data-[variant=primary]:before:bg-(--bg-hover) not-data-[inert]:data-[variant=primary]:after:bg-(--bg-active) not-data-[inert]:data-[variant=secondary]:bg-(--secondary) not-data-[inert]:data-[variant=secondary]:text-(--secondary-foreground) not-data-[inert]:data-[variant=secondary]:before:bg-(--bg-hover) not-data-[inert]:data-[variant=secondary]:after:bg-(--bg-active) not-data-[inert]:data-[variant=outline]:border not-data-[inert]:data-[variant=outline]:border-(--border-default) not-data-[inert]:data-[variant=outline]:bg-(--bg-surface) not-data-[inert]:data-[variant=outline]:text-(--text-default) not-data-[inert]:data-[variant=outline]:before:bg-(--bg-mask) not-data-[inert]:data-[variant=outline]:after:bg-(--bg-active) not-data-[inert]:data-[variant=ghost]:bg-transparent not-data-[inert]:data-[variant=ghost]:text-(--text-default) not-data-[inert]:data-[variant=ghost]:before:bg-(--bg-mask) not-data-[inert]:data-[variant=ghost]:after:bg-(--bg-active) not-data-[inert]:data-[variant=danger]:border not-data-[inert]:data-[variant=danger]:border-(--danger-border) not-data-[inert]:data-[variant=danger]:bg-(--danger) not-data-[inert]:data-[variant=danger]:text-(--danger-foreground) not-data-[inert]:data-[variant=danger]:before:bg-(--bg-hover) not-data-[inert]:data-[variant=danger]:after:bg-(--bg-active) data-[inert]:border-transparent data-[inert]:bg-(--bg-disabled) data-[inert]:text-(--text-disabled) data-[inert]:before:hidden data-[inert]:after:hidden data-[loading]:cursor-wait data-[disabled]:cursor-not-allowed data-[size=large]:size-10 data-[size=large]:text-button-lg data-[size=medium]:size-8 data-[size=medium]:text-button-md data-[size=small]:size-7 data-[size=small]:text-button-md"
+    'group/icon-button [:where(&)]:relative inline-flex shrink-0 items-center justify-center rounded-(--shape-button) ' +
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) before:pointer-events-none ' +
+    "before:absolute before:inset-0 before:rounded-[inherit] before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance " +
+    "after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:opacity-0 after:content-[''] after:transition-opacity after:duration-fast-02 " +
+    'after:ease-productive-entrance hover:before:opacity-100 active:after:opacity-100 motion-reduce:before:transition-none motion-reduce:after:transition-none disabled:before:hidden ' +
+    'disabled:after:hidden ' +
+    'not-data-[inert]:data-[variant=primary]:bg-(--primary) not-data-[inert]:data-[variant=primary]:text-(--primary-foreground) ' +
+    'not-data-[inert]:data-[variant=primary]:before:bg-(--bg-hover) not-data-[inert]:data-[variant=primary]:after:bg-(--bg-active) ' +
+    'not-data-[inert]:data-[variant=secondary]:bg-(--secondary) not-data-[inert]:data-[variant=secondary]:text-(--secondary-foreground) ' +
+    'not-data-[inert]:data-[variant=secondary]:before:bg-(--bg-hover) not-data-[inert]:data-[variant=secondary]:after:bg-(--bg-active) not-data-[inert]:data-[variant=outline]:border ' +
+    'not-data-[inert]:data-[variant=outline]:border-(--border-default) not-data-[inert]:data-[variant=outline]:bg-(--bg-surface) ' +
+    'not-data-[inert]:data-[variant=outline]:text-(--text-default) not-data-[inert]:data-[variant=outline]:before:bg-(--bg-mask) ' +
+    'not-data-[inert]:data-[variant=outline]:after:bg-(--bg-active) not-data-[inert]:data-[variant=ghost]:bg-transparent not-data-[inert]:data-[variant=ghost]:text-(--text-default) ' +
+    'not-data-[inert]:data-[variant=ghost]:before:bg-(--bg-mask) not-data-[inert]:data-[variant=ghost]:after:bg-(--bg-active) not-data-[inert]:data-[variant=danger]:border ' +
+    'not-data-[inert]:data-[variant=danger]:border-(--danger-border) not-data-[inert]:data-[variant=danger]:bg-(--danger) ' +
+    'not-data-[inert]:data-[variant=danger]:text-(--danger-foreground) not-data-[inert]:data-[variant=danger]:before:bg-(--bg-hover) ' +
+    'not-data-[inert]:data-[variant=danger]:after:bg-(--bg-active) data-[inert]:border-transparent data-[inert]:bg-(--bg-disabled) data-[inert]:text-(--text-disabled) ' +
+    'data-[inert]:before:hidden data-[inert]:after:hidden ' +
+    'data-[loading]:cursor-wait ' +
+    'data-[disabled]:cursor-not-allowed ' +
+    'data-[size=large]:size-10 data-[size=large]:text-button-lg data-[size=medium]:size-8 data-[size=medium]:text-button-md data-[size=small]:size-7 data-[size=small]:text-button-md'
 
   const loadingTestId = computed(() => `${testId.value}__loading`)
 
@@ -83,6 +103,15 @@
 
     emit('click', event)
   }
+
+  const ICON_CLASS =
+    'relative z-1 inline-flex items-center justify-center ' +
+    'data-[transition]:shrink-0 data-[transition]:overflow-hidden data-[transition]:size-3 ' +
+    'group-data-[size=large]/icon-button:data-[transition]:size-4'
+
+  const ICON_ENTER_ACTIVE_CLASS =
+    'pointer-events-none absolute inset-0 inline-flex items-center justify-center transition-[scale,opacity] duration-moderate-01 ease-productive-entrance ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -107,7 +136,7 @@
   >
     <span
       :data-transition="iconTransition || null"
-      class="relative z-1 inline-flex items-center justify-center data-[transition]:shrink-0 data-[transition]:overflow-hidden data-[transition]:size-3 group-data-[size=large]/icon-button:data-[transition]:size-4"
+      :class="ICON_CLASS"
     >
       <Spinner
         v-if="loading"
@@ -117,7 +146,7 @@
       <Transition
         v-else-if="iconTransition"
         mode="out-in"
-        enter-active-class="pointer-events-none absolute inset-0 inline-flex items-center justify-center transition-[scale,opacity] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
+        :enter-active-class="ICON_ENTER_ACTIVE_CLASS"
         enter-from-class="scale-0 opacity-0 motion-reduce:scale-100 motion-reduce:opacity-100"
         enter-to-class="scale-100 opacity-100"
         leave-active-class="pointer-events-none absolute inset-0 inline-flex items-center justify-center transition-opacity duration-fast-02 ease-productive-exit motion-reduce:transition-none"
@@ -168,7 +197,7 @@
   >
     <span
       :data-transition="iconTransition || null"
-      class="relative z-1 inline-flex items-center justify-center data-[transition]:shrink-0 data-[transition]:overflow-hidden data-[transition]:size-3 group-data-[size=large]/icon-button:data-[transition]:size-4"
+      :class="ICON_CLASS"
     >
       <Spinner
         v-if="loading"
@@ -178,7 +207,7 @@
       <Transition
         v-else-if="iconTransition"
         mode="out-in"
-        enter-active-class="pointer-events-none absolute inset-0 inline-flex items-center justify-center transition-[scale,opacity] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
+        :enter-active-class="ICON_ENTER_ACTIVE_CLASS"
         enter-from-class="scale-0 opacity-0 motion-reduce:scale-100 motion-reduce:opacity-100"
         enter-to-class="scale-100 opacity-100"
         leave-active-class="pointer-events-none absolute inset-0 inline-flex items-center justify-center transition-opacity duration-fast-02 ease-productive-exit motion-reduce:transition-none"
