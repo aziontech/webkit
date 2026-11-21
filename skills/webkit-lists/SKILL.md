@@ -2,7 +2,7 @@
 name: webkit-lists
 description: The list page — the one shape every resource index takes on @aziontech/webkit, and the collection model behind it. Every list runs on `useCollection` (`@aziontech/webkit/use-collection`), in client mode (in-memory items) or server mode (a `fetch` that returns one page and the total) — it owns the text and property filters, sorting, pagination, selection across pages, the empty vs no-match states, the filter, sort and page in the URL and the saved preferences, and hands back props to bind on `Table`, `Pagination`, `PropertyFilter`, `CollectionPreferences` and `CardList`. Fixes the page skeleton (shell → page heading carrying the create action → controls row with the PropertyFilter and CollectionPreferences → card-wrapped Table, or CardList), which columns become filter properties, and the two empty states. Use when building or reviewing any resource index, list, card view or "all X" page. The page-level companion to /webkit-tables (which owns the Table and its cell recipes).
 status: active
-last_updated: 2026-11-17
+last_updated: 2026-11-20
 scope: general
 enforced_by: [webkit-prefer-over-custom, webkit-component-states, webkit-styling, ui-verify, review]
 ---
@@ -237,6 +237,13 @@ const properties = [
   are suggested and printed by label in the token.
 - **Number or date column → a property with `type: 'number'` / `'date'`**, which offers `>`, `<`, `>=`,
   `<=` as well as `=` and `!=`.
+- **Reference column (another resource: the organization, the assignee) → a property whose values
+  come from `loadValues`**, the `PropertyFilter` prop that fetches the values for the typed text. The
+  suggestion and the token print the name, the query keeps the ID; nobody types an ID into a filter.
+  It is the filter form of the searchable picker in `/webkit-form` (Control by data type).
+- **Date column on a time-ordered list → a `DateRangePicker` next to the filter** when the period is
+  the main question (logs, activity, invoices); a `type: 'date'` property when it is one filter among
+  many. Never a text token holding an ISO date.
 - **Free-text column → a plain property** (name, domain) — the free-text token covers it too, so keep
   only the ones people name ("Name contains api").
 - **A column with two values that are never both interesting → nothing.**

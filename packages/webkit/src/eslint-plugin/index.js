@@ -12,12 +12,14 @@ import noOutputInCommand from './rules/no-output-in-command.js'
 import noPageNavigationMenu from './rules/no-page-navigation-menu.js'
 import noPhysicalDirection from './rules/no-physical-direction.js'
 import noPolymorphicAsProp from './rules/no-polymorphic-as-prop.js'
+import noRawIdInput from './rules/no-raw-id-input.js'
 import noRootRelativeAsset from './rules/no-root-relative-asset.js'
 import noStyleOverride from './rules/no-style-override.js'
 import noUnknownImport from './rules/no-unknown-import.js'
 import noViewportHeightCalc from './rules/no-viewport-height-calc.js'
 import noWholeIconSetImport from './rules/no-whole-icon-set-import.js'
 import noWrappedPageChrome from './rules/no-wrapped-page-chrome.js'
+import preferDatePicker from './rules/prefer-date-picker.js'
 import preferDefineModel from './rules/prefer-define-model.js'
 import preferHrefInMenuNode from './rules/prefer-href-in-menu-node.js'
 import preferTreeShakeableRoot from './rules/prefer-tree-shakeable-root.js'
@@ -59,7 +61,9 @@ const rules = {
   'require-composable-scope-cleanup': requireComposableScopeCleanup,
   'no-polymorphic-as-prop': noPolymorphicAsProp,
   'no-page-navigation-menu': noPageNavigationMenu,
-  'consistent-header-action-size': consistentHeaderActionSize
+  'consistent-header-action-size': consistentHeaderActionSize,
+  'prefer-date-picker': preferDatePicker,
+  'no-raw-id-input': noRawIdInput
 }
 
 const FILES = [
@@ -121,13 +125,17 @@ const RECOMMENDED = {
   'require-composable-scope-cleanup': 'error',
   'no-polymorphic-as-prop': 'error',
   'no-page-navigation-menu': 'warn',
-  'consistent-header-action-size': 'error'
+  'consistent-header-action-size': 'error',
+  'prefer-date-picker': 'warn',
+  'no-raw-id-input': 'warn'
 }
 
 export const HEURISTIC_RULES = Object.freeze([
   'require-container-width',
   'no-output-in-command',
-  'no-page-navigation-menu'
+  'no-page-navigation-menu',
+  'prefer-date-picker',
+  'no-raw-id-input'
 ])
 
 const STRICT = Object.fromEntries(

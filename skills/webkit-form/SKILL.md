@@ -123,6 +123,323 @@ its state, and the group it belongs to. The mechanics differ per approach, the c
 
 The sections below show each mechanism in place; this is the contract they satisfy.
 
+## Control by data type — the value decides the control
+
+Before you pick a control, ask what the API stores in the field. The type of the value picks the
+control; a free-text `Input` is right only for free text. A date typed as an ISO string, or a
+resource found by pasting its 32-character ID, makes people do work the interface should do, and
+the API rejects the typo after the form is sent.
+
+| What the field holds                                                                                | Control                                                                                                                                                                       | Never                                                                     |
+| --------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| An instant: a timestamp with a time of day (`expires_at`, `starts_at`, `scheduled_at`, `review_at`) | `DatePicker` with `show-time`                                                                                                                                                 | An `Input` with an ISO hint (`2026-01-31T00:00:00Z`)                      |
+| A calendar date with no time (`due_date`, `birth_date`, a billing day)                              | `DatePicker`                                                                                                                                                                  | A native `<input type="date">` or an `Input` with `YYYY-MM-DD`            |
+| A period: a pair of start and end (`from` / `to`, `period_start` / `period_end`)                    | One `DateRangePicker`, `range-selector-mode="absolute-only"`; `:show-time="false"` for whole days                                                                             | Two separate pickers, or two `Input`s                                     |
+| A duration (`ttl`, `timeout_seconds`, `retention_days`)                                             | `NumberInput` with the unit in the label (`TTL in seconds`) and `min` / `max`; a `Select` or `RadioGroup` of presets (`1 hour`, `8 hours`, `7 days`) when the API takes a few | A number with no unit, or a string such as `1h30m` typed by hand          |
+| One of a closed set (an enum: status, type, region)                                                 | `RadioGroup` (up to about 5 options, with a `description` when a value needs one) or `Select`; `MultiSelect` for several; a human label per value                             | Free text for a closed set, or the raw value (`read_only`) as the label   |
+| A reference to another resource (`organization_id`, `assignee_id`, `plan_id`, `team_ids`)           | A searchable resource picker (below): name first, the ID only as secondary text                                                                                               | An `Input` that asks for the ID, a label that says `Organization ID`      |
+| Money                                                                                               | `NumberInput` with the currency in the label (`Monthly limit in USD`) and `min`; convert minor units for display and back before sending                                      | A string with a currency sign the API must parse                          |
+| A percentage                                                                                        | `NumberInput` with `:min="0"` `:max="100"` and `%` in the label                                                                                                               | A fraction (`0.15`) the person has to convert                             |
+| A code, key or slug the person creates                                                              | `Input` with the rule in `Field.Description` (`Lowercase letters, digits and _, 3 to 40 characters`), filled from the name until edited                                       | A rule the person learns only from the error                              |
+| A boolean                                                                                           | `Switch` for a setting that applies at once or on save, `Checkbox` for consent or one item of a set                                                                           | A `Select` with `true` / `false`                                          |
+| Structured data with a known shape (headers, key–value pairs, tiers, tags, a map of locale to text) | `AttributeEditor` (rows of fields), `TagEditor` (a list of values), or `SchemaForm` when you hold the JSON Schema                                                             | A JSON `Textarea`; keep raw JSON for an open-ended schema, under Advanced |
+
+Two more rules hold for every row:
+
+- **Label the thing, not its storage.** The label is `Organization`, `Assignee`, `Expires`; the API
+  field name (`organization_id`, `expires_at`) never reaches the screen. The description says what
+  the value is for, with a concrete example.
+- **Bounds come from the rule.** An expiry is in the future (`:min`), a period is no longer than the
+  API allows (`:max-duration`), a percentage stops at 100. Set them on the control so an invalid value
+  cannot be picked, and still validate on submit.
+
+### Dates and times
+
+`DatePicker` (`@aziontech/webkit/date-picker-root`) binds a `Date` (or `null`). With `show-time` the
+panel adds a time field, so the value is an instant; send it with `toISOString()` (RFC 3339, UTC) and
+show it in the person's time zone. A date with no time is a calendar day: send its local parts, never
+`toISOString()`, which moves the day across zones.
+
+```vue
+<script setup lang="ts">
+  import DatePickerRoot from '@aziontech/webkit/date-picker-root'
+  import Field from '@aziontech/webkit/field'
+  import { ref } from 'vue'
+
+  const props = defineProps<{ today: Date }>()
+  const expires = ref<Date | null>(null)
+  const due = ref<Date | null>(null)
+
+  const instant = (value: Date | null) => value?.toISOString() ?? null
+  const calendarDay = (value: Date | null) =>
+    value
+      ? [
+          value.getFullYear(),
+          String(value.getMonth() + 1).padStart(2, '0'),
+          String(value.getDate()).padStart(2, '0')
+        ].join('-')
+      : null
+  // body: { expires_at: instant(expires.value), due_date: calendarDay(due.value) }
+</script>
+
+<template>
+  <Field required>
+    <Field.Label>Expires</Field.Label>
+    <DatePickerRoot
+      v-model="expires"
+      show-time
+      :min="props.today"
+    />
+    <Field.Description>The key stops working at this time, in your time zone.</Field.Description>
+  </Field>
+  <Field>
+    <Field.Label>Due date</Field.Label>
+    <DatePickerRoot v-model="due" />
+  </Field>
+</template>
+```
+
+A period is one `DateRangePicker` (`@aziontech/webkit/date-range-picker`). In a form, offer absolute
+ranges only; its value is `{ type: 'absolute', start, end }` with ISO strings, ready to send.
+Relative ranges (`Last 24 hours`) belong to filters and dashboards, not to a stored period.
+
+```vue
+<script setup lang="ts">
+  import DateRangePicker, { type DateRangeValue } from '@aziontech/webkit/date-range-picker'
+  import Field from '@aziontech/webkit/field'
+  import { ref } from 'vue'
+
+  const period = ref<DateRangeValue | null>(null)
+</script>
+
+<template>
+  <Field required>
+    <Field.Label>Billing period</Field.Label>
+    <DateRangePicker
+      v-model="period"
+      range-selector-mode="absolute-only"
+      :show-time="false"
+      :show-refresh="false"
+      :max-duration="{ amount: 1, unit: 'year' }"
+    />
+  </Field>
+</template>
+```
+
+### References to other resources — a picker, never an ID field
+
+A field whose value is the ID of another resource is a **searchable resource picker**: the person
+types part of a name, sees names, and picks one; the ID travels in `v-model` and never has to be
+read or typed. Each option shows the **name first**, with the kind or a shortened ID
+(`org_01a1…3f2a`) as secondary text, so two resources with the same name can still be told apart.
+
+The picker follows the long-list rule in `/webkit-ux-heuristics`: search past 7 options, a fixed
+first batch with Load more, a no-match line, and a `Create <noun>` action when the person may not
+have the resource yet (`/webkit-create-surface`, section 6). A whole resource the flow may reuse or
+create gets its own band instead: the `create/create-resource-picker` block (Existing / New).
+
+**A `Select` with a search field** is the default: the search sits in `Select.Content`'s `#search`
+slot, Load more and `Create <noun>` in its `#footer`, and `display-value` names the chosen resource
+even when the current page of results does not hold it (an edit form opens on a saved ID).
+
+```vue
+<script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import Field from '@aziontech/webkit/field'
+  import Input from '@aziontech/webkit/input'
+  import Select from '@aziontech/webkit/select'
+  import { onBeforeUnmount, ref, watch } from 'vue'
+
+  type Organization = { id: string; name: string }
+  const props = defineProps<{
+    listOrganizations: (query: {
+      search: string
+      page: number
+      signal: AbortSignal
+    }) => Promise<{ items: Organization[]; total: number }>
+    selectedName?: string
+  }>()
+
+  const organizationId = ref('')
+  const search = ref('')
+  const items = ref<Organization[]>([])
+  const total = ref(0)
+  const page = ref(1)
+  const loading = ref(false)
+  const names = new Map<string, string>()
+  let timer: ReturnType<typeof setTimeout> | undefined
+  let controller: AbortController | undefined
+
+  const shortId = (id: string) => (id.length > 12 ? `${id.slice(0, 8)}…${id.slice(-4)}` : id)
+
+  async function load(next: number) {
+    controller?.abort()
+    controller = new AbortController()
+    loading.value = true
+    try {
+      const result = await props.listOrganizations({
+        search: search.value.trim(),
+        page: next,
+        signal: controller.signal
+      })
+      result.items.forEach((item) => names.set(item.id, item.name))
+      items.value = next === 1 ? result.items : [...items.value, ...result.items]
+      total.value = result.total
+      page.value = next
+    } finally {
+      loading.value = false
+    }
+  }
+
+  watch(search, () => {
+    clearTimeout(timer)
+    timer = setTimeout(() => load(1), 250)
+  })
+  load(1)
+  onBeforeUnmount(() => {
+    clearTimeout(timer)
+    controller?.abort()
+  })
+</script>
+
+<template>
+  <Field required>
+    <Field.Label>Organization</Field.Label>
+    <Select
+      v-model="organizationId"
+      placeholder="Select an organization"
+      :display-value="(id: string) => names.get(id) ?? props.selectedName ?? shortId(id)"
+    >
+      <Select.Trigger />
+      <Select.Content>
+        <template #search>
+          <Input
+            v-model="search"
+            size="small"
+            placeholder="Search by name"
+            aria-label="Search organizations"
+          />
+        </template>
+        <Select.Item
+          v-for="organization in items"
+          :key="organization.id"
+          :value="organization.id"
+        >
+          {{ organization.name }}
+          <span class="text-(--text-muted)">{{ shortId(organization.id) }}</span>
+        </Select.Item>
+        <template #footer>
+          <Button
+            v-if="items.length < total"
+            :label="`Load ${Math.min(7, total - items.length)} more`"
+            variant="ghost"
+            size="small"
+            class="w-full"
+            :loading="loading"
+            @click="load(page + 1)"
+          />
+        </template>
+      </Select.Content>
+    </Select>
+    <Field.Description>The organization that owns the new project.</Field.Description>
+  </Field>
+</template>
+```
+
+**A `Combobox` with server search** fits when typing is the way in (a directory of people, a large
+catalog) and a first batch of names is enough: `:filter="false"` hands filtering to the server,
+`:allow-custom="false"` rejects text that names no resource, `:loading` shows the spinner and the
+loading row, and each option's `description` carries the secondary text. `search` fires on every
+keystroke, so debounce it; keep the chosen option in `options`, or the field falls back to showing
+the raw value.
+
+```vue
+<script setup lang="ts">
+  import Combobox, { type ComboboxOption } from '@aziontech/webkit/combobox'
+  import Field from '@aziontech/webkit/field'
+  import { onBeforeUnmount, ref } from 'vue'
+
+  type Person = { id: string; name: string; email: string }
+  const props = defineProps<{ findPeople: (text: string) => Promise<Person[]> }>()
+
+  const assigneeId = ref('')
+  const options = ref<ComboboxOption[]>([])
+  const loading = ref(false)
+  let timer: ReturnType<typeof setTimeout> | undefined
+  let latest = 0
+
+  function search(text: string) {
+    clearTimeout(timer)
+    timer = setTimeout(async () => {
+      const id = ++latest
+      loading.value = true
+      const people = await props.findPeople(text.trim())
+      if (id !== latest) return
+      const chosen = options.value.find((option) => option.value === assigneeId.value)
+      const found = people.map((person) => ({
+        value: person.id,
+        label: person.name,
+        description: person.email
+      }))
+      options.value =
+        chosen && !found.some((option) => option.value === chosen.value)
+          ? [chosen, ...found]
+          : found
+      loading.value = false
+    }, 250)
+  }
+
+  onBeforeUnmount(() => clearTimeout(timer))
+</script>
+
+<template>
+  <Field>
+    <Field.Label>Assignee</Field.Label>
+    <Combobox
+      v-model="assigneeId"
+      :options="options"
+      :filter="false"
+      :allow-custom="false"
+      :loading="loading"
+      placeholder="Search people by name or email"
+      @search="search"
+    />
+  </Field>
+</template>
+```
+
+Several references are a `MultiSelect` with `searchable` (and `:filter="false"` plus its `search`
+event when the server filters): the chosen resources show as chips with their names. A list filter
+on a referenced resource is a `PropertyFilter` property whose values come from `loadValues`, so the
+token prints the name while the URL keeps the ID (`/webkit-lists`, section 3).
+
+Pasting a full ID into the search is still useful to people who have one: when the text matches
+the ID's pattern, resolve it with the API's get-by-ID call and offer that one resource as the
+result.
+
+### Reading it back — IDs and times in read views
+
+The same values in a detail page or a table: **the name first**, linked by name; the ID as
+secondary mono text with a copy button (`TableCellId`, with `resource` naming what it copies); a time
+as `Timestamp` or `TableCellTime`, relative with the absolute date a hover away. `/webkit-tables`
+owns the cell recipes.
+
+### Do and Don't
+
+- **Do:** pick the control from the type of the value before you write the field.
+- **Do:** name the thing in the label and keep the API field name off the screen.
+- **Do:** send instants as RFC 3339 UTC and calendar days as `YYYY-MM-DD` from their local parts.
+- **Don't:** ask a person to type a date, a time, an enum value or another resource's ID.
+- **Don't:** put a format in the placeholder (`YYYY-MM-DD`, `org_…`) as the only guidance; the
+  right control makes the format disappear.
+
+The consumer lint backs this section: `webkit/prefer-date-picker` warns on a text field that holds a
+date or time (key `*_at` / `*At` / `*date` / `*time`, a date-format placeholder, a date label), and
+`webkit/no-raw-id-input` on one that asks for an ID (key `*_id` / `*Id`, a label ending in `ID`, an
+opaque identifier as placeholder). An identifier from another system that people copy in (a tax ID,
+an OAuth client ID) is the one legitimate text field for an ID; the rule skips those names, and a
+`readonly` field that only shows an ID.
+
 ## Form Layout — the spacing reference
 
 Every form sits on the same **Form Layout**: the shared spacing spec for field rows and columns — the
@@ -835,15 +1152,15 @@ The browser, password managers and mobile keyboards read the `<input>`, so the h
 there. `Input` takes `type`, `autocomplete` and `spellcheck` on its `<input>`; `PasswordInput` takes
 `autocomplete`.
 
-| Field                               | `type`  | `autocomplete`     | `spellcheck` |
-| ----------------------------------- | ------- | ------------------ | ------------ |
-| Sign-in e-mail / username           | `email` | `username`         | `false`      |
-| Sign-up, contact or newsletter mail | `email` | `email`            | `false`      |
-| Current password                    | —       | `current-password` | —            |
-| New password (sign-up, reset)       | —       | `new-password`     | —            |
-| One-time code                       | `text`  | `one-time-code`    | `false`      |
-| Slug, ID, domain, token, code       | `text`  | `off`              | `false`      |
-| Search, filter (not a credential)   | `text`  | `off`              | —            |
+| Field                                  | `type`  | `autocomplete`     | `spellcheck` |
+| -------------------------------------- | ------- | ------------------ | ------------ |
+| Sign-in e-mail / username              | `email` | `username`         | `false`      |
+| Sign-up, contact or newsletter mail    | `email` | `email`            | `false`      |
+| Current password                       | —       | `current-password` | —            |
+| New password (sign-up, reset)          | —       | `new-password`     | —            |
+| One-time code                          | `text`  | `one-time-code`    | `false`      |
+| Slug, external ID, domain, token, code | `text`  | `off`              | `false`      |
+| Search, filter (not a credential)      | `text`  | `off`              | —            |
 
 - Give every control a meaningful `name` next to `autocomplete`; autofill needs both.
 - WebKit hides every field **without** `autocomplete` from password managers (`data-1p-ignore` and the
@@ -1158,6 +1475,11 @@ End with: `form is accessible` or `N gaps — fix before polish`.
       for the Card-with-independent-saves type.
 - [ ] Every field that needs another resource offers `Create <noun>` when it may not exist yet; the
       drawer creates it and selects it back, so the reader never leaves the form to create it.
+- [ ] Every control matches the type of its value (Control by data type): instants in a `DatePicker`
+      with `show-time`, dates in a `DatePicker`, periods in one `DateRangePicker`, enums in a
+      `RadioGroup` or `Select` with human labels, references to other resources in a searchable picker
+      labelled with the thing (never an `Input` asking for an ID), money and percentages in a
+      `NumberInput` with the unit in the label, known structures in `AttributeEditor` / `TagEditor`.
 - [ ] A **nested drawer** keeps parent and child as independent forms — each its own `submitting` flag,
       `<fieldset :disabled>`, and Save `:loading`; the parent `Select` is controlled with a sentinel
       quick-add; the child creates the missing resource or item with its own create form and wires it

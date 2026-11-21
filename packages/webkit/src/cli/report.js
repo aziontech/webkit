@@ -9,6 +9,8 @@ export const UI_EXTENSIONS = ['vue', 'astro']
 
 export const RULE_PURPOSE = {
   'no-page-navigation-menu': 'free Menu in a page body (one navigation per level)',
+  'prefer-date-picker': 'date or time typed as text instead of DatePicker or DateRangePicker',
+  'no-raw-id-input': 'resource ID typed as text instead of a searchable picker',
   'no-viewport-height-calc':
     'page height hand-computed from the viewport (calc(100dvh - …)) instead of data-layout-fill',
   'no-root-relative-asset':
