@@ -300,6 +300,13 @@ describe('screen-reader smoke · form blocks', () => {
               - paragraph: The root hostname this domain answers for, without a subdomain.
               - textbox "Domain name":
                 - /placeholder: example.com
+          - heading "Tags" [level=2]
+          - button "Labels for ownership, cost and search. The same keys across resources keep them easy to find."
+          - group:
+            - paragraph: No tags associated with the resource.
+            - button "Add new tag"
+            - paragraph: You can add 50 more tags.
+            - status
           - heading "Advanced" [level=2]:
             - button "Advanced"
         - button "Cancel"
