@@ -745,6 +745,661 @@
       "tool": "suggest",
       "query": "list of domains with filters",
       "top1": "view/view-table"
+    },
+    {
+      "tool": "suggest",
+      "query": "date and time field",
+      "top1": "date-picker"
+    },
+    {
+      "tool": "suggest",
+      "query": "datetime input",
+      "top1": "date-picker"
+    },
+    {
+      "tool": "suggest",
+      "query": "pick a date",
+      "top1": "date-picker"
+    },
+    {
+      "tool": "suggest",
+      "query": "expiration date",
+      "top1": "date-picker"
+    },
+    {
+      "tool": "suggest",
+      "query": "schedule time",
+      "top1": "date-picker"
+    },
+    {
+      "tool": "suggest",
+      "query": "time picker",
+      "top1": "date-picker"
+    },
+    {
+      "tool": "suggest",
+      "query": "due date field",
+      "top1": "date-picker"
+    },
+    {
+      "tool": "suggest",
+      "query": "date range",
+      "top1": "date-range-picker"
+    },
+    {
+      "tool": "suggest",
+      "query": "time range filter",
+      "top1": "date-range-picker"
+    },
+    {
+      "tool": "suggest",
+      "query": "last 24 hours",
+      "top1": "date-range-picker"
+    },
+    {
+      "tool": "suggest",
+      "query": "period selector",
+      "top1": "date-range-picker"
+    },
+    {
+      "tool": "suggest",
+      "query": "phone number",
+      "top1": "phone-input"
+    },
+    {
+      "tool": "suggest",
+      "query": "telephone field",
+      "top1": "phone-input"
+    },
+    {
+      "tool": "suggest",
+      "query": "numeric input",
+      "top1": "number-input"
+    },
+    {
+      "tool": "suggest",
+      "query": "port number field",
+      "top1": "number-input"
+    },
+    {
+      "tool": "suggest",
+      "query": "quantity stepper",
+      "top1": "number-input"
+    },
+    {
+      "tool": "suggest",
+      "query": "ttl seconds",
+      "top1": "number-input"
+    },
+    {
+      "tool": "suggest",
+      "query": "duration input",
+      "top1": "number-input"
+    },
+    {
+      "tool": "suggest",
+      "query": "password field",
+      "top1": "password-input"
+    },
+    {
+      "tool": "suggest",
+      "query": "api token field",
+      "top1": "password-input"
+    },
+    {
+      "tool": "suggest",
+      "query": "verification code",
+      "top1": "otp-input"
+    },
+    {
+      "tool": "suggest",
+      "query": "2fa code",
+      "top1": "otp-input"
+    },
+    {
+      "tool": "suggest",
+      "query": "dropdown",
+      "top1": "select",
+      "accept": ["select", "dropdown-menu"]
+    },
+    {
+      "tool": "suggest",
+      "query": "autocomplete",
+      "top1": "combobox"
+    },
+    {
+      "tool": "suggest",
+      "query": "typeahead",
+      "top1": "combobox"
+    },
+    {
+      "tool": "suggest",
+      "query": "search with suggestions",
+      "top1": "combobox"
+    },
+    {
+      "tool": "suggest",
+      "query": "multi select",
+      "top1": "multi-select"
+    },
+    {
+      "tool": "suggest",
+      "query": "tags input",
+      "top1": "multi-select",
+      "accept": ["multi-select", "tag-editor"]
+    },
+    {
+      "tool": "suggest",
+      "query": "key value pairs",
+      "top1": "attribute-editor",
+      "accept": ["attribute-editor", "key-value-list"]
+    },
+    {
+      "tool": "suggest",
+      "query": "environment variables editor",
+      "top1": "edit/edit-variables",
+      "accept": ["edit/edit-variables", "attribute-editor"]
+    },
+    {
+      "tool": "suggest",
+      "query": "http headers editor",
+      "top1": "attribute-editor"
+    },
+    {
+      "tool": "suggest",
+      "query": "resource tags",
+      "top1": "tag-editor"
+    },
+    {
+      "tool": "suggest",
+      "query": "toggle",
+      "top1": "switch"
+    },
+    {
+      "tool": "suggest",
+      "query": "on off setting",
+      "top1": "switch"
+    },
+    {
+      "tool": "suggest",
+      "query": "radio buttons",
+      "top1": "radio-group"
+    },
+    {
+      "tool": "suggest",
+      "query": "range slider",
+      "top1": "slider"
+    },
+    {
+      "tool": "suggest",
+      "query": "file upload",
+      "top1": "file-dropzone"
+    },
+    {
+      "tool": "suggest",
+      "query": "drag and drop files",
+      "top1": "file-dropzone"
+    },
+    {
+      "tool": "suggest",
+      "query": "code editor",
+      "top1": "code-editor"
+    },
+    {
+      "tool": "suggest",
+      "query": "json editor",
+      "top1": "code-editor"
+    },
+    {
+      "tool": "suggest",
+      "query": "textarea",
+      "top1": "textarea"
+    },
+    {
+      "tool": "suggest",
+      "query": "language picker",
+      "top1": "language-select"
+    },
+    {
+      "tool": "suggest",
+      "query": "dark mode toggle",
+      "top1": "theme-switcher"
+    },
+    {
+      "tool": "suggest",
+      "query": "form from json schema",
+      "top1": "schema-form"
+    },
+    {
+      "tool": "suggest",
+      "query": "currency input",
+      "top1": "input-group",
+      "accept": ["input-group", "number-input"]
+    },
+    {
+      "tool": "suggest",
+      "query": "show a date",
+      "top1": "timestamp"
+    },
+    {
+      "tool": "suggest",
+      "query": "relative time",
+      "top1": "timestamp"
+    },
+    {
+      "tool": "suggest",
+      "query": "time ago",
+      "top1": "timestamp"
+    },
+    {
+      "tool": "suggest",
+      "query": "created at column",
+      "top1": "timestamp"
+    },
+    {
+      "tool": "suggest",
+      "query": "copy to clipboard",
+      "top1": "copy-button"
+    },
+    {
+      "tool": "suggest",
+      "query": "copyable id",
+      "top1": "copy-text"
+    },
+    {
+      "tool": "suggest",
+      "query": "show code snippet",
+      "top1": "code-block"
+    },
+    {
+      "tool": "suggest",
+      "query": "logs",
+      "top1": "log-viewer"
+    },
+    {
+      "tool": "suggest",
+      "query": "terminal output",
+      "top1": "log-viewer"
+    },
+    {
+      "tool": "suggest",
+      "query": "show a price",
+      "top1": "currency-amount"
+    },
+    {
+      "tool": "suggest",
+      "query": "status badge",
+      "top1": "tag",
+      "accept": ["tag", "status-indicator"]
+    },
+    {
+      "tool": "suggest",
+      "query": "status dot",
+      "top1": "status-indicator"
+    },
+    {
+      "tool": "suggest",
+      "query": "count badge",
+      "top1": "badge"
+    },
+    {
+      "tool": "suggest",
+      "query": "label pill",
+      "top1": "tag"
+    },
+    {
+      "tool": "suggest",
+      "query": "removable filter chip",
+      "top1": "chip"
+    },
+    {
+      "tool": "suggest",
+      "query": "severity level",
+      "top1": "severity-tag"
+    },
+    {
+      "tool": "suggest",
+      "query": "user avatar",
+      "top1": "avatar"
+    },
+    {
+      "tool": "suggest",
+      "query": "avatar stack",
+      "top1": "avatar-group"
+    },
+    {
+      "tool": "suggest",
+      "query": "keyboard shortcut",
+      "top1": "kbd"
+    },
+    {
+      "tool": "suggest",
+      "query": "confirm delete",
+      "top1": "confirm-dialog"
+    },
+    {
+      "tool": "suggest",
+      "query": "modal",
+      "top1": "dialog"
+    },
+    {
+      "tool": "suggest",
+      "query": "side panel",
+      "top1": "drawer"
+    },
+    {
+      "tool": "suggest",
+      "query": "tooltip",
+      "top1": "tooltip"
+    },
+    {
+      "tool": "suggest",
+      "query": "popover",
+      "top1": "popover"
+    },
+    {
+      "tool": "suggest",
+      "query": "context menu",
+      "top1": "context-menu"
+    },
+    {
+      "tool": "suggest",
+      "query": "actions menu",
+      "top1": "dropdown-menu"
+    },
+    {
+      "tool": "suggest",
+      "query": "command palette",
+      "top1": "command"
+    },
+    {
+      "tool": "suggest",
+      "query": "notification",
+      "top1": "toast"
+    },
+    {
+      "tool": "suggest",
+      "query": "error banner",
+      "top1": "alert"
+    },
+    {
+      "tool": "suggest",
+      "query": "inline warning",
+      "top1": "alert"
+    },
+    {
+      "tool": "suggest",
+      "query": "loading spinner",
+      "top1": "spinner"
+    },
+    {
+      "tool": "suggest",
+      "query": "loading placeholder",
+      "top1": "skeleton"
+    },
+    {
+      "tool": "suggest",
+      "query": "progress bar",
+      "top1": "progress"
+    },
+    {
+      "tool": "suggest",
+      "query": "empty state",
+      "top1": "empty-state"
+    },
+    {
+      "tool": "suggest",
+      "query": "no results",
+      "top1": "empty-state"
+    },
+    {
+      "tool": "suggest",
+      "query": "upload progress",
+      "top1": "upload-progress"
+    },
+    {
+      "tool": "suggest",
+      "query": "data table",
+      "top1": "data-table"
+    },
+    {
+      "tool": "suggest",
+      "query": "sortable table",
+      "top1": "data-table"
+    },
+    {
+      "tool": "suggest",
+      "query": "editable grid",
+      "top1": "data-grid"
+    },
+    {
+      "tool": "suggest",
+      "query": "spreadsheet",
+      "top1": "data-grid"
+    },
+    {
+      "tool": "suggest",
+      "query": "list of items",
+      "top1": "item"
+    },
+    {
+      "tool": "suggest",
+      "query": "tree view",
+      "top1": "tree"
+    },
+    {
+      "tool": "suggest",
+      "query": "key value details",
+      "top1": "key-value-list"
+    },
+    {
+      "tool": "suggest",
+      "query": "pagination",
+      "top1": "pagination"
+    },
+    {
+      "tool": "suggest",
+      "query": "tabs",
+      "top1": "tabs"
+    },
+    {
+      "tool": "suggest",
+      "query": "accordion",
+      "top1": "accordion"
+    },
+    {
+      "tool": "suggest",
+      "query": "stepper",
+      "top1": "stepper"
+    },
+    {
+      "tool": "suggest",
+      "query": "wizard",
+      "top1": "wizard"
+    },
+    {
+      "tool": "suggest",
+      "query": "multi step form",
+      "top1": "wizard"
+    },
+    {
+      "tool": "suggest",
+      "query": "breadcrumb",
+      "top1": "breadcrumb"
+    },
+    {
+      "tool": "suggest",
+      "query": "sidebar navigation",
+      "top1": "sidebar",
+      "accept": ["sidebar", "sidebar-menu"]
+    },
+    {
+      "tool": "suggest",
+      "query": "line chart",
+      "top1": "chart"
+    },
+    {
+      "tool": "suggest",
+      "query": "bar chart",
+      "top1": "chart"
+    },
+    {
+      "tool": "suggest",
+      "query": "pie chart",
+      "top1": "donut-chart"
+    },
+    {
+      "tool": "suggest",
+      "query": "sparkline",
+      "top1": "spark-chart"
+    },
+    {
+      "tool": "suggest",
+      "query": "kpi",
+      "top1": "stat-tile"
+    },
+    {
+      "tool": "suggest",
+      "query": "uptime bars",
+      "top1": "tracker"
+    },
+    {
+      "tool": "suggest",
+      "query": "world map",
+      "top1": "network-map",
+      "accept": ["network-map", "map-chart"]
+    },
+    {
+      "tool": "suggest",
+      "query": "flow diagram",
+      "top1": "flow-diagram"
+    },
+    {
+      "tool": "suggest",
+      "query": "trace waterfall",
+      "top1": "trace"
+    },
+    {
+      "tool": "suggest",
+      "query": "gauge",
+      "top1": "gauge-chart"
+    },
+    {
+      "tool": "suggest",
+      "query": "chat messages",
+      "top1": "conversation",
+      "accept": ["conversation", "chat-message"]
+    },
+    {
+      "tool": "suggest",
+      "query": "prompt box",
+      "top1": "prompt-input"
+    },
+    {
+      "tool": "suggest",
+      "query": "markdown renderer",
+      "top1": "streaming-response",
+      "accept": ["streaming-response", "doc-markdown"]
+    },
+    {
+      "tool": "suggest",
+      "query": "card",
+      "top1": "card"
+    },
+    {
+      "tool": "suggest",
+      "query": "divider",
+      "top1": "separator"
+    },
+    {
+      "tool": "suggest",
+      "query": "settings row",
+      "top1": "settings-row"
+    },
+    {
+      "tool": "suggest",
+      "query": "button with dropdown",
+      "top1": "split-button"
+    },
+    {
+      "tool": "suggest",
+      "query": "icon button",
+      "top1": "icon-button"
+    },
+    {
+      "tool": "suggest",
+      "query": "link",
+      "top1": "link"
+    },
+    {
+      "tool": "suggest",
+      "query": "segmented control",
+      "top1": "toggle-group"
+    },
+    {
+      "tool": "suggest",
+      "query": "transfer list",
+      "top1": "transfer-list"
+    },
+    {
+      "tool": "suggest",
+      "query": "resizable panels",
+      "top1": "resizable"
+    },
+    {
+      "tool": "suggest",
+      "query": "scroll area",
+      "top1": "scroll-area"
+    },
+    {
+      "tool": "suggest",
+      "query": "qr code",
+      "top1": "qr-code"
+    },
+    {
+      "tool": "suggest",
+      "query": "split pane",
+      "top1": "resizable"
+    },
+    {
+      "tool": "suggest",
+      "query": "unsaved changes bar",
+      "top1": "save-bar"
+    },
+    {
+      "tool": "suggest",
+      "query": "lightbox",
+      "top1": "image-gallery"
+    },
+    {
+      "tool": "suggest",
+      "query": "color picker",
+      "top1": "(none)",
+      "none": true
+    },
+    {
+      "tool": "suggest",
+      "query": "star rating",
+      "top1": "(none)",
+      "none": true
+    },
+    {
+      "tool": "suggest",
+      "query": "format bytes",
+      "top1": "(none)",
+      "none": true
+    },
+    {
+      "tool": "suggest",
+      "query": "kanban board",
+      "top1": "(none)",
+      "none": true
+    },
+    {
+      "tool": "suggest",
+      "query": "signature pad",
+      "top1": "(none)",
+      "none": true
     }
   ]
 }

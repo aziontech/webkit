@@ -17,7 +17,8 @@ const { requests } = JSON.parse(
 function first(tool, query) {
   if (tool === 'components') return searchComponents(catalog, query).matches[0]?.name ?? null
   const r = suggestComponent(catalog, query)
-  return r.recommendation === 'block' ? r.block.id : (r.best?.name ?? null)
+  if (r.recommendation === 'block') return r.block.id
+  return r.found === false ? '(none)' : (r.best?.name ?? null)
 }
 
 test('every request is well formed', () => {
@@ -36,3 +37,11 @@ for (const r of requests) {
     assert.ok(accepted.includes(got), `got ${got ?? '(none)'}, want ${accepted.join(' or ')}`)
   })
 }
+
+test('a need no component covers answers "not found" and says to build from tokens', () => {
+  const r = suggestComponent(catalog, 'color picker')
+  assert.equal(r.found, false)
+  assert.equal(r.best, null)
+  assert.match(r.message, /No WebKit component is made for/)
+  assert.ok(r.weakMatches.length > 0)
+})
