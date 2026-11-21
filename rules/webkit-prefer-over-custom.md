@@ -22,4 +22,9 @@ Before you write UI, check whether the design system already has it. It almost a
 - Keep it composable with webkit components rather than reinventing their look.
 - Consider raising the gap with the design-system team so it can be added once for everyone.
 
+## Enforcement
+
+- `webkit/prefer-webkit-component` (ESLint) flags an import from another UI library.
+- `webkit/prefer-value-control` (ESLint, `error`) flags an `Input` with a native `type` of `number`, `date`, `datetime-local`, `time`, `tel` or `password`, or with a date format in its placeholder.
+
 The goal: your UI looks and behaves like the rest of the product because it is built from the same parts.

@@ -147,6 +147,9 @@ only at submit and loses the keyboard, locale and time zone handling the real co
   and `disabled` from it, like an `Input` does.
 - **To show a value the person does not edit**, use `Timestamp` for a moment in time and a readonly
   `Input` for text, never a disabled picker.
+- **Lint holds the clear cases.** `webkit/prefer-value-control` fails an `Input` with a native
+  `type` of `number`, `date`, `datetime-local`, `time`, `tel` or `password`, or with a date format in
+  its placeholder.
 - **Not sure a control exists?** Ask the webkit MCP `suggest_component` with the kind of value ("date
   and time", "phone number") before you reach for `Input`; `Input` is the answer only for free text.
 

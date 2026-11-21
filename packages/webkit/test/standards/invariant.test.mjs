@@ -254,9 +254,11 @@ test('every shipped eslint rule is claimed by a standard (no orphan gates)', asy
   }
   // prefer-webkit-component, require-header-search and no-page-navigation-menu steer ADOPTION (use
   // webkit instead of a foreign lib; search in an app header through SearchTrigger; one navigation
-  // per level, rule webkit-navigation-levels) — deliberately not construction standards.
+  // per level, rule webkit-navigation-levels; the control made for a kind of value instead of a
+  // text Input, rule webkit-prefer-over-custom) — deliberately not construction standards.
   const ORPHAN_OK = new Set([
     'prefer-webkit-component',
+    'prefer-value-control',
     'require-header-search',
     'no-page-navigation-menu'
   ])

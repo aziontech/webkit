@@ -36,6 +36,8 @@ export const RULE_PURPOSE = {
   'no-gap-after-closing-section':
     'Spacer or closing frame after a section that draws its own close',
   'require-accessible-name': 'IconButton or ButtonGroup with no aria-label or aria-labelledby',
+  'prefer-value-control':
+    'text Input used for a number, a date, a phone number or a secret (native type or a date format)',
   'no-dropped-children': 'content inside a webkit component with no default slot, never rendered'
 }
 
@@ -46,6 +48,7 @@ const TEMPLATE_ONLY_RULES = [
   'no-wrapped-page-chrome',
   'no-gap-after-closing-section',
   'require-accessible-name',
+  'prefer-value-control',
   'no-dropped-children'
 ]
 
