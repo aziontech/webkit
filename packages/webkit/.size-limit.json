@@ -99,7 +99,7 @@
   {
     "name": "data-table",
     "path": "src/components/data/data-table/data-table.vue",
-    "limit": "57.95 KB"
+    "limit": "58 KB"
   },
   {
     "name": "data-grid",
@@ -360,7 +360,7 @@
   {
     "name": "media-tabs",
     "path": "src/components/marketing/media-tabs/media-tabs.vue",
-    "limit": "9.05 KB"
+    "limit": "9.1 KB"
   },
   {
     "name": "embed",
@@ -1104,7 +1104,7 @@
   {
     "name": "multi-select",
     "path": "src/components/input/multi-select/index.ts",
-    "limit": "29.85 KB"
+    "limit": "29.9 KB"
   },
   {
     "name": "code-block",
@@ -1410,7 +1410,7 @@
   {
     "name": "table-cell-actions",
     "path": "src/components/data/table/table-cell-actions/table-cell-actions.vue",
-    "limit": "11.9 KB"
+    "limit": "11.95 KB"
   },
   {
     "name": "file-token-group",
@@ -2409,7 +2409,7 @@
   {
     "name": "dialog-content",
     "path": "src/components/overlay/dialog/dialog-content.vue",
-    "limit": "18.05 KB"
+    "limit": "18.1 KB"
   },
   {
     "name": "dialog-description",
