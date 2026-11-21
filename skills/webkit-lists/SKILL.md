@@ -240,7 +240,7 @@ const properties = [
 - **Reference column (another resource: the organization, the assignee) → a property whose values
   come from `loadValues`**, the `PropertyFilter` prop that fetches the values for the typed text. The
   suggestion and the token print the name, the query keeps the ID; nobody types an ID into a filter.
-  It is the filter form of the searchable picker in `/webkit-form` (Control by data type).
+  It is the filter form of the searchable picker in `/webkit-form` (Pick the control from the kind of value).
 - **Date column on a time-ordered list → a `DateRangePicker` next to the filter** when the period is
   the main question (logs, activity, invoices); a `type: 'date'` property when it is one filter among
   many. Never a text token holding an ISO date.

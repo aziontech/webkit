@@ -109,32 +109,35 @@ it. A plain `Input` is for free text only. A typed value in a text box (a date a
 `2026-12-31T00:00:00Z`, a phone as digits, a port as text) makes the person learn a format, fails
 only at submit and loses the keyboard, locale and time zone handling the real control already has.
 
-| The field holds                                                 | Use                                                                                           | Bind                                                       | Never                                                         |
-| --------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | ---------------------------------------------------------- | ------------------------------------------------------------- |
-| One date (due date, expiry, birthday)                           | `DatePicker`                                                                                  | `Date \| null`                                             | an `Input` that asks for `YYYY-MM-DD`                         |
-| One date **and** time (a schedule, a start, an expiry instant)  | `DatePicker` with `show-time`                                                                 | `Date \| null`                                             | an `Input` that asks for ISO 8601 text, two loose text fields |
-| A start and an end, or "the last N" (a period, a window, a log) | `DateRangePicker` (`:show-time="false"` for whole days)                                       | a `DateRangeValue` (relative, absolute or since)           | two `DatePicker`s, two text fields                            |
-| A duration or a count (TTL, retention days, port, replicas)     | `NumberInput` with `min` / `max` / `step`; the unit in `Field.Description` or an `InputGroup` | `number`                                                   | `Input`, a date picker for a number of days                   |
-| An approximate value inside a bounded range                     | `Slider`                                                                                      | `number`                                                   | a `NumberInput` when the exact digit does not matter          |
-| A phone number                                                  | `PhoneInput`                                                                                  | national digits + `v-model:country`; send the E.164 number | `Input` with a mask or a `+1` placeholder                     |
-| A password or another secret (token, client secret)             | `PasswordInput` (+ `PasswordRequirements` under a new password)                               | `string`                                                   | `Input` with dots, a hand-made reveal button                  |
-| A one-time code                                                 | `OtpInput`                                                                                    | `string`                                                   | six `Input`s                                                  |
-| One choice of two to seven, all visible                         | `RadioGroup` (`variant="card"` for cards)                                                     | the option's value                                         | a `Select` for three options                                  |
-| One choice from a longer list                                   | `Select` (a search box in its panel for a long list)                                          | the option's value                                         | a typed id or name                                            |
-| A value the list only suggests (a new one is valid)             | `Combobox`                                                                                    | `string`                                                   | an `Input` beside a list of examples                          |
-| Several choices from a list                                     | `MultiSelect`; a `Checkbox` per option for two to five                                        | an array of values                                         | a comma-separated `Input`                                     |
-| On or off, saved with the form                                  | `Checkbox`                                                                                    | `boolean`                                                  | a `Select` with Yes and No                                    |
-| On or off, applied at once                                      | `Switch`                                                                                      | `boolean`                                                  | a checkbox that saves on click                                |
-| A list of same-shaped rows (variables, headers, criteria)       | `AttributeEditor`                                                                             | an array of rows                                           | a `Textarea` of `KEY=value` lines                             |
-| Key and value tags of a resource                                | `TagEditor`                                                                                   | `key` / `value` pairs                                      | a comma-separated `Input`                                     |
-| Files to upload                                                 | `FileDropzone` + a Browse files `Button`, the picked files in `FileTokenGroup`                | the `File` list your form keeps                            | a native file input left unstyled                             |
-| Code, a query, JSON or YAML the person edits                    | `CodeEditor`                                                                                  | `string`                                                   | a `Textarea`                                                  |
-| Several lines of free text                                      | `Textarea`                                                                                    | `string`                                                   | an `Input`                                                    |
-| Text with a fixed part in the same box (`https://`, `.com`)     | `InputGroup` with `InputGroup.Addon`                                                          | `string`                                                   | the fixed part typed into the value                           |
-| The interface language                                          | `LanguageSelect`                                                                              | a BCP 47 tag                                               | a hand-made `Select` of languages                             |
-| The colour theme (system, light, dark)                          | `ThemeSwitcher`                                                                               | the mode                                                   | a `Select` or three buttons                                   |
-| A form described by a JSON schema                               | `SchemaForm`                                                                                  | the value object                                           | fields written by hand from the schema                        |
-| One line of free text, an e-mail, a name, a slug                | `Input`                                                                                       | `string`                                                   | —                                                             |
+| The field holds                                                 | Use                                                                                                                                                                                            | Bind                                                       | Never                                                                |
+| --------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- | -------------------------------------------------------------------- |
+| One date (due date, expiry, birthday)                           | `DatePicker`                                                                                                                                                                                   | `Date \| null`                                             | an `Input` that asks for `YYYY-MM-DD`                                |
+| One date **and** time (a schedule, a start, an expiry instant)  | `DatePicker` with `show-time`                                                                                                                                                                  | `Date \| null`                                             | an `Input` that asks for ISO 8601 text, two loose text fields        |
+| A start and an end, or "the last N" (a period, a window, a log) | `DateRangePicker` (`:show-time="false"` for whole days)                                                                                                                                        | a `DateRangeValue` (relative, absolute or since)           | two `DatePicker`s, two text fields                                   |
+| A duration or a count (TTL, retention days, port, replicas)     | `NumberInput` with `min` / `max` / `step` and the unit in the label (`TTL in seconds`) or an `InputGroup`; a `Select` or `RadioGroup` of presets (`1 hour`, `7 days`) when the API takes a few | `number`                                                   | `Input`, a date picker for a number of days, `1h30m` typed by hand   |
+| An approximate value inside a bounded range                     | `Slider`                                                                                                                                                                                       | `number`                                                   | a `NumberInput` when the exact digit does not matter                 |
+| Money                                                           | `NumberInput` with the currency in the label (`Monthly limit in USD`) or an `InputGroup.Addon`, and `min`                                                                                      | `number` in major units; convert minor units at the edge   | a string with a currency sign the API must parse                     |
+| A percentage                                                    | `NumberInput` with `:min="0"` `:max="100"` and `%` in an `InputGroup.Addon`                                                                                                                    | `number` from 0 to 100                                     | a fraction (`0.15`) the person has to convert                        |
+| A phone number                                                  | `PhoneInput`                                                                                                                                                                                   | national digits + `v-model:country`; send the E.164 number | `Input` with a mask or a `+1` placeholder                            |
+| A password or another secret (token, client secret)             | `PasswordInput` (+ `PasswordRequirements` under a new password)                                                                                                                                | `string`                                                   | `Input` with dots, a hand-made reveal button                         |
+| A one-time code                                                 | `OtpInput`                                                                                                                                                                                     | `string`                                                   | six `Input`s                                                         |
+| One choice of two to seven, all visible                         | `RadioGroup` (`variant="card"` for cards)                                                                                                                                                      | the option's value                                         | a `Select` for three options                                         |
+| One choice from a longer list                                   | `Select` (a search box in its panel for a long list)                                                                                                                                           | the option's value                                         | a typed id or name                                                   |
+| The ID of another resource (`organization_id`, `team_ids`)      | A resource picker searched by name: `Select` with a `#search` field and Load more, `Combobox` with server search, `MultiSelect` with `searchable` for several (below)                          | the ID, or an array of IDs                                 | an `Input` that asks for the ID, a label that says `Organization ID` |
+| A value the list only suggests (a new one is valid)             | `Combobox`                                                                                                                                                                                     | `string`                                                   | an `Input` beside a list of examples                                 |
+| Several choices from a list                                     | `MultiSelect`; a `Checkbox` per option for two to five                                                                                                                                         | an array of values                                         | a comma-separated `Input`                                            |
+| On or off, saved with the form                                  | `Checkbox`                                                                                                                                                                                     | `boolean`                                                  | a `Select` with Yes and No                                           |
+| On or off, applied at once                                      | `Switch`                                                                                                                                                                                       | `boolean`                                                  | a checkbox that saves on click                                       |
+| A list of same-shaped rows (variables, headers, criteria)       | `AttributeEditor`                                                                                                                                                                              | an array of rows                                           | a `Textarea` of `KEY=value` lines                                    |
+| Key and value tags of a resource                                | `TagEditor`                                                                                                                                                                                    | `key` / `value` pairs                                      | a comma-separated `Input`                                            |
+| Files to upload                                                 | `FileDropzone` + a Browse files `Button`, the picked files in `FileTokenGroup`                                                                                                                 | the `File` list your form keeps                            | a native file input left unstyled                                    |
+| Code, a query, JSON or YAML the person edits                    | `CodeEditor`                                                                                                                                                                                   | `string`                                                   | a `Textarea`                                                         |
+| Several lines of free text                                      | `Textarea`                                                                                                                                                                                     | `string`                                                   | an `Input`                                                           |
+| Text with a fixed part in the same box (`https://`, `.com`)     | `InputGroup` with `InputGroup.Addon`                                                                                                                                                           | `string`                                                   | the fixed part typed into the value                                  |
+| The interface language                                          | `LanguageSelect`                                                                                                                                                                               | a BCP 47 tag                                               | a hand-made `Select` of languages                                    |
+| The colour theme (system, light, dark)                          | `ThemeSwitcher`                                                                                                                                                                                | the mode                                                   | a `Select` or three buttons                                          |
+| A form described by a JSON schema                               | `SchemaForm`                                                                                                                                                                                   | the value object                                           | fields written by hand from the schema                               |
+| One line of free text, an e-mail, a name, a slug                | `Input`                                                                                                                                                                                        | `string`                                                   | —                                                                    |
 
 - **The model is the typed value, not its text.** A date field binds a `Date` (or `null` while empty)
   and the picker prints it for the person's locale and time zone. Convert at the edge: send
@@ -142,9 +145,16 @@ only at submit and loses the keyboard, locale and time zone handling the real co
   when the form loads. The person never reads or types ISO 8601.
 - **Bound what can be picked** with the control's own props (`min` / `max` on `DatePicker`,
   `DateRangePicker` and `NumberInput`) instead of refusing the value after submit. A date that must
-  be in the future (a token expiry, a schedule) sets `:min` to today.
+  be in the future (a token expiry, a schedule) sets `:min` to today, a stored period sets
+  `:max-duration`, a percentage stops at 100; still validate on submit.
 - **Every one of these sits in a `Field`** and takes its label, description, `required`, `invalid`
   and `disabled` from it, like an `Input` does.
+- **Label the thing, not its storage.** The label is `Organization`, `Assignee`, `Expires`; the API
+  field name (`organization_id`, `expires_at`) never reaches the screen. The description says what
+  the value is for, with a concrete example.
+- **A closed set shows a human label per value**, never the raw value (`read_only`) as the label.
+  A code, key or slug the person creates is an `Input` with its rule in `Field.Description`
+  (`Lowercase letters, digits and _, 3 to 40 characters`), filled from the name until edited.
 - **To show a value the person does not edit**, use `Timestamp` for a moment in time and a readonly
   `Input` for text, never a disabled picker.
 - **Lint holds the clear cases.** `webkit/prefer-value-control` fails an `Input` with a native
@@ -196,65 +206,11 @@ only at submit and loses the keyboard, locale and time zone handling the real co
 </template>
 ```
 
-## Label association — every control names itself (both approaches)
-
-The one non-negotiable both layouts share: every control has a **programmatic accessible name**, its
-error is **tied to it**, and related controls are **grouped** — so a screen reader announces the field,
-its state, and the group it belongs to. The mechanics differ per approach, the contract does not:
-
-- **A real label, never a placeholder.** Approach B (and a composed `Select`) wires a real `<label for>`
-  to the control `id` — a `Field.Label` inside a `Field` does it for you (a `Select` inside a `Field`
-  gets the id on its trigger); a `Field.Label` set apart from its control points `for` at
-  `Select.Trigger`'s `id` (labelling the wrapper labels nothing). Approach A (ItemGroup) uses
-  `Item.Title` as the field name and gives the control an `aria-label`. A placeholder is **never** the
-  label — it disappears on input and is not a reliable accessible name.
-- **Errors associated via `aria-describedby`.** The message carries an `id` and the control points
-  `aria-describedby` at it, so it is announced when focus lands; `required` / `:invalid` set
-  `aria-required` / `aria-invalid` — don't hand-roll them. Inside a `Field`, `Field.Description` /
-  `Field.Error` register themselves and the control is described by them automatically; in an ItemGroup
-  you set `aria-describedby` on the control and the `id` on the `<FieldError>` yourself.
-- **Groups in `<fieldset>` + `<legend>`.** Each section is a native `<fieldset>` with a `<legend>`
-  (`sr-only` when a visible title already names it); a radio/checkbox set is its own `<fieldset>` whose
-  `<legend>` is the question.
-
-The sections below show each mechanism in place; this is the contract they satisfy.
-
-## Control by data type — the value decides the control
-
-Before you pick a control, ask what the API stores in the field. The type of the value picks the
-control; a free-text `Input` is right only for free text. A date typed as an ISO string, or a
-resource found by pasting its 32-character ID, makes people do work the interface should do, and
-the API rejects the typo after the form is sent.
-
-| What the field holds                                                                                | Control                                                                                                                                                                       | Never                                                                     |
-| --------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| An instant: a timestamp with a time of day (`expires_at`, `starts_at`, `scheduled_at`, `review_at`) | `DatePicker` with `show-time`                                                                                                                                                 | An `Input` with an ISO hint (`2026-01-31T00:00:00Z`)                      |
-| A calendar date with no time (`due_date`, `birth_date`, a billing day)                              | `DatePicker`                                                                                                                                                                  | A native `<input type="date">` or an `Input` with `YYYY-MM-DD`            |
-| A period: a pair of start and end (`from` / `to`, `period_start` / `period_end`)                    | One `DateRangePicker`, `range-selector-mode="absolute-only"`; `:show-time="false"` for whole days                                                                             | Two separate pickers, or two `Input`s                                     |
-| A duration (`ttl`, `timeout_seconds`, `retention_days`)                                             | `NumberInput` with the unit in the label (`TTL in seconds`) and `min` / `max`; a `Select` or `RadioGroup` of presets (`1 hour`, `8 hours`, `7 days`) when the API takes a few | A number with no unit, or a string such as `1h30m` typed by hand          |
-| One of a closed set (an enum: status, type, region)                                                 | `RadioGroup` (up to about 5 options, with a `description` when a value needs one) or `Select`; `MultiSelect` for several; a human label per value                             | Free text for a closed set, or the raw value (`read_only`) as the label   |
-| A reference to another resource (`organization_id`, `assignee_id`, `plan_id`, `team_ids`)           | A searchable resource picker (below): name first, the ID only as secondary text                                                                                               | An `Input` that asks for the ID, a label that says `Organization ID`      |
-| Money                                                                                               | `NumberInput` with the currency in the label (`Monthly limit in USD`) and `min`; convert minor units for display and back before sending                                      | A string with a currency sign the API must parse                          |
-| A percentage                                                                                        | `NumberInput` with `:min="0"` `:max="100"` and `%` in the label                                                                                                               | A fraction (`0.15`) the person has to convert                             |
-| A code, key or slug the person creates                                                              | `Input` with the rule in `Field.Description` (`Lowercase letters, digits and _, 3 to 40 characters`), filled from the name until edited                                       | A rule the person learns only from the error                              |
-| A boolean                                                                                           | `Switch` for a setting that applies at once or on save, `Checkbox` for consent or one item of a set                                                                           | A `Select` with `true` / `false`                                          |
-| Structured data with a known shape (headers, key–value pairs, tiers, tags, a map of locale to text) | `AttributeEditor` (rows of fields), `TagEditor` (a list of values), or `SchemaForm` when you hold the JSON Schema                                                             | A JSON `Textarea`; keep raw JSON for an open-ended schema, under Advanced |
-
-Two more rules hold for every row:
-
-- **Label the thing, not its storage.** The label is `Organization`, `Assignee`, `Expires`; the API
-  field name (`organization_id`, `expires_at`) never reaches the screen. The description says what
-  the value is for, with a concrete example.
-- **Bounds come from the rule.** An expiry is in the future (`:min`), a period is no longer than the
-  API allows (`:max-duration`), a percentage stops at 100. Set them on the control so an invalid value
-  cannot be picked, and still validate on submit.
-
 ### Dates and times
 
-`DatePicker` (`@aziontech/webkit/date-picker-root`) binds a `Date` (or `null`). With `show-time` the
-panel adds a time field, so the value is an instant; send it with `toISOString()` (RFC 3339, UTC) and
-show it in the person's time zone. A date with no time is a calendar day: send its local parts, never
-`toISOString()`, which moves the day across zones.
+With `show-time` the value is an instant: send it with `toISOString()` (RFC 3339, UTC), as above. A
+date with no time is a calendar day: send its local parts, never `toISOString()`, which moves the day
+across zones.
 
 ```vue
 <script setup lang="ts">
@@ -262,11 +218,8 @@ show it in the person's time zone. A date with no time is a calendar day: send i
   import Field from '@aziontech/webkit/field'
   import { ref } from 'vue'
 
-  const props = defineProps<{ today: Date }>()
-  const expires = ref<Date | null>(null)
   const due = ref<Date | null>(null)
 
-  const instant = (value: Date | null) => value?.toISOString() ?? null
   const calendarDay = (value: Date | null) =>
     value
       ? [
@@ -275,19 +228,10 @@ show it in the person's time zone. A date with no time is a calendar day: send i
           String(value.getDate()).padStart(2, '0')
         ].join('-')
       : null
-  // body: { expires_at: instant(expires.value), due_date: calendarDay(due.value) }
+  // body: { due_date: calendarDay(due.value) }
 </script>
 
 <template>
-  <Field required>
-    <Field.Label>Expires</Field.Label>
-    <DatePickerRoot
-      v-model="expires"
-      show-time
-      :min="props.today"
-    />
-    <Field.Description>The key stops working at this time, in your time zone.</Field.Description>
-  </Field>
   <Field>
     <Field.Label>Due date</Field.Label>
     <DatePickerRoot v-model="due" />
@@ -529,12 +473,35 @@ owns the cell recipes.
 - **Don't:** put a format in the placeholder (`YYYY-MM-DD`, `org_…`) as the only guidance; the
   right control makes the format disappear.
 
-The consumer lint backs this section: `webkit/prefer-date-picker` warns on a text field that holds a
-date or time (key `*_at` / `*At` / `*date` / `*time`, a date-format placeholder, a date label), and
+The consumer lint backs this section beyond `prefer-value-control`: `webkit/prefer-date-picker` warns on a text field that holds a
+date or time by its key (`*_at` / `*At` / `*date` / `*time`) or label (`Start date`), or a `Textarea` or native input with a date format, and
 `webkit/no-raw-id-input` on one that asks for an ID (key `*_id` / `*Id`, a label ending in `ID`, an
 opaque identifier as placeholder). An identifier from another system that people copy in (a tax ID,
 an OAuth client ID) is the one legitimate text field for an ID; the rule skips those names, and a
 `readonly` field that only shows an ID.
+
+## Label association — every control names itself (both approaches)
+
+The one non-negotiable both layouts share: every control has a **programmatic accessible name**, its
+error is **tied to it**, and related controls are **grouped** — so a screen reader announces the field,
+its state, and the group it belongs to. The mechanics differ per approach, the contract does not:
+
+- **A real label, never a placeholder.** Approach B (and a composed `Select`) wires a real `<label for>`
+  to the control `id` — a `Field.Label` inside a `Field` does it for you (a `Select` inside a `Field`
+  gets the id on its trigger); a `Field.Label` set apart from its control points `for` at
+  `Select.Trigger`'s `id` (labelling the wrapper labels nothing). Approach A (ItemGroup) uses
+  `Item.Title` as the field name and gives the control an `aria-label`. A placeholder is **never** the
+  label — it disappears on input and is not a reliable accessible name.
+- **Errors associated via `aria-describedby`.** The message carries an `id` and the control points
+  `aria-describedby` at it, so it is announced when focus lands; `required` / `:invalid` set
+  `aria-required` / `aria-invalid` — don't hand-roll them. Inside a `Field`, `Field.Description` /
+  `Field.Error` register themselves and the control is described by them automatically; in an ItemGroup
+  you set `aria-describedby` on the control and the `id` on the `<FieldError>` yourself.
+- **Groups in `<fieldset>` + `<legend>`.** Each section is a native `<fieldset>` with a `<legend>`
+  (`sr-only` when a visible title already names it); a radio/checkbox set is its own `<fieldset>` whose
+  `<legend>` is the question.
+
+The sections below show each mechanism in place; this is the contract they satisfy.
 
 ## Form Layout — the spacing reference
 
@@ -1585,7 +1552,7 @@ End with: `form is accessible` or `N gaps — fix before polish`.
       for the Card-with-independent-saves type.
 - [ ] Every field that needs another resource offers `Create <noun>` when it may not exist yet; the
       drawer creates it and selects it back, so the reader never leaves the form to create it.
-- [ ] Every control matches the type of its value (Control by data type): instants in a `DatePicker`
+- [ ] Every control matches the type of its value (Pick the control from the kind of value): instants in a `DatePicker`
       with `show-time`, dates in a `DatePicker`, periods in one `DateRangePicker`, enums in a
       `RadioGroup` or `Select` with human labels, references to other resources in a searchable picker
       labelled with the thing (never an `Input` asking for an ID), money and percentages in a
