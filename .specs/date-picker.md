@@ -8,16 +8,16 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5087-17336
   node_id: 5087:17336
-checksum: 731a5a4a79fd5a9afd42c760a86c468ad38ffd8aa9f8a72ac33f1dc5bca25c2d
+checksum: 8d6324278f4bac33e6d910aa042fe7db06962e8c83124802168cfd5c9c92d0da
 created: 2026-06-25
-last_updated: 2026-11-19
+last_updated: 2026-11-21
 ---
 
 # DatePicker — Component Spec
 
 ## Purpose
 
-DatePicker picks **one date**, optionally with a time, in a form field. A trigger button opens a popover that holds a month grid, a typed date field (and a time field with `showTime`), an optional footer and an Apply action. The selection is staged in a draft inside the popover and committed to `v-model` only on Apply (or immediately when `show-apply` is false). Date math uses the native `Date` API only — no date library; the trigger formats the value with `Intl` in `v-model:time-zone` (the local zone when empty). Before 6.0 this component was `Calendar` and also picked ranges, periods and presets; every range — relative or absolute, with or without times — now belongs to `date-range-picker`, which reuses this component's month grid and fields as internal parts. The name follows Cloudscape DatePicker and the shadcn "Date Picker".
+DatePicker picks **one date**, optionally with a time, in a form field. A trigger button opens a popover that holds a month grid, a typed date field (and a time field with `showTime`), an optional footer and an Apply action. The selection is staged in a draft inside the popover and committed to `v-model` only on Apply (or immediately when `show-apply` is false). Date math uses the native `Date` API only — no date library; the trigger formats the value with `Intl` in `v-model:time-zone` (the local zone when empty), and the panel shows and edits it in that zone too: the grid, the date and time fields and the `min` / `max` bounds are wall-clock time there, and `v-model` stays the instant. Before 6.0 this component was `Calendar` and also picked ranges, periods and presets; every range — relative or absolute, with or without times — now belongs to `date-range-picker`, which reuses this component's month grid and fields as internal parts. The name follows Cloudscape DatePicker and the shadcn "Date Picker".
 
 ## When to use
 
@@ -115,11 +115,11 @@ Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `par
 
 ## v-model
 
-| Model               | Type           | Default     | Emits               | Notes                                                                                                                                                      |
-| ------------------- | -------------- | ----------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model`           | `Date \| null` | `null`      | `update:modelValue` | The committed date via `defineModel`; `null` on clear. Only updated on Apply (or immediately when `showApply` is false). Uncontrolled when unbound.        |
-| `v-model:open`      | `boolean`      | `undefined` | `update:open`       | Open state of the popover via `defineModel`. Fires when the popover opens or closes. Unbound, the popover keeps its own state and starts at `defaultOpen`. |
-| `v-model:time-zone` | `string`       | `''`        | `update:timeZone`   | IANA time zone the trigger formats the value in, via `defineModel('timeZone')`. Empty resolves to the local zone. Same name as on `date-range-picker`.     |
+| Model               | Type           | Default     | Emits               | Notes                                                                                                                                                                                                                                                                                       |
+| ------------------- | -------------- | ----------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model`           | `Date \| null` | `null`      | `update:modelValue` | The committed date via `defineModel`; `null` on clear. Only updated on Apply (or immediately when `showApply` is false). Uncontrolled when unbound.                                                                                                                                         |
+| `v-model:open`      | `boolean`      | `undefined` | `update:open`       | Open state of the popover via `defineModel`. Fires when the popover opens or closes. Unbound, the popover keeps its own state and starts at `defaultOpen`.                                                                                                                                  |
+| `v-model:time-zone` | `string`       | `''`        | `update:timeZone`   | IANA time zone the value is shown and picked in, via `defineModel('timeZone')`: the trigger formats in it, and the grid, the fields and `min` / `max` are its wall-clock time, so picking 16:00 commits 16:00 there. Empty resolves to the local zone. Same name as on `date-range-picker`. |
 
 **Booleans that default to true.** `showFields` and `showApply` default to `true`: they switch off parts of the default panel. Inverting them (`hideFields`, `instant`) would break every consumer, so they are recorded here as the exceptions to props.md's default-false rule.
 

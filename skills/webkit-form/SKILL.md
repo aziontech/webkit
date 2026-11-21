@@ -210,7 +210,10 @@ only at submit and loses the keyboard, locale and time zone handling the real co
 
 With `show-time` the value is an instant: send it with `toISOString()` (RFC 3339, UTC), as above. A
 date with no time is a calendar day: send its local parts, never `toISOString()`, which moves the day
-across zones.
+across zones. To pick in a zone that is not the browser's (the person's saved zone, the zone a
+schedule runs in), bind `v-model:time-zone`: the trigger, the grid, the time field and `min` / `max`
+all read in that zone while `v-model` stays the same instant. Name the zone beside the field (an
+`abbr` with the zone id as its `title`, or a Time zone `Select`), as `DateRangePicker` asks of the page.
 
 ```vue
 <script setup lang="ts">
