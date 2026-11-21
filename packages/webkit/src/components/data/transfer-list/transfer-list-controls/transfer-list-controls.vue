@@ -21,6 +21,11 @@
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'transfer-list-controls'
   )
+
+  const CONTROL_CLASS =
+    'inline-flex size-10 shrink-0 items-center justify-center rounded-(--shape-control) text-(--text-default) transition-colors duration-150 ease-out ' +
+    'motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 ' +
+    'focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:text-(--text-disabled)'
 </script>
 
 <template>
@@ -34,7 +39,7 @@
       :disabled="ctx.disabled.value || ctx.anyLoading.value || !ctx.hasSelection('source')"
       :aria-label="t('transferList.moveSelectedToTarget')"
       :data-testid="`${testId}__move-to-target`"
-      class="inline-flex size-10 shrink-0 items-center justify-center rounded-(--shape-control) text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
+      :class="CONTROL_CLASS"
       @click="ctx.move($event, 'to-target')"
     >
       <svg
@@ -56,7 +61,7 @@
       :disabled="ctx.disabled.value || ctx.anyLoading.value || ctx.count('source') === 0"
       :aria-label="t('transferList.moveAllToTarget')"
       :data-testid="`${testId}__move-all-to-target`"
-      class="inline-flex size-10 shrink-0 items-center justify-center rounded-(--shape-control) text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
+      :class="CONTROL_CLASS"
       @click="ctx.moveAll($event, 'to-target')"
     >
       <svg
@@ -79,7 +84,7 @@
       :disabled="ctx.disabled.value || ctx.anyLoading.value || !ctx.hasSelection('target')"
       :aria-label="t('transferList.moveSelectedToSource')"
       :data-testid="`${testId}__move-to-source`"
-      class="inline-flex size-10 shrink-0 items-center justify-center rounded-(--shape-control) text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
+      :class="CONTROL_CLASS"
       @click="ctx.move($event, 'to-source')"
     >
       <svg
@@ -101,7 +106,7 @@
       :disabled="ctx.disabled.value || ctx.anyLoading.value || ctx.count('target') === 0"
       :aria-label="t('transferList.moveAllToSource')"
       :data-testid="`${testId}__move-all-to-source`"
-      class="inline-flex size-10 shrink-0 items-center justify-center rounded-(--shape-control) text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
+      :class="CONTROL_CLASS"
       @click="ctx.moveAll($event, 'to-source')"
     >
       <svg

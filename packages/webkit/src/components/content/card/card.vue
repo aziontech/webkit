@@ -45,6 +45,11 @@
     hasHeaderSlot() || hasHeaderActionsSlot() || Boolean(props.title?.trim())
 
   const showDefaultHeader = () => showHeaderRegion() && !hasHeaderSlot()
+
+  const HEADER_CLASS =
+    'group flex min-h-14 shrink-0 items-center justify-between gap-(--spacing-xs) border-b border-(--border-default) ' +
+    '[&:has(+:empty:not([data-padded]))]:border-b-0 ' +
+    'px-(--spacing-md) py-(--spacing-sm)'
 </script>
 
 <template>
@@ -60,7 +65,7 @@
   >
     <header
       v-if="showHeaderRegion()"
-      class="group flex min-h-14 shrink-0 items-center justify-between gap-(--spacing-xs) border-b border-(--border-default) [&:has(+:empty:not([data-padded]))]:border-b-0 px-(--spacing-md) py-(--spacing-sm)"
+      :class="HEADER_CLASS"
       :data-testid="`${testId}__header`"
     >
       <slot

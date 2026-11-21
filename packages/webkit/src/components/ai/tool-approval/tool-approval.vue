@@ -124,6 +124,14 @@
   }
 
   defineExpose({ focus })
+
+  const ROOT_CLASS =
+    'flex w-full flex-col gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md) ' +
+    'data-[variant=danger]:data-[status=pending]:border-(--danger-border)'
+
+  const PHRASE_CLASS =
+    'h-8 w-full rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-body-sm ' +
+    'pointer-coarse:text-body-md text-(--text-default) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) disabled:bg-(--bg-disabled)'
 </script>
 
 <template>
@@ -135,7 +143,7 @@
     :data-testid="testId"
     :data-status="status"
     :data-variant="variant"
-    class="flex w-full flex-col gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md) data-[variant=danger]:data-[status=pending]:border-(--danger-border)"
+    :class="ROOT_CLASS"
   >
     <div class="flex items-start gap-(--spacing-sm)">
       <i
@@ -221,7 +229,7 @@
           spellcheck="false"
           :disabled="loading"
           :data-testid="`${testId}__phrase`"
-          class="h-8 w-full rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-body-sm pointer-coarse:text-body-md text-(--text-default) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) disabled:bg-(--bg-disabled)"
+          :class="PHRASE_CLASS"
         />
       </div>
       <div class="flex flex-wrap justify-end gap-(--spacing-xs)">

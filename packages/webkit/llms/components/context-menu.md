@@ -129,6 +129,10 @@ No built-in strings: item labels and the panel's `aria-label` come from the cons
   const onSelect = (event, value) => {
     last.value = `${value} · ${target.value}`
   }
+
+  const RESOURCE_ROW_CLASS =
+    'flex h-10 items-center border-b border-(--border-default) px-(--spacing-md) text-body-sm text-(--text-default) outline-none ' +
+    'last:border-b-0 focus-visible:ring-2 focus-visible:ring-(--ring-color)'
 </script>
 
 <template>
@@ -145,7 +149,7 @@ No built-in strings: item labels and the panel's `aria-label` come from the cons
             v-for="name in resources"
             :key="name"
             tabindex="0"
-            class="flex h-10 items-center border-b border-(--border-default) px-(--spacing-md) text-body-sm text-(--text-default) outline-none last:border-b-0 focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+            :class="RESOURCE_ROW_CLASS"
             @contextmenu="target = name"
             @focus="target = name"
           >

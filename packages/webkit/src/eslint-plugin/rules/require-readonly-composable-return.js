@@ -123,7 +123,9 @@ export default {
     type: 'problem',
     docs: {
       description:
-        'An exported composable returns read-only state: no reactive() object, no raw ref(), and an explicit return type in TypeScript (see the webkit-composables rule shipped by `npx @aziontech/webkit init`).'
+        'An exported composable returns read-only state: no reactive() object, no raw ref(), and ' +
+        'an explicit return type in TypeScript (see the webkit-composables rule shipped by `npx ' +
+        '@aziontech/webkit init`).'
     },
     schema: [],
     messages: {

@@ -40,7 +40,11 @@
     title?: string
     /** Supporting sentence under the headline. */
     description?: string
-    /** The tiles rendered as frame cells, in order; each is `{ title, description, illustration?, scale? }` where `illustration` is a registry name drawn fluid above the caption, and `scale` its media scale. */
+    /**
+     * The tiles rendered as frame cells, in order; each is `{ title, description, illustration?,
+     * scale? }` where `illustration` is a registry name drawn fluid above the caption, and
+     * `scale` its media scale.
+     */
     tiles?: FeatureTilesSectionTile[]
   }
 

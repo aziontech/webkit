@@ -28,7 +28,11 @@
     sideOffset?: number
     /** Prevents the trigger from opening the panel and applies disabled tokens. */
     disabled?: boolean
-    /** Panel width preset mapped to container tokens: `'small'` (`--container-xs`), `'medium'` (`--container-sm`), `'large'` (`--container-md`). When omitted, the panel sizes fluidly between `--container-3xs` and `--container-xs`. */
+    /**
+     * Panel width preset mapped to container tokens: `'small'` (`--container-xs`), `'medium'`
+     * (`--container-sm`), `'large'` (`--container-md`). When omitted, the panel sizes fluidly between
+     * `--container-3xs` and `--container-xs`.
+     */
     size?: PopoverSize
     /** Initial open state when uncontrolled. */
     defaultOpen?: boolean

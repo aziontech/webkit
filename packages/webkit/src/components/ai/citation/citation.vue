@@ -16,7 +16,11 @@
     index: number
     /** Title of the source, shown in the tooltip and read in the accessible name. */
     title?: string
-    /** Where the reference points: `#<anchor>-source-<n>` for the `Sources` list under the response, or the source URL. Without it, or when it is not a safe URL (javascript, data and other script schemes), the number is plain text. */
+    /**
+     * Where the reference points: `#<anchor>-source-<n>` for the `Sources` list under the response,
+     * or the source URL. Without it, or when it is not a safe URL (javascript, data and other
+     * script schemes), the number is plain text.
+     */
     href?: string
   }
 
@@ -36,6 +40,11 @@
   )
   const linkHref = computed<string | null>(() => safeHref(props.href))
   const external = computed<boolean>(() => /^https?:\/\//i.test(linkHref.value ?? ''))
+
+  const LINK_CLASS =
+    'mx-0.5 inline-flex min-w-4 items-center justify-center rounded-(--shape-control) bg-(--bg-surface-raised) px-1 align-super text-label-sm leading-none text-(--text-link) ' +
+    'no-underline transition-colors duration-fast-02 ease-productive-entrance ' +
+    'motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)'
 </script>
 
 <template>
@@ -51,7 +60,7 @@
       :rel="external ? 'noopener noreferrer' : undefined"
       :aria-label="label"
       :data-testid="testId"
-      class="mx-0.5 inline-flex min-w-4 items-center justify-center rounded-(--shape-control) bg-(--bg-surface-raised) px-1 align-super text-label-sm leading-none text-(--text-link) no-underline transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+      :class="LINK_CLASS"
     >
       {{ index }}
     </a>

@@ -384,6 +384,11 @@ jobs:
   const steps = computed(() =>
     path.value === 'actions' ? ACTIONS_STEPS : cliSteps(props.getStarted)
   )
+
+  const DOCS_LINK_CLASS =
+    'rounded-(--shape-button) text-(--text-link) underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance ' +
+    'hover:text-(--text-link-hover) underline hover:decoration-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 ' +
+    'focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none'
 </script>
 
 <template>
@@ -596,7 +601,7 @@ jobs:
                     href="https://example.com/docs/cli"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="rounded-(--shape-button) text-(--text-link) underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-link-hover) underline hover:decoration-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
+                    :class="DOCS_LINK_CLASS"
                     >CLI docs</a
                   >.
                 </template>

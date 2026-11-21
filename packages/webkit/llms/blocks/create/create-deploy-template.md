@@ -275,6 +275,11 @@ Each variant is the same screen in another state: `get_block("create/create-depl
       ? `${currentTemplate.value.name} is cloned into a repository in your account, then deployed to ${props.service} on every push.`
       : `${currentTemplate.value.name} is cloned into a repository in your account, then deployed from it on every push.`
   )
+
+  const ACCOUNT_BUTTON_CLASS =
+    'rounded-full transition-opacity duration-fast-02 ease-productive-entrance ' +
+    'hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -305,7 +310,7 @@ Each variant is the same screen in another state: `get_block("create/create-depl
           type="button"
           aria-label="Account settings"
           @click="(event: MouseEvent) => emit('account', event)"
-          class="rounded-full transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
+          :class="ACCOUNT_BUTTON_CLASS"
         >
           <Avatar
             :label="currentAccount"

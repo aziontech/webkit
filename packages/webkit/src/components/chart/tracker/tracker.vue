@@ -141,6 +141,23 @@
   function onPointerleave() {
     setActiveIndex(null)
   }
+
+  const ERROR_CLASS =
+    'flex h-8 items-center gap-(--spacing-xs) rounded-(--shape-control) border border-(--danger-border) bg-(--danger) px-(--spacing-sm) text-label-sm text-(--danger-foreground) ' +
+    'forced-color-adjust-none'
+
+  const READOUT_CLASS =
+    'pointer-events-none absolute bottom-full mb-(--spacing-xs) w-max max-w-(--container-3xs) rounded-(--shape-control) border border-(--chart-tooltip-border) bg-(--chart-tooltip-bg) ' +
+    'px-(--spacing-sm) py-(--spacing-xs) text-label-md text-(--chart-tooltip-text) opacity-0 shadow-(--shadow-sm) transition-opacity duration-fast-02 ease-productive-entrance ' +
+    'data-[moving]:transition-[translate,opacity] ' +
+    'data-[state=open]:opacity-100 ' +
+    'motion-reduce:transition-none motion-reduce:data-[moving]:transition-none'
+
+  const BLOCK_CLASS =
+    'h-full min-w-0 flex-1 bg-(--tracker-block) forced-color-adjust-none transition-opacity duration-fast-02 ease-productive-entrance ' +
+    'first:rounded-s-(--shape-control) last:rounded-e-(--shape-control) ' +
+    'data-[dimmed]:opacity-40 ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -169,7 +186,7 @@
       v-else-if="hasError"
       role="alert"
       :data-testid="`${testId}__error`"
-      class="flex h-8 items-center gap-(--spacing-xs) rounded-(--shape-control) border border-(--danger-border) bg-(--danger) px-(--spacing-sm) text-label-sm text-(--danger-foreground) forced-color-adjust-none"
+      :class="ERROR_CLASS"
     >
       <i
         class="az az-triangle-alert shrink-0"
@@ -185,7 +202,7 @@
         :data-moving="moving || null"
         aria-hidden="true"
         :style="{ left: 0, translate: readout.translate }"
-        class="pointer-events-none absolute bottom-full mb-(--spacing-xs) w-max max-w-(--container-3xs) rounded-(--shape-control) border border-(--chart-tooltip-border) bg-(--chart-tooltip-bg) px-(--spacing-sm) py-(--spacing-xs) text-label-md text-(--chart-tooltip-text) opacity-0 shadow-(--shadow-sm) transition-opacity duration-fast-02 ease-productive-entrance data-[moving]:transition-[translate,opacity] data-[state=open]:opacity-100 motion-reduce:transition-none motion-reduce:data-[moving]:transition-none"
+        :class="READOUT_CLASS"
       >
         {{ readout.label }}
       </div>
@@ -204,7 +221,7 @@
           :data-active="(activeIndex !== null && index === activeIndex) || null"
           :data-dimmed="(activeIndex !== null && index !== activeIndex) || null"
           :style="{ '--tracker-block': block.color }"
-          class="h-full min-w-0 flex-1 bg-(--tracker-block) forced-color-adjust-none transition-opacity duration-fast-02 ease-productive-entrance first:rounded-s-(--shape-control) last:rounded-e-(--shape-control) data-[dimmed]:opacity-40 motion-reduce:transition-none"
+          :class="BLOCK_CLASS"
         />
       </div>
     </template>

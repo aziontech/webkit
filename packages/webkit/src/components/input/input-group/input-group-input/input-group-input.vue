@@ -61,6 +61,10 @@
   const onInput = (event: globalThis.Event) => {
     model.value = (event.target as globalThis.HTMLInputElement).value
   }
+
+  const ROOT_CLASS =
+    'h-full w-full min-w-0 flex-1 border-0 bg-transparent px-(--spacing-sm) text-label-sm ' +
+    'pointer-coarse:text-body-md text-(--text-default) outline-none placeholder:text-(--text-muted) focus:ring-0 disabled:cursor-not-allowed disabled:text-(--text-disabled)'
 </script>
 
 <template>
@@ -78,7 +82,7 @@
     :aria-required="isRequired || undefined"
     :data-testid="testId"
     v-bind="{ ...autofillHints, ...$attrs }"
-    class="h-full w-full min-w-0 flex-1 border-0 bg-transparent px-(--spacing-sm) text-label-sm pointer-coarse:text-body-md text-(--text-default) outline-none placeholder:text-(--text-muted) focus:ring-0 disabled:cursor-not-allowed disabled:text-(--text-disabled)"
+    :class="ROOT_CLASS"
     @input="onInput"
   />
 </template>

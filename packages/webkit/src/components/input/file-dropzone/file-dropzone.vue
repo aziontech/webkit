@@ -189,6 +189,24 @@
     if (!isOverlayLive.value || event.key !== 'Escape') return
     depth.value = 0
   }
+
+  const ROOT_CLASS =
+    'group flex flex-col rounded-(--shape-card) ' +
+    'data-[variant=inline]:w-full data-[variant=inline]:border data-[variant=inline]:border-dashed data-[variant=inline]:border-(--border-input) ' +
+    'data-[variant=inline]:data-[state=idle]:not-data-[disabled]:hover:border-(--border-strong) data-[variant=inline]:bg-(--bg-surface) data-[variant=inline]:p-(--spacing-lg) ' +
+    'data-[variant=inline]:transition-[background-color,border-color] data-[variant=inline]:duration-fast-02 data-[variant=inline]:ease-productive-entrance ' +
+    'motion-reduce:transition-none ' +
+    'data-[variant=inline]:data-[state=active]:border-(--border-selected) data-[variant=inline]:data-[state=active]:bg-(--bg-selected) ' +
+    'data-[variant=inline]:data-[state=idle]:data-[invalid]:not-data-[disabled]:border-(--danger-border) data-[variant=inline]:data-[disabled]:border-(--border-default) ' +
+    'data-[variant=inline]:data-[disabled]:bg-(--bg-disabled) ' +
+    'data-[disabled]:cursor-not-allowed ' +
+    'data-[variant=overlay]:absolute data-[variant=overlay]:inset-0 data-[variant=overlay]:border-2 data-[variant=overlay]:border-dashed ' +
+    'data-[variant=overlay]:border-(--border-selected) data-[variant=overlay]:bg-(--bg-canvas) data-[variant=overlay]:data-[state=idle]:pointer-events-none'
+
+  const PROMPT_CLASS =
+    'flex w-full flex-col items-center justify-center gap-(--spacing-md) text-center ' +
+    'group-data-[variant=overlay]:sticky group-data-[variant=overlay]:top-0 group-data-[variant=overlay]:h-dvh group-data-[variant=overlay]:max-h-full ' +
+    'group-data-[variant=overlay]:p-(--spacing-lg)'
 </script>
 
 <template>
@@ -211,15 +229,13 @@
       :aria-labelledby="isInline ? labelIds : undefined"
       :aria-describedby="isInline ? descriptionIds : undefined"
       :aria-hidden="isInline ? undefined : 'true'"
-      class="group flex flex-col rounded-(--shape-card) data-[variant=inline]:w-full data-[variant=inline]:border data-[variant=inline]:border-dashed data-[variant=inline]:border-(--border-input) data-[variant=inline]:data-[state=idle]:not-data-[disabled]:hover:border-(--border-strong) data-[variant=inline]:bg-(--bg-surface) data-[variant=inline]:p-(--spacing-lg) data-[variant=inline]:transition-[background-color,border-color] data-[variant=inline]:duration-fast-02 data-[variant=inline]:ease-productive-entrance motion-reduce:transition-none data-[variant=inline]:data-[state=active]:border-(--border-selected) data-[variant=inline]:data-[state=active]:bg-(--bg-selected) data-[variant=inline]:data-[state=idle]:data-[invalid]:not-data-[disabled]:border-(--danger-border) data-[variant=inline]:data-[disabled]:border-(--border-default) data-[variant=inline]:data-[disabled]:bg-(--bg-disabled) data-[disabled]:cursor-not-allowed data-[variant=overlay]:absolute data-[variant=overlay]:inset-0 data-[variant=overlay]:border-2 data-[variant=overlay]:border-dashed data-[variant=overlay]:border-(--border-selected) data-[variant=overlay]:bg-(--bg-canvas) data-[variant=overlay]:data-[state=idle]:pointer-events-none"
+      :class="ROOT_CLASS"
       @dragenter="onRootDragenter"
       @dragleave="onRootDragleave"
       @dragover="onRootDragover"
       @drop="onRootDrop"
     >
-      <div
-        class="flex w-full flex-col items-center justify-center gap-(--spacing-md) text-center group-data-[variant=overlay]:sticky group-data-[variant=overlay]:top-0 group-data-[variant=overlay]:h-dvh group-data-[variant=overlay]:max-h-full group-data-[variant=overlay]:p-(--spacing-lg)"
-      >
+      <div :class="PROMPT_CLASS">
         <span
           class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised)"
           aria-hidden="true"

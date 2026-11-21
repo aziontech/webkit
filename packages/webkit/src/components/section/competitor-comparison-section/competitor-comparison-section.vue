@@ -75,7 +75,12 @@
     partialLabel?: string
     /** Tooltip and screen-reader text of an unsupported cell. */
     noneLabel?: string
-    /** The platform compared with Azion; `{ name, logo?, logoLight?, artwork? }` where `logo` is the dark-theme file and `logoLight` the light-theme one. With only a `name`, the logo is taken from the competitor registry once the page is interactive, and the name is the column head until then or when the registry has no entry. */
+    /**
+     * The platform compared with Azion; `{ name, logo?, logoLight?, artwork? }` where `logo` is the
+     * dark-theme file and `logoLight` the light-theme one. With only a `name`, the logo is taken from the
+     * competitor registry once the page is interactive, and the name is the column head until then or when
+     * the registry has no entry.
+     */
     competitor: CompetitorComparisonSectionCompetitor
     /** The categories, in order; each is `{ title, rows }` and a row is `{ capability, definition?, azion?, competitor? }` with each level `full`, `partial` or `none` (missing reads as `none`). */
     groups?: CompetitorComparisonSectionGroup[]
@@ -142,6 +147,23 @@
 
   const isLast = (groupIndex: number, rowIndex: number) =>
     groupIndex === props.groups.length - 1 && rowIndex === props.groups[groupIndex].rows.length - 1
+
+  const CAPABILITY_HEADER_CELL_CLASS =
+    'sticky top-(--layout-sticky-top) z-20 border-b border-(--border-default) bg-(--bg-canvas) px-(--spacing-md) py-0 ' +
+    'sm:px-(--spacing-xl) text-start align-middle font-normal h-(--competitor-comparison-section-head)'
+
+  const PLATFORM_HEADER_CELL_CLASS =
+    'sticky top-(--layout-sticky-top) z-20 border-b border-s border-(--border-default) bg-(--bg-canvas) px-(--spacing-2xs) py-0 text-center align-middle font-normal ' +
+    'h-(--competitor-comparison-section-head) sm:px-(--spacing-lg)'
+
+  const GROUP_HEADER_CELL_CLASS =
+    'sticky top-[calc(3.5rem+var(--competitor-comparison-section-head))] z-10 border-b border-(--border-default) bg-(--bg-surface) px-(--spacing-md) py-(--spacing-sm) ' +
+    'sm:px-(--spacing-xl) text-start font-normal'
+
+  const ROW_HEADER_CELL_CLASS =
+    'border-b border-(--border-default) px-(--spacing-md) py-(--spacing-md) text-start align-middle text-label-md font-normal text-(--text-default) ' +
+    'group-data-[last]/row:border-b-0 ' +
+    'sm:px-(--spacing-xl)'
 </script>
 
 <template>
@@ -193,14 +215,14 @@
             <tr>
               <th
                 scope="col"
-                class="sticky top-(--layout-sticky-top) z-20 border-b border-(--border-default) bg-(--bg-canvas) px-(--spacing-md) py-0 sm:px-(--spacing-xl) text-start align-middle font-normal h-(--competitor-comparison-section-head)"
+                :class="CAPABILITY_HEADER_CELL_CLASS"
               >
                 <span class="text-overline-md text-(--text-muted)">{{ columnLabel }}</span>
               </th>
               <th
                 scope="col"
                 aria-label="Azion"
-                class="sticky top-(--layout-sticky-top) z-20 border-b border-s border-(--border-default) bg-(--bg-canvas) px-(--spacing-2xs) py-0 text-center align-middle font-normal h-(--competitor-comparison-section-head) sm:px-(--spacing-lg)"
+                :class="PLATFORM_HEADER_CELL_CLASS"
               >
                 <Brand
                   variant="default"
@@ -212,7 +234,7 @@
               <th
                 scope="col"
                 :aria-label="competitor.name"
-                class="sticky top-(--layout-sticky-top) z-20 border-b border-s border-(--border-default) bg-(--bg-canvas) px-(--spacing-2xs) py-0 text-center align-middle font-normal h-(--competitor-comparison-section-head) sm:px-(--spacing-lg)"
+                :class="PLATFORM_HEADER_CELL_CLASS"
               >
                 <ThirdPartyLogo
                   :name="competitorMark.name"
@@ -233,7 +255,7 @@
               <th
                 scope="colgroup"
                 colspan="3"
-                class="sticky top-[calc(3.5rem+var(--competitor-comparison-section-head))] z-10 border-b border-(--border-default) bg-(--bg-surface) px-(--spacing-md) py-(--spacing-sm) sm:px-(--spacing-xl) text-start font-normal"
+                :class="GROUP_HEADER_CELL_CLASS"
               >
                 <span
                   :data-testid="`${testId}__group-title`"
@@ -250,7 +272,7 @@
             >
               <th
                 scope="row"
-                class="border-b border-(--border-default) px-(--spacing-md) py-(--spacing-md) text-start align-middle text-label-md font-normal text-(--text-default) group-data-[last]/row:border-b-0 sm:px-(--spacing-xl)"
+                :class="ROW_HEADER_CELL_CLASS"
               >
                 <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                   <span class="min-w-0 text-pretty wrap-break-word">{{ item.capability }}</span>

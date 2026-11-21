@@ -114,7 +114,8 @@ export const GATES = [
   {
     id: 'quality-lint',
     label: 'No line over 200 characters in components, blocks and examples',
-    steps: [['pnpm', 'run', 'lint:quality']]
+    root: true,
+    steps: [['pnpm', '--filter', '@aziontech/webkit', 'run', 'lint:quality']]
   },
   {
     id: 'hooks',

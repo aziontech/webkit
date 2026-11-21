@@ -42,7 +42,10 @@
   export interface ArticleHighlightSectionProps {
     /** In-page id set on the band so a `#hash` link can scroll to it. */
     anchor?: string
-    /** The highlight articles in wall order, the one at the bound index (the first by default) selected on load; each is `{ key, href, image, highlightImage?, meta, title, description, readTime }`. */
+    /**
+     * The highlight articles in wall order, the one at the bound index (the first by default) selected on
+     * load; each is `{ key, href, image, highlightImage?, meta, title, description, readTime }`.
+     */
     items?: ArticleHighlightSectionItem[]
     /** Label of the button into the selected article; the button is omitted when empty. */
     actionLabel?: string
@@ -193,6 +196,36 @@
     if (key === 'ArrowLeft' || key === 'ArrowUp') pendingDirection = 'back'
     void focusTab(target)
   }
+
+  const ARTICLE_ENTER_FROM_CLASS =
+    'opacity-0 ' +
+    'group-data-[direction=forward]/panel:translate-x-(--spacing-xl) group-data-[direction=back]/panel:-translate-x-(--spacing-xl) ' +
+    'rtl:group-data-[direction=forward]/panel:-translate-x-(--spacing-xl) rtl:group-data-[direction=back]/panel:translate-x-(--spacing-xl) motion-reduce:translate-x-0'
+
+  const ARTICLE_LEAVE_TO_CLASS =
+    'opacity-0 ' +
+    'group-data-[direction=forward]/panel:-translate-x-(--spacing-xl) group-data-[direction=back]/panel:translate-x-(--spacing-xl) ' +
+    'rtl:group-data-[direction=forward]/panel:translate-x-(--spacing-xl) rtl:group-data-[direction=back]/panel:-translate-x-(--spacing-xl) motion-reduce:translate-x-0'
+
+  const ARTICLE_MEDIA_CLASS =
+    'relative block aspect-video overflow-hidden border-b border-(--border-default) bg-(--bg-canvas) ' +
+    'lg:aspect-4/3 lg:group-data-[fill]/highlight:aspect-auto lg:border-e lg:border-b-0'
+
+  const ARTICLE_COPY_CLASS =
+    'flex min-w-0 flex-col justify-center gap-(--spacing-sm) p-(--spacing-xl) transition-colors duration-fast-02 ease-productive-entrance ' +
+    'group-hover/article:bg-(--bg-surface-raised) motion-reduce:transition-none lg:p-(--spacing-2xl) lg:[@media(max-height:50rem)]:group-data-[fill]/highlight:py-(--spacing-lg)'
+
+  const ARTICLE_TITLE_LINK_CLASS =
+    "text-inherit no-underline after:absolute after:inset-0 after:content-[''] focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-inset " +
+    'focus-visible:after:ring-(--ring-color)'
+
+  const TAB_CLASS =
+    'relative isolate flex h-full w-full cursor-pointer flex-col items-start gap-(--spacing-xs) p-(--spacing-lg) text-start transition-colors duration-moderate-01 ease-out ' +
+    'before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:bg-(--bg-hover) before:opacity-0 before:transition-opacity before:duration-fast-02 ' +
+    "before:ease-productive-entrance before:content-[''] hover:before:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset " +
+    'focus-visible:ring-(--ring-color) ' +
+    'data-[active]:bg-(--bg-selected) data-[active]:before:hidden ' +
+    'motion-reduce:transition-none motion-reduce:before:transition-none'
 </script>
 
 <template>
@@ -272,17 +305,15 @@
               <Transition
                 mode="out-in"
                 enter-active-class="transition-[translate,opacity] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
-                enter-from-class="opacity-0 group-data-[direction=forward]/panel:translate-x-(--spacing-xl) group-data-[direction=back]/panel:-translate-x-(--spacing-xl) rtl:group-data-[direction=forward]/panel:-translate-x-(--spacing-xl) rtl:group-data-[direction=back]/panel:translate-x-(--spacing-xl) motion-reduce:translate-x-0"
+                :enter-from-class="ARTICLE_ENTER_FROM_CLASS"
                 leave-active-class="pointer-events-none transition-[translate,opacity] duration-moderate-01 ease-productive-exit motion-reduce:transition-none"
-                leave-to-class="opacity-0 group-data-[direction=forward]/panel:-translate-x-(--spacing-xl) group-data-[direction=back]/panel:translate-x-(--spacing-xl) rtl:group-data-[direction=forward]/panel:translate-x-(--spacing-xl) rtl:group-data-[direction=back]/panel:-translate-x-(--spacing-xl) motion-reduce:translate-x-0"
+                :leave-to-class="ARTICLE_LEAVE_TO_CLASS"
               >
                 <article
                   :key="current.key"
                   class="group/article relative grid min-w-0 lg:grid-cols-2"
                 >
-                  <div
-                    class="relative block aspect-video overflow-hidden border-b border-(--border-default) bg-(--bg-canvas) lg:aspect-4/3 lg:group-data-[fill]/highlight:aspect-auto lg:border-e lg:border-b-0"
-                  >
+                  <div :class="ARTICLE_MEDIA_CLASS">
                     <img
                       :src="current.highlightImage || current.image"
                       alt=""
@@ -290,14 +321,12 @@
                       class="absolute inset-0 size-full object-cover transition-[scale] duration-moderate-02 ease-productive-entrance group-hover/article:scale-105 motion-reduce:transition-none"
                     />
                   </div>
-                  <div
-                    class="flex min-w-0 flex-col justify-center gap-(--spacing-sm) p-(--spacing-xl) transition-colors duration-fast-02 ease-productive-entrance group-hover/article:bg-(--bg-surface-raised) motion-reduce:transition-none lg:p-(--spacing-2xl) lg:[@media(max-height:50rem)]:group-data-[fill]/highlight:py-(--spacing-lg)"
-                  >
+                  <div :class="ARTICLE_COPY_CLASS">
                     <span class="text-overline-sm text-(--text-muted)">{{ current.meta }}</span>
                     <h2 class="m-0 text-balance text-heading-lg text-(--text-default)">
                       <a
                         :href="safeHref(current.href) ?? undefined"
-                        class="text-inherit no-underline after:absolute after:inset-0 after:content-[''] focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-(--ring-color)"
+                        :class="ARTICLE_TITLE_LINK_CLASS"
                       >
                         {{ current.title }}
                       </a>
@@ -357,7 +386,7 @@
                   :aria-controls="panelId"
                   :tabindex="index === selected ? 0 : -1"
                   :data-active="index === selected || undefined"
-                  class="relative isolate flex h-full w-full cursor-pointer flex-col items-start gap-(--spacing-xs) p-(--spacing-lg) text-start transition-colors duration-moderate-01 ease-out before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:bg-(--bg-hover) before:opacity-0 before:transition-opacity before:duration-fast-02 before:ease-productive-entrance before:content-[''] hover:before:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) data-[active]:bg-(--bg-selected) data-[active]:before:hidden motion-reduce:transition-none motion-reduce:before:transition-none"
+                  :class="TAB_CLASS"
                   @click="select(index)"
                   @keydown="onKeydown($event, index)"
                 >

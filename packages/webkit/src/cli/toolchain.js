@@ -10,7 +10,9 @@ export const VUE_TSC_BROKEN = {
   '3.3.12': DOUBLE_SLASH_SCOPE,
   '3.3.13': DOUBLE_SLASH_SCOPE,
   '3.3.14':
-    'a static attribute containing "//" on a component drops a surrounding v-for scope and types later template expressions as refs ("Property \'value\' does not exist"); vuejs/language-tools#6240, #6322'
+    'a static attribute containing "//" on a component drops a surrounding v-for scope and types ' +
+    'later template expressions as refs ("Property \'value\' does not exist"); ' +
+    'vuejs/language-tools#6240, #6322'
 }
 
 const parse = (version) => {

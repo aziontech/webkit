@@ -98,10 +98,17 @@ export function walkTemplate(ast) {
   return { tags, classes, attrs }
 }
 
+const CLASS_CONSTANT = /const [A-Z0-9_]*CLASS\b[^=\n]*=((?:\s*(?:'[^'\n]*'|"[^"\n]*")\s*\+?)+)/g
+const STRING_PIECE = /'([^'\n]*)'|"([^"\n]*)"/g
+
 function scriptClasses(script) {
   const out = new Set()
   for (const [, lit] of script.matchAll(/'([^'\n]{40,})'/g)) {
     if (/\b(flex|inline-flex|rounded|bg-|text-|data-\[)/.test(lit)) splitClasses(lit, out)
+  }
+  for (const [, body] of script.matchAll(CLASS_CONSTANT)) {
+    for (const [, single, double] of body.matchAll(STRING_PIECE))
+      splitClasses(single ?? double, out)
   }
   return out
 }

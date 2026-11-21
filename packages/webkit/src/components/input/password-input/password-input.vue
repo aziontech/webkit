@@ -106,6 +106,15 @@
     /** Moves focus to the native field. */
     focus: (): void => inputEl.value?.focus()
   })
+
+  const INPUT_CLASS =
+    'relative z-(--z-control) w-full min-w-0 border-0 bg-transparent py-0 pe-0 ps-(--spacing-md) ' +
+    'group-data-[leading]:ps-0 ' +
+    'outline-none text-label-sm ' +
+    'group-data-[monospace]:text-label-code-sm ' +
+    'pointer-coarse:text-body-md pointer-coarse:group-data-[monospace]:text-label-code-lg ' +
+    'text-(--text-default) placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled) read-only:cursor-default ' +
+    'transition-opacity duration-150 ease-out motion-reduce:transition-none'
 </script>
 
 <template>
@@ -127,7 +136,8 @@
       '[&:not(:focus-within):not([data-disabled])]:hover:border-(--border-strong)',
       'focus-within:outline-none focus-within:ring-2 focus-within:ring-(--ring-color) focus-within:ring-offset-2 focus-within:ring-offset-(--bg-canvas)',
       'data-[invalid]:border-(--danger-border)',
-      'data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:cursor-not-allowed data-[disabled]:hover:border-(--border-input) data-[disabled]:focus-within:ring-0 data-[disabled]:focus-within:ring-offset-0',
+      'data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:cursor-not-allowed',
+      'data-[disabled]:hover:border-(--border-input) data-[disabled]:focus-within:ring-0 data-[disabled]:focus-within:ring-offset-0',
       attrs.class
     ]"
   >
@@ -155,7 +165,7 @@
       :aria-required="isRequired || undefined"
       :data-testid="testId"
       dir="auto"
-      class="relative z-(--z-control) w-full min-w-0 border-0 bg-transparent py-0 pe-0 ps-(--spacing-md) group-data-[leading]:ps-0 outline-none text-label-sm group-data-[monospace]:text-label-code-sm pointer-coarse:text-body-md pointer-coarse:group-data-[monospace]:text-label-code-lg text-(--text-default) placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled) read-only:cursor-default transition-opacity duration-150 ease-out motion-reduce:transition-none"
+      :class="INPUT_CLASS"
       v-bind="passthroughAttrs"
       @input="onInput"
     />

@@ -52,6 +52,22 @@
 
   const methods = ['github', 'cli', 'scratch']
   const promos = ['catalog', 'agent']
+
+  const CARD_LINK_CLASS =
+    'group relative flex h-full w-full flex-col items-start gap-(--spacing-md) rounded-(--shape-card) p-(--spacing-md) text-start no-underline transition-colors duration-moderate-01 ' +
+    'ease-productive-entrance motion-reduce:transition-none hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) ' +
+    'focus-visible:ring-inset'
+
+  const MARK_STACK_CLASS =
+    'flex items-center [&>*+*]:-ms-2 [&>*+*]:transition-[margin-left] [&>*+*]:duration-moderate-01 [&>*+*]:ease-productive-entrance group-hover:[&>*+*]:-ms-1.5 ' +
+    'group-focus-visible:[&>*+*]:-ms-1.5 motion-reduce:[&>*+*]:transition-none'
+
+  const MARK_TILE_CLASS =
+    'flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)'
+
+  const EXTERNAL_ICON_CLASS =
+    'az az-external-link absolute end-(--spacing-md) top-(--spacing-md) text-body-sm leading-none text-(--text-muted) transition-colors duration-moderate-01 ease-productive-entrance ' +
+    'motion-reduce:transition-none group-hover:text-(--text-default)'
 </script>
 
 <template>
@@ -263,39 +279,31 @@
             href="https://www.azion.com/en/templates/"
             target="_blank"
             rel="noopener noreferrer"
-            class="group relative flex h-full w-full flex-col items-start gap-(--spacing-md) rounded-(--shape-card) p-(--spacing-md) text-start no-underline transition-colors duration-moderate-01 ease-productive-entrance motion-reduce:transition-none hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset"
+            :class="CARD_LINK_CLASS"
           >
             <span
-              class="flex items-center [&>*+*]:-ms-2 [&>*+*]:transition-[margin-left] [&>*+*]:duration-moderate-01 [&>*+*]:ease-productive-entrance group-hover:[&>*+*]:-ms-1.5 group-focus-visible:[&>*+*]:-ms-1.5 motion-reduce:[&>*+*]:transition-none"
+              :class="MARK_STACK_CLASS"
               aria-hidden="true"
             >
-              <span
-                class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)"
-              >
+              <span :class="MARK_TILE_CLASS">
                 <i
                   class="az-color az-nextjs text-body-lg leading-none text-(--text-default)"
                   aria-hidden="true"
                 />
               </span>
-              <span
-                class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)"
-              >
+              <span :class="MARK_TILE_CLASS">
                 <i
                   class="az-color az-react text-body-lg leading-none text-(--text-default)"
                   aria-hidden="true"
                 />
               </span>
-              <span
-                class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)"
-              >
+              <span :class="MARK_TILE_CLASS">
                 <i
                   class="az-color az-vue text-body-lg leading-none text-(--text-default)"
                   aria-hidden="true"
                 />
               </span>
-              <span
-                class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)"
-              >
+              <span :class="MARK_TILE_CLASS">
                 <i
                   class="az-color az-svelte text-body-lg leading-none text-(--text-default)"
                   aria-hidden="true"
@@ -313,7 +321,7 @@
             </span>
 
             <i
-              class="az az-external-link absolute end-(--spacing-md) top-(--spacing-md) text-body-sm leading-none text-(--text-muted) transition-colors duration-moderate-01 ease-productive-entrance motion-reduce:transition-none group-hover:text-(--text-default)"
+              :class="EXTERNAL_ICON_CLASS"
               aria-hidden="true"
             />
             <span class="sr-only">(opens in a new tab)</span>
@@ -328,16 +336,16 @@
         <template #default>
           <a
             :href="agentSetupHref"
-            class="group relative flex h-full w-full flex-col items-start gap-(--spacing-md) rounded-(--shape-card) p-(--spacing-md) text-start no-underline transition-colors duration-moderate-01 ease-productive-entrance motion-reduce:transition-none hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset"
+            :class="CARD_LINK_CLASS"
           >
             <span
-              class="flex items-center [&>*+*]:-ms-2 [&>*+*]:transition-[margin-left] [&>*+*]:duration-moderate-01 [&>*+*]:ease-productive-entrance group-hover:[&>*+*]:-ms-1.5 group-focus-visible:[&>*+*]:-ms-1.5 motion-reduce:[&>*+*]:transition-none"
+              :class="MARK_STACK_CLASS"
               aria-hidden="true"
             >
               <span
                 v-for="agent in agentMarks"
                 :key="agent.name"
-                class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)"
+                :class="MARK_TILE_CLASS"
               >
                 <ThirdPartyLogo
                   :name="agent.name"

@@ -764,6 +764,10 @@ Each variant is the same screen in another state: `get_block("account/account-de
       deleteOpen.value = true
     }
   }
+
+  const INFO_ALERT_LABEL =
+    'A Deployment Setting says how a deploy routes: its binding policy, its deployment policy and its rollout defaults. Every environment is linked to one automatically, matching its ' +
+    'own deployment policy, and only a matching setting can be chosen. Point two environments at the same setting and a deploy into it publishes to both.'
 </script>
 
 <template>
@@ -798,7 +802,7 @@ Each variant is the same screen in another state: `get_block("account/account-de
           severity="info"
           size="small"
           closable
-          label="A Deployment Setting says how a deploy routes: its binding policy, its deployment policy and its rollout defaults. Every environment is linked to one automatically, matching its own deployment policy, and only a matching setting can be chosen. Point two environments at the same setting and a deploy into it publishes to both."
+          :label="INFO_ALERT_LABEL"
           @close="infoOpen = false"
         />
 

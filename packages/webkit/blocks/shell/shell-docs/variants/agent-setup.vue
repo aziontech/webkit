@@ -283,6 +283,10 @@
         'An index answers questions about code nobody opened, at the cost of a copy of the repository. A session only knows what it was shown.'
     }
   ]
+
+  const AGENT_LINK_CLASS =
+    'flex min-w-0 items-center gap-(--spacing-sm) rounded-(--shape-flat) text-label-md text-(--text-default) no-underline ' +
+    'hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color)'
 </script>
 
 <template>
@@ -370,7 +374,7 @@
           <template #cell-agent="{ row }">
             <a
               :href="row.href"
-              class="flex min-w-0 items-center gap-(--spacing-sm) rounded-(--shape-flat) text-label-md text-(--text-default) no-underline hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color)"
+              :class="AGENT_LINK_CLASS"
             >
               <ThirdPartyLogo
                 v-if="row.logo"

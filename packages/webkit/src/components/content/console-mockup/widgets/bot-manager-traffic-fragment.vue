@@ -56,6 +56,23 @@
   const focused = computed(() => props.active && (props.hovered || !canHover.value))
 
   const dimmed = (key: string) => focused.value && key !== FOCUS
+
+  const ARC_CLASS =
+    'text-(--border-default) transition-opacity duration-moderate-02 ease-productive-entrance ' +
+    'data-dimmed:opacity-30 ' +
+    'data-[slice=bad-bot]:text-(--chart-series-1) data-[slice=good-bot]:text-(--text-default) data-[slice=legitimate]:text-(--text-muted) ' +
+    'motion-reduce:transition-none'
+
+  const LEGEND_ITEM_CLASS =
+    'flex items-center gap-(--spacing-xs) rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) transition-[opacity,background-color] duration-moderate-02 ' +
+    'ease-productive-entrance ' +
+    'data-dimmed:opacity-50 ' +
+    'data-focused:bg-(--bg-hover) ' +
+    'motion-reduce:transition-none'
+
+  const LEGEND_SWATCH_CLASS =
+    'size-2.5 shrink-0 rounded-(--shape-control) bg-(--border-default) ' +
+    'data-[slice=bad-bot]:bg-(--chart-series-1) data-[slice=good-bot]:bg-(--text-default) data-[slice=legitimate]:bg-(--text-muted)'
 </script>
 
 <template>
@@ -108,7 +125,7 @@
                       :stroke-dashoffset="arc.offset"
                       :data-slice="arc.key"
                       :data-dimmed="dimmed(arc.key) || null"
-                      class="text-(--border-default) transition-opacity duration-moderate-02 ease-productive-entrance data-dimmed:opacity-30 data-[slice=bad-bot]:text-(--chart-series-1) data-[slice=good-bot]:text-(--text-default) data-[slice=legitimate]:text-(--text-muted) motion-reduce:transition-none"
+                      :class="ARC_CLASS"
                     />
                   </svg>
                   <span class="grid place-items-center text-center">
@@ -135,11 +152,11 @@
                     :key="slice.key"
                     :data-dimmed="dimmed(slice.key) || null"
                     :data-focused="(focused && slice.key === FOCUS) || null"
-                    class="flex items-center gap-(--spacing-xs) rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) transition-[opacity,background-color] duration-moderate-02 ease-productive-entrance data-dimmed:opacity-50 data-focused:bg-(--bg-hover) motion-reduce:transition-none"
+                    :class="LEGEND_ITEM_CLASS"
                   >
                     <span
                       :data-slice="slice.key"
-                      class="size-2.5 shrink-0 rounded-(--shape-control) bg-(--border-default) data-[slice=bad-bot]:bg-(--chart-series-1) data-[slice=good-bot]:bg-(--text-default) data-[slice=legitimate]:bg-(--text-muted)"
+                      :class="LEGEND_SWATCH_CLASS"
                     />
                     <span class="min-w-0 flex-1 truncate text-body-sm text-(--text-default)">
                       {{ slice.label }}

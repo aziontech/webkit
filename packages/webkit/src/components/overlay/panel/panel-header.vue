@@ -21,7 +21,8 @@
   )
 
   const ROOT_CLASS =
-    'flex min-h-14 shrink-0 items-center justify-between gap-(--spacing-xs) border-0 border-b border-b-(length:--border-width-default) border-b-(--border-muted) bg-(--bg-surface) ps-(--spacing-lg) pe-(--spacing-md) py-(--spacing-md)'
+    'flex min-h-14 shrink-0 items-center justify-between gap-(--spacing-xs) border-0 border-b border-b-(length:--border-width-default) border-b-(--border-muted) bg-(--bg-surface) ' +
+    'ps-(--spacing-lg) pe-(--spacing-md) py-(--spacing-md)'
 </script>
 
 <template>

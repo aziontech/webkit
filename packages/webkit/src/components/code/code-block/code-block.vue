@@ -686,17 +686,49 @@
       runLinesMotion(enabled ? 'enter' : null)
     }
   )
+
+  const TAB_CLASS =
+    'relative z-2 inline-flex h-8 shrink-0 items-center justify-center rounded-(--shape-control) px-(--spacing-sm) text-label-sm text-(--text-muted) transition-colors duration-fast-02 ' +
+    'ease-productive-entrance hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 ' +
+    'focus-visible:ring-offset-(--bg-canvas) ' +
+    'data-[state=active]:text-(--text-default) ' +
+    'motion-reduce:transition-none'
+
+  const CONTENT_CLASS =
+    'relative flex max-h-[var(--code-block-max-height,320px)] min-h-0 shrink flex-col overflow-hidden transition-[height] duration-moderate-02 ease-productive-entrance ' +
+    'motion-reduce:transition-none'
+
+  const LINE_CLASS =
+    'group relative flex min-w-full w-max shrink-0 items-center gap-(--spacing-xs) px-(--spacing-lg) py-(--spacing-2xs) text-label-code-sm ' +
+    'data-[state=added]:bg-(--success)/40 data-[state=removed]:bg-(--danger)/40 data-[state=highlighted]:bg-(--info)/40'
+
+  const LINE_HOVER_CLASS =
+    'pointer-events-none absolute inset-0 z-0 bg-(--bg-hover) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance ' +
+    'motion-reduce:transition-none group-hover:opacity-100 ' +
+    'group-data-[state=added]:hidden group-data-[state=removed]:hidden'
+
+  const SIDE_CLASS =
+    'min-w-0 overflow-x-auto outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset ' +
+    'data-[side=start]:border-e data-[side=start]:border-(--border-muted)'
+
+  const SPLIT_LINE_CLASS =
+    'relative flex min-w-full w-max shrink-0 items-center gap-(--spacing-xs) px-(--spacing-sm) py-(--spacing-2xs) text-label-code-sm ' +
+    'data-[state=added]:bg-(--success)/40 data-[state=removed]:bg-(--danger)/40 data-[state=highlighted]:bg-(--info)/40 data-[state=empty]:bg-(--bg-canvas)'
+
+  const ROOT_CLASS =
+    'group/code-block flex h-[var(--code-block-height,auto)] w-full @container flex-col overflow-hidden rounded-(--shape-control) bg-(--bg-surface) ' +
+    'data-[bordered]:border data-[bordered]:border-(--border-default) ' +
+    'data-[type=output]:bg-(--bg-canvas)'
+
+  const SPLIT_LINE_MARKER_CLASS =
+    'pointer-events-none absolute inset-y-0 start-0 w-[2px] ' +
+    'in-data-[state=added]:bg-(--success-border) in-data-[state=removed]:bg-(--danger-border) in-data-[state=highlighted]:bg-(--info-border)'
 </script>
 
 <template>
   <div
     v-bind="$attrs"
-    :class="
-      cn(
-        'group/code-block flex h-[var(--code-block-height,auto)] w-full @container flex-col overflow-hidden rounded-(--shape-control) bg-(--bg-surface) data-[bordered]:border data-[bordered]:border-(--border-default) data-[type=output]:bg-(--bg-canvas)',
-        attrs.class as string | undefined
-      )
-    "
+    :class="cn(ROOT_CLASS, attrs.class as string | undefined)"
     :data-bordered="bordered || null"
     :data-copyable="canCopy || null"
     :data-type="type"
@@ -749,7 +781,7 @@
           type="button"
           role="tab"
           :id="tabId(index)"
-          class="relative z-2 inline-flex h-8 shrink-0 items-center justify-center rounded-(--shape-control) px-(--spacing-sm) text-label-sm text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) data-[state=active]:text-(--text-default) motion-reduce:transition-none"
+          :class="TAB_CLASS"
           :aria-selected="index === activeTabIndex"
           :aria-controls="index === activeTabIndex ? panelId : undefined"
           :tabindex="index === activeTabIndex ? 0 : -1"
@@ -798,7 +830,7 @@
     <div
       ref="contentEl"
       dir="ltr"
-      class="relative flex max-h-[var(--code-block-max-height,320px)] min-h-0 shrink flex-col overflow-hidden transition-[height] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
+      :class="CONTENT_CLASS"
       :data-testid="`${testId}__content`"
       @transitionend="onContentTransitionend"
     >
@@ -859,14 +891,13 @@
                 <div
                   v-for="(line, offset) in chunk.items"
                   :key="`${activeTab.value}-${panelVersion}-${chunk.start + offset}`"
-                  class="group relative flex min-w-full w-max shrink-0 items-center gap-(--spacing-xs) px-(--spacing-lg) py-(--spacing-2xs) text-label-code-sm data-[state=added]:bg-(--success)/40 data-[state=removed]:bg-(--danger)/40 data-[state=highlighted]:bg-(--info)/40"
-                  :class="getLineMotionClasses(chunk.start + offset)"
+                  :class="[LINE_CLASS, getLineMotionClasses(chunk.start + offset)]"
                   :style="getLineMotionStyle(chunk.start + offset)"
                   :data-testid="`${testId}__line`"
                   :data-state="line.state"
                 >
                   <span
-                    class="pointer-events-none absolute inset-0 z-0 bg-(--bg-hover) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance motion-reduce:transition-none group-hover:opacity-100 group-data-[state=added]:hidden group-data-[state=removed]:hidden"
+                    :class="LINE_HOVER_CLASS"
                     aria-hidden="true"
                   />
                   <span
@@ -930,7 +961,7 @@
               :aria-label="side === 'start' ? t('codeBlock.original') : t('codeBlock.modified')"
               :data-side="side"
               :data-testid="`${testId}__side`"
-              class="min-w-0 overflow-x-auto outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset data-[side=start]:border-e data-[side=start]:border-(--border-muted)"
+              :class="SIDE_CLASS"
             >
               <div class="flex min-w-full w-max flex-col">
                 <template
@@ -949,7 +980,7 @@
                     <div
                       v-for="(pair, offset) in chunk.items"
                       :key="`${activeTab.value}-${side}-${chunk.start + offset}`"
-                      class="relative flex min-w-full w-max shrink-0 items-center gap-(--spacing-xs) px-(--spacing-sm) py-(--spacing-2xs) text-label-code-sm data-[state=added]:bg-(--success)/40 data-[state=removed]:bg-(--danger)/40 data-[state=highlighted]:bg-(--info)/40 data-[state=empty]:bg-(--bg-canvas)"
+                      :class="SPLIT_LINE_CLASS"
                       :data-state="pair[side]?.state ?? 'empty'"
                       :data-testid="`${testId}__split-line`"
                     >
@@ -982,7 +1013,7 @@
                       >
                       <span
                         v-if="pair[side] && pair[side].state !== 'default'"
-                        class="pointer-events-none absolute inset-y-0 start-0 w-[2px] in-data-[state=added]:bg-(--success-border) in-data-[state=removed]:bg-(--danger-border) in-data-[state=highlighted]:bg-(--info-border)"
+                        :class="SPLIT_LINE_MARKER_CLASS"
                         aria-hidden="true"
                       />
                     </div>

@@ -29,7 +29,10 @@
       label: 'JSON',
       value: 'json',
       language: 'json',
-      code: '{\n  "name": "Cache images",\n  "active": true,\n  "criteria": [[{ "variable": "${uri}", "operator": "starts_with", "argument": "/images" }]],\n  "behaviors": [{ "type": "set_cache_policy", "attributes": { "value": 1020 } }]\n}'
+      code:
+        '{\n  "name": "Cache images",\n  "active": true,\n' +
+        '  "criteria": [[{ "variable": "${uri}", "operator": "starts_with", "argument": "/images" }]],\n' +
+        '  "behaviors": [{ "type": "set_cache_policy", "attributes": { "value": 1020 } }]\n}'
     }
   ]
 

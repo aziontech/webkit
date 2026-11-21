@@ -210,7 +210,11 @@
   const asideStyle = computed(() => ({ ...cssVars.value, ...railStyle.value }))
 
   const RAIL_MOTION_CLASS =
-    'transition-[width,min-width] duration-moderate-02 ease-expressive-entrance has-[>div>input:checked]:ease-productive-exit data-[resizing]:transition-none not-data-[settled]:transition-none motion-reduce:transition-none'
+    'transition-[width,min-width] duration-moderate-02 ease-expressive-entrance ' +
+    'has-[>div>input:checked]:ease-productive-exit ' +
+    'data-[resizing]:transition-none ' +
+    'not-data-[settled]:transition-none ' +
+    'motion-reduce:transition-none'
 
   const rootClass = computed(() =>
     cn(
@@ -242,7 +246,11 @@
   )
 
   const INNER_MOTION_CLASS =
-    'transition-[translate,opacity] duration-moderate-02 ease-expressive-entrance has-[>input:checked]:ease-productive-exit data-[resizing]:transition-none not-data-[settled]:transition-none motion-reduce:transition-none motion-reduce:translate-none'
+    'transition-[translate,opacity] duration-moderate-02 ease-expressive-entrance ' +
+    'has-[>input:checked]:ease-productive-exit ' +
+    'data-[resizing]:transition-none ' +
+    'not-data-[settled]:transition-none ' +
+    'motion-reduce:transition-none motion-reduce:translate-none'
 
   const innerClass = computed(() =>
     cn(
@@ -286,6 +294,24 @@
       slots['header'] ? 'pt-(--spacing-2xs)' : undefined,
       rail.value ? 'px-(--spacing-xs)' : undefined
     )
+
+  const RESIZE_INDICATOR_CLASS =
+    'pointer-events-none absolute inset-y-0 end-0 w-(--border-width-2) bg-(--accent) opacity-0 transition-opacity ' +
+    'group-hover:opacity-100 group-focus-visible:opacity-100 ' +
+    'group-data-[preview]:opacity-100 ' +
+    'group-data-[resizing]:opacity-100 ' +
+    'motion-reduce:transition-none'
+
+  const EXPAND_CLASS =
+    'group absolute inset-y-0 start-0 z-20 w-(--size-6) hover:w-(--size-10) focus-within:w-(--size-10) ' +
+    'transition-[width] duration-moderate-02 ease-expressive-exit hover:ease-expressive-entrance focus-within:ease-expressive-entrance motion-reduce:transition-none'
+
+  const EXPAND_HINT_CLASS =
+    'pointer-events-none absolute start-full top-1/2 -translate-y-1/2 translate-x-[calc(-1_*_var(--size-10))] ' +
+    'rtl:translate-x-(--size-10) ps-(--spacing-2xs) opacity-0 transition-[translate,opacity] duration-moderate-02 ease-expressive-exit ' +
+    'group-hover:translate-x-0 rtl:group-hover:translate-x-0 group-hover:opacity-100 group-hover:pointer-events-auto group-hover:ease-expressive-entrance ' +
+    'group-focus-within:translate-x-0 rtl:group-focus-within:translate-x-0 group-focus-within:opacity-100 group-focus-within:pointer-events-auto ' +
+    'group-focus-within:ease-expressive-entrance motion-reduce:transition-none motion-reduce:translate-none'
 </script>
 
 <template>
@@ -394,9 +420,7 @@
       @keydown="onHandleKey($event)"
       @dblclick="collapsed = true"
     >
-      <span
-        class="pointer-events-none absolute inset-y-0 end-0 w-(--border-width-2) bg-(--accent) opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100 group-data-[preview]:opacity-100 group-data-[resizing]:opacity-100 motion-reduce:transition-none"
-      />
+      <span :class="RESIZE_INDICATOR_CLASS" />
     </div>
   </aside>
 
@@ -411,7 +435,7 @@
       :data-resizing="resizing ? '' : undefined"
       :data-preview="previewing ? '' : undefined"
       :data-testid="`${testId}__expand`"
-      class="group absolute inset-y-0 start-0 z-20 w-(--size-6) hover:w-(--size-10) focus-within:w-(--size-10) transition-[width] duration-moderate-02 ease-expressive-exit hover:ease-expressive-entrance focus-within:ease-expressive-entrance motion-reduce:transition-none"
+      :class="EXPAND_CLASS"
       @pointerenter="startPreview"
       @pointerleave="endPreview"
       @focusin="startPreview"
@@ -432,9 +456,7 @@
         @keydown="onHandleKey($event, true)"
       />
 
-      <div
-        class="pointer-events-none absolute start-full top-1/2 -translate-y-1/2 translate-x-[calc(-1_*_var(--size-10))] rtl:translate-x-(--size-10) ps-(--spacing-2xs) opacity-0 transition-[translate,opacity] duration-moderate-02 ease-expressive-exit group-hover:translate-x-0 rtl:group-hover:translate-x-0 group-hover:opacity-100 group-hover:pointer-events-auto group-hover:ease-expressive-entrance group-focus-within:translate-x-0 rtl:group-focus-within:translate-x-0 group-focus-within:opacity-100 group-focus-within:pointer-events-auto group-focus-within:ease-expressive-entrance motion-reduce:transition-none motion-reduce:translate-none"
-      >
+      <div :class="EXPAND_HINT_CLASS">
         <Tooltip
           :content="labels.expand"
           side="end"

@@ -115,7 +115,10 @@ export function navigationFindings(snapshot) {
       rule: `${NAVIGATION_RULE}/duplicate-route`,
       route,
       controls: [...byControl.keys()].map((index) => controls[index].name),
-      message: `${route} is offered by ${offers.length} navigation controls: ${offers.join(' and ')}. A destination appears once per screen: keep it in one level and drop it from the other (${NAVIGATION_RULE}, rule 5).`
+      message:
+        `${route} is offered by ${offers.length} navigation controls: ${offers.join(' and ')}. A ` +
+        `destination appears once per screen: keep it in one level and drop it from the other ` +
+        `(${NAVIGATION_RULE}, rule 5).`
     })
   }
 
@@ -143,7 +146,10 @@ export function navigationFindings(snapshot) {
         rule: `${NAVIGATION_RULE}/current-disagrees`,
         route: ra,
         controls: [a.control.name, b.control.name],
-        message: `${display(a.control)} marks "${a.link.label}" (${ra}) as the current page but ${display(b.control)} marks "${b.link.label}" (${rb}): the current rows of every level describe the same place (${NAVIGATION_RULE}, rule 6).`
+        message:
+          `${display(a.control)} marks "${a.link.label}" (${ra}) as the current page but ` +
+          `${display(b.control)} marks "${b.link.label}" (${rb}): the current rows of every level ` +
+          `describe the same place (${NAVIGATION_RULE}, rule 6).`
       })
     }
   }

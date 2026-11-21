@@ -754,6 +754,15 @@
   })
 
   onMounted(focusFirstField)
+
+  const ACCOUNT_BUTTON_CLASS =
+    'rounded-full transition-opacity duration-fast-02 ease-productive-entrance ' +
+    'hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) ' +
+    'motion-reduce:transition-none'
+
+  const DOMAIN_SLOT_CLASS =
+    'flex min-h-10 min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-sm) ' +
+    'data-[empty]:border-dashed'
 </script>
 
 <template>
@@ -783,7 +792,7 @@
         <button
           type="button"
           aria-label="Account settings"
-          class="rounded-full transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
+          :class="ACCOUNT_BUTTON_CLASS"
         >
           <Avatar
             label="name@example.com"
@@ -1307,7 +1316,7 @@
                     <p class="text-label-sm text-(--text-default)">Traffic arrives on</p>
                     <div
                       :data-empty="!names.domain || null"
-                      class="flex min-h-10 min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-sm) data-[empty]:border-dashed"
+                      :class="DOMAIN_SLOT_CLASS"
                     >
                       <i
                         class="az az-globe shrink-0 text-(--text-muted)"

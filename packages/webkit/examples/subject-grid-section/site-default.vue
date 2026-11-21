@@ -80,7 +80,9 @@
       slug: 'bots',
       title: 'Bots',
       description:
-        'Bots are automated software programs that perform repetitive tasks on websites and applications. While some bots like search engine crawlers are beneficial, malicious bots can cause significant harm to businesses in multiple ways.',
+        'Bots are automated software programs that perform repetitive tasks on websites and applications. While some ' +
+        'bots like search engine crawlers are beneficial, malicious bots can cause significant harm to businesses in ' +
+        'multiple ways.',
       articles: [
         {
           label: 'What is a Bot?',

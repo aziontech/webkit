@@ -106,6 +106,11 @@
   watch(query, () => {
     shown.value = BATCH
   })
+
+  const ENTRY_LINK_CLASS =
+    'flex min-h-7 items-center gap-(--spacing-2xs) rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-default) no-underline transition-colors ' +
+    'duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -183,7 +188,7 @@
                 :href="safeHref(entry.href) ?? undefined"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="flex min-h-7 items-center gap-(--spacing-2xs) rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-default) no-underline transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+                :class="ENTRY_LINK_CLASS"
               >
                 <span
                   dir="auto"

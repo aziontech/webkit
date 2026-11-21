@@ -249,6 +249,19 @@
   const onCheckOpen = (value: boolean) => {
     if (!value) check.open = false
   }
+
+  const AGENT_STACK_CLASS =
+    'flex items-center [&>*+*]:-ms-2 [&>*+*]:transition-[margin-left] [&>*+*]:duration-moderate-01 [&>*+*]:ease-productive-entrance group-hover/item:[&>*+*]:-ms-1.5 ' +
+    'group-focus-visible/item:[&>*+*]:-ms-1.5 motion-reduce:[&>*+*]:transition-none'
+
+  const AGENT_MARK_CLASS =
+    'flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised) ' +
+    'text-(--text-default)'
+
+  const CARD_GRID_CLASS =
+    'animate-content-enter motion-reduce:animate-none mt-(--spacing-lg) grid w-full min-w-0 grid-cols-1 gap-(--layout-group-gap) ' +
+    'sm:grid-cols-2 lg:grid-cols-3 xl:min-h-0 xl:flex-1 xl:grid-cols-5 xl:gap-(--layout-section-gap) ' +
+    '[--content-enter-delay:var(--transition-duration-fast-01)]'
 </script>
 
 <template>
@@ -316,13 +329,13 @@
                 >
                   <span class="flex min-w-0 flex-col items-start gap-(--spacing-md)">
                     <span
-                      class="flex items-center [&>*+*]:-ms-2 [&>*+*]:transition-[margin-left] [&>*+*]:duration-moderate-01 [&>*+*]:ease-productive-entrance group-hover/item:[&>*+*]:-ms-1.5 group-focus-visible/item:[&>*+*]:-ms-1.5 motion-reduce:[&>*+*]:transition-none"
+                      :class="AGENT_STACK_CLASS"
                       aria-hidden="true"
                     >
                       <span
                         v-for="agent in agentMarks"
                         :key="agent.name"
-                        class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised) text-(--text-default)"
+                        :class="AGENT_MARK_CLASS"
                       >
                         <ThirdPartyLogo
                           :name="agent.name"
@@ -365,7 +378,7 @@
       </aside>
 
       <section
-        class="animate-content-enter motion-reduce:animate-none mt-(--spacing-lg) grid w-full min-w-0 grid-cols-1 gap-(--layout-group-gap) sm:grid-cols-2 lg:grid-cols-3 xl:min-h-0 xl:flex-1 xl:grid-cols-5 xl:gap-(--layout-section-gap) [--content-enter-delay:var(--transition-duration-fast-01)]"
+        :class="CARD_GRID_CLASS"
         aria-label="Resources"
       >
         <div

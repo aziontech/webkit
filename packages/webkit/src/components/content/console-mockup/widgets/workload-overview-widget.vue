@@ -162,6 +162,21 @@
         'Every other branch. Each version keeps its own URL, so a build can be read before it is live.'
     }
   ]
+
+  const ENVIRONMENT_SELECT_CLASS =
+    'flex h-8 items-center gap-(--spacing-xs) rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-label-sm text-(--text-default)'
+
+  const NODE_CLASS =
+    'min-w-0 self-start rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) shadow-sm ' +
+    'data-dashed:border-dashed ' +
+    'data-focused:border-(--primary) ' +
+    'data-gap:mb-(--spacing-sm)'
+
+  const DEPLOY_DRAWER_CLASS =
+    'absolute inset-y-0 end-0 flex w-[47%] translate-x-full flex-col border-s border-(--border-default) bg-(--bg-surface) transition-[translate] duration-slow-01 ' +
+    'ease-productive-entrance ' +
+    'data-[state=open]:translate-x-0 ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -233,9 +248,7 @@
                       size="medium"
                       icon="az az-external-link"
                     />
-                    <span
-                      class="flex h-8 items-center gap-(--spacing-xs) rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-label-sm text-(--text-default)"
-                    >
+                    <span :class="ENVIRONMENT_SELECT_CLASS">
                       <i
                         class="az az-layers shrink-0 text-(--text-muted)"
                         aria-hidden="true"
@@ -403,7 +416,7 @@
                         :data-dashed="node.dashed || null"
                         :data-focused="(tab === 'topology' && node.key === 'workload') || null"
                         :data-gap="node.key === 'application' || null"
-                        class="min-w-0 self-start rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) shadow-sm data-dashed:border-dashed data-focused:border-(--primary) data-gap:mb-(--spacing-sm)"
+                        :class="NODE_CLASS"
                       >
                         <div
                           class="flex w-full items-center gap-(--spacing-2xs) px-(--spacing-md) pt-(--spacing-sm) pb-(--spacing-2xs)"
@@ -467,7 +480,7 @@
       />
       <aside
         :data-state="tab === 'deploy' ? 'open' : 'closed'"
-        class="absolute inset-y-0 end-0 flex w-[47%] translate-x-full flex-col border-s border-(--border-default) bg-(--bg-surface) transition-[translate] duration-slow-01 ease-productive-entrance data-[state=open]:translate-x-0 motion-reduce:transition-none"
+        :class="DEPLOY_DRAWER_CLASS"
       >
         <div
           class="flex shrink-0 items-start gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-lg) py-(--spacing-md)"

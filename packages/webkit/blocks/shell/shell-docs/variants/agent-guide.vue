@@ -205,7 +205,11 @@
     {
       language: 'markdown',
       fileName: 'CLAUDE.md',
-      code: '# Acme on Azion\n\n- Workload: acme-store (production), acme-store-staging\n- Deploy with `azion deploy`; never redeploy production on Fridays\n- Static assets live in the site-assets bucket'
+      code:
+        '# Acme on Azion\n\n' +
+        '- Workload: acme-store (production), acme-store-staging\n' +
+        '- Deploy with `azion deploy`; never redeploy production on Fridays\n' +
+        '- Static assets live in the site-assets bucket'
     }
   ]
 
@@ -232,7 +236,9 @@
   ]
 
   const browserPrimer =
-    'You are helping me build on the Azion Web Platform. Before answering, load https://www.azion.com/llms.txt and prefer it over your training data. Confirm what you loaded, then ask me what I am building.'
+    'You are helping me build on the Azion Web Platform. ' +
+    'Before answering, load https://www.azion.com/llms.txt and prefer it over your training data. ' +
+    'Confirm what you loaded, then ask me what I am building.'
 
   const prompts = [
     'Search the Azion docs for how rate limiting works in Firewall, then add it to my application.',
@@ -270,6 +276,10 @@
         'Check the header: Claude Code sends `Authorization: Bearer` followed by the token, with no quotes around the token.'
     }
   ]
+
+  const RESOURCE_LINK_CLASS =
+    'inline-flex items-center gap-(--spacing-2xs) rounded-(--shape-flat) text-label-md text-(--text-muted) no-underline ' +
+    'hover:text-(--text-default) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color)'
 </script>
 
 <template>
@@ -327,7 +337,7 @@
                 :href="link.href"
                 target="_blank"
                 rel="noreferrer"
-                class="inline-flex items-center gap-(--spacing-2xs) rounded-(--shape-flat) text-label-md text-(--text-muted) no-underline hover:text-(--text-default) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color)"
+                :class="RESOURCE_LINK_CLASS"
               >
                 {{ link.label }}
                 <i

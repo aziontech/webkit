@@ -80,6 +80,11 @@
 
   const washOpacity = computed(() => (props.stacked ? 0.24 : 0.1))
   const dimmed = (id: string) => ctx.emphasized.value !== null && ctx.emphasized.value !== id
+
+  const STROKE_CLASS =
+    '[stroke-dasharray:1.02_1.02] [stroke-dashoffset:1.02] transition-[stroke-dashoffset] duration-slow-02 ease-productive-entrance ' +
+    'motion-reduce:transition-none ' +
+    'data-[entered]:[stroke-dashoffset:0]'
 </script>
 
 <template>
@@ -116,7 +121,7 @@
         pathLength="1"
         :data-entered="ctx.entered.value || null"
         :style="{ transitionDelay: area.delay }"
-        class="[stroke-dasharray:1.02_1.02] [stroke-dashoffset:1.02] transition-[stroke-dashoffset] duration-slow-02 ease-productive-entrance motion-reduce:transition-none data-[entered]:[stroke-dashoffset:0]"
+        :class="STROKE_CLASS"
       />
     </g>
   </svg>

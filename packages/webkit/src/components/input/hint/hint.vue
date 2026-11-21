@@ -24,6 +24,10 @@
   const attrs = useAttrs()
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'hint')
+
+  const TRIGGER_CLASS =
+    'relative inline-flex size-5 items-center justify-center rounded-(--shape-button) text-(--text-muted) transition-colors duration-150 ease-out ' +
+    'hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none'
 </script>
 
 <template>
@@ -37,7 +41,7 @@
       type="button"
       :data-testid="`${testId}__trigger`"
       :aria-label="content"
-      class="relative inline-flex size-5 items-center justify-center rounded-(--shape-button) text-(--text-muted) transition-colors duration-150 ease-out hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+      :class="TRIGGER_CLASS"
       @click.prevent
     >
       <span

@@ -47,6 +47,15 @@
     danger: 'az az-circle-alert'
   }
   const icon = computed(() => icons[props.severity])
+
+  const ROOT_CLASS =
+    'group pointer-events-auto relative flex w-full items-start gap-(--spacing-sm) rounded-(--shape-control) border-solid border-[length:var(--border-width-default,1px)] ' +
+    'border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-sm) text-(--text-default) shadow-(--shadow-sm)'
+
+  const ICON_CLASS =
+    'leading-none text-(--text-muted) ' +
+    'data-[severity=success]:text-(--success-foreground) data-[severity=info]:text-(--info-foreground) data-[severity=warning]:text-(--warning-foreground) ' +
+    'data-[severity=danger]:text-(--danger-foreground)'
 </script>
 
 <template>
@@ -57,7 +66,7 @@
     :data-severity="severity"
     :data-loading="loading || null"
     :aria-busy="loading || undefined"
-    class="group pointer-events-auto relative flex w-full items-start gap-(--spacing-sm) rounded-(--shape-control) border-solid border-[length:var(--border-width-default,1px)] border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-sm) text-(--text-default) shadow-(--shadow-sm)"
+    :class="ROOT_CLASS"
   >
     <div class="flex min-w-0 flex-1 items-start gap-(--spacing-sm)">
       <span
@@ -71,9 +80,8 @@
         />
         <i
           v-else
-          :class="icon"
           :data-severity="severity"
-          class="leading-none text-(--text-muted) data-[severity=success]:text-(--success-foreground) data-[severity=info]:text-(--info-foreground) data-[severity=warning]:text-(--warning-foreground) data-[severity=danger]:text-(--danger-foreground)"
+          :class="[ICON_CLASS, icon]"
         />
       </span>
       <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-2xs)">

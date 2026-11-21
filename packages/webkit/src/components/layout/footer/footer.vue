@@ -17,7 +17,13 @@
   export interface FooterProps {
     /** Accessible name for the contentinfo landmark. Empty uses the locale catalog (`Footer`). */
     ariaLabel?: string
-    /** Where the footer sits: `content` (the default) runs the bands full bleed across the zone that holds it; `site` spans the page like the site header, opening on a plain full-width rule, like the header's, and insetting its content to the header measure; `console` is one slim bar under a console page, the brand and the links of each column on one line with the status and language at its end. */
+    /**
+     * Where the footer sits: `content` (the default) runs the bands full bleed across the zone
+     * that holds it; `site` spans the page like the site header, opening on a plain full-width
+     * rule, like the header's, and insetting its content to the header measure; `console` is one
+     * slim bar under a console page, the brand and the links of each column on one line with the
+     * status and language at its end.
+     */
     variant?: FooterVariant
   }
 
@@ -53,6 +59,25 @@
   provide(FooterInjectionKey, {
     testId: testId.value
   })
+
+  const BANDS_CLASS =
+    'flex w-full flex-col ' +
+    'group-data-[variant=console]/footer:flex-row group-data-[variant=console]/footer:flex-wrap group-data-[variant=console]/footer:items-center ' +
+    'group-data-[variant=console]/footer:gap-x-(--spacing-lg) group-data-[variant=console]/footer:gap-y-(--spacing-sm) group-data-[variant=console]/footer:px-(--spacing-lg) ' +
+    'group-data-[variant=console]/footer:py-(--spacing-sm)'
+
+  const COLUMNS_CLASS =
+    'order-2 grid w-full grid-cols-2 gap-y-(--spacing-lg) px-(--footer-inset) ' +
+    'md:grid-cols-4 md:gap-y-0 ' +
+    'group-data-[variant=console]/footer:flex group-data-[variant=console]/footer:w-auto group-data-[variant=console]/footer:min-w-0 group-data-[variant=console]/footer:flex-wrap ' +
+    'group-data-[variant=console]/footer:items-center group-data-[variant=console]/footer:gap-x-(--spacing-lg) group-data-[variant=console]/footer:gap-y-(--spacing-xs) ' +
+    'group-data-[variant=console]/footer:md:gap-y-(--spacing-xs)'
+
+  const BAR_CLASS =
+    'order-3 flex flex-col gap-y-(--spacing-md) border-0 border-t border-t-(length:--border-width-default) border-t-(--border-default) ' +
+    'px-[calc(var(--footer-inset,0%)_+_var(--spacing-lg))] py-(--spacing-md) ' +
+    'first:border-t-0 md:min-h-14 md:flex-row md:flex-wrap md:items-center md:justify-between md:gap-x-(--spacing-lg) md:py-(--spacing-sm) ' +
+    'group-data-[variant=console]/footer:contents'
 </script>
 
 <template>
@@ -69,13 +94,11 @@
       :data-testid="`${testId}__frame`"
       class="w-full"
     >
-      <div
-        class="flex w-full flex-col group-data-[variant=console]/footer:flex-row group-data-[variant=console]/footer:flex-wrap group-data-[variant=console]/footer:items-center group-data-[variant=console]/footer:gap-x-(--spacing-lg) group-data-[variant=console]/footer:gap-y-(--spacing-sm) group-data-[variant=console]/footer:px-(--spacing-lg) group-data-[variant=console]/footer:py-(--spacing-sm)"
-      >
+      <div :class="BANDS_CLASS">
         <div
           v-if="hasColumns()"
           :data-testid="`${testId}__columns`"
-          class="order-2 grid w-full grid-cols-2 gap-y-(--spacing-lg) px-(--footer-inset) md:grid-cols-4 md:gap-y-0 group-data-[variant=console]/footer:flex group-data-[variant=console]/footer:w-auto group-data-[variant=console]/footer:min-w-0 group-data-[variant=console]/footer:flex-wrap group-data-[variant=console]/footer:items-center group-data-[variant=console]/footer:gap-x-(--spacing-lg) group-data-[variant=console]/footer:gap-y-(--spacing-xs) group-data-[variant=console]/footer:md:gap-y-(--spacing-xs)"
+          :class="COLUMNS_CLASS"
         >
           <slot />
         </div>
@@ -83,7 +106,7 @@
         <div
           v-if="hasStart() || hasEnd()"
           :data-testid="`${testId}__bar`"
-          class="order-3 flex flex-col gap-y-(--spacing-md) border-0 border-t border-t-(length:--border-width-default) border-t-(--border-default) px-[calc(var(--footer-inset,0%)_+_var(--spacing-lg))] py-(--spacing-md) first:border-t-0 md:min-h-14 md:flex-row md:flex-wrap md:items-center md:justify-between md:gap-x-(--spacing-lg) md:py-(--spacing-sm) group-data-[variant=console]/footer:contents"
+          :class="BAR_CLASS"
         >
           <div
             v-if="hasStart()"

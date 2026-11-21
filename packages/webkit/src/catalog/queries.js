@@ -120,7 +120,10 @@ export function listTokens(catalog, { category } = {}) {
           class: `animate-${name}`,
           ...(tokens.animationGuide?.[name] || {})
         })),
-        hint: 'Every motion-bearing class pairs with a motion-reduce: fallback (e.g. `animate-slide-in-start motion-reduce:animate-none`). Panel/drawer open-close wraps the v-if region in a Vue Transition with enter-active-class / leave-active-class.'
+        hint:
+          'Every motion-bearing class pairs with a motion-reduce: fallback (e.g. ' +
+          '`animate-slide-in-start motion-reduce:animate-none`). Panel/drawer open-close wraps the ' +
+          'v-if region in a Vue Transition with enter-active-class / leave-active-class.'
       }
     }
     if (key === 'typography' || key === 'type' || key === 'font' || key === 'fonts') {
@@ -160,7 +163,10 @@ export function listTokens(catalog, { category } = {}) {
       found: true,
       category: key,
       tokens: group.map((name) => describeToken(tokens, name)),
-      hint: 'A semantic token carries its `light` and `dark` value (a colour) or its `value` and `breakpoints` (a length), and its `purpose`. A token with only a name is a primitive: use the semantic token whose purpose fits instead.'
+      hint:
+        'A semantic token carries its `light` and `dark` value (a colour) or its `value` and ' +
+        '`breakpoints` (a length), and its `purpose`. A token with only a name is a primitive: use ' +
+        'the semantic token whose purpose fits instead.'
     }
   }
 
@@ -180,7 +186,11 @@ export function listTokens(catalog, { category } = {}) {
     themes: tokens.themes || ['light', 'dark'],
     typography: tokens.typography,
     vocabulary: catalog.vocabulary || null,
-    hint: 'Call list_tokens with a category (e.g. "primary", "bg", "text", "chart", "spacing", "shape", "layout", "typography", "animations") for that group, or with one token name (e.g. "--bg-surface"). Semantic tokens come with their light and dark values and a one-line purpose; pick by purpose, never by the value.'
+    hint:
+      'Call list_tokens with a category (e.g. "primary", "bg", "text", "chart", "spacing", ' +
+      '"shape", "layout", "typography", "animations") for that group, or with one token name (e.g. ' +
+      '"--bg-surface"). Semantic tokens come with their light and dark values and a one-line ' +
+      'purpose; pick by purpose, never by the value.'
   }
 }
 
@@ -234,7 +244,10 @@ export function listAssets(catalog, { kind, query } = {}) {
           : undefined
         return { kind: k, ...meta, ...(matches != null ? { matches } : {}) }
       }),
-      hint: 'Call list_assets with a kind ("illustrations", "diagrams", "brandMarks", "icons") for every valid name, and a query to filter by name, label or keyword. Never guess a name from a file in src/: an unregistered name renders a placeholder or nothing.'
+      hint:
+        'Call list_assets with a kind ("illustrations", "diagrams", "brandMarks", "icons") for every ' +
+        'valid name, and a query to filter by name, label or keyword. Never guess a name from a file ' +
+        'in src/: an unregistered name renders a placeholder or nothing.'
     }
   }
   const resolved = assetKindOf(catalog, kind)
@@ -598,7 +611,10 @@ export function searchComponents(catalog, query, { surface } = {}) {
       ...(wantedSurface ? { surface: wantedSurface } : {}),
       count: matches.length,
       matches,
-      hint: 'A marketing page is the shell/shell-site block (get_block("shell/shell-site")) filled with page sections: import each from its flat subpath, bind it with v-bind="section.props" and place it inside Container and Spacer (rule webkit-sections).'
+      hint:
+        'A marketing page is the shell/shell-site block (get_block("shell/shell-site")) filled with ' +
+        'page sections: import each from its flat subpath, bind it with v-bind="section.props" and ' +
+        'place it inside Container and Spacer (rule webkit-sections).'
     }
   }
   const aliases = aliasHits(catalog, q)
@@ -879,7 +895,9 @@ export function validateUsage(catalog, { import: importPath, classes, component 
           component: key,
           classes: rejected,
           allowed: [...LAYOUT_CLASS_FAMILIES],
-          message: `Classes ${rejected.join(' ')} override the webkit component "${key}". Only layout utilities (${LAYOUT_CLASS_FAMILIES.join(', ')}) may go on its tag; move the rest to a wrapper element.`
+          message:
+            `Classes ${rejected.join(' ')} override the webkit component "${key}". Only layout utilities ` +
+            `(${LAYOUT_CLASS_FAMILIES.join(', ')}) may go on its tag; move the rest to a wrapper element.`
         })
       }
     }
@@ -1183,8 +1201,19 @@ export function getBlock(catalog, id, { variant, sections } = {}) {
         }
       : {}),
     howToUse: p.guidelines
-      ? "Read `guidelines` first: when to use this screen and when not, what each building block is for, do and don't, the copy rules and the accessibility rules. Then copy this SFC as the starting point of the screen and change only the content (copy, data, handlers, routes), following the guidelines. A block with `files` takes its data through typed props and emits its actions: copy each file next to the SFC (`webkit add` does it and fixes the imports), pass your records, `loading` and `error` as props, and handle the events; a variant imports the primary SFC and only passes it other props. Keep the components, their order, the props and the classes: they are the reviewed Azion layout. Pass `variant` to get another state of the same screen. Follow the listed skills."
-      : 'Copy this SFC as the starting point of the screen and change only the content (copy, data, handlers, routes). Keep the components, their order, the props and the classes: they are the reviewed Azion layout. Pass `variant` to get another state of the same screen. Follow the listed skills.'
+      ? 'Read `guidelines` first: when to use this screen and when not, what each building block is ' +
+        "for, do and don't, the copy rules and the accessibility rules. Then copy this SFC as the " +
+        'starting point of the screen and change only the content (copy, data, handlers, routes), ' +
+        'following the guidelines. A block with `files` takes its data through typed props and emits ' +
+        'its actions: copy each file next to the SFC (`webkit add` does it and fixes the imports), ' +
+        'pass your records, `loading` and `error` as props, and handle the events; a variant imports ' +
+        'the primary SFC and only passes it other props. Keep the components, their order, the props ' +
+        'and the classes: they are the reviewed Azion layout. Pass `variant` to get another state of ' +
+        'the same screen. Follow the listed skills.'
+      : 'Copy this SFC as the starting point of the screen and change only the content (copy, data, ' +
+        'handlers, routes). Keep the components, their order, the props and the classes: they are ' +
+        'the reviewed Azion layout. Pass `variant` to get another state of the same screen. Follow ' +
+        'the listed skills.'
   }
 }
 
@@ -1239,7 +1268,10 @@ export function suggestComponent(catalog, need, { surface } = {}) {
         recommendation: 'block',
         block: topBlock,
         blockAlternatives: blocks.matches.slice(1, 3),
-        hint: `A marketing page starts from the website shell: call get_block("${topBlock.id}") and copy its SFC, then fill the frame with page sections (the components below, in page order: the hero band first, the closing call to action last).`,
+        hint:
+          `A marketing page starts from the website shell: call get_block("${topBlock.id}") and copy ` +
+          `its SFC, then fill the frame with page sections (the components below, in page order: the ` +
+          `hero band first, the closing call to action last).`,
         best: component.best,
         alternatives: component.alternatives
       }
@@ -1258,7 +1290,10 @@ export function suggestComponent(catalog, need, { surface } = {}) {
           .slice(0, 3)
           .map((r) => ({ ...componentCard(catalog, r.sub), score: r.score })),
         found: true,
-        hint: 'A marketing band is a page section: import it from its flat subpath (@aziontech/webkit/<name>, the site JSON _id), bind it with v-bind="section.props" and place it inside Container and Spacer (rule webkit-sections).'
+        hint:
+          'A marketing band is a page section: import it from its flat subpath ' +
+          '(@aziontech/webkit/<name>, the site JSON _id), bind it with v-bind="section.props" and ' +
+          'place it inside Container and Spacer (rule webkit-sections).'
       }
     }
   }

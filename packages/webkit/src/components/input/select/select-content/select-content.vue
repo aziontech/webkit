@@ -91,6 +91,10 @@
   )
 
   const portalLocale = usePortalLocale()
+
+  const ROOT_CLASS =
+    'fixed z-(--z-control-overlay) flex max-h-[20rem] flex-col overflow-hidden rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-xs) ' +
+    'data-[variant=ghost]:min-w-(--container-3xs)'
 </script>
 
 <template>
@@ -107,12 +111,11 @@
         v-bind="$attrs"
         :data-testid="testId"
         :data-state="ctx.open.value ? 'open' : 'closed'"
-        :class="attrs.class"
         :data-side="resolvedSide"
         :data-align="resolvedAlign"
         :style="[panelStyle, panelWidth()]"
         :data-variant="ctx.variant.value"
-        class="fixed z-(--z-control-overlay) flex max-h-[20rem] flex-col overflow-hidden rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-xs) data-[variant=ghost]:min-w-(--container-3xs)"
+        :class="[ROOT_CLASS, attrs.class]"
         @keydown="onKeydown"
       >
         <div

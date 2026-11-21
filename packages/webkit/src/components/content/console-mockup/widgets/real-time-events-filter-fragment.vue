@@ -120,6 +120,27 @@
   watch(wanted, advance, { immediate: true })
 
   onScopeDispose(halt)
+
+  const FIELDS_PANEL_CLASS =
+    'flex -translate-x-[12%] flex-col opacity-0 transition-[translate,opacity] duration-moderate-01 ease-productive-entrance [grid-area:1/1] ' +
+    'data-active:translate-x-0 data-active:opacity-100 ' +
+    'motion-reduce:transition-none'
+
+  const MENU_ROW_CLASS =
+    'flex w-full items-center gap-(--spacing-sm) rounded-(--shape-control) px-(--spacing-sm) py-(--spacing-xs) text-label-sm text-(--text-default) transition-colors duration-fast-02 ' +
+    'ease-productive-entrance ' +
+    'data-hovered:bg-(--bg-hover) ' +
+    'motion-reduce:transition-none'
+
+  const VALUES_PANEL_CLASS =
+    'flex translate-x-[12%] flex-col opacity-0 transition-[translate,opacity] duration-moderate-01 ease-productive-entrance [grid-area:1/1] ' +
+    'data-active:translate-x-0 data-active:opacity-100 ' +
+    'motion-reduce:transition-none'
+
+  const VALUES_FOOTER_CLASS =
+    'border-t border-(--border-default) p-(--spacing-2xs) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance ' +
+    'data-[state=open]:opacity-100 ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -177,7 +198,7 @@
           <div
             :data-active="frame.level === 'fields' || null"
             :aria-hidden="frame.level !== 'fields'"
-            class="flex -translate-x-[12%] flex-col opacity-0 transition-[translate,opacity] duration-moderate-01 ease-productive-entrance [grid-area:1/1] data-active:translate-x-0 data-active:opacity-100 motion-reduce:transition-none"
+            :class="FIELDS_PANEL_CLASS"
           >
             <div class="border-b border-(--border-default) p-(--spacing-xs)">
               <Input
@@ -201,7 +222,7 @@
                 :key="field.id"
                 :data-cursor="`row-${field.id}`"
                 :data-hovered="(frame.level === 'fields' && frame.hovered === field.id) || null"
-                class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-control) px-(--spacing-sm) py-(--spacing-xs) text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance data-hovered:bg-(--bg-hover) motion-reduce:transition-none"
+                :class="MENU_ROW_CLASS"
               >
                 <span class="grow truncate">{{ field.label }}</span>
                 <span
@@ -221,7 +242,7 @@
           <div
             :data-active="frame.level === 'values' || null"
             :aria-hidden="frame.level !== 'values'"
-            class="flex translate-x-[12%] flex-col opacity-0 transition-[translate,opacity] duration-moderate-01 ease-productive-entrance [grid-area:1/1] data-active:translate-x-0 data-active:opacity-100 motion-reduce:transition-none"
+            :class="VALUES_PANEL_CLASS"
           >
             <div
               class="flex items-center gap-(--spacing-xs) border-b border-(--border-default) p-(--spacing-xs)"
@@ -256,7 +277,7 @@
                 :key="source.id"
                 :data-cursor="`row-${source.id}`"
                 :data-hovered="(frame.level === 'values' && frame.hovered === source.id) || null"
-                class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-control) px-(--spacing-sm) py-(--spacing-xs) text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance data-hovered:bg-(--bg-hover) motion-reduce:transition-none"
+                :class="MENU_ROW_CLASS"
               >
                 <span class="grow truncate">{{ source.label }}</span>
                 <i
@@ -268,7 +289,7 @@
             </div>
             <div
               :data-state="frame.picked ? 'open' : 'closed'"
-              class="border-t border-(--border-default) p-(--spacing-2xs) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance data-[state=open]:opacity-100 motion-reduce:transition-none"
+              :class="VALUES_FOOTER_CLASS"
             >
               <span
                 class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-control) px-(--spacing-sm) py-(--spacing-xs) text-label-sm text-(--text-default)"

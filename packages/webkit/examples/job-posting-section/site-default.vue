@@ -40,7 +40,9 @@
         blocks: [
           {
             type: 'text',
-            text: 'As a Senior Platform Engineer you will turn quality into a built-in capability of our engineering platform: automation, internal tools and standards that remove manual steps from the delivery cycle.'
+            text:
+              'As a Senior Platform Engineer you will turn quality into a built-in capability of our engineering platform: ' +
+              'automation, internal tools and standards that remove manual steps from the delivery cycle.'
           },
           {
             type: 'text',

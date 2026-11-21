@@ -100,6 +100,12 @@
   watch(wanted, advance, { immediate: true })
 
   onScopeDispose(halt)
+
+  const PEAK_TOOLTIP_CLASS =
+    'absolute z-1 flex -translate-x-1/2 translate-y-12 flex-col gap-(--spacing-2xs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-sm) ' +
+    'py-(--spacing-xs) whitespace-nowrap opacity-0 transition-opacity duration-moderate-01 ease-productive-entrance ' +
+    'data-[state=open]:opacity-100 ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -208,7 +214,7 @@
                   <span
                     :style="peakStyle"
                     :data-state="frame.tip ? 'open' : 'closed'"
-                    class="absolute z-1 flex -translate-x-1/2 translate-y-12 flex-col gap-(--spacing-2xs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-sm) py-(--spacing-xs) whitespace-nowrap opacity-0 transition-opacity duration-moderate-01 ease-productive-entrance data-[state=open]:opacity-100 motion-reduce:transition-none"
+                    :class="PEAK_TOOLTIP_CLASS"
                   >
                     <span class="text-label-sm text-(--text-default)">
                       Oct 16, 2026, 02:02:40 PM

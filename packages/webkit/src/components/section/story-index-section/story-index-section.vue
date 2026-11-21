@@ -237,6 +237,21 @@
     const name = props.linkLabel ? `${props.linkLabel}: ${item.client.name}` : item.client.name
     return item.target === '_blank' ? `${name} ${t('common.newTab')}` : name
   }
+
+  const CARD_CELL_CLASS =
+    'border-b border-(--border-default) last:border-b-0 sm:border-e sm:max-lg:even:border-e-0 sm:max-lg:data-last-row-sm:border-b-0 lg:nth-[3n]:border-e-0 lg:data-last-row-lg:border-b-0'
+
+  const CARD_LINK_CLASS =
+    'group/card flex h-full flex-col gap-(--spacing-lg) p-(--spacing-xl) transition-colors duration-fast-02 ease-productive-entrance ' +
+    'hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) motion-reduce:transition-none'
+
+  const CARD_LINK_LABEL_CLASS =
+    'mt-auto flex items-center gap-(--spacing-2xs) pt-(--spacing-sm) text-overline-sm text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance ' +
+    'group-hover/card:text-(--text-default) motion-reduce:transition-none'
+
+  const CARD_ARROW_CLASS =
+    'az az-arrow-up-right text-[length:inherit] leading-none transition-[translate] duration-moderate-02 ease-expressive-entrance ' +
+    'group-hover/card:-translate-y-0.5 group-hover/card:translate-x-0.5 rtl:group-hover/card:-translate-x-0.5 motion-reduce:transition-none'
 </script>
 
 <template>
@@ -387,14 +402,14 @@
               :key="item.id"
               :data-last-row-sm="index >= lastRowFrom(2) || undefined"
               :data-last-row-lg="index >= lastRowFrom(3) || undefined"
-              class="border-b border-(--border-default) last:border-b-0 sm:border-e sm:max-lg:even:border-e-0 sm:max-lg:data-last-row-sm:border-b-0 lg:nth-[3n]:border-e-0 lg:data-last-row-lg:border-b-0"
+              :class="CARD_CELL_CLASS"
             >
               <a
                 :href="safeHref(item.href) ?? undefined"
                 :target="item.target"
                 :rel="item.target === '_blank' ? 'noopener' : undefined"
                 :aria-label="cardLabel(item)"
-                class="group/card flex h-full flex-col gap-(--spacing-lg) p-(--spacing-xl) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+                :class="CARD_LINK_CLASS"
               >
                 <span class="flex h-8 items-center">
                   <img
@@ -410,12 +425,10 @@
                 <span
                   v-if="linkLabel"
                   aria-hidden="true"
-                  class="mt-auto flex items-center gap-(--spacing-2xs) pt-(--spacing-sm) text-overline-sm text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance group-hover/card:text-(--text-default) motion-reduce:transition-none"
+                  :class="CARD_LINK_LABEL_CLASS"
                 >
                   {{ linkLabel }}
-                  <i
-                    class="az az-arrow-up-right text-[length:inherit] leading-none transition-[translate] duration-moderate-02 ease-expressive-entrance group-hover/card:-translate-y-0.5 group-hover/card:translate-x-0.5 rtl:group-hover/card:-translate-x-0.5 motion-reduce:transition-none"
-                  />
+                  <i :class="CARD_ARROW_CLASS" />
                 </span>
               </a>
             </li>

@@ -73,7 +73,13 @@
     columns?: FeatureWidgetsSectionColumns
     /** Label a cell's copy button shows for two seconds after a copy; empty uses the catalog's `Copied`. */
     copiedLabel?: string
-    /** The cells, in order; each is `{ title, description, scene?, illustration?, action?, copy? }` where `scene` is a webkit scene asset handed `hovered` while the pointer is over the cell, `illustration` is drawn when no scene is set, `action` is `{ label, href }` rendered as an outlined link button and `copy` is `{ label, text }` rendered as a copy button that puts `text` on the clipboard; a cell may carry both. */
+    /**
+     * The cells, in order; each is `{ title, description, scene?, illustration?, action?, copy?
+     * }` where `scene` is a webkit scene asset handed `hovered` while the pointer is over the
+     * cell, `illustration` is drawn when no scene is set, `action` is `{ label, href }` rendered
+     * as an outlined link button and `copy` is `{ label, text }` rendered as a copy button that
+     * puts `text` on the clipboard; a cell may carry both.
+     */
     items?: FeatureWidgetsSectionItem[]
   }
 

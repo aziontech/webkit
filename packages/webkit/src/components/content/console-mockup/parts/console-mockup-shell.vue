@@ -242,6 +242,23 @@
   }
 
   provide(ConsoleMockupShellInjectionKey, { entered: readonly(entered), beatStyle })
+
+  const ROOT_CLASS =
+    'relative m-0 h-full w-full min-w-0 overflow-hidden select-none pointer-events-none ' +
+    'data-interactive:pointer-events-auto data-interactive:select-auto ' +
+    'data-[variant=bare]:overflow-x-visible data-[variant=bare]:overflow-y-clip data-[variant=window]:rounded-(--shape-card) data-[variant=window]:bg-(--bg-canvas) ' +
+    'data-[variant=window]:[background-clip:var(--illustration-rim-boxes,padding-box,border-box,border-box)] ' +
+    'data-[variant=window]:[background-image:linear-gradient(var(--bg-canvas),var(--bg-canvas)),var(--illustration-rim,linear-gradient(135deg,var(--border-default)_0%,var(--border-default)_18%,transparent_45%,transparent_55%,var(--border-default)_82%,var(--border-default)_100%)),linear-gradient(var(--bg-canvas),var(--bg-canvas))] ' +
+    'data-[variant=window]:[background-origin:var(--illustration-rim-boxes,padding-box,border-box,border-box)] ' +
+    'data-[variant=window]:[border:var(--illustration-rim-width-hairline,var(--border-width-default))_solid_transparent]'
+
+  const FADE_CLASS =
+    'pointer-events-none absolute inset-0 z-20 ' +
+    'data-[fade=bottom]:[background-image:linear-gradient(to_bottom,transparent_var(--console-mockup-fade-start,55%),var(--console-mockup-fade-color,var(--bg-canvas))_var(--console-mockup-fade-end,100%))] ' +
+    'data-[fade=left]:[background-image:linear-gradient(to_left,transparent_var(--console-mockup-fade-start,55%),var(--console-mockup-fade-color,var(--bg-canvas))_var(--console-mockup-fade-end,100%))] ' +
+    'data-[fade=right]:[background-image:linear-gradient(to_right,transparent_var(--console-mockup-fade-start,55%),var(--console-mockup-fade-color,var(--bg-canvas))_var(--console-mockup-fade-end,100%))] ' +
+    'data-[fade=top]:[background-image:linear-gradient(to_top,transparent_var(--console-mockup-fade-start,55%),var(--console-mockup-fade-color,var(--bg-canvas))_var(--console-mockup-fade-end,100%))] ' +
+    'data-[fade=y]:[background-image:linear-gradient(to_bottom,var(--console-mockup-fade-color,var(--bg-canvas))_0%,transparent_var(--console-mockup-fade-edge,22%),transparent_calc(100%-var(--console-mockup-fade-edge,22%)),var(--console-mockup-fade-color,var(--bg-canvas))_100%)]'
 </script>
 
 <template>
@@ -255,7 +272,7 @@
     :data-interactive="interactive || null"
     :data-variant="variant"
     :data-fade="fade"
-    class="relative m-0 h-full w-full min-w-0 overflow-hidden select-none pointer-events-none data-interactive:pointer-events-auto data-interactive:select-auto data-[variant=bare]:overflow-x-visible data-[variant=bare]:overflow-y-clip data-[variant=window]:rounded-(--shape-card) data-[variant=window]:bg-(--bg-canvas) data-[variant=window]:[background-clip:var(--illustration-rim-boxes,padding-box,border-box,border-box)] data-[variant=window]:[background-image:linear-gradient(var(--bg-canvas),var(--bg-canvas)),var(--illustration-rim,linear-gradient(135deg,var(--border-default)_0%,var(--border-default)_18%,transparent_45%,transparent_55%,var(--border-default)_82%,var(--border-default)_100%)),linear-gradient(var(--bg-canvas),var(--bg-canvas))] data-[variant=window]:[background-origin:var(--illustration-rim-boxes,padding-box,border-box,border-box)] data-[variant=window]:[border:var(--illustration-rim-width-hairline,var(--border-width-default))_solid_transparent]"
+    :class="ROOT_CLASS"
   >
     <div
       :data-variant="variant"
@@ -471,7 +488,7 @@
     <div
       v-if="fade !== 'none'"
       :data-fade="fade"
-      class="pointer-events-none absolute inset-0 z-20 data-[fade=bottom]:[background-image:linear-gradient(to_bottom,transparent_var(--console-mockup-fade-start,55%),var(--console-mockup-fade-color,var(--bg-canvas))_var(--console-mockup-fade-end,100%))] data-[fade=left]:[background-image:linear-gradient(to_left,transparent_var(--console-mockup-fade-start,55%),var(--console-mockup-fade-color,var(--bg-canvas))_var(--console-mockup-fade-end,100%))] data-[fade=right]:[background-image:linear-gradient(to_right,transparent_var(--console-mockup-fade-start,55%),var(--console-mockup-fade-color,var(--bg-canvas))_var(--console-mockup-fade-end,100%))] data-[fade=top]:[background-image:linear-gradient(to_top,transparent_var(--console-mockup-fade-start,55%),var(--console-mockup-fade-color,var(--bg-canvas))_var(--console-mockup-fade-end,100%))] data-[fade=y]:[background-image:linear-gradient(to_bottom,var(--console-mockup-fade-color,var(--bg-canvas))_0%,transparent_var(--console-mockup-fade-edge,22%),transparent_calc(100%-var(--console-mockup-fade-edge,22%)),var(--console-mockup-fade-color,var(--bg-canvas))_100%)]"
+      :class="FADE_CLASS"
     />
   </figure>
 </template>

@@ -171,7 +171,11 @@ export interface TableColumn {
   frozen?: 'start' | 'end'
   /** Fixed width (px) — needed for a frozen column that precedes another frozen column on the same edge, so sticky offsets can be summed. */
   width?: number
-  /** Minimum width (px). The column resolves to the widest of this floor and its own content (its header, with the sort affordance, and every rendered cell) — one width for the whole column, so a chip column reserves nothing it is not using and never clips a chip. `width` wins when both are set. */
+  /**
+   * Minimum width (px). The column resolves to the widest of this floor and its own content (its header, with
+   * the sort affordance, and every rendered cell) — one width for the whole column, so a chip column reserves
+   * nothing it is not using and never clips a chip. `width` wins when both are set.
+   */
   minWidth?: number
   /** Cell alignment. */
   align?: 'start' | 'center' | 'end'

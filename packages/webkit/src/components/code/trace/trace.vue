@@ -704,6 +704,103 @@
   const detailId = `${uid}-detail`
 
   const LOADING_ROWS = 5
+
+  const ROOT_CLASS =
+    'group/trace @container/trace flex w-full min-w-0 flex-col overflow-hidden bg-(--bg-surface) ' +
+    'data-bordered:rounded-(--shape-card) data-bordered:border data-bordered:border-(--border-default)'
+
+  const AXIS_CLASS =
+    '[--trace-name:9rem] @xl/trace:[--trace-name:13rem] @3xl/trace:[--trace-name:16rem] @5xl/trace:[--trace-name:20rem] ' +
+    'grid grid-cols-[var(--trace-name)_minmax(0,1fr)] items-stretch border-b border-(--border-muted) ' +
+    'data-[view=timeline]:grid-cols-1 data-[view=tree]:grid-cols-[minmax(0,1fr)_auto]'
+
+  const TICK_CLASS =
+    'absolute inset-y-0 start-(--trace-tick-at) flex w-0 items-center justify-center ' +
+    'data-[edge=end]:justify-end data-[edge=start]:justify-start ' +
+    '@max-xs/trace:data-[density=mid]:hidden @max-xl/trace:data-[density=quarter]:hidden'
+
+  const MINIMAP_CLASS =
+    '[--trace-name:9rem] @xl/trace:[--trace-name:13rem] @3xl/trace:[--trace-name:16rem] @5xl/trace:[--trace-name:20rem] ' +
+    'grid grid-cols-[var(--trace-name)_minmax(0,1fr)] items-stretch border-b border-(--border-muted) ' +
+    'group-data-[view=timeline]/trace:grid-cols-1'
+
+  const MINIMAP_LABEL_CLASS =
+    'flex min-w-0 items-center gap-(--spacing-xs) border-e border-(--border-muted) px-(--spacing-sm) py-(--spacing-2xs) ' +
+    'group-data-[view=timeline]/trace:border-e-0 group-data-[view=timeline]/trace:border-b'
+
+  const MINIMAP_LINE_CLASS =
+    'pointer-events-none absolute start-[calc(var(--trace-line-offset)*100%)] top-[calc(var(--trace-line-top)*100%)] h-[max(1px,calc(var(--trace-line-height)*100%))] ' +
+    'w-[max(1px,calc(var(--trace-line-width)*100%))] rounded-full ' +
+    'data-[status=error]:bg-(--danger-border) data-[status=success]:bg-(--success-border) ' +
+    'data-root:data-[status=success]:bg-(--info-border) ' +
+    'data-[status=running]:bg-(--warning-border)'
+
+  const WINDOW_CLASS =
+    'pointer-events-none absolute inset-y-0 start-[calc(var(--trace-window-start)*100%)] w-[calc(var(--trace-window-size)*100%)] rounded-(--shape-button) border ' +
+    'border-(--border-selected) bg-(--bg-selected)/40'
+
+  const THUMB_CLASS =
+    'pointer-events-auto absolute inset-y-0 w-3 cursor-ew-resize rounded-(--shape-button) ' +
+    'after:absolute after:inset-y-(--spacing-2xs) after:start-1/2 after:w-0.5 after:-ms-px after:rounded-full after:bg-(--border-selected) focus-visible:ring-2 ' +
+    'focus-visible:ring-(--ring-color) focus-visible:outline-none ' +
+    'data-[edge=end]:-end-1.5 data-[edge=start]:-start-1.5 ' +
+    'pointer-coarse:w-6 pointer-coarse:data-[edge=end]:-end-3 pointer-coarse:data-[edge=start]:-start-3'
+
+  const GRID_LINES_CLASS =
+    '[--trace-name:9rem] @xl/trace:[--trace-name:13rem] @3xl/trace:[--trace-name:16rem] @5xl/trace:[--trace-name:20rem] ' +
+    'pointer-events-none absolute inset-y-0 start-[calc(var(--trace-name)+var(--spacing-md))] end-(--spacing-md) hidden ' +
+    '@xl/trace:block ' +
+    'data-[view=timeline]:start-(--spacing-md)'
+
+  const SKELETON_CLASS =
+    '[--trace-name:9rem] @xl/trace:[--trace-name:13rem] @3xl/trace:[--trace-name:16rem] @5xl/trace:[--trace-name:20rem] ' +
+    'grid min-h-9 grid-cols-[var(--trace-name)_minmax(0,1fr)] items-center border-b border-(--border-muted) ' +
+    'last:border-b-0'
+
+  const FLAME_BAR_CLASS =
+    'absolute inset-y-0 start-[calc(var(--trace-span-offset)*100%)] flex w-[calc(var(--trace-span-width)*100%)] min-w-1 cursor-pointer items-center overflow-hidden ' +
+    'rounded-(--shape-button) border transition-opacity duration-150 ease-out outline-offset-1 ' +
+    'focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:outline-none motion-reduce:transition-none ' +
+    'data-dimmed:opacity-40 ' +
+    'data-outside:hidden ' +
+    'data-selected:outline-2 data-selected:outline-(--border-selected) ' +
+    'data-[status=error]:border-(--danger-border) data-[status=error]:bg-(--danger) data-[status=success]:border-(--success-border) data-[status=success]:bg-(--success) ' +
+    'data-root:data-[status=success]:border-(--info-border) data-root:data-[status=success]:bg-(--info) ' +
+    'data-[status=running]:border-(--warning-border) data-[status=running]:bg-(--warning)'
+
+  const FLAME_BAR_LABEL_CLASS =
+    'truncate px-(--spacing-xs) text-label-sm whitespace-nowrap tabular-nums ' +
+    'data-[status=error]:text-(--danger-foreground) data-[status=success]:text-(--success-foreground) ' +
+    'data-root:data-[status=success]:text-(--info-foreground) ' +
+    'data-[status=running]:text-(--warning-foreground)'
+
+  const ROW_CLASS =
+    '[--trace-name:9rem] @xl/trace:[--trace-name:13rem] @3xl/trace:[--trace-name:16rem] @5xl/trace:[--trace-name:20rem] ' +
+    'grid min-h-9 w-full cursor-pointer grid-cols-[var(--trace-name)_minmax(0,1fr)] ' +
+    'data-[view=tree]:grid-cols-[minmax(0,1fr)_auto] ' +
+    'items-stretch border-b border-(--border-muted) text-start transition-colors duration-150 ease-out ' +
+    'last:border-b-0 hover:bg-(--bg-hover) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:outline-none focus-visible:ring-inset ' +
+    'data-selected:bg-(--bg-selected) ' +
+    'motion-reduce:transition-none pointer-coarse:min-h-11'
+
+  const NAME_CELL_CLASS =
+    'flex min-w-0 items-center gap-(--spacing-2xs) border-e border-(--border-muted) py-(--spacing-xs) ps-[calc(var(--spacing-xs)+var(--trace-span-depth)*var(--spacing-md))] ' +
+    'pe-(--spacing-sm)'
+
+  const BAR_CLASS =
+    'absolute inset-y-0 start-[calc(var(--trace-span-offset)*100%)] w-[calc(var(--trace-span-width)*100%)] rounded-(--shape-button) border ' +
+    'data-outside:hidden ' +
+    'data-[status=error]:border-(--danger-border) data-[status=error]:bg-(--danger) data-[status=success]:border-(--success-border) data-[status=success]:bg-(--success) ' +
+    'data-root:data-[status=success]:border-(--info-border) data-root:data-[status=success]:bg-(--info) ' +
+    'data-[status=running]:border-(--warning-border) data-[status=running]:bg-(--warning)'
+
+  const BAR_DURATION_CLASS =
+    'pointer-events-none absolute start-full top-1/2 ms-(--spacing-2xs) -translate-y-1/2 text-label-sm whitespace-nowrap tabular-nums ' +
+    'data-flip:start-auto data-flip:end-full data-flip:ms-0 data-flip:me-(--spacing-2xs) ' +
+    'data-wide:start-(--spacing-xs) data-wide:ms-0 ' +
+    'data-[status=error]:text-(--danger-foreground) data-[status=success]:text-(--success-foreground) ' +
+    'data-root:data-[status=success]:text-(--info-foreground) ' +
+    'data-[status=running]:text-(--warning-foreground)'
 </script>
 
 <template>
@@ -714,7 +811,7 @@
     :data-loading="loading || null"
     :data-view="layout"
     :aria-busy="loading || undefined"
-    class="group/trace @container/trace flex w-full min-w-0 flex-col overflow-hidden bg-(--bg-surface) data-bordered:rounded-(--shape-card) data-bordered:border data-bordered:border-(--border-default)"
+    :class="ROOT_CLASS"
   >
     <div
       class="flex flex-wrap items-center gap-(--spacing-xs) border-b border-(--border-muted) p-(--spacing-xs)"
@@ -747,7 +844,7 @@
 
     <div
       :data-view="layout"
-      class="[--trace-name:9rem] @xl/trace:[--trace-name:13rem] @3xl/trace:[--trace-name:16rem] @5xl/trace:[--trace-name:20rem] grid grid-cols-[var(--trace-name)_minmax(0,1fr)] items-stretch border-b border-(--border-muted) data-[view=timeline]:grid-cols-1 data-[view=tree]:grid-cols-[minmax(0,1fr)_auto]"
+      :class="AXIS_CLASS"
     >
       <div
         v-if="layout !== 'timeline'"
@@ -781,7 +878,7 @@
             :data-edge="tick.edge"
             :data-density="tick.density"
             :style="{ '--trace-tick-at': `${tick.at * 100}%` }"
-            class="absolute inset-y-0 start-(--trace-tick-at) flex w-0 items-center justify-center data-[edge=end]:justify-end data-[edge=start]:justify-start @max-xs/trace:data-[density=mid]:hidden @max-xl/trace:data-[density=quarter]:hidden"
+            :class="TICK_CLASS"
           >
             <span class="text-label-sm whitespace-nowrap text-(--text-muted) tabular-nums">{{
               tick.label
@@ -795,11 +892,9 @@
       v-if="zoomable && spans.length && layout !== 'tree'"
       :data-zoomed="zoomed || null"
       :data-testid="`${testId}__minimap`"
-      class="[--trace-name:9rem] @xl/trace:[--trace-name:13rem] @3xl/trace:[--trace-name:16rem] @5xl/trace:[--trace-name:20rem] grid grid-cols-[var(--trace-name)_minmax(0,1fr)] items-stretch border-b border-(--border-muted) group-data-[view=timeline]/trace:grid-cols-1"
+      :class="MINIMAP_CLASS"
     >
-      <div
-        class="flex min-w-0 items-center gap-(--spacing-xs) border-e border-(--border-muted) px-(--spacing-sm) py-(--spacing-2xs) group-data-[view=timeline]/trace:border-e-0 group-data-[view=timeline]/trace:border-b"
-      >
+      <div :class="MINIMAP_LABEL_CLASS">
         <span class="truncate text-label-sm text-(--text-muted)">{{ t('trace.zoom') }}</span>
         <Button
           v-if="zoomed"
@@ -828,12 +923,12 @@
             :data-root="line.root || null"
             :style="line.style"
             aria-hidden="true"
-            class="pointer-events-none absolute start-[calc(var(--trace-line-offset)*100%)] top-[calc(var(--trace-line-top)*100%)] h-[max(1px,calc(var(--trace-line-height)*100%))] w-[max(1px,calc(var(--trace-line-width)*100%))] rounded-full data-[status=error]:bg-(--danger-border) data-[status=success]:bg-(--success-border) data-root:data-[status=success]:bg-(--info-border) data-[status=running]:bg-(--warning-border)"
+            :class="MINIMAP_LINE_CLASS"
           />
           <span
             :style="windowStyle"
             :data-testid="`${testId}__window`"
-            class="pointer-events-none absolute inset-y-0 start-[calc(var(--trace-window-start)*100%)] w-[calc(var(--trace-window-size)*100%)] rounded-(--shape-button) border border-(--border-selected) bg-(--bg-selected)/40"
+            :class="WINDOW_CLASS"
           >
             <span
               v-for="thumb in thumbs"
@@ -848,7 +943,7 @@
               :aria-valuetext="thumb.text"
               :data-edge="thumb.edge"
               :data-testid="`${testId}__thumb`"
-              class="pointer-events-auto absolute inset-y-0 w-3 cursor-ew-resize rounded-(--shape-button) after:absolute after:inset-y-(--spacing-2xs) after:start-1/2 after:w-0.5 after:-ms-px after:rounded-full after:bg-(--border-selected) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:outline-none data-[edge=end]:-end-1.5 data-[edge=start]:-start-1.5 pointer-coarse:w-6 pointer-coarse:data-[edge=end]:-end-3 pointer-coarse:data-[edge=start]:-start-3"
+              :class="THUMB_CLASS"
               @pointerdown.stop="onThumbDown($event, thumb.edge)"
               @keydown="onThumbKey($event, thumb.edge)"
             />
@@ -862,7 +957,7 @@
         v-if="layout !== 'tree'"
         aria-hidden="true"
         :data-view="layout"
-        class="[--trace-name:9rem] @xl/trace:[--trace-name:13rem] @3xl/trace:[--trace-name:16rem] @5xl/trace:[--trace-name:20rem] pointer-events-none absolute inset-y-0 start-[calc(var(--trace-name)+var(--spacing-md))] end-(--spacing-md) hidden @xl/trace:block data-[view=timeline]:start-(--spacing-md)"
+        :class="GRID_LINES_CLASS"
       >
         <span class="absolute inset-y-0 start-1/4 w-px bg-(--border-muted)" />
         <span class="absolute inset-y-0 start-1/2 w-px bg-(--border-muted)" />
@@ -880,7 +975,7 @@
           v-for="n in LOADING_ROWS"
           :key="n"
           :data-testid="`${testId}__skeleton`"
-          class="[--trace-name:9rem] @xl/trace:[--trace-name:13rem] @3xl/trace:[--trace-name:16rem] @5xl/trace:[--trace-name:20rem] grid min-h-9 grid-cols-[var(--trace-name)_minmax(0,1fr)] items-center border-b border-(--border-muted) last:border-b-0"
+          :class="SKELETON_CLASS"
         >
           <span class="px-(--spacing-sm) py-(--spacing-xs)">
             <Skeleton
@@ -936,7 +1031,7 @@
                 '--trace-span-offset': String(item.offset),
                 '--trace-span-width': String(item.width)
               }"
-              class="absolute inset-y-0 start-[calc(var(--trace-span-offset)*100%)] flex w-[calc(var(--trace-span-width)*100%)] min-w-1 cursor-pointer items-center overflow-hidden rounded-(--shape-button) border transition-opacity duration-150 ease-out outline-offset-1 focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:outline-none motion-reduce:transition-none data-dimmed:opacity-40 data-outside:hidden data-selected:outline-2 data-selected:outline-(--border-selected) data-[status=error]:border-(--danger-border) data-[status=error]:bg-(--danger) data-[status=success]:border-(--success-border) data-[status=success]:bg-(--success) data-root:data-[status=success]:border-(--info-border) data-root:data-[status=success]:bg-(--info) data-[status=running]:border-(--warning-border) data-[status=running]:bg-(--warning)"
+              :class="FLAME_BAR_CLASS"
               @click="pick(item.span.id)"
               @focus="focusedId = item.span.id"
               @keydown="onBarKeydown($event, item.span.id)"
@@ -946,7 +1041,7 @@
                 :data-status="item.status"
                 :data-root="item.root || null"
                 aria-hidden="true"
-                class="truncate px-(--spacing-xs) text-label-sm whitespace-nowrap tabular-nums data-[status=error]:text-(--danger-foreground) data-[status=success]:text-(--success-foreground) data-root:data-[status=success]:text-(--info-foreground) data-[status=running]:text-(--warning-foreground)"
+                :class="FLAME_BAR_LABEL_CLASS"
                 ><bdi>{{ item.span.name }}</bdi> · {{ formatDuration(item.span.duration) }}</span
               >
             </span>
@@ -1004,14 +1099,14 @@
             '--trace-span-depth': String(row.depth)
           }"
           :data-view="layout"
-          class="[--trace-name:9rem] @xl/trace:[--trace-name:13rem] @3xl/trace:[--trace-name:16rem] @5xl/trace:[--trace-name:20rem] grid min-h-9 w-full cursor-pointer grid-cols-[var(--trace-name)_minmax(0,1fr)] data-[view=tree]:grid-cols-[minmax(0,1fr)_auto] items-stretch border-b border-(--border-muted) text-start transition-colors duration-150 ease-out last:border-b-0 hover:bg-(--bg-hover) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:outline-none focus-visible:ring-inset data-selected:bg-(--bg-selected) motion-reduce:transition-none pointer-coarse:min-h-11"
+          :class="ROW_CLASS"
           @click="select(row)"
           @focus="focusedId = row.span.id"
           @keydown="onKeydown($event, index)"
         >
           <span
             role="gridcell"
-            class="flex min-w-0 items-center gap-(--spacing-2xs) border-e border-(--border-muted) py-(--spacing-xs) ps-[calc(var(--spacing-xs)+var(--trace-span-depth)*var(--spacing-md))] pe-(--spacing-sm)"
+            :class="NAME_CELL_CLASS"
           >
             <span
               v-if="row.hasChildren"
@@ -1094,14 +1189,14 @@
                 :data-root="row.root || null"
                 :data-outside="row.outside || null"
                 :data-testid="`${testId}__bar`"
-                class="absolute inset-y-0 start-[calc(var(--trace-span-offset)*100%)] w-[calc(var(--trace-span-width)*100%)] rounded-(--shape-button) border data-outside:hidden data-[status=error]:border-(--danger-border) data-[status=error]:bg-(--danger) data-[status=success]:border-(--success-border) data-[status=success]:bg-(--success) data-root:data-[status=success]:border-(--info-border) data-root:data-[status=success]:bg-(--info) data-[status=running]:border-(--warning-border) data-[status=running]:bg-(--warning)"
+                :class="BAR_CLASS"
               >
                 <span
                   :data-status="row.status"
                   :data-root="row.root || null"
                   :data-wide="row.wide || null"
                   :data-flip="row.flip || null"
-                  class="pointer-events-none absolute start-full top-1/2 ms-(--spacing-2xs) -translate-y-1/2 text-label-sm whitespace-nowrap tabular-nums data-flip:start-auto data-flip:end-full data-flip:ms-0 data-flip:me-(--spacing-2xs) data-wide:start-(--spacing-xs) data-wide:ms-0 data-[status=error]:text-(--danger-foreground) data-[status=success]:text-(--success-foreground) data-root:data-[status=success]:text-(--info-foreground) data-[status=running]:text-(--warning-foreground)"
+                  :class="BAR_DURATION_CLASS"
                   aria-hidden="true"
                   >{{ formatDuration(row.span.duration) }}</span
                 >

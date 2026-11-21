@@ -360,6 +360,14 @@
   useEventListener(globalThis.window, 'scroll', spy, { passive: true })
 
   onMounted(spy)
+
+  const ARTICLE_GRID_CLASS =
+    'grid gap-(--spacing-xl) p-(--spacing-xl) pb-(--spacing-2xl) lg:grid-cols-[minmax(var(--size-44),1fr)_minmax(0,var(--container-2xl))_minmax(var(--size-44),1fr)] ' +
+    'lg:grid-rows-[auto_auto_1fr]'
+
+  const COMMUNITY_LINK_CLASS =
+    'flex items-center gap-(--spacing-sm) rounded-(--shape-flat) py-(--spacing-2xs) text-body-sm text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance ' +
+    'hover:text-(--text-default) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color) motion-reduce:transition-none'
 </script>
 
 <template>
@@ -398,9 +406,7 @@
           borders="y"
           marks="all"
         >
-          <div
-            class="grid gap-(--spacing-xl) p-(--spacing-xl) pb-(--spacing-2xl) lg:grid-cols-[minmax(var(--size-44),1fr)_minmax(0,var(--container-2xl))_minmax(var(--size-44),1fr)] lg:grid-rows-[auto_auto_1fr]"
-          >
+          <div :class="ARTICLE_GRID_CLASS">
             <header class="flex min-w-0 flex-col gap-(--spacing-lg) lg:col-start-2">
               <Breadcrumb
                 v-if="trail.length > 0"
@@ -603,7 +609,7 @@
                         :href="safeHref(link.href) ?? undefined"
                         :target="isExternal(link.href) ? '_blank' : undefined"
                         :rel="isExternal(link.href) ? 'noopener' : undefined"
-                        class="flex items-center gap-(--spacing-sm) rounded-(--shape-flat) py-(--spacing-2xs) text-body-sm text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color) motion-reduce:transition-none"
+                        :class="COMMUNITY_LINK_CLASS"
                       >
                         <i
                           :class="link.icon"

@@ -99,7 +99,8 @@
       },
       category: 'Retail',
       description:
-        'Discover how Marisa improved e-commerce performance with the Azion Platform, delivering 85% of traffic through distributed infrastructure, reducing origin costs, and supporting 96% online sales growth.',
+        'Discover how Marisa improved e-commerce performance with the Azion Platform, delivering 85% of traffic ' +
+        'through distributed infrastructure, reducing origin costs, and supporting 96% online sales growth.',
       facets: {
         industry: ['Retail'],
         solution: ['Build', 'Deploy'],

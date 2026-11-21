@@ -165,6 +165,15 @@
   function toggle(): void {
     open.value = !isOpen.value
   }
+
+  const TRIGGER_CLASS =
+    'flex min-h-10 min-w-0 flex-1 basis-48 items-center gap-(--spacing-xs) rounded-(--shape-control) text-start ' +
+    'pointer-coarse:min-h-11 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)'
+
+  const CHEVRON_CLASS =
+    'az az-chevron-down shrink-0 text-body-xs text-(--text-muted) transition-[rotate] duration-fast-02 ease-productive-entrance ' +
+    'motion-reduce:transition-none ' +
+    'data-[state=open]:rotate-180'
 </script>
 
 <template>
@@ -186,7 +195,7 @@
           :aria-expanded="isOpen ? 'true' : 'false'"
           :aria-controls="panelId"
           :data-testid="`${testId}__trigger`"
-          class="flex min-h-10 min-w-0 flex-1 basis-48 items-center gap-(--spacing-xs) rounded-(--shape-control) text-start pointer-coarse:min-h-11 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+          :class="TRIGGER_CLASS"
           @click="toggle"
         >
           <i
@@ -210,7 +219,7 @@
           </span>
           <i
             :data-state="isOpen ? 'open' : 'closed'"
-            class="az az-chevron-down shrink-0 text-body-xs text-(--text-muted) transition-[rotate] duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-[state=open]:rotate-180"
+            :class="CHEVRON_CLASS"
             aria-hidden="true"
           />
         </button>

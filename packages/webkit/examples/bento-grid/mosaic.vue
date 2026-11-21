@@ -1,6 +1,10 @@
 <script setup>
   import BentoGridCell from '@aziontech/webkit/bento-grid-cell'
   import BentoGridRoot from '@aziontech/webkit/bento-grid-root'
+
+  const CELL_LINK_CLASS =
+    'flex h-full flex-col justify-between gap-(--spacing-lg) bg-(--bg-contrast) p-(--spacing-xl) text-(--bg-canvas) ' +
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color)'
 </script>
 
 <template>
@@ -38,7 +42,7 @@
     >
       <a
         href="#pricing"
-        class="flex h-full flex-col justify-between gap-(--spacing-lg) bg-(--bg-contrast) p-(--spacing-xl) text-(--bg-canvas) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color)"
+        :class="CELL_LINK_CLASS"
       >
         <span class="text-heading-xs">Pay for what you use</span>
         <span class="text-body-sm"

@@ -34,6 +34,11 @@
   const attrs = useAttrs()
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'link-directory')
+
+  const ROOT_CLASS =
+    'grid gap-px bg-(--border-default) ' +
+    'data-[mobile-columns=1]:grid-cols-1 data-[mobile-columns=2]:grid-cols-2 ' +
+    'data-[columns=2]:sm:grid-cols-2 data-[columns=3]:sm:grid-cols-2 data-[columns=3]:lg:grid-cols-3 data-[columns=4]:sm:grid-cols-2 data-[columns=4]:lg:grid-cols-4'
 </script>
 
 <template>
@@ -43,7 +48,7 @@
     :data-columns="columns"
     :data-mobile-columns="mobileColumns"
     :aria-label="ariaLabel || undefined"
-    class="grid gap-px bg-(--border-default) data-[mobile-columns=1]:grid-cols-1 data-[mobile-columns=2]:grid-cols-2 data-[columns=2]:sm:grid-cols-2 data-[columns=3]:sm:grid-cols-2 data-[columns=3]:lg:grid-cols-3 data-[columns=4]:sm:grid-cols-2 data-[columns=4]:lg:grid-cols-4"
+    :class="ROOT_CLASS"
   >
     <slot />
   </nav>

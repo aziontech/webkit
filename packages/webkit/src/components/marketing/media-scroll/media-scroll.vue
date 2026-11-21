@@ -175,6 +175,43 @@
     const share = metrics.total / count.value
     globalThis.scrollTo({ top: trackTop - pinnedTop + share * (index + 0.5) })
   }
+
+  const ROOT_CLASS =
+    'relative [--media-scroll-open:calc(var(--spacing-xl)*4)] ' +
+    'data-[size=large]:[--media-scroll-open:calc(var(--spacing-xl)*5)] data-[size=small]:[--media-scroll-open:calc(var(--spacing-xl)*3)] ' +
+    'lg:h-[calc(100dvh*var(--media-scroll-span))]'
+
+  const GRID_CLASS =
+    'grid w-full grid-cols-1 lg:shrink-0 lg:h-[var(--media-scroll-height,100%)] lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:border-y-[length:var(--media-scroll-frame-border,0)] ' +
+    'lg:border-solid lg:border-(--border-default)'
+
+  const ITEM_CLASS =
+    'group relative border-b border-(--border-default) px-(--spacing-xl) py-(--spacing-lg) ' +
+    'last:border-b-0 lg:flex lg:grow-0 lg:flex-col lg:justify-start lg:transition-[flex-grow] lg:duration-moderate-01 lg:ease-productive-entrance lg:data-[dense]:py-(--spacing-md) ' +
+    'lg:data-[active]:min-h-(--media-scroll-open) lg:data-[active]:grow lg:data-[active]:justify-center lg:data-[active]:py-(--spacing-xl) lg:data-[active]:data-[actions]:justify-start ' +
+    'lg:data-[active]:data-[actions]:pb-(--spacing-lg) lg:data-[active]:data-[dense]:py-(--spacing-lg) lg:data-[active]:data-[dense]:data-[actions]:pb-(--spacing-md) ' +
+    'motion-reduce:transition-none'
+
+  const ITEM_TITLE_CLASS =
+    'm-0 text-heading-md text-(--text-default) transition-[color,opacity] duration-moderate-01 ease-out ' +
+    'motion-reduce:transition-none lg:text-(--text-muted) lg:group-data-[active]:text-(--text-default) lg:group-data-[completed]:opacity-55'
+
+  const ITEM_BUTTON_CLASS =
+    "m-0 cursor-default p-0 text-start lg:cursor-pointer lg:after:absolute lg:after:inset-0 lg:after:content-[''] focus-visible:ring-2 focus-visible:ring-(--ring-color) " +
+    'focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)'
+
+  const ITEM_BODY_CLASS =
+    'grid grid-rows-[1fr] transition-[grid-template-rows] duration-moderate-01 ease-productive-entrance ' +
+    'motion-reduce:transition-none lg:min-h-0 lg:grid-rows-[0fr] lg:group-data-[active]:grid-rows-[1fr] lg:group-data-[active]:group-data-[actions]:flex-1'
+
+  const ITEM_DESCRIPTION_CLASS =
+    'm-0 max-w-(--container-sm) pt-(--spacing-sm) text-body-md text-(--text-muted) transition-[opacity,translate] duration-moderate-02 ease-productive-entrance ' +
+    'motion-reduce:transition-none lg:translate-y-(--spacing-sm) lg:opacity-0 lg:group-data-[active]:translate-y-0 lg:group-data-[active]:opacity-100 lg:group-data-[active]:delay-100'
+
+  const ITEM_ACTIONS_CLASS =
+    'mt-(--spacing-xl) flex items-center gap-(--spacing-sm) transition-[opacity,translate] duration-moderate-02 ease-productive-entrance ' +
+    'motion-reduce:transition-none lg:invisible lg:mt-auto lg:translate-y-(--spacing-sm) lg:pt-(--spacing-xl) lg:opacity-0 lg:group-data-[active]:visible ' +
+    'lg:group-data-[active]:translate-y-0 lg:group-data-[active]:opacity-100 lg:group-data-[active]:delay-200'
 </script>
 
 <template>
@@ -186,7 +223,7 @@
     :data-size="size"
     :data-progress="showProgress || null"
     :style="{ '--media-scroll-span': span, '--media-scroll-dwell': dwell }"
-    class="relative [--media-scroll-open:calc(var(--spacing-xl)*4)] data-[size=large]:[--media-scroll-open:calc(var(--spacing-xl)*5)] data-[size=small]:[--media-scroll-open:calc(var(--spacing-xl)*3)] lg:h-[calc(100dvh*var(--media-scroll-span))]"
+    :class="ROOT_CLASS"
   >
     <div
       ref="frameEl"
@@ -198,9 +235,7 @@
       >
         <Texture variant="lines" />
       </div>
-      <div
-        class="grid w-full grid-cols-1 lg:shrink-0 lg:h-[var(--media-scroll-height,100%)] lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:border-y-[length:var(--media-scroll-frame-border,0)] lg:border-solid lg:border-(--border-default)"
-      >
+      <div :class="GRID_CLASS">
         <ol
           class="m-0 flex list-none flex-col p-0 lg:min-w-0 lg:[align-self:var(--media-scroll-align,start)]"
         >
@@ -211,15 +246,13 @@
             :data-completed="index < activeIndex || null"
             :data-actions="hasActions(item, index) || null"
             :data-dense="dense || null"
-            class="group relative border-b border-(--border-default) px-(--spacing-xl) py-(--spacing-lg) last:border-b-0 lg:flex lg:grow-0 lg:flex-col lg:justify-start lg:transition-[flex-grow] lg:duration-moderate-01 lg:ease-productive-entrance lg:data-[dense]:py-(--spacing-md) lg:data-[active]:min-h-(--media-scroll-open) lg:data-[active]:grow lg:data-[active]:justify-center lg:data-[active]:py-(--spacing-xl) lg:data-[active]:data-[actions]:justify-start lg:data-[active]:data-[actions]:pb-(--spacing-lg) lg:data-[active]:data-[dense]:py-(--spacing-lg) lg:data-[active]:data-[dense]:data-[actions]:pb-(--spacing-md) motion-reduce:transition-none"
+            :class="ITEM_CLASS"
           >
-            <h3
-              class="m-0 text-heading-md text-(--text-default) transition-[color,opacity] duration-moderate-01 ease-out motion-reduce:transition-none lg:text-(--text-muted) lg:group-data-[active]:text-(--text-default) lg:group-data-[completed]:opacity-55"
-            >
+            <h3 :class="ITEM_TITLE_CLASS">
               <button
                 type="button"
                 :aria-current="isActive(index) ? 'true' : undefined"
-                class="m-0 cursor-default p-0 text-start lg:cursor-pointer lg:after:absolute lg:after:inset-0 lg:after:content-[''] focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
+                :class="ITEM_BUTTON_CLASS"
                 @click="goTo(index)"
                 @focus="goTo(index)"
               >
@@ -227,19 +260,15 @@
               </button>
             </h3>
 
-            <div
-              class="grid grid-rows-[1fr] transition-[grid-template-rows] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none lg:min-h-0 lg:grid-rows-[0fr] lg:group-data-[active]:grid-rows-[1fr] lg:group-data-[active]:group-data-[actions]:flex-1"
-            >
+            <div :class="ITEM_BODY_CLASS">
               <div class="min-h-0 overflow-hidden lg:flex lg:flex-col">
-                <p
-                  class="m-0 max-w-(--container-sm) pt-(--spacing-sm) text-body-md text-(--text-muted) transition-[opacity,translate] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none lg:translate-y-(--spacing-sm) lg:opacity-0 lg:group-data-[active]:translate-y-0 lg:group-data-[active]:opacity-100 lg:group-data-[active]:delay-100"
-                >
+                <p :class="ITEM_DESCRIPTION_CLASS">
                   {{ item.description }}
                 </p>
 
                 <div
                   v-if="hasActions(item, index)"
-                  class="mt-(--spacing-xl) flex items-center gap-(--spacing-sm) transition-[opacity,translate] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none lg:invisible lg:mt-auto lg:translate-y-(--spacing-sm) lg:pt-(--spacing-xl) lg:opacity-0 lg:group-data-[active]:visible lg:group-data-[active]:translate-y-0 lg:group-data-[active]:opacity-100 lg:group-data-[active]:delay-200"
+                  :class="ITEM_ACTIONS_CLASS"
                 >
                   <slot
                     name="actions"

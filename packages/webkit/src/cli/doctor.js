@@ -157,7 +157,9 @@ function checkGitHooks(projectDir, pkg, git, add) {
     !hasHook
       ? 'no .husky/pre-commit lint block — commits are not linted locally.'
       : legacyHook
-        ? `${where(hookDir)}.husky/pre-commit lints the whole tree, build output included (\`npx stylelint "**/*…"\`), so the first commit after a build fails on compiled CSS — re-run \`npx @aziontech/webkit init\` to lint \`src/\` only.`
+        ? `${where(hookDir)}.husky/pre-commit lints the whole tree, build output included (\`npx ` +
+          `stylelint "**/*…"\`), so the first commit after a build fails on compiled CSS — re-run ` +
+          `\`npx @aziontech/webkit init\` to lint \`src/\` only.`
         : `${where(hookDir)}.husky/pre-commit lints on commit`
   )
 
@@ -171,7 +173,9 @@ function checkGitHooks(projectDir, pkg, git, add) {
           ? 'not a git repository — the pre-commit hook cannot run. After `git init`, run `npx husky` once to activate it.'
           : git.huskyActive
             ? `core.hooksPath = ${git.hooksPath}`
-            : `the pre-commit hook is not active (core.hooksPath is ${git.hooksPath ? `"${git.hooksPath}"` : 'unset'}) — run \`npx husky\` once (husky skips activation when the install runs before \`git init\`).`
+            : `the pre-commit hook is not active (core.hooksPath is ` +
+              `${git.hooksPath ? `"${git.hooksPath}"` : 'unset'}) — run \`npx husky\` once (husky skips ` +
+              `activation when the install runs before \`git init\`).`
     )
   }
 }
@@ -239,7 +243,9 @@ export function planDoctor(projectDir) {
         ? 'src/webkit.css registers every WebKit component (@aziontech/webkit/styles/all) — the app ships the CSS of all of them; import ./webkit.sources.css instead to compile only what it uses'
         : explicitSource
           ? 'src/webkit.css registers webkit with an explicit @source'
-          : `src/webkit.css does not register webkit with Tailwind — component classes will not compile (unstyled UI). Add \`@import './webkit.sources.css';\` (6.0: \`@aziontech/webkit/styles\` no longer scans WebKit) and run \`npx @aziontech/webkit css\`.`
+          : `src/webkit.css does not register webkit with Tailwind — component classes will not compile ` +
+            `(unstyled UI). Add \`@import './webkit.sources.css';\` (6.0: \`@aziontech/webkit/styles\` ` +
+            `no longer scans WebKit) and run \`npx @aziontech/webkit css\`.`
   )
 
   if (cssEntry) {
@@ -248,7 +254,10 @@ export function planDoctor(projectDir) {
       'webkit.css @source not',
       unexcluded.length ? 'warn' : 'ok',
       unexcluded.length
-        ? `src/webkit.css does not keep ${unexcluded.map((p) => p.slice(3)).join(', ')} out of the Tailwind scan, so the example classes in the AI guidance files compile into your CSS. Add ${unexcluded.map((p) => `\`${exclusionLine(p)}\``).join(' ')} (or run \`npx @aziontech/webkit init\`).`
+        ? `src/webkit.css does not keep ${unexcluded.map((p) => p.slice(3)).join(', ')} out of the ` +
+            `Tailwind scan, so the example classes in the AI guidance files compile into your CSS. Add ` +
+            `${unexcluded.map((p) => `\`${exclusionLine(p)}\``).join(' ')} (or run \`npx ` +
+            `@aziontech/webkit init\`).`
         : 'src/webkit.css keeps the AI guidance files (.claude, CLAUDE.md, AGENTS.md) out of the Tailwind scan'
     )
   }
@@ -263,7 +272,10 @@ export function planDoctor(projectDir) {
       'webkit css sources',
       sources.stale ? 'fail' : sources.resolved || !sources.subpaths.length ? 'ok' : 'warn',
       sources.stale
-        ? `${SOURCES_FILE} is out of date${missing.length ? ` — ${missing.length} imported WebKit file(s) are missing, so their components render unstyled` : ''}. Run \`npx @aziontech/webkit css\` (the Vite plugin, ${VITE_PLUGIN_SPECIFIER}, keeps it current on every dev and build).`
+        ? `${SOURCES_FILE} is out of ` +
+            `date${missing.length ? ` — ${missing.length} imported WebKit file(s) are missing, so their components render unstyled` : ''}. ` +
+            `Run \`npx @aziontech/webkit css\` (the Vite plugin, ${VITE_PLUGIN_SPECIFIER}, keeps it ` +
+            `current on every dev and build).`
         : sources.resolved
           ? `${SOURCES_FILE} lists ${sources.files.length} WebKit file(s) for ${sources.subpaths.length} import(s)`
           : sources.subpaths.length
@@ -278,7 +290,9 @@ export function planDoctor(projectDir) {
         hasPlugin ? 'ok' : 'warn',
         hasPlugin
           ? `${viteCfg} runs ${VITE_PLUGIN_SPECIFIER}, so ${SOURCES_FILE} follows your imports`
-          : `${viteCfg} does not run ${VITE_PLUGIN_SPECIFIER} — ${SOURCES_FILE} goes stale when you import a new component. Add \`import webkit from '${VITE_PLUGIN_SPECIFIER}'\` and \`webkit()\` to plugins.`
+          : `${viteCfg} does not run ${VITE_PLUGIN_SPECIFIER} — ${SOURCES_FILE} goes stale when you ` +
+              `import a new component. Add \`import webkit from '${VITE_PLUGIN_SPECIFIER}'\` and ` +
+              `\`webkit()\` to plugins.`
       )
     }
   }
@@ -302,7 +316,9 @@ export function planDoctor(projectDir) {
       postcssRunsTailwind
         ? `Tailwind runs through PostCSS (${postcssCfg})`
         : postcssCfg
-          ? `${postcssCfg} does not load @tailwindcss/postcss and @tailwindcss/vite is not installed — Tailwind v4 may not run in the build. Add the plugin (see \`npx @aziontech/webkit init --dry-run\`).`
+          ? `${postcssCfg} does not load @tailwindcss/postcss and @tailwindcss/vite is not installed — ` +
+            `Tailwind v4 may not run in the build. Add the plugin (see \`npx @aziontech/webkit init ` +
+            `--dry-run\`).`
           : 'neither @tailwindcss/vite nor a PostCSS config — Tailwind v4 may not run in the build. Run `npx @aziontech/webkit init`.'
     )
   }
@@ -460,7 +476,9 @@ export function planDoctor(projectDir) {
     provided ? 'ok' : 'warn',
     provided
       ? 'ConfigProvider is mounted'
-      : 'no ConfigProvider in src/ — components read English text, left-to-right, and format for the device locale. Wrap the app root in `<ConfigProvider :catalogs="catalogs">` from \'@aziontech/webkit/config-provider\' (add `:locale` for a language the user chose).'
+      : 'no ConfigProvider in src/ — components read English text, left-to-right, and format for the ' +
+          'device locale. Wrap the app root in `<ConfigProvider :catalogs="catalogs">` from ' +
+          "'@aziontech/webkit/config-provider' (add `:locale` for a language the user chose)."
   )
 
   let usesToast = false
@@ -479,7 +497,9 @@ export function planDoctor(projectDir) {
       toastWired ? 'ok' : 'warn',
       toastWired
         ? 'toast region wired (ToastPlugin or a mounted Toaster)'
-        : "toast is imported but no region is wired — toasts will not render. Add `import { ToastPlugin } from '@aziontech/webkit/toast'` and chain `.use(ToastPlugin)` onto createApp() in your entry (the plugin mounts the region automatically)."
+        : 'toast is imported but no region is wired — toasts will not render. Add `import { ' +
+            "ToastPlugin } from '@aziontech/webkit/toast'` and chain `.use(ToastPlugin)` onto " +
+            'createApp() in your entry (the plugin mounts the region automatically).'
     )
   }
 

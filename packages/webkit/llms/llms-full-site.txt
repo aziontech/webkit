@@ -5912,13 +5912,21 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 <script setup>
   import ArticleBodySection from '@aziontech/webkit/article-body-section'
   import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
+
+  const BODY =
+    '## Challenge\n\n' +
+    'Magalu is the most innovative retail company in LATAM.\n\n' +
+    '## Solution\n\n' +
+    'Magalu counts on Azion’s platform to evolve its security posture.\n\n' +
+    '## Results and Impact\n\n' +
+    'Magalu simplified security operations by blocking millions of threats per year.'
 </script>
 
 <template>
   <ArticleBodySection
     eyebrow="Blog"
     :banner="placeholderImage"
-    body="## Challenge&#10;&#10;Magalu is the most innovative retail company in LATAM.&#10;&#10;## Solution&#10;&#10;Magalu counts on Azion’s platform to evolve its security posture.&#10;&#10;## Results and Impact&#10;&#10;Magalu simplified security operations by blocking millions of threats per year."
+    :body="BODY"
     :article="{
       title: 'Magalu Ensures High Availability at Scale with Azion',
       description:
@@ -6955,7 +6963,9 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
     {
       logo: magaluExtendedColor,
       clientName: 'Magalu',
-      text: 'Azion shielded us from sophisticated cyberattacks and empowered us to modernize our infrastructure, reduce costs, and deliver the best shopping experiences to millions of customers across Latin America.',
+      text:
+        'Azion shielded us from sophisticated cyberattacks and empowered us to modernize our infrastructure, reduce ' +
+        'costs, and deliver the best shopping experiences to millions of customers across Latin America.',
       name: 'Allan Monteiro',
       jobTitle: 'CISO & Head of Technology at Magalu'
     },
@@ -8079,12 +8089,16 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
       {
         question: 'What types of storefronts can I build and deploy on Azion?',
         answer:
-          'You can build and deploy storefronts, marketplaces, campaign pages, and supporting retail apps. Any web app or website runs on Azion. The platform also covers much of the backend, for static and dynamic workloads on a distributed architecture.'
+          'You can build and deploy storefronts, marketplaces, campaign pages, and supporting retail apps. Any web app ' +
+          'or website runs on Azion. The platform also covers much of the backend, for static and dynamic workloads on a ' +
+          'distributed architecture.'
       },
       {
         question: 'Which frameworks are compatible?',
         answer:
-          'Azion is compatible with modern frameworks such as Next.js, React, Vue, Astro, Angular, Nuxt, Svelte, and others, so you can reuse your current stack without a full rewrite. See the full [frameworks compatibility list](/en/documentation/products/devtools/azion-edge-runtime/frameworks-compatibility/).'
+          'Azion is compatible with modern frameworks such as Next.js, React, Vue, Astro, Angular, Nuxt, Svelte, and ' +
+          'others, so you can reuse your current stack without a full rewrite. See the full [frameworks compatibility ' +
+          'list](/en/documentation/products/devtools/azion-edge-runtime/frameworks-compatibility/).'
       },
       {
         question: 'How do preview deployments work?',
@@ -9185,7 +9199,9 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
       blocks: [
         {
           type: 'text',
-          text: 'As a Senior Platform Engineer you will turn quality into a built-in capability of our engineering platform: automation, internal tools and standards that remove manual steps from the delivery cycle.'
+          text:
+            'As a Senior Platform Engineer you will turn quality into a built-in capability of our engineering platform: ' +
+            'automation, internal tools and standards that remove manual steps from the delivery cycle.'
         },
         {
           type: 'text',
@@ -9844,13 +9860,18 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 ```vue
 <script setup>
   import MediaSplitSection from '@aziontech/webkit/media-split-section'
+
+  const DESCRIPTION =
+    'Quality, Drive, Accountability, and Innovation. They guide how we work every ' +
+    'day: we set high standards and measure what we deliver, take on hard problems with persistence, own our commitments and mistakes, and use AI and new technology to solve problems in ' +
+    'new ways. Together, they help us earn and keep the trust of our customers.'
 </script>
 
 <template>
   <MediaSplitSection
     eyebrow="Our values"
     title="Four values shape every role at Azion"
-    description="Quality, Drive, Accountability, and Innovation. They guide how we work every day: we set high standards and measure what we deliver, take on hard problems with persistence, own our commitments and mistakes, and use AI and new technology to solve problems in new ways. Together, they help us earn and keep the trust of our customers."
+    :description="DESCRIPTION"
     size="large"
     :scene="{ component: 'BrandGlobeScene' }"
   />
@@ -10312,12 +10333,16 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 <script setup>
   import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
   import PhotoMarqueeSection from '@aziontech/webkit/photo-marquee-section'
+
+  const DESCRIPTION =
+    'The Azion Way of Life pairs high performance with autonomy, authenticity, and enjoyment. You manage your own routine and answer for outcomes, working with teammates across ' +
+    "countries and cultures. There's no dress code: what counts is the ideas, energy, and integrity you bring."
 </script>
 
 <template>
   <PhotoMarqueeSection
     title="Work at Azion"
-    description="The Azion Way of Life pairs high performance with autonomy, authenticity, and enjoyment. You manage your own routine and answer for outcomes, working with teammates across countries and cultures. There's no dress code: what counts is the ideas, energy, and integrity you bring."
+    :description="DESCRIPTION"
     description-width="wide"
     aria-label="Azion offices"
     :photos="[
@@ -11056,7 +11081,9 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
         logoLight: gigaomExtendedColor
       },
       {
-        text: 'Recognized as a Leader in CDN, Web Security, and DDoS Protection, and a High Performer in Cloud Security, WAF, Bot Detection and Mitigation, SSL & TLS Certificate Tools, and API Security Tools.',
+        text:
+          'Recognized as a Leader in CDN, Web Security, and DDoS Protection, and a High Performer in Cloud Security, ' +
+          'WAF, Bot Detection and Mitigation, SSL & TLS Certificate Tools, and API Security Tools.',
         reportName: 'G2 Reports',
         date: 'March 2026',
         firmName: 'G2',

@@ -53,6 +53,19 @@
   const attrs = useAttrs()
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'settings-row')
+
+  const TEXT_CLASS =
+    'flex flex-col ' +
+    '[&>[data-slot=item-description]]:line-clamp-none ' +
+    'data-[depth=1]:border-s data-[depth=2]:border-s data-[depth=1]:border-(--border-default) data-[depth=2]:border-(--border-default) data-[depth=1]:ps-(--spacing-md) ' +
+    'data-[depth=2]:ps-(--spacing-md) data-[depth=2]:ms-(--spacing-md)'
+
+  const CONTROL_CLASS =
+    'contents ' +
+    'data-[variant=field]:flex data-[variant=field]:min-w-0 data-[variant=field]:max-w-(--container-3xs) data-[variant=field]:flex-1 data-[variant=field]:justify-end ' +
+    '@max-md/settings-row:data-[variant=field]:max-w-none @max-md/settings-row:data-[variant=field]:basis-full @max-md/settings-row:data-[variant=field]:justify-start ' +
+    '@max-lg/settings-row:data-[variant=field]:data-[stackable]:max-w-none @max-lg/settings-row:data-[variant=field]:data-[stackable]:basis-full ' +
+    '@max-lg/settings-row:data-[variant=field]:data-[stackable]:justify-start'
 </script>
 
 <template>
@@ -73,7 +86,7 @@
       <ItemContent>
         <div
           :data-depth="depth"
-          class="flex flex-col [&>[data-slot=item-description]]:line-clamp-none data-[depth=1]:border-s data-[depth=2]:border-s data-[depth=1]:border-(--border-default) data-[depth=2]:border-(--border-default) data-[depth=1]:ps-(--spacing-md) data-[depth=2]:ps-(--spacing-md) data-[depth=2]:ms-(--spacing-md)"
+          :class="TEXT_CLASS"
         >
           <ItemTitle :data-testid="`${testId}__title`">
             <slot name="title">{{ title }}</slot>
@@ -94,7 +107,7 @@
       <div
         :data-variant="variant"
         :data-stackable="stackable || null"
-        class="contents data-[variant=field]:flex data-[variant=field]:min-w-0 data-[variant=field]:max-w-(--container-3xs) data-[variant=field]:flex-1 data-[variant=field]:justify-end @max-md/settings-row:data-[variant=field]:max-w-none @max-md/settings-row:data-[variant=field]:basis-full @max-md/settings-row:data-[variant=field]:justify-start @max-lg/settings-row:data-[variant=field]:data-[stackable]:max-w-none @max-lg/settings-row:data-[variant=field]:data-[stackable]:basis-full @max-lg/settings-row:data-[variant=field]:data-[stackable]:justify-start"
+        :class="CONTROL_CLASS"
       >
         <ItemActions
           :data-testid="`${testId}__control`"

@@ -179,6 +179,23 @@
     emit('upload', event, picked)
     input.value = ''
   }
+
+  const ACCOUNT_BUTTON_CLASS =
+    'rounded-full transition-opacity duration-fast-02 ease-productive-entrance ' +
+    'hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) ' +
+    'motion-reduce:transition-none'
+
+  const TEMPLATE_GLOW_CLASS =
+    'pointer-events-none absolute inset-0 -z-1 overflow-hidden rounded-(--shape-card) opacity-0 transition-opacity duration-moderate-01 ease-productive-entrance ' +
+    'group-focus-within:opacity-100 group-hover:opacity-100 motion-reduce:transition-none'
+
+  const TEMPLATE_ICON_CLASS =
+    'text-body-lg leading-none text-(--text-default) grayscale transition duration-moderate-01 ease-productive-entrance ' +
+    'group-focus-within:grayscale-0 group-hover:grayscale-0 motion-reduce:transition-none'
+
+  const TEMPLATE_LINK_CLASS =
+    "text-(--text-default) no-underline outline-none after:absolute after:inset-0 after:z-20 after:rounded-(--shape-card) after:content-[''] focus-visible:after:ring-2 " +
+    'focus-visible:after:ring-inset focus-visible:after:ring-(--ring-color)'
 </script>
 
 <template>
@@ -207,7 +224,7 @@
         <button
           type="button"
           aria-label="Account settings"
-          class="rounded-full transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
+          :class="ACCOUNT_BUTTON_CLASS"
         >
           <Avatar
             label="name@example.com"
@@ -629,7 +646,7 @@
                                   <div class="isolate flex flex-1 flex-col">
                                     <span
                                       aria-hidden="true"
-                                      class="pointer-events-none absolute inset-0 -z-1 overflow-hidden rounded-(--shape-card) opacity-0 transition-opacity duration-moderate-01 ease-productive-entrance group-focus-within:opacity-100 group-hover:opacity-100 motion-reduce:transition-none"
+                                      :class="TEMPLATE_GLOW_CLASS"
                                     >
                                       <i
                                         :class="[item.icon, item.markClass]"
@@ -643,8 +660,10 @@
                                         class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
                                       >
                                         <i
-                                          :class="[item.icon, item.markClass]"
-                                          class="text-body-lg leading-none text-(--text-default) grayscale transition duration-moderate-01 ease-productive-entrance group-focus-within:grayscale-0 group-hover:grayscale-0 motion-reduce:transition-none"
+                                          :class="[
+                                            TEMPLATE_ICON_CLASS,
+                                            [item.icon, item.markClass]
+                                          ]"
                                           aria-hidden="true"
                                         />
                                       </span>
@@ -652,7 +671,7 @@
                                         <h4 class="text-label-md text-(--text-default)">
                                           <a
                                             :href="templateHref(item)"
-                                            class="text-(--text-default) no-underline outline-none after:absolute after:inset-0 after:z-20 after:rounded-(--shape-card) after:content-[''] focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-(--ring-color)"
+                                            :class="TEMPLATE_LINK_CLASS"
                                           >
                                             {{ item.title }}
                                           </a>

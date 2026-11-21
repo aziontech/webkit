@@ -122,12 +122,17 @@
       new Date(base.getFullYear(), base.getMonth(), base.getDate(), time.hours, time.minutes)
     )
   }
+
+  const ROOT_CLASS =
+    'group/fields flex flex-col gap-(--spacing-sm) [--input-ring-offset:var(--bg-surface-raised)] ' +
+    'data-[inline-labels]:grid data-[inline-labels]:grid-cols-[max-content_minmax(0,1fr)] data-[inline-labels]:items-center data-[inline-labels]:gap-x-(--spacing-sm) ' +
+    'data-[inline-labels]:gap-y-(--spacing-xs)'
 </script>
 
 <template>
   <div
     :data-inline-labels="inlineLabels || null"
-    class="group/fields flex flex-col gap-(--spacing-sm) [--input-ring-offset:var(--bg-surface-raised)] data-[inline-labels]:grid data-[inline-labels]:grid-cols-[max-content_minmax(0,1fr)] data-[inline-labels]:items-center data-[inline-labels]:gap-x-(--spacing-sm) data-[inline-labels]:gap-y-(--spacing-xs)"
+    :class="ROOT_CLASS"
     data-testid="date-picker__fields"
   >
     <div class="flex flex-col gap-(--spacing-2xs) group-data-[inline-labels]/fields:contents">

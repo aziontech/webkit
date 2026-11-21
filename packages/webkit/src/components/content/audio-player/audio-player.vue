@@ -263,6 +263,10 @@
     rate.value = rates[(index + 1) % rates.length] ?? rates[0] ?? 1
     if (audioEl.value) audioEl.value.playbackRate = rate.value
   }
+
+  const TRANSCRIPT_SUMMARY_CLASS =
+    'cursor-pointer rounded-(--shape-control) text-label-sm text-(--text-default) ' +
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)'
 </script>
 
 <template>
@@ -425,9 +429,7 @@
       v-if="transcript"
       :data-testid="`${testId}__transcript`"
     >
-      <summary
-        class="cursor-pointer rounded-(--shape-control) text-label-sm text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
-      >
+      <summary :class="TRANSCRIPT_SUMMARY_CLASS">
         {{ t('audioPlayer.transcript') }}
       </summary>
       <p

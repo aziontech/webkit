@@ -187,6 +187,36 @@
   const stopResize = () => {
     dragAxis.value = null
   }
+
+  const FRAME_CLASS =
+    'relative mx-auto max-w-full rounded-(--shape-card) bg-(--bg-surface) after:pointer-events-none after:absolute after:inset-0 after:rounded-(--shape-card) after:border ' +
+    "after:border-(--border-default) after:content-['']"
+
+  const WIDTH_HANDLE_CLASS =
+    'group/handle absolute inset-y-0 end-0 flex w-6 cursor-col-resize touch-none items-center justify-center rounded-(--shape-control) outline-none ' +
+    'focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)'
+
+  const WIDTH_GRIP_CLASS =
+    'h-8 w-1 rounded-(--shape-control) bg-(--border-strong) transition-colors duration-150 ease-out ' +
+    'group-hover/handle:bg-(--text-default) group-focus-visible/handle:bg-(--text-default) ' +
+    'group-data-[resizing]:bg-(--text-default) ' +
+    'motion-reduce:transition-none'
+
+  const HEIGHT_HANDLE_CLASS =
+    'group/handle absolute inset-x-0 bottom-0 flex h-6 cursor-row-resize touch-none items-center justify-center rounded-(--shape-control) outline-none ' +
+    'focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)'
+
+  const HEIGHT_GRIP_CLASS =
+    'h-1 w-8 rounded-(--shape-control) bg-(--border-strong) transition-colors duration-150 ease-out ' +
+    'group-hover/handle:bg-(--text-default) group-focus-visible/handle:bg-(--text-default) ' +
+    'group-data-[resizing]:bg-(--text-default) ' +
+    'motion-reduce:transition-none'
+
+  const CORNER_GRIP_CLASS =
+    'size-2 rounded-(--shape-control) bg-(--border-strong) transition-colors duration-150 ease-out ' +
+    'group-hover/handle:bg-(--text-default) ' +
+    'group-data-[resizing]:bg-(--text-default) ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -203,7 +233,7 @@
       class="h-0 w-full"
     />
     <div
-      class="relative mx-auto max-w-full rounded-(--shape-card) bg-(--bg-surface) after:pointer-events-none after:absolute after:inset-0 after:rounded-(--shape-card) after:border after:border-(--border-default) after:content-['']"
+      :class="FRAME_CLASS"
       :style="frameStyle"
     >
       <div
@@ -276,7 +306,7 @@
         :aria-controls="viewportId"
         :aria-label="widthHandleAriaLabel || t('browserFrame.resizeWidth')"
         :data-testid="`${testId}__width-handle`"
-        class="group/handle absolute inset-y-0 end-0 flex w-6 cursor-col-resize touch-none items-center justify-center rounded-(--shape-control) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
+        :class="WIDTH_HANDLE_CLASS"
         @keydown="onWidthKeydown"
         @focus="focused = true"
         @blur="focused = false"
@@ -286,9 +316,7 @@
         @pointercancel="stopResize"
         @lostpointercapture="stopResize"
       >
-        <span
-          class="h-8 w-1 rounded-(--shape-control) bg-(--border-strong) transition-colors duration-150 ease-out group-hover/handle:bg-(--text-default) group-focus-visible/handle:bg-(--text-default) group-data-[resizing]:bg-(--text-default) motion-reduce:transition-none"
-        />
+        <span :class="WIDTH_GRIP_CLASS" />
       </div>
       <div
         role="separator"
@@ -301,7 +329,7 @@
         :aria-controls="viewportId"
         :aria-label="heightHandleAriaLabel || t('browserFrame.resizeHeight')"
         :data-testid="`${testId}__height-handle`"
-        class="group/handle absolute inset-x-0 bottom-0 flex h-6 cursor-row-resize touch-none items-center justify-center rounded-(--shape-control) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
+        :class="HEIGHT_HANDLE_CLASS"
         @keydown="onHeightKeydown"
         @focus="focused = true"
         @blur="focused = false"
@@ -311,9 +339,7 @@
         @pointercancel="stopResize"
         @lostpointercapture="stopResize"
       >
-        <span
-          class="h-1 w-8 rounded-(--shape-control) bg-(--border-strong) transition-colors duration-150 ease-out group-hover/handle:bg-(--text-default) group-focus-visible/handle:bg-(--text-default) group-data-[resizing]:bg-(--text-default) motion-reduce:transition-none"
-        />
+        <span :class="HEIGHT_GRIP_CLASS" />
       </div>
       <div
         aria-hidden="true"
@@ -325,9 +351,7 @@
         @pointercancel="stopResize"
         @lostpointercapture="stopResize"
       >
-        <span
-          class="size-2 rounded-(--shape-control) bg-(--border-strong) transition-colors duration-150 ease-out group-hover/handle:bg-(--text-default) group-data-[resizing]:bg-(--text-default) motion-reduce:transition-none"
-        />
+        <span :class="CORNER_GRIP_CLASS" />
       </div>
     </div>
     <Teleport

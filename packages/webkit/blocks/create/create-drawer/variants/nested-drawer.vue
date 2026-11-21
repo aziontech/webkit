@@ -150,13 +150,17 @@
     when: () => childOpen.value && !childSubmitting.value,
     handler: () => childFormEl.value?.requestSubmit()
   })
+
+  const PAGE_DESCRIPTION =
+    'The rules of the storefront resource, run in order on every request they match. A rule that sends requests to an origin the resource does not have yet creates it in a second ' +
+    'drawer.'
 </script>
 
 <template>
   <div class="layout-boundary flex min-h-0 flex-1 flex-col">
     <PageHeader
       title="Rules Engine"
-      description="The rules of the storefront resource, run in order on every request they match. A rule that sends requests to an origin the resource does not have yet creates it in a second drawer."
+      :description="PAGE_DESCRIPTION"
       size="small"
     >
       <template #actions>

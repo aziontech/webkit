@@ -68,6 +68,42 @@
   })
 
   const activate = () => context.select(props.value)
+
+  const HEADER_BUTTON_CLASS =
+    'flex min-h-10 w-full items-stretch gap-(--spacing-sm) rounded-(--shape-control) px-(--spacing-sm) py-(--spacing-xs) text-start transition-colors duration-fast-02 ' +
+    'ease-productive-entrance hover:bg-(--bg-hover) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) ' +
+    'focus-visible:outline-none disabled:cursor-not-allowed disabled:hover:bg-transparent motion-reduce:transition-none'
+
+  const DOT_CLASS =
+    'relative flex size-6 shrink-0 items-center justify-center rounded-(--radius-full) border border-(--border-default) bg-(--bg-surface) text-label-sm text-(--text-muted) ' +
+    'transition-colors duration-fast-02 ease-productive-entrance ' +
+    'group-data-[completed]/step:border-(--secondary) group-data-[completed]/step:bg-(--secondary) group-data-[completed]/step:text-(--secondary-foreground) ' +
+    'group-data-[active]/step:border-(--secondary) ' +
+    'group-data-[status=error]/step:border-(--danger-border) group-data-[status=error]/step:bg-(--danger) group-data-[status=error]/step:text-(--danger-foreground) ' +
+    'group-data-[status=running]/step:border-(--secondary) group-data-[status=running]/step:text-(--secondary) ' +
+    'group-data-[disabled]/step:text-(--text-disabled) ' +
+    'motion-reduce:transition-none'
+
+  const DISC_CLASS =
+    'pointer-events-none absolute inset-0 m-auto size-2 scale-0 rounded-(--radius-full) bg-(--secondary) transition-[scale] duration-fast-02 ease-productive-entrance ' +
+    'group-data-[active]/step:scale-100 ' +
+    'motion-reduce:transition-none'
+
+  const TITLE_CLASS =
+    'flex min-h-6 items-center text-label-md text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance ' +
+    'group-data-[completed]/step:text-(--text-default) ' +
+    'group-data-[active]/step:text-(--text-default) ' +
+    'group-data-[disabled]/step:text-(--text-disabled) ' +
+    'motion-reduce:transition-none'
+
+  const CONNECTOR_CLASS =
+    'pointer-events-none absolute start-[calc(var(--spacing-sm)+0.75rem-0.5px)] top-[calc(var(--spacing-xs)*2+1.5rem)] bottom-(--spacing-xs) min-h-6 w-px bg-(--border-default) ' +
+    'transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none'
+
+  const CONNECTOR_FILL_CLASS =
+    'absolute inset-0 origin-top scale-y-0 bg-(--secondary) transition-[scale] duration-moderate-02 ease-productive-entrance ' +
+    'group-data-[completed]/step:scale-y-100 ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -87,7 +123,7 @@
       :disabled="disabled"
       :aria-current="shown === 'active' ? 'step' : undefined"
       :aria-busy="shown === 'running' ? 'true' : undefined"
-      class="flex min-h-10 w-full items-stretch gap-(--spacing-sm) rounded-(--shape-control) px-(--spacing-sm) py-(--spacing-xs) text-start transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) focus-visible:outline-none disabled:cursor-not-allowed disabled:hover:bg-transparent motion-reduce:transition-none"
+      :class="HEADER_BUTTON_CLASS"
       @click="activate"
     >
       <span
@@ -96,11 +132,11 @@
       >
         <span
           data-slot="step-dot"
-          class="relative flex size-6 shrink-0 items-center justify-center rounded-(--radius-full) border border-(--border-default) bg-(--bg-surface) text-label-sm text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance group-data-[completed]/step:border-(--secondary) group-data-[completed]/step:bg-(--secondary) group-data-[completed]/step:text-(--secondary-foreground) group-data-[active]/step:border-(--secondary) group-data-[status=error]/step:border-(--danger-border) group-data-[status=error]/step:bg-(--danger) group-data-[status=error]/step:text-(--danger-foreground) group-data-[status=running]/step:border-(--secondary) group-data-[status=running]/step:text-(--secondary) group-data-[disabled]/step:text-(--text-disabled) motion-reduce:transition-none"
+          :class="DOT_CLASS"
         >
           <span
             data-slot="step-disc"
-            class="pointer-events-none absolute inset-0 m-auto size-2 scale-0 rounded-(--radius-full) bg-(--secondary) transition-[scale] duration-fast-02 ease-productive-entrance group-data-[active]/step:scale-100 motion-reduce:transition-none"
+            :class="DISC_CLASS"
           />
           <Spinner
             v-if="shown === 'running'"
@@ -122,10 +158,7 @@
         />
       </span>
       <span class="flex min-w-0 flex-1 flex-col pb-(--spacing-sm) group-data-[has-body]/step:pb-0">
-        <span
-          class="flex min-h-6 items-center text-label-md text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance group-data-[completed]/step:text-(--text-default) group-data-[active]/step:text-(--text-default) group-data-[disabled]/step:text-(--text-disabled) motion-reduce:transition-none"
-          >{{ title }}</span
-        >
+        <span :class="TITLE_CLASS">{{ title }}</span>
         <span class="sr-only">{{ statusLabel }}</span>
         <Transition
           enter-active-class="transition-[grid-template-rows,opacity] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
@@ -152,11 +185,9 @@
       v-if="!isLast"
       data-slot="step-connector"
       aria-hidden="true"
-      class="pointer-events-none absolute start-[calc(var(--spacing-sm)+0.75rem-0.5px)] top-[calc(var(--spacing-xs)*2+1.5rem)] bottom-(--spacing-xs) min-h-6 w-px bg-(--border-default) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none"
+      :class="CONNECTOR_CLASS"
     >
-      <span
-        class="absolute inset-0 origin-top scale-y-0 bg-(--secondary) transition-[scale] duration-moderate-02 ease-productive-entrance group-data-[completed]/step:scale-y-100 motion-reduce:transition-none"
-      />
+      <span :class="CONNECTOR_FILL_CLASS" />
     </span>
     <div
       v-if="$slots['default']"

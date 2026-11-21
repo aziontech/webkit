@@ -97,6 +97,20 @@
     if (!ctx?.dismissible) return
     ctx.dismiss()
   }
+
+  const BACKDROP_CLASS =
+    'fixed inset-0 z-1000 bg-(--bg-backdrop) opacity-0 ' +
+    'data-[state=open]:opacity-100 ' +
+    'transition-opacity motion-reduce:transition-none max-md:duration-slow-01 max-md:ease-productive-entrance max-md:data-[state=closed]:duration-slow-02 ' +
+    'max-md:data-[state=closed]:ease-productive-exit md:duration-moderate-01 md:ease-productive-entrance md:data-[state=closed]:ease-productive-exit'
+
+  const PANEL_SHELL_CLASS =
+    'pointer-events-auto mx-auto w-full max-md:w-full ' +
+    'data-[size=small]:md:max-w-(--container-sm) data-[size=medium]:md:max-w-(--container-xl) data-[size=large]:md:max-w-(--container-2xl) ' +
+    'transition-[translate,scale,opacity] motion-reduce:transition-none max-md:translate-x-0 max-md:duration-slow-02 max-md:ease-expressive-entrance ' +
+    'max-md:data-[state=closed]:translate-y-full max-md:data-[state=closed]:duration-slow-01 max-md:data-[state=closed]:ease-expressive-exit max-md:data-[state=open]:translate-y-0 ' +
+    'md:origin-center md:translate-y-0 md:scale-90 md:opacity-0 md:duration-moderate-01 md:ease-productive-entrance md:data-[state=closed]:ease-productive-exit ' +
+    'md:data-[state=open]:scale-100 md:data-[state=open]:opacity-100'
 </script>
 
 <template>
@@ -111,7 +125,7 @@
       :lang="portalLocale.lang"
     >
       <div
-        class="fixed inset-0 z-1000 bg-(--bg-backdrop) opacity-0 data-[state=open]:opacity-100 transition-opacity motion-reduce:transition-none max-md:duration-slow-01 max-md:ease-productive-entrance max-md:data-[state=closed]:duration-slow-02 max-md:data-[state=closed]:ease-productive-exit md:duration-moderate-01 md:ease-productive-entrance md:data-[state=closed]:ease-productive-exit"
+        :class="BACKDROP_CLASS"
         :data-state="motionState"
         :data-testid="`${testId}__backdrop`"
         aria-hidden="true"
@@ -136,7 +150,7 @@
         <div
           :data-state="motionState"
           :data-size="ctx?.size ?? 'medium'"
-          class="pointer-events-auto mx-auto w-full max-md:w-full data-[size=small]:md:max-w-(--container-sm) data-[size=medium]:md:max-w-(--container-xl) data-[size=large]:md:max-w-(--container-2xl) transition-[translate,scale,opacity] motion-reduce:transition-none max-md:translate-x-0 max-md:duration-slow-02 max-md:ease-expressive-entrance max-md:data-[state=closed]:translate-y-full max-md:data-[state=closed]:duration-slow-01 max-md:data-[state=closed]:ease-expressive-exit max-md:data-[state=open]:translate-y-0 md:origin-center md:translate-y-0 md:scale-90 md:opacity-0 md:duration-moderate-01 md:ease-productive-entrance md:data-[state=closed]:ease-productive-exit md:data-[state=open]:scale-100 md:data-[state=open]:opacity-100"
+          :class="PANEL_SHELL_CLASS"
         >
           <Panel
             :size="ctx?.size ?? 'medium'"

@@ -699,6 +699,17 @@
   }
 
   const portalLocale = usePortalLocale()
+
+  const SUGGESTIONS_CLASS =
+    'fixed z-(--z-control-overlay) flex max-h-80 flex-col gap-(--spacing-2xs) overflow-y-auto overscroll-contain rounded-(--shape-control) border border-(--border-default) ' +
+    'bg-(--bg-surface-raised) p-(--spacing-2xs) shadow-(--shadow-xs)'
+
+  const OPTION_CLASS =
+    'flex min-h-8 cursor-pointer items-center gap-(--spacing-sm) rounded-(--shape-control) border-y border-transparent bg-clip-padding ' +
+    'forced-colors:border-y-0 px-(--spacing-sm) py-(--spacing-2xs) text-start text-label-sm text-(--text-default) transition-colors duration-150 ease-out ' +
+    'hover:bg-(--bg-hover) ' +
+    'data-[active]:bg-(--bg-hover) ' +
+    'motion-reduce:transition-none pointer-coarse:min-h-11'
 </script>
 
 <template>
@@ -769,7 +780,7 @@
           :data-side="resolvedSide"
           :data-align="resolvedAlign"
           :style="panelStyle"
-          class="fixed z-(--z-control-overlay) flex max-h-80 flex-col gap-(--spacing-2xs) overflow-y-auto overscroll-contain rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-2xs) shadow-(--shadow-xs)"
+          :class="SUGGESTIONS_CLASS"
         >
           <li
             v-for="section in sections"
@@ -798,7 +809,7 @@
                 :data-active="index === active || null"
                 :data-group="item.group"
                 :data-testid="`${testId}__option`"
-                class="flex min-h-8 cursor-pointer items-center gap-(--spacing-sm) rounded-(--shape-control) border-y border-transparent bg-clip-padding forced-colors:border-y-0 px-(--spacing-sm) py-(--spacing-2xs) text-start text-label-sm text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) data-[active]:bg-(--bg-hover) motion-reduce:transition-none pointer-coarse:min-h-11"
+                :class="OPTION_CLASS"
                 @mousedown.prevent
                 @click="item.apply()"
                 @keydown.enter.prevent="item.apply()"

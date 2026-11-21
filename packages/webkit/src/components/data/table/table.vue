@@ -92,6 +92,32 @@
     end: overflowEnd,
     measure: measureEdges
   } = useScrollEdges(viewportEl)
+
+  const ROOT_CLASS =
+    '@container/table ' +
+    'data-[density=compact]:[&_[role=cell]]:min-h-9 data-[density=compact]:[&_[role=cell]]:py-(--spacing-2xs) ' +
+    'data-[wrap]:[&_[role=cell]]:whitespace-normal ' +
+    'data-[wrap]:[&_[role=cell]_.truncate:not(:is(code,kbd,samp,[dir=ltr],[class*=text-label-code]),:is(code,kbd,samp,[dir=ltr],[class*=text-label-code])_*)]:whitespace-normal ' +
+    'data-[wrap]:[&_[role=cell]_.truncate:not(:is(code,kbd,samp,[dir=ltr],[class*=text-label-code]),:is(code,kbd,samp,[dir=ltr],[class*=text-label-code])_*)]:break-words ' +
+    'data-[wrap]:[&_[role=cell]_:is(code,kbd,samp,[dir=ltr],[class*=text-label-code])]:whitespace-nowrap ' +
+    'flex w-full flex-col overflow-hidden rounded-(--shape-control) bg-(--bg-surface) text-(--text-default) text-body-sm ' +
+    'data-[bordered]:border-(length:--border-width-default) data-[bordered]:border-solid data-[bordered]:border-(--border-default)'
+
+  const VIEWPORT_CLASS =
+    'relative min-h-0 min-w-0 max-h-(--table-viewport-height) overflow-x-auto overflow-y-hidden ' +
+    'data-[scroll=both]:overflow-y-auto ' +
+    '[scrollbar-width:thin] [scrollbar-color:var(--border-muted)_transparent] ' +
+    'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--border-default) motion-reduce:scroll-auto'
+
+  const FADE_START_CLASS =
+    'pointer-events-none absolute inset-y-0 start-0 z-5 hidden bg-gradient-to-l from-transparent to-(--bg-surface) ' +
+    'group-data-[overflow-start]/scroll:block ' +
+    'rtl:bg-gradient-to-r forced-colors:forced-color-adjust-none forced-colors:to-[Canvas]'
+
+  const FADE_END_CLASS =
+    'pointer-events-none absolute inset-y-0 end-0 z-5 hidden bg-gradient-to-r from-transparent to-(--bg-surface) ' +
+    'group-data-[overflow-end]/scroll:block ' +
+    'rtl:bg-gradient-to-l forced-colors:forced-color-adjust-none forced-colors:to-[Canvas]'
 </script>
 
 <template>
@@ -102,7 +128,7 @@
     :data-density="density"
     :data-wrap="wrapLines || null"
     :style="viewportHeightVar"
-    class="@container/table data-[density=compact]:[&_[role=cell]]:min-h-9 data-[density=compact]:[&_[role=cell]]:py-(--spacing-2xs) data-[wrap]:[&_[role=cell]]:whitespace-normal data-[wrap]:[&_[role=cell]_.truncate:not(:is(code,kbd,samp,[dir=ltr],[class*=text-label-code]),:is(code,kbd,samp,[dir=ltr],[class*=text-label-code])_*)]:whitespace-normal data-[wrap]:[&_[role=cell]_.truncate:not(:is(code,kbd,samp,[dir=ltr],[class*=text-label-code]),:is(code,kbd,samp,[dir=ltr],[class*=text-label-code])_*)]:break-words data-[wrap]:[&_[role=cell]_:is(code,kbd,samp,[dir=ltr],[class*=text-label-code])]:whitespace-nowrap flex w-full flex-col overflow-hidden rounded-(--shape-control) bg-(--bg-surface) text-(--text-default) text-body-sm data-[bordered]:border-(length:--border-width-default) data-[bordered]:border-solid data-[bordered]:border-(--border-default)"
+    :class="ROOT_CLASS"
   >
     <div
       v-if="$slots['title'] || $slots['toolbar']"
@@ -135,7 +161,7 @@
         tabindex="0"
         :data-scroll="maxHeight ? 'both' : 'horizontal'"
         :data-testid="`${testId}__viewport`"
-        class="relative min-h-0 min-w-0 max-h-(--table-viewport-height) overflow-x-auto overflow-y-hidden data-[scroll=both]:overflow-y-auto [scrollbar-width:thin] [scrollbar-color:var(--border-muted)_transparent] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--border-default) motion-reduce:scroll-auto"
+        :class="VIEWPORT_CLASS"
         @scroll.passive="measureEdges"
       >
         <div class="flex w-max min-w-full flex-col">
@@ -153,13 +179,13 @@
         aria-hidden="true"
         :data-testid="`${testId}__fade-start`"
         :style="{ width: `${overflowStart}px` }"
-        class="pointer-events-none absolute inset-y-0 start-0 z-5 hidden bg-gradient-to-l from-transparent to-(--bg-surface) group-data-[overflow-start]/scroll:block rtl:bg-gradient-to-r forced-colors:forced-color-adjust-none forced-colors:to-[Canvas]"
+        :class="FADE_START_CLASS"
       />
       <span
         aria-hidden="true"
         :data-testid="`${testId}__fade-end`"
         :style="{ width: `${overflowEnd}px` }"
-        class="pointer-events-none absolute inset-y-0 end-0 z-5 hidden bg-gradient-to-r from-transparent to-(--bg-surface) group-data-[overflow-end]/scroll:block rtl:bg-gradient-to-l forced-colors:forced-color-adjust-none forced-colors:to-[Canvas]"
+        :class="FADE_END_CLASS"
       />
     </div>
 

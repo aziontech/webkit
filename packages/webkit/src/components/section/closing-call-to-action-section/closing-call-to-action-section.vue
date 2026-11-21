@@ -74,7 +74,12 @@
     command?: string
     /** Draws the hatched closing frame under the band; turn it off when another closing band stacks directly below and draws the shared frame. */
     hatch?: boolean
-    /** The ways in of the `primary` close, in switch order; each is `{ value, label, copy?, actions? }` (`copy` is `{ label, text, shell? }`, `shell` drawing the `$` prompt; an action is `{ label, href, variant?, trailing? }`) and the first one opens. Replaces the command and the two actions; the switch renders only with two or more. */
+    /**
+     * The ways in of the `primary` close, in switch order; each is `{ value, label, copy?, actions? }`
+     * (`copy` is `{ label, text, shell? }`, `shell` drawing the `$` prompt; an action is `{ label, href,
+     * variant?, trailing? }`) and the first one opens. Replaces the command and the two actions; the
+     * switch renders only with two or more.
+     */
     audiences?: ClosingCallToActionSectionAudience[]
     /** Fixed opening of the typed line under the audiences, before the typed word. */
     typedLead?: string

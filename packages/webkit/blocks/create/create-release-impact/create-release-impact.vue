@@ -262,7 +262,9 @@
 
   const impactSummary = computed(
     () =>
-      `This release reaches ${plural(projects.value.length, 'project', 'projects')} in ${plural(environments.value.length, 'environment', 'environments')} through ${plural(impactTree.value.length, 'Deployment Setting', 'Deployment Settings')}.`
+      `This release reaches ${plural(projects.value.length, 'project', 'projects')} ` +
+      `in ${plural(environments.value.length, 'environment', 'environments')} ` +
+      `through ${plural(impactTree.value.length, 'Deployment Setting', 'Deployment Settings')}.`
   )
 
   const blocker = computed(() => {
@@ -357,6 +359,20 @@
   onBeforeUnmount(() => {
     toast.dismiss(RUN_TOAST)
   })
+
+  const ENVIRONMENT_BRANCH_CLASS =
+    'relative flex min-w-0 flex-col before:absolute before:top-0 before:-start-(--tree-rail) before:h-4 before:w-(--tree-rail) before:rounded-es-(--shape-control) before:border-b ' +
+    "before:border-s before:border-(--border-default) before:content-[''] after:absolute after:top-4 after:bottom-0 after:-start-(--tree-rail) after:border-s " +
+    "after:border-(--border-default) after:content-[''] last:after:hidden"
+
+  const PROJECT_BRANCH_CLASS =
+    'relative flex min-w-0 before:absolute before:top-0 before:-start-(--tree-rail) before:h-4 before:w-(--tree-rail) before:rounded-es-(--shape-control) before:border-b before:border-s ' +
+    "before:border-(--border-default) before:content-[''] after:absolute after:top-4 after:bottom-0 after:-start-(--tree-rail) after:border-s after:border-(--border-default) " +
+    "after:content-[''] last:after:hidden"
+
+  const SETTINGS_NODE_CLASS =
+    'flex min-w-0 shrink-0 flex-col gap-(--spacing-2xs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-sm) py-(--spacing-xs) ' +
+    'sm:w-(--size-40)'
 </script>
 
 <template>
@@ -826,7 +842,7 @@
                           <li
                             v-for="environment in settings.environments"
                             :key="environment.id"
-                            class="relative flex min-w-0 flex-col before:absolute before:top-0 before:-start-(--tree-rail) before:h-4 before:w-(--tree-rail) before:rounded-es-(--shape-control) before:border-b before:border-s before:border-(--border-default) before:content-[''] after:absolute after:top-4 after:bottom-0 after:-start-(--tree-rail) after:border-s after:border-(--border-default) after:content-[''] last:after:hidden"
+                            :class="ENVIRONMENT_BRANCH_CLASS"
                           >
                             <span
                               class="flex min-h-8 min-w-0 items-center justify-between gap-(--spacing-xs)"
@@ -848,7 +864,7 @@
                               <li
                                 v-for="project in environment.projects"
                                 :key="project.id"
-                                class="relative flex min-w-0 before:absolute before:top-0 before:-start-(--tree-rail) before:h-4 before:w-(--tree-rail) before:rounded-es-(--shape-control) before:border-b before:border-s before:border-(--border-default) before:content-[''] after:absolute after:top-4 after:bottom-0 after:-start-(--tree-rail) after:border-s after:border-(--border-default) after:content-[''] last:after:hidden"
+                                :class="PROJECT_BRANCH_CLASS"
                               >
                                 <span
                                   class="flex min-h-8 min-w-0 flex-1 items-center justify-between gap-(--spacing-xs)"
@@ -885,9 +901,7 @@
                         :key="settings.id"
                         class="flex min-w-0 flex-col items-stretch gap-(--spacing-xs) sm:flex-row sm:items-center"
                       >
-                        <span
-                          class="flex min-w-0 shrink-0 flex-col gap-(--spacing-2xs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-sm) py-(--spacing-xs) sm:w-(--size-40)"
-                        >
+                        <span :class="SETTINGS_NODE_CLASS">
                           <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                             <i
                               class="az az-sliders-horizontal shrink-0 text-(--text-muted)"

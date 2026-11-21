@@ -35,7 +35,9 @@ export async function runNavigationCheck(projectDir, urls, { timeout = 30000, ch
   if (!engine) {
     return [
       finding(
-        `--url drives the routes in a browser and needs Playwright in this project: install it with \`npm i -D playwright && npx playwright install chromium\`, then run \`npx ${PACKAGE_NAME} check --url <url>\` again.`
+        `--url drives the routes in a browser and needs Playwright in this project: install it with ` +
+          `\`npm i -D playwright && npx playwright install chromium\`, then run \`npx ${PACKAGE_NAME} ` +
+          `check --url <url>\` again.`
       )
     ]
   }

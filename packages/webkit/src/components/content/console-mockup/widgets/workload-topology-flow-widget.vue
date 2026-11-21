@@ -81,6 +81,12 @@
       ]
     }
   ]
+
+  const NODE_CLASS =
+    'relative flex w-full min-w-0 flex-col rounded-(--shape-card) border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) shadow-(--shadow-xs) ' +
+    'data-[active]:border-(--primary) data-[active]:before:pointer-events-none data-[active]:before:absolute data-[active]:before:inset-0 data-[active]:before:rounded-[inherit] ' +
+    "data-[active]:before:content-[''] " +
+    'data-[active]:before:shadow-[calc(var(--spacing-5)*-1)_0_var(--spacing-11)_calc(var(--spacing-4)*-1)_var(--accent),var(--spacing-5)_0_var(--spacing-11)_calc(var(--spacing-4)*-1)_var(--primary),0_0_var(--spacing-5)_calc(var(--spacing-2)*-1)_var(--primary)]'
 </script>
 
 <template>
@@ -111,7 +117,7 @@
           >
             <div
               :data-active="node.key === 'workload' || null"
-              class="relative flex w-full min-w-0 flex-col rounded-(--shape-card) border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) shadow-(--shadow-xs) data-[active]:border-(--primary) data-[active]:before:pointer-events-none data-[active]:before:absolute data-[active]:before:inset-0 data-[active]:before:rounded-[inherit] data-[active]:before:content-[''] data-[active]:before:shadow-[calc(var(--spacing-5)*-1)_0_var(--spacing-11)_calc(var(--spacing-4)*-1)_var(--accent),var(--spacing-5)_0_var(--spacing-11)_calc(var(--spacing-4)*-1)_var(--primary),0_0_var(--spacing-5)_calc(var(--spacing-2)*-1)_var(--primary)]"
+              :class="NODE_CLASS"
             >
               <FlowDiagramAnchor>
                 <div

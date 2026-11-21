@@ -562,6 +562,56 @@
     active.value = { row: HEADER, col }
   }
   onBeforeUnmount(() => stopResize?.())
+
+  const ROOT_CLASS =
+    'flex w-full flex-col overflow-hidden rounded-(--shape-control) border-(length:--border-width-default) border-solid border-(--border-default) bg-(--bg-surface) text-body-sm ' +
+    'text-(--text-default)'
+
+  const SELECT_ALL_CLASS =
+    'relative flex min-h-10 shrink-0 items-center bg-(--bg-surface-raised) px-(--spacing-sm) text-label-sm text-(--text-muted) outline-none ' +
+    'focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) ' +
+    'data-[frozen]:sticky data-[frozen]:z-1 ' +
+    'pointer-coarse:min-h-11'
+
+  const RESIZE_HANDLE_CLASS =
+    'absolute inset-y-0 -end-3 z-1 w-6 cursor-col-resize touch-none after:absolute after:inset-y-2 after:start-1/2 after:w-px after:bg-(--border-default) focus-visible:outline-none ' +
+    'focus-visible:ring-2 focus-visible:ring-(--ring-color) pointer-coarse:-end-[1.375rem] pointer-coarse:w-11'
+
+  const CELL_CLASS =
+    'relative flex min-h-10 shrink-0 cursor-default items-center bg-(--bg-surface) px-(--spacing-sm) outline-none transition-colors duration-150 ease-out ' +
+    'group-hover/row:bg-(--bg-canvas) ' +
+    'group-data-[state=selected]/row:bg-(--bg-selected) ' +
+    'data-[selected]:bg-(--bg-selected) ' +
+    'focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) ' +
+    'data-[frozen]:sticky data-[frozen]:z-1 ' +
+    'data-[editing]:p-0 ' +
+    'motion-reduce:transition-none pointer-coarse:min-h-11'
+
+  const SELECT_EDITOR_CLASS =
+    'size-full min-h-10 rounded-(--shape-control) border-none bg-(--bg-surface) px-(--spacing-sm) text-body-sm ' +
+    'pointer-coarse:text-body-md text-(--text-default) outline-none ring-2 ring-inset ring-(--ring-color) ' +
+    'pointer-coarse:min-h-11'
+
+  const INPUT_EDITOR_CLASS =
+    'size-full min-h-10 rounded-(--shape-control) border-none bg-(--bg-surface) px-(--spacing-sm) text-start text-body-sm ' +
+    'pointer-coarse:text-body-md text-(--text-default) outline-none ring-2 ring-inset ring-(--ring-color) ' +
+    'data-[align=end]:text-end ' +
+    'data-[invalid]:ring-(--danger-border) ' +
+    'pointer-coarse:min-h-11'
+
+  const ERROR_CLASS =
+    'absolute start-0 top-full z-3 mt-(--spacing-2xs) whitespace-nowrap rounded-(--shape-control) border-(length:--border-width-default) border-solid border-(--danger-border) ' +
+    'bg-(--bg-surface) px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-default)'
+
+  const FADE_START_CLASS =
+    'pointer-events-none absolute inset-y-0 start-0 z-20 hidden bg-gradient-to-l from-transparent to-(--bg-surface) ' +
+    'group-data-[overflow-start]/scroll:block ' +
+    'rtl:bg-gradient-to-r forced-colors:forced-color-adjust-none forced-colors:to-[Canvas]'
+
+  const FADE_END_CLASS =
+    'pointer-events-none absolute inset-y-0 end-0 z-20 hidden bg-gradient-to-r from-transparent to-(--bg-surface) ' +
+    'group-data-[overflow-end]/scroll:block ' +
+    'rtl:bg-gradient-to-l forced-colors:forced-color-adjust-none forced-colors:to-[Canvas]'
 </script>
 
 <script lang="ts">
@@ -578,7 +628,7 @@
     v-bind="rootAttrs"
     :data-testid="testId"
     :data-readonly="readonly || null"
-    class="flex w-full flex-col overflow-hidden rounded-(--shape-control) border-(length:--border-width-default) border-solid border-(--border-default) bg-(--bg-surface) text-body-sm text-(--text-default)"
+    :class="ROOT_CLASS"
   >
     <div
       v-if="$slots['toolbar']"
@@ -639,7 +689,7 @@
                   : `${testId}__select-all`
               "
               :style="{ width: `${widthAt(col - 1)}px`, ...frozenStyle(col - 1) }"
-              class="relative flex min-h-10 shrink-0 items-center bg-(--bg-surface-raised) px-(--spacing-sm) text-label-sm text-(--text-muted) outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) data-[frozen]:sticky data-[frozen]:z-1 pointer-coarse:min-h-11"
+              :class="SELECT_ALL_CLASS"
               @focus="onCellFocus(HEADER, col - 1)"
               @keydown="(event) => onCellKeydown(event, HEADER, col - 1)"
               @pointerdown="(event) => onCellPointerdown(event, HEADER, col - 1)"
@@ -669,7 +719,7 @@
                   :aria-valuemax="MAX_WIDTH"
                   :aria-label="t('dataGrid.resize', { column: columnAt(col - 1)?.header ?? '' })"
                   :data-testid="`${testId}__resize-${columnAt(col - 1)?.id}`"
-                  class="absolute inset-y-0 -end-3 z-1 w-6 cursor-col-resize touch-none after:absolute after:inset-y-2 after:start-1/2 after:w-px after:bg-(--border-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) pointer-coarse:-end-[1.375rem] pointer-coarse:w-11"
+                  :class="RESIZE_HANDLE_CLASS"
                   @pointerdown="(event) => startResize(event, columnAt(col - 1) as DataGridColumn)"
                   @keydown="
                     (event) => onResizeKeydown(event, columnAt(col - 1) as DataGridColumn, col - 1)
@@ -719,7 +769,7 @@
                   : `${testId}__select-${r}`
               "
               :style="{ width: `${widthAt(col - 1)}px`, ...frozenStyle(col - 1) }"
-              class="relative flex min-h-10 shrink-0 cursor-default items-center bg-(--bg-surface) px-(--spacing-sm) outline-none transition-colors duration-150 ease-out group-hover/row:bg-(--bg-canvas) group-data-[state=selected]/row:bg-(--bg-selected) data-[selected]:bg-(--bg-selected) focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) data-[frozen]:sticky data-[frozen]:z-1 data-[editing]:p-0 motion-reduce:transition-none pointer-coarse:min-h-11"
+              :class="CELL_CLASS"
               @focus="onCellFocus(r, col - 1)"
               @keydown="(event) => onCellKeydown(event, r, col - 1)"
               @pointerdown="(event) => onCellPointerdown(event, r, col - 1)"
@@ -740,7 +790,7 @@
                   :value="draft"
                   :aria-label="columnAt(col - 1)?.header"
                   :data-testid="`${testId}__editor`"
-                  class="size-full min-h-10 rounded-(--shape-control) border-none bg-(--bg-surface) px-(--spacing-sm) text-body-sm pointer-coarse:text-body-md text-(--text-default) outline-none ring-2 ring-inset ring-(--ring-color) pointer-coarse:min-h-11"
+                  :class="SELECT_EDITOR_CLASS"
                   @keydown="onEditorKeydown"
                   @change="onEditorInput"
                   @blur="commit"
@@ -765,7 +815,7 @@
                     :data-align="columnAt(col - 1)?.align ?? 'start'"
                     :data-invalid="invalid || null"
                     :data-testid="`${testId}__editor`"
-                    class="size-full min-h-10 rounded-(--shape-control) border-none bg-(--bg-surface) px-(--spacing-sm) text-start text-body-sm pointer-coarse:text-body-md text-(--text-default) outline-none ring-2 ring-inset ring-(--ring-color) data-[align=end]:text-end data-[invalid]:ring-(--danger-border) pointer-coarse:min-h-11"
+                    :class="INPUT_EDITOR_CLASS"
                     @input="onEditorInput"
                     @keydown="onEditorKeydown"
                     @blur="commit"
@@ -775,7 +825,7 @@
                     :id="`${cellId(r, col - 1)}-error`"
                     role="alert"
                     :data-testid="`${testId}__error`"
-                    class="absolute start-0 top-full z-3 mt-(--spacing-2xs) whitespace-nowrap rounded-(--shape-control) border-(length:--border-width-default) border-solid border-(--danger-border) bg-(--bg-surface) px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-default)"
+                    :class="ERROR_CLASS"
                     >{{ t('dataGrid.invalidNumber') }}</span
                   >
                 </template>
@@ -809,13 +859,13 @@
         aria-hidden="true"
         :data-testid="`${testId}__fade-start`"
         :style="{ insetInlineStart: `${frozenWidth}px`, width: `${overflowStart}px` }"
-        class="pointer-events-none absolute inset-y-0 start-0 z-20 hidden bg-gradient-to-l from-transparent to-(--bg-surface) group-data-[overflow-start]/scroll:block rtl:bg-gradient-to-r forced-colors:forced-color-adjust-none forced-colors:to-[Canvas]"
+        :class="FADE_START_CLASS"
       />
       <span
         aria-hidden="true"
         :data-testid="`${testId}__fade-end`"
         :style="{ width: `${overflowEnd}px` }"
-        class="pointer-events-none absolute inset-y-0 end-0 z-20 hidden bg-gradient-to-r from-transparent to-(--bg-surface) group-data-[overflow-end]/scroll:block rtl:bg-gradient-to-l forced-colors:forced-color-adjust-none forced-colors:to-[Canvas]"
+        :class="FADE_END_CLASS"
       />
     </div>
     <div

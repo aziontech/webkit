@@ -116,6 +116,10 @@
       )
       ?.focus()
   )
+
+  const FILE_REGION_CLASS =
+    'max-h-56 overflow-auto overscroll-contain border-t border-(--border-muted) ' +
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color)'
 </script>
 
 <template>
@@ -193,7 +197,7 @@
                   role="region"
                   tabindex="0"
                   :aria-label="`Files in ${folderName}`"
-                  class="max-h-56 overflow-auto overscroll-contain border-t border-(--border-muted) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color)"
+                  :class="FILE_REGION_CLASS"
                 >
                   <ul
                     class="list-none p-0"

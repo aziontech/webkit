@@ -19,7 +19,11 @@
     name: string
     /** What the call does in the reader's words (`Listing your workloads`). Empty shows only the name. */
     title?: string
-    /** `pending` waits for authorization, `streaming` receives its arguments, `running` is in flight, then `success`, `error`, `canceled` (stopped before it finished) or `denied` (the reader refused it). */
+    /**
+     * `pending` waits for authorization, `streaming` receives its arguments, `running` is in
+     * flight, then `success`, `error`, `canceled` (stopped before it finished) or `denied` (the
+     * reader refused it).
+     */
     status?: ToolCallStatus
     /** Initial open state when uncontrolled; details start collapsed. */
     defaultOpen?: boolean

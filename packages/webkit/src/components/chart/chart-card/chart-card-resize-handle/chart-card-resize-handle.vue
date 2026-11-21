@@ -110,6 +110,11 @@
   }
 
   onScopeDispose(release)
+
+  const ROOT_CLASS =
+    "absolute bottom-0 end-0 z-1 flex size-6 before:absolute before:-inset-2 before:content-[''] " +
+    'cursor-nwse-resize touch-none items-center justify-center rounded-(--shape-button) text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance ' +
+    'motion-reduce:transition-none hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)'
 </script>
 
 <template>
@@ -125,7 +130,7 @@
     :aria-valuemax="ctx.maxSpan.value"
     :aria-valuetext="valueText"
     :data-testid="testId"
-    class="absolute bottom-0 end-0 z-1 flex size-6 before:absolute before:-inset-2 before:content-[''] cursor-nwse-resize touch-none items-center justify-center rounded-(--shape-button) text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+    :class="ROOT_CLASS"
     @pointerdown="onPointerdown"
     @pointermove="onPointermove"
     @pointerup="onPointerup"

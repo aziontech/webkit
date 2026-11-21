@@ -83,6 +83,26 @@
   const currencySuffix = computed(() => (props.showSuffix ? props.suffix : ''))
 
   const priceKey = computed(() => `${currencyPrefix.value}|${props.value}|${currencySuffix.value}`)
+
+  const ROOT_CLASS =
+    'group/card flex w-full flex-col items-start overflow-clip p-(--spacing-lg) ' +
+    'data-[actions-position=bottom]:gap-(--spacing-lg) data-[actions-position=middle]:justify-between ' +
+    'data-[variant=contained]:rounded-(--shape-card) data-[variant=contained]:border-(length:--border-width-default) data-[variant=contained]:border-(--border-default) ' +
+    'data-[variant=contained]:bg-(--bg-surface)'
+
+  const CONTENT_CLASS =
+    'flex w-full flex-col items-start ' +
+    'group-data-[actions-position=bottom]/card:shrink-0 group-data-[actions-position=middle]/card:min-h-px group-data-[actions-position=middle]/card:flex-1 ' +
+    'group-data-[actions-position=middle]/card:gap-(--spacing-lg)'
+
+  const HEADER_CLASS =
+    'flex w-full max-w-(--container-xs) shrink-0 flex-col items-start ' +
+    'group-data-[actions-position=bottom]/card:gap-(--spacing-xs) group-data-[actions-position=middle]/card:gap-(--spacing-md)'
+
+  const PRICING_DETAILS_CLASS =
+    'text-(--text-muted) [word-break:break-word] ' +
+    'group-data-[equal-height]/card:min-h-[3lh] ' +
+    'group-data-[actions-position=bottom]/card:text-body-sm group-data-[actions-position=middle]/card:text-body-md'
 </script>
 
 <template>
@@ -93,13 +113,11 @@
     :data-variant="variant"
     :data-equal-height="equalHeight || null"
     :data-animated="animated || null"
-    class="group/card flex w-full flex-col items-start overflow-clip p-(--spacing-lg) data-[actions-position=bottom]:gap-(--spacing-lg) data-[actions-position=middle]:justify-between data-[variant=contained]:rounded-(--shape-card) data-[variant=contained]:border-(length:--border-width-default) data-[variant=contained]:border-(--border-default) data-[variant=contained]:bg-(--bg-surface)"
+    :class="ROOT_CLASS"
   >
-    <div
-      class="flex w-full flex-col items-start group-data-[actions-position=bottom]/card:shrink-0 group-data-[actions-position=middle]/card:min-h-px group-data-[actions-position=middle]/card:flex-1 group-data-[actions-position=middle]/card:gap-(--spacing-lg)"
-    >
+    <div :class="CONTENT_CLASS">
       <div
-        class="flex w-full max-w-(--container-xs) shrink-0 flex-col items-start group-data-[actions-position=bottom]/card:gap-(--spacing-xs) group-data-[actions-position=middle]/card:gap-(--spacing-md)"
+        :class="HEADER_CLASS"
         :data-testid="`${testId}__header`"
       >
         <div class="flex min-h-6 w-full shrink-0 items-center gap-(--spacing-xs)">
@@ -146,7 +164,7 @@
           />
           <p
             v-if="(showPricingDetails && pricingDetails) || equalHeight"
-            class="text-(--text-muted) [word-break:break-word] group-data-[equal-height]/card:min-h-[3lh] group-data-[actions-position=bottom]/card:text-body-sm group-data-[actions-position=middle]/card:text-body-md"
+            :class="PRICING_DETAILS_CLASS"
             :data-testid="`${testId}__pricing-details`"
           >
             {{ showPricingDetails ? pricingDetails : '' }}

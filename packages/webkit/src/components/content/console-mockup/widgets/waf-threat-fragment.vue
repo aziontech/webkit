@@ -195,6 +195,11 @@
     halt()
     observer?.disconnect()
   })
+
+  const THREAT_CARD_CLASS =
+    'flex items-start gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) p-(--spacing-md) transition-colors duration-moderate-01 ease-productive-entrance ' +
+    'data-on:border-(--primary) ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -229,7 +234,7 @@
         >
           <div
             :data-on="enabled(threat.key) || null"
-            class="flex items-start gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) p-(--spacing-md) transition-colors duration-moderate-01 ease-productive-entrance data-on:border-(--primary) motion-reduce:transition-none"
+            :class="THREAT_CARD_CLASS"
           >
             <LegacySwitch
               :checked="enabled(threat.key)"

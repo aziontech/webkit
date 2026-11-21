@@ -233,6 +233,10 @@
       { description: 'The change is part of this draft until you deploy it.' }
     )
   }
+
+  const FUNCTION_LINK_CLASS =
+    'group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline ' +
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)'
 </script>
 
 <template>
@@ -354,7 +358,7 @@
                         <Tooltip :content="`Open ${value} in Functions`">
                           <a
                             :href="`/functions/${value}`"
-                            class="group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
+                            :class="FUNCTION_LINK_CLASS"
                           >
                             <span class="truncate underline-offset-2 group-hover/link:underline">{{
                               value

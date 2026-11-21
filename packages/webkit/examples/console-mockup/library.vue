@@ -77,6 +77,10 @@
     'workload-domain'
   ]
   const hovered = ref('')
+
+  const FRAGMENT_FRAME_CLASS =
+    'h-80 w-full min-w-0 overflow-clip rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) px-(--spacing-xl) pt-(--spacing-xl) ' +
+    '[--console-mockup-fade-color:var(--bg-surface)]'
 </script>
 
 <template>
@@ -104,7 +108,7 @@
       >
         <span class="text-label-sm text-(--text-muted)">{{ name }}</span>
         <div
-          class="h-80 w-full min-w-0 overflow-clip rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) px-(--spacing-xl) pt-(--spacing-xl) [--console-mockup-fade-color:var(--bg-surface)]"
+          :class="FRAGMENT_FRAME_CLASS"
           @pointerenter="hovered = name"
           @pointerleave="hovered = ''"
         >

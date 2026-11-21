@@ -426,6 +426,10 @@
       created.length === 1 ? `${created[0].key} created.` : `${created.length} variables created.`
     )
   }
+
+  const SCOPE_HINT =
+    'Global covers the entire account and turns off when you enable a specific scope. Each scope starts with every resource selected. Scope cannot be changed after the variable is ' +
+    'created.'
 </script>
 
 <template>
@@ -743,7 +747,7 @@
 
             <SettingsGroup
               label="Scope"
-              hint="Global covers the entire account and turns off when you enable a specific scope. Each scope starts with every resource selected. Scope cannot be changed after the variable is created."
+              :hint="SCOPE_HINT"
             >
               <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
                 <div

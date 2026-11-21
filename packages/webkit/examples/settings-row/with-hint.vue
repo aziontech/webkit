@@ -7,6 +7,10 @@
   import { reactive } from 'vue'
 
   const form = reactive({ ttl: '', stale: false })
+
+  const CACHE_TTL_HINT =
+    'The edge serves the cached copy until this many seconds pass, then asks the origin again. A Cache-Control max-age header from the origin takes precedence when it is lower. Use 0 to ' +
+    'revalidate every request.'
 </script>
 
 <template>
@@ -16,7 +20,7 @@
         <SettingsRow
           title="Cache TTL"
           description="How long the edge keeps a copy of a response, in seconds."
-          hint="The edge serves the cached copy until this many seconds pass, then asks the origin again. A Cache-Control max-age header from the origin takes precedence when it is lower. Use 0 to revalidate every request."
+          :hint="CACHE_TTL_HINT"
         >
           <Input
             v-model="form.ttl"

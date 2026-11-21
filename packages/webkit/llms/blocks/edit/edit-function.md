@@ -595,6 +595,15 @@ Each variant is the same screen in another state: `get_block("edit/edit-function
     if (!dirty.value || saving.value) return
     save(event)
   }
+
+  const FIELD_LIST_CLASS =
+    'relative flex w-full flex-col *:data-[slot=item]:rounded-none *:data-[slot=item]:border-b-(--border-muted) ' +
+    '[&>[data-slot=item]:last-child]:border-b-transparent'
+
+  const FIELD_BODY_CLASS =
+    'grid grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-01 ease-productive-entrance ' +
+    'data-[state=open]:grid-rows-[1fr] ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -810,9 +819,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-function
                               <Card :padded="false">
                                 <template #default>
                                   <Item.List>
-                                    <div
-                                      class="relative flex w-full flex-col *:data-[slot=item]:rounded-none *:data-[slot=item]:border-b-(--border-muted) [&>[data-slot=item]:last-child]:border-b-transparent"
-                                    >
+                                    <div :class="FIELD_LIST_CLASS">
                                       <Item
                                         v-for="(field, index) in draftFields"
                                         :key="field.id"
@@ -926,7 +933,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-function
                                           <div
                                             :id="formId + '-body-' + field.id"
                                             :data-state="isExpanded(field.id) ? 'open' : 'closed'"
-                                            class="grid grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-01 ease-productive-entrance data-[state=open]:grid-rows-[1fr] motion-reduce:transition-none"
+                                            :class="FIELD_BODY_CLASS"
                                           >
                                             <div class="overflow-hidden">
                                               <div

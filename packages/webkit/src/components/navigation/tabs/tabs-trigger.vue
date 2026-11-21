@@ -75,7 +75,15 @@
   })
 
   const ROOT_CLASS =
-    'relative z-1 inline-flex h-(--size-8) pointer-coarse:min-h-11 shrink-0 cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xs) text-label-md transition-colors motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) bg-transparent text-(--text-muted) hover:bg-(--bg-hover) hover:text-(--text-default) not-data-[disabled]:data-[mode=tab]:data-[state=active]:text-(--text-default) not-data-[disabled]:data-[mode=tab]:data-[state=active]:hover:bg-transparent not-data-[disabled]:data-[mode=toggle]:data-[state=active]:border-(length:--border-width-default) not-data-[disabled]:data-[mode=toggle]:data-[state=active]:border-(--border-muted) not-data-[disabled]:data-[mode=toggle]:data-[state=active]:bg-(--secondary-mask) not-data-[disabled]:data-[mode=toggle]:data-[state=active]:text-(--text-default) not-data-[disabled]:data-[mode=toggle]:data-[state=active]:shadow-(--shadow-xs) data-[disabled]:pointer-events-none data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:opacity-60'
+    'relative z-1 inline-flex h-(--size-8) pointer-coarse:min-h-11 shrink-0 cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xs) ' +
+    'text-label-md transition-colors motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 ' +
+    'focus-visible:ring-offset-(--bg-canvas) bg-transparent text-(--text-muted) ' +
+    'hover:bg-(--bg-hover) hover:text-(--text-default) ' +
+    'not-data-[disabled]:data-[mode=tab]:data-[state=active]:text-(--text-default) not-data-[disabled]:data-[mode=tab]:data-[state=active]:hover:bg-transparent ' +
+    'not-data-[disabled]:data-[mode=toggle]:data-[state=active]:border-(length:--border-width-default) not-data-[disabled]:data-[mode=toggle]:data-[state=active]:border-(--border-muted) ' +
+    'not-data-[disabled]:data-[mode=toggle]:data-[state=active]:bg-(--secondary-mask) not-data-[disabled]:data-[mode=toggle]:data-[state=active]:text-(--text-default) ' +
+    'not-data-[disabled]:data-[mode=toggle]:data-[state=active]:shadow-(--shadow-xs) data-[disabled]:pointer-events-none data-[disabled]:bg-(--bg-disabled) ' +
+    'data-[disabled]:text-(--text-disabled) data-[disabled]:opacity-60'
 
   const activate = (event: globalThis.MouseEvent) => {
     if (isDisabled.value) {
@@ -126,6 +134,10 @@
 
     context.unregisterTab(props.value)
   })
+
+  const CLOSE_CLASS =
+    'flex size-3.5 shrink-0 items-center justify-center rounded-(--shape-button) text-[inherit] ' +
+    'hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)'
 </script>
 
 <template>
@@ -181,7 +193,7 @@
     </span>
     <span
       v-if="closable"
-      class="flex size-3.5 shrink-0 items-center justify-center rounded-(--shape-button) text-[inherit] hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+      :class="CLOSE_CLASS"
       :data-testid="`${testId}__close`"
       :title="t('tabs.close')"
       aria-hidden="true"

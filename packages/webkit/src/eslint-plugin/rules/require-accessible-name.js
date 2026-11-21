@@ -28,12 +28,16 @@ export default {
     type: 'problem',
     docs: {
       description:
-        'An IconButton or ButtonGroup must carry an accessible name: aria-label (static or bound) or aria-labelledby. The name is optional in the prop types so the kebab aria-label attribute type-checks in a consumer app; this rule is what keeps it required.'
+        'An IconButton or ButtonGroup must carry an accessible name: aria-label (static or ' +
+        'bound) or aria-labelledby. The name is optional in the prop types so the kebab ' +
+        'aria-label attribute type-checks in a consumer app; this rule is what keeps it required.'
     },
     schema: [],
     messages: {
       missing:
-        '{{component}} has no accessible name. Write aria-label="…" naming the action (aria-label="Delete domain", not the glyph), or :aria-label when it changes, or aria-labelledby pointing at visible text.'
+        '{{component}} has no accessible name. Write aria-label="…" naming the action ' +
+        '(aria-label="Delete domain", not the glyph), or :aria-label when it changes, or ' +
+        'aria-labelledby pointing at visible text.'
     }
   },
   create(context) {

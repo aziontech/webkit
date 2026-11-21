@@ -89,6 +89,10 @@
       onItemClick(event as MouseEvent, href)
     }
   }
+
+  const OVERFLOW_TRIGGER_CLASS =
+    'relative h-7 min-w-7 items-center justify-center rounded-(--shape-button) px-(--spacing-xs) text-button-md text-(--text-default) transition-colors duration-fast-02 ' +
+    'ease-productive-entrance hover:bg-(--bg-mask) active:bg-(--bg-active) motion-reduce:transition-none'
 </script>
 
 <template>
@@ -162,7 +166,7 @@
                 <DropdownMenu.Trigger
                   :aria-label="t('breadcrumb.showHidden')"
                   :data-testid="`${testId}__overflow-trigger`"
-                  class="relative h-7 min-w-7 items-center justify-center rounded-(--shape-button) px-(--spacing-xs) text-button-md text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-mask) active:bg-(--bg-active) motion-reduce:transition-none"
+                  :class="OVERFLOW_TRIGGER_CLASS"
                 >
                   <i
                     class="az az-ellipsis size-[0.875rem]! shrink-0 text-[0.875rem]! leading-none"

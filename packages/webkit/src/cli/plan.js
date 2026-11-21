@@ -388,7 +388,11 @@ function huskyActions(projectDir, git) {
     return [
       {
         type: 'advise',
-        message: `The git root is ${git.root}, above this project, so a plain "prepare": "husky" cannot find .git. Point it at this folder instead: "prepare": "cd ${relative(projectDir, git.root).split('\\').join('/') || '.'} && husky ${rel}/.husky", then run your install.`
+        message:
+          `The git root is ${git.root}, above this project, so a plain "prepare": "husky" cannot find ` +
+          `.git. Point it at this folder instead: "prepare": "cd ` +
+          `${relative(projectDir, git.root).split('\\').join('/') || '.'} && husky ${rel}/.husky", ` +
+          `then run your install.`
       }
     ]
   }
@@ -411,7 +415,10 @@ function vueTscActions(projectDir) {
     return [
       {
         type: 'advise',
-        message: `TypeScript project without vue-tsc: add it pinned to a known-good version (\`npm i -D vue-tsc@${VUE_TSC_KNOWN_GOOD}\`) so \`vue-tsc -b\` type-checks WebKit templates. Avoid ${why(Object.keys(VUE_TSC_BROKEN))}.`
+        message:
+          `TypeScript project without vue-tsc: add it pinned to a known-good version (\`npm i -D ` +
+          `vue-tsc@${VUE_TSC_KNOWN_GOOD}\`) so \`vue-tsc -b\` type-checks WebKit templates. Avoid ` +
+          `${why(Object.keys(VUE_TSC_BROKEN))}.`
       }
     ]
   }
@@ -420,7 +427,10 @@ function vueTscActions(projectDir) {
   return [
     {
       type: 'advise',
-      message: `vue-tsc "${state.declared}" was left as it is, but it can resolve to a release with a known bug: ${why(broken)}. If \`vue-tsc -b\` reports it, pin the last good release: \`npm i -D vue-tsc@${VUE_TSC_KNOWN_GOOD}\`.`
+      message:
+        `vue-tsc "${state.declared}" was left as it is, but it can resolve to a release with a known ` +
+        `bug: ${why(broken)}. If \`vue-tsc -b\` reports it, pin the last good release: \`npm i -D ` +
+        `vue-tsc@${VUE_TSC_KNOWN_GOOD}\`.`
     }
   ]
 }
@@ -601,7 +611,10 @@ function vitePluginActions(projectDir) {
     return [
       {
         type: 'advise',
-        message: `No Vite config found. Run \`npx @aziontech/webkit css\` after you add or remove a WebKit import: it rewrites ${SOURCES_FILE}, the list of WebKit files Tailwind compiles (doctor and check fail when it is stale).`
+        message:
+          `No Vite config found. Run \`npx @aziontech/webkit css\` after you add or remove a WebKit ` +
+          `import: it rewrites ${SOURCES_FILE}, the list of WebKit files Tailwind compiles (doctor and ` +
+          `check fail when it is stale).`
       }
     ]
   }
@@ -812,7 +825,11 @@ export function planInit(projectDir, opts = {}) {
         : 'you changed it'
     actions.push({
       type: 'advise',
-      message: `${starter.files.join(' and ')} (the ${starter.from} starter stylesheet, imported in ${entry}) was left in place because ${reason}. Its global rules (body margin and colours, #app width) fight the WebKit theme: delete ${starter.files.length === 1 ? 'it' : 'them'} and the \`${starter.line.trim()}\` line when you no longer need them.`
+      message:
+        `${starter.files.join(' and ')} (the ${starter.from} starter stylesheet, imported in ` +
+        `${entry}) was left in place because ${reason}. Its global rules (body margin and colours, ` +
+        `#app width) fight the WebKit theme: delete ${starter.files.length === 1 ? 'it' : 'them'} ` +
+        `and the \`${starter.line.trim()}\` line when you no longer need them.`
     })
   }
 
@@ -822,7 +839,12 @@ export function planInit(projectDir, opts = {}) {
   if (rawStylesheets.length) {
     actions.push({
       type: 'advise',
-      message: `${rawStylesheets.join(', ')} ${rawStylesheets.length === 1 ? 'uses' : 'use'} raw colours (hex, rgb or hsl — a starter template's stylesheet usually does), so the webkit stylelint${gitHooks ? ' in the pre-commit hook' : ''} rejects ${rawStylesheets.length === 1 ? 'it' : 'them'}. Replace the values with theme tokens (var(--bg-canvas), var(--text-default)…), or delete the starter stylesheet and its import.`
+      message:
+        `${rawStylesheets.join(', ')} ${rawStylesheets.length === 1 ? 'uses' : 'use'} raw colours ` +
+        `(hex, rgb or hsl — a starter template's stylesheet usually does), so the webkit ` +
+        `stylelint${gitHooks ? ' in the pre-commit hook' : ''} rejects ` +
+        `${rawStylesheets.length === 1 ? 'it' : 'them'}. Replace the values with theme tokens ` +
+        `(var(--bg-canvas), var(--text-default)…), or delete the starter stylesheet and its import.`
     })
   }
 
@@ -850,7 +872,9 @@ export function planInit(projectDir, opts = {}) {
   actions.push({
     type: 'advise',
     message:
-      'Theme: the design system follows the device setting (light or dark) by default. To pin one, set <html data-theme="light"> or <html data-theme="dark"> (or toggle it at runtime); the tokens also respond to the `.dark` class.'
+      'Theme: the design system follows the device setting (light or dark) by default. To pin one, ' +
+      'set <html data-theme="light"> or <html data-theme="dark"> (or toggle it at runtime); the ' +
+      'tokens also respond to the `.dark` class.'
   })
 
   return actions
@@ -922,7 +946,9 @@ export const PRETTIER_CONTENT = `${JSON.stringify(
   2
 )}\n`
 const PRETTIER_SNIPPET_HEADER =
-  'A Prettier config already exists, so none is written. The copied WebKit blocks are formatted with these options; use them, or expect the first format run to restyle every copied block (and `webkit diff` to report it):'
+  'A Prettier config already exists, so none is written. The copied WebKit blocks are ' +
+  'formatted with these options; use them, or expect the first format run to restyle every ' +
+  'copied block (and `webkit diff` to report it):'
 
 function packageHasKey(projectDir, key) {
   const raw = read(join(projectDir, 'package.json'))

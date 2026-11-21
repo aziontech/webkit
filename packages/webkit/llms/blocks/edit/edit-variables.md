@@ -912,6 +912,10 @@ Each variant is the same screen in another state: `get_block("edit/edit-variable
     }
     finishSave(payload)
   }
+
+  const SCOPE_HINT =
+    'Global covers the entire account and turns off when you enable a specific scope. Each scope starts with every resource selected. Scope cannot be changed after the variable is ' +
+    'created.'
 </script>
 
 <template>
@@ -1410,7 +1414,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-variable
 
               <SettingsGroup
                 label="Scope"
-                hint="Global covers the entire account and turns off when you enable a specific scope. Each scope starts with every resource selected. Scope cannot be changed after the variable is created."
+                :hint="SCOPE_HINT"
               >
                 <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
                   <div

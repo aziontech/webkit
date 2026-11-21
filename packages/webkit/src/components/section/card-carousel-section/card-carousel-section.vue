@@ -59,6 +59,18 @@
   )
 
   const rowName = computed(() => props.ariaLabel || props.title)
+
+  const CARD_TITLE_LINK_CLASS =
+    'text-inherit no-underline after:absolute after:inset-0 after:rounded-(--shape-card) focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-inset ' +
+    'focus-visible:after:ring-(--ring-color)'
+
+  const CARD_LINK_LABEL_CLASS =
+    'mt-auto flex items-center gap-(--spacing-xs) pt-(--spacing-lg) text-overline-sm text-(--text-muted) uppercase transition-colors duration-fast-02 ease-productive-entrance ' +
+    'group-hover/card:text-(--text-default) motion-reduce:transition-none'
+
+  const CARD_LINK_ARROW_CLASS =
+    'az az-arrow-right text-[length:inherit] leading-none text-(--text-brand) transition-[translate] duration-moderate-02 ease-expressive-entrance ' +
+    'group-hover/card:translate-x-0.5 rtl:-scale-x-100 rtl:group-hover/card:-translate-x-0.5 motion-reduce:transition-none'
 </script>
 
 <template>
@@ -102,7 +114,7 @@
             <a
               v-if="item.href"
               :href="safeHref(item.href) ?? undefined"
-              class="text-inherit no-underline after:absolute after:inset-0 after:rounded-(--shape-card) focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-(--ring-color)"
+              :class="CARD_TITLE_LINK_CLASS"
               >{{ item.title }}</a
             >
             <template v-else>{{ item.title }}</template>
@@ -113,12 +125,10 @@
           <span
             v-if="item.href && item.linkLabel"
             aria-hidden="true"
-            class="mt-auto flex items-center gap-(--spacing-xs) pt-(--spacing-lg) text-overline-sm text-(--text-muted) uppercase transition-colors duration-fast-02 ease-productive-entrance group-hover/card:text-(--text-default) motion-reduce:transition-none"
+            :class="CARD_LINK_LABEL_CLASS"
           >
             {{ item.linkLabel }}
-            <i
-              class="az az-arrow-right text-[length:inherit] leading-none text-(--text-brand) transition-[translate] duration-moderate-02 ease-expressive-entrance group-hover/card:translate-x-0.5 rtl:-scale-x-100 rtl:group-hover/card:-translate-x-0.5 motion-reduce:transition-none"
-            />
+            <i :class="CARD_LINK_ARROW_CLASS" />
           </span>
         </div>
       </CarouselItem>

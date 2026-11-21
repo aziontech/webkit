@@ -73,6 +73,33 @@
     if (inactive.value) return
     ctx.select(props.value)
   }
+
+  const ROOT_CLASS =
+    'group/radio-item relative inline-flex w-fit max-w-full cursor-pointer items-start gap-(--spacing-xs) text-label-sm text-(--text-default) ' +
+    'data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled) ' +
+    'data-[variant=card]:flex data-[variant=card]:w-full data-[variant=card]:min-w-0 data-[variant=card]:rounded-(--shape-button) data-[variant=card]:border ' +
+    'data-[variant=card]:border-(--border-muted) data-[variant=card]:bg-(--bg-surface) data-[variant=card]:p-(--spacing-sm) data-[variant=card]:transition-colors ' +
+    'data-[variant=card]:duration-fast-02 data-[variant=card]:ease-productive-entrance ' +
+    'motion-reduce:transition-none ' +
+    'data-[variant=card]:hover:bg-(--bg-hover) data-[variant=card]:has-[:focus-visible]:outline-none data-[variant=card]:has-[:focus-visible]:ring-2 ' +
+    'data-[variant=card]:has-[:focus-visible]:ring-(--ring-color) data-[variant=card]:has-[:focus-visible]:ring-offset-1 ' +
+    'data-[variant=card]:has-[:focus-visible]:ring-offset-(--bg-canvas) data-[variant=card]:data-[invalid]:not-data-[checked]:border-(--danger-border) ' +
+    'data-[variant=card]:data-[checked]:border-(--border-selected) data-[variant=card]:data-[checked]:bg-(--primary-selected) data-[variant=card]:data-[disabled]:opacity-50 ' +
+    'data-[variant=card]:data-[disabled]:hover:bg-(--bg-surface) ' +
+    'group-data-[orientation=horizontal]/radio-group:data-[variant=card]:flex-1 group-data-[orientation=horizontal]/radio-group:data-[variant=card]:basis-48'
+
+  const INDICATOR_CLASS =
+    'group relative inline-flex size-5 shrink-0 items-center justify-center rounded-full border border-(--border-input) bg-(--bg-surface) ' +
+    "before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-(--bg-hover) before:opacity-0 before:content-[''] before:transition-opacity " +
+    'before:duration-fast-02 before:ease-productive-entrance after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:bg-(--bg-active) after:opacity-0 ' +
+    "after:content-[''] after:transition-opacity after:duration-fast-02 after:ease-productive-entrance active:after:opacity-100 motion-reduce:before:transition-none " +
+    'motion-reduce:after:transition-none has-[:focus-visible]:outline-none has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-(--ring-color) has-[:focus-visible]:ring-offset-1 ' +
+    'has-[:focus-visible]:ring-offset-(--bg-canvas) ' +
+    '[&:not([data-checked])]:hover:border-(--primary) ' +
+    'data-[invalid]:not-data-[checked]:border-(--danger-border) ' +
+    'data-[checked]:border-(--primary) data-[checked]:bg-(--primary) data-[checked]:after:hidden ' +
+    'data-[disabled]:pointer-events-none data-[disabled]:border-(--border-input) data-[disabled]:bg-(--bg-disabled) data-[disabled]:opacity-50 data-[disabled]:before:hidden ' +
+    'data-[disabled]:after:hidden'
 </script>
 
 <template>
@@ -83,7 +110,7 @@
     :data-checked="checked || null"
     :data-disabled="inactive || null"
     :data-invalid="isInvalid || null"
-    class="group/radio-item relative inline-flex w-fit max-w-full cursor-pointer items-start gap-(--spacing-xs) text-label-sm text-(--text-default) data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled) data-[variant=card]:flex data-[variant=card]:w-full data-[variant=card]:min-w-0 data-[variant=card]:rounded-(--shape-button) data-[variant=card]:border data-[variant=card]:border-(--border-muted) data-[variant=card]:bg-(--bg-surface) data-[variant=card]:p-(--spacing-sm) data-[variant=card]:transition-colors data-[variant=card]:duration-fast-02 data-[variant=card]:ease-productive-entrance motion-reduce:transition-none data-[variant=card]:hover:bg-(--bg-hover) data-[variant=card]:has-[:focus-visible]:outline-none data-[variant=card]:has-[:focus-visible]:ring-2 data-[variant=card]:has-[:focus-visible]:ring-(--ring-color) data-[variant=card]:has-[:focus-visible]:ring-offset-1 data-[variant=card]:has-[:focus-visible]:ring-offset-(--bg-canvas) data-[variant=card]:data-[invalid]:not-data-[checked]:border-(--danger-border) data-[variant=card]:data-[checked]:border-(--border-selected) data-[variant=card]:data-[checked]:bg-(--primary-selected) data-[variant=card]:data-[disabled]:opacity-50 data-[variant=card]:data-[disabled]:hover:bg-(--bg-surface) group-data-[orientation=horizontal]/radio-group:data-[variant=card]:flex-1 group-data-[orientation=horizontal]/radio-group:data-[variant=card]:basis-48"
+    :class="ROOT_CLASS"
   >
     <input
       v-if="isCard"
@@ -106,7 +133,7 @@
       :data-checked="checked || null"
       :data-disabled="inactive || null"
       :data-invalid="isInvalid || null"
-      class="group relative inline-flex size-5 shrink-0 items-center justify-center rounded-full border border-(--border-input) bg-(--bg-surface) before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-(--bg-hover) before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:bg-(--bg-active) after:opacity-0 after:content-[''] after:transition-opacity after:duration-fast-02 after:ease-productive-entrance active:after:opacity-100 motion-reduce:before:transition-none motion-reduce:after:transition-none has-[:focus-visible]:outline-none has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-(--ring-color) has-[:focus-visible]:ring-offset-1 has-[:focus-visible]:ring-offset-(--bg-canvas) [&:not([data-checked])]:hover:border-(--primary) data-[invalid]:not-data-[checked]:border-(--danger-border) data-[checked]:border-(--primary) data-[checked]:bg-(--primary) data-[checked]:after:hidden data-[disabled]:pointer-events-none data-[disabled]:border-(--border-input) data-[disabled]:bg-(--bg-disabled) data-[disabled]:opacity-50 data-[disabled]:before:hidden data-[disabled]:after:hidden"
+      :class="INDICATOR_CLASS"
     >
       <input
         type="radio"

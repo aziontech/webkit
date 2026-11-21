@@ -621,6 +621,35 @@
     /** The Monaco editor once mounted, for actions such as formatting. */
     editor: editorRef
   })
+
+  const ROOT_CLASS =
+    '@container/code-editor flex w-full min-w-0 flex-col overflow-hidden border-(--border-default) bg-(--bg-surface) transition-colors duration-150 ease-out ' +
+    'focus-within:ring-2 focus-within:ring-(--ring-color) ' +
+    'not-data-[bordered]:focus-within:ring-inset data-[bordered]:rounded-(--shape-control) data-[bordered]:border data-[bordered]:focus-within:ring-offset-2 ' +
+    'data-[bordered]:focus-within:ring-offset-(--bg-canvas) ' +
+    'data-[disabled]:bg-(--bg-disabled) ' +
+    'data-[fill]:min-h-0 data-[fill]:flex-1 ' +
+    'data-[invalid]:border-(--danger-border) ' +
+    'motion-reduce:transition-none forced-colors:data-[bordered]:border-[CanvasText]'
+
+  const GUTTER_CLASS =
+    'sticky start-0 z-1 m-0 shrink-0 list-none border-e border-(--border-default) bg-(--bg-canvas) py-(--spacing-xs) ps-(--spacing-sm) pe-(--spacing-xs) text-end text-body-code-sm ' +
+    'pointer-coarse:text-label-code-lg text-(--code-syntax-line-number) select-none'
+
+  const LINE_NUMBER_CLASS =
+    'relative min-w-[2ch] tabular-nums ' +
+    'data-[change=added]:bg-(--success) data-[change=added]:text-(--success-foreground) data-[change=removed]:bg-(--danger) data-[change=removed]:text-(--danger-foreground) ' +
+    'data-[severity]:font-medium data-[severity=danger]:text-(--danger-foreground) data-[severity=info]:text-(--info-foreground) data-[severity=warning]:text-(--warning-foreground) ' +
+    'forced-colors:data-[severity]:text-[Highlight]'
+
+  const INPUT_CLASS =
+    'm-0 block min-w-0 flex-1 resize-none overflow-hidden border-0 bg-transparent px-(--spacing-sm) py-(--spacing-xs) text-body-code-sm ' +
+    'pointer-coarse:text-label-code-lg whitespace-pre text-(--code-syntax-identifier) caret-(--text-default) outline-none ' +
+    'placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled)'
+
+  const PROBLEM_CLASS =
+    'flex min-h-8 w-full cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-control) px-(--spacing-xs) text-start text-body-xs text-(--text-default) transition-colors ' +
+    'duration-150 ease-out hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none pointer-coarse:min-h-11'
 </script>
 
 <template>
@@ -636,7 +665,7 @@
     :data-fill="fill || null"
     :data-bordered="bordered || null"
     :aria-busy="mode === 'loading' || undefined"
-    class="@container/code-editor flex w-full min-w-0 flex-col overflow-hidden border-(--border-default) bg-(--bg-surface) transition-colors duration-150 ease-out focus-within:ring-2 focus-within:ring-(--ring-color) not-data-[bordered]:focus-within:ring-inset data-[bordered]:rounded-(--shape-control) data-[bordered]:border data-[bordered]:focus-within:ring-offset-2 data-[bordered]:focus-within:ring-offset-(--bg-canvas) data-[disabled]:bg-(--bg-disabled) data-[fill]:min-h-0 data-[fill]:flex-1 data-[invalid]:border-(--danger-border) motion-reduce:transition-none forced-colors:data-[bordered]:border-[CanvasText]"
+    :class="ROOT_CLASS"
   >
     <div
       v-if="$slots['toolbar']"
@@ -690,7 +719,7 @@
                   diff && changesBySide
                 ]"
                 aria-hidden="true"
-                class="sticky start-0 z-1 m-0 shrink-0 list-none border-e border-(--border-default) bg-(--bg-canvas) py-(--spacing-xs) ps-(--spacing-sm) pe-(--spacing-xs) text-end text-body-code-sm pointer-coarse:text-label-code-lg text-(--code-syntax-line-number) select-none"
+                :class="GUTTER_CLASS"
                 :data-testid="`${testId}__gutter`"
               >
                 <li
@@ -701,7 +730,7 @@
                     (diff && changesBySide[pane.main ? 'modified' : 'original'].get(index + 1)) ||
                     null
                   "
-                  class="relative min-w-[2ch] tabular-nums data-[change=added]:bg-(--success) data-[change=added]:text-(--success-foreground) data-[change=removed]:bg-(--danger) data-[change=removed]:text-(--danger-foreground) data-[severity]:font-medium data-[severity=danger]:text-(--danger-foreground) data-[severity=info]:text-(--info-foreground) data-[severity=warning]:text-(--warning-foreground) forced-colors:data-[severity]:text-[Highlight]"
+                  :class="LINE_NUMBER_CLASS"
                 >
                   {{ lineLabel(index + 1) }}
                 </li>
@@ -723,7 +752,7 @@
                 :aria-invalid="(pane.main && isInvalid) || undefined"
                 :aria-readonly="!pane.editable || undefined"
                 :aria-describedby="pane.main ? describedBy : undefined"
-                class="m-0 block min-w-0 flex-1 resize-none overflow-hidden border-0 bg-transparent px-(--spacing-sm) py-(--spacing-xs) text-body-code-sm pointer-coarse:text-label-code-lg whitespace-pre text-(--code-syntax-identifier) caret-(--text-default) outline-none placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
+                :class="INPUT_CLASS"
                 :data-testid="`${testId}__${pane.main ? 'input' : 'original'}`"
                 @input="onInput"
                 @keydown="onKeydown($event, pane.editable)"
@@ -774,7 +803,7 @@
           <button
             type="button"
             :data-severity="marker.severity"
-            class="flex min-h-8 w-full cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-control) px-(--spacing-xs) text-start text-body-xs text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none pointer-coarse:min-h-11"
+            :class="PROBLEM_CLASS"
             :data-testid="`${testId}__problem`"
             @click="goTo(marker)"
           >

@@ -30,7 +30,11 @@
     bytes?: number
     /** URL of an image or PDF file to draw. Set, it wins over `base64`. */
     src?: string
-    /** Base64 bytes of the file, for an app that holds the file rather than a URL. Text and JSON are decoded into the body when `content` is empty; an image or PDF with no `src` is drawn from them. */
+    /**
+     * Base64 bytes of the file, for an app that holds the file rather than a URL. Text and JSON
+     * are decoded into the body when `content` is empty; an image or PDF with no `src` is drawn
+     * from them.
+     */
     base64?: string
     /** Text of a text or JSON file. JSON that parses is pretty-printed; JSON that does not shows as text. Set, it wins over `base64`. */
     content?: string
@@ -164,6 +168,10 @@
   })
 
   onScopeDispose(releaseObjectUrl)
+
+  const TEXT_CLASS =
+    'm-0 min-h-0 flex-1 overflow-auto whitespace-pre-wrap break-words p-(--spacing-md) text-start text-body-code-sm text-(--text-default) ' +
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color)'
 </script>
 
 <template>
@@ -298,7 +306,7 @@
           tabindex="0"
           dir="auto"
           :aria-label="t('filePreview.contents', { name: fileName })"
-          class="m-0 min-h-0 flex-1 overflow-auto whitespace-pre-wrap break-words p-(--spacing-md) text-start text-body-code-sm text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color)"
+          :class="TEXT_CLASS"
           >{{ visibleText }}</pre>
         <p
           v-if="truncated"

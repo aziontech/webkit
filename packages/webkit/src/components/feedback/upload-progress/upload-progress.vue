@@ -147,6 +147,12 @@
   }
 
   const showActions = () => status.value !== 'running' && Boolean(slots['actions'])
+
+  const ROOT_CLASS =
+    'group/up z-40 flex w-full flex-col gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-md) shadow-(--shadow-sm) ' +
+    'animate-popup-scale-in motion-reduce:animate-none ' +
+    'data-[floating]:fixed data-[floating]:inset-x-(--spacing-md) data-[floating]:bottom-(--spacing-md) ' +
+    'sm:data-[floating]:inset-x-auto sm:data-[floating]:end-(--spacing-md) sm:data-[floating]:w-(--container-xs)'
 </script>
 
 <template>
@@ -157,7 +163,7 @@
     :data-status="status"
     :data-state="isCollapsed ? 'closed' : 'open'"
     :data-floating="floating || null"
-    class="group/up z-40 flex w-full flex-col gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-md) shadow-(--shadow-sm) animate-popup-scale-in motion-reduce:animate-none data-[floating]:fixed data-[floating]:inset-x-(--spacing-md) data-[floating]:bottom-(--spacing-md) sm:data-[floating]:inset-x-auto sm:data-[floating]:end-(--spacing-md) sm:data-[floating]:w-(--container-xs)"
+    :class="ROOT_CLASS"
   >
     <span
       role="status"

@@ -105,6 +105,34 @@
   const hasBackdrop = () => Boolean(slots.background) || props.texture !== 'none'
   const hasMedia = () => Boolean(slots.media)
   const hasFloorTexture = computed(() => props.floorTexture !== 'none')
+
+  const ROOT_CLASS =
+    'relative isolate grid w-full grid-cols-1 grid-rows-[1fr_auto] overflow-clip bg-(--bg-canvas) ' +
+    'data-[bordered]:border-b data-[bordered]:border-(--border-default) ' +
+    'data-[variant=screen]:min-h-[calc(100dvh-var(--hero-banner-offset,0rem))]'
+
+  const BACKDROP_CLASS =
+    'pointer-events-none relative col-[1] row-[1/3] overflow-hidden [z-index:var(--hero-banner-z-background,0)] ' +
+    '[:has(>[data-slot=hero-bottom]_[data-plain-ground]:not([data-opaque]_[data-plain-ground]))>&]:row-[1/2] ' +
+    '[:has(>[data-slot=hero-top]_[data-plain-ground]:not([data-opaque]_[data-plain-ground]))>&]:hidden ' +
+    '[:has(>[data-slot=hero-content]_[data-slot=hero-media]_[data-plain-ground]:not([data-opaque]_[data-plain-ground]))>&]:hidden'
+
+  const CONTENT_CLASS =
+    'relative col-[1] row-[1] mx-auto w-full px-(--spacing-xl) [z-index:var(--hero-banner-z-content,10)] ' +
+    'data-[variant=screen]:flex data-[variant=screen]:flex-1 data-[variant=screen]:flex-col data-[variant=screen]:data-[align=start]:justify-start ' +
+    'data-[variant=screen]:data-[align=center]:justify-center data-[variant=screen]:data-[align=end]:justify-end ' +
+    'data-[width=3xl]:max-w-(--container-3xl) data-[width=4xl]:max-w-(--container-4xl) data-[width=5xl]:max-w-(--container-5xl) data-[width=6xl]:max-w-(--container-6xl) ' +
+    'data-[width=7xl]:max-w-(--container-7xl) data-[width=site]:layout-column-site data-[width=full]:max-w-none ' +
+    'data-[padded]:data-[size=medium]:py-(--spacing-2xl) data-[padded]:data-[size=large]:py-[calc(var(--spacing-2xl)*2)]'
+
+  const FLOOR_TEXTURE_CLASS =
+    '[mask-image:linear-gradient(to_right,black_0%,color-mix(in_srgb,black_30%,transparent)_40%,color-mix(in_srgb,black_30%,transparent)_62%,black_100%)] [mask-mode:alpha] ' +
+    '[opacity:var(--hero-banner-floor-ink,0.6)]'
+
+  const MARQUEE_CLASS =
+    'mx-auto w-full px-(--spacing-xl) py-(--spacing-xl) ' +
+    'data-[width=3xl]:max-w-(--container-3xl) data-[width=4xl]:max-w-(--container-4xl) data-[width=5xl]:max-w-(--container-5xl) data-[width=6xl]:max-w-(--container-6xl) ' +
+    'data-[width=7xl]:max-w-(--container-7xl) data-[width=site]:layout-column-site data-[width=full]:max-w-none'
 </script>
 
 <template>
@@ -123,13 +151,13 @@
       '--hero-banner-offset': offset || undefined,
       '--hero-banner-bottom-height': bottomHeight || undefined
     }"
-    class="relative isolate grid w-full grid-cols-1 grid-rows-[1fr_auto] overflow-clip bg-(--bg-canvas) data-[bordered]:border-b data-[bordered]:border-(--border-default) data-[variant=screen]:min-h-[calc(100dvh-var(--hero-banner-offset,0rem))]"
+    :class="ROOT_CLASS"
   >
     <div
       v-if="hasBackdrop()"
       aria-hidden="true"
       data-slot="hero-backdrop"
-      class="pointer-events-none relative col-[1] row-[1/3] overflow-hidden [z-index:var(--hero-banner-z-background,0)] [:has(>[data-slot=hero-bottom]_[data-plain-ground]:not([data-opaque]_[data-plain-ground]))>&]:row-[1/2] [:has(>[data-slot=hero-top]_[data-plain-ground]:not([data-opaque]_[data-plain-ground]))>&]:hidden [:has(>[data-slot=hero-content]_[data-slot=hero-media]_[data-plain-ground]:not([data-opaque]_[data-plain-ground]))>&]:hidden"
+      :class="BACKDROP_CLASS"
     >
       <div
         class="absolute inset-0 [--texture-fade-lead:transparent] [translate:var(--hero-banner-background-x,0)_var(--hero-banner-background-y,0)]"
@@ -163,7 +191,7 @@
       :data-padded="props.padded || null"
       :data-size="size"
       :data-align="align"
-      class="relative col-[1] row-[1] mx-auto w-full px-(--spacing-xl) [z-index:var(--hero-banner-z-content,10)] data-[variant=screen]:flex data-[variant=screen]:flex-1 data-[variant=screen]:flex-col data-[variant=screen]:data-[align=start]:justify-start data-[variant=screen]:data-[align=center]:justify-center data-[variant=screen]:data-[align=end]:justify-end data-[width=3xl]:max-w-(--container-3xl) data-[width=4xl]:max-w-(--container-4xl) data-[width=5xl]:max-w-(--container-5xl) data-[width=6xl]:max-w-(--container-6xl) data-[width=7xl]:max-w-(--container-7xl) data-[width=site]:layout-column-site data-[width=full]:max-w-none data-[padded]:data-[size=medium]:py-(--spacing-2xl) data-[padded]:data-[size=large]:py-[calc(var(--spacing-2xl)*2)]"
+      :class="CONTENT_CLASS"
     >
       <div
         v-if="hasMedia()"
@@ -199,7 +227,7 @@
           v-if="hasFloorTexture"
           :variant="floorTexture"
           :size="floorTextureSize"
-          class="[mask-image:linear-gradient(to_right,black_0%,color-mix(in_srgb,black_30%,transparent)_40%,color-mix(in_srgb,black_30%,transparent)_62%,black_100%)] [mask-mode:alpha] [opacity:var(--hero-banner-floor-ink,0.6)]"
+          :class="FLOOR_TEXTURE_CLASS"
         />
 
         <div
@@ -219,7 +247,7 @@
           :marks="marqueeMarks"
           :label="marqueeLabel"
           size="small"
-          class="mx-auto w-full px-(--spacing-xl) py-(--spacing-xl) data-[width=3xl]:max-w-(--container-3xl) data-[width=4xl]:max-w-(--container-4xl) data-[width=5xl]:max-w-(--container-5xl) data-[width=6xl]:max-w-(--container-6xl) data-[width=7xl]:max-w-(--container-7xl) data-[width=site]:layout-column-site data-[width=full]:max-w-none"
+          :class="MARQUEE_CLASS"
         />
       </div>
     </div>

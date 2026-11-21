@@ -33,9 +33,17 @@
     src?: string
     /** URL of the light-theme file; with `src` both files render and the theme reveals one. */
     srcLight?: string
-    /** The ink a single file is drawn in: `light` art (for dark surfaces) is inverted on the light theme, `dark` art is inverted on the dark theme, `color` is kept as is. Ignored when `srcLight` is set or `variant` is not `color`. */
+    /**
+     * The ink a single file is drawn in: `light` art (for dark surfaces) is inverted on the light
+     * theme, `dark` art is inverted on the dark theme, `color` is kept as is. Ignored when
+     * `srcLight` is set or `variant` is not `color`.
+     */
     artwork?: ThirdPartyLogoArtwork
-    /** Ink: `color` keeps the vendor's colours, `monochrome` paints one silhouette black on light and white on dark, `current` paints it in the surrounding text colour, `knockout` pins it black for a mark on a coloured fill. */
+    /**
+     * Ink: `color` keeps the vendor's colours, `monochrome` paints one silhouette black on light
+     * and white on dark, `current` paints it in the surrounding text colour, `knockout` pins it
+     * black for a mark on a coloured fill.
+     */
     variant?: ThirdPartyLogoVariant
     /** Accessible name when it should differ from `name`. */
     ariaLabel?: string
@@ -73,6 +81,14 @@
     `url("${value.replace(/[\\"]/g, '\\$&').replace(/\n/g, '\\a ')}")`
 
   const maskStyle = computed(() => ({ '--third-party-logo-mask': cssUrl(file.value) }))
+
+  const IMAGE_CLASS =
+    'block h-full w-auto max-w-full object-contain ' +
+    'data-[ink=color]:data-[artwork=light]:invert ' +
+    '[[data-theme=dark]_&]:data-[ink=color]:data-[artwork=light]:invert-0 [[data-theme=dark]_&]:data-[ink=color]:data-[artwork=dark]:invert ' +
+    'data-[ink=monochrome]:brightness-0 ' +
+    '[[data-theme=dark]_&]:data-[ink=monochrome]:invert ' +
+    'data-[ink=knockout]:brightness-0 data-[ink=current]:opacity-0'
 </script>
 
 <template>
@@ -115,7 +131,7 @@
         decoding="async"
         :data-ink="variant"
         :data-artwork="artwork"
-        class="block h-full w-auto max-w-full object-contain data-[ink=color]:data-[artwork=light]:invert [[data-theme=dark]_&]:data-[ink=color]:data-[artwork=light]:invert-0 [[data-theme=dark]_&]:data-[ink=color]:data-[artwork=dark]:invert data-[ink=monochrome]:brightness-0 [[data-theme=dark]_&]:data-[ink=monochrome]:invert data-[ink=knockout]:brightness-0 data-[ink=current]:opacity-0"
+        :class="IMAGE_CLASS"
       />
       <span
         v-if="variant === 'current'"

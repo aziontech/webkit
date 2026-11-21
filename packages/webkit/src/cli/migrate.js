@@ -726,7 +726,9 @@ export function migrateSource(input, migration, { fromMajor = null, declaredMajo
         const tag = `${PREFIX}${subpath}: <${binding}> :${kebab(prop)}="${expr}"`
         warnings.push(
           kind === 'opaque'
-            ? `${tag} is bound to a value migrate cannot read: make sure it never yields ${old.map((v) => `'${v}' (now '${values[v]}')`).join(', ')}, then put <!-- ${MIGRATE_OK} --> on the line above the tag`
+            ? `${tag} is bound to a value migrate cannot read: make sure it never yields ` +
+                `${old.map((v) => `'${v}' (now '${values[v]}')`).join(', ')}, then put <!-- ${MIGRATE_OK} ` +
+                `--> on the line above the tag`
             : `${tag} is a bound expression; map its ${old.join(', ')} values by hand (or, when only a comparison keeps an old value, put <!-- ${MIGRATE_OK} --> on the line above the tag)`
         )
       })
@@ -920,7 +922,9 @@ export function planMigrate(projectDir, { version = 6, dryRun = false, fromMajor
       file: 'package.json',
       changes: [],
       warnings: [
-        `the project is on @aziontech/webkit v${from}${declared ? ` (${declared.range})` : ''}; migrate v${version} rewrites v${version - 1} code, so every v${from} component whose API changed is listed as MANUAL`
+        `the project is on @aziontech/webkit v${from}${declared ? ` (${declared.range})` : ''}; ` +
+          `migrate v${version} rewrites v${version - 1} code, so every v${from} component whose API ` +
+          `changed is listed as MANUAL`
       ]
     })
   }

@@ -558,6 +558,15 @@ Each variant is the same screen in another state: `get_block("detail/detail-vers
     confirmOpen.value = false
     emit('revert', event, viewed.value)
   }
+
+  const CONTACT_SALES_LINK_CLASS =
+    'inline-flex items-center gap-(--spacing-2xs) rounded-(--shape-button) text-(--text-link) underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance ' +
+    'hover:text-(--text-link-hover) underline hover:decoration-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 ' +
+    'focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none'
+
+  const VERSION_LINK_CLASS =
+    'group flex w-full min-w-0 gap-(--spacing-sm) rounded-(--shape-button) text-start no-underline ' +
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)'
 </script>
 
 <template>
@@ -1072,7 +1081,7 @@ Each variant is the same screen in another state: `get_block("detail/detail-vers
                                         href="https://example.com/contact-sales"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        class="inline-flex items-center gap-(--spacing-2xs) rounded-(--shape-button) text-(--text-link) underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-link-hover) underline hover:decoration-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
+                                        :class="CONTACT_SALES_LINK_CLASS"
                                       >
                                         Contact sales
                                         <i
@@ -1534,7 +1543,7 @@ Each variant is the same screen in another state: `get_block("detail/detail-vers
                   <a
                     :href="`/resources/${resource.name}/versions/${entry.name}`"
                     :aria-current="entry.id === viewed.id ? 'page' : undefined"
-                    class="group flex w-full min-w-0 gap-(--spacing-sm) rounded-(--shape-button) text-start no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+                    :class="VERSION_LINK_CLASS"
                   >
                     <span
                       class="relative flex size-7 shrink-0 items-center justify-center rounded-full border border-(--border-default) bg-(--bg-surface) text-(--text-default)"

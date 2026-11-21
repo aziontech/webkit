@@ -56,7 +56,11 @@
       disabled?: boolean
       /** Disables Add only, for example until the last row is filled in. */
       addDisabled?: boolean
-      /** Shows a grip and Move up / Move down on every row (and every group in grouped mode) when there is more than one; rows move by dragging the grip, with the buttons, with Arrow Up / Arrow Down on the grip or Alt+Arrow Up / Alt+Arrow Down anywhere in the row. The new order goes out through v-model. */
+      /**
+       * Shows a grip and Move up / Move down on every row (and every group in grouped mode) when there is
+       * more than one; rows move by dragging the grip, with the buttons, with Arrow Up / Arrow Down on the
+       * grip or Alt+Arrow Up / Alt+Arrow Down anywhere in the row. The new order goes out through v-model.
+       */
       reorderable?: boolean
       /** Accessible name of the list of rows. */
       ariaLabel?: string
@@ -433,6 +437,49 @@
     drag.value?.index !== index
       ? drop.value.edge
       : undefined
+
+  const GROUP_CLASS =
+    'relative flex min-w-0 flex-col gap-(--spacing-sm) ' +
+    'data-[grouped]:rounded-(--shape-card) data-[grouped]:border data-[grouped]:border-(--border-muted) data-[grouped]:bg-(--bg-surface) data-[grouped]:p-(--spacing-md) ' +
+    'data-[dragging]:opacity-60 data-[dragging]:outline-dashed data-[dragging]:outline-2 data-[dragging]:outline-offset-2 data-[dragging]:outline-(--accent) ' +
+    'data-[drop]:before:pointer-events-none data-[drop]:before:absolute data-[drop]:before:inset-x-0 data-[drop]:before:h-0.5 data-[drop]:before:bg-(--accent) ' +
+    "data-[drop]:before:content-[''] data-[drop=before]:before:-top-(--spacing-xs) data-[drop=after]:before:-bottom-(--spacing-xs)"
+
+  const GROUP_GRIP_CLASS =
+    'inline-flex size-7 shrink-0 cursor-grab items-center justify-center rounded-(--shape-button) text-(--text-muted) ' +
+    'hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) active:cursor-grabbing ' +
+    'disabled:cursor-not-allowed disabled:text-(--text-disabled) disabled:hover:bg-transparent'
+
+  const HEADER_CLASS =
+    'hidden min-w-0 grid-cols-[repeat(var(--attribute-editor-columns),minmax(0,1fr))_auto] gap-(--spacing-sm) text-label-sm text-(--text-default) ' +
+    'group-data-[fit=md]:@md/attribute-editor:grid group-data-[fit=xl]:@xl/attribute-editor:grid group-data-[fit=3xl]:@3xl/attribute-editor:grid'
+
+  const ROW_CLASS =
+    'relative flex min-w-0 flex-col gap-(--spacing-sm) border-t border-(--border-muted) pt-(--spacing-sm) ' +
+    'first:border-t-0 first:pt-0 ' +
+    'group-data-[fit=md]:@md/attribute-editor:border-t-0 group-data-[fit=xl]:@xl/attribute-editor:border-t-0 group-data-[fit=3xl]:@3xl/attribute-editor:border-t-0 ' +
+    'group-data-[fit=md]:@md/attribute-editor:pt-0 group-data-[fit=xl]:@xl/attribute-editor:pt-0 group-data-[fit=3xl]:@3xl/attribute-editor:pt-0 ' +
+    'data-[joined]:border-t-0 data-[joined]:pt-0 ' +
+    'data-[dragging]:rounded-(--shape-card) data-[dragging]:opacity-60 data-[dragging]:outline-dashed data-[dragging]:outline-2 data-[dragging]:outline-offset-2 ' +
+    'data-[dragging]:outline-(--accent) ' +
+    'data-[drop]:before:pointer-events-none data-[drop]:before:absolute data-[drop]:before:inset-x-0 data-[drop]:before:h-0.5 data-[drop]:before:bg-(--accent) ' +
+    "data-[drop]:before:content-[''] data-[drop=before]:before:-top-(--spacing-2xs) data-[drop=after]:before:-bottom-(--spacing-2xs)"
+
+  const ROW_FIELDS_CLASS =
+    'flex min-w-0 grid-cols-[repeat(var(--attribute-editor-columns),minmax(0,1fr))_auto] flex-col gap-(--spacing-sm) ' +
+    'group-data-[fit=md]:@md/attribute-editor:grid group-data-[fit=xl]:@xl/attribute-editor:grid group-data-[fit=3xl]:@3xl/attribute-editor:grid ' +
+    'group-data-[fit=md]:@md/attribute-editor:items-start group-data-[fit=xl]:@xl/attribute-editor:items-start group-data-[fit=3xl]:@3xl/attribute-editor:items-start'
+
+  const GRIP_CLASS =
+    'inline-flex shrink-0 cursor-grab items-center justify-center rounded-(--shape-button) text-(--text-muted) ' +
+    'hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) active:cursor-grabbing ' +
+    'disabled:cursor-not-allowed disabled:text-(--text-disabled) disabled:hover:bg-transparent ' +
+    'group-data-[size=small]/attribute-editor:size-7 group-data-[size=medium]/attribute-editor:size-8 group-data-[size=large]/attribute-editor:size-10'
+
+  const REMOVE_PLACEHOLDER_CLASS =
+    'hidden ' +
+    'group-data-[fit=md]:@md/attribute-editor:block group-data-[fit=xl]:@xl/attribute-editor:block group-data-[fit=3xl]:@3xl/attribute-editor:block ' +
+    'group-data-[size=small]/attribute-editor:w-7 group-data-[size=medium]/attribute-editor:w-8 group-data-[size=large]/attribute-editor:w-10'
 </script>
 
 <script lang="ts">
@@ -488,7 +535,7 @@
         </li>
         <component
           :is="grouped ? 'li' : 'div'"
-          class="relative flex min-w-0 flex-col gap-(--spacing-sm) data-[grouped]:rounded-(--shape-card) data-[grouped]:border data-[grouped]:border-(--border-muted) data-[grouped]:bg-(--bg-surface) data-[grouped]:p-(--spacing-md) data-[dragging]:opacity-60 data-[dragging]:outline-dashed data-[dragging]:outline-2 data-[dragging]:outline-offset-2 data-[dragging]:outline-(--accent) data-[drop]:before:pointer-events-none data-[drop]:before:absolute data-[drop]:before:inset-x-0 data-[drop]:before:h-0.5 data-[drop]:before:bg-(--accent) data-[drop]:before:content-[''] data-[drop=before]:before:-top-(--spacing-xs) data-[drop=after]:before:-bottom-(--spacing-xs)"
+          :class="GROUP_CLASS"
           :data-grouped="grouped || null"
           :data-group-index="grouped ? groupIndex : undefined"
           :data-dragging="grouped ? dragging('group', groupIndex, undefined) : undefined"
@@ -510,7 +557,7 @@
             <button
               type="button"
               data-reorder="group-grip"
-              class="inline-flex size-7 shrink-0 cursor-grab items-center justify-center rounded-(--shape-button) text-(--text-muted) hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) active:cursor-grabbing disabled:cursor-not-allowed disabled:text-(--text-disabled) disabled:hover:bg-transparent"
+              :class="GROUP_GRIP_CLASS"
               :aria-label="t('attributeEditor.reorderGroup', { index: groupIndex + 1 })"
               :aria-describedby="hintId"
               :disabled="disabled"
@@ -561,7 +608,7 @@
             <div
               v-if="!slots.row && definition.length && group.length"
               aria-hidden="true"
-              class="hidden min-w-0 grid-cols-[repeat(var(--attribute-editor-columns),minmax(0,1fr))_auto] gap-(--spacing-sm) text-label-sm text-(--text-default) group-data-[fit=md]:@md/attribute-editor:grid group-data-[fit=xl]:@xl/attribute-editor:grid group-data-[fit=3xl]:@3xl/attribute-editor:grid"
+              :class="HEADER_CLASS"
               :data-testid="`${testId}__header`"
             >
               <span
@@ -586,7 +633,7 @@
               <li
                 v-for="(item, index) in group"
                 :key="rowKey(item)"
-                class="relative flex min-w-0 flex-col gap-(--spacing-sm) border-t border-(--border-muted) pt-(--spacing-sm) first:border-t-0 first:pt-0 group-data-[fit=md]:@md/attribute-editor:border-t-0 group-data-[fit=xl]:@xl/attribute-editor:border-t-0 group-data-[fit=3xl]:@3xl/attribute-editor:border-t-0 group-data-[fit=md]:@md/attribute-editor:pt-0 group-data-[fit=xl]:@xl/attribute-editor:pt-0 group-data-[fit=3xl]:@3xl/attribute-editor:pt-0 data-[joined]:border-t-0 data-[joined]:pt-0 data-[dragging]:rounded-(--shape-card) data-[dragging]:opacity-60 data-[dragging]:outline-dashed data-[dragging]:outline-2 data-[dragging]:outline-offset-2 data-[dragging]:outline-(--accent) data-[drop]:before:pointer-events-none data-[drop]:before:absolute data-[drop]:before:inset-x-0 data-[drop]:before:h-0.5 data-[drop]:before:bg-(--accent) data-[drop]:before:content-[''] data-[drop=before]:before:-top-(--spacing-2xs) data-[drop=after]:before:-bottom-(--spacing-2xs)"
+                :class="ROW_CLASS"
                 :data-row="index"
                 :data-group="grouped ? groupIndex : undefined"
                 :data-joined="grouped && index > 0 ? '' : undefined"
@@ -629,9 +676,7 @@
                       moveRow(index, grouped ? groupIndex : undefined, index + offset)
                   "
                 >
-                  <div
-                    class="flex min-w-0 grid-cols-[repeat(var(--attribute-editor-columns),minmax(0,1fr))_auto] flex-col gap-(--spacing-sm) group-data-[fit=md]:@md/attribute-editor:grid group-data-[fit=xl]:@xl/attribute-editor:grid group-data-[fit=3xl]:@3xl/attribute-editor:grid group-data-[fit=md]:@md/attribute-editor:items-start group-data-[fit=xl]:@xl/attribute-editor:items-start group-data-[fit=3xl]:@3xl/attribute-editor:items-start"
-                  >
+                  <div :class="ROW_FIELDS_CLASS">
                     <Field
                       v-for="column in definition"
                       :key="column.key"
@@ -685,7 +730,7 @@
                         <button
                           type="button"
                           data-reorder="grip"
-                          class="inline-flex shrink-0 cursor-grab items-center justify-center rounded-(--shape-button) text-(--text-muted) hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) active:cursor-grabbing disabled:cursor-not-allowed disabled:text-(--text-disabled) disabled:hover:bg-transparent group-data-[size=small]/attribute-editor:size-7 group-data-[size=medium]/attribute-editor:size-8 group-data-[size=large]/attribute-editor:size-10"
+                          :class="GRIP_CLASS"
                           :aria-label="
                             t('attributeEditor.reorder', {
                               index: position(index, grouped ? groupIndex : undefined)
@@ -781,7 +826,7 @@
                         <span
                           v-else
                           aria-hidden="true"
-                          class="hidden group-data-[fit=md]:@md/attribute-editor:block group-data-[fit=xl]:@xl/attribute-editor:block group-data-[fit=3xl]:@3xl/attribute-editor:block group-data-[size=small]/attribute-editor:w-7 group-data-[size=medium]/attribute-editor:w-8 group-data-[size=large]/attribute-editor:w-10"
+                          :class="REMOVE_PLACEHOLDER_CLASS"
                         />
                       </slot>
                     </div>

@@ -58,6 +58,16 @@
   const dashboard = computed(() =>
     props.active && (props.hovered || !canHover.value) ? 'breakdown' : 'overview'
   )
+
+  const OVERVIEW_PANEL_CLASS =
+    'col-start-1 row-start-1 grid translate-y-1 grid-cols-2 gap-(--spacing-sm) opacity-0 transition-[translate,opacity] duration-moderate-02 ease-productive-entrance ' +
+    'data-active:translate-y-0 data-active:opacity-100 ' +
+    'motion-reduce:transition-none'
+
+  const BREAKDOWN_PANEL_CLASS =
+    'col-start-1 row-start-1 flex translate-y-1 flex-col gap-(--spacing-sm) opacity-0 transition-[translate,opacity] duration-moderate-02 ease-productive-entrance ' +
+    'data-active:translate-y-0 data-active:opacity-100 ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -86,7 +96,7 @@
         <div class="grid">
           <div
             :data-active="dashboard === 'overview' || null"
-            class="col-start-1 row-start-1 grid translate-y-1 grid-cols-2 gap-(--spacing-sm) opacity-0 transition-[translate,opacity] duration-moderate-02 ease-productive-entrance data-active:translate-y-0 data-active:opacity-100 motion-reduce:transition-none"
+            :class="OVERVIEW_PANEL_CLASS"
           >
             <Card
               v-for="metric in BIG_NUMBERS"
@@ -112,7 +122,7 @@
 
           <div
             :data-active="dashboard === 'breakdown' || null"
-            class="col-start-1 row-start-1 flex translate-y-1 flex-col gap-(--spacing-sm) opacity-0 transition-[translate,opacity] duration-moderate-02 ease-productive-entrance data-active:translate-y-0 data-active:opacity-100 motion-reduce:transition-none"
+            :class="BREAKDOWN_PANEL_CLASS"
           >
             <Card>
               <template #default>

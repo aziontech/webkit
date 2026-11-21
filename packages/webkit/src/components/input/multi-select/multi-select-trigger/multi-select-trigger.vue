@@ -133,6 +133,45 @@
     locked: () => ctx.disabled.value || ctx.readonly.value,
     pendingFocus: ctx.pendingFocus
   })
+
+  const ROOT_CLASS =
+    'group relative flex w-full items-center gap-(--spacing-xs) rounded-(--shape-control) border border-(--border-input) bg-(--bg-surface) px-(--spacing-sm) text-label-sm ' +
+    'text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 ' +
+    'focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) ' +
+    'data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 ' +
+    'data-[invalid]:border-(--danger-border) data-[invalid]:focus-visible:ring-(--danger) ' +
+    'data-[disabled]:cursor-not-allowed data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:hover:border-(--border-input) ' +
+    'data-[disabled]:focus-visible:ring-0 data-[disabled]:focus-visible:ring-offset-0 ' +
+    'data-[readonly]:cursor-default'
+
+  const CHEVRON_CLASS =
+    'az az-chevron-down shrink-0 text-(--text-muted) ' +
+    'group-data-[disabled]:text-(--text-disabled) ' +
+    'transition-transform duration-150 ease-out motion-reduce:transition-none ' +
+    'data-[state=open]:rotate-180'
+
+  const FIELD_ROOT_CLASS =
+    'group relative flex w-full cursor-pointer flex-wrap items-center gap-(--spacing-2xs) rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) py-px ' +
+    'ps-(--spacing-2xs) pe-(--spacing-sm) text-label-sm text-(--text-default) transition-colors duration-150 ease-out ' +
+    'motion-reduce:transition-none hover:border-(--border-strong) ' +
+    'has-[[data-control]:focus-visible]:ring-2 has-[[data-control]:focus-visible]:ring-(--ring-color) has-[[data-control]:focus-visible]:ring-offset-2 ' +
+    'has-[[data-control]:focus-visible]:ring-offset-(--bg-canvas) ' +
+    'data-[size=small]:min-h-7 data-[size=medium]:min-h-8 data-[size=large]:min-h-10 ' +
+    'data-[invalid]:border-(--danger-border) data-[invalid]:has-[[data-control]:focus-visible]:ring-(--danger) ' +
+    'data-[disabled]:cursor-not-allowed data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:hover:border-(--border-default) ' +
+    'data-[readonly]:cursor-default'
+
+  const SEARCH_INPUT_CLASS =
+    'h-6 min-w-16 flex-1 bg-transparent ps-(--spacing-2xs) text-label-sm pointer-coarse:text-body-md ' +
+    'text-(--text-default) outline-none placeholder:text-(--text-muted) ' +
+    'data-[filled]:placeholder:text-(--text-default) ' +
+    'disabled:cursor-not-allowed disabled:placeholder:text-(--text-disabled)'
+
+  const FIELD_CHEVRON_CLASS =
+    'az az-chevron-down ms-auto shrink-0 text-(--text-muted) ' +
+    'group-data-[disabled]:text-(--text-disabled) ' +
+    'transition-transform duration-150 ease-out motion-reduce:transition-none ' +
+    'data-[state=open]:rotate-180'
 </script>
 
 <template>
@@ -165,8 +204,7 @@
     :data-invalid="ctx.invalid.value || null"
     :data-required="ctx.required.value || null"
     :data-filled="ctx.filled.value || null"
-    :class="attrs.class"
-    class="group relative flex w-full items-center gap-(--spacing-xs) rounded-(--shape-control) border border-(--border-input) bg-(--bg-surface) px-(--spacing-sm) text-label-sm text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 data-[invalid]:border-(--danger-border) data-[invalid]:focus-visible:ring-(--danger) data-[disabled]:cursor-not-allowed data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:hover:border-(--border-input) data-[disabled]:focus-visible:ring-0 data-[disabled]:focus-visible:ring-offset-0 data-[readonly]:cursor-default"
+    :class="[ROOT_CLASS, attrs.class]"
     @click="onClick"
     @keydown="onKeydown"
   >
@@ -185,7 +223,7 @@
       <template v-else>{{ ctx.placeholder.value }}</template>
     </span>
     <i
-      class="az az-chevron-down shrink-0 text-(--text-muted) group-data-[disabled]:text-(--text-disabled) transition-transform duration-150 ease-out motion-reduce:transition-none data-[state=open]:rotate-180"
+      :class="CHEVRON_CLASS"
       :data-state="ctx.open.value ? 'open' : 'closed'"
       aria-hidden="true"
       :data-testid="`${testId}__chevron`"
@@ -209,8 +247,7 @@
     :data-invalid="ctx.invalid.value || null"
     :data-required="ctx.required.value || null"
     :data-filled="ctx.filled.value || null"
-    :class="attrs.class"
-    class="group relative flex w-full cursor-pointer flex-wrap items-center gap-(--spacing-2xs) rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) py-px ps-(--spacing-2xs) pe-(--spacing-sm) text-label-sm text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:border-(--border-strong) has-[[data-control]:focus-visible]:ring-2 has-[[data-control]:focus-visible]:ring-(--ring-color) has-[[data-control]:focus-visible]:ring-offset-2 has-[[data-control]:focus-visible]:ring-offset-(--bg-canvas) data-[size=small]:min-h-7 data-[size=medium]:min-h-8 data-[size=large]:min-h-10 data-[invalid]:border-(--danger-border) data-[invalid]:has-[[data-control]:focus-visible]:ring-(--danger) data-[disabled]:cursor-not-allowed data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:hover:border-(--border-default) data-[readonly]:cursor-default"
+    :class="[FIELD_ROOT_CLASS, attrs.class]"
     @click="onFieldClick"
     @keydown="onFieldKeydown"
   >
@@ -268,7 +305,7 @@
       autocomplete="off"
       :spellcheck="false"
       dir="auto"
-      class="h-6 min-w-16 flex-1 bg-transparent ps-(--spacing-2xs) text-label-sm pointer-coarse:text-body-md text-(--text-default) outline-none placeholder:text-(--text-muted) data-[filled]:placeholder:text-(--text-default) disabled:cursor-not-allowed disabled:placeholder:text-(--text-disabled)"
+      :class="SEARCH_INPUT_CLASS"
       @input="onInput"
     />
     <button
@@ -296,7 +333,7 @@
       <template v-if="!ctx.filled.value">{{ ctx.placeholder.value }}</template>
     </button>
     <i
-      class="az az-chevron-down ms-auto shrink-0 text-(--text-muted) group-data-[disabled]:text-(--text-disabled) transition-transform duration-150 ease-out motion-reduce:transition-none data-[state=open]:rotate-180"
+      :class="FIELD_CHEVRON_CLASS"
       :data-state="ctx.open.value ? 'open' : 'closed'"
       aria-hidden="true"
       :data-testid="`${testId}__chevron`"

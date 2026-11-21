@@ -90,6 +90,10 @@
   const hasCards = computed(() => cards.value.length > 0)
 
   const hasActions = computed(() => Boolean(props.primaryAction || props.secondaryAction))
+
+  const DEPLOY_BUTTON_CLASS =
+    'z-1 mt-auto self-start group-hover/template:before:opacity-100 group-active/template:after:opacity-100 group-hover/template:[&_[data-animated]]:translate-x-0.5 ' +
+    'rtl:group-hover/template:[&_[data-animated]]:-translate-x-0.5'
 </script>
 
 <template>
@@ -175,7 +179,7 @@
                       icon-position="trailing"
                       animated
                       :href="template.href"
-                      class="z-1 mt-auto self-start group-hover/template:before:opacity-100 group-active/template:after:opacity-100 group-hover/template:[&_[data-animated]]:translate-x-0.5 rtl:group-hover/template:[&_[data-animated]]:-translate-x-0.5"
+                      :class="DEPLOY_BUTTON_CLASS"
                     >
                       <template #leading>
                         <i

@@ -809,6 +809,62 @@
   })
 
   const portalLocale = usePortalLocale()
+
+  const CONTROL_CLASS =
+    'inline-flex max-w-full items-stretch rounded-(--shape-control) border border-(--border-input) bg-(--bg-surface) transition-colors duration-150 ease-out ' +
+    '[&:not(:focus-within):not([data-disabled])]:hover:border-(--border-strong) ' +
+    'data-[invalid]:border-(--danger-border) ' +
+    'data-[disabled]:cursor-not-allowed data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) ' +
+    'motion-reduce:transition-none'
+
+  const PREVIOUS_CLASS =
+    'relative inline-flex shrink-0 items-center justify-center border-e border-(--border-input) px-(--spacing-xs) text-(--text-muted) transition-colors duration-150 ease-out ' +
+    'hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset disabled:cursor-not-allowed ' +
+    'disabled:text-(--text-disabled) ' +
+    'data-[size=small]:min-h-7 data-[size=medium]:min-h-8 data-[size=large]:min-h-10 ' +
+    'motion-reduce:transition-none pointer-coarse:min-w-11'
+
+  const TRIGGER_CLASS =
+    'relative text-label-sm inline-flex min-w-0 flex-1 items-center gap-(--spacing-xs) px-(--spacing-sm) py-(--spacing-2xs) text-(--text-default) transition-colors duration-150 ease-out ' +
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset disabled:cursor-not-allowed disabled:text-(--text-disabled) ' +
+    'data-[size=small]:min-h-7 data-[size=medium]:min-h-8 data-[size=large]:min-h-10 ' +
+    'data-[empty]:text-(--text-muted) ' +
+    'motion-reduce:transition-none'
+
+  const CHEVRON_CLASS =
+    'az az-chevron-down shrink-0 text-[length:inherit] leading-none text-(--text-muted) transition-transform duration-150 ease-out ' +
+    'data-[state=open]:rotate-180 ' +
+    'motion-reduce:transition-none'
+
+  const NEXT_CLASS =
+    'relative inline-flex shrink-0 items-center justify-center border-s border-(--border-input) px-(--spacing-xs) text-(--text-muted) transition-colors duration-150 ease-out ' +
+    'hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset disabled:cursor-not-allowed ' +
+    'disabled:text-(--text-disabled) ' +
+    'data-[size=small]:min-h-7 data-[size=medium]:min-h-8 data-[size=large]:min-h-10 ' +
+    'motion-reduce:transition-none pointer-coarse:min-w-11'
+
+  const POPOVER_CLASS =
+    'flex w-min max-w-[calc(100vw-2*var(--spacing-sm))] flex-col overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-sm) ' +
+    'outline-none [transform-origin:var(--popup-origin,top_left)] [--input-ring-offset:var(--bg-surface-raised)] ' +
+    'max-sm:inset-x-0! max-sm:top-auto! max-sm:bottom-0! max-sm:w-full! max-sm:max-w-none! max-sm:max-h-[85dvh]! max-sm:translate-none! max-sm:rounded-b-none max-sm:border-x-0 ' +
+    'max-sm:border-b-0 max-sm:pb-[env(safe-area-inset-bottom)] max-sm:[transform-origin:bottom_center]'
+
+  const PANEL_BODY_CLASS =
+    'flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain ' +
+    'data-[size=small]:w-[calc(7*var(--size-8)_+_2*var(--spacing-sm))] data-[size=medium]:w-[calc(7*var(--size-9)_+_2*var(--spacing-sm))] ' +
+    'data-[size=large]:w-[calc(7*var(--size-10)_+_2*var(--spacing-sm))] ' +
+    'max-sm:w-full!'
+
+  const OPTION_CLASS =
+    'text-label-sm flex min-h-8 cursor-pointer items-center justify-between gap-(--spacing-xs) rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) text-(--text-default) ' +
+    'transition-colors duration-150 ease-out hover:bg-(--bg-hover) has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-(--ring-color) has-[:focus-visible]:ring-inset ' +
+    'data-[selected]:bg-(--bg-selected) ' +
+    'motion-reduce:transition-none pointer-coarse:min-h-11'
+
+  const QUICK_RANGES_CLASS =
+    'text-label-sm -ms-(--spacing-2xs) inline-flex min-h-8 w-fit cursor-pointer items-center gap-(--spacing-2xs) rounded-(--shape-control) px-(--spacing-2xs) text-(--text-muted) ' +
+    'transition-colors duration-150 ease-out hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) ' +
+    'focus-visible:ring-inset motion-reduce:transition-none pointer-coarse:min-h-11'
 </script>
 
 <template>
@@ -825,7 +881,7 @@
       ref="triggerEl"
       :data-disabled="isDisabled || null"
       :data-invalid="field.invalid.value || null"
-      class="inline-flex max-w-full items-stretch rounded-(--shape-control) border border-(--border-input) bg-(--bg-surface) transition-colors duration-150 ease-out [&:not(:focus-within):not([data-disabled])]:hover:border-(--border-strong) data-[invalid]:border-(--danger-border) data-[disabled]:cursor-not-allowed data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) motion-reduce:transition-none"
+      :class="CONTROL_CLASS"
     >
       <button
         v-if="showStep"
@@ -834,7 +890,7 @@
         :aria-label="t('dateRangePicker.previous')"
         :data-size="size"
         :data-testid="`${testId}__previous`"
-        class="relative inline-flex shrink-0 items-center justify-center border-e border-(--border-input) px-(--spacing-xs) text-(--text-muted) transition-colors duration-150 ease-out hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset disabled:cursor-not-allowed disabled:text-(--text-disabled) data-[size=small]:min-h-7 data-[size=medium]:min-h-8 data-[size=large]:min-h-10 motion-reduce:transition-none pointer-coarse:min-w-11"
+        :class="PREVIOUS_CLASS"
         @click="step(-1)"
       >
         <span
@@ -864,7 +920,7 @@
         :aria-invalid="field.invalid.value || undefined"
         aria-haspopup="dialog"
         :aria-expanded="isOpen"
-        class="relative text-label-sm inline-flex min-w-0 flex-1 items-center gap-(--spacing-xs) px-(--spacing-sm) py-(--spacing-2xs) text-(--text-default) transition-colors duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset disabled:cursor-not-allowed disabled:text-(--text-disabled) data-[size=small]:min-h-7 data-[size=medium]:min-h-8 data-[size=large]:min-h-10 data-[empty]:text-(--text-muted) motion-reduce:transition-none"
+        :class="TRIGGER_CLASS"
         @click="setOpen(!isOpen)"
       >
         <span
@@ -890,7 +946,7 @@
         >
         <i
           :data-state="isOpen ? 'open' : 'closed'"
-          class="az az-chevron-down shrink-0 text-[length:inherit] leading-none text-(--text-muted) transition-transform duration-150 ease-out data-[state=open]:rotate-180 motion-reduce:transition-none"
+          :class="CHEVRON_CLASS"
           aria-hidden="true"
         />
       </button>
@@ -901,7 +957,7 @@
         :aria-label="t('dateRangePicker.next')"
         :data-size="size"
         :data-testid="`${testId}__next`"
-        class="relative inline-flex shrink-0 items-center justify-center border-s border-(--border-input) px-(--spacing-xs) text-(--text-muted) transition-colors duration-150 ease-out hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset disabled:cursor-not-allowed disabled:text-(--text-disabled) data-[size=small]:min-h-7 data-[size=medium]:min-h-8 data-[size=large]:min-h-10 motion-reduce:transition-none pointer-coarse:min-w-11"
+        :class="NEXT_CLASS"
         @click="step(1)"
       >
         <span
@@ -940,7 +996,7 @@
           :data-align="resolvedAlign"
           :data-size="size"
           :style="panelStyle"
-          class="flex w-min max-w-[calc(100vw-2*var(--spacing-sm))] flex-col overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-sm) outline-none [transform-origin:var(--popup-origin,top_left)] [--input-ring-offset:var(--bg-surface-raised)] max-sm:inset-x-0! max-sm:top-auto! max-sm:bottom-0! max-sm:w-full! max-sm:max-w-none! max-sm:max-h-[85dvh]! max-sm:translate-none! max-sm:rounded-b-none max-sm:border-x-0 max-sm:border-b-0 max-sm:pb-[env(safe-area-inset-bottom)] max-sm:[transform-origin:bottom_center]"
+          :class="POPOVER_CLASS"
           @keydown="onPanelKeydown"
         >
           <div
@@ -962,7 +1018,7 @@
             v-if="panelMode === 'relative'"
             :data-size="size"
             :data-view="relativeView"
-            class="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain data-[size=small]:w-[calc(7*var(--size-8)_+_2*var(--spacing-sm))] data-[size=medium]:w-[calc(7*var(--size-9)_+_2*var(--spacing-sm))] data-[size=large]:w-[calc(7*var(--size-10)_+_2*var(--spacing-sm))] max-sm:w-full!"
+            :class="PANEL_BODY_CLASS"
             :data-testid="`${testId}__relative`"
           >
             <template v-if="relativeView === 'quick'">
@@ -988,7 +1044,7 @@
                     :key="option.key"
                     :data-selected="draftKey === option.key || null"
                     :data-testid="`${testId}__option`"
-                    class="text-label-sm flex min-h-8 cursor-pointer items-center justify-between gap-(--spacing-xs) rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-(--ring-color) has-[:focus-visible]:ring-inset data-[selected]:bg-(--bg-selected) motion-reduce:transition-none pointer-coarse:min-h-11"
+                    :class="OPTION_CLASS"
                   >
                     <input
                       :checked="draftKey === option.key"
@@ -1044,7 +1100,7 @@
               <button
                 type="button"
                 :data-testid="`${testId}__quick-ranges`"
-                class="text-label-sm -ms-(--spacing-2xs) inline-flex min-h-8 w-fit cursor-pointer items-center gap-(--spacing-2xs) rounded-(--shape-control) px-(--spacing-2xs) text-(--text-muted) transition-colors duration-150 ease-out hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset motion-reduce:transition-none pointer-coarse:min-h-11"
+                :class="QUICK_RANGES_CLASS"
                 @click="showQuick"
               >
                 <i
@@ -1114,7 +1170,7 @@
             v-else
             :data-size="size"
             :data-view="absoluteView"
-            class="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain data-[size=small]:w-[calc(7*var(--size-8)_+_2*var(--spacing-sm))] data-[size=medium]:w-[calc(7*var(--size-9)_+_2*var(--spacing-sm))] data-[size=large]:w-[calc(7*var(--size-10)_+_2*var(--spacing-sm))] max-sm:w-full!"
+            :class="PANEL_BODY_CLASS"
             :data-testid="`${testId}__absolute`"
           >
             <div

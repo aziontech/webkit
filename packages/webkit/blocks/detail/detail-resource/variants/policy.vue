@@ -7,6 +7,16 @@
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Tag from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
+
+  const DETAIL_LINK_CLASS =
+    'group/link ' +
+    'data-link:cursor-pointer ' +
+    'inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline ' +
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)'
+
+  const FOOTER_BAND_CLASS =
+    '@container/band flex min-h-(--size-12) flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-xs) border-t border-(--border-muted) bg-(--bg-canvas) px-(--spacing-md) ' +
+    'py-(--spacing-xs)'
 </script>
 
 <template>
@@ -28,7 +38,7 @@
               <a
                 href="/resources/3344556677"
                 data-link
-                class="group/link data-link:cursor-pointer inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
+                :class="DETAIL_LINK_CLASS"
               >
                 <span class="truncate underline-offset-2 group-hover/link:underline">web-app</span>
                 <i
@@ -176,9 +186,7 @@
         </div>
       </div>
 
-      <div
-        class="@container/band flex min-h-(--size-12) flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-xs) border-t border-(--border-muted) bg-(--bg-canvas) px-(--spacing-md) py-(--spacing-xs)"
-      >
+      <div :class="FOOTER_BAND_CLASS">
         <p
           class="min-w-0 flex-1 basis-(--container-2xs) text-pretty text-body-sm text-(--text-muted)"
         >

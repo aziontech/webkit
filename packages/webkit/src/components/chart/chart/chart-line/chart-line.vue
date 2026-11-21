@@ -59,6 +59,11 @@
     }
     return points.flatMap((point, index) => (point ? [{ index, x: point[0], y: point[1] }] : []))
   }
+
+  const LINE_CLASS =
+    '[stroke-dasharray:1.02_1.02] [stroke-dashoffset:1.02] transition-[stroke-dashoffset] duration-slow-02 ease-productive-entrance ' +
+    'motion-reduce:transition-none ' +
+    'data-[entered]:[stroke-dashoffset:0]'
 </script>
 
 <template>
@@ -87,7 +92,7 @@
         pathLength="1"
         :data-entered="ctx.entered.value || null"
         :style="{ transitionDelay: line.delay }"
-        class="[stroke-dasharray:1.02_1.02] [stroke-dashoffset:1.02] transition-[stroke-dashoffset] duration-slow-02 ease-productive-entrance motion-reduce:transition-none data-[entered]:[stroke-dashoffset:0]"
+        :class="LINE_CLASS"
       />
       <circle
         v-for="marker in markersOf(line.points)"

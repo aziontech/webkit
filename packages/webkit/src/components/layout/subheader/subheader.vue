@@ -45,6 +45,10 @@
   const anchorUrl = computed(() =>
     props.anchor ? `${globalThis.location?.href.split('#')[0] ?? ''}#${props.anchor}` : ''
   )
+
+  const ANCHOR_CLASS =
+    'shrink-0 opacity-0 transition-opacity duration-150 ease-out group-hover/heading:opacity-100 group-focus-within/heading:opacity-100 [@media(hover:none)]:opacity-100 ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -67,7 +71,7 @@
           </h2>
           <span
             v-if="anchor"
-            class="shrink-0 opacity-0 transition-opacity duration-150 ease-out group-hover/heading:opacity-100 group-focus-within/heading:opacity-100 [@media(hover:none)]:opacity-100 motion-reduce:transition-none"
+            :class="ANCHOR_CLASS"
           >
             <CopyButton
               :value="anchorUrl"

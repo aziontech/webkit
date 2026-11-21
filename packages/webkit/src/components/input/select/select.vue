@@ -25,7 +25,10 @@
       placeholder?: string
       /** Size token; affects trigger height. */
       size?: SelectSize
-      /** Trigger look: `outline` is the bordered field; `ghost` has no border or fill until hover, sized to its value, for a switcher inside a line of text such as the environment at the end of a breadcrumb. */
+      /**
+       * Trigger look: `outline` is the bordered field; `ghost` has no border or fill until hover, sized to
+       * its value, for a switcher inside a line of text such as the environment at the end of a breadcrumb.
+       */
       variant?: SelectVariant
       /** Disables the trigger and prevents opening. */
       disabled?: boolean

@@ -83,12 +83,16 @@ export default {
     type: 'suggestion',
     docs: {
       description:
-        'Warn when a Card, StatTile or ChartCard is a direct child of a flex parent without a width (w-full, flex-1, grow, basis-*): these components are containers with no intrinsic width and collapse as content-sized flex items.'
+        'Warn when a Card, StatTile or ChartCard is a direct child of a flex parent without a ' +
+        'width (w-full, flex-1, grow, basis-*): these components are containers with no ' +
+        'intrinsic width and collapse as content-sized flex items.'
     },
     schema: [],
     messages: {
       collapses:
-        '\'<{{tag}}>\' is a container: as a content-sized item of this flex parent it collapses to its content (or to zero). Give it a width: class="w-full" on it, or wrap it in an element with flex-1, grow or basis-*.'
+        "'<{{tag}}>' is a container: as a content-sized item of this flex parent it collapses " +
+        'to its content (or to zero). Give it a width: class="w-full" on it, or wrap it in an ' +
+        'element with flex-1, grow or basis-*.'
     }
   },
   create(context) {

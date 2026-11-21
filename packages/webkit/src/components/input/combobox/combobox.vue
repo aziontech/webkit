@@ -453,6 +453,19 @@
   const showClear = computed(
     () => props.clearable && Boolean(text.value) && !isDisabled.value && !props.readonly
   )
+
+  const LISTBOX_CLASS =
+    'fixed z-(--z-control-overlay) m-0 flex max-h-80 list-none flex-col gap-(--spacing-2xs) overflow-y-auto overscroll-contain rounded-(--shape-control) border border-(--border-default) ' +
+    'bg-(--bg-surface-raised) p-(--spacing-2xs) shadow-(--shadow-xs)'
+
+  const OPTION_CLASS =
+    'flex min-h-8 cursor-pointer select-none items-center gap-(--spacing-sm) rounded-(--shape-control) border-y border-transparent bg-clip-padding ' +
+    'forced-colors:border-y-0 px-(--spacing-sm) py-(--spacing-2xs) text-start text-label-sm text-(--text-default) transition-colors duration-150 ease-out ' +
+    'hover:bg-(--bg-hover) ' +
+    'data-[active]:bg-(--bg-hover) ' +
+    'data-[selected]:bg-(--bg-selected) ' +
+    'data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled) data-[disabled]:hover:bg-transparent ' +
+    'motion-reduce:transition-none pointer-coarse:min-h-11'
 </script>
 
 <template>
@@ -548,7 +561,7 @@
           :data-side="resolvedSide"
           :data-align="resolvedAlign"
           :style="panelSizing"
-          class="fixed z-(--z-control-overlay) m-0 flex max-h-80 list-none flex-col gap-(--spacing-2xs) overflow-y-auto overscroll-contain rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-2xs) shadow-(--shadow-xs)"
+          :class="LISTBOX_CLASS"
           @mousedown.prevent
         >
           <li
@@ -585,7 +598,7 @@
                   :data-disabled="isDisabledRow(row) || null"
                   :data-type="row.kind"
                   :data-testid="`${testId}__option`"
-                  class="flex min-h-8 cursor-pointer select-none items-center gap-(--spacing-sm) rounded-(--shape-control) border-y border-transparent bg-clip-padding forced-colors:border-y-0 px-(--spacing-sm) py-(--spacing-2xs) text-start text-label-sm text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) data-[active]:bg-(--bg-hover) data-[selected]:bg-(--bg-selected) data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled) data-[disabled]:hover:bg-transparent motion-reduce:transition-none pointer-coarse:min-h-11"
+                  :class="OPTION_CLASS"
                   @click="commitRow($event, row)"
                   @keydown.enter.prevent="commitRow($event, row)"
                   @mousemove="active = isDisabledRow(row) ? active : rows.indexOf(row)"

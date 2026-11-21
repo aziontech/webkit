@@ -413,6 +413,21 @@
   }
 
   const dimmed = (id: string) => activeKey.value !== null && activeKey.value !== id
+
+  const REGION_CLASS =
+    'cursor-pointer opacity-0 transition-opacity duration-slow-01 ease-productive-entrance ' +
+    'motion-reduce:transition-none ' +
+    'data-[entered]:opacity-100 data-[entered]:data-[dimmed]:opacity-40'
+
+  const BUBBLE_CLASS =
+    'cursor-pointer opacity-0 transition-opacity duration-slow-01 ease-productive-entrance ' +
+    'motion-reduce:transition-none ' +
+    'data-[entered]:opacity-100 data-[entered]:data-[dimmed]:opacity-40'
+
+  const TOOLTIP_PANEL_CLASS =
+    'flex w-max max-w-(--container-3xs) -translate-y-1/2 flex-col overflow-hidden rounded-(--shape-control) border border-(--chart-tooltip-border) bg-(--chart-tooltip-bg) ' +
+    'text-(--chart-tooltip-text) shadow-(--shadow-sm) ' +
+    'data-[side=end]:translate-x-(--spacing-sm) data-[side=start]:-translate-x-[calc(100%+var(--spacing-sm))]'
 </script>
 
 <template>
@@ -590,7 +605,7 @@
             :data-bin="shape.bin"
             :data-dimmed="dimmed(shape.id) || null"
             :data-entered="entered || null"
-            class="cursor-pointer opacity-0 transition-opacity duration-slow-01 ease-productive-entrance motion-reduce:transition-none data-[entered]:opacity-100 data-[entered]:data-[dimmed]:opacity-40"
+            :class="REGION_CLASS"
             @pointerenter="setActive(shape.id)"
           />
           <circle
@@ -607,7 +622,7 @@
             :data-point="bubble.id"
             :data-dimmed="dimmed(bubble.id) || null"
             :data-entered="entered || null"
-            class="cursor-pointer opacity-0 transition-opacity duration-slow-01 ease-productive-entrance motion-reduce:transition-none data-[entered]:opacity-100 data-[entered]:data-[dimmed]:opacity-40"
+            :class="BUBBLE_CLASS"
             @pointerenter="setActive(bubble.id)"
           />
         </svg>
@@ -620,7 +635,7 @@
         >
           <div
             :data-side="readout.side"
-            class="flex w-max max-w-(--container-3xs) -translate-y-1/2 flex-col overflow-hidden rounded-(--shape-control) border border-(--chart-tooltip-border) bg-(--chart-tooltip-bg) text-(--chart-tooltip-text) shadow-(--shadow-sm) data-[side=end]:translate-x-(--spacing-sm) data-[side=start]:-translate-x-[calc(100%+var(--spacing-sm))]"
+            :class="TOOLTIP_PANEL_CLASS"
           >
             <span
               class="border-b border-(--chart-tooltip-border) px-(--spacing-sm) py-(--spacing-xs) text-label-md"

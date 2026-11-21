@@ -213,6 +213,15 @@
       submitting.value = false
     }
   }
+
+  const ACCOUNT_BUTTON_CLASS =
+    'rounded-full transition-opacity duration-fast-02 ease-productive-entrance ' +
+    'hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) ' +
+    'motion-reduce:transition-none'
+
+  const HEADER_PREVIEW_CLASS =
+    'inline-flex min-w-0 max-w-(--container-3xs) items-center gap-(--spacing-xs) self-start rounded-(--shape-button) border border-(--border-muted) bg-(--bg-canvas) px-(--spacing-xs) ' +
+    'py-(--spacing-2xs)'
 </script>
 
 <template>
@@ -242,7 +251,7 @@
         <button
           type="button"
           aria-label="Account settings"
-          class="rounded-full transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
+          :class="ACCOUNT_BUTTON_CLASS"
         >
           <Avatar
             label="JD"
@@ -347,7 +356,7 @@
                           <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
                             <p class="m-0 text-overline-sm text-(--text-muted)">In the header</p>
                             <span
-                              class="inline-flex min-w-0 max-w-(--container-3xs) items-center gap-(--spacing-xs) self-start rounded-(--shape-button) border border-(--border-muted) bg-(--bg-canvas) px-(--spacing-xs) py-(--spacing-2xs)"
+                              :class="HEADER_PREVIEW_CLASS"
                               data-testid="create-organization__preview"
                             >
                               <span

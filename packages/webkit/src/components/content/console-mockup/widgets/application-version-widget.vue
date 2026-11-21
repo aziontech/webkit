@@ -191,6 +191,11 @@
   const gridOf = (columns: TableColumn[]) => ({
     gridTemplateColumns: columns.map((column) => column.width).join(' ')
   })
+
+  const TAB_CLASS =
+    'inline-flex h-8 items-center rounded-(--shape-control) px-3 text-body-sm font-semibold text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance ' +
+    'data-active:bg-(--bg-contrast) data-active:font-bold data-active:text-(--text-contrast) ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -240,7 +245,7 @@
             v-for="item in TABS"
             :key="item.value"
             :data-active="item.value === tab || null"
-            class="inline-flex h-8 items-center rounded-(--shape-control) px-3 text-body-sm font-semibold text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance data-active:bg-(--bg-contrast) data-active:font-bold data-active:text-(--text-contrast) motion-reduce:transition-none"
+            :class="TAB_CLASS"
           >
             {{ item.label }}
           </span>

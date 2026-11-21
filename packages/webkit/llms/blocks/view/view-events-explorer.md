@@ -1194,6 +1194,18 @@ Each variant is the same screen in another state: `get_block("view/view-events-e
   onBeforeUnmount(() => {
     explorerObserver?.disconnect()
   })
+
+  const FIELD_ROW_CLASS =
+    'group flex items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-2xs) transition-colors duration-fast-02 ease-productive-entrance ' +
+    'hover:bg-(--bg-hover) motion-reduce:transition-none'
+
+  const FIELD_COUNT_CLASS =
+    'shrink-0 cursor-pointer text-label-code-sm tabular-nums text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance ' +
+    'hover:text-(--text-default) group-hover:text-(--text-default) motion-reduce:transition-none'
+
+  const STATUS_CELL_CLASS =
+    'min-w-0 truncate text-label-code-sm tabular-nums text-(--text-default) ' +
+    'data-[severity=danger]:text-(--danger-foreground) data-[severity=warning]:text-(--warning-foreground)'
 </script>
 
 <template>
@@ -1370,7 +1382,7 @@ Each variant is the same screen in another state: `get_block("view/view-events-e
                   <div
                     v-for="field in shownFields"
                     :key="field.id"
-                    class="group flex items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-2xs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) motion-reduce:transition-none"
+                    :class="FIELD_ROW_CLASS"
                   >
                     <div class="min-w-0 flex-1">
                       <Field
@@ -1393,9 +1405,7 @@ Each variant is the same screen in another state: `get_block("view/view-events-e
                       side="end"
                       align="start"
                     >
-                      <div
-                        class="shrink-0 cursor-pointer text-label-code-sm tabular-nums text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) group-hover:text-(--text-default) motion-reduce:transition-none"
-                      >
+                      <div :class="FIELD_COUNT_CLASS">
                         <Popover.Trigger
                           role="button"
                           tabindex="0"
@@ -1493,7 +1503,7 @@ Each variant is the same screen in another state: `get_block("view/view-events-e
                           <div
                             v-for="field in category.fields"
                             :key="field.id"
-                            class="group flex items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-2xs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) motion-reduce:transition-none"
+                            :class="FIELD_ROW_CLASS"
                           >
                             <div class="min-w-0 flex-1">
                               <Field orientation="horizontal">
@@ -1513,9 +1523,7 @@ Each variant is the same screen in another state: `get_block("view/view-events-e
                               side="end"
                               align="start"
                             >
-                              <div
-                                class="shrink-0 cursor-pointer text-label-code-sm tabular-nums text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) group-hover:text-(--text-default) motion-reduce:transition-none"
-                              >
+                              <div :class="FIELD_COUNT_CLASS">
                                 <Popover.Trigger
                                   role="button"
                                   tabindex="0"
@@ -1777,7 +1785,7 @@ Each variant is the same screen in another state: `get_block("view/view-events-e
 
                     <template #cell-status="{ value }">
                       <span
-                        class="min-w-0 truncate text-label-code-sm tabular-nums text-(--text-default) data-[severity=danger]:text-(--danger-foreground) data-[severity=warning]:text-(--warning-foreground)"
+                        :class="STATUS_CELL_CLASS"
                         :data-severity="statusSeverity(value)"
                       >
                         {{ formatEventValue(statusField, value) }}

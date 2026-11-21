@@ -99,6 +99,18 @@
   watch(wanted, advance, { immediate: true })
 
   onScopeDispose(halt)
+
+  const RULE_ROW_CLASS =
+    'grid h-11 grid-cols-[8.5rem_1fr_auto] items-center gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-sm) transition-colors duration-moderate-01 ' +
+    'ease-productive-entrance ' +
+    'data-altered:bg-(--bg-surface-raised) ' +
+    'motion-reduce:transition-none'
+
+  const REVIEW_BAR_CLASS =
+    'flex h-14 items-center justify-end gap-(--spacing-sm) border-t border-(--border-default) px-(--spacing-sm) opacity-0 transition-opacity duration-moderate-01 ' +
+    'ease-productive-entrance ' +
+    'data-[state=open]:opacity-100 ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -137,7 +149,7 @@
             v-for="(name, index) in frame.order"
             :key="name"
             :data-altered="altered(name) || null"
-            class="grid h-11 grid-cols-[8.5rem_1fr_auto] items-center gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-sm) transition-colors duration-moderate-01 ease-productive-entrance data-altered:bg-(--bg-surface-raised) motion-reduce:transition-none"
+            :class="RULE_ROW_CLASS"
           >
             <span class="flex items-center gap-(--spacing-sm)">
               <i
@@ -170,7 +182,7 @@
 
       <div
         :data-state="frame.review ? 'open' : 'closed'"
-        class="flex h-14 items-center justify-end gap-(--spacing-sm) border-t border-(--border-default) px-(--spacing-sm) opacity-0 transition-opacity duration-moderate-01 ease-productive-entrance data-[state=open]:opacity-100 motion-reduce:transition-none"
+        :class="REVIEW_BAR_CLASS"
       >
         <Button
           label="Discard Changes"

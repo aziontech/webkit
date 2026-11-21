@@ -60,6 +60,20 @@
   const resolvedVariant = computed((): TagVariant | null =>
     resolvedSeverity.value ? null : VARIANTS.includes(props.variant) ? props.variant : 'primary'
   )
+
+  const ROOT_CLASS =
+    'group/tag inline-flex items-center justify-center overflow-hidden border border-transparent leading-none text-tag-md ' +
+    'data-[size=small]:text-tag-sm data-[size=medium]:gap-(--spacing-xs) data-[size=small]:gap-(--spacing-2xs) data-[size=medium]:h-6 data-[size=medium]:px-(--spacing-xs) ' +
+    'data-[size=small]:h-5 data-[size=small]:px-(--spacing-2xs) ' +
+    'rounded-(--shape-control) ' +
+    'data-[rounded]:rounded-full! ' +
+    'data-[variant=primary]:bg-(--primary) data-[variant=primary]:text-(--primary-foreground) ' +
+    'data-[severity=neutral]:border-(length:--border-width-default) data-[severity=neutral]:border-(--border-default) data-[severity=neutral]:bg-(--bg-canvas) ' +
+    'data-[severity=neutral]:text-(--text-default) ' +
+    'data-[variant=accent]:bg-(--accent) data-[variant=accent]:text-(--accent-foreground) data-[variant=contrast]:bg-(--bg-contrast) data-[variant=contrast]:text-(--text-contrast) ' +
+    'data-[severity=success]:bg-(--success) data-[severity=success]:text-(--success-foreground) data-[severity=info]:bg-(--info) data-[severity=info]:text-(--info-foreground) ' +
+    'data-[severity=warning]:bg-(--warning) data-[severity=warning]:text-(--warning-foreground) data-[severity=danger]:bg-(--danger) data-[severity=danger]:text-(--danger-foreground) ' +
+    'data-[variant=highlight]:bg-(--primary-mask) data-[variant=highlight]:text-(--text-brand)'
 </script>
 
 <template>
@@ -70,8 +84,7 @@
     :data-variant="resolvedVariant"
     :data-size="size"
     :data-rounded="rounded || null"
-    :class="attrs.class"
-    class="group/tag inline-flex items-center justify-center overflow-hidden border border-transparent leading-none text-tag-md data-[size=small]:text-tag-sm data-[size=medium]:gap-(--spacing-xs) data-[size=small]:gap-(--spacing-2xs) data-[size=medium]:h-6 data-[size=medium]:px-(--spacing-xs) data-[size=small]:h-5 data-[size=small]:px-(--spacing-2xs) rounded-(--shape-control) data-[rounded]:rounded-full! data-[variant=primary]:bg-(--primary) data-[variant=primary]:text-(--primary-foreground) data-[severity=neutral]:border-(length:--border-width-default) data-[severity=neutral]:border-(--border-default) data-[severity=neutral]:bg-(--bg-canvas) data-[severity=neutral]:text-(--text-default) data-[variant=accent]:bg-(--accent) data-[variant=accent]:text-(--accent-foreground) data-[variant=contrast]:bg-(--bg-contrast) data-[variant=contrast]:text-(--text-contrast) data-[severity=success]:bg-(--success) data-[severity=success]:text-(--success-foreground) data-[severity=info]:bg-(--info) data-[severity=info]:text-(--info-foreground) data-[severity=warning]:bg-(--warning) data-[severity=warning]:text-(--warning-foreground) data-[severity=danger]:bg-(--danger) data-[severity=danger]:text-(--danger-foreground) data-[variant=highlight]:bg-(--primary-mask) data-[variant=highlight]:text-(--text-brand)"
+    :class="[ROOT_CLASS, attrs.class]"
   >
     <i
       v-if="icon"

@@ -100,6 +100,24 @@
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'log-viewer-content'
   )
+
+  const LINE_CLASS =
+    'text-label-code-sm relative flex gap-(--spacing-md) border-s-2 border-s-transparent px-(--spacing-md) py-(--spacing-2xs) transition-colors duration-150 ease-out ' +
+    "before:pointer-events-none before:absolute before:inset-0 before:bg-(--bg-hover) before:opacity-0 before:transition-opacity before:duration-150 before:ease-out before:content-[''] " +
+    'hover:border-s-(--ring-color) hover:bg-(--bg-surface-raised) hover:before:opacity-100 ' +
+    'data-[level=warn]:bg-(--warning) data-[level=warn]:hover:bg-(--warning) data-[level=error]:bg-(--danger) data-[level=error]:hover:bg-(--danger) ' +
+    'motion-reduce:transition-none motion-reduce:before:transition-none'
+
+  const LINE_LEVEL_CLASS =
+    'relative z-1 w-(--log-viewer-level-width) shrink-0 uppercase text-(--text-muted) ' +
+    'data-[level=error]:text-(--danger-foreground) data-[level=info]:text-(--info-foreground) data-[level=warn]:text-(--warning-foreground)'
+
+  const LINE_MESSAGE_CLASS =
+    'relative z-1 flex min-w-0 flex-1 items-center gap-(--spacing-xs) text-(--text-default) ' +
+    'data-[level=error]:text-(--danger-foreground) ' +
+    'data-[type=success]:gap-(--spacing-xs) ' +
+    'data-[level=warn]:text-(--warning-foreground) ' +
+    'max-sm:whitespace-nowrap'
 </script>
 
 <template>
@@ -202,7 +220,7 @@
                 :data-testid="`${ctx.testId.value}__line`"
                 :data-type="line.type"
                 :data-level="line.level"
-                class="text-label-code-sm relative flex gap-(--spacing-md) border-s-2 border-s-transparent px-(--spacing-md) py-(--spacing-2xs) transition-colors duration-150 ease-out before:pointer-events-none before:absolute before:inset-0 before:bg-(--bg-hover) before:opacity-0 before:transition-opacity before:duration-150 before:ease-out before:content-[''] hover:border-s-(--ring-color) hover:bg-(--bg-surface-raised) hover:before:opacity-100 data-[level=warn]:bg-(--warning) data-[level=warn]:hover:bg-(--warning) data-[level=error]:bg-(--danger) data-[level=error]:hover:bg-(--danger) motion-reduce:transition-none motion-reduce:before:transition-none"
+                :class="LINE_CLASS"
               >
                 <span
                   v-if="columns.time"
@@ -219,7 +237,7 @@
                   :data-testid="`${ctx.testId.value}__line-level`"
                   :data-level="line.level"
                   dir="ltr"
-                  class="relative z-1 w-(--log-viewer-level-width) shrink-0 uppercase text-(--text-muted) data-[level=error]:text-(--danger-foreground) data-[level=info]:text-(--info-foreground) data-[level=warn]:text-(--warning-foreground)"
+                  :class="LINE_LEVEL_CLASS"
                 >
                   {{ line.level }}
                 </span>
@@ -228,7 +246,7 @@
                   v-if="line.type !== 'folder'"
                   :data-testid="`${ctx.testId.value}__line-message`"
                   dir="auto"
-                  class="relative z-1 flex min-w-0 flex-1 items-center gap-(--spacing-xs) text-(--text-default) data-[level=error]:text-(--danger-foreground) data-[type=success]:gap-(--spacing-xs) data-[level=warn]:text-(--warning-foreground) max-sm:whitespace-nowrap"
+                  :class="LINE_MESSAGE_CLASS"
                   :data-type="line.type"
                   :data-level="line.level"
                 >

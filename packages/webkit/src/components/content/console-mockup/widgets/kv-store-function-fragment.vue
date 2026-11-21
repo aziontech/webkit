@@ -104,6 +104,11 @@ await client.incr('api:calls:today', 1);`
   })
 
   onScopeDispose(() => globalThis.cancelAnimationFrame(frame))
+
+  const CODE_FRAME_CLASS =
+    'overflow-hidden rounded-(--shape-control) [border:var(--illustration-rim-width,var(--border-width-2))_solid_transparent] ' +
+    '[background-image:var(--illustration-rim-layers,linear-gradient(var(--illustration-fill,var(--bg-surface)),var(--illustration-fill,var(--bg-surface))),var(--illustration-rim,linear-gradient(135deg,var(--border-default)_0%,var(--border-default)_18%,transparent_45%,transparent_55%,var(--border-default)_82%,var(--border-default)_100%)),linear-gradient(var(--illustration-fill,var(--bg-surface)),var(--illustration-fill,var(--bg-surface))))] ' +
+    '[background-origin:var(--illustration-rim-boxes,padding-box,border-box,border-box)] [background-clip:var(--illustration-rim-boxes,padding-box,border-box,border-box)]'
 </script>
 
 <template>
@@ -125,9 +130,7 @@ await client.incr('api:calls:today', 1);`
           ref="hostEl"
           class="h-full"
         >
-          <div
-            class="overflow-hidden rounded-(--shape-control) [border:var(--illustration-rim-width,var(--border-width-2))_solid_transparent] [background-image:var(--illustration-rim-layers,linear-gradient(var(--illustration-fill,var(--bg-surface)),var(--illustration-fill,var(--bg-surface))),var(--illustration-rim,linear-gradient(135deg,var(--border-default)_0%,var(--border-default)_18%,transparent_45%,transparent_55%,var(--border-default)_82%,var(--border-default)_100%)),linear-gradient(var(--illustration-fill,var(--bg-surface)),var(--illustration-fill,var(--bg-surface))))] [background-origin:var(--illustration-rim-boxes,padding-box,border-box,border-box)] [background-clip:var(--illustration-rim-boxes,padding-box,border-box,border-box)]"
-          >
+          <div :class="CODE_FRAME_CLASS">
             <CodeBlock
               :tabs="FILES"
               :bordered="false"

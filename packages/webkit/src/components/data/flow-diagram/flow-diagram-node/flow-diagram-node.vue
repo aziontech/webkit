@@ -41,10 +41,25 @@
   )
 
   const ROOT_CLASS =
-    'group/node relative z-1 text-label-md text-(--text-default) data-[styled]:inline-flex data-[styled]:min-h-10 data-[styled]:items-center data-[styled]:justify-center data-[styled]:whitespace-nowrap data-[styled]:rounded-(--shape-button) data-[styled]:border-solid data-[styled]:border-[length:var(--border-width-default,1px)] data-[styled]:border-(--border-default) data-[styled]:bg-(--bg-surface-raised) data-[styled]:px-(--spacing-md) data-[styled]:py-(--spacing-sm) data-[styled]:shadow-(--shadow-xs) data-[styled]:has-[[data-slot=flow-diagram-title]]:flex data-[styled]:has-[[data-slot=flow-diagram-title]]:flex-col data-[styled]:has-[[data-slot=flow-diagram-title]]:items-stretch data-[styled]:has-[[data-slot=flow-diagram-title]]:justify-start data-[styled]:has-[[data-slot=flow-diagram-title]]:whitespace-normal data-[styled]:has-[[data-slot=flow-diagram-title]]:rounded-(--shape-card) data-[styled]:has-[[data-slot=flow-diagram-title]]:bg-(--bg-surface) data-[styled]:has-[[data-slot=flow-diagram-title]]:p-0 data-[styled]:has-[[data-slot=flow-diagram-title]]:text-start data-[styled]:data-[dashed]:border-dashed data-[styled]:has-[[data-pending]]:border-dashed data-[disabled]:text-(--text-disabled) data-[disabled]:opacity-60 transition-colors duration-moderate-01 ease-productive-entrance hover:data-[styled]:border-(--border-strong) motion-reduce:transition-none'
+    'group/node relative z-1 text-label-md text-(--text-default) ' +
+    'data-[styled]:inline-flex data-[styled]:min-h-10 data-[styled]:items-center data-[styled]:justify-center data-[styled]:whitespace-nowrap data-[styled]:rounded-(--shape-button) ' +
+    'data-[styled]:border-solid data-[styled]:border-[length:var(--border-width-default,1px)] data-[styled]:border-(--border-default) data-[styled]:bg-(--bg-surface-raised) ' +
+    'data-[styled]:px-(--spacing-md) data-[styled]:py-(--spacing-sm) data-[styled]:shadow-(--shadow-xs) data-[styled]:has-[[data-slot=flow-diagram-title]]:flex ' +
+    'data-[styled]:has-[[data-slot=flow-diagram-title]]:flex-col data-[styled]:has-[[data-slot=flow-diagram-title]]:items-stretch ' +
+    'data-[styled]:has-[[data-slot=flow-diagram-title]]:justify-start data-[styled]:has-[[data-slot=flow-diagram-title]]:whitespace-normal ' +
+    'data-[styled]:has-[[data-slot=flow-diagram-title]]:rounded-(--shape-card) data-[styled]:has-[[data-slot=flow-diagram-title]]:bg-(--bg-surface) ' +
+    'data-[styled]:has-[[data-slot=flow-diagram-title]]:p-0 data-[styled]:has-[[data-slot=flow-diagram-title]]:text-start data-[styled]:data-[dashed]:border-dashed ' +
+    'data-[styled]:has-[[data-pending]]:border-dashed ' +
+    'data-[disabled]:text-(--text-disabled) data-[disabled]:opacity-60 ' +
+    'transition-colors duration-moderate-01 ease-productive-entrance hover:data-[styled]:border-(--border-strong) motion-reduce:transition-none'
 
   const PORT_CLASS =
-    'pointer-events-none absolute top-1/2 size-2 -translate-y-1/2 rounded-(--radius-sm) border-solid border-[length:var(--border-width-default,1px)] border-(--border-muted) bg-(--accent) group-has-[[data-slot=flow-diagram-anchor]]/node:hidden data-[side=end]:-start-px data-[side=end]:-translate-x-full data-[side=start]:-end-px data-[side=start]:translate-x-full rtl:data-[side=end]:translate-x-full rtl:data-[side=start]:-translate-x-full group-data-[disabled]/node:border-dashed'
+    'pointer-events-none absolute top-1/2 size-2 -translate-y-1/2 rounded-(--radius-sm) border-solid border-[length:var(--border-width-default,1px)] border-(--border-muted) ' +
+    'bg-(--accent) ' +
+    'group-has-[[data-slot=flow-diagram-anchor]]/node:hidden ' +
+    'data-[side=end]:-start-px data-[side=end]:-translate-x-full data-[side=start]:-end-px data-[side=start]:translate-x-full ' +
+    'rtl:data-[side=end]:translate-x-full rtl:data-[side=start]:-translate-x-full ' +
+    'group-data-[disabled]/node:border-dashed'
 
   const rootClass = computed(() => cn(ROOT_CLASS, attrs.class as string | undefined))
 </script>

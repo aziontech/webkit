@@ -334,6 +334,14 @@ Each variant is the same screen in another state: `get_block("create/create-page
     },
     { immediate: true }
   )
+
+  const ACCOUNT_BUTTON_CLASS =
+    'rounded-full transition-opacity duration-fast-02 ease-productive-entrance ' +
+    'hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) ' +
+    'motion-reduce:transition-none'
+
+  const DNSSEC_DESCRIPTION =
+    "Signs this domain's answers so a resolver can detect cache poisoning and spoofing. Completing the setup also means adding the Key Tag and Digest at your domain provider."
 </script>
 
 <template>
@@ -363,7 +371,7 @@ Each variant is the same screen in another state: `get_block("create/create-page
         <button
           type="button"
           aria-label="Account settings"
-          class="rounded-full transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
+          :class="ACCOUNT_BUTTON_CLASS"
         >
           <Avatar
             label="name@example.com"
@@ -471,7 +479,7 @@ Each variant is the same screen in another state: `get_block("create/create-page
                     <Item.List>
                       <SettingsRow
                         title="DNSSEC"
-                        description="Signs this domain's answers so a resolver can detect cache poisoning and spoofing. Completing the setup also means adding the Key Tag and Digest at your domain provider."
+                        :description="DNSSEC_DESCRIPTION"
                         variant="compact"
                       >
                         <Switch

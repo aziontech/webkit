@@ -50,12 +50,17 @@ export default {
     type: 'suggestion',
     docs: {
       description:
-        'Warn when a page body (a file under views/ or pages/, or one that imports PageHeader or PageTabs) renders a Menu outside a navigation host (Sidebar, ConsoleLayout, DocLayout, AppLayout): page navigation lives in the rail, and a page has only its PageTabs.'
+        'Warn when a page body (a file under views/ or pages/, or one that imports PageHeader or ' +
+        'PageTabs) renders a Menu outside a navigation host (Sidebar, ConsoleLayout, DocLayout, ' +
+        'AppLayout): page navigation lives in the rail, and a page has only its PageTabs.'
     },
     schema: [],
     messages: {
       pageMenu:
-        "'{{source}}' in a page body: page navigation lives in the rail (two levels at most), and a page has only its PageTabs, so a Menu in the page repeats their destinations. Drop it: list the pages in the rail, or show a resource's pages as its PageTabs (at most 7, related pages as sections of one tab) (rule `webkit-navigation-levels`)."
+        "'{{source}}' in a page body: page navigation lives in the rail (two levels at most), " +
+        'and a page has only its PageTabs, so a Menu in the page repeats their destinations. ' +
+        "Drop it: list the pages in the rail, or show a resource's pages as its PageTabs (at " +
+        'most 7, related pages as sections of one tab) (rule `webkit-navigation-levels`).'
     }
   },
   create(context) {

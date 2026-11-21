@@ -48,6 +48,22 @@
   const testId = computed(() => (attrs['data-testid'] as string) ?? 'doc-previous-next')
 
   const ariaLabel = computed(() => (attrs['aria-label'] as string) ?? t('docPreviousNext.label'))
+
+  const PREVIOUS_CLASS =
+    'group flex flex-col items-start gap-(--spacing-2xs) rounded-(--shape-control) p-(--spacing-xs) no-underline ' +
+    'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color)'
+
+  const PREVIOUS_ICON_CLASS =
+    'az az-chevron-left size-4 text-label-sm text-(--text-default) transition-[translate] duration-150 ease-out ' +
+    'group-hover:-translate-x-0.5 rtl:group-hover:translate-x-0.5 motion-reduce:transition-none rtl:-scale-x-100'
+
+  const NEXT_CLASS =
+    'group flex flex-col items-end gap-(--spacing-2xs) rounded-(--shape-control) p-(--spacing-xs) no-underline ' +
+    'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color)'
+
+  const NEXT_ICON_CLASS =
+    'az az-chevron-right size-4 text-label-sm text-(--text-default) transition-[translate] duration-150 ease-out ' +
+    'group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5 motion-reduce:transition-none rtl:-scale-x-100'
 </script>
 
 <template>
@@ -61,7 +77,7 @@
       v-if="previous"
       :href="safeHref(previous.href) ?? undefined"
       :data-testid="`${testId}__previous`"
-      class="group flex flex-col items-start gap-(--spacing-2xs) rounded-(--shape-control) p-(--spacing-xs) no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color)"
+      :class="PREVIOUS_CLASS"
       @click="emit('navigate', $event, previous)"
     >
       <span class="ps-5 text-label-sm text-(--text-muted)">{{
@@ -69,7 +85,7 @@
       }}</span>
       <span class="flex items-center gap-(--spacing-2xs)">
         <i
-          class="az az-chevron-left size-4 text-label-sm text-(--text-default) transition-[translate] duration-150 ease-out group-hover:-translate-x-0.5 rtl:group-hover:translate-x-0.5 motion-reduce:transition-none rtl:-scale-x-100"
+          :class="PREVIOUS_ICON_CLASS"
           aria-hidden="true"
         />
         <span class="text-label-md text-(--text-default)">{{ previous.label }}</span>
@@ -80,7 +96,7 @@
       v-if="next"
       :href="safeHref(next.href) ?? undefined"
       :data-testid="`${testId}__next`"
-      class="group flex flex-col items-end gap-(--spacing-2xs) rounded-(--shape-control) p-(--spacing-xs) no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color)"
+      :class="NEXT_CLASS"
       @click="emit('navigate', $event, next)"
     >
       <span class="pe-5 text-label-sm text-(--text-muted)">{{
@@ -89,7 +105,7 @@
       <span class="flex items-center gap-(--spacing-2xs)">
         <span class="text-label-md text-(--text-default)">{{ next.label }}</span>
         <i
-          class="az az-chevron-right size-4 text-label-sm text-(--text-default) transition-[translate] duration-150 ease-out group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5 motion-reduce:transition-none rtl:-scale-x-100"
+          :class="NEXT_ICON_CLASS"
           aria-hidden="true"
         />
       </span>

@@ -264,6 +264,19 @@
   const setOptionQuery = (key: string, value: string): void => {
     optionQuery.value = { ...optionQuery.value, [key]: value }
   }
+
+  const ROW_CLASS =
+    'group/row relative grid transition-colors duration-fast-02 ease-productive-entrance ' +
+    'hover:bg-(--bg-hover) motion-reduce:transition-none lg:grid-cols-[minmax(0,2fr)_minmax(0,5fr)]'
+
+  const ROW_TITLE_LINK_CLASS =
+    "text-pretty text-heading-sm text-(--text-default) no-underline after:absolute after:inset-0 after:content-[''] focus-visible:outline-none focus-visible:after:ring-2 " +
+    'focus-visible:after:ring-inset focus-visible:after:ring-(--ring-color)'
+
+  const ROW_LABEL_CLASS =
+    'flex shrink-0 translate-y-1 items-center self-center gap-(--spacing-2xs) whitespace-nowrap text-overline-md text-(--text-default) uppercase opacity-0 transition-[opacity,translate] ' +
+    'duration-moderate-01 ease-productive-entrance group-hover/row:translate-y-0 group-hover/row:opacity-100 group-has-[a:focus-visible]/row:translate-y-0 ' +
+    'group-has-[a:focus-visible]/row:opacity-100 motion-reduce:transition-none max-lg:hidden'
 </script>
 
 <template>
@@ -408,9 +421,7 @@
                 aria-hidden="true"
                 class="h-(--spacing-lg) border-y border-(--border-default)"
               />
-              <article
-                class="group/row relative grid transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) motion-reduce:transition-none lg:grid-cols-[minmax(0,2fr)_minmax(0,5fr)]"
-              >
+              <article :class="ROW_CLASS">
                 <div
                   class="flex aspect-40/21 items-center justify-center overflow-hidden border-b border-(--border-default) bg-(--bg-surface) lg:border-e lg:border-b-0"
                 >
@@ -440,7 +451,7 @@
                           :href="safeHref(item.href) ?? undefined"
                           :target="item.target"
                           :rel="item.target === '_blank' ? 'noopener' : undefined"
-                          class="text-pretty text-heading-sm text-(--text-default) no-underline after:absolute after:inset-0 after:content-[''] focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-(--ring-color)"
+                          :class="ROW_TITLE_LINK_CLASS"
                         >
                           {{ item.title }}
                           <span
@@ -482,7 +493,7 @@
                   <span
                     v-if="rowLabel"
                     aria-hidden="true"
-                    class="flex shrink-0 translate-y-1 items-center self-center gap-(--spacing-2xs) whitespace-nowrap text-overline-md text-(--text-default) uppercase opacity-0 transition-[opacity,translate] duration-moderate-01 ease-productive-entrance group-hover/row:translate-y-0 group-hover/row:opacity-100 group-has-[a:focus-visible]/row:translate-y-0 group-has-[a:focus-visible]/row:opacity-100 motion-reduce:transition-none max-lg:hidden"
+                    :class="ROW_LABEL_CLASS"
                   >
                     {{ rowLabel }}
                     <i class="az az-arrow-up-right leading-none" />

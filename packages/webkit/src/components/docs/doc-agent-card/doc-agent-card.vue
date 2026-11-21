@@ -52,6 +52,14 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'doc-agent-card')
   const copyAgents = computed(() => (props.agents ? { agents: props.agents } : {}))
+
+  const ASIDE_CLASS =
+    'relative isolate flex min-w-0 flex-col items-start justify-between gap-(--spacing-lg) overflow-hidden border-t border-(--border-default) p-(--spacing-xl) ' +
+    '@3xl:border-t-0 @3xl:border-s'
+
+  const ART_CLASS =
+    '[--texture-direction:to_bottom_right] [--texture-fade-start:15%] [--texture-fade-end:80%] [--texture-ink:color-mix(in_srgb,var(--primary)_70%,transparent)] ' +
+    'rtl:[--texture-direction:to_bottom_left]'
 </script>
 
 <template>
@@ -90,7 +98,7 @@
         </div>
         <div
           :data-testid="`${testId}__aside`"
-          class="relative isolate flex min-w-0 flex-col items-start justify-between gap-(--spacing-lg) overflow-hidden border-t border-(--border-default) p-(--spacing-xl) @3xl:border-t-0 @3xl:border-s"
+          :class="ASIDE_CLASS"
         >
           <div
             aria-hidden="true"
@@ -101,7 +109,7 @@
               size="small"
               fade="top"
               :data-testid="`${testId}__art`"
-              class="[--texture-direction:to_bottom_right] [--texture-fade-start:15%] [--texture-fade-end:80%] [--texture-ink:color-mix(in_srgb,var(--primary)_70%,transparent)] rtl:[--texture-direction:to_bottom_left]"
+              :class="ART_CLASS"
             />
           </div>
           <p class="m-0 max-w-(--container-3xs) text-heading-md text-(--text-default)">

@@ -52,6 +52,10 @@
       nextTick(focusField)
     }
   )
+
+  const PREVIOUS_CLASS =
+    'flex h-8 max-w-[40%] shrink-0 items-center gap-(--spacing-2xs) rounded-(--shape-control) px-(--spacing-xs) text-label-sm text-(--text-default) transition-colors duration-150 ' +
+    'ease-out hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none'
 </script>
 
 <template>
@@ -65,7 +69,7 @@
       type="button"
       :aria-label="backLabel"
       :data-testid="`${testId}__previous`"
-      class="flex h-8 max-w-[40%] shrink-0 items-center gap-(--spacing-2xs) rounded-(--shape-control) px-(--spacing-xs) text-label-sm text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+      :class="PREVIOUS_CLASS"
       @click="goBack"
     >
       <i

@@ -228,7 +228,14 @@
         fileName: 'deploy.sh',
         fileIcon: 'az az-azion-cli',
         language: 'bash',
-        code: '# Ship the project in front of you\nazion deploy\n\n# Or link the repo once, and every push to main deploys\nazion link --preset next\ngit push origin main\n\n# Then roll back if it should not have gone out\nazion rollback --to previous',
+        code:
+          '# Ship the project in front of you\n' +
+          'azion deploy\n\n' +
+          '# Or link the repo once, and every push to main deploys\n' +
+          'azion link --preset next\n' +
+          'git push origin main\n\n' +
+          '# Then roll back if it should not have gone out\n' +
+          'azion rollback --to previous',
         copyAriaLabel: 'Copy the deploy.sh sample'
       }
     },
@@ -245,7 +252,18 @@
         fileName: 'azion.config.js',
         fileIcon: 'az-color az-javascript',
         language: 'javascript',
-        code: "import { defineConfig } from 'azion'\n\nexport default defineConfig({\n  build: {\n    entry: 'src/index.ts',\n    worker: true,\n    preset: 'next'\n  },\n  functions: [\n    { name: 'storefront', path: '.edge/worker.js' }\n  ]\n})",
+        code:
+          "import { defineConfig } from 'azion'\n\n" +
+          'export default defineConfig({\n' +
+          '  build: {\n' +
+          "    entry: 'src/index.ts',\n" +
+          '    worker: true,\n' +
+          "    preset: 'next'\n" +
+          '  },\n' +
+          '  functions: [\n' +
+          "    { name: 'storefront', path: '.edge/worker.js' }\n" +
+          '  ]\n' +
+          '})',
         copyAriaLabel: 'Copy the azion.config.js sample'
       }
     },
@@ -262,7 +280,15 @@
         fileName: 'create-workload.sh',
         fileIcon: 'az az-azion-cli',
         language: 'bash',
-        code: '# Create the workload the pipeline just built for\ncurl -X POST https://api.azion.com/v4/workloads \\\n  -H "Authorization: Token $AZION_TOKEN" \\\n  -H "Content-Type: application/json" \\\n  -d \'{\n    "name": "storefront",\n    "domains": ["storefront.example.com"]\n  }\'',
+        code:
+          '# Create the workload the pipeline just built for\n' +
+          'curl -X POST https://api.azion.com/v4/workloads \\\n' +
+          '  -H "Authorization: Token $AZION_TOKEN" \\\n' +
+          '  -H "Content-Type: application/json" \\\n' +
+          "  -d '{\n" +
+          '    "name": "storefront",\n' +
+          '    "domains": ["storefront.example.com"]\n' +
+          "  }'",
         copyAriaLabel: 'Copy the create-workload.sh sample'
       }
     },
@@ -279,7 +305,19 @@
         fileName: 'main.tf',
         fileIcon: 'az-color az-terraform',
         language: 'hcl',
-        code: 'resource "azion_application" "storefront" {\n  name                    = "storefront"\n  edge_functions          = true\n  application_accelerator = true\n}\n\nresource "azion_workload" "storefront" {\n  name    = "storefront"\n  domains = ["storefront.example.com"]\n\n  application {\n    id = azion_application.storefront.id\n  }\n}',
+        code:
+          'resource "azion_application" "storefront" {\n' +
+          '  name                    = "storefront"\n' +
+          '  edge_functions          = true\n' +
+          '  application_accelerator = true\n' +
+          '}\n\n' +
+          'resource "azion_workload" "storefront" {\n' +
+          '  name    = "storefront"\n' +
+          '  domains = ["storefront.example.com"]\n\n' +
+          '  application {\n' +
+          '    id = azion_application.storefront.id\n' +
+          '  }\n' +
+          '}',
         copyAriaLabel: 'Copy the main.tf sample'
       }
     },
@@ -297,7 +335,18 @@
         fileName: 'requests.graphql',
         fileIcon: 'az-color az-graphql',
         language: 'graphql',
-        code: 'query RequestsByStatus($begin: DateTime!, $end: DateTime!) {\n  httpMetrics(\n    limit: 100\n    filter: { tsRange: { begin: $begin, end: $end } }\n    groupBy: [status]\n  ) {\n    status\n    requests: sum(field: requests)\n    p95: percentile(field: requestTime, percentile: 95)\n  }\n}',
+        code:
+          'query RequestsByStatus($begin: DateTime!, $end: DateTime!) {\n' +
+          '  httpMetrics(\n' +
+          '    limit: 100\n' +
+          '    filter: { tsRange: { begin: $begin, end: $end } }\n' +
+          '    groupBy: [status]\n' +
+          '  ) {\n' +
+          '    status\n' +
+          '    requests: sum(field: requests)\n' +
+          '    p95: percentile(field: requestTime, percentile: 95)\n' +
+          '  }\n' +
+          '}',
         copyAriaLabel: 'Copy the requests.graphql sample'
       }
     }

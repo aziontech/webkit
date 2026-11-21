@@ -74,6 +74,15 @@
   )
 
   const hasTitle = computed(() => props.title.length > 0)
+
+  const CARD_LINK_CLASS =
+    'group/post flex h-full flex-col transition-colors duration-fast-02 ease-productive-entrance ' +
+    'hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) motion-reduce:transition-none'
+
+  const MARK_IMAGE_CLASS =
+    'h-8 w-auto max-w-40 object-contain transition-[scale] duration-moderate-02 ease-productive-entrance ' +
+    'group-hover/post:scale-105 motion-reduce:transition-none brightness-0 ' +
+    '[[data-theme=dark]_&]:invert'
 </script>
 
 <template>
@@ -124,7 +133,7 @@
               :href="safeHref(item.href) ?? undefined"
               :target="item.target"
               :rel="item.target === '_blank' ? 'noopener' : undefined"
-              class="group/post flex h-full flex-col transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+              :class="CARD_LINK_CLASS"
             >
               <span
                 class="flex aspect-video items-center justify-center overflow-hidden border-b border-(--border-default) bg-(--bg-surface)"
@@ -142,7 +151,7 @@
                   :src="item.mark.logo"
                   :alt="item.mark.name"
                   decoding="async"
-                  class="h-8 w-auto max-w-40 object-contain transition-[scale] duration-moderate-02 ease-productive-entrance group-hover/post:scale-105 motion-reduce:transition-none brightness-0 [[data-theme=dark]_&]:invert"
+                  :class="MARK_IMAGE_CLASS"
                 />
               </span>
               <span class="flex flex-1 flex-col gap-(--spacing-sm) p-(--spacing-xl)">

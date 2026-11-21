@@ -116,6 +116,10 @@
     when: () => open.value,
     handler: () => formEl.value?.requestSubmit()
   })
+
+  const PROJECT_OPTION_CLASS =
+    'flex w-full min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xs) text-start transition-colors duration-fast-02 ' +
+    'ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none'
 </script>
 
 <template>
@@ -533,7 +537,7 @@
                                   :key="entry.id"
                                   type="button"
                                   :aria-current="entry.id === project.id || undefined"
-                                  class="flex w-full min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xs) text-start transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+                                  :class="PROJECT_OPTION_CLASS"
                                   @click="pickProject(entry.id)"
                                 >
                                   <span class="flex min-w-0 flex-1 flex-col gap-(--spacing-2xs)">

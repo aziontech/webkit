@@ -36,6 +36,14 @@
   )
 
   const hasValue = () => hasRenderedContent(slots['default']?.() ?? [])
+
+  const ROOT_CLASS =
+    'flex min-w-0 flex-col gap-(--spacing-2xs) ' +
+    'data-[variant=split]:flex-row data-[variant=split]:flex-wrap data-[variant=split]:items-center data-[variant=split]:justify-between data-[variant=split]:gap-x-(--spacing-md)'
+
+  const VALUE_CLASS =
+    'flex min-w-0 flex-wrap items-center gap-(--spacing-xs) break-words text-body-sm text-(--text-default) ' +
+    'data-[variant=split]:ms-auto data-[variant=split]:justify-end data-[variant=split]:text-end'
 </script>
 
 <template>
@@ -43,7 +51,7 @@
     v-bind="$attrs"
     :data-testid="testId"
     :data-variant="context.variant.value"
-    class="flex min-w-0 flex-col gap-(--spacing-2xs) data-[variant=split]:flex-row data-[variant=split]:flex-wrap data-[variant=split]:items-center data-[variant=split]:justify-between data-[variant=split]:gap-x-(--spacing-md)"
+    :class="ROOT_CLASS"
   >
     <dt class="flex shrink-0 items-center gap-(--spacing-2xs) text-body-sm text-(--text-muted)">
       <span>{{ label }}</span>
@@ -51,7 +59,7 @@
     </dt>
     <dd
       :data-variant="context.variant.value"
-      class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs) break-words text-body-sm text-(--text-default) data-[variant=split]:ms-auto data-[variant=split]:justify-end data-[variant=split]:text-end"
+      :class="VALUE_CLASS"
     >
       <Skeleton v-if="context.loading.value" />
       <slot v-else-if="hasValue()" />

@@ -866,7 +866,9 @@ export const sampleFailedSteps: AsyncSubmitStep[] = [
 ]
 
 export const sampleError =
-  'The template built, its assets were uploaded and the service was created, but a rule with the same behavior is already bound to this domain, so the routing rules were refused. Nothing was published, so a redeploy starts from the same commit.'
+  'The template built, its assets were uploaded and the service was created, ' +
+  'but a rule with the same behavior is already bound to this domain, so the routing rules were refused. ' +
+  'Nothing was published, so a redeploy starts from the same commit.'
 
 export const sampleDeployment: AsyncSubmitDeployment = {
   domain: 'web-app.example.com',

@@ -48,7 +48,10 @@
     fill?: MediaSplitFill
     /** The media cell's fill. `surface` sets the asset on its own plate, one step off the page; `canvas` lets the whole band sit on the page. */
     mediaFill?: MediaSplitFill
-    /** Draw the band's own registration frame: its top and bottom rules, with the copy and the media framed as two cells, each with its four marks. Turn it off when the page already wraps the band in a frame. */
+    /**
+     * Draw the band's own registration frame: its top and bottom rules, with the copy and the media framed
+     * as two cells, each with its four marks. Turn it off when the page already wraps the band in a frame.
+     */
     framed?: boolean
     /** Draw the seam between the copy and the media. Turn it off for a band whose two halves should read as one plate. */
     divided?: boolean
@@ -62,11 +65,23 @@
     textureFade?: TextureFade
     /** Inset the media from the cell's edges. An exported asset carries its own air and runs flush; a screenshot or a composed panel wants the inset. */
     mediaPadded?: boolean
-    /** URL the band links to. With it set the media cell is one link named by the band's title, a click anywhere else on the band follows it, and hovering the band reveals the chevron affordance and the hover state of its link actions. */
+    /**
+     * URL the band links to. With it set the media cell is one link named by the band's title, a click
+     * anywhere else on the band follows it, and hovering the band reveals the chevron affordance and the
+     * hover state of its link actions.
+     */
     mediaHref?: string
-    /** Where the copy sits down its cell. `start` holds the copy at the cell's top and floors the actions so consecutive bands align on them; `center` gathers the copy and its actions into one block on the cell's vertical middle. */
+    /**
+     * Where the copy sits down its cell. `start` holds the copy at the cell's top and floors the actions
+     * so consecutive bands align on them; `center` gathers the copy and its actions into one block on the
+     * cell's vertical middle.
+     */
     align?: MediaSplitAlign
-    /** Type scale and air of the copy. `medium` sets the headline at heading-md for a band beside other content; `large` sets it at heading-xl with a larger description and pads the copy cell a step wider, for a band that carries only its headline and actions. */
+    /**
+     * Type scale and air of the copy. `medium` sets the headline at heading-md for a band beside other
+     * content; `large` sets it at heading-xl with a larger description and pads the copy cell a step
+     * wider, for a band that carries only its headline and actions.
+     */
     size?: MediaSplitSize
   }
 
@@ -148,6 +163,35 @@
     }
     globalThis.location.assign(href)
   }
+
+  const CELLS_CLASS =
+    'grid h-full ' +
+    'group-data-[divided]/split:gap-px group-data-[divided]/split:bg-(--border-default) ' +
+    'group-data-[media]/split:data-[orientation=horizontal]:@min-[60rem]/media-split:grid-cols-2'
+
+  const COPY_CLASS =
+    'flex h-full flex-col justify-between gap-(--spacing-2xl) p-(--spacing-xl) ' +
+    'group-data-[size=large]/split:p-(--spacing-2xl) ' +
+    'group-data-[media]/split:group-data-[orientation=horizontal]/split:group-data-[size=large]/split:@min-[60rem]/media-split:@max-[72rem]/media-split:p-(--spacing-xl) ' +
+    'group-data-[fill=canvas]/split:bg-(--bg-canvas) group-data-[fill=surface]/split:bg-(--bg-surface) ' +
+    'group-data-[align=center]/split:justify-center'
+
+  const ACTIONS_CLASS =
+    'flex flex-wrap items-center gap-(--spacing-sm) ' +
+    'group-data-[media-href]/split:group-hover/split:[&>a]:before:opacity-100 group-data-[media-href]/split:group-active/split:[&>a]:after:opacity-100 ' +
+    'group-data-[media-href]/split:group-hover/split:[&>a_[data-animated]]:translate-x-0.5'
+
+  const MEDIA_CLASS =
+    'group/media relative flex h-full min-w-0 items-center justify-center overflow-hidden ' +
+    'group-data-[media-fill=surface]/split:bg-(--bg-surface) group-data-[media-fill=canvas]/split:bg-(--bg-canvas) ' +
+    'group-data-[media-padded]/split:p-(--spacing-xl) ' +
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset'
+
+  const MEDIA_AFFORDANCE_CLASS =
+    'pointer-events-none absolute end-(--spacing-xl) bottom-(--spacing-xl) z-20 inline-flex h-7 min-w-7 translate-x-1 items-center justify-center rounded-(--shape-button) ' +
+    'bg-(--secondary) px-(--spacing-xs) text-button-md text-(--secondary-foreground) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance ' +
+    'group-hover/split:translate-x-0 group-hover/split:opacity-100 group-focus-visible/media:translate-x-0 group-focus-visible/media:opacity-100 rtl:-translate-x-1 ' +
+    'rtl:group-hover/split:translate-x-0 rtl:group-focus-visible/media:translate-x-0 motion-reduce:transition-none'
 </script>
 
 <template>
@@ -176,7 +220,7 @@
       <div
         :data-testid="`${testId}__cells`"
         :data-orientation="orientation"
-        class="grid h-full group-data-[divided]/split:gap-px group-data-[divided]/split:bg-(--border-default) group-data-[media]/split:data-[orientation=horizontal]:@min-[60rem]/media-split:grid-cols-2"
+        :class="CELLS_CLASS"
       >
         <component
           :is="cellFrame"
@@ -185,9 +229,7 @@
           :data-orientation="orientation"
           class="min-w-0 group-data-[variant=media-start]/split:@min-[60rem]/media-split:order-last group-data-[variant=media-start]/split:data-[orientation=vertical]:order-last"
         >
-          <div
-            class="flex h-full flex-col justify-between gap-(--spacing-2xl) p-(--spacing-xl) group-data-[size=large]/split:p-(--spacing-2xl) group-data-[media]/split:group-data-[orientation=horizontal]/split:group-data-[size=large]/split:@min-[60rem]/media-split:@max-[72rem]/media-split:p-(--spacing-xl) group-data-[fill=canvas]/split:bg-(--bg-canvas) group-data-[fill=surface]/split:bg-(--bg-surface) group-data-[align=center]/split:justify-center"
-          >
+          <div :class="COPY_CLASS">
             <div
               class="flex max-w-(--container-md) flex-col gap-(--spacing-lg) group-data-[size=large]/split:max-w-(--container-lg)"
             >
@@ -217,7 +259,7 @@
 
             <div
               v-if="slots.actions"
-              class="flex flex-wrap items-center gap-(--spacing-sm) group-data-[media-href]/split:group-hover/split:[&>a]:before:opacity-100 group-data-[media-href]/split:group-active/split:[&>a]:after:opacity-100 group-data-[media-href]/split:group-hover/split:[&>a_[data-animated]]:translate-x-0.5"
+              :class="ACTIONS_CLASS"
             >
               <slot name="actions" />
             </div>
@@ -236,7 +278,7 @@
             :href="mediaLink ?? undefined"
             :aria-label="isMediaLink ? title : undefined"
             :data-testid="`${testId}__media`"
-            class="group/media relative flex h-full min-w-0 items-center justify-center overflow-hidden group-data-[media-fill=surface]/split:bg-(--bg-surface) group-data-[media-fill=canvas]/split:bg-(--bg-canvas) group-data-[media-padded]/split:p-(--spacing-xl) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset"
+            :class="MEDIA_CLASS"
           >
             <Texture
               :variant="texture"
@@ -262,7 +304,7 @@
               v-if="isMediaLink"
               aria-hidden="true"
               :data-testid="`${testId}__media-affordance`"
-              class="pointer-events-none absolute end-(--spacing-xl) bottom-(--spacing-xl) z-20 inline-flex h-7 min-w-7 translate-x-1 items-center justify-center rounded-(--shape-button) bg-(--secondary) px-(--spacing-xs) text-button-md text-(--secondary-foreground) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance group-hover/split:translate-x-0 group-hover/split:opacity-100 group-focus-visible/media:translate-x-0 group-focus-visible/media:opacity-100 rtl:-translate-x-1 rtl:group-hover/split:translate-x-0 rtl:group-focus-visible/media:translate-x-0 motion-reduce:transition-none"
+              :class="MEDIA_AFFORDANCE_CLASS"
             >
               <i class="az az-chevron-right text-[length:inherit] leading-none rtl:-scale-x-100" />
             </span>

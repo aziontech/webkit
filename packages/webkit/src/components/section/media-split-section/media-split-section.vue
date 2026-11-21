@@ -75,7 +75,11 @@
     illustration?: string
     /** Accessible name of the illustration; empty keeps it decorative. */
     illustrationAriaLabel?: string
-    /** First button under the copy; `{ label, href, trailing?, icon?, target?, variant? }`. When it is the only action it renders outlined with a trailing chevron, and the whole band links to it; `variant` overrides the drawn variant. */
+    /**
+     * First button under the copy; `{ label, href, trailing?, icon?, target?, variant? }`. When
+     * it is the only action it renders outlined with a trailing chevron, and the whole band links
+     * to it; `variant` overrides the drawn variant.
+     */
     primaryAction?: MediaSplitSectionAction
     /** Second, outlined button beside the first; `{ label, href, trailing?, icon?, target?, variant? }`. With two actions the band stays unlinked. */
     secondaryAction?: MediaSplitSectionAction
@@ -156,7 +160,9 @@
       (bare) => {
         if (bare)
           console.warn(
-            `[webkit] <MediaSplitSection>: the band "${props.title}" has no media. Give it an illustration, a widget or a scene; code goes in FeatureScrollSection and a request-flow diagram in ConsoleShowcaseSection.`
+            `[webkit] <MediaSplitSection>: the band "${props.title}" has no media. ` +
+              'Give it an illustration, a widget or a scene; ' +
+              'code goes in FeatureScrollSection and a request-flow diagram in ConsoleShowcaseSection.'
           )
       },
       { immediate: true }

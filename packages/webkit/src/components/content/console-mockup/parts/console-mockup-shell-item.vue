@@ -25,6 +25,12 @@
   )
 
   const style = computed(() => beatStyle(props.order))
+
+  const ROOT_CLASS =
+    'translate-y-4 opacity-0 transition-[opacity,translate] [transition-duration:var(--console-mockup-shell-item-duration)] [transition-delay:var(--console-mockup-shell-item-delay)] ' +
+    'ease-expressive-entrance ' +
+    'data-entered:translate-y-0 data-entered:opacity-100 ' +
+    'motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:transition-none'
 </script>
 
 <template>
@@ -33,7 +39,7 @@
     :data-testid="testId"
     :data-entered="entered || null"
     :style="style"
-    class="translate-y-4 opacity-0 transition-[opacity,translate] [transition-duration:var(--console-mockup-shell-item-duration)] [transition-delay:var(--console-mockup-shell-item-delay)] ease-expressive-entrance data-entered:translate-y-0 data-entered:opacity-100 motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:transition-none"
+    :class="ROOT_CLASS"
   >
     <slot />
   </div>

@@ -90,6 +90,15 @@
 
   onMounted(() => context?.registerHotspot(props.hotspotId))
   onBeforeUnmount(() => context?.unregisterHotspot(props.hotspotId))
+
+  const MARKER_CLASS =
+    'relative inline-flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-(--radius-full) outline-none ' +
+    "before:absolute before:-inset-2 before:content-[''] focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
+
+  const DOT_CLASS =
+    'relative size-3 rounded-(--radius-full) border-2 border-(--primary) bg-(--bg-surface) transition-colors duration-fast-02 ease-productive-entrance ' +
+    'group-data-[active]/hotspot:bg-(--primary) ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -118,7 +127,7 @@
           :aria-label="t('tutorialPanel.hotspotLabel', { title: entry.title })"
           :data-testid="`${testId}__marker`"
           :data-active="isCurrent || null"
-          class="relative inline-flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-(--radius-full) outline-none before:absolute before:-inset-2 before:content-[''] focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
+          :class="MARKER_CLASS"
         >
           <span
             v-if="isOpen"
@@ -127,7 +136,7 @@
           />
           <span
             aria-hidden="true"
-            class="relative size-3 rounded-(--radius-full) border-2 border-(--primary) bg-(--bg-surface) transition-colors duration-fast-02 ease-productive-entrance group-data-[active]/hotspot:bg-(--primary) motion-reduce:transition-none"
+            :class="DOT_CLASS"
           />
         </button>
       </PopoverTrigger>

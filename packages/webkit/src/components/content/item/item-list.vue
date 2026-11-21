@@ -18,6 +18,12 @@
 
   provide(ItemContainerInjectionKey, { forceVariant: 'default' })
   provide(ItemListMemberInjectionKey, true)
+
+  const ROOT_CLASS =
+    'flex w-full flex-col ' +
+    '[&>[data-slot=item]]:rounded-none [&>[data-slot=item]]:border-b-(color:--border-muted) [&>[data-slot=item]:last-child]:border-b-[color:transparent] ' +
+    '[&>[data-slot=item-listitem]>[data-slot=item]]:rounded-none [&>[data-slot=item-listitem]>[data-slot=item]]:border-b-(color:--border-muted) ' +
+    '[&>[data-slot=item-listitem]:last-child>[data-slot=item]]:border-b-[color:transparent]'
 </script>
 
 <template>
@@ -26,7 +32,7 @@
     role="list"
     data-slot="item-list"
     :data-testid="testId"
-    class="flex w-full flex-col [&>[data-slot=item]]:rounded-none [&>[data-slot=item]]:border-b-(color:--border-muted) [&>[data-slot=item]:last-child]:border-b-[color:transparent] [&>[data-slot=item-listitem]>[data-slot=item]]:rounded-none [&>[data-slot=item-listitem]>[data-slot=item]]:border-b-(color:--border-muted) [&>[data-slot=item-listitem]:last-child>[data-slot=item]]:border-b-[color:transparent]"
+    :class="ROOT_CLASS"
   >
     <slot />
   </div>

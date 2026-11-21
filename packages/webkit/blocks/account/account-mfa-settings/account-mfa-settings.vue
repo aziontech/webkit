@@ -82,6 +82,17 @@
 
   const withoutMfa = computed(() => items.value.filter((member) => !member.enabled))
 
+  const requireDescription = computed(() => {
+    const count = withoutMfa.value.length
+    if (!count)
+      return 'Everyone in the account already uses MFA. New people set it up at their first sign-in.'
+    const names = withoutMfa.value.map((member) => member.name).join(', ')
+    return (
+      `${count} ${count === 1 ? 'person does' : 'people do'} not use MFA yet (${names}). ` +
+      'They are asked to set it up at their next sign-in and cannot use the account until they do.'
+    )
+  })
+
   const columns: TableColumn[] = [
     { accessorKey: 'name', header: 'Name', sortable: true, principal: true, hideable: false },
     { accessorKey: 'status', header: 'MFA', minWidth: 120 },
@@ -374,11 +385,7 @@
       v-model:open="requireOpen"
       variant="primary"
       title="Require MFA"
-      :description="
-        withoutMfa.length
-          ? `${withoutMfa.length} ${withoutMfa.length === 1 ? 'person does' : 'people do'} not use MFA yet (${withoutMfa.map((member) => member.name).join(', ')}). They are asked to set it up at their next sign-in and cannot use the account until they do.`
-          : 'Everyone in the account already uses MFA. New people set it up at their first sign-in.'
-      "
+      :description="requireDescription"
       confirm-label="Require MFA"
       size="small"
       @confirm="confirmRequire"

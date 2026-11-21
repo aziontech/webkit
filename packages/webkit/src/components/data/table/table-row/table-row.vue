@@ -26,6 +26,13 @@
 
   const group = inject(TableRowGroupInjectionKey, { hoverable: true })
   const fallbackTestId = 'table-row'
+
+  const ROOT_CLASS =
+    'flex w-full items-stretch [--table-row-bg:var(--bg-surface)] bg-(--table-row-bg) border-b-(length:--border-width-default) border-solid border-(--border-default) transition-colors ' +
+    'duration-150 ease-out motion-reduce:transition-none ' +
+    'data-[hoverable]:hover:[--table-row-bg:var(--bg-canvas)] ' +
+    'data-[state=selected]:[--table-row-bg:var(--bg-selected)] data-[state=selected]:hover:[--table-row-bg:var(--bg-selected)] ' +
+    'data-[frozen]:sticky data-[frozen]:top-0 data-[frozen]:z-10'
 </script>
 
 <template>
@@ -38,7 +45,7 @@
     :data-frozen="frozen || null"
     :data-hoverable="group.hoverable || null"
     :aria-selected="selected || undefined"
-    class="flex w-full items-stretch [--table-row-bg:var(--bg-surface)] bg-(--table-row-bg) border-b-(length:--border-width-default) border-solid border-(--border-default) transition-colors duration-150 ease-out motion-reduce:transition-none data-[hoverable]:hover:[--table-row-bg:var(--bg-canvas)] data-[state=selected]:[--table-row-bg:var(--bg-selected)] data-[state=selected]:hover:[--table-row-bg:var(--bg-selected)] data-[frozen]:sticky data-[frozen]:top-0 data-[frozen]:z-10"
+    :class="ROOT_CLASS"
   >
     <slot />
   </div>

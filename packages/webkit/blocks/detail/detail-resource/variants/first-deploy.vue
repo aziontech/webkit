@@ -35,6 +35,19 @@
       createdAt: 'Sep 22'
     }
   ]
+
+  const CONNECT_LINK_CLASS =
+    'inline-flex min-w-0 items-center rounded-(--shape-button) text-body-sm text-(--text-link) underline-offset-2 transition-colors duration-150 ease-out ' +
+    'hover:text-(--text-link-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 ' +
+    'focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none'
+
+  const FOOTER_BAND_CLASS =
+    '@container/band flex min-h-(--size-12) flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-xs) border-t border-(--border-muted) bg-(--bg-canvas) px-(--spacing-md) ' +
+    'py-(--spacing-xs)'
+
+  const DETAIL_LINK_CLASS =
+    'group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline ' +
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)'
 </script>
 
 <template>
@@ -121,7 +134,7 @@
             <div class="flex min-h-7 min-w-0 flex-wrap items-center gap-x-(--spacing-sm)">
               <a
                 href="#connect-repository"
-                class="inline-flex min-w-0 items-center rounded-(--shape-button) text-body-sm text-(--text-link) underline-offset-2 transition-colors duration-150 ease-out hover:text-(--text-link-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
+                :class="CONNECT_LINK_CLASS"
               >
                 <span class="truncate">Connect Git repository</span>
               </a>
@@ -147,9 +160,7 @@
           </div>
         </div>
 
-        <div
-          class="@container/band flex min-h-(--size-12) flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-xs) border-t border-(--border-muted) bg-(--bg-canvas) px-(--spacing-md) py-(--spacing-xs)"
-        >
+        <div :class="FOOTER_BAND_CLASS">
           <p
             class="min-w-0 flex-1 basis-(--container-2xs) text-pretty text-body-sm text-(--text-muted)"
           >
@@ -198,7 +209,7 @@
                   :href="`https://${service.domain}`"
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
+                  :class="DETAIL_LINK_CLASS"
                 >
                   <span class="truncate underline-offset-2 group-hover/link:underline">{{
                     service.domain

@@ -57,7 +57,11 @@
     anchor?: string
     /** The subject cards, in order; each is `{ slug, title, description, articles }` where every article is `{ label, href }`. Subjects without a title or a linked article are skipped. */
     subjects?: SubjectGridSectionSubject[]
-    /** Call to action across the grid's last two cells; `{ eyebrow, title, titleMuted, description, primaryAction, secondaryAction }` where each action is `{ label, href, trailing?, target? }`. Omitted when absent. */
+    /**
+     * Call to action across the grid's last two cells; `{ eyebrow, title, titleMuted,
+     * description, primaryAction, secondaryAction }` where each action is `{ label, href,
+     * trailing?, target? }`. Omitted when absent.
+     */
     closing?: SubjectGridSectionClosing
     /** Accessible name of the band; empty leaves the section unnamed. */
     ariaLabel?: string
@@ -90,6 +94,11 @@
   const hasSubjects = computed(() => library.value.length > 0)
 
   const hasClosing = computed(() => Boolean(props.closing?.title))
+
+  const ARTICLE_LINK_CLASS =
+    'text-body-sm text-(--text-muted) underline underline-offset-2 transition-colors duration-150 ease-out ' +
+    'hover:text-(--text-default) focus-visible:rounded-(--shape-flat) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color) ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -146,7 +155,7 @@
                 >
                   <a
                     :href="safeHref(article.href) ?? undefined"
-                    class="text-body-sm text-(--text-muted) underline underline-offset-2 transition-colors duration-150 ease-out hover:text-(--text-default) focus-visible:rounded-(--shape-flat) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color) motion-reduce:transition-none"
+                    :class="ARTICLE_LINK_CLASS"
                   >
                     {{ article.label }}
                   </a>

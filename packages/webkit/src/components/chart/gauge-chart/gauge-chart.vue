@@ -180,6 +180,11 @@
   )
 
   onScopeDispose(cancelEnter)
+
+  const ARC_CLASS =
+    '[stroke-dasharray:0_100] transition-[stroke-dasharray,stroke] duration-slow-02 ease-productive-entrance ' +
+    'motion-reduce:transition-none ' +
+    'data-[entered]:[stroke-dasharray:var(--gauge-chart-dash)]'
 </script>
 
 <template>
@@ -278,7 +283,7 @@
             :data-entered="entered || null"
             :data-testid="`${testId}__arc`"
             :style="{ '--gauge-chart-dash': `${filled} 100` }"
-            class="[stroke-dasharray:0_100] transition-[stroke-dasharray,stroke] duration-slow-02 ease-productive-entrance motion-reduce:transition-none data-[entered]:[stroke-dasharray:var(--gauge-chart-dash)]"
+            :class="ARC_CLASS"
           />
           <line
             v-for="tick in ticks"

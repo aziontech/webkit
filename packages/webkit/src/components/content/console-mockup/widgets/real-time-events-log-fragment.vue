@@ -151,6 +151,44 @@
   watch(wanted, advance, { immediate: true })
 
   onScopeDispose(halt)
+
+  const BUTTON_RING_CLASS =
+    'inline-flex shrink-0 rounded-(--shape-button) ring-(--ring-color) ring-offset-(--bg-surface) transition-shadow duration-fast-02 ease-productive-entrance ' +
+    'data-pressed:ring-2 data-pressed:ring-offset-2 ' +
+    'motion-reduce:transition-none'
+
+  const EXPAND_CELL_CLASS =
+    'flex min-h-12 items-center justify-center border-b border-(--border-default) px-(--spacing-xs) transition-colors duration-fast-02 ease-productive-entrance ' +
+    'data-selected:bg-(--bg-selected) ' +
+    'motion-reduce:transition-none'
+
+  const EXPAND_CHEVRON_CLASS =
+    'az az-chevron-right text-(--text-muted) transition-transform duration-fast-02 ease-productive-entrance ' +
+    'data-[state=open]:rotate-90 data-[state=open]:text-(--primary) ' +
+    'motion-reduce:transition-none rtl:-scale-x-100 rtl:data-[state=open]:-rotate-90'
+
+  const TIME_CELL_CLASS =
+    'flex min-h-12 items-center border-b border-(--border-default) px-(--spacing-xs) text-label-code-sm whitespace-nowrap tabular-nums text-(--text-muted) transition-colors ' +
+    'duration-fast-02 ease-productive-entrance ' +
+    'data-selected:bg-(--bg-selected) ' +
+    'motion-reduce:transition-none'
+
+  const LEVEL_CELL_CLASS =
+    'flex min-h-12 items-center border-b border-(--border-default) px-(--spacing-xs) transition-colors duration-fast-02 ease-productive-entrance ' +
+    'data-selected:bg-(--bg-selected) ' +
+    'motion-reduce:transition-none'
+
+  const SOURCE_CELL_CLASS =
+    'flex min-h-12 items-center border-b border-(--border-default) px-(--spacing-xs) text-label-md whitespace-nowrap text-(--text-default) transition-colors duration-fast-02 ' +
+    'ease-productive-entrance ' +
+    'data-selected:bg-(--bg-selected) ' +
+    'motion-reduce:transition-none'
+
+  const MESSAGE_CELL_CLASS =
+    'flex min-h-12 min-w-0 items-center border-b border-(--border-default) px-(--spacing-xs) text-label-md text-(--text-default) transition-colors duration-fast-02 ' +
+    'ease-productive-entrance ' +
+    'data-selected:bg-(--bg-selected) ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -207,7 +245,7 @@
           <span
             data-cursor="download"
             :data-pressed="frame.exporting || null"
-            class="inline-flex shrink-0 rounded-(--shape-button) ring-(--ring-color) ring-offset-(--bg-surface) transition-shadow duration-fast-02 ease-productive-entrance data-pressed:ring-2 data-pressed:ring-offset-2 motion-reduce:transition-none"
+            :class="BUTTON_RING_CLASS"
           >
             <IconButton
               icon="az az-download"
@@ -241,23 +279,23 @@
             <span
               :data-selected="selected(index) || null"
               :data-cursor="`row-${index}`"
-              class="flex min-h-12 items-center justify-center border-b border-(--border-default) px-(--spacing-xs) transition-colors duration-fast-02 ease-productive-entrance data-selected:bg-(--bg-selected) motion-reduce:transition-none"
+              :class="EXPAND_CELL_CLASS"
             >
               <i
                 :data-state="selected(index) ? 'open' : 'closed'"
-                class="az az-chevron-right text-(--text-muted) transition-transform duration-fast-02 ease-productive-entrance data-[state=open]:rotate-90 data-[state=open]:text-(--primary) motion-reduce:transition-none rtl:-scale-x-100 rtl:data-[state=open]:-rotate-90"
+                :class="EXPAND_CHEVRON_CLASS"
                 aria-hidden="true"
               />
             </span>
             <span
               :data-selected="selected(index) || null"
-              class="flex min-h-12 items-center border-b border-(--border-default) px-(--spacing-xs) text-label-code-sm whitespace-nowrap tabular-nums text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance data-selected:bg-(--bg-selected) motion-reduce:transition-none"
+              :class="TIME_CELL_CLASS"
             >
               {{ event.time }}
             </span>
             <span
               :data-selected="selected(index) || null"
-              class="flex min-h-12 items-center border-b border-(--border-default) px-(--spacing-xs) transition-colors duration-fast-02 ease-productive-entrance data-selected:bg-(--bg-selected) motion-reduce:transition-none"
+              :class="LEVEL_CELL_CLASS"
             >
               <Tag
                 :label="event.level"
@@ -267,13 +305,13 @@
             </span>
             <span
               :data-selected="selected(index) || null"
-              class="flex min-h-12 items-center border-b border-(--border-default) px-(--spacing-xs) text-label-md whitespace-nowrap text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance data-selected:bg-(--bg-selected) motion-reduce:transition-none"
+              :class="SOURCE_CELL_CLASS"
             >
               {{ event.source }}
             </span>
             <span
               :data-selected="selected(index) || null"
-              class="flex min-h-12 min-w-0 items-center border-b border-(--border-default) px-(--spacing-xs) text-label-md text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance data-selected:bg-(--bg-selected) motion-reduce:transition-none"
+              :class="MESSAGE_CELL_CLASS"
             >
               <span class="min-w-0 truncate">{{ event.message }}</span>
             </span>

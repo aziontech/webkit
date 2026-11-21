@@ -82,8 +82,11 @@
     '[--sidebar-menu-rail-x:var(--spacing-sm)] ' +
     'ps-(--sidebar-menu-indent) ' +
     '[&>li]:relative ' +
-    "[&>li]:before:pointer-events-none [&>li]:before:absolute [&>li]:before:top-0 [&>li]:before:start-[calc(var(--sidebar-menu-rail-x)-var(--sidebar-menu-indent))] [&>li]:before:h-4 [&>li]:before:w-[calc(var(--sidebar-menu-indent)-var(--sidebar-menu-rail-x))] [&>li]:before:rounded-es-(--shape-control) [&>li]:before:border-b [&>li]:before:border-s [&>li]:before:border-(--border-default) [&>li]:before:content-[''] " +
-    "[&>li]:after:pointer-events-none [&>li]:after:absolute [&>li]:after:top-4 [&>li]:after:bottom-0 [&>li]:after:start-[calc(var(--sidebar-menu-rail-x)-var(--sidebar-menu-indent))] [&>li]:after:w-0 [&>li]:after:border-s [&>li]:after:border-(--border-default) [&>li]:after:content-[''] " +
+    '[&>li]:before:pointer-events-none [&>li]:before:absolute [&>li]:before:top-0 [&>li]:before:start-[calc(var(--sidebar-menu-rail-x)-var(--sidebar-menu-indent))] [&>li]:before:h-4 ' +
+    '[&>li]:before:w-[calc(var(--sidebar-menu-indent)-var(--sidebar-menu-rail-x))] [&>li]:before:rounded-es-(--shape-control) [&>li]:before:border-b [&>li]:before:border-s ' +
+    "[&>li]:before:border-(--border-default) [&>li]:before:content-[''] " +
+    '[&>li]:after:pointer-events-none [&>li]:after:absolute [&>li]:after:top-4 [&>li]:after:bottom-0 [&>li]:after:start-[calc(var(--sidebar-menu-rail-x)-var(--sidebar-menu-indent))] ' +
+    "[&>li]:after:w-0 [&>li]:after:border-s [&>li]:after:border-(--border-default) [&>li]:after:content-[''] " +
     '[&>li:last-child]:after:hidden'
 
   const DRILL_CLASS =

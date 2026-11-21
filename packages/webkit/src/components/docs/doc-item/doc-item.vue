@@ -51,6 +51,15 @@
   const isExternal = computed(
     () => props.target === '_blank' || /^(https?:)?\/\/|^mailto:/.test(props.href)
   )
+
+  const ROOT_CLASS =
+    'group/item items-start transition-colors duration-150 ease-out has-[a:hover]:bg-(--bg-hover) has-[a:focus-visible]:outline-none has-[a:focus-visible]:ring-2 ' +
+    'has-[a:focus-visible]:ring-inset has-[a:focus-visible]:ring-(--ring-color) motion-reduce:transition-none'
+
+  const DESCRIPTION_CLASS =
+    'line-clamp-none text-pretty [&_code:not(pre_*)]:rounded-(--shape-control) [&_code:not(pre_*)]:inset-ring [&_code:not(pre_*)]:inset-ring-(--border-default) ' +
+    '[&_code:not(pre_*)]:forced-colors:border [&_code:not(pre_*)]:bg-(--bg-hover) [&_code:not(pre_*)]:px-(--spacing-2xs) [&_code:not(pre_*)]:text-label-code-sm ' +
+    '[&_code:not(pre_*)]:text-(--text-default) [&_code:not(pre_*)]:wrap-anywhere [&_code:not(pre_*)]:box-decoration-clone'
 </script>
 
 <template>
@@ -59,7 +68,7 @@
     role="listitem"
     :data-testid="testId"
     data-doc-chrome
-    class="group/item items-start transition-colors duration-150 ease-out has-[a:hover]:bg-(--bg-hover) has-[a:focus-visible]:outline-none has-[a:focus-visible]:ring-2 has-[a:focus-visible]:ring-inset has-[a:focus-visible]:ring-(--ring-color) motion-reduce:transition-none"
+    :class="ROOT_CLASS"
   >
     <ItemMedia
       v-if="icon"
@@ -84,9 +93,7 @@
         </a>
         <template v-else>{{ title }}</template>
       </ItemTitle>
-      <ItemDescription
-        class="line-clamp-none text-pretty [&_code:not(pre_*)]:rounded-(--shape-control) [&_code:not(pre_*)]:inset-ring [&_code:not(pre_*)]:inset-ring-(--border-default) [&_code:not(pre_*)]:forced-colors:border [&_code:not(pre_*)]:bg-(--bg-hover) [&_code:not(pre_*)]:px-(--spacing-2xs) [&_code:not(pre_*)]:text-label-code-sm [&_code:not(pre_*)]:text-(--text-default) [&_code:not(pre_*)]:wrap-anywhere [&_code:not(pre_*)]:box-decoration-clone"
-      >
+      <ItemDescription :class="DESCRIPTION_CLASS">
         <slot>{{ label }}</slot>
       </ItemDescription>
     </ItemContent>

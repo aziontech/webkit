@@ -197,6 +197,14 @@
     document.removeEventListener('keydown', onShortcut)
     clearTimeout(loadTimer)
   })
+
+  const ACCOUNT_BUTTON_CLASS =
+    'flex h-10 w-full min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) transition-colors duration-fast-02 ease-productive-entrance ' +
+    'hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none'
+
+  const ACCOUNT_BUTTON_COMPACT_CLASS =
+    'flex h-7 min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-2xs) transition-colors duration-fast-02 ease-productive-entrance ' +
+    'hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none'
 </script>
 
 <template>
@@ -214,7 +222,7 @@
             :aria-label="`Account: ${currentAccount.name}. Switch account`"
             aria-haspopup="dialog"
             aria-keyshortcuts="Control+O Meta+O"
-            class="flex h-10 w-full min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+            :class="ACCOUNT_BUTTON_CLASS"
             @click="openSwitch"
           >
             <Avatar
@@ -244,7 +252,7 @@
             :aria-label="`Account: ${currentAccount.name}. Switch account`"
             aria-haspopup="dialog"
             aria-keyshortcuts="Control+O Meta+O"
-            class="flex h-7 min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-2xs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+            :class="ACCOUNT_BUTTON_COMPACT_CLASS"
             @click="openSwitch"
           >
             <Avatar

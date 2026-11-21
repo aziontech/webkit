@@ -50,6 +50,18 @@
     if (!linked.value) return
     emit('click', event, { title: props.title, href: props.href })
   }
+
+  const ROW_CLASS =
+    'group mx-[calc((var(--spacing-md)+1px)*-1)] flex min-h-(--size-11) items-center gap-[calc(var(--spacing-md)+var(--spacing-2xs))] rounded-(--shape-card) border border-transparent ' +
+    'px-(--spacing-md) py-(--spacing-sm) transition-colors duration-fast-02 ease-productive-entrance ' +
+    'focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) focus-visible:outline-none ' +
+    'data-[linked]:hover:border-(--border-default) data-[linked]:hover:bg-(--bg-hover) ' +
+    'motion-reduce:transition-none'
+
+  const ICON_CLASS =
+    'flex size-(--size-5) shrink-0 items-center justify-center text-(length:--size-5) text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance ' +
+    'group-[[data-linked]:hover]:text-(--primary) ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -62,13 +74,12 @@
       :href="linked ? href : undefined"
       :data-linked="linked || null"
       :data-testid="`${testId}__row`"
-      class="group mx-[calc((var(--spacing-md)+1px)*-1)] flex min-h-(--size-11) items-center gap-[calc(var(--spacing-md)+var(--spacing-2xs))] rounded-(--shape-card) border border-transparent px-(--spacing-md) py-(--spacing-sm) transition-colors duration-fast-02 ease-productive-entrance focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) focus-visible:outline-none data-[linked]:hover:border-(--border-default) data-[linked]:hover:bg-(--bg-hover) motion-reduce:transition-none"
+      :class="ROW_CLASS"
       @click="onClick"
     >
       <i
         v-if="icon"
-        :class="icon"
-        class="flex size-(--size-5) shrink-0 items-center justify-center text-(length:--size-5) text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance group-[[data-linked]:hover]:text-(--primary) motion-reduce:transition-none"
+        :class="[ICON_CLASS, icon]"
         aria-hidden="true"
       />
 

@@ -425,6 +425,12 @@
 
   const { t } = useTranslate({ toast: en.toast })
   const regionLabel = computed(() => t('toast.region', { hotkey: 'Alt+T' }))
+
+  const ITEM_CLASS =
+    'will-change-transform rounded-(--shape-control) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) ' +
+    'transition-[transform,opacity,height] duration-moderate-02 ease-productive-entrance ' +
+    'data-[removing]:duration-slow-01 data-[removing]:ease-productive-exit ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -479,7 +485,7 @@
           :data-removing="item.removing || null"
           :tabindex="region.live.indexOf(item) === 0 ? -1 : undefined"
           :style="toastStyle(region, item, indexInAll)"
-          class="will-change-transform rounded-(--shape-control) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) transition-[transform,opacity,height] duration-moderate-02 ease-productive-entrance data-[removing]:duration-slow-01 data-[removing]:ease-productive-exit motion-reduce:transition-none"
+          :class="ITEM_CLASS"
         >
           <div :ref="(el) => setCardEl(item.entry.id, el)">
             <slot

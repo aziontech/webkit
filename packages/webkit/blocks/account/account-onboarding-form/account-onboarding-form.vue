@@ -418,6 +418,13 @@
     step.value = 0
     emit('cancel', event)
   }
+
+  const SAVED_CARD_CLASS =
+    'flex min-h-14 flex-wrap items-center gap-(--spacing-md) rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xs)'
+
+  const PREVIEW_FIGURE_CLASS =
+    'pointer-events-none absolute inset-y-0 start-0 m-0 flex w-(--container-3xl) flex-col overflow-hidden rounded-(--shape-card) border-(length:--border-width-default) ' +
+    'border-(--border-muted) bg-(--bg-surface) select-none'
 </script>
 
 <template>
@@ -730,7 +737,7 @@
                                           >
                                             <div
                                               v-if="!editing"
-                                              class="flex min-h-14 flex-wrap items-center gap-(--spacing-md) rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xs)"
+                                              :class="SAVED_CARD_CLASS"
                                             >
                                               <PaymentBrand brand="visa" />
                                               <p
@@ -1124,7 +1131,7 @@
             class="relative hidden h-[calc(100dvh-12rem)] max-h-(--container-xl) min-h-(--container-sm) overflow-hidden mask-r-from-72% mask-b-from-80% lg:block"
           >
             <figure
-              class="pointer-events-none absolute inset-y-0 start-0 m-0 flex w-(--container-3xl) flex-col overflow-hidden rounded-(--shape-card) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface) select-none"
+              :class="PREVIEW_FIGURE_CLASS"
               aria-hidden="true"
             >
               <div

@@ -49,6 +49,22 @@
     () => Boolean(props.node.message) || Boolean(props.node.fields?.length)
   )
   const kind = computed<string>(() => props.node.eyebrow ?? '')
+
+  const NODE_TOGGLE_CLASS =
+    'group/toggle flex w-full items-center gap-(--spacing-2xs) rounded-b-(--shape-card) border-t border-solid border-(--border-muted) px-(--spacing-md) py-(--spacing-xs) text-start ' +
+    'text-label-sm text-(--text-muted) outline-none transition-colors duration-moderate-01 ease-productive-entrance ' +
+    'hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset ' +
+    'data-[state=open]:rounded-b-none ' +
+    'motion-reduce:transition-none'
+
+  const TOGGLE_CHEVRON_CLASS =
+    'az az-chevron-down ms-auto shrink-0 text-body-xs transition-transform duration-moderate-01 ease-productive-entrance ' +
+    'group-data-[state=open]/toggle:rotate-180 ' +
+    'motion-reduce:transition-none'
+
+  const FIELD_LINK_CLASS =
+    'min-w-0 truncate rounded-(--shape-control) text-body-xs text-(--text-default) underline-offset-2 outline-none ' +
+    'hover:underline focus-visible:ring-2 focus-visible:ring-(--ring-color)'
 </script>
 
 <template>
@@ -100,13 +116,13 @@
         :aria-controls="bodyId"
         :data-state="open ? 'open' : 'closed'"
         :data-testid="`${testId}__node-toggle`"
-        class="group/toggle flex w-full items-center gap-(--spacing-2xs) rounded-b-(--shape-card) border-t border-solid border-(--border-muted) px-(--spacing-md) py-(--spacing-xs) text-start text-label-sm text-(--text-muted) outline-none transition-colors duration-moderate-01 ease-productive-entrance hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset data-[state=open]:rounded-b-none motion-reduce:transition-none"
+        :class="NODE_TOGGLE_CLASS"
         @click="(event: globalThis.MouseEvent) => emit('toggle', event)"
       >
         <span class="sr-only">{{ node.title || kind }}</span>
         {{ t('flowDiagram.details') }}
         <i
-          class="az az-chevron-down ms-auto shrink-0 text-body-xs transition-transform duration-moderate-01 ease-productive-entrance group-data-[state=open]/toggle:rotate-180 motion-reduce:transition-none"
+          :class="TOGGLE_CHEVRON_CLASS"
           aria-hidden="true"
         />
       </button>
@@ -140,7 +156,7 @@
                   target="_blank"
                   rel="noopener noreferrer"
                   dir="auto"
-                  class="min-w-0 truncate rounded-(--shape-control) text-body-xs text-(--text-default) underline-offset-2 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+                  :class="FIELD_LINK_CLASS"
                   >{{ field.value }}</a
                 >
                 <span

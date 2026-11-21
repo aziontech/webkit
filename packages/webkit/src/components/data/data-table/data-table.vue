@@ -126,7 +126,11 @@
       exportFilename?: string
       /** Rows TableExportButton and exportCsv() write for the `filtered` and `all` scopes in place of the rows the table holds; useCollection binds every match, not only the page. */
       exportRows?: (scope: 'filtered' | 'all') => TRow[] | Promise<TRow[]>
-      /** Opt in to stacked rows. When the table's own box is narrower than `--container-lg`, each row renders as a card of label and value pairs instead of the horizontally scrolling grid. Off by default: a console list scrolls sideways on a phone. */
+      /**
+       * Opt in to stacked rows. When the table's own box is narrower than `--container-lg`, each row renders
+       * as a card of label and value pairs instead of the horizontally scrolling grid. Off by default: a
+       * console list scrolls sideways on a phone.
+       */
       stackable?: boolean
       /** Cell text wraps onto several lines instead of truncating. */
       wrapLines?: boolean
@@ -138,13 +142,25 @@
       virtual?: boolean
       /** Row height (px) assumed in `virtual` mode until a row is measured. */
       estimateRowHeight?: number
-      /** A leading grip lets people drag rows, or move the focused one with Arrow Up, Arrow Down, Home and End, into a new order. The table emits `update:data` with the reordered records (bind `v-model:data`) and `reorder`; it is locked while a sort is applied. */
+      /**
+       * A leading grip lets people drag rows, or move the focused one with Arrow Up, Arrow Down, Home and
+       * End, into a new order. The table emits `update:data` with the reordered records (bind `v-model:data`)
+       * and `reorder`; it is locked while a sort is applied.
+       */
       reorderable?: boolean
-      /** With `reorderable`: decides per row whether it can move (`(row) => !row.locked`). A row it rejects keeps its place: its grip is disabled, and no other row is dropped onto it or moved past it with the keys. */
+      /**
+       * With `reorderable`: decides per row whether it can move (`(row) => !row.locked`). A row it rejects
+       * keeps its place: its grip is disabled, and no other row is dropped onto it or moved past it with the
+       * keys.
+       */
       rowReorderable?: (row: TRow) => boolean
       /** Tree rows. Returns a row's children; rows with children expand in place under a chevron in the principal column and the grid becomes a `treegrid`. */
       getSubRows?: (row: TRow) => TRow[] | undefined
-      /** More rows exist after the last one. The table emits `load-more` as the end of the rows nears the viewport (also in `virtual` mode) and offers a Load more button; false shows the end-of-results line once more rows were requested. */
+      /**
+       * More rows exist after the last one. The table emits `load-more` as the end of the rows nears the
+       * viewport (also in `virtual` mode) and offers a Load more button; false shows the end-of-results line
+       * once more rows were requested.
+       */
       moreRows?: boolean
       /** The next rows are loading; shows a loading line under the rows and holds further `load-more` requests. */
       loadingMore?: boolean
@@ -1262,6 +1278,13 @@
   const STACKED_FIELD_CLASS =
     'order-1 basis-full! min-h-8! justify-start! text-start! whitespace-normal static! before:hidden! after:hidden!'
   const STACKED_CELL_CLASS = 'static! before:hidden! after:hidden!'
+  const DATA_ROW_CLASS =
+    'relative transition-[opacity] duration-fast-02 ease-productive-entrance ' +
+    'motion-reduce:transition-none after:pointer-events-none after:absolute after:inset-0 after:z-20 ' +
+    'data-[dragging]:opacity-60 data-[dragging]:after:outline-dashed data-[dragging]:after:outline-2 data-[dragging]:after:-outline-offset-2 data-[dragging]:after:outline-(--accent) ' +
+    'data-[drop=before]:after:shadow-[inset_0_2px_0_var(--accent)] data-[drop=after]:after:shadow-[inset_0_-2px_0_var(--accent)] ' +
+    'data-[live-boundary]:shadow-[inset_0_2px_0_var(--success)] ' +
+    'outline-none focus-visible:after:outline-2 focus-visible:after:-outline-offset-2 focus-visible:after:outline-solid focus-visible:after:outline-(--ring-color)'
   interface ColumnView {
     type: 'default' | 'action'
     grow: 1 | 2 | 3
@@ -1707,6 +1730,28 @@
       default:
     }
   }
+
+  const ROOT_CLASS =
+    '@container/table ' +
+    'data-[density=compact]:[&_[role=cell]]:min-h-9 data-[density=compact]:[&_[role=cell]]:py-(--spacing-2xs) ' +
+    'data-[wrap]:[&_[role=cell]]:whitespace-normal data-[wrap]:[&_[role=cell]_.truncate]:whitespace-normal data-[wrap]:[&_[role=cell]_.truncate]:break-words ' +
+    'flex w-full flex-col overflow-hidden rounded-(--shape-control) bg-(--bg-surface) text-(--text-default) text-body-sm ' +
+    'data-[bordered]:border-(length:--border-width-default) data-[bordered]:border-solid data-[bordered]:border-(--border-default)'
+
+  const EXPAND_TOGGLE_CLASS =
+    'flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-(--shape-button) border-(length:--border-width-default) border-solid border-(--border-default) ' +
+    'bg-(--bg-surface) text-(--text-default) transition-colors duration-150 ease-out ' +
+    'hover:bg-(--bg-canvas) motion-reduce:transition-none'
+
+  const FADE_START_CLASS =
+    'pointer-events-none absolute inset-y-0 start-0 z-5 hidden bg-gradient-to-l from-transparent to-(--bg-surface) ' +
+    'group-data-[overflow-start]/scroll:block ' +
+    'rtl:bg-gradient-to-r forced-colors:forced-color-adjust-none forced-colors:to-[Canvas]'
+
+  const FADE_END_CLASS =
+    'pointer-events-none absolute inset-y-0 end-0 z-5 hidden bg-gradient-to-r from-transparent to-(--bg-surface) ' +
+    'group-data-[overflow-end]/scroll:block ' +
+    'rtl:bg-gradient-to-l forced-colors:forced-color-adjust-none forced-colors:to-[Canvas]'
 </script>
 
 <script lang="ts">
@@ -1734,7 +1779,7 @@
     :data-density="density"
     :data-wrap="wrapLines || null"
     :style="viewportHeightVar"
-    class="@container/table data-[density=compact]:[&_[role=cell]]:min-h-9 data-[density=compact]:[&_[role=cell]]:py-(--spacing-2xs) data-[wrap]:[&_[role=cell]]:whitespace-normal data-[wrap]:[&_[role=cell]_.truncate]:whitespace-normal data-[wrap]:[&_[role=cell]_.truncate]:break-words flex w-full flex-col overflow-hidden rounded-(--shape-control) bg-(--bg-surface) text-(--text-default) text-body-sm data-[bordered]:border-(length:--border-width-default) data-[bordered]:border-solid data-[bordered]:border-(--border-default)"
+    :class="ROOT_CLASS"
   >
     <div
       v-if="$slots['title'] || $slots['toolbar']"
@@ -1998,7 +2043,7 @@
                       striped && (windowStart + index) % 2 === 1
                         ? '[--table-row-bg:var(--bg-surface-raised)]'
                         : undefined,
-                      'relative transition-[opacity] duration-fast-02 ease-productive-entrance motion-reduce:transition-none after:pointer-events-none after:absolute after:inset-0 after:z-20 data-[dragging]:opacity-60 data-[dragging]:after:outline-dashed data-[dragging]:after:outline-2 data-[dragging]:after:-outline-offset-2 data-[dragging]:after:outline-(--accent) data-[drop=before]:after:shadow-[inset_0_2px_0_var(--accent)] data-[drop=after]:after:shadow-[inset_0_-2px_0_var(--accent)] data-[live-boundary]:shadow-[inset_0_2px_0_var(--success)] outline-none focus-visible:after:outline-2 focus-visible:after:-outline-offset-2 focus-visible:after:outline-solid focus-visible:after:outline-(--ring-color)'
+                      DATA_ROW_CLASS
                     ]"
                     @click="onRowClick($event, row)"
                     @keydown="onTreeKeydown($event, row)"
@@ -2075,7 +2120,7 @@
                           v-if="row.getCanExpand()"
                           aria-hidden="true"
                           :data-testid="`${testId}__expand-toggle`"
-                          class="flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-(--shape-button) border-(length:--border-width-default) border-solid border-(--border-default) bg-(--bg-surface) text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-canvas) motion-reduce:transition-none"
+                          :class="EXPAND_TOGGLE_CLASS"
                           @click.stop="toggleTreeRow(row)"
                         >
                           <i
@@ -2195,13 +2240,13 @@
         aria-hidden="true"
         :data-testid="`${testId}__fade-start`"
         :style="{ width: `${overflowStart}px` }"
-        class="pointer-events-none absolute inset-y-0 start-0 z-5 hidden bg-gradient-to-l from-transparent to-(--bg-surface) group-data-[overflow-start]/scroll:block rtl:bg-gradient-to-r forced-colors:forced-color-adjust-none forced-colors:to-[Canvas]"
+        :class="FADE_START_CLASS"
       />
       <span
         aria-hidden="true"
         :data-testid="`${testId}__fade-end`"
         :style="{ width: `${overflowEnd}px` }"
-        class="pointer-events-none absolute inset-y-0 end-0 z-5 hidden bg-gradient-to-r from-transparent to-(--bg-surface) group-data-[overflow-end]/scroll:block rtl:bg-gradient-to-l forced-colors:forced-color-adjust-none forced-colors:to-[Canvas]"
+        :class="FADE_END_CLASS"
       />
     </div>
     <template v-if="reorderActive">

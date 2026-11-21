@@ -278,6 +278,10 @@
   })
 
   defineExpose({ scrollToBottom })
+
+  const VIEWPORT_CLASS =
+    'min-h-0 flex-1 overflow-y-auto overscroll-contain rounded-(--shape-control) [overflow-anchor:none] ' +
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset'
 </script>
 
 <template>
@@ -297,7 +301,7 @@
       :aria-label="ariaLabel || t('conversation.label')"
       :aria-busy="loadingMore || undefined"
       :data-testid="`${testId}__viewport`"
-      class="min-h-0 flex-1 overflow-y-auto overscroll-contain rounded-(--shape-control) [overflow-anchor:none] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset"
+      :class="VIEWPORT_CLASS"
       @scroll.passive="onScroll"
       @wheel.passive="markIntent"
       @touchmove.passive="markIntent"

@@ -125,6 +125,18 @@
   }
 
   onScopeDispose(() => stopDrag?.())
+
+  const ROOT_CLASS =
+    'relative z-10 shrink-0 touch-none bg-(--border-default) outline-none ' +
+    'data-[orientation=horizontal]:pointer-coarse:before:-inset-x-4.5 data-[orientation=vertical]:pointer-coarse:before:-inset-y-4.5 ' +
+    "transition-colors duration-fast-02 ease-productive-entrance before:absolute before:content-[''] hover:bg-(--border-strong) focus-visible:bg-(--accent) focus-visible:ring-2 " +
+    'focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) ' +
+    'data-[orientation=horizontal]:w-(--spacing-2xs) data-[orientation=horizontal]:cursor-col-resize data-[orientation=horizontal]:before:inset-y-0 ' +
+    'data-[orientation=horizontal]:before:-inset-x-2 data-[orientation=vertical]:h-(--spacing-2xs) data-[orientation=vertical]:cursor-row-resize ' +
+    'data-[orientation=vertical]:before:inset-x-0 data-[orientation=vertical]:before:-inset-y-2 ' +
+    'data-[resizing]:bg-(--accent) ' +
+    'data-[disabled]:pointer-events-none data-[disabled]:cursor-default data-[disabled]:opacity-40 ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -143,7 +155,7 @@
     :data-orientation="orientation"
     :data-resizing="resizing || null"
     :data-disabled="disabled || null"
-    class="relative z-10 shrink-0 touch-none bg-(--border-default) outline-none data-[orientation=horizontal]:pointer-coarse:before:-inset-x-4.5 data-[orientation=vertical]:pointer-coarse:before:-inset-y-4.5 transition-colors duration-fast-02 ease-productive-entrance before:absolute before:content-[''] hover:bg-(--border-strong) focus-visible:bg-(--accent) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) data-[orientation=horizontal]:w-(--spacing-2xs) data-[orientation=horizontal]:cursor-col-resize data-[orientation=horizontal]:before:inset-y-0 data-[orientation=horizontal]:before:-inset-x-2 data-[orientation=vertical]:h-(--spacing-2xs) data-[orientation=vertical]:cursor-row-resize data-[orientation=vertical]:before:inset-x-0 data-[orientation=vertical]:before:-inset-y-2 data-[resizing]:bg-(--accent) data-[disabled]:pointer-events-none data-[disabled]:cursor-default data-[disabled]:opacity-40 motion-reduce:transition-none"
+    :class="ROOT_CLASS"
     @pointerdown="startResize"
     @keydown.left.prevent="orientation === 'horizontal' && nudge(dir === 'rtl' ? 1 : -1)"
     @keydown.right.prevent="orientation === 'horizontal' && nudge(dir === 'rtl' ? -1 : 1)"

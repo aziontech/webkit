@@ -137,6 +137,14 @@
       '--console-showcase-section-fade-start': `${fadeEnd - 22}%`
     }
   })
+
+  const SCENE_CLASS =
+    'relative z-10 w-full ' +
+    'data-[variant=console]:aspect-square data-[variant=diagram]:flex data-[variant=diagram]:min-h-(--size-96) data-[variant=diagram]:items-center data-[variant=diagram]:justify-center ' +
+    'data-[variant=diagram]:*:min-w-[min(100%,var(--container-3xl))] ' +
+    'md:data-[variant=console]:-mb-(--console-showcase-section-crop) md:data-[variant=console]:aspect-[1.9/1] ' +
+    'md:data-[variant=console]:[--console-mockup-fade-end:var(--console-showcase-section-fade-end)] ' +
+    'md:data-[variant=console]:[--console-mockup-fade-start:var(--console-showcase-section-fade-start)]'
 </script>
 
 <template>
@@ -211,7 +219,7 @@
           />
           <div
             :data-variant="variant"
-            class="relative z-10 w-full data-[variant=console]:aspect-square data-[variant=diagram]:flex data-[variant=diagram]:min-h-(--size-96) data-[variant=diagram]:items-center data-[variant=diagram]:justify-center data-[variant=diagram]:*:min-w-[min(100%,var(--container-3xl))] md:data-[variant=console]:-mb-(--console-showcase-section-crop) md:data-[variant=console]:aspect-[1.9/1] md:data-[variant=console]:[--console-mockup-fade-end:var(--console-showcase-section-fade-end)] md:data-[variant=console]:[--console-mockup-fade-start:var(--console-showcase-section-fade-start)]"
+            :class="SCENE_CLASS"
             :style="cropStyle"
           >
             <slot

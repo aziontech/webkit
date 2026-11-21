@@ -142,6 +142,20 @@
     if (!canInteract.value) return
     model.value = stepBy(-props.step)
   }
+
+  const INPUT_CLASS =
+    'relative z-(--z-control) w-full min-w-0 border-0 bg-transparent outline-none px-(--spacing-md) text-label-sm ' +
+    'pointer-coarse:text-body-md text-(--text-default) placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled) read-only:cursor-default ' +
+    '[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'
+
+  const INCREMENT_CLASS =
+    'relative flex flex-1 items-center justify-center border-b border-(--border-input) ' +
+    'pointer-coarse:border-b-0 pointer-coarse:border-s text-(--text-default) transition-colors duration-150 ease-out ' +
+    'motion-reduce:transition-none hover:bg-(--bg-hover) disabled:cursor-not-allowed disabled:text-(--text-disabled)'
+
+  const DECREMENT_CLASS =
+    'relative flex flex-1 items-center justify-center text-(--text-default) transition-colors duration-150 ease-out ' +
+    'motion-reduce:transition-none hover:bg-(--bg-hover) disabled:cursor-not-allowed disabled:text-(--text-disabled)'
 </script>
 
 <template>
@@ -159,7 +173,8 @@
       'focus-within:outline-none focus-within:ring-2 focus-within:ring-(--ring-color) focus-within:ring-offset-2 focus-within:ring-offset-(--bg-canvas)',
       'data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10',
       'data-[invalid]:border-(--danger-border)',
-      'data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:cursor-not-allowed data-[disabled]:hover:border-(--border-input) data-[disabled]:focus-within:ring-0 data-[disabled]:focus-within:ring-offset-0',
+      'data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:cursor-not-allowed',
+      'data-[disabled]:hover:border-(--border-input) data-[disabled]:focus-within:ring-0 data-[disabled]:focus-within:ring-offset-0',
       attrs['class']
     ]"
   >
@@ -187,7 +202,7 @@
       :data-testid="testId"
       dir="auto"
       v-bind="{ ...PASSWORD_MANAGER_IGNORE, ...passthroughAttrs }"
-      class="relative z-(--z-control) w-full min-w-0 border-0 bg-transparent outline-none px-(--spacing-md) text-label-sm pointer-coarse:text-body-md text-(--text-default) placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled) read-only:cursor-default [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+      :class="INPUT_CLASS"
       @input="onInput"
       @change="onChange"
     />
@@ -216,7 +231,7 @@
         tabindex="-1"
         :aria-label="t('numberInput.increment')"
         :disabled="isDisabled || readonly"
-        class="relative flex flex-1 items-center justify-center border-b border-(--border-input) pointer-coarse:border-b-0 pointer-coarse:border-s text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
+        :class="INCREMENT_CLASS"
         @click="onIncrement"
       >
         <span
@@ -234,7 +249,7 @@
         tabindex="-1"
         :aria-label="t('numberInput.decrement')"
         :disabled="isDisabled || readonly"
-        class="relative flex flex-1 items-center justify-center text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
+        :class="DECREMENT_CLASS"
         @click="onDecrement"
       >
         <span

@@ -200,7 +200,10 @@ export function runCheck(projectDir, webkit, { lint = true } = {}) {
     findings.push({
       source: 'stylelint',
       severity: 'warn',
-      message: `Stylelint did not run (${styled.reason}): only the built-in CSS scan (the ${PACKAGE_NAME}/stylelint-config rules) covered the styles. Run \`npx ${PACKAGE_NAME} init\` to wire it; the pre-commit hook runs it.`
+      message:
+        `Stylelint did not run (${styled.reason}): only the built-in CSS scan (the ` +
+        `${PACKAGE_NAME}/stylelint-config rules) covered the styles. Run \`npx ${PACKAGE_NAME} ` +
+        `init\` to wire it; the pre-commit hook runs it.`
     })
   }
 

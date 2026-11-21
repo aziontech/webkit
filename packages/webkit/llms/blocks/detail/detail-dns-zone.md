@@ -484,6 +484,11 @@ Each variant is the same screen in another state: `get_block("detail/detail-dns-
     emit('row-action', event, { value, record })
 
   const tableEl = ref<TableExposed<DnsZoneDetailRecord> | null>(null)
+
+  const DNSSEC_DESCRIPTION =
+    'Enable DNSSEC to secure your DNS zone against cache poisoning and spoofing ' +
+    'attacks. Configure the key tag and digest values in your domain provider to ' +
+    'complete the setup.'
 </script>
 
 <template>
@@ -629,7 +634,7 @@ Each variant is the same screen in another state: `get_block("detail/detail-dns-
                     <ItemList>
                       <SettingsRow
                         title="Enable DNSSEC"
-                        description="Enable DNSSEC to secure your DNS zone against cache poisoning and spoofing attacks. Configure the key tag and digest values in your domain provider to complete the setup."
+                        :description="DNSSEC_DESCRIPTION"
                         variant="compact"
                       >
                         <Switch

@@ -38,7 +38,11 @@
     steps?: ProcessScrollSectionStep[]
     /** Accessible name of the scrollable card row. */
     ariaLabel?: string
-    /** From the large breakpoint, pins the band under the site header while the page scrolls and slides the card row sideways until its last card is in view; below it, or under reduced motion, the row scrolls sideways on its own. */
+    /**
+     * From the large breakpoint, pins the band under the site header while the page scrolls and
+     * slides the card row sideways until its last card is in view; below it, or under reduced
+     * motion, the row scrolls sideways on its own.
+     */
     pinned?: boolean
     /** Height of the sticky site header a pinned band sticks under; defaults to the SiteHeaderSection bar's token, any CSS length. */
     headerOffset?: string
@@ -83,6 +87,22 @@
   }
 
   const stepNumber = (index: number) => String(index + 1).padStart(2, '0')
+
+  const BAND_CLASS =
+    'flex flex-col lg:motion-safe:group-data-[pinned]/process:sticky lg:motion-safe:group-data-[pinned]/process:top-(--process-scroll-section-offset) ' +
+    'lg:motion-safe:group-data-[pinned]/process:h-[calc(100dvh-var(--process-scroll-section-offset))]'
+
+  const VIEWPORT_CLASS =
+    'h-full snap-x snap-mandatory overflow-x-auto scrollbar-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) ' +
+    'lg:motion-safe:group-data-[pinned]/process:snap-none lg:motion-safe:group-data-[pinned]/process:overflow-hidden [&::-webkit-scrollbar]:hidden'
+
+  const TRACK_CLASS =
+    'm-0 grid h-full min-h-56 w-max list-none auto-cols-[min(22rem,80vw)] grid-flow-col grid-rows-[1fr_auto_auto] p-0 ' +
+    'lg:min-h-96 lg:w-full lg:auto-cols-fr lg:group-data-[pinned]/process:w-max lg:group-data-[pinned]/process:auto-cols-[26rem]'
+
+  const STEP_CLASS =
+    'relative row-span-3 grid min-w-0 snap-start grid-rows-subgrid gap-y-(--spacing-sm) overflow-hidden border-(--border-default) bg-(--bg-surface) p-(--spacing-xl) ' +
+    'not-last:border-e lg:p-(--spacing-lg)'
 </script>
 
 <template>
@@ -98,7 +118,7 @@
   >
     <div
       ref="bandEl"
-      class="flex flex-col lg:motion-safe:group-data-[pinned]/process:sticky lg:motion-safe:group-data-[pinned]/process:top-(--process-scroll-section-offset) lg:motion-safe:group-data-[pinned]/process:h-[calc(100dvh-var(--process-scroll-section-offset))]"
+      :class="BAND_CLASS"
     >
       <Module
         :divided="false"
@@ -126,19 +146,19 @@
             role="region"
             :aria-label="rowName"
             tabindex="0"
-            class="h-full snap-x snap-mandatory overflow-x-auto scrollbar-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) lg:motion-safe:group-data-[pinned]/process:snap-none lg:motion-safe:group-data-[pinned]/process:overflow-hidden [&::-webkit-scrollbar]:hidden"
+            :class="VIEWPORT_CLASS"
           >
             <ol
               ref="trackEl"
               :style="{ translate: shift }"
-              class="m-0 grid h-full min-h-56 w-max list-none auto-cols-[min(22rem,80vw)] grid-flow-col grid-rows-[1fr_auto_auto] p-0 lg:min-h-96 lg:w-full lg:auto-cols-fr lg:group-data-[pinned]/process:w-max lg:group-data-[pinned]/process:auto-cols-[26rem]"
+              :class="TRACK_CLASS"
             >
               <li
                 v-for="(step, index) in steps"
                 :key="step.title"
                 data-theme="dark"
                 :style="TEXTURE"
-                class="relative row-span-3 grid min-w-0 snap-start grid-rows-subgrid gap-y-(--spacing-sm) overflow-hidden border-(--border-default) bg-(--bg-surface) p-(--spacing-xl) not-last:border-e lg:p-(--spacing-lg)"
+                :class="STEP_CLASS"
               >
                 <Texture
                   variant="pixelate"

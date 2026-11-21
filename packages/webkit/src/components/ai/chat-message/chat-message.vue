@@ -103,6 +103,15 @@
     from: computed(() => props.from),
     status: computed(() => props.status)
   })
+
+  const COLUMN_CLASS =
+    'flex min-w-0 flex-col gap-(--spacing-xs) ' +
+    'data-[from=assistant]:flex-1 data-[from=user]:max-w-[85%] data-[from=user]:data-[alignment=split]:items-end data-[from=system]:max-w-full data-[from=system]:items-center'
+
+  const CONTENT_CLASS =
+    'flex min-w-0 flex-col gap-(--spacing-sm) text-body-md text-(--text-default) break-words ' +
+    'data-[from=user]:rounded-(--shape-card) data-[from=user]:bg-(--bg-surface-raised) data-[from=user]:px-(--spacing-md) data-[from=user]:py-(--spacing-sm) ' +
+    'data-[from=system]:text-body-sm data-[from=system]:text-(--text-muted) data-[from=system]:text-center'
 </script>
 
 <template>
@@ -136,7 +145,7 @@
     <div
       :data-from="from"
       :data-alignment="alignment"
-      class="flex min-w-0 flex-col gap-(--spacing-xs) data-[from=assistant]:flex-1 data-[from=user]:max-w-[85%] data-[from=user]:data-[alignment=split]:items-end data-[from=system]:max-w-full data-[from=system]:items-center"
+      :class="COLUMN_CLASS"
     >
       <p
         v-if="!grouped && from !== 'system'"
@@ -162,7 +171,7 @@
         ref="bodyEl"
         :data-from="from"
         :data-testid="`${testId}__content`"
-        class="flex min-w-0 flex-col gap-(--spacing-sm) text-body-md text-(--text-default) break-words data-[from=user]:rounded-(--shape-card) data-[from=user]:bg-(--bg-surface-raised) data-[from=user]:px-(--spacing-md) data-[from=user]:py-(--spacing-sm) data-[from=system]:text-body-sm data-[from=system]:text-(--text-muted) data-[from=system]:text-center"
+        :class="CONTENT_CLASS"
       >
         <slot />
       </div>

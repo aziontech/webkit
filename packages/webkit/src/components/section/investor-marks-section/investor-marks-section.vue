@@ -55,6 +55,22 @@
   const hasItems = computed(() => props.items.length > 0)
 
   const hasHeading = computed(() => props.title.length > 0)
+
+  const INVESTOR_LINK_CLASS =
+    'group/investor relative isolate flex h-48 w-full items-center justify-center p-(--spacing-xl) ' +
+    'before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:bg-(--bg-hover) before:opacity-0 before:transition-opacity before:duration-moderate-01 ' +
+    'before:ease-productive-entrance hover:before:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset ' +
+    'focus-visible:before:opacity-100 motion-reduce:before:transition-none'
+
+  const INVESTOR_MARK_CLASS =
+    'flex items-center justify-center transition-[translate] duration-moderate-01 ease-productive-entrance ' +
+    'group-hover/investor:-translate-y-(--spacing-sm) group-focus-visible/investor:-translate-y-(--spacing-sm) motion-reduce:transition-none'
+
+  const INVESTOR_HINT_CLASS =
+    'pointer-events-none absolute inset-x-0 top-1/2 mt-(--spacing-md) flex translate-y-1 items-center justify-center gap-(--spacing-2xs) whitespace-nowrap text-overline-md uppercase ' +
+    'text-(--text-default) opacity-0 transition-[opacity,translate] duration-moderate-01 ease-productive-entrance ' +
+    'group-hover/investor:translate-y-0 group-hover/investor:opacity-100 group-focus-visible/investor:translate-y-0 group-focus-visible/investor:opacity-100 ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -100,11 +116,9 @@
               target="_blank"
               rel="noopener noreferrer"
               :aria-label="`${linkLabel}, ${item.name} (opens in a new tab)`"
-              class="group/investor relative isolate flex h-48 w-full items-center justify-center p-(--spacing-xl) before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:bg-(--bg-hover) before:opacity-0 before:transition-opacity before:duration-moderate-01 before:ease-productive-entrance hover:before:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset focus-visible:before:opacity-100 motion-reduce:before:transition-none"
+              :class="INVESTOR_LINK_CLASS"
             >
-              <span
-                class="flex items-center justify-center transition-[translate] duration-moderate-01 ease-productive-entrance group-hover/investor:-translate-y-(--spacing-sm) group-focus-visible/investor:-translate-y-(--spacing-sm) motion-reduce:transition-none"
-              >
+              <span :class="INVESTOR_MARK_CLASS">
                 <template v-if="item.logoLight">
                   <img
                     :src="item.logo"
@@ -129,7 +143,7 @@
               </span>
               <span
                 aria-hidden="true"
-                class="pointer-events-none absolute inset-x-0 top-1/2 mt-(--spacing-md) flex translate-y-1 items-center justify-center gap-(--spacing-2xs) whitespace-nowrap text-overline-md uppercase text-(--text-default) opacity-0 transition-[opacity,translate] duration-moderate-01 ease-productive-entrance group-hover/investor:translate-y-0 group-hover/investor:opacity-100 group-focus-visible/investor:translate-y-0 group-focus-visible/investor:opacity-100 motion-reduce:transition-none"
+                :class="INVESTOR_HINT_CLASS"
               >
                 {{ linkLabel }}
                 <i class="az az-arrow-up-right leading-none" />

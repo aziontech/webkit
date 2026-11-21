@@ -44,7 +44,10 @@ export default {
     type: 'problem',
     docs: {
       description:
-        'Flag a name WebKit 6.0 renamed or removed: an import of a retired component subpath, a renamed prop or value on a WebKit tag, a retired icon class. Reads the same maps `webkit migrate` applies (src/cli/migrations/v6*.json), so running `npx @aziontech/webkit migrate` fixes what this rule reports.'
+        'Flag a name WebKit 6.0 renamed or removed: an import of a retired component subpath, a ' +
+        'renamed prop or value on a WebKit tag, a retired icon class. Reads the same maps ' +
+        '`webkit migrate` applies (src/cli/migrations/v6*.json), so running `npx ' +
+        '@aziontech/webkit migrate` fixes what this rule reports.'
     },
     schema: [],
     messages: {

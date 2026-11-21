@@ -95,6 +95,11 @@
   watch(wanted, advance, { immediate: true })
 
   onScopeDispose(halt)
+
+  const FIELD_RING_CLASS =
+    'flex rounded-(--shape-control) ring-(--ring-color) ring-offset-(--bg-surface) transition-shadow duration-fast-02 ease-productive-entrance ' +
+    'data-focused:ring-2 data-focused:ring-offset-2 ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -153,7 +158,7 @@
                   >
                   <span
                     :data-focused="frame.typing || null"
-                    class="flex rounded-(--shape-control) ring-(--ring-color) ring-offset-(--bg-surface) transition-shadow duration-fast-02 ease-productive-entrance data-focused:ring-2 data-focused:ring-offset-2 motion-reduce:transition-none"
+                    :class="FIELD_RING_CLASS"
                   >
                     <Textarea
                       id="accelerator-cookies-fields"

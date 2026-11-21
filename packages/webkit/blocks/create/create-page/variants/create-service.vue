@@ -168,6 +168,14 @@
       submitting.value = false
     }
   }
+
+  const ACCOUNT_BUTTON_CLASS =
+    'rounded-full transition-opacity duration-fast-02 ease-productive-entrance ' +
+    'hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) ' +
+    'motion-reduce:transition-none'
+
+  const MAXIMUM_TTL_DESCRIPTION =
+    'In seconds. Enable dynamic acceleration in the Main Settings tab to use values lower than 60 seconds. A secondary cache requires a cache TTL equal to or greater than 3 seconds.'
 </script>
 
 <template>
@@ -197,7 +205,7 @@
         <button
           type="button"
           aria-label="Account settings"
-          class="rounded-full transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
+          :class="ACCOUNT_BUTTON_CLASS"
         >
           <Avatar
             label="name@example.com"
@@ -535,7 +543,7 @@
                     <SettingsRow
                       stackable
                       title="Maximum TTL"
-                      description="In seconds. Enable dynamic acceleration in the Main Settings tab to use values lower than 60 seconds. A secondary cache requires a cache TTL equal to or greater than 3 seconds."
+                      :description="MAXIMUM_TTL_DESCRIPTION"
                     >
                       <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                         <NumberInput

@@ -732,6 +732,18 @@
       actions: [{ label: 'Edit', onClick: () => openRule(created) }]
     })
   }
+
+  const BEHAVIOR_ROW_CLASS =
+    'relative grid grid-cols-1 items-start gap-(--spacing-xs) rounded-(--shape-card) transition-[opacity,scale,outline-color] ' +
+    'motion-reduce:transition-none ' +
+    'data-dragging:scale-[0.98] data-dragging:opacity-70 data-dragging:outline-2 data-dragging:outline-(--accent) data-dragging:outline-dashed ' +
+    'data-drop:before:pointer-events-none data-drop:before:absolute data-drop:before:inset-x-0 data-drop:before:-top-(--spacing-2xs) data-drop:before:border-t-2 ' +
+    "data-drop:before:border-(--accent) data-drop:before:content-[''] " +
+    'sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]'
+
+  const DRAG_HANDLE_CLASS =
+    'inline-flex size-10 shrink-0 cursor-grab items-center justify-center rounded-(--shape-button) text-(--text-muted) outline-none transition-colors ' +
+    'hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:ring-2 focus-visible:ring-(--ring-color) active:cursor-grabbing motion-reduce:transition-none'
 </script>
 
 <template>
@@ -942,7 +954,7 @@
                           data-drag-row
                           :data-dragging="isDragging('behavior', bIdx) || null"
                           :data-drop="isDropTarget('behavior', bIdx) || null"
-                          class="relative grid grid-cols-1 items-start gap-(--spacing-xs) rounded-(--shape-card) transition-[opacity,scale,outline-color] motion-reduce:transition-none data-dragging:scale-[0.98] data-dragging:opacity-70 data-dragging:outline-2 data-dragging:outline-(--accent) data-dragging:outline-dashed data-drop:before:pointer-events-none data-drop:before:absolute data-drop:before:inset-x-0 data-drop:before:-top-(--spacing-2xs) data-drop:before:border-t-2 data-drop:before:border-(--accent) data-drop:before:content-[''] sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]"
+                          :class="BEHAVIOR_ROW_CLASS"
                           @dragenter.prevent="onDragenter('behavior', bIdx)"
                           @dragover.prevent
                           @drop="dropOnBehavior(bIdx)"
@@ -1086,7 +1098,7 @@
                               tabindex="0"
                               aria-label="Drag to reorder behavior, or use arrow keys"
                               draggable="true"
-                              class="inline-flex size-10 shrink-0 cursor-grab items-center justify-center rounded-(--shape-button) text-(--text-muted) outline-none transition-colors hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:ring-2 focus-visible:ring-(--ring-color) active:cursor-grabbing motion-reduce:transition-none"
+                              :class="DRAG_HANDLE_CLASS"
                               @dragstart="onDragstart('behavior', bIdx, $event)"
                               @dragend="onDragend"
                               @keydown.up.prevent="moveBehavior(bIdx, -1)"

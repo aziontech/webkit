@@ -234,6 +234,22 @@
     clearTimeout(timer)
     toast.dismiss(RUN_TOAST)
   })
+
+  const DROP_ZONE_CLASS =
+    'pointer-events-none absolute inset-[var(--drop-zone-inset,0)] z-40 overflow-hidden rounded-(--shape-card) border-2 border-dashed border-(--border-selected) bg-(--bg-canvas) ' +
+    '[--drop-zone-inset:var(--layout-boundary-inline)]'
+
+  const REPOSITORY_LINK_CLASS =
+    'truncate rounded-(--shape-button) text-body-sm text-(--text-default) underline-offset-2 ' +
+    'hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)'
+
+  const DETAIL_LINK_CLASS =
+    'group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline ' +
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)'
+
+  const FOOTER_BAND_CLASS =
+    '@container/band flex min-h-(--size-12) flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-xs) border-t border-(--border-muted) bg-(--bg-canvas) px-(--spacing-md) ' +
+    'py-(--spacing-xs)'
 </script>
 
 <template>
@@ -274,7 +290,7 @@
         <div
           v-if="dragging"
           aria-hidden="true"
-          class="pointer-events-none absolute inset-[var(--drop-zone-inset,0)] z-40 overflow-hidden rounded-(--shape-card) border-2 border-dashed border-(--border-selected) bg-(--bg-canvas) [--drop-zone-inset:var(--layout-boundary-inline)]"
+          :class="DROP_ZONE_CLASS"
         >
           <div
             class="sticky top-0 flex h-dvh max-h-full flex-col items-center justify-center gap-(--spacing-md) p-(--spacing-lg) text-center"
@@ -340,7 +356,7 @@
                             :href="`https://github.com/${APP.repository}`"
                             target="_blank"
                             rel="noopener noreferrer"
-                            class="truncate rounded-(--shape-button) text-body-sm text-(--text-default) underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+                            :class="REPOSITORY_LINK_CLASS"
                             >{{ APP.repository
                             }}<span class="sr-only">{{ ' (opens in a new tab)' }}</span></a
                           >
@@ -536,7 +552,7 @@
                         :href="`https://${APP.host}`"
                         target="_blank"
                         rel="noopener noreferrer"
-                        class="group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
+                        :class="DETAIL_LINK_CLASS"
                       >
                         <span class="truncate underline-offset-2 group-hover/link:underline">{{
                           APP.host
@@ -687,9 +703,7 @@
                 </div>
               </div>
 
-              <div
-                class="@container/band flex min-h-(--size-12) flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-xs) border-t border-(--border-muted) bg-(--bg-canvas) px-(--spacing-md) py-(--spacing-xs)"
-              >
+              <div :class="FOOTER_BAND_CLASS">
                 <p
                   class="min-w-0 flex-1 basis-(--container-2xs) text-pretty text-body-sm text-(--text-muted)"
                 >

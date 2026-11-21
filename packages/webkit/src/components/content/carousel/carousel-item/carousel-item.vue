@@ -29,6 +29,12 @@
   const attrs = useAttrs()
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'carousel-item')
+
+  const ROOT_CLASS =
+    'grid w-[85vw] shrink-0 snap-start border border-(--border-default) bg-(--bg-surface) p-(--spacing-xl) ' +
+    'data-[variant=cards]:rounded-(--shape-card) data-[variant=strip]:not-last:-me-px ' +
+    'data-[size=large]:max-w-(--container-md) data-[size=medium]:max-w-(--container-sm) data-[size=small]:max-w-(--container-2xs) ' +
+    'sm:data-[size=large]:w-(--container-md) sm:data-[size=medium]:w-(--container-sm) sm:data-[size=small]:w-(--container-2xs)'
 </script>
 
 <template>
@@ -37,7 +43,7 @@
     :data-testid="testId"
     :data-size="size"
     :data-variant="context.variant.value"
-    class="grid w-[85vw] shrink-0 snap-start border border-(--border-default) bg-(--bg-surface) p-(--spacing-xl) data-[variant=cards]:rounded-(--shape-card) data-[variant=strip]:not-last:-me-px data-[size=large]:max-w-(--container-md) data-[size=medium]:max-w-(--container-sm) data-[size=small]:max-w-(--container-2xs) sm:data-[size=large]:w-(--container-md) sm:data-[size=medium]:w-(--container-sm) sm:data-[size=small]:w-(--container-2xs)"
+    :class="ROOT_CLASS"
   >
     <slot />
   </li>

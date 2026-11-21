@@ -290,6 +290,18 @@
   const splitTitleId = `${uid}-split-title`
   const splitId = `${uid}-split`
   const contentId = `${uid}-content`
+
+  const SPLIT_SEPARATOR_ROW_CLASS =
+    'absolute inset-x-0 top-0 z-10 h-(--spacing-2xs) cursor-row-resize bg-transparent outline-none transition-colors duration-fast-02 ease-productive-entrance ' +
+    "before:absolute before:inset-x-0 before:-inset-y-2 before:content-[''] hover:bg-(--border-strong) focus-visible:bg-(--accent) focus-visible:ring-2 focus-visible:ring-(--ring-color) " +
+    'data-[resizing]:bg-(--accent) ' +
+    'motion-reduce:transition-none'
+
+  const SPLIT_SEPARATOR_COLUMN_CLASS =
+    'absolute inset-y-0 start-0 z-10 w-(--spacing-2xs) cursor-col-resize bg-transparent outline-none transition-colors duration-fast-02 ease-productive-entrance ' +
+    "before:absolute before:inset-y-0 before:-inset-x-2 before:content-[''] hover:bg-(--border-strong) focus-visible:bg-(--accent) focus-visible:ring-2 focus-visible:ring-(--ring-color) " +
+    'data-[resizing]:bg-(--accent) ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -381,7 +393,7 @@
               :aria-valuemax="maxSize"
               :data-testid="`${testId}__split-separator`"
               :data-resizing="resizing || null"
-              class="absolute inset-x-0 top-0 z-10 h-(--spacing-2xs) cursor-row-resize bg-transparent outline-none transition-colors duration-fast-02 ease-productive-entrance before:absolute before:inset-x-0 before:-inset-y-2 before:content-[''] hover:bg-(--border-strong) focus-visible:bg-(--accent) focus-visible:ring-2 focus-visible:ring-(--ring-color) data-[resizing]:bg-(--accent) motion-reduce:transition-none"
+              :class="SPLIT_SEPARATOR_ROW_CLASS"
               @pointerdown="startResize"
               @keydown="nudge"
             />
@@ -443,7 +455,7 @@
             :aria-valuemax="maxSize"
             :data-testid="`${testId}__split-separator`"
             :data-resizing="resizing || null"
-            class="absolute inset-y-0 start-0 z-10 w-(--spacing-2xs) cursor-col-resize bg-transparent outline-none transition-colors duration-fast-02 ease-productive-entrance before:absolute before:inset-y-0 before:-inset-x-2 before:content-[''] hover:bg-(--border-strong) focus-visible:bg-(--accent) focus-visible:ring-2 focus-visible:ring-(--ring-color) data-[resizing]:bg-(--accent) motion-reduce:transition-none"
+            :class="SPLIT_SEPARATOR_COLUMN_CLASS"
             @pointerdown="startResize"
             @keydown="nudge"
           />

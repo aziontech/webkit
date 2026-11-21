@@ -145,6 +145,17 @@
   onScopeDispose(() => {
     if (frame) globalThis.cancelAnimationFrame(frame)
   })
+
+  const ROW_CLASS =
+    'relative flex w-full min-w-0 items-center gap-(--spacing-md) rounded-(--shape-control) pe-(--spacing-xs) ' +
+    "data-[interactive]:before:absolute data-[interactive]:before:inset-x-0 data-[interactive]:before:-inset-y-1 data-[interactive]:before:content-[''] " +
+    'text-start text-(--text-default) no-underline transition-colors duration-fast-02 ease-productive-entrance ' +
+    'motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-surface) ' +
+    'data-[interactive]:cursor-pointer data-[interactive]:hover:bg-(--bg-hover)'
+
+  const BAR_CLASS =
+    'absolute inset-y-0 start-0 rounded-(--shape-control) bg-[color-mix(in_srgb,var(--bar-list-fill)_24%,transparent)] forced-color-adjust-none transition-[width] duration-slow-01 ' +
+    'ease-productive-entrance motion-reduce:transition-none'
 </script>
 
 <template>
@@ -226,7 +237,7 @@
           :type="row.tag === 'button' ? 'button' : undefined"
           :data-interactive="row.interactive || null"
           :data-testid="`${testId}__row`"
-          class="relative flex w-full min-w-0 items-center gap-(--spacing-md) rounded-(--shape-control) pe-(--spacing-xs) data-[interactive]:before:absolute data-[interactive]:before:inset-x-0 data-[interactive]:before:-inset-y-1 data-[interactive]:before:content-[''] text-start text-(--text-default) no-underline transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-surface) data-[interactive]:cursor-pointer data-[interactive]:hover:bg-(--bg-hover)"
+          :class="ROW_CLASS"
           @click="onRowClick($event, row.item, row.interactive)"
         >
           <span class="relative flex h-8 min-w-0 flex-1 items-center">
@@ -234,7 +245,7 @@
               aria-hidden="true"
               :data-testid="`${testId}__bar`"
               :style="{ width: row.width }"
-              class="absolute inset-y-0 start-0 rounded-(--shape-control) bg-[color-mix(in_srgb,var(--bar-list-fill)_24%,transparent)] forced-color-adjust-none transition-[width] duration-slow-01 ease-productive-entrance motion-reduce:transition-none"
+              :class="BAR_CLASS"
             />
             <span class="relative min-w-0 truncate px-(--spacing-xs) text-label-md">
               {{ row.item.name }}

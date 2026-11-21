@@ -98,6 +98,16 @@
   })
 
   onScopeDispose(() => arrival?.disconnect())
+
+  const BACKDROP_CLASS =
+    'relative w-full overflow-hidden px-(--spacing-xl) pt-(--spacing-16) md:pt-(--spacing-32) ' +
+    '[--texture-wave-gain:1.8] [--texture-wave-pace:5] [--texture-pool-a:50%_100%] [--texture-pool-b:50%_0%]'
+
+  const STAGE_CLASS =
+    'relative z-10 mx-auto -mb-(--spacing-xs) h-(--size-72) w-full max-w-(--container-4xl) translate-y-(--spacing-xl) scale-95 rounded-(--shape-control) opacity-0 shadow-(--shadow-2xl) ' +
+    'transition-[translate,scale,opacity] duration-slow-02 ease-expressive-entrance ' +
+    'data-entered:translate-y-0 data-entered:scale-100 data-entered:opacity-100 ' +
+    'md:h-(--size-96) motion-reduce:translate-y-0 motion-reduce:scale-100 motion-reduce:opacity-100 motion-reduce:transition-none'
 </script>
 
 <template>
@@ -151,9 +161,7 @@
         borders="y"
         marks="all"
       >
-        <div
-          class="relative w-full overflow-hidden px-(--spacing-xl) pt-(--spacing-16) md:pt-(--spacing-32) [--texture-wave-gain:1.8] [--texture-wave-pace:5] [--texture-pool-a:50%_100%] [--texture-pool-b:50%_0%]"
-        >
+        <div :class="BACKDROP_CLASS">
           <Texture
             variant="pixelate"
             size="small"
@@ -163,7 +171,7 @@
             v-if="script"
             ref="stageEl"
             :data-entered="entered || null"
-            class="relative z-10 mx-auto -mb-(--spacing-xs) h-(--size-72) w-full max-w-(--container-4xl) translate-y-(--spacing-xl) scale-95 rounded-(--shape-control) opacity-0 shadow-(--shadow-2xl) transition-[translate,scale,opacity] duration-slow-02 ease-expressive-entrance data-entered:translate-y-0 data-entered:scale-100 data-entered:opacity-100 md:h-(--size-96) motion-reduce:translate-y-0 motion-reduce:scale-100 motion-reduce:opacity-100 motion-reduce:transition-none"
+            :class="STAGE_CLASS"
           >
             <ConsoleMockup :name="widget" />
           </div>

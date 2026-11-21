@@ -108,6 +108,16 @@
   onScopeDispose(halt)
 
   const shown = (value: unknown) => String(value)
+
+  const NAME_FIELD_RING_CLASS =
+    'flex min-w-0 rounded-(--shape-control) ring-(--ring-color) ring-offset-(--bg-surface) transition-shadow duration-fast-02 ease-productive-entrance ' +
+    'data-focused:ring-2 data-focused:ring-offset-2 ' +
+    'motion-reduce:transition-none'
+
+  const ADD_COLUMN_RING_CLASS =
+    'flex rounded-(--shape-button) ring-(--ring-color) ring-offset-(--bg-surface) transition-shadow duration-fast-02 ease-productive-entrance ' +
+    'data-pressed:ring-2 data-pressed:ring-offset-2 ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -226,7 +236,7 @@
                       </span>
                       <span
                         :data-focused="frame.focused || null"
-                        class="flex min-w-0 rounded-(--shape-control) ring-(--ring-color) ring-offset-(--bg-surface) transition-shadow duration-fast-02 ease-productive-entrance data-focused:ring-2 data-focused:ring-offset-2 motion-reduce:transition-none"
+                        :class="NAME_FIELD_RING_CLASS"
                       >
                         <Input
                           :model-value="frame.name"
@@ -279,7 +289,7 @@
 
               <span
                 :data-pressed="pressed || null"
-                class="flex rounded-(--shape-button) ring-(--ring-color) ring-offset-(--bg-surface) transition-shadow duration-fast-02 ease-productive-entrance data-pressed:ring-2 data-pressed:ring-offset-2 motion-reduce:transition-none"
+                :class="ADD_COLUMN_RING_CLASS"
               >
                 <Button
                   label="Add column"

@@ -247,6 +247,10 @@
   })
 
   onScopeDispose(() => observer?.disconnect())
+
+  const PORT_CLASS =
+    'absolute top-1/2 size-2 -translate-y-1/2 rounded-(--radius-sm) border border-(--border-muted) bg-(--accent) ' +
+    'data-[side=start]:-start-px data-[side=start]:-translate-x-full data-[side=end]:-end-px data-[side=end]:translate-x-full'
 </script>
 
 <template>
@@ -304,7 +308,7 @@
               v-for="side in portsOf(arrangement, node.key)"
               :key="side"
               :data-side="side"
-              class="absolute top-1/2 size-2 -translate-y-1/2 rounded-(--radius-sm) border border-(--border-muted) bg-(--accent) data-[side=start]:-start-px data-[side=start]:-translate-x-full data-[side=end]:-end-px data-[side=end]:translate-x-full"
+              :class="PORT_CLASS"
               aria-hidden="true"
             />
             <div

@@ -10,7 +10,11 @@ const NOT_FIELD_INPUT_TYPES = new Set(['button', 'submit', 'reset', 'image', 'fi
 
 /** Options of `useFocusTrap`. */
 export interface UseFocusTrapOptions {
-  /** What takes focus when the trap turns on, after an element marked `data-autofocus`: the first tabbable element, or the first form field (falling back to the first tabbable element when there is none). */
+  /**
+   * What takes focus when the trap turns on, after an element marked `data-autofocus`: the first
+   * tabbable element, or the first form field (falling back to the first tabbable element when
+   * there is none).
+   */
   initialFocus?: 'first' | 'field'
 }
 

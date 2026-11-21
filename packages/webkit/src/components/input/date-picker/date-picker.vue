@@ -274,6 +274,46 @@
   })
 
   const portalLocale = usePortalLocale()
+
+  const CONTROL_CLASS =
+    'inline-flex w-(--container-3xs) max-w-full items-stretch rounded-(--shape-control) border border-(--border-input) bg-(--bg-surface) transition-colors duration-150 ease-out ' +
+    '[&:not(:focus-within):not([data-disabled])]:hover:border-(--border-strong) ' +
+    'data-[invalid]:border-(--danger-border) ' +
+    'data-[disabled]:cursor-not-allowed data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) ' +
+    'motion-reduce:transition-none'
+
+  const TRIGGER_CLASS =
+    'relative text-label-sm inline-flex min-w-0 flex-1 items-center gap-(--spacing-xs) px-(--spacing-sm) py-(--spacing-2xs) text-(--text-default) transition-colors duration-150 ease-out ' +
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed ' +
+    'disabled:text-(--text-disabled) ' +
+    'data-[size=small]:min-h-7 data-[size=medium]:min-h-8 data-[size=large]:min-h-10 ' +
+    'data-[empty]:text-(--text-muted) ' +
+    'motion-reduce:transition-none'
+
+  const CHEVRON_CLASS =
+    'az az-chevron-down shrink-0 text-[length:inherit] leading-none text-(--text-muted) transition-transform duration-150 ease-out ' +
+    'data-[state=open]:rotate-180 ' +
+    'motion-reduce:transition-none'
+
+  const CLEAR_TRIGGER_CLASS =
+    'relative inline-flex shrink-0 items-center justify-center px-(--spacing-xs) text-(--text-muted) transition-colors duration-150 ease-out ' +
+    'hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none'
+
+  const SPLIT_CLASS =
+    'relative inline-flex shrink-0 items-center justify-center border-s border-(--border-input) px-(--spacing-xs) text-(--text-muted) transition-colors duration-150 ease-out ' +
+    'hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none'
+
+  const POPOVER_CLASS =
+    'flex max-w-[min(calc(100vw-2*var(--spacing-sm)),44rem)] flex-col overflow-x-hidden overflow-y-auto overscroll-contain rounded-(--shape-card) border border-(--border-default) ' +
+    'bg-(--bg-surface-raised) shadow-(--shadow-sm) outline-none [transform-origin:var(--popup-origin,top_left)] ' +
+    'max-sm:inset-x-0! max-sm:top-auto! max-sm:bottom-0! max-sm:w-full! max-sm:max-w-none! max-sm:max-h-[85dvh]! max-sm:translate-none! max-sm:items-center max-sm:rounded-b-none ' +
+    'max-sm:border-x-0 max-sm:border-b-0 max-sm:pb-[env(safe-area-inset-bottom)] max-sm:[transform-origin:bottom_center]'
+
+  const FOOTER_CLASS =
+    'flex flex-col gap-(--spacing-sm) border-t border-(--border-default) p-(--spacing-sm) ' +
+    'data-[size=small]:max-w-[calc(7*var(--size-8)_+_2*var(--spacing-sm))] data-[size=medium]:max-w-[calc(7*var(--size-9)_+_2*var(--spacing-sm))] ' +
+    'data-[size=large]:max-w-[calc(7*var(--size-10)_+_2*var(--spacing-sm))] ' +
+    'data-[horizontal]:sm:min-w-(--container-3xs) data-[horizontal]:sm:max-w-none data-[horizontal]:sm:border-t-0 data-[horizontal]:sm:border-s'
 </script>
 
 <template>
@@ -301,7 +341,7 @@
           :data-state="isOpen ? 'open' : 'closed'"
           :data-disabled="isDisabled || null"
           :data-invalid="field.invalid.value || null"
-          class="inline-flex w-(--container-3xs) max-w-full items-stretch rounded-(--shape-control) border border-(--border-input) bg-(--bg-surface) transition-colors duration-150 ease-out [&:not(:focus-within):not([data-disabled])]:hover:border-(--border-strong) data-[invalid]:border-(--danger-border) data-[disabled]:cursor-not-allowed data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) motion-reduce:transition-none"
+          :class="CONTROL_CLASS"
         >
           <button
             type="button"
@@ -315,7 +355,7 @@
             :aria-invalid="field.invalid.value || undefined"
             aria-haspopup="dialog"
             :aria-expanded="isOpen"
-            class="relative text-label-sm inline-flex min-w-0 flex-1 items-center gap-(--spacing-xs) px-(--spacing-sm) py-(--spacing-2xs) text-(--text-default) transition-colors duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:text-(--text-disabled) data-[size=small]:min-h-7 data-[size=medium]:min-h-8 data-[size=large]:min-h-10 data-[empty]:text-(--text-muted) motion-reduce:transition-none"
+            :class="TRIGGER_CLASS"
             @click="toggleOpen"
           >
             <span
@@ -335,7 +375,7 @@
             <i
               v-if="!split && !(clearable && hasCommitted)"
               :data-state="isOpen ? 'open' : 'closed'"
-              class="az az-chevron-down shrink-0 text-[length:inherit] leading-none text-(--text-muted) transition-transform duration-150 ease-out data-[state=open]:rotate-180 motion-reduce:transition-none"
+              :class="CHEVRON_CLASS"
               aria-hidden="true"
             />
           </button>
@@ -346,7 +386,7 @@
             :disabled="isDisabled"
             :aria-label="t('datePicker.clear')"
             :data-testid="`${testId}__clear-trigger`"
-            class="relative inline-flex shrink-0 items-center justify-center px-(--spacing-xs) text-(--text-muted) transition-colors duration-150 ease-out hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+            :class="CLEAR_TRIGGER_CLASS"
             @click="clearCommitted"
           >
             <span
@@ -367,7 +407,7 @@
             :aria-label="t('datePicker.open')"
             :aria-expanded="isOpen"
             :data-testid="`${testId}__split`"
-            class="relative inline-flex shrink-0 items-center justify-center border-s border-(--border-input) px-(--spacing-xs) text-(--text-muted) transition-colors duration-150 ease-out hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+            :class="SPLIT_CLASS"
             @click="toggleOpen"
           >
             <span
@@ -408,7 +448,7 @@
           :data-side="resolvedSide"
           :data-align="resolvedAlign"
           :style="panelStyle"
-          class="flex max-w-[min(calc(100vw-2*var(--spacing-sm)),44rem)] flex-col overflow-x-hidden overflow-y-auto overscroll-contain rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-sm) outline-none [transform-origin:var(--popup-origin,top_left)] max-sm:inset-x-0! max-sm:top-auto! max-sm:bottom-0! max-sm:w-full! max-sm:max-w-none! max-sm:max-h-[85dvh]! max-sm:translate-none! max-sm:items-center max-sm:rounded-b-none max-sm:border-x-0 max-sm:border-b-0 max-sm:pb-[env(safe-area-inset-bottom)] max-sm:[transform-origin:bottom_center]"
+          :class="POPOVER_CLASS"
           @keydown="onPanelKeydown"
         >
           <div
@@ -422,7 +462,7 @@
             <div
               :data-size="size"
               :data-horizontal="isHorizontal || null"
-              class="flex flex-col gap-(--spacing-sm) border-t border-(--border-default) p-(--spacing-sm) data-[size=small]:max-w-[calc(7*var(--size-8)_+_2*var(--spacing-sm))] data-[size=medium]:max-w-[calc(7*var(--size-9)_+_2*var(--spacing-sm))] data-[size=large]:max-w-[calc(7*var(--size-10)_+_2*var(--spacing-sm))] data-[horizontal]:sm:min-w-(--container-3xs) data-[horizontal]:sm:max-w-none data-[horizontal]:sm:border-t-0 data-[horizontal]:sm:border-s"
+              :class="FOOTER_CLASS"
             >
               <DatePickerFields v-if="showFields" />
 

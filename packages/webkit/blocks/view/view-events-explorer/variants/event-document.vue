@@ -89,6 +89,10 @@
     }
     filters.value = { ...filters.value, [id]: without(filters.value[id], value) }
   }
+
+  const FIELD_ROW_CLASS =
+    'group grid min-w-0 grid-cols-[minmax(0,7rem)_minmax(0,1fr)] items-center gap-x-(--spacing-sm) rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) transition-colors ' +
+    'duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) motion-reduce:transition-none'
 </script>
 
 <template>
@@ -142,7 +146,7 @@
           <div
             v-for="row in shownRows(fields)"
             :key="row.id"
-            class="group grid min-w-0 grid-cols-[minmax(0,7rem)_minmax(0,1fr)] items-center gap-x-(--spacing-sm) rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) motion-reduce:transition-none"
+            :class="FIELD_ROW_CLASS"
           >
             <dt class="min-w-0 truncate text-label-sm text-(--text-muted)">
               {{ row.label }}

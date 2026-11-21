@@ -57,6 +57,19 @@
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'compliance-logos-section'
   )
+
+  const CERTIFICATION_BADGE_CLASS =
+    'inline-flex h-7 items-center gap-(--spacing-xs) whitespace-nowrap rounded-full border border-(--border-muted) bg-(--bg-surface-raised) pe-(--spacing-sm) ps-(--spacing-2xs) ' +
+    'text-overline-sm text-(--text-default)'
+
+  const MORE_LINK_CLASS =
+    'group/more flex h-full items-center justify-center gap-(--spacing-xs) px-(--spacing-sm) py-(--spacing-xl) text-overline-md uppercase text-(--text-muted) transition-colors ' +
+    'duration-moderate-02 ease-expressive-entrance hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:bg-(--bg-hover) focus-visible:text-(--text-default) ' +
+    'focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset focus-visible:outline-none motion-reduce:transition-none'
+
+  const MORE_LINK_CHEVRON_CLASS =
+    'az az-chevron-right shrink-0 text-[length:inherit] leading-none transition-[translate] duration-moderate-02 ease-expressive-entrance ' +
+    'group-hover/more:translate-x-0.5 rtl:group-hover/more:-translate-x-0.5 motion-reduce:transition-none rtl:-scale-x-100'
 </script>
 
 <template>
@@ -107,9 +120,7 @@
                   decoding="async"
                   class="h-16 w-24 object-contain"
                 />
-                <span
-                  class="inline-flex h-7 items-center gap-(--spacing-xs) whitespace-nowrap rounded-full border border-(--border-muted) bg-(--bg-surface-raised) pe-(--spacing-sm) ps-(--spacing-2xs) text-overline-sm text-(--text-default)"
-                >
+                <span :class="CERTIFICATION_BADGE_CLASS">
                   <span
                     aria-hidden="true"
                     class="flex size-5 shrink-0 items-center justify-center rounded-full bg-(--success-foreground) text-tag-sm text-(--success)"
@@ -128,12 +139,12 @@
             >
               <a
                 :href="safeHref(primaryAction.href) ?? undefined"
-                class="group/more flex h-full items-center justify-center gap-(--spacing-xs) px-(--spacing-sm) py-(--spacing-xl) text-overline-md uppercase text-(--text-muted) transition-colors duration-moderate-02 ease-expressive-entrance hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:bg-(--bg-hover) focus-visible:text-(--text-default) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset focus-visible:outline-none motion-reduce:transition-none"
+                :class="MORE_LINK_CLASS"
               >
                 {{ primaryAction.label }}
                 <i
                   aria-hidden="true"
-                  class="az az-chevron-right shrink-0 text-[length:inherit] leading-none transition-[translate] duration-moderate-02 ease-expressive-entrance group-hover/more:translate-x-0.5 rtl:group-hover/more:-translate-x-0.5 motion-reduce:transition-none rtl:-scale-x-100"
+                  :class="MORE_LINK_CHEVRON_CLASS"
                 />
               </a>
             </CardGridCell>

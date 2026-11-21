@@ -162,6 +162,11 @@
   ]
 
   const language = ref('en-US')
+
+  const BRAND_LINK_CLASS =
+    'inline-flex w-fit items-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance ' +
+    'hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -307,7 +312,7 @@
             <a
               href="/"
               aria-label="Azion home"
-              class="inline-flex w-fit items-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
+              :class="BRAND_LINK_CLASS"
             >
               <Brand size="small" />
             </a>

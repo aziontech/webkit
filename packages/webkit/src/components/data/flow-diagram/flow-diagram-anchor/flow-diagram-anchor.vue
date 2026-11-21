@@ -30,7 +30,11 @@
   )
 
   const PORT_CLASS =
-    'pointer-events-none absolute top-1/2 size-2 -translate-y-1/2 rounded-(--radius-sm) border-solid border-[length:var(--border-width-default,1px)] border-(--border-muted) bg-(--accent) data-[side=end]:-start-px data-[side=end]:-translate-x-full data-[side=start]:-end-px data-[side=start]:translate-x-full rtl:data-[side=end]:translate-x-full rtl:data-[side=start]:-translate-x-full group-data-[disabled]/node:border-dashed'
+    'pointer-events-none absolute top-1/2 size-2 -translate-y-1/2 rounded-(--radius-sm) border-solid border-[length:var(--border-width-default,1px)] border-(--border-muted) ' +
+    'bg-(--accent) ' +
+    'data-[side=end]:-start-px data-[side=end]:-translate-x-full data-[side=start]:-end-px data-[side=start]:translate-x-full ' +
+    'rtl:data-[side=end]:translate-x-full rtl:data-[side=start]:-translate-x-full ' +
+    'group-data-[disabled]/node:border-dashed'
 </script>
 
 <template>

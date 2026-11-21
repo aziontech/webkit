@@ -45,7 +45,9 @@ export default {
       preferRoot:
         "'{{binding}}' is imported from the compound entry '{{compound}}' (bundles all sub-components) but only '<{{binding}}>' is used. Import '{{root}}' to keep it tree-shakeable.",
       preferRootNamed:
-        "'{{binding}}' is imported from the compound entry '{{compound}}' (bundles all sub-components) but only '<{{binding}}>' is used. Import it from '{{root}}', and import each named binding from its own entry: '{{root}}' has no named exports.",
+        "'{{binding}}' is imported from the compound entry '{{compound}}' (bundles all " +
+        "sub-components) but only '<{{binding}}>' is used. Import it from '{{root}}', and import " +
+        "each named binding from its own entry: '{{root}}' has no named exports.",
       useRoot: "Import from '{{root}}'"
     }
   },

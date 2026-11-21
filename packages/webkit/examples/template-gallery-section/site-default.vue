@@ -100,6 +100,10 @@
     'sqlite',
     'drizzle'
   ]
+
+  const DESCRIPTION =
+    'Launch storefronts faster with pre-built templates and starter kits for headless commerce, marketing pages, and product catalogs. Deploy complete projects in seconds with popular ' +
+    'frameworks.'
 </script>
 
 <template>
@@ -109,7 +113,7 @@
     <TemplateGallerySection
       eyebrow="Your Stack, Your Way"
       title="Quick Start with Templates"
-      description="Launch storefronts faster with pre-built templates and starter kits for headless commerce, marketing pages, and product catalogs. Deploy complete projects in seconds with popular frameworks."
+      :description="DESCRIPTION"
       :primary-action="primaryAction"
       :secondary-action="secondaryAction"
       :templates="templates"

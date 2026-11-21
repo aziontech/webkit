@@ -45,6 +45,10 @@
   }
 
   const portalLocale = usePortalLocale()
+
+  const PANEL_CLASS =
+    'flex w-max min-w-(--container-3xs) max-w-(--container-xs) flex-col gap-(--spacing-sm) overflow-y-auto rounded-(--shape-control) border border-(--border-default) ' +
+    'bg-(--bg-surface-raised) p-(--spacing-md) text-body-sm text-(--text-default) shadow-(--shadow-sm) [transform-origin:var(--popup-origin,top_left)]'
 </script>
 
 <template>
@@ -65,7 +69,7 @@
         :data-side="ctx.side.value"
         :data-align="ctx.align.value"
         :style="ctx.panelStyle.value"
-        class="flex w-max min-w-(--container-3xs) max-w-(--container-xs) flex-col gap-(--spacing-sm) overflow-y-auto rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-md) text-body-sm text-(--text-default) shadow-(--shadow-sm) [transform-origin:var(--popup-origin,top_left)]"
+        :class="PANEL_CLASS"
         @pointerenter="ctx.cancelClose()"
         @pointerleave="onPointerleave"
         @focusin="ctx.cancelClose()"

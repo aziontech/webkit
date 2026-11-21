@@ -68,6 +68,32 @@
   const toggle = () => {
     open.value = !open.value
   }
+
+  const COPY_LINK_CLASS =
+    'absolute -start-(--size-6) flex size-5 shrink-0 items-center justify-center rounded-(--shape-button) text-(--text-muted) opacity-0 transition-opacity duration-fast-02 ' +
+    'ease-productive-entrance hover:text-(--text-default) focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) ' +
+    'group-hover/heading:opacity-100 group-focus-within/heading:opacity-100 [@media(hover:none)]:static [@media(hover:none)]:order-last [@media(hover:none)]:opacity-100 ' +
+    'motion-reduce:transition-none'
+
+  const TRIGGER_CLASS =
+    'group/disclosure -mx-(--spacing-2xs) flex items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-2xs) text-start transition-colors duration-fast-02 ' +
+    'ease-productive-entrance hover:text-(--text-muted) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 ' +
+    'focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none'
+
+  const CHEVRON_CLASS =
+    'az az-chevron-down shrink-0 text-body-xs leading-none text-(--text-muted) transition-transform duration-fast-02 ease-productive-entrance ' +
+    'group-data-[state=open]/disclosure:rotate-180 ' +
+    'motion-reduce:transition-none'
+
+  const BODY_CLASS =
+    'min-w-0 transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance ' +
+    'data-collapsible:grid data-collapsible:grid-rows-[0fr] data-collapsible:data-[state=open]:grid-rows-[1fr] ' +
+    'motion-reduce:transition-none'
+
+  const CONTENT_CLASS =
+    '@container/settings-group flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance ' +
+    'data-[state=open]:translate-y-0 data-[state=open]:opacity-100 ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -86,7 +112,7 @@
           copied ? t('settingsGroup.linkCopied') : t('settingsGroup.copyLink', { title: label })
         "
         :data-state="copied ? 'copied' : undefined"
-        class="absolute -start-(--size-6) flex size-5 shrink-0 items-center justify-center rounded-(--shape-button) text-(--text-muted) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) group-hover/heading:opacity-100 group-focus-within/heading:opacity-100 [@media(hover:none)]:static [@media(hover:none)]:order-last [@media(hover:none)]:opacity-100 motion-reduce:transition-none"
+        :class="COPY_LINK_CLASS"
         @click="copyLink"
       >
         <i
@@ -107,7 +133,7 @@
           :aria-expanded="open"
           :aria-controls="regionId"
           :data-state="open ? 'open' : 'closed'"
-          class="group/disclosure -mx-(--spacing-2xs) flex items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-2xs) text-start transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-muted) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
+          :class="TRIGGER_CLASS"
           @click="toggle"
         >
           <i
@@ -118,7 +144,7 @@
           />
           <slot name="label">{{ label }}</slot>
           <i
-            class="az az-chevron-down shrink-0 text-body-xs leading-none text-(--text-muted) transition-transform duration-fast-02 ease-productive-entrance group-data-[state=open]/disclosure:rotate-180 motion-reduce:transition-none"
+            :class="CHEVRON_CLASS"
             aria-hidden="true"
           />
         </button>
@@ -142,7 +168,7 @@
       :data-collapsible="collapsible || null"
       :inert="!expanded || undefined"
       :aria-hidden="!expanded || undefined"
-      class="min-w-0 transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-collapsible:grid data-collapsible:grid-rows-[0fr] data-collapsible:data-[state=open]:grid-rows-[1fr] motion-reduce:transition-none"
+      :class="BODY_CLASS"
     >
       <div
         :data-collapsible="collapsible || null"
@@ -150,7 +176,7 @@
       >
         <div
           :data-state="expanded ? 'open' : 'closed'"
-          class="@container/settings-group flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-[state=open]:translate-y-0 data-[state=open]:opacity-100 motion-reduce:transition-none"
+          :class="CONTENT_CLASS"
         >
           <slot />
         </div>

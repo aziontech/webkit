@@ -24,6 +24,30 @@
   ]
   const environments = [{ name: 'Production' }, { name: 'Preview' }]
   const environment = defineModel<string>('environment', { default: 'Production' })
+
+  const DETAIL_LINK_CLASS =
+    'group/link ' +
+    'data-link:cursor-pointer ' +
+    'inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline ' +
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)'
+
+  const DOMAIN_LINK_CLASS =
+    'flex items-center gap-(--spacing-2xs) rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-default) ' +
+    'hover:bg-(--bg-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 ' +
+    'focus-visible:ring-offset-(--bg-canvas)'
+
+  const MENU_TRIGGER_CLASS =
+    'flex h-8 min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-label-sm text-(--text-default) ' +
+    'transition-colors duration-150 ease-out motion-reduce:transition-none hover:border-(--border-strong)'
+
+  const DEPLOYMENT_SETTINGS_SUMMARY_CLASS =
+    'flex flex-wrap items-center gap-x-(--spacing-sm) gap-y-(--spacing-2xs) px-(--spacing-md) pb-(--spacing-md) ' +
+    '@lg/band:pointer-events-none @lg/band:absolute @lg/band:inset-y-0 @lg/band:end-0 @lg/band:max-w-[calc(100%-12rem)] @lg/band:justify-end @lg/band:px-0 @lg/band:pe-(--spacing-md) ' +
+    '@lg/band:pb-0'
+
+  const SETTINGS_LINK_CLASS =
+    'group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline ' +
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)'
 </script>
 
 <template>
@@ -47,7 +71,7 @@
                 target="_blank"
                 rel="noopener noreferrer"
                 data-link
-                class="group/link data-link:cursor-pointer inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
+                :class="DETAIL_LINK_CLASS"
               >
                 <span class="truncate underline-offset-2 group-hover/link:underline"
                   >service-01.example.com</span
@@ -91,7 +115,7 @@
                   :href="`https://${domain}`"
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="flex items-center gap-(--spacing-2xs) rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-default) hover:bg-(--bg-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
+                  :class="DOMAIN_LINK_CLASS"
                 >
                   <span class="truncate">{{ domain }}</span>
                   <i
@@ -134,9 +158,7 @@
                 "
               >
                 <DropdownMenu.Trigger>
-                  <span
-                    class="flex h-8 min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-label-sm text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:border-(--border-strong)"
-                  >
+                  <span :class="MENU_TRIGGER_CLASS">
                     <i
                       class="az az-layers shrink-0 text-(--text-muted)"
                       aria-hidden="true"
@@ -310,9 +332,7 @@
                 </span>
               </Accordion.Trigger>
 
-              <div
-                class="flex flex-wrap items-center gap-x-(--spacing-sm) gap-y-(--spacing-2xs) px-(--spacing-md) pb-(--spacing-md) @lg/band:pointer-events-none @lg/band:absolute @lg/band:inset-y-0 @lg/band:end-0 @lg/band:max-w-[calc(100%-12rem)] @lg/band:justify-end @lg/band:px-0 @lg/band:pe-(--spacing-md) @lg/band:pb-0"
-              >
+              <div :class="DEPLOYMENT_SETTINGS_SUMMARY_CLASS">
                 <Tag
                   label="Shared · 3 services"
                   severity="warning"
@@ -323,7 +343,7 @@
                   <Tooltip content="Open acme-production in Build and deployment settings">
                     <a
                       href="/account/build-deployment"
-                      class="group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
+                      :class="SETTINGS_LINK_CLASS"
                     >
                       <span class="truncate underline-offset-2 group-hover/link:underline">
                         acme-production

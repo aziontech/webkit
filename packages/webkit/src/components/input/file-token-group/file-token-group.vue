@@ -145,6 +145,16 @@
     emit('remove', event, { index, item })
     void focusAfterRemoval(index)
   }
+
+  const LIST_CLASS =
+    'm-0 flex list-none gap-(--spacing-xs) p-0 outline-none ' +
+    'group-data-[orientation=vertical]/ftg:flex-col group-data-[orientation=horizontal]/ftg:flex-row group-data-[orientation=horizontal]/ftg:flex-wrap'
+
+  const TOKEN_CLASS =
+    'flex min-w-0 flex-col gap-(--spacing-2xs) rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xs) transition-colors ' +
+    'duration-fast-02 ease-productive-entrance motion-reduce:transition-none ' +
+    'data-[status=warning]:border-(--warning-border) data-[status=error]:border-(--danger-border) ' +
+    'group-data-[orientation=horizontal]/ftg:w-(--container-3xs) group-data-[orientation=horizontal]/ftg:max-w-full'
 </script>
 
 <template>
@@ -161,14 +171,14 @@
       tabindex="-1"
       :aria-label="ariaLabel || t('fileTokenGroup.label')"
       :data-testid="`${testId}__list`"
-      class="m-0 flex list-none gap-(--spacing-xs) p-0 outline-none group-data-[orientation=vertical]/ftg:flex-col group-data-[orientation=horizontal]/ftg:flex-row group-data-[orientation=horizontal]/ftg:flex-wrap"
+      :class="LIST_CLASS"
     >
       <li
         v-for="(item, index) in visible"
         :key="`${index}-${relativePathOf(item.file)}`"
         :data-testid="`${testId}__token`"
         :data-status="statusOf(item)"
-        class="flex min-w-0 flex-col gap-(--spacing-2xs) rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xs) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-[status=warning]:border-(--warning-border) data-[status=error]:border-(--danger-border) group-data-[orientation=horizontal]/ftg:w-(--container-3xs) group-data-[orientation=horizontal]/ftg:max-w-full"
+        :class="TOKEN_CLASS"
       >
         <div class="flex min-w-0 items-center gap-(--spacing-xs)">
           <i

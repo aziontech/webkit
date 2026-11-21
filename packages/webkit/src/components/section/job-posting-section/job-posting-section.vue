@@ -129,7 +129,11 @@
   }
 
   export interface JobPostingSectionProps {
-    /** The application form: `{ title, description?, submitLabel, anchor?, ariaLabel?, fields }`, where `anchor` is the id of the apply section the rail button links to and a field is `{ name, type, label, required?, helper?, placeholder?, accept?, autocomplete?, country? }`. */
+    /**
+     * The application form: `{ title, description?, submitLabel, anchor?, ariaLabel?, fields }`,
+     * where `anchor` is the id of the apply section the rail button links to and a field is `{
+     * name, type, label, required?, helper?, placeholder?, accept?, autocomplete?, country? }`.
+     */
     form: JobPostingSectionForm
     /** Copy of the form and its outcomes: `{ missing, invalidEmail, invalidUrl, error, successTitle, successDescription, done, browse }`. */
     messages: JobPostingSectionMessages

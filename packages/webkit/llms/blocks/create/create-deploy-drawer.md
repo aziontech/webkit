@@ -552,6 +552,14 @@ Each variant is the same screen in another state: `get_block("create/create-depl
   const sharedDependency = (row: DeployDrawerResource) =>
     row.dependencies.find((dependency) => dependency.sharedWith?.length)
 
+  const sharedDependencyLabel = (row: DeployDrawerResource) => {
+    const shared = sharedDependency(row)
+    return (
+      `${shared?.name} is shared, so it deploys at one version. ` +
+      `Changing it here changes it for ${listFormat(shared?.sharedWith ?? [])} too.`
+    )
+  }
+
   const dependenciesLoading = (row: DeployDrawerResource) =>
     props.dependenciesLoadingKeys.includes(row.key)
 
@@ -948,7 +956,7 @@ Each variant is the same screen in another state: `get_block("create/create-depl
                                   v-if="sharedDependency(row)"
                                   severity="info"
                                   size="small"
-                                  :label="`${sharedDependency(row)?.name} is shared, so it deploys at one version. Changing it here changes it for ${listFormat(sharedDependency(row)?.sharedWith ?? [])} too.`"
+                                  :label="sharedDependencyLabel(row)"
                                 />
                                 <Item.Group>
                                   <Item

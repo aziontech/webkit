@@ -117,6 +117,16 @@
   watch(wanted, advance, { immediate: true })
 
   onScopeDispose(halt)
+
+  const MENU_CLASS =
+    'absolute top-full start-0 z-1 mt-1 flex min-w-(--container-3xs) flex-col overflow-hidden rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) ' +
+    'shadow-(--shadow-sm) [--popup-origin:top_left]'
+
+  const OPTION_CLASS =
+    'flex w-full items-center gap-(--spacing-sm) rounded-(--shape-control) px-(--spacing-sm) py-(--spacing-xs) text-label-sm text-(--text-default) transition-colors duration-fast-02 ' +
+    'ease-productive-entrance ' +
+    'data-highlighted:bg-(--bg-hover) ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -163,7 +173,7 @@
           >
             <div
               v-if="frame.open"
-              class="absolute top-full start-0 z-1 mt-1 flex min-w-(--container-3xs) flex-col overflow-hidden rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-sm) [--popup-origin:top_left]"
+              :class="MENU_CLASS"
             >
               <div
                 class="flex items-center gap-(--spacing-xs) border-b border-(--border-default) p-(--spacing-xs)"
@@ -199,7 +209,7 @@
                   :key="period"
                   :data-cursor="`option-${index}`"
                   :data-highlighted="frame.highlight === index || null"
-                  class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-control) px-(--spacing-sm) py-(--spacing-xs) text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance data-highlighted:bg-(--bg-hover) motion-reduce:transition-none"
+                  :class="OPTION_CLASS"
                 >
                   <span class="grow truncate">{{ period }}</span>
                   <i

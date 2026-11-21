@@ -184,6 +184,12 @@
       (active !== null && active !== bar.index) || (emphasized !== null && emphasized !== bar.id)
     )
   }
+
+  const BAR_CLASS =
+    'origin-bottom [scale:var(--chart-bar-from)] [transform-box:fill-box] transition-[scale] duration-slow-01 ease-productive-entrance ' +
+    'motion-reduce:transition-none ' +
+    'data-[entered]:[scale:1] ' +
+    'data-[orientation=horizontal]:origin-[0%_50%] data-[orientation=horizontal]:data-[rtl]:origin-[100%_50%]'
 </script>
 
 <template>
@@ -211,7 +217,7 @@
         :data-entered="ctx.entered.value || null"
         :style="{ '--chart-bar-from': growFrom, transitionDelay: bar.delay }"
         :data-rtl="ctx.rtl.value || null"
-        class="origin-bottom [scale:var(--chart-bar-from)] [transform-box:fill-box] transition-[scale] duration-slow-01 ease-productive-entrance motion-reduce:transition-none data-[entered]:[scale:1] data-[orientation=horizontal]:origin-[0%_50%] data-[orientation=horizontal]:data-[rtl]:origin-[100%_50%]"
+        :class="BAR_CLASS"
       />
     </g>
     <text

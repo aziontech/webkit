@@ -156,6 +156,11 @@
   onScopeDispose(halt)
 
   const shown = (value: unknown) => String(value)
+
+  const BUTTON_RING_CLASS =
+    'inline-flex rounded-(--shape-button) ring-(--ring-color) ring-offset-(--bg-surface) transition-shadow duration-fast-02 ease-productive-entrance ' +
+    'data-pressed:ring-2 data-pressed:ring-offset-2 ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -257,7 +262,7 @@
           <span
             data-cursor="and"
             :data-pressed="pressed || null"
-            class="inline-flex rounded-(--shape-button) ring-(--ring-color) ring-offset-(--bg-surface) transition-shadow duration-fast-02 ease-productive-entrance data-pressed:ring-2 data-pressed:ring-offset-2 motion-reduce:transition-none"
+            :class="BUTTON_RING_CLASS"
           >
             <Button
               label="And"

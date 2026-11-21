@@ -50,6 +50,10 @@
   )
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'doc-heading')
+
+  const ANCHOR_ICON_CLASS =
+    'az az-link ms-(--spacing-xs) align-middle text-label-md text-(--text-muted) opacity-0 transition-opacity duration-150 ease-out ' +
+    'group-hover/anchor:opacity-100 group-focus-visible/anchor:opacity-100 motion-reduce:transition-none'
 </script>
 
 <template>
@@ -73,7 +77,7 @@
         <slot>{{ label }}</slot>
       </span>
       <i
-        class="az az-link ms-(--spacing-xs) align-middle text-label-md text-(--text-muted) opacity-0 transition-opacity duration-150 ease-out group-hover/anchor:opacity-100 group-focus-visible/anchor:opacity-100 motion-reduce:transition-none"
+        :class="ANCHOR_ICON_CLASS"
         aria-hidden="true"
       />
     </a>

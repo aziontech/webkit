@@ -21,7 +21,9 @@ export const TOKEN_CHECKS = [
     id: 'typography-raw-size',
     regex: /\btext-(?:xs|sm|base|lg|xl|2xl|3xl|4xl|5xl|6xl|7xl|8xl|9xl)\b(?!-)/g,
     message:
-      'Raw Tailwind text size. Use a generated typography class (text-heading-md, text-body-sm, text-button-lg, text-label-md, ...) — ask the webkit MCP: list_tokens (no category) returns every typography class.'
+      'Raw Tailwind text size. Use a generated typography class (text-heading-md, ' +
+      'text-body-sm, text-button-lg, text-label-md, ...) — ask the webkit MCP: list_tokens (no ' +
+      'category) returns every typography class.'
   },
   {
     id: 'typography-raw-length',
@@ -72,19 +74,29 @@ export const TOKEN_CHECKS = [
     id: 'dead-token-shorthand',
     regex: /-\((?=[^)]*--)[^)]*\s[^)]*\)|\[--\(/g,
     message:
-      'Malformed token shorthand — the style NEVER applies (Tailwind emits nothing for a space inside the parens; an inverted `[--(token)]` emits an invalid value the browser discards). Write `prop-(--token)` / `prop-(type:--token)` with no whitespace inside the parens, and `[--token:value]` to DECLARE a custom property (.claude/rules/styling.md).'
+      'Malformed token shorthand — the style NEVER applies (Tailwind emits nothing for a space ' +
+      'inside the parens; an inverted `[--(token)]` emits an invalid value the browser ' +
+      'discards). Write `prop-(--token)` / `prop-(type:--token)` with no whitespace inside the ' +
+      'parens, and `[--token:value]` to DECLARE a custom property (.claude/rules/styling.md).'
   },
   {
     id: 'container-query-on-container',
     regex: /(["'`])(?=[^"'`]*@container\/([\w-]+)(?![\w-]))[^"'`]*@[^\s"'`/]*\/\2:/g,
     message:
-      'Container-query variant on the element that declares the container. A container query never matches its own container, so `@xl/name:` on the `@container/name` element NEVER applies. Put the variant on a child of the container (.claude/rules/styling.md).'
+      'Container-query variant on the element that declares the container. A container query ' +
+      'never matches its own container, so `@xl/name:` on the `@container/name` element NEVER ' +
+      'applies. Put the variant on a child of the container (.claude/rules/styling.md).'
   },
   {
     id: 'has-on-scroll-frame',
     regex: /(?<![\w-])(?:group|peer)-has-(?:\[[^\s"'`]*\]|[\w-]+)\/scroll:/g,
     message:
-      'A :has() variant read from the scroll frame (`group-has-[…]/scroll:`). The frame wraps every row, so Chromium re-checks the :has() whenever a row mounts and restyles the whole table on every scroll frame (the 10k-row virtual DataTable went from 228 ms to 3,580 ms of style recalc). Get the result from the stacking order (the table scroll cue sits below the frozen cells), or measure the state in script, set a data attribute on the frame and read it with `group-data-[…]/scroll:` (.claude/rules/styling.md).'
+      'A :has() variant read from the scroll frame (`group-has-[…]/scroll:`). The frame wraps ' +
+      'every row, so Chromium re-checks the :has() whenever a row mounts and restyles the ' +
+      'whole table on every scroll frame (the 10k-row virtual DataTable went from 228 ms to ' +
+      '3,580 ms of style recalc). Get the result from the stacking order (the table scroll cue ' +
+      'sits below the frozen cells), or measure the state in script, set a data attribute on ' +
+      'the frame and read it with `group-data-[…]/scroll:` (.claude/rules/styling.md).'
   },
   {
     id: 'rtl-double-flip',
@@ -92,7 +104,10 @@ export const TOKEN_CHECKS = [
     regex:
       /(["'`])(?=[^"'`]*(?<![\w-])az-(?:(?:(?:circle-)?(?:chevron|arrow)|chevrons|arrow-down|caret)-(?:left|right)|log-in|log-out|reply|undo)(?![\w-]))[^"'`]*?(?<![^\s"'`])(?:[^\s"'`]*:)?rtl:-?rotate-180(?![^\s"'`])/g,
     message:
-      'rtl:rotate-180 on a directional icon. `@aziontech/webkit/styles` already mirrors every directional `az-*` glyph under RTL with `scale: -1 1`; adding a rotation composes with it and the arrow points the WRONG way. Drop the rotation (or use `rtl:-scale-x-100`, which sets the same scale) (.claude/rules/styling.md).'
+      'rtl:rotate-180 on a directional icon. `@aziontech/webkit/styles` already mirrors every ' +
+      'directional `az-*` glyph under RTL with `scale: -1 1`; adding a rotation composes with ' +
+      'it and the arrow points the WRONG way. Drop the rotation (or use `rtl:-scale-x-100`, ' +
+      'which sets the same scale) (.claude/rules/styling.md).'
   },
   {
     id: 'off-brand-orange',
@@ -100,7 +115,10 @@ export const TOKEN_CHECKS = [
     regex:
       /(?<!\w)(?:--text-primary(?![\w-])|(?:--color-)?(?:alpha-orange|brand-primary|orange)-(?!500(?![\w-]))\d{2,3}(?![\w-]))/g,
     message:
-      'An orange that is not the logo orange. Content uses one orange, the logo orange #F3652B: var(--text-brand) for text, var(--primary) for fills, glyphs and glows. --text-primary was removed in 6.0 (use --text-brand), and the lighter and darker steps of the orange scale stay inside the theme (rules/webkit-tokens.md).'
+      'An orange that is not the logo orange. Content uses one orange, the logo orange ' +
+      '#F3652B: var(--text-brand) for text, var(--primary) for fills, glyphs and glows. ' +
+      '--text-primary was removed in 6.0 (use --text-brand), and the lighter and darker steps ' +
+      'of the orange scale stay inside the theme (rules/webkit-tokens.md).'
   },
   {
     id: 'class-in-defineprops',

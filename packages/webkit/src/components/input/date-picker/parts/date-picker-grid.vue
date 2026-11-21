@@ -393,6 +393,23 @@
         break
     }
   }
+
+  const MONTH_STEP_CLASS =
+    'inline-flex size-7 shrink-0 items-center justify-center rounded-(--shape-control) text-(--text-muted) transition-colors duration-150 ease-out ' +
+    'hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 ' +
+    'focus-visible:ring-offset-(--bg-surface-raised) disabled:cursor-not-allowed disabled:text-(--text-disabled) motion-reduce:transition-none'
+
+  const DAY_CLASS =
+    'flex items-center justify-center text-(--text-default) transition-colors duration-150 ease-out ' +
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) ' +
+    'data-[size=small]:size-8 data-[size=small]:text-body-xs data-[size=medium]:size-9 data-[size=medium]:text-body-sm data-[size=large]:size-10 data-[size=large]:text-body-md ' +
+    'data-[band=none]:rounded-(--shape-control) data-[band=none]:hover:bg-(--bg-hover) data-[band=single]:rounded-(--shape-control) data-[band=single]:bg-(--secondary-selected) ' +
+    'data-[band=single]:text-(--secondary-foreground) data-[band=start]:rounded-s-(--shape-control) data-[band=start]:bg-(--secondary-selected) ' +
+    'data-[band=start]:text-(--secondary-foreground) data-[band=end]:rounded-e-(--shape-control) data-[band=end]:bg-(--secondary-selected) data-[band=end]:text-(--secondary-foreground) ' +
+    'data-[band=middle]:bg-(--bg-selected) ' +
+    'data-[outside]:not-data-[disabled]:text-(--text-muted) ' +
+    'data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled) ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -410,7 +427,7 @@
         data-testid="date-picker__previous-month"
         :disabled="disabledAll"
         :aria-label="t('datePicker.previousMonth')"
-        class="inline-flex size-7 shrink-0 items-center justify-center rounded-(--shape-control) text-(--text-muted) transition-colors duration-150 ease-out hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) disabled:cursor-not-allowed disabled:text-(--text-disabled) motion-reduce:transition-none"
+        :class="MONTH_STEP_CLASS"
         @click="goToPreviousMonth"
       >
         <i
@@ -466,7 +483,7 @@
         data-testid="date-picker__next-month"
         :disabled="disabledAll"
         :aria-label="t('datePicker.nextMonth')"
-        class="inline-flex size-7 shrink-0 items-center justify-center rounded-(--shape-control) text-(--text-muted) transition-colors duration-150 ease-out hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) disabled:cursor-not-allowed disabled:text-(--text-disabled) motion-reduce:transition-none"
+        :class="MONTH_STEP_CLASS"
         @click="goToNextMonth"
       >
         <i
@@ -538,7 +555,7 @@
                     :data-disabled="day.disabled || null"
                     data-testid="date-picker__day"
                     :tabindex="!day.outside && day.time === activeTime ? 0 : -1"
-                    class="flex items-center justify-center text-(--text-default) transition-colors duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) data-[size=small]:size-8 data-[size=small]:text-body-xs data-[size=medium]:size-9 data-[size=medium]:text-body-sm data-[size=large]:size-10 data-[size=large]:text-body-md data-[band=none]:rounded-(--shape-control) data-[band=none]:hover:bg-(--bg-hover) data-[band=single]:rounded-(--shape-control) data-[band=single]:bg-(--secondary-selected) data-[band=single]:text-(--secondary-foreground) data-[band=start]:rounded-s-(--shape-control) data-[band=start]:bg-(--secondary-selected) data-[band=start]:text-(--secondary-foreground) data-[band=end]:rounded-e-(--shape-control) data-[band=end]:bg-(--secondary-selected) data-[band=end]:text-(--secondary-foreground) data-[band=middle]:bg-(--bg-selected) data-[outside]:not-data-[disabled]:text-(--text-muted) data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled) motion-reduce:transition-none"
+                    :class="DAY_CLASS"
                     @click="selectDay(day)"
                     @keydown="onDayKeydown($event, day)"
                   >

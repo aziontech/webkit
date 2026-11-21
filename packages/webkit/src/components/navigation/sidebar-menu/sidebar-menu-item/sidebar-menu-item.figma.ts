@@ -22,11 +22,15 @@ const label = labelLayer.type === 'TEXT' ? labelLayer.textContent : ''
 const tag = showTag ? instance.findInstance('Tag') : null
 const tagValue = tag && tag.type === 'INSTANCE' ? tag.getString('label') : ''
 
+const labelAttr = label === 'Option 1' ? '' : figma.code` label="${label}"`
+
+const tagValueAttr = tagValue ? figma.code` tag-value="${tagValue}"` : ''
+
 export default {
   example:
     type === 'group'
       ? figma.code`<SidebarMenu.Group label="${label}" />`
-      : figma.code`<SidebarMenu.Item${label === 'Option 1' ? '' : figma.code` label="${label}"`}${showIcon ? '' : ' icon=""'}${selected ? ' active' : ''}${tagValue ? figma.code` tag-value="${tagValue}"` : ''} />`,
+      : figma.code`<SidebarMenu.Item${labelAttr}${showIcon ? '' : ' icon=""'}${selected ? ' active' : ''}${tagValueAttr} />`,
   imports: ["import SidebarMenu from '@aziontech/webkit/sidebar-menu'"],
   id: 'sidebar-menu-item',
   metadata: { nestable: true }

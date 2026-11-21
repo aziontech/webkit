@@ -50,7 +50,12 @@
     title?: string
     /** Supporting sentence under the headline. */
     description?: string
-    /** The features, in order, at most three; each is `{ title, description, value?, code?, illustration?, illustrationLabel? }` where `value` is the key handed to the band scene as its `tab`, `code` is the file the tab opens as its media, `illustration` is a registry name drawn when the tab has no code and the band no scene, and `illustrationLabel` its accessible name. */
+    /**
+     * The features, in order, at most three; each is `{ title, description, value?, code?, illustration?,
+     * illustrationLabel? }` where `value` is the key handed to the band scene as its `tab`, `code` is the
+     * file the tab opens as its media, `illustration` is a registry name drawn when the tab has no code
+     * and the band no scene, and `illustrationLabel` its accessible name.
+     */
     tabs?: FeatureTabsSectionTab[]
     /** Live scene drawn as the media of every tab without code, `{ component, props? }` naming a webkit scene asset; it receives the tab's `value` as `tab` and whether the tab is open as `active`. */
     scene?: FeatureTabsSectionScene

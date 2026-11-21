@@ -67,7 +67,11 @@
   export interface ContactHubSectionProps {
     /** In-page id set on the band so a `#hash` link can scroll to it. */
     anchor?: string
-    /** The team lanes side by side, in order; each is `{ icon, title, description, action?, secondaryAction?, statusLink? }` where `action` is the lane's leading button, `secondaryAction` an outlined button after it, and `statusLink` the system status link beside them. */
+    /**
+     * The team lanes side by side, in order; each is `{ icon, title, description, action?,
+     * secondaryAction?, statusLink? }` where `action` is the lane's leading button, `secondaryAction` an
+     * outlined button after it, and `statusLink` the system status link beside them.
+     */
     lanes?: ContactHubSectionLane[]
     /** The self-serve channels in the rows under the lanes, in order; each is `{ icon, title, description, href, target? }`, rendered as a linked topic. */
     channels?: ContactHubSectionChannel[]
@@ -91,6 +95,11 @@
   const relOf = (target?: string) => (target === '_blank' ? 'noopener noreferrer' : undefined)
   const statusLinkName = (link: ContactHubSectionStatusLink) =>
     link.target === '_blank' ? `${link.label} ${t('common.newTab')}` : undefined
+
+  const STATUS_LINK_CLASS =
+    'inline-flex min-h-10 max-w-full items-center rounded-full border border-(--border-default) bg-(--bg-surface) px-(--spacing-md) text-button-lg text-(--text-default) no-underline ' +
+    'transition-colors duration-150 ease-out hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 ' +
+    'focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none'
 </script>
 
 <template>
@@ -172,7 +181,7 @@
                   :target="lane.statusLink.target"
                   :rel="relOf(lane.statusLink.target)"
                   :aria-label="statusLinkName(lane.statusLink)"
-                  class="inline-flex min-h-10 max-w-full items-center rounded-full border border-(--border-default) bg-(--bg-surface) px-(--spacing-md) text-button-lg text-(--text-default) no-underline transition-colors duration-150 ease-out hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
+                  :class="STATUS_LINK_CLASS"
                 >
                   <StatusIndicator
                     v-if="lane.statusLink.severity"

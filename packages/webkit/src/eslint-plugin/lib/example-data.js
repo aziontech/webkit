@@ -70,11 +70,17 @@ const INVENTED_BRAND = /\b(?:edgeflow|contoso|globex|initech|hooli)\b/gi
 
 export const EXAMPLE_DATA_MESSAGES = {
   'invented-brand':
-    "Invented company brand in sample data. The one sample company is Acme (shadcn's placeholder), on example.com domains; resources are named for what they are (production, site-assets) (rules/webkit-example-data.md).",
+    "Invented company brand in sample data. The one sample company is Acme (shadcn's " +
+    'placeholder), on example.com domains; resources are named for what they are (production, ' +
+    'site-assets) (rules/webkit-example-data.md).',
   domain:
-    'Sample data uses a reserved domain: example.com, example.org or example.net and their subdomains (RFC 2606), e.g. m@example.com. Real hosts are allowed only as links to the real resource (rules/webkit-example-data.md).',
+    'Sample data uses a reserved domain: example.com, example.org or example.net and their ' +
+    'subdomains (RFC 2606), e.g. m@example.com. Real hosts are allowed only as links to the real ' +
+    'resource (rules/webkit-example-data.md).',
   'regional-format':
-    'Sample data in a national format (CPF, CNPJ, CEP, +55, R$, a Brazilian street). Use the neutral house format: fictional US data (+1 555-01xx, a US address, USD) and no national ID masks (rules/webkit-example-data.md).'
+    'Sample data in a national format (CPF, CNPJ, CEP, +55, R$, a Brazilian street). Use the ' +
+    'neutral house format: fictional US data (+1 555-01xx, a US address, USD) and no national ID ' +
+    'masks (rules/webkit-example-data.md).'
 }
 
 export function scanExampleData(content) {

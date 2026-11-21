@@ -294,6 +294,10 @@
   })
 
   onBeforeUnmount(clearAll)
+
+  const STEP_DESCRIPTION_CLASS =
+    'min-w-0 truncate text-body-sm text-(--text-muted) ' +
+    'data-[status=error]:whitespace-normal data-[status=error]:text-pretty data-[status=error]:text-(--danger-foreground) data-[status=running]:text-(--text-default)'
 </script>
 
 <template>
@@ -403,7 +407,7 @@
               />
               <span
                 :data-status="stepStatus(i)"
-                class="min-w-0 truncate text-body-sm text-(--text-muted) data-[status=error]:whitespace-normal data-[status=error]:text-pretty data-[status=error]:text-(--danger-foreground) data-[status=running]:text-(--text-default)"
+                :class="STEP_DESCRIPTION_CLASS"
               >
                 {{ step.description }}
               </span>

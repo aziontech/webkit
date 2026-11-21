@@ -19,4 +19,6 @@ export const sampleReloadedOrigins: FormValidationOrigin[] = sampleOrigins.filte
 )
 
 export const sampleOriginError =
-  'Origin "web-origin-prod" no longer exists. Another user deleted it while you were filling in this form, so the service wasn\'t created. Nothing else was lost: reload the origin list and select another one.'
+  'Origin "web-origin-prod" no longer exists. ' +
+  "Another user deleted it while you were filling in this form, so the service wasn't created. " +
+  'Nothing else was lost: reload the origin list and select another one.'

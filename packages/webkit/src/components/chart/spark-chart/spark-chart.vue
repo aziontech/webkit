@@ -141,6 +141,16 @@
     if (frame) globalThis.cancelAnimationFrame(frame)
     if (measureFrame) globalThis.cancelAnimationFrame(measureFrame)
   })
+
+  const LINE_CLASS =
+    '[stroke-dasharray:1.02_1.02] [stroke-dashoffset:1.02] transition-[stroke-dashoffset] duration-slow-02 ease-productive-entrance ' +
+    'motion-reduce:transition-none ' +
+    'data-[entered]:[stroke-dashoffset:0]'
+
+  const BAR_CLASS =
+    'origin-bottom [scale:var(--spark-chart-bar-from)] [transform-box:fill-box] transition-[scale] duration-slow-01 ease-productive-entrance ' +
+    'motion-reduce:transition-none ' +
+    'data-[entered]:[scale:1]'
 </script>
 
 <template>
@@ -198,7 +208,7 @@
           stroke-linejoin="round"
           pathLength="1"
           :data-entered="entered || null"
-          class="[stroke-dasharray:1.02_1.02] [stroke-dashoffset:1.02] transition-[stroke-dashoffset] duration-slow-02 ease-productive-entrance motion-reduce:transition-none data-[entered]:[stroke-dashoffset:0]"
+          :class="LINE_CLASS"
         />
       </template>
       <path
@@ -207,7 +217,7 @@
         :d="bar.d"
         :fill="hue"
         :data-entered="entered || null"
-        class="origin-bottom [scale:var(--spark-chart-bar-from)] [transform-box:fill-box] transition-[scale] duration-slow-01 ease-productive-entrance motion-reduce:transition-none data-[entered]:[scale:1]"
+        :class="BAR_CLASS"
       />
     </svg>
   </div>

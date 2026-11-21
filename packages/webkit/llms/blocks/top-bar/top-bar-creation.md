@@ -191,6 +191,11 @@ Each variant is the same screen in another state: `get_block("top-bar/top-bar-cr
   }>()
 
   const account = computed(() => props.account ?? sampleAccount)
+
+  const ACCOUNT_TRIGGER_CLASS =
+    'rounded-(--shape-button) transition-opacity duration-fast-02 ease-productive-entrance ' +
+    'hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -236,7 +241,7 @@ Each variant is the same screen in another state: `get_block("top-bar/top-bar-cr
             <button
               type="button"
               aria-label="Account menu"
-              class="rounded-(--shape-button) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
+              :class="ACCOUNT_TRIGGER_CLASS"
             >
               <Avatar
                 :label="account.name"

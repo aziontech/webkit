@@ -151,6 +151,16 @@
   )
 
   onScopeDispose(() => cancelAnimationFrame(focusFrame))
+
+  const ITEM_CLASS =
+    'group/item flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-control) transition-colors duration-fast-02 ease-productive-entrance ' +
+    'hover:bg-(--bg-hover) ' +
+    'data-[active]:bg-(--bg-selected) ' +
+    'motion-reduce:transition-none'
+
+  const ITEM_BUTTON_CLASS =
+    'flex h-8 min-w-0 flex-1 items-center rounded-(--shape-control) px-(--spacing-xs) text-start text-label-sm text-(--text-default) outline-none ' +
+    'focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset'
 </script>
 
 <template>
@@ -222,14 +232,14 @@
                 :key="item.id"
                 :data-active="item.id === model || null"
                 :data-testid="`${testId}__item`"
-                class="group/item flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-control) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) data-[active]:bg-(--bg-selected) motion-reduce:transition-none"
+                :class="ITEM_CLASS"
               >
                 <button
                   type="button"
                   data-slot="conversation-history-item"
                   :aria-current="item.id === model ? 'page' : undefined"
                   :title="item.title"
-                  class="flex h-8 min-w-0 flex-1 items-center rounded-(--shape-control) px-(--spacing-xs) text-start text-label-sm text-(--text-default) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset"
+                  :class="ITEM_BUTTON_CLASS"
                   @click="model = item.id"
                 >
                   <bdi

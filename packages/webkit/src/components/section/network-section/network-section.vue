@@ -80,9 +80,18 @@
     claimsEyebrow?: string
     /** Short figures rendered as chips under the claims eyebrow, in order; each is a string or `{ label, mobile? }`, where `mobile: false` hides the chip below the medium breakpoint. */
     claims?: (string | NetworkSectionClaim)[]
-    /** Client results for the `outcomes` floor, in order, one column each up to four; each is `{ logo?, logoAlt?, logoTreatment?, text, highlights? }` where `logo` is the mark URL (the cell renders no mark without it), `logoAlt` names the client, `logoTreatment` is `'monochrome'` or `'color'`, and `highlights` are the phrases of `text` set in the accent. */
+    /**
+     * Client results for the `outcomes` floor, in order, one column each up to four; each is `{
+     * logo?, logoAlt?, logoTreatment?, text, highlights? }` where `logo` is the mark URL (the
+     * cell renders no mark without it), `logoAlt` names the client, `logoTreatment` is
+     * `'monochrome'` or `'color'`, and `highlights` are the phrases of `text` set in the accent.
+     */
     outcomes?: NetworkSectionOutcome[]
-    /** Topics for the `benefits` floor, in order, on up to three columns balanced so every row is full; each is `{ title, description, icon }`, rendered as a topic led by its glyph whose title is an `h3`. */
+    /**
+     * Topics for the `benefits` floor, in order, on up to three columns balanced so every row is
+     * full; each is `{ title, description, icon }`, rendered as a topic led by its glyph whose
+     * title is an `h3`.
+     */
     benefits?: NetworkSectionBenefit[]
     /** Figures for the `stats` floor, in order, rendered by `stats`; each is `{ value, label, prefix?, suffix? }`. */
     stats?: NetworkSectionStat[]
@@ -115,6 +124,10 @@
   )
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'network-section')
+
+  const CLAIM_CHIP_CLASS =
+    'inline-flex h-6 items-center rounded-(--shape-control) border border-(--primary) bg-[color-mix(in_srgb,var(--primary)_10%,var(--bg-canvas))] px-(--spacing-xs) text-label-sm ' +
+    'text-(--text-default) max-md:data-[mobile=hidden]:hidden sm:h-7 sm:px-(--spacing-sm) sm:text-label-md'
 </script>
 
 <template>
@@ -194,7 +207,7 @@
                   v-for="claim in chips"
                   :key="claim.label"
                   :data-mobile="claim.mobile ? null : 'hidden'"
-                  class="inline-flex h-6 items-center rounded-(--shape-control) border border-(--primary) bg-[color-mix(in_srgb,var(--primary)_10%,var(--bg-canvas))] px-(--spacing-xs) text-label-sm text-(--text-default) max-md:data-[mobile=hidden]:hidden sm:h-7 sm:px-(--spacing-sm) sm:text-label-md"
+                  :class="CLAIM_CHIP_CLASS"
                 >
                   {{ claim.label }}
                 </li>

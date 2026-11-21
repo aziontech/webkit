@@ -5,7 +5,12 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
 
-  /** `floating` overlays the bottom of the scroll region without moving the content, `docked` takes its own row at the bottom, `plain` closes a form column with its actions on the right, `fade` closes a wizard step with no border, the content fading into the canvas above it, `centered` floats the actions as a raised card centred over the bottom of a create page. */
+  /**
+   * `floating` overlays the bottom of the scroll region without moving the content, `docked` takes
+   * its own row at the bottom, `plain` closes a form column with its actions on the right, `fade`
+   * closes a wizard step with no border, the content fading into the canvas above it, `centered`
+   * floats the actions as a raised card centred over the bottom of a create page.
+   */
   export type SaveBarVariant = 'floating' | 'docked' | 'plain' | 'fade' | 'centered'
 
   defineOptions({
@@ -134,6 +139,25 @@
   )
 
   onScopeDispose(release)
+
+  const ROOT_CLASS =
+    'group/save-bar @container/save-bar sticky bottom-0 z-10 shrink-0 ' +
+    'data-[variant=floating]:h-0 data-[variant=plain]:border-t-(length:--border-width-default) data-[variant=plain]:border-(--border-muted) data-[variant=plain]:bg-(--bg-surface) ' +
+    'data-[variant=fade]:bg-linear-to-b data-[variant=fade]:from-transparent data-[variant=fade]:to-(--bg-canvas) data-[variant=centered]:pointer-events-none'
+
+  const SHELL_CLASS =
+    'group-data-[variant=docked]/save-bar:border-t group-data-[variant=docked]/save-bar:border-(--border-default) group-data-[variant=docked]/save-bar:bg-(--bg-canvas) ' +
+    'group-data-[variant=docked]/save-bar:@xl/save-bar:h-14 group-data-[variant=floating]/save-bar:absolute group-data-[variant=floating]/save-bar:inset-x-0 ' +
+    'group-data-[variant=floating]/save-bar:bottom-0 group-data-[variant=floating]/save-bar:border-t group-data-[variant=floating]/save-bar:border-(--border-default) ' +
+    'group-data-[variant=floating]/save-bar:bg-(--bg-canvas) group-data-[variant=floating]/save-bar:@xl/save-bar:h-14'
+
+  const CARD_CLASS =
+    'pointer-events-auto flex max-w-full min-w-0 items-center gap-(--spacing-md) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-xs) ' +
+    'shadow-(--shadow-lg)'
+
+  const BAR_CLASS =
+    'layout-boundary-inline flex min-w-0 flex-col gap-(--spacing-sm) pt-(--spacing-sm) pb-[max(var(--spacing-sm),env(safe-area-inset-bottom))] ' +
+    '@xl/save-bar:h-full @xl/save-bar:flex-row @xl/save-bar:flex-wrap @xl/save-bar:items-center @xl/save-bar:justify-between @xl/save-bar:gap-x-(--spacing-xl) @xl/save-bar:py-0'
 </script>
 
 <template>
@@ -143,11 +167,11 @@
     :data-testid="testId"
     :data-variant="variant"
     :style="rootStyle"
-    class="group/save-bar @container/save-bar sticky bottom-0 z-10 shrink-0 data-[variant=floating]:h-0 data-[variant=plain]:border-t-(length:--border-width-default) data-[variant=plain]:border-(--border-muted) data-[variant=plain]:bg-(--bg-surface) data-[variant=fade]:bg-linear-to-b data-[variant=fade]:from-transparent data-[variant=fade]:to-(--bg-canvas) data-[variant=centered]:pointer-events-none"
+    :class="ROOT_CLASS"
   >
     <div
       ref="shellEl"
-      class="group-data-[variant=docked]/save-bar:border-t group-data-[variant=docked]/save-bar:border-(--border-default) group-data-[variant=docked]/save-bar:bg-(--bg-canvas) group-data-[variant=docked]/save-bar:@xl/save-bar:h-14 group-data-[variant=floating]/save-bar:absolute group-data-[variant=floating]/save-bar:inset-x-0 group-data-[variant=floating]/save-bar:bottom-0 group-data-[variant=floating]/save-bar:border-t group-data-[variant=floating]/save-bar:border-(--border-default) group-data-[variant=floating]/save-bar:bg-(--bg-canvas) group-data-[variant=floating]/save-bar:@xl/save-bar:h-14"
+      :class="SHELL_CLASS"
     >
       <div
         v-if="variant === 'plain'"
@@ -182,7 +206,7 @@
       >
         <div
           :data-testid="`${testId}__card`"
-          class="pointer-events-auto flex max-w-full min-w-0 items-center gap-(--spacing-md) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-xs) shadow-(--shadow-lg)"
+          :class="CARD_CLASS"
         >
           <div
             v-if="$slots['leading'] || $slots['default']"
@@ -229,7 +253,7 @@
       </div>
       <div
         v-else
-        class="layout-boundary-inline flex min-w-0 flex-col gap-(--spacing-sm) pt-(--spacing-sm) pb-[max(var(--spacing-sm),env(safe-area-inset-bottom))] @xl/save-bar:h-full @xl/save-bar:flex-row @xl/save-bar:flex-wrap @xl/save-bar:items-center @xl/save-bar:justify-between @xl/save-bar:gap-x-(--spacing-xl) @xl/save-bar:py-0"
+        :class="BAR_CLASS"
       >
         <div
           v-if="$slots['leading'] || $slots['default']"

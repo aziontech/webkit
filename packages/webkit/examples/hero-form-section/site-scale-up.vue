@@ -47,12 +47,16 @@
   }
 
   const onSubmit = (_event, _values) => {}
+
+  const DESCRIPTION =
+    'Up to $120,000 in service credits for your company. Azion Scale Up gives startups free credits, onboarding with Azion experts and 24/7 technical support while they build on the ' +
+    'platform.'
 </script>
 
 <template>
   <HeroFormSection
     title="Azion Scale Up Credit Program"
-    description="Up to $120,000 in service credits for your company. Azion Scale Up gives startups free credits, onboarding with Azion experts and 24/7 technical support while they build on the platform."
+    :description="DESCRIPTION"
     form-aria-label="Request immediate contact"
     :fields="fields"
     submit-label="Request immediate contact"

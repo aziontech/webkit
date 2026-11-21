@@ -20,7 +20,11 @@
     columns?: BentoGridColumns
     /** How many columns the mosaic holds below the medium breakpoint, where every cell claims one of them. */
     mobileColumns?: BentoGridMobileColumns
-    /** The surrounding frame already draws the grid's outer rules: the grid drops its own top and left ones and lays its right and bottom ones onto the frame's, so a framed column keeps one hairline per edge. */
+    /**
+     * The surrounding frame already draws the grid's outer rules: the grid drops its own top and
+     * left ones and lays its right and bottom ones onto the frame's, so a framed column keeps one
+     * hairline per edge.
+     */
     flush?: boolean
   }
 
@@ -42,6 +46,14 @@
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'bento-grid')
 
   const hasCells = computed(() => hasRenderedContent(slots['default']?.() ?? []))
+
+  const ROOT_CLASS =
+    'grid ' +
+    'data-[mobile-columns=1]:grid-cols-1 data-[mobile-columns=2]:grid-cols-2 ' +
+    'data-[columns=2]:md:grid-cols-2 data-[columns=3]:md:grid-cols-3 data-[columns=4]:md:grid-cols-4 ' +
+    'md:auto-rows-fr ' +
+    'data-[filled]:border-(--border-default) data-[filled]:data-[flush=false]:border-s data-[filled]:data-[flush=false]:border-t ' +
+    'data-[flush=true]:-mb-px data-[flush=true]:-me-px'
 </script>
 
 <template>
@@ -53,7 +65,7 @@
     :data-mobile-columns="mobileColumns"
     :data-flush="flush"
     :aria-label="ariaLabel || undefined"
-    class="grid data-[mobile-columns=1]:grid-cols-1 data-[mobile-columns=2]:grid-cols-2 data-[columns=2]:md:grid-cols-2 data-[columns=3]:md:grid-cols-3 data-[columns=4]:md:grid-cols-4 md:auto-rows-fr data-[filled]:border-(--border-default) data-[filled]:data-[flush=false]:border-s data-[filled]:data-[flush=false]:border-t data-[flush=true]:-mb-px data-[flush=true]:-me-px"
+    :class="ROOT_CLASS"
   >
     <slot />
   </section>

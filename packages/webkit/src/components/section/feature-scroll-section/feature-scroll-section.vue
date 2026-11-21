@@ -74,7 +74,14 @@
     title?: string
     /** Supporting sentence under the headline. */
     description?: string
-    /** The features, in order; each is `{ title, description, scene?, code?, illustration?, action? }` where `scene` is `{ component, props? }` naming a webkit scene asset (drawn live in the stack, still in the grid), `code` is a one-file sample `{ fileName, code, language?, fileIcon?, copyAriaLabel? }` drawn when no scene is set, `illustration` is a registry name drawn when neither is set, and `action` is `{ label, href, trailing?, target?, variant? }` rendered as a small button under the step, secondary unless `variant` says otherwise. */
+    /**
+     * The features, in order; each is `{ title, description, scene?, code?, illustration?, action? }`
+     * where `scene` is `{ component, props? }` naming a webkit scene asset (drawn live in the stack, still
+     * in the grid), `code` is a one-file sample `{ fileName, code, language?, fileIcon?, copyAriaLabel? }`
+     * drawn when no scene is set, `illustration` is a registry name drawn when neither is set, and
+     * `action` is `{ label, href, trailing?, target?, variant? }` rendered as a small button under the
+     * step, secondary unless `variant` says otherwise.
+     */
     items?: FeatureScrollSectionItem[]
   }
 
@@ -112,6 +119,12 @@
       fileIcon: sample.fileIcon
     }
   ]
+
+  const MEDIA_FRAME_CLASS =
+    'relative h-[30rem] w-full min-w-0 overflow-hidden rounded-(--shape-card) bg-(--bg-surface) ' +
+    'lg:absolute lg:inset-0 lg:h-auto lg:rounded-none lg:border-0 [background-clip:var(--illustration-rim-boxes)] ' +
+    '[background-image:linear-gradient(var(--bg-surface),var(--bg-surface)),var(--illustration-rim),linear-gradient(var(--bg-surface),var(--bg-surface))] ' +
+    '[background-origin:var(--illustration-rim-boxes)] [border:var(--illustration-rim-width-hairline)_solid_transparent]'
 </script>
 
 <template>
@@ -200,9 +213,7 @@
         <MediaScroll :items="items">
           <template #media="{ index, active }">
             <div class="contents">
-              <div
-                class="relative h-[30rem] w-full min-w-0 overflow-hidden rounded-(--shape-card) bg-(--bg-surface) lg:absolute lg:inset-0 lg:h-auto lg:rounded-none lg:border-0 [background-clip:var(--illustration-rim-boxes)] [background-image:linear-gradient(var(--bg-surface),var(--bg-surface)),var(--illustration-rim),linear-gradient(var(--bg-surface),var(--bg-surface))] [background-origin:var(--illustration-rim-boxes)] [border:var(--illustration-rim-width-hairline)_solid_transparent]"
-              >
+              <div :class="MEDIA_FRAME_CLASS">
                 <Texture
                   variant="dots"
                   size="small"

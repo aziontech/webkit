@@ -77,6 +77,24 @@
   const frameProps = computed(() =>
     props.framed ? { flush: true, borders: 'y', marks: 'all' } : {}
   )
+
+  const CONTENT_CLASS =
+    'flex flex-col items-start gap-(--spacing-xl) ' +
+    'group-data-[framed]:px-(--spacing-xl) group-data-[framed]:py-(--spacing-2xl) group-data-[framed]:group-data-[padding=small]:py-(--spacing-xl) ' +
+    'group-data-[align=center]:items-center'
+
+  const TITLE_CLASS =
+    'm-0 text-balance text-(--text-default) ' +
+    'group-data-[size=small]:text-heading-lg group-data-[size=medium]:text-heading-xl group-data-[size=large]:text-heading-2xl ' +
+    'md:[grid-column:span_var(--module-header-headline-span,1)/span_var(--module-header-headline-span,1)] md:[max-width:var(--module-header-headline-max,none)]'
+
+  const DESCRIPTION_CLASS =
+    'm-0 self-start text-pretty text-body-lg text-(--text-muted) md:col-start-3 md:group-data-[description-width=wide]:col-span-2 md:group-data-[description-width=wide]:col-start-2 ' +
+    'md:group-data-[description-width=wide]:max-w-(--container-xl) md:group-data-[description-width=wide]:justify-self-end'
+
+  const ACTIONS_CLASS =
+    'flex w-full max-w-full min-w-0 flex-col items-stretch gap-(--spacing-md) ' +
+    '[&>*]:w-full [&>*]:max-w-full sm:w-auto sm:flex-row sm:items-center sm:[&>*]:w-auto sm:group-data-[align=center]:justify-center'
 </script>
 
 <template>
@@ -91,9 +109,7 @@
     :data-description-width="descriptionWidth"
     class="group"
   >
-    <div
-      class="flex flex-col items-start gap-(--spacing-xl) group-data-[framed]:px-(--spacing-xl) group-data-[framed]:py-(--spacing-2xl) group-data-[framed]:group-data-[padding=small]:py-(--spacing-xl) group-data-[align=center]:items-center"
-    >
+    <div :class="CONTENT_CLASS">
       <div
         v-if="align === 'split'"
         class="flex w-full flex-col gap-(--spacing-lg)"
@@ -105,14 +121,12 @@
           >{{ eyebrow }}</Eyebrow
         >
         <div class="grid gap-(--spacing-xl) md:grid-cols-3">
-          <h2
-            class="m-0 text-balance text-(--text-default) group-data-[size=small]:text-heading-lg group-data-[size=medium]:text-heading-xl group-data-[size=large]:text-heading-2xl md:[grid-column:span_var(--module-header-headline-span,1)/span_var(--module-header-headline-span,1)] md:[max-width:var(--module-header-headline-max,none)]"
-          >
+          <h2 :class="TITLE_CLASS">
             {{ title }}
           </h2>
           <p
             v-if="hasDescription()"
-            class="m-0 self-start text-pretty text-body-lg text-(--text-muted) md:col-start-3 md:group-data-[description-width=wide]:col-span-2 md:group-data-[description-width=wide]:col-start-2 md:group-data-[description-width=wide]:max-w-(--container-xl) md:group-data-[description-width=wide]:justify-self-end"
+            :class="DESCRIPTION_CLASS"
           >
             <slot>{{ description }}</slot>
           </p>
@@ -144,7 +158,7 @@
 
       <div
         v-if="slots.actions"
-        class="flex w-full max-w-full min-w-0 flex-col items-stretch gap-(--spacing-md) [&>*]:w-full [&>*]:max-w-full sm:w-auto sm:flex-row sm:items-center sm:[&>*]:w-auto sm:group-data-[align=center]:justify-center"
+        :class="ACTIONS_CLASS"
       >
         <slot name="actions" />
       </div>

@@ -55,6 +55,21 @@
   useHeadingOutline(rootEl, () =>
     anchorId.value ? { id: anchorId.value, text: props.title || props.label, depth: 2 } : null
   )
+
+  const ANCHOR_ICON_CLASS =
+    'az az-link text-label-md text-(--text-muted) opacity-0 transition-opacity duration-150 ease-out ' +
+    'group-hover/anchor:opacity-100 group-focus-visible/anchor:opacity-100 motion-reduce:transition-none'
+
+  const BODY_CLASS =
+    'relative min-w-0 flex-1 md:border-s md:border-(--border-default) md:ps-(--spacing-lg) md:data-titled:ps-(--spacing-xl) ' +
+    'md:[[data-doc-changelog-entry]+[data-doc-changelog-entry]_&]:-mt-6 md:[[data-doc-changelog-entry]+[data-doc-changelog-entry]_&]:pt-6 ' +
+    'data-titled:[[data-doc-changelog-entry]:has(+[data-doc-changelog-entry])_&]:pb-(--spacing-xl) ' +
+    '[&>*:first-child]:pt-0!'
+
+  const NODE_CLASS =
+    'absolute top-[0.5lh] start-[calc(var(--spacing-xl)*-1)] hidden size-3 -translate-x-1/2 ' +
+    'rtl:translate-x-1/2 -translate-y-1/2 rounded-(--radius-sm) border border-(--border-strong) bg-(--bg-canvas) text-heading-md ' +
+    'md:block'
 </script>
 
 <template>
@@ -96,7 +111,7 @@
           >
           <span class="ms-(--spacing-xs) inline-flex h-lh items-center align-top">
             <i
-              class="az az-link text-label-md text-(--text-muted) opacity-0 transition-opacity duration-150 ease-out group-hover/anchor:opacity-100 group-focus-visible/anchor:opacity-100 motion-reduce:transition-none"
+              :class="ANCHOR_ICON_CLASS"
               aria-hidden="true"
             />
           </span>
@@ -123,7 +138,7 @@
     </div>
     <div
       :data-titled="title ? '' : null"
-      class="relative min-w-0 flex-1 md:border-s md:border-(--border-default) md:ps-(--spacing-lg) md:data-titled:ps-(--spacing-xl) md:[[data-doc-changelog-entry]+[data-doc-changelog-entry]_&]:-mt-6 md:[[data-doc-changelog-entry]+[data-doc-changelog-entry]_&]:pt-6 data-titled:[[data-doc-changelog-entry]:has(+[data-doc-changelog-entry])_&]:pb-(--spacing-xl) [&>*:first-child]:pt-0!"
+      :class="BODY_CLASS"
     >
       <div
         v-if="title"
@@ -133,7 +148,7 @@
         <span
           aria-hidden="true"
           :data-testid="`${testId}__node`"
-          class="absolute top-[0.5lh] start-[calc(var(--spacing-xl)*-1)] hidden size-3 -translate-x-1/2 rtl:translate-x-1/2 -translate-y-1/2 rounded-(--radius-sm) border border-(--border-strong) bg-(--bg-canvas) text-heading-md md:block"
+          :class="NODE_CLASS"
         />
         <h2
           :id="`${anchorId}-label`"
@@ -151,7 +166,7 @@
             >
             <span class="ms-(--spacing-xs) inline-flex h-lh items-center align-top">
               <i
-                class="az az-link text-label-md text-(--text-muted) opacity-0 transition-opacity duration-150 ease-out group-hover/anchor:opacity-100 group-focus-visible/anchor:opacity-100 motion-reduce:transition-none"
+                :class="ANCHOR_ICON_CLASS"
                 aria-hidden="true"
               />
             </span>

@@ -129,6 +129,11 @@
     halt()
     observer?.disconnect()
   })
+
+  const MODULE_CARD_CLASS =
+    'flex items-start gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) p-(--spacing-md) transition-colors duration-moderate-01 ease-productive-entrance ' +
+    'data-on:border-(--primary) ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -157,7 +162,7 @@
       >
         <div
           :data-on="enabled(module.key) || null"
-          class="flex items-start gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) p-(--spacing-md) transition-colors duration-moderate-01 ease-productive-entrance data-on:border-(--primary) motion-reduce:transition-none"
+          :class="MODULE_CARD_CLASS"
         >
           <LegacySwitch
             :checked="enabled(module.key)"

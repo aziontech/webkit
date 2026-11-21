@@ -190,7 +190,9 @@
   const INLINE_BODY = new Set<Component>([DocCallout, DocItem, DocPrompt])
 
   const TOOLTIP_TERM_CLASS =
-    'm-0 cursor-help rounded-(--shape-flat) border-0 bg-transparent p-0 text-start text-(--text-default) underline decoration-dotted decoration-(--border-strong) underline-offset-4 transition-colors duration-150 ease-out hover:decoration-(--text-default) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color) motion-reduce:transition-none'
+    'm-0 cursor-help rounded-(--shape-flat) border-0 bg-transparent p-0 text-start text-(--text-default) underline decoration-dotted decoration-(--border-strong) underline-offset-4 ' +
+    'transition-colors duration-150 ease-out hover:decoration-(--text-default) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color) ' +
+    'motion-reduce:transition-none'
 
   const text = (value: unknown): string => (typeof value === 'string' ? value : '')
 

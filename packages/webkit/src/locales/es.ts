@@ -1394,7 +1394,9 @@ export const es: Messages = {
   docAgentCard: {
     title: 'Tu agente de IA, fluido en Azion',
     description:
-      'Un prompt le enseña la plataforma a cualquier agente de código: los nombres actuales de los productos, la documentación en vivo a través del servidor MCP de Azion y despliegues reales con la CLI.',
+      'Un prompt le enseña la plataforma a cualquier agente de código: los nombres actuales de ' +
+      'los productos, la documentación en vivo a través del servidor MCP de Azion y ' +
+      'despliegues reales con la CLI.',
     asideTitle: '¿Prefieres la ruta guiada?',
     action: 'Configurar agente'
   },

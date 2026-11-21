@@ -10,7 +10,11 @@
   })
 
   export interface SelectTriggerProps {
-    /** Base direction of the shown value, isolated from the trigger's own direction. Omitted, it follows the value's first strong character (`<bdi>`); pass `ltr` for values such as dial codes (`+1`) that have none. */
+    /**
+     * Base direction of the shown value, isolated from the trigger's own direction. Omitted, it follows
+     * the value's first strong character (`<bdi>`); pass `ltr` for values such as dial codes (`+1`) that
+     * have none.
+     */
     valueDir?: 'ltr' | 'rtl' | 'auto'
   }
   const props = defineProps<SelectTriggerProps>()
@@ -48,6 +52,25 @@
     locked: () => ctx.disabled.value || ctx.readonly.value,
     pendingFocus: ctx.pendingFocus
   })
+
+  const ROOT_CLASS =
+    'group relative flex w-full items-center gap-(--spacing-xs) rounded-(--shape-control) border border-(--border-input) bg-(--bg-surface) px-(--spacing-sm) text-label-sm ' +
+    'text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 ' +
+    'focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) ' +
+    'data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 ' +
+    'data-[invalid]:border-(--danger-border) data-[invalid]:focus-visible:ring-(--danger) ' +
+    'data-[disabled]:cursor-not-allowed data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:hover:border-(--border-input) ' +
+    'data-[disabled]:focus-visible:ring-0 data-[disabled]:focus-visible:ring-offset-0 ' +
+    'data-[readonly]:cursor-default ' +
+    'data-[variant=ghost]:w-auto data-[variant=ghost]:max-w-full data-[variant=ghost]:gap-(--spacing-2xs) data-[variant=ghost]:border-0 data-[variant=ghost]:bg-transparent ' +
+    'data-[variant=ghost]:px-(--spacing-xs) data-[variant=ghost]:text-label-md data-[variant=ghost]:focus-visible:ring-offset-0 data-[variant=ghost]:hover:bg-(--bg-mask) ' +
+    'data-[variant=ghost]:data-[state=open]:bg-(--bg-mask) data-[variant=ghost]:data-[disabled]:bg-transparent data-[variant=ghost]:data-[disabled]:hover:bg-transparent'
+
+  const CHEVRON_CLASS =
+    'az az-chevron-down shrink-0 text-(--text-muted) ' +
+    'group-data-[disabled]:text-(--text-disabled) ' +
+    'transition-transform duration-150 ease-out motion-reduce:transition-none ' +
+    'data-[state=open]:rotate-180'
 </script>
 
 <template>
@@ -80,8 +103,7 @@
     :data-invalid="ctx.invalid.value || null"
     :data-required="ctx.required.value || null"
     :data-filled="ctx.filled.value || null"
-    :class="attrs.class"
-    class="group relative flex w-full items-center gap-(--spacing-xs) rounded-(--shape-control) border border-(--border-input) bg-(--bg-surface) px-(--spacing-sm) text-label-sm text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 data-[invalid]:border-(--danger-border) data-[invalid]:focus-visible:ring-(--danger) data-[disabled]:cursor-not-allowed data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:hover:border-(--border-input) data-[disabled]:focus-visible:ring-0 data-[disabled]:focus-visible:ring-offset-0 data-[readonly]:cursor-default data-[variant=ghost]:w-auto data-[variant=ghost]:max-w-full data-[variant=ghost]:gap-(--spacing-2xs) data-[variant=ghost]:border-0 data-[variant=ghost]:bg-transparent data-[variant=ghost]:px-(--spacing-xs) data-[variant=ghost]:text-label-md data-[variant=ghost]:focus-visible:ring-offset-0 data-[variant=ghost]:hover:bg-(--bg-mask) data-[variant=ghost]:data-[state=open]:bg-(--bg-mask) data-[variant=ghost]:data-[disabled]:bg-transparent data-[variant=ghost]:data-[disabled]:hover:bg-transparent"
+    :class="[ROOT_CLASS, attrs.class]"
     @click="onClick"
     @keydown="onKeydown"
   >
@@ -106,7 +128,7 @@
     </span>
     <slot name="trailing" />
     <i
-      class="az az-chevron-down shrink-0 text-(--text-muted) group-data-[disabled]:text-(--text-disabled) transition-transform duration-150 ease-out motion-reduce:transition-none data-[state=open]:rotate-180"
+      :class="CHEVRON_CLASS"
       :data-state="ctx.open.value ? 'open' : 'closed'"
       aria-hidden="true"
       :data-testid="`${testId}__chevron`"

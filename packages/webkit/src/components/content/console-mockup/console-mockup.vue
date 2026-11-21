@@ -173,7 +173,10 @@
     )
     if (!ignored.length) return
     console.warn(
-      `[webkit] <ConsoleMockup name="${name}">: ${ignored.join(', ')} ${ignored.length > 1 ? 'have' : 'has'} no effect on this widget. Fragments keep their own width and fade and take only variant, and chrome while framed; the workload screens take variant, chrome, width and fade (see the console-mockup spec).`
+      `[webkit] <ConsoleMockup name="${name}">: ${ignored.join(', ')} ` +
+        `${ignored.length > 1 ? 'have' : 'has'} no effect on this widget. ` +
+        'Fragments keep their own width and fade and take only variant, and chrome while framed; ' +
+        'the workload screens take variant, chrome, width and fade (see the console-mockup spec).'
     )
   }
 

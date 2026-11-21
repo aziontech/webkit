@@ -50,6 +50,13 @@
     deployEnvironments(environment.value).filter((name) => name !== environment.value)
   )
 
+  const sharedSettingsLabel = computed(
+    () =>
+      `${environment.value} deploys with ${current.value.settings}, ` +
+      `which is also linked in ${listFormat(alsoDeploys.value)}, ` +
+      `so this deployment goes live in ${deployEnvironments(environment.value).length} environments at once.`
+  )
+
   const projectCount = (name: string) =>
     reachOf(name).groups.reduce((total, group) => total + group.projects.length, 0)
 
@@ -155,7 +162,7 @@
         key="alert-2"
         severity="warning"
         size="small"
-        :label="`${environment} deploys with ${current.settings}, which is also linked in ${listFormat(alsoDeploys)}, so this deployment goes live in ${deployEnvironments(environment).length} environments at once.`"
+        :label="sharedSettingsLabel"
       />
     </template>
   </CreateDeployDrawer>

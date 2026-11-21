@@ -108,6 +108,10 @@
   const clearError = () => {
     invalidMessage.value = ''
   }
+
+  const FLOOR_CLASS =
+    'relative isolate h-[calc(var(--spacing-2xl)*2.5)] overflow-clip border-t border-(--border-default) bg-(--bg-canvas) [--texture-pool-a:20%_110%] [--texture-pool-b:80%_110%] ' +
+    '[--texture-wave-gain:3] [--texture-wave-pace:5]'
 </script>
 
 <template>
@@ -229,7 +233,7 @@
 
         <div
           aria-hidden="true"
-          class="relative isolate h-[calc(var(--spacing-2xl)*2.5)] overflow-clip border-t border-(--border-default) bg-(--bg-canvas) [--texture-pool-a:20%_110%] [--texture-pool-b:80%_110%] [--texture-wave-gain:3] [--texture-wave-pace:5]"
+          :class="FLOOR_CLASS"
         >
           <Texture
             variant="pixelate"

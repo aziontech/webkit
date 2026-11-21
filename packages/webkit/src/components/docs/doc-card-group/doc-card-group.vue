@@ -35,6 +35,11 @@
   const attrs = useAttrs()
 
   const testId = computed(() => (attrs['data-testid'] as string) ?? 'doc-card-group')
+
+  const GRID_CLASS =
+    'grid w-full gap-px [&>*]:ring-1 [&>*]:ring-(--border-default) ' +
+    'data-[mobile-columns=1]:grid-cols-1 data-[mobile-columns=2]:grid-cols-2 ' +
+    'data-[columns=2]:sm:grid-cols-2 data-[columns=3]:sm:grid-cols-2 data-[columns=3]:lg:grid-cols-3 data-[columns=4]:sm:grid-cols-2 data-[columns=4]:lg:grid-cols-4'
 </script>
 
 <template>
@@ -46,7 +51,7 @@
     class="w-full"
   >
     <div
-      class="grid w-full gap-px [&>*]:ring-1 [&>*]:ring-(--border-default) data-[mobile-columns=1]:grid-cols-1 data-[mobile-columns=2]:grid-cols-2 data-[columns=2]:sm:grid-cols-2 data-[columns=3]:sm:grid-cols-2 data-[columns=3]:lg:grid-cols-3 data-[columns=4]:sm:grid-cols-2 data-[columns=4]:lg:grid-cols-4"
+      :class="GRID_CLASS"
       :data-columns="columns"
       :data-mobile-columns="mobileColumns"
     >

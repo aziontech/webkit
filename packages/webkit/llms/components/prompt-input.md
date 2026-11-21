@@ -418,7 +418,10 @@ packages/webkit/src/components/ai/prompt-input/
   import { ref } from 'vue'
 
   const prompt = ref(
-    'Write a function that redirects every request from the old blog path to the new one, keeps the query string, answers with a permanent redirect and logs the original path so I can check later which links people still use. It should also skip the redirect for requests that already come from the new path, and it should run before the cache.'
+    'Write a function that redirects every request from the old blog path to the new one, keeps the query string, ' +
+      'answers with a permanent redirect and logs the original path so I can check later which links people still ' +
+      'use. It should also skip the redirect for requests that already come from the new path, and it should run ' +
+      'before the cache.'
   )
 </script>
 

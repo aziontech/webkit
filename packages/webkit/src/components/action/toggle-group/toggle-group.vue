@@ -118,7 +118,9 @@
   }))
 
   const ROOT_CLASS =
-    'group relative inline-flex w-fit max-w-full min-w-0 items-stretch gap-(--spacing-2xs) rounded-(--shape-button) border border-(--border-muted) bg-(--bg-surface) p-(--spacing-2xs) data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 data-[fluid]:flex data-[fluid]:w-full'
+    'group relative inline-flex w-fit max-w-full min-w-0 items-stretch gap-(--spacing-2xs) rounded-(--shape-button) border border-(--border-muted) bg-(--bg-surface) p-(--spacing-2xs) ' +
+    'data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 ' +
+    'data-[fluid]:flex data-[fluid]:w-full'
 
   const resolveOptionElement = (
     element: globalThis.Element | ComponentPublicInstance | null
@@ -285,10 +287,29 @@
   )
 
   watch(selectedValue, scheduleIndicatorSync)
+
+  const INDICATOR_CLASS =
+    'pointer-events-none absolute top-0 z-0 rounded-(--shape-button) bg-(--bg-selected) transition-[transform,width,height] duration-moderate-02 ease-productive-entrance ' +
+    'motion-reduce:transition-none'
+
+  const OPTION_CLASS =
+    'relative z-1 inline-flex min-w-0 items-center justify-center gap-(--spacing-xs) whitespace-nowrap ' +
+    'group-data-[fluid]:min-w-0 group-data-[fluid]:flex-1 ' +
+    'rounded-(--shape-button) border border-transparent bg-transparent ' +
+    'group-data-[size=small]:px-(--spacing-xs) group-data-[size=medium]:px-(--spacing-sm) group-data-[size=large]:px-(--spacing-md) group-data-[size=small]:text-label-sm ' +
+    'group-data-[size=medium]:text-label-sm group-data-[size=large]:text-label-md ' +
+    'data-[state=active]:text-(--text-default) data-[state=inactive]:text-(--text-muted) ' +
+    'data-[locked]:pe-(--spacing-xs) ' +
+    'transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) ' +
+    'disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-(--bg-disabled) disabled:text-(--text-disabled)'
 </script>
 
 <script lang="ts">
-  /** One segment; type a list as ToggleGroupOption of the model's union so each value is one of it. A number value is coerced to its string. `locked` draws the trailing lock icon; `disabled` alone draws none. */
+  /**
+   * One segment; type a list as ToggleGroupOption of the model's union so each value is one of it. A
+   * number value is coerced to its string. `locked` draws the trailing lock icon; `disabled` alone draws
+   * none.
+   */
   export type ToggleGroupOption<TOptionValue extends string | number = string | number> = {
     label?: string | number
     value?: TOptionValue
@@ -314,7 +335,7 @@
   >
     <span
       v-show="indicatorVisible"
-      class="pointer-events-none absolute top-0 z-0 rounded-(--shape-button) bg-(--bg-selected) transition-[transform,width,height] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
+      :class="INDICATOR_CLASS"
       :style="indicatorTransformStyle"
       :data-testid="`${testId}__indicator`"
       aria-hidden="true"
@@ -332,7 +353,7 @@
       :data-state="option.value === selectedValue ? 'active' : 'inactive'"
       :data-disabled="option.disabled ? '' : undefined"
       :data-locked="option.locked || null"
-      class="relative z-1 inline-flex min-w-0 items-center justify-center gap-(--spacing-xs) whitespace-nowrap group-data-[fluid]:min-w-0 group-data-[fluid]:flex-1 rounded-(--shape-button) border border-transparent bg-transparent group-data-[size=small]:px-(--spacing-xs) group-data-[size=medium]:px-(--spacing-sm) group-data-[size=large]:px-(--spacing-md) group-data-[size=small]:text-label-sm group-data-[size=medium]:text-label-sm group-data-[size=large]:text-label-md data-[state=active]:text-(--text-default) data-[state=inactive]:text-(--text-muted) data-[locked]:pe-(--spacing-xs) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-(--bg-disabled) disabled:text-(--text-disabled)"
+      :class="OPTION_CLASS"
       @click="selectOption(option.value, option.disabled)"
       @keydown="onOptionKeydown($event, option.value, option.disabled)"
     >

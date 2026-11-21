@@ -251,6 +251,16 @@
   const replay = (event: MouseEvent) => {
     if (run.value) emit('replay', event, run.value)
   }
+
+  const FOOTER_BAND_CLASS =
+    '@container/band flex min-h-(--size-12) flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-xs) border-t border-(--border-muted) bg-(--bg-canvas) px-(--spacing-md) ' +
+    'py-(--spacing-xs)'
+
+  const FLOW_NODE_CARD_CLASS =
+    'flex w-full min-w-0 flex-col ' +
+    'in-data-[direction=row]:w-(--size-56) ' +
+    'rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) transition-colors duration-moderate-01 ease-productive-entrance ' +
+    'hover:border-(--border-strong) has-[:focus-visible]:border-(--border-strong) motion-reduce:transition-none'
 </script>
 
 <template>
@@ -415,9 +425,7 @@
               </div>
             </div>
 
-            <div
-              class="@container/band flex min-h-(--size-12) flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-xs) border-t border-(--border-muted) bg-(--bg-canvas) px-(--spacing-md) py-(--spacing-xs)"
-            >
+            <div :class="FOOTER_BAND_CLASS">
               <div
                 class="flex min-w-0 flex-1 basis-(--container-2xs) items-center gap-(--spacing-xs)"
               >
@@ -470,9 +478,7 @@
                 unstyled
                 :terminal="node.key === 'origin'"
               >
-                <div
-                  class="flex w-full min-w-0 flex-col in-data-[direction=row]:w-(--size-56) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) transition-colors duration-moderate-01 ease-productive-entrance hover:border-(--border-strong) has-[:focus-visible]:border-(--border-strong) motion-reduce:transition-none"
-                >
+                <div :class="FLOW_NODE_CARD_CLASS">
                   <FlowDiagram.Anchor>
                     <div
                       class="flex w-full items-center gap-(--spacing-2xs) px-(--spacing-md) pt-(--spacing-sm) pb-(--spacing-2xs)"

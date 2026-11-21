@@ -47,6 +47,13 @@
     loading: computed(() => props.loading),
     variant: computed(() => props.variant)
   })
+
+  const ROOT_CLASS =
+    'grid w-full grid-cols-1 gap-x-(--spacing-lg) gap-y-(--spacing-md) ' +
+    'data-[variant=split]:gap-y-(--spacing-sm) ' +
+    'data-[columns=2]:grid-cols-[repeat(auto-fill,minmax(min(100%,max(var(--container-3xs),calc((100%_-_var(--spacing-lg))/2))),1fr))] ' +
+    'data-[columns=3]:grid-cols-[repeat(auto-fill,minmax(min(100%,max(var(--container-3xs),calc((100%_-_2*var(--spacing-lg))/3))),1fr))] ' +
+    'data-[columns=4]:grid-cols-[repeat(auto-fill,minmax(min(100%,max(var(--container-3xs),calc((100%_-_3*var(--spacing-lg))/4))),1fr))]'
 </script>
 
 <template>
@@ -58,7 +65,7 @@
     :data-loading="loading || null"
     :aria-busy="loading ? 'true' : undefined"
     :aria-label="ariaLabel || undefined"
-    class="grid w-full grid-cols-1 gap-x-(--spacing-lg) gap-y-(--spacing-md) data-[variant=split]:gap-y-(--spacing-sm) data-[columns=2]:grid-cols-[repeat(auto-fill,minmax(min(100%,max(var(--container-3xs),calc((100%_-_var(--spacing-lg))/2))),1fr))] data-[columns=3]:grid-cols-[repeat(auto-fill,minmax(min(100%,max(var(--container-3xs),calc((100%_-_2*var(--spacing-lg))/3))),1fr))] data-[columns=4]:grid-cols-[repeat(auto-fill,minmax(min(100%,max(var(--container-3xs),calc((100%_-_3*var(--spacing-lg))/4))),1fr))]"
+    :class="ROOT_CLASS"
   >
     <slot />
   </dl>

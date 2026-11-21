@@ -342,7 +342,11 @@
       if (!pairs.length) return
       warnedRoutes.add(route)
       console.warn(
-        `[webkit] <ConsoleLayout>: on route "${route}" a SidebarMenu in the page body repeats the layout navigation: ${[...new Set(pairs)].join('; ')}. A destination appears once per screen, and a page has only its PageTabs: drop the in-page menu and keep these pages in the rail or in the resource's tabs (rule webkit-navigation-levels).`
+        `[webkit] <ConsoleLayout>: on route "${route}" a SidebarMenu in the page body repeats the layout navigation: ` +
+          `${[...new Set(pairs)].join('; ')}. ` +
+          'A destination appears once per screen, and a page has only its PageTabs: ' +
+          "drop the in-page menu and keep these pages in the rail or in the resource's tabs " +
+          '(rule webkit-navigation-levels).'
       )
     }
 
@@ -448,6 +452,25 @@
   const openSearch = () => {
     searchOpen.value = true
   }
+
+  const DRAWER_HOME_LINK_CLASS =
+    'flex h-6 w-fit items-center rounded-(--shape-button) px-(--spacing-xs) transition-opacity duration-fast-02 ease-productive-entrance ' +
+    'hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none'
+
+  const HEADER_HOME_LINK_CLASS =
+    'flex h-6 w-fit shrink-0 items-center @max-xs:hidden rounded-(--shape-button) px-(--spacing-2xs) transition-opacity duration-fast-02 ease-productive-entrance ' +
+    'hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none'
+
+  const ACCOUNT_TRIGGER_CLASS =
+    'rounded-(--shape-button) transition-opacity duration-fast-02 ease-productive-entrance ' +
+    'hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) ' +
+    'motion-reduce:transition-none'
+
+  const MAIN_CLASS =
+    'flex min-h-full min-w-0 flex-col animate-page-enter ' +
+    'has-[>[data-layout-fill]]:h-full has-[>[data-layout-fill]]:overflow-hidden ' +
+    'motion-reduce:animate-none ' +
+    '[&>[data-layout-fill]]:h-auto [&>[data-layout-fill]]:min-h-0 [&>[data-layout-fill]]:flex-1'
 </script>
 
 <template>
@@ -481,7 +504,7 @@
                 <a
                   :href="safeHref(home) ?? undefined"
                   :aria-label="t('consoleLayout.home')"
-                  class="flex h-6 w-fit items-center rounded-(--shape-button) px-(--spacing-xs) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+                  :class="DRAWER_HOME_LINK_CLASS"
                 >
                   <Brand
                     variant="default"
@@ -581,7 +604,7 @@
                     v-if="!pageControl"
                     :href="safeHref(home) ?? undefined"
                     :aria-label="t('consoleLayout.home')"
-                    class="flex h-6 w-fit shrink-0 items-center @max-xs:hidden rounded-(--shape-button) px-(--spacing-2xs) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+                    :class="HEADER_HOME_LINK_CLASS"
                   >
                     <Brand
                       variant="default"
@@ -667,7 +690,7 @@
                   <button
                     type="button"
                     :aria-label="accountTriggerLabel"
-                    class="rounded-(--shape-button) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
+                    :class="ACCOUNT_TRIGGER_CLASS"
                   >
                     <Avatar
                       :src="account.src"
@@ -710,7 +733,7 @@
         ref="mainEl"
         :key="pageKey"
         :data-testid="`${testId}__main`"
-        class="flex min-h-full min-w-0 flex-col animate-page-enter has-[>[data-layout-fill]]:h-full has-[>[data-layout-fill]]:overflow-hidden motion-reduce:animate-none [&>[data-layout-fill]]:h-auto [&>[data-layout-fill]]:min-h-0 [&>[data-layout-fill]]:flex-1"
+        :class="MAIN_CLASS"
       >
         <slot />
       </main>

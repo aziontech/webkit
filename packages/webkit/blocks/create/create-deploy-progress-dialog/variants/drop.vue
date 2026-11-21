@@ -85,6 +85,10 @@
   })
 
   onBeforeUnmount(() => clearTimeout(stepTimer))
+
+  const FILE_LIST_CLASS =
+    'm-0 flex max-h-64 min-w-0 list-none flex-col gap-(--spacing-2xs) overflow-auto overscroll-contain p-0 ' +
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)'
 </script>
 
 <template>
@@ -148,7 +152,7 @@
             <ul
               aria-label="Dropped files"
               tabindex="0"
-              class="m-0 flex max-h-64 min-w-0 list-none flex-col gap-(--spacing-2xs) overflow-auto overscroll-contain p-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+              :class="FILE_LIST_CLASS"
             >
               <li
                 v-for="file in shownFiles"

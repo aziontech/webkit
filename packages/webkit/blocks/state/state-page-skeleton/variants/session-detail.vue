@@ -12,6 +12,10 @@
   const formRows = ['58%', '44%', '66%']
 
   const detailTabs = ['6rem', '3rem', '7.5rem', '8rem', '9rem', '6.5rem']
+
+  const SIDEBAR_CLASS =
+    'hidden w-(--container-2xs) shrink-0 flex-col gap-(--spacing-lg) overflow-hidden border-e-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface) p-(--spacing-sm) ' +
+    'md:flex'
 </script>
 
 <template>
@@ -71,9 +75,7 @@
     </div>
 
     <div class="flex min-h-0 flex-1">
-      <div
-        class="hidden w-(--container-2xs) shrink-0 flex-col gap-(--spacing-lg) overflow-hidden border-e-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface) p-(--spacing-sm) md:flex"
-      >
+      <div :class="SIDEBAR_CLASS">
         <Skeleton height="2.5rem" />
 
         <div

@@ -394,6 +394,13 @@ Unbound, each one keeps its own local state.
       if (!open) selectedId.value = ''
     }
   })
+
+  const SERVICE_BUTTON_CLASS =
+    'flex w-full items-center justify-between gap-(--spacing-sm) rounded-(--shape-button) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xs) ' +
+    'text-start text-label-md text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance ' +
+    'hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) ' +
+    'aria-pressed:border-(--accent) ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -420,7 +427,7 @@ Unbound, each one keeps its own local state.
             <button
               type="button"
               :aria-pressed="selectedId === service.id"
-              class="flex w-full items-center justify-between gap-(--spacing-sm) rounded-(--shape-button) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xs) text-start text-label-md text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) aria-pressed:border-(--accent) motion-reduce:transition-none"
+              :class="SERVICE_BUTTON_CLASS"
               @click="selectedId = service.id"
             >
               <span class="min-w-0 truncate">{{ service.id }}</span>

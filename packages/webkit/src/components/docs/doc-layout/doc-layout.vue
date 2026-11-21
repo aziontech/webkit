@@ -313,6 +313,10 @@
     }
     emit('search-select', event, value)
   }
+
+  const OUTLINE_CLASS =
+    'sticky top-(--layout-header-height) flex max-h-[calc(100dvh-var(--layout-header-height))] flex-col gap-(--spacing-lg) overflow-y-auto px-(--spacing-md) pt-(--spacing-md) ' +
+    'pb-(--spacing-lg)'
 </script>
 
 <template>
@@ -440,9 +444,7 @@
         :data-testid="`${testId}__aside`"
         class="hidden w-(--container-3xs) shrink-0 border-s border-(--border-default) xl:block"
       >
-        <div
-          class="sticky top-(--layout-header-height) flex max-h-[calc(100dvh-var(--layout-header-height))] flex-col gap-(--spacing-lg) overflow-y-auto px-(--spacing-md) pt-(--spacing-md) pb-(--spacing-lg)"
-        >
+        <div :class="OUTLINE_CLASS">
           <DocTableOfContents
             :items="outline"
             :groups="outlineGroups"

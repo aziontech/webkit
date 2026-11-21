@@ -53,6 +53,17 @@
   const resolvedVariant = computed((): BadgeVariant | null =>
     resolvedSeverity.value ? null : props.variant === 'secondary' ? 'secondary' : 'primary'
   )
+
+  const ROOT_CLASS =
+    'inline-flex items-center justify-center overflow-hidden leading-none text-label-md ' +
+    'data-[size=small]:text-label-sm data-[size=small]:h-5 data-[size=small]:px-(--spacing-2xs) data-[size=medium]:h-6 data-[size=medium]:px-(--spacing-xs) data-[size=large]:h-[30px] ' +
+    'data-[size=large]:px-(--spacing-xs) ' +
+    'rounded-(--shape-control) ' +
+    'data-[variant=primary]:bg-(--primary) data-[variant=primary]:text-(--primary-foreground) data-[variant=secondary]:bg-(--secondary) ' +
+    'data-[variant=secondary]:text-(--secondary-foreground) ' +
+    'data-[severity=info]:bg-(--info) data-[severity=info]:text-(--info-foreground) data-[severity=success]:bg-(--success) data-[severity=success]:text-(--success-foreground) ' +
+    'data-[severity=warning]:bg-(--warning) data-[severity=warning]:text-(--warning-foreground) data-[severity=danger]:bg-(--danger) data-[severity=danger]:text-(--danger-foreground) ' +
+    'data-[severity=neutral]:bg-(--bg-surface) data-[severity=neutral]:text-(--text-default)'
 </script>
 
 <template>
@@ -62,8 +73,7 @@
     :data-severity="resolvedSeverity"
     :data-variant="resolvedVariant"
     :data-size="size"
-    :class="attrs.class"
-    class="inline-flex items-center justify-center overflow-hidden leading-none text-label-md data-[size=small]:text-label-sm data-[size=small]:h-5 data-[size=small]:px-(--spacing-2xs) data-[size=medium]:h-6 data-[size=medium]:px-(--spacing-xs) data-[size=large]:h-[30px] data-[size=large]:px-(--spacing-xs) rounded-(--shape-control) data-[variant=primary]:bg-(--primary) data-[variant=primary]:text-(--primary-foreground) data-[variant=secondary]:bg-(--secondary) data-[variant=secondary]:text-(--secondary-foreground) data-[severity=info]:bg-(--info) data-[severity=info]:text-(--info-foreground) data-[severity=success]:bg-(--success) data-[severity=success]:text-(--success-foreground) data-[severity=warning]:bg-(--warning) data-[severity=warning]:text-(--warning-foreground) data-[severity=danger]:bg-(--danger) data-[severity=danger]:text-(--danger-foreground) data-[severity=neutral]:bg-(--bg-surface) data-[severity=neutral]:text-(--text-default)"
+    :class="[ROOT_CLASS, attrs.class]"
   >
     <slot v-if="$slots['default']" />
     <span

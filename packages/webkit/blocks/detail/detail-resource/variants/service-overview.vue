@@ -352,6 +352,12 @@
   const complete = computed(
     () => productionSteps.length > 0 && doneCount.value === productionSteps.length
   )
+
+  const STEP_MEDIA_CLASS =
+    'flex size-8 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface) text-(--text-default) transition-colors duration-fast-02 ' +
+    'ease-productive-entrance ' +
+    'group-data-done/item:border-(--primary) group-data-done/item:bg-transparent group-data-done/item:text-(--primary) ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -584,7 +590,7 @@
                     >
                       <Item.Media>
                         <span
-                          class="flex size-8 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface) text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance group-data-done/item:border-(--primary) group-data-done/item:bg-transparent group-data-done/item:text-(--primary) motion-reduce:transition-none"
+                          :class="STEP_MEDIA_CLASS"
                           aria-hidden="true"
                         >
                           <i

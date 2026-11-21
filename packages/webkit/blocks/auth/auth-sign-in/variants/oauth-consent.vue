@@ -53,6 +53,10 @@
       outcome.value = answer === 'allow' ? 'allowed' : 'denied'
     }, 600)
   }
+
+  const FORM_COLUMN_CLASS =
+    'm-auto flex w-full flex-col items-center gap-(--spacing-md) transition-[translate,opacity] duration-slow-01 ease-expressive-entrance ' +
+    'starting:-translate-x-6 starting:opacity-0 rtl:starting:translate-x-6 motion-reduce:transition-none'
 </script>
 <template>
   <div class="flex h-dvh flex-col overflow-hidden bg-(--bg-canvas)">
@@ -84,9 +88,7 @@
     <main class="flex min-h-0 flex-1 flex-col overflow-y-auto lg:overflow-hidden">
       <div class="layout-column-site flex flex-1 flex-col lg:min-h-0">
         <div class="flex flex-1 flex-col py-(--spacing-xl) lg:min-h-0 lg:overflow-y-auto">
-          <div
-            class="m-auto flex w-full flex-col items-center gap-(--spacing-md) transition-[translate,opacity] duration-slow-01 ease-expressive-entrance starting:-translate-x-6 starting:opacity-0 rtl:starting:translate-x-6 motion-reduce:transition-none"
-          >
+          <div :class="FORM_COLUMN_CLASS">
             <div class="flex w-full flex-col items-center">
               <Card
                 class="w-full max-w-(--container-sm)"

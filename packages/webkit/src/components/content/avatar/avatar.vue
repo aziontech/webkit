@@ -95,17 +95,18 @@
   function onImageError() {
     imageFailed.value = true
   }
+
+  const ROOT_CLASS =
+    'inline-flex shrink-0 items-center justify-center overflow-hidden bg-(--bg-surface-raised) text-(--text-default) uppercase select-none text-label-sm rounded-full size-8 ' +
+    'data-[variant=square]:rounded-(--shape-button) ' +
+    'data-[size=small]:size-6 data-[size=large]:size-12 data-[size=large]:text-label-md ' +
+    'data-[content=label]:border data-[content=label]:border-(--border-default)'
 </script>
 
 <template>
   <span
     v-bind="$attrs"
-    :class="
-      cn(
-        'inline-flex shrink-0 items-center justify-center overflow-hidden bg-(--bg-surface-raised) text-(--text-default) uppercase select-none text-label-sm rounded-full size-8 data-[variant=square]:rounded-(--shape-button) data-[size=small]:size-6 data-[size=large]:size-12 data-[size=large]:text-label-md data-[content=label]:border data-[content=label]:border-(--border-default)',
-        attrs.class as string | undefined
-      )
-    "
+    :class="cn(ROOT_CLASS, attrs.class as string | undefined)"
     :data-testid="testId"
     :data-variant="variant"
     :data-size="size"

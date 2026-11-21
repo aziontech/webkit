@@ -53,7 +53,11 @@
   type QuoteTabsDirection = 'forward' | 'back'
 
   export interface QuoteTabsProps {
-    /** The clients, in wall order; each item is the URL of the client's colour logo, the registry name of its one-ink mark, its name in prose, how tall its mark sits on the card, the quotation, who said it, their role and their likeness. */
+    /**
+     * The clients, in wall order; each item is the URL of the client's colour logo, the registry name of
+     * its one-ink mark, its name in prose, how tall its mark sits on the card, the quotation, who said it,
+     * their role and their likeness.
+     */
     items?: QuoteTabsItem[]
     /** Accessible name for the wall of client cards. */
     ariaLabel?: string
@@ -244,6 +248,28 @@
   function hideLeaving(element: Element): void {
     element.setAttribute('aria-hidden', 'true')
   }
+
+  const PANEL_CLASS =
+    'group/panel bg-(--bg-canvas) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 ' +
+    'focus-visible:ring-offset-(--bg-canvas)'
+
+  const QUOTE_ENTER_FROM_CLASS =
+    'opacity-0 ' +
+    'group-data-[direction=forward]/panel:translate-x-(--spacing-xl) group-data-[direction=back]/panel:-translate-x-(--spacing-xl) ' +
+    'rtl:group-data-[direction=forward]/panel:-translate-x-(--spacing-xl) rtl:group-data-[direction=back]/panel:translate-x-(--spacing-xl) motion-reduce:translate-x-0'
+
+  const QUOTE_LEAVE_TO_CLASS =
+    'opacity-0 ' +
+    'group-data-[direction=forward]/panel:-translate-x-(--spacing-xl) group-data-[direction=back]/panel:translate-x-(--spacing-xl) ' +
+    'rtl:group-data-[direction=forward]/panel:translate-x-(--spacing-xl) rtl:group-data-[direction=back]/panel:-translate-x-(--spacing-xl) motion-reduce:translate-x-0'
+
+  const TAB_CLASS =
+    'relative isolate flex aspect-3/2 w-full cursor-pointer items-center justify-center px-(--spacing-md) transition-colors duration-moderate-01 ease-out ' +
+    'before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:bg-(--bg-hover) before:opacity-0 before:transition-opacity before:duration-fast-02 ' +
+    "before:ease-productive-entrance before:content-[''] hover:before:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset " +
+    'focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) ' +
+    'data-[active]:bg-(--bg-selected) data-[active]:before:hidden ' +
+    'motion-reduce:transition-none motion-reduce:before:transition-none'
 </script>
 
 <template>
@@ -277,7 +303,7 @@
       :data-testid="`${testId}__panel`"
       :data-direction="direction"
       :aria-labelledby="current.id"
-      class="group/panel bg-(--bg-canvas) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
+      :class="PANEL_CLASS"
     >
       <div class="grid p-(--spacing-xl) *:col-start-1 *:row-start-1">
         <div
@@ -325,9 +351,9 @@
         <Transition
           mode="out-in"
           enter-active-class="transition-[translate,opacity] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none motion-reduce:duration-0"
-          enter-from-class="opacity-0 group-data-[direction=forward]/panel:translate-x-(--spacing-xl) group-data-[direction=back]/panel:-translate-x-(--spacing-xl) rtl:group-data-[direction=forward]/panel:-translate-x-(--spacing-xl) rtl:group-data-[direction=back]/panel:translate-x-(--spacing-xl) motion-reduce:translate-x-0"
+          :enter-from-class="QUOTE_ENTER_FROM_CLASS"
           leave-active-class="pointer-events-none transition-[translate,opacity] duration-moderate-01 ease-productive-exit motion-reduce:transition-none motion-reduce:duration-0"
-          leave-to-class="opacity-0 group-data-[direction=forward]/panel:-translate-x-(--spacing-xl) group-data-[direction=back]/panel:translate-x-(--spacing-xl) rtl:group-data-[direction=forward]/panel:translate-x-(--spacing-xl) rtl:group-data-[direction=back]/panel:-translate-x-(--spacing-xl) motion-reduce:translate-x-0"
+          :leave-to-class="QUOTE_LEAVE_TO_CLASS"
           @before-leave="hideLeaving"
         >
           <div
@@ -411,7 +437,7 @@
           :aria-selected="isActive(index) ? 'true' : 'false'"
           :aria-controls="panelId"
           :tabindex="isActive(index) ? 0 : -1"
-          class="relative isolate flex aspect-3/2 w-full cursor-pointer items-center justify-center px-(--spacing-md) transition-colors duration-moderate-01 ease-out before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:bg-(--bg-hover) before:opacity-0 before:transition-opacity before:duration-fast-02 before:ease-productive-entrance before:content-[''] hover:before:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) data-[active]:bg-(--bg-selected) data-[active]:before:hidden motion-reduce:transition-none motion-reduce:before:transition-none"
+          :class="TAB_CLASS"
           @click="onTabClick(index)"
         >
           <img

@@ -145,6 +145,19 @@
     scrollPrev,
     scrollNext
   })
+
+  const TRACK_CLASS =
+    'data-[variant=cards]:gap-(--spacing-md) ' +
+    '[--carousel-fade-end:0%] [--carousel-fade-start:0%] ' +
+    'data-[can-scroll-next]:[--carousel-fade-end:12%] ' +
+    'data-[can-scroll-prev]:[--carousel-fade-start:12%] ' +
+    'data-[scrollable]:not-focus-visible:mask-[linear-gradient(to_right,transparent,black_var(--carousel-fade-start),black_calc(100%-var(--carousel-fade-end)),transparent)] ' +
+    'rtl:data-[scrollable]:not-focus-visible:mask-[linear-gradient(to_left,transparent,black_var(--carousel-fade-start),black_calc(100%-var(--carousel-fade-end)),transparent)] ' +
+    'flex snap-x snap-mandatory overflow-x-auto scroll-smooth scrollbar-none ' +
+    '[&::-webkit-scrollbar]:hidden ' +
+    'data-[dragging]:cursor-grabbing data-[dragging]:snap-none data-[dragging]:scroll-auto data-[dragging]:select-none ' +
+    'data-[scrollable]:not-data-[dragging]:cursor-grab ' +
+    'focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:scroll-auto'
 </script>
 
 <template>
@@ -184,7 +197,7 @@
       :data-can-scroll-next="canScrollNext || null"
       :data-dragging="dragging || null"
       :data-variant="variant"
-      class="data-[variant=cards]:gap-(--spacing-md) [--carousel-fade-end:0%] [--carousel-fade-start:0%] data-[can-scroll-next]:[--carousel-fade-end:12%] data-[can-scroll-prev]:[--carousel-fade-start:12%] data-[scrollable]:not-focus-visible:mask-[linear-gradient(to_right,transparent,black_var(--carousel-fade-start),black_calc(100%-var(--carousel-fade-end)),transparent)] rtl:data-[scrollable]:not-focus-visible:mask-[linear-gradient(to_left,transparent,black_var(--carousel-fade-start),black_calc(100%-var(--carousel-fade-end)),transparent)] flex snap-x snap-mandatory overflow-x-auto scroll-smooth scrollbar-none [&::-webkit-scrollbar]:hidden data-[dragging]:cursor-grabbing data-[dragging]:snap-none data-[dragging]:scroll-auto data-[dragging]:select-none data-[scrollable]:not-data-[dragging]:cursor-grab focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:scroll-auto"
+      :class="TRACK_CLASS"
     >
       <slot />
     </ul>

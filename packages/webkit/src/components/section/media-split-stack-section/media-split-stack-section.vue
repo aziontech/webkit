@@ -86,7 +86,14 @@
     title?: string
     /** Supporting sentence under the section title. */
     description?: string
-    /** The bands, in order; each is `{ title, description, eyebrow?, href?, action? }` plus its required picture, one of `scene`, `widget` or `illustration` (with `illustrationLabel?`), where `eyebrow` is the band's overline, `href` the link the whole band follows (falling back to the action's), `scene` a webkit scene asset other than `Diagram`, `widget` a `ConsoleMockup` name, `illustration` a name of the illustration registry, and `action` `{ label, href }` the outlined button. */
+    /**
+     * The bands, in order; each is `{ title, description, eyebrow?, href?, action? }` plus its
+     * required picture, one of `scene`, `widget` or `illustration` (with `illustrationLabel?`),
+     * where `eyebrow` is the band's overline, `href` the link the whole band follows (falling
+     * back to the action's), `scene` a webkit scene asset other than `Diagram`, `widget` a
+     * `ConsoleMockup` name, `illustration` a name of the illustration registry, and `action` `{
+     * label, href }` the outlined button.
+     */
     bands?: MediaSplitStackSectionBand[]
   }
 
@@ -138,7 +145,9 @@
       (titles) => {
         if (titles.length)
           console.warn(
-            `[webkit] <MediaSplitStackSection>: ${titles.map((title) => `"${title}"`).join(', ')} has no picture. Give every band an illustration, a widget or a scene; a request-flow diagram goes in ConsoleShowcaseSection.`
+            `[webkit] <MediaSplitStackSection>: ${titles.map((title) => `"${title}"`).join(', ')} has no picture. ` +
+              'Give every band an illustration, a widget or a scene; ' +
+              'a request-flow diagram goes in ConsoleShowcaseSection.'
           )
       },
       { immediate: true }

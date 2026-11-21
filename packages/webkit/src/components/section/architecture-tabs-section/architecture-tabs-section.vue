@@ -44,7 +44,11 @@
     description?: string
     /** Side of the diagram the tabs sit on: `top`, `bottom`, `start` or `end`; start and end hold up to three tabs. */
     tabsSide?: ArchitectureTabsSectionSide
-    /** The architectures, in order; each is `{ value, title, description, diagram, diagramAriaLabel? }` where `diagram` is the name of the diagram drawn while the tab is active and `diagramAriaLabel` replaces the description it ships. */
+    /**
+     * The architectures, in order; each is `{ value, title, description, diagram, diagramAriaLabel? }`
+     * where `diagram` is the name of the diagram drawn while the tab is active and `diagramAriaLabel`
+     * replaces the description it ships.
+     */
     tabs?: ArchitectureTabsSectionTab[]
     /** Opens the next tab on a timer, with the composed tabs' visible pause control. */
     autoplay?: boolean

@@ -16,6 +16,14 @@
   ]
 
   const organization = 'Acme Inc.'
+
+  const ACCOUNT_BUTTON_CLASS =
+    'flex h-10 w-full min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) transition-colors duration-fast-02 ease-productive-entrance ' +
+    'hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none'
+
+  const COMPACT_ACCOUNT_BUTTON_CLASS =
+    'flex h-7 shrink-0 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-2xs) transition-colors duration-fast-02 ease-productive-entrance ' +
+    'hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none'
 </script>
 
 <template>
@@ -29,7 +37,7 @@
         type="button"
         :aria-label="`Account: ${organization}. Switch account`"
         aria-haspopup="dialog"
-        class="flex h-10 w-full min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+        :class="ACCOUNT_BUTTON_CLASS"
       >
         <Avatar
           :label="organization"
@@ -53,7 +61,7 @@
         type="button"
         :aria-label="`Account: ${organization}. Switch account`"
         aria-haspopup="dialog"
-        class="flex h-7 shrink-0 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-2xs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+        :class="COMPACT_ACCOUNT_BUTTON_CLASS"
       >
         <Avatar
           :label="organization"

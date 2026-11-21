@@ -41,6 +41,10 @@
 
   const saveToolbar = () => saveCard(savingToolbar, 'Preview Toolbar')
   const saveProtection = () => saveCard(savingProtection, 'Deployment Protection')
+
+  const PREVIEW_TOOLBAR_NOTE =
+    'Enable the Preview Toolbar on your deployments. To use the toolbar in production, ' +
+    'team members need the browser extension or must enable the toolbar for that domain in the toolbar menu.'
 </script>
 
 <template>
@@ -62,7 +66,7 @@
 
             <Alert
               severity="info"
-              label="Enable the Preview Toolbar on your deployments. To use the toolbar in production, team members need the browser extension or must enable the toolbar for that domain in the toolbar menu."
+              :label="PREVIEW_TOOLBAR_NOTE"
             />
 
             <div class="grid grid-cols-1 gap-(--spacing-lg) sm:grid-cols-2">

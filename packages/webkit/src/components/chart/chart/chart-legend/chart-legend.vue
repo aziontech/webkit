@@ -29,6 +29,18 @@
       dimmed: ctx.emphasized.value !== null && ctx.emphasized.value !== entry.id
     }))
   )
+
+  const ITEM_CLASS =
+    "relative inline-flex min-h-6 items-center before:absolute before:inset-x-0 before:-inset-y-2 before:content-[''] " +
+    'gap-(--spacing-xs) rounded-(--shape-control) px-(--spacing-2xs) text-body-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance ' +
+    'motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) ' +
+    'data-[hidden]:text-(--text-muted)'
+
+  const KEY_CLASS =
+    'size-2.5 shrink-0 rounded-(--shape-control) bg-(--chart-legend-key) forced-color-adjust-none transition-opacity duration-moderate-01 ' +
+    'motion-reduce:transition-none ' +
+    'data-[dimmed]:opacity-30 ' +
+    'data-[hidden]:opacity-30'
 </script>
 
 <template>
@@ -47,7 +59,7 @@
         :aria-pressed="!entry.hidden"
         :data-hidden="entry.hidden || null"
         :data-testid="`${testId}__item`"
-        class="relative inline-flex min-h-6 items-center before:absolute before:inset-x-0 before:-inset-y-2 before:content-[''] gap-(--spacing-xs) rounded-(--shape-control) px-(--spacing-2xs) text-body-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) data-[hidden]:text-(--text-muted)"
+        :class="ITEM_CLASS"
         @click="ctx.toggleSeries($event, entry.id)"
         @pointerenter="ctx.setEmphasized(entry.hidden ? null : entry.id)"
         @pointerleave="ctx.setEmphasized(null)"
@@ -58,7 +70,7 @@
           :data-hidden="entry.hidden || null"
           :data-dimmed="entry.dimmed || null"
           :style="{ '--chart-legend-key': entry.color }"
-          class="size-2.5 shrink-0 rounded-(--shape-control) bg-(--chart-legend-key) forced-color-adjust-none transition-opacity duration-moderate-01 motion-reduce:transition-none data-[dimmed]:opacity-30 data-[hidden]:opacity-30"
+          :class="KEY_CLASS"
         />
         <span>{{ entry.name }}</span>
         <span

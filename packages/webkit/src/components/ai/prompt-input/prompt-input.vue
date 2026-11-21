@@ -66,7 +66,11 @@
     status?: PromptInputStatus
     /** Disables the text area, the submit control and every control in the slots' rows. */
     disabled?: boolean
-    /** Shortcut menus opened by a trigger character at the start of a word: `/` for commands, `@` for things to reference. Choosing an option inserts `<trigger><label>` and adds it to `references`. */
+    /**
+     * Shortcut menus opened by a trigger character at the start of a word: `/` for commands, `@`
+     * for things to reference. Choosing an option inserts `<trigger><label>` and adds it to
+     * `references`.
+     */
     menus?: PromptInputMenu[]
     /** File filter in the native accept syntax (extensions, MIME types, wildcards) for picked, dropped and pasted files. Empty accepts every file. */
     accept?: string
@@ -413,6 +417,31 @@
   })
 
   defineExpose({ focus })
+
+  const BOX_CLASS =
+    'relative flex w-full cursor-text flex-col gap-(--spacing-xs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-xs) transition-colors ' +
+    'duration-fast-02 ease-productive-entrance motion-reduce:transition-none focus-within:border-(--border-strong) focus-within:ring-2 focus-within:ring-(--ring-color) ' +
+    'data-[invalid]:border-(--danger-border) ' +
+    'data-[disabled]:bg-(--bg-disabled)'
+
+  const DROP_CLASS =
+    'pointer-events-none absolute inset-0 z-2 flex items-center justify-center rounded-(--shape-card) border-2 border-dashed border-(--border-selected) bg-(--bg-surface) text-label-md ' +
+    "text-(--text-default) before:absolute before:inset-0 before:rounded-[inherit] before:bg-(--bg-selected) before:content-['']"
+
+  const MENU_CLASS =
+    'absolute inset-x-0 z-(--z-control-overlay) m-0 flex ' +
+    'data-[side=bottom]:top-full data-[side=bottom]:mt-(--spacing-2xs) data-[side=top]:bottom-full data-[side=top]:mb-(--spacing-2xs) ' +
+    'max-h-72 list-none flex-col overflow-y-auto rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-2xs) shadow-(--shadow-xs)'
+
+  const OPTION_CLASS =
+    'flex cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-control) border-y border-transparent bg-clip-padding ' +
+    'forced-colors:border-y-0 px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-default) ' +
+    'hover:bg-(--bg-hover) ' +
+    'data-[active]:bg-(--bg-selected)'
+
+  const TEXTAREA_CLASS =
+    'w-full resize-none bg-transparent px-(--spacing-xs) py-(--spacing-2xs) text-body-md text-(--text-default) ' +
+    'placeholder:text-(--text-muted) outline-none disabled:cursor-not-allowed disabled:text-(--text-disabled)'
 </script>
 
 <template>
@@ -430,7 +459,7 @@
       :data-dragging="(dragging && !disabled) || null"
       ref="boxEl"
       :data-testid="`${testId}__box`"
-      class="relative flex w-full cursor-text flex-col gap-(--spacing-xs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-xs) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none focus-within:border-(--border-strong) focus-within:ring-2 focus-within:ring-(--ring-color) data-[invalid]:border-(--danger-border) data-[disabled]:bg-(--bg-disabled)"
+      :class="BOX_CLASS"
       @pointerdown="onBoxPointerdown"
       @dragenter="attach?.drag"
       @dragover="attach?.drag"
@@ -441,7 +470,7 @@
         v-if="dragging && !disabled"
         aria-hidden="true"
         :data-testid="`${testId}__drop`"
-        class="pointer-events-none absolute inset-0 z-2 flex items-center justify-center rounded-(--shape-card) border-2 border-dashed border-(--border-selected) bg-(--bg-surface) text-label-md text-(--text-default) before:absolute before:inset-0 before:rounded-[inherit] before:bg-(--bg-selected) before:content-['']"
+        :class="DROP_CLASS"
       >
         <span class="relative">{{ t('promptInput.drop') }}</span>
       </div>
@@ -480,7 +509,7 @@
         ref="menuEl"
         :data-trigger="query?.menu.trigger"
         :data-side="menuSide"
-        class="absolute inset-x-0 z-(--z-control-overlay) m-0 flex data-[side=bottom]:top-full data-[side=bottom]:mt-(--spacing-2xs) data-[side=top]:bottom-full data-[side=top]:mb-(--spacing-2xs) max-h-72 list-none flex-col overflow-y-auto rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-2xs) shadow-(--shadow-xs)"
+        :class="MENU_CLASS"
       >
         <li
           v-for="(option, index) in matches"
@@ -489,7 +518,7 @@
           role="option"
           :aria-selected="index === activeIndex"
           :data-active="index === activeIndex || null"
-          class="flex cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-control) border-y border-transparent bg-clip-padding forced-colors:border-y-0 px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-default) hover:bg-(--bg-hover) data-[active]:bg-(--bg-selected)"
+          :class="OPTION_CLASS"
           @mousedown.prevent
           @click="choose(option)"
           @keydown.enter.prevent="choose(option)"
@@ -523,7 +552,7 @@
         :disabled="disabled"
         :data-testid="`${testId}__textarea`"
         enterkeyhint="send"
-        class="w-full resize-none bg-transparent px-(--spacing-xs) py-(--spacing-2xs) text-body-md text-(--text-default) placeholder:text-(--text-muted) outline-none disabled:cursor-not-allowed disabled:text-(--text-disabled)"
+        :class="TEXTAREA_CLASS"
         @input="onInput"
         @keydown="onKeydown"
         @click="readQuery"

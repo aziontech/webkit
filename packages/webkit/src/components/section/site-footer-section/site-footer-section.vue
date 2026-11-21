@@ -63,7 +63,11 @@
     socials?: SiteFooterSectionSocial[]
     /** Line of the system status indicator; the indicator is not rendered when empty. */
     statusLabel?: string
-    /** BCP 47 tags of the languages offered, such as EN, PT-BR, ES; each shows its round flag and its name in its own language, and the first one is selected until `v-model:language` holds another. The language select is not rendered when empty. */
+    /**
+     * BCP 47 tags of the languages offered, such as EN, PT-BR, ES; each shows its round flag and
+     * its name in its own language, and the first one is selected until `v-model:language` holds
+     * another. The language select is not rendered when empty.
+     */
     languages?: string[]
     /** Accessible name of the language select, also its placeholder. Empty uses the locale catalog (`Language`). */
     languageAriaLabel?: string
@@ -101,6 +105,11 @@
   )
 
   const hasHome = computed(() => props.home.length > 0)
+
+  const HOME_LINK_CLASS =
+    'inline-flex w-fit items-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance ' +
+    'hover:opacity-80 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 ' +
+    'focus-visible:ring-offset-(--bg-canvas)'
 </script>
 
 <template>
@@ -145,7 +154,7 @@
         <a
           :href="safeHref(home) ?? undefined"
           :aria-label="homeAriaLabel || t('siteFooterSection.home')"
-          class="inline-flex w-fit items-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
+          :class="HOME_LINK_CLASS"
         >
           <Brand size="small" />
         </a>

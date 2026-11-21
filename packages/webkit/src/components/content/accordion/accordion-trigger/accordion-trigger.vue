@@ -69,6 +69,22 @@
       default:
     }
   }
+
+  const TRIGGER_CLASS =
+    'group flex w-full items-center justify-between bg-transparent px-[var(--accordion-inset,var(--spacing-md))] text-start text-(--text-default) outline-none transition-colors ' +
+    'duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 ' +
+    'focus-visible:ring-offset-(--bg-canvas) gap-(--spacing-sm) ' +
+    'data-[size=medium]:min-h-8 ' +
+    'pointer-coarse:min-h-11! ' +
+    'data-[size=medium]:text-body-sm data-[size=large]:min-h-10 data-[size=large]:text-body-md ' +
+    'data-[icon-position=leading]:flex-row-reverse data-[icon-position=leading]:justify-end data-[icon-position=leading]:gap-(--spacing-xs) ' +
+    'data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled)'
+
+  const CHEVRON_CLASS =
+    'az az-chevron-down w-[1em] shrink-0 text-center text-(--text-muted) transition-transform duration-150 ease-out ' +
+    'motion-reduce:transition-none ' +
+    'group-data-[state=open]:rotate-180 ' +
+    'group-data-[disabled]:text-(--text-disabled)'
 </script>
 
 <template>
@@ -89,8 +105,7 @@
       :data-size="ctx.size.value"
       :data-icon-position="ctx.iconPosition.value"
       :data-disabled="itemCtx.disabled.value || null"
-      :class="attrs.class"
-      class="group flex w-full items-center justify-between bg-transparent px-[var(--accordion-inset,var(--spacing-md))] text-start text-(--text-default) outline-none transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) gap-(--spacing-sm) data-[size=medium]:min-h-8 pointer-coarse:min-h-11! data-[size=medium]:text-body-sm data-[size=large]:min-h-10 data-[size=large]:text-body-md data-[icon-position=leading]:flex-row-reverse data-[icon-position=leading]:justify-end data-[icon-position=leading]:gap-(--spacing-xs) data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled)"
+      :class="[TRIGGER_CLASS, attrs.class]"
       @click="onClick"
       @keydown="onKeydown"
     >
@@ -100,7 +115,7 @@
         <slot />
       </span>
       <i
-        class="az az-chevron-down w-[1em] shrink-0 text-center text-(--text-muted) transition-transform duration-150 ease-out motion-reduce:transition-none group-data-[state=open]:rotate-180 group-data-[disabled]:text-(--text-disabled)"
+        :class="CHEVRON_CLASS"
         aria-hidden="true"
         :data-testid="`${testId}__chevron`"
       />

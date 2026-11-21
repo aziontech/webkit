@@ -28,7 +28,10 @@ export default {
     type: 'problem',
     docs: {
       description:
-        'Disallow a Spacer or a closing RegistrationFrame right after a closing section (ClosingCallToActionSection, its newsletter variant, or a TemplateGallerySection set as closing): the section draws the hatched closing frame itself, so a trailing one doubles it. A section bound with :hatch="false" draws no frame and is skipped.'
+        'Disallow a Spacer or a closing RegistrationFrame right after a closing section ' +
+        '(ClosingCallToActionSection, its newsletter variant, or a TemplateGallerySection set as ' +
+        'closing): the section draws the hatched closing frame itself, so a trailing one doubles ' +
+        'it. A section bound with :hatch="false" draws no frame and is skipped.'
     },
     schema: [],
     messages: {

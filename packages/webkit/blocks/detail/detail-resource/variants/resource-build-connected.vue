@@ -55,6 +55,10 @@
   const discard = () => {
     Object.assign(settings, JSON.parse(baseline.value) as typeof settings)
   }
+
+  const DETAIL_LINK_CLASS =
+    'group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline ' +
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)'
 </script>
 
 <template>
@@ -124,7 +128,7 @@
                                     :href="`https://github.com/${repository}`"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    class="group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
+                                    :class="DETAIL_LINK_CLASS"
                                   >
                                     <span
                                       class="truncate underline-offset-2 group-hover/link:underline"

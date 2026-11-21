@@ -20,6 +20,13 @@
   }
 
   const portalLocale = usePortalLocale()
+
+  const PANEL_CLASS =
+    'flex min-w-[min(var(--container-3xs),calc(100vw_-_var(--spacing-md)))] max-w-[min(var(--container-xs),calc(100vw_-_var(--spacing-md)))] flex-col overflow-y-auto ' +
+    'rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-sm) outline-none ' +
+    'data-[size=small]:min-w-[min(var(--container-xs),calc(100vw_-_var(--spacing-md)))] data-[size=small]:max-w-[min(var(--container-xs),calc(100vw_-_var(--spacing-md)))] ' +
+    'data-[size=medium]:min-w-[min(var(--container-sm),calc(100vw_-_var(--spacing-md)))] data-[size=medium]:max-w-[min(var(--container-sm),calc(100vw_-_var(--spacing-md)))] ' +
+    'data-[size=large]:min-w-[min(var(--container-md),calc(100vw_-_var(--spacing-md)))] data-[size=large]:max-w-[min(var(--container-md),calc(100vw_-_var(--spacing-md)))]'
 </script>
 
 <template>
@@ -48,7 +55,7 @@
         :data-size="ctx.size.value || null"
         :data-width="ctx.size.value || null"
         :style="ctx.panelStyle.value"
-        class="flex min-w-[min(var(--container-3xs),calc(100vw_-_var(--spacing-md)))] max-w-[min(var(--container-xs),calc(100vw_-_var(--spacing-md)))] flex-col overflow-y-auto rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-sm) outline-none data-[size=small]:min-w-[min(var(--container-xs),calc(100vw_-_var(--spacing-md)))] data-[size=small]:max-w-[min(var(--container-xs),calc(100vw_-_var(--spacing-md)))] data-[size=medium]:min-w-[min(var(--container-sm),calc(100vw_-_var(--spacing-md)))] data-[size=medium]:max-w-[min(var(--container-sm),calc(100vw_-_var(--spacing-md)))] data-[size=large]:min-w-[min(var(--container-md),calc(100vw_-_var(--spacing-md)))] data-[size=large]:max-w-[min(var(--container-md),calc(100vw_-_var(--spacing-md)))]"
+        :class="PANEL_CLASS"
       >
         <div
           :data-testid="`${ctx.testId}__body`"

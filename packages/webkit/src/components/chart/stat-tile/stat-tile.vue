@@ -113,6 +113,10 @@
   })
 
   const hasTrend = computed(() => props.trend.filter(isFiniteNumber).length > 1)
+
+  const ROOT_CLASS =
+    'group/stat-tile @container/stat-tile flex min-w-0 flex-col overflow-hidden border-(--border-default) ' +
+    'not-data-[grouped]:rounded-(--shape-card) not-data-[grouped]:border not-data-[grouped]:bg-(--bg-surface) data-[grouped]:border-e data-[grouped]:border-b'
 </script>
 
 <template>
@@ -127,7 +131,7 @@
     :data-grouped="group ? '' : null"
     :aria-labelledby="labelId"
     :aria-busy="loading || undefined"
-    class="group/stat-tile @container/stat-tile flex min-w-0 flex-col overflow-hidden border-(--border-default) not-data-[grouped]:rounded-(--shape-card) not-data-[grouped]:border not-data-[grouped]:bg-(--bg-surface) data-[grouped]:border-e data-[grouped]:border-b"
+    :class="ROOT_CLASS"
   >
     <div
       class="flex min-h-20 flex-1 flex-col justify-center gap-(--spacing-2xs) p-(--spacing-md) @max-3xs/stat-tile:p-(--spacing-sm)"

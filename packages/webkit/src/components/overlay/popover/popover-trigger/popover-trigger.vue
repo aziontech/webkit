@@ -49,6 +49,11 @@
   onBeforeUnmount(() => {
     ctx.triggerEl.value = null
   })
+
+  const ROOT_CLASS =
+    'inline-flex w-fit shrink-0 cursor-pointer rounded-(--shape-control) outline-none ' +
+    'focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) ' +
+    'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50'
 </script>
 
 <template>
@@ -61,7 +66,7 @@
     :data-testid="testId"
     :data-state="isOpen ? 'open' : 'closed'"
     :data-disabled="isDisabled || null"
-    class="inline-flex w-fit shrink-0 cursor-pointer rounded-(--shape-control) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50"
+    :class="ROOT_CLASS"
     @click="toggle"
     @keydown="onKeydown"
     @control="onControl"

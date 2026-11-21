@@ -53,6 +53,10 @@
   const isExternal = computed(
     () => props.target === '_blank' || /^(https?:)?\/\/|^mailto:/.test(props.href)
   )
+
+  const ROOT_CLASS =
+    'group relative flex h-full flex-col bg-(--bg-surface) px-(--spacing-xl) py-5 no-underline transition-colors duration-150 ease-out ' +
+    'hover:bg-(--bg-hover) focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) motion-reduce:transition-none'
 </script>
 
 <template>
@@ -64,7 +68,7 @@
     :href="isLink ? href : undefined"
     :target="isLink ? target : undefined"
     :rel="isLink && target === '_blank' ? 'noreferrer' : undefined"
-    class="group relative flex h-full flex-col bg-(--bg-surface) px-(--spacing-xl) py-5 no-underline transition-colors duration-150 ease-out hover:bg-(--bg-hover) focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+    :class="ROOT_CLASS"
   >
     <span
       v-if="$slots['icon']"

@@ -37,7 +37,12 @@ export const TEXTURE_BACKDROP_DIRS = [
 
 export const TEXTURE_BACKDROP_MESSAGES = {
   'graphic-on-texture':
-    'Content other than text drawn on a texture: a chart, diagram, map or stat, or any page-JSON scene other than a console window, globe or illustration. A Texture is a backdrop for text only: its dots compete with the marks, labels and lines, so the content cannot be read. Set the host to a layout without the texture (`ConsoleShowcaseSection variant="diagram"`, `texture="none"`), or move the graphic off the textured band (.claude/rules/styling.md § "A texture is a backdrop for text only").'
+    'Content other than text drawn on a texture: a chart, diagram, map or stat, or any ' +
+    'page-JSON scene other than a console window, globe or illustration. A Texture is a ' +
+    'backdrop for text only: its dots compete with the marks, labels and lines, so the ' +
+    'content cannot be read. Set the host to a layout without the texture ' +
+    '(`ConsoleShowcaseSection variant="diagram"`, `texture="none"`), or move the graphic off ' +
+    'the textured band (.claude/rules/styling.md § "A texture is a backdrop for text only").'
 }
 
 export function textureBackdropApplies(rel) {

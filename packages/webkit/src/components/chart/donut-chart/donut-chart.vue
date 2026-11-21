@@ -247,6 +247,19 @@
     setActive(null)
     emit('legend-toggle', event, target.source)
   }
+
+  const SLICE_CLASS =
+    'cursor-pointer [stroke-dasharray:0_100] [stroke-width:var(--donut-chart-width)] transition-[stroke-dasharray,stroke-width,opacity] duration-slow-02 ease-productive-entrance ' +
+    'motion-reduce:transition-none ' +
+    'data-[active]:[stroke-width:var(--donut-chart-lift)] ' +
+    'data-[dimmed]:opacity-40 ' +
+    'data-[entered]:[stroke-dasharray:var(--donut-chart-dash)]'
+
+  const LEGEND_ITEM_CLASS =
+    "relative inline-flex min-h-6 w-full items-center before:absolute before:inset-x-0 before:-inset-y-2 before:content-[''] " +
+    'gap-(--spacing-xs) rounded-(--shape-control) px-(--spacing-2xs) text-start text-body-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance ' +
+    'motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) ' +
+    'data-[hidden]:text-(--text-muted)'
 </script>
 
 <template>
@@ -392,7 +405,7 @@
               '--donut-chart-lift': `${WIDTH[type] + LIFT[type]}`,
               transitionDelay: slice.delay
             }"
-            class="cursor-pointer [stroke-dasharray:0_100] [stroke-width:var(--donut-chart-width)] transition-[stroke-dasharray,stroke-width,opacity] duration-slow-02 ease-productive-entrance motion-reduce:transition-none data-[active]:[stroke-width:var(--donut-chart-lift)] data-[dimmed]:opacity-40 data-[entered]:[stroke-dasharray:var(--donut-chart-dash)]"
+            :class="SLICE_CLASS"
             @pointerenter="setActive(index)"
           />
         </svg>
@@ -435,7 +448,7 @@
             :aria-pressed="!entry.hidden"
             :data-hidden="entry.hidden || null"
             :data-testid="`${testId}__legend-item`"
-            class="relative inline-flex min-h-6 w-full items-center before:absolute before:inset-x-0 before:-inset-y-2 before:content-[''] gap-(--spacing-xs) rounded-(--shape-control) px-(--spacing-2xs) text-start text-body-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) data-[hidden]:text-(--text-muted)"
+            :class="LEGEND_ITEM_CLASS"
             @click="toggle($event, entry.id)"
           >
             <span

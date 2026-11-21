@@ -110,6 +110,10 @@
   provide(DropdownMenuGroupInjectionKey, true)
 
   const portalLocale = usePortalLocale()
+
+  const PANEL_CLASS =
+    'flex min-w-(--container-3xs) max-w-[min(var(--container-2xs),calc(100vw-2*var(--spacing-xs)))] flex-col overflow-hidden rounded-(--shape-card) border border-(--border-default) ' +
+    'bg-(--bg-surface) py-(--spacing-xs) shadow-(--shadow-sm) outline-none [transform-origin:var(--popup-origin,top_left)]'
 </script>
 
 <template>
@@ -129,7 +133,7 @@
         :data-side="resolvedSide"
         :data-align="resolvedAlign"
         :style="panelStyle"
-        class="flex min-w-(--container-3xs) max-w-[min(var(--container-2xs),calc(100vw-2*var(--spacing-xs)))] flex-col overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) py-(--spacing-xs) shadow-(--shadow-sm) outline-none [transform-origin:var(--popup-origin,top_left)]"
+        :class="PANEL_CLASS"
         @keydown="onKeydown"
         @pointerenter="onPointerenter"
       >

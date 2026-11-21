@@ -74,6 +74,21 @@
   onMounted(play)
   watch(() => [props.severity, props.animated], play)
   onBeforeUnmount(() => globalThis.cancelAnimationFrame?.(frame))
+
+  const DISC_CLASS =
+    'origin-center fill-(--success-mark) [transform-box:fill-box] ' +
+    'group-data-[severity=danger]:fill-(--danger-mark) group-data-[severity=warning]:fill-(--warning-mark) group-data-[severity=neutral]:fill-(--bg-surface-raised) ' +
+    'group-data-[severity=neutral]:stroke-(--border-default) ' +
+    'group-data-[state=pending]:scale-50 group-data-[state=pending]:opacity-0 ' +
+    'group-data-[animated]:transition-[scale,opacity] group-data-[animated]:duration-moderate-02 group-data-[animated]:ease-expressive-entrance ' +
+    'motion-reduce:transition-none'
+
+  const GLYPH_CLASS =
+    'stroke-(--text-contrast) [stroke-dasharray:1] ' +
+    'group-data-[severity=neutral]:stroke-(--text-muted) ' +
+    'group-data-[state=pending]:[stroke-dashoffset:1] ' +
+    'group-data-[animated]:transition-[stroke-dashoffset] group-data-[animated]:delay-150 group-data-[animated]:duration-slow-01 group-data-[animated]:ease-expressive-entrance ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -95,7 +110,7 @@
       cy="10"
       r="9.5"
       :data-testid="`${testId}__disc`"
-      class="origin-center fill-(--success-mark) [transform-box:fill-box] group-data-[severity=danger]:fill-(--danger-mark) group-data-[severity=warning]:fill-(--warning-mark) group-data-[severity=neutral]:fill-(--bg-surface-raised) group-data-[severity=neutral]:stroke-(--border-default) group-data-[state=pending]:scale-50 group-data-[state=pending]:opacity-0 group-data-[animated]:transition-[scale,opacity] group-data-[animated]:duration-moderate-02 group-data-[animated]:ease-expressive-entrance motion-reduce:transition-none"
+      :class="DISC_CLASS"
     />
     <path
       :d="glyph"
@@ -104,7 +119,7 @@
       stroke-linecap="round"
       stroke-linejoin="round"
       :data-testid="`${testId}__glyph`"
-      class="stroke-(--text-contrast) [stroke-dasharray:1] group-data-[severity=neutral]:stroke-(--text-muted) group-data-[state=pending]:[stroke-dashoffset:1] group-data-[animated]:transition-[stroke-dashoffset] group-data-[animated]:delay-150 group-data-[animated]:duration-slow-01 group-data-[animated]:ease-expressive-entrance motion-reduce:transition-none"
+      :class="GLYPH_CLASS"
     />
   </svg>
 </template>

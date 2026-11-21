@@ -37,6 +37,10 @@
   const attrs = useAttrs()
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'page-tabs')
+
+  const ROW_CLASS =
+    'layout-boundary-inline flex items-center gap-(--spacing-sm) py-(--spacing-sm) ' +
+    'group-data-[column=data]/page-tabs:layout-column group-data-[column=focused]/page-tabs:layout-column-focused group-data-[column=form]/page-tabs:layout-column-form'
 </script>
 
 <template>
@@ -48,7 +52,7 @@
   >
     <div
       :data-testid="`${testId}__row`"
-      class="layout-boundary-inline flex items-center gap-(--spacing-sm) py-(--spacing-sm) group-data-[column=data]/page-tabs:layout-column group-data-[column=focused]/page-tabs:layout-column-focused group-data-[column=form]/page-tabs:layout-column-form"
+      :class="ROW_CLASS"
     >
       <div class="flex -ms-(--spacing-xs) min-w-0 flex-1">
         <TabsRoot

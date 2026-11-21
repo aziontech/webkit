@@ -59,7 +59,11 @@
     anchor?: string
     /** Headline of the band, rendered by the left-aligned section title as its `h2`; the band renders no header when empty. */
     title?: string
-    /** The columns left to right; each is `{ key, label, grow?, align? }` where `key` picks the row value, `grow` is the flex weight (1, 2 or 3) and `align` is `start` or `end`. The first column names the row and the second describes it on phones. */
+    /**
+     * The columns left to right; each is `{ key, label, grow?, align? }` where `key` picks the
+     * row value, `grow` is the flex weight (1, 2 or 3) and `align` is `start` or `end`. The first
+     * column names the row and the second describes it on phones.
+     */
     columns?: ListingTableSectionColumn[]
     /** The linked rows, in order; each is `{ href, values }` where `values` maps a column key to its text. */
     data?: ListingTableSectionRow[]

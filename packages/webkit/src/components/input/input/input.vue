@@ -121,6 +121,23 @@
     /** Moves focus to the native field. */
     focus: (): void => inputEl.value?.focus()
   })
+
+  const ROOT_CLASS =
+    'group/input relative inline-flex items-center w-full cursor-text gap-(--spacing-xs) px-(--spacing-sm) rounded-(--shape-control) border border-(--border-input) bg-(--bg-surface) ' +
+    'text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none ' +
+    '[&:not(:focus-within):not([data-disabled]):not([data-readonly])]:hover:border-(--border-strong) ' +
+    'focus-within:outline-none focus-within:ring-2 focus-within:ring-(--ring-color) focus-within:ring-offset-2 focus-within:ring-offset-[var(--input-ring-offset,var(--bg-canvas))] ' +
+    'data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 ' +
+    'data-[invalid]:border-(--danger-border) ' +
+    'data-[readonly]:cursor-default ' +
+    'data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:cursor-not-allowed data-[disabled]:hover:border-(--border-input) ' +
+    'data-[disabled]:focus-within:ring-0 data-[disabled]:focus-within:ring-offset-0'
+
+  const INPUT_CLASS =
+    'relative z-(--z-control) h-full w-full min-w-0 self-stretch border-0 bg-transparent p-0 outline-none text-label-sm ' +
+    'group-data-[monospace]/input:text-label-code-sm ' +
+    'pointer-coarse:text-body-md pointer-coarse:group-data-[monospace]/input:text-label-code-lg ' +
+    'text-(--text-default) placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled) read-only:cursor-default'
 </script>
 
 <template>
@@ -134,8 +151,7 @@
     :data-monospace="monospace || null"
     :data-leading="hasLeading() || null"
     :data-trailing="hasTrailing() || null"
-    class="group/input relative inline-flex items-center w-full cursor-text gap-(--spacing-xs) px-(--spacing-sm) rounded-(--shape-control) border border-(--border-input) bg-(--bg-surface) text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none [&:not(:focus-within):not([data-disabled]):not([data-readonly])]:hover:border-(--border-strong) focus-within:outline-none focus-within:ring-2 focus-within:ring-(--ring-color) focus-within:ring-offset-2 focus-within:ring-offset-[var(--input-ring-offset,var(--bg-canvas))] data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 data-[invalid]:border-(--danger-border) data-[readonly]:cursor-default data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:cursor-not-allowed data-[disabled]:hover:border-(--border-input) data-[disabled]:focus-within:ring-0 data-[disabled]:focus-within:ring-offset-0"
-    :class="attrs.class"
+    :class="[ROOT_CLASS, attrs.class]"
     @mousedown="onChromeMousedown"
   >
     <span
@@ -166,7 +182,7 @@
       :aria-required="isRequired || undefined"
       :data-testid="testId"
       dir="auto"
-      class="relative z-(--z-control) h-full w-full min-w-0 self-stretch border-0 bg-transparent p-0 outline-none text-label-sm group-data-[monospace]/input:text-label-code-sm pointer-coarse:text-body-md pointer-coarse:group-data-[monospace]/input:text-label-code-lg text-(--text-default) placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled) read-only:cursor-default"
+      :class="INPUT_CLASS"
       v-bind="{ ...autofillHints, ...passthroughAttrs }"
       :id="controlId"
       :aria-describedby="describedBy"

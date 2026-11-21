@@ -6,7 +6,9 @@ import type {
 } from '../mcp-app-frame.vue'
 
 const CONTENT_POLICY =
-  "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; media-src data:; font-src data:; connect-src 'none'; frame-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'"
+  "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; " +
+  "media-src data:; font-src data:; connect-src 'none'; frame-src 'none'; form-action 'none'; " +
+  "base-uri 'none'; object-src 'none'"
 
 const MIN_HEIGHT = 48
 const START_HEIGHT = 240

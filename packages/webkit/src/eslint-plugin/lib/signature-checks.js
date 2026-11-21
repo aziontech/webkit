@@ -13,9 +13,13 @@ export const SIGNATURE_RULES = {
 
 export const SIGNATURE_MESSAGES = {
   'require-readonly-composable-return':
-    'Exported composable returns `reactive()`, a raw `ref()`, or has no explicit return type. Return refs/computed/functions, wrap escaping state in `readonly()`, and declare the return type (composables.md).',
+    'Exported composable returns `reactive()`, a raw `ref()`, or has no explicit return ' +
+    'type. Return refs/computed/functions, wrap escaping state in `readonly()`, and declare ' +
+    'the return type (composables.md).',
   'require-composable-scope-cleanup':
-    'Composable registers a listener, timer, animation frame or observer with no `onScopeDispose` in the file. Tear it down in `onScopeDispose` or use the VueUse primitive that owns its cleanup (composables.md).',
+    'Composable registers a listener, timer, animation frame or observer with no ' +
+    '`onScopeDispose` in the file. Tear it down in `onScopeDispose` or use the VueUse ' +
+    'primitive that owns its cleanup (composables.md).',
   'no-polymorphic-as-prop':
     '`defineProps` declares `as` / `asChild`. A component owns its root: switch anchor vs. button on `href` with `<component :is>` (root-element.md).'
 }

@@ -287,6 +287,15 @@
 
   const logViewer = ref<LogViewerStepsView>('phased')
   const openStep = ref('rules')
+
+  const DETAIL_LINK_CLASS =
+    'group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline ' +
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)'
+
+  const DEPLOYMENT_SETTINGS_SUMMARY_CLASS =
+    'flex flex-wrap items-center gap-x-(--spacing-sm) gap-y-(--spacing-2xs) px-(--spacing-md) pb-(--spacing-md) ' +
+    '@lg/band:pointer-events-none @lg/band:absolute @lg/band:inset-y-0 @lg/band:end-0 @lg/band:max-w-[calc(100%-12rem)] @lg/band:justify-end @lg/band:px-0 @lg/band:pe-(--spacing-md) ' +
+    '@lg/band:pb-0'
 </script>
 
 <template>
@@ -433,7 +442,7 @@
               <Tooltip content="Open web-app in Services">
                 <a
                   href="/services/1784675753"
-                  class="group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
+                  :class="DETAIL_LINK_CLASS"
                 >
                   <span class="truncate underline-offset-2 group-hover/link:underline">
                     web-app
@@ -450,7 +459,7 @@
               <Tooltip content="Open web-app in Resources">
                 <a
                   href="/resources/1784552864"
-                  class="group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
+                  :class="DETAIL_LINK_CLASS"
                 >
                   <span class="truncate underline-offset-2 group-hover/link:underline">
                     web-app
@@ -518,7 +527,7 @@
                     href="https://web-app-mh2saq.example.com"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
+                    :class="DETAIL_LINK_CLASS"
                   >
                     <span class="truncate underline-offset-2 group-hover/link:underline">
                       web-app-mh2saq.example.com
@@ -556,14 +565,12 @@
                     </span>
                   </Accordion.Trigger>
 
-                  <div
-                    class="flex flex-wrap items-center gap-x-(--spacing-sm) gap-y-(--spacing-2xs) px-(--spacing-md) pb-(--spacing-md) @lg/band:pointer-events-none @lg/band:absolute @lg/band:inset-y-0 @lg/band:end-0 @lg/band:max-w-[calc(100%-12rem)] @lg/band:justify-end @lg/band:px-0 @lg/band:pe-(--spacing-md) @lg/band:pb-0"
-                  >
+                  <div :class="DEPLOYMENT_SETTINGS_SUMMARY_CLASS">
                     <div class="pointer-events-auto">
                       <Tooltip content="Open Default in Build and deployment settings">
                         <a
                           href="/account/build-deployment"
-                          class="group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
+                          :class="DETAIL_LINK_CLASS"
                         >
                           <span class="truncate underline-offset-2 group-hover/link:underline">
                             Default

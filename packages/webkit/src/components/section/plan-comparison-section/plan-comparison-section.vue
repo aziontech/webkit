@@ -89,7 +89,12 @@
     excludedLabel?: string
     /** The plan columns, in order; each is `{ id, name, description?, highlighted?, action }` with `action` as `{ label, href }`; a plan without a name is dropped. */
     plans?: PlanComparisonSectionPlan[]
-    /** The product bands, in order; each is `{ eyebrow, title, description, rows, action? }` (`action` closes the band, `{ label, href }`) and a row is `{ label, values, group?, hint?, tag? }` with one value per plan: `true` or a tick is included, a dash is not included, other text shows as written, empty is blank; `hint` defines the label in a popover. */
+    /**
+     * The product bands, in order; each is `{ eyebrow, title, description, rows, action? }`
+     * (`action` closes the band, `{ label, href }`) and a row is `{ label, values, group?, hint?,
+     * tag? }` with one value per plan: `true` or a tick is included, a dash is not included,
+     * other text shows as written, empty is blank; `hint` defines the label in a popover.
+     */
     sections?: PlanComparisonSectionSection[]
     /** Closing link under the table, opened in a new tab; `{ label, href }`. Omitted when absent. */
     primaryAction?: ModuleHeaderAction
@@ -194,6 +199,23 @@
     sectionIndex === props.sections.length - 1 &&
     !closingOf(props.sections[sectionIndex]) &&
     rowIndex === (props.sections[sectionIndex]?.rows.length ?? 0) - 1
+
+  const PLAN_HEADER_CELL_CLASS =
+    'sticky top-(--layout-sticky-top) z-20 border-b border-s border-(--border-default) bg-(--bg-canvas) p-(--spacing-sm) align-top ' +
+    'lg:p-(--spacing-lg) font-normal max-lg:data-folded:hidden'
+
+  const ROW_HEADER_CELL_CLASS =
+    'border-(--border-default) px-(--spacing-sm) py-(--spacing-md) text-start align-middle ' +
+    'lg:px-(--spacing-lg) text-label-md font-normal text-(--text-muted) ' +
+    'group-data-lead/row:text-(--text-default) ' +
+    'group-data-ruled/row:border-t ' +
+    'group-data-closing/row:border-b'
+
+  const VALUE_CELL_CLASS =
+    'border-s border-(--border-default) px-(--spacing-sm) py-(--spacing-md) text-center align-middle text-label-md text-(--text-default) ' +
+    'group-data-ruled/row:border-t ' +
+    'group-data-closing/row:border-b ' +
+    'max-lg:data-folded:hidden'
 </script>
 
 <template>
@@ -273,7 +295,7 @@
               scope="col"
               :data-folded="plan.id !== visiblePlan || null"
               :data-highlighted="plan.highlighted || null"
-              class="sticky top-(--layout-sticky-top) z-20 border-b border-s border-(--border-default) bg-(--bg-canvas) p-(--spacing-sm) align-top lg:p-(--spacing-lg) font-normal max-lg:data-folded:hidden"
+              :class="PLAN_HEADER_CELL_CLASS"
             >
               <span
                 v-if="plan.highlighted"
@@ -343,7 +365,7 @@
               <th
                 :scope="isCategory(row) ? 'rowgroup' : 'row'"
                 :colspan="isCategory(row) ? columns.length + 1 : undefined"
-                class="border-(--border-default) px-(--spacing-sm) py-(--spacing-md) text-start align-middle lg:px-(--spacing-lg) text-label-md font-normal text-(--text-muted) group-data-lead/row:text-(--text-default) group-data-ruled/row:border-t group-data-closing/row:border-b"
+                :class="ROW_HEADER_CELL_CLASS"
               >
                 <span>
                   <template v-if="row.hint">
@@ -386,7 +408,7 @@
                   v-for="{ plan, index } in columns"
                   :key="plan.id"
                   :data-folded="plan.id !== visiblePlan || null"
-                  class="border-s border-(--border-default) px-(--spacing-sm) py-(--spacing-md) text-center align-middle text-label-md text-(--text-default) group-data-ruled/row:border-t group-data-closing/row:border-b max-lg:data-folded:hidden"
+                  :class="VALUE_CELL_CLASS"
                 >
                   <template v-if="isIncluded(row.values[index])">
                     <Tooltip :content="includedText">

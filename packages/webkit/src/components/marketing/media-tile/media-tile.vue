@@ -22,11 +22,18 @@
     src?: string
     /** Alternative text describing what the image shows; empty keeps it decorative. */
     alt?: string
-    /** Inset the media — inside the frame in the `frame` register, from the cell's edges in `plain`. Turn it off for an asset that should run to the cell's edges; the caption keeps its own inset either way. */
+    /**
+     * Inset the media — inside the frame in the `frame` register, from the cell's edges in `plain`. Turn
+     * it off for an asset that should run to the cell's edges; the caption keeps its own inset either way.
+     */
     padded?: boolean
     /** Stretch the media to the frame's full width with its aspect ratio locked, so it grows and shrinks with the tile; off, slotted media keeps its own size, centred. */
     fluid?: boolean
-    /** Scale of the media inside its frame, around its centre. The frame keeps its size and clips whatever grows past it, so a scene drawn small on its canvas can be fitted to the tile without changing the band's rhythm. */
+    /**
+     * Scale of the media inside its frame, around its centre. The frame keeps its size and clips whatever
+     * grows past it, so a scene drawn small on its canvas can be fitted to the tile without changing the
+     * band's rhythm.
+     */
     mediaScale?: number
   }
 
@@ -58,6 +65,11 @@
   const mediaStyle = computed(() =>
     props.mediaScale === 1 ? undefined : { scale: String(props.mediaScale) }
   )
+
+  const FRAME_CLASS =
+    'overflow-hidden ' +
+    'data-[variant=frame]:min-h-64 data-[variant=plain]:min-h-32 data-[variant=frame]:bg-(--bg-canvas) data-[variant=frame]:data-[padded]:p-(--spacing-xl) ' +
+    'data-[variant=plain]:data-[padded]:px-(--spacing-lg) data-[variant=plain]:data-[padded]:pt-(--spacing-lg)'
 </script>
 
 <template>
@@ -75,7 +87,7 @@
       :data-testid="`${testId}__frame`"
       :data-variant="variant"
       :data-padded="padded || null"
-      class="overflow-hidden data-[variant=frame]:min-h-64 data-[variant=plain]:min-h-32 data-[variant=frame]:bg-(--bg-canvas) data-[variant=frame]:data-[padded]:p-(--spacing-xl) data-[variant=plain]:data-[padded]:px-(--spacing-lg) data-[variant=plain]:data-[padded]:pt-(--spacing-lg)"
+      :class="FRAME_CLASS"
     >
       <div
         :data-testid="`${testId}__media`"

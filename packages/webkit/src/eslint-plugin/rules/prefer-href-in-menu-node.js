@@ -21,12 +21,16 @@ export default {
     type: 'problem',
     docs: {
       description:
-        'Flag a navigation node (an object with `id` and `label`, as a SidebarMenu `groups` tree holds) that names its destination `path`, `to`, `url` or `route` instead of `href`: SidebarMenu reads only `href`, so the row renders as a button with nowhere to go.'
+        'Flag a navigation node (an object with `id` and `label`, as a SidebarMenu `groups` tree ' +
+        'holds) that names its destination `path`, `to`, `url` or `route` instead of `href`: ' +
+        'SidebarMenu reads only `href`, so the row renders as a button with nowhere to go.'
     },
     schema: [],
     messages: {
       alias:
-        "SidebarMenu reads a row's destination from `href` only; `{{key}}` is not read, so this row renders as a button with no link. Rename `{{key}}` to `href` (with Vue Router, put the route's path there and call `router.push(node.href)` in `@navigate`)."
+        "SidebarMenu reads a row's destination from `href` only; `{{key}}` is not read, so this " +
+        'row renders as a button with no link. Rename `{{key}}` to `href` (with Vue Router, put ' +
+        "the route's path there and call `router.push(node.href)` in `@navigate`)."
     }
   },
   create(context) {

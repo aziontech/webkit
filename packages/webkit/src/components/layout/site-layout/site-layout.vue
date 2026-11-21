@@ -188,6 +188,11 @@
     emit('navigate', event, page)
     follow(event, page)
   }
+
+  const ROOT_CLASS =
+    'flex min-h-dvh w-full min-w-0 flex-col bg-(--bg-canvas) text-(--text-default) ' +
+    'data-[nav-overlay]:grid data-[nav-overlay]:grid-rows-[1fr_auto] data-[nav-overlay]:[&>div>header]:[grid-area:1/1/3/2] data-[nav-overlay]:[&>div>header]:self-start ' +
+    'data-[nav-overlay]:[&>main]:[grid-area:1/1] data-[nav-overlay]:[&>main+div]:[grid-area:2/1]'
 </script>
 
 <template>
@@ -195,7 +200,7 @@
     v-bind="$attrs"
     :data-testid="testId"
     :data-nav-overlay="navOverlay || null"
-    class="flex min-h-dvh w-full min-w-0 flex-col bg-(--bg-canvas) text-(--text-default) data-[nav-overlay]:grid data-[nav-overlay]:grid-rows-[1fr_auto] data-[nav-overlay]:[&>div>header]:[grid-area:1/1/3/2] data-[nav-overlay]:[&>div>header]:self-start data-[nav-overlay]:[&>main]:[grid-area:1/1] data-[nav-overlay]:[&>main+div]:[grid-area:2/1]"
+    :class="ROOT_CLASS"
   >
     <SkipLink
       :href="`#${mainId}`"

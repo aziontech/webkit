@@ -104,7 +104,11 @@
     items?: HeroFormSectionItem[]
     /** Accessible name of the field group, read as its legend. */
     formAriaLabel?: string
-    /** The form fields in order; each is `{ name, type, label, placeholder?, required?, half?, options?, country?, visuallyHiddenLabel? }`; `visuallyHiddenLabel` keeps the label as the accessible name but does not draw it. */
+    /**
+     * The form fields in order; each is `{ name, type, label, placeholder?, required?, half?,
+     * options?, country?, visuallyHiddenLabel? }`; `visuallyHiddenLabel` keeps the label as the
+     * accessible name but does not draw it.
+     */
     fields?: HeroFormSectionField[]
     /** Label of the submit button. */
     submitLabel?: string
@@ -232,6 +236,11 @@
     }
     emit('submit', event as SubmitEvent, collected)
   }
+
+  const DESCRIPTION_LINK_CLASS =
+    'underline underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance ' +
+    'hover:text-(--text-default) focus-visible:rounded-(--shape-flat) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color) ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -274,7 +283,7 @@
             <a
               v-if="descriptionLink"
               :href="safeHref(descriptionLink.href) ?? undefined"
-              class="underline underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:rounded-(--shape-flat) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color) motion-reduce:transition-none"
+              :class="DESCRIPTION_LINK_CLASS"
               >{{ descriptionLink.label }}</a
             >{{ descriptionAfter }}
           </template>

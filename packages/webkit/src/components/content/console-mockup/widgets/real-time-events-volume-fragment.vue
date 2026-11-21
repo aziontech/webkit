@@ -138,6 +138,20 @@
   watch(wanted, advance, { immediate: true })
 
   onScopeDispose(halt)
+
+  const BAR_SEGMENT_CLASS =
+    'w-full ' +
+    'data-[level=Debug]:bg-(--text-muted) data-[level=Info]:bg-(--info-foreground) data-[level=Warning]:bg-(--warning-foreground) data-[level=Error]:bg-(--danger-foreground)'
+
+  const BUCKET_CARD_CLASS =
+    'pointer-events-none absolute top-[calc(100%+var(--spacing-2xs))] z-30 w-max min-w-(--container-3xs) rounded-(--shape-control) border border-(--border-default) ' +
+    'bg-(--bg-surface-raised) p-(--spacing-sm) shadow-(--shadow-sm) transition-[left] duration-fast-02 ease-productive-entrance ' +
+    'data-[align=center]:-translate-x-1/2 data-[align=end]:-translate-x-full ' +
+    'motion-reduce:transition-none'
+
+  const LEGEND_SWATCH_CLASS =
+    'size-2 shrink-0 rounded-(--shape-control) ' +
+    'data-[level=Debug]:bg-(--text-muted) data-[level=Info]:bg-(--info-foreground) data-[level=Warning]:bg-(--warning-foreground) data-[level=Error]:bg-(--danger-foreground)'
 </script>
 
 <template>
@@ -190,7 +204,7 @@
                   v-for="level in STACK_ORDER"
                   :key="level"
                   :data-level="level"
-                  class="w-full data-[level=Debug]:bg-(--text-muted) data-[level=Info]:bg-(--info-foreground) data-[level=Warning]:bg-(--warning-foreground) data-[level=Error]:bg-(--danger-foreground)"
+                  :class="BAR_SEGMENT_CLASS"
                   :style="{ height: share(bucket.levels[level]) }"
                 />
               </div>
@@ -218,7 +232,7 @@
               <div
                 v-if="activeBucket"
                 :data-align="cardAlign"
-                class="pointer-events-none absolute top-[calc(100%+var(--spacing-2xs))] z-30 w-max min-w-(--container-3xs) rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-sm) shadow-(--shadow-sm) transition-[left] duration-fast-02 ease-productive-entrance data-[align=center]:-translate-x-1/2 data-[align=end]:-translate-x-full motion-reduce:transition-none"
+                :class="BUCKET_CARD_CLASS"
                 :style="{ left: centre }"
               >
                 <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
@@ -236,7 +250,7 @@
                       <span
                         :data-level="level"
                         aria-hidden="true"
-                        class="size-2 shrink-0 rounded-(--shape-control) data-[level=Debug]:bg-(--text-muted) data-[level=Info]:bg-(--info-foreground) data-[level=Warning]:bg-(--warning-foreground) data-[level=Error]:bg-(--danger-foreground)"
+                        :class="LEGEND_SWATCH_CLASS"
                       />
                       <dt class="min-w-0 truncate text-label-sm text-(--text-muted)">
                         {{ level }}

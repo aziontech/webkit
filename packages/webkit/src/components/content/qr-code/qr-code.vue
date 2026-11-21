@@ -68,6 +68,11 @@
   })
 
   const name = computed<string>(() => props.ariaLabel || t('qrCode.label'))
+
+  const ROOT_CLASS =
+    'inline-flex aspect-square max-w-full shrink-0 overflow-clip rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) text-(--text-default) ' +
+    'forced-color-adjust-none ' +
+    'data-[size=small]:w-32 data-[size=medium]:w-40 data-[size=large]:w-56'
 </script>
 
 <template>
@@ -80,8 +85,7 @@
     :data-version="grid ? (modules - 17) / 4 : undefined"
     :data-modules="grid ? modules : undefined"
     data-theme="light"
-    :class="attrs.class"
-    class="inline-flex aspect-square max-w-full shrink-0 overflow-clip rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) text-(--text-default) forced-color-adjust-none data-[size=small]:w-32 data-[size=medium]:w-40 data-[size=large]:w-56"
+    :class="[ROOT_CLASS, attrs.class]"
   >
     <svg
       :viewBox="`0 0 ${modules + QUIET * 2} ${modules + QUIET * 2}`"

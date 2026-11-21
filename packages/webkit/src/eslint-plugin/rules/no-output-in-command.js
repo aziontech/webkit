@@ -61,12 +61,16 @@ export default {
     type: 'suggestion',
     docs: {
       description:
-        'Warn when a shell code sample (CodeBlock tab, DocCodeGroup sample) mixes what the reader runs with what the command prints: a `# HTTP/2 200` comment after the command, or output lines in a `$`-prompted transcript.'
+        'Warn when a shell code sample (CodeBlock tab, DocCodeGroup sample) mixes what the ' +
+        'reader runs with what the command prints: a `# HTTP/2 200` comment after the command, ' +
+        'or output lines in a `$`-prompted transcript.'
     },
     schema: [],
     messages: {
       output:
-        "This shell sample holds expected output ('{{line}}'). A command block holds only what the reader runs, so the copy control copies exactly that: move the output to the sample's `output` field (DocCodeGroup), a `<CodeBlock kind=\"output\">`, or the prose."
+        "This shell sample holds expected output ('{{line}}'). A command block holds only what " +
+        'the reader runs, so the copy control copies exactly that: move the output to the ' +
+        'sample\'s `output` field (DocCodeGroup), a `<CodeBlock kind="output">`, or the prose.'
     }
   },
   create(context) {

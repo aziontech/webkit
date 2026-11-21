@@ -85,12 +85,21 @@ export default {
     type: 'problem',
     docs: {
       description:
-        'Disallow sizing a page body to the viewport minus the chrome above it (`h-[calc(100dvh-…)]`, `min-h-[calc(100vh-…)]`, `height: calc(100dvh - …)`): it breaks as soon as the header, a notification or the tools region changes. Inside `ConsoleLayout`, `data-layout-fill` on the page root makes the main a fixed-height region the root fills. A `sticky` or `fixed` element may cap itself to the viewport.'
+        'Disallow sizing a page body to the viewport minus the chrome above it ' +
+        '(`h-[calc(100dvh-…)]`, `min-h-[calc(100vh-…)]`, `height: calc(100dvh - …)`): it breaks ' +
+        'as soon as the header, a notification or the tools region changes. Inside ' +
+        '`ConsoleLayout`, `data-layout-fill` on the page root makes the main a fixed-height ' +
+        'region the root fills. A `sticky` or `fixed` element may cap itself to the viewport.'
     },
     schema: [],
     messages: {
       viewportCalc:
-        "`{{value}}` sizes the page to the viewport minus the chrome above it, so it overflows or leaves a gap as soon as the header, a notification or the tools region changes. Inside `ConsoleLayout`, put `data-layout-fill` on the page body's root: the main becomes a fixed-height, non-scrolling region the root fills, and the panes inside take `flex-1 min-h-0`. Only a pinned (`sticky` or `fixed`) element may size itself against the viewport."
+        '`{{value}}` sizes the page to the viewport minus the chrome above it, so it overflows ' +
+        'or leaves a gap as soon as the header, a notification or the tools region changes. ' +
+        "Inside `ConsoleLayout`, put `data-layout-fill` on the page body's root: the main " +
+        'becomes a fixed-height, non-scrolling region the root fills, and the panes inside take ' +
+        '`flex-1 min-h-0`. Only a pinned (`sticky` or `fixed`) element may size itself against ' +
+        'the viewport.'
     }
   },
   create(context) {

@@ -51,7 +51,11 @@ export default {
     fixable: 'code',
     docs: {
       description:
-        'Disallow physical direction utilities (ml-/mr-, pl-/pr-, left-/right-, text-left/right, border-l/r, rounded-l/r…) in class strings; use the logical ones so layouts mirror under dir="rtl". A horizontal gradient (bg-gradient-to-l/r, bg-linear-to-l/r and the diagonals) needs an rtl: pair in the same class string. The left-1/2 -translate-x-1/2 centering pattern is allowed.'
+        'Disallow physical direction utilities (ml-/mr-, pl-/pr-, left-/right-, text-left/right, ' +
+        'border-l/r, rounded-l/r…) in class strings; use the logical ones so layouts mirror ' +
+        'under dir="rtl". A horizontal gradient (bg-gradient-to-l/r, bg-linear-to-l/r and the ' +
+        'diagonals) needs an rtl: pair in the same class string. The left-1/2 -translate-x-1/2 ' +
+        'centering pattern is allowed.'
     },
     schema: [
       {

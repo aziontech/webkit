@@ -7,7 +7,11 @@
 
   defineOptions({ name: 'Backdrop', inheritAttrs: false })
 
-  /** The backdrop drawn behind a band: `globe` hangs a globe half past the page's inline-end rule over the dot lattice, `map` insets the world map beside the copy, `network` lays the map full bleed with its data centers lit, traffic crossing between them and a scrim over the copy column. */
+  /**
+   * The backdrop drawn behind a band: `globe` hangs a globe half past the page's inline-end rule over
+   * the dot lattice, `map` insets the world map beside the copy, `network` lays the map full bleed with
+   * its data centers lit, traffic crossing between them and a scrim over the copy column.
+   */
   export type BackdropVariant = 'globe' | 'map' | 'network'
 
   export interface BackdropProps {
@@ -27,6 +31,16 @@
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'backdrop')
 
   const backdrop = computed<BackdropVariant>(() => props.variant)
+
+  const GLOBE_FRAME_CLASS =
+    'relative aspect-square w-[min(calc(100cqh*1.25),150vw,var(--container-5xl))] shrink-0 translate-x-1/2 [mask-composite:intersect] ' +
+    '[mask-image:linear-gradient(to_right,transparent_0%,black_20%),linear-gradient(to_bottom,transparent_11%,black_26%,black_74%,transparent_89%)] ' +
+    'rtl:-translate-x-1/2 rtl:[mask-image:linear-gradient(to_left,transparent_0%,black_20%),linear-gradient(to_bottom,transparent_11%,black_26%,black_74%,transparent_89%)]'
+
+  const MAP_FADE_CLASS =
+    'absolute inset-0 ' +
+    '[background-image:linear-gradient(to_right,var(--bg-canvas)_0%,color-mix(in_srgb,var(--bg-canvas)_72%,transparent)_22%,color-mix(in_srgb,var(--bg-canvas)_28%,transparent)_40%,transparent_56%)] ' +
+    'rtl:[background-image:linear-gradient(to_left,var(--bg-canvas)_0%,color-mix(in_srgb,var(--bg-canvas)_72%,transparent)_22%,color-mix(in_srgb,var(--bg-canvas)_28%,transparent)_40%,transparent_56%)]'
 </script>
 
 <template>
@@ -42,9 +56,7 @@
       <div
         class="absolute inset-0 mx-auto flex w-full max-w-(--layout-measure-site) items-center justify-end"
       >
-        <div
-          class="relative aspect-square w-[min(calc(100cqh*1.25),150vw,var(--container-5xl))] shrink-0 translate-x-1/2 [mask-composite:intersect] [mask-image:linear-gradient(to_right,transparent_0%,black_20%),linear-gradient(to_bottom,transparent_11%,black_26%,black_74%,transparent_89%)] rtl:-translate-x-1/2 rtl:[mask-image:linear-gradient(to_left,transparent_0%,black_20%),linear-gradient(to_bottom,transparent_11%,black_26%,black_74%,transparent_89%)]"
-        >
+        <div :class="GLOBE_FRAME_CLASS">
           <SpinningGlobe
             :animated="animated"
             :scale="1"
@@ -89,9 +101,7 @@
           :animated="animated"
           traffic
         />
-        <div
-          class="absolute inset-0 [background-image:linear-gradient(to_right,var(--bg-canvas)_0%,color-mix(in_srgb,var(--bg-canvas)_72%,transparent)_22%,color-mix(in_srgb,var(--bg-canvas)_28%,transparent)_40%,transparent_56%)] rtl:[background-image:linear-gradient(to_left,var(--bg-canvas)_0%,color-mix(in_srgb,var(--bg-canvas)_72%,transparent)_22%,color-mix(in_srgb,var(--bg-canvas)_28%,transparent)_40%,transparent_56%)]"
-        />
+        <div :class="MAP_FADE_CLASS" />
       </div>
     </template>
   </div>

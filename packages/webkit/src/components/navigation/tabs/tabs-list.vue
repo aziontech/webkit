@@ -131,6 +131,11 @@
 
   watch(indicatorTarget, scheduleIndicatorSync)
   watch(() => context.tabs.value, scheduleIndicatorSync, { deep: true })
+
+  const INDICATOR_CLASS =
+    'pointer-events-none absolute top-0 z-0 rounded-(--shape-button) bg-(--secondary-mask) border-(length:--border-width-default) border-(--border-muted) shadow-(--shadow-xs) ' +
+    'transition-[transform,width,height] duration-moderate-02 ease-productive-entrance ' +
+    'motion-reduce:transition-none'
 </script>
 
 <template>
@@ -147,7 +152,7 @@
     >
       <span
         v-show="indicatorVisible"
-        class="pointer-events-none absolute top-0 z-0 rounded-(--shape-button) bg-(--secondary-mask) border-(length:--border-width-default) border-(--border-muted) shadow-(--shadow-xs) transition-[transform,width,height] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
+        :class="INDICATOR_CLASS"
         :style="indicatorTransformStyle"
         :data-testid="`${testId}__indicator`"
         aria-hidden="true"

@@ -85,7 +85,13 @@
   }
 
   export interface HeroSectionProps {
-    /** Layout of the band: `center` fills a screen over a dot field, `title-band` is a padded band, `center-band` is a large site-wide band with the copy centered, `compact-band` is a short site-wide band with the copy at the start, `copy-beside-art` sets an illustration or an image beside the copy, `copy-on-top-art` fills a screen with the copy centered over a scene in the `top` or `bottom` slot. */
+    /**
+     * Layout of the band: `center` fills a screen over a dot field, `title-band` is a padded
+     * band, `center-band` is a large site-wide band with the copy centered, `compact-band` is a
+     * short site-wide band with the copy at the start, `copy-beside-art` sets an illustration or
+     * an image beside the copy, `copy-on-top-art` fills a screen with the copy centered over a
+     * scene in the `top` or `bottom` slot.
+     */
     variant?: HeroSectionVariant
     /** Vertical rhythm of the band; `large` is the opening a product page leads with. */
     size?: HeroSectionSize
@@ -109,7 +115,11 @@
     illustration?: string
     /** Accessible description of the illustration. */
     illustrationAriaLabel?: string
-    /** Image set beside the copy in the `copy-beside-art` layout when no `illustration` is given; `{ src, alt, width, height }`. A portrait image (taller than wide) is drawn at half width, centered, below `md`. */
+    /**
+     * Image set beside the copy in the `copy-beside-art` layout when no `illustration` is given;
+     * `{ src, alt, width, height }`. A portrait image (taller than wide) is drawn at half width,
+     * centered, below `md`.
+     */
     image?: HeroSectionImage
     /** Mark set before the eyebrow (`//`, `<>`, `</>`, or empty for none); drawn only with an eyebrow. */
     eyebrowPrefix?: HeroTitleEyebrowPrefix
@@ -117,11 +127,19 @@
     anchor?: string
     /** Height of the site header above the band, taken out of a band that fills a screen; defaults to the SiteHeaderSection bar's token, any CSS length, empty for a page with no header above it. */
     headerOffset?: string
-    /** Length of the headline: `short` sets it on the site's narrow headline measure in the centered layouts, so a four-to-seven-word headline breaks over two balanced lines while the sentence under it keeps the full column; `long` lets the headline take the whole column. */
+    /**
+     * Length of the headline: `short` sets it on the site's narrow headline measure in the
+     * centered layouts, so a four-to-seven-word headline breaks over two balanced lines while the
+     * sentence under it keeps the full column; `long` lets the headline take the whole column.
+     */
     titleLength?: HeroSectionTitleLength
     /** Drops the dot texture of the `center` layout. */
     plain?: boolean
-    /** Columns of the topology the `copy-on-top-art` layout draws under the copy when neither scene slot is given, left to right; each is `{ nodes }`, the cards top to bottom, each `{ eyebrow, icon, title, label, severity, lit? }`. A card without `title` is skipped. */
+    /**
+     * Columns of the topology the `copy-on-top-art` layout draws under the copy when neither
+     * scene slot is given, left to right; each is `{ nodes }`, the cards top to bottom, each `{
+     * eyebrow, icon, title, label, severity, lit? }`. A card without `title` is skipped.
+     */
     levels?: HeroSectionLevel[]
     /** Arguments in a framed grid under the band, three to a row; each is `{ icon, title, description }`. The grid renders only when there are items. */
     items?: HeroSectionItem[]
@@ -318,6 +336,10 @@
 
   const scene = () =>
     props.variant === 'copy-on-top-art' && !slots.top && !slots.bottom ? levelColumns.value : []
+
+  const SCENE_CLASS =
+    'flex animate-content-enter justify-center pb-(--spacing-2xl) [--content-enter-delay:120ms] ' +
+    'motion-reduce:animate-none @max-2xl:[mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]'
 </script>
 
 <template>
@@ -397,9 +419,7 @@
         #bottom
       >
         <div class="@container">
-          <div
-            class="flex animate-content-enter justify-center pb-(--spacing-2xl) [--content-enter-delay:120ms] motion-reduce:animate-none @max-2xl:[mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]"
-          >
+          <div :class="SCENE_CLASS">
             <slot name="bottom">
               <HeroSectionTopology :nodes="scene()" />
             </slot>
